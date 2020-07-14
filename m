@@ -2,93 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31D121EE83
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 12:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D000921EEFC
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 13:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgGNK7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 06:59:45 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58017 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726041AbgGNK7p (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 06:59:45 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1727772AbgGNLRR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 07:17:17 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:27253 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727771AbgGNLP5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 07:15:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594725356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wo3b72+f5d0wE/+LGqBGg/pHVyxAvNtZLrUUPiNVkWE=;
+        b=UlfzeEpU+F3xiCwOvGbX6JlNs8IDz4m03ydvaPUE1xMHjW5bQqXQ+xG3gosc8KMhjvDPjw
+        cTfCx/A+HqEr4w9FF9OIF8tJCRhBAsGjR9OpF9cCL0iUAlZaKCiDI12Q/iKPHN8bKHhLA8
+        +/JGQCvKrqnYUI739jllFovnehEEkBQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-56-JAf95g9fOGa8PNJBi69ewg-1; Tue, 14 Jul 2020 07:15:50 -0400
+X-MC-Unique: JAf95g9fOGa8PNJBi69ewg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5cwb2qV0z9s1x;
-        Tue, 14 Jul 2020 20:59:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594724383;
-        bh=CaU7hMehrwH/u8zCbwdV66QNc3iG4evLpsX9iI3ZC+Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZcQVvzY6KQEMk0CwfGUxxOYjXPcK05VLW5I2bcw0XwQMqWOhqm6jKRXo+4sgLJbOP
-         yM0KlqRrUQkLiyLqm02ksHByF9A5aOtFP+TOsGyOb1Zow5kHOLTLNzvlu3OKSdFi8t
-         tV05dE6Axo7cVmGMe5TqV8n7a6KbN/3dtE/27Upz/8gHWmlcjpKeZaPajR/7hof0JQ
-         DCeOMEDgGKmaogRoBbT/CDPXFhsGAfrj6kj5wtUuOPDqNoC1N0gKLSsqzxNzhyR62U
-         VTUkpWaKFcVb2BuxXj4glqiwmM28ExAdlKO1kDbSvHuH7XGIOHZWe3FDD1hDryslnb
-         XflqvL8ic4caw==
-Date:   Tue, 14 Jul 2020 20:59:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@codeaurora.org>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E931100A61D;
+        Tue, 14 Jul 2020 11:15:49 +0000 (UTC)
+Received: from krava (unknown [10.40.193.14])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3ADFA1CA;
+        Tue, 14 Jul 2020 11:15:46 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 13:15:45 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joseph Chuang <joseph.chuang@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>
-Subject: linux-next: Fixes tag needs some work in the wireless-drivers-next
- tree
-Message-ID: <20200714205942.26248f1c@canb.auug.org.au>
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+Message-ID: <20200714111545.GI183694@krava>
+References: <20200714121608.58962d66@canb.auug.org.au>
+ <20200714090048.GG183694@krava>
+ <20200714203341.4664dda3@canb.auug.org.au>
+ <20200714104702.GH183694@krava>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OiDA8Ai=f6igcds2bDJuwLA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714104702.GH183694@krava>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OiDA8Ai=f6igcds2bDJuwLA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 14, 2020 at 12:47:02PM +0200, Jiri Olsa wrote:
+> On Tue, Jul 14, 2020 at 08:33:41PM +1000, Stephen Rothwell wrote:
+> 
+> SNIP
+> 
+> > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> > > index 948378ca73d4..a88cd4426398 100644
+> > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > @@ -16,6 +16,20 @@ else
+> > >    MAKEFLAGS=--no-print-directory
+> > >  endif
+> > >  
+> > > +# always use the host compiler
+> > > +ifneq ($(LLVM),)
+> > > +HOSTAR  ?= llvm-ar
+> > > +HOSTCC  ?= clang
+> > > +HOSTLD  ?= ld.lld
+> > > +else
+> > > +HOSTAR  ?= ar
+> > > +HOSTCC  ?= gcc
+> > > +HOSTLD  ?= ld
+> > > +endif
+> > > +AR       = $(HOSTAR)
+> > > +CC       = $(HOSTCC)
+> > > +LD       = $(HOSTLD)
+> > > +
+> > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> > >  
+> > >  LIBBPF_SRC := $(srctree)/tools/lib/bpf/
+> > > 
+> > 
+> > Thanks for the quick response.  However, in the mean time the bpf-next
+> > tree has been merged into the net-next tree, so these fixes will be
+> > needed there ASAP.
+> 
+> I just posted it
 
-Hi all,
+ugh, you said net-next..
 
-In commit
+David, do you need me to repost with net-next tag?
+  https://lore.kernel.org/bpf/20200714102534.299280-1-jolsa@kernel.org/T/
 
-  ad96bc27032c ("brcmfmac: initialize the requested dwell time")
+jirka
 
-Fixes tag
-
-  Fixes: 4905432b28b7 ("brcmfmac: Fix P2P Group Formation failure via Go-ne=
-g method")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-
-Maybe you meant
-
-Fixes: 9c29da3f4e7e ("brcmfmac: Fix P2P Group Formation failure via Go-neg =
-method")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OiDA8Ai=f6igcds2bDJuwLA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8NkB4ACgkQAVBC80lX
-0Gw50Af+LW7WJB3/+r+ZbjDE806XKes7SJGPe6XT5WjrV4ULYecYAKRr0v+IZTJr
-V6GzRRJZzQ2KeIeCHSFjekWjsefCRn/Wdd8woFly/lAqWLGXA+t5ma/q4gAFxVOD
-FnER451dMzVpAYyUVI7hcwaQd+W3S1eGBcWNGPDpQ8RU5f/ECQ8N1ushy2Mj0z+L
-5a0XXn6W8DBJLON87dQYBmSubg+d68UMTz0JWP0pPcaoCLGZ/KrGhoHB+VGsMtEi
-zZdk+kGLwpOnm3VACO2OCLd/rMwYB1kdean/n70wt1cJ2lpxxV152QZLCjbKNzbo
-HS07Kz+w01ZP4GK0b50+dzodOiE0IQ==
-=3u/W
------END PGP SIGNATURE-----
-
---Sig_/OiDA8Ai=f6igcds2bDJuwLA--

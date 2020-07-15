@@ -2,52 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA5522023E
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jul 2020 04:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06839220242
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jul 2020 04:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgGOCTH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 22:19:07 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:59324 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725977AbgGOCTH (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 22:19:07 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 607E6ABA0787A02C4ED1;
-        Wed, 15 Jul 2020 10:19:04 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.238) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Wed, 15 Jul 2020
- 10:18:58 +0800
-Subject: Re: [PATCH v3] mm/percpu: fix 'defined but not used' warning
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
-        <john.wanghui@huawei.com>, Roman Gushchin <guro@fb.com>
-References: <20200714134101.80534-1-cuibixuan@huawei.com>
- <20200714225311.7aeffffd@canb.auug.org.au>
- <6f1a8c76-d6d7-1a2c-8b0b-26a4a31f1a19@huawei.com>
- <20200715062229.78591ff9@canb.auug.org.au>
- <6d41b939-a741-b521-a7a2-e7296ec16219@huawei.com>
- <20200715115043.45a505ca@canb.auug.org.au>
-From:   Bixuan Cui <cuibixuan@huawei.com>
-Message-ID: <2c0fc001-fcf2-1b2c-3311-c3827aeff73d@huawei.com>
-Date:   Wed, 15 Jul 2020 10:18:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727961AbgGOCTt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 22:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726458AbgGOCTs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 22:19:48 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7090DC061755;
+        Tue, 14 Jul 2020 19:19:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B61L81L3Hz9sQt;
+        Wed, 15 Jul 2020 12:19:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594779584;
+        bh=+IIpIm5NBf0FLv1htcwiZDfeAADjuxvH47Lc0Ejtq2Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J+AcP4twDPUf7D3brcjpb2DpRsznmMk+CLVEFTrsUO9Ji+U8fVuT0SNBqrFT9hEvS
+         FsawEyHoGcwyCrM98PfdwyQj3qamcqRdlQQv0DRlF0RDE2IkhB5YuCj7HGCtZk+Wua
+         84syc2Qhj326ydHFFS5bBx9o0JVdSr7P8Jrw4tnEMParhSna+26dVQuk3AOCgLTryG
+         0lvYRtA5rMznfCP2LCLcdoze16ghklSs0tyWJJIEBoVVrdXWh32Y0ThO4kmy+yYhvI
+         iSkeSD6CTuhFd3M1LvF9ZaYRGkZbXGKkDeHK3GniAHtcnobwmpC4+tp31Lg/ogDXwR
+         3qOhRN9xa3FSg==
+Date:   Wed, 15 Jul 2020 12:19:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Guo Xuenan <guoxuenan@huawei.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, wangli74@huawei.com,
+        fangwei1@huawei.com, ming.lei@redhat.com, josef@toxicpanda.com,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] blk-rq-qos: remove redundant finish_wait to
+ rq_qos_wait.
+Message-ID: <20200715121942.33bb34d8@canb.auug.org.au>
+In-Reply-To: <20200714232123.GA49251@lca.pw>
+References: <20200628135625.3396636-1-guoxuenan@huawei.com>
+        <20200714232123.GA49251@lca.pw>
 MIME-Version: 1.0
-In-Reply-To: <20200715115043.45a505ca@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.238]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="Sig_/.aioA6X+ig3cO9mw.DyZQFf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/.aioA6X+ig3cO9mw.DyZQFf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2020/7/15 9:50, Stephen Rothwell wrote:
-> I have added this patch to linux-next today.
-thanks.
+On Tue, 14 Jul 2020 19:21:24 -0400 Qian Cai <cai@lca.pw> wrote:
+>
+> On Sun, Jun 28, 2020 at 09:56:25AM -0400, Guo Xuenan wrote:
+> > It is no need do finish_wait twice after acquiring inflight.
+> >=20
+> > Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+> > ---
+> >  block/blk-rq-qos.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> >=20
+> > diff --git a/block/blk-rq-qos.c b/block/blk-rq-qos.c
+> > index 656460636ad3..18f3eab9f768 100644
+> > --- a/block/blk-rq-qos.c
+> > +++ b/block/blk-rq-qos.c
+> > @@ -273,8 +273,6 @@ void rq_qos_wait(struct rq_wait *rqw, void *private=
+_data,
+> >  		if (data.got_token)
+> >  			break;
+> >  		if (!has_sleeper && acquire_inflight_cb(rqw, private_data)) {
+> > -			finish_wait(&rqw->wait, &data.wq);
+> > -
+> >  			/*
+> >  			 * We raced with wbt_wake_function() getting a token,
+> >  			 * which means we now have two. Put our local token
+> > --=20
+> > 2.25.4 =20
+>=20
+> Reverting this commit fixed an issue that swapping workloads will stall f=
+or
+> days without being able to make any progress below.
 
+I have reverted that commit from linux-next today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.aioA6X+ig3cO9mw.DyZQFf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8OZ78ACgkQAVBC80lX
+0GybOAgAnpJviyuvglPkeY5E4Ah0HAPdrEr3GmaaWUxS8v+D1qxs3u8/Jd8UhPOP
+I8nZsL3u41jxUzFtn8jMy8b3/8k+BbZej+aRXwLIg6O42YS/40AfX+SYvOnMp0n3
+mD9joEL0hUoqvpZSWfPRLWzgqvzF7KLCKY9wyvB+f5xQDrzftY67u+4J6A9YyG5Z
+AvsUetVrt2SvOpxavgjs9YyHE/XDC5CPAy7QnDyZUu0Y7RC9ndoGcNOYtZrQ9BjZ
+e1tisxXkROR0IUSAQv9x/xExKLj4uUi4Z0RDdHD5lWuokOUZi6WA6XRORqgfFbRW
+uJPi45PylXE4PrzRYnZKEghPtTmyKA==
+=KgD5
+-----END PGP SIGNATURE-----
+
+--Sig_/.aioA6X+ig3cO9mw.DyZQFf--

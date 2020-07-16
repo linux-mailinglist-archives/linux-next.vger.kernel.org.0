@@ -2,35 +2,34 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE2B222439
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 15:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260AE222441
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 15:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgGPNrW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 09:47:22 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46564 "EHLO huawei.com"
+        id S1728832AbgGPNtA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 09:49:00 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7771 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726537AbgGPNrW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jul 2020 09:47:22 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id C8AF06FE82A9CF1EF574;
-        Thu, 16 Jul 2020 21:47:17 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.238) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Thu, 16 Jul 2020
- 21:47:11 +0800
-Subject: [PATCH -next v2] usb: usbtest: reduce stack usage in test_queue
-To:     <linux-next@vger.kernel.org>, <gustavoars@kernel.org>,
-        <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <qiang.zhang@windriver.com>,
-        "Wanghui (John)" <john.wanghui@huawei.com>
-References: <20200716082735.66342-1-cuibixuan@huawei.com>
+        id S1728093AbgGPNs7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 09:48:59 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 444E759714EF947306CC;
+        Thu, 16 Jul 2020 21:48:57 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.238) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Thu, 16 Jul 2020
+ 21:48:47 +0800
+Subject: [PATCH -next v2] media: tuners: reduce stack usage in
+ mxl5005s_reconfigure
 From:   Bixuan Cui <cuibixuan@huawei.com>
-Message-ID: <42fe1a83-38a5-816b-9258-8a344008f398@huawei.com>
-Date:   Thu, 16 Jul 2020 21:47:10 +0800
+To:     <linux-next@vger.kernel.org>, <mchehab@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <john.wanghui@huawei.com>
+References: <20200716171742.45621-1-cuibixuan@huawei.com>
+Message-ID: <7b3e9680-9a39-45d3-44c2-85b374df4a19@huawei.com>
+Date:   Thu, 16 Jul 2020 21:48:47 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200716082735.66342-1-cuibixuan@huawei.com>
+In-Reply-To: <20200716171742.45621-1-cuibixuan@huawei.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -43,56 +42,57 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Fix the warning: [-Werror=-Wframe-larger-than=]
 
-drivers/usb/misc/usbtest.c: In function 'test_queue':
-drivers/usb/misc/usbtest.c:2148:1:
-warning: the frame size of 1232 bytes is larger than 1024 bytes
+drivers/media/tuners/mxl5005s.c: In function 'mxl5005s_reconfigure':
+drivers/media/tuners/mxl5005s.c:3953:1:
+warning: the frame size of 1152 bytes is larger than 1024 bytes
 
-Reported-by: kbuild test robot <lkp@intel.com>
 Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
 ---
- drivers/usb/misc/usbtest.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/media/tuners/mxl5005s.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-index 8b220d56647b..a9b40953d6bc 100644
---- a/drivers/usb/misc/usbtest.c
-+++ b/drivers/usb/misc/usbtest.c
-@@ -2043,7 +2043,7 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
- 	unsigned		i;
- 	unsigned long		packets = 0;
- 	int			status = 0;
--	struct urb		*urbs[MAX_SGLEN];
-+	struct urb		**urbs;
+diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
+index 1c07e2225fb3..f6e82a8e7d37 100644
+--- a/drivers/media/tuners/mxl5005s.c
++++ b/drivers/media/tuners/mxl5005s.c
+@@ -3926,15 +3926,26 @@ static int mxl5005s_reconfigure(struct dvb_frontend *fe, u32 mod_type,
+ 	u32 bandwidth)
+ {
+ 	struct mxl5005s_state *state = fe->tuner_priv;
+-
+-	u8 AddrTable[MXL5005S_REG_WRITING_TABLE_LEN_MAX];
+-	u8 ByteTable[MXL5005S_REG_WRITING_TABLE_LEN_MAX];
++	u8 *AddrTable;
++	u8 *ByteTable;
+ 	int TableLen;
 
- 	if (!param->sglen || param->iterations > UINT_MAX / param->sglen)
- 		return -EINVAL;
-@@ -2051,6 +2051,10 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
- 	if (param->sglen > MAX_SGLEN)
- 		return -EINVAL;
+ 	dprintk(1, "%s(type=%d, bw=%d)\n", __func__, mod_type, bandwidth);
 
-+	urbs = kcalloc(MAX_SGLEN, sizeof(*urbs), GFP_KERNEL);
-+	if (!urbs)
+ 	mxl5005s_reset(fe);
+
++	AddrTable = kcalloc(MXL5005S_REG_WRITING_TABLE_LEN_MAX, sizeof(u8),
++			    GFP_KERNEL);
++	if (!AddrTable)
 +		return -ENOMEM;
 +
- 	memset(&context, 0, sizeof(context));
- 	context.count = param->iterations * param->sglen;
- 	context.dev = dev;
-@@ -2137,6 +2141,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
- 	else if (context.errors >
- 			(context.is_iso ? context.packet_count / 10 : 0))
- 		status = -EIO;
++	ByteTable = kcalloc(MXL5005S_REG_WRITING_TABLE_LEN_MAX, sizeof(u8),
++			    GFP_KERNEL);
++	if (!ByteTable) {
++		kfree(AddrTable);
++		return -ENOMEM;
++	}
 +
-+	kfree(urbs);
- 	return status;
+ 	/* Tuner initialization stage 0 */
+ 	MXL_GetMasterControl(ByteTable, MC_SYNTH_RESET);
+ 	AddrTable[0] = MASTER_CONTROL_ADDR;
+@@ -3949,6 +3960,9 @@ static int mxl5005s_reconfigure(struct dvb_frontend *fe, u32 mod_type,
 
- fail:
-@@ -2144,6 +2150,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
- 		if (urbs[i])
- 			simple_free_urb(urbs[i]);
- 	}
+ 	mxl5005s_writeregs(fe, AddrTable, ByteTable, TableLen);
+
++	kfree(AddrTable);
++	kfree(ByteTable);
 +
-+	kfree(urbs);
- 	return status;
+ 	return 0;
  }
 
 --
@@ -100,5 +100,6 @@ index 8b220d56647b..a9b40953d6bc 100644
 
 
 .
+
 
 

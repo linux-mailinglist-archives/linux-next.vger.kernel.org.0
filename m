@@ -2,93 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50CC221F8C
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 11:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E51222003
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 11:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgGPJQO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 05:16:14 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7872 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725975AbgGPJQN (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jul 2020 05:16:13 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id DB2A2BB2FE22CB6FFFDF;
-        Thu, 16 Jul 2020 17:16:10 +0800 (CST)
-Received: from huawei.com (10.174.28.241) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Thu, 16 Jul 2020
- 17:16:04 +0800
-From:   Bixuan Cui <cuibixuan@huawei.com>
-To:     <linux-next@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <mchehab@kernel.org>, <john.wanghui@huawei.com>
-Subject: [PATCH] media: tuners: reduce stack usage in mxl5005s_reconfigure
-Date:   Thu, 16 Jul 2020 17:17:42 +0000
-Message-ID: <20200716171742.45621-1-cuibixuan@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726293AbgGPJxT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 05:53:19 -0400
+Received: from smtprelay0250.hostedemail.com ([216.40.44.250]:38766 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726027AbgGPJxT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 05:53:19 -0400
+X-Greylist: delayed 382 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jul 2020 05:53:19 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 894D91802E6DA
+        for <linux-next@vger.kernel.org>; Thu, 16 Jul 2020 09:46:58 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 3F00D837F24D;
+        Thu, 16 Jul 2020 09:46:57 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1568:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:2904:3138:3139:3140:3141:3142:3622:3865:3871:4321:5007:10004:10400:10848:11026:11232:11473:11657:11658:11914:12043:12048:12114:12296:12297:12438:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21451:21627:30046:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: mind98_58102b926f01
+X-Filterd-Recvd-Size: 1571
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf03.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 16 Jul 2020 09:46:55 +0000 (UTC)
+Message-ID: <687734b1623965b154752252968adeca35740c88.camel@perches.com>
+Subject: Re: [PATCH] net: neterion: vxge: reduce stack usage in
+ VXGE_COMPLETE_VPATH_TX
+From:   Joe Perches <joe@perches.com>
+To:     Bixuan Cui <cuibixuan@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, linux-next@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        jdmason@kudzu.us, christophe.jaillet@wanadoo.fr,
+        john.wanghui@huawei.com
+Date:   Thu, 16 Jul 2020 02:46:54 -0700
+In-Reply-To: <20200716173247.78912-1-cuibixuan@huawei.com>
+References: <20200716173247.78912-1-cuibixuan@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.28.241]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix the warning: [-Werror=-Wframe-larger-than=]
+On Thu, 2020-07-16 at 17:32 +0000, Bixuan Cui wrote:
+> Fix the warning: [-Werror=-Wframe-larger-than=]
+[]
+> diff --git a/drivers/net/ethernet/neterion/vxge/vxge-main.c b/drivers/net/ethernet/neterion/vxge/vxge-main.c
+[]
+> @@ -100,8 +100,14 @@ static inline void VXGE_COMPLETE_VPATH_TX(struct vxge_fifo *fifo)
+>  	struct sk_buff **temp;
+>  #define NR_SKB_COMPLETED 128
+>  	struct sk_buff *completed[NR_SKB_COMPLETED];
+> +	struct sk_buff **completed;
+>  	int more;
+> 
+> +	completed = kcalloc(NR_SKB_COMPLETED, sizeof(*completed),
+> +			    GFP_KERNEL);
 
-drivers/media/tuners/mxl5005s.c: In function 'mxl5005s_reconfigure':
-drivers/media/tuners/mxl5005s.c:3953:1:
-warning: the frame size of 1152 bytes is larger than 1024 bytes
+I doubt this is a good idea.
+Check the callers interrupt status.
 
-Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
----
- drivers/media/tuners/mxl5005s.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/tuners/mxl5005s.c b/drivers/media/tuners/mxl5005s.c
-index 1c07e2225fb3..f6e82a8e7d37 100644
---- a/drivers/media/tuners/mxl5005s.c
-+++ b/drivers/media/tuners/mxl5005s.c
-@@ -3926,15 +3926,26 @@ static int mxl5005s_reconfigure(struct dvb_frontend *fe, u32 mod_type,
- 	u32 bandwidth)
- {
- 	struct mxl5005s_state *state = fe->tuner_priv;
--
--	u8 AddrTable[MXL5005S_REG_WRITING_TABLE_LEN_MAX];
--	u8 ByteTable[MXL5005S_REG_WRITING_TABLE_LEN_MAX];
-+	u8 *AddrTable;
-+	u8 *ByteTable;
- 	int TableLen;
-
- 	dprintk(1, "%s(type=%d, bw=%d)\n", __func__, mod_type, bandwidth);
-
- 	mxl5005s_reset(fe);
-
-+	AddrTable = kcalloc(MXL5005S_REG_WRITING_TABLE_LEN_MAX, sizeof(u8),
-+			    GFP_KERNEL);
-+	if (!AddrTable)
-+		return -ENOMEM;
-+
-+	ByteTable = kcalloc(MXL5005S_REG_WRITING_TABLE_LEN_MAX, sizeof(u8),
-+			    GFP_KERNEL);
-+	if (!ByteTable) {
-+		kfree(AddrTable);
-+		return -ENOMEM;
-+	}
-+
- 	/* Tuner initialization stage 0 */
- 	MXL_GetMasterControl(ByteTable, MC_SYNTH_RESET);
- 	AddrTable[0] = MASTER_CONTROL_ADDR;
-@@ -3949,6 +3960,9 @@ static int mxl5005s_reconfigure(struct dvb_frontend *fe, u32 mod_type,
-
- 	mxl5005s_writeregs(fe, AddrTable, ByteTable, TableLen);
-
-+	kfree(AddrTable);
-+	kfree(ByteTable);
-+
- 	return 0;
- }
-
---
-2.17.1
 

@@ -2,75 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 360B0222C7F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 22:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D5A222EC3
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 01:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729458AbgGPUKf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 16:10:35 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:60733 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728907AbgGPUKf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jul 2020 16:10:35 -0400
-Received: from mail-qv1-f44.google.com ([209.85.219.44]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MeCd5-1kX9G22kSN-00bJXo; Thu, 16 Jul 2020 22:10:33 +0200
-Received: by mail-qv1-f44.google.com with SMTP id t11so3320396qvk.1;
-        Thu, 16 Jul 2020 13:10:33 -0700 (PDT)
-X-Gm-Message-State: AOAM5327dbr353eCdcRtNK6j6ef50MttfAigcuX18sini8AyJfh6BCMO
-        j+0XaHr7QjDjoQmeob+fzC1kP5QsXKF8M83TRYM=
-X-Google-Smtp-Source: ABdhPJwf7kynnKai6Afz4/H0ZOfc7dZWYD0b8lXfjI914wMkP72ofpm/hkrkGhRuFEea9pz2bjdqMx8ipsD3ImBVJTk=
-X-Received: by 2002:ad4:4c09:: with SMTP id bz9mr5708144qvb.210.1594930232427;
- Thu, 16 Jul 2020 13:10:32 -0700 (PDT)
+        id S1728224AbgGPXKW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 19:10:22 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39635 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728149AbgGPXJ6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 19:09:58 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B792D01SRz9sSd;
+        Fri, 17 Jul 2020 09:09:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594940996;
+        bh=QWdrxFBpnc+5yuo/EXWfNKKKZ2K+Toci8Qlf1n0C6y0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PDEe9kz4oTwEwQL1l+VwLcW6E6k3EgHZQ1rVzPjU6atoGl6I+EWivth53CB0cj/Ff
+         XcAGKp66vPBeKN4jx51BfkfGO9RnBvoTXLlMb5coShUzXMkKEZt+NKSuO0NRZzMFcU
+         O4Us8lrYYeOGHGd4XpK4wgYgHzMIP01ATXhmNI5pIHcIsdmW9vQegA2jZQkfXDYr5g
+         QJ4aJnLCh8RavotRrhJ85U631r3KjlkBCjx8TGHG6YUh6vfxE5HarM00BggWawG2yl
+         AGVWzLBtUIuUzQyh8waUfmLMpZUE9D/wimIyrRYx6uvzwEhvHMK26VuEXbOWFW1sLr
+         XYIfSSohdea7A==
+Date:   Fri, 17 Jul 2020 09:09:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Bharata B Rao <bharata@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, aneesh.kumar@linux.ibm.com,
+        npiggin@gmail.com, mpe@ellerman.id.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Off-load TLB invalidations to host for !GTSE
+Message-ID: <20200717090954.51b5e952@canb.auug.org.au>
+In-Reply-To: <20200716172713.GA4565@lca.pw>
+References: <20200703053608.12884-1-bharata@linux.ibm.com>
+        <20200716172713.GA4565@lca.pw>
 MIME-Version: 1.0
-References: <20200714075729.68b92239@canb.auug.org.au> <1381a6c0-22fe-a175-f649-ea49da3451da@kernel.org>
-In-Reply-To: <1381a6c0-22fe-a175-f649-ea49da3451da@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Jul 2020 22:10:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a06bHeOqkQPG3Ap4hu4yFU-LA3L-5nwqk+7VGhSrKO_ng@mail.gmail.com>
-Message-ID: <CAK8P3a06bHeOqkQPG3Ap4hu4yFU-LA3L-5nwqk+7VGhSrKO_ng@mail.gmail.com>
-Subject: Re: linux-next: Fixes tags need some work in the arm-soc-fixes tree
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Xd04xb6AfbcMeaVp2O5+oAotMu02M4is0P1oZOZNRddIdv5h3wf
- wiGEDgcgcAVFCILgN8gvrIN5UDfiFezxAuL0T0Uf/rl9uBURUQG2U4PKT9CkfbP2itjZKqp
- xECZtDiPO9v33CDblevk6VJClfExoccMN0SIilRWAoSPUy8TVLcTCVBVVouJEtYoixmJi0R
- ZPVUNYJfMKOyPYbSCmptQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:P5u18hlfURo=:zq8//lt1fQ4GBjvBMJyN05
- MZaptGCWpcozdo0WAOGu/IHPcurpw1l1rJobQ07wALffLLgPFiGSaqJCz/PEmgoQlHMpRGd4+
- 0hVej9B+GYNc58YpPL6cTkGKuW8bSt18xTaOeHYFkH8IVG16oFEiA2xrl6rqKiAdhZ66F9FCk
- Hx11n3ZjUgcRJx01p0AgOvqLknxRePXil2a0tgwAg/8ETPOBa77PZ6LTLUr+XYhr0tpowZWlm
- CeRAQrpqIXDzGeRd43RO+mnbcMs3r/8WZ1Pf2lqYOlcpX66J7pKbG0zmPsOfVa9Ne3Quuxox/
- Y8yZPXW1d/2FB/jFwQgnBRpa+gqsRiyeh5bLKutonA5z6yLrl6iRP99PkAzEPjOtOVLmcBggu
- qriBsGixfyHt1PhYdtSccAAbBFKqYIGhRwAadvJNU81q4b2dlkkUyWTfi5Fkd/L+SEu2O3Z4V
- 9GWPQIh40qR7K/RmleSUli8Zo8awBnwSJfUM2hmDEo0w0NlnCXdTPlOznoBba48osnue5mqsg
- hA061v7GNUA675tmKNsD4jdSc0iKe8AQYW+s3/MizolWMftXFgd0XsfQDcCfNJzbtX3Gx+Qrx
- tt8tzbbzvfKoouVYFCn07GAaRj00V4JkJClyzbRWLWRFn8sK7E48brwuW1xDqBCaU+JzLy2QW
- hX94GjJzGzxV6dIer24n5la6Ej0T8TEEy+3Lh9wNqsD1LK9qXCIrOc0J7ao4DK3Tpz4MOePAQ
- 1VNWdLLQ/jY36/UNEbOZjNT4zDhZGDDGezvuwOKc4hvxU+0h2ivraBZYdDMvKhW4qC6c492gE
- B03tTnIWBEyVKkvWkTlBG9ZW7vHvoJI5KbbIFO2RJDRnsxQpF2rhaAV/MtgTUiGaEbL/7rC
+Content-Type: multipart/signed; boundary="Sig_/LrU42vrRqFzVHW8kLZ7IOY.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 9:14 PM Dinh Nguyen <dinguyen@kernel.org> wrote:
->
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA512
->
-> Hi,
->
-> I apologize for this! I have an updated branch that fixes these tags.
-> Let me know if I need to respin the pull request.
+--Sig_/LrU42vrRqFzVHW8kLZ7IOY.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I've recreated the branch from scratch now (this was one of only
-two pull requests I got anyway), it should be fine now.
+Hi all,
 
-       Arnd
+On Thu, 16 Jul 2020 13:27:14 -0400 Qian Cai <cai@lca.pw> wrote:
+>
+> Reverting the whole series fixed random memory corruptions during boot on
+> POWER9 PowerNV systems below.
+
+I will revert those commits from linux-next today as well (they revert
+cleanly).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LrU42vrRqFzVHW8kLZ7IOY.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8Q3kIACgkQAVBC80lX
+0Gx0EAgAgGAiEBdzR5nyLORIZM/X+qAx7M26k7TbqqYdKD9yzUyQlly6tj8yyOEz
+ivEg8oZYzNeoiqxPkYr/HLNzR/4ckQQ5RxTxXXI3r/nSj7nG4TI6vN+tSIomNs0p
+hZMh6QMkN52Yf179tutfBOhMdD4Gu5PIeQcgI7qd6VhOFfrZd17WS44i0oIWb1N7
+bxGLDbfH7dWO/b3imxj2rsnUZd6Qfs7jrCEExl/88mHPrRkfXlj4IWPdXoQ8R6wV
+mkhaEu3JZHlhgVoTebHsTyzlI9mIjKlx0UaOkBX+G6awc/msTlxuKmdBIKxDcj1b
+xCwR3sZinXugs1SFocbfj6SGmA9uvQ==
+=Nze4
+-----END PGP SIGNATURE-----
+
+--Sig_/LrU42vrRqFzVHW8kLZ7IOY.--

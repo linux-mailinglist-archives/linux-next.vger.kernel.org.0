@@ -2,86 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74DD221C92
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 08:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1817221CA9
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jul 2020 08:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbgGPGYM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 02:24:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50546 "EHLO mail.kernel.org"
+        id S1728114AbgGPGiB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 02:38:01 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:39386 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbgGPGYL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jul 2020 02:24:11 -0400
-Received: from localhost (unknown [122.171.202.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4611A206F5;
-        Thu, 16 Jul 2020 06:24:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594880651;
-        bh=Z/nrTcXcFk5J/58Hd9SKJQ2QPGf+Bc9TRddt07uYXJ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J1+Y5vDv98bZYgYKLHiON0mpd/bJAW/JRJIdHK5gRELyyKKz6ZDiJO0BDj9Ejrlvv
-         KX36RQTyBVP96DWYJTp/OHW4rg6XkM0uK+fOJScU6N06KiSXEMrxtEUtO/oILiqfOn
-         IVWiQoPGzHyRam56Su9cKc1ueWxKpPCrlEz6ZxRY=
-Date:   Thu, 16 Jul 2020 11:54:06 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726069AbgGPGiA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 02:38:00 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1jvxVi-0002fN-3n; Thu, 16 Jul 2020 16:36:51 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 16 Jul 2020 16:36:50 +1000
+Date:   Thu, 16 Jul 2020 16:36:50 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: linux-next: Tree for Jul 15
- (drivers/phy/allwinner/phy-sun4i-usb.c)
-Message-ID: <20200716062406.GG55478@vkoul-mobl>
-References: <20200715180551.64d8d21e@canb.auug.org.au>
- <edd798bb-ee51-bb99-b885-682489e7fda5@infradead.org>
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH RESEND] lockdep: Move list.h inclusion into lockdep.h
+Message-ID: <20200716063649.GA23065@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <edd798bb-ee51-bb99-b885-682489e7fda5@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 15-07-20, 08:18, Randy Dunlap wrote:
-> On 7/15/20 1:05 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200714:
-> > 
-> 
-> on x86_64:
-> # CONFIG_GPIOLIB is not set
-> 
-> ../drivers/phy/allwinner/phy-sun4i-usb.c: In function ‘sun4i_usb_phy0_get_id_det’:
-> ../drivers/phy/allwinner/phy-sun4i-usb.c:367:11: error: implicit declaration of function ‘gpiod_get_value_cansleep’; did you mean ‘gpio_get_value_cansleep’? [-Werror=implicit-function-declaration]
->     return gpiod_get_value_cansleep(data->id_det_gpio);
->            ^~~~~~~~~~~~~~~~~~~~~~~~
->            gpio_get_value_cansleep
->   CC      fs/bad_inode.o
-> ../drivers/phy/allwinner/phy-sun4i-usb.c: In function ‘sun4i_usb_phy_probe’:
-> ../drivers/phy/allwinner/phy-sun4i-usb.c:707:22: error: implicit declaration of function ‘devm_gpiod_get_optional’; did you mean ‘devm_clk_get_optional’? [-Werror=implicit-function-declaration]
->   data->id_det_gpio = devm_gpiod_get_optional(dev, "usb0_id_det",
->                       ^~~~~~~~~~~~~~~~~~~~~~~
->                       devm_clk_get_optional
-> ../drivers/phy/allwinner/phy-sun4i-usb.c:708:11: error: ‘GPIOD_IN’ undeclared (first use in this function); did you mean ‘GPIOF_IN’?
->            GPIOD_IN);
->            ^~~~~~~~
->            GPIOF_IN
-> ../drivers/phy/allwinner/phy-sun4i-usb.c:708:11: note: each undeclared identifier is reported only once for each function it appears in
-> ../drivers/phy/allwinner/phy-sun4i-usb.c:815:21: error: implicit declaration of function ‘gpiod_to_irq’; did you mean ‘gpio_to_irq’? [-Werror=implicit-function-declaration]
->   data->id_det_irq = gpiod_to_irq(data->id_det_gpio);
->                      ^~~~~~~~~~~~
->                      gpio_to_irq
-> 
-> 
-> Full randconfig file is attached.
+Currently lockdep_types.h includes list.h without actually using any
+of its macros or functions.  All it needs are the type definitions
+which were moved into types.h long ago.  This potentially causes
+inclusion loops because both are included by many core header
+files.
 
-Thanks Randy for the report, it is fixed by adding the right gpio
-header, sending a patch now
+This patch moves the list.h inclusion into lockdep.h.  Note that
+we could probably remove it completely but that could potentially
+result in compile failures should any end users not include list.h
+directly and also be unlucky enough to not get list.h via some other
+header file.
 
+Reported-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 3b73cf84f77d..b1ad5c045353 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -21,6 +21,7 @@ extern int lock_stat;
+ #ifdef CONFIG_LOCKDEP
+ 
+ #include <linux/linkage.h>
++#include <linux/list.h>
+ #include <linux/debug_locks.h>
+ #include <linux/stacktrace.h>
+ 
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index 7b9350624577..bb35b449f533 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -32,8 +32,6 @@ enum lockdep_wait_type {
+ 
+ #ifdef CONFIG_LOCKDEP
+ 
+-#include <linux/list.h>
+-
+ /*
+  * We'd rather not expose kernel/lockdep_states.h this wide, but we do need
+  * the total number of states... :-(
 -- 
-~Vinod
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

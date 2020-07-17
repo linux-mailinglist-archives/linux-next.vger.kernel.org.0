@@ -2,329 +2,293 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CA822329A
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 06:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2452232CA
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 07:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbgGQErF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 00:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S1726013AbgGQFMA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 01:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbgGQErF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 00:47:05 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F70C061755;
-        Thu, 16 Jul 2020 21:47:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7JW62mKtz9sRW;
-        Fri, 17 Jul 2020 14:46:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594961221;
-        bh=oWCQWQTnYs63n2+4mU4tRGhEi0v9vBwzy4mhYDlLzps=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iQ2hIQwVLN+ppQzJbVnKC6uriZjC7QqgkxHAEoqIh0fmFFDhbtf7Jb+ol2sUiSifj
-         knTnZj110bd4oQuy/ACTs0Qt1JDInuJ0lSKNj/fh4m5H/YHs1sJpprb/uO37cdQwyT
-         ANJigPuKeyQAC3OaF5ePGeHwV2rd3FEUQbANJ+v0+kyOGsdOkXDEiYNAG5S/hntDs2
-         /Qo2918at39ql2GmR8R6IPX5f1729epafO0mmHPhCX2W+GvbMzu7npU2REoD2Yil+G
-         WW1f1xAvXW5fdHbk64OGwfvguS6S4RlFlUG1VYvBjzE3kEcGP+OhzMrNuhOpdEu4dH
-         jfQeeFS7IwjSQ==
-Date:   Fri, 17 Jul 2020 14:46:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: linux-next: manual merge of the tip tree with the crypto tree
-Message-ID: <20200717144656.4bdbf81f@canb.auug.org.au>
+        with ESMTP id S1725300AbgGQFMA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 01:12:00 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA502C061755
+        for <linux-next@vger.kernel.org>; Thu, 16 Jul 2020 22:11:59 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id w2so6113122pgg.10
+        for <linux-next@vger.kernel.org>; Thu, 16 Jul 2020 22:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=C4zTCkRTzikuZQjFF8BDYey3Fb1PqCHA0fV8UfDmlPA=;
+        b=WeKCt2r0NIXmro2cm3faWmUI+w+CsrgDTCW1Yqk/vkgbYfVCBNgdYEQr/QrgOANCkT
+         TJGYuIf5IK1cRGvpkr5vPzF/HI1gOk08PZb/e2ybc6PMBeD9vD+UUuN7hlhSejgt85XX
+         pEpGLfBoI6Bv9aqzUMuX5CZxnWNDhrYW8mCRXqypdd8mUdiKEf1uJY5IRSGiEVKbiCTv
+         YnLvlQnA8TFMAHIEmGxDzy6lwcfiKqTT4IUPvqdIslhsxmdjSUOHMXRbMAmE/b14aJ6d
+         7+brZOmj/Fw0Ob+i/7OVg41UPkhX3TXXP61H4LkEEL42g3trkKIJv4RweEO83nl8rY7B
+         gLfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=C4zTCkRTzikuZQjFF8BDYey3Fb1PqCHA0fV8UfDmlPA=;
+        b=hSoAMyTWU5D32yHW2Kccs1KHYbD80w/IvTRXXySnlSlkN/Y7cf367Ds25WDnSi90V4
+         pWKw4kHncDRq2AASA2h3dXr3yNv8Zq1BNtEJpcfAlrXuROjpTFLkLkedVoUSVowC9WzY
+         wHDxbO1uAbBOy1BRvzRSdkM9GX1ssFeyKyaKWLjfG4TnJ5Bg1aLzZaEKGTqb6E0+9NIW
+         zS5zN0KXX1hHywc07rt2IR3JLSEibJRyy+d69cAF0Clm/cyISckdiGulmVwdaKWPR7w1
+         MAmEX3iZ2ioGTIhvEWfcXSOYFbdb+6uB6nmAzw32aMthozGHM8JnPwGt8e9dn32cewtZ
+         dsTA==
+X-Gm-Message-State: AOAM532m8uoAlvoYPSDPGxMcL2WdZcT7RrbmijDzQstGQXh1K5zNKnrf
+        HzyY+JBRuIdVjoCLxQ1Gv4Z8poEd3AY=
+X-Google-Smtp-Source: ABdhPJwr+cFfRn3XBJNCNSY3H8Md0jJu5a7PaBfB5blaSCp56HWOYsRAGBKiRNIXVheKoZJ6IaZpvA==
+X-Received: by 2002:a63:cc18:: with SMTP id x24mr7005493pgf.86.1594962718802;
+        Thu, 16 Jul 2020 22:11:58 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q24sm6415762pfg.95.2020.07.16.22.11.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 22:11:58 -0700 (PDT)
+Message-ID: <5f11331e.1c69fb81.db233.4cee@mx.google.com>
+Date:   Thu, 16 Jul 2020 22:11:58 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qFh0fIP7XemDn+0mQcZbzqg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc5-311-g3c7f84b22484
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 176 runs,
+ 6 regressions (v5.8-rc5-311-g3c7f84b22484)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qFh0fIP7XemDn+0mQcZbzqg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 176 runs, 6 regressions (v5.8-rc5-311-g3c7f84b=
+22484)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the tip tree got a conflict in:
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+bcm2837-rpi-3-b         | arm64 | lab-baylibre  | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 4/5    =
 
-  arch/x86/include/asm/inst.h
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-8    | defconfig     =
+               | 0/1    =
 
-between commit:
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 0/1    =
 
-  d7866e503bdc ("crypto: x86 - Remove include/asm/inst.h")
+vexpress-v2p-ca15-tc1   | arm   | lab-baylibre  | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
 
-from the crypto tree and commit:
+vexpress-v2p-ca15-tc1   | arm   | lab-cip       | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
 
-  eaad981291ee ("x86/entry/64: Introduce the FIND_PERCPU_BASE macro")
+vexpress-v2p-ca15-tc1   | arm   | lab-collabora | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
 
-from the tip tree.
 
-I fixed it up (I brought the file back but removed what the crypto tree
-no longer needed - see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc5-311-g3c7f84b22484/plan/baseline/
 
-I think if the crypto tree brought back this file as well (even without
-the RDPID macro, it would make this conflict much more manageable.
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc5-311-g3c7f84b22484
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      3c7f84b2248457030a903813e4af71d80141d663 =
 
-/* SPDX-License-Identifier: GPL-2.0 */
-/*
- * Generate .byte code for some instructions not supported by old
- * binutils.
- */
-#ifndef X86_ASM_INST_H
-#define X86_ASM_INST_H
 
-#ifdef __ASSEMBLY__
 
-#define REG_NUM_INVALID		100
+Test Regressions
+---------------- =
 
-#define REG_TYPE_R32		0
-#define REG_TYPE_R64		1
-#define REG_TYPE_XMM		2
-#define REG_TYPE_INVALID	100
 
-	.macro R32_NUM opd r32
-	\opd =3D REG_NUM_INVALID
-	.ifc \r32,%eax
-	\opd =3D 0
-	.endif
-	.ifc \r32,%ecx
-	\opd =3D 1
-	.endif
-	.ifc \r32,%edx
-	\opd =3D 2
-	.endif
-	.ifc \r32,%ebx
-	\opd =3D 3
-	.endif
-	.ifc \r32,%esp
-	\opd =3D 4
-	.endif
-	.ifc \r32,%ebp
-	\opd =3D 5
-	.endif
-	.ifc \r32,%esi
-	\opd =3D 6
-	.endif
-	.ifc \r32,%edi
-	\opd =3D 7
-	.endif
-#ifdef CONFIG_X86_64
-	.ifc \r32,%r8d
-	\opd =3D 8
-	.endif
-	.ifc \r32,%r9d
-	\opd =3D 9
-	.endif
-	.ifc \r32,%r10d
-	\opd =3D 10
-	.endif
-	.ifc \r32,%r11d
-	\opd =3D 11
-	.endif
-	.ifc \r32,%r12d
-	\opd =3D 12
-	.endif
-	.ifc \r32,%r13d
-	\opd =3D 13
-	.endif
-	.ifc \r32,%r14d
-	\opd =3D 14
-	.endif
-	.ifc \r32,%r15d
-	\opd =3D 15
-	.endif
-#endif
-	.endm
 
-	.macro R64_NUM opd r64
-	\opd =3D REG_NUM_INVALID
-#ifdef CONFIG_X86_64
-	.ifc \r64,%rax
-	\opd =3D 0
-	.endif
-	.ifc \r64,%rcx
-	\opd =3D 1
-	.endif
-	.ifc \r64,%rdx
-	\opd =3D 2
-	.endif
-	.ifc \r64,%rbx
-	\opd =3D 3
-	.endif
-	.ifc \r64,%rsp
-	\opd =3D 4
-	.endif
-	.ifc \r64,%rbp
-	\opd =3D 5
-	.endif
-	.ifc \r64,%rsi
-	\opd =3D 6
-	.endif
-	.ifc \r64,%rdi
-	\opd =3D 7
-	.endif
-	.ifc \r64,%r8
-	\opd =3D 8
-	.endif
-	.ifc \r64,%r9
-	\opd =3D 9
-	.endif
-	.ifc \r64,%r10
-	\opd =3D 10
-	.endif
-	.ifc \r64,%r11
-	\opd =3D 11
-	.endif
-	.ifc \r64,%r12
-	\opd =3D 12
-	.endif
-	.ifc \r64,%r13
-	\opd =3D 13
-	.endif
-	.ifc \r64,%r14
-	\opd =3D 14
-	.endif
-	.ifc \r64,%r15
-	\opd =3D 15
-	.endif
-#endif
-	.endm
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+bcm2837-rpi-3-b         | arm64 | lab-baylibre  | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 4/5    =
 
-	.macro XMM_NUM opd xmm
-	\opd =3D REG_NUM_INVALID
-	.ifc \xmm,%xmm0
-	\opd =3D 0
-	.endif
-	.ifc \xmm,%xmm1
-	\opd =3D 1
-	.endif
-	.ifc \xmm,%xmm2
-	\opd =3D 2
-	.endif
-	.ifc \xmm,%xmm3
-	\opd =3D 3
-	.endif
-	.ifc \xmm,%xmm4
-	\opd =3D 4
-	.endif
-	.ifc \xmm,%xmm5
-	\opd =3D 5
-	.endif
-	.ifc \xmm,%xmm6
-	\opd =3D 6
-	.endif
-	.ifc \xmm,%xmm7
-	\opd =3D 7
-	.endif
-	.ifc \xmm,%xmm8
-	\opd =3D 8
-	.endif
-	.ifc \xmm,%xmm9
-	\opd =3D 9
-	.endif
-	.ifc \xmm,%xmm10
-	\opd =3D 10
-	.endif
-	.ifc \xmm,%xmm11
-	\opd =3D 11
-	.endif
-	.ifc \xmm,%xmm12
-	\opd =3D 12
-	.endif
-	.ifc \xmm,%xmm13
-	\opd =3D 13
-	.endif
-	.ifc \xmm,%xmm14
-	\opd =3D 14
-	.endif
-	.ifc \xmm,%xmm15
-	\opd =3D 15
-	.endif
-	.endm
 
-	.macro REG_TYPE type reg
-	R32_NUM reg_type_r32 \reg
-	R64_NUM reg_type_r64 \reg
-	XMM_NUM reg_type_xmm \reg
-	.if reg_type_r64 <> REG_NUM_INVALID
-	\type =3D REG_TYPE_R64
-	.elseif reg_type_r32 <> REG_NUM_INVALID
-	\type =3D REG_TYPE_R32
-	.elseif reg_type_xmm <> REG_NUM_INVALID
-	\type =3D REG_TYPE_XMM
-	.else
-	\type =3D REG_TYPE_INVALID
-	.endif
-	.endm
+  Details:     https://kernelci.org/test/plan/id/5f1101fe2751c081dc85bb22
 
-	.macro PFX_OPD_SIZE
-	.byte 0x66
-	.endm
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
+e/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
+e/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
 
-	.macro PFX_REX opd1 opd2 W=3D0
-	.if ((\opd1 | \opd2) & 8) || \W
-	.byte 0x40 | ((\opd1 & 8) >> 3) | ((\opd2 & 8) >> 1) | (\W << 3)
-	.endif
-	.endm
 
-	.macro MODRM mod opd1 opd2
-	.byte \mod | (\opd1 & 7) | ((\opd2 & 7) << 3)
-	.endm
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f1101fe2751c081=
+dc85bb25
+      new failure (last pass: v5.8-rc5-262-g7be1e4d3000e)
+      1 lines =
 
-.macro RDPID opd
-	REG_TYPE rdpid_opd_type \opd
-	.if rdpid_opd_type =3D=3D REG_TYPE_R64
-	R64_NUM rdpid_opd \opd
-	.else
-	R32_NUM rdpid_opd \opd
-	.endif
-	.byte 0xf3
-	.if rdpid_opd > 7
-	PFX_REX rdpid_opd 0
-	.endif
-	.byte 0x0f, 0xc7
-	MODRM 0xc0 rdpid_opd 0x7
-.endm
-#endif
 
-#endif
 
---=20
-Cheers,
-Stephen Rothwell
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-8    | defconfig     =
+               | 0/1    =
 
---Sig_/qFh0fIP7XemDn+0mQcZbzqg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+  Details:     https://kernelci.org/test/plan/id/5f11012c39b441b74385bb1f
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8RLUAACgkQAVBC80lX
-0GzX5wf/bMv33RnMLoOXbHMcGzegM54nfMV2XRxB1jQXtVhccQYfPJgPnVxePZvu
-2vsg9kX3IzyMNhH7NTWEEit5TJD7zYtjiOFT3F2GyXUXm2dRSAUrMwhInhp8pMXi
-vmjkNpqtLYTuOd8y5FdxQ63SFTzfrZYx6flm3LqijqhjeEAtPnZf7KXkgNXYc+XM
-X7AGFG5opT2Kj+XmshK+wY6a8rPMMx6ePeuDLcgcEYS4Ptci7w1vWietL4D9+OGZ
-Ap5QEep6IiNPznAme91cjpSbCRHno1U80h/To2mnIeSGZA963zyuiwex19SGh47x
-XxUh2t1mETrz5xEo6wF6+zXnH02Y2g==
-=rH1W
------END PGP SIGNATURE-----
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
+pi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
+pi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
 
---Sig_/qFh0fIP7XemDn+0mQcZbzqg--
+
+  * baseline.login: https://kernelci.org/test/case/id/5f11012c39b441b74385b=
+b20
+      new failure (last pass: v5.8-rc5-262-g7be1e4d3000e) =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f1102a82f8bb7b7b485bb1c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f1102a82f8bb7b7b485b=
+b1d
+      failing since 1 day (last pass: v5.8-rc4-597-gb8976598d3c1, first fai=
+l: v5.8-rc5-248-g9259f7ab5c13) =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+vexpress-v2p-ca15-tc1   | arm   | lab-baylibre  | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f10fd22a71f57909985bb27
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
+-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
+-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f10fd22a71f5790=
+9985bb2a
+      failing since 18 days (last pass: v5.8-rc2-453-gf59148f15013, first f=
+ail: v5.8-rc3-164-g155c91ddae03)
+      2 lines =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+vexpress-v2p-ca15-tc1   | arm   | lab-cip       | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f10fd297dd21db8cf85bb18
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
+ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
+ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f10fd297dd21db8=
+cf85bb1b
+      failing since 18 days (last pass: v5.8-rc2-453-gf59148f15013, first f=
+ail: v5.8-rc3-164-g155c91ddae03)
+      2 lines =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | results
+------------------------+-------+---------------+----------+---------------=
+---------------+--------
+vexpress-v2p-ca15-tc1   | arm   | lab-collabora | gcc-8    | vexpress_defco=
+nfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f10fd3176eeca9b6985bb19
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpres=
+s-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-31=
+1-g3c7f84b22484/arm/vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpres=
+s-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f10fd3176eeca9b=
+6985bb1c
+      failing since 18 days (last pass: v5.8-rc2-453-gf59148f15013, first f=
+ail: v5.8-rc3-164-g155c91ddae03)
+      2 lines =20

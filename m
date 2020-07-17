@@ -2,22 +2,22 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC2222FE6
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 02:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB14222FE9
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 02:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbgGQAWf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 20:22:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7772 "EHLO huawei.com"
+        id S1726204AbgGQAXD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 20:23:03 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7773 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726125AbgGQAWf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jul 2020 20:22:35 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 5CA266E5D3DBC4F29409;
-        Fri, 17 Jul 2020 08:22:32 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.238) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Jul 2020
- 08:22:23 +0800
-Subject: Re: [PATCH -next v2] usb: usbtest: reduce stack usage in test_queue
+        id S1725958AbgGQAXD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 20:23:03 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 9E79EA198379C7F1B5BB;
+        Fri, 17 Jul 2020 08:23:00 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.238) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Jul 2020
+ 08:22:53 +0800
+Subject: [PATCH -next v2] usb: usbtest: reduce stack usage in test_queue
 To:     Alan Stern <stern@rowland.harvard.edu>
 CC:     <linux-next@vger.kernel.org>, <gustavoars@kernel.org>,
         <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
@@ -27,8 +27,8 @@ References: <20200716082735.66342-1-cuibixuan@huawei.com>
  <42fe1a83-38a5-816b-9258-8a344008f398@huawei.com>
  <20200716154510.GE1112537@rowland.harvard.edu>
 From:   Bixuan Cui <cuibixuan@huawei.com>
-Message-ID: <3c01b28e-0568-b5d6-e8ce-9176da09466c@huawei.com>
-Date:   Fri, 17 Jul 2020 08:22:22 +0800
+Message-ID: <ffa85702-86ab-48d7-4da2-2efcc94b05d3@huawei.com>
+Date:   Fri, 17 Jul 2020 08:22:53 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0

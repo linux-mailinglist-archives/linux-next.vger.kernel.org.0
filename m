@@ -2,143 +2,327 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BFA22332C
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 07:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5F022347A
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 08:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbgGQF5K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 01:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S1727870AbgGQG1l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 02:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgGQF5J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 01:57:09 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B03EC061755;
-        Thu, 16 Jul 2020 22:57:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7L3z5kSgz9sQt;
-        Fri, 17 Jul 2020 15:57:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594965425;
-        bh=pogloshOGM434OcRKBF6s6ykZvFgAvuWoOESdMeuiYQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Qh6uvWzU9USOoVdsHuNu9fBrdoTUryAb8L7RQvx42+KbM904Jpg/QAkQVAzaoCEWd
-         TYd71mEQtOaxgHgVkBEu7L8kn14f2SbliwRKDAcyU/KTeG05Bv+MqKF9Xi//sa5UkL
-         BzNBXO6HwX6qz5LmOPHV9eTmhV2YWZS9eyhac3rBSnrRCPAwxackvwxhOU52Ni8uJN
-         IzusT8QiRIzNqHR/Les5DWWLeLA96mxB+tLEjAVFP4+yiU6p9BPvpoJHkrLMyEnCKx
-         W0pDwPPaZHpO/t+JesjlkDXhVIZbu8pmfJRfkvO08lZRJxAxm7Ekvv8duZRNshXgi+
-         rgyqV0Ey1ytXQ==
-Date:   Fri, 17 Jul 2020 15:57:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kvm tree
-Message-ID: <20200717155701.2d7caebb@canb.auug.org.au>
+        with ESMTP id S1726962AbgGQG1j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 02:27:39 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754E3C061755;
+        Thu, 16 Jul 2020 23:27:39 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id dm12so3821754qvb.9;
+        Thu, 16 Jul 2020 23:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A3qqFF9yd3EKW/+nagLOaGgu79oDzMUA/VxmH16ttug=;
+        b=ZixpRszNUNTbAzJhX/ocpWCSZ9iF+5uvw17oQTar95O/SvFbUASypBidCkEVY9HMLF
+         SwkhIbNuNlOszMxEazsN/bF20wXIYRLh5nkCTA//BjMDxuqAP8oLeiSKFLnfaj4PHWUo
+         jnjLHvlOwajtqkaBjc2ET2Vns9Gm/fgMocFZI7DGd/U3sSqo+fmqVDwMWu1GxqQ+NKew
+         tRDeYwRvL4co/lxvjH/JBzB/4UMCJPi+DcmJe1vgxnmpNtyOFi6XL9WYPW/a0umAKqlq
+         9hSP7eF5XH2TM7zRdeHWoTe+1ASmGZcjkr0HI32/qFbU050sZtA9cxw34YzFDdRDeR/l
+         j2fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A3qqFF9yd3EKW/+nagLOaGgu79oDzMUA/VxmH16ttug=;
+        b=P4gb6TFYFgJFQiXSBe1VydgUSQ1XQ+VlhZmeXUUXsI/xx43d7QxOmtVWpm81ce0oM4
+         ckG77RGv41Zc5Zssuza179KbArAOEprqQw5RULrkj0uRJILAv46uF72imI6hkB8eWhFW
+         f3D9XGH15aCLY3Vo3++2OfzLGSPiX/Zv6QLBSVXftfXyI4ATNRelT0GWEAQc1gNR/uDB
+         vv286sXOTAvbdt329fUPTq2FoBY+rbVQftWYdA0cKxe5gx19Zq2H1rIK4tjVl6l6nBkv
+         eKq+A2+UlwX0JEPR+GBqUV/9g4yC73VP2sdpTDWah7PHKg+uOBLbvgTXCjej/LvCCF1i
+         wqvw==
+X-Gm-Message-State: AOAM533zatl2Ro2odTZdzAhMfCVh53E27YL0F+uPkxPRYJdUYIB1ZC50
+        LeMycu8mFOstm/HD8qlWE3fi3qF34uRVFYOc+EjKGWIX
+X-Google-Smtp-Source: ABdhPJwZWWO4WoZvg8RmUJxWGouo5QxAZHQLboX1iGjpX0vnF24PIbk3GO27rwGBsGCQZvrN9AnVJoO4Auo5M6hOVfQ=
+X-Received: by 2002:a05:6214:1586:: with SMTP id m6mr7428351qvw.171.1594967258230;
+ Thu, 16 Jul 2020 23:27:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A2+892SpS7JbA5SH7D40+2e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200717144656.4bdbf81f@canb.auug.org.au>
+In-Reply-To: <20200717144656.4bdbf81f@canb.auug.org.au>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Fri, 17 Jul 2020 08:27:27 +0200
+Message-ID: <CAFULd4Ye2d-8BY7aY+_2tYwcXsfSCe3O6aJ4LF0KhvWTjVt0rA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the crypto tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A2+892SpS7JbA5SH7D40+2e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 17, 2020 at 6:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>
+>   arch/x86/include/asm/inst.h
+>
+> between commit:
+>
+>   d7866e503bdc ("crypto: x86 - Remove include/asm/inst.h")
+>
+> from the crypto tree and commit:
+>
+>   eaad981291ee ("x86/entry/64: Introduce the FIND_PERCPU_BASE macro")
+>
+> from the tip tree.
+>
+> I fixed it up (I brought the file back but removed what the crypto tree
+> no longer needed - see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> I think if the crypto tree brought back this file as well (even without
+> the RDPID macro, it would make this conflict much more manageable.
 
-Hi all,
+I will prepare a v2 that leaves needed part of inst.h.
 
-After merging the kvm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Uros.
 
-arch/x86/kernel/kvm.c: In function '__sysvec_kvm_asyncpf_interrupt':
-arch/x86/kernel/kvm.c:275:13: error: implicit declaration of function 'idte=
-ntry_enter_cond_rcu'; did you mean 'idtentry_enter_nmi'? [-Werror=3Dimplici=
-t-function-declaration]
-  275 |  rcu_exit =3D idtentry_enter_cond_rcu(regs);
-      |             ^~~~~~~~~~~~~~~~~~~~~~~
-      |             idtentry_enter_nmi
-arch/x86/kernel/kvm.c:286:2: error: implicit declaration of function 'idten=
-try_exit_cond_rcu'; did you mean 'idtentry_exit_nmi'? [-Werror=3Dimplicit-f=
-unction-declaration]
-  286 |  idtentry_exit_cond_rcu(regs, rcu_exit);
-      |  ^~~~~~~~~~~~~~~~~~~~~~
-      |  idtentry_exit_nmi
-
-Caused by commit
-
-  b037b09b9058 ("x86/entry: Rename idtentry_enter/exit_cond_rcu() to idtent=
-ry_enter/exit()")
-
-from the tip tree interacting with commit
-
-  26d05b368a5c ("Merge branch 'kvm-async-pf-int' into HEAD")
-
-from the kvm tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Jul 2020 15:51:27 +1000
-Subject: [PATCH] fix up for idtentry_{enter,exit}_cond_rcu() renaming
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/kernel/kvm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index cebd96687194..91dd322f768d 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -270,9 +270,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_kvm_asyncpf_interrupt)
- {
- 	struct pt_regs *old_regs =3D set_irq_regs(regs);
- 	u32 token;
--	bool rcu_exit;
-+	idtentry_state_t state;
-=20
--	rcu_exit =3D idtentry_enter_cond_rcu(regs);
-+	state =3D idtentry_enter(regs);
-=20
- 	inc_irq_stat(irq_hv_callback_count);
-=20
-@@ -283,7 +283,7 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_kvm_asyncpf_interrupt)
- 		wrmsrl(MSR_KVM_ASYNC_PF_ACK, 1);
- 	}
-=20
--	idtentry_exit_cond_rcu(regs, rcu_exit);
-+	idtentry_exit(regs, state);
- 	set_irq_regs(old_regs);
- }
-=20
---=20
-2.27.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A2+892SpS7JbA5SH7D40+2e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8RPa0ACgkQAVBC80lX
-0Gz2TggAl6/wSCerW01gjKj4t12AMidEFOAeQs+6Wu9p8rYdNsggQaPG4Y3mMJtr
-T44siKA0jHZ4iHFm/8BrjopwqDcJ5EGoOqAGm1MVOHZILE4Pjg22yxvJm5kc/1aQ
-8fxTiGMc5H5ntKpkeVlsVr+tumcQf1yAtQYhkHGbEloeVHBVS98rQkBzq/9ERLoN
-4DuLnOw6lalilJBSinhs431OzZL243An4aX+Li2S6rn57k9tNVd54xFzNGtUE3B6
-SRpG3twknomwuHVNDDFyL7EQ/eAZg8W2v5YGSqIe9YPvDL3M+Zjrfcsd9bwhD1+T
-5ieVxU+gK1WbvteqeTQGI4xQCndvtA==
-=rcvQ
------END PGP SIGNATURE-----
-
---Sig_/A2+892SpS7JbA5SH7D40+2e--
+> /* SPDX-License-Identifier: GPL-2.0 */
+> /*
+>  * Generate .byte code for some instructions not supported by old
+>  * binutils.
+>  */
+> #ifndef X86_ASM_INST_H
+> #define X86_ASM_INST_H
+>
+> #ifdef __ASSEMBLY__
+>
+> #define REG_NUM_INVALID         100
+>
+> #define REG_TYPE_R32            0
+> #define REG_TYPE_R64            1
+> #define REG_TYPE_XMM            2
+> #define REG_TYPE_INVALID        100
+>
+>         .macro R32_NUM opd r32
+>         \opd = REG_NUM_INVALID
+>         .ifc \r32,%eax
+>         \opd = 0
+>         .endif
+>         .ifc \r32,%ecx
+>         \opd = 1
+>         .endif
+>         .ifc \r32,%edx
+>         \opd = 2
+>         .endif
+>         .ifc \r32,%ebx
+>         \opd = 3
+>         .endif
+>         .ifc \r32,%esp
+>         \opd = 4
+>         .endif
+>         .ifc \r32,%ebp
+>         \opd = 5
+>         .endif
+>         .ifc \r32,%esi
+>         \opd = 6
+>         .endif
+>         .ifc \r32,%edi
+>         \opd = 7
+>         .endif
+> #ifdef CONFIG_X86_64
+>         .ifc \r32,%r8d
+>         \opd = 8
+>         .endif
+>         .ifc \r32,%r9d
+>         \opd = 9
+>         .endif
+>         .ifc \r32,%r10d
+>         \opd = 10
+>         .endif
+>         .ifc \r32,%r11d
+>         \opd = 11
+>         .endif
+>         .ifc \r32,%r12d
+>         \opd = 12
+>         .endif
+>         .ifc \r32,%r13d
+>         \opd = 13
+>         .endif
+>         .ifc \r32,%r14d
+>         \opd = 14
+>         .endif
+>         .ifc \r32,%r15d
+>         \opd = 15
+>         .endif
+> #endif
+>         .endm
+>
+>         .macro R64_NUM opd r64
+>         \opd = REG_NUM_INVALID
+> #ifdef CONFIG_X86_64
+>         .ifc \r64,%rax
+>         \opd = 0
+>         .endif
+>         .ifc \r64,%rcx
+>         \opd = 1
+>         .endif
+>         .ifc \r64,%rdx
+>         \opd = 2
+>         .endif
+>         .ifc \r64,%rbx
+>         \opd = 3
+>         .endif
+>         .ifc \r64,%rsp
+>         \opd = 4
+>         .endif
+>         .ifc \r64,%rbp
+>         \opd = 5
+>         .endif
+>         .ifc \r64,%rsi
+>         \opd = 6
+>         .endif
+>         .ifc \r64,%rdi
+>         \opd = 7
+>         .endif
+>         .ifc \r64,%r8
+>         \opd = 8
+>         .endif
+>         .ifc \r64,%r9
+>         \opd = 9
+>         .endif
+>         .ifc \r64,%r10
+>         \opd = 10
+>         .endif
+>         .ifc \r64,%r11
+>         \opd = 11
+>         .endif
+>         .ifc \r64,%r12
+>         \opd = 12
+>         .endif
+>         .ifc \r64,%r13
+>         \opd = 13
+>         .endif
+>         .ifc \r64,%r14
+>         \opd = 14
+>         .endif
+>         .ifc \r64,%r15
+>         \opd = 15
+>         .endif
+> #endif
+>         .endm
+>
+>         .macro XMM_NUM opd xmm
+>         \opd = REG_NUM_INVALID
+>         .ifc \xmm,%xmm0
+>         \opd = 0
+>         .endif
+>         .ifc \xmm,%xmm1
+>         \opd = 1
+>         .endif
+>         .ifc \xmm,%xmm2
+>         \opd = 2
+>         .endif
+>         .ifc \xmm,%xmm3
+>         \opd = 3
+>         .endif
+>         .ifc \xmm,%xmm4
+>         \opd = 4
+>         .endif
+>         .ifc \xmm,%xmm5
+>         \opd = 5
+>         .endif
+>         .ifc \xmm,%xmm6
+>         \opd = 6
+>         .endif
+>         .ifc \xmm,%xmm7
+>         \opd = 7
+>         .endif
+>         .ifc \xmm,%xmm8
+>         \opd = 8
+>         .endif
+>         .ifc \xmm,%xmm9
+>         \opd = 9
+>         .endif
+>         .ifc \xmm,%xmm10
+>         \opd = 10
+>         .endif
+>         .ifc \xmm,%xmm11
+>         \opd = 11
+>         .endif
+>         .ifc \xmm,%xmm12
+>         \opd = 12
+>         .endif
+>         .ifc \xmm,%xmm13
+>         \opd = 13
+>         .endif
+>         .ifc \xmm,%xmm14
+>         \opd = 14
+>         .endif
+>         .ifc \xmm,%xmm15
+>         \opd = 15
+>         .endif
+>         .endm
+>
+>         .macro REG_TYPE type reg
+>         R32_NUM reg_type_r32 \reg
+>         R64_NUM reg_type_r64 \reg
+>         XMM_NUM reg_type_xmm \reg
+>         .if reg_type_r64 <> REG_NUM_INVALID
+>         \type = REG_TYPE_R64
+>         .elseif reg_type_r32 <> REG_NUM_INVALID
+>         \type = REG_TYPE_R32
+>         .elseif reg_type_xmm <> REG_NUM_INVALID
+>         \type = REG_TYPE_XMM
+>         .else
+>         \type = REG_TYPE_INVALID
+>         .endif
+>         .endm
+>
+>         .macro PFX_OPD_SIZE
+>         .byte 0x66
+>         .endm
+>
+>         .macro PFX_REX opd1 opd2 W=0
+>         .if ((\opd1 | \opd2) & 8) || \W
+>         .byte 0x40 | ((\opd1 & 8) >> 3) | ((\opd2 & 8) >> 1) | (\W << 3)
+>         .endif
+>         .endm
+>
+>         .macro MODRM mod opd1 opd2
+>         .byte \mod | (\opd1 & 7) | ((\opd2 & 7) << 3)
+>         .endm
+>
+> .macro RDPID opd
+>         REG_TYPE rdpid_opd_type \opd
+>         .if rdpid_opd_type == REG_TYPE_R64
+>         R64_NUM rdpid_opd \opd
+>         .else
+>         R32_NUM rdpid_opd \opd
+>         .endif
+>         .byte 0xf3
+>         .if rdpid_opd > 7
+>         PFX_REX rdpid_opd 0
+>         .endif
+>         .byte 0x0f, 0xc7
+>         MODRM 0xc0 rdpid_opd 0x7
+> .endm
+> #endif
+>
+> #endif
+>
+> --
+> Cheers,
+> Stephen Rothwell

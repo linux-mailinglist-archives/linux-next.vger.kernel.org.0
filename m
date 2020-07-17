@@ -2,83 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D5A222EC3
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 01:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAC2222FE6
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 02:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgGPXKW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 19:10:22 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39635 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728149AbgGPXJ6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jul 2020 19:09:58 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B792D01SRz9sSd;
-        Fri, 17 Jul 2020 09:09:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594940996;
-        bh=QWdrxFBpnc+5yuo/EXWfNKKKZ2K+Toci8Qlf1n0C6y0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PDEe9kz4oTwEwQL1l+VwLcW6E6k3EgHZQ1rVzPjU6atoGl6I+EWivth53CB0cj/Ff
-         XcAGKp66vPBeKN4jx51BfkfGO9RnBvoTXLlMb5coShUzXMkKEZt+NKSuO0NRZzMFcU
-         O4Us8lrYYeOGHGd4XpK4wgYgHzMIP01ATXhmNI5pIHcIsdmW9vQegA2jZQkfXDYr5g
-         QJ4aJnLCh8RavotRrhJ85U631r3KjlkBCjx8TGHG6YUh6vfxE5HarM00BggWawG2yl
-         AGVWzLBtUIuUzQyh8waUfmLMpZUE9D/wimIyrRYx6uvzwEhvHMK26VuEXbOWFW1sLr
-         XYIfSSohdea7A==
-Date:   Fri, 17 Jul 2020 09:09:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Qian Cai <cai@lca.pw>
-Cc:     Bharata B Rao <bharata@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, aneesh.kumar@linux.ibm.com,
-        npiggin@gmail.com, mpe@ellerman.id.au,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Off-load TLB invalidations to host for !GTSE
-Message-ID: <20200717090954.51b5e952@canb.auug.org.au>
-In-Reply-To: <20200716172713.GA4565@lca.pw>
-References: <20200703053608.12884-1-bharata@linux.ibm.com>
-        <20200716172713.GA4565@lca.pw>
+        id S1726166AbgGQAWf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jul 2020 20:22:35 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7772 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726125AbgGQAWf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jul 2020 20:22:35 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 5CA266E5D3DBC4F29409;
+        Fri, 17 Jul 2020 08:22:32 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.238) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Jul 2020
+ 08:22:23 +0800
+Subject: Re: [PATCH -next v2] usb: usbtest: reduce stack usage in test_queue
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <linux-next@vger.kernel.org>, <gustavoars@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <qiang.zhang@windriver.com>,
+        "Wanghui (John)" <john.wanghui@huawei.com>
+References: <20200716082735.66342-1-cuibixuan@huawei.com>
+ <42fe1a83-38a5-816b-9258-8a344008f398@huawei.com>
+ <20200716154510.GE1112537@rowland.harvard.edu>
+From:   Bixuan Cui <cuibixuan@huawei.com>
+Message-ID: <3c01b28e-0568-b5d6-e8ce-9176da09466c@huawei.com>
+Date:   Fri, 17 Jul 2020 08:22:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LrU42vrRqFzVHW8kLZ7IOY.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200716154510.GE1112537@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.238]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LrU42vrRqFzVHW8kLZ7IOY.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fix the warning: [-Werror=-Wframe-larger-than=]
 
-Hi all,
+drivers/usb/misc/usbtest.c: In function 'test_queue':
+drivers/usb/misc/usbtest.c:2148:1:
+warning: the frame size of 1232 bytes is larger than 1024 bytes
 
-On Thu, 16 Jul 2020 13:27:14 -0400 Qian Cai <cai@lca.pw> wrote:
->
-> Reverting the whole series fixed random memory corruptions during boot on
-> POWER9 PowerNV systems below.
+Reported-by: kbuild test robot <lkp@intel.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+---
+v2: Change MAX_SGLEN to param->sglen.
 
-I will revert those commits from linux-next today as well (they revert
-cleanly).
+ drivers/usb/misc/usbtest.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+index 8b220d56647b..150090ee4ec1 100644
+--- a/drivers/usb/misc/usbtest.c
++++ b/drivers/usb/misc/usbtest.c
+@@ -2043,7 +2043,7 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	unsigned		i;
+ 	unsigned long		packets = 0;
+ 	int			status = 0;
+-	struct urb		*urbs[MAX_SGLEN];
++	struct urb		**urbs;
 
---Sig_/LrU42vrRqFzVHW8kLZ7IOY.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ 	if (!param->sglen || param->iterations > UINT_MAX / param->sglen)
+ 		return -EINVAL;
+@@ -2051,6 +2051,10 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	if (param->sglen > MAX_SGLEN)
+ 		return -EINVAL;
 
------BEGIN PGP SIGNATURE-----
++	urbs = kcalloc(param->sglen, sizeof(*urbs), GFP_KERNEL);
++	if (!urbs)
++		return -ENOMEM;
++
+ 	memset(&context, 0, sizeof(context));
+ 	context.count = param->iterations * param->sglen;
+ 	context.dev = dev;
+@@ -2137,6 +2141,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	else if (context.errors >
+ 			(context.is_iso ? context.packet_count / 10 : 0))
+ 		status = -EIO;
++
++	kfree(urbs);
+ 	return status;
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8Q3kIACgkQAVBC80lX
-0Gx0EAgAgGAiEBdzR5nyLORIZM/X+qAx7M26k7TbqqYdKD9yzUyQlly6tj8yyOEz
-ivEg8oZYzNeoiqxPkYr/HLNzR/4ckQQ5RxTxXXI3r/nSj7nG4TI6vN+tSIomNs0p
-hZMh6QMkN52Yf179tutfBOhMdD4Gu5PIeQcgI7qd6VhOFfrZd17WS44i0oIWb1N7
-bxGLDbfH7dWO/b3imxj2rsnUZd6Qfs7jrCEExl/88mHPrRkfXlj4IWPdXoQ8R6wV
-mkhaEu3JZHlhgVoTebHsTyzlI9mIjKlx0UaOkBX+G6awc/msTlxuKmdBIKxDcj1b
-xCwR3sZinXugs1SFocbfj6SGmA9uvQ==
-=Nze4
------END PGP SIGNATURE-----
+ fail:
+@@ -2144,6 +2150,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 		if (urbs[i])
+ 			simple_free_urb(urbs[i]);
+ 	}
++
++	kfree(urbs);
+ 	return status;
+ }
 
---Sig_/LrU42vrRqFzVHW8kLZ7IOY.--
+--
+2.17.1
+
+
+.
+
+
+

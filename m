@@ -2,89 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68B5223B06
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 14:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6831C223B19
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 14:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbgGQMAx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 08:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbgGQMAx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 08:00:53 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF6FC061755;
-        Fri, 17 Jul 2020 05:00:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726113AbgGQMFl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 08:05:41 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:45431 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725950AbgGQMFl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Jul 2020 08:05:41 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1594987540; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=hPWgjh6Z31+8mVshXFtGOQtuU1a/Lut0EMPEI8zc8j4=; b=wSW9x2L6O1Yk1g6YTx7S06YBBJA9ej/otgvmlb3pyN/HvCiGUSh43BX0Ih/ydAx20UXmyl/e
+ QK4nYNbROIqrXIqpxCSxUkOob+09gbVuU2hWmeRHS47GLjRaWH1tHwu9JAP0SHEqWl9Pbe7b
+ 9G54lARhxeJwfPKfwGsJA93kUkI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
+ 5f119414166c1c54948c54e6 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 17 Jul 2020 12:05:40
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D8807C43395; Fri, 17 Jul 2020 12:05:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7V7l29pkz9sR4;
-        Fri, 17 Jul 2020 22:00:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594987251;
-        bh=4MGJKluqDSBdANksRYdiW/8gMkKqqwzjaR5VZewNpa4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tCt3nDUBVfJp0cefSiSVLdkJ/L+/fCfTRAlzahiGr6Z47pLATW5fRqmeseOBHaOob
-         O6Lg/h1ULRxDBAx1olmDzptpSgsVAUIIVv2Pze8QJwyUvCCjjlhaXLj5pf3q4nj4IP
-         TGoZ9B3ai4icVilqAH/1EBQpZGWdYJfy6Zj2xjyCzXccFcZQGHPa9z2FMlupHWOS47
-         S2clOIPN3lfqXWHYTKn05aHCaNwGHaqGqVcbiEFm3MpFm/34rYq2rglFMdMPkKSJD8
-         nZrX/Ehl3vgmaDUkjRWKqQ+yCC0lHKmSeyuQ1TilYeU3Q9Rw0nbg4v2BqBcMBrJFyG
-         TzSr1AovdRbrQ==
-Date:   Fri, 17 Jul 2020 22:00:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the mfd tree
-Message-ID: <20200717220050.034e93e0@canb.auug.org.au>
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 22D79C433C6;
+        Fri, 17 Jul 2020 12:05:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 22D79C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: linux-next: manual merge of the dmaengine tree with the wireless-drivers-next and Linus' trees
+References: <20200717165336.312dcf09@canb.auug.org.au>
+Date:   Fri, 17 Jul 2020 15:05:34 +0300
+In-Reply-To: <20200717165336.312dcf09@canb.auug.org.au> (Stephen Rothwell's
+        message of "Fri, 17 Jul 2020 16:53:36 +1000")
+Message-ID: <87tuy673e9.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/99+HQU_Mm71v2Rrv5FaYIpg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/99+HQU_Mm71v2Rrv5FaYIpg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Hi all,
+> Today's linux-next merge of the dmaengine tree got a conflict in:
+>
+>   MAINTAINERS
+>
+> between commit:
+>
+>   5625f965d764 ("wilc1000: move wilc driver out of staging")
+>
+> from the wireless-drivers-next tree, commit:
+>
+>   6e701c299469 ("MAINTAINERS: merge entries for felix and ocelot drivers")
+>
+> from Linus' tree and commit:
+>
+>   c3846c4cce15 ("MAINTAINERS: dmaengine: Microchip: add Tudor Ambarus
+> as co-maintainer")
+>
+> from the dmaengine tree.
 
-In commit
+I think this is trivial enough that Linus can take care of it without
+any extra actions. Thanks for the report.
 
-  52aa6355da7a ("mfd: kempld-core: Fix 'assignment of read-only location' e=
-rror")
-
-Fixes tag
-
-  Fixes: 765f4122aee ("mfd: core: Make a best effort attempt to match devic=
-es with the correct of_nodes")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/99+HQU_Mm71v2Rrv5FaYIpg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8RkvIACgkQAVBC80lX
-0GyonAf9HgXtPCrVl2OMVejZ0TR7gJMM3vNce+T+6OjaT6ygNWnCnt+zqAuSEZSz
-DrIMcwMbvvZwgsLFKwZ37BNY9pNzsbC2ZZKjVqcLps+87mYalBBnNKJtlir80H7x
-Epu/jjqQbAMzFJE2kYCXU86CbaWNlFakixJuJ02oHlIJv/UTk/U0eQaazgSVC0+A
-FHK8nsmdUiIjStxbpfNVcetGmJeawCUyA+gd7EqSSjTWRi3Rfj3AVrU2hDZMRw1p
-NGI7gb1bmOOg3UNK8u97TODY4Cm3PDQcfvGFkc4HN1bO1wVXziKfJKIwFjVns/UT
-/ovn0FuMMaURXOB8mdDOk3DY7EnSUg==
-=grsJ
------END PGP SIGNATURE-----
-
---Sig_/99+HQU_Mm71v2Rrv5FaYIpg--
+-- 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

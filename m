@@ -2,170 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4830E2231BC
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 05:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E7322325B
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 06:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbgGQDl5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jul 2020 23:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726489AbgGQDl5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jul 2020 23:41:57 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB77BC061755;
-        Thu, 16 Jul 2020 20:41:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7H42710Zz9sRN;
-        Fri, 17 Jul 2020 13:41:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594957315;
-        bh=I+diQgdBksqMDNEDQO1DW8SMPxA1UG60rYse/U+8AdA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AE4PMhkmmCW7YXcQNLsaTU0YVx/3DxL140ssxxbvyM15wJf6Sg7BdnytdSo9TL4jQ
-         z9v9ulL7Zr6206TZbDOLKrwfCsRCepVfeP21MthdbDQwmDgUfctS4Kdn5HGdcLS7JV
-         fRymt4XdmRn3qw8mQka4MAgkTb4PZL1a83B3ZWNwJecpttG0NeQqwk82822LNXCjUK
-         qsKT3XpcxOQoIsRmQeA19APkq/2NajRFdWDRMK8NPJVz2X5549yI7R/d+UJFnUEWNf
-         ofbSS5z7ETAl0DDH9JjCwcvtLGb4fRQjM8GK6AwtCzm3u7Eefi8ZvDTNsn8dROYe2o
-         sJd75QfXwzNGw==
-Date:   Fri, 17 Jul 2020 13:41:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mfd tree
-Message-ID: <20200717134154.50326d78@canb.auug.org.au>
+        id S1726524AbgGQE3N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 00:29:13 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27504 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725300AbgGQE3M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Jul 2020 00:29:12 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06H41tMv063706;
+        Fri, 17 Jul 2020 00:29:04 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32auquns3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 00:29:04 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06H42W2f065651;
+        Fri, 17 Jul 2020 00:29:04 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32auquns30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 00:29:03 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06H4PZed026546;
+        Fri, 17 Jul 2020 04:29:01 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3274pgx35g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 04:29:01 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06H4SxbV66912320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jul 2020 04:28:59 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A22A811C050;
+        Fri, 17 Jul 2020 04:28:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE9C511C04C;
+        Fri, 17 Jul 2020 04:28:57 +0000 (GMT)
+Received: from in.ibm.com (unknown [9.77.195.220])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 17 Jul 2020 04:28:57 +0000 (GMT)
+Date:   Fri, 17 Jul 2020 09:58:54 +0530
+From:   Bharata B Rao <bharata@linux.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Qian Cai <cai@lca.pw>, aneesh.kumar@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        sfr@canb.auug.org.au
+Subject: Re: [PATCH v3 0/3] Off-load TLB invalidations to host for !GTSE
+Message-ID: <20200717042854.GL7902@in.ibm.com>
+Reply-To: bharata@linux.ibm.com
+References: <20200703053608.12884-1-bharata@linux.ibm.com>
+ <20200716172713.GA4565@lca.pw>
+ <1594950229.jn9ipe6td1.astroid@bobo.none>
+ <1594953143.b8px5ir35m.astroid@bobo.none>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wzSUY.Mm=JfxGqE90lH3=LR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1594953143.b8px5ir35m.astroid@bobo.none>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-16_11:2020-07-16,2020-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ adultscore=0 clxscore=1011 phishscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=6 priorityscore=1501 mlxscore=0
+ mlxlogscore=933 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007170025
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wzSUY.Mm=JfxGqE90lH3=LR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 17, 2020 at 12:44:00PM +1000, Nicholas Piggin wrote:
+> Excerpts from Nicholas Piggin's message of July 17, 2020 12:08 pm:
+> > Excerpts from Qian Cai's message of July 17, 2020 3:27 am:
+> >> On Fri, Jul 03, 2020 at 11:06:05AM +0530, Bharata B Rao wrote:
+> >>> Hypervisor may choose not to enable Guest Translation Shootdown Enable
+> >>> (GTSE) option for the guest. When GTSE isn't ON, the guest OS isn't
+> >>> permitted to use instructions like tblie and tlbsync directly, but is
+> >>> expected to make hypervisor calls to get the TLB flushed.
+> >>> 
+> >>> This series enables the TLB flush routines in the radix code to
+> >>> off-load TLB flushing to hypervisor via the newly proposed hcall
+> >>> H_RPT_INVALIDATE. 
+> >>> 
+> >>> To easily check the availability of GTSE, it is made an MMU feature.
+> >>> The OV5 handling and H_REGISTER_PROC_TBL hcall are changed to
+> >>> handle GTSE as an optionally available feature and to not assume GTSE
+> >>> when radix support is available.
+> >>> 
+> >>> The actual hcall implementation for KVM isn't included in this
+> >>> patchset and will be posted separately.
+> >>> 
+> >>> Changes in v3
+> >>> =============
+> >>> - Fixed a bug in the hcall wrapper code where we were missing setting
+> >>>   H_RPTI_TYPE_NESTED while retrying the failed flush request with
+> >>>   a full flush for the nested case.
+> >>> - s/psize_to_h_rpti/psize_to_rpti_pgsize
+> >>> 
+> >>> v2: https://lore.kernel.org/linuxppc-dev/20200626131000.5207-1-bharata@linux.ibm.com/T/#t
+> >>> 
+> >>> Bharata B Rao (2):
+> >>>   powerpc/mm: Enable radix GTSE only if supported.
+> >>>   powerpc/pseries: H_REGISTER_PROC_TBL should ask for GTSE only if
+> >>>     enabled
+> >>> 
+> >>> Nicholas Piggin (1):
+> >>>   powerpc/mm/book3s64/radix: Off-load TLB invalidations to host when
+> >>>     !GTSE
+> >> 
+> >> Reverting the whole series fixed random memory corruptions during boot on
+> >> POWER9 PowerNV systems below.
+> > 
+> > If I s/mmu_has_feature(MMU_FTR_GTSE)/(1)/g in radix_tlb.c, then the .o
+> > disasm is the same as reverting my patch.
+> > 
+> > Feature bits not being set right? PowerNV should be pretty simple, seems
+> > to do the same as FTR_TYPE_RADIX.
+> 
+> Might need this fix
+> 
+> ---
+> 
+> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+> index 9cc49f265c86..54c9bcea9d4e 100644
+> --- a/arch/powerpc/kernel/prom.c
+> +++ b/arch/powerpc/kernel/prom.c
+> @@ -163,7 +163,7 @@ static struct ibm_pa_feature {
+>  	{ .pabyte = 0,  .pabit = 6, .cpu_features  = CPU_FTR_NOEXECUTE },
+>  	{ .pabyte = 1,  .pabit = 2, .mmu_features  = MMU_FTR_CI_LARGE_PAGE },
+>  #ifdef CONFIG_PPC_RADIX_MMU
+> -	{ .pabyte = 40, .pabit = 0, .mmu_features  = MMU_FTR_TYPE_RADIX },
+> +	{ .pabyte = 40, .pabit = 0, .mmu_features  = (MMU_FTR_TYPE_RADIX | MMU_FTR_GTSE) },
+>  #endif
+>  	{ .pabyte = 1,  .pabit = 1, .invert = 1, .cpu_features = CPU_FTR_NODSISRALIGN },
+>  	{ .pabyte = 5,  .pabit = 0, .cpu_features  = CPU_FTR_REAL_LE,
 
-Hi all,
+Michael - Let me know if this should be folded into 1/3 and the complete
+series resent.
 
-After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
-
-drivers/mfd/kempld-core.c: In function 'kempld_register_cells_generic':
-drivers/mfd/kempld-core.c:105:13: error: assignment of read-only location '=
-devs[i++]'
-  105 |   devs[i++] =3D kempld_devs[KEMPLD_I2C];
-      |             ^
-drivers/mfd/kempld-core.c:108:13: error: assignment of read-only location '=
-devs[i++]'
-  108 |   devs[i++] =3D kempld_devs[KEMPLD_WDT];
-      |             ^
-drivers/mfd/kempld-core.c:111:13: error: assignment of read-only location '=
-devs[i++]'
-  111 |   devs[i++] =3D kempld_devs[KEMPLD_GPIO];
-      |             ^
-drivers/mfd/kempld-core.c:114:13: error: assignment of read-only location '=
-devs[i++]'
-  114 |   devs[i++] =3D kempld_devs[KEMPLD_UART];
-      |             ^
-
-Caused by commit
-
-  70d48975c152 ("mfd: core: Make a best effort attempt to match devices wit=
-h the correct of_nodes")
-
-I have added the following fix patch for today (I assume that there is
-a better solution):
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 17 Jul 2020 13:36:22 +1000
-Subject: [PATCH] fix up for struct mfd_cell change
-
-Fixes: 70d48975c152 ("mfd: core: Make a best effort attempt to match device=
-s with the correct of_nodes")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/mfd/kempld-core.c | 28 ++++++++++------------------
- 1 file changed, 10 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/mfd/kempld-core.c b/drivers/mfd/kempld-core.c
-index f48e21d8b97c..ad68ee699cb5 100644
---- a/drivers/mfd/kempld-core.c
-+++ b/drivers/mfd/kempld-core.c
-@@ -79,39 +79,31 @@ enum kempld_cells {
- 	KEMPLD_UART,
- };
-=20
--static const struct mfd_cell kempld_devs[] =3D {
--	[KEMPLD_I2C] =3D {
--		.name =3D "kempld-i2c",
--	},
--	[KEMPLD_WDT] =3D {
--		.name =3D "kempld-wdt",
--	},
--	[KEMPLD_GPIO] =3D {
--		.name =3D "kempld-gpio",
--	},
--	[KEMPLD_UART] =3D {
--		.name =3D "kempld-uart",
--	},
-+static const char *kempld_devs[] =3D {
-+	[KEMPLD_I2C] =3D "kempld-i2c",
-+	[KEMPLD_WDT] =3D "kempld-wdt",
-+	[KEMPLD_GPIO] =3D "kempld-gpio",
-+	[KEMPLD_UART] =3D "kempld-uart",
- };
-=20
- #define KEMPLD_MAX_DEVS	ARRAY_SIZE(kempld_devs)
-=20
- static int kempld_register_cells_generic(struct kempld_device_data *pld)
- {
--	struct mfd_cell devs[KEMPLD_MAX_DEVS];
-+	struct mfd_cell devs[KEMPLD_MAX_DEVS] =3D {};
- 	int i =3D 0;
-=20
- 	if (pld->feature_mask & KEMPLD_FEATURE_BIT_I2C)
--		devs[i++] =3D kempld_devs[KEMPLD_I2C];
-+		devs[i++].name =3D kempld_devs[KEMPLD_I2C];
-=20
- 	if (pld->feature_mask & KEMPLD_FEATURE_BIT_WATCHDOG)
--		devs[i++] =3D kempld_devs[KEMPLD_WDT];
-+		devs[i++].name =3D kempld_devs[KEMPLD_WDT];
-=20
- 	if (pld->feature_mask & KEMPLD_FEATURE_BIT_GPIO)
--		devs[i++] =3D kempld_devs[KEMPLD_GPIO];
-+		devs[i++].name =3D kempld_devs[KEMPLD_GPIO];
-=20
- 	if (pld->feature_mask & KEMPLD_FEATURE_MASK_UART)
--		devs[i++] =3D kempld_devs[KEMPLD_UART];
-+		devs[i++].name =3D kempld_devs[KEMPLD_UART];
-=20
- 	return mfd_add_devices(pld->dev, -1, devs, i, NULL, 0, NULL);
- }
---=20
-2.27.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wzSUY.Mm=JfxGqE90lH3=LR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8RHgIACgkQAVBC80lX
-0GyeBQf/b5vLY/pw4G+VOpwfhhkkmnOYfUIioFB0RbMDhyACfxE+3uMLw6mkI9dQ
-g5oB7HHWkHqzXSNhdVjfua2Zc1CAh//TTQhRuf+19SfSo8Z47wF/Z6+eQT20hK1J
-1+5YvfeEh+S94RpnDmGAq35fFoDjC4WYP08KDslRgFGDNmkF3tcNhQ/f4PogO611
-ePhWyhkE4hbzCJb2VbtKARFWpHJZ1d/G4rXPxCD+SpCnXsVHsXGWKXj+yhcrmwCk
-VPvyaI9gC0l5p1NckYAFSXz40E21WJnz9CcQTOfwLbrNbVDi3y+BDMnfoCKQd7ai
-m7vkWmm9IEeZbqlIQa+XKtaZOLM54w==
-=B271
------END PGP SIGNATURE-----
-
---Sig_/wzSUY.Mm=JfxGqE90lH3=LR--
+Regards,
+Bharata.

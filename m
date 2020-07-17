@@ -2,142 +2,186 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81B72240C6
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 18:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916F5224283
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 19:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgGQQtP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 12:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726221AbgGQQtP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 12:49:15 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B98C0619D2;
-        Fri, 17 Jul 2020 09:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=u0JM6c08RReApxGswkP2r77YhwJHKkc2EjdJzkbnHXQ=; b=PYmVXrd42CrpgcWrj/QV0Y8W9l
-        Lkohjch9CFGyMhjEMptbgC9m9JrcRkK7fBu48xqCS0dAClLeLwWCRUR1ACgtaRbvRWftg19e0rVi6
-        dEU7TiYrdL2FL57rtThihxKSVgSRJdGNKCumUwKexTHzme02lSzYyA8CiEk1JnDDiUfpD7DgIxMs9
-        nbvHLH62K7v8Ma6ibkurMeO/X71qUFiRz2iY89380cqL4xVd97H9EJPRVzyGZgqjlC+FyAszRrA3U
-        c9rqLZC9E+aOONJ0p4uQk83/2RfXeiA+5wB0OElMbYGHl2fFqmjItphGSTYkHTqluxszY1UpJS/40
-        dN5YQS1Q==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwTXp-0008Qz-V4; Fri, 17 Jul 2020 16:49:10 +0000
-Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
+        id S1726593AbgGQRro (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 13:47:44 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6170 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726232AbgGQRro (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Jul 2020 13:47:44 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06HHlYcC011245;
+        Fri, 17 Jul 2020 10:47:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=ismwuUsenhx6tCs9S3sjoVHVjXmpL8GD2doGKWKGjWY=;
+ b=YJ+rsBT6wY0m8c8H658GEv+K5ieS7MmK5VdOXZmFxKx2jjBeccMkJoIsBoMzoU6Jueq7
+ pJG/XyeKSISmNTEETcJjWaOKFiP5U3l9EZPmYaY9tidSf2w/Ppww/EbC3Y9eEvRbuujz
+ 2MAV8fYFBgENmlm8BIPHvzM9zlhagAlmyuk= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 32arerxctf-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 17 Jul 2020 10:47:34 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 17 Jul 2020 10:47:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JnVs4nkmQl48iIFmXRSR6BGAEB1f7yxO/BlEWv+0POpw/to9BOMjhF56JwaUiwkZclXYy7v0hxP8Abr1E1un4IsiB2CtKyRBDS8QK3gs+P024S/2ON5M09Qq55MM3bZ3Sh0Il6Ot2pxI8P45dEPt4lPPwMFobY4rz1BtMoofx32Exx1gcbDP3YoFPTLsjWM7erh4VGHH/e7eldHMjmux5mnB+RDGGEUV7iXraqPDmiLtSc+v0lH0fY2Yu4HVsO+lkM3OAgQNif+LJkcB0Sz6HlSlhb1fDj60JIrl+zC1KS/ezn6TnoBDBhN+peVo4i2+2JcLK9h5mLsDgnLFDwyEBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ismwuUsenhx6tCs9S3sjoVHVjXmpL8GD2doGKWKGjWY=;
+ b=MC+xg4agbOI9hoO2+mN4ryayqLRH9R8DBDrVDyBbW5lAVIzTdayicLfUkQTEAUOY+/PUgk+kdRlp7MeFvz3E2vuAjUGfpy8zP7+06Ulo4aGhVqTa9YsQQfsrdnvSqCfCpt1y9EzxzrvuX4L2NnQfh1xT//z6SIdAxfsAt333IUDg4h1mfLT9cqHKNuVkCsbGvCU/um5v9lpDTek8oXsbxVXvC4inenGRi9UxmwZh5kwiRU5PTOQhkN/g45qXtD0VwE3iPY7Cz8dbuwnsMNjIm5nz4ogRommQCVyBYrjln9vGz8hw4rpe2wwQUxStTx9u51xwp6ZG6Ymk5Ds1xw151Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ismwuUsenhx6tCs9S3sjoVHVjXmpL8GD2doGKWKGjWY=;
+ b=QqKhkp/ooS/IJrBTQzqSx9al+DXkKeiyczWXVN4azEwnqKhAY5PW7H/RqVqroVV62OLsJw9XPNx+NklR2L6DrSecNgJdOpDlCDzOdzNP6UX2cVJnZppIGnYYslOBtWSjet2AWl4bO4lEIueb0ufhChnEaj5CiU+AmSeYVvwi8a0=
+Authentication-Results: canb.auug.org.au; dkim=none (message not signed)
+ header.d=none;canb.auug.org.au; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by BYAPR15MB3144.namprd15.prod.outlook.com (2603:10b6:a03:fe::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Fri, 17 Jul
+ 2020 17:47:08 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::48e3:c159:703d:a2f1]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::48e3:c159:703d:a2f1%5]) with mapi id 15.20.3195.022; Fri, 17 Jul 2020
+ 17:47:08 +0000
+Date:   Fri, 17 Jul 2020 10:47:05 -0700
+From:   Roman Gushchin <guro@fb.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Scott Wood <scottwood@freescale.com>
-References: <20200717214036.67fa5379@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
-Date:   Fri, 17 Jul 2020 09:49:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200717174705.GA55916@carbon.DHCP.thefacebook.com>
+References: <20200717203127.00db2444@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717203127.00db2444@canb.auug.org.au>
+X-ClientProxiedBy: BY5PR13CA0028.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::41) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
 MIME-Version: 1.0
-In-Reply-To: <20200717214036.67fa5379@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from carbon.DHCP.thefacebook.com (2620:10d:c090:400::5:bef8) by BY5PR13CA0028.namprd13.prod.outlook.com (2603:10b6:a03:180::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.9 via Frontend Transport; Fri, 17 Jul 2020 17:47:08 +0000
+X-Originating-IP: [2620:10d:c090:400::5:bef8]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ca2caf9-1504-425c-32df-08d82a796d42
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3144:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3144BA5CA8B7397B8B26298CBE7C0@BYAPR15MB3144.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:586;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kQWk/VVyBWfPoSqn0gUT09Fy/tZrS8+S8RXBIaHnhkxDmp6x45FTbpR51dNTeLH5f2MwGbzYkQ9Ma+xUGNKGgDijfxFEr3VWjKxowEs5xJNETY7EJJZ1mlA2BMC6lbn/If4kiGgcTJTHStNxZYTpX2YeRM9OgrrGKSuiYufkaTcNLDoeZIeGJBYuW3llty9NYllyPPyFTyA5cDdR6hxsbrmbcZX04cKBZjdIpEYe+lfp5YpDkPm4xQgcNkNGpueXKv/EqRtgZj+pp+PWJ2Fp2uocSj6lTrA5TtO6SKKoHzvITeZJe6VFxHbYjBXnnMjyMNeE6uWhxXgZb6VeTBsRmA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(376002)(366004)(136003)(39860400002)(396003)(6506007)(86362001)(6666004)(54906003)(110136005)(9686003)(5660300002)(55016002)(83380400001)(8936002)(16526019)(8676002)(2906002)(33656002)(478600001)(186003)(4326008)(66946007)(52116002)(66556008)(316002)(1076003)(66476007)(7696005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: G1QG2W4gZltnulqRcisa0LtFqSH7/IRk2ljY/tlqxaZMl2IzNRYCsg5PAEksEaQYrGgvJU9451iEPtgXioQsTXF1bjOKWVV7+bSefkewHmEUXNYgJWlYawN9dEtQjycJej+PRvoLpww5x3mGqCXo7DkF0lMqYucNObSu61JwswjFoSYApKv3YWHihYxT7GFD6H6cCCbtGnfSYrY6VwOrhxAG6le/douTDYp9d0rHk5qjMw/dkP8piyg7xLn95dgH8qS0XlmqxSH4L61lDvU5bLoOoQoEAw5YFP3VZ6tjLTLoUiwR88QKuFrK4aJ/3RaUJQlLg3H+PPSQM7kYVFe3cwXmUlWJ/2zmB+3FfRjviDlaO5c/+//NnmQU6dInABbcvybZmEBgTQO2t/bqhH6hE+bbiYX2DVplwKoNSvItAloKAnC6JNZhfOzqMBODBvUbgej6KFwPOXq/y/lDALtxqB9R/xBFjTheIuPWsaimKDRczvOuKBxA8z13qdBXqj0GPo3RlMcDp7Zi68hw3MhuJg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca2caf9-1504-425c-32df-08d82a796d42
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2020 17:47:08.7538
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ji0HF7vllLezDvvFYqGL0offLy8XnbYHrJHdolEhvWVia10eGMZ/7GX0xAXV5FOj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3144
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-17_08:2020-07-17,2020-07-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ priorityscore=1501 adultscore=0 mlxscore=0 suspectscore=1 malwarescore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007170127
+X-FB-Internal: deliver
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/17/20 4:40 AM, Stephen Rothwell wrote:
+On Fri, Jul 17, 2020 at 08:31:27PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Changes since 20200716:
+> After merging the akpm-current tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
 > 
-> New tree: init
-> Changed tree: dmi (from quilt to git)
+> mm/vmstat.c:614: warning: "MAX_THRESHOLD" redefined
+>   614 | #define MAX_THRESHOLD 0
+>       | 
+> mm/vmstat.c:172: note: this is the location of the previous definition
+>   172 | #define MAX_THRESHOLD 125
+>       | 
+> mm/vmstat.c:614: warning: "MAX_THRESHOLD" redefined
+>   614 | #define MAX_THRESHOLD 0
+>       | 
+> mm/vmstat.c:172: note: this is the location of the previous definition
+>   172 | #define MAX_THRESHOLD 125
+>       | 
 > 
-> My fixes tree contains:
+> Introduced by commit
 > 
->   dbf24e30ce2e ("device_cgroup: Fix RCU list debugging warning")
+>   5f6bac149e10 ("mm: vmstat: fix /proc/sys/vm/stat_refresh generating false warnings")
 > 
-> I revreted 3 commits from the powerpc tree due to reported run time
-> problems.
+> The preproccesor directives look like this:
 > 
-> The sound tree gained a semantic conflict against the dma-mapping tree.
+> #ifdef CONFIG_SMP
+> #define MAX_THRESHOLD 125
+> #ifdef CONFIG_HAVE_CMPXCHG_LOCAL
+> #else
+> #define MAX_THRESHOLD 0
 > 
-> The security tree still had its build failure for which I applied a patch.
-> 
-> The tip tree still had one build failure for which I reverted a commit.
-> It also gained a conflict against the crypto tree
-> 
-> The kvm tree gained a conflict and a semantic conflict against the
-> tip tree.
-> 
-> The dmaengine tree gained conflicts against the wireless-drivers-next
-> and Linus' trees.
-> 
-> The pinctrl tree gained a build failure so I used the version from
-> next-20200716.
-> 
-> The set_fs tree gained a conflict against the powerpc tree.
-> 
-> The init tree gained a conflict against the block tre.
-> 
-> The akpm-current tree gained conflicts against the crypto and tip trees.
-> It also gained a build failure for which I applied a patch.
-> 
-> Non-merge commits (relative to Linus' tree): 8001
->  8717 files changed, 441636 insertions(+), 169176 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf. After
-> the final fixups (if any), I do an x86_64 modules_install followed by
-> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> kvm enabled).
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 325 trees (counting Linus' and 83 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
+> So I guess the second MAX_THRESHOLD was put after the wrong #else?
 
-on x86_64:
-# CONFIG_WATCHDOG is not set
+Right, I missed it. Sorry for the inconvenience!
+And thank you for pointing at it!
 
-ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
-rtc-ds1374.c:(.text+0x736): undefined reference to `watchdog_init_timeout'
-ld: rtc-ds1374.c:(.text+0x77e): undefined reference to `devm_watchdog_register_device'
+The following diff fixes it.
 
+Andrew, can you, please, squash it into the
+"mm: vmstat: fix /proc/sys/vm/stat_refresh generating false warnings" ?
 
+Thank you!
+
+--
+
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 8f0ef8aaf8ee..08e415e0a15d 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -168,9 +168,12 @@ EXPORT_SYMBOL(vm_numa_stat);
+ EXPORT_SYMBOL(vm_node_stat);
+ 
+ #ifdef CONFIG_SMP
+-
+ #define MAX_THRESHOLD 125
++#else
++#define MAX_THRESHOLD 0
++#endif
+ 
++#ifdef CONFIG_SMP
+ int calculate_pressure_threshold(struct zone *zone)
+ {
+ 	int threshold;
+@@ -611,8 +614,6 @@ void dec_node_page_state(struct page *page, enum node_stat_item item)
+ EXPORT_SYMBOL(dec_node_page_state);
+ #else
+ 
+-#define MAX_THRESHOLD 0
+-
+ /*
+  * Use interrupt disable to serialize counter updates
+  */
 -- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+2.26.2
+

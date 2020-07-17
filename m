@@ -2,68 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E57A223D83
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 15:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1031223D94
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 16:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgGQN7T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 09:59:19 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:44444 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726675AbgGQN7S (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 09:59:18 -0400
-Received: by mail-io1-f69.google.com with SMTP id h15so6569648ioj.11
-        for <linux-next@vger.kernel.org>; Fri, 17 Jul 2020 06:59:17 -0700 (PDT)
+        id S1726418AbgGQODa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 10:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgGQODa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 10:03:30 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A78C0619D2
+        for <linux-next@vger.kernel.org>; Fri, 17 Jul 2020 07:03:30 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z2so11296373wrp.2
+        for <linux-next@vger.kernel.org>; Fri, 17 Jul 2020 07:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RbOdxTlyI/3XAl9I0H4CmZU9SzIOJB1OUydhqh4FBss=;
+        b=tWcyINfGOtyDShLYeEK02hBFV/l5a8CG8sfXDhxwe+Br8WJ4vwIhzGNfuvJiLqaZHd
+         TTNVHLIBC24RsTN0lmiQqTokcUZxSc2/hcXzfMy0zf9dja11DF6n1JVaSmUVK4AqFM4Z
+         LZfF6/KmbEMGVJwKIxp0aEY5/FDuB9L3Cj2qVb6+kXXYZMH65TRY2ylJWVh2FgvF2Fjh
+         6O7sa2cJNofLopOOukDUGbEvoPkGt5rTZRGGvYTqrFGJ93TYlfZGiATRbeqbA9eZUUqI
+         MCvBYTjcUyUlHL+UnGMthgs8bqfyfU6sJpCu+tNIPzkzbdGAcbZX3htNgcl3b6khbQxJ
+         +RLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=bU3sd8rGiZmUAWTtsb671xLiu6bhL6hUo6RVTwP9+PM=;
-        b=hcJ1DL/8SMZTetTNTqgXLkbGqk40ZfZBg3uPpd9b5mXIDJ72gSlnwnSDxA3BCHanYA
-         G9L8O/thf8azvOlfu2NqwhVAfcktQCup1PKqNU3AS3/4GIzAnev1xC4/ONvafnRssei5
-         b2PB3kZ39mTEum50+CedBV1ehT3TYDplPokNkffSerWEuBL1DmJDuiQE+rODXR6fcm50
-         jq5BDSAuKfaXYqt9IJcD6yPutfXvwGv42vm/ZhOECfXWkWU6lwVn/Tcwmuwe05ogUn1J
-         g99UOCBOPmt9kQ1PrKfwKEe/dfl5mCDtZ12DUy4uSHfhaKMgyO6GdUwZFJdVAbzkpWa7
-         e9LA==
-X-Gm-Message-State: AOAM532Xjlr4ECNWjKAgJ/pd+185WXAKMk8mqI1SVKOtWOxdH19+1Nhc
-        bpiw8YHvy2lgXwB4U+Uux4DKxmzVVB6s8SzBzdrVRUjmqFfi
-X-Google-Smtp-Source: ABdhPJxBymMVURyvlvIGIGz/LASCLSjZQQeUx2NklGbcytS45lHuxj9hQhMvJ9L3pFdkcjadZLy87IvxIzUg1/6DjkuxwIiAfpuK
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RbOdxTlyI/3XAl9I0H4CmZU9SzIOJB1OUydhqh4FBss=;
+        b=W5OFjK+qoU1G6hkXB/ZECkA49KdOnlePWcm+9rsLqvRMKNgLSy/ZiALx6+2cENrdnQ
+         CbRvPKGSAXkFQ7uD/C1LxR1vjUNCtjuWXPHH0s1DBv08PkmCvP5ipRNry1k3QlZR60HZ
+         TttGH1jYW6i2SeGOFtUuEr9KPbfIARjotiZ9Bj+nG6JC3x45DRMUDrGDebu97wFRoyeA
+         Bxz+bgKg/9onesfKZJxpEyGGKI9k6dIbW48O1IywI7ePi2X0r9Hkrpj5mU3ksW1gA2Ey
+         O/iiL0y8Pi3jALgOku1StJpO3dXW5Nag3IrR3Ah5GPeAmlhrm+OjfWhdmfKpqzUVP5Vh
+         UgXg==
+X-Gm-Message-State: AOAM530nVPtrkx5bohrVNy+pn4nXprbgNFLY+ZIGX8Kr+91o/rgnp2ew
+        IHhZVn+qYaz9S1t01dTKStftcQ==
+X-Google-Smtp-Source: ABdhPJztHsBgGovks545WPzg+s4wqHMB3T2D1WGezjpsODG5+6zyHP9SWLYPg6/frHageCw2tVb7KA==
+X-Received: by 2002:a5d:4687:: with SMTP id u7mr11091880wrq.357.1594994608729;
+        Fri, 17 Jul 2020 07:03:28 -0700 (PDT)
+Received: from dell ([2.27.167.94])
+        by smtp.gmail.com with ESMTPSA id w13sm14635829wrr.67.2020.07.17.07.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 07:03:28 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 15:03:26 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     syzbot <syzbot+2fa4c81b0e82fb808f38@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Subject: Re: linux-next build error (10)
+Message-ID: <20200717140326.GJ3165313@dell>
+References: <00000000000018715505aaa390ed@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:bd0f:: with SMTP id c15mr9434314ile.95.1594994357463;
- Fri, 17 Jul 2020 06:59:17 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 06:59:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000018715505aaa390ed@google.com>
-Subject: linux-next build error (10)
-From:   syzbot <syzbot+2fa4c81b0e82fb808f38@syzkaller.appspotmail.com>
-To:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <00000000000018715505aaa390ed@google.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Fri, 17 Jul 2020, syzbot wrote:
 
-syzbot found the following issue on:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    aab7ee9f Add linux-next specific files for 20200717
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=123cefcf100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=66b5d44ee3d87c99
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2fa4c81b0e82fb808f38
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2fa4c81b0e82fb808f38@syzkaller.appspotmail.com
+> 
+> drivers/mfd/mfd-core.c:147:17: error: implicit declaration of function 'of_read_number' [-Werror=implicit-function-declaration]
 
-HEAD commit:    aab7ee9f Add linux-next specific files for 20200717
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=123cefcf100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=66b5d44ee3d87c99
-dashboard link: https://syzkaller.appspot.com/bug?extid=2fa4c81b0e82fb808f38
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+This is fixed already, but thanks for the heads-up.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2fa4c81b0e82fb808f38@syzkaller.appspotmail.com
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-drivers/mfd/mfd-core.c:147:17: error: implicit declaration of function 'of_read_number' [-Werror=implicit-function-declaration]
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

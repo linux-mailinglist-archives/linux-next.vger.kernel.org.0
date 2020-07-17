@@ -2,92 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC693223536
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 09:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E7A223544
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 09:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbgGQHLG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 03:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726113AbgGQHLF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 03:11:05 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B20C061755
-        for <linux-next@vger.kernel.org>; Fri, 17 Jul 2020 00:11:05 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id f2so9865327wrp.7
-        for <linux-next@vger.kernel.org>; Fri, 17 Jul 2020 00:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ArTRNnzZs91FkA6/ho6wtwomeiOgsZ04JTylL3kLyNs=;
-        b=kDLT6+leXR3qSGdg6iPjbZzsiQrryZSog3FdKj/+hYTCAgYEN2f+fSZOMcVvcVx8Da
-         NTx74nLGPTS7LDBzlM9nQ6Th0UIw0M0dm6aERDQMNDa/DhTFc1Q/kd4rbIuNzRDr/i7t
-         YF5wf9g3y6l2hc+M67fA1TG5k0mNpQXFuo/QRrOZbK1TCVk3BAUM3COpO1gdIWy2HDnd
-         14sT/3G9ghmBYgX0YQRuq/2hKzVl4PVtucD5NGtVM9HKVY/gQauhpd8bG3waw8hj0InN
-         LPesgOo6D+Jg2dcMBmu2cM2xy3rr+NKIqmUszshPHDmyMQTTYn07O26utsNVTc2T3z6b
-         e3YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ArTRNnzZs91FkA6/ho6wtwomeiOgsZ04JTylL3kLyNs=;
-        b=Bz45fqEp5twM+/uMw/2+TPUIZq8QOYEmYRDtO3Z/XFQxyHZIJCr5sOyapc8uzToDYH
-         qenV539HJCNsoJTvnt7jANTWX0vm7CgAxdO+fldX0NXiE8PMtl5zkiu12bnWWJb5AORV
-         wbPtHR/+7ES1f/sVTryYJkIODsopKOUnAvCIxcfQkyM8za15Vw8Bb6rR5VqoehfoCNZI
-         EfuvIcS0Dk/dFa0hSyXZ0zKfQhPArio7q9MPFgMpGRAs+QwsUNEpcF07Ar8mm3EP7XWD
-         jSoZrwtuInDIo+Yx2glW2/nH8sVrsIm2uFt1w58X1m2i8w4w2TxM4sVpaUjwPlEFrl9t
-         Sxww==
-X-Gm-Message-State: AOAM5326rjfYpQatMOv0cXWuS6BSS8L6FXO0b7sZUeFog66/aRKTw5i3
-        /eGlPXS8BbQhCafay0qEcgUtGw==
-X-Google-Smtp-Source: ABdhPJy9nuaTBwW1I5JOhKknn3r1C08+e8njv/F7IHQArMz57YQ6EzXop430T9F9pKM1MIEDjgNQ6Q==
-X-Received: by 2002:adf:a34a:: with SMTP id d10mr8846245wrb.59.1594969864077;
-        Fri, 17 Jul 2020 00:11:04 -0700 (PDT)
-Received: from dell ([2.27.167.94])
-        by smtp.gmail.com with ESMTPSA id d13sm13261001wrn.61.2020.07.17.00.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 00:11:03 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 08:11:01 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726201AbgGQHQk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 03:16:40 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48613 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726113AbgGQHQk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Jul 2020 03:16:40 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7Mqk6xh3z9sRW;
+        Fri, 17 Jul 2020 17:16:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594970195;
+        bh=oTj8Uaaotye20E7nbwvHhre4w0zWt0nBV6tySDhiD+E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YJ/14INQyPXfRursA7MF7Ch5Bxhi61lCq31FGRwEa/cM/u+hg7GyA8iTZalnKCGGx
+         ysH9alOH9ybXdiRrPFyJ0dAhpQOruHfdUCTYfjkQ54PvnbXwjlTsKL8zP+LyYhVO+z
+         XD5TdxqdfEVpyHh4mZVmDV2D+YN+JydSSAIH1DChIYwITWmFTwf5lWymau/efGPjDE
+         tItCdRiNou0vSfA2YZD4Ff1hlNu7S5N7yfT3+6uHfJyccymP99JWy+zoUktCMco5Zl
+         CgKiWIp2r46c+u0n8WBZ/DItXKboS5eIlIWNAhK/mHW6aGy8jtL2fkBg/GLu3wgRU/
+         2MsOvT3aIMn5Q==
+Date:   Fri, 17 Jul 2020 17:16:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mfd tree
-Message-ID: <20200717071101.GC3165313@dell>
-References: <20200717134154.50326d78@canb.auug.org.au>
- <20200717065636.GB3165313@dell>
- <20200717165958.41db203d@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hanks Chen <hanks.chen@mediatek.com>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Mars Cheng <mars.cheng@mediatek.com>
+Subject: linux-next: build failure after merge of the pinctrl tree
+Message-ID: <20200717171634.4b68472c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200717165958.41db203d@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/Ip=NXk1Hx7QoDwi+Gmdo.e2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 17 Jul 2020, Stephen Rothwell wrote:
+--Sig_/Ip=NXk1Hx7QoDwi+Gmdo.e2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi Lee,
-> 
-> On Fri, 17 Jul 2020 07:56:36 +0100 Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > > +static const char *kempld_devs[] = {  
-> > 
-> > Do you mind if I change this to 'kempld_dev_names' and still keep your
-> > SoB?
-> 
-> No worries, I just did a quick hack, so if you neaten it up that would
-> be good.
+Hi all,
 
-Great.  Thanks again.
+After merging the pinctrl tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Applied, thanks.
+drivers/pinctrl/mediatek/pinctrl-mt6779.c:783:1: warning: data definition h=
+as no type or storage class
+  783 | arch_initcall(mt6779_pinctrl_init);
+      | ^~~~~~~~~~~~~
+drivers/pinctrl/mediatek/pinctrl-mt6779.c:783:1: error: type defaults to 'i=
+nt' in declaration of 'arch_initcall' [-Werror=3Dimplicit-int]
+drivers/pinctrl/mediatek/pinctrl-mt6779.c:783:1: warning: parameter names (=
+without types) in function declaration
+drivers/pinctrl/mediatek/pinctrl-mt6779.c:779:19: warning: 'mt6779_pinctrl_=
+init' defined but not used [-Wunused-function]
+  779 | static int __init mt6779_pinctrl_init(void)
+      |                   ^~~~~~~~~~~~~~~~~~~
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Caused by commit
+
+  e6f744c6ad4f ("pinctrl: mediatek: add pinctrl support for MT6779 SoC")
+
+Forgot to include module.h (since it is tristate in Kconfig) or init.h?
+
+I used the pinctrl tree from next-20200716 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ip=NXk1Hx7QoDwi+Gmdo.e2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8RUFIACgkQAVBC80lX
+0GwW4Qf/U9+yRyzHbBgotPvNHdRVuVngKgRqwGRr2Q+biDGlpjacKUVLt9om0Jb0
+Uaet6q5UsQHBBjopnZg3N4knmaIVCUHTsDLdG+wHnjOUHsHrhdpQlK1A188Yti0B
+UuOGJnCAlKMuNUmZDKn9u4X+F66X/BMCh0izUUETjmuV6zPc+X2OUBOIgEL/P7Yq
+VUwbkXn1DGrzIvoxyWqVkALk4kOkivO6u564MN3a0jtdFBf4rvnV0ab5H3K8ZYH7
++Gd1FPXFkZagPeLDsY884eg1f9pzv/yJ4GzrV063Zj5LYACXv/wQawtPy8oMY9GZ
+lU+huz43csOde8EMBwdU1kS1JFZ6jw==
+=wOdB
+-----END PGP SIGNATURE-----
+
+--Sig_/Ip=NXk1Hx7QoDwi+Gmdo.e2--

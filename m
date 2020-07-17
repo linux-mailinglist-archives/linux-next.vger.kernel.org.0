@@ -2,90 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 785A8224006
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 17:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81B72240C6
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jul 2020 18:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbgGQP7G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 11:59:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40054 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726381AbgGQP7G (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Jul 2020 11:59:06 -0400
-Received: from [192.168.1.30] (cpe-70-114-128-244.austin.res.rr.com [70.114.128.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5D13204EA;
-        Fri, 17 Jul 2020 15:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595001545;
-        bh=96HqE9DoPXDog7gYWuAkDp8aupsEHF0zpvpihqEoVEE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=zQXwVgzOZlh95kljqcBrN8UsXPsOH9yj4zuIIPaFwfSJpi3r0pyOO4C1Hss+KF1bP
-         tlXVtmv+5kyYJuY9p5skQUKhCmDXpZ9aHkpkqorOpNgklW+WRuvJtsHn6+WFipatqy
-         yVYy2mWXOdm9mPN4dZtHiNYLTlhkPYVVXmiz0lXM=
-Subject: Re: linux-next: Fixes tags need some work in the arm-soc-fixes tree
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20200714075729.68b92239@canb.auug.org.au>
- <1381a6c0-22fe-a175-f649-ea49da3451da@kernel.org>
- <CAK8P3a06bHeOqkQPG3Ap4hu4yFU-LA3L-5nwqk+7VGhSrKO_ng@mail.gmail.com>
- <3761e5c8-3ba4-2925-9f3a-2d98dd1e46e2@kernel.org>
- <CAK8P3a3YXWx5PhnZzsX_fYD0FC92XAn=2gr_3MA8dJ=zSpToBw@mail.gmail.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <2aa2b6dd-5d78-cf7a-6a7f-bc07dc1fef43@kernel.org>
-Date:   Fri, 17 Jul 2020 10:59:03 -0500
+        id S1726401AbgGQQtP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jul 2020 12:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726221AbgGQQtP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 12:49:15 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B98C0619D2;
+        Fri, 17 Jul 2020 09:49:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=u0JM6c08RReApxGswkP2r77YhwJHKkc2EjdJzkbnHXQ=; b=PYmVXrd42CrpgcWrj/QV0Y8W9l
+        Lkohjch9CFGyMhjEMptbgC9m9JrcRkK7fBu48xqCS0dAClLeLwWCRUR1ACgtaRbvRWftg19e0rVi6
+        dEU7TiYrdL2FL57rtThihxKSVgSRJdGNKCumUwKexTHzme02lSzYyA8CiEk1JnDDiUfpD7DgIxMs9
+        nbvHLH62K7v8Ma6ibkurMeO/X71qUFiRz2iY89380cqL4xVd97H9EJPRVzyGZgqjlC+FyAszRrA3U
+        c9rqLZC9E+aOONJ0p4uQk83/2RfXeiA+5wB0OElMbYGHl2fFqmjItphGSTYkHTqluxszY1UpJS/40
+        dN5YQS1Q==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwTXp-0008Qz-V4; Fri, 17 Jul 2020 16:49:10 +0000
+Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Scott Wood <scottwood@freescale.com>
+References: <20200717214036.67fa5379@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
+Date:   Fri, 17 Jul 2020 09:49:05 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3YXWx5PhnZzsX_fYD0FC92XAn=2gr_3MA8dJ=zSpToBw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200717214036.67fa5379@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
@@ -93,36 +50,94 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 7/17/20 10:46 AM, Arnd Bergmann wrote:
-> On Fri, Jul 17, 2020 at 5:36 PM Dinh Nguyen <dinguyen@kernel.org> wrote:
->> On 7/16/20 3:10 PM, Arnd Bergmann wrote:
->>> On Wed, Jul 15, 2020 at 9:14 PM Dinh Nguyen <dinguyen@kernel.org> wrote:
->>>>
->>>> -----BEGIN PGP SIGNED MESSAGE-----
->>>> Hash: SHA512
->>>>
->>>> Hi,
->>>>
->>>> I apologize for this! I have an updated branch that fixes these tags.
->>>> Let me know if I need to respin the pull request.
->>>
->>> I've recreated the branch from scratch now (this was one of only
->>> two pull requests I got anyway), it should be fine now.
->>>
->>
->> Thank you!
+On 7/17/20 4:40 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I was about to send off the pull request to Linus now, but I now saw
-> that the tag I pulled was not updated and still has the broken lines.
+> Changes since 20200716:
 > 
-> Could you make sure you upload a new tag and send the pull
-> request for that so I can pull it once more?
+> New tree: init
+> Changed tree: dmi (from quilt to git)
+> 
+> My fixes tree contains:
+> 
+>   dbf24e30ce2e ("device_cgroup: Fix RCU list debugging warning")
+> 
+> I revreted 3 commits from the powerpc tree due to reported run time
+> problems.
+> 
+> The sound tree gained a semantic conflict against the dma-mapping tree.
+> 
+> The security tree still had its build failure for which I applied a patch.
+> 
+> The tip tree still had one build failure for which I reverted a commit.
+> It also gained a conflict against the crypto tree
+> 
+> The kvm tree gained a conflict and a semantic conflict against the
+> tip tree.
+> 
+> The dmaengine tree gained conflicts against the wireless-drivers-next
+> and Linus' trees.
+> 
+> The pinctrl tree gained a build failure so I used the version from
+> next-20200716.
+> 
+> The set_fs tree gained a conflict against the powerpc tree.
+> 
+> The init tree gained a conflict against the block tre.
+> 
+> The akpm-current tree gained conflicts against the crypto and tip trees.
+> It also gained a build failure for which I applied a patch.
+> 
+> Non-merge commits (relative to Linus' tree): 8001
+>  8717 files changed, 441636 insertions(+), 169176 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 325 trees (counting Linus' and 83 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
 > 
 
-I just sent you an updated pull request for the tag
-socfpga_fixes_for_v5.8_v2.
+on x86_64:
+# CONFIG_WATCHDOG is not set
 
-Thanks,
-Dinh
+ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
+rtc-ds1374.c:(.text+0x736): undefined reference to `watchdog_init_timeout'
+ld: rtc-ds1374.c:(.text+0x77e): undefined reference to `devm_watchdog_register_device'
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

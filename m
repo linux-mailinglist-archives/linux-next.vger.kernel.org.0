@@ -2,98 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A13C2247D0
-	for <lists+linux-next@lfdr.de>; Sat, 18 Jul 2020 03:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F262249E0
+	for <lists+linux-next@lfdr.de>; Sat, 18 Jul 2020 10:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgGRBi5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jul 2020 21:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S1729015AbgGRIfl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Jul 2020 04:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726710AbgGRBi4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jul 2020 21:38:56 -0400
+        with ESMTP id S1728129AbgGRIfl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Jul 2020 04:35:41 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE31C0619D2;
-        Fri, 17 Jul 2020 18:38:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CC4C0619D2;
+        Sat, 18 Jul 2020 01:35:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7rHf0sfDz9sSt;
-        Sat, 18 Jul 2020 11:38:54 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B81XS0Pbbz9sRN;
+        Sat, 18 Jul 2020 18:35:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595036334;
-        bh=KwdV0zFfsed7iFUlolMU4dmFArtNxfTQjE+hDf9oNT0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Vo2plUFogRNZIrfmPHCaSGtuSvm5g+P2grDJmJCiEHtNaoMa5Zu+GaFdNw7WmE3Fd
-         SGtqh6b/9lahSClv/zFNTBrLmMH8rO7Kwn19o9zUxD82NoHF9sIC0jMTtQJbNq8zjr
-         bqNyse9mrq+UqwNkWsLTh2VPamKUjGO+8gxSKFFLK2NuyAzw9/d+MRDU+IHwLGr22f
-         HhDeSXZ/8CWEq6n56vqgeVLqTtDPCxX1XG94yD/RPMQvliR4OmLsB2gslL4l0fcg4K
-         CcdR2VMZBGq40DixURuGme6ZeiDJXIr8ATPOWV3twj7h3/N0+WMesDnqOzVCdMmkqM
-         WxA2nUa58Lq7Q==
-Date:   Sat, 18 Jul 2020 11:38:53 +1000
+        s=201702; t=1595061337;
+        bh=/JC4+I9ojxORAlks9BSHvHNb9rXl2GhB0EH9eS44SGU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TwFBPgNrUtqA3FUCVFTV6wxvR3++SXhCWewYZJ8GzlGiRX9nmLJauDFj6nfze7/p+
+         x17eHHvAv4yXuWsTKwiJEfb/ECCLgt8o/0MZrr+PDuG4Jc5CE0zeAnaIZJeFJJiwNe
+         9fZb9jKM7jrTmhF5SzBxDGWsq3E6oWtcSXDViKUYwWqlZtR9z7hceWYt9rAYvBaq4N
+         6zocr+1trdr2LSxwfNxRB6V4DSm3WWoanii/upfG04IFVog5RK7wctUBdqdL9TroiN
+         KLk/C68SOeo2xKosrG4fr6p2a0siWR2jYHgJwi9JrDMq+K0QL/JWYWfrK3OnEEphxO
+         YvZqxdWhOs7aA==
+Date:   Sat, 18 Jul 2020 18:35:33 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Scott Wood <scottwood@freescale.com>,
-        "Johnson CH Chen (=?UTF-8?B?6Zmz5pit5Yuz?=)" 
-        <JohnsonCH.Chen@moxa.com>
-Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
-Message-ID: <20200718113853.6bd63897@canb.auug.org.au>
-In-Reply-To: <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
-References: <20200717214036.67fa5379@canb.auug.org.au>
-        <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the thermal tree
+Message-ID: <20200718183533.0145f682@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ";
+Content-Type: multipart/signed; boundary="Sig_/GrjFDz344.hnVwSNhV3I3De";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ
+--Sig_/GrjFDz344.hnVwSNhV3I3De
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Randy,
+Hi all,
 
-[Please trim your emails a bit more, thanks]
+Commit
 
-On Fri, 17 Jul 2020 09:49:05 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
-> on x86_64:
-> # CONFIG_WATCHDOG is not set
->=20
-> ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
-> rtc-ds1374.c:(.text+0x736): undefined reference to `watchdog_init_timeout'
-> ld: rtc-ds1374.c:(.text+0x77e): undefined reference to `devm_watchdog_reg=
-ister_device'
+  130b31498517 ("thermal: core: remove redundant initialization of variable=
+ ret")
 
-Caused by commit
+is missing a Signed-off-by from its committer.
 
-  d3de4beb14a8 ("rtc: ds1374: wdt: Use watchdog core for watchdog part")
-
-from the rtc tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ
+--Sig_/GrjFDz344.hnVwSNhV3I3De
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8SUq0ACgkQAVBC80lX
-0GwmYQf/b9MIx545+4QiU0BgJ3WpM57kY2Ui95nGJ56BI82/pKDGVZA1N4GX+Bze
-TOR+tDoPr1HKOp5R+7dgkLbOMHGbFWpy5AEREjlEjauZHNH+TSvYcnb6F9evHSIX
-8V1SvbtGv1vNwDXkWgvqjwf63fV4fY6e5cs6Ppe/30a/PhOFepdf/ou6vmp0eIDL
-5wvFqhRDY7ovZCgSIRHJYiToCHd07K9CsvnsWQWITweReVC/Xs1Ri0cpTxbtXiQn
-3oHJCUC3s7WbH71RZMWiP4IhXOQ8p9BGyOyEIsck0FD305FwRR4ZMnNEjdHan3qX
-7Edp8erFhl/N7RpzXYj5l2BBDVP+dw==
-=fykx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8StFYACgkQAVBC80lX
+0Gy9xwgAhPMuhcn6Q7Xq2vaaGBU9oXwZeTkK0AyMIzQFEMabMLkNSiJDiJEYi9N4
+rM8guxfF6B6TwVQq4SndCo0DG41f1ekWHqbg+dJjlFZ0o3NRhEEk2KvVPl/KOHLM
+OZHBd9kaiJ3g16kb4tnk9yDJ/gTKC7dWJ9U2wlCyw2KH1yA7zee7jICu9D6ZInET
+mmLdml3FLiq/gf4Le+qTdGQESGy3rUY51AwLCvgEsDDQ3Nhn0KA0qHyLSSPNMgQN
+lJWgXzRcUeqb9EThTnvuPf0KR/3SD3k2xCOLtt1L1kCencC+ulopQGN7qfZZm0rx
+d6nZys0CXmfgRhV6XHGMmjQeEi6Rgw==
+=CPIu
 -----END PGP SIGNATURE-----
 
---Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ--
+--Sig_/GrjFDz344.hnVwSNhV3I3De--

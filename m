@@ -2,78 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A2A2249E2
-	for <lists+linux-next@lfdr.de>; Sat, 18 Jul 2020 10:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E3A224B35
+	for <lists+linux-next@lfdr.de>; Sat, 18 Jul 2020 14:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgGRIhT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Jul 2020 04:37:19 -0400
-Received: from ozlabs.org ([203.11.71.1]:47675 "EHLO ozlabs.org"
+        id S1726524AbgGRMki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Jul 2020 08:40:38 -0400
+Received: from ozlabs.org ([203.11.71.1]:60315 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726418AbgGRIhT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 18 Jul 2020 04:37:19 -0400
+        id S1726493AbgGRMki (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 18 Jul 2020 08:40:38 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B81ZN4Bfwz9sRN;
-        Sat, 18 Jul 2020 18:37:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595061436;
-        bh=gTeSEd/BlloWxyCEUk/UQCF++X75mENXYoBi+3X6SUQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EIRb29Ic6syzqhHvZfNbcE6JhtQ6Q9g4OE6j5gNZxlJHlf21u/VwrwCn3/EotlIyg
-         A5J/6wjqYM45VV28I4NYs4qi3NaZw912nMWLKYJ7rALX2DIcQ0Tkh/GaYSFBk2GPVF
-         eJ1z5IBpJdmyBIGJnNnM+TnG4qiFcxPp+/UWu8yoUKvuJwjzRm4E5ZIzpGDWYeKZBS
-         8Da6NKSvDVcTPJqLHtQgvWU0wWK1M7x7pkGpqFuK+uZILCmtsS2vG8WVtrV5AlQW7O
-         fmN0JTuroTuP18/M/HhtBPoBL5ujgbn25j9eT0qU3OEIbxQO5qyRrN3vVcmJ8IMnaX
-         Qn+2nwt2hlepg==
-Date:   Sat, 18 Jul 2020 18:37:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Saeed Mahameed <saeedm@mellanox.com>
-Subject: linux-next: Signed-off-by missing for commit in the net-next tree
-Message-ID: <20200718183715.45af4cea@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B86z73yKWz9sRR;
+        Sat, 18 Jul 2020 22:40:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1595076036;
+        bh=47LBnCPyXKwB+KStYuVH0eRhSaHYfD2Jm6Mq0Pm89jw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=B6C6yFO8JIaWqWyy80XKXY7ZchyFlbK3ojH06zfkIxqvHAvS5guIUrDEzjT2pMXyj
+         r/sS5uC8/8elhBSb1QIgNnX89dFfJPZYGoFqPi3s2xqZXVy3dNuD7jhUKhr4gyZVom
+         UK/nerX027qr30VvMhw/RZNTOQw7hk+cHubeXBMozwNQqxw2jrDQXbdPQqDgQahfwH
+         /zQ+F3eW3DOgdqq7VI/54puegYzp99vlWfma88N9mgxgQ5oQbNKkgmhkcGjzxsDL/9
+         wUsVBj+ZEa16lSS3/VNz7JcYlZTaQ+4L/8efm8+5yaviD6CvMFNNRRM0RwKUgD3k7x
+         XlnnXq1MmB52g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     bharata@linux.ibm.com, Nicholas Piggin <npiggin@gmail.com>
+Cc:     Qian Cai <cai@lca.pw>, aneesh.kumar@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sfr@canb.auug.org.au
+Subject: Re: [PATCH v3 0/3] Off-load TLB invalidations to host for !GTSE
+In-Reply-To: <20200717042854.GL7902@in.ibm.com>
+References: <20200703053608.12884-1-bharata@linux.ibm.com> <20200716172713.GA4565@lca.pw> <1594950229.jn9ipe6td1.astroid@bobo.none> <1594953143.b8px5ir35m.astroid@bobo.none> <20200717042854.GL7902@in.ibm.com>
+Date:   Sat, 18 Jul 2020 22:40:34 +1000
+Message-ID: <87pn8tt2rh.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=dxtHhDdfCq/NMU.EBieV4L";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=dxtHhDdfCq/NMU.EBieV4L
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Bharata B Rao <bharata@linux.ibm.com> writes:
+> On Fri, Jul 17, 2020 at 12:44:00PM +1000, Nicholas Piggin wrote:
+>> Excerpts from Nicholas Piggin's message of July 17, 2020 12:08 pm:
+>> > Excerpts from Qian Cai's message of July 17, 2020 3:27 am:
+>> >> On Fri, Jul 03, 2020 at 11:06:05AM +0530, Bharata B Rao wrote:
+>> >>> Hypervisor may choose not to enable Guest Translation Shootdown Enable
+>> >>> (GTSE) option for the guest. When GTSE isn't ON, the guest OS isn't
+>> >>> permitted to use instructions like tblie and tlbsync directly, but is
+>> >>> expected to make hypervisor calls to get the TLB flushed.
+>> >>> 
+>> >>> This series enables the TLB flush routines in the radix code to
+>> >>> off-load TLB flushing to hypervisor via the newly proposed hcall
+>> >>> H_RPT_INVALIDATE. 
+>> >>> 
+>> >>> To easily check the availability of GTSE, it is made an MMU feature.
+>> >>> The OV5 handling and H_REGISTER_PROC_TBL hcall are changed to
+>> >>> handle GTSE as an optionally available feature and to not assume GTSE
+>> >>> when radix support is available.
+>> >>> 
+>> >>> The actual hcall implementation for KVM isn't included in this
+>> >>> patchset and will be posted separately.
+>> >>> 
+>> >>> Changes in v3
+>> >>> =============
+>> >>> - Fixed a bug in the hcall wrapper code where we were missing setting
+>> >>>   H_RPTI_TYPE_NESTED while retrying the failed flush request with
+>> >>>   a full flush for the nested case.
+>> >>> - s/psize_to_h_rpti/psize_to_rpti_pgsize
+>> >>> 
+>> >>> v2: https://lore.kernel.org/linuxppc-dev/20200626131000.5207-1-bharata@linux.ibm.com/T/#t
+>> >>> 
+>> >>> Bharata B Rao (2):
+>> >>>   powerpc/mm: Enable radix GTSE only if supported.
+>> >>>   powerpc/pseries: H_REGISTER_PROC_TBL should ask for GTSE only if
+>> >>>     enabled
+>> >>> 
+>> >>> Nicholas Piggin (1):
+>> >>>   powerpc/mm/book3s64/radix: Off-load TLB invalidations to host when
+>> >>>     !GTSE
+>> >> 
+>> >> Reverting the whole series fixed random memory corruptions during boot on
+>> >> POWER9 PowerNV systems below.
+>> > 
+>> > If I s/mmu_has_feature(MMU_FTR_GTSE)/(1)/g in radix_tlb.c, then the .o
+>> > disasm is the same as reverting my patch.
+>> > 
+>> > Feature bits not being set right? PowerNV should be pretty simple, seems
+>> > to do the same as FTR_TYPE_RADIX.
+>> 
+>> Might need this fix
+>> 
+>> ---
+>> 
+>> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+>> index 9cc49f265c86..54c9bcea9d4e 100644
+>> --- a/arch/powerpc/kernel/prom.c
+>> +++ b/arch/powerpc/kernel/prom.c
+>> @@ -163,7 +163,7 @@ static struct ibm_pa_feature {
+>>  	{ .pabyte = 0,  .pabit = 6, .cpu_features  = CPU_FTR_NOEXECUTE },
+>>  	{ .pabyte = 1,  .pabit = 2, .mmu_features  = MMU_FTR_CI_LARGE_PAGE },
+>>  #ifdef CONFIG_PPC_RADIX_MMU
+>> -	{ .pabyte = 40, .pabit = 0, .mmu_features  = MMU_FTR_TYPE_RADIX },
+>> +	{ .pabyte = 40, .pabit = 0, .mmu_features  = (MMU_FTR_TYPE_RADIX | MMU_FTR_GTSE) },
+>>  #endif
+>>  	{ .pabyte = 1,  .pabit = 1, .invert = 1, .cpu_features = CPU_FTR_NODSISRALIGN },
+>>  	{ .pabyte = 5,  .pabit = 0, .cpu_features  = CPU_FTR_REAL_LE,
+>
+> Michael - Let me know if this should be folded into 1/3 and the complete
+> series resent.
 
-Hi all,
+No it's already merged.
 
-Commit
+Please send a proper patch with a Fixes: tag and a change log that
+explains the details.
 
-  1315971fea66 ("net/mlx5e: Fix missing switch_id for representors")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=dxtHhDdfCq/NMU.EBieV4L
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8StLsACgkQAVBC80lX
-0Gw5Zgf9FzV6F/5dA843iqyrVSt1hR15cASs1y0CTI56ISyDu0oBlHjcNkybjBod
-y7G1171Ro4KXyy1oQMEiXbZqNmDFkoZ+85pVWJ3ESeSe5v8Uwji/Bkiqbru2Jo7y
-/Ph0rB9liFwAaEk3KaC3fp/bnky+ijUaNk6DlKAR/mUqu+N5YHJyg8hVwIlPBjCM
-omay03PsyW8Zqdmnrx0emqVcT9Z5NpkgbNOxaUlSj0tPVDhNTOVnzh5NerTOXBHZ
-ZQByEWSx912m34HA68PPR2C+hl4sDZVXc/K+ZFDSv2irsX+kJAABLZvPyjjXlWr5
-IhtZCQOXpNRfUO71UtMiTqv2FUFP9Q==
-=ZhWK
------END PGP SIGNATURE-----
-
---Sig_/=dxtHhDdfCq/NMU.EBieV4L--
+cheers

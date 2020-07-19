@@ -2,121 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E3A224B35
-	for <lists+linux-next@lfdr.de>; Sat, 18 Jul 2020 14:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6222252E9
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jul 2020 19:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgGRMki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Jul 2020 08:40:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:60315 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726493AbgGRMki (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 18 Jul 2020 08:40:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B86z73yKWz9sRR;
-        Sat, 18 Jul 2020 22:40:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1595076036;
-        bh=47LBnCPyXKwB+KStYuVH0eRhSaHYfD2Jm6Mq0Pm89jw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=B6C6yFO8JIaWqWyy80XKXY7ZchyFlbK3ojH06zfkIxqvHAvS5guIUrDEzjT2pMXyj
-         r/sS5uC8/8elhBSb1QIgNnX89dFfJPZYGoFqPi3s2xqZXVy3dNuD7jhUKhr4gyZVom
-         UK/nerX027qr30VvMhw/RZNTOQw7hk+cHubeXBMozwNQqxw2jrDQXbdPQqDgQahfwH
-         /zQ+F3eW3DOgdqq7VI/54puegYzp99vlWfma88N9mgxgQ5oQbNKkgmhkcGjzxsDL/9
-         wUsVBj+ZEa16lSS3/VNz7JcYlZTaQ+4L/8efm8+5yaviD6CvMFNNRRM0RwKUgD3k7x
-         XlnnXq1MmB52g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     bharata@linux.ibm.com, Nicholas Piggin <npiggin@gmail.com>
-Cc:     Qian Cai <cai@lca.pw>, aneesh.kumar@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH v3 0/3] Off-load TLB invalidations to host for !GTSE
-In-Reply-To: <20200717042854.GL7902@in.ibm.com>
-References: <20200703053608.12884-1-bharata@linux.ibm.com> <20200716172713.GA4565@lca.pw> <1594950229.jn9ipe6td1.astroid@bobo.none> <1594953143.b8px5ir35m.astroid@bobo.none> <20200717042854.GL7902@in.ibm.com>
-Date:   Sat, 18 Jul 2020 22:40:34 +1000
-Message-ID: <87pn8tt2rh.fsf@mpe.ellerman.id.au>
+        id S1726073AbgGSRFd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Jul 2020 13:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgGSRFc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Jul 2020 13:05:32 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE30C0619D2
+        for <linux-next@vger.kernel.org>; Sun, 19 Jul 2020 10:05:32 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id a9so3339205pjd.3
+        for <linux-next@vger.kernel.org>; Sun, 19 Jul 2020 10:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rm+ZUNmz42i49+8HSleDh8syNULnEr9j572afF7Mzjs=;
+        b=c1bkVNtufUQB0LzCaDll0bv4MjFg0PvcgSuzyEv+5TBypThJ9lum4OyWA680pIheuv
+         UfITsozvyM+VMZHLcUzZJMOz/L7+eF0yd5iuo00A7UnHJuBYnmYcMVvIhHiILcYgiCxW
+         mBKhOpL2TylDctbQhl8AWgy9irky3vMLVJjC9BGMgpPox1UNQRvq0Q35WyNbF/yTEc6S
+         to0a3S+WgW9OwiwnEf5gn6yhUnToHyNpV6Er7CRfbwpO42faOCB2ZgWhhrvwrR+7V7lu
+         QOkhZ2ofXtiK/Kf+pmnq973HQMj2djwoX0G7e3qsonDKYnjt97x6uww4IOLkqglCxHbg
+         p5KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rm+ZUNmz42i49+8HSleDh8syNULnEr9j572afF7Mzjs=;
+        b=WSpEFx1GXMRC9v1BtyeRbk4TZGuJFjhkNNObJ4nTT3Xec91mQsfbSLOR5MXnXl87lA
+         H2LVnF6JgeQyG2e5n2wkDJz8nw1uzm2EJ3w+8xpyPURi4+uGAj94sWFc2Zpovr0Uc8SW
+         gGMcGPkrhbdGJhnk/DikMkjYvVHiSnmVcNWsYl7hdCmNQy+rwWzJlkdfPoIeqrDhKP/5
+         Zz5SIqk27EIOm5ENyxd4MZlZXCweDLSmKu/n67+17Ghor7bDufBeV7IOramJmhQGnROi
+         bfLD2Tp5cIvAtPO63VJ2aHCAS/MVC6D4jQ8WMVs+AUAsrUako/QF6+uY23QNiagAlxDy
+         VFBA==
+X-Gm-Message-State: AOAM533BHRtwnBj5ICIBS+TeOobHAKN6yNH1VCmenuQoUABkHId2bDSs
+        vbadi10Oz8pa0gszuIvzp8FGow==
+X-Google-Smtp-Source: ABdhPJwuULdEXFD36AtFRB/oIPgxUFVcjKoHqbzCbXhGMUrFfqwxUWb2GXc98khAIUzH9T8stRYhWQ==
+X-Received: by 2002:a17:90a:2749:: with SMTP id o67mr19839181pje.183.1595178332191;
+        Sun, 19 Jul 2020 10:05:32 -0700 (PDT)
+Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
+        by smtp.gmail.com with ESMTPSA id t20sm14300845pfc.158.2020.07.19.10.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jul 2020 10:05:31 -0700 (PDT)
+Date:   Sun, 19 Jul 2020 10:05:22 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Bixuan Cui <cuibixuan@huawei.com>
+Cc:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <jdmason@kudzu.us>,
+        <christophe.jaillet@wanadoo.fr>, <john.wanghui@huawei.com>
+Subject: Re: [PATCH] net: neterion: vxge: reduce stack usage in
+ VXGE_COMPLETE_VPATH_TX
+Message-ID: <20200719100522.220a6f5a@hermes.lan>
+In-Reply-To: <20200716173247.78912-1-cuibixuan@huawei.com>
+References: <20200716173247.78912-1-cuibixuan@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Bharata B Rao <bharata@linux.ibm.com> writes:
-> On Fri, Jul 17, 2020 at 12:44:00PM +1000, Nicholas Piggin wrote:
->> Excerpts from Nicholas Piggin's message of July 17, 2020 12:08 pm:
->> > Excerpts from Qian Cai's message of July 17, 2020 3:27 am:
->> >> On Fri, Jul 03, 2020 at 11:06:05AM +0530, Bharata B Rao wrote:
->> >>> Hypervisor may choose not to enable Guest Translation Shootdown Enable
->> >>> (GTSE) option for the guest. When GTSE isn't ON, the guest OS isn't
->> >>> permitted to use instructions like tblie and tlbsync directly, but is
->> >>> expected to make hypervisor calls to get the TLB flushed.
->> >>> 
->> >>> This series enables the TLB flush routines in the radix code to
->> >>> off-load TLB flushing to hypervisor via the newly proposed hcall
->> >>> H_RPT_INVALIDATE. 
->> >>> 
->> >>> To easily check the availability of GTSE, it is made an MMU feature.
->> >>> The OV5 handling and H_REGISTER_PROC_TBL hcall are changed to
->> >>> handle GTSE as an optionally available feature and to not assume GTSE
->> >>> when radix support is available.
->> >>> 
->> >>> The actual hcall implementation for KVM isn't included in this
->> >>> patchset and will be posted separately.
->> >>> 
->> >>> Changes in v3
->> >>> =============
->> >>> - Fixed a bug in the hcall wrapper code where we were missing setting
->> >>>   H_RPTI_TYPE_NESTED while retrying the failed flush request with
->> >>>   a full flush for the nested case.
->> >>> - s/psize_to_h_rpti/psize_to_rpti_pgsize
->> >>> 
->> >>> v2: https://lore.kernel.org/linuxppc-dev/20200626131000.5207-1-bharata@linux.ibm.com/T/#t
->> >>> 
->> >>> Bharata B Rao (2):
->> >>>   powerpc/mm: Enable radix GTSE only if supported.
->> >>>   powerpc/pseries: H_REGISTER_PROC_TBL should ask for GTSE only if
->> >>>     enabled
->> >>> 
->> >>> Nicholas Piggin (1):
->> >>>   powerpc/mm/book3s64/radix: Off-load TLB invalidations to host when
->> >>>     !GTSE
->> >> 
->> >> Reverting the whole series fixed random memory corruptions during boot on
->> >> POWER9 PowerNV systems below.
->> > 
->> > If I s/mmu_has_feature(MMU_FTR_GTSE)/(1)/g in radix_tlb.c, then the .o
->> > disasm is the same as reverting my patch.
->> > 
->> > Feature bits not being set right? PowerNV should be pretty simple, seems
->> > to do the same as FTR_TYPE_RADIX.
->> 
->> Might need this fix
->> 
->> ---
->> 
->> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
->> index 9cc49f265c86..54c9bcea9d4e 100644
->> --- a/arch/powerpc/kernel/prom.c
->> +++ b/arch/powerpc/kernel/prom.c
->> @@ -163,7 +163,7 @@ static struct ibm_pa_feature {
->>  	{ .pabyte = 0,  .pabit = 6, .cpu_features  = CPU_FTR_NOEXECUTE },
->>  	{ .pabyte = 1,  .pabit = 2, .mmu_features  = MMU_FTR_CI_LARGE_PAGE },
->>  #ifdef CONFIG_PPC_RADIX_MMU
->> -	{ .pabyte = 40, .pabit = 0, .mmu_features  = MMU_FTR_TYPE_RADIX },
->> +	{ .pabyte = 40, .pabit = 0, .mmu_features  = (MMU_FTR_TYPE_RADIX | MMU_FTR_GTSE) },
->>  #endif
->>  	{ .pabyte = 1,  .pabit = 1, .invert = 1, .cpu_features = CPU_FTR_NODSISRALIGN },
->>  	{ .pabyte = 5,  .pabit = 0, .cpu_features  = CPU_FTR_REAL_LE,
->
-> Michael - Let me know if this should be folded into 1/3 and the complete
-> series resent.
+On Thu, 16 Jul 2020 17:32:47 +0000
+Bixuan Cui <cuibixuan@huawei.com> wrote:
 
-No it's already merged.
+> Fix the warning: [-Werror=-Wframe-larger-than=]
+> 
+> drivers/net/ethernet/neterion/vxge/vxge-main.c:
+> In function'VXGE_COMPLETE_VPATH_TX.isra.37':
+> drivers/net/ethernet/neterion/vxge/vxge-main.c:119:1:
+> warning: the frame size of 1056 bytes is larger than 1024 bytes
+> 
+> Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
 
-Please send a proper patch with a Fixes: tag and a change log that
-explains the details.
+Dropping the NR_SKB_COMPLETED to 16 won't have much impact
+on performance, and shrink the size.
 
-cheers
+Doing 16 skb's at a time instead of 128 probably costs
+less than one allocation. Especially since it is unlikely
+that the device completed that many transmits at once.
+

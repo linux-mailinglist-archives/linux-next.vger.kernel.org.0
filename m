@@ -2,143 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACE0225644
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jul 2020 05:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D022225667
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jul 2020 06:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgGTDqV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Jul 2020 23:46:21 -0400
-Received: from mail-eopbgr1310085.outbound.protection.outlook.com ([40.107.131.85]:47584
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726123AbgGTDqU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 19 Jul 2020 23:46:20 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KSVUVnlYw+POUATSaOKMepxwJQCbNqSmpBcVVm3ll0zMKbz/hHM0/NO+hEAOmyuhGKw86+RTem/pL1BHqlUbaKXs/WwD5quQCZBFPLsrviUCTfEVWwF/H8ccaBtd1bjsDhtH0u8KV7QVBP3HVID6cSn3KPA5v9J9iT8L5Gczqaj8DpfyUZMXF+kHWKrsMvscpS76cE8kA1Lx0EBZvJNNrmygoc3BbIfjiobMmyIlPnFuFBaUVSpzVeEaQHPOGbwU0s58RHkb5MfIhAamVTWIObFMOv0TQbiLVO1Ctdn2+EfgR1dq0tcgsZhgocS/Ru4mxxHfh9gda/mS9/iZsWj6mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fgKcaSx9e6Wgyj3SgEVBicEOJnG/0XvaqOASV2Wld98=;
- b=mMLK5DMJuAeCWg+jydQTPYLY7LNnJK3Gj5ctFkH2us8/wg+i6wixupPOrQYCo/28JJ0Y5XTtqa6Y1PLbi6EUZb+Fd9/LY1UdXZmwcoAWzzV+YhkP9o7856VSgY3yiX5Knk3wiNKc9jd6KBmOXL/tKUXKOuErAPwOSBVtH/4OPjGJHQ0yB/0DG/Qo1n+3kLzyEFdghBaEOC1ImFcDBtSTVlzB21F+1vijo2fUYwwn0MuaTl3hBY2NhHdAvU0JV0V/kbHV7x0V54mko+APghumpYHWsn8lILLk5O0aiHM7ol9vqCuxu5Pcu/5qCaAY6ndgO/3rudLPxjaYhTlI5Lyl6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
- dkim=pass header.d=moxa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fgKcaSx9e6Wgyj3SgEVBicEOJnG/0XvaqOASV2Wld98=;
- b=L6IBJn/SeHUACUIsfrI35esmvFTOlKT9zSiegPPxWZ7QhcvCMz6c7r6YDVQ16OhDyHiljpEhvqMgHz9Do7kNpjMN5BdVXKWKtLV6mCFu1Fqx0YRBLqHKJ8C/HqLacETkOTh/FcHBwp2XFbM1lnLmFjgf7a1JAMitT9rRwxO1C84=
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- (2603:1096:202:22::12) by HK2PR01MB3394.apcprd01.prod.exchangelabs.com
- (2603:1096:202:25::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Mon, 20 Jul
- 2020 03:46:16 +0000
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::dce:9650:6c58:8b77]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::dce:9650:6c58:8b77%4]) with mapi id 15.20.3195.025; Mon, 20 Jul 2020
- 03:46:16 +0000
-From:   =?iso-2022-jp?B?Sm9obnNvbiBDSCBDaGVuICgbJEJERD48Ui4bKEIp?= 
-        <JohnsonCH.Chen@moxa.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Randy Dunlap <rdunlap@infradead.org>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726016AbgGTED4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jul 2020 00:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725263AbgGTED4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jul 2020 00:03:56 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B379C0619D2;
+        Sun, 19 Jul 2020 21:03:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B97Pw6sbYz9sRW;
+        Mon, 20 Jul 2020 14:03:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595217833;
+        bh=OcY+Ne7vqBdLxjtQfG1gVX1Q4F+5772mkCwouUBaQZ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CTBxu60hNGJAbPCCy/hV+e51xBKhf698iS1sOhbF9n9//gKUw9Kmw/UCS7vWsD7Y4
+         3ix8hChWp7WlhNgaewECkLABV7YSI7+aY0LxY34wj/dBfO1bIGSMbTspUlqE60ZwJt
+         r7EfhWA76xnOMX19tHemU7eag8Are/HlPLpbxjMdR8FtZy9oTg/FX5nN12gtffY7c+
+         PAY7ncIqqn0RJ6Us8cYAIhOeBq50KQvmbJ9w43/y5qw/8+QsYK5aZNO+bCYug27tx3
+         CtUGjh/H9YQg1WY4xNUzw5Fj/qTDVDQdaayfIBqLG5QYzvfpi/vMnjKNJj8Mtmj6XN
+         szOdiJoXQzzow==
+Date:   Mon, 20 Jul 2020 14:03:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Scott Wood <scottwood@freescale.com>
-Subject: RE: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
-Thread-Topic: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
-Thread-Index: AQHWXKQ1iSSgQh4Y6UGMkRd+5h1jW6kP00MA
-Date:   Mon, 20 Jul 2020 03:46:15 +0000
-Message-ID: <HK2PR01MB32812019FB4521DC22313B10FA7B0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
-References: <20200717214036.67fa5379@canb.auug.org.au>
-        <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
- <20200718113853.6bd63897@canb.auug.org.au>
-In-Reply-To: <20200718113853.6bd63897@canb.auug.org.au>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none header.from=moxa.com;
-x-originating-ip: [123.51.145.16]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ff539962-4a2c-4f01-6803-08d82c5f7473
-x-ms-traffictypediagnostic: HK2PR01MB3394:
-x-microsoft-antispam-prvs: <HK2PR01MB33948810D5DBFCB22785FB51FA7B0@HK2PR01MB3394.apcprd01.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WMc/gfyo30y82V1p1jN2w513PGlubAJyeIY0y4M3ZOG6ekqiN70Erdi4DvlimY2QAmJttZuIbqAKVC//mWNuva2P2/t+VjH9wnoPA9Ym8WhRjsN2A1KISqTERUTHDGeizv/ptIwWxtFxfh6swMKcF4DrJntjmNfvFSi0HEFb49qbw2TSRYeWEzsiNfOAf1gfnn/GobUVi1Zak56AJH3xxlWS5v9YLTTxImhzSHmyZuVb60RgxCggjlIbAAWQT0OtnSEjLYA7t0VMePFnD9IMXs8TBZfcg1QO9fRaikjxfte0+CiCxRRGDPR+XxFkHnQVp7IBxUBdCUXA9jaQVP37lA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(376002)(366004)(346002)(396003)(39850400004)(26005)(85182001)(478600001)(71200400001)(186003)(86362001)(110136005)(5660300002)(2906002)(4326008)(8676002)(66946007)(316002)(76116006)(66446008)(66476007)(64756008)(66556008)(33656002)(52536014)(6506007)(54906003)(8936002)(53546011)(9686003)(55016002)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: HnQGPVZLQPkt0Ymn5cFka/6Bm/9AY7gWByultUV5xeqxojmmQ7wANc6eroH+sfRgISq4boEIatCuCFEmQ5NN2Vi58V8qzlVbPjH4TlXD3Hpc4M1vA1i/cRXVVP87VVw8fArhD/EE/0z31oFKrXkJSOEDh3orpnAFZ3tE9zm54QRr0CaTYwICfVoRoGcjyRuBhs7PbRb918ZlPLUR7m7WLcB/ZsAKwliG7P/YZ1vmXn7ew/CtlYzwpahnMNokFC7N7iTheIJ7cOrvyWOTg/Lpv628mutpmVEmHUSWEr0jflms4iptOKduNTngmF0oY0pQ456/MhnmVFObVtayceL9uwgMy4fDHVlPeUn6dmKYHvrPrtcscWLrA5X2XPKChnrheP+4lZgDoyN6pHeiJXAbHBRzqatVShiG4UXrCDwtyG6YZthYMyCcS9WPdbuCd1bWtY7Qpdaln63HiyUxDcj+2PngNa+KgbjiQVjgAs/2fNM=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the crypto tree
+Message-ID: <20200720140346.109a3006@canb.auug.org.au>
+In-Reply-To: <CAFULd4b9O+KJKwjQTB1PTuxMEDSDMov0rQaE85+9pfRrd02dKw@mail.gmail.com>
+References: <20200717144656.4bdbf81f@canb.auug.org.au>
+        <CAFULd4Ye2d-8BY7aY+_2tYwcXsfSCe3O6aJ4LF0KhvWTjVt0rA@mail.gmail.com>
+        <20200717064401.GB2504@gondor.apana.org.au>
+        <CAFULd4b9O+KJKwjQTB1PTuxMEDSDMov0rQaE85+9pfRrd02dKw@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR01MB3281.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff539962-4a2c-4f01-6803-08d82c5f7473
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2020 03:46:15.8631
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oxh0tT6oACoybb4ezZnanlkAdBnaT5YsmXag5BG4IdI+ceyxLQ5ARq39EYnXZr8AZFEJOdPUpikTHN/iDW5j/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR01MB3394
+Content-Type: multipart/signed; boundary="Sig_/qJXKyrG4d4dA/22o/ihB5O8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,=20
+--Sig_/qJXKyrG4d4dA/22o/ihB5O8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Sent: Saturday, July 18, 2020 9:39 AM
-> To: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel Ma=
-iling
-> List <linux-kernel@vger.kernel.org>; linux-rtc@vger.kernel.org; Alessandr=
-o
-> Zummo <a.zummo@towertech.it>; Alexandre Belloni
-> <alexandre.belloni@bootlin.com>; Scott Wood <scottwood@freescale.com>;
-> Johnson CH Chen (=1B$BDD><R.=1B(B) <JohnsonCH.Chen@moxa.com>
-> Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
->=20
-> Hi Randy,
->=20
-> [Please trim your emails a bit more, thanks]
->=20
-> On Fri, 17 Jul 2020 09:49:05 -0700 Randy Dunlap <rdunlap@infradead.org>
-> wrote:
-> > on x86_64:
-> > # CONFIG_WATCHDOG is not set
-> >
+Hi Uros,
 
-Thanks for your information.
+On Fri, 17 Jul 2020 09:31:18 +0200 Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> Please find attached the incremental patch that puts back integer
+> parts of inst.h. This resolves the conflict with the tip tree.
 
-It seems RTC_DRV_DS1374_WDT should be depended on RTC_DRV_DS1374 && WATCHDO=
-G_CORE. Otherwise error will happen if RTC_DRV_DS1374_WDT is enabled but WA=
-TCHDOG_CORE not. I'll put this into v5 if there are no other suggestions.
+The tip tree change needs the XMM parts kept as well, sorry.
 
-Should I add " Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>" into v=
-5? So many thanks!
+So I ended up just removing the actual now unused crypto instruction
+macros.
 
-> > ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
-> > rtc-ds1374.c:(.text+0x736): undefined reference to
-> `watchdog_init_timeout'
-> > ld: rtc-ds1374.c:(.text+0x77e): undefined reference to
-> `devm_watchdog_register_device'
->=20
-> Caused by commit
->=20
->   d3de4beb14a8 ("rtc: ds1374: wdt: Use watchdog core for watchdog
-> part")
->=20
-> from the rtc tree.
-> --
-> Cheers,
-> Stephen Rothwell
+--=20
+Cheers,
+Stephen Rothwell
 
-Best regards,
-Johnson
+--Sig_/qJXKyrG4d4dA/22o/ihB5O8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8VF6IACgkQAVBC80lX
+0Gz6GQf+OKDf0YYb4uBRmcWB0VQx2DEFV1NAm1t1xR5m8NNS+PMR3EBdAWPueiTe
+enkl3448LXZiuKvqycKJz7AHqMu/fNPKQJrLnCS1d7NLj6UcTrNEaXrFHUym4D7/
+M1PEFlnRsDWkhmBM2/f93KJ8R2q543YQjT6HRswTn1vm3wTXPUuqxX2d0P9kClNg
+Vt4nYDrs0jXnQ/F9FcIeCz/hXV+cCrlLk5K8bwwnITO2bXBu91DED/TuEQfFel2B
+D8zrMaT0uf4KbaaQxVpkIdtN0IyvbGcbfdM+THHt/k/zK49LfilUBbEPYQLrc9n6
+lK8pEYAYZzuTyDNVjjXpeS83dzwWNw==
+=CZ+b
+-----END PGP SIGNATURE-----
+
+--Sig_/qJXKyrG4d4dA/22o/ihB5O8--

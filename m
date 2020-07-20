@@ -2,118 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7653C225716
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jul 2020 07:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE7C225749
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jul 2020 07:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbgGTFhL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jul 2020 01:37:11 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54493 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726045AbgGTFhK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Jul 2020 01:37:10 -0400
+        id S1725845AbgGTF7W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jul 2020 01:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbgGTF7W (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jul 2020 01:59:22 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA50EC0619D2;
+        Sun, 19 Jul 2020 22:59:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B99Tc3QHKz9sRN;
-        Mon, 20 Jul 2020 15:37:08 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B99zB1h5cz9sR4;
+        Mon, 20 Jul 2020 15:59:18 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595223428;
-        bh=2XgeZBjjdE0EpxfJtO9yXEaHdZMYFiS96jVy6kfAMZM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qlsUEVfWLhZzsoGzVlHp4kZq8qiAa6D5Om5fTtMuWSeNBwrT++rUkJ9L+HPA6Ym2h
-         dq1LXz+GdkdigcGaojJ45vM7QwW0poZ5TKCOYroY4uqOrAnok4NkdN1j3pA6dxRm5e
-         gUw2SkLPB+f8VDsuFeqPCQZp2ss+rxedWeEG3f6UavxxDBliaLU1BcuP0uQgF4WF3N
-         Jwu6dNahdOFOWEgwkHSlg2Wp2kBLarMI7DI58S4tor4UiFFzrm8WxIr0EdDr/MvOQ6
-         kJquRxwR5KD4xV2516E6bopxvuhF6o/CxfJraDDnvtu1c8bttF3+0+Kk85PCXIk/xl
-         UfW+jZvczW1eA==
-Date:   Mon, 20 Jul 2020 15:37:06 +1000
+        s=201702; t=1595224758;
+        bh=ilwXSUuQzp9spzFiL/T+eRwhknMRDNwY+IVvHUMC+tA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qtz0OWT13eFaczr2i4vKiOxL8cqWTGT1M3SUk6TbOGRLOb8NtAtVoQNhWXJiso6m4
+         WMSa96IvttAoDTs6PUlj1vMDnqla5Qbp4TP4FQ2+2/YTvluD58xn//YVp9/cGcXrBu
+         Zk3elSi5pdvE8+0q4QJ1ioRm1ywvDuxRKmB6tun9tfv1kWFEk1+o7S8nn4u6UfKQXs
+         ZoLheiazZzObICyZPFfY4DWj5S3DUJryiAFv9KskR1hhlsGYIQ0nuCYKWxmepDF64a
+         ZDXCBn7AiK4N2nRL/y9ilQ99Az+EHNXQJN0TFRGDdF9U0aBhg4zQfCfVzPQjR+L9QO
+         5g9v1KgjuyGQQ==
+Date:   Mon, 20 Jul 2020 15:59:17 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200720153706.440b86b5@canb.auug.org.au>
-In-Reply-To: <20200714135012.447d185c@canb.auug.org.au>
-References: <20200622113700.3dd74527@canb.auug.org.au>
-        <20200630125459.0ca67c38@canb.auug.org.au>
-        <20200707123301.79ca8a94@canb.auug.org.au>
-        <20200714135012.447d185c@canb.auug.org.au>
+Subject: linux-next: manual merge of the seccomp tree with the kselftest
+ tree
+Message-ID: <20200720155917.607fff9b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Mns_sDvtX/2R3KX_Xse_pB5";
+Content-Type: multipart/signed; boundary="Sig_/tRJ57A5kyRqYB0=24Jc24ko";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Mns_sDvtX/2R3KX_Xse_pB5
+--Sig_/tRJ57A5kyRqYB0=24Jc24ko
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 14 Jul 2020 13:50:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Tue, 7 Jul 2020 12:33:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >
-> > On Tue, 30 Jun 2020 12:54:59 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > On Mon, 22 Jun 2020 11:37:00 +1000 Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:   =20
-> > > >
-> > > > After merging the tip tree, today's linux-next build (x86_64 allmod=
-config)
-> > > > failed like this:
-> > > >=20
-> > > > ERROR: modpost: "sched_setscheduler" [kernel/trace/ring_buffer_benc=
-hmark.ko] undefined!
-> > > >=20
-> > > > Caused by commit
-> > > >=20
-> > > >   616d91b68cd5 ("sched: Remove sched_setscheduler*() EXPORTs")
-> > > >=20
-> > > > Missed one :-)
-> > > >=20
-> > > > I have reverted that commit for today.     =20
-> > >=20
-> > > I am still reverting that commit.   =20
-> >=20
-> > Ditto ... =20
->=20
-> Ping?
+Today's linux-next merge of the seccomp tree got a conflict in:
 
-OK, it has now been three weeks ... I must admit I was a little
-suprised that initial testing of the tip tree (or even the branch that
-this commit is on) did not pick this up.
+  tools/testing/selftests/seccomp/seccomp_bpf.c
 
-Unless there is something really weird going on here, Linus will notice
-if you try to get him to pull this as he tests with an x86_64
-allmodconfig build.
+between commit:
+
+  4c6614dc86ad ("selftests/seccomp: Check ENOSYS under tracing")
+
+from the kselftest tree and commit:
+
+  11eb004ef7ea ("selftests/seccomp: Check ENOSYS under tracing")
+
+from the seccomp tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Mns_sDvtX/2R3KX_Xse_pB5
+--Sig_/tRJ57A5kyRqYB0=24Jc24ko
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8VLYIACgkQAVBC80lX
-0GwklAf/QO1rgP8S5l24OL7AOPztYJ3K+g/LfkrM2C5KVqrNqs4s8Gibgc+jXjLD
-GcfmJ9DUgAlh6868Z6CRhKS9dxZCwojICPrJxDQ6Kbxb7/27oOdY1mAABBy7IOZq
-YO4GeJ9804pRzVXO+CDKsvcWMTiig60cjELmpqBS3j0AkkSdiVUYTE1vuJERRAjy
-AVhyshcgRQRNZ/7innrdIedENhDFabukPYNntOylbREJ/O7MyVVS5x6POgKn5NuF
-wFMU+KhL1eI7ZFGqUIAmbi+vmxjd9w0XidfnhjaPp1s4X68Qkeg8PkHvPbUhOkpz
-gCZlHd+sEounzSD61fz8mz0itFlrWA==
-=IZ0s
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8VMrUACgkQAVBC80lX
+0Gx2cQf7BL2mF+iLBACtiGk3iGAMq/WCRSBzf0xBCTqm+e9/6HZekbkDIuuUy1Qw
++2IXfpn+8tgxtTMz0FpkKHU23JOLm9lpaFWMwKSmwNSHAXfVjkCybY+WKPNL6+zp
+o9H9ofRohc/2PmM+uv61xWfd5TPAMv7b6CbxAl89wizKO/FX/TLDTZTdMOXxSi1B
+wpKVE17TBkMIOmBGLpQikyHgtTSEtP5uqmq+PxAPa7Et9IR9PAbk8H4yttmytuLu
+rlQ9A2QUBTRMWPwa11u/AZDSH7VWcppLPLb4BmPq/nwCRfCqC2vZodkciHni2dzX
+vjzwJEtyqtdpii0mvxVUwR4/A4DuZQ==
+=aCl4
 -----END PGP SIGNATURE-----
 
---Sig_/Mns_sDvtX/2R3KX_Xse_pB5--
+--Sig_/tRJ57A5kyRqYB0=24Jc24ko--

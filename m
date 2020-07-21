@@ -2,147 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC6D2286C9
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 19:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3E82287A4
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 19:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730476AbgGURFv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jul 2020 13:05:51 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36932 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730120AbgGURFv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jul 2020 13:05:51 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LGlQAi131749;
-        Tue, 21 Jul 2020 17:05:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=U8rsu8OEcOF6ZyhEIv1vKXBX17S62Qnhb7hHFJSUhuo=;
- b=bsxsVR7l1RDpCsrDB7Jj19d/QM2y4YQZOwOkemAh+qYE4eQ7ZBhtNoqTQVMnt88459cL
- t7JjMg9G7uxgMt620eCRkNh9SKuWyi8PgayDQoqRVq1/z+e3WAPOQT7wGHeGsPHoQZhq
- z02DqTIdyvYXhL5fsLR12aOTr5gin2dHzfiWLqrcJtjvh4HKZYvmVeiqh0EYqJOIx/nX
- cQYanUxfadgM35I2A2PGdpsBpY9V9kGacLprllG98vfxhuYq2HxV3hQOBIcgCRWYsFDs
- h5grdeahCkxej6oE92wvYqhglnIeZoxsCETgGmJ/+HzxSPFebmBqXWGNpUK864kw6Ylb Lg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 32bs1megjs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 17:05:27 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LGm3b9125264;
-        Tue, 21 Jul 2020 17:05:27 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 32e3vehune-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 17:05:26 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06LH5Nlj013809;
-        Tue, 21 Jul 2020 17:05:23 GMT
-Received: from [192.168.2.112] (/50.38.35.18)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 17:05:23 +0000
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Roman Gushchin <guro@fb.com>
-References: <20200721205716.6dbaa56b@canb.auug.org.au>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <e921bf90-d1f5-3795-478b-4cfae9086749@oracle.com>
-Date:   Tue, 21 Jul 2020 10:05:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1730824AbgGURmM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jul 2020 13:42:12 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:29964 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730804AbgGURmH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jul 2020 13:42:07 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200721174204epoutp03e4a4cf497f3f1005432d6cd560db3fda~j1WVNIpEE2679226792epoutp033
+        for <linux-next@vger.kernel.org>; Tue, 21 Jul 2020 17:42:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200721174204epoutp03e4a4cf497f3f1005432d6cd560db3fda~j1WVNIpEE2679226792epoutp033
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1595353324;
+        bh=jjP9Yogd6RPQu0KtJN58TDx/6/d93a8jjg+K17x3bAI=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=IM0ImzkInVStP3hSOG/Qk3XmMpXbqvws4PfzncHL1VFiirR2aSNifKdS2R8EWpiRf
+         NIH82hryfsTDaStjUmzFRwaet+LC5DFhPH1XL8qIRmzN6dq/fjoFQOeBJYrsxLJbea
+         dhDH2G0pGv8fwU9xdOxVVR9YhgH9X1KdaHxJAgHg=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20200721174203epcas5p30337de22dce96877606a12f2feede272~j1WUPOFFE1008610086epcas5p3p;
+        Tue, 21 Jul 2020 17:42:03 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        62.9E.09475.AE8271F5; Wed, 22 Jul 2020 02:42:02 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200721174202epcas5p1cf62a9357c8c8fffa978946005ebf551~j1WTZqnTo0836208362epcas5p1S;
+        Tue, 21 Jul 2020 17:42:02 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200721174202epsmtrp2976177db6d3fdf6bad357ca2a8f31fd3~j1WTY6MIP1506815068epsmtrp2g;
+        Tue, 21 Jul 2020 17:42:02 +0000 (GMT)
+X-AuditID: b6c32a4b-39fff70000002503-50-5f1728ea0c91
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        35.77.08382.9E8271F5; Wed, 22 Jul 2020 02:42:01 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.108.234.165]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200721174159epsmtip2f651e157973aa10613138d5ff8901959~j1WRVSoUN2332023320epsmtip2C;
+        Tue, 21 Jul 2020 17:41:59 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Randy Dunlap'" <rdunlap@infradead.org>,
+        "'Stephen Rothwell'" <sfr@canb.auug.org.au>,
+        "'Linux Next Mailing List'" <linux-next@vger.kernel.org>
+Cc:     "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
+        "'linux-scsi'" <linux-scsi@vger.kernel.org>,
+        "'Santosh Yaraganavi'" <santosh.sy@samsung.com>,
+        "'Vinayak Holikatti'" <h.vinayak@samsung.com>,
+        "'Seungwon Jeon'" <essuuj@gmail.com>
+In-Reply-To: <e6112633-61c9-fa80-8479-fe90bb360868@infradead.org>
+Subject: RE: linux-next: Tree for Jul 20 (scsi/ufs/exynos)
+Date:   Tue, 21 Jul 2020 23:11:57 +0530
+Message-ID: <06a601d65f86$3d8aeee0$b8a0cca0$@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20200721205716.6dbaa56b@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=2
- adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007210115
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 bulkscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011
- spamscore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210115
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIWmKFrqc6cTichonS6aOkZQnVssAH33GmqAhZA11+ocWkksA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKKsWRmVeSWpSXmKPExsWy7bCmpu4rDfF4g+nvLS2WX1jCZHF51xw2
+        i4ML2xgtuq/vYLN4e2c6i8XWvVfZHdg8Gm/cYPPYOesuu8fmFVoenzfJBbBEcdmkpOZklqUW
+        6dslcGWs7p/LVHCZq+Lo7bdsDYzPOboYOTkkBEwkpjSvYu9i5OIQEtjNKLH59V5WCOcTo8Tn
+        aS9ZIJxvjBLXP21ih2nZvHkFI0RiL6PE78Nv2CCcN4wSr5b0sYJUsQnoSuxY3AaWEBGYzijx
+        4WkXmMMs8JNR4uwtkBZODk4BR4mGztksILawgJXEnDO7wLpZBFQlvp05wAhi8wpYShx82A1l
+        C0qcnPkErJ5ZQFti2cLXzBA3KUj8fLoMrFdEwEmi798uJogacYmjP3ugalo5JD6ek4ewXSR+
+        zj7BCGELS7w6vgXqNymJz+/2At3GAWRnS/TsMoYI10gsnXeMBcK2lzhwZQ4LSAmzgKbE+l36
+        EJv4JHp/P2GC6OSV6GgTgqhWlWh+dxWqU1piYnc3K4TtIdG+fQHrBEbFWUj+moXkr1lI7p+F
+        sGwBI8sqRsnUguLc9NRi0wLjvNRyveLE3OLSvHS95PzcTYzglKPlvYPx0YMPeocYmTgYDzFK
+        cDArifDqMIrHC/GmJFZWpRblxxeV5qQWH2KU5mBREudV+nEmTkggPbEkNTs1tSC1CCbLxMEp
+        1cA021Vdo28F40TWWVn37Z9MmRCY4Barouy2817qJZUKl22bxMJ888yYdd7MrhaPU1q2tML+
+        U8AcYVW13y7ZXhuuPozftF9p+yZx93Xu+7yvb9QQe5EXeKiB/VXhR92s1+/ZPiUnHTsnrK4t
+        Wa267ZLfVJ7vm/lYG3qv+Mg6nBJTyuhkcK1kcSoTFj8t/yzI0PTmywMnbpxo/Bi9g9nt0Yf8
+        G2snsp3mKNZ5MM/bWrLssmiy23KdoN9bZ/21UJcSvhhk4bmF/+DFF937VfeqeS+N99FuKWFP
+        tjnFyu7xSt1JTD7z94fJWXria1P3zPvppKCxbMeEv24r9dccKWw+dbPpU+jWmqP9nFv2Ta9k
+        uKzEUpyRaKjFXFScCAAzuE6aqAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJLMWRmVeSWpSXmKPExsWy7bCSvO4rDfF4gxehFssvLGGyuLxrDpvF
+        wYVtjBbd13ewWby9M53FYuveq+wObB6NN26weeycdZfdY/MKLY/Pm+QCWKK4bFJSczLLUov0
+        7RK4MlbcsC/o4Ko49mYTcwPjIo4uRk4OCQETic2bVzB2MXJxCAnsZpR48WYZK0RCWuL6xgns
+        ELawxMp/z9khil4xSvy4eJ8ZJMEmoCuxY3EbG0hCRGA6o8T5vi/MIA6zwG9GiVNtG1ggWvYy
+        Shz4dBJsFqeAo0RD52wWEFtYwEpizpldYPtYBFQlvp05wAhi8wpYShx82A1lC0qcnPkErJ5Z
+        QFvi6c2ncPayha+ZIe5TkPj5FOJuEQEnib5/u5ggasQljv7sYZ7AKDwLyahZSEbNQjJqFpKW
+        BYwsqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxgmNHS3MH4/ZVH/QOMTJxMB5ilOBg
+        VhLh1WEUjxfiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6NwYZyQQHpiSWp2ampBahFMlomDU6qB
+        Kb8mt6Pa8JLnnUfODx+GzFqzafcktbbE3+snyi35GT9n1THrnr8savLbFhz6sVxtBv8iT73L
+        h9/tLCle+HvTizBLE0fR14/KOK8FeW2+fcxQTsnC/4mm85fXO2KUjuv9F8/5ZHhQOVGR66bs
+        eYeX07fGeEkrFXneuNq+UnzC14fX5ZoePXrygneiMM/7pdqrdfu+cidaer/x071VfiK+NDr/
+        +7vWtY1/+ho7JpWlnP26/9kWrq+BbE887pkX+02ofX79nm5Dqf4etiU1ntd+B367bjSltMZy
+        wWq1ZR5pu7ZouIXc2Wi+V2rrkbCsb9ybly4OEb+TWre2omL18psdbwNEMiKrmB9bH4gyWfVT
+        Ll+JpTgj0VCLuag4EQA4T0MvDAMAAA==
+X-CMS-MailID: 20200721174202epcas5p1cf62a9357c8c8fffa978946005ebf551
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200720164116epcas5p2021c67d1778e737d7c695f6bdbc5b2d4
+References: <20200720194225.17de9962@canb.auug.org.au>
+        <CGME20200720164116epcas5p2021c67d1778e737d7c695f6bdbc5b2d4@epcas5p2.samsung.com>
+        <e6112633-61c9-fa80-8479-fe90bb360868@infradead.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/21/20 3:57 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the akpm-current tree, today's linux-next build
-> (sparc64 defconfig) failed like this:
-> 
-> mm/hugetlb.c: In function 'free_gigantic_page':
-> mm/hugetlb.c:1233:18: error: 'hugetlb_cma' undeclared (first use in this function); did you mean 'hugetlb_lock'?
->       cma_release(hugetlb_cma[page_to_nid(page)], page, 1 << order))
->                   ^~~~~~~~~~~
->                   hugetlb_lock
-> 
-> Caused by commits
-> 
->   ee0889218f26 ("mm/hugetlb: avoid hardcoding while checking if cma is enabled")
->   8729fda59982 ("mm-hugetlb-avoid-hardcoding-while-checking-if-cma-is-enabled-fix")
-> 
-> I have added this patch for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 21 Jul 2020 20:44:57 +1000
-> Subject: [PATCH] mm/hugetlb: better checks before using hugetlb_cma
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Hi Randy,
 
-Thanks Stephen, sorry for missing that in review.
+> -----Original Message-----
+> From: Randy Dunlap <rdunlap=40infradead.org>
+> Sent: 20 July 2020 22:11
+> To: Stephen Rothwell <sfr=40canb.auug.org.au>; Linux Next Mailing List <l=
+inux-
+> next=40vger.kernel.org>
+> Cc: Linux Kernel Mailing List <linux-kernel=40vger.kernel.org>; linux-scs=
+i <linux-
+> scsi=40vger.kernel.org>; Santosh Yaraganavi <santosh.sy=40samsung.com>;
+> Vinayak Holikatti <h.vinayak=40samsung.com>; Alim Akhtar
+> <alim.akhtar=40samsung.com>; Seungwon Jeon <essuuj=40gmail.com>
+> Subject: Re: linux-next: Tree for Jul 20 (scsi/ufs/exynos)
+>=20
+> On 7/20/20 2:42 AM, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Changes since 20200717:
+> >
+>=20
+> on x86_64:
+>=20
+> WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
+>   Depends on =5Bn=5D: OF =5B=3Dn=5D && (ARCH_EXYNOS =7C=7C COMPILE_TEST =
+=5B=3Dy=5D)
+>   Selected by =5By=5D:
+>   - SCSI_UFS_EXYNOS =5B=3Dy=5D && SCSI_LOWLEVEL =5B=3Dy=5D && SCSI =5B=3D=
+y=5D &&
+> SCSI_UFSHCD_PLATFORM =5B=3Dy=5D && (ARCH_EXYNOS =7C=7C COMPILE_TEST =5B=
+=3Dy=5D)
+>=20
+Thanks, will post a patch shortly.
+>=20
+> There are no build errors since <linux/of.h> provides stubs for functions=
+ when
+> CONFIG_OF is not enabled.
+>=20
+> But new warnings are not OK.
+>=20
+> thanks.
+> --
+> =7ERandy
+> Reported-by: Randy Dunlap <rdunlap=40infradead.org>
 
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
--- 
-Mike Kravetz
-
-> ---
->  mm/hugetlb.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 4b560c7555e7..4645f1441d32 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1229,9 +1229,10 @@ static void free_gigantic_page(struct page *page, unsigned int order)
->  	 * If the page isn't allocated using the cma allocator,
->  	 * cma_release() returns false.
->  	 */
-> -	if (IS_ENABLED(CONFIG_CMA) &&
-> -	    cma_release(hugetlb_cma[page_to_nid(page)], page, 1 << order))
-> +#ifdef CONFIG_CMA
-> +	if (cma_release(hugetlb_cma[page_to_nid(page)], page, 1 << order))
->  		return;
-> +#endif
->  
->  	free_contig_range(page_to_pfn(page), 1 << order);
->  }
-> @@ -1242,7 +1243,8 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
->  {
->  	unsigned long nr_pages = 1UL << huge_page_order(h);
->  
-> -	if (IS_ENABLED(CONFIG_CMA)) {
-> +#ifdef CONFIG_CMA
-> +	{
->  		struct page *page;
->  		int node;
->  
-> @@ -1256,6 +1258,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
->  				return page;
->  		}
->  	}
-> +#endif
->  
->  	return alloc_contig_pages(nr_pages, gfp_mask, nid, nodemask);
->  }
-> 

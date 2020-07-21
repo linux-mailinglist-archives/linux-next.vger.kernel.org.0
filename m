@@ -2,92 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7910228BF2
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 00:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC3C228CD5
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 01:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728470AbgGUWdl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jul 2020 18:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgGUWdl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jul 2020 18:33:41 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D18C061794;
-        Tue, 21 Jul 2020 15:33:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BBD020WFSz9sQt;
-        Wed, 22 Jul 2020 08:33:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595370818;
-        bh=mEh9lByFt6+8XfLg34G91vSdHQ48/apE0hfFi62CUvI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EhM1gJiv7FHNRsr4Hqd3T1k0s7wnMx10ymdwYJgTT74xP9e8piISwg/G/cdTZ7ecs
-         ibo5sggBlNG7mYJN4uo533S8MtY5TCOQUJVgq12QrbfOeEa4csNdU2Dv5N/UWhkfAb
-         mtbS4iJg32VqUvYU8jyI4Wj7ox+tveKzL5NHElfi2MxbEsfnG2P1Vag0JYBILs6Rr9
-         3/CtqbsX8V9jdH2vRQVFNU4DwiEvmUTaQGKDPoqroOhP2Ovv6pmG0zoq2mrqn/J4P8
-         T5874mWUe6CVWcrzrh1cuhysyHf53Umya7SJE+zcQtDYSuArl8Q+92HWhJxnQThfwZ
-         kMXon+TusLf+A==
-Date:   Wed, 22 Jul 2020 08:33:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-Subject: linux-next: Fixes tag needs some work in the leds tree
-Message-ID: <20200722083337.067e1445@canb.auug.org.au>
+        id S1731576AbgGUXqW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jul 2020 19:46:22 -0400
+Received: from mga17.intel.com ([192.55.52.151]:63096 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726652AbgGUXqV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Jul 2020 19:46:21 -0400
+IronPort-SDR: 9iLPS2wLjZf/hw4nMZR1HRRL1JOE0iccozZDAmbjdCCDkXeWvapJs+f/gqXp46lB7ra63wF7Tm
+ o4mV57Lhd7tg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="130329721"
+X-IronPort-AV: E=Sophos;i="5.75,380,1589266800"; 
+   d="scan'208";a="130329721"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 16:46:20 -0700
+IronPort-SDR: EdUSW0Kroy9pLQvPhnmhLmYYOgpMioJiapWH6En2np7t2X2KTiWSzCwIAxA87FRz5khEkSDYCa
+ 3ohxscb2IZ6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,380,1589266800"; 
+   d="scan'208";a="284036759"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2020 16:46:20 -0700
+Date:   Tue, 21 Jul 2020 16:46:20 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Tang Yizhou <tangyizhou@huawei.com>
+Cc:     linux-mm@kvack.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Subject: Re: [PATCH -next] mm/gup.c: Fix the comment of return value for
+ populate_vma_page_range()
+Message-ID: <20200721234619.GC643353@iweiny-DESK2.sc.intel.com>
+References: <20200720034303.29920-1-tangyizhou@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A.eKzdVutjbv5GyOp483DFO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720034303.29920-1-tangyizhou@huawei.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A.eKzdVutjbv5GyOp483DFO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 20, 2020 at 11:43:03AM +0800, Tang Yizhou wrote:
+> The return value of populate_vma_page_range() is consistent with
+> __get_user_pages(), and so is the function comment of return value.
+> 
+> Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
 
-Hi all,
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 
-In commit
-
-  347b711870ab ("leds: multicolor: Fix camel case in documentation")
-
-Fixes tag
-
-  Fixes: f5a6eb5c5e38 ("leds: multicolor: Introduce a multicolor class defi=
-nition")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 59bb31e8549e ("leds: multicolor: Introduce a multicolor class defini=
-tion")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/A.eKzdVutjbv5GyOp483DFO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8XbUEACgkQAVBC80lX
-0GzWTQf/fQ5WDTJaPGRjUvB8n0i6Bjfv5QQOQiBRLaBs9tZSQzmwuxqlfeuMWY40
-PQfoipRFUbkGJYQKBk3MH35tsp+G89DvN6WXNPHBU3dKY8P5DKnUy/xhiSkTbZKn
-y4Q9+fi3EOaRIsfxi2M92XCVpufGDE4TV3L7RIoCGM4Css82vrWJvRQ7PsIPn6QS
-fkD5m9lilufRcfIcU+8NehjEcMHtiRR07N94jezShuV4h2DwW8vn03jUW1bw1cwh
-XjworXjBdLf3TwJeJl9D5nfSg2Bq4GelCuV1D4GaqDN+xMVUbhjPlS4K5tIDwrlp
-B7m1oJxyL8QbTjVfj4JQKYMps3sMiw==
-=xtQT
------END PGP SIGNATURE-----
-
---Sig_/A.eKzdVutjbv5GyOp483DFO--
+> ---
+>  mm/gup.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 2cc5eba44362..a55f1ec712e9 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1386,7 +1386,8 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>   *
+>   * This takes care of mlocking the pages too if VM_LOCKED is set.
+>   *
+> - * return 0 on success, negative error code on error.
+> + * Return either number of pages pinned in the vma, or a negative error
+> + * code on error.
+>   *
+>   * vma->vm_mm->mmap_lock must be held.
+>   *
+> -- 
+> 2.17.1
+> 

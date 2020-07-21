@@ -2,131 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9BD22757F
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 04:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6792B227582
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 04:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbgGUCQf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jul 2020 22:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S1725774AbgGUCRt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jul 2020 22:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgGUCQd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jul 2020 22:16:33 -0400
+        with ESMTP id S1726042AbgGUCRt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jul 2020 22:17:49 -0400
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7936DC061794;
-        Mon, 20 Jul 2020 19:16:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3293C061794;
+        Mon, 20 Jul 2020 19:17:48 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9hzg5GdJz9sSy;
-        Tue, 21 Jul 2020 12:16:31 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9j171SqLz9sR4;
+        Tue, 21 Jul 2020 12:17:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595297792;
-        bh=MQhPK7Of38NS8E7kuszvHDn+nGkfoaSvpuI3ArH4y9Q=;
+        s=201702; t=1595297867;
+        bh=I45GVsDCNk/R2oPtF45ExzI8cXBJ9bqkldc1fr62dbY=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZnMB6Iyl47yKHcqQyhqk+mGM2pbKzrlLhiY3PO3kKliNhBdpYK1vSMeakAvg7nQzJ
-         SAuneqXJOdh+2rLEry9qVzYDn4u2qKozLhWyKPNZihA5zU4LAMDHBaCO63Lb9gsdOV
-         z5G7dqOHOnnscCZUtxGvWsf1Z19En0UNVLEot9ovjg0FewfbTvmpvmd7WDPf8EiftG
-         kmtVzv0RFHeCc1wajOH43vLfROKoMj2gHf9/V5M7ElmghWmyDZapBZo6Ry13LjVpc0
-         eTbg/k7ZQ4UNCyiQZUvLzcZ3yqOoTGw65L8ErAUEv6QjHZxzZ7Xce141GXR5dFLetN
-         Y/37dN0uOLgbA==
-Date:   Tue, 21 Jul 2020 12:16:30 +1000
+        b=G3ShTEZfLYq4iaLs3ZH210NcOBCtAyq0JSKtCCsoDzeKYYb8es4PZmPsMez2Fl3/M
+         5LFTSlJ8sCbsJ/Q5xwzde/AJRY+zm90zs1ycde31m8qgjen+KyAjDmVUNX5y4MSAPY
+         iGNOjxINJAC/fcwZqoA0t8c54So3gRYDabLG7bvyfQBc0/oxiarVA6yzc9IEKf/p85
+         nBL7tM6zNWUdXevm8iRXhgX4NydBF3UEwilVMGQrLVLZsYST5gQ2WHeJPrwc1Lp9u4
+         WrNBY4ooa64Z9ASfVm9Uxjlu1r/PhoC82qbM2sDhS9VJIh+z7AZv0hIR5IV8kj3oGa
+         o/IW1Lyrxuv+w==
+Date:   Tue, 21 Jul 2020 12:17:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>
+To:     Rob Herring <robherring2@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <20200721121630.5c06c492@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the devicetree tree
+Message-ID: <20200721121746.37e540ad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AuQAVy0q=OC.ztWpD/zw4rg";
+Content-Type: multipart/signed; boundary="Sig_/syf51WeqTU7=k0D6_IXaoPR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AuQAVy0q=OC.ztWpD/zw4rg
+--Sig_/syf51WeqTU7=k0D6_IXaoPR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Commit
 
-  include/net/xdp.h
+  74ea3273d24b ("dt-bindings: media: imx274: Add optional input clock and s=
+upplies")
 
-between commit:
-
-  2f0bc54ba9a8 ("xdp: introduce xdp_get_shared_info_from_{buff, frame} util=
-ity routines")
-
-from the net-next tree and commits:
-
-  9216477449f3 ("bpf: cpumap: Add the possibility to attach an eBPF program=
- to cpumap")
-  28b1520ebf81 ("bpf: cpumap: Implement XDP_REDIRECT for eBPF programs atta=
-ched to map entries")
-
-from the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/net/xdp.h
-index d3005bef812f,5be0d4d65b94..000000000000
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@@ -104,15 -98,12 +104,21 @@@ struct xdp_frame=20
-  	struct net_device *dev_rx; /* used by cpumap */
-  };
- =20
- +static inline struct skb_shared_info *
- +xdp_get_shared_info_from_frame(struct xdp_frame *frame)
- +{
- +	void *data_hard_start =3D frame->data - frame->headroom - sizeof(*frame);
- +
- +	return (struct skb_shared_info *)(data_hard_start + frame->frame_sz -
- +				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
- +}
- +
-+ struct xdp_cpumap_stats {
-+ 	unsigned int redirect;
-+ 	unsigned int pass;
-+ 	unsigned int drop;
-+ };
-+=20
-  /* Clear kernel pointers in xdp_frame */
-  static inline void xdp_scrub_frame(struct xdp_frame *frame)
-  {
-
---Sig_/AuQAVy0q=OC.ztWpD/zw4rg
+--Sig_/syf51WeqTU7=k0D6_IXaoPR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WT/8ACgkQAVBC80lX
-0GxOXAf+J1KJ5i8wnn1+rkxAbVQ9INjgIUPb+TNOyxa85tHHyjgCiEehBsbscQoj
-42c2xq42+xI7Z+AJ7VQ0iZJaQlM8usG7d0SOvi+zynyEynycjOc4hYlxWnkNPhK+
-0hAidcIOwJsG6B0dRKlLDiQNDUAt4bX5p7hX+BohAEdKvHYYyPpAFr0WTeLe/NR8
-wS7d2Y8oexfg+QlHtRZ4fmhzbRqo8BwuZk5nIsd6Oha+mO5qr+3d/a/RRY0hAjna
-tUPAcDpfaHgEY50/832Y3RytnGY+GUWccHXdYO+vEUQKJmkzIL50J9uN9NUTAt08
-DR+eiHOItK73iq42vitUtAG0cAj2fQ==
-=xwir
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WUEoACgkQAVBC80lX
+0Gy9DQf+P1Wr/UmN+4+ZsSbmWX0LAmOCLCbnUVnID7ZW+tXo1HR2TtYp2G7PD55H
+/5Rzuf2HqWSib/OGDLcU+maNBEG3yHSZ/pJRj8PzaAD3xQCpXZLbsji+vqE036mJ
+o7ElB4rhrnNbfGve7/LlYg+d5N171I+tgI5l4TYkNo2HT9nHDv6KEubF+lzhTC9q
+r2VZpWZdjdkOhUr5y/Hml745/HgqAf7zMQpuZnGhXZ8OygWLlHTJ3/DP8wcxwx0k
+/4eoIQJtVKc23PEAnlTIb+6GMhhizqZhhx2UIa3ju9By7PF3xYXE/jiRWGe48AOz
+sVB6NpGAWEzCvB/GNmrmoPphEoQ21Q==
+=8sxK
 -----END PGP SIGNATURE-----
 
---Sig_/AuQAVy0q=OC.ztWpD/zw4rg--
+--Sig_/syf51WeqTU7=k0D6_IXaoPR--

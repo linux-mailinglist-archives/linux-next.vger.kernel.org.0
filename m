@@ -2,113 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 514702278DF
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 08:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DFC22791B
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 08:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgGUGas (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jul 2020 02:30:48 -0400
-Received: from ozlabs.org ([203.11.71.1]:32813 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726039AbgGUGas (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Jul 2020 02:30:48 -0400
+        id S1726834AbgGUGyf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jul 2020 02:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726039AbgGUGyf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jul 2020 02:54:35 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B27CC061794;
+        Mon, 20 Jul 2020 23:54:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9pd222Qlz9sQt;
-        Tue, 21 Jul 2020 16:30:46 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9q8K5v03z9sQt;
+        Tue, 21 Jul 2020 16:54:25 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595313046;
-        bh=Ski7uvVE6HCOcCrUZSaPFCYyuGvb4x7b/TTuVA+A3sg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EqjkVxMIOc469vracsxL61urPM4YSMaLF1euHNynPfMlX0UA7uL+J6wOI/IYQl+cM
-         /Pz9EmG4miq9VcA7db8DWjXGGcivM0XFhZ21h03HZ2ao46a1pSNOV1TTmLsl9HPFXJ
-         8cMaNYjk0dvixjXEONEJ+u4W3B0tDoroQhsCCaxJvD7j4Od9XGPEsFmEJ/Tt0wXeeN
-         7CvsyxZN6AIi9467Y5HwhG+FAcYx+rAaP7kIfuZOGyVHGaHMwPhGKhIPL++MMSFPOa
-         OtmZqlNyAKVfIps5OKPUwYFYYCYUBWiSkvsljLNwhkmeGYj8shz+aAfB2FuwEyJ0m/
-         HcPQcUHqDnp1w==
-Date:   Tue, 21 Jul 2020 16:30:45 +1000
+        s=201702; t=1595314472;
+        bh=mJsTszFvnCYvpWubjtgvg98U0MICF1p5OyjYGn6wYAM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Oih2Qp+Nu5cR+e5iFKw29doka1pPdYxf7DOvZzXdqHrkhZyxL5zoZeMWBGkgw5B6Z
+         mo+tXGmeXESAzMQIKZ5ZFNWlIOgWsIdY9ybMcnLmepOyyQtBQyOx7WWDffTMVmkWuh
+         jxT47UkDugIQBNHJY8FVdsH/TUPqfD5GXQNudcpLXwGlASXEz1qY5VrvhkZqT8lGi7
+         jugJZ0b/n3RK3BeQ/0AGyDFkv8r1Zq0TvfmKWsBh2JXIAMrXm4DZIc6BsD5pDaRBhr
+         Ct7HhytX1IKiYnx0wBXtOxyG07YvEuhstEK88LD2Y9TigpYgC+C4niV+uVlkhThl3L
+         5Z7IG3olGOtOg==
+Date:   Tue, 21 Jul 2020 16:54:24 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20200721163045.50c205a5@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Miller <davem@davemloft.net>,
+        Xin Long <lucien.xin@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Subject: Re: mmotm 2020-07-20-19-06 uploaded (net/ipv6/ip6_vti.o)
+Message-ID: <20200721165424.4aa21b81@canb.auug.org.au>
+In-Reply-To: <536c2421-7ae2-5657-ff31-fbd80bd71784@infradead.org>
+References: <20200721020722.6C7YAze1t%akpm@linux-foundation.org>
+        <536c2421-7ae2-5657-ff31-fbd80bd71784@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZZoqgnmJ5s9kV/F0STSQU=i";
+Content-Type: multipart/signed; boundary="Sig_/9zIg8IHnPNH650=BUHEpwdZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZZoqgnmJ5s9kV/F0STSQU=i
+--Sig_/9zIg8IHnPNH650=BUHEpwdZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the scsi-mkp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Mon, 20 Jul 2020 23:09:34 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
+>
+> on i386:
+>=20
+> ld: net/ipv6/ip6_vti.o: in function `vti6_rcv_tunnel':
+> ip6_vti.c:(.text+0x2d11): undefined reference to `xfrm6_tunnel_spi_lookup'
 
-ERROR: modpost: "exynos_ufs_dump_info" [drivers/scsi/ufs/ufs-exynos.ko] und=
-efined!
-ERROR: modpost: "exynos_ufs_init_dbg" [drivers/scsi/ufs/ufs-exynos.ko] unde=
-fined!
-ERROR: modpost: "exynos_ufs_cmd_log_start" [drivers/scsi/ufs/ufs-exynos.ko]=
- undefined!
+Caused by commit
 
-Caused by commits
+  08622869ed3f ("ip6_vti: support IP6IP6 tunnel processing with .cb_handler=
+")
 
-  c3b5e96ef515 ("scsi: ufs: exynos: Introduce command history")
-  957ee40d413b ("scsi: ufs: exynos: Implement dbg_register_dump")
+from the linux-next ipsec-next tree.
 
-I applied the following patch for now.
-
-=46rom 6535b25fb253c7f25bf924655edb2b22fdaeb545 Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 21 Jul 2020 16:26:05 +1000
-Subject: [PATCH] scsi: ufs: exynos: mark debugging as broken
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/scsi/ufs/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
-index 2c31b33f0adc..925f8de62f6d 100644
---- a/drivers/scsi/ufs/Kconfig
-+++ b/drivers/scsi/ufs/Kconfig
-@@ -178,6 +178,7 @@ config SCSI_UFS_EXYNOS_DBG
- 	bool "EXYNOS specific debug functions"
- 	default n
- 	depends on SCSI_UFS_EXYNOS
-+	depends on BROKEN
- 	help
- 	  This selects EXYNOS specific functions to get and even print
- 	  debug information to see what's happening at both command
---=20
-2.27.0
-
+CONFIG_INET6_XFRM_TUNNEL=3Dm
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZZoqgnmJ5s9kV/F0STSQU=i
+--Sig_/9zIg8IHnPNH650=BUHEpwdZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8Wi5UACgkQAVBC80lX
-0GwB0Qf/TvUUtrSxXwKpGJGAxsk2LBni0oVRd8u/WObwL3V1E11lFeI3ddN+eNRM
-xXVDkc3xRpm1RES46Pl/AMLETFQlY+Zq1Re719v0sKxThEoUgHTJRaNQMmaTQuhN
-7dqZx0d8yeY8dfIrhatI/OQ27l9fcZoIZ/RCJea7IucYVHdJIJGsrXGU4yxZ7f2X
-2WJP7S6aZN2QFcIRB+7OLLtnpPiD2oLOGkrKMzZ3IKYqKkCf+uymiLQ7JrdvPrGB
-8s1gHkIHmQ+F6cKcKbUF9io1pnn4czSS4kW9nX+k6IPU0FbqlRlJojceWLr+iXpX
-h6mhAcM15bqn/JbM7irs3eoYquYypA==
-=eVyE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WkSAACgkQAVBC80lX
+0GypDQf+J1VwO4D8LazPteqDAJk+Cjpltx0+scco6H/nuwwMjcnCP0hGiSdGj3+Q
+SQHviHlbpqbO+iSdPq/Zg8ITkqg59NHbDECNq2iHxNV2jXe6OhJwvjko25dTtbKK
+n/OQVrMKhpduCWmUx7XJDvPseEzrNtHW5J9R7KvlnD30d6yXCnU35ETgM1mIjdJk
+LzQxqZLt0OPIMPYu9mk4kH2PoKvgaSYe1fnPfiIPzlXvwNf7tHUY388ZsU56Og/d
+vD/jpWb3QFraRv6do9m/k5+RL3HWdRyBXkfa+VCS8Lb9Ye9UKFRRaOuBZJQD74ml
+7HXQiJQmc+m9k2xK7qZpWtp6u31vQQ==
+=uNPM
 -----END PGP SIGNATURE-----
 
---Sig_/ZZoqgnmJ5s9kV/F0STSQU=i--
+--Sig_/9zIg8IHnPNH650=BUHEpwdZ--

@@ -2,85 +2,230 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF05B227714
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 05:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C99422779D
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 06:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgGUDjc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jul 2020 23:39:32 -0400
-Received: from ozlabs.org ([203.11.71.1]:45567 "EHLO ozlabs.org"
+        id S1726368AbgGUE2z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jul 2020 00:28:55 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38733 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726016AbgGUDjc (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Jul 2020 23:39:32 -0400
+        id S1725294AbgGUE2z (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Jul 2020 00:28:55 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9kqP1b5kz9sRN;
-        Tue, 21 Jul 2020 13:39:28 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9lwJ1slYz9sRR;
+        Tue, 21 Jul 2020 14:28:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595302770;
-        bh=AdJIwGNJIYdl+U/l5eRj9cn/K2SgesHoTlU3Olw/5+Q=;
+        s=201702; t=1595305730;
+        bh=91WFzPEefhKLKMfP1BJFRHM/dzkdTxB3Wion0WWI7Ro=;
         h=Date:From:To:Cc:Subject:From;
-        b=PhEJHdgOD5kogRu1hsubZHvuoeZ+yf6NMjhEtjPG9rwr7CFO9xVKzY0nAjlA77ome
-         nRxcm9YfcxcUgOIy+6PGuW5PssffjvV6sRdeWahMKyPCKhyMINSy7GUNq7XiefyzGK
-         xhjKqCVZFwVxds8RTI7TuL8fQw3oTm3Ej9e81R0eU27XWOoiaq4Tuwd8lWaQf+0eF5
-         yIzrYW+GYZASc2t+BSRcTEWMNu4rAYABzI/V+9TwfwmzpqDzRq6k1FnE+X7CfCOZV5
-         Z6IxnaaKf6/O3YVgnES8wAjRflPQxo1qdVyRtOjHNhykhqlxitvajy2ZtvkLhmbBo6
-         3UnuYNRsu3BGg==
-Date:   Tue, 21 Jul 2020 13:39:26 +1000
+        b=kWAnq1pz86jpMhs5cbSPQrfSBsvbZ9gtu241uhTRsl+4ayw2wsgTFI1aBYncSXIbJ
+         Vzl+ylJVsXIc4ABwpenqnTS48xV3FTiyUEURRsuRaz1A5jsjUSRbVROCnYlIoBL5/E
+         EJ7gshfxN4B0TtZKMGV8n6Q1XfEkhlXY7QFNU86tmWtuunXJlCPr3XFOazttW0TBll
+         rYC2OqlEkucF9SpVbSwAo8hRSSsBR7Czdu4PfewIzX0Dbe2pnDxOcyksb4QqgYzHiU
+         fMNRl9B10MaMmJNlkFID2mn4/umimah8YsGU0o5/xcUVEnYJN4vCmyBNXSybUIPv8o
+         VlWlludng4YGA==
+Date:   Tue, 21 Jul 2020 14:28:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee.jones@linaro.org>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: linux-next: build warning after merge of the backlight tree
-Message-ID: <20200721133926.7e2eeb4f@canb.auug.org.au>
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>
+Subject: linux-next: manual merge of the tip tree with the crypto tree
+Message-ID: <20200721142845.76ebea00@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nPnSCLF+LQVpxJV7QQNy0iq";
+Content-Type: multipart/signed; boundary="Sig_/.j5GyyiXptkUvHOgZllA5Tt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nPnSCLF+LQVpxJV7QQNy0iq
+--Sig_/.j5GyyiXptkUvHOgZllA5Tt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the backlight tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+Today's linux-next merge of the tip tree got a conflict in:
 
-drivers/video/backlight/cr_bllcd.c: In function 'cr_backlight_set_intensity=
-':
-drivers/video/backlight/cr_bllcd.c:62:6: warning: unused variable 'intensit=
-y' [-Wunused-variable]
-   62 |  int intensity =3D bd->props.brightness;
-      |      ^~~~~~~~~
+  arch/x86/include/asm/inst.h
 
-Introduced by commit
+between commit:
 
-  24d34617c24f ("backlight: cr_bllcd: Introduce gpio-backlight semantics")
+  d7866e503bdc ("crypto: x86 - Remove include/asm/inst.h")
+(also "crypto: x86 - Put back integer parts of include/asm/inst.h"
+which I have added to the crypto tree merge today)
+
+from the crypto tree and commit:
+
+  eaad981291ee ("x86/entry/64: Introduce the FIND_PERCPU_BASE macro")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nPnSCLF+LQVpxJV7QQNy0iq
+diff --cc arch/x86/include/asm/inst.h
+index 438ccd4f3cc4,d063841a17e3..000000000000
+--- a/arch/x86/include/asm/inst.h
++++ b/arch/x86/include/asm/inst.h
+@@@ -143,6 -203,124 +143,21 @@@
+  	.macro MODRM mod opd1 opd2
+  	.byte \mod | (\opd1 & 7) | ((\opd2 & 7) << 3)
+  	.endm
++=20
+ -	.macro PSHUFB_XMM xmm1 xmm2
+ -	XMM_NUM pshufb_opd1 \xmm1
+ -	XMM_NUM pshufb_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX pshufb_opd1 pshufb_opd2
+ -	.byte 0x0f, 0x38, 0x00
+ -	MODRM 0xc0 pshufb_opd1 pshufb_opd2
+ -	.endm
+ -
+ -	.macro PCLMULQDQ imm8 xmm1 xmm2
+ -	XMM_NUM clmul_opd1 \xmm1
+ -	XMM_NUM clmul_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX clmul_opd1 clmul_opd2
+ -	.byte 0x0f, 0x3a, 0x44
+ -	MODRM 0xc0 clmul_opd1 clmul_opd2
+ -	.byte \imm8
+ -	.endm
+ -
+ -	.macro PEXTRD imm8 xmm gpr
+ -	R32_NUM extrd_opd1 \gpr
+ -	XMM_NUM extrd_opd2 \xmm
+ -	PFX_OPD_SIZE
+ -	PFX_REX extrd_opd1 extrd_opd2
+ -	.byte 0x0f, 0x3a, 0x16
+ -	MODRM 0xc0 extrd_opd1 extrd_opd2
+ -	.byte \imm8
+ -	.endm
+ -
+ -	.macro AESKEYGENASSIST rcon xmm1 xmm2
+ -	XMM_NUM aeskeygen_opd1 \xmm1
+ -	XMM_NUM aeskeygen_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aeskeygen_opd1 aeskeygen_opd2
+ -	.byte 0x0f, 0x3a, 0xdf
+ -	MODRM 0xc0 aeskeygen_opd1 aeskeygen_opd2
+ -	.byte \rcon
+ -	.endm
+ -
+ -	.macro AESIMC xmm1 xmm2
+ -	XMM_NUM aesimc_opd1 \xmm1
+ -	XMM_NUM aesimc_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aesimc_opd1 aesimc_opd2
+ -	.byte 0x0f, 0x38, 0xdb
+ -	MODRM 0xc0 aesimc_opd1 aesimc_opd2
+ -	.endm
+ -
+ -	.macro AESENC xmm1 xmm2
+ -	XMM_NUM aesenc_opd1 \xmm1
+ -	XMM_NUM aesenc_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aesenc_opd1 aesenc_opd2
+ -	.byte 0x0f, 0x38, 0xdc
+ -	MODRM 0xc0 aesenc_opd1 aesenc_opd2
+ -	.endm
+ -
+ -	.macro AESENCLAST xmm1 xmm2
+ -	XMM_NUM aesenclast_opd1 \xmm1
+ -	XMM_NUM aesenclast_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aesenclast_opd1 aesenclast_opd2
+ -	.byte 0x0f, 0x38, 0xdd
+ -	MODRM 0xc0 aesenclast_opd1 aesenclast_opd2
+ -	.endm
+ -
+ -	.macro AESDEC xmm1 xmm2
+ -	XMM_NUM aesdec_opd1 \xmm1
+ -	XMM_NUM aesdec_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aesdec_opd1 aesdec_opd2
+ -	.byte 0x0f, 0x38, 0xde
+ -	MODRM 0xc0 aesdec_opd1 aesdec_opd2
+ -	.endm
+ -
+ -	.macro AESDECLAST xmm1 xmm2
+ -	XMM_NUM aesdeclast_opd1 \xmm1
+ -	XMM_NUM aesdeclast_opd2 \xmm2
+ -	PFX_OPD_SIZE
+ -	PFX_REX aesdeclast_opd1 aesdeclast_opd2
+ -	.byte 0x0f, 0x38, 0xdf
+ -	MODRM 0xc0 aesdeclast_opd1 aesdeclast_opd2
+ -	.endm
+ -
+ -	.macro MOVQ_R64_XMM opd1 opd2
+ -	REG_TYPE movq_r64_xmm_opd1_type \opd1
+ -	.if movq_r64_xmm_opd1_type =3D=3D REG_TYPE_XMM
+ -	XMM_NUM movq_r64_xmm_opd1 \opd1
+ -	R64_NUM movq_r64_xmm_opd2 \opd2
+ -	.else
+ -	R64_NUM movq_r64_xmm_opd1 \opd1
+ -	XMM_NUM movq_r64_xmm_opd2 \opd2
+ -	.endif
+ -	PFX_OPD_SIZE
+ -	PFX_REX movq_r64_xmm_opd1 movq_r64_xmm_opd2 1
+ -	.if movq_r64_xmm_opd1_type =3D=3D REG_TYPE_XMM
+ -	.byte 0x0f, 0x7e
+ -	.else
+ -	.byte 0x0f, 0x6e
+ -	.endif
+ -	MODRM 0xc0 movq_r64_xmm_opd1 movq_r64_xmm_opd2
+ -	.endm
+ -
++ .macro RDPID opd
++ 	REG_TYPE rdpid_opd_type \opd
++ 	.if rdpid_opd_type =3D=3D REG_TYPE_R64
++ 	R64_NUM rdpid_opd \opd
++ 	.else
++ 	R32_NUM rdpid_opd \opd
++ 	.endif
++ 	.byte 0xf3
++ 	.if rdpid_opd > 7
++ 	PFX_REX rdpid_opd 0
++ 	.endif
++ 	.byte 0x0f, 0xc7
++ 	MODRM 0xc0 rdpid_opd 0x7
++ .endm
+  #endif
+ =20
+  #endif
+
+--Sig_/.j5GyyiXptkUvHOgZllA5Tt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WY28ACgkQAVBC80lX
-0GypIQgAmB3rPn62k1dTf31BjDpHNe54tNe4DdX3RH+PVsbl/twjnMo34t2jfCx0
-y4TCUyj91s9kAiXDyDnyyP+IxGh9HFLcsVFXiADkejjHFQxKTP8nMJ6Qd74X3bJl
-N9OGzvOtKAD1CgZPF6aBZTZaNAD+6y4JBXpVY9EjWS933FV7ouEuptzhKBHmlUD2
-YP7tIANXvDvZ5xZHrAhvhHMlyh3YJdiityquurelkLXd/zCSP10zBPE5v0H76XGv
-AXEihqJaSeHjuoLbwzwJwFBxlQRf5m35PEsWo90pX3F0ay+38OEwLkIWaATjj0mp
-tg4yiGzzsnGsWZA1w6hCEnPCJ3fsAg==
-=rXWK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8Wbv0ACgkQAVBC80lX
+0GwF9AgAoLS/9jvFh/rnKXxK4krQcPJ2szSjyyirbG93jA+Du/PmifMQbsguzz4W
+Ehn1ok5UZHDcmCeFonhvt08qaDQwCEaQh/OEgOj8bMP7XZGgWms6592/JPgEMS4y
+bNfVJEotq9GZRvqhkuzKA1SvyS27XTADciV+mDjRjkvcr0bjHCa5xLkxD7KZQAUJ
+I23GHAM1TrFNO9DRHX71z/VNptaTqFiUWRlteF3CcQj3qekg8u7HOJHdc6weUMa8
+CxS+fqtoZjvHjajDr+bkCV7Khdvzac5GMkIbl8jxx/8XtAY8NI3srEurzFEkgnoP
+dZtf54ZOgLyt2IZetl5uEvjiwpMhaA==
+=qlGn
 -----END PGP SIGNATURE-----
 
---Sig_/nPnSCLF+LQVpxJV7QQNy0iq--
+--Sig_/.j5GyyiXptkUvHOgZllA5Tt--

@@ -2,91 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811AE2278B3
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 08:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8852278C4
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 08:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726003AbgGUGO7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jul 2020 02:14:59 -0400
-Received: from a.mx.secunet.com ([62.96.220.36]:35500 "EHLO a.mx.secunet.com"
+        id S1726455AbgGUGRP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jul 2020 02:17:15 -0400
+Received: from ozlabs.org ([203.11.71.1]:33463 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725294AbgGUGO7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Jul 2020 02:14:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 666AC20265;
-        Tue, 21 Jul 2020 08:14:56 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 94PZoZvLZkCG; Tue, 21 Jul 2020 08:14:55 +0200 (CEST)
-Received: from mail-essen-01.secunet.de (mail-essen-01.secunet.de [10.53.40.204])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1725294AbgGUGRP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Jul 2020 02:17:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id B8160201E2;
-        Tue, 21 Jul 2020 08:14:55 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- mail-essen-01.secunet.de (10.53.40.204) with Microsoft SMTP Server (TLS) id
- 14.3.487.0; Tue, 21 Jul 2020 08:14:55 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Tue, 21 Jul
- 2020 08:14:55 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)      id E06AD31801E1;
- Tue, 21 Jul 2020 08:14:54 +0200 (CEST)
-Date:   Tue, 21 Jul 2020 08:14:54 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <broonie@kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-next@vger.kernel.org>,
-        <mhocko@suse.cz>, <mm-commits@vger.kernel.org>,
-        <sfr@canb.auug.org.au>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David Miller" <davem@davemloft.net>
-Subject: Re: mmotm 2020-07-20-19-06 uploaded (net/ipv6/ip6_vti.o)
-Message-ID: <20200721061454.GK20687@gauss3.secunet.de>
-References: <20200721020722.6C7YAze1t%akpm@linux-foundation.org>
- <536c2421-7ae2-5657-ff31-fbd80bd71784@infradead.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9pKM2t9Kz9sPB;
+        Tue, 21 Jul 2020 16:17:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595312232;
+        bh=WZV4+iRfMoNQK9wg0RRfY4PHdeJb/n3hoO/d0GU546o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Xw7uJzgIArTiwFZ3/KtVCzAo4+8RWha7oFtD+JuM6HwS0APox65ODZhw9GwM20NT2
+         6noQKC+6Fw8fyCEsBktegcA51zIYk+HrtbTyNswEMKpQHDKkzvP+SNvSZcw3BsQPrc
+         1NLbiVN3LbV6qURnltHkUTyewCWqUy2WPcRwygduXLX6smi12qQdIGtmuUcNfYEoRw
+         +msUArYVxgTvyz8i+/X4xZuJw9AIA8ipyDZac4AGengfBEaH/Aolgb1knBgti6kaqU
+         n34GDSLpq0S3CRW3AGRerku01kIB3cMQZlaz/eq+8LxdVLV/BaMy94aMAhko2vEwXT
+         GnJLWgUk2aVmg==
+Date:   Tue, 21 Jul 2020 16:17:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: linux-next: manual merge of the dmaengine tree with the phy-next
+ tree
+Message-ID: <20200721161701.64b4245e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <536c2421-7ae2-5657-ff31-fbd80bd71784@infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: multipart/signed; boundary="Sig_/JiCKaOVGPzTJDq2Or+8rB07";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 11:09:34PM -0700, Randy Dunlap wrote:
-> On 7/20/20 7:07 PM, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2020-07-20-19-06 has been uploaded to
-> > 
-> >    http://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > mmotm-readme.txt says
-> > 
-> > README for mm-of-the-moment:
-> > 
-> > http://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> > 
-> > You will need quilt to apply these patches to the latest Linus release (5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > http://ozlabs.org/~akpm/mmotm/series
-> > 
-> 
-> 
-> on i386:
-> 
-> ld: net/ipv6/ip6_vti.o: in function `vti6_rcv_tunnel':
-> ip6_vti.c:(.text+0x2d11): undefined reference to `xfrm6_tunnel_spi_lookup'
+--Sig_/JiCKaOVGPzTJDq2Or+8rB07
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report!
+Hi all,
 
-I've applied a fix to ipsec-next just a minute ago.
+Today's linux-next merge of the dmaengine tree got a conflict in:
+
+  MAINTAINERS
+
+between commit:
+
+  4a33bea00314 ("phy: zynqmp: Add PHY driver for the Xilinx ZynqMP Gigabit =
+Transceiver")
+
+from the phy-next tree and commit:
+
+  ef9303fdf46f ("dt: bindings: dma: xilinx: dpdma: DT bindings for Xilinx D=
+PDMA")
+
+from the dmaengine tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 495e4247cbb0,1ba09904354f..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -11432,20 -11364,14 +11434,13 @@@ L:	linux-arm-kernel@lists.infradead.or
+  S:	Supported
+  F:	drivers/usb/gadget/udc/atmel_usba_udc.*
+ =20
+ -MICROSEMI ETHERNET SWITCH DRIVER
+ -M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+ -M:	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+ -L:	netdev@vger.kernel.org
+ +MICROCHIP WILC1000 WIFI DRIVER
+ +M:	Ajay Singh <ajay.kathat@microchip.com>
+ +M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+ +L:	linux-wireless@vger.kernel.org
+  S:	Supported
+ -F:	drivers/net/ethernet/mscc/
+ -F:	include/soc/mscc/ocelot*
+ +F:	drivers/net/wireless/microchip/wilc1000/
+ =20
+- MICROCHIP XDMA DRIVER
+- M:	Ludovic Desroches <ludovic.desroches@microchip.com>
+- L:	linux-arm-kernel@lists.infradead.org
+- L:	dmaengine@vger.kernel.org
+- S:	Supported
+- F:	drivers/dma/at_xdmac.c
+-=20
+  MICROSEMI MIPS SOCS
+  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+  M:	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+@@@ -18990,15 -18847,15 +18985,24 @@@ F:	Documentation/devicetree/bindings/=
+me
+  F:	drivers/media/platform/xilinx/
+  F:	include/uapi/linux/xilinx-v4l2-controls.h
+ =20
+ +XILINX ZYNQMP PSGTR PHY DRIVER
+ +M:	Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+ +M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ +L:	linux-kernel@vger.kernel.org
+ +S:	Supported
+ +T:	git https://github.com/Xilinx/linux-xlnx.git
+ +F:	Documentation/devicetree/bindings/phy/xlnx,zynqmp-psgtr.yaml
+ +F:	drivers/phy/xilinx/phy-zynqmp.c
+ +
++ XILINX ZYNQMP DPDMA DRIVER
++ M:	Hyun Kwon <hyun.kwon@xilinx.com>
++ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++ L:	dmaengine@vger.kernel.org
++ S:	Supported
++ F:	Documentation/devicetree/bindings/dma/xilinx/xlnx,zynqmp-dpdma.yaml
++ F:	drivers/dma/xilinx/xilinx_dpdma.c
++ F:	include/dt-bindings/dma/xlnx-zynqmp-dpdma.h
++=20
+  XILLYBUS DRIVER
+  M:	Eli Billauer <eli.billauer@gmail.com>
+  L:	linux-kernel@vger.kernel.org
+
+--Sig_/JiCKaOVGPzTJDq2Or+8rB07
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WiF0ACgkQAVBC80lX
+0Gwj/Qf+MKcSU4OQfFBRgPufNkEFYoqsaXF7AuA6u8CqtM0rZHn7PNPg4l0ZctQk
+Ra0G76mVnHoPlog12gnGROwHn2dpjuyuknrYKg5fUJEH3J+o72emqexzhCrjm82I
+vDjrMBJ5M/ECwnmtj/2UY7dPSC1Dsw+YDzXuxSLlo4t7BJ0HzyglboByIwjgRfDw
+6cmqGUHQzdfxpGHmivInBgwa88eFHv7F6pdEKJoZjHmiWY7hlv0IfViH4qj6XuL1
+u2MdGKnkIVnkcDKLQvc0GuSlp74ZK6e8jQHFN5zqmEbzoHTYyP3hz0hGxbhjXBa+
+d7KV9iDAe6SX/QZ3Xhhrh2oRw/3t2g==
+=2GWy
+-----END PGP SIGNATURE-----
+
+--Sig_/JiCKaOVGPzTJDq2Or+8rB07--

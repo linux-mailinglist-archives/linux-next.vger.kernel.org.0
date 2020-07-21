@@ -2,80 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6792B227582
-	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 04:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF05B227714
+	for <lists+linux-next@lfdr.de>; Tue, 21 Jul 2020 05:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbgGUCRt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jul 2020 22:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726042AbgGUCRt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Jul 2020 22:17:49 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3293C061794;
-        Mon, 20 Jul 2020 19:17:48 -0700 (PDT)
+        id S1726719AbgGUDjc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jul 2020 23:39:32 -0400
+Received: from ozlabs.org ([203.11.71.1]:45567 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726016AbgGUDjc (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Jul 2020 23:39:32 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9j171SqLz9sR4;
-        Tue, 21 Jul 2020 12:17:47 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B9kqP1b5kz9sRN;
+        Tue, 21 Jul 2020 13:39:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595297867;
-        bh=I45GVsDCNk/R2oPtF45ExzI8cXBJ9bqkldc1fr62dbY=;
+        s=201702; t=1595302770;
+        bh=AdJIwGNJIYdl+U/l5eRj9cn/K2SgesHoTlU3Olw/5+Q=;
         h=Date:From:To:Cc:Subject:From;
-        b=G3ShTEZfLYq4iaLs3ZH210NcOBCtAyq0JSKtCCsoDzeKYYb8es4PZmPsMez2Fl3/M
-         5LFTSlJ8sCbsJ/Q5xwzde/AJRY+zm90zs1ycde31m8qgjen+KyAjDmVUNX5y4MSAPY
-         iGNOjxINJAC/fcwZqoA0t8c54So3gRYDabLG7bvyfQBc0/oxiarVA6yzc9IEKf/p85
-         nBL7tM6zNWUdXevm8iRXhgX4NydBF3UEwilVMGQrLVLZsYST5gQ2WHeJPrwc1Lp9u4
-         WrNBY4ooa64Z9ASfVm9Uxjlu1r/PhoC82qbM2sDhS9VJIh+z7AZv0hIR5IV8kj3oGa
-         o/IW1Lyrxuv+w==
-Date:   Tue, 21 Jul 2020 12:17:46 +1000
+        b=PhEJHdgOD5kogRu1hsubZHvuoeZ+yf6NMjhEtjPG9rwr7CFO9xVKzY0nAjlA77ome
+         nRxcm9YfcxcUgOIy+6PGuW5PssffjvV6sRdeWahMKyPCKhyMINSy7GUNq7XiefyzGK
+         xhjKqCVZFwVxds8RTI7TuL8fQw3oTm3Ej9e81R0eU27XWOoiaq4Tuwd8lWaQf+0eF5
+         yIzrYW+GYZASc2t+BSRcTEWMNu4rAYABzI/V+9TwfwmzpqDzRq6k1FnE+X7CfCOZV5
+         Z6IxnaaKf6/O3YVgnES8wAjRflPQxo1qdVyRtOjHNhykhqlxitvajy2ZtvkLhmbBo6
+         3UnuYNRsu3BGg==
+Date:   Tue, 21 Jul 2020 13:39:26 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the devicetree tree
-Message-ID: <20200721121746.37e540ad@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: linux-next: build warning after merge of the backlight tree
+Message-ID: <20200721133926.7e2eeb4f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/syf51WeqTU7=k0D6_IXaoPR";
+Content-Type: multipart/signed; boundary="Sig_/nPnSCLF+LQVpxJV7QQNy0iq";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/syf51WeqTU7=k0D6_IXaoPR
+--Sig_/nPnSCLF+LQVpxJV7QQNy0iq
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the backlight tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-  74ea3273d24b ("dt-bindings: media: imx274: Add optional input clock and s=
-upplies")
+drivers/video/backlight/cr_bllcd.c: In function 'cr_backlight_set_intensity=
+':
+drivers/video/backlight/cr_bllcd.c:62:6: warning: unused variable 'intensit=
+y' [-Wunused-variable]
+   62 |  int intensity =3D bd->props.brightness;
+      |      ^~~~~~~~~
 
-is missing a Signed-off-by from its committer.
+Introduced by commit
+
+  24d34617c24f ("backlight: cr_bllcd: Introduce gpio-backlight semantics")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/syf51WeqTU7=k0D6_IXaoPR
+--Sig_/nPnSCLF+LQVpxJV7QQNy0iq
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WUEoACgkQAVBC80lX
-0Gy9DQf+P1Wr/UmN+4+ZsSbmWX0LAmOCLCbnUVnID7ZW+tXo1HR2TtYp2G7PD55H
-/5Rzuf2HqWSib/OGDLcU+maNBEG3yHSZ/pJRj8PzaAD3xQCpXZLbsji+vqE036mJ
-o7ElB4rhrnNbfGve7/LlYg+d5N171I+tgI5l4TYkNo2HT9nHDv6KEubF+lzhTC9q
-r2VZpWZdjdkOhUr5y/Hml745/HgqAf7zMQpuZnGhXZ8OygWLlHTJ3/DP8wcxwx0k
-/4eoIQJtVKc23PEAnlTIb+6GMhhizqZhhx2UIa3ju9By7PF3xYXE/jiRWGe48AOz
-sVB6NpGAWEzCvB/GNmrmoPphEoQ21Q==
-=8sxK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8WY28ACgkQAVBC80lX
+0GypIQgAmB3rPn62k1dTf31BjDpHNe54tNe4DdX3RH+PVsbl/twjnMo34t2jfCx0
+y4TCUyj91s9kAiXDyDnyyP+IxGh9HFLcsVFXiADkejjHFQxKTP8nMJ6Qd74X3bJl
+N9OGzvOtKAD1CgZPF6aBZTZaNAD+6y4JBXpVY9EjWS933FV7ouEuptzhKBHmlUD2
+YP7tIANXvDvZ5xZHrAhvhHMlyh3YJdiityquurelkLXd/zCSP10zBPE5v0H76XGv
+AXEihqJaSeHjuoLbwzwJwFBxlQRf5m35PEsWo90pX3F0ay+38OEwLkIWaATjj0mp
+tg4yiGzzsnGsWZA1w6hCEnPCJ3fsAg==
+=rXWK
 -----END PGP SIGNATURE-----
 
---Sig_/syf51WeqTU7=k0D6_IXaoPR--
+--Sig_/nPnSCLF+LQVpxJV7QQNy0iq--

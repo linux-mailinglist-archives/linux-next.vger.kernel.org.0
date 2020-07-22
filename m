@@ -2,98 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6168C229CE9
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 18:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1105229D32
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 18:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730415AbgGVQRL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 12:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S1726711AbgGVQfs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 12:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730325AbgGVQRK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 12:17:10 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22109C0619E0
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 09:17:10 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id x9so1805389ila.3
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 09:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tcL+fVRHFbwjcT2YoeEyW0ovDsmOpco9f4REaf4pOLw=;
-        b=Yubxcjwtpc7YJGf0Tziz+sT7J49N0W4XOpcuP6qz+/oiMJmZWQU/Kd8bRbKoKhkvRZ
-         RnULiCwqMICOqU1HdOr0DGkfNUWsljA27n+XJ+U5D4l98CuiRYbkSXMPr4+W0DyFNtb+
-         AY+GHqK5P2TwUgTqNVgFJTxJoi0sTaFqqe+6N0p/LenOodA1YiaVIgE+e2BMkKkM402X
-         R4n2L8/Xi3rrf4jYh3bII4QM3zJZ2tIZWJ5l8SbQpLT5zkqRCfn06WbbJYUNLuUFZK79
-         2WjQU9hbziDqo4arXlFdwyZ0UC8MY80G8CFPHzWB/TsG+e4NxODiBVUvc4xDIlT2n9fa
-         B76A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tcL+fVRHFbwjcT2YoeEyW0ovDsmOpco9f4REaf4pOLw=;
-        b=erdlCFeLLTlWLxvNP6Qvd/0rcrK18gdlrJZanjLehZhmVvyjXPWh3oxMPg+HsfFUA3
-         e03XsbCE6LUcUZ+e3f2RFDsiY8OyzsOf8I8gB8N0vOlqOWWILE7yZBUPl/knl3+9qNwL
-         5zpFqC9GdoaRspLNQG9C8pgcOrFXu5zfXaM+z9Am4FPV8bP8Xgu1BO8RruSyHiMVg/2u
-         uZGwrcOExR+WZjNDcFsoj64PHBTwe2uZZvCabrHjMoaE8LEjRDq/OqVRX3upd0fC4v84
-         AU1uU/iQVdwLIfkRvG7lUp8FFHEa4FNHl8zKCAjZU1hDiTKOK8UFimmqOFrG6SYy3zqf
-         +L2Q==
-X-Gm-Message-State: AOAM532km4q3AwqxdC40l7Cax5AfIEK1Hvv/55/iklk1qhtOfRqxr+ym
-        V39EUbBARsZiiyiiUhdjgzaLntTbW1ei2ZWR8fq7Xw==
-X-Google-Smtp-Source: ABdhPJzRjVSHUdq95L4uwyL/QiKe4BnlIZ7BNNuAXtthqySJmpzNdrp3+RktG+FL20eMYaBBJOPnsGSirp9tKRuuYbA=
-X-Received: by 2002:a92:404e:: with SMTP id n75mr615859ila.203.1595434629062;
- Wed, 22 Jul 2020 09:17:09 -0700 (PDT)
+        with ESMTP id S1726535AbgGVQfs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 12:35:48 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FFBC0619DC;
+        Wed, 22 Jul 2020 09:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=5XZN44V6CF32fCmbu6lN9a7A+gJGo7nDxcGvT72Gh9Q=; b=R9nzzvmIS+N0vrYDloMBSCBYaj
+        THJs3mLaZ4vD8p/YZNaKSeo8B0l6g69cdikZ5e4hzc9JcOFXBLrj8H4f1IM7iqbB0MO0fLOdIDZyT
+        YwqozO+H84qg0S6WYJ4NqKDDBPD2id9gqNI64bdk9scHdmf846NSW4vBoJZO9WAP82XYUWJkRyITP
+        4Y3FA9gM5aCCU+hDyHrDjqlSjt3zEfy1wYlbGoXdYl2t2ZficHKqHaBr40Ir2h1t5W2M6nXhP40nC
+        xyeCyjfxhQD2sCkqyeGB0biqA3rHF6pE+TeVRwgxvKJFFdgwkmntKlmHPEIXj9ifwgm+ZnYGUEDkD
+        sor7GMlQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jyHiW-0000XQ-MQ; Wed, 22 Jul 2020 16:35:41 +0000
+Subject: Re: linux-next: Tree for Jul 22 (drivers/net/vrf)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        David Miller <davem@davemloft.net>
+References: <20200722231640.3dae04cd@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e1fc4765-db64-2876-2f3c-857c45d4fb45@infradead.org>
+Date:   Wed, 22 Jul 2020 09:35:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <CA+G9fYuj3bHUMz8XQztbmTgF0c5+rZ5-FkUjFyvEftej2jLT+Q@mail.gmail.com>
- <CAK8P3a3br1bDc8C6UjRWzdmwzVV26YYe3ixHV7LH5Z0-OiqPQQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3br1bDc8C6UjRWzdmwzVV26YYe3ixHV7LH5Z0-OiqPQQ@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 22 Jul 2020 09:16:57 -0700
-Message-ID: <CALvZod5cBTsytQz5=EbqT_s1_ZJ8YpkBe+CLEAU+25FP4kHSAg@mail.gmail.com>
-Subject: Re: BUG at mm/vmalloc.c:3089! - invalid opcode: 0000 [#1] SMP KASAN PTI
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
-        LTP List <ltp@lists.linux.it>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Roman Gushchin <guro@fb.com>,
-        Dennis Zhou <dennis@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200722231640.3dae04cd@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 1:55 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> Adding Roman Gushchin to Cc, he touched that code recently.
->
-> Naresh, if nobody has any immediate ideas, you could double-check by
-> reverting these commits:
->
-> e0b8d00b7561 mm: memcg/percpu: per-memcg percpu memory statistics
-> 99411af13595 mm/percpu: fix 'defined but not used' warning
-> 9398ce6306b6 mm-memcg-percpu-account-percpu-memory-to-memory-cgroups-fix-fix
-> 54116d471779 mm-memcg-percpu-account-percpu-memory-to-memory-cgroups-fix
-> ec518e090843 mm: memcg/percpu: account percpu memory to memory cgroups
-> 9bc897d18dc3 percpu: return number of released bytes from pcpu_free_area()
->
->        Arnd
->
+On 7/22/20 6:16 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200721:
+> 
 
-I think syzbot has bisected this issue to the suspect patch.
+on i386:
+when CONFIG_SYSCTL is not set/enabled:
 
-https://lore.kernel.org/lkml/00000000000043f09405ab01b0b8@google.com/
+ERROR: modpost: "sysctl_vals" [drivers/net/vrf.ko] undefined!
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

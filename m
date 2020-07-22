@@ -2,153 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10ADB229B54
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 17:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A86229BC8
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 17:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732723AbgGVP0K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 11:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S1732699AbgGVPuU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 11:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732633AbgGVP0J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 11:26:09 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACD9C0619DE
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 08:26:09 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id md7so1564276pjb.1
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 08:26:09 -0700 (PDT)
+        with ESMTP id S1730870AbgGVPuU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 11:50:20 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C92C0619DF
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 08:50:20 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id l23so2449773qkk.0
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 08:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CzLOOS//hUD8q9wPH1hxqf0po1Wm9sGqsog9+/iTqAI=;
-        b=NOZ6UetuWCJDo0hzkrmh3VMWWV8D9oRUMNZ4pDO/kd+xEWZ3QyxKqGDHqUhauU42FT
-         lJzbINvNQ1ipDKEiN6giuu5cmLuuCZzH9aWilbHEM/+yYaK0n5KkbpzB3e+7nRY92qp9
-         BJfGq3Hc4KULpAJlLg0z7bJ8+wchj3TY7lAYpqgPBp9T0FMfvwvM8UI7gAqZ1aQNc05l
-         /COONQpsGm7VOPJuN4srq76cyOU5+y1lnlFGsR46MxI863bKkBEhKiPHnLRRwjqGRU3D
-         lk1WvdlrwxYRZussgyknvro6EMDvVT5va4jpcOh16Ex9YhZvZ2xr5u2kMB/OOB5Mx7Ap
-         kmwg==
+        bh=FbZpQKjkyVWA5idi3w+btcCrZiLttKv+UA9Wn+yjyV0=;
+        b=OBleOo+TpJlNHgO3Hupf36nyBJkcwDDKREwPcTAtj6Sp2D5PjGq5CvkBZSLh7t0ptU
+         TYUv4+DllNHf7bn3Rh1p34Ffb8mU63zP0IIi9Ai2qGwBI3Qrv07OVzkOkL05OQ1rbeFR
+         9oBCEv+aVCb98tGVAtAEHt5/ZY8dADMil0LVidWEPfbhtXdHA965EUvmMKGsuXdontIb
+         plNtHfvt1rTUVyFJRXM/R++7bl/E3CKm13FQ4u8VO8jOMskk/G1ilzLFdZp225CLN0B8
+         +XbqihxsVQqSYOFAuzVAqzg25leFXoVIL9Zu2oV1pzHbi08PdZv63INm2RU2vKOOhiIz
+         VzzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CzLOOS//hUD8q9wPH1hxqf0po1Wm9sGqsog9+/iTqAI=;
-        b=Qmk/Dxj9pVcS7SlAjdKI8V2RWwYI/mdvuNjtqOc8VZ4oA49H/9Tu4h50CYWsnQnBEu
-         LqozVz68vvO+EwZObaCKPZEf4EjgQEqdr4ZxZmYYvZaoABq3d4NWY65H9JuztEvQpnTD
-         BZUDn+8fLAPlWYyHD69fNejAMF9FWXVgQbQFm08oGc+jAjt2owB/WKSwLgACbyQXKHcC
-         j4L4o4kGu/GS15zK2xYqsvXMPTVem0zgf4eBiOIS7F37IeBE8bKmop2iDz9ibyMAwd73
-         caDJ9OUm845qdOUrM6NDarf354uLn7I063ABv2JLjyM2Ri/E9lsXjp9y7vy46Y+mYTXu
-         VMpQ==
-X-Gm-Message-State: AOAM53284qZ5mpUo4Ii81f7sxFsf4OoK+IuQxsXm3W21R96/LfuQzi7V
-        Zb7aa5j8CdZGefXY1Aqm8DOPEVwm5bh3LNuRc42prQ==
-X-Google-Smtp-Source: ABdhPJxwGbDkiUfVo298yjBOWU/WqwCHTeJkyyPq+H7SlytcoTd3ErvS9165gVdX0ddyHf3f1m9/coLUoxNHm/YzU3c=
-X-Received: by 2002:a17:90b:3683:: with SMTP id mj3mr10501433pjb.91.1595431568642;
- Wed, 22 Jul 2020 08:26:08 -0700 (PDT)
+        bh=FbZpQKjkyVWA5idi3w+btcCrZiLttKv+UA9Wn+yjyV0=;
+        b=XcYiBPawEnE1GCZz7kqehFeYXOl/2kdk8Ya6m6hYcTHpNR8cpIrglY57vdCug3eVez
+         t+SM+LBTl7sQ6TNio7W66c0V1Xug/TqcrsmX51CMHI04+alOPnte24pVJWt+DW0ucW9B
+         n8JjBy/rfOK/MSzP8aL9RL9ocAU/b3dJVeLTOLU6GJZMLoE5jBCuucFkL8Y8CR3pAlDf
+         UIX5c+HTuv6AyBMglwd7HYTQwYxRty5mnfClvmmXaeug3Od3jPVdWvTgvcyfvzFbKgwk
+         m280VPKCGBIYERqZwZJLWYAeg8wlAW62IURXePn0C3nleYxb7sKGn8FiDsGghFuEkGHe
+         ie4Q==
+X-Gm-Message-State: AOAM533FfAbkkNEqpP279Pcd6luZPPsyz22beMWHrPUn5vKgjWtgsB8r
+        5917xQAX+x1mfizz3eRJzFsaZeXw
+X-Google-Smtp-Source: ABdhPJx03XQmpz/EVTTdjTNpJbGotstLRukGSvw3Rebkl3ZXJOxZIC+eqdBTv63CzHxdhw4Diukl0Q==
+X-Received: by 2002:a37:a292:: with SMTP id l140mr540468qke.79.1595433018908;
+        Wed, 22 Jul 2020 08:50:18 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id 62sm60691qte.19.2020.07.22.08.50.17
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jul 2020 08:50:17 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id l19so1258417ybl.1
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 08:50:17 -0700 (PDT)
+X-Received: by 2002:a25:cc4e:: with SMTP id l75mr52192685ybf.165.1595433016973;
+ Wed, 22 Jul 2020 08:50:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYvHH7nDRYE6-tZL6+QmyX21D4OOQ4YU+v+okE6FEqqkhg@mail.gmail.com>
- <CAK8P3a01smLHy0vyPX0WxDRWWPxDCbZhRCBB5qGFvMCnsghwjg@mail.gmail.com> <20200722130109.GO9247@paulmck-ThinkPad-P72>
-In-Reply-To: <20200722130109.GO9247@paulmck-ThinkPad-P72>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 22 Jul 2020 08:25:32 -0700
-Message-ID: <CAGETcx9xjyPw01gmhtu9XShmkmXriTPgoc8UfSQgHhkQg5S=VQ@mail.gmail.com>
-Subject: Re: BUG: sleeping function called from invalid context at
- kernel/locking/mutex.c db410c
-To:     paulmck@kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org,
+References: <87wo2vwxq6.fsf@cloudflare.com> <20200722144212.27106-1-kuniyu@amazon.co.jp>
+ <87v9ifwq2p.fsf@cloudflare.com> <CA+FuTScto+Z_qgFxJBzhPUNEruAvKLSTL7-0AnyP-M6Gon_e5Q@mail.gmail.com>
+ <87tuxzwp0v.fsf@cloudflare.com>
+In-Reply-To: <87tuxzwp0v.fsf@cloudflare.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 22 Jul 2020 11:49:40 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSdQWKFam0KwCg_REZdhNB6+BOwAHL00eRgrJ2FwPDRjcA@mail.gmail.com>
+Message-ID: <CA+FuTSdQWKFam0KwCg_REZdhNB6+BOwAHL00eRgrJ2FwPDRjcA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the net tree
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        kernel-team <kernel-team@cloudflare.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        walter-zh.wu@mediatek.com, neeraju@codeaurora.org,
-        Vinod Koul <vinod.koul@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Network Development <netdev@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 6:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Wed, Jul 22, 2020 at 11:25 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
 >
-> On Wed, Jul 22, 2020 at 10:04:21AM +0200, Arnd Bergmann wrote:
-> > On Wed, Jul 22, 2020 at 9:44 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > Kernel BUG noticed on arm64 db410c device while booting linux next 20200721 tag.
-> > > Continually popping up these BUG messages on the boot console and kernel warning
-> > > also noticed.
-> > >
-> > > metadata:
-> > >   git branch: master
-> > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > >   git commit: de2e69cfe54a8f2ed4b75f09d3110c514f45d38e
-> > >   git describe: next-20200721
-> > >   kernel-config:
-> > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818/config
-> > >   build-location:
-> > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818
-> > >
-> > > Crash log:
-> > > [    0.444349] BUG: sleeping function called from invalid context at
-> > > /usr/src/kernel/kernel/locking/mutex.c:935
-> > > [    0.444422] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
-> > > 30, name: kworker/0:1
-> > > [    0.444458] 2 locks held by kworker/0:1/30:
-> > > [    0.444489]  #0: ffff00000eb15138
-> > > ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
-> > > [    0.444627]  #1: ffff800013713df0
-> > > ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
-> > > process_one_work+0x208/0x768
-> > > [    0.444761] CPU: 0 PID: 30 Comm: kworker/0:1 Not tainted
-> > > 5.8.0-rc6-next-20200721 #1
-> > > [    0.444787] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > > [    0.444817] Workqueue: rcu_gp srcu_invoke_callbacks
-> > > [    0.444856] Call trace:
-> > > [    0.444883]  dump_backtrace+0x0/0x1f8
-> > > [    0.444910]  show_stack+0x2c/0x38
-> > > [    0.444939]  dump_stack+0xf0/0x16c
-> > > [    0.444969]  ___might_sleep+0x144/0x208
-> > > [    0.444996]  __might_sleep+0x54/0x90
-> > > [    0.445027]  __mutex_lock+0x64/0x970
-> > > [    0.445055]  mutex_lock_nested+0x54/0x70
-> > > [    0.445084]  device_del+0x44/0x3c0
-> > > [    0.445110]  device_unregister+0x24/0x78
-> > > [    0.445138]  __device_link_free_srcu+0x64/0x70
-> > > [    0.445164]  srcu_invoke_callbacks+0x10c/0x1a0
+> On Wed, Jul 22, 2020 at 05:05 PM CEST, Willem de Bruijn wrote:
+> > On Wed, Jul 22, 2020 at 11:02 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+> >>
+> >> On Wed, Jul 22, 2020 at 04:42 PM CEST, Kuniyuki Iwashima wrote:
+> >> > Can I submit a patch to net tree that rewrites udp[46]_lib_lookup2() to
+> >> > use only 'result' ?
+> >>
+> >> Feel free. That should make the conflict resolution even easier later
+> >> on.
 > >
-> > The device_unregister() was added to __device_link_free_srcu() as part
-> > of commit 287905e68dd2 ("driver core: Expose device link details in sysfs")
+> > Thanks for the detailed analysis, Jakub.
 > >
-> > I'm fairly sure this is what introduced the console output, though the
-> > code before it is already suspicious:
-> >
-> > call_srcu(&device_links_srcu, &link->rcu_head, __device_link_free_srcu);
-> >
-> > According to the documentation, call_srcu() must not call any sleeping
-> > functions, which is what the 'in_atomic(): 1' above is about.
+> > Would it be easier to fix this wholly in bpf-next, by introducing
+> > reuseport_result there?
 >
-> Yes, the callback function, in this case __device_link_free_srcu(),
-> will execute from softirq context.
+> Did you mean replicating the Kuniyuki fix in bpf-next, or just
+> introducing the intermediate 'reuseport_result' var?
 >
-> > However, from what I can tell, the put_device() and pm_runtime_put()
-> > calls in device_link_free() can also potentially sleep even if they normally
-> > don't warn about that.
->
-> The usual workaround is to have __device_link_free_srcu() schedule a
-> workqueue that invokes the potentially sleeping functions.
->
->                                                         Thanx, Paul
+> I'm assuming the former, so that the conflict resolving later on will
+> reduce to selecting everything from bpf-next side.
 
-Thanks for reporting. It was already reported and fixed last week.
-Waiting on Greg to pull it in.
-https://lore.kernel.org/lkml/CAGETcx9quqtV9TeD8WEcLLijGeV+7hXqnyiMv7F8xo+vyF_7iw@mail.gmail.com/#t
+Indeed. Since you are already adding a patch to bpf-next to move the
+reuseport_has_conns check back. At the same time, it can introduce
+reuseport_result:
 
+                if (score > badness) {
+                        reuseport_result = lookup_reuseport(net, sk,
+skb, saddr, sport, daddr, hnum);
+                        if (reuseport_result && !reuseport_has_conns(sk, false))
+                                return reuseport_result;
 
--Saravana
+                        result = reuseport_result ? : sk;
+                        badness = score;
+                }
+
+> TBH, I don't what is the preferred way to handle it. Perhaps DaveM or
+> Alexei/Daniel can say what would make their life easiest?
+
+Good point.
+
+With the above, there still remains a merge conflict, of course. But
+then we can take bpf-next as is, so I think it would save a separate
+patch to net. But not sure whether that helps anything. It does add an
+unnecessary variable.

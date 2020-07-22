@@ -2,357 +2,251 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803FE22981A
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 14:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32B42298DF
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 15:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732209AbgGVMRK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 08:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729628AbgGVMRJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 08:17:09 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A64EC0619DE
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 05:17:09 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id x9so2242820ljc.5
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 05:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=KDQ7v8Cm4abDVKMKnlWuLlGXPImMSg6jDl7cdiUj9Es=;
-        b=oE8lvE0uOlHhdoKbqZt4B/mSaexsfTZjIGuTTMKkKvn5vup8rXuK4c7zueH8pe3JeR
-         jUYubcAqubDo8qb9ovRyFu3c4O/KkA7eZoY6HMIAL1YkepkMcPW0O3ZSRxVaSXVTTCHF
-         z5EWOQKgREPDKF79pmpPL8jzchj2DL6xnE5kk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=KDQ7v8Cm4abDVKMKnlWuLlGXPImMSg6jDl7cdiUj9Es=;
-        b=ceKDiE6RrR+NaZWlREYhXCBCAYIkPBE3NhYOntrGwfXqvweLbrxf7CjgQksM2hJ9Gg
-         8UGY1gKzTibTzssQCkF8ULqe29g1G0mO3CzmRcWfkogF4Ta0rj26+mILaAypdmoSWlWT
-         HBJsDdzLkbMNcrgpNkJpqsreteXlUqg2dwc+UyILFlVUslofXBM8JUBvMAPDrHFwrU/V
-         qndKn46Uitr3vEX3TalcOgasGiCYdWEpRHxE0oFo673nboC0dnBzxkY9C0RS7mjWXQDY
-         AFvjueNPqlj0M968Tt1dvsvBAhYQR0KvUxPJfv+Z20EtZiz2Ll21NdDxIBUf/qxNtGao
-         J9gw==
-X-Gm-Message-State: AOAM5327V+ItYb1aDipdggQElLc7uzPV3xIrLPa/2OkitSf+rkha4uek
-        FY2YutAdSy8Wh0LeCfMUjpZIUA==
-X-Google-Smtp-Source: ABdhPJxGQlT+m2wmcUpDcQT+EirYFTNer4xuc5FN0GY49qhvhgWmJpcFl1SyCfUKE0RHTxHsIrahbA==
-X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr13982642ljb.251.1595420226553;
-        Wed, 22 Jul 2020 05:17:06 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id y1sm4945185lfb.45.2020.07.22.05.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2020 05:17:05 -0700 (PDT)
-References: <20200722132143.700a5ccc@canb.auug.org.au>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        kernel-team@cloudflare.com, Willem de Bruijn <willemb@google.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the net tree
-In-reply-to: <20200722132143.700a5ccc@canb.auug.org.au>
-Date:   Wed, 22 Jul 2020 14:17:05 +0200
-Message-ID: <87wo2vwxq6.fsf@cloudflare.com>
+        id S1732357AbgGVNBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 09:01:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726525AbgGVNBK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Jul 2020 09:01:10 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-111-31.bvtn.or.frontiernet.net [50.39.111.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7DF1720771;
+        Wed, 22 Jul 2020 13:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595422869;
+        bh=re2SLMvaPX33VyGgSQ8AOGuG0q3Enka/EZTlLd3Zh8Y=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rWoEHvufV+awCSjF877unkE43g2tM+oXSeytgYmR+D1BKxsZ16DlQWDj4b2OLT10/
+         2MR5jwtW1tlEiVlqXyB0K513GPqtHM0U+7nbRLvqtnlWg8Hfyt0jrW/ha51Gv2TEQ0
+         T2oWk0Lcdu2yl2sBCbeKuGeXb8g3LnA1MmcF56Wk=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 57ED13522753; Wed, 22 Jul 2020 06:01:09 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 06:01:09 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        walter-zh.wu@mediatek.com, neeraju@codeaurora.org,
+        Vinod Koul <vinod.koul@linaro.org>, saravanak@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: BUG: sleeping function called from invalid context at
+ kernel/locking/mutex.c db410c
+Message-ID: <20200722130109.GO9247@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CA+G9fYvHH7nDRYE6-tZL6+QmyX21D4OOQ4YU+v+okE6FEqqkhg@mail.gmail.com>
+ <CAK8P3a01smLHy0vyPX0WxDRWWPxDCbZhRCBB5qGFvMCnsghwjg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a01smLHy0vyPX0WxDRWWPxDCbZhRCBB5qGFvMCnsghwjg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 05:21 AM CEST, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got conflicts in:
->
->   net/ipv4/udp.c
->   net/ipv6/udp.c
->
-> between commit:
->
->   efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
->
-> from the net tree and commits:
->
->   7629c73a1466 ("udp: Extract helper for selecting socket from reuseport group")
->   2a08748cd384 ("udp6: Extract helper for selecting socket from reuseport group")
->
-> from the bpf-next tree.
->
-> I fixed it up (I wasn't sure how to proceed, so I used the latter
-> version) and can carry the fix as necessary. This is now fixed as far
-> as linux-next is concerned, but any non trivial conflicts should be
-> mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
+On Wed, Jul 22, 2020 at 10:04:21AM +0200, Arnd Bergmann wrote:
+> On Wed, Jul 22, 2020 at 9:44 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > Kernel BUG noticed on arm64 db410c device while booting linux next 20200721 tag.
+> > Continually popping up these BUG messages on the boot console and kernel warning
+> > also noticed.
+> >
+> > metadata:
+> >   git branch: master
+> >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >   git commit: de2e69cfe54a8f2ed4b75f09d3110c514f45d38e
+> >   git describe: next-20200721
+> >   kernel-config:
+> > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818/config
+> >   build-location:
+> > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818
+> >
+> > Crash log:
+> > [    0.444349] BUG: sleeping function called from invalid context at
+> > /usr/src/kernel/kernel/locking/mutex.c:935
+> > [    0.444422] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
+> > 30, name: kworker/0:1
+> > [    0.444458] 2 locks held by kworker/0:1/30:
+> > [    0.444489]  #0: ffff00000eb15138
+> > ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> > [    0.444627]  #1: ffff800013713df0
+> > ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> > process_one_work+0x208/0x768
+> > [    0.444761] CPU: 0 PID: 30 Comm: kworker/0:1 Not tainted
+> > 5.8.0-rc6-next-20200721 #1
+> > [    0.444787] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [    0.444817] Workqueue: rcu_gp srcu_invoke_callbacks
+> > [    0.444856] Call trace:
+> > [    0.444883]  dump_backtrace+0x0/0x1f8
+> > [    0.444910]  show_stack+0x2c/0x38
+> > [    0.444939]  dump_stack+0xf0/0x16c
+> > [    0.444969]  ___might_sleep+0x144/0x208
+> > [    0.444996]  __might_sleep+0x54/0x90
+> > [    0.445027]  __mutex_lock+0x64/0x970
+> > [    0.445055]  mutex_lock_nested+0x54/0x70
+> > [    0.445084]  device_del+0x44/0x3c0
+> > [    0.445110]  device_unregister+0x24/0x78
+> > [    0.445138]  __device_link_free_srcu+0x64/0x70
+> > [    0.445164]  srcu_invoke_callbacks+0x10c/0x1a0
+> 
+> The device_unregister() was added to __device_link_free_srcu() as part
+> of commit 287905e68dd2 ("driver core: Expose device link details in sysfs")
+> 
+> I'm fairly sure this is what introduced the console output, though the
+> code before it is already suspicious:
+> 
+> call_srcu(&device_links_srcu, &link->rcu_head, __device_link_free_srcu);
+> 
+> According to the documentation, call_srcu() must not call any sleeping
+> functions, which is what the 'in_atomic(): 1' above is about.
 
-This one is a bit tricky.
+Yes, the callback function, in this case __device_link_free_srcu(),
+will execute from softirq context.
 
-Looking at how code in udp[46]_lib_lookup2 evolved, first:
+> However, from what I can tell, the put_device() and pm_runtime_put()
+> calls in device_link_free() can also potentially sleep even if they normally
+> don't warn about that.
 
-  acdcecc61285 ("udp: correct reuseport selection with connected sockets")
+The usual workaround is to have __device_link_free_srcu() schedule a
+workqueue that invokes the potentially sleeping functions.
 
-1) exluded connected UDP sockets from reuseport group during lookup, and
-2) limited fast reuseport return to groups with no connected sockets,
+							Thanx, Paul
 
-The second change had an uninteded side-effect of discarding reuseport
-socket selection when reuseport group contained connected sockets.
-
-Then, recent
-
-  efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
-
-rectified it by recording reuseport socket selection as lookup result
-candidate, in case fast reuseport return did not happen because
-reuseport group had connected sockets.
-
-I belive that changes in commit efc6b6f6c311 can be rewritten as below
-to the same effect, by realizing that we are always setting the 'result'
-if 'score > badness'. Either to what reuseport_select_sock() returned or
-to 'sk' that scored higher than current 'badness' threshold.
-
----8<---
-static struct sock *udp4_lib_lookup2(struct net *net,
-				     __be32 saddr, __be16 sport,
-				     __be32 daddr, unsigned int hnum,
-				     int dif, int sdif,
-				     struct udp_hslot *hslot2,
-				     struct sk_buff *skb)
-{
-	struct sock *sk, *result;
-	int score, badness;
-	u32 hash = 0;
-
-	result = NULL;
-	badness = 0;
-	udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
-		score = compute_score(sk, net, saddr, sport,
-				      daddr, hnum, dif, sdif);
-		if (score > badness) {
-			result = NULL;
-			if (sk->sk_reuseport &&
-			    sk->sk_state != TCP_ESTABLISHED) {
-				hash = udp_ehashfn(net, daddr, hnum,
-						   saddr, sport);
-				result = reuseport_select_sock(sk, hash, skb,
-							       sizeof(struct udphdr));
-				if (result && !reuseport_has_conns(sk, false))
-					return result;
-			}
-			if (!result)
-				result = sk;
-			badness = score;
-		}
-	}
-	return result;
-}
----8<---
-
-From there, it is now easier to resolve the conflict with
-
-  7629c73a1466 ("udp: Extract helper for selecting socket from reuseport group")
-  2a08748cd384 ("udp6: Extract helper for selecting socket from reuseport group")
-
-which extract the 'if (sk->sk_reuseport && sk->sk_state !=
-TCP_ESTABLISHED)' block into a helper called lookup_reuseport().
-
-To merge the two, we need to pull the reuseport_has_conns() check up
-from lookup_reuseport() and back into udp[46]_lib_lookup2(), because now
-we want to record reuseport socket selection even if reuseport group has
-connections.
-
-The only other call site of lookup_reuseport() is in
-udp[46]_lookup_run_bpf(). We don't want to discard the reuseport
-selected socket if group has connections there either, so no changes are
-needed. And, now that I think about it, the current behavior in
-udp[46]_lookup_run_bpf() is not right.
-
-The end result for udp4 will look like:
-
----8<---
-static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
-					    struct sk_buff *skb,
-					    __be32 saddr, __be16 sport,
-					    __be32 daddr, unsigned short hnum)
-{
-	struct sock *reuse_sk = NULL;
-	u32 hash;
-
-	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
-		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
-		reuse_sk = reuseport_select_sock(sk, hash, skb,
-						 sizeof(struct udphdr));
-	}
-	return reuse_sk;
-}
-
-/* called with rcu_read_lock() */
-static struct sock *udp4_lib_lookup2(struct net *net,
-				     __be32 saddr, __be16 sport,
-				     __be32 daddr, unsigned int hnum,
-				     int dif, int sdif,
-				     struct udp_hslot *hslot2,
-				     struct sk_buff *skb)
-{
-	struct sock *sk, *result;
-	int score, badness;
-
-	result = NULL;
-	badness = 0;
-	udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
-		score = compute_score(sk, net, saddr, sport,
-				      daddr, hnum, dif, sdif);
-		if (score > badness) {
-			result = lookup_reuseport(net, sk, skb,
-						  saddr, sport, daddr, hnum);
-			if (result && !reuseport_has_conns(sk, false))
-				return result;
-			if (!result)
-				result = sk;
-			badness = score;
-		}
-	}
-	return result;
-}
----8<---
-
-I will submit a patch that pulls the reuseport_has_conns() check from
-lookup_reuseport() to bpf-next. That should bring the two sides of the
-merge closer. Please let me know if I can help in any other way.
-
-Also, please take a look at the 3-way diff below from my attempt to
-merge net tree into bpf-next tree taking the described approach.
-
-Thanks,
--jkbs
-
---
-diff --cc net/ipv4/udp.c
-index b738c63d7a77,4077d589b72e..f5297ea376de
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@@ -408,25 -408,6 +408,22 @@@ static u32 udp_ehashfn(const struct ne
-  			      udp_ehash_secret + net_hash_mix(net));
-  }
-
- +static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
- +					    struct sk_buff *skb,
- +					    __be32 saddr, __be16 sport,
- +					    __be32 daddr, unsigned short hnum)
- +{
- +	struct sock *reuse_sk = NULL;
- +	u32 hash;
- +
- +	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
- +		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
- +		reuse_sk = reuseport_select_sock(sk, hash, skb,
- +						 sizeof(struct udphdr));
-- 		/* Fall back to scoring if group has connections */
-- 		if (reuseport_has_conns(sk, false))
-- 			return NULL;
- +	}
- +	return reuse_sk;
- +}
- +
-  /* called with rcu_read_lock() */
-  static struct sock *udp4_lib_lookup2(struct net *net,
-  				     __be32 saddr, __be16 sport,
-@@@ -444,13 -426,20 +441,13 @@@
-  		score = compute_score(sk, net, saddr, sport,
-  				      daddr, hnum, dif, sdif);
-  		if (score > badness) {
- -			reuseport_result = NULL;
- -
- -			if (sk->sk_reuseport &&
- -			    sk->sk_state != TCP_ESTABLISHED) {
- -				hash = udp_ehashfn(net, daddr, hnum,
- -						   saddr, sport);
- -				reuseport_result = reuseport_select_sock(sk, hash, skb,
- -									 sizeof(struct udphdr));
- -				if (reuseport_result && !reuseport_has_conns(sk, false))
- -					return reuseport_result;
- -			}
- -
- -			result = reuseport_result ? : sk;
- +			result = lookup_reuseport(net, sk, skb,
- +						  saddr, sport, daddr, hnum);
-- 			if (result)
-++			if (result && !reuseport_has_conns(sk, false))
- +				return result;
--
-++			if (!result)
-++				result = sk;
-  			badness = score;
-- 			result = sk;
-  		}
-  	}
-  	return result;
-diff --cc net/ipv6/udp.c
-index ff8be202726a,a8d74f44056a..ca50fcdf0776
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@@ -141,27 -141,6 +141,24 @@@ static int compute_score(struct sock *s
-  	return score;
-  }
-
- +static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
- +					    struct sk_buff *skb,
- +					    const struct in6_addr *saddr,
- +					    __be16 sport,
- +					    const struct in6_addr *daddr,
- +					    unsigned int hnum)
- +{
- +	struct sock *reuse_sk = NULL;
- +	u32 hash;
- +
- +	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
- +		hash = udp6_ehashfn(net, daddr, hnum, saddr, sport);
- +		reuse_sk = reuseport_select_sock(sk, hash, skb,
- +						 sizeof(struct udphdr));
-- 		/* Fall back to scoring if group has connections */
-- 		if (reuseport_has_conns(sk, false))
-- 			return NULL;
- +	}
- +	return reuse_sk;
- +}
- +
-  /* called with rcu_read_lock() */
-  static struct sock *udp6_lib_lookup2(struct net *net,
-  		const struct in6_addr *saddr, __be16 sport,
-@@@ -178,12 -158,20 +175,12 @@@
-  		score = compute_score(sk, net, saddr, sport,
-  				      daddr, hnum, dif, sdif);
-  		if (score > badness) {
- -			reuseport_result = NULL;
- -
- -			if (sk->sk_reuseport &&
- -			    sk->sk_state != TCP_ESTABLISHED) {
- -				hash = udp6_ehashfn(net, daddr, hnum,
- -						    saddr, sport);
- -
- -				reuseport_result = reuseport_select_sock(sk, hash, skb,
- -									 sizeof(struct udphdr));
- -				if (reuseport_result && !reuseport_has_conns(sk, false))
- -					return reuseport_result;
- -			}
- -
- -			result = reuseport_result ? : sk;
- +			result = lookup_reuseport(net, sk, skb,
- +						  saddr, sport, daddr, hnum);
-- 			if (result)
-++			if (result && !reuseport_has_conns(sk, false))
- +				return result;
--
-- 			result = sk;
-++			if (!result)
-++				result = sk;
-  			badness = score;
-  		}
-  	}
+>        Arnd
+> 
+> > [    0.445191]  process_one_work+0x2b0/0x768
+> > [    0.445218]  worker_thread+0x48/0x498
+> > [    0.445246]  kthread+0x158/0x168
+> > [    0.445274]  ret_from_fork+0x10/0x1c
+> >
+> > <>
+> >
+> > [   13.015528] BUG: sleeping function called from invalid context at
+> > /usr/src/kernel/kernel/locking/mutex.c:935
+> > [   13.015588] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
+> > 188, name: kworker/2:4
+> > [   13.025268] 2 locks held by kworker/2:4/188:
+> > [   13.032647]  #0: ffff00000eb15138
+> > ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> > [   13.036920]  #1: ffff80001426bdf0
+> > ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> > process_one_work+0x208/0x768
+> > [   13.046032] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+> >       5.8.0-rc6-next-20200721 #1
+> > [   13.056039] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [   13.065417] Workqueue: rcu_gp srcu_invoke_callbacks
+> > [   13.072091] Call trace:
+> > [   13.076695]  dump_backtrace+0x0/0x1f8
+> > [   13.079124]  show_stack+0x2c/0x38
+> > [   13.082944]  dump_stack+0xf0/0x16c
+> > [   13.086243]  ___might_sleep+0x144/0x208
+> > [   13.089542]  __might_sleep+0x54/0x90
+> > [   13.093274]  __mutex_lock+0x64/0x970
+> > [   13.097094]  mutex_lock_nested+0x54/0x70
+> > [   13.100654]  device_del+0x44/0x3c0
+> > [   13.104556]  device_unregister+0x24/0x78
+> > [   13.107771]  __device_link_free_srcu+0x64/0x70
+> > [   13.111850]  srcu_invoke_callbacks+0x10c/0x1a0
+> > [   13.116103]  process_one_work+0x2b0/0x768
+> > [   13.120530]  worker_thread+0x48/0x498
+> > [   13.124610]  kthread+0x158/0x168
+> > [   13.128254]  ret_from_fork+0x10/0x1c
+> > [   13.131818] BUG: scheduling while atomic: kworker/2:4/188/0x00000201
+> > [   13.135243] 3 locks held by kworker/2:4/188:
+> > [   13.141558]  #0: ffff00000eb15138
+> > ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> > [   13.145834]  #1: ffff80001426bdf0
+> > ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> > process_one_work+0x208/0x768
+> > [   13.154924]  #2: ffff8000127f2fd0 (kernfs_mutex){+.+.}-{3:3}, at:
+> > __kernfs_remove+0x304/0x378
+> > [   13.164952] Modules linked in: mdt_loader videobuf2_common
+> > drm_kms_helper qcom_rng i2c_qcom_cci display_connector drm socinfo
+> > rmtfs_mem rfkill qrtr ns fuse
+> > [   13.173653] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+> >       5.8.0-rc6-next-20200721 #1
+> > [   13.187296] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [   13.196666] Workqueue: rcu_gp srcu_invoke_callbacks
+> > [   13.203340] Call trace:
+> > [[0;32m  OK  [0m] Started Network Manager Script Dispatcher Servic[
+> > 13.207942]  dump_backtrace+0x0/0x1f8
+> > e.[   13.221350]  __schedule_bug+0x74/0xa0
+> > [   13.221386]  __schedule+0x890/0x938
+> > [   13.224160]  schedule+0x48/0x110
+> > [   13.227462]  schedule_preempt_disabled+0x1c/0x30
+> > [   13.230933]  __mutex_lock+0x814/0x970
+> > [   13.235533]  mutex_lock_nested+0x54/0x70
+> > [   13.239091]  __kernfs_remove+0x304/0x378
+> > [   13.243085]  kernfs_remove_by_name_ns+0x5c/0xc0
+> > [   13.246991]  sysfs_remove_link+0x30/0x60
+> > [   13.251246]  device_remove_class_symlinks+0x78/0xa8
+> > [   13.255411]  device_del+0xb8/0x3c0
+> >
+> > [   13.260011]  device_unregister+0x24/0x78
+> > [   13.263744]  __device_link_free_srcu+0x64/0x70
+> > [   13.267746]  srcu_invoke_callbacks+0x10c/0x1a0
+> > [   13.271992]  process_one_work+0x2b0/0x768
+> > [   13.276417]  worker_thread+0x48/0x498
+> > [   13.280499]  kthread+0x158/0x168
+> > [   13.284144]  ret_from_fork+0x10/0x1c
+> > [   13.289062] BUG: workqueue leaked lock or atomic: kworker/2:4/0xfffffe00/188
+> > [   13.289062]      last function: srcu_invoke_callbacks
+> > [   13.291056] no locks held by kworker/2:4/188.
+> > [   13.302935] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+> >       5.8.0-rc6-next-20200721 #1
+> > [   13.305703] rtc-pm8xxx 200f000.spmi:pm8916@0:rtc@6000: registered as rtc0
+> > [   13.307317] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [   13.307333] Workqueue: rcu_gp srcu_invoke_callbacks
+> > [   13.307349] Call trace:
+> > [   13.307360]  dump_backtrace+0x0/0x1f8
+> > [   13.307369]  show_stack+0x2c/0x38
+> > [   13.307381]  dump_stack+0xf0/0x16c
+> > [   13.307392]  process_one_work+0x624/0x768
+> > [   13.347424]  worker_thread+0x48/0x498
+> > [   13.351501]  kthread+0x158/0x168
+> > [   13.355146]  ret_from_fork+0x10/0x1c
+> > [   13.358487] BUG: scheduling while atomic: kworker/2:4/188/0xfffffe01
+> > [   13.362056] no locks held by kworker/2:4/188.
+> > [   13.363536] rtc-pm8xxx 200f000.spmi:pm8916@0:rtc@6000: setting
+> > system clock to 1970-01-01T00:00:19 UTC (19)
+> > [   13.368361] Modules linked in: rtc_pm8xxx(+) videobuf2_memops
+> > videobuf2_v4l2 mdt_loader videobuf2_common drm_kms_helper qcom_rng
+> > i2c_qcom_cci display_connector drm socinfo rmtfs_mem rfkill qrtr ns
+> > fuse
+> > [   13.382197] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+> >       5.8.0-rc6-next-20200721 #1
+> > [   13.400208] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> > [   13.409418] Workqueue:  0x0 (rcu_gp)
+> > [   13.416084] Call trace:
+> > [   13.419646]  dump_backtrace+0x0/0x1f8
+> > [   13.421815]  show_stack+0x2c/0x38
+> > [   13.425635]  dump_stack+0xf0/0x16c
+> > [   13.428933]  __schedule_bug+0x74/0xa0
+> > [   13.432234]  __schedule+0x890/0x938
+> > [   13.435967]  schedule+0x48/0x110
+> > [   13.439262]  worker_thread+0xc0/0x498
+> > [   13.442735]  kthread+0x158/0x168
+> > [   13.446294]  ret_from_fork+0x10/0x1c
+> >
+> > Full test log,
+> > https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200721/testrun/2972385/suite/linux-log-parser/test/check-kernel-warning-1595062/log
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org

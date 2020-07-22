@@ -2,130 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009FA2299EE
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 16:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C42229A11
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 16:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726003AbgGVOUE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 10:20:04 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:38311 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732391AbgGVOUD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 10:20:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1595427603; x=1626963603;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=ha8GtwYRQaL2vNMa4s7WrkwTNjFSlfVvhhA2ie04zWE=;
-  b=RqAl5UV0QCElEHctRrrgPbfoepqeeE+YeCMKlZl2iXcMgTQ0WonjMGAf
-   mLLNBb/wRNxh6bGmLAQ1Yjg2lwLQdnPQS5Lb0Drs6rxfV6Yw0jW9ECklg
-   dABo7NunWDfM4U+rm67uWl/R5365fUNt7ZjmdbI9Gyj1Wy+H3I1RykzjM
-   HwjURdMf33DeeXfTkHM7SmS4j707XyN2vM1znLHv+DHO09zXZoX6kPI2l
-   r78f2P83MIbPGBR/BGgLmB+OKZqxMMLVSuLTxFXoIWlIKWA5X1huTJEiD
-   ZQW39AmpYuHJtLXb9XDzVWy25pUTz1dQgbfWDgs1q7q2R5jNsfEWrxgU8
-   w==;
-IronPort-SDR: oXHbcLRdFk7EkkjXhtN/J+l7McNzpIOJxeDzZRxmulF9rwA2L2dY7VseQCBn42jcm7UJhqRohC
- +Mf5LjjQ4liAEcNtkboA/reI17lfKYCOiaz+ZwXZRCaUbXV96CvGM/G/Yfg9zaiH7jSWnmVB0y
- 1tXwjp+XRE0INSbFPIc3MaFL24EdisHbL70u7S+hXQVEVRUoIVbj2TxXWpEvfT9Pm1TT0qFTZ+
- T21NQb5IfLaD1TlKFk4itIuGwM9gzwYUM0kfnUOqgcXkPbZKOT9wH0XgV05a9QjsCHcl8AzXYS
- WWI=
-X-IronPort-AV: E=Sophos;i="5.75,383,1589212800"; 
-   d="scan'208";a="143210954"
-Received: from mail-dm6nam11lp2172.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.172])
-  by ob1.hgst.iphmx.com with ESMTP; 22 Jul 2020 22:19:47 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HcIb713MGfMub1q6izc3wnp7QA4eR2dIc/x4kphjEvrjdeoX53eTmmqQPO5gZbabndaoFS0zcvGk2XuLbPCGRhuX7moQlmjyuU6ujp/mUmIyz0tvtvDJi15ymiz+coRBxgTnEIIhjsg+HBSP2nj8gwEOBFcIkCPNZrNYgKM5KU1j2F2jIyHg4Q+4rWUFYhs0mrlNBZ/EaNShSDGn9IG8Ihx3mC30cANO3fNph1kSwMwYrnIrq8LpV8ygMs8aiHCaOLKCpLhgBDZjZRVcOnDYc6Cco1jBX1QjqYY2WSDX2IOIU4kH2WszF/BSZrq8jT3A1AplsqcczfY0jDf/dCeacw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QzMEi7a3C41bv5q7cy2vmmyuZAEwxQXipF7JMur9kx0=;
- b=cGwuYZiqvZcoGLpoxUNUIr9Vb4hWMboNaXJzvTGXFKOlZN6y1TB+26u5uZJcc34en2Ej7sZ5nSBlo0f4wYTavah/bxsTmC5sCRscZE6JGvYkB3TxH4UGiwcP89KPQ+XF5sq9nLq668E0O1AHyhlH+sMh1AJjx/R97juLw1njog+8vRcpQnWK42s2z2EWkKsd3ADhSA6zgwpzB/39Pl/VRLiQa1jPDqG7VaDeFOOux7ueTVo8UZ9MUa6wvrhr4BiKWmEzJC6XlLFQrPiUH7Ogj3i2OD/Gsvekh5r9Vz6EUHNyBnEmMZ9xkDpKXxRA1tqXr3S/en8jW4hfHD1ihr+Teg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S1732492AbgGVO2E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 10:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730600AbgGVO2E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 10:28:04 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056FC0619DE
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 07:28:04 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id b25so1950512qto.2
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 07:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QzMEi7a3C41bv5q7cy2vmmyuZAEwxQXipF7JMur9kx0=;
- b=efflEtYhTLHhVSy54H8sB4+HVhPf4s0rhtKBXQxeFS+aTqpQM2AZZfR10BWFWvQRFsxFMaJU2FfyaQzKveMNpRO0dUif7eZ5+5XXqprW//RNxvl6OKLL3I3Hjv6eXTStv/XIUBJ7ue6PelNMcRTB2p4TBbFl4SF2Jbrbwyhvb30=
-Received: from CY4PR04MB3751.namprd04.prod.outlook.com (2603:10b6:903:ec::14)
- by CY4PR04MB1049.namprd04.prod.outlook.com (2603:10b6:910:56::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.25; Wed, 22 Jul
- 2020 14:19:45 +0000
-Received: from CY4PR04MB3751.namprd04.prod.outlook.com
- ([fe80::d9e5:135e:cfd9:4de0]) by CY4PR04MB3751.namprd04.prod.outlook.com
- ([fe80::d9e5:135e:cfd9:4de0%7]) with mapi id 15.20.3195.025; Wed, 22 Jul 2020
- 14:19:45 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: linux-next: interesting merge in the zonefs tree
-Thread-Topic: linux-next: interesting merge in the zonefs tree
-Thread-Index: AQHWYDAlawvQHwkQg0uu/iK03AzjUg==
-Date:   Wed, 22 Jul 2020 14:19:44 +0000
-Message-ID: <CY4PR04MB375191BC8B3ED61678D16CB2E7790@CY4PR04MB3751.namprd04.prod.outlook.com>
-References: <20200722235802.1f01457e@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none header.from=wdc.com;
-x-originating-ip: [60.117.181.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b4d5ed98-4a77-4f87-24e7-08d82e4a4872
-x-ms-traffictypediagnostic: CY4PR04MB1049:
-x-microsoft-antispam-prvs: <CY4PR04MB104919AC9551AE602BC5FB59E7790@CY4PR04MB1049.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 59YQjjrxxkEQsw4kFm7zEx2XF4v68CZsAxYtNAhPOw1cDuGLyJdCNB+OnGM3e1ir/UMAc6DwISQAV505L5SF24/NBbj3EM48koc/iZui/GQCm3pkiLT3wN7jbUuj4zvjKfjEpc+XM4zLwNEpIRePyEKOMLcRDXiA82cTuos134OKp+1kjor7/HhG+TOl3OQUcgffShNO0+4VqqfWvoMw5yPC0HnXiTvt2BUFNac/FMXsFonHlU91NHKfrYK07WziSrPy9r8QdYPigmlbnsPZhXlJvn8Lk5FhUI1HZb9tx+c7FOOKREwJxW8I0/2bES/b
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR04MB3751.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(4326008)(6916009)(54906003)(478600001)(316002)(186003)(4744005)(33656002)(55016002)(26005)(53546011)(6506007)(7696005)(9686003)(66946007)(91956017)(76116006)(83380400001)(66476007)(2906002)(66556008)(52536014)(8936002)(5660300002)(8676002)(71200400001)(64756008)(66446008)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: XD+P9Pj/WtEtyEjuxZ+MgxSFPaoCTTdtpGn1MH3dm7ERbo/qRzXfWYzCGBZ9RpntGdYxYFyFFWY1TY0y91jyeELrZMPaO1MKOxzcrjTILOF1JF+7eW5aiCHymPFGDF6YTonB0/t+V1nCDlugGusX7mvuzyDKx5uW0tAsVQBV35Z9Wev/Cs0KfcItpFyGzhs63xCUd4x21us6eQ0CZOaYMbgfvaN/AIVXBLvehbEtjdHq0IslwBXkm53f2jef2otUZY2tJ0PTVgE50FLgnwh3M7rUk24WIGO8pAqdletBv7Lt1n6YVb4d91GClhjJnW1DkznNo9vL5XBWX9r2I9QW0zzeo9BSMfoTjvHsImAk2vHrL9/srZgt39OMoEyvT62bODaaP/69Oy38pdQk+g5DV4Rd+O/ydxwGFYp0pyO5bmT2zFRNclUnoeG2esp8RHmhfhtlorhQXvbTU87VSAtGIEDg7zpXN9GWYHm17yU+KUZRjQjs4zYg8/T+uM1fW0ys
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=lca.pw; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=H6WE3JyokUNpf3pZ07U954Le17+CyTzIij3tqVBs39I=;
+        b=XiVGTwtQsXVJRXr5uow2BuPY/0MaetFyj1IpenDWud/W0awmx/5jZvpVkzNGVtAwmb
+         rjavL/pa0HY7TYIhcPd1Fp4F5JCP6u/26cXac9UgpKX912Lhr6/YqW7sqov7y0nx3S8b
+         nERgUUP1AP7OlM3vMPdCijqpc9QLPJxa+4wdt+7N9mIG4H324l+CPmIkWbmcz+Vqj7do
+         RQvVsuJTRHAhLJHspL/vzlISkLsSVPF6VBROnccbHkrerplAFWvB3s074hQbWgyS0koW
+         O/dSNsD5hskQ1F7RCMrCopsUcTLPhgB4vRk/oZ+HYCF58UZjAzchozYEffdjL7KD53cT
+         lVgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H6WE3JyokUNpf3pZ07U954Le17+CyTzIij3tqVBs39I=;
+        b=If0MSGxzdAedcSkj8+X8kfV26ilqpGuBUYE1aNd0dodqzXFwnK8XgBZHZ4vv313FOc
+         LUrrRvBq2mVzs37UudAY9jEID06CVYnY8tls1SVhrkU1WWVCuxMeS3pbYraK2T8vTmhP
+         GGZyp4R9RLWkI876YiRVyaCJby7trrwqqipFikdnIML31ZYAx/qE2lQ/+ILH3ns2dhnf
+         iXcVX2maMmDNrgeGOtHw9TDf6FqUCgYKAm6dtl6S/7e3ca27Ey9icRQwQkL4CBKiHwOM
+         fF5do3V0efk92/T2QTdkI1DXyjWdzQe9unoY26qD4/rVURfeKRMiCK2q9I2DZoCYHhC5
+         gStg==
+X-Gm-Message-State: AOAM533E8nAC8gKevYsTmFXzv1kxeu/vK5mfb3ZnrTel6mgv6+LI9uLf
+        fCiL3/NfLjzoDOODJDQpcQhQ+hT8tlhpbQ==
+X-Google-Smtp-Source: ABdhPJx+zZSGSakjQ6BZGwuAsGBRlXDp3FliHmomkqKOENaWVWfp9CvwEeJGS2okAYYvxdpw9h3dIw==
+X-Received: by 2002:ac8:554f:: with SMTP id o15mr34924964qtr.278.1595428083244;
+        Wed, 22 Jul 2020 07:28:03 -0700 (PDT)
+Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id f130sm18441qke.99.2020.07.22.07.28.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 07:28:02 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 10:28:00 -0400
+From:   Qian Cai <cai@lca.pw>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     akpm@linux-foundation.org, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        mingo@redhat.com, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        x86@kernel.org, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        lpf.vector@gmail.com
+Subject: Re: kernel BUG at mm/vmalloc.c:LINE! (2)
+Message-ID: <20200722142759.GB4041@lca.pw>
+References: <000000000000588c2c05aa156b2b@google.com>
+ <0000000000003cdc6c05aae24652@google.com>
+ <20200720200618.GA9501@pc636>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR04MB3751.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4d5ed98-4a77-4f87-24e7-08d82e4a4872
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 14:19:44.9693
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vkaH3hohUmmXCubo7WXlDEStw2gvWIDL7sPqXBA7JF7NEXL3QVhjyZf5I9RIf6Q2zrr2GCZJBaBUhyDnEPwC/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR04MB1049
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720200618.GA9501@pc636>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020/07/22 22:58, Stephen Rothwell wrote:=0A=
-> Hi all,=0A=
-> =0A=
-> It looks an old version of the block tree has been merged into the=0A=
-> zonefs tree.  Is that deliberate?  Other trees should not be merged unles=
-s=0A=
-> they are guaranteed not to be rebased (which is what has happened here).=
-=0A=
-> =0A=
-=0A=
-I must have done something wrong. Patches for zonefs for 5.9 depend on patc=
-hes=0A=
-in Jens tree. So I merged Jens for-next tree into zonefs for-5.9 branch as =
-a=0A=
-base for the new patches. zonefs for-next branch should contain the same, b=
-ut I=0A=
-may have screwed up somewhere... Let me check.=0A=
-=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+On Mon, Jul 20, 2020 at 10:06:18PM +0200, Uladzislau Rezki wrote:
+> On Mon, Jul 20, 2020 at 09:48:21AM -0700, syzbot wrote:
+> > syzbot has found a reproducer for the following issue on:
+> > 
+> > HEAD commit:    ab8be66e Add linux-next specific files for 20200720
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=161a0cc8900000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c4bf77d63d0cf88c
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=5f326d255ca648131f87
+> > compiler:       gcc (GCC) 10.1.0-syz 20200507
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151192bb100000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d7a873100000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+5f326d255ca648131f87@syzkaller.appspotmail.com
+> > 
+> > ------------[ cut here ]------------
+> > kernel BUG at mm/vmalloc.c:3089!
+> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.8.0-rc6-next-20200720-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Workqueue: events pcpu_balance_workfn
+> > RIP: 0010:free_vm_area mm/vmalloc.c:3089 [inline]
+> > RIP: 0010:free_vm_area mm/vmalloc.c:3085 [inline]
+> > RIP: 0010:pcpu_free_vm_areas+0x96/0xc0 mm/vmalloc.c:3432
+> > Code: 75 48 48 8b 2b 48 8d 7d 08 48 89 f8 48 c1 e8 03 42 80 3c 30 00 75 2c 48 8b 7d 08 e8 c4 c8 ff ff 48 39 c5 74 a5 e8 ea c3 c9 ff <0f> 0b e8 e3 c3 c9 ff 4c 89 ff 5b 5d 41 5c 41 5d 41 5e 41 5f e9 71
+> > RSP: 0018:ffffc90000d2fba8 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: ffff8880a801be00 RCX: 0000000000000000
+> > RDX: ffff8880a95fa300 RSI: ffffffff81aa7c76 RDI: 0000000000000001
+> > RBP: ffff8880a2b38180 R08: 0000000000000000 R09: ffffffff89cfecc3
+> > R10: fffffbfff139fd98 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000001 R14: dffffc0000000000 R15: ffff8880a801be00
+> > FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000004c8e48 CR3: 00000000a4c08000 CR4: 00000000001506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  pcpu_destroy_chunk mm/percpu-vm.c:366 [inline]
+> >  __pcpu_balance_workfn mm/percpu.c:1982 [inline]
+> >  pcpu_balance_workfn+0x8b3/0x1310 mm/percpu.c:2069
+> >  process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
+> >  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+> >  kthread+0x3b5/0x4a0 kernel/kthread.c:292
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> > Modules linked in:
+> > ---[ end trace 6a2e56ec52e1f480 ]---
+> > RIP: 0010:free_vm_area mm/vmalloc.c:3089 [inline]
+> > RIP: 0010:free_vm_area mm/vmalloc.c:3085 [inline]
+> > RIP: 0010:pcpu_free_vm_areas+0x96/0xc0 mm/vmalloc.c:3432
+> > Code: 75 48 48 8b 2b 48 8d 7d 08 48 89 f8 48 c1 e8 03 42 80 3c 30 00 75 2c 48 8b 7d 08 e8 c4 c8 ff ff 48 39 c5 74 a5 e8 ea c3 c9 ff <0f> 0b e8 e3 c3 c9 ff 4c 89 ff 5b 5d 41 5c 41 5d 41 5e 41 5f e9 71
+> > RSP: 0018:ffffc90000d2fba8 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: ffff8880a801be00 RCX: 0000000000000000
+> > RDX: ffff8880a95fa300 RSI: ffffffff81aa7c76 RDI: 0000000000000001
+> > RBP: ffff8880a2b38180 R08: 0000000000000000 R09: ffffffff89cfecc3
+> > R10: fffffbfff139fd98 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000001 R14: dffffc0000000000 R15: ffff8880a801be00
+> > FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00000000004c8e48 CR3: 00000000a4c08000 CR4: 00000000001506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > 
+> That is because of below revert:
+> 
+> <snip>
+> commit bdbfb1d52d5e576c1d275fd8ab59b677011229e8
+> Author: Ingo Molnar <mingo@kernel.org>
+> Date:   Sun Jun 7 21:12:51 2020 +0200
+> 
+>     Revert "mm/vmalloc: modify struct vmap_area to reduce its size"
+>     
+>     This reverts commit 688fcbfc06e4fdfbb7e1d5a942a1460fe6379d2d.
+>     
+>     Signed-off-by: Ingo Molnar <mingo@kernel.org>
+>     
+>     Conflicts:
+>             mm/vmalloc.c
+> <snip>
+> 
+> I can check further, but it can be it was not correctly reverted,
+> because everything should work just fine even with the revert,
+> though i i do not understand a reason of reverting.
+
+Vlad, how sure are you about this? We also start to trigger this now on
+linux-next, but the reverting patch surely looks like doggy without any useful
+information in the commit description.

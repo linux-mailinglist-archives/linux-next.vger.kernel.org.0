@@ -2,111 +2,357 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0217229658
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 12:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803FE22981A
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 14:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgGVKiS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 06:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
+        id S1732209AbgGVMRK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725847AbgGVKiR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 06:38:17 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BAEC0619DC;
-        Wed, 22 Jul 2020 03:38:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BBX462F1dz9sRN;
-        Wed, 22 Jul 2020 20:38:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595414295;
-        bh=G2OKpMJf7TXN0BgliBx+hmCERlwb78Kx6qogY3MuDZg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UR57oAWlbpnGN2Ld2CpEvv6NySO8xFLdNykZqwa8kCFqJsfYRvi4QH9krVs0FmM+5
-         tvQ7I76bAKrNFAPzBW90g5xLm5kUNt9ghYkXtppSnyQjh6QnvHtuorpF+EQ56Zuqfz
-         Zft+IEmBecw0oWkgtXBPnCIaFN0VYGvMGIA9Qv8WEtlNl3sUccn2K9+9vRcwHjppSF
-         jtxTN+3gwV45HHAXF/of/n3SPKADUGYGwpsrmBwk3ni4C4G3ncOF5CfB/BmexnAD8i
-         lxkwMNmH6ZnOrCUNHr3PXHSK3NG+F4TeVKcz0ePhee8pXBOE6C2u2xPBj9HLTcrnyt
-         rqYSOhEL15Jeg==
-Date:   Wed, 22 Jul 2020 20:38:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>,
-        Rich Felker <dalias@libc.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: linux-next: manual merge of the pidfd tree with the sh tree
-Message-ID: <20200722203812.6ca23e0d@canb.auug.org.au>
+        with ESMTP id S1729628AbgGVMRJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 08:17:09 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A64EC0619DE
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 05:17:09 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id x9so2242820ljc.5
+        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 05:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=KDQ7v8Cm4abDVKMKnlWuLlGXPImMSg6jDl7cdiUj9Es=;
+        b=oE8lvE0uOlHhdoKbqZt4B/mSaexsfTZjIGuTTMKkKvn5vup8rXuK4c7zueH8pe3JeR
+         jUYubcAqubDo8qb9ovRyFu3c4O/KkA7eZoY6HMIAL1YkepkMcPW0O3ZSRxVaSXVTTCHF
+         z5EWOQKgREPDKF79pmpPL8jzchj2DL6xnE5kk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=KDQ7v8Cm4abDVKMKnlWuLlGXPImMSg6jDl7cdiUj9Es=;
+        b=ceKDiE6RrR+NaZWlREYhXCBCAYIkPBE3NhYOntrGwfXqvweLbrxf7CjgQksM2hJ9Gg
+         8UGY1gKzTibTzssQCkF8ULqe29g1G0mO3CzmRcWfkogF4Ta0rj26+mILaAypdmoSWlWT
+         HBJsDdzLkbMNcrgpNkJpqsreteXlUqg2dwc+UyILFlVUslofXBM8JUBvMAPDrHFwrU/V
+         qndKn46Uitr3vEX3TalcOgasGiCYdWEpRHxE0oFo673nboC0dnBzxkY9C0RS7mjWXQDY
+         AFvjueNPqlj0M968Tt1dvsvBAhYQR0KvUxPJfv+Z20EtZiz2Ll21NdDxIBUf/qxNtGao
+         J9gw==
+X-Gm-Message-State: AOAM5327V+ItYb1aDipdggQElLc7uzPV3xIrLPa/2OkitSf+rkha4uek
+        FY2YutAdSy8Wh0LeCfMUjpZIUA==
+X-Google-Smtp-Source: ABdhPJxGQlT+m2wmcUpDcQT+EirYFTNer4xuc5FN0GY49qhvhgWmJpcFl1SyCfUKE0RHTxHsIrahbA==
+X-Received: by 2002:a2e:5cc6:: with SMTP id q189mr13982642ljb.251.1595420226553;
+        Wed, 22 Jul 2020 05:17:06 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id y1sm4945185lfb.45.2020.07.22.05.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 05:17:05 -0700 (PDT)
+References: <20200722132143.700a5ccc@canb.auug.org.au>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        kernel-team@cloudflare.com, Willem de Bruijn <willemb@google.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the net tree
+In-reply-to: <20200722132143.700a5ccc@canb.auug.org.au>
+Date:   Wed, 22 Jul 2020 14:17:05 +0200
+Message-ID: <87wo2vwxq6.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x+W3LsrrrKSHka0rbOzRN/w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/x+W3LsrrrKSHka0rbOzRN/w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 22, 2020 at 05:21 AM CEST, Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the bpf-next tree got conflicts in:
+>
+>   net/ipv4/udp.c
+>   net/ipv6/udp.c
+>
+> between commit:
+>
+>   efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
+>
+> from the net tree and commits:
+>
+>   7629c73a1466 ("udp: Extract helper for selecting socket from reuseport group")
+>   2a08748cd384 ("udp6: Extract helper for selecting socket from reuseport group")
+>
+> from the bpf-next tree.
+>
+> I fixed it up (I wasn't sure how to proceed, so I used the latter
+> version) and can carry the fix as necessary. This is now fixed as far
+> as linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
 
-Hi all,
+This one is a bit tricky.
 
-Today's linux-next merge of the pidfd tree got a conflict in:
+Looking at how code in udp[46]_lib_lookup2 evolved, first:
 
-  arch/um/Kconfig
+  acdcecc61285 ("udp: correct reuseport selection with connected sockets")
 
-between commit:
+1) exluded connected UDP sockets from reuseport group during lookup, and
+2) limited fast reuseport return to groups with no connected sockets,
 
-  5c77ba8aa183 ("dma-mapping: consolidate the NO_DMA definition in kernel/d=
-ma/Kconfig")
+The second change had an uninteded side-effect of discarding reuseport
+socket selection when reuseport group contained connected sockets.
 
-from the sh tree and commit:
+Then, recent
 
-  140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
+  efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
 
-from the pidfd tree.
+rectified it by recording reuseport socket selection as lookup result
+candidate, in case fast reuseport return did not happen because
+reuseport group had connected sockets.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I belive that changes in commit efc6b6f6c311 can be rewritten as below
+to the same effect, by realizing that we are always setting the 'result'
+if 'score > badness'. Either to what reuseport_select_sock() returned or
+to 'sk' that scored higher than current 'badness' threshold.
 
---=20
-Cheers,
-Stephen Rothwell
+---8<---
+static struct sock *udp4_lib_lookup2(struct net *net,
+				     __be32 saddr, __be16 sport,
+				     __be32 daddr, unsigned int hnum,
+				     int dif, int sdif,
+				     struct udp_hslot *hslot2,
+				     struct sk_buff *skb)
+{
+	struct sock *sk, *result;
+	int score, badness;
+	u32 hash = 0;
 
-diff --cc arch/um/Kconfig
-index 32c1d1945033,ef69be17ff70..000000000000
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@@ -14,8 -14,6 +14,7 @@@ config UM
-  	select HAVE_FUTEX_CMPXCHG if FUTEX
-  	select HAVE_DEBUG_KMEMLEAK
-  	select HAVE_DEBUG_BUGVERBOSE
-- 	select HAVE_COPY_THREAD_TLS
- +	select NO_DMA
-  	select GENERIC_IRQ_SHOW
-  	select GENERIC_CPU_DEVICES
-  	select GENERIC_CLOCKEVENTS
+	result = NULL;
+	badness = 0;
+	udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
+		score = compute_score(sk, net, saddr, sport,
+				      daddr, hnum, dif, sdif);
+		if (score > badness) {
+			result = NULL;
+			if (sk->sk_reuseport &&
+			    sk->sk_state != TCP_ESTABLISHED) {
+				hash = udp_ehashfn(net, daddr, hnum,
+						   saddr, sport);
+				result = reuseport_select_sock(sk, hash, skb,
+							       sizeof(struct udphdr));
+				if (result && !reuseport_has_conns(sk, false))
+					return result;
+			}
+			if (!result)
+				result = sk;
+			badness = score;
+		}
+	}
+	return result;
+}
+---8<---
 
---Sig_/x+W3LsrrrKSHka0rbOzRN/w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+From there, it is now easier to resolve the conflict with
 
------BEGIN PGP SIGNATURE-----
+  7629c73a1466 ("udp: Extract helper for selecting socket from reuseport group")
+  2a08748cd384 ("udp6: Extract helper for selecting socket from reuseport group")
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8YFxQACgkQAVBC80lX
-0Gx5dAf8C7VOAxe/6DdQQs2IEa25H7OLYt2wqVyWmPLTOPq5qXMDvfw/gN7jAJAj
-B4579sHxl5za29HNp8fdDz3o07jB638irPa8LpmAM0xn+MqbZPA2lQHyEViuq6TX
-bzu4M+Yj3NjstAG2iGMcK/PdG3pyVEtdpDBaFFsKChbmGTqTbRBh9ykuQ8NixSEn
-OK+HSuYlNoajCo8EP8DfcY+YJFeKuQ+pMCRfutNQxOluGqLqGcMBK1c8pqW0zisN
-tLch/vy+kh6HA23JiVBY1hPQyQEa01Q+uTTyjhxKskBeJ0JpBax2PKaZQM6oWZ92
-zRaSXKlruT9B8U/FMLWchbiMXz6WSQ==
-=BfZj
------END PGP SIGNATURE-----
+which extract the 'if (sk->sk_reuseport && sk->sk_state !=
+TCP_ESTABLISHED)' block into a helper called lookup_reuseport().
 
---Sig_/x+W3LsrrrKSHka0rbOzRN/w--
+To merge the two, we need to pull the reuseport_has_conns() check up
+from lookup_reuseport() and back into udp[46]_lib_lookup2(), because now
+we want to record reuseport socket selection even if reuseport group has
+connections.
+
+The only other call site of lookup_reuseport() is in
+udp[46]_lookup_run_bpf(). We don't want to discard the reuseport
+selected socket if group has connections there either, so no changes are
+needed. And, now that I think about it, the current behavior in
+udp[46]_lookup_run_bpf() is not right.
+
+The end result for udp4 will look like:
+
+---8<---
+static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+					    struct sk_buff *skb,
+					    __be32 saddr, __be16 sport,
+					    __be32 daddr, unsigned short hnum)
+{
+	struct sock *reuse_sk = NULL;
+	u32 hash;
+
+	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
+		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
+		reuse_sk = reuseport_select_sock(sk, hash, skb,
+						 sizeof(struct udphdr));
+	}
+	return reuse_sk;
+}
+
+/* called with rcu_read_lock() */
+static struct sock *udp4_lib_lookup2(struct net *net,
+				     __be32 saddr, __be16 sport,
+				     __be32 daddr, unsigned int hnum,
+				     int dif, int sdif,
+				     struct udp_hslot *hslot2,
+				     struct sk_buff *skb)
+{
+	struct sock *sk, *result;
+	int score, badness;
+
+	result = NULL;
+	badness = 0;
+	udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
+		score = compute_score(sk, net, saddr, sport,
+				      daddr, hnum, dif, sdif);
+		if (score > badness) {
+			result = lookup_reuseport(net, sk, skb,
+						  saddr, sport, daddr, hnum);
+			if (result && !reuseport_has_conns(sk, false))
+				return result;
+			if (!result)
+				result = sk;
+			badness = score;
+		}
+	}
+	return result;
+}
+---8<---
+
+I will submit a patch that pulls the reuseport_has_conns() check from
+lookup_reuseport() to bpf-next. That should bring the two sides of the
+merge closer. Please let me know if I can help in any other way.
+
+Also, please take a look at the 3-way diff below from my attempt to
+merge net tree into bpf-next tree taking the described approach.
+
+Thanks,
+-jkbs
+
+--
+diff --cc net/ipv4/udp.c
+index b738c63d7a77,4077d589b72e..f5297ea376de
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@@ -408,25 -408,6 +408,22 @@@ static u32 udp_ehashfn(const struct ne
+  			      udp_ehash_secret + net_hash_mix(net));
+  }
+
+ +static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ +					    struct sk_buff *skb,
+ +					    __be32 saddr, __be16 sport,
+ +					    __be32 daddr, unsigned short hnum)
+ +{
+ +	struct sock *reuse_sk = NULL;
+ +	u32 hash;
+ +
+ +	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
+ +		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
+ +		reuse_sk = reuseport_select_sock(sk, hash, skb,
+ +						 sizeof(struct udphdr));
+- 		/* Fall back to scoring if group has connections */
+- 		if (reuseport_has_conns(sk, false))
+- 			return NULL;
+ +	}
+ +	return reuse_sk;
+ +}
+ +
+  /* called with rcu_read_lock() */
+  static struct sock *udp4_lib_lookup2(struct net *net,
+  				     __be32 saddr, __be16 sport,
+@@@ -444,13 -426,20 +441,13 @@@
+  		score = compute_score(sk, net, saddr, sport,
+  				      daddr, hnum, dif, sdif);
+  		if (score > badness) {
+ -			reuseport_result = NULL;
+ -
+ -			if (sk->sk_reuseport &&
+ -			    sk->sk_state != TCP_ESTABLISHED) {
+ -				hash = udp_ehashfn(net, daddr, hnum,
+ -						   saddr, sport);
+ -				reuseport_result = reuseport_select_sock(sk, hash, skb,
+ -									 sizeof(struct udphdr));
+ -				if (reuseport_result && !reuseport_has_conns(sk, false))
+ -					return reuseport_result;
+ -			}
+ -
+ -			result = reuseport_result ? : sk;
+ +			result = lookup_reuseport(net, sk, skb,
+ +						  saddr, sport, daddr, hnum);
+- 			if (result)
+++			if (result && !reuseport_has_conns(sk, false))
+ +				return result;
+-
+++			if (!result)
+++				result = sk;
+  			badness = score;
+- 			result = sk;
+  		}
+  	}
+  	return result;
+diff --cc net/ipv6/udp.c
+index ff8be202726a,a8d74f44056a..ca50fcdf0776
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@@ -141,27 -141,6 +141,24 @@@ static int compute_score(struct sock *s
+  	return score;
+  }
+
+ +static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ +					    struct sk_buff *skb,
+ +					    const struct in6_addr *saddr,
+ +					    __be16 sport,
+ +					    const struct in6_addr *daddr,
+ +					    unsigned int hnum)
+ +{
+ +	struct sock *reuse_sk = NULL;
+ +	u32 hash;
+ +
+ +	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
+ +		hash = udp6_ehashfn(net, daddr, hnum, saddr, sport);
+ +		reuse_sk = reuseport_select_sock(sk, hash, skb,
+ +						 sizeof(struct udphdr));
+- 		/* Fall back to scoring if group has connections */
+- 		if (reuseport_has_conns(sk, false))
+- 			return NULL;
+ +	}
+ +	return reuse_sk;
+ +}
+ +
+  /* called with rcu_read_lock() */
+  static struct sock *udp6_lib_lookup2(struct net *net,
+  		const struct in6_addr *saddr, __be16 sport,
+@@@ -178,12 -158,20 +175,12 @@@
+  		score = compute_score(sk, net, saddr, sport,
+  				      daddr, hnum, dif, sdif);
+  		if (score > badness) {
+ -			reuseport_result = NULL;
+ -
+ -			if (sk->sk_reuseport &&
+ -			    sk->sk_state != TCP_ESTABLISHED) {
+ -				hash = udp6_ehashfn(net, daddr, hnum,
+ -						    saddr, sport);
+ -
+ -				reuseport_result = reuseport_select_sock(sk, hash, skb,
+ -									 sizeof(struct udphdr));
+ -				if (reuseport_result && !reuseport_has_conns(sk, false))
+ -					return reuseport_result;
+ -			}
+ -
+ -			result = reuseport_result ? : sk;
+ +			result = lookup_reuseport(net, sk, skb,
+ +						  saddr, sport, daddr, hnum);
+- 			if (result)
+++			if (result && !reuseport_has_conns(sk, false))
+ +				return result;
+-
+- 			result = sk;
+++			if (!result)
+++				result = sk;
+  			badness = score;
+  		}
+  	}

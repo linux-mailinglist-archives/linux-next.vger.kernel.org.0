@@ -2,149 +2,256 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2C022929B
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 09:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8431A2292E8
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jul 2020 10:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728459AbgGVHyT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jul 2020 03:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728448AbgGVHyS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 03:54:18 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DDAC0619DE
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 00:54:18 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id m18so354516vkk.7
-        for <linux-next@vger.kernel.org>; Wed, 22 Jul 2020 00:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=wp7cLzalHd7kyU2cYcp7xvtQkBGEmVbye1wtB/k/l3Y=;
-        b=S8luBJgFvit1zlJAsvYPv7f4ldEkJxzK4yZgF7GfFM/4xtumiUsYejg+P0RIR9DhzM
-         E1qS0MG45c/nt05/BhOxdDQBOd1TxDqyormzXUBTLmnWGjcwQDVNG2G6tVwnsdiZuMwt
-         aYdd17W2oDqlJpO91CX0F/ahwuFwop1WBJo9CIvjUVn+ep+q1VpisrVR0zTcsYXB8KPf
-         N925FbxN/tIezpMA1LDKX7myH0ukvNCKsYDrKKGKx6jR4HrojU3hYnwI7/rC2Gu3XeWM
-         02iPK2J0C7L3JtN3CdZkmZDIE1ECee4DMsrv0he+z2gBNLOJjB7UflrzQTNQTMicLjnQ
-         OdAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=wp7cLzalHd7kyU2cYcp7xvtQkBGEmVbye1wtB/k/l3Y=;
-        b=Wd1xgKWbcxklJzv/P/p/pBgZOtw3wH88ckfuArDYB8fRrdrv2Puu9hbCddNvxfMjWf
-         FUFraS4gPcOT4eHyJGqyana6B0OxICL+n3hvwZy92K3X7xU4sOZug/ZdNWWpyaDgCK6P
-         xQ6N1G/1UD3VUPqkZxBp6AMkqKxj/i9o7iR8Ilmdv7p+g0cS4Qtjfka0BDbF/Cp7fQqn
-         NqjPkii3oZhShyGxyQVp61pM1Wx8VObWfKOCvJOPSHeeJkQxl0a1AXekWcBm0pSxWHeO
-         1Www8w0TQGOOuJs1/hwUcUC4pJcljo40d5zIoJ9ww6gni/E55yODiDylBkhIwFCJl3c1
-         /PkA==
-X-Gm-Message-State: AOAM530RHDUzzxZrER3q4DGsELcaWQgm1H+6It1uWGy0fM37r3rom4Xo
-        xmZ6Eh8UiA++/mqJ4okv3G6DyPhxtKObuqjuRkO5UQ==
-X-Google-Smtp-Source: ABdhPJwpJE6nZ/4uqieQIpxG0DaJE1P7Dq3awxlUKdO1z6CLKIW3zUuJaPsYiyFK6Av4UUwsn3sIaI+KyweJiz6gKUE=
-X-Received: by 2002:a1f:5e14:: with SMTP id s20mr17461433vkb.63.1595404456374;
- Wed, 22 Jul 2020 00:54:16 -0700 (PDT)
+        id S1726850AbgGVIEn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jul 2020 04:04:43 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:34841 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbgGVIEn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jul 2020 04:04:43 -0400
+Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1N3bfB-1kwgUP37Br-010fjL; Wed, 22 Jul 2020 10:04:38 +0200
+Received: by mail-qt1-f175.google.com with SMTP id k18so1178290qtm.10;
+        Wed, 22 Jul 2020 01:04:38 -0700 (PDT)
+X-Gm-Message-State: AOAM533HVYuYVR6JSl0Ienxr9xs77iAkp2aU46ntZfAljmmrHYZIj5xt
+        ri/ZiEHdK3Im9U5+ZIGRKtkQCFDwozK5hOyW38w=
+X-Google-Smtp-Source: ABdhPJx4c0Ui3LN7CfhvLV8CLGvi5V5YCH+EAY9oASjlpqJqkqP7YO8Rz8Gdk69KI0byAZrJ24VqXTr0KgbxxpwbWJY=
+X-Received: by 2002:ac8:7587:: with SMTP id s7mr33251180qtq.304.1595405077290;
+ Wed, 22 Jul 2020 01:04:37 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 22 Jul 2020 13:24:05 +0530
-Message-ID: <CA+G9fYvUOTWJdPpUM=_ciPbZ+roQBBnjH6aJffWwUfeFG2OGwg@mail.gmail.com>
-Subject: WARNING: fs/kernfs/dir.c:1508 kernfs_remove_by_name_ns
-To:     open list <linux-kernel@vger.kernel.org>,
+References: <CA+G9fYvHH7nDRYE6-tZL6+QmyX21D4OOQ4YU+v+okE6FEqqkhg@mail.gmail.com>
+In-Reply-To: <CA+G9fYvHH7nDRYE6-tZL6+QmyX21D4OOQ4YU+v+okE6FEqqkhg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Jul 2020 10:04:21 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a01smLHy0vyPX0WxDRWWPxDCbZhRCBB5qGFvMCnsghwjg@mail.gmail.com>
+Message-ID: <CAK8P3a01smLHy0vyPX0WxDRWWPxDCbZhRCBB5qGFvMCnsghwjg@mail.gmail.com>
+Subject: Re: BUG: sleeping function called from invalid context at
+ kernel/locking/mutex.c db410c
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        lkft-triage@lists.linaro.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, walter-zh.wu@mediatek.com,
-        neeraju@codeaurora.org, Vinod Koul <vinod.koul@linaro.org>,
-        Mateusz Nosek <mateusznosek0@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        walter-zh.wu@mediatek.com, neeraju@codeaurora.org,
+        Vinod Koul <vinod.koul@linaro.org>, saravanak@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Z8x+/urS4bpP9dmj1Co9Uz4yqUt0WB16VNNeQ0yTAXYa9CcikEF
+ UkOKkZlVEu848339DGX1QiiJINalcmqXwjZcotGG/eIRjuBg9BvXsaU6qYq6QZkcN98db1D
+ ku4FDluZuE38iN8vCiTmbAD5l7OcuwW2lDl1AkRDxnYe7xbCpzJR9riwJ8Tkz7Nf37u7yv2
+ VyEYN9AW6o6T1cH+aznFQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:A2kIDYSuvxc=:eNstWQPUaoXNz3vGnVL324
+ Yqzyr2ZYz2Iri+kqd6oZh9+wrtDenHOjeGNuC+nD9vgU/XcCj0F7NbVEBl4tGWUFRw9mo7D6l
+ y5ikWS2JEU8PoKMP3QG64Qh2X4YVj+sD3b85hLpAA4PB0FgFSLSSq3TVrcrJaFUzVttS2MkjD
+ hSTwkaP+8hQQtFTGQnb9o2RzgiYUi7DfgP3fypxWxYr+xsnbnH/ZLHo31iSHGy1qn+l1x+3jN
+ PJCKanubbEDSRw09CTRryi/sqVe3d1+HHUTospjeJYy7TuhtdF+qSJHWFaL6WjuJZEMHsUm8O
+ l/uMRD/X6r5VP4NzFJ328zviYOuQDHUSnYdQje4m2VtveLQ7l71IT31lCqw6kdpMn3QCPtURT
+ OMNcVkE9+aWggwFyLkgAEJOcCa47/+cdhB0aYbtOminpiT3JN8mpmXeygRC9TaZ2Q7oua+S1u
+ FaOoqnVI0zEvfmtewrvgwcSQ9tUH4imGG5Cx9+1Kcd03LsMu6EXPchWPf2cFDS1t28auMQd+j
+ qpLOsO35qGwpqDw1w6t0frfcmW86T7tLO09NFgj2QW8wl+YQJ6ZIgDFgcsAcLeBPJJ2uKLevl
+ M3C38fwdtBYHpf3cGB+Fc85kQU9zNRwZj2oRIb027LqOIG///ix4z/CxTC5A6UwOy1QngSzKI
+ Vkz7ZL3mxl14kElncSnjyFivrK0yHuIrOWcki6Lzs9dafD6p/3a7tYVNwMzzQQvXL+WqBb0WO
+ rZTnkSHj1SrS+2DBIFuCtc9bLsOEXUqC4Tipe/PR0ZbcYJYTcOk8oNSjXpijUPM8piSTaloG9
+ wc3KEhFOcArkQCsnyNy6uL7StYoBudTRZwXrm6op9Qv/EQneOW0vYdJ+hqisrGgx3reUaGeNk
+ WXyf5I3JCkoVKsdF5mFJAPCmmZSxzr0c63aIpepNybBEWggLBlIAMPgedafnj0Fzuj88lxUw/
+ FBtwio2z33wALx2NMYnWpY/ndKjUjZAVkUxRnpORokLDLAYOSPipt
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Kernel WARNING noticed on arm64 db410c device while booting linux next
-20200721 tag.
-Kernel BUGs followed by kernel WARNINGS noticed on this db410c device.
+On Wed, Jul 22, 2020 at 9:44 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> Kernel BUG noticed on arm64 db410c device while booting linux next 20200721 tag.
+> Continually popping up these BUG messages on the boot console and kernel warning
+> also noticed.
+>
+> metadata:
+>   git branch: master
+>   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>   git commit: de2e69cfe54a8f2ed4b75f09d3110c514f45d38e
+>   git describe: next-20200721
+>   kernel-config:
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818/config
+>   build-location:
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818
+>
+> Crash log:
+> [    0.444349] BUG: sleeping function called from invalid context at
+> /usr/src/kernel/kernel/locking/mutex.c:935
+> [    0.444422] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
+> 30, name: kworker/0:1
+> [    0.444458] 2 locks held by kworker/0:1/30:
+> [    0.444489]  #0: ffff00000eb15138
+> ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> [    0.444627]  #1: ffff800013713df0
+> ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> process_one_work+0x208/0x768
+> [    0.444761] CPU: 0 PID: 30 Comm: kworker/0:1 Not tainted
+> 5.8.0-rc6-next-20200721 #1
+> [    0.444787] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    0.444817] Workqueue: rcu_gp srcu_invoke_callbacks
+> [    0.444856] Call trace:
+> [    0.444883]  dump_backtrace+0x0/0x1f8
+> [    0.444910]  show_stack+0x2c/0x38
+> [    0.444939]  dump_stack+0xf0/0x16c
+> [    0.444969]  ___might_sleep+0x144/0x208
+> [    0.444996]  __might_sleep+0x54/0x90
+> [    0.445027]  __mutex_lock+0x64/0x970
+> [    0.445055]  mutex_lock_nested+0x54/0x70
+> [    0.445084]  device_del+0x44/0x3c0
+> [    0.445110]  device_unregister+0x24/0x78
+> [    0.445138]  __device_link_free_srcu+0x64/0x70
+> [    0.445164]  srcu_invoke_callbacks+0x10c/0x1a0
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: de2e69cfe54a8f2ed4b75f09d3110c514f45d38e
-  git describe: next-20200721
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818/config
-  build-location:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/818
+The device_unregister() was added to __device_link_free_srcu() as part
+of commit 287905e68dd2 ("driver core: Expose device link details in sysfs")
 
-Crash log:
-[    5.802135] ------------[ cut here ]------------
-[    5.802509] l12: supplied by regulator-dummy
-[    5.805901] kernfs: can not remove 'supplier:regulator.14', no directory
-[    5.810782] l12: Bringing 0uV into 1750000-1750000uV
-[    5.814789] WARNING: CPU: 3 PID: 164 at
-/usr/src/kernel/fs/kernfs/dir.c:1508
-kernfs_remove_by_name_ns+0xb0/0xc0
-[    5.823085] l13: supplied by regulator-dummy
-[    5.826334] Modules linked in:
-[    5.826354] CPU: 3 PID: 164 Comm: kworker/3:2 Tainted: G        W
-      5.8.0-rc6-next-20200721 #1
-[    5.826363] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    5.826378] Workqueue: rcu_gp srcu_invoke_callbacks
-[    5.826396] pstate: 80000005 (Nzcv daif -PAN -UAO BTYPE=--)
-[    5.826409] pc : kernfs_remove_by_name_ns+0xb0/0xc0
-[    5.836530] l13: Bringing 0uV into 1750000-1750000uV
-[    5.840651] lr : kernfs_remove_by_name_ns+0xb0/0xc0
-[    5.840659] sp : ffff800014093be0
-[    5.840667] x29: ffff800014093be0 x28: 0000000000000000
-[    5.840688] x27: ffff8000101c42cc x26: ffff8000101c42cc
-[    5.840708] x25: ffff8000129fee68 x24: ffff00003fcb7640
-[    5.845080] l14: supplied by regulator-dummy
-[    5.852811] x23: ffff00003fcb76c0 x22: 0000000000000000
-[    5.852831] x21: ffff00003a5cb400 x20: 0000000000000000
-[    5.852851] x19: ffff00003a604018 x18: ffffffffffffffff
-[    5.852875] x17: 0000000000000000
-[    5.859830] l14: Bringing 0uV into 1750000-1750000uV
-[    5.864089] x16: 0000000000000000
-[    5.864102] x15: ffff800012720a88 x14: ffff800094093877
-[    5.864123] x13: ffff800014093885 x12: 0000000000000003
-[    5.864143] x11: 0000000005f5e0ff x10: 0000000000000000
-[    5.871315] l15: supplied by regulator-dummy
-[    5.874505] x9 : ffff800012720a88 x8 : 0000000018bc90a0
-[    5.874526] x7 : 00000000b9433f15 x6 : ffff800014093820
-[    5.874546] x5 : ffff800012721000 x4 : 0000000000000003
-[    5.874566] x3 : 0000000000000004 x2 : 0000000000000201
-[    5.880082] l15: Bringing 0uV into 1750000-1750000uV
-[    5.884311] x1 : b2684f8263e0e600 x0 : 0000000000000000
-[    5.884333] Call trace:
-[    5.884346]  kernfs_remove_by_name_ns+0xb0/0xc0
-[    5.884358]  sysfs_remove_link+0x30/0x60
-[    5.884371]  devlink_remove_symlinks+0xa8/0x138
-[    5.884382]  device_del+0xf4/0x3c0
-[    5.890179] l16: supplied by regulator-dummy
-[    5.893172]  device_unregister+0x24/0x78
-[    5.893182]  __device_link_free_srcu+0x64/0x70
-[    5.898780] l16: Bringing 0uV into 1750000-1750000uV
-[    5.903762]  srcu_invoke_callbacks+0x10c/0x1a0
-[    5.903773]  process_one_work+0x2b0/0x768
-[    5.903783]  worker_thread+0x48/0x498
-[    5.903795]  kthread+0x158/0x168
-[    5.903806]  ret_from_fork+0x10/0x1c
-[    5.903815] irq event stamp: 18695
-[    5.909658] l17: supplied by regulator-dummy
-[    5.913312] hardirqs last  enabled at (18694): [<ffff800010083318>]
-el1_irq+0xd8/0x180
-[    5.913325] hardirqs last disabled at (18695): [<ffff8000100aaebc>]
-debug_exception_enter+0xac/0xe8
-[    5.913337] softirqs last  enabled at (18614): [<ffff8000101c42cc>]
-srcu_invoke_callbacks+0xf4/0x1a0
-[    5.913349] softirqs last disabled at (18652): [<ffff8000101c42cc>]
-srcu_invoke_callbacks+0xf4/0x1a0
-[    5.913358] ---[ end trace 8fa12bb0128735e5 ]---
+I'm fairly sure this is what introduced the console output, though the
+code before it is already suspicious:
 
-full test log,
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200721/testrun/2972385/suite/linux-log-parser/test/check-kernel-warning-1595062/log
+call_srcu(&device_links_srcu, &link->rcu_head, __device_link_free_srcu);
 
---
-Linaro LKFT
-https://lkft.linaro.org
+According to the documentation, call_srcu() must not call any sleeping
+functions, which is what the 'in_atomic(): 1' above is about.
+
+However, from what I can tell, the put_device() and pm_runtime_put()
+calls in device_link_free() can also potentially sleep even if they normally
+don't warn about that.
+
+       Arnd
+
+> [    0.445191]  process_one_work+0x2b0/0x768
+> [    0.445218]  worker_thread+0x48/0x498
+> [    0.445246]  kthread+0x158/0x168
+> [    0.445274]  ret_from_fork+0x10/0x1c
+>
+> <>
+>
+> [   13.015528] BUG: sleeping function called from invalid context at
+> /usr/src/kernel/kernel/locking/mutex.c:935
+> [   13.015588] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid:
+> 188, name: kworker/2:4
+> [   13.025268] 2 locks held by kworker/2:4/188:
+> [   13.032647]  #0: ffff00000eb15138
+> ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> [   13.036920]  #1: ffff80001426bdf0
+> ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> process_one_work+0x208/0x768
+> [   13.046032] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+>       5.8.0-rc6-next-20200721 #1
+> [   13.056039] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [   13.065417] Workqueue: rcu_gp srcu_invoke_callbacks
+> [   13.072091] Call trace:
+> [   13.076695]  dump_backtrace+0x0/0x1f8
+> [   13.079124]  show_stack+0x2c/0x38
+> [   13.082944]  dump_stack+0xf0/0x16c
+> [   13.086243]  ___might_sleep+0x144/0x208
+> [   13.089542]  __might_sleep+0x54/0x90
+> [   13.093274]  __mutex_lock+0x64/0x970
+> [   13.097094]  mutex_lock_nested+0x54/0x70
+> [   13.100654]  device_del+0x44/0x3c0
+> [   13.104556]  device_unregister+0x24/0x78
+> [   13.107771]  __device_link_free_srcu+0x64/0x70
+> [   13.111850]  srcu_invoke_callbacks+0x10c/0x1a0
+> [   13.116103]  process_one_work+0x2b0/0x768
+> [   13.120530]  worker_thread+0x48/0x498
+> [   13.124610]  kthread+0x158/0x168
+> [   13.128254]  ret_from_fork+0x10/0x1c
+> [   13.131818] BUG: scheduling while atomic: kworker/2:4/188/0x00000201
+> [   13.135243] 3 locks held by kworker/2:4/188:
+> [   13.141558]  #0: ffff00000eb15138
+> ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x208/0x768
+> [   13.145834]  #1: ffff80001426bdf0
+> ((work_completion)(&sdp->work)){+.+.}-{0:0}, at:
+> process_one_work+0x208/0x768
+> [   13.154924]  #2: ffff8000127f2fd0 (kernfs_mutex){+.+.}-{3:3}, at:
+> __kernfs_remove+0x304/0x378
+> [   13.164952] Modules linked in: mdt_loader videobuf2_common
+> drm_kms_helper qcom_rng i2c_qcom_cci display_connector drm socinfo
+> rmtfs_mem rfkill qrtr ns fuse
+> [   13.173653] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+>       5.8.0-rc6-next-20200721 #1
+> [   13.187296] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [   13.196666] Workqueue: rcu_gp srcu_invoke_callbacks
+> [   13.203340] Call trace:
+> [[0;32m  OK  [0m] Started Network Manager Script Dispatcher Servic[
+> 13.207942]  dump_backtrace+0x0/0x1f8
+> e.[   13.221350]  __schedule_bug+0x74/0xa0
+> [   13.221386]  __schedule+0x890/0x938
+> [   13.224160]  schedule+0x48/0x110
+> [   13.227462]  schedule_preempt_disabled+0x1c/0x30
+> [   13.230933]  __mutex_lock+0x814/0x970
+> [   13.235533]  mutex_lock_nested+0x54/0x70
+> [   13.239091]  __kernfs_remove+0x304/0x378
+> [   13.243085]  kernfs_remove_by_name_ns+0x5c/0xc0
+> [   13.246991]  sysfs_remove_link+0x30/0x60
+> [   13.251246]  device_remove_class_symlinks+0x78/0xa8
+> [   13.255411]  device_del+0xb8/0x3c0
+>
+> [   13.260011]  device_unregister+0x24/0x78
+> [   13.263744]  __device_link_free_srcu+0x64/0x70
+> [   13.267746]  srcu_invoke_callbacks+0x10c/0x1a0
+> [   13.271992]  process_one_work+0x2b0/0x768
+> [   13.276417]  worker_thread+0x48/0x498
+> [   13.280499]  kthread+0x158/0x168
+> [   13.284144]  ret_from_fork+0x10/0x1c
+> [   13.289062] BUG: workqueue leaked lock or atomic: kworker/2:4/0xfffffe00/188
+> [   13.289062]      last function: srcu_invoke_callbacks
+> [   13.291056] no locks held by kworker/2:4/188.
+> [   13.302935] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+>       5.8.0-rc6-next-20200721 #1
+> [   13.305703] rtc-pm8xxx 200f000.spmi:pm8916@0:rtc@6000: registered as rtc0
+> [   13.307317] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [   13.307333] Workqueue: rcu_gp srcu_invoke_callbacks
+> [   13.307349] Call trace:
+> [   13.307360]  dump_backtrace+0x0/0x1f8
+> [   13.307369]  show_stack+0x2c/0x38
+> [   13.307381]  dump_stack+0xf0/0x16c
+> [   13.307392]  process_one_work+0x624/0x768
+> [   13.347424]  worker_thread+0x48/0x498
+> [   13.351501]  kthread+0x158/0x168
+> [   13.355146]  ret_from_fork+0x10/0x1c
+> [   13.358487] BUG: scheduling while atomic: kworker/2:4/188/0xfffffe01
+> [   13.362056] no locks held by kworker/2:4/188.
+> [   13.363536] rtc-pm8xxx 200f000.spmi:pm8916@0:rtc@6000: setting
+> system clock to 1970-01-01T00:00:19 UTC (19)
+> [   13.368361] Modules linked in: rtc_pm8xxx(+) videobuf2_memops
+> videobuf2_v4l2 mdt_loader videobuf2_common drm_kms_helper qcom_rng
+> i2c_qcom_cci display_connector drm socinfo rmtfs_mem rfkill qrtr ns
+> fuse
+> [   13.382197] CPU: 2 PID: 188 Comm: kworker/2:4 Tainted: G        W
+>       5.8.0-rc6-next-20200721 #1
+> [   13.400208] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [   13.409418] Workqueue:  0x0 (rcu_gp)
+> [   13.416084] Call trace:
+> [   13.419646]  dump_backtrace+0x0/0x1f8
+> [   13.421815]  show_stack+0x2c/0x38
+> [   13.425635]  dump_stack+0xf0/0x16c
+> [   13.428933]  __schedule_bug+0x74/0xa0
+> [   13.432234]  __schedule+0x890/0x938
+> [   13.435967]  schedule+0x48/0x110
+> [   13.439262]  worker_thread+0xc0/0x498
+> [   13.442735]  kthread+0x158/0x168
+> [   13.446294]  ret_from_fork+0x10/0x1c
+>
+> Full test log,
+> https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200721/testrun/2972385/suite/linux-log-parser/test/check-kernel-warning-1595062/log
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org

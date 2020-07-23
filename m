@@ -2,114 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE6122B094
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jul 2020 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD88122B216
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jul 2020 17:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728935AbgGWNez (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jul 2020 09:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgGWNey (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jul 2020 09:34:54 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C06C0619DC;
-        Thu, 23 Jul 2020 06:34:53 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id j18so4978167wmi.3;
-        Thu, 23 Jul 2020 06:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zZ5AbTmRi6SKRjj5jh6jgspAZ8rlBVrCJiQnAL/REKc=;
-        b=d8jN0+bLE7DW9ROZe/xGQcyl45MyiLs5bAqePU0cxQUpbV5sUx2Exr4doXTWBj9NRF
-         dZCrzZeLTWa/xhrb+UlwSMK5QAZiZBuWhAFH24H9nMac+YuXHlbsamRL5vsjx4Q4yaM8
-         ZNGkXapNAu/PAiOCK1mxAlX2uuXKK3QD1MrB5vUWdHB8KG2Qg6g9aaA0yD+kpwa3WrkI
-         eqYJZR8/oep/KXvVumH+Uufjky+VnIoVjiJRKflGkhbtva/JryX6rhvx5zaNpzkzWqzp
-         YiN0inWSvVsG2nHAD1DEbylUI5hzHq+0H/ekg7sKQ4xE9wBqMiegGgHpL8M5tFhTT/9y
-         H8ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zZ5AbTmRi6SKRjj5jh6jgspAZ8rlBVrCJiQnAL/REKc=;
-        b=kk1mO2TgiiarqSjbQjN4Jw+y+uhTVq6cMjdOmg7UDnTacsPgQN5XCqe0ndzpvysvVk
-         0nz6lHxzKei5y6SVBZy1YlQCrlD1WOSgPtu4ndKKk040ZlpQPQRhOzHp1zgJPtdoJmuH
-         V2fsmjbpR/Ycok/6EaY7LPRwfttdbGPT4GWCoYV0krIVgPMfriJIytGg8M0IGL3mutXE
-         2thXIXMi5nWE+449YAh9IrFnkMYmX72Imowd7sV9PtFCJhZaj5LZ7Hd91pkT497POlCT
-         dhcyztD2WBcldg1hp7RM4joy82Aub0sxzkB2kfpb2EOAbSqN2uZqwytB6T2NMOLnXCnd
-         sHMQ==
-X-Gm-Message-State: AOAM530wz0OZVF5gfzyt/ung0YCa40YocXslqpTCcxwa9PHqU/6eiC59
-        k7hFnkn+m7LSi427p7H8AnPJ54Tro6xLhTb0ihua9m6r
-X-Google-Smtp-Source: ABdhPJxSQ5Rc5LXMXXqQgZOhc78GrmT88M9AV/Oyw196T+QQbWFOWsH3ZrYwCKGRHKbR9w2pZwrVj1aRey4/YgZ/fqo=
-X-Received: by 2002:a1c:2:: with SMTP id 2mr4266406wma.79.1595511291877; Thu,
- 23 Jul 2020 06:34:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200722143417.42b52c73@canb.auug.org.au> <CAKMK7uGZ4qdtkD6r_RzRUiEXrumkdAwENuKfKmfsuscQZtkWqA@mail.gmail.com>
-In-Reply-To: <CAKMK7uGZ4qdtkD6r_RzRUiEXrumkdAwENuKfKmfsuscQZtkWqA@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 23 Jul 2020 09:34:40 -0400
-Message-ID: <CADnq5_PFfVONDAQLYLpkOzL5yxdA-0zisN7xdEt6pJmP6ZfQaA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the amdgpu tree with Linus' tree
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        id S1727916AbgGWPDf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jul 2020 11:03:35 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:33418 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727108AbgGWPDf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jul 2020 11:03:35 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06NF2ZNi044266;
+        Thu, 23 Jul 2020 15:03:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=L6YMu5hMIyONs163kBUsQtc+IsC5DQJqhzfU8lanX1o=;
+ b=OxdHgVkuuWhyf2dp06bQtEnEQBWqhg40pozko6piztSlwsH3ACxJqrKpDvkJUwNY9fZm
+ osupjqKm50GdqLJZ+ltP1Jhvn+U4Kp8ZQFITy981+Eh4CERhmUZdShlhTCCsnt2Z7iVh
+ 1B03PaTT88GWiGlEijqaWWiXNwrDH8lfZu0Ig+qqqPSwgR0HCjUlbtR9evDYS+1iLpud
+ 4v2CH6YsTyE6poW75ar3iGXYevSze3Rj/iXiPxLoR+r2F60WF46bwsfj2nACSWFpCwyN
+ H1XGa2+cNEZLAFeaSexkOgYd+emZp8CVZlQZmIOc5WP9q9JgRFdZ3kI8py3aXZggOGNP rA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 32brgrsx57-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Jul 2020 15:03:18 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06NEx8aR112243;
+        Thu, 23 Jul 2020 15:01:18 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 32fb8gxn5x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jul 2020 15:01:18 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06NF1FB0011054;
+        Thu, 23 Jul 2020 15:01:17 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 23 Jul 2020 08:01:15 -0700
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1mu3qe0wm.fsf@ca-mkp.ca.oracle.com>
+References: <20200721163045.50c205a5@canb.auug.org.au>
+        <20200723155452.6dccd510@canb.auug.org.au>
+Date:   Thu, 23 Jul 2020 11:01:10 -0400
+In-Reply-To: <20200723155452.6dccd510@canb.auug.org.au> (Stephen Rothwell's
+        message of "Thu, 23 Jul 2020 15:54:52 +1000")
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9691 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0 phishscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230112
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9691 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ impostorscore=0 suspectscore=1 adultscore=0 clxscore=1011 mlxlogscore=999
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007230112
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 4:01 AM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Wed, Jul 22, 2020 at 6:34 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > [I can't find a previous email about this, sorry ...]
-> >
-> > There is a semantic conflict between Linus' tree and the amdgpu tree
-> > between commit
-> >
-> >   d7a6634a4cfb ("drm/amdgpu/atomfirmware: fix vram_info fetching for renoir")
-> >
-> > from Linus' tree and commts
-> >
-> >   fe098a5d6443 ("drm/amdgpu/atomfirmware: fix vram_info fetching for renoir")
-> >   836dab851903 ("drm/amdgpu/atomfirmware: update vram info handling for renoir")
-> >
-> > The automted git merge leaves two "case 12" labels.  I have been
-> > reverting commit d7a6634a4cfb since July 3 ... This will need to be
-> > fixed up when the amdgpu tree is next merged into the drm tree, or a back
-> > merge of d7a6634a4cfb could be done into the amdgpu tree and the older
-> > "case 12" label removed in that merge.
->
-> Yeah this is a bit nasty, I just crashed over it too (btw moved to
-> drm-next now). Alex is this the right conflict resolution for -next? I
-> think we should bake this in with a backmerge ...
 
-Yes, you can drop either d7a6634a4cfb or fe098a5d6443.  I just
-cherry-picked the commit from -next back to 5.8 and stable since it
-was a bug fix.
+Stephen,
 
-Alex
+>> ERROR: modpost: "exynos_ufs_dump_info" [drivers/scsi/ufs/ufs-exynos.ko] undefined!
+>> ERROR: modpost: "exynos_ufs_init_dbg" [drivers/scsi/ufs/ufs-exynos.ko] undefined!
+>> ERROR: modpost: "exynos_ufs_cmd_log_start" [drivers/scsi/ufs/ufs-exynos.ko] undefined!
 
-> -Daniel
->
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> > _______________________________________________
-> > dri-devel mailing list
-> > dri-devel@lists.freedesktop.org
-> > https://lists.freedesktop.org/mailman/listinfo/dri-devel
->
->
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+*sigh* sorry about that. I did verify yesterday's exynos build fix with
+COMPILE_TEST but it looks like I didn't have the new driver debugging
+option enabled.
+
+Kiwoong/Alim: Please fix!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

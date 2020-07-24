@@ -2,54 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74B622BBF1
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jul 2020 04:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E6222BBFC
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jul 2020 04:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726355AbgGXCXs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jul 2020 22:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgGXCXs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jul 2020 22:23:48 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB491C0619D3;
-        Thu, 23 Jul 2020 19:23:47 -0700 (PDT)
+        id S1726454AbgGXC2v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jul 2020 22:28:51 -0400
+Received: from ozlabs.org ([203.11.71.1]:34909 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726310AbgGXC2v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 23 Jul 2020 22:28:51 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BCY0X6wN2z9sPB;
-        Fri, 24 Jul 2020 12:23:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BCY6T0n59z9sPB;
+        Fri, 24 Jul 2020 12:28:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595557426;
-        bh=bN8U7G1juy01wiajGZjiaE7j/5xz+BioEttOGYRZprE=;
+        s=201702; t=1595557729;
+        bh=+lHtLN9mb1RQ+OsZ7B8pI105hf8EiMsgdXCmbj5M5KE=;
         h=Date:From:To:Cc:Subject:From;
-        b=tTXT9i+65peA3SqGimMv3+wCcp1LlYtJjaRHeiHy6qqPOZys/68gebTggPV8srH7t
-         JsjZsBf5S2uOnuKSUIsllO6yHkQ5f9a3fXaEasLt8E6R+AwNDPTYeb1kSRhTguWR9S
-         qTY6RvIAA4sfZ2mC5BcXcyhlzMV3g/v8NV93KIKen/q0SMXFU+S5Fg9YhJdyRgjB1y
-         YZK+eGwo7tVbtYHo2Hg5Ty1XQagpI5L61ypT1srC7I8hZEtXDGCs6hqUw2gQrhRQxO
-         R3wQk5bcg2qHFeMbPHhQl3QGQtJB+0mlFRFPdbd/X5Gxy27FOezWIZaTd7dV8UkmS0
-         AzD3Es8DMGF8w==
-Date:   Fri, 24 Jul 2020 12:23:39 +1000
+        b=UWLVCzt1SNeC5nLH6z+Edb6oSxm1MmVpa7BoVhf7JApsOlsJOM+D/jbTAOjgJAZcT
+         1LGcbYzPr7nnkE4O29vrCAFrdTyGuVJ4AyaYMAGEYKb6/QSvrxqL2CMXDPvfQPurQl
+         4ROlYaJ9exV/oeES2DxsNmrW/U7ZsCjD/xhapVfCfAKA42Xz/u6YIi/eZ8XzFhdJ/X
+         rxy2hEiB43N/5i46BNRHTYZfPCpsT5bj+0ASno14q91qFns6D08GKeJXhGqjQHa7HG
+         3mXIGldxazrlzHdr4R9C5agSJE6TwCZdElA1Y97vEgeEkwEFwgZlBjwjc99pDlFZsx
+         NCgMCJy1SPWEw==
+Date:   Fri, 24 Jul 2020 12:28:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Michael Walle <michael@walle.cc>
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Sabrina Dubroca <sd@queasysnail.net>
 Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200724122339.7abaf0e9@canb.auug.org.au>
+Message-ID: <20200724122848.5273805b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EGZA=/AkJi0fr0zl4/ATvu/";
+Content-Type: multipart/signed; boundary="Sig_/0/CaStq8PsOM2rs9teGrXqu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EGZA=/AkJi0fr0zl4/ATvu/
+--Sig_/0/CaStq8PsOM2rs9teGrXqu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -57,47 +53,43 @@ Hi all,
 
 Today's linux-next merge of the net-next tree got a conflict in:
 
-  drivers/net/ethernet/freescale/enetc/enetc_pf.c
+  drivers/net/geneve.c
 
 between commit:
 
-  26cb7085c898 ("enetc: Remove the mdio bus on PF probe bailout")
+  32818c075c54 ("geneve: fix an uninitialized value in geneve_changelink()")
 
-from the net tree and commits:
+from the net tree and commit:
 
-  07095c025ac2 ("net: enetc: Use DT protocol information to set up the port=
-s")
-  c6dd6488acd1 ("enetc: Remove the imdio bus on PF probe bailout")
+  9e06e8596bc8 ("geneve: move all configuration under struct geneve_config")
 
 from the net-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-
+I fixed it up (the latter removed the code moved by the former) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/EGZA=/AkJi0fr0zl4/ATvu/
+--Sig_/0/CaStq8PsOM2rs9teGrXqu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8aRisACgkQAVBC80lX
-0GzPnggApnPI6idjigVTb3u7DyKeLobDIPoAl9w2ymwXZVKsPVjyFgg5ZWzNGQ4W
-qtAfbYne78uWNTVeZ80MEbf44qWamM9HTv/7uADKdniPl6poTkC3/iAwRVsFe82n
-GOJDNTSf/oaLXavuQu5DiM6JLknBaakIhZS7vP+7PVQBpH8IhopFzB/mwEI27Il1
-fqNnbbJKUAUitAk2tAIOKLxY8DW+LtUIrecvjJmhx1DHZiPCSA/M+8pRDwfUR1O6
-aE3UeoDfShj0MEuZ3DPc9WqenbQr4HyRWGIpuDe7PO0xLWlGDCbkKX5B4+fF4UVQ
-D5EXaKZFdkQDRILpxqHYQQC2NGQ7tg==
-=B/2n
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8aR2AACgkQAVBC80lX
+0GyflwgAjwsTSUvaLoCjCAqY362x8G2xjr+TrdmF+UxWZznVEXDSv75xNeJUgqN/
+JDPiHJBREt9S27i944qPUPpGkialHxCiqsgsBvEfl+fOU1y9CWkalX79aR6ZewTI
+/xTAav5a2VDNcvvrlDayXhevFgX3IGjO5BxH4cGhtk5zixxlIctZYjYiA217cLnH
+gWJYxS4g6TJDbGLUkPe4dPGuUCtSub9oKBDcD5RacCBiGuv1z9iNpdP8GbRFRfr7
+uhnY1zc7Lf8LGf/CHCwulzN4ktFABKTecUPhc3i8aO3ErIHTWD9IK1rV/I6B01eC
+yofI8bIkDJ6Ga6e6DMSCm69n1DYV7w==
+=yJBd
 -----END PGP SIGNATURE-----
 
---Sig_/EGZA=/AkJi0fr0zl4/ATvu/--
+--Sig_/0/CaStq8PsOM2rs9teGrXqu--

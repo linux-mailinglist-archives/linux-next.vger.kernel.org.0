@@ -2,110 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C1222E9DB
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 12:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D74422E9E0
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 12:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgG0KRp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 06:17:45 -0400
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:46921 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726139AbgG0KRp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Jul 2020 06:17:45 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9161F3FC;
-        Mon, 27 Jul 2020 06:17:44 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 27 Jul 2020 06:17:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=ZDs/129nDxe4od5CuQldkDJUHjv
-        hQGEA4HL1+Z4NwB0=; b=UenlOqPNa8ALR+X82P4+hNkZ2XzF4zV1VnRbnINe360
-        t5OnKx0CfbRQaOiqDzGx8j3GyPwwHUoFGQ7QufLraaMnNfetVMjKjpk+F40g/v2N
-        jvCQLWDWvUizvK6yiQ//OBM32NOA4O7ZxMQZ6vChAQ1fNQKyJvm2tS5siEfZXQua
-        uT/AHhgogs/DXHnebxT68OWS7hH0ok/JfZmXloTyq3UDeHF2gmmTmk2PmudUDzjA
-        dOaHzX+8+SThg2hnQh1xAIAkyiwipQx/P277UVG936oVToyaQE5zQsP774SxbOnL
-        9+RyWrzbsCfCD9i5e2kf54VyxaFIuk90WSCAuqQHl1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ZDs/12
-        9nDxe4od5CuQldkDJUHjvhQGEA4HL1+Z4NwB0=; b=Oh+o8qIiSx0zx7tH0opo/Y
-        OQxaaQ7rOyDgx8yC/hIiAgVhSorjS9PkiOhVblPuIZ+laa/+furai2vMk8h5trKa
-        WO4yy2t62j5IY6W5RvnOTBgPPAxV/H5BVMHpEGUQCkyYO7VG4yPpSU2O/1yqc0Jf
-        VsGZCDUd46YE65tEjE2yBLMbo+VZAloEncRA1MhD3Wi6x1rblErneXTwK/0w13wg
-        bAiJG8DoxtNUOB8JZZBy1EpIIge1+diQ0wdOlALQddPP5K4krUh7qKxj5FvpdJ1d
-        F8BxwOhG3ilEwF2t3lfNjzkxd+kcCnSUb4AxNWKblVJOshmPDGmNMO1WIrmCmVJw
-        ==
-X-ME-Sender: <xms:x6keX2OwXvklkq8BK0gfhBX6e5MwA20ukZlEJe1oZDFztnZ0Vx_jdg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedriedtgddviecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
-    keeirdekledruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:x6keX08oBP0w5nyK56rmVJi2WxmW3V3Cv9Nntmt8jcajLGMtY00ZmA>
-    <xmx:x6keX9R7MBnIfQ7F2RM5JIe9sijGy2tmq5GRZN3yF8SQld4_CY44ow>
-    <xmx:x6keX2udOI1VK8pCJoNeA93QkIoeYsm2AsJw1PyhAZNiPEb1_oBROg>
-    <xmx:yKkeXyHL364vxT4qg3XRHEWKlnIideKqnS0FKzeKMTpEbTJMbQgHuQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 17F2A3280063;
-        Mon, 27 Jul 2020 06:17:42 -0400 (EDT)
-Date:   Mon, 27 Jul 2020 12:17:38 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20200727101738.GA1923289@kroah.com>
-References: <20200727165539.0e8797ab@canb.auug.org.au>
+        id S1726222AbgG0KUn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 06:20:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726139AbgG0KUm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Jul 2020 06:20:42 -0400
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 367DA2075A;
+        Mon, 27 Jul 2020 10:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595845242;
+        bh=hQhd05LXAPUzwQ3UfG5KK9j6yLXXJMe0iDQuBeqoHns=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bIzVZyZhA97PhUA4EYvzfXEQwyyNNoyQOJIOL/oTL539fSOOf3CVe/kR0BO4UHBM+
+         MF5SpNMerItNE8HpFVeCdmutj/YlrDnT1fzfEYGaEDCOX7AF0MfsE9+FMMxjff64pv
+         Q+1UxWAgyOSymrNjrZZMBWYGa0SNXMQjs6DrvwOM=
+Received: by mail-lj1-f174.google.com with SMTP id q7so16616530ljm.1;
+        Mon, 27 Jul 2020 03:20:42 -0700 (PDT)
+X-Gm-Message-State: AOAM5310NO8aBX4qNh9rcgH93y/I+xBgUC7kw0az+1P5HdEqYWeeykmy
+        1bPazVCpMYL9P2ZTPDs543A4ZprivtyhPFz39Cg=
+X-Google-Smtp-Source: ABdhPJxtpea9rcbxDoSjPDe363q5v13DQCeX0XUIQbde3R4Ukf2I/W1lLNDlLkuIctJ6zpqjHgdEMeQ4EQeCPQrm3+k=
+X-Received: by 2002:a2e:91da:: with SMTP id u26mr10158388ljg.311.1595845240511;
+ Mon, 27 Jul 2020 03:20:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200727165539.0e8797ab@canb.auug.org.au>
+References: <20200727201600.7d3b31c8@canb.auug.org.au>
+In-Reply-To: <20200727201600.7d3b31c8@canb.auug.org.au>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Mon, 27 Jul 2020 12:20:29 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcna2YyemERXhumasikQZMKVciQoDbpDfAYAvg3+GCXMQ@mail.gmail.com>
+Message-ID: <CAJKOXPcna2YyemERXhumasikQZMKVciQoDbpDfAYAvg3+GCXMQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the devfreq tree with the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 04:55:39PM +1000, Stephen Rothwell wrote:
+On Mon, 27 Jul 2020 at 12:16, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > Hi all,
-> 
-> After merging the driver-core tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/dmi.h:5,
->                  from drivers/firmware/efi/embedded-firmware.c:8:
-> drivers/firmware/efi/embedded-firmware.c:25:38: error: static declaration of 'efi_embedded_fw_list' follows non-static declaration
->    25 | EFI_EMBEDDED_FW_VISIBILITY LIST_HEAD(efi_embedded_fw_list);
->       |                                      ^~~~~~~~~~~~~~~~~~~~
-> include/linux/list.h:24:19: note: in definition of macro 'LIST_HEAD'
->    24 |  struct list_head name = LIST_HEAD_INIT(name)
->       |                   ^~~~
-> In file included from drivers/firmware/efi/embedded-firmware.c:17:
-> drivers/firmware/efi/embedded-firmware.h:16:25: note: previous declaration of 'efi_embedded_fw_list' was here
->    16 | extern struct list_head efi_embedded_fw_list;
->       |                         ^~~~~~~~~~~~~~~~~~~~
-> drivers/firmware/efi/embedded-firmware.c:26:33: error: static declaration of 'efi_embedded_fw_checked' follows non-static declaration
->    26 | EFI_EMBEDDED_FW_VISIBILITY bool efi_embedded_fw_checked;
->       |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-> In file included from drivers/firmware/efi/embedded-firmware.c:17:
-> drivers/firmware/efi/embedded-firmware.h:17:13: note: previous declaration of 'efi_embedded_fw_checked' was here
->    17 | extern bool efi_embedded_fw_checked;
->       |             ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   2d38dbf89a06 ("test_firmware: Test platform fw loading on non-EFI systems")
-> 
-> CONFIG_TEST_FIRMWARE=m for this build.
-> 
-> I have used the driver-core tree from next-20200724 for today.
+>
+> Today's linux-next merge of the devfreq tree got a conflict in:
+>
+>   MAINTAINERS
+>
+> between commit:
+>
+>   8a9ff8758159 ("MAINTAINERS: Add Krzysztof Kozlowski as maintainer of memory controllers")
+>
+> from the arm-soc tree and commit:
+>
+>   34886407581b ("PM / devfreq: tegra: Add Dmitry as a maintainer")
 
-Thanks, I've reverted this from my tree now.
+Thanks, looks correct to me,
 
-greg k-h
+Dear Arnd, Olof,
+
+I forgot to check for this conflic. I don't expect any other conflicts
+in the first drivers/memory pull.
+
+Best regards,
+Krzysztof

@@ -2,70 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA28D22EB72
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 13:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949B322EBB5
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 14:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgG0LtW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 07:49:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52054 "EHLO mail.kernel.org"
+        id S1727844AbgG0MG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 08:06:56 -0400
+Received: from ozlabs.org ([203.11.71.1]:35395 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726885AbgG0LtW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Jul 2020 07:49:22 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726555AbgG0MGz (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Jul 2020 08:06:55 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C857D2074F;
-        Mon, 27 Jul 2020 11:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595850562;
-        bh=AP8qQis0mm9kaqZRRNwDPioe7x3P6w6WMGgquzMgdJk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=wBJ+TaJaoAWCitlegwqY4aSQWrI1IL2hO0Z9FBEJWbMn6/b4asehZypWLMxPJygjp
-         gsNIlnNYt3NiijmvRTVep2Wp0v5iqcAfDv9ZQUZ55ahk3GyKh03keYB7m4vYlsiw0i
-         /+6K98xWldd4c7HSmbndUHXDi8EqY+VuRZahFFH4=
-Received: by mail-lf1-f50.google.com with SMTP id 140so8836508lfi.5;
-        Mon, 27 Jul 2020 04:49:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533XoBcDB2pe18x+UtOrj10zRVXdh2s+o85jKH4goOPR11lKKI1R
-        JusjLuJuPhVEeXOGaxrQpUaXlTxoYof/hYn5Yu0=
-X-Google-Smtp-Source: ABdhPJzF9ksBLcDaFH7InKBJ6D2AjvYVzzXFLPKUYrij9YkRoYcS3582wzerTkvg4RKeanCee4bQcMwaB6qCppwKFz8=
-X-Received: by 2002:ac2:5548:: with SMTP id l8mr5573404lfk.39.1595850560136;
- Mon, 27 Jul 2020 04:49:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727213641.3491e3d1@canb.auug.org.au>
-In-Reply-To: <20200727213641.3491e3d1@canb.auug.org.au>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Mon, 27 Jul 2020 13:49:08 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdPVEB7V3Kvz5rrVu9DUULWGZ-ne804NJSB+QtB=6C30w@mail.gmail.com>
-Message-ID: <CAJKOXPdPVEB7V3Kvz5rrVu9DUULWGZ-ne804NJSB+QtB=6C30w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drivers-memory tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFdp55Ty9z9sPf;
+        Mon, 27 Jul 2020 22:06:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595851614;
+        bh=6x2B4jt9+T+gEuV521o9lcOuHxfXIf5goQ2QNuOkOkc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fqfb2dQMmjYjez4RgFIcH9r5DmoALebBJTX3LoxHFx9kw6ZOdl+nQ6xx9KlSJJMlt
+         WNyP0DUtum0iWous/v2zHOZKO0GgsO4TmIKJuFtUL+8KqJ6iFEbUJOZZsNsDdqB1qe
+         upjvN7LWGMypeiehCoLOivFYNJGFV/jucdtOCJ9n+60suWtVn/mJ0miZvmT7Mk8Ac3
+         UT8sDc347jXt0GHdc0WSVG2mDK35MinJNpl0xE83lloWQoBp6y1G6EniehgxQlL5wd
+         diAJkwJCXznUXMoKgrPEy814JxXNHZJIt3laGkuhuaB8qMo8K++eTuPH7ni3QqHqjD
+         CAY+EJaMCfc7Q==
+Date:   Mon, 27 Jul 2020 22:06:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Al Viro <viro@ZenIV.linux.org.uk>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the vfs tree
+Message-ID: <20200727220652.2a1ec36b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/EOMCACGCRreFYMV6f=gabN+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 27 Jul 2020 at 13:36, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the drivers-memory tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/memory/omap-gpmc.c:36:10: fatal error: asm/mach-types.h: No such file or directory
->    36 | #include <asm/mach-types.h>
->       |          ^~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   99b42df9d57e ("memory: Enable compile testing for most of the drivers")
->
-> I have reverted that commit for today.
+--Sig_/EOMCACGCRreFYMV6f=gabN+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, I applied the patch too early, without all dependencies fixing
-compile testing. I will drop the commit from the tree soon.
+Hi all,
 
-Best Regards,
-Krzysztof
+After merging the vfs tree, today's linux-next build (sparc defconfig)
+failed like this:
+
+arch/sparc/kernel/ptrace_32.c: In function 'setregs_set':
+arch/sparc/kernel/ptrace_32.c:271:2: error: 'ret' undeclared (first use in =
+this function); did you mean 'net'?
+  ret =3D user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+  ^~~
+  net
+
+
+Caused by commit
+
+  cf921bf15c62 ("sparc32: get rid of odd callers of copy_regset_from_user()=
+")
+
+I added this patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 27 Jul 2020 21:59:23 +1000
+Subject: [PATCH] sparc32: declare ret
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/sparc/kernel/ptrace_32.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/sparc/kernel/ptrace_32.c b/arch/sparc/kernel/ptrace_32.c
+index caeb99cbc1fa..f2c581d36d6c 100644
+--- a/arch/sparc/kernel/ptrace_32.c
++++ b/arch/sparc/kernel/ptrace_32.c
+@@ -264,6 +264,7 @@ static int setregs_set(struct task_struct *target,
+ {
+ 	struct pt_regs *regs =3D target->thread.kregs;
+ 	u32 v[4];
++	int ret;
+=20
+ 	if (target =3D=3D current)
+ 		flush_user_windows();
+--=20
+2.27.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/EOMCACGCRreFYMV6f=gabN+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8ew1wACgkQAVBC80lX
+0GxHgAgAnYo0PB6RAKchA2URp3527vamRm4VIk1XsoBGuYes0dtgNetcaHbuID+i
+YnkS/4bVe9owMEfzLSJOvmyVIW5Oh934xyn5TECbblHSPKlNzl3rRNMQFumEGZzR
+D7JAMTBAe28s7xlAhfP+72vpnIPxPoEvL2dfsx8/yAB+tqSGkzySRrF2I2alxH9J
+XCovivn4nC6i5W+ENTcwOqUPMAvjJbrCK2wFNCBAC6BHgMylsKHooKfUYrbzNd0D
+uzZQAD163rg3bIXzK+KlWtS6PmwLQRxXz5EKBBM7tqRLYtEhTqECfBdWwBxQDvS9
+xbS+Kpm0OlGjH+rOfBCjYBLhbCeOZA==
+=FM29
+-----END PGP SIGNATURE-----
+
+--Sig_/EOMCACGCRreFYMV6f=gabN+--

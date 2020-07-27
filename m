@@ -2,228 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3763422EA04
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 12:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF3122EA94
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 13:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgG0K2t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 06:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S1727898AbgG0LAQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 07:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbgG0K2t (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 06:28:49 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5840C061794
-        for <linux-next@vger.kernel.org>; Mon, 27 Jul 2020 03:28:47 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id w17so7772753ply.11
-        for <linux-next@vger.kernel.org>; Mon, 27 Jul 2020 03:28:47 -0700 (PDT)
+        with ESMTP id S1727775AbgG0LAP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 07:00:15 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F5DC061794;
+        Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id u24so4083571oiv.7;
+        Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vry7m05aEvxzytfo0wfd/3wM8fV0s+dX7tFz1osl/4A=;
-        b=TfM5QJSkjqrm+iM67O41aYHF/uLLRt1vIjsKaJaLZ5Sr6srBXK/EcCQstooYj4wFOP
-         kxFsH6M3yJvzPtMM0gI1l1hw9xLFafdNrbE57jfSKq5D7QoWjJpVcZModvbqkyz0tJfn
-         oDy9VW2S9kcxKYB5eTqfupQBU9NuZaYthdIezMnBROV+BntazQd9vA1vdIG3bbbqKnHz
-         xH/stE4s6+xJxLOV/cTXZHa9iblQP8KwmGQVStSyWhIa/bp7/I5cwb6VcaMbd116ZQB+
-         ngAgMEL8AZGNYs04lE1VyTGLevRoVpBU3Y7SrAkxpxxTjaCmpE5IYp810dIXeAlWm21u
-         U/kA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7PdAl22kYVVHyy+DC47FmxXZY5dbomVe4vqaxI2xzsQ=;
+        b=haorPcN/q/kHQHvFoDiDMfAPWlhOMyhnap37UU7V5VKr6LC1Cyk6A6ksDmii4OairR
+         fIFhKvoWv+c0AoBwph4202ezXcTa67D3grHIhdId5Hu5Ur/59PzblIQ/u9k5B4QyP7kM
+         hU353MU0Dg44P5IZfxIQvyjdhdyW4wK+6LfHiYPb6IXALUfKH1tzc9PsSZRvCGkC6oG9
+         GyjnyxjyEXuGIFFgz4vsySwsSuCjXk31y03/k+Rjc37uJD508Uhkbn1Cs1XmBpQ9o7lZ
+         XdhAKlx9Xl+732X+VPRrWegGgR0FkUeEs4qbbEwSPX+6r/8hgEPlYLWqaVER9JfXx32b
+         b7pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vry7m05aEvxzytfo0wfd/3wM8fV0s+dX7tFz1osl/4A=;
-        b=tFQpTUk8d+bLyZg7a2WZIom5j6qHidJWISgFjWaAILxh4cqh+aopbYdGMbL3stSYaI
-         Pmyo6vDlBRk1+HNhhbuSF3Dl6+GTCZ6WSs3f1BPFEfcpAi55/3kLInrfOQYOJcuapdyH
-         LP4KWyl0vrqVzQsCNngT600E0Gzv+ddwJMeNYSeobt33zYNgBMADsHj5IivZT/yiXgax
-         ok4ONsBtpNPuMB7HCDxrg0FopntOiLD+fUEOaVWpmln3j3sQajo5W20W4pV8bxz09OHT
-         igF/p0Kwd4h8vwZ9jTI111WsKyt42TEk37G5rHnMRq0Oo+Fx2AZyzYFN01+n7vzVzp7Y
-         iQ9A==
-X-Gm-Message-State: AOAM530Ajo96E2saq5tD/a1Uti6NFOQeyi3Qvta5VdnZAPCN76vPSStu
-        pz14XbjxLuXU19iTxyAdIJDnIKKhIeg=
-X-Google-Smtp-Source: ABdhPJxAlynMrz/kq+CbrGqcrZmo1KgY3jVXqmnq1wU30qLoUcYY/jYLuVQOwvMnVfKd1SkTlVnmeg==
-X-Received: by 2002:a17:90a:c212:: with SMTP id e18mr15290774pjt.118.1595845726969;
-        Mon, 27 Jul 2020 03:28:46 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a30sm7480312pfr.29.2020.07.27.03.28.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 03:28:46 -0700 (PDT)
-Message-ID: <5f1eac5e.1c69fb81.e476b.b2fe@mx.google.com>
-Date:   Mon, 27 Jul 2020 03:28:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7PdAl22kYVVHyy+DC47FmxXZY5dbomVe4vqaxI2xzsQ=;
+        b=T4TvzI1vo9p2jA4kjLpKXqX2ZzV2X463v/MK/YKijh4phfu9Zr0yIz2ncqa9rF2avs
+         RG90aRAO9ZPM0nzjb5l0SlyWPJPqtPxrDI+iKVxu179F5oTy7RgLYsU6eBMezTz7Y2Lq
+         oD/B5KAr0DbTZ8EU6zT/n8eHM0urvWJXZjDBjxPam49XRJXYuIOj3jmdVuOI5vz6phrP
+         8QJCmNJuPsTFEXMRSgv3eayvYnCjWMURfBI6XIFEuAC23csZpr2/lMGwBtGYnMF8Jy/S
+         Bj8+ooNm9RQyvnaqqCQBg4dCv7439dIIuUNthwEo9/YbgRCRp7F4hsPbOdY0HM7+leNQ
+         QACw==
+X-Gm-Message-State: AOAM531gglZSrxBOS2do94Ivxjt8xOiFN01HIVV7WCsLrMOpmKHkkEmN
+        9aW1HGuS6pAIrPJWDBoGM+WzJYqaX1iaixK6cFyxkxJC3LA=
+X-Google-Smtp-Source: ABdhPJwB0fhvgfez3aT41nXznftzgbVGj0p5rk6LaOIkWS+q9JnjvjhSSTcwNy3ryKYSuqE9klE6B5nQ9bklJKrD6+c=
+X-Received: by 2002:aca:a990:: with SMTP id s138mr1243980oie.154.1595847615017;
+ Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc7-70-g8e4b9e8d6624
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 331 runs,
- 5 regressions (v5.8-rc7-70-g8e4b9e8d6624)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200727180831.6c356fc1@canb.auug.org.au> <20200727092448.GB1764157@kroah.com>
+ <CAFCwf13o6A_88xBZdTk+XamAULckKB3Wk8A-V8NmmvkXDwB60w@mail.gmail.com> <20200727100529.GA1922918@kroah.com>
+In-Reply-To: <20200727100529.GA1922918@kroah.com>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Mon, 27 Jul 2020 13:59:46 +0300
+Message-ID: <CAFCwf11+xFm8LkV4uuK8iRM4cVARQV+8+XqgEm8dhSMBRcaDhQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Omer Shpigelman <oshpigelman@habana.ai>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 331 runs, 5 regressions (v5.8-rc7-70-g8e4b9e8d=
-6624)
+On Mon, Jul 27, 2020 at 1:05 PM Greg KH <greg@kroah.com> wrote:
+>
+> On Mon, Jul 27, 2020 at 12:28:14PM +0300, Oded Gabbay wrote:
+> > On Mon, Jul 27, 2020 at 12:24 PM Greg KH <greg@kroah.com> wrote:
+> > >
+> > > On Mon, Jul 27, 2020 at 06:08:31PM +1000, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > After merging the char-misc tree, today's linux-next build (x86_64
+> > > > allmodconfig) failed like this:
+> > > >
+> > > > In file included from drivers/misc/habanalabs/goya/goya.c:8:
+> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No such file or directory
+> > > >    12 | #include "habanalabs.h"
+> > > >       |          ^~~~~~~~~~~~~~
+> > > > In file included from drivers/misc/habanalabs/goya/goya_security.c:8:
+> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No such file or directory
+> > > >    12 | #include "habanalabs.h"
+> > > >       |          ^~~~~~~~~~~~~~
+> > > >
+> > > > Presumably caused by commit
+> > > >
+> > > >   70b2f993ea4a ("habanalabs: create common folder")
+> > > >
+> > > > I have used the char-misc tree from next-20200724 for today.
+> > >
+> > > Ugh, this is a mess of a merge with this driver.
+> > >
+> > > Oded, I'll take Stephen's merge resolutions here and push out a new
+> > > version, and try to resolve this error, but if you could verify I got it
+> > > correct, that would be great.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Sure, np. Just point me where to look.
+>
+> I didn't see the above build issue, but maybe I didn't have the right
+> configuration options enabled for my build.
+>
+> Oded, I've done the merge and pushed it out to my char-misc-next branch,
+> let me know if I've messed anything up there.
+>
+> thanks,
+>
+> greg k-h
 
-Regressions Summary
--------------------
-
-platform                 | arch  | lab          | compiler | defconfig     =
-     | results
--------------------------+-------+--------------+----------+---------------=
------+--------
-at91-sama5d4_xplained    | arm   | lab-baylibre | gcc-8    | sama5_defconfi=
-g    | 0/1    =
-
-bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig     =
-     | 4/5    =
-
-imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defco=
-nfig | 3/5    =
-
-sun50i-a64-bananapi-m64  | arm64 | lab-clabbe   | gcc-8    | defconfig     =
-     | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.8-rc7-70-g8e4b9e8d6624/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.8-rc7-70-g8e4b9e8d6624
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      8e4b9e8d66247170509b77c741b3acaaac50d64d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-     | results
--------------------------+-------+--------------+----------+---------------=
------+--------
-at91-sama5d4_xplained    | arm   | lab-baylibre | gcc-8    | sama5_defconfi=
-g    | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f1e7109ca04fd68ba85bb28
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4=
-_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4=
-_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f1e7109ca04fd68ba85b=
-b29
-      failing since 82 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first f=
-ail: v5.7-rc4-211-g6d4315023bc9) =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-     | results
--------------------------+-------+--------------+----------+---------------=
------+--------
-bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig     =
-     | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f1e57b4398713892785bb18
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.=
-txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f1e57b439871389=
-2785bb1b
-      new failure (last pass: v5.8-rc6-327-gb1263ee340f7)
-      2 lines =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-     | results
--------------------------+-------+--------------+----------+---------------=
------+--------
-imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defco=
-nfig | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f1e79ad4d72b765ee85bb47
-
-  Results:     3 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var=
--dt6customboard.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var=
--dt6customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f1e79ad4d72b76=
-5ee85bb4b
-      new failure (last pass: v5.8-rc6-327-gb1263ee340f7)
-      4 lines* baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f1e=
-79ad4d72b765ee85bb4c
-      new failure (last pass: v5.8-rc6-327-gb1263ee340f7)
-      57 lines =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-     | results
--------------------------+-------+--------------+----------+---------------=
------+--------
-sun50i-a64-bananapi-m64  | arm64 | lab-clabbe   | gcc-8    | defconfig     =
-     | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f1e585bc8d064464b85bb87
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananap=
-i-m64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-70=
--g8e4b9e8d6624/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananap=
-i-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f1e585bc8d064464b85b=
-b88
-      failing since 6 days (last pass: v5.8-rc5-432-g6ded1a48da25, first fa=
-il: v5.8-rc6-163-g19ae985ddbc8) =20
+Looks good, thanks!
+Oded

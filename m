@@ -2,72 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D0122ED46
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 15:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD7722ED82
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 15:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728813AbgG0N20 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 09:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgG0N20 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 09:28:26 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DBBC0619D2
-        for <linux-next@vger.kernel.org>; Mon, 27 Jul 2020 06:28:25 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k13so9025108lfo.0
-        for <linux-next@vger.kernel.org>; Mon, 27 Jul 2020 06:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gOqZtq8jjYGsRrVE9SfOle2aGRnGjTTajFWgsMLd7gI=;
-        b=oS9RvDUMQeGfwmgdSCWGfV1B2GIKKEJhFrjFeWhGkG7qgakjvxs6REU2MKlHBProdS
-         GpwXKK2siUcskNGjWF9vvF446AH5dhXkieeBzX7OWsCEldIbv/E/wf6CZhZvATIO4kf8
-         v+OB+xQh1Lyp0Z3yfqCDfY+GEjDXZNi/9YE5syOKWfW0zGSg8alkKPTN+kMFo+Tk7ulV
-         wGCknvO0pU/wZ8+bKNO3QsxnyOMmCWONpMApvL9VF38FQVF2oVRgVju/UjVVdBcbTClO
-         l6r5jtmsOOv3dCqM2ztlbdzO/gTE2U3Ij37aZoR2DojjI7YkOttQwep4ycWE0dsKTUVK
-         Cn7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gOqZtq8jjYGsRrVE9SfOle2aGRnGjTTajFWgsMLd7gI=;
-        b=njQAGIPOhy0PGmAkzU9qVYdpmYsZQ/X028RZUcqMqqyU56Qa3PrgqlMlCyueA3iFmJ
-         hgK0NKCRh2bpo4su/9HKx21HHcD/ZKz5dZJ/MIK/uTorsFseMEjxs0Spkr63vM5UXS8G
-         z0gpg1SPzjKDRdRUrBNsO9BwoMaaO1g5zPiO4gMvZEzKljX8n9Z/9xYRrKq212yKC8Ag
-         oscW3cnaKCdEVe2XHEGLssc2XPETN845vE223D62CDWD/q7kkGOuSJHz/hPSiN2Ods0Z
-         Utp9ktUyuAPf5kzmnXNl10rEUWpKpDozjOA2KNXAWChid5IHsaxoHavMu3kj4vdUHkol
-         eTuA==
-X-Gm-Message-State: AOAM530i1wLAwNLrIdrP/s9QBA87Zc32hkoTg6I9wolZ47OP+8SLRh7s
-        OUIKpFjVwuz6Q0bCd446mRqGemHfwi9q+jMAaXuAAg==
-X-Google-Smtp-Source: ABdhPJxGHOXZCG9AsImtYwpDzkDpPQ4nkXAG0kareKMahSYOQsdz7xhKFMJbEbPGn/7D27VIvWTBsU2LlctndTriyKY=
-X-Received: by 2002:a19:1c6:: with SMTP id 189mr11675726lfb.158.1595856503472;
- Mon, 27 Jul 2020 06:28:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727134433.1c4ea34e@canb.auug.org.au> <20200727052224.GA933@lst.de>
-In-Reply-To: <20200727052224.GA933@lst.de>
-From:   Alain Michaud <alainmichaud@google.com>
-Date:   Mon, 27 Jul 2020 09:28:12 -0400
-Message-ID: <CALWDO_W5mY9_KJwWikCtAZufTqSFnn238C7cPy34RQoqASpxhQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+        id S1727909AbgG0NgH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 09:36:07 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:58372 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728995AbgG0NgE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Jul 2020 09:36:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595856963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qUgEH1K320HFXVyeiPJVVXjlGNJKxoO09QtGKl4Q8tg=;
+        b=XWqRgd1jVnGoZbh8aaq1Zv+7HNOPTqJZsU8rqW1NLY1Ym+r8LUX0eECnTBPritilK/JZc3
+        HGJMvzam9Joqm+ufic369GsWJIcSol5f+5Vpoko/CsdtEZOf6VzEKhzi7S3SL9tDP4HYqz
+        ZA/exE/FDe7VZt0lLBm4Km/tuix7WaA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-48-5g5K5XbrPlGQU-D9eMtoZQ-1; Mon, 27 Jul 2020 09:36:01 -0400
+X-MC-Unique: 5g5K5XbrPlGQU-D9eMtoZQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A03721932489;
+        Mon, 27 Jul 2020 13:36:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-112-32.rdu2.redhat.com [10.10.112.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7CB219D82;
+        Mon, 27 Jul 2020 13:35:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200727224343.5f86c3c8@canb.auug.org.au>
+References: <20200727224343.5f86c3c8@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alain Michaud <alainm@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: problem in the fsinfo tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2814644.1595856959.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 27 Jul 2020 14:35:59 +0100
+Message-ID: <2814645.1595856959@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Same here, thanks for the fix!
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+
+> In rebasing commit
+> =
+
+>   348b039216fb ("fsinfo: Add fsinfo() syscall to query filesystem inform=
+ation")
+> =
+
+> you forgot to update
+> =
+
+> arch/arm64/include/asm/unistd.h
+> include/uapi/asm-generic/unistd.h =
 
 
-On Mon, Jul 27, 2020 at 1:22 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> The fixup looks good to me, thanks.
+Sorry about that, but it's a pain to do this manually.
+
+David
+

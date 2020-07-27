@@ -2,53 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C44622E3A7
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 03:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152F422E3AB
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 03:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgG0BcW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Jul 2020 21:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbgG0BcV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Jul 2020 21:32:21 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86698C0619D2;
-        Sun, 26 Jul 2020 18:32:21 -0700 (PDT)
+        id S1726753AbgG0BhR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 26 Jul 2020 21:37:17 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34143 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726736AbgG0BhQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 26 Jul 2020 21:37:16 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFMjt2QB1z9sRR;
-        Mon, 27 Jul 2020 11:32:17 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFMqY3Rj5z9sR4;
+        Mon, 27 Jul 2020 11:37:13 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595813538;
-        bh=Sd0QMp+dL8Xl9I/23zPlRtnU55UdXgSaX9CBCoroSaY=;
+        s=201702; t=1595813834;
+        bh=2HGtDVl81XeUzs5FBuvoiwwRr5u4U87gWF3ezxpGHTg=;
         h=Date:From:To:Cc:Subject:From;
-        b=h2Oie2Tgxe4VdqETiQbQPK/848q7x4sw/9l/prnYyLvbOhKsCZ9UIgmG9Dqh7W+T0
-         MESoCYuo5yiuk9mdpmSe6fBrERJ5TEB9EBctlZ6lmYdscXolmqwb4gqpVfXW3twlmc
-         MhpNE+cQDNe2a9dKRPs4XVvbsShmFXdM9Y9yPwMWPIgQ8+RGRInCabPyPOy8B9A1KN
-         FA0QINKwjs+M1XSPOZwToARjGS8b2Y8D0Dw0E9i/Kxs3RHMMDiBBYNUpjFN3sZmcmu
-         rN0ANM9JrzeTa+pfxld+NWPnvyPq5G1ScTvw/ou3HJBRETtCQXBB+eHsvG+aHH5Ycu
-         tq4+doTKIoj9Q==
-Date:   Mon, 27 Jul 2020 11:32:16 +1000
+        b=sAmQ1iGjsn+xToQh6JKce7ccgrevN7ChSvO9aqDe9KBwwKD7Qn8udQRK6p958n7GT
+         bPrvIdkzgByweTkOHeSgHp50mrep7OupqWH1qCZYyY+1WyvJZQKojRlmQ6yoXkV0r4
+         m2DrS68gBwkhMeqi/dFIJPlYU5lWkyPKwse74gve5rkBVIwD/R6rdLSo1q1B3D4+54
+         Cib6zyofZ3yyzIGws+WYmTfHCwGr9ORgbKNrTnXdtmpt5H7PFriGfU2m7BMNrpZMU6
+         HTosB/EhUN2+AhaVzOFRUYrsBquqyhgKRXhiJKCDSZ6FSamMBoQUdHE8L7b3LCSZX+
+         pDOgElx1lVDCg==
+Date:   Mon, 27 Jul 2020 11:37:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: linux-next: manual merge of the vfs tree with the powerpc tree
-Message-ID: <20200727113216.6620d08d@canb.auug.org.au>
+        Kevin Buettner <kevinb@redhat.com>
+Subject: linux-next: manual merge of the vfs tree with Linus' tree
+Message-ID: <20200727113712.55fdf621@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sVS2GV+Gl.fsQlMJEzZZfq5";
+Content-Type: multipart/signed; boundary="Sig_/IJ9_NogjI858KS7k_Kv5q/2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sVS2GV+Gl.fsQlMJEzZZfq5
+--Sig_/IJ9_NogjI858KS7k_Kv5q/2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -56,21 +51,21 @@ Hi all,
 
 Today's linux-next merge of the vfs tree got a conflict in:
 
-  arch/powerpc/kernel/ptrace/ptrace-view.c
+  arch/x86/kernel/fpu/xstate.c
 
 between commit:
 
-  e0d8e991be64 ("powerpc/book3s64/kuap: Move UAMOR setup to key init functi=
-on")
+  5714ee50bb43 ("copy_xstate_to_kernel: Fix typo which caused GDB regressio=
+n")
 
-from the powerpc tree and commit:
+from Linus' tree and commit:
 
-  5e39a71bddb3 ("powerpc: switch to ->regset_get()")
+  c196049cc732 ("x86: switch to ->regset_get()")
 
 from the vfs tree.
 
-I fixed it up (I thnk - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
 conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
@@ -80,58 +75,51 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/powerpc/kernel/ptrace/ptrace-view.c
-index ac7d480cb9c1,13208a9a02ca..000000000000
---- a/arch/powerpc/kernel/ptrace/ptrace-view.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace-view.c
-@@@ -486,23 -468,15 +468,15 @@@ static int pkey_active(struct task_stru
-  }
+diff --cc arch/x86/kernel/fpu/xstate.c
+index ad3a2b37927d,c80d4734c1f6..000000000000
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@@ -1065,17 -1048,16 +1048,16 @@@ void copy_xstate_to_kernel(struct membu
+  	header.xfeatures &=3D xfeatures_mask_user();
  =20
-  static int pkey_get(struct task_struct *target, const struct user_regset =
-*regset,
-- 		    unsigned int pos, unsigned int count, void *kbuf, void __user *ubuf)
-+ 		    struct membuf to)
-  {
-- 	int ret;
--=20
-  	BUILD_BUG_ON(TSO(amr) + sizeof(unsigned long) !=3D TSO(iamr));
- -	BUILD_BUG_ON(TSO(iamr) + sizeof(unsigned long) !=3D TSO(uamor));
- =20
-  	if (!arch_pkeys_enabled())
-  		return -ENODEV;
- =20
-- 	ret =3D user_regset_copyout(&pos, &count, &kbuf, &ubuf, &target->thread.=
-amr,
-- 				  0, 2 * sizeof(unsigned long));
-- 	if (ret)
-- 		return ret;
--=20
-- 	ret =3D user_regset_copyout(&pos, &count, &kbuf, &ubuf, &default_uamor,
-- 				  2 * sizeof(unsigned long), 3 * sizeof(unsigned long));
-- 	return ret;
- -	return membuf_write(&to, &target->thread.amr, ELF_NPKEY * sizeof(unsigne=
-d long));
-++	membuf_write(&to, &target->thread.amr, 2 * sizeof(unsigned long));
-++	return membuf_write(&to, &default_uamor, sizeof(unsigned long));
-  }
- =20
-  static int pkey_set(struct task_struct *target, const struct user_regset =
-*regset,
+  	if (header.xfeatures & XFEATURE_MASK_FP)
+- 		copy_part(0, off_mxcsr,
+- 			  &xsave->i387, &kbuf, &offset_start, &count);
++ 		copy_part(&to, &last, 0, off_mxcsr, &xsave->i387);
+  	if (header.xfeatures & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM))
+- 		copy_part(off_mxcsr, MXCSR_AND_FLAGS_SIZE,
+- 			  &xsave->i387.mxcsr, &kbuf, &offset_start, &count);
++ 		copy_part(&to, &last, off_mxcsr,
++ 			  MXCSR_AND_FLAGS_SIZE, &xsave->i387.mxcsr);
+  	if (header.xfeatures & XFEATURE_MASK_FP)
+- 		copy_part(offsetof(struct fxregs_state, st_space), 128,
+- 			  &xsave->i387.st_space, &kbuf, &offset_start, &count);
++ 		copy_part(&to, &last, offsetof(struct fxregs_state, st_space),
++ 			  128, &xsave->i387.st_space);
+  	if (header.xfeatures & XFEATURE_MASK_SSE)
+- 		copy_part(xstate_offsets[XFEATURE_SSE], 256,
+- 			  &xsave->i387.xmm_space, &kbuf, &offset_start, &count);
+ -		copy_part(&to, &last, xstate_offsets[XFEATURE_MASK_SSE],
+++		copy_part(&to, &last, xstate_offsets[XFEATURE_SSE],
++ 			  256, &xsave->i387.xmm_space);
+  	/*
+  	 * Fill xsave->i387.sw_reserved value for ptrace frame:
+  	 */
 
---Sig_/sVS2GV+Gl.fsQlMJEzZZfq5
+--Sig_/IJ9_NogjI858KS7k_Kv5q/2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8eLqAACgkQAVBC80lX
-0GxrMAgAop/ZehtWHdSxDiwZRtYm/KeL+VDgOu/EB2NnzudtQ5fjbz5bPJ23A3Ro
-eF83bAoOOFJBCRh05ih5yHRaQUT35EVYlKqs1RPgqf6RXN1cG5Pyy/UzJxwoifHU
-MGMvguyLElrREbso7JqGVo2nXA4gUqyLwAZRNViuWBfUU0hOnyZppH3u1GfGfJyu
-xdA6C9PSfc3ZaDQPRajM5GDBp/ZQGtKOucnW1fLnSs7GZbCnhrCPhZ5asQwcKB3P
-2aiYbMGCGXcYva71IvnMC0zaDMLmDGlyrxJq06Up7PjoHYEaCWT3feD2F6W9htpv
-NoH3SBihnsxmY4ccyTAKdJ7FDHiDSQ==
-=LSpH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8eL8gACgkQAVBC80lX
+0GwBEAf+JffQp4JD4YPsjr46UoC0cqDlEn5dR6QETMapiZXmbSXYSsAbi09kJh50
+YWsZyLUmVQMBmW9fnyiBevmzqSrEI9tjbHEuQS/UlMnR7u5e91EqsIQ+xjWwsxep
+K3//JSZM1AbtpXMjsKcv/EKUaumBZoRY9UQ6C29z4R9eGPes5vcIyDJ1inAWpV7k
+4MRKafCHMeMDyYTcbrsx/Mf5VyR8wMeR3tlNVApUu905oPb7lEA+Y0+VjUPiu2Id
+T2/HfPRVLQj/BYqy5WDT3qDmW5+VOD+S94MSuwFbRACxxLC7lbC1bnWQ6sbkIJ+r
+8Vl0tfweBj/R14srJ6K9E0fnxlOJbg==
+=XxDx
 -----END PGP SIGNATURE-----
 
---Sig_/sVS2GV+Gl.fsQlMJEzZZfq5--
+--Sig_/IJ9_NogjI858KS7k_Kv5q/2--

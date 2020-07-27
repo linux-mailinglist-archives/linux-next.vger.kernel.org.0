@@ -2,94 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 227F122E745
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 10:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D117722E7B9
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 10:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgG0IIf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 04:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726122AbgG0IIf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 04:08:35 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB2BC0619D2;
-        Mon, 27 Jul 2020 01:08:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFXW46K3hz9sRN;
-        Mon, 27 Jul 2020 18:08:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595837313;
-        bh=ZB0YfooDmJb71L7NPOII9upL0BQw1kzm26TJWFmNJvI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ObQ5W0T7KVZ6Ir3M3Uw2LogMkZzz0v5LK+9xQtfHDgApg/LsLpJbZRVzAyj8EyPMq
-         X72EUqWLziUQ/34KjXKVbrzSLEKwPt6NIDmVcYpFz15pTZ8yz39uGQ6e/8HIt7gG2S
-         KRPUrNr8scujsVTmH0fn7+6ZJRqjmKGtPamzxdzzzadLEb7g9j4zQBy3SUQoD6ciwg
-         L9QCAzHOSXi/U6mLHhV3o1IqFSkOuOnOtxMWyntqi3DtbcWaPNtAStIzxW8CkEtDYs
-         aUYKkKrpiA/lGYOxKeGGuWn/Azm4OeDK5dEzoQICJpj3rBJtOnIVf95kxenXMCMO7i
-         I2LJ0hYEMrDGg==
-Date:   Mon, 27 Jul 2020 18:08:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+        id S1726320AbgG0I3n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 04:29:43 -0400
+Received: from mail-ej1-f52.google.com ([209.85.218.52]:33787 "EHLO
+        mail-ej1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgG0I3n (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 04:29:43 -0400
+Received: by mail-ej1-f52.google.com with SMTP id g11so4394917ejr.0;
+        Mon, 27 Jul 2020 01:29:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=nCH15011ULLgua14hO6k9+Wy0yqjOncFU6eW8oYQbYg=;
+        b=Oc2Akq1nHstNB/PlJzNEyNkiY2SNDS/taKe5NiddO9QJFFFwc9Iw1roV81U8VSf9qi
+         AcOOYkbQLx8Vk124cLbA2nERuLH6fxMBXMsZxrdvQB3KktWfHAvAGyXZ8xijB0RAsX3Q
+         baaBPffw9OGarvmRc3qnWsPZ1+4xtJBoUEkUZJ31t2kRctbV8fREDsXOH7NdGCZmPVdH
+         BD/Q/FKhZL9mLwKElmuX1TWkeMH95+tECyuc/fw4oDgi4nC2XXGitOGq/RDxfZNwCxdc
+         orxPmFjl4SsKnRL9H03tDzB2+5Qq0EoXZ5fh6Cfs4c7TFrTaPsIr8HRVqiFjqciULmXc
+         kZBQ==
+X-Gm-Message-State: AOAM5316aKaNrdpurGBEuVf+x77JqX/pBJgQE7jh2Y3P6oLza7ESYYWe
+        qrqzP5gYbGcELpbJ5hmumVxWLOKFTvI=
+X-Google-Smtp-Source: ABdhPJz2CUV9C4KJyv+GvWrIA9OTOeJRCHY20K4L2aBZWq8Y1JyOs5XvBWrbylBvvLcVpxPH7xa6aw==
+X-Received: by 2002:a17:906:4f82:: with SMTP id o2mr20642996eju.424.1595838581802;
+        Mon, 27 Jul 2020 01:29:41 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.213])
+        by smtp.googlemail.com with ESMTPSA id k25sm638841edj.84.2020.07.27.01.29.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 Jul 2020 01:29:40 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 10:29:38 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Omer Shpigelman <oshpigelman@habana.ai>
-Subject: linux-next: build failure after merge of the char-misc tree
-Message-ID: <20200727180831.6c356fc1@canb.auug.org.au>
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>
+Subject: Include krzk/linux-mem-ctrl (for drivers/memory) in next
+Message-ID: <20200727082938.GA25420@kozik-lap>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wNv+Qy3O1nb0cUhVFMrSJS_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wNv+Qy3O1nb0cUhVFMrSJS_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+Please include in linux-next a new tree for drivers/memory:
+URL: https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git
 
-After merging the char-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+branches:
+1. for-next
+   into next,
+2. fixes
+   into pending fixes (for current cycle),
 
-In file included from drivers/misc/habanalabs/goya/goya.c:8:
-drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No s=
-uch file or directory
-   12 | #include "habanalabs.h"
-      |          ^~~~~~~~~~~~~~
-In file included from drivers/misc/habanalabs/goya/goya_security.c:8:
-drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No s=
-uch file or directory
-   12 | #include "habanalabs.h"
-      |          ^~~~~~~~~~~~~~
+The tree will have patches later send via pull-request to arm-soc (Arnd,
+Olof).
 
-Presumably caused by commit
-
-  70b2f993ea4a ("habanalabs: create common folder")
-
-I have used the char-misc tree from next-20200724 for today.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wNv+Qy3O1nb0cUhVFMrSJS_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8ei4AACgkQAVBC80lX
-0GwpbAf/W+vSs7w255A8tCEkIBcZiJvjLSaE1H/eeFvaEHrgwaRVpxmtFzl3eN3k
-upP61pSy5fHrS5ZnlIR5hbQZpnuZvSIiw+yBSwOxQWtXuMEgoLbaPnXUNF25jq2T
-P6mJ/iw22BqsvSi4sUYqDZy4So7Xp1JJQ67X5FEeRh0SWAyLeE6Lh4SZjSf58hEe
-WXvMYvW4nctN3OM1l/Pc/YzjJiUaZ6r7msc1a/30i3MU/EkQdr/i+o9JFTzYlA3Y
-Mty1rmQBqlz1jquwQ7MbUgDP4ugRdMcROQd74Sg029UZCDz2njZBmz3PJzUViXkN
-TCBdufQdyPief3ioZCgh3wH9UqIFCQ==
-=EXts
------END PGP SIGNATURE-----
-
---Sig_/wNv+Qy3O1nb0cUhVFMrSJS_--
+Best regards,
+Krzysztof

@@ -2,114 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF3122EA94
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 13:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F91222EA98
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jul 2020 13:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgG0LAQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 07:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727775AbgG0LAP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 07:00:15 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F5DC061794;
-        Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id u24so4083571oiv.7;
-        Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7PdAl22kYVVHyy+DC47FmxXZY5dbomVe4vqaxI2xzsQ=;
-        b=haorPcN/q/kHQHvFoDiDMfAPWlhOMyhnap37UU7V5VKr6LC1Cyk6A6ksDmii4OairR
-         fIFhKvoWv+c0AoBwph4202ezXcTa67D3grHIhdId5Hu5Ur/59PzblIQ/u9k5B4QyP7kM
-         hU353MU0Dg44P5IZfxIQvyjdhdyW4wK+6LfHiYPb6IXALUfKH1tzc9PsSZRvCGkC6oG9
-         GyjnyxjyEXuGIFFgz4vsySwsSuCjXk31y03/k+Rjc37uJD508Uhkbn1Cs1XmBpQ9o7lZ
-         XdhAKlx9Xl+732X+VPRrWegGgR0FkUeEs4qbbEwSPX+6r/8hgEPlYLWqaVER9JfXx32b
-         b7pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7PdAl22kYVVHyy+DC47FmxXZY5dbomVe4vqaxI2xzsQ=;
-        b=T4TvzI1vo9p2jA4kjLpKXqX2ZzV2X463v/MK/YKijh4phfu9Zr0yIz2ncqa9rF2avs
-         RG90aRAO9ZPM0nzjb5l0SlyWPJPqtPxrDI+iKVxu179F5oTy7RgLYsU6eBMezTz7Y2Lq
-         oD/B5KAr0DbTZ8EU6zT/n8eHM0urvWJXZjDBjxPam49XRJXYuIOj3jmdVuOI5vz6phrP
-         8QJCmNJuPsTFEXMRSgv3eayvYnCjWMURfBI6XIFEuAC23csZpr2/lMGwBtGYnMF8Jy/S
-         Bj8+ooNm9RQyvnaqqCQBg4dCv7439dIIuUNthwEo9/YbgRCRp7F4hsPbOdY0HM7+leNQ
-         QACw==
-X-Gm-Message-State: AOAM531gglZSrxBOS2do94Ivxjt8xOiFN01HIVV7WCsLrMOpmKHkkEmN
-        9aW1HGuS6pAIrPJWDBoGM+WzJYqaX1iaixK6cFyxkxJC3LA=
-X-Google-Smtp-Source: ABdhPJwB0fhvgfez3aT41nXznftzgbVGj0p5rk6LaOIkWS+q9JnjvjhSSTcwNy3ryKYSuqE9klE6B5nQ9bklJKrD6+c=
-X-Received: by 2002:aca:a990:: with SMTP id s138mr1243980oie.154.1595847615017;
- Mon, 27 Jul 2020 04:00:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727180831.6c356fc1@canb.auug.org.au> <20200727092448.GB1764157@kroah.com>
- <CAFCwf13o6A_88xBZdTk+XamAULckKB3Wk8A-V8NmmvkXDwB60w@mail.gmail.com> <20200727100529.GA1922918@kroah.com>
-In-Reply-To: <20200727100529.GA1922918@kroah.com>
-From:   Oded Gabbay <oded.gabbay@gmail.com>
-Date:   Mon, 27 Jul 2020 13:59:46 +0300
-Message-ID: <CAFCwf11+xFm8LkV4uuK8iRM4cVARQV+8+XqgEm8dhSMBRcaDhQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727775AbgG0LBn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 07:01:43 -0400
+Received: from ozlabs.org ([203.11.71.1]:37857 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726946AbgG0LBm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Jul 2020 07:01:42 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFcLr2gP9z9sPf;
+        Mon, 27 Jul 2020 21:01:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595847701;
+        bh=JcrwtuzTf1Td8z0PhNeQgTOjS9LYgqoPWnumxhyecmQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OV+7mc+C1WN55vuNaPEFt8baEO7b7I4Ip7yRw+Sx5V7mFkpSPDS5YpWxqgBEi3oS7
+         HHzHOZjPV6xlcoD4WCOPworR/4GcdXczPby15mtRk1BAkejbJQr579wLTKN6iFKE++
+         ccerq9hob9l0GklKUMlGnGdrwqsqiJC8xEV75aECkzb/9nMPFCgtRF8du5JeowBPgO
+         pW5lWnSL6Y8CCtTAr/H7bWMBPiT3PQ9rmBhs3ZrhdAaRdttvbDn8a3qVKb8MZPBq8g
+         xgWuOk4DUu754SK4vy/fnzcqMTcWjI96aX5gWRqIx/OAFZxVx3LbLfn8CrSWqvn26P
+         WAL+EDoyZ3s9Q==
+Date:   Mon, 27 Jul 2020 21:01:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>, Sebastian Reichel <sre@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Omer Shpigelman <oshpigelman@habana.ai>
-Content-Type: text/plain; charset="UTF-8"
+        Yongqiang Liu <liuyongqiang13@huawei.com>
+Subject: linux-next: manual merge of the set_fs tree with the battery tree
+Message-ID: <20200727210137.01a5d03d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/4NmD3S59rw+DPsjjpoTFo70";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 1:05 PM Greg KH <greg@kroah.com> wrote:
->
-> On Mon, Jul 27, 2020 at 12:28:14PM +0300, Oded Gabbay wrote:
-> > On Mon, Jul 27, 2020 at 12:24 PM Greg KH <greg@kroah.com> wrote:
-> > >
-> > > On Mon, Jul 27, 2020 at 06:08:31PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > After merging the char-misc tree, today's linux-next build (x86_64
-> > > > allmodconfig) failed like this:
-> > > >
-> > > > In file included from drivers/misc/habanalabs/goya/goya.c:8:
-> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No such file or directory
-> > > >    12 | #include "habanalabs.h"
-> > > >       |          ^~~~~~~~~~~~~~
-> > > > In file included from drivers/misc/habanalabs/goya/goya_security.c:8:
-> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs.h: No such file or directory
-> > > >    12 | #include "habanalabs.h"
-> > > >       |          ^~~~~~~~~~~~~~
-> > > >
-> > > > Presumably caused by commit
-> > > >
-> > > >   70b2f993ea4a ("habanalabs: create common folder")
-> > > >
-> > > > I have used the char-misc tree from next-20200724 for today.
-> > >
-> > > Ugh, this is a mess of a merge with this driver.
-> > >
-> > > Oded, I'll take Stephen's merge resolutions here and push out a new
-> > > version, and try to resolve this error, but if you could verify I got it
-> > > correct, that would be great.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Sure, np. Just point me where to look.
->
-> I didn't see the above build issue, but maybe I didn't have the right
-> configuration options enabled for my build.
->
-> Oded, I've done the merge and pushed it out to my char-misc-next branch,
-> let me know if I've messed anything up there.
->
-> thanks,
->
-> greg k-h
+--Sig_/4NmD3S59rw+DPsjjpoTFo70
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Looks good, thanks!
-Oded
+Hi all,
+
+Today's linux-next merge of the set_fs tree got a conflict in:
+
+  drivers/power/supply/da9030_battery.c
+
+between commit:
+
+  9d832cd36c60 ("power: Convert to DEFINE_SHOW_ATTRIBUTE")
+
+from the battery tree and commit:
+
+  4d4901c6d748 ("seq_file: switch over direct seq_read method calls to seq_=
+read_iter")
+
+from the set_fs tree.
+
+I fixed it up (I just used the former) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4NmD3S59rw+DPsjjpoTFo70
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8etBEACgkQAVBC80lX
+0GyoUgf/c2wl8WGbs70FOlAtbSu3j63DNxJ5/TO6ifWmhLQ2o/OapGXF5h9KHF2x
+UYzrFf09jefoQnYV+2QJ4Ig3M5Tg0ooTc0IboO1uzgfjyTdCQ3qqUPrz+4EU9mXi
+5+Tke1eqrDOLnwr3g7atE3NhLScU+JoLshN27JZutE9O5ywvHW1ckEvWmzs4d+wI
+0k74kXc9YEziym2EIipBofNoaMHrR+kzhATr6QEtrwLt/ajDp7kydri13iuBXI2c
+fL4K0RLw3eetXZKRDQW/IQwrzqIYd5wXQP031ZNqNrT+hQJMwSsYC8bdMFNDWonP
+WODnEj4LVQpUmRz5tG7Du9kNn8K/9Q==
+=igdf
+-----END PGP SIGNATURE-----
+
+--Sig_/4NmD3S59rw+DPsjjpoTFo70--

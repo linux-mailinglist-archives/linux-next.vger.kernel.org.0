@@ -2,127 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5F0230547
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 10:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911BE23055E
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 10:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbgG1IYD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 04:24:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39759 "EHLO ozlabs.org"
+        id S1728148AbgG1I2e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 04:28:34 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:18127 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728068AbgG1IYD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Jul 2020 04:24:03 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1727878AbgG1I2e (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Jul 2020 04:28:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1595924913; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=JsZFMI5l/wCWWGprGiEt11W9Nl9giP5BK5ShNxbLSLs=; b=e2evAm/DQ9rDOzKqrn4WEKAMUtYCxkCqgsmFFQ+37HtFNUU7yTGSJwb/vBIicG1zClnOKtPO
+ rKZXVy0zmq2+SkUBAjCqMzlT0OeiivnlXQPW7MPDozfcNFHJinZiHeC5YEhatICRRbERRqZs
+ G8YmFXVFIo1vUPXEIFAi9Onc4d0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5f1fe134a61bb9e3f57d16be (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 28 Jul 2020 08:26:28
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 76611C433CB; Tue, 28 Jul 2020 08:26:27 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.8 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.102] (unknown [49.204.127.128])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BG8pS1NyFz9sRW;
-        Tue, 28 Jul 2020 18:24:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595924640;
-        bh=60mZRoWM2idPyLTMkNGGtMlwz70fmdg4RXl5UmowsdU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HKHeOMmtJz8kLW8dWnEyVdXXSFrawjEsVH/W5ODJ/9RLFTFrmM1JRFf8vmtAYnoAZ
-         W/Yceq0MYOTGblXw37yDc8cbqVZb0sbd+aFqyy15R19sb9aHJtYDUWx4cFU+RKTQEH
-         6vh4/4k93uuwIogUr8yaQtCNiX+/1lwXRoLAAkdjygHc0Zit04klYJecK41jR+u7br
-         zIYkyX+BGMffABaZq8g7LgK1xgS8nqqTLOAT4hwEbWaC+rD9h1HRkjAt7IkS/ti7W7
-         CU2fxtylh8yuEfyllUZVKRHmeAz1HT45svcFUZ7wC48+FXWQPzm9xO+AKKsMbcMoaI
-         besgCas1fsEiw==
-Date:   Tue, 28 Jul 2020 18:23:59 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        (Authenticated sender: sivaprak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8D6D3C433C9;
+        Tue, 28 Jul 2020 08:26:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8D6D3C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sivaprak@codeaurora.org
+Subject: Re: linux-next: manual merge of the devicetree tree with the pci tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robherring2@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Omer Shpigelman <oshpigelman@habana.ai>
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-Message-ID: <20200728182359.2b9b31bf@canb.auug.org.au>
-In-Reply-To: <20200728075336.GB351768@kroah.com>
-References: <20200727180831.6c356fc1@canb.auug.org.au>
-        <20200727092448.GB1764157@kroah.com>
-        <20200728173331.5bf1f438@canb.auug.org.au>
-        <20200728075336.GB351768@kroah.com>
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+References: <20200728154903.51a60b8e@canb.auug.org.au>
+From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
+Message-ID: <c7c752bc-2a06-fc56-6f87-dfdddd8a436e@codeaurora.org>
+Date:   Tue, 28 Jul 2020 13:56:21 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wkuDAp/IUbg_VsGwI2uOlDA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200728154903.51a60b8e@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wkuDAp/IUbg_VsGwI2uOlDA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Greg,
-
-On Tue, 28 Jul 2020 09:53:36 +0200 Greg KH <greg@kroah.com> wrote:
+On 7/28/2020 11:19 AM, Stephen Rothwell wrote:
+> Hi all,
 >
-> On Tue, Jul 28, 2020 at 05:33:31PM +1000, Stephen Rothwell wrote:
-> > Hi Greg,
-> >=20
-> > On Mon, 27 Jul 2020 11:24:48 +0200 Greg KH <greg@kroah.com> wrote: =20
-> > >
-> > > On Mon, Jul 27, 2020 at 06:08:31PM +1000, Stephen Rothwell wrote: =20
-> > > > Hi all,
-> > > >=20
-> > > > After merging the char-misc tree, today's linux-next build (x86_64
-> > > > allmodconfig) failed like this:
-> > > >=20
-> > > > In file included from drivers/misc/habanalabs/goya/goya.c:8:
-> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs=
-.h: No such file or directory
-> > > >    12 | #include "habanalabs.h"
-> > > >       |          ^~~~~~~~~~~~~~
-> > > > In file included from drivers/misc/habanalabs/goya/goya_security.c:=
-8:
-> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs=
-.h: No such file or directory
-> > > >    12 | #include "habanalabs.h"
-> > > >       |          ^~~~~~~~~~~~~~
-> > > >=20
-> > > > Presumably caused by commit
-> > > >=20
-> > > >   70b2f993ea4a ("habanalabs: create common folder")
-> > > >=20
-> > > > I have used the char-misc tree from next-20200724 for today.   =20
-> > >=20
-> > > Ugh, this is a mess of a merge with this driver.
-> > >=20
-> > > Oded, I'll take Stephen's merge resolutions here and push out a new
-> > > version, and try to resolve this error, but if you could verify I got=
- it
-> > > correct, that would be great. =20
-> >=20
-> > The conflicts are gone, but I still get these errors. =20
->=20
-> Very odd, I can not duplicate this at all here.  I just did a clean
-> checkout of the char-misc-next branch and a full 'make allmodconfig' for
-> x86_64, and it worked just fine.
->=20
-> Are you sure it's not coming from some other tree?
+> Today's linux-next merge of the devicetree tree got a conflict in:
+>
+>    Documentation/devicetree/bindings/pci/qcom,pcie.txt
+>
+> between commits:
+>
+>    736ae5c91712 ("dt-bindings: PCI: qcom: Add missing clks")
+>    b11b8cc161de ("dt-bindings: PCI: qcom: Add ext reset")
+>    d511580ea9c2 ("dt-bindings: PCI: qcom: Add ipq8064 rev 2 variant")
+>
+> from the pci tree and commit:
+>
+>    70172d196947 ("dt-bindings: pci: convert QCOM pci bindings to YAML")
+>
+> from the devicetree tree.
+>
+> I don;t know how to fixed it up so I just left the latter one . This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Do you build with a separate object tree?  I always use make O=3D...
-which makes the difference.  I tested with just your tree.
+Rob/Bjorn,
 
---=20
-Cheers,
-Stephen Rothwell
+Please let me know if I can provide a patch rebased to linux-next.
 
---Sig_/wkuDAp/IUbg_VsGwI2uOlDA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Bjorn can pick up the patch after review and Rob can drop the old pci 
+yaml conversion patch.
 
------BEGIN PGP SIGNATURE-----
+let me know your thoughts.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8f4J8ACgkQAVBC80lX
-0GyZBAf+JOBkbFTavF6sh5WjNeVue+y+tHkuofKhbdU3DJrSpkGTQKpl7f9DNaP9
-lAO47a1QwTQ8HAQrGtuLM6DhX20/QJfBxmk/kDtBWSo/0qiyuuL7EF7LvV6eMgSJ
-qgTuAoZtSy6Fd1m0w3DtpJtwXdHgaPmYFzwJmmHd4PstrQy5m76rCmrIyAGlumJE
-0CqqD8lQsLFhwYqEbtSralKIdkzzrVFkH86G/67RXuZUmi0z9b2SflEpvpobuyHv
-Nc3DZK653swd2z2AzUgKLOsu03QC9Q25w5pLZM16vQKA29L/4xupYOqgUZJQsZ/d
-sobdabDztFePUPIWL6W71UbBwoMiRA==
-=bXqx
------END PGP SIGNATURE-----
-
---Sig_/wkuDAp/IUbg_VsGwI2uOlDA--
+>

@@ -2,105 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14BE22FBFD
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 00:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74B422FE6C
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 02:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726183AbgG0WUC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 18:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S1726278AbgG1ASz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 20:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbgG0WUC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 18:20:02 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B493C061794;
-        Mon, 27 Jul 2020 15:20:02 -0700 (PDT)
+        with ESMTP id S1726196AbgG1ASz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 20:18:55 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547FBC061794;
+        Mon, 27 Jul 2020 17:18:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFvPX3lYBz9sRN;
-        Tue, 28 Jul 2020 08:20:00 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BFy2f07z3z9sSt;
+        Tue, 28 Jul 2020 10:18:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595888400;
-        bh=2siZQ0R3xXUQX1M1uAe4gYn01t+fG41I4zXbILs0lys=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jg8rj+FWB9riRdeIfmv4Kv1YI1CNVF7GL534MuaBC//Y8GK2NLqnfPHegbzapRMx6
-         HtfDjq30v9n2cxmXaV/6iGxsH5FMmt1l+HrkRJzv2tkQUjlaI+IxHRpHgc9jZou/XE
-         pXRgxnbHnLiH4SXxMnMXQDB0ay/KIAoA/6VZIMceuTfcU4Uadv8hLmdQ6nYPsXo9eF
-         5ZJFRfRIeD6+WH3bVGZR1WlXZ+QpVosrl13rD0aPwl+2rh+cfRy5+h4P3leSVahlcH
-         zLlC0TUvG7mjabDw6aAcY/5Ge9QESy1nC1X5Orjpr5CdheH/y85bKn/zSvhcEivQZ1
-         comrRRfk9/RQQ==
-Date:   Tue, 28 Jul 2020 08:19:59 +1000
+        s=201702; t=1595895532;
+        bh=8Elas+GZy4aG143LOZC08U5Il/Mlcion7Q0KOmbQfEg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DZjUvggIf+h98zuWFbPFq5NgD1p9bbyJrP9fztkIhumWsbaKV6D9po5/pozSSqZRS
+         iaqw7OygVe7yKBUAlLuvJTi4ICP1OkvhqqNGpS4lzO56ASbsTMJBh36fgLaksFpP09
+         GzCNZxy5iPNfLy/elGCEDCOnBMJLhqJl+KfP2ZmvA4nB3FqLR5t87K5uTqwsqRVXL0
+         O4OV56G/+Q2UnOFBcZFdsJ/D7AjZwXK7goWMwzlo3WMsA/Qgv0iaSBeIeThoLs4j1e
+         0Rgkf4Uq9iccZEEUykHVI1L8HpsmKAG0iaWY2dNHw15P+OpQvwAngTCwfeQODMDQtC
+         CxewCn09BUpAQ==
+Date:   Tue, 28 Jul 2020 10:18:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Rich Felker <dalias@libc.org>, Guo Ren <ren_guo@c-sky.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the printk tree
-Message-ID: <20200728081959.2df754d0@canb.auug.org.au>
-In-Reply-To: <87tuxt3sjj.fsf@jogness.linutronix.de>
-References: <20200727234612.3037c4a5@canb.auug.org.au>
-        <87tuxt3sjj.fsf@jogness.linutronix.de>
+        Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+Subject: linux-next: manual merge of the sh tree with the csky tree
+Message-ID: <20200728101846.73cf063c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/U76SY5Wxb0hYCWqSA9BFyXc";
+Content-Type: multipart/signed; boundary="Sig_/R4JPgLYyfUn4NvlA+F+kfWi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/U76SY5Wxb0hYCWqSA9BFyXc
+--Sig_/R4JPgLYyfUn4NvlA+F+kfWi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi John,
+Hi all,
 
-On Mon, 27 Jul 2020 17:13:44 +0206 John Ogness <john.ogness@linutronix.de> =
-wrote:
->
-> On 2020-07-27, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > In commit
-> >
-> >   96b917f8e9ec ("printk: ringbuffer: support dataless records")
-> >
-> > Fixes tag
-> >
-> >   Fixes: ("printk: use the lockless ringbuffer")
-> >
-> > has these problem(s):
-> >
-> >   - No SHA1 recognised
-> >
-> > Maybe you meant
-> >
-> > Fixes: 896fbe20b4e2 ("printk: use the lockless ringbuffer") =20
->=20
-> Yes, sorry. I did not think linux-next SHA1 hashes were used in commit
-> logs.
+Today's linux-next merge of the sh tree got a conflict in:
 
-Well, it makes sense to use them if they are stable (i.e. the tree they
-are in does not rebase) which, by this part of the cycle, I would
-*hope* would be true (but sometimes isn't :-().
+  tools/testing/selftests/seccomp/seccomp_bpf.c
+
+between commit:
+
+  f4dd2edafba0 ("csky: add support for SECCOMP and SECCOMP_FILTER")
+
+from the csky tree and commit:
+
+  469023465e79 ("sh: Add SECCOMP_FILTER")
+
+from the sh tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/U76SY5Wxb0hYCWqSA9BFyXc
+diff --cc tools/testing/selftests/seccomp/seccomp_bpf.c
+index 8d18a0ddafdd,6eb21685c88f..000000000000
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@@ -1703,8 -1699,7 +1709,8 @@@ void change_syscall(struct __test_metad
+  	EXPECT_EQ(0, ret) {}
+ =20
+  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+ -	defined(__s390__) || defined(__hppa__) || defined(__riscv) || defined(__=
+sh__)
+ +	defined(__s390__) || defined(__hppa__) || defined(__riscv) || \
+- 	defined(__csky__)
+++	defined(__csky__) || defined(__sh__)
+  	{
+  		regs.SYSCALL_NUM =3D syscall;
+  	}
+
+--Sig_/R4JPgLYyfUn4NvlA+F+kfWi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8fUw8ACgkQAVBC80lX
-0GywzwgAii8GIkcMNj7QU7Ws2basrTbqlUTkwCj12MGTty2yh6XWSQhkR9S4kWS5
-FK6Rs7qxcPnJu+y6A75a3EoYk5JzflJXM0PiP2pW/hP7pPIpXzqRC8mHwjtdURN0
-XAQ+wpvB1kadaONF2y99ME384684Rgigyv3HNG0iW+JN1ldCxTuJspA3B97scuhd
-2s+VOnRiEygZb3ib+yhWE8t81rppLeYKVdvnFQktlVW/QixhWK16o5iLHxwDMUgB
-ffTd5Q/SesIjYMEW7nWL2f8a2vYx1KpqBFk3/N7aoDaTTSUZygycB2mIANlumMaV
-nNOCMc7xGNsY7GzDqyVrsFqhO28xhQ==
-=mkR/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8fbuYACgkQAVBC80lX
+0GyAHQf/dg9qwOF7ATm1BDj7lL98hYGbzbCkgID7JNK/dHx8iFn7rJMuajdOyX7d
+JbwbdtA9DseCWnVq9JYm2QKxXctopnqDLPTP+ZrhnbN9je3fnH3F5p2Di9sY6ifE
+u6x8MyskofVAWmGOM6lXCmrvytlmRnvJIqo56lOOMevefTfae1UifwqiVqc7XsAf
+Id+LhtGtvbgs2mWjS0XZ7jvlS5vCMInvOfgvFh17Bn7GgiZbXmqMZfb+RwVUKn3f
+63SuCdi1eQmvkLqiOn4tfR+SJK5Lkaae/t5C1Nfwa0vDQQlDsIikLvIdNSK/dGEc
+BKz9VOhKDnvsdjo+HILwcsVpHVg2kw==
+=hTCd
 -----END PGP SIGNATURE-----
 
---Sig_/U76SY5Wxb0hYCWqSA9BFyXc--
+--Sig_/R4JPgLYyfUn4NvlA+F+kfWi--

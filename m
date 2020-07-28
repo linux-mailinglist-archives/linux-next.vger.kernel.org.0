@@ -2,146 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE61322FF63
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 04:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98A222FF82
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 04:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgG1COn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jul 2020 22:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S1726538AbgG1CV4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jul 2020 22:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726944AbgG1COm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 22:14:42 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB4FC061794;
-        Mon, 27 Jul 2020 19:14:42 -0700 (PDT)
+        with ESMTP id S1726269AbgG1CV4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jul 2020 22:21:56 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A99C061794;
+        Mon, 27 Jul 2020 19:21:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BG0cJ1s3sz9sRW;
-        Tue, 28 Jul 2020 12:14:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BG0md2Jm1z9sRW;
+        Tue, 28 Jul 2020 12:21:53 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1595902480;
-        bh=QaZcW7Jf9qMD1DalrmrMmBPYCGe8Qf5ICJMH13G62F0=;
+        s=201702; t=1595902914;
+        bh=nfrzytzibpbBRKo0fiL93fU+1sogFMuht34aTf1uoTA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=abJarT5kJDtHga9hjAWUYG52TZqXJLClWI4fOx2RT9SsXt/slEG2hMhwGUo6oYTdC
-         Y7W149ht+EYYf/yqQ/B5OCKyB47GDZPs3Ly9dDe3ZOx2RsVWrEgRw/S049dy0IVngA
-         s4kWOy+MzWR9JiekTYKk1mDXskwW5lmHQDPUl+yd3avgIrU6gbv3VRpTqdFnnf56pb
-         2thGtZITa4LsEeH0ES3zQuW9pxwKatwgYEJZZom+CWiTcM0CDbMslnPB9EeCJpasaD
-         dy4VpdN5FO7cwFetvssNy8tzAQhHXPeEB3hXIuf3fSj9jyHkt3xIcc3c94K8ujcmqz
-         +zBcGVIKknW1A==
-Date:   Tue, 28 Jul 2020 12:14:39 +1000
+        b=XuOd101QIaTsN7AHtL8ziBfKkk/hShVxOPCQdP5h4ngI91q6io0AdTiC2xaLafKj6
+         5hwbrBVvGs9J6nTAGNm+IkMdfhFoIC7t37m3h2UBokHSlGplOkYtIzBzxLbH5r2jVc
+         jT/+AQD5zM/SxEA1YS4q90w/N/C7mgfHpvJdEdOcUyqvc/E4BrUX8fdoAgwGBrQJ2C
+         eFNGIr2I5SiBvrDGE37UBw/XnRjn/qBWiNwnxzURPRxVhFoFqy8CoTDcCp9YHurv3y
+         uRjHM2aUtP6BsyiICofJeyjqEUc4fXLVD/uHASUBEzd2GtJBPcNIgjhj84Nu2er7at
+         7AzpCk9a0AItg==
+Date:   Tue, 28 Jul 2020 12:21:52 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org
-Subject: Re: mmotm 2020-07-27-18-18 uploaded
-Message-ID: <20200728121439.6a40591d@canb.auug.org.au>
-In-Reply-To: <20200728011914.S-8vAYUK0%akpm@linux-foundation.org>
-References: <20200723211432.b31831a0df3bc2cbdae31b40@linux-foundation.org>
-        <20200728011914.S-8vAYUK0%akpm@linux-foundation.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: Re: linux-next: build failure after merge of the printk tree
+Message-ID: <20200728122152.384a57d0@canb.auug.org.au>
+In-Reply-To: <20200728015119.GA11428@gondor.apana.org.au>
+References: <20200728114927.4590731f@canb.auug.org.au>
+        <20200728015119.GA11428@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/G9hTn9gO9HlIukNdNnh9dpw";
+Content-Type: multipart/signed; boundary="Sig_/A2kUx_+7frIlU2WQN2.BnaQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/G9hTn9gO9HlIukNdNnh9dpw
+--Sig_/A2kUx_+7frIlU2WQN2.BnaQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andrew,
+Hi Herbert,
 
-On Mon, 27 Jul 2020 18:19:14 -0700 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
+On Tue, 28 Jul 2020 11:51:19 +1000 Herbert Xu <herbert@gondor.apana.org.au>=
+ wrote:
 >
-> * mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting=
--api-fix-2.patch
+> This patch depends on two patches in the tips tree.  I presume
+> this build test was done without the tips tree, right?
 
-These syscall patches have been a pain, sorry.  I have corrected the above =
-to this:
+Of course it was ...
 
-From: Andrew Morton <akpm@linux-foundation.org>
-Date: Tue, 28 Jul 2020 11:29:27 +1000
-Subject:=20
- mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-ap=
-i-fix-2
-
-fix include/uapi/asm-generic/unistd.h whoops
-
-Cc: Alexander Duyck <alexander.h.duyck@linux.intel.com>
-Cc: Brian Geffon <bgeffon@google.com>
-Cc: Christian Brauner <christian@brauner.io>
-Cc: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: Daniel Colascione <dancol@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: John Dias <joaodias@google.com>
-Cc: Kirill Tkhai <ktkhai@virtuozzo.com>
-Cc: <linux-man@vger.kernel.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Oleksandr Natalenko <oleksandr@redhat.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: SeongJae Park <sj38.park@gmail.com>
-Cc: SeongJae Park <sjpark@amazon.de>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Sonny Rao <sonnyrao@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Tim Murray <timmurray@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/u=
-nistd.h
-index 4d8044ca1bd5..c0b5f8b609eb 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -861,13 +861,13 @@ __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
- __SYSCALL(__NR_faccessat2, sys_faccessat2)
- #define __NR_watch_mount 440
- __SYSCALL(__NR_watch_mount, sys_watch_mount)
--#define __NR_fsinfo 442
-+#define __NR_fsinfo 441
- __SYSCALL(__NR_fsinfo, sys_fsinfo)
--#define __NR_fsinfo 443
-+#define __NR_process_madvise 442
- __SC_COMP(__NR_process_madvise, sys_process_madvise, compat_sys_process_ma=
-dvise)
-=20
- #undef __NR_syscalls
--#define __NR_syscalls 444
-+#define __NR_syscalls 443
-=20
- /*
-  * 32 bit systems traditionally used different
-
+Each tree merged into linux-next should really be standalone (in case
+e.g. Linus does not take the other tree).  So to do what you want, you
+need those other 2 commits to be in a separate branch that both the tip
+tree and the printk tree can merge.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/G9hTn9gO9HlIukNdNnh9dpw
+--Sig_/A2kUx_+7frIlU2WQN2.BnaQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8fig8ACgkQAVBC80lX
-0Gz9VQf9G5l+YOY+DnzdmF1UsIt9om60cj4VdrD7gkVghJH599yOYm8REZxC/1YQ
-UuVrbWaXBAOoeIuT4EaYKn+8qyxO8i52uLf+zEucW8uLnRIsVtaVuKtFOjnPuXJP
-9dSTJX9zMWSd4aQI/vhYOW2ECzfyLLjXgp7JRr9UUVqiNSEVu8vALvFZh0EHnXg3
-YF3mzGh+K3PAvYUpMv7p0Mymgy6hgPLu4tcolHy/1az32FF5GqPLwK8Od6oScl0W
-Pb4oGJpkElwJcW5sNioV8R0p7azwgzFjm3An5UH0KLryhMMbkSMHlywJVnhCY0b6
-dPH0eOCYz+vy6LIN8ekOPhOVORw9dA==
-=oyMQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8fi8AACgkQAVBC80lX
+0Gx3Bwf/Rlr96rZSVFUEHoJuMrRV0GaMYS+tpWTx6clXrg5GZ5aq4JLYKDWO/t48
+5AWaxhhTEtRrZQROf3APsjKWVAZ2Y9ov/PB41nRzRiNg0hmCcYt9frqmnGeV1Lf7
+4ojeC20kXfKIZm3MpqJYyBeSRr4T86LAyhONn5Rt56zBVB99td/WjhzD+EDy+BQp
+hrDolR2a5t1ixzfwfTTzndWNdleKAMfPMbOfFIAdj2XQeOHDec+ivvSsoSq+l1lC
+bexGyW1eWHYH2nJqE9qDYtbT7UhbqSnNcOtzybhyru/mV0LL/FjOF2rL7hoCgFIa
+7ANwgsz/xrs80bie5hN7PbTy1hsMjg==
+=hTIn
 -----END PGP SIGNATURE-----
 
---Sig_/G9hTn9gO9HlIukNdNnh9dpw--
+--Sig_/A2kUx_+7frIlU2WQN2.BnaQ--

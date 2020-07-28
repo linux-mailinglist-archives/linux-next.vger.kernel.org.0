@@ -2,173 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2528823054C
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 10:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5F0230547
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 10:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgG1IYJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 04:24:09 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:38548 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728172AbgG1IYG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 04:24:06 -0400
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200728082403epoutp037bc31b4266c14d11529a32ab402d8476~l3QHikOVK0240402404epoutp03L
-        for <linux-next@vger.kernel.org>; Tue, 28 Jul 2020 08:24:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200728082403epoutp037bc31b4266c14d11529a32ab402d8476~l3QHikOVK0240402404epoutp03L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1595924643;
-        bh=lffFS9Qk7KyQhIt5idZnIw+cL7XP2ngNX4A36tfUE/E=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=KNilb2ZR8+G/UcIymCi8skSL8P3o0uPtosfBmyHGC+EIen5Tt8k7rW1yu6Nnemgz4
-         uitykU3XG1dQKOZu53XrClZ417uTq4baeg3eJ4KtnpCGS0uOptsKUsB7yRY6pdFNUf
-         oedzPBvuDWiIfoKXuBdinYxRSRHOD5nmf1wyzT8k=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20200728082402epcas5p28795d7bdd17e9f01703f028ca02ee1a8~l3QHKB8JP2028320283epcas5p2P;
-        Tue, 28 Jul 2020 08:24:02 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        31.96.09475.2A0EF1F5; Tue, 28 Jul 2020 17:24:02 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200728082402epcas5p333b3017f433ad9998564fbb8f3816f30~l3QGfRnz32645526455epcas5p3_;
-        Tue, 28 Jul 2020 08:24:02 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200728082401epsmtrp26ec2661f02fd4598740d88b635619f6c~l3QGeXCrz2759827598epsmtrp2h;
-        Tue, 28 Jul 2020 08:24:01 +0000 (GMT)
-X-AuditID: b6c32a4b-389ff70000002503-36-5f1fe0a2901b
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D3.C1.08303.1A0EF1F5; Tue, 28 Jul 2020 17:24:01 +0900 (KST)
-Received: from alimakhtar02 (unknown [107.111.84.49]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200728082400epsmtip2aeb1eebe4e35d5115587fdb564990b7b~l3QEpektJ1407014070epsmtip2O;
-        Tue, 28 Jul 2020 08:23:59 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Randy Dunlap'" <rdunlap@infradead.org>,
-        "'Andrew Morton'" <akpm@linux-foundation.org>,
-        <broonie@kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-next@vger.kernel.org>, <mhocko@suse.cz>,
-        <mm-commits@vger.kernel.org>, <sfr@canb.auug.org.au>,
-        "'linux-scsi'" <linux-scsi@vger.kernel.org>,
-        "'Seungwon Jeon'" <essuuj@gmail.com>
-In-Reply-To: <c99c3cef-1b03-0adf-62a6-373e692425b5@infradead.org>
-Subject: RE: mmotm 2020-07-27-18-18 uploaded (drivers/scsi/ufs/:
- SCSI_UFS_EXYNOS)
-Date:   Tue, 28 Jul 2020 13:53:58 +0530
-Message-ID: <000001d664b8$72cbd790$586386b0$@samsung.com>
+        id S1728134AbgG1IYD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 04:24:03 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39759 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728068AbgG1IYD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Jul 2020 04:24:03 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BG8pS1NyFz9sRW;
+        Tue, 28 Jul 2020 18:24:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595924640;
+        bh=60mZRoWM2idPyLTMkNGGtMlwz70fmdg4RXl5UmowsdU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HKHeOMmtJz8kLW8dWnEyVdXXSFrawjEsVH/W5ODJ/9RLFTFrmM1JRFf8vmtAYnoAZ
+         W/Yceq0MYOTGblXw37yDc8cbqVZb0sbd+aFqyy15R19sb9aHJtYDUWx4cFU+RKTQEH
+         6vh4/4k93uuwIogUr8yaQtCNiX+/1lwXRoLAAkdjygHc0Zit04klYJecK41jR+u7br
+         zIYkyX+BGMffABaZq8g7LgK1xgS8nqqTLOAT4hwEbWaC+rD9h1HRkjAt7IkS/ti7W7
+         CU2fxtylh8yuEfyllUZVKRHmeAz1HT45svcFUZ7wC48+FXWQPzm9xO+AKKsMbcMoaI
+         besgCas1fsEiw==
+Date:   Tue, 28 Jul 2020 18:23:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Omer Shpigelman <oshpigelman@habana.ai>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <20200728182359.2b9b31bf@canb.auug.org.au>
+In-Reply-To: <20200728075336.GB351768@kroah.com>
+References: <20200727180831.6c356fc1@canb.auug.org.au>
+        <20200727092448.GB1764157@kroah.com>
+        <20200728173331.5bf1f438@canb.auug.org.au>
+        <20200728075336.GB351768@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQH6RHqNssVmezboDnOhfcuciV9AnAIQbK05Ag8N1j2os+oSEA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOKsWRmVeSWpSXmKPExsWy7bCmlu6iB/LxBvMvKFvMWb+GzWLqwyds
-        FssvLGGy2LP3JIvF5V1z2CzurfnPanFwYRujRff1HWwWr5q/s1q8nniB1eLtneksFlv3XmV3
-        4PFovHGDzWPnrLvsHptXaHlsWtXJ5rHp0yR2jxMzfrN4nFlwhN3j8ya5AI4oLpuU1JzMstQi
-        fbsErowv+z+zFVzkr7jS18zWwPiPp4uRk0NCwESi4ec1FhBbSGA3o8TXv7xdjFxA9idGiS0T
-        zjJCOJ8ZJS6ceMwE03FsXS9UYhejxJOVr1khnFeMEh+eHGUHqWIT0JXYsbiNDSQhItDNLPH5
-        YwsbSIJTwFHi2LVNYKOEBYIl9s4+zwxiswioSkzc+xPM5hWwlHg8eSsjhC0ocXLmE7ADmQW0
-        JZYtfM0McYaCxM+ny1hBbBEBJ4nnS0+wQ9SISxz92cMMslhC4AiHxK75ExkhGlwk3vR2skLY
-        whKvjm9hh7ClJD6/2wt0HAeQnS3Rs8sYIlwjsXTeMRYI217iwJU5LCAlzAKaEut36UOs4pPo
-        /f2ECaKTV6KjTQiiWlWi+d1VqE5piYnd3VBLPSR6evugYXWaUWJ6SzPjBEaFWUi+nIXky1lI
-        vpmFsHkBI8sqRsnUguLc9NRi0wLjvNRyveLE3OLSvHS95PzcTYzgtKblvYPx0YMPeocYmTgY
-        DzFKcDArifByi8rEC/GmJFZWpRblxxeV5qQWH2KU5mBREudV+nEmTkggPbEkNTs1tSC1CCbL
-        xMEp1cDkoBKWt9yjoVpCRTJjLsvXGzeTmc9rNZ/7UmbwQ6nL02nDto6in8liF+8r6jKnfpjZ
-        aCt+tbJH6/uH65ETWlqWzC6f8T3FcqpF2lIRTwGvA37KE7n+euyfOvvAaaPFTD/a0s39Eiz1
-        +i6/ygrYm9PBvjvrwULp/cJmzHMyDjhfsLr75lRliEzir+ZXDK/sVmYVJQtHdGmfPDzfvN3u
-        +ww25y0cvWJ3JixbHm147+nnQ1ZHex6orXybc4DNL3HvDi9n7t02s2IX5Zs6NP4qUM28GmN9
-        tbalbcc67RlnzDoTxM+1bHBX+MfXsm9KlWTYTpfNv36wWYjYPHmb/fje6kutri7P6iOU7H6L
-        l/g2dSmxFGckGmoxFxUnAgChHnJk2gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsWy7bCSvO7CB/LxBmtvGlvMWb+GzWLqwyds
-        FssvLGGy2LP3JIvF5V1z2CzurfnPanFwYRujRff1HWwWr5q/s1q8nniB1eLtneksFlv3XmV3
-        4PFovHGDzWPnrLvsHptXaHlsWtXJ5rHp0yR2jxMzfrN4nFlwhN3j8ya5AI4oLpuU1JzMstQi
-        fbsErox9D/rZC97zVaz4sYmpgXEBTxcjJ4eEgInEsXW9jF2MXBxCAjsYJRYu62KCSEhLXN84
-        gR3CFpZY+e85O0TRC0aJ8/u3soAk2AR0JXYsbmMDSYgITGeW+DHpOjNE1XFGiWmv1oCN4hRw
-        lDh2bROQzcEhLBAosWqnK0iYRUBVYuLen8wgNq+ApcTjyVsZIWxBiZMzn4AtYBbQlnh68ymc
-        vWzha2aIixQkfj5dxgpiiwg4STxfeoIdokZc4ujPHuYJjEKzkIyahWTULCSjZiFpWcDIsopR
-        MrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzgOtbR2MO5Z9UHvECMTB+MhRgkOZiURXm5R
-        mXgh3pTEyqrUovz4otKc1OJDjNIcLErivF9nLYwTEkhPLEnNTk0tSC2CyTJxcEo1MLXOk19S
-        IlLVqlhmdz3GobpbUWr9or+ij643Kr24u8LJaZ/MCr0fNYn+P4M8BfZHO4Xs8T7u9J77/Wff
-        Rfckph3byNAvNZu7b97MipeZhkKKFt+2iJ7sjijl+e/GlLN6stavI8tOtOdwbbb+nxrTv/9k
-        vod74ZslN3tlb51zuNKW/yVN8lx7iYSRptzqi0GvotqkuiXmPGJrtDziJLTGb8KPjRbvojqK
-        8gstLa984J7E86NSsbg/MylH/6jt5u/7ll072HXJ/rm4y6x3rdIbf9XtiJFt7Dy30Tl/zb0T
-        91wKPT+2Kj78FDllvtlkDfO3zXI/Das7OyrZGcXnNhV+nWPT+fvJRq+epA8eJU/WK7EUZyQa
-        ajEXFScCAH7AEroyAwAA
-X-CMS-MailID: 20200728082402epcas5p333b3017f433ad9998564fbb8f3816f30
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200728032310epcas5p27226ae967b93325ca145e70a14a8bdf8
-References: <20200728011914.S-8vAYUK0%akpm@linux-foundation.org>
-        <CGME20200728032310epcas5p27226ae967b93325ca145e70a14a8bdf8@epcas5p2.samsung.com>
-        <c99c3cef-1b03-0adf-62a6-373e692425b5@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/wkuDAp/IUbg_VsGwI2uOlDA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Randy,
+--Sig_/wkuDAp/IUbg_VsGwI2uOlDA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Randy Dunlap <rdunlap=40infradead.org>
-> Sent: 28 July 2020 08:53
-> To: Andrew Morton <akpm=40linux-foundation.org>; broonie=40kernel.org; li=
-nux-
-> fsdevel=40vger.kernel.org; linux-kernel=40vger.kernel.org; linux-mm=40kva=
-ck.org;
-> linux-next=40vger.kernel.org; mhocko=40suse.cz; mm-commits=40vger.kernel.=
-org;
-> sfr=40canb.auug.org.au; linux-scsi <linux-scsi=40vger.kernel.org>; Alim A=
-khtar
-> <alim.akhtar=40samsung.com>; Seungwon Jeon <essuuj=40gmail.com>
-> Subject: Re: mmotm 2020-07-27-18-18 uploaded (drivers/scsi/ufs/:
-> SCSI_UFS_EXYNOS)
->=20
-> On 7/27/20 6:19 PM, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2020-07-27-18-18 has been uploaded to
-> >
-> >    http://www.ozlabs.org/=7Eakpm/mmotm/
-> >
-> > mmotm-readme.txt says
-> >
-> > README for mm-of-the-moment:
-> >
-> > http://www.ozlabs.org/=7Eakpm/mmotm/
-> >
-> > This is a snapshot of my -mm patch queue.  Uploaded at random
-> > hopefully more than once a week.
-> >
-> > You will need quilt to apply these patches to the latest Linus release
-> > (5.x or 5.x-rcY).  The series file is in broken-out.tar.gz and is
-> > duplicated in http://ozlabs.org/=7Eakpm/mmotm/series
-> >
->=20
-> on i386:
->=20
-> when CONFIG_OF is not set/enabled:
->=20
-> WARNING: unmet direct dependencies detected for PHY_SAMSUNG_UFS
->   Depends on =5Bn=5D: OF =5B=3Dn=5D && (ARCH_EXYNOS =7C=7C COMPILE_TEST =
-=5B=3Dy=5D)
->   Selected by =5Bm=5D:
->   - SCSI_UFS_EXYNOS =5B=3Dm=5D && SCSI_LOWLEVEL =5B=3Dy=5D && SCSI =5B=3D=
-y=5D &&
-> SCSI_UFSHCD_PLATFORM =5B=3Dm=5D && (ARCH_EXYNOS =7C=7C COMPILE_TEST =5B=
-=3Dy=5D)
->=20
-Have already posted a fix for this =5B1=5D
-=5B1=5D https://www.spinics.net/lists/linux-scsi/msg144970.html
+Hi Greg,
 
+On Tue, 28 Jul 2020 09:53:36 +0200 Greg KH <greg@kroah.com> wrote:
+>
+> On Tue, Jul 28, 2020 at 05:33:31PM +1000, Stephen Rothwell wrote:
+> > Hi Greg,
+> >=20
+> > On Mon, 27 Jul 2020 11:24:48 +0200 Greg KH <greg@kroah.com> wrote: =20
+> > >
+> > > On Mon, Jul 27, 2020 at 06:08:31PM +1000, Stephen Rothwell wrote: =20
+> > > > Hi all,
+> > > >=20
+> > > > After merging the char-misc tree, today's linux-next build (x86_64
+> > > > allmodconfig) failed like this:
+> > > >=20
+> > > > In file included from drivers/misc/habanalabs/goya/goya.c:8:
+> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs=
+.h: No such file or directory
+> > > >    12 | #include "habanalabs.h"
+> > > >       |          ^~~~~~~~~~~~~~
+> > > > In file included from drivers/misc/habanalabs/goya/goya_security.c:=
+8:
+> > > > drivers/misc/habanalabs/goya/goyaP.h:12:10: fatal error: habanalabs=
+.h: No such file or directory
+> > > >    12 | #include "habanalabs.h"
+> > > >       |          ^~~~~~~~~~~~~~
+> > > >=20
+> > > > Presumably caused by commit
+> > > >=20
+> > > >   70b2f993ea4a ("habanalabs: create common folder")
+> > > >=20
+> > > > I have used the char-misc tree from next-20200724 for today.   =20
+> > >=20
+> > > Ugh, this is a mess of a merge with this driver.
+> > >=20
+> > > Oded, I'll take Stephen's merge resolutions here and push out a new
+> > > version, and try to resolve this error, but if you could verify I got=
+ it
+> > > correct, that would be great. =20
+> >=20
+> > The conflicts are gone, but I still get these errors. =20
 >=20
-> Full randconfig file is attached.
+> Very odd, I can not duplicate this at all here.  I just did a clean
+> checkout of the char-misc-next branch and a full 'make allmodconfig' for
+> x86_64, and it worked just fine.
 >=20
-Thanks for config file, I can reproduce it and confirm that =5B1=5D above f=
-ixes this Warning.
+> Are you sure it's not coming from some other tree?
 
->=20
-> --
-> =7ERandy
-> Reported-by: Randy Dunlap <rdunlap=40infradead.org>
+Do you build with a separate object tree?  I always use make O=3D...
+which makes the difference.  I tested with just your tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/wkuDAp/IUbg_VsGwI2uOlDA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8f4J8ACgkQAVBC80lX
+0GyZBAf+JOBkbFTavF6sh5WjNeVue+y+tHkuofKhbdU3DJrSpkGTQKpl7f9DNaP9
+lAO47a1QwTQ8HAQrGtuLM6DhX20/QJfBxmk/kDtBWSo/0qiyuuL7EF7LvV6eMgSJ
+qgTuAoZtSy6Fd1m0w3DtpJtwXdHgaPmYFzwJmmHd4PstrQy5m76rCmrIyAGlumJE
+0CqqD8lQsLFhwYqEbtSralKIdkzzrVFkH86G/67RXuZUmi0z9b2SflEpvpobuyHv
+Nc3DZK653swd2z2AzUgKLOsu03QC9Q25w5pLZM16vQKA29L/4xupYOqgUZJQsZ/d
+sobdabDztFePUPIWL6W71UbBwoMiRA==
+=bXqx
+-----END PGP SIGNATURE-----
+
+--Sig_/wkuDAp/IUbg_VsGwI2uOlDA--

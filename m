@@ -2,127 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0502231229
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 21:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C14231328
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 21:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbgG1THJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 15:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S1728635AbgG1Txl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 15:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729168AbgG1THJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 15:07:09 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDDCC061794;
-        Tue, 28 Jul 2020 12:07:09 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id 11so19813321qkn.2;
-        Tue, 28 Jul 2020 12:07:09 -0700 (PDT)
+        with ESMTP id S1728622AbgG1Txk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 15:53:40 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68443C061794
+        for <linux-next@vger.kernel.org>; Tue, 28 Jul 2020 12:53:40 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id t10so5194810plz.10
+        for <linux-next@vger.kernel.org>; Tue, 28 Jul 2020 12:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a4k23v6u+Ynb9I+UZreRULUB5erdIyY4Rw8+D/r4YBg=;
-        b=rzHKu3oiRxCv2rWjVM5ZT2ZfECTv55bKcEn0gOGRiBmvtND8mTEbnNMiLNxSDTS889
-         VTBm52iBupzS6bnS07qgGUIQZJVUZYlZZFijnyrFr2eJl8fe0U+oJFUAU57Jm7FrnbJc
-         iegIINWy6pTqFXKEat61aTh++Ah5z6gstdnrNic4u0Da3dV80oTEsqLB23Y7Kd3PT7CY
-         zgRwvLoi3g1kQZnnrhiiDUBCR2K/moIZYx+Rp4AEvP3eBEVliFOqvDaCUFIfcwQkkNoe
-         Q6noOUBjW1vNKAuq9qGfWIpeJfaaxsPy9lvdUiXnu0eHOVqgXda++KZ9b2aIWQnuB2ur
-         7WTg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M4QobJGk9dlE330lE7DgROWIsDgwRridwjflFvvj77I=;
+        b=BhoOPapJanyvJ0SluMNCkyz+xSdkAZyVwi0sRykgI9PuhjbZxMFkeD3pCMftznEDo/
+         yv6RToHZRM9XhatTU1ftPJRDVSGnu/rhtlThDqTrfe2Kn11Ssoo0Df/l8EyjfFhOKOMb
+         E2m1RNQPZDk4ejYDhy4NABHcdKbZYDRyVNZi8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a4k23v6u+Ynb9I+UZreRULUB5erdIyY4Rw8+D/r4YBg=;
-        b=hicpyvuE0AvYDtysY6403lxtpdSTYvaIATpewSdtuGvxrcOUzTB1KvumHqZ8PBdLGR
-         KSlx/ctD0UIqh2lhdCuEseRFqCVnd2dd03QwHKuhtoGO0Df0XgW+Dt2dlnZ2Id7Rzg9+
-         lraC1U8nIBEBUaSsU0fUYtVlev+Pl4Gf9RUzq+TOzaWp3xSpA9XEIpIKjfUat6MHdD84
-         QNqBK6azwWOWT+RQbN7qJCxSQvyaK6Al9tAbtpfSwmKMfqIKqOHGYcZlZxfj7ZcJf8HA
-         J73nyp9rMj+EUHXykgqLcK2FLQgVjs7KxXlvZg6lSSbLb1p75UDZa93Yxu8G3AMVxu9m
-         IGOQ==
-X-Gm-Message-State: AOAM532O4UVczxNxnObDsaLM2UyMJwMI6JWHsy4uDCRkQb0COqwRuuNB
-        H1Z2tEHZn4CRYfs9gwvqu+ZcbyDECiZ9xgv2JeQ=
-X-Google-Smtp-Source: ABdhPJynywuwc/59HutV2Wmn/jRKU1gHMVeo7tUzFSE/COhAoW50C/APPJJa6wl5xuMZcvDGkNw4DcUaMD3g9MzD+rA=
-X-Received: by 2002:a05:620a:4c:: with SMTP id t12mr3913142qkt.449.1595963228377;
- Tue, 28 Jul 2020 12:07:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727232346.0106c375@canb.auug.org.au> <e342e8ce-db29-1603-3fd9-40792a783296@infradead.org>
- <CAEf4BzYD-PiA2cDvD5qRv7hHZ_GTDdKqAm1jfg2ZWBWM_3YO5w@mail.gmail.com> <f5613a75-efcb-93e6-e139-e16b87b373f5@infradead.org>
-In-Reply-To: <f5613a75-efcb-93e6-e139-e16b87b373f5@infradead.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 28 Jul 2020 12:06:57 -0700
-Message-ID: <CAEf4BzbVxJG4WBC10sW7N0OJ9HAZGK4WTCp2GQVF6+UzVSqkrA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 27 (kernel/bpf/syscall.o)
-To:     Randy Dunlap <rdunlap@infradead.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M4QobJGk9dlE330lE7DgROWIsDgwRridwjflFvvj77I=;
+        b=JSB6uhi5fgNpEIwidCZ7VVAnLsY7d5baQ457hOlUr1cZ58GJpAaJ8S7mUuACt6Oms3
+         GeL8qXKcwzZH0se5z8kL+LOd/qa32mQh/cD+HzRDfTjI7cePmzfk0QcoHiuWnxZ2/s7R
+         UjdPbBdVRehcsZdocHhWOcp4Py/yTGBt0uGIC+n4DnWuPW80FYxa2onVuuxktVaefjNL
+         ug8Yan+mnyQaFpum+NqG+znqkrPYKGH3Xa+byP7fT36KMA1kXgpKZxayj/1zv4lGoai8
+         Fb9miHTheOMFkOcaKqEdqLN9I4QREhgqU1mHbcLSa55aZULCOdC996IWyYL6y2TmC9PL
+         D06w==
+X-Gm-Message-State: AOAM531nc9yAd5H+AV97YnAo22CCZX97Ss9tS/JQdlhc2SS7Qb95vvCt
+        0pnINKUbTXUFa0CA92abV3w2mkcpR1I=
+X-Google-Smtp-Source: ABdhPJwjKdZHkwmjwC85YCbaOdS4pGSZ/aTX5aooDoEqPGYTudrqIHcFVLMAbdSL500eWww7ndQs4Q==
+X-Received: by 2002:a17:90a:c207:: with SMTP id e7mr2313446pjt.172.1595966020011;
+        Tue, 28 Jul 2020 12:53:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 186sm19096548pfe.1.2020.07.28.12.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 12:53:38 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 12:53:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg KH <greg@kroah.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+        Scott Branden <scott.branden@broadcom.com>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <202007281253.A003D16E62@keescook>
+References: <20200727165539.0e8797ab@canb.auug.org.au>
+ <20200727101738.GA1923289@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200727101738.GA1923289@kroah.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 11:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 7/27/20 10:48 PM, Andrii Nakryiko wrote:
-> > On Mon, Jul 27, 2020 at 11:58 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >> On 7/27/20 6:23 AM, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> Changes since 20200724:
-> >>>
-> >>
-> >> on i386:
-> >> when CONFIG_XPS is not set/enabled:
-> >>
-> >> ld: kernel/bpf/syscall.o: in function `__do_sys_bpf':
-> >> syscall.c:(.text+0x4482): undefined reference to `bpf_xdp_link_attach'
-> >>
-> >
-> > I can't repro this on x86-64 with CONFIG_XPS unset. Do you mind
-> > sharing the exact config you've used?
->
-> No problem. I see this on i386 or x86_64. I am attaching the x86_64
-> randconfig file instead of the i386 one.
->
-> > I see that kernel/bpf/syscall.c doesn't include linux/netdevice.h
-> > directly, so something must be preventing netdevice.h to eventually
-> > get to bpf/syscall.c, but instead of guessing on the fix, I'd like to
-> > repro it first. Thanks!
->
-> The build failure was causing me to see lots of builds failing, so I made
-> a simple patch so that I could get past this issue.  My patch follows.
-> Feel free to fix it any way you like.
->
+On Mon, Jul 27, 2020 at 12:17:38PM +0200, Greg KH wrote:
+> On Mon, Jul 27, 2020 at 04:55:39PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the driver-core tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > In file included from include/linux/dmi.h:5,
+> >                  from drivers/firmware/efi/embedded-firmware.c:8:
+> > drivers/firmware/efi/embedded-firmware.c:25:38: error: static declaration of 'efi_embedded_fw_list' follows non-static declaration
+> >    25 | EFI_EMBEDDED_FW_VISIBILITY LIST_HEAD(efi_embedded_fw_list);
+> >       |                                      ^~~~~~~~~~~~~~~~~~~~
+> > include/linux/list.h:24:19: note: in definition of macro 'LIST_HEAD'
+> >    24 |  struct list_head name = LIST_HEAD_INIT(name)
+> >       |                   ^~~~
+> > In file included from drivers/firmware/efi/embedded-firmware.c:17:
+> > drivers/firmware/efi/embedded-firmware.h:16:25: note: previous declaration of 'efi_embedded_fw_list' was here
+> >    16 | extern struct list_head efi_embedded_fw_list;
+> >       |                         ^~~~~~~~~~~~~~~~~~~~
+> > drivers/firmware/efi/embedded-firmware.c:26:33: error: static declaration of 'efi_embedded_fw_checked' follows non-static declaration
+> >    26 | EFI_EMBEDDED_FW_VISIBILITY bool efi_embedded_fw_checked;
+> >       |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from drivers/firmware/efi/embedded-firmware.c:17:
+> > drivers/firmware/efi/embedded-firmware.h:17:13: note: previous declaration of 'efi_embedded_fw_checked' was here
+> >    17 | extern bool efi_embedded_fw_checked;
+> >       |             ^~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Caused by commit
+> > 
+> >   2d38dbf89a06 ("test_firmware: Test platform fw loading on non-EFI systems")
+> > 
+> > CONFIG_TEST_FIRMWARE=m for this build.
+> > 
+> > I have used the driver-core tree from next-20200724 for today.
+> 
+> Thanks, I've reverted this from my tree now.
 
-I was confused for a while by CONFIG_XPS, as nothing really depends on
-it. So it turned out the real dependency is CONFIG_NET, which is also
-unset in your random config. I just sent a fix, thanks for reporting
-and sharing the config!
+Ugh, my mistake; sorry for the hassle! I will get this corrected and
+re-sent.
 
-
-> Thanks.
-> ---
-> ---
->  kernel/bpf/syscall.c |    4 ++++
->  1 file changed, 4 insertions(+)
->
-> --- mmotm-2020-0727-1818.orig/kernel/bpf/syscall.c
-> +++ mmotm-2020-0727-1818/kernel/bpf/syscall.c
-> @@ -3924,7 +3924,11 @@ static int link_create(union bpf_attr *a
->                 ret = netns_bpf_link_create(attr, prog);
->                 break;
->         case BPF_PROG_TYPE_XDP:
-> +#ifdef CONFIG_XPS
->                 ret = bpf_xdp_link_attach(attr, prog);
-> +#else
-> +               ret = -EINVAL;
-> +#endif
->                 break;
->         default:
->                 ret = -EINVAL;
->
+-- 
+Kees Cook

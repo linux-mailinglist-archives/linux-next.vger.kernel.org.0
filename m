@@ -2,93 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B83230205
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 07:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AD423020B
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 07:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgG1FsR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 01:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S1726751AbgG1FtJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 01:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbgG1FsR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 01:48:17 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA3C061794;
-        Mon, 27 Jul 2020 22:48:17 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id l23so17671714qkk.0;
-        Mon, 27 Jul 2020 22:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jvlM9NHcsACKHHGiZRDV7tCWZy0Y4sC2TI8QRB0PPGQ=;
-        b=aK6zkF40KDA0bO12q53pkVpFYe+e73fEmE6vPRW+8PozxmR+lF8y8CsJDalWhutE9P
-         GaNKLckJ683mZ66OiAoz6Hvfq9keqggBbof51sgJQ3X9y2umghAIcI+ZS3bbfdGX3ZOm
-         RSfys2J7nUIra0LaZ/mbRJAGGpSxE4Y/L2r3ti1HGsRJtDCFgtuxbeBOWDrCaYWSe6VQ
-         56afX33NU9PjG9KstKRHrX/X8GUXPHI4FMwiPjzAz/HtkplWT1NYoPbXI5Dtd9fh/ih4
-         6dpa5xP/iyTuI0TgW536j3Cf62R984vFeQhmZ2Uw2DylCostvUzuWG7Fx1bqOA1CNKOD
-         sKWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jvlM9NHcsACKHHGiZRDV7tCWZy0Y4sC2TI8QRB0PPGQ=;
-        b=oa9m5yVy7sy3PhhRg0Xzyxzk66Z9USkqUyPoxPebT8MTtWQS2qtGS/4ut77MmDaZFt
-         0HBmX/Bk9ffBIHTHTZcABKDImCuu6laD/krJLJeHaK3jVVPOcBH1nNfLMAhnXK0XvOKn
-         h77lkW87jac/G8oAJhu0oauK0KTzG/ES5IKM1ttngkVndvJ6q+UImQulNIclDEAE97W8
-         4wOCx2jEn+uZppGv+Ta9vVVCqODKNO/hxKQBmhIXlyGIMIQ2myKA1xqNR1R8h/N7QHDx
-         o7XzaN2WrHFQH0of3dpOl2ox05m/jRbmSmygUTZc2HHKo50CKNREWJ5p3zpjBqeLGJin
-         9MCw==
-X-Gm-Message-State: AOAM531kak9nE3+7lNMMW10nafEQHNNjd+NABx4xaTpuL8qMHBdmjN9/
-        wwJdDHZtbttN3JKuCE94jsm1QPQpvjtKM9ZJLXY=
-X-Google-Smtp-Source: ABdhPJzYaowpf8c8ew54cvnOj81WmjS1ctFGJrkLtq16cmtc9r7UbP0dSQjGKtifjM/IdKtliCg1nJr8KoHA19UIXBA=
-X-Received: by 2002:ae9:f002:: with SMTP id l2mr27590585qkg.437.1595915296590;
- Mon, 27 Jul 2020 22:48:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727232346.0106c375@canb.auug.org.au> <e342e8ce-db29-1603-3fd9-40792a783296@infradead.org>
-In-Reply-To: <e342e8ce-db29-1603-3fd9-40792a783296@infradead.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 27 Jul 2020 22:48:05 -0700
-Message-ID: <CAEf4BzYD-PiA2cDvD5qRv7hHZ_GTDdKqAm1jfg2ZWBWM_3YO5w@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 27 (kernel/bpf/syscall.o)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S1726536AbgG1FtJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 01:49:09 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677D4C061794;
+        Mon, 27 Jul 2020 22:49:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BG5Mj6hMwz9sTm;
+        Tue, 28 Jul 2020 15:49:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595915346;
+        bh=7pmVD8Xdvv4c9LCnzIqpgqptaxY1J/8r1eRxOVHym24=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iAV/XMBQKiPYSh+PsNrDpamjdpVDsZvLA2MyoC6R6WA+r5wty37lisenAPTpivjQP
+         E3+AW2NzRQW8h3Q67PyhE2DSD6mogXFBZjYOkQgV6rtTx3ksuomA18RXR92P2buCgU
+         dbUuFmnzcpxbeLglppi6RWRXhjybqwzUkdLjhkdO5y26FRTqPxz1SXEkCky3BFNmYB
+         4+DGiQU2GP7GjVwhIGknVfFWmyMjxmNAxc7kPOWwcCk6sHAeSyNeyroY3OSZ6zBhFN
+         HgsNBJHaO9/qs+ncoinq6s2TRewFxaYVGioPRDvnznh6zZKlOCyWZG2z3hrkMjMbiL
+         T9/9q1H2iVBdg==
+Date:   Tue, 28 Jul 2020 15:49:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: linux-next: manual merge of the devicetree tree with the pci tree
+Message-ID: <20200728154903.51a60b8e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/qzxUCl99eEfApvkgx+E75GL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 11:58 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 7/27/20 6:23 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20200724:
-> >
->
-> on i386:
-> when CONFIG_XPS is not set/enabled:
->
-> ld: kernel/bpf/syscall.o: in function `__do_sys_bpf':
-> syscall.c:(.text+0x4482): undefined reference to `bpf_xdp_link_attach'
->
+--Sig_/qzxUCl99eEfApvkgx+E75GL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I can't repro this on x86-64 with CONFIG_XPS unset. Do you mind
-sharing the exact config you've used?
+Hi all,
 
-I see that kernel/bpf/syscall.c doesn't include linux/netdevice.h
-directly, so something must be preventing netdevice.h to eventually
-get to bpf/syscall.c, but instead of guessing on the fix, I'd like to
-repro it first. Thanks!
+Today's linux-next merge of the devicetree tree got a conflict in:
 
+  Documentation/devicetree/bindings/pci/qcom,pcie.txt
 
->
-> --
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+between commits:
+
+  736ae5c91712 ("dt-bindings: PCI: qcom: Add missing clks")
+  b11b8cc161de ("dt-bindings: PCI: qcom: Add ext reset")
+  d511580ea9c2 ("dt-bindings: PCI: qcom: Add ipq8064 rev 2 variant")
+
+from the pci tree and commit:
+
+  70172d196947 ("dt-bindings: pci: convert QCOM pci bindings to YAML")
+
+from the devicetree tree.
+
+I don;t know how to fixed it up so I just left the latter one . This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qzxUCl99eEfApvkgx+E75GL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8fvFAACgkQAVBC80lX
+0GyZGwf/dObb8tS2w5gHpUiENUNXKmqVUovTJzGcrtrG7AO4dwIcSq/DQ9SE773W
+dU7X2BF9Deo5BHNj7x+2o4759mRpYAaBU1q3mdc8te9/1RUgWHmyeyJMVgKF8B7n
+/UhNx68ITaoiFNVU6UFviHNKR5XIWxPCgsXtmeF7NRUYfcuJHa0vOX4SM8Gh6e1q
+AfZRUFr7dJXnWr8X9CeSwxpuDjNv16YOVonLOTSxkmaQETA/Xg2AH38YInjOSKYm
+IC+zQK+i/aCHWm/ck0lCEpeTIgrZnbMVaYhPWGTsi0106fU7a2JbHK6gxJoVTgM0
+CTdRa8gC7OX5E6jV8h4qcU/LhPtDpw==
+=c64L
+-----END PGP SIGNATURE-----
+
+--Sig_/qzxUCl99eEfApvkgx+E75GL--

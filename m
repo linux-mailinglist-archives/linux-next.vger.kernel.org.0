@@ -2,218 +2,193 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C90B2315C2
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 00:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0949D231676
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 01:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729628AbgG1Wwd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 18:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S1729953AbgG1XyT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 19:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729380AbgG1Wwd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 18:52:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040C0C061794;
-        Tue, 28 Jul 2020 15:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=VQf79G5Y1eYYYZQ+c40JhTQR5eeF5fS1GIEoN0sdVjk=; b=qNSCo0+U6rD0tp0Ek4aGz0TfvO
-        nBazLgngluGnmrQvDaWmDjleBMz00xP9QsQFHnb+GVs3CKYaAVvoeK7srjo8B/4lcwr5O3MFVhp2Z
-        2spINP4Pz/cvKMIc/qeVCe9qLmlV99cTY/icHc95162qvT247FfYrbATkZdrR0JMN7ZnVmCGaZt5d
-        JEJGEsp4XwYW6Y9lo9HqoQhv+f+N6iMeWK/QRJj6l7MuO6U30XDyjQRAH6ovlaUooY0g8JQlkCc0i
-        jgYVnFY5GdMamKazIcXDM9ucJUjPJ9Bz7OH6EsDvRfV6NTBmSu8hVeXe1z9/y+LvDaeaORvVTMytD
-        Gbmadllg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k0YSG-0000aH-TF; Tue, 28 Jul 2020 22:52:28 +0000
-Subject: Re: linux-next: Tree for Jul 27 (drivers/gpu/drm/xlnx/zynqmp-dpsub)
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hyun Kwon <hyun.kwon@xilinx.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org
-References: <20200727232346.0106c375@canb.auug.org.au>
- <9122c7ca-86a6-1def-0ddc-536ba97b49b8@infradead.org>
- <20200728223243.GS13753@pendragon.ideasonboard.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <20d362b1-eef5-0376-0d51-a4e661a60dca@infradead.org>
-Date:   Tue, 28 Jul 2020 15:52:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S1729819AbgG1XyS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 19:54:18 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FCBC061794
+        for <linux-next@vger.kernel.org>; Tue, 28 Jul 2020 16:54:18 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id e22so1083891pjt.3
+        for <linux-next@vger.kernel.org>; Tue, 28 Jul 2020 16:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=FU2aPg1R+Qj9j/aRgIzh6R+ovs/zcpihQESYJF9Ah70=;
+        b=OvvuBGeNCehMJcTOPrZj6v2xbu3trutSnStlSKVQBf1nmoLJ85QMGx+BhNIWfu42qc
+         J9uT2pyhjBm3lWHGKWUGLCXysgQKVXScposTUYO6iFTekt7zEFYyZ2pSFWaIRw9TSyfY
+         gz7tgwjF4b2y4EL+Fugv0wTAdn3KPdPLTE3y9nMkfY5lIFxSMEY+RtuCOKvdqxKVYd/U
+         HI/jrg6o54nSMlp3rMoYN8+LQNH1PIzwnM/Vx6J/U+ckNlXWRpcNWcujIqJ2HVyRLhXE
+         W/pbHVopd2/Xak21NnHLe84XFmv+uazrdqptoM5xp3kLbc0ZC1ATlxfU2kLeQkMDhmJh
+         hSYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=FU2aPg1R+Qj9j/aRgIzh6R+ovs/zcpihQESYJF9Ah70=;
+        b=k/1ghN8yqNMK5siv/m1xskTivVliiqiagfgnTgVNEKdH2rRDvNXlWWbbfYh909cYpd
+         kub7CQj17wpBr7Wmapkcm4p+KAKsL9z1cfHRl2FyP8ibxOfmbHhNl2JvHhC27rWUj/YO
+         +4SSuHy7X/5Sxsrg8CD3b2LJLhvRlkISZqTfAs/QWs2xpYphqp4mqE3SlbqCRDPwEMcz
+         iEv6FZGF7VJNe2z7zPvRBiECeRjKAMsjci0O7bQgCoa4EUEJSdd26KANRiklI9u8oGAG
+         SppFv07pS7V7Sw5u+k1Yg+rvgwo3VNyRiNZMYirQ9TidEBNE7N3qUr4r1qWx5eKhyM6O
+         ntgQ==
+X-Gm-Message-State: AOAM53242SipSF7FKUIj6WNy3YyeMmbF02GEX7c4LoqPq+bP2hIxwR7k
+        duT/A28xANc3KknXaySRnjUrPVN7b50=
+X-Google-Smtp-Source: ABdhPJxFi7SJXVeLFUdaZC5VQ/b4mYGNApf6Tj3P0booa39LRc871oVBVbuizthOJTh1mOTBH0/CsQ==
+X-Received: by 2002:a17:90a:dc06:: with SMTP id i6mr6596550pjv.161.1595980457453;
+        Tue, 28 Jul 2020 16:54:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x9sm254824pjt.9.2020.07.28.16.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 16:54:16 -0700 (PDT)
+Message-ID: <5f20baa8.1c69fb81.fc9e1.14d7@mx.google.com>
+Date:   Tue, 28 Jul 2020 16:54:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200728223243.GS13753@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.8-rc7-93-g49ee2b4bc7d6
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 277 runs,
+ 3 regressions (v5.8-rc7-93-g49ee2b4bc7d6)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/28/20 3:32 PM, Laurent Pinchart wrote:
-> Hi Randy,
-> 
-> (adding a few people to the CC list to discuss the proposed solution
-> below)
-> 
-> Thanks for the report.
-> 
-> On Mon, Jul 27, 2020 at 05:49:41PM -0700, Randy Dunlap wrote:
->> On 7/27/20 6:23 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20200724:
->>
->> on x86_64:
->>
->> WARNING: unmet direct dependencies detected for DMA_ENGINE
->>   Depends on [n]: DMADEVICES [=n]
->>   Selected by [m]:
->>   - DRM_ZYNQMP_DPSUB [=m] && HAS_IOMEM [=y] && (ARCH_ZYNQMP || COMPILE_TEST [=y]) && COMMON_CLK [=y] && DRM [=m] && OF [=y]
->>
->> and about 45 "undefined reference" build errors (here's a sample):
->>
->> ld: drivers/misc/mic/scif/scif_dma.o: in function `scif_sync_dma.constprop.11':
->> scif_dma.c:(.text+0x672): undefined reference to `dma_sync_wait'
->> ld: drivers/spi/spi-bcm2835.o: in function `bcm2835_dma_release.isra.9':
->> spi-bcm2835.c:(.text+0xb34): undefined reference to `dma_release_channel'
->> ld: spi-bcm2835.c:(.text+0xc17): undefined reference to `dma_release_channel'
->> ld: drivers/spi/spi-bcm2835.o: in function `bcm2835_dma_init':
->> spi-bcm2835.c:(.text+0xd3c): undefined reference to `dma_request_chan'
->> ld: spi-bcm2835.c:(.text+0xd8b): undefined reference to `dma_request_chan'
->> ld: spi-bcm2835.c:(.text+0xf8a): undefined reference to `dma_get_slave_caps'
->> ld: spi-bcm2835.c:(.text+0x11d0): undefined reference to `dma_get_slave_caps'
->> ld: drivers/spi/spi-ep93xx.o: in function `ep93xx_spi_release_dma':
->> spi-ep93xx.c:(.text+0x1fc): undefined reference to `dma_release_channel'
->> ld: spi-ep93xx.c:(.text+0x220): undefined reference to `dma_release_channel'
->> ERROR: modpost: "dma_release_channel" [drivers/gpu/drm/xlnx/zynqmp-dpsub.ko] undefined!
->>
->>
->>
->> I tried adding
->> 	depends on DMADEVICES
->> to DRM_ZYNQMP_DPSUB
->>
->> but that just gets into messy/ugly Kconfig
->> 	error: recursive dependency detected!
-> 
-> drivers/i2c/Kconfig:8:error: recursive dependency detected!
-> drivers/i2c/Kconfig:8:  symbol I2C is selected by FB_DDC
-> drivers/video/fbdev/Kconfig:63: symbol FB_DDC depends on FB
-> drivers/video/fbdev/Kconfig:12: symbol FB is selected by DRM_KMS_FB_HELPER
-> drivers/gpu/drm/Kconfig:80:     symbol DRM_KMS_FB_HELPER depends on DRM_KMS_HELPER
-> drivers/gpu/drm/Kconfig:74:     symbol DRM_KMS_HELPER is selected by DRM_ZYNQMP_DPSUB
-> drivers/gpu/drm/xlnx/Kconfig:1: symbol DRM_ZYNQMP_DPSUB depends on DMA_ENGINE
-> drivers/dma/Kconfig:44: symbol DMA_ENGINE depends on DMADEVICES
-> drivers/dma/Kconfig:6:  symbol DMADEVICES is selected by SND_SOC_SH4_SIU
-> sound/soc/sh/Kconfig:30:        symbol SND_SOC_SH4_SIU is selected by SND_SIU_MIGOR
-> sound/soc/sh/Kconfig:60:        symbol SND_SIU_MIGOR depends on I2C
-> For a resolution refer to Documentation/kbuild/kconfig-language.rst
-> subsection "Kconfig recursive dependency limitations"
-> 
->> BTW, adding
->> 	select DMADEVICES
->> is not a good solution.  We try very hard not to enable entire
->> subsystems with one driver "select".  (No doubt you can find a
->> few examples that do just that, but it is strongly discouraged.)
-> 
-> If this isn't allowed, then we need to fix this where used, as that's
-> what seems to cause the recursive dependency. Would the following
-> patches be acceptable in your opinion ? If so I'll submit them proper.
+next/pending-fixes baseline: 277 runs, 3 regressions (v5.8-rc7-93-g49ee2b4b=
+c7d6)
 
-Yes, they look like they do the right thing and I tested them.
+Regressions Summary
+-------------------
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+platform                | arch  | lab          | compiler | defconfig      =
+ | results
+------------------------+-------+--------------+----------+----------------=
+-+--------
+at91-sama5d4_xplained   | arm   | lab-baylibre | gcc-8    | sama5_defconfig=
+ | 0/1    =
 
-Thanks for doing this.
+bcm2837-rpi-3-b         | arm64 | lab-baylibre | gcc-8    | defconfig      =
+ | 4/5    =
 
-> commit 410e29afd54fd23ee94cd1842b51b7a9e2f96cd8
-> Author: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Date:   Wed Jul 29 01:19:40 2020 +0300
-> 
->     treewide: kconfig: Replace 'select' DMAENGINES 'with depends on'
->     
->     Enabling a whole subsystem from a single driver 'select' is frowned
->     upon and won't be accepted in new drivers, that need to use 'depends on'
->     instead. Existing selection of DMAENGINES will then cause circular
->     dependencies. Replace them with a dependency.
->     
->     Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> diff --git a/drivers/rapidio/Kconfig b/drivers/rapidio/Kconfig
-> index e4c422d806be..b9f8514909bf 100644
-> --- a/drivers/rapidio/Kconfig
-> +++ b/drivers/rapidio/Kconfig
-> @@ -37,7 +37,7 @@ config RAPIDIO_ENABLE_RX_TX_PORTS
->  config RAPIDIO_DMA_ENGINE
->  	bool "DMA Engine support for RapidIO"
->  	depends on RAPIDIO
-> -	select DMADEVICES
-> +	depends on DMADEVICES
->  	select DMA_ENGINE
->  	help
->  	  Say Y here if you want to use DMA Engine frameork for RapidIO data
-> diff --git a/sound/soc/sh/Kconfig b/sound/soc/sh/Kconfig
-> index dc20f0f7080a..ef8a29b9f641 100644
-> --- a/sound/soc/sh/Kconfig
-> +++ b/sound/soc/sh/Kconfig
-> @@ -30,8 +30,8 @@ config SND_SOC_SH4_FSI
->  config SND_SOC_SH4_SIU
->  	tristate
->  	depends on ARCH_SHMOBILE && HAVE_CLK
-> +	depends on DMADEVICES
->  	select DMA_ENGINE
-> -	select DMADEVICES
->  	select SH_DMAE
->  	select FW_LOADER
->  
-> commit 3e68c8fc7a2f3f7992c7fa8b30108d3831c7fb3b
-> Author: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Date:   Wed Jul 29 01:23:32 2020 +0300
-> 
->     drm: xlnx: dpsub: Fix DMADEVICES Kconfig dependency
-> 
->     The dpsub driver uses the DMA engine API, and thus selects DMA_ENGINE to
->     provide that API. DMA_ENGINE depends on DMADEVICES, which can be
->     deselected by the user, creating a possibly unmet indirect dependency:
-> 
->     WARNING: unmet direct dependencies detected for DMA_ENGINE
->       Depends on [n]: DMADEVICES [=n]
->       Selected by [m]:
->       - DRM_ZYNQMP_DPSUB [=m] && HAS_IOMEM [=y] && (ARCH_ZYNQMP || COMPILE_TEST [=y]) && COMMON_CLK [=y] && DRM [=m] && OF [=y]
-> 
->     Add a dependency on DMADEVICES to fix this.
-> 
->     Reported-by: Randy Dunlap <rdunlap@infradead.org>
->     Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> diff --git a/drivers/gpu/drm/xlnx/Kconfig b/drivers/gpu/drm/xlnx/Kconfig
-> index aa6cd889bd11..b52c6cdfc0b8 100644
-> --- a/drivers/gpu/drm/xlnx/Kconfig
-> +++ b/drivers/gpu/drm/xlnx/Kconfig
-> @@ -2,6 +2,7 @@ config DRM_ZYNQMP_DPSUB
->  	tristate "ZynqMP DisplayPort Controller Driver"
->  	depends on ARCH_ZYNQMP || COMPILE_TEST
->  	depends on COMMON_CLK && DRM && OF
-> +	depends on DMADEVICES
->  	select DMA_ENGINE
->  	select DRM_GEM_CMA_HELPER
->  	select DRM_KMS_CMA_HELPER
-> 
->> Full randconfig file is attached.
->>
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> [snip]
-> 
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig      =
+ | 0/1    =
 
 
--- 
-~Randy
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc7-93-g49ee2b4bc7d6/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc7-93-g49ee2b4bc7d6
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      49ee2b4bc7d6b8a72afdcdde6a682c5d1a28032d =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                | arch  | lab          | compiler | defconfig      =
+ | results
+------------------------+-------+--------------+----------+----------------=
+-+--------
+at91-sama5d4_xplained   | arm   | lab-baylibre | gcc-8    | sama5_defconfig=
+ | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f20650c4704b0300752c1be
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4=
+_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4=
+_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f20650c4704b0300752c=
+1bf
+      failing since 84 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first f=
+ail: v5.7-rc4-211-g6d4315023bc9) =
+
+
+
+platform                | arch  | lab          | compiler | defconfig      =
+ | results
+------------------------+-------+--------------+----------+----------------=
+-+--------
+bcm2837-rpi-3-b         | arm64 | lab-baylibre | gcc-8    | defconfig      =
+ | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f205fdedaf6c7606952c1c8
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.=
+txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f205fdedaf6c760=
+6952c1cb
+      failing since 1 day (last pass: v5.8-rc6-327-gb1263ee340f7, first fai=
+l: v5.8-rc7-70-g8e4b9e8d6624)
+      2 lines =
+
+
+
+platform                | arch  | lab          | compiler | defconfig      =
+ | results
+------------------------+-------+--------------+----------+----------------=
+-+--------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig      =
+ | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f2060bed49ce7759d52c1bd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananap=
+i-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc7-93=
+-g49ee2b4bc7d6/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananap=
+i-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f2060bed49ce7759d52c=
+1be
+      failing since 7 days (last pass: v5.8-rc5-432-g6ded1a48da25, first fa=
+il: v5.8-rc6-163-g19ae985ddbc8) =20

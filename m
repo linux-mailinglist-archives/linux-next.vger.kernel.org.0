@@ -2,79 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E504230CB1
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 16:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05532230D92
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jul 2020 17:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730452AbgG1OuQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 10:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S1730741AbgG1PU7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 11:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730335AbgG1OuQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 10:50:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2ABC061794;
-        Tue, 28 Jul 2020 07:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=QTqHP6bK9W4RFpKAMBcspR5sA1/+rrn6GZmLT6RFR2o=; b=jF9O5dfqNDC0lWxB7y/eY27PpJ
-        XVJ1Zl6Xh6YxEBwVfJ7AV+OcbuFxqaCPr1o1Ko/I/V8dZfo49zDUPE42Y2plHlxH+MNcoXw+b6trg
-        i03meS7XFWkTrrM2aFbUwNpXUvOWqlIhhrTGN8E5HhfkjKAFYqqmvl/q909D5aPWbgfwoYHog+Sd2
-        q3BlVtdubcUIopYG8CURT7UrAcyiiJITcbWxjyvRpvB/UnvQcJWunC3Fvqx7/a6HmokqaY6/2jeIw
-        VA3uFOYJs0zt9FTLtonZzQK+nCaKyk/DbimLBV/hyzuHT9MR/e4aV72HJunpTlDDbwWzCZxyMJYF9
-        +LNnf8Sw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k0Qvk-0001Bt-Rh; Tue, 28 Jul 2020 14:50:13 +0000
-Subject: Re: linux-next: Tree for Jul 28 (drivers/net/usb/)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oliver@neukum.org>
-References: <20200728215731.00cb56d3@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d8e712fa-65c8-f616-3411-a41b88950eba@infradead.org>
-Date:   Tue, 28 Jul 2020 07:50:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S1730586AbgG1PU6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 11:20:58 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971A2C061794;
+        Tue, 28 Jul 2020 08:20:58 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id t7so1340108otp.0;
+        Tue, 28 Jul 2020 08:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3fjZl1RVLXY1uNlmaJnq6KmBuBn/W8J4Zm8rshj+CNI=;
+        b=bLIYwDRybKvdUVVFY0A2TMSDlrdzdOh4ifKZU8iH7ZVliMRiYmXjE6Jk/usGdy7OmT
+         bO0zJxYEKeM2tUU+RVATmSB+V0dDVnPVBEM6oBOJxEK1+arXzxrzXR4NQCQpNJadRQtW
+         0N8Fg26WMNHdpbuEtPPq3tOLAMtdrKrtEdUxCT89DZonWPUz0Bd9u7ljSOHPWqhJDb67
+         KeQsWgqYIst+LH+lBm2KyfxBXiXAhdJVFTrqQGgvAonrWQA+RPjdKMckG19SZYD3cZw7
+         jETzWvVQtqQ6hDXFyb7i/Xk/y83o6OMcJCLWMB2BS9zvGMBGvDiK6zmSZDEbPNcv/nOY
+         HAhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3fjZl1RVLXY1uNlmaJnq6KmBuBn/W8J4Zm8rshj+CNI=;
+        b=JfpqXEl9sZhAY2r4LLyo8usFRuEvv+pJQ1xqndDKTZcn4zMrlJaEepMqe5GPpfrFR7
+         Ov0QhVoGdrsdwbxC5qvNz9ZiUrf6U50TiAQyFHKcVJZScpTzHC3zOee0DrcFrmMr54iJ
+         OqrEv+YLI6LJoJ2PHboG9ZoCSUSi3mSWd/PIQayIZz/rFBYvqpId2EKJQuE2eMj/pqP8
+         QRfiUcsP8OAwy9tYyhWzohvHR5IVYluSp27u3NbMHUjX7GZ9IEGLr3WPR3Asrc03lKbO
+         p9PJIkd9xektAAEAG2cQNoM8v1n6H5jWtMfNVI8/ltpxQTvzVqpFMCkzy34HoHb6E8uZ
+         FRlQ==
+X-Gm-Message-State: AOAM5316wU2V/Zq1fC2sgKi/zDV5fuLJe3lYggosTRpqh3OnkdVMvB/C
+        d3RcGSNtefQwRDwfLYAOGnTruCWad1ZlhY3aKA==
+X-Google-Smtp-Source: ABdhPJwcsJOsVl5dMiUaOLvJG8LILElWBPVEbSidGRSlql9+NAi6oaWnpg4f+EUBdBJfPzUypO3iLg8u26RBbEbPv64=
+X-Received: by 2002:a9d:46c:: with SMTP id 99mr25007624otc.192.1595949657943;
+ Tue, 28 Jul 2020 08:20:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200728215731.00cb56d3@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200728154903.51a60b8e@canb.auug.org.au> <c7c752bc-2a06-fc56-6f87-dfdddd8a436e@codeaurora.org>
+In-Reply-To: <c7c752bc-2a06-fc56-6f87-dfdddd8a436e@codeaurora.org>
+From:   Rob Herring <robherring2@gmail.com>
+Date:   Tue, 28 Jul 2020 09:20:45 -0600
+Message-ID: <CAL_JsqJ6zZcK=Yv2Bbnz-gBVZ0DV0Lp+9hbW3U2qvvAo7rHLbw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the devicetree tree with the pci tree
+To:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/28/20 4:57 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20200727:
-> 
+On Tue, Jul 28, 2020 at 2:28 AM Sivaprakash Murugesan
+<sivaprak@codeaurora.org> wrote:
+>
+> On 7/28/2020 11:19 AM, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Today's linux-next merge of the devicetree tree got a conflict in:
+> >
+> >    Documentation/devicetree/bindings/pci/qcom,pcie.txt
+> >
+> > between commits:
+> >
+> >    736ae5c91712 ("dt-bindings: PCI: qcom: Add missing clks")
+> >    b11b8cc161de ("dt-bindings: PCI: qcom: Add ext reset")
+> >    d511580ea9c2 ("dt-bindings: PCI: qcom: Add ipq8064 rev 2 variant")
+> >
+> > from the pci tree and commit:
+> >
+> >    70172d196947 ("dt-bindings: pci: convert QCOM pci bindings to YAML")
+> >
+> > from the devicetree tree.
+> >
+> > I don;t know how to fixed it up so I just left the latter one . This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+>
+> Rob/Bjorn,
+>
+> Please let me know if I can provide a patch rebased to linux-next.
 
-on i386:
+A patch based on linux-next is useless unless you want it applied
+after the next merge window because no one can apply it.
 
-CONFIG_USB_USBNET=y
-# CONFIG_USB_NET_AX8817X is not set
-CONFIG_USB_NET_AX88179_178A=y
-CONFIG_USB_NET_CDCETHER=m
-CONFIG_USB_NET_CDC_EEM=m
-CONFIG_USB_NET_CDC_NCM=y
-CONFIG_USB_NET_HUAWEI_CDC_NCM=m
-CONFIG_USB_NET_CDC_MBIM=m
+> Bjorn can pick up the patch after review and Rob can drop the old pci
+> yaml conversion patch.
 
-ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x27c): undefined reference to `usbnet_cdc_update_filter'
-ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x2dc): undefined reference to `usbnet_cdc_update_filter'
-ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x33c): undefined reference to `usbnet_cdc_update_filter'
+I'll drop it and it can go via the PCI tree. I have some minor fixups
+I'll comment on.
 
-because 'usbnet_cdc_update_filter' lives in cdc_ether.c, which is being built
-as a loadable module while cdc_ncm.o is builtin.
-
-
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Rob

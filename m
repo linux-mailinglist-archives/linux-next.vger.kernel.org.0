@@ -2,85 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBBA231F62
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 15:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAF8231FEE
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 16:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbgG2NgC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 09:36:02 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:43688 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726391AbgG2NgC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Jul 2020 09:36:02 -0400
+        id S1726353AbgG2OIW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 10:08:22 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:51652 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbgG2OIV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 10:08:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596029761;
+        s=mimecast20190719; t=1596031700;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UoAZNhHf1hQmOQfH+hbOw0J7WwqGHOBNlKUEao3PZkI=;
-        b=MUEib7tFlEUUyxxpcbnRzIOWU6WpD7YocNkZqsVvHtnh3DyqaNRugj4taEpMu+U7s4QNgI
-        PzcFibAbWq4+g007YydTz/CVsxoZedbAgQqsgNGCdo3ZsHPSJSfJeIwmetfwhuhBQEihO9
-        XUW6XbMp1qc4Q+BDgcfqP36/71JYVd8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-511-c2B0SQTRMF2tdMPs1dspbA-1; Wed, 29 Jul 2020 09:35:50 -0400
-X-MC-Unique: c2B0SQTRMF2tdMPs1dspbA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F1B141005504;
-        Wed, 29 Jul 2020 13:35:47 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-116-40.rdu2.redhat.com [10.10.116.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5F4F5DA7A;
-        Wed, 29 Jul 2020 13:35:45 +0000 (UTC)
-Subject: Re: [PATCH 0/2] locking/qspinlock: Break qspinlock_types.h header
- loop
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-References: <20200729210311.425d0e9b@canb.auug.org.au>
- <20200729114757.GA19388@gondor.apana.org.au>
- <20200729122807.GA7047@gondor.apana.org.au>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <ed62ba67-0e1d-3fee-8c09-7750d5690be5@redhat.com>
-Date:   Wed, 29 Jul 2020 09:35:45 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        bh=tSDnY3FzGhTn/u6Pww0mdVOV9X0S2Fmn3lliAT+Fx3Y=;
+        b=FI0Gq25tsVhoT1N15O0lxHDteh4O04FdKxKQLccHH/9cq9LMDPDKGHP358Q/fRivs0xXlK
+        DdB7Zp+OS3EfesdnqgqyExb7JIPUMLdnt7qqIuOcJvBAWp41MlcigLQJrR6zOMNy7twHZy
+        8DL/laVpTqFTUDXTONfGtO0ukp2yh7w=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-3-L_7B9nLtMsO5XOyd-mYb3w-1; Wed, 29 Jul 2020 10:08:17 -0400
+X-MC-Unique: L_7B9nLtMsO5XOyd-mYb3w-1
+Received: by mail-wm1-f69.google.com with SMTP id u14so622081wml.0
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 07:08:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tSDnY3FzGhTn/u6Pww0mdVOV9X0S2Fmn3lliAT+Fx3Y=;
+        b=qw56ZCMzhdgXqQBIuu8gowg89x4Igi64eCa8rVULQTBRKXITU5gyM1C9kIaC94xeA2
+         F0zDib2lxnz/KVjAEGIL14sshdpsKjDmn9EPI7+Im4EqEhGb6z8jKKMzud7/GHar1eF9
+         pjpW7uZzmPkRlfHaHrCV/W5Mkz/+/Yrg5wKf7iIxpdU7xP840ORwIgURGpKldjM1tk3s
+         bC1AjJ3yB79MaYSpRJwaZb9CsIxP5YjvKziFLvgWxloGMRUAAwOXW91ny/YeyP4G1c3z
+         eBX/YrK2Eo3SrVP0nQkR5UlK2DvEpI/jNVEemonFUcXBDGv8PT9+FyIkCr5/01A0idgN
+         Mwrw==
+X-Gm-Message-State: AOAM533ViKPJA/hxssxM+DJ9kiTt8qfP6mLu+pah7XSKT74wiYbYU605
+        yGkFJFXVAiw7AMgbPtEHI3HAfjLcN+Lk3k3gMOB0m8CQTwq7Uv7ET2etNOl3m7PMnSkF6AzHNsk
+        HtgEUGclSG6tqiupmBmRzYA==
+X-Received: by 2002:a7b:cf2f:: with SMTP id m15mr6450731wmg.69.1596031696040;
+        Wed, 29 Jul 2020 07:08:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyZx2GDeOT4xiXXkyJbtLRy1H/T+pPmI/LpfhQCdBFqN5vPspeNyXF/MgS2kwoyjVW/b1BjZA==
+X-Received: by 2002:a7b:cf2f:: with SMTP id m15mr6450724wmg.69.1596031695863;
+        Wed, 29 Jul 2020 07:08:15 -0700 (PDT)
+Received: from redhat.com (bzq-79-179-105-63.red.bezeqint.net. [79.179.105.63])
+        by smtp.gmail.com with ESMTPSA id y2sm5487847wmg.25.2020.07.29.07.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2020 07:08:15 -0700 (PDT)
+Date:   Wed, 29 Jul 2020 10:08:12 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vhost tree
+Message-ID: <20200729100754-mutt-send-email-mst@kernel.org>
+References: <20200728181132.55476e07@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200729122807.GA7047@gondor.apana.org.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200728181132.55476e07@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/29/20 8:28 AM, Herbert Xu wrote:
-> This miniseries breaks a header loop involving qspinlock_types.h.
-> The issue is that qspinlock_types.h includes atomic.h, which then
-> eventually includes kernel.h which could lead back to the original
-> file via spinlock_types.h.
->
-> The first patch moves ATOMIC_INIT into linux/types.h while the second
-> patch actuallys breaks the loop by no longer including atomic.h
-> in qspinlock_types.h.
->
+On Tue, Jul 28, 2020 at 06:11:32PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the vhost tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> In file included from drivers/virtio/virtio_vdpa.c:17:
+> include/linux/vdpa.h:43:21: error: expected ':', ',', ';', '}' or '__attribute__' before '.' token
+>    43 |  bool features_valid.
+>       |                     ^
+> 
+> Caused by commit
+> 
+>   fee8fe6bd8cc ("vdpa: make sure set_features in invoked for legacy")
+> 
+> I have used the vhost tree from next-20200727 for today.
+
+Sorry by bad, pushed to a wrong tag.
+
+
+> -- 
 > Cheers,
+> Stephen Rothwell
 
-This patch series looks good to me. I just wonder if we should also move 
-ATOMIC64_INIT() to types.h for symmetry purpose. Anyway,
-
-Acked-by: Waiman Long <longman@redhat.com>
 

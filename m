@@ -2,106 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75D231781
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 04:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A442231805
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 05:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730874AbgG2CER (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jul 2020 22:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S1726365AbgG2DU6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jul 2020 23:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728401AbgG2CEQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 22:04:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD28C0619D2;
-        Tue, 28 Jul 2020 19:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=ptZ4CaB+9ZPFK7eW316fU2oYVkH0yzLQ4pZT4nFsjOA=; b=L8btYvGdt15/+hqPaBMVifuHFP
-        mj1IC0WwS/5cB699Ff1misVVzWwylEgRgEeikp3o/HEiq+IyuXdd6WoWiXKDbcNet35tUEacF9F+9
-        mTYW32EXz7eJ/JSPU2++z/q2bQfBo5prJ2CKpSn404aT0xYiDT1cZoVI4cZ1GREvWMq8SK5FNhqgv
-        Lx/3DW/HMBwZBVDr0Rr7vmXvNb+UYGm6DsZZr5TKt+r2yhEvRq/kp4Jmg8cTkHauBvfjZeKgZL2CG
-        SCwjA23ZuC+u/AqV2hlZ4HIYdHMxBYe7VnBlWw0ukpM+T48gLB8uyjhAHWYmM98XD1fqBBbKRt2bI
-        LjM9hGDQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k0bS1-0001A0-Q2; Wed, 29 Jul 2020 02:04:14 +0000
-Subject: Re: mmotm 2020-07-27-18-18 uploaded (mm/page_alloc.c)
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-References: <20200728011914.S-8vAYUK0%akpm@linux-foundation.org>
- <ae87385b-f830-dbdf-ebc7-1afb82a7fed0@infradead.org>
- <20200728145553.2a69fa2080de01922b3a74e0@linux-foundation.org>
- <048cef07-ad4b-8788-94a4-e144de731ab6@infradead.org>
- <20200728184419.4b137162844987c9199542bb@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <bdd0b49f-2cdd-02e1-3c91-d96b4f806490@infradead.org>
-Date:   Tue, 28 Jul 2020 19:04:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S1726047AbgG2DU6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jul 2020 23:20:58 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD50C061794;
+        Tue, 28 Jul 2020 20:20:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BGf2F2DGWz9sSd;
+        Wed, 29 Jul 2020 13:20:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595992855;
+        bh=FQfpmxCdFZ8cS6nJ/IIH9W5dOQ4bTbHg21bsMtTdKQU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kNKkuZCSB/1cjnGKIvUbpELOPWY91GQC01onRDI72UXmjECLOx1xHBTC/r0Gt7w+w
+         g+OX4Xf1hzVKS6IsOh92BWB6BBDI7QEJC5n02UGzHfOQmkz67029v4fBCzXK1HN4gS
+         Ck3QppYN8ixBOz5HXwYZREZfPRGeGIoa54EAWoQrlbUnIK2/UZvO2UJ5ARTSqEyJDF
+         vqC1y+JWefdIfcHxRgsJwCYx0tvT5TW0X5qePGNItmvYqmq4Jef9Qz44C87Uqhsku3
+         W2ybIp9w7euAl4hbqdB8b7KERKAmb2kCsojUMkDFEPgwR2pidsxBlaQg2LTVXZ+VJa
+         bHXvwFZacJEeA==
+Date:   Wed, 29 Jul 2020 13:20:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jacob Keller <jacob.e.keller@intel.com>
+Subject: linux-next: manual merge of the net-next tree with the risc-v tree
+Message-ID: <20200729132050.10527ff1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200728184419.4b137162844987c9199542bb@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/rKGAqN4rJ0Sxexkd60vKQYf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/28/20 6:44 PM, Andrew Morton wrote:
-> On Tue, 28 Jul 2020 15:39:21 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->> On 7/28/20 2:55 PM, Andrew Morton wrote:
->>> On Tue, 28 Jul 2020 05:33:58 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
->>>
->>>> On 7/27/20 6:19 PM, Andrew Morton wrote:
->>>>> The mm-of-the-moment snapshot 2020-07-27-18-18 has been uploaded to
->>>>>
->>>>>    http://www.ozlabs.org/~akpm/mmotm/
->>
->>
->>>> on x86_64:
->>>>
->>>> ../mm/page_alloc.c:8355:48: warning: ‘struct compact_control’ declared inside parameter list will not be visible outside of this definition or declaration
->>>>  static int __alloc_contig_migrate_range(struct compact_control *cc,
->>>>                                                 ^~~~~~~~~~~~~~~
->>>
->>> As is usually the case with your reports, I can't figure out how to
->>> reproduce it.  I copy then .config, run `make oldconfig' (need to hit
->>> enter a zillion times because the .config is whacky) then the build
->>> succeeds.  What's the secret?
->>
->> I was not aware that there was a problem. cp .config and make oldconfig
->> should be sufficient -- and I don't understand why you would need to hit
->> enter many times.
->>
->> I repeated this on my system without having to answer any oldconfig prompts
->> and still got build errors.
->>
->> There is no secret that I know of, but it would be good to get to the
->> bottom of this problem.
-> 
-> Well the first thing I hit was
-> 
-> Support for big SMP systems with more than 8 CPUs (X86_BIGSMP) [N/y/?] (NEW) 
-> 
-> and your .config doesn't mention that.
+--Sig_/rKGAqN4rJ0Sxexkd60vKQYf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's an x86_32 symbol and my config was for x86_64.
+Hi all,
 
+Today's linux-next merge of the net-next tree got a conflict in:
 
-> make mrproper
-> cp ~/config-randy .config
-> make oldconfig
+  lib/Kconfig
 
-make ARCH=x86_64 oldconfig
+between commit:
 
-HTH.
--- 
-~Randy
+  1a479f783857 ("lib: Add a generic version of devmem_is_allowed()")
 
+from the risc-v tree and commit:
+
+  b8265621f488 ("Add pldmfw library for PLDM firmware update")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc lib/Kconfig
+index 610c16ecbb7c,3ffbca6998e5..000000000000
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@@ -677,5 -677,6 +677,9 @@@ config GENERIC_LIB_CMPDI
+  config GENERIC_LIB_UCMPDI2
+  	bool
+ =20
+ +config GENERIC_LIB_DEVMEM_IS_ALLOWED
+ +	bool
+++
++ config PLDMFW
++ 	bool
++ 	default n
+
+--Sig_/rKGAqN4rJ0Sxexkd60vKQYf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8g6xIACgkQAVBC80lX
+0GwumwgAgaM1oRM4ovApS9tbdCpmmk2laMWFWvSV2XbYF4B78o8pUdMRNkFwh/eA
+1KHu//ycq1O56W1APnv4XeQGoH+qdB43aJSddvCerdpEFLrCgkhPdaoq5s9ROkop
+s/hWBVw8oqV1xtYdnK4vg0j6++uhHSpoPYMGqqxi++yP+jih1c3cE3kj+hXEGc8s
+OiLAqUM9g+L0ZQnRahWiqHjNwNhy8ESWdH3LKmOD2inIoYoInF4a6oOUU+H/t/gE
+9YvtqSgRQc3ugmKjeJGmVc5aRhYH47TPwaB2b13TS2ZbXSFsK88IznQIl5tSxZrG
+9Md6SnDc1uXL4yO2fDNG3tlQfW0izg==
+=bvmC
+-----END PGP SIGNATURE-----
+
+--Sig_/rKGAqN4rJ0Sxexkd60vKQYf--

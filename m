@@ -2,97 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07771231D55
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 13:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C47231DA5
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 13:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgG2L1Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 07:27:25 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57065 "EHLO ozlabs.org"
+        id S1726391AbgG2LsT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 07:48:19 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:59876 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726480AbgG2L1Z (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Jul 2020 07:27:25 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BGrqb1j6jz9sRK;
-        Wed, 29 Jul 2020 21:27:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596022043;
-        bh=3B1l9zsxDWHUUR26XQYf02znLLnavQzwvvwX89Hy1rc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NNfs3ifhLeqzO8x99kAQO0VXMYlyV1DmDUm5+wk0NzTwPx7k/FB1ctwECY+eswCj2
-         t/aNGzL7o75rnrbQVSjvt54Fl7Xm2KFbhDWngcpzehBOFifAgOr1evu4zhkItlYPJn
-         mDnGC8rJwJnDNawRr5yydtPQtfgv1cTEkrcUVzMtIKdEvl6XvjjtBFbgQ9FHl4o3Di
-         5LNfRj3dyArcwPZzMgOOY1ITfp2a+4e0OrNl69ECFdNmOc3y+37dWf5wQrJnJ61etf
-         aRHr8HxvX20hCDWSkjrQiFV0Op514bWKsySbsaEyFzk5AOUCOh8N7Dsfr+RS9DgnNG
-         VYw7YrC4Uxu7w==
-Date:   Wed, 29 Jul 2020 21:27:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726385AbgG2LsS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jul 2020 07:48:18 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1k0kYv-0008QF-EN; Wed, 29 Jul 2020 21:47:58 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 29 Jul 2020 21:47:57 +1000
+Date:   Wed, 29 Jul 2020 21:47:57 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brian Vazquez <brianvv@google.com>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20200729212721.1ee4eef8@canb.auug.org.au>
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: Re: linux-next: build failure after merge of the printk tree
+Message-ID: <20200729114757.GA19388@gondor.apana.org.au>
+References: <20200729210311.425d0e9b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w/x_VlSZc+ml8x648uLVh5w";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200729210311.425d0e9b@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w/x_VlSZc+ml8x648uLVh5w
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jul 29, 2020 at 09:03:11PM +1000, Stephen Rothwell wrote:
+> 
+> After merging the printk tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 
-Hi all,
+Hi Stephen:
 
-After merging the net-next tree, today's linux-next build (i386 defconfig)
-failed like this:
+This loop was introduced recently by the powerpc tree with
 
-x86_64-linux-gnu-ld: net/core/fib_rules.o: in function `fib_rules_lookup':
-fib_rules.c:(.text+0x5c6): undefined reference to `fib6_rule_match'
-x86_64-linux-gnu-ld: fib_rules.c:(.text+0x5d8): undefined reference to `fib=
-6_rule_match'
-x86_64-linux-gnu-ld: fib_rules.c:(.text+0x64d): undefined reference to `fib=
-6_rule_action'
-x86_64-linux-gnu-ld: fib_rules.c:(.text+0x662): undefined reference to `fib=
-6_rule_action'
-x86_64-linux-gnu-ld: fib_rules.c:(.text+0x67a): undefined reference to `fib=
-6_rule_suppress'
-x86_64-linux-gnu-ld: fib_rules.c:(.text+0x68d): undefined reference to `fib=
-6_rule_suppress'
+https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=aa65ff6b18e0366db1790609956a4ac7308c5668
 
-Caused by commit
+powerpc/64s: Implement queued spinlocks and rwlocks
 
-  b9aaec8f0be5 ("fib: use indirect call wrappers in the most common fib_rul=
-es_ops")
+However the loop itself goes back further and in fact someone has
+already tried to work around it by adding ifdefs on CONFIG_PARAVIRT
+in asm-generic/qspinlock_types.h.  I'll try to fix this properly.
 
-# CONFIG_IPV6_MULTIPLE_TABLES is not set
-
-I have reverted that commit for today.
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/w/x_VlSZc+ml8x648uLVh5w
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8hXRkACgkQAVBC80lX
-0Gwl4wf/a7UQAOA7rptHNQF+m0JcGAIWdcRBnTPxuMhF7/scEaGuBmLDeHvp6xU7
-Noe09vWdXZmm0nszSz56b1FUg7VBMMw71UeY4Dbm9FdR6cwA1mqlSjNza75d1txp
-Kl+8x4OEPTHf8CNr614LQxBE+ZaEzpGlx4Fp9wQKxvWQ/t/Mnc+fsm0BB2tmuJ47
-ubn7/l6mCCAdp569m7lWF0gliY8GwGTGYcBOF6ib9/j/sNVnwyw5EdCnNfVaSrwI
-C5YYEg28M8VwSwz9mA8nkJ/CrbafsY7f+6mhMPRJjm5PSTS/6bfzMU2xQRY8SHS5
-GVB4TOHGqEkkH1Y1bPLCxR8vXuRqgQ==
-=qzAe
------END PGP SIGNATURE-----
-
---Sig_/w/x_VlSZc+ml8x648uLVh5w--
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,92 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAF8231FEE
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 16:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48065231FF7
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jul 2020 16:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgG2OIW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 10:08:22 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:51652 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbgG2OIV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 10:08:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596031700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tSDnY3FzGhTn/u6Pww0mdVOV9X0S2Fmn3lliAT+Fx3Y=;
-        b=FI0Gq25tsVhoT1N15O0lxHDteh4O04FdKxKQLccHH/9cq9LMDPDKGHP358Q/fRivs0xXlK
-        DdB7Zp+OS3EfesdnqgqyExb7JIPUMLdnt7qqIuOcJvBAWp41MlcigLQJrR6zOMNy7twHZy
-        8DL/laVpTqFTUDXTONfGtO0ukp2yh7w=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-3-L_7B9nLtMsO5XOyd-mYb3w-1; Wed, 29 Jul 2020 10:08:17 -0400
-X-MC-Unique: L_7B9nLtMsO5XOyd-mYb3w-1
-Received: by mail-wm1-f69.google.com with SMTP id u14so622081wml.0
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 07:08:17 -0700 (PDT)
+        id S1726925AbgG2OJ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 10:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726353AbgG2OJ6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 10:09:58 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F75DC061794;
+        Wed, 29 Jul 2020 07:09:58 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 3so3117914wmi.1;
+        Wed, 29 Jul 2020 07:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=vkC3fvNmKNBLIFtY8s9gUSSMLaLvXlZcrAXU3Wmoa0w=;
+        b=HWz4qlSCLN8duN0zFg0ocHeQRqTJjBs9yoGP64/yFcIPLUor7/d7E6l4Y1LVAb2pYt
+         npipybWRRBj/4+LxMWwXqK9Nu/Cz8vCDTXhdhaH84VVrc5dY2ESVcO+84xOU+Wmyj/8l
+         zeMiqNQs4L9jMC7wvqAgpZIVSbGWssrPmjM1XsUAMkIQBfcBXoGyshmLhP8BH0cRbgoa
+         lqUaEYtQkP8BBH/dvsnbPl1XbkpOaYdqUcA1yeT1ETdF51djMOdBbr15zB19Jtk8xBn5
+         bGQX7NAN1wOb6glAbcTyJvH61rVQPEopLf0RdoYAZfOKqr3MoLSsntdkc+ikWtvVXiLn
+         7vCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tSDnY3FzGhTn/u6Pww0mdVOV9X0S2Fmn3lliAT+Fx3Y=;
-        b=qw56ZCMzhdgXqQBIuu8gowg89x4Igi64eCa8rVULQTBRKXITU5gyM1C9kIaC94xeA2
-         F0zDib2lxnz/KVjAEGIL14sshdpsKjDmn9EPI7+Im4EqEhGb6z8jKKMzud7/GHar1eF9
-         pjpW7uZzmPkRlfHaHrCV/W5Mkz/+/Yrg5wKf7iIxpdU7xP840ORwIgURGpKldjM1tk3s
-         bC1AjJ3yB79MaYSpRJwaZb9CsIxP5YjvKziFLvgWxloGMRUAAwOXW91ny/YeyP4G1c3z
-         eBX/YrK2Eo3SrVP0nQkR5UlK2DvEpI/jNVEemonFUcXBDGv8PT9+FyIkCr5/01A0idgN
-         Mwrw==
-X-Gm-Message-State: AOAM533ViKPJA/hxssxM+DJ9kiTt8qfP6mLu+pah7XSKT74wiYbYU605
-        yGkFJFXVAiw7AMgbPtEHI3HAfjLcN+Lk3k3gMOB0m8CQTwq7Uv7ET2etNOl3m7PMnSkF6AzHNsk
-        HtgEUGclSG6tqiupmBmRzYA==
-X-Received: by 2002:a7b:cf2f:: with SMTP id m15mr6450731wmg.69.1596031696040;
-        Wed, 29 Jul 2020 07:08:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyZx2GDeOT4xiXXkyJbtLRy1H/T+pPmI/LpfhQCdBFqN5vPspeNyXF/MgS2kwoyjVW/b1BjZA==
-X-Received: by 2002:a7b:cf2f:: with SMTP id m15mr6450724wmg.69.1596031695863;
-        Wed, 29 Jul 2020 07:08:15 -0700 (PDT)
-Received: from redhat.com (bzq-79-179-105-63.red.bezeqint.net. [79.179.105.63])
-        by smtp.gmail.com with ESMTPSA id y2sm5487847wmg.25.2020.07.29.07.08.14
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=vkC3fvNmKNBLIFtY8s9gUSSMLaLvXlZcrAXU3Wmoa0w=;
+        b=C1rCWNxZ5W021QdW6oMucImqBwngWZ/aI5r880/l1U5rEmhFvGM8FCs8vKfYFWPr4z
+         DDdMcSXGYN30AXCnKyfrab/2cToczapkknTl1kMzPhpXDws3hVwHxIBFkLMAObnlJfCy
+         sJLyWEm8UM/nDHWnRnCudKZy0l0CUaptq5HwBybaunmH8S5Y1NVKeon8RFyrlY/CIX20
+         Ah5Lknh3vAF+UnmFihQcztjjlkThEhak6lWNOO4ygWvrrO2cdu0XGP8uEFbTSzHNvv1J
+         IDnv6zctK+/+7Jkrk4PJH2/GGJbHdNaCueybizq3Mgl5MnRMxY446Qi6vvxio7KzS7cF
+         Bq3w==
+X-Gm-Message-State: AOAM533FU+iSdZagNukvt2r9te+/a0hkx77+PsO/+6P5+kHZ0KuxJ3fn
+        nlUwT8r3Ac6S/28h2BVQc1eEab4=
+X-Google-Smtp-Source: ABdhPJyXW+bW53cuqDMz8WcVkCDkydQaO3+Q1hZ+DmtxT7lDLGPCxHSXpdUbqmNjbC0jgizGK74V+Q==
+X-Received: by 2002:a1c:f70c:: with SMTP id v12mr8915133wmh.100.1596031796471;
+        Wed, 29 Jul 2020 07:09:56 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.254.111])
+        by smtp.gmail.com with ESMTPSA id i6sm5202596wrp.92.2020.07.29.07.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2020 07:08:15 -0700 (PDT)
-Date:   Wed, 29 Jul 2020 10:08:12 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vhost tree
-Message-ID: <20200729100754-mutt-send-email-mst@kernel.org>
-References: <20200728181132.55476e07@canb.auug.org.au>
+        Wed, 29 Jul 2020 07:09:55 -0700 (PDT)
+Date:   Wed, 29 Jul 2020 17:09:53 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject: make oldconfig (Re: mmotm 2020-07-27-18-18 uploaded
+ (mm/page_alloc.c))
+Message-ID: <20200729140953.GA1650156@localhost.localdomain>
+References: <20200728011914.S-8vAYUK0%akpm@linux-foundation.org>
+ <ae87385b-f830-dbdf-ebc7-1afb82a7fed0@infradead.org>
+ <20200728145553.2a69fa2080de01922b3a74e0@linux-foundation.org>
+ <048cef07-ad4b-8788-94a4-e144de731ab6@infradead.org>
+ <20200728184419.4b137162844987c9199542bb@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200728181132.55476e07@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200728184419.4b137162844987c9199542bb@linux-foundation.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 06:11:32PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Jul 28, 2020 at 06:44:19PM -0700, Andrew Morton wrote:
+> On Tue, 28 Jul 2020 15:39:21 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> After merging the vhost tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from drivers/virtio/virtio_vdpa.c:17:
-> include/linux/vdpa.h:43:21: error: expected ':', ',', ';', '}' or '__attribute__' before '.' token
->    43 |  bool features_valid.
->       |                     ^
-> 
-> Caused by commit
-> 
->   fee8fe6bd8cc ("vdpa: make sure set_features in invoked for legacy")
-> 
-> I have used the vhost tree from next-20200727 for today.
+> > On 7/28/20 2:55 PM, Andrew Morton wrote:
+> > > On Tue, 28 Jul 2020 05:33:58 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+> > > 
+> > >> On 7/27/20 6:19 PM, Andrew Morton wrote:
+> > >>> The mm-of-the-moment snapshot 2020-07-27-18-18 has been uploaded to
+> > >>>
+> > >>>    http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > 
+> > >> on x86_64:
+> > >>
+> > >> ../mm/page_alloc.c:8355:48: warning: ‘struct compact_control’ declared inside parameter list will not be visible outside of this definition or declaration
+> > >>  static int __alloc_contig_migrate_range(struct compact_control *cc,
+> > >>                                                 ^~~~~~~~~~~~~~~
+> > > 
+> > > As is usually the case with your reports, I can't figure out how to
+> > > reproduce it.  I copy then .config, run `make oldconfig' (need to hit
+> > > enter a zillion times because the .config is whacky)
 
-Sorry by bad, pushed to a wrong tag.
+If it helps with Enter:
 
+	yes '' | make oldconfig
 
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-
+Works 99.99% of the time except when there is numeric/string option
+without default value.

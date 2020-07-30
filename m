@@ -2,116 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B8D23318F
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 14:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5C023321B
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 14:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgG3MDR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 08:03:17 -0400
-Received: from mail-eopbgr70040.outbound.protection.outlook.com ([40.107.7.40]:58551
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726581AbgG3MDP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 30 Jul 2020 08:03:15 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GGQUu2ASPo/rhTYvnWjoI0FXWXs/CRmMlzN/T5M7N1L/Vcj8qd6y2pUq0/IHihugQt9H8CD6RP04B5OLinR/HoMaYyB0D1dOyC6hs4uJ5/JNxG4CjRV0h0Hvwwmck8B9KCrn7lFuZBfsqi2pLYPzu5W568uHft3pkQZ+SNx1mJcXobfSYG6jtgtKZYuptFgSpYoQcv2Vm/8gIc2NdLSgegb4tOfLbyipYapjaVFM0xBiZVkrsScszZIIFxaSbeY1q8Wu1zSRTKecUjYPbmH4vYH+780YJDehROw9NE898wAvW90rPGp73ivEMKUhPEvDwxD1u8i5owgfRlpU5RFP3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qN8eX597T2OaFClzdUsyPgbwZkf/drlB2RlXM3sX1SY=;
- b=gu6mBA/wB085y343loBmzUIv3DrZIuxr8SwxCjXxOIJf88asjOUJtvTdFLhR9mv4bOqBWcqnwZ/XPR0bfUAizx7NT17nmGqJXRMcpNUl1YzRrXANzwivTYVupOYNPfcGAEmrMeoxYtEXa0ZxHHm5OlBadtBfOmyrtyznamhwAAu/ldqs9x9WBQ7DWGId0lXAklWCAtD561MB+LNHP8VXnXQ/9xPOESDVyNcALfLq2j/aClFyKmN1qAvsgFFBmEZ0xE3v9juzwwd23GqqMkjHoL4G8H/j2ePa6TJJWS8a2nPJHhGzgbBmApamu7mS35Z7ejrYHAgcIn0B4G7T6sn26w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qN8eX597T2OaFClzdUsyPgbwZkf/drlB2RlXM3sX1SY=;
- b=HcfGkhzvBrfLApOZZYjfmcC0SZ/49xFfCv4MhL1RdmW9pfRgQo5lod4sMqf2Sg2fc2s4bCq4hbPl1oM1PEXCQBWi1D0xaMrf1cgCtYJKOF8FVwp25bzrlq+Tz47gpL9RDnjBEe7o6l1PCdu2FaK+JieyAkKmMENjIWJaxpNwACM=
-Authentication-Results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none
- header.from=mellanox.com;
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (2603:10a6:803:44::15)
- by VI1PR05MB5583.eurprd05.prod.outlook.com (2603:10a6:803:99::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.24; Thu, 30 Jul
- 2020 12:03:11 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::10b0:e5f1:adab:799a]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::10b0:e5f1:adab:799a%4]) with mapi id 15.20.3216.034; Thu, 30 Jul 2020
- 12:03:11 +0000
-Date:   Thu, 30 Jul 2020 09:03:03 -0300
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ben Skeggs <bskeggs@redhat.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: Re: linux-next: manual merge of the hmm tree with the drm tree
-Message-ID: <20200730120303.GQ19097@mellanox.com>
-References: <20200730192110.1466e63e@canb.auug.org.au>
+        id S1728601AbgG3M3H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 08:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728157AbgG3M3E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 08:29:04 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C68C061794
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 05:29:04 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id b79so25307333qkg.9
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 05:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=a9jZH6Ll+sEH5WFMFRXAZ0o9TX5SDfud55CbQYcvoaA=;
+        b=WSj5RPMJbQFYGXKFa57Tt+1uPT5FuT5rpSK8NNCi9wwgIMbSj0cdw0haGQ+8Pcc9Qe
+         dg0s35Nr8WipD1fDqaycqfRTfRYaUSLSNg1xHVWXbk4HeNwAEqLnxquDP24Imbk3gdfc
+         ZUUmg1QaWMBy4qV6M7SNEDwwMG6nUcjtUPZ8YJWXAPmMbFYX3FypuDhVEad1lccx+T5H
+         yBMguWxzxZ1flfBGjdFG1kwZOApBkSk7556CwptBg9W1mNKWlJ8xSs2YP8CWp7pbnWGp
+         QOIpWQORAgijBiOZblNHDMwVZTM14QvSL39XQmVsNxa1VPiz6E2x0SpxLIVFMlDyEyAs
+         4W/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=a9jZH6Ll+sEH5WFMFRXAZ0o9TX5SDfud55CbQYcvoaA=;
+        b=ty55McdlNSSFX3h6SFCCYC0uIduvMzMj/T9wqJmgtGsAbyIzGKyhXZZHFSQWsQnb5d
+         rrHTgE3mpQ4mpSVxYTuNTp+jnaKNyAzvNmSQyjs1p1DMw+PBUfPlp4BBq0kdl31o7WAV
+         WCmywZc3cUyO5BuKop+amWJv6ZOjLWjI3w0K/n8ENeGZVkSpDTI4fMKWAWG1e7kFleRt
+         mFaa9CAgM6ISPwkcaw/Euivk/aairsLID1vnWx34zQqdJ2e/F+gwBZT+sSglmD/MtgBP
+         56e5Ory4zV206RRBvrsgjQ5vDg427q7ryUJgf33bulDFBuBxrPywC0sOFj3liOb3zIny
+         nrfg==
+X-Gm-Message-State: AOAM533BxA/olmwvw/LKXxtkPvLwHcnY9YHqfGbosHc5rBbmWXZJWVjU
+        VXFmjaR6qSxOYK8GLDohDPWYFA==
+X-Google-Smtp-Source: ABdhPJwSdsCtQ0DJ9ivSf+lIOXepWUFKgPioDAv68OAiCRuMu9agvZzMQmfas/iKby0HEJZ0V8rCqA==
+X-Received: by 2002:a37:a45:: with SMTP id 66mr39219924qkk.435.1596112143280;
+        Thu, 30 Jul 2020 05:29:03 -0700 (PDT)
+Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id b8sm4129626qtg.45.2020.07.30.05.29.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2020 05:29:02 -0700 (PDT)
+Date:   Thu, 30 Jul 2020 08:28:56 -0400
+From:   Qian Cai <cai@lca.pw>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+        songliubraving@fb.com, andriin@fb.com, daniel@iogearbox.net,
+        catalin.marinas@arm.com, john.fastabend@gmail.com, ast@kernel.org,
+        zlim.lnx@gmail.com, kpsingh@chromium.org, yhs@fb.com,
+        will@kernel.org, kafai@fb.com, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/1] arm64: bpf: Add BPF exception tables
+Message-ID: <20200730122855.GA3773@lca.pw>
+References: <20200728152122.1292756-1-jean-philippe@linaro.org>
+ <20200728152122.1292756-2-jean-philippe@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200730192110.1466e63e@canb.auug.org.au>
-X-ClientProxiedBy: BL0PR03CA0031.namprd03.prod.outlook.com
- (2603:10b6:208:2d::44) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:44::15)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (156.34.48.30) by BL0PR03CA0031.namprd03.prod.outlook.com (2603:10b6:208:2d::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.16 via Frontend Transport; Thu, 30 Jul 2020 12:03:11 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@mellanox.com>)      id 1k17H5-001PZJ-JA; Thu, 30 Jul 2020 09:03:03 -0300
-X-Originating-IP: [156.34.48.30]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: cefdcd09-3ed9-483b-7297-08d8348087c5
-X-MS-TrafficTypeDiagnostic: VI1PR05MB5583:
-X-Microsoft-Antispam-PRVS: <VI1PR05MB55838C2B805AE91E71170085CF710@VI1PR05MB5583.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:313;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KOAewo6oGAbMffbVE3kpHscIZmlDE9Ul8qtmElj6kNQMoV6X9SJAmWl+WqZwRjdJfkaFn6kWPupbCB/XV9Vp9BBJDDGDoxYyyiO+BvPeD0wq8bzCtWEaCKuLVl8R9Vgc3ETPe/hSp7rs4GoaF2RAgbbEH96AWBWjX1j0i42bq+/HMhBW2uiCT7tELnqkbA5jTrfo7tkJPpblD38eswWY3JBsRyqm/uVnV8VArHOiNe6b/KnxQAJBMa686OuclyV1PFZY6CZQaxp/Y4LTBnv4z/hbZaAczyQA2HmfvJN4V61Z5vxWoGCZmqMZgkBYVvT+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR05MB4141.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(376002)(346002)(396003)(366004)(39860400002)(26005)(33656002)(316002)(8676002)(54906003)(66946007)(478600001)(110136005)(5660300002)(1076003)(2616005)(2906002)(66476007)(66556008)(426003)(4326008)(9786002)(9746002)(36756003)(8936002)(4744005)(86362001)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: FcNZZ6T7j9n82oupaxaoHtwz3B4Ka/sPhTFMOvAdVrL0ZiR05Yoo6f9vG0mm8JFWefDFs88aGT9QjbGmnyD1+VosE36GCsoJVbfFtwlqNIY4OcjElzayWTJYPDr4+MGG8kzAw4yhfsFoPfIad+WXq6NF8aTjRqmartaM3qyvjNZJAvAQZe6+z5jScAD63kxNjweYRyWuaUbbnvucd3RVZGsPOyA5/x0xW91h4G1PY+jh6WfOvVwzdrTCYR8vNQx9QwK+R5n+0lfmP1zbdkOO6XYMsU0s9tzv2dJImAZTArWE0hb347kiy3KgQMtk7YVkBAvgfyzKJsKHfO0zQWcAORs9ca7blPMBTq8eUYch1DmioOqkLVvmdwVMfU06QaD+rzXo9dCRUygnBX57yk/oQg18xEICytVKLwAJtpk1/iai/AvKl54VUKmY/qZjYxczWid0sXQ5CequbE3TbSnPSV/VQ50fZholUlTvx8EdhBc=
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cefdcd09-3ed9-483b-7297-08d8348087c5
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR05MB4141.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2020 12:03:11.2776
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M+GVNafIGEf5+EcO72w9jyXNZ4yrDt2ECEUR9W0c56HFGo0gmWK3MrVCiEitjL0jZZVbAOekVvdeTqguKBj8Gg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB5583
-X-MS-Exchange-Transport-Forked: True
+In-Reply-To: <20200728152122.1292756-2-jean-philippe@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 07:21:10PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Jul 28, 2020 at 05:21:26PM +0200, Jean-Philippe Brucker wrote:
+> When a tracing BPF program attempts to read memory without using the
+> bpf_probe_read() helper, the verifier marks the load instruction with
+> the BPF_PROBE_MEM flag. Since the arm64 JIT does not currently recognize
+> this flag it falls back to the interpreter.
 > 
-> Today's linux-next merge of the hmm tree got a conflict in:
+> Add support for BPF_PROBE_MEM, by appending an exception table to the
+> BPF program. If the load instruction causes a data abort, the fixup
+> infrastructure finds the exception table and fixes up the fault, by
+> clearing the destination register and jumping over the faulting
+> instruction.
 > 
->   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+> To keep the compact exception table entry format, inspect the pc in
+> fixup_exception(). A more generic solution would add a "handler" field
+> to the table entry, like on x86 and s390.
 > 
-> between commit:
-> 
->   7763d24f3ba0 ("drm/nouveau/vmm/gp100-: fix mapping 2MB sysmem pages")
-> 
-> from the drm tree and commits:
-> 
->   4725c6b82a48 ("nouveau: fix mapping 2MB sysmem pages")
->   1a77decd0cae ("nouveau: fix storing invalid ptes")
-> 
-> from the hmm tree.
-> 
-> 7763d24f3ba0 and 4725c6b82a48 are exactly the same patch.
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-Oh? Ralph? What happened here?
+This will fail to compile on arm64,
 
-Ben can you drop 7763d24f3ba0 ?
+https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
 
-Jason
+arch/arm64/mm/extable.o: In function `fixup_exception':
+arch/arm64/mm/extable.c:19: undefined reference to `arm64_bpf_fixup_exception'
+
+> ---
+> Note: the extable is aligned on 32 bits. Given that extable entries have
+> 32-bit members I figured we don't need to align it to 64 bits.
+> ---
+>  arch/arm64/include/asm/extable.h |  3 ++
+>  arch/arm64/mm/extable.c          | 11 ++--
+>  arch/arm64/net/bpf_jit_comp.c    | 93 +++++++++++++++++++++++++++++---
+>  3 files changed, 98 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
+> index 56a4f68b262e..bcee40df1586 100644
+> --- a/arch/arm64/include/asm/extable.h
+> +++ b/arch/arm64/include/asm/extable.h
+> @@ -22,5 +22,8 @@ struct exception_table_entry
+>  
+>  #define ARCH_HAS_RELATIVE_EXTABLE
+>  
+> +int arm64_bpf_fixup_exception(const struct exception_table_entry *ex,
+> +			      struct pt_regs *regs);
+> +
+>  extern int fixup_exception(struct pt_regs *regs);
+>  #endif
+> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+> index 81e694af5f8c..1f42991cacdd 100644
+> --- a/arch/arm64/mm/extable.c
+> +++ b/arch/arm64/mm/extable.c
+> @@ -11,8 +11,13 @@ int fixup_exception(struct pt_regs *regs)
+>  	const struct exception_table_entry *fixup;
+>  
+>  	fixup = search_exception_tables(instruction_pointer(regs));
+> -	if (fixup)
+> -		regs->pc = (unsigned long)&fixup->fixup + fixup->fixup;
+> +	if (!fixup)
+> +		return 0;
+>  
+> -	return fixup != NULL;
+> +	if (regs->pc >= BPF_JIT_REGION_START &&
+> +	    regs->pc < BPF_JIT_REGION_END)
+> +		return arm64_bpf_fixup_exception(fixup, regs);
+> +
+> +	regs->pc = (unsigned long)&fixup->fixup + fixup->fixup;
+> +	return 1;
+>  }
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 3cb25b43b368..f8912e45be7a 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -7,6 +7,7 @@
+>  
+>  #define pr_fmt(fmt) "bpf_jit: " fmt
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/bpf.h>
+>  #include <linux/filter.h>
+>  #include <linux/printk.h>
+> @@ -56,6 +57,7 @@ struct jit_ctx {
+>  	int idx;
+>  	int epilogue_offset;
+>  	int *offset;
+> +	int exentry_idx;
+>  	__le32 *image;
+>  	u32 stack_size;
+>  };
+> @@ -351,6 +353,67 @@ static void build_epilogue(struct jit_ctx *ctx)
+>  	emit(A64_RET(A64_LR), ctx);
+>  }
+>  
+> +#define BPF_FIXUP_OFFSET_MASK	GENMASK(26, 0)
+> +#define BPF_FIXUP_REG_MASK	GENMASK(31, 27)
+> +
+> +int arm64_bpf_fixup_exception(const struct exception_table_entry *ex,
+> +			      struct pt_regs *regs)
+> +{
+> +	off_t offset = FIELD_GET(BPF_FIXUP_OFFSET_MASK, ex->fixup);
+> +	int dst_reg = FIELD_GET(BPF_FIXUP_REG_MASK, ex->fixup);
+> +
+> +	regs->regs[dst_reg] = 0;
+> +	regs->pc = (unsigned long)&ex->fixup - offset;
+> +	return 1;
+> +}
+> +
+[]

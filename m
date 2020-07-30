@@ -2,120 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EE7232B51
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 07:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1A2232BC7
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 08:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727838AbgG3FUK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 01:20:10 -0400
-Received: from ozlabs.org ([203.11.71.1]:46997 "EHLO ozlabs.org"
+        id S1726774AbgG3GOY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 02:14:24 -0400
+Received: from wtarreau.pck.nerim.net ([62.212.114.60]:39189 "EHLO 1wt.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgG3FUK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 30 Jul 2020 01:20:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BHJdN0ss3z9sRX;
-        Thu, 30 Jul 2020 15:20:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596086408;
-        bh=ODeRgtMKT9jb1AW+U70iuR+0CpBcYdgaLgF+n3GXCP4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BVHxBkPZYUUs2Y6tuyHj5/gZZ98M9TqcWwGpfOpIihsQ0Z9MSdbw4YcTaPA5xqGiJ
-         bXmHaVtsWKLxTYTJIkUnCz1M5J0honBwSb4a9XhHl6RmyS6YnBg0uRrEEYvqvFqYda
-         /lOe12lKSibmolA6r2GVWamN6PRUmOU3Ovq6PdKfapT8UKdwwDbrKiSHWOkohLFDq/
-         xtgkl0Ydp9K7YfmH4ZtWrCMLAO/uqRGe7ghqqHligX7Vq/xIfeGw90AxSZsZ3gEkTD
-         4TMYsUBALOiNM7ZMi8GUKx/Qdpp/4L7ZLiGF31v+HB7qWH/SuKtftMFryESdzMWO0r
-         B2gUjy+qTJzjg==
-Date:   Thu, 30 Jul 2020 15:20:06 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725892AbgG3GOY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 30 Jul 2020 02:14:24 -0400
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 06U6E7kL007952;
+        Thu, 30 Jul 2020 08:14:07 +0200
+Date:   Thu, 30 Jul 2020 08:14:07 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Emese Revfy <re.emese@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: linux-next: manual merge of the iommu tree with the dma-mapping
- tree
-Message-ID: <20200730152006.7d012668@canb.auug.org.au>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Subject: Re: linux-next: build failure after merge of the origin tree
+Message-ID: <20200730061407.GA7941@1wt.eu>
+References: <20200730090828.2349e159@canb.auug.org.au>
+ <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
+ <202007292007.D87DBD34B@keescook>
+ <20200730032250.GB7790@1wt.eu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.gygsxj+xJnStLtg1iKpndV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/mixed; boundary="1yeeQ81UyVL57Vl7"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200730032250.GB7790@1wt.eu>
+User-Agent: Mutt/1.6.1 (2016-04-27)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.gygsxj+xJnStLtg1iKpndV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+--1yeeQ81UyVL57Vl7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Today's linux-next merge of the iommu tree got a conflict in:
+On Thu, Jul 30, 2020 at 05:22:50AM +0200, Willy Tarreau wrote:
+> On Wed, Jul 29, 2020 at 08:17:48PM -0700, Kees Cook wrote:
+> > And just another heads-up, the patch[1] (which was never sent to a public
+> > list) also breaks arm64 (circular header needs?):
+> (...)
+> 
+> Definitely, we've just got a report about this, I'll have a look once
+> I'm at the office. I'd like to check that we don't obviously break
+> another arch by just removing percpu. If at least shuffling them around
+> is sufficient that'd be nice. Otherwise we'll likely need a separate
+> header (which is not a bad thing for the long term).
 
-  drivers/iommu/Kconfig
+So Linus proposed a clean solution which might be harder to backport
+but looks better for 5.8. However the attached one addresses the issue
+for me on arm64 and still works on x86_64, arm, mips. I think we should
+go with this one first then apply Linus' one on top of it to be long
+term proof, and backport only the first one. Linus ?
 
-between commit:
+Willy
 
-  2f9237d4f6df ("dma-mapping: make support for dma ops optional")
+--1yeeQ81UyVL57Vl7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: attachment; filename="0001-random-fix-circular-include-dependency-on-arm64-afte.patch"
+Content-Transfer-Encoding: 8bit
 
-from the dma-mapping tree and commit:
+From 18fba9e2dfb16605a722e01f95d9e2d020efaa42 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Thu, 30 Jul 2020 07:59:24 +0200
+Subject: random: fix circular include dependency on arm64 after addition of
+ percpu.h
+MIME-Version: 1.0
+Content-Type: text/plain; charset=latin1
+Content-Transfer-Encoding: 8bit
 
-  ab65ba57e3ac ("iommu/vt-d: Move Kconfig and Makefile bits down into intel=
- directory")
+Daniel Díaz and Kees Cook independently reported that commit f227e3ec3b5c
+("random32: update the net random state on interrupt and activity") broke
+arm64 due to a circular dependency on include files since the addition of
+percpu.h in random.h.
 
-from the iommu tree.
+The correct fix would definitely be to move all the prandom32 stuff out
+of random.h but for backporting, a smaller solution is preferred. This
+one replaces linux/percpu.h with asm/percpu.h, and this fixes the problem
+on x86_64, arm64, arm, and mips. Note that moving percpu.h around didn't
+change anything and that removing it entirely broke differently. When
+backporting, such options might still be considered if this patch fails
+to help.
 
-I fixed it up (I used the ;atter and applied the folowing merge fix
-patch as well) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 30 Jul 2020 15:14:18 +1000
-Subject: [PATCH] merge fix for "dma-mapping: make support for dma ops optio=
-nal"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reported-by: Daniel Díaz <daniel.diaz@linaro.org>
+Reported-by: Kees Cook <keescook@chromium.org>
+Fixes: f227e3ec3b5c
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- drivers/iommu/intel/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/random.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
-index 877beec9d987..5337ee1584b0 100644
---- a/drivers/iommu/intel/Kconfig
-+++ b/drivers/iommu/intel/Kconfig
-@@ -6,6 +6,7 @@ config DMAR_TABLE
- config INTEL_IOMMU
- 	bool "Support for Intel IOMMU using DMA Remapping Devices"
- 	depends on PCI_MSI && ACPI && (X86 || IA64)
-+	select DMA_OPS
- 	select IOMMU_API
- 	select IOMMU_IOVA
- 	select NEED_DMA_MAP_STATE
---=20
-2.27.0
+diff --git a/include/linux/random.h b/include/linux/random.h
+index f310897f051d..9ab7443bd91b 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -11,7 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/once.h>
+-#include <linux/percpu.h>
++#include <asm/percpu.h>
+ 
+ #include <uapi/linux/random.h>
+ 
+-- 
+2.20.1
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/.gygsxj+xJnStLtg1iKpndV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8iWIYACgkQAVBC80lX
-0GxylAf3V+eKlEHqQi+SBPIXWiaFumZKs8Zr6vyqoeeu1NhsHKGmfRuUs7DI5Rd0
-ss5/FvPXlbnmqsZT0KoCeS9ZwAIjlh8OJ/9eiR1q9bgkAAEBrFNIC2BaP47/O433
-Hd/BlGhnbFpyZQ5hWv9cn+GGP5TwSGyDHa87nkhh3vBzh4ScRTjYkT+KKC5z54Au
-rAq2MYLvqaJBBCHLb28Si1aO/OFGxhDJGXmy03p/Qo7Ds98uCfqIEWiJMdE0yvro
-jkkk0mfrnchgof/iQllMoppkoHAJ7nEXZgSlpLVE+M3egM9svMd4VMkDNoC1yzCx
-7Ax+PJ7DYjJdhGmQ1BNsQJjfskf/
-=yw64
------END PGP SIGNATURE-----
-
---Sig_/.gygsxj+xJnStLtg1iKpndV--
+--1yeeQ81UyVL57Vl7--

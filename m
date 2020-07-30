@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2137F23284B
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 01:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB58232891
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 02:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgG2XnY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 19:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S1728053AbgG3AKS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 20:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727072AbgG2XnY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 19:43:24 -0400
+        with ESMTP id S1727072AbgG3AKR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 20:10:17 -0400
 Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B86C061794
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 16:43:23 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id q7so26924670ljm.1
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 16:43:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E55C061794
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:17 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id q7so26974498ljm.1
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cLb39v1oq5FRSvzH9bhk1WYh4C3cI/mPlFpmehg+P8U=;
-        b=bJY1IJETI9mZ6ooPJU+FDg9B7jzap0h2Yz93SPYM9zKJ9Wdg5rhq1Q38+uqHFUftp6
-         yXS3OWEtQE+ECx5vOXCBAGIp+ZFWxHA4xV5cJeTIyP54f59CP+/hvMrC1NPhC8s3Ij31
-         Sk8Hf3X7mT+6eSMW+Rv2JLhvzWZAuA8ve65jI=
+        bh=5uaGB2xOYWa+jACqPIzmH4++Yk2MzFSBiFLA11OUW2E=;
+        b=hEZFWlE7wFcKYKOakFk0ARR5rq45yVm7myS+H/aFfLygPk2/HtvTay9IOs8X986Au0
+         ysId+nihcBhqm06rqs/so9xUnDDA9GxF8oz88kgI3tVsdQf2m5jR8R6WiMH0ND1+jRFf
+         q0p1S8kKPPF01m/AsRNu6iCyH2Apvz8S+SYjo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cLb39v1oq5FRSvzH9bhk1WYh4C3cI/mPlFpmehg+P8U=;
-        b=OwJzFFXK12ROZQiXdtr1n9KljABlSDShfhyxoGy+XlJg9nZRXIjhwKwYY3uLqnCnMA
-         9RB4VEsuxfgx1aLKGCajH5yJATtHOrh80LYpRVSDm6XidWKSmbgarMQoWiTHRm18CRZU
-         P4tUsmgCcbDkgSXUDSV6u8bvw93EYabo8AxDJGCYuLBhyNxbZZryVOXV2iKzJh4c+z4q
-         eBxuVxHUkhMW0On6pWpVX+flFjjs0C2O8se+CPG50D8WEJUSa/fOtd/GCkeHapbEywfJ
-         mDYVrtCaZgw7QuSKbCIxZzzg2vNt3yKxVL/eAO/rwT9r9F5jhxqFj7tzeQ3TVIpobRJt
-         Stxw==
-X-Gm-Message-State: AOAM533ATlqEUnJwC64fL2YrIr45dj+h2iiBjTNQXlmNqjAWalV2AA5H
-        HG9pRWshak/V5sdbqUR6E8rQ92Jl0aw=
-X-Google-Smtp-Source: ABdhPJwjpisJUz0omJChIbAx+c1TG/jjsIN4mu52QHkQLWyzAGIXpMw8Bu+gaBPgpn05VfR388cr1A==
-X-Received: by 2002:a2e:3015:: with SMTP id w21mr146539ljw.30.1596066202140;
-        Wed, 29 Jul 2020 16:43:22 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id g2sm796394ljj.90.2020.07.29.16.43.20
+        bh=5uaGB2xOYWa+jACqPIzmH4++Yk2MzFSBiFLA11OUW2E=;
+        b=qLZ/UnP0Py+Odo1z6DeIpLj5Opy/c1fJyjiMgEHyOWAudkB2BbmjVj5lnZzYEUY3Oz
+         wXG6yFj2UuNfBirN50V4an9EfxV1GYNa1M7UYtPd/M2by1C2dzXYatN3dy1GSKo107ZN
+         JVSdvSVFPZKvGLIdUF93iPCy4UARsFmezQ9G5qFQ+o+9SD9lz1NErkoZ0zd3aPwklG0f
+         Kg69hC0PnvhX+1AZApFlJIi/74pephx2mr/nsBZWW9n/lI3vg7pX6Vv6AM/JJNyfjCEk
+         VJGoHnW94fS0yUI/ho35UozLA+EHToOpy7mQ5e4SByrzS2o7aJ85I50GiQk85+7QWFpQ
+         VbIQ==
+X-Gm-Message-State: AOAM533YCJTYEfXzbOUXK1YHoFAhLWG0JkV1U3NwHEOINQn8o8pqCfWE
+        aRaEXT+FcBNA3RzHAgan0VY6gRgf1Ew=
+X-Google-Smtp-Source: ABdhPJy5TH8dNZKyxFy4YEYEeAHpHwT3VW1++LFFqyoCpWC6/Ok3oQWqj26aMiH1q9bah4NjkEV55Q==
+X-Received: by 2002:a2e:8145:: with SMTP id t5mr156386ljg.201.1596067815595;
+        Wed, 29 Jul 2020 17:10:15 -0700 (PDT)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id g18sm820194ljk.27.2020.07.29.17.10.14
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 16:43:21 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id b11so13980732lfe.10
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 16:43:20 -0700 (PDT)
-X-Received: by 2002:a05:6512:241:: with SMTP id b1mr171970lfo.125.1596066200379;
- Wed, 29 Jul 2020 16:43:20 -0700 (PDT)
+        Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 140so14003828lfi.5
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
+X-Received: by 2002:a05:6512:3b7:: with SMTP id v23mr238005lfp.10.1596067814139;
+ Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200730090828.2349e159@canb.auug.org.au>
-In-Reply-To: <20200730090828.2349e159@canb.auug.org.au>
+References: <20200730090828.2349e159@canb.auug.org.au> <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 29 Jul 2020 16:43:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
-Message-ID: <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
+Date:   Wed, 29 Jul 2020 17:09:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
+Message-ID: <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
 Subject: Re: linux-next: build failure after merge of the origin tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Emese Revfy <re.emese@gmail.com>,
@@ -69,43 +69,21 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 4:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Jul 29, 2020 at 4:43 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> include/linux/random.h:123:24: error: variable 'net_rand_state' with 'latent_entropy' attribute must not be local
->   123 | DECLARE_PER_CPU(struct rnd_state, net_rand_state) __latent_entropy;
+> Ok, this shows a limitation of my allmodconfig testing (and all my
+> normal builds) - no plugins. So that problem wasn't as obvious as it
+> should have been.
 
-Hmm.
+Ok, that was easy to install and get the coverage, and now I see the error.
 
-Ok, this shows a limitation of my allmodconfig testing (and all my
-normal builds) - no plugins. So that problem wasn't as obvious as it
-should have been.
+Except I still don't know the gcc plugins well enough to fix it at the
+plugin level. And the gcc docs only talk about TREE_STATIC() for
+functions, not for variables. Apparently variables should use
+DECL_THIS_EXTERN or DECL_THIS_STATIC according to the docs I find, but
+..
 
-That error isn't very helpful, in that I think it actually is very
-wrong. The variable really isn't local at all.
+Removing the __latent_entropy marker obviously fixes things.
 
-I think what the plugin *means* by "local" is "automatic", and I think
-it uses the wrong test for it. IOW, looking at the plugin, it does
-
-                if (!TREE_STATIC(*node)) {
-                        *no_add_attrs = true;
-                        error("variable %qD with %qE attribute must
-not be local",
-                                *node, name);
-
-and what I think it really wants is that it has a static address - so
-a global variable is fine - as opposed to being an actual static
-declaration.
-
-Also looking at the plugin, I suspect it is going to be very unhappy
-about the fact that the attribute is there both on a declaration and
-on the actual definition. The code later seems to really only want to
-work on the definition, since it's creating an initializer..
-
-IOW, I get the feeling that the plugin is confused, and it so happened
-that the only variables we'd marked for latent entropy were static
-ones. But I haven't done gcc plugins, so...
-
-Adding the gcc plugin people. Otherwise the only option seems to be to
-just remove that __latent_entropy marker.
-
-                    Linus
+               Linus

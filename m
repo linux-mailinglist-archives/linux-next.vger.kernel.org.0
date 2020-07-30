@@ -2,92 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 443FC23395B
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 21:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071AA233A5D
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 23:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730550AbgG3TxQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 15:53:16 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:38825 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726857AbgG3TxO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 30 Jul 2020 15:53:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596138793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LUonSFV6XEmNIUenD36yg/0NS2iO4j/UJ8CxJKTK1/c=;
-        b=Cq7Ip1mZ48AX6la10bcYwXiKWSC3rFZGnUjr08+orYUemcm/PxphRCT2q3T4L1ni+TndGT
-        8vF/7rwJdiPH/ZsBXoXYBiF1JS3X/AQnKnuCP1f3SPTKHlojvm6omvD/a0ka2TFo4j0j3H
-        v933QdyiCHQ08g9GQmyTRdp6hx3ALpA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-157-kybUVMzfPoW0YYiKC78ySA-1; Thu, 30 Jul 2020 15:53:11 -0400
-X-MC-Unique: kybUVMzfPoW0YYiKC78ySA-1
-Received: by mail-wr1-f70.google.com with SMTP id d6so6763358wrv.23
-        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 12:53:11 -0700 (PDT)
+        id S1730477AbgG3VPA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 17:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728171AbgG3VO7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 17:14:59 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E9CC061574
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 14:14:58 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id qc22so14595979ejb.4
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 14:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HQQ6RdOfI3qK/AtcGyAa3PPfsZ6PvAzcNLL/uW5Ov+c=;
+        b=iSeinaQFf3yOe2lHxw0CJ8uvvymodnA+gZRBuK4XFslunfBv0lKOpua4/qzmJAeEFf
+         CIhT9MTlKcx429Yqx/9BIvA0klhKjSnvGk84//qFwlrkB9ss82m9nN1DLOaLaapcrVBh
+         KwI/PLMaPPLuiVBdfpgbc6+Q6yzAILIrEWmSOzbfKHx359OcZL2Ra3+hiznU8ilKAdgG
+         YM3x9kcYKXXxov8pSZBJMUeEQ2qZIy648K1J3KfS1xgw1u2pwO3Wr8gjFMa+X2vSEiZ+
+         yNar+F+DxEXNUGQoQlvdbdB6KQ/xGNWe7kHQq4J3/QP3sB0jL/wbrhD+H/8BX/pHIxDw
+         xrHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=LUonSFV6XEmNIUenD36yg/0NS2iO4j/UJ8CxJKTK1/c=;
-        b=NQ2eYVg2rJ0UNeFSCCeubIEUKTJ+SizxJX6dmFGvMNCyufEaI5O8giyFfY3tEmnllX
-         eKX/9vM5wA6FVnQW1O7+Hu/igiZP/ZRDREBDPG7RMCtxF/mjkect9BTWKUE2OS3f66G9
-         mFOoYr1OVFOUQgU8G6dBLDKD6wHcJM3r9uo+Sf/vMsoaGvswolxMr97Zssn+TtQGkGY+
-         weYLppbNcbA+denkj6D8EBYqxPHMhfmJPadcOFZzwHQ3Z0Xfsh9jzxB8BX9Ap2aq8bq6
-         NjTuE+xk4RUlST5EUdPg9RvByfz7mE5MWS+/nti5kjYMZdA5k+A5pTIY1Fnh2SNfR0tS
-         0D6Q==
-X-Gm-Message-State: AOAM53035JH0R+0N6gBRguiiWZ/y5hgcCDgIyMe8ut1S9ofnPhKJrJB+
-        DuVgeDLh357aEWsuZdxpUlhY2gzqvsaMAKDWrnSXpNkVqqpEtONmzmU9yngPRgcY0UIFpqgYXjI
-        Ie8X9dVXtz0OviDIfHIWaQA==
-X-Received: by 2002:a5d:5086:: with SMTP id a6mr307336wrt.304.1596138790350;
-        Thu, 30 Jul 2020 12:53:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwtUCkyYmzlnOirlC1EsPCXGLv7EslLS3tLClf3ZG6+NqtRlH5qYQ9cAiYMPVBZRUrE1bGksg==
-X-Received: by 2002:a5d:5086:: with SMTP id a6mr307325wrt.304.1596138790132;
-        Thu, 30 Jul 2020 12:53:10 -0700 (PDT)
-Received: from redhat.com (bzq-79-179-105-63.red.bezeqint.net. [79.179.105.63])
-        by smtp.gmail.com with ESMTPSA id 3sm312979wms.36.2020.07.30.12.53.08
+        bh=HQQ6RdOfI3qK/AtcGyAa3PPfsZ6PvAzcNLL/uW5Ov+c=;
+        b=RSzFJEoaR7N68Afw+PTCw8+yXHDC4zXzaq7Wnhmdg9RfQPkfk2k5weQqTf6Vo8GKlk
+         6QsTEwEXH441z867Zef3AAxuw1Ab07CNuYNH+LR+qbHWxfRZvswhzMdkTbVJQEB9AcFn
+         FJevA07Ec2j45dSHjVX+im+fM/HkFu+h+/o2J/ppPxsIxqDKI2dTxZHzWOpx2MybD9Vh
+         x7uDMMBRhJ5ArY2VsHaNtXtK9GqRZv8MIO9DxpYyCQu4ra05lz4MbcO3JsWTSmmuutb/
+         ua8AJ92TL3z0uUn562E5CNvJNuiNT6LIy06vHsb5kVMKIlgO/WujnTe7B+NkXsx4itC5
+         HNpA==
+X-Gm-Message-State: AOAM531Sg3W0kTYx1uWuivTVfECiPw1TH6lUX/G1dVBE1yHS0LF6mv9y
+        PEnP4XO5xZmy5Pfk0sDkyKnBAw==
+X-Google-Smtp-Source: ABdhPJzlHh02QVVAFLKTB+xoRHb3mqAraUbK6zYudTHxIdHXY8kSsZkO1Rf8FHPFvQ+mk1u0vH6A8A==
+X-Received: by 2002:a17:906:fb07:: with SMTP id lz7mr991136ejb.49.1596143697686;
+        Thu, 30 Jul 2020 14:14:57 -0700 (PDT)
+Received: from lophozonia ([2001:1715:4e26:a7e0:f1b0:45a6:cd09:bcd0])
+        by smtp.gmail.com with ESMTPSA id w20sm7569128eds.21.2020.07.30.14.14.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2020 12:53:09 -0700 (PDT)
-Date:   Thu, 30 Jul 2020 15:53:06 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the vhost tree
-Message-ID: <20200730155043-mutt-send-email-mst@kernel.org>
-References: <20200728080556.447ba206@canb.auug.org.au>
+        Thu, 30 Jul 2020 14:14:57 -0700 (PDT)
+Date:   Thu, 30 Jul 2020 23:14:53 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Qian Cai <cai@lca.pw>, linux-arm-kernel@lists.infradead.org,
+        bpf@vger.kernel.org, songliubraving@fb.com, andriin@fb.com,
+        catalin.marinas@arm.com, john.fastabend@gmail.com, ast@kernel.org,
+        zlim.lnx@gmail.com, kpsingh@chromium.org, yhs@fb.com,
+        will@kernel.org, kafai@fb.com, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/1] arm64: bpf: Add BPF exception tables
+Message-ID: <20200730211453.GA79372@lophozonia>
+References: <20200728152122.1292756-1-jean-philippe@linaro.org>
+ <20200728152122.1292756-2-jean-philippe@linaro.org>
+ <20200730122855.GA3773@lca.pw>
+ <20200730142213.GB1529030@myrica>
+ <f2f05f41-ccf9-e693-85bf-59ebbf8dadfe@iogearbox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200728080556.447ba206@canb.auug.org.au>
+In-Reply-To: <f2f05f41-ccf9-e693-85bf-59ebbf8dadfe@iogearbox.net>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 08:05:56AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Jul 30, 2020 at 09:47:39PM +0200, Daniel Borkmann wrote:
+> On 7/30/20 4:22 PM, Jean-Philippe Brucker wrote:
+> > On Thu, Jul 30, 2020 at 08:28:56AM -0400, Qian Cai wrote:
+> > > On Tue, Jul 28, 2020 at 05:21:26PM +0200, Jean-Philippe Brucker wrote:
+> > > > When a tracing BPF program attempts to read memory without using the
+> > > > bpf_probe_read() helper, the verifier marks the load instruction with
+> > > > the BPF_PROBE_MEM flag. Since the arm64 JIT does not currently recognize
+> > > > this flag it falls back to the interpreter.
+> > > > 
+> > > > Add support for BPF_PROBE_MEM, by appending an exception table to the
+> > > > BPF program. If the load instruction causes a data abort, the fixup
+> > > > infrastructure finds the exception table and fixes up the fault, by
+> > > > clearing the destination register and jumping over the faulting
+> > > > instruction.
+> > > > 
+> > > > To keep the compact exception table entry format, inspect the pc in
+> > > > fixup_exception(). A more generic solution would add a "handler" field
+> > > > to the table entry, like on x86 and s390.
+> > > > 
+> > > > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > > 
+> > > This will fail to compile on arm64,
+> > > 
+> > > https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
+> > > 
+> > > arch/arm64/mm/extable.o: In function `fixup_exception':
+> > > arch/arm64/mm/extable.c:19: undefined reference to `arm64_bpf_fixup_exception'
+> > 
+> > Thanks for the report, I attached a fix. Daniel, can I squash it and
+> > resend as v2 or is it too late?
 > 
-> ommit
-> 
->   ed944d574cc7 ("ack! virtio: VIRTIO_F_IOMMU_PLATFORM -> VIRTIO_F_ACCESS_PLATFORM")
-> 
-> is missing a Signed-off-by from its author and committer.
-> 
-> I have never seen an empty commit like this before - I assume it is just
-> a way to add an Reviewed-by to a previous commit without rebaseing
-> the tree.
+> If you want I can squash your attached snippet into the original patch of
+> yours. If you want to send a v2 that is fine as well of course. Let me know.
 
-Yes - I'm using these to record acks, then squash before the pull
-request. git patches I'm using to support this are here - I've rebased
-since but didn't have the energy to advocate for upstreaming:
-https://lore.kernel.org/r/1460296343-17304-1-git-send-email-mst%40redhat.com
+Yes please squash it into the original patch, sorry for the mess
 
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-
+Thanks,
+Jean

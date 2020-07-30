@@ -2,113 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DBB23388C
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 20:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5668E233941
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 21:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728565AbgG3SrZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 14:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726343AbgG3SrY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 14:47:24 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F58C061574
-        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 11:47:24 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id kr4so3072172pjb.2
-        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 11:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=20EbUEqeYpd3RRZUZK1aesXR8taUEzkknvo8JthXpRA=;
-        b=mGjup5h1kWARxWONoDVI2PHrZazfbUi5lBQ0bXcOsbujHQq2gF2Jr5Hjanq+FS/GK7
-         AJ4vM5eaPU6+EeStZkPwAcLTaK/csiqXJDmm+rF53e9D2zFhxyRVE6ueu34xfxf51RRs
-         s2cOtYC3OvjXZBd/SLGSAK9FJ6zlFi6Tg0Z5M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=20EbUEqeYpd3RRZUZK1aesXR8taUEzkknvo8JthXpRA=;
-        b=RYMtapEDjcxT64HPyw2cF5NzjBYJFrvajlVnrn/x62tuJ/A45VREUikeBhnSZ3ba9l
-         V+FHJtOQvYdbqwQ7G6xcTrCNWzA4sxklt9uVvZP0awytOKcEIdIxwe4ejHmL4Xxzd48c
-         IYRFJJzzPtPLRXVHdpWGe1B6C9MniWZfnWYcFzJIpdoTJ5doVO4IoFMf1h++rxJtJOcK
-         JAxFPDG6+VZDgg7+7DxBeXuUl7nD+1NO6Pqz6WfqRM8C/g6YD5GqH0FQOPTZ89f9P9O4
-         Zv6ciAaxrPWgYGt98Q8s5c2ifqe9Xlowij1TJwUP4wNvUFHpdiSpvF4/qQ6oK1yZk9qu
-         QEpQ==
-X-Gm-Message-State: AOAM530CIGIbeukdoLXnUwZHJpUCGFoGSUNacoZAF+eEMnj70Q+GeNuA
-        OInp5xHymcNJusczjibDikBBhQ==
-X-Google-Smtp-Source: ABdhPJyQX1XNcftoW/MpbN6UWTl2wh1bt4Xo8RHzLBHCtvzshUMKwTYpwnID02muvX0tix70g3Y+Jg==
-X-Received: by 2002:a17:90a:348d:: with SMTP id p13mr479596pjb.108.1596134844313;
-        Thu, 30 Jul 2020 11:47:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i1sm7221219pfo.212.2020.07.30.11.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2020 11:47:23 -0700 (PDT)
-Date:   Thu, 30 Jul 2020 11:47:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Emese Revfy <re.emese@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: linux-next: build failure after merge of the origin tree
-Message-ID: <202007301138.D8B018CB@keescook>
-References: <20200730090828.2349e159@canb.auug.org.au>
- <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
- <202007292007.D87DBD34B@keescook>
- <CAHk-=wivHdh7yWmPMLDLVWzO-gVtu94KBq5RETPeU8EoBR2Qqg@mail.gmail.com>
+        id S1728692AbgG3Tro (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 15:47:44 -0400
+Received: from www62.your-server.de ([213.133.104.62]:36664 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726857AbgG3Tro (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 15:47:44 -0400
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k1EWi-0007ew-B5; Thu, 30 Jul 2020 21:47:40 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k1EWi-000C0T-0x; Thu, 30 Jul 2020 21:47:40 +0200
+Subject: Re: [PATCH bpf-next 1/1] arm64: bpf: Add BPF exception tables
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Qian Cai <cai@lca.pw>
+Cc:     linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+        songliubraving@fb.com, andriin@fb.com, catalin.marinas@arm.com,
+        john.fastabend@gmail.com, ast@kernel.org, zlim.lnx@gmail.com,
+        kpsingh@chromium.org, yhs@fb.com, will@kernel.org, kafai@fb.com,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200728152122.1292756-1-jean-philippe@linaro.org>
+ <20200728152122.1292756-2-jean-philippe@linaro.org>
+ <20200730122855.GA3773@lca.pw> <20200730142213.GB1529030@myrica>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f2f05f41-ccf9-e693-85bf-59ebbf8dadfe@iogearbox.net>
+Date:   Thu, 30 Jul 2020 21:47:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wivHdh7yWmPMLDLVWzO-gVtu94KBq5RETPeU8EoBR2Qqg@mail.gmail.com>
+In-Reply-To: <20200730142213.GB1529030@myrica>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25889/Thu Jul 30 17:03:53 2020)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 11:24:44AM -0700, Linus Torvalds wrote:
-> On Wed, Jul 29, 2020 at 8:17 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > I'll look into this more tomorrow. (But yes, __latent_entropy is
-> > absolutely used for globals already, as you found, but this is the first
-> > percpu it was applied to...)
+On 7/30/20 4:22 PM, Jean-Philippe Brucker wrote:
+> On Thu, Jul 30, 2020 at 08:28:56AM -0400, Qian Cai wrote:
+>> On Tue, Jul 28, 2020 at 05:21:26PM +0200, Jean-Philippe Brucker wrote:
+>>> When a tracing BPF program attempts to read memory without using the
+>>> bpf_probe_read() helper, the verifier marks the load instruction with
+>>> the BPF_PROBE_MEM flag. Since the arm64 JIT does not currently recognize
+>>> this flag it falls back to the interpreter.
+>>>
+>>> Add support for BPF_PROBE_MEM, by appending an exception table to the
+>>> BPF program. If the load instruction causes a data abort, the fixup
+>>> infrastructure finds the exception table and fixes up the fault, by
+>>> clearing the destination register and jumping over the faulting
+>>> instruction.
+>>>
+>>> To keep the compact exception table entry format, inspect the pc in
+>>> fixup_exception(). A more generic solution would add a "handler" field
+>>> to the table entry, like on x86 and s390.
+>>>
+>>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>
+>> This will fail to compile on arm64,
+>>
+>> https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
+>>
+>> arch/arm64/mm/extable.o: In function `fixup_exception':
+>> arch/arm64/mm/extable.c:19: undefined reference to `arm64_bpf_fixup_exception'
 > 
-> Note that it was always per-cpu.
-> 
-> The only thing that changed was that it was declared static in
-> lib/random.c vs being externally visible.
+> Thanks for the report, I attached a fix. Daniel, can I squash it and
+> resend as v2 or is it too late?
 
-Yup, thanks. I realized that a bit after sending my email. :)
+If you want I can squash your attached snippet into the original patch of
+yours. If you want to send a v2 that is fine as well of course. Let me know.
 
-> Unrelated side note: I notice that the plugins could be simplified a
-> bit now that we require gcc 4.9 or later. There's a fair amount of
-> cruft for the earlier gcc versions.
-
-Yup -- Masahiro keeps poking the build system, but I haven't cleaned up
-the header file macros to keep up with the recent jumps. (It falls a bit
-low on my TODO list since it's a bit of a mechanical cleanup. I'm open
-to anyone that would like to send patches, though!)
-
-> I'm not sure how seriously the gcc plugins are actually maintained (no
-> offense) aside from just keeping them limping along. Does anybody
-> actually use them in production? I thought google had mostly moved on
-> to clang.
-
-They're part of regular testing, and there is ongoing development
-(e.g. see Alex Popov's recent series[1], which is in -next waiting for
-the v5.9 merge window). I hear regularly from folks using randstruct,
-stackleak, structleak, and latent_entropy. But yes, Google has moved
-to Clang where we're using Clang's implementation of structleak
-(auto-var-init) but there has been work to get randstruct ported (as
-desired by at least one Android vendor), though it's currently stalled.
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20200624123330.83226-1-alex.popov@linux.com/
-
--- 
-Kees Cook
+Thanks,
+Daniel

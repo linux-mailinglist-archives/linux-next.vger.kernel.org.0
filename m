@@ -2,92 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10032232C6D
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 09:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDDF232CB1
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 09:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725974AbgG3HTE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 03:19:04 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:48322 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgG3HTE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 03:19:04 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1596093541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pJGza9Pz+sV1Z8JGFBKIAwU8e2IyPGK36s3Pj76aQFE=;
-        b=i9avbnTss81DkmBzU4BwIQNN/Yy7tEFYX/dK7y+O1TjsfZ9E2+cfxC3b4j5IJpTxKmHAII
-        whwYXMHShIF6fD/tQooG3Vltg+wAQHByKlZ3DlASU+RpbMeyOBVATbZ4bHwVlE1JeeCt6c
-        SXlKqLrRlN4vfvjJ+9X1qTb/8MaaoTi3pAlIQf0CgcfJC3R/OG+g3NW1/iK7NbLRnLC0ca
-        HA7rlYqcLRrVqpTYvl6GgVUwylc6FB8fC+UvKbYIS0jnJw5iDdxRV2BFNOJlll08B713yD
-        eyJnNuYJtCYCHCn1qkljUGL+ztB00SE440sPS7Ts72ds8AsGGsOlD1xnCyVj0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1596093541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pJGza9Pz+sV1Z8JGFBKIAwU8e2IyPGK36s3Pj76aQFE=;
-        b=v2/7CCNT5pPmG7kimp3idDxfwKe1F9dXaGk7jvbAsZThXuDU2Utaa7pkHv4D1liE56BZXu
-        giFq8KLWyl5AnrAw==
-To:     Qian Cai <cai@lca.pw>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org
-Subject: Re: [patch V5 05/15] entry: Provide infrastructure for work before transitioning to guest mode
-In-Reply-To: <20200729165524.GA4178@lca.pw>
-References: <20200722215954.464281930@linutronix.de> <20200722220519.833296398@linutronix.de> <20200729165524.GA4178@lca.pw>
-Date:   Thu, 30 Jul 2020 09:19:01 +0200
-Message-ID: <87bljxa2sa.fsf@nanos.tec.linutronix.de>
+        id S1726194AbgG3Hrd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 03:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgG3Hrc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 03:47:32 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A1C061794;
+        Thu, 30 Jul 2020 00:47:32 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id t6so16085060pgq.1;
+        Thu, 30 Jul 2020 00:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtQd0r7mPWp4LCw9V5WruqvGI96T5CfT/3YOE4IYwQ0=;
+        b=HWli+F3cevEtYkBYYAuXIgETbH5MGA5ExQ9WlWrGjRuUIvFZ37JydUyNRuJy8P5vPj
+         8wj20w+O+qh2W1z22hoZoyjpNes8mHlfrCxmUfkxdsuwoNWp16IbARd6DE7c83M/pEA7
+         rV5g81Lgcogtn+Yq+3Im0FMGGiMg3qLLQa4rPN9e++mtzRZ0tOY5pH58CfJ9HZBmx5Mr
+         KemeY08AQzmAeJJHE2mxKjhMwfDUWVCmJdcECblJtWkRyQcyy/D0VLHewLaFItoFXrhX
+         zoOXeCFFnJzEQqVwTeoayag3F8bzUyoNyuygIMd7HqiS/9zcaMqX1MMDBQSrzO3tftRC
+         SWLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtQd0r7mPWp4LCw9V5WruqvGI96T5CfT/3YOE4IYwQ0=;
+        b=sln+m9hdVYPKr8peJDipqolfbrYI9fG6wsD5tQMADbnlFG6XgfG0KuxNMnQ1LnKj6X
+         oHYHL0oDxTC1U6+ddL80HDTOr/v2Zx9RMxAurO0aP/31nLyJFnPGbBkOJ1uv2aiZkonT
+         NED+C4/yKQo/CqdeFEbxIWIWtKinI02TByLXtSR0VN+GzaHzBjuBjBZZVgERv2tLIV2Y
+         /PinjsbGc6ZLHVV+60V3IZE0ykcDxxVsGAyGbcJzvvcOr+96z5Wlrs+jOZz1uRikDDGv
+         uWM/XakOle5inZFnpGzbfG+UuUALGVLRHMWDguQodJ67Ollzm7QtSmBvxgp+gyehu9Z3
+         LiPw==
+X-Gm-Message-State: AOAM533GuWJpHyKEWlk9Flkek56o7o850lsu9yU8Jpg9Msc3odlewp4n
+        SbiX4auQoIcfszogiDC98SS2Do293V+I5NHVAxk=
+X-Google-Smtp-Source: ABdhPJyvPhaxkAc8ZiP0Pqc3h7whZYpVSqj5vo0Mt3lDjRMjOkz1Mb4vjCwgIGBpxrGSQlRS1dJC8fjYpwgg3idWIL0=
+X-Received: by 2002:a62:7b4e:: with SMTP id w75mr1977914pfc.130.1596095251805;
+ Thu, 30 Jul 2020 00:47:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200729210311.425d0e9b@canb.auug.org.au> <20200729114757.GA19388@gondor.apana.org.au>
+ <20200729122807.GA7047@gondor.apana.org.au> <ed62ba67-0e1d-3fee-8c09-7750d5690be5@redhat.com>
+ <CAHp75VdbZu008RcxNhMysoqBs2FSPXWv+au_ROJ7FPVd0uOhtg@mail.gmail.com> <20200730005922.GA9710@gondor.apana.org.au>
+In-Reply-To: <20200730005922.GA9710@gondor.apana.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 30 Jul 2020 10:47:16 +0300
+Message-ID: <CAHp75Vf9Oj5DsGveN32i0A2TqudS+DXfhJYUOzSMJ6VD_A+2Ow@mail.gmail.com>
+Subject: Re: [PATCH 0/2] locking/qspinlock: Break qspinlock_types.h header loop
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Qian Cai <cai@lca.pw> writes:
-> On Wed, Jul 22, 2020 at 11:59:59PM +0200, Thomas Gleixner wrote:
-> SR-IOV will start trigger a warning below in this commit,
+On Thu, Jul 30, 2020 at 4:00 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
 >
-> [  765.434611] WARNING: CPU: 13 PID: 3377 at include/linux/entry-kvm.h:75 kvm_arch_vcpu_ioctl_run+0xb52/0x1320 [kvm]
+> On Wed, Jul 29, 2020 at 06:04:57PM +0300, Andy Shevchenko wrote:
+> > On Wed, Jul 29, 2020 at 4:35 PM Waiman Long <longman@redhat.com> wrote:
+> > > On 7/29/20 8:28 AM, Herbert Xu wrote:
+> >
+> > ...
+> >
+> > > This patch series looks good to me. I just wonder if we should also move
+> > > ATOMIC64_INIT() to types.h for symmetry purpose. Anyway,
+> >
+> > Same question here.
+>
+> Yes I almost started doing it but at least one architecture (arc)
+> had a custom atomic64_t so I kept it out just to be on the safe
+> side.
 
-Yes, I'm a moron. Fixed it locally and failed to transfer the fixup when
-merging it. Fix below.
+We may ask Synopsys folks to look at this as well.
+Vineet, any ideas if we may unify ATOMIC64_INIT() across the architectures?
 
-> [  768.221270] softirqs last disabled at (5093): [<ffffffffa1800ec2>] asm_call_on_stack+0x12/0x20
-> [  768.267273] ---[ end trace 8730450ad8cfee9f ]---
+> We certainly could do this as a follow-up patch.
 
-Can you pretty please trim your replies?
-
->> ---
->> V5: Rename exit -> xfer (Sean)
-
-<removed 200 lines of useless information>
-
-Thanks,
-
-        tglx
----
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 82d4a9e88908..532597265c50 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8682,7 +8682,7 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
- 			break;
- 		}
- 
--		if (xfer_to_guest_mode_work_pending()) {
-+		if (__xfer_to_guest_mode_work_pending()) {
- 			srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
- 			r = xfer_to_guest_mode_handle_work(vcpu);
- 			if (r)
-
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,125 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A372329BE
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 03:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9C22329D2
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 04:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728297AbgG3B54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 21:57:56 -0400
-Received: from relay5.mymailcheap.com ([159.100.241.64]:52059 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgG3B54 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 21:57:56 -0400
-Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.156])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 9A73F200E1
-        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 01:57:53 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay4.mymailcheap.com (Postfix) with ESMTPS id 6C4AA3F1CF;
-        Thu, 30 Jul 2020 03:57:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id 38F7A2A905;
-        Thu, 30 Jul 2020 03:57:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1596074270;
-        bh=HNTEtPvZ8Q8gpHfiRmmFzp9wJg7FvAMRKSwxXCTdJrE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=BwbeTpv5nImr8tezlb1vzB2mbeke4/G4RVKozUmwkrFbDdrHv9rckNjRDOiSBACRu
-         RHzZIHM4PJXBDq/M6jfHsPT8A0AhhkwndzNRvC7BAk82ptan1Zr98IXVGTIwBeQnQi
-         5/EOXz/gR43aXrFxcyzkx5xRmNdb4JbO11aCMR0Y=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dkVGCNmU6JUo; Thu, 30 Jul 2020 03:57:48 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Thu, 30 Jul 2020 03:57:48 +0200 (CEST)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id A46B940143;
-        Thu, 30 Jul 2020 01:57:45 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="YWQi6BdG";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (n11212042148.netvigator.com [112.120.42.148])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 74A0C40EB8;
-        Thu, 30 Jul 2020 01:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1596074226;
-        bh=HNTEtPvZ8Q8gpHfiRmmFzp9wJg7FvAMRKSwxXCTdJrE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=YWQi6BdG/NkMEerlQ1guyowekdGQEQKRmswhMgIQKX8MUnnQc530Sus0VGPVC5aSf
-         cbR7Lr9h+zV0v+be1jTdNq0Vjmoj34IZKBgz34SCAROeB7mA8PzHIJHy5QmH9HjkEn
-         RfCFYxbSWWbM77QQfAulrrnDqOxJa70EtFrF0764=
-Subject: Re: linux-next: build warning after merge of the mips tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>
-References: <20200729203142.18248463@canb.auug.org.au>
- <f2a9f50d-5299-04f8-146b-e09df8943367@flygoat.com>
- <20200730114023.60317d30@canb.auug.org.au>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <e8757bd7-e6e6-5181-ef52-7dca0a114360@flygoat.com>
-Date:   Thu, 30 Jul 2020 09:56:59 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726342AbgG3CNS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 22:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbgG3CNS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 22:13:18 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A133C0619D2
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 19:13:18 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id r19so27144396ljn.12
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 19:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cbyxg+vBVnUwNhF6wHPJRbrQKhEXP4EDZkqjL33ulC8=;
+        b=bzgFXToNOzcaLAmgIt+T0m4TY8UlRWwL9ZmbMxXoi7Js+hwyr/1u527NYpJ0AzFfwp
+         hR5A96iyL6BVxwjsCMm8WMG0KOXib7CoqXeQdc3Qq3gFRDaIBI1zPPUF4i1SRUCaa3+7
+         C2+L1V+r5jNUWwAbW4hfwvrpdKEpd+3mzaOtI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cbyxg+vBVnUwNhF6wHPJRbrQKhEXP4EDZkqjL33ulC8=;
+        b=h/odAeT4MRXV01yw9Qe1N8iOHxAUrCnlpwrhc+n6nqtvoHAOq7EygncMflJ3t7x6CA
+         jZ29UKLMsWKb9A+I3bn2oXwVAcOwQsNA6+qpOdo/Zytri5XkNoxWLUFiIZRWo+hEKzyV
+         giOhmA284Kpz1XDm5jbGr16laokI/SxRJkJolIvbQ9KVy5LA3ve3usFaEVgZd3gJIXIV
+         posYHMiUpgkTA9ZN1VIB69AVYfKb1qAgiogtJy/dlClvM5Lpw/s6BW/rb7OT6XNf7y28
+         CGGvfaHaaLtmIBOctzKVIUAgdcuubMWksnh7HH2bYcAY2dd/+O0+0qis0jo9hwZOYpgQ
+         WdgQ==
+X-Gm-Message-State: AOAM533CkMwFmHpMQ5m7QdXo5HyRENgVeGJPY+0olWxiTh53MWBmIkF1
+        j6jyCrKzQXVgyewhr/KLrrhU1NImY7w=
+X-Google-Smtp-Source: ABdhPJwnFmsDHac6ruHnYGxWlxfRGvI5+ueW1EBy2DWr39iihMec7nRuqnjv6kdEU3qfORlw6TIDMg==
+X-Received: by 2002:a2e:880e:: with SMTP id x14mr330070ljh.218.1596075195891;
+        Wed, 29 Jul 2020 19:13:15 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id r19sm838585lfi.58.2020.07.29.19.13.14
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 19:13:14 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id i80so14097681lfi.13
+        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 19:13:14 -0700 (PDT)
+X-Received: by 2002:ac2:46d0:: with SMTP id p16mr223536lfo.142.1596075194006;
+ Wed, 29 Jul 2020 19:13:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200730114023.60317d30@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Rspamd-Queue-Id: A46B940143
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         FROM_HAS_DN(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         TO_DN_ALL(0.00)[];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         RCPT_COUNT_SEVEN(0.00)[7];
-         RCVD_IN_DNSWL_NONE(0.00)[213.133.102.83:from];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+References: <20200730090828.2349e159@canb.auug.org.au> <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
+ <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
+In-Reply-To: <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 29 Jul 2020 19:12:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiFLA=TeG903JHPvRHSoMd=mE=7EC0OMajs+bo014A4Lw@mail.gmail.com>
+Message-ID: <CAHk-=wiFLA=TeG903JHPvRHSoMd=mE=7EC0OMajs+bo014A4Lw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the origin tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Emese Revfy <re.emese@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-在 2020/7/30 上午9:40, Stephen Rothwell 写道:
-> Hi Jiaxun,
+On Wed, Jul 29, 2020 at 5:09 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On Thu, 30 Jul 2020 09:04:40 +0800 Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> Btw: Neither James nor Ralf is still active at Linux-MIPS.
-> Interesting.  I have just them listed as my contacts for MIPS.  Should
-> I change to just Thomes (Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de>)?
+> Removing the __latent_entropy marker obviously fixes things.
 
-Yes, Thomas is now the sole maintainer of Linux-MIPS.
+Ok, I did that for now. I spent a few minutes looking at the gcc
+plugin in case I'd be hit by some sudden stroke of genius, but that
+didn't happen, so let's avoid the issue until somebody who knows the
+gcc plugins better can come up with what the right solution is.
 
-Thanks.
-
-- Jiaxun
-
->
+            Linus

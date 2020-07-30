@@ -2,88 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB58232891
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 02:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D583232946
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 02:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728053AbgG3AKS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jul 2020 20:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727072AbgG3AKR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jul 2020 20:10:17 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E55C061794
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:17 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id q7so26974498ljm.1
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5uaGB2xOYWa+jACqPIzmH4++Yk2MzFSBiFLA11OUW2E=;
-        b=hEZFWlE7wFcKYKOakFk0ARR5rq45yVm7myS+H/aFfLygPk2/HtvTay9IOs8X986Au0
-         ysId+nihcBhqm06rqs/so9xUnDDA9GxF8oz88kgI3tVsdQf2m5jR8R6WiMH0ND1+jRFf
-         q0p1S8kKPPF01m/AsRNu6iCyH2Apvz8S+SYjo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5uaGB2xOYWa+jACqPIzmH4++Yk2MzFSBiFLA11OUW2E=;
-        b=qLZ/UnP0Py+Odo1z6DeIpLj5Opy/c1fJyjiMgEHyOWAudkB2BbmjVj5lnZzYEUY3Oz
-         wXG6yFj2UuNfBirN50V4an9EfxV1GYNa1M7UYtPd/M2by1C2dzXYatN3dy1GSKo107ZN
-         JVSdvSVFPZKvGLIdUF93iPCy4UARsFmezQ9G5qFQ+o+9SD9lz1NErkoZ0zd3aPwklG0f
-         Kg69hC0PnvhX+1AZApFlJIi/74pephx2mr/nsBZWW9n/lI3vg7pX6Vv6AM/JJNyfjCEk
-         VJGoHnW94fS0yUI/ho35UozLA+EHToOpy7mQ5e4SByrzS2o7aJ85I50GiQk85+7QWFpQ
-         VbIQ==
-X-Gm-Message-State: AOAM533YCJTYEfXzbOUXK1YHoFAhLWG0JkV1U3NwHEOINQn8o8pqCfWE
-        aRaEXT+FcBNA3RzHAgan0VY6gRgf1Ew=
-X-Google-Smtp-Source: ABdhPJy5TH8dNZKyxFy4YEYEeAHpHwT3VW1++LFFqyoCpWC6/Ok3oQWqj26aMiH1q9bah4NjkEV55Q==
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr156386ljg.201.1596067815595;
-        Wed, 29 Jul 2020 17:10:15 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id g18sm820194ljk.27.2020.07.29.17.10.14
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id 140so14003828lfi.5
-        for <linux-next@vger.kernel.org>; Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
-X-Received: by 2002:a05:6512:3b7:: with SMTP id v23mr238005lfp.10.1596067814139;
- Wed, 29 Jul 2020 17:10:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200730090828.2349e159@canb.auug.org.au> <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 29 Jul 2020 17:09:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
-Message-ID: <CAHk-=whA7d4ug8-=TQWq_uR04+MqbfZemz+meFhfu_bCyGzvpw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the origin tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Emese Revfy <re.emese@gmail.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1728245AbgG3A7i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jul 2020 20:59:38 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:34210 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726859AbgG3A7i (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jul 2020 20:59:38 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1k0wup-00050D-0F; Thu, 30 Jul 2020 10:59:24 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 30 Jul 2020 10:59:22 +1000
+Date:   Thu, 30 Jul 2020 10:59:22 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH 0/2] locking/qspinlock: Break qspinlock_types.h header
+ loop
+Message-ID: <20200730005922.GA9710@gondor.apana.org.au>
+References: <20200729210311.425d0e9b@canb.auug.org.au>
+ <20200729114757.GA19388@gondor.apana.org.au>
+ <20200729122807.GA7047@gondor.apana.org.au>
+ <ed62ba67-0e1d-3fee-8c09-7750d5690be5@redhat.com>
+ <CAHp75VdbZu008RcxNhMysoqBs2FSPXWv+au_ROJ7FPVd0uOhtg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdbZu008RcxNhMysoqBs2FSPXWv+au_ROJ7FPVd0uOhtg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 4:43 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Ok, this shows a limitation of my allmodconfig testing (and all my
-> normal builds) - no plugins. So that problem wasn't as obvious as it
-> should have been.
+On Wed, Jul 29, 2020 at 06:04:57PM +0300, Andy Shevchenko wrote:
+> On Wed, Jul 29, 2020 at 4:35 PM Waiman Long <longman@redhat.com> wrote:
+> > On 7/29/20 8:28 AM, Herbert Xu wrote:
+> 
+> ...
+> 
+> > This patch series looks good to me. I just wonder if we should also move
+> > ATOMIC64_INIT() to types.h for symmetry purpose. Anyway,
+> 
+> Same question here.
 
-Ok, that was easy to install and get the coverage, and now I see the error.
+Yes I almost started doing it but at least one architecture (arc)
+had a custom atomic64_t so I kept it out just to be on the safe
+side.
 
-Except I still don't know the gcc plugins well enough to fix it at the
-plugin level. And the gcc docs only talk about TREE_STATIC() for
-functions, not for variables. Apparently variables should use
-DECL_THIS_EXTERN or DECL_THIS_STATIC according to the docs I find, but
-..
+We certainly could do this as a follow-up patch.
 
-Removing the __latent_entropy marker obviously fixes things.
-
-               Linus
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

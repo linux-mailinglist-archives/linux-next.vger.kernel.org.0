@@ -2,99 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10262334DE
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 17:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EF32334F3
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jul 2020 17:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbgG3PBC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jul 2020 11:01:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52526 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726275AbgG3PBC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 30 Jul 2020 11:01:02 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EFD832070B;
-        Thu, 30 Jul 2020 15:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596121261;
-        bh=vrT0L42uxKpirJmQf04CjGJseDo6AeA6oDr8HXNg8Vs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J2AGaFsP3cCdxOYRg2TlT/S6yMwsJgah7u7grimwcOQdZL6EaFs/5bFUbboX8sXAW
-         dHs1inYA/qcBuTef/BAmWX5GTgUor/PoRZs+lkVwHU3LcCTeRpCbmwZdpD5ZsjHuw+
-         zqksTEoCJqMZm2C4kp9xeJhfbBGyuWWdqILwkzBA=
-Date:   Thu, 30 Jul 2020 16:00:56 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Marc Zyngier <maz@misterjones.org>, Willy Tarreau <w@1wt.eu>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Emese Revfy <re.emese@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1728910AbgG3PEo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jul 2020 11:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726581AbgG3PEn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jul 2020 11:04:43 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E9CC061575
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 08:04:43 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id e64so28506328iof.12
+        for <linux-next@vger.kernel.org>; Thu, 30 Jul 2020 08:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mtebjY7zqQmxK4blDByy24YEZvtg1VgS49VyUH+Bk54=;
+        b=IFvtypmnuy+FD59buzQsBGlluhs8zj+9N6uxiqSJhSFqkPX345o3ct+kJ07I1a7DVd
+         Wt/kT40XJ7NtdugtJzHRfQVLMUZDwf1uEkJiCNYtDezotKmw9o0SmkKDW/E2AWx8AjZR
+         DWmzauCwvh/rwYz/8j3Ab1wGhFxsJPFq6w3oMT7J2rToZzcpQgnQ8Bk4ITuj50sbM8IW
+         JfNI4LaOtAHcJQa1mhod1stjeUVqDNHnHSEXyCP16wRhbo7/JMeli0N9UP2eyqW5QqCG
+         UNl1R7wil5HQ0B6FDhvDk0safChUb76Wl1RcQ3F758MwHtOq6tuuQwAAPRdlYFkJG/bC
+         DMsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mtebjY7zqQmxK4blDByy24YEZvtg1VgS49VyUH+Bk54=;
+        b=IrVM8OVHnO0ohWNIn85VLsXOxSBS2eNrM/07sQnyo3vkMhosuF/2f5ifrjlfOw7QOH
+         eKkZkp4EmAiPYLBV5bYK+scoO9w6+F3rtac3rmpoMNAmAy2A+5AoHfUbujpnY8irR/zI
+         NFZmL85lwKp3f4WhEbOWQzz1vZDwsqx7U/lK984g4M2lTh+CXzd9x6O1g8xFPlXGiEdD
+         +HuJoJIqksRHOFgBr9wvqrC37GTcTPJaLDAqp9cxwPDnfk99Q4n+EdJ4KIH1UIcDZ6F7
+         OcPnICxe0870aLVVjqmoMbnacoGRdcGea+FddCVy/2Q9LoDWt6oIwLzDlIHtBfPxAN0C
+         UoAw==
+X-Gm-Message-State: AOAM530QOyDPlduxkdkOrLj9FY+Ta8va5awEjG1yvZTWngLLi83FMsZk
+        FE3egrPql6kD88OaAb/3okRi3kQ3sHg=
+X-Google-Smtp-Source: ABdhPJy/LIN0Vx8knW+VahVygoK4OZBhqppeSDsSWVHJQbR9ICzzGFP97DTzi2tbufdFdL7FrC7MJw==
+X-Received: by 2002:a6b:b682:: with SMTP id g124mr38836585iof.55.1596121482554;
+        Thu, 30 Jul 2020 08:04:42 -0700 (PDT)
+Received: from [192.168.1.58] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id b74sm3199806ilb.64.2020.07.30.08.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2020 08:04:42 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Subject: Re: linux-next: build failure after merge of the origin tree
-Message-ID: <20200730150056.GA24716@willie-the-truck>
-References: <20200730090828.2349e159@canb.auug.org.au>
- <CAHk-=wjK8+12i8iDC41LXfZBcMjGsF+WyW_+ncPFmrexRT0yxw@mail.gmail.com>
- <202007292007.D87DBD34B@keescook>
- <20200730032250.GB7790@1wt.eu>
- <20200730061407.GA7941@1wt.eu>
- <102fc7a6fa4c2767879a6f911a9a16d5@misterjones.org>
- <20200730100923.GE25149@gaia>
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20200730080849.70cfeeb6@canb.auug.org.au>
+ <20200730081203.5358cbc3@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <93067598-8a12-4f98-0c76-3fd1f14cd16e@kernel.dk>
+Date:   Thu, 30 Jul 2020 09:04:41 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200730100923.GE25149@gaia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200730081203.5358cbc3@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 11:09:23AM +0100, Catalin Marinas wrote:
-> On Thu, Jul 30, 2020 at 10:59:09AM +0100, Marc Zyngier wrote:
-> > From 33d819f4efa0a4474b5dc2e4bcaef1b886ca30c3 Mon Sep 17 00:00:00 2001
-> > From: Marc Zyngier <maz@kernel.org>
-> > Date: Thu, 30 Jul 2020 10:53:05 +0100
-> > Subject: [PATCH] arm64: Drop unnecessary include from asm/smp.h
-> > 
-> > asm/pointer_auth.h is not needed anymore in asm/smp.h, as 62a679cb2825
-> > ("arm64: simplify ptrauth initialization") removed the keys from the
-> > secondary_data structure.
-> > 
-> > This also cures a compilation issue introduced by f227e3ec3b5c
-> > ("random32: update the net random state on interrupt and activity").
-> > 
-> > Fixes: 62a679cb2825 ("arm64: simplify ptrauth initialization")
-> > Fixes: f227e3ec3b5c ("random32: update the net random state on interrupt and
-> > activity")
-> > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/smp.h | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-> > index ea268d88b6f7..a0c8a0b65259 100644
-> > --- a/arch/arm64/include/asm/smp.h
-> > +++ b/arch/arm64/include/asm/smp.h
-> > @@ -30,7 +30,6 @@
-> >  #include <linux/threads.h>
-> >  #include <linux/cpumask.h>
-> >  #include <linux/thread_info.h>
-> > -#include <asm/pointer_auth.h>
-> > 
-> >  DECLARE_PER_CPU_READ_MOSTLY(int, cpu_number);
+On 7/29/20 4:12 PM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I think this arm64 patch makes sense irrespective of any other generic
-> fixes. If Will wants to take it as a fix:
+> [Just adding cc's]
 > 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> 
-> (otherwise I'll queue it for 5.9)
+> On Thu, 30 Jul 2020 08:08:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> In commit
+>>
+>>   64d452b3560b ("nvme-loop: set ctrl state connecting after init")
+>>
+>> Fixes tag
+>>
+>>   Fixes: aa63fa6776a7 ("nvme-fabrics: allow to queue requests for live queues")
+>>
+>> has these problem(s):
+>>
+>>   - Target SHA1 does not exist
+>>
+>> I can't easily find what commit is meant :-(
 
-Cheers, I'll pick this up asap.
+Yeah, it's obviously garbage, the commit doesn't even exist, let alone the sha.
 
-Will
+Chaitanya, where's this from??
+
+-- 
+Jens Axboe
+

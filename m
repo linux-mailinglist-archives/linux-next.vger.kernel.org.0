@@ -2,51 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD76235685
-	for <lists+linux-next@lfdr.de>; Sun,  2 Aug 2020 13:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21643239CB8
+	for <lists+linux-next@lfdr.de>; Mon,  3 Aug 2020 00:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHBLLa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 2 Aug 2020 07:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726416AbgHBLLa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 2 Aug 2020 07:11:30 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E566FC06174A;
-        Sun,  2 Aug 2020 04:11:29 -0700 (PDT)
+        id S1726989AbgHBWEE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 2 Aug 2020 18:04:04 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48343 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726364AbgHBWEE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 2 Aug 2020 18:04:04 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BKJHK4qQPz9sRN;
-        Sun,  2 Aug 2020 21:11:25 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BKZmJ1BkMz9sPC;
+        Mon,  3 Aug 2020 08:03:59 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596366686;
-        bh=5uCbBvvTxj60H9uD/TN9xyrNZM3pahYzd1cSEffXcpc=;
+        s=201702; t=1596405842;
+        bh=pQ3Sd7U4vE+w2/lTVbDs04/hjZDdOaGEZd/XadR12Ao=;
         h=Date:From:To:Cc:Subject:From;
-        b=aRwD1cp3incqjLgV0BeWoQy0xKJV0WvTkE5ZbXtf0Z3kCapUbQLRL5eJmcH+2VDwC
-         7Oe0qQjFzv6wzkkARQSwqAt1lFjSr+S/itHfmMRYY1B1YSZ3sHt7kQk/3Kkw/NFfPT
-         T3KUq0tkHgyDmYJgoOyaIDN/xhtjI9C35/xvk1c1hse3XL7MIPh2vkQEuN/YFbIUtT
-         ACWQQYv+WvYILdOa4EeVXjwsiJN1rKWs+SLnU/lDrZiFkYbh6oD2EpQoUjnVhxjU0C
-         L0XAFpFOqjFv54SWeHHbQw/WVSwdQH3JEP+j4KDCcMW1Z+tpADVvP72IzzVcW7RFX1
-         x3YKqCkeEF6Lw==
-Date:   Sun, 2 Aug 2020 21:11:24 +1000
+        b=Y8mOqd7hVKh/YCJsydQj0+K4RC0gJBzDXV2ag5TQJ1TEry6nM4mEhvtNlOi4CXRG/
+         wn7Pl0+vVdfNEe5cW+FYqWCdnd19bM9BKek1pvqRjXT8C+6kkjlbQSdtPNzlJ482Tf
+         gCivxyyx8i1dh6PVck3I9f51sJkby9pTKRnVIYR7cQU7KIG5lbX5WL35a5LPHUw8nM
+         /HT5U9OeMCots+BykzpQlFMM1OWXRwaC/kdlDB4r3KvesCBl/ALAyRoZbIWMgWBmDc
+         eNf1Gh2HL572GuQxvSOarApPGeibtZn3R5gChelh23jp2632XmrvswkZhNAf5Vf0s6
+         GUUiINjoMyhhQ==
+Date:   Mon, 3 Aug 2020 08:03:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>
-Subject: linux-next: Fixes tags need some work in the kvm-fixes tree
-Message-ID: <20200802211124.00311643@canb.auug.org.au>
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>
+Subject: linux-next: Fixes tag needs some work in the wireless-drivers-next
+ tree
+Message-ID: <20200803080359.64b417e3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/esB4f=Wx.bHI8+faGsv2avb";
+Content-Type: multipart/signed; boundary="Sig_/.dw=d/6DpwdkTfTtS7D8fHD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/esB4f=Wx.bHI8+faGsv2avb
+--Sig_/.dw=d/6DpwdkTfTtS7D8fHD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -54,55 +54,41 @@ Hi all,
 
 In commit
 
-  830f01b089b1 ("KVM: SVM: Fix disable pause loop exit/pause filtering capa=
-bility on SVM")
+  4c7e1711cf4c ("mt76: mt7915: fix potential memory leak in mcu message han=
+dler")
 
 Fixes tag
 
-  Fixes: 8566ac8b ("KVM: SVM: Implement pause loop exit logic in SVM")
+  Fixes: c6b002bcdfa6 ("mt76: add mac80211 driver for MT7915 PCIe-based chi=
+psets")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Target SHA1 does not exist
 
-In commit
+Maybe you meant
 
-  d2286ba7d574 ("KVM: LAPIC: Prevent setting the tscdeadline timer if the l=
-apic is hw disabled")
-
-Fixes tag
-
-  Fixes: bce87cce88 (KVM: x86: consolidate different ways to test for in-ke=
-rnel LAPIC)
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
-Something to remember for next time.
+Fixes: e57b7901469f ("mt76: add mac80211 driver for MT7915 PCIe-based chips=
+ets")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/esB4f=Wx.bHI8+faGsv2avb
+--Sig_/.dw=d/6DpwdkTfTtS7D8fHD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8mn1wACgkQAVBC80lX
-0GznBQf+LttyGsuUjfAwm29XPgV8AcmseDQx2xVX4/1z1jj+4Ehf5oRiqzVxHALE
-VN7+dE1bm1DeK/Q9PiVjnJycLTFtXyX1Q1D+U2mQ3kNj6+gPaoLKNXtANueaan/u
-ys67FMzeJl93Ip/GpA0UAuSPZmkzO8sgoRnk9sp0uxzB62smPcVk0Zr+q12uhPFY
-cF5Xqrp1E6gz+ITGev7I5gGYf8MbXRrgv5fHysMmMaHYmIC194U+ftoj9g9t3Hqq
-u5vIapqZNyXvailDQKqWrfZUsExbV0a9PWJ+h6dFW+Ec62BdWxz3pTFlJSY3L1Q9
-10ExPaa9y1xzIpuFoHB3w8ZYJqn2AQ==
-=nM1V
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8nOE8ACgkQAVBC80lX
+0GxaUAf/SptKRVKpWm13tMWq0MJ7Yw2NRvk6LlQHOMweDoHDz7a95dmR3g37k5sp
+wrTdKF4Cpt43G8Q1+rNlOk8YW1gY7JhMvQ5A1N3dv8x9mgC69/WJXBSibR7r+GxB
+BxrOiluNB7OWsNyYE1Eyim+BZeq2EeD3cBPVmdW43Wh1HyCzBwVGvTtU68vtZgtM
+Yzv+6zXGp+6eZK4bUTDzziZRLisI2SX0nSgEb1tYau/g2xy4Bupm7dKOmONB4s8U
+6xRjhLDxuCDKYnzLSxTH77IssJGeMu7b1sKHfqxmvemxAr4mOnJK4N1gYvN1dsf2
+CBEKb0qK1qH8OKXiJLs7pDQu3VYSQA==
+=eZJ2
 -----END PGP SIGNATURE-----
 
---Sig_/esB4f=Wx.bHI8+faGsv2avb--
+--Sig_/.dw=d/6DpwdkTfTtS7D8fHD--

@@ -2,87 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE7E23C1E7
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 00:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65E123C1EF
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 00:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgHDW0m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Aug 2020 18:26:42 -0400
-Received: from ozlabs.org ([203.11.71.1]:57247 "EHLO ozlabs.org"
+        id S1726932AbgHDW3l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Aug 2020 18:29:41 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48147 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726282AbgHDW0m (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 4 Aug 2020 18:26:42 -0400
+        id S1726282AbgHDW3l (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 4 Aug 2020 18:29:41 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BLq9S632vz9sR4;
-        Wed,  5 Aug 2020 08:26:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BLqDz0ZqKz9sRK;
+        Wed,  5 Aug 2020 08:29:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596579997;
-        bh=SDxUt3jLGE+9ERQ0nln2YTixtJIxts89+JgXVcjR1aI=;
+        s=201702; t=1596580179;
+        bh=WoofWK6zkGi4H6IHzt499LN7kOmRiarBusIWwUY5Z/o=;
         h=Date:From:To:Cc:Subject:From;
-        b=ko7SWMqBWyTCGyfEuZ2kY/YUjyOTfBdueIFT/cgbtTYbQMTX4X362d26G5fEsPtsv
-         eoLoulBU87y54HU/nEz1RUQeL1RC43GMkW5Nm1TMOoIOBv21hjnrkCYIcov116tZUF
-         KWUpFUYanu/K+l3/YyJKznIOAhJuYgHEJS1h8nukqL/w0M2U64r+YJMekrY/7PGZwN
-         KhnUaqiKH0jwQx1zB4JrRVDlHT7tZZs8SKADrWd3Kpd2zJwmuetxjEvZkOxTXFX+h7
-         EA+j3+yJ0gOsrzBq1t+KXYMr+Qf5GeGEI1DQzPB7UnsR8MqTCYHnL8RNe6ou9yKQp+
-         keRjLoqoQ2jKg==
-Date:   Wed, 5 Aug 2020 08:26:35 +1000
+        b=JPK1eueYnJRZDa1+2G8efUrd8Ox4SRGyHjJTB08U07Vf2UriaxA76tmhSDTLqpZ5r
+         KUxXMsR1vVfGNzZPn3hrYFvd4ra2s1FF2sF1Y0f7eWa/XexJNmq1xF/0bqgs/YT9gd
+         U9RBeK5JVWTKyMRt2KUOxY846jIjYKChq1Kyx6RJZ5rq9mBlcrjCmwhr1Ioa1VONP2
+         QCes0ypCmD6NjGyEiErtw0x16YWyEvXJmzMB5J9tNUESgCdjmTsJLO530vfT9eiERF
+         pqHjZp1rtEh/p5F/w35eRs4DH3UhJwsq/7Holaq+fkRxj5F9Be5uK+7hEWwoVwNfq7
+         DxCI7+KHZ62cw==
+Date:   Wed, 5 Aug 2020 08:29:38 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wim Van Sebroeck <wim@iguana.be>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: linux-next: Fixes tag needs some work in the watchdog tree
-Message-ID: <20200805082635.6cbf7f2d@canb.auug.org.au>
+        Mohammed Gamal <mgamal@redhat.com>
+Subject: linux-next: Signed-off-by missing for commit in the kvm tree
+Message-ID: <20200805082938.32f248e8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6ydXZ6d7W_6yPnSzdud_eU2";
+Content-Type: multipart/signed; boundary="Sig_/Sv.ebZX6FhRJQ2UIKrPRp0r";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6ydXZ6d7W_6yPnSzdud_eU2
+--Sig_/Sv.ebZX6FhRJQ2UIKrPRp0r
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commit
 
-  95d0c04e0cf9 ("watchdog: f71808e_wdt: remove use of wrong watchdog_info o=
-ption")
+  1dbf5d68af6f ("KVM: VMX: Add guest physical address check in EPT violatio=
+n and misconfig")
 
-Fixes tag
-
-  Fixes: 96cb4eb019ce ("watchdog: f71808e_wdt: new watchdog driver for
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.
+is missing a Signed-off-by from its author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6ydXZ6d7W_6yPnSzdud_eU2
+--Sig_/Sv.ebZX6FhRJQ2UIKrPRp0r
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8p4JsACgkQAVBC80lX
-0Gyx7wgAhBvxVC1rfRqDUampfqyaD9fJcSGcmD3vS3fpYXI/XjTAWm9heks06gfu
-TDklpM27bhO6Tvha1Kh9beq84SWl2cIQN2Iuf7smL7TlpZtqHvVBbpU8XqBoCaXX
-eDffmRfeZfnrlHMgh5HWeOmbt4jAF7e/gh7EGH0mzvv5W5snATAybwdWDh20CfU7
-2CoCFbjMieptQVmGJ+ckFx7PEdpYhnjFpLNbMJGYLGZpCs20NV1K2UznjTwPzGdM
-YCteCo0RcAJYdiDN3GnWkzHJ63WS3U3zXdDq62hBNuvbxcy3S81cWvo255FDplAm
-8qQXANflphdtqE+VXSPdB4F0VQCMJw==
-=0pBm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8p4VIACgkQAVBC80lX
+0GzM+Qf7B8FXNsjEOtBNevQ6UOlERRA/SzXTAg8Dw9HUhJhIwkb5hHMX+JmtLaHd
+tQtUQY6fZ0LMF6FTqFtbqMja4M4MTsjx8bN5FQo0jAWUtywRkvkjChVRp17itcpJ
+NP4QNp2o2QmFfQI4Qe8I4MF1Y7Ckq1uiFYtW27eXmVha1gQCCZjL35VtdXn0jK9Z
+04BYylurv9pzR4GghflCjjz5ipMLrZZEd8JI5pMLAPOcvOXzGOloQkbIAusxLGv9
+D6NkIE14pOHygnvzCEiEQKGN4pd14iexnRfQZsHHMWOS7ZhjmUB8//Rqe8IO/qDx
+nq5QWiCbfSzfjodPlpnTHdkILJw4Aw==
+=cpTl
 -----END PGP SIGNATURE-----
 
---Sig_/6ydXZ6d7W_6yPnSzdud_eU2--
+--Sig_/Sv.ebZX6FhRJQ2UIKrPRp0r--

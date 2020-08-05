@@ -2,142 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE24023CD1E
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 19:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEED223CCDD
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 19:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbgHERUs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 13:20:48 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:43327 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728669AbgHERSR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 13:18:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596647894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7dizVWiIXd9zC97fZn3S5tjxTFtcwUz/YOaFNcDsaNo=;
-        b=dGp6JrlikQJ5bObcSBC86bFo7WkJigMXS7eqhbPkazSDNkb/JtvOwbQEUTNUjg8Z42zDCJ
-        q1Xk89ngC6ILBr7KPPvus+SCDqV4rqFrRfCsZN7GTLh/VH0ZDuHSkeTAUTqW8TEA2aAPcb
-        DcKIPMeNqar8tC2O7s47jqv92nLPvt8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-511-iDJLuTjkO4KTzKuCgAPGSg-1; Wed, 05 Aug 2020 09:59:47 -0400
-X-MC-Unique: iDJLuTjkO4KTzKuCgAPGSg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1728519AbgHERJP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 13:09:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60520 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728460AbgHEREv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:04:51 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 819D718C63C0;
-        Wed,  5 Aug 2020 13:59:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-112-32.rdu2.redhat.com [10.10.112.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E9CD1002382;
-        Wed,  5 Aug 2020 13:59:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <cb34df80-d6af-507d-9935-1685b787f7a3@infradead.org>
-References: <cb34df80-d6af-507d-9935-1685b787f7a3@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     dhowells@redhat.com,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH -next] fs: mount_notify.c: fix build without CONFIG_FSINFO
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2303938.1596635984.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 05 Aug 2020 14:59:44 +0100
-Message-ID: <2303939.1596635984@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        by mail.kernel.org (Postfix) with ESMTPSA id E237222D00;
+        Wed,  5 Aug 2020 17:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596647090;
+        bh=bEv1I5kUy8vw/4EQLmasNlul0jYH0UHc1VynpmwLox0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sZcswPx/xxMgbqCzG02ZGu8ILuUxfbUk5k03bxlx3V8LroEQR8W4RiBXdU1cFEsq/
+         OkR2oj/Pr1pQC9YMt4NGJWPTy3IiykKKPzLr/4Fb9WlZNjmRFH/im2VxlMx/jPcbn9
+         4EC8ty/EZqmXwj9FEz/UANWHzKjSWxu54eY/9k/w=
+Date:   Thu, 6 Aug 2020 02:04:45 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [External] linux-next: build warning after merge of the ftrace
+ tree
+Message-Id: <20200806020445.649ddaa8b8ec1b91e23508e4@kernel.org>
+In-Reply-To: <20200805111105.081276bb@oasis.local.home>
+References: <20200805142136.0331f7ea@canb.auug.org.au>
+        <CAMZfGtX0a3tui_KQfCXLcARVcev9V-HV6HMkXgVXObq8w-4EQg@mail.gmail.com>
+        <20200805111105.081276bb@oasis.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Randy,
+On Wed, 5 Aug 2020 11:11:05 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> From: Randy Dunlap <rdunlap@infradead.org>
-> =
+> On Wed, 5 Aug 2020 12:53:39 +0800
+> Muchun Song <songmuchun@bytedance.com> wrote:
+> 
+> > On Wed, Aug 5, 2020 at 12:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > After merging the ftrace tree, today's linux-next build (powerpc
+> > > ppc64_defconfig) produced this warning:
+> > >
+> > > kernel/kprobes.c: In function 'kill_kprobe':
+> > > kernel/kprobes.c:1116:33: warning: statement with no effect [-Wunused-value]
+> > >  1116 | #define disarm_kprobe_ftrace(p) (-ENODEV)
+> > >       |                                 ^
+> > > kernel/kprobes.c:2154:3: note: in expansion of macro 'disarm_kprobe_ftrace'
+> > >  2154 |   disarm_kprobe_ftrace(p);
+> > >       |   ^~~~~~~~~~~~~~~~~~~~
+> > >  
+> > 
+> > Sorry, maybe we should rework the macro of disarm_kprobe_ftrace to an
+> > inline function like below.
+> > 
+> > -#define disarm_kprobe_ftrace(p)        (-ENODEV)
+> > +static inline int disarm_kprobe_ftrace(struct kprobe *p)
+> > +{
+> > +       return -ENODEV
+> > +}
+> >  #endif
+> 
+> Looks like that would work. Care to send a formal patch. Could you also
+> change arm_kprobe_ftrace() as well?
 
-> Fix mount_notify.c build errors when CONFIG_FSINFO is not set/enabled:
-> =
+Looks good to me too as far as updating it to static inline function.
 
-> ../fs/mount_notify.c:94:28: error: 'struct mount' has no member named 'm=
-nt_unique_id'; did you mean 'mnt_group_id'?
-> ../fs/mount_notify.c:109:28: error: 'struct mount' has no member named '=
-mnt_unique_id'; did you mean 'mnt_group_id'?
-> =
+Thank you,
 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-
-That's not quite the right solution.  I'm going to use the attached instea=
-d.
-
-David
----
-commit 830d864747b00d979914f15adaad58ccb9fd77f6
-Author: Randy Dunlap <rdunlap@infradead.org>
-Date:   Wed Aug 5 06:11:32 2020 -0700
-
-    fs: mount_notify.c: fix build without CONFIG_FSINFO
-    =
-
-    Fix mount_notify.c build errors when CONFIG_FSINFO is not set/enabled:
-    =
-
-    ../fs/mount_notify.c:94:28: error: 'struct mount' has no member named =
-'mnt_unique_id'; did you mean 'mnt_group_id'?
-    ../fs/mount_notify.c:109:28: error: 'struct mount' has no member named=
- 'mnt_unique_id'; did you mean 'mnt_group_id'?
-    =
-
-    [DH: Fix this to use mnt_id if CONFIG_FSINFO=3Dn rather than not setti=
-ng
-    anything]
-    =
-
-    Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-    Cc: David Howells <dhowells@redhat.com>
-    Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-    Cc: linux-fsdevel@vger.kernel.org
-    Signed-off-by: David Howells <dhowells@redhat.com>
-
-diff --git a/fs/mount_notify.c b/fs/mount_notify.c
-index 57995c27ca88..254090b6d5ac 100644
---- a/fs/mount_notify.c
-+++ b/fs/mount_notify.c
-@@ -91,7 +91,11 @@ void notify_mount(struct mount *trigger,
- 	n.watch.type	=3D WATCH_TYPE_MOUNT_NOTIFY;
- 	n.watch.subtype	=3D subtype;
- 	n.watch.info	=3D info_flags | watch_sizeof(n);
-+#ifdef CONFIG_FSINFO
- 	n.triggered_on	=3D trigger->mnt_unique_id;
-+#else
-+	n.triggered_on	=3D trigger->mnt_id;
-+#endif
- =
-
- 	smp_wmb(); /* See fsinfo_generic_mount_info(). */
- =
-
-@@ -106,7 +110,11 @@ void notify_mount(struct mount *trigger,
- 	case NOTIFY_MOUNT_UNMOUNT:
- 	case NOTIFY_MOUNT_MOVE_FROM:
- 	case NOTIFY_MOUNT_MOVE_TO:
-+#ifdef CONFIG_FSINFO
- 		n.auxiliary_mount =3D aux->mnt_unique_id;
-+#else
-+		n.auxiliary_mount =3D aux->mnt_id;
-+#endif
- 		atomic_long_inc(&trigger->mnt_topology_changes);
- 		atomic_long_inc(&aux->mnt_topology_changes);
- 		break;
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

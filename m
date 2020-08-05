@@ -2,93 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6595E23D047
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 21:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFF023D04C
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 21:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbgHETbC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 15:31:02 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23210 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728442AbgHERDW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 13:03:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596646995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aqjcjFj0cLfrtaKdyRnzSHGUtnIcD/6QjX80vbdnnDs=;
-        b=i3EmGrMkaEYumeiOORyoM/7Lfr9A6oDgsIgn9K5bX5/Nd2DOk307e9T25itqaKeW8O+5DF
-        /ZzRBidD1ejtMKVItSfx7tzrPIiCCMsSzM3WauEASCfcjlgmmOczrQQljMZSqj7HbMBY1R
-        SIuy4dJiFyAVx7AA2U/l5VDXmgMZyy8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-48-v1Ut0-vMMlKQmdlxYzNI4g-1; Wed, 05 Aug 2020 13:03:04 -0400
-X-MC-Unique: v1Ut0-vMMlKQmdlxYzNI4g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5AA368F53CF;
-        Wed,  5 Aug 2020 17:02:48 +0000 (UTC)
-Received: from elisabeth (unknown [10.36.110.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 488217B910;
-        Wed,  5 Aug 2020 17:02:41 +0000 (UTC)
-Date:   Wed, 5 Aug 2020 19:02:34 +0200
-From:   Stefano Brivio <sbrivio@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-riscv@lists.infradead.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Westphal <fw@strlen.de>,
-        David Ahern <dsahern@gmail.com>,
-        Aaron Conole <aconole@redhat.com>,
-        Numan Siddique <nusiddiq@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Roopa Prabhu <roopa@cumulusnetworks.com>,
-        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
-        Lourdes Pedrajas <lu@pplo.net>,
-        Netdev <netdev@vger.kernel.org>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH net-next v2 2/6] tunnels: PMTU discovery support for
- directly bridged IP packets
-Message-ID: <20200805190234.1d95dccd@elisabeth>
-In-Reply-To: <CA+G9fYsJdoQieVr6=e09nYAvpAjnay5XSmJ3WkZHgMdzJRUYEw@mail.gmail.com>
-References: <cover.1596520062.git.sbrivio@redhat.com>
-        <83e5876f589b0071638630dd93fbe0fa6b1b257c.1596520062.git.sbrivio@redhat.com>
-        <CA+G9fYsJdoQieVr6=e09nYAvpAjnay5XSmJ3WkZHgMdzJRUYEw@mail.gmail.com>
-Organization: Red Hat
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1728924AbgHETbQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 15:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728951AbgHETbG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 15:31:06 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC004C061575;
+        Wed,  5 Aug 2020 12:31:05 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 2DB3A152F10F1;
+        Wed,  5 Aug 2020 12:14:19 -0700 (PDT)
+Date:   Wed, 05 Aug 2020 12:31:03 -0700 (PDT)
+Message-Id: <20200805.123103.464522080473075661.davem@davemloft.net>
+To:     sbrivio@redhat.com
+Cc:     sfr@canb.auug.org.au, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        heiko.carstens@de.ibm.com, xiyou.wangcong@gmail.com
+Subject: Re: [PATCH RESEND net-next] ip_tunnel_core: Fix build for archs
+ without _HAVE_ARCH_IPV6_CSUM
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200805153931.50a3d518@redhat.com>
+References: <20200805153931.50a3d518@redhat.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 05 Aug 2020 12:14:19 -0700 (PDT)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Naresh,
+From: Stefano Brivio <sbrivio@redhat.com>
+Date: Wed, 5 Aug 2020 15:39:31 +0200
 
-On Wed, 5 Aug 2020 22:24:03 +0530
-Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-
-> On Tue, 4 Aug 2020 at 11:24, Stefano Brivio <sbrivio@redhat.com> wrote:
-> >
-> > +       icmp6h->icmp6_cksum = csum_ipv6_magic(&nip6h->saddr, &nip6h->daddr, len,
-> > +                                             IPPROTO_ICMPV6, csum);
+> On architectures defining _HAVE_ARCH_IPV6_CSUM, we get
+> csum_ipv6_magic() defined by means of arch checksum.h headers. On
+> other architectures, we actually need to include net/ip6_checksum.h
+> to be able to use it.
 > 
-> Linux next build breaks for riscv architecture defconfig build.
+> Without this include, building with defconfig breaks at least for
+> s390.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 4cb47a8644cc ("tunnels: PMTU discovery support for directly bridged IP packets")
+> Signed-off-by: Stefano Brivio <sbrivio@redhat.com>
 
-Yes, sorry for that. Stephen Rothwell already reported this for s390
-defconfig and I sent a patch some hours ago:
-
-	https://patchwork.ozlabs.org/project/netdev/patch/a85e9878716c2904488d56335320b7131613e94c.1596633316.git.sbrivio@redhat.com/
-
-Thanks for reporting this though!
-
--- 
-Stefano
-
+Applied, thank you.

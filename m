@@ -2,87 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C6623D159
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 22:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0C723D0E3
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 21:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgHEQmL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 12:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S1728079AbgHETyA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 15:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727826AbgHEQkH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 12:40:07 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEECC034616;
-        Wed,  5 Aug 2020 05:31:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BM9wD3YVbz9sPB;
-        Wed,  5 Aug 2020 22:31:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596630685;
-        bh=j8w8EuBO1+cpbq1KuEU666Od/hNNRqCbcp1rNpt5oEw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pLUXTHxN42q9ByPuE33ruB4nmahaXsszt8bpAIpPTfA6RA1vO3vbs/fHmKQ+Hon7N
-         Rafklf5W/B5SmRE6vzqx9F2Y7PsQwz4/mIPgrol71jEPN6wJrmRmjra7ujp74MvY+2
-         qZShvYTEL+37aiR7F4zoRwfN+OHIdBjBMY8EkLhBMBIXxI4WJMysVIQYXHugBfP8vJ
-         zHllSfM+6WcZadDDNLzl2oopZTBVZcVRYkV+QjeIsJ1Z0esXc6Z26NdfLOx+WxUDvr
-         DpLa2OG6x8bvZ3ZagFq/OnaM6lTv4npM9iU2hiqUDcF3JlSAyQPYiP472j3D3/3uhY
-         ZPMww51D7nJLA==
-Date:   Wed, 5 Aug 2020 22:31:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        <heiko.carstens@de.ibm.com>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20200805223121.7dec86de@canb.auug.org.au>
+        with ESMTP id S1728034AbgHEQtT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 12:49:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71793C034626;
+        Wed,  5 Aug 2020 06:11:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=aQaNuTuKrv/QpgSuKkWo+skzZpmsy56Ti//TuRZUJ/o=; b=KAxbeNa8Sc0qbF7vMs7exLRKW/
+        r07rdTZDoU658JGP/zM4K8pbrXHc8vZ8F1lfh6xl5Cwz+XrgNLZecJDGyeFLJ+E3enVzL97zS/J9E
+        X4XY7H+djuNDSTwr0ehHq3NlnUysRoTIA4HpKVLnIWZ46mOeRLPNj9tRfe78qoatIVWJZbZyVEEu0
+        FjUACpRyQOCkVYcKm7eBRV7O3l6tMrxKYN+g6C7QGeYE6ETxFGPmwA2Iyl7uWAqDpDgP4AFs+yMxO
+        2AX4kRFtc96qYaEa9MfM7kC/BpoCHXGSpl8RkYFnTGsyyOO2LIh3X2Mbbl7HucEO5DAKf9lNjLZm1
+        VMfw+f2Q==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k3JCg-00045d-SL; Wed, 05 Aug 2020 13:11:35 +0000
+To:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH -next] fs: mount_notify.c: fix build without CONFIG_FSINFO
+Message-ID: <cb34df80-d6af-507d-9935-1685b787f7a3@infradead.org>
+Date:   Wed, 5 Aug 2020 06:11:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iGNImgk4v6HDXIvgTQwoqbm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iGNImgk4v6HDXIvgTQwoqbm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Hi all,
+Fix mount_notify.c build errors when CONFIG_FSINFO is not set/enabled:
 
-After merging the net-next tree, today's linux-next build (s390 defconfig)
-failed like this:
+../fs/mount_notify.c:94:28: error: 'struct mount' has no member named 'mnt_unique_id'; did you mean 'mnt_group_id'?
+../fs/mount_notify.c:109:28: error: 'struct mount' has no member named 'mnt_unique_id'; did you mean 'mnt_group_id'?
 
-net/ipv4/ip_tunnel_core.c:335:2: error: implicit declaration of function 'c=
-sum_ipv6_magic' [-Werror=3Dimplicit-function-declaration]
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+---
+ fs/mount_notify.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-Caused by commit
+--- linux-next-20200805.orig/fs/mount_notify.c
++++ linux-next-20200805/fs/mount_notify.c
+@@ -91,7 +91,9 @@ void notify_mount(struct mount *trigger,
+ 	n.watch.type	= WATCH_TYPE_MOUNT_NOTIFY;
+ 	n.watch.subtype	= subtype;
+ 	n.watch.info	= info_flags | watch_sizeof(n);
++#ifdef CONFIG_FSINFO
+ 	n.triggered_on	= trigger->mnt_unique_id;
++#endif
+ 
+ 	smp_wmb(); /* See fsinfo_generic_mount_info(). */
+ 
+@@ -106,7 +108,9 @@ void notify_mount(struct mount *trigger,
+ 	case NOTIFY_MOUNT_UNMOUNT:
+ 	case NOTIFY_MOUNT_MOVE_FROM:
+ 	case NOTIFY_MOUNT_MOVE_TO:
++#ifdef CONFIG_FSINFO
+ 		n.auxiliary_mount = aux->mnt_unique_id;
++#endif
+ 		atomic_long_inc(&trigger->mnt_topology_changes);
+ 		atomic_long_inc(&aux->mnt_topology_changes);
+ 		break;
 
-  4cb47a8644cc ("tunnels: PMTU discovery support for directly bridged IP pa=
-ckets")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iGNImgk4v6HDXIvgTQwoqbm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8qppkACgkQAVBC80lX
-0Gz4Hgf5AcOL3mJwLlnnFj7+zFUXWc6JxU8HniK9p2KGwMa5ISQE9lbmSUVTOXoC
-ssxig80+QPKSO4XASSwEcB7RzdfkdE/phan/zxIKirQlPFlbaOlSb209yzGsyZLe
-WaMCkuMIdPcT7Fi8clOk+yjwyujx7FTfxDcayUqphOmMMb+CxKKcqnXhe7Fv0sPc
-25na5ErrG9A02+zS25XzE/KCielqumhgKfEyDmJDH7kZvQJrNlG8h8zof8juLIww
-7o5UdQt9VIzVwlBy7FKZo9Pu0tltbL6tSm0DXtO5tRwYbd7Qub6QeZig34u0rtfB
-zEMFJTpJriTcP3EHxbpo3vP4AVTn7g==
-=216g
------END PGP SIGNATURE-----
-
---Sig_/iGNImgk4v6HDXIvgTQwoqbm--

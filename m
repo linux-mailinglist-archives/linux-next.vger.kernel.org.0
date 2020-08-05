@@ -2,86 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD0D23D3E8
-	for <lists+linux-next@lfdr.de>; Thu,  6 Aug 2020 00:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFB723D437
+	for <lists+linux-next@lfdr.de>; Thu,  6 Aug 2020 01:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgHEW1r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 18:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbgHEW1r (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 18:27:47 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3964C061574;
-        Wed,  5 Aug 2020 15:27:46 -0700 (PDT)
+        id S1725969AbgHEXkM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 19:40:12 -0400
+Received: from ozlabs.org ([203.11.71.1]:43031 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725920AbgHEXkJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 5 Aug 2020 19:40:09 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BMR8B4NV4z9sTM;
-        Thu,  6 Aug 2020 08:27:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BMSlp0VCMz9sR4;
+        Thu,  6 Aug 2020 09:40:05 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596666459;
-        bh=H1q7O14vu9zhIhL/tHyQXAvQU555EVFOoWuAexg7pyQ=;
+        s=201702; t=1596670808;
+        bh=TdkG1vT9yZEKFN0XCtbZ+7HMVEJsNm9Xzz0nNd1K2eM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eo+YwzPc6VIgTyNKoK/068zdkNxNdRelrLdxSqcVdAt9RuJPdog5dmV8EMGHupyjE
-         grgkBYPKlEnBMuB0hH+k87V6FEQdhza/ssRfT3p5LbpILZg9I5UlRoNEDQXFDucCiG
-         djhiJs6G1jo/hdkozU2rlI4DTqXNf0LWMFKHzGVtwwecmk2Ok7RXrf6TEG+FuRlbnY
-         l4tzUggdrxlkh+f93JExEJmobZ6hv5/UYszPiYSxd4uikQ2sokl35RjmGHnEpQJdTG
-         9R5ziXptnHIYkvSwLXZoLeraFktcO/39plytpg0E+Ppyt5Fz+pEAyrROYbjWtURdj0
-         wBTxD7zrL4YFg==
-Date:   Thu, 6 Aug 2020 08:27:37 +1000
+        b=qExdT6B7jJf7qQAVSnc05Zqb9z8kkG8nLZI+XL78nxLH9EgiWPOD7X8G1Z4VfkS/s
+         9PaxYhEQa/d1lTy6TIc2jMk46g52crWeDa54/4vulMUITBfl19V703/3vMGZP+MTHY
+         IZzfnoOObW/iZo6NAtjozmUqzob2rMkoxGgtOQjaRO+FPzddD5rx0O4g1EoiiJw9B7
+         m0w6MD/TgSKz5O8MLh6n8gd19tueFxA0A1jrOqnEYfoqIZeJFwTcL+7uI8e8Mp/Gnm
+         sapuNnVmqfxsmKRFtyhskq330MlSwHQACVq/pWWOAFfpZZjZf8EkqivZdrzXU5cHUl
+         gpTYje0b+FaLA==
+Date:   Thu, 6 Aug 2020 09:40:05 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the seccomp tree with the kselftest
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alastair D'Silva <alastair@d-silva.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: linux-next: manual merge of the char-misc tree with the powerpc
  tree
-Message-ID: <20200806082737.44f4594b@canb.auug.org.au>
-In-Reply-To: <0300764c-a9cf-bdef-57aa-afc0e59d8c17@linuxfoundation.org>
-References: <20200720155917.607fff9b@canb.auug.org.au>
-        <20200805154511.698d76d0@canb.auug.org.au>
-        <0300764c-a9cf-bdef-57aa-afc0e59d8c17@linuxfoundation.org>
+Message-ID: <20200806094005.29296b53@canb.auug.org.au>
+In-Reply-To: <20200803165546.6ab5ab6f@canb.auug.org.au>
+References: <20200803165546.6ab5ab6f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZRTwqCiW1vXJ/0U_fCPCwbE";
+Content-Type: multipart/signed; boundary="Sig_/YpRe1X4DL6Z4XGZOpqE8aXS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZRTwqCiW1vXJ/0U_fCPCwbE
+--Sig_/YpRe1X4DL6Z4XGZOpqE8aXS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Shuah,
+Hi all,
 
-On Wed, 5 Aug 2020 16:24:04 -0600 Shuah Khan <skhan@linuxfoundation.org> wr=
-ote:
+On Mon, 3 Aug 2020 16:55:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> This is sorted out. I added a note to my pull request.
+> Today's linux-next merge of the char-misc tree got a conflict in:
+>=20
+>   drivers/misc/ocxl/config.c
+>=20
+> between commit:
+>=20
+>   3591538a31af ("ocxl: Address kernel doc errors & warnings")
+>=20
+> from the powerpc tree and commit:
+>=20
+>   28fc491e9be6 ("misc: ocxl: config: Provide correct formatting to functi=
+on headers")
+>=20
+> from the char-misc tree.
+>=20
+> I fixed it up (as it was just differences in comments, I just arbitrarily
+> chose the latter version) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thanks for letting me know.
+This is now a conflict between the powerpc tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZRTwqCiW1vXJ/0U_fCPCwbE
+--Sig_/YpRe1X4DL6Z4XGZOpqE8aXS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8rMlkACgkQAVBC80lX
-0Gxw/gf/fWJvPq4fO83nMC18QNBOjxcrII3czTqDLK1t1YPN2DM7YUXkocN5PKKi
-guNJOAEcJzH7SmreNi4TX+/kNeKPbxppLFabKlis4if5qN0dXBdzGmCGzF7Clbup
-ojs1sH1Q7JA1xThd3Drr83EVYv6O4HSyoAMeqa4YVSqkB+jaY0YrqgZb0nOsEfpY
-Ksp7qkOY+yBQL4l2q56OGK66LUM7UC8m9xlKWTX45xu2CSdblvyPO/XsEUuAzNk4
-v6nWbh6MoP0Xchr7h9HomS9iwjNHB29ugwuj1ogdfpXpxHjyqL/cNcCjWo1rUeIr
-pnc3C7Y2+Kr3auU4KaXCeGYONMK5Ag==
-=nBro
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8rQ1UACgkQAVBC80lX
+0GxKcAgAh9MsxkEzKH36US4RjkNvMuK3i1Mbivu0awyiu/pTkhV3wXb3PX+4cAX+
+odIcjjAMxHtTHiN3OJqmCtywz9vzKdtjKo7d7SLetB7bcNQqgaOtpk8ZMtmOLxOJ
+QF6q7rvcFrWGY9OPi2Y+GGLIHhyWr9z+IeC5SAJ1fPnVTn9HYGbSs2cutd2a5K9y
+Qm7xcasc5CiYAEdhRmfwllSoBXx0Huq3k8D9ltTtRZLxyQkWh0nT32p6me2sHyOv
+yQwnqTx+3CpEujw2I8d5OxTJgbXjdMkSsHds6G+okXBpj3n2xafRiN7NFfltXFjF
+RdiGuazkFVmJ9WSwgTCF4cTGE8OftQ==
+=Yve7
 -----END PGP SIGNATURE-----
 
---Sig_/ZRTwqCiW1vXJ/0U_fCPCwbE--
+--Sig_/YpRe1X4DL6Z4XGZOpqE8aXS--

@@ -2,110 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED78B23D059
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 21:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6595E23D047
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 21:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbgHEQ72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 12:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728268AbgHEQ5p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 12:57:45 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60308C001FCD
-        for <linux-next@vger.kernel.org>; Wed,  5 Aug 2020 08:52:16 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id mt12so4735025pjb.4
-        for <linux-next@vger.kernel.org>; Wed, 05 Aug 2020 08:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3rgPdx4FvPNj3L/b4d9eiz4Lukmw32rT0pYFOATs+yo=;
-        b=uhBO0OpFg/LYWCU/5Q95FYkvHAjv/6vqQnVWGZzffuTQK/Qt3glmHzfnFmhjJqC8RT
-         N0CiCQ6ukSeX5YVxSKoMGN9Qb1uJBgtNieq4cbiZZSukukLRsN2H4hGfYtlcRiwHyfs3
-         BvjqbigytY0sqh3GHRdYZ4Dp0GpMRo6dKqTWxcM19sUN5Y1Yv8qcNnh5Zt+epIcPsJ95
-         paI74rAQyMO4signAODc/PF3fcaVtAkg4y87a9W67Jz1Dchst1zaLxoEIQcm/vUWZJQh
-         m5f5buRbOnH0sv7xBuqOH/zDcxvvoc1xi8kLJC9YoO8EdYWn1DBBSpoZtiHLLljLBM0c
-         azHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3rgPdx4FvPNj3L/b4d9eiz4Lukmw32rT0pYFOATs+yo=;
-        b=SLnwFGzkFMZDgbAN/UdgWoTKVKuWhnAqB6jORTyvQvQutR/y2WM9GsgLFqR7fYH4Ah
-         bOeREvRaddkJOVskBvCd4gGI594JV+WBtJVxO67ONFCOYOJBIAxu6cjXV6s7EBu9Na06
-         agFjzdbJAc46kDo7KVW4dOS8ZohqT3clMiS9Amtu+hNuNGWeybHq6u2JjcE3S6N1ZPvo
-         iPnA5idBz2wghw3Z7P8xXH9XKcYEfElJGqsGkVeBOCXCynHYagUV+RSZ5CALl7J2deKT
-         K65pEjPpo/YUciZ2+2GT8N6qEwvruYKi4yaAZpuE8FpSXBCynPz1zIUDcTeQdMUrrRxX
-         pcJw==
-X-Gm-Message-State: AOAM532wFAPeltWmHhWEI6W7yY6icz0C8wCpuqXOcmk83og8/DyDwYSX
-        FK72zoNmrh/5kDXwS3wlyUMgKltBJ17tm8iXeOcRmw==
-X-Google-Smtp-Source: ABdhPJz+S08tQUWlf0uwerTLvPYHj7weeZ1Gqq2V3WinQnKdQtXh5JjIbGt6HHa9rGmGMGwnT3MhZnsWIgeaF+dLaW8=
-X-Received: by 2002:a17:90a:fa8c:: with SMTP id cu12mr4074109pjb.229.1596642731102;
- Wed, 05 Aug 2020 08:52:11 -0700 (PDT)
+        id S1728842AbgHETbC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 15:31:02 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23210 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728442AbgHERDW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 13:03:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596646995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aqjcjFj0cLfrtaKdyRnzSHGUtnIcD/6QjX80vbdnnDs=;
+        b=i3EmGrMkaEYumeiOORyoM/7Lfr9A6oDgsIgn9K5bX5/Nd2DOk307e9T25itqaKeW8O+5DF
+        /ZzRBidD1ejtMKVItSfx7tzrPIiCCMsSzM3WauEASCfcjlgmmOczrQQljMZSqj7HbMBY1R
+        SIuy4dJiFyAVx7AA2U/l5VDXmgMZyy8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-48-v1Ut0-vMMlKQmdlxYzNI4g-1; Wed, 05 Aug 2020 13:03:04 -0400
+X-MC-Unique: v1Ut0-vMMlKQmdlxYzNI4g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5AA368F53CF;
+        Wed,  5 Aug 2020 17:02:48 +0000 (UTC)
+Received: from elisabeth (unknown [10.36.110.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 488217B910;
+        Wed,  5 Aug 2020 17:02:41 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 19:02:34 +0200
+From:   Stefano Brivio <sbrivio@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-riscv@lists.infradead.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Westphal <fw@strlen.de>,
+        David Ahern <dsahern@gmail.com>,
+        Aaron Conole <aconole@redhat.com>,
+        Numan Siddique <nusiddiq@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Roopa Prabhu <roopa@cumulusnetworks.com>,
+        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
+        Lourdes Pedrajas <lu@pplo.net>,
+        Netdev <netdev@vger.kernel.org>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH net-next v2 2/6] tunnels: PMTU discovery support for
+ directly bridged IP packets
+Message-ID: <20200805190234.1d95dccd@elisabeth>
+In-Reply-To: <CA+G9fYsJdoQieVr6=e09nYAvpAjnay5XSmJ3WkZHgMdzJRUYEw@mail.gmail.com>
+References: <cover.1596520062.git.sbrivio@redhat.com>
+        <83e5876f589b0071638630dd93fbe0fa6b1b257c.1596520062.git.sbrivio@redhat.com>
+        <CA+G9fYsJdoQieVr6=e09nYAvpAjnay5XSmJ3WkZHgMdzJRUYEw@mail.gmail.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <20200805142136.0331f7ea@canb.auug.org.au> <CAMZfGtX0a3tui_KQfCXLcARVcev9V-HV6HMkXgVXObq8w-4EQg@mail.gmail.com>
- <20200805111105.081276bb@oasis.local.home>
-In-Reply-To: <20200805111105.081276bb@oasis.local.home>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 5 Aug 2020 23:51:34 +0800
-Message-ID: <CAMZfGtU7iTFAZVRFgh5vgzB9nSOoDjm7F4Jqpd4uhEe8NListQ@mail.gmail.com>
-Subject: Re: [External] linux-next: build warning after merge of the ftrace tree
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 11:11 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Wed, 5 Aug 2020 12:53:39 +0800
-> Muchun Song <songmuchun@bytedance.com> wrote:
->
-> > On Wed, Aug 5, 2020 at 12:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > After merging the ftrace tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) produced this warning:
-> > >
-> > > kernel/kprobes.c: In function 'kill_kprobe':
-> > > kernel/kprobes.c:1116:33: warning: statement with no effect [-Wunused-value]
-> > >  1116 | #define disarm_kprobe_ftrace(p) (-ENODEV)
-> > >       |                                 ^
-> > > kernel/kprobes.c:2154:3: note: in expansion of macro 'disarm_kprobe_ftrace'
-> > >  2154 |   disarm_kprobe_ftrace(p);
-> > >       |   ^~~~~~~~~~~~~~~~~~~~
-> > >
+Hi Naresh,
+
+On Wed, 5 Aug 2020 22:24:03 +0530
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+
+> On Tue, 4 Aug 2020 at 11:24, Stefano Brivio <sbrivio@redhat.com> wrote:
 > >
-> > Sorry, maybe we should rework the macro of disarm_kprobe_ftrace to an
-> > inline function like below.
-> >
-> > -#define disarm_kprobe_ftrace(p)        (-ENODEV)
-> > +static inline int disarm_kprobe_ftrace(struct kprobe *p)
-> > +{
-> > +       return -ENODEV
-> > +}
-> >  #endif
->
-> Looks like that would work. Care to send a formal patch. Could you also
-> change arm_kprobe_ftrace() as well?
+> > +       icmp6h->icmp6_cksum = csum_ipv6_magic(&nip6h->saddr, &nip6h->daddr, len,
+> > +                                             IPPROTO_ICMPV6, csum);
+> 
+> Linux next build breaks for riscv architecture defconfig build.
 
-OK, I will do that. Thanks.
+Yes, sorry for that. Stephen Rothwell already reported this for s390
+defconfig and I sent a patch some hours ago:
 
->
-> Thanks!
->
-> -- Steve
+	https://patchwork.ozlabs.org/project/netdev/patch/a85e9878716c2904488d56335320b7131613e94c.1596633316.git.sbrivio@redhat.com/
 
-
+Thanks for reporting this though!
 
 -- 
-Yours,
-Muchun
+Stefano
+

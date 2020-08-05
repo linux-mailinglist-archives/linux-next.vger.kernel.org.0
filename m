@@ -2,102 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE8B23C4CC
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 06:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BDF23C52F
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 07:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbgHEEyV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Aug 2020 00:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgHEEyQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Aug 2020 00:54:16 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618C6C061757
-        for <linux-next@vger.kernel.org>; Tue,  4 Aug 2020 21:54:16 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id o1so24591251plk.1
-        for <linux-next@vger.kernel.org>; Tue, 04 Aug 2020 21:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KYCQlIkzg67iN4PflE8iywKTCPG8vSpboFXW+JvF3bs=;
-        b=K21CmpkUagMRtBPpA73E3ebTNyhpUWKOwUpsv9WNMiieMdLiZnYar8K8jPuHZGK3E8
-         8w12hgheCn8CkvUzAYJ/oq6UxtzFu13cxOKErlWlcS89ClpLAX2u79Jh3oI/8s65/hdS
-         3/nv3rPIYrWZJTyEgozv6gtpVlc1a09/F6MyXwIHz8Uom5BBQNck015vr2Fb1Fb84dfj
-         Dsr7SErCuqP0srGRZfGacBuwiUgI83LukV4XQVlrgZTPb8LClnzA3de/e6/NTCuxdwUd
-         54k9tjlcTwTYshXkRJRq7+E2UVtS+/VY0nBOG9+/B+WlBIZ430qBSHjkDKr1dc960fqI
-         cQTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KYCQlIkzg67iN4PflE8iywKTCPG8vSpboFXW+JvF3bs=;
-        b=T368h93kGOEPzFUUOfwdC0yKaSQsWwvNhhsJ8NxDDhhU6sfGt4gAshgkpMIPtLmYNu
-         r/VG05Sj8tfb22GWr6d3FURFw1IhphTFE76Z8xAml3kxQ3So22mGLLZdLErdI6yICs8v
-         KYtPNu5MmG3cjQ2FZzMI/9GKUCPmlHjpL989eGuT0i2cfKMgSteBdGNXcTvRsafeGrDG
-         +AWF7Y3BsQP265oIDaarXZpoBGcXrdxUYZSUjkQcbhfNPRiIHNLfmNgaB7Lnko/RkBW8
-         sB1XdLInq9oNzaeaaEtjYaOZC1bBaf7oJYdw7IMqlmYFpaQVvMjS2EqV49Y/dGP7Sioo
-         Ykyg==
-X-Gm-Message-State: AOAM533HmVE1Ef4wbMGdRYzGx7GuxcvSL9Evulkctf3xln06t9I1cHH+
-        7lUJDBuKZtG/YjkiQHDN19XkTEyl7vZo3c1PJ70Q0Q==
-X-Google-Smtp-Source: ABdhPJx8lhzU3SLTCTXaRcNfhn+oTEgFF0sx2/gEfFSroWOlyhiIDRSP/joPoUWfQREEyMuzsDvHnU6iUzBHH/dPC78=
-X-Received: by 2002:a17:90a:fa8c:: with SMTP id cu12mr1515639pjb.229.1596603255913;
- Tue, 04 Aug 2020 21:54:15 -0700 (PDT)
+        id S1725904AbgHEFpP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Aug 2020 01:45:15 -0400
+Received: from ozlabs.org ([203.11.71.1]:60519 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725920AbgHEFpP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 5 Aug 2020 01:45:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BM0vY058Pz9s1x;
+        Wed,  5 Aug 2020 15:45:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1596606313;
+        bh=NzlaBPMcet68MRThHWBED544AXpBFsunpqHG4FwhiHU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IbihYlJjtFxCDgnyq6LpT7wHEldmZlcBzwEcQzo2bqUls+uE67qZNKFrlC+V7mQMw
+         GCsTRlHnfE25NQuoQdVlE4mF52gpp9M/4lltTqkCHCEg4BjSZ5kDqlv+04RCymKhHz
+         q6fF3jhxyBQtv+1eEMuImIVdvuA+N5gJ3+39pGhUXwd3T6N3JuBkNeGk3VMC5+TFRY
+         d1nipxIIFpwdr10N7Wb6p/ZNY3ulM3IVR+MsSxJtGhcgMsW693Hgi4a8C5ZeTzi3Js
+         rW5DUq9pbj1Z7KQaXeckZu87fJofHsWh40TZCjxF1fsVO9iKLS1l1EMMrCJ6jyhTQ2
+         pZMPTvWoxcXFQ==
+Date:   Wed, 5 Aug 2020 15:45:11 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the seccomp tree with the kselftest
+ tree
+Message-ID: <20200805154511.698d76d0@canb.auug.org.au>
+In-Reply-To: <20200720155917.607fff9b@canb.auug.org.au>
+References: <20200720155917.607fff9b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200805142136.0331f7ea@canb.auug.org.au>
-In-Reply-To: <20200805142136.0331f7ea@canb.auug.org.au>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 5 Aug 2020 12:53:39 +0800
-Message-ID: <CAMZfGtX0a3tui_KQfCXLcARVcev9V-HV6HMkXgVXObq8w-4EQg@mail.gmail.com>
-Subject: Re: [External] linux-next: build warning after merge of the ftrace tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_//OcwuG_Hnd6Y469Wk63sQWn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 12:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_//OcwuG_Hnd6Y469Wk63sQWn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Mon, 20 Jul 2020 15:59:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
 > Hi all,
->
-> After merging the ftrace tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
->
-> kernel/kprobes.c: In function 'kill_kprobe':
-> kernel/kprobes.c:1116:33: warning: statement with no effect [-Wunused-value]
->  1116 | #define disarm_kprobe_ftrace(p) (-ENODEV)
->       |                                 ^
-> kernel/kprobes.c:2154:3: note: in expansion of macro 'disarm_kprobe_ftrace'
->  2154 |   disarm_kprobe_ftrace(p);
->       |   ^~~~~~~~~~~~~~~~~~~~
->
+>=20
+> Today's linux-next merge of the seccomp tree got a conflict in:
+>=20
+>   tools/testing/selftests/seccomp/seccomp_bpf.c
+>=20
+> between commit:
+>=20
+>   4c6614dc86ad ("selftests/seccomp: Check ENOSYS under tracing")
+>=20
+> from the kselftest tree and commit:
+>=20
+>   11eb004ef7ea ("selftests/seccomp: Check ENOSYS under tracing")
+>=20
+> from the seccomp tree.
+>=20
+> I fixed it up (I just used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-Sorry, maybe we should rework the macro of disarm_kprobe_ftrace to an
-inline function like below.
+This is now a conflict between the kselftest tree and Linus' tree.
 
--#define disarm_kprobe_ftrace(p)        (-ENODEV)
-+static inline int disarm_kprobe_ftrace(struct kprobe *p)
-+{
-+       return -ENODEV
-+}
- #endif
+--=20
+Cheers,
+Stephen Rothwell
 
-> Introduced by commit
->
->   0cb2f1372baa ("kprobes: Fix NULL pointer dereference at kprobe_ftrace_handler")
->
-> --
-> Cheers,
-> Stephen Rothwell
+--Sig_//OcwuG_Hnd6Y469Wk63sQWn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8qR2cACgkQAVBC80lX
+0Gw0pAf/W6TwKUxKg3P5QQPYUyF5sIxMMJjo+uO8MbNouRI5yMlFcft8YsdE6Wnq
+zZwZPXKHBja+1c8ZJOY1blAMVRYVYk0g7jSIcPJCqW/4MDW4SzhxoD6AOnSvjnhG
+8BOaQ+xbD16q9xrhbsSPmHuDHa3Qzpd8XtZA/dFF0Fef6D0KojXM7QsaRBssJyQJ
+XhG+mg0R4NSdsM9dg0GgN6fGzWtrEBQlMej6mgCRTbQEvuy3uUePLc4ixKt2PYRt
+OQXOjX69nrIdrqMx9jvkp92EBAwPvn8YDwQ7DNSm8RodEiPWUMLJApNwSY4u2e44
+P6NCZf6dVSBiWI10Oia47IGJatRSkw==
+=fWyi
+-----END PGP SIGNATURE-----
 
--- 
-Yours,
-Muchun
+--Sig_//OcwuG_Hnd6Y469Wk63sQWn--

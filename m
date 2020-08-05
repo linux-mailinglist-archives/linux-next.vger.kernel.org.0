@@ -2,76 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB1023C2A5
-	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 02:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E0923C2DB
+	for <lists+linux-next@lfdr.de>; Wed,  5 Aug 2020 03:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgHEAlA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Aug 2020 20:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbgHEAlA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Aug 2020 20:41:00 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1525C06174A;
-        Tue,  4 Aug 2020 17:40:59 -0700 (PDT)
+        id S1727039AbgHEBDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Aug 2020 21:03:13 -0400
+Received: from ozlabs.org ([203.11.71.1]:55287 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727032AbgHEBDM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 4 Aug 2020 21:03:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BLt8T4b8Vz9sPC;
-        Wed,  5 Aug 2020 10:40:57 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BLtf31rXGz9sPB;
+        Wed,  5 Aug 2020 11:03:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596588058;
-        bh=o8lf6TdzrWFXOHnZQm2y7sn451B/oLl7VtF+Feotq/k=;
+        s=201702; t=1596589389;
+        bh=94VQAPciLQAfl1zeYhFAE4TKPCd/11jXI0MZrbSUPhs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ToPQ4yP7+31m4kSvsm+FjGGDTX1xOU6VLIE0yrVgQXX17ojejsCHSutRIKh3DlSTp
-         SBd3fkIPL06fHLFacJnDjyK8ePzz6uuAaGnSRF8kP9QPSYjtRGRsTDAhsAVjS7mG98
-         k3uLVRXV01d06oqtxxD9MWBoVUQotkIffI4s7m2rD8ys+thpI8YGD+FGmEdrmFYe7f
-         CZv3a3WmmV/cTAILPkMXV6o/XcIu1t+TYuQ7ZxeW94d/1IXu1bmSIox7s8lwiaJ+TA
-         QNy25yH3Kvwqp8zmseHi4Ek9hsYejvRzlRFQSc75KokAMlDZ/B6gCbcBi8xQLmR8Ed
-         6sU7h9wHtwlcg==
-Date:   Wed, 5 Aug 2020 10:40:56 +1000
+        b=PvUqlAvvMVi3if2OPvkDoDXEIe+PF/9Zyu977rpf50dgJGnMbv3IY8TJnEfvESkT1
+         /aHPbEuyb9f3CCTIiFyRqsqlXwcm4JeBKr5sXK12M0tUmYgZIytTgPu70LWH9Qc0oG
+         WYMxDk/Z6U+7N5u30owbuZXMsOx5UA4kQFwEc7FZrcCM7vn/afZ5mrPBcyF9LjEfI9
+         67yTRra8r+Bfx2XCZn7VzCMV0UNV1UvA6dI2Ez+W+2lEHaPWsYRxfPYEwLW4ToX4tO
+         dYNcb0h+EFE6T5OBKGYakBQqKBaQ06/86sgIAGCh+4tWP+fDsCyFj1Pie770Qc0NLI
+         iOxxdLSOJwBTw==
+Date:   Wed, 5 Aug 2020 11:03:06 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>,
-        Rich Felker <dalias@libc.org>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: manual merge of the pidfd tree with the sh tree
-Message-ID: <20200805104056.2b1591a8@canb.auug.org.au>
-In-Reply-To: <20200722203812.6ca23e0d@canb.auug.org.au>
-References: <20200722203812.6ca23e0d@canb.auug.org.au>
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: Re: linux-next: manual merge of the tip tree with the vfs tree
+Message-ID: <20200805110306.752b4176@canb.auug.org.au>
+In-Reply-To: <20200727153510.0996a35c@canb.auug.org.au>
+References: <20200727153510.0996a35c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/l1VvXk8FmB+J5KgBSOkdAvT";
+Content-Type: multipart/signed; boundary="Sig_/j0u21+z/9.U6Ugb.nps7NFo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/l1VvXk8FmB+J5KgBSOkdAvT
+--Sig_/j0u21+z/9.U6Ugb.nps7NFo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 22 Jul 2020 20:38:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 27 Jul 2020 15:35:10 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
->
-> Today's linux-next merge of the pidfd tree got a conflict in:
 >=20
->   arch/um/Kconfig
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   arch/x86/include/asm/fpu/xstate.h
 >=20
 > between commit:
 >=20
->   5c77ba8aa183 ("dma-mapping: consolidate the NO_DMA definition in kernel=
-/dma/Kconfig")
+>   c196049cc732 ("x86: switch to ->regset_get()")
 >=20
-> from the sh tree and commit:
+> from the vfs tree and commit:
 >=20
->   140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
+>   ce711ea3cab9 ("perf/x86/intel/lbr: Support XSAVES/XRSTORS for LBR conte=
+xt switch")
 >=20
-> from the pidfd tree.
+> from the tip tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -80,40 +79,46 @@ wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc arch/um/Kconfig
-> index 32c1d1945033,ef69be17ff70..000000000000
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@@ -14,8 -14,6 +14,7 @@@ config UM
->   	select HAVE_FUTEX_CMPXCHG if FUTEX
->   	select HAVE_DEBUG_KMEMLEAK
->   	select HAVE_DEBUG_BUGVERBOSE
-> - 	select HAVE_COPY_THREAD_TLS
->  +	select NO_DMA
->   	select GENERIC_IRQ_SHOW
->   	select GENERIC_CPU_DEVICES
->   	select GENERIC_CLOCKEVENTS
+> diff --cc arch/x86/include/asm/fpu/xstate.h
+> index f691ea1bc086,1559554af931..000000000000
+> --- a/arch/x86/include/asm/fpu/xstate.h
+> +++ b/arch/x86/include/asm/fpu/xstate.h
+> @@@ -71,8 -103,9 +103,9 @@@ extern void __init update_regset_xstate
+>   void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr);
+>   const void *get_xsave_field_ptr(int xfeature_nr);
+>   int using_compacted_format(void);
+> + int xfeature_size(int xfeature_nr);
+>  -int copy_xstate_to_kernel(void *kbuf, struct xregs_state *xsave, unsign=
+ed int offset, unsigned int size);
+>  -int copy_xstate_to_user(void __user *ubuf, struct xregs_state *xsave, u=
+nsigned int offset, unsigned int size);
+>  +struct membuf;
+>  +void copy_xstate_to_kernel(struct membuf to, struct xregs_state *xsave);
+>   int copy_kernel_to_xstate(struct xregs_state *xsave, const void *kbuf);
+>   int copy_user_to_xstate(struct xregs_state *xsave, const void __user *u=
+buf);
+>   void copy_supervisor_to_kernel(struct xregs_state *xsave);
 
-This is now a conflict between the sh tree and Linus' tree.
+This is now a conflict between the vfs tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/l1VvXk8FmB+J5KgBSOkdAvT
+--Sig_/j0u21+z/9.U6Ugb.nps7NFo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8qABgACgkQAVBC80lX
-0Gw2mwf+JRHRrswhLl7z0Ru7fOcV9wxOoOVwg6WMrCXJuLba6v52sYpynvBt7ojW
-tclBce0LQNCetY3CiKRQ8DwxmmWTUcKk5Lacm1Z+M3wqk8kkvn6n2HcmZQb550Gh
-Xp0/40ZuJK3Se7ro4iwRr0uzPGPKkct8KSyTslWyG33nR1ph3I4FAJRsISjDalzN
-TFhHttWtnRn/l9k5Xef2DfoUNcaRLz/TxZ1jjah85/uSXnVK8D91khvJEEjO82J0
-RmTbZ0pO6V35UKPzBmNqGNFlTe0FZ/66hXYn8dCi9N1ovNk1MGbCqZDMAPjKo6GK
-u81VsdNQU/0e5D0n82b8KQmSHzCPqg==
-=XY6W
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8qBUoACgkQAVBC80lX
+0GzycAgAjw5Wd6932cXC26peffItFoR/HInFLpD5H4ulbg9i11GaB96R9gZ3Ug9f
+uL6iK5aNW1YH9mLxYxDIAt2H1vTJOras5W0U9MEc6UGE/m4w8PlEdOv0Pi7Q/Zm2
+yqs7+s95zTF1vadOi1BLPjrohEWywGVDNTtc0u/ARifxTPlrX3PJaoeh6anZ1kHk
+StH21nNfyjV7kzeRr2F4U6YH4/AI/j7bm+AW7LeOC85BLAnwzHRafZbqFiu3u3tX
+n394BWD1erymqZd6KwBKZ1qvDUbdkhRGMkCTROUk/bB3XhGeSUqYE/3PCNcBw8L4
+GHIxLvIWvxun8bDJ1ZisX7pxuH/5EA==
+=klzH
 -----END PGP SIGNATURE-----
 
---Sig_/l1VvXk8FmB+J5KgBSOkdAvT--
+--Sig_/j0u21+z/9.U6Ugb.nps7NFo--

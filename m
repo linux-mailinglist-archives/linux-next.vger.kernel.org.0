@@ -2,82 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFDD23D6FA
-	for <lists+linux-next@lfdr.de>; Thu,  6 Aug 2020 08:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27FB23DC9E
+	for <lists+linux-next@lfdr.de>; Thu,  6 Aug 2020 18:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgHFGpI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Aug 2020 02:45:08 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50699 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726051AbgHFGpI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 6 Aug 2020 02:45:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BMfB96mJxz9sR4;
-        Thu,  6 Aug 2020 16:45:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596696306;
-        bh=7/xlpJoxq3E+xxtklotRMYDoQWqHhPskpcJSlFOw/FE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sW3dIafVLjc9oUBNlFW6Mt95Im09NmmYm+qpOvCmRBrrxXokpxOhd4zvkOq6gTB3x
-         tZCTi9govX1DUY1Cz1PmL+4glrGKhC1/c9dfo+/tphyZBeyfEgu2GrCReIQFHjh70h
-         6RSwwhwxtKkCkeG5zcMwCcqUSdteoeKJcHQOraA7QvbUwyZus7VnrCrupyBuKYJEqi
-         DmZ1AYmwqyr6VrRQt67JPluDHzMxfEuB9+qIjx9KYgKMPJ6WOKMfZmn8G6onsOhsOd
-         dx8eOJy619q4p0RO59fiI9VdIdxf6etUqaCye5IYCbfosJOtaZzHXxPXqxHeAwi4qt
-         G/FguN0JC1LxQ==
-Date:   Thu, 6 Aug 2020 16:45:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20200806164505.0eada105@canb.auug.org.au>
+        id S1729679AbgHFQxc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Aug 2020 12:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726420AbgHFQu7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Aug 2020 12:50:59 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8720C0A889F;
+        Thu,  6 Aug 2020 07:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=C7mDjirUH0CxtHZlI1BoAJQsb/U9YG0YsZtlAVvm1Qw=; b=rcU+IgX43aspgYAYN1zcfhG3fV
+        h2u5zd+2/s8BzvboULXvhysrHIDIYXzV2x4O6w2VIcm+jPfO9GdmAUoXYpAj1fcPPFrBFEYpVmeXp
+        Tgcg1bJpF3lBBOf3LQElHVvDqGxer7ejCE1k8eU8teIEmQLrF+uDU0O9rPHO9HdsVznnxfC65lQ/a
+        q3QHnkKDV7iUNUrGuSgzYW1Z2f69xzrPg7sESW/jmWlBfMYYcN/fWPZSYTA9GARiB+daxyvQvVPu8
+        JHgKyKWg9iVjpyGstyox1cLo1rVj1aGAZ4lCbi0mYVqcTUz0LosgHtrY7WZ4WliBUIMRFHScDRf/S
+        ry+ogeCg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k3hDo-0006fy-M6; Thu, 06 Aug 2020 14:50:21 +0000
+Subject: Re: linux-next: Tree for Aug 6 (mm/migrate.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20200806162116.1d033db0@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <85e9276d-1747-b265-53be-a33ab6203045@infradead.org>
+Date:   Thu, 6 Aug 2020 07:50:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w7r+KWZmbZgQLSZbRRBQoEp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200806162116.1d033db0@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w7r+KWZmbZgQLSZbRRBQoEp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/5/20 11:21 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
 
-Hi all,
+on x86_64:
 
-Commit
+when CONFIG_MMU_NOTIFIER is not set/enabled:
 
-  2676d210d2f4 ("cifs: Fix an error pointer dereference in cifs_mount()")
+../mm/migrate.c: In function 'migrate_vma_collect':
+../mm/migrate.c:2481:7: error: 'struct mmu_notifier_range' has no member named 'migrate_pgmap_owner'
+  range.migrate_pgmap_owner = migrate->pgmap_owner;
+       ^
 
-is missing a Signed-off-by from its author.
-
-This is only pisked up by my script because of the mangling of the email
-sender address by the mailing list it passed through.  I guess a little
-more care is required to make sure the author attribution is correct in
-this case.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/w7r+KWZmbZgQLSZbRRBQoEp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8rpvEACgkQAVBC80lX
-0Gx25QgAkjpPfnRhXfssBJMUeVWcCTujG16TXok8AUIVu6IM6nkVJJ/cw6Pei9VM
-oErz/+Cm8n4lbrxDhJrUSaP8c3YXs/DLRCu+H7KKo7NswWgTQP/Ue7Z415JRtnJ9
-CHa/ErYA08b4VYMlmM5WH8jZ/wYFHjYJTDq97aIsTYzpPF2vAPz2syzQqJd9Z/hH
-EP6kErYrxZprNNrL4Lioonif3dddXLUzcLyjAsKG9fcVOfK0ATu1ymhtSnJAjzZQ
-FOxP9ZiDLDMdFMahGyu6+kBjbu3HQo0gWk4/bsSZd86f5nchmOvSTdhDdcsZISvs
-kZCZV5wW0kBe6eYbId999LHwByVq3A==
-=37Us
------END PGP SIGNATURE-----
-
---Sig_/w7r+KWZmbZgQLSZbRRBQoEp--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

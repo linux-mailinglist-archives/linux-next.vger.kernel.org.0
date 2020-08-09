@@ -2,99 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA0723ECE3
-	for <lists+linux-next@lfdr.de>; Fri,  7 Aug 2020 13:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7754523FC06
+	for <lists+linux-next@lfdr.de>; Sun,  9 Aug 2020 02:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728293AbgHGLts (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 7 Aug 2020 07:49:48 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:38804 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728159AbgHGLtr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 7 Aug 2020 07:49:47 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077BmPa7042504;
-        Fri, 7 Aug 2020 11:49:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=MApzyHnmExjGWQNHHBlWhBsaX3jE1XvA21fvZMpg+Tc=;
- b=EyXbU6S1jX+nqFMrDAOn7yPjSHibQN8ptMgf24gZCVhRBsNLttyN6Ktya5KkD6OOQCjX
- iZmGInCQRpd6azqf8EmUCwPoKWtw3JloS+wYNVkgID22rsfh++hBE9eIoADJOkSlPJat
- v0A2bVhiasKTsJXeOg4d7Dvq3kmS8T+Et8Zktt+gDRc6JDrPmKa0IiuCjED/Afj3VaG9
- AW5t6yNS3Ajv/vhqjUzN6o6rySc7yy2krB+hUfguSTSBwaKW/hvpFqcnMm3LCwRmnjLA
- N/lGQOeFbKVwv37o2fc6RS8iYrbbQfS4IgpSikNSc95RYnL+MM/ZfjFKKbCrf0k/Y3Jm /A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 32r6fxr3jf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 07 Aug 2020 11:49:36 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077BlwOw028894;
-        Fri, 7 Aug 2020 11:49:36 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 32r6cxggpd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Aug 2020 11:49:36 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 077BnZF4013749;
-        Fri, 7 Aug 2020 11:49:35 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 07 Aug 2020 04:49:34 -0700
-Date:   Fri, 7 Aug 2020 14:49:27 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
+        id S1726058AbgHIAuk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 8 Aug 2020 20:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726040AbgHIAui (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 8 Aug 2020 20:50:38 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA078C061756;
+        Sat,  8 Aug 2020 17:50:38 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id o1so3026317plk.1;
+        Sat, 08 Aug 2020 17:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SVQj5qhpcJx5458dmkItx649M+rUsyKRr5ejPEPf2ho=;
+        b=PSl8Nmud+Sra0Xk4u5STYo1NqhZ/j+tsWDTn7GrRronYe8lyE+LgFhvGzRNkE+HAXi
+         GqY43arY2XRK0faJjuEsUPsdDp20uIPDLt2DLOVF+FxJvG/QcLWEV7jHvWAwSN8lF9zX
+         TxA1h3WdGnoKoF7URjaKgf9oT4DB91MYy0N6qbSalfLLnl1zKuZcT8IQdipOM69FQ7wF
+         uNmNLsRFPonT5r334TjqAzs+8QV7Xzbk276vJfOQjpVi6hSGaojbDwdpr6I9zsoZscgO
+         Cj23E4fx90bnHUs+pJo70NQzdKAa0C5oZgfE10sxPq/aA6uAQVdWKyhgL6ejb6aJk/Aj
+         wqug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SVQj5qhpcJx5458dmkItx649M+rUsyKRr5ejPEPf2ho=;
+        b=EpPJKGU226rXAl4AESkv9ia1x/G/9X/KNs494zJ0O4VxuAHuRRvhX2msOrPezCS2KE
+         xYr60Fk3fb6cmHzRbY1KCn6jSQe0u4Rayd4D5uWDetZkpYoGgYGUacZiqOTCuhV0HkHx
+         sCAh/zPcQRIRSFueYVrNf++0/bYbe07hyw6xqfcdbgpByN2sirFSUOTT2dF2c1A9cNUp
+         hq9OUgdUmiNhFvBGRF8h7g0rUrJiN4I21DUA1CDf3DIoklLD1CIVPpdxQkX0U5yg5RgQ
+         MU9hAWfx1pwQpbhLa6+LHsaD1LsAbHCH8MmTZ/aqPnL1xt7ve9IfYBSsDptgJaRoueM+
+         UnwQ==
+X-Gm-Message-State: AOAM532fBjnMQm4g3Vcfg/SkOWWdgcvpOVEFdeTd6T9k/0gxfmE2FM/n
+        Z52wfGIEcnVofM2po37VI4s=
+X-Google-Smtp-Source: ABdhPJyFfwJNnjRgRxDEZD1e5kwxl/o2VNsVzpa5hsTY/5+0SOqV+L8X/arc3UPGWcChoXnYlCcVMA==
+X-Received: by 2002:a17:902:c154:: with SMTP id 20mr19264971plj.64.1596934238002;
+        Sat, 08 Aug 2020 17:50:38 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x18sm17161588pfc.93.2020.08.08.17.50.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 08 Aug 2020 17:50:37 -0700 (PDT)
+Date:   Sat, 8 Aug 2020 17:50:36 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20200807114927.GY5493@kadam>
-References: <20200806164505.0eada105@canb.auug.org.au>
- <CAH2r5mvGD3ftLDfwrpx61kaJQnPpspupdDHD8NOjnF-q-ByTfg@mail.gmail.com>
- <20200807083342.6977153b@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: linux-next: build failure after merge of the thunderbolt tree
+Message-ID: <20200809005036.GA100652@roeck-us.net>
+References: <20200630160346.696f6419@canb.auug.org.au>
+ <20200630113302.GN5180@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200807083342.6977153b@canb.auug.org.au>
+In-Reply-To: <20200630113302.GN5180@lahna.fi.intel.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9705 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008070085
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9705 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 impostorscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 clxscore=1011 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008070085
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 08:33:42AM +1000, Stephen Rothwell wrote:
-> Hi Steve,
+On Tue, Jun 30, 2020 at 02:33:02PM +0300, Mika Westerberg wrote:
+> On Tue, Jun 30, 2020 at 04:03:46PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the thunderbolt tree, today's linux-next build (powerpc
+> > allyesconfig) failed like this:
+> > 
+> > 
+> > Caused by commit
+> > 
+> >   54509f5005ca ("thunderbolt: Add KUnit tests for path walking")
+> > 
+> > interacting with commit
+> > 
+> >   d4cdd146d0db ("kunit: generalize kunit_resource API beyond allocated resources")
+> > 
+> > from the kunit-next tree.
 > 
-> Thanks for fixing this up.
-> 
-> On Thu, 6 Aug 2020 10:31:33 -0500 Steve French <smfrench@gmail.com> wrote:
-> >
-> > I just fixed the Author tag in this patch to match your email address
-> > but seems like the author email address gets mangled when sent through
-> > some mailing lists.  Any ideas how to avoid this.
-> 
-> You may need to ask people to add an explicit From: line at the start
-> of the body for patches sent via the samba.org mailing lists (since
-> they mangle addresses to get around DKIM checks, I assume).
-> 
+> Thanks for reporting and fixing. The fix looks good to me.
 
-I wonder why it affects me in particular and only now...
+Unfortunately, the fix didn't make it into mainline.
 
-Steve, could you send me a copy of the patch that you recieved or
-something?
+Building x86_64:allyesconfig ... failed
+--------------
+Error log:
+drivers/thunderbolt/test.c: In function '__ida_init':
+drivers/thunderbolt/test.c:20:5: error: 'struct kunit_resource' has no member named 'allocation'
+   20 |  res->allocation = ida;
+      |     ^~
+drivers/thunderbolt/test.c: In function '__ida_destroy':
+drivers/thunderbolt/test.c:26:23: error: 'struct kunit_resource' has no member named 'allocation'
+   26 |  struct ida *ida = res->allocation;
+      |                       ^~
+make[3]: *** [drivers/thunderbolt/test.o] Error 1
 
-regards,
-dan carpenter
-
-
+Guenter

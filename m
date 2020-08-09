@@ -2,74 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F72923FD69
-	for <lists+linux-next@lfdr.de>; Sun,  9 Aug 2020 10:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D2A23FD70
+	for <lists+linux-next@lfdr.de>; Sun,  9 Aug 2020 10:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgHIIoI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Aug 2020 04:44:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:56207 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725710AbgHIIoI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 9 Aug 2020 04:44:08 -0400
+        id S1726338AbgHIItY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Aug 2020 04:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgHIItY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Aug 2020 04:49:24 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102CEC061756;
+        Sun,  9 Aug 2020 01:49:24 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BPXh353pvz9sPC;
-        Sun,  9 Aug 2020 18:44:03 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BPXp853M6z9sPC;
+        Sun,  9 Aug 2020 18:49:20 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1596962645;
-        bh=bkqpeA8hJXRKZhX5To79DYhW6lFpYbJLRp9jA2KTtMw=;
+        s=201702; t=1596962962;
+        bh=vmcF6JaVB9YzsYbgxV6MclWx9ms91mROlIX4Wr3RmNA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aSj9S23x5sFVombGEXAroKJ7zbce1TIAVXR8JsYXTVHwAz0RWGTcoNZqGBeegO1DQ
-         PVtAmAjZfQmFjfXEUbSzRPU1Oxp+ZT6mTOMgMKu2kPjTLNsGNGEzGJNR05B3N82Krq
-         GnTs61PeSt+N9v5XbNFSoB4lBRHVmVzzxyXQ7el57MC3jiBXv4nTBf2QRsfjtaygbh
-         phCjqkYr4zTa6GRuHIHw2dnhF695C/FAjt80o83dfZPrE34ZVS4TxYjxO/cC4yvxIL
-         A3r05TpApQ1eEY2FnHLIFqyzJWTDiUnkAy9X9xSqGGAGDIitYODM/0n91yeteJoGCc
-         x7D4I6uEevAsA==
-Date:   Sun, 9 Aug 2020 18:44:02 +1000
+        b=uCaDYJO4JvWv7j5T+6hWT67aVyY3Q/y+eqs5kpBjW08xUdC6oT+Il0xzqV/1myA37
+         TkfcWTFz51mipouREBGM6xWwrJrt91Odt/GGM1CE0dSWnHSaQusHaK/+/zjZy48CB8
+         LbipFVdZXyAtDg50LBVogkxnjOdrtqpbomspzk7EaRvOHOmQfIQeX9ZmQ2dv0rw7gr
+         Okr72dSiDHEV+5YYavGpKkhZvmovGOKj0ihqqP+91PW7ZAQgD1zq03RlrOjXX/kqff
+         oc+QHRliP6uNB5z6maXFdh3QrvcCHjX7T65keinGjIX4DSLJh1CkAY0ndr9kpcPBem
+         47RrPWkHBzcQg==
+Date:   Sun, 9 Aug 2020 18:49:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Satya Tangirala <satyat@google.com>,
-        Chao Yu <yuchao0@huawei.com>
-Subject: Re: linux-next: manual merge of the f2fs tree with the fscrypt tree
-Message-ID: <20200809184402.20a29137@canb.auug.org.au>
-In-Reply-To: <20200708103858.1196bb65@canb.auug.org.au>
-References: <20200708103858.1196bb65@canb.auug.org.au>
+        Christophe Kerello <christophe.kerello@st.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Subject: Re: linux-next: manual merge of the spi tree with the mtd tree
+Message-ID: <20200809184919.2621b652@canb.auug.org.au>
+In-Reply-To: <20200708143759.50246487@canb.auug.org.au>
+References: <20200708143759.50246487@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=sT6bNjnPvTnddTKeX23DSc";
+Content-Type: multipart/signed; boundary="Sig_/r.1rXCEyQYA9h2viBzClPFN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=sT6bNjnPvTnddTKeX23DSc
+--Sig_/r.1rXCEyQYA9h2viBzClPFN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 8 Jul 2020 10:38:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Wed, 8 Jul 2020 14:37:59 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
+>
+> Today's linux-next merge of the spi tree got conflicts in:
 >=20
-> Today's linux-next merge of the f2fs tree got a conflict in:
->=20
->   Documentation/filesystems/f2fs.rst
+>   drivers/memory/Kconfig
+>   drivers/memory/Makefile
 >=20
 > between commit:
 >=20
->   38dff4e50c12 ("f2fs: add inline encryption support")
+>   66b8173a197f ("memory: stm32-fmc2-ebi: add STM32 FMC2 EBI controller dr=
+iver")
 >=20
-> from the fscrypt tree and commit:
+> from the mtd tree and commit:
 >=20
->   a7c77c387b60 ("f2fs: fix to document reserved special compression exten=
-sion")
+>   ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
 >=20
-> from the f2fs tree.
+> from the spi tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,56 +83,71 @@ sion")
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc Documentation/filesystems/f2fs.rst
-> index 8b4fac44f4e1,535021c46260..000000000000
-> --- a/Documentation/filesystems/f2fs.rst
-> +++ b/Documentation/filesystems/f2fs.rst
-> @@@ -258,13 -258,8 +258,15 @@@ compress_extension=3D%s  Support adding s
->                          on compression extension list and enable compres=
-sion on
->                          these file by default rather than to enable it v=
-ia ioctl.
->                          For other files, we can still enable compression=
- via ioctl.
-> +                        Note that, there is one reserved special extensi=
-on '*', it
-> +                        can be set to enable compression for all files.
->  +inlinecrypt
->  +                       When possible, encrypt/decrypt the contents of e=
-ncrypted
->  +                       files using the blk-crypto framework rather than
->  +                       filesystem-layer encryption. This allows the use=
- of
->  +                       inline encryption hardware. The on-disk format is
->  +                       unaffected. For more details, see
->  +                       Documentation/block/inline-encryption.rst.
->   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> diff --cc drivers/memory/Kconfig
+> index be69c07b8941,e438d79857da..000000000000
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@@ -174,16 -174,15 +174,25 @@@ config PL353_SM
+>   	  This driver is for the ARM PL351/PL353 Static Memory
+>   	  Controller(SMC) module.
 >  =20
->   Debugfs Entries
+> + config RENESAS_RPCIF
+> + 	tristate "Renesas RPC-IF driver"
+> + 	depends on ARCH_RENESAS
+> + 	select REGMAP_MMIO
+> + 	help
+> + 	  This supports Renesas R-Car Gen3 RPC-IF which provides either SPI
+> + 	  host or HyperFlash. You'll have to select individual components
+> + 	  under the corresponding menu.
+> +=20
+>  +config STM32_FMC2_EBI
+>  +	tristate "Support for FMC2 External Bus Interface on STM32MP SoCs"
+>  +	depends on MACH_STM32MP157 || COMPILE_TEST
+>  +	select MFD_SYSCON
+>  +	help
+>  +	  Select this option to enable the STM32 FMC2 External Bus Interface
+>  +	  controller. This driver configures the transactions with external
+>  +	  devices (like SRAM, ethernet adapters, FPGAs, LCD displays, ...) on
+>  +	  SOCs containing the FMC2 External Bus Interface.
+>  +
+>   source "drivers/memory/samsung/Kconfig"
+>   source "drivers/memory/tegra/Kconfig"
+>  =20
+> diff --cc drivers/memory/Makefile
+> index d3d8d6ced342,d105f8ebe8b8..000000000000
+> --- a/drivers/memory/Makefile
+> +++ b/drivers/memory/Makefile
+> @@@ -22,7 -22,7 +22,8 @@@ obj-$(CONFIG_JZ4780_NEMC)	+=3D jz4780-nem
+>   obj-$(CONFIG_MTK_SMI)		+=3D mtk-smi.o
+>   obj-$(CONFIG_DA8XX_DDRCTL)	+=3D da8xx-ddrctl.o
+>   obj-$(CONFIG_PL353_SMC)		+=3D pl353-smc.o
+> + obj-$(CONFIG_RENESAS_RPCIF)	+=3D renesas-rpc-if.o
+>  +obj-$(CONFIG_STM32_FMC2_EBI)	+=3D stm32-fmc2-ebi.o
+>  =20
+>   obj-$(CONFIG_SAMSUNG_MC)	+=3D samsung/
+>   obj-$(CONFIG_TEGRA_MC)		+=3D tegra/
 
-This is now a conflict between the f2fs tree and Linus' tree.
+This is now a conflict between the mtd tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=sT6bNjnPvTnddTKeX23DSc
+--Sig_/r.1rXCEyQYA9h2viBzClPFN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8vt1IACgkQAVBC80lX
-0Gxm8gf/ca3/+5VpjZjqqaJQvN9wDIrenb9IZk29DUn3iulxcY9XfuSX+g3KLAez
-YP/l7qKs4GSOsniTjJp4wIh+fjT0asTkmMBLWuwN2vzTptmrHvGZBCA4hP7vekVi
-HBlsJb3A/dZ77lZ5s3DboMUPBmecNE6oNtmiKPFzQPw0IEAWpeUvjVipiy2vzDZn
-eAWs/oFbBjdpkj5S+a/obVDJygr3vwd6yz5QokPgYVqX3E22CUCCflEG0V0wLjOI
-A2fKJHMarcVYOo+1RZmIHeOHZrMw2529CXVHi6EPndAPNPcrvnIL8lQRu1syt+4s
-jpRomTKt8/ZimN9M8UegHgwVff6SIw==
-=nT0Q
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8vuJAACgkQAVBC80lX
+0GztAAf/Qx5eYoviXZc8UooMN1qeo1ukp95ixUhNQ1u9NsOfx6uoV++c1iYSFgry
+YzunnpDyPl/b882JCHW87aMIhPXq+tvhKOwmcQLWX/OWsLAH53MI3XPT9+EDsIoX
+5w/Xrh04kmLL7kHwBttbHkMXpp6h5WxyVBuhgRMmQgrSGA5OWfX5/Dp/L0ch8rbu
+gwqGjFQF7K1TyuCabLUewmA4KzO0PWXUn2KCxhPnR53YprTHiKP64Ya7HmmObqko
+QkrnuXplniGbtkU6rIR00H4lTs0GdiYTjMI0jaa7Ocf3PWjOe/gFYOyK5el+glvK
+28/1xIXlJ9adp9OKF1uedK84qpq5sg==
+=ryR0
 -----END PGP SIGNATURE-----
 
---Sig_/=sT6bNjnPvTnddTKeX23DSc--
+--Sig_/r.1rXCEyQYA9h2viBzClPFN--

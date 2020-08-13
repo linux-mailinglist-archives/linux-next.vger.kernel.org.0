@@ -2,76 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C36243F58
-	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 21:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D962440F1
+	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 23:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgHMThl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Aug 2020 15:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbgHMThk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Aug 2020 15:37:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD34C061757;
-        Thu, 13 Aug 2020 12:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IODJshfpTM1XsW9BHVqe/s7asLOIvIqCZkJTIuAQFZs=; b=VG6q7s2F3otZwNLaM0WobbwFVk
-        cCL/TBAJDfW7F35NMTmtJA39tF0AGKW91DUPJQWYxnminO7w6RDQTh7/AHGxuvrrBY9kGfGovSipJ
-        ZsurcXEw/dcDiAqtg0155yA1n5I3+U8QOdL4ygLt+vcqyPyrT78fVu7hC0sAzcZrps/vyPZYNUwZl
-        KJclcXnOlsjGONvcXU5H4QoZlzr5fWy2/dry0FvqYHmEZBS3ufk1S3ojZRG1Ke9QQmJ7x/q8XDAyg
-        vMego03XF+/jM9FQ5aMLpEkZTaa0tSpUKdv7mQU4zU1zp5Ggq5NlDVAmW5GVlSMNvRUUcg0EYlI+6
-        M/rwiu8w==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k6J2c-0005T8-4P; Thu, 13 Aug 2020 19:37:34 +0000
-Subject: Re: linux-next: Tree for Aug 12 (x86: xen/pci)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        xen-devel <xen-devel@lists.xenproject.org>
-References: <20200812142211.1fde2a46@canb.auug.org.au>
- <013ba445-7970-99c2-5639-44dcb5867340@infradead.org>
-Message-ID: <7ff3c83c-81d7-9a06-b3ce-74e3f7098a4a@infradead.org>
-Date:   Thu, 13 Aug 2020 12:37:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726591AbgHMVzM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Aug 2020 17:55:12 -0400
+Received: from mga14.intel.com ([192.55.52.115]:14131 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726205AbgHMVzL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 Aug 2020 17:55:11 -0400
+IronPort-SDR: gOPz0Lvuug6nd1lJdswMAqWMhhBtUFKPsjzu/am1tY783wvP2SbKbFUh0sBK0fqN+gngr6EzV4
+ jVjgp9d2pFLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="153553652"
+X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
+   d="scan'208";a="153553652"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 14:55:11 -0700
+IronPort-SDR: eFLGK9y2LhwRrxsytEDwPP051lVfVP+dpt0KjHb75lXCYyXcYKVqPqMpdoioqBZ2YmEMynbXqh
+ X2cMxAmFJSyQ==
+X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
+   d="scan'208";a="325544031"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 14:55:08 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 34D0620699; Fri, 14 Aug 2020 00:55:05 +0300 (EEST)
+Date:   Fri, 14 Aug 2020 00:55:05 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: linux-next: Tree for Aug 13 (drivers/media/i2c/max9286.c)
+Message-ID: <20200813215505.GC24582@paasikivi.fi.intel.com>
+References: <20200813165846.27887669@canb.auug.org.au>
+ <17a1c5aa-2f38-c84d-bf2d-485862dc0615@infradead.org>
+ <3262a9fc-46e2-3109-3764-e7153edf486d@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <013ba445-7970-99c2-5639-44dcb5867340@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3262a9fc-46e2-3109-3764-e7153edf486d@ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/12/20 7:57 AM, Randy Dunlap wrote:
-> On 8/11/20 9:22 PM, Stephen Rothwell wrote:
->> Hi all,
->>
-> 
-> 
-> on x86_64:
-> 
-> ../arch/x86/pci/xen.c: In function ‘pci_xen_init’:
-> ../arch/x86/pci/xen.c:410:2: error: implicit declaration of function ‘acpi_noirq_set’; did you mean ‘acpi_irq_get’? [-Werror=implicit-function-declaration]
->   acpi_noirq_set();
->   ^~~~~~~~~~~~~~
+Hi Kieran,
 
-(still seeing this one)
-
-# CONFIG_ACPI is not set/enabled.
-
+On Thu, Aug 13, 2020 at 08:01:01PM +0100, Kieran Bingham wrote:
+> Hi Randy,
 > 
-> Full randconfig file is attached.
+> On 13/08/2020 19:35, Randy Dunlap wrote:
+> > On 8/12/20 11:58 PM, Stephen Rothwell wrote:
+> >> Hi all,
+> >>
+> >> News: The merge window has opened, so please do not add any v5.10
+> >> related material to your linux-next included branches until after the
+> >> merge window closes again.
+> >>
+> >> Changes since 20200812:
+> >>
+> > 
+> > on x86_64:
+> > 
+> > # CONFIG_GPIOLIB is not set
+> > 
+> > ../drivers/media/i2c/max9286.c: In function 'max9286_register_gpio':
+> > ../drivers/media/i2c/max9286.c:1033:6: error: 'struct gpio_chip' has no member named 'of_node'
+> >   gpio->of_node = dev->of_node;
+> > 
 > 
+> Thanks for the report, Sakari has already submitted a fix [0] for this.
+> I assume it just needs a nudge to get picked up via Mauro's tree.
+> 
+> [0]
+> https://lore.kernel.org/linux-media/20200803090935.23619-1-sakari.ailus@linux.intel.com/
 
+Yes. I'll send a pull request soon.
 
 -- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Sakari Ailus

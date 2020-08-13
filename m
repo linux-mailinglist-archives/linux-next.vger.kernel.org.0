@@ -2,163 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 510F4243772
-	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 11:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15A22437E3
+	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 11:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726224AbgHMJRE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Aug 2020 05:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbgHMJRE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Aug 2020 05:17:04 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D22C061383
-        for <linux-next@vger.kernel.org>; Thu, 13 Aug 2020 02:17:03 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id t13so4945995ile.9
-        for <linux-next@vger.kernel.org>; Thu, 13 Aug 2020 02:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AVVK701BmMx0nOUeszXW5DOWYJuKUEBlmJUyUmBXonw=;
-        b=KBgg1LChIJzojq8wCoeBtwucYMjlQp1QRp2wmwPAM1zKPNUxxR3/5bSVizhTzk6G44
-         npUXrcnyRvP3lRa9ULHZykC+QGgP49O13LGemQfktRZo0AwGCTZxu1Ja45c7yx18xNv1
-         muca13rZx62UlS4IYGcPmIkoylmr5XPcDhItlD5VtS/lOEzd/55M7WX/jCSGZlcxiQI+
-         xvnTzujx3DLUkky5EGUiKdsM2s3jPLVW09TCdy6GQnvkfys69duwnup2xrOpSZ4dzgrb
-         MtdejXgoIja4ZEo0YCTAljx1ZieNdcHRbla7np/JOHNAUDYiXq7g/vRLdZ5Giy7MIEkC
-         pJKA==
+        id S1726167AbgHMJr2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Aug 2020 05:47:28 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:35910 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726522AbgHMJr1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Aug 2020 05:47:27 -0400
+Received: by mail-io1-f70.google.com with SMTP id h205so3643986iof.3
+        for <linux-next@vger.kernel.org>; Thu, 13 Aug 2020 02:47:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AVVK701BmMx0nOUeszXW5DOWYJuKUEBlmJUyUmBXonw=;
-        b=N1uhqlr7hUwYGcLmag7rJUixDoWFKn8OlshHFnu0ddfD8f0g9e30qoCI10FyB4Kbpa
-         3jZlYc2lbDaqEusXySBO+xbzVy2y+k2rYkbNW/6wck7SoRoL1qa37zBk3TIRK9a13SJ1
-         /Fx8RDE9XMPmuBdzYSRNyPX79JSD9rbiAk6qHnaErjczgbrZOaCpOLJRZrr0H0AL5dAn
-         Xdnt0zYlXFToqVu56NLj3zTt65MGumb5OWvSOyccr65/h8WEPezLB426xRnvW+o5AnwE
-         wYNJ8fHawvog+YexNptgjg1vZgBQ8JlFl/IXf0X5eu1SscfFHfLeniaomlvMcMmykRCF
-         /Pbg==
-X-Gm-Message-State: AOAM532CRyBCn4je02qqBVrqdSrn7crNOiGTnaEwVYk/qx0lLPkJbNsV
-        aCGBVyodJWR3i10sERy4xvdkByMavvxbijywEBpq4g==
-X-Google-Smtp-Source: ABdhPJxRPXxN0U59d/h40YvTBY16ELyNZJXxcUBHQUGymL9OOd1KXfE1MSjnoyNb6ubpiCdMHTv5+ANAII49M9IQehI=
-X-Received: by 2002:a92:d5ca:: with SMTP id d10mr3686682ilq.216.1597310222851;
- Thu, 13 Aug 2020 02:17:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9Dlz59NWZ1Pt0j6oxZ7rlutFZtxOxRW52eAAmLe4yhU=;
+        b=ktLQeXBA0N4xfa0R4oxBvG4Kp4243+1VKmrq1uzhIspzJFS+hHIggxGjul/lhJwtCD
+         DSkmq1U9a8G8zeENfjtXUHauHk3I+/jku5IfQbS69U0I6F4z0hU0DVJ57rLLLoIBq12b
+         oPwUjaV0Z+5NBpFsZ7m9R0dH20jSraE0iuqHuHX1Hdm/4B8W97Pj37lDTG0+a6EVr4qJ
+         vLqjTcOJVUBhw6NJNpVDXDpGB33xbXcD58CDeXXXO4htyx/aSzxLLiU7hi28JUosHxAW
+         YKOY/CJq8VC14l8McSyklxKhOj82olS8y33uTzYC7LYLvBqtg6r3F9QCfacyoSwl79QD
+         6vLQ==
+X-Gm-Message-State: AOAM530D1Ww4sYwPqc9yYvUnsmJm+maygf8srmF6Ir2jjE7+1fLZ8yBk
+        /FIM06Rs+/qzI7QZCCvP9rEjs7b6VCLtI4aNMpiXj1BehAbS
+X-Google-Smtp-Source: ABdhPJxAdxBg2PCfzqxKDb9uJ/FqI62zx/scKeu/gYbyeE2wehZKlTYjqh7jAud1uZ0jJLwLBtyxlnFRbB4E9Fy3wsNYrRhX7xH/
 MIME-Version: 1.0
-References: <20200623184515.4132564-1-guro@fb.com> <20200623184515.4132564-5-guro@fb.com>
- <20200811152737.GB650506@cmpxchg.org> <20200811170611.GB1507044@carbon.DHCP.thefacebook.com>
-In-Reply-To: <20200811170611.GB1507044@carbon.DHCP.thefacebook.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 13 Aug 2020 14:46:51 +0530
-Message-ID: <CA+G9fYuTsjEpDpODGcYf5hnGwzxj__tVdCMpWeC+ojg5pkYCzw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] mm: memcg: charge memcg percpu memory to the
- parent cgroup
-To:     Roman Gushchin <guro@fb.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Cgroups <cgroups@vger.kernel.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Kernel Team <kernel-team@fb.com>, lkft-triage@lists.linaro.org
+X-Received: by 2002:a6b:ba03:: with SMTP id k3mr3995605iof.72.1597312046218;
+ Thu, 13 Aug 2020 02:47:26 -0700 (PDT)
+Date:   Thu, 13 Aug 2020 02:47:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001c467c05acbf3196@google.com>
+Subject: linux-next boot error: WARNING in mem_cgroup_css_alloc
+From:   syzbot <syzbot+f96cbc69d9803e663664@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        vdavydov.dev@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The kernel warnings  were noticed on linux next 20200813 while booting
-on arm64, arm, x86_64 and i386.
+Hello,
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: e6d113aca646fb6a92b237340109237fd7a9c770
-  git describe: next-20200813
-  make_kernelversion: 5.8.0
-  kernel-config:
-https://builds.tuxbuild.com/YQHc_PpEV-DF8rU7N9tlIQ/kernel.config
+syzbot found the following issue on:
 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 130093bdf74b..e25f2db7e61c 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -5137,6 +5137,9 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
->         if (!pn)
->                 return 1;
->
-> +       /* We charge the parent cgroup, never the current task */
-> +       WARN_ON_ONCE(!current->active_memcg);
-> +
->         pn->lruvec_stat_local = alloc_percpu_gfp(struct lruvec_stat,
->                                                  GFP_KERNEL_ACCOUNT);
->         if (!pn->lruvec_stat_local) {
-> @@ -5219,6 +5222,9 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
->                 goto fail;
->         }
->
-> +       /* We charge the parent cgroup, never the current task */
-> +       WARN_ON_ONCE(!current->active_memcg);
+HEAD commit:    e6d113ac Add linux-next specific files for 20200813
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11db9fd6900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2055bd0d83d5ee16
+dashboard link: https://syzkaller.appspot.com/bug?extid=f96cbc69d9803e663664
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-[    0.217404] ------------[ cut here ]------------
-[    0.218038] WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5226
-mem_cgroup_css_alloc+0x680/0x740
-[    0.219188] Modules linked in:
-[    0.219597] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-next-20200813 #1
-[    0.220187] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[    0.221190] EIP: mem_cgroup_css_alloc+0x680/0x740
-[    0.222190] Code: d6 17 5d ff 8d 65 f4 89 d8 5b 5e 5f 5d c3 8d 74
-26 00 b8 58 39 6a d1 e8 fe 94 55 ff 8d 65 f4 89 d8 5b 5e 5f 5d c3 8d
-74 26 00 <0f> 0b e9 01 fa ff ff 8d b4 26 00 00 00 00 66 90 bb f4 ff ff
-ff ba
-[    0.223188] EAX: 00000000 EBX: d13666c0 ECX: 00000cc0 EDX: 0000ffff
-[    0.224187] ESI: 00000000 EDI: f4c11000 EBP: d1361f50 ESP: d1361f40
-[    0.225188] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210246
-[    0.226190] CR0: 80050033 CR2: ffd19000 CR3: 115f8000 CR4: 00040690
-[    0.227195] Call Trace:
-[    0.227882]  ? _cond_resched+0x17/0x30
-[    0.228195]  cgroup_init_subsys+0x66/0x12a
-[    0.229193]  cgroup_init+0x118/0x323
-[    0.230194]  start_kernel+0x43c/0x47d
-[    0.231193]  i386_start_kernel+0x48/0x4a
-[    0.232194]  startup_32_smp+0x164/0x168
-[    0.233195] ---[ end trace dfcf9be7b40caf05 ]---
-[    0.2342#
-08] ------------[ cut here ]------------
-[    0.235192] WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5141
-mem_cgroup_css_alloc+0x718/0x740
-[    0.236187] Modules linked in:
-[    0.236590] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
-  5.8.0-next-20200813 #1
-[    0.237190] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.12.0-1 04/01/2014
-[    0.238194] EIP: mem_cgroup_css_alloc+0x718/0x740
-[    0.239191] Code: 48 ff e9 7c fd ff ff 8d 76 00 a1 b0 14 40 d1 e9
-53 fc ff ff 8d b6 00 00 00 00 0f 0b 8d b6 00 00 00 00 0f 0b 8d b6 00
-00 00 00 <0f> 0b e9 df f9 ff ff 90 89 f8 e8 29 0c 5c ff 89 f2 b8 10 f4
-40 d1
-[    0.240190] EAX: 00000000 EBX: f4c0c800 ECX: 00000000 EDX: d0eab660
-[    0.241189] ESI: 00000000 EDI: f4c11000 EBP: d1361f50 ESP: d1361f40
-[    0.242189] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210246
-[    0.243190] CR0: 80050033 CR2: ffd19000 CR3: 115f8000 CR4: 00040690
-[    0.244188] Call Trace:
-[    0.245191]  ? _cond_resched+0x17/0x30
-[    0.245686]  cgroup_init_subsys+0x66/0x12a
-[    0.246189]  cgroup_init+0x118/0x323
-[    0.246654]  start_kernel+0x43c/0x47d
-[    0.247189]  i386_start_kernel+0x48/0x4a
-[    0.247697]  startup_32_smp+0x164/0x168
-[    0.248188] ---[ end trace dfcf9be7b40caf06 ]---
-[    0.248990] Last level iTLB entries: 4KB 512, 2MB 255, 4MB 127
-[    0.249187] Last level dTLB entries: 4KB 512, 2MB 255, 4MB 127, 1GB 0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f96cbc69d9803e663664@syzkaller.appspotmail.com
+
+mem auto-init: stack:off, heap alloc:on, heap free:off
+Memory: 6458876K/7863916K available (116743K kernel code, 18258K rwdata, 21644K rodata, 2812K init, 25364K bss, 1404784K reserved, 0K cma-reserved)
+Running RCU self tests
+rcu: Preemptible hierarchical RCU implementation.
+rcu: 	RCU lockdep checking is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=64 to nr_cpu_ids=2.
+rcu: 	RCU callback double-/use-after-free debug enabled.
+rcu: 	RCU debug extended QS entry/exit.
+	All grace periods are expedited (rcu_expedited).
+	Trampoline variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+NR_IRQS: 4352, nr_irqs: 440, preallocated irqs: 16
+random: get_random_bytes called from boot_init_stack_canary arch/x86/include/asm/stackprotector.h:80 [inline] with crng_init=0
+random: get_random_bytes called from start_kernel+0x23b/0x46a init/main.c:957 with crng_init=0
+Console: colour VGA+ 80x25
+printk: console [ttyS0] enabled
+printk: console [ttyS0] enabled
+printk: bootconsole [earlyser0] disabled
+printk: bootconsole [earlyser0] disabled
+Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+... MAX_LOCKDEP_SUBCLASSES:  8
+... MAX_LOCK_DEPTH:          48
+... MAX_LOCKDEP_KEYS:        8192
+... CLASSHASH_SIZE:          4096
+... MAX_LOCKDEP_ENTRIES:     32768
+... MAX_LOCKDEP_CHAINS:      65536
+... CHAINHASH_SIZE:          32768
+ memory used by lock dependency info: 6301 kB
+ memory used for stack traces: 4224 kB
+ per task-struct memory footprint: 1920 bytes
+mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
+ACPI: Core revision 20200717
+APIC: Switch to symmetric I/O mode setup
+x2apic enabled
+Switched APIC routing to physical x2apic.
+..TIMER: vector=0x30 apic1=0 pin1=0 apic2=-1 pin2=-1
+clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x212735223b2, max_idle_ns: 440795277976 ns
+Calibrating delay loop (skipped) preset value.. 4600.00 BogoMIPS (lpj=23000000)
+pid_max: default: 32768 minimum: 301
+LSM: Security Framework initializing
+LSM: security= is ignored because it is superseded by lsm=
+Yama: becoming mindful.
+TOMOYO Linux initialized
+AppArmor: AppArmor initialized
+LSM support for eBPF active
+Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc)
+Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc)
+Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5226 memalloc_unuse_memcg include/linux/sched/mm.h:331 [inline]
+WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5226 mem_cgroup_css_alloc+0x535/0x1c30 mm/memcontrol.c:5285
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-next-20200813-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ panic+0x2e3/0x75c kernel/panic.c:231
+ __warn.cold+0x20/0x4a kernel/panic.c:600
+ report_bug+0x1bd/0x210 lib/bug.c:198
+ handle_bug+0x38/0x90 arch/x86/kernel/traps.c:234
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+RIP: 0010:mem_cgroup_alloc mm/memcontrol.c:5226 [inline]
+RIP: 0010:mem_cgroup_css_alloc+0x535/0x1c30 mm/memcontrol.c:5284
+Code: 01 00 48 8d bb 48 14 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 74 81 e8 a0 79 c0 f9 e9 77 ff ff ff <0f> 0b e9 21 fc ff ff 48 89 ef e8 3c af c5 f9 48 b8 00 00 00 00 00
+RSP: 0000:ffffffff89a07e20 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffff89a99dc0 RCX: 1ffff110436f4c28
+RDX: 1ffffffff1353641 RSI: ffffffff83b2f532 RDI: ffffffff89a9b208
+RBP: ffff88821b7a6000 R08: 0000000000000001 R09: ffff8880a9c06b6f
+R10: 0000000000000000 R11: ffffffff810000d4 R12: ffffffff8abb6bb4
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff8abb6bd0
+ cgroup_init_subsys+0x215/0x4d7 kernel/cgroup/cgroup.c:5587
+ cgroup_init+0x359/0xa63 kernel/cgroup/cgroup.c:5713
+ start_kernel+0x426/0x46a init/main.c:1035
+ secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
+Rebooting in 86400 seconds..
 
 
-Full test log,
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200813/testrun/3061112/suite/linux-log-parser/test/check-kernel-warning-1665815/log
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

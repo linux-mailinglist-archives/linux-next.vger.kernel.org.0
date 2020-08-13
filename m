@@ -2,183 +2,200 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80469243CCA
-	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 17:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D77243CDF
+	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 17:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbgHMPuV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Aug 2020 11:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbgHMPuV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Aug 2020 11:50:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAC4C061757;
-        Thu, 13 Aug 2020 08:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:References;
-        bh=hcRGhxjeGGcGlL0jZtmM6ynKLp4oPbSQ7Fim3MB2HL4=; b=AJOZfHRNcKSNOPpzUH+9Y0lsem
-        WVTwk3Q43JKKwOubbajp7NsJQfbX7H+m6a5MIkEGah3ohP5pAnx1ZiTWLtxBw7ucngZkZcVYC2DaG
-        Kc/TuCS7s1srPKV/MiGXCYS+Bz1SgHa8cqayJsXbOIbDd7HoOnNPKAetH4m2NIsMy0AoTUV+fxTfN
-        Dc7QB834JroqBZYOdhP5n0Mazpd88hcT5ITKnAn0ePWtGMabxZKh666skge4xMlX4yUhVHZq9Kf8R
-        SYGhJx4aiDNoNPEwlST4Xlw1Ff+2BaeT25kCCRn8yzw0e6CkG61pps9ACFx7Mc10GEHLhW04+b3w2
-        PVtT3gyA==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k6FUX-0000kK-BX; Thu, 13 Aug 2020 15:50:09 +0000
-Date:   Thu, 13 Aug 2020 16:50:09 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     linux-nvme <linux-nvme@lists.infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726546AbgHMP5O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Aug 2020 11:57:14 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:65362 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726131AbgHMP5N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 Aug 2020 11:57:13 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07DFdrPI012996;
+        Thu, 13 Aug 2020 08:56:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=IwURd1p8THJt57DEP7ZAgjPp6V8uJGe4kfwpe8jaGfM=;
+ b=bdqa/UEhRBsAd/9wtpgYGed8AyyjehB2sxbvtdjbVxNvfbOXBECwq07ggOeSSVMNbYEb
+ q5O3Oea1OgExVP8wYAlN060fRu1arRbxys8ELJ16WBHBRikOcYAWkQt9od06u1CRuKry
+ l343OEfYOuvxd5wYpI7PVx3k3P7OB9RhD1I= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 32v0khaec8-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 13 Aug 2020 08:56:53 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 13 Aug 2020 08:56:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PdoEmfZ5zw1xe9CDneQKO/gTenaLHOsiaTy19NqP5mPC5FY+8rfGn4E5kNEVT03ALVRumB7rpXxweuGFd7TE8/whpaGUcHFVdURgKOO8mmh+AetYI/oG+Mpgd8tQ1yF2/r7svqPOlj6xLozUa59vKQjF10mDXtSVGDIrOMo/vtbiSr32MYZc/JiPdwTraIKDILBqdkMKK7Ol4e3yDnmSpRBEaLkFauR7oeCrcOvzb6iREbymFt1fvXf8Y6yVRU9C2qaqeeAmLaZMf8Hoy/IlJnbsvrYtmrp4OYVjsUN9/OJle4AOEsVgOwrO9jK0BBu9I2dF0E2+64+MMI93TBybBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IwURd1p8THJt57DEP7ZAgjPp6V8uJGe4kfwpe8jaGfM=;
+ b=d16vh4UIadQL3Hr9jG3eU91qy4wIsLgdxTZ39vFDL+1nTIXZnGRIs3iSZzefF0mB8ZUOcSB1HPWmm1PPH2Cz1H2GlG/TkTeUnm5+y7qj/hKoiwi3zILD7ZVA6+E04Uz/ti4hLskJzkkHqUhj5IZxd96MJf14ohCmWkCVH40F5JDtcR9XQjC9TAkSd8MLPKQNLANPmEr2K1bQKZpM2iXi1guPL9tDyR5AstXSotwLyYN1Bnk3CqUTsK3y9XZpFgthWS5W201cQrAjM8ScjWBsFYYykcgzdyp2AsWA6wpSejfvcBagr0b+8bhhFaHbvjjM065ffg1dvSaOrt80sPpAvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IwURd1p8THJt57DEP7ZAgjPp6V8uJGe4kfwpe8jaGfM=;
+ b=Bsf9eoxOqLfmmXH9V1c072NcJiIRcUYcYPbWXlJ9hUTMNKXxtxrAnXsh+5jOC1BIldJlu8wzY9wRYuHwlE5R7t4Q1k11twaWuA/QaFd6pMBhNhMf36WkM8ChQ67RBBsQ9vi1KXWWvakwStAyNk7D9lPmaNJs9/svneVzs9s/HZc=
+Authentication-Results: cmpxchg.org; dkim=none (message not signed)
+ header.d=none;cmpxchg.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by BYAPR15MB2630.namprd15.prod.outlook.com (2603:10b6:a03:14c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.15; Thu, 13 Aug
+ 2020 15:56:49 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::354d:5296:6a28:f55e]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::354d:5296:6a28:f55e%6]) with mapi id 15.20.3261.025; Thu, 13 Aug 2020
+ 15:56:49 +0000
+Date:   Thu, 13 Aug 2020 08:56:46 -0700
+From:   Roman Gushchin <guro@fb.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: nvme crash - Re: linux-next: Tree for Aug 13
-Message-ID: <20200813155009.GA2303@infradead.org>
-MIME-Version: 1.0
+        Linux PowerPC Mailing List <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: runtime warning in Linus' tree
+Message-ID: <20200813153856.GA1641111@carbon.lan>
+References: <20200813164654.061dbbd3@canb.auug.org.au>
+ <20200813152033.GA701678@cmpxchg.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <454c65b1-872a-a48c-662d-690044662772@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200813152033.GA701678@cmpxchg.org>
+X-ClientProxiedBy: BY5PR16CA0021.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::34) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from carbon.lan (2620:10d:c090:400::5:c40b) by BY5PR16CA0021.namprd16.prod.outlook.com (2603:10b6:a03:1a0::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16 via Frontend Transport; Thu, 13 Aug 2020 15:56:48 +0000
+X-Originating-IP: [2620:10d:c090:400::5:c40b]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1da9ab32-668f-4b18-1a97-08d83fa17cde
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2630:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB26301BCB38E276424318FA98BE430@BYAPR15MB2630.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YhPDGJwGv172HsB80kwiJ20iv7ardIN4G7G4Pt+kJi6lovUKfBSXlRskz7GXicPPJOPAvPxZud7pyKe2Z3DeQZDupwbe5K4E8MdcN9fdYawAjziNBBTEejSxL7moz8UZTFT0dacD0OSrUSrXOpTnEU9izkBmNko4XGTfxq24s4kfGniDtn5dIFUlpndBT8Fi35lmdwaLTOR8X9CcOa/Rlt+mP/aVzKmZblRCDVHBNK7ibZSZfbMpjsIC8XEq4GPdfjRA+8Wl/n2coK7LVwVY8UYUHuGvHxES2V06qjVE1pI9JV63djJmiS+RT/BIAc+YxAVueI7k3piSQN2onhVudA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(366004)(396003)(39860400002)(346002)(8886007)(1076003)(66476007)(66556008)(478600001)(66946007)(2906002)(33656002)(4326008)(8676002)(55016002)(5660300002)(9686003)(54906003)(86362001)(53546011)(16526019)(6916009)(316002)(83380400001)(36756003)(6506007)(52116002)(8936002)(7696005)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: V2oB/i/Z5OVgDMZfJbT/pqxZ1p0k98B1k51xiNujKjxg0vIjfzSs+t/O0gDG6NlsxXv8UmHxKKByKnckaVJ9oTqv3aoO3zsc9QsxuY6/bofQ6wM+Bc5jUVmzHQ3hf88EdvOWxLYc+jmpdhueOf3TeEEQ5xlh/gYLMFnNgNTTUTA3ZylHlcIykrirFALvPga4tRnchgzYc/ZMzc8ESVOKS3o4L6I3sO1KXsIm92Cwi5qMBT7PABQNUvEyZ3VFYVCbYIjJCesPW+bVSdgstZJbyY9jFZAkLzzBkBTQQCimwMyRk25L52crQ2rvQRhY87Ev1Pja7uWdhFYDcFUrbJzE+9H7woe17Oz91lU4dzFxck8AzresD0bkq3voHCwpPIVNrOVQaDr/UPyB80z/bh13wpijgt5tNStYe1pDFgquDxAy5MSUYWLRUKWoq6fKSv4k4quLKA1v1GY6lX0yK8JS5MNfi1AsD2Cj6GhYF7fsIW+CmQ3AMQibrybEcYdltT++cc6TSU8XgWrZZOuWgR9jH5Je4blkmn+6UXAY5Kr/0IRBSob5O6EaGfPgQoTIbot60dzhRy96cSWIKdSRzUoRRQzYFkKpL6rPd/cMuwM7C0tUic2nIx49DtuSpqyP2wkMhJQJ1DOPp7UiSPombGGcW1HAmC3FgTlxZzaukccX3kI=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1da9ab32-668f-4b18-1a97-08d83fa17cde
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2020 15:56:49.2908
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SFMHRVInJ/SjrLansjjd6ora1H2abGC7jVy3lvQPGAI8Flwns3aOKMlG8RQ0+9mU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2630
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-13_14:2020-08-13,2020-08-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ phishscore=0 suspectscore=1 mlxlogscore=999 priorityscore=1501
+ adultscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008130117
+X-FB-Internal: deliver
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 12:00:19PM +0100, John Garry wrote:
-> On 13/08/2020 07:58, Stephen Rothwell wrote:
-> > Hi all,
+On Thu, Aug 13, 2020 at 11:20:33AM -0400, Johannes Weiner wrote:
+> On Thu, Aug 13, 2020 at 04:46:54PM +1000, Stephen Rothwell wrote:
+> > [    0.055220][    T0] WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5220 mem_cgroup_css_alloc+0x350/0x904
 > 
-> Hi guys,
+> > [The line numbers in the final linux next are 5226 and 5141 due to
+> > later patches.]
+> > 
+> > Introduced (or exposed) by commit
+> > 
+> >   3e38e0aaca9e ("mm: memcg: charge memcg percpu memory to the parent cgroup")
+> > 
+> > This commit actually adds the WARN_ON, so it either adds the bug that
+> > sets it off, or the bug already existed.
+> > 
+> > Unfotunately, the version of this patch in linux-next up tuntil today
+> > is different.  :-(
 > 
-> I have experienced this this crash below on linux-next for the last few days
-> on my arm64 system. Linus' master branch today also has it.
+> Sorry, I made a last-minute request to include these checks in that
+> patch to make the code a bit more robust, but they trigger a false
+> positive here. Let's remove them.
+> 
+> ---
+> 
+> From de8ea7c96c056c3cbe7b93995029986a158fb9cd Mon Sep 17 00:00:00 2001
+> From: Johannes Weiner <hannes@cmpxchg.org>
+> Date: Thu, 13 Aug 2020 10:40:54 -0400
+> Subject: [PATCH] mm: memcontrol: fix warning when allocating the root cgroup
+> 
+> Commit 3e38e0aaca9e ("mm: memcg: charge memcg percpu memory to the
+> parent cgroup") adds memory tracking to the memcg kernel structures
+> themselves to make cgroups liable for the memory they are consuming
+> through the allocation of child groups (which can be significant).
+> 
+> This code is a bit awkward as it's spread out through several
+> functions: The outermost function does memalloc_use_memcg(parent) to
+> set up current->active_memcg, which designates which cgroup to charge,
+> and the inner functions pass GFP_ACCOUNT to request charging for
+> specific allocations. To make sure this dependency is satisfied at all
+> times - to make sure we don't randomly charge whoever is calling the
+> functions - the inner functions warn on !current->active_memcg.
+> 
+> However, this triggers a false warning when the root memcg itself is
+> allocated. No parent exists in this case, and so current->active_memcg
+> is rightfully NULL. It's a false positive, not indicative of a bug.
+> 
+> Delete the warnings for now, we can revisit this later.
+> 
+> Fixes: 3e38e0aaca9e ("mm: memcg: charge memcg percpu memory to the parent cgroup")
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Adding Robin and the iommu list as this seems to be in the dma-iommu
-code.
+Acked-by: Roman Gushchin <guro@fb.com>
 
-> root@ubuntu:/home/john# insmod nvme.ko
-> [148.254564] nvme 0000:81:00.0: Adding to iommu group 21
-> [148.260973] nvme nvme0: pci function 0000:81:00.0
-> root@ubuntu:/home/john# [148.272996] Unable to handle kernel NULL pointer
-> dereference at virtual address 0000000000000010
-> [148.281784] Mem abort info:
-> [148.284584] ESR = 0x96000004
-> [148.287641] EC = 0x25: DABT (current EL), IL = 32 bits
-> [148.292950] SET = 0, FnV = 0
-> [148.295998] EA = 0, S1PTW = 0
-> [148.299126] Data abort info:
-> [148.302003] ISV = 0, ISS = 0x00000004
-> [148.305832] CM = 0, WnR = 0
-> [148.308794] user pgtable: 4k pages, 48-bit VAs, pgdp=00000a27bf3c9000
-> [148.315229] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-> [148.322016] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> [148.327577] Modules linked in: nvme nvme_core
-> [148.331927] CPU: 56 PID: 256 Comm: kworker/u195:0 Not tainted
-> 5.8.0-next-20200812 #27
-> [148.339744] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI RC0 -
-> V1.16.01 03/15/2019
-> [148.348260] Workqueue: nvme-reset-wq nvme_reset_work [nvme]
-> [148.353822] pstate: 80c00009 (Nzcv daif +PAN +UAO BTYPE=--)
-> [148.359390] pc : __sg_alloc_table_from_pages+0xec/0x238
-> [148.364604] lr : __sg_alloc_table_from_pages+0xc8/0x238
-> [148.369815] sp : ffff800013ccbad0
-> [148.373116] x29: ffff800013ccbad0 x28: ffff0a27b3d380a8
-> [148.378417] x27: 0000000000000000 x26: 0000000000002dc2
-> [148.383718] x25: 0000000000000dc0 x24: 0000000000000000
-> [148.389019] x23: 0000000000000000 x22: ffff800013ccbbe8
-> [148.394320] x21: 0000000000000010 x20: 0000000000000000
-> [148.399621] x19: 00000000fffff000 x18: ffffffffffffffff
-> [148.404922] x17: 00000000000000c0 x16: fffffe289eaf6380
-> [148.410223] x15: ffff800011b59948 x14: ffff002bc8fe98f8
-> [148.415523] x13: ff00000000000000 x12: ffff8000114ca000
-> [148.420824] x11: 0000000000000000 x10: ffffffffffffffff
-> [148.426124] x9 : ffffffffffffffc0 x8 : ffff0a27b5f9b6a0
-> [148.431425] x7 : 0000000000000000 x6 : 0000000000000001
-> [148.436726] x5 : ffff0a27b5f9b680 x4 : 0000000000000000
-> [148.442027] x3 : ffff0a27b5f9b680 x2 : 0000000000000000
-> [148.447328] x1 : 0000000000000001 x0 : 0000000000000000
-> [148.452629] Call trace:
-> [148.455065]__sg_alloc_table_from_pages+0xec/0x238
-> [148.459931]sg_alloc_table_from_pages+0x18/0x28
-> [148.464541]iommu_dma_alloc+0x474/0x678
-> [148.468455]dma_alloc_attrs+0xd8/0xf0
-> [148.472193]nvme_alloc_queue+0x114/0x160 [nvme]
-> [148.476798]nvme_reset_work+0xb34/0x14b4 [nvme]
-> [148.481407]process_one_work+0x1e8/0x360
-> [148.485405]worker_thread+0x44/0x478
-> [148.489055]kthread+0x150/0x158
-> [148.492273]ret_from_fork+0x10/0x34
-> [148.495838] Code: f94002c3 6b01017f 540007c2 11000486 (f8645aa5)
-> [148.501921] ---[ end trace 89bb2b72d59bf925 ]---
+Thanks!
+
+
+> ---
+>  mm/memcontrol.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> Anything to worry about? I guess not since we're in the merge window, but
-> mentioning just in case ...
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index d59fd9af6e63..9d87082e64aa 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -5137,9 +5137,6 @@ static int alloc_mem_cgroup_per_node_info(struct mem_cgroup *memcg, int node)
+>  	if (!pn)
+>  		return 1;
+>  
+> -	/* We charge the parent cgroup, never the current task */
+> -	WARN_ON_ONCE(!current->active_memcg);
+> -
+>  	pn->lruvec_stat_local = alloc_percpu_gfp(struct lruvec_stat,
+>  						 GFP_KERNEL_ACCOUNT);
+>  	if (!pn->lruvec_stat_local) {
+> @@ -5222,9 +5219,6 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+>  		goto fail;
+>  	}
+>  
+> -	/* We charge the parent cgroup, never the current task */
+> -	WARN_ON_ONCE(!current->active_memcg);
+> -
+>  	memcg->vmstats_local = alloc_percpu_gfp(struct memcg_vmstats_percpu,
+>  						GFP_KERNEL_ACCOUNT);
+>  	if (!memcg->vmstats_local)
+> -- 
+> 2.28.0
 > 
-> Thanks,
-> john
-> 
-> > 
-> > News: The merge window has opened, so please do not add any v5.10
-> > related material to your linux-next included branches until after the
-> > merge window closes again.
-> > 
-> > Changes since 20200812:
-> > 
-> > My fixes tree contains:
-> > 
-> >    73c7adb54169 ("device_cgroup: Fix RCU list debugging warning")
-> > 
-> > Linus' tree produces a WARNING in my qemu testing (see
-> > https://lore.kernel.org/lkml/20200813164654.061dbbd3@canb.auug.org.au/).
-> > 
-> > Non-merge commits (relative to Linus' tree): 946
-> >   1083 files changed, 28405 insertions(+), 9953 deletions(-)
-> > 
-> > ----------------------------------------------------------------------------
-> > 
-> > I have created today's linux-next tree at
-> > git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> > are tracking the linux-next tree using git, you should not use "git pull"
-> > to do so as that will try to merge the new linux-next release with the
-> > old one.  You should use "git fetch" and checkout or reset to the new
-> > master.
-> > 
-> > You can see which trees have been included by looking in the Next/Trees
-> > file in the source.  There are also quilt-import.log and merge.log
-> > files in the Next directory.  Between each merge, the tree was built
-> > with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> > multi_v7_defconfig for arm and a native build of tools/perf. After
-> > the final fixups (if any), I do an x86_64 modules_install followed by
-> > builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> > ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> > and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> > of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> > kvm enabled).
-> > 
-> > Below is a summary of the state of the merge.
-> > 
-> > I am currently merging 327 trees (counting Linus' and 85 trees of bug
-> > fix patches pending for the current merge release).
-> > 
-> > Stats about the size of the tree over time can be seen at
-> > http://neuling.org/linux-next-size.html .
-> > 
-> > Status of my local build tests will be at
-> > http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> > advice about cross compilers/configs that work, we are always open to add
-> > more builds.
-> > 
-> > Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> > Gortmaker for triage and bug fixes.
-> > 
-> 
-> 
-> _______________________________________________
-> Linux-nvme mailing list
-> Linux-nvme@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-nvme
----end quoted text---

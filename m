@@ -2,149 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15A22437E3
-	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 11:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DECD24390D
+	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 13:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgHMJr2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Aug 2020 05:47:28 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:35910 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726522AbgHMJr1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 Aug 2020 05:47:27 -0400
-Received: by mail-io1-f70.google.com with SMTP id h205so3643986iof.3
-        for <linux-next@vger.kernel.org>; Thu, 13 Aug 2020 02:47:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=9Dlz59NWZ1Pt0j6oxZ7rlutFZtxOxRW52eAAmLe4yhU=;
-        b=ktLQeXBA0N4xfa0R4oxBvG4Kp4243+1VKmrq1uzhIspzJFS+hHIggxGjul/lhJwtCD
-         DSkmq1U9a8G8zeENfjtXUHauHk3I+/jku5IfQbS69U0I6F4z0hU0DVJ57rLLLoIBq12b
-         oPwUjaV0Z+5NBpFsZ7m9R0dH20jSraE0iuqHuHX1Hdm/4B8W97Pj37lDTG0+a6EVr4qJ
-         vLqjTcOJVUBhw6NJNpVDXDpGB33xbXcD58CDeXXXO4htyx/aSzxLLiU7hi28JUosHxAW
-         YKOY/CJq8VC14l8McSyklxKhOj82olS8y33uTzYC7LYLvBqtg6r3F9QCfacyoSwl79QD
-         6vLQ==
-X-Gm-Message-State: AOAM530D1Ww4sYwPqc9yYvUnsmJm+maygf8srmF6Ir2jjE7+1fLZ8yBk
-        /FIM06Rs+/qzI7QZCCvP9rEjs7b6VCLtI4aNMpiXj1BehAbS
-X-Google-Smtp-Source: ABdhPJxAdxBg2PCfzqxKDb9uJ/FqI62zx/scKeu/gYbyeE2wehZKlTYjqh7jAud1uZ0jJLwLBtyxlnFRbB4E9Fy3wsNYrRhX7xH/
+        id S1726131AbgHMLCh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Aug 2020 07:02:37 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2599 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726072AbgHMLCg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 Aug 2020 07:02:36 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 9BF02BCB56C4161DE76E;
+        Thu, 13 Aug 2020 12:02:34 +0100 (IST)
+Received: from [127.0.0.1] (10.210.169.159) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 13 Aug
+ 2020 12:02:34 +0100
+Subject: nvme crash - Re: linux-next: Tree for Aug 13
+To:     linux-nvme <linux-nvme@lists.infradead.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200813165846.27887669@canb.auug.org.au>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <454c65b1-872a-a48c-662d-690044662772@huawei.com>
+Date:   Thu, 13 Aug 2020 12:00:19 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-X-Received: by 2002:a6b:ba03:: with SMTP id k3mr3995605iof.72.1597312046218;
- Thu, 13 Aug 2020 02:47:26 -0700 (PDT)
-Date:   Thu, 13 Aug 2020 02:47:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001c467c05acbf3196@google.com>
-Subject: linux-next boot error: WARNING in mem_cgroup_css_alloc
-From:   syzbot <syzbot+f96cbc69d9803e663664@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-        vdavydov.dev@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200813165846.27887669@canb.auug.org.au>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.169.159]
+X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On 13/08/2020 07:58, Stephen Rothwell wrote:
+> Hi all,
 
-syzbot found the following issue on:
+Hi guys,
 
-HEAD commit:    e6d113ac Add linux-next specific files for 20200813
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11db9fd6900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2055bd0d83d5ee16
-dashboard link: https://syzkaller.appspot.com/bug?extid=f96cbc69d9803e663664
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+I have experienced this this crash below on linux-next for the last few 
+days on my arm64 system. Linus' master branch today also has it.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f96cbc69d9803e663664@syzkaller.appspotmail.com
+root@ubuntu:/home/john# insmod nvme.ko
+[148.254564] nvme 0000:81:00.0: Adding to iommu group 21
+[148.260973] nvme nvme0: pci function 0000:81:00.0
+root@ubuntu:/home/john# [148.272996] Unable to handle kernel NULL 
+pointer dereference at virtual address 0000000000000010
+[148.281784] Mem abort info:
+[148.284584] ESR = 0x96000004
+[148.287641] EC = 0x25: DABT (current EL), IL = 32 bits
+[148.292950] SET = 0, FnV = 0
+[148.295998] EA = 0, S1PTW = 0
+[148.299126] Data abort info:
+[148.302003] ISV = 0, ISS = 0x00000004
+[148.305832] CM = 0, WnR = 0
+[148.308794] user pgtable: 4k pages, 48-bit VAs, pgdp=00000a27bf3c9000
+[148.315229] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+[148.322016] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[148.327577] Modules linked in: nvme nvme_core
+[148.331927] CPU: 56 PID: 256 Comm: kworker/u195:0 Not tainted 
+5.8.0-next-20200812 #27
+[148.339744] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI RC0 
+- V1.16.01 03/15/2019
+[148.348260] Workqueue: nvme-reset-wq nvme_reset_work [nvme]
+[148.353822] pstate: 80c00009 (Nzcv daif +PAN +UAO BTYPE=--)
+[148.359390] pc : __sg_alloc_table_from_pages+0xec/0x238
+[148.364604] lr : __sg_alloc_table_from_pages+0xc8/0x238
+[148.369815] sp : ffff800013ccbad0
+[148.373116] x29: ffff800013ccbad0 x28: ffff0a27b3d380a8
+[148.378417] x27: 0000000000000000 x26: 0000000000002dc2
+[148.383718] x25: 0000000000000dc0 x24: 0000000000000000
+[148.389019] x23: 0000000000000000 x22: ffff800013ccbbe8
+[148.394320] x21: 0000000000000010 x20: 0000000000000000
+[148.399621] x19: 00000000fffff000 x18: ffffffffffffffff
+[148.404922] x17: 00000000000000c0 x16: fffffe289eaf6380
+[148.410223] x15: ffff800011b59948 x14: ffff002bc8fe98f8
+[148.415523] x13: ff00000000000000 x12: ffff8000114ca000
+[148.420824] x11: 0000000000000000 x10: ffffffffffffffff
+[148.426124] x9 : ffffffffffffffc0 x8 : ffff0a27b5f9b6a0
+[148.431425] x7 : 0000000000000000 x6 : 0000000000000001
+[148.436726] x5 : ffff0a27b5f9b680 x4 : 0000000000000000
+[148.442027] x3 : ffff0a27b5f9b680 x2 : 0000000000000000
+[148.447328] x1 : 0000000000000001 x0 : 0000000000000000
+[148.452629] Call trace:
+[148.455065]__sg_alloc_table_from_pages+0xec/0x238
+[148.459931]sg_alloc_table_from_pages+0x18/0x28
+[148.464541]iommu_dma_alloc+0x474/0x678
+[148.468455]dma_alloc_attrs+0xd8/0xf0
+[148.472193]nvme_alloc_queue+0x114/0x160 [nvme]
+[148.476798]nvme_reset_work+0xb34/0x14b4 [nvme]
+[148.481407]process_one_work+0x1e8/0x360
+[148.485405]worker_thread+0x44/0x478
+[148.489055]kthread+0x150/0x158
+[148.492273]ret_from_fork+0x10/0x34
+[148.495838] Code: f94002c3 6b01017f 540007c2 11000486 (f8645aa5)
+[148.501921] ---[ end trace 89bb2b72d59bf925 ]---
 
-mem auto-init: stack:off, heap alloc:on, heap free:off
-Memory: 6458876K/7863916K available (116743K kernel code, 18258K rwdata, 21644K rodata, 2812K init, 25364K bss, 1404784K reserved, 0K cma-reserved)
-Running RCU self tests
-rcu: Preemptible hierarchical RCU implementation.
-rcu: 	RCU lockdep checking is enabled.
-rcu: 	RCU restricting CPUs from NR_CPUS=64 to nr_cpu_ids=2.
-rcu: 	RCU callback double-/use-after-free debug enabled.
-rcu: 	RCU debug extended QS entry/exit.
-	All grace periods are expedited (rcu_expedited).
-	Trampoline variant of Tasks RCU enabled.
-rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
-NR_IRQS: 4352, nr_irqs: 440, preallocated irqs: 16
-random: get_random_bytes called from boot_init_stack_canary arch/x86/include/asm/stackprotector.h:80 [inline] with crng_init=0
-random: get_random_bytes called from start_kernel+0x23b/0x46a init/main.c:957 with crng_init=0
-Console: colour VGA+ 80x25
-printk: console [ttyS0] enabled
-printk: console [ttyS0] enabled
-printk: bootconsole [earlyser0] disabled
-printk: bootconsole [earlyser0] disabled
-Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-... MAX_LOCKDEP_SUBCLASSES:  8
-... MAX_LOCK_DEPTH:          48
-... MAX_LOCKDEP_KEYS:        8192
-... CLASSHASH_SIZE:          4096
-... MAX_LOCKDEP_ENTRIES:     32768
-... MAX_LOCKDEP_CHAINS:      65536
-... CHAINHASH_SIZE:          32768
- memory used by lock dependency info: 6301 kB
- memory used for stack traces: 4224 kB
- per task-struct memory footprint: 1920 bytes
-mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
-ACPI: Core revision 20200717
-APIC: Switch to symmetric I/O mode setup
-x2apic enabled
-Switched APIC routing to physical x2apic.
-..TIMER: vector=0x30 apic1=0 pin1=0 apic2=-1 pin2=-1
-clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x212735223b2, max_idle_ns: 440795277976 ns
-Calibrating delay loop (skipped) preset value.. 4600.00 BogoMIPS (lpj=23000000)
-pid_max: default: 32768 minimum: 301
-LSM: Security Framework initializing
-LSM: security= is ignored because it is superseded by lsm=
-Yama: becoming mindful.
-TOMOYO Linux initialized
-AppArmor: AppArmor initialized
-LSM support for eBPF active
-Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, vmalloc)
-Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, vmalloc)
-Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
-Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, vmalloc)
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5226 memalloc_unuse_memcg include/linux/sched/mm.h:331 [inline]
-WARNING: CPU: 0 PID: 0 at mm/memcontrol.c:5226 mem_cgroup_css_alloc+0x535/0x1c30 mm/memcontrol.c:5285
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-next-20200813-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- panic+0x2e3/0x75c kernel/panic.c:231
- __warn.cold+0x20/0x4a kernel/panic.c:600
- report_bug+0x1bd/0x210 lib/bug.c:198
- handle_bug+0x38/0x90 arch/x86/kernel/traps.c:234
- exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
- asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
-RIP: 0010:mem_cgroup_alloc mm/memcontrol.c:5226 [inline]
-RIP: 0010:mem_cgroup_css_alloc+0x535/0x1c30 mm/memcontrol.c:5284
-Code: 01 00 48 8d bb 48 14 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 74 81 e8 a0 79 c0 f9 e9 77 ff ff ff <0f> 0b e9 21 fc ff ff 48 89 ef e8 3c af c5 f9 48 b8 00 00 00 00 00
-RSP: 0000:ffffffff89a07e20 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffffff89a99dc0 RCX: 1ffff110436f4c28
-RDX: 1ffffffff1353641 RSI: ffffffff83b2f532 RDI: ffffffff89a9b208
-RBP: ffff88821b7a6000 R08: 0000000000000001 R09: ffff8880a9c06b6f
-R10: 0000000000000000 R11: ffffffff810000d4 R12: ffffffff8abb6bb4
-R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff8abb6bd0
- cgroup_init_subsys+0x215/0x4d7 kernel/cgroup/cgroup.c:5587
- cgroup_init+0x359/0xa63 kernel/cgroup/cgroup.c:5713
- start_kernel+0x426/0x46a init/main.c:1035
- secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
-Rebooting in 86400 seconds..
+Anything to worry about? I guess not since we're in the merge window, 
+but mentioning just in case ...
 
+Thanks,
+john
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> News: The merge window has opened, so please do not add any v5.10
+> related material to your linux-next included branches until after the
+> merge window closes again.
+> 
+> Changes since 20200812:
+> 
+> My fixes tree contains:
+> 
+>    73c7adb54169 ("device_cgroup: Fix RCU list debugging warning")
+> 
+> Linus' tree produces a WARNING in my qemu testing (see
+> https://lore.kernel.org/lkml/20200813164654.061dbbd3@canb.auug.org.au/).
+> 
+> Non-merge commits (relative to Linus' tree): 946
+>   1083 files changed, 28405 insertions(+), 9953 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 327 trees (counting Linus' and 85 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
+> 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

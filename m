@@ -2,92 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D962440F1
-	for <lists+linux-next@lfdr.de>; Thu, 13 Aug 2020 23:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED06244117
+	for <lists+linux-next@lfdr.de>; Fri, 14 Aug 2020 00:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgHMVzM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Aug 2020 17:55:12 -0400
-Received: from mga14.intel.com ([192.55.52.115]:14131 "EHLO mga14.intel.com"
+        id S1726679AbgHMWHU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Aug 2020 18:07:20 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60779 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726205AbgHMVzL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 13 Aug 2020 17:55:11 -0400
-IronPort-SDR: gOPz0Lvuug6nd1lJdswMAqWMhhBtUFKPsjzu/am1tY783wvP2SbKbFUh0sBK0fqN+gngr6EzV4
- jVjgp9d2pFLw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="153553652"
-X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
-   d="scan'208";a="153553652"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 14:55:11 -0700
-IronPort-SDR: eFLGK9y2LhwRrxsytEDwPP051lVfVP+dpt0KjHb75lXCYyXcYKVqPqMpdoioqBZ2YmEMynbXqh
- X2cMxAmFJSyQ==
-X-IronPort-AV: E=Sophos;i="5.76,309,1592895600"; 
-   d="scan'208";a="325544031"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 14:55:08 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 34D0620699; Fri, 14 Aug 2020 00:55:05 +0300 (EEST)
-Date:   Fri, 14 Aug 2020 00:55:05 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S1726678AbgHMWHT (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 Aug 2020 18:07:19 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BSLJz20Jqz9sTF;
+        Fri, 14 Aug 2020 08:07:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1597356436;
+        bh=O90B6lPgDbctD7DTLOixetS5SEhrzQ35jkHhZCRy+/Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mLpjo5WOrz0/70Oi8Dx8l/LlsKMCkIbWO/zb9uPqVzRXkHS5/AinqEXnOpZmQ3DqT
+         cqWyeDAM/IkyrRqP9654DnFlAofd72coChEsr68RAJ3M+LW32CLgtmjoCKTgAmIWns
+         BQKpojE9XgIGI8T+H1j0ZWvNGYjepuRJtuYisb2iJpQ4T4Wq6w21rIm/UZsLI5LjWO
+         /at+uZOZnX5eSmClgc/7waqIJeLaCSVJ+0S51kImQsdo39/xrDFFFHiuMBVmC6ILE6
+         c++oFnx4RfmYGa746f0OWCQ8mWeObac6XzNzIjNucweLEFZAVXoLLggkOR+brchABw
+         OSnr4YqCVH39g==
+Date:   Fri, 14 Aug 2020 08:07:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Xen Devel <Xen-devel@lists.xensource.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: Re: linux-next: Tree for Aug 13 (drivers/media/i2c/max9286.c)
-Message-ID: <20200813215505.GC24582@paasikivi.fi.intel.com>
-References: <20200813165846.27887669@canb.auug.org.au>
- <17a1c5aa-2f38-c84d-bf2d-485862dc0615@infradead.org>
- <3262a9fc-46e2-3109-3764-e7153edf486d@ideasonboard.com>
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+Subject: linux-next: Fixes tag needs some work in the xen-tip tree
+Message-ID: <20200814080714.6aa441cd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3262a9fc-46e2-3109-3764-e7153edf486d@ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/MhZ8wxdqyR2_58Uq9lvmpR4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Kieran,
+--Sig_/MhZ8wxdqyR2_58Uq9lvmpR4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 13, 2020 at 08:01:01PM +0100, Kieran Bingham wrote:
-> Hi Randy,
-> 
-> On 13/08/2020 19:35, Randy Dunlap wrote:
-> > On 8/12/20 11:58 PM, Stephen Rothwell wrote:
-> >> Hi all,
-> >>
-> >> News: The merge window has opened, so please do not add any v5.10
-> >> related material to your linux-next included branches until after the
-> >> merge window closes again.
-> >>
-> >> Changes since 20200812:
-> >>
-> > 
-> > on x86_64:
-> > 
-> > # CONFIG_GPIOLIB is not set
-> > 
-> > ../drivers/media/i2c/max9286.c: In function 'max9286_register_gpio':
-> > ../drivers/media/i2c/max9286.c:1033:6: error: 'struct gpio_chip' has no member named 'of_node'
-> >   gpio->of_node = dev->of_node;
-> > 
-> 
-> Thanks for the report, Sakari has already submitted a fix [0] for this.
-> I assume it just needs a nudge to get picked up via Mauro's tree.
-> 
-> [0]
-> https://lore.kernel.org/linux-media/20200803090935.23619-1-sakari.ailus@linux.intel.com/
+Hi all,
 
-Yes. I'll send a pull request soon.
+In commit
 
--- 
-Sakari Ailus
+  14dee0586104 ("drm/xen-front: Fix misused IS_ERR_OR_NULL checks")
+
+Fixes tag
+
+  Fixes:  c575b7eeb89f: "drm/xen-front: Add support for Xen PV display fron=
+tend"
+
+has these problem(s):
+
+  - missing space between the SHA1 and the subject
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Fixes: c575b7eeb89f ("drm/xen-front: Add support for Xen PV display fronten=
+d")
+
+Also, please keep all the commit message tags together at the end of
+the commit message.
+
+Not worth rebasing over, just to remember for next time, thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/MhZ8wxdqyR2_58Uq9lvmpR4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl81uZIACgkQAVBC80lX
+0Gx0EAgAixJH9UPNrwekGE13e/05L03RxpI+G04md3cJ2kk44qGeGtK+qiTjHpZh
+sPsD4q2b4tyljqbRo8x3G3Z/ekS1t/a324NznDn9fAfyEY2ZHsqjjm4E+szpYINb
+v720/bnq6/hQ+6chniPGufY7Cv/ZRcw7DRT10VWHeEV+HIH2RuHiUdVqX4cHKtGj
+mH6Yn+x9MoT3XxoBngmMwCDTaBsmCbw1tQOVF1eW6/OelD6cX9fvXmh+O0mZNDo+
+NY85c2zvgyPqB9+9pQiErAmhTDDJvqDryIKgjGeV6jhPTb1hp+smfuscho2YZjDP
+ewBtoupmn40opBvAvUQM02PXx8LpNA==
+=1asd
+-----END PGP SIGNATURE-----
+
+--Sig_/MhZ8wxdqyR2_58Uq9lvmpR4--

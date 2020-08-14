@@ -2,59 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CEF244AB9
-	for <lists+linux-next@lfdr.de>; Fri, 14 Aug 2020 15:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35776244B07
+	for <lists+linux-next@lfdr.de>; Fri, 14 Aug 2020 16:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgHNNkK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Aug 2020 09:40:10 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2607 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726139AbgHNNkK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 14 Aug 2020 09:40:10 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 7163B571FFE3D7393BC5;
-        Fri, 14 Aug 2020 14:40:08 +0100 (IST)
-Received: from [127.0.0.1] (10.47.4.107) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Fri, 14 Aug
- 2020 14:40:07 +0100
-Subject: Re: nvme crash - Re: linux-next: Tree for Aug 13
-From:   John Garry <john.garry@huawei.com>
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     linux-nvme <linux-nvme@lists.infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <chaitanya.kulkarni@wdc.com>
-References: <20200813155009.GA2303@infradead.org>
- <81e42d30-ede3-d7b0-ad7b-8192bcf27a4c@huawei.com>
- <20200814120824.GB1872@infradead.org>
- <895b0c2f-52eb-bd72-7cbf-aa6808c018d2@huawei.com>
-Message-ID: <4f01dd86-62da-84bd-0ae4-7e31b5484514@huawei.com>
-Date:   Fri, 14 Aug 2020 14:37:52 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726700AbgHNOER (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Aug 2020 10:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgHNOEL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Aug 2020 10:04:11 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83F1C061384;
+        Fri, 14 Aug 2020 07:04:10 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id a24so8216929oia.6;
+        Fri, 14 Aug 2020 07:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=l7qAZHlwpAfFDjUxIVbnGJtoyTbh3th5DAv9R8mDvnI=;
+        b=KvAg9/yXCUX2u+WovBrDP84L91SacWSuc/f5lkKrcTsZEBKdeHdT0OWjFsJF++zE0q
+         F5YDoKk59DLQ/jLcnQDZWJ2DnWf0onNv5w1sQUuPuyC/FaE9LY43G4HcHPyu+8gN2PM6
+         AnJvTTfnKLAlNSissXB1O4r4FEsseZrCmE06zodPylBtIPRlRzxJr5K+J6Eg7ug2fnrr
+         IAAuCEXnc0k6UfcNuWCQOmjdH9+0ADtBC/maDjz5YfL+zFjeykIXBNzTR9zShhgcJW1M
+         NxxwIRrM0xGk09CiC6iuR/ZcBI8hngJR+wg/8bSKQzlg5TgZ5OE7dBFT7aeQmeXsUryy
+         rtuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=l7qAZHlwpAfFDjUxIVbnGJtoyTbh3th5DAv9R8mDvnI=;
+        b=VPvcGtuW2D/s5/pBYBjmstOUgw5o0GO/cxErfA/bCtTGHb3BhkhQU4S4P2BuPuvCTC
+         banwu66HLc+nt9tHKLJhrkIU/a89X/7Ff7kyLiQMk8Z/+M5T9rxYKPECsen1Qy9M36Yz
+         NDyZ7MyBUzSALq9bBW83AGcrkCJft6a7BZCbGFAvhBx4vu572SlcxkPKKoUtJKJxLP9o
+         hixDr/nhrDyc/Zug5s4AxCJIAdJhvEAQaispJxKHyexq0oAKO4SCNjKZhPbp12uGHos9
+         0zm+LOTb6HbJ88Z7UFEqUNb4rpAGh18dTQvN1TMTZ4awVf6FZj2+/Cu11rA3sqv7KBOg
+         BKFA==
+X-Gm-Message-State: AOAM533tyIDCAv97eKs5DRztybQxBRXB4eJSMB1swane7HbHvFxRprSP
+        285Pr11xxR/GzTO3T4Zy9MvK8kGTfwiwB2kuWnI=
+X-Google-Smtp-Source: ABdhPJyoWmPw0vLLG5fF2q5gc1/a49BHT0yNW0u0oHbhwp3G3kpl8UKDyBEe8cQYQieQPBNY7ucmh8XmNWLGJi0TYio=
+X-Received: by 2002:aca:4e92:: with SMTP id c140mr1499399oib.70.1597413850167;
+ Fri, 14 Aug 2020 07:04:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <895b0c2f-52eb-bd72-7cbf-aa6808c018d2@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.4.107]
-X-ClientProxiedBy: lhreml726-chm.china.huawei.com (10.201.108.77) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20200811143130.0ca95b8d@canb.auug.org.au> <CAMj1kXGvfjO_e7AgurJ-81o6e4rBC8HkXi3Kkb+ZZfy-MoKcyQ@mail.gmail.com>
+ <20200814102206.GB2367157@gmail.com>
+In-Reply-To: <20200814102206.GB2367157@gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 14 Aug 2020 16:03:58 +0200
+Message-ID: <CA+icZUWYaSnudhHfRWOc_3wx6jRK1aPs-FUpvfq6RQ4_grY5QQ@mail.gmail.com>
+Subject: Re: linux-next: new build warnings after binutils update
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 14/08/2020 14:07, John Garry wrote:
-> 
-> BTW, as for the DMA/sg scatterlist code, it so happens in this case that 
-> we try the dma alloc for size=0 in nvme_alloc_queue() - I know an 
-> allocation for size=0 makes no sense, but couldn't we bit a bit more 
-> robust?
+On Fri, Aug 14, 2020 at 12:22 PM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> > (+ Arvind, Kees)
+> >
+> > On Thu, 13 Aug 2020 at 22:58, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > After upgading some software, builds of Linus' tree now produce these warnings:
+> > >
+> > > x86_64-linux-gnu-ld: arch/x86/boot/compressed/head_64.o: warning: relocation in read-only section `.head.text'
+> > > x86_64-linux-gnu-ld: warning: creating DT_TEXTREL in a PIE
+> > >
+> > > I upgraded binutils from 2.34-8 to 2.35-1 (Debian versions).
+> > >
+> > > $ x86_64-linux-gnu-gcc --version
+> > > x86_64-linux-gnu-gcc (Debian 9.3.0-13) 9.3.0
+> > >
+> > > Any ideas?
+> > >
+> >
+> > Arvind and I have some patches on the list that fix various relocation
+> > issues in the decompressor binary.
+> >
+> > As far as I can tell, Arvind's patch to suppress runtime relocations
+> > [0] addresses this exact issue.
+> >
+> > Unfortunately, in spite of various pings and attempts to get the x86
+> > maintainers to notice this series, it has been ignored so far. Perhaps
+> > this is a good time to merge it for -rc1/2?
+> >
+> > [0] https://lore.kernel.org/lkml/20200731202738.2577854-6-nivedita@alum.mit.edu/
+>
+> It all looked good to me but was a bit late for v5.9, will pick up
+> after -rc1.
+>
+> Thanks,
+>
 
-it's giving ZERO_SIZE_PTR, which we deference, so ignore me...
+Good news :-).
+
+- Sedat -

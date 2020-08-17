@@ -2,99 +2,172 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA95247B22
-	for <lists+linux-next@lfdr.de>; Tue, 18 Aug 2020 01:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C4E247B5B
+	for <lists+linux-next@lfdr.de>; Tue, 18 Aug 2020 02:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbgHQXiM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Aug 2020 19:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726228AbgHQXiL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Aug 2020 19:38:11 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAE3C061389;
-        Mon, 17 Aug 2020 16:38:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BVr7y3zHPz9sRK;
-        Tue, 18 Aug 2020 09:38:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1597707486;
-        bh=glBGkMEeeVmAs1ezPi175DVrKUs2y/psfxcXJaM7nzo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SAhdMq9zewewaqx+pB/kaXx4rrvUkTwNKvCfP+uwLWxpsKQYj9ge1VffcVneTYBHp
-         rUBu+4zsuShzoDf0aG7hNoxMKHkcNeQeowoI9EEmNC1cufC4KmLT67eGNLQOnt7p5f
-         TgRJSpDgPIKfxdolpSp9r7/UNmacsEnKXoMLEjj3EgGFG8KHwwFcEuaiPNNCHdBS39
-         mrA53Rq+CBY/yluST2dNXzYc4FNhi0VKdnkazbracd6Gq7QnccM5wwLeHKC3de5wJU
-         McoyJNTvPYnck62BqgJjTvDCXTpB6lAG1iMkTw0lrYySYAk/6b+dj0kZ/xcYY2woJR
-         AzW3XR52JjnFQ==
-Date:   Tue, 18 Aug 2020 09:38:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+        id S1726302AbgHRABS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Aug 2020 20:01:18 -0400
+Received: from gateway23.websitewelcome.com ([192.185.49.60]:36376 "EHLO
+        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726245AbgHRABS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 17 Aug 2020 20:01:18 -0400
+X-Greylist: delayed 1230 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Aug 2020 20:01:17 EDT
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 2CDE0513C
+        for <linux-next@vger.kernel.org>; Mon, 17 Aug 2020 18:40:45 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 7ok9kTNc6CjCV7ok9kKBHr; Mon, 17 Aug 2020 18:40:45 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+M1K/obiXRJz+UfXXnjT0T/KoVlQ+falhng8CYsAloc=; b=y5obTZsjukOYF22mytJldCc1oF
+        lUWzvbpTKfSR5mjoNHI1UaskTYigl7Ty+zTV5R5u0vexq0yM0eKum1WBbM1bYZ+oe+qsSlPIUTDnx
+        3frM1XW7IzPooZ7Xb9jaLyqXaE8Cky2ym4eRb4220G/WgRBF3OABeZINGiOleC7Nh2RZBnzim2A50
+        uteUqWWR0ZUCn6ktwLSmQmtL+3LE0D0hpcKX1DlJ89R3two4DbmvN0wmPLjH0HY4OiI7RR0QEqaSW
+        /ht4aMrYS8TtkIg6nxbGUx7daCaCwkSP13Td55hsYidiqb9Wt20McDIG4vZlcydYqDUhgdwU8s11i
+        QLozJpCA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:47366 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1k7ok8-002Mal-Uu; Mon, 17 Aug 2020 18:40:44 -0500
+Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kspp-gustavo tree
-Message-ID: <20200818093805.11c0c3c3@canb.auug.org.au>
+References: <20200818093419.5362379c@canb.auug.org.au>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ AP7RWS474w==
+Message-ID: <951ad363-cac4-967e-10fd-bce8640d6d10@embeddedor.com>
+Date:   Mon, 17 Aug 2020 18:46:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P4xDWas+LsMVjT5qYAfbDHA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200818093419.5362379c@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1k7ok8-002Mal-Uu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:47366
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/P4xDWas+LsMVjT5qYAfbDHA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On 8/17/20 18:34, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kspp-gustavo tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from include/linux/compiler_types.h:65,
+>                  from <command-line>:
+> arch/powerpc/net/bpf_jit_comp64.c: In function 'bpf_jit_build_body':
+> include/linux/compiler_attributes.h:214:41: error: attribute 'fallthrough' not preceding a case label or default label [-Werror]
+>   214 | # define fallthrough                    __attribute__((__fallthrough__))
+>       |                                         ^~~~~~~~~~~~~
+> arch/powerpc/net/bpf_jit_comp64.c:847:4: note: in expansion of macro 'fallthrough'
+>   847 |    fallthrough;
+>       |    ^~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   02b894b985cb ("treewide: Use fallthrough pseudo-keyword")
+> 
+> I have added the following patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 18 Aug 2020 09:26:47 +1000
+> Subject: [PATCH] revert part of "treewide: Use fallthrough pseudo-keyword"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/powerpc/net/bpf_jit_comp64.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 57412af338fb..022103c6a201 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -844,7 +844,7 @@ static int bpf_jit_build_body(struct bpf_prog *fp, u32 *image,
+>  		case BPF_JMP32 | BPF_JSET | BPF_K:
+>  		case BPF_JMP32 | BPF_JSET | BPF_X:
+>  			true_cond = COND_NE;
+> -			fallthrough;
+> +			/* Fall through */
+>  
+>  cond_branch:
+>  			switch (code) {
+> 
 
-After merging the kspp-gustavo tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Thanks a lot for the patch. I will fix this up in my -next tree for
+tomorrow's linux-next. :)
 
-arch/powerpc/boot/inflate.c: In function 'zlib_inflate':
-arch/powerpc/boot/inflate.c:399:3: error: 'fallthrough' undeclared (first u=
-se in this function)
-  399 |   fallthrough;
-      |   ^~~~~~~~~~~
-arch/powerpc/boot/inflate.c:399:3: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-In file included from ./arch/powerpc/boot/decompress_inflate.c:12,
-                 from /home/sfr/next/next/arch/powerpc/boot/decompress.c:33:
-./arch/powerpc/boot/inflate.c: In function 'zlib_inflate':
-./arch/powerpc/boot/inflate.c:399:3: error: 'fallthrough' undeclared (first=
- use in this function)
-  399 |   fallthrough;
-      |   ^~~~~~~~~~~
-./arch/powerpc/boot/inflate.c:399:3: note: each undeclared identifier is re=
-ported only once for each function it appears in
-
-Caused by commit
-
-  02b894b985cb ("treewide: Use fallthrough pseudo-keyword")
-
-I have used the kspp-gustavo tree from next-20200817 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/P4xDWas+LsMVjT5qYAfbDHA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl87FN0ACgkQAVBC80lX
-0GwHMAf/aups+qKemoa+luhPfLUuaxOrRhOTvI7O1fEmYiT6quseyKDG0ucEP6qh
-hep8jZhxhNyc6lTOgqmS+k4LsQBHbwLoryD0TTrjxmlX4oG/n4EsWR8YU4XFM9pV
-mQOKfvR+oHwGNWc9LEW7+CuXqlO6O6LVgilmT48zbrpRYAhKYMbou85cEBidjTIA
-XH6tATXqt1DmLpH21K6Xi/cHAqXaMGh88CM4NtwnaqqIka6f2wzvikxf0Bf4/fnX
-JNn4e3WXRY6d4kL5mWrI+2FbEPCJnaS3OfIbA1iZTDh+vHpHVFQi7z+gKZsQt5p1
-8s9uWrWvTj84iDEb6khVr8EZSGW/BQ==
-=rHLK
------END PGP SIGNATURE-----
-
---Sig_/P4xDWas+LsMVjT5qYAfbDHA--
+--
+Gustavo

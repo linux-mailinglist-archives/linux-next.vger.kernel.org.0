@@ -2,89 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8013245C25
-	for <lists+linux-next@lfdr.de>; Mon, 17 Aug 2020 07:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3067F245DD7
+	for <lists+linux-next@lfdr.de>; Mon, 17 Aug 2020 09:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726235AbgHQFxQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Aug 2020 01:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgHQFxP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Aug 2020 01:53:15 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD67C061388;
-        Sun, 16 Aug 2020 22:53:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BVNW94j1Sz9sTH;
-        Mon, 17 Aug 2020 15:53:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1597643591;
-        bh=mFaorMpU/2N/sp0r+EBSBM5/iK2seMXlAMNmtKFb8gE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eKQ8syUbyAAwD18TMeRtgc+1zXZAX6X4m35PkCX99AXOfCKMVtu8Ztn31qz/uPq3s
-         Bcq/0mLRLuoZTc3UNUkTxsm88EffOucRVnEjubK3sw6dehy28kkxzwEu6AlKYKLUtP
-         llnkJna5blfOLl1u4R8oqkROIaIy6jslpFZIgtaI6jwOgNVGi0HIX8hogzcBUh0YBP
-         unAtlfGckqvI4badOtK1qezo4k5ZuLRveiyrD5yVFs5Rkf3z9Tqv4F+BjYd2GD5Hg1
-         Wa2uKUBSp9TTCbdfZpwyrNDsWxdeaVqo/i4+CsUrkrHgwApkfbr1WQp5Jqa1SqkW33
-         12noW141lN1Eg==
-Date:   Mon, 17 Aug 2020 15:53:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726371AbgHQHVR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Aug 2020 03:21:17 -0400
+Received: from mout.gmx.net ([212.227.17.20]:32923 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726194AbgHQHVO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 17 Aug 2020 03:21:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1597648863;
+        bh=LDcWdHJDKvbRXTcscXlY+66WEBzsgmri1TA1vVDn7MY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:References:Date:In-Reply-To;
+        b=BwB6onwTkfOx2BrJAfJ5l0uRVFpjF/4OPw1ONlxAn3nW9juC5b3AjZh69iMNRcO63
+         ormbok+vsD9Ekv5eATRZ7b1sg5ZXbQKtDeMgTel0nRBZ5DNjsV/xdHtsTDuylWB1AF
+         HWJJYn7elivEGatvPI+7IKtTqVRN3fNon4DxxS1o=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([79.223.54.124]) by mail.gmx.com
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MtfNf-1kxBKa32Br-00vB7g; Mon, 17 Aug 2020 09:21:03 +0200
+Received: by localhost.localdomain (Postfix, from userid 1000)
+        id 75DC5800D9; Mon, 17 Aug 2020 09:20:59 +0200 (CEST)
+From:   Sven Joachim <svenjoac@gmx.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20200817155307.2aabc9ea@canb.auug.org.au>
+        Brian Vazquez <brianvv@google.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+References: <20200729212721.1ee4eef8@canb.auug.org.au>
+Date:   Mon, 17 Aug 2020 09:20:59 +0200
+In-Reply-To: <20200729212721.1ee4eef8@canb.auug.org.au> (Stephen Rothwell's
+        message of "Wed, 29 Jul 2020 21:27:21 +1000")
+Message-ID: <87ft8lwxes.fsf@turtle.gmx.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yp2VGUoYxVJg.uX4ToQ_9UU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Provags-ID: V03:K1:+gMeo5T9ZZBMhvY3gxLb824G7oBZvNHYbIZviNetkD4ThGjJTtb
+ d16OaFHdenKQ3Ufx87ia4cqNIM+INUVK+3Ni4KrHLyo+QjVc+YJxBVSmjv0tXSoBVd88LWT
+ zyf/vb6aEygqglWm27aB4K12eRMUYQSpHHFAN0reOamIFJdldkPL9JP5LpcBrAvskeWulxm
+ ioGyfEwKpOLEql6D/ukLA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LJiQNcqpV6I=:ZE2E42FsBcKDzna8tFNlkj
+ O5fjb3yF8RDFlWt+ed6CufAHrYWdazHkSIL+ir2Fwtzwc6HT3IS18WP65K3Uqn7Mtg4DPbJ2u
+ HN+QvIhyQgviJUNgLk2QF/ToC0mRKaoPGJSZ4ny9leArpo+XVeXjl2OnISwf1T7GzDFDNLdDn
+ 3uKLAaYPj75YH834DjjJUgCpSK2uIA7SV4UPUyrrdzsilzK3JzTR/wOlrK5XRtG5fA7IscdO/
+ zM8ae4SJly1cIpzNTOcf5MoruhhiX0/XOXU9AVHpgbbHzsD2xOIFZIm2fqTntwC72sTqtf+y3
+ 46XxsvvJjA57Rc91XDgUYbWnhZWbdLPGiL7+IQlRgEkqw0+N+YNdcdZncA9gWLZKVtcenTsib
+ uASWBj4SVUA4yjd8OUqZni5VJgLIBhbt4vdhKv0//fwyj2FB6YSs4qd+55xeU5SX9ehY7114t
+ l1i38JgnXdokpdIVuqqdoGWH0VUbCj04bvEllwAE9TI9C7YmcdCaik8TZKaR14AwQT56Nr2Ox
+ CH+T1BvGtG4ykG3+w2ic7pNAqltMVc91PbxJ0yyLCo61pIUF2PveBtDba+Wp97wzlPfmlvJBK
+ P3lytJN6sbvtoSqsivQy1XjxVqz7XwzEYJV+VChA9mDtSuTCSYNTSZkjRLU8qxeX2LcA5tIj6
+ g+abJyvZ4tQhlzok2ylthf7ahVU978/GVQg6K0LLTGMQEQXhlT8yJLKx8Dcm0k5C6blIN+gVp
+ m4E/z59b1yDlfxUOsxjFFsI/WTSI4TrZp1AvGfj8jMcMPDHsNX60H4gUiinfS1/Xn1gS/UzP3
+ GJ5x8FxtBZg9yknzdgkuqFpERs6jdkXguxgKM2Q0bWDhMSqzK6GQQ1TagtsY0al2VdyhkVk0N
+ j7mSdKqkTbCtC1v5hV5io0rNwybEvjw/VyzjL3q1w5UXG0EoqGty/n8KxLy2HK4p2D1+9eWKB
+ doUE5k3s1m7WbYyhjSCLYj+pcLLNjPB95+HmSxglSKRMAY9aa+E1pHlKg97AWevMdsAEANTRb
+ xAZYZS/YcFOA4HdPtdYlywpBwamw+Ud+SbWaIGtixYcilKj1gz5jvqpg/5z3amT4rELuFY+Y0
+ azC3T0VzIHDyaL+ZDPlSMX/+GaKRGSA8TSoNULubI1xsZZnqxafAqp6JcScjcqUAyrmoILnZd
+ nedslp8khoB1ka+Asez9KbOlPnIWOTMWlUY6g7+VI/SxMgl9xBoG+x6yYjzHkLVsSvBmbY0ZM
+ raAxobcbT2NzByNoV
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Yp2VGUoYxVJg.uX4ToQ_9UU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2020-07-29 21:27 +1000, Stephen Rothwell wrote:
 
-Hi all,
+> Hi all,
+>
+> After merging the net-next tree, today's linux-next build (i386 defconfi=
+g)
+> failed like this:
+>
+> x86_64-linux-gnu-ld: net/core/fib_rules.o: in function `fib_rules_lookup=
+':
+> fib_rules.c:(.text+0x5c6): undefined reference to `fib6_rule_match'
+> x86_64-linux-gnu-ld: fib_rules.c:(.text+0x5d8): undefined reference to `=
+fib6_rule_match'
+> x86_64-linux-gnu-ld: fib_rules.c:(.text+0x64d): undefined reference to `=
+fib6_rule_action'
+> x86_64-linux-gnu-ld: fib_rules.c:(.text+0x662): undefined reference to `=
+fib6_rule_action'
+> x86_64-linux-gnu-ld: fib_rules.c:(.text+0x67a): undefined reference to `=
+fib6_rule_suppress'
+> x86_64-linux-gnu-ld: fib_rules.c:(.text+0x68d): undefined reference to `=
+fib6_rule_suppress'
 
-In commit
+FWIW, I saw these errors in 5.9-rc1 today, so the fix in commit
+41d707b7332f ("fib: fix fib_rules_ops indirect calls wrappers") was
+apparently not sufficient.
 
-  b3b2854dcf70 ("mptcp: sendmsg: reset iter on error redux")
+,----
+| $ grep IPV6 .config
+| CONFIG_IPV6=3Dm
+| # CONFIG_IPV6_ROUTER_PREF is not set
+| # CONFIG_IPV6_OPTIMISTIC_DAD is not set
+| # CONFIG_IPV6_MIP6 is not set
+| # CONFIG_IPV6_ILA is not set
+| # CONFIG_IPV6_VTI is not set
+| CONFIG_IPV6_SIT=3Dm
+| # CONFIG_IPV6_SIT_6RD is not set
+| CONFIG_IPV6_NDISC_NODETYPE=3Dy
+| CONFIG_IPV6_TUNNEL=3Dm
+| CONFIG_IPV6_MULTIPLE_TABLES=3Dy
+| # CONFIG_IPV6_SUBTREES is not set
+| # CONFIG_IPV6_MROUTE is not set
+| # CONFIG_IPV6_SEG6_LWTUNNEL is not set
+| # CONFIG_IPV6_SEG6_HMAC is not set
+| # CONFIG_IPV6_RPL_LWTUNNEL is not set
+| # CONFIG_NF_SOCKET_IPV6 is not set
+| # CONFIG_NF_TPROXY_IPV6 is not set
+| # CONFIG_NF_DUP_IPV6 is not set
+| # CONFIG_NF_REJECT_IPV6 is not set
+| # CONFIG_NF_LOG_IPV6 is not set
+| CONFIG_NF_DEFRAG_IPV6=3Dm
+`----
 
-Fixes tag
+> Caused by commit
+>
+>   b9aaec8f0be5 ("fib: use indirect call wrappers in the most common fib_=
+rules_ops")
+>
+> # CONFIG_IPV6_MULTIPLE_TABLES is not set
+>
+> I have reverted that commit for today.
 
-  Fixes: 35759383133f64d "(mptcp: sendmsg: reset iter on error)"
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/Yp2VGUoYxVJg.uX4ToQ_9UU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl86G0QACgkQAVBC80lX
-0Gw9rgf/WsitZxRFjYFoS8rdLpln+Q9Vqd0cDd8JHGPQWMP0M49/bJjwoQ6ry4dl
-UwBq3WCW+Ts6e60v9Okdjid4N9FFn/O0q7a/yT5xYvQoKbQ/y8R6zepNBESuSzdd
-yZPW+l4JuVpTamz/li4ReSKQfrnWsJ0wLQBGFpiQZgKjDejPk0vklGjYFJ9kE6EL
-6TEIO0gzEpol9dm3A47BlEqwMf50vkfEXGvRR36csIEteCcFjkmLA5utKsTQsCSV
-ENVQQ8ZNC+h7CtlJ+lHPxD5L0f2TkOP6xw6C5VxM2E6HSgqKv4KUzAFNXC+zHwx5
-vk0UShCeCnmbRohz3RnvPmG5cNi9jQ==
-=ToE4
------END PGP SIGNATURE-----
-
---Sig_/Yp2VGUoYxVJg.uX4ToQ_9UU--
+       Sven

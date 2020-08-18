@@ -2,65 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D536C248063
-	for <lists+linux-next@lfdr.de>; Tue, 18 Aug 2020 10:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A9F248352
+	for <lists+linux-next@lfdr.de>; Tue, 18 Aug 2020 12:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbgHRITa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Aug 2020 04:19:30 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:29321 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726519AbgHRIT1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 18 Aug 2020 04:19:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597738766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u5BW4sttAkWqGg8PlkiSb/wzvzki2Fh+MHof6eikw/c=;
-        b=IflrO10lhZ64dzPVvN6Gg1KAlsPPxIhS2/bvBAuliWqHYGt0GRdVII28TGydxUCOUiB1NF
-        txlcz0ouBGrFYAamMwa7706MRwzZNHM5BRe0CAuuJTiR9g/hAUUejAoZQ/+fudBUF+KEsi
-        nsQWCTVA0bF2WXbY0GTmg4av7XqoxpE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-377-9aejwH2JN_etFEeUIAm9LA-1; Tue, 18 Aug 2020 04:19:22 -0400
-X-MC-Unique: 9aejwH2JN_etFEeUIAm9LA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726640AbgHRKsI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Aug 2020 06:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgHRKsI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Aug 2020 06:48:08 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD4AC061389;
+        Tue, 18 Aug 2020 03:48:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D65E281F012;
-        Tue, 18 Aug 2020 08:19:20 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-127.rdu2.redhat.com [10.10.120.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A810C7A1E6;
-        Tue, 18 Aug 2020 08:19:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200817090523.68692855@canb.auug.org.au>
-References: <20200817090523.68692855@canb.auug.org.au> <20200805163246.4df09c31@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com, Masahiro Yamada <masahiroy@kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BW70y2TJ2z9sPC;
+        Tue, 18 Aug 2020 20:48:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1597747682;
+        bh=3kIXGotFaP4a+86oeoeZVflcMriWduQ4QxOHceZ7zjU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BFDo4pYzlA9vBlvXuAXLv9csKx7A/l3dFaYJVS2cyXxudz7rbbVoE0nquTZqTeZAZ
+         1nAhdspfGIxp3gk1331GG+PI33+VXYHL0O74QyKpX988IE+ZjVRDW6kYWHRXAPdxWj
+         tAvetSgYdicBkHtACRvKj5uZOYVrGNxod0CClFZcGLrIaoRuQz1orDMDZ6S66mvXFV
+         EMxyn+u3WvaW6433x/oAazRqUHoi+QjEBPq8WxJ3vTp8wyDIC8ADroH6HEfZJwY98/
+         UkRhrnnQTjy3AzmpYIV5VmW57oQfJKo1sVRglth3vPHnJy/cWKEN1J4JT4uBHH520y
+         2Pk24MKl05izw==
+Date:   Tue, 18 Aug 2020 20:48:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the fsinfo tree with the kbuid tree
+Message-ID: <20200818204800.1bce48de@canb.auug.org.au>
+In-Reply-To: <2193240.1597738758@warthog.procyon.org.uk>
+References: <20200817090523.68692855@canb.auug.org.au>
+        <20200805163246.4df09c31@canb.auug.org.au>
+        <2193240.1597738758@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2193239.1597738758.1@warthog.procyon.org.uk>
-Date:   Tue, 18 Aug 2020 09:19:18 +0100
-Message-ID: <2193240.1597738758@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: multipart/signed; boundary="Sig_/sqADU2uWxS3SxU9/mwkWD03";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/sqADU2uWxS3SxU9/mwkWD03
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> This is now a conflict between the fsinfo tree and Linus' tree.
+Hi David,
 
-Please drop the fsinfo branch for now, thanks.
+On Tue, 18 Aug 2020 09:19:18 +0100 David Howells <dhowells@redhat.com> wrot=
+e:
+>
+> Please drop the fsinfo branch for now, thanks.
 
-David
+OK, done.  What about the notifications tree?  (not pushing, just wondering)
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/sqADU2uWxS3SxU9/mwkWD03
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl87seAACgkQAVBC80lX
+0Gyspwf/aF4pNeP+57KWhzJY3U6hyq66BzJ5CkYOZLArAuxTt2dHtaDo76piyU3i
+z+gnixLss6qbQlhdEj+7OVI9GKVrQHGftVN8Oqt78y9G0/a7sOiKMpEECOeAz8f5
+y4gFno0uI+NINb/qJ7KRYWJnOJMbdEDVAtHJhOZSES3PKK5WzmUZjLuRzNQ2pDI1
+JAVcuvR5TG+SxOM93J6xKl03b1LugJ1a+vmCzaSv2XPKSF3TVfR8syTat28NEXYp
+szYfS2kkvLysuhR2MMMHo++YQKIRyVvawQKXgdo1XO4Yw0SXUNHLf1FAHnjMmpdt
+g2bM5/Bi8ecCrXvOh6nfTCjLE6J+IQ==
+=8TTh
+-----END PGP SIGNATURE-----
+
+--Sig_/sqADU2uWxS3SxU9/mwkWD03--

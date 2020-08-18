@@ -2,89 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCFA2486B4
-	for <lists+linux-next@lfdr.de>; Tue, 18 Aug 2020 16:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B92E2490D8
+	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 00:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbgHROIZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Aug 2020 10:08:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38172 "EHLO mail.kernel.org"
+        id S1726600AbgHRWaj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Aug 2020 18:30:39 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41571 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726476AbgHROIZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 18 Aug 2020 10:08:25 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726539AbgHRWai (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 18 Aug 2020 18:30:38 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6FD9320786;
-        Tue, 18 Aug 2020 14:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597759704;
-        bh=gTniIHzq+b6N51aAyJt0DOJVvbWbr6c5Fi78zNiIl00=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UfT8HJN+60NmK5dY57smuSuAJ21H7qOEhN41xi9OhoWWw9nfrqqLWhXtNYOGdQ1HR
-         WXblTbgOe8fOmXpgbovnU6DbaMn4lbotVOcqIkTEDUOBMoFhnPLhR5FnTxzct5CLLG
-         FPNzNexkCsAD2I8ZoC/hgMC3LXx2WxdphqXCcMrI=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 20A9C35228F5; Tue, 18 Aug 2020 07:08:24 -0700 (PDT)
-Date:   Tue, 18 Aug 2020 07:08:24 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BWQbb4prnz9sPf;
+        Wed, 19 Aug 2020 08:30:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1597789836;
+        bh=1gjRiVgYgoe5FwHLOxx/q36r4UxxcTTxIyGM4l2io9Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M5laFzK7kkm3RSHzVgwyrnh+IhEteClUsAwk21ux3UP0flU3Kmd5tPGTnuTuQiojd
+         htalMdAptkFgm7qWJgptxfBG4OVrJPaw8oWnRPN7ihFHSQc/sKmHvU9umNPlM3o3sL
+         gAz3030uByhirAt2P1UKkTPkotKn+DGaqD17K7oMRD0YUpWsxOaB0Ji1v2/Sr/ETaf
+         WPPNhxDxihgjBPZ6e5TSUdpkZsrGKjRDNzpv3dFY7PCVa6TL5bnoef7px9RaovhoUM
+         LEnQ5Ro1Mg2dO+N5Z0paMnwo3gVA9Ozj9bb14AOIAvWw2g59O2LGpGQ44WbtNy4Eri
+         9M413xOVKUUIA==
+Date:   Wed, 19 Aug 2020 08:30:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <20200818140824.GA27891@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200818114354.6c7c2142@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        brookxu <brookxu.cn@gmail.com>,
+        Chunguang Xu <brookxu@tencent.com>
+Subject: linux-next: Signed-off-by missing for commits in the ext4 tree
+Message-ID: <20200819083034.6c2b3b33@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200818114354.6c7c2142@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/dgvTkg2jpM3WZMgkEcK8Ipi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 11:43:54AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> In file included from include/linux/kernel.h:15,
->                  from kernel/rcu/rcuscale.c:13:
-> kernel/rcu/rcuscale.c: In function 'rcu_scale_writer':
-> kernel/rcu/rcuscale.c:430:6: error: 'perf_type' undeclared (first use in this function); did you mean 'kernfs_type'?
->   430 |      perf_type, PERF_FLAG, me, MIN_MEAS);
->       |      ^~~~~~~~~
-> include/linux/printk.h:319:35: note: in definition of macro 'pr_alert'
->   319 |  printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
->       |                                   ^~~~~~~~~~~
-> kernel/rcu/rcuscale.c:430:6: note: each undeclared identifier is reported only once for each function it appears in
->   430 |      perf_type, PERF_FLAG, me, MIN_MEAS);
->       |      ^~~~~~~~~
-> include/linux/printk.h:319:35: note: in definition of macro 'pr_alert'
->   319 |  printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
->       |                                   ^~~~~~~~~~~
-> kernel/rcu/rcuscale.c:430:17: error: 'PERF_FLAG' undeclared (first use in this function)
->   430 |      perf_type, PERF_FLAG, me, MIN_MEAS);
->       |                 ^~~~~~~~~
-> include/linux/printk.h:319:35: note: in definition of macro 'pr_alert'
->   319 |  printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
->       |                                   ^~~~~~~~~~~
-> kernel/rcu/rcuscale.c:431:27: error: 'n_rcu_perf_writer_finished' undeclared (first use in this function); did you mean 'n_rcu_scale_writer_finished'?
->   431 |    if (atomic_inc_return(&n_rcu_perf_writer_finished) >=
->       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                           n_rcu_scale_writer_finished
-> 
-> Caused by commit
-> 
->   a20b5bd09813 ("rcuperf: Change rcuperf to rcuscale")
-> 
-> I have used the rcu tree from next-20200817 for today.
+--Sig_/dgvTkg2jpM3WZMgkEcK8Ipi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My test scripts clearly are not dealing gracefully with filename changes,
-are they?  :-/
+Hi all,
 
-Thank you for catching this one!  I have queued a fix.
+Commits
 
-							Thanx, Paul
+  dddcd2f9ebde ("ext4: optimize the implementation of ext4_mb_good_group()")
+  051e2ce8cb90 ("ext4: delete invalid comments near ext4_mb_check_limits()")
+  e9a3cd48d653 ("ext4: fix typos in ext4_mb_regular_allocator() comment")
+  9375ac770cda ("ext4: delete the invalid BUGON in ext4_mb_load_buddy_gfp()=
+")
+
+are missing a Signed-off-by from their authors.
+
+Not really (I assume), but their author is brookxu <brookxu.cn@gmail.com>
+and the Signed-off-by is Chunguang Xu <brookxu@tencent.com>.  Consistency
+would be nice.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dgvTkg2jpM3WZMgkEcK8Ipi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl88VooACgkQAVBC80lX
+0Gwqhwf6Ar7wek+8xwmLcFGPaq8OmS1oaeA1BYGDWu8uoxno7Ve1Pp2o3lINTfVN
+0O/dIi2F8/8EJwDaw57twGlpNR5dBtHWuXFqnYgdqCtu4qEcccT6BfX7IC7bhW/8
+gzdNPT3kboQZsvqrJpZhri2FdBsEpAYMZ05bCCv9bcrr8fWXaBY6i9LzoyzoNFaV
+NJrT+kRZyYqomLW8x0puDonXE1jcqz24oh4H/WLyBgzqFfiyJbDNOS98WXYj7NlL
+9fl5M+v0NnwoHEqVf0eTOpoyPFGSP3l7/gS5fknQjIU1fCMe3t24YEWvB1wWXzNY
+wUFs10zygU4chO9K6rXRrVSi5TG5+g==
+=PDjy
+-----END PGP SIGNATURE-----
+
+--Sig_/dgvTkg2jpM3WZMgkEcK8Ipi--

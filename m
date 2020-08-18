@@ -2,86 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B92E2490D8
-	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 00:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513402490F1
+	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 00:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgHRWaj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Aug 2020 18:30:39 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41571 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726539AbgHRWai (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 18 Aug 2020 18:30:38 -0400
+        id S1726600AbgHRWeH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 Aug 2020 18:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbgHRWeH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Aug 2020 18:34:07 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E6EC061389;
+        Tue, 18 Aug 2020 15:34:07 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BWQbb4prnz9sPf;
-        Wed, 19 Aug 2020 08:30:35 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BWQgW6XF5z9sPf;
+        Wed, 19 Aug 2020 08:33:59 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1597789836;
-        bh=1gjRiVgYgoe5FwHLOxx/q36r4UxxcTTxIyGM4l2io9Y=;
+        s=201702; t=1597790040;
+        bh=k3pxQt90eE1hv4CqHI80gnmB8e6EPfCXSkwk+ZlMmI4=;
         h=Date:From:To:Cc:Subject:From;
-        b=M5laFzK7kkm3RSHzVgwyrnh+IhEteClUsAwk21ux3UP0flU3Kmd5tPGTnuTuQiojd
-         htalMdAptkFgm7qWJgptxfBG4OVrJPaw8oWnRPN7ihFHSQc/sKmHvU9umNPlM3o3sL
-         gAz3030uByhirAt2P1UKkTPkotKn+DGaqD17K7oMRD0YUpWsxOaB0Ji1v2/Sr/ETaf
-         WPPNhxDxihgjBPZ6e5TSUdpkZsrGKjRDNzpv3dFY7PCVa6TL5bnoef7px9RaovhoUM
-         LEnQ5Ro1Mg2dO+N5Z0paMnwo3gVA9Ozj9bb14AOIAvWw2g59O2LGpGQ44WbtNy4Eri
-         9M413xOVKUUIA==
-Date:   Wed, 19 Aug 2020 08:30:34 +1000
+        b=YybmRaTtsIR4PdObYNnpET3BTRyXgVIAepEKXD6b1M3tIbTFD6o0+EkvcH6PRGZVX
+         cNeRSyaMhJd/9IqdIKajTXdKKhrAkKs5hrUx9PIZWEpqCR8gkBFwE4MwTWgwHpV5Ad
+         6uXBPzlmbxwj8tRUnUygbjlqOxW3z4OJzqeT5Pdg53ALi7VkLpxAvij2dvWAmvacpD
+         X1D1peglLZ2r3J5ebVu9VNQrqXvk5sCnxHrD/KrDDdrgohQfftaWCJ+oQyyiJugnf0
+         mFHqNDrALDXqe6ZIKhFaTlp8wXTh4BdRx7sRD7USjZKxtxvcbLJtGbr6pWzC3Bo8uk
+         PATLoCN/JU3Cw==
+Date:   Wed, 19 Aug 2020 08:33:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        brookxu <brookxu.cn@gmail.com>,
-        Chunguang Xu <brookxu@tencent.com>
-Subject: linux-next: Signed-off-by missing for commits in the ext4 tree
-Message-ID: <20200819083034.6c2b3b33@canb.auug.org.au>
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: linux-next: Fixes tag needs some work in the wireless-drivers-next
+ tree
+Message-ID: <20200819083359.67f45112@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dgvTkg2jpM3WZMgkEcK8Ipi";
+Content-Type: multipart/signed; boundary="Sig_/oHp_qW2ROkDZtlx9g_HdhiR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dgvTkg2jpM3WZMgkEcK8Ipi
+--Sig_/oHp_qW2ROkDZtlx9g_HdhiR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+In commit
 
-  dddcd2f9ebde ("ext4: optimize the implementation of ext4_mb_good_group()")
-  051e2ce8cb90 ("ext4: delete invalid comments near ext4_mb_check_limits()")
-  e9a3cd48d653 ("ext4: fix typos in ext4_mb_regular_allocator() comment")
-  9375ac770cda ("ext4: delete the invalid BUGON in ext4_mb_load_buddy_gfp()=
-")
+  3b9fb6791e71 ("wcn36xx: Fix reported 802.11n rx_highest rate wcn3660/wcn3=
+680")
 
-are missing a Signed-off-by from their authors.
+Fixes tag
 
-Not really (I assume), but their author is brookxu <brookxu.cn@gmail.com>
-and the Signed-off-by is Chunguang Xu <brookxu@tencent.com>.  Consistency
-would be nice.
+  Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN36=
+80
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more that one line.  Also, keep all
+the commit message tags together at the end of the message.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dgvTkg2jpM3WZMgkEcK8Ipi
+--Sig_/oHp_qW2ROkDZtlx9g_HdhiR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl88VooACgkQAVBC80lX
-0Gwqhwf6Ar7wek+8xwmLcFGPaq8OmS1oaeA1BYGDWu8uoxno7Ve1Pp2o3lINTfVN
-0O/dIi2F8/8EJwDaw57twGlpNR5dBtHWuXFqnYgdqCtu4qEcccT6BfX7IC7bhW/8
-gzdNPT3kboQZsvqrJpZhri2FdBsEpAYMZ05bCCv9bcrr8fWXaBY6i9LzoyzoNFaV
-NJrT+kRZyYqomLW8x0puDonXE1jcqz24oh4H/WLyBgzqFfiyJbDNOS98WXYj7NlL
-9fl5M+v0NnwoHEqVf0eTOpoyPFGSP3l7/gS5fknQjIU1fCMe3t24YEWvB1wWXzNY
-wUFs10zygU4chO9K6rXRrVSi5TG5+g==
-=PDjy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl88V1cACgkQAVBC80lX
+0Gx7xgf/d1v4bs1bxMPJDa8T426PtGjqkDAj1nMUYX9oAXdyMaKgmHKHOds+sjOP
+BzZPw7TuY8n4Vcni7XOlq+D8IjNPOQVuYKNVPbpu2mApn1qo5u7WZ7MgxvWNjyti
++2jrmxZ3QwkQBVdj1c37XnCn/Pn/mU/caJnI0kYoRIcp1w+z+1yc7YhwP8OU6pAh
+2d6G+5mP+Uy3Y6zY0jt7dW5Wt3vAWJE3OtYCbLtVQl0pjHnCuCLKRvmyxmwQM3Y9
+RQ0B0b1g0WwSnCZBP8OjwQe6nFyX401KoxFc2YXMn108M+5eDDLQhw3P0tDjTW/q
+euYoO2XsDU3WHHhveKV2vP0oQyBSvA==
+=jnXl
 -----END PGP SIGNATURE-----
 
---Sig_/dgvTkg2jpM3WZMgkEcK8Ipi--
+--Sig_/oHp_qW2ROkDZtlx9g_HdhiR--

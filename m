@@ -2,97 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 583D72494FB
-	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 08:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9C5249546
+	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 08:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbgHSGaq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Aug 2020 02:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbgHSGap (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Aug 2020 02:30:45 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13467C061389;
-        Tue, 18 Aug 2020 23:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=UgSZNlUuKgU2XUXlOtW6UXW0y0qV6J6pfHHe7gP/Sl4=; b=w5IZhdb/A8fGlvpqumPxnZyxGa
-        eA9F4+irb6pQJYTnyUPw4+aoVgc86Cc6ihlMmXVfWGWb4I9gY8g4M1HKuBCQArL+lGGm6EWAPwpI5
-        eISXZCE4CxKBYdQnDLfvGP2nETM9VMKlicekO7MxHQGZbN4ZMmm1Lr5BhDY/UdrlT3ODDQxtnVbrf
-        JNsyeN7llL3OoY8tFFKHoODmR6HmqfqvohPj3E4zm7yPQVebL87UocHSUyoEVeD/S1UN0Q9ApAHtn
-        2HtJ3ckALaClJmpdaKvI1pzReu2Q8VtWrZQCwhtUBXaVzmxNssJU7jZ1dlropWtK9PJMgumRNA9is
-        T39nu3eg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k8HcP-0002A9-LH; Wed, 19 Aug 2020 06:30:42 +0000
-Subject: Re: linux-next: Tree for Aug 19 (scsi/libsas/)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <20200819155742.1793a180@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <dbbf8037-1e6c-5e66-39e1-3a5f4b0f3249@infradead.org>
-Date:   Tue, 18 Aug 2020 23:30:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726931AbgHSGwy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Aug 2020 02:52:54 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:48707 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726815AbgHSGwx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 19 Aug 2020 02:52:53 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597819972; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=kk18VZt/UZaR2z1275ZwkWBhTQypRK0gS1BfRBqg2H0=; b=DS+03TURs57dl85G1zn9Ef+1wt5r3+Ko8xuiGofDnzkO5wZq8MLaevKepsumF/V/0T+fmVxv
+ 1XFKpr7yvsU95UoB0vWpmphW58jjvowWG4T6Sdx5KTfutLGXVyUiV4eEwd5ZjzQuoh3Df5kH
+ TeLtVwV92Cye7HM6n6W9eKzLL1Y=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 5f3ccc44440a07969a5737dc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 Aug 2020 06:52:52
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id EBD19C433CA; Wed, 19 Aug 2020 06:52:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 32F49C433C6;
+        Wed, 19 Aug 2020 06:52:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 32F49C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: linux-next: Fixes tag needs some work in the wireless-drivers-next tree
+References: <20200819083359.67f45112@canb.auug.org.au>
+Date:   Wed, 19 Aug 2020 09:52:47 +0300
+In-Reply-To: <20200819083359.67f45112@canb.auug.org.au> (Stephen Rothwell's
+        message of "Wed, 19 Aug 2020 08:33:59 +1000")
+Message-ID: <87y2mbi0u8.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20200819155742.1793a180@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/18/20 10:57 PM, Stephen Rothwell wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
 > Hi all,
-> 
-> Changes since 20200818:
-> 
+>
+> In commit
+>
+>   3b9fb6791e71 ("wcn36xx: Fix reported 802.11n rx_highest rate wcn3660/wcn3680")
+>
+> Fixes tag
+>
+>   Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> Please do not split Fixes tags over more that one line.  Also, keep all
+> the commit message tags together at the end of the message.
 
-Is this some kind of mis-merge?
+Doh, I have checked carefully the commit ids but of course I missed
+checking the trailing. I really need to automate this. Stephen, are your
+scripts checking these available somewhere?
 
-In sas_discover.c:
-
-	case SAS_SATA_DEV:
-	case SAS_SATA_PM:
-#ifdef CONFIG_SCSI_SAS_ATA
-		error = sas_discover_sata(dev);
-		break;
-#else
-		pr_notice("ATA device seen but CONFIG_SCSI_SAS_ATA=N so cannot attach\n");
-		fallthrough;
-#endif
-		fallthrough;	/* only for the #else condition above */
-
-
-
-
-  CC [M]  drivers/scsi/libsas/sas_discover.o
-In file included from ./../include/linux/compiler_types.h:65:0,
-                 from <command-line>:0:
-../drivers/scsi/libsas/sas_discover.c: In function 'sas_discover_domain':
-../include/linux/compiler_attributes.h:214:41: warning: attribute 'fallthrough' not preceding a case label or default label
- # define fallthrough                    __attribute__((__fallthrough__))
-                                         ^
-../drivers/scsi/libsas/sas_discover.c:469:3: note: in expansion of macro 'fallthrough'
-   fallthrough;
-   ^~~~~~~~~~~
-  CC      drivers/ide/ide-eh.o
-../include/linux/compiler_attributes.h:214:41: error: invalid use of attribute 'fallthrough'
- # define fallthrough                    __attribute__((__fallthrough__))
-                                         ^
-../drivers/scsi/libsas/sas_discover.c:471:3: note: in expansion of macro 'fallthrough'
-   fallthrough; /* only for the #else condition above */
-   ^~~~~~~~~~~
-
-
+But I'll leave this as is, no point of rebasing just because of this.
+Thanks for the report.
 
 -- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,94 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A23E52494F4
-	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 08:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583D72494FB
+	for <lists+linux-next@lfdr.de>; Wed, 19 Aug 2020 08:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgHSG0h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Aug 2020 02:26:37 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:55408 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726585AbgHSG0h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 19 Aug 2020 02:26:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597818396; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=PN6zE1gpjyYIM9fr5EdDm53UBzFyP2EjiyqPgnc+nnw=; b=N7XpPa9A9y8Ju6NGBC/SpifFq9ZcDySZFLN3JTOmyEZ/D2T1GXAAVFkqvWitNa4bn8qWW3Sy
- s7uSY4+WHzFgQ5+jyF/EPsJrcVWshsu/2nb4d2kFPmsfdgLRBpJGZDHxGVi6Y5E9NQNGjzg/
- tcDs9sj3aEW0Fwq5fkAPUjj+gzM=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 5f3cc61b2889723bf871e31e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 Aug 2020 06:26:35
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5FD51C43387; Wed, 19 Aug 2020 06:26:35 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5E4AAC433C6;
-        Wed, 19 Aug 2020 06:26:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5E4AAC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the wireless-drivers-next tree with the kspp-gustavo tree
-References: <20200819111815.73cae4b0@canb.auug.org.au>
-Date:   Wed, 19 Aug 2020 09:26:31 +0300
-In-Reply-To: <20200819111815.73cae4b0@canb.auug.org.au> (Stephen Rothwell's
-        message of "Wed, 19 Aug 2020 11:18:15 +1000")
-Message-ID: <87364jjgmg.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1725601AbgHSGaq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Aug 2020 02:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726646AbgHSGap (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Aug 2020 02:30:45 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13467C061389;
+        Tue, 18 Aug 2020 23:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=UgSZNlUuKgU2XUXlOtW6UXW0y0qV6J6pfHHe7gP/Sl4=; b=w5IZhdb/A8fGlvpqumPxnZyxGa
+        eA9F4+irb6pQJYTnyUPw4+aoVgc86Cc6ihlMmXVfWGWb4I9gY8g4M1HKuBCQArL+lGGm6EWAPwpI5
+        eISXZCE4CxKBYdQnDLfvGP2nETM9VMKlicekO7MxHQGZbN4ZMmm1Lr5BhDY/UdrlT3ODDQxtnVbrf
+        JNsyeN7llL3OoY8tFFKHoODmR6HmqfqvohPj3E4zm7yPQVebL87UocHSUyoEVeD/S1UN0Q9ApAHtn
+        2HtJ3ckALaClJmpdaKvI1pzReu2Q8VtWrZQCwhtUBXaVzmxNssJU7jZ1dlropWtK9PJMgumRNA9is
+        T39nu3eg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k8HcP-0002A9-LH; Wed, 19 Aug 2020 06:30:42 +0000
+Subject: Re: linux-next: Tree for Aug 19 (scsi/libsas/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20200819155742.1793a180@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <dbbf8037-1e6c-5e66-39e1-3a5f4b0f3249@infradead.org>
+Date:   Tue, 18 Aug 2020 23:30:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200819155742.1793a180@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+On 8/18/20 10:57 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200818:
+> 
 
-> Today's linux-next merge of the wireless-drivers-next tree got a
-> conflict in:
->
->   drivers/net/wireless/ath/ath11k/dp_rx.c
->
-> between commit:
->
->   58e813cceabd ("treewide: Use fallthrough pseudo-keyword")
->
-> from the kspp-gustavo tree and commit:
->
->   0b294aebb6a0 ("ath11k: Use fallthrough pseudo-keyword")
->
-> from the wireless-drivers-next tree.
->
-> I fixed it up (the latter removed an extra blank line) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
+Is this some kind of mis-merge?
 
-Gustavo, why do you have patches changing ath11k in your tree? PLEASE
-don't do that! Instead properly send them to linux-wireless and ath11k
-lists, as you have done before. That way there are no unncessary
-conflicts like this one which cause extra work for the maintainers.
+In sas_discover.c:
+
+	case SAS_SATA_DEV:
+	case SAS_SATA_PM:
+#ifdef CONFIG_SCSI_SAS_ATA
+		error = sas_discover_sata(dev);
+		break;
+#else
+		pr_notice("ATA device seen but CONFIG_SCSI_SAS_ATA=N so cannot attach\n");
+		fallthrough;
+#endif
+		fallthrough;	/* only for the #else condition above */
+
+
+
+
+  CC [M]  drivers/scsi/libsas/sas_discover.o
+In file included from ./../include/linux/compiler_types.h:65:0,
+                 from <command-line>:0:
+../drivers/scsi/libsas/sas_discover.c: In function 'sas_discover_domain':
+../include/linux/compiler_attributes.h:214:41: warning: attribute 'fallthrough' not preceding a case label or default label
+ # define fallthrough                    __attribute__((__fallthrough__))
+                                         ^
+../drivers/scsi/libsas/sas_discover.c:469:3: note: in expansion of macro 'fallthrough'
+   fallthrough;
+   ^~~~~~~~~~~
+  CC      drivers/ide/ide-eh.o
+../include/linux/compiler_attributes.h:214:41: error: invalid use of attribute 'fallthrough'
+ # define fallthrough                    __attribute__((__fallthrough__))
+                                         ^
+../drivers/scsi/libsas/sas_discover.c:471:3: note: in expansion of macro 'fallthrough'
+   fallthrough; /* only for the #else condition above */
+   ^~~~~~~~~~~
+
+
 
 -- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

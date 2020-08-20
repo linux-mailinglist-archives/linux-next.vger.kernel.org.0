@@ -2,76 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A6024BD37
-	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 15:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D2B24BF03
+	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 15:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgHTNBz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Aug 2020 09:01:55 -0400
-Received: from mga05.intel.com ([192.55.52.43]:44475 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729033AbgHTJkl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:40:41 -0400
-IronPort-SDR: ZLFWryVtWQ2sbvEQWyNXSFbHoj79jmR0bGsufnMp9JmdvE+ZmSEwEodLn1QOxUonp9DqZMRRbR
- ClI/Kr3sJi9A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="240093999"
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="240093999"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 02:40:38 -0700
-IronPort-SDR: E40CW/24bwrXLELWjiM6ePuqcHQIEYJyWgdOpngCph/tENCwJFg+8CovzvyYfMS1FKZoIu8e0O
- nlaEONdqORFQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="327377344"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2020 02:40:37 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1k8h3k-00A50Z-2Y; Thu, 20 Aug 2020 12:40:36 +0300
-Date:   Thu, 20 Aug 2020 12:40:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pinctrl-intel tree
-Message-ID: <20200820094036.GU1891694@smile.fi.intel.com>
-References: <20200820113039.71120e6a@canb.auug.org.au>
+        id S1729210AbgHTNjN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Aug 2020 09:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726752AbgHTJaF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Aug 2020 05:30:05 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383CFC061383
+        for <linux-next@vger.kernel.org>; Thu, 20 Aug 2020 02:30:05 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id k25so699107vsm.11
+        for <linux-next@vger.kernel.org>; Thu, 20 Aug 2020 02:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=6apwous/HgYA9e9mDqfrOOmq5wxR8eDdobsnINeJ2Ak=;
+        b=eETmXHMWgfN31+kZjG7CG3fcmrCL+QERYJYc7EZzYmZ/iyBm5vlKvOgbCCqNZxA+XN
+         10DkxJfP4eEu/UlvRJDammSXb+HlcfLo/fsFf2aSFcRcqIBQ+7RjdJr38r2T4P+8cYKO
+         8d/CnJ8R9svj2hUovuPzmNxBKfCNxtu6eLdBKKXWJVho4oL/RoLTArsoGOYd0BIX4/qh
+         +UqJMgXb82l+X/lNn+LZEZ6OyBAE3uKibnk1yh8wKFDHh+ShOt7pHuNUpHZjMK/Qj8+B
+         5xpyiCvymikyE0YC0aGlESFBcdypcqQY4fBWYVaeZr3tCYVHbpKA/DJkxajl5oNxBOLv
+         96Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=6apwous/HgYA9e9mDqfrOOmq5wxR8eDdobsnINeJ2Ak=;
+        b=Fe5JDvSCDDN2W4j9BY+tYSZLmOgumyt6dUWEWIaebr3Y8rc9sdp1UTQfD2p0gscPxo
+         JxejEgMdizEama20CHQvASnAOsajEl0NbT6WSZTldl4WbO9fCylNYwoYdRmxYpKBtNPm
+         vOXC0DatZaNa8BFgTtytMfz3egZlOIMcN7gAiq/6Ix0mbsapUOSHA+PCN3T1/wiklIbm
+         m6jTF7QfniO9PvcuO59NFPlpxmOtw533O5zizY/p/2HyuUVnfa3Fqnioj/lYz4cJe/we
+         XDNraGOFIXeqiaizTvwIR/ULPpivzsBDwAzWmTRNA8to24+LMudXPAs85OBMkJgVYfE4
+         WvXg==
+X-Gm-Message-State: AOAM530v3ID5SImxgA9ne/+T8P+KgGHJc0pDAJkLU0Zt5EylfnVsvSlU
+        BvTjy6HqpfqZOmdiOwPNrGE3Af38mFhKY4BAcYb2UyHXGJ4XIyzS
+X-Google-Smtp-Source: ABdhPJxnX/aP9f1YYTlY9xogXia5cP6a2JVmyDFGvwr+8ZISnTbDnkGzsLz43KbFCYTyN0PDQwvWxV+jgNeZmbRKM00=
+X-Received: by 2002:a67:e45:: with SMTP id 66mr1205335vso.191.1597915803707;
+ Thu, 20 Aug 2020 02:30:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200820113039.71120e6a@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 20 Aug 2020 14:59:52 +0530
+Message-ID: <CA+G9fYuNS3k0DVT62twfV746pfNhCSrk5sVMcOcQ1PGGnEseyw@mail.gmail.com>
+Subject: =?UTF-8?B?bW0vZ3VwLmM6MTkyMjo3OiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuYw==?=
+        =?UTF-8?B?dGlvbiDigJhpc192YWxpZF9ndXBfZmxhZ3PigJk=?=
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linuxarm@huawei.com, Barry Song <song.bao.hua@hisilicon.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 11:30:39AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pinctrl-intel tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> x86_64-linux-gnu-ld: drivers/pinctrl/intel/pinctrl-baytrail.o: in function `byt_pinctrl_probe':
-> pinctrl-baytrail.c:(.text+0x12bf): undefined reference to `intel_pinctrl_get_soc_data'
-> 
-> Caused by commit
-> 
->   2db97df9f29d ("pinctrl: baytrail: Switch to use intel_pinctrl_get_soc_data()")
+arm and riscv architecture build failed on linux next 20200820 tag.
 
-Right, I have updated it. Shouldn't be issues now.
+make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux -j16 ARCH=3Darm
+CROSS_COMPILE=3Darm-linux-gnueabihf- HOSTCC=3Dgcc CC=3D"sccache
+arm-linux-gnueabihf-gcc" O=3Dbuild zImage
 
-> CONFIG_PINCTRL_BAYTRAIL=y
-> CONFIG_PINCTRL_INTEL=m
-> 
-> I have ised the pinctrl-intel tree from next-20200819 for today.
+348#
+349../mm/gup.c: In function =E2=80=98get_user_pages=E2=80=99:
+350../mm/gup.c:1922:7: error: implicit declaration of function
+=E2=80=98is_valid_gup_flags=E2=80=99 [-Werror=3Dimplicit-function-declarati=
+on]
+351 1922 | if (!is_valid_gup_flags(gup_flags))
+352 | ^~~~~~~~~~~~~~~~~~
+353cc1: some warnings being treated as errors
 
-Thanks!
+Full build log,
+https://gitlab.com/Linaro/lkft/kernel-runs/-/jobs/695005038
+https://gitlab.com/Linaro/lkft/kernel-runs/-/jobs/695005042
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--=20
+Linaro LKFT
+https://lkft.linaro.org

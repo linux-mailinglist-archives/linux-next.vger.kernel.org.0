@@ -2,107 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B6124C6C5
-	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 22:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E923A24C6E4
+	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 22:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgHTUcM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Aug 2020 16:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728387AbgHTUcJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 Aug 2020 16:32:09 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35145C061385;
-        Thu, 20 Aug 2020 13:32:09 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id q93so1639547pjq.0;
-        Thu, 20 Aug 2020 13:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=G3xCXzeUDIhCl6owaiUBzRZG/Sfi/OOI40JT8zMVERQ=;
-        b=LrvBm3zli7Ms8zRyZKSzRIeqErF/PBZRswt+dMOiW8+pwctmZ838SG2Kji8iImez3t
-         K6d+IHn4O0FHe6xXgsIkkf7xF1AUdl6d/060277krMkym1ctH6mgpxSXcFm58RDD9yP2
-         56H0k+ZpyL1e9sAgo/Glsjqo1EEs4k48bK5nOAaBxWjHA/PEP/R14OwQAfrTHFReoSBK
-         R5aK1/4KanAPIFxgeScUiQXPX9lwNvdbN8/5XkRSAmiQdOoAcrodsIaW5EyUttONw/rB
-         j16n/NksBOagHTsKC+MJoQ7dlYSt9izZqQot25nllQfkMBgAowe/295tlKNAXjtw2Goi
-         Bf1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=G3xCXzeUDIhCl6owaiUBzRZG/Sfi/OOI40JT8zMVERQ=;
-        b=UM2dw88wOP0JGnaLxesz421Gv8HtOmGpGi6QUk8Ti5p0hNHItUtZeVpsc6hH2Fx7J5
-         DcrcT/vXsRnqeTrJ+5W25qQtJgyY6/ryD9xrbqRn7Ima7w8hR9tozDS94Ow5bygLnwSr
-         kUcedaAHSu8JXMvbvL7beJYe2J5ABWmDP2KCImy4F72hrakTBre/xyO4d0JvyhwStOCb
-         Xhz6tDKMGMhe5IExCp8WShqyKfoJ/9M6W4uK6wr4bjlX/94I5roXOBa8twM6ls2gdw48
-         LjbLHsc85l+gWF7nFt48w8tAqwMhBidiXg3s/FPVUhmoZXGMEzx2XTeLfC0d2VkJ5PwG
-         O4sw==
-X-Gm-Message-State: AOAM5304JKNP9Y6rBSE+YRHDai8N+p/WmavV4D13Cg86X9M0KF6ZrdaJ
-        4Psr1IAoTfkSS4bmKEmu5XzUs+gKr9etIg==
-X-Google-Smtp-Source: ABdhPJwcTX8qLks5xw2PCSfN+/HPbMeilOKASUrn6up2ACzHypzCNxOPD+Tf4vwZK6uSXiLTEaNy7A==
-X-Received: by 2002:a17:90a:39c8:: with SMTP id k8mr32027pjf.19.1597955528429;
-        Thu, 20 Aug 2020 13:32:08 -0700 (PDT)
-Received: from Asurada-Nvidia (thunderhill.nvidia.com. [216.228.112.22])
-        by smtp.gmail.com with ESMTPSA id bv17sm2894418pjb.0.2020.08.20.13.32.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 20 Aug 2020 13:32:08 -0700 (PDT)
-Date:   Thu, 20 Aug 2020 13:31:53 -0700
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: boot failure after merge of the dma-mapping tree
-Message-ID: <20200820203153.GA13251@Asurada-Nvidia>
-References: <20200820155112.29459f41@canb.auug.org.au>
- <20200820083617.GA6124@Asurada>
- <20200820154941.GA11349@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200820154941.GA11349@lst.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1728555AbgHTUzU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Aug 2020 16:55:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbgHTUzS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 20 Aug 2020 16:55:18 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E89BB20885;
+        Thu, 20 Aug 2020 20:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597956916;
+        bh=0sC4plwLSrHCEwGCAy2r05gwxbQdkP/sGe8Xwz3RSX0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KtEB4K2Mxe1YWeBfBpp3kbuupp93sDeZqu4W10cnBxvmYNgrjShbUr0OMMtAIQjP7
+         lZBfhetsS8S/oetCoDroqLe+PjwWsWeZOh8x/xndisyuxV+YdpX5yd8s5j18W1ef/F
+         azzTZZq2iebAalbcSX7ngCZBAPabFw5wZG5hOMaI=
+Date:   Thu, 20 Aug 2020 13:55:15 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
+        linuxarm@huawei.com, Barry Song <song.bao.hua@hisilicon.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: mm/gup.c:1922:7: error: implicit declaration of function
+ =?UTF-8?B?4oCYaXNfdmFsaWRfZ3VwX2ZsYWdz4oCZ?=
+Message-Id: <20200820135515.c36b35449143c723f0800f5b@linux-foundation.org>
+In-Reply-To: <CA+G9fYuNS3k0DVT62twfV746pfNhCSrk5sVMcOcQ1PGGnEseyw@mail.gmail.com>
+References: <CA+G9fYuNS3k0DVT62twfV746pfNhCSrk5sVMcOcQ1PGGnEseyw@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 05:49:41PM +0200, Christoph Hellwig wrote:
-> On Thu, Aug 20, 2020 at 01:36:17AM -0700, Nicolin Chen wrote:
-> > Took a quick look -- the boundary_size is seemingly passed from
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/powerpc/kernel/iommu.c#n240
-> > 
-> > 	boundary_size = ALIGN(dma_get_seg_boundary(dev) + 1,
-> > 			1 << tbl->it_page_shift);
-> > 
-> > Looks like an overflow happens due to (ULONG_MAX + 1). Should
-> > we fix here instead (or also)?
+On Thu, 20 Aug 2020 14:59:52 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+
+> arm and riscv architecture build failed on linux next 20200820 tag.
 > 
-> Yes, please.  I'll drop the patch again for now, but once we've
-> got this sorted out I'll readd it.
+> make -sk KBUILD_BUILD_USER=TuxBuild -C/linux -j16 ARCH=arm
+> CROSS_COMPILE=arm-linux-gnueabihf- HOSTCC=gcc CC="sccache
+> arm-linux-gnueabihf-gcc" O=build zImage
+> 
+> 348#
+> 349../mm/gup.c: In function ‘get_user_pages’:
+> 350../mm/gup.c:1922:7: error: implicit declaration of function
+> ‘is_valid_gup_flags’ [-Werror=implicit-function-declaration]
+> 351 1922 | if (!is_valid_gup_flags(gup_flags))
+> 352 | ^~~~~~~~~~~~~~~~~~
+> 353cc1: some warnings being treated as errors
+> 
 
-I'll send a series of changes, as I found these...
+Yes, thanks.
 
-   1    145  arch/alpha/kernel/pci_iommu.c <<iommu_arena_find_pages>>
-             boundary_size = dma_get_seg_boundary(dev) + 1;
-   2    488  arch/ia64/hp/common/sba_iommu.c <<sba_search_bitmap>>
-             boundary_size = (unsigned long long )dma_get_seg_boundary(dev) + 1;
-   3    266  arch/s390/pci/pci_dma.c <<__dma_alloc_iommu>>
-             boundary_size = ALIGN(dma_get_seg_boundary(dev) + 1,
-   4    170  arch/sparc/kernel/iommu-common.c <<iommu_tbl_range_alloc>>
-             boundary_size = ALIGN(dma_get_seg_boundary(dev) + 1,
-   5    475  arch/sparc/kernel/iommu.c <<dma_4u_map_sg>>
-             seg_boundary_size = ALIGN(dma_get_seg_boundary(dev) + 1,
-   6    511  arch/sparc/kernel/pci_sun4v.c <<dma_4v_map_sg>>
-             seg_boundary_size = ALIGN(dma_get_seg_boundary(dev) + 1,
-   7     97  arch/x86/kernel/amd_gart_64.c <<alloc_iommu>>
-             base_index = ALIGN(iommu_bus_base & dma_get_seg_boundary(dev),
-   8     99  arch/x86/kernel/amd_gart_64.c <<alloc_iommu>>
-             boundary_size = ALIGN((u64)dma_get_seg_boundary(dev) + 1,
-   9    359  drivers/parisc/ccio-dma.c <<ccio_alloc_range>>
-             boundary_size = ALIGN((unsigned long long )dma_get_seg_boundary(dev) + 1,
-  10    110  drivers/parisc/iommu-helpers.h <<iommu_coalesce_chunks>>
-             unsigned int max_seg_boundary = dma_get_seg_boundary(dev) + 1;
-  11    345  drivers/parisc/sba_iommu.c <<sba_search_bitmap>>
-             boundary_size = ALIGN((unsigned long long )dma_get_seg_boundary(dev) + 1,
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: mm-gup-dont-permit-users-to-call-get_user_pages-with-foll_longterm-fix
+
+fix CONFIG_MMU=n build
+
+Link: https://lkml.kernel.org/r/CA+G9fYuNS3k0DVT62twfV746pfNhCSrk5sVMcOcQ1PGGnEseyw@mail.gmail.com
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Barry Song <song.bao.hua@hisilicon.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ mm/gup.c |   38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+
+--- a/mm/gup.c~mm-gup-dont-permit-users-to-call-get_user_pages-with-foll_longterm-fix
++++ a/mm/gup.c
+@@ -1759,6 +1759,25 @@ static __always_inline long __gup_longte
+ }
+ #endif /* CONFIG_FS_DAX || CONFIG_CMA */
+ 
++static bool is_valid_gup_flags(unsigned int gup_flags)
++{
++	/*
++	 * FOLL_PIN must only be set internally by the pin_user_pages*() APIs,
++	 * never directly by the caller, so enforce that with an assertion:
++	 */
++	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
++		return false;
++	/*
++	 * FOLL_PIN is a prerequisite to FOLL_LONGTERM. Another way of saying
++	 * that is, FOLL_LONGTERM is a specific case, more restrictive case of
++	 * FOLL_PIN.
++	 */
++	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
++		return false;
++
++	return true;
++}
++
+ #ifdef CONFIG_MMU
+ static long __get_user_pages_remote(struct mm_struct *mm,
+ 				    unsigned long start, unsigned long nr_pages,
+@@ -1789,25 +1808,6 @@ static long __get_user_pages_remote(stru
+ 				       gup_flags | FOLL_TOUCH | FOLL_REMOTE);
+ }
+ 
+-static bool is_valid_gup_flags(unsigned int gup_flags)
+-{
+-	/*
+-	 * FOLL_PIN must only be set internally by the pin_user_pages*() APIs,
+-	 * never directly by the caller, so enforce that with an assertion:
+-	 */
+-	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
+-		return false;
+-	/*
+-	 * FOLL_PIN is a prerequisite to FOLL_LONGTERM. Another way of saying
+-	 * that is, FOLL_LONGTERM is a specific case, more restrictive case of
+-	 * FOLL_PIN.
+-	 */
+-	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
+-		return false;
+-
+-	return true;
+-}
+-
+ /**
+  * get_user_pages_remote() - pin user pages in memory
+  * @mm:		mm_struct of target mm
+_
+

@@ -2,117 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F46724AC92
-	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 03:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6C824ACA3
+	for <lists+linux-next@lfdr.de>; Thu, 20 Aug 2020 03:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgHTBVn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 Aug 2020 21:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S1726603AbgHTBar (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 Aug 2020 21:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbgHTBVm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Aug 2020 21:21:42 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692A6C061384
-        for <linux-next@vger.kernel.org>; Wed, 19 Aug 2020 18:21:41 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id d6so675157ejr.5
-        for <linux-next@vger.kernel.org>; Wed, 19 Aug 2020 18:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=clSRpeeAhBeOa1Z/EGoW+BCJ0W1c3rpm/3iMv3CQBEg=;
-        b=XxgsNqxMJXLMCQt0hvVtovYPMv5lUeVtNbekV18RPRgTSr0lhWryi6qkLfR94gGEFA
-         PztV185NnjB+IYrEZe/xikgYrOfWzJcB4lRxCVUsGayaD7bm8YHeNDsf/DamWw8BVs2k
-         +C5RLMsYP77t9xELeLr7BZ8TE9RPDTxUtbOCnIfrcwrBw8y3WSH+0ZHY3lxyoFNYInmd
-         TDJMfUOKVrH8E2/fkwXZ0LCI2QSnPDsF872t5RLF6bYhssrqv69dNmVY8+Eghelm3/l9
-         teR8GTfWk0l6Uls7pTmAylPqw9UetBvz7mVqC+Lfnnr+ldA5FBptPQ9RJUdzYhBT78hX
-         yNTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=clSRpeeAhBeOa1Z/EGoW+BCJ0W1c3rpm/3iMv3CQBEg=;
-        b=j6dh6AEaIoNK83QzZvgqQjLdoBE5JJ6Tr5REf31YcYnzJH4u204LQbqwMj8ruOcAgC
-         6ZvltmfdnVv1dWpshcxnEXPXXGelke2BhPtGIdbOuOwhr6nft4msKaDIWneQJrCAJ87b
-         zWUHzMyvKAnn3Y4SrexkVaxTwKV5b8tCa4HBqRuRp/naWVJtcdLmmI7P1Qv360zsyfYp
-         BGfplAw8+nHloCCujQAdmov2FF0wmJGDDEBDYgmmToNOrLhf0b3DmOiZo5a9OeGrpf5S
-         5fjCGXQve2ERB9U9aGela5BhAvXAD6gu9MLhqL30ELu/NNpCIAD0pldWoSJH/B8n/sZS
-         y68g==
-X-Gm-Message-State: AOAM5325CECSU2ePxQveulWOLN7UOPII8XLk9qvazEqvcabLt41H8ugN
-        B5I2cRX5K4nW24Sl9+9i3+42H87Ehz7IkYf8lqeZ
-X-Google-Smtp-Source: ABdhPJy5YCNpJnv1Y/CpvGqmyFX6PcYJ+U9KLCqrkT4JqKRby0aWCLgHjSuUt8brRGEdtFouaOnueCCnkewqCmUMGeo=
-X-Received: by 2002:a17:906:c1d8:: with SMTP id bw24mr998580ejb.91.1597886500276;
- Wed, 19 Aug 2020 18:21:40 -0700 (PDT)
+        with ESMTP id S1726362AbgHTBap (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 Aug 2020 21:30:45 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E56C061757;
+        Wed, 19 Aug 2020 18:30:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BX6Xw68Hyz9sRN;
+        Thu, 20 Aug 2020 11:30:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1597887041;
+        bh=TdAJ4cPSBt+M8/z0nQKPFMUV7jka8gqRD4Yx3McuvvU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=m/yMUiiJTQhvMO9gjEi+NVWAMNVB5Bb/KFM3jnkE+Pcr0xYmU1aDpQpHxWyi8JZ6A
+         F7+L3GEaLADOcWFWaFyKVyB0tLaCyHKYZeXF39MBuDSH0/Wzl2JsH6kjpXc1J0dAIv
+         kiYdHA3Hbh3ROmPhNJN0B2FhMkuf8hR0Ic9RIHH+GvXSriKwfYv2ea2QeG1GRVGUPE
+         NwTgTyWA8+1c0uZSsCb91SYMb/UeqVD4Spun3EQRwP7xjt+z63BlXWe/781ycw/Hk0
+         UXIr3tlFiwaq0InQShy9xgp3q3QEW6av1E1KqjWRIuhXtV9EqbFKlk2x3p1hnqbk/U
+         9KeYunDXdA4LQ==
+Date:   Thu, 20 Aug 2020 11:30:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pinctrl-intel tree
+Message-ID: <20200820113039.71120e6a@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYvdAUWHw7SUF6Da1bgDJ2Q=59nJLovrxz8Ke74DSFnG1g@mail.gmail.com>
- <543834b1-9e7e-187d-4f98-e8484362105b@gmail.com> <CAHp75Vf_3cb51UPXqiPspo4pa5AhU7xTvwAk6Z2+FtzNfmogDA@mail.gmail.com>
- <fdffd8f2-ea67-4bfd-f75b-9ffd56dfbbde@gmail.com> <20200820083111.46e81b4c@canb.auug.org.au>
-In-Reply-To: <20200820083111.46e81b4c@canb.auug.org.au>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 19 Aug 2020 21:21:29 -0400
-Message-ID: <CAHC9VhTR7b_p3rdiQ8q07OMoY3fXgU4kH=bH5URVgVS6kH5r5g@mail.gmail.com>
-Subject: Re: Linux-next: Kernel panic - not syncing: Fatal exception in
- interrupt - RIP: 0010:security_port_sid
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, selinux@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Eric Paris <eparis@parisplace.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>, rgb@redhat.com,
-        Kees Cook <keescook@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        YueHaibing <yuehaibing@huawei.com>, jeffv@google.com,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/8UAI6lqCqSoD9nqaTUmXgUj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 6:31 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> On Wed, 19 Aug 2020 11:12:44 -0400 Stephen Smalley <stephen.smalley.work@gmail.com> wrote:
-> >
-> > Fix can be found at:https://patchwork.kernel.org/patch/11724203/
-> > <https://patchwork.kernel.org/patch/11724203/>
->
-> Thanks.
->
-> I will add that to the selinux tree merge in linux-next until it turns
-> up in the tree.
+--Sig_/8UAI6lqCqSoD9nqaTUmXgUj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FYI, I just merged that patch into the selinux/next tree.
+Hi all,
 
-  commit 37ea433c66070fcef09c6d118492c36299eb72ba
-  Author: Stephen Smalley <stephen.smalley.work@gmail.com>
-  Date:   Wed Aug 19 09:45:41 2020 -0400
+After merging the pinctrl-intel tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-   selinux: avoid dereferencing the policy prior to initialization
+x86_64-linux-gnu-ld: drivers/pinctrl/intel/pinctrl-baytrail.o: in function =
+`byt_pinctrl_probe':
+pinctrl-baytrail.c:(.text+0x12bf): undefined reference to `intel_pinctrl_ge=
+t_soc_data'
 
-   Certain SELinux security server functions (e.g. security_port_sid,
-   called during bind) were not explicitly testing to see if SELinux
-   has been initialized (i.e. initial policy loaded) and handling
-   the no-policy-loaded case.  In the past this happened to work
-   because the policydb was statically allocated and could always
-   be accessed, but with the recent encapsulation of policy state
-   and conversion to dynamic allocation, we can no longer access
-   the policy state prior to initialization.  Add a test of
-   !selinux_initialized(state) to all of the exported functions that
-   were missing them and handle appropriately.
+Caused by commit
 
-   Fixes: 461698026ffa ("selinux: encapsulate policy state, refactor ...")
-   Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-   Tested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-   Signed-off-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-   Signed-off-by: Paul Moore <paul@paul-moore.com>
+  2db97df9f29d ("pinctrl: baytrail: Switch to use intel_pinctrl_get_soc_dat=
+a()")
 
--- 
-paul moore
-www.paul-moore.com
+CONFIG_PINCTRL_BAYTRAIL=3Dy
+CONFIG_PINCTRL_INTEL=3Dm
+
+I have ised the pinctrl-intel tree from next-20200819 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8UAI6lqCqSoD9nqaTUmXgUj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl890j8ACgkQAVBC80lX
+0GxQigf/fVhxSDZ0PgozBs+DPVQ4zRlcl+0GBUYmx8gagOoWt4DaFEpP50ZBtd++
+MNFv1GbXGX2BRfPGRpMFrwZoIIGuvkW3qaLL6Z9/Tbx+8Sa8XAg7hnEvaCRZkRP+
+lWWPuTDI7JSrfwps0ggfTe7Gkhvfd1VWwUJFvT/WUhGi1BCktCTVSqQxzmtYzppC
+q6Ei+E7V95p5azhv8gKa2tIllq6R2b5zwLGuILom/b4brIPMrTdGjQ5cgFvhhnFQ
+Wsk+jSgU5d6um/PkX14gwmCXumNley/DS74uo9EHB5/CUyH+eIo1NxFzndZZHYKY
+JCTl4UU7s/ux8c9G1YVkaZYRmXFCkg==
+=4SpN
+-----END PGP SIGNATURE-----
+
+--Sig_/8UAI6lqCqSoD9nqaTUmXgUj--

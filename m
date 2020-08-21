@@ -2,95 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AA024C8B2
-	for <lists+linux-next@lfdr.de>; Fri, 21 Aug 2020 01:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8542224C8F2
+	for <lists+linux-next@lfdr.de>; Fri, 21 Aug 2020 02:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728631AbgHTXjE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Aug 2020 19:39:04 -0400
-Received: from ozlabs.org ([203.11.71.1]:33381 "EHLO ozlabs.org"
+        id S1727012AbgHUABV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Aug 2020 20:01:21 -0400
+Received: from mga05.intel.com ([192.55.52.43]:1502 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728746AbgHTXjE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 20 Aug 2020 19:39:04 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BXh1f3fFpz9sTF;
-        Fri, 21 Aug 2020 09:39:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1597966742;
-        bh=sYBaVBkEqe2/Mw/Lfq5kEh4Qy/zScPTo61xwiHFUTsg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MXHgrmFGNeGYhCzEHhGMHDlptaFrySiOyIrdL2smS2yTVSEqztX/u2uJ1E56hGQUk
-         CCePijDuAMD1HWzCIqZeV8NtiwDmbGe8bZeyx48hd8GlqTB93Wv7QLsGuc7OITHETD
-         h/lqERpGnauGE/Gkb9Ou0GL2Xko9BRwxl+x7ojLqGZ1fU0fR3wSpLh/PA8PuobArzU
-         ZfSO+XPQ0l8Av7dWcpPjkUMH8Kuhi7n36CK3xncAsk24dYhXzKj4tQA8wyrQH945Be
-         ged98WrSmmiLbhc+8+EUCfxaBac8K3HYUzwjcaPr9sHQ6qDvLPQDI33opkHZS1YNzK
-         HreAP5SHF8ckA==
-Date:   Fri, 21 Aug 2020 09:39:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
+        id S1725852AbgHUABS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 20 Aug 2020 20:01:18 -0400
+IronPort-SDR: XTU6GajE9DhcV7cY5W7SU+rxH7hxjYDKCDeGlWd75bMalXtfcej+9XWiawC3p5Qz2TFuojKADH
+ RXZrQoXVRfIg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9719"; a="240248547"
+X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
+   d="scan'208";a="240248547"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 17:01:17 -0700
+IronPort-SDR: aIrQRzVbnSy4fGnpPk3fTLjyEOg2meO3TrdwzhaKiqR4HWbjeg6fyBA7R/6ux3NtGV44fSkOJm
+ OZUJHtGddR6w==
+X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
+   d="scan'208";a="321073087"
+Received: from ralvare1-mobl1.amr.corp.intel.com (HELO [10.212.254.51]) ([10.212.254.51])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 17:01:16 -0700
+Subject: Re: linux-next: build warnings after merge of the sound-asoc-fixes
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the sound-asoc-fixes tree
-Message-ID: <20200821093901.4257afdc@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bard liao <yung-chuan.liao@linux.intel.com>
+References: <20200821093901.4257afdc@canb.auug.org.au>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <a8b47ba9-7b45-bef1-08a2-820fe48c4cc4@linux.intel.com>
+Date:   Thu, 20 Aug 2020 19:01:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H=z86_dTv/Ev.5_C8zSBkV/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200821093901.4257afdc@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/H=z86_dTv/Ev.5_C8zSBkV/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the sound-asoc-fixes tree, today's linux-next build
-(x86_64 allmodconfig) produced these warnings:
+On 8/20/20 6:39 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the sound-asoc-fixes tree, today's linux-next build
+> (x86_64 allmodconfig) produced these warnings:
+> 
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_acpi_scan from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_probe from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_process_wakeen_event from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_startup from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_exit from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_enable_irq from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_thread from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+> 
+> Presumably introduced by commit
+> 
+>    82cb71d68c22 ("ASoC: SOF: Intel: add build support for SoundWire")
 
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_acp=
-i_scan from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_pro=
-be from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_pro=
-cess_wakeen_event from namespace SOUNDWIRE_INTEL_INIT, but does not import =
-it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_sta=
-rtup from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_exi=
-t from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_ena=
-ble_irq from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
-WARNING: modpost: module snd-sof-intel-hda-common uses symbol sdw_intel_thr=
-ead from namespace SOUNDWIRE_INTEL_INIT, but does not import it.
+There is a companion patch 1eb629363aa35 ("ASoC: SOF: Intel: hda: import 
+SOUNDWIRE_INIT namespace") that does the import, not sure what causes 
+the warning?
 
-Presumably introduced by commit
 
-  82cb71d68c22 ("ASoC: SOF: Intel: add build support for SoundWire")
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/H=z86_dTv/Ev.5_C8zSBkV/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8/CZUACgkQAVBC80lX
-0GwIpQf+KDZgVI29MDPJFukKSCpymet1xG/gkD7MdDP8dWPEPLiaAgUjrH5ql47k
-Nl+o9b2DeE/dcuKj/EplfLU17h0XLI9s8q2lzIWxeTiqeqZHTlyUr5dAif+NMftd
-djdj+GpKkiluNYScFqsswf5koJCV8WOtFSPfshW/aYrwoWsz3Y0Q2ZgxK58ih+1+
-4nQrfjc4LNcx6xkszv6/R9VriX1vAQSspM8rUrpH0rYto7shcdqGt55UcJ4oB4Mr
-bPEcWpIIYVrcvoTOBydxVg4qoxZq8LTtwY7UmRKx3t77u+YEGgvOB+aD33C6op3N
-tssc8LkpfUfWxTEyzS54EKdC7As6hw==
-=8djY
------END PGP SIGNATURE-----
-
---Sig_/H=z86_dTv/Ev.5_C8zSBkV/--

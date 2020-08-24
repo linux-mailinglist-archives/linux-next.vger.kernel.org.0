@@ -2,118 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A36852508E1
-	for <lists+linux-next@lfdr.de>; Mon, 24 Aug 2020 21:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EEA250C02
+	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 01:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgHXTJF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Aug 2020 15:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbgHXTJD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Aug 2020 15:09:03 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77856C061573;
-        Mon, 24 Aug 2020 12:09:03 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h15so3327962wrt.12;
-        Mon, 24 Aug 2020 12:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1/OwrF6O4VfIPs9S1xxSmo2BOW+0i4nsagYJC2DaJR0=;
-        b=cFWXMyWnhZK5nA5qU9KqQ9s7hjZ3hz6kAsmKD3x6qC1cRjhnC6qDyns9g2XG0PXpYZ
-         NfxulGrAmAF5NwG45URsOSf4qZX6nlueL2C1RtJYvp3d3PL5+Pr8zcIl03id53/GOLzM
-         ealXfC2ehlkCBMi0nJfjcIdc+A5swPmfwC8NswkVKAkc0ctu57maYtebzCDgwu3sqnIU
-         PmsRD/aY8njmxdznomtKxkz6sIuaAJ5/WzfwVGW38Xle0LMESS0xBV66v/+fPitw0ezX
-         Yk6tJ2C+MjbgfDJfOJT1PrdE7P3X8XhsTktsd5hEguM8V9BM+2DO2c1JnDC4VmzlwmIM
-         CVEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1/OwrF6O4VfIPs9S1xxSmo2BOW+0i4nsagYJC2DaJR0=;
-        b=Mm4JD83WFAFxrJRI4sxThyORqzuLRic9LTqsHuthyHOQL+6NE/IzUjhlsZWkuIYvro
-         7p7eI0axd0MWFntz67oIRVasYiTgS4ueLJEuHSlzK8eOxyRMFonHxaeO1lSf7SFS4D4O
-         Vgk7dqzsVzW0IBrDZ0WHCIpjDf63iTIlMGTGLEQ609cqbVPR0s7dud6hW69CEIabNe+7
-         MIwfgsuzP+JGw8w0OuFlThTadt62/wCcr+gikGI0INVsCBrleCDOxk7KFBpEaRKSZ4fg
-         us1qQWvFWt0G1H3uIXffSrfAgOTb/qGHYKl4xtPf5tP1LpNbvVPGthDWXCD4p5BqaN7s
-         44Qw==
-X-Gm-Message-State: AOAM532yuH8BLHP+jsVRWhdj1lCNQm/Pk/JNenCKjfE8r6zr2xVZgdfx
-        a18/TtufigHjee5XdzzpkBFRYBRFoklrRwYNm0s=
-X-Google-Smtp-Source: ABdhPJwLbaBmcJ0YU0Mm63DMRB1XUTp+nUhq0FoG7V+AI1bd+N1eoy8dCmFllCCCc33XNjvD+ws1FKPboGBlQG76Rsk=
-X-Received: by 2002:adf:e8cc:: with SMTP id k12mr7385575wrn.2.1598296142108;
- Mon, 24 Aug 2020 12:09:02 -0700 (PDT)
+        id S1728058AbgHXXA7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Aug 2020 19:00:59 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55587 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726519AbgHXXA7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 24 Aug 2020 19:00:59 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bb6zq03mTz9sSP;
+        Tue, 25 Aug 2020 09:00:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1598310057;
+        bh=eDDydcN+yRwqvCr58cy3ZtpIXf7l8cnkzFj+j1CqajM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bhHutHwcHIAL9ZElVcQQk25ly0t5DlWuVtHmK3kFpuxfYpgSIUxe3i7Dwf+HPRMWN
+         D+F49Hy90V3rnGPOmwlB8FmTw4m5u0OVlESvELOTcUL/qquubwqnXGVzL9LD3aPMwc
+         CGMiBfTl2CvWpU0XobpSYMeT3zf2EcuOYroHY3UZ7xd2COfY9DSIdNoq5Dk+iqdqVz
+         TJbQ6AjtyUJzVlovsBKnXm93TnFjnvnUBsZilA2GoXAIUizRL1PNSLM/3rGX866oa6
+         RDPFiyMo6NtWzdAszGH8k1rf76B8FW4FMDFQPvXYBSzPX2JpXzy/HkXEJr1+g+Xrdl
+         LmHnzuTFbCojw==
+Date:   Tue, 25 Aug 2020 09:00:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Qian Cai <cai@lca.pw>, Alex Shi <alex.shi@linux.alibaba.com>,
+        akpm@linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [Resend PATCH 1/6] mm/memcg: warning on !memcg after readahead
+ page charged
+Message-ID: <20200825090054.3c5dd68a@canb.auug.org.au>
+In-Reply-To: <20200824151045.GC3415@dhcp22.suse.cz>
+References: <1597144232-11370-1-git-send-email-alex.shi@linux.alibaba.com>
+        <20200820145850.GA4622@lca.pw>
+        <20200824145201.GB4337@lca.pw>
+        <20200824151045.GC3415@dhcp22.suse.cz>
 MIME-Version: 1.0
-From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date:   Mon, 24 Aug 2020 22:08:25 +0300
-Message-ID: <CAJ1xhMUpqtKMuGUZdComskTqd0oOKCfDuVQT3+c13u=NSJLkBw@mail.gmail.com>
-Subject: nouveau PUSHBUFFER_ERR on 5.9.0-rc2-next-20200824
-To:     bskeggs@redhat.com, Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-Next <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/GBWE4=3K9zAUW5hSuk=F0/p";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Since upgrading to linux-next based on 5.9.0-rc1 and 5.9.0-rc2 I have
-had my mouse pointer disappear soon after logging in, and I have
-observed the system freezing temporarily when clicking on objects and
-when typing text.
-I have also found records of push buffer errors in dmesg output:
-[ 6625.450394] nouveau 0000:01:00.0: disp: ERROR 1 [PUSHBUFFER_ERR] 02
-[] chid 0 mthd 0000 data 00000400
+--Sig_/GBWE4=3K9zAUW5hSuk=F0/p
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I tried setting CONFIG_NOUVEAU_DEBUG=5 (tracing) to try and collect
-further debug info, but nothing caught the eye.
+Hi Michal,
 
-The error message in question comes from nv50_disp_intr_error in
-drivers/gpu/drm/nouveau/nvkm/engine/disp/nv50.c:613,645.
-And nv50_disp_intr_error is called from nv50_disp_intr in the
-following while block:
-drivers/gpu/drm/nouveau/nvkm/engine/disp/nv50.c:647,658
-void
-nv50_disp_intr(struct nv50_disp *disp)
-{
-        struct nvkm_device *device = disp->base.engine.subdev.device;
-        u32 intr0 = nvkm_rd32(device, 0x610020);
-        u32 intr1 = nvkm_rd32(device, 0x610024);
+On Mon, 24 Aug 2020 17:10:45 +0200 Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 24-08-20 10:52:02, Qian Cai wrote:
+> > On Thu, Aug 20, 2020 at 10:58:50AM -0400, Qian Cai wrote: =20
+> > > On Tue, Aug 11, 2020 at 07:10:27PM +0800, Alex Shi wrote: =20
+> > > > Since readahead page is charged on memcg too, in theory we don't ha=
+ve to
+> > > > check this exception now. Before safely remove them all, add a warn=
+ing
+> > > > for the unexpected !memcg.
+> > > >=20
+> > > > Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
+> > > > Acked-by: Michal Hocko <mhocko@suse.com> =20
+> > >=20
+> > > This will trigger, =20
+> >=20
+> > Andrew, Stephen, can you drop this series for now? I did manage to trig=
+ger this
+> > warning on all arches, powerpc, x86 and arm64 (below). =20
+>=20
+> Yes, I do agree. See http://lkml.kernel.org/r/20200824151013.GB3415@dhcp2=
+2.suse.cz
 
-        while (intr0 & 0x001f0000) {
-                u32 chid = __ffs(intr0 & 0x001f0000) - 16;
-                nv50_disp_intr_error(disp, chid);
-                intr0 &= ~(0x00010000 << chid);
-        }
-...
-}
+OK, I have removed the following from linux-next for today:
 
-Could this be in any way related to this series of commits?
-commit 0a96099691c8cd1ac0744ef30b6846869dc2b566
-Author: Ben Skeggs <bskeggs@redhat.com>
-Date:   Tue Jul 21 11:34:07 2020 +1000
+  c443db77c9f3 ("mm/thp: narrow lru locking")
+  18bafefba73d ("mm/thp: remove code path which never got into")
+  5fb6c0683017 ("mm/thp: clean up lru_add_page_tail")
+  9d1d568727a8 ("mm/thp: move lru_add_page_tail func to huge_memory.c")
+  47eb331560ff ("mm/memcg: bail out early from swap accounting when memcg i=
+s disabled")
+  4b0d99a64d78 ("mm/memcg: warning on !memcg after readahead page charged")
 
-    drm/nouveau/kms/nv50-: implement proper push buffer control logic
+--=20
+Cheers,
+Stephen Rothwell
 
-    We had a, what was supposed to be temporary, hack in the KMS code where we'd
-    completely drain an EVO/NVD channel's push buffer when wrapping to the start
-    again, instead of treating it as a ring buffer.
+--Sig_/GBWE4=3K9zAUW5hSuk=F0/p
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    Let's fix that, finally.
+-----BEGIN PGP SIGNATURE-----
 
-    Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9ERqYACgkQAVBC80lX
+0GwA5wf+MmH5x5QjwvI+81lnKYiqyUbfsEnlGMvy8JrOIX37/7lb9nUtabZtlOIx
+RV6oA0amomiZDwc/c2X6GQh3oVsn69NpycxvuwZmofK7TSCz6U+YZFaUsFLxdJmd
+RfQIvC55ORNcYXyjd67/OgCeXYDf//WyYMy82qd37YvLK3E7vtQQRRvdrskLBMNr
+MpcRDAW4Lj3JBojpGVBspX2t0L0rmXzQY2OomgWQB29HFnJqNxPQ77aRLhm2zM6E
+uRoOgMi2ca9F/cxXJKQwDrPceC7xWzaiUgCD8uOxFLwqtzcdiipnOOAeg6SJ1krt
+7HQIE8bmAXf6XXAKncXy8nF4+VL0Pg==
+=v0cS
+-----END PGP SIGNATURE-----
 
-Here are my GPU details:
-01:00.0 VGA compatible controller: NVIDIA Corporation GT216 [GeForce
-210] (rev a1)
-        Subsystem: Micro-Star International Co., Ltd. [MSI] Device 8a93
-        Kernel driver in use: nouveau
-
-The last linux-next kernel I built where the problem reported does not
-manifest itself is 5.8.0-rc6-next-20200720.
-
-I would appreciate being given any pointers on how to further debug this.
-Or is git bisect the only way to proceed with this?
-
-Thanks.
+--Sig_/GBWE4=3K9zAUW5hSuk=F0/p--

@@ -2,195 +2,175 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A3A24F2E3
-	for <lists+linux-next@lfdr.de>; Mon, 24 Aug 2020 09:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809DB24F2FA
+	for <lists+linux-next@lfdr.de>; Mon, 24 Aug 2020 09:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725850AbgHXHBy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Aug 2020 03:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S1726119AbgHXHRv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Aug 2020 03:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgHXHBw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Aug 2020 03:01:52 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4E1C061573;
-        Mon, 24 Aug 2020 00:01:52 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id p37so4121556pgl.3;
-        Mon, 24 Aug 2020 00:01:52 -0700 (PDT)
+        with ESMTP id S1725850AbgHXHRs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Aug 2020 03:17:48 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD87C061573
+        for <linux-next@vger.kernel.org>; Mon, 24 Aug 2020 00:17:48 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id oz20so5575577ejb.5
+        for <linux-next@vger.kernel.org>; Mon, 24 Aug 2020 00:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=0zrV+CngMOhoULdpw/C/2MOfxZLOIh5Q40JHaANvzKE=;
-        b=Emngsf7uI/mwcI/x1V+pb/qwNVd8PuBgm1QYQU3Y6qPKeAwtd22GOSE9OJfQdajGWV
-         iQwaaXBWyej2k2tTn0V9kVCS0q+Hg5pPoFl80y8/GYd4ZPBppfTl93lFVqqh00+2gNLP
-         hYk/4/wD2dzP1oHDZy4plLdc+uKfLDqB1+1Hr31pbpKOStimR43YcKbgtN+1R46HHM6x
-         6de8akFHe8JwTjHKTIUrzjCI6320CarAMAdkKZmvRRKejduMBbbZ+DQfDS9XPrfa5sjs
-         UARXEcLVxpdC2Dfui3p46OQbFf2LklyItTpqZDa5+el0alad8+ySFp2vAPviVm7OsDVP
-         KfyA==
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cv0gBSyms31X3v+bjPdOSOUcfTikjpWu5wq03sJExYI=;
+        b=icNFqnhWBsWGPLfip7JfTbIQR2nv2ccuCFXyuBt2XGNAW3KN3qXJALxpXhHTcNZi0K
+         NQKfFa/P+16/EwNZACRzEThzhl2oZ6fO9QHLUSn9sajKLAD42zfW6LV8pVR/ysgVssBk
+         rlIdPGxvXIB1J8E72bJeafJS7B8CxXodWiCwnn7fsSlgCeAx10rx5P/vApmr6vpBlVqn
+         wvJM//5Xjj2JuuGo7Ue3GA2f8xjHdoqZh5h55JPGjmcK6h0dokRmpr9VZLd5gzNl1zeF
+         bONG5Anz389Eb7yyWeSkdWwxjS1ZDR8FInMHypyVEXRt4HTXG65MihnAykaCj8wJLRIC
+         UPIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=0zrV+CngMOhoULdpw/C/2MOfxZLOIh5Q40JHaANvzKE=;
-        b=dqGLeBg511ou5SR01LITTcJh6ayU9f1a78Y/lhFPP9OvuMnRzV628IfQzFH6iDvDl+
-         E2Sd7jO78i/0utzI+khHvsBKG9mAWBPme1Z6i7IJeLdV80cEv+WVmRbPF+EQSFOTbsvu
-         waJNrvn46Yo4bVnO75QVvTTOMuCOlzs0RwDFKkvNtDQfWm4P2eqyD3P4SgKMy4CQHBEt
-         JKxGs9le0uZFegMWbeIplHQCXwJOIVEfPBCb86cMh0wWzN9O78K1XvvjSgJURTMW6yFp
-         WHqboqPLX3KNXmwQswx42D+7asZYj2o2TBSxZ6PLY6/YSO7BxowBtB79upmG6C7/835U
-         tqog==
-X-Gm-Message-State: AOAM533r2Aw2AnLqFtsMzXa1U0krpegA39ora1rCDPykvgt7PtpN9hw6
-        6aj14eBonTtyjAyRqHXW6mM=
-X-Google-Smtp-Source: ABdhPJzjfI/8BrR22q4cvETsVuCnk7AMqOjuVfibV6FoP6omGJgWAutyVPLt8b9ZQphvgSa7eciqHw==
-X-Received: by 2002:aa7:9f92:: with SMTP id z18mr3153579pfr.260.1598252511953;
-        Mon, 24 Aug 2020 00:01:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o38sm8506730pgb.38.2020.08.24.00.01.50
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=cv0gBSyms31X3v+bjPdOSOUcfTikjpWu5wq03sJExYI=;
+        b=c/VPmcv8+W1CN5a+DePyKrJdNLLarS4UrwoVf+dsXfk0WJy88OoV3v3yQ94kCLQSjI
+         CFK9aZVETjqk0/IW8e42O7L6DZFB9xBOgrCeRTgEtvkzzsZrYzvE+3m95D5xrHSPUI8Y
+         tinoW00o5i5AcUYgqN8z3UeKj6wGk+/sG6m2t4M9ajAroumRF+QTCE9RoF02i5Tmx08L
+         JkbTggYY08WJfGK/xH7HOMv3Fi+3m+FuRdG2jw215+8hK84z+ZYWFxCzdeKU8CvlM5dS
+         PQI7T3EQn8PMym88mM+vktRwPsQBJwC9zpchWpK2KS6i6wuJxK0z5Lqx72OR5bdS46nL
+         ut6A==
+X-Gm-Message-State: AOAM531+QmlCBkZtehdMxVYRPVD2gMBEeOf+CCE9iDdSPdHr25mAdIk7
+        WIjgRTckr5ZyrjDqMGyTVCzdag==
+X-Google-Smtp-Source: ABdhPJzxmT5nThaJSE79UQYoUDb+3mYAi302TJOj9NUZLu/JbSWvaTT8BRzykjFb9U89gqTs5pXtVg==
+X-Received: by 2002:a17:906:fcdc:: with SMTP id qx28mr614644ejb.289.1598253467063;
+        Mon, 24 Aug 2020 00:17:47 -0700 (PDT)
+Received: from [192.168.0.151] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id r18sm3336241eju.25.2020.08.24.00.17.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2020 00:01:50 -0700 (PDT)
-Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        Mon, 24 Aug 2020 00:17:45 -0700 (PDT)
+Subject: Re: linux-next: Signed-off-by missing for commits in the
+ arm-soc-fixes tree
+To:     Olof Johansson <olof@lixom.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Kitt <steve@sk2.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-References: <20200824102858.5554a2b2@canb.auug.org.au>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3c308474-932d-a800-fc65-5d8e412cfa2f@roeck-us.net>
-Date:   Mon, 24 Aug 2020 00:01:48 -0700
+        Michal Simek <michal.simek@xilinx.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200821151942.6b01dbd8@canb.auug.org.au>
+ <CAOesGMhHhBBdXdEAM+P5orFz56bdQTk8MP20k4UZ2rh53Ge6XQ@mail.gmail.com>
+From:   Michal Simek <monstr@monstr.eu>
+Autocrypt: addr=monstr@monstr.eu; keydata=
+ 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
+ 0Z1MQlmNcq2bhOMzTxuXX2NDzUZs4aqEyZQ=
+Message-ID: <77be1e4f-6734-8e9c-f539-26123e55f5dc@monstr.eu>
+Date:   Mon, 24 Aug 2020 09:17:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200824102858.5554a2b2@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="V1pIFd9W2l3G2AuVUZfwNfMyUYLDg2sDz"
+In-Reply-To: <CAOesGMhHhBBdXdEAM+P5orFz56bdQTk8MP20k4UZ2rh53Ge6XQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---V1pIFd9W2l3G2AuVUZfwNfMyUYLDg2sDz
-Content-Type: multipart/mixed; boundary="8IOyuIs8tBuUOaiqDTZ5ujYsv8eDUC8mX"
-
---8IOyuIs8tBuUOaiqDTZ5ujYsv8eDUC8mX
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 8/23/20 5:28 PM, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the hwmon-staging tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/hwmon/pmbus/adm1266.c: In function 'adm1266_probe':
-> drivers/hwmon/pmbus/adm1266.c:478:31: error: passing argument 2 of 'pmb=
-us_do_probe' from incompatible pointer type [-Werror=3Dincompatible-point=
-er-types]
->   478 |  ret =3D pmbus_do_probe(client, id, &data->info);
->       |                               ^~
->       |                               |
->       |                               const struct i2c_device_id *
-> In file included from drivers/hwmon/pmbus/adm1266.c:20:
-> drivers/hwmon/pmbus/pmbus.h:492:73: note: expected 'struct pmbus_driver=
-_info *' but argument is of type 'const struct i2c_device_id *'
->   492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driv=
-er_info *info);
->       |                                               ~~~~~~~~~~~~~~~~~=
-~~~~~~~~~^~~~
-> drivers/hwmon/pmbus/adm1266.c:478:8: error: too many arguments to funct=
-ion 'pmbus_do_probe'
->   478 |  ret =3D pmbus_do_probe(client, id, &data->info);
->       |        ^~~~~~~~~~~~~~
-> In file included from drivers/hwmon/pmbus/adm1266.c:20:
-> drivers/hwmon/pmbus/pmbus.h:492:5: note: declared here
->   492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driv=
-er_info *info);
->       |     ^~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
->=20
-> Caused by commit
->=20
->   9832ecffd8f8 ("hwmon: (pmbus) Add support for ADM1266")
->=20
-> interacting with commit
->=20
->   d46dc459db38 ("hwmon (pmbus) use simple i2c probe function")
->=20
-> I have used the hwmon-staging tree from next-20200821 for today.
->=20
-
-Fixed. Sorry for the trouble.
-
-Guenter
 
 
---8IOyuIs8tBuUOaiqDTZ5ujYsv8eDUC8mX--
+On 21. 08. 20 18:18, Olof Johansson wrote:
+> Hi,
+> 
+> On Thu, Aug 20, 2020 at 10:19 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> Commits
+>>
+>>   8d53ecfbf231 ("arm64: dts: xilinx: Align IOMMU nodename with dtschema")
+>>   b4b6fb8de8dc ("arm64: dts: zynqmp: Add GTR transceivers")
+>>
+>> are missing a Signed-off-by from their committer.
+> 
+> Ah, I see what happened here. I've been relying on some of my
+> semi-automation scripts for catching this, but I had to use regular
+> manual git merge for this branch due to GPG signatures not capturing
+> it in patchwork.
+> 
+> Since the committer was Michal, and the pull request came from him, we
+> still have the chain of contribution documented, but I'll keep this in
+> mind on future manual merges.
 
---V1pIFd9W2l3G2AuVUZfwNfMyUYLDg2sDz
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Sorry about it. I expect I don't need to do anything but I have at least
+add checking to git hooks to make sure that this won't happen again.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Michal
 
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl9DZd0ACgkQyx8mb86f
-mYFrhA//Z8xz0+JuNoGIUlrazcN5bDvFscvYxnrqVPyDVlu8a+BlN8EGqduJVd9X
-ZwpiWdOy4MbmzvdHGWncwi4pb9PoFGpr/IABo3Z0XL1YOoEq6WfuQrL+HQ7hh5Z8
-vmY/t37+uWtqHQgThjuKAlHmOM7km/qkj8MXYv3mpjZ9ANlrTSpPMDOo3FJS/whY
-f9oV0EgtDhRzc39sYWTgBrvbhyaF4GbRR2Lpbn69REB5ti8IhNaQRHS4039NVhmy
-Y+2hRSnHFqAM6FVIphE8i50YHYVkP8pwbFDVma4AuuQ6kmGKAkc9nXicQ9ITgoJT
-AaLoOZV405VQmlTYSTwF+BQRgPGogluFGEXzrW8/LHo9IQCAUCh/cNwXSQq/4mkT
-0Xxerwr8F2BKsFVT4/ybrScHUq3aruRW4n1a7JyhW7Ul8cKBQndMVSMq+pkhMAAa
-Sz9LSGhCQEsmO93CTLvj2Wf1KRbYlkfTskFl5P372dECAPnyXBXUkVjUPf9tFB9L
-s4WpnOk8g2W313v+2rABvCCW4TVpDko8ST50mBCrMxNPrCnCCQlQaBLAMOOw7V8P
-KRSeGCQkqVCNrTZH8irmdHyDyVkJt3t5SOvX7q2GZb3XUffauCl3C3xoWboD4CRP
-WsOGA1b5g0tuq8yfg8+pPrDO79hV/wd6O750zB56XN3p/UZcGsc=
-=KiuN
------END PGP SIGNATURE-----
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
---V1pIFd9W2l3G2AuVUZfwNfMyUYLDg2sDz--

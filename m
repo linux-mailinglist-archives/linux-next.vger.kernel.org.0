@@ -2,67 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 540B3250C2E
-	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 01:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3968250C32
+	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 01:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgHXXQQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Aug 2020 19:16:16 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:35313 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726090AbgHXXQQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 24 Aug 2020 19:16:16 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01355;MF=alex.shi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0U6mPOyb_1598310966;
-Received: from IT-FVFX43SYHV2H.lan(mailfrom:alex.shi@linux.alibaba.com fp:SMTPD_---0U6mPOyb_1598310966)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 25 Aug 2020 07:16:11 +0800
-Subject: Re: [Resend PATCH 1/6] mm/memcg: warning on !memcg after readahead
- page charged
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Qian Cai <cai@lca.pw>, akpm@linux-foundation.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-References: <1597144232-11370-1-git-send-email-alex.shi@linux.alibaba.com>
- <20200820145850.GA4622@lca.pw> <20200824145201.GB4337@lca.pw>
- <20200824151045.GC3415@dhcp22.suse.cz>
- <20200825090054.3c5dd68a@canb.auug.org.au>
-From:   Alex Shi <alex.shi@linux.alibaba.com>
-Message-ID: <3003ffb6-f527-ae33-60f2-50cd25316fdd@linux.alibaba.com>
-Date:   Tue, 25 Aug 2020 07:14:39 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.7.0
+        id S1728052AbgHXXSQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Aug 2020 19:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgHXXSQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Aug 2020 19:18:16 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15822C061574;
+        Mon, 24 Aug 2020 16:18:15 -0700 (PDT)
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 9CFC42CB;
+        Mon, 24 Aug 2020 23:18:15 +0000 (UTC)
+Date:   Mon, 24 Aug 2020 17:18:14 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs
+ tree
+Message-ID: <20200824171814.7905b7c9@lwn.net>
+In-Reply-To: <20200825091346.63395129@canb.auug.org.au>
+References: <20200825091346.63395129@canb.auug.org.au>
+Organization: LWN.net
 MIME-Version: 1.0
-In-Reply-To: <20200825090054.3c5dd68a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, 25 Aug 2020 09:13:46 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-
-在 2020/8/25 上午7:00, Stephen Rothwell 写道:
->>>> This will trigger,  
->>> Andrew, Stephen, can you drop this series for now? I did manage to trigger this
->>> warning on all arches, powerpc, x86 and arm64 (below).  
->> Yes, I do agree. See http://lkml.kernel.org/r/20200824151013.GB3415@dhcp22.suse.cz
-> OK, I have removed the following from linux-next for today:
+> Commit
 > 
->   c443db77c9f3 ("mm/thp: narrow lru locking")
->   18bafefba73d ("mm/thp: remove code path which never got into")
->   5fb6c0683017 ("mm/thp: clean up lru_add_page_tail")
->   9d1d568727a8 ("mm/thp: move lru_add_page_tail func to huge_memory.c")
->   47eb331560ff ("mm/memcg: bail out early from swap accounting when memcg is disabled")
->   4b0d99a64d78 ("mm/memcg: warning on !memcg after readahead page charged")
+>   09824ed3a906 ("Documentation/locking/locktypes: fix local_locks documentation")
+> 
+> is missing a Signed-off-by from its committer.
 
-The first patch 4b0d99a64d78 ("mm/memcg: warning on !memcg after readahead page charged")
-reveals the hugetlb out of lru on some unexpected path. At least comments are helpful.
+*That* is weird...it was applied with the same "git am" script as all the
+rest...  Thanks for the heads-up, sure wish I knew what's going on.
 
-All other are good and functional.
-
-Thanks
-Alex
+jon

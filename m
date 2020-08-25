@@ -2,282 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C42510B6
-	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 06:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F0725125F
+	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 08:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgHYEZ5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Aug 2020 00:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbgHYEZ5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Aug 2020 00:25:57 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E36FC061574
-        for <linux-next@vger.kernel.org>; Mon, 24 Aug 2020 21:25:57 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q1so561861pjd.1
-        for <linux-next@vger.kernel.org>; Mon, 24 Aug 2020 21:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oloMvMfv0PkZHz53lpPmqQ7EmU+58CaFrm+JTasK+5k=;
-        b=ACciLTZTrf15EMayBavVVileVpk7UP8Ne3RUU90uIB2o2+5Zfqd8QWhVdgImiMugWF
-         JKc85YrLIiDUyhk7S9wRWp2U9tAr3WFYin3F+5rk5FSq6yD+zWGox1cP5yl6/iLLxOyj
-         CvgC0bxeDtK/urWVVRRcWkY3HBbaEBJ7c6A0L1fN2ZXp5gf8SPltg9jOWmZdDsqZhXG+
-         xvu6PO+ITaMzCsERa5GbhL9DLX71zSFDVTwVazw7luCvx93VijpBXASAgzoAg5pLFLZf
-         g1GdYteMbiWS0wVYHxY9L3tG86AsExQ1l2pgUlPzw5k7ahQQDlkxBi4/qUveuaQekttR
-         nvAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oloMvMfv0PkZHz53lpPmqQ7EmU+58CaFrm+JTasK+5k=;
-        b=rbMTWV1v1FAI4y/lw9nCwRt2Q4Nie1jzuptc5/NNvQc39vZjJwGBKSonJM6vxOHsXo
-         DL1YzS4Pmz/iCtLlSFexQTjv2y3Dq2Fq1o+Jw0KQi1QWsJFkCGnozjQa03w7QYUhDofK
-         XjRPPw9Od3agCOf36OznDwNLNHQoFgjTsDGsFgjjbC7Iqq6AqaFGfogVvxhAwpt08MYT
-         xj5ht7kT7XvciOXRDgU4fx4XKosBT9piKSQ7KQvIOFepa30ScjbCqzbRCJIGwDL5/mg0
-         Y1+yacK8g0Q7lOFd9JfMXloLA+k6kaGyFAJIe1YgIh43ZmbmJOkbabH9uEpOkQYmcYwz
-         FFPA==
-X-Gm-Message-State: AOAM533m7IlSI89MnsdzE3BV6xHuN0dcaTeUVzxOZ6kPUXE+KGSsbPMn
-        80oK66bWmbouXbA+ck+QjNYbVXtI5xiB1Q==
-X-Google-Smtp-Source: ABdhPJxojMMUga2ITYEQeBiCMyUPKe7+tWp6oT25TPE/dL0risbaCciqEICNpTRU0MDKe27FxFX4ZA==
-X-Received: by 2002:a17:90b:4012:: with SMTP id ie18mr75607pjb.118.1598329556314;
-        Mon, 24 Aug 2020 21:25:56 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g7sm1084636pjj.2.2020.08.24.21.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 21:25:55 -0700 (PDT)
-Message-ID: <5f4492d3.1c69fb81.73c94.4039@mx.google.com>
-Date:   Mon, 24 Aug 2020 21:25:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1729128AbgHYGuh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Aug 2020 02:50:37 -0400
+Received: from ozlabs.org ([203.11.71.1]:51733 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729116AbgHYGug (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 25 Aug 2020 02:50:36 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BbKPh4TtCz9sTK;
+        Tue, 25 Aug 2020 16:50:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1598338234;
+        bh=j9NrgxUjqWGE3IxuHRcqD4UBKle0ICvlV8D9udyUimw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dp8HZQrQc6wRe+J1BEAo9CUpupQ4h3iULERXYZPL5jpU/z3dxhpNHZzB006zesX39
+         HtQINc6Nzi8aX9qEhXj7kzGOz5b8duQIhe9FBbcGaN63dtynXRWNbfcbEFUAzsNFIJ
+         Gh9ISm8vtrlNPHxMSHq0Orx7EFHsj/vLDfxQCPxnYIcdF+Yn5eb4BPvxpJo5QrGuyy
+         XrHr3K8ZApY+qSZkh09vMK9KJwxa5xv5yNJbDuDmgWjjUUr252P9Qx950effgVYJn+
+         +Jhm6Tuyy93fMvANbLxIGwK8FtO27IIutMZjl23AdPo9Ps4Q/onET+FmbMGuntn8OK
+         +1NRusNoUGGSA==
+Date:   Tue, 25 Aug 2020 16:50:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20200825165029.795a8428@canb.auug.org.au>
+In-Reply-To: <CAADnVQKGf7o8gJ60m_zjh+QcmRTNH+y1ha_B2q-1ixcCSAoHaw@mail.gmail.com>
+References: <20200821111111.6c04acd6@canb.auug.org.au>
+        <20200825112020.43ce26bb@canb.auug.org.au>
+        <CAADnVQLr8dU799ZrUnrBBDCtDxPyybZwrMFs5CAOHHW5pnLHHA@mail.gmail.com>
+        <20200825130445.655885f8@canb.auug.org.au>
+        <CAADnVQKGf7o8gJ60m_zjh+QcmRTNH+y1ha_B2q-1ixcCSAoHaw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc2-260-g90854ecf6e2a
-Subject: next/pending-fixes baseline: 166 runs,
- 5 regressions (v5.9-rc2-260-g90854ecf6e2a)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/tDU.O6cX1D9IrOpNIJF9IC5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 166 runs, 5 regressions (v5.9-rc2-260-g90854ec=
-f6e2a)
+--Sig_/tDU.O6cX1D9IrOpNIJF9IC5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi Alexei,
 
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig+CON...OMIZE=
-_BASE=3Dy | 0/1    =
+On Mon, 24 Aug 2020 20:27:28 -0700 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> I didn't receive the first email you've replied to.
+> The build error is:
+> "
+> No libelf found
+> make[5]: *** [Makefile:284: elfdep] Error 1
+> "
+> and build process stops because libelf is not found, right?
+> That is expected and necessary.
+> bpf_preload needs libbpf that depends on libelf.
+> The only 'fix' is to turn off bpf_preload.
+> It's off by default.
+> allmodconfig cannot build bpf_preload umd if there is no libelf.
+> There is CC_CAN_LINK that does feature detection.
+> We can extend scripts/cc-can-link.sh or add another script that
+> will do CC_CAN_LINK_LIBELF, but such approach doesn't scale.
+> imo it's cleaner to rely on feature detection by libbpf Makefile with
+> an error above instead of adding such knobs to top Kconfig.
+> Does it make sense?
 
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig            =
-        | 0/1    =
+Sorry, but if this is not necessary to build the kernel, then an
+allmodconfig build needs to succeed so you need to do the detection and
+turn it off automatically.  Or you could make it so that it has to be
+manually enabled in all circumstances.
 
-omap4-panda      | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
-G_SMP=3Dn | 4/5    =
+--=20
+Cheers,
+Stephen Rothwell
 
-omap4-panda      | arm   | lab-collabora | gcc-8    | omap2plus_defconfig  =
-        | 0/1    =
+--Sig_/tDU.O6cX1D9IrOpNIJF9IC5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig+CON...OMIZE=
-_BASE=3Dy | 0/1    =
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9EtLUACgkQAVBC80lX
+0GwK6gf8DesCk38JfwT0m8g2BShvJEsTqH87hEuvVInFsGPaKvYcQTntETkYPPQa
+bF4jfkYOh5VlMGkgCLMGUw+GP48RuHKXt75oohyPzAEnDSwJhVAdG2q4LD4qhDJJ
+P+vN1s1VQ/qxreEGn0kqy66UJSWzavy1NKn2JXeEkacGKdQBqPhm1o1D+Cqay948
++JGt4A1kCx9uR+a1lWoafFLsdRgkMCbnKM+qTAhU+pnm67xsk+gO81MtmfX2/0Tw
+ocs0Uo2yl1K5u3RVciU83Ad7htWkqBvuFFiCXKIaGKNRPRKIZEnHG+X4hdAp9EdM
+Sbh7fMGJHGmjUV4MUvCVgzhUD65p+A==
+=Geul
+-----END PGP SIGNATURE-----
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.9-rc2-260-g90854ecf6e2a/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.9-rc2-260-g90854ecf6e2a
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      90854ecf6e2a489b82a57529ba6b524fd7749b48 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig+CON...OMIZE=
-_BASE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f4455675bf3c379129fb486
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f4455675bf3c379129fb=
-487
-      failing since 14 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-12062-g26dee840e516)  =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig            =
-        | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f4456040a5e7ffe419fb454
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
-a.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
-a.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f4456040a5e7ffe419fb=
-455
-      failing since 14 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-12062-g26dee840e516)  =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-omap4-panda      | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
-G_SMP=3Dn | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f4459ee712f3103399fb447
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-omap4-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-omap4-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f4459ee712f310=
-3399fb44d
-      failing since 19 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)
-      60 lines
-
-    2020-08-25 00:23:03.796000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c802
-    2020-08-25 00:23:03.801000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c803
-    2020-08-25 00:23:03.807000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c804
-    2020-08-25 00:23:03.813000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c805
-    2020-08-25 00:23:03.819000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c806
-    2020-08-25 00:23:03.824000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c807
-    2020-08-25 00:23:03.830000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c808
-    2020-08-25 00:23:03.836000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c809
-    2020-08-25 00:23:03.842000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80a
-    2020-08-25 00:23:03.847000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80b
-    ... (49 line(s) more)
-      =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-omap4-panda      | arm   | lab-collabora | gcc-8    | omap2plus_defconfig  =
-        | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f445842327f49d3189fb43b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f445842327f49d3189fb=
-43c
-      failing since 19 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =
-
-
-
-platform         | arch  | lab           | compiler | defconfig            =
-        | results
------------------+-------+---------------+----------+----------------------=
---------+--------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig+CON...OMIZE=
-_BASE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f44556b81af4e7d769fb439
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-26=
-0-g90854ecf6e2a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f44556b81af4e7d769fb=
-43a
-      failing since 3 days (last pass: v5.9-rc1-381-g159f8cd76711, first fa=
-il: v5.9-rc1-419-gdb8c0d8e5d3c)  =20
+--Sig_/tDU.O6cX1D9IrOpNIJF9IC5--

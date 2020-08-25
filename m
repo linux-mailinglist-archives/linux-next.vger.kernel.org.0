@@ -2,93 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276DC252281
-	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 23:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9002523B3
+	for <lists+linux-next@lfdr.de>; Wed, 26 Aug 2020 00:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgHYVKv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Aug 2020 17:10:51 -0400
-Received: from ozlabs.org ([203.11.71.1]:41271 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbgHYVKu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 25 Aug 2020 17:10:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BbhVH30g0z9sPB;
-        Wed, 26 Aug 2020 07:10:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1598389848;
-        bh=QO0VFcTYeT00h9+sR3A8pseHdrBg8aKdHYb6On8HQrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QlbTTwbuKi9SZo3famM1SYPZOR24DM7Mbk2NPkexjSIoJ20RVbSgG6q7I3A2jWTrG
-         F/TMd9QU0OrnnrOxtMmyhBIDaLSOgrPvHiRuXZkx+H3v/G/AvDXxysKQuQ3z18VeeK
-         0YziGBwEG8kfxEsBBSVqVqC8lixCVoUXGJAoLxpKgb4SGL5fCxhle2LSoOFKS2kmoi
-         jGkbI28jr+ggDk45JBaLf77maxQX3YfVfJ/B/Z67Rxq1/ZXdnBlJ9PU3goD6Eri4GS
-         f4ZmqhStPwGFC2RAW3LWvMwbeUkDgNeBMoHra6/c78nufN/PcMuqkd3uRYJbnrBpya
-         0dHukJO7Ocsjg==
-Date:   Wed, 26 Aug 2020 07:10:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        id S1726542AbgHYWfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Aug 2020 18:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgHYWfG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Aug 2020 18:35:06 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D03C061574;
+        Tue, 25 Aug 2020 15:35:05 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id t6so89082ljk.9;
+        Tue, 25 Aug 2020 15:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fhI77mTTE3Q9HRTUpRDWftZSAKhyMtuih4ksQk5Kfv8=;
+        b=pcrgcAZFXz7Eu75AUFKMmboPdmVsbh1mQWVhuJi0+BbFpj9NGCQS78kuO2Z+CBjifE
+         7ML7FCmWie8ruFSNnUxz7iv0PGbKL9KbD+0D+dURzgEuRyBF36slx4qAa58o7/yzEmBA
+         gbf5bH3EVvOfEBszH6VHaIpIcjja0dj1BFljplM2vDaX+NbFKkuJGRSyPYpuFf6yQxxC
+         PcwQsNROM8serROd8XEF1Lu0YGb0kn8CPx8O/92JGdIdMkdy2/rtUcu9+9aFRFMUBBR1
+         hNSPPAa/jaLReAfi6so6pdAACcCZdV0HVU8issXnyZEGYTJG8ijFP7koert9c+H2sVpb
+         aW8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fhI77mTTE3Q9HRTUpRDWftZSAKhyMtuih4ksQk5Kfv8=;
+        b=nf4O/9XEGgajix5tOI46OAZSHspagLCeQr7l+8srGg/B8urD+mEpwxI14ASc1NcomY
+         m+6/RZBIi072oP9f5ZG9czRKuZKlResY/ix9950LjArF9G9IpdLMbm9a0SGLN7jUYgqa
+         MfNJhzFwin1FCCtFzuKDgofR82g2FMdJ8MMPHVo6SWfF23JXnNrK+M2jILt3nt0FUpzZ
+         5vP5hoGwkcxISDaFsmUuaS2J1+oDJtZ+en2h0T7KKYfS4yfeGBPzM/1LUxXvV7uUoHHP
+         84Nqi/DIabTge6kB5p0+fzicmMBy1S/w2T1gNLHr82ENH/dkmd3cYg5h+zhywKI64GMr
+         LLqA==
+X-Gm-Message-State: AOAM531K4+1CxjmMNs9kPN6ZTLkL9AOUH5EKBUt+ev0pkhW6suTZFciF
+        oFCeLtQdhuoJVNk4eZbEeyjBGC11yvutNlb+Hmmf2zVb6EI=
+X-Google-Smtp-Source: ABdhPJxLpkxRg6tHcVTDcmg0hcCpxmN+zClDnZ/HI3J/wOOe37dpERDWmXCSLCjlwatVyfDIEGqmOXbed+f8RzEXoFo=
+X-Received: by 2002:a05:651c:82:: with SMTP id 2mr5884377ljq.2.1598394903461;
+ Tue, 25 Aug 2020 15:35:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200821111111.6c04acd6@canb.auug.org.au> <20200825112020.43ce26bb@canb.auug.org.au>
+ <CAADnVQLr8dU799ZrUnrBBDCtDxPyybZwrMFs5CAOHHW5pnLHHA@mail.gmail.com>
+ <20200825130445.655885f8@canb.auug.org.au> <CAADnVQKGf7o8gJ60m_zjh+QcmRTNH+y1ha_B2q-1ixcCSAoHaw@mail.gmail.com>
+ <20200825165029.795a8428@canb.auug.org.au> <CAADnVQ+SZj-Q=vijGkoUkmWeA=MM2S2oaVvJ7fj6=c4S4y-LMA@mail.gmail.com>
+ <20200826071046.263e0c24@canb.auug.org.au>
+In-Reply-To: <20200826071046.263e0c24@canb.auug.org.au>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 25 Aug 2020 15:34:52 -0700
+Message-ID: <CAADnVQJ1KZ1hUGsZY0XrWcQTa6V-y7VA9YdEjxCJfHRe5mH4xw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Networking <netdev@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         David Miller <davem@davemloft.net>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20200826071046.263e0c24@canb.auug.org.au>
-In-Reply-To: <CAADnVQ+SZj-Q=vijGkoUkmWeA=MM2S2oaVvJ7fj6=c4S4y-LMA@mail.gmail.com>
-References: <20200821111111.6c04acd6@canb.auug.org.au>
-        <20200825112020.43ce26bb@canb.auug.org.au>
-        <CAADnVQLr8dU799ZrUnrBBDCtDxPyybZwrMFs5CAOHHW5pnLHHA@mail.gmail.com>
-        <20200825130445.655885f8@canb.auug.org.au>
-        <CAADnVQKGf7o8gJ60m_zjh+QcmRTNH+y1ha_B2q-1ixcCSAoHaw@mail.gmail.com>
-        <20200825165029.795a8428@canb.auug.org.au>
-        <CAADnVQ+SZj-Q=vijGkoUkmWeA=MM2S2oaVvJ7fj6=c4S4y-LMA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y/.zqijQVP+YmB_bY0J/fw2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/y/.zqijQVP+YmB_bY0J/fw2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Alexei,
-
-On Tue, 25 Aug 2020 07:33:51 -0700 Alexei Starovoitov <alexei.starovoitov@g=
-mail.com> wrote:
+On Tue, Aug 25, 2020 at 2:10 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> what do you suggest to use to make it 'manually enabled' ?
-> All I could think of is to add:
-> depends on !COMPILE_TEST
-> so that allmodconfig doesn't pick it up.
+> Hi Alexei,
+>
+> On Tue, 25 Aug 2020 07:33:51 -0700 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > what do you suggest to use to make it 'manually enabled' ?
+> > All I could think of is to add:
+> > depends on !COMPILE_TEST
+> > so that allmodconfig doesn't pick it up.
+>
+> That is probably sufficient.  Some gcc plugins and kasan bits, etc use
+> just that.
 
-That is probably sufficient.  Some gcc plugins and kasan bits, etc use
-just that.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/y/.zqijQVP+YmB_bY0J/fw2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9FflYACgkQAVBC80lX
-0Gyrrgf+NknsvQw7owFtB5Pel/msT4aHC2kMQZM6gItF8wEutI6YJ2hcsYDThS8L
-y/4m6LPsYaBDlVcevw2lzwKiROs+3DyeSbc/j0l2fE6ndWNbKL7NCnmqpwAMRrz/
-HMxxs/4AEsGuwfzfVxT+yY2K6FD0dsdQySktPHoxsLR1uMVTIat/daPWtTXNiojI
-YusSanCdtztGqKlv5p+rkBaMVsdC4zehmcH0TrrkXNSPn+2CL6UAKfQTVRcxa5wv
-xzoFCreq+R0tmm2jDlLaNz6HUiNotIbW64o5sOQObHpUpIpFiX12twv98IUO1QZn
-qz6pNpLa1CAA5zkQXkRPjOg6GFOQ0Q==
-=+8xn
------END PGP SIGNATURE-----
-
---Sig_/y/.zqijQVP+YmB_bY0J/fw2--
+Ok. Pushed the silencing 'fix':
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=2532f849b5134c4c62a20e5aaca33d9fb08af528

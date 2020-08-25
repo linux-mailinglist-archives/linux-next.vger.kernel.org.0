@@ -2,109 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D01250E48
-	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 03:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD7E250FD2
+	for <lists+linux-next@lfdr.de>; Tue, 25 Aug 2020 05:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbgHYBft (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Aug 2020 21:35:49 -0400
-Received: from ozlabs.org ([203.11.71.1]:53049 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbgHYBft (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 24 Aug 2020 21:35:49 -0400
+        id S1728272AbgHYDEz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Aug 2020 23:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728175AbgHYDEx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Aug 2020 23:04:53 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A30DC061574;
+        Mon, 24 Aug 2020 20:04:53 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BbBQV4VJCz9sR4;
-        Tue, 25 Aug 2020 11:35:46 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BbDPF10T7z9sTK;
+        Tue, 25 Aug 2020 13:04:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1598319347;
-        bh=8p7ww7B74nvM8w6zFS7pwO7BTZdUOOnKMN6mqG+iohE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Xc0Q9W1YSqV0W9TJ0zJqXa/5RZKA2mztUZn7K6U6p4iCNWaDBqm9iD4hzD4pbCMsI
-         OQ/gL/pXWrlrNZ49N8MfkX9mnC1AW1b0/NeLfDTESoaiEpnnZL2GAXogwZnyeqnwPY
-         jaBeQsGd90vdM/Ppf8bkKkGEjkeEHru/adAciIindCuUpCwrUzxhUSdXoV6xgtpvVO
-         68diPef7+iX+HiQr9mSyCiOXv9FbqLKPoLmgmUs9iaS5Zqv/cDnGWQ7050I8DOhfWG
-         5u9IX6HfIVU8zMTE1kVQeEkKN8+MvWPM3d0CrnIt+tnSf5kZjoNAK0w9crJhWyPfNL
-         pMXFB0SSlA/AQ==
-Date:   Tue, 25 Aug 2020 11:35:45 +1000
+        s=201702; t=1598324690;
+        bh=lhIqz0KHpNDTmGHLdzVh8OUSERGOE3vTU7qYSXb9H0M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ogCUT23ikQY9/IXgkqJbt/3Rzwz16zo2Akhi97eCg3F2rcU+onlZe5f8jjuVFNJWl
+         yYtfcQmsJgFlecHghQNn1zrK4QZ1zzO2E+JqlZHIWzoUuatU/p1CzF8hWkfPwLPwYS
+         DlSDjpD/mkyKMsaxwfGQl1II8wYFNMri1E6L/IqB2YNWCfpXNTi4Kiv5uC2duCQW/X
+         CqpRfE7VTREB72C4ZpIeefE+uS56yQF2PSzrIS408WCyM9dZv09f/wBSUWrj9gflnd
+         YKevMVcbSwyj6QnF3qm8BjtE3kGtx4323R5D+vfbk5YDDB2wfiZP9iDCgQWn2ZPGp+
+         zJ5XBZdrBQs2g==
+Date:   Tue, 25 Aug 2020 13:04:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Aaron Ma <aaron.ma@canonical.com>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20200825113545.6e8d3a4a@canb.auug.org.au>
+        David Miller <davem@davemloft.net>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20200825130445.655885f8@canb.auug.org.au>
+In-Reply-To: <CAADnVQLr8dU799ZrUnrBBDCtDxPyybZwrMFs5CAOHHW5pnLHHA@mail.gmail.com>
+References: <20200821111111.6c04acd6@canb.auug.org.au>
+        <20200825112020.43ce26bb@canb.auug.org.au>
+        <CAADnVQLr8dU799ZrUnrBBDCtDxPyybZwrMFs5CAOHHW5pnLHHA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NCXA+tX1bYtA+FnVdqiK0XF";
+Content-Type: multipart/signed; boundary="Sig_/UdHhr.Z1_ueRZo/AaeqreTx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NCXA+tX1bYtA+FnVdqiK0XF
+--Sig_/UdHhr.Z1_ueRZo/AaeqreTx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Alexei,
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+On Mon, 24 Aug 2020 18:25:44 -0700 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> On Mon, Aug 24, 2020 at 6:20 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > On Fri, 21 Aug 2020 11:11:11 +1000 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > >
+> > > After merging the bpf-next tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >
+> > > Auto-detecting system features:
+> > > ...                        libelf: [  [31mOFF [m ]
+> > > ...                          zlib: [  [31mOFF [m ]
+> > > ...                           bpf: [  [32mon [m  ]
+> > >
+> > > No libelf found
+> > > make[5]: *** [Makefile:284: elfdep] Error 1
+> > >
+> > > Caused by commit
+> > >
+> > >   d71fa5c9763c ("bpf: Add kernel module with user mode driver that po=
+pulates bpffs.")
+> > >
+> > > [For a start, can we please *not* add this verbose feature detection
+> > > output to the nrormal build?]
+> > >
+> > > This is a PowerPC hosted cross build.
+> > >
+> > > I have marked BPF_PRELOAD as BROKEN for now. =20
+> >
+> > Still getting this failure ... =20
+>=20
+> I don't have powerpc with crosscompiler to x86 to reproduce.
+> What exactly the error?
 
-  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+Just as above.
 
-between commit:
+> bpf_preload has:
+> "depends on CC_CAN_LINK"
+> which is exactly the same as bpfilter.
+> You should have seen this issue with bpfilter for years now.
 
-  3b2e973dff59 ("drm/amd/display: add dmcub check on RENOIR")
-
-from Linus' tree and commit:
-
-  4a580877bdcb ("drm/amdgpu: Get DRM dev from adev by inline-f")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Well, I haven't :-)  It just started the other day when that commit
+appeared.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index df9338257ae0,785f21ea35df..000000000000
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@@ -1383,8 -1389,8 +1389,8 @@@ static int dm_late_init(void *handle
-  	struct dmcu *dmcu =3D NULL;
-  	bool ret =3D true;
- =20
- -	if (!adev->dm.fw_dmcu)
- +	if (!adev->dm.fw_dmcu && !adev->dm.dmub_fw)
-- 		return detect_mst_link_for_all_connectors(adev->ddev);
-+ 		return detect_mst_link_for_all_connectors(adev_to_drm(adev));
- =20
-  	dmcu =3D adev->dm.dc->res_pool->dmcu;
- =20
-
---Sig_/NCXA+tX1bYtA+FnVdqiK0XF
+--Sig_/UdHhr.Z1_ueRZo/AaeqreTx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9EavEACgkQAVBC80lX
-0Gz/kgf+Jk6orunwf0oAkK8oP3E0FAVh2i3EzoTZXZjvqHehmXhupnuLh1MUiru/
-gnqAwGDF5CcmTF4e46YZjRAQz1ABCw84+VprZn+hdSGpfNkM0+wPfhYO0bG+txyp
-wpWtRSVh7OCxpV8waszCnJzaf48EOo4itJ+1chHAAZ9Wd7B1fV8bmhfHU7atXMOd
-gHEAxJjr56kqqfXcZonQK/+Oj/vjdkfL2YQFcHLyajLLhZURGvGaIIWpuV4B3LnV
-K65Tp1NoynVSsGJsTPlAoWEBNH3IYSJHDHbVc18Q5GyeyI1QImGG7EyNvzVJTkzF
-ZBw5Rov81Po4HACln27nlfaGlEeqdg==
-=la76
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9Ef80ACgkQAVBC80lX
+0GztqQgAnLGgzIRqWxxHypLlA/LvG2w9edly23uy0BJN03RXPa3Cvpew2ncoHwfs
+MVduYmtGBYedqewae9ZmSVtuRqh73ANCoit0FahXeEbj4Cwi4rw5RIaGP/Qsojbb
+c2xFtgRRDVzeEsyS7ZQo9t+UF7s6DNkkO/pMeLViDDujGspbJQiNeBH9bBoAH48Y
+evzfAso+xprMeAdn/EPe46g2C2SyS8b+PDIUVpOqZo4bosBmZs39B4XhLm5OXXi3
+p/D2H4uxaaHkm4BBBKgU0Za1SgwElOFfy8+ckGB78fuBe9ZndFsmyl4TH1MAkhGv
+FChh4XLX8Lp0gIso/bf1HauoK7fUUA==
+=sTUQ
 -----END PGP SIGNATURE-----
 
---Sig_/NCXA+tX1bYtA+FnVdqiK0XF--
+--Sig_/UdHhr.Z1_ueRZo/AaeqreTx--

@@ -2,226 +2,512 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C4F2524E9
-	for <lists+linux-next@lfdr.de>; Wed, 26 Aug 2020 03:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC8A2525ED
+	for <lists+linux-next@lfdr.de>; Wed, 26 Aug 2020 05:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbgHZBLa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Aug 2020 21:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S1726757AbgHZD6U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Aug 2020 23:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726635AbgHZBL2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Aug 2020 21:11:28 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65528C061756;
-        Tue, 25 Aug 2020 17:55:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BbnTw0RvFz9sTK;
-        Wed, 26 Aug 2020 10:55:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1598403348;
-        bh=hoxKBsKE63D/fgihlpKl/FhX6INVTwC8nzDYLZcAU1Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bpsFMPJ60MQtLACGbpOyZQnUtvSXtarJc1iumaQkKoENqgipOYxREylVeY6K+lCbN
-         8bsaQ9ObuYAg511+ZVaVp+fsvejqUzNEXUvbfmK8iFXIh385ZKymYdzcq2IjiQkURG
-         mv/LIEmqcvTL11ciwwJwY5DWOCRvqXlQVA1eSb8tprUOQYhApvm22W9ad5Shg9DKgu
-         SqDa3RYgRVeVZGxWBxvHPwo/KrsYtDBEk52eOcAYhXBVvrFv3yOYRCchK/efMD6M9D
-         2d+Nujeg0+iqwzMFCArfDYH0VKoSRyc39FZWZgveJNW1WaX+BvhFpRiMhZJrtbZ1zg
-         Jcrsd9bdIsyAw==
-Date:   Wed, 26 Aug 2020 10:55:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20200826105547.4f6ea26d@canb.auug.org.au>
+        with ESMTP id S1726698AbgHZD6T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Aug 2020 23:58:19 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A685EC061574
+        for <linux-next@vger.kernel.org>; Tue, 25 Aug 2020 20:58:19 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id g6so262961pjl.0
+        for <linux-next@vger.kernel.org>; Tue, 25 Aug 2020 20:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=oKi5Ok9t9HS6hzODisJWCdm8GaJdWGYRjdMBaeKf0rA=;
+        b=VzLem/YVcb8NIS/UoNpwV52rFNpuzExaXoOLyb6BvShfjRNO36bYJI87WvSNBmjkOZ
+         cqEZ/BzOTgShExgKCBqxFx7p5+3Q3rSdOYa1uJ5FC5PoI9Lfj+byR5emCdMSbBT4MUUd
+         Ar/O1bzDI0xJEthCJyEqaNrUAot/QDq79oPPLLYqzXwKSDptVS8gZBG3jUfJpL9pVcKQ
+         dECCRL9G9CyvbgkKIisG3luJ3tLIjLm3k6ocOuggLj4rF0FnCIJm1vOBvRHEoyWbYmok
+         X1Hw2VJdYwxLMk5obiFW34Fw2B7DOGl4NmIlamaRPqbMmoqCFPpMFC+JvxmoCVmP8Jzo
+         W/WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=oKi5Ok9t9HS6hzODisJWCdm8GaJdWGYRjdMBaeKf0rA=;
+        b=roybMh6Pt+zrENmf/ip2it/MfJ7mOSdhLk20oiQd4cChhPry9Spb6en/8510MiH+FP
+         cf4AnGNKec734AIwRk8OuINLBHhD6N0oq81eUkCXOXdcCOOfKVDjrCRjXN2RiSbDd1ZT
+         ldErOpmvxqcALT8CQZKJaVWUs46qkD6uMuMOAoyFqayzeE8ZYNoD+6Ojd0a59kxwmlsT
+         Q8W+jREEecJFKKYY86z6cgwcNbDBYSFXDeWWS0/cu+LcFEa9p4+t6XMkNlwGN6Pz4k+P
+         cNVrhRn3obORtKMh3RmgvuiJZMAG+LkJ8k+zdCUxG7jizI+V1Njct1J8S2APHG49azPM
+         H+4A==
+X-Gm-Message-State: AOAM532QXzaXouL9krnspA2gGikoDBvkobxPyguSyTLYh4s8w9/dJxKs
+        no6zmQCPupGxb1q9Vs5zXVV9t+xaTvsuMA==
+X-Google-Smtp-Source: ABdhPJxkpKcNzfI38bA4Xi6ZrjR4PLImrIhTioZXTHjx0zZ9GRYbOxLrYZQbk+DHHBQQGQYtRF/faw==
+X-Received: by 2002:a17:90a:f0c5:: with SMTP id fa5mr4368446pjb.10.1598414298388;
+        Tue, 25 Aug 2020 20:58:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id l24sm851358pff.20.2020.08.25.20.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 20:58:17 -0700 (PDT)
+Message-ID: <5f45ddd9.1c69fb81.40f65.3329@mx.google.com>
+Date:   Tue, 25 Aug 2020 20:58:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=t6fPzJwTXhrx0VBf9IFJv2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.9-rc2-333-g6b34ba1e5a5e
+Subject: next/pending-fixes baseline: 325 runs,
+ 12 regressions (v5.9-rc2-333-g6b34ba1e5a5e)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=t6fPzJwTXhrx0VBf9IFJv2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 325 runs, 12 regressions (v5.9-rc2-333-g6b34ba=
+1e5a5e)
 
-Hi all,
+Regressions Summary
+-------------------
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+at91-sama5d4_xplained    | arm   | lab-baylibre  | gcc-8    | sama5_defconf=
+ig              | 0/1    =
 
-drivers/gpu/drm/qxl/qxl_display.c: In function 'qxl_display_read_client_mon=
-itors_config':
-include/drm/drm_modeset_lock.h:167:7: error: implicit declaration of functi=
-on 'drm_drv_uses_atomic_modeset' [-Werror=3Dimplicit-function-declaration]
-  167 |  if (!drm_drv_uses_atomic_modeset(dev))    \
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:187:2: note: in expansion of macro 'DRM_M=
-ODESET_LOCK_ALL_BEGIN'
-  187 |  DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, DRM_MODESET_ACQUIRE_INTERRUPT=
-IBLE, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:189:35: error: macro "DRM_MODESET_LOCK_AL=
-L_END" requires 3 arguments, but only 2 given
-  189 |  DRM_MODESET_LOCK_ALL_END(ctx, ret);
-      |                                   ^
-In file included from include/drm/drm_crtc.h:36,
-                 from include/drm/drm_atomic.h:31,
-                 from drivers/gpu/drm/qxl/qxl_display.c:29:
-include/drm/drm_modeset_lock.h:194: note: macro "DRM_MODESET_LOCK_ALL_END" =
-defined here
-  194 | #define DRM_MODESET_LOCK_ALL_END(dev, ctx, ret)    \
-      |=20
-drivers/gpu/drm/qxl/qxl_display.c:189:2: error: 'DRM_MODESET_LOCK_ALL_END' =
-undeclared (first use in this function)
-  189 |  DRM_MODESET_LOCK_ALL_END(ctx, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:189:2: note: each undeclared identifier i=
-s reported only once for each function it appears in
-drivers/gpu/drm/qxl/qxl_display.c:187:2: error: label 'modeset_lock_fail' u=
-sed but not defined
-  187 |  DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, DRM_MODESET_ACQUIRE_INTERRUPT=
-IBLE, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/drm/drm_crtc.h:36,
-                 from include/drm/drm_atomic.h:31,
-                 from drivers/gpu/drm/qxl/qxl_display.c:29:
-include/drm/drm_modeset_lock.h:170:1: warning: label 'modeset_lock_retry' d=
-efined but not used [-Wunused-label]
-  170 | modeset_lock_retry:       \
-      | ^~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:187:2: note: in expansion of macro 'DRM_M=
-ODESET_LOCK_ALL_BEGIN'
-  187 |  DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, DRM_MODESET_ACQUIRE_INTERRUPT=
-IBLE, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c: In function 'qxl_framebuffer_surface_dir=
-ty':
-drivers/gpu/drm/qxl/qxl_display.c:434:35: error: macro "DRM_MODESET_LOCK_AL=
-L_END" requires 3 arguments, but only 2 given
-  434 |  DRM_MODESET_LOCK_ALL_END(ctx, ret);
-      |                                   ^
-In file included from include/drm/drm_crtc.h:36,
-                 from include/drm/drm_atomic.h:31,
-                 from drivers/gpu/drm/qxl/qxl_display.c:29:
-include/drm/drm_modeset_lock.h:194: note: macro "DRM_MODESET_LOCK_ALL_END" =
-defined here
-  194 | #define DRM_MODESET_LOCK_ALL_END(dev, ctx, ret)    \
-      |=20
-drivers/gpu/drm/qxl/qxl_display.c:434:2: error: 'DRM_MODESET_LOCK_ALL_END' =
-undeclared (first use in this function)
-  434 |  DRM_MODESET_LOCK_ALL_END(ctx, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:411:2: error: label 'modeset_lock_fail' u=
-sed but not defined
-  411 |  DRM_MODESET_LOCK_ALL_BEGIN(fb->dev, ctx, DRM_MODESET_ACQUIRE_INTER=
-RUPTIBLE, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/drm/drm_crtc.h:36,
-                 from include/drm/drm_atomic.h:31,
-                 from drivers/gpu/drm/qxl/qxl_display.c:29:
-include/drm/drm_modeset_lock.h:170:1: warning: label 'modeset_lock_retry' d=
-efined but not used [-Wunused-label]
-  170 | modeset_lock_retry:       \
-      | ^~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/qxl/qxl_display.c:411:2: note: in expansion of macro 'DRM_M=
-ODESET_LOCK_ALL_BEGIN'
-  411 |  DRM_MODESET_LOCK_ALL_BEGIN(fb->dev, ctx, DRM_MODESET_ACQUIRE_INTER=
-RUPTIBLE, ret);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | exynos_defcon=
+fig             | 0/1    =
 
-Caused by commit
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+onfig           | 0/1    =
 
-  bbaac1354cc9 ("drm/qxl: Replace deprecated function in qxl_display")
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
 
-interacting with commit
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...G_ARM_LPAE=3Dy | 0/1    =
 
-  77ef38574beb ("drm/modeset-lock: Take the modeset BKL for legacy drivers")
+imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
 
-from the drm-misc-fixes tree.
+mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
 
-drivers/gpu/drm/qxl/qxl_display.c manages to include
-drm/drm_modeset_lock.h by some indirect route, but fails to have
-drm/drm_drv.h similarly included.  In fact, drm/drm_modeset_lock.h should
-have included drm/drm_drv.h since it uses things declared there, and
-drivers/gpu/drm/qxl/qxl_display.c should include drm/drm_modeset_lock.h
-similarly.
+mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig+CON=
+...OMIZE_BASE=3Dy | 0/1    =
 
-I have added the following hack patch for today.
+omap4-panda              | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 4/5    =
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 26 Aug 2020 10:40:18 +1000
-Subject: [PATCH] fix interaction with drm-misc-fix commit
+omap4-panda              | arm   | lab-collabora | gcc-8    | omap2plus_def=
+config          | 0/1    =
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/qxl/qxl_display.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
 
-diff --git a/drivers/gpu/drm/qxl/qxl_display.c b/drivers/gpu/drm/qxl/qxl_di=
-splay.c
-index fa79688013b7..6063f3a15329 100644
---- a/drivers/gpu/drm/qxl/qxl_display.c
-+++ b/drivers/gpu/drm/qxl/qxl_display.c
-@@ -26,6 +26,7 @@
- #include <linux/crc32.h>
- #include <linux/delay.h>
-=20
-+#include <drm/drm_drv.h>
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_gem_framebuffer_helper.h>
-@@ -186,7 +187,7 @@ void qxl_display_read_client_monitors_config(struct qxl=
-_device *qdev)
-=20
- 	DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, DRM_MODESET_ACQUIRE_INTERRUPTIBLE, r=
-et);
- 	qxl_update_offset_props(qdev);
--	DRM_MODESET_LOCK_ALL_END(ctx, ret);
-+	DRM_MODESET_LOCK_ALL_END(dev, ctx, ret);
- 	if (!drm_helper_hpd_irq_event(dev)) {
- 		/* notify that the monitor configuration changed, to
- 		   adjust at the arbitrary resolution */
-@@ -431,7 +432,7 @@ static int qxl_framebuffer_surface_dirty(struct drm_fra=
-mebuffer *fb,
- 			  clips, num_clips, inc, 0);
-=20
- out_lock_end:
--	DRM_MODESET_LOCK_ALL_END(ctx, ret);
-+	DRM_MODESET_LOCK_ALL_END(fb->dev, ctx, ret);
-=20
- 	return 0;
- }
---=20
-2.28.0
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig+CON=
+...OMIZE_BASE=3Dy | 0/1    =
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/=t6fPzJwTXhrx0VBf9IFJv2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-rc2-333-g6b34ba1e5a5e/plan/baseline/
 
------BEGIN PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-rc2-333-g6b34ba1e5a5e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      6b34ba1e5a5ec0abcfb3b145ec54d79f9037da60 =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9FsxMACgkQAVBC80lX
-0GwUiAf/VXvo+XA2ZBKhDrKTbyDJzIg5LziJNHZxevxS8R3ZifhABsFNxhzTaEEx
-H/VO6kLeXk0hrXryvT/5vZVfWEYvxU967IDJUMa+XmY8GuXzzUJurF1h7wN9UJOq
-B2DHvAQsyG/JLFvZDTWd6ZTv+cGcetSBcCLhlb7ShfDzyOWU8mePuTREXo7htzrC
-X+gFiDijD/vf5X5L+rCXSK3bzT+jzP7h2BvGLiqVwm1avOWDHjmUyAfWIcrgbdbl
-Mh8KDWB7xDiZgUkMu/Z7OTvAhp9j+kFHd+/jZIrw3qieAGrnrK7QSAS85BSATMwq
-YvWGtyH5uF0rPvrG2A1+As/qiN3KlQ==
-=K0X/
------END PGP SIGNATURE-----
 
---Sig_/=t6fPzJwTXhrx0VBf9IFJv2--
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+at91-sama5d4_xplained    | arm   | lab-baylibre  | gcc-8    | sama5_defconf=
+ig              | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45aa415f1c0fd5cd9fb449
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45aa415f1c0fd5cd9fb=
+44a
+      failing since 112 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first =
+fail: v5.7-rc4-211-g6d4315023bc9)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | exynos_defcon=
+fig             | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45bca2025931ef7b9fb459
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: exynos_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/exynos_defconfig/gcc-8/lab-collabora/baseline-exynos542=
+2-odroidxu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/exynos_defconfig/gcc-8/lab-collabora/baseline-exynos542=
+2-odroidxu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45bca2025931ef7b9fb=
+45a
+      failing since 2 days (last pass: v5.9-rc1-419-gdb8c0d8e5d3c, first fa=
+il: v5.9-rc2-193-g42693eb57618)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+onfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45c4832ec2ec0b559fb445
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos5=
+422-odroidxu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos5=
+422-odroidxu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45c4832ec2ec0b559fb=
+446
+      failing since 8 days (last pass: v5.9-rc1-137-ga49f4f3ccd1d, first fa=
+il: v5.9-rc1-207-gddf860520297)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45c5c3707ac7ae299fb42b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-exynos5422-odroidxu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-exynos5422-odroidxu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45c5c3707ac7ae299fb=
+42c
+      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...G_ARM_LPAE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45c70eee8fb441799fb42b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
+cc-8/lab-collabora/baseline-exynos5422-odroidxu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
+cc-8/lab-collabora/baseline-exynos5422-odroidxu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45c70eee8fb441799fb=
+42c
+      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45ab511179a230959fb43f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
+seline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
+seline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45ab511179a230959fb=
+440
+      failing since 7 days (last pass: v5.9-rc1-137-ga49f4f3ccd1d, first fa=
+il: v5.9-rc1-207-gddf860520297)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45a78b6bb04aaad39fb457
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
+a.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
+a.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45a78b6bb04aaad39fb=
+458
+      failing since 15 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-12062-g26dee840e516)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig+CON=
+...OMIZE_BASE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45a952128266757d9fb448
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
+ra/baseline-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
+ra/baseline-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45a952128266757d9fb=
+449
+      failing since 15 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-12062-g26dee840e516)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+omap4-panda              | arm   | lab-collabora | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45aa4b5f1c0fd5cd9fb45c
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-omap4-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-omap4-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f45aa4b5f1c0fd=
+5cd9fb462
+      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)
+      60 lines
+
+    2020-08-26 00:18:13.647000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-08-26 00:18:13.652000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-08-26 00:18:13.658000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-08-26 00:18:13.664000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-08-26 00:18:13.670000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-08-26 00:18:13.675000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-08-26 00:18:13.681000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-08-26 00:18:13.687000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-08-26 00:18:13.693000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-08-26 00:18:13.703000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+omap4-panda              | arm   | lab-collabora | gcc-8    | omap2plus_def=
+config          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45a958975b2b37ff9fb43c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
+panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
+panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45a958975b2b37ff9fb=
+43d
+      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45a795707757b5019fb431
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
+in.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45a795707757b5019fb=
+432
+      new failure (last pass: v5.9-rc2-260-g90854ecf6e2a)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig+CON=
+...OMIZE_BASE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f45a940ba256157ae9fb45f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
+ra/baseline-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
+3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
+ra/baseline-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f45a940ba256157ae9fb=
+460
+      failing since 4 days (last pass: v5.9-rc1-381-g159f8cd76711, first fa=
+il: v5.9-rc1-419-gdb8c0d8e5d3c)  =20

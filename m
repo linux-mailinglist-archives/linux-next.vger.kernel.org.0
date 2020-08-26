@@ -2,512 +2,290 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC8A2525ED
-	for <lists+linux-next@lfdr.de>; Wed, 26 Aug 2020 05:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31982525F4
+	for <lists+linux-next@lfdr.de>; Wed, 26 Aug 2020 06:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgHZD6U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Aug 2020 23:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbgHZD6T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Aug 2020 23:58:19 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A685EC061574
-        for <linux-next@vger.kernel.org>; Tue, 25 Aug 2020 20:58:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g6so262961pjl.0
-        for <linux-next@vger.kernel.org>; Tue, 25 Aug 2020 20:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oKi5Ok9t9HS6hzODisJWCdm8GaJdWGYRjdMBaeKf0rA=;
-        b=VzLem/YVcb8NIS/UoNpwV52rFNpuzExaXoOLyb6BvShfjRNO36bYJI87WvSNBmjkOZ
-         cqEZ/BzOTgShExgKCBqxFx7p5+3Q3rSdOYa1uJ5FC5PoI9Lfj+byR5emCdMSbBT4MUUd
-         Ar/O1bzDI0xJEthCJyEqaNrUAot/QDq79oPPLLYqzXwKSDptVS8gZBG3jUfJpL9pVcKQ
-         dECCRL9G9CyvbgkKIisG3luJ3tLIjLm3k6ocOuggLj4rF0FnCIJm1vOBvRHEoyWbYmok
-         X1Hw2VJdYwxLMk5obiFW34Fw2B7DOGl4NmIlamaRPqbMmoqCFPpMFC+JvxmoCVmP8Jzo
-         W/WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oKi5Ok9t9HS6hzODisJWCdm8GaJdWGYRjdMBaeKf0rA=;
-        b=roybMh6Pt+zrENmf/ip2it/MfJ7mOSdhLk20oiQd4cChhPry9Spb6en/8510MiH+FP
-         cf4AnGNKec734AIwRk8OuINLBHhD6N0oq81eUkCXOXdcCOOfKVDjrCRjXN2RiSbDd1ZT
-         ldErOpmvxqcALT8CQZKJaVWUs46qkD6uMuMOAoyFqayzeE8ZYNoD+6Ojd0a59kxwmlsT
-         Q8W+jREEecJFKKYY86z6cgwcNbDBYSFXDeWWS0/cu+LcFEa9p4+t6XMkNlwGN6Pz4k+P
-         cNVrhRn3obORtKMh3RmgvuiJZMAG+LkJ8k+zdCUxG7jizI+V1Njct1J8S2APHG49azPM
-         H+4A==
-X-Gm-Message-State: AOAM532QXzaXouL9krnspA2gGikoDBvkobxPyguSyTLYh4s8w9/dJxKs
-        no6zmQCPupGxb1q9Vs5zXVV9t+xaTvsuMA==
-X-Google-Smtp-Source: ABdhPJxkpKcNzfI38bA4Xi6ZrjR4PLImrIhTioZXTHjx0zZ9GRYbOxLrYZQbk+DHHBQQGQYtRF/faw==
-X-Received: by 2002:a17:90a:f0c5:: with SMTP id fa5mr4368446pjb.10.1598414298388;
-        Tue, 25 Aug 2020 20:58:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l24sm851358pff.20.2020.08.25.20.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 20:58:17 -0700 (PDT)
-Message-ID: <5f45ddd9.1c69fb81.40f65.3329@mx.google.com>
-Date:   Tue, 25 Aug 2020 20:58:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc2-333-g6b34ba1e5a5e
-Subject: next/pending-fixes baseline: 325 runs,
- 12 regressions (v5.9-rc2-333-g6b34ba1e5a5e)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1725853AbgHZEAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Aug 2020 00:00:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725267AbgHZEAa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 26 Aug 2020 00:00:30 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F10B20707;
+        Wed, 26 Aug 2020 04:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598414428;
+        bh=ta9vjwjmdHKK7wyorZhpXUtkEFDaZl+AmMoYyiaq4Mk=;
+        h=Date:From:To:Subject:From;
+        b=QcH2rLyg3BlfLC6BOtWSD8pbYreQbsHbiaWd0vQJeeehiUqW7P4v6OE9TFof0Sh/g
+         P2bQLbhlhrR0BX8nvUGC/5sBEaMrnIuyZpoTlLTE1tDkYijQZcC5/QEIJWUAdnTsIC
+         xQvDyHyhlgOGDag6Ffc4cEnt6pZSXmADnWcmbT+g=
+Date:   Tue, 25 Aug 2020 21:00:27 -0700
+From:   akpm@linux-foundation.org
+To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject:  mmotm 2020-08-25-20-59 uploaded
+Message-ID: <20200826040027.gO8h8uZAo%akpm@linux-foundation.org>
+User-Agent: s-nail v14.8.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 325 runs, 12 regressions (v5.9-rc2-333-g6b34ba=
-1e5a5e)
-
-Regressions Summary
--------------------
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-at91-sama5d4_xplained    | arm   | lab-baylibre  | gcc-8    | sama5_defconf=
-ig              | 0/1    =
-
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | exynos_defcon=
-fig             | 0/1    =
-
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-onfig           | 0/1    =
-
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 0/1    =
-
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...G_ARM_LPAE=3Dy | 0/1    =
-
-imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 0/1    =
-
-mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig    =
-                | 0/1    =
-
-mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig+CON=
-...OMIZE_BASE=3Dy | 0/1    =
-
-omap4-panda              | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 4/5    =
-
-omap4-panda              | arm   | lab-collabora | gcc-8    | omap2plus_def=
-config          | 0/1    =
-
-rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
-                | 0/1    =
-
-rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig+CON=
-...OMIZE_BASE=3Dy | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.9-rc2-333-g6b34ba1e5a5e/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.9-rc2-333-g6b34ba1e5a5e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      6b34ba1e5a5ec0abcfb3b145ec54d79f9037da60 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-at91-sama5d4_xplained    | arm   | lab-baylibre  | gcc-8    | sama5_defconf=
-ig              | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45aa415f1c0fd5cd9fb449
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45aa415f1c0fd5cd9fb=
-44a
-      failing since 112 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first =
-fail: v5.7-rc4-211-g6d4315023bc9)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | exynos_defcon=
-fig             | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45bca2025931ef7b9fb459
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: exynos_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/exynos_defconfig/gcc-8/lab-collabora/baseline-exynos542=
-2-odroidxu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/exynos_defconfig/gcc-8/lab-collabora/baseline-exynos542=
-2-odroidxu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45bca2025931ef7b9fb=
-45a
-      failing since 2 days (last pass: v5.9-rc1-419-gdb8c0d8e5d3c, first fa=
-il: v5.9-rc2-193-g42693eb57618)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-onfig           | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45c4832ec2ec0b559fb445
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos5=
-422-odroidxu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos5=
-422-odroidxu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45c4832ec2ec0b559fb=
-446
-      failing since 8 days (last pass: v5.9-rc1-137-ga49f4f3ccd1d, first fa=
-il: v5.9-rc1-207-gddf860520297)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45c5c3707ac7ae299fb42b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-exynos5422-odroidxu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-exynos5422-odroidxu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45c5c3707ac7ae299fb=
-42c
-      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-exynos5422-odroidxu3     | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...G_ARM_LPAE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45c70eee8fb441799fb42b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-8/lab-collabora/baseline-exynos5422-odroidxu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-8/lab-collabora/baseline-exynos5422-odroidxu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45c70eee8fb441799fb=
-42c
-      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45ab511179a230959fb43f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
-seline-imx6q-var-dt6customboard.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
-seline-imx6q-var-dt6customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45ab511179a230959fb=
-440
-      failing since 7 days (last pass: v5.9-rc1-137-ga49f4f3ccd1d, first fa=
-il: v5.9-rc1-207-gddf860520297)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig    =
-                | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45a78b6bb04aaad39fb457
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
-a.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-mt8173-elm-han=
-a.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45a78b6bb04aaad39fb=
-458
-      failing since 15 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-12062-g26dee840e516)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-mt8173-elm-hana          | arm64 | lab-collabora | gcc-8    | defconfig+CON=
-...OMIZE_BASE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45a952128266757d9fb448
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45a952128266757d9fb=
-449
-      failing since 15 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-12062-g26dee840e516)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-omap4-panda              | arm   | lab-collabora | gcc-8    | multi_v7_defc=
-...CONFIG_SMP=3Dn | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45aa4b5f1c0fd5cd9fb45c
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-omap4-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-omap4-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f45aa4b5f1c0fd=
-5cd9fb462
-      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)
-      60 lines
-
-    2020-08-26 00:18:13.647000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c802
-    2020-08-26 00:18:13.652000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c803
-    2020-08-26 00:18:13.658000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c804
-    2020-08-26 00:18:13.664000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c805
-    2020-08-26 00:18:13.670000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c806
-    2020-08-26 00:18:13.675000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c807
-    2020-08-26 00:18:13.681000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c808
-    2020-08-26 00:18:13.687000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c809
-    2020-08-26 00:18:13.693000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80a
-    2020-08-26 00:18:13.703000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80b
-    ... (49 line(s) more)
-      =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-omap4-panda              | arm   | lab-collabora | gcc-8    | omap2plus_def=
-config          | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45a958975b2b37ff9fb43c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-omap4-=
-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45a958975b2b37ff9fb=
-43d
-      failing since 20 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
-                | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45a795707757b5019fb431
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
-in.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
-in.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45a795707757b5019fb=
-432
-      new failure (last pass: v5.9-rc2-260-g90854ecf6e2a)  =
-
-
-
-platform                 | arch  | lab           | compiler | defconfig    =
-                | results
--------------------------+-------+---------------+----------+--------------=
-----------------+--------
-rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig+CON=
-...OMIZE_BASE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f45a940ba256157ae9fb45f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc2-33=
-3-g6b34ba1e5a5e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabo=
-ra/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f45a940ba256157ae9fb=
-460
-      failing since 4 days (last pass: v5.9-rc1-381-g159f8cd76711, first fa=
-il: v5.9-rc1-419-gdb8c0d8e5d3c)  =20
+The mm-of-the-moment snapshot 2020-08-25-20-59 has been uploaded to
+
+   https://www.ozlabs.org/~akpm/mmotm/
+
+mmotm-readme.txt says
+
+README for mm-of-the-moment:
+
+https://www.ozlabs.org/~akpm/mmotm/
+
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
+
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
+
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
+
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
+
+
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
+
+	https://github.com/hnaz/linux-mm
+
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
+
+A git copy of this tree is also available at
+
+	https://github.com/hnaz/linux-mm
+
+
+
+This mmotm tree contains the following patches against 5.9-rc2:
+(patches marked "*" will be included in linux-next)
+
+  origin.patch
+* memcg-fix-use-after-free-in-uncharge_batch.patch
+* mm-slub-fix-conversion-of-freelist_corrupted.patch
+* maintainers-update-cavium-marvell-entries.patch
+* maintainers-add-llvm-maintainers.patch
+* lib-stringc-implement-stpcpy.patch
+* mm-track-page-table-modifications-in-__apply_to_page_range.patch
+* mm-track-page-table-modifications-in-__apply_to_page_range-fix.patch
+* ipc-adjust-proc_ipc_sem_dointvec-definition-to-match-prototype.patch
+* fork-adjust-sysctl_max_threads-definition-to-match-prototype.patch
+* checkpatch-fix-the-usage-of-capture-group.patch
+* mm-gup_benchmark-update-the-documentation-in-kconfig.patch
+* mm-madvise-fix-vma-user-after-free.patch
+* mm-migrate-fixup-setting-uffd_wp-flag.patch
+* mm-rmap-fixup-copying-of-soft-dirty-and-uffd-ptes.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* fork-silence-a-false-postive-warning-in-__mmdrop.patch
+* mm-slub-re-initialize-randomized-freelist-sequence-in-calculate_sizes.patch
+* mm-slub-re-initialize-randomized-freelist-sequence-in-calculate_sizes-fix.patch
+* mm-thp-swap-fix-allocating-cluster-for-swapfile-by-mistake.patch
+* checkpatch-test-git_dir-changes.patch
+* scripts-tagssh-exclude-tools-directory-from-tags-generation.patch
+* ntfs-add-check-for-mft-record-size-in-superblock.patch
+* fs-ocfs2-delete-repeated-words-in-comments.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* ramfs-support-o_tmpfile.patch
+* kernel-watchdog-flush-all-printk-nmi-buffers-when-hardlockup-detected.patch
+  mm.patch
+* mm-slub-branch-optimization-in-free-slowpath.patch
+* mm-slub-fix-missing-alloc_slowpath-stat-when-bulk-alloc.patch
+* mm-slub-make-add_full-condition-more-explicit.patch
+* mm-kmemleak-rely-on-rcu-for-task-stack-scanning.patch
+* x86-numa-cleanup-configuration-dependent-command-line-options.patch
+* x86-numa-add-nohmat-option.patch
+* x86-numa-add-nohmat-option-fix.patch
+* efi-fake_mem-arrange-for-a-resource-entry-per-efi_fake_mem-instance.patch
+* acpi-hmat-refactor-hmat_register_target_device-to-hmem_register_device.patch
+* resource-report-parent-to-walk_iomem_res_desc-callback.patch
+* mm-memory_hotplug-introduce-default-phys_to_target_node-implementation.patch
+* mm-memory_hotplug-introduce-default-phys_to_target_node-implementation-fix.patch
+* acpi-hmat-attach-a-device-for-each-soft-reserved-range.patch
+* device-dax-drop-the-dax_regionpfn_flags-attribute.patch
+* device-dax-move-instance-creation-parameters-to-struct-dev_dax_data.patch
+* device-dax-make-pgmap-optional-for-instance-creation.patch
+* device-dax-kill-dax_kmem_res.patch
+* device-dax-add-an-allocation-interface-for-device-dax-instances.patch
+* device-dax-introduce-seed-devices.patch
+* drivers-base-make-device_find_child_by_name-compatible-with-sysfs-inputs.patch
+* device-dax-add-resize-support.patch
+* mm-memremap_pages-convert-to-struct-range.patch
+* mm-memremap_pages-support-multiple-ranges-per-invocation.patch
+* device-dax-add-dis-contiguous-resource-support.patch
+* device-dax-introduce-mapping-devices.patch
+* device-dax-make-align-a-per-device-property.patch
+* device-dax-make-align-a-per-device-property-fix.patch
+* device-dax-add-an-align-attribute.patch
+* dax-hmem-introduce-dax_hmemregion_idle-parameter.patch
+* device-dax-add-a-range-mapping-allocation-attribute.patch
+* mm-debug-do-not-dereference-i_ino-blindly.patch
+* mm-dump_page-rename-head_mapcount-head_compound_mapcount.patch
+* mm-gup_benchmark-use-pin_user_pages-for-foll_longterm-flag.patch
+* mm-gup-dont-permit-users-to-call-get_user_pages-with-foll_longterm.patch
+* mm-gup-dont-permit-users-to-call-get_user_pages-with-foll_longterm-fix.patch
+* swap-rename-swp_fs-to-swap_fs_ops-to-avoid-ambiguity.patch
+* mm-remove-activate_page-from-unuse_pte.patch
+* mm-remove-superfluous-__clearpageactive.patch
+* memremap-convert-devmap-static-branch-to-incdec.patch
+* mm-rework-remote-memcg-charging-api-to-support-nesting.patch
+* mm-memcontrol-use-flex_array_size-helper-in-memcpy.patch
+* mm-memcontrol-use-the-preferred-form-for-passing-the-size-of-a-structure-type.patch
+* mm-account-pmd-tables-like-pte-tables.patch
+* mm-account-pmd-tables-like-pte-tables-fix.patch
+* mm-memory-fix-typo-in-__do_fault-comment.patch
+* mm-memoryc-replace-vmf-vma-with-variable-vma.patch
+* mm-mmap-rename-__vma_unlink_common-to-__vma_unlink.patch
+* mm-mmap-leverage-vma_rb_erase_ignore-to-implement-vma_rb_erase.patch
+* mmap-locking-api-add-mmap_lock_is_contended.patch
+* mm-smaps-extend-smap_gather_stats-to-support-specified-beginning.patch
+* mm-proc-smaps_rollup-do-not-stall-write-attempts-on-mmap_lock.patch
+* mm-mmap-fix-the-adjusted-length-error.patch
+* mm-move-pagedoublemap-bit.patch
+* mm-simplify-pagedoublemap-with-pf_second-policy.patch
+* mm-dmapoolc-replace-open-coded-list_for_each_entry_safe.patch
+* mm-dmapoolc-replace-hard-coded-function-name-with-__func__.patch
+* mm-memory-failure-do-pgoff-calculation-before-for_each_process.patch
+* docs-vm-fix-mm_count-vs-mm_users-counter-confusion.patch
+* mm-page_alloc-tweak-comments-in-has_unmovable_pages.patch
+* mm-page_isolation-exit-early-when-pageblock-is-isolated-in-set_migratetype_isolate.patch
+* mm-page_isolation-drop-warn_on_once-in-set_migratetype_isolate.patch
+* mm-page_isolation-cleanup-set_migratetype_isolate.patch
+* virtio-mem-dont-special-case-zone_movable.patch
+* mm-document-semantics-of-zone_movable.patch
+* mm-isolation-avoid-checking-unmovable-pages-across-pageblock-boundary.patch
+* mm-hugetlbc-make-is_hugetlb_entry_hwpoisoned-return-bool.patch
+* mm-hugetlbc-remove-the-unnecessary-non_swap_entry.patch
+* doc-vm-fix-typo-in-the-hugetlb-admin-documentation.patch
+* mm-huge_memoryc-update-tlb-entry-if-pmd-is-changed.patch
+* mips-do-not-call-flush_tlb_all-when-setting-pmd-entry.patch
+* kvm-ppc-book3s-hv-simplify-kvm_cma_reserve.patch
+* dma-contiguous-simplify-cma_early_percent_memory.patch
+* arm-xtensa-simplify-initialization-of-high-memory-pages.patch
+* arm64-numa-simplify-dummy_numa_init.patch
+* h8300-nds32-openrisc-simplify-detection-of-memory-extents.patch
+* riscv-drop-unneeded-node-initialization.patch
+* mircoblaze-drop-unneeded-numa-and-sparsemem-initializations.patch
+* memblock-make-for_each_memblock_type-iterator-private.patch
+* memblock-make-memblock_debug-and-related-functionality-private.patch
+* memblock-make-memblock_debug-and-related-functionality-private-fix.patch
+* memblock-reduce-number-of-parameters-in-for_each_mem_range.patch
+* arch-mm-replace-for_each_memblock-with-for_each_mem_pfn_range.patch
+* arch-drivers-replace-for_each_membock-with-for_each_mem_range.patch
+* arch-drivers-replace-for_each_membock-with-for_each_mem_range-fix.patch
+* x86-setup-simplify-initrd-relocation-and-reservation.patch
+* x86-setup-simplify-reserve_crashkernel.patch
+* memblock-remove-unused-memblock_mem_size.patch
+* memblock-implement-for_each_reserved_mem_region-using-__next_mem_region.patch
+* memblock-use-separate-iterators-for-memory-and-reserved-regions.patch
+* mm-oom_adj-dont-loop-through-tasks-in-__set_oom_adj-when-not-necessary.patch
+* mmhwpoison-cleanup-unused-pagehuge-check.patch
+* mm-hwpoison-remove-recalculating-hpage.patch
+* mmhwpoison-inject-dont-pin-for-hwpoison_filter.patch
+* mmhwpoison-un-export-get_hwpoison_page-and-make-it-static.patch
+* mmhwpoison-kill-put_hwpoison_page.patch
+* mmhwpoison-unify-thp-handling-for-hard-and-soft-offline.patch
+* mmhwpoison-rework-soft-offline-for-free-pages.patch
+* mmhwpoison-rework-soft-offline-for-in-use-pages.patch
+* mmhwpoison-refactor-soft_offline_huge_page-and-__soft_offline_page.patch
+* mmhwpoison-refactor-soft_offline_huge_page-and-__soft_offline_page-fix.patch
+* mmhwpoison-return-0-if-the-page-is-already-poisoned-in-soft-offline.patch
+* mmhwpoison-introduce-mf_msg_unsplit_thp.patch
+* mmhwpoison-double-check-page-count-in-__get_any_page.patch
+* mm-vmstat-fix-proc-sys-vm-stat_refresh-generating-false-warnings.patch
+* mm-vmstat-fix-proc-sys-vm-stat_refresh-generating-false-warnings-fix.patch
+* mm-vmstat-fix-proc-sys-vm-stat_refresh-generating-false-warnings-fix-2.patch
+* mm-util-update-the-kerneldoc-for-kstrdup_const.patch
+* mm-memory_hotplug-inline-__offline_pages-into-offline_pages.patch
+* mm-memory_hotplug-enforce-section-granularity-when-onlining-offlining.patch
+* mm-memory_hotplug-simplify-page-offlining.patch
+* mm-page_alloc-simplify-__offline_isolated_pages.patch
+* mm-memory_hotplug-drop-nr_isolate_pageblock-in-offline_pages.patch
+* mm-page_isolation-simplify-return-value-of-start_isolate_page_range.patch
+* mm-memory_hotplug-simplify-page-onlining.patch
+* mm-page_alloc-drop-stale-pageblock-comment-in-memmap_init_zone.patch
+* mm-pass-migratetype-into-memmap_init_zone-and-move_pfn_range_to_zone.patch
+* mm-memory_hotplug-mark-pageblocks-migrate_isolate-while-onlining-memory.patch
+* mm-slab-remove-duplicate-include.patch
+* mm-page_reporting-drop-stale-list-head-check-in-page_reporting_cycle.patch
+* mm-highmem-clean-up-endif-comments.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* fs-configfs-delete-repeated-words-in-comments.patch
+* get_maintainer-add-test-for-file-in-vcs.patch
+* get_maintainer-exclude-maintainers-files-from-git-fallback.patch
+* lib-bitmap-delete-duplicated-words.patch
+* lib-libcrc32c-delete-duplicated-words.patch
+* lib-decompress_bunzip2-delete-duplicated-words.patch
+* lib-devres-delete-duplicated-words.patch
+* lib-dynamic_queue_limits-delete-duplicated-words-fix-typo.patch
+* lib-earlycpio-delete-duplicated-words.patch
+* lib-radix-tree-delete-duplicated-words.patch
+* lib-syscall-delete-duplicated-words.patch
+* lib-test_sysctl-delete-duplicated-words.patch
+* bitops-simplify-get_count_order_long.patch
+* bitops-use-the-same-mechanism-for-get_count_order.patch
+* checkpatch-add-kconfig-prefix.patch
+* checkpatch-move-repeated-word-test.patch
+* checkpatch-add-test-for-comma-use-that-should-be-semicolon.patch
+* const_structscheckpatch-add-phy_ops.patch
+* checkpatch-warn-if-trace_printk-and-friends-are-called.patch
+* fs-binfmt_elf-use-pt_load-p_align-values-for-suitable-start-address.patch
+* fs-binfmt_elf-use-pt_load-p_align-values-for-suitable-start-address-fix.patch
+* fs-binfmt_elf-use-pt_load-p_align-values-for-suitable-start-address-v4.patch
+* add-self-test-for-verifying-load-alignment.patch
+* harden-autofs-ioctl-table.patch
+* panic-dump-registers-on-panic_on_warn.patch
+* aio-simplify-read_events.patch
+* proc-add-struct-mount-struct-super_block-addr-in-lx-mounts-command.patch
+* tasks-add-headers-and-improve-spacing-format.patch
+* romfs-support-inode-blocks-calculation.patch
+  linux-next.patch
+* x86-defconfigs-explicitly-unset-config_64bit-in-i386_defconfig.patch
+* scripts-gdb-add-utilsread_ulong.patch
+* scripts-gdb-update-for-lockless-printk-ringbuffer.patch
+* scripts-gdb-update-for-lockless-printk-ringbuffer-checkpatch-fixes.patch
+* ia64-fix-build-error-with-coredump.patch
+* mm-madvise-pass-task-and-mm-to-do_madvise.patch
+* pid-move-pidfd_get_pid-to-pidc.patch
+* mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-api.patch
+* mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-api-fix.patch
+* mm-madvise-check-fatal-signal-pending-of-target-process.patch
+* mm-memory-failure-remove-a-wrapper-for-alloc_migration_target.patch
+* mm-memory_hotplug-remove-a-wrapper-for-alloc_migration_target.patch
+* mm-migrate-avoid-possible-unnecessary-process-right-check-in-kernel_move_pages.patch
+* mm-mmap-add-inline-vma_next-for-readability-of-mmap-code.patch
+* mm-mmap-add-inline-munmap_vma_range-for-code-readability.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

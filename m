@@ -2,130 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9FD254B78
-	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 19:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86036254CA9
+	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 20:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgH0RD4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Aug 2020 13:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S1726944AbgH0SNJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Aug 2020 14:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgH0RDz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 13:03:55 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8DEC061264
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 10:03:54 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d22so3991145pfn.5
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 10:03:54 -0700 (PDT)
+        with ESMTP id S1726291AbgH0SNJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 14:13:09 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB290C06121B
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 11:13:08 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id d30so2117033qvc.9
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 11:13:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VdlKRWAYiWH7aKzpIghVWZrmLNU8AEzG/Co4MAt2Y8A=;
-        b=jz0jrysRrFtf/raS4GKGdoe89ArXeoPqY37vy/lf9q7hC1dPzYrXzA7FQg1GxNoSx9
-         45sI9wAD+tgmlr+4TRjRy7KymBhpuGnQhdOezR7Iji0nDV4LHV6FZa9XYTwyqI7K5ywo
-         wZW4a8krMN8wUAFvWxBTRuvn0QzrMmbFzyALo6zd9iPiVjYXO08aHo24023L8s2S2miN
-         fSBNMgoX7M1YmR4ki4uaKST0hES5XubV5AUI379ZwuQSy+yn34/KVq80YDGHALdqwTC4
-         D5bltMawbgbptzmTJG/fA7IDtDYZ5aBE5bZGX+w8WcIZl7cfNsgcjR3BVcPdMri/bQlR
-         CI0g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ssRaouXMj2o/HtEZZ3R9vlEAQEleSnlrqRH6Z6mK0YM=;
+        b=hTYxcSPYcs/JpYjOgeSQeg6Xl3LxylMwCdjgvYwx1aZ0q9UMPVlNcB95FXYna3al52
+         IbTaBhRvKMuLTqjFu5nwJvvcRfM5hlW4mr0CAIw5t/TZ9K03o40d9+HsdyT9aHbx1V9u
+         6lZyigyUUK6y9vpQiHxICC3q0LPAv4EOwqGca0jbl9DK/0ufdjWzxlzp4M+vIrJCDfLD
+         rTLXzM7s1yCsMnkF3SLfrSOCuq2rWL6RINgYVQ1ynhxBGMt2E2ZfHWhIMvb97fvURbWm
+         /4HAoGwQtJz95MMLCIXruMdQ2RP37flfW+Z+PMdo9OixEUHbUjbtaq1V5cLjd1XtAf10
+         iwTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=VdlKRWAYiWH7aKzpIghVWZrmLNU8AEzG/Co4MAt2Y8A=;
-        b=E+InWnc/Lrm3UKqNdEdBoaHfKPCF8NuoZ0oMpoti/1bhEnnV7VU+LjbwHCwsPCCEK9
-         Y1PvJg8xX0Bv3VqL2a/+UPh9C37sPdtd0IsuXBc6gbGoQ+5hCh4w2sggn+7oWRIvJcU6
-         IQ9Yf79uT/zV0d0GL1Hr441o5tvqDX9XQBeckeBbBldSdq4Ap6jc3+r/4I4AntQLF6YJ
-         ovOHaRf1gifzupH9VkuZHqVC0GrXkvsRIv9MrSlO22bnKrDhARRml56J6h6fq/1QL+8n
-         28oXPMx8N+z6E4E7nk1ajJyY6qbeVl+6XbLeT7C9naa4IpOBIboI5kAEiMIOE3tL7lxa
-         AMFw==
-X-Gm-Message-State: AOAM531V6fksrQ1CwcYOJGDwRa/IVYHp6HQIiYjmj/jFlsZZj1dMLgra
-        rlNJ0S5dIsfped/oJo/aEllm01CyHE+Uww==
-X-Google-Smtp-Source: ABdhPJzh87b1e1c3qz49gLw9m5Qn9DxARjR19PlbS5t4MeaJtCJCaCf1OukqFVW6zxLubVLXUWN6HA==
-X-Received: by 2002:a63:a53:: with SMTP id z19mr14876176pgk.67.1598547834087;
-        Thu, 27 Aug 2020 10:03:54 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id v10sm3402662pff.192.2020.08.27.10.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 10:03:53 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 10:03:53 -0700 (PDT)
-X-Google-Original-Date: Thu, 27 Aug 2020 10:03:52 PDT (-0700)
-Subject:     Re: linux-next: Tree for Aug 27
-In-Reply-To: <fa8a133517704eff9b0f2369c1b7b5bbc8517916.camel@wdc.com>
-CC:     anders.roxell@linaro.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        anup@brainfault.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     Atish Patra <Atish.Patra@wdc.com>
-Message-ID: <mhng-16126c08-fe1d-43bf-bd48-9f1cdcdb5a57@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ssRaouXMj2o/HtEZZ3R9vlEAQEleSnlrqRH6Z6mK0YM=;
+        b=ev9g+AAh8umKM0MkN+VCTwrKkoyXMGSK+uiwgnK6L3Cl+xcTdVQ+Zl3t/+/pysMAve
+         idkn0G2PQ0V9s72oPg8ni3v8Uq+v0wTU+sRLKOmRjNd4OlrUKuF8J4jKyk2/Q/V0PNsp
+         lkWu7J6aPTJ0s+zpGvMtnkqRdXr1WO934dp29+j/PQAthOux40s0kzWdnL3GArLCKzi6
+         Ej2jTeYK3XioKnDqgn8WarT6PEw8tEjEaxP7uPvy0z97HzZxRHEvPfofgNCW4HMmC9iW
+         S5BHg0bGrmQ83GDVBDboYwjGHitnCtEj3s3uOiSQsczhCD/BvDPxluEQQ8s+ck0PXw9T
+         Ca5g==
+X-Gm-Message-State: AOAM530gl0lAbkBcL/PsDHlU+1c2LIe+D7JhDX9JTC9R2DOghaBUxSSH
+        r2m7Mqd0O/38uhpggiBE4S4j/5XJAsL0uM6aBeQFkw==
+X-Google-Smtp-Source: ABdhPJy+icwO9xKN//159CWIuCBqk8MV0Dp0jEhUL4JCTuBiRCitMg1ap+ZOEoYO7Yy4bHcgdPptWx3uVVGIwM6G+34=
+X-Received: by 2002:a05:6214:10ca:: with SMTP id r10mr232930qvs.185.1598551987724;
+ Thu, 27 Aug 2020 11:13:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200729212721.1ee4eef8@canb.auug.org.au> <87ft8lwxes.fsf@turtle.gmx.de>
+ <CAMzD94Rz4NYnhheS8SmuL14MNM4VGxOnAW-WZ9k1JEqrbwyrvw@mail.gmail.com>
+ <87y2m7gq86.fsf@turtle.gmx.de> <87pn7gh3er.fsf@turtle.gmx.de>
+In-Reply-To: <87pn7gh3er.fsf@turtle.gmx.de>
+From:   Brian Vazquez <brianvv@google.com>
+Date:   Thu, 27 Aug 2020 11:12:56 -0700
+Message-ID: <CAMzD94Rkq1RTZJG5UsEz9VhaCBbvObD1azqU2gsJzZ6gPYcfag@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To:     Sven Joachim <svenjoac@gmx.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 27 Aug 2020 10:02:57 PDT (-0700), Atish Patra wrote:
-> On Thu, 2020-08-27 at 10:37 +0200, Anders Roxell wrote:
->> On Thu, 27 Aug 2020 at 07:11, Stephen Rothwell <sfr@canb.auug.org.au>
->> wrote:
->> > Hi all,
->> > 
->> > News:  There will be no linux-next releases next Monday or Tuesday.
->> > 
->> > Changes since 20200826:
->> > 
->> > The net-next tree gained a conflict against the net tree.
->> > 
->> > Non-merge commits (relative to Linus' tree): 2901
->> >  3429 files changed, 100496 insertions(+), 37081 deletions(-)
->> > 
->> 
->> I built riscv on todays tag and I see this error:
->> ../arch/riscv/kernel/setup.c: In function ‘setup_arch’:
->> ../arch/riscv/kernel/setup.c:74:2: error: implicit declaration of
->> function ‘early_ioremap_setup’; did you mean ‘early_memtest’?
->> [-Werror=implicit-function-declaration]
->>   early_ioremap_setup();
->>   ^~~~~~~~~~~~~~~~~~~
->>   early_memtest
->> cc1: some warnings being treated as errors
->> 
->> I think its due to commit 3d109b0e0949 ("RISC-V: Add early ioremap
->> support")
->> 
-> 
-> Yes. For some reason, I never get this with the UEFI support series
-> applied on top 5.9-rc2 in my tree. But I get this error with linux-next 
-> tree.
-> 
->> It builds with this fix:
->> 
->> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
->> index 5ab185130cae..41ef96d0d97a 100644
->> --- a/arch/riscv/kernel/setup.c
->> +++ b/arch/riscv/kernel/setup.c
->> @@ -19,6 +19,7 @@
->>  #include <linux/smp.h>
->> 
->>  #include <asm/cpu_ops.h>
->> +#include <asm/early_ioremap.h>
->>  #include <asm/setup.h>
->>  #include <asm/sections.h>
->>  #include <asm/sbi.h>
->> 
->> 
-> 
-> This fix solves the problem. Thanks.
-> @palmer: Do you want me to update the patch and send v7 ?
+Hi Sven,
 
-That'd be great, thanks!
+I've been trying to reproduce it with your config but I didn't
+succeed. I also looked at the file after the preprocessor and it
+looked good:
 
-> 
-> 
->> Cheers,
->> Anders
-> 
-> -- 
-> Regards,
-> Atish
+ret = ({ __builtin_expect(!!(ops->match == fib6_rule_match), 1) ?
+fib6_rule_match(rule, fl, flags) : ops->match(rule, fl, flags); })
+
+Note that fib4_rule_match doesn't appear as the
+CONFIG_IP_MULTIPLE_TABLES is not there.
+
+Could you share more details on how you're compiling it and what
+compiler you're using??
+
+Thanks,
+Brian
+
+
+
+On Mon, Aug 24, 2020 at 1:08 AM Sven Joachim <svenjoac@gmx.de> wrote:
+>
+> On 2020-08-22 08:16 +0200, Sven Joachim wrote:
+>
+> > On 2020-08-21 09:23 -0700, Brian Vazquez wrote:
+> >
+> >> Hi Sven,
+> >>
+> >> Sorry for the late reply, did you still see this after:
+> >> https://patchwork.ozlabs.org/project/netdev/patch/20200803131948.41736-1-yuehaibing@huawei.com/
+> >> ??
+> >
+> > That patch is apparently already in 5.9-rc1 as commit 80fbbb1672e7, so
+> > yes I'm still seeing it.
+>
+> Still present in 5.9-rc2 as of today, I have attached my .config for
+> reference.  Note that I have CONFIG_IPV6_MULTIPLE_TABLES=y, but
+> CONFIG_IP_MULTIPLE_TABLES is not mentioned at all there.
+>
+> To build the kernel, I have now deselected IPV6_MULTIPLE_TABLES.  Not
+> sure why this was enabled in my .config which has grown organically over
+> many years.
+>
+> Cheers,
+>        Sven
+>
+>
+> >> On Mon, Aug 17, 2020 at 12:21 AM Sven Joachim <svenjoac@gmx.de> wrote:
+> >>
+> >>> On 2020-07-29 21:27 +1000, Stephen Rothwell wrote:
+> >>>
+> >>> > Hi all,
+> >>> >
+> >>> > After merging the net-next tree, today's linux-next build (i386
+> >>> defconfig)
+> >>> > failed like this:
+> >>> >
+> >>> > x86_64-linux-gnu-ld: net/core/fib_rules.o: in function
+> >>> `fib_rules_lookup':
+> >>> > fib_rules.c:(.text+0x5c6): undefined reference to `fib6_rule_match'
+> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x5d8): undefined reference to
+> >>> `fib6_rule_match'
+> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x64d): undefined reference to
+> >>> `fib6_rule_action'
+> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x662): undefined reference to
+> >>> `fib6_rule_action'
+> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x67a): undefined reference to
+> >>> `fib6_rule_suppress'
+> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x68d): undefined reference to
+> >>> `fib6_rule_suppress'
+> >>>
+> >>> FWIW, I saw these errors in 5.9-rc1 today, so the fix in commit
+> >>> 41d707b7332f ("fib: fix fib_rules_ops indirect calls wrappers") was
+> >>> apparently not sufficient.
+> >>>
+> >>> ,----
+> >>> | $ grep IPV6 .config
+> >>> | CONFIG_IPV6=m
+> >>> | # CONFIG_IPV6_ROUTER_PREF is not set
+> >>> | # CONFIG_IPV6_OPTIMISTIC_DAD is not set
+> >>> | # CONFIG_IPV6_MIP6 is not set
+> >>> | # CONFIG_IPV6_ILA is not set
+> >>> | # CONFIG_IPV6_VTI is not set
+> >>> | CONFIG_IPV6_SIT=m
+> >>> | # CONFIG_IPV6_SIT_6RD is not set
+> >>> | CONFIG_IPV6_NDISC_NODETYPE=y
+> >>> | CONFIG_IPV6_TUNNEL=m
+> >>> | CONFIG_IPV6_MULTIPLE_TABLES=y
+> >>> | # CONFIG_IPV6_SUBTREES is not set
+> >>> | # CONFIG_IPV6_MROUTE is not set
+> >>> | # CONFIG_IPV6_SEG6_LWTUNNEL is not set
+> >>> | # CONFIG_IPV6_SEG6_HMAC is not set
+> >>> | # CONFIG_IPV6_RPL_LWTUNNEL is not set
+> >>> | # CONFIG_NF_SOCKET_IPV6 is not set
+> >>> | # CONFIG_NF_TPROXY_IPV6 is not set
+> >>> | # CONFIG_NF_DUP_IPV6 is not set
+> >>> | # CONFIG_NF_REJECT_IPV6 is not set
+> >>> | # CONFIG_NF_LOG_IPV6 is not set
+> >>> | CONFIG_NF_DEFRAG_IPV6=m
+> >>> `----
+> >>>
+> >>> > Caused by commit
+> >>> >
+> >>> >   b9aaec8f0be5 ("fib: use indirect call wrappers in the most common
+> >>> fib_rules_ops")
+> >>> >
+> >>> > # CONFIG_IPV6_MULTIPLE_TABLES is not set
+> >>> >
+> >>> > I have reverted that commit for today.
+> >>>
+> >>> Cheers,
+> >>>        Sven
+> >>>

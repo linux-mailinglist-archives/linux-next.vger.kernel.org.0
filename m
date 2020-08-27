@@ -2,84 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C9C25417D
-	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 11:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28062541A0
+	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 11:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgH0JIS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Aug 2020 05:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S1726157AbgH0JMm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Aug 2020 05:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726851AbgH0JIR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 05:08:17 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549C4C06121A
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:08:17 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id k1so3010585pfu.2
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:08:17 -0700 (PDT)
+        with ESMTP id S1726851AbgH0JMl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 05:12:41 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCC2C06121A
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:12:41 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id d20so1437695ual.13
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oPjyPuQZLGoAAp7WDErL8smQlxbu/OGI8IboZaU2Re8=;
-        b=kbrLnLLypu1K4wto5wlI+scUZ5AZE2OgFnMBjIjsM6A3YVM11Jw/71yIEf8dBePqJh
-         qX07G1SA2DRMh8Wx9QCClbYUywElg2DnVoXmNpbx2BHJKmHJ9bdejJSFLHnCtr/YTYe2
-         s5FqJIYGpHx0/RAPuKjGnNP2Ga9mynO4ENb9LA/+Ig2TBNG3vNzkmseLvxBiHs7Kckz3
-         RGGl+s03h3f+CLm1XD6bDvEBQBFllEJMHpgxkuiR/fr4/yjmWWfLvpaYn/RkS3M35kPW
-         PZ6g+zqYZat8m7sW0P8xBob2NLajW0mH7avesiS13EnomP4NE0UwI9ozg/yyCQVwufme
-         ppBQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=genBMQ0a0FJW4bbCFUIpD9NvnERWSoYFNlijRZogzqE=;
+        b=wWGTwH6rDBLBUPsoZPSY8zLf+v4FaY000pUyfkrjQsbk5ndSya7swAwCjx+PBxyLd2
+         8w7VqQt0JeOfkVO1g9KmsaGJ0KCbIeH1j2XZAIecfsDoObi3OXEHHLBeBSFXbDiiKYIk
+         FZk0aSvKgHnfcjjmRdkAbSS8O0/3Nis5nDKyhunZd7syVxgAN7xmqFE0hMA0GX4AuK1x
+         olDTrvMXmqwY7u1HjykdCwBhPRbPZJx2YB21nOw9zLRSl3BzPWLAhGiNMJV7ktSsHGaU
+         WGBP0xG6aBADPd8HKhpLzs6sz69xUc32vNKefXqooN9i0pXVqB+2CRid2KpYdbX3X1hX
+         Z8zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oPjyPuQZLGoAAp7WDErL8smQlxbu/OGI8IboZaU2Re8=;
-        b=XklDVW5YxQ/UGWFq6iX1z7JYKZcZDk2BtDoVEbDaK6Ital8DQBr064XobEq3dJztI9
-         zcNcEZFglydVd/KH4A/j24uzSipvfZghuZfCHKCrioNX6ITzrvNVkc80SbKJLAqM/VHL
-         mPQso/s0i+WZdR6dltyDMIeO0wYwNzx6G4tSc/XQbaumVHCv+ba6O/Q2zeqHmgxBGYt/
-         eo3p4L9Lz9YRsRgDwf+vHH0mCwEZjBc6Nnl7VeF41CJXWBvzLTgwOh4ugxpCnDn35Bbc
-         UD1mdfjs56tkaUrtxMsJI32Ag5KX50CW8cjO1vNInOimVQmPAUreHrfZ1b15LjX1PwM1
-         Zenw==
-X-Gm-Message-State: AOAM530eJw0xe4lYSKccS2pdP6WKBeYNkTUbIDFk4A2Zucvoy023WIio
-        TNA9e/BLGieLXs043BvQBNM2rA==
-X-Google-Smtp-Source: ABdhPJxLdKqL0imkuv7l0gVZyl56bIuowcCfqjqoAkApu59s3G9Jo12SUihZRzm9/k+G88BXbtIwJw==
-X-Received: by 2002:a05:6a00:7c7:: with SMTP id n7mr15878283pfu.291.1598519296549;
-        Thu, 27 Aug 2020 02:08:16 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id r75sm2033654pfc.88.2020.08.27.02.08.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Aug 2020 02:08:15 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 14:38:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>, rnayak@codeaurora.org
-Cc:     open list <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=genBMQ0a0FJW4bbCFUIpD9NvnERWSoYFNlijRZogzqE=;
+        b=Lb7AHXSVUGjOZTzIcgx64p2TrLdaUPqrf236ew/qGfS4JRpmcS/L3LsfjvtTFxMk1T
+         LLpWaEvDjtV4/DCmooy3KSYi9/nfjqvhwePpVLICmJ2xQS16GZ4tWFf1jyZ1FiS9tzAZ
+         wHTF8Zf0AuzVD5gZrucqxi9wpEx87sIZ7+wgPkUJV8ysrdkzlhPNAZCZq/O+sDtxLSvh
+         5ObM+5Tj1lHbIcq2WvyKM5ughZgJ8syL+HyGDjvVAz7xrxC3WeEgOGQAFeF0l+wKlvzC
+         Eui5Noa1nmEPNVqhIGyJqjcV+OhjvfSAAmuHmtmmTsGMsyP9FMZzM8hl/ZL6RfLyanN8
+         1W8Q==
+X-Gm-Message-State: AOAM532XuwiJ0ClWAPHwbv5VclAngl8c2CgBqhL05eNHriYSCfOLq+J+
+        JGE1Rb6VnPHj3PYOMj443Qlo6/aRgjL9mu7/Xt7xNQ==
+X-Google-Smtp-Source: ABdhPJz/w7KnfMyCLw7D++/e98PHxfOdwJ7I+TNih3N8LYOWe6N67z2J4HWLIxIxyXEUTk8EOT1pxUvHsR2haz0mGY8=
+X-Received: by 2002:ab0:142e:: with SMTP id b43mr11615047uae.7.1598519560755;
+ Thu, 27 Aug 2020 02:12:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 27 Aug 2020 14:42:29 +0530
+Message-ID: <CA+G9fYtq=+TAh57y-N-ngwDqs8ZbPbJs3cVF96gVXmZkq0xdYQ@mail.gmail.com>
+Subject: Re: Kernel panic : Unable to handle kernel paging request at virtual
+ address - dead address between user and kernel address ranges
+To:     open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-clk <linux-clk@vger.kernel.org>, linux-mmc@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        lkft-triage@lists.linaro.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         John Stultz <john.stultz@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, lars.povlsen@microchip.com,
-        madhuparnabhowmik10@gmail.com
-Subject: Re: Kernel panic : Unable to handle kernel paging request at virtual
- address - dead address between user and kernel address ranges
-Message-ID: <20200827090813.fjugeqbb47fachy7@vireshk-i7>
-References: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        madhuparnabhowmik10@gmail.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+Rajendra
-
-On 27-08-20, 14:02, Naresh Kamboju wrote:
+On Thu, 27 Aug 2020 at 14:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
 > arm64 dragonboard db410c boot failed while running linux next 20200827 kernel.
-> 
+>
 > metadata:
 >   git branch: master
 >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
@@ -88,9 +83,17 @@ On 27-08-20, 14:02, Naresh Kamboju wrote:
 >   make_kernelversion: 5.9.0-rc2
 >   kernel-config:
 > https://builds.tuxbuild.com/vThV35pOF_GMlWdiTs3Bdw/kernel.config
-> 
+
+The reported issue is started from linux next tag next-20200825.
+
+BAD:  next-20200825
+GOOD:  next-20200824
+
+We are working on git bisect and boot testing on db410c and get back to you.
+
+>
 > Boot log,
-> 
+>
 > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
 > [    0.000000] Linux version 5.9.0-rc2-next-20200827
 > (TuxBuild@12963d21faa5) (aarch64-linux-gnu-gcc (Debian 9.3.0-8) 9.3.0,
@@ -172,13 +175,10 @@ On 27-08-20, 14:02, Naresh Kamboju wrote:
 > [    3.772924] PHYS_OFFSET: 0x80000000
 > [    3.778216] CPU features: 0x0240002,24802005
 > [    3.781602] Memory Limit: none
-> 
+>
 > full test log,
 > https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200827/testrun/3123101/suite/linux-log-parser/test/check-kernel-oops-1714695/log
-> 
-> -- 
+>
+> --
 > Linaro LKFT
 > https://lkft.linaro.org
-
--- 
-viresh

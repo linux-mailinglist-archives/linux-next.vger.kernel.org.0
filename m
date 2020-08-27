@@ -2,183 +2,321 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A28062541A0
-	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 11:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F31254286
+	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 11:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgH0JMm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Aug 2020 05:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S1728351AbgH0JfF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Aug 2020 05:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726851AbgH0JMl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 05:12:41 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCC2C06121A
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:12:41 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id d20so1437695ual.13
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:12:41 -0700 (PDT)
+        with ESMTP id S1727030AbgH0JfE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 05:35:04 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7ACC06121B
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:35:04 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id x2so2224840vsp.13
+        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 02:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=genBMQ0a0FJW4bbCFUIpD9NvnERWSoYFNlijRZogzqE=;
-        b=wWGTwH6rDBLBUPsoZPSY8zLf+v4FaY000pUyfkrjQsbk5ndSya7swAwCjx+PBxyLd2
-         8w7VqQt0JeOfkVO1g9KmsaGJ0KCbIeH1j2XZAIecfsDoObi3OXEHHLBeBSFXbDiiKYIk
-         FZk0aSvKgHnfcjjmRdkAbSS8O0/3Nis5nDKyhunZd7syVxgAN7xmqFE0hMA0GX4AuK1x
-         olDTrvMXmqwY7u1HjykdCwBhPRbPZJx2YB21nOw9zLRSl3BzPWLAhGiNMJV7ktSsHGaU
-         WGBP0xG6aBADPd8HKhpLzs6sz69xUc32vNKefXqooN9i0pXVqB+2CRid2KpYdbX3X1hX
-         Z8zw==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ZoZRWBejixABEWT5ob4yAZy+/4BzgKmNPxRPIsvrKC0=;
+        b=Iby+b/VEw8MIEt16ewhQ9obSWVH5Cuz7dt+ecYwt9wwONbSFO5+9V0RrNIHtKScOfK
+         6BPpscL+EWdtUr8FL0SRaJjgQqSc0M+7kn0CPXZ9Sb3G0wK92Yf9gP8FQPbBPW8PR92H
+         9ErGadQW3UXW6y5JLLiU/g2ejReQ5CfZsMwdVgS5zKo5K2hc9K7PP63AW2qluKGBWSBh
+         KPRBgftT/sAp4lA68F0+BiS9RThjdaDdunag6JuUvV6kW+EY3AER2CnDYu4g6aaoz4pu
+         iE91I/8nPb/oPZ9wZHp+EJ7Rwyr0d2CTrrXD0mTPZdR3GSg1y8c7auWj0stUvrRRPvox
+         Qj2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=genBMQ0a0FJW4bbCFUIpD9NvnERWSoYFNlijRZogzqE=;
-        b=Lb7AHXSVUGjOZTzIcgx64p2TrLdaUPqrf236ew/qGfS4JRpmcS/L3LsfjvtTFxMk1T
-         LLpWaEvDjtV4/DCmooy3KSYi9/nfjqvhwePpVLICmJ2xQS16GZ4tWFf1jyZ1FiS9tzAZ
-         wHTF8Zf0AuzVD5gZrucqxi9wpEx87sIZ7+wgPkUJV8ysrdkzlhPNAZCZq/O+sDtxLSvh
-         5ObM+5Tj1lHbIcq2WvyKM5ughZgJ8syL+HyGDjvVAz7xrxC3WeEgOGQAFeF0l+wKlvzC
-         Eui5Noa1nmEPNVqhIGyJqjcV+OhjvfSAAmuHmtmmTsGMsyP9FMZzM8hl/ZL6RfLyanN8
-         1W8Q==
-X-Gm-Message-State: AOAM532XuwiJ0ClWAPHwbv5VclAngl8c2CgBqhL05eNHriYSCfOLq+J+
-        JGE1Rb6VnPHj3PYOMj443Qlo6/aRgjL9mu7/Xt7xNQ==
-X-Google-Smtp-Source: ABdhPJz/w7KnfMyCLw7D++/e98PHxfOdwJ7I+TNih3N8LYOWe6N67z2J4HWLIxIxyXEUTk8EOT1pxUvHsR2haz0mGY8=
-X-Received: by 2002:ab0:142e:: with SMTP id b43mr11615047uae.7.1598519560755;
- Thu, 27 Aug 2020 02:12:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ZoZRWBejixABEWT5ob4yAZy+/4BzgKmNPxRPIsvrKC0=;
+        b=OMzaJeSRLIe4owmGu9rUKxTTp8AgemkBQdbdH+UMs4OW0YFPmgHG/dTKNXDeuxE25c
+         QRnpFZZNlnVIJ2bUqcETudUR1CVqk32aGCZSZmizs4xM6QV09mKPLfEODNRF5G/7Q4/Y
+         QLkUDIRC3awpkBeZZSFAeyeSD+R/OrQMYFrFQxBZi+xulKJUJtrDND/BVnA5GEc0TjvH
+         0dzjUfjza4do2vzJt2WCvzVmbkiihXHDO2NhN0Fs5S7RY82UfqfOU5grZPGipP0r5Ffb
+         VR3w7ubRm40MfoSQ+zlKZABcjG4c9B6qvgCZ3l2Tvi9a1L1oXOiw9e+wRduSIFEzWOIi
+         GXhg==
+X-Gm-Message-State: AOAM5306KeYoMM+//IIh/w0Z7to0aHGWAgh11RxFSzuCeweKltJt/G+F
+        QXzBYCykZHgSTR0TXN+9L7hgHeqGvknU//8fEPJKhA==
+X-Google-Smtp-Source: ABdhPJzzfui8hxlaJnkurpGMgX/qf5AHwDlnmkE2kMh7RnHjKPR6L+OLrlI2Yp5O1xfARMh8kKVIRyFsGZNkq7lfmas=
+X-Received: by 2002:a67:7905:: with SMTP id u5mr11663816vsc.179.1598520902978;
+ Thu, 27 Aug 2020 02:35:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 27 Aug 2020 14:42:29 +0530
-Message-ID: <CA+G9fYtq=+TAh57y-N-ngwDqs8ZbPbJs3cVF96gVXmZkq0xdYQ@mail.gmail.com>
-Subject: Re: Kernel panic : Unable to handle kernel paging request at virtual
- address - dead address between user and kernel address ranges
+Date:   Thu, 27 Aug 2020 15:04:51 +0530
+Message-ID: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
+Subject: WARNING: at drivers/opp/core.c:678 dev_pm_opp_set_rate+0x4cc/0x5d4 -
+ on arm x15
 To:     open list <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-clk <linux-clk@vger.kernel.org>, linux-mmc@vger.kernel.org,
         lkft-triage@lists.linaro.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        John Stultz <john.stultz@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, lars.povlsen@microchip.com,
-        madhuparnabhowmik10@gmail.com,
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 27 Aug 2020 at 14:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> arm64 dragonboard db410c boot failed while running linux next 20200827 kernel.
->
-> metadata:
->   git branch: master
->   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   git commit: 88abac0b753dfdd85362a26d2da8277cb1e0842b
->   git describe: next-20200827
->   make_kernelversion: 5.9.0-rc2
->   kernel-config:
-> https://builds.tuxbuild.com/vThV35pOF_GMlWdiTs3Bdw/kernel.config
-
-The reported issue is started from linux next tag next-20200825.
+While boot testing arm x15 devices the Kernel warning noticed with linux next
+tag 20200825.
 
 BAD:  next-20200825
 GOOD:  next-20200824
 
-We are working on git bisect and boot testing on db410c and get back to you.
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: 3a00d3dfd4b68b208ecd5405e676d06c8ad6bb63
+  git describe: next-20200825
+  make_kernelversion: 5.9.0-rc2
+  kernel-config:
+https://builds.tuxbuild.com/LDTu4GFMmvkJspza5LJIjQ/kernel.config
 
->
-> Boot log,
->
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
-> [    0.000000] Linux version 5.9.0-rc2-next-20200827
-> (TuxBuild@12963d21faa5) (aarch64-linux-gnu-gcc (Debian 9.3.0-8) 9.3.0,
-> GNU ld (GNU Binutils for Debian) 2.34) #1 SMP PREEMPT Thu Aug 27
-> 05:19:00 UTC 2020
-> [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
-> [    0.000000] efi: UEFI not found.
-> [    0.000000] [Firmware Bug]: Kernel image misaligned at boot, please
-> fix your bootloader!
-> <trmi>
-> [    3.451425] i2c_qup 78ba000.i2c: using default clock-frequency 100000
-> [    3.451491] i2c_qup 78ba000.i2c:
-> [    3.451491]  tx channel not available
-> [    3.493455] sdhci: Secure Digital Host Controller Interface driver
-> [    3.493508] sdhci: Copyright(c) Pierre Ossman
-> [    3.500902] Synopsys Designware Multimedia Card Interface Driver
-> [    3.507441] sdhci-pltfm: SDHCI platform and OF driver helper
-> [    3.514308] Unable to handle kernel paging request at virtual
-> address dead000000000108
-> [    3.514695] Mem abort info:
-> [    3.522421]   ESR = 0x96000044
-> [    3.525096]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    3.528236]   SET = 0, FnV = 0
-> [    3.533703]   EA = 0, S1PTW = 0
-> [    3.536561] Data abort info:
-> [    3.539601]   ISV = 0, ISS = 0x00000044
-> [    3.542727]   CM = 0, WnR = 1
-> [    3.546287] [dead000000000108] address between user and kernel address ranges
-> [    3.549414] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [    3.556520] Modules linked in:
-> [    3.561901] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-> 5.9.0-rc2-next-20200827 #1
-> [    3.565034] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> [    3.572584] pstate: 60000005 (nZCv daif -PAN -UAO BTYPE=--)
-> [    3.579271] pc : __clk_put+0x40/0x140
-> [    3.584556] lr : __clk_put+0x2c/0x140
-> [    3.588373] sp : ffff80001002bb00
-> [    3.592016] x29: ffff80001002bb00 x28: 000000000000002e
-> [    3.595320] x27: ffff000009f7ba68 x26: ffff80001146d878
-> [    3.600703] x25: ffff00003fcfd8f8 x24: ffff00003d0bc410
-> [    3.605999] x23: ffff80001146d0e0 x22: ffff000009f7ba40
-> [    3.611293] x21: ffff00003d0bc400 x20: ffff000009f7b580
-> [    3.616588] x19: ffff00003bccc780 x18: 0000000007824000
-> [    3.621883] x17: ffff000009f7ba00 x16: ffff000009f7b5d0
-> [    3.627177] x15: ffff800011966cf8 x14: ffffffffffffffff
-> [    3.632472] x13: ffff800012917000 x12: ffff800012917000
-> [    3.637769] x11: 0000000000000020 x10: 0101010101010101
-> [    3.643063] x9 : ffff8000107a984c x8 : 7f7f7f7f7f7f7f7f
-> [    3.648358] x7 : ffff000009fd8000 x6 : ffff80001237a000
-> [    3.653653] x5 : 0000000000000000 x4 : ffff000009fd8000
-> [    3.658949] x3 : ffff8000124e6768 x2 : ffff000009fd8000
-> [    3.664243] x1 : ffff00003bccca80 x0 : dead000000000100
-> [    3.669539] Call trace:
-> [    3.674830]  __clk_put+0x40/0x140
-> [    3.677003]  clk_put+0x18/0x28
-> [    3.680477]  dev_pm_opp_put_clkname+0x30/0x58
-> [    3.683431]  sdhci_msm_probe+0x284/0x9a0
-> [    3.687857]  platform_drv_probe+0x5c/0xb0
-> [    3.691847]  really_probe+0xf0/0x4d8
-> [    3.695753]  driver_probe_device+0xfc/0x168
-> [    3.699399]  device_driver_attach+0x7c/0x88
-> [    3.703306]  __driver_attach+0xac/0x178
-> [    3.707472]  bus_for_each_dev+0x78/0xc8
-> [    3.711291]  driver_attach+0x2c/0x38
-> [    3.715110]  bus_add_driver+0x14c/0x230
-> [    3.718929]  driver_register+0x6c/0x128
-> [    3.722489]  __platform_driver_register+0x50/0x60
-> [    3.726312]  sdhci_msm_driver_init+0x24/0x30
-> [    3.731173]  do_one_initcall+0x4c/0x2c0
-> [    3.735511]  kernel_init_freeable+0x21c/0x284
-> [    3.739072]  kernel_init+0x1c/0x120
-> [    3.743582]  ret_from_fork+0x10/0x30
-> [    3.746885] Code: 35000720 a9438660 f9000020 b4000040 (f9000401)
-> [    3.750720] ---[ end trace a8d4100497387a2e ]---
-> [    3.756736] Kernel panic - not syncing: Attempted to kill init!
-> exitcode=0x0000000b
-> [    3.761392] SMP: stopping secondary CPUs
-> [    3.768877] Kernel Offset: 0x80000 from 0xffff800010000000
-> [    3.772924] PHYS_OFFSET: 0x80000000
-> [    3.778216] CPU features: 0x0240002,24802005
-> [    3.781602] Memory Limit: none
->
-> full test log,
-> https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200827/testrun/3123101/suite/linux-log-parser/test/check-kernel-oops-1714695/log
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+We are working on git bisect and boot testing on x15 and get back to you.
+
+warning log:
+-----------------
+[   13.330201] sdhci-pltfm: SDHCI platform and OF driver helper
+[   13.352903] omap_gpio 4805d000.gpio: Could not set line 27 debounce
+to 200000 microseconds (-22)
+[   13.361767] sdhci-omap 4809c000.mmc: Got CD GPIO
+[   13.366885] sdhci-omap 4809c000.mmc: supply vqmmc not found, using
+dummy regulator
+[   13.374716] ------------[ cut here ]------------
+[   13.379414] WARNING: CPU: 0 PID: 21 at drivers/opp/core.c:678
+dev_pm_opp_set_rate+0x4cc/0x5d4
+[   13.387999] Modules linked in:
+[   13.391089] CPU: 0 PID: 21 Comm: kworker/0:1 Not tainted
+5.9.0-rc2-next-20200825 #1
+[   13.398779] Hardware name: Generic DRA74X (Flattened Device Tree)
+[   13.404908] Workqueue: events dbs_work_handler
+[   13.409378] Backtrace:
+[   13.411852] [<c040e860>] (dump_backtrace) from [<c040ebd4>]
+(show_stack+0x20/0x24)
+[   13.419460]  r7:c20cca94 r6:00000000 r5:60000013 r4:c20cca94
+[   13.425153] [<c040ebb4>] (show_stack) from [<c0941338>]
+(dump_stack+0xec/0x118)
+[   13.432505] [<c094124c>] (dump_stack) from [<c0451530>] (__warn+0xe8/0x100)
+[   13.439501]  r10:e8b50600 r9:00000009 r8:c105f6f4 r7:000002a6
+r6:c105f6f4 r5:00000009
+[   13.447369]  r4:00000000 r3:c2004f30
+[   13.450968] [<c0451448>] (__warn) from [<c04518fc>]
+(warn_slowpath_fmt+0x74/0xc4)
+[   13.458485]  r7:000002a6 r6:c1b42034 r5:00000000 r4:e9b50000
+[   13.464174] [<c045188c>] (warn_slowpath_fmt) from [<c105f6f4>]
+(dev_pm_opp_set_rate+0x4cc/0x5d4)
+[   13.472999]  r9:e8b50280 r8:e9b50000 r7:ffffffea r6:3b9aca00
+r5:59682f00 r4:e8902c00
+[   13.480783] [<c105f228>] (dev_pm_opp_set_rate) from [<c106aa8c>]
+(set_target+0x3c/0x64)
+[   13.488824]  r10:00000002 r9:00000000 r8:c22b508c r7:c2227048
+r6:0016e360 r5:00000000
+[   13.496688]  r4:e8903000
+[   13.499243] [<c106aa50>] (set_target) from [<c1064ca0>]
+(__cpufreq_driver_target+0x2d0/0x628)
+[   13.507808]  r7:c2227048 r6:e9b50000 r5:00000000 r4:e8903000
+[   13.513499] [<c10649d0>] (__cpufreq_driver_target) from
+[<c1069040>] (od_dbs_update+0x14c/0x170)
+[   13.522327]  r10:c2204070 r9:e8b50880 r8:e8b50800 r7:e8b51440
+r6:e8b50880 r5:e8b50800
+[   13.530192]  r4:e8903000
+[   13.532741] [<c1068ef4>] (od_dbs_update) from [<c1069d5c>]
+(dbs_work_handler+0x3c/0x68)
+[   13.540783]  r9:00000000 r8:c21d902c r7:e8903000 r6:e8b50804
+r5:00000000 r4:e8b50838
+[   13.548572] [<c1069d20>] (dbs_work_handler) from [<c046f204>]
+(process_one_work+0x200/0x560)
+[   13.557051]  r9:00000000 r8:00000000 r7:efc2c600 r6:efc29300
+r5:e9b24500 r4:e8b50838
+[   13.564833] [<c046f004>] (process_one_work) from [<c046f5b0>]
+(worker_thread+0x4c/0x57c)
+[   13.572963]  r10:efc29300 r9:00000008 r8:c2003d00 r7:efc29318
+r6:e9b24514 r5:efc29300
+[   13.580828]  r4:e9b24500
+[   13.583381] [<c046f564>] (worker_thread) from [<c04773e0>]
+(kthread+0x144/0x170)
+[   13.590812]  r10:e9979e7c r9:e9b24500 r8:c046f564 r7:e9b50000
+r6:00000000 r5:e9b25b80
+[   13.598675]  r4:e99c0140
+[   13.601228] [<c047729c>] (kthread) from [<c040024c>]
+(ret_from_fork+0x14/0x28)
+[   13.608484] Exception stack(0xe9b51fb0 to 0xe9b51ff8)
+[   13.613559] 1fa0:                                     00000000
+00000000 00000000 00000000
+[   13.621777] 1fc0: 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000
+[   13.629994] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[   13.636642]  r10:00000000 r9:00000000 r8:00000000 r7:00000000
+r6:00000000 r5:c047729c
+[   13.644506]  r4:e9b25b80
+[   13.647118] ---[ end trace 4ddd29ac9505935c ]---
+[   13.651768] cpu cpu0: multiple regulators are not supported
+[ #
+  13.655036] usb 1-1: new high-speed USB device number 2 using xhci-hcd
+[   13.657394] cpufreq: __target_index: Failed to change cpu frequency: -22
+[   13.670803] ------------[ cut here ]------------
+[   13.675501] WARNING: CPU: 0 PID: 21 at drivers/opp/core.c:678
+dev_pm_opp_set_rate+0x4cc/0x5d4
+[   13.684068] Modules linked in:
+[   13.687178] CPU: 0 PID: 21 Comm: kworker/0:1 Tainted: G        W
+     5.9.0-rc2-next-20200825 #1
+[   13.696267] Hardware name: Generic DRA74X (Flattened Device Tree)
+[   13.702394] Workqueue: events dbs_work_handler
+[   13.706861] Backtrace:
+[   13.709334] [<c040e860>] (dump_backtrace) from [<c040ebd4>]
+(show_stack+0x20/0x24)
+[   13.716942]  r7:c20cca94 r6:00000000 r5:60000013 r4:c20cca94
+[   13.722633] [<c040ebb4>] (show_stack) from [<c0941338>]
+(dump_stack+0xec/0x118)
+[   13.729983] [<c094124c>] (dump_stack) from [<c0451530>] (__warn+0xe8/0x100)
+[   13.736978]  r10:e8b50600 r9:00000009 r8:c105f6f4 r7:000002a6
+r6:c105f6f4 r5:00000009
+[   13.744844]  r4:00000000 r3:c2004f30
+[   13.748442] [<c0451448>] (__warn) from [<c04518fc>]
+(warn_slowpath_fmt+0x74/0xc4)
+[   13.755960]  r7:000002a6 r6:c1b42034 r5:00000000 r4:e9b50000
+[   13.761649] [<c045188c>] (warn_slowpath_fmt) from [<c105f6f4>]
+(dev_pm_opp_set_rate+0x4cc/0x5d4)
+[   13.770479]  r9:e8b50280 r8:e9b50000 r7:ffffffea r6:3b9aca00
+r5:59682f00 r4:e8902c00
+[   13.778263] [<c105f228>] (dev_pm_opp_set_rate) from [<c106aa8c>]
+(set_target+0x3c/0x64)
+[   13.786304]  r10:00000002 r9:00000000 r8:c22b508c r7:c2227048
+r6:0016e360 r5:00000000
+[   13.794168]  r4:e8903000
+[   13.796717] [<c106aa50>] (set_target) from [<c1064ca0>]
+(__cpufreq_driver_target+0x2d0/0x628)
+[   13.805281]  r7:c2227048 r6:e9b50000 r5:00000000 r4:e8903000
+[   13.810971] [<c10649d0>] (__cpufreq_driver_target) from
+[<c1069040>] (od_dbs_update+0x14c/0x170)
+[   13.819797]  r10:c2204070 r9:e8b50880 r8:e8b50800 r7:e8b51440
+r6:e8b50880 r5:e8b50800
+[   13.827662]  r4:e8903000
+[   13.830213] [<c1068ef4>] (od_dbs_update) from [<c1069d5c>]
+(dbs_work_handler+0x3c/0x68)
+[   13.838256]  r9:00000000 r8:c21d902c r7:e8903000 r6:e8b50804
+r5:00000000 r4:e8b50838
+[   13.846042] [<c1069d20>] (dbs_work_handler) from [<c046f204>]
+(process_one_work+0x200/0x560)
+[   13.854518]  r9:00000000 r8:00000000 r7:efc2c600 r6:efc29300
+r5:e9b24500 r4:e8b50838
+[   13.862301] [<c046f004>] (process_one_work) from [<c046f5b0>]
+(worker_thread+0x4c/0x57c)
+[   13.870431]  r10:efc29300 r9:00000008 r8:c2003d00 r7:efc29318
+r6:e9b24514 r5:efc29300
+[   13.878295]  r4:e9b24500
+[   13.880846] [<c046f564>] (worker_thread) from [<c04773e0>]
+(kthread+0x144/0x170)
+[   13.888278]  r10:e9979e7c r9:e9b24500 r8:c046f564 r7:e9b50000
+r6:00000000 r5:e9b25b80
+[   13.896144]  r4:e99c0140
+[   13.898694] [<c047729c>] (kthread) from [<c040024c>]
+(ret_from_fork+0x14/0x28)
+[   13.905948] Exception stack(0xe9b51fb0 to 0xe9b51ff8)
+[   13.911024] 1fa0:                                     00000000
+00000000 00000000 00000000
+[   13.919241] 1fc0: 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000
+[   13.927457] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[   13.934104]  r10:00000000 r9:00000000 r8:00000000 r7:00000000
+r6:00000000 r5:c047729c
+[   13.941967]  r4:e9b25b80
+[   13.944558] ---[ end trace 4ddd29ac9505935d ]---
+[   13.949228] cpu cpu0: multiple regulators are not supported
+[   13.954832] cpufreq: __target_index: Failed to change cpu frequency: -22
+#
+[   13.961638] ------------[ cut here ]------------
+[   13.961941] sdhci-omap 4809c000.mmc: no pinctrl state for ddr_3_3v mode
+[   13.966303] WARNING: CPU: 0 PID: 21 at drivers/opp/core.c:678
+dev_pm_opp_set_rate+0x4cc/0x5d4
+[   13.966311] Modules linked in:
+[   13.984620] CPU: 0 PID: 21 Comm: kworker/0:1 Tainted: G        W
+     5.9.0-rc2-next-20200825 #1
+[   13.993706] Hardware name: Generic DRA74X (Flattened Device Tree)
+[   13.999833] Workqueue: events dbs_work_handler
+[   14.004301] Backtrace:
+[   14.006772] [<c040e860>] (dump_backtrace) from [<c040ebd4>]
+(show_stack+0x20/0x24)
+[   14.014379]  r7:c20cca94 r6:00000000 r5:60000013 r4:c20cca94
+[   14.020071] [<c040ebb4>] (show_stack) from [<c0941338>]
+(dump_stack+0xec/0x118)
+[   14.027418] [<c094124c>] (dump_stack) from [<c0451530>] (__warn+0xe8/0x100)
+[   14.034416]  r10:e8b50600 r9:00000009 r8:c105f6f4 r7:000002a6
+r6:c105f6f4 r5:00000009
+[   14.042282]  r4:00000000 r3:c2004f30
+[   14.045878] [<c0451448>] (__warn) from [<c04518fc>]
+(warn_slowpath_fmt+0x74/0xc4)
+[   14.053394]  r7:000002a6 r6:c1b42034 r5:00000000 r4:e9b50000
+[   14.059082] [<c045188c>] (warn_slowpath_fmt) from [<c105f6f4>]
+(dev_pm_opp_set_rate+0x4cc/0x5d4)
+[   14.067912]  r9:e8b50280 r8:e9b50000 r7:ffffffea r6:3b9aca00
+r5:59682f00 r4:e8902c00
+[   14.075695] [<c105f228>] (dev_pm_opp_set_rate) from [<c106aa8c>]
+(set_target+0x3c/0x64)
+[   14.083736]  r10:00000002 r9:00000000 r8:c22b508c r7:c2227048
+r6:0016e360 r5:00000000
+[   14.091600]  r4:e8903000
+[   14.094150] [<c106aa50>] (set_target) from [<c1064ca0>]
+(__cpufreq_driver_target+0x2d0/0x628)
+[   14.102715]  r7:c2227048 r6:e9b50000 r5:00000000 r4:e8903000
+[   14.108403] [<c10649d0>] (__cpufreq_driver_target) from
+[<c1069040>] (od_dbs_update+0x14c/0x170)
+[   14.117229]  r10:c2204070 r9:e8b50880 r8:e8b50800 r7:e8b51440
+r6:e8b50880 r5:e8b50800
+[   14.125094]  r4:e8903000
+[   14.127646] [<c1068ef4>] (od_dbs_update) from [<c1069d5c>]
+(dbs_work_handler+0x3c/0x68)
+[   14.135690]  r9:00000000 r8:c21d902c r7:e8903000 r6:e8b50804
+r5:00000000 r4:e8b50838
+[   14.143476] [<c1069d20>] (dbs_work_handler) from [<c046f204>]
+(process_one_work+0x200/0x560)
+[   14.151954]  r9:00000000 r8:00000000 r7:efc2c600 r6:efc29300
+r5:e9b24500 r4:e8b50838
+[   14.159737] [<c046f004>] (process_one_work) from [<c046f5b0>]
+(worker_thread+0x4c/0x57c)
+[   14.167867]  r10:efc29300 r9:00000008 r8:c2003d00 r7:efc29318
+r6:e9b24514 r5:efc29300
+[   14.175732]  r4:e9b24500
+[   14.178282] [<c046f564>] (worker_thread) from [<c04773e0>]
+(kthread+0x144/0x170)
+[   14.185715]  r10:e9979e7c r9:e9b24500 r8:c046f564 r7:e9b50000
+r6:00000000 r5:e9b25b80
+[   14.193578]  r4:e99c0140
+[   14.196127] [<c047729c>] (kthread) from [<c040024c>]
+(ret_from_fork+0x14/0x28)
+[   14.203381] Exception stack(0xe9b51fb0 to 0xe9b51ff8)
+[   14.208458] 1fa0:                                     00000000
+00000000 00000000 00000000
+[   14.216674] 1fc0: 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 00000000
+[   14.224889] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[   14.231536]  r10:00000000 r9:00000000 r8:00000000 r7:00000000
+r6:00000000 r5:c047729c
+[   14.239400]  r4:e9b25b80
+[   14.242012] ---[ end trace 4ddd29ac9505935e ]---
+[   14.246695] cpu cpu0: multiple regulators are not supported
+[   14.252301] cpufreq: __target_index: Failed to change cpu frequency: -22
+[   14.259160] ------------[ cut here ]------------
+[   14.263821] WARNIN#
+G: CPU: 0 PID: 21 at drivers/opp/core.c:678 dev_pm_opp_set_rate+0x4cc/0x5d4
+[   14.272406] Modules linked in:
+[   14.275542] CPU: 0 PID: 21 Comm: kworker/0:1 Tainted: G        W
+     5.9.0-rc2-next-20200825 #1
+[   14.284629] Hardware name: Generic DRA74X (Flattened Device Tree)
+[   14.290756] Workqueue: events dbs_work_handler
+[   14.295223] Backtrace:
+
+Full log,
+https://pastebin.com/HwTf2VMA
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

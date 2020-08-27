@@ -2,178 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86036254CA9
-	for <lists+linux-next@lfdr.de>; Thu, 27 Aug 2020 20:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6505625512D
+	for <lists+linux-next@lfdr.de>; Fri, 28 Aug 2020 00:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgH0SNJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Aug 2020 14:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S1728069AbgH0Wdr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Aug 2020 18:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgH0SNJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 14:13:09 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB290C06121B
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 11:13:08 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id d30so2117033qvc.9
-        for <linux-next@vger.kernel.org>; Thu, 27 Aug 2020 11:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ssRaouXMj2o/HtEZZ3R9vlEAQEleSnlrqRH6Z6mK0YM=;
-        b=hTYxcSPYcs/JpYjOgeSQeg6Xl3LxylMwCdjgvYwx1aZ0q9UMPVlNcB95FXYna3al52
-         IbTaBhRvKMuLTqjFu5nwJvvcRfM5hlW4mr0CAIw5t/TZ9K03o40d9+HsdyT9aHbx1V9u
-         6lZyigyUUK6y9vpQiHxICC3q0LPAv4EOwqGca0jbl9DK/0ufdjWzxlzp4M+vIrJCDfLD
-         rTLXzM7s1yCsMnkF3SLfrSOCuq2rWL6RINgYVQ1ynhxBGMt2E2ZfHWhIMvb97fvURbWm
-         /4HAoGwQtJz95MMLCIXruMdQ2RP37flfW+Z+PMdo9OixEUHbUjbtaq1V5cLjd1XtAf10
-         iwTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ssRaouXMj2o/HtEZZ3R9vlEAQEleSnlrqRH6Z6mK0YM=;
-        b=ev9g+AAh8umKM0MkN+VCTwrKkoyXMGSK+uiwgnK6L3Cl+xcTdVQ+Zl3t/+/pysMAve
-         idkn0G2PQ0V9s72oPg8ni3v8Uq+v0wTU+sRLKOmRjNd4OlrUKuF8J4jKyk2/Q/V0PNsp
-         lkWu7J6aPTJ0s+zpGvMtnkqRdXr1WO934dp29+j/PQAthOux40s0kzWdnL3GArLCKzi6
-         Ej2jTeYK3XioKnDqgn8WarT6PEw8tEjEaxP7uPvy0z97HzZxRHEvPfofgNCW4HMmC9iW
-         S5BHg0bGrmQ83GDVBDboYwjGHitnCtEj3s3uOiSQsczhCD/BvDPxluEQQ8s+ck0PXw9T
-         Ca5g==
-X-Gm-Message-State: AOAM530gl0lAbkBcL/PsDHlU+1c2LIe+D7JhDX9JTC9R2DOghaBUxSSH
-        r2m7Mqd0O/38uhpggiBE4S4j/5XJAsL0uM6aBeQFkw==
-X-Google-Smtp-Source: ABdhPJy+icwO9xKN//159CWIuCBqk8MV0Dp0jEhUL4JCTuBiRCitMg1ap+ZOEoYO7Yy4bHcgdPptWx3uVVGIwM6G+34=
-X-Received: by 2002:a05:6214:10ca:: with SMTP id r10mr232930qvs.185.1598551987724;
- Thu, 27 Aug 2020 11:13:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200729212721.1ee4eef8@canb.auug.org.au> <87ft8lwxes.fsf@turtle.gmx.de>
- <CAMzD94Rz4NYnhheS8SmuL14MNM4VGxOnAW-WZ9k1JEqrbwyrvw@mail.gmail.com>
- <87y2m7gq86.fsf@turtle.gmx.de> <87pn7gh3er.fsf@turtle.gmx.de>
-In-Reply-To: <87pn7gh3er.fsf@turtle.gmx.de>
-From:   Brian Vazquez <brianvv@google.com>
-Date:   Thu, 27 Aug 2020 11:12:56 -0700
-Message-ID: <CAMzD94Rkq1RTZJG5UsEz9VhaCBbvObD1azqU2gsJzZ6gPYcfag@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Sven Joachim <svenjoac@gmx.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+        with ESMTP id S1728054AbgH0Wdp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Aug 2020 18:33:45 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B4C061264;
+        Thu, 27 Aug 2020 15:33:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BcyF10lGTz9sPB;
+        Fri, 28 Aug 2020 08:33:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1598567622;
+        bh=lmvn/ZGe/3UDRoc/5WUAswCHgpiyFOhBnbOILWKgyt4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lYOrebd0kyIc5T6N93C6fMzQm7qduBxItQYATmdO2n2xpbQR0ZYYxQy6phzpEIccL
+         kzxdzLOfVVQ7ek3hfg31jmOYC/5Qdx5+NGBLyxB6LMM9k6d1V2mqBMkVGu/BxtZKx1
+         SkNYiVvnBrpe2WMCqlkhOVSzsOZX0GBku9DGtFjJQ4SpFLLuyoN8pN7N9uAwdDAvuN
+         F5Hs+UL8uira8nELT0teEY5SVyEpXWn5vp85xQ1mR0mKI7oGkhJkScNBUKhYMr3EG6
+         yjk/QW/mU9cA5wrpVpYw8aVNOBHFW1EshYYhI4BRAIlac3ANitgg+ipzMVTtnbGwVE
+         eSxiLiqEj42vw==
+Date:   Fri, 28 Aug 2020 08:33:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200828083340.24d99009@canb.auug.org.au>
+In-Reply-To: <20200827124549.GD167163@linux.ibm.com>
+References: <20200827182058.1c7d75ed@canb.auug.org.au>
+        <20200827124549.GD167163@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Xvn8QAz2O0btk/AJFCIzn_f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Sven,
+--Sig_/Xvn8QAz2O0btk/AJFCIzn_f
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I've been trying to reproduce it with your config but I didn't
-succeed. I also looked at the file after the preprocessor and it
-looked good:
+Hi Mike,
 
-ret = ({ __builtin_expect(!!(ops->match == fib6_rule_match), 1) ?
-fib6_rule_match(rule, fl, flags) : ops->match(rule, fl, flags); })
-
-Note that fib4_rule_match doesn't appear as the
-CONFIG_IP_MULTIPLE_TABLES is not there.
-
-Could you share more details on how you're compiling it and what
-compiler you're using??
-
-Thanks,
-Brian
-
-
-
-On Mon, Aug 24, 2020 at 1:08 AM Sven Joachim <svenjoac@gmx.de> wrote:
+On Thu, 27 Aug 2020 15:45:49 +0300 Mike Rapoport <rppt@linux.ibm.com> wrote:
 >
-> On 2020-08-22 08:16 +0200, Sven Joachim wrote:
->
-> > On 2020-08-21 09:23 -0700, Brian Vazquez wrote:
-> >
-> >> Hi Sven,
-> >>
-> >> Sorry for the late reply, did you still see this after:
-> >> https://patchwork.ozlabs.org/project/netdev/patch/20200803131948.41736-1-yuehaibing@huawei.com/
-> >> ??
-> >
-> > That patch is apparently already in 5.9-rc1 as commit 80fbbb1672e7, so
-> > yes I'm still seeing it.
->
-> Still present in 5.9-rc2 as of today, I have attached my .config for
-> reference.  Note that I have CONFIG_IPV6_MULTIPLE_TABLES=y, but
-> CONFIG_IP_MULTIPLE_TABLES is not mentioned at all there.
->
-> To build the kernel, I have now deselected IPV6_MULTIPLE_TABLES.  Not
-> sure why this was enabled in my .config which has grown organically over
-> many years.
->
-> Cheers,
->        Sven
->
->
-> >> On Mon, Aug 17, 2020 at 12:21 AM Sven Joachim <svenjoac@gmx.de> wrote:
-> >>
-> >>> On 2020-07-29 21:27 +1000, Stephen Rothwell wrote:
-> >>>
-> >>> > Hi all,
-> >>> >
-> >>> > After merging the net-next tree, today's linux-next build (i386
-> >>> defconfig)
-> >>> > failed like this:
-> >>> >
-> >>> > x86_64-linux-gnu-ld: net/core/fib_rules.o: in function
-> >>> `fib_rules_lookup':
-> >>> > fib_rules.c:(.text+0x5c6): undefined reference to `fib6_rule_match'
-> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x5d8): undefined reference to
-> >>> `fib6_rule_match'
-> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x64d): undefined reference to
-> >>> `fib6_rule_action'
-> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x662): undefined reference to
-> >>> `fib6_rule_action'
-> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x67a): undefined reference to
-> >>> `fib6_rule_suppress'
-> >>> > x86_64-linux-gnu-ld: fib_rules.c:(.text+0x68d): undefined reference to
-> >>> `fib6_rule_suppress'
-> >>>
-> >>> FWIW, I saw these errors in 5.9-rc1 today, so the fix in commit
-> >>> 41d707b7332f ("fib: fix fib_rules_ops indirect calls wrappers") was
-> >>> apparently not sufficient.
-> >>>
-> >>> ,----
-> >>> | $ grep IPV6 .config
-> >>> | CONFIG_IPV6=m
-> >>> | # CONFIG_IPV6_ROUTER_PREF is not set
-> >>> | # CONFIG_IPV6_OPTIMISTIC_DAD is not set
-> >>> | # CONFIG_IPV6_MIP6 is not set
-> >>> | # CONFIG_IPV6_ILA is not set
-> >>> | # CONFIG_IPV6_VTI is not set
-> >>> | CONFIG_IPV6_SIT=m
-> >>> | # CONFIG_IPV6_SIT_6RD is not set
-> >>> | CONFIG_IPV6_NDISC_NODETYPE=y
-> >>> | CONFIG_IPV6_TUNNEL=m
-> >>> | CONFIG_IPV6_MULTIPLE_TABLES=y
-> >>> | # CONFIG_IPV6_SUBTREES is not set
-> >>> | # CONFIG_IPV6_MROUTE is not set
-> >>> | # CONFIG_IPV6_SEG6_LWTUNNEL is not set
-> >>> | # CONFIG_IPV6_SEG6_HMAC is not set
-> >>> | # CONFIG_IPV6_RPL_LWTUNNEL is not set
-> >>> | # CONFIG_NF_SOCKET_IPV6 is not set
-> >>> | # CONFIG_NF_TPROXY_IPV6 is not set
-> >>> | # CONFIG_NF_DUP_IPV6 is not set
-> >>> | # CONFIG_NF_REJECT_IPV6 is not set
-> >>> | # CONFIG_NF_LOG_IPV6 is not set
-> >>> | CONFIG_NF_DEFRAG_IPV6=m
-> >>> `----
-> >>>
-> >>> > Caused by commit
-> >>> >
-> >>> >   b9aaec8f0be5 ("fib: use indirect call wrappers in the most common
-> >>> fib_rules_ops")
-> >>> >
-> >>> > # CONFIG_IPV6_MULTIPLE_TABLES is not set
-> >>> >
-> >>> > I have reverted that commit for today.
-> >>>
-> >>> Cheers,
-> >>>        Sven
-> >>>
+> On Thu, Aug 27, 2020 at 06:20:58PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the akpm-current tree, today's linux-next build (mips
+> > cavium_octeon_defconfig) failed like this:
+> >=20
+> > arch/mips/cavium-octeon/dma-octeon.c:205:7: error: =E2=80=98mem=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98sem=E2=
+=80=99?
+> >=20
+> > Caused by commit
+> >=20
+> >   52e1a745395d ("arch, drivers: replace for_each_membock() with for_eac=
+h_mem_range()")
+> >=20
+> > Reported by "kernelci.org bot" <bot@kernelci.org>. =20
+>=20
+> Here's the fix:
+>=20
+> From 9e46da6793528e35883ff81835d65a864bf98007 Mon Sep 17 00:00:00 2001
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> Date: Thu, 27 Aug 2020 15:42:49 +0300
+> Subject: [PATCH] mips: fix cavium-octeon build caused by memblock refacto=
+ring
+
+Thanks, I have added that to linux-next today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Xvn8QAz2O0btk/AJFCIzn_f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9INMQACgkQAVBC80lX
+0GyXTAf/WLJXgbKJdZ4nNUwPFGSRmsM1OzWBt+AO4RlkEjpdgiw7+xBa5aI0LB0/
+e0cD+RBZGFSU/+vko+nkHlsxHuWIxTvkGXA6v82qanLv+OmrZYFO347dA7b+cVrD
+KgVnv2oIQoH8iUGHPFgqRJ+FsFAnh38fToY4rjVU+We2pNJ4bIZqZs7qUMjgyf3N
+hNp8dxiqbVmn29+fw5WebUkxthkXPvoigjwBnPXZuK7WDNg4GDP14uFDAh01rNb9
+tjU3jnnd6IcV1OOxBCfKqyzDfjfGhTqASGynPnmSmfR4asqNJqb1DxjmlzvYxy2z
+/zZPuEgtI+SB3MnriBMqYR8dXuGYbw==
+=5QCt
+-----END PGP SIGNATURE-----
+
+--Sig_/Xvn8QAz2O0btk/AJFCIzn_f--

@@ -2,98 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1319257315
-	for <lists+linux-next@lfdr.de>; Mon, 31 Aug 2020 06:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A42625731F
+	for <lists+linux-next@lfdr.de>; Mon, 31 Aug 2020 06:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbgHaEls (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Aug 2020 00:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S1725829AbgHaEqO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Aug 2020 00:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgHaElg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Aug 2020 00:41:36 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885ACC061575
-        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 21:41:35 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u128so3883684pfb.6
-        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 21:41:35 -0700 (PDT)
+        with ESMTP id S1725446AbgHaEqN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Aug 2020 00:46:13 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E45C061573
+        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 21:46:12 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id s2so2337006pjr.4
+        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 21:46:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=tKBW/F//Odqb5tM/8/4W6YOQLh46rA7wiAa9+W09lUs=;
-        b=c7qfDC09HduGCiqIk+BgOYpQ9cvQvrcoJ68UU8Om0zB6UfcJuBggEjd3zzgQiQSvWz
-         0cx6iY68Z3P6Wp/t5Qbf/E6ovg3xn5scdjX29vQ9aEWfrxC9SJUv5iGNJgN6lD2ORyYg
-         U3IerKG6ipw6v5cNOcAXAWk6qtm+Ey1GST3evZhR46so5KxZy9kA1E2TtjvhZoaKFjov
-         bHVxUnufMR8HN58YdZNjvhAg9uS3dFQuD8Ufk6DrYMO0/QP+sv2gTl7u734p3k2lGHps
-         rZcq/O8vyDLshkQH+D1qAiHIycDiP2Fk7+LrYiXCUxIhlK3MLYABLrKOALQqyvQyFpaD
-         VQYQ==
+        bh=9DT7T9nQfwo6eKdKm8ktrJGI/iqaC4tsTOR19DzTOIc=;
+        b=gqG+SDRFtzBK7B/V2gV7gjW0mZAqUuY/579i8mfVPZ62EyXYeaZjxrmqJ4cmgi263J
+         KVJuqDAAKZJ/ghgm5Sy+azj5BrwEDWUL2/F7xevIXcp525YE/I/IqhIj1El6lShC6gHA
+         Rg1Dxn3AUyJImGm2mW+eqYkCrxx/f2TxJmOxJ8iMwP5QiiWLUPXsGQXluACFyBkUmhya
+         0qCGHP8hXj7qjnpnzxUuFpeRrlThckzHt8aZFKUTexLXbfwR84nT08fFvOi5wHsCgodU
+         wZetw2ky7aQu6OeA0Kx2LMu5/rpf16Zg8Chdqy07tLQCfySrwEreR3N1kzw4O2CEUkyS
+         Vj6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tKBW/F//Odqb5tM/8/4W6YOQLh46rA7wiAa9+W09lUs=;
-        b=uPjSJoElY9WPNdveUxd1Kel6LzdSD6XMN1srV444wJECwj2r6W4jIXeN6xOjNt8mRx
-         prlB1VYvXEUPj3DRzfTJEZLaDl5lOyQMgVI1eNXa/Fox8cTbudsW5uyTS8VY2KlZcIH6
-         HO6op2WC//0pLUYguLwPi4TdKcCvJ8bqTfJnipfXQsAW7KuhT3+8Mv2MyiY1ubYlO6Ep
-         JeppxpHDGSrsit/fOJJYtP5SoYhTJUrdVQPRFe8lULiM7yZ2J96MyfRV1QMEZjVAVU5C
-         RA2m0uih5XyjwlXfybXyBbb3BigbAHemmFLJ/Z9EHC2OvuF6OvaO+d+95xBbZ5a/lPop
-         dHiQ==
-X-Gm-Message-State: AOAM532JkpW0zhfKSCfNoBvFnT6D1XCrjZp8fAB8EPULTrto1wnLJU05
-        GjZi3VrpT0LSNuVgwUECR9/BJw==
-X-Google-Smtp-Source: ABdhPJwRrm2hAT1+zyOzYg5wvxBV6hOve2sGkJOFOkrgXNNu1vlfGDGouDr0VBs0EX8TzqHhtvmClQ==
-X-Received: by 2002:a63:354:: with SMTP id 81mr7199979pgd.216.1598848895038;
-        Sun, 30 Aug 2020 21:41:35 -0700 (PDT)
+        bh=9DT7T9nQfwo6eKdKm8ktrJGI/iqaC4tsTOR19DzTOIc=;
+        b=ht3Fkw/dvSuFBTpd7w5OW9IAQu9gt6e4yJUEr65znbOWuxollv9/cWsHYHl4Pjfxue
+         NQSpIQkjGeVKRKD2ZoKb4mAXfL1iMOLT5sOKWSdWylHlWv4lAjRGOC8npNb8lKHyiWZt
+         C3u/0q1kBauUf4VBuRyFU3UDB9xbIW45dFwIhq1Pau5Lm4NyW+kRbNnle9bl3zY0GgyO
+         Q7EscTsnZcs7UcnsPL4IhntjAyuSO2gs8If718ZGG1WvLfh6upa+v5mGqG6mZEhi2afB
+         9zQa4aWm5cpPy5SP+zQfmuHP8jRzVjPsK3uDyDjqzju9csYdx/vMsepohiFgoLKRd9Ik
+         b+Tg==
+X-Gm-Message-State: AOAM531k+rt8B6TQFn5mrRyEVRtmiYSvWApKs+VnEYCd9NGQUctQKOP7
+        IRPtH/RmBMRjiQW92X4F7VewpQ==
+X-Google-Smtp-Source: ABdhPJxt8ExSDwcad3/nlwy4wcUU3CTerjAZ2bl7+IOocMW5vV2fbb+AlFHt6ItMXMlUaUtqP2vCDA==
+X-Received: by 2002:a17:90b:1093:: with SMTP id gj19mr9397091pjb.149.1598849172382;
+        Sun, 30 Aug 2020 21:46:12 -0700 (PDT)
 Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id a10sm6214503pfl.28.2020.08.30.21.41.34
+        by smtp.gmail.com with ESMTPSA id h193sm5930037pgc.42.2020.08.30.21.46.11
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 30 Aug 2020 21:41:34 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 10:11:32 +0530
+        Sun, 30 Aug 2020 21:46:11 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 10:16:09 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephan Gerhold <stephan@gerhold.net>,
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
         Rajendra Nayak <rnayak@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
-Subject: Re: WARNING: at drivers/opp/core.c:678
- dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
-Message-ID: <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
-References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
- <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
- <20200827211832.3ebeda8a@canb.auug.org.au>
- <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
- <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, John Stultz <john.stultz@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        madhuparnabhowmik10@gmail.com
+Subject: Re: Kernel panic : Unable to handle kernel paging request at virtual
+ address - dead address between user and kernel address ranges
+Message-ID: <20200831044609.owejwct5rvrgc5e5@vireshk-i7>
+References: <CA+G9fYvUwH2FA9GOeA_7GYpLA31uOmEpg32VKnJ8-d5QSK4PdQ@mail.gmail.com>
+ <20200827090813.fjugeqbb47fachy7@vireshk-i7>
+ <CAK8P3a2zxybiMDzHXkTsT=VpHJOLkwd1=YTtCNU04vuMjZLkxA@mail.gmail.com>
+ <20200827101231.smqrhqu5da6jlz6i@vireshk-i7>
+ <CA+G9fYv=XLtsuD=tVR1HHotwpKLkbwZVyPr4UhY-jD+6-duTmw@mail.gmail.com>
+ <CA+G9fYvSEHua0EpW64rASucWuS-U2STAZxufrfN75UDspGt2cA@mail.gmail.com>
+ <CAPDyKFrpOqpBiSvkvO7sXHiQDOwdXYmx-80Ji5wW79QF-MrOuQ@mail.gmail.com>
+ <CADYN=9K3D3OZ5T_K+6MfcgVLRoktPB6LvwDiXGj-+Zpq3faYfg@mail.gmail.com>
+ <CAPDyKFpNVJZ0FddJ8naXYp-oZr-mYSOH-5iXG-wASZEFozBJJQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
+In-Reply-To: <CAPDyKFpNVJZ0FddJ8naXYp-oZr-mYSOH-5iXG-wASZEFozBJJQ@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 28-08-20, 15:42, Naresh Kamboju wrote:
-> Viresh,
-> I have applied the v2 patch series on top of linux next-20200824.
-> and tested again the reported kernel warning is fixed [1]
+On 28-08-20, 14:23, Ulf Hansson wrote:
+> Anders, Naresh - thanks for testing and reporting. I am dropping the
+> patch from my tree.
 > 
-> [1] https://lkft.validation.linaro.org/scheduler/job/1717615#L1881
+> Viresh, I suggest to keep Anders/Naresh in the cc, for the next
+> version. Then I can wait for their tested-by tag before I apply again.
 
-Hi Naresh,
-
-You meant this one ?
-
-[PATCH V2 4/8] mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
-
-Great, thanks a lot for testing these.
+Sorry for the trouble, I thought you will wait for a bit before
+applying the patch to see test results from Naresh, but you were fast
+enough as well :)
 
 -- 
 viresh

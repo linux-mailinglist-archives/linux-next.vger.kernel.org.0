@@ -2,59 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B24D0257375
-	for <lists+linux-next@lfdr.de>; Mon, 31 Aug 2020 08:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBFE257377
+	for <lists+linux-next@lfdr.de>; Mon, 31 Aug 2020 08:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgHaGAZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 Aug 2020 02:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S1725891AbgHaGCL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 Aug 2020 02:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgHaGAX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Aug 2020 02:00:23 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6E6C061573
-        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 23:00:23 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id j188so2633177vsd.2
-        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 23:00:23 -0700 (PDT)
+        with ESMTP id S1725829AbgHaGCH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 Aug 2020 02:02:07 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2137C061575
+        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 23:02:06 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id x18so1297033pll.6
+        for <linux-next@vger.kernel.org>; Sun, 30 Aug 2020 23:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jPR6E22q3UvNsEW0qxCDu2FmZX7UARU+hYhcDGZGweA=;
-        b=t3rUgXe/X9VtlQzwBgCEyPm7ABnuByKRqwNbksXDycnu+HFH/DK7iXQgNZxmIbPWLE
-         TZdz75AD0/N1v06ZgeKjXZ5yRHjb6Mehm39GJIZ4E8jaB9syZeEBBSgWMghzPZPatTi1
-         QMucj1c4u1eveuP3kgRLsTqFdI8CiXA9x8LzpUw66pUgg78FPuEEQsKzJASpDiSdlVKL
-         cPn0omDEIwOipWkmNGwYj4muoYZBvyb1aZb/h3hfyYtNXsJlrUye8xiDkE59HHI6sGTg
-         U9eEsGA/yuEf9HAxc0t8OQITM0/PBD/CFf2NABRFisOMPKF5WDx0a6RNmRkTkZdFv4dR
-         bHFg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=T0ddowV1YvN/aU8XxhlLoq1wELp6Tq70TmTHW0qRDVI=;
+        b=oyZKTm6Tk8Vfn+6jwN/7gGN7iSX68l/t/xvDbQcC2eXx4gwvTmqL2o1sL3NWAqGw9e
+         HlOdy/6xd2zXu5VIdMqgzyfvmP5PVD4c+iHDjw6shV3Yy16kPvWyIGSgpVDZyMla3KME
+         UnW071eobQ0jbulqrWPqjlMGi09kcOsSxM5E0FUoe9tmTWINaYbWM6Bt4FyWPho2hktn
+         6Hbf/Vua+a7ZbggXlT0Qo9cxJHzUVQMEz/UaTzitb2+IobwMNM5ZFpGNeZkpT+j3CeJZ
+         OlnsmqPbKN3DgHr0aDVbsL1FzQcgdA9z7O5zOw0hBdbaro50Sg+uldE9v18Bmjkbb14v
+         KXxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jPR6E22q3UvNsEW0qxCDu2FmZX7UARU+hYhcDGZGweA=;
-        b=A9K+qAZ4FwRl/A6cmoQp8aystacBhB2Ulb35yuCOhTNUMJvSl9vwSaukkDN/KMgcK/
-         RQBApuPgKOuH41a/3ju2B239RNXC06em13u277+OQvxP6pK+wpmRC0LWqMsyQxYz1v/3
-         Ina1KOR/AmdHDg42BV1bN7XOJbxHCcs8RnvLHsx52cVx7wg8R3xcrYLir2O8M3R2GAzG
-         IhgDBsqYadXQLpe+OzEu8Y2YAyagDB3yox/IYQyErWZUUNnILGzPpGezfMe9k50vwE7Y
-         kGCZ80r5M/CTrq2yxs45NIaA8FqSiZIs4xJlRBDC4KovisBtK981Cw04lRTomhh/4WhT
-         j92A==
-X-Gm-Message-State: AOAM532JF5S8WbqVClDeKqqNnyEQ7Szm/qgOjhhEkmAE8VbgTxp+ANGN
-        0xFNqH+Qo1gNBGFX6F9ugxMwm/i6zFgjnM+sbete0g==
-X-Google-Smtp-Source: ABdhPJzabAOw5f4M98Uk3VeYnZHKFFd23UucsW7AqrMhZATJGgyPECIanekf0eYeVulibqH5Joiez/O1Hix+DfthbT0=
-X-Received: by 2002:a67:e3cc:: with SMTP id k12mr1468vsm.173.1598853619997;
- Sun, 30 Aug 2020 23:00:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
- <20200827094651.3grvs6ungv3dh7y3@vireshk-i7> <20200827211832.3ebeda8a@canb.auug.org.au>
- <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7> <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
- <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
-In-Reply-To: <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 31 Aug 2020 11:30:08 +0530
-Message-ID: <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
-Subject: Re: WARNING: at drivers/opp/core.c:678 dev_pm_opp_set_rate+0x4cc/0x5d4
- - on arm x15
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=T0ddowV1YvN/aU8XxhlLoq1wELp6Tq70TmTHW0qRDVI=;
+        b=MMbWNlwl6AKWnhQMeiNAAhNFeebaNHQvXMhe8xTWacsbDUepTPY/FbFMDhrZc+AAzy
+         Xt9XSRbixv4kn0yq4zBMo0RBnt/Fk40oxnH8JP5rJ6b5kRgMvchhm8aWFzzISp9tq3DU
+         ulH/En9YtROjSzfn/dgFhYXumEBlI3ScaoqgR9WXPW8R5pOFOXYVoFL+LW7oItCk1OSh
+         1u5nv310gA/Bj39VWCPeDL5BWmlh0O2OQjJopf0FjfI9A8cq6MSPIcK4LD6bXDlL/4/l
+         38fh79qoBcUemwYwma+0s+uyvk/07IPR2jj8BSrLV+yoskEXIxEb8wTiB1rLYlUZg9A5
+         nvMg==
+X-Gm-Message-State: AOAM532k3Wxnv/dLooFkXinvbcYU0lzYO0YyLAEtEpevyXYN0e7XiunA
+        xPp+1su2hGqWkY6L7BnPSFu5Nw==
+X-Google-Smtp-Source: ABdhPJykLmYFCGwOE6bqP4q4MynlYfHpxLNeOGfCqaMjdqKJQBPGSdKEXOfXuxq0dm9PoHZkmhlxgg==
+X-Received: by 2002:a17:90a:4401:: with SMTP id s1mr171676pjg.79.1598853726264;
+        Sun, 30 Aug 2020 23:02:06 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id s20sm5932548pga.7.2020.08.30.23.02.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 30 Aug 2020 23:02:05 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 11:32:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         open list <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -67,50 +62,49 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Sibi Sankar <sibis@codeaurora.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         Stephen Boyd <sboyd@kernel.org>, nm@ti.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: WARNING: at drivers/opp/core.c:678
+ dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
+Message-ID: <20200831060203.7guhirtxb72odow2@vireshk-i7>
+References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
+ <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
+ <20200827211832.3ebeda8a@canb.auug.org.au>
+ <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
+ <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
+ <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
+ <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 31 Aug 2020 at 10:11, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 28-08-20, 15:42, Naresh Kamboju wrote:
-> > Viresh,
-> > I have applied the v2 patch series on top of linux next-20200824.
-> > and tested again the reported kernel warning is fixed [1]
+On 31-08-20, 11:30, Naresh Kamboju wrote:
+> On Mon, 31 Aug 2020 at 10:11, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > [1] https://lkft.validation.linaro.org/scheduler/job/1717615#L1881
->
-> Hi Naresh,
->
-> You meant this one ?
->
-> [PATCH V2 4/8] mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
+> > On 28-08-20, 15:42, Naresh Kamboju wrote:
+> > > Viresh,
+> > > I have applied the v2 patch series on top of linux next-20200824.
+> > > and tested again the reported kernel warning is fixed [1]
+> > >
+> > > [1] https://lkft.validation.linaro.org/scheduler/job/1717615#L1881
+> >
+> > Hi Naresh,
+> >
+> > You meant this one ?
+> >
+> > [PATCH V2 4/8] mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
+> 
+> I have not tested individual patches instead applied all v2 of 8 patches
+> and tested.
 
-I have not tested individual patches instead applied all v2 of 8 patches
-and tested.
+Ah okay, Thanks. That's the same.
 
-This is from my tree.
-$ git log --oneline | head -8
-574dafbe5e8a qcom-geni-se: remove has_opp_table
-6680f35d0cca tty: serial: qcom_geni_serial: Unconditionally call
-dev_pm_opp_of_remove_table()
-2a3929d0d5e0 spi: spi-qcom-qspi: Unconditionally call
-dev_pm_opp_of_remove_table()
-617b65175370 spi: spi-geni-qcom: Unconditionally call
-dev_pm_opp_of_remove_table()
-e736706a4914 mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
-afdd91145686 drm/msm: Unconditionally call dev_pm_opp_of_remove_table()
-b85668862d92 drm/lima: Unconditionally call dev_pm_opp_of_remove_table()
-3ac057e88c7c cpufreq: imx6q: Unconditionally call dev_pm_opp_of_remove_table()
+To be honest, I wasn't targeting fixing this bug with that version,
+but it went well after all :)
 
->
-> Great, thanks a lot for testing these.
-Anytime testing  :)
-
->
-> --
-> viresh
-
-- Naresh
+-- 
+viresh

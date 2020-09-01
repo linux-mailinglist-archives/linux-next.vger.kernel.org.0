@@ -2,134 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70384258F5C
-	for <lists+linux-next@lfdr.de>; Tue,  1 Sep 2020 15:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB8B259D41
+	for <lists+linux-next@lfdr.de>; Tue,  1 Sep 2020 19:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727910AbgIANrS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Sep 2020 09:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728236AbgIANqr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Sep 2020 09:46:47 -0400
-X-Greylist: delayed 506 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Sep 2020 06:46:45 PDT
-Received: from smtp2-3.goneo.de (smtp2.goneo.de [IPv6:2001:1640:5::8:33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC6BC061244
-        for <linux-next@vger.kernel.org>; Tue,  1 Sep 2020 06:46:45 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp2.goneo.de (Postfix) with ESMTP id EFA7223F56F;
-        Tue,  1 Sep 2020 15:38:12 +0200 (CEST)
-X-Virus-Scanned: by goneo
-X-Spam-Flag: NO
-X-Spam-Score: -3.846
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.846 tagged_above=-999 tests=[ALL_TRUSTED=-1,
-        AWL=1.184, BAYES_00=-1.9, NICE_REPLY_A=-2.13] autolearn=ham
-Received: from smtp2.goneo.de ([127.0.0.1])
-        by localhost (smtp2.goneo.de [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id J9dzge83HrKw; Tue,  1 Sep 2020 15:38:11 +0200 (CEST)
-Received: from [192.168.1.127] (dyndsl-091-096-137-061.ewe-ip-backbone.de [91.96.137.61])
-        by smtp2.goneo.de (Postfix) with ESMTPSA id 5854823F03B;
-        Tue,  1 Sep 2020 15:38:11 +0200 (CEST)
-Subject: Re: linux-next: build failure after upgrading sphinx
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726543AbgIARg3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Sep 2020 13:36:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55572 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726301AbgIARg2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 1 Sep 2020 13:36:28 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57AA52071B;
+        Tue,  1 Sep 2020 17:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598981787;
+        bh=JdV+6cN4jk9Av19/JkbyWVKBmm6t9dmg8jS26hDhVCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nl2Z9NWaY5Cj+fwlV0BAwTPsT0/EG0zhoeGA/Gb8WybGXZ0OQyE9wTG1O7scrbNN5
+         f4S6zAhIOYUn42q6O6SOSOZa7DGiewDGvRipMtQiGAWTk1XucujZ3uCydVx+K10Ngc
+         UM1cHkGSxlDGHhp/wfR4m+diN/dOsAcKFVBk4Aes=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7156040D3D; Tue,  1 Sep 2020 14:36:25 -0300 (-03)
+Date:   Tue, 1 Sep 2020 14:36:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200827145017.47c16c73@canb.auug.org.au>
- <20200831130312.0a2cbd0c@lwn.net>
-From:   Markus Heiser <markus.heiser@darmarit.de>
-Message-ID: <089b8100-0ee6-36b2-c524-0d9370d6bb52@darmarit.de>
-Date:   Tue, 1 Sep 2020 15:38:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: Re: linux-next: build warnings from perf build in Linus' tree
+Message-ID: <20200901173625.GA1463758@kernel.org>
+References: <20200827083839.276cc0d0@canb.auug.org.au>
+ <20200827091009.54789c17@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200831130312.0a2cbd0c@lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-DE
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200827091009.54789c17@canb.auug.org.au>
+X-Url:  http://acmel.wordpress.com
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Am 31.08.20 um 21:03 schrieb Jonathan Corbet:
-> On Thu, 27 Aug 2020 14:50:17 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Em Thu, Aug 27, 2020 at 09:10:09AM +1000, Stephen Rothwell escreveu:
+> Hi all,
 > 
->> Today I upgraded ot sphinx v3.2.1 and got the following error from
->> "make htmldocs":
->>
->> Running Sphinx v3.2.1
->> enabling CJK for LaTeX builder
->>
->> Extension error:
->> Could not import extension cdomain (exception: cannot import name 'c_funcptr_sig_re' from 'sphinx.domains.c' (/usr/lib/python3/dist-packages/sphinx/domains/c.py))
->>
->> I have downgraded to version 2.4.3 and await suggestions/patches :-)
+> On Thu, 27 Aug 2020 08:38:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > /home/sfr/next/next/tools/perf/util/namespaces.c: In function 'nsinfo__new':
+> > /home/sfr/next/next/tools/perf/util/namespaces.c:139:12: note: the layout of aggregates containing vectors with 8-byte alignment has changed in GCC 5
+> >   139 |   nsi->pid = pid;
+> >       |   ~~~~~~~~~^~~~~
+> > 
+> > I assume they are because I have changed all my toolcahins to gcc
+> > v10 today.
 > 
-> [Adding Markus]
-> 
-> Markus, this looks like an issue with the "handle function-like macros"
-> code that has your name on it.  The Sphinx folks think that functionality
-> can just be removed:
-> 
-> 	https://github.com/sphinx-doc/sphinx/issues/7421
-> 
-> Do you agree?  We need to look at what they're saying about the :name:
-> directive as well; somehow I missed that when it first went in.
-> 
-> Thanks,
-> 
-> jon
+> From gcc v9, so I have no idea what the GGC 5 note is about.
 
-Hi Jon, thanks for taking me into CC.
+Yeah, strange warning, and I reproduced it here with a container:
 
-I guess you refer this post:
+[perfbuilder@five x-powerpc64el]$ dm ubuntu:20.04-x-powerpc64el
+Tue 01 Sep 2020 02:23:28 PM -03
+# export PERF_TARBALL=http://192.168.122.1/perf/perf-5.9.0-rc1.tar.xz
+# dm  ubuntu:20.04-x-powerpc64el
+   1    37.44 ubuntu:20.04-x-powerpc64el    : Ok   powerpc64le-linux-gnu-gcc (Ubuntu 10-20200411-0ubuntu1) 10.0.1 20200411 (experimental) [master revision bb87d5cc77d:75961caccb7:f883c46b4877f637e0fa5025b4d6b5c9040ec566]
+ 2 37.4383
+[perfbuilder@five x-powerpc64el]$
 
-   https://github.com/sphinx-doc/sphinx/issues/7421#issuecomment-609830660
-
-What I know is: The Sphinx >= v3.0 includes a "C, initial
-rewrite" which is not downward compatible.
-
-  https://github.com/sphinx-doc/sphinx/commit/0f49e30c#diff-59e33b0
-
----
-
-To give an short answer to opener's question:
-
-Our Sphinx-build is not Sphinx >= v3.0 ready.  We recommend
-to follow our installation instructions [1] and install
-requirements by::
-
-   (virtualenv) $ pip install -r Documentation/sphinx/requirements.txt
-
-In the requirements.txt we stick Sphinx at 'Sphinx==2.4.4'.
-In my personal opinion there are more problems than just the
-C-domain when using other Sphinx Versions (e.g. PDF is most
-often problematic).
-
-[1] https://www.kernel.org/doc/html/latest/doc-guide/sphinx.html#sphinx-install
-
----
-
-I can't say if this *rewrite* has a better "handle
-function-like macros" or not.
-
-Since the changes are not downward compatible,
-Documentation/sphinx/cdomain.py needs a rewrite
-(Unfortunately, I hadn't had the time to do this).
-
-TL;DR;
-
-In my linuxdoc [2] project I use the same cdomain.py
-implementation and split cdomain into v2 and v3 [3].  ATM
-linuxdoc/cdomainv3.py is just a skeleton which is used in
-Sphinx >= v3.0 installations.  My experience is, that it
-spits out more noise, but I haven't had time to look closer
-right now.
-
-[2] https://return42.github.io/linuxdoc
-[3] https://github.com/return42/linuxdoc/commit/70673dc
+But then the build goes thru and finishes ok :-\
 
 
-   -- Markus --
+  CC       /tmp/build/perf/util/perf-hooks.o
+  FLEX     /tmp/build/perf/util/parse-events-flex.c
+  FLEX     /tmp/build/perf/util/pmu-flex.c
+util/synthetic-events.c: In function 'perf_event__synthesize_sample':
+util/synthetic-events.c:1441:22: note: the layout of aggregates containing vectors with 8-byte alignment has changed in GCC 5
+ 1441 |   u.val32[0] = sample->pid;
+      |                ~~~~~~^~~~~
+  CC       /tmp/build/perf/util/pmu-bison.o
+  FLEX     /tmp/build/perf/util/expr-flex.c
+  CC       /tmp/build/perf/util/expr-bison.o
+  CC       /tmp/build/perf/util/parse-events.o
+  CC       /tmp/build/perf/util/parse-events-flex.o
+  CC       /tmp/build/perf/util/pmu.o
+  CC       /tmp/build/perf/util/pmu-flex.o
+  CC       /tmp/build/perf/util/expr-flex.o
+  CC       /tmp/build/perf/util/expr.o
+util/jitdump.c: In function 'jit_process':
+util/jitdump.c:329:23: note: the layout of aggregates containing vectors with 8-byte alignment has changed in GCC 5
+  329 |    jr->load.pid       = bswap_32(jr->load.pid);
+      |                       ^
+util/probe-finder.c: In function 'line_range_search_cb':
+util/probe-finder.c:1887:17: note: the layout of aggregates containing vectors with 8-byte alignment has changed in GCC 5
+ 1887 |   lr->start = lf->lno_s;
+      |               ~~^~~~~~~
+util/pmu.c: In function '__perf_pmu__new_alias':
+util/pmu.c:308:12: note: the layout of aggregates containing vectors with 2-byte alignment has changed in GCC 5
+  308 | static int __perf_pmu__new_alias(struct list_head *list, char *dir, char *name,
+      |            ^~~~~~~~~~~~~~~~~~~~~
+  LD       /tmp/build/perf/util/intel-pt-decoder/perf-in.o
+util/parse-events.c: In function 'parse_events__modifier_event':
+util/parse-events.c:1892:5: note: the layout of aggregates containing vectors with 8-byte alignment has changed in GCC 5
+ 1892 | int parse_events__modifier_event(struct list_head *list, char *str, bool add)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  LD       /tmp/build/perf/util/perf-in.o
+  LD       /tmp/build/perf/perf-in.o
+  LINK     /tmp/build/perf/perf
+make: Leaving directory '/git/linux/tools/perf'
++ set +o xtrace
+/rx_and_build.sh: 38: powerpc64le-linux-gnu-clang: not found
+[perfbuilder@five x-powerpc64el]$

@@ -2,90 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3C0258AA8
-	for <lists+linux-next@lfdr.de>; Tue,  1 Sep 2020 10:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB8E258AEE
+	for <lists+linux-next@lfdr.de>; Tue,  1 Sep 2020 11:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgIAItw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Sep 2020 04:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725949AbgIAItw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Sep 2020 04:49:52 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8357FC061244;
-        Tue,  1 Sep 2020 01:49:51 -0700 (PDT)
+        id S1726102AbgIAJD7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Sep 2020 05:03:59 -0400
+Received: from ozlabs.org ([203.11.71.1]:49879 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725989AbgIAJD6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 1 Sep 2020 05:03:58 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bggk36491z9sTM;
-        Tue,  1 Sep 2020 18:49:47 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bgh2M5xvBz9sTS;
+        Tue,  1 Sep 2020 19:03:55 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1598950188;
-        bh=OS5jYEkx/bz+JtpadafYuUFnzUgrYohCxZLJW5RQ2h0=;
+        s=201702; t=1598951036;
+        bh=EBqFZ+7gjT+GJqGJ9xRTYbNv77jFG4C4i0OaQps+hKw=;
         h=Date:From:To:Cc:Subject:From;
-        b=Dr4efZLrMZws2qF5Dd6XeW/rTu9RR2pFTF2ahH53nKWwQwk4F7xEpkoUyCC63Oar9
-         zrAqryGgoP9b1sHPnOhglPIbdz+SIXswCme4UKELAzcne+RQydYz3TFGu+u0y98FD3
-         tAxzLcuB/ofIzXbipWONF6u26CqOYFQuTcKqu5q3fgfPLiUMkP4sotMspllTnIoM0E
-         eXjvJSib1p622KwPQgEUWrtblE1yZWYhcy+k2gLXxbXdEz009hgmsSE2rhYyHZfLG8
-         VXLjBj2/YnvLC2XQJ+0uTN/ARZ4qo1ko20CPah3xh2i1/gbzg9WEfhMItH/Hov7fy+
-         cubrKqrvwgamw==
-Date:   Tue, 1 Sep 2020 18:49:28 +1000
+        b=DRtqDkGz/O9/EtHDHqYh4dDvQO1WObwKsOOuA+GB9C8EiLL5zn2gWmp9H4mZJwqBs
+         WElOdqdc5TLhJUzEGKt2A7t4Mm433+SHdd/URaLoSaRqZuht/jsk2Vb9DcMtJSh2py
+         eM0TdGokCsYbvvkMPVw7OUWRUIqa0px19o8TYgsWy5WpcO0UszukSnTF2AzUQIw0pS
+         PdYQP7F/YKJBfgUHTy4VprLUopG4bIvNuZnkunmQJB2CXjme/XKLo3JlKByMoprwQJ
+         o00APKU/RJ6pryfpdOeKs4b4KMIbZVzdQF4rSnkWxbzCIwKiNdXrqKnjIZwTjeaC5p
+         IhD2dE9NWBFCQ==
+Date:   Tue, 1 Sep 2020 19:03:54 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: linux-next: Fixes tag needs some work in the arc-current tree
-Message-ID: <20200901184928.057f6082@canb.auug.org.au>
+        Julia Lawall <Julia.Lawall@inria.fr>
+Subject: linux-next: Signed-off-by missing for commits in the v4l-dvb tree
+Message-ID: <20200901190354.38b0d16c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+gqfVyeX5wILx==AABy5tQ5";
+Content-Type: multipart/signed; boundary="Sig_/POKICJpTD8GfIrtLag1qN0H";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+gqfVyeX5wILx==AABy5tQ5
+--Sig_/POKICJpTD8GfIrtLag1qN0H
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commits
 
-  7000c9462d1b ("arc: fix memory initialization for systems with two memory=
- banks")
+  063a27cb9820 ("media: tm6000: drop unnecessary list_empty")
+  1c047c859965 ("media: saa7134: drop unnecessary list_empty")
+  3fdcea7c763a ("media: cx231xx: drop unnecessary list_empty")
 
-Fixes tag
-
-  Fixes: 51930df5801e ("mm: free_area_init: allow defining max_zone_pfn in =
-descend ing order")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+are missing a Signed-off-by from their author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+gqfVyeX5wILx==AABy5tQ5
+--Sig_/POKICJpTD8GfIrtLag1qN0H
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9OCxgACgkQAVBC80lX
-0GzOmQf/fvIechmbewtjZgVoZVwhQrCe1Us2G2yNRkDe6zFP0iMdRw/w64RsrHOV
-UXsLslz9NTSRoDAQM3EoYF3mbO2j1sFkQDqXMP61cj/Qrv5pf1NmZTDpzgUbCp1N
-y0d7sx3E/+fMT4N2zayY/7ILKKGz9xOfpeXH5exmB6mCUWYb72MYNRUNnx6FqihZ
-hxFlttbKHM+fmrwvbN7gVaD+qfwHET40et31+eMBxGkiFGIK/2Z3VQszZtoIKu1N
-+aUWdBDDCqT0qbhqFQ/9gLinVeeZsSsO7g4WtRm16zT2hfFExiPZkGst2RnsnHMd
-/hGG1kmmEwhLoM9Ot7x4V1gKzY3IHw==
-=r+3P
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9ODnoACgkQAVBC80lX
+0GxOOwf/SZ1MgrrSp2n7ghJmNc88l33v3luuTzZZ5jSLNyQPHW9sLFhmw9pRrf8i
+GN+nWKkQVWp8HnajUfzqgUShyY9yzVOgGlcdZgytGaVEv4pu6nQGVoravvxt7UW6
+kec4wnX36m+5XRnNgnvjJl1Lpx7YmyrBPR3bRbkQpU8lxvIFnzuRV9IWvWspLOC4
+KZ3ewUo7mZNGVwBkNG91uhPe08a9LEFhDiprj2jt7ayJsPSkYI5JurkfA6jCIZBu
++sofWD7ZI7W/7O9L+SGANY9109rI3467Jk2uWBuKgfZNqR/ZbfYa8TuuoJPfuB4J
+cm3yJLWsM05ql+6iZoRJF+RkebXuBQ==
+=G8lv
 -----END PGP SIGNATURE-----
 
---Sig_/+gqfVyeX5wILx==AABy5tQ5--
+--Sig_/POKICJpTD8GfIrtLag1qN0H--

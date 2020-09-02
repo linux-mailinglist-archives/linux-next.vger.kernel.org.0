@@ -2,92 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D66D625A0C4
-	for <lists+linux-next@lfdr.de>; Tue,  1 Sep 2020 23:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A054525A225
+	for <lists+linux-next@lfdr.de>; Wed,  2 Sep 2020 02:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgIAVXA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Sep 2020 17:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S1726173AbgIBAD1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Sep 2020 20:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgIAVW7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Sep 2020 17:22:59 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB011C061244;
-        Tue,  1 Sep 2020 14:22:58 -0700 (PDT)
+        with ESMTP id S1726167AbgIBADY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Sep 2020 20:03:24 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D24C061244;
+        Tue,  1 Sep 2020 17:03:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bh0R26hvBz9sPB;
-        Wed,  2 Sep 2020 07:22:54 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bh40651wLz9sTK;
+        Wed,  2 Sep 2020 10:03:18 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1598995375;
-        bh=3Esvk0W81xrUht6daRuR6VuF2EFX7pYqSLRxhTBc+UI=;
+        s=201702; t=1599004998;
+        bh=TafR9jtaY0GaA3rIEKpugx8KdZnfWM2Qko6C1NGi0F8=;
         h=Date:From:To:Cc:Subject:From;
-        b=aHq09IbG0pm8buLuCZyGCMApsK4jafJJh8AGfiOKTzGoJUWShsGLtvltYv+38clJH
-         RpvtOsyANVy4ofTfVTsAT0G8CyCCxJEveo5m9zfKTQsm3DX/22zQsRqNgsz3ROnYZ4
-         jhZtlGEFMuB2oc+ljnsTvPtU4+pEkpHW0Kava3GjUOJekutwENMzc8tA+/N/Ujauhd
-         I4kvw39LnCKklUZx41eUkNqq4GtieTx69GT/5CyLntp/DaaNh11QK1rvTd8+WkptoE
-         So6zqwEzO8taVQ+eRuJklFTK3zrtAE08G1I3Ovy1k1fCsiZZcTxmKibUz2JuFhJUYs
-         55Ym9JLmLZ8eA==
-Date:   Wed, 2 Sep 2020 07:22:54 +1000
+        b=WfYoHoAwuFOFeyaOAqXf9CXvAZAxVquqCR18saxQcjSw5SFg4L15u5KTM5doYwNko
+         JHTHmFvTAkT6+et4lsQ8NS2zKxlPXIqUmiwPfUthk6s9OJ7Sj5e6T0f2zRo0c4fQXH
+         DfNqx9fRPm4a3Ea5+qj1GdwmUjLD7wXUblrEA3BOtEuKLG7L1ktZciYlnmleMmbNiv
+         xUBMrjiO9lQC58ARohTYt+iu5JEDd/dM9sNWH5mVZvHpz6QJ5cLuapSZGhXz3dPA1x
+         NajT/Mlw1lL7O1yic/ETIfEyX2RdTdB37s1jTdktIqHE/VD/RmHzrjz/69cVC2gTaX
+         8xolhMHn6cSCQ==
+Date:   Wed, 2 Sep 2020 10:03:17 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Petr Mladek <pmladek@suse.com>
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: linux-next: Fixes tags need some work in the printk tree
-Message-ID: <20200902072254.3054db47@canb.auug.org.au>
+        Jim Quinlan <james.quinlan@broadcom.com>
+Subject: linux-next: build warning after merge of the dma-mapping tree
+Message-ID: <20200902100317.142db5be@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rBhn/T6ojvrr=_d+utx4LNb";
+Content-Type: multipart/signed; boundary="Sig_/aK6x.Oc52X+djELhZVnHxDh";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rBhn/T6ojvrr=_d+utx4LNb
+--Sig_/aK6x.Oc52X+djELhZVnHxDh
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commits
+After merging the dma-mapping tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  e5e4c07d9233 ("docs: vmcoreinfo: add lockless printk ringbuffer vmcoreinf=
-o")
-  0cfdacd74ad5 ("scripts/gdb: update for lockless printk ringbuffer")
+In file included from arch/arm/mach-keystone/keystone.c:24:
+arch/arm/mach-keystone/keystone.c: In function 'keystone_platform_notifier':
+arch/arm/mach-keystone/memory.h:17:34: warning: conversion from 'long long =
+unsigned int' to 'phys_addr_t' {aka 'unsigned int'} changes value from '343=
+59738368' to '0' [-Woverflow]
+   17 | #define KEYSTONE_HIGH_PHYS_START 0x800000000ULL
+      |                                  ^~~~~~~~~~~~~~
+arch/arm/mach-keystone/keystone.c:40:39: note: in expansion of macro 'KEYST=
+ONE_HIGH_PHYS_START'
+   40 |   int ret =3D dma_set_offset_range(dev, KEYSTONE_HIGH_PHYS_START,
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes tag
+Introduced by commit
 
-  Fixes: ("printk: use the lockless ringbuffer")
-
-has these problem(s):
-
-  - No SHA1 recognised
-
-Maybe you meant
-
-Fixes: 254685ef9374 ("scripts/gdb: update for lockless printk ringbuffer")
+  eef520b232c6 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_=
+offset")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rBhn/T6ojvrr=_d+utx4LNb
+--Sig_/aK6x.Oc52X+djELhZVnHxDh
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9Ou64ACgkQAVBC80lX
-0Gzr7Af/fkH9i2kiBWEjQ7QiuHNiHo49tfZZuyGnrBWS/1ct1lIEPi0pr0aVP0JQ
-X8koJ5b4e8Sn7+7FOX24BQJYQOqRYCD3vnI4xC3OJZ63GkGrdW+RuL7x/VOkshJ0
-EhZ2GBS7ydTGvDdvX2ZGWOB+tk7AxdNEpGtPBhvXvlD9REtYLK2G2LA0PhI9ZDQn
-nmvu6ZxU09FfwGbuE41xrHuflw4zMLRH5u8QEd90PfKXMlqDY8qUX/j1gAX0Dlz2
-e6us6vVwhs++6nMEuq8zfmzlfiN5yQGRuJ7z4bIqC0DzVOWuBUthgxHI/fW6ISNw
-vfXtHoD0kjxkm5sKeZHLXan3GKOcVA==
-=t+44
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9O4UUACgkQAVBC80lX
+0GzTnQf+NwmQjAtd7YsvE0/fo93evzTWcEZN1yKNUJl+RegtCUvj/p7ax/iaglkR
+FDIi+afU0M9IbRLidRPXySH62k0IzPivwexEmkYqw+7fiMXwcZNWWfMt5l1Bxszt
+thtwe8ZwZywPZEkN53EiJmngI6FYPW3rM9e3TGuSW1DzmylF5/nUtLGBt+nkoeZP
+93a2X2jg2DMSLQ+q7t+aTIZK0denQEpdMnpd5mLjjo2H76x+cFtPhRaENCP2/QJG
+yelu3xL/K3/EZ3kSKLswjqAbp98C55mQP2DVESeqOxOsMviUSj5qKFaM9EdLgzk/
+57GFYAPiGaopHQCwAuyaqcL1Bi7sEg==
+=jnDr
 -----END PGP SIGNATURE-----
 
---Sig_/rBhn/T6ojvrr=_d+utx4LNb--
+--Sig_/aK6x.Oc52X+djELhZVnHxDh--

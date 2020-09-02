@@ -2,116 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B1125AB76
-	for <lists+linux-next@lfdr.de>; Wed,  2 Sep 2020 14:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E1D25ABC3
+	for <lists+linux-next@lfdr.de>; Wed,  2 Sep 2020 15:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727004AbgIBMws (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Sep 2020 08:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S1727794AbgIBNH7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Sep 2020 09:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727061AbgIBMwb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 08:52:31 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8E8C061245
-        for <linux-next@vger.kernel.org>; Wed,  2 Sep 2020 05:52:31 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id n18so3420294qtw.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Sep 2020 05:52:31 -0700 (PDT)
+        with ESMTP id S1727019AbgIBNHr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 09:07:47 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC40C061245
+        for <linux-next@vger.kernel.org>; Wed,  2 Sep 2020 06:07:47 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mw10so2321356pjb.2
+        for <linux-next@vger.kernel.org>; Wed, 02 Sep 2020 06:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Pvl3SWJ9e5sce/rNKaSduyhhxTz1BgiMnI37NgwAhUY=;
-        b=pIMqb6bVqWYzxtZFWJSmWNZTz/EKtlBYMVpJ1K3XEhvzHRG+pUoB71bDqhI9uFBunZ
-         0ELFd1MpKzQV7R7HqrjpoygMTptfUS3x9DM9irg13KRTLIwpsXzY08GHwgEhIHcK+JG3
-         5dF9VrfpoF6k+pqSgyuqE7WXB8lmuNVHJfO1SyLKglUoE1+u1A2KVu8DI+woV91/Rq5l
-         VvS69IgnUJmomuB85Tj2Tovhgf+DLbtjQ6aPDI1VO+d6Igxe+o1Z6Yx9cNfB6EtRMf3w
-         hvPdpp04eEOxT9aVpqI4jjroa4TIBvpK7unQsS+nvWg3hdKGrgCHZndy7EMCrad54QkP
-         OtlQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=RezvhQlBXmlBEvDF1/F+27IedIFclHoGFTrF6++AWDY=;
+        b=BhvRTFLY1zIvRP5T2IObdfQP00mMBcSNgqPIP7FtFoRKbEpOsPdGNmUA6FqiVuIcxo
+         Q2o+EW/0oq1kwwJmXmIO8fct6dvzSi5qAf249NDT65Pj2Q44zdLdk0hgOeq/JPWUhrVc
+         c77hCjhxJrfTqYaesd/lK3Dwp4z5s/F/cK+UnxPQmxZRX31zyDISUVlLKa0S45nG04Mv
+         VHJyZtL6Iu4I3c8yCwc8WaFAgXkar+RQe2oL6eU77AHeMeY0KFX+BTScWPyNeD6KQokY
+         3VM9wfaSHifYJDas7IkVkTJoPWI4/vkSCZPebVxP+3Ozbci6pesT3Rj5Gvb3QRkABv5s
+         bUcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=Pvl3SWJ9e5sce/rNKaSduyhhxTz1BgiMnI37NgwAhUY=;
-        b=cNOU6cTuk5F1ymBNO4bdaCqTe6OSKZO365Df95dhUN5MeeLNCLyVH5AQ6j+vIY0Yv7
-         nx9Iqrkd3aVf2bh+GyCSG3q912HfYi/08FtkqZ7ARQVM6nnFsGHDn3x9SxaCVi7KSxmP
-         Dq2HygyI9NS20zXdbEqFdZdO72NjTKTsNwLgXeRvJJAZDnHdRBgWEYU9MsE9WLgb2rzW
-         t27RYBf+Ws+FcqbLo0gT8SUuD0n6lqVNkxd5vIfCLj66sfoAPHF6PqqtQH147FCAP5fD
-         6d8BrPXLJamcPqy07iXKeJh2RaEPo3mzKpFJCQXD1L3BrDPUqF50pPvOMzwC7PJSedD7
-         iciQ==
-X-Gm-Message-State: AOAM530GMToc1ZMlhunwhZ/M523PMxFpoVYxye06ZGKC78Tg4bFlc7dZ
-        3qSHJhcaO0rST5iZPnyI1Gbh0A==
-X-Google-Smtp-Source: ABdhPJzbj9HoMDTrZSIHvhNE2C9Cwm3ZM61DpTVhFH/mNvlJbuBbLY7DbYz1/PBcCkRU6zj6OTP/9Q==
-X-Received: by 2002:aed:27dd:: with SMTP id m29mr6853784qtg.165.1599051150238;
-        Wed, 02 Sep 2020 05:52:30 -0700 (PDT)
-Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id 184sm4731438qkl.104.2020.09.02.05.52.29
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=RezvhQlBXmlBEvDF1/F+27IedIFclHoGFTrF6++AWDY=;
+        b=dATvtTN55EXZRVC/yufcve4itQeIbTGxo9JiSmbqWJwoJG9E2ZglwJFoMVufr7+0Ql
+         qL46sboyCxfg7TSXxz4PvRXP9miHYqQtl5oaUICpmz2QnP+rx24GpUS6K4vWye2qAlmU
+         jgPYdsl8s8gkcCxjJos91uKU8GvHqQLV78aQhRIO8rAmBd4EYkR6SoKqqqebFQxq1W/Y
+         WF7NzrZc6IYgQqX24Y+icEKx1ESUuI0TL59C0/XwI8LdcTfClmy5KRGzybJ/lxOhmxXR
+         CPirGFYhtYQLbcBbPdtKtWxLuenqaQfdexuUap58siBf+cpt29L+3go+xqdhOf0eoJZx
+         r3qg==
+X-Gm-Message-State: AOAM532mFcdTvp/ZDrzONxGgJEl637z7bmnDR8xlRulYkcjPrn9UWlf/
+        QzKH2mpgm3zIDtqVcytXgKdC32kJvFqWYA==
+X-Google-Smtp-Source: ABdhPJzLVafjJyBlHSKfJ9ecMxzhQiEMb+KER19eUcAOKcmgcuoi0CRsyGIBF9vVp0MpkuPqv9PKiQ==
+X-Received: by 2002:a17:902:788e:: with SMTP id q14mr2014918pll.140.1599052065406;
+        Wed, 02 Sep 2020 06:07:45 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w4sm211138pfu.215.2020.09.02.06.07.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 05:52:29 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 08:52:24 -0400
-From:   Qian Cai <cai@lca.pw>
-To:     Uriel Guajardo <urielguajardojr@gmail.com>
-Cc:     brendanhiggins@google.com, urielguajardo@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH 2/2] kunit: ubsan integration
-Message-ID: <20200902125223.GA5676@lca.pw>
-References: <20200806174326.3577537-1-urielguajardojr@gmail.com>
- <20200806174326.3577537-2-urielguajardojr@gmail.com>
+        Wed, 02 Sep 2020 06:07:43 -0700 (PDT)
+Message-ID: <5f4f991f.1c69fb81.34034.0566@mx.google.com>
+Date:   Wed, 02 Sep 2020 06:07:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200806174326.3577537-2-urielguajardojr@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.9-rc3-380-g4d386b9bd46d
+Subject: next/pending-fixes baseline: 301 runs,
+ 2 regressions (v5.9-rc3-380-g4d386b9bd46d)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 06, 2020 at 05:43:26PM +0000, Uriel Guajardo wrote:
-> Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-> whenever it reports undefined behavior.
-> 
-> Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+next/pending-fixes baseline: 301 runs, 2 regressions (v5.9-rc3-380-g4d386b9=
+bd46d)
 
-It looks like this patch had been merged into linux-next but the "[PATCH 1/2]
-kunit: support failure from dynamic analysis tools" did not. Hence, it caused a
-compiling failure.
+Regressions Summary
+-------------------
 
-lib/ubsan.c: In function ‘ubsan_prologue’:
-lib/ubsan.c:141:2: error: implicit declaration of function ‘kunit_fail_current_test’; did you mean ‘kunit_init_test’? [-Werror=implicit-function-declaration]
-  kunit_fail_current_test();
-  ^~~~~~~~~~~~~~~~~~~~~~~
-  kunit_init_test
-cc1: some warnings being treated as errors
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
 
-> ---
->  lib/ubsan.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/lib/ubsan.c b/lib/ubsan.c
-> index cb9af3f6b77e..1460e2c828c8 100644
-> --- a/lib/ubsan.c
-> +++ b/lib/ubsan.c
-> @@ -14,6 +14,7 @@
->  #include <linux/types.h>
->  #include <linux/sched.h>
->  #include <linux/uaccess.h>
-> +#include <kunit/test.h>
->  
->  #include "ubsan.h"
->  
-> @@ -137,6 +138,7 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
->  {
->  	current->in_ubsan++;
->  
-> +	kunit_fail_current_test();
->  	pr_err("========================================"
->  		"========================================\n");
->  	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
-> -- 
-> 2.28.0.163.g6104cc2f0b6-goog
-> 
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-rc3-380-g4d386b9bd46d/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-rc3-380-g4d386b9bd46d
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      4d386b9bd46de4ca4d841962887d700e09e831f3 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+imx6q-var-dt6customboard | arm   | lab-baylibre  | gcc-8    | multi_v7_defc=
+...CONFIG_SMP=3Dn | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f4f686ef997363c2a081135
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc3-38=
+0-g4d386b9bd46d/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
+seline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc3-38=
+0-g4d386b9bd46d/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/ba=
+seline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f4f686ef997363c2a081=
+136
+      failing since 15 days (last pass: v5.9-rc1-137-ga49f4f3ccd1d, first f=
+ail: v5.9-rc1-207-gddf860520297)  =
+
+
+
+platform                 | arch  | lab           | compiler | defconfig    =
+                | results
+-------------------------+-------+---------------+----------+--------------=
+----------------+--------
+rk3399-gru-kevin         | arm64 | lab-collabora | gcc-8    | defconfig    =
+                | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f4f613f88b8a39f0e081130
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc3-38=
+0-g4d386b9bd46d/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
+in.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc3-38=
+0-g4d386b9bd46d/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kev=
+in.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f4f613f88b8a39f0e081=
+131
+      new failure (last pass: v5.9-rc2-452-g3b025a0ae05d)  =20

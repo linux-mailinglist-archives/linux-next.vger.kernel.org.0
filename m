@@ -2,216 +2,208 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51CC25AE0A
-	for <lists+linux-next@lfdr.de>; Wed,  2 Sep 2020 16:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAF125AD8D
+	for <lists+linux-next@lfdr.de>; Wed,  2 Sep 2020 16:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgIBO5w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Sep 2020 10:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S1727028AbgIBOo2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Sep 2020 10:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726938AbgIBN4t (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 09:56:49 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F81C061244
-        for <linux-next@vger.kernel.org>; Wed,  2 Sep 2020 06:20:07 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id np15so2181454pjb.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Sep 2020 06:20:07 -0700 (PDT)
+        with ESMTP id S1727955AbgIBOlC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 10:41:02 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649B9C061246
+        for <linux-next@vger.kernel.org>; Wed,  2 Sep 2020 07:41:02 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id e14so2669861vsa.9
+        for <linux-next@vger.kernel.org>; Wed, 02 Sep 2020 07:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=gRwKAJZ8KzM+C88qCyT9+8XlzUctET1a1PIFvhoqfWQ=;
-        b=o+1KJH3y9R25xlP/UHf5epbY7JUNZJcD32XAa5Pgfsw1zdED4QurddrGrHVM00CkI+
-         wOIYIRC10HEhsRjRn/X6cCVEMnF5HIb5i8I7GHLS8yUoVEN/Nov7bqzEAu0HZJGkFIB1
-         qhXbIR43AiSe36123KYls2ifMAwAL1uPW0JQrGOekKFDUPRNmbkMDBUxG7thOr68ddsE
-         7+uesWhPQfoY4dh1xZSO+ul7bs/8gLCWxfYPVMmJDs+OpMgZQFgA8H/2KT1G9nbCpwZ/
-         qxRr0874kthO73Mj/8R2gseW/n+QDZkwpdC+BnE20j9aTjURpOJINrrP99pHUPoNuraR
-         vlPw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B/zlgCI9QrJNPU4JJlp1UP/IMi9j+4O0vRWsFWmv0KI=;
+        b=VLaaxBL3UFPDYVUJ5u3qnhXXYiWouCcUpbGhcl8mkRK7KVGFsfz0SiYYjhEZeqM6ev
+         kLwMmuI2R1ybRDGdb62aq4/OF0wCpEegWeULD0pDxvQvQOYdsqWMqsQeAS2Reo9i5x5/
+         q3Pj+eXZKms7JnqjKxS3W+KSojCcZudHAlWt9N4kJIusQD/NA3fN6BjnG+ZzVxveCxP0
+         fjiTplf6t9cfgtQFRLmsTZPxJBxWO0rDplJuR+eYWn/uJvMpbzs4bqoGe1znbGzedqNS
+         6Div+I9dOBnHLRefDLL+pXF2AJyMinxm8k5BWY7L7wyVghBHL/1XrzKok+a9FLkC8/x9
+         EIyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=gRwKAJZ8KzM+C88qCyT9+8XlzUctET1a1PIFvhoqfWQ=;
-        b=kiUOl0fCA909YiOwtJP8+45ESMhA3SYAaTcdCXZYXi3ZJJ4UQqATcCwI8j6Eg6JkQt
-         RPlHAegbebPdAEniL2r1LO9WUCnarYH1/2a89o55Z+cs3ZEWp0RxZ8ZktkCKZNBSV4N4
-         Pr7kcZnvFLGJ9s56WGhWY+tDRMcpYOg2NKqgLBVOooMhtJnoo1FW/Q+s2KisYev1ptsW
-         hb9cnDnVJsRYgyVluOaYculd755LYcmyzq8acKe+MU9sFfLwRCGg4XaAV2/wMshcTYUz
-         +JPpB5xBftq8c4+sP+RWi0uBSqGGJ7GQ/p3DZEBX9VoAo2a9ZlAy+M6tVCV4uWaYhKjl
-         7VCg==
-X-Gm-Message-State: AOAM532LWdScl/EWB12bBz0wAon+O02xkDYhpFq/lnb0Sz+ydMGduVh3
-        qDqu7t4i5pqODRdeIrAF+4xF6K2O5FhWbA==
-X-Google-Smtp-Source: ABdhPJxcOb08oQlDfweDcZdGkmity3Sl+qmZiyySx0ecrrbROVy8+rWe9+dBNTFsrCWHDLrO5gch1w==
-X-Received: by 2002:a17:90b:1902:: with SMTP id mp2mr2251953pjb.53.1599052805095;
-        Wed, 02 Sep 2020 06:20:05 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w5sm5435200pgk.20.2020.09.02.06.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 06:20:04 -0700 (PDT)
-Message-ID: <5f4f9c04.1c69fb81.4af30.e866@mx.google.com>
-Date:   Wed, 02 Sep 2020 06:20:04 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B/zlgCI9QrJNPU4JJlp1UP/IMi9j+4O0vRWsFWmv0KI=;
+        b=YV2or5q2OFisSmUELTlwj6nHb/135+zADisyEqjHLDeoHV4Bg6FBT53GwzcpAgqFiN
+         ZE6tTwpcaRocv0qEvc4/tybwYnERB8dR/RUHpBZ7vVxXVaELix9UInm6xtZwWEI+NXZs
+         nsLP3hvAOmxFP299qlX9P4ZcGtsdw2lQZu6f7bfi4ZpK951x9Ur4Nw/uSQaZfWC7VRue
+         YlaieE42Uk1HI7tPWr+mkiXPxrPE/s5WQoGoR4m05gvqDgoDldKB4o6p/zx0CMVgc8eY
+         vA7Q9MlgdJ/jKwGZdUTP9JZI8E3H9vh8uSiM7mabV6aBFdHfeG08eIQ8jobi/fJ+ZIP2
+         AUpg==
+X-Gm-Message-State: AOAM532b97eqLs53hPjZH9zNhdvbn9pMppWB8t+l54YUr8BSymCp7B4p
+        wu4xnkoMwuEiWkVle/uNBkziVaUExmwrJAU/U7qKaw==
+X-Google-Smtp-Source: ABdhPJzlxTPaTI8JwFZQXPJBSSUSFEsHPrWt06u3qPZOY9J3wJyukGwQHEqGAZWmHxk7I65dz6qnkslKhZ6rX4tFp/8=
+X-Received: by 2002:a67:e9d4:: with SMTP id q20mr5209551vso.83.1599057661252;
+ Wed, 02 Sep 2020 07:41:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200902
-Subject: next/master baseline: 238 runs, 4 regressions (next-20200902)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20191112110330.179649-1-pihsun@chromium.org> <20191112110330.179649-5-pihsun@chromium.org>
+ <2abf8fdd-7b7c-73b0-beea-9c9ac56869dc@gmail.com>
+In-Reply-To: <2abf8fdd-7b7c-73b0-beea-9c9ac56869dc@gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 2 Sep 2020 20:10:49 +0530
+Message-ID: <CA+G9fYt9AujG6gyfeV5AaAv0EgggUfGT1jow8DJjVfetVWV3EA@mail.gmail.com>
+Subject: Re: [PATCH v21 4/4] arm64: dts: mt8183: add scp node
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Pi-Hsun Shih <pihsun@chromium.org>, Erin Lo <erin.lo@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 238 runs, 4 regressions (next-20200902)
+On Thu, 27 Aug 2020 at 15:44, Matthias Brugger <matthias.bgg@gmail.com> wrote:
+>
+>
+>
+> On 12/11/2019 12:03, Pi-Hsun Shih wrote:
+> > From: Eddie Huang <eddie.huang@mediatek.com>
+> >
+> > Add scp node to mt8183 and mt8183-evb
+> >
+> > Signed-off-by: Erin Lo <erin.lo@mediatek.com>
+> > Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+> > Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+>
+> Sorry I somehow oversaw this. Next time please don't doubt to ping me.
+>
+> Bjorn, do I understand correctly that you don't send emails to the list
+> informing of the inclusion of a patch/series in your tree?
+>
+> Anyway applied now to v5.9-next/dts64 :)
 
-Regressions Summary
--------------------
+arm64 build dtbs failed on linux next 20200902.
 
-platform                 | arch | lab           | compiler | defconfig     =
-     | results
--------------------------+------+---------------+----------+---------------=
------+--------
-imx6q-var-dt6customboard | arm  | lab-baylibre  | gcc-8    | multi_v7_defco=
-nfig | 2/4    =
+mt8183.dtsi:342.21-352.5: ERROR (phandle_references):
+/soc/scp@10500000: Reference to non-existent node or label
+"scp_mem_reserved"
 
-rk3288-veyron-jaq        | arm  | lab-collabora | gcc-8    | multi_v7_defco=
-nfig | 67/69  =
+build log,
 
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-200902/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20200902
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      4442749a203151a319a5bb8d0b983b84253a6931 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-     | results
--------------------------+------+---------------+----------+---------------=
------+--------
-imx6q-var-dt6customboard | arm  | lab-baylibre  | gcc-8    | multi_v7_defco=
-nfig | 2/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f4f64073cd88fb732081118
-
-  Results:     2 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200902/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var-dt6customboard.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200902/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-var-dt6customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f4f64073cd88fb=
-73208111b
-      new failure (last pass: next-20200828)
-      4 lines
-
-    2020-09-02 09:20:54.459000  kern  :alert : Unable to handle kernel pagi=
-ng request at virtual address ed21f900
-    2020-09-02 09:20:54.460000  kern  :alert : pgd =3D (ptrval)
-    2020-09-02 09:20:54.460000  kern  :alert : [ed21f900] *pgd=3D3d21141e(b=
-ad)
-     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f4f64073cd8=
-8fb73208111c
-      new failure (last pass: next-20200828)
-      20 lines
-
-    2020-09-02 09:20:54.503000  kern  :emerg : Process kworker/1:3 (pid: 13=
-5, stack limit =3D 0x(ptrval))
-    2020-09-02 09:20:54.503000  kern  :emerg : Stack: (0xed1adf10 to 0xed1a=
-e000)
-    2020-09-02 09:20:54.503000  kern  :emerg : df00:                       =
-              ed2edda0 ed217680 ef7aa200 c0361748
-    2020-09-02 09:20:54.503000  kern  :emerg : df20: eda51e00 ef7aa200 0000=
-0008 ed217680 ed217694 ef7aa200 00000008 c1803d00
-    2020-09-02 09:20:54.504000  kern  :emerg : df40: ef7aa218 ef7aa200 ffff=
-e000 c0361d2c eda51e00 c19edc0c c1374428 c0361a84
-    2020-09-02 09:20:54.545000  kern  :emerg : df60: ed217680 eeb5de80 eea0=
-d500 00000000 ed1ac000 c0361a84 ed217680 ee91dea4
-    2020-09-02 09:20:54.546000  kern  :emerg : df80: eeb5dea4 c0368200 0000=
-0001 eea0d500 c03680b0 00000000 00000000 00000000
-    2020-09-02 09:20:54.546000  kern  :emerg : dfa0: 00000000 00000000 0000=
-0000 c03001a8 00000000 00000000 00000000 00000000
-    2020-09-02 09:20:54.546000  kern  :emerg : dfc0: 00000000 00000000 0000=
-0000 00000000 00000000 00000000 00000000 00000000
-    2020-09-02 09:20:54.546000  kern  :emerg : dfe0: 00000000 00000000 0000=
-0000 00000000 00000013 00000000 00000000 00000000
-    ... (9 line(s) more)
-      =
+make -sk KBUILD_BUILD_USER=TuxBuild -C/linux ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu- HOSTCC=gcc CC="sccache
+aarch64-linux-gnu-gcc" O=build dtbs
+#
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #address-cells (1) differs from / (2)
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #size-cells (1) differs from / (2)
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #address-cells (1) differs from / (2)
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #size-cells (1) differs from / (2)
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #address-cells (1) differs from / (2)
+../arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14:
+Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges"
+property but its #size-cells (1) differs from / (2)
+../arch/arm64/boot/dts/mediatek/mt8183.dtsi:342.21-352.5: ERROR
+(phandle_references): /soc/scp@10500000: Reference to non-existent
+node or label "scp_mem_reserved"
 
 
+>
+> Thanks!
+>
+> > ---
+> > Changes from v20 ... v14:
+> >   - No change.
+> >
+> > Changes from v13:
+> >   - Change the size of the cfg register region.
+> >
+> > Changes from v12 ... v10:
+> >   - No change.
+> >
+> > Changes from v9:
+> >   - Remove extra reserve-memory-vpu_share node.
+> >
+> > Changes from v8:
+> >   - New patch.
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183-evb.dts | 11 +++++++++++
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi    | 12 ++++++++++++
+> >   2 files changed, 23 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > index 1fb195c683c3..ddb7a7ac9655 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > @@ -24,6 +24,17 @@ memory@40000000 {
+> >       chosen {
+> >               stdout-path = "serial0:921600n8";
+> >       };
+> > +
+> > +     reserved-memory {
+> > +             #address-cells = <2>;
+> > +             #size-cells = <2>;
+> > +             ranges;
+> > +             scp_mem_reserved: scp_mem_region {
+> > +                     compatible = "shared-dma-pool";
+> > +                     reg = <0 0x50000000 0 0x2900000>;
+> > +                     no-map;
+> > +             };
+> > +     };
+> >   };
+> >
+> >   &auxadc {
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index 10b32471bc7b..e582f5e6691d 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -269,6 +269,18 @@ pwrap: pwrap@1000d000 {
+> >                       clock-names = "spi", "wrap";
+> >               };
+> >
+> > +             scp: scp@10500000 {
+> > +                     compatible = "mediatek,mt8183-scp";
+> > +                     reg = <0 0x10500000 0 0x80000>,
+> > +                           <0 0x105c0000 0 0x19080>;
+> > +                     reg-names = "sram", "cfg";
+> > +                     interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     clocks = <&infracfg CLK_INFRA_SCPSYS>;
+> > +                     clock-names = "main";
+> > +                     memory-region = <&scp_mem_reserved>;
+> > +                     status = "disabled";
+> > +             };
+> > +
+> >               systimer: timer@10017000 {
+> >                       compatible = "mediatek,mt8183-timer",
+> >                                    "mediatek,mt6765-timer";
+> >
 
-platform                 | arch | lab           | compiler | defconfig     =
-     | results
--------------------------+------+---------------+----------+---------------=
------+--------
-rk3288-veyron-jaq        | arm  | lab-collabora | gcc-8    | multi_v7_defco=
-nfig | 67/69  =
+full build log,
+https://builds.tuxbuild.com/_IfeLhOWMWxIkRkmAtAwOQ/build.log
 
 
-  Details:     https://kernelci.org/test/plan/id/5f4f626756644b93e608112b
-
-  Results:     67 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200902/arm/=
-multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-jaq.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200902/arm/=
-multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-jaq.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f4f626756644b9=
-3e608112f
-      new failure (last pass: next-20200828)
-      4 lines
-
-    2020-09-02 09:14:08.272000  kern  :alert : pgd =3D ea2708a9
-    2020-09-02 09:14:08.272000  kern  :alert : [003bffc4] *pgd=3D00000000
-     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f4f62675664=
-4b93e6081130
-      new failure (last pass: next-20200828)
-      42 lines
-
-    2020-09-02 09:14:08.297000  kern  :emerg : Process kworker/1:2 (pid: 62=
-, stack limit =3D 0x1311bc0e)
-    2020-09-02 09:14:08.297000  kern  :emerg : Stack: (0xc2ad5d70 to 0xc2ad=
-6000)
-    2020-09-02 09:14:08.309000  kern  :emerg : 5d60:                       =
-              c2ad5da2 00000001 ffffffff c0733f0c
-    2020-09-02 09:14:08.309000  kern  :emerg : 5d80: c2ad5df0 ffffff04 ffff=
-0a00 c0cac96c 00000016 ed356000 c2ad5da2 ed356000
-    2020-09-02 09:14:08.322000  kern  :emerg : 5da0: c14ba980 c0737d78 c14b=
-a980 ffffff04 ffff0a00 c09f873c ee2d8c20 ed356000
-    2020-09-02 09:14:08.334000  kern  :emerg : 5dc0: 12ca9fff c2ad4000 ee2d=
-8c00 ffffff04 ffff0a00 77687b43 ed33b640 c2ad4000
-    2020-09-02 09:14:08.347000  kern  :emerg : 5de0: c2ad4000 00000002 ed35=
-6000 ee2d8c20 c19c12f4 ee2d8c00 ed300000 c07380f8
-    2020-09-02 09:14:08.347000  kern  :emerg : 5e00: c2ad5e18 77687b43 ed35=
-6000 00000000 c0cdc504 c14ba980 003bffc4 77687b43
-    2020-09-02 09:14:08.359000  kern  :emerg : 5e20: ffff0a00 77687b43 003b=
-ffc4 77687b43 c2ad4000 c19c0178 ed356000 0000004a
-    2020-09-02 09:14:08.372000  kern  :emerg : 5e40: ed300000 ed300000 ed35=
-6000 c1492388 ed300000 c0cdc5a8 0000000f 00000000
-    ... (31 line(s) more)
-      =20
+-- 
+Linaro LKFT
+https://lkft.linaro.org

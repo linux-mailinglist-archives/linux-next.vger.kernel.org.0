@@ -2,71 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8AC25BE99
-	for <lists+linux-next@lfdr.de>; Thu,  3 Sep 2020 11:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620BE25BF47
+	for <lists+linux-next@lfdr.de>; Thu,  3 Sep 2020 12:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725984AbgICJsl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Sep 2020 05:48:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60320 "EHLO mx2.suse.de"
+        id S1728372AbgICKo4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Sep 2020 06:44:56 -0400
+Received: from elvis.franken.de ([193.175.24.41]:50761 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726047AbgICJsl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 3 Sep 2020 05:48:41 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C720BAB9F;
-        Thu,  3 Sep 2020 09:48:39 +0000 (UTC)
-Date:   Thu, 3 Sep 2020 11:48:37 +0200
-From:   Petr Mladek <pmladek@suse.com>
+        id S1726292AbgICKos (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 3 Sep 2020 06:44:48 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kDmjV-0001dG-00; Thu, 03 Sep 2020 12:44:45 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 08CEBC0E88; Thu,  3 Sep 2020 12:01:19 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 12:01:19 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: linux-next: Fixes tags need some work in the printk tree
-Message-ID: <20200903091436.GA5012@alley>
-References: <20200902072254.3054db47@canb.auug.org.au>
- <20200902072610.GA9496@alley>
- <20200903065547.0cc6f53b@canb.auug.org.au>
+        Huang Pei <huangpei@loongson.cn>
+Subject: Re: linux-next: Fixes tag needs some work in the mips-fixes tree
+Message-ID: <20200903100118.GA9038@alpha.franken.de>
+References: <20200903184259.74a4f24f@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200903065547.0cc6f53b@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200903184259.74a4f24f@canb.auug.org.au>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu 2020-09-03 06:55:47, Stephen Rothwell wrote:
-> Hi Petr,
+On Thu, Sep 03, 2020 at 06:42:59PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Wed, 2 Sep 2020 09:26:11 +0200 Petr Mladek <pmladek@suse.com> wrote:
-> > 
-> > The problem is that this commit is not in mainline. It is living
-> > only in printk/linux.git.
-> > 
-> > Could we use the SHA1 from the maintainer tree when it would not get rebased?
-> > 
-> > Or should we rather avoid Fixes: tag referencing commits that are not
-> > in mainline?
-> > 
-> > I am sorry to bother you with this silly question. I do not see any
-> > hint in Documentation/process/submitting-patches.rst.
+> In commit
 > 
-> Well, in theory, maintainers trees should not be rebased after they
-> have been published (except in exceptional circumstances), so using
-> SHA1s from them should be OK.  Especially if the fixing commit is in
-> the same maintainers tree (which it should be, right).  It does mean
-> that maintainers need to be a bit more careful if they do rebase their
-> trees to update any Fixes tags (or other commit references) that are
-> affected by the rebase.
+>   f8a005e1632c ("MIPS: add missing MSACSR and upper MSA initialization")
+> 
+> Fixes tag
+> 
+>   Fixes: cc97ab235f ("MIPS: Simplify FP context initialization")
+> 
+> has these problem(s):
+> 
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
 
-Thanks a lot for info.
+it's fixed now.
 
-I have rebased the last 5 commits in the printk-rework branch and
-added the missing SHAs there.
+Thomas.
 
-Best Regards,
-Petr
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

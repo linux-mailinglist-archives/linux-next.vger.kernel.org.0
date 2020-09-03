@@ -2,121 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FB225B8D0
-	for <lists+linux-next@lfdr.de>; Thu,  3 Sep 2020 04:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704C825B967
+	for <lists+linux-next@lfdr.de>; Thu,  3 Sep 2020 05:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbgICCgC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Sep 2020 22:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S1728070AbgICDvN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Sep 2020 23:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgICCgB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 22:36:01 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485AC061244;
-        Wed,  2 Sep 2020 19:36:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BhlKj1VkPz9sTS;
-        Thu,  3 Sep 2020 12:35:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599100555;
-        bh=cURnmHEF5OCE3wHPfmuJVfdtp3KvF7NBHs8Is7up7Zk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mQIlxUyooEDyVEpcYWVDhFtPALw5w5iWn9aA72HM118NKtN1nmuVZ7FhDQ4dUphE1
-         woXpSSFpfwwZKWWLcqbkFXruMuGYi2rsXemsBdadidOSJSgTlq54GTRJLHoTLs7CUz
-         BzKU9kmlPPV2dtD1qyFZMt91ZY78bmGNujWVSXG43kY+cw1diZm0WRofq3c3WaAWsw
-         bvJPE8lV+B9AGgESU7rbdxY6fphkOZJ11ZrU2vzbAlD+HWoJHweh8fEGoYdZqcx14n
-         b0KPXprnwWzKbQ8QaEg2+qCF5h6EokkybRhmo1Mt9jSWGLSYPcrnGFWaJFqxIkjlMM
-         U1JK85kAz6SLw==
-Date:   Thu, 3 Sep 2020 12:35:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        with ESMTP id S1726654AbgICDvN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Sep 2020 23:51:13 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B078C061244;
+        Wed,  2 Sep 2020 20:51:12 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id nw23so1750478ejb.4;
+        Wed, 02 Sep 2020 20:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7sqFas94AUuM/xkz1q3rV1FkcNmy4bzm158KDgU2swo=;
+        b=oAC9GSH+JYBdvHePsapdvPC9SibHSeLyqEVhACwWyaiKLjWlqz/U8Pk3xTdi2H3cqK
+         SLfAfmZV3ZfhXfzI5OS8pwQj7koWNF4F4Z3GcCzED0Lq6G0RoMGqWd9j2ltjHCH0XTHC
+         xM4QBytW4yz/4lek4urySrObpOQDG0pAj4gZF2W1YgJdOLOedbkltpdPvAkDolkKhoM7
+         WqEgwQhQGxqSp8VKl3s8JLnbTUvVjp6ZZxRk9wB22NOwcbvOKBD8hmiPCp8w9TjoDSPV
+         719ryjLzBraB6Zc5Rnd/Ps3zAQD4OOuRS6G7SO0H/RDeMHF23uvUyOJ861gRY7/b9bUA
+         drOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=7sqFas94AUuM/xkz1q3rV1FkcNmy4bzm158KDgU2swo=;
+        b=OmtwLvLs0vnJk1U88eJQLyNEBQe9cs0NlqpIVefI6Tata7UmMyXJfCf4bkzxSdQZmv
+         v3fDik0yNoEPXzfU0TN1XWyMr0oJnazi/xnRQGF6o/AWWsFZFn2rk9D8mpYlx8/3Mzad
+         9zy+AH1VK3MaYvWhwN9R3vxXq9m2qqq02GVdsHAACXHnST7iaI2pIpAH+XN6xwKi9mTq
+         DE5QOocCfWTubRjVRm3/oTmwbKpXKEjh/KEaXTVIO/yj8cidbX+j7Y2GlPXkSDAt7pcm
+         PADKPBD1KpOwAEcj73GFNWfWaab0HwoWfGpP1lUp3GyRNwSMlIYshLfRsVfRK15IUtew
+         MxYA==
+X-Gm-Message-State: AOAM533Czv97OyIUAWXRY/0aieMZi+4vtl8klGZJihvzXWGqno+M0xmc
+        489qRzdk3v5InLVmN4TC938=
+X-Google-Smtp-Source: ABdhPJwkOHEoNIXQqNSrRaqlu0WWDp+BmAcCI+YIEEX089J/JIWGxDeqgxoJxgrtCjDfPzQ+HHlbfQ==
+X-Received: by 2002:a17:906:54d3:: with SMTP id c19mr155465ejp.408.1599105071349;
+        Wed, 02 Sep 2020 20:51:11 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id k25sm1830561ejk.3.2020.09.02.20.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2020 20:51:10 -0700 (PDT)
+Date:   Thu, 3 Sep 2020 05:51:08 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20200903123552.0c5d1277@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20200903035108.GA3616759@gmail.com>
+References: <20200903123552.0c5d1277@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iK+q8_5r/YfNVEVLof7b3+d";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903123552.0c5d1277@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iK+q8_5r/YfNVEVLof7b3+d
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-After merging the tip tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> 
+> Caused by commit
+> 
+>   f670269a42bf ("x86: Fix early boot crash on gcc-10, next try")
+> 
+> interacting with commit
+> 
+>   a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
+> 
+> from Linus' tree (v5.7-rc6) - the automatic merge did not go well.
+> 
+> I have added this patch for today (it removes the older version).
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 3 Sep 2020 12:31:13 +1000
+> Subject: [PATCH] merge fix for compiler.h
 
+I've merged the old commit by mistake - it's removed now.
 
-Caused by commit
+Thanks,
 
-  f670269a42bf ("x86: Fix early boot crash on gcc-10, next try")
-
-interacting with commit
-
-  a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
-
-from Linus' tree (v5.7-rc6) - the automatic merge did not go well.
-
-I have added this patch for today (it removes the older version).
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 3 Sep 2020 12:31:13 +1000
-Subject: [PATCH] merge fix for compiler.h
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/compiler.h | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index d60365d4fb56..b78233fb1af7 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -223,12 +223,6 @@ static inline void *offset_to_ptr(const int *off)
- /* &a[0] degrades to a pointer: a different type from an array */
- #define __must_be_array(a)	BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
-=20
--/*
-- * This is needed in functions which generate the stack canary, see
-- * arch/x86/kernel/smpboot.c::start_secondary() for an example.
-- */
--#define prevent_tail_call_optimization()	mb()
--
- #include <asm/rwonce.h>
-=20
- /*
---=20
-2.28.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iK+q8_5r/YfNVEVLof7b3+d
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9QVogACgkQAVBC80lX
-0GwbcQf+KAZjlj5H/RiH7Q4R8SgiK/xfVy0ZD/LKtJviMmP8XhZRsdy3XvkGf8Sa
-mhTUpRxvD3ofrQUZN+p/qW+E1gX6stvgiQWGbhDDsNG6yT9Nvdvf9aavH4iASgPT
-IjylyJfGOhlj5iRWU1YzD5dFi7b4kP7nUHeRtrfWjUw37kqGCJQCYS1/0v2O1moO
-xiQufp91APpPfHoS3ZDf3iadIVFjIHVlR/CezuqbwGktNzVJJlPEAVWcUPKtPopW
-GmawLPUXbMtiTvADTbyYLgYa7WPxoUUD5soYsuGpXpo1Lw2PzjKhzIIpzYguyhwr
-z5OfdhlUIYocLMKOY5HW/K4v3A1pdw==
-=7RH1
------END PGP SIGNATURE-----
-
---Sig_/iK+q8_5r/YfNVEVLof7b3+d--
+	Ingo

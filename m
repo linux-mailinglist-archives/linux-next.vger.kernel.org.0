@@ -2,76 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F115225E50A
-	for <lists+linux-next@lfdr.de>; Sat,  5 Sep 2020 04:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7A725E54F
+	for <lists+linux-next@lfdr.de>; Sat,  5 Sep 2020 06:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgIECSl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Sep 2020 22:18:41 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52747 "EHLO ozlabs.org"
+        id S1726261AbgIEEKH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 5 Sep 2020 00:10:07 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41349 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbgIECSk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 4 Sep 2020 22:18:40 -0400
+        id S1725554AbgIEEKG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 5 Sep 2020 00:10:06 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bjyrs6MPBz9sTd;
-        Sat,  5 Sep 2020 12:18:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bk1KQ1tPwz9sTM;
+        Sat,  5 Sep 2020 14:10:02 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599272318;
-        bh=9xTsIfpKFrJK+6CcxEyuNQq1X6wX2Zpz7mBvSHpJa+8=;
+        s=201702; t=1599279003;
+        bh=9eB4K8KoHD4blH4JPzEEGzol5NGmZwBzc3bm9jCe0kI=;
         h=Date:From:To:Cc:Subject:From;
-        b=VdmgoSgtUsgcWLKyiYYKApVHPr/bIRN65VNzEem2NeVLSA7ukGRyegsoKXkfhXhLt
-         pbB+dOELBVrNaJEO6SSMGtfK3iFV8VR9P2L/FNAaZJa8ox9AVw3bbkJfvmw3+wUWfZ
-         tZp43Pgbd4o5Y2xWvsR+nkj0sZVLjrakm/r2rHPzrWIHO2bdBTfbe/ZQyHqRFc8rRN
-         CdQff9khtMiBSdsLdrTRZsBTPiZHaGRnKmqrYB21aCA+ti3A1OMc7zWvHxvKmt1n3p
-         GJlgpdKbv3LUAJamiI9psws7eWXA/lsPoYguOSAgiwdCntDZcTcIknZzlmXmsnRnZp
-         1yg/SvLjlxurw==
-Date:   Sat, 5 Sep 2020 12:18:27 +1000
+        b=LjFj2AIzb35wjXOq5pROkUpUqJfsZ6YyZkkOOecS7cAUKK4vIXLmByARMLfthuVGe
+         Q7bWJGGDIBmOotHRuDu6fh3n4sUbw+ldg6pnVo8PESucg0kKIsh+wajsD4xAgV3GlB
+         AJkSbwIaH7SmyEv0gF/MP8s5tZhCUX/8OAImWwn/ZItEv3AVcGYadcYl8dm9zIdChJ
+         WACX2fAiccSg6+/SUZA/ooj0k34U+s3metO5SxJmW9Ey17/pmuHcZmow5wtQfF4sL4
+         Buf1qIy7rby0N0UnM0rUrpAW3j4MyJb4ncs1xSMzwwGXujdF9YR9UYKwchZNwhbJIP
+         yTFWyoOrVmm7w==
+Date:   Sat, 5 Sep 2020 14:10:01 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the printk tree
-Message-ID: <20200905121827.22fb4037@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm-current tree with the net-next
+ tree
+Message-ID: <20200905141001.18356cd4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ae+uAE5g57V.AWQ6ZTLbzem";
+Content-Type: multipart/signed; boundary="Sig_/xDXJQWw/zaBTRUF_p6lJ0UI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ae+uAE5g57V.AWQ6ZTLbzem
+--Sig_/xDXJQWw/zaBTRUF_p6lJ0UI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-  4c31ead75f41 ("printk: ringbuffer: support dataless records")
+  mm/filemap.c
 
-is missing a Signed-off-by from its committer.
+between commit:
+
+  76cd61739fd1 ("mm/error_inject: Fix allow_error_inject function signature=
+s.")
+
+from the net-next tree and commit:
+
+  2cb138387ead ("mm/filemap: fix storing to a THP shadow entry")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ae+uAE5g57V.AWQ6ZTLbzem
+diff --cc mm/filemap.c
+index 78d07a712112,054d93a86f8a..000000000000
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@@ -827,10 -827,10 +827,10 @@@ int replace_page_cache_page(struct pag
+  }
+  EXPORT_SYMBOL_GPL(replace_page_cache_page);
+ =20
+- static int __add_to_page_cache_locked(struct page *page,
+- 				      struct address_space *mapping,
+- 				      pgoff_t offset, gfp_t gfp,
+- 				      void **shadowp)
++ noinline int __add_to_page_cache_locked(struct page *page,
++ 					struct address_space *mapping,
+ -					pgoff_t offset, gfp_t gfp_mask,
+++					pgoff_t offset, gfp_t gfp,
++ 					void **shadowp)
+  {
+  	XA_STATE(xas, &mapping->i_pages, offset);
+  	int huge =3D PageHuge(page);
+
+--Sig_/xDXJQWw/zaBTRUF_p6lJ0UI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9S9XMACgkQAVBC80lX
-0GyeBggAhLs/myYpmuJulQz/QfTiSizT5ROEVYr/pPbLXIPC3kAaxTd0W2LEbMSq
-NkUv56TOlT9yDDRkOolzPPXximDk9vXQp3z78T+Ie6KNMVIjOg3U/j7XjJ5gRIBl
-iJF4aaU3E8qLmdp8cbs+n+FECX8tpWqV5ELARmaFn71LVztmhxmNuW0xz3u7ILw5
-z73omK6fHSA+N/6+15A8GtmwMChlgArTOphefH9g3IbixJtIMqjZtu8x5cfUXZmn
-7GHf3HFvLkUcr8u7sjjJY2AWoBg3dSyDlM/ZQ4wV8e8V1ZvdHT1BkGckuZOLdg5H
-daDdAwvI/S8MA0muShAO6nVqLMo9bQ==
-=cz9H
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9TD5kACgkQAVBC80lX
+0GzlKwgAgyPjNJJsKV57McF4UsmQEqwOJ3GQH1rH7VPoaZbHkktEE6jo1/rAYlz2
+yuAcC0nN+BemNvQOxPGlyTFZ08viniDhMqhvwDfnsonaqlIAAQy78IbjtajYvKTK
+0eBGNal9g2+NOCnRBx1RmuZaa6SGRNgUNjvgoH75ZbIB7fm4MH2nkCqyPZ/rSJ+9
+5y6Hb7C+fCTcBXePvSZAJNzphTGrgvRMXWZ0azWB4ffm25yg5PHjWj0sOWWjowob
+3noca6AI9xt8a5ajokOu3VN8kcfGFrfn1AuMyXV/liat28V7DNwviOvuNdIh+CEx
+JnInXbOAEI5Pw4cJ12frbEKNMZmA8g==
+=DI4q
 -----END PGP SIGNATURE-----
 
---Sig_/ae+uAE5g57V.AWQ6ZTLbzem--
+--Sig_/xDXJQWw/zaBTRUF_p6lJ0UI--

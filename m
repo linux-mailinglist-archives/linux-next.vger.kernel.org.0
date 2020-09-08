@@ -2,65 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB6126091A
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 05:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA2A260928
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 06:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728474AbgIHDtY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Sep 2020 23:49:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43826 "EHLO mail.kernel.org"
+        id S1725801AbgIHEAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 00:00:31 -0400
+Received: from ozlabs.org ([203.11.71.1]:39451 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728327AbgIHDtY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 7 Sep 2020 23:49:24 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725268AbgIHEAb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Sep 2020 00:00:31 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CA1C2080A;
-        Tue,  8 Sep 2020 03:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599536963;
-        bh=1JF9ErwwV+qLjfbssjhvOAA1nzkFV5n0GXMMuBk2Sa8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kv1F3mm49dkxGSDp+x5x+JDeQbZIzZ6QhGmkLA17nzvHXRe/Tj3cgl1i++Gj2z1Hu
-         ogXA/0F7v0FBxAWLSz4vxShs+rbOmhQd2poEqFncqcCW7rYWe2dgAjoWOtdw84GD3u
-         wClHz0qCGdRmz9/87u+HV2NPmTPM9AgJnrBA1MYY=
-Date:   Mon, 7 Sep 2020 20:49:21 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Blryw3lfYz9sSP;
+        Tue,  8 Sep 2020 14:00:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1599537629;
+        bh=lX+lFzaomXR3T5BNsGpelGARr9NU3vJkQfKKiQ3vhfo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OnTn3YI/noqm0XeiRNjqDqsf27QSFchpoFOwYNoKV5Eln0f4Xg46WXR9m4LQFxXSq
+         y18VBCHxYmAbMFCbbrVFeP30hQtx/kEDT3WNg4BUeUM0em/LkskRDYwrVfumXzQ/w/
+         h6ezb6t0N5kEtiwMyYqnfFSiffQHE7GKi9rPZQBAE8gAItZd+71Q8rGTLTxoL+kdOG
+         BvXO/VMr0xmmGnwlUfVYjk3nr7UPOgC77+dsm34C5mmwbGDrHsjdT9oELMy98qniqZ
+         9kty7X/fjrRhkTFO8tOXoVkaB9Tjlpw8q7DKyJtV9fjv0L7vxOdJA9MpBBp8w3nfjp
+         aLV37DoAM5L2A==
+Date:   Tue, 8 Sep 2020 14:00:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Guru Das Srinagesh <gurus@codeaurora.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <20200907204921.130dd6ce@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20200908130000.7d33d787@canb.auug.org.au>
-References: <20200908130000.7d33d787@canb.auug.org.au>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20200908140022.67dd3801@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/h0m8vAjcwPu32aOQXEmjVLl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 8 Sep 2020 13:00:00 +1000 Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
-> 
-> net/bridge/br_multicast.c: In function 'br_multicast_find_port':
-> net/bridge/br_multicast.c:1818:21: warning: unused variable 'br' [-Wunused-variable]
->  1818 |  struct net_bridge *br = mp->br;
->       |                     ^~
-> 
-> Introduced by commit
-> 
->   0436862e417e ("net: bridge: mcast: support for IGMPv3/MLDv2 ALLOW_NEW_SOURCES report")
-> 
-> Maybe turning mlock_dereference into a static inline function would help.
+--Sig_/h0m8vAjcwPu32aOQXEmjVLl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Or perhaps provide a better definition of whatever is making the
-reference disappear? RCU_LOCKDEP_WARN()?
+Hi all,
 
-Thanks for the report!
+Today's linux-next merge of the drm-intel tree got a conflict in:
+
+  drivers/gpu/drm/i915/display/intel_panel.c
+
+between commit:
+
+  f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an exter=
+nal PWM controller")
+
+from Linus' tree and commit:
+
+  6b51e7d23aa8 ("drm/i915: panel: Honor the VBT PWM frequency for devs with=
+ an external PWM controller")
+
+from the drm-intel tree.
+
+I fixed it up (I just used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/h0m8vAjcwPu32aOQXEmjVLl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XAdYACgkQAVBC80lX
+0GyqvQf8Cn9ZF8yqil/uPRy79nIaruZ5rShO6tXxLcj2/g03Eyk3zsCcaV9Vs00N
+2MVGydDPI4xh40OjIrPKuhbHjvqwosg9TQQ6g0q8VIv/e1tE62qP3Dst3VWYIHhl
+t3TgfrLfzqMKoLgUrcyqbUmZ2/E+iH538sLZbm2UdqJNVT311IgNSMMVtdYbfn+Q
+5w5LGYltB74C0ai55NDMw8Hl4/uqeXIDMqdy3C4Ul7R1wE83hD7s2j9F59vx0AAo
+RbNIupYaBxVQMwqev3TsrRO7tPJvEDBB1fH+UZsD3YyTG7ZqyTRL+EYdPi/YC176
+b5FtRP4/npzO3KXZ0FafbxtzNWUu5w==
+=pB//
+-----END PGP SIGNATURE-----
+
+--Sig_/h0m8vAjcwPu32aOQXEmjVLl--

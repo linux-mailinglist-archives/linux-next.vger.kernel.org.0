@@ -2,121 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29BC26141E
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 18:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DC526149F
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 18:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731160AbgIHQFc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 12:05:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58291 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731205AbgIHQFE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 12:05:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599581103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sn9YyaxDlmem+Af35OWOD/fQH327GLoTO2uCzA73Adk=;
-        b=bGwjW1BPPiw5JflD5MjOQHFFObFNKDLmoJebD10Sy99PzoSyE9SOxLIosl1yFSBMmIeQkj
-        6PU2HcB4Adon+SG1E9/oZ+VlyF/klApjWztQEtitzp9g1reSeFSk9HXxxinOc8sKUFTQ7q
-        n3dOZFx0AaSEtssKDRPe7cGrF5bPLm0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-342-Ic_nwVryMe-TVrW6fRwG2Q-1; Tue, 08 Sep 2020 09:50:56 -0400
-X-MC-Unique: Ic_nwVryMe-TVrW6fRwG2Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B221801AE0;
-        Tue,  8 Sep 2020 13:50:55 +0000 (UTC)
-Received: from horse.redhat.com (ovpn-116-76.rdu2.redhat.com [10.10.116.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EC1C319728;
-        Tue,  8 Sep 2020 13:50:51 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 1F095223B13; Tue,  8 Sep 2020 09:50:51 -0400 (EDT)
-Date:   Tue, 8 Sep 2020 09:50:51 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Roger Pau Monne <roger.pau@citrix.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Sebastien Boeuf <sebastien.boeuf@intel.com>,
-        Liu Bo <bo.liu@linux.alibaba.com>,
+        id S1731975AbgIHQ2l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 12:28:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:57508 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731964AbgIHQ2g (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:28:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AD081045;
+        Tue,  8 Sep 2020 09:28:35 -0700 (PDT)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C8F03F68F;
+        Tue,  8 Sep 2020 09:28:34 -0700 (PDT)
+References: <20200908205659.361b0a1b@canb.auug.org.au> <ddc76403-4b00-66ba-43ea-7889b9a32bb5@infradead.org> <CAKfTPtB-br6iKAMnofbPEmPVF-fpQpjkbXtfTcNkNzbc1Kdtug@mail.gmail.com> <jhj4ko86zk4.mognet@arm.com> <b6e6f676-d61b-5109-759f-4b4f2c24bab1@infradead.org> <jhj363s6ylu.mognet@arm.com>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20200908135051.GC69769@redhat.com>
-References: <20200908200950.1368e71b@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: linux-next: Tree for Sep 8 (sched/topology.c)
+In-reply-to: <jhj363s6ylu.mognet@arm.com>
+Date:   Tue, 08 Sep 2020 17:28:32 +0100
+Message-ID: <jhj1rjc6xn3.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200908200950.1368e71b@canb.auug.org.au>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 08:09:50PM +1000, Stephen Rothwell wrote:
 
-[..]
-> fs/fuse/virtio_fs.c: In function 'virtio_fs_setup_dax':
-> fs/fuse/virtio_fs.c:838:9: error: 'struct dev_pagemap' has no member named 'res'; did you mean 'ref'?
->   838 |  pgmap->res = (struct resource){
->       |         ^~~
->       |         ref
-> 
-> Caused by commit
-> 
->   b3e022c5a68c ("mm/memremap_pages: convert to 'struct range'")
-> 
-> interacting with commit
-> 
->   9e2369c06c8a ("xen: add helpers to allocate unpopulated memory")
-> 
-> from Linus' tree (in v5.9-rc4) and commit
-> 
->   7e833303db20 ("virtiofs: set up virtio_fs dax_device")
-> 
-> from the fuse tree.
-> 
-> I have added the following patch which may require more work but at
-> least makes it all build.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 8 Sep 2020 20:00:20 +1000
-> Subject: [PATCH] merge fix up for "mm/memremap_pages: convert to 'struct
->  range'"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/xen/unpopulated-alloc.c | 15 +++++++++------
->  fs/fuse/virtio_fs.c             |  3 +--
->  2 files changed, 10 insertions(+), 8 deletions(-)
-> 
+On 08/09/20 17:07, Valentin Schneider wrote:
+> On 08/09/20 16:50, Randy Dunlap wrote:
+>> Sure, here it is again.  And
+>> CONFIG_SMP=y
+>> CONFIG_SCHED_DEBUG=y
+>>
+>> thanks.
+>
+> Okay so I can reproduce that with GCC-10.1, now to figure out WTH is going on...
 
-[..]
-> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-> index da3ede268604..8f27478497fa 100644
-> --- a/fs/fuse/virtio_fs.c
-> +++ b/fs/fuse/virtio_fs.c
-> @@ -835,8 +835,7 @@ static int virtio_fs_setup_dax(struct virtio_device *vdev, struct virtio_fs *fs)
->  	 * initialize a struct resource from scratch (only the start
->  	 * and end fields will be used).
->  	 */
-> -	pgmap->res = (struct resource){
-> -		.name = "virtio-fs dax window",
-> +	pgmap->range = (struct range){
->  		.start = (phys_addr_t) cache_reg.addr,
->  		.end = (phys_addr_t) cache_reg.addr + cache_reg.len - 1,
->  	};
+Yet another fail from my end, the declaration is conditioned by:
 
-Thanks Stephen. This change looks good to me for virtiofs.
+  CONFIG_SCHED_DEBUG
+  CONFIG_SMP
+  CONFIG_SYSCTL
 
-Thanks
-Vivek
+that last one being ofc stupid. Below lets me build; I'll go get
+something with caffeine in it and double-check the shuffles I've done
+before sending an actual patch.
 
+Thanks for the report!
+
+---
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index 0d7896d2a0b2..0ca486aa296b 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -185,6 +185,12 @@ late_initcall(sched_init_debug);
+
+ #ifdef CONFIG_SMP
+
++#define SD_FLAG(_name, mflags) [__##_name] = { .meta_flags = mflags, .name = #_name },
++const struct sd_flag_debug sd_flag_debug[] = {
++#include <linux/sched/sd_flags.h>
++};
++#undef SD_FLAG
++
+ #ifdef CONFIG_SYSCTL
+
+ static struct ctl_table sd_ctl_dir[] = {
+@@ -245,12 +251,6 @@ set_table_entry(struct ctl_table *entry,
+        entry->proc_handler = proc_handler;
+ }
+
+-#define SD_FLAG(_name, mflags) [__##_name] = { .meta_flags = mflags, .name = #_name },
+-const struct sd_flag_debug sd_flag_debug[] = {
+-#include <linux/sched/sd_flags.h>
+-};
+-#undef SD_FLAG
+-
+ static int sd_ctl_doflags(struct ctl_table *table, int write,
+                          void *buffer, size_t *lenp, loff_t *ppos)
+ {
+---

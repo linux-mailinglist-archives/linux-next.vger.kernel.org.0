@@ -2,122 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D23D26106E
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 13:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AC72612B4
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 16:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbgIHLGV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 07:06:21 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:37317 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729625AbgIHLGF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Sep 2020 07:06:05 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1729406AbgIHO3R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 10:29:17 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:30625 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729922AbgIHO1E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 10:27:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599575164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iz+7zzBpkiJrIKI0XTqvxV8tNmeNS+Jw/qROZpGe5DE=;
+        b=A6GI9P1iwRsBLAln+b2QxzOslWVosILO9qj1Y5w7cMRQKFXrRRWIcijQ++pVhPTufP1Dgb
+        /lwjMWj9ffApYfWkW8GeSsvyj38OPHKewLxEIIRJ/Fp18b8Us0sKps9ngeno3C93psbTTJ
+        Yf8GgobsWzhDhM4OPkgD9Qo/J2raerc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-176-gbnLPucUPMqc6J3Xih0mPw-1; Tue, 08 Sep 2020 09:14:44 -0400
+X-MC-Unique: gbnLPucUPMqc6J3Xih0mPw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bm2Nf16mGz9sPB;
-        Tue,  8 Sep 2020 21:04:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599563092;
-        bh=6U+pqYLfxynVW7ZBWg5ewtSebrhAHs8Jw/8Fsgfyq0Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CaXld08YvgRf7d39KaKgHP619xkysrKAzZdRY2sqZ0tQerwYvkE0GwKePLTW5SxDf
-         1eg/R3asmvc6sRCDO3kb0sV3KSBu/hdBD8ksAueQANLDhT8xJweSXTrA9jRt634/di
-         ewHOLutGWOkiqBAm5qpo+ic/M++ML7+vRoTYkR3YLNuxVcx/6vQ7CGqMvXKZ/z3dkp
-         tACT/u4z05iYE8zAbUz6F24BvjZs0OQhnYwMC7IFqxuNpdXuTH3rFKm/ZDVbizm742
-         Fij/LE8BI+XdhzcQcAIW+B2rlx3pTEgMWn4PBedj97223donzxhO6brrtrW7iWy4sY
-         kI2KSOrUK6Flw==
-Date:   Tue, 8 Sep 2020 21:04:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 259B51074644;
+        Tue,  8 Sep 2020 13:14:43 +0000 (UTC)
+Received: from treble (ovpn-117-163.rdu2.redhat.com [10.10.117.163])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD5187D923;
+        Tue,  8 Sep 2020 13:14:41 +0000 (UTC)
+Date:   Tue, 8 Sep 2020 08:14:39 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
-Message-ID: <20200908210449.1a4f8e52@canb.auug.org.au>
-In-Reply-To: <db369f50-a3a0-2504-0628-ce5e6780d31b@redhat.com>
-References: <20200908140022.67dd3801@canb.auug.org.au>
-        <db369f50-a3a0-2504-0628-ce5e6780d31b@redhat.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: linux-next: build warnings in Linus' tree
+Message-ID: <20200908131439.xj6nzi6nny3u5icb@treble>
+References: <20200908091102.4c2d7b37@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dGXS.TNI7czMZikC=h9RWLW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200908091102.4c2d7b37@canb.auug.org.au>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dGXS.TNI7czMZikC=h9RWLW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 08, 2020 at 09:11:02AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Building Linus' tree, today's linux-next build (x86_64 allmodconfig)
+> produced these warnings:
+> 
+> arch/x86/kernel/cpu/mce/core.o: warning: objtool: mce_panic()+0x2a3: unreachable instruction
+> net/core/skbuff.o: warning: objtool: skb_push.cold()+0x1b: unreachable instruction
+> arch/x86/mm/mmio-mod.o: warning: objtool: pre()+0x21a: unreachable instruction
+> arch/x86/kvm/vmx/vmx.o: warning: objtool: vmx_handle_exit_irqoff()+0x142: unreachable instruction
+> kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x26: unreachable instruction
+> kernel/cred.o: warning: objtool: get_task_cred.cold()+0x19: unreachable instruction
+> drivers/misc/sgi-gru/grukservices.o: warning: objtool: gru_wait_abort_proc()+0x97: unreachable instruction
+> drivers/scsi/pcmcia/aha152x_core.o: warning: objtool: is_complete()+0x6c6: unreachable instruction
+> drivers/message/fusion/mptbase.o: warning: objtool: mpt_SoftResetHandler()+0x4a5: unreachable instruction
+> drivers/scsi/aic7xxx/aic79xx_core.o: warning: objtool: ahd_intr()+0x2a9: unreachable instruction
+> drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.o: warning: objtool: otx2_sq_append_tso()+0xab6: unreachable instruction
+> fs/btrfs/extent_io.o: warning: objtool: __set_extent_bit.cold()+0x12: unreachable instruction
+> fs/btrfs/backref.o: warning: objtool: btrfs_backref_finish_upper_links()+0x818: unreachable instruction
+> fs/btrfs/relocation.o: warning: objtool: update_backref_cache.isra.0()+0x3bf: unreachable instruction
+> drivers/atm/horizon.o: warning: objtool: rx_data_av_handler()+0x452: unreachable instruction
 
-Hi Hans,
+I suspect these will all be fixed by this livepatching pull request:
 
-On Tue, 8 Sep 2020 10:22:06 +0200 Hans de Goede <hdegoede@redhat.com> wrote:
->
-> On 9/8/20 6:00 AM, Stephen Rothwell wrote:
-> >=20
-> > Today's linux-next merge of the drm-intel tree got a conflict in:
-> >=20
-> >    drivers/gpu/drm/i915/display/intel_panel.c
-> >=20
-> > between commit:
-> >=20
-> >    f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an =
-external PWM controller")
+  https://lkml.kernel.org/r/20200907082036.GC8084@alley
 
-This should have been
+-- 
+Josh
 
-  899c537c25f9 ("drm/i915: Use 64-bit division macro")
-
-> >=20
-> > from Linus' tree and commit:
-> >=20
-> >    6b51e7d23aa8 ("drm/i915: panel: Honor the VBT PWM frequency for devs=
- with an external PWM controller") =20
->=20
-> That doesn't sound correct, those are both commits from the drm-intel tre=
-e.
->=20
-> > from the drm-intel tree.
-> >=20
-> > I fixed it up (I just used the latter) =20
->=20
-> Just taking the drivers/gpu/drm/i915/display/intel_panel.c contents of:
->=20
-> f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an exter=
-nal PWM controller")
->=20
-> Is the right thing to do, the problem is a difference in a line which gets
-> removed in that commit.
-
-Which is what I actually did, I guess :-)
-
-Sorry about that.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dGXS.TNI7czMZikC=h9RWLW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XZVEACgkQAVBC80lX
-0Gzlbwf+PPJxV9Q4ttdCmWNOyTMQU/r6ZMUpOfodqyfxbkboiTWSI6NyJshSUujB
-46CgTj20eGsf1wxDpfceCBW10RiLoxvTv9RRCn0FKFJ4knjlUmLgd5H/q3nyw7KY
-I9mymEV1qQR5Bt3qxz1kFzYDyaZVG6QHBSOAwVMkP+WPT9hAFPcJtVg4rqGsW9DS
-xPBjTxacTcrBVq1hG+L+Uc5Urr4zxyGKibMeSd1YikukIuRquftUqjBpjINUBGvU
-6DkZ2Hg5JFvNqbV1BiA9wxOFOUUCJz524+efusX9Fh5dL4YVCV6ex9SJhXboFLMP
-KAlVyNGP4K23MYWFl+nKhqsvhxrf7Q==
-=1Pjd
------END PGP SIGNATURE-----
-
---Sig_/dGXS.TNI7czMZikC=h9RWLW--

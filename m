@@ -2,147 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7C7260E99
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 11:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A94260F20
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgIHJYO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 05:24:14 -0400
-Received: from ozlabs.org ([203.11.71.1]:32889 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728632AbgIHJYO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Sep 2020 05:24:14 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bm08W0YTPz9sSJ;
-        Tue,  8 Sep 2020 19:24:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599557051;
-        bh=R0OYKkOy/iCGsKRLvkfsNG7vlF5NkmSqZDFWBzeg5Z4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pS7PQnmxcHqgNKq1hQbK3RkqCm50Ki1px8JNSu4XMFD1CLLdzz2vKpbFA2eAxuwfD
-         W3wBjQ5Y0ndaYcwYGnMFdqWfGOts5QJG5GnZKGkSmTOSB/bani4oRnxbWoz06d9EiR
-         oPBUw2k7bHw+RjFANDwiBXq2BQNobZs67t1PLM5Uytt1uPFVazTlGoUCnGOtR5iB+g
-         kpMVqeRE+0dFwJYB4J5rmKCchB5Zq+OVaxAQKhHsV7Av/qL+6QAKmaCc5mvQfCLKr9
-         jja2bIMGHRwt55dt2aLLtwOCjPuYM/jc87OpjkDb86adnLDqU9VVPmNfm0bfkdoQjv
-         DVa4o1nz27JAA==
-Date:   Tue, 8 Sep 2020 19:24:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Roger Pau Monne <roger.pau@citrix.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        id S1728828AbgIHJ7d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 05:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728886AbgIHJ7a (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 05:59:30 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D90C061573;
+        Tue,  8 Sep 2020 02:59:28 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id s2so7765049pjr.4;
+        Tue, 08 Sep 2020 02:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PQg9eVQV0B9Lm6jeMoc6uXGoshaI/xJEXEEmohkfSoM=;
+        b=rgN9WNfsDxisbDvGyY8i6+CQHQlG5FF22yiWG6ndBt1M6Mh6OCBKxEV2ppnLczz5Hc
+         Rzaxv0wZgpKb4Duvwkmx18+xADlczn5HKJz6Qa5JhGHdKb9h2DlPMDqyVTY6BmlnIEcj
+         jjD3eWa1eyY7B8iuArm1I8LZxpP714HssoNr+DpTGlEwMagBKy0pxnfIcAQq9XoHDQlE
+         k3UlfxmN2EYYSB/4c/1nAxfPZ9Iqdlz59HFlOGm8ZnrdhbpeggeWW9UzZ25qM5kifHjS
+         jYsfHKxEhGqjUho7T5p2wx8ORCKQ6mcXyO4jjGxQCxCQRjVk2cU+yf4JJ6T5rwK7C6gU
+         ECkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PQg9eVQV0B9Lm6jeMoc6uXGoshaI/xJEXEEmohkfSoM=;
+        b=Zv0nugOcjyNn4R6iXdZOt+2xFCui3ou2tNfXlH/xBf3fZV3j2bOLwuYk6hGaP6PzQ8
+         liqvZBpxn9+H98FOgwjC73xb478q2dQSNk/+Lj00xapvNIR8OlSIRsWMnrrekW4NI0gL
+         OVYspEzEdOTD9WenFlOWp+f1zw01bv1KkybSOlkarEUNjeQ06/8zPpyWlW8eHb38eRWt
+         642HtOZXxIBiqfPrdsBPj9j/jXi3bHNgIRQ1dQe7S0LmmRal5U2EVrxUjqRyazUTAG+W
+         v0oGGm9Kq+PGlFDuqT7uOY70PJrWl39v/5gL6O1ewextea/hdyOzu3cAtKykAtMnsP0i
+         57Ow==
+X-Gm-Message-State: AOAM5327lDqQqmJWakt/S0IwVwLZiHRltmb9SlikZV6zTJmzxPEG7he4
+        hzBup7Id+YHHn/Em3g9dLhh2Yw4q5C4=
+X-Google-Smtp-Source: ABdhPJypY1ZWkw/zpjg++SXqQq35X+DjtyhCd2pmzg+3p/NykE1cvX3rDLapKctnBGWOzLmL24GQRA==
+X-Received: by 2002:a17:90b:4a47:: with SMTP id lb7mr3243837pjb.196.1599559168036;
+        Tue, 08 Sep 2020 02:59:28 -0700 (PDT)
+Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
+        by smtp.gmail.com with ESMTPSA id gn24sm1700897pjb.8.2020.09.08.02.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 02:59:26 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 18:59:24 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with Linus' tree
-Message-ID: <20200908192410.0ffe8c33@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the printk tree
+Message-ID: <20200908095924.GA74028@jagdpanzerIV.localdomain>
+References: <20200905121827.22fb4037@canb.auug.org.au>
+ <20200908074601.GA3864@alley>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GI3t10h4Bjs/Gsj=kU5YHr1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200908074601.GA3864@alley>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GI3t10h4Bjs/Gsj=kU5YHr1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On (20/09/08 09:46), Petr Mladek wrote:
+> On Sat 2020-09-05 12:18:27, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Commit
+> > 
+> >   4c31ead75f41 ("printk: ringbuffer: support dataless records")
+> > 
+> > is missing a Signed-off-by from its committer.
+> 
+> Thanks for catching this. It should be fixed now.
+> 
+> It has been originally committed by Sergey. I rebased it to add the
+> missing SHA1[0] and suddenly became committer, see
 
-Hi all,
+Oh.
+I missed it somehow that b4/git-am didn't add all the required fields.
+That wasn't the only patch that I applied. So, well.. Sorry and thanks
+for catching and fixing this up.
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
-
-  drivers/dax/device.c
-
-between commit:
-
-  4533d3aed857 ("memremap: rename MEMORY_DEVICE_DEVDAX to MEMORY_DEVICE_GEN=
-ERIC")
-
-from Linus' tree and commit:
-
-  ceb1b473719c ("device-dax: make pgmap optional for instance creation")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/dax/device.c
-index 1e89513f3c59,cc1f4ce185bf..000000000000
---- a/drivers/dax/device.c
-+++ b/drivers/dax/device.c
-@@@ -420,17 -396,37 +396,37 @@@ int dev_dax_probe(struct dev_dax *dev_d
-  	struct inode *inode;
-  	struct cdev *cdev;
-  	void *addr;
-- 	int rc;
-+ 	int rc, i;
- =20
-- 	/* 1:1 map region resource range to device-dax instance range */
-- 	if (!devm_request_mem_region(dev, res->start, resource_size(res),
-- 				dev_name(dev))) {
-- 		dev_warn(dev, "could not reserve region %pR\n", res);
-- 		return -EBUSY;
-+ 	pgmap =3D dev_dax->pgmap;
-+ 	if (dev_WARN_ONCE(dev, pgmap && dev_dax->nr_range > 1,
-+ 			"static pgmap / multi-range device conflict\n"))
-+ 		return -EINVAL;
-+=20
-+ 	if (!pgmap) {
-+ 		pgmap =3D devm_kzalloc(dev, sizeof(*pgmap) + sizeof(struct range)
-+ 				* (dev_dax->nr_range - 1), GFP_KERNEL);
-+ 		if (!pgmap)
-+ 			return -ENOMEM;
-+ 		pgmap->nr_range =3D dev_dax->nr_range;
-+ 	}
-+=20
-+ 	for (i =3D 0; i < dev_dax->nr_range; i++) {
-+ 		struct range *range =3D &dev_dax->ranges[i].range;
-+=20
-+ 		if (!devm_request_mem_region(dev, range->start,
-+ 					range_len(range), dev_name(dev))) {
-+ 			dev_warn(dev, "mapping%d: %#llx-%#llx could not reserve range\n",
-+ 					i, range->start, range->end);
-+ 			return -EBUSY;
-+ 		}
-+ 		/* don't update the range for static pgmap */
-+ 		if (!dev_dax->pgmap)
-+ 			pgmap->ranges[i] =3D *range;
-  	}
- =20
-- 	dev_dax->pgmap.type =3D MEMORY_DEVICE_GENERIC;
-- 	addr =3D devm_memremap_pages(dev, &dev_dax->pgmap);
- -	pgmap->type =3D MEMORY_DEVICE_DEVDAX;
-++	pgmap->type =3D MEMORY_DEVICE_GENERIC;
-+ 	addr =3D devm_memremap_pages(dev, pgmap);
-  	if (IS_ERR(addr))
-  		return PTR_ERR(addr);
- =20
-
---Sig_/GI3t10h4Bjs/Gsj=kU5YHr1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XTboACgkQAVBC80lX
-0GyFCAf9FFrnvr/UxrRQ2HBwGRuvytzOZqOtVP/lRQ06aKH7wRoW94rnvmVaDs4M
-cdlS/55qJUy+PuynNSjrntT9r8dLqnvYHz5whh+WebS+tWFGS6+5OVDSmjzdVfvE
-bXrQ3Lh//x9ktn80jisVwEX93NfLKaIM2VxEv1DeHGW136OUe9MhI1jAivwDBz3D
-E01a0ToXpo06XNcWp7KoDFOuKlfOhgFC5GuWAd7NaDFbjnDdvbqoZLeXYd4K1PGA
-nsesvkosiOsUw4yXb3tN/O5FhMBrgIbN7BR1j1/JU9xlbSoC4pPZc36HEZ/zFVT+
-hYED52fXva77/vtmwj3Fxe+WEHJ7PQ==
-=iEvi
------END PGP SIGNATURE-----
-
---Sig_/GI3t10h4Bjs/Gsj=kU5YHr1--
+	-ss

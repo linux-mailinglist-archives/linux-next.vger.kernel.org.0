@@ -2,89 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10484260E69
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 11:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F05260E85
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 11:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729225AbgIHJMi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 05:12:38 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52489 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729322AbgIHJMd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Sep 2020 05:12:33 -0400
+        id S1728755AbgIHJSE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 05:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727995AbgIHJSC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 05:18:02 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECF6C061573;
+        Tue,  8 Sep 2020 02:18:02 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Blzty11gQz9sSJ;
-        Tue,  8 Sep 2020 19:12:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bm01K6s9tz9sSJ;
+        Tue,  8 Sep 2020 19:17:57 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599556348;
-        bh=xkKtQPVGfzHcLN5WAlWypj63duX2vRBfC4xpES4+S9E=;
+        s=201702; t=1599556678;
+        bh=AGqEGVdDSR1eqYULm9R1gdR20ZUjvSYppBbyTkjhNuQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=opmcjJAAROFcd3v61LSygjI+JYzHXbfeUk71FLl1rwSflXTVnZf91pTlR0RTUmlaj
-         hixz9g/wWNtgxXmfkfL+QxENOtyEfwpidRck5ekNVB74vMlJKiL6zT9PrACZW+CSe9
-         DxaJSiYwXLWPthLMtXCOHzbhYWSgYj0UkYWWAzYSytd/EBLoWTMiuoVpn0mJ5Dz5X4
-         L2YUIpMcJK4IyxM/aD0/1P1mfwXZ0bs+Q2L2MLfMA4itHTrgCPivx6vvUHO/7CoSM5
-         TZJKx6ufYB8Vzc5g1KW5QP1bRZAGxfIF3rDeWbdCqEvxzB6JUVW+denv9Ff3/2/1Ws
-         EOWL4vjKiOP3Q==
-Date:   Tue, 8 Sep 2020 19:12:23 +1000
+        b=UAB5Nn6ZKRMMT/n2ydNQyNCrC093HVGctdYGM0sf2FIl90qVSjopjx2Udls3bbuES
+         dMo+xlN7jhLrWI7kAgjIp83gL5kBcp20GqrNx4bU0oppTra/cQUnnBQdphqiBa5epk
+         Mzl6Q4ZnZpyRXaa3Bc0nmWBP3U20J1+1Ozaizxd0eGm3WOmyxNczrleWcfIk8Go9hL
+         deSdsO5hhI/AyZnMp128M8fhRfoazAk84KZOocxaFNwiUeaM4f6JttwTVLbUmNoVnc
+         rXd+UGwri/p1BDdrfPyIMAAiyGy0neHNQNhvZ323T9oNvVWpomUN0Wn54oqTrLfqJ5
+         zlVC66dADcDzw==
+Date:   Tue, 8 Sep 2020 19:17:57 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20200908191223.0e7a9640@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm-current tree with Linus' tree
+Message-ID: <20200908191757.3ff97cc4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hYofkrjaPSAvqhP_kr/YbJq";
+Content-Type: multipart/signed; boundary="Sig_/G.7l04rUbkLX=soO+HJtrp_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hYofkrjaPSAvqhP_kr/YbJq
+--Sig_/G.7l04rUbkLX=soO+HJtrp_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-ERROR: modpost: too long symbol ".__tracepoint_iter_pnfs_mds_fallback_pg_ge=
-t_mirror_count" [fs/nfs/flexfilelayout/nfs_layout_flexfiles.ko]
+  .clang-format
 
-Caused by commit
+between commit:
 
-  d25e37d89dd2 ("tracepoint: Optimize using static_call()")
+  4e4bb894467c ("clang-format: Update with the latest for_each macro list")
 
-Exported symbols need to be <=3D (64 - sizeof(Elf_Addr)) long.  This is
-presumably 56 on 64 bit arches and the above symbol (including the '.')
-is 56 characters long.
+from Linus' tree and commits:
 
-I have reverted that commit for today.
+  7008a2f408a3 ("memblock: implement for_each_reserved_mem_region() using _=
+_next_mem_region()")
+  203287621da3 ("memblock: use separate iterators for memory and reserved r=
+egions")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hYofkrjaPSAvqhP_kr/YbJq
+diff --cc .clang-format
+index badfc1ba440a,a118fdde25c1..000000000000
+--- a/.clang-format
++++ b/.clang-format
+@@@ -269,8 -267,7 +271,9 @@@ ForEachMacros
+    - 'for_each_process_thread'
+    - 'for_each_property_of_node'
+    - 'for_each_registered_fb'
+ +  - 'for_each_requested_gpio'
+ +  - 'for_each_requested_gpio_in_range'
++   - 'for_each_reserved_mem_range'
+    - 'for_each_reserved_mem_region'
+    - 'for_each_rtd_codec_dais'
+    - 'for_each_rtd_codec_dais_rollback'
+
+--Sig_/G.7l04rUbkLX=soO+HJtrp_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XSvcACgkQAVBC80lX
-0GyRVQf7B1Ax2DBQ5gKK5Kq7QsZRIFiKrcVfbog2OnYc8+MNR2tbZPP8lATP/Gxr
-AIaMn5PQu+J0tANjdncm87DTgDN0af7RV0ndmj2VWIx+eBBZwrmRoWU6+jxO245L
-XzOY5IwJkV5mZnMFdvsWrmh++eL1Ecg7QYMTsGplotHNPzmN8IIH6hYhl92lsxWp
-5QFXwt50apJ3cgbMmZhBAIzZPuYbkXrzO40p0tSWnmgyiKe6t898vsbmslzLY4xy
-0oGB9GPqUmxg9HQaYurdP6W3tSrj7uf7K5rwB+mRiNaAu4xWkSJzJ1wf36owFVO8
-LBp6T7Q3geUWzoi5wlJjBFg23mmAug==
-=H2FX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XTEUACgkQAVBC80lX
+0GzHKwf/SuC435HV4tJqICQxuHms12++D0vU4hzcc8tNzYT58BP4bNI97a3gnEjh
+XW+z6RMGEkmgURJmPo0XHmXIajuRCGyVagZlZ1Y4csT7oQvTWvvabDBnZGVpHDIl
+a9qpaMUA4AEOgrUqJjPJTDsnIyHipx8WmoKftL9xYsfls3IHmZvB/d46UmcP2eq+
+8q9aNNLtl958L3D3N2pdSo1SWu1x0yNyb4yN7uIMDrVuuCinYiNOt475Qyo0WQgN
+YRsHPiZTUESVcu50u6J6EPSq5oM5rFoxI+4oDkxqPxa6ui259X+Pt5vfAl2nuqV6
+DeXjlJWF0WybzhHrUvn+jYTHycSZSg==
+=zZ9E
 -----END PGP SIGNATURE-----
 
---Sig_/hYofkrjaPSAvqhP_kr/YbJq--
+--Sig_/G.7l04rUbkLX=soO+HJtrp_--

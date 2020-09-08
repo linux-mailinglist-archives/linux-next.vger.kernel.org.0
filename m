@@ -2,53 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7696F261DE6
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 21:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583E22620B5
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 22:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732348AbgIHTnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 15:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S1730634AbgIHUOp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 16:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730853AbgIHPvt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 11:51:49 -0400
+        with ESMTP id S1729986AbgIHPKq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 11:10:46 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748C9C061389;
-        Tue,  8 Sep 2020 08:50:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CDAC09B051;
+        Tue,  8 Sep 2020 07:49:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:In-Reply-To:MIME-Version:
         Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NAGoiJvaXjpcGkBgI676u9ZQqCwzrGSfBRgPAeRQu80=; b=bVKl81Viqplvd0Dn3WNTDqqPkB
-        Kp/HBjjar4d4XMc51a70tlofHvP+urLcz7rLyxjSUL4+/h9+ZKed0QMGMZZotw1GjVAWmGxGiK9ZP
-        nQRiIpNVajHzZoW57wTqq6kq6onvJSwp5hX/Im1BBvz5aWWolTm+nivfFx2EwnBP9c5INpHaa9YyE
-        qe894rhSCgRb8FXH9uLISXX75IcDLS9G5ZQjz9aCuCWwAPOPPS0fvM5HJBLq26JJepXCJ2MjC14Qx
-        lQJfV11uUXDAR07ZfbZa+bcr01m9P6bU04ebpGtXsL7WbcwB61kyxz62ZWjD/djuhSWug1oBH3SOg
-        GLrBwy9A==;
+        bh=tv1NpD8ryuk60IGNCwWmFJdGI82m9eTuUc5apjeOGyc=; b=t6SbkAib+v+lx5PiOaiF0mDflo
+        F1LRDicZvbScE8TD1PcbxZo5ld4G6U3MtDJg0Oc0XOGlOx7ZAEJ6pJaKJMDBRKHsJwtIfcEegmY0g
+        lEcKOBD2bB1g6AJGx0C9Z8w613Y5GM1ebquJLGO+jXL7TDBad2PN7ebNO7VLcfGm5yLLeS+mNZBwU
+        m/21iN9JJ0IAGrlnZY2b7A2xXjVEp9zEscN8WhVG6qRkLULMqOM5invCDaIT7aPmIlwABJJOFK3rJ
+        0mh/klPaqeiucx3XL6QMyCIrsvA6kd9WSYsx4ZkgMIdC9Jx5FrBmmQWKG37m2EyrpH6Kq6RZtb3WM
+        kiEJpC4Q==;
 Received: from [2601:1c0:6280:3f0::19c2]
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFftO-0006Hg-Eo; Tue, 08 Sep 2020 15:50:48 +0000
+        id 1kFeu3-0002cA-T3; Tue, 08 Sep 2020 14:47:57 +0000
 Subject: Re: linux-next: Tree for Sep 8 (sched/topology.c)
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
 References: <20200908205659.361b0a1b@canb.auug.org.au>
- <ddc76403-4b00-66ba-43ea-7889b9a32bb5@infradead.org>
- <CAKfTPtB-br6iKAMnofbPEmPVF-fpQpjkbXtfTcNkNzbc1Kdtug@mail.gmail.com>
- <jhj4ko86zk4.mognet@arm.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <b6e6f676-d61b-5109-759f-4b4f2c24bab1@infradead.org>
-Date:   Tue, 8 Sep 2020 08:50:43 -0700
+Message-ID: <ddc76403-4b00-66ba-43ea-7889b9a32bb5@infradead.org>
+Date:   Tue, 8 Sep 2020 07:47:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <jhj4ko86zk4.mognet@arm.com>
+In-Reply-To: <20200908205659.361b0a1b@canb.auug.org.au>
 Content-Type: multipart/mixed;
- boundary="------------7BED6E5369EBA3D1C9C380AB"
+ boundary="------------EE81A0BA50E552AA8913B143"
 Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
@@ -56,74 +52,32 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------7BED6E5369EBA3D1C9C380AB
+--------------EE81A0BA50E552AA8913B143
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On 9/8/20 8:47 AM, Valentin Schneider wrote:
+On 9/8/20 3:56 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 08/09/20 16:03, Vincent Guittot wrote:
->> Adding Valentin as this seems related to the patch "sched/topology:
->> Move sd_flag_debug out of linux/sched/topology.h"
->>
+> Changes since 20200903:
 > 
-> Thanks!
-> 
->>
->> On Tue, 8 Sep 2020 at 16:48, Randy Dunlap <rdunlap@infradead.org> wrote:
->>>
->>> On 9/8/20 3:56 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20200903:
->>>>
->>>
->>> on i386:
->>>
->>> ld: kernel/sched/topology.o: in function `cpu_attach_domain':
->>> topology.c:(.text+0xf03): undefined reference to `sd_flag_debug'
->>> ld: topology.c:(.text+0xf4f): undefined reference to `sd_flag_debug'
->>> ld: topology.c:(.text+0xfc2): undefined reference to `sd_flag_debug'
->>>
-> 
-> So that should be in sched_domain_debug_one() which only gets defined for
-> CONFIG_SCHED_DEBUG. Now, sd_flag_debug is:
-> - declared in include/linux/sched/topology.h if CONFIG_SCHED_DEBUG
-> - defined in kernel/sched/debug.c (only built if CONFIG_SCHED_DEBUG)
-> 
-> I've compile-tested this for arm64 & x86 (default configs + toggling
-> CONFIG_SCHED_DEBUG). UP can't be the cause because topology.c wouldn't even
-> be compiled then.
-> 
-> IIUC this is a build with CONFIG_SCHED_DEBUG but for some reason it doesn't
-> link with kernel/sched/debug.o?
-> 
->>>
->>> Full randconfig file is attached.
->>>
-> 
-> I wanted to peek at that config, but can't find that email. The thread view
-> on lore [1] also shows it as AWOL; any chance you (or someone else) could
-> re-send it?
-> 
-> [1]: https://lore.kernel.org/lkml/20200908205659.361b0a1b@canb.auug.org.au/
-> 
->>>
->>> --
->>> ~Randy
->>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
-Sure, here it is again.  And
-CONFIG_SMP=y
-CONFIG_SCHED_DEBUG=y
+on i386:
 
-thanks.
+ld: kernel/sched/topology.o: in function `cpu_attach_domain':
+topology.c:(.text+0xf03): undefined reference to `sd_flag_debug'
+ld: topology.c:(.text+0xf4f): undefined reference to `sd_flag_debug'
+ld: topology.c:(.text+0xfc2): undefined reference to `sd_flag_debug'
+
+
+Full randconfig file is attached.
+
 
 -- 
 ~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
-
---------------7BED6E5369EBA3D1C9C380AB
+--------------EE81A0BA50E552AA8913B143
 Content-Type: text/plain; charset=UTF-8;
  name="config-r4875"
 Content-Transfer-Encoding: base64
@@ -2231,4 +2185,4 @@ VF9TVEFDS0lOSVQgaXMgbm90IHNldAojIENPTkZJR19URVNUX01FTUlOSVQgaXMgbm90IHNl
 dApDT05GSUdfVEVTVF9GUFU9eQpDT05GSUdfTUVNVEVTVD15CkNPTkZJR19IWVBFUlZfVEVT
 VElORz15CiMgZW5kIG9mIEtlcm5lbCBUZXN0aW5nIGFuZCBDb3ZlcmFnZQojIGVuZCBvZiBL
 ZXJuZWwgaGFja2luZwo=
---------------7BED6E5369EBA3D1C9C380AB--
+--------------EE81A0BA50E552AA8913B143--

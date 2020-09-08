@@ -2,134 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8482615B3
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 18:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23BA261540
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 18:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731989AbgIHQyv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 12:54:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23030 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731947AbgIHQsF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 12:48:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599583682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kk/MzQpl2YW+BRjUs+jKB6CtH3juIQy3EW0uS3+0BVs=;
-        b=FaiKCfdB8+U66neeWsffP/LUV0GoQtx+Cy1IXNrbabf5j2Ukf6E+ySYzCTCgbItvaCgN+7
-        T8BEIHHxpjZDN/IVIejmPgJSLMH2fSCnk9XL6QqStg05DQQTcALlN0y3ipFKHy/FKYvqVo
-        l8y8MA2HTwN/4Uv+VVYEh5yHNXm5VU8=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-528-TEoiJfnqOq-mdCSx_HDX3w-1; Tue, 08 Sep 2020 09:20:26 -0400
-X-MC-Unique: TEoiJfnqOq-mdCSx_HDX3w-1
-Received: by mail-ed1-f72.google.com with SMTP id x14so2290987edv.8
-        for <linux-next@vger.kernel.org>; Tue, 08 Sep 2020 06:20:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kk/MzQpl2YW+BRjUs+jKB6CtH3juIQy3EW0uS3+0BVs=;
-        b=NTxQOONoYGlgAIPh5K/b2uuA88YzX5mgEXPj9BCYn8RyAdR+zxYyScAdgmI7CLvxjI
-         kuxB0zDDxj4mHhEuwWityqNsNYlafEcCjNp0h05eu7K5+th/N3hOajmmltH+UUZkFiLa
-         jgD/fYzmGFGOtITwfD10xKxH0VwM9Xc+ybIh9zI1qLSXJvz2easrAZIcyFBzW4HNStal
-         pxl9+S55peykhq00ft7cGBpnstuzwSkpHN9inv9t43AmetaxjDVb0DTOHS4EzsxicaxW
-         okLt7+I9yF+qPTWasQB858CtSjVm0NzB4ydEIK2lzzFxdO/k8ahy3uUuO9+L35/GChVW
-         4Odg==
-X-Gm-Message-State: AOAM533CqloENO2SAmu4xTWz4K6ew+Ntyj1QBZcsUUeQpabVR77QaYHn
-        S7seiQSYH5RcJyH+l4QB4fUqa8OOPhInPd8yEtQ/hg8khYj+aCYyACbiMF/zlnhZcXfWllhH0hp
-        8KWVkE543ofHEINhaxp9rBw==
-X-Received: by 2002:aa7:d697:: with SMTP id d23mr27729544edr.13.1599571225487;
-        Tue, 08 Sep 2020 06:20:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJSCXKpUVVYMUY6y6pGIlWBQF6oylam73BShkdtH0Ngf5e1fkNihiTDrhP7Zi2Gs3qSlHKgQ==
-X-Received: by 2002:aa7:d697:: with SMTP id d23mr27729530edr.13.1599571225337;
-        Tue, 08 Sep 2020 06:20:25 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id n11sm14190638ejs.38.2020.09.08.06.20.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2020 06:20:24 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        id S1731910AbgIHQqs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 12:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731949AbgIHQ1O (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 12:27:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D52DC08EC65;
+        Tue,  8 Sep 2020 07:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=y4d0IpUN2yx9YRU65V5SiTPs5ZTZxBRK5kB3YxXQmEM=; b=pRRFZdvzJdD3AVoWZ9jUzrp/Q0
+        HKk1CID4JuLaYa0Mrj5PUoI6oQA5ciqJLBt5n5ag5rsIR1An2Ka5mAEm2114XrYmUFMhl45Xo5Tgw
+        1f/vNIsf9lGV3nxP8kEE6lE06fxMwHrKgMQu0pm3I0x/IyhLrqz+KKXAANGDWrG7AVVjPFzF5xi3j
+        b+2cyyoXEAUSsyUS34TeeH0WHmQnA7c49k8282aVWJL0Rr7DiG9/VGMMMa2l+P0T1l1zriMKbxZya
+        xNWqdb2Fviuue9DuvWQYMq8RKd6rulRyNI2IoQ+PtU88jlKEYqHk3sh4DyJcAunFrK+qy1HINMR77
+        ZUuxAv5A==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kFeld-00026L-QW; Tue, 08 Sep 2020 14:39:04 +0000
+Subject: Re: linux-next: Tree for Sep 2 (lib/ubsan.c)
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200908140022.67dd3801@canb.auug.org.au>
- <db369f50-a3a0-2504-0628-ce5e6780d31b@redhat.com>
- <20200908210449.1a4f8e52@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <d5c2cb83-8fc0-069e-7d4b-64a8ecf9a6b4@redhat.com>
-Date:   Tue, 8 Sep 2020 15:20:23 +0200
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+References: <20200902180950.4bc7c4de@canb.auug.org.au>
+ <3abfa193-a56e-66ba-1080-885906fa0196@infradead.org>
+ <fdf322d4-cc01-2c85-67cd-86b2d6f4ebff@infradead.org>
+ <CAFd5g44g6OrL3fxQNRZ1rR0PruAty8tBZr8JDzM-oonZJRDZyw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <84531c68-2ac8-924b-5e71-077f9abb2503@infradead.org>
+Date:   Tue, 8 Sep 2020 07:38:31 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200908210449.1a4f8e52@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <CAFd5g44g6OrL3fxQNRZ1rR0PruAty8tBZr8JDzM-oonZJRDZyw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
-
-On 9/8/20 1:04 PM, Stephen Rothwell wrote:
-> Hi Hans,
+On 9/4/20 12:59 AM, Brendan Higgins wrote:
+> On Thu, Sep 3, 2020 at 11:12 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> On 9/2/20 8:44 AM, Randy Dunlap wrote:
+>>> On 9/2/20 1:09 AM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20200828:
+>>>>
+>>>
+>>>
+>>> on i386:
+>>>
+>>> ../lib/ubsan.c: In function ‘ubsan_prologue’:
+>>> ../lib/ubsan.c:141:2: error: implicit declaration of function ‘kunit_fail_current_test’; did you mean ‘kunit_init_test’? [-Werror=implicit-function-declaration]
+>>>   kunit_fail_current_test();
+>>>
+>>>
+>>> Full randconfig file is attached.
+>>>
+>>
+>> Hi Brendan,
+>>
+>> Do you know anything about this build error?
+>>
+>> I can't find kunit_fail_current_test() anywhere.
 > 
-> On Tue, 8 Sep 2020 10:22:06 +0200 Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> On 9/8/20 6:00 AM, Stephen Rothwell wrote:
->>>
->>> Today's linux-next merge of the drm-intel tree got a conflict in:
->>>
->>>     drivers/gpu/drm/i915/display/intel_panel.c
->>>
->>> between commit:
->>>
->>>     f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an external PWM controller")
+> Yeah, this got applied for some reason without the prerequisite
+> patches. It is from a two patch series, the other being here:
 > 
-> This should have been
+> https://lore.kernel.org/linux-kselftest/20200813205722.1384108-1-urielguajardojr@gmail.com/
 > 
->    899c537c25f9 ("drm/i915: Use 64-bit division macro")
-
-Yes that makes more sense.
-
->>> from Linus' tree and commit:
->>>
->>>     6b51e7d23aa8 ("drm/i915: panel: Honor the VBT PWM frequency for devs with an external PWM controller")
->>
->> That doesn't sound correct, those are both commits from the drm-intel tree.
->>
->>> from the drm-intel tree.
->>>
->>> I fixed it up (I just used the latter)
->>
->> Just taking the drivers/gpu/drm/i915/display/intel_panel.c contents of:
->>
->> f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an external PWM controller")
->>
->> Is the right thing to do, the problem is a difference in a line which gets
->> removed in that commit.
+> which in turn depends on another patchset which didn't make it into 5.9.
 > 
-> Which is what I actually did, I guess :-)
+> Again, I don't know why this was applied without it's prereqs. Sorry about that.
+> 
 
-Yes, looks good.
+Well.  Who is responsible for this small mess?
+It is still killing linux-next builds for me (2020-0908).
 
-> Sorry about that.
-
-No problem and thank you for all the work you do on -next.
-
-Regards,
-
-Hans
+-- 
+~Randy
 

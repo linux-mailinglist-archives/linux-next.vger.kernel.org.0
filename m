@@ -2,151 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4CC26105B
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 12:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D23D26106E
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 13:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729603AbgIHK6n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 06:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729125AbgIHK6F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 06:58:05 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D27C061573;
-        Tue,  8 Sep 2020 03:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=h0VvsYSE+w3nFKH9YA+g18tRVTSKMLX/aErXMNaKl3o=; b=cVBATJMnNT7ngYwKMX50JOE42s
-        w38L4tGQY28hDLRNIXlIkkftUq/sBQfzuP7UOR07E+tF8u1i5SeGvsBqoWNn/oLBddhUImsB3w2KP
-        233TSw6q9lHcauEnzc4OAQNMIb6VNP0fwm0midNEEVVEKaCSzgitu/m7UPQZtwCjrIOn9bcUbjLW3
-        4k1UwS/1hED6NWgpN0lk2j/zMJPXANny1rIHdViofPpZ/uKMb8gO7OkGsWkS5zAJ4plzNDON1dYQw
-        rVMvE8xaAjGijkNJ1OR3XVbjTQlw37Fxir17521GQRZCG8VZqoVrO4QbmW9SqkZ/P7RTFP8sxEMNe
-        AU6F1ORw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kFbJq-0008Mk-3L; Tue, 08 Sep 2020 10:57:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 82AEC3010D2;
-        Tue,  8 Sep 2020 12:57:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2AF8A23D54AA4; Tue,  8 Sep 2020 12:57:43 +0200 (CEST)
-Date:   Tue, 8 Sep 2020 12:57:43 +0200
-From:   peterz@infradead.org
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        id S1729259AbgIHLGV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 07:06:21 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37317 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729625AbgIHLGF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Sep 2020 07:06:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bm2Nf16mGz9sPB;
+        Tue,  8 Sep 2020 21:04:50 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1599563092;
+        bh=6U+pqYLfxynVW7ZBWg5ewtSebrhAHs8Jw/8Fsgfyq0Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CaXld08YvgRf7d39KaKgHP619xkysrKAzZdRY2sqZ0tQerwYvkE0GwKePLTW5SxDf
+         1eg/R3asmvc6sRCDO3kb0sV3KSBu/hdBD8ksAueQANLDhT8xJweSXTrA9jRt634/di
+         ewHOLutGWOkiqBAm5qpo+ic/M++ML7+vRoTYkR3YLNuxVcx/6vQ7CGqMvXKZ/z3dkp
+         tACT/u4z05iYE8zAbUz6F24BvjZs0OQhnYwMC7IFqxuNpdXuTH3rFKm/ZDVbizm742
+         Fij/LE8BI+XdhzcQcAIW+B2rlx3pTEgMWn4PBedj97223donzxhO6brrtrW7iWy4sY
+         kI2KSOrUK6Flw==
+Date:   Tue, 8 Sep 2020 21:04:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Guru Das Srinagesh <gurus@codeaurora.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200908105743.GW2674@hirez.programming.kicks-ass.net>
-References: <20200908191223.0e7a9640@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20200908210449.1a4f8e52@canb.auug.org.au>
+In-Reply-To: <db369f50-a3a0-2504-0628-ce5e6780d31b@redhat.com>
+References: <20200908140022.67dd3801@canb.auug.org.au>
+        <db369f50-a3a0-2504-0628-ce5e6780d31b@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200908191223.0e7a9640@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/dGXS.TNI7czMZikC=h9RWLW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 07:12:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the tip tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->=20
-> ERROR: modpost: too long symbol ".__tracepoint_iter_pnfs_mds_fallback_pg_=
-get_mirror_count" [fs/nfs/flexfilelayout/nfs_layout_flexfiles.ko]
->=20
-> Caused by commit
->=20
->   d25e37d89dd2 ("tracepoint: Optimize using static_call()")
->=20
-> Exported symbols need to be <=3D (64 - sizeof(Elf_Addr)) long.  This is
-> presumably 56 on 64 bit arches and the above symbol (including the '.')
-> is 56 characters long.
+--Sig_/dGXS.TNI7czMZikC=h9RWLW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I suppose something like the below ought to cure that. Still, stupid
-long tracename that.
+Hi Hans,
 
----
+On Tue, 8 Sep 2020 10:22:06 +0200 Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> On 9/8/20 6:00 AM, Stephen Rothwell wrote:
+> >=20
+> > Today's linux-next merge of the drm-intel tree got a conflict in:
+> >=20
+> >    drivers/gpu/drm/i915/display/intel_panel.c
+> >=20
+> > between commit:
+> >=20
+> >    f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an =
+external PWM controller")
 
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 3722a10fc46d..81fa0b2f271e 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -154,7 +154,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(t=
-racepoint_ptr_t *p)
- #ifdef CONFIG_HAVE_STATIC_CALL
- #define __DO_TRACE_CALL(name)	static_call(tp_func_##name)
- #else
--#define __DO_TRACE_CALL(name)	__tracepoint_iter_##name
-+#define __DO_TRACE_CALL(name)	__traceiter_##name
- #endif /* CONFIG_HAVE_STATIC_CALL */
-=20
- /*
-@@ -232,8 +232,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(t=
-racepoint_ptr_t *p)
-  * poking RCU a bit.
-  */
- #define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args) \
--	extern int __tracepoint_iter_##name(data_proto);		\
--	DECLARE_STATIC_CALL(tp_func_##name, __tracepoint_iter_##name); \
-+	extern int __traceiter_##name(data_proto);			\
-+	DECLARE_STATIC_CALL(tp_func_##name, __traceiter_##name);	\
- 	extern struct tracepoint __tracepoint_##name;			\
- 	static inline void trace_##name(proto)				\
- 	{								\
-@@ -288,19 +288,19 @@ static inline struct tracepoint *tracepoint_ptr_deref=
-(tracepoint_ptr_t *p)
- 	static const char __tpstrtab_##_name[]				\
- 	__section(__tracepoints_strings) =3D #_name;			\
- 	extern struct static_call_key STATIC_CALL_KEY(tp_func_##_name);	\
--	int __tracepoint_iter_##_name(void *__data, proto);		\
-+	int __traceiter_##_name(void *__data, proto);			\
- 	struct tracepoint __tracepoint_##_name	__used			\
- 	__section(__tracepoints) =3D {					\
- 		.name =3D __tpstrtab_##_name,				\
- 		.key =3D STATIC_KEY_INIT_FALSE,				\
- 		.static_call_key =3D &STATIC_CALL_KEY(tp_func_##_name),	\
- 		.static_call_tramp =3D STATIC_CALL_TRAMP_ADDR(tp_func_##_name), \
--		.iterator =3D &__tracepoint_iter_##_name,			\
-+		.iterator =3D &__traceiter_##_name,			\
- 		.regfunc =3D _reg,					\
- 		.unregfunc =3D _unreg,					\
- 		.funcs =3D NULL };					\
- 	__TRACEPOINT_ENTRY(_name);					\
--	int __tracepoint_iter_##_name(void *__data, proto)		\
-+	int __traceiter_##_name(void *__data, proto)			\
- 	{								\
- 		struct tracepoint_func *it_func_ptr;			\
- 		void *it_func;						\
-@@ -314,18 +314,18 @@ static inline struct tracepoint *tracepoint_ptr_deref=
-(tracepoint_ptr_t *p)
- 		} while ((++it_func_ptr)->func);			\
- 		return 0;						\
- 	}								\
--	DEFINE_STATIC_CALL(tp_func_##_name, __tracepoint_iter_##_name);
-+	DEFINE_STATIC_CALL(tp_func_##_name, __traceiter_##_name);
-=20
- #define DEFINE_TRACE(name, proto, args)		\
- 	DEFINE_TRACE_FN(name, NULL, NULL, PARAMS(proto), PARAMS(args));
-=20
- #define EXPORT_TRACEPOINT_SYMBOL_GPL(name)				\
- 	EXPORT_SYMBOL_GPL(__tracepoint_##name);				\
--	EXPORT_SYMBOL_GPL(__tracepoint_iter_##name);			\
-+	EXPORT_SYMBOL_GPL(__traceiter_##name);				\
- 	EXPORT_STATIC_CALL_GPL(tp_func_##name)
- #define EXPORT_TRACEPOINT_SYMBOL(name)					\
- 	EXPORT_SYMBOL(__tracepoint_##name);				\
--	EXPORT_SYMBOL(__tracepoint_iter_##name);			\
-+	EXPORT_SYMBOL(__traceiter_##name);				\
- 	EXPORT_STATIC_CALL(tp_func_##name)
-=20
-=20
+This should have been
+
+  899c537c25f9 ("drm/i915: Use 64-bit division macro")
+
+> >=20
+> > from Linus' tree and commit:
+> >=20
+> >    6b51e7d23aa8 ("drm/i915: panel: Honor the VBT PWM frequency for devs=
+ with an external PWM controller") =20
+>=20
+> That doesn't sound correct, those are both commits from the drm-intel tre=
+e.
+>=20
+> > from the drm-intel tree.
+> >=20
+> > I fixed it up (I just used the latter) =20
+>=20
+> Just taking the drivers/gpu/drm/i915/display/intel_panel.c contents of:
+>=20
+> f8bd54d21904 ("drm/i915: panel: Use atomic PWM API for devs with an exter=
+nal PWM controller")
+>=20
+> Is the right thing to do, the problem is a difference in a line which gets
+> removed in that commit.
+
+Which is what I actually did, I guess :-)
+
+Sorry about that.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dGXS.TNI7czMZikC=h9RWLW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9XZVEACgkQAVBC80lX
+0Gzlbwf+PPJxV9Q4ttdCmWNOyTMQU/r6ZMUpOfodqyfxbkboiTWSI6NyJshSUujB
+46CgTj20eGsf1wxDpfceCBW10RiLoxvTv9RRCn0FKFJ4knjlUmLgd5H/q3nyw7KY
+I9mymEV1qQR5Bt3qxz1kFzYDyaZVG6QHBSOAwVMkP+WPT9hAFPcJtVg4rqGsW9DS
+xPBjTxacTcrBVq1hG+L+Uc5Urr4zxyGKibMeSd1YikukIuRquftUqjBpjINUBGvU
+6DkZ2Hg5JFvNqbV1BiA9wxOFOUUCJz524+efusX9Fh5dL4YVCV6ex9SJhXboFLMP
+KAlVyNGP4K23MYWFl+nKhqsvhxrf7Q==
+=1Pjd
+-----END PGP SIGNATURE-----
+
+--Sig_/dGXS.TNI7czMZikC=h9RWLW--

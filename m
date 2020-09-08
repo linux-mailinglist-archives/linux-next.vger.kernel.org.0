@@ -2,116 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB6626080C
-	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 03:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D7260827
+	for <lists+linux-next@lfdr.de>; Tue,  8 Sep 2020 04:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbgIHB3q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Sep 2020 21:29:46 -0400
-Received: from ozlabs.org ([203.11.71.1]:36475 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728088AbgIHB3n (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 7 Sep 2020 21:29:43 -0400
+        id S1728213AbgIHCLh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Sep 2020 22:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728210AbgIHCLh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Sep 2020 22:11:37 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B835EC061573;
+        Mon,  7 Sep 2020 19:11:36 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Blnd121LZz9sSP;
-        Tue,  8 Sep 2020 11:29:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BlpYL2qfRz9sR4;
+        Tue,  8 Sep 2020 12:11:34 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599528581;
-        bh=KoPWn2j54CxH5/hsGP8oBbcq9orM2s0Jc9bUUxyFu5U=;
+        s=201702; t=1599531094;
+        bh=HLnxUEsN4jtlio8BiweoeszpyAofnT5Xx6AYfXs5j6I=;
         h=Date:From:To:Cc:Subject:From;
-        b=AxSRVSuOU4tFxcpXDiO7Lvu7retPHbADRf4SR3WKaHXBTalR7DvascRV3gE43042U
-         N2HQzYIg7yCHe2HzSx42+QjFmukzZ1RZDzKFG1ncTZyKiJ955iXuQjirRifL+e9xWN
-         XN0nKIgZuFAu+C3E1wGu/VYeOERwwxge6aS3tu9EY210yFpAFDDW7DE0CbBNITemVb
-         oOmJb4FL3fv8lSPioymofSrHsPZykxJfhcqf2NtrZlZOoNgCRwMDmsZR/LGVPFZuKK
-         u6+BI4xYQbDTATyVwXRdi/v0m+POLvTFwBliYU1tX+Yse3A2vuRLgMGCZ1WmQXW3Em
-         pHYm+zMn+ZOrw==
-Date:   Tue, 8 Sep 2020 11:29:40 +1000
+        b=s8WJM4Fxu8qTZzZ8n5kKqgUmea0HlzaTpMNuLAdIyjtt5LeWi5fwfvYapfZw/LQdS
+         LpQeiBvh5dezC3Hqg6ipYqvvpXD3jX056SMcM6evJ4SsW87THmCvaS90V5aDXuMzMd
+         +HzWtaImRkb5Gr2UAFJ/eHP4/OnJgZlWfy/V5iPWl9Ellfl7sKqDDkb8pfK7/c3/MJ
+         2ERPFF/TE25rlt7N9+L9+sDkxtcknlileU9wIoRsP5movIvrRO4tZc/kkzCpCjuMG3
+         /jk7odE4vdDTtkiXpRpihxulp9sGUEfuzUITPnMJwQNkVVBDVKbp/kr8QZ4741nLC9
+         PjWwrC3zZf4Hw==
+Date:   Tue, 8 Sep 2020 12:11:33 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs tree with the s390 tree
-Message-ID: <20200908112940.6d025af7@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the v4l-dvb tree
+Message-ID: <20200908121133.7cf400d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NTd4A7br10mBdN=kSLDdwGo";
+Content-Type: multipart/signed; boundary="Sig_/HB_4KZ/yH6E1RbsTGB=pUa_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NTd4A7br10mBdN=kSLDdwGo
+--Sig_/HB_4KZ/yH6E1RbsTGB=pUa_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfs tree got a conflict in:
+After merging the v4l-dvb tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  arch/s390/include/asm/checksum.h
+drivers/media/test-drivers/vivid/vivid-core.c: In function 'vivid_create_de=
+vnodes':
+drivers/media/test-drivers/vivid/vivid-core.c:1318:11: warning: unused vari=
+able 'i' [-Wunused-variable]
+ 1318 |  int ret, i;
+      |           ^
+drivers/media/test-drivers/vivid/vivid-core.c: In function 'vivid_create_in=
+stance':
+drivers/media/test-drivers/vivid/vivid-core.c:1885:47: error: 'cec_tx_bus_c=
+nt' undeclared (first use in this function)
+ 1885 |  ret =3D vivid_create_devnodes(pdev, dev, inst, cec_tx_bus_cnt,
+      |                                               ^~~~~~~~~~~~~~
+drivers/media/test-drivers/vivid/vivid-core.c:1885:47: note: each undeclare=
+d identifier is reported only once for each function it appears in
 
-between commit:
+Caused by commit
 
-  98ad45fb58c1 ("s390/checksum: coding style changes")
+  62c6b4c9e3c8 ("media: vivid: move the devnode creation logic to a separat=
+e function")
 
-from the s390 tree and commit:
-
-  6e41c585e38f ("unify generic instances of csum_partial_copy_nocheck()")
-
-from the vfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the v4l-dvb tree from next-20200903 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/s390/include/asm/checksum.h
-index c401a5fd3ad2,6813bfa1eeb7..000000000000
---- a/arch/s390/include/asm/checksum.h
-+++ b/arch/s390/include/asm/checksum.h
-@@@ -39,15 -39,8 +39,8 @@@ static inline __wsum csum_partial(cons
-  	return sum;
-  }
- =20
-- static inline __wsum csum_partial_copy_nocheck(const void *src, void *dst,
-- 					       int len, __wsum sum)
-- {
-- 	memcpy(dst, src, len);
-- 	return csum_partial(dst, len, sum);
-- }
--=20
-  /*
- - *      Fold a partial checksum without adding pseudo headers
- + * Fold a partial checksum without adding pseudo headers.
-   */
-  static inline __sum16 csum_fold(__wsum sum)
-  {
-
---Sig_/NTd4A7br10mBdN=kSLDdwGo
+--Sig_/HB_4KZ/yH6E1RbsTGB=pUa_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9W3oQACgkQAVBC80lX
-0GxBcwf+Irr/yM58qKpLt9CPpGnNiSr2X7KWNwGWn+OIT970PoGHViPmHxZliZQ2
-dBU0aBkAIEc4i0LBBchby3VIxxS09xnco0leT3pyoko/ypIYjKnglu0IXGdQYG49
-Ck999XRJg6jZnO0T0+tkmJWS0VzwErr448nj/Z2lZSL3xQeYNZhTRq9CWDWNMzQ0
-iQqVgguBrzNMg7EYdnTGHxGsVZ59kwdT9rGChlqeo6sIkIh/qWdV6JA4rYA4Ldc2
-fHhBpIYmSd2eJenfHjzgVK5mFQcke4y8Rt0t2fA2cDr/Tcy+t1u7+uD/oFtlIrPv
-ZrbPKKaCaAUNKLG8fRfYJfIzqbv71g==
-=pUTx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9W6FUACgkQAVBC80lX
+0GxPqgf+MsVF/aNFfC/xK9PFDhAcgSwjLuBkfrqMit+Tw7zA93EKbFSlt28ZMB1a
+rkIN0l2kJSZ8HWEb6TChhk/hk9rJ4f52X1xsGryBLA/6PCHXRJ7e3244E+WZCjp8
+U7QbkyAyLriOmrqyCiDrn4/QqHlpt/51q4pNmA4ILgRULJOT6N1NADQ0wU/nfRIY
+RIRT+6ZIymSDQBMvBX7VO9h2k2WvNcNAE1+i0SDJbjzQRZtlIqBb+1WQjtvNZ8Vw
+H1W1+95dEqLAvQ3hWUHR1Kjdlb+8VR0qTFIrskuA8i9q+m2Yj8ZY4HshlhA0AExT
+MF8ZdisnOeHbZdcoytAaScAOkykDhw==
+=yP0M
 -----END PGP SIGNATURE-----
 
---Sig_/NTd4A7br10mBdN=kSLDdwGo--
+--Sig_/HB_4KZ/yH6E1RbsTGB=pUa_--

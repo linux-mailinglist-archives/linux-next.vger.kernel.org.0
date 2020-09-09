@@ -2,73 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 152C42632BC
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 18:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4233626345A
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 19:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730509AbgIIQG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 12:06:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34250 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729960AbgIIQGf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 9 Sep 2020 12:06:35 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33F8E20768;
-        Wed,  9 Sep 2020 16:06:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599667593;
-        bh=bpmlhJ4tGdUygZ0/mU+qkvtjvF8E6W97OEIUrPW+wVs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=04tj+YLe815u7occsUkDlqWPh8fsWJwmzVj+cPDMA6A6lZlNEKhJZW25btGXYld4/
-         ctgde9kGYq1iXDsQKthPM5pR7c6M7/faY2Jcm65SjrZRPshUVEY5Q7mWYoM03P5j/Z
-         eqit/buQNgXBT2HHYZgB5ftulbL8bNHe2iwU0/BM=
-Received: by mail-oi1-f177.google.com with SMTP id a3so2884877oib.4;
-        Wed, 09 Sep 2020 09:06:33 -0700 (PDT)
-X-Gm-Message-State: AOAM532uCIAZSDtflbUpNUA8VqFOM7hGa9Puhnes1vQy1YoZQ5wmr0Cp
-        Uku7KhYPHF7KQR51j/N6gFhCOpWe6N7aJ8tlsA==
-X-Google-Smtp-Source: ABdhPJzuWcr018b5cvylq7G23uicZG1s4aX+2Ts28vwJYpMm8l0+Gg0ibgIJwv92Dm+R1ZI60FQM3vXmWFQxTyajfqA=
-X-Received: by 2002:aca:fc07:: with SMTP id a7mr1109062oii.106.1599667592564;
- Wed, 09 Sep 2020 09:06:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200909123710.50b16d37@canb.auug.org.au>
-In-Reply-To: <20200909123710.50b16d37@canb.auug.org.au>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 9 Sep 2020 10:06:20 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+tH+zAjdoC807Z7-89P5e6BUHVXd4Udbcp21a3XPx=VQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+tH+zAjdoC807Z7-89P5e6BUHVXd4Udbcp21a3XPx=VQ@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the pci tree
+        id S1731147AbgIIRTe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 13:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729129AbgIIP1Y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 11:27:24 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBD7C06134D;
+        Wed,  9 Sep 2020 06:56:59 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x14so3033394wrl.12;
+        Wed, 09 Sep 2020 06:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BEYCNqgyVOK8LPHm0pW4gAQlXSGsL9SxMYctPkZYsHs=;
+        b=DTyimvyUJkz5jsk/uhVkU2oSMDIcAlgsNGEUGmPcgAL38LkplJ71fCV1INCXFoATQ/
+         x4acNttWaBovxqTj7wCmX+AcTsozmKZtgfIvmtynQQ1rTSWPO2BTcPbGbpCm+W8zB0b/
+         LsUVJZTYghi3q+cSZmOgRbnQrgGwuqLt3FI1Q1148EC02AZQI8PdQTgTVUxtdLpKpjgS
+         ChW+JAMIDUtN/064x10uzDfFLJykGFDXxsYtoSnuH/csnnfB+uxlWA7PPQh7FbZ+rhI7
+         yffBubaG1T4R8w+dJxwZwbqRmU6IpkjMV25kW5h4Fm0PVvvAjNWXghHjhX8wOqpxA2c4
+         mepw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BEYCNqgyVOK8LPHm0pW4gAQlXSGsL9SxMYctPkZYsHs=;
+        b=tbLTx+L/cE4vj5mleX5MnoHGIqIkxmMCdl/kQt0SIUV3vYzsOLTbwLaehcQo7VKfev
+         icyPp4ysF66bIse653IL8hRybwkhflit0bi3y2LSoQmseSmi8IT+63f6+tjgXGm3zoVC
+         qqZRnzbm+vhXvWSl3lscgLSAEigkyMYroQDS/HknelhohnUQunIzv0LhiQyzRN6ruGiz
+         9HEwMOnpqkCbH0gD/fEZl5z2el11zmCGM9vdBUsYd0YVtr6F1byAmYdxfDYagnwsWly7
+         Mqy64dGlUxbC3dqUKWCzrFZl6er4qMuFJIf2gXK/nIPnMd/oZg8e1JhCou1v68Yai/UC
+         ePnQ==
+X-Gm-Message-State: AOAM532ULL4hwIV4HWOUI8Pvjh4U+RtsYvGsiRoUglA7KBLwBh3qX9vl
+        FdjJJZdOEieJKEbna4v2yhU562NoDZE=
+X-Google-Smtp-Source: ABdhPJw1g2DznKLop0gjKRUfU3u5Dl/1ECcNw6HJ524feFznXNwBISGkn0wO6A++0KBND14/MEnGIg==
+X-Received: by 2002:adf:ba83:: with SMTP id p3mr4330840wrg.246.1599659818085;
+        Wed, 09 Sep 2020 06:56:58 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.113.201])
+        by smtp.gmail.com with ESMTPSA id q20sm3966068wmj.5.2020.09.09.06.56.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2020 06:56:57 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the mediatek tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Frank Wunderlich <frank-w@public-files.de>
+References: <20200909204951.5d3196d0@canb.auug.org.au>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <cefa0d86-d9ed-d2be-91db-b060aafd8b52@gmail.com>
+Date:   Wed, 9 Sep 2020 15:56:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <20200909204951.5d3196d0@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 8:37 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+
+
+On 09/09/2020 12:49, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the pci tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
+> 
+> In commit
+> 
+>    845d404207f1 ("arm: dts: mt7623: move display nodes to separate mt7623n.dtsi")
+> 
+> Fixes tag
+> 
+>    Fixes: 1f6ed224594 ("arm: dts: mt7623: add Mali-450 device node")
+> 
+> has these problem(s):
+> 
+>    - SHA1 should be at least 12 digits long
+>      Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>      or later) just making sure it is not set (or set to "auto").
+> 
 
-Uggg. I guess 0-day just doesn't do arm32 builds anymore as it caught
-more obscure build issues, but not this one (and some others I've had
-recently).
+Fixed now and pushed again. Thanks for noting.
 
-> drivers/pci/controller/dwc/pci-dra7xx.c: In function 'dra7xx_pcie_establish_link':
-> drivers/pci/controller/dwc/pci-dra7xx.c:142:6: warning: unused variable 'exp_cap_off' [-Wunused-variable]
->   142 |  u32 exp_cap_off = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
->       |      ^~~~~~~~~~~
->
-> Introduced by commit
->
->   3af45d34d30c ("PCI: dwc: Centralize link gen setting")
->
-> --
-> Cheers,
-> Stephen Rothwell
+Regards,
+Matthias

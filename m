@@ -2,98 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537292638A9
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 23:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E992638EF
+	for <lists+linux-next@lfdr.de>; Thu, 10 Sep 2020 00:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgIIVrV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 17:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgIIVrU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 17:47:20 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C41C061573
-        for <linux-next@vger.kernel.org>; Wed,  9 Sep 2020 14:47:19 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x123so3336988pfc.7
-        for <linux-next@vger.kernel.org>; Wed, 09 Sep 2020 14:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c43l4haQiH2l2U2Uxeo70dZHTihDun4B2/lN0CtMGwY=;
-        b=IEhWgrJqh/LelmsUp+GmgJEU5D0S1P6HNMNZBzcEXC6OX2Dx8t0NbpWWroOPaEizt8
-         QZPjkLfGNCy/ErDM0TZ5G45/D4VzTiJtbc+qtSn2jPpuNKrwshlv18DwvAR7paKIMvWm
-         BXeYdkGAu4F0iAY2x+UF6d9YO44ybeNtE7a3k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c43l4haQiH2l2U2Uxeo70dZHTihDun4B2/lN0CtMGwY=;
-        b=pFNHkAqYzhOjfeau3SbiNHOz+udVyp+c9oIlNSR5kkZGHPqjuNkiUIOJC42szeXCQk
-         6YtyXhBluiJp1lMbW2lMqMgu/1aiOhjE6CAV0zn+0OBwlbbxn9QOmzPgEcFmuwi/fa3v
-         1kH2xdVuYruSd8Mi/Ch8iQeSXKCEsLccsAXEdIqRLIxC6pgbsOkBzfmG8PPu1D+c+Gcz
-         N76pSbee0tMfE+segGzsFcKnxn2IUKy0+G9KrSFYS19jVVTV71xfr9ptOIKkztKvct5z
-         Qgs78XnL5AaEa/0KFIBOVyxNeJeD2zHqHZNHxOqRowq5A5DTVP64SNXcrGJ8RO/ZLQv6
-         4mKQ==
-X-Gm-Message-State: AOAM532EEK8pnku+9OKMbGPJURA2FZvZCTti2KhAsfJgICoz1QPSVfho
-        uoslhAy9G6RM4ot9rRBwOfIR1Q==
-X-Google-Smtp-Source: ABdhPJwH76k4mk8b1qLtiU7RgZYntfKYanCipdXxCyld7g7uIy6GXrZvvmmLCeRPn0Xyz7dtTdV7tA==
-X-Received: by 2002:a62:150b:: with SMTP id 11mr2415164pfv.115.1599688039142;
-        Wed, 09 Sep 2020 14:47:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u10sm3590464pfn.122.2020.09.09.14.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 14:47:18 -0700 (PDT)
-Date:   Wed, 9 Sep 2020 14:47:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <202009091446.806D39CB@keescook>
-References: <20200909154709.619fe9bb@canb.auug.org.au>
- <20200909072105.GA438160@kroah.com>
+        id S1726489AbgIIWXb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 18:23:31 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45693 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726426AbgIIWXb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Sep 2020 18:23:31 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BmxP83Zpvz9sTM;
+        Thu, 10 Sep 2020 08:23:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1599690206;
+        bh=/LELMHd64D8Vw4FvapsmxQ+3yrnc8Bc03jaD12MveK4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EG6bdLnyFPv+CMjFMQrdRZ9MPyKy0ImM7aAnNRkfPxy1eMx+uLfgg7aQbemxy7RoC
+         hc2EiqgwA738c1J2/O/K8wFZXkb9NarqYk4BXUMeiul5dUr9LaGJT8le3+DR/SNz+v
+         XM5nZj8lL1AgyUiOdqL8Xl3NJxyH89wI8LCs02tVZDza81s+51rivwHRPBJmeQFCEq
+         xFFSReZzPEQF3535FGmh+1UVRtQM2q5OGDLCKkeBDMp1iFde/roRgg1DkVjGfHd4iB
+         Qay2TarR8b249awhR0l+hXOPhB4aUGlV1GDDYLKfrgsq9eTcPMahu/KyEF3/3rikgK
+         7jVYR/d/c3XlA==
+Date:   Thu, 10 Sep 2020 08:23:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     jim.cromie@gmail.com, Petr Mladek <pmladek@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>
+Subject: Re: kernel BUG at /usr/src/kernel/lib/dynamic_debug.c:267!
+Message-ID: <20200910082323.59e41def@canb.auug.org.au>
+In-Reply-To: <20200909181251.GA1007128@kroah.com>
+References: <CA+G9fYvg7voMNArr3nPpv_dRn10RwYos075NW_b5rFbBLZ=-8g@mail.gmail.com>
+        <20200909144745.504c4cbfeea9bc298e3c6b9b@kernel.org>
+        <20200909080025.GC3864@alley>
+        <20200909122502.GB668220@kroah.com>
+        <CAJfuBxzNFmgY=Wbz99K8QTxkBVDaJn5+gTTxUTJTtkJe7nxfsQ@mail.gmail.com>
+        <20200909181251.GA1007128@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200909072105.GA438160@kroah.com>
+Content-Type: multipart/signed; boundary="Sig_/+KVPDKbrXvUrBxeMPlr_fAU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 09:21:05AM +0200, Greg KH wrote:
-> On Wed, Sep 09, 2020 at 03:47:09PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the driver-core tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > lib/test_firmware.c: In function 'trigger_request_platform_store':
-> > lib/test_firmware.c:517:35: error: 'efi_embedded_fw_list' undeclared (first use in this function); did you mean 'efi_embedded_fw_desc'?
-> >   517 |  list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
-> >       |                                   ^~~~~~~~~~~~~~~~~~~~
-> >       |                                   efi_embedded_fw_desc
-> > lib/test_firmware.c:517:35: note: each undeclared identifier is reported only once for each function it appears in
-> > lib/test_firmware.c:518:34: error: 'efi_embedded_fw_checked' undeclared (first use in this function); did you mean 'saved_efi_embedded_fw_checked'?
-> >   518 |  saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
-> >       |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-> >       |                                  saved_efi_embedded_fw_checked
-> > 
-> > Caused by commit
-> > 
-> >   18efb2f9e897 ("test_firmware: Test platform fw loading on non-EFI systems")
-> 
-> {sigh}
-> 
-> I'll go revert this, sorry about that.
-> 
-> Kees, can you fix up this whole series and resend it again?  I'm
-> dropping it from my trees now...
+--Sig_/+KVPDKbrXvUrBxeMPlr_fAU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oh ew, I will check the configs. I wonder what went wrong with this...
-sorry for the noise!
+Hi Greg,
 
--- 
-Kees Cook
+On Wed, 9 Sep 2020 20:12:51 +0200 Greg Kroah-Hartman <gregkh@linuxfoundatio=
+n.org> wrote:
+>
+> I'll go revert both patches from my tree in the morning, which should
+> clear these issues up.
+
+I have reverted them from linux-next today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+KVPDKbrXvUrBxeMPlr_fAU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9ZVdsACgkQAVBC80lX
+0GxGRAf/Zy1vE3KdsI6KlcgGDBQvA3vUsWVPwh/atRg9acrTyzUGedKKx8dB8Q3o
+Pu0LVptygbCo7ne51xER4g0Xpo5sGpAHBHqoQV74s6kx2HgLD10q3vKTgzWKHQme
+5nBHPMWty/kwPDvhF0pMgq8hCQvPb2Vm/fV8ujwVCdoC2rXeif3diPfyQE51WQ7x
+Ijm6M5H44gQVjh3a5WxG0lo6ZgYcz9QrOS45D956RdxhOM+HM+ARM1ousOXKz+tS
+32D2w7iXrxMcAUnh1u1g97KBB0jzzPNmyGbKt00QHnP0Q5oGyXwAsKbIN43wsZp+
+HDRHyBD7QXDJ2pwr+TYVA/0y57lP8Q==
+=nc1L
+-----END PGP SIGNATURE-----
+
+--Sig_/+KVPDKbrXvUrBxeMPlr_fAU--

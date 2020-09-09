@@ -2,99 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E81262898
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 09:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91361262901
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 09:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728954AbgIIH2a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 03:28:30 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:38881 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726738AbgIIH20 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 03:28:26 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id AA1F7873;
-        Wed,  9 Sep 2020 03:28:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 09 Sep 2020 03:28:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=ztv3pYM9if/AKbtduMXThCKbXls
-        eUt+U5+kl5SHucvo=; b=nTjUSHXvCf0Z1Nz7ii7cQ2jTR9AQHTr+DTUfjS6gxNB
-        Ldg3j5KnpdWg3OMTWH4oGB/9/06f/N3ptPyLNeP2S0BtdIRpU9svieZ3hkTYTIr4
-        vl4YfOJlXJGjvn2R8u/v50A4UIXHyuqv3ku/9Iw9zLEYCK9GGiWOiGuRUlrA3tR9
-        CeadJIYap4+GHjCTj63abC4EIQBEQNNqixtmHlxuA3hzRfZyG08K/yMA6850Z3R5
-        9H9+KnWATswB3k6ftRV6LDXTVKf5LszDf8+mWihzgpJsUVRCs5EixniI8U7S+Li3
-        p1ts3Ad70YPjGU5xP7lyFyMoOALu3zRof8aF7YITxkg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ztv3pY
-        M9if/AKbtduMXThCKbXlseUt+U5+kl5SHucvo=; b=n4siJob6OsV/ePASdIHLaB
-        5hZZkFtEo9kjbde8xW3BImB/NbaeiyiegpCmsIYTX3ZVurDXuP5Z/FvuGvuE+bVz
-        PFbdqyx85BjYAJYP8joqWsfco9nE3e95UGLSWUEkAV7hNHnmq09t1q6y7AgZ+6UI
-        g7g4cZaCpSzkP3UksU/YA6sdCp8FpS8AoDBP49wDjuHS30hwcGaT+baqo1yD+kWm
-        0PzWGS96LtP2/z8Utl26puk6Frf8PMPj2GIC5LjbPiuDR6ClrK4mtXFegJ2LZtBI
-        1IJBCTrgBsP+E4nWvaavt4Yo5x+pzYxeXb419Wm3zIK8kFs1Pocmtr5VEFEo5z4g
-        ==
-X-ME-Sender: <xms:GIRYX-6blghuaOAZLLEu36Cfi1RDZwYKdA7AL3JnYkccwLsjk_o46Q>
-    <xme:GIRYX35UlmPRBkP9ROdvW9VBOmdu2mGxmGbMyMaC1f3r1jcuEdrA4jm5Bq239zJ29
-    IRzo6VeHgkzSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehgedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
-    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:GIRYX9eFc5ZmBxtazoCf7_z_lx6MX7hAJysxQNdX5mnZVkBK1dSRSg>
-    <xmx:GIRYX7KShvIsNkVwiYudOuJtBpm84AcMUvgiEtq9hFU-JyeaGJ2rdg>
-    <xmx:GIRYXyImdP9UpdWdQPyVFHDKa3svFzHiQeDjSOHx6JnxDEYiV4ZdtQ>
-    <xmx:GYRYX0iChrX7yp4TYoWXP0l7gQ0_XMAjzhLPr_RrQAIDL15-cU3ewA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6F7C93064A01;
-        Wed,  9 Sep 2020 03:28:24 -0400 (EDT)
-Date:   Wed, 9 Sep 2020 09:28:35 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20200909072835.GA439753@kroah.com>
-References: <20200909154709.619fe9bb@canb.auug.org.au>
+        id S1727087AbgIIHiG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 03:38:06 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:10239 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729161AbgIIHh3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 03:37:29 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f5885b20000>; Wed, 09 Sep 2020 00:35:14 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 09 Sep 2020 00:37:29 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 09 Sep 2020 00:37:29 -0700
+Received: from [10.26.73.157] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Sep
+ 2020 07:37:20 +0000
+Subject: Re: [PATCH v21 4/4] arm64: dts: mt8183: add scp node
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Eddie Huang <eddie.huang@mediatek.com>
+CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Pi-Hsun Shih <pihsun@chromium.org>,
+        Erin Lo <erin.lo@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        <lkft-triage@lists.linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20191112110330.179649-1-pihsun@chromium.org>
+ <20191112110330.179649-5-pihsun@chromium.org>
+ <2abf8fdd-7b7c-73b0-beea-9c9ac56869dc@gmail.com>
+ <CA+G9fYt9AujG6gyfeV5AaAv0EgggUfGT1jow8DJjVfetVWV3EA@mail.gmail.com>
+ <CAJKOXPeV9zCg4v0kBfToGdJSxswbKtT16LVYADALpYRHqWXBOg@mail.gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <ab35a9c7-1b33-dc75-8520-ee072ff1309f@nvidia.com>
+Date:   Wed, 9 Sep 2020 08:37:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200909154709.619fe9bb@canb.auug.org.au>
+In-Reply-To: <CAJKOXPeV9zCg4v0kBfToGdJSxswbKtT16LVYADALpYRHqWXBOg@mail.gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1599636914; bh=NRptkkFmJKN48wrOiQ7yrq/L1r5kklHTYRCDYEWsDB0=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=jnn3trhAfxkws/mo/0eN55qV+nx5mQCk/pzThZ7D2nd/qaWddSQWnqyb6QeJGMpgd
+         q+ta3oSTu4mKCzOXtKbCT+ePy2xLNuB+QIegT9kfNP7SdOmszsOeiPMITVh8PvImwM
+         uaI9owjP8fyXn3hIFiGWlL+Sl9jFS3VJaa8dgz+P/It2afJV5nEPu5t1YSi4Snj2mD
+         3wzmX4o6aTDAH9n1gPe+1Hof32T3WbGJSykqx+hgO0G4T5b+JXcXDBdjQzOjCjtxto
+         WrlnKWqoNxTwhOHsw6zOQByisStAh2vTJIG64NDH/SdxmrvVoYVkZZLYT2r9J/oxoc
+         B22SYp58s553g==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 03:47:09PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the driver-core tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> lib/test_firmware.c: In function 'trigger_request_platform_store':
-> lib/test_firmware.c:517:35: error: 'efi_embedded_fw_list' undeclared (first use in this function); did you mean 'efi_embedded_fw_desc'?
->   517 |  list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
->       |                                   ^~~~~~~~~~~~~~~~~~~~
->       |                                   efi_embedded_fw_desc
-> lib/test_firmware.c:517:35: note: each undeclared identifier is reported only once for each function it appears in
-> lib/test_firmware.c:518:34: error: 'efi_embedded_fw_checked' undeclared (first use in this function); did you mean 'saved_efi_embedded_fw_checked'?
->   518 |  saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
->       |                                  ^~~~~~~~~~~~~~~~~~~~~~~
->       |                                  saved_efi_embedded_fw_checked
-> 
-> Caused by commit
-> 
->   18efb2f9e897 ("test_firmware: Test platform fw loading on non-EFI systems")
-> 
-> I have reverted that commit for today.
 
-Now reverted in my tree too, thanks.
+On 02/09/2020 17:23, Krzysztof Kozlowski wrote:
+> On Wed, 2 Sep 2020 at 16:45, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>
+>> On Thu, 27 Aug 2020 at 15:44, Matthias Brugger <matthias.bgg@gmail.com> wrote:
+>>>
+>>>
+>>>
+>>> On 12/11/2019 12:03, Pi-Hsun Shih wrote:
+>>>> From: Eddie Huang <eddie.huang@mediatek.com>
+>>>>
+>>>> Add scp node to mt8183 and mt8183-evb
+>>>>
+>>>> Signed-off-by: Erin Lo <erin.lo@mediatek.com>
+>>>> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+>>>> Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+>>>
+>>> Sorry I somehow oversaw this. Next time please don't doubt to ping me.
+>>>
+>>> Bjorn, do I understand correctly that you don't send emails to the list
+>>> informing of the inclusion of a patch/series in your tree?
+>>>
+>>> Anyway applied now to v5.9-next/dts64 :)
+>>
+>> arm64 build dtbs failed on linux next 20200902.
+> 
+> I just hit it as well... I wish the kernel was built after applying
+> patches... it would make the next a better place.
 
-greg k-h
+
+Any update on this? It is still broken as of next-20200908.
+
+Jon
+
+-- 
+nvpublic

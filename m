@@ -2,93 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54192262877
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 09:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E81262898
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 09:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgIIHXX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 03:23:23 -0400
-Received: from ozlabs.org ([203.11.71.1]:40417 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbgIIHXU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 9 Sep 2020 03:23:20 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BmYQZ1tkLz9sTX;
-        Wed,  9 Sep 2020 17:23:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599636198;
-        bh=d6EUXUc9+FiqXpuacjC9aDTYw/+UMcDEJgP0/w1dNDs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iF0d9TgFexX1zsaMEN9Rf67znAEVV1L8nHn8Dlavz2Atb9fuiJJfiqZfFpGM6epys
-         VQTFOz/anr+Wx0nt9KaQF+1WGah1QUPsfyUnTNumLjw2zfmyBr+q6ymjw3kpugUCJE
-         v18LYtWu2WE0gNJktbKEkhigzMwlwGdPb7xK7jRbdND32wLLOqs87gbi7jBuTErxXj
-         rszTVSrdgQygX0Hz2P7xbBLRASKNc3qP8SeJNRS4595BvZA9FB4WXTZMC+X3S1PWfP
-         mayUWAAmtc/PhFlPSajyCtGG0CWgnxiFNsMzv6lcstdIj9Gk1s0CmKNv6mkMwNg47a
-         SCGLS38uqlUcQ==
-Date:   Wed, 9 Sep 2020 17:23:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S1728954AbgIIH2a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 03:28:30 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:38881 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726738AbgIIH20 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 03:28:26 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id AA1F7873;
+        Wed,  9 Sep 2020 03:28:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 09 Sep 2020 03:28:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=ztv3pYM9if/AKbtduMXThCKbXls
+        eUt+U5+kl5SHucvo=; b=nTjUSHXvCf0Z1Nz7ii7cQ2jTR9AQHTr+DTUfjS6gxNB
+        Ldg3j5KnpdWg3OMTWH4oGB/9/06f/N3ptPyLNeP2S0BtdIRpU9svieZ3hkTYTIr4
+        vl4YfOJlXJGjvn2R8u/v50A4UIXHyuqv3ku/9Iw9zLEYCK9GGiWOiGuRUlrA3tR9
+        CeadJIYap4+GHjCTj63abC4EIQBEQNNqixtmHlxuA3hzRfZyG08K/yMA6850Z3R5
+        9H9+KnWATswB3k6ftRV6LDXTVKf5LszDf8+mWihzgpJsUVRCs5EixniI8U7S+Li3
+        p1ts3Ad70YPjGU5xP7lyFyMoOALu3zRof8aF7YITxkg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ztv3pY
+        M9if/AKbtduMXThCKbXlseUt+U5+kl5SHucvo=; b=n4siJob6OsV/ePASdIHLaB
+        5hZZkFtEo9kjbde8xW3BImB/NbaeiyiegpCmsIYTX3ZVurDXuP5Z/FvuGvuE+bVz
+        PFbdqyx85BjYAJYP8joqWsfco9nE3e95UGLSWUEkAV7hNHnmq09t1q6y7AgZ+6UI
+        g7g4cZaCpSzkP3UksU/YA6sdCp8FpS8AoDBP49wDjuHS30hwcGaT+baqo1yD+kWm
+        0PzWGS96LtP2/z8Utl26puk6Frf8PMPj2GIC5LjbPiuDR6ClrK4mtXFegJ2LZtBI
+        1IJBCTrgBsP+E4nWvaavt4Yo5x+pzYxeXb419Wm3zIK8kFs1Pocmtr5VEFEo5z4g
+        ==
+X-ME-Sender: <xms:GIRYX-6blghuaOAZLLEu36Cfi1RDZwYKdA7AL3JnYkccwLsjk_o46Q>
+    <xme:GIRYX35UlmPRBkP9ROdvW9VBOmdu2mGxmGbMyMaC1f3r1jcuEdrA4jm5Bq239zJ29
+    IRzo6VeHgkzSQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehgedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
+    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:GIRYX9eFc5ZmBxtazoCf7_z_lx6MX7hAJysxQNdX5mnZVkBK1dSRSg>
+    <xmx:GIRYX7KShvIsNkVwiYudOuJtBpm84AcMUvgiEtq9hFU-JyeaGJ2rdg>
+    <xmx:GIRYXyImdP9UpdWdQPyVFHDKa3svFzHiQeDjSOHx6JnxDEYiV4ZdtQ>
+    <xmx:GYRYX0iChrX7yp4TYoWXP0l7gQ0_XMAjzhLPr_RrQAIDL15-cU3ewA>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6F7C93064A01;
+        Wed,  9 Sep 2020 03:28:24 -0400 (EDT)
+Date:   Wed, 9 Sep 2020 09:28:35 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the driver-core tree
-Message-ID: <20200909172317.170984de@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20200909072835.GA439753@kroah.com>
+References: <20200909154709.619fe9bb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/18lyfPQH8SGzodw.E.jQO8Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200909154709.619fe9bb@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/18lyfPQH8SGzodw.E.jQO8Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 09, 2020 at 03:47:09PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the driver-core tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> lib/test_firmware.c: In function 'trigger_request_platform_store':
+> lib/test_firmware.c:517:35: error: 'efi_embedded_fw_list' undeclared (first use in this function); did you mean 'efi_embedded_fw_desc'?
+>   517 |  list_add(&efi_embedded_fw.list, &efi_embedded_fw_list);
+>       |                                   ^~~~~~~~~~~~~~~~~~~~
+>       |                                   efi_embedded_fw_desc
+> lib/test_firmware.c:517:35: note: each undeclared identifier is reported only once for each function it appears in
+> lib/test_firmware.c:518:34: error: 'efi_embedded_fw_checked' undeclared (first use in this function); did you mean 'saved_efi_embedded_fw_checked'?
+>   518 |  saved_efi_embedded_fw_checked = efi_embedded_fw_checked;
+>       |                                  ^~~~~~~~~~~~~~~~~~~~~~~
+>       |                                  saved_efi_embedded_fw_checked
+> 
+> Caused by commit
+> 
+>   18efb2f9e897 ("test_firmware: Test platform fw loading on non-EFI systems")
+> 
+> I have reverted that commit for today.
 
-Hi all,
+Now reverted in my tree too, thanks.
 
-After merging the driver-core tree, today's linux-next build produced
-this warning:
-
-drivers/mmc/host/davinci_mmc.c: In function 'davinci_mmcsd_probe':
-drivers/mmc/host/davinci_mmc.c:1243:4: warning: ignoring return value of 'd=
-ev_err_probe' declared with attribute 'warn_unused_result' [-Wunused-result]
- 1243 |    dev_err_probe(&pdev->dev, ret,
-      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 1244 |           "could not parse of data\n");
-      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Introduced by commit
-
-  e1f82a0dcf38 ("driver core: Annotate dev_err_probe() with __must_check")
-
-interacting with commit
-
-  3a35e7e1bd50 ("mmc: davinci: Simplify with dev_err_probe()")
-
-from the mmc tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/18lyfPQH8SGzodw.E.jQO8Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9YguUACgkQAVBC80lX
-0GyMPAf/XYMWZojWSl9lqF7j+11gEeyUdYJZYtcFNdrqCr+5ZWyaKNAtpV0wb2h7
-s4JXDBE8oLKV/0cJ0P2t3NyVyer4DYSJ6AZfMLTPSetmOvcXp82wgSBLtz6yxoOx
-QEI6/R/YY0K6V8Fg+Zx1A7BECWPRXDXD7K738zRsjM+A67kHOb0/K69JElM/yOml
-hw5wTwGZ31f1M1skXDPMUZ+s+tFQE49coaSZFHyMZvzeoDxF9E1i02pZ8QDBd/x/
-bFPdv7yWht0Gv66YAvFbvzXtW8tzzm36Eu3hIaFGDWiZppQinX9n0GIuTSaoX6B8
-Al/9G5yLIOToGrnTfbchFj5lCIIo0w==
-=WNOR
------END PGP SIGNATURE-----
-
---Sig_/18lyfPQH8SGzodw.E.jQO8Q--
+greg k-h

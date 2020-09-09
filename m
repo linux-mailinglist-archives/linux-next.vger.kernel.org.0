@@ -2,85 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1800D262542
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 04:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20BB262588
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 05:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgIICit (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 22:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726657AbgIICis (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Sep 2020 22:38:48 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0468C061573;
-        Tue,  8 Sep 2020 19:38:46 -0700 (PDT)
+        id S1726801AbgIIDAu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Sep 2020 23:00:50 -0400
+Received: from ozlabs.org ([203.11.71.1]:50703 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727804AbgIIDAu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Sep 2020 23:00:50 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BmR6D3gbmz9sTS;
-        Wed,  9 Sep 2020 12:38:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BmRbg2x0Gz9sTX;
+        Wed,  9 Sep 2020 13:00:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599619124;
-        bh=2izng1FlEMeGvkzbnaHy65co67h6yPmYVNwVRf6P3i0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LYytBpncR++dbiT4D3vcQ3D9GqsDhRottrmhn99d37hKi2lyNL+29pqivWPresaz+
-         LoFeRLErapUhbi1yessfmrRKePy+Bz0t97hTbr2jyw8505B6iV+vRae+PjehjWq3Sd
-         1YkWF4AHCSwjUhPhCOX4dSDIVCu9fSQOIB7xj/dgDyISjm2fFVqQGTI8cJMXhrMaaX
-         RxLP5DKXtXOCzlLY87yYe7Q1pEwacE4aE/uJ3HK0aGMI5uqlrBx49lyKJFI4xie+/a
-         cdMo8UH5j4s72N6h74yo8BFySLu0o9IKeUexxkbbMlWzROs/u3yyzHUrI61r8sGiYT
-         anO7orXivOI/A==
-Date:   Wed, 9 Sep 2020 12:38:43 +1000
+        s=201702; t=1599620447;
+        bh=3sMO884hg7pPLK7RKjxOZTh+vUD/yFzH8k0FjgNvOok=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uaWxMc0OMTr1wT+EG8NLJgY72MEJ32VhO4TLbXpDfqMIzmrLbH29lQ6JnUTONVx0x
+         BZlAZPt3+huulhPQhxvbnk8TkpY0LY4iqvZWxyELQKL0So61IFOeCvg+ZRMU6kTamW
+         wyU5VNazyX/xdSYYSD3mu/vviL0pqGy7w2xGTqoV3l4xSKQmJ/uwFldU7Jv4daUC8k
+         xCRer2a8AftNyH7pXTpHw2XxTXH+/puJjJr+ePzazfA58pklYRFFOYDLJKt6zPrrg8
+         yRB6X4wiKEvniWJe0GgevNTULo4Z0PkwziAnufQqwhAMez3MM24jamB8jC6FFon0g0
+         wKmyr1gXzfbuQ==
+Date:   Wed, 9 Sep 2020 13:00:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the pci tree
-Message-ID: <20200909123843.390cbf28@canb.auug.org.au>
+To:     Qian Cai <cai@lca.pw>
+Cc:     skhan@linuxfoundation.org, brendanhiggins@google.com,
+        urielguajardo@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH 2/2] kunit: ubsan integration
+Message-ID: <20200909130046.118fe505@canb.auug.org.au>
+In-Reply-To: <20200903123824.GA4225@lca.pw>
+References: <20200806174326.3577537-1-urielguajardojr@gmail.com>
+        <20200806174326.3577537-2-urielguajardojr@gmail.com>
+        <20200902125223.GA5676@lca.pw>
+        <20200903123824.GA4225@lca.pw>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AL7W2=v4vj53okQq37zom2.";
+Content-Type: multipart/signed; boundary="Sig_/zfuNZ91fUths2EWrVnzCG=u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AL7W2=v4vj53okQq37zom2.
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/zfuNZ91fUths2EWrVnzCG=u
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Qian,
 
-After merging the pci tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+On Thu, 3 Sep 2020 08:38:25 -0400 Qian Cai <cai@lca.pw> wrote:
+>
+> On Wed, Sep 02, 2020 at 08:52:24AM -0400, Qian Cai wrote:
+> > On Thu, Aug 06, 2020 at 05:43:26PM +0000, Uriel Guajardo wrote: =20
+> > > Integrates UBSAN into the KUnit testing framework. It fails KUnit tes=
+ts
+> > > whenever it reports undefined behavior.
+> > >=20
+> > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com> =20
+> >=20
+> > It looks like this patch had been merged into linux-next but the "[PATC=
+H 1/2]
+> > kunit: support failure from dynamic analysis tools" did not. Hence, it =
+caused a
+> > compiling failure.
+> >=20
+> > lib/ubsan.c: In function =E2=80=98ubsan_prologue=E2=80=99:
+> > lib/ubsan.c:141:2: error: implicit declaration of function =E2=80=98kun=
+it_fail_current_test=E2=80=99; did you mean =E2=80=98kunit_init_test=E2=80=
+=99? [-Werror=3Dimplicit-function-declaration]
+> >   kunit_fail_current_test();
+> >   ^~~~~~~~~~~~~~~~~~~~~~~
+> >   kunit_init_test
+> > cc1: some warnings being treated as errors =20
+>=20
+> Stephen, Shuah, can you revert this commit or pick up its dependency as w=
+ell?
 
-WARNING: modpost: "dw_pcie_link_set_max_speed" [vmlinux] is a static EXPORT=
-_SYMBOL_GPL
-
-Introduced by commit
-
-  3af45d34d30c ("PCI: dwc: Centralize link gen setting")
+Sorry, for the slow response ... this should be gone today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AL7W2=v4vj53okQq37zom2.
+--Sig_/zfuNZ91fUths2EWrVnzCG=u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9YQDMACgkQAVBC80lX
-0GwsNQf/aTIlF/2NlwaoLrYuHIDhfEa/XkV5yluznkda/vnaS0SRQaX1QiTArH+r
-yx2RCs5R82fYRIpxk35NMJcOXTfKXHEMwQEzEfuR8NeCRF3VZGlewwRVfMELrR6P
-BnxmABIWy1PrRrHzEtqdbSsCTNSHpLvJUkRI8NmqNs0uZxEgmsgTUKhIW5vH+QcG
-9KCmwImotFp6xnTEi06Cuds3EoTTNbJXo5j9nq2fvFFfVCiOgO5ogqJ4nVb9CPiW
-y5hF2IYm+fR5Vwyra8rWlUaudE2a92HRLq2PvObEd64pTj9vq+Plo/4q6vks3ykn
-mYLXwtQGFcfD0L82CvtaRQEaTJ3FfQ==
-=tG+m
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9YRV4ACgkQAVBC80lX
+0Gw8EQf/c1VzFm3ro9TFRsYuojPzJHb6J39cJzCwYjxVJ9yH1Qcf0d1rUbpt6w1W
+8+EupMS6gQrVVzdawHGApftrxHuV8ELNRDVNsRo07V9E/cjbdHSaB7gXvnoCrjzR
+msDborabO43BmnOVFs2Ji54y7Fl1Uy6EiTl9hDYXCEC3clXZaFL2FOU4myWaFLd0
+kZJD4/pEcbe56T5Javo/fQFZCKYxC3jHGOeE1QQZ7yilSRsYFBLbvH5eTaOSDFOm
+TIeuV0erCW3wrqKvhjz6ZWJHlilxSiBCnIPWuEu8dq+rcrXzGzvFDkWJs0REJU70
+P90MDo8f4SV1Zgav4daSHApS5PnpLQ==
+=qlg+
 -----END PGP SIGNATURE-----
 
---Sig_/AL7W2=v4vj53okQq37zom2.--
+--Sig_/zfuNZ91fUths2EWrVnzCG=u--

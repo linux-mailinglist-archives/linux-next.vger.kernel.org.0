@@ -2,107 +2,222 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20BB262588
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 05:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591AB262659
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 06:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgIIDAu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Sep 2020 23:00:50 -0400
-Received: from ozlabs.org ([203.11.71.1]:50703 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727804AbgIIDAu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Sep 2020 23:00:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BmRbg2x0Gz9sTX;
-        Wed,  9 Sep 2020 13:00:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599620447;
-        bh=3sMO884hg7pPLK7RKjxOZTh+vUD/yFzH8k0FjgNvOok=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uaWxMc0OMTr1wT+EG8NLJgY72MEJ32VhO4TLbXpDfqMIzmrLbH29lQ6JnUTONVx0x
-         BZlAZPt3+huulhPQhxvbnk8TkpY0LY4iqvZWxyELQKL0So61IFOeCvg+ZRMU6kTamW
-         wyU5VNazyX/xdSYYSD3mu/vviL0pqGy7w2xGTqoV3l4xSKQmJ/uwFldU7Jv4daUC8k
-         xCRer2a8AftNyH7pXTpHw2XxTXH+/puJjJr+ePzazfA58pklYRFFOYDLJKt6zPrrg8
-         yRB6X4wiKEvniWJe0GgevNTULo4Z0PkwziAnufQqwhAMez3MM24jamB8jC6FFon0g0
-         wKmyr1gXzfbuQ==
-Date:   Wed, 9 Sep 2020 13:00:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Qian Cai <cai@lca.pw>
-Cc:     skhan@linuxfoundation.org, brendanhiggins@google.com,
-        urielguajardo@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH 2/2] kunit: ubsan integration
-Message-ID: <20200909130046.118fe505@canb.auug.org.au>
-In-Reply-To: <20200903123824.GA4225@lca.pw>
-References: <20200806174326.3577537-1-urielguajardojr@gmail.com>
-        <20200806174326.3577537-2-urielguajardojr@gmail.com>
-        <20200902125223.GA5676@lca.pw>
-        <20200903123824.GA4225@lca.pw>
+        id S1726062AbgIIE1x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 00:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgIIE1v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 00:27:51 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85ACC061756
+        for <linux-next@vger.kernel.org>; Tue,  8 Sep 2020 21:27:49 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id x142so377309vke.0
+        for <linux-next@vger.kernel.org>; Tue, 08 Sep 2020 21:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=lmdiyj/70FAt1MqnYepgOMsvppkz9UCOyxgtuK4ZyWA=;
+        b=LlBjRsfGVocQsRFr2x4XqQQ0Ty8BjXNNX5hLS9LfrwoJA6MjKUtE35EDCn/LBzS4CG
+         aNr0+gOY0quhsgPcB14zVpaVykYjejPU+uhiJ5GRE3iwFomYPUGPGXf62ZIsjmZpPwFV
+         lqVZbnRXUHReaVVOHTccZmTw1LSeAB4Opg+ydikg6vOnVf0WR9P1sRE+5yVCqwsTlfIw
+         S13WUJRZ/w8lBOUSwV6ykm6lDc6ijVB3AGZ4jiP4o+Z2+ME/hKlmK/uNGE9YolYp2s0f
+         eTScFsRpMbXXifxnWAdh+Fpnv/hOkPOW2npsPkA6FnuOFY0mpN525qDu/0fSzg9faqx4
+         vWjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lmdiyj/70FAt1MqnYepgOMsvppkz9UCOyxgtuK4ZyWA=;
+        b=NNKzdON5OTFalexmVu/2pqRFvQyURXxBsclvk7H2GpFb4g5lr2ca+g8qF0PjEgreod
+         Z8h/gdqhfLgHnQWKI8YX1j6PAQ2w/VO7QyL+OKTBBDAvQYEFbf5x6azRsjduoH4gFQle
+         9ygLi9P9M6zEnllXpk3Za3p+5DZCangUjAQJCPGcSBRl6zmQZCfFek1ox/BH9RdUDOiY
+         aumJ4CNzKIvrqxJFAjHrRKhVmjpidQk6U883rUoX40bEfNmsM88X9YtPBUTaWiQ5Rbh1
+         MIUr/zHHUERU8ffkUk67A2Q3Tol5SaTWUjrFnlIW6/cEckIC4BoIn25UHGb07wHwlVO7
+         0K4A==
+X-Gm-Message-State: AOAM533sLh92Wi+8w+szc26vxV+8WNE/g9ul3O0KAgt1uXctsHx8eL82
+        Z7bEAXxjqJGSsVhglVuO9uTg3vaISOVMGeb0Tgba2K5Ym1FRFcDY
+X-Google-Smtp-Source: ABdhPJxgsedb4wzLubajLwc+AXqKhZq/N1Y5DdrQccSR11g4h11PRQvX+vIyEpJVxQq713ke0dbJ9eoL+b86mSCEpEo=
+X-Received: by 2002:a1f:9f87:: with SMTP id i129mr1538929vke.46.1599625667666;
+ Tue, 08 Sep 2020 21:27:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zfuNZ91fUths2EWrVnzCG=u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 9 Sep 2020 09:57:36 +0530
+Message-ID: <CA+G9fYvFOw2NFtUz7DT_2_bKfHPVo8Vrsc+F=ub_R+b1wXpQOQ@mail.gmail.com>
+Subject: WARNING: suspicious RCU usage: include/trace/events/tlb.h:57
+ suspicious rcu_dereference_check() usage!
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        rcu@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zfuNZ91fUths2EWrVnzCG=u
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+While booting i386 with Linux next 20200908 tag kernel this warning noticed.
 
-Hi Qian,
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: dff9f829e5b0181d4ed9d35aa62d695292399b54
+  git describe: next-20200908
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/853/config
 
-On Thu, 3 Sep 2020 08:38:25 -0400 Qian Cai <cai@lca.pw> wrote:
->
-> On Wed, Sep 02, 2020 at 08:52:24AM -0400, Qian Cai wrote:
-> > On Thu, Aug 06, 2020 at 05:43:26PM +0000, Uriel Guajardo wrote: =20
-> > > Integrates UBSAN into the KUnit testing framework. It fails KUnit tes=
-ts
-> > > whenever it reports undefined behavior.
-> > >=20
-> > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com> =20
-> >=20
-> > It looks like this patch had been merged into linux-next but the "[PATC=
-H 1/2]
-> > kunit: support failure from dynamic analysis tools" did not. Hence, it =
-caused a
-> > compiling failure.
-> >=20
-> > lib/ubsan.c: In function =E2=80=98ubsan_prologue=E2=80=99:
-> > lib/ubsan.c:141:2: error: implicit declaration of function =E2=80=98kun=
-it_fail_current_test=E2=80=99; did you mean =E2=80=98kunit_init_test=E2=80=
-=99? [-Werror=3Dimplicit-function-declaration]
-> >   kunit_fail_current_test();
-> >   ^~~~~~~~~~~~~~~~~~~~~~~
-> >   kunit_init_test
-> > cc1: some warnings being treated as errors =20
->=20
-> Stephen, Shuah, can you revert this commit or pick up its dependency as w=
-ell?
+warning log:
+-----------------
+[   11.451223] Write protecting kernel text and read-only data: 20800k
+[   11.457522] Run /sbin/init as init process
+[   11.463807] random: fast init done
+[   11.471527]
+[   11.473118] =============================
+[   11.477129] WARNING: suspicious RCU usage
+[   11.481135] 5.9.0-rc4-next-20200908 #1 Not tainted
+[   11.485926] -----------------------------
+[   11.489931] /usr/src/kernel/include/trace/events/tlb.h:57
+suspicious rcu_dereference_check() usage!
+[   11.498970]
+[   11.498970] other info that might help us debug this:
+[   11.498970]
+[   11.506961]
+[   11.506961] rcu_scheduler_active = 2, debug_locks = 1
+[   11.513476] RCU used illegally from extended quiescent state!
+[   11.519215] no locks held by swapper/0/0.
+[   11.523217]
+[   11.523217] stack backtrace:
+[   11.527569] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.9.0-rc4-next-20200908 #1
+[   11.534955] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   11.542345] Call Trace:
+[   11.544792]  dump_stack+0x6d/0x8b
+[   11.548112]  lockdep_rcu_suspicious+0xb2/0xd0
+[   11.552473]  switch_mm_irqs_off+0x508/0x510
+[   11.556658]  switch_mm+0x19/0x50
+[   11.559890]  leave_mm+0x2d/0x40
+[   11.563034]  acpi_idle_enter_bm+0x1c/0x120
+[   11.567127]  acpi_idle_enter+0x13b/0x230
+[   11.571049]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
+[   11.576008]  ? acpi_idle_enter_s2idle+0x50/0x50
+[   11.580542]  cpuidle_enter_state+0x87/0x560
+[   11.584732]  cpuidle_enter+0x27/0x40
+[   11.588316]  do_idle+0x20b/0x2a0
+[   11.591551]  cpu_startup_entry+0x25/0x30
+[   11.595474]  rest_init+0x166/0x230
+[   11.598881]  arch_call_rest_init+0xd/0x19
+[   11.602893]  start_kernel+0x481/0x4a0
+[   11.606562]  i386_start_kernel+0x48/0x4a
+[   11.610485]  startup_32_smp+0x164/0x168
+[   11.614338]
+[   11.614339] =============================
+[   11.614339] WARNING: suspicious RCU usage
+[   11.614340] 5.9.0-rc4-next-20200908 #1 Not tainted
+[   11.614340] -----------------------------
+[   11.614341] /usr/src/kernel/include/trace/events/lock.h:37
+suspicious rcu_dereference_check() usage!
+[   11.614341]
+[   11.614341] other info that might help us debug this:
+[   11.614342]
+[   11.614342]
+[   11.614342] rcu_scheduler_active = 2, debug_locks = 1
+[   11.614343] RCU used illegally from extended quiescent state!
+[   11.614343] no locks held by swapper/0/0.
+[   11.614343]
+[   11.614344] stack backtrace:
+[   11.614344] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.9.0-rc4-next-20200908 #1
+[   11.614345] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   11.614345] Call Trace:
+[   11.614345]  dump_stack+0x6d/0x8b
+[   11.614346]  lockdep_rcu_suspicious+0xb2/0xd0
+[   11.614346]  lock_acquire+0x2d8/0x340
+[   11.614346]  _raw_spin_lock+0x27/0x40
+[   11.614347]  ? vprintk_emit+0x57/0x2c0
+[   11.614347]  vprintk_emit+0x57/0x2c0
+[   11.614347]  vprintk_default+0x17/0x20
+[   11.614348]  vprintk_func+0x4f/0xd0
+[   11.614348]  printk+0x13/0x15
+[   11.614348]  lockdep_rcu_suspicious+0x21/0xd0
+[   11.614349]  switch_mm_irqs_off+0x508/0x510
+[   11.614349]  switch_mm+0x19/0x50
+[   11.614349]  leave_mm+0x2d/0x40
+[   11.614350]  acpi_idle_enter_bm+0x1c/0x120
+[   11.614350]  acpi_idle_enter+0x13b/0x230
+[   11.614351]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
+[   11.614351]  ? acpi_idle_enter_s2idle+0x50/0x50
+[   11.614351]  cpuidle_enter_state+0x87/0x560
+[   11.614352]  cpuidle_enter+0x27/0x40
+[   11.614352]  do_idle+0x20b/0x2a0
+[   11.614352]  cpu_startup_entry+0x25/0x30
+[   11.614353]  rest_init+0x166/0x230
+[   11.614353]  arch_call_rest_init+0xd/0x19
+[   11.614353]  start_kernel+0x481/0x4a0
+[   11.614354]  i386_start_kernel+0x48/0x4a
+[   11.614354]  startup_32_smp+0x164/0x168
+[   11.614354]
+[   11.614355] =============================
+[   11.614355] WARNING: suspicious RCU usage
+[   11.614356] 5.9.0-rc4-next-20200908 #1 Not tainted
+[   11.614356] -----------------------------
+[   11.614356] /usr/src/kernel/include/trace/events/lock.h:63
+suspicious rcu_dereference_check() usage!
+[   11.614357]
+[   11.614357] other info that might help us debug this:
+[   11.614357]
+[   11.614358]
+[   11.614358] rcu_scheduler_active = 2, debug_locks = 1
+[   11.614358] RCU used illegally from extended quiescent state!
+[   11.614359] 1 lock held by swapper/0/0:
+[   11.614359]  #0: c82fd670 (logbuf_lock){-...}-{2:2}, at:
+vprintk_emit+0x57/0x2c0
+[   11.614361]
+[   11.614361] stack backtrace:
+[   11.614362] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
+5.9.0-rc4-next-20200908 #1
+[   11.614362] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   11.614362] Call Trace:
+[   11.614363]  dump_stack+0x6d/0x8b
+[   11.614363]  lockdep_rcu_suspicious+0xb2/0xd0
+[   11.614364]  lock_release+0x23c/0x260
+[   11.614364]  ? vprintk_emit+0x79/0x2c0
+[   11.614364]  _raw_spin_unlock+0x16/0x30
+[   11.614365]  vprintk_emit+0x79/0x2c0
+[   11.614365]  vprintk_default+0x17/0x20
+[   11.614365]  vprintk_func+0x4f/0xd0
+[   11.614366]  printk+0x13/0x15
+[   11.614366]  lockdep_rcu_suspicious+0x21/0xd0
+[   11.614366]  switch_mm_irqs_off+0x508/0x510
+[   11.614367]  switch_mm+0x19/0x50
+[   11.614367]  leave_mm+0x2d/0x40
+[   11.614367]  acpi_idle_enter_bm+0x1c/0x120
+[   11.614368]  acpi_idle_enter+0x13b/0x230
+[   11.614368]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
+[   11.614368]  ? acpi_idle_enter_s2idle+0x50/0x50
+[   11.614369]  cpuidle_enter_state+0x87/0x560
+[   11.614369]  cpuidle_enter+0x27/0x40
+[   11.614369]  do_idle+0x20b/0x2a0
+[   11.614370]  cpu_startup_entry+0x25/0x30
+[   11.614370]  rest_init+0x166/0x230
+[   11.614370]  arch_call_rest_init+0xd/0x19
+[   11.614371]  start_kernel+0x481/0x4a0
+[   11.614371]  i386_start_kernel+0x48/0x4a
+[   11.614371]  startup_32_smp+0x164/0x168
 
-Sorry, for the slow response ... this should be gone today.
+Full test log,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200908/testrun/3171106/suite/linux-log-parser/test/check-kernel-warning-1743529/log
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/zfuNZ91fUths2EWrVnzCG=u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9YRV4ACgkQAVBC80lX
-0Gw8EQf/c1VzFm3ro9TFRsYuojPzJHb6J39cJzCwYjxVJ9yH1Qcf0d1rUbpt6w1W
-8+EupMS6gQrVVzdawHGApftrxHuV8ELNRDVNsRo07V9E/cjbdHSaB7gXvnoCrjzR
-msDborabO43BmnOVFs2Ji54y7Fl1Uy6EiTl9hDYXCEC3clXZaFL2FOU4myWaFLd0
-kZJD4/pEcbe56T5Javo/fQFZCKYxC3jHGOeE1QQZ7yilSRsYFBLbvH5eTaOSDFOm
-TIeuV0erCW3wrqKvhjz6ZWJHlilxSiBCnIPWuEu8dq+rcrXzGzvFDkWJs0REJU70
-P90MDo8f4SV1Zgav4daSHApS5PnpLQ==
-=qlg+
------END PGP SIGNATURE-----
-
---Sig_/zfuNZ91fUths2EWrVnzCG=u--
+-- 
+Linaro LKFT
+https://lkft.linaro.org

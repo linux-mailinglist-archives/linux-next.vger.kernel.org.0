@@ -2,220 +2,262 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4951F2635A6
-	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 20:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7CD2635D3
+	for <lists+linux-next@lfdr.de>; Wed,  9 Sep 2020 20:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726226AbgIISMn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 14:12:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34514 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725772AbgIISMm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 9 Sep 2020 14:12:42 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2A692065E;
-        Wed,  9 Sep 2020 18:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599675161;
-        bh=n7wfh0kn6mbW8NnqXFuMguLN0jUmMK2izVFTgQuGlXo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=imQf99W+8bGf2BtMHOSBLy9W4T1tqEKZ4oEHoY7SSFcXIHOZsbMigrVx4O/s9ki1o
-         6qFGb9YfMFcCaNlYK61KQE6KWxVUID1m57D9a7csqUZwhMmduqnu1Qdh3oFKJjNmyd
-         QrWra0CXVpL05Dwi+iRTQ+0k6osQuPckaMht9OB4=
-Date:   Wed, 9 Sep 2020 20:12:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     jim.cromie@gmail.com
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>
-Subject: Re: kernel BUG at /usr/src/kernel/lib/dynamic_debug.c:267!
-Message-ID: <20200909181251.GA1007128@kroah.com>
-References: <CA+G9fYvg7voMNArr3nPpv_dRn10RwYos075NW_b5rFbBLZ=-8g@mail.gmail.com>
- <20200909144745.504c4cbfeea9bc298e3c6b9b@kernel.org>
- <20200909080025.GC3864@alley>
- <20200909122502.GB668220@kroah.com>
- <CAJfuBxzNFmgY=Wbz99K8QTxkBVDaJn5+gTTxUTJTtkJe7nxfsQ@mail.gmail.com>
+        id S1726005AbgIISVz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 14:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725772AbgIISVy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 14:21:54 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAD8C061573
+        for <linux-next@vger.kernel.org>; Wed,  9 Sep 2020 11:21:53 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q4so1742985pjh.5
+        for <linux-next@vger.kernel.org>; Wed, 09 Sep 2020 11:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=XK0R1xi+j9PSrORZ39bI8Ha5FpyyIpsLlb9jtn/Lvj0=;
+        b=oHY2G0ukeAV+hiGrQ32N4q4RwJOSvzvpsdFBGbOxd5jqTQa+dy8okFRaFW1BlPzNFU
+         GYcAbUOmx/Nznn3JQdg40Q1IMIyUl82HQHFWzSZGhk0kCWxipif28zzPXFV1D1CHeEhu
+         U/FBowmBMShRcpY21W7gBlUBY5lwMfgAFyfjDavfxHBSaV/g44kRgon01ZKPa9s4mSIV
+         utxYcKIYPacXqqbKYsaSuBNLwP6DrrHw6xL2rzcLiIFZ9jY8cIQ6u4PtxvhHN2bTdR/E
+         rwcvl3e7hxN2lV4jY9csiDO/NPt/d6vWBCwuzhBFJaXX1KbiWXUYRjBGbo9s1I6dA54B
+         sVXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=XK0R1xi+j9PSrORZ39bI8Ha5FpyyIpsLlb9jtn/Lvj0=;
+        b=OMKtdwEo+BmMsEeNAMQulHUUVqheKr1koUC6LqKfM81idO5dp6ehK0Kb3y3aCocHdb
+         gA39mryvvN1xT2+1sF+1yiyeiF4Io7zVGfgIInEvAC7Px0thjjiIv8I3qNXiVXbDSCu7
+         0aNO/Qpiocsy5FTq+JcpuTLFXgmS1HLflaXzE8SpBkY/OSouT0xV8oqhNcOSOBzMQvIb
+         SFz/G/2F93s2m4NZ5umi7ekh1h2CycK+S2ussMYE3OevPG2kv5HjVtFBtJjmIPUzUqXr
+         PvCv9AzVpmAHo6T6GUu6KBA4/WSohoOOR1WaNvQetDuI5kcn+U6U7tH7J00hfZy6cV00
+         IC9A==
+X-Gm-Message-State: AOAM532LGYurguTDe5JL5sb9/xfv/gIuG9vdY1opkfwoj6rpEzYnEaZF
+        fOQtHbpW59sONLZDbElqyKeS4sgxgIqR5A==
+X-Google-Smtp-Source: ABdhPJyoPRNDqFhU4dILFS3zBjVNwIl58YFBMjdO0CM+Gtm9ctKU8xgV0mslrjzBKurMAnMTcJDKMA==
+X-Received: by 2002:a17:90a:54f:: with SMTP id h15mr1921579pjf.191.1599675711741;
+        Wed, 09 Sep 2020 11:21:51 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n26sm3341666pff.30.2020.09.09.11.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 11:21:50 -0700 (PDT)
+Message-ID: <5f591d3e.1c69fb81.3fb24.9444@mx.google.com>
+Date:   Wed, 09 Sep 2020 11:21:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfuBxzNFmgY=Wbz99K8QTxkBVDaJn5+gTTxUTJTtkJe7nxfsQ@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: next-20200909
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master baseline: 287 runs, 4 regressions (next-20200909)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 11:44:44AM -0600, jim.cromie@gmail.com wrote:
-> On Wed, Sep 9, 2020 at 6:24 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Sep 09, 2020 at 10:00:25AM +0200, Petr Mladek wrote:
-> > > On Wed 2020-09-09 14:47:45, Masami Hiramatsu wrote:
-> > > > Hi Naresh,
-> > > >
-> > > > Thanks for reporting, it seems that you have run the kselftests/livepatch/test-livepatch.sh.
-> > > > Then, I think it is better to report to Livepatch maintainers too. (I Cc'd them)
-> > > >
-> > > > Thank you,
-> > > >
-> > > > On Wed, 9 Sep 2020 10:24:09 +0530
-> > > > Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > > While testing livepatch test cases on x86_64 with Linux next 20200908 tag kernel
-> > > > > this kernel BUG noticed several times.
-> > > > >
-> > > > > metadata:
-> > > > >   git branch: master
-> > > > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > > > >   git commit: dff9f829e5b0181d4ed9d35aa62d695292399b54
-> > > > >   git describe: next-20200908
-> > > > >     kernel-config:
-> > > > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/853/config
-> > > > >
-> > > > > kernel BUG log,
-> > > > > ----------------------
-> > > > > [  634.063970] % rmmod test_klp_livepatch
-> > > > > [  634.114787] test_klp_atomic_replace: this has been live patched
-> > > > > [  634.121953] % echo 0 > /sys/kernel/livepatch/test_klp_atomic_replace/enabled
-> > > > > [  634.129391] livepatch: 'test_klp_atomic_replace': starting
-> > > > > unpatching transition
-> > > > > [  634.143990] livepatch: 'test_klp_atomic_replace': unpatching complete
-> > > > > [  634.156223] % rmmod test_klp_atomic_replace
-> > > > > [  634.235451] ------------[ cut here ]------------
-> > > > > [  634.240314] kernel BUG at /usr/src/kernel/lib/dynamic_debug.c:267!
-> > > > > [  634.246584] invalid opcode: 0000 [#1] SMP PTI
-> > > > > [  634.250955] CPU: 0 PID: 12791 Comm: test-livepatch. Tainted: G
-> > > > >   W     K   5.9.0-rc4-next-20200908 #1
-> > > > > [  634.260615] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > > > > 2.2 05/23/2018
-> > > > > [  634.268007] RIP: 0010:ddebug_exec_query+0x77b/0xb90
-> > > > > [  634.272886] Code: 4c 89 ad 70 ff ff ff e9 db fb ff ff b8 03 00 00
-> > > > > 00 e9 20 fb ff ff b8 02 00 00 00 e9 16 fb ff ff b8 01 00 00 00 e9 0c
-> > > > > fb ff ff <0f> 0b 31 c0 e9 03 fb ff ff 49 89 f4 48 89 f7 e9 78 f9 ff ff
-> > > > > 8b 15
-> > > > > [  634.291630] RSP: 0018:ffff9f0c80a5bd18 EFLAGS: 00010246
-> > > > > [  634.296856] RAX: 000000000000003d RBX: 0000000000000000 RCX: 0000000000000000
-> > > > > [  634.303987] RDX: 000000000000003d RSI: 0000000000000000 RDI: ffff90db906583ec
-> > > > > [  634.311111] RBP: ffff9f0c80a5bde8 R08: 000000000000000a R09: 000000000000003b
-> > > > > [  634.318236] R10: ffff90db92610000 R11: 0000000000000246 R12: ffff90db906583ec
-> > > > > [  634.325368] R13: ffffffffbe87cbc0 R14: 0000000000000000 R15: 0000000000000004
-> > > > > [  634.332500] FS:  00007fd37249a740(0000) GS:ffff90dbefa00000(0000)
-> > > > > knlGS:0000000000000000
-> > > > > [  634.340578] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > [  634.346315] CR2: 0000000000e6d00c CR3: 000000026a4b8004 CR4: 00000000003706f0
-> > > > > [  634.353446] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > [  634.360570] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > [  634.367693] Call Trace:
-> > > > > [  634.370139]  ? lock_acquire+0xa6/0x390
-> > > > > [  634.373892]  ? __might_fault+0x34/0x80
-> > > > > [  634.377648]  ddebug_exec_queries+0x6e/0x140
-> > > > > [  634.381831]  ddebug_proc_write+0x4b/0xa0
-> > > > > [  634.385756]  full_proxy_write+0x5f/0x90
-> > > > > [  634.389595]  vfs_write+0xed/0x240
-> > > > > [  634.392915]  ksys_write+0xad/0xf0
-> > > > > [  634.396233]  ? syscall_trace_enter+0x17a/0x240
-> > > > > [  634.400670]  __x64_sys_write+0x1a/0x20
-> > > > > [  634.404416]  do_syscall_64+0x37/0x50
-> > > > > [  634.407993]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > > > > [  634.413038] RIP: 0033:0x7fd371b84144
-> > > > > [  634.416617] Code: 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00
-> > > > > 00 00 00 00 66 90 48 8d 05 c1 e7 2c 00 8b 00 85 c0 75 13 b8 01 00 00
-> > > > > 00 0f 05 <48> 3d 00 f0 ff ff 77 54 c3 0f 1f 00 41 54 49 89 d4 55 48 89
-> > > > > f5 53
-> > > > > [  634.435362] RSP: 002b:00007ffd19447658 EFLAGS: 00000246 ORIG_RAX:
-> > > > > 0000000000000001
-> > > > > [  634.442928] RAX: ffffffffffffffda RBX: 00000000000000bc RCX: 00007fd371b84144
-> > > > > [  634.450059] RDX: 00000000000000bc RSI: 0000000000e6cf70 RDI: 0000000000000001
-> > > > > [  634.457181] RBP: 0000000000e6cf70 R08: 00000000000000e9 R09: 0000000000000000
-> > > > > [  634.464305] R10: 00007ffd19447c48 R11: 0000000000000246 R12: 00007fd371e4e760
-> > > > > [  634.471429] R13: 00000000000000bc R14: 00007fd371e49760 R15: 00000000000000bc
-> > > > > [  634.478559] Modules linked in: trace_printk sch_fq 8021q
-> > > > > iptable_filter xt_mark ip_tables cls_bpf sch_ingress veth algif_hash
-> > > > > x86_pkg_temp_thermal fuse [last unloaded: test_klp_atomic_replace]
-> > > > > [  634.495695] ---[ end trace d04d7e11bd1458bf ]---
-> > > > > [  634.500333] RIP: 0010:ddebug_exec_query+0x77b/0xb90
-> > > > > [  634.505218] Code: 4c 89 ad 70 ff ff ff e9 db fb ff ff b8 03 00 00
-> > > > > 00 e9 20 fb ff ff b8 02 00 00 00 e9 16 fb ff ff b8 01 00 00 00 e9 0c
-> > > > > fb ff ff <0f> 0b 31 c0 e9 03 fb ff ff 49 89 f4 48 89 f7 e9 78 f9 ff ff
-> > > > > 8b 15
-> > > > > [  634.523969] RSP: 0018:ffff9f0c80a5bd18 EFLAGS: 00010246
-> > > > > [  634.529197] RAX: 000000000000003d RBX: 0000000000000000 RCX: 0000000000000000
-> > > > > [  634.536330] RDX: 000000000000003d RSI: 0000000000000000 RDI: ffff90db906583ec
-> > > > > [  634.543462] RBP: ffff9f0c80a5bde8 R08: 000000000000000a R09: 000000000000003b
-> > > > > [  634.550593] R10: ffff90db92610000 R11: 0000000000000246 R12: ffff90db906583ec
-> > > > > [  634.557727] R13: ffffffffbe87cbc0 R14: 0000000000000000 R15: 0000000000000004
-> > > > > [  634.564869] FS:  00007fd37249a740(0000) GS:ffff90dbefa00000(0000)
-> > > > > knlGS:0000000000000000
-> > > > > [  634.572953] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > [  634.578699] CR2: 0000000000e6d00c CR3: 000000026a4b8004 CR4: 00000000003706f0
-> > > > > [  634.585829] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > [  634.592964] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > >
-> > > It is caused by the commit 42f07816ac0cc79792811 ("dyndbg:
-> > > fix problem parsing format="foo bar"). It modified the condition
-> > > when the above BUG() gets triggered.
-> > >
-> > > It has even been reported by the kernel test robot, see
-> > > https://lore.kernel.org/lkml/20200902074124.GP4299@shao2-debian/
-> > >
-> > >
-> > > It is triggered when the livepatching selftest is trying to restore the
-> > > original setting of dynamic debug messages in the livepatch framework.
-> > >
-> > > It can get reliably reproduced by the following call:
-> > >
-> > > $> echo -n 'file kernel/livepatch/transition.c line 586 =_' > \
-> > >    /sys/kernel/debug/dynamic_debug/control
-> > >
-> > >
-> > > Adding people from the problematic patch into CC.
-> > >
-> > > I haven't dived into the dynamic debug code yet. The logic might
-> > > be wrong.
-> > >
-> > > Anyway, the BUG_ON() should get replaced by a normal error message.
-> > > There is no reason to panic() when a string can't be parsed !!!
-> >
-> > The above mentioned patch was trying to fix things so that the BUG_ON()
-> > would not be hit, I guess that's not really happening here :(
-> >
-> > Jim, can you look into this?
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> Ive been down with a stomach bug for past week,
-> Im feeling normal-ish now, but playing catchup, and taking some NMIs.
-> 
-> 
->  commit 42f07816ac0cc79792811 ("dyndbg: fix problem parsing format="foo bar").
-> 
-> I'm miffed and embarrassed that the quick fix also broke.
-> Im not experienced enough to know what "normal" handling looks like
-> for reactive breakages like this...
-> 
-> If you want to revert the 2 commits (original feature + fixup),
-> Id find some stress relief in that, and would take a clean run at it later.
-> 
-> I hope to steal a few hrs from the catchup tasks to investigate this RSN.
-> 
-> thanks and apologies
+next/master baseline: 287 runs, 4 regressions (next-20200909)
 
-No worries, go rest and get better, that's more important than this
-little stuff.
+Regressions Summary
+-------------------
 
-I'll go revert both patches from my tree in the morning, which should
-clear these issues up.
+platform             | arch  | lab           | compiler | defconfig        =
+            | results
+---------------------+-------+---------------+----------+------------------=
+------------+--------
+hifive-unleashed-a00 | riscv | lab-baylibre  | gcc-8    | defconfig        =
+            | 0/1    =
 
-thanks,
+panda                | arm   | lab-collabora | gcc-8    | multi_v7_defconfi=
+g           | 4/5    =
 
-greg k-h
+panda                | arm   | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 4/5    =
+
+panda                | arm   | lab-collabora | gcc-8    | omap2plus_defconf=
+ig          | 0/1    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200909/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200909
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      7204eaa2c1f509066486f488c9dcb065d7484494 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform             | arch  | lab           | compiler | defconfig        =
+            | results
+---------------------+-------+---------------+----------+------------------=
+------------+--------
+hifive-unleashed-a00 | riscv | lab-baylibre  | gcc-8    | defconfig        =
+            | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f58e3cdbf241a8026d3537d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200909/risc=
+v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200909/risc=
+v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/riscv/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f58e3cdbf241a8026d35=
+37e
+      new failure (last pass: next-20200818)  =
+
+
+
+platform             | arch  | lab           | compiler | defconfig        =
+            | results
+---------------------+-------+---------------+----------+------------------=
+------------+--------
+panda                | arm   | lab-collabora | gcc-8    | multi_v7_defconfi=
+g           | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f58e668fd46e2d9f1d35384
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200909/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200909/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f58e668fd46e2d=
+9f1d35388
+      failing since 56 days (last pass: next-20200706, first fail: next-202=
+00715)
+      60 lines
+
+    2020-09-09 14:27:45.158000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c802
+    2020-09-09 14:27:45.164000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c803
+    2020-09-09 14:27:45.170000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c804
+    2020-09-09 14:27:45.176000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c805
+    2020-09-09 14:27:45.182000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c806
+    2020-09-09 14:27:45.188000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c807
+    2020-09-09 14:27:45.194000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c808
+    2020-09-09 14:27:45.200000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c809
+    2020-09-09 14:27:45.206000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80a
+    2020-09-09 14:27:45.212000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform             | arch  | lab           | compiler | defconfig        =
+            | results
+---------------------+-------+---------------+----------+------------------=
+------------+--------
+panda                | arm   | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f58e6f61dc970f1a8d3537a
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200909/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200909/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f58e6f61dc970f=
+1a8d3537e
+      failing since 56 days (last pass: next-20200706, first fail: next-202=
+00715)
+      60 lines
+
+    2020-09-09 14:30:08.068000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-09-09 14:30:08.074000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-09-09 14:30:08.079000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-09-09 14:30:08.085000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-09-09 14:30:08.090000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-09-09 14:30:08.096000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-09-09 14:30:08.102000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-09-09 14:30:08.108000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-09-09 14:30:08.114000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-09-09 14:30:08.119000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform             | arch  | lab           | compiler | defconfig        =
+            | results
+---------------------+-------+---------------+----------+------------------=
+------------+--------
+panda                | arm   | lab-collabora | gcc-8    | omap2plus_defconf=
+ig          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f58e8cdf8ab447e97d35397
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200909/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200909/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f58e8cdf8ab447e97d35=
+398
+      failing since 49 days (last pass: next-20200706, first fail: next-202=
+00721)  =20

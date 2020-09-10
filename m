@@ -2,145 +2,235 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FE4263A95
-	for <lists+linux-next@lfdr.de>; Thu, 10 Sep 2020 04:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EFB263B78
+	for <lists+linux-next@lfdr.de>; Thu, 10 Sep 2020 05:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730644AbgIJCfM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Sep 2020 22:35:12 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:24545 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730450AbgIJCdJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 22:33:09 -0400
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200910023306epoutp034767795825ad01ada2688cd31e0740e1~zS2QpAZeL1667816678epoutp03K
-        for <linux-next@vger.kernel.org>; Thu, 10 Sep 2020 02:33:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200910023306epoutp034767795825ad01ada2688cd31e0740e1~zS2QpAZeL1667816678epoutp03K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1599705186;
-        bh=teGCqHEFthsRoEpChIqH0QsySgv8omqE3KANwVAcCYg=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=rOYFMHv8skkfz3GKYer1VtbeMZwGgCpvdkZ9w9Zxu6Vt8wyY+n6VB/dAR2IghvhyS
-         qEMkp0sMAGAvdjyNo99xvj462yMeZBCgHHWU7obatRYptvA1O6SiB35sT42Kja0ezK
-         1SEtIBVY3RA1YsL42+rm6IH4EBXhGuzyS7u15alM=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20200910023305epcas5p3055a9045fa34a834221d5849dec7d0f2~zS2QN-O3Q1505215052epcas5p3Q;
-        Thu, 10 Sep 2020 02:33:05 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        43.09.40333.160995F5; Thu, 10 Sep 2020 11:33:05 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200910023304epcas5p33a0b919b4ac04564f198039bded0f11e~zS2O2yFnU3181931819epcas5p3D;
-        Thu, 10 Sep 2020 02:33:04 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200910023304epsmtrp2db94ac8dfa57c83ce40e7c28007207c6~zS2O2J5hE2057720577epsmtrp2E;
-        Thu, 10 Sep 2020 02:33:04 +0000 (GMT)
-X-AuditID: b6c32a4a-9a7ff70000019d8d-23-5f599061bca8
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5F.FB.08303.060995F5; Thu, 10 Sep 2020 11:33:04 +0900 (KST)
-Received: from alimakhtar02 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20200910023302epsmtip149e3e90d71931ca158338c7cfaaa84fa~zS2Ng6cQJ2321123211epsmtip1A;
-        Thu, 10 Sep 2020 02:33:02 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Martin K. Petersen'" <martin.petersen@oracle.com>,
-        "'Randy Dunlap'" <rdunlap@infradead.org>
-Cc:     "'Stephen Rothwell'" <sfr@canb.auug.org.au>,
-        "'Linux Next Mailing List'" <linux-next@vger.kernel.org>,
-        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
-        "'linux-scsi'" <linux-scsi@vger.kernel.org>,
-        "'Santosh Yaraganavi'" <santosh.sy@samsung.com>,
-        "'Vinayak Holikatti'" <h.vinayak@samsung.com>,
-        "'Seungwon Jeon'" <essuuj@gmail.com>
-In-Reply-To: <yq1a6xy2wph.fsf@ca-mkp.ca.oracle.com>
-Subject: RE: linux-next: Tree for Jul 20 (scsi/ufs/exynos)
-Date:   Thu, 10 Sep 2020 08:03:01 +0530
-Message-ID: <001501d6871a$b5b29f10$2117dd30$@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIWmKFrqc6cTichonS6aOkZQnVssAH33GmqAhZA118BQ2wKXgD2W6KbAfj42Oionvwl0A==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHKsWRmVeSWpSXmKPExsWy7bCmpm7ihMh4g5urNSyWX1jCZHF51xw2
-        i4ML2xgtuq/vYLNYfvwfk8XbO9NZLLbuvcruwO7ReOMGm8fOWXfZPTav0PL4+PQWi8fnTXIB
-        rFFcNimpOZllqUX6dglcGWd/LmMrmM9ZMWXjatYGxgvsXYycHBICJhL3nkxg62Lk4hAS2M0o
-        saX1HjuE84lRoqvrJyOE85lR4vvDz6wwLXv/f2KGSOxilOjbeJYJwnnJKPH74FsmkCo2AV2J
-        HYvb2EBsEYFkic2L94J1MAs8YpLo3PMHaBQHB6eAscStm3kgNcICVhJzzuwC28AioCoxc/98
-        ZhCbV8BSonnLVhYIW1Di5MwnYDazgLzE9rdzmCEuUpD4+XQZK8SuMImNT1dB1YhLHP3ZA7ZX
-        QmAmh8Tyk+egXnCRmP/nPwuELSzx6vgWaGhISXx+t5cN5DYJgWyJnl3GEOEaiaXzjkGV20sc
-        uDKHBaSEWUBTYv0ufYhVfBK9v58wQXTySnS0CUFUq0o0v7sK1SktMbG7G+oAD4n27QtYJzAq
-        zkLy2Cwkj81C8sAshGULGFlWMUqmFhTnpqcWmxYY5aWW6xUn5haX5qXrJefnbmIEJyEtrx2M
-        Dx980DvEyMTBeIhRgoNZSYQ3KT8yXog3JbGyKrUoP76oNCe1+BCjNAeLkjiv0o8zcUIC6Ykl
-        qdmpqQWpRTBZJg5OqQYmkykJ65Oeh3+6ZvssRH/emwMfPy1xy05paf760nHzHflmro1Z25Z9
-        Vtu3J7is6UuWfdWU8Cr2v8aL0itfFc9R23U3O8ymqnPK54AkKyNn5mVSDzL6thwy3yrWlLif
-        a965FW+4KhhUpedwGc5idr9ac1ZYd9/WdMXv8Vq6FbbZ/1/mJEyZsr2jZlk4w7K/Vs9DvhbM
-        LpicKCHlnL5HWu27DjebjGv4U/fU+hsL9GfOM/11nU078M5W0Y+OOzbqeS/purLF4URd8w7b
-        6KPKPz4G+dWdPl0ZzPDvlOUiufluOUy/Upo4Votxr9q3er3R/dA7Vy9+s/giIZqSlOGxvllc
-        qcrJyCV6UbIb74tth1cqsRRnJBpqMRcVJwIAypUNkbEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJTjdhQmS8wbLVvBbLLyxhsri8aw6b
-        xcGFbYwW3dd3sFksP/6PyeLtneksFlv3XmV3YPdovHGDzWPnrLvsHptXaHl8fHqLxePzJrkA
-        1igum5TUnMyy1CJ9uwSujLM/l7EVzOesmLJxNWsD4wX2LkZODgkBE4m9/z8xg9hCAjsYJa7t
-        M4KIS0tc3zgBqkZYYuW/50A2F1DNc0aJJ5tmMoIk2AR0JXYsbmMDsUUEkiV2P9/ODFLELPCM
-        SWLXvnZWiI7jTBLbuvtZuhg5ODgFjCVu3cwDaRAWsJKYc2YXK4jNIqAqMXP/fLAreAUsJZq3
-        bGWBsAUlTs58AtbKLKAn0bYRbC+zgLzE9rdzmCGOU5D4+XQZK8QNYRIbn65igagRlzj6s4d5
-        AqPwLCSTZiFMmoVk0iwkHQsYWVYxSqYWFOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgRHkpbW
-        DsY9qz7oHWJk4mA8xCjBwawkwpuUHxkvxJuSWFmVWpQfX1Sak1p8iFGag0VJnPfrrIVxQgLp
-        iSWp2ampBalFMFkmDk6pBqbWB8/lLn0WsDzkzDHn0OKlr3gOzP+sr7p7xa8SifvFMyoL5UPi
-        a84+UNlwx+Vbg7bC2n1vHpe94Zphu9Zsytz1TVM/7fNq2XzQMmLGm6KivFR2hgXbrZMzDhn1
-        tn6P5qm077r6+KZMZvp274r3glbZvkcPBhwz38G+p9thcveW1D/VHtv/TfBcempzYsPn4PSi
-        v51f840mHnd/8eux+MPVB961/klcs0Jimu7BA223z/gp+AVxzeniDfkZJKIQkDDH6Wrx/2Y9
-        Zue6qnWu2UaMhxWuK5zcdWifyP7so9v5zutMT7IVCBe45rJyYruOAaMX5xqdwuC7s05mhjua
-        t+65MMlTZ8vh7qh+4SnpvX1KLMUZiYZazEXFiQDBWXGuEwMAAA==
-X-CMS-MailID: 20200910023304epcas5p33a0b919b4ac04564f198039bded0f11e
-X-Msg-Generator: CA
+        id S1727055AbgIJDa2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Sep 2020 23:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgIJDaZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Sep 2020 23:30:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260D9C061573
+        for <linux-next@vger.kernel.org>; Wed,  9 Sep 2020 20:30:24 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id bd2so229186plb.7
+        for <linux-next@vger.kernel.org>; Wed, 09 Sep 2020 20:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=HCxgVneQJ9imDhhKE671gWGRU2GPxG0SIJRYLNdvVLY=;
+        b=Cj3LZzYS5V2xbGO86Lv+HsufBQcVQGgYeqT0qaPN+O9oTIsZgx4BkYEBjuP6Oi7zO8
+         CdHZLutgL4yqWNMd3uWva929BFdl5aaMwUuKmvTA5na1IobbLapIpt3Y48pdN3cMtVqS
+         iKvKyhU8r9kTVhdswofFla2r3fhzscZBE4Ru9ltB2tYbaWmxbKy7sj8eDvVyZNERdrBu
+         J4Uw5EJxp2eWn+Olu7kK/V3J0HmrXfVPT0byAvYMPjpcQlGO7SwVa1pWjoIbHG7V/GpI
+         lNsOFacd44p1XmEwRaXEAIdNzJCeK+FqTNSoldz2MRepmMZwAV9g8gFgli1/MAE0sA8/
+         wh0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=HCxgVneQJ9imDhhKE671gWGRU2GPxG0SIJRYLNdvVLY=;
+        b=IDAjTDl4vDHWWklcsfks1Y1fV8PGg0BreozHkaUIsHqRx1wMWladOIqJo4tIZNMeFJ
+         p37Dw58DbGWo9CXKeoIDaLdMyn/D2ehNcNdcpK3aO9dDZv4giar5fWo/kjRt54Q+BBmb
+         bl0H+1+Le5GNiD4k77rFulT9MFVmjhMVemX6f3mlsBtYHhsgBynTi60WGlsBvsCkEA39
+         5/X6U41ez4fpOyPBaI3LHlo9nqVKcHqZ77+kvWuhPcs82C/DDQwQ8r1UtjPWZNtEJAgo
+         U5z1l0pnKhd1e/lWV4mBApwGMvb3s3fXG5yEaAcyyePTNYrcf6VM8QScWW8Y2g996atE
+         ubIA==
+X-Gm-Message-State: AOAM531yt/2ecepvu+k2pjMzkUd5AodoYDccsj2h1AN41d0x73vJ4GA1
+        WXPNwY8jP48jz3tJnj4ASAIoFC3Mm2Qq/Q==
+X-Google-Smtp-Source: ABdhPJzgHketUnKHpv1CCG/N7w+PJda0dOdGYqXC28/eD+2/pc4fB9Wp5DMI2A1ejNU9o6eDL1T+5A==
+X-Received: by 2002:a17:90a:4803:: with SMTP id a3mr3394498pjh.192.1599708622237;
+        Wed, 09 Sep 2020 20:30:22 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n2sm4030083pfe.208.2020.09.09.20.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 20:30:21 -0700 (PDT)
+Message-ID: <5f599dcd.1c69fb81.90d7e.cbde@mx.google.com>
+Date:   Wed, 09 Sep 2020 20:30:21 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200720164116epcas5p2021c67d1778e737d7c695f6bdbc5b2d4
-References: <20200720194225.17de9962@canb.auug.org.au>
-        <CGME20200720164116epcas5p2021c67d1778e737d7c695f6bdbc5b2d4@epcas5p2.samsung.com>
-        <e6112633-61c9-fa80-8479-fe90bb360868@infradead.org>
-        <06a601d65f86$3d8aeee0$b8a0cca0$@samsung.com>
-        <f72b8022-1ebd-c5a1-2fe2-a3e93854fd0e@infradead.org>
-        <yq1a6xy2wph.fsf@ca-mkp.ca.oracle.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.9-rc4-363-g1dfc67596dbb
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 324 runs,
+ 3 regressions (v5.9-rc4-363-g1dfc67596dbb)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Randy and Martin,
+next/pending-fixes baseline: 324 runs, 3 regressions (v5.9-rc4-363-g1dfc675=
+96dbb)
 
-> -----Original Message-----
-> From: Martin K. Petersen <martin.petersen@oracle.com>
-> Sent: 10 September 2020 07:58
-> To: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>; 'Stephen Rothwell'
-> <sfr@canb.auug.org.au>; 'Linux Next Mailing List' <linux-
-> next@vger.kernel.org>; 'Linux Kernel Mailing List' <linux-
-> kernel@vger.kernel.org>; 'linux-scsi' <linux-scsi@vger.kernel.org>;
-'Santosh
-> Yaraganavi' <santosh.sy@samsung.com>; 'Vinayak Holikatti'
-> <h.vinayak@samsung.com>; 'Seungwon Jeon' <essuuj@gmail.com>
-> Subject: Re: linux-next: Tree for Jul 20 (scsi/ufs/exynos)
-> 
-> 
-> Randy,
-> 
-> > I am still seeing this in linux-next of 20200909.
-> > Was there a patch posted that I missed and is not applied anywhere yet?
-> 
-> This patch became a victim of dropping the Exynos changes in 5.9. I have
-> added it back in.
-> 
-Sorry about not following on this after 5.9-rc1 was out.
-As Martin pointed this was posted 
-https://www.spinics.net/lists/linux-scsi/msg144970.html
+Regressions Summary
+-------------------
 
-I just send V2 of the same with Randy's Acked-by
-Please take a look.
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
 
-> --
-> Martin K. Petersen	Oracle Linux Engineering
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
 
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-rc4-363-g1dfc67596dbb/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-rc4-363-g1dfc67596dbb
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      1dfc67596dbbc7bab78376ebb1afdce355f3fdca =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5961661922e5436ed353b1
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f5961661922e543=
+6ed353b3
+      failing since 5 days (last pass: v5.9-rc3-380-g4d386b9bd46d, first fa=
+il: v5.9-rc3-474-gc41730a9bddc)
+      2 lines
+
+    2020-09-09 23:10:26.975000  Connected to bcm2837-rpi-3-b console [chann=
+el connected] (~$quit to exit)
+    2020-09-09 23:10:26.975000  (user:khilman) is already connected
+    2020-09-09 23:10:42.696000  =00
+    2020-09-09 23:10:42.697000  =
+
+    2020-09-09 23:10:42.697000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
+0)
+    2020-09-09 23:10:42.697000  =
+
+    2020-09-09 23:10:42.697000  DRAM:  948 MiB
+    2020-09-09 23:10:42.713000  RPI 3 Model B (0xa02082)
+    2020-09-09 23:10:42.800000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
+    2020-09-09 23:10:42.831000  Loading Environment from FAT... *** Warning=
+ - bad CRC, using default environment
+    ... (381 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f596543513b347ed5d35395
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f596543513b347=
+ed5d35399
+      failing since 35 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)
+      60 lines
+
+    2020-09-09 23:29:00.587000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-09-09 23:29:00.593000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-09-09 23:29:00.598000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-09-09 23:29:00.604000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-09-09 23:29:00.610000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-09-09 23:29:00.616000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-09-09 23:29:00.627000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-09-09 23:29:00.628000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-09-09 23:29:00.633000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-09-09 23:29:00.639000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f596437832520d2c2d35384
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-36=
+3-g1dfc67596dbb/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f596437832520d2c2d35=
+385
+      failing since 35 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =20

@@ -2,160 +2,301 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E677726567E
-	for <lists+linux-next@lfdr.de>; Fri, 11 Sep 2020 03:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B5326585B
+	for <lists+linux-next@lfdr.de>; Fri, 11 Sep 2020 06:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725468AbgIKBRm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Sep 2020 21:17:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44909 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbgIKBRl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 10 Sep 2020 21:17:41 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BndCg1g9Cz9sV5;
-        Fri, 11 Sep 2020 11:17:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1599787057;
-        bh=LWyAdIS7WVTbxNr2SjDaV0cpjjjBFUm7NK4RyJZ+7Pc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=t8LQWBMzi/l4dMpI8k8CyXYUqi5ON4wyS4mjbZLkSvLAI/7zW+nixIrMVVOJWTJfR
-         IyggRjIP8tqba89IaB+0OnF0S6XjRxCIV72E1pLhccW6Y5Md+62V8RlLjxpBaMka/h
-         WbvUCbG7hrUvo7rQV8rt2ww4YBrpI2UHvF4hDmSMA2I8KiIZSlSLFzae5f9KkD59YH
-         MAfYpgELwGhiYIFRX921griXXMqdL9AYglrlcoOq44WDgDxm0BFyTtIhpHgPzshc7T
-         y5Gulti2SlReie66DH0pPd4/yJd9hhE9tG3IFEu9Sl3QHmL50GUBMNwLLIwuQlIbCa
-         hJyTaZYd4kIkA==
-Date:   Fri, 11 Sep 2020 11:17:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Helmut Grohne <helmut.grohne@intenta.de>,
-        Paul Barker <pbarker@konsulko.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200911111731.48a324d0@canb.auug.org.au>
+        id S1725446AbgIKEb0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Sep 2020 00:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbgIKEbZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Sep 2020 00:31:25 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9A8C061573
+        for <linux-next@vger.kernel.org>; Thu, 10 Sep 2020 21:31:25 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id v15so5712514pgh.6
+        for <linux-next@vger.kernel.org>; Thu, 10 Sep 2020 21:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=q3+EF7ZKWV7yQl5Br36dXN3pMDO+I6KUO56KWgFG10g=;
+        b=n9txHpRdamNGvC+P4aDCFswkQZjVDF/u6uWiaMQrh/n19nDYshX1CsrVJ391vwu2gs
+         RenrXjNB/8PmvqDbchQJP9gA/b7hqn8YdY7kuxKs6CyQHbvQOFFwongeBl89PIm82uPL
+         A18TeDEHc+/12cScaInFJcHZws7jYUgI1CqY/MhWJtYwOr4QxphEiyabCdiXcoxFP4lU
+         nfVpFfCpDyi6RvtXn2//JJfu0IiojFlB2/qzgjSg4qNsOCPS22DzoyzAIdSRyjWszKbi
+         /NDsaG6CtLS/F2BEUm8ZnZJeeqfXaUldTGLzxmaocww8SOzeZsr5kUZoNk6ZEp8vvyvx
+         wx8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=q3+EF7ZKWV7yQl5Br36dXN3pMDO+I6KUO56KWgFG10g=;
+        b=dggQnVDHLk0LbjbgeiVziFJDBG4kQ5lyd2MGjVfFoYo9MZjZ300j2UZuDygOSQlNze
+         bMrzjicny9ISRBI3plSRvtbP7UInlDqTwHRcr4EC+I9Wjy3fmfz81aJREP2ifqou0etR
+         vI+18mCKcuZzGeDFqU3hBQAtQaBRvvV7OQUjlessrvs36bthkwbkrX83OfRuDFgN5nMJ
+         lFR4ftj+lrhQHRYIFLxi8BsE6g7MKZ0PL5hM2zMXBdG+VakzTEo2YKOZk8b3/Gtm74/G
+         zOxq8a/QpGbW3TVne+s2lJ5i/LpTSIW+CO5DuM+n+KO9NROaJP/S4FOIRo7o3uq52f+P
+         GyvQ==
+X-Gm-Message-State: AOAM533mP78LiPUOB4L3ykGU8w3MLmJ3ORTwFwUmF6tU/e+w+Fd49d6G
+        OzUR3juEBiJghbdUGSeNl1n6HDhjjxy4Ag==
+X-Google-Smtp-Source: ABdhPJwO7pcDPGzMFQNCavNtwCgA+oT4HtNHlvB5Yd+Dw95pHlk2I5KYdNV3L73vth21lK9bLlpgPQ==
+X-Received: by 2002:a63:7d5a:: with SMTP id m26mr327988pgn.373.1599798684264;
+        Thu, 10 Sep 2020 21:31:24 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x20sm671162pfr.190.2020.09.10.21.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 21:31:23 -0700 (PDT)
+Message-ID: <5f5afd9b.1c69fb81.21619.28af@mx.google.com>
+Date:   Thu, 10 Sep 2020 21:31:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O1IAK=LqVcAtnf78bAe8pva";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.9-rc4-402-gc7fa2d821136
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 288 runs,
+ 5 regressions (v5.9-rc4-402-gc7fa2d821136)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/O1IAK=LqVcAtnf78bAe8pva
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 288 runs, 5 regressions (v5.9-rc4-402-gc7fa2d8=
+21136)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the net-next tree got a conflict in:
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
 
-  drivers/net/dsa/microchip/ksz9477.c
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...OMIZE_=
+BASE=3Dy | 3/4    =
 
-between commit:
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
 
-  edecfa98f602 ("net: dsa: microchip: look for phy-mode in port nodes")
+panda           | arm   | lab-baylibre  | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
 
-from the net tree and commit:
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
 
-  805a7e6f5388 ("net: dsa: microchip: Improve phy mode message")
 
-from the net-next tree.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-rc4-402-gc7fa2d821136/plan/baseline/
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-rc4-402-gc7fa2d821136
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      c7fa2d821136a8951cfe7ddd0f6521e241dce597 =
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc drivers/net/dsa/microchip/ksz9477.c
-index 2f5506ac7d19,b62dd64470a8..000000000000
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@@ -1229,12 -1229,15 +1229,15 @@@ static void ksz9477_port_setup(struct k
-  			ksz9477_set_gbit(dev, true, &data8);
-  			data8 &=3D ~PORT_RGMII_ID_IG_ENABLE;
-  			data8 &=3D ~PORT_RGMII_ID_EG_ENABLE;
- -			if (dev->interface =3D=3D PHY_INTERFACE_MODE_RGMII_ID ||
- -			    dev->interface =3D=3D PHY_INTERFACE_MODE_RGMII_RXID)
- +			if (p->interface =3D=3D PHY_INTERFACE_MODE_RGMII_ID ||
- +			    p->interface =3D=3D PHY_INTERFACE_MODE_RGMII_RXID)
-  				data8 |=3D PORT_RGMII_ID_IG_ENABLE;
- -			if (dev->interface =3D=3D PHY_INTERFACE_MODE_RGMII_ID ||
- -			    dev->interface =3D=3D PHY_INTERFACE_MODE_RGMII_TXID)
- +			if (p->interface =3D=3D PHY_INTERFACE_MODE_RGMII_ID ||
- +			    p->interface =3D=3D PHY_INTERFACE_MODE_RGMII_TXID)
-  				data8 |=3D PORT_RGMII_ID_EG_ENABLE;
-+ 			/* On KSZ9893, disable RGMII in-band status support */
-+ 			if (dev->features & IS_9893)
-+ 				data8 &=3D ~PORT_MII_MAC_MODE;
-  			p->phydev.speed =3D SPEED_1000;
-  			break;
-  		}
-@@@ -1276,22 -1280,21 +1281,30 @@@ static void ksz9477_config_cpu_port(str
-  			 * note the difference to help debugging.
-  			 */
-  			interface =3D ksz9477_get_interface(dev, i);
- -			if (!dev->interface)
- -				dev->interface =3D interface;
- -			if (interface && interface !=3D dev->interface) {
- +			if (!p->interface) {
- +				if (dev->compat_interface) {
- +					dev_warn(dev->dev,
- +						 "Using legacy switch \"phy-mode\" property, because it is missing =
-on port %d node. "
- +						 "Please update your device tree.\n",
- +						 i);
- +					p->interface =3D dev->compat_interface;
- +				} else {
- +					p->interface =3D interface;
- +				}
- +			}
-- 			if (interface && interface !=3D p->interface)
-- 				dev_info(dev->dev,
-- 					 "use %s instead of %s\n",
-- 					  phy_modes(p->interface),
-- 					  phy_modes(interface));
-++			if (interface && interface !=3D p->interface) {
-+ 				prev_msg =3D " instead of ";
-+ 				prev_mode =3D phy_modes(interface);
-+ 			} else {
-+ 				prev_msg =3D "";
-+ 				prev_mode =3D "";
-+ 			}
-+ 			dev_info(dev->dev,
-+ 				 "Port%d: using phy mode %s%s%s\n",
-+ 				 i,
- -				 phy_modes(dev->interface),
-++				 phy_modes(p->interface),
-+ 				 prev_msg,
-+ 				 prev_mode);
- =20
-  			/* enable cpu port */
-  			ksz9477_port_setup(dev, i, true);
 
---Sig_/O1IAK=LqVcAtnf78bAe8pva
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Test Regressions
+---------------- =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9a0CsACgkQAVBC80lX
-0GwgVwgAjhDoosLD6E5rpvDHIOaa9kvp7nqC93q03BzCmkoeoKeEz0xqT+3kkV7z
-+N9UzEsvUkDwo8Kfd6JbbTsVH+yp6fEDX/R/GTnqRHMoLIgvL2bnZbKAu/ixmNn5
-rbLv1JnlaSo1OcNmk//FWm/Nx+Yj5zjyWZWdbvbymiuNeCH00huDJF2jQkPmaqyf
-fKqTZFinAn0JlXyY6dddrEg4h2pcrJiHkXqnqah+ORhcwkVIQdx2eJmZCGDZPJtR
-0MtblS+GEUd9vLMfGmch/r048VkohdKC+0Si3x2dNs46bke63IKzk3/iSga4PzAs
-soAaSHL1GP+AAD+mtaFZ5ATPjvDnRA==
-=cPgw
------END PGP SIGNATURE-----
 
---Sig_/O1IAK=LqVcAtnf78bAe8pva--
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5abdc1daaa425c74d3538c
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f5abdc1daaa425c=
+74d3538e
+      failing since 7 days (last pass: v5.9-rc3-380-g4d386b9bd46d, first fa=
+il: v5.9-rc3-474-gc41730a9bddc)
+      5 lines  =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...OMIZE_=
+BASE=3Dy | 3/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5abe8c6787704c32d3537f
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
+e/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
+e/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f5abe8c6787704c=
+32d35381
+      new failure (last pass: v5.9-rc4-363-g1dfc67596dbb)
+      1 lines
+
+    2020-09-11 00:00:10.852000  Connected to bcm2837-rpi-3-b console [chann=
+el connected] (~$quit to exit)
+    2020-09-11 00:00:10.852000  (user:khilman) is already connected
+    2020-09-11 00:00:26.404000  =00
+    2020-09-11 00:00:26.404000  =
+
+    2020-09-11 00:00:26.420000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
+0)
+    2020-09-11 00:00:26.420000  =
+
+    2020-09-11 00:00:26.420000  DRAM:  948 MiB
+    2020-09-11 00:00:26.436000  RPI 3 Model B (0xa02082)
+    2020-09-11 00:00:26.525000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
+    2020-09-11 00:00:26.557000  Loading Environment from FAT... *** Warning=
+ - bad CRC, using default environment
+    ... (378 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5ac22879b458e4c3d3537b
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f5ac22879b458e=
+4c3d3537f
+      failing since 36 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)
+      60 lines
+
+    2020-09-11 00:17:38.276000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-09-11 00:17:38.282000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-09-11 00:17:38.287000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-09-11 00:17:38.293000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-09-11 00:17:38.299000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-09-11 00:17:38.305000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-09-11 00:17:38.311000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-09-11 00:17:38.316000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-09-11 00:17:38.322000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-09-11 00:17:38.328000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-baylibre  | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5ac9cd4c86b2c73bd35370
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-panda.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-panda.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f5ac9cd4c86b2c73bd35=
+371
+      failing since 36 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5ac65f179bbf60d9d35382
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc4-40=
+2-gc7fa2d821136/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f5ac65f179bbf60d9d35=
+383
+      failing since 36 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =20

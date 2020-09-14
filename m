@@ -2,78 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D94A02689AF
-	for <lists+linux-next@lfdr.de>; Mon, 14 Sep 2020 12:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F038268EE4
+	for <lists+linux-next@lfdr.de>; Mon, 14 Sep 2020 17:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgINK7a convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Mon, 14 Sep 2020 06:59:30 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:50345 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725967AbgINK71 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Sep 2020 06:59:27 -0400
-X-Originating-IP: 91.224.148.103
-Received: from xps13 (unknown [91.224.148.103])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 5C3542000D;
-        Mon, 14 Sep 2020 10:58:59 +0000 (UTC)
-Date:   Mon, 14 Sep 2020 12:58:58 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alex Dewar <alex.dewar90@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the nand tree
-Message-ID: <20200914125858.2614d92d@xps13>
-In-Reply-To: <20200914095041.phuv6q7rl4nsdxnw@medion>
-References: <20200914114552.5030ef1e@canb.auug.org.au>
-        <20200914095041.phuv6q7rl4nsdxnw@medion>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726098AbgINPEC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Sep 2020 11:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726035AbgINPDs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Sep 2020 11:03:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39AFC061788;
+        Mon, 14 Sep 2020 08:03:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=wulbEpVG9y6PsrWLiE952ZIiq7qXbTBlk+RovXIeNiU=; b=pGpOyTWSJIO3+I3N4/zuuVQjjO
+        zdlBe+d6oX+42X1Y/OzXLsKo7vSefQiLSydMjQ2rx1r8sx9Uymu6QLbEYu70gG/tOf1t6ixxAHCAk
+        rm/5Zr/nD6fncGYH8z/Y1hJwvFJgDeQU+ugoR9y+yrE7YTJjYzVHhrcvlypoUef+hX61a6ySsIFAH
+        psvD1rdDCbSujPYYoMlOkvD8mytXHytMOpU05FeAHFoAQ5AUOgocKePM8Bd84RLg/pTb89mI4Kpgz
+        8E7IhWeVyEeq3NgJPMYJuFOnJfsmAhFnLtEtGF037qK/gD3kMq3QsLuZ+v3PATro1ROQcZxwKn6Sh
+        8zoytUyQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHq15-0002XS-GE; Mon, 14 Sep 2020 15:03:41 +0000
+Subject: Re: mmotm 2020-09-13-21-39 uploaded (arch/x86/kernel/kvm.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        KVM <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+References: <20200914044009.bRyqjBRrs%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <25f9de21-a825-2e6d-38ba-b86e80271390@infradead.org>
+Date:   Mon, 14 Sep 2020 08:03:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200914044009.bRyqjBRrs%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
-
-Alex Dewar <alex.dewar90@gmail.com> wrote on Mon, 14 Sep 2020 10:50:41
-+0100:
-
-> On Mon, Sep 14, 2020 at 11:45:52AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the nand tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > drivers/mtd/nand/onenand/onenand_omap2.c:27:10: fatal error: asm/mach/flash.h: No such file or directory
-> >    27 | #include <asm/mach/flash.h>
-> >       |          ^~~~~~~~~~~~~~~~~~
-> > 
-> > Caused by commit
-> > 
-> >   26e1a8efc63d ("mtd: onenand: omap2: Allow for compile-testing on !ARM")
-> > 
-> > I have reverted that commit for today.
+On 9/13/20 9:40 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-09-13-21-39 has been uploaded to
 > 
-> Gah, sorry :(. I definitely *tried* to build test it, but I must have
-> messed up and built the wrong tree or something.
+>    http://www.ozlabs.org/~akpm/mmotm/
 > 
-> Apologies,
-> Alex
+> mmotm-readme.txt says
 > 
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
+> README for mm-of-the-moment:
 > 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+> 
+> This tree is partially included in linux-next.  To see which patches are
+> included in linux-next, consult the `series' file.  Only the patches
+> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> linux-next.
 > 
 
-I'll drop this patch for now, we'll try to have it for the next release
-if Alex fixes it.
 
-Thanks,
-Miquèl
+(found in mmotm but not in one of its patches; i.e., in linux-next or mainline)
+
+on i386:
+
+../arch/x86/kernel/kvm.c: In function ‘kvm_alloc_cpumask’:
+../arch/x86/kernel/kvm.c:800:35: error: ‘kvm_send_ipi_mask_allbutself’ undeclared (first use in this function); did you mean ‘apic_send_IPI_allbutself’?
+  apic->send_IPI_mask_allbutself = kvm_send_ipi_mask_allbutself;
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                   apic_send_IPI_allbutself
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

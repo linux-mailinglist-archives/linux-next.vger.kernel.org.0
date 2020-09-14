@@ -2,94 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F038268EE4
-	for <lists+linux-next@lfdr.de>; Mon, 14 Sep 2020 17:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4587D269304
+	for <lists+linux-next@lfdr.de>; Mon, 14 Sep 2020 19:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbgINPEC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Sep 2020 11:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S1726428AbgINM3c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Sep 2020 08:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbgINPDs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Sep 2020 11:03:48 -0400
+        with ESMTP id S1726297AbgINM1y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Sep 2020 08:27:54 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39AFC061788;
-        Mon, 14 Sep 2020 08:03:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107B6C0612F2;
+        Mon, 14 Sep 2020 04:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=wulbEpVG9y6PsrWLiE952ZIiq7qXbTBlk+RovXIeNiU=; b=pGpOyTWSJIO3+I3N4/zuuVQjjO
-        zdlBe+d6oX+42X1Y/OzXLsKo7vSefQiLSydMjQ2rx1r8sx9Uymu6QLbEYu70gG/tOf1t6ixxAHCAk
-        rm/5Zr/nD6fncGYH8z/Y1hJwvFJgDeQU+ugoR9y+yrE7YTJjYzVHhrcvlypoUef+hX61a6ySsIFAH
-        psvD1rdDCbSujPYYoMlOkvD8mytXHytMOpU05FeAHFoAQ5AUOgocKePM8Bd84RLg/pTb89mI4Kpgz
-        8E7IhWeVyEeq3NgJPMYJuFOnJfsmAhFnLtEtGF037qK/gD3kMq3QsLuZ+v3PATro1ROQcZxwKn6Sh
-        8zoytUyQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kHq15-0002XS-GE; Mon, 14 Sep 2020 15:03:41 +0000
-Subject: Re: mmotm 2020-09-13-21-39 uploaded (arch/x86/kernel/kvm.c)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        KVM <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
-References: <20200914044009.bRyqjBRrs%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <25f9de21-a825-2e6d-38ba-b86e80271390@infradead.org>
-Date:   Mon, 14 Sep 2020 08:03:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sovkMljeHeE8QiqrRubge8NYzTKoGU5H5cGDXKlh4Do=; b=vUB6uayCQphbQuNntBPspugAbh
+        jOnkcmA2i0c1bK3N378QEG6urxYN2R7PkOVb1UBFygrhBxVKmvJMjSakYenuJpOACgtx48gHNx+Og
+        OjV/0iCsw0wHglN8SOZU9DcEQyzQl7SWZIGlWIHGw1wA20VEHpisZSEb6BLPX8fG7L7A+/Cetvyyo
+        hvCQE07SWyK0xzyh330bETJW80DBj35QKQDo5dF7JehFVwCkWjyJWZWIyUfDCpjhryV40uYeeZUag
+        tRBzRfTAjPKaeFXjbX7UurmQrcJmocUWXkD10jTTSuoo42EsMmxfEZeOH34uT3zkVyXpjvEMBB6N5
+        QVntRK2g==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kHn5T-0007T5-Al; Mon, 14 Sep 2020 11:55:59 +0000
+Date:   Mon, 14 Sep 2020 12:55:59 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        gandalf@winds.org, Qian Cai <cai@lca.pw>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Michal Hocko <mhocko@suse.com>, Yang Shi <shy828301@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>
+Subject: Re: BUG: kernel NULL pointer dereference, address: RIP:
+ 0010:shmem_getpage_gfp.isra.0+0x470/0x750
+Message-ID: <20200914115559.GN6583@casper.infradead.org>
+References: <CA+G9fYvmut-pJT-HsFRCxiEzOnkOjC8UcksX4v8jUvyLYeXTkQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200914044009.bRyqjBRrs%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvmut-pJT-HsFRCxiEzOnkOjC8UcksX4v8jUvyLYeXTkQ@mail.gmail.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/13/20 9:40 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2020-09-13-21-39 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
-> 
+On Mon, Sep 14, 2020 at 03:49:43PM +0530, Naresh Kamboju wrote:
+> While running LTP fs on qemu x86 and qemu_i386 these kernel BUGs noticed.
 
+I actually sent the fix for this a couple of days ago [1], but I think Andrew
+overlooked it while constructing the -mm tree.  Here's a fix you can
+apply to the -mm tree:
 
-(found in mmotm but not in one of its patches; i.e., in linux-next or mainline)
+[1] https://lore.kernel.org/linux-mm/20200912032042.GA6583@casper.infradead.org/
 
-on i386:
-
-../arch/x86/kernel/kvm.c: In function ‘kvm_alloc_cpumask’:
-../arch/x86/kernel/kvm.c:800:35: error: ‘kvm_send_ipi_mask_allbutself’ undeclared (first use in this function); did you mean ‘apic_send_IPI_allbutself’?
-  apic->send_IPI_mask_allbutself = kvm_send_ipi_mask_allbutself;
-                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                   apic_send_IPI_allbutself
-
-
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+diff --git a/mm/shmem.c b/mm/shmem.c
+index d2a46ef7df43..58bc9e326d0d 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1793,7 +1793,7 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
+ 	struct mm_struct *charge_mm;
+ 	struct page *page;
+ 	enum sgp_type sgp_huge = sgp;
+-	pgoff_t hindex;
++	pgoff_t hindex = index;
+ 	int error;
+ 	int once = 0;
+ 	int alloced = 0;
+@@ -1822,6 +1822,8 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
+ 		return error;
+ 	}
+ 
++	if (page)
++		hindex = page->index;
+ 	if (page && sgp == SGP_WRITE)
+ 		mark_page_accessed(page);
+ 
+@@ -1832,6 +1834,7 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
+ 		unlock_page(page);
+ 		put_page(page);
+ 		page = NULL;
++		hindex = index;
+ 	}
+ 	if (page || sgp == SGP_READ)
+ 		goto out;
+@@ -1982,7 +1985,7 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
+ 		goto unlock;
+ 	}
+ out:
+-	*pagep = page + index - page->index;
++	*pagep = page + index - hindex;
+ 	return 0;
+ 
+ 	/*

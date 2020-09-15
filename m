@@ -2,96 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444E6269CEB
-	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 06:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34A5269E84
+	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 08:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgIOEQT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 00:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbgIOEQS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 00:16:18 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F54C06174A;
-        Mon, 14 Sep 2020 21:16:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Br8zy4QyYz9sVB;
-        Tue, 15 Sep 2020 14:16:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600143375;
-        bh=1xUEsk5Wj3dbUswPqUAtUgGLbA6i2z5+Jjmrc8Xi6fo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iyD/lMZ9yot+zr9aospjnWEMHvVzlzMN5vPN0c20R0dZxvx2hMo9NttNYSkOpk8F8
-         gpboYJx1qi58JI4D3GTeuOfoibdcA9WPKsKGVWuepRKRLMdHaOsGEyTfTsmXeEB5Gc
-         YkCoY5M69UvsBOxaBp5FHWxiKh9OzHtlRt6axR4Ans2owJ2vtJYepI+FRfAkAH6nVD
-         aFkFIWJXuK7cXlqH8d+1XrKdQu/Afv8M0+S8H2gwYAQWLK+nKEqyfkktBpmAyLch/s
-         kXimZXICpfV6fLM6ckZWb+QTtDl986SslvmuwBq8tM87KvKY2ztjQlcOmRfIXaukMd
-         NyPgYAMOwFSxA==
-Date:   Tue, 15 Sep 2020 14:16:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Gow <davidgow@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20200915141613.09dba80c@canb.auug.org.au>
-In-Reply-To: <CABVgOSko2FDCgEhCBD4Nm5ExEa9vLQrRiHMh+89nPYjqGjegFw@mail.gmail.com>
-References: <20200914170055.45a02b55@canb.auug.org.au>
-        <CABVgOSko2FDCgEhCBD4Nm5ExEa9vLQrRiHMh+89nPYjqGjegFw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z2knM/TUP8H9wxwd02Y46Ya";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S1726066AbgIOGbv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 02:31:51 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:13280 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726056AbgIOGbu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Sep 2020 02:31:50 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08F6704u098249;
+        Tue, 15 Sep 2020 02:31:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=b/EX2RhTV5VeaSE/WblE3R6qq3W28b/TaRIYmsvfycQ=;
+ b=FOW5E8fXjti3IXj6reR13VSJi05PGZ78gUSWRvZFmrIjcNyEANlGJAT2d/nRrbaLYk2Z
+ pHuqLy1ShFbUggQcmokXVG4pDrT+j3s/PUFif9/SsFpDUbGtLNmtNSQyRsHOCyetVT7k
+ fx7dcXIJ2Sw2TJEMKRy5xawVjgsvkhnRAyL7P4kTcGOJ68Y3rDSE4sSrU2alAAsqavp9
+ Bp8sFukvr2YoUNgtQGzT1Aa6/LQXa/a5KWL3MkKe/BLEvj/8GAPFTME4qOeCkeiO3uLp
+ pw9l2OBZenTAz9/k9R+O6Lxx0gU9X8V8AN5at0JL5CRRPJiS5+rTPZSe0jn7/9CcOA5y kg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33jqaw9h30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Sep 2020 02:31:40 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08F6NhMs022605;
+        Tue, 15 Sep 2020 06:31:38 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 33h2r9aq80-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Sep 2020 06:31:38 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08F6U20D10027470
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 06:30:02 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72BC8AE051;
+        Tue, 15 Sep 2020 06:31:36 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE154AE063;
+        Tue, 15 Sep 2020 06:31:35 +0000 (GMT)
+Received: from [9.199.38.191] (unknown [9.199.38.191])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Sep 2020 06:31:35 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.15\))
+Subject: [5.9.0-rc5-20200914] Kernel crash while running LTP(mlock201)
+Message-Id: <3DCED508-4DC0-42AA-9CFF-3AB260ED1E9A@linux.vnet.ibm.com>
+Date:   Tue, 15 Sep 2020 12:01:34 +0530
+Cc:     linuxppc-dev@lists.ozlabs.org, willy@infradead.org
+To:     linux-next@vger.kernel.org
+X-Mailer: Apple Mail (2.3445.104.15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-15_04:2020-09-15,2020-09-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=1 bulkscore=0
+ malwarescore=0 priorityscore=1501 clxscore=1011 mlxlogscore=839
+ spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150052
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/z2knM/TUP8H9wxwd02Y46Ya
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+While running LTP tests (specifically mlock201) against next-20200914 =
+tree
+on a POWER9 LPAR results in following crash.
 
-Hi David,
+BUG: Kernel NULL pointer dereference on read at 0x00000000
+Faulting instruction address: 0xc000000000454248
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
+Modules linked in: af_packet(E) nft_ct(E) nf_conntrack(E) =
+nf_defrag_ipv6(E) nf_defrag_ipv4(E) libcrc32c(E) ip6_tables(E) =
+nft_compat(E) ip_set(E) rfkill(E) nf_tables(E) nfnetlink(E) =
+vmx_crypto(E) uio_pdrv_genirq(E) gf128mul(E) uio(E) rtc_generic(E) =
+crct10dif_vpmsum(E) sch_fq_codel(E) ip_tables(E) x_tables(E) ext4(E) =
+crc16(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) sg(E) ibmvscsi(E) =
+scsi_transport_srp(E) scsi_mod(E) ibmveth(E) crc32c_vpmsum(E) =
+dm_mirror(E) dm_region_hash(E) dm_log(E) dm_mod(E) autofs4(E)
+CPU: 11 PID: 26435 Comm: mlock201 Tainted: G            E     =
+5.9.0-rc5-next-20200914-281.gf529200-default #1
+NIP:  c000000000454248 LR: c000000000445a74 CTR: c000000000413150
+REGS: c0000008e645b770 TRAP: 0300   Tainted: G            E      =
+(5.9.0-rc5-next-20200914-281.gf529200-default)
+MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28002482  XER: =
+20040000
+CFAR: c00000000000fbb0 DAR: 0000000000000000 DSISR: 40000000 IRQMASK: 0=20=
 
-On Tue, 15 Sep 2020 12:03:08 +0800 David Gow <davidgow@google.com> wrote:
->
-> > drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c: In function 'common_nfc_set=
-_geometry':
-> > drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c:514:3: warning: initializati=
-on discards 'const' qualifier from pointer target type [-Wdiscarded-qualifi=
-ers]
-> >   514 |   nanddev_get_ecc_requirements(&chip->base);
-> >       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > =20
->=20
-> I was unable to reproduce this warning: it looks unrelated, so I'm
-> assuming it was attributed.
+GPR00: c000000000445a74 c0000008e645ba00 c0000000017c4500 =
+0000000000000000=20
+GPR04: 0000000000000001 c0000008ea109e98 c0000008f0c40000 =
+0000000000000000=20
+GPR08: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000003=20
+GPR12: c000000000413150 c00000001ec70200 0000000000000000 =
+c000000001502038=20
+GPR16: 00007fff9c61ffff 00007fff9c61ffff 00007fff9c61ffff =
+c000000000cb02f8=20
+GPR20: 00007fff9c5c0000 00007fff9c620000 c0000008e645bcd8 =
+c0000008f0c40000=20
+GPR24: c00c0000023c0d00 fffffffffffffe7f 0000000000000000 =
+c0000008f0c40000=20
+GPR28: c0000008ea109e98 0000000000000001 c0000008ea9288a8 =
+0000000000000000=20
+NIP [c000000000454248] PageHuge+0x8/0x60
+LR [c000000000445a74] find_get_incore_page+0x114/0x160
+Call Trace:
+[c0000008e645ba00] [c000000000445994] find_get_incore_page+0x34/0x160 =
+(unreliable)
+[c0000008e645ba40] [c000000000412e54] mincore_page+0x24/0x160
+[c0000008e645ba70] [c000000000413020] =
+__mincore_unmapped_range+0x90/0x160
+[c0000008e645bac0] [c000000000413680] mincore_pte_range+0x530/0x5d0
+[c0000008e645bb40] [c000000000422a38] walk_pgd_range+0x4e8/0xae0
+[c0000008e645bc30] [c0000000004230c4] __walk_page_range+0x94/0x250
+[c0000008e645bcb0] [c0000000004233d8] walk_page_range+0x158/0x1e0
+[c0000008e645bd40] [c00000000041386c] sys_mincore+0x14c/0x370
+[c0000008e645bdc0] [c000000000033eb8] system_call_exception+0xf8/0x200
+[c0000008e645be20] [c00000000000d140] system_call_common+0xf0/0x27c
+Instruction dump:
+e8410018 38210020 e8010010 7c0803a6 4e800020 60000000 3d400001 7d435378=20=
 
-Yeah, sorry, that was included by accident.
+4e800020 60000000 7c0802a6 60000000 <e9230000> 75290001 40820010 =
+e9230008=20
+---[ end trace 357eb14a3b22eab2 ]=E2=80=94
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/z2knM/TUP8H9wxwd02Y46Ya
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+The function find_get_incore_page() was introduced with=20
+3fcbe4eb49a0406e6202e8c8c3560f30965a8e79=20
 
------BEGIN PGP SIGNATURE-----
+mm: factor find_get_incore_page out of mincore_page
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9gQA0ACgkQAVBC80lX
-0GxqDQf/fGxucLLY3tmR4qE2OIiFf7aAcXMvI5w1rjnvS8yH4ptRBt0+Iln2ov7A
-2GFZ7QcsUTmMZ7a86pjnbu/3fyOcQQc8rTXZlPI04eP0+iRXOZLbRq73vsVKENdl
-6aYcCDdDn092Et5C4C0a41nYiEb4lNi1l4DKS+DBnuBHruhsKUuUrH1Lhk3DgDHt
-VKbnPOgcEHtu8W6uSU3rllre9qQ+OfQ6KRsSDFY5VLH9+yVvElk1e4ZRs0ZdRfVV
-80ZfZDRnou09BMMY9C8Fk1+B/cPuAObvX3rGUoFwiUv0MYribQtrVLaI6gEhjTdF
-UE4QNst1BeyAc7sd1AhkrZrbql9Isg==
-=OB08
------END PGP SIGNATURE-----
 
---Sig_/z2knM/TUP8H9wxwd02Y46Ya--
+Thanks
+-Sachin
+

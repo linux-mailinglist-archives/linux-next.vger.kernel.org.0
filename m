@@ -2,211 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8E626A603
-	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 15:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDAE26A63A
+	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 15:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgIONNL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        id S1726607AbgIONWq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 09:22:46 -0400
+Received: from mga04.intel.com ([192.55.52.120]:51792 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726150AbgIONNL (ORCPT <rfc822;linux-next@vger.kernel.org>);
         Tue, 15 Sep 2020 09:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726476AbgIONLF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 09:11:05 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7181C06178A;
-        Tue, 15 Sep 2020 06:11:04 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id ef16so1650609qvb.8;
-        Tue, 15 Sep 2020 06:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Op4Uh59qL63YT0usxFuHkJ5g//0WvryB7nEITuGpAyc=;
-        b=Oqj/bAONA2sJIdV5yutBnpoAGEHbw9fTdjKwNzNrTZz2NxlgFczbBVmY8gsXFf/xAk
-         cTykHtIbYNMs4svrJOp3ggc3OMr9jmSpDfMdyQK0DWd8xf1HnlAfnETAflX/jvpnEaTd
-         Gg9Mv+xbQgn2TaS91TAqnm4D6N969BlA10Hbf6IWCkTGpDeVX5OzLVpjUGp2wDhx3Wbt
-         kZzW4CJABhvSEK+fdgiGs/9QWGc0BA403RLbf7FVs/fF58dLTLCL3cTcfjbFZxW605gn
-         vNrImzCGQaerPs/HUmNASonfnOaQIoPm9n1Zh4pVbeeTTeFYElMJ6HCQc9OrB+MoBXNk
-         nLhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Op4Uh59qL63YT0usxFuHkJ5g//0WvryB7nEITuGpAyc=;
-        b=tFre3+Nkj9dYA61VniZDPenc/xHh7whGbG/5HzpGRhe+vIYEVcRZogl85LhofWgpNs
-         mmz0sd8MFf0Cc1w9MF4QhOBPiq0BbKmfrOIHxON3Gz5GhWU3Fr3aVDvPSG0jW9IoxAJm
-         4mo31Lr/2sa+KUKNB41V2Fu0dt8U4yWniOxljMv6Tzpj6x+Kinw72DOiEJQfdYRvcpdn
-         MSUEZlE5Cg38OEiRnnCgC3lcUM5Gdd/dHOFDpr53XpLGxaDavVhQELJIO6kKEjhDceMp
-         xNuc/Zy6hIfMa76pBtAYPXjzyuPfrumaUsQ63wZ1SIN35bleENhua6fvm2PlvPGsZUat
-         evNA==
-X-Gm-Message-State: AOAM532Lc7plTz8b0yl1U9KFqKPiUVeO6msEhU/+0SaIUbM/XoNHeBej
-        yOkSgr7FiykSmzOYFleccBA=
-X-Google-Smtp-Source: ABdhPJy05oYi7s4PC56Edy9zJPTT0/PPHMpyT8eWNskZGJZtl2QRbpSCK/nd/kMp4G/ZZcJxS/ftvw==
-X-Received: by 2002:a0c:b3d7:: with SMTP id b23mr1621388qvf.33.1600175464043;
-        Tue, 15 Sep 2020 06:11:04 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id 192sm16643833qkm.110.2020.09.15.06.11.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Sep 2020 06:11:03 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 946BB27C005A;
-        Tue, 15 Sep 2020 09:11:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 15 Sep 2020 09:11:02 -0400
-X-ME-Sender: <xms:Zb1gX8qRDhtX5w6CZFFdZGmlnCTO-MftyszEDnH7GAhlo2nmHK6nNQ>
-    <xme:Zb1gXyqrXXb6aVbxaa9S3rLNb81AADl9V3pnuNI7UxW19fDO70RP0Y3oazy3Zmabp
-    oUeVYQOMB1pV-DtNw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddtgdeftdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeevieejtdfhieejfeduheehvdevgedugeethefggfdtvdeutdevgeetvddvfeeg
-    tdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeehvddrudehhedrudduud
-    drjedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    sghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtie
-    egqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhi
-    gihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:Zb1gXxP1wbur_9-ZJOtcxBZYh6hMkSfVy7A3KORuuq-XSsoOOWpIwQ>
-    <xmx:Zb1gXz7XK-AqXKCYD0YFvwGudQinH4lYr57_1QBnv14eh01PdQGnFg>
-    <xmx:Zb1gX74deEO9sXVagDCHd4qa5IReZtpVNfFXTWqFHb4nD84ntK_7yA>
-    <xmx:Zr1gX_gK1QexdA2I8iiWXgA9X-F4ABBK1FNdmOahRaI7vo2BgKhW6PLpwF0>
-Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0CDD4328005D;
-        Tue, 15 Sep 2020 09:11:00 -0400 (EDT)
-Date:   Tue, 15 Sep 2020 21:10:59 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Qian Cai <cai@redhat.com>
-Cc:     "Ahmed S. Darwish" <a.darwish@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v2 0/5] seqlock: Introduce PREEMPT_RT support
-Message-ID: <20200915131059.GB127490@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-References: <20200904153231.11994-1-a.darwish@linutronix.de>
- <224bd11b533dd2acff3f6cce51ab4ca676eb4f9f.camel@redhat.com>
- <20200915124817.GA127490@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+IronPort-SDR: gsrNfGacKcRAfTPBxV+oEhlJiE6DY5d6xT/6vDRenBzno5Ee4d1Qy/iO9+YQS9q8no2JDyOG2n
+ XvX3EEAB2Sbg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="156644630"
+X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
+   d="scan'208";a="156644630"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 06:12:35 -0700
+IronPort-SDR: m9GG9i7zAQK6ipetH/eFrX5Q9lN9ooOlMUan41kWfAu5FFM1EpGh+zCD41bpq0nGnPhq3wZdHx
+ mbTfE6uTEC0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,430,1592895600"; 
+   d="scan'208";a="335645295"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2020 06:12:32 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kIAl2-00GqQQ-Ty; Tue, 15 Sep 2020 16:12:28 +0300
+Date:   Tue, 15 Sep 2020 16:12:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kent Gibson <warthog618@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH 0/3] gpiolib: generalize GPIO line names property
+Message-ID: <20200915131228.GX3956970@smile.fi.intel.com>
+References: <20200908125813.8809-1-brgl@bgdev.pl>
+ <CADYN=9+3kHG0CexzZiMQoXdF2piN2ZhOTObhY=7VCKrnFVN0Kw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915124817.GA127490@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+In-Reply-To: <CADYN=9+3kHG0CexzZiMQoXdF2piN2ZhOTObhY=7VCKrnFVN0Kw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 08:48:17PM +0800, Boqun Feng wrote:
-> On Mon, Sep 14, 2020 at 08:20:53PM -0400, Qian Cai wrote:
-> > On Fri, 2020-09-04 at 17:32 +0200, Ahmed S. Darwish wrote:
-> > > Hi,
-> > > 
-> > > Changelog-v2
-> > > ============
-> > > 
-> > >   - Standardize on seqcount_LOCKNAME_t as the canonical reference for
-> > >     sequence counters with associated locks, instead of v1
-> > >     seqcount_LOCKTYPE_t.
-> > > 
-> > >   - Use unique prefix "seqprop_*" for all seqcount_t/seqcount_LOCKNAME_t
-> > >     property accessors.
-> > > 
-> > >   - Touch-up the lock-unlock rationale for more clarity. Enforce writer
-> > >     non-preemitiblity using "__seq_enforce_writer_non_preemptibility()".
-> > > 
-> > > Cover letter (v1)
-> > > =================
-> > > 
-> > > https://lkml.kernel.org/r/20200828010710.5407-1-a.darwish@linutronix.de
-> > > 
-> > > Preemption must be disabled before entering a sequence counter write
-> > > side critical section.  Otherwise the read side section can preempt the
-> > > write side section and spin for the entire scheduler tick.  If that
-> > > reader belongs to a real-time scheduling class, it can spin forever and
-> > > the kernel will livelock.
-> > > 
-> > > Disabling preemption cannot be done for PREEMPT_RT though: it can lead
-> > > to higher latencies, and the write side sections will not be able to
-> > > acquire locks which become sleeping locks (e.g. spinlock_t).
-> > > 
-> > > To remain preemptible, while avoiding a possible livelock caused by the
-> > > reader preempting the writer, use a different technique: let the reader
-> > > detect if a seqcount_LOCKNAME_t writer is in progress. If that's the
-> > > case, acquire then release the associated LOCKNAME writer serialization
-> > > lock. This will allow any possibly-preempted writer to make progress
-> > > until the end of its writer serialization lock critical section.
-> > > 
-> > > Implement this lock-unlock technique for all seqcount_LOCKNAME_t with
-> > > an associated (PREEMPT_RT) sleeping lock, and for seqlock_t.
-> > 
-> > Reverting this patchset [1] from today's linux-next fixed a splat below. The
-> > splat looks like a false positive anyway because the existing locking dependency
-> > chains from the task #1 here:
-> > 
-> > &s->seqcount#2 ---> pidmap_lock
-> > 
-> > [  528.078061][ T7867] -> #1 (pidmap_lock){....}-{2:2}:
-> > [  528.078078][ T7867]        lock_acquire+0x10c/0x560
-> > [  528.078089][ T7867]        _raw_spin_lock_irqsave+0x64/0xb0
-> > [  528.078108][ T7867]        free_pid+0x5c/0x160
-> > free_pid at kernel/pid.c:131
-> > [  528.078127][ T7867]        release_task.part.40+0x59c/0x7f0
-> > __unhash_process at kernel/exit.c:76
-> > (inlined by) __exit_signal at kernel/exit.c:147
-> > (inlined by) release_task at kernel/exit.c:198
-> > [  528.078145][ T7867]        do_exit+0x77c/0xda0
-> > exit_notify at kernel/exit.c:679
-> > (inlined by) do_exit at kernel/exit.c:826
-> > [  528.078163][ T7867]        kthread+0x148/0x1d0
-> > [  528.078182][ T7867]        ret_from_kernel_thread+0x5c/0x80
-> > 
-> > It is write_seqlock(&sig->stats_lock) in __exit_signal(), but the &s->seqcount#2 
-> > in read_mems_allowed_begin() is read_seqcount_begin(&current->mems_allowed_seq), 
-> > so there should be no deadlock?
-> > 
-> 
-> I think this happened because seqcount_##lockname##_init() is defined at
-> function rather than macro, so when the seqcount_init() gets expand in
-> that function, the lock_class_key of seqcount will be a static variable
-> of seqcount_##lockname##_init() function, as a result, all
-> seqcount_##lockname##_t in the same compile unit (in this case it's
-> kernel/fork.c) share the same lock class key, and lockdep thought they
-> are the same lock ;-)
-> 
+On Tue, Sep 15, 2020 at 02:01:56PM +0200, Anders Roxell wrote:
+> On Tue, 8 Sep 2020 at 18:40, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > I initially sent this as part of the gpio-mockup overhaul but since
+> > these patches are indepentent and the work on gpio-mockup may become
+> > more complicated - I'm sending these separately.
+> >
+> > The only change is adding additional property helpers to count strings
+> > in array.
+> >
+> > Bartosz Golaszewski (3):
+> >   device: property: add helpers to count items in string arrays
+> >   gpiolib: generalize devprop_gpiochip_set_names() for device properties
+> >   gpiolib: unexport devprop_gpiochip_set_names()
 
-Don't know how to fix this properly, but below is an ugly attemption,
-only build test, just food for thoughts.
+Ha-ha, OF unittest is of_node centric. definitely there is no backed device.
 
-Regards,
-Boqun
+Bart, it seems we are stuck with fwnode interface.
 
---------------->8
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index f73c7eb68f27..938a5053def3 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -84,14 +84,18 @@ static inline void __seqcount_init(seqcount_t *s, const char *name,
- # define SEQCOUNT_DEP_MAP_INIT(lockname)				\
- 		.dep_map = { .name = #lockname }
- 
-+# define MSIOCU 8 /* MAX SEQCOUNT IN ON COMPILE UNIT */
- /**
-  * seqcount_init() - runtime initializer for seqcount_t
-  * @s: Pointer to the seqcount_t instance
-  */
- # define seqcount_init(s)						\
- 	do {								\
--		static struct lock_class_key __key;			\
--		__seqcount_init((s), #s, &__key);			\
-+		static struct lock_class_key __key[MSIOCU];		\
-+		static int idx = 0;					\
-+									\
-+		BUG_ON(idx >= MSIOCU);					\
-+		__seqcount_init((s), #s, &__key[idx++]);		\
- 	} while (0)
- 
- static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
+> [ 6186.379069][    T1]  device_property_read_string_array+0x40/0xa0
+> [ 6186.381741][    T1]  devprop_gpiochip_set_names.isra.0+0x4c/0x200
+> [ 6186.384394][    T1]  gpiochip_add_data_with_key+0x75c/0xf80
+> [ 6186.386876][    T1]  unittest_gpio_probe+0xf4/0x1e0
+
+> [ 6186.433241][    T1] Unable to handle kernel read from unreadable
+> memory at virtual address 0000000000000570
+> [ 6186.437207][    T1] Mem abort info:
+> [ 6186.438639][    T1]   ESR = 0x96000004
+> [ 6186.440536][    T1]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 6186.442791][    T1]   SET = 0, FnV = 0
+> [ 6186.444660][    T1]   EA = 0, S1PTW = 0
+> [ 6186.446233][    T1] Data abort info:
+> [ 6186.447938][    T1]   ISV = 0, ISS = 0x00000004
+> [ 6186.449749][    T1]   CM = 0, WnR = 0
+> [ 6186.451222][    T1] [0000000000000570] user address but active_mm is swapper
+> [ 6186.454000][    T1] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [ 6186.456422][    T1] Modules linked in:
+> [ 6186.458232][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B
+> W         5.9.0-rc5-next-20200915-00006-g104c8fe4916b #1
+> [ 6186.462833][    T1] Hardware name: linux,dummy-virt (DT)
+> [ 6186.465170][    T1] pstate: 60400005 (nZCv daif +PAN -UAO BTYPE=--)
+> [ 6186.467910][    T1] pc : device_property_read_string_array+0x40/0xa0
+> [ 6186.470653][    T1] lr : device_property_read_string_array+0x40/0xa0
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

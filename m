@@ -2,720 +2,1358 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1BB26A02A
-	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 09:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B803426A058
+	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 10:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbgIOHuO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 03:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
+        id S1726214AbgIOIBj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 04:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgIOHti (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 03:49:38 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4A1C06174A;
-        Tue, 15 Sep 2020 00:49:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BrFk54MZfz9sVD;
-        Tue, 15 Sep 2020 17:49:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600156173;
-        bh=m5tTcKYMBDcS17N46uWiMwgVreJ7dX4WXD9FuhUpesg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lMqlYkwi3edYUN+rrh3JABPaV9u6QTt4inJ2y61huIZrOpkPl0oeRpF0DX6LpS9Fy
-         +M8bVlSnZDFhMT6uf7hGUU8I9RYgPwlnEqibPtW8l+WA6Esk8AhFEJIvTxcAyU0sKr
-         fT9wW7HEndmh/x3mGhSnSs34zQkcBOEYMEiS5zjdeCxpk1LrZIOZO8+NYOnv06nAKm
-         /OT34HMlvH+aBwP9Mq3OcVrQRB0Ygn10SRKtfV616a/AfmAHpXXcOSWqDAxJV6Dddv
-         clh0q8D604OqZZ4vOStdgT6TF54szHsS2GNXGUhCiHXN+JRaU9sjfJDwegWx1pfs99
-         7HDqqJRFz3wTQ==
-Date:   Tue, 15 Sep 2020 17:49:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 15
-Message-ID: <20200915174932.3aa7d103@canb.auug.org.au>
+        with ESMTP id S1726236AbgIOIA1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 04:00:27 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF1AC06174A
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 01:00:26 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d19so920876pld.0
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 01:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=SJpr36teYxYZwDIVt9ugPAJd8S/2CUzQ9A72Tl6EnJc=;
+        b=fBOCL1PWOxlEEzoeW8Ot9ikvtn/ELU4bnWJrj6F+QKzCwrVX1SkrKapIJ0p36S8FZk
+         Fyiei4P+2Bcf7APT7MW8JGr5Kqp1xFX3Ta2DOUzZzH08sicEhH3QVzZiUsIGAT+p3v4d
+         2tMSHTdnC3aiUBdiZWFaCTpmOJEuv7p8mNUZUDynt0NgHCt0NhhXBNlwz2N9A+aA6Fhg
+         WXw9tmrUD5HNvKx/Xrcxp4/T1kIGSXJvO7Be2grwuz0XcaposoxYGSIj7wfGLzv02JSs
+         M+eL6gIah0Rl+ql2gT/NPD+a6mfpNpjem8146rKIwC1XszFOjmMkFdbTtFy9vCJvAFJs
+         FWhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=SJpr36teYxYZwDIVt9ugPAJd8S/2CUzQ9A72Tl6EnJc=;
+        b=V9BG5KAZz+IaT0Vp0oXRrjS4chgyq1AuSTPn5C5wQJyl+Ef4LOF638Sb+nDhyNWdNs
+         om4fWh4HjZDchfcyz0fhjZ42RGU/ZxUzHMtVZAL5ekCWwhAVWHMeoJ6mnFATeqObwk17
+         dSOGu037N/oKlDtJqgjBJqsj8ILYJqOVRK+HWo4JbVL2I3dZ93oUrR3FRV8JZMPTCKos
+         nZngHJv9aIf7qSbxyJq7i8jpga5mvYjqmH09fiM486Jf/WG5kC7eKi3D82y1GESUy/Aa
+         UEP7ounRRCPDJptmpjUNOjULnTEnZJSCg8co1Zt9ilC+tcl5rFpuP7HULctAgiI7St52
+         8Fog==
+X-Gm-Message-State: AOAM533VSVeYYBqbd0zXj6rMBqUYzMf2IWsvvq0U56U1r56YgrQTiZKk
+        5PXU5HR/cLFfrasIKYqYVdxNkSR/0mgFkw==
+X-Google-Smtp-Source: ABdhPJxijmzX+qOFtMGbHHkjVD8/+tYui+v0/dnfT1RMJ8lGxD3rEPGyVsiHbuCY0+wF1Ys3aNN5ow==
+X-Received: by 2002:a17:902:ea8b:b029:d1:7ed9:55c6 with SMTP id x11-20020a170902ea8bb02900d17ed955c6mr17897987plb.19.1600156823739;
+        Tue, 15 Sep 2020 01:00:23 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c1sm12712042pfc.93.2020.09.15.01.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 01:00:22 -0700 (PDT)
+Message-ID: <5f607496.1c69fb81.99126.18c3@mx.google.com>
+Date:   Tue, 15 Sep 2020 01:00:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//YsclZZygAmX2HiI=GdUS4W";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200914
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master baseline: 472 runs, 39 regressions (next-20200914)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//YsclZZygAmX2HiI=GdUS4W
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+next/master baseline: 472 runs, 39 regressions (next-20200914)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Changes since 20200914:
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+at91-sama5d4_xplained     | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
 
-The nand tree lost its build failure.
+at91-sama5d4_xplained     | arm   | lab-baylibre    | gcc-8    | sama5_defc=
+onfig              | 0/1    =
 
-The v4l-dvb tree lost its build failure.
+beagle-xm                 | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/3    =
 
-I added a supplied fix to the akpm-current tree.
+beaglebone-black          | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
 
-Non-merge commits (relative to Linus' tree): 6959
- 8002 files changed, 249237 insertions(+), 142287 deletions(-)
+beaglebone-black          | arm   | lab-cip         | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
 
-----------------------------------------------------------------------------
+beaglebone-black          | arm   | lab-baylibre    | gcc-8    | omap2plus_=
+defconfig          | 2/4    =
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+beaglebone-black          | arm   | lab-cip         | gcc-8    | omap2plus_=
+defconfig          | 3/5    =
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-and sparc64 defconfig and htmldocs. And finally, a simple boot test
-of the powerpc pseries_le_defconfig kernel in qemu (with and without
-kvm enabled).
+dove-cubox                | arm   | lab-pengutronix | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
 
-Below is a summary of the state of the merge.
+dove-cubox                | arm   | lab-pengutronix | gcc-8    | mvebu_v7_d=
+efconfig           | 2/5    =
 
-I am currently merging 328 trees (counting Linus' and 86 trees of bug
-fix patches pending for the current merge release).
+hifive-unleashed-a00      | riscv | lab-baylibre    | gcc-8    | defconfig =
+                   | 0/1    =
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+imx53-qsrb                | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_=
+defconfig          | 3/5    =
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+imx53-qsrb                | arm   | lab-pengutronix | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+odroid-x2                 | arm   | lab-collabora   | gcc-8    | exynos_def=
+config             | 0/1    =
 
---=20
-Cheers,
-Stephen Rothwell
+odroid-x2                 | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (856deb866d16 Linux 5.9-rc5)
-Merging fixes/fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging kbuild-current/fixes (f4d51dffc6c0 Linux 5.9-rc4)
-Merging arc-current/for-curr (f4d51dffc6c0 Linux 5.9-rc4)
-Merging arm-current/fixes (5c6360ee4a0e ARM: 8988/1: mmu: fix crash in EFI =
-calls due to p4d typo in create_mapping_late())
-Merging arm64-fixes/for-next/fixes (ed888cb0d1eb arm64: Allow CPUs unffecte=
-d by ARM erratum 1418040 to come in late)
-Merging arm-soc-fixes/arm/fixes (a4da411e4189 Merge tag 'arm-soc/for-5.9/de=
-vicetree-fixes' of https://github.com/Broadcom/stblinux into arm/fixes)
-Merging uniphier-fixes/fixes (48778464bb7d Linux 5.8-rc2)
-Merging drivers-memory-fixes/fixes (7ff3a2a626f7 memory: jz4780_nemc: Fix a=
-n error pointer vs NULL check in probe())
-Merging m68k-current/for-linus (382f429bb559 m68k: defconfig: Update defcon=
-figs for v5.8-rc3)
-Merging powerpc-fixes/fixes (0460534b532e powerpc/papr_scm: Limit the reada=
-bility of 'perf_stats' sysfs attribute)
-Merging s390-fixes/fixes (cd4d3d5f21dd s390: add 3f program exception handl=
-er)
-Merging sparc/master (0a95a6d1a4cd sparc: use for_each_child_of_node() macr=
-o)
-Merging fscrypt-current/for-stable (2b4eae95c736 fscrypt: don't evict dirty=
- inodes after removing key)
-Merging net/master (1869e226a7b3 ipv4: Initialize flowi4_multipath_hash in =
-data path)
-Merging bpf/master (fde6dedfb794 docs/bpf: Fix ringbuf documentation)
-Merging ipsec/master (8366685b2883 xfrm: clone whole liftime_cur structure =
-in xfrm_do_migrate)
-Merging netfilter/master (9b29e26f7934 Merge branch 'net-qed-disable-aRFS-i=
-n-NPAR-and-100G')
-Merging ipvs/master (7c7ab580db49 net: Convert to use the fallthrough macro)
-Merging wireless-drivers/master (1264c1e0cfe5 Revert "wlcore: Adding suppop=
-rt for IGTK key in wlcore driver")
-Merging mac80211/master (c8146fe292a7 Merge git://git.kernel.org/pub/scm/li=
-nux/kernel/git/bpf/bpf)
-Merging rdma-fixes/for-rc (856deb866d16 Linux 5.9-rc5)
-Merging sound-current/for-linus (8949b6660c3c Merge tag 'asoc-fix-v5.9-rc4'=
- of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-=
-linus)
-Merging sound-asoc-fixes/for-linus (e841ab6475e7 Merge remote-tracking bran=
-ch 'asoc/for-5.9' into asoc-linus)
-Merging regmap-fixes/for-linus (f75aef392f86 Linux 5.9-rc3)
-Merging regulator-fixes/for-linus (856deb866d16 Linux 5.9-rc5)
-Merging spi-fixes/for-linus (a67ea3c79f01 Merge remote-tracking branch 'spi=
-/for-5.9' into spi-linus)
-Merging pci-current/for-linus (e338eecf3fe7 PCI: rockchip: Fix bus checks i=
-n rockchip_pcie_valid_device())
-Merging driver-core.current/driver-core-linus (856deb866d16 Linux 5.9-rc5)
-Merging tty.current/tty-linus (f75aef392f86 Linux 5.9-rc3)
-Merging usb.current/usb-linus (856deb866d16 Linux 5.9-rc5)
-Merging usb-gadget-fixes/fixes (51609fba0cca usb: dwc3: simple: add support=
- for Hikey 970)
-Merging usb-serial-fixes/usb-linus (2bb70f0a4b23 USB: serial: option: suppo=
-rt dynamic Quectel USB compositions)
-Merging usb-chipidea-fixes/ci-for-usb-stable (2d79b3360dcc usb: chipidea: c=
-ore: add wakeup support for extcon)
-Merging phy/fixes (850280156f64 phy: ti: am654: Fix a leak in serdes_am654_=
-probe())
-Merging staging.current/staging-linus (856deb866d16 Linux 5.9-rc5)
-Merging char-misc.current/char-misc-linus (856deb866d16 Linux 5.9-rc5)
-Merging soundwire-fixes/fixes (3fbbf2148a40 soundwire: fix double free of d=
-angling pointer)
-Merging thunderbolt-fixes/fixes (f022ff7bf377 thunderbolt: Retry DROM read =
-once if parsing fails)
-Merging input-current/for-linus (6c77545af100 Input: trackpoint - add new t=
-rackpoint variant IDs)
-Merging crypto-current/master (1b0df11fde0f padata: fix possible padata_wor=
-ks_lock deadlock)
-Merging ide/master (6800cd8cbc6e ide-acpi: use %*ph to print small buffer)
-Merging vfio-fixes/for-linus (aae7a75a821a vfio/type1: Add proper error unw=
-ind for vfio_iommu_replay())
-Merging kselftest-fixes/fixes (5c1e4f7e9e49 selftests/timers: Turn off time=
-out setting)
-Merging modules-fixes/modules-linus (57baec7b1b04 scripts/nsdeps: make sure=
- to pass all module source files to spatch)
-Merging dmaengine-fixes/fixes (f4d51dffc6c0 Linux 5.9-rc4)
-Merging backlight-fixes/for-backlight-fixes (219d54332a09 Linux 5.4)
-Merging mtd-fixes/mtd/fixes (f7e6b19bc764 mtd: properly check all write ioc=
-tls for permissions)
-Merging mfd-fixes/for-mfd-fixes (22380b65dc70 mfd: mfd-core: Ensure disable=
-d devices are ignored without error)
-Merging v4l-dvb-fixes/fixes (129134e5415d media: media/v4l2: remove V4L2_FL=
-AG_MEMORY_NON_CONSISTENT flag)
-Merging reset-fixes/reset/fixes (b460e0a9e240 reset: intel: add unspecified=
- HAS_IOMEM dependency)
-Merging mips-fixes/mips-fixes (baf5cb30fbd1 MIPS: SNI: Fix SCSI interrupt)
-Merging at91-fixes/at91-fixes (54ecb8f7028c Linux 5.4-rc1)
-Merging omap-fixes/fixes (6542e2b613c2 ARM: dts: omap5: Fix DSI base addres=
-s and clocks)
-Merging kvm-fixes/master (37f66bbef092 KVM: emulator: more strict rsm check=
-s.)
-Merging kvms390-fixes/master (f20d4e924b44 docs: kvm: add documentation for=
- KVM_CAP_S390_DIAG318)
-Merging hwmon-fixes/hwmon (d50e0d750004 hwmon: (sparx5) Fix initial reading=
- of temperature)
-Merging nvdimm-fixes/libnvdimm-fixes (6180bb446ab6 dax: fix detection of da=
-x support for non-persistent memory block devices)
-Merging btrfs-fixes/next-fixes (15d5ea19f76c Merge branch 'misc-5.9' into n=
-ext-fixes)
-Merging vfs-fixes/fixes (9d682ea6bcc7 vboxsf: Fix the check for the old bin=
-ary mount-arguments struct)
-Merging dma-mapping-fixes/for-linus (892fc9f6835e dma-pool: Fix an uninitia=
-lized variable bug in atomic_pool_expand())
-Merging i3c-fixes/master (6fbc7275c7a9 Linux 5.2-rc7)
-Merging drivers-x86-fixes/fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging samsung-krzk-fixes/fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging pinctrl-samsung-fixes/pinctrl-fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging devicetree-fixes/dt/linus (d89a80ddbfd8 dt-bindings: crypto: sa2ul:=
- fix a DT binding check warning)
-Merging scsi-fixes/fixes (244359c99fd9 scsi: libsas: Fix error path in sas_=
-notify_lldd_dev_found())
-Merging drm-fixes/drm-fixes (7f7a47952c0f Merge tag 'drm-misc-fixes-2020-09=
--09' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (856deb866d16 Linux 5.9-rc5)
-Merging mmc-fixes/fixes (14801c624066 mmc: mmc_spi: Fix mmc_spi_dma_alloc()=
- return type for !HAS_DMA)
-Merging rtc-fixes/rtc-fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging gnss-fixes/gnss-linus (48778464bb7d Linux 5.8-rc2)
-Merging hyperv-fixes/hyperv-fixes (911e1987efc8 Drivers: hv: vmbus: Add tim=
-eout to vmbus_wait_for_unload)
-Merging soc-fsl-fixes/fix (fe8fe7723a3a soc: fsl: dpio: register dpio irq h=
-andlers after dpio create)
-Merging risc-v-fixes/fixes (66d18dbda846 RISC-V: Take text_mutex in ftrace_=
-init_nop())
-Merging pidfd-fixes/fixes (bda4c60d02e9 sys: Convert to the new fallthrough=
- notation)
-Merging fpga-fixes/fixes (8614afd689df fpga: dfl: fix bug in port reset han=
-dshake)
-Merging spdx/spdx-linus (856deb866d16 Linux 5.9-rc5)
-Merging gpio-intel-fixes/fixes (9123e3a74ec7 Linux 5.9-rc1)
-Merging pinctrl-intel-fixes/fixes (3488737093e7 pinctrl: cherryview: Preser=
-ve CHV_PADCTRL1_INVRXTX_TXDATA flag on GPIOs)
-Merging erofs-fixes/fixes (9ebcfadb0610 Linux 5.8-rc3)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (21a6d1780d5b kunit: tool: allow generating=
- test results in JSON)
-Merging ubifs-fixes/fixes (f37e99aca03f Merge tag 's390-5.8-6' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/s390/linux into master)
-Merging memblock-fixes/fixes (5f7b81c18366 ia64: fix min_low_pfn/max_low_pf=
-n build errors)
-Merging drm-misc-fixes/for-linux-next-fixes (74ea06164cda drm/sun4i: mixer:=
- Extend regmap max_register)
-Merging kspp-gustavo/for-next/kspp (cb0938372de0 Merge branch 'for-next/cla=
-ng' into for-next/kspp)
-Merging kbuild/for-next (26bde0ed700d Merge branch 'kbuild' (early part) in=
-to for-next)
-Merging compiler-attributes/compiler-attributes (e5fc436f06ee sparse: use s=
-tatic inline for __chk_{user,io}_ptr())
-Merging dma-mapping/for-next (a92df4f62fda dma-mapping: move the dma_declar=
-e_coherent_memory documentation)
-Merging asm-generic/master (060dc911501f nds32: fix build failure caused by=
- page table folding updates)
-Merging arc/for-next (def9d2780727 Linux 5.5-rc7)
-Merging arm/for-next (4dffbda6a996 Merge branches 'fixes' and 'misc' into f=
-or-next)
-Merging arm64/for-next/core (e35928ce20ba Merge branches 'for-next/acpi', '=
-for-next/cpuinfo', 'for-next/misc', 'for-next/mm', 'for-next/perf', 'for-ne=
-xt/topology', 'for-next/tpyos' and 'for-next/vdso' into for-next/core)
-Merging arm-perf/for-next/perf (f75aef392f86 Linux 5.9-rc3)
-Merging arm-soc/for-next (6e5fe0090bcd ARM: Document merges)
-Merging amlogic/for-next (c943b84fab78 Merge branch 'v5.10/dt64' into tmp/a=
-ml-rebuild)
-Merging aspeed/for-next (315d4a38c4b6 ARM: config: aspeed_g5: Enable IBM OP=
- Panel driver)
-Merging at91/at91-next (0ec63ea2b8cd Merge branches 'at91-soc' and 'at91-dt=
-' into at91-next)
-Merging drivers-memory/for-next (a8529f3b1cd8 memory: mtk-smi: add support =
-for MT8167)
-Merging imx-mxs/for-next (4f4ceed1a40f Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (36f3ea3c42ce Merge branch 'for_5.10/drivers-soc' int=
-o next)
-Merging mediatek/for-next (2fb345db29ad Merge branch 'v5.9-next/soc' into f=
-or-next)
-Merging mvebu/for-next (29bd9d8c2ac1 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (34766a7d60e9 Merge branch 'omap-for-v5.10/defconfig'=
- into for-next)
-Merging qcom/for-next (b3f89968f4fd Merge branches 'arm64-for-5.10' and 'ar=
-m64-defconfig-for-5.10' into for-next)
-CONFLICT (content): Merge conflict in arch/arm64/configs/defconfig
-Merging raspberrypi/for-next (4564363351e2 ARM: dts: bcm2711: Enable the di=
-splay pipeline)
-Merging realtek/for-next (486f29df6941 Merge branch 'v5.8/dt' into next)
-Merging renesas/next (9b060e6015d3 Merge branches 'renesas-arm-dt-for-v5.10=
-' and 'renesas-drivers-for-v5.10' into renesas-next)
-Merging reset/reset/next (2983e2385ff6 reset: imx7: add the cm4 reset for i=
-.MX8MQ)
-CONFLICT (content): Merge conflict in drivers/reset/reset-imx7.c
-Merging rockchip/for-next (5b54a6a5703f Merge branch 'v5.10-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (b8a3b763539f Merge branch 'next/dt64-schema-=
-var' into for-next)
-Merging scmi/for-linux-next (0d5e4b9b1bac Merge tag 'scmi-updates-5.10' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-l=
-inux-next)
-Merging sunxi/sunxi/for-next (5bcae6ef32b0 Merge branch 'sunxi/dt-for-5.10'=
- into sunxi/for-next)
-Merging tegra/for-next (05ccc6eebf8e Merge branch for-5.10/arm64/defconfig =
-into for-next)
-Merging ti-k3/ti-k3-next (1e3d655fe7b4 Merge branch 'ti-k3-config-next' int=
-o ti-k3-next)
-Merging ti-k3-new/ti-k3-next (69fba6172b9f arm64: dts: ti: k3-am65: ringacc=
-: drop ti, dma-ring-reset-quirk)
-Merging uniphier/for-next (4f8fb65af529 Merge branch 'dt64' into for-next)
-Merging clk/clk-next (2d0cc1cd35f2 Merge branch 'clk-fixes' into clk-next)
-Merging clk-samsung/for-next (3d77e6a8804a Linux 5.7)
-Merging csky/linux-next (bdcd93ef9afb csky: Add context tracking support)
-Merging h8300/h8300-next (8808515be0ed h8300: Replace <linux/clk-provider.h=
-> by <linux/of_clk.h>)
-Merging ia64/next (c331649e6371 ia64: Use libata instead of the legacy ide =
-driver in defconfigs)
-Merging m68k/for-next (352e04291115 m68k: Replace HTTP links with HTTPS one=
-s)
-Merging m68knommu/for-next (858b810bf63f m68knommu: switch to using asm-gen=
-eric/uaccess.h)
-CONFLICT (content): Merge conflict in arch/m68k/Kconfig
-Merging microblaze/next (4a17e8513376 microblaze: fix kbuild redundant file=
- warning)
-Merging mips/mips-next (601637e42df0 MIPS: Remove mach-*/war.h)
-Merging nds32/next (54bde873682b nds32: Fix bogus reference to <asm/procinf=
-o.h>)
-Merging nios2/for-next (6b57fa4d374b nios2: signal: Mark expected switch fa=
-ll-through)
-Merging openrisc/for-next (55b2662ec665 openrisc: uaccess: Add user address=
- space check to access_ok)
-Merging parisc-hd/for-next (c71fcd3c4fcf parisc: disable CONFIG_IDE in defc=
-onfigs)
-Merging powerpc/next (dc462267d2d7 powerpc/64s: handle ISA v3.1 local copy-=
-paste context switches)
-Merging fsl/next (a76bea0287ce powerpc/kmcent2: add ranges to the pci bridg=
-es)
-Merging soc-fsl/next (e9e4ef9116b1 soc: fsl: dpio: Remove unused inline fun=
-ction qbman_write_eqcr_am_rt_register)
-Merging risc-v/for-next (3a822d8ea3b3 RISC-V: Fix duplicate included thread=
-_info.h)
-Merging s390/features (1a80b54d1ce1 s390/uv: add destroy page call)
-Merging sh/for-next (b0cfc315ff38 sh: fix syscall tracing)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (f6e8c474390b um: virtio: Replace zero-length array =
-with flexible-array)
-Merging xtensa/xtensa-for-next (4ca4c562efb6 xtensa: uaccess: Add missing _=
-_user to strncpy_from_user() prototype)
-Merging fscrypt/master (5e895bd4d523 fscrypt: restrict IV_INO_LBLK_32 to in=
-o_bits <=3D 32)
-Merging afs/afs-next (8409f67b6437 afs: Adjust the fileserver rotation algo=
-rithm to reprobe/retry more quickly)
-Merging btrfs/for-next (abecc38b009f Merge branch 'for-next-next-v5.9-20200=
-910' into for-next-20200910)
-Merging ceph/master (f44d04e696fe rbd: require global CAP_SYS_ADMIN for map=
-ping and unmapping)
-Merging cifs/for-next (856deb866d16 Linux 5.9-rc5)
-Merging configfs/for-next (059ccbfff8a8 configfs: use flush file op to comm=
-it writes to a binary file)
-Merging ecryptfs/next (8b614cb8f1dc Merge tag '5.6-rc4-smb3-fixes' of git:/=
-/git.samba.org/sfrench/cifs-2.6)
-Merging erofs/dev (cfcedfe21820 erofs: avoid duplicated permission check fo=
-r "trusted." xattrs)
-Merging exfat/dev (9764d7e25a9f exfat: eliminate dead code in exfat_find())
-Merging ext3/for_next (c53ec7bcc780 ext2: Fix some kernel-doc warnings in b=
-alloc.c)
-Merging ext4/dev (27bc446e2def ext4: limit the length of per-inode prealloc=
- list)
-Merging f2fs/dev (b8ee60871d5e f2fs: compress: introduce cic/dic slab cache)
-Merging fsverity/fsverity (f3db0bed4583 fs-verity: use smp_load_acquire() f=
-or ->i_verity_info)
-Merging fuse/for-next (9a752d18c85a virtiofs: add logic to free up a memory=
- range)
-Merging jfs/jfs-next (7aba5dcc2346 jfs: Replace zero-length array with flex=
-ible-array member)
-Merging nfs/linux-next (856deb866d16 Linux 5.9-rc5)
-Merging nfs-anna/linux-next (7705a4e65fc5 NFSv4.2: xattr cache: remove unus=
-ed cache struct field)
-Merging nfsd/nfsd-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging cel/cel-next (f75aef392f86 Linux 5.9-rc3)
-Merging orangefs/for-next (e848643b524b orangefs: remove unnecessary assign=
-ment to variable ret)
-Merging overlayfs/overlayfs-next (8f6ee74c2786 ovl: rearrange ovl_can_list(=
-))
-Merging ubifs/next (798b7347e4f2 jffs2: fix UAF problem)
-Merging v9fs/9p-next (2ed0b7578170 9p: Remove unneeded cast from memory all=
-ocation)
-Merging xfs/for-next (18a1031619de xfs: ensure that fpunch, fcollapse, and =
-finsert operations are aligned to rt extent size)
-Merging zonefs/for-next (d012a7190fc1 Linux 5.9-rc2)
-Merging iomap/iomap-for-next (14284fedf59f iomap: Mark read blocks uptodate=
- in write_begin)
-Merging djw-vfs/vfs-for-next (e4f9ba20d3b8 fs/xfs: Update xfs_ioctl_setattr=
-_dax_invalidate())
-Merging file-locks/locks-next (1ad5f100e3ba locks: Remove extra "0x" in tra=
-cepoint format specifier)
-Merging vfs/for-next (c5c8adc73309 Merge branches 'fixes', 'work.misc', 'wo=
-rk.sparc', 'base.set_fs' and 'work.csum_and_copy', remote-tracking branch '=
-vfs/work.epoll' into for-next)
-CONFLICT (content): Merge conflict in arch/s390/include/asm/checksum.h
-CONFLICT (content): Merge conflict in arch/m68k/Kconfig
-Merging printk/for-next (22ed34492cf7 Merge branch 'printk-rework' into for=
--next)
-Merging pci/next (763801810fc5 Merge branch 'remotes/lorenzo/pci/vmd')
-CONFLICT (content): Merge conflict in drivers/pci/controller/dwc/pci-imx6.c
-Merging pstore/for-next/pstore (137c6236aeec mailmap: Add WeiXiong Liao)
-CONFLICT (content): Merge conflict in .mailmap
-Merging hid/for-next (5bd34639e3da Merge branch 'for-5.10/core' into for-ne=
-xt)
-Merging i2c/i2c/for-next (ab17a48e18c4 Merge branch 'i2c/for-current' into =
-i2c/for-next)
-Merging i3c/i3c/next (cc3a392d69b6 i3c: master: fix for SETDASA and DAA pro=
-cess)
-Merging dmi/dmi-for-next (a3d13a0a23ea Replace HTTP links with HTTPS ones: =
-DMI/SMBIOS SUPPORT)
-Merging hwmon-staging/hwmon-next (1d6baf062dee hwmon: (pmbus) Move boolean =
-error condition check to generating code)
-Merging jc_docs/docs-next (78ff97ebd4e9 iio: iio.h: fix a warning at the ke=
-rnel-doc markup)
-Merging v4l-dvb/master (741043b02c2e media: vidtv: don't initialize cnr2qua=
-l var)
-Merging v4l-dvb-next/master (0d6db85131e0 Revert "media: atomisp: keep the =
-ISP powered on when setting it")
-Merging fbdev/fbdev-for-next (732146a3f1dc video: fbdev: imxfb: fix a typo =
-in imxfb_probe())
-Merging pm/linux-next (23818c154bae Merge branch 'pm-em' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (d168eaa6f6a1 cpufreq: qcom-hw: =
-Make use of cpufreq driver_data for passing pdev)
-Merging cpupower/cpupower (527b7779e5ec cpupower: speed up generating git v=
-ersion string)
-Merging devfreq/devfreq-next (d283fdeb22aa PM / devfreq: event: Change prot=
-otype of devfreq_event_get_edev_by_phandle function)
-Merging opp/opp/linux-next (257eba525a2e opp: Prevent memory leak in dev_pm=
-_opp_attach_genpd())
-Merging thermal/thermal/linux-next (6f55be9fd5ee Merge branch 'thermal/fixe=
-s' into thermal/linux-next)
-Merging thermal-rzhang/next (54ecb8f7028c Linux 5.4-rc1)
-Merging thermal-soc/next (6c375eccded4 thermal: db8500: Rewrite to be a pur=
-e OF sensor)
-Merging ieee1394/for-next (67f8e65e4fc1 firewire: net: remove set but not u=
-sed variable 'guid')
-Merging dlm/next (7ae0451e2e6c fs: dlm: use free_con to free connection)
-Merging swiotlb/linux-next (4cdfb27ba80d xen/swiotlb: remember having calle=
-d xen_create_contiguous_region())
-CONFLICT (content): Merge conflict in drivers/xen/swiotlb-xen.c
-Merging rdma/for-next (9e054b13b2f7 RDMA/qedr: Fix function prototype param=
-eters alignment)
-Merging net-next/master (ed6d9b022813 ionic: fix up debugfs after queue swa=
-p)
-CONFLICT (content): Merge conflict in drivers/net/dsa/microchip/ksz9477.c
-Merging bpf-next/master (d72714c1da13 s390/bpf: Fix multiple tail calls)
-Merging ipsec-next/master (02a20d4fef3d enic: switch from 'pci_' to 'dma_' =
-API)
-Merging mlx5-next/mlx5-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging netfilter-next/master (4f6a5caf187f net: dsa: b53: Report VLAN tabl=
-e occupancy via devlink)
-Merging ipvs-next/master (bfdd5aaa54b0 Merge tag 'Smack-for-5.9' of git://g=
-ithub.com/cschaufler/smack-next)
-Merging wireless-drivers-next/master (5a6bd84f8154 net: hns: use IRQ_NOAUTO=
-EN to avoid irq is enabled due to request_irq)
-Merging bluetooth/master (e91172151a40 Bluetooth: btintel: Refactor firmwar=
-e download function)
-Merging mac80211-next/master (e059c6f340f6 tulip: switch from 'pci_' to 'dm=
-a_' API)
-Merging gfs2/for-next (2928eebec009 gfs2: Fix bad comment for trans_drain)
-Merging mtd/mtd/next (1840ff8d4261 mtd: mtdconcat: map: remove redundant as=
-signment to variable 'size')
-Merging nand/nand/next (a50dc7a3ede6 mtd: rawnand: vf610: Remove unused fun=
-ction vf610_nfc_transfer_size())
-Merging spi-nor/spi-nor/next (e93a977367b2 mtd: revert "spi-nor: intel: pro=
-vide a range for poll_timout")
-Merging crypto/master (8db1824f5a38 crypto: ux500 - Fix sparse endianness w=
-arnings)
-Merging drm/drm-next (818280d5adf1 Merge v5.9-rc5 into drm-next)
-Merging amdgpu/drm-next (1b7eca59ceb0 Revert "drm/radeon: handle PCIe root =
-ports with addressing limitations")
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_ctx=
-.c
-Merging drm-intel/for-linux-next (ac03de1f5e83 drm/i915: Update DRIVER_DATE=
- to 20200914)
-Merging drm-tegra/drm/tegra/for-next (4fba6d22ca9a drm/tegra: plane: Suppor=
-t 180=C2=B0 rotation)
-Merging drm-misc/for-linux-next (37054fc81443 gpu/drm: ingenic: Add option =
-to mmap GEM buffers cached)
-Merging drm-msm/msm-next (1ef7c99d145c drm/msm/dsi: add support for 7nm DSI=
- PHY/PLL)
-Merging mali-dp/for-upstream/mali-dp (f634c6a80287 dt/bindings: display: Ad=
-d optional property node define for Mali DP500)
-Merging imx-drm/imx-drm/next (efd5a93d2a89 drm/imx: drop explicit drm_mode_=
-config_cleanup)
-Merging etnaviv/etnaviv/next (c5d5a32ead1e drm/etnaviv: fix ref count leak =
-via pm_runtime_get_sync)
-Merging regmap/for-next (b89102f28d29 Merge remote-tracking branch 'regmap/=
-for-5.10' into regmap-next)
-Merging sound/for-next (2b3d2987d800 ALSA: firewire: Replace tasklet with w=
-ork)
-Merging sound-asoc/for-next (f11cecaf4673 Merge remote-tracking branch 'aso=
-c/for-5.10' into asoc-next)
-Merging modules/modules-next (14721add58ef module: Add more error message f=
-or failed kernel module loading)
-Merging input/next (4238e52cc351 Input: elants_i2c - report resolution of A=
-BS_MT_TOUCH_MAJOR by FW information.)
-Merging block/for-next (9875251dad8f Merge branch 'for-5.10/block' into for=
--next)
-Merging device-mapper/for-next (3a653b205f29 dm thin metadata: Fix use-afte=
-r-free in dm_bm_set_read_only)
-Merging pcmcia/pcmcia-next (46d079790663 pcmcia: make pccard_loop_tuple() s=
-tatic)
-Merging mmc/next (878dbe426a56 mmc: core: clear 'doing_init_tune' also afte=
-r failures)
-CONFLICT (content): Merge conflict in drivers/mmc/host/Kconfig
-Merging mfd/for-mfd-next (59306d7db654 mfd: sprd: Add wakeup capability for=
- PMIC IRQ)
-Merging backlight/for-backlight-next (7eb99a39ef76 video: backlight: cr_bll=
-cd: Remove unused variable 'intensity')
-Merging battery/for-next (d8483f31487c dt-bindings: power: supply: Cleanup =
-charger-manager bindings)
-Merging regulator/for-next (4c66a0efe041 Merge remote-tracking branch 'regu=
-lator/for-5.10' into regulator-next)
-Merging security/next-testing (bc62d68e2a0a device_cgroup: Fix RCU list deb=
-ugging warning)
-Merging apparmor/apparmor-next (e37986097ba6 apparmor: Use true and false f=
-or bool variable)
-Merging integrity/next-integrity (48ce1ddce16b ima: Fail rule parsing when =
-asymmetric key measurement isn't supportable)
-Merging keys/keys-next (b6f61c314649 keys: Implement update for the big_key=
- type)
-Merging safesetid/safesetid-next (0476c865ded6 LSM: SafeSetID: Fix warnings=
- reported by test bot)
-Merging selinux/next (e8ba53d0023a selinux: access policycaps with READ_ONC=
-E/WRITE_ONCE)
-Merging smack/next (322dd63c7f98 Smack: Use the netlabel cache)
-Merging tomoyo/master (5384d92e4e02 tomoyo: Loosen pathname/domainname vali=
-dation.)
-Merging tpmdd/next (9123e3a74ec7 Linux 5.9-rc1)
-Merging watchdog/master (18445bf405cb Merge tag 'spi-fix-v5.9-rc1' of git:/=
-/git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging iommu/next (c59bc95e9144 Merge branches 'iommu/fixes', 'arm/allwinn=
-er', 'arm/mediatek', 'arm/renesas', 'arm/tegra', 'arm/qcom', 'x86/amd', 'x8=
-6/vt-d' and 'core' into next)
-Merging vfio/next (ccd59dce1a21 vfio/type1: Refactor vfio_iommu_type1_ioctl=
-())
-Merging audit/next (c07203516439 audit: Remove redundant null check)
-Merging devicetree/for-next (2c2262307051 dt-bindings: clock: imx8m: Integr=
-ate duplicated i.MX 8M schemas)
-Merging mailbox/mailbox-for-next (884996986347 mailbox: mediatek: cmdq: cle=
-ar task in channel before shutdown)
-Merging spi/for-next (de0a4481dcf2 Merge remote-tracking branch 'spi/for-5.=
-10' into spi-next)
-Merging tip/auto-latest (e524f5c7cbd0 Merge branch 'core/build')
-Merging clockevents/timers/drivers/next (9fba22584e54 clocksource: Ingenic:=
- Add support for the Ingenic X1000 OST.)
-Merging edac/edac-for-next (66a7eb4cf792 Merge branch 'edac-misc' into edac=
--for-next)
-Merging irqchip/irq/irqchip-next (27225be58515 Merge branch 'irq/ipi-as-irq=
-' into irq/irqchip-next)
-Merging ftrace/for-next (38ce2a9e33db tracing: Add trace_array_init_printk(=
-) to initialize instance trace_printk() buffers)
-Merging rcu/rcu/next (45faed7569d3 srcu: Take early exit on memory-allocati=
-on failure)
-Merging kvm/linux-next (e792415c5d3e KVM: MIPS/VZ: Fix build error caused b=
-y 'kvm_run' cleanup)
-Merging kvm-arm/next (ae8bd85ca8a4 Merge branch 'kvm-arm64/pt-new' into kvm=
-arm-master/next)
-Merging kvm-ppc/kvm-ppc-next (5706d14d2a94 KVM: PPC: Book3S HV: XICS: Repla=
-ce the 'destroy' method by a 'release' method)
-Merging kvms390/next (23a60f834406 s390/kvm: diagnose 0x318 sync and reset)
-Merging xen-tip/linux-next (9e2369c06c8a xen: add helpers to allocate unpop=
-ulated memory)
-Merging percpu/for-next (fbb145bcfb5e Merge branch 'for-5.9-fixes' into for=
--next)
-Merging workqueues/for-next (10cdb1575954 workqueue: use BUILD_BUG_ON() for=
- compile time test instead of WARN_ON())
-Merging drivers-x86/for-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging chrome-platform/for-next (dd92f7dfe1ba platform/chrome: Kconfig: Re=
-move the transitional MFD_CROS_EC config)
-Merging hsi/for-next (bb6d3fb354c5 Linux 5.6-rc1)
-Merging leds/for-next (03eb2ca44a95 leds: tlc591xx: Simplify with dev_err_p=
-robe())
-Merging ipmi/for-next (e829295c9bae ipmi: Reset response handler when faili=
-ng to send the command)
-Merging driver-core/driver-core-next (9ef8638bd8c7 Merge 5.9-rc5 into drive=
-r-core-next)
-Merging usb/usb-next (fccee0baced0 Merge 5.9-rc5 into usb-next)
-Merging usb-gadget/next (f5e46aa4a124 usb: dwc3: gadget: when the started l=
-ist is empty stop the active xfer)
-Merging usb-serial/usb-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging usb-chipidea-next/ci-for-usb-next (71ac680e6339 usb: chipidea: ci_h=
-drc_imx: restore pinctrl)
-Merging phy-next/next (ee626660ddbd dt-binding: phy: convert ti,omap-usb2 t=
-o YAML)
-Merging tty/tty-next (71a174b39f10 pty: do tty_flip_buffer_push without por=
-t->lock in pty_write)
-Merging char-misc/char-misc-next (05fa34dcdb34 Merge 5.9-rc5 into char-misc=
--next)
-Merging extcon/extcon-next (e12334b989bc extcon: axp288: Use module_platfor=
-m_driver to simplify the code)
-CONFLICT (content): Merge conflict in MAINTAINERS
-Merging soundwire/next (32d2a8935bf8 soundwire: cadence: add parity error i=
-njection through debugfs)
-Merging thunderbolt/next (77e4907fa620 thunderbolt: debugfs: Fix uninitiali=
-zed return in counters_write())
-Merging staging/staging-next (1622d3545313 Merge 5.9-rc5 into staging-next)
-Merging mux/for-next (05f19f7f8944 mux: adgs1408: Add mod_devicetable.h and=
- remove of_match_ptr)
-Merging icc/icc-next (f995194545ab interconnect: qcom: Add OSM L3 support o=
-n SM8150)
-Merging dmaengine/next (e3a52158a682 dmaengine: Kconfig: Update description=
- for RCAR_DMAC config)
-Merging cgroup/for-next (936f2a70f207 cgroup: add cpu.stat file to root cgr=
-oup)
-Merging scsi/for-next (5399a4aa684d Merge branch 'misc' into for-next)
-CONFLICT (content): Merge conflict in drivers/scsi/aacraid/aachba.c
-Merging scsi-mkp/for-next (2de7649cff44 scsi: lpfc: Remove set but not used=
- 'qp')
-Merging vhost/linux-next (8a7c3213db06 vdpa/mlx5: fix up endian-ness for mt=
-u)
-Merging rpmsg/for-next (797134ad55b2 Merge branch 'rproc-next' into for-nex=
-t)
-Merging gpio/for-next (feeaefd378ca gpio: dwapb: Use resource managed GPIO-=
-chip add data method)
-Merging gpio-brgl/gpio/for-next (32fc5aa2df12 gpiolib: unexport devprop_gpi=
-ochip_set_names())
-Merging gpio-intel/for-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging pinctrl/for-next (ebc2599144b6 pinctrl: mcp23s08: Improve error mes=
-saging in ->probe())
-Merging pinctrl-intel/for-next (a0bf06dc51db pinctrl: cherryview: Preserve =
-CHV_PADCTRL1_INVRXTX_TXDATA flag on GPIOs)
-Merging pinctrl-samsung/for-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging pwm/for-next (6ced5ff0be8e pwm: bcm-iproc: handle clk_get_rate() re=
-turn)
-Merging userns/for-next (7fce69dff8db Implement kernel_execve)
-Merging ktest/for-next (ff131efff141 ktest.pl: Fix spelling mistake "Cant" =
--> "Can't")
-Merging random/dev (ab9a7e27044b random: avoid warnings for !CONFIG_NUMA bu=
-ilds)
-Merging kselftest/next (f69237e1e954 selftests: more general make nesting s=
-upport)
-Merging y2038/y2038 (c4e71212a245 Revert "drm/etnaviv: reject timeouts with=
- tv_nsec >=3D NSEC_PER_SEC")
-Merging livepatching/for-next (59fc1e476962 Merge branch 'for-5.10/flive-pa=
-tching' into for-next)
-Merging coresight/next (40278ee5edb8 coresight: Make sysfs functional on to=
-pologies with per core sink)
-Merging rtc/rtc-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging nvdimm/libnvdimm-for-next (03b68d5d7d4b Merge branch 'for-5.9/copy_=
-mc' into libnvdimm-for-next)
-Merging at24/at24/for-next (99363d1c26c8 eeprom: at24: Tidy at24_read())
-Merging ntb/ntb-next (b8e2c8bbdf77 NTB: Use struct_size() helper in devm_kz=
-alloc())
-Merging seccomp/for-next/seccomp (a23042882ff2 selftests/seccomp: Use bitwi=
-se instead of arithmetic operator for flags)
-Merging kspp/for-next/kspp (55dde35fdb7f overflow: Add __must_check attribu=
-te to check_*() helpers)
-Merging gnss/gnss-next (48778464bb7d Linux 5.8-rc2)
-Merging fsi/next (4a851d714ead fsi: aspeed: Support CFAM reset GPIO)
-Merging slimbus/for-next (9123e3a74ec7 Linux 5.9-rc1)
-Merging nvmem/for-next (9b7afbd83ef9 nvmem: switch to simpler IDA interface)
-Merging xarray/xarray (27586ca786a7 XArray: Handle retry entries within xas=
-_find_marked)
-Merging hyperv/hyperv-next (49971e6bad2d drivers: hv: remove cast from hype=
-rv_die_event)
-Merging auxdisplay/auxdisplay (46d4a403a04c auxdisplay: Replace HTTP links =
-with HTTPS ones)
-Merging kgdb/kgdb/for-next (e16c33e29079 kernel/debug: Fix spelling mistake=
- in debug_core.c)
-Merging pidfd/for-next (f2e9aec45e9e Merge tag 'kernel-clone-v5.9' into for=
--next)
-Merging hmm/hmm (9123e3a74ec7 Linux 5.9-rc1)
-Merging fpga/for-next (6cc3f83da922 fpga: dfl: fix the comments of type & f=
-eature_id fields)
-Merging kunit/test (9123e3a74ec7 Linux 5.9-rc1)
-Merging generic-ioremap/for-next (4bdc0d676a64 remove ioremap_nocache and d=
-evm_ioremap_nocache)
-Merging cfi/cfi/next (11399346ac39 mtd: Replace zero-length array with flex=
-ible-array)
-Merging kunit-next/kunit (9123e3a74ec7 Linux 5.9-rc1)
-Merging trivial/for-next (2a9b29b28983 xtensa: fix Kconfig typo)
-Merging zx2c4/for-next (16fbf79b0f83 Linux 5.6-rc7)
-Merging mhi/mhi-next (18e9533ac877 bus: mhi: core: Introduce APIs to alloca=
-te and free the MHI controller)
-Merging notifications/notifications-pipe-core (841a0dfa5113 watch_queue: sa=
-mple: Display mount tree change notifications)
-Merging memblock/for-next (762d4d1a174c arch/ia64: Restore arch-specific pg=
-d_offset_k implementation)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging akpm-current/current (89db71ff9227 x86: add failure injection to ge=
-t/put/clear_user)
-CONFLICT (content): Merge conflict in mm/filemap.c
-CONFLICT (content): Merge conflict in arch/powerpc/platforms/pseries/hotplu=
-g-memory.c
-Applying: merge fix up for "mm/memremap_pages: convert to 'struct range'"
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (7a6834cc8dbc mm-madvise-introduce-process_madvise-sysc=
-all-an-external-memory-hinting-api-fix-fix-fix-fix-fix)
+panda                     | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
 
---Sig_//YsclZZygAmX2HiI=GdUS4W
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+panda                     | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 4/5    =
 
------BEGIN PGP SIGNATURE-----
+panda                     | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9gcg0ACgkQAVBC80lX
-0Gy39wf+Mnn/6MkCWvbJMEAavJPdItRzTtRJ+Fu3cJ7gj7nOQGBa7I4NydbiPctR
-ghrhMTn8wFSysQw23v4mc4W7V/bYiLB+N9m0axFrtwh0Yw8WjrO//hnbI8IluVUY
-Qx4JuDADTgVX+/1GQklvfgXcGCqAQLgCWoFvot2Xc9f549YGz50ID1S9Fo5nlnZ9
-9Swa51D2jlKi1IN8maE0MS/SwHAQAcuRyqr9PyZjrv+2OKikdRahYtAUjHK+WfVP
-nl8S4ryBI1wDrp5P0SYEju/2FluwZ+xIWH3nALVjp6BvIubCxuCjxLGjKY+Ixd2G
-FAFJ8vcfT8sLDtR9GDdyy5InrtvcHA==
-=YXfw
------END PGP SIGNATURE-----
+panda                     | arm   | lab-baylibre    | gcc-8    | omap2plus_=
+defconfig          | 0/1    =
 
---Sig_//YsclZZygAmX2HiI=GdUS4W--
+panda                     | arm   | lab-collabora   | gcc-8    | omap2plus_=
+defconfig          | 0/1    =
+
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 67/69  =
+
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...G_ARM_LPAE=3Dy | 67/69  =
+
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
+
+sun4i-a10-olinuxino-lime  | arm   | lab-baylibre    | gcc-8    | sunxi_defc=
+onfig              | 2/4    =
+
+sun5i-a13-olinuxino-micro | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
+
+sun5i-a13-olinuxino-micro | arm   | lab-baylibre    | gcc-8    | sunxi_defc=
+onfig              | 2/4    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200914/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200914
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      f965d3ec86fa89285db0fbb983da76ba9c398efa =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+at91-sama5d4_xplained     | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042adb7fdd6923da60935
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042adb7fdd69=
+23da60938
+      new failure (last pass: next-20200902)
+      4 lines
+
+    2020-09-15 04:27:19.131000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:27:19.132000  kern  :alert : [0000001c] *pgd=3D3a707831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6042adb7fd=
+d6923da60939
+      new failure (last pass: next-20200902)
+      29 lines
+
+    2020-09-15 04:27:19.244000  kern  :emerg : Process dropbear (pid: 138, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:27:19.244000  kern  :emerg : Stack: (0xc3aa7e30 to 0xc3aa=
+8000)
+    2020-09-15 04:27:19.244000  kern  :emerg : 7e20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 04:27:19.244000  kern  :emerg : 7e40: c137d53c c136c02c c3a4=
+d018 c3a4d000 00000003 00000428 c3a4d018 00000038
+    2020-09-15 04:27:19.244000  kern  :emerg : 7e60: 00000000 00000000 c3aa=
+7f78 c0307f4c c3a4d018 00000038 00000000 c3a4d000
+    2020-09-15 04:27:19.283000  kern  :emerg : 7e80: c3a4d018 c04cad10 0000=
+0000 00001000 bec4e858 c3a4d028 00000000 c100edbc
+    2020-09-15 04:27:19.284000  kern  :emerg : 7ea0: c1877434 c138ed64 2b66=
+7bbc db20e680 c04ca994 d8693cc0 bec4e858 00001000
+    2020-09-15 04:27:19.284000  kern  :emerg : 7ec0: c3aa7f78 00000001 c052=
+36a8 c0523750 c3aa6000 00001000 00000000 bec4e858
+    2020-09-15 04:27:19.284000  kern  :emerg : 7ee0: d8693cc0 c3aa7f78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 04:27:19.284000  kern  :emerg : 7f00: ffffd17b ffffffff 0000=
+0001 00000000 3b9a9b7b 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+at91-sama5d4_xplained     | arm   | lab-baylibre    | gcc-8    | sama5_defc=
+onfig              | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f603ee92736c98bfda6091f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f603ee92736c98bfda60=
+920
+      failing since 139 days (last pass: next-20200424, first fail: next-20=
+200428)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+beagle-xm                 | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/3    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042e0325941c855a60947
+
+  Results:     2 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-xm.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042e0325941c=
+855a6094a
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:28:01.866000  <4>[   35.648193] WARNING: CPU: 0 PID: 5 at=
+ drivers/opp/core.c:678 dev_pm_opp_set_rate+0x494/0x574
+    2020-09-15 04:28:01.875000  <4>[   35.657135] Modules linked in: phy_ge=
+neric phy_twl4030_usb omap2430 musb_hdrc ehci_omap
+    2020-09-15 04:28:01.884000  <4>[   35.665649] CPU: 0 PID: 5 Comm: kwork=
+er/0:0 Tainted: G      D W         5.9.0-rc5-next-20200914 #1
+    2020-09-15 04:28:01.890000  <4>[   35.674926] Hardware name: Generic OM=
+AP36xx (Flattened Device Tree)
+    2020-09-15 04:28:01.895000  <4>[   35.681518] Workqueue: events dbs_wor=
+k_handler
+    2020-09-15 04:28:01.904000  <4>[   35.686279] [<c0310d04>] (unwind_back=
+trace) from [<c030b7e4>] (show_stack+0x10/0x14)
+    2020-09-15 04:28:01.911000  <4>[   35.694335] [<c030b7e4>] (show_stack)=
+ from [<c0f64a9c>] (dump_stack+0xc8/0xdc)
+    2020-09-15 04:28:01.918000  <4>[   35.701873] [<c0f64a9c>] (dump_stack)=
+ from [<c0343b04>] (__warn+0xd8/0xf0)
+    2020-09-15 04:28:01.926000  <4>[   35.709045] [<c0343b04>] (__warn) fro=
+m [<c0f60ce0>] (warn_slowpath_fmt+0x64/0xbc)
+    2020-09-15 04:28:01.934000  <4>[   35.716857] [<c0f60ce0>] (warn_slowpa=
+th_fmt) from [<c0cf76f8>] (dev_pm_opp_set_rate+0x494/0x574)
+    ... (179 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+beaglebone-black          | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6044082ef55c2cb3a609ab
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6044082ef55c2=
+cb3a609ae
+      new failure (last pass: next-20200806)
+      4 lines
+
+    2020-09-15 04:33:06.337000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:33:06.340000  kern  :alert : pgd =3D 4749b23b
+    2020-09-15 04:33:06.346000  kern  :alert : [0000001c] *pgd=3D97a4f831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6044082ef5=
+5c2cb3a609af
+      new failure (last pass: next-20200806)
+      29 lines
+
+    2020-09-15 04:33:06.382000  kern  :emerg : Process dropbear (pid: 127, =
+stack limit =3D 0x28d35a9f)
+    2020-09-15 04:33:06.387000  kern  :emerg : Stack: (0xd780fe30 to 0xd781=
+0000)
+    2020-09-15 04:33:06.395000  kern  :emerg : fe20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 04:33:06.403000  kern  :emerg : fe40: c137d53c c136c02c c361=
+6018 c3616000 00000003 0000044f c3616018 0000003d
+    2020-09-15 04:33:06.412000  kern  :emerg : fe60: 00000000 00000000 d780=
+ff78 c0307f4c c3616018 0000003d 00000000 c3616000
+    2020-09-15 04:33:06.420000  kern  :emerg : fe80: c3616018 c04cad10 0000=
+0000 00001000 bea97858 c3616028 00000000 c100edbc
+    2020-09-15 04:33:06.428000  kern  :emerg : fea0: c1877434 c138ed64 29cb=
+ded6 db23d980 c04ca994 c3741900 bea97858 00001000
+    2020-09-15 04:33:06.436000  kern  :emerg : fec0: d780ff78 00000001 c052=
+36a8 c0523750 d780e000 00001000 00000000 bea97858
+    2020-09-15 04:33:06.445000  kern  :emerg : fee0: c3741900 d780ff78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 04:33:06.453000  kern  :emerg : ff00: ffffeee9 ffffffff 0000=
+0001 00000000 3b9ab8e9 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+beaglebone-black          | arm   | lab-cip         | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f60429994f3f904c3a60914
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f60429994f3f90=
+4c3a60918
+      new failure (last pass: next-20200806)
+      4 lines
+
+    2020-09-15 04:27:00.770000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:27:00.774000  kern  :alert : pgd =3D fec89872
+    2020-09-15 04:27:00.779000  kern  :alert : [0000001c] *pgd=3D8352e831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f60429994f3=
+f904c3a60919
+      new failure (last pass: next-20200806)
+      29 lines
+
+    2020-09-15 04:27:00.817000  kern  :emerg : Process dropbear (pid: 125, =
+stack limit =3D 0x7564db87)
+    2020-09-15 04:27:00.819000  kern  :emerg : Stack: (0xd7825e30 to 0xd782=
+6000)
+    2020-09-15 04:27:00.828000  kern  :emerg : 5e20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 04:27:00.836000  kern  :emerg : 5e40: c137d53c c136c02c c350=
+8018 c3508000 00000003 0000044f c3508018 0000003d
+    2020-09-15 04:27:00.844000  kern  :emerg : 5e60: 00000000 00000000 d782=
+5f78 c0307f4c c3508018 0000003d 00000000 c3508000
+    2020-09-15 04:27:00.853000  kern  :emerg : 5e80: c3508018 c04cad10 0000=
+0000 00001000 befa9858 c3508028 00000000 c100edbc
+    2020-09-15 04:27:00.861000  kern  :emerg : 5ea0: c1877434 c138ed64 0765=
+bc64 db23d980 c04ca994 c363db40 befa9858 00001000
+    2020-09-15 04:27:00.869000  kern  :emerg : 5ec0: d7825f78 00000001 c052=
+36a8 c0523750 d7824000 00001000 00000000 befa9858
+    2020-09-15 04:27:00.878000  kern  :emerg : 5ee0: c363db40 d7825f78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 04:27:00.885000  kern  :emerg : 5f00: ffffedef ffffffff 0000=
+0001 00000000 3b9ab7ef 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+beaglebone-black          | arm   | lab-baylibre    | gcc-8    | omap2plus_=
+defconfig          | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042cf325941c855a6091d
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042cf325941c=
+855a60920
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:27:53.850000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:27:53.854000  kern  :alert : pgd =3D 4ac258b9
+    2020-09-15 04:27:53.860000  kern  :alert : [0000001c] *pgd=3D9e180831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6042cf3259=
+41c855a60921
+      new failure (last pass: next-20200911)
+      28 lines
+
+    2020-09-15 04:27:53.904000  kern  :emerg : Process dropbear (pid: 151, =
+stack limit =3D 0xa7cb43db)
+    2020-09-15 04:27:53.913000  kern  :emerg : Stack: (0xdb18de40 to 0xdb18=
+e000)
+    2020-09-15 04:27:53.919000  kern  :emerg : de40: db18c000 c02fb888 c0ee=
+7f60 00000002 0000065c db0c8460 00000003 0000003e
+    2020-09-15 04:27:53.924000  kern  :emerg : de60: 00000000 c0e604f4 db0c=
+8478 db0c8478 db18df78 c0108028 00000000 c0e604f4
+    2020-09-15 04:27:53.932000  kern  :emerg : de80: db0c8478 db0c8460 0000=
+0691 c02fc6bc 1ca4a370 00001000 bef2e858 db0c8488
+    2020-09-15 04:27:53.941000  kern  :emerg : dea0: 00000000 00000000 1d87=
+1deb de16a380 c02fc334 db159f00 bef2e858 00001000
+    2020-09-15 04:27:53.949000  kern  :emerg : dec0: db18df78 00000001 c036=
+5a9c c0365b44 db18c000 00001000 00000000 bef2e858
+    2020-09-15 04:27:53.960000  kern  :emerg : dee0: db159f00 db18df78 0000=
+0001 c02d1be4 ffffeebf ffffffff 00000001 00000000
+    2020-09-15 04:27:53.968000  kern  :emerg : df00: 3b9ab8bf 00000000 0000=
+0001 00000000 3b9ab8bf 00000000 00000001 000f423b
+    2020-09-15 04:27:53.976000  kern  :emerg : df20: 3b9ab8bf 00000000 0000=
+0002 be3e024e 00000000 bef2e850 db18c000 db18df68
+    ... (17 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+beaglebone-black          | arm   | lab-cip         | gcc-8    | omap2plus_=
+defconfig          | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042e5325941c855a60951
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042e5325941c=
+855a60955
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:28:17.173000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:28:17.177000  kern  :alert : pgd =3D 13c7bc54
+    2020-09-15 04:28:17.183000  kern  :alert : [0000001c] *pgd=3D83947831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6042e53259=
+41c855a60956
+      new failure (last pass: next-20200911)
+      28 lines
+
+    2020-09-15 04:28:17.227000  kern  :emerg : Process dropbear (pid: 148, =
+stack limit =3D 0x0b38d568)
+    2020-09-15 04:28:17.232000  kern  :emerg : Stack: (0xc3927e40 to 0xc392=
+8000)
+    2020-09-15 04:28:17.239000  kern  :emerg : 7e40: c3926000 c02fb888 c0ee=
+7f60 00000002 00000690 c37bf4b0 00000003 0000003e
+    2020-09-15 04:28:17.248000  kern  :emerg : 7e60: 00000000 c0e604f4 c37b=
+f4c8 c37bf4c8 c3927f78 c0108028 00000000 c0e604f4
+    2020-09-15 04:28:17.255000  kern  :emerg : 7e80: c37bf4c8 c37bf4b0 0000=
+06c5 c02fc6bc 20486e2c 00001000 be8aa858 c37bf4d8
+    2020-09-15 04:28:17.264000  kern  :emerg : 7ea0: 00000000 00000000 117e=
+1d6c de16a380 c02fc334 de291300 be8aa858 00001000
+    2020-09-15 04:28:17.272000  kern  :emerg : 7ec0: c3927f78 00000001 c036=
+5a9c c0365b44 c3926000 00001000 00000000 be8aa858
+    2020-09-15 04:28:17.281000  kern  :emerg : 7ee0: de291300 c3927f78 0000=
+0001 c02d1be4 ffffeb01 ffffffff 00000001 00000000
+    2020-09-15 04:28:17.288000  kern  :emerg : 7f00: 3b9ab501 00000000 0000=
+0001 00000000 3b9ab501 00000000 00000001 000f423a
+    2020-09-15 04:28:17.297000  kern  :emerg : 7f20: 3b9ab501 00000000 0000=
+0002 d6bce3c2 00000000 be8aa850 c3926000 c3927f68
+    ... (17 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+dove-cubox                | arm   | lab-pengutronix | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042b9b7fdd6923da60940
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-pengutronix/baseline-dove-cubox.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-pengutronix/baseline-dove-cubox.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042b9b7fdd69=
+23da60946
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:26:29.687000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:26:29.687000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:26:29.688000  kern  :alert : [0000001c] *pgd=3D3b9d1831
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6042b9b7fd=
+d6923da60947
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-15 04:26:29.722000  kern  :emerg : Process dropbear (pid: 132, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:26:29.722000  kern  :emerg : Stack: (0xc41e5e30 to 0xc41e=
+6000)
+    2020-09-15 04:26:29.725000  kern  :emerg : 5e20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 04:26:29.742000  kern  :emerg : 5e40: c137d53c c136c02c eef7=
+9018 eef79000 00000003 0000040b eef79018 0000002a
+    2020-09-15 04:26:29.744000  kern  :emerg : 5e60: 00000000 00000000 c41e=
+5f78 c0307f4c eef79018 0000002a 00000000 eef79000
+    2020-09-15 04:26:29.776000  kern  :emerg : 5e80: eef79018 c04cad10 0000=
+0000 00001000 bea2f848 eef79028 00000000 c100edbc
+    2020-09-15 04:26:29.776000  kern  :emerg : 5ea0: c1877434 c138ed64 14be=
+502a ee8a5d80 c04ca994 c410d000 bea2f848 00001000
+    2020-09-15 04:26:29.777000  kern  :emerg : 5ec0: c41e5f78 00000001 c052=
+36a8 c0523750 c41e4000 00001000 00000000 bea2f848
+    2020-09-15 04:26:29.777000  kern  :emerg : 5ee0: c410d000 c41e5f78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 04:26:29.796000  kern  :emerg : 5f00: ffffef80 ffffffff 0000=
+0001 00000000 3b9ab980 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+dove-cubox                | arm   | lab-pengutronix | gcc-8    | mvebu_v7_d=
+efconfig           | 2/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f454e0c5cb435e6a60929
+
+  Results:     2 PASS, 2 FAIL, 1 SKIP
+  Full config: mvebu_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+mvebu_v7_defconfig/gcc-8/lab-pengutronix/baseline-dove-cubox.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+mvebu_v7_defconfig/gcc-8/lab-pengutronix/baseline-dove-cubox.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f5f454e0c5cb43=
+5e6a6092d
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:10:19.472000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:10:19.472000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:10:19.472000  kern  :alert : [0000001c] *pgd=3D3fdff831
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f5f454e0c5c=
+b435e6a6092e
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-15 04:10:19.508000  kern  :emerg : Process dropbear (pid: 152, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:10:19.511000  kern  :emerg : Stack: (0xee953e30 to 0xee95=
+4000)
+    2020-09-15 04:10:19.517000  kern  :emerg : 3e20:                       =
+              00000004 c027c018 c0ea50fc 00000002
+    2020-09-15 04:10:19.526000  kern  :emerg : 3e40: c0b01524 c0b01528 eea4=
+c428 eea4c410 00000003 000003c4 eea4c428 0000002a
+    2020-09-15 04:10:19.535000  kern  :emerg : 3e60: 00000000 00000000 ee95=
+3f78 c0107e3c eea4c428 0000002a 00000000 eea4c410
+    2020-09-15 04:10:19.544000  kern  :emerg : 3e80: eea4c428 c027ce94 0000=
+0000 00001000 beb3c848 eea4c438 00000000 c0a09b7c
+    2020-09-15 04:10:19.553000  kern  :emerg : 3ea0: c0e28634 c0b1666c 096f=
+2204 ef1f5f80 c027cb18 eea493c0 beb3c848 00001000
+    2020-09-15 04:10:19.562000  kern  :emerg : 3ec0: ee953f78 00000001 c02d=
+28e4 c02d298c ee952000 00001000 00000000 beb3c848
+    2020-09-15 04:10:19.564000  kern  :emerg : 3ee0: eea493c0 ee953f78 0000=
+0001 c0254378 00000008 00000000 00000051 c026978c
+    2020-09-15 04:10:19.571000  kern  :emerg : 3f00: ffffef74 ffffffff 0000=
+0001 00000000 3b9ab974 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+hifive-unleashed-a00      | riscv | lab-baylibre    | gcc-8    | defconfig =
+                   | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f4791e8a516e2cfa6091c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/risc=
+v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/risc=
+v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/riscv/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f5f4791e8a516e2cfa60=
+91d
+      failing since 4 days (last pass: next-20200818, first fail: next-2020=
+0909)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+imx53-qsrb                | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_=
+defconfig          | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f45506bd26569eca60914
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx53-qsrb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx53-qsrb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f5f45506bd2656=
+9eca60918
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:21:17.444000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:21:17.444000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:21:17.445000  kern  :alert : [0000001c] *pgd=3Dc8290831
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f5f45506bd2=
+6569eca60919
+      new failure (last pass: next-20200911)
+      28 lines
+
+    2020-09-15 04:21:17.520000  kern  :emerg : Process dropbear (pid: 169, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:21:17.521000  kern  :emerg : Stack: (0xdc8d1e40 to 0xdc8d=
+2000)
+    2020-09-15 04:21:17.529000  kern  :emerg : 1e40: dc51ee00 dc51ee6c c169=
+f860 00000002 c1d294dc dc8b8088 00000003 00000171
+    2020-09-15 04:21:17.538000  kern  :emerg : 1e60: 00000000 c15a20fc dc8b=
+80a0 dc8b80a0 dc8d1f78 c01084d4 00000000 c15a20fc
+    2020-09-15 04:21:17.547000  kern  :emerg : 1e80: dc8b80a0 dc8b8088 0000=
+0558 c02e0a14 dc8d1ef8 00001000 beb13858 dc8b80b0
+    2020-09-15 04:21:17.556000  kern  :emerg : 1ea0: 00000000 00000000 27f0=
+c06e dc2adb40 c02e067c dc3bc280 beb13858 00001000
+    2020-09-15 04:21:17.565000  kern  :emerg : 1ec0: dc8d1f78 00000001 c034=
+d3d4 c034d47c dc8d0000 000010[   11.316665] evbug: Event. Dev: input0, Type=
+: 3, Code: 1, Value: 29
+    2020-09-15 04:21:17.574000  [   11.324677] evbug: Event. Dev: input0, T=
+ype: 0, Code: 0, Value: 0
+    2020-09-15 04:21:17.574000  00 00000000 beb13858
+    2020-09-15 04:21:17.583000  kern  :emerg : 1ee0: dc3bc280 dc8d1f78 0000=
+0001 c02b1c0c ffffc91e ffffffff 00000001 00000000
+    ... (19 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+imx53-qsrb                | arm   | lab-pengutronix | gcc-8    | multi_v7_d=
+efconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f60431c00a415c371a60914
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx53-qsrb.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx53-qsrb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f60431c00a415c=
+371a6091a
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:29:10.813000  kern  :alert : Unable to handle kernel NULL=
+ pointer dereference at virtual address 0000001c
+    2020-09-15 04:29:10.813000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:29:10.814000  kern  :alert : [0000001c] *pgd=3Dcb21c831
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f60431c00a4=
+15c371a6091b
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-15 04:29:10.863000  kern  :emerg : Process dropbear (pid: 128, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:29:10.864000  kern  :emerg : Stack: (0xc81d9e30 to 0xc81d=
+a000)
+    2020-09-15 04:29:10.872000  kern  :emerg : 9e20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 04:29:10.881000  kern  :emerg : 9e40: c137d53c c136c02c c802=
+40b8 c80240a0 00000003 00000425 c80240b8 00000171
+    2020-09-15 04:29:10.890000  kern  :emerg : 9e60: 00000000 00000000 c81d=
+9f78 c0307f4c c80240b8 00000171 00000000 c80240a0
+    2020-09-15 04:29:10.899000  kern  :emerg : 9e80: c80240b8 c04cad10 0000=
+0000 00001000 beaae858 c80240c8 00000000 c100edbc
+    2020-09-15 04:29:10.908000  kern  :emerg : 9ea0: c1877434 c138ed64 19e6=
+92f4 de9f3680 c04ca994 c81dd000 beaae858 00001000
+    2020-09-15 04:29:10.917000  kern  :emerg : 9ec0: c81d9f78 00000001 c052=
+36a8 c0523750 c81d8000 00001000 00000000 beaae858
+    2020-09-15 04:29:10.918000  kern  :emerg : 9ee0: c81dd000 c81d9f78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 04:29:10.929000  kern  :emerg : 9f00: ffffe98a ffffffff 0000=
+0001 00000000 3b9ab38a 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+odroid-x2                 | arm   | lab-collabora   | gcc-8    | exynos_def=
+config             | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f476371cdfeea7aa6091c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: exynos_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+exynos_defconfig/gcc-8/lab-collabora/baseline-odroid-x2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+exynos_defconfig/gcc-8/lab-collabora/baseline-odroid-x2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f5f476371cdfeea7aa60=
+91d
+      new failure (last pass: next-20200911)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+odroid-x2                 | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f60439e35bd50ab60a60930
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-x2.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-x2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f60439e35bd50ab60a60=
+931
+      new failure (last pass: next-20200911)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+panda                     | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6047d68485758888a60934
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6047d68485758888a60=
+935
+      new failure (last pass: next-20200911)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+panda                     | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6041681f7f735bcea6091e
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6041681f7f735=
+bcea60922
+      failing since 61 days (last pass: next-20200706, first fail: next-202=
+00715)
+      60 lines
+
+    2020-09-15 04:21:54.354000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-09-15 04:21:54.360000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-09-15 04:21:54.366000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-09-15 04:21:54.371000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-09-15 04:21:54.377000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-09-15 04:21:54.383000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-09-15 04:21:54.389000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-09-15 04:21:54.394000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-09-15 04:21:54.400000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-09-15 04:21:54.406000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+panda                     | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f60438835bd50ab60a6092b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f60438835bd50ab60a60=
+92c
+      new failure (last pass: next-20200911)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+panda                     | arm   | lab-baylibre    | gcc-8    | omap2plus_=
+defconfig          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6049cb44f89d6fffa6093f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-baylibre/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-baylibre/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6049cb44f89d6fffa60=
+940
+      failing since 55 days (last pass: next-20200706, first fail: next-202=
+00721)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+panda                     | arm   | lab-collabora   | gcc-8    | omap2plus_=
+defconfig          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6044d0858e3a13a0a60914
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6044d0858e3a13a0a60=
+915
+      failing since 55 days (last pass: next-20200706, first fail: next-202=
+00721)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...CONFIG_SMP=3Dn | 67/69  =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6042479b03d6fc9ea60916
+
+  Results:     67 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-rk3288-veyro=
+n-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-rk3288-veyro=
+n-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6042479b03d6f=
+c9ea6091a
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:25:35.218000  kern  :alert : pgd =3D 0d9d50db
+    2020-09-15 04:25:35.218000  kern  :alert : [003bffc4] *pgd=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f6042479b03=
+d6fc9ea6091b
+      new failure (last pass: next-20200911)
+      41 lines
+
+    2020-09-15 04:25:35.242000  kern  :emerg : Process kworker/0:0 (pid: 3,=
+ stack limit =3D 0xb722e230)
+    2020-09-15 04:25:35.243000  kern  :emerg : Stack: (0xee0e7d80 to 0xee0e=
+8000)
+    2020-09-15 04:25:35.255000  kern  :emerg : 7d80: ee0e7db2 ffffffb6 ffff=
+ffff c06c6934 ee0e7e00 ffffff04 ffff0a00 c0c09fd0
+    2020-09-15 04:25:35.267000  kern  :emerg : 7da0: 00000016 c30a7000 ee0e=
+7db2 c30a7000 c13b519c c06ca748 c13b519c ffffff04
+    2020-09-15 04:25:35.268000  kern  :emerg : 7dc0: ffff0a00 a0000093 8000=
+0013 c30a7000 3cf58fff c1704048 80000013 ffffff04
+    2020-09-15 04:25:35.280000  kern  :emerg : 7de0: ffff0a00 989c045c 0000=
+004a c1704048 c1704048 00000002 c30a7000 c309ec20
+    2020-09-15 04:25:35.292000  kern  :emerg : 7e00: c18c87b8 c309ec00 c31a=
+8000 c06caabc ee0e7e28 989c045c c30a7000 00000000
+    2020-09-15 04:25:35.305000  kern  :emerg : 7e20: c0c38f94 c13b519c 003b=
+ffc4 989c045c ffff0a00 989c045c 003bffc4 989c045c
+    2020-09-15 04:25:35.305000  kern  :emerg : 7e40: c1704048 c18c763c c30a=
+7000 0000004a c31a8000 c31a8000 c30a7000 c138ccac
+    2020-09-15 04:25:35.318000  kern  :emerg : 7e60: c31a8000 c0c39038 0000=
+000f 00000000 c309ec20 c309ec00 c31a8000 c0c39230
+    ... (30 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efc...G_ARM_LPAE=3Dy | 67/69  =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f604295d47117b0baa60928
+
+  Results:     67 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-8/lab-collabora/b=
+aseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-8/lab-collabora/b=
+aseline-rk3288-veyron-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f604295d47117b=
+0baa6092c
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:26:54.519000  kern  :alert : pgd =3D 9fd9d23f
+    2020-09-15 04:26:54.519000  kern  :alert : [003bffc4] *pgd=3D8000000020=
+4003, *pmd=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f604295d471=
+17b0baa6092d
+      new failure (last pass: next-20200911)
+      42 lines
+
+    2020-09-15 04:26:54.550000  kern  :emerg : Process kworker/3:3 (pid: 13=
+3, stack limit =3D 0xebe417c2)
+    2020-09-15 04:26:54.550000  kern  :emerg : Stack: (0xe92d5d70 to 0xe92d=
+6000)
+    2020-09-15 04:26:54.562000  kern  :emerg : 5d60:                       =
+              e92d5da2 00000001 ffffffff c0838c9c
+    2020-09-15 04:26:54.562000  kern  :emerg : 5d80: e92d5df0 ffffff04 ffff=
+0a00 c0dad680 00000016 e9298000 e92d5da2 e9298000
+    2020-09-15 04:26:54.575000  kern  :emerg : 5da0: c16c284c c083caf8 c16c=
+284c ffffff04 ffff0a00 c0afcd7c e935e820 e9298000
+    2020-09-15 04:26:54.587000  kern  :emerg : 5dc0: 16d67fff e92d4000 e935=
+e800 ffffff04 ffff0a00 9368c212 ea3a0b80 e92d4000
+    2020-09-15 04:26:54.600000  kern  :emerg : 5de0: e92d4000 00000002 e929=
+8000 e935e820 c1bc29b4 e935e800 c2aa4000 c083ce78
+    2020-09-15 04:26:54.600000  kern  :emerg : 5e00: e92d5e18 9368c212 e929=
+8000 00000000 c0ddd824 c16c284c 003bffc4 9368c212
+    2020-09-15 04:26:54.612000  kern  :emerg : 5e20: ffff0a00 9368c212 003b=
+ffc4 9368c212 e92d4000 c1bc1838 e9298000 0000004a
+    2020-09-15 04:26:54.624000  kern  :emerg : 5e40: c2aa4000 c2aa4000 e929=
+8000 c169a0f0 c2aa4000 c0ddd8c8 0000000f 00000000
+    ... (31 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+rk3288-veyron-jaq         | arm   | lab-collabora   | gcc-8    | multi_v7_d=
+efconfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f60453e54588671fba60914
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-jaq.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-jaq.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f60453e54588671fba60=
+915
+      new failure (last pass: next-20200911)  =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+sun4i-a10-olinuxino-lime  | arm   | lab-baylibre    | gcc-8    | sunxi_defc=
+onfig              | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f52ffe650e219d9a6091e
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun4i-a10-olinuxino-lime.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun4i-a10-olinuxino-lime.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f5f52ffe650e21=
+9d9a60921
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-14 11:24:38.796000  kern  :alert : pgd =3D (ptrval)
+    2020-09-14 11:24:38.797000  kern  :alert : [0000001c] *pgd=3D4343b831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f5f52ffe650=
+e219d9a60922
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-14 11:24:38.837000  kern  :emerg : Process dropbear (pid: 129, =
+stack limit =3D 0x(ptrval))
+    2020-09-14 11:24:38.839000  kern  :emerg : Stack: (0xddfe1e28 to 0xddfe=
+2000)
+    2020-09-14 11:24:38.840000  kern  :emerg : 1e20:                   c0cf=
+bdb4 c0c0505c 00000008 c0c04edc c0800578 00000002
+    2020-09-14 11:24:38.841000  kern  :emerg : 1e40: c091dbe0 c091dbe4 ddd0=
+b018 ddd0b000 00000003 00000655 ddd0b018 00000078
+    2020-09-14 11:24:38.842000  kern  :emerg : 1e60: 00000000 00000000 ddfe=
+1f78 c01075d4 ddd0b018 00000078 00000000 ddd0b000
+    2020-09-14 11:24:38.878000  kern  :emerg : 1e80: ddd0b018 c024c9f0 0000=
+0000 00001000 be806858 ddd0b028 00000000 c080557c
+    2020-09-14 11:24:38.880000  kern  :emerg : 1ea0: c0c49334 c092e994 1c9c=
+3b95 df540b80 c024c674 c3418c00 be806858 00001000
+    2020-09-14 11:24:38.881000  kern  :emerg : 1ec0: ddfe1f78 00000001 c029=
+b3ac c029b454 ddfe0000 00001000 00000000 be806858
+    2020-09-14 11:24:38.883000  kern  :emerg : 1ee0: c3418c00 ddfe1f78 0000=
+0001 c0223d90 00000008 00000000 00000051 c0239270
+    2020-09-14 11:24:38.884000  kern  :emerg : 1f00: ffffee95 ffffffff 0000=
+0001 00000000 3b9ab895 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+sun5i-a13-olinuxino-micro | arm   | lab-baylibre    | gcc-8    | multi_v7_d=
+efconfig           | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f604a602bd89f353ca6093c
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun5i-a13-olinuxino-micro.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun5i-a13-olinuxino-micro.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f604a602bd89f3=
+53ca6093f
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 05:00:01.724000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 05:00:01.725000  kern  :alert : [0000001c] *pgd=3D43af6831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f604a602bd8=
+9f353ca60940
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-15 05:00:01.751000  kern  :emerg : Process dropbear (pid: 122, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 05:00:01.753000  kern  :emerg : Stack: (0xc3c19e30 to 0xc3c1=
+a000)
+    2020-09-15 05:00:01.754000  kern  :emerg : 9e20:                       =
+              00000010 c04c9e94 c19f75bc 00000002
+    2020-09-15 05:00:01.756000  kern  :emerg : 9e40: c137d53c c136c02c c3a8=
+d018 c3a8d000 00000003 00000352 c3a8d018 00000044
+    2020-09-15 05:00:01.757000  kern  :emerg : 9e60: 00000000 00000000 c3c1=
+9f78 c0307f4c c3a8d018 00000044 00000000 c3a8d000
+    2020-09-15 05:00:01.782000  kern  :emerg : 9e80: c3a8d018 c04cad10 0000=
+0000 00001000 beb84858 c3a8d028 00000000 c100edbc
+    2020-09-15 05:00:01.784000  kern  :emerg : 9ea0: c1877434 c138ed64 2377=
+c922 c90f1d80 c04ca994 c3b9ad80 beb84858 00001000
+    2020-09-15 05:00:01.785000  kern  :emerg : 9ec0: c3c19f78 00000001 c052=
+36a8 c0523750 c3c18000 00001000 00000000 beb84858
+    2020-09-15 05:00:01.787000  kern  :emerg : 9ee0: c3b9ad80 c3c19f78 0000=
+0001 c04a1984 00000008 00000000 00000051 c04b725c
+    2020-09-15 05:00:01.789000  kern  :emerg : 9f00: ffffeebf ffffffff 0000=
+0001 00000000 3b9ab8bf 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =
+
+
+
+platform                  | arch  | lab             | compiler | defconfig =
+                   | results
+--------------------------+-------+-----------------+----------+-----------=
+-------------------+--------
+sun5i-a13-olinuxino-micro | arm   | lab-baylibre    | gcc-8    | sunxi_defc=
+onfig              | 2/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f5f460b8ad6dead8ca6092a
+
+  Results:     2 PASS, 2 FAIL, 0 SKIP
+  Full config: sunxi_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200914/arm/=
+sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun5i-a13-olinuxino-micro.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200914/arm/=
+sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun5i-a13-olinuxino-micro.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f5f460b8ad6dea=
+d8ca6092d
+      new failure (last pass: next-20200911)
+      4 lines
+
+    2020-09-15 04:31:43.654000  kern  :alert : pgd =3D (ptrval)
+    2020-09-15 04:31:43.655000  kern  :alert : [0000001c] *pgd=3D47f96831, =
+*pte=3D00000000, *ppte=3D00000000
+     * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f5f460b8ad6=
+dead8ca6092e
+      new failure (last pass: next-20200911)
+      29 lines
+
+    2020-09-15 04:31:43.695000  kern  :emerg : Process dropbear (pid: 122, =
+stack limit =3D 0x(ptrval))
+    2020-09-15 04:31:43.697000  kern  :emerg : Stack: (0xc7febe28 to 0xc7fe=
+c000)
+    2020-09-15 04:31:43.698000  kern  :emerg : be20:                   c0cf=
+bdb4 c0c0505c 00000008 c0c04edc c0800574 00000002
+    2020-09-15 04:31:43.699000  kern  :emerg : be40: c091dbe0 c091dbe4 c7e1=
+80b8 c7e180a0 00000003 0000038f c7e180b8 00000044
+    2020-09-15 04:31:43.701000  kern  :emerg : be60: 00000000 00000000 c7fe=
+bf78 c01075d4 c7e180b8 00000044 00000000 c7e180a0
+    2020-09-15 04:31:43.736000  kern  :emerg : be80: c7e180b8 c024c9f0 0000=
+0000 00001000 bebd7858 c7e180c8 00000000 c080557c
+    2020-09-15 04:31:43.738000  kern  :emerg : bea0: c0c49334 c092e994 34c3=
+2351 c949cf80 c024c674 c7e179c0 bebd7858 00001000
+    2020-09-15 04:31:43.740000  kern  :emerg : bec0: c7febf78 00000001 c029=
+b3ac c029b454 c7fea000 00001000 00000000 bebd7858
+    2020-09-15 04:31:43.741000  kern  :emerg : bee0: c7e179c0 c7febf78 0000=
+0001 c0223d90 00000008 00000000 00000051 c0239270
+    2020-09-15 04:31:43.742000  kern  :emerg : bf00: fffff036 ffffffff 0000=
+0001 00000000 3b9aba36 00000000 00000001 00000000
+    ... (18 line(s) more)
+      =20

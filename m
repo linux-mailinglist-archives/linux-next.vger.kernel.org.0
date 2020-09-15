@@ -2,82 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A6326B0B5
-	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 00:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D9326B065
+	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 00:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgIOWSL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 18:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S1727977AbgIOWJe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 18:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727446AbgIOQdY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 12:33:24 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5AAC06178B;
-        Tue, 15 Sep 2020 09:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=DRZPq16Nwbe7wkPR64aqrha3z0JvuZxrmSCMnTXQmXs=; b=Ar6dKiwnflCK0BKblP1LY5tJ4j
-        Osni+05bRKhLaXD5gtdPeP6w/f5cnoRAYa6+O+w/YzZzyA3Z02yaQ4sNmcovoRm7Kslc265LBntnx
-        eidt6fqPkQeco0ytjkTUmbc0/JloJtZamyFf7gFWcqV1ipuW09w+cjkni6a8tmahXcTba8UQ4ib76
-        RznZwfsQ/MeGWxQAOYAfPrKpVcc/uzLVxY/r/yd3+ZAdlOEVnyUmTh3Y9NToRGkYGQwcHAI8bK3+u
-        acDDs8N4Xh1UcHu3vb+7NIGUBm6Yg7QZJuu2CrvhjXnwVfiowtSO0QRs4qLPBUUJSEalJADkl152J
-        0e+u+42Q==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kIDtO-0004Ri-My; Tue, 15 Sep 2020 16:33:19 +0000
-Subject: Re: linux-next: Tree for Sep 15 (drivers/media/test-drivers/vidtv/)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-References: <20200915174932.3aa7d103@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <55ef0376-7809-c875-5dcc-5bb46d6204df@infradead.org>
-Date:   Tue, 15 Sep 2020 09:33:14 -0700
+        with ESMTP id S1727822AbgIOUSp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 16:18:45 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD3DC06174A
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 13:18:42 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id z1so1104134ooj.3
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 13:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7Pxy8XuN4H9/39l6P169WyiunvVoa6/MHSiTUzpc2H0=;
+        b=StKfSTomujrlgFk7a+XxdsRkBonWZLkkibhHZMq5mmkqzeaXSUoJHCzAwYq+CzHJNp
+         UvGlWzUtFUw2x1sb+ZEOxNkUAvZKfMpTdP96SHWdVVg3EBAJA7VV9xG8wkTTJim5TZi3
+         Q/NOlPnYgwcNUJUy3Z0G+9jbsSx+wRYV6/aAI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7Pxy8XuN4H9/39l6P169WyiunvVoa6/MHSiTUzpc2H0=;
+        b=awvobNRnlvKYo/ZAC1Tt09OqRu2UETFsamCTMySVPjJUc6Zj51Cog3ufVt2ryj3XJG
+         wRvlpczIL9iaeM3h1QRdM+bJYUt9Gj+T9VJsKVKFlDV5Zo003o4mYJGp9gqWIxdr5IKv
+         RzjLOcavF9jYU95FQHtNfTV5rLJNwtfeWgKso+U3704lPMkWqPSZgFmzSait5p53cM9F
+         R4w9eusLe/C62vOeg4XocM0Cv3dIGebrYawIgiHjktdODWXTwdfhXkKDSts/Mcw9W5Im
+         MddcK7+vonSxVqFKM6KEqxjAtld8bMxq11fcg+7NShu+UlfdKktqUziLTXFxmqtizO5N
+         GRtA==
+X-Gm-Message-State: AOAM533g/xz+5ncP77Hn0h3IGwZCvz5l4Sk+ZPOU2btURz12xP0/ZF+Q
+        IP9xV0o6Nx2XT2lrENqovXN72Q==
+X-Google-Smtp-Source: ABdhPJzryCOcoMZBw1SZnsYqoffKa4MsGINM/LYQGkRr4W88hKIyCvYanE+t8tLIvSwSXkBG6dFSNA==
+X-Received: by 2002:a4a:81:: with SMTP id 123mr15461886ooh.80.1600201122088;
+        Tue, 15 Sep 2020 13:18:42 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id u9sm6595084otq.54.2020.09.15.13.18.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 13:18:41 -0700 (PDT)
+Subject: Re: [REGRESSION] kselftest: next-20200915
+To:     Justin Cook <justin.cook@linaro.org>, LKFT <lkft@linaro.org>
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au, shuah@kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <0100017492de8180-c524cff4-bd4e-4777-9f33-7e1da2c986d2-000000@email.amazonses.com>
+ <CANKHsTfyE64ygNB0H0Nx=P63D-kqYa6aGOXS6ZmNUspLJJtS=Q@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f9144c49-d39a-af67-2a5a-3828b86ea86c@linuxfoundation.org>
+Date:   Tue, 15 Sep 2020 14:18:40 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200915174932.3aa7d103@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <CANKHsTfyE64ygNB0H0Nx=P63D-kqYa6aGOXS6ZmNUspLJJtS=Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/15/20 12:49 AM, Stephen Rothwell wrote:
-> Hi all,
+On 9/15/20 11:52 AM, Justin Cook wrote:
+> Hello,
 > 
-> Changes since 20200914:
+> Linaro had previously been sending out a report based on our testing of 
+> the linux kernel using kselftest. We paused sending that report to fix a 
+> few issues. We are now continuing the process, starting with this report.
 > 
-> The v4l-dvb tree lost its build failure.
+> If you have any questions, comments, feedback, or concerns please email 
+> lkft@linaro.org <mailto:lkft@linaro.org>.
+> 
+> Thanks,
+> 
+> Justin
 > 
 
-media driver build problems on i386:
-gcc (SUSE Linux) 7.5.0
+Hi Justin,
 
-build#1:
+Thanks for the report. It would be nice to see the reports. However, it
+is hard for me to determine which tests failed and why.
 
-ERROR: modpost: "__udivdi3" [drivers/media/test-drivers/vidtv/dvb-vidtv-bridge.ko] undefined!
+> On Tue, 15 Sep 2020 at 12:44, LKFT <lkft@linaro.org 
+> <mailto:lkft@linaro.org>> wrote:
+> 
+>     ## Kernel
+>     * kernel: 5.9.0-rc5
+>     * git repo:
+>     ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git',
+>     'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+>     * git branch: master
+>     * git commit: 6b02addb1d1748d21dd1261e46029b264be4e5a0
+>     * git describe: next-20200915
+>     * Test details:
+>     https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200915
+> 
+>     ## Regressions (compared to build next-20200914)
+> 
+>     juno-r2:
+>        kselftest:
+>          * memfd_memfd_test
+> 
+>     x86:
+>        kselftest-vsyscall-mode-native:
+>          * kvm_vmx_preemption_timer_test
 
-build#2:
+I looked for the above two failures to start with since these
+are regressions and couldn't find them.
 
-ld: drivers/media/test-drivers/vidtv/vidtv_s302m.o: in function `vidtv_s302m_encode':
-vidtv_s302m.c:(.text+0x1f3): undefined reference to `__udivdi3'
-ld: drivers/media/test-drivers/vidtv/vidtv_mux.o: in function `vidtv_mux_tick':
-vidtv_mux.c:(.text+0x3ee): undefined reference to `__udivdi3'
-ld: vidtv_mux.c:(.text+0x40b): undefined reference to `__udivdi3'
+Are the regressions tied to new commits in linux-next from the
+mm and kvm trees?
 
+thanks,
+-- Shuah
 
-
-randconfig files are available if anyone wants them.
-
-thanks.
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>

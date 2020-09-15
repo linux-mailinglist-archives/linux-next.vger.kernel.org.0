@@ -2,76 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2123C26B144
-	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 00:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C9D26B235
+	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 00:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727705AbgIOW1p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 18:27:45 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:46669 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727504AbgIOW1i (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Sep 2020 18:27:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BrdCC0BHdz9sTN;
-        Wed, 16 Sep 2020 08:27:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600208855;
-        bh=hffzkyYV8waiSdgiO/5Whh0gF4DNYgLzs9mF7TL+73c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ahuIUFUUqOla1YAWb09A9z6SJ+VcCd0RKALSWjWyi2bze2ROMR1NLikH3AUF6ttKO
-         szHEtr00gIrGRWxYz12xsOJgiLd+t7yMVlfYAr1284vcfKdVXwdzQEtWVG4hIDPXPu
-         5JWStHv8Y9QOZHfTIznfPlDxwwkpe+YgcI7JZ5V8HozuH31Am20/6fSmY9YhBlG5t0
-         lP5RCcdvDkvKQf0fOo+fdd8UXmbmHVWPzS8aeWxPRM6XlRAA4UEVGgbIIQkp+nOACG
-         IkcCxcd7bPga2eJwICvGQvnHYj4a5TA87mT0spX/USmC86+vWaXm5fyQTyTPVXj2Us
-         bx3HiAztmLHFA==
-Date:   Wed, 16 Sep 2020 08:27:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
-Message-ID: <20200916082733.50f872d4@canb.auug.org.au>
+        id S1727570AbgIOWmR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 18:42:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35006 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727455AbgIOP4D (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Sep 2020 11:56:03 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08FFtHA5122917;
+        Tue, 15 Sep 2020 11:55:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=kXdEGL2gPNUg6d8s/J1VONpUzVRwiUhLRy3ED/9oUxk=;
+ b=FlWYpamroa52hxtin7SjsiZxb6oQpgzd9TijUwrvw+K+aguggruqb4Z+S3nUNl/pGDCa
+ MAsb8V3pVPd6100wezu+BzlpZdgIig//xP9/GHfMVkrcxlOOmO8oJWqkIJb2sugKxSgI
+ zQKrxz79Wmpc+L03UQV33CqCoWQw2KD0IElneiCflnm1GbCLQ22BuKxUDc8aN30OlA2z
+ AzFsvFSFN6wSWjBC/xYeXhdoLc/saextAqVrIOjSX1WzLC45vZLG7uYPGCrYGIiGajpI
+ YWMnrpKe4bSN/78sHSp5+tJi9/irpC0O6B1ttfYRYwVHWJfSXfLnl/RTQahJ70xQsSVa yg== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33k0b40m9j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Sep 2020 11:55:54 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08FFmhva023161;
+        Tue, 15 Sep 2020 15:55:39 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 33gny81xd3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Sep 2020 15:55:39 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08FFtaiN23331288
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 15:55:36 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9FE624C046;
+        Tue, 15 Sep 2020 15:55:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FA544C040;
+        Tue, 15 Sep 2020 15:55:36 +0000 (GMT)
+Received: from osiris (unknown [9.171.78.178])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 15 Sep 2020 15:55:36 +0000 (GMT)
+Date:   Tue, 15 Sep 2020 17:55:34 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Christoph Hellwig <hch@lst.de>, linux-next@vger.kernel.org
+Subject: linux-next: add s390 set_fs branch?
+Message-ID: <20200915155534.GA11180@osiris>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TJ+G7Jo_gNzijhAJc_XCoI4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-15_11:2020-09-15,2020-09-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 mlxscore=0 mlxlogscore=887 suspectscore=2
+ bulkscore=0 adultscore=0 clxscore=1011 impostorscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150127
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TJ+G7Jo_gNzijhAJc_XCoI4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+could you please add the 'set_fs' branch of the s390 kernel.org
+repository to linux-next?
 
-Commit
+git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git set_fs
 
-  dd9a8f6b930b ("PCI/ERR: Fix reset logic in pcie_do_recovery() call")
+I'm wondering what the best way would be to deal with additional s390
+specific topic branches and how to get them merged into linux-next?
 
-is missing a Signed-off-by from its committer.
+As far as I can tell other maintainers merge all their branches into a
+'for-next' branch, so that you only need to pull one branch (and don't
+need to deal with requests like this one ;) ).
 
---=20
-Cheers,
-Stephen Rothwell
+Would that the best way for you? If so we could simply do the same for
+s390 as well. Please let us know.
 
---Sig_/TJ+G7Jo_gNzijhAJc_XCoI4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9hP9UACgkQAVBC80lX
-0GxeLwf+IpkbXyxcmfFbRzP01N2vG+wk6qyxS9RA5nwQoxn0NK4zkpRd83kV6XBv
-zupQRH+NAR6mnE8q6OHrtfr7/VzfrrF+K4/ewIGxUGJ7Hbx5zfT9AgfcB3FNFdCF
-rowoHuNkrFhxUkhGGNj7AWti5ef2upv6acIPudSPShrRGRy2+30JkaT6nuXxgRp8
-90CNUV2/vowDP7m0lk5vHkd79WgATRVMtYWarDpU29lWljvdz7Ilad8TvX9F6AKL
-rc8P3NQToqFI3n/CyXV9Rlk6MffRQ70LpYHALFrIAtZaxZqxZ6cRcuUiS/Ccz5De
-brGptYjEOVMorN9ZvcghCo//6/2oHQ==
-=uZbv
------END PGP SIGNATURE-----
-
---Sig_/TJ+G7Jo_gNzijhAJc_XCoI4--
+Thank you!

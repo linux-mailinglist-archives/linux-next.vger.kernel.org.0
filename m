@@ -2,102 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BEB26B2BD
-	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 00:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C500426B395
+	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 01:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727699AbgIOWwj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 18:52:39 -0400
-Received: from ozlabs.org ([203.11.71.1]:42063 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727672AbgIOWwZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Sep 2020 18:52:25 -0400
+        id S1727424AbgIOXFC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 19:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727394AbgIOXFA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 19:05:00 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B695AC06174A;
+        Tue, 15 Sep 2020 16:04:59 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Brdln15Ryz9sSs;
-        Wed, 16 Sep 2020 08:52:21 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Brf2D0nqvz9sTN;
+        Wed, 16 Sep 2020 09:04:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600210343;
-        bh=EPzAMIcHsLtJmMMKyEMteGFNclnevagytfnflOTYbfw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GbYM1BL9fvc61W6wXdnQUb86KCCHjKfW4hg8Ln8O+7SiSzCSgYwcq144/xZq64DyR
-         znMao3PBbpaZ1eUAp2UeyhCy5XC5WHiUKEE6WtsMUKUWZ4D1n09rJSM2XlfnJ60Nkt
-         81223glfSux2yRfeFArzZILTBG7zIhlXQmPbgNJGEzQZrvkUM4vgHj+siCSS9J7eEo
-         OfTqlBBRTwC+q/y9crODmaSESwfMTtgYdOKHgVWsPy/LoZP7V5x9FcOa33ZLGXms/2
-         NcoZdQLsfytDz7WQbQDqHkPkLCPOS6VTrSWscpNLidHUAUrnftIBe32Nkvpa7/gnKv
-         HbzSJHg0Zoy9g==
-Date:   Wed, 16 Sep 2020 08:52:20 +1000
+        s=201702; t=1600211092;
+        bh=2cPl+pITWd+vDIZL5DnD4Pvu9CM8FqL9TgUwktcR0DA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tYaqG76DA0F1y8CcJ2W5gkv2Y9ZOGkI5BRZ4uQm8YhMHmqvIgCt0oWOfbYaO1xALM
+         EBpXHZ2MUnwxLT+ta16ZQhMO23kNL9oRjHipb1xhZThQTH95Ho6jMEEwvyN4dHkZ7O
+         54WZQvd7vVKGM5/mqifYFhbxCtr39vUaicDCPdybaSL9BNNTjB75lBel7omjVnPaa5
+         jb8oZX/cORmCk+IUMuOwf4iyRqqbhzN84oeOgljMe8YofiT+RYQzV21QSng8mi17kS
+         ck+I/UUkwjaiGSDce8AhtURxC9afWA/Lxyi2wTYnxRKYladj6Q5e7MnVBWqYcyUcPl
+         mtcGGr5It7thw==
+Date:   Wed, 16 Sep 2020 09:04:51 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        gandalf@winds.org, Qian Cai <cai@lca.pw>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Michal Hocko <mhocko@suse.com>, Yang Shi <shy828301@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>
-Subject: Re: BUG: kernel NULL pointer dereference, address: RIP:
- 0010:shmem_getpage_gfp.isra.0+0x470/0x750
-Message-ID: <20200916085220.4906a985@canb.auug.org.au>
-In-Reply-To: <20200915131048.GF5449@casper.infradead.org>
-References: <CA+G9fYvmut-pJT-HsFRCxiEzOnkOjC8UcksX4v8jUvyLYeXTkQ@mail.gmail.com>
-        <20200914115559.GN6583@casper.infradead.org>
-        <20200915165243.58379eb7@canb.auug.org.au>
-        <20200915131048.GF5449@casper.infradead.org>
+To:     Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net-next tree
+Message-ID: <20200916090451.41e7a174@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oUjubHQkRs3rJ5X8Uo5nyMt";
+Content-Type: multipart/signed; boundary="Sig_/iQstRI/L.BDLUj2VHUkCoVw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oUjubHQkRs3rJ5X8Uo5nyMt
+--Sig_/iQstRI/L.BDLUj2VHUkCoVw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 15 Sep 2020 14:10:48 +0100 Matthew Wilcox <willy@infradead.org> wro=
-te:
->
-> On Tue, Sep 15, 2020 at 04:52:43PM +1000, Stephen Rothwell wrote:
-> > I have applied that to linux-next today. =20
->=20
-> Thanks!  Can you also pick up these two:
->=20
-> https://lore.kernel.org/linux-mm/20200914112738.GM6583@casper.infradead.o=
-rg/
-> https://lore.kernel.org/linux-mm/20200914165032.GS6583@casper.infradead.o=
-rg/
+In commit
 
-I have added both those to linux-next today.
+  9f19306d1666 ("net: stmmac: use netif_tx_start|stop_all_queues() function=
+")
+
+Fixes tag
+
+  Fixes: c22a3f48 net: stmmac: adding multiple napi mechanism
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+Also, please keep the commit message tags all together at the end of
+the commit message and just use
+
+git log -1 --format=3D'Fixes: %h ("%s")' <SHA1>
+
+to generate Fixes tag lines.
+
+Since Dave does not rebase his tree, this is just for future reference.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/oUjubHQkRs3rJ5X8Uo5nyMt
+--Sig_/iQstRI/L.BDLUj2VHUkCoVw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9hRaQACgkQAVBC80lX
-0GymTgf6AxNAk5p0NU6ylCs1AaisXUyjZOsIm92KIniATCh88zPrBEDwE+OSVifu
-ABAomXzcCaSWrkyzofL2UXZ8lusXm03nx95KaqCox7Eyc2RmGMgyCE81swVkfk9D
-oefLZWlksKLwDBnAJ/ClhUHIgM4yLkmIwPJAnN+JMjgJpFya9aEyaXkFjqjoab9e
-uHJW+i2GtT1ZmkhdpCCU8b4Iou0hs0QqHHA7hgMDrqgwk/SVQNUiKpXVscSUyYzM
-f4NWOoY9MNmzPyhDqZWdSSc8s0z1Y69FmHEsYi59VuCRJoPDbIAcmy9ZE4+j3/sn
-K+Lqu1Z0DyfS5YYRUQTfMyfaksmuuA==
-=nbxA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9hSJMACgkQAVBC80lX
+0GwffwgAoBxnbvEa4e+9EC19EERC6ylvIIY/zaWzZuQ7S/vFc9UwcM/DAtzSrSk/
+CB3E0NuGrVOKDG5l3Mw2mREiuaWccHRGqPvkwjndQAQUWvufc2rCeGhEILcLdsAs
+Ia8diC58IVQWTagu/1/DrWSeBLRsPzV8kupFcMM5Oz9urwhS5fSHYgVja6DBCRKr
+5+Yg1e6M2m/o2wkGnwcvbwv8JjSLjafHvzI+7/2gLLhm+rRFazdyo1k3WR3mSLWQ
+SdJe0Ip3CQfAUzNCsCnFwzGyTcuERXMH8hbaOB8MkMc9EpBNJYoqyG9/trIgz5wL
+ltkE1Syfu1IG2AKdOCWAoaPR/tmDGg==
+=jD7h
 -----END PGP SIGNATURE-----
 
---Sig_/oUjubHQkRs3rJ5X8Uo5nyMt--
+--Sig_/iQstRI/L.BDLUj2VHUkCoVw--

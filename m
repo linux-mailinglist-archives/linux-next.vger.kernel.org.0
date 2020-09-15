@@ -2,118 +2,208 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D7026A41A
-	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 13:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8027F26A4E2
+	for <lists+linux-next@lfdr.de>; Tue, 15 Sep 2020 14:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgIOLZm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Sep 2020 07:25:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49329 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726242AbgIOLYu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Sep 2020 07:24:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BrLVM70dlz9sVM;
-        Tue, 15 Sep 2020 21:24:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1600169084;
-        bh=vwQV7qeFTU97cqEIIJI2HqYzEK96icuAhdrJc1SZ50c=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=prKzwknFVr9DjUmmzGOx6sGZ3/ZPjF5DldXo/d/XmMWSmSYb0s3ySkcsIUw+FO5SZ
-         GiDFjbh5ayGPdxxCjV7DbprPsL4p1d03V6pLg5m+cTO9RdPbYMu8pETXZf4gPwDcso
-         PyFQkhVjvaQ8qaJeQ0nhHhdTJgOVdSyk9MuXtgplYpBXcokTAmrpQXE025EdIpTvS2
-         U2tfrEg2SZRnsMQWPEEMP94Lujy0o8a+U1OKVHEVVMbHpINk8fr1B4uytBGwV4LB/x
-         HBPUVmEDUpXgaJspAWwyL1mvQPT5t+k1oNc/s1b+cS/hd5TVZZNcSjRZ/u3T+La5KM
-         3ri0sJl1bXIZg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        linux-next@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, willy@infradead.org
-Subject: Re: [5.9.0-rc5-20200914] Kernel crash while running LTP(mlock201)
-In-Reply-To: <3DCED508-4DC0-42AA-9CFF-3AB260ED1E9A@linux.vnet.ibm.com>
-References: <3DCED508-4DC0-42AA-9CFF-3AB260ED1E9A@linux.vnet.ibm.com>
-Date:   Tue, 15 Sep 2020 21:24:38 +1000
-Message-ID: <87o8m7p9jd.fsf@mpe.ellerman.id.au>
+        id S1726466AbgIOMRt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Sep 2020 08:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbgIOMCK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Sep 2020 08:02:10 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A567C061352
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 05:02:09 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id x77so2839813lfa.0
+        for <linux-next@vger.kernel.org>; Tue, 15 Sep 2020 05:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2ZJ+GbXc0wmHPJm25O4vi0yPUnebJyibV4Y+lWCt0+0=;
+        b=ACGjOsqYMP3W+ZFb5of5vpmVTwBuG62LZrzZaBFgNeYvwqO859mMvZBEYQiJIgQgNb
+         UPrbR/VK1ho4Pnoer/NfYREwCfGFQtHrdCs7uLG6InbMc8W/ZhU76BwGSLYnG7IduY61
+         FK6Sdakr0Z8ueBxFakucZIQBNwyl72BWcJM734s4RFvGRiqURtUZHHbR6LjHQFePAskz
+         HvX2V7eNWpVfrgf914kqkLO/rL1slXoieGLMb32oCzx8iGNLfnE9q9ZH0EpJxxNRKf8o
+         Cnm9EJ32p7menxU82yE728RbVvNkzfOqguU5VibAzR4XnpueMNlDGXdyEpF20f4LP/yK
+         W7Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2ZJ+GbXc0wmHPJm25O4vi0yPUnebJyibV4Y+lWCt0+0=;
+        b=e0K8oiV2DeHHvgH4QirFIlXwS2f0CT2P92LeBtUbEJAfP8WHn+Om9i5S3hQdGD5yVg
+         clx+Xhi+F3G+bJtS/j0L99md4RCOB43pMst8Pm7amuEpA3PF3ol0LBSKgH+/OHf7nqaJ
+         jT8nS2ufOmdiInPGnExS5rTSap1wTM1Ba/klGfJH4gJbEL5zN2DJalhYBQxfushy/pt7
+         6cxbb8WXn/o5aohPM5DOBSapCNiHVY7tOwvAiW3XuNvS6NPXxGnhbch392ad19XWcesb
+         j5NoY5O1XwbZb+afhKK8riTS2/19YOz2ZyJzQTz1NCRTUQyjVAiwW2Aaqg94Jy3EmSmW
+         OPcA==
+X-Gm-Message-State: AOAM5321b3rDAFye5pRByNue5JPkfzRJa0nqq3jGRfhdjFp8kwSOobaf
+        isn3nqbMl9jQqdI5yAxItKbhWDbcG1unH83tGhyeaQ==
+X-Google-Smtp-Source: ABdhPJz+rPNx9r/2oJ8y8WaQrTKm2idA42hHus5emYon+7xs//tS2onQrAkrZ9mxGClX74aBYQ8UCFTLrakGDfzjhsA=
+X-Received: by 2002:ac2:54b4:: with SMTP id w20mr6963969lfk.13.1600171327699;
+ Tue, 15 Sep 2020 05:02:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20200908125813.8809-1-brgl@bgdev.pl>
+In-Reply-To: <20200908125813.8809-1-brgl@bgdev.pl>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Tue, 15 Sep 2020 14:01:56 +0200
+Message-ID: <CADYN=9+3kHG0CexzZiMQoXdF2piN2ZhOTObhY=7VCKrnFVN0Kw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] gpiolib: generalize GPIO line names property
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kent Gibson <warthog618@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sachin Sant <sachinp@linux.vnet.ibm.com> writes:
-> While running LTP tests (specifically mlock201) against next-20200914 tree
-> on a POWER9 LPAR results in following crash.
+On Tue, 8 Sep 2020 at 18:40, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>
+> I initially sent this as part of the gpio-mockup overhaul but since
+> these patches are indepentent and the work on gpio-mockup may become
+> more complicated - I'm sending these separately.
+>
+> The only change is adding additional property helpers to count strings
+> in array.
+>
+> Bartosz Golaszewski (3):
+>   device: property: add helpers to count items in string arrays
+>   gpiolib: generalize devprop_gpiochip_set_names() for device properties
+>   gpiolib: unexport devprop_gpiochip_set_names()
 
-Looks the same as:
+I do an arm64 allmodconfig build fron linux-next (tag: next-20200915) and
+run that in qemu. When I run I see the following output (see full log [1]):
+"BUG: KASAN: null-ptr-deref in device_property_read_string_array".
 
-https://lore.kernel.org/linux-mm/20200914085545.GB28738@shao2-debian/
 
-cheers
+[ 6186.339462][    T1] unittest-gpio
+testcase-data:overlay-node:test-bus:gpio@0: no pinctrl handle
+[ 6186.346148][    T1] gpiochip_find_base: found new base at 507
+[ 6186.348684][    T1]
+==================================================================
+[ 6186.351563][    T1] BUG: KASAN: null-ptr-deref in
+device_property_read_string_array+0x40/0xa0
+[ 6186.355157][    T1] Read of size 8 at addr 0000000000000570 by task
+swapper/0/1
+[ 6186.358212][    T1]
+[ 6186.359361][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G
+W         5.9.0-rc5-next-20200915-00006-g104c8fe4916b #1
+[ 6186.363877][    T1] Hardware name: linux,dummy-virt (DT)
+[ 6186.366156][    T1] Call trace:
+[ 6186.367540][    T1]  dump_backtrace+0x0/0x320
+[ 6186.369446][    T1]  show_stack+0x38/0x60
+[ 6186.371282][    T1]  dump_stack+0x1d4/0x278
+[ 6186.373193][    T1]  __kasan_report+0x148/0x180
+[ 6186.375265][    T1]  kasan_report+0x44/0xe0
+[ 6186.377168][    T1]  __asan_load8+0xbc/0xe0
+[ 6186.379069][    T1]  device_property_read_string_array+0x40/0xa0
+[ 6186.381741][    T1]  devprop_gpiochip_set_names.isra.0+0x4c/0x200
+[ 6186.384394][    T1]  gpiochip_add_data_with_key+0x75c/0xf80
+[ 6186.386876][    T1]  unittest_gpio_probe+0xf4/0x1e0
+[ 6186.389049][    T1]  platform_drv_probe+0xac/0x160
+[ 6186.391184][    T1]  really_probe+0x430/0xaa0
+[ 6186.393136][    T1]  really_probe_debug+0x3c/0xe0
+[ 6186.395238][    T1]  driver_probe_device+0x134/0x1c0
+[ 6186.397443][    T1]  device_driver_attach+0xec/0x180
+[ 6186.399639][    T1]  __driver_attach+0x1f0/0x220
+[ 6186.401718][    T1]  bus_for_each_dev+0x104/0x1c0
+[ 6186.403796][    T1]  driver_attach+0x44/0x60
+[ 6186.405731][    T1]  bus_add_driver+0x214/0x3c0
+[ 6186.407745][    T1]  driver_register+0x1a8/0x240
+[ 6186.409835][    T1]  __platform_driver_register+0x90/0xa0
+[ 6186.412207][    T1]  of_unittest_overlay_gpio+0x20c/0x7cc
+[ 6186.414595][    T1]  of_unittest_overlay+0x748/0x7c0
+[ 6186.416810][    T1]  of_unittest+0x148/0x184
+[ 6186.418732][    T1]  do_one_initcall+0xc4/0x280
+[ 6186.420782][    T1]  do_initcalls+0x148/0x1ac
+[ 6186.422758][    T1]  kernel_init_freeable+0x158/0x1a0
+[ 6186.425023][    T1]  kernel_init+0x24/0x1f0
+[ 6186.426938][    T1]  ret_from_fork+0x10/0x18
+[ 6186.428894][    T1]
+==================================================================
+[ 6186.433241][    T1] Unable to handle kernel read from unreadable
+memory at virtual address 0000000000000570
+[ 6186.437207][    T1] Mem abort info:
+[ 6186.438639][    T1]   ESR = 0x96000004
+[ 6186.440536][    T1]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 6186.442791][    T1]   SET = 0, FnV = 0
+[ 6186.444660][    T1]   EA = 0, S1PTW = 0
+[ 6186.446233][    T1] Data abort info:
+[ 6186.447938][    T1]   ISV = 0, ISS = 0x00000004
+[ 6186.449749][    T1]   CM = 0, WnR = 0
+[ 6186.451222][    T1] [0000000000000570] user address but active_mm is swapper
+[ 6186.454000][    T1] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[ 6186.456422][    T1] Modules linked in:
+[ 6186.458232][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B
+W         5.9.0-rc5-next-20200915-00006-g104c8fe4916b #1
+[ 6186.462833][    T1] Hardware name: linux,dummy-virt (DT)
+[ 6186.465170][    T1] pstate: 60400005 (nZCv daif +PAN -UAO BTYPE=--)
+[ 6186.467910][    T1] pc : device_property_read_string_array+0x40/0xa0
+[ 6186.470653][    T1] lr : device_property_read_string_array+0x40/0xa0
+[ 6186.473380][    T1] sp : ffff000069827770
+[ 6186.475138][    T1] x29: ffff000069827770 x28: ffffa00014a2cc20
+[ 6186.477806][    T1] x27: ffff000068794760 x26: ffff000068794800
+[ 6186.480444][    T1] x25: ffff000068794000 x24: ffff0000674e1094
+[ 6186.483107][    T1] x23: 0000000000000000 x22: 0000000000000000
+[ 6186.485794][    T1] x21: ffffa00012d61ca0 x20: ffffa00012d61200
+[ 6186.488457][    T1] x19: 0000000000000000 x18: 00000000000014b8
+[ 6186.491100][    T1] x17: 00000000000014f8 x16: 0000000000001438
+[ 6186.493779][    T1] x15: 00000000f1f1f1f1 x14: 0000000000000003
+[ 6186.496405][    T1] x13: 00000000000ca688 x12: ffff80000d304e7b
+[ 6186.499084][    T1] x11: 1fffe0000d304e7a x10: ffff80000d304e7a
+[ 6186.501775][    T1] x9 : ffffa00012702b2c x8 : ffff0000698273d7
+[ 6186.504409][    T1] x7 : 0000000000000001 x6 : 00007ffff2cfb186
+[ 6186.507074][    T1] x5 : 0000000000000000 x4 : dfffa00000000000
+[ 6186.509706][    T1] x3 : ffffa000126f85c4 x2 : 0000000000000007
+[ 6186.512352][    T1] x1 : ffff00006981c040 x0 : 0000000000000001
+[ 6186.515009][    T1] Call trace:
+[ 6186.516511][    T1]  device_property_read_string_array+0x40/0xa0
+[ 6186.519155][    T1]  devprop_gpiochip_set_names.isra.0+0x4c/0x200
+[ 6186.521806][    T1]  gpiochip_add_data_with_key+0x75c/0xf80
+[ 6186.524294][    T1]  unittest_gpio_probe+0xf4/0x1e0
+[ 6186.526518][    T1]  platform_drv_probe+0xac/0x160
+[ 6186.528632][    T1]  really_probe+0x430/0xaa0
+[ 6186.530600][    T1]  really_probe_debug+0x3c/0xe0
+[ 6186.532679][    T1]  driver_probe_device+0x134/0x1c0
+[ 6186.534936][    T1]  device_driver_attach+0xec/0x180
+[ 6186.537119][    T1]  __driver_attach+0x1f0/0x220
+[ 6186.539182][    T1]  bus_for_each_dev+0x104/0x1c0
+[ 6186.541315][    T1]  driver_attach+0x44/0x60
+[ 6186.543233][    T1]  bus_add_driver+0x214/0x3c0
+[ 6186.545307][    T1]  driver_register+0x1a8/0x240
+[ 6186.547373][    T1]  __platform_driver_register+0x90/0xa0
+[ 6186.549754][    T1]  of_unittest_overlay_gpio+0x20c/0x7cc
+[ 6186.552105][    T1]  of_unittest_overlay+0x748/0x7c0
+[ 6186.554272][    T1]  of_unittest+0x148/0x184
+[ 6186.556193][    T1]  do_one_initcall+0xc4/0x280
+[ 6186.558248][    T1]  do_initcalls+0x148/0x1ac
+[ 6186.560227][    T1]  kernel_init_freeable+0x158/0x1a0
+[ 6186.562492][    T1]  kernel_init+0x24/0x1f0
+[ 6186.564395][    T1]  ret_from_fork+0x10/0x18
+[ 6186.566404][    T1] Code: aa0303f7 97b54003 9115c260 97c3ca39 (f942ba74)
+[ 6186.569375][    T1] ---[ end trace f489669ae669dad0 ]---
+[ 6186.571688][    T1] Kernel panic - not syncing: Oops: Fatal exception
+[ 6186.574448][    T1] Kernel Offset: disabled
+[ 6186.576306][    T1] CPU features: 0x0240002,20002004
+[ 6186.578453][    T1] Memory Limit: none
+[ 6186.580215][    T1] ---[ end Kernel panic - not syncing: Oops:
+Fatal exception ]---
 
-> BUG: Kernel NULL pointer dereference on read at 0x00000000
-> Faulting instruction address: 0xc000000000454248
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
-> Modules linked in: af_packet(E) nft_ct(E) nf_conntrack(E) nf_defrag_ipv6(=
-E) nf_defrag_ipv4(E) libcrc32c(E) ip6_tables(E) nft_compat(E) ip_set(E) rfk=
-ill(E) nf_tables(E) nfnetlink(E) vmx_crypto(E) uio_pdrv_genirq(E) gf128mul(=
-E) uio(E) rtc_generic(E) crct10dif_vpmsum(E) sch_fq_codel(E) ip_tables(E) x=
-_tables(E) ext4(E) crc16(E) mbcache(E) jbd2(E) sd_mod(E) t10_pi(E) sg(E) ib=
-mvscsi(E) scsi_transport_srp(E) scsi_mod(E) ibmveth(E) crc32c_vpmsum(E) dm_=
-mirror(E) dm_region_hash(E) dm_log(E) dm_mod(E) autofs4(E)
-> CPU: 11 PID: 26435 Comm: mlock201 Tainted: G            E     5.9.0-rc5-n=
-ext-20200914-281.gf529200-default #1
-> NIP:  c000000000454248 LR: c000000000445a74 CTR: c000000000413150
-> REGS: c0000008e645b770 TRAP: 0300   Tainted: G            E      (5.9.0-r=
-c5-next-20200914-281.gf529200-default)
-> MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28002482  XER: 20040000
-> CFAR: c00000000000fbb0 DAR: 0000000000000000 DSISR: 40000000 IRQMASK: 0=20
-> GPR00: c000000000445a74 c0000008e645ba00 c0000000017c4500 000000000000000=
-0=20
-> GPR04: 0000000000000001 c0000008ea109e98 c0000008f0c40000 000000000000000=
-0=20
-> GPR08: 0000000000000000 0000000000000000 0000000000000000 000000000000000=
-3=20
-> GPR12: c000000000413150 c00000001ec70200 0000000000000000 c00000000150203=
-8=20
-> GPR16: 00007fff9c61ffff 00007fff9c61ffff 00007fff9c61ffff c000000000cb02f=
-8=20
-> GPR20: 00007fff9c5c0000 00007fff9c620000 c0000008e645bcd8 c0000008f0c4000=
-0=20
-> GPR24: c00c0000023c0d00 fffffffffffffe7f 0000000000000000 c0000008f0c4000=
-0=20
-> GPR28: c0000008ea109e98 0000000000000001 c0000008ea9288a8 000000000000000=
-0=20
-> NIP [c000000000454248] PageHuge+0x8/0x60
-> LR [c000000000445a74] find_get_incore_page+0x114/0x160
-> Call Trace:
-> [c0000008e645ba00] [c000000000445994] find_get_incore_page+0x34/0x160 (un=
-reliable)
-> [c0000008e645ba40] [c000000000412e54] mincore_page+0x24/0x160
-> [c0000008e645ba70] [c000000000413020] __mincore_unmapped_range+0x90/0x160
-> [c0000008e645bac0] [c000000000413680] mincore_pte_range+0x530/0x5d0
-> [c0000008e645bb40] [c000000000422a38] walk_pgd_range+0x4e8/0xae0
-> [c0000008e645bc30] [c0000000004230c4] __walk_page_range+0x94/0x250
-> [c0000008e645bcb0] [c0000000004233d8] walk_page_range+0x158/0x1e0
-> [c0000008e645bd40] [c00000000041386c] sys_mincore+0x14c/0x370
-> [c0000008e645bdc0] [c000000000033eb8] system_call_exception+0xf8/0x200
-> [c0000008e645be20] [c00000000000d140] system_call_common+0xf0/0x27c
-> Instruction dump:
-> e8410018 38210020 e8010010 7c0803a6 4e800020 60000000 3d400001 7d435378=20
-> 4e800020 60000000 7c0802a6 60000000 <e9230000> 75290001 40820010 e9230008=
-=20
-> ---[ end trace 357eb14a3b22eab2 ]=E2=80=94
->
->
-> The function find_get_incore_page() was introduced with=20
-> 3fcbe4eb49a0406e6202e8c8c3560f30965a8e79=20
->
-> mm: factor find_get_incore_page out of mincore_page
->
->
-> Thanks
-> -Sachin
+
+Cheers,
+Anders
+[1] http://ix.io/2xDy

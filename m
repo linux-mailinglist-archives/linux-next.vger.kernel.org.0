@@ -2,63 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE58426C2F1
-	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 14:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5630826C424
+	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 17:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727570AbgIPMo0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Sep 2020 08:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S1726310AbgIPPY2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Sep 2020 11:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726542AbgIPKaT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Sep 2020 06:30:19 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F6AC061788
-        for <linux-next@vger.kernel.org>; Wed, 16 Sep 2020 03:29:38 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z19so3698445pfn.8
-        for <linux-next@vger.kernel.org>; Wed, 16 Sep 2020 03:29:37 -0700 (PDT)
+        with ESMTP id S1726293AbgIPPUf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Sep 2020 11:20:35 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6972DC061356
+        for <linux-next@vger.kernel.org>; Wed, 16 Sep 2020 03:57:42 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id u13so3712342pgh.1
+        for <linux-next@vger.kernel.org>; Wed, 16 Sep 2020 03:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=hm/PuoRA9a2AeV91Zy/HKsKyLtkQleBZCBj8Uryh624=;
-        b=jAGF4rFc01wvjyBRA1Sa67GkOiceRNj3nwHCPXFnqN/ocFbuAID8Rc0C0i1e/Y4dD2
-         Ly7jmduUcNWNfXqhIPW579Vcovn/Lq+Ut7FW0q0sM3vEzn21F4SQnejG5D/1uhvJaTPu
-         LYXpE8KnmPdqIt4lUROl+KfPBGtRnPva5zi5bG2pAjwgmYEYd2p1+WkSexd5Q4jQU6kI
-         prmNKuqBkWjQVqBdiziOq5W7g9+1UUeCPux3wAp9acyXq4YKwuyy8qWxpLqfl6cRQrvQ
-         AzZmJSsrVi+s/YhNVNKxckxGDLDtekQwmPXlD0tvoGhC8WCs4EZXkUXG9FM3i+0dsHSt
-         Z0Nw==
+        bh=tSutw+9KOM8d3vfBqsGQVED0y5LDtvx8V6L5qEJxqkE=;
+        b=ybW50QQOgDvi7twVamtXOUd0TgKyEIJYX+2pPwhJ180BOjbxXd4kBxzz1msGi2Cz9d
+         szUO+VT2pXC/24ofSMm9THRdE7cgleEQumu12oyd4LNKIziZ9v+t70qTjW2cngt+F09e
+         GCu7wtxLqCdMCGj8MqrequBEj6jUlp2RAqxgBg05EqBHHVhwq6IfKmhlIpyqYx1d/Zd6
+         K6l4i75DhgDrMhuHKGhScDgNZ0/JT6FZCcgjRjzu8mRRiYnBji63mEMw3c8rFUEsqGq+
+         6+2kCZfw0Mzs3Mv1lfmqzNfEjJb/IB9vcjlznt2RMJR46gIrvDj/QqbiCn3kkQ1+WUb0
+         DncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=hm/PuoRA9a2AeV91Zy/HKsKyLtkQleBZCBj8Uryh624=;
-        b=mySMhNZQ5MNLHcwS2L0IBsjbApU+PmtUqA3HK6tN/CAu7YTaJ5cEsn29HwjoBTp4c+
-         +VVxI6PzV9/uarObDp6nuVvmgbC3twrfn2504wzLHYu8KixNK4SepPLUd/2SvncvPkFj
-         lwm+x+sWw3ZwtIsZSuYb+GwjpDKyCwDF21OLcr7lrQUaTEuOn3LM9uUCB3MeEpQ2u1s5
-         CZYBAOs9Q1j2zCwhLpvbBNF2DgrjYR3O/6txsC/IpQ/0NOnZgjBvYZTkmaJTZWyQUA2P
-         U9BJ3XkD8xq8T7Ml3r7BimrSZiRwxHCpHVYMJAHFlrVTH3bHHw9VXuO6n+Rv2tUCkNtq
-         BG/Q==
-X-Gm-Message-State: AOAM531fk1bKVW6pE4YjaFOVtZpWm30mxC+snT+PRL1+TuAUWWckBd39
-        o7L/awy8J0Fl46Q0ju4Nwn9xpioEtAG4ig==
-X-Google-Smtp-Source: ABdhPJz2SiJ3l/ZUB7VysF3tcijYDugZI7b4cEkcE+j3QFa9t/oUPOTa3P06LhthNYXfHfbifTPj3w==
-X-Received: by 2002:a63:6985:: with SMTP id e127mr11825272pgc.325.1600252174064;
-        Wed, 16 Sep 2020 03:29:34 -0700 (PDT)
+        bh=tSutw+9KOM8d3vfBqsGQVED0y5LDtvx8V6L5qEJxqkE=;
+        b=C052boSOfgERjwe0j04RaFCeDBYttG8KDir6Mqadpa9jZlZsoJXwlr9oEnOMr5zN91
+         IpAWndLM49tezMCGrpJN8jM39cfisVKQm8cfOAJZa2O3CoXPc7CG6L8fvzjidliuuaBt
+         pYaReuN39d2ad1gLVCgw76x/MsMgvhXw5YAye2JdaBqzUlUvtHTkxnwVMTVx6pio2ZZB
+         F8SPlyT6BBzXe4FZb3JEsdCvaLIpke3AuLXJQl3DpA3lNH2daK0Ve6PR9Ubo60Kxkp/t
+         TW5mAjFxXaclLtV523nrtGhXN8xHhjbNigBVe/IhZXr/LQIxLnwY1q2ixsfLQLq8AmX5
+         cUvA==
+X-Gm-Message-State: AOAM530XwzFvlZfu0pf1PY89PnTMZ51L5xcjAKfLKjOa4jm1XAbsYV7q
+        w8aiShkcKInYk9OcbqcNQR7MGnPdJtAxfQ==
+X-Google-Smtp-Source: ABdhPJxH3KsDn2W0JE1+yxSrSjU6jI75L7yIXD4UzhzRgKRi8wCFGNoMtr7nBehviUOuxLveV1+vgw==
+X-Received: by 2002:a65:4987:: with SMTP id r7mr13355052pgs.228.1600253858881;
+        Wed, 16 Sep 2020 03:57:38 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s28sm16886217pfd.111.2020.09.16.03.29.32
+        by smtp.gmail.com with ESMTPSA id in10sm2343502pjb.11.2020.09.16.03.57.37
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 03:29:33 -0700 (PDT)
-Message-ID: <5f61e90d.1c69fb81.9f270.b406@mx.google.com>
-Date:   Wed, 16 Sep 2020 03:29:33 -0700 (PDT)
+        Wed, 16 Sep 2020 03:57:37 -0700 (PDT)
+Message-ID: <5f61efa1.1c69fb81.42318.556f@mx.google.com>
+Date:   Wed, 16 Sep 2020 03:57:37 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20200916
-X-Kernelci-Branch: master
+X-Kernelci-Kernel: v5.9-rc5-253-g8562c805780e
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Tree: next
-Subject: next/master build: 228 builds: 17 failed, 211 passed, 1460 errors,
- 259 warnings (next-20200916)
+Subject: next/pending-fixes build: 212 builds: 0 failed, 212 passed,
+ 1438 errors, 215 warnings (v5.9-rc5-253-g8562c805780e)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -66,114 +66,63 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 228 builds: 17 failed, 211 passed, 1460 errors, 259 warn=
-ings (next-20200916)
+next/pending-fixes build: 212 builds: 0 failed, 212 passed, 1438 errors, 21=
+5 warnings (v5.9-rc5-253-g8562c805780e)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200916/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.9-rc5-253-g8562c805780e/
 
 Tree: next
-Branch: master
-Git Describe: next-20200916
-Git Commit: 5fa35f247b563a7893f3f68f19d00ace2ccf3dff
+Branch: pending-fixes
+Git Describe: v5.9-rc5-253-g8562c805780e
+Git Commit: 8562c805780e79133c8b4e03d52a91eaf4fe7214
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    defconfig: (clang-10) FAIL
-    allmodconfig: (clang-9) FAIL
-    allnoconfig: (clang-9) FAIL
-    defconfig: (clang-9) FAIL
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-9) FAIL
-
-arm:
-    multi_v7_defconfig: (clang-10) FAIL
-    allmodconfig: (clang-9) FAIL
-    allnoconfig: (clang-9) FAIL
-    aspeed_g5_defconfig: (clang-9) FAIL
-    multi_v5_defconfig: (clang-9) FAIL
-    multi_v7_defconfig: (clang-9) FAIL
-    allmodconfig: (gcc-8) FAIL
-    milbeaut_m10v_defconfig: (gcc-8) FAIL
-
-x86_64:
-    x86_64_defconfig: (clang-10) FAIL
-    allmodconfig: (clang-9) FAIL
-    allnoconfig: (clang-9) FAIL
-    x86_64_defconfig: (clang-9) FAIL
 
 Errors and Warnings Detected:
 
 arc:
-    haps_hs_smp_defconfig+kselftest (gcc-8): 167 errors, 24 warnings
+    haps_hs_smp_defconfig+kselftest (gcc-8): 166 errors, 23 warnings
 
 arm64:
-    allmodconfig (clang-9): 1 error
-    allmodconfig (gcc-8): 11 warnings
-    allnoconfig (gcc-8): 2 warnings
-    allnoconfig (clang-9): 2 errors
-    defconfig (clang-9): 1 error
-    defconfig (gcc-8): 9 warnings
-    defconfig (clang-10): 1 error, 2 warnings
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-9): 1 error
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-8): 9 warnings
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 9 warnings
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-8): 9 warnings
-    defconfig+kselftest (gcc-8): 302 errors, 12 warnings
-    tinyconfig (gcc-8): 2 warnings
+    defconfig (gcc-8): 8 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 8 warnings
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-8): 8 warnings
+    defconfig+kselftest (gcc-8): 302 errors, 11 warnings
 
 arm:
-    allmodconfig (clang-9): 2 errors
-    allmodconfig (gcc-8): 1 error, 9 warnings
-    allnoconfig (clang-9): 2 errors
-    aspeed_g5_defconfig (clang-9): 2 errors
-    imx_v6_v7_defconfig (gcc-8): 1 warning
+    allmodconfig (gcc-8): 9 warnings
+    aspeed_g4_defconfig (gcc-8): 1 warning
+    bcm2835_defconfig (gcc-8): 1 warning
     mmp2_defconfig (gcc-8): 3 warnings
-    multi_v5_defconfig (clang-9): 2 errors
-    multi_v7_defconfig (clang-10): 1 error
-    multi_v7_defconfig (clang-9): 1 error
-    multi_v7_defconfig (gcc-8): 4 warnings
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 4 warnings
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-8): 4 warnin=
+    multi_v7_defconfig (gcc-8): 3 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 3 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-8): 3 warnin=
 gs
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-8): 4 warnings
-    multi_v7_defconfig+kselftest (gcc-8): 280 errors, 8 warnings
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-8): 3 warnings
+    multi_v7_defconfig+kselftest (gcc-8): 280 errors, 6 warnings
     omap1_defconfig (gcc-8): 3 warnings
     pxa168_defconfig (gcc-8): 3 warnings
     pxa910_defconfig (gcc-8): 3 warnings
-    qcom_defconfig (gcc-8): 1 warning
 
 i386:
-    i386_defconfig+kselftest (gcc-8): 59 errors, 30 warnings
+    i386_defconfig+kselftest (gcc-8): 59 errors, 29 warnings
 
 mips:
-    32r2el_defconfig+kselftest (gcc-8): 280 errors, 20 warnings
-    decstation_64_defconfig (gcc-8): 1 warning
-    decstation_defconfig (gcc-8): 1 warning
-    decstation_r4k_defconfig (gcc-8): 1 warning
-    loongson3_defconfig (gcc-8): 1 warning
+    32r2el_defconfig+kselftest (gcc-8): 280 errors, 19 warnings
+    gcw0_defconfig (gcc-8): 2 warnings
+    loongson3_defconfig (gcc-8): 3 warnings
     malta_qemu_32r6_defconfig (gcc-8): 1 warning
-    nlm_xlr_defconfig (gcc-8): 1 warning
+    qi_lb60_defconfig (gcc-8): 2 warnings
     rm200_defconfig (gcc-8): 1 warning
+    rs90_defconfig (gcc-8): 2 warnings
 
 riscv:
-    allnoconfig (gcc-8): 1 warning
-    defconfig (gcc-8): 1 warning
-    defconfig+kselftest (gcc-8): 279 errors, 12 warnings
-    nommu_k210_defconfig (gcc-8): 1 warning
-    nommu_virt_defconfig (gcc-8): 1 warning
-    rv32_defconfig (gcc-8): 7 warnings
-    tinyconfig (gcc-8): 1 warning
+    defconfig+kselftest (gcc-8): 280 errors, 11 warnings
+    rv32_defconfig (gcc-8): 6 warnings
 
 x86_64:
-    allmodconfig (clang-9): 1 error
-    allmodconfig (gcc-8): 2 warnings
-    allnoconfig (clang-9): 2 errors
     tinyconfig (gcc-8): 1 warning
-    x86_64_defconfig (clang-9): 1 error
-    x86_64_defconfig (clang-10): 1 error
     x86_64_defconfig+kselftest (gcc-8): 71 errors, 39 warnings
 
 Errors summary:
@@ -188,13 +137,11 @@ fatal error: asm/types.h: No such file or directory
 : No such file or directory
     15   arc-elf32-gcc: error: unrecognized command line option =E2=80=98-p=
 thread=E2=80=99
+    14   /bin/sh: 3: llc: not found
     14   /bin/sh: 1: llc: not found
-    13   /bin/sh: 3: llc: not found
-    13   /bin/sh: 1: clang: not found
+    14   /bin/sh: 1: clang: not found
     11   test_execve.c:4:10: fatal error: cap-ng.h: No such file or directo=
 ry
-    11   /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, =
-your version of Clang is too old - please use 10.0.1 or newer.
     9    get_size.c:29:10: fatal error: sys/sysinfo.h: No such file or dire=
 ctory
     9    execveat.c:11:10: fatal error: sys/sendfile.h: No such file or dir=
@@ -216,14 +163,8 @@ ile or directory
 tory
     4    test_verifier.c:25:10: fatal error: sys/capability.h: No such file=
  or directory
-    4    hmm-tests.c:24:10: fatal error: hugetlbfs.h: No such file or direc=
-tory
     4    binderfs_test.c:22:10: fatal error: linux/android/binderfs.h: No s=
 uch file or directory
-    4    /scratch/linux/include/linux/compiler-clang.h/scratch/linux/includ=
-e/linux/compiler-clang.h::1111::33::  errorerror: : Sorry, your version of =
-Clang is too old - please use 10.0.1 or newer.Sorry, your version of Clang =
-is too old - please use 10.0.1 or newer.
     4    ../kselftest_harness.h:56:10: fatal error: asm/types.h: No such fi=
 le or directory
     4    ../../../include/uapi/linux/fcntl.h:5:10: fatal error: asm/fcntl.h=
@@ -235,8 +176,6 @@ tory
     3    ionutils.c:7:10: fatal error: sys/ioctl.h: No such file or directo=
 ry
     3    ion.h:18:10: fatal error: linux/ioctl.h: No such file or directory
-    3    error: fallthrough annotation does not directly precede switch lab=
-el
     2    udmabuf.c:13:10: fatal error: linux/udmabuf.h: No such file or dir=
 ectory
     2    tls.c:1284:27: error: =E2=80=98TLS_CIPHER_AES_GCM_256=E2=80=99 und=
@@ -304,6 +243,8 @@ s initializer but incomplete type
 tory
     2    nf-queue.c:13:10: fatal error: libmnl/libmnl.h: No such file or di=
 rectory
+    2    mlock-random-test.c:8:10: fatal error: sys/capability.h: No such f=
+ile or directory
     2    lib/kvm_util.c:302:22: error: =E2=80=98KVM_CLEAR_DIRTY_LOG=E2=80=
 =99 undeclared (first use in this function); did you mean =E2=80=98KVM_GET_=
 DIRTY_LOG=E2=80=99?
@@ -323,10 +264,10 @@ nitializer but incomplete type
 tory
     2    include/x86_64/processor.h:14:10: fatal error: asm/msr-index.h: No=
  such file or directory
+    2    hmm-tests.c:24:10: fatal error: hugetlbfs.h: No such file or direc=
+tory
     2    helpers.c:12:10: fatal error: syscall.h: No such file or directory
     2    fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
-    2    compaction_test.c:12:10: fatal error: sys/mman.h: No such file or =
-directory
     2    close_range_test.c:55:10: error: expected expression before =E2=80=
 =98return=E2=80=99
     2    close_range_test.c:47:11: error: expected expression before =E2=80=
@@ -365,6 +306,8 @@ or directory
 tory
     1    resolve_test.c:12:10: fatal error: sys/mount.h: No such file or di=
 rectory
+    1    recursion-depth.c:24:10: fatal error: sys/mount.h: No such file or=
+ directory
     1    proc.h:10:10: fatal error: sys/syscall.h: No such file or directory
     1    posix_timers.c:217:25: error: =E2=80=98CLOCK_PROCESS_CPUTIME_ID=E2=
 =80=99 undeclared (first use in this function); did you mean =E2=80=98CLOCK=
@@ -385,8 +328,6 @@ _REALTIME=E2=80=99?
 rectory
     1    open-unlink.c:7:10: fatal error: sys/ioctl.h: No such file or dire=
 ctory
-    1    nosymfollow-test.c:12:10: fatal error: sys/mount.h: No such file o=
-r directory
     1    nf-queue.c:11:10: fatal error: arpa/inet.h: No such file or direct=
 ory
     1    nanosleep.c:27:10: fatal error: sys/timex.h: No such file or direc=
@@ -404,13 +345,12 @@ rectory
 r.h: No such file or directory
     1    membarrier_test_multi_thread.c:3:10: fatal error: linux/membarrier=
 .h: No such file or directory
-    1    load_address.c:5:10: fatal error: link.h: No such file or directory
     1    kcmp_test.c:12:10: fatal error: linux/unistd.h: No such file or di=
+rectory
+    1    gup_benchmark.c:6:10: fatal error: sys/ioctl.h: No such file or di=
 rectory
     1    fw_namespace.c:14:10: fatal error: sys/mount.h: No such file or di=
 rectory
-    1    error: /scratch/linux/include/linux/compiler-clang.h:11:Sorry, you=
-r version of Clang is too old - please use 10.0.1 or newer.3
     1    epoll_wakeup_test.c:4:10: fatal error: poll.h: No such file or dir=
 ectory
     1    dnotify_test.c:28:42: error: =E2=80=98DN_MULTISHOT=E2=80=99 undecl=
@@ -434,6 +374,8 @@ ed (first use in this function); did you mean =E2=80=98S_IFIFO=E2=80=99?
 =99; did you mean =E2=80=98si_code=E2=80=99?
     1    devpts_pts.c:11:10: fatal error: asm/ioctls.h: No such file or dir=
 ectory
+    1    compaction_test.c:12:10: fatal error: sys/mman.h: No such file or =
+directory
     1    close_range_test.c:6:10: fatal error: linux/kernel.h: No such file=
  or directory
     1    clone3_clear_sighand.c:11:10: fatal error: linux/sched.h: No such =
@@ -442,10 +384,6 @@ file or directory
 ry
     1    bug-link-o-tmpfile.c:23:10: fatal error: sys/mount.h: No such file=
  or directory
-    1    ERROR: modpost: "__aeabi_uldivmod" [drivers/media/test-drivers/vid=
-tv/dvb-vidtv-bridge.ko] undefined!
-    1    : error: Sorry, your version of Clang is too old - please use 10.0=
-.1 or newer.
     1    /usr/arc-elf32/sys-include/sys/dirent.h:10:2: error: #error "<dire=
 nt.h> not supported"
     1    /usr/arc-elf32/sys-include/dirent.h:76:15: error: unknown type nam=
@@ -468,107 +406,93 @@ e =E2=80=98DIR=E2=80=99
 e =E2=80=98DIR=E2=80=99
     1    /usr/arc-elf32/sys-include/dirent.h:48:12: error: unknown type nam=
 e =E2=80=98DIR=E2=80=99
-    1    /scratch/linux/include/linux/compiler-clang.h:11:3: error: In file=
- included from <built-in>:2:
-    1    /bin/sh: 1: /bin/sh: 3: llc: not found
     1    ../../include/uapi/linux/types.h:5:10: fatal error: asm-generic/in=
 t-ll64.h: No such file or directory
 
 Warnings summary:
 
     24   cc1: warning: -fsanitize=3Daddress not supported for this target
-    18   /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+    12   /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
 dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
 s" property but its #size-cells (1) differs from / (2)
-    18   /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+    12   /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
 dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
 s" property but its #address-cells (1) differs from / (2)
+    9    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    9    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    9    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
     8    pidfd_wait.c:22:25: warning: excess elements in struct initializer
     8    cc1: warning: -fsanitize=3Daddress and -fsanitize=3Dkernel-address=
  are not supported for this target
-    8    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    8    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: w=
-arning: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=
-=98long unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=
-=99 to =E2=80=98705032704=E2=80=99 [-Woverflow]
-    8    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    8    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
     7    rsync -a /root/build/kselftest/lkdtm/PANIC.sh /root/build/kselftes=
 t/lkdtm/BUG.sh /root/build/kselftest/lkdtm/WARNING.sh /root/build/kselftest=
 /lkdtm/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/bu=
 ild/kselftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /r=
 oot/build/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORR=
 UPT_STACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/b=
-uild/kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_=
-GUARD_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING=
-.sh /root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/D=
-OUBLE_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kself=
-test/lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWR=
-ITE_ALLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/bui=
-ld/kselftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUD=
-DY_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root=
-/build/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB=
-_FREE_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/ks=
-elftest/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root=
-/build/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.=
-sh /root/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXE=
-C_STACK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftes=
-t/lkdtm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/bu=
-ild/kselftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL=
-.sh /root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/l=
-kdtm/ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kse=
-lftest/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselfte=
-st/lkdtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_=
-NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVER=
-FLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselft=
-est/lkdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC=
-_AND_TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEG=
-ATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kself=
-test/lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SA=
-TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/buil=
-d/kselftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REF=
-COUNT_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NO=
-T_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATUR=
-ATED.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /roo=
-t/build/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOM=
-IC_TIMING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/bui=
-ld/kselftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHIT=
-ELIST_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/=
-build/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lk=
-dtm/USERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh=
- /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkd=
-tm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+uild/kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUP=
+T_USER_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/=
+build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lk=
+dtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/k=
+selftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_ST=
+ORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/buil=
+d/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTE=
+R_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build=
+/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_=
+FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/k=
+selftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh =
+/root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINL=
+OCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkd=
+tm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kself=
+test/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /roo=
+t/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USE=
+RSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lk=
+dtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/bu=
+ild/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_=
+INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFL=
+OW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/b=
+uild/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftes=
+t/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGAT=
+IVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/=
+build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselfte=
+st/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO=
+.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kself=
+test/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_A=
+DD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED=
+.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/bu=
+ild/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftes=
+t/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFC=
+OUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kse=
+lftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_=
+HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh=
+ /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/ks=
+elftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCO=
+PY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh=
+ /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm=
+/USERCOPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /ro=
+ot/build/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     7    install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING_MESSAGE=
 .sh
     7    install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING.sh
-    7    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=
-=80=98zone=E2=80=99 [-Wunused-variable]
     6    pidfd.h:30:21: warning: excess elements in struct initializer
-    6    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =
-=E2=80=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=
-=E2=80=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=
-=3D]
-    6    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning=
-: unused variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
-    6    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
+    4    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
 ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
 its #size-cells (1) differs from / (2)
-    6    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: War=
+    4    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
 ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
 its #address-cells (1) differs from / (2)
-    4    /scratch/linux/arch/riscv/mm/init.c:44:28: warning: =E2=80=98pt_op=
-s=E2=80=99 defined but not used [-Wunused-variable]
-    3    /scratch/linux/kernel/rcu/tasks.h:710:13: warning: =E2=80=98show_r=
-cu_tasks_rude_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
-    3    /scratch/linux/drivers/dma/sf-pdma/sf-pdma.c:287:23: warning: unus=
-ed variable =E2=80=98desc=E2=80=99 [-Wunused-variable]
+    3    /scratch/linux/drivers/iio/iio_core_trigger.h:42:13: warning: =E2=
+=80=98iio_device_unregister_trigger_consumer=E2=80=99 defined but not used =
+[-Wunused-function]
+    3    /scratch/linux/drivers/iio/iio_core_trigger.h:33:12: warning: =E2=
+=80=98iio_device_register_trigger_consumer=E2=80=99 defined but not used [-=
+Wunused-function]
     2    tls.c:1273:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-=
 Wunused-variable]
     2    tls.c:1221:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-=
@@ -615,8 +539,6 @@ gs=E2=80=99 declared inside parameter list will not be visible outside of t=
 his definition or declaration
     2    clone3/clone3_selftests.h:16:25: warning: excess elements in struc=
 t initializer
-    2    aarch64-linux-gnu-ld: warning: orphan section `.igot.plt' from `ar=
-ch/arm64/kernel/head.o' being placed in section `.igot.plt'
     2    Warning: Kernel ABI header at 'tools/include/uapi/linux/netlink.h'=
  differs from latest version at 'include/uapi/linux/netlink.h'
     2    Warning: Kernel ABI header at 'tools/include/uapi/linux/if_link.h'=
@@ -627,13 +549,14 @@ ch/arm64/kernel/head.o' being placed in section `.igot.plt'
 -Wcpp]
     2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
 d [-Wcpp]
+    2    /scratch/linux/kernel/rcu/tasks.h:593:13: warning: =E2=80=98show_r=
+cu_tasks_classic_gp_kthread=E2=80=99 defined but not used [-Wunused-functio=
+n]
     2    /scratch/linux/drivers/net/ethernet/intel/ice/ice_flow.h:197:33: w=
 arning: cast from pointer to integer of different size [-Wpointer-to-int-ca=
 st]
-    2    /scratch/linux/arch/arm64/kernel/smp.c:967:13: warning: =E2=80=98i=
-pi_teardown=E2=80=99 defined but not used [-Wunused-function]
-    1    {standard input}:39: Warning: macro instruction expanded into mult=
-iple instructions
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
     1    sync_stress_parallelism.c:93:2: warning: implicit declaration of f=
 unction =E2=80=98pthread_create=E2=80=99; did you mean =E2=80=98pthread_atf=
 ork=E2=80=99? [-Wimplicit-function-declaration]
@@ -670,33 +593,39 @@ on-declaration]
     1    default_file_splice_read.c:7:9: warning: implicit declaration of f=
 unction =E2=80=98splice=E2=80=99; did you mean =E2=80=98select=E2=80=99? [-=
 Wimplicit-function-declaration]
-    1    1 warning generated.
-    1    /tmp/ccEdiU20.s:18192: Warning: using r15 results in unpredictable=
+    1    /tmp/ccs2CqrC.s:18192: Warning: using r15 results in unpredictable=
  behaviour
-    1    /tmp/ccEdiU20.s:18120: Warning: using r15 results in unpredictable=
+    1    /tmp/ccs2CqrC.s:18120: Warning: using r15 results in unpredictable=
  behaviour
-    1    /scratch/linux/mm/madvise.c:881:15: warning: unused variable 'zone=
-' [-Wunused-variable]
+    1    /scratch/linux/drivers/vhost/vhost.c:1906:1: warning: the frame si=
+ze of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
+    1    /scratch/linux/drivers/vhost/scsi.c:1374:1: warning: the frame siz=
+e of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
     1    /scratch/linux/drivers/net/ethernet/intel/ice/ice_flow.h:198:32: w=
 arning: cast to pointer from integer of different size [-Wint-to-pointer-ca=
 st]
-    1    /scratch/linux/drivers/gpio/gpio-omap.c:1528:12: warning: =E2=80=
+    1    /scratch/linux/drivers/media/tuners/mxl5005s.c:3953:1: warning: th=
+e frame size of 1120 bytes is larger than 1024 bytes [-Wframe-larger-than=
+=3D]
+    1    /scratch/linux/drivers/gpio/gpio-omap.c:1531:12: warning: =E2=80=
 =98omap_gpio_resume=E2=80=99 defined but not used [-Wunused-function]
-    1    /scratch/linux/drivers/gpio/gpio-omap.c:1516:12: warning: =E2=80=
+    1    /scratch/linux/drivers/gpio/gpio-omap.c:1519:12: warning: =E2=80=
 =98omap_gpio_suspend=E2=80=99 defined but not used [-Wunused-function]
+    1    /scratch/linux/drivers/crypto/sa2ul.c:1486:33: warning: cast from =
+pointer to integer of different size [-Wpointer-to-int-cast]
     1    /scratch/linux/drivers/block/paride/bpck.c:32: warning: "PC" redef=
 ined
     1    /scratch/linux/arch/arm/mach-omap1/board-ams-delta.c:462:12: warni=
 ng: =E2=80=98ams_delta_camera_power=E2=80=99 defined but not used [-Wunused=
 -function]
-    1    .config:1176:warning: override: UNWINDER_GUESS changes choice state
+    1    .config:1169:warning: override: UNWINDER_GUESS changes choice state
 
 Section mismatches summary:
 
-    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2b4c): Section mismat=
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a94): Section mismat=
 ch in reference from the function pmax_setup_memory_region() to the functio=
 n .init.text:add_memory_region()
-    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x28fc): Section mismat=
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2848): Section mismat=
 ch in reference from the function pmax_setup_memory_region() to the functio=
 n .init.text:add_memory_region()
 
@@ -714,7 +643,7 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 280 errors, 20 war=
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 280 errors, 19 war=
 nings, 0 section mismatches
 
 Errors:
@@ -1264,9 +1193,6 @@ uch file or directory
 or directory
 
 Warnings:
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING.sh
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING_MESSAGE.sh
     cc1: warning: -fsanitize=3Daddress and -fsanitize=3Dkernel-address are =
@@ -1287,47 +1213,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     cc1: warning: -fsanitize=3Daddress and -fsanitize=3Dkernel-address are =
 not supported for this target
     cc1: warning: -fsanitize=3Daddress not supported for this target
@@ -1343,129 +1270,44 @@ not supported for this target
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, clang-9) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h/scratch/linux/include/lin=
-ux/compiler-clang.h::1111::33::  errorerror: : Sorry, your version of Clang=
- is too old - please use 10.0.1 or newer.Sorry, your version of Clang is to=
-o old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-9) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    error: /scratch/linux/include/linux/compiler-clang.h:11:Sorry, your ver=
-sion of Clang is too old - please use 10.0.1 or newer.3
-    : error: Sorry, your version of Clang is too old - please use 10.0.1 or=
- newer.
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 9 warnings, 0 section mi=
-smatches
-
-Errors:
-    ERROR: modpost: "__aeabi_uldivmod" [drivers/media/test-drivers/vidtv/dv=
-b-vidtv-bridge.ko] undefined!
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 9 warnings, 0 section m=
+ismatches
 
 Warnings:
-    /tmp/ccEdiU20.s:18120: Warning: using r15 results in unpredictable beha=
+    /tmp/ccs2CqrC.s:18120: Warning: using r15 results in unpredictable beha=
 viour
-    /tmp/ccEdiU20.s:18192: Warning: using r15 results in unpredictable beha=
+    /tmp/ccs2CqrC.s:18192: Warning: using r15 results in unpredictable beha=
 viour
-    /scratch/linux/drivers/dma/sf-pdma/sf-pdma.c:287:23: warning: unused va=
-riable =E2=80=98desc=E2=80=99 [-Wunused-variable]
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
+    /scratch/linux/drivers/crypto/sa2ul.c:1486:33: warning: cast from point=
+er to integer of different size [-Wpointer-to-int-cast]
     /scratch/linux/drivers/net/ethernet/intel/ice/ice_flow.h:197:33: warnin=
 g: cast from pointer to integer of different size [-Wpointer-to-int-cast]
     /scratch/linux/drivers/net/ethernet/intel/ice/ice_flow.h:197:33: warnin=
 g: cast from pointer to integer of different size [-Wpointer-to-int-cast]
     /scratch/linux/drivers/net/ethernet/intel/ice/ice_flow.h:198:32: warnin=
 g: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
-Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
-    /scratch/linux/drivers/dma/sf-pdma/sf-pdma.c:287:23: warning: unused va=
-riable =E2=80=98desc=E2=80=99 [-Wunused-variable]
-
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 11 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
-    /scratch/linux/drivers/dma/sf-pdma/sf-pdma.c:287:23: warning: unused va=
-riable =E2=80=98desc=E2=80=99 [-Wunused-variable]
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section =
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
 
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: In file incl=
-uded from <built-in>:2:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
 ---------------------------------------------------------------------------=
@@ -1475,60 +1317,23 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
+allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
 allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
 mismatches
 
-Warnings:
-    /scratch/linux/arch/arm64/kernel/smp.c:967:13: warning: =E2=80=98ipi_te=
-ardown=E2=80=99 defined but not used [-Wunused-function]
-    aarch64-linux-gnu-ld: warning: orphan section `.igot.plt' from `arch/ar=
-m64/kernel/head.o' being placed in section `.igot.plt'
-
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arm64, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    /scratch/linux/arch/riscv/mm/init.c:44:28: warning: =E2=80=98pt_ops=E2=
-=80=99 defined but not used [-Wunused-variable]
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1542,19 +1347,12 @@ ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 
 ---------------------------------------------------------------------------=
 -----
-aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
 
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
+Warnings:
+    /scratch/linux/kernel/rcu/tasks.h:593:13: warning: =E2=80=98show_rcu_ta=
+sks_classic_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1603,8 +1401,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    /scratch/linux/kernel/rcu/tasks.h:593:13: warning: =E2=80=98show_rcu_ta=
+sks_classic_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1713,60 +1515,40 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    /scratch/linux/kernel/rcu/tasks.h:710:13: warning: =E2=80=98show_rcu_ta=
-sks_rude_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    /scratch/linux/kernel/rcu/tasks.h:710:13: warning: =E2=80=98show_rcu_ta=
-sks_rude_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: modpost: vmlinux.o(.text.unlikely+0x2b4c): Section mismatch in=
- reference from the function pmax_setup_memory_region() to the function .in=
-it.text:add_memory_region()
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
  0 section mismatches
 
-Warnings:
-    /scratch/linux/kernel/rcu/tasks.h:710:13: warning: =E2=80=98show_rcu_ta=
-sks_rude_gp_kthread=E2=80=99 defined but not used [-Wunused-function]
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
 Section mismatches:
-    WARNING: modpost: vmlinux.o(.text.unlikely+0x28fc): Section mismatch in=
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a94): Section mismatch in=
  reference from the function pmax_setup_memory_region() to the function .in=
 it.text:add_memory_region()
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, clang-9) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
-ismatches
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
 
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h/scratch/linux/include/lin=
-ux/compiler-clang.h::1111::33::  errorerror: : Sorry, your version of Clang=
- is too old - please use 10.0.1 or newer.Sorry, your version of Clang is to=
-o old - please use 10.0.1 or newer.
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2848): Section mismatch in=
+ reference from the function pmax_setup_memory_region() to the function .in=
+it.text:add_memory_region()
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 9 warnings, 0 section mi=
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
 smatches
 
 Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #address-cells (1) differs from / (2)
@@ -1785,87 +1567,19 @@ operty but its #address-cells (1) differs from / (2)
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 section =
-mismatches
-
-Errors:
-    error: fallthrough annotation does not directly precede switch label
-
-Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable 'zone' [-W=
-unused-variable]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-9) =E2=80=94 FAIL, 1 err=
-or, 0 warnings, 0 section mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h/scratch/linux/include/lin=
-ux/compiler-clang.h::1111::33::  errorerror: : Sorry, your version of Clang=
- is too old - please use 10.0.1 or newer.Sorry, your version of Clang is to=
-o old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
-s, 9 warnings, 0 section mismatches
-
-Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 size-cells (1) differs from / (2)
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 9 warnings, 0 section mismatches
+, 8 warnings, 0 section mismatches
 
 Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #address-cells (1) differs from / (2)
@@ -1884,21 +1598,19 @@ operty but its #address-cells (1) differs from / (2)
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 size-cells (1) differs from / (2)
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 9 warnings, 0 section mismatches
+, 8 warnings, 0 section mismatches
 
 Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #address-cells (1) differs from / (2)
@@ -1917,16 +1629,16 @@ operty but its #address-cells (1) differs from / (2)
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 size-cells (1) differs from / (2)
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 279 errors, 12 warnings,=
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 280 errors, 11 warnings,=
  0 section mismatches
 
 Errors:
@@ -2449,7 +2161,8 @@ or directory
     /usr/include/stdio.h:27:10: fatal error: bits/libc-header-start.h: No s=
 uch file or directory
     /bin/sh: 1: llc: not found
-    /bin/sh: 1: /bin/sh: 3: llc: not found
+    /bin/sh: 1: clang: not found
+    /bin/sh: 3: llc: not found
     /usr/include/features.h:424:12: fatal error: sys/cdefs.h: No such file =
 or directory
     /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
@@ -2475,8 +2188,6 @@ uch file or directory
 or directory
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING.sh
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING_MESSAGE.sh
     cc1: warning: -fsanitize=3Daddress not supported for this target
@@ -2489,47 +2200,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     cc1: warning: -fsanitize=3Daddress not supported for this target
     cc1: warning: -fsanitize=3Daddress not supported for this target
     cc1: warning: -fsanitize=3Daddress not supported for this target
@@ -2537,7 +2249,7 @@ I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 302 errors, 12 warnings,=
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 302 errors, 11 warnings,=
  0 section mismatches
 
 Errors:
@@ -3129,8 +2841,6 @@ uch file or directory
 or directory
 
 Warnings:
-    /scratch/linux/mm/madvise.c:881:15: warning: unused variable =E2=80=98z=
-one=E2=80=99 [-Wunused-variable]
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #address-cells (1) differs from / (2)
@@ -3149,10 +2859,10 @@ operty but its #address-cells (1) differs from / (2)
     /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
 7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
 operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:185.3-14: Warning =
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
 (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
 size-cells (1) differs from / (2)
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING.sh
@@ -3163,47 +2873,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
 
 ---------------------------------------------------------------------------=
 -----
@@ -3257,8 +2968,16 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    /scratch/linux/drivers/iio/iio_core_trigger.h:42:13: warning: =E2=80=98=
+iio_device_unregister_trigger_consumer=E2=80=99 defined but not used [-Wunu=
+sed-function]
+    /scratch/linux/drivers/iio/iio_core_trigger.h:33:12: warning: =E2=80=98=
+iio_device_register_trigger_consumer=E2=80=99 defined but not used [-Wunuse=
+d-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3297,7 +3016,7 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 167 errors, 24=
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 166 errors, 23=
  warnings, 0 section mismatches
 
 Errors:
@@ -3494,7 +3213,10 @@ or directory
  error: asm/types.h: No such file or directory
     /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
  error: asm/types.h: No such file or directory
-    load_address.c:5:10: fatal error: link.h: No such file or directory
+    recursion-depth.c:24:10: fatal error: sys/mount.h: No such file or dire=
+ctory
+    /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
+ error: asm/types.h: No such file or directory
     dnotify_test.c:13:17: error: =E2=80=98siginfo_t=E2=80=99 {aka =E2=80=98=
 struct <anonymous>=E2=80=99} has no member named =E2=80=98si_fd=E2=80=99; d=
 id you mean =E2=80=98si_code=E2=80=99?
@@ -3533,10 +3255,6 @@ such file or directory
  error: asm/types.h: No such file or directory
     ../../../include/uapi/linux/fcntl.h:5:10: fatal error: asm/fcntl.h: No =
 such file or directory
-    nosymfollow-test.c:12:10: fatal error: sys/mount.h: No such file or dir=
-ectory
-    /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
- error: asm/types.h: No such file or directory
     mq_perf_tests.c:38:10: fatal error: mqueue.h: No such file or directory
     /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
  error: asm/types.h: No such file or directory
@@ -3588,15 +3306,12 @@ d=E2=80=99
     nanosleep.c:27:10: fatal error: sys/timex.h: No such file or directory
     /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
  error: asm/types.h: No such file or directory
-    compaction_test.c:12:10: fatal error: sys/mman.h: No such file or direc=
-tory
+    gup_benchmark.c:6:10: fatal error: sys/ioctl.h: No such file or directo=
+ry
     /scratch/linux/tools/testing/selftests/kselftest_harness.h:56:10: fatal=
  error: asm/types.h: No such file or directory
 
 Warnings:
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING.sh
     install -m 0744 run.sh /root/build/kselftest/lkdtm/WARNING_MESSAGE.sh
     cc1: warning: -fsanitize=3Daddress not supported for this target
@@ -3642,47 +3357,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     cc1: warning: -fsanitize=3Daddress not supported for this target
     cc1: warning: -fsanitize=3Daddress not supported for this target
     cc1: warning: -fsanitize=3Daddress not supported for this target
@@ -3708,7 +3424,7 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 59 errors, 30 warnin=
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 59 errors, 29 warnin=
 gs, 0 section mismatches
 
 Errors:
@@ -3811,12 +3527,10 @@ tializer but incomplete type
     /bin/sh: 1: llc: not found
     /bin/sh: 1: clang: not found
     /bin/sh: 3: llc: not found
-    hmm-tests.c:24:10: fatal error: hugetlbfs.h: No such file or directory
+    mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file o=
+r directory
 
 Warnings:
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
     Warning: Kernel ABI header at 'tools/include/uapi/linux/netlink.h' diff=
 ers from latest version at 'include/uapi/linux/netlink.h'
     Warning: Kernel ABI header at 'tools/include/uapi/linux/if_link.h' diff=
@@ -3860,47 +3574,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     tls.c:1221:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-Wunus=
 ed-variable]
     tls.c:1273:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-Wunus=
@@ -3925,14 +3640,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -4011,12 +3720,16 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
+    /scratch/linux/drivers/media/tuners/mxl5005s.c:3953:1: warning: the fra=
+me size of 1120 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
+    /scratch/linux/drivers/vhost/scsi.c:1374:1: warning: the frame size of =
+1040 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
+    /scratch/linux/drivers/vhost/vhost.c:1906:1: warning: the frame size of=
+ 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -4069,8 +3782,8 @@ malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
 , 0 section mismatches
 
 Warnings:
-    {standard input}:39: Warning: macro instruction expanded into multiple =
-instructions
+    {standard input}:141: Warning: macro instruction expanded into multiple=
+ instructions
 
 ---------------------------------------------------------------------------=
 -----
@@ -4099,7 +3812,7 @@ maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
 
 ---------------------------------------------------------------------------=
 -----
-milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, =
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
 
 ---------------------------------------------------------------------------=
@@ -4149,49 +3862,15 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, clang-9) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
 multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
 tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig (arm, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    error: fallthrough annotation does not directly precede switch label
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-9) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h/scratch/linux/include/lin=
-ux/compiler-clang.h::1111::33::  errorerror: : Sorry, your version of Clang=
- is too old - please use 10.0.1 or newer.Sorry, your version of Clang is to=
-o old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
     /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
 us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
 I bus
@@ -4204,13 +3883,9 @@ prerequisite 'spi_bus_bridge'
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
- errors, 4 warnings, 0 section mismatches
+ errors, 3 warnings, 0 section mismatches
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
     /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
 us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
 I bus
@@ -4223,13 +3898,9 @@ prerequisite 'spi_bus_bridge'
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
-=94 PASS, 0 errors, 4 warnings, 0 section mismatches
+=94 PASS, 0 errors, 3 warnings, 0 section mismatches
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
     /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
 us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
 I bus
@@ -4241,14 +3912,10 @@ prerequisite 'spi_bus_bridge'
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 =
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 =
 warnings, 0 section mismatches
 
 Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
     /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
 us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
 I bus
@@ -4260,7 +3927,7 @@ prerequisite 'spi_bus_bridge'
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 280 errors, 8 war=
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 280 errors, 6 war=
 nings, 0 section mismatches
 
 Errors:
@@ -4810,13 +4477,6 @@ uch file or directory
 or directory
 
 Warnings:
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
     /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
 us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
 I bus
@@ -4833,47 +4493,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
 
 ---------------------------------------------------------------------------=
 -----
@@ -4917,31 +4578,18 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    /scratch/linux/include/linux/kern_levels.h:5:18: warning: format =E2=80=
-=98%lu=E2=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=
-=99, but argument 8 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    /scratch/linux/arch/riscv/mm/init.c:44:28: warning: =E2=80=98pt_ops=E2=
-=80=99 defined but not used [-Wunused-variable]
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    /scratch/linux/arch/riscv/mm/init.c:44:28: warning: =E2=80=98pt_ops=E2=
-=80=99 defined but not used [-Wunused-variable]
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -4962,9 +4610,9 @@ Warnings:
     /scratch/linux/arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =
 =E2=80=98ams_delta_camera_power=E2=80=99 defined but not used [-Wunused-fun=
 ction]
-    /scratch/linux/drivers/gpio/gpio-omap.c:1528:12: warning: =E2=80=98omap=
+    /scratch/linux/drivers/gpio/gpio-omap.c:1531:12: warning: =E2=80=98omap=
 _gpio_resume=E2=80=99 defined but not used [-Wunused-function]
-    /scratch/linux/drivers/gpio/gpio-omap.c:1516:12: warning: =E2=80=98omap=
+    /scratch/linux/drivers/gpio/gpio-omap.c:1519:12: warning: =E2=80=98omap=
 _gpio_suspend=E2=80=99 defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
@@ -5011,6 +4659,11 @@ ection mismatches
 -----
 pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
+
+---------------------------------------------------------------------------=
+-----
+pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -5064,19 +4717,21 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    /scratch/linux/drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warnin=
-g: conversion from =E2=80=98long long unsigned int=E2=80=99 to =E2=80=98lon=
-g unsigned int=E2=80=99 changes value from =E2=80=985000000000=E2=80=99 to =
-=E2=80=98705032704=E2=80=99 [-Woverflow]
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
 tion mismatches
+
+Warnings:
+    /scratch/linux/drivers/iio/iio_core_trigger.h:42:13: warning: =E2=80=98=
+iio_device_unregister_trigger_consumer=E2=80=99 defined but not used [-Wunu=
+sed-function]
+    /scratch/linux/drivers/iio/iio_core_trigger.h:33:12: warning: =E2=80=98=
+iio_device_register_trigger_consumer=E2=80=99 defined but not used [-Wunuse=
+d-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -5108,8 +4763,16 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    /scratch/linux/drivers/iio/iio_core_trigger.h:42:13: warning: =E2=80=98=
+iio_device_unregister_trigger_consumer=E2=80=99 defined but not used [-Wunu=
+sed-function]
+    /scratch/linux/drivers/iio/iio_core_trigger.h:33:12: warning: =E2=80=98=
+iio_device_register_trigger_consumer=E2=80=99 defined but not used [-Wunuse=
+d-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -5118,7 +4781,7 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
 on mismatches
 
 Warnings:
@@ -5126,8 +4789,6 @@ Warnings:
     <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    /scratch/linux/drivers/gpu/drm/radeon/radeon_ttm.c:696:24: warning: unu=
-sed variable =E2=80=98rdev=E2=80=99 [-Wunused-variable]
     <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
     <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
@@ -5240,16 +4901,8 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
-Warnings:
-    .config:1176:warning: override: UNWINDER_GUESS changes choice state
 
 ---------------------------------------------------------------------------=
 -----
@@ -5258,12 +4911,21 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
 
 Warnings:
-    /scratch/linux/arch/riscv/mm/init.c:44:28: warning: =E2=80=98pt_ops=E2=
-=80=99 defined but not used [-Wunused-variable]
+    .config:1169:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
 
 ---------------------------------------------------------------------------=
 -----
@@ -5272,19 +4934,8 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
-
-Warnings:
-    /scratch/linux/arch/arm64/kernel/smp.c:967:13: warning: =E2=80=98ipi_te=
-ardown=E2=80=99 defined but not used [-Wunused-function]
-    aarch64-linux-gnu-ld: warning: orphan section `.igot.plt' from `arch/ar=
-m64/kernel/head.o' being placed in section `.igot.plt'
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
 
 ---------------------------------------------------------------------------=
 -----
@@ -5348,25 +4999,8 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-x86_64_defconfig (x86_64, clang-9) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    /scratch/linux/include/linux/compiler-clang.h:11:3: error: Sorry, your =
-version of Clang is too old - please use 10.0.1 or newer.
-
----------------------------------------------------------------------------=
------
 x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    error: fallthrough annotation does not directly precede switch label
 
 ---------------------------------------------------------------------------=
 -----
@@ -5499,7 +5133,8 @@ tializer but incomplete type
     /bin/sh: 1: llc: not found
     /bin/sh: 1: clang: not found
     /bin/sh: 3: llc: not found
-    hmm-tests.c:24:10: fatal error: hugetlbfs.h: No such file or directory
+    mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file o=
+r directory
 
 Warnings:
     Warning: Kernel ABI header at 'tools/include/uapi/linux/netlink.h' diff=
@@ -5557,47 +5192,48 @@ m/WARNING_MESSAGE.sh /root/build/kselftest/lkdtm/EXCEPTION.sh /root/build/k=
 selftest/lkdtm/LOOP.sh /root/build/kselftest/lkdtm/EXHAUST_STACK.sh /root/b=
 uild/kselftest/lkdtm/CORRUPT_STACK.sh /root/build/kselftest/lkdtm/CORRUPT_S=
 TACK_STRONG.sh /root/build/kselftest/lkdtm/CORRUPT_LIST_ADD.sh /root/build/=
-kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/STACK_GUARD=
-_PAGE_LEADING.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /=
-root/build/kselftest/lkdtm/UNSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE=
-_FAULT.sh /root/build/kselftest/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/=
-lkdtm/UNALIGNED_LOAD_STORE_WRITE.sh /root/build/kselftest/lkdtm/OVERWRITE_A=
-LLOCATION.sh /root/build/kselftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/ks=
-elftest/lkdtm/READ_AFTER_FREE.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AF=
-TER_FREE.sh /root/build/kselftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/buil=
-d/kselftest/lkdtm/SLAB_FREE_DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE=
-_CROSS.sh /root/build/kselftest/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselfte=
-st/lkdtm/SOFTLOCKUP.sh /root/build/kselftest/lkdtm/HARDLOCKUP.sh /root/buil=
-d/kselftest/lkdtm/SPINLOCKUP.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /r=
-oot/build/kselftest/lkdtm/EXEC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STA=
-CK.sh /root/build/kselftest/lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkd=
-tm/EXEC_VMALLOC.sh /root/build/kselftest/lkdtm/EXEC_RODATA.sh /root/build/k=
-selftest/lkdtm/EXEC_USERSPACE.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /=
-root/build/kselftest/lkdtm/ACCESS_USERSPACE.sh /root/build/kselftest/lkdtm/=
-ACCESS_NULL.sh /root/build/kselftest/lkdtm/WRITE_RO.sh /root/build/kselftes=
-t/lkdtm/WRITE_RO_AFTER_INIT.sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /r=
-oot/build/kselftest/lkdtm/REFCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lk=
-dtm/REFCOUNT_ADD_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_Z=
-ERO_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/l=
-kdtm/REFCOUNT_DEC_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_=
-TEST_NEGATIVE.sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE=
-.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/=
-lkdtm/REFCOUNT_ADD_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_SATURAT=
-ED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kse=
-lftest/lkdtm/REFCOUNT_ADD_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT=
-_INC_NOT_ZERO_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZER=
-O_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.=
-sh /root/build/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/bui=
-ld/kselftest/lkdtm/REFCOUNT_TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TI=
-MING.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/ks=
-elftest/lkdtm/USERCOPY_HEAP_SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCO=
-PY_HEAP_WHITELIST_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST=
-_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build=
-/kselftest/lkdtm/USERCOPY_STACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/U=
-SERCOPY_STACK_BEYOND.sh /root/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /roo=
-t/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/build/kselftest/lkdtm/CF=
-I_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
+kselftest/lkdtm/CORRUPT_LIST_DEL.sh /root/build/kselftest/lkdtm/CORRUPT_USE=
+R_DS.sh /root/build/kselftest/lkdtm/STACK_GUARD_PAGE_LEADING.sh /root/build=
+/kselftest/lkdtm/STACK_GUARD_PAGE_TRAILING.sh /root/build/kselftest/lkdtm/U=
+NSET_SMEP.sh /root/build/kselftest/lkdtm/DOUBLE_FAULT.sh /root/build/kselft=
+est/lkdtm/CORRUPT_PAC.sh /root/build/kselftest/lkdtm/UNALIGNED_LOAD_STORE_W=
+RITE.sh /root/build/kselftest/lkdtm/OVERWRITE_ALLOCATION.sh /root/build/kse=
+lftest/lkdtm/WRITE_AFTER_FREE.sh /root/build/kselftest/lkdtm/READ_AFTER_FRE=
+E.sh /root/build/kselftest/lkdtm/WRITE_BUDDY_AFTER_FREE.sh /root/build/ksel=
+ftest/lkdtm/READ_BUDDY_AFTER_FREE.sh /root/build/kselftest/lkdtm/SLAB_FREE_=
+DOUBLE.sh /root/build/kselftest/lkdtm/SLAB_FREE_CROSS.sh /root/build/kselft=
+est/lkdtm/SLAB_FREE_PAGE.sh /root/build/kselftest/lkdtm/SOFTLOCKUP.sh /root=
+/build/kselftest/lkdtm/HARDLOCKUP.sh /root/build/kselftest/lkdtm/SPINLOCKUP=
+.sh /root/build/kselftest/lkdtm/HUNG_TASK.sh /root/build/kselftest/lkdtm/EX=
+EC_DATA.sh /root/build/kselftest/lkdtm/EXEC_STACK.sh /root/build/kselftest/=
+lkdtm/EXEC_KMALLOC.sh /root/build/kselftest/lkdtm/EXEC_VMALLOC.sh /root/bui=
+ld/kselftest/lkdtm/EXEC_RODATA.sh /root/build/kselftest/lkdtm/EXEC_USERSPAC=
+E.sh /root/build/kselftest/lkdtm/EXEC_NULL.sh /root/build/kselftest/lkdtm/A=
+CCESS_USERSPACE.sh /root/build/kselftest/lkdtm/ACCESS_NULL.sh /root/build/k=
+selftest/lkdtm/WRITE_RO.sh /root/build/kselftest/lkdtm/WRITE_RO_AFTER_INIT.=
+sh /root/build/kselftest/lkdtm/WRITE_KERN.sh /root/build/kselftest/lkdtm/RE=
+FCOUNT_INC_OVERFLOW.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_OVERFLOW.sh=
+ /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh /root/build/=
+kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_DEC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_DEC_NEGATIVE.s=
+h /root/build/kselftest/lkdtm/REFCOUNT_DEC_AND_TEST_NEGATIVE.sh /root/build=
+/kselftest/lkdtm/REFCOUNT_SUB_AND_TEST_NEGATIVE.sh /root/build/kselftest/lk=
+dtm/REFCOUNT_INC_ZERO.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_ZERO.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_INC_SATURATED.sh /root/build/kselftest/=
+lkdtm/REFCOUNT_DEC_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_ADD_SA=
+TURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_INC_NOT_ZERO_SATURATED.sh /=
+root/build/kselftest/lkdtm/REFCOUNT_ADD_NOT_ZERO_SATURATED.sh /root/build/k=
+selftest/lkdtm/REFCOUNT_DEC_AND_TEST_SATURATED.sh /root/build/kselftest/lkd=
+tm/REFCOUNT_SUB_AND_TEST_SATURATED.sh /root/build/kselftest/lkdtm/REFCOUNT_=
+TIMING.sh /root/build/kselftest/lkdtm/ATOMIC_TIMING.sh /root/build/kselftes=
+t/lkdtm/USERCOPY_HEAP_SIZE_TO.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_=
+SIZE_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_TO.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_HEAP_WHITELIST_FROM.sh /root/build/kselfte=
+st/lkdtm/USERCOPY_STACK_FRAME_TO.sh /root/build/kselftest/lkdtm/USERCOPY_ST=
+ACK_FRAME_FROM.sh /root/build/kselftest/lkdtm/USERCOPY_STACK_BEYOND.sh /roo=
+t/build/kselftest/lkdtm/USERCOPY_KERNEL.sh /root/build/kselftest/lkdtm/USER=
+COPY_KERNEL_DS.sh /root/build/kselftest/lkdtm/STACKLEAK_ERASING.sh /root/bu=
+ild/kselftest/lkdtm/CFI_FORWARD_PROTO.sh /root/build/_kselftest_/lkdtm/
     tls.c:1221:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-Wunus=
 ed-variable]
     tls.c:1273:39: warning: unused variable =E2=80=98tls12=E2=80=99 [-Wunus=

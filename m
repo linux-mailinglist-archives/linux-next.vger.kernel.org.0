@@ -2,98 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1355C26C4D0
-	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 18:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE7D26C786
+	for <lists+linux-next@lfdr.de>; Wed, 16 Sep 2020 20:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726312AbgIPQBn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Sep 2020 12:01:43 -0400
-Received: from mga03.intel.com ([134.134.136.65]:14649 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726421AbgIPQBZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:01:25 -0400
-IronPort-SDR: 0S+lRSoIFN1hNt1uyl4BizDuBXwzBRsTUFIYFjCPa6ZXIJ0Dbka/0/aZ+Bcf6hFu5QN4F5Xbd4
- sl440QxVMHAw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="159522952"
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="159522952"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 07:29:37 -0700
-IronPort-SDR: JLxWPzmpU6s9li6Ml4Q2lqYdMMIDVcaFdVWu1zenXIZs0Q9diPfrJ+nt76t3ZcgyCOsIBZl8YS
- vfwsGEKSfZpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,433,1592895600"; 
-   d="scan'208";a="336040902"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 16 Sep 2020 07:29:33 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kIYR8-00H6Ky-0Q; Wed, 16 Sep 2020 17:29:30 +0300
-Date:   Wed, 16 Sep 2020 17:29:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kent Gibson <warthog618@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH next] gpiolib: check for parent device in
- devprop_gpiochip_set_names()
-Message-ID: <20200916142930.GK3956970@smile.fi.intel.com>
-References: <20200916134327.3435-1-brgl@bgdev.pl>
+        id S1727443AbgIPS32 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Sep 2020 14:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728001AbgIPS2w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Sep 2020 14:28:52 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B4C0A8895;
+        Wed, 16 Sep 2020 05:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3fsuI9w5GdoIgxeD1xv5qa75sHOHCTimKxD8QqBKKvM=; b=jlXXu49/jB89TDAuiJwrD8HRAS
+        SHqt4hS3yNU6uPG9WnxXbo1RnlYY+wGBcvWMQ+XvDifTL8dN472JqW6xcTzUcnohkmbcE9EINw1Ov
+        Bg2kT+yGHOg6OYKgEQMwWL+H/JezTCFvZmrnycvcyBtJcQ8IZ/t72tN8cTYFoKbhLvmYHZtGv4yLq
+        DqJNdcmUHWBzshsvkiEgRQWzNr84Q+Iqx2ENzvimsHDuRbYz6X0qa5Da8l6mDWHdp6cNHo0h8IkLe
+        PEqqaKlvKomk7GUQygg9XTNPDm+F9WoABVU00pS3fgEzjCQ8cN9Uohn+oRvUkr/ikmgfCODioV0Ca
+        d7MTghBg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kIWwn-0002Cn-1a; Wed, 16 Sep 2020 12:54:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85BC13011FE;
+        Wed, 16 Sep 2020 14:54:02 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CD1522B9285CC; Wed, 16 Sep 2020 14:54:02 +0200 (CEST)
+Date:   Wed, 16 Sep 2020 14:54:02 +0200
+From:   peterz@infradead.org
+To:     Qian Cai <cai@redhat.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Sebastian A. Siewior" <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v2 0/5] seqlock: Introduce PREEMPT_RT support
+Message-ID: <20200916125402.GR2674@hirez.programming.kicks-ass.net>
+References: <20200904153231.11994-1-a.darwish@linutronix.de>
+ <224bd11b533dd2acff3f6cce51ab4ca676eb4f9f.camel@redhat.com>
+ <20200915124817.GA127490@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+ <20200915143028.GB2674@hirez.programming.kicks-ass.net>
+ <32bfdec1ad4e11cfecd840e1b83d95ba2bab1abc.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200916134327.3435-1-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <32bfdec1ad4e11cfecd840e1b83d95ba2bab1abc.camel@redhat.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 03:43:27PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Wed, Sep 16, 2020 at 08:52:07AM -0400, Qian Cai wrote:
+> On Tue, 2020-09-15 at 16:30 +0200, peterz@infradead.org wrote:
+> > On Tue, Sep 15, 2020 at 08:48:17PM +0800, Boqun Feng wrote:
+> > > I think this happened because seqcount_##lockname##_init() is defined at
+> > > function rather than macro, so when the seqcount_init() gets expand in
+> > 
+> > Bah! I hate all this :/
+> > 
+> > I suspect the below, while more verbose than I'd like is the best
+> > option.
 > 
-> It's possible for a GPIO chip to not have a parent device (whose
-> properties we inspect for 'gpio-line-names'). In this case we should
-> simply return from devprop_gpiochip_set_names(). Add an appropriate
-> check for this use-case.
+> Stephen, can you add this patch for now until Peter beats you to it?
 
-Ah, nice!
-Can we also add a small comment in the code, b/c w/o it I would stumble over
-and eager to remove looks-as-unneeded check?
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: 7cba1a4d5e16 ("gpiolib: generalize devprop_gpiochip_set_names() for device properties")
-> Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  drivers/gpio/gpiolib.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index b7b608ef9..ac2c77edc 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -375,6 +375,9 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
->  	int ret, i;
->  	int count;
->  
-> +	if (!dev)
-> +		return 0;
-> +
->  	count = device_property_string_array_count(dev, "gpio-line-names");
->  	if (count < 0)
->  		return 0;
-> -- 
-> 2.26.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Did you verify it works? I only wrote it..

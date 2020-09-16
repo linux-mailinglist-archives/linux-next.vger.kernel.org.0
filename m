@@ -2,76 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC8C26CEC0
-	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 00:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B77526CF28
+	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 00:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgIPWbZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Sep 2020 18:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S1726304AbgIPWzB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Sep 2020 18:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726311AbgIPWbZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Sep 2020 18:31:25 -0400
-Received: from pasta.tip.net.au (pasta.tip.net.au [IPv6:2401:fc00:0:129::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF90EC06174A;
-        Wed, 16 Sep 2020 15:31:23 -0700 (PDT)
-Received: from canb.auug.org.au (203-206-41-51.dyn.iinet.net.au [203.206.41.51])
+        with ESMTP id S1726189AbgIPWy7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Sep 2020 18:54:59 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EDDC06174A
+        for <linux-next@vger.kernel.org>; Wed, 16 Sep 2020 15:54:58 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by pasta.tip.net.au (Postfix) with ESMTPSA id 4BsFF273WQz8t8V;
-        Thu, 17 Sep 2020 08:31:17 +1000 (AEST)
-Date:   Thu, 17 Sep 2020 08:31:15 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BsFm35pmgz9sVC;
+        Thu, 17 Sep 2020 08:54:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600296890;
+        bh=ALfqkhXecz3xjiWH5VA0Zac2vyZx14+HCwEv1KacsOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bg5xRTNPkO10k87vvPh7pb6et+RraAS/Hn+HiP2QVYnLOZpSEyW+acSgExuYcLV5S
+         0Qp/dSpiA8gkz8LU+EiqDBrSlvAfaZ1cUiG4yEoVzIXl9hVew2eVjiuvWpFJdl677T
+         L13pPRig1f4sydP5kdSEdeyBA9c09tgXeIiQo10KTqO66zusmIOrudxqqbGqmLT9eJ
+         t7EVf6hvuonX0U3NNqrCzcqbpnhhRDtzY20kRgLu6d12D4ZaSAU00bgZDk37llka0c
+         vEspIsWWqsbK8OJO0O3gYAoYLx0r8C3GzBd0DX/MPD5EFBjY5eowY6ECjad0UHXkGq
+         Tvhc9OUOAfdaA==
+Date:   Thu, 17 Sep 2020 08:54:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: linux-next: Signed-off-by missing for commit in the net-next tree
-Message-ID: <20200917083115.23fb84a0@canb.auug.org.au>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-next@vger.kernel.org
+Subject: Re: linux-next: add s390 set_fs branch?
+Message-ID: <20200917085138.0bd1998e@canb.auug.org.au>
+In-Reply-To: <20200916162846.GE7076@osiris>
+References: <20200915155534.GA11180@osiris>
+        <20200916095437.77e7365d@canb.auug.org.au>
+        <20200916162846.GE7076@osiris>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_bd_+EkqQoKkoHQQ.57U3zV";
+Content-Type: multipart/signed; boundary="Sig_/5Y/wiLZmVkb=.jqa8IBPGzQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_bd_+EkqQoKkoHQQ.57U3zV
+--Sig_/5Y/wiLZmVkb=.jqa8IBPGzQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Heiko,
 
-Commits
+On Wed, 16 Sep 2020 18:28:46 +0200 Heiko Carstens <hca@linux.ibm.com> wrote:
+>
+> Ok, so we have a "for-next" branch now:
+>=20
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git for-next
+>=20
+> If you would include that in linux-next then you can drop the
+> following ones:
+>=20
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#fixes
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#features
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#set_fs
 
-  0d2ffdc8d400 ("net/mlx5: Don't call timecounter cyc2time directly from 1P=
-PS flow")
-  87f3495cbe8d ("net/mlx5: Release clock lock before scheduling a PPS work")
-  aac2df7f022e ("net/mlx5: Rename ptp clock info")
-  fb609b5112bd ("net/mlx5: Always use container_of to find mdev pointer fro=
-m clock struct")
-  ec529b44abfe ("net/mlx5: remove erroneous fallthrough")
-
-are missing a Signed-off-by from their committer.
+I have removed the s390-setfs tree and updated the s390 tree.  I like
+to keep the s390-fixes tree separate as I merge all the pending fixes
+early and they get tested separately.   That should not stop you
+merging your fixes branch into your for-next branch as well (to get rid
+of conflicts or you local testing).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_bd_+EkqQoKkoHQQ.57U3zV
+--Sig_/5Y/wiLZmVkb=.jqa8IBPGzQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9ikjMACgkQAVBC80lX
-0Gwjjwf+JYNxkXnjBVO+jpqvSYjaUtkUgjt/7MCHMmo24i5qti1tnchXNVWvqqJA
-VoCx+xdoTPv1oVCDX1ur/LmUW3D0OZJjAMRzTacexi9vF2mIndlVQvSvgtfOmFfY
-udzu4HgYogtSFrSvN55hv/f5faax+tY8TcXFHdVVM/K/9bvn5UOyxMq9Uknp+Ljk
-Ipst5xbNQeJi6WBbf5MiFOa2DWqf+qlxGUem9Pocusk7G1erPiU+lJnGaalK7A1G
-OX5ZC9JO9cP8e9tw1jlmFPZioa28S3/uoW+6njLCQBjYT47xi4bfT7Rz1ygN9N1x
-DXdPhJhg0oBe/mjoOAuJYrnzYs3UEA==
-=PTfZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9il6UACgkQAVBC80lX
+0GwNIQf+IBIvRgq8sWJvLCoFD3RkW9x0jzjuzWQWngAMWYn6doECKKdGMu2XUsdl
+dlI0mhC18uNKhzLhd/Bss0Srx+dhSvJzQPIJrxo6YqgmxAHD8cukTWNegHtVabgn
+DABuCZy3360Xyq9yHu1oJqUEzTcXO5xyIiG/uDUgBCCrH+bY7PAMRPQ2GohxjEns
+IDrirWT54+dZrcq09LKIfoyLz2DAE/BPWU36TmzG7u+sOykaJ0lodUDizsjDF2Tk
+3AIgB523dGJGCBz2IoKrGgmFyvOHvUFdn5v58/TBTGA1KUa4mCnJjaeDAjiMmiov
+/DcuJ5ZUzAFnc5FZGhvgt5yMsO5fyA==
+=Thgv
 -----END PGP SIGNATURE-----
 
---Sig_/_bd_+EkqQoKkoHQQ.57U3zV--
+--Sig_/5Y/wiLZmVkb=.jqa8IBPGzQ--

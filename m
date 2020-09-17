@@ -2,100 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19C026D61B
-	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 10:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3F326D73D
+	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 10:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgIQINR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 04:13:17 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45180 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726442AbgIQINQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 17 Sep 2020 04:13:16 -0400
-X-Greylist: delayed 3321 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 04:13:15 EDT
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08H71THD123417;
-        Thu, 17 Sep 2020 03:17:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=CIaPOVNbmqTtCtZVIPDosBxYXlLl5cQmfhaysc+mS3o=;
- b=ApMf+l2mD3F39w7urgtt4nhNBe3cAhi6F7ZOd/xx/qIcx8d66KIIWXbP3G48KC+4bqf0
- E4xsioMz0uI9VnLzHW9jIGOEftmchh+zv0GaSMkrNVoDPbyw6CGbDEM6z4kVKHJTaU1X
- zC9GebkLviCnKYgsv8N3oq+nPU+pImFjvsxghaJZhgaB4CYv6DoNQCg6c8RbHTr8p+sU
- w/+d3Xwj2jwYYfOyCFgTK7eeK/qd/YzgwMIFRXVChUyUIpDkuau/qU4HN03YTelCRPSu
- xoOH2JJsqlLyIy5tGZcjFnOFnYyfSqyLRs3H4gifNwipd7q311hFXPt87tP5pFDQXRFu +A== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33m2f0hkfd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Sep 2020 03:17:46 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08H72UQv030541;
-        Thu, 17 Sep 2020 07:17:44 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 33k6eshtw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Sep 2020 07:17:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08H7G7JG9765130
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Sep 2020 07:16:07 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CDC94C04A;
-        Thu, 17 Sep 2020 07:17:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20B3A4C044;
-        Thu, 17 Sep 2020 07:17:41 +0000 (GMT)
-Received: from osiris (unknown [9.171.81.108])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 17 Sep 2020 07:17:41 +0000 (GMT)
-Date:   Thu, 17 Sep 2020 09:17:39 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-next@vger.kernel.org
-Subject: Re: linux-next: add s390 set_fs branch?
-Message-ID: <20200917071739.GA6743@osiris>
-References: <20200915155534.GA11180@osiris>
- <20200916095437.77e7365d@canb.auug.org.au>
- <20200916162846.GE7076@osiris>
- <20200917085138.0bd1998e@canb.auug.org.au>
+        id S1726471AbgIQI5i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Sep 2020 04:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgIQI5h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 04:57:37 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD77C06174A;
+        Thu, 17 Sep 2020 01:57:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BsW7Z2M8fz9sSC;
+        Thu, 17 Sep 2020 18:57:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600333050;
+        bh=x+1vU5s/qiYCUF+IZF2QwlxWyd8G1Gbr/+jRFDRLYsQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hIpHaiHjARQMG9yODevuXD3saGCjTXzTfRhk1DdtHGusBJMlkuFIStPOnaw8YVF42
+         QXb2IYOzKa0yvxAgfn4GzWmUtUI/kVxeshowDOTN8AWizwm28DZd7ZRikTqPJ5DRxd
+         2153q1PVAwjM4Uiy6J470i148Y0ERQU2TpiMPm645dFjG5vZ7jEweswMhui4wdGef/
+         hm3sTUmjxanSU05jyVviyLLwwUf/xzxxK9kwjGnC/1j0JQ4yw24OVz/CZTQjGl8zrR
+         nWWfFRQwiJHiKKMvIHLOmjHseXabNFKPYPrxxQ7tZUyiEwXSZM0fP8wKDjPsMaUC17
+         t24uqqPFB1GZQ==
+Date:   Thu, 17 Sep 2020 18:57:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm-current tree with the powerpc
+ tree
+Message-ID: <20200917185729.7911e2b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200917085138.0bd1998e@canb.auug.org.au>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-17_03:2020-09-16,2020-09-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 mlxlogscore=999 lowpriorityscore=0 suspectscore=2
- bulkscore=0 adultscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009170049
+Content-Type: multipart/signed; boundary="Sig_/h=lzTyWsgBMheYWQVF1XVyg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/h=lzTyWsgBMheYWQVF1XVyg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 17, 2020 at 08:54:29AM +1000, Stephen Rothwell wrote:
-> On Wed, 16 Sep 2020 18:28:46 +0200 Heiko Carstens <hca@linux.ibm.com> wrote:
-> >
-> > Ok, so we have a "for-next" branch now:
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git for-next
-> > 
-> > If you would include that in linux-next then you can drop the
-> > following ones:
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#fixes
-> > git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#features
-> > git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git#set_fs
-> 
-> I have removed the s390-setfs tree and updated the s390 tree.  I like
-> to keep the s390-fixes tree separate as I merge all the pending fixes
-> early and they get tested separately.   That should not stop you
-> merging your fixes branch into your for-next branch as well (to get rid
-> of conflicts or you local testing).
+Hi all,
 
-Great, thank you!
+Today's linux-next merge of the akpm-current tree got a conflict in:
+
+  arch/powerpc/mm/kasan/kasan_init_32.c
+
+between commit:
+
+  4c42dc5c69a8 ("powerpc/kasan: Fix CONFIG_KASAN_VMALLOC for 8xx")
+
+from the powerpc tree and commit:
+
+  76713c119a9d ("arch, drivers: replace for_each_membock() with for_each_me=
+m_range()")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/powerpc/mm/kasan/kasan_init_32.c
+index 929716ea21e9,26fda3203320..000000000000
+--- a/arch/powerpc/mm/kasan/kasan_init_32.c
++++ b/arch/powerpc/mm/kasan/kasan_init_32.c
+@@@ -137,12 -138,12 +137,12 @@@ void __init kasan_mmu_init(void
+ =20
+  void __init kasan_init(void)
+  {
+- 	struct memblock_region *reg;
++ 	phys_addr_t base, end;
+ +	int ret;
++ 	u64 i;
+ =20
+- 	for_each_memblock(memory, reg) {
+- 		phys_addr_t base =3D reg->base;
+- 		phys_addr_t top =3D min(base + reg->size, total_lowmem);
++ 	for_each_mem_range(i, &base, &end) {
++ 		phys_addr_t top =3D min(end, total_lowmem);
+ -		int ret;
+ =20
+  		if (base >=3D top)
+  			continue;
+
+--Sig_/h=lzTyWsgBMheYWQVF1XVyg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9jJPkACgkQAVBC80lX
+0GzX1Qf/WyTnkTqyUByLSsUHq60F3H+M30drzVVUeJ62iEtD/O42AYpwitbMsJTf
+QHZNYbop7aCBXjmPTbSg93xiV/npJz71eFbbwYxjdWG2WNcRHT6TEKtFzqdkmI7d
+or+2qYkq14sYkqm1jv3+8dLBmKBS2lGZ0XCdrnQKk4NmwtcLo443o5TGZZhxl7Ee
+sfRK7oxl3ESYSVPUL7B/uBC59Iwkr0f7WhTQ6lKZLDXMZLKXOQ2AoNL9RwAI21D6
+7yakCPtax05i0aJl4FJEuOGuP32pgJmdxvqFK4WemEoOXrXK6CUDBr7IE5e7jliO
+/2U/kf7dDag+gQL9tklDqdHkkL/NUQ==
+=f7B6
+-----END PGP SIGNATURE-----
+
+--Sig_/h=lzTyWsgBMheYWQVF1XVyg--

@@ -2,104 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC3C26D515
-	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 09:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED5726D56A
+	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 09:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgIQHtH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 03:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgIQHtG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 03:49:06 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4992C061756
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 00:49:06 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id q63so1341297qkf.3
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 00:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZKJHKk7vG3da0ptMNHqr0ZH7librM+LR8T0+DdZdF4M=;
-        b=ZXzXz46o2tHEdoZfj427WwyXF5XwFye1GOfw+mLenLLXV0ueZgYC1pcYj3lYMxGu3O
-         u9Z21GE3b8lgMynuSLz0WpjzT2x6MzjDI8WCfQY7wND/MbNP3i14vroVqXAybUvtYC/I
-         UiWcKbmcFNN664FeX5JQQHlbVfgav9HJTyuL8eExMXb8sbL5kr+E3JIuHlgaf9zt3NBN
-         7rafP5yu1KT2YGTZUje00lgvuSRI5Em3InKyKKekVuUT2fIV0rcf6qvqNL+xKpB4nCgJ
-         BBNAbkX1UEYNRCZgPH8TWGvArylDH4vm9B0sFqABcHnnDkI8EKlxiXyS1yIJpp+1BpV2
-         q/Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZKJHKk7vG3da0ptMNHqr0ZH7librM+LR8T0+DdZdF4M=;
-        b=G/iRYRgHhrBhn/EVGyIolcXtFtm3IWF0Tn+AwIj+nTNSx1Ic+25tDohXTVKbUuRa0U
-         2TX/aaOYh9nGDLE5vCs8ncb85P+TCLQ8TSbDIGfNfBfLMdxGuWub/O5YRH8wBJQ3j9/4
-         hQtjey3OiCP841dnFk9fm7cC3aEb+lQ2MTSTiZMjMUEX3K5MHOVQVH9+zI0eDiYfvyXe
-         pbzTgdDlYyRbihas0NrJBtpXWS/5xtGgdULYHpe19Rew1ErZLAQluRr72Qxh8BELF4BL
-         nP9HTQHgNMjsEOcxZWQabP0HK5xjS+xpzoPBrSoOwiUILCl/LZtGKdmnod1WMTaw5s9F
-         38yw==
-X-Gm-Message-State: AOAM530h72trC0vQTF7Je+oaiTp1gDJRx7/rxkQrDOsmMeuWtGwFrPHa
-        aa/j+iy9itEO3qYWSk6pFmmRag==
-X-Google-Smtp-Source: ABdhPJzWJyaQQuiN+8cGiMTVoympH5kdMvCkREdE+9MOy1CGXfAhEUdzcOTU3OzLOUd2seVHXv5nBQ==
-X-Received: by 2002:a37:9d84:: with SMTP id g126mr27322880qke.473.1600328945938;
-        Thu, 17 Sep 2020 00:49:05 -0700 (PDT)
-Received: from localhost.localdomain (amontpellier-657-1-17-60.w109-210.abo.wanadoo.fr. [109.210.64.60])
-        by smtp.gmail.com with ESMTPSA id q19sm3153736qtk.74.2020.09.17.00.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 00:49:05 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Kent Gibson <warthog618@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH next v2] gpiolib: check for parent device in devprop_gpiochip_set_names()
-Date:   Thu, 17 Sep 2020 09:48:57 +0200
-Message-Id: <20200917074857.6716-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.26.1
+        id S1726198AbgIQH6K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Sep 2020 03:58:10 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55489 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726196AbgIQH6I (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Sep 2020 03:58:08 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BsTpz0LtWz9sTS;
+        Thu, 17 Sep 2020 17:58:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600329483;
+        bh=EPn/KIsEWg4qP+mChd9xQIyx9odP5Kr6Q7ENForP53o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NfRf3TJedGCwAsuVwPNV3NV986bOtiVKMfpnWTOqEvoSrtxLhL0qR09FlzLjGvs3G
+         zgUPnFA2TDYggXYmwx5mfw9U1EB3SIruFt+vJwsHkvLCv4JSGwCjSUrtl3VjmdzJRI
+         0Oiq1Iwl2gKrWLo686yCkifJ2cS3Z+7DffwKLNSYpCdk/LMQnfYoqptOBEvC/QzPkP
+         Tg8Nt71YlB2g7j9ZZNAquXoKcluhTXbyOPLdAf5CYQuKeHsEWXWZdR+Am+jjIDuMew
+         pP/78XbepgvagA1q6iZqsG4uZ5dskOyuI/UpB6XcvCIZVNCubcXiE0O8rIQnP1E7zp
+         6F+ho5OkwdJ+w==
+Date:   Thu, 17 Sep 2020 17:58:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-msm tree
+Message-ID: <20200917175800.7a55e4fb@canb.auug.org.au>
+In-Reply-To: <20200914121022.2c5c494a@canb.auug.org.au>
+References: <20200914121022.2c5c494a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/rFJhFWUqe0ohZy1McHleVwY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+--Sig_/rFJhFWUqe0ohZy1McHleVwY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's possible for a GPIO chip to not have a parent device (whose
-properties we inspect for 'gpio-line-names'). In this case we should
-simply return from devprop_gpiochip_set_names(). Add an appropriate
-check for this use-case.
+Hi all,
 
-Fixes: 7cba1a4d5e16 ("gpiolib: generalize devprop_gpiochip_set_names() for device properties")
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
----
-v1 -> v2:
-- added a comment as requested by Andy
+On Mon, 14 Sep 2020 12:10:22 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the drm-msm tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>=20
+> drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c: In function 'msm_dsi_pll_7nm_i=
+nit':
+> drivers/gpu/drm/msm/dsi/pll/dsi_pll_7nm.c:882:19: warning: conversion fro=
+m 'long long unsigned int' to 'long unsigned int' changes value from '50000=
+00000' to '705032704' [-Woverflow]
+>   882 |   pll->max_rate =3D 5000000000UL;
+>       |                   ^~~~~~~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   1ef7c99d145c ("drm/msm/dsi: add support for 7nm DSI PHY/PLL")
 
- drivers/gpio/gpiolib.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I am still getting this warning.
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index b7b608ef9e6b..dfcff5d24b18 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -375,6 +375,10 @@ static int devprop_gpiochip_set_names(struct gpio_chip *chip)
- 	int ret, i;
- 	int count;
- 
-+	/* GPIO chip may not have a parent device whose properties we inspect. */
-+	if (!dev)
-+		return 0;
-+
- 	count = device_property_string_array_count(dev, "gpio-line-names");
- 	if (count < 0)
- 		return 0;
--- 
-2.26.1
+--Sig_/rFJhFWUqe0ohZy1McHleVwY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9jFwgACgkQAVBC80lX
+0Gyx8wf8DDIt3TppVeZWpG8t7e0f9t+UkOcrzJMcgwlpHf7jNowlP2qaZe1D2qlv
+efLdmGI+XP8A9AL53dbEOSxY0NRDTBJBhwrEC5KcyieiHopGYaqUl+miE7K5rOx0
+cuJWuGPt2SBJ88pkDmAKp41sxctnOSpNJukhz656P+rufUqIhDC1JZa9jIWyOYAY
+KXurNu1+leiH/h3sxHayZIdFWvw6TBClwxUt1Al3Ml7p1xYj3LucCUTD926uj1nS
+1XkFAobJcMkaEMtuVSiaGsvAD0QgcqLki0qmhapQPWsKr5UJHzx9XhVQE/sRBzVK
+brYZYmkdbUwv4JnfWdTBQ8qZtj9Y8Q==
+=+3l+
+-----END PGP SIGNATURE-----
+
+--Sig_/rFJhFWUqe0ohZy1McHleVwY--

@@ -2,139 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E427E26E038
-	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 18:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56C926E315
+	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 20:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728307AbgIQQDr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 12:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbgIQQDU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 12:03:20 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C1C061788
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 08:53:03 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id bd2so1344645plb.7
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 08:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0bpeJmfLaUdJUdRQCC+1Kkaahik9MfGdV1JCQQN+ftA=;
-        b=wPTmRKV7mzIGoyC0/19DkfpvYXemkGgKI/iGQM4Fdiinvf2NCxAs3ZEabWCfux8ImY
-         hXmIzcCLXR8o7A+rE2lXB7YLN54APTzj4nLGIm2uKgAe3LG7522D/4ELuDr4tRrFYIId
-         r/ZH7sFBXdUXoS3kthIR3gCxRTi6d5xQBFRVY5+3dB/Eo0YjyqH5fN6bN48VyLHIuqKf
-         BoyVePZutG74g2JLDexWawC2CbQv5WropMXHekT3PAOQldXFUWFJn/O3xbEBo2G2yCwZ
-         SAkjfNu/giXR8pqEJC5bA0W3tV+9Z1S6qE1N0qK03UURdLzrS+12648xIa3dfCvTKFEt
-         b11Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0bpeJmfLaUdJUdRQCC+1Kkaahik9MfGdV1JCQQN+ftA=;
-        b=YjGkPevpVYA9NtM+W1cadwvyoR7iS0ED6xWLWlaepNviHMGHFB2XYR9/4/5SeE0S0a
-         o35S3eiK610WLz9GvUfJvDbTvs7zdXB+Cpi3hW9JlARLLqdA/BBKzzJdT4Z2lem5iDEx
-         EEwW5bwvDB2WP8Bopudm5vOI2cSW/nrMgwzapfDMVGDTPqKVdIoVzg7xwi+gjHmS5MIm
-         9ckaS1BaPTktDA6tIxX3soxFXvVWjPnFDQqsBxFg6AXLavoK3LamqOx8Kwub6mvn1yU6
-         0xO2R+MXr6+IH6Sj/cHqNGKkGsPr6zXFvdt2WKpvdmXm8MIePc2lEPZrU54SQbkCVwp5
-         YvUQ==
-X-Gm-Message-State: AOAM530rN4RNknXycqzNHgUZgiVhBkzISDQpEHJyFD8o6M8lJxSDG1R5
-        wczpUeqqnPejRXk7jcIIpxrCDcnmF4nOtXGPpuJiHg==
-X-Google-Smtp-Source: ABdhPJzxBD08XLMZ/eMtjTIwg6DpVlX5XjkQM77G7WqyVfiLwHULJwFyZzC5fFdye7ihxhxIu1whj65ca14QsM1AhSU=
-X-Received: by 2002:a17:90a:db49:: with SMTP id u9mr8923866pjx.90.1600357982512;
- Thu, 17 Sep 2020 08:53:02 -0700 (PDT)
+        id S1726426AbgIQSAZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Sep 2020 14:00:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48532 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726582AbgIQSAG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:00:06 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B75120707;
+        Thu, 17 Sep 2020 18:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600365605;
+        bh=sym+4IMmWlAE40RItS/W9ywy+geN2STM8ay5dMNNwpc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=PMUSAz74MXGzcOVQtNfwi5lSgSzsCRxzWrux+WySIWfqcheevXrAJNFThINhBMc/2
+         JktNPJUzHRCqDEiMvEaC6ZlVBYb5L/poDNi6n0lUj1weKTBhqKQXBNzSenKEmuwGR2
+         Hs4NkHwD3sJCEGzsSBXJNcuLhVUVfyWSkOdX6GrY=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 3BD8835225FA; Thu, 17 Sep 2020 11:00:05 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 11:00:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
+Message-ID: <20200917180005.GM29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200917132652.738c4cc2@canb.auug.org.au>
 MIME-Version: 1.0
-References: <0100017492de8180-c524cff4-bd4e-4777-9f33-7e1da2c986d2-000000@email.amazonses.com>
- <CANKHsTfyE64ygNB0H0Nx=P63D-kqYa6aGOXS6ZmNUspLJJtS=Q@mail.gmail.com> <f9144c49-d39a-af67-2a5a-3828b86ea86c@linuxfoundation.org>
-In-Reply-To: <f9144c49-d39a-af67-2a5a-3828b86ea86c@linuxfoundation.org>
-From:   Justin Cook <justin.cook@linaro.org>
-Date:   Thu, 17 Sep 2020 10:52:51 -0500
-Message-ID: <CANKHsTeOix88zT=d1ywROXXXZRxYnYOEzRQDJGJgoh4DVbnPjQ@mail.gmail.com>
-Subject: Re: [REGRESSION] kselftest: next-20200915
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     LKFT <lkft@linaro.org>, lkft-triage@lists.linaro.org,
-        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917132652.738c4cc2@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Shuah,
+On Thu, Sep 17, 2020 at 01:26:52PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   903c5302fa2d ("sched/core: Allow try_invoke_on_locked_down_task() with irqs disabled")
+> 
+> is missing a Signed-off-by from its author and committer.
+> 
+> I didn't complain about this when it was first present because I figured
+> it was just a debugging commit that would be removed quickly.  However,
+> there are now quite a few follow up commits ...
 
-The report sent was meant to be a general summary, rather than a deep
-dive, of the results. Most of that information can be gathered by
-viewing the test details.
+Without Peter's Signed-off-by, I clearly won't be submitting it to the
+upcoming merge window.
 
->     * Test details:
->     https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200915
+Peter, this is now quite close to your original patch.  May I please
+add your Signed-off-by?
 
-If you open that link in a web browser, there are a number of ways to
-dig down into the results. If you have questions about the best ways
-to do this, please let me know.
-
-Maybe that isn't the best way? I'm very open to feedback. I just tried
-to best copy the previous report that was being sent out to start.
-
-Please feel free to ask any questions you have or provide me with
-feedback. I'm here to help.
-
-Thanks,
-
-Justin
-
-On Tue, 15 Sep 2020 at 15:18, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 9/15/20 11:52 AM, Justin Cook wrote:
-> > Hello,
-> >
-> > Linaro had previously been sending out a report based on our testing of
-> > the linux kernel using kselftest. We paused sending that report to fix a
-> > few issues. We are now continuing the process, starting with this report.
-> >
-> > If you have any questions, comments, feedback, or concerns please email
-> > lkft@linaro.org <mailto:lkft@linaro.org>.
-> >
-> > Thanks,
-> >
-> > Justin
-> >
->
-> Hi Justin,
->
-> Thanks for the report. It would be nice to see the reports. However, it
-> is hard for me to determine which tests failed and why.
->
-> > On Tue, 15 Sep 2020 at 12:44, LKFT <lkft@linaro.org
-> > <mailto:lkft@linaro.org>> wrote:
-> >
-> >     ## Kernel
-> >     * kernel: 5.9.0-rc5
-> >     * git repo:
-> >     ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git',
-> >     'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-> >     * git branch: master
-> >     * git commit: 6b02addb1d1748d21dd1261e46029b264be4e5a0
-> >     * git describe: next-20200915
-> >     * Test details:
-> >     https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200915
-> >
-> >     ## Regressions (compared to build next-20200914)
-> >
-> >     juno-r2:
-> >        kselftest:
-> >          * memfd_memfd_test
-> >
-> >     x86:
-> >        kselftest-vsyscall-mode-native:
-> >          * kvm_vmx_preemption_timer_test
->
-> I looked for the above two failures to start with since these
-> are regressions and couldn't find them.
->
-> Are the regressions tied to new commits in linux-next from the
-> mm and kvm trees?
->
-> thanks,
-> -- Shuah
->
+							Thanx, Paul

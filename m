@@ -2,122 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3F326D73D
-	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 10:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C0526D847
+	for <lists+linux-next@lfdr.de>; Thu, 17 Sep 2020 12:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726471AbgIQI5i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 04:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726191AbgIQI5h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 04:57:37 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD77C06174A;
-        Thu, 17 Sep 2020 01:57:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BsW7Z2M8fz9sSC;
-        Thu, 17 Sep 2020 18:57:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600333050;
-        bh=x+1vU5s/qiYCUF+IZF2QwlxWyd8G1Gbr/+jRFDRLYsQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hIpHaiHjARQMG9yODevuXD3saGCjTXzTfRhk1DdtHGusBJMlkuFIStPOnaw8YVF42
-         QXb2IYOzKa0yvxAgfn4GzWmUtUI/kVxeshowDOTN8AWizwm28DZd7ZRikTqPJ5DRxd
-         2153q1PVAwjM4Uiy6J470i148Y0ERQU2TpiMPm645dFjG5vZ7jEweswMhui4wdGef/
-         hm3sTUmjxanSU05jyVviyLLwwUf/xzxxK9kwjGnC/1j0JQ4yw24OVz/CZTQjGl8zrR
-         nWWfFRQwiJHiKKMvIHLOmjHseXabNFKPYPrxxQ7tZUyiEwXSZM0fP8wKDjPsMaUC17
-         t24uqqPFB1GZQ==
-Date:   Thu, 17 Sep 2020 18:57:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the powerpc
- tree
-Message-ID: <20200917185729.7911e2b5@canb.auug.org.au>
+        id S1726380AbgIQKCm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Sep 2020 06:02:42 -0400
+Received: from mga09.intel.com ([134.134.136.24]:32026 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726360AbgIQKCl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Sep 2020 06:02:41 -0400
+X-Greylist: delayed 434 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 06:02:41 EDT
+IronPort-SDR: B+xH0zFmjQIIhZFtByEb1uFS4KP+tIhp/hdDsPEYoPils0TxuAu9obgiFv6DkNRPHceuPAEYMA
+ xNs0//Q/78QQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="160590741"
+X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
+   d="scan'208";a="160590741"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 02:55:20 -0700
+IronPort-SDR: 6AWgY6k2jSM6QsujXaNtiiUDS/Fn+dL8VWCglFvIAk26Fo4St2OUfqS3ZchJAQuNrr212bTyNP
+ sdO6q+0OmcHw==
+X-IronPort-AV: E=Sophos;i="5.76,436,1592895600"; 
+   d="scan'208";a="452231616"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 02:55:16 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 17 Sep 2020 12:55:14 +0300
+Date:   Thu, 17 Sep 2020 12:55:14 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kent Gibson <warthog618@gmail.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH next v2] gpiolib: check for parent device in
+ devprop_gpiochip_set_names()
+Message-ID: <20200917095514.GO2495@lahna.fi.intel.com>
+References: <20200917074857.6716-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h=lzTyWsgBMheYWQVF1XVyg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917074857.6716-1-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/h=lzTyWsgBMheYWQVF1XVyg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Sep 17, 2020 at 09:48:57AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> 
+> It's possible for a GPIO chip to not have a parent device (whose
+> properties we inspect for 'gpio-line-names'). In this case we should
+> simply return from devprop_gpiochip_set_names(). Add an appropriate
+> check for this use-case.
+> 
+> Fixes: 7cba1a4d5e16 ("gpiolib: generalize devprop_gpiochip_set_names() for device properties")
+> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
 
-Hi all,
+FWIW,
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
-
-  arch/powerpc/mm/kasan/kasan_init_32.c
-
-between commit:
-
-  4c42dc5c69a8 ("powerpc/kasan: Fix CONFIG_KASAN_VMALLOC for 8xx")
-
-from the powerpc tree and commit:
-
-  76713c119a9d ("arch, drivers: replace for_each_membock() with for_each_me=
-m_range()")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/powerpc/mm/kasan/kasan_init_32.c
-index 929716ea21e9,26fda3203320..000000000000
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@@ -137,12 -138,12 +137,12 @@@ void __init kasan_mmu_init(void
- =20
-  void __init kasan_init(void)
-  {
-- 	struct memblock_region *reg;
-+ 	phys_addr_t base, end;
- +	int ret;
-+ 	u64 i;
- =20
-- 	for_each_memblock(memory, reg) {
-- 		phys_addr_t base =3D reg->base;
-- 		phys_addr_t top =3D min(base + reg->size, total_lowmem);
-+ 	for_each_mem_range(i, &base, &end) {
-+ 		phys_addr_t top =3D min(end, total_lowmem);
- -		int ret;
- =20
-  		if (base >=3D top)
-  			continue;
-
---Sig_/h=lzTyWsgBMheYWQVF1XVyg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9jJPkACgkQAVBC80lX
-0GzX1Qf/WyTnkTqyUByLSsUHq60F3H+M30drzVVUeJ62iEtD/O42AYpwitbMsJTf
-QHZNYbop7aCBXjmPTbSg93xiV/npJz71eFbbwYxjdWG2WNcRHT6TEKtFzqdkmI7d
-or+2qYkq14sYkqm1jv3+8dLBmKBS2lGZ0XCdrnQKk4NmwtcLo443o5TGZZhxl7Ee
-sfRK7oxl3ESYSVPUL7B/uBC59Iwkr0f7WhTQ6lKZLDXMZLKXOQ2AoNL9RwAI21D6
-7yakCPtax05i0aJl4FJEuOGuP32pgJmdxvqFK4WemEoOXrXK6CUDBr7IE5e7jliO
-/2U/kf7dDag+gQL9tklDqdHkkL/NUQ==
-=f7B6
------END PGP SIGNATURE-----
-
---Sig_/h=lzTyWsgBMheYWQVF1XVyg--
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

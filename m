@@ -2,104 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAD326F4D2
-	for <lists+linux-next@lfdr.de>; Fri, 18 Sep 2020 05:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F5726F558
+	for <lists+linux-next@lfdr.de>; Fri, 18 Sep 2020 07:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgIRDwR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 23:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgIRDwR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 23:52:17 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE83C06174A
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 20:52:17 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id x8so3310706ybm.3
-        for <linux-next@vger.kernel.org>; Thu, 17 Sep 2020 20:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nme931I5f1UOsrOsO4Rb7WHHBrdHAMoy/1dfpIEkmUw=;
-        b=S4SaM1NGJL7jkwHvKbSHmLJtNecMzgaGWgtOhwJ5PvGNoEFS9whv2xwQUVYUUt7Y+c
-         0Wlnmc1kw05G3htSrglqn2XjmqLNmqGbWoAINAzCVMtut0L8lMK5L7cGNUfwYy3SaOQs
-         dKXdsv49srMvy5uV1fYnwxcR5cPazt1PH9h2nrMMdd8SfsmxuCpxk4Knk3m6yKUmRP6Z
-         mft9aSK0zGa/6BBSu14M60iv9T7PutIyn081Ez6mUV/IH80E9i0hHSB7KBnJXk09CxZ4
-         WA4zIXuYP+lhCXo3fHmjwDl8ExTmcuqSOeLsdmbaOIoASBZTc5ocuQYG8fEWvaVBctgL
-         TSCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nme931I5f1UOsrOsO4Rb7WHHBrdHAMoy/1dfpIEkmUw=;
-        b=AABkTQmxbwA4dgkBp08ZidwcdLjeq9/ftEjZSCQ1O2dFrjwBK3bd5pXwdevRe2PYYK
-         TIDOOzi5zLSuw8/MSEoQg7LoLhcjbgO7lFKhckU8Yz1c79u0KNWxN4hJWDXxYWI/fzl5
-         DkJcn3MqGg9xYmWfYXjx5LNqsMM+uUB6p9YuNVz6YXagDWzznLZvb1qH6gcbU2fd1/7P
-         GxEjNwiRQr/N3FWSIlg7Vz6Ny0V65632ZKeVopjVy/ovwqJonybuvkLcCYIKgZDIUxjb
-         cN9f8w8ux+/TegBow3l93Ce7OQjoKVHSwK42EuHUHAQ56g84p6Ojle78eQV40zPEXjjH
-         e2xA==
-X-Gm-Message-State: AOAM5312iY4nxm4gu2aRMCq5O28Sm3o1lexZTXMn/WJF2S9GWFj0yKch
-        Vb/cBUkX7W7Z37w0mRlM/ziY/LZHWxXArtudmjjt5w==
-X-Google-Smtp-Source: ABdhPJyLJTvEF5MXENMyCWAwK46pIB/PtI8Z5niW+AWW7qz0g5gvUjB4hunEZyEPL/VdhBZoP/lGOSsp/yKYtNBY3rY=
-X-Received: by 2002:a25:7606:: with SMTP id r6mr11568379ybc.42.1600401135999;
- Thu, 17 Sep 2020 20:52:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200917202313.143f66f3@canb.auug.org.au> <20f0b8f7-bbe8-fd31-819e-998054e41766@infradead.org>
-In-Reply-To: <20f0b8f7-bbe8-fd31-819e-998054e41766@infradead.org>
-From:   =?UTF-8?B?TWFoZXNoIEJhbmRld2FyICjgpK7gpLngpYfgpLYg4KSs4KSC4KSh4KWH4KS14KS+4KSwKQ==?= 
-        <maheshb@google.com>
-Date:   Thu, 17 Sep 2020 20:52:00 -0700
-Message-ID: <CAF2d9ji_ueJyMgwqfKxzsEjMaY09DxYboymELCNnEhJQGZDHPQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Sep 17 (netdevice.h: net_has_fallback_tunnels
- when SYSCTL is not set)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726309AbgIRFVd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Sep 2020 01:21:33 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33059 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726222AbgIRFVd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 18 Sep 2020 01:21:33 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bt2Hs5rBWz9sSf;
+        Fri, 18 Sep 2020 15:21:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600406490;
+        bh=YuNkjMY+PPETCNlgaTO4CnNygY4KP4AnSDSyMlGt4mo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tPa0ZYJRuUySqDwpzgNn32SSZVQb/492jhKstS3//zh8AfQjFXVuyapf+Xjd8rNGL
+         IJNLovwSl6dcLgVq6SVXLNvfCODbCdTso+NllNoshfAjOnoMReNI/hNgxELrHRu5ct
+         B6HKZ0asNIoZUVvsJ3qo9SVM2S5/T8PajodPy19VP1nYGIEIcmtbOuvUf82lTdEhP+
+         axnz9d6OYjeviS1npj6l3rIWSsdkpKR4jFl7/KNlBGr7pSK0R4oVNwmM8E05rUtKSM
+         TqrHRmAgqBKO+dyj0mfXd5UP0gdCjZw3Ri87wAOVar7/GQc6DB9rx5rFpalHK5b0xd
+         PIbE/vFWnXNOQ==
+Date:   Fri, 18 Sep 2020 15:21:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the staging tree with the crypto tree
+Message-ID: <20200918152127.4414b524@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8uQtOioeX7eIItwlkcKMxkL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 1:33 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 9/17/20 3:23 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20200916:
-> >
->
-> I am seeing build errors when CONFIG_SYSCTL is not set:
->
-> ld: net/ipv4/ip_tunnel.o: in function `ip_tunnel_init_net':
-> ip_tunnel.c:(.text+0x2ea0): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> ld: net/ipv6/ip6_vti.o: in function `vti6_init_net':
-> ip6_vti.c:(.text+0x1b56): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> ld: net/ipv6/sit.o: in function `sit_init_net':
-> sit.c:(.text+0x4568): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> ld: net/ipv6/ip6_tunnel.o: in function `ip6_tnl_init_net':
-> ip6_tunnel.c:(.text+0x27d6): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
-> ld: net/ipv6/ip6_gre.o: in function `ip6gre_init_net':
-> ip6_gre.c:(.text+0x3a5e): undefined reference to `sysctl_fb_tunnels_only_for_init_net'
->
-> due to 316cdaa1158af:
->
-> commit 316cdaa1158af17250397054f92bb339fbd8e282
-> Author: Mahesh Bandewar <maheshb@google.com>
-> Date:   Wed Aug 26 09:05:35 2020 -0700
->
->     net: add option to not create fall-back tunnels in root-ns as well
->
->
-> This was first reported to netdev@ on Sept. 02 but Mahesh was not cc-ed
-> on that report.
->
-Thanks Randy for the report.
-Probably we shouldn't have removed the !ENBALED(CONFIG_SYSCTL) check.
-Let me cook a fix and send it.
->
-> --
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+--Sig_/8uQtOioeX7eIItwlkcKMxkL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the staging tree got a conflict in:
+
+  drivers/staging/rtl8192e/Kconfig
+
+between commit:
+
+  054694a46d64 ("staging/rtl8192e: switch to RC4 library interface")
+
+from the crypto tree and commits:
+
+  243d040a6e4a ("staging: rtl8192e: fix kconfig dependency warning for RTLL=
+IB_CRYPTO_TKIP")
+  02c4260713d6 ("staging: rtl8192e: fix kconfig dependency warning for RTLL=
+IB_CRYPTO_WEP")
+
+from the staging tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/staging/rtl8192e/Kconfig
+index 4c440bdaaf6e,31e076cc6f16..000000000000
+--- a/drivers/staging/rtl8192e/Kconfig
++++ b/drivers/staging/rtl8192e/Kconfig
+@@@ -25,7 -26,8 +26,8 @@@ config RTLLIB_CRYPTO_CCM
+  config RTLLIB_CRYPTO_TKIP
+  	tristate "Support for rtllib TKIP crypto"
+  	depends on RTLLIB
++ 	select CRYPTO
+ -	select CRYPTO_ARC4
+ +	select CRYPTO_LIB_ARC4
+  	select CRYPTO_MICHAEL_MIC
+  	default y
+  	help
+@@@ -35,7 -37,8 +37,8 @@@
+ =20
+  config RTLLIB_CRYPTO_WEP
+  	tristate "Support for rtllib WEP crypto"
++ 	select CRYPTO
+ -	select CRYPTO_ARC4
+ +	select CRYPTO_LIB_ARC4
+  	depends on RTLLIB
+  	default y
+  	help
+
+--Sig_/8uQtOioeX7eIItwlkcKMxkL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9kQ9cACgkQAVBC80lX
+0Gxr2Qf/bawMPref1jwdFOCFNVKlpscttUQrex19Y8Q1aoBWtAvM1Yrds9nnnwG4
+edvKq+bBUoCtMvQ6ZV6pSrxRvjtfHFbsGaef7XqdEwvBhfvuoWtrhCeBNMAJwplV
+4lZLxQLarQrgZgcpDhpAbU3FIy15EK/GFfiJAkvag4Ma5YJufrSJzEHTyvr/YJY5
+NASEKDAI+PnLI5z4WdyObT6H0Ew6Zj4k3NECb5Hqn4QaAkis6cUT5uFyR7+/vzMu
+jrhvHWmuQki9T4BHe5Bs+azfo+fjGzfDxOAKBkkrrcCOis5F0h3zVhAZadIhM9V3
+XWVi+WtqRYz16+zAtu1JV6ZDqfy2Hw==
+=M0Gs
+-----END PGP SIGNATURE-----
+
+--Sig_/8uQtOioeX7eIItwlkcKMxkL--

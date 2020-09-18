@@ -2,105 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFF226E857
-	for <lists+linux-next@lfdr.de>; Fri, 18 Sep 2020 00:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFFA26E9B1
+	for <lists+linux-next@lfdr.de>; Fri, 18 Sep 2020 02:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgIQW1K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Sep 2020 18:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726055AbgIQW1K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Sep 2020 18:27:10 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96DDC06174A;
-        Thu, 17 Sep 2020 15:27:09 -0700 (PDT)
+        id S1726043AbgIRAAZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Sep 2020 20:00:25 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:52861 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726009AbgIRAAZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Sep 2020 20:00:25 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bss5j2PCTz9sSJ;
-        Fri, 18 Sep 2020 08:27:05 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bsv9L51KCz9sRf;
+        Fri, 18 Sep 2020 10:00:22 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600381625;
-        bh=65GgIVjHlsKL7mcg4a+XCD4S0QJQ0hobEgxDH3w58vE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tqtIP0EtIAK/7pxLmSQSvqpyQZPMnIztWi0f1pUQ63/sLsiT0G2+P7MMu0CUHV9qt
-         qr1DiueMVKSZ4Sgudrn+9f0bKyNBosPxtoQ9l3O1Ui3RlHC+AZBjmoRGORmWZcD7gI
-         9m2wvXGLhZiXfxS9J/A5v0jmnpv4jC9pGRbGj0wQV4qddWWihTgEfNaUP695DrULs7
-         JiojES3GaVcjY1wAlAXbC/rcTb2EWwuJLC4QFNSotz54uB0sabapDkXBR3XEv8QOwl
-         cRb38A3CGGkh/nlcXne0PxgfqeYmyilFj8ORtB7AAxRUVIbXZQLI0qHQhDyUDZQvGX
-         GIZuZ3gK0BicA==
-Date:   Fri, 18 Sep 2020 08:27:04 +1000
+        s=201702; t=1600387222;
+        bh=av0Qkoc0K3cVyYRKgm8VeC/8t+na5neqYt0ktSZe2Mw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FVIk/YpYJNDnxhiaG1FK9+2PmUT2OI+2z/LjyoTmISErENIxMhbDcs2769iUTEW1R
+         Y4GOA7qBbLtXBtxh5jScCN/Wc043tBwgcufbcpIxYdkNm6J4nKojM/3eAVgMUjVC7s
+         DyAYwfuNQUjS7Yl+SrVsaWwpefPv4k6iElZWP8uiI0kc9uHdb4kUEcTjueIh1eel26
+         JQQMz2RJuv+fwhPUiUhZ7f/NWhQ2pIWjqyIxdhCcwlatxyFEgyNhCnV/syMCSplHdD
+         XDp1F7+sjSIjjCIBo9a9WO527LfdMbON8qsvHe7ma/DaOqOmsxyCcn3umRWIGH8dpQ
+         V/AbmdCos+B+Q==
+Date:   Fri, 18 Sep 2020 10:00:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Rossi <issor.oruam@gmail.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>
-Subject: linux-next: Fixes tags need some work in the amdgpu tree
-Message-ID: <20200918082704.466c822a@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the rcu tree
+Message-ID: <20200918100019.6bf0053d@canb.auug.org.au>
+In-Reply-To: <20200917220145.GQ29330@paulmck-ThinkPad-P72>
+References: <20200917151909.01fa6684@canb.auug.org.au>
+        <20200917220145.GQ29330@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9=e4Li/30Z3EhUqJDWMNFpT";
+Content-Type: multipart/signed; boundary="Sig_/DD0guL027BVH7Hlb/Q8mJCj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9=e4Li/30Z3EhUqJDWMNFpT
+--Sig_/DD0guL027BVH7Hlb/Q8mJCj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Paul,
 
-In commit
+On Thu, 17 Sep 2020 15:01:45 -0700 "Paul E. McKenney" <paulmck@kernel.org> =
+wrote:
+>
+> On Thu, Sep 17, 2020 at 03:19:09PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the rcu tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >=20
+> > In file included from kernel/rcu/update.c:578:
+> > kernel/rcu/tasks.h:601:20: error: static declaration of 'show_rcu_tasks=
+_classic_gp_kthread' follows non-static declaration
+> >   601 | static inline void show_rcu_tasks_classic_gp_kthread(void) { }
+> >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from kernel/rcu/update.c:49:
+> > kernel/rcu/rcu.h:537:6: note: previous declaration of 'show_rcu_tasks_c=
+lassic_gp_kthread' was here
+> >   537 | void show_rcu_tasks_classic_gp_kthread(void);
+> >       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   675d3ca52626 ("rcutorture: Make grace-period kthread report match RCU=
+ flavor being tested")
+> >=20
+> > I have used the rcu tree from next-20200916 for today. =20
+>=20
+> Please accept my apologies for the hassle!  I believe that I finally
+> have this straightened out.
+>=20
+> Please ignore if you already pulled -rcu for today, as I previously
+> set rcu/next back to a commit preceding the offending one.
 
-  2561adedd576 ("drm/amd/display: dc/clk_mgr: make function static")
-
-Fixes tag
-
-  Fixes: 3ecb3b794e2 "drm/amd/display: dc/clk_mgr: add support for SI parts=
- (v2)"
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
-In commit
-
-  d5c0af573279 ("drm/amd/display: Add missing "Copy GSL groups when committ=
-ing a new context"")
-
-Fixes tag
-
-  Fixes: b6e881c9474 ("drm/amd/display: update navi to use new surface prog=
-ramming behaviour")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+No worries, I have the new one.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/9=e4Li/30Z3EhUqJDWMNFpT
+--Sig_/DD0guL027BVH7Hlb/Q8mJCj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9j4rgACgkQAVBC80lX
-0GwNKQf/TPJM3QhpZqVVWuANzX8M8NhZDd8U/aXbm3UZtwQWoHyBNLJOSFjuPAB8
-YGBrSTuJV1OoWir7c7gcx763YsCj0/wkL2hCe7Sa/A3nswgyME0iwiV+IsMRnQhU
-gtSu9cnnIcH4GJ7x72ypykZxNRMgjOpvcOgR48e0DSy9/QkC93VemKyu/UQg4eAm
-aScRTNqYhbS4ndLb45J869TNUrTxUowHuezaOqHwY4Qi1pmsfmWbnUjIR7SiuBiG
-3+pRUQ+eGsM701onilAwcO3aMxe9pgC/BEJYvCXSUfoMXzYzJziS19k+ejlGfxxC
-1rXntwUX+xlJLpDbPFeyJ+lIDpHesw==
-=EIEx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9j+JMACgkQAVBC80lX
+0Gyzmgf/WMV4EFR23rztXLLazfHOz4zjdvzqRJUoHlfvpd/+H44UHEoBePPeabF9
+hDs1JYEMGLRaDJB7qa3kTk+wx8Xf6/8aW6WrkdHNZ30JCw4HNJiJSSUT5zRUdxQ8
+RrJrxk5rYFyA/lwJN2d5vyatMTtvyO+X6kVGrkp5xgeVsnGPfWVEtWbhCs6441YO
+3Ipx1HAUCCUHrGIzpJao1D/H3fg2akT59cyn0sX808Y5cMJp0/KjhtDSR5c0hUNU
+TWTUqgDa7e9ycC8yB4pLmgt8ZNTpCpys+dUshPeIW0VRa4BhYpXwkpaZtyurhk5P
++U74j4yRPsadrp1lkCgnoHpVaZImYA==
+=JsXm
 -----END PGP SIGNATURE-----
 
---Sig_/9=e4Li/30Z3EhUqJDWMNFpT--
+--Sig_/DD0guL027BVH7Hlb/Q8mJCj--

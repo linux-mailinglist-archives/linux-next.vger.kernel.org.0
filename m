@@ -2,111 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E9E271A57
-	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 07:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B525B271AB1
+	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 08:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgIUFSO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Sep 2020 01:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S1726211AbgIUGMv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Sep 2020 02:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgIUFSO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Sep 2020 01:18:14 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14098C061755;
-        Sun, 20 Sep 2020 22:18:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bvt4d3x0Xz9sR4;
-        Mon, 21 Sep 2020 15:18:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600665491;
-        bh=Hh4xj2jPivYdeHaxLSo7KgWAKFpLMU7I7ybHbjiP3p0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W77gqC4LHd29lI3tnJ6105GoATQK6fROLOYQC1pBSY5zQHrJsmSW6B6Wh6EWJ66ej
-         sZMOMH+8BCW+fyVA3KoQffXna/yTazZJ1aESp/cfyFrFtJAvcvuFogn6xZNYCXW1/z
-         7sj7TEwA3Gl33YG8fywVpYEUaCWUaXO4ELmkTVTzgLpcUvN2q/DBYtgC7hCdGYbcEc
-         oWuErpFKFjvj6wk39adf+EdOATpX5Uls9ZPREfyCxLtNbQyVLI0Dh0f11gQd4+AZ98
-         bVD8srESt4Ppi9z/Wz21pzacfeVINe0wPc4MAnSskI3CSDu3ezmQBtUGjAZwUwBVJQ
-         ZnelMZxzoHW6Q==
-Date:   Mon, 21 Sep 2020 15:18:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Jim Quinlan <jquinlan@broadcom.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the pci tree
-Message-ID: <20200921151807.637905c0@canb.auug.org.au>
+        with ESMTP id S1726149AbgIUGMv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Sep 2020 02:12:51 -0400
+X-Greylist: delayed 492 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Sep 2020 23:12:50 PDT
+Received: from dvalin.narfation.org (dvalin.narfation.org [IPv6:2a00:17d8:100::8b1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23BAC061755
+        for <linux-next@vger.kernel.org>; Sun, 20 Sep 2020 23:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1600668272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b8fQsCvgcnqMQgvxHhj7epbLkU3gFqxiKxz9y0e4wlc=;
+        b=JqaTnaVcg3c5vaxTp9fuoGBCO5CZ3YvkbUnhCKsqdmqoAu8hts5PmKq21SLHsWD478HmGW
+        DWszYPZ1cgDyeHsqU2mX1ytgZZe64b4Fp3QRIP7dHzbfXOqQF+5py186tjK+ZLRun1XLv0
+        Jz+gXgQp8EljnWB7GlAZsLAjWtLkQ5I=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus =?ISO-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>,
+        Simon Wunderlich <sw@simonwunderlich.de>
+Subject: Re: linux-next: Fixes tag needs some work in the net tree
+Date:   Mon, 21 Sep 2020 08:04:30 +0200
+Message-ID: <1845864.bm72gKIjWm@ripper>
+In-Reply-To: <20200921055919.5bf70643@canb.auug.org.au>
+References: <20200921055919.5bf70643@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nqdGVLMfBAT8Rvf3qCHfRxy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; boundary="nextPart5321733.tfhsDO9XnZ"; micalg="pgp-sha512"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nqdGVLMfBAT8Rvf3qCHfRxy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+--nextPart5321733.tfhsDO9XnZ
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi all,
+On Sunday, 20 September 2020 21:59:19 CEST Stephen Rothwell wrote:
+> Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+Yes, I've accidentally swapped the IDs while adding them to the various patches.
 
-  drivers/pci/controller/pcie-brcmstb.c
+The correct ones should have been:
 
-between commit:
+* 097930e85f90 ("batman-adv: bla: fix type misuse for backbone_gw hash indexing")
 
-  1cf1b0a6dd95 ("PCI: brcmstb: Add bcm7278 register info")
+  Fixes: 07568d0369f9 ("batman-adv: don't rely on positions in struct for hashing")
+  (seems to be correct)
 
-from the pci tree and commit:
+* 7dda5b338412 ("batman-adv: mcast/TT: fix wrongly dropped or rerouted packets")
 
-  f48cc509c935 ("Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware whe=
-n present"")
+  Fixes: 279e89b2281a ("batman-adv: bla: use netif_rx_ni when not in interrupt context")
+  (seems to be correct)
 
-from the usb tree.
+* 4bba9dab86b6 ("batman-adv: Add missing include for in_interrupt()")
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  Fixes: 279e89b2281a ("batman-adv: bla: use netif_rx_ni when not in interrupt context")
+  (seems to be correct)
 
---=20
-Cheers,
-Stephen Rothwell
+* 3236d215ad38 ("batman-adv: mcast: fix duplicate mcast packets in BLA backbone from LAN")
 
-diff --cc drivers/pci/controller/pcie-brcmstb.c
-index 6e7aa82a54a3,bac63d04297f..000000000000
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@@ -1213,8 -929,6 +1211,7 @@@ static int brcm_pcie_probe(struct platf
-  {
-  	struct device_node *np =3D pdev->dev.of_node, *msi_np;
-  	struct pci_host_bridge *bridge;
-- 	struct device_node *fw_np;
- +	const struct pcie_cfg_data *data;
-  	struct brcm_pcie *pcie;
-  	int ret;
- =20
+  Fixes: a44ebeff6bbd ("batman-adv: Fix multicast TT issues with bogus ROAM flags")
+  (this was wrong)
 
---Sig_/nqdGVLMfBAT8Rvf3qCHfRxy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+* 74c09b727512 ("batman-adv: mcast: fix duplicate mcast packets in BLA backbone from mesh")
+
+  Fixes: 2d3f6ccc4ea5 ("batman-adv: check incoming packet type for bla")
+  (this was wrong)
+
+* 2369e8270469 ("batman-adv: mcast: fix duplicate mcast packets from BLA backbone to mesh")
+
+  Fixes: fe2da6ff27c7 ("batman-adv: add broadcast duplicate check")
+  (this was wrong)
+
+Kind regards,
+	Sven
+--nextPart5321733.tfhsDO9XnZ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oN48ACgkQAVBC80lX
-0GwlNAf+PGQHE3ysNK68/6po12G/AkWK40hqnzJNMPAsCX+3aBobVrVHHOQDn7dK
-7Y5rUxgbxcFBnM7o0mSPOZUyA7lbS6jX3ZxLi6gT76FCD77BogZy28ZxA/cA3Q6S
-QlAUKDK6Df5xp1wMfNbbCBLrDkHJ2zzaDa0leb+tpW4yAur2+zy56mic58NNPPkq
-JYBx+9F9XVN7tgqDMNVqSGQPwksV0GcwPbYZQW1YLsw75nsKGBWJ+JjfT2Obhvds
-k60T4Aeuh2BBrqQaSAzXIJd0icgdfKrphBsnGFNIA9bdphjYYrPxVv+gfKFPDJHf
-wBselLMg04zOk0HZ6CE2AIqQVX0BiA==
-=kk6c
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAl9oQm4ACgkQXYcKB8Em
+e0ZYdQ//evajP1e6HFFq7NS/9XZOCyoIOsAvo+FBGaA9uImaBPJY7ekJBdkzpr9y
+i2Hrx4I08Z0a65Ph5VLHWLNao12Gw0XnVKHLWyPf+6vMqjiqRyi6qaddYR78T2P1
+wRNXm72bCG+ZQGpTM7DPmU8BYaANatM56CPI90p6549BW4ts3XTYXrhDp+AuITKp
+SP47rG3j5gx+kK484CQ5URpNzfNxUn2gn9otPVoSsRmcod4X9IzmLiEF8xA0RhO+
+vKkRCBSuC4M2gwltKPLXNzuGbEip7dOP9Re8Z/uOgPp/f5fzC/2lGvUxB0Zt+yR+
+iELJkdulA9wOu59rCFJHrVHi+5CzAPDrqfQS+ZQO2OLDOcY2Ljv3Mk9srmwMdaUg
+7KFo6opjGV9aCYgVSC3s25hhmGjgTgCGhsA45xWeMLIrfLttLYREgAnj9NnStyHN
+KXc1pYb5ZkC5B8eIS2kkrHdns/2Xc3ZWBmY4fEvmHnvCPMaslQPCZf2BJ4JPJ6ko
+FRsQC9F8qmWZuDC96dazWTYseq0+EkW9NBym3QSuxoAifJcD3EPcO7CBI8Y14k7p
+mfnqhOZSufYlJSJYGuuPUusbGnnz6mFSDjBt3u1qg4dK48S3vEKZl933/7xotbmi
+dtBz2c+bjgHRNfzUEyzs9U1nmifWgSn9HsQ/pPbZfBEzABcnD8Q=
+=GCWG
 -----END PGP SIGNATURE-----
 
---Sig_/nqdGVLMfBAT8Rvf3qCHfRxy--
+--nextPart5321733.tfhsDO9XnZ--
+
+
+

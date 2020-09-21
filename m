@@ -2,215 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA352719AA
-	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 05:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714972719C0
+	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 06:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbgIUDtd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Sep 2020 23:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
+        id S1726184AbgIUEJO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Sep 2020 00:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbgIUDtd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 20 Sep 2020 23:49:33 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732BC061755
-        for <linux-next@vger.kernel.org>; Sun, 20 Sep 2020 20:49:33 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id g29so7864511pgl.2
-        for <linux-next@vger.kernel.org>; Sun, 20 Sep 2020 20:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=WTankCVS1WmApy5CzH/KOWRyXXbA2p/0p6cyGnpdKWE=;
-        b=0FkpSbs81GrjG5m4A0Tiu+E6sHcg2RBjryrmywq/aqhEUKDue/3taGR1uy2tA+OM5b
-         sJvQk03cfdxZBRmTI2k3NtdRbsB73V2RRSQCUs+gUBmjdUfBYlDI6v3g8xt5xP7/aN2m
-         KtnXRcT28cdH2Hi86BjCTqwukDevdOHlu7K1BOeB+g1jpyedWeekzpsQzRA+9bk3uYKY
-         Ra73cpGNEd8sOTkl+TKAsrSa/kqT0MsxELWi5Bfnjuv7ykR2Fn5I22kRuQsJDZPNecO6
-         NNyqm0IXngcpjksoUvsMYBdYC48v+IZ7YSYDV2GjwwSNOcab+9/zidfavpB4eCqgG/gH
-         MIRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=WTankCVS1WmApy5CzH/KOWRyXXbA2p/0p6cyGnpdKWE=;
-        b=Nc+zEAVSy4TW8imLhjOIpruNauwrHmOV4FWEahKrkRS3KYL5u0Zx4+EMsEl5szzqQ5
-         d0yNioRAUS0TAgQkVB/KUDAxRexsF85DcRNXujYKxSUfTfd4V/lMA98dxl7w2WwfEb/y
-         d1MCr8gMKspikdmthkXnhi/sDYdyaqkBqEQX5pepGGQgquMkkZIDQrHDCsi+Bg7IXGIh
-         3MCa36eRhfvfP9lQ6Gy5zwrrPedfL8F3EenSzAsZbUQvVCSvKCKxnJz3hL/3L/GA9P9W
-         +YZy5P5t+nUfX+3eA7UOWra9vBmghbbGWzxgEQBRyYumE1rYUc1GsYcOrCRA2DKNS57m
-         Lj9w==
-X-Gm-Message-State: AOAM5338jjQD9z7aNX+6J+LviJaAk40eOK+HC0/k8AuKPk8xs7DVUzcf
-        qKfyM40OncyDtWuaqJzZ3MiMqYIDPiM6uA==
-X-Google-Smtp-Source: ABdhPJxfGtFYZn9s8ftjuruVvMQ3Cx3ULcB/VbwQwmRj4DqJgpD6DGHeKzT+zKclcYHSom7eGjO0rw==
-X-Received: by 2002:a17:902:b186:b029:d1:cc21:9a7d with SMTP id s6-20020a170902b186b02900d1cc219a7dmr30977997plr.8.1600660171950;
-        Sun, 20 Sep 2020 20:49:31 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g23sm8816419pjz.51.2020.09.20.20.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2020 20:49:31 -0700 (PDT)
-Message-ID: <5f6822cb.1c69fb81.e7ed7.4aa4@mx.google.com>
-Date:   Sun, 20 Sep 2020 20:49:31 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1726011AbgIUEJN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Sep 2020 00:09:13 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7EBC061755;
+        Sun, 20 Sep 2020 21:09:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BvrXz6Zr1z9sSn;
+        Mon, 21 Sep 2020 14:09:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600661349;
+        bh=3v9jQEpjc+WZkN+YkJLb/PKJrBJXSbxO/6dNR1q9i3k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Z6YRPgwqot5pxF1eMLIKHe7pIBbntu6oTB2JQKB5OUK2iJMI4IRfDOlq2v21yvzCb
+         KQXfZzntW+aXi7bUJ4XLAuLuNeSfsslL284l0JmjYTSEh0Et+0mWqp2w4AefvNBKmx
+         hFPKhH352a1Ob+T+NDTtpgX9GZGMyhpi42cS2YHGm6p1Q7vicuEv4BtDilc15fOQs4
+         AAoyBtCT2NTcysdqBUCluU0nJxfwYMxQvAtBCRV/LEal/TQoEAW/2lDbcaPSwKIiku
+         mQSXWy1ZVN6X2uFzTqAOJL3rKZq2pLgOKuk21kVuY7xsr8NPJ/0ZT6OOh04eB44nje
+         cYrRNVKZ9xy1g==
+Date:   Mon, 21 Sep 2020 14:09:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Tom Murphy <murphyt7@tcd.ie>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the iommu tree
+Message-ID: <20200921140901.16adf8c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.9-rc5-476-g3d0d0d2eb359
-Subject: next/pending-fixes baseline: 317 runs,
- 3 regressions (v5.9-rc5-476-g3d0d0d2eb359)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/=tJLjgMi0YT_2e4JbYtQ+Xw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 317 runs, 3 regressions (v5.9-rc5-476-g3d0d0d2=
-eb359)
+--Sig_/=tJLjgMi0YT_2e4JbYtQ+Xw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
-            | 0/1    =
+After merging the iommu tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 4/5    =
+drivers/gpu/drm/msm/msm_iommu.c: In function 'msm_iommu_pagetable_unmap':
+drivers/gpu/drm/msm/msm_iommu.c:46:2: error: implicit declaration of functi=
+on 'iommu_flush_tlb_all'; did you mean 'iommu_flush_iotlb_all'? [-Werror=3D=
+implicit-function-declaration]
+   46 |  iommu_flush_tlb_all(to_msm_iommu(pagetable->parent)->domain);
+      |  ^~~~~~~~~~~~~~~~~~~
+      |  iommu_flush_iotlb_all
 
-panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
-ig          | 0/1    =
+Caused by commit
 
+  aae4c8e27bd7 ("iommu: Rename iommu_tlb_* functions to iommu_iotlb_*")
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.9-rc5-476-g3d0d0d2eb359/plan/baseline/
+interacting with commit
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.9-rc5-476-g3d0d0d2eb359
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      3d0d0d2eb359e332fbe7962a5fa62e8c85961243 =
+  b145c6e65eb0 ("drm/msm: Add support to create a local pagetable")
 
+from the drm-msm tree.
 
+I have applied the following merge fix patch.  Someone will need to tell
+Linus about this fix up when the trees get merged.
 
-Test Regressions
----------------- =
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 21 Sep 2020 14:04:14 +1000
+Subject: [PATCH] merge fix upt for iommu_flush_iotlb_all() rename
 
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/msm/msm_iommu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iomm=
+u.c
+index 3a83ffdb3b90..22ac7c692a81 100644
+--- a/drivers/gpu/drm/msm/msm_iommu.c
++++ b/drivers/gpu/drm/msm/msm_iommu.c
+@@ -43,7 +43,7 @@ static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu,=
+ u64 iova,
+ 		size -=3D 4096;
+ 	}
+=20
+-	iommu_flush_tlb_all(to_msm_iommu(pagetable->parent)->domain);
++	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
+=20
+ 	return (unmapped =3D=3D size) ? 0 : -EINVAL;
+ }
+@@ -199,7 +199,7 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_m=
+mu *parent)
+=20
+ 	/*
+ 	 * TODO we would like each set of page tables to have a unique ASID
+-	 * to optimize TLB invalidation.  But iommu_flush_tlb_all() will
++	 * to optimize TLB invalidation.  But iommu_flush_iotlb_all() will
+ 	 * end up flushing the ASID used for TTBR1 pagetables, which is not
+ 	 * what we want.  So for now just use the same ASID as TTBR1.
+ 	 */
+--=20
+2.28.0
 
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
-            | 0/1    =
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/=tJLjgMi0YT_2e4JbYtQ+Xw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-  Details:     https://kernelci.org/test/plan/id/5f67ef71b56ce58ff2bf9de0
+-----BEGIN PGP SIGNATURE-----
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oJ10ACgkQAVBC80lX
+0GzqhAgAgI5bvNANY/dpO3XbDnaqIvof5KBq4oIgY+R/5raInQLxtzFMgpspd/y8
+yNX8ndiP3j4xT3xO/v7QBGfKK13qkYNQI1ZfGecvnQTQ1BalLrDuEbRH3d/qR3R3
+TEMQAPy+t/v2kIaMDVDVhTwm75xcMbhbTNjw3HaWfCpYmTOOeVqU2Mcfd8QIKGsv
+DysXjU+Wx/KrA0b5pFS5yCQi8/TqMDUmT2/KkLBmTgZcAmKNYmogLlIEOQGR8EKT
+42u4nM+5lpxMvR/Kj7jBOnc2XrOdkk87Uz1ot+MWgFU+JAUH6XMvw+UZZDQGn86s
+uq+avB9gMlh9jQAdp1XaCxhu274cXQ==
+=wtfn
+-----END PGP SIGNATURE-----
 
-
-  * baseline.login: https://kernelci.org/test/case/id/5f67ef71b56ce58ff2bf9=
-de1
-      failing since 138 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first =
-fail: v5.7-rc4-211-g6d4315023bc9)  =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f67ef5b1fb6ab1391bf9db3
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f67ef5b1fb6ab1=
-391bf9db9
-      failing since 46 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)
-      60 lines
-
-    2020-09-21 00:09:57.425000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c802
-    2020-09-21 00:09:57.431000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c803
-    2020-09-21 00:09:57.436000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c804
-    2020-09-21 00:09:57.442000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c805
-    2020-09-21 00:09:57.448000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c806
-    2020-09-21 00:09:57.454000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c807
-    2020-09-21 00:09:57.460000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c808
-    2020-09-21 00:09:57.465000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c809
-    2020-09-21 00:09:57.471000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80a
-    2020-09-21 00:09:57.477000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80b
-    ... (49 line(s) more)
-      =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
-ig          | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f67ee65c3078acf3dbf9dc3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
-txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc5-47=
-6-g3d0d0d2eb359/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f67ee65c3078acf3dbf9=
-dc4
-      failing since 46 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =20
+--Sig_/=tJLjgMi0YT_2e4JbYtQ+Xw--

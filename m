@@ -2,113 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B525B271AB1
-	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 08:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46F0271D0B
+	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 10:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbgIUGMv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Sep 2020 02:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgIUGMv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Sep 2020 02:12:51 -0400
-X-Greylist: delayed 492 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Sep 2020 23:12:50 PDT
-Received: from dvalin.narfation.org (dvalin.narfation.org [IPv6:2a00:17d8:100::8b1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23BAC061755
-        for <linux-next@vger.kernel.org>; Sun, 20 Sep 2020 23:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1600668272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b8fQsCvgcnqMQgvxHhj7epbLkU3gFqxiKxz9y0e4wlc=;
-        b=JqaTnaVcg3c5vaxTp9fuoGBCO5CZ3YvkbUnhCKsqdmqoAu8hts5PmKq21SLHsWD478HmGW
-        DWszYPZ1cgDyeHsqU2mX1ytgZZe64b4Fp3QRIP7dHzbfXOqQF+5py186tjK+ZLRun1XLv0
-        Jz+gXgQp8EljnWB7GlAZsLAjWtLkQ5I=
-From:   Sven Eckelmann <sven@narfation.org>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus =?ISO-8859-1?Q?L=FCssing?= <linus.luessing@c0d3.blue>,
-        Simon Wunderlich <sw@simonwunderlich.de>
-Subject: Re: linux-next: Fixes tag needs some work in the net tree
-Date:   Mon, 21 Sep 2020 08:04:30 +0200
-Message-ID: <1845864.bm72gKIjWm@ripper>
-In-Reply-To: <20200921055919.5bf70643@canb.auug.org.au>
-References: <20200921055919.5bf70643@canb.auug.org.au>
+        id S1726657AbgIUIEF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Sep 2020 04:04:05 -0400
+Received: from ozlabs.org ([203.11.71.1]:49579 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726475AbgIUID7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 21 Sep 2020 04:03:59 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bvxlw2NPFz9sVM;
+        Mon, 21 Sep 2020 18:03:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600675436;
+        bh=q0F6idTpwc+Dm6dwxWE7RZeQQGaT5vBD1szhy4qsIDM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=vKNGwmy+i7PN7EClC1cPrAfznDuBBdBZyoZmq6graDUQxFhGOP1NlQoGlPIzj9rPZ
+         BI8nNJUq7WXr370EeUw0R8K0EFloy6kjgTcSsxw1uX6/3bulixdIdqtNGGEuH+JKuE
+         bi9bKtI9taYveWcLudProgk4Lx0IEb0uM+yNSOlppMfgAbhebbHxSd7Mb3cydIheNf
+         j0nEatlus9OQUgnwwj1ZtCEMPJY+v6qojXZGSLER77btSUt5pYbRRM6T8a0yq+9Mfx
+         OKAUIj0ShoTr8725FEwCyOv7CcsQvAkcXqPX8Sfg26ShMGhi6q3zygQ8c7IrNA+n9f
+         xyXqEzpfoepeg==
+Date:   Mon, 21 Sep 2020 18:03:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm-current tree with the arm64
+ tree
+Message-ID: <20200921180353.421484e8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5321733.tfhsDO9XnZ"; micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: multipart/signed; boundary="Sig_/FB/FyPYpIBh1H2M2TEO3gze";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---nextPart5321733.tfhsDO9XnZ
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+--Sig_/FB/FyPYpIBh1H2M2TEO3gze
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sunday, 20 September 2020 21:59:19 CEST Stephen Rothwell wrote:
-> Hi all,
+Hi all,
 
-Yes, I've accidentally swapped the IDs while adding them to the various patches.
 
-The correct ones should have been:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-* 097930e85f90 ("batman-adv: bla: fix type misuse for backbone_gw hash indexing")
+  arch/arm64/mm/mmu.c
 
-  Fixes: 07568d0369f9 ("batman-adv: don't rely on positions in struct for hashing")
-  (seems to be correct)
+between commit:
 
-* 7dda5b338412 ("batman-adv: mcast/TT: fix wrongly dropped or rerouted packets")
+  0178dc761368 ("arm64: mte: Use Normal Tagged attributes for the linear ma=
+p")
 
-  Fixes: 279e89b2281a ("batman-adv: bla: use netif_rx_ni when not in interrupt context")
-  (seems to be correct)
+from the arm64 tree and commit:
 
-* 4bba9dab86b6 ("batman-adv: Add missing include for in_interrupt()")
+  8e19cbb9528f ("arch, drivers: replace for_each_membock() with for_each_me=
+m_range()")
 
-  Fixes: 279e89b2281a ("batman-adv: bla: use netif_rx_ni when not in interrupt context")
-  (seems to be correct)
+from the akpm-current tree.
 
-* 3236d215ad38 ("batman-adv: mcast: fix duplicate mcast packets in BLA backbone from LAN")
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-  Fixes: a44ebeff6bbd ("batman-adv: Fix multicast TT issues with bogus ROAM flags")
-  (this was wrong)
+--=20
+Cheers,
+Stephen Rothwell
 
-* 74c09b727512 ("batman-adv: mcast: fix duplicate mcast packets in BLA backbone from mesh")
+diff --cc arch/arm64/mm/mmu.c
+index 087a844b4d26,64211436629d..000000000000
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@@ -493,21 -483,10 +494,15 @@@ static void __init map_mem(pgd_t *pgdp
+  #endif
+ =20
+  	/* map all the memory banks */
+- 	for_each_memblock(memory, reg) {
+- 		phys_addr_t start =3D reg->base;
+- 		phys_addr_t end =3D start + reg->size;
+-=20
++ 	for_each_mem_range(i, &start, &end) {
+  		if (start >=3D end)
+  			break;
+- 		if (memblock_is_nomap(reg))
+- 			continue;
+-=20
+ -		__map_memblock(pgdp, start, end, PAGE_KERNEL, flags);
+ +		/*
+ +		 * The linear map must allow allocation tags reading/writing
+ +		 * if MTE is present. Otherwise, it has the same attributes as
+ +		 * PAGE_KERNEL.
+ +		 */
+ +		__map_memblock(pgdp, start, end, PAGE_KERNEL_TAGGED, flags);
+  	}
+ =20
+  	/*
 
-  Fixes: 2d3f6ccc4ea5 ("batman-adv: check incoming packet type for bla")
-  (this was wrong)
-
-* 2369e8270469 ("batman-adv: mcast: fix duplicate mcast packets from BLA backbone to mesh")
-
-  Fixes: fe2da6ff27c7 ("batman-adv: add broadcast duplicate check")
-  (this was wrong)
-
-Kind regards,
-	Sven
---nextPart5321733.tfhsDO9XnZ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+--Sig_/FB/FyPYpIBh1H2M2TEO3gze
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAl9oQm4ACgkQXYcKB8Em
-e0ZYdQ//evajP1e6HFFq7NS/9XZOCyoIOsAvo+FBGaA9uImaBPJY7ekJBdkzpr9y
-i2Hrx4I08Z0a65Ph5VLHWLNao12Gw0XnVKHLWyPf+6vMqjiqRyi6qaddYR78T2P1
-wRNXm72bCG+ZQGpTM7DPmU8BYaANatM56CPI90p6549BW4ts3XTYXrhDp+AuITKp
-SP47rG3j5gx+kK484CQ5URpNzfNxUn2gn9otPVoSsRmcod4X9IzmLiEF8xA0RhO+
-vKkRCBSuC4M2gwltKPLXNzuGbEip7dOP9Re8Z/uOgPp/f5fzC/2lGvUxB0Zt+yR+
-iELJkdulA9wOu59rCFJHrVHi+5CzAPDrqfQS+ZQO2OLDOcY2Ljv3Mk9srmwMdaUg
-7KFo6opjGV9aCYgVSC3s25hhmGjgTgCGhsA45xWeMLIrfLttLYREgAnj9NnStyHN
-KXc1pYb5ZkC5B8eIS2kkrHdns/2Xc3ZWBmY4fEvmHnvCPMaslQPCZf2BJ4JPJ6ko
-FRsQC9F8qmWZuDC96dazWTYseq0+EkW9NBym3QSuxoAifJcD3EPcO7CBI8Y14k7p
-mfnqhOZSufYlJSJYGuuPUusbGnnz6mFSDjBt3u1qg4dK48S3vEKZl933/7xotbmi
-dtBz2c+bjgHRNfzUEyzs9U1nmifWgSn9HsQ/pPbZfBEzABcnD8Q=
-=GCWG
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oXmkACgkQAVBC80lX
+0Gz7Zwf+NRQXl32XFQTnt0Tki9LEvDg9BAUrZi5+tlVgeSCZCk/o1gnohNfHYMjd
+mwPl3ISaPpE8bn2K35SS7xRIJ1Yom2vOq5Etxpz8684EKJ3C+MCA/5NYlpdgr32q
+qSc+E810vXQhCy5wNC0ufvsi1IWhTUTIGGshu0GkJDnko0TkEsAxPG2L0tA1Tagn
+zMQEg4GuuPsZXL96X8n6NplUXW6GJ3eQkCy9ciwnNZeP7O0RUx+UrjKoOgG4k+mK
+WnK7XU22/DBwwjlehBAeoaA9F9zsXQFpznNzNQxIGPJHtImLjWLnVFAoqQW9N/YY
+FeEU7Tp+bVsTrIeMhslLHNsXpPR5cw==
+=kwfM
 -----END PGP SIGNATURE-----
 
---nextPart5321733.tfhsDO9XnZ--
-
-
-
+--Sig_/FB/FyPYpIBh1H2M2TEO3gze--

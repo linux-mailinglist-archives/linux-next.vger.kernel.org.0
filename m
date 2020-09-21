@@ -2,126 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46F0271D0B
-	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 10:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763B9271D2A
+	for <lists+linux-next@lfdr.de>; Mon, 21 Sep 2020 10:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbgIUIEF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Sep 2020 04:04:05 -0400
-Received: from ozlabs.org ([203.11.71.1]:49579 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726475AbgIUID7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 21 Sep 2020 04:03:59 -0400
+        id S1726534AbgIUIIB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Sep 2020 04:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgIUIH6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Sep 2020 04:07:58 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7EC0613D2;
+        Mon, 21 Sep 2020 01:07:58 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bvxlw2NPFz9sVM;
-        Mon, 21 Sep 2020 18:03:56 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BvxrN6CR4z9sRf;
+        Mon, 21 Sep 2020 18:07:48 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1600675436;
-        bh=q0F6idTpwc+Dm6dwxWE7RZeQQGaT5vBD1szhy4qsIDM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vKNGwmy+i7PN7EClC1cPrAfznDuBBdBZyoZmq6graDUQxFhGOP1NlQoGlPIzj9rPZ
-         BI8nNJUq7WXr370EeUw0R8K0EFloy6kjgTcSsxw1uX6/3bulixdIdqtNGGEuH+JKuE
-         bi9bKtI9taYveWcLudProgk4Lx0IEb0uM+yNSOlppMfgAbhebbHxSd7Mb3cydIheNf
-         j0nEatlus9OQUgnwwj1ZtCEMPJY+v6qojXZGSLER77btSUt5pYbRRM6T8a0yq+9Mfx
-         OKAUIj0ShoTr8725FEwCyOv7CcsQvAkcXqPX8Sfg26ShMGhi6q3zygQ8c7IrNA+n9f
-         xyXqEzpfoepeg==
-Date:   Mon, 21 Sep 2020 18:03:53 +1000
+        s=201702; t=1600675674;
+        bh=iaBdLJOvxyJXfcUEqmY+3Nksf5Jf9xHCFLBtVdF2GM8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K5wKwexmDJAci9TTwYRSQ0w9PM5CiPqAwagC2tcao/hBigyuoMxG1C8D0UmTRvwbU
+         EhPScTRFe/siLj3BjXiyv9uIFmQY0S4UmOdPSVysuZGSDahrfPB83W3uawREPQpzd0
+         kHld44CU++GsPbN3dC1XVd4QoBpM6Lgj+V1kNNdSetTvjN8TgT8QvRc6F00jrjsQD6
+         lDVtnrJaxh5Jw5LEvG/jpEkcuTha5XPYFINClW5XVtzMcKkHT38c4BYivb3A3RLDRr
+         JaS6Iuw/LnkzJSYvM742RWyWBJTrmzSqPEqXAqPcsYg8niNwEgDNwWig1CMgfOS4OB
+         vkx4v/7kdkZQQ==
+Date:   Mon, 21 Sep 2020 18:07:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+To:     Qian Cai <cai@redhat.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the arm64
- tree
-Message-ID: <20200921180353.421484e8@canb.auug.org.au>
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <20200921180748.4f88028d@canb.auug.org.au>
+In-Reply-To: <fdd0240c187f974fccc553acea895f638d5e822a.camel@redhat.com>
+References: <20200916073539.3552-1-rppt@kernel.org>
+        <5d97da4d86db258fdc9b20be3c12588089e17da2.camel@redhat.com>
+        <fdd0240c187f974fccc553acea895f638d5e822a.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FB/FyPYpIBh1H2M2TEO3gze";
+Content-Type: multipart/signed; boundary="Sig_/qIGimAfxVKTvCJ+PllFC0A/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FB/FyPYpIBh1H2M2TEO3gze
+--Sig_/qIGimAfxVKTvCJ+PllFC0A/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
+On Fri, 18 Sep 2020 14:25:15 -0400 Qian Cai <cai@redhat.com> wrote:
+>
+> On Thu, 2020-09-17 at 09:27 -0400, Qian Cai wrote:
+> > On Wed, 2020-09-16 at 10:35 +0300, Mike Rapoport wrote: =20
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > >=20
+> > > This is an implementation of "secret" mappings backed by a file descr=
+iptor.=20
+> > > I've dropped the boot time reservation patch for now as it is not str=
+ictly
+> > > required for the basic usage and can be easily added later either wit=
+h or
+> > > without CMA. =20
+> >=20
+> > On powerpc: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.co=
+nfig
+> >=20
+> > There is a compiling warning from the today's linux-next:
+> >=20
+> > <stdin>:1532:2: warning: #warning syscall memfd_secret not implemented =
+[-Wcpp] =20
+>=20
+> This should silence the warning:
+>=20
+> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> index a18b47695f55..b7609958ee36 100755
+> --- a/scripts/checksyscalls.sh
+> +++ b/scripts/checksyscalls.sh
+> @@ -40,6 +40,10 @@ cat << EOF
+>  #define __IGNORE_setrlimit	/* setrlimit */
+>  #endif
+> =20
+> +#ifndef __ARCH_WANT_MEMFD_SECRET
+> +#define __IGNORE_memfd_secret
+> +#endif
+> +
+>  /* Missing flags argument */
+>  #define __IGNORE_renameat	/* renameat2 */
+>=20
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
-
-  arch/arm64/mm/mmu.c
-
-between commit:
-
-  0178dc761368 ("arm64: mte: Use Normal Tagged attributes for the linear ma=
-p")
-
-from the arm64 tree and commit:
-
-  8e19cbb9528f ("arch, drivers: replace for_each_membock() with for_each_me=
-m_range()")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Added to linux-next today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/mm/mmu.c
-index 087a844b4d26,64211436629d..000000000000
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@@ -493,21 -483,10 +494,15 @@@ static void __init map_mem(pgd_t *pgdp
-  #endif
- =20
-  	/* map all the memory banks */
-- 	for_each_memblock(memory, reg) {
-- 		phys_addr_t start =3D reg->base;
-- 		phys_addr_t end =3D start + reg->size;
--=20
-+ 	for_each_mem_range(i, &start, &end) {
-  		if (start >=3D end)
-  			break;
-- 		if (memblock_is_nomap(reg))
-- 			continue;
--=20
- -		__map_memblock(pgdp, start, end, PAGE_KERNEL, flags);
- +		/*
- +		 * The linear map must allow allocation tags reading/writing
- +		 * if MTE is present. Otherwise, it has the same attributes as
- +		 * PAGE_KERNEL.
- +		 */
- +		__map_memblock(pgdp, start, end, PAGE_KERNEL_TAGGED, flags);
-  	}
- =20
-  	/*
-
---Sig_/FB/FyPYpIBh1H2M2TEO3gze
+--Sig_/qIGimAfxVKTvCJ+PllFC0A/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oXmkACgkQAVBC80lX
-0Gz7Zwf+NRQXl32XFQTnt0Tki9LEvDg9BAUrZi5+tlVgeSCZCk/o1gnohNfHYMjd
-mwPl3ISaPpE8bn2K35SS7xRIJ1Yom2vOq5Etxpz8684EKJ3C+MCA/5NYlpdgr32q
-qSc+E810vXQhCy5wNC0ufvsi1IWhTUTIGGshu0GkJDnko0TkEsAxPG2L0tA1Tagn
-zMQEg4GuuPsZXL96X8n6NplUXW6GJ3eQkCy9ciwnNZeP7O0RUx+UrjKoOgG4k+mK
-WnK7XU22/DBwwjlehBAeoaA9F9zsXQFpznNzNQxIGPJHtImLjWLnVFAoqQW9N/YY
-FeEU7Tp+bVsTrIeMhslLHNsXpPR5cw==
-=kwfM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9oX1QACgkQAVBC80lX
+0GwVfQgAho6bGSHnGAjI0IiMmFRLcHM+KMH0XiVgh9bvUjVASl1mVgeIe7v//Oef
+uyH9zCWyUFof0EnaT4f5uZctC2pe/qvb7BsEdaSlLUSz4X8J1xLWfdYbdJHMvtYR
+WnrFHwGCmEtpImNTTZtXcdDZeliVgq41XGd/h1Z59o6givzPYTtIK59LlOOcZj3y
+KIY0ELXUPauFOINBbfRzs0xlB6upYfVrHUdh9/glsrY4wVcEfPhjgFVAk+Ua/4/E
+/ksLJ+WeUZxJ/2SOPL5Vm23vZvmSE0fD4krBBiANbBiKShRgJRU21uc/ulEdHh5E
+qZjQA6jjcKFGbIbi78Sb6LxIzI/mKQ==
+=OfZk
 -----END PGP SIGNATURE-----
 
---Sig_/FB/FyPYpIBh1H2M2TEO3gze--
+--Sig_/qIGimAfxVKTvCJ+PllFC0A/--

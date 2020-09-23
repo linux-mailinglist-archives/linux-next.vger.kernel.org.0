@@ -2,125 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62244274E20
-	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 03:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EB4274EA7
+	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 03:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgIWBGO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Sep 2020 21:06:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27011 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726839AbgIWBGN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 22 Sep 2020 21:06:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600823171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HWJcac1QdW9dsyQKtkyOkOZ4w1weaZOAZAMFMC95DE4=;
-        b=YAfXPmarN47tMfkgq+2QZiQLJvazI9RADBsvKKXAn4GcKqu8chzRFVYUzcaaaa0rOq9x05
-        T70vKF3+1AJZ4ayMVoeECYQ33+uHvocdnAnXV7dLkTsyMnFkNFJZLUjGfTvFUKLVl9hvxj
-        bUNnlMryhMEGRp5sRl8BaE29bPvRbXA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-321-VnKzYDtLOJ6489vL7AfGag-1; Tue, 22 Sep 2020 21:06:07 -0400
-X-MC-Unique: VnKzYDtLOJ6489vL7AfGag-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4509881CBF1;
-        Wed, 23 Sep 2020 01:06:05 +0000 (UTC)
-Received: from ovpn-66-35.rdu2.redhat.com (unknown [10.10.67.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2FD17368D;
-        Wed, 23 Sep 2020 01:06:03 +0000 (UTC)
-Message-ID: <95bd1230f2fcf01f690770eb77696862b8fb607b.camel@redhat.com>
-Subject: Re: [PATCH v2 5/9] iomap: Support arbitrarily many blocks per page
-From:   Qian Cai <cai@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-nvdimm@lists.01.org, linux-kernel@vger.kernel.org,
-        Dave Kleikamp <shaggy@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Dave Chinner <dchinner@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Date:   Tue, 22 Sep 2020 21:06:03 -0400
-In-Reply-To: <20200922170526.GK32101@casper.infradead.org>
-References: <20200910234707.5504-1-willy@infradead.org>
-         <20200910234707.5504-6-willy@infradead.org>
-         <163f852ba12fd9de5dec7c4a2d6b6c7cdb379ebc.camel@redhat.com>
-         <20200922170526.GK32101@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+        id S1727170AbgIWBoo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Sep 2020 21:44:44 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13827 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726992AbgIWBon (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Sep 2020 21:44:43 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 802CD83C44DD7ABFB3C0;
+        Wed, 23 Sep 2020 09:44:40 +0800 (CST)
+Received: from [10.174.179.238] (10.174.179.238) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 23 Sep 2020 09:44:39 +0800
+Subject: Re: [PATCH -next v2] net: ice: Fix pointer cast warnings
+From:   Bixuan Cui <cuibixuan@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <jeffrey.t.kirsher@intel.com>, <intel-wired-lan@lists.osuosl.org>,
+        <netdev@vger.kernel.org>, <linux-next@vger.kernel.org>
+References: <20200731105721.18511-1-cuibixuan@huawei.com>
+ <5af7c5af-c45d-2174-de89-8b89eddb4f4d@huawei.com>
+Message-ID: <9ba08d48-a192-bf9d-b37e-e7f3c9699970@huawei.com>
+Date:   Wed, 23 Sep 2020 09:44:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <5af7c5af-c45d-2174-de89-8b89eddb4f4d@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Originating-IP: [10.174.179.238]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 2020-09-22 at 18:05 +0100, Matthew Wilcox wrote:
-> On Tue, Sep 22, 2020 at 12:23:45PM -0400, Qian Cai wrote:
-> > On Fri, 2020-09-11 at 00:47 +0100, Matthew Wilcox (Oracle) wrote:
-> > > Size the uptodate array dynamically to support larger pages in the
-> > > page cache.  With a 64kB page, we're only saving 8 bytes per page today,
-> > > but with a 2MB maximum page size, we'd have to allocate more than 4kB
-> > > per page.  Add a few debugging assertions.
-> > > 
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > Reviewed-by: Dave Chinner <dchinner@redhat.com>
-> > 
-> > Some syscall fuzzing will trigger this on powerpc:
-> > 
-> > .config: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
-> > 
-> > [ 8805.895344][T445431] WARNING: CPU: 61 PID: 445431 at fs/iomap/buffered-
-> > io.c:78 iomap_page_release+0x250/0x270
-> 
-> Well, I'm glad it triggered.  That warning is:
->         WARN_ON_ONCE(bitmap_full(iop->uptodate, nr_blocks) !=
->                         PageUptodate(page));
-> so there was definitely a problem of some kind.
-> 
-> truncate_cleanup_page() calls
-> do_invalidatepage() calls
-> iomap_invalidatepage() calls
-> iomap_page_release()
-> 
-> Is this the first warning?  I'm wondering if maybe there was an I/O error
-> earlier which caused PageUptodate to get cleared again.  If it's easy to
-> reproduce, perhaps you could try something like this?
-> 
-> +void dump_iomap_page(struct page *page, const char *reason)
-> +{
-> +       struct iomap_page *iop = to_iomap_page(page);
-> +       unsigned int nr_blocks = i_blocks_per_page(page->mapping->host, page);
-> +
-> +       dump_page(page, reason);
-> +       if (iop)
-> +               printk("iop:reads %d writes %d uptodate %*pb\n",
-> +                               atomic_read(&iop->read_bytes_pending),
-> +                               atomic_read(&iop->write_bytes_pending),
-> +                               nr_blocks, iop->uptodate);
-> +       else
-> +               printk("iop:none\n");
-> +}
-> 
-> and then do something like:
-> 
-> 	if (bitmap_full(iop->uptodate, nr_blocks) != PageUptodate(page))
-> 		dump_iomap_page(page, NULL);
+ping~
 
-This:
-
-[ 1683.158254][T164965] page:000000004a6c16cd refcount:2 mapcount:0 mapping:00000000ea017dc5 index:0x2 pfn:0xc365c
-[ 1683.158311][T164965] aops:xfs_address_space_operations ino:417b7e7 dentry name:"trinity-testfile2"
-[ 1683.158354][T164965] flags: 0x7fff8000000015(locked|uptodate|lru)
-[ 1683.158392][T164965] raw: 007fff8000000015 c00c0000019c4b08 c00c0000019a53c8 c000201c8362c1e8
-[ 1683.158430][T164965] raw: 0000000000000002 0000000000000000 00000002ffffffff c000201c54db4000
-[ 1683.158470][T164965] page->mem_cgroup:c000201c54db4000
-[ 1683.158506][T164965] iop:none
-
-
+On 2020/7/31 18:07, Bixuan Cui wrote:
+> pointers should be casted to unsigned long to avoid
+> -Wpointer-to-int-cast warnings:
+> 
+> drivers/net/ethernet/intel/ice/ice_flow.h:197:33: warning:
+>     cast from pointer to integer of different size
+> drivers/net/ethernet/intel/ice/ice_flow.h:198:32: warning:
+>     cast to pointer from integer of different size
+> 
+> Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+> ---
+> v2->v1: add fix:
+>  ice_flow.h:198:32: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>  #define ICE_FLOW_ENTRY_PTR(h) ((struct ice_flow_entry *)(h))
+> 
+>  drivers/net/ethernet/intel/ice/ice_flow.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/ice/ice_flow.h b/drivers/net/ethernet/intel/ice/ice_flow.h
+> index 3913da2116d2..829f90b1e998 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_flow.h
+> +++ b/drivers/net/ethernet/intel/ice/ice_flow.h
+> @@ -194,8 +194,8 @@ struct ice_flow_entry {
+>  	u16 entry_sz;
+>  };
+> 
+> -#define ICE_FLOW_ENTRY_HNDL(e)	((u64)e)
+> -#define ICE_FLOW_ENTRY_PTR(h)	((struct ice_flow_entry *)(h))
+> +#define ICE_FLOW_ENTRY_HNDL(e)	((u64)(uintptr_t)e)
+> +#define ICE_FLOW_ENTRY_PTR(h)	((struct ice_flow_entry *)(uintptr_t)(h))
+> 
+>  struct ice_flow_prof {
+>  	struct list_head l_entry;
+> --
+> 2.17.1
+> 
+> 
+> .
+> 

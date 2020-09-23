@@ -2,313 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882B9274F6C
-	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 05:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37376274F94
+	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 05:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgIWDMB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Sep 2020 23:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgIWDMA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Sep 2020 23:12:00 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC24C061755
-        for <linux-next@vger.kernel.org>; Tue, 22 Sep 2020 20:12:00 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d6so14165929pfn.9
-        for <linux-next@vger.kernel.org>; Tue, 22 Sep 2020 20:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=B1jEx8tIC9EZBmbkbRsmLHIiL5/YLiLgd+sH0hYKA8Q=;
-        b=uurFUTTwC9e9TbC4DdthjOswhelo/jecoB2c2S3pn9c0W3euozorlvMdZisbNYPXMY
-         QkJj+61XUX8lOadEv9I6S9f7Q5OcbZ5v6f6F+v7i+n3LM+6Xjja7Jo4EU15Qw/2vQyeY
-         GL9CsyNMa0GhZvmY+kDXwecsSsUub7kjCklDRJ8v/SorfNJp+BnuSXwC78mnWJB+mI2X
-         SQF/vmDZVB/9T79CKTeMFISVqJYqEqXqyWH87lKzI6DeM8PCHFBjQjr2tFNoAUrjES97
-         uAB5DjFchieV1f1GHuQTEz2nJPLzAcz4xgliZxbAYTUYfa4qlWX+wDbfPelG60/IqbBK
-         HL3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=B1jEx8tIC9EZBmbkbRsmLHIiL5/YLiLgd+sH0hYKA8Q=;
-        b=LwMt/miGe2etLjf9zR10hyl7pX9Q6ufLXimYWKsAyF90CNs688crS0tJb9mZGM4T4X
-         fibN/mu7DJc83CiDQokYAy/ilMhmHakJGFuq4NVygmdC/Z43ZYruTXhvdBRF8tiMpzE4
-         Gq0bIvNeBtqXmEO+sjQFuK6eX7xV1ZZgRuio0mmGkvSiX6toTWBxPhMTJLRR9eGCOpwq
-         c2h5/jVdRQx0ziUuw5xvNYxU2X5vbJjQAiD3lj0fUCSYymVZLvvQ6xoChv6YUOXSTgR6
-         MzKUjvxLLPn1TKsOo1BSG3BXuwBKTtZRbRDBb7y/unxdQSWP5ibmPRGCOD4LNWIzRf1j
-         9w/w==
-X-Gm-Message-State: AOAM532tSMEC5WSfVX5Art+q0TY4oR4LNJFsv9X3/HgU2TcJAmFom5oc
-        Hfw0IFZhr0WPPnN5kfGk3e2eP0U6u+byuQ==
-X-Google-Smtp-Source: ABdhPJztzVp85w9PwVQmKKZykbPegeq6wg2Ecoyf4H/Butuv5XPy5Lxhp9MOIOBX4khaoFSzk3S3wQ==
-X-Received: by 2002:a63:2e42:: with SMTP id u63mr6024469pgu.292.1600830719812;
-        Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y3sm17660487pfb.18.2020.09.22.20.11.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
-Message-ID: <5f6abcff.1c69fb81.9f59c.c296@mx.google.com>
-Date:   Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726739AbgIWDgH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Sep 2020 23:36:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:49045 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726448AbgIWDgH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Sep 2020 23:36:07 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bx3jt59KWz9sSn;
+        Wed, 23 Sep 2020 13:36:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600832165;
+        bh=MtXeczgxHCMCOhw5upnnvy0kfwQmSR6Qt9dVzzJLaj0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=D7ERjTxLzELXXCCTfJzgm7XZwAOKft271gxmDWMF+nrw/eI7yUVMma4pU/P4+y/gV
+         2d7xambn/kbsul+p6lGOIRqAtUAtD7st8eYIYnZkIZ7PcEdfFfybn97dLypm2aNCx3
+         3OTTemeOUdYjNWo2eW+l7fWwLreGeBQc9ukax6uqVD225MkmtVL/SDN1i7TbdsGe7K
+         JoYtp+524bwQYBrxcJhLzAG/0NSz9tCrz2BACM02tUTjWOdlqqDu5pWlFb9vp9yvtz
+         w6rEGG4OFFgIy87MFFZ2E9o9MQehAi9d+Pnf6i8M/B3E4n7MiYWWqZjlNG/d5CbNOL
+         TgtfB2I25o3YQ==
+Date:   Wed, 23 Sep 2020 13:36:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Swapnil Jakhade <sjakhade@cadence.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Jyri Sarha <jsarha@ti.com>,
+        Quentin Schulz <quentin.schulz@free-electrons.com>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the drm tree
+Message-ID: <20200923133601.293b4fe6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.9-rc6-391-g5849c6655ec3
-Subject: next/pending-fixes baseline: 317 runs,
- 6 regressions (v5.9-rc6-391-g5849c6655ec3)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/.1DoauiACeF/_K0DBRu0xdy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 317 runs, 6 regressions (v5.9-rc6-391-g5849c66=
-55ec3)
+--Sig_/.1DoauiACeF/_K0DBRu0xdy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
-            | 0/1    =
+After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defconfi=
-g           | 0/1    =
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c: In function 'cdns_mhdp=
+_fw_activate':
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c:751:10: warning: conver=
+sion from 'long unsigned int' to 'unsigned int' changes value from '1844674=
+4073709551613' to '4294967293' [-Woverflow]
+  751 |   writel(~CDNS_APB_INT_MASK_SW_EVENT_INT,
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c: In function 'cdns_mhdp=
+_attach':
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c:1692:10: warning: conve=
+rsion from 'long unsigned int' to 'unsigned int' changes value from '184467=
+44073709551613' to '4294967293' [-Woverflow]
+ 1692 |   writel(~CDNS_APB_INT_MASK_SW_EVENT_INT,
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c: In function 'cdns_mhdp=
+_bridge_hpd_enable':
+drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c:2125:10: warning: conve=
+rsion from 'long unsigned int' to 'unsigned int' changes value from '184467=
+44073709551613' to '4294967293' [-Woverflow]
+ 2125 |   writel(~CDNS_APB_INT_MASK_SW_EVENT_INT,
 
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 0/1    =
+Introduced by commit
 
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...G=
-_ARM_LPAE=3Dy | 0/1    =
+  fb43aa0acdfd ("drm: bridge: Add support for Cadence MHDP8546 DPI/DP bridg=
+e")
 
-panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 4/5    =
+--=20
+Cheers,
+Stephen Rothwell
 
-panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
-ig          | 0/1    =
+--Sig_/.1DoauiACeF/_K0DBRu0xdy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.9-rc6-391-g5849c6655ec3/plan/baseline/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9qwqEACgkQAVBC80lX
+0GwjlQf7BSZScMksb4Tc0d+RoBesYr35EISzCfuZU9ZW4qiyQDEo1etWVXXZpDhc
+4tzreKqaXHdWBmDnz3iAtPiCvAa/rimO4ap5RoK4TPAJVVYt95rjMrc+9L+afLZg
+usk0AZAWac/gUeP6n4lntfSjZ+U3O0TrtAnrRqj2xhuw2zLs4h5EZAt+vLj1v9MQ
+koNYp6BJvt1BT0ZPUzxDougjXKLxzLUzl/t8LPUni2VGqZIGM2omyBqqPPk/EqDT
+BMGT8UDlNI1U2Hf4v+UQyQud/6eNww+EoZ8DsovxrYdEsbpYXfABwcEvSrWArekc
+vN4tP7nwI6eFTJJY7U4TsKhe5XIfTQ==
+=O+t8
+-----END PGP SIGNATURE-----
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.9-rc6-391-g5849c6655ec3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5849c6655ec33bd5902f0c6231d334b614053a3b =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
-            | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6a864df370ea1692bf9de8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f6a864df370ea1692bf9=
-de9
-      failing since 140 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first =
-fail: v5.7-rc4-211-g6d4315023bc9)  =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defconfi=
-g           | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6a961e17ab9db3b7bf9dcc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-=
-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-=
-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f6a961e17ab9db3b7bf9=
-dcd
-      failing since 4 days (last pass: v5.9-rc5-318-g177467af003a, first fa=
-il: v5.9-rc5-353-gfc14a2f59553)  =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6a98e75a0cf459bfbf9dc3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-odroid-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-odroid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f6a98e75a0cf459bfbf9=
-dc4
-      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...G=
-_ARM_LPAE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6aa2aa69753d1ebabf9dc7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-8/lab-collabora/baseline-odroid-xu3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
-cc-8/lab-collabora/baseline-odroid-xu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f6aa2aa69753d1ebabf9=
-dc8
-      new failure (last pass: v5.9-rc5-353-gfc14a2f59553)  =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
-ONFIG_SMP=3Dn | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6a888af8db90693bbf9dbd
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6a888af8db906=
-93bbf9dc3
-      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)
-      60 lines
-
-    2020-09-22 23:28:02.831000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c802
-    2020-09-22 23:28:02.837000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c803
-    2020-09-22 23:28:02.842000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c804
-    2020-09-22 23:28:02.848000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c805
-    2020-09-22 23:28:02.854000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c806
-    2020-09-22 23:28:02.860000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c807
-    2020-09-22 23:28:02.865000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c808
-    2020-09-22 23:28:02.871000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c809
-    2020-09-22 23:28:02.877000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80a
-    2020-09-22 23:28:02.883000  kern  :alert : BUG: Bad page state in proce=
-ss swapper  pfn:9c80b
-    ... (49 line(s) more)
-      =
-
-
-
-platform              | arch | lab           | compiler | defconfig        =
-            | results
-----------------------+------+---------------+----------+------------------=
-------------+--------
-panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
-ig          | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6a8b22fd74317cfdbf9ddb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
-txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
-1-g5849c6655ec3/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f6a8b22fd74317cfdbf9=
-ddc
-      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
-: v5.8-3221-g983112062f35)  =20
+--Sig_/.1DoauiACeF/_K0DBRu0xdy--

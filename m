@@ -2,150 +2,313 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BAB274F3D
-	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 04:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882B9274F6C
+	for <lists+linux-next@lfdr.de>; Wed, 23 Sep 2020 05:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgIWCtE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Sep 2020 22:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S1726589AbgIWDMB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Sep 2020 23:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726873AbgIWCtD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Sep 2020 22:49:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8117DC061755;
-        Tue, 22 Sep 2020 19:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+tm3L9Qdu9Qa27/TXUn0VZXyFl0wWgXIWdk1uWUmYXo=; b=bro9h2a+1VJMD+WRmif02SxOCd
-        V6iYwofbx8Scioi6syigtzG1nhgPfDNbKD+0AWCloYcoCtuGqizghQ+7957ITN7duW0ad3Y5qa8VB
-        ihRdtXr+JyqzpvML6OtwnnNFi7N//U0P0vnT9u30mG5Rim8975d7CazXnklVXf3CEerJaHJoGFIz9
-        4bAUYyK+H0hxgkSUl+ojUHYKyXOM0gcJpmUlOTvCob9VH08ZAXjhQFntUbdjqyBJJLNWrbVYtRIHC
-        OodUmoJ9hZSATDquWRrgE+cTS0iPMrQgoPY77FgQMh9bNrJbF4LdjWkjTbbI5hNKEdsJTwkzAeM1R
-        P9U1wjcA==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKuq4-0000Po-1g; Wed, 23 Sep 2020 02:49:00 +0000
-Date:   Wed, 23 Sep 2020 03:48:59 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Qian Cai <cai@redhat.com>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-nvdimm@lists.01.org, linux-kernel@vger.kernel.org,
-        Dave Kleikamp <shaggy@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Dave Chinner <dchinner@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH v2 5/9] iomap: Support arbitrarily many blocks per page
-Message-ID: <20200923024859.GM32101@casper.infradead.org>
-References: <20200910234707.5504-1-willy@infradead.org>
- <20200910234707.5504-6-willy@infradead.org>
- <163f852ba12fd9de5dec7c4a2d6b6c7cdb379ebc.camel@redhat.com>
- <20200922170526.GK32101@casper.infradead.org>
- <95bd1230f2fcf01f690770eb77696862b8fb607b.camel@redhat.com>
+        with ESMTP id S1726448AbgIWDMA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Sep 2020 23:12:00 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC24C061755
+        for <linux-next@vger.kernel.org>; Tue, 22 Sep 2020 20:12:00 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d6so14165929pfn.9
+        for <linux-next@vger.kernel.org>; Tue, 22 Sep 2020 20:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=B1jEx8tIC9EZBmbkbRsmLHIiL5/YLiLgd+sH0hYKA8Q=;
+        b=uurFUTTwC9e9TbC4DdthjOswhelo/jecoB2c2S3pn9c0W3euozorlvMdZisbNYPXMY
+         QkJj+61XUX8lOadEv9I6S9f7Q5OcbZ5v6f6F+v7i+n3LM+6Xjja7Jo4EU15Qw/2vQyeY
+         GL9CsyNMa0GhZvmY+kDXwecsSsUub7kjCklDRJ8v/SorfNJp+BnuSXwC78mnWJB+mI2X
+         SQF/vmDZVB/9T79CKTeMFISVqJYqEqXqyWH87lKzI6DeM8PCHFBjQjr2tFNoAUrjES97
+         uAB5DjFchieV1f1GHuQTEz2nJPLzAcz4xgliZxbAYTUYfa4qlWX+wDbfPelG60/IqbBK
+         HL3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=B1jEx8tIC9EZBmbkbRsmLHIiL5/YLiLgd+sH0hYKA8Q=;
+        b=LwMt/miGe2etLjf9zR10hyl7pX9Q6ufLXimYWKsAyF90CNs688crS0tJb9mZGM4T4X
+         fibN/mu7DJc83CiDQokYAy/ilMhmHakJGFuq4NVygmdC/Z43ZYruTXhvdBRF8tiMpzE4
+         Gq0bIvNeBtqXmEO+sjQFuK6eX7xV1ZZgRuio0mmGkvSiX6toTWBxPhMTJLRR9eGCOpwq
+         c2h5/jVdRQx0ziUuw5xvNYxU2X5vbJjQAiD3lj0fUCSYymVZLvvQ6xoChv6YUOXSTgR6
+         MzKUjvxLLPn1TKsOo1BSG3BXuwBKTtZRbRDBb7y/unxdQSWP5ibmPRGCOD4LNWIzRf1j
+         9w/w==
+X-Gm-Message-State: AOAM532tSMEC5WSfVX5Art+q0TY4oR4LNJFsv9X3/HgU2TcJAmFom5oc
+        Hfw0IFZhr0WPPnN5kfGk3e2eP0U6u+byuQ==
+X-Google-Smtp-Source: ABdhPJztzVp85w9PwVQmKKZykbPegeq6wg2Ecoyf4H/Butuv5XPy5Lxhp9MOIOBX4khaoFSzk3S3wQ==
+X-Received: by 2002:a63:2e42:: with SMTP id u63mr6024469pgu.292.1600830719812;
+        Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y3sm17660487pfb.18.2020.09.22.20.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
+Message-ID: <5f6abcff.1c69fb81.9f59c.c296@mx.google.com>
+Date:   Tue, 22 Sep 2020 20:11:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <95bd1230f2fcf01f690770eb77696862b8fb607b.camel@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.9-rc6-391-g5849c6655ec3
+Subject: next/pending-fixes baseline: 317 runs,
+ 6 regressions (v5.9-rc6-391-g5849c6655ec3)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 09:06:03PM -0400, Qian Cai wrote:
-> On Tue, 2020-09-22 at 18:05 +0100, Matthew Wilcox wrote:
-> > On Tue, Sep 22, 2020 at 12:23:45PM -0400, Qian Cai wrote:
-> > > On Fri, 2020-09-11 at 00:47 +0100, Matthew Wilcox (Oracle) wrote:
-> > > > Size the uptodate array dynamically to support larger pages in the
-> > > > page cache.  With a 64kB page, we're only saving 8 bytes per page today,
-> > > > but with a 2MB maximum page size, we'd have to allocate more than 4kB
-> > > > per page.  Add a few debugging assertions.
-> > > > 
-> > > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > > Reviewed-by: Dave Chinner <dchinner@redhat.com>
-> > > 
-> > > Some syscall fuzzing will trigger this on powerpc:
-> > > 
-> > > .config: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
-> > > 
-> > > [ 8805.895344][T445431] WARNING: CPU: 61 PID: 445431 at fs/iomap/buffered-
-> > > io.c:78 iomap_page_release+0x250/0x270
-> > 
-> > Well, I'm glad it triggered.  That warning is:
-> >         WARN_ON_ONCE(bitmap_full(iop->uptodate, nr_blocks) !=
-> >                         PageUptodate(page));
-> > so there was definitely a problem of some kind.
-> > 
-> > truncate_cleanup_page() calls
-> > do_invalidatepage() calls
-> > iomap_invalidatepage() calls
-> > iomap_page_release()
-> > 
-> > Is this the first warning?  I'm wondering if maybe there was an I/O error
-> > earlier which caused PageUptodate to get cleared again.  If it's easy to
-> > reproduce, perhaps you could try something like this?
-> > 
-> > +void dump_iomap_page(struct page *page, const char *reason)
-> > +{
-> > +       struct iomap_page *iop = to_iomap_page(page);
-> > +       unsigned int nr_blocks = i_blocks_per_page(page->mapping->host, page);
-> > +
-> > +       dump_page(page, reason);
-> > +       if (iop)
-> > +               printk("iop:reads %d writes %d uptodate %*pb\n",
-> > +                               atomic_read(&iop->read_bytes_pending),
-> > +                               atomic_read(&iop->write_bytes_pending),
-> > +                               nr_blocks, iop->uptodate);
-> > +       else
-> > +               printk("iop:none\n");
-> > +}
-> > 
-> > and then do something like:
-> > 
-> > 	if (bitmap_full(iop->uptodate, nr_blocks) != PageUptodate(page))
-> > 		dump_iomap_page(page, NULL);
-> 
-> This:
-> 
-> [ 1683.158254][T164965] page:000000004a6c16cd refcount:2 mapcount:0 mapping:00000000ea017dc5 index:0x2 pfn:0xc365c
-> [ 1683.158311][T164965] aops:xfs_address_space_operations ino:417b7e7 dentry name:"trinity-testfile2"
-> [ 1683.158354][T164965] flags: 0x7fff8000000015(locked|uptodate|lru)
-> [ 1683.158392][T164965] raw: 007fff8000000015 c00c0000019c4b08 c00c0000019a53c8 c000201c8362c1e8
-> [ 1683.158430][T164965] raw: 0000000000000002 0000000000000000 00000002ffffffff c000201c54db4000
-> [ 1683.158470][T164965] page->mem_cgroup:c000201c54db4000
-> [ 1683.158506][T164965] iop:none
+next/pending-fixes baseline: 317 runs, 6 regressions (v5.9-rc6-391-g5849c66=
+55ec3)
 
-Oh, I'm a fool.  This is after the call to detach_page_private() so
-page->private is NULL and we don't get the iop dumped.
+Regressions Summary
+-------------------
 
-Nevertheless, this is interesting.  Somehow, the page is marked Uptodate,
-but the bitmap is deemed not full.  There are three places where we set
-an iomap page Uptodate:
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
+            | 0/1    =
 
-1.      if (bitmap_full(iop->uptodate, i_blocks_per_page(inode, page)))
-                SetPageUptodate(page);
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defconfi=
+g           | 0/1    =
 
-2.      if (page_has_private(page))
-                iomap_iop_set_range_uptodate(page, off, len);
-        else
-                SetPageUptodate(page);
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 0/1    =
 
-3.      BUG_ON(page->index);
-...
-        SetPageUptodate(page);
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...G=
+_ARM_LPAE=3Dy | 0/1    =
 
-It can't be #2 because the page has an iop.  It can't be #3 because the
-page->index is not 0.  So at some point in the past, the bitmap was full.
+panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 4/5    =
 
-I don't think it's possible for inode->i_blksize to change, and you
-aren't running with THPs, so it's definitely not possible for thp_size()
-to change.  So i_blocks_per_page() isn't going to change.
+panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
+ig          | 0/1    =
 
-We seem to have allocated enough memory for ->iop because that's also
-based on i_blocks_per_page().
 
-I'm out of ideas.  Maybe I'll wake up with a better idea in the morning.
-I've been trying to reproduce this on x86 with a 1kB block size
-filesystem, and haven't been able to yet.  Maybe I'll try to setup a
-powerpc cross-compilation environment tomorrow.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-rc6-391-g5849c6655ec3/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-rc6-391-g5849c6655ec3
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      5849c6655ec33bd5902f0c6231d334b614053a3b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
+            | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6a864df370ea1692bf9de8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6a864df370ea1692bf9=
+de9
+      failing since 140 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first =
+fail: v5.7-rc4-211-g6d4315023bc9)  =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defconfi=
+g           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6a961e17ab9db3b7bf9dcc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-=
+xu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-odroid-=
+xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6a961e17ab9db3b7bf9=
+dcd
+      failing since 4 days (last pass: v5.9-rc5-318-g177467af003a, first fa=
+il: v5.9-rc5-353-gfc14a2f59553)  =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6a98e75a0cf459bfbf9dc3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-odroid-xu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-odroid-xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6a98e75a0cf459bfbf9=
+dc4
+      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+odroid-xu3            | arm  | lab-collabora | gcc-8    | multi_v7_defc...G=
+_ARM_LPAE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6aa2aa69753d1ebabf9dc7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
+cc-8/lab-collabora/baseline-odroid-xu3.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/g=
+cc-8/lab-collabora/baseline-odroid-xu3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6aa2aa69753d1ebabf9=
+dc8
+      new failure (last pass: v5.9-rc5-353-gfc14a2f59553)  =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+panda                 | arm  | lab-collabora | gcc-8    | multi_v7_defc...C=
+ONFIG_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6a888af8db90693bbf9dbd
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
+aseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6a888af8db906=
+93bbf9dc3
+      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)
+      60 lines
+
+    2020-09-22 23:28:02.831000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-09-22 23:28:02.837000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-09-22 23:28:02.842000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-09-22 23:28:02.848000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-09-22 23:28:02.854000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-09-22 23:28:02.860000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-09-22 23:28:02.865000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-09-22 23:28:02.871000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-09-22 23:28:02.877000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-09-22 23:28:02.883000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+            | results
+----------------------+------+---------------+----------+------------------=
+------------+--------
+panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
+ig          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6a8b22fd74317cfdbf9ddb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-rc6-39=
+1-g5849c6655ec3/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f6a8b22fd74317cfdbf9=
+ddc
+      failing since 48 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =20

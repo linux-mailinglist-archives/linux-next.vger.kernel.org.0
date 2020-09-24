@@ -2,128 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA22E27681C
-	for <lists+linux-next@lfdr.de>; Thu, 24 Sep 2020 07:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE332768C0
+	for <lists+linux-next@lfdr.de>; Thu, 24 Sep 2020 08:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgIXFLl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Sep 2020 01:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
+        id S1726850AbgIXGQx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Sep 2020 02:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbgIXFLl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Sep 2020 01:11:41 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1B5C0613D2
-        for <linux-next@vger.kernel.org>; Wed, 23 Sep 2020 22:11:41 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id q4so1016950pjh.5
-        for <linux-next@vger.kernel.org>; Wed, 23 Sep 2020 22:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ozlabs-ru.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IbzPox5jnfS/DQmh8djlNye1AT0DWj0P7hHtIMKDwWQ=;
-        b=FkkyUKYxCpfoJ2ecMoGh6ROu3M69X5VALvn5grx2GvyJL0d0IvLBVhOrEDy7CW2CDO
-         1nUK7ocrk2L91TMbHmwE3MKp0UdP/SpWzKk1dLhCxLvrQtpYBlcYbiMlrOToGJ7wZCfr
-         kK43FF2/8yP3ieU98Uj5+BfguC5S22hL5AQ6DJzjqy6WnYWEgW3ou5/374se6TooKhN/
-         Yd/Wyrs+ay97YO3xhzcawwaNrtXWcTU/nq1JGCOD793yt47DkyVh/ATuUx15F3D59Xe6
-         Y6Z0h07so/a9YQdQEYfhzjeWo8oPYGEHWobYZCQ6uhcNG/eJWPuH7YSoAMjkZgOFE4jK
-         oGVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IbzPox5jnfS/DQmh8djlNye1AT0DWj0P7hHtIMKDwWQ=;
-        b=lswu0oHIGZJG/XP6HmmSzATjN6BClOgkBu8gTxLmCov/fxAcT2uph3U0SemwcS5BgB
-         0fTwqbkFhHGSlP/no0E0Q4L2CbWLnUmgD3aDB3nmajQ1w4hpmJ/RbaQMqbGVjRfvEihD
-         dHtklbtX8QNwQq//u5mObB+eSLk+r3yjVL3Golir9HDFM6mL5t8U9A2jr0UG+BQyDfz2
-         Gq6vrmcOsDAIx74asBbxScIcQOLZupW1Gcl7E6SkyZxo4xdNt7bd8m7T28oKoodUaGA9
-         VUzDQV2mVYe8+AjMZDqvJpT/SymrI7TioiQG4Uau4f/bkdlZOkftuawo86GXv0ZR1K3Q
-         QHOg==
-X-Gm-Message-State: AOAM5303ftmQwUmk7amg+8f2imYK/tQFfc1WjzIR/NNgtUDnabya8dnn
-        qmN/OEUaxDkVfhiCOGO0au3K7w==
-X-Google-Smtp-Source: ABdhPJxDqx2cNvY5ZYZXAj3yz7pPa4YrB0VaL8i1aMei83D4I+xii9AnLbYiY+iyOBht0JR1Fz4+UA==
-X-Received: by 2002:a17:90a:ead5:: with SMTP id ev21mr2241627pjb.188.1600924300494;
-        Wed, 23 Sep 2020 22:11:40 -0700 (PDT)
-Received: from [192.168.10.94] (124-171-83-152.dyn.iinet.net.au. [124.171.83.152])
-        by smtp.gmail.com with ESMTPSA id a2sm1225190pfk.201.2020.09.23.22.11.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2020 22:11:39 -0700 (PDT)
-Subject: Re: [PATCH v2] powerpc/pci: unmap legacy INTx interrupts when a PHB
- is removed
-To:     =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>,
-        Qian Cai <cai@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200807101854.844619-1-clg@kaod.org>
- <9c5eca863c63e360662fae7597213e8927c2a885.camel@redhat.com>
- <fce8ffe1-521c-8344-c7ad-53550e408cdc@kaod.org>
-From:   Alexey Kardashevskiy <aik@ozlabs.ru>
-Message-ID: <6716add0-9244-4da1-a578-f7faeb529e77@ozlabs.ru>
-Date:   Thu, 24 Sep 2020 15:11:34 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.2
+        with ESMTP id S1726683AbgIXGQx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Sep 2020 02:16:53 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED7EC0613CE;
+        Wed, 23 Sep 2020 23:16:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4BxlDw4X06z9sTM;
+        Thu, 24 Sep 2020 16:16:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1600928209;
+        bh=vIEPy/d+ouY1HAsMITJ2LBk3ast64x0SEFEfKuM2ToE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HYvNVW/KQT220hVWs6sn+TM8Gs+4aPIS8hQRbP3OVITCNF4A+goGdJQONcyc1Bi5L
+         VRoZ1mWeWF2QgDTTlxSx3nUCttBCqFgI5yAkPfWg+yc+4Il9FNXZL8i8I/KfWAQTSc
+         AStFCeIqXSXnIczI+fvIFYcz4ZkeYfWO5wP1nIgi1tvtZUOwiO/Dc1VkHsZ+DTDzkv
+         gKxuT6m6cWH8brUUCwtKaU5ETEqgI3lAUF3EsuB90eoa/Yr9clsw/A2icPzcovfPOs
+         S8lZa1APdS4huJC5vwMPRDAk6i3HjN6sOG80uYethOckNHf5wwVIofWtJGsJdQZn1d
+         GWyQgaTPNWuBg==
+Date:   Thu, 24 Sep 2020 16:16:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the pwm tree
+Message-ID: <20200924161647.39d44a7c@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <fce8ffe1-521c-8344-c7ad-53550e408cdc@kaod.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/E=q3ubulOBpTUtt5.QlDmxo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/E=q3ubulOBpTUtt5.QlDmxo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 23/09/2020 17:06, Cédric Le Goater wrote:
-> On 9/23/20 2:33 AM, Qian Cai wrote:
->> On Fri, 2020-08-07 at 12:18 +0200, Cédric Le Goater wrote:
->>> When a passthrough IO adapter is removed from a pseries machine using
->>> hash MMU and the XIVE interrupt mode, the POWER hypervisor expects the
->>> guest OS to clear all page table entries related to the adapter. If
->>> some are still present, the RTAS call which isolates the PCI slot
->>> returns error 9001 "valid outstanding translations" and the removal of
->>> the IO adapter fails. This is because when the PHBs are scanned, Linux
->>> maps automatically the INTx interrupts in the Linux interrupt number
->>> space but these are never removed.
->>>
->>> To solve this problem, we introduce a PPC platform specific
->>> pcibios_remove_bus() routine which clears all interrupt mappings when
->>> the bus is removed. This also clears the associated page table entries
->>> of the ESB pages when using XIVE.
->>>
->>> For this purpose, we record the logical interrupt numbers of the
->>> mapped interrupt under the PHB structure and let pcibios_remove_bus()
->>> do the clean up.
->>>
->>> Since some PCI adapters, like GPUs, use the "interrupt-map" property
->>> to describe interrupt mappings other than the legacy INTx interrupts,
->>> we can not restrict the size of the mapping array to PCI_NUM_INTX. The
->>> number of interrupt mappings is computed from the "interrupt-map"
->>> property and the mapping array is allocated accordingly.
->>>
->>> Cc: "Oliver O'Halloran" <oohall@gmail.com>
->>> Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
->>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->>
->> Some syscall fuzzing will trigger this on POWER9 NV where the traces pointed to
->> this patch.
->>
->> .config: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
-> 
-> OK. The patch is missing a NULL assignement after kfree() and that
-> might be the issue. 
-> 
-> I did try PHB removal under PowerNV, so I would like to understand 
-> how we managed to remove twice the PCI bus and possibly reproduce. 
-> Any chance we could grab what the syscall fuzzer (syzkaller) did ? 
+After merging the pwm tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
+WARNING: modpost: missing MODULE_LICENSE() in drivers/pwm/pwm-intel-lgm.o
 
+Introduced by commit
 
-My guess would be it is doing this in parallel to provoke races.
+  9fba318f0f7f ("Add PWM fan controller driver for LGM SoC")
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/E=q3ubulOBpTUtt5.QlDmxo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Alexey
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9sOc8ACgkQAVBC80lX
+0Gxxbwf+MLRDw9xhaw8V0qUyU1/qJOsJjVF3akcdKnOfYA8prwPmbZzFYSdDpQAI
+aIwgJIg9eOL+EWJMBQe3MMa0MJLkrYVVlmmLNb8t2GQvFsuV5qzkt6Cub3KqSWn1
+WBJuClflNeIbXP38u3seWoyNsbPAU612VgaSnGAc3wSpp3s2B6rIwAYGFWnqBAVq
+FxgAgqR26YKx3o57PS4g379zdGRkKh3G64OWxDMmZyHUC5oXXbGTVsWwvFrea8of
+WOpGWboK+Tw5bddRuED6qV0KcuTWX07vxv6x1DmKpOYN40XzcpL3scY1Q+lMpgmr
+LroqYxsdnMNxxLFe469w7QGFsvQFag==
+=8jyX
+-----END PGP SIGNATURE-----
+
+--Sig_/E=q3ubulOBpTUtt5.QlDmxo--

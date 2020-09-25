@@ -2,192 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C4E2782A0
-	for <lists+linux-next@lfdr.de>; Fri, 25 Sep 2020 10:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813BE2782D5
+	for <lists+linux-next@lfdr.de>; Fri, 25 Sep 2020 10:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbgIYIWG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Sep 2020 04:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727248AbgIYIWF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Sep 2020 04:22:05 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A8DC0613CE
-        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 01:22:05 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id d18so659275uav.4
-        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 01:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WvDyteRu76pYPa4UAHUwSYLYJxuuyxc2Dt1PKdTqcpM=;
-        b=yTnQ4SV+hkPVxsQOZuljNgG+ll2vkUcmkTeES9wkAB2E6MwbdALDRKC5/qErzxHexZ
-         70H9PmgMHqXNxxZIIjZGiKvr2WozB4tuEMjUho6Xp9AT5Y/zRF5qQCJ7qulTMbtogqoz
-         isGEDVKW+sgSMRbs/PJV8waGVvK8XpmEIRI8gm1t6JTpicOBLWftuIWzMlMzjmw16tyt
-         BVKhk9gLbpJPVej+XcRMQlOxXCM3ZqVob/MbQz+/+hQPeKos8VHuZTutglw2wY5TUFq5
-         PxGaWlGgp7KiDuOq18dRuA6kjn9PGg9ur8FI/N4bggCtUJXjvo2hGb7IFjVa1fGufd3F
-         IYCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WvDyteRu76pYPa4UAHUwSYLYJxuuyxc2Dt1PKdTqcpM=;
-        b=TXtGNGAHbmuu6vHNlfWUTYhcYJLv+bAF263vwh+mfa+TzE3alZBF6SmYKieRceHBS4
-         qS5PRjxql6/21q/xmjW7PdewO3q6kxkroueXT3qNH5n7ezu3cnpHCNwR2kvIRM29ca0M
-         EKZugfy9Zdq/l01ccaWGZ+3uIIXB4Jre3ackTzlV4SY6LwC7HLMpo/o06Y0QFB/zYTOd
-         ULBiGM1sRWKRGHsrLh/I6MGQVmiTBs8K/ab1aTeZlVjw6/FQCq2tC1DK0zsaFLtYVIZc
-         S/aBegVeG4ebR6v5a03cx6zmMIGCZREYtkbyj0LiJueGIXUSbiFrLDkBrbOiqBWOeN3b
-         lVMg==
-X-Gm-Message-State: AOAM531a0FL7b/Jj6/Xfd2MZopAg5TbnEa+XGQBlGRUVEtUIBNpu9Xcp
-        ZwaHIDzNBA1bdblwAcPeP6Awd+sBdItbqATck7/FIg==
-X-Google-Smtp-Source: ABdhPJzLpE+AUK3XJTcofgSAmKvjhVK7+3tvguttC5HmiCpeMiYmNklBnlRfzt2LXLjnlt0nX+EaErShGSTZoNR/zHY=
-X-Received: by 2002:ab0:1450:: with SMTP id c16mr1693683uae.27.1601022124294;
- Fri, 25 Sep 2020 01:22:04 -0700 (PDT)
+        id S1727067AbgIYIh5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Sep 2020 04:37:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38728 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727063AbgIYIh5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 25 Sep 2020 04:37:57 -0400
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1BA8A208B6;
+        Fri, 25 Sep 2020 08:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601023076;
+        bh=gpwZEFQ/+uBupX6jV0nVrhi45AEr20eCgci0AaJokA4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YO2YPFXMrbvnXCG0H5ENFVaRuBCFOmiGZJwU8ih4LYqk3FqBVfh8Lwe0YLlkgGtNW
+         onUu4U5ej4ZlQjKPlkYETAGUPVz17jxZYw4Hg8pyu9F94y6BFQmtpZhRvC4AMos+fW
+         kal4LTVSMAAwG/t95Vk7ylwplBt878cj6Wtcv67k=
+Date:   Fri, 25 Sep 2020 16:37:49 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Wasim Khan <wasim.khan@nxp.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the pci tree with the imx-mxs tree
+Message-ID: <20200925083748.GJ25109@dragon>
+References: <20200924115731.194ecd6f@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200914021758.420874-1-liuhangbin@gmail.com/> <20200914022227.437143-1-liuhangbin@gmail.com>
-In-Reply-To: <20200914022227.437143-1-liuhangbin@gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Sep 2020 13:51:53 +0530
-Message-ID: <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
-Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
- test individually selectable
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
-        lkft-triage@lists.linaro.org, Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924115731.194ecd6f@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 14 Sep 2020 at 07:53, Hangbin Liu <liuhangbin@gmail.com> wrote:
->
-> Currently, after generating run_kselftest.sh, there is no way to choose
-> which test we could run. All the tests are listed together and we have
-> to run all every time. This patch enhanced the run_kselftest.sh to make
-> the tests individually selectable. e.g.
->
->   $ ./run_kselftest.sh -t "bpf size timers"
+On Thu, Sep 24, 2020 at 11:57:31AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the pci tree got a conflict in:
+> 
+>   arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+> 
+> between commit:
+> 
+>   f7d48ffcfc6e ("arm64: dts: layerscape: Add label to pcie nodes")
+> 
+> from the imx-mxs tree and commit:
+> 
+>   c9443b6500ff ("arm64: dts: layerscape: Add PCIe EP node for ls1088a")
+> 
+> from the pci tree.
 
-My test run break on linux next
+It should go through imx-mxs -> arm-soc, not pci tree.
 
-./run_kselftest.sh: line 1331: syntax error near unexpected token `)'
-./run_kselftest.sh: line 1331: `-e -s | --summary )
-logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;'
+Shawn
 
-steps do run:
-# run_kselftest.sh file generated by kselftest Makefile and included in tarball
-./run_kselftest.sh 2>&1 | tee "${LOGFILE}"
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+> index ff5805206a28,f21dd143ab6d..000000000000
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+> @@@ -517,7 -499,18 +517,18 @@@
+>   			status = "disabled";
+>   		};
+>   
+> + 		pcie-ep@3400000 {
+> + 			compatible = "fsl,ls1088a-pcie-ep","fsl,ls-pcie-ep";
+> + 			reg = <0x00 0x03400000 0x0 0x00100000
+> + 			       0x20 0x00000000 0x8 0x00000000>;
+> + 			reg-names = "regs", "addr_space";
+> + 			num-ib-windows = <24>;
+> + 			num-ob-windows = <128>;
+> + 			max-functions = /bits/ 8 <2>;
+> + 			status = "disabled";
+> + 		};
+> + 
+>  -		pcie@3500000 {
+>  +		pcie2: pcie@3500000 {
+>   			compatible = "fsl,ls1088a-pcie";
+>   			reg = <0x00 0x03500000 0x0 0x00100000   /* controller registers */
+>   			       0x28 0x00000000 0x0 0x00002000>; /* configuration space */
+> @@@ -543,7 -536,17 +554,17 @@@
+>   			status = "disabled";
+>   		};
+>   
+> + 		pcie-ep@3500000 {
+> + 			compatible = "fsl,ls1088a-pcie-ep","fsl,ls-pcie-ep";
+> + 			reg = <0x00 0x03500000 0x0 0x00100000
+> + 			       0x28 0x00000000 0x8 0x00000000>;
+> + 			reg-names = "regs", "addr_space";
+> + 			num-ib-windows = <6>;
+> + 			num-ob-windows = <8>;
+> + 			status = "disabled";
+> + 		};
+> + 
+>  -		pcie@3600000 {
+>  +		pcie3: pcie@3600000 {
+>   			compatible = "fsl,ls1088a-pcie";
+>   			reg = <0x00 0x03600000 0x0 0x00100000   /* controller registers */
+>   			       0x30 0x00000000 0x0 0x00002000>; /* configuration space */
 
-ref:
-https://github.com/nareshkamboju/test-definitions/blob/master/automated/linux/kselftest/kselftest.sh#L222
 
-full test run log:
-https://lkft.validation.linaro.org/scheduler/job/1786826#L1391
-
->
-> Before the patch:
-> ================
->
-> $ cat run_kselftest.sh
-> \#!/bin/sh
-> BASE_DIR=$(realpath $(dirname $0))
-> cd $BASE_DIR
-> . ./kselftest/runner.sh
-> ROOT=$PWD
-> if [ "$1" = "--summary" ]; then
->   logfile=$BASE_DIR/output.log
->   cat /dev/null > $logfile
-> fi
-> [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
-> cd android
-> run_many        \
->         "run.sh"
-> cd $ROOT
-> ...<snip>...
-> [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
-> cd zram
-> run_many        \
->         "zram.sh"
-> cd $ROOT
->
-> After the patch:
-> ===============
->
-> $ cat run_kselftest.sh
-> \#!/bin/sh
-> BASE_DIR=$(realpath $(dirname $0))
-> . ./kselftest/runner.sh
-> TESTS="android ...<snip>... filesystems/binderfs ...<snip>... zram"
->
-> run_android()
-> {
->         [ -w /dev/kmsg ] && echo "kselftest: Running tests in android" >> /dev/kmsg
->         cd android
->         run_many        \
->                 "run.sh"
->         cd $ROOT
-> }
->
-> ...<snip>...
->
-> run_filesystems_binderfs()
-> {
->         [ -w /dev/kmsg ] && echo "kselftest: Running tests in filesystems/binderfs" >> /dev/kmsg
->         cd filesystems/binderfs
->         run_many        \
->                 "binderfs_test"
->         cd $ROOT
-> }
->
-> ...<snip>...
->
-> run_zram()
-> {
->         [ -w /dev/kmsg ] && echo "kselftest: Running tests in zram" >> /dev/kmsg
->         cd zram
->         run_many        \
->                 "zram.sh"
->         cd $ROOT
-> }
->
-> usage()
-> {
->         cat <<EOF
-> usage: ${0##*/} OPTS
->         -s | --summary          Only print summary info and put detailed log in output.log
->         -t | --tests            Test name you want to run specifically
->         -h | --help             Show this usage info
-> EOF
-> }
->
-> while true; do
->         case "$1" in
->         -s | --summary ) logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;
->         -t | --tests ) TESTS=$2; shift 2 ;;
->         -l | --list ) echo $TESTS; exit 0 ;;
->         -h | --help ) usage; exit 0 ;;
->         "" ) break;;
->         * ) usage; exit 1;;
->         esac
-> done
->
-> cd $BASE_DIR
-> ROOT=$PWD
-> for folder in $TESTS; do
->         folder=$(echo $folder | tr -s '/-' '_')
->         run_$folder
-> done
->
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
--- 
-Linaro LKFT
-https://lkft.linaro.org

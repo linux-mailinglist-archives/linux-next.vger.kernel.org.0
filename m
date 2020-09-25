@@ -2,111 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 060D8279492
-	for <lists+linux-next@lfdr.de>; Sat, 26 Sep 2020 01:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6CA2794E8
+	for <lists+linux-next@lfdr.de>; Sat, 26 Sep 2020 01:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729339AbgIYXOV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Sep 2020 19:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S1729480AbgIYXpk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Sep 2020 19:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728680AbgIYXOV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Sep 2020 19:14:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230BEC0613CE;
-        Fri, 25 Sep 2020 16:14:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1601075659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5hfCJknL7vN5FQ7E5rBJUvr3Ui/JGPGdNK+KMG+iROA=;
-        b=O8WigxqARtdurkJ3wZLtFlOVp/IJYLWjDmhmQmul4Jh1+/tu2tcAC1TQqLvZ7X6XtgAJUn
-        eOxJOrPLqDp0AFlhrf9ICCES57zKrQJtWeBw+enhlvFsmhVrk/PIHUraubnLUB8YFVD3EU
-        aO+sAe/6qmqsJ4/w9ay6UGJ7n4LbTG7vauQWZ+EMoZO0h8etOCXCfxiQH5btgeOiQSreV3
-        mVGp6pGYXUixpnIECzjY39qztquc0ZKZJGi+8R9bz6K81QFII/mn3LRxC2GMX7eONSPEt0
-        XqZWoOf+IOa80v+JeOxpuuaVtH3FZsqK9XZ5peTSl+Dt7ASOi02SLO6a+QW6sw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1601075659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5hfCJknL7vN5FQ7E5rBJUvr3Ui/JGPGdNK+KMG+iROA=;
-        b=qe4V7bKcqNpxkkupSUaXGl+NgWRwWilYYeYK3x3W8R47Rqr4/aCDpm5Xt3BubAKjEHc4Tr
-        Du8N8X29kfg+K2Ag==
-To:     Peter Zijlstra <peterz@infradead.org>, Qian Cai <cai@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jon Derrick <jonathan.derrick@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <rja@hpe.com>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Baolu Lu <baolu.lu@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [patch V2 00/46] x86, PCI, XEN, genirq ...: Prepare for device MSI
-In-Reply-To: <20200925154937.GL29142@worktop.programming.kicks-ass.net>
-References: <20200826111628.794979401@linutronix.de> <3c12bdec2c4ecdabcccd9ece3d495d792e9fc231.camel@redhat.com> <20200925154937.GL29142@worktop.programming.kicks-ass.net>
-Date:   Sat, 26 Sep 2020 01:14:18 +0200
-Message-ID: <87tuvltpo5.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1729478AbgIYXpi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Sep 2020 19:45:38 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4D6C0613D5
+        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 16:45:38 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id k8so4765061pfk.2
+        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 16:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cCvjyh3GAWHODp3gNqO/cxpjyT+UK9hE3i+NYvWYWug=;
+        b=UaBaPWPOtq6Ku6r+E/aktfyx2R2zJ+wD62Bxd9SCvodOkjq446bGgfddVvHaqJ5ZQv
+         tievxaUuKaBeq+7npte/4zLwlBxDDR3mz9dCXRJcIJkGTv4dIDWeyziPvNaRxHbd+ThX
+         hJzLkj0XnH6NjDHuGuo8XH+MMqxth9IEeOwF8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cCvjyh3GAWHODp3gNqO/cxpjyT+UK9hE3i+NYvWYWug=;
+        b=QbyUFQDhTWjVyy8aJh0aBQDoDXDGDHGGBf5HgaPHH/D/cwcj1Tw6LrWDU76nGzhET5
+         JepewYPlB+jT2ZVwnh6fjRxHeZG5U/k5zowjHTMcpJuJXFADtmOSTelWVMgEsiQwJo7S
+         wExIAZtUh5yz8Y/1oiLacloZxYs7RkICa0BzvHHi65hdkfbPg4DBEuBmUgjION8mQNRq
+         Xd4mlnDY3t3mF1eNAESmDzND0vgGjzS9X448l5Kg+tpEWcZrrruk0nRjudB3SCaBXuQP
+         3SY9jC9iK/o9a2mQd24lMXm+jg2XHklCHOnXndbgU+8LKQ+2Gg9PIyWHWoDG5iVLhQah
+         W32Q==
+X-Gm-Message-State: AOAM5319Oqjb24zfgixKC2RFCdCxyFZSwf7PQanNqTVjVTOFlek3ouTb
+        He8xbq1YDQZEorpY2I1/Fb5OFA==
+X-Google-Smtp-Source: ABdhPJx/ssB0AJWYYp3cLL8gzai0BTOQP/wl4iZKIWPv0+GRei9MwCIslR5o26fmdgEwQGo/+OrXgg==
+X-Received: by 2002:aa7:96f1:0:b029:142:2501:39ed with SMTP id i17-20020aa796f10000b0290142250139edmr859126pfq.60.1601077537908;
+        Fri, 25 Sep 2020 16:45:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n9sm3119447pgi.2.2020.09.25.16.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 16:45:36 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] selftests: Extract run_kselftest.sh and generate stand-alone test list
+Date:   Fri, 25 Sep 2020 16:45:25 -0700
+Message-Id: <20200925234527.1885234-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 25 2020 at 17:49, Peter Zijlstra wrote:
-> Here it looks like this:
->
-> [    1.830276] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [    1.838043] #PF: supervisor instruction fetch in kernel mode
-> [    1.844357] #PF: error_code(0x0010) - not-present page
-> [    1.850090] PGD 0 P4D 0
-> [    1.852915] Oops: 0010 [#1] SMP
-> [    1.856419] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.9.0-rc6-00700-g0248dedd12d4 #419
-> [    1.865447] Hardware name: Intel Corporation S2600GZ/S2600GZ, BIOS SE5C600.86B.02.02.0002.122320131210 12/23/2013
-> [    1.876902] RIP: 0010:0x0
-> [    1.879824] Code: Bad RIP value.
-> [    1.883423] RSP: 0000:ffffffff82803da0 EFLAGS: 00010282
-> [    1.889251] RAX: 0000000000000000 RBX: ffffffff8282b980 RCX: ffffffff82803e40
-> [    1.897241] RDX: 0000000000000001 RSI: ffffffff82803e40 RDI: ffffffff8282b980
-> [    1.905201] RBP: ffff88842f331000 R08: 00000000ffffffff R09: 0000000000000001
-> [    1.913162] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000048
-> [    1.921123] R13: ffffffff82803e40 R14: ffffffff8282b9c0 R15: 0000000000000000
-> [    1.929085] FS:  0000000000000000(0000) GS:ffff88842f400000(0000) knlGS:0000000000000000
-> [    1.938113] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    1.944524] CR2: ffffffffffffffd6 CR3: 0000000002811001 CR4: 00000000000606b0
-> [    1.952484] Call Trace:
-> [    1.955214]  msi_domain_alloc+0x36/0x130
+Hi!
 
-Hrm. That looks like a not initialized mandatory callback. Confused.
+I really like Hangbin Liu's intent[1] but I think we need to be a little
+more clean about the implementation. This extracts run_kselftest.sh from
+the Makefile so it can actually be changed without embeds, etc. Instead,
+generate the test list into a text file. Everything gets much simpler.
+:)
 
-Is this on -next and if so, does this happen on tip:x86/irq as well?
+And in patch 2, I add back Hangin Liu's new options (with some extra
+added) with knowledge of "collections" (i.e. Makefile TARGETS) and
+subtests. This should work really well with LAVA too, which needs to
+manipulate the lists of tests being run.
 
-Can you provide yoru config please?
+Thoughts?
 
-Thanks,
+-Kees
 
-        tglx
+[1] https://lore.kernel.org/lkml/20200914022227.437143-1-liuhangbin@gmail.com/
+
+Kees Cook (2):
+  selftests: Extract run_kselftest.sh and generate stand-alone test list
+  selftests/run_kselftest.sh: Make each test individually selectable
+
+ tools/testing/selftests/Makefile         | 26 ++-----
+ tools/testing/selftests/lib.mk           |  5 +-
+ tools/testing/selftests/run_kselftest.sh | 89 ++++++++++++++++++++++++
+ 3 files changed, 98 insertions(+), 22 deletions(-)
+ create mode 100755 tools/testing/selftests/run_kselftest.sh
+
+-- 
+2.25.1
+

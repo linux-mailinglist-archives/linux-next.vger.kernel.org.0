@@ -2,104 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5942794F3
-	for <lists+linux-next@lfdr.de>; Sat, 26 Sep 2020 01:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1972798DE
+	for <lists+linux-next@lfdr.de>; Sat, 26 Sep 2020 14:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729473AbgIYXqs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Sep 2020 19:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbgIYXqs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Sep 2020 19:46:48 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215F0C0613CE
-        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 16:46:48 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id k133so3873346pgc.7
-        for <linux-next@vger.kernel.org>; Fri, 25 Sep 2020 16:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HpFQhrcK5tTLpxHok0d7YfneEXCwBPCYjtbmDqMgkHs=;
-        b=DZxvGcbCxH6vr1ajOYyWWuYAL4y5DWR6ExkCNQGiXwqV0Gv3O4b3i0dNxC7s+zZclN
-         pO91uUpvMHRqVi9PhkSJMILdLqsZWhZ7smbN2OaYA7ttENhUdVsNkUAN2aXKssThr55q
-         HX0rG+q/pPv26SBN7hYcYV7wWTfFFwO5V/WtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HpFQhrcK5tTLpxHok0d7YfneEXCwBPCYjtbmDqMgkHs=;
-        b=HIxbPo8+WG0m0Ul2WRV38aSqQfD21uYDBO7tW4FtNgY8vOb/6vnjj8jurAMzpjQZgV
-         sreZ9qaDT7hy0lc9uXHOa1RUwZFa2dr92jXWfzm3WsHVL4aj992WI+GjYJW9Oa2Wj0II
-         mBuoNNdkXqY93/GnObdmTt0GByaRgNfDHrP32ZAVTfY8osQ5Nd2dCL9xV05CTPpJgcWp
-         5lGuJrsMouuGX4BdfupoOTGqSPtOsQ1fLUmhtMrvqLpRHEQkrrR+ljh8piOrhUmBNEy0
-         /K1mwFN/Y0kGFwm3kNhViXz10EMG/P0m823zBYDhFu7OMmhw3yLk8g7XmfG7UOrojdoj
-         /LEQ==
-X-Gm-Message-State: AOAM531EZZ6GaQmIWVQ7hShA5Zad8IYS5l4K7R2/vV9w0JxJTMElCNp/
-        uf2UsNP//9xaCdXndveG4XTp9A==
-X-Google-Smtp-Source: ABdhPJwq99F00rfpytlVAljspyCw6wbr6M3oTKSGKGkGqOsBbC4I1Y/0khozD6K1OFK7zTzkVp+y4w==
-X-Received: by 2002:aa7:96bb:0:b029:142:440c:6ebc with SMTP id g27-20020aa796bb0000b0290142440c6ebcmr907038pfk.22.1601077607710;
-        Fri, 25 Sep 2020 16:46:47 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f12sm261436pjm.5.2020.09.25.16.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 16:46:46 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 16:46:45 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
-        lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
- test individually selectable
-Message-ID: <202009251646.43B045E0@keescook>
-References: <20200914021758.420874-1-liuhangbin@gmail.com/>
- <20200914022227.437143-1-liuhangbin@gmail.com>
- <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
- <202009251414.15274C0@keescook>
- <f375a87d-7ba3-f97f-b39a-06b61f80c552@linuxfoundation.org>
+        id S1728861AbgIZMjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Sep 2020 08:39:48 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11546 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726183AbgIZMjr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Sat, 26 Sep 2020 08:39:47 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08QCWRe0111727;
+        Sat, 26 Sep 2020 08:39:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=3MYKY040lEuw5jDKzV3PF147mCVYwbqY92Kcs2d9pHM=;
+ b=stYoAHM4Idv9dsIru0fmgGg81Du4QTVpzAy3h7TyNOJeQLokKMLrJqIE4dCviuU9KwBb
+ IsZSYnrpNZ+wsMMBawyZaunEhq0onbMYGNEe3hcH/FWrMyy7MwDtDDOGWflQ+m9zqGz8
+ SsbpFbkp1/Tpa5IRfDPQPQ7KG60pXTMaQXHCKb/xbK9mrXkL4uqw+1nFonDjSDncarcQ
+ Is+gIoez8CG1++CbuoWEy2GgeDRN8bzXXmZFe5+IyxB5C1JmLB1TjPvIbd2hJGmhxXuy
+ 1EErU5N4KtdBp5+VG58W6XUpLKMHS7LRSJzpbkuYAontzSSvj8OuNtPZc3DTB00JxD2Z iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33t5er8cv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 26 Sep 2020 08:39:04 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08QCWWxS111972;
+        Sat, 26 Sep 2020 08:39:03 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33t5er8cuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 26 Sep 2020 08:39:03 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08QCRuOI023314;
+        Sat, 26 Sep 2020 12:39:00 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 33sw980bk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 26 Sep 2020 12:39:00 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08QCcva320513094
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 26 Sep 2020 12:38:57 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57D25A4040;
+        Sat, 26 Sep 2020 12:38:57 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36400A4057;
+        Sat, 26 Sep 2020 12:38:55 +0000 (GMT)
+Received: from localhost (unknown [9.145.18.16])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat, 26 Sep 2020 12:38:55 +0000 (GMT)
+Date:   Sat, 26 Sep 2020 14:38:53 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Qian Cai <cai@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Jon Derrick <jonathan.derrick@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <rja@hpe.com>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Megha Dey <megha.dey@intel.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Baolu Lu <baolu.lu@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [patch V2 34/46] PCI/MSI: Make arch_.*_msi_irq[s] fallbacks
+ selectable
+Message-ID: <your-ad-here.call-01601123933-ext-6476@work.hours>
+References: <20200826111628.794979401@linutronix.de>
+ <20200826112333.992429909@linutronix.de>
+ <cdfd63305caa57785b0925dd24c0711ea02c8527.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f375a87d-7ba3-f97f-b39a-06b61f80c552@linuxfoundation.org>
+In-Reply-To: <cdfd63305caa57785b0925dd24c0711ea02c8527.camel@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-26_10:2020-09-24,2020-09-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ adultscore=0 priorityscore=1501 phishscore=0 mlxlogscore=948
+ suspectscore=0 mlxscore=0 bulkscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009260111
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 05:06:02PM -0600, Shuah Khan wrote:
-> On 9/25/20 3:16 PM, Kees Cook wrote:
-> > On Fri, Sep 25, 2020 at 01:51:53PM +0530, Naresh Kamboju wrote:
-> > > On Mon, 14 Sep 2020 at 07:53, Hangbin Liu <liuhangbin@gmail.com> wrote:
-> > > > 
-> > > > Currently, after generating run_kselftest.sh, there is no way to choose
-> > > > which test we could run. All the tests are listed together and we have
-> > > > to run all every time. This patch enhanced the run_kselftest.sh to make
-> > > > the tests individually selectable. e.g.
-> > > > 
-> > > >    $ ./run_kselftest.sh -t "bpf size timers"
-> > > 
-> > > My test run break on linux next
-> > > 
-> > > ./run_kselftest.sh: line 1331: syntax error near unexpected token `)'
-> > > ./run_kselftest.sh: line 1331: `-e -s | --summary )
-> > > logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;'
+On Fri, Sep 25, 2020 at 09:54:52AM -0400, Qian Cai wrote:
+> On Wed, 2020-08-26 at 13:17 +0200, Thomas Gleixner wrote:
+> > From: Thomas Gleixner <tglx@linutronix.de>
 > > 
-> > Yes, please revert this patch. The resulting script is completely
-> > trashed:
+> > The arch_.*_msi_irq[s] fallbacks are compiled in whether an architecture
+> > requires them or not. Architectures which are fully utilizing hierarchical
+> > irq domains should never call into that code.
 > > 
+> > It's not only architectures which depend on that by implementing one or
+> > more of the weak functions, there is also a bunch of drivers which relies
+> > on the weak functions which invoke msi_controller::setup_irq[s] and
+> > msi_controller::teardown_irq.
+> > 
+> > Make the architectures and drivers which rely on them select them in Kconfig
+> > and if not selected replace them by stub functions which emit a warning and
+> > fail the PCI/MSI interrupt allocation.
+> > 
+> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > 
-> Thank you both. Now reverted.
+> Today's linux-next will have some warnings on s390x:
+> 
+> .config: https://gitlab.com/cailca/linux-mm/-/blob/master/s390.config
+> 
+> WARNING: unmet direct dependencies detected for PCI_MSI_ARCH_FALLBACKS
+>   Depends on [n]: PCI [=n]
+>   Selected by [y]:
+>   - S390 [=y]
+> 
+> WARNING: unmet direct dependencies detected for PCI_MSI_ARCH_FALLBACKS
+>   Depends on [n]: PCI [=n]
+>   Selected by [y]:
+>   - S390 [=y]
+>
 
-I've sent an alternative that I think should do nicely. It will work
-well with LAVA as well.
+Yes, as well as on mips and sparc which also don't FORCE_PCI.
+This seems to work for s390:
 
--- 
-Kees Cook
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index b0b7acf07eb8..41136fbe909b 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -192,3 +192,3 @@ config S390
+        select PCI_MSI                  if PCI
+-       select PCI_MSI_ARCH_FALLBACKS
++       select PCI_MSI_ARCH_FALLBACKS   if PCI
+        select SET_FS

@@ -2,88 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CB5279D92
-	for <lists+linux-next@lfdr.de>; Sun, 27 Sep 2020 04:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB362279F8C
+	for <lists+linux-next@lfdr.de>; Sun, 27 Sep 2020 10:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729291AbgI0Csw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Sep 2020 22:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726840AbgI0Csw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Sep 2020 22:48:52 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D29C0613CE;
-        Sat, 26 Sep 2020 19:48:52 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id d9so6392032pfd.3;
-        Sat, 26 Sep 2020 19:48:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6HrXb1MRMvuJZH4Tlpi5gzDu5KYeDDOzm0HgEkkBYnc=;
-        b=P8p38Uh0M80AclAJil+aZs0bsoQUwKBs/CvXvg57k+SD1vZ64Mau3AmLwV96njcKBk
-         aOLWH6njnMM1LPcjD1IAcgnmW4LkuGuiGTDlpbIW4ovlFYJZPBoY/rj5KQeWYi93W4cG
-         7qUryz98BvNsh809BUO6WiAHzt5AhIin5p3H1hgYA8AWBNMTwt2S3teC+EOJ6r/4UVyK
-         gUNgl4VK6wmG+1wRAzsG7piJXq0WwZ5tp35NcaE//lazeITOQu7XkV/rrERyVOZu5Pan
-         gB8YFbyf0pVitwKNOBlm+9XTmSqholVHsJWIajan42vBlTccAn35C6WTck0zXriEg424
-         oQXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6HrXb1MRMvuJZH4Tlpi5gzDu5KYeDDOzm0HgEkkBYnc=;
-        b=rVgqGvkfmIMwr9X3MQ8NzAY5hwZ2gJYoZCxLpWWOSMXh10/YTx2Mw0jJHn0+tPi+Tb
-         o77PXJUFg8Rqol9VrqrrbfaOEWwnrevYXzPp/gWxVMKivfbXcW5Dnnu52drw/4rxoyh3
-         e78jGpN1+kmUmaPtbCWPP2HqUSd5bv/l5rnXIhecl0YVOFO6XP69f107kJqe1L4wSedh
-         bNASRfNSiyZX39lAsA2HRi8eMoIIu47s8XJGxk8IWerNx7HX51FyYAjDb0qjJZ7iRr95
-         l7kq6fzgbqirepRMZEwvOhiTwfsQw5wbXAwO8LT4KxvYMpkZzchIiwPo+IMVavbxw0sv
-         OqMQ==
-X-Gm-Message-State: AOAM532Smti1LthEhaXIWD8CVb+WskslV90HfGVfBTnFDts1XH550DvP
-        KJLcP9qtdkRdrGdsv8nYTDY=
-X-Google-Smtp-Source: ABdhPJw3GNw6X+0Py5NQJgfZnzf3OC+XoXwuyLrsfv8EKJ0VsHvNRwlgyGJHk6V0d23sfuUmvlRiPg==
-X-Received: by 2002:a62:fb1a:0:b029:142:2501:39f9 with SMTP id x26-20020a62fb1a0000b0290142250139f9mr4801639pfm.72.1601174932142;
-        Sat, 26 Sep 2020 19:48:52 -0700 (PDT)
-Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id b15sm6682050pft.84.2020.09.26.19.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2020 19:48:51 -0700 (PDT)
-Date:   Sun, 27 Sep 2020 10:48:40 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/run_kselftest.sh: Make each test
- individually selectable
-Message-ID: <20200927024840.GD2531@dhcp-12-153.nay.redhat.com>
-References: <20200925234527.1885234-1-keescook@chromium.org>
- <20200925234527.1885234-3-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925234527.1885234-3-keescook@chromium.org>
+        id S1730352AbgI0IS7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Sep 2020 04:18:59 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55262 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729125AbgI0IS7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 27 Sep 2020 04:18:59 -0400
+X-Greylist: delayed 510 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Sep 2020 04:18:58 EDT
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EA8EA20147F;
+        Sun, 27 Sep 2020 10:10:27 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 29B0B200049;
+        Sun, 27 Sep 2020 10:10:24 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 340DE402E6;
+        Sun, 27 Sep 2020 10:10:19 +0200 (CEST)
+From:   Yangbo Lu <yangbo.lu@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Yangbo Lu <yangbo.lu@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] ptp: add stub function for ptp_get_msgtype()
+Date:   Sun, 27 Sep 2020 16:01:50 +0800
+Message-Id: <20200927080150.8479-1-yangbo.lu@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 04:45:27PM -0700, Kees Cook wrote:
-> Currently with run_kselftest.sh there is no way to choose which test
-> we could run. All the tests listed in kselftest-list.txt are all run
-> every time. This patch enhanced the run_kselftest.sh to make the test
-> collections (or tests) individually selectable. e.g.:
-> 
-> $ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
-> 
-> Additionally adds a way to list all known tests with "-l", usage
-> with "-h", and perform a dry run without running tests with "-n".
+Added the missing stub function for ptp_get_msgtype().
 
-This is better than my previous patch and we can modify run_kselftest.sh
-easily. The Documentation/dev-tools/kselftest.rst should also be update.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 036c508ba95e ("ptp: Add generic ptp message type function")
+Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
+---
+ include/linux/ptp_classify.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks
-Hangbin
+diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+index 8437307..c6487b7 100644
+--- a/include/linux/ptp_classify.h
++++ b/include/linux/ptp_classify.h
+@@ -134,5 +134,13 @@ static inline struct ptp_header *ptp_parse_header(struct sk_buff *skb,
+ {
+ 	return NULL;
+ }
++static inline u8 ptp_get_msgtype(const struct ptp_header *hdr,
++				 unsigned int type)
++{
++	/* The return is meaningless. The stub function would not be
++	 * executed since no available header from ptp_parse_header.
++	 */
++	return 0;
++}
+ #endif
+ #endif /* _PTP_CLASSIFY_H_ */
+-- 
+2.7.4
+

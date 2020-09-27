@@ -2,108 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5982B279FC1
-	for <lists+linux-next@lfdr.de>; Sun, 27 Sep 2020 10:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6FF27A1C8
+	for <lists+linux-next@lfdr.de>; Sun, 27 Sep 2020 18:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728855AbgI0Iqs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Sep 2020 04:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S1726265AbgI0QOn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Sep 2020 12:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727369AbgI0Iqs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Sep 2020 04:46:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB24C0613CE;
-        Sun, 27 Sep 2020 01:46:48 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1601196405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3LGtm2OI8qF06h9KMGGQRJ7d4e/B09d0iYRNLqK19DE=;
-        b=vtWT6FXNpv1rJGdbEJJKxhxZ2hkowdjPcJEaDMAro5/mwYgF7f2qjEeiKFQSSH9PtTbtjQ
-        HsUFQz/Trt8kMSfUg/AQa+Dd6H6TLmp85HgtKhILMKJEBPAXZTlBVlCuBVrTlZ3SWkXObd
-        A3uYhH4wFHZJacmbgX2O+NsHMqa/9G2Pkuz65AAv9jSfW+iCB+ZS9fYcuTgvLwKZwmDf/O
-        zZgGz9fCusPWYJqd2bYwAHlyXGdEd/MWFvhUhNXr7HHWvB0uTZIwM6dBXR4V6SnJO+mQK+
-        WSRcbCQJ++zz1iV8DGtZCO9vHOjRIHe69AAw88TEiMXTyc69NYyY/moKXh9SBg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1601196405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=3LGtm2OI8qF06h9KMGGQRJ7d4e/B09d0iYRNLqK19DE=;
-        b=2lHZQSLVc5ukVdtzXcK6JAqYUmFwK6ZXXzxyFLvvd4IZf5x37NfcDYaGYy6WSVTOsGs4s7
-        44wL1Jbt8wkVdCAA==
-To:     Peter Zijlstra <peterz@infradead.org>, Qian Cai <cai@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jon Derrick <jonathan.derrick@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <rja@hpe.com>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Baolu Lu <baolu.lu@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH] x86/apic/msi: Unbreak DMAR and HPET MSI
-In-Reply-To: <87tuvltpo5.fsf@nanos.tec.linutronix.de>
-Date:   Sun, 27 Sep 2020 10:46:44 +0200
-Message-ID: <87wo0fli8b.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1726239AbgI0QOn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Sep 2020 12:14:43 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6287C0613CE;
+        Sun, 27 Sep 2020 09:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=ik7a4/nsVk8BAlTpU8JGdC8GG6dWXG+8DRdMggxS0U0=; b=LMq/AnZNjA9odfL5NABJEuri3d
+        LncuhwLNRHkqxISOEcTNlzY2d+wOM7RTjGKe3gyf16qM8327F9iZUTmWN1jn8bgYyuLF7pJstF1YT
+        ZwCQ2PsL+HXOZZ3DjHyi+QQv1UQGR4SinrIEmLlkXN5ctnNyQQgw2kV3Qp0zU4pombGX0UxaTLUrP
+        aUjDlC511KeBCeYGOzUCuj47GYaU7S2pFUy0PClVmHJciDOsZzugJuoBw9L9NKgzoc4fwOpC/D0/q
+        hxHePhFzidGuLsdNNUcG1kczfN7cJWdJh13RACqYE1latlGad+DbUSGjmeIu7gUZQ3BsKcUZY7vFM
+        67LObhDA==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kMZJr-0001tk-NA; Sun, 27 Sep 2020 16:14:36 +0000
+Subject: Re: [PATCH] ptp: add stub function for ptp_get_msgtype()
+To:     Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>
+References: <20200927080150.8479-1-yangbo.lu@nxp.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <77c83c45-4087-eab8-ee66-6bcca11a5e2d@infradead.org>
+Date:   Sun, 27 Sep 2020 09:14:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20200927080150.8479-1-yangbo.lu@nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Switching the DMAR and HPET MSI code to use the generic MSI domain ops
-missed to add the flag which tells the core code to update the domain
-operations with the defaults. As a consequence the core code crashes
-when an interrupt in one of those domains is allocated.
+On 9/27/20 1:01 AM, Yangbo Lu wrote:
+> Added the missing stub function for ptp_get_msgtype().
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 036c508ba95e ("ptp: Add generic ptp message type function")
+> Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
 
-Add the missing flags.
+Yes, that works. Thanks.
 
-Fixes: 9006c133a422 ("x86/msi: Use generic MSI domain ops")
-Reported-by: Qian Cai <cai@redhat.com> 
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/apic/msi.c |    2 ++
- 1 file changed, 2 insertions(+)
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
---- a/arch/x86/kernel/apic/msi.c
-+++ b/arch/x86/kernel/apic/msi.c
-@@ -309,6 +309,7 @@ static struct msi_domain_ops dmar_msi_do
- static struct msi_domain_info dmar_msi_domain_info = {
- 	.ops		= &dmar_msi_domain_ops,
- 	.chip		= &dmar_msi_controller,
-+	.flags		= MSI_FLAG_USE_DEF_DOM_OPS,
- };
- 
- static struct irq_domain *dmar_get_irq_domain(void)
-@@ -408,6 +409,7 @@ static struct msi_domain_ops hpet_msi_do
- static struct msi_domain_info hpet_msi_domain_info = {
- 	.ops		= &hpet_msi_domain_ops,
- 	.chip		= &hpet_msi_controller,
-+	.flags		= MSI_FLAG_USE_DEF_DOM_OPS,
- };
- 
- struct irq_domain *hpet_create_irq_domain(int hpet_id)
+
+> ---
+>  include/linux/ptp_classify.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+> index 8437307..c6487b7 100644
+> --- a/include/linux/ptp_classify.h
+> +++ b/include/linux/ptp_classify.h
+> @@ -134,5 +134,13 @@ static inline struct ptp_header *ptp_parse_header(struct sk_buff *skb,
+>  {
+>  	return NULL;
+>  }
+> +static inline u8 ptp_get_msgtype(const struct ptp_header *hdr,
+> +				 unsigned int type)
+> +{
+> +	/* The return is meaningless. The stub function would not be
+> +	 * executed since no available header from ptp_parse_header.
+> +	 */
+> +	return 0;
+> +}
+>  #endif
+>  #endif /* _PTP_CLASSIFY_H_ */
+> 
+
+
+-- 
+~Randy

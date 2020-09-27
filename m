@@ -2,84 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DC3279C39
-	for <lists+linux-next@lfdr.de>; Sat, 26 Sep 2020 21:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4136279D5F
+	for <lists+linux-next@lfdr.de>; Sun, 27 Sep 2020 03:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729921AbgIZTlS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 26 Sep 2020 15:41:18 -0400
-Received: from andersk.zulipdev.org ([107.170.241.23]:49744 "EHLO
-        zulip-bionic.lxd" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729106AbgIZTlS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Sep 2020 15:41:18 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Sep 2020 15:41:18 EDT
-Received: from User (localhost [127.0.0.1])
-        by zulip-bionic.lxd (Postfix) with SMTP id 8769614C80F;
-        Sat, 26 Sep 2020 19:30:57 +0000 (UTC)
-Reply-To: <imfdepartmentunit101@gmail.com>
-From:   "Mr. James Amsterdam (IMF Director)" <info@usa.net>
-Subject: Are You Dead Or Alive???
-Date:   Sat, 26 Sep 2020 20:31:17 +0100
+        id S1730018AbgI0Bxr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 26 Sep 2020 21:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726478AbgI0Bxr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 26 Sep 2020 21:53:47 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE87EC0613CE;
+        Sat, 26 Sep 2020 18:53:46 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id d13so5399421pgl.6;
+        Sat, 26 Sep 2020 18:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=63gTB/opngvWQpxsqyyVmbz485xcMBG552lLah4TntY=;
+        b=nf+wkl5yx8wpRiM7+3p7Kvxjbp54f85aDPU7nfrglXIbeitshFVNeHQn4xeNO1LMOI
+         Xh19u6fShKUbL+djFQzBpBoNfjpOVtX0DuufNvHnvpgFJzGWR9Wle+bp1V78e6gJeEWT
+         iHfXHXbL2UyVFNe+RnFxvt16HL76igfk+2LJdJ1OcYMcUsotWc3bXGOSd+Qy78lmegaK
+         y7MXNWdQRGf5lPeANQ70zqcaECDpdZhf5C08GZsiMC5Be+WlwTIX1daRFLAMplUiNYJ2
+         4qPmw+Una7M6l+rVovJW6eLWnr5Gi33N17okqMFHVMGBtdy2dlPvRWxJdPZePcPlLb/z
+         xsDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=63gTB/opngvWQpxsqyyVmbz485xcMBG552lLah4TntY=;
+        b=JzNE7T7Rl5U3YfXHyy2Dzrg8uHe3Pt4I7Pj35uxoszjY6JET/ESdyXNHlyNyUzpNXL
+         DwdRHOzxcELZmb2pmmTYQzfVj8R5x23AMcl0gwn4rr6HMcr73g7tqf2aHZvrk7g8wdud
+         7wD+8mNDSirPSULvFgIR7QX1veHgu6+D2PBwlEwK3ZsaW6yLltZFsh7S0Hd8Hg6I/za2
+         Zu7FFMWOrY16KjrNBGKuMHhec07Jq8B7EReADHA+QwUXhamsmZIXrJFQsHLyPZNEnGE6
+         U88PqJgkenM6z3xFq2XWbes357EFwL2ig4RFSco80Xyomfkv5753gYxbRikSJkbfHLX1
+         H5rw==
+X-Gm-Message-State: AOAM533yQi5e0AJlXaGWAropgVGqZvqNCnoX/Rx4swW4TE9cu1H4DOgD
+        hbqCeBuICagbDqFcN2suQfg=
+X-Google-Smtp-Source: ABdhPJzeGzXSb8Xqr+qYPObX4r2M6kOGPtBlgo4hIZrbnCIeD1OGQBR8N9BX/MTdkDzxguPs2FfNGg==
+X-Received: by 2002:aa7:9850:0:b029:142:2501:34f0 with SMTP id n16-20020aa798500000b0290142250134f0mr5425247pfq.73.1601171626422;
+        Sat, 26 Sep 2020 18:53:46 -0700 (PDT)
+Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id b11sm6609285pfo.15.2020.09.26.18.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Sep 2020 18:53:45 -0700 (PDT)
+Date:   Sun, 27 Sep 2020 09:53:34 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-doc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, Tim.Bird@sony.com,
+        lkft-triage@lists.linaro.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCHv5 kselftest next] selftests/run_kselftest.sh: make each
+ test individually selectable
+Message-ID: <20200927015334.GC2531@dhcp-12-153.nay.redhat.com>
+References: <20200914021758.420874-1-liuhangbin@gmail.com/>
+ <20200914022227.437143-1-liuhangbin@gmail.com>
+ <CA+G9fYvT6Mw2BamoiVyw=wLUqD-3LB2oaDqcuabOyWfFxEN1qg@mail.gmail.com>
+ <202009251414.15274C0@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Antivirus: Avast (VPS 200926-2, 09/26/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20200926193057.8769614C80F@zulip-bionic.lxd>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202009251414.15274C0@keescook>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-INTERNATIONAL MONETARY FUND (IMF) OF BENIN REPUBLIC
-Address: Lot B14 PATTE D'OIE, BP 2163, Cotonou
-Officer In Charge Of Foreign Inheritance Payment
-File Registration No: 20431/29-IMF-CTN-BN
-Mr. James Amsterdam (IMF Director)
-E-mail: ( imfdepartmentunit101@gmail.com )
-Telephone Number: (+229) 6537 2627
+On Fri, Sep 25, 2020 at 02:16:14PM -0700, Kees Cook wrote:
+> On Fri, Sep 25, 2020 at 01:51:53PM +0530, Naresh Kamboju wrote:
+> > On Mon, 14 Sep 2020 at 07:53, Hangbin Liu <liuhangbin@gmail.com> wrote:
+> > >
+> > > Currently, after generating run_kselftest.sh, there is no way to choose
+> > > which test we could run. All the tests are listed together and we have
+> > > to run all every time. This patch enhanced the run_kselftest.sh to make
+> > > the tests individually selectable. e.g.
+> > >
+> > >   $ ./run_kselftest.sh -t "bpf size timers"
+> > 
+> > My test run break on linux next
+> > 
+> > ./run_kselftest.sh: line 1331: syntax error near unexpected token `)'
+> > ./run_kselftest.sh: line 1331: `-e -s | --summary )
+> > logfile=$BASE_DIR/output.log; cat /dev/null > $logfile; shift ;;'
+> 
+> Yes, please revert this patch. The resulting script is completely
+> trashed:
+> 
+> BASE_DIR=$(realpath $(dirname $0))
+> . ./kselftest/runner.sh
+> TESTS="seccomp"
+> 
+> run_seccomp()
+> {
+> -e      [ -w /dev/kmsg ] && echo "kselftest: Running tests in seccomp" >> /dev/kmsg
+> -e      cd seccomp
+> -en     run_many
+>         \
+> -ne             "seccomp_bpf"
+>         \
+> -ne             "seccomp_benchmark"
+> 
+> -e      cd $ROOT
+> }
 
-Attention: Dear Beneficiary,
+I'm really sorry to make this trouble. And I'm OK to revert the patch.
+I just a little wondering how do you generate this script.
+I tested with 'make -C tools/testing/selftests gen_tar FORMAT=.xz' before
+post the patch and all looks good to me.
 
-A power of attorney was forwarded to our office this morning by this woman, she is an American national and Her name is Regina Bryan Ranoa, This woman claimed to be your representative and this power of attorney stated that you are dead and she brought an account to replace your information in order to claim your inheritance fund worth of $1,500.000.00 (One  Million Five Hundred Thousand Dollars) which is now lying in a dormant account UNCLAIMED, below is the information she have submitted:
+```
 
-Full Name: Regina Bryan Ranoa.
-Full Address: 655 12TH 224 Oakland, CA 94607-3666 USA
-Telephone Number: 714-421-4900
-Occupation: Retired Accountant
-Marital Status: Married, 51 Years
-Bank Account: City Bank
-Account Number: 472 380 2115.
-Routing: 122006743
+run_seccomp()
+{
+        [ -w /dev/kmsg ] && echo "kselftest: Running tests in seccomp" >> /dev/kmsg
+        cd seccomp
+        run_many        \
+                "seccomp_bpf"   \
+                "seccomp_benchmark"
+        cd $ROOT
+}
 
-Be further informed that this power of attorney stated that you suffered and died of a deadly disease but before you past away, she said you issued this power of attorney in her favor.  So we are given you 24 hours to confirm the truth in this information, If you are still alive, then you are to contact us back immediately, Because we are working 24 hours just to ensure that we monitor all the activities going on in regards to transfer beneficiaries inheritance and contract payment.
-You are to call this office once for clarifications on this matter as we shall be available 24 hours to speak with you and give you the necessary guidelines on how to ensure that your payment is wired to you possession and we also want to remind you that any further delay from your side could be dangerous, as we will not be held responsible for any wrong payment.
-So kindly contact us as matter of urgency if you are (REALLY ALIVE) as we have her identification and residence she provided for this payment to be wired to her account for us to get her arrested. Note that the only fee you are required to pay is the IMF Payment Release Bond Administrative Charge of $395.00 (Three Hundred And Ninety-Five Dollars).
+```
 
-Kindly re-confirm your personal information to enable cross-check with the data's we have in our central computer if it's correct or not.
-
-(1) Full Name:......................
-(2) Country/State/ City Name:....................
-(3) Delivery Address:..................
-(4) Occupation:..............................
-(5) Sex:................................
-(6) Age:............................
-(7) Telephone Number:.......................
-(8) A Copy of Your Passport/ Drivers Licenses:...............
-
-As soon as you provide the information above, we will direct you on how to send the file endorsement processing fee of $395.00 (Three Hundred And Ninety-Five Dollars) via western union or money gram.
-Best Regards.
-
-Mr. James Amsterdam (IMF Director)
-Senior Representative Benin Republic
-E-mail:  ( imfdepartmentunit101@gmail.com )
-Telephone Number: (+229) 6537 2627
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Thanks
+Hangbin

@@ -2,149 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D6A27AB16
-	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 11:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D647F27AB8B
+	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 12:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbgI1JrM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Sep 2020 05:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S1726526AbgI1KLp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Sep 2020 06:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbgI1JrL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Sep 2020 05:47:11 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E8BC061755
-        for <linux-next@vger.kernel.org>; Mon, 28 Sep 2020 02:47:11 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 7so370303pgm.11
-        for <linux-next@vger.kernel.org>; Mon, 28 Sep 2020 02:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sByFvzANNavXstWIngm0BaCccoxXcpgpgCM5Oz7ddDc=;
-        b=QSvKozpy4dwqhQ3rm2KwqwK/O8nSux1S09jdTfHI1J273nxM5rEIfPP1WJXCY/fPu4
-         dbrSOz51lPZZSOe4akRbLX74WJlrqNHqGi0lSz6gR5R+512/PBm+n9/QFRDYRBwKeYBZ
-         Nvmm9Rv9GwdsvYRvfKiQvhRdSDnzhPi7OccY7poPFhiTND0z+0H4s2UtyuFwQTeRggLi
-         pJZUSEWKf9j+x4CqBZZ5+Sfi8Rc1QMN4/31RS3j5+mb1V4bh9wCEuXkJfCWE07vpixqZ
-         HsmulRCsj5e5M2pIUO4y0aelzRVfCQor/CBXf6f/P6qQ/Zd/KLlkJhc483NeLJsOiDl1
-         UVxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sByFvzANNavXstWIngm0BaCccoxXcpgpgCM5Oz7ddDc=;
-        b=LNSiI0i5hwoz/C7HeaLSkezvUTqYkil05PYwRCDbKl+cQDM4tDw6aUgIXWcVdMCfx4
-         ql9NOIJHKYg3mSYuNkj1bMYXiAsQ8ODf0/GXhnyVBb21f4l4E+Ke39rt1sbJa7T4B9bK
-         3StSjdhm0/k8Y7Csbr0Y8q9p6NNi5GqHgzUMlNIeHdTfcWKWZEg5hjN0gfFW1xoK50HG
-         f+RU+Sk+N1n1r05BIpKQNGuCE8crz+b2W3+KYd6OiYNWQN4ydLCEJXF964GZtwNtbSkA
-         8C7sztH8BcLa55b3tgeTcZ1YI2FI2tAAlf/ztomVOGQryxizlrcun2V9+Hh17hhJ74ML
-         /dUw==
-X-Gm-Message-State: AOAM533PYFcP2Tbwa1QAQt9syBwIytmyOGGwx4kUHhvQK1dEjLgFwa7p
-        USctTW8+8ElnMJUe/hUZx/g7
-X-Google-Smtp-Source: ABdhPJyEqUCMQ5YQbSuGTIK/wFn0PQfjKFE1yYJVltrnkh9bccuAL1DaU3x6A/Y/8EkftfiR7/YNEQ==
-X-Received: by 2002:a62:6dc3:0:b029:13c:1611:658d with SMTP id i186-20020a626dc30000b029013c1611658dmr9450782pfc.10.1601286431063;
-        Mon, 28 Sep 2020 02:47:11 -0700 (PDT)
-Received: from linux ([103.59.133.81])
-        by smtp.gmail.com with ESMTPSA id z7sm761284pgc.35.2020.09.28.02.47.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 28 Sep 2020 02:47:10 -0700 (PDT)
-Date:   Mon, 28 Sep 2020 15:17:04 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Govind Singh <govinds@codeaurora.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ath11k@lists.infradead.org
-Subject: Re: linux-next: build failure after merge of the mhi tree
-Message-ID: <20200928094704.GB11515@linux>
-References: <20200928184230.2d973291@canb.auug.org.au>
- <20200928091035.GA11515@linux>
- <87eemmfdn3.fsf@codeaurora.org>
+        with ESMTP id S1726328AbgI1KLp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Sep 2020 06:11:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E97C061755;
+        Mon, 28 Sep 2020 03:11:44 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1601287900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/LEbaJHkdEDSvABDEX0Mpwgs63YbqlMHeZ5/FcFgS7c=;
+        b=WscWB2qjowVUKNzXJ7iKsyolZUkjDBztcYFbIgHrMUrtAEvquCam4/K52jcCtRQM+yKytr
+        URMI6z640lbxw7hkIOVx1TRLHMdhaWzx98lhVnLFqthWanJFHVHxlo2eOWubHBSTBu9GDF
+        7G67OuYSeZNyWEttoblh+kzL4D7QpchbFTWBx+ikU8exuLt8q5pjxfqcBdHoB6zPbCD8mH
+        lZQfvtFRw5BX5n7PSkSM/ugl/cb4XGqprClPnO9RlJUYEx0yP1D0OFHRQNoIV4NB6Tbt2s
+        hzKesgmvohZEey59MwUSx2qdsQEH+kkd6efSVXhIbahzs/eEUDUMLSXdq82ySg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1601287900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/LEbaJHkdEDSvABDEX0Mpwgs63YbqlMHeZ5/FcFgS7c=;
+        b=gKFUKgJag7QuixgLnPA+ShsJ5WL+xoFovrXQai1julVEgAI8XcH7X6h36NY9HKTW9eWOPq
+        ZWPyJFpE9hRbkzAA==
+To:     Vasily Gorbik <gor@linux.ibm.com>, Qian Cai <cai@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Jon Derrick <jonathan.derrick@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <sivanich@hpe.com>,
+        Russ Anderson <rja@hpe.com>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Megha Dey <megha.dey@intel.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Baolu Lu <baolu.lu@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [patch V2 34/46] PCI/MSI: Make arch_.*_msi_irq[s] fallbacks selectable
+In-Reply-To: <your-ad-here.call-01601123933-ext-6476@work.hours>
+References: <20200826111628.794979401@linutronix.de> <20200826112333.992429909@linutronix.de> <cdfd63305caa57785b0925dd24c0711ea02c8527.camel@redhat.com> <your-ad-here.call-01601123933-ext-6476@work.hours>
+Date:   Mon, 28 Sep 2020 12:11:40 +0200
+Message-ID: <87eemmky77.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87eemmfdn3.fsf@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 12:34:40PM +0300, Kalle Valo wrote:
-> Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
-> 
-> > On Mon, Sep 28, 2020 at 06:42:30PM +1000, Stephen Rothwell wrote:
-> >> Hi all,
-> >> 
-> >> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-> >> failed like this:
-> >> 
-> >> drivers/net/wireless/ath/ath11k/mhi.c:27:4: error: 'struct
-> >> mhi_channel_config' has no member named 'auto_start'
-> >>    27 |   .auto_start = false,
-> >>       |    ^~~~~~~~~~
-> >> drivers/net/wireless/ath/ath11k/mhi.c:42:4: error: 'struct
-> >> mhi_channel_config' has no member named 'auto_start'
-> >>    42 |   .auto_start = false,
-> >>       |    ^~~~~~~~~~
-> >> drivers/net/wireless/ath/ath11k/mhi.c:57:4: error: 'struct
-> >> mhi_channel_config' has no member named 'auto_start'
-> >>    57 |   .auto_start = true,
-> >>       |    ^~~~~~~~~~
-> >> drivers/net/wireless/ath/ath11k/mhi.c:72:4: error: 'struct
-> >> mhi_channel_config' has no member named 'auto_start'
-> >>    72 |   .auto_start = true,
-> >>       |    ^~~~~~~~~~
-> >> 
-> >> Caused by commit
-> >> 
-> >>   ed39d7816885 ("bus: mhi: Remove auto-start option")
-> >> 
-> >> interacting with commit
-> >> 
-> >>   1399fb87ea3e ("ath11k: register MHI controller device for QCA6390")
-> >> 
-> >> from the net-next tree.
-> >> 
-> >> I applied the following merge fix patch, but maybe more is required.
-> >> Even if so, this could be fixed now in the net-next tree.
-> >> 
-> >> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> >> Date: Mon, 28 Sep 2020 18:39:41 +1000
-> >> Subject: [PATCH] fix up for "ath11k: register MHI controller device for QCA6390"
-> >> 
-> >> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >
-> > Sorry, I forgot to submit a patch against net-next for fixing this while merging
-> > the MHI change.
-> 
-> Try to notify the ath11k list (CCed) whenever changing MHI API so that
-> we (ath11k folks) can be prepared for any major changes.
-> 
+On Sat, Sep 26 2020 at 14:38, Vasily Gorbik wrote:
+> On Fri, Sep 25, 2020 at 09:54:52AM -0400, Qian Cai wrote:
+> Yes, as well as on mips and sparc which also don't FORCE_PCI.
+> This seems to work for s390:
+>
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index b0b7acf07eb8..41136fbe909b 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -192,3 +192,3 @@ config S390
+>         select PCI_MSI                  if PCI
+> -       select PCI_MSI_ARCH_FALLBACKS
+> +       select PCI_MSI_ARCH_FALLBACKS   if PCI
+>         select SET_FS
 
-Okay sure, will do!
-
-> > But your change looks good and I can just modify the subject/description and
-> > resubmit. Or if Dave prefers to fix the original commit itself in net-next,
-> > I'm fine!
-> 
-> Actually I prefer to apply the fix to my ath.git tree, less conflicts
-> that way (I have still quite a lot of ath11k patches pending for -next).
-> I'll then send a pull request to Dave end of this week.
-> 
-> So please submit the patch like a normal ath11k patch documented here:
-> 
-
-Okay.
-
-Thanks,
-Mani
-
-> https://wireless.wiki.kernel.org/en/users/drivers/ath11k/submittingpatches
-> 
-> -- 
-> https://patchwork.kernel.org/project/linux-wireless/list/
-> 
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+lemme fix that for all of them ...

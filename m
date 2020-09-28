@@ -2,76 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F3827B2D0
-	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 19:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA1627B34A
+	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 19:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgI1RMP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Sep 2020 13:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726348AbgI1RMP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Sep 2020 13:12:15 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACFAC061755;
-        Mon, 28 Sep 2020 10:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=qaQ/v6vKPGApGPWxgofd4F7eZEv7mlDZvTFdTHtBj3A=; b=FwIYLY13TDFDv7+LaMYnS0Oqnd
-        CuUKja+FafEjRhPdscPLsiVEwGJq1NzQgQQu7n+ojlYAVRPf4rm3IQpQn3bDWHxSYX4akRn79LBeO
-        icO/1R/2ngsSSOR9febaPYQZymjBIgTmEhU+KXyzMxOE40MFeq1wmPTL04rsSqYPCUvkkZb7TyMFI
-        7kBmdikNeKd8XeeNJVsfXRhwT7coW4nLOvemJl3dVm4v35UObIf8x/WWL7G1oJfYKemn8vxY1fntN
-        qqK0qapDdhQlpujmH04Vqq7Ypxu0zs/OknzQymjma+8uF4A6zu0ZUQXWByZeyi6voHz3XMfGiyLQl
-        fleiKocg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kMwh7-0006tt-FS; Mon, 28 Sep 2020 17:12:09 +0000
-Subject: Re: linux-next: Tree for Sep 28 (drivers/misc/hisi_hikey_usb.c )
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20200928215551.2b882630@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <0fd4bbff-25e1-2799-4320-41be5adfc59e@infradead.org>
-Date:   Mon, 28 Sep 2020 10:12:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726497AbgI1RdO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Sep 2020 13:33:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726409AbgI1RdO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 28 Sep 2020 13:33:14 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 030F82083B;
+        Mon, 28 Sep 2020 17:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601314394;
+        bh=x7A7JcYB4k1uuOLNpLJbXIeiahwcbTalHktGMazaCYc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=0gXWVoumy/Gr1lugNenFb+SfqzWGd0nlVYYuDj5MJs6PoeFK+pQb32V0Ao1xRC4iQ
+         xt4fqzSumJ8AWla0pXiHoTUUulGSusrNMlj518mXhkmnZ+VQRzp89m1J6ID5ZU0rOz
+         N3mg+wfJDlfHDtfuO/qsh+CSj3TTqipl5g6dIikg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C15CE352183A; Mon, 28 Sep 2020 10:33:13 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 10:33:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
+Message-ID: <20200928173313.GP29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200917132652.738c4cc2@canb.auug.org.au>
+ <20200917180005.GM29330@paulmck-ThinkPad-P72>
+ <20200928075729.GC2611@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200928215551.2b882630@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928075729.GC2611@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/28/20 4:55 AM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Sep 28, 2020 at 09:57:29AM +0200, Peter Zijlstra wrote:
+> On Thu, Sep 17, 2020 at 11:00:05AM -0700, Paul E. McKenney wrote:
+> > On Thu, Sep 17, 2020 at 01:26:52PM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Commit
+> > > 
+> > >   903c5302fa2d ("sched/core: Allow try_invoke_on_locked_down_task() with irqs disabled")
+> > > 
+> > > is missing a Signed-off-by from its author and committer.
+> > > 
+> > > I didn't complain about this when it was first present because I figured
+> > > it was just a debugging commit that would be removed quickly.  However,
+> > > there are now quite a few follow up commits ...
+> > 
+> > Without Peter's Signed-off-by, I clearly won't be submitting it to the
+> > upcoming merge window.
+> > 
+> > Peter, this is now quite close to your original patch.  May I please
+> > add your Signed-off-by?
 > 
-> Changes since 20200925:
-> 
+> Sure!
 
-on i386:
+Much appreciated!!!
 
-ld: drivers/misc/hisi_hikey_usb.o: in function `hisi_hikey_usb_remove':
-hisi_hikey_usb.c:(.text+0x14): undefined reference to `usb_role_switch_unregister'
-ld: hisi_hikey_usb.c:(.text+0x20): undefined reference to `usb_role_switch_put'
-ld: drivers/misc/hisi_hikey_usb.o: in function `hub_usb_role_switch_set':
-hisi_hikey_usb.c:(.text+0x37): undefined reference to `usb_role_switch_get_drvdata'
-ld: drivers/misc/hisi_hikey_usb.o: in function `relay_set_role_switch':
-hisi_hikey_usb.c:(.text+0x1b2): undefined reference to `usb_role_switch_set_role'
-ld: drivers/misc/hisi_hikey_usb.o: in function `hisi_hikey_usb_probe':
-hisi_hikey_usb.c:(.text+0x2ca): undefined reference to `usb_role_switch_get'
-ld: hisi_hikey_usb.c:(.text+0x369): undefined reference to `usb_role_switch_register'
-ld: hisi_hikey_usb.c:(.text+0x380): undefined reference to `usb_role_switch_put'
+But I already replaced that commit with one that moves the call to
+try_invoke_on_locked_down_task() an interrupts-enabled region of code.
+Which is probably what I should have done to start with...  :-/
 
-It looks like HISI_HIKEY_USB should at least depend on USB
-and probably on USB_ROLE_SWITCH.
-
-
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+							Thanx, Paul

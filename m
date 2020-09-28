@@ -2,106 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FAA27A602
-	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 05:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2986B27A70C
+	for <lists+linux-next@lfdr.de>; Mon, 28 Sep 2020 07:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgI1DyM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Sep 2020 23:54:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:37977 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbgI1DyM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 27 Sep 2020 23:54:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C07tS6Dtrz9sSC;
-        Mon, 28 Sep 2020 13:54:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601265250;
-        bh=zJZbAuZVkx42FoKhUXPLJIvzQCvkeCOXLrWnMARQTLM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=InBSiV7PACLpqSfam1oCU3GUsUkYDYzaH9tnw8L20pgNLTrNDbrjAYPORCvV/IEKH
-         RzeeVX3zGBfbgsbQAwYvdE8BuW1ALkEwwfzq5dbvQbzEokt4CEKhNJzgD/LI2yxyQY
-         kUZFcQAHTs3GuTj+hojmRgly0bM3n58YFOkqGlWbt9Igzyz3yrJ85+JFKRXxzShMm6
-         gez+DbcZtmLFBRbsvi1fZTRjqAbQ8HotvHVtsnGZ5NeC26K5DaKLBkKz/JYuZjh3Hl
-         AQ6v0PGQQO0Rxnq756hL4Q1UGpT/7vsYY+yGKE5iGqYKaay9ZHGSp6POkS2BZbLWrC
-         q3wObpwmu3k8g==
-Date:   Mon, 28 Sep 2020 13:54:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm tree
-Message-ID: <20200928135405.73404219@canb.auug.org.au>
+        id S1726518AbgI1FqG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Sep 2020 01:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbgI1FqG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Sep 2020 01:46:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED842C0613CE;
+        Sun, 27 Sep 2020 22:46:05 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1601271964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A9eaFRIMoE0WeEdJ53JqY4q9jI4yipgGb6l9S8GlcS8=;
+        b=sIzs58AzruwgZUJMijBXyQC/4ZH238GgkcpBckJJWD6o1GrwtQSrQPbkHcXRbbfp0sdu7B
+        G9MsnpKS7UV/8487vce5FIxPpKZjlCnBlJFwHRPCdToHamRpneaT0YvgCk5tHwo5uh8Yl6
+        PIbkwtxJsyZAUj2haTHmGteiTtzzjkrdbZq6h6q5ENzbbTlHrdTvY3wSLdBpnhKxQ8bjRP
+        OW4ZbfAykuJCIN+yOIaq7N7n6jP8mUuVUOBiPYpddvVvsZuhGe2uEKcqYqbQyiCGcBweDc
+        aE7h7+BNIVeRpa0SX02TvFt0T1HqBJWhc4oOWfG7DHcZIYL+by5qpXDWfbeGzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1601271964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A9eaFRIMoE0WeEdJ53JqY4q9jI4yipgGb6l9S8GlcS8=;
+        b=FrCw4YN0pav3h7gyurYCoA/ypC/kzr8cyiwJyWn6dx6eJnXdZdZcmj1PqQGEPofsI75yQU
+        LMVGTugUcj+4lWCA==
+To:     Yangbo Lu <yangbo.lu@nxp.com>, netdev@vger.kernel.org
+Cc:     Yangbo Lu <yangbo.lu@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH] ptp: add stub function for ptp_get_msgtype()
+In-Reply-To: <20200927080150.8479-1-yangbo.lu@nxp.com>
+References: <20200927080150.8479-1-yangbo.lu@nxp.com>
+Date:   Mon, 28 Sep 2020 07:46:03 +0200
+Message-ID: <87imbya1yc.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TtqDvJSRZxzN_9i5h=CBwVG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TtqDvJSRZxzN_9i5h=CBwVG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+--=-=-=
+Content-Type: text/plain
 
-Hi all,
+On Sun Sep 27 2020, Yangbo Lu wrote:
+> Added the missing stub function for ptp_get_msgtype().
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 036c508ba95e ("ptp: Add generic ptp message type function")
+> Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
 
-After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Oh, my bad. Thanks for fixing it.
 
-drivers/gpu/drm/ingenic/ingenic-drm-drv.c: In function 'ingenic_drm_sync_da=
-ta':
-drivers/gpu/drm/ingenic/ingenic-drm-drv.c:478:4: error: implicit declaratio=
-n of function 'dma_cache_sync'; did you mean 'regcache_sync'? [-Werror=3Dim=
-plicit-function-declaration]
-  478 |    dma_cache_sync(priv->dev, addr + offset,
-      |    ^~~~~~~~~~~~~~
-      |    regcache_sync
-drivers/gpu/drm/ingenic/ingenic-drm-drv.c: In function 'ingenic_drm_gem_mma=
-p':
-drivers/gpu/drm/ingenic/ingenic-drm-drv.c:671:11: error: 'DMA_ATTR_NON_CONS=
-ISTENT' undeclared (first use in this function)
-  671 |   attrs =3D DMA_ATTR_NON_CONSISTENT;
-      |           ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/ingenic/ingenic-drm-drv.c:671:11: note: each undeclared ide=
-ntifier is reported only once for each function it appears in
+Thanks,
+Kurt
 
-Caused by commit
-
-  37054fc81443 ("gpu/drm: ingenic: Add option to mmap GEM buffers cached")
-
-interacting with commits
-
-  5a8429227140 ("dma-mapping: remove dma_cache_sync")
-  efa70f2fdc84 ("dma-mapping: add a new dma_alloc_pages API")
-
-from the dma-mapping tree.
-
-Its not immediately obvious how to fix this up, so I have just marked
-CONFIG_DRM_INGENIC as BROKEN until a fix up is provided.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TtqDvJSRZxzN_9i5h=CBwVG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9xXl0ACgkQAVBC80lX
-0GwLMwf9HC4vQnyBXp4F+rGioMw5maEobTmfFn1IC5QL/ahSKbDX1Sv0pYo2WCfR
-afvxdZbG1SFC9U5jF9n/gnBxyq3DIdPK+/3TScFbMGKWq23BpyA+50oVl1joZq7l
-ThZ31182NgnYUgiGnDPpSuNF2olCo0ot4c9tCuu9wHau47tqxsWm2ijp1SuzMdT8
-0rDEShd5HHDG4a9WwRpJUCsIVslKT9tfcFwjYwXGz3R+nWyIxkICLjCXQ0ze39zD
-iGJN0IVEWnzt3Ix8acp+R0OHJVEqcZwA5xmSkv8O3nOAMvm8UoU0lN2b6aOxQRYi
-o4N4nqROvaXI1VM9nzW1CA+I9WAJhw==
-=/EiK
+iQIzBAEBCgAdFiEEooWgvezyxHPhdEojeSpbgcuY8KYFAl9xeJsACgkQeSpbgcuY
+8KZ2Sg/9HYtK+8W/h5Z24wmmt2IpN9XXT22eXxDiis6aE2fHYwTAP1/JIuLftsba
+zQ+QvrOTxJ0BHhU2ysOjVECTyImRzbAm+b1ZjAM2RU7L/YBzarjhwXE4uYQgtmUc
+cMLkDphhR6s+/mTQH9VBupbsXCLyvgJcNg2oNZXNtGqNwENqI2IzoH4tVTHyW5ep
+EmDR/hX0GIHa+2tAGgM9XKQTprshvbP0HkwoBAxVTN5DEf10gfKQ6+xkHJ9fKQFm
+kA1SWfTDttdOlzO3xYWzB4uPAbqRK1mAkpD045C/ktFv8ST7UECkljOElv6pJoP3
+W8ac5Erd4AkwqILVSrwwaoA6AR4lpSv+df+c0ig9rMmAVknG3K3kAdBn3MAAG0GR
+tYCEnk/Td2/7CItOcAuPNGtirwdRm0WyKaHtUbagQ1SNGf8gGzZVb8wdy6MDe7GQ
+YrUd3t858zapqdNuvUy+0s/fgEToP/rXmKr0nsiyY+D+hmR5HIdJKPIZ06nBs+3K
+5VTU6QOnnOLPkKRYrVSFnz43icY80X1kZU2WW/8X0MrPwjGUo/6GuKqzyZUuBhVl
+mOV7gsbQvwVyo1RISXmwDwQ9xK4mv5A/6g9SUv9MQW8Q5qZpQIzagWAPIv6UT/Fw
+1fP3aLYMLFS1SBzpR9pLm8yiejJwJeHNEijCsC/3H6Y+DNSgS2M=
+=Zj3V
 -----END PGP SIGNATURE-----
-
---Sig_/TtqDvJSRZxzN_9i5h=CBwVG--
+--=-=-=--

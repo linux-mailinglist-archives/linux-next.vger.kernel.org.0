@@ -2,110 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E8627CB48
-	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 14:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D1D27CE4E
+	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 15:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732320AbgI2M0Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Sep 2020 08:26:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27844 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731712AbgI2M0U (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 29 Sep 2020 08:26:20 -0400
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601382379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYCM27eQBX+C1GSLSFKxmj4gnOFHGu50TnKuH5f77Uw=;
-        b=MdaZvGHh9gM8qqXpkXpqP9AUtqKIbJ0sPpFgUZFdWp/aKBbE5QzjUtAZLCK98MZ3C2Ms2j
-        fzJ4YiTN/Yhj6n6tuJNXmW1xXW8o25cB8p5E3Y+5XnfpCl2EydGmqbNwIq9qc6P/NVmGAk
-        G4lQBelVBb8x9HfH75qeszwY0UJPJlg=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-404-EYvddGX7PxqzIZWN91J9Xg-1; Tue, 29 Sep 2020 08:26:17 -0400
-X-MC-Unique: EYvddGX7PxqzIZWN91J9Xg-1
-Received: by mail-wr1-f72.google.com with SMTP id h4so1703841wrb.4
-        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 05:26:17 -0700 (PDT)
+        id S1728327AbgI2NBD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Sep 2020 09:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbgI2NBC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Sep 2020 09:01:02 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26553C061755
+        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 06:01:01 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id x16so3833535pgj.3
+        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 06:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=v9RWCExIFGbiT3lDbOdVUZjuNWAtPVije16lrKfT3oQ=;
+        b=NWBSpNDVWI+t+ZexgfRV6iAoCFB2c6mCOoudMr1sHsRdd7ysBT8Ns9EfXEMEa5EriA
+         iHyA9zvDNkIo/d77TQnheX1viqgjMgWKrsewUmDC4kdxI9sgMMbzfgVDsmwc+ntkDX/z
+         Iaq4PTYUnw30FoDlMu1H4hlhkdJjf3RmAcodHXiGDV7NPbOlqCoLehpABL1oHpeaefQP
+         lb5D3trHXQBOcwWjkohgW5X89/32Jh5LOB0ha150Ogrx/IGA38i87IEp7BLhZeRocgog
+         s1XiuBm01M4Vpxn/9hl3FUMgIiJ8KOJxRH1tERKiD8ydtwYjGacLNHdcRShnQDW58Q2t
+         sPFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gYCM27eQBX+C1GSLSFKxmj4gnOFHGu50TnKuH5f77Uw=;
-        b=Nh6CvXWB1/EWTnTRJeRo1XecNQQfc5n8hGxGHcSgFxKKUn8n4gLI1X2e221r/MYElj
-         YtiSnQVO7pySmgRqbHATDQg2ryzIUa8CVW60vN5XOvwBM6kswYJuIcC3Zz5QWy6LhTN+
-         5GcP8NdsXBFGMYjz6hCHxvvjqlGoO1QWjLaoZO0JQ8R9EHa9PwecJrR92kxWzmHk48/s
-         sMnPUjgNRpFz2nZdvpyiH8xgC4q8jXtHr+OJbKuHIlGmIW3mKOZIb7Ow8VkAlUJuesTd
-         3HEYx8JGzHbzGTQgXMHHVqNSyMYrZ8FEEaq6jX8NTGvezvRGhA7W/sh2RLs7FRrJGeZa
-         BULg==
-X-Gm-Message-State: AOAM5322h6B2mJpwVR8jG48cmZaeHPgWyRkIYCGTrYwDeOxcOcWwGY3X
-        LAqRoeZIaN+CmmW45PPo5ya/rKe4Sf3qYnVqiU5E4dpMlO/SXVgV0K08a2IOzjmwPlPF05Py3tx
-        qGYOXGo1PikwwJ6N9N7KdsA==
-X-Received: by 2002:a7b:c749:: with SMTP id w9mr4033755wmk.29.1601382376049;
-        Tue, 29 Sep 2020 05:26:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz2s4HKbrVlR26BGHrynO5370fP6WNbutA1OCmeWGjDR5Zag1+91h5hGA+sTgEMJPKwtl+9PA==
-X-Received: by 2002:a7b:c749:: with SMTP id w9mr4033734wmk.29.1601382375843;
-        Tue, 29 Sep 2020 05:26:15 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9dbe:2c91:3d1b:58c6? ([2001:b07:6468:f312:9dbe:2c91:3d1b:58c6])
-        by smtp.gmail.com with ESMTPSA id l18sm5937819wrp.84.2020.09.29.05.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2020 05:26:15 -0700 (PDT)
-Subject: Re: [PATCH] KVM: x86: VMX: Make smaller physical guest address space
- support user-configurable
-To:     Qian Cai <cai@redhat.com>, Mohammed Gamal <mgamal@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, sean.j.christopherson@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20200903141122.72908-1-mgamal@redhat.com>
- <1f42d8f084083cdf6933977eafbb31741080f7eb.camel@redhat.com>
- <e1dee0fd2b4be9d8ea183d3cf6d601cf9566fde9.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <ebcd39a5-364f-c4ac-f8c7-41057a3d84be@redhat.com>
-Date:   Tue, 29 Sep 2020 14:26:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=v9RWCExIFGbiT3lDbOdVUZjuNWAtPVije16lrKfT3oQ=;
+        b=uTZyeIMhYwvf9apnbgpdEzrAPaaJckSppLZaMZi0KhfL8hVtK814dO0Fcq5WQCo5vw
+         CRSKO7fVIhS9LS+7WF9hxrHe+A7CAZT4ipMXf5d7G8GghI4R9ZBQKXAhe6pqWWYkgegn
+         bXm8EeQOMA4U9gtoQIohQKtSuyYTL8+ko1TEJYGbSK1JMV8uwhXiH3W99UZfI90bCKcv
+         MkH8x8EdADWCrKRCsgJbxB4XVsZgWru9lcvG6noYpkj7gq2/v7lQV1EB+ugGv9HIzURb
+         XB8CRHQLMrCdUsFcAE4XgDqTuuYDaR/iNznDc0scJgUamqAhe56Gzkj0pOzwliV6ogdk
+         WgYw==
+X-Gm-Message-State: AOAM531LD2QdcbWNmicdsS8VuW+2mRf7WD0U2GKfzoOHlRzKJOOd7Evn
+        WFwIp4Kt/uaD/qUiB7THylhmccyZ3DB6XQ==
+X-Google-Smtp-Source: ABdhPJzuKhoqJPMTI3E/2HXnE3LweUQEu8Rk/TqSBhDNjvJEdoHOdTG8+8OU/cW5iV8Qghaq9z1kfA==
+X-Received: by 2002:a62:1787:0:b029:151:1a04:894 with SMTP id 129-20020a6217870000b02901511a040894mr3946315pfx.37.1601384460281;
+        Tue, 29 Sep 2020 06:01:00 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 190sm5634629pfy.22.2020.09.29.06.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 06:00:59 -0700 (PDT)
+Message-ID: <5f73300b.1c69fb81.5630e.b57e@mx.google.com>
+Date:   Tue, 29 Sep 2020 06:00:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <e1dee0fd2b4be9d8ea183d3cf6d601cf9566fde9.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20200928
+Subject: next/master baseline: 430 runs, 2 regressions (next-20200928)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 29/09/20 13:59, Qian Cai wrote:
-> 
-> WARN_ON_ONCE(!allow_smaller_maxphyaddr);
-> 
-> I noticed the origin patch did not have this WARN_ON_ONCE(), but the mainline
-> commit b96e6506c2ea ("KVM: x86: VMX: Make smaller physical guest address space
-> support user-configurable") does have it for some reasons.
+next/master baseline: 430 runs, 2 regressions (next-20200928)
 
-Because that part of the code should not be reached.  The exception
-bitmap is set up with
+Regressions Summary
+-------------------
 
-        if (!vmx_need_pf_intercept(vcpu))
-                eb &= ~(1u << PF_VECTOR);
+platform              | arch | lab           | compiler | defconfig        =
+   | results
+----------------------+------+---------------+----------+------------------=
+---+--------
+at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
+   | 0/1    =
 
-where
+panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
+ig | 0/1    =
 
-static inline bool vmx_need_pf_intercept(struct kvm_vcpu *vcpu)
-{
-        if (!enable_ept)
-                return true;
 
-        return allow_smaller_maxphyaddr &&
-		 cpuid_maxphyaddr(vcpu) < boot_cpu_data.x86_phys_bits;
-}
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200928/plan/baseline/
 
-We shouldn't get here if "enable_ept && !allow_smaller_maxphyaddr",
-which implies vmx_need_pf_intercept(vcpu) == false.  So the warning is
-genuine; I've sent a patch.
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200928
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      663b07a45f972c23ac315fd690874bc00977fe99 =
 
-Paolo
 
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+   | results
+----------------------+------+---------------+----------+------------------=
+---+--------
+at91-sama5d4_xplained | arm  | lab-baylibre  | gcc-8    | sama5_defconfig  =
+   | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f72fb8983d6b2884cbf9dcf
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200928/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200928/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-2-g61393d279614/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f72fb8983d6b2884cbf9=
+dd0
+      failing since 153 days (last pass: next-20200424, first fail: next-20=
+200428)  =
+
+
+
+platform              | arch | lab           | compiler | defconfig        =
+   | results
+----------------------+------+---------------+----------+------------------=
+---+--------
+panda                 | arm  | lab-collabora | gcc-8    | omap2plus_defconf=
+ig | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f72fbd0ecebc33b8ebf9dc1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200928/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200928/arm/=
+omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-2-g61393d279614/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f72fbd0ecebc33b8ebf9=
+dc2
+      failing since 69 days (last pass: next-20200706, first fail: next-202=
+00721)  =20

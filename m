@@ -2,75 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DEC27DC26
-	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 00:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E9827DC2D
+	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 00:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbgI2WhU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Sep 2020 18:37:20 -0400
-Received: from ozlabs.org ([203.11.71.1]:41799 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728115AbgI2WhU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 29 Sep 2020 18:37:20 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1Dly0QK4z9sSC;
-        Wed, 30 Sep 2020 08:37:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601419038;
-        bh=nDdaIRopVsSYUNHCgPGV+F5lWyZ/fWHdmVjmcga+npk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NVPeeF/NqzF9A/S4Z6l29k6BX6+A+u1o26L2EIaeWWazZBMGPVnWI+JVL4h2vaiS/
-         UYNTLRUoB3bA/TZi/X4LmsFLucGwPrxShx639ysURs0ItyIiNDM9GhjIYNwV90qJxf
-         MYM/Y5V6mT0ltLHOJsLOwOzhBKyxN7vVk0BfdZOolhJpHw4C616xHSvbIHD5yJdMJ+
-         S2OUiPHxxSQbFquJ4C4IUiti+Ooe/jVtS5SuWIidRPo+F8DQcwUAJ3wvY26vrp5tZ2
-         63dfQyVCQiEfrQ6bMQ5D9xZjaFbWZyKpwqLUsUskImh7EFF5y6bTEgCSwfTs3tX8L8
-         ytqG7fLVpRWuA==
-Date:   Wed, 30 Sep 2020 08:37:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <20200930083717.0b8e7139@canb.auug.org.au>
+        id S1728206AbgI2WnA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Sep 2020 18:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728124AbgI2Wm7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Sep 2020 18:42:59 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6A6C061755;
+        Tue, 29 Sep 2020 15:42:58 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id x20so4856880ybs.8;
+        Tue, 29 Sep 2020 15:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Uzp0mbaDszk4+DW+KjTjHRU3IuMkydHeAh8AYBMQC4=;
+        b=Q1ihDVJGMcmGgokcLCYYkQYPU9KeaYFCXnc+QgKy4eqoziuhyzRkLSvHcpKyK9009p
+         PF+gxQ+uoqzwaIcZVBRaKivcKDI01ryz2oykrOGoQZQlDPqxMkZ0Dl19+1YQiKm9VATs
+         eoGxRASnHgiDHkXdtJpePVRBU38c96/XAAONMG9mAtVet0lyOjkD8gHYPIG33WImTR3o
+         afdrIddQuVkPAJ/JFA5MLUvv19v4lsDhvbL24UBtX5bG+u3bvT9SLt7sB0xp41cnNfNm
+         AdRMg6W23+/KI2D2irV8TWc6wC38naQ2c21upraF4JZu6zWG1HxQpvSnfWyr1xtd3Jyq
+         gkhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Uzp0mbaDszk4+DW+KjTjHRU3IuMkydHeAh8AYBMQC4=;
+        b=a+1mXeKkFLeD0Hfa1z5REyyORyZeiHk1v3r4OPYMgsCRaIURW3n46P9R8+GXjd7lEo
+         yzYtE3TKz+XE91ip6abo121mAAWiCBfObiFeHouWmxs82khVB+49VwqF4MG+KHH1Xl5f
+         gqtZrjvGSCvVXlQhbw3sMD/Dq1OxJbsAal4BSLFvN4UTdcCT1tpgPI7jyfC7mCGRKHr2
+         gGyFMQtj+braXo5AnCZfED5sT6Bc5pASbKMYSyPcAIQInTTJNz53P9iniV9DEqW2TycW
+         JAgKDfNy2Okm8k2PjoW4QelOoSu2cgkeFSB1TTmhGdWw14MbTGIo9SJzgvORqpWfxrH0
+         yoGw==
+X-Gm-Message-State: AOAM5325wR6BLGODVADUxYc92WdUY/n4AtJ936Wyr5eEjUL10YKojqyQ
+        TdCh6cha9fw9MnZmxgZzsO9cUYY+ouNCG0s/fCv7mUbitb0=
+X-Google-Smtp-Source: ABdhPJzUbfFoYw22pNhJEoKzH7dhAwYSkX18z6yiPiKX2FigwmnpapCglVbEwnP3QeiMNaqFQeKUpVGiT8RnaBQlekY=
+X-Received: by 2002:a25:9c82:: with SMTP id y2mr8603291ybo.364.1601419377394;
+ Tue, 29 Sep 2020 15:42:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oacCE8=l1=kxsO5mqTcKXtJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200930083120.6b969c8c@canb.auug.org.au>
+In-Reply-To: <20200930083120.6b969c8c@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Tue, 29 Sep 2020 17:42:46 -0500
+Message-ID: <CAH2r5mu6mSDQ5STUoFKYnDqyyQTY9jfdFiq6J0YwcxOuBd6y_w@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oacCE8=l1=kxsO5mqTcKXtJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+fixed
 
-Hi all,
+On Tue, Sep 29, 2020 at 5:31 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   87505cefd88d ("Convert trailing spaces and periods in path components")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commit
 
-  5f5f44ca646f ("EXP Revert "KVM: Check the allocation of pv cpu mask"")
 
-is missing a Signed-off-by from its committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oacCE8=l1=kxsO5mqTcKXtJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9ztx0ACgkQAVBC80lX
-0Gw/8wf+P/qSTg4ieSwdOg5Qsd95khiApajkFQ6m0uWf8Ts5Q7E3M7q5VyPOnJmG
-YVZX77deefFluvtyi+pY7Q7Pa1c2mHCXLAsDbQhuhbeheg5Wy6c7fsAqgRUhuIH0
-KAauoZ/dB/3c0hGe8Itp7SEth7pAJUwcvNc+glm/a/X8Xi7f7MGuBo/Uckqy5rt8
-x0WKgvMMRV2VtNG6Y4/whByHWIDDfaLPjbP6YyJkoLXlj6KrvPGjkK0n+IPb0MCQ
-eohN5qJ5uGTFd4kvglVw9W+1lZ0eoqU6wIm3FekcAJkiaH9AEhhmIBQT9G9k+vGD
-P4aDUSOceK72wQP5U95Vlg9q6vuubA==
-=toNR
------END PGP SIGNATURE-----
-
---Sig_/oacCE8=l1=kxsO5mqTcKXtJ--
+Steve

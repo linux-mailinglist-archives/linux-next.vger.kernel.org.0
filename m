@@ -2,120 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC54127BBCF
-	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 06:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7E727BCB1
+	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 08:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725710AbgI2ELM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Sep 2020 00:11:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:34085 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725320AbgI2ELL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 29 Sep 2020 00:11:11 -0400
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601352670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dyx38wIked7j7LE32TY+lTP/Kvmn3DXgSAx3Y20CudE=;
-        b=eonJM+q83Qh7kFO76jRACSgMHtKF5v+wY7IP2a0FMTqJKk0kgIE0E7nnL4jAE9Dot6bbsM
-        xJ4w3pVVh0LPaalNw0LrRo6IOtb0OpuUpwheR4F2kGwPYS4aaeZYQLGfpfQUcfJS2wouK2
-        bfZZzN1quEinYwEPhVBnOnN21cNXZnk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-516-GwNLlKHaP0ONTNhf19ePkQ-1; Tue, 29 Sep 2020 00:11:05 -0400
-X-MC-Unique: GwNLlKHaP0ONTNhf19ePkQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1725535AbgI2GBU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Sep 2020 02:01:20 -0400
+Received: from ozlabs.org ([203.11.71.1]:45729 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725355AbgI2GBU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 29 Sep 2020 02:01:20 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 59EBD1084C84;
-        Tue, 29 Sep 2020 04:11:03 +0000 (UTC)
-Received: from treble (ovpn-112-110.rdu2.redhat.com [10.10.112.110])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 035A67BE42;
-        Tue, 29 Sep 2020 04:10:59 +0000 (UTC)
-Date:   Mon, 28 Sep 2020 23:10:56 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C0pfh6CLGz9s0b;
+        Tue, 29 Sep 2020 16:01:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601359277;
+        bh=lyiMm0dbNsxCAlzMu4JOmGxzRVXQoG0UphpNbZR2Usk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iyAsJMUpL7ztsddYhSk3NVXQFoEwCY9QgIK6/3o6GSZ+lQEieWhbl9v+da09DmYsm
+         s/ugcDNfWjYCterogxb7t6/Az7LfDY9fm8581LAM16d/dAbpWT7M+fYGyeNfj2tsTE
+         tJiSmdx8n3FqVUZiz+6U8nYLHiemdnC7QupL4f86qprKGx/JUZWqzdHM8Y2uGpohBn
+         YEhLoY2s6Rgx+rwTc5MutdhjmoEuGe/wwRVYxEu4jC4MrR3EnJki2Xq+3vGHvz4cle
+         gdhCiw9so0Uwq9XJRG/Qhbm2Tc7Qso3Gviq+B8cSm6WcnHH2HJhWZ9cVhvFnjkmSOe
+         e9ZpbTWjm2TXQ==
+Date:   Tue, 29 Sep 2020 16:01:11 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Qinglang Miao <miaoqinglang@huawei.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: linux-next: build failure after merge of the vfs tree
-Message-ID: <20200929041056.uj6gedgm6hfjaxrx@treble>
-References: <20200924183038.3c6da86e@canb.auug.org.au>
- <20200924200807.GU3421308@ZenIV.linux.org.uk>
- <20200925220128.1604f09b@canb.auug.org.au>
- <20200925133820.GW3421308@ZenIV.linux.org.uk>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the tty tree
+Message-ID: <20200929160111.18719071@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200925133820.GW3421308@ZenIV.linux.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: multipart/signed; boundary="Sig_/2=V.9quiXz=cxF80yjE8NJn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 02:38:20PM +0100, Al Viro wrote:
-> On Fri, Sep 25, 2020 at 10:01:28PM +1000, Stephen Rothwell wrote:
-> > $ x86_64-linux-gnu-gcc --version
-> > x86_64-linux-gnu-gcc (Debian 10.2.0-9) 10.2.0
-> > $ x86_64-linux-gnu-ld --version
-> > GNU ld (GNU Binutils for Debian) 2.35
-> > 
-> > and the gcc plugins don't get built for the allnoconfig builds.
-> 
-> > I reverted my Revert commit after I finished linux-next today and built
-> > the x86_64 allnoconfig verion of lib/iov_iter.s:
-> > 
-> > $ grep -A 1 '41 "/home/sfr/next/next/arch/x86/include/asm/barrier.h"' lib/iov_iter.s
-> > # 41 "/home/sfr/next/next/arch/x86/include/asm/barrier.h" 1
-> > 	cmp $140737488351232,%rdx; sbb %rcx,%rcx;	#, uaddr, mask
-> 
-> Wait a sec...
-> static inline unsigned long array_index_mask_nospec(unsigned long index,
->                 unsigned long size)
-> {
->         unsigned long mask;
-> 
->         asm volatile ("cmp %1,%2; sbb %0,%0;"
->                         :"=r" (mask)
->                         :"g"(size),"r" (index)
->                         :"cc");
->         return mask;
-> }  
-> 
-> used with large constant size will blow up - "g" is wrong, since cmp allows
-> 64bit arguments to be register or memory ones; immediates can't go past
-> 32bit.
-> 
-> Looks like on the configs where it builds we end up with not seeing it's
-> a constant...
-> 
-> Josh, any ideas?  We could, of course, make it "r"(size), but that would
-> be unpleasant in all existing callers...
+--Sig_/2=V.9quiXz=cxF80yjE8NJn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I've been traveling.  I'd just vote for making it "r".
+Hi all,
 
-array_index_nospec() is always called after a usercopy.  I don't think
-anyone will notice the extra mov, for the cases where it would be
-propagated as an immediate.  And the argument *is* an unsigned long
-after all.
+After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
-Stephen, can you confirm this fixes it?
+drivers/tty/serial/mvebu-uart.c: In function 'mvebu_uart_probe':
+drivers/tty/serial/mvebu-uart.c:806:6: warning: unused variable 'ret' [-Wun=
+used-variable]
+  806 |  int ret, id, irq;
+      |      ^~~
 
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index d158ea1fa250..69045ac62f58 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -40,7 +40,7 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
- 
- 	asm volatile ("cmp %1,%2; sbb %0,%0;"
- 			:"=r" (mask)
--			:"g"(size),"r" (index)
-+			:"r"(size), "r"(index)
- 			:"cc");
- 	return mask;
- }
+Introduced by commit
 
+  b63537020db3 ("serial: mvebu-uart: simplify the return expression of mveb=
+u_uart_probe()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2=V.9quiXz=cxF80yjE8NJn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9yzacACgkQAVBC80lX
+0Gw5Nwf8CsRTJL9V/dD3N5uLXfhjIFZa0ch5TpY1B9VSxbny2ztFmkMgJ7cQy/NJ
+lsbro1apGN/w4VX1WiHSkfe110+MNO4FDSILKZBXgeW3MXpc1j2OrMaX1RxDGVeA
+Kd8iYdt3Fnr6KjC0aYMQi8i2gui77GUIUXKga9gEUrcMTovdZNPWGYZYfLzTuQ4+
+DDD5gEZLGg+TPws7LuOY5yr3JD/xuBtCPKUjHtPfTUYzIrnsWTJ14ffzk1mqkNaL
+ysrClhQihz6Qc1L8zsBS+KX9pEqeMBDpQEiGDOdlatKQrTT1uslTWCRooxwPND0X
+kDsLMbm7+XIMfQs6On5Ru1IizPXLYw==
+=Qea+
+-----END PGP SIGNATURE-----
+
+--Sig_/2=V.9quiXz=cxF80yjE8NJn--

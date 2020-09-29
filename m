@@ -2,178 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC6527D1BF
-	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 16:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B132327D2DC
+	for <lists+linux-next@lfdr.de>; Tue, 29 Sep 2020 17:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730778AbgI2Orf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Sep 2020 10:47:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40774 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728198AbgI2Orf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 29 Sep 2020 10:47:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601390853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PtRKjvr2xKdnyYEHitFUee6d7Brs/dWCC9MF1YYO3xM=;
-        b=IksYDtnuZyRBSML19JirOJP6+HOk2rU69at/CKVG9PYJQ4JUIhC6ZcYpfdXg3+e0CXp6RM
-        B263CjemAjFMfUb6WiP2yJRNrTiQVCPvacxikZfF8S6OkGSOyAijkfYb+W9BqLrcDWX3Vh
-        jIINX5GqxNURNBZntH5E7z26Td0owm4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-20-1e1JJMPdMYatuMNeIr0fGQ-1; Tue, 29 Sep 2020 10:47:31 -0400
-X-MC-Unique: 1e1JJMPdMYatuMNeIr0fGQ-1
-Received: by mail-wr1-f70.google.com with SMTP id 33so1852025wrk.12
-        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 07:47:31 -0700 (PDT)
+        id S1728570AbgI2Pfj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Sep 2020 11:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728241AbgI2Pfj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Sep 2020 11:35:39 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A496C0613D0
+        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 08:35:39 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id d13so4161863pgl.6
+        for <linux-next@vger.kernel.org>; Tue, 29 Sep 2020 08:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8ouYvJ11GUvmankQF/7U1i7ZXcYaX9D7igBLN8Zdxa0=;
+        b=ffnUz12QPqQ8+EYUCJcWTxFgtMCk6BAB2P/mlYZkUvgK+FzAyWNxmcRAbeHCC5z2gN
+         dfdt2xo3DhM7bBaZkq55I6jeJLlTUCSMc9SRyy4IpvYNnCwYy9Al85AwN58Tfyov/XZf
+         ynqooyn5OcM5BLGpCpyAszVY80XccZDTZfWOuDvb0GNFeoAWgwxSYZoCfDKc1G96aFeU
+         voXfJw2xJP96BJFtOqCNujgz5zfdugKGJzehxI+YzikdJQRGFKEy+8D5gtE+Bn42t4b6
+         t9kPkm+DfvFEhOsy2fA+jbEY7jMjBfNQqM7Lo1KoekasKBbJYq2xMprKxvqGWweDb9Ss
+         f67Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PtRKjvr2xKdnyYEHitFUee6d7Brs/dWCC9MF1YYO3xM=;
-        b=ALq1KN5k+uVfalAlp412WPfK4czid1B+MA284J8siloRrQSO3UiwSQVIh8cpztAYCf
-         xTnBEiWS/lvXExu0P0UFgcbrDxR5Gt8Jp7zg3JSqVGze9LHBHX2GBbpZwOh5rJXygMV+
-         P5uRHmI80SEHmx7zCUYWunnDjSrVx1tc1bQendxqJQeOWlElBGGWMXwF5eGtI94Ulj+W
-         U6bbKzbQo3QxmIy7C91p92GP+z9M7tD1xwidTDhTFYP8s3FaVx9fSrAnJcGmGsgTJYyO
-         f60sCJFmv1iqS9MsRWaU1KyVEsda+UErNJ4c/MShHb+01bKhEuR2v5TvCWcgn3PLs6mb
-         6TWw==
-X-Gm-Message-State: AOAM533BJZDvJ1pZmol8yp0DTEcDjP8jipX0Hv7KIg5S70gJhiCbNX3p
-        K6AgIWRAk1q18wOzs0RvaF3powTHZYIWyPaVSHWyzR+14y9nUpj4Vb9+u7TMhxIYWZ3pEzoYxBE
-        UtWMHWcUqZZ9Acjq0TGcrFQ==
-X-Received: by 2002:a1c:9c4b:: with SMTP id f72mr4941942wme.188.1601390850360;
-        Tue, 29 Sep 2020 07:47:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwVvIsgRlLltuU7/F3qHNhZaYh3pEjgJZUzHs5Wbg6c+re1FxA/iDBgncxK9LACmKogcerxaw==
-X-Received: by 2002:a1c:9c4b:: with SMTP id f72mr4941915wme.188.1601390850039;
-        Tue, 29 Sep 2020 07:47:30 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:9dbe:2c91:3d1b:58c6? ([2001:b07:6468:f312:9dbe:2c91:3d1b:58c6])
-        by smtp.gmail.com with ESMTPSA id t17sm6687615wrx.82.2020.09.29.07.47.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2020 07:47:28 -0700 (PDT)
-Subject: Re: [PATCH] KVM: x86: VMX: Make smaller physical guest address space
- support user-configurable
-To:     Qian Cai <cai@redhat.com>, Mohammed Gamal <mgamal@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, sean.j.christopherson@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20200903141122.72908-1-mgamal@redhat.com>
- <1f42d8f084083cdf6933977eafbb31741080f7eb.camel@redhat.com>
- <e1dee0fd2b4be9d8ea183d3cf6d601cf9566fde9.camel@redhat.com>
- <ebcd39a5-364f-c4ac-f8c7-41057a3d84be@redhat.com>
- <2063b592f82f680edf61dad575f7c092d11d8ba3.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <c385b225-77fb-cf2a-fba3-c70a9b6d541d@redhat.com>
-Date:   Tue, 29 Sep 2020 16:47:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8ouYvJ11GUvmankQF/7U1i7ZXcYaX9D7igBLN8Zdxa0=;
+        b=is8Q1LtVMuciGskiGp3rNQUm+C/0050EK7XB/su+hHkuTWJtwEFzQ1owvtvtHGUvEC
+         bzWZoS2nOivgPvSK8rJxr8h2f1rga79A0JIiBIyDu91PKsBQtyw5E+5yqrpYQJxqkgqL
+         nTbgqv8k1XDIn2nKjJV2xDQ19ql6wR+b0gcVPDBfZfPtM7EtBP5eRWRv7mbwHuwaBxy4
+         IEFY/dEb9hxjhwhIBHUSQJf7ymfMQxELJsN8lbafvo5WWooAycNDlCndlvlPojdHRqU2
+         DgsCTGt48DpdkbZzfHPc2RloEn8wuWCrzBCv8Tit8o8l41zkrqhAyvJnJ4ijVtPXT/ap
+         PwXg==
+X-Gm-Message-State: AOAM532GJ2gb/iu1uZAjaUyNblA3wK95uZSp3tOWP+0m01WWipGouEpd
+        rH+B9Z7wD2qlFVzjPLAozUjJ
+X-Google-Smtp-Source: ABdhPJzqZEBdNDpZI0r75IgOozmaEa/xnQcX3rbHKgba8WbhAS9a5Yr3tOG2O/1frtQUWERSV2rP+A==
+X-Received: by 2002:a63:5d58:: with SMTP id o24mr1674695pgm.115.1601393738619;
+        Tue, 29 Sep 2020 08:35:38 -0700 (PDT)
+Received: from Mani-XPS-13-9360 ([103.59.133.81])
+        by smtp.gmail.com with ESMTPSA id gb19sm5029947pjb.38.2020.09.29.08.35.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 29 Sep 2020 08:35:38 -0700 (PDT)
+Date:   Tue, 29 Sep 2020 21:05:31 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Govind Singh <govinds@codeaurora.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ath11k@lists.infradead.org
+Subject: Re: linux-next: build failure after merge of the mhi tree
+Message-ID: <20200929153531.GB17845@Mani-XPS-13-9360>
+References: <20200928184230.2d973291@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <2063b592f82f680edf61dad575f7c092d11d8ba3.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928184230.2d973291@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 29/09/20 15:39, Qian Cai wrote:
-> On Tue, 2020-09-29 at 14:26 +0200, Paolo Bonzini wrote:
->> On 29/09/20 13:59, Qian Cai wrote:
->>> WARN_ON_ONCE(!allow_smaller_maxphyaddr);
->>>
->>> I noticed the origin patch did not have this WARN_ON_ONCE(), but the
->>> mainline
->>> commit b96e6506c2ea ("KVM: x86: VMX: Make smaller physical guest address
->>> space
->>> support user-configurable") does have it for some reasons.
->>
->> Because that part of the code should not be reached.  The exception
->> bitmap is set up with
->>
->>         if (!vmx_need_pf_intercept(vcpu))
->>                 eb &= ~(1u << PF_VECTOR);
->>
->> where
->>
->> static inline bool vmx_need_pf_intercept(struct kvm_vcpu *vcpu)
->> {
->>         if (!enable_ept)
->>                 return true;
->>
->>         return allow_smaller_maxphyaddr &&
->> 		 cpuid_maxphyaddr(vcpu) < boot_cpu_data.x86_phys_bits;
->> }
->>
->> We shouldn't get here if "enable_ept && !allow_smaller_maxphyaddr",
->> which implies vmx_need_pf_intercept(vcpu) == false.  So the warning is
->> genuine; I've sent a patch.
+Hi,
+
+On Mon, Sep 28, 2020 at 06:42:30PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Care to provide a link to the patch? Just curious.
+> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> drivers/net/wireless/ath/ath11k/mhi.c:27:4: error: 'struct mhi_channel_config' has no member named 'auto_start'
+>    27 |   .auto_start = false,
+>       |    ^~~~~~~~~~
+> drivers/net/wireless/ath/ath11k/mhi.c:42:4: error: 'struct mhi_channel_config' has no member named 'auto_start'
+>    42 |   .auto_start = false,
+>       |    ^~~~~~~~~~
+> drivers/net/wireless/ath/ath11k/mhi.c:57:4: error: 'struct mhi_channel_config' has no member named 'auto_start'
+>    57 |   .auto_start = true,
+>       |    ^~~~~~~~~~
+> drivers/net/wireless/ath/ath11k/mhi.c:72:4: error: 'struct mhi_channel_config' has no member named 'auto_start'
+>    72 |   .auto_start = true,
+>       |    ^~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   ed39d7816885 ("bus: mhi: Remove auto-start option")
 > 
 
-Ok, I haven't sent it yet. :)  But here it is:
+After having the discussion with Kalle, we decided to drop these offending
+patches from mhi-next (reason is net-next will be broken without these patches).
+So we'll deal with this in next merge window.
 
-commit 608e2791d7353e7d777bf32038ca3e7d548155a4 (HEAD -> kvm-master)
-Author: Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue Sep 29 08:31:32 2020 -0400
+Thanks,
+Mani
 
-    KVM: VMX: update PFEC_MASK/PFEC_MATCH together with PF intercept
-    
-    The PFEC_MASK and PFEC_MATCH fields in the VMCS reverse the meaning of
-    the #PF intercept bit in the exception bitmap when they do not match.
-    This means that, if PFEC_MASK and/or PFEC_MATCH are set, the
-    hypervisor can get a vmexit for #PF exceptions even when the
-    corresponding bit is clear in the exception bitmap.
-    
-    This is unexpected and is promptly reported as a WARN_ON_ONCE.
-    To fix it, reset PFEC_MASK and PFEC_MATCH when the #PF intercept
-    is disabled (as is common with enable_ept && !allow_smaller_maxphyaddr).
-    
-    Reported-by: Qian Cai <cai@redhat.com>>
-    Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> interacting with commit
+> 
+>   1399fb87ea3e ("ath11k: register MHI controller device for QCA6390")
+> 
+> from the net-next tree.
+> 
+> I applied the following merge fix patch, but maybe more is required.
+> Even if so, this could be fixed now in the net-next tree.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 28 Sep 2020 18:39:41 +1000
+> Subject: [PATCH] fix up for "ath11k: register MHI controller device for QCA6390"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/net/wireless/ath/ath11k/mhi.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+> index aded9a719d51..47a1ce1bee4f 100644
+> --- a/drivers/net/wireless/ath/ath11k/mhi.c
+> +++ b/drivers/net/wireless/ath/ath11k/mhi.c
+> @@ -24,7 +24,6 @@ static struct mhi_channel_config ath11k_mhi_channels[] = {
+>  		.offload_channel = false,
+>  		.doorbell_mode_switch = false,
+>  		.auto_queue = false,
+> -		.auto_start = false,
+>  	},
+>  	{
+>  		.num = 1,
+> @@ -39,7 +38,6 @@ static struct mhi_channel_config ath11k_mhi_channels[] = {
+>  		.offload_channel = false,
+>  		.doorbell_mode_switch = false,
+>  		.auto_queue = false,
+> -		.auto_start = false,
+>  	},
+>  	{
+>  		.num = 20,
+> @@ -54,7 +52,6 @@ static struct mhi_channel_config ath11k_mhi_channels[] = {
+>  		.offload_channel = false,
+>  		.doorbell_mode_switch = false,
+>  		.auto_queue = false,
+> -		.auto_start = true,
+>  	},
+>  	{
+>  		.num = 21,
+> @@ -69,7 +66,6 @@ static struct mhi_channel_config ath11k_mhi_channels[] = {
+>  		.offload_channel = false,
+>  		.doorbell_mode_switch = false,
+>  		.auto_queue = true,
+> -		.auto_start = true,
+>  	},
+>  };
+>  
+> -- 
+> 2.28.0
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index f0384e93548a..f4e9c310032a 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -794,6 +794,18 @@ void update_exception_bitmap(struct kvm_vcpu *vcpu)
- 	 */
- 	if (is_guest_mode(vcpu))
- 		eb |= get_vmcs12(vcpu)->exception_bitmap;
-+        else {
-+		/*
-+		 * If EPT is enabled, #PF is only trapped if MAXPHYADDR is mismatched
-+		 * between guest and host.  In that case we only care about present
-+		 * faults.  For vmcs02, however, PFEC_MASK and PFEC_MATCH are set in
-+		 * prepare_vmcs02_rare.
-+		 */
-+		bool selective_pf_trap = enable_ept && (eb & (1u << PF_VECTOR));
-+		int mask = selective_pf_trap ? PFERR_PRESENT_MASK : 0;
-+		vmcs_write32(PAGE_FAULT_ERROR_CODE_MASK, mask);
-+		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, mask);
-+	}
- 
- 	vmcs_write32(EXCEPTION_BITMAP, eb);
- }
-@@ -4355,16 +4367,6 @@ static void init_vmcs(struct vcpu_vmx *vmx)
- 		vmx->pt_desc.guest.output_mask = 0x7F;
- 		vmcs_write64(GUEST_IA32_RTIT_CTL, 0);
- 	}
--
--	/*
--	 * If EPT is enabled, #PF is only trapped if MAXPHYADDR is mismatched
--	 * between guest and host.  In that case we only care about present
--	 * faults.
--	 */
--	if (enable_ept) {
--		vmcs_write32(PAGE_FAULT_ERROR_CODE_MASK, PFERR_PRESENT_MASK);
--		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, PFERR_PRESENT_MASK);
--	}
- }
- 
- static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
 

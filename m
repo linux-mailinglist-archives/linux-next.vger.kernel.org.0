@@ -2,51 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D6927E8B6
-	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 14:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607D527E8FA
+	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729867AbgI3Ml1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Sep 2020 08:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729767AbgI3Ml1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Sep 2020 08:41:27 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9438C061755;
-        Wed, 30 Sep 2020 05:41:26 -0700 (PDT)
+        id S1729707AbgI3MwK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Sep 2020 08:52:10 -0400
+Received: from ozlabs.org ([203.11.71.1]:34887 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725776AbgI3MwK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 30 Sep 2020 08:52:10 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1bTt3vJCz9sSt;
-        Wed, 30 Sep 2020 22:41:22 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1bkG0VVJz9sS8;
+        Wed, 30 Sep 2020 22:52:05 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601469683;
-        bh=MZa3I4X11U6g3zahDyYonOXRWDpauA3FSK6KKipyz8o=;
+        s=201702; t=1601470328;
+        bh=5uDqlMF7QMOoneOmZeOfQS1ttR1WOO7xw/PHqMk8yVU=;
         h=Date:From:To:Cc:Subject:From;
-        b=chGh0mA1PnSuSJuNCVTAfkN/kHIUCTA9lPW6E+bmro+YDjVaDhwBi2yP22TcJarCw
-         OYW52lus5XwaBbQgyE1CZmWyv13jyvJb5gXMXgGz1xnTxyDwMrNZn3XWlfbCeYNbAB
-         Xq1zFWAd2wcDBxVf8vQICG93Qzm5JeiAsDFcfTogVT1UlHmtCK35j04OktamXW9CeV
-         3SnuAblkr0HYfnOxymnVSuVrpBLDL9CQuHDpZPKcI/Bbq+E39a2vttOFUV2ZfessUx
-         vdiG+5zTla4mTwZM5DP4C/JczTWWet+mZEHQFvWhBI/ryTiXQT6vnZa6m1AgCxeubA
-         LLPY9VLKI2ZWA==
-Date:   Wed, 30 Sep 2020 22:41:21 +1000
+        b=hmlcrVmApJdPd8+xE8bpq0M43F/hU/dJBNrdcSUZ28dmb68vrdDhGp1XoQYK/hUoo
+         bHvlAcQRUTPEQptJPQNdMf38zG0H5td7x1cSg+3eHgdgW3sAdN+3pA6BCxGMhUPgHL
+         Vw29AuTt0BM8Pj6I7iAVMqx2P0eGRt8+23IXI+X8XAqNNtIOkaRZ1AuMHkNmcejwG9
+         BSMAhv/tIk/hUbbRH851nSCqRkBY2s+zSEIXxQ8J6e6qNQMqjQ+gimus9EUu40t+qu
+         y+MoTpv73R3eYQBMzvn1ID0TBcUd2BvWII/9UabKQS9y5SZ4m/w9bYxmxTAUzFW7qj
+         +GIdu+lk7Y9qA==
+Date:   Wed, 30 Sep 2020 22:52:04 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup.patel@wdc.com>
-Subject: linux-next: Fixes tag needs some work in the risc-v-fixes tree
-Message-ID: <20200930224121.12b54d61@canb.auug.org.au>
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20200930225204.6a02d9a0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uhBCk_IwK1FtX98DtPL/9G/";
+Content-Type: multipart/signed; boundary="Sig_/VDja9WA2r_K.PpQq0NRgshM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uhBCk_IwK1FtX98DtPL/9G/
+--Sig_/VDja9WA2r_K.PpQq0NRgshM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -54,37 +52,38 @@ Hi all,
 
 In commit
 
-  1e555ccc72e0 ("RISC-V: Check clint_time_val before use")
+  233e7aca4c8a ("sched/fair: Use dst group while checking imbalance for NUM=
+A balancer")
 
 Fixes tag
 
-  Fixes: d5be89a8d118 ("RISC-V: Resurrect the MMIO timer implementation
+  Fixes: fb86f5b211 ("sched/numa: Use similar logic to the load balancer fo=
+r moving between domains with spare capacity")
 
 has these problem(s):
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not break Fixes tags over more than one line.
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/uhBCk_IwK1FtX98DtPL/9G/
+--Sig_/VDja9WA2r_K.PpQq0NRgshM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl90fPEACgkQAVBC80lX
-0Gy0vgf+Nyfg/+LfxjCpyWYg71LQ8x9yQ9TaXRjiLha3pcEETv2uO2qBLY5pDFRN
-qKC/zYjFX4vX7ut09shqzz1ALJEtAV44YE5CcI/7uraqdIDyCIeyacXaPoYz+0hq
-5jbqVSRCt24Ou0i+OBw4SQF/d/U2XBToDHGizLSbUgD1PoHOV86A5+Qm98/FRigi
-oMsXiYVQwN4nulfSwRrh89V79IFiItwAf0eoZdOIgmOkq2L+NuSyIpKzlGLW3Tgx
-gMa328B9TCqzYH94RKEjkqEo1o8VY2yp0bLftqkaPrbMPPfcAzJnANhbEZ2SuSDP
-JHPrBVCIndOt0Ca8ech0smcjTgckiQ==
-=6L1F
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl90f3QACgkQAVBC80lX
+0Gwjnwf/WqAmTyah3Ts8LrraXSTm5iNzKaFnjOpav93RKLLuaEIldOpwVECyxJaV
+HPDb53YhHLdZaFIVwBNxfwK9WWgBzJ7uzl3uyW3h6jEfdBcu0eQnFxwaWFICXtE7
+vRtDKtHhDbREhC2NvQcwZvFXdWPHg/T4cxInGacU9bw8Nq4SURmOpVpex3Aifgoz
+ae+nLvK37HWhr3sc5aC0uNA1db4ZmepEMit4/ajm7M3na16zpKmEvTtjUVUlxe51
+i5wyr5feVKfNKkDWMI27FUr89y+N3aKRAubfiYdXJFBVXrDPhz0l2aMQrXY5829P
+83CqW7+I0vcDUdoJvSdp3U6AQxBN7g==
+=TG9w
 -----END PGP SIGNATURE-----
 
---Sig_/uhBCk_IwK1FtX98DtPL/9G/--
+--Sig_/VDja9WA2r_K.PpQq0NRgshM--

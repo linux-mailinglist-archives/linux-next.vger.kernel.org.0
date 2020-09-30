@@ -2,82 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E9827DC2D
-	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 00:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C981F27DEF4
+	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 05:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbgI2WnA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Sep 2020 18:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgI2Wm7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Sep 2020 18:42:59 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6A6C061755;
-        Tue, 29 Sep 2020 15:42:58 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id x20so4856880ybs.8;
-        Tue, 29 Sep 2020 15:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Uzp0mbaDszk4+DW+KjTjHRU3IuMkydHeAh8AYBMQC4=;
-        b=Q1ihDVJGMcmGgokcLCYYkQYPU9KeaYFCXnc+QgKy4eqoziuhyzRkLSvHcpKyK9009p
-         PF+gxQ+uoqzwaIcZVBRaKivcKDI01ryz2oykrOGoQZQlDPqxMkZ0Dl19+1YQiKm9VATs
-         eoGxRASnHgiDHkXdtJpePVRBU38c96/XAAONMG9mAtVet0lyOjkD8gHYPIG33WImTR3o
-         afdrIddQuVkPAJ/JFA5MLUvv19v4lsDhvbL24UBtX5bG+u3bvT9SLt7sB0xp41cnNfNm
-         AdRMg6W23+/KI2D2irV8TWc6wC38naQ2c21upraF4JZu6zWG1HxQpvSnfWyr1xtd3Jyq
-         gkhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Uzp0mbaDszk4+DW+KjTjHRU3IuMkydHeAh8AYBMQC4=;
-        b=a+1mXeKkFLeD0Hfa1z5REyyORyZeiHk1v3r4OPYMgsCRaIURW3n46P9R8+GXjd7lEo
-         yzYtE3TKz+XE91ip6abo121mAAWiCBfObiFeHouWmxs82khVB+49VwqF4MG+KHH1Xl5f
-         gqtZrjvGSCvVXlQhbw3sMD/Dq1OxJbsAal4BSLFvN4UTdcCT1tpgPI7jyfC7mCGRKHr2
-         gGyFMQtj+braXo5AnCZfED5sT6Bc5pASbKMYSyPcAIQInTTJNz53P9iniV9DEqW2TycW
-         JAgKDfNy2Okm8k2PjoW4QelOoSu2cgkeFSB1TTmhGdWw14MbTGIo9SJzgvORqpWfxrH0
-         yoGw==
-X-Gm-Message-State: AOAM5325wR6BLGODVADUxYc92WdUY/n4AtJ936Wyr5eEjUL10YKojqyQ
-        TdCh6cha9fw9MnZmxgZzsO9cUYY+ouNCG0s/fCv7mUbitb0=
-X-Google-Smtp-Source: ABdhPJzUbfFoYw22pNhJEoKzH7dhAwYSkX18z6yiPiKX2FigwmnpapCglVbEwnP3QeiMNaqFQeKUpVGiT8RnaBQlekY=
-X-Received: by 2002:a25:9c82:: with SMTP id y2mr8603291ybo.364.1601419377394;
- Tue, 29 Sep 2020 15:42:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200930083120.6b969c8c@canb.auug.org.au>
-In-Reply-To: <20200930083120.6b969c8c@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 29 Sep 2020 17:42:46 -0500
-Message-ID: <CAH2r5mu6mSDQ5STUoFKYnDqyyQTY9jfdFiq6J0YwcxOuBd6y_w@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        id S1726924AbgI3DZ0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Sep 2020 23:25:26 -0400
+Received: from ozlabs.org ([203.11.71.1]:46211 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726299AbgI3DZ0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 29 Sep 2020 23:25:26 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1M8L55npz9sSG;
+        Wed, 30 Sep 2020 13:25:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601436323;
+        bh=u54S/ygKxoHQd93zauf7Zl/YQ7Ohsz0njaj6JvK12BQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tZPbyFL/Un9ZbEW9flDKINmJehyEtp+G2Qmues8kfT/lzPpEznkgj9Gk6LDiJi7xS
+         d5eUt/COklLHEZ47jK5pmYNL53WNf1x36pwCqFolaRdOKet5H0Wvdr41mLrM83sH16
+         C97Q3gZGTjXhb8EyVgakNdbE0iyBOOa7p22ccPuxKUlWBqA1F8m1Gj9m9PlzNFUn1g
+         UU4csg2PLc98N/e/YEU4Y3qcumMTnCs5IgOSqHmEcIWA8vW3LbONvUFaai4CylDdFa
+         SbNqWFWBNPRnkD7asb8WX7hLzgvtizmuApGNlLM+NPzRYsRac4PvRcbl8SKuILYudo
+         Y9nW+SDGyIVtA==
+Date:   Wed, 30 Sep 2020 13:25:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Willy Liu <willy.liu@realtek.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20200930132521.41e5b00d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/FdD.lH2B3/sg9QFvd1eebk_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-fixed
+--Sig_/FdD.lH2B3/sg9QFvd1eebk_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 29, 2020 at 5:31 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   87505cefd88d ("Convert trailing spaces and periods in path components")
->
-> is missing a Signed-off-by from its committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  drivers/net/phy/realtek.c
 
--- 
-Thanks,
+between commit:
 
-Steve
+  bbc4d71d6354 ("net: phy: realtek: fix rtl8211e rx/tx delay config")
+
+from the net tree and commit:
+
+  66e22932eb79 ("net: phy: realtek: enable ALDPS to save power for RTL8211F=
+")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/phy/realtek.c
+index 0f0960971800,4bf54cded48a..000000000000
+--- a/drivers/net/phy/realtek.c
++++ b/drivers/net/phy/realtek.c
+@@@ -31,9 -33,13 +32,13 @@@
+  #define RTL8211F_TX_DELAY			BIT(8)
+  #define RTL8211F_RX_DELAY			BIT(3)
+ =20
++ #define RTL8211F_ALDPS_PLL_OFF			BIT(1)
++ #define RTL8211F_ALDPS_ENABLE			BIT(2)
++ #define RTL8211F_ALDPS_XTAL_OFF			BIT(12)
++=20
+ -#define RTL8211E_TX_DELAY			BIT(1)
+ -#define RTL8211E_RX_DELAY			BIT(2)
+ -#define RTL8211E_MODE_MII_GMII			BIT(3)
+ +#define RTL8211E_CTRL_DELAY			BIT(13)
+ +#define RTL8211E_TX_DELAY			BIT(12)
+ +#define RTL8211E_RX_DELAY			BIT(11)
+ =20
+  #define RTL8201F_ISR				0x1e
+  #define RTL8201F_IER				0x13
+
+--Sig_/FdD.lH2B3/sg9QFvd1eebk_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9z+qEACgkQAVBC80lX
+0GyY9Qf/cXBMXSwNE2gVWs91tBnwk1S3Z8hmsbC/Kfg+lhU8x4NlvFIRLmw7hq14
+/4IueTPX1EuPDna9IlWyEKM3LtJlSIxvrLD1+rirH8v6L4pzvqWO5VNtjXONljvK
+w769jrD47MzrIOo8DrC0P8EpSJukr3KWqdHG1t0p0B8wwSvAXRQwBzSOVXwY1YkL
+GKrbytiDr8zePgcIS4FsnwieflJBuJ/0dqnfSAarVRseuhTdQecV1TtibNuCwuql
+5OO/d7jsPNoKSMaNvA0iMsdP2Nx2q1xRLlMqPCEDt0g9DHqVuQYzWvPV6nOcRcSQ
+uNgYkRLtUBgKyRiupZwLMyJhcaxc5Q==
+=8cSi
+-----END PGP SIGNATURE-----
+
+--Sig_/FdD.lH2B3/sg9QFvd1eebk_--

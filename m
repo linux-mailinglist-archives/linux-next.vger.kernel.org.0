@@ -2,49 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685AB27E8FE
-	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 14:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E160227E916
+	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 15:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728340AbgI3MyB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Sep 2020 08:54:01 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34113 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbgI3MyB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 30 Sep 2020 08:54:01 -0400
+        id S1725776AbgI3NBW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Sep 2020 09:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725771AbgI3NBW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Sep 2020 09:01:22 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633B5C061755;
+        Wed, 30 Sep 2020 06:01:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1bmP0n28z9sS8;
-        Wed, 30 Sep 2020 22:53:57 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1bww1lB0z9sSC;
+        Wed, 30 Sep 2020 23:01:20 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601470439;
-        bh=ITAoACACOSJwNRhRYeETTT4Trm8gFpFR4fLNuGG80tw=;
+        s=201702; t=1601470880;
+        bh=X6xiN2I+x6wk33yKc9ZJAYAQCXgB64u04V5muRpUoDg=;
         h=Date:From:To:Cc:Subject:From;
-        b=jqj4a3HifSMPPGsulHv5ZcBzJD6+IL+d+awd/QwMFyHIBPvkgSLWaB9C+GeBVRdvJ
-         r0N3hp+lCRY4W1w3DVEUs+1kZ9pUimFIr3uzSxRUvZBKvDm2da6iexIaqykfXd4hf5
-         ItvB4f/9WP9EGYPJxI65r4xV6v4ZzkerCAEyWzwWqS1It/Vc6Oyx+r6P219C/U288M
-         ebWp51VTQRK1d1SGa9uCwPmko1rX6PwCz0/qXH1w4AYENVs+Sy4KQRznOeq8dTlWPD
-         g+6+slM71eXBpMLEmvTHFFhB2aCHytffbqaVvV2Yn4+wPbsxvphEVV3xLD5zKUfXd/
-         +spHx9KBidLiQ==
-Date:   Wed, 30 Sep 2020 22:53:56 +1000
+        b=qwGdwRznymrwuPS6IRWjx4VDBTL53v4BNJ+IKZeXNXFaEZ3+BUfI6AE657eO8vX8M
+         MVZkz/1XYEWEyQybM/QyvJzWY3jPf2b5ab9QfPUdkMnYUUMMf/vIaSwgz1qS1T0E13
+         gGnyUxIyQjfKZBleJCe5ZbNmSXVpJ7qCxKgRsxKhBFaF7SuV/EPpRd3HFPjGKSbNrA
+         T9AWd0z9K2vPIs7Mq29SSmm1ZsFWVRqM+KlQmbGLbK/5qCtn6AIyPMVHN7zmHZ2BQb
+         QtINCsuidDzI+xHoB4UI4htHx7S+fFWq/8V1hl13qQUfgGRdpV6p+U4G6GjL8Dkvxl
+         ik+8gcf+5YjCQ==
+Date:   Wed, 30 Sep 2020 23:01:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xunlei Pang <xlpang@linux.alibaba.com>
-Subject: linux-next: Fixes tag needs some work in the tip tree
-Message-ID: <20200930225356.714b1235@canb.auug.org.au>
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: linux-next: Fixes tag needs some work in the pinctrl tree
+Message-ID: <20200930230119.4ca24210@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bPq+/dM18VJ/a.oJTsDHfMC";
+Content-Type: multipart/signed; boundary="Sig_/VTB.ucLalxn6JrQwhO6XpBU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bPq+/dM18VJ/a.oJTsDHfMC
+--Sig_/VTB.ucLalxn6JrQwhO6XpBU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -52,35 +53,40 @@ Hi all,
 
 In commit
 
-  df3cb4ea1fb6 ("sched/fair: Fix wrong cpu selecting from isolated domain")
+  8947391f77c8 ("pinctrl: qcom: sm8250: correct sdc2_clk")
 
 Fixes tag
 
-  Fixes: 10e2f1acd010 ("sched/core: Rewrite and improve select_idle_sibling=
-s())
+  Fixes: 4e3ec9e407ad5058003309072b37111f7b8c900a
 
 has these problem(s):
 
-  - Subject has leading but no trailing quotes
+  - missing subject
+
+Just use
+
+	git log -1 --format=3D'Fixes: %h ("%s") <commit>'
+
+Fixes: 4e3ec9e407ad ("pinctrl: qcom: Add sm8250 pinctrl driver.")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/bPq+/dM18VJ/a.oJTsDHfMC
+--Sig_/VTB.ucLalxn6JrQwhO6XpBU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl90f+QACgkQAVBC80lX
-0Gwp3Af/UpF5ruXRpSy9XLzGE0KX/NNQ5Zj6fE1Qkpi49stWHmQlHXC8Ub4PSamb
-Vr12kGl0IwdsvdVtWCQ9C3Mw4pIdo7B8m0BxITKjTTfNyssqCuyDqkAWmCJ+GoUy
-Q3fOY9+UC5ZLCphRa63qsCobsED8CymIOdqL0/6j3dwfshV7IoBlGYzo/2zSJzXB
-CTzolsv9kjLgCeJjlXpeIMBwg7GDYoSH7Lao64fv+akGsGOEZoTYTXJMi0iEOhaC
-GZEJLoaa8EUgVCiUGhJ50ARO4Lc5bYST8t5rZ9tncFG1gkhtTVR/D/NFHXUY9wrS
-cvq8p6GH0ambkYlKFSX7fey9qZzEYA==
-=eV8N
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl90gZ8ACgkQAVBC80lX
+0Gxfngf9GBGBzxfE9TRaaqboItuOrSnPdq12dedvIE24bcOcU+tv24/QO/LvVj/j
+JHovNKqo6XO5H+Ckt3eiI2NML1xfi/hKbcB+qVgV7vka67EMymL8MWRcngs+j6fN
+GGwhh+5L5zALCWToQmHXGTs3eCQAVPDvLQVpw+aSfUD5IRwQNGAEO0dDAMeQRe3M
+ROBydeACGXBn59xpyV9zBNTNxs33GczF3YfAYTMTGnBgRKl6Jg88ag5zvw/XUTr8
+TxB853+1oxPAJSVS7mq4iiVRp4Y9dePMc2XxReHfQZuqOdy8+hZZdf4+a3JAMrsZ
+pNYGPLKxw9WooSq4S7QzJF9ibdLIMA==
+=qIpS
 -----END PGP SIGNATURE-----
 
---Sig_/bPq+/dM18VJ/a.oJTsDHfMC--
+--Sig_/VTB.ucLalxn6JrQwhO6XpBU--

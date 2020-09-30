@@ -2,85 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279C827E952
-	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 15:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F340F27EA07
+	for <lists+linux-next@lfdr.de>; Wed, 30 Sep 2020 15:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgI3NS6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Sep 2020 09:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725771AbgI3NS6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Sep 2020 09:18:58 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE83C061755;
-        Wed, 30 Sep 2020 06:18:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1cKC2CYTz9sSC;
-        Wed, 30 Sep 2020 23:18:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601471935;
-        bh=FkDTgKkdMZkN5NHC27aOBiKvLMyBdJbffOKlNeZGAWg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BPHaZKlYX732fbsVavb+Z7tCtAbp+DuQ0S9eM93tw8/rfbAwxp7OeJxukmTn0RtiW
-         mdCocFo8X3Pej083TSdLHKIzCwHhCsi1YD+I/3J6Jd286PgB1njy4ohvr67EaRg0P9
-         WsHk9jaeexOQuydeZQSSjkYbWHwFfPEjZc5uCBmMigcw3Xe4uwftcJ3bxyNjHPRXlK
-         6t24Mm0EfiX3plm5ADWpFzvugCs+Sf+Y7siic1UeRKs036pRAUIaoeTUt/LvObGoZJ
-         2N4d2EcwVT99uLv4LYKIZgSKtP9dIanUGTbAMfvdy4ZXAcC9Ypi9EovjDQ1lAiFbpv
-         7Hty9ys3DJ1KA==
-Date:   Wed, 30 Sep 2020 23:18:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
-Message-ID: <20200930231854.0ce0de19@canb.auug.org.au>
-In-Reply-To: <20200930230119.4ca24210@canb.auug.org.au>
-References: <20200930230119.4ca24210@canb.auug.org.au>
+        id S1730048AbgI3Nd1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Sep 2020 09:33:27 -0400
+Received: from crapouillou.net ([89.234.176.41]:57212 "EHLO crapouillou.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729663AbgI3Nd1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 30 Sep 2020 09:33:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1601472804; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ecNy/ZxFnTbjbqIO9nlUei1JR0PPL4AarFwXzFKz9CI=;
+        b=lxYQCYkS2XdyqSqq16yw9/T40tnQonUGTBT6Sv19anGho7VUp97RwFz4qhnHgq1E9+MtLF
+        v08Kd9A3oakGolE3MCiGYlzZpXxo5iHj5FyOzgqTweF97cPa8pGejg52DFJ5KEOpNBHrog
+        e+Js9L8qS1uQsNBoXvJoJRJUqwxI91Y=
+Date:   Wed, 30 Sep 2020 15:33:13 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: linux-next: build failure after merge of the drm tree
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-Id: <DB4HHQ.1KMN8GNWYJLC1@crapouillou.net>
+In-Reply-To: <20200930090252.GA9357@lst.de>
+References: <20200928135405.73404219@canb.auug.org.au>
+        <20200928060427.GA15041@lst.de> <KU5DHQ.C9RVOLP69UO81@crapouillou.net>
+        <20200928113415.GA555@lst.de> <72ADHQ.T6LL1SHQF0RG3@crapouillou.net>
+        <20200928121002.GA3219@lst.de> <GWEDHQ.HNERRUK8XXOM2@crapouillou.net>
+        <20200930090252.GA9357@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rbalI3ONL5eX0sbd1CMFIJK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rbalI3ONL5eX0sbd1CMFIJK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Christoph,
 
-Hi all,
-
-On Wed, 30 Sep 2020 23:01:19 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Just use
+Le mer. 30 sept. 2020 =E0 11:02, Christoph Hellwig <hch@lst.de> a =E9crit=20
+:
+> On Mon, Sep 28, 2020 at 03:31:28PM +0200, Paul Cercueil wrote:
+>>  It's allocated with dma_alloc_wc, but then it's only accessed as
+>>  non-coherent.
+>>=20
+>>  Anyway, for the time being I guess you could revert 37054fc81443.=20
+>> But I
+>>  have patches on top of it in drm-misc-next so it's going to be a=20
+>> mess.
+>>=20
+>>  If we have time I can come up with a custom dumb_create() fonction,=20
+>> to make
+>>  sure that the GEM buffers are allocated with=20
+>> dma_alloc_noncoherent(). Is
+>>  there a dma_mmap_noncoherent() too?
 >=20
-> 	git log -1 --format=3D'Fixes: %h ("%s") <commit>'
+> Please use the lower-level dma_alloc_pages and then just insert the
+> pages directly using remap_pfn_range.  Although it might make sense
+> to eventually create a wrapper around remap_pfn_range for all the
+> vma sizing sanity checks.
 
-git log -1 --format=3D'Fixes: %h ("%s")' <commit>
+One thing missing for remap_pfn_range(), I have no alternative for this:
 
-sorry :-)
---=20
-Cheers,
-Stephen Rothwell
+vma->vm_page_prot =3D dma_pgprot(dev, vma->vm_page_prot,=20
+DMA_ATTR_NON_CONSISTENT);
 
---Sig_/rbalI3ONL5eX0sbd1CMFIJK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+So I have to do:
 
------BEGIN PGP SIGNATURE-----
+vma->vm_page_prot =3D pgprot_noncached(vma->vm_page_prot);
+pgprot_val(vma->vm_page_prot) &=3D ~_CACHE_MASK;
+pgprot_val(vma->vm_page_prot) |=3D _CACHE_CACHABLE_NONCOHERENT;
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl90hb4ACgkQAVBC80lX
-0Gw5qwf+PQFnelYHkdtd/iykyRW9B8oDK53BDGDSjSBE0vHP1S2Km5ntImubM+4g
-6OLL9FrYBvXuZ98cTFF2aiFEBaxmkbK03Kdg1RNbmAI9+PNsu/suWPEz+uO++/hi
-n+2YZ4qPuXsyu2+tpcJWAJSdhT74hU+i4rLbSE+yprckWtCvveWi/G8b+ssxCvnc
-ulSqcNeCxqIryrkmnJhK//rJwmm/7bYu0WhfPWonlWZ6GGnB/BrfMUrKR8FPwrbK
-VYlo5otGP6114dnEzVqMCLlSWYRptLxnXPjdCuNENyxk9w6YddVX4lyF8DQH6Hxt
-wF8vnw6eJ2NUOhWMzSyICbuY3x2puQ==
-=gVIx
------END PGP SIGNATURE-----
+And that will only compile on MIPS, because these _CACHE_* macros are=20
+only defined there.
 
---Sig_/rbalI3ONL5eX0sbd1CMFIJK--
+I would need something like a pgprot_noncoherent(), I think.
+
+-Paul
+
+

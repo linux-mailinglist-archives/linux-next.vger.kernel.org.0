@@ -2,173 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 326AC27FBEE
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 10:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488E527FC97
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 11:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731724AbgJAIvw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Oct 2020 04:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731697AbgJAIvt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 04:51:49 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B27C0613E4
-        for <linux-next@vger.kernel.org>; Thu,  1 Oct 2020 01:51:48 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id o5so4679306wrn.13
-        for <linux-next@vger.kernel.org>; Thu, 01 Oct 2020 01:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q0ZqQW+4vFf+iD9A70s75Xj0tDXrtRGQDZhTqMv0HQA=;
-        b=GwbofYx9CoC9S0ddpDsHPuhwueqzRHZJ5M3qYwTGpY3ghcpSvLbKilOykFTg4hujbF
-         4cDGPHsCdmFztg066nYKNVFnoOQPPtCulSXtYZ/9JB+hmtVuoIXZauMaSu79yZoJVC6T
-         syAYqU+eBGvvW9GhE2Es/xGggziKKjMhpL4Bo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=Q0ZqQW+4vFf+iD9A70s75Xj0tDXrtRGQDZhTqMv0HQA=;
-        b=lp5PdxykpkWBs3NZ6LYh8zGGkyATlRnlhOfjIEP8NJA9lcjfZme1OzXf6hfjbs80U0
-         eOKnIr4SUVHf0EgbZlRhPSVVhjlF8CwqryWqokYDt4Ssa06vXDnpyZiAv98V4Aqu4av8
-         G86oSCjZftBoY/Z1JU6VU/sNP2HhhLb1Xz+vs6lliV1LecbYHKHRVXu8WFp+ohZIs70z
-         SVKxmayt3583qOu1qY7eV64quGfyP3l8ynLi49MSKQeosWgDKMBSXk9/TpmJ2pykoxPk
-         xnZXvW61WOHDTZqmFBTEBkkOl6iZV//xK2WFui4HgRpfrq02c4p1DYD4UBUgnKoXx9Or
-         GQOg==
-X-Gm-Message-State: AOAM531wZJnwdm9CfK2wCqWAbhaRCX6W+HrcWo6aTj0bJ59HuDg9q2+s
-        yIyOT0gAYXD/eh7yYGDos2SjXg==
-X-Google-Smtp-Source: ABdhPJzKXFLbzshpy+p+8230Vw8GdYl9ooKUmCa2O/O8jqzK2KVTh/nWZ/iQ0i7cPspGYyUBl9SBvg==
-X-Received: by 2002:adf:ec47:: with SMTP id w7mr8110204wrn.175.1601542307324;
-        Thu, 01 Oct 2020 01:51:47 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n3sm7712106wmn.28.2020.10.01.01.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 01:51:46 -0700 (PDT)
-Date:   Thu, 1 Oct 2020 10:51:44 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH 1/3] drm: Add and export function
- drm_gem_cma_create_noalloc
-Message-ID: <20201001085144.GD438822@phenom.ffwll.local>
-Mail-Followup-To: Paul Cercueil <paul@crapouillou.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20200930165212.GA8833@lst.de>
- <20200930171644.299363-1-paul@crapouillou.net>
+        id S1731670AbgJAJnp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 05:43:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:50541 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726992AbgJAJnp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 1 Oct 2020 05:43:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C27VP09d9z9sTs;
+        Thu,  1 Oct 2020 19:43:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601545421;
+        bh=J4X96+CdZJrxFVmnrvuTEdZgARQMFxDjr3Wg7nv6vME=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dcSwWLO7nvRjFCjH7jjzIW4PzmXRPFoFnKyIqs9MIKcrJTT6bSvtRapRgAnEVMF6S
+         ZPGqqBWmSyHxkFFp0uOsCQOMmvo4j7QaWOWTfnUmeibQ7Sgk5oO4pHaHV/ek/1qeaH
+         gNpxo6cNc+SFkN962SR7L8sTXkfYX9nPCQAVHqb3KUAjSXDGQoqtV2g6hfMTUbp+rz
+         bx1gPzLOfP/qRdpfeSIVGoFEtkoa34SmtIl6qb4bDF94nEf7wOnRT2E9pU4SSEDPAz
+         uKqXmhTo8p1E3OxuhycKc8dW8Pi9V0D367MaN4x5qY5mYSEXICrLxX0KxhEDjIvv0s
+         YJ8pAdrw93sHQ==
+Date:   Thu, 1 Oct 2020 19:43:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the pm tree
+Message-ID: <20201001194337.35f881af@canb.auug.org.au>
+In-Reply-To: <20200922181126.3cae159a@canb.auug.org.au>
+References: <20200922181126.3cae159a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200930171644.299363-1-paul@crapouillou.net>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+Content-Type: multipart/signed; boundary="Sig_/LiHM.SdF5oFucLpdTGGyPhd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 07:16:42PM +0200, Paul Cercueil wrote:
-> Add and export the function drm_gem_cma_create_noalloc(), which is just
-> __drm_gem_cma_create() renamed.
-> 
-> This function can be used by drivers that need to create a GEM object
-> without allocating the backing memory.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/gpu/drm/drm_gem_cma_helper.c | 11 ++++++-----
->  include/drm/drm_gem_cma_helper.h     |  3 +++
->  2 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-> index 59b9ca207b42..6abc4b306832 100644
-> --- a/drivers/gpu/drm/drm_gem_cma_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-> @@ -34,7 +34,7 @@
->   */
->  
->  /**
-> - * __drm_gem_cma_create - Create a GEM CMA object without allocating memory
-> + * drm_gem_cma_create_noalloc - Create a GEM CMA object without allocating memory
->   * @drm: DRM device
->   * @size: size of the object to allocate
->   *
-> @@ -45,8 +45,8 @@
->   * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
->   * error code on failure.
->   */
-> -static struct drm_gem_cma_object *
-> -__drm_gem_cma_create(struct drm_device *drm, size_t size)
-> +struct drm_gem_cma_object *
-> +drm_gem_cma_create_noalloc(struct drm_device *drm, size_t size)
->  {
->  	struct drm_gem_cma_object *cma_obj;
->  	struct drm_gem_object *gem_obj;
-> @@ -76,6 +76,7 @@ __drm_gem_cma_create(struct drm_device *drm, size_t size)
->  	kfree(cma_obj);
->  	return ERR_PTR(ret);
->  }
-> +EXPORT_SYMBOL_GPL(drm_gem_cma_create_noalloc);
+--Sig_/LiHM.SdF5oFucLpdTGGyPhd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This feels a bit awkward, since for drivers who want to roll their own we
-can do that already.
+Hi all,
 
-I think the better approach is to export a cma function which allocates
-non-coherent dma memory.
--Daniel
+On Tue, 22 Sep 2020 18:11:26 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the pm tree, today's linux-next build (i386 defconfig)
+> produced this warning:
+>=20
+> In file included from include/acpi/acpi.h:24,
+>                  from drivers/acpi/acpica/hwgpe.c:10:
+> drivers/acpi/acpica/hwgpe.c: In function 'acpi_hw_gpe_read':
+> include/acpi/actypes.h:501:48: warning: cast to pointer from integer of d=
+ifferent size [-Wint-to-pointer-cast]
+>   501 | #define ACPI_CAST_PTR(t, p)             ((t *) (acpi_uintptr_t) (=
+p))
+>       |                                                ^
+> drivers/acpi/acpica/acmacros.h:18:41: note: in expansion of macro 'ACPI_C=
+AST_PTR'
+>    18 | #define ACPI_CAST8(ptr)                 ACPI_CAST_PTR (u8, (ptr))
+>       |                                         ^~~~~~~~~~~~~
+> drivers/acpi/acpica/acmacros.h:22:43: note: in expansion of macro 'ACPI_C=
+AST8'
+>    22 | #define ACPI_GET8(ptr)                  (*ACPI_CAST8 (ptr))
+>       |                                           ^~~~~~~~~~
+> drivers/acpi/acpica/hwgpe.c:50:17: note: in expansion of macro 'ACPI_GET8'
+>    50 |   *value =3D (u64)ACPI_GET8(reg->address);
+>       |                 ^~~~~~~~~
+> drivers/acpi/acpica/hwgpe.c: In function 'acpi_hw_gpe_write':
+> include/acpi/actypes.h:501:48: warning: cast to pointer from integer of d=
+ifferent size [-Wint-to-pointer-cast]
+>   501 | #define ACPI_CAST_PTR(t, p)             ((t *) (acpi_uintptr_t) (=
+p))
+>       |                                                ^
+> drivers/acpi/acpica/acmacros.h:18:41: note: in expansion of macro 'ACPI_C=
+AST_PTR'
+>    18 | #define ACPI_CAST8(ptr)                 ACPI_CAST_PTR (u8, (ptr))
+>       |                                         ^~~~~~~~~~~~~
+> drivers/acpi/acpica/acmacros.h:26:43: note: in expansion of macro 'ACPI_C=
+AST8'
+>    26 | #define ACPI_SET8(ptr, val)             (*ACPI_CAST8 (ptr) =3D (u=
+8) (val))
+>       |                                           ^~~~~~~~~~
+> drivers/acpi/acpica/hwgpe.c:85:3: note: in expansion of macro 'ACPI_SET8'
+>    85 |   ACPI_SET8(reg->address, value);
+>       |   ^~~~~~~~~
+>=20
+> Introduced by commit
+>=20
+>   7a8379eb41a4 ("ACPICA: Add support for using logical addresses of GPE b=
+locks")
 
->  
->  /**
->   * drm_gem_cma_create - allocate an object with the given size
-> @@ -98,7 +99,7 @@ struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
->  
->  	size = round_up(size, PAGE_SIZE);
->  
-> -	cma_obj = __drm_gem_cma_create(drm, size);
-> +	cma_obj = drm_gem_cma_create_noalloc(drm, size);
->  	if (IS_ERR(cma_obj))
->  		return cma_obj;
->  
-> @@ -476,7 +477,7 @@ drm_gem_cma_prime_import_sg_table(struct drm_device *dev,
->  		return ERR_PTR(-EINVAL);
->  
->  	/* Create a CMA GEM buffer. */
-> -	cma_obj = __drm_gem_cma_create(dev, attach->dmabuf->size);
-> +	cma_obj = drm_gem_cma_create_noalloc(dev, attach->dmabuf->size);
->  	if (IS_ERR(cma_obj))
->  		return ERR_CAST(cma_obj);
->  
-> diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma_helper.h
-> index 2bfa2502607a..be2b8e3a8ab2 100644
-> --- a/include/drm/drm_gem_cma_helper.h
-> +++ b/include/drm/drm_gem_cma_helper.h
-> @@ -83,6 +83,9 @@ int drm_gem_cma_mmap(struct file *filp, struct vm_area_struct *vma);
->  struct drm_gem_cma_object *drm_gem_cma_create(struct drm_device *drm,
->  					      size_t size);
->  
-> +struct drm_gem_cma_object *
-> +drm_gem_cma_create_noalloc(struct drm_device *drm, size_t size);
-> +
->  extern const struct vm_operations_struct drm_gem_cma_vm_ops;
->  
->  #ifndef CONFIG_MMU
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+I am still getting these warnings ...
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LiHM.SdF5oFucLpdTGGyPhd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl91pMkACgkQAVBC80lX
+0GwdCgf/RNgZyS5m2LkshdnMmBp+8tesk3stxfbNHOZn+mQIt7Xphxx+9B5UDjcm
+K8QrpJi/DgaqwBAOTE1KCOxnPdhefMxfX7+jILbiWT5Vk5gIiJ0zHNkcAxRIzzQS
+1qXlzeROOYdmzP+Xa5DtTCSe0teopDT/U6XjF2b70aixLD7ZjZtKQUgLvyfowQuT
+yM+JXEAfqDALgDDxHDMgMPWK5RHUBmbZqdIUWLoOokxkHnvAEHrVmDy72F2ASbDU
+ZpZhpTH7W+vo57ZWr7Ugy+x0+uChuJ+A8EC5qzbqt0p+IML0hQT0J9To5Pr9A61k
+WoWW4ksoSGmym9SkiXEBPykU7ZZFPA==
+=aIYk
+-----END PGP SIGNATURE-----
+
+--Sig_/LiHM.SdF5oFucLpdTGGyPhd--

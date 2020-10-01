@@ -2,94 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91503280229
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 17:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E994D28022F
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 17:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732339AbgJAPI2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Oct 2020 11:08:28 -0400
-Received: from mga07.intel.com ([134.134.136.100]:3056 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732213AbgJAPI2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 1 Oct 2020 11:08:28 -0400
-IronPort-SDR: 2/bjamm5NXgcRVfi6LE3LpT/AjcVtk3DftdkGBPv7i39vEr3OHaSeuQzPOBr/XGQ5hFjL1QCrA
- UqymGpyqRRUA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9760"; a="226872520"
-X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
-   d="scan'208";a="226872520"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 08:08:21 -0700
-IronPort-SDR: O74dZO2eJgRDJLthE9jBgpEVhqwkllD59i4GnCHCxutJccngda6LcTYLp6JKVj8dIEg/+jV4fu
- l6hOT1x/4JaQ==
-X-IronPort-AV: E=Sophos;i="5.77,323,1596524400"; 
-   d="scan'208";a="504034506"
-Received: from lraichel-mobl.ger.corp.intel.com (HELO localhost) ([10.249.36.225])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2020 08:08:17 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the akpm tree with the drm-intel tree
-In-Reply-To: <CAKMK7uFfBLsZ=wetii4bc+BTiKObD5DJ7B-kDO4am6AhBY+AhQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20201001203917.43d46a3d@canb.auug.org.au> <20201001135350.GA14869@lst.de> <CAKMK7uFfBLsZ=wetii4bc+BTiKObD5DJ7B-kDO4am6AhBY+AhQ@mail.gmail.com>
-Date:   Thu, 01 Oct 2020 18:08:36 +0300
-Message-ID: <87h7rem1aj.fsf@intel.com>
+        id S1732213AbgJAPJs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 11:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732104AbgJAPJs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 11:09:48 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D08CC0613D0;
+        Thu,  1 Oct 2020 08:09:47 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id n61so5712360ota.10;
+        Thu, 01 Oct 2020 08:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=U0g09Rah3LxrhZwTf9GoVSaA9gSyeX4AfpYye/uEAuE=;
+        b=TPF6PiHp1EPgq+RTiUAONnQUVkmpLMm0etlXShlH8gVlzDJ6R4owjU5qZSDoS5vJwn
+         qDzZMsHR1Al21VEn1y4Dq6IvBjpHJtsg0jbONUPx7bo4ZTZhdpEw2ax8FWgApKk4RTSN
+         A0BtWa+yF3/bdwOFtuzt+6DrjNESW4aMdowth73CyjrEgZUeCVcTZaWKauKY+2+na75/
+         GjRke27bp/8c7S6gBB1OK0XZYl1Nm1JZn28fWLKk4NrjvxCgXWQUzBpTSbunM0YHDIo2
+         Q4GS0uXcF+kWBjD4BGWHWlaXos2rmPgfhX//SPwPN7KC0GKQBwCV1aL7pVHdoG9TeCT8
+         VUnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=U0g09Rah3LxrhZwTf9GoVSaA9gSyeX4AfpYye/uEAuE=;
+        b=jYy5glnTy780J9xCHLJITgyQ5YR1RjoEpdAYPu0AQ097ggaBTTE8Ba9SdgfOd4gisx
+         8cyBFV2DtbT/xu36jC2pl4deHIf9s5Tlh5tDdAzftfcaoDsVcBBgB9DzboLfuJAm8UsU
+         EqLa/uW2jn1cQg/CmQ4YP8nlpmJQ7G8DuF36x8PzhcuGachHEdPt5RMTbhKkmt6TtRiY
+         K3nUXi2keYEo3SG6pEjRIXmtfnC+mpsqYfHXWe9WdlDava6DPdXkQqij93ZdZ/MkQeas
+         wt5H+mFQj8bvLdlVW/jTjQyFrR5OS9DsJt0XA6j4vq1pn/ffkEaiwYqBRfkjfgcAFPIy
+         YwDA==
+X-Gm-Message-State: AOAM5316Eb2CGe6hR4CTdHIrfrO3Gq/B4OHUamHNJ+f/3e+VRArB1LCy
+        ixBaBTyVvZPkOmX91STscO8=
+X-Google-Smtp-Source: ABdhPJzotb2mZ2pV2e7egchL0U0gs98OQTt8NT1VSwbIMYkLCSRnnl513MWFPNP7waDS4CYR7oI69g==
+X-Received: by 2002:a05:6830:3155:: with SMTP id c21mr5034140ots.2.1601564986581;
+        Thu, 01 Oct 2020 08:09:46 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c14sm1448350ooi.9.2020.10.01.08.09.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 01 Oct 2020 08:09:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 1 Oct 2020 08:09:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Vadim Pasternak <vadimp@nvidia.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the hwmon-staging tree
+Message-ID: <20201001150944.GA64648@roeck-us.net>
+References: <20201001125310.3399978a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201001125310.3399978a@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 01 Oct 2020, Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
-> On Thu, Oct 1, 2020 at 3:53 PM Christoph Hellwig <hch@lst.de> wrote:
->>
->> On Thu, Oct 01, 2020 at 08:39:17PM +1000, Stephen Rothwell wrote:
->> > Hi all,
->> >
->> > Today's linux-next merge of the akpm tree got a conflict in:
->> >
->> >   drivers/gpu/drm/i915/gem/i915_gem_pages.c
->> >
->> > between commit:
->> >
->> >   4caf017ee937 ("drm/i915/gem: Avoid implicit vmap for highmem on x86-32")
->> >   ba2ebf605d5f ("drm/i915/gem: Prevent using pgprot_writecombine() if PAT is not supported")
->
-> Uh these patches shouldn't be in linux-next because they're for 5.11,
-> not the 5.10 merge window that will open soon. Joonas?
+On Thu, Oct 01, 2020 at 12:53:10PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the hwmon-staging tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/hwmon/pmbus/mp2975.c: In function 'mp2975_probe':
+> drivers/hwmon/pmbus/mp2975.c:740:32: error: passing argument 2 of 'pmbus_do_probe' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   740 |  return pmbus_do_probe(client, id, info);
+>       |                                ^~
+>       |                                |
+>       |                                const struct i2c_device_id *
+> In file included from drivers/hwmon/pmbus/mp2975.c:13:
+> drivers/hwmon/pmbus/pmbus.h:492:73: note: expected 'struct pmbus_driver_info *' but argument is of type 'const struct i2c_device_id *'
+>   492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+>       |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+> drivers/hwmon/pmbus/mp2975.c:740:9: error: too many arguments to function 'pmbus_do_probe'
+>   740 |  return pmbus_do_probe(client, id, info);
+>       |         ^~~~~~~~~~~~~~
+> In file included from drivers/hwmon/pmbus/mp2975.c:13:
+> drivers/hwmon/pmbus/pmbus.h:492:5: note: declared here
+>   492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+>       |     ^~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   dd38ac315b23 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
+> 
+Oops, sorry, got caught in API changes. Fixed.
 
-I don't know anything else, but both are tagged Cc: stable.
+Guenter
 
-BR,
-Jani.
+> I have used the hwmon-staging tree from next-20200930 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
->
->> > from the drm-intel tree and patch:
->> >
->> >   "drm/i915: use vmap in i915_gem_object_map"
->> >
->> > from the akpm tree.
->> >
->> > I fixed it up (I just dropped the changes in the former commits) and
->>
->> Sigh.  The solution is a bit more complicated, but I just redid my
->> patches to not depend on the above ones.  I can revert back to the old
->> version, though.  Andrew, let me know what works for you.
->
-> Imo ignore, rebasing onto linux-next without those intel patches was
-> the right thing for the 5.10 merge window.
-> -Daniel
 
--- 
-Jani Nikula, Intel Open Source Graphics Center

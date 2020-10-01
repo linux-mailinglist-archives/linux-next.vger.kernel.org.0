@@ -2,288 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFEB2805AB
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 19:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3079328067C
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 20:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732847AbgJARlm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Oct 2020 13:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S1732407AbgJASYv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 14:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732096AbgJARll (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 13:41:41 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAE7C0613D0
-        for <linux-next@vger.kernel.org>; Thu,  1 Oct 2020 10:41:41 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q4so2376058pjh.5
-        for <linux-next@vger.kernel.org>; Thu, 01 Oct 2020 10:41:41 -0700 (PDT)
+        with ESMTP id S1732384AbgJASYu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 14:24:50 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0B4C0613E3
+        for <linux-next@vger.kernel.org>; Thu,  1 Oct 2020 11:24:50 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id n61so6415848ota.10
+        for <linux-next@vger.kernel.org>; Thu, 01 Oct 2020 11:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=93E9wJvpAnh9TYpDagFxQ/1Phf1/Ki1H7Z+iHpAhI2E=;
-        b=b9gjVEw50s6uoSFeE432iSaExwdEdDVYSKTxLZXzxomm/MQ+6Su/vnNGYrZTpbhh51
-         kY7O3sd6chOydPGqJJsRRNDUdWwgeTnB2mNVd/KCQiDK/sT/l4olpTdfKR0dW/n5AfA3
-         YJrPmVc+QLuGuaeKU6aTiAZ/DANipwU7W7bIRta9okjdnSXOYwqymqr/SIRfOUWkqmrH
-         LHnVDomLOdAp2GlQI6e24WZsjyh/M0CdznD7m/YQO1TqCPPvMGqJ9pEY2EKIo+GPDkcA
-         XPn6f6Hxv/lIowuCJQkpuxUN8T4LyiIjZR3BgUgOh9I1XPmkwzccMpQSTV7J4uHLh75d
-         VNBw==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7Y8kwT+ROkgjZr0Bqbw1zBd8u6aeCCa5OOj6AKhB4fk=;
+        b=gkhPgFzGjJMsz5ghjHdA/sGZd3J6aQAA1JuFyZ56AEuvCbzt0o0nitxaL/bfbc4vyb
+         ZaUzMfiw6JALKv72W4NgHU6eMZZYNm/amG6bgFdl0qESiLHu4C2/0jss9hk3QUWp/fRW
+         semtDI5Ok4/0lxLZ/iJ2Tta0XrbQTUdm2aOVLQGdsPKURboWfBctCOzWU1dQsjDcgCGn
+         7eTUclWwVgasO8gZiu/MN/1hL9IooZboMmN9fJm32vISG0YOOeMoE0qRyqLn50jexm9n
+         c1pS5v2RNj2hcWNysJvZANmqk3EtH55Q8PnHfDIxLH6h+CazIRnNTstf6RYgXEgVxVUx
+         KAbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=93E9wJvpAnh9TYpDagFxQ/1Phf1/Ki1H7Z+iHpAhI2E=;
-        b=Gyc9mk77QfxRhoRhsyLIcdVmaH6910xTkATrpCBYfDI+v2X7eEUWcCJE5Ojz4alzIu
-         mhJpDT5cCZT+RFxvpGQf8c7iWU0rRlG/3KxVyZbY73ICYb9La+anGzi9PpSSG39JwTFG
-         X4jI6C3CVkPHFqJWE9k8l318c14pOZPSRsGcTk48vs/U8SZlxqQhiQWFpjei+wg0k+dY
-         mmGevCy+tc6ppWuUPFtrWf6zKPYYiJDiLSuatY/5m5IcV06xGsq06gI8IWlqihhK2rHh
-         xwjSpAajMYOaflmxi05bgg0ZjwfOt/knJ0bSzo6+lCuWdraHVUDTLwAe6b8LKZg5AoZ6
-         icIQ==
-X-Gm-Message-State: AOAM533nkiRIMaVIPP/MSti9rc/NtmKXrr4Cwp7hSpjkIGC2/r57gpoT
-        C3G52V06Ua7qb++GwuOsbDoKUa5g5ZQLCw==
-X-Google-Smtp-Source: ABdhPJxgjPOuJtoDevgSJ3ObZdjIMHLEJr2/aYmuve6gj+zRpj54l7FkiGBZFhLxMGMywCuhMWATjw==
-X-Received: by 2002:a17:90a:71cb:: with SMTP id m11mr1022294pjs.14.1601574100597;
-        Thu, 01 Oct 2020 10:41:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d20sm445214pjv.39.2020.10.01.10.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 10:41:39 -0700 (PDT)
-Message-ID: <5f7614d3.1c69fb81.12aac.0f49@mx.google.com>
-Date:   Thu, 01 Oct 2020 10:41:39 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7Y8kwT+ROkgjZr0Bqbw1zBd8u6aeCCa5OOj6AKhB4fk=;
+        b=WcGEPA1CGLacKO4y1A4DLPEWZAAxSsJvHd3/VohoLX/CYGJSoiv3U103b38BWBdVbY
+         cS5iSmbz1E3Nm7r19knXgYe8HexnfHdHzLr/ddNg856NK4owlrQU3laP+/VNfW2oyZ+U
+         FT6AgEB1zIUI8SO0sx3E/jwsCc2lLjoF/lk9fdabjX1KA3R56uBiojuhqpI5BPjfHV67
+         E8QZuar4wGSHj1pV07Nif6PNw0zXHPNGOvrcYLXkFp6mQ2gkv93R1s6zTdE7lthOC4rF
+         8x1ei2ZpBbFcIbQit6K0km7auKC51BVQVcIyVkDxb13yO+YQnbWLGbsXjZbgN24Tu9/H
+         uGiw==
+X-Gm-Message-State: AOAM530J9VXTcO7cJ1lPtAdoiZc3WCUpBtfl8wvHYJYJY1Qo4o2DmHMH
+        0uAXJLOUPkvazWulwMe1UltopJWuhzZShmsGP1zT3a7n8EtlLgJp
+X-Google-Smtp-Source: ABdhPJxWy/dpIvIDE/9/cGX1GNZNxseEYh6cB+HFNMCEeGK1IxO6vBuNub9gh4y7ASbo3xoJaIH/2w5QgNadoQojr3U=
+X-Received: by 2002:a05:6830:2104:: with SMTP id i4mr6082572otc.266.1601576688890;
+ Thu, 01 Oct 2020 11:24:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20201001
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 397 runs, 5 regressions (next-20201001)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 1 Oct 2020 23:54:37 +0530
+Message-ID: <CA+G9fYvPXVRO0NV7yL=FxCmFEMYkCwdz7R=9W+_votpT824YJA@mail.gmail.com>
+Subject: BUG: kernel NULL pointer dereference, address: 00000024 - ftrace
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 397 runs, 5 regressions (next-20201001)
-
-Regressions Summary
--------------------
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-at91-sama5d4_xplained | arm   | lab-baylibre  | gcc-8    | sama5_defconfig =
-             | 0/1    =
-
-bcm2836-rpi-2-b       | arm   | lab-collabora | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 0/1    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | clang-10 | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-OMIZE_BASE=3Dy | 3/4    =
-
-panda                 | arm   | lab-collabora | gcc-8    | omap2plus_defcon=
-fig          | 0/1    =
+While running kselftest on i386 on Linux next 20201001 kernel this bug
+was noticed.
+BUG: kernel NULL pointer dereference, address: 00000024
 
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-201001/plan/baseline/
+steps to reproduce:
+# cd  /opt/kselftests/ftrace
+# ./ftracetest
 
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20201001
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d39294091fee6b89d9c4a683bb19441b25098330 =
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: d39294091fee6b89d9c4a683bb19441b25098330
+  git describe: next-20201001ftracetest
+  make_kernelversion: 5.9.0-rc7
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/872/config
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-at91-sama5d4_xplained | arm   | lab-baylibre  | gcc-8    | sama5_defconfig =
-             | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f75ddb1082d87701b877169
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201001/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201001/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-2-g61393d279614/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f75ddb1082d87701b877=
-16a
-      failing since 156 days (last pass: next-20200424, first fail: next-20=
-200428)  =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2836-rpi-2-b       | arm   | lab-collabora | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f75f3293a69cc23ba87716d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201001/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201001/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-2-g61393d279614/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f75f3293a69cc23ba877=
-16e
-      failing since 0 day (last pass: next-20200929, first fail: next-20200=
-930)  =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | clang-10 | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
+# selftests: ftrace: ftracetest
+# === Ftrace unit tests ===
+# [1] Basic trace file check [PASS]
+# [2] Basic test for tracers [PASS]
+# [3] Basic trace clock test [PASS]
+# [4] Basic event tracing check [PASS]
+# [5] Change the ringbuffer size [PASS]
+# [6] Snapshot and tracing setting [PASS]
+# [7] trace_pipe and trace_marker [PASS]
+# [8] Test ftrace direct functions against tracers [UNRESOLVED]
+# [9] Test ftrace direct functions against kprobes [UNRESOLVED]
+# [10] Generic dynamic event - add/remove kprobe events [PASS]
+# [11] Generic dynamic event - add/remove synthetic events [PASS]
+# [12] Generic dynamic event - selective clear (compatibility) [PASS]
+# [13] Generic dynamic event - generic clear event [PASS]
+# [14] event tracing - enable/disable with event level files
+[  207.481763] BUG: kernel NULL pointer dereference, address: 00000024
+[  207.488050] #PF: supervisor read access in kernel mode
+[  207.493205] #PF: error_code(0x0000) - not-present page
+[  207.498355] *pde = 00000000
+[  207.501258] Oops: 0000 [#1] SMP
+[  207.504421] CPU: 2 PID: 0 Comm: swapper/2 Tainted: G        W
+  5.9.0-rc7-next-20201001 #1
+[  207.513205] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  207.520680] EIP: trace_event_raw_event_sched_switch+0x10/0x180
+[  207.526510] Code: 08 5b 5e 5f 5d c3 8d 74 26 00 31 c0 eb e4 e8 27
+1d de 00 8d b4 26 00 00 00 00 55 89 e5 57 56 53 89 c6 89 cf 83 ec 28
+8b 45 08 <8b> 5e 24 89 55 cc 89 45 d0 65 a1 14 00 00 00 89 45 f0 31 c0
+f6 c7
+[  207.545253] EAX: f55aa480 EBX: f55aa480 ECX: f55adb40 EDX: 00000000
+[  207.551510] ESI: 00000000 EDI: f55adb40 EBP: f55bbf20 ESP: f55bbeec
+[  207.557769] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210092
+[  207.564554] CR0: 80050033 CR2: 00000024 CR3: 10830000 CR4: 003506d0
+[  207.570811] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  207.577069] DR6: fffe0ff0 DR7: 00000400
+[  207.580898] Call Trace:
+[  207.583344]  ? pick_next_task_fair+0x165/0x3b0
+[  207.587794]  __schedule+0x4dc/0xa90
+[  207.591283]  schedule_idle+0x1c/0x40
+[  207.594863]  do_idle+0x185/0x2a0
+[  207.598097]  cpu_startup_entry+0x25/0x30
+[  207.602021]  start_secondary+0x106/0x140
+[  207.605946]  startup_32_smp+0x164/0x168
+[  207.609778] Modules linked in: sch_fq sch_ingress veth algif_hash
+x86_pkg_temp_thermal fuse [last unloaded: test_bpf]
+[  207.620385] CR2: 0000000000000024
+[  207.623697] ---[ end trace 6ad815a56bdaaf71 ]---
+[  207.628342] EIP: trace_event_raw_event_sched_switch+0x10/0x180
+[  207.634173] Code: 08 5b 5e 5f 5d c3 8d 74 26 00 31 c0 eb e4 e8 27
+1d de 00 8d b4 26 00 00 00 00 55 89 e5 57 56 53 89 c6 89 cf 83 ec 28
+8b 45 08 <8b> 5e 24 89 55 cc 89 45 d0 65 a1 14 00 00 00 89 45 f0 31 c0
+f6 c7
+[  207.652918] EAX: f55aa480 EBX: f55aa480 ECX: f55adb40 EDX: 00000000
+[  207.659175] ESI: 00000000 EDI: f55adb40 EBP: f55bbf20 ESP: f55bbeec
+[  207.665433] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210092
+[  207.672211] CR0: 80050033 CR2: 00000024 CR3: 10830000 CR4: 003506d0
+[  207.678466] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  207.684740] DR6: fffe0ff0 DR7: 00000400
+[  207.688597] Kernel panic - not syncing: Attempted to kill the idle task!
+[  207.695329] Kernel Offset: disabled
+[  207.698828] ---[ end Kernel panic - not syncing: Attempted to kill
+the idle task! ]---
 
 
-  Details:     https://kernelci.org/test/plan/id/5f75dcd8c4d10e185d87718d
+full test log,
+https://lkft.validation.linaro.org/scheduler/job/1809544#L6012
 
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20200708124224+ef32c=
-611aa2-1~exp1~20200707224822.188 )
-  Plain log:   https://storage.kernelci.org//next/master/next-20201001/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201001/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-2-g61393d279614/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f75dcd8c4d10e18=
-5d877191
-      new failure (last pass: next-20200930)
-      2 lines
-
-    2020-10-01 13:40:34.886000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-01 13:40:34.886000  (user:khilman) is already connected
-    2020-10-01 13:40:50.092000  =00
-    2020-10-01 13:40:50.092000  =
-
-    2020-10-01 13:40:50.092000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-01 13:40:50.092000  =
-
-    2020-10-01 13:40:50.092000  DRAM:  948 MiB
-    2020-10-01 13:40:50.107000  RPI 3 Model B (0xa02082)
-    2020-10-01 13:40:50.196000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-01 13:40:50.227000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (384 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-OMIZE_BASE=3Dy | 3/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f75dfad173b1792ca877173
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201001/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201001/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-2-g61393d279614/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f75dfad173b1792=
-ca877177
-      new failure (last pass: next-20200930)
-      4 lines
-
-    2020-10-01 13:51:58.466000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-01 13:51:58.466000  (user:khilman) is already connected
-    2020-10-01 13:52:14.338000  =00
-    2020-10-01 13:52:14.338000  =
-
-    2020-10-01 13:52:14.338000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-01 13:52:14.338000  =
-
-    2020-10-01 13:52:14.339000  DRAM:  948 MiB
-    2020-10-01 13:52:14.355000  RPI 3 Model B (0xa02082)
-    2020-10-01 13:52:14.442000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-01 13:52:14.474000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (396 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-panda                 | arm   | lab-collabora | gcc-8    | omap2plus_defcon=
-fig          | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f75e0491b233bf14387716f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201001/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201001/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-2-g61393d279614/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f75e0491b233bf143877=
-170
-      failing since 71 days (last pass: next-20200706, first fail: next-202=
-00721)  =20
+-- 
+Linaro LKFT
+https://lkft.linaro.org

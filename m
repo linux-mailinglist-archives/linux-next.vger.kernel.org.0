@@ -2,82 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 665CF27F733
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 03:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E0427F808
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 04:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730476AbgJABWK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Sep 2020 21:22:10 -0400
-Received: from ozlabs.org ([203.11.71.1]:59853 "EHLO ozlabs.org"
+        id S1725823AbgJACxQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Sep 2020 22:53:16 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:50467 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730881AbgJABWI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 30 Sep 2020 21:22:08 -0400
+        id S1725372AbgJACxQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 30 Sep 2020 22:53:16 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1wMc5Qcsz9sVH;
-        Thu,  1 Oct 2020 11:22:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1yNn1FWMz9sTR;
+        Thu,  1 Oct 2020 12:53:12 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601515325;
-        bh=lxReYaKMZ4Whv2LEP3oxnspFk35br6e0B7xf7dEz2Hs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ANfcG7RdhJU1XQnVrLkFQGNV7ML0+gzOP0wt19ipwQvTzqfpvosIZJmb/7H4BSXg8
-         FwYA3EcniJxoluxnUgvxMvwul94/Z/jxuKmdU/xRopJOZugV80cs9oiClg8QTppvAr
-         Dn4hP0NbFWzVdDo7Ze9pT6ZRqoEJtBTBEtG1Zzbl/6ag/ZntzA0yyty+obbzS2BX0U
-         rdngucPAK3+IhM+ucc6EUyJBEKpfdjKcAi7qbvCw5AopFEGeBTUmF7EROycUfoBFWK
-         WNah0SHXXAWohfPWGEYSGhBUrlimt/ncFdEX2wQfxoKCTOtrGkCdPFmBXH4ysidSTU
-         aOHvmbTNL9dpw==
-Date:   Thu, 1 Oct 2020 11:22:02 +1000
+        s=201702; t=1601520793;
+        bh=bzhHsD9F+82Rc9As0BJmM3vlChyB3KuF3Wox7Cz256I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rzVGibBSE2DYf7WsIiGWFZRzK5zDAHNnfGcRsZQfi2JZ3fPa1amaHnr+VwDjj48qI
+         yN4+7gz27j1Xfrg08oPr99U25v5HaaglSjka/nC4BJSZe54PEENQtHd1thiHBBLBUw
+         s5Gew47NLNj39xjMI0dMVrg3ef5Iz1qjmOiPMFWuOI3UCz6pcQI95iQX8Wr7whJwZs
+         f+R7hVDXFdVkFoH8AsuO1Oog8ol6GjP9aNozCM0KD9lD8S1f1jPzbRcjNNDjbH64Da
+         757cngT1PYGxKYtqEHDXAdX1VmriUKV7W3fJGzCu+WYTafsdXStlMmA4+DxZmICf6o
+         6rCZ+r/VEFO6w==
+Date:   Thu, 1 Oct 2020 12:53:10 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Vadim Pasternak <vadimp@nvidia.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the clk tree
-Message-ID: <20201001112202.74a7e72a@canb.auug.org.au>
-In-Reply-To: <160151172628.310579.596467424545504483@swboyd.mtv.corp.google.com>
-References: <20200923214632.079690f6@canb.auug.org.au>
-        <160151172628.310579.596467424545504483@swboyd.mtv.corp.google.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hwmon-staging tree
+Message-ID: <20201001125310.3399978a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/epqEPDSI/CmOSX7m.VoxL/8";
+Content-Type: multipart/signed; boundary="Sig_/Ot49Y=10vJ5ouB+B0c3J7Q.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/epqEPDSI/CmOSX7m.VoxL/8
+--Sig_/Ot49Y=10vJ5ouB+B0c3J7Q.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-On Wed, 30 Sep 2020 17:22:06 -0700 Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Thanks for pointing that out. Is this part of checkpatch? I run
-> checkpatch on most patches and didn't see any complaint.
+After merging the hwmon-staging tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-This is not part of checkpatch, just some scripts I run after fetching
-each tree each day.
+drivers/hwmon/pmbus/mp2975.c: In function 'mp2975_probe':
+drivers/hwmon/pmbus/mp2975.c:740:32: error: passing argument 2 of 'pmbus_do=
+_probe' from incompatible pointer type [-Werror=3Dincompatible-pointer-type=
+s]
+  740 |  return pmbus_do_probe(client, id, info);
+      |                                ^~
+      |                                |
+      |                                const struct i2c_device_id *
+In file included from drivers/hwmon/pmbus/mp2975.c:13:
+drivers/hwmon/pmbus/pmbus.h:492:73: note: expected 'struct pmbus_driver_inf=
+o *' but argument is of type 'const struct i2c_device_id *'
+  492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_i=
+nfo *info);
+      |                                               ~~~~~~~~~~~~~~~~~~~~~=
+~~~~~^~~~
+drivers/hwmon/pmbus/mp2975.c:740:9: error: too many arguments to function '=
+pmbus_do_probe'
+  740 |  return pmbus_do_probe(client, id, info);
+      |         ^~~~~~~~~~~~~~
+In file included from drivers/hwmon/pmbus/mp2975.c:13:
+drivers/hwmon/pmbus/pmbus.h:492:5: note: declared here
+  492 | int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_i=
+nfo *info);
+      |     ^~~~~~~~~~~~~~
+
+Caused by commit
+
+  dd38ac315b23 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 cont=
+roller")
+
+I have used the hwmon-staging tree from next-20200930 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/epqEPDSI/CmOSX7m.VoxL/8
+--Sig_/Ot49Y=10vJ5ouB+B0c3J7Q.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl91LzoACgkQAVBC80lX
-0Gx+nQf+N09NcphrAUh/sN1LRxsfksBpBEVB4mQj8b0IiHRSmKyN2Z8tOlogwLai
-jELGwd+EhUzNrlWXoVDEgCLjC7P+4Jo2DWnv0kZyl/iCQJgQC1C9Y6smOqPOomnb
-rQ8UnL9z9rCZF46o+CSq3eOfysml969SCeEBiVAzq5eUvyj4KqNhwgDTZpRbVSBe
-GI59K9DfhPkgi/pCmd2TKPwnsrceU89hSYsPYVRefqxzyjYPKVj2gC7ktXDD4fpj
-V2O4Hfbc3TEdttqo/yyk6Qc3K4dvhswkcv8YiF6A5b5c3RISMWssatGxz12BLfwy
-Qf4zDskYWoOewM7apkFEWhNtcYZkBQ==
-=XxkC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl91RJYACgkQAVBC80lX
+0GwS9Qf/SbbejcpJ4T0s0C+j5NsyN3sWxjmmUQj19l/8jN039K0fGAEHg0pAPw6a
+xBtZSlqZjYH7VR9Yu8c1xFzMfE4YuqllnX97wZ9CyktOHf3JhuuLbh9/oXm4bIRg
+2PhTf5QuZsTuVmjz6vQSTN6Bd3/11bY/RWOj53pHXB1tgTNkKH7n7tFWu6KZ3R6w
+Tc/TFYyJ6Gmmwq7cez4sqKc0GvMhRdx35rdaDuipjj6ZMGrptW97U7KP2McoUeUb
+Lv+Xf0gsOjLpKAg17l2C2JSEZ1FKFf+oM+ZXkjuz9cG9aRY6czsr57B4uDkVOKrQ
+McchV/BrCXfZU0+BaSPFau8EBZTylA==
+=9aBv
 -----END PGP SIGNATURE-----
 
---Sig_/epqEPDSI/CmOSX7m.VoxL/8--
+--Sig_/Ot49Y=10vJ5ouB+B0c3J7Q.--

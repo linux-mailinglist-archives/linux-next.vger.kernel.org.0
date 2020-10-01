@@ -2,55 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2698D27F8E5
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 07:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE4727F8E8
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 07:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbgJAFJi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Oct 2020 01:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S1730671AbgJAFKC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 01:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbgJAFJi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 01:09:38 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40448C061755
-        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:09:38 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id m12so4221202otr.0
-        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:09:38 -0700 (PDT)
+        with ESMTP id S1725933AbgJAFKC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 01:10:02 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4000C0613D1
+        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:10:01 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id i17so4288749oig.10
+        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q6KOBJvHBicR0VoRRtmGhxc4kN/+VGebNPC7Evs4tF4=;
-        b=cm3qXwMNswUF/liZPf5zMwhmh8GyH5J8ViJ70KxfUs7yhhVYXbCaon/m0ixBKyvtaA
-         DHW1hKffN8HrskAwfnGEMN8iPg4MKLhY9VVD+L21T1W6x9VljZ7yudIj8AproT57ytv9
-         gHSNS89B9H4W5REGOxuK7w9WGMo5OPkLpZBy6fqX6aa6b7TzZEEMaJK9UZc0c889QEbE
-         0M1rpi9cmeeCTsaBNuizNXKVZBksVhtff5r7dAUNUaj5VFfi+fpzV1z6WFj659rdZIaC
-         QzKCc9z09at1Sj8sWPvD524hGLrD79PDvpP02W4IOLLALVL3QcoJdeH27iHhx5vsGwGH
-         EDEw==
+        bh=zfiXEz/Yp7QnacqOD0Bzaygm1o0QXJVF3bzwVd/E22Q=;
+        b=Uz+lMmvfUS1+tFLwnQ2LlW/OVHuHJghfAGtFQ6AJ2KGeGLhy1Qky5mnDJwmzbAbpKb
+         v7jfYo3oD29S7aGY7clc2Gq9wRpmItDqHfH1GVygOnbaQvgz8ez1XJHACveGMW+v2Pkz
+         8PsriqINqCg2XRIaDmvD0VZWhLMRGfypdMvwcLxgWBqJRkf5lvDwAdb+XnVtrmFiMotM
+         V8fUdTkREETmdPW7/XkRmjMdWtbJuWLL6y4W4PayDpTK7bIB/RGRZEFGJmcrBULqNU9H
+         DuZW+PYMLdDinRJntfZBzT73jAtCISezkDzN1iRG5JrsuSk9LCQhoHbKAcqneS2KZdXV
+         Si9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q6KOBJvHBicR0VoRRtmGhxc4kN/+VGebNPC7Evs4tF4=;
-        b=dEQvMQ8LsEvGnRxPRfcWbHI/Nky8wwsko9RuXzn7n+cXUw65pQ8646UWK93bliGaPd
-         aYCMK/9CsHpeL+9ROlR9H2Trjvsk1vtgDenjJks1JswYYCQ4oMb1ajjuuaTuA/NRVvNA
-         r5MBCGorrsFW5zvrGgR2sFwBOYAAJ1zsEu/B0V38+CqovRDXJf5N1NdLzwWy6DveG67f
-         elvrGnB03Z/mAa59mF+GPNiI5ufbzot2caYDw8Wfc4dWItizZCxemjMqMh8wIVctIlOS
-         JT4b6MGg9mw6jBzUmHRMPXaFM+Nk7VmzNWYykZhsVNGtKwFZiuccczPlADKCUQ4wLlVD
-         CJeQ==
-X-Gm-Message-State: AOAM531dvZghXeBiWGl1fCM6ZCaIuVcqEvOrxM4pG9QDy+kDJ3vSG0gb
-        bACViwGNlCNoiV6LY0XSqJbZHtbwaajp/i2xeBHRAw==
-X-Google-Smtp-Source: ABdhPJyiR313uHTtIPf7OufasmFIaSMpBW4yu1rpoIB4XegXsDLsrEUYH3jEZhxSCK1w300SRNjGUNOE3soN7DimF7Q=
-X-Received: by 2002:a05:6830:22ce:: with SMTP id q14mr3666913otc.72.1601528976723;
- Wed, 30 Sep 2020 22:09:36 -0700 (PDT)
+        bh=zfiXEz/Yp7QnacqOD0Bzaygm1o0QXJVF3bzwVd/E22Q=;
+        b=gijO50uh7sQdkig5YVci+lR1hLwwm8Pirli1/kVcUlAtH/ZBnTcdmxFK9Qs5Em4Zgw
+         nDMk8q24inPLaSmGBqV78/GEuOXVInz+zSuZFbwdDAR7Sz/oe0hRNgkfV0WXZOKtjrN+
+         xeye8nuLROzpxYMojAqFDEhm8aWnCIGWIfP5AuxYnp2UKYlEegVIfa6MQNHS05LxG7gk
+         N9Z6f9R/3ITK8ZbP+ccR54qA95q9pLyyxdEMsipWBZxL6+rzsYwzhlvx+6x+uifIjsW3
+         NBnEy1apy6do9W755miWpfA7doq46FdBuuIV0CJ0fNvafjAQrJ84STOTn61NpbqVfEvR
+         +m9w==
+X-Gm-Message-State: AOAM5336/OVTB5W3ft8dnmu9Na88CR6pNVm2lLrSiUvkaH4Sds6mwTBE
+        xZEu4aPzkEOPmvtA7sIqKIbbN7foCZaVdDZ/opItZQ==
+X-Google-Smtp-Source: ABdhPJzQ6h/KHKuHn3/SzwzefC4Qb4baLReVpfD338TkNEHJRp7rh7ry3lxoUZOLw48LBreyERso58n2djRLzIXnL88=
+X-Received: by 2002:aca:4142:: with SMTP id o63mr3062971oia.167.1601529001163;
+ Wed, 30 Sep 2020 22:10:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200928202650.2530280-1-keescook@chromium.org> <20200928202650.2530280-2-keescook@chromium.org>
-In-Reply-To: <20200928202650.2530280-2-keescook@chromium.org>
+References: <20200928202650.2530280-1-keescook@chromium.org> <20200928202650.2530280-3-keescook@chromium.org>
+In-Reply-To: <20200928202650.2530280-3-keescook@chromium.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 1 Oct 2020 10:39:25 +0530
-Message-ID: <CA+G9fYvwJM20+0Td24H9reeiQPkak+uq7TL1cugufkUxFthWFA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] selftests: Extract run_kselftest.sh and generate
- stand-alone test list
+Date:   Thu, 1 Oct 2020 10:39:50 +0530
+Message-ID: <CA+G9fYtLQN_dMXUE0zVbWmtYjpu16hbShMb+mxQh3tiedwrXuQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] selftests/run_kselftest.sh: Make each test
+ individually selectable
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
@@ -68,16 +68,18 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
 >
-> Instead of building a script on the fly (which just repeats the same
-> thing for each test collection), move the script out of the Makefile and
-> into run_kselftest.sh, which reads kselftest-list.txt.
+> Currently with run_kselftest.sh there is no way to choose which test
+> we could run. All the tests listed in kselftest-list.txt are all run
+> every time. This patch enhanced the run_kselftest.sh to make the test
+> collections (or tests) individually selectable. e.g.:
 >
-> Adjust the emit_tests target to report each test on a separate line so
-> that test running tools (e.g. LAVA) can easily remove individual
-> tests (for example, as seen in [1]).
+> $ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
 >
-> [1] https://github.com/Linaro/test-definitions/pull/208/commits/2e7b62155e4998e54ac0587704932484d4ff84c8
+> Additionally adds a way to list all known tests with "-l", usage
+> with "-h", and perform a dry run without running tests with "-n".
 >
+> Co-developed-by: Hangbin Liu <liuhangbin@gmail.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 
 Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>

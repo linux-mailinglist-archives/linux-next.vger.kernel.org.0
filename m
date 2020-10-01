@@ -2,109 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CB927F842
-	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 05:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2698D27F8E5
+	for <lists+linux-next@lfdr.de>; Thu,  1 Oct 2020 07:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730378AbgJADwk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Sep 2020 23:52:40 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49727 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725800AbgJADwk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 30 Sep 2020 23:52:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C1zjK6tQFz9sVH;
-        Thu,  1 Oct 2020 13:52:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601524358;
-        bh=gCAT7PYuRTzz3YkKtze9ptscMbAyN0IEBzt3bY9bTGQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gM+8vo9Bznn5OC3R32jb8bpMkElXkqqvTtuV0V74b/XqSWcgMxFc/KEbEXqaj9Y7+
-         0rwJuI2cWnkOHkIRF1FB/FzAeOyEeAc7mOhw46WQq/6cfA/qsJhAzosCcuUunceE27
-         eiAxMezNIHga2TNkzUNhYnjTfd9loBFuH0BTdHb3wbD6doknrWMA+gDhy3cAnKLh8i
-         VadCzvWHW2CYz+ob3nfxh+VC+LK2l5JFKUZ6qY1BqsJIb/4SlBTzGmbIUevfgm/MAq
-         /4Tjw9kapn4/n3kn/O1t9LhEfBac3J0dPcdmjB1Lx0lY4ZJP048+XqQBub70bIS/fP
-         +UWpLSZcBHJZA==
-Date:   Thu, 1 Oct 2020 13:52:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Geliang Tang <geliangtang@gmail.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20201001135237.6ec2468a@canb.auug.org.au>
+        id S1725943AbgJAFJi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 01:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbgJAFJi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 01:09:38 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40448C061755
+        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:09:38 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id m12so4221202otr.0
+        for <linux-next@vger.kernel.org>; Wed, 30 Sep 2020 22:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q6KOBJvHBicR0VoRRtmGhxc4kN/+VGebNPC7Evs4tF4=;
+        b=cm3qXwMNswUF/liZPf5zMwhmh8GyH5J8ViJ70KxfUs7yhhVYXbCaon/m0ixBKyvtaA
+         DHW1hKffN8HrskAwfnGEMN8iPg4MKLhY9VVD+L21T1W6x9VljZ7yudIj8AproT57ytv9
+         gHSNS89B9H4W5REGOxuK7w9WGMo5OPkLpZBy6fqX6aa6b7TzZEEMaJK9UZc0c889QEbE
+         0M1rpi9cmeeCTsaBNuizNXKVZBksVhtff5r7dAUNUaj5VFfi+fpzV1z6WFj659rdZIaC
+         QzKCc9z09at1Sj8sWPvD524hGLrD79PDvpP02W4IOLLALVL3QcoJdeH27iHhx5vsGwGH
+         EDEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q6KOBJvHBicR0VoRRtmGhxc4kN/+VGebNPC7Evs4tF4=;
+        b=dEQvMQ8LsEvGnRxPRfcWbHI/Nky8wwsko9RuXzn7n+cXUw65pQ8646UWK93bliGaPd
+         aYCMK/9CsHpeL+9ROlR9H2Trjvsk1vtgDenjJks1JswYYCQ4oMb1ajjuuaTuA/NRVvNA
+         r5MBCGorrsFW5zvrGgR2sFwBOYAAJ1zsEu/B0V38+CqovRDXJf5N1NdLzwWy6DveG67f
+         elvrGnB03Z/mAa59mF+GPNiI5ufbzot2caYDw8Wfc4dWItizZCxemjMqMh8wIVctIlOS
+         JT4b6MGg9mw6jBzUmHRMPXaFM+Nk7VmzNWYykZhsVNGtKwFZiuccczPlADKCUQ4wLlVD
+         CJeQ==
+X-Gm-Message-State: AOAM531dvZghXeBiWGl1fCM6ZCaIuVcqEvOrxM4pG9QDy+kDJ3vSG0gb
+        bACViwGNlCNoiV6LY0XSqJbZHtbwaajp/i2xeBHRAw==
+X-Google-Smtp-Source: ABdhPJyiR313uHTtIPf7OufasmFIaSMpBW4yu1rpoIB4XegXsDLsrEUYH3jEZhxSCK1w300SRNjGUNOE3soN7DimF7Q=
+X-Received: by 2002:a05:6830:22ce:: with SMTP id q14mr3666913otc.72.1601528976723;
+ Wed, 30 Sep 2020 22:09:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Xi1Cp4gLlSyPSukUV7g=1JA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200928202650.2530280-1-keescook@chromium.org> <20200928202650.2530280-2-keescook@chromium.org>
+In-Reply-To: <20200928202650.2530280-2-keescook@chromium.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 1 Oct 2020 10:39:25 +0530
+Message-ID: <CA+G9fYvwJM20+0Td24H9reeiQPkak+uq7TL1cugufkUxFthWFA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] selftests: Extract run_kselftest.sh and generate
+ stand-alone test list
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Justin Cook <justin.cook@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Xi1Cp4gLlSyPSukUV7g=1JA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
+>
+> Instead of building a script on the fly (which just repeats the same
+> thing for each test collection), move the script out of the Makefile and
+> into run_kselftest.sh, which reads kselftest-list.txt.
+>
+> Adjust the emit_tests target to report each test on a separate line so
+> that test running tools (e.g. LAVA) can easily remove individual
+> tests (for example, as seen in [1]).
+>
+> [1] https://github.com/Linaro/test-definitions/pull/208/commits/2e7b62155e4998e54ac0587704932484d4ff84c8
+>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Hi all,
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-Today's linux-next merge of the net-next tree got a conflict in:
-
-  net/mptcp/protocol.h
-
-between commit:
-
-  1a49b2c2a501 ("mptcp: Handle incoming 32-bit DATA_FIN values")
-
-from the net tree and commit:
-
-  5c8c1640956e ("mptcp: add mptcp_destroy_common helper")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/mptcp/protocol.h
-index 20f04ac85409,7cfe52aeb2b8..000000000000
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@@ -387,7 -407,8 +407,8 @@@ void mptcp_data_ready(struct sock *sk,=20
-  bool mptcp_finish_join(struct sock *sk);
-  void mptcp_data_acked(struct sock *sk);
-  void mptcp_subflow_eof(struct sock *sk);
- -bool mptcp_update_rcv_data_fin(struct mptcp_sock *msk, u64 data_fin_seq);
- +bool mptcp_update_rcv_data_fin(struct mptcp_sock *msk, u64 data_fin_seq, =
-bool use_64bit);
-+ void mptcp_destroy_common(struct mptcp_sock *msk);
- =20
-  void __init mptcp_token_init(void);
-  static inline void mptcp_token_init_request(struct request_sock *req)
-
---Sig_/Xi1Cp4gLlSyPSukUV7g=1JA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl91UoUACgkQAVBC80lX
-0GzlOQgApUn7XBMil9BuKY+GtJSLDWnvKm0AX3W8QwtRWA50cU0DBk8TXCYrN8tL
-MSaL/brv651s87L0vCB49bPRUswqsAHycnPTdGS+Qp/1js8zMjJ9OFosMO/Ap3sB
-jKtw7BK0wDzWaKoOzUbAcSKhb8c0nAgEeXtWYiaKb6QRLMV1q409Sw6pGxOpZgWU
-r6rB8OcBk7lFcK8rkWos9rJHybdjha+sDhhzzBC13jrg/3gIGKxel/DxLHtnUH8f
-3pz7zRtRt0u1ezxxuDKJSUNmOP45uY1vLkfxdQL0KrIspJPMxV7yqBCGpt6H3/Yp
-ktfGkm4dlVKOfrkwi4yUuHp5kekB2w==
-=UdjP
------END PGP SIGNATURE-----
-
---Sig_/Xi1Cp4gLlSyPSukUV7g=1JA--
+- Naresh

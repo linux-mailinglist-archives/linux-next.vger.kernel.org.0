@@ -2,89 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5A280A46
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 00:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01909280ACD
+	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 01:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgJAWcF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 1 Oct 2020 18:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgJAWcE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 18:32:04 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68232C0613D0;
-        Thu,  1 Oct 2020 15:32:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C2SXx0cT4z9sPB;
-        Fri,  2 Oct 2020 08:32:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601591521;
-        bh=fUY8+FnzG5Q2bV0WByp0ECn/teOoW1FrlqCSKsTxGEQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mXLdliclLjqScHhS0gYBIlLqMgf3nC8UeEnIfrZo7l09gltSETVnHWA3PNQ4a3Hot
-         V/5ZwmEs9Z34DvzWHJHMIoSp4DrkpcuAlXhxXAsmksUduoSTBqPUWd67H5Wj7VNFVy
-         fUxuxmRwEdjAlc41OLKyhbgR/MvknV2CyCfMBfxMILUEWU9t46whxsJrOAESDdg/OV
-         85GiuXPTgX1Iu0Tb3O7Ocs+GNeoL+MzeTCjSLJxEbEewq91iEmuXPWr5hZSQRekQfv
-         DdK8lxeCvdjKUGtd5tfJ/57SwYHxlVve3IP03aJ724TUkCgzwXGF72TXNb2UIC7Rag
-         X+Ay82CTyQueQ==
-Date:   Fri, 2 Oct 2020 08:32:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Si-Wei Liu <si-wei.liu@oracle.com>
-Subject: linux-next: Fixes tag needs some work in the vhost tree
-Message-ID: <20201002083200.685639e9@canb.auug.org.au>
+        id S1732836AbgJAXD6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 1 Oct 2020 19:03:58 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:54230 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726855AbgJAXD5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 1 Oct 2020 19:03:57 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091N1Avi141327;
+        Thu, 1 Oct 2020 23:03:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ from : mime-version : to : cc : subject : references : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=vOPqAmXxwNywmBL8EtvY+0JDVVyhFlGepf2Y739w2Pc=;
+ b=d1/RCwI5+xIGyu2UOABJnHOrhFZ8kzIhWSQc9d7d9gh7Sh2FWuAntDy3ZgQ0RCsz/WEz
+ ik5bDbK9eV81tM+M1OYfhNMmv4gtK+L64ZC0qahxAlzI0Z7CQ1utKpZTucqWbkGbNI0E
+ ClnqWJcADvUMHcMhOpUVmo0ts1y6TeUiV/+BBS5z3I3MZghauuzZ51ni4Hc4JpT8nENo
+ RGCq9dqKJMCK4ojQbiFR2QZz0FVFJSc6TBFAOYSHrP+Lud/LtZKQQR/JQaYmIKTRqkKY
+ Jdu6tDrh0dEqogOjxP89R/zI5QA2TZlNrFIIle1KeYDUUEaYkJgmajDKZW0popg0dS// Uw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 33swkm8r23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 01 Oct 2020 23:03:47 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091N11Xm125453;
+        Thu, 1 Oct 2020 23:03:47 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 33uv2hjebp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Oct 2020 23:03:47 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 091N3iAh014839;
+        Thu, 1 Oct 2020 23:03:44 GMT
+Received: from [10.159.142.93] (/10.159.142.93)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 01 Oct 2020 16:03:44 -0700
+Message-ID: <5F76604E.6080304@oracle.com>
+Date:   Thu, 01 Oct 2020 16:03:42 -0700
+From:   si-wei liu <si-wei.liu@oracle.com>
+Organization: Oracle Corporation
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dOyryZZtE/hUhAiRtgy=LTM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the vhost tree
+References: <20201002083200.685639e9@canb.auug.org.au>
+In-Reply-To: <20201002083200.685639e9@canb.auug.org.au>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9761 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010010185
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9761 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1011 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010010185
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dOyryZZtE/hUhAiRtgy=LTM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Thanks Stephen, the SHA1 referenced is not correct. A v2 patch is posted.
 
-Hi all,
+Thanks,
+-Siwei
 
-In commit
 
-  c9795f8fbb41 ("vhost-vdpa: fix page pinning leakage in error path")
+On 10/1/2020 3:32 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> In commit
+>
+>    c9795f8fbb41 ("vhost-vdpa: fix page pinning leakage in error path")
+>
+> Fixes tag
+>
+>    Fixes: 20453a45fb06 ("vhost: introduce vDPA-based backend")
+>
+> has these problem(s):
+>
+>    - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+>
 
-Fixes tag
-
-  Fixes: 20453a45fb06 ("vhost: introduce vDPA-based backend")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dOyryZZtE/hUhAiRtgy=LTM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl92WOAACgkQAVBC80lX
-0GyaZAf/Y5fX2v/DrBcNgRdYakP6nIRQJ5QmrZpFxwQ55pDeAQqXkazzG0pOmEhn
-QBVtiy0DU0p0hfenIfDco4fwi+uD1lip+m3rtsHhVO09LqESXH/L2veovm92fv5n
-SvCqE2zn7aMibYef6IFSylXXaFmwgeMW4WEY1gMT0bKT8v0YbT3dHzCiblbtMh6R
-ITFybYh3awtHJUH6mz3VaGepT6t2DaBA0e4qhwGKEt1jf9AAG1/mgr3YmDixJFn/
-TC5LPvyFisVe7xUYtaLEpxaeUU+bZZYPivtR/FG5L39hkLc4A57mttpDfFj/uWDW
-8URPwnDaVqgo4AKgfaTWEoPszkmnKA==
-=4v+2
------END PGP SIGNATURE-----
-
---Sig_/dOyryZZtE/hUhAiRtgy=LTM--

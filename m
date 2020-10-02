@@ -2,108 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA9B280E11
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 09:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3951D280E1E
+	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 09:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbgJBHdE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 03:33:04 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43574 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725961AbgJBHdE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 03:33:04 -0400
-Received: by mail-ot1-f65.google.com with SMTP id n61so510182ota.10;
-        Fri, 02 Oct 2020 00:33:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i0BxTRWq9QLgI6hSEktstwE5J1XX/IGqSCCD9sxjccA=;
-        b=WVPzS8oelpwW4VDC0lngLATEycaAGmW0KIiVLxScAp5QByl96+56spRfpCnc0EO+D+
-         +1nUOr2UoiQm7ThDwMZ4PiWNXhVBQpatg/v5sSVsYW0CopSOWehmjra3qjBwy3sQw8Ar
-         3kViwC9QfYR88V2yE21hspfq133i4nnr3BMFvbtIA3GY4bKYIcT1YuANMuKcIloKbj4S
-         Wtl1J5aLN5aIMRtraDbXwO2254N/KeSs5WQ3jKruwS0EQOPG4AjUETbNK34LQe8x1I/C
-         kRlmfZP6ME6ZPgB7lJLtFBXI6Rqp0v7fXVAYcB7ywdOpHMPpFjC/wJvTvo0W0RD8yblm
-         cMTQ==
-X-Gm-Message-State: AOAM532hgCWQg0IGzlbQKsY0rvM82fA0/nJOKK4dng7tLSXVmOn9b05v
-        BOTztbdNCSVcSPxwzbVbbdNclEu6GiNND3vwelcj8p1s
-X-Google-Smtp-Source: ABdhPJwACY0SABTWY3mw/HvFFTMe+4lu1BY2IUjRwb4M/xt4Kuvc6m3aL1GqaRSX6pAbToniQcn7gF8uX2+ivCXDufI=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr737978otp.107.1601623983253;
- Fri, 02 Oct 2020 00:33:03 -0700 (PDT)
+        id S1725961AbgJBHfz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 03:35:55 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:18348 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbgJBHfz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 03:35:55 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f76d84e0000>; Fri, 02 Oct 2020 00:35:42 -0700
+Received: from [10.2.56.62] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Oct
+ 2020 07:35:55 +0000
+Subject: Re: [PATCH] selftests/vm: fix: make check_config.sh executable
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Linux Next <linux-next@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+References: <20201002064811.435769-1-jhubbard@nvidia.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <fa388abf-c6b6-f975-959c-6bc1be03f026@nvidia.com>
+Date:   Fri, 2 Oct 2020 00:35:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-References: <20201002130237.42fe476e@canb.auug.org.au>
-In-Reply-To: <20201002130237.42fe476e@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Oct 2020 09:32:52 +0200
-Message-ID: <CAMuHMdVouviP6mUmTd1b1uvkmZWYXinECOvOLr-y-z-7C46cdA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marian-Cristian Rotariu 
-        <marian-cristian.rotariu.rb@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201002064811.435769-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601624142; bh=6aKRGI4jjZ60KF/SCMuVt1rtkIbOvp8a1aQsfb/vwtA=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=Qlqk4gqH248giwliwSnfsfUNuGu+EywSeQTKnzTI4rRgmfWbtkp0NCKF7NK4dIoPH
+         ZYPqa6OvGQIB44NsZR1cr1HLBqGBZalf12ELH1sVvQJG4xhNS6PqKryf6Phvj8kzIb
+         dx5tu+3+QVymJk2z7DSEPASgsyioKkA7aXD7JqeP9FD/4s8lXJ1bsxny4BOdN7U2ME
+         JjliyDQvF7TmVxnZmtFAMeZALF6KSZbCVWjsswhYx89OsSfIrqaEQOAFE8v3SPasFE
+         y1xFx0BWcEEs/4PrOMIYWXc045AQz3QDlQpdLXp2QXTs1ejvzUP17KEkHVI97EjN2m
+         eqDgub5ik04RA==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On 10/1/20 11:48 PM, John Hubbard wrote:
+> commit 30fb9454ab23 ("selftests/vm: hmm-tests: remove the libhugetlbfs
+> dependency") created the new check_config.sh file without the execute
+> bits set. This is a problem because the Makefile runs it with "./", so
+> now "make" is failing in that directory.
+> 
+> The posted patch [1] does seem to have it as an executable file, so I'm
+> not sure how this happened. But in any case, make check_config.sh
+> executable again, so that "make" in selftests/vm works once again.
+> 
+> [1] https://lore.kernel.org/linux-doc/20200929212747.251804-9-jhubbard@nvidia.com/
+> 
+> Fixes: commit 30fb9454ab23 ("selftests/vm: hmm-tests: remove the libhugetlbfs dependency")
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+> 
+> Hi,
+> 
+> This applies to today's 20201001) linux-next. I forgot if this needs to
+> be a separate patch or if it can be fixed up in Andrew's tree.
+> 
 
-On Fri, Oct 2, 2020 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the net-next tree got a conflict in:
->
->   Documentation/devicetree/bindings/net/renesas,ravb.txt
->
-> between commit:
->
->   307eea32b202 ("dt-bindings: net: renesas,ravb: Add support for r8a774e1 SoC")
->
-> from the net tree and commit:
->
->   d7adf6331189 ("dt-bindings: net: renesas,etheravb: Convert to json-schema")
->
-> from the net-next tree.
->
-> I fixed it up (I deleted the file and added the following patch) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 2 Oct 2020 12:57:33 +1000
-> Subject: [PATCH] fix up for "dt-bindings: net: renesas,ravb: Add support for r8a774e1 SoC"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+hmm, in fact I think something similar also happened to run_vmtest.sh, in the same
+directory. Please let me know if a patch is needed there, or if you can just fix
+up this one or the tree or something?
 
-Thank you, that resolution looks good to me!
+> thanks,
+> John Hubbard
+> NVIDIA
+> 
+> 
+>   tools/testing/selftests/vm/check_config.sh | 0
+>   1 file changed, 0 insertions(+), 0 deletions(-)
+>   mode change 100644 => 100755 tools/testing/selftests/vm/check_config.sh
+> 
+> diff --git a/tools/testing/selftests/vm/check_config.sh b/tools/testing/selftests/vm/check_config.sh
+> old mode 100644
+> new mode 100755
+> 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/Documentation/devicetree/bindings/net/renesas,etheravb.yaml
-> +++ b/Documentation/devicetree/bindings/net/renesas,etheravb.yaml
-> @@ -31,6 +31,7 @@ properties:
->                - renesas,etheravb-r8a774a1     # RZ/G2M
->                - renesas,etheravb-r8a774b1     # RZ/G2N
->                - renesas,etheravb-r8a774c0     # RZ/G2E
-> +              - renesas,etheravb-r8a774e1     # RZ/G2H
->                - renesas,etheravb-r8a7795      # R-Car H3
->                - renesas,etheravb-r8a7796      # R-Car M3-W
->                - renesas,etheravb-r8a77961     # R-Car M3-W+
-> --
-> 2.28.0
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+thanks,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+John Hubbard
+NVIDIA

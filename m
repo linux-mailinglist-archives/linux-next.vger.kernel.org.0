@@ -2,103 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A3B281E00
-	for <lists+linux-next@lfdr.de>; Sat,  3 Oct 2020 00:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942F9281E99
+	for <lists+linux-next@lfdr.de>; Sat,  3 Oct 2020 00:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725283AbgJBWEu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 18:04:50 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:7051 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725648AbgJBWEt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 18:04:49 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f77a3f40000>; Fri, 02 Oct 2020 15:04:36 -0700
-Received: from [10.2.58.214] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Oct
- 2020 22:04:48 +0000
-Subject: Re: [PATCH v2 2/2] selftests/vm: fix run_vmtest.sh: restore
- executable bits, and "s" in name
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <20201002084049.556824-1-jhubbard@nvidia.com>
- <20201002084049.556824-3-jhubbard@nvidia.com>
- <20201002145945.c5abb5f57dbeac30351b7757@linux-foundation.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <9c41820b-05d5-8e62-2ef2-ab82d5e02f06@nvidia.com>
-Date:   Fri, 2 Oct 2020 15:04:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1725446AbgJBWqE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 18:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbgJBWqD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 18:46:03 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFCCC0613D0
+        for <linux-next@vger.kernel.org>; Fri,  2 Oct 2020 15:46:03 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id q4so1909781pjh.5
+        for <linux-next@vger.kernel.org>; Fri, 02 Oct 2020 15:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zc5L4nr4dVUi+rfFZrY/83BZu7OKCaVrudFyrQwC9tk=;
+        b=lgmveYo2LZNOyCCahKX3gYNXSR3RDqXa3gUFBFTRX+E3jlo6amPHHvDkGBdVZzw0S5
+         yCBevr+ldYOBy1MyfDBpySf9J71K/FcfemZSHz9pDdVDnuen5uaUQILTXHGLhCC9+e4p
+         IR7OLTltI1w9YlOQek3CVC6P86srTSv79sgjc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zc5L4nr4dVUi+rfFZrY/83BZu7OKCaVrudFyrQwC9tk=;
+        b=KrD+h7wcQ34nerHFwUClaIqpHcwTAh7pbzuXBuWqaG5KA6kTpvnha8GwGPVB4ztQcE
+         FvAApVkJ/CQJ4egI6LIsHEr1uMMSjtr9zeUeu11CUnqaASx9CguWzW3r+Lmwq0/8TnL1
+         tL+ZtWM+5pXQAzzSbPrdW6KwOjoaPAnVCcHps78yzXBUGEsvRmwXAwn03Mpqms5fjcEM
+         sEStRKIul+jD7N+xyrGzq66TTKzSsscaC9EQ2qoCBTx21Z0Cqi/lXbsEdw09orRTFzNg
+         dCSqvm3npruANEfs9wgu1KEMS5RY10yNwwGC+Zs0hTxy+kMeQUWOPvCSdI1SXow0XyOn
+         VFnQ==
+X-Gm-Message-State: AOAM532KPxfR8aEZbW0YjNYbVqQly5xf4lDrF608/caeaIVPlD+laZCJ
+        mD/zyR+1AderUXXGO8sRfUeOqQ==
+X-Google-Smtp-Source: ABdhPJz86F/vlBMKar8+F1ffAI2X8jj8iZZYcvXnBR9Ubx8INdUjL7Nov24GYM3V1b/HsaljIHU8QA==
+X-Received: by 2002:a17:90a:3984:: with SMTP id z4mr4851276pjb.131.1601678763400;
+        Fri, 02 Oct 2020 15:46:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m21sm3090187pfo.13.2020.10.02.15.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 15:46:02 -0700 (PDT)
+Date:   Fri, 2 Oct 2020 15:46:01 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the tip tree
+Message-ID: <202010021545.43A9454E@keescook>
+References: <20200914132249.40c88461@canb.auug.org.au>
+ <202009141310.C668784@keescook>
+ <20200915083553.144aabef@canb.auug.org.au>
+ <20201001210257.19bc53f8@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20201002145945.c5abb5f57dbeac30351b7757@linux-foundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601676276; bh=tsVL+aYK5H/xpBAIEurPJopgRTkiLvAbf0cAHKTbOVY=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=goSevYuqzGKTKFDYTjm0H1Dh3EAUWuicHgP/aF5RHge52TmeUwv6AFDidhwf237hR
-         AAvBqnV5sErsPmUJd7FJiCG7hykSdsE2NLpG4yY8gP0sCZTocQl1Ydw8g7ydFn1S/9
-         GFEQLalCW8IG6EK0zaEuMlAMstmROPscLN3w4TciV6/ufqrwsDN7cQW/R1fh9vrED0
-         u2CmBdea6dwjHfKUAk675BNqXYvU57JrFYZq1QCteBIFH+a730omJIKaXDWF4msUir
-         NLduV6M2amMzR52e1XvogLy/2WYB8OR9182X3MAZUbayadMYpUVnxkW9BJxexLw1xu
-         Ad2IfHL32hCSQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201001210257.19bc53f8@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/2/20 2:59 PM, Andrew Morton wrote:
-> On Fri, 2 Oct 2020 01:40:49 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+On Thu, Oct 01, 2020 at 09:02:57PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
->> commit cb2ab76685d7 ("selftests/vm: rename run_vmtests -->
->> run_vmtests.sh") changed the name of run_vmtests to run_vmtest.sh, but
->> inadvertently dropped the executable bits.
+> On Tue, 15 Sep 2020 08:35:53 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi Kees,
+> > 
+> > On Mon, 14 Sep 2020 13:11:37 -0700 Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Mon, Sep 14, 2020 at 01:22:49PM +1000, Stephen Rothwell wrote:  
+> > > > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > > > produced this warning:
+> > > > 
+> > > > x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/trace_selftest_dynamic.o' being placed in section `.ctors.65435'
+> > > > [...]    
+> > > 
+> > > Hmm, I wasn't seeing that...
+> > > 
+> > > Which gcc and bintuils versions are you using?  
+> > 
+> > gcc (Debian 10.2.0-5) 10.2.0
+> > GNU ld (GNU Binutils for Debian) 2.35
 > 
-> We cannot depend on the x bit.  Because downloading linux-foo.patch.gz
-> and installing it with patch(1) is a supported way of obtaining Linux.
-> And patch(1) loses the x bit.
+> Any progress on this?
 
-OK. I was just hoping that, within our processes here, there's still some
-way to get something committed that does have the bit set. Because it's a
-nice touch to be able to do
+Hi!
 
-./run_vmtests.sh
+I needed to get by build environment set up with the newer toolchain,
+and I've finally gotten that done today. I'll be investigating it
+shortly; thanks for waiting on me!
 
-Not a big deal of course.
+-Kees
 
-> 
-> If $(CONFIG_SHELL) is unavailable then invoking the script with
-> "/bin/sh foo.sh" should do the trick.
-
-OK, I'll use that for the Makefile.
-
-> 
->> Somehow the name is missing an "s", too. Fix both of these problems by
->> renaming, and restoring the executable bits.
-> 
-> But that's what your patch did!
-> 
-> tools/testing/selftests/vm/{run_vmtests => run_vmtest.sh} | 0
-> 
-> Here: https://lkml.kernel.org/r/20200929212747.251804-4-jhubbard@nvidia.com
-> 
-
-Yes, the dropped "s" is my mistake!
-
-> 
-> So all confused.  I'll drop this version - please redo and resend when
-> convenient?
-> 
-
-Coming up, sorry about the mess here!
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
+Kees Cook

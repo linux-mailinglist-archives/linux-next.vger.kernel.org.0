@@ -2,245 +2,493 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A62C280F8A
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 11:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EE0280FDC
+	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 11:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726754AbgJBJJi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 05:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S2387629AbgJBJaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 05:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgJBJJh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 05:09:37 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9096CC0613D0
-        for <linux-next@vger.kernel.org>; Fri,  2 Oct 2020 02:09:37 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id 4so167154ooh.11
-        for <linux-next@vger.kernel.org>; Fri, 02 Oct 2020 02:09:37 -0700 (PDT)
+        with ESMTP id S1726329AbgJBJaH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 05:30:07 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB4CC0613E3
+        for <linux-next@vger.kernel.org>; Fri,  2 Oct 2020 02:30:05 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id m13so753871otl.9
+        for <linux-next@vger.kernel.org>; Fri, 02 Oct 2020 02:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=FfRCOyJ+EaFKOr3Aio0ATDsi4SO+lyczP5yA1MZQ5e0=;
-        b=j/WOA/G5nLeq0+z7X7XdOb9FeYv6+7RcT/uNKRuepLJCg+seMU9yWk1vcmt+C5r59C
-         kMz8uVU3wlrX4MazPR4SODyBIUcXkTZZLPzyJobZxTdwCP8FCFQNfUoF5gQOGSScPU+s
-         7NgpSO03/mMlvlnTNpwaEzvEUD2hUP6kOlyLgExUno5Hzko+/xRxDa0unGdNCQjDKYJe
-         jZ2djbgz20zzwlDpPy1JtNSk/1lenZ7j+MLK5Nk60o/SxUBBlo2H78wOcFaQkIiEzSCX
-         KnXWM1gfunkxsK7TRMv2vYL4BAMBqlO+JY3Q6kVkylx15gK+2984OW7Cp0xre2DeoGCw
-         gYTA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zE69fsYMitPYyw0c71bvhOXi9871tbyiSnv4grxFsDM=;
+        b=ZbdWm6eDLKEcPQ6LRLeHtAgaTqYSS3zDgIUINXQROYiws0gEdw02MnuDRLFUWWYfeq
+         kzHxQZEbgAcEyRLHL1f52PSFjRLUxqnPYA07ZYguCACRdJHLuJobPZUUyyRhMA9in0N5
+         glKL8YOleEIHw4e9QUsg7kfWZQgxbzH6QGNQsxc6bU6Sq0GHsBVur0QkKHkNJdI6Dhs0
+         93AKFcuBy2LFU9o1sIevbJGTG12mFGFSGvp0RZhRAtYjQqD8QChK1BHb5w0qbiX8gHSt
+         EJgyEY9UIiXnITSmAmEhYNLZuL/Yi4aEBKEkUoHoZt6m2Xm3XxfkMBZUyJ5GMcT2KJPR
+         mSQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FfRCOyJ+EaFKOr3Aio0ATDsi4SO+lyczP5yA1MZQ5e0=;
-        b=R3u6XcP4SZowvXL5d8DUqUe0oG652Ajn4ate55FIR2NhcfcLVNY/SU5xf7Oy4Cs69D
-         RXWW33/2xseBj/nd9SrjWcPtdUu9brpIdxOSpOcCJH/W1FqbCm4fvuApTMIr7EzOC+FZ
-         gjabqsTvtAlbgaKCZID9c5ZojYsIs7mzZ14VZ2sa74weIxgJsXzzaSaA2D1+qyfHQ7y6
-         lC4xaeJPKru7y9WYRBMg3YTCUpgEm6PSbgnbqqmuFEdzrkoSZ6RMJjc4R/oZr94Thqoq
-         YHV/ViF/Xp55pIGbLIZZHkRS4lafHHAddzjimMIECNwekfX3vLJnERJByfB2aoMQPXsW
-         YrHQ==
-X-Gm-Message-State: AOAM530MIcOUzJXuyl7vM3jhnE7xiBlqNxWIfYBcAt/kZXIuucSjnIHu
-        Vhg2OXVcVzywv2jSmV5/mwEjGM7pojGLseaxMsilahKFFBK3h/RL
-X-Google-Smtp-Source: ABdhPJwoHf5y9qn43pRyYCZ4uhpEQ+4hPyozHUpFuwptzv6ycXJb1CUeH4MS6V90pjT4l2f9yOJSzu5gy1b8jT25ZwM=
-X-Received: by 2002:a4a:5d84:: with SMTP id w126mr1133578ooa.1.1601629775860;
- Fri, 02 Oct 2020 02:09:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zE69fsYMitPYyw0c71bvhOXi9871tbyiSnv4grxFsDM=;
+        b=V5tiIQ7kYql4rTB5BDLP1UHLdupDfL+g1gugtdlzrbbvuhAicwGm8WamlEsTbmypk9
+         On6+zfGIZpVXd1hgpB4nsRGzngKgTnVM5Oj3GqMHl4R49yiLe/djJsOvLVDIDGzQntA7
+         YuwfNDkV2cvt/3L4OIUjwKFIOBKXKVffdD3iOBXm6odNEgfPteWUe+0VImdxAfb5C6/D
+         SI9XCwcegksYsjLACznkUEePrRKwFPshPRNnhwIw4fVk5dWnCZ9V6nFaPlZmQnkSnMYg
+         6+foxC0Ht31M5oXp5/dUWhjy2wboVpep9gBhTxT2Vllds55CzThQuVqwjgB77cV4vcLJ
+         Y6+g==
+X-Gm-Message-State: AOAM533Xf+WxRo++UPpmZkYODWROqOFRUI97IvrUojXqLE6qp1oT48YD
+        y0fN53wwG8BTfYfYPp7UaqH0fLnB7pSya1gJdUnSHg==
+X-Google-Smtp-Source: ABdhPJxv6lyt1iJBH4eWcrIwbz/ItzzeA6umb7mnJgmWW1zYxi3pFZKIFn/mpFBJ1EdCeJMlp9O36xTz2spU1WZo0YA=
+X-Received: by 2002:a05:6830:22ce:: with SMTP id q14mr1029057otc.72.1601631004482;
+ Fri, 02 Oct 2020 02:30:04 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200916054130.8685-1-Zhiqiang.Hou@nxp.com> <CAL_JsqJwgNUpWFTq2YWowDUigndSOB4rUcVm0a_U=FEpEmk94Q@mail.gmail.com>
+ <HE1PR0402MB3371F8191538F47E8249F048843F0@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <CAL_JsqLdQY_DqpduaTv4hMDM_-cvZ_+s8W+HdOuZVVYjTO4yxw@mail.gmail.com>
+ <HE1PR0402MB337180458625B05D1529535384390@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <20200928093911.GB12010@e121166-lin.cambridge.arm.com> <HE1PR0402MB33713A623A37D08AE3253DEB84320@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <DM5PR12MB1276D80424F88F8A9243D5E2DA320@DM5PR12MB1276.namprd12.prod.outlook.com>
+ <CAL_JsqJJxq2jZzbzZffsrPxnoLJdWLLS-7bG-vaqyqs5NkQhHQ@mail.gmail.com>
+ <9ac53f04-f2e8-c5f9-e1f7-e54270ec55a0@ti.com> <CAL_JsqJEp8yyctJYUjHM4Ti6ggPb4ouYM_WDvpj_PiobnAozBw@mail.gmail.com>
+ <67ac959f-561e-d1a0-2d89-9a85d5f92c72@ti.com> <99d24fe08ecb5a6f5bba7dc6b1e2b42b@walle.cc>
+In-Reply-To: <99d24fe08ecb5a6f5bba7dc6b1e2b42b@walle.cc>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 2 Oct 2020 14:39:24 +0530
-Message-ID: <CA+G9fYvE--g01a=eTs1Teo_AAZke34WvtOKxZ+7WhLnmkymQgA@mail.gmail.com>
-Subject: Internal error: Oops: __traceiter_rcu_dyntick and rcu_nmi_enter
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org,
-        lkft-triage@lists.linaro.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
+Date:   Fri, 2 Oct 2020 14:59:53 +0530
+Message-ID: <CA+G9fYtR5MwQ_Gd1=R=815eCAz+5uC67wXV2x094pc_=PtkA2g@mail.gmail.com>
+Subject: Re: [PATCH] PCI: dwc: Added link up check in map_bus of dw_child_pcie_ops
+To:     Zhiqiang.Hou@nxp.com, Rob Herring <robh@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-While running LTP tracing the following kernel warning was noticed on
-qemu_arm running linux next 20201001 kernel.
-I have not bisected this problem yet.
+On Thu, 1 Oct 2020 at 22:16, Michael Walle <michael@walle.cc> wrote:
+>
+> Am 2020-10-01 15:32, schrieb Kishon Vijay Abraham I:
+>
+> > Meanwhile would it be okay to add linkup check atleast for DRA7X so
+> > that
+> > we could have it booting in linux-next?
+>
+> Layerscape SoCs (at least the LS1028A) are also still broken in
+> linux-next,
+> did I miss something here?
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+I have been monitoring linux next boot and functional testing on nxp devices
+for more than two week and still the problem exists on nxp-ls2088.
 
-steps to reproduce:
-# boot qemu arm with linux next 20201001 tag kernel and this command line
+Do you mind checking the possibilities to revert bad patches on linux next tree
+and continue to work on fixes please ?
 
-/usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
-virt-2.10,accel=kvm -nographic -net
-nic,model=virtio,macaddr=BA:DD:AD:CC:09:02 -net tap -m 2048 -monitor
-none -kernel /kernel/zImage --append "console=ttyAMA0 root=/dev/vda
-rw" -hda /rootfs/rpb-console-image-lkft-am57xx-evm-20200723162735-41.rootfs.ext4
--m 4096 -smp 2 -nographic
+suspected bad commit: [ I have not bisected this problem ]
+c2b0c098fbd1 ("PCI: dwc: Use generic config accessors")
 
-# cd  /opt/ltp/
-# ./runltp -s tracing
-
-metadata:
-  git branch: master
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git commit: d39294091fee6b89d9c4a683bb19441b25098330
-  git describe: next-20201001
-  make_kernelversion: 5.9.0-rc7
-  kernel-config:
-https://builds.tuxbuild.com/hw-PTbFtm7XJ15ZoA5Agjw/kernel.config
-
-Test output log:
---------------------
-ftrace_buffer_size_kb.sh: line 33: echo: write error: Cannot allocate memory
-ftrace_buffer_size_kb.sh: line 33: echo: write error: Cannot allocate memory
-[  118.092279] 8<--- cut here ---
-[  118.093743] Unable to handle kernel NULL pointer dereference at
-virtual address 00000000
-[  118.097204] pgd = 5cbbb903
-[  118.098406] [00000000] *pgd=00000000
-[  118.099886] Internal error: Oops: 5 [#1] SMP ARM
-[  118.102124] Modules linked in: crc32_arm_ce sha2_arm_ce sha256_arm
-sha1_arm_ce sha1_arm aes_arm_ce crypto_simd
-[  118.107642] CPU: 0 PID: 919 Comm: (agetty) Not tainted
+crash log snippet:
+[    1.563008] SError Interrupt on CPU5, code 0xbf000002 -- SError
+[    1.563010] CPU: 5 PID: 1 Comm: swapper/0 Not tainted
 5.9.0-rc7-next-20201001 #1
-[  118.111384] Hardware name: Generic DT based system
-[  118.113677] PC is at __traceiter_rcu_dyntick+0x34/0x68
-[  118.116173] LR is at rcu_nmi_enter+0x158/0x17c
-[  118.118348] pc : [<c03cd414>]    lr : [<c12517c0>]    psr: 60000093
-[  118.121347] sp : eb333c20  ip : c03cd3f8  fp : eb333c4c
-[  118.123862] r10: eb333e18  r9 : c18da374  r8 : 005f67aa
-[  118.126722] r7 : 40000000  r6 : 40000002  r5 : ee4d5ec0  r4 : 00000000
-[  118.129822] r3 : 40000002  r2 : 40000000  r1 : c18da374  r0 : c1f30ca0
-[  118.132978] Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM
-Segment none
-[  118.136502] Control: 10c5383d  Table: 690a406a  DAC: 00000051
-[  118.139302] Process (agetty) (pid: 919, stack limit = 0x423671c1)
-[  118.142166] Stack: (0xeb333c20 to 0xeb334000)
-[  118.144241] 3c20: eb333ccc eb333c30 00000002 ee4d5ec0 eb332000
-00000000 c1d04f54 0000001f
-[  118.148079] 3c40: eb333c7c eb333c50 c12517c0 c03cd3ec 005f67aa
-c1cbac10 60000093 c0500464
-[  118.151904] 3c60: ffffe000 c1f31380 c0502384 00000001 eb333c8c
-eb333c80 c12517f4 c1251674
-[  118.155748] 3c80: eb333ca4 eb333c90 c03db214 c12517f0 c1cbac10
-c0500464 eb333ccc eb333ca8
-[  118.159746] 3ca0: c044bd08 c03db1f8 ebba56c0 00000dc0 c051d0cc
-60000013 ee4d9258 c1f9b28c
-[  118.163658] 3cc0: eb333cf4 eb333cd0 c0500464 c044bc00 ed9006c0
-00000000 00000000 00000dc0
-[  118.167535] 3ce0: c1d056e0 c1f9b28c eb333d3c eb333cf8 c0502384
-c0500408 ffffe000 687b39a1
-[  118.171412] 3d00: eb333d34 c1da6628 c051d0cc 0000f0f4 00020101
-c1da6628 eb27d180 00020101
-[  118.175257] 3d20: 00020101 000002c0 00000000 eb333e18 eb333d5c
-eb333d40 c051d0cc c0501ebc
-[  118.179074] 3d40: c1da6628 c1d04bc0 eb27d180 00020101 eb333d8c
-eb333d60 c051d570 c051d0a8
-[  118.182905] 3d60: 00000001 eb333e18 eb332000 eb332000 eb333ee8
-eb333ee8 eb333e18 ffffff9c
-[  118.187135] 3d80: eb333e14 eb333d90 c052d17c c051d514 c052e0e0
-00000403 eb333dcc eb333da8
-[  118.191102] 3da0: c0452290 c043b58c 40000013 eb332000 00000041
-eb332000 ed8e8000 00001000
-[  118.195036] 3dc0: eb333e14 eb333dd0 c04bc420 c0452218 ed805080
-687b39a1 ed8e8000 eb332000
-[  118.198974] 3de0: 00000003 687b39a1 00000000 eb332000 eb332000
-eb333ee8 00000001 eb333e18
-[  118.203347] 3e00: ffffff9c ffffff9c eb333ed4 eb333e18 c052f61c
-c052d13c ebe70800 e81167c0
-[  118.207566] 3e20: 00000000 00100000 eb333e94 eb333e38 c03131b4
-c044d940 ebe70800 00000003
-[  118.211702] 3e40: 00000003 00000000 c05404f0 c0541488 ebe70800
-00000000 eb333e5c 00100000
-[  118.215701] 3e60: eb333e94 687b39a1 c03131b4 00000003 ebe70800
-e81167c0 00000000 00100000
-[  118.219782] 3e80: 000a0101 00000100 eb333ec4 edbb3000 00000000
-c05404e4 ffffff9c eb332000
-[  118.223752] 3ea0: eb333f30 edbb3000 00000000 687b39a1 ffffff9c
-eb332000 00000003 edbb3000
-[  118.227999] 3ec0: 00000000 eb332000 eb333f2c eb333ed8 c0516c78
-c052f5ac eb333f0c eb333ee8
-[  118.231954] 3ee0: c035fa10 eb27dd70 00020101 687b0000 00000002
-00000100 00000001 687b39a1
-[  118.236161] 3f00: 00000142 00000000 00000000 000a0101 00000000
-eb332000 ffffff9c 00605738
-[  118.240218] 3f20: eb333f94 eb333f30 c0518374 c0516a70 000a0101
-00000000 00000000 00000000
-[  118.244210] 3f40: 00000000 00000000 000a0101 00000000 00000000
-00000000 00000000 00000000
-[  118.248508] 3f60: 00000000 687b39a1 00000142 00000000 00000000
-b6f25900 00000142 c0300284
-[  118.252549] 3f80: eb332000 00000142 eb333fa4 eb333f98 c05183fc
-c05182e8 00000000 eb333fa8
-[  118.256884] 3fa0: c03000c0 c05183ec 00000000 00000000 ffffff9c
-00605738 000a0101 00000000
-[  118.261036] 3fc0: 00000000 00000000 b6f25900 00000142 00605738
-00000000 00000001 befa7514
-[  118.265154] 3fe0: b6c15210 befa7440 b6db7380 b6bfe338 60000010
-ffffff9c 00000000 00000000
-[  118.269399] Backtrace:
-[  118.270680] [<c03cd3e0>] (__traceiter_rcu_dyntick) from
-[<c12517c0>] (rcu_nmi_enter+0x158/0x17c)
-[  118.275211]  r9:0000001f r8:c1d04f54 r7:00000000 r6:eb332000
-r5:ee4d5ec0 r4:00000002
-[  118.278994] [<c1251668>] (rcu_nmi_enter) from [<c12517f4>]
-(rcu_irq_enter+0x10/0x14)
-[  118.282731]  r9:00000001 r8:c0502384 r7:c1f31380 r6:ffffe000
-r5:c0500464 r4:60000093
-[  118.286527] [<c12517e4>] (rcu_irq_enter) from [<c03db214>]
-(rcu_irq_enter_irqson+0x28/0x44)
-[  118.290545] [<c03db1ec>] (rcu_irq_enter_irqson) from [<c044bd08>]
-(trace_hardirqs_on+0x114/0x1b0)
-[  118.294786]  r5:c0500464 r4:c1cbac10
-[  118.296529] [<c044bbf4>] (trace_hardirqs_on) from [<c0500464>]
-(__slab_alloc.constprop.0+0x68/0x6c)
-[  118.300895]  r9:c1f9b28c r8:ee4d9258 r7:60000013 r6:c051d0cc
-r5:00000dc0 r4:ebba56c0
-[  118.304648] [<c05003fc>] (__slab_alloc.constprop.0) from
-[<c0502384>] (kmem_cache_alloc+0x4d4/0x684)
-[  118.309048]  r9:c1f9b28c r8:c1d056e0 r7:00000dc0 r6:00000000
-r5:00000000 r4:ed9006c0
-[  118.312803] [<c0501eb0>] (kmem_cache_alloc) from [<c051d0cc>]
-(__alloc_file+0x30/0xd4)
-[  118.316606]  r10:eb333e18 r9:00000000 r8:000002c0 r7:00020101
-r6:00020101 r5:eb27d180
-[  118.320369]  r4:c1da6628
-[  118.321632] [<c051d09c>] (__alloc_file) from [<c051d570>]
-(alloc_empty_file+0x68/0x130)
-[  118.325452]  r7:00020101 r6:eb27d180 r5:c1d04bc0 r4:c1da6628
-[  118.328214] [<c051d508>] (alloc_empty_file) from [<c052d17c>]
-(path_openat+0x4c/0xe2c)
-[  118.332028]  r9:ffffff9c r8:eb333e18 r7:eb333ee8 r6:eb333ee8
-r5:eb332000 r4:eb332000
-[  118.335759] [<c052d130>] (path_openat) from [<c052f61c>]
-(do_filp_open+0x7c/0xe8)
-[  118.339432]  r10:ffffff9c r9:ffffff9c r8:eb333e18 r7:00000001
-r6:eb333ee8 r5:eb332000
-[  118.343198]  r4:eb332000
-[  118.344449] [<c052f5a0>] (do_filp_open) from [<c0516c78>]
-(do_sys_openat2+0x214/0x2d4)
-[  118.348303]  r8:eb332000 r7:00000000 r6:edbb3000 r5:00000003 r4:eb332000
-[  118.351537] [<c0516a64>] (do_sys_openat2) from [<c0518374>]
-(do_sys_open+0x98/0xd4)
-[  118.355219]  r10:00605738 r9:ffffff9c r8:eb332000 r7:00000000
-r6:000a0101 r5:00000000
-[  118.358972]  r4:00000000
-[  118.360235] [<c05182dc>] (do_sys_open) from [<c05183fc>]
-(sys_openat+0x1c/0x20)
-[  118.363722]  r10:00000142 r9:eb332000 r8:c0300284 r7:00000142
-r6:b6f25900 r5:00000000
-[  118.367455]  r4:00000000
-[  118.368707] [<c05183e0>] (sys_openat) from [<c03000c0>]
-(ret_fast_syscall+0x0/0x28)
-[  118.372366] Exception stack(0xeb333fa8 to 0xeb333ff0)
-[  118.374829] 3fa0:                   00000000 00000000 ffffff9c
-00605738 000a0101 00000000
-[  118.378763] 3fc0: 00000000 00000000 b6f25900 00000142 00605738
-00000000 00000001 befa7514
-[  118.382680] 3fe0: b6c15210 befa7440 b6db7380 b6bfe338
-[  118.385101] Code: e1a09001 e590415c e1a07002 e1a06003 (e5945000)
-[  118.388047] ---[ end trace d9dd2a672e7123ad ]---
+[    1.563011] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+[    1.563013] pstate: 20000085 (nzCv daIf -PAN -UAO -TCO BTYPE=--)
+[    1.563014] pc : pci_generic_config_read+0x44/0xe8
+[    1.563015] lr : pci_generic_config_read+0x2c/0xe8
 
-full test log
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201001/testrun/3260001/suite/linux-log-parser/test/check-kernel-trace-1809841/log
+
+full boot log and its link,
+----------------------------------
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd082]
+[    0.000000] Linux version 5.9.0-rc7-next-20201001
+(TuxBuild@40858153859f) (aarch64-linux-gnu-gcc (Debian 9.3.0-8) 9.3.0,
+GNU ld (GNU Binutils for Debian) 2.34) #1 SMP PREEMPT Thu Oct 1
+14:14:17 UTC 2020
+[    0.000000] Machine model: Freescale Layerscape 2088A RDB Board
+[    0.000000] earlycon: uart8250 at MMIO 0x00000000021c0600 (options '')
+[    0.000000] printk: bootconsole [uart8250] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] [Firmware Bug]: Kernel image misaligned at boot, please
+fix your bootloader!
+[    0.000000] cma: Reserved 32 MiB at 0x00000000f9c00000
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem
+0x0000000080000000-0x000000837fffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x837e3fb100-0x837e3fcfff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000bfffffff]
+[    0.000000]   DMA32    [mem 0x00000000c0000000-0x00000000ffffffff]
+[    0.000000]   Normal   [mem 0x0000000100000000-0x000000837fffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000fbdfffff]
+[    0.000000]   node   0: [mem 0x0000008080000000-0x000000837fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x000000837fffffff]
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+[    0.000000] psci: SMC Calling Convention v1.1
+[    0.000000] percpu: Embedded 31 pages/cpu s89624 r8192 d29160 u126976
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] CPU features: detected: GIC system register CPU interface
+[    0.000000] CPU features: detected: EL2 vector hardening
+[    0.000000] CPU features: kernel page table isolation forced ON by KASLR
+[    0.000000] CPU features: detected: Kernel page table isolation (KPTI)
+[    0.000000] CPU features: detected: Spectre-v2
+[    0.000000] CPU features: detected: ARM errata 1165522, 1319367, or 1530923
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 3596040
+[    0.000000] Policy zone: Normal
+[    0.000000] Kernel command line: console=ttyS1,115200n8
+root=/dev/nfs rw
+nfsroot=59.144.98.45:/var/lib/lava/dispatcher/tmp/90794/extract-nfsrootfs-r9w7i8h0,tcp,hard,v3
+earlycon=uart8250,mmio,0x21c0600 nousb default_hugepagesz=2m
+hugepagesz=2m hugepages=256 arm-smmu-mod.disable_bypass=n
+arm-smmu.disable_bypass=n  ip=dhcp
+[    0.000000] Dentry cache hash table entries: 2097152 (order: 12,
+16777216 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 1048576 (order: 11,
+8388608 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] software IO TLB: mapped [mem
+0x00000000bbfff000-0x00000000bffff000] (64MB)
+[    0.000000] Memory: 14189284K/14612480K available (17468K kernel
+code, 3990K rwdata, 9344K rodata, 9344K init, 566K bss, 390428K
+reserved, 32768K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
+[    0.000000] ftrace: allocating 59411 entries in 233 pages
+[    0.000000] ftrace: allocated 233 pages with 5 groups
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: RCU event tracing is enabled.
+[    0.000000] rcu: RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=8.
+[    0.000000] Trampoline variant of Tasks RCU enabled.
+[    0.000000] Rude variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay
+is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
+[    0.000000] GICv3: 256 SPIs implemented
+[    0.000000] GICv3: 0 Extended SPIs implemented
+[    0.000000] GICv3: Distributor has no Range Selector support
+[    0.000000] GICv3: 16 PPIs implemented
+[    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x0000000006100000
+[    0.000000] ITS [mem 0x06020000-0x0603ffff]
+[    0.000000] ITS@0x0000000006020000: allocated 8192 Devices
+@836e5d0000 (flat, esz 8, psz 64K, shr 0)
+[    0.000000] ITS: using cache flushing for cmd queue
+[    0.000000] GICv3: using LPI property table @0x000000836e5e0000
+[    0.000000] GIC: using cache flushing for LPI property table
+[    0.000000] GICv3: CPU0: using allocated LPI pending table
+@0x000000836e5f0000
+[    0.000000] random: get_random_bytes called from
+start_kernel+0x39c/0x56c with crng_init=0
+[    0.000000] arch_timer: Enabling global workaround for Freescale
+erratum a005858
+[    0.000000] arch_timer: CPU0: Trapping CNTVCT access
+[    0.000000] arch_timer: cp15 timer(s) running at 25.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff
+max_cycles: 0x5c409fb33, max_idle_ns: 440795203156 ns
+[    0.000002] sched_clock: 56 bits at 25MHz, resolution 39ns, wraps
+every 4398046511103ns
+[    0.008260] Console: colour dummy device 80x25
+[    0.012772] Calibrating delay loop (skipped), value calculated
+using timer frequency.. 50.00 BogoMIPS (lpj=100000)
+[    0.023192] pid_max: default: 32768 minimum: 301
+[    0.027878] LSM: Security Framework initializing
+[    0.032588] Mount-cache hash table entries: 32768 (order: 6, 262144
+bytes, linear)
+[    0.040245] Mountpoint-cache hash table entries: 32768 (order: 6,
+262144 bytes, linear)
+[    0.049245] rcu: Hierarchical SRCU implementation.
+[    0.054670] Platform MSI: gic-its@6020000 domain created
+[    0.060101] PCI/MSI: /interrupt-controller@6000000/gic-its@6020000
+domain created
+[    0.067682] fsl-mc MSI: gic-its@6020000 domain created
+[    0.073366] EFI services will not be available.
+[    0.078210] smp: Bringing up secondary CPUs ...
+[    0.083166] Detected PIPT I-cache on CPU1
+[    0.083182] GICv3: CPU1: found redistributor 1 region 0:0x0000000006120000
+[    0.083190] GICv3: CPU1: using allocated LPI pending table
+@0x000000836e600000
+[    0.083206] arch_timer: CPU1: Trapping CNTVCT access
+[    0.083216] CPU1: Booted secondary processor 0x0000000001 [0x410fd082]
+[    0.083656] Detected PIPT I-cache on CPU2
+[    0.083671] GICv3: CPU2: found redistributor 100 region 0:0x0000000006140000
+[    0.083679] GICv3: CPU2: using allocated LPI pending table
+@0x000000836e610000
+[    0.083694] arch_timer: CPU2: Trapping CNTVCT access
+[    0.083703] CPU2: Booted secondary processor 0x0000000100 [0x410fd082]
+[    0.084154] Detected PIPT I-cache on CPU3
+[    0.084164] GICv3: CPU3: found redistributor 101 region 0:0x0000000006160000
+[    0.084171] GICv3: CPU3: using allocated LPI pending table
+@0x000000836e620000
+[    0.084181] arch_timer: CPU3: Trapping CNTVCT access
+[    0.084188] CPU3: Booted secondary processor 0x0000000101 [0x410fd082]
+[    0.084608] Detected PIPT I-cache on CPU4
+[    0.084624] GICv3: CPU4: found redistributor 200 region 0:0x0000000006180000
+[    0.084632] GICv3: CPU4: using allocated LPI pending table
+@0x000000836e630000
+[    0.084647] arch_timer: CPU4: Trapping CNTVCT access
+[    0.084656] CPU4: Booted secondary processor 0x0000000200 [0x410fd082]
+[    0.085098] Detected PIPT I-cache on CPU5
+[    0.085109] GICv3: CPU5: found redistributor 201 region 0:0x00000000061a0000
+[    0.085116] GICv3: CPU5: using allocated LPI pending table
+@0x000000836e640000
+[    0.085126] arch_timer: CPU5: Trapping CNTVCT access
+[    0.085134] CPU5: Booted secondary processor 0x0000000201 [0x410fd082]
+[    0.085563] Detected PIPT I-cache on CPU6
+[    0.085581] GICv3: CPU6: found redistributor 300 region 0:0x00000000061c0000
+[    0.085589] GICv3: CPU6: using allocated LPI pending table
+@0x000000836e650000
+[    0.085604] arch_timer: CPU6: Trapping CNTVCT access
+[    0.085615] CPU6: Booted secondary processor 0x0000000300 [0x410fd082]
+[    0.086050] Detected PIPT I-cache on CPU7
+[    0.086061] GICv3: CPU7: found redistributor 301 region 0:0x00000000061e0000
+[    0.086068] GICv3: CPU7: using allocated LPI pending table
+@0x000000836e660000
+[    0.086079] arch_timer: CPU7: Trapping CNTVCT access
+[    0.086087] CPU7: Booted secondary processor 0x0000000301 [0x410fd082]
+[    0.086162] smp: Brought up 1 node, 8 CPUs
+[    0.299613] SMP: Total of 8 processors activated.
+[    0.304348] CPU features: detected: 32-bit EL0 Support
+[    0.309537] CPU features: detected: CRC32 instructions
+[    0.314711] CPU features: detected: 32-bit EL1 Support
+[    0.339004] CPU: All CPU(s) started at EL2
+[    0.343157] alternatives: patching kernel code
+[    0.348551] devtmpfs: initialized
+[    0.353789] KASLR enabled
+[    0.356755] clocksource: jiffies: mask: 0xffffffff max_cycles:
+0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.366571] futex hash table entries: 2048 (order: 5, 131072 bytes, linear)
+[    0.374031] pinctrl core: initialized pinctrl subsystem
+[    0.379863] DMI not present or invalid.
+[    0.384013] NET: Registered protocol family 16
+[    0.389659] DMA: preallocated 2048 KiB GFP_KERNEL pool for atomic allocations
+[    0.397124] DMA: preallocated 2048 KiB GFP_KERNEL|GFP_DMA pool for
+atomic allocations
+[    0.405317] DMA: preallocated 2048 KiB GFP_KERNEL|GFP_DMA32 pool
+for atomic allocations
+[    0.413398] audit: initializing netlink subsys (disabled)
+[    0.418940] audit: type=2000 audit(0.280:1): state=initialized
+audit_enabled=0 res=1
+[    0.419382] thermal_sys: Registered thermal governor 'step_wise'
+[    0.426741] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.433373] cpuidle: using governor menu
+[    0.444057] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.451014] ASID allocator initialised with 32768 entries
+[    0.457115] Serial: AMBA PL011 UART driver
+[    0.482622] Machine: Freescale Layerscape 2088A RDB Board
+[    0.488055] SoC family: QorIQ LS2088A
+[    0.491733] SoC ID: svr:0x87090010, Revision: 1.0
+[    0.511230] HugeTLB registered 2.00 MiB page size, pre-allocated 256 pages
+[    0.518172] HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.524921] HugeTLB registered 32.0 MiB page size, pre-allocated 0 pages
+[    0.531661] HugeTLB registered 64.0 KiB page size, pre-allocated 0 pages
+[    0.541027] cryptd: max_cpu_qlen set to 1000
+[    0.550747] ACPI: Interpreter disabled.
+[    0.556228] iommu: Default domain type: Translated
+[    0.561321] vgaarb: loaded
+[    0.564177] SCSI subsystem initialized
+[    0.568186] usbcore: registered new interface driver usbfs
+[    0.573730] usbcore: registered new interface driver hub
+[    0.579135] usbcore: registered new device driver usb
+[    0.584676] imx-i2c 2000000.i2c: can't get pinctrl, bus recovery
+not supported
+[    0.592140] i2c i2c-0: IMX I2C adapter registered
+[    0.597181] mc: Linux media interface: v0.10
+[    0.601505] videodev: Linux video capture interface: v2.00
+[    0.607040] pps_core: LinuxPPS API ver. 1 registered
+[    0.612031] pps_core: Software ver. 5.3.6 - Copyright 2005-2007
+Rodolfo Giometti <giometti@linux.it>
+[    0.621226] PTP clock support registered
+[    0.625279] EDAC MC: Ver: 3.0.0
+[    0.629525] fsl-ifc 2240000.ifc: Freescale Integrated Flash Controller
+[    0.636130] fsl-ifc 2240000.ifc: IFC version 2.0, 8 banks
+[    0.641716] FPGA manager framework
+[    0.645165] Advanced Linux Sound Architecture Driver Initialized.
+[    0.651768] clocksource: Switched to clocksource arch_sys_counter
+[    1.001279] VFS: Disk quotas dquot_6.6.0
+[    1.005269] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    1.012344] pnp: PnP ACPI: disabled
+[    1.019574] NET: Registered protocol family 2
+[    1.024205] tcp_listen_portaddr_hash hash table entries: 8192
+(order: 5, 131072 bytes, linear)
+[    1.032962] TCP established hash table entries: 131072 (order: 8,
+1048576 bytes, linear)
+[    1.041546] TCP bind hash table entries: 65536 (order: 8, 1048576
+bytes, linear)
+[    1.049454] TCP: Hash tables configured (established 131072 bind 65536)
+[    1.056243] UDP hash table entries: 8192 (order: 6, 262144 bytes, linear)
+[    1.063249] UDP-Lite hash table entries: 8192 (order: 6, 262144
+bytes, linear)
+[    1.070792] NET: Registered protocol family 1
+[    1.075466] RPC: Registered named UNIX socket transport module.
+[    1.081446] RPC: Registered udp transport module.
+[    1.086178] RPC: Registered tcp transport module.
+[    1.090909] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    1.097393] PCI: CLS 0 bytes, default 64
+[    1.102116] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7
+counters available
+[    1.110121] kvm [1]: IPA Size Limit: 44 bits
+[    1.115035] kvm [1]: vgic-v2@c0e0000
+[    1.118651] kvm [1]: GIC system register CPU interface enabled
+[    1.124671] kvm [1]: vgic interrupt IRQ9
+[    1.128787] kvm [1]: Hyp mode initialized successfully
+[    1.137122] Initialise system trusted keyrings
+[    1.141697] workingset: timestamp_bits=44 max_order=22 bucket_order=0
+[    1.150888] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    1.157123] NFS: Registering the id_resolver key type
+[    1.162230] Key type id_resolver registered
+[    1.166438] Key type id_legacy registered
+[    1.170508] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    1.177326] 9p: Installing v9fs 9p2000 file system support
+[    1.204782] NET: Registered protocol family 38
+[    1.209256] Key type asymmetric registered
+[    1.213377] Asymmetric key parser 'x509' registered
+[    1.218299] Block layer SCSI generic (bsg) driver version 0.4
+loaded (major 244)
+[    1.225741] io scheduler mq-deadline registered
+[    1.230299] io scheduler kyber registered
+[    1.244691] layerscape-pcie 3600000.pcie: host bridge
+/soc/pcie@3600000 ranges:
+[    1.252091] layerscape-pcie 3600000.pcie:       IO
+0x3000010000..0x300001ffff -> 0x0000000000
+[    1.260693] layerscape-pcie 3600000.pcie:      MEM
+0x3040000000..0x307fffffff -> 0x0040000000
+[    1.269382] layerscape-pcie 3600000.pcie: PCI host bridge to bus 0000:00
+[    1.276126] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.281644] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    1.287862] pci_bus 0000:00: root bus resource [mem
+0x3040000000-0x307fffffff] (bus address [0x40000000-0x7fffffff])
+[    1.298475] pci 0000:00:00.0: [1957:8240] type 01 class 0x060400
+[    1.304533] pci 0000:00:00.0: reg 0x10: [mem 0x00000000-0x00ffffff]
+[    1.310844] pci 0000:00:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+[    1.317155] pci 0000:00:00.0: reg 0x38: [mem 0x3048000000-0x3048ffffff pref]
+[    1.324323] pci 0000:00:00.0: supports D1 D2
+[    1.328616] pci 0000:00:00.0: PME# supported from D0 D1 D2 D3hot
+[    1.335444] pci 0000:01:00.0: [8086:10d3] type 00 class 0x020000
+[    1.341558] pci 0000:01:00.0: reg 0x10: [mem 0x3049000000-0x304901ffff]
+[    1.348250] pci 0000:01:00.0: reg 0x14: [mem 0x3049080000-0x30490fffff]
+[    1.354941] pci 0000:01:00.0: reg 0x18: [io  0x1000-0x101f]
+[    1.360585] pci 0000:01:00.0: reg 0x1c: [mem 0x3049100000-0x3049103fff]
+[    1.367360] pci 0000:01:00.0: reg 0x30: [mem 0x3049140000-0x304917ffff pref]
+[    1.374722] pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+[    1.392335] pci 0000:00:00.0: BAR 1: assigned [mem 0x3040000000-0x3043ffffff]
+[    1.399519] pci 0000:00:00.0: BAR 0: assigned [mem 0x3044000000-0x3044ffffff]
+[    1.406703] pci 0000:00:00.0: BAR 6: assigned [mem
+0x3045000000-0x3045ffffff pref]
+[    1.414321] pci 0000:00:00.0: BAR 14: assigned [mem
+0x3046000000-0x30460fffff]
+[    1.421588] pci 0000:00:00.0: BAR 13: assigned [io  0x1000-0x1fff]
+[    1.427806] pci 0000:01:00.0: BAR 1: assigned [mem 0x3046000000-0x304607ffff]
+[    1.434996] pci 0000:01:00.0: BAR 6: assigned [mem
+0x3046080000-0x30460bffff pref]
+[    1.442613] pci 0000:01:00.0: BAR 0: assigned [mem 0x30460c0000-0x30460dffff]
+[    1.449802] pci 0000:01:00.0: BAR 3: assigned [mem 0x30460e0000-0x30460e3fff]
+[    1.456991] pci 0000:01:00.0: BAR 2: assigned [io  0x1000-0x101f]
+[    1.463132] pci 0000:00:00.0: PCI bridge to [bus 01-ff]
+[    1.468388] pci 0000:00:00.0:   bridge window [io  0x1000-0x1fff]
+[    1.474519] pci 0000:00:00.0:   bridge window [mem 0x3046000000-0x30460fffff]
+[    1.481942] layerscape-pcie 3700000.pcie: host bridge
+/soc/pcie@3700000 ranges:
+[    1.489357] layerscape-pcie 3700000.pcie:       IO
+0x3800010000..0x380001ffff -> 0x0000000000
+[    1.497969] layerscape-pcie 3700000.pcie:      MEM
+0x3840000000..0x387fffffff -> 0x0040000000
+[    1.506647] layerscape-pcie 3700000.pcie: PCI host bridge to bus 0001:00
+[    1.513390] pci_bus 0001:00: root bus resource [bus 00-ff]
+[    1.518910] pci_bus 0001:00: root bus resource [io
+0x10000-0x1ffff] (bus address [0x0000-0xffff])
+[    1.527925] pci_bus 0001:00: root bus resource [mem
+0x3840000000-0x387fffffff] (bus address [0x40000000-0x7fffffff])
+[    1.538539] pci 0001:00:00.0: [1957:8240] type 01 class 0x060400
+[    1.544609] pci 0001:00:00.0: reg 0x38: [mem 0x3840000000-0x38400007ff pref]
+[    1.551773] pci 0001:00:00.0: supports D1 D2
+[    1.556066] pci 0001:00:00.0: PME# supported from D0 D1 D2 D3hot
+[    1.563008] SError Interrupt on CPU5, code 0xbf000002 -- SError
+[    1.563010] CPU: 5 PID: 1 Comm: swapper/0 Not tainted
+5.9.0-rc7-next-20201001 #1
+[    1.563011] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+[    1.563013] pstate: 20000085 (nzCv daIf -PAN -UAO -TCO BTYPE=--)
+[    1.563014] pc : pci_generic_config_read+0x44/0xe8
+[    1.563015] lr : pci_generic_config_read+0x2c/0xe8
+[    1.563016] sp : ffff80001005b7d0
+[    1.563017] x29: ffff80001005b7d0 x28: 0000000000000001
+[    1.563020] x27: 0000000000000000 x26: ffff0082eddfb800
+[    1.563022] x25: ffffc428e3e1dde8 x24: 0000000000000000
+[    1.563025] x23: ffff80001005b924 x22: 0000000000000087
+[    1.563027] x21: ffff0082eddfb800 x20: 0000000000000004
+[    1.563029] x19: ffff80001005b864 x18: 0000000000000000
+[    1.563032] x17: 00000000be711609 x16: 000000006455f136
+[    1.563034] x15: ffff0082ee750480 x14: ffffffffffffffff
+[    1.563036] x13: ffff0082cd313a1c x12: ffff0082cd313293
+[    1.563039] x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f
+[    1.563041] x9 : ffffc428e1d4a53c x8 : 0000000000000004
+[    1.563043] x7 : ffff800011200000 x6 : ffff800011200000
+[    1.563046] x5 : 0000000000000003 x4 : 0000000000000004
+[    1.563048] x3 : 0000000000000004 x2 : dda16212b714c600
+[    1.563050] x1 : 0000000000000000 x0 : ffff800010202000
+[    1.563053] Kernel panic - not syncing: Asynchronous SError Interrupt
+[    1.563054] CPU: 5 PID: 1 Comm: swapper/0 Not tainted
+5.9.0-rc7-next-20201001 #1
+[    1.563056] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+[    1.563057] Call trace:
+[    1.563058]  dump_backtrace+0x0/0x1d8
+[    1.563059]  show_stack+0x20/0x70
+[    1.563059]  dump_stack+0xf8/0x168
+[    1.563060]  panic+0x184/0x390
+[    1.563061]  nmi_panic+0x94/0x98
+[    1.563062]  arm64_serror_panic+0x88/0x94
+[    1.563063]  do_serror+0xac/0x1c8
+[    1.563064]  el1_error+0x88/0x104
+[    1.563065]  pci_generic_config_read+0x44/0xe8
+[    1.563066]  dw_pcie_rd_other_conf+0x20/0x78
+[    1.563067]  pci_bus_read_config_dword+0x88/0xe0
+[    1.563068]  pci_bus_generic_read_dev_vendor_id+0x3c/0x1b8
+[    1.563070]  pci_bus_read_dev_vendor_id+0x54/0x78
+[    1.563071]  pci_scan_single_device+0x84/0xf8
+[    1.563072]  pci_scan_slot+0x48/0x128
+[    1.563073]  pci_scan_child_bus_extend+0x60/0x340
+[    1.563074]  pci_scan_child_bus+0x1c/0x28
+[    1.563075]  pci_scan_bridge_extend+0x168/0x5a8
+[    1.563076]  pci_scan_child_bus_extend+0x138/0x340
+[    1.563077]  pci_scan_root_bus_bridge+0x6c/0xe0
+[    1.563078]  pci_host_probe+0x20/0xd0
+[    1.563079]  dw_pcie_host_init+0x1b0/0x320
+[    1.563080]  ls_pcie_probe+0x108/0x140
+[    1.563081]  platform_drv_probe+0x5c/0xb0
+[    1.563082]  really_probe+0xf0/0x4d8
+[    1.563083]  driver_probe_device+0xfc/0x168
+[    1.563084]  device_driver_attach+0x7c/0x88
+[    1.563085]  __driver_attach+0xac/0x178
+[    1.563086]  bus_for_each_dev+0x78/0xc8
+[    1.563087]  driver_attach+0x2c/0x38
+[    1.563088]  bus_add_driver+0x14c/0x230
+[    1.563089]  driver_register+0x6c/0x128
+[    1.563090]  __platform_driver_probe+0x80/0x148
+[    1.563091]  ls_pcie_driver_init+0x2c/0x38
+[    1.563092]  do_one_initcall+0x4c/0x2d0
+[    1.563093]  kernel_init_freeable+0x214/0x280
+[    1.563094]  kernel_init+0x1c/0x128
+[    1.563095]  ret_from_fork+0x10/0x30
+[    1.563111] SMP: stopping secondary CPUs
+[    1.563112] Kernel Offset: 0x4428d1680000 from 0xffff800010000000
+[    1.563113] PHYS_OFFSET: 0xffffd10300000000
+[    1.563114] CPU features: 0x0240022,21806008
+[    1.563115] Memory Limit: none
+
+link,
+https://lavalab.nxp.com/scheduler/job/90794#L791
 
 -- 
 Linaro LKFT

@@ -2,77 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A24280F1C
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 10:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AAB280F20
+	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 10:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387687AbgJBIkz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 04:40:55 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3825 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387680AbgJBIku (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 04:40:50 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f76e75e0001>; Fri, 02 Oct 2020 01:39:58 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Oct
- 2020 08:40:50 +0000
-Received: from sandstorm.nvidia.com (10.124.1.5) by mail.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Fri, 2 Oct 2020 08:40:50 +0000
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Linux Next <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 2/2] selftests/vm: fix run_vmtest.sh: restore executable bits, and "s" in name
-Date:   Fri, 2 Oct 2020 01:40:49 -0700
-Message-ID: <20201002084049.556824-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201002084049.556824-1-jhubbard@nvidia.com>
-References: <20201002084049.556824-1-jhubbard@nvidia.com>
+        id S1726275AbgJBIlO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 04:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbgJBIlK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 04:41:10 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5834C0613E2;
+        Fri,  2 Oct 2020 01:41:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C2k3j0yjdz9sSn;
+        Fri,  2 Oct 2020 18:41:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601628065;
+        bh=tNP2S6ioVXYX9zJ/IZt7o6EbrSsrykUZzieTLp+1aS0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=k+RxPZV4YYIBbLK6eSMQ3jIsepfh4xn8S3arnmuryDC2g6p2IYPCLKUIajYek2kQF
+         KoQhQqjPt/QJNiERT7yN1rb64XxyGvU5IEARwywQyWfOvYk0D7HWvZ03eB7wzaSNTv
+         HxU2bG0yzgXt+58nbSNeH77YGEZbgSlikzcFRhUgPzxuYHWPnYmWWBMR36CPrloECm
+         P7DvfzRlduHHuU53SlZfPOto5QPb8G3XDr6Rxfp4vhDoWhAdKDFv2XGpOhyrqTHVH2
+         LYsVu20P0NM8BNy09Q+4bFO//pB3hv0GmmP45t191OPDa8pO5pksmZ7SwqwI8MoKuy
+         1CE2uTa4yxOjg==
+Date:   Fri, 2 Oct 2020 18:41:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kvm-arm tree
+Message-ID: <20201002184103.657c745d@canb.auug.org.au>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601627998; bh=sLW1NmIain7VcL393VHibP/0YfWKAtBQhR2AcJQQwXI=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=JqBFYC56bV1VH6/J6NSMKJ9QGb1LwwetP1bxAL+Wj9lsPt5QBJJXgllYItJHNMHCj
-         UA7ig8vMjD6VAgRDaEGnsJIh532YQuM1f1ku9/ENn6uMDpyZMQijMJYsqiQ1mvbp0m
-         T2MjGJMld36DHWzJRsAtRLIni53dAIa4LujGPaniC86ne5g02Vzqn0pt4xz6ZPzevg
-         HEzXJr64siYqNn78sgBwiPNlZjWobaxvzGIIx6gZ8Z5qSYyFQ2pbmV3hjYZ7n5fsJ+
-         cUBzA1b8PXwqllks4q9WdOwOvyqp1dgD1ONggWiNSjIXHJKlVWDIsRi5VQYHzy3x7h
-         4CHe+wpUzNngw==
+Content-Type: multipart/signed; boundary="Sig_/pENtMYdd6oe/ChRyAjyq4d+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-commit cb2ab76685d7 ("selftests/vm: rename run_vmtests -->
-run_vmtests.sh") changed the name of run_vmtests to run_vmtest.sh, but
-inadvertently dropped the executable bits.
+--Sig_/pENtMYdd6oe/ChRyAjyq4d+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Somehow the name is missing an "s", too. Fix both of these problems by
-renaming, and restoring the executable bits.
+Hi all,
 
-Fixes: cb2ab76685d7 ("selftests/vm: rename run_vmtests --> run_vmtests.sh")
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/{run_vmtest.sh =3D> run_vmtests.sh} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename tools/testing/selftests/vm/{run_vmtest.sh =3D> run_vmtests.sh} (100=
-%)
- mode change 100644 =3D> 100755
+After merging the kvm-arm tree, today's linux-next build (htmldocs)
+produced this warning:
 
-diff --git a/tools/testing/selftests/vm/run_vmtest.sh b/tools/testing/selft=
-ests/vm/run_vmtests.sh
-old mode 100644
-new mode 100755
-similarity index 100%
-rename from tools/testing/selftests/vm/run_vmtest.sh
-rename to tools/testing/selftests/vm/run_vmtests.sh
+Documentation/virt/kvm/devices/vcpu.rst:70: WARNING: Malformed table.
+Text in column margin in table line 2.
+
+=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-ENODEV: PMUv3 not supported or GIC not initialized
+-ENXIO:  PMUv3 not properly configured or in-kernel irqchip not
+         configured as required prior to calling this attribute
+-EBUSY:  PMUv3 already initialized
+-EINVAL: Invalid filter range
+=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Introduced by commit
+
+  8be86a5eec04 ("KVM: arm64: Document PMU filtering API")
+
 --=20
-2.28.0
+Cheers,
+Stephen Rothwell
 
+--Sig_/pENtMYdd6oe/ChRyAjyq4d+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl92558ACgkQAVBC80lX
+0Gy0QggAnkGjmLIGUY1GRFNuBQEEu5nve5LdRAamwSE1M+O1RQZg9qqi078+Mu7U
+g8rLpiw09T6J5RmvKdNXS3VMhg+Bhiqgab2OMJNQEqDf3iT9jYBC/Xse4VrIrgIE
+FeM4qxvfAzRVpDAM9yVl2B2Pe4Kci5lle7DHSFtbPN9XJ+Vr30IXNL14iJRqKFwF
+ke+FPfftPCV4TQFG8kjdSs0vITVqRqXK60VwkrdSnhKwG437E4AFqxZfHDwKDZR+
+2v+WjBuAdjSHj9U2T+e1C7vr2+tqImEcXSDtGaipfhw1ZxnXWQnKLY6OUgKUFr3c
+WZpAnUKO0bo/hgM9jLci3qddIh/yog==
+=uKUi
+-----END PGP SIGNATURE-----
+
+--Sig_/pENtMYdd6oe/ChRyAjyq4d+--

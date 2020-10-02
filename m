@@ -2,69 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5601C281DF2
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 23:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A3B281E00
+	for <lists+linux-next@lfdr.de>; Sat,  3 Oct 2020 00:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725710AbgJBV7t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 17:59:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725283AbgJBV7t (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 2 Oct 2020 17:59:49 -0400
-Received: from X1 (c-76-21-107-111.hsd1.ca.comcast.net [76.21.107.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC29420719;
-        Fri,  2 Oct 2020 21:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601675987;
-        bh=GX3SlIpSpsmf0/iZGt5G8efHVWaAJE8GOD956nTu+uM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hrjjWRl7Pc8btXlVDSBjiNYuf9lAmJ6uyjjkUzgArCfosqCfS6P2aPfBC46vYPVrt
-         CqHeM9+i3hWZZ2yc2N+04/TJPWej7hPMA0jvCvT13jf18EE5Ja4KfTqp7pLQ2xI2Ou
-         vyWsKDrnVOMYVUzAIYGw2PGZ9LSs+6b4rYGqO9w4=
-Date:   Fri, 2 Oct 2020 14:59:45 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+        id S1725283AbgJBWEu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 18:04:50 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:7051 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725648AbgJBWEt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 18:04:49 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f77a3f40000>; Fri, 02 Oct 2020 15:04:36 -0700
+Received: from [10.2.58.214] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Oct
+ 2020 22:04:48 +0000
 Subject: Re: [PATCH v2 2/2] selftests/vm: fix run_vmtest.sh: restore
  executable bits, and "s" in name
-Message-Id: <20201002145945.c5abb5f57dbeac30351b7757@linux-foundation.org>
-In-Reply-To: <20201002084049.556824-3-jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next <linux-next@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
 References: <20201002084049.556824-1-jhubbard@nvidia.com>
-        <20201002084049.556824-3-jhubbard@nvidia.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20201002084049.556824-3-jhubbard@nvidia.com>
+ <20201002145945.c5abb5f57dbeac30351b7757@linux-foundation.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <9c41820b-05d5-8e62-2ef2-ab82d5e02f06@nvidia.com>
+Date:   Fri, 2 Oct 2020 15:04:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20201002145945.c5abb5f57dbeac30351b7757@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601676276; bh=tsVL+aYK5H/xpBAIEurPJopgRTkiLvAbf0cAHKTbOVY=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=goSevYuqzGKTKFDYTjm0H1Dh3EAUWuicHgP/aF5RHge52TmeUwv6AFDidhwf237hR
+         AAvBqnV5sErsPmUJd7FJiCG7hykSdsE2NLpG4yY8gP0sCZTocQl1Ydw8g7ydFn1S/9
+         GFEQLalCW8IG6EK0zaEuMlAMstmROPscLN3w4TciV6/ufqrwsDN7cQW/R1fh9vrED0
+         u2CmBdea6dwjHfKUAk675BNqXYvU57JrFYZq1QCteBIFH+a730omJIKaXDWF4msUir
+         NLduV6M2amMzR52e1XvogLy/2WYB8OR9182X3MAZUbayadMYpUVnxkW9BJxexLw1xu
+         Ad2IfHL32hCSQ==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 2 Oct 2020 01:40:49 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+On 10/2/20 2:59 PM, Andrew Morton wrote:
+> On Fri, 2 Oct 2020 01:40:49 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
+> 
+>> commit cb2ab76685d7 ("selftests/vm: rename run_vmtests -->
+>> run_vmtests.sh") changed the name of run_vmtests to run_vmtest.sh, but
+>> inadvertently dropped the executable bits.
+> 
+> We cannot depend on the x bit.  Because downloading linux-foo.patch.gz
+> and installing it with patch(1) is a supported way of obtaining Linux.
+> And patch(1) loses the x bit.
 
-> commit cb2ab76685d7 ("selftests/vm: rename run_vmtests -->
-> run_vmtests.sh") changed the name of run_vmtests to run_vmtest.sh, but
-> inadvertently dropped the executable bits.
+OK. I was just hoping that, within our processes here, there's still some
+way to get something committed that does have the bit set. Because it's a
+nice touch to be able to do
 
-We cannot depend on the x bit.  Because downloading linux-foo.patch.gz
-and installing it with patch(1) is a supported way of obtaining Linux. 
-And patch(1) loses the x bit.
+./run_vmtests.sh
 
-If $(CONFIG_SHELL) is unavailable then invoking the script with
-"/bin/sh foo.sh" should do the trick.
+Not a big deal of course.
 
-> Somehow the name is missing an "s", too. Fix both of these problems by
-> renaming, and restoring the executable bits.
+> 
+> If $(CONFIG_SHELL) is unavailable then invoking the script with
+> "/bin/sh foo.sh" should do the trick.
 
-But that's what your patch did!
+OK, I'll use that for the Makefile.
 
-tools/testing/selftests/vm/{run_vmtests => run_vmtest.sh} | 0
+> 
+>> Somehow the name is missing an "s", too. Fix both of these problems by
+>> renaming, and restoring the executable bits.
+> 
+> But that's what your patch did!
+> 
+> tools/testing/selftests/vm/{run_vmtests => run_vmtest.sh} | 0
+> 
+> Here: https://lkml.kernel.org/r/20200929212747.251804-4-jhubbard@nvidia.com
+> 
 
-Here: https://lkml.kernel.org/r/20200929212747.251804-4-jhubbard@nvidia.com
+Yes, the dropped "s" is my mistake!
 
+> 
+> So all confused.  I'll drop this version - please redo and resend when
+> convenient?
+> 
 
-So all confused.  I'll drop this version - please redo and resend when
-convenient?
+Coming up, sorry about the mess here!
+
+thanks,
+-- 
+John Hubbard
+NVIDIA

@@ -2,121 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CC2280DA3
-	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 08:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA9B280E11
+	for <lists+linux-next@lfdr.de>; Fri,  2 Oct 2020 09:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgJBGtw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 2 Oct 2020 02:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbgJBGtw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 02:49:52 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C5FC0613D0
-        for <linux-next@vger.kernel.org>; Thu,  1 Oct 2020 23:49:51 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j2so491632wrx.7
-        for <linux-next@vger.kernel.org>; Thu, 01 Oct 2020 23:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UoynpyD6AhgXUB6wR1FXtYWnjMZi4vEwFI3CCNbPh/Q=;
-        b=tWXguv2ZF0F5qwrOvcenJ2zOdlhvSJCtiTfazpgPgCUff7y5mZjhcy91c4+YFMJQFs
-         r30J/sQBFQQGHuHftJQldSaD1Up2mzT5VYE143b1Ny7JTtZJUGmGRtB0eeFhZFsWSSdU
-         VFXK+kxDZyob7WTGnDZTD4K08nvWYRegljwj0VAAt0sO3RX03Eq4TXbnh3B97nhZ2GFf
-         zS6u77rCgEG6WPXLkmco018F6NTrS+yeUvgX+DEoEUnSpTy0y9rIJojPpxm4Z9GIcm9s
-         tTOGdi/sEB0xMeuLFLtonRmCGZQjCDvx3uQvR8AN2QBfh2cZjeNQ87gbgOcuO3tdeYkY
-         g/YQ==
+        id S1726295AbgJBHdE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 2 Oct 2020 03:33:04 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43574 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbgJBHdE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 2 Oct 2020 03:33:04 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n61so510182ota.10;
+        Fri, 02 Oct 2020 00:33:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UoynpyD6AhgXUB6wR1FXtYWnjMZi4vEwFI3CCNbPh/Q=;
-        b=g3J1RIZhlTI/VCy6a2HpshWMA/Hn4mcDharflmc671J66Iri1PlGyWMtrdsOBx3pvH
-         c8Thy47IYv/3FyN1DKvTyFpHGnoLAJOgOfkJX0XVaK58CE956nYGM/8/oy6s18/2Bt0O
-         JkmunrJfpS9BSYoP3yWLRGoXkNRfxjV/Ua5qG3LgzeBPmra4zN95Nzd3llqBdJIy6rjf
-         kzLFo0J9Bo3EIpvRlS3y4TYZIUtFO9HxoUfGSte0kYYukxdbn30v05Ky0MsOV3rYy5D6
-         jlweIWCANvqEls/5BiufrO0JCdi0YMPr/Q87lxG5LDqVctW9eIRCe6ijkWSPjCiNKWKU
-         favg==
-X-Gm-Message-State: AOAM530AZG1q/0Qe8mVd8laWPodrthFYj8gatcm/6Oi0Vn4xxHWVWh9x
-        1xvjopjTNif7HbHoEJEu960m0g==
-X-Google-Smtp-Source: ABdhPJwXKvamwY1YeQU9ErKMKhnd33q+LPxo4LI6im24/u+dR6YSHPEn41d7IqdD7pAJjfPLnHbrvQ==
-X-Received: by 2002:adf:fe42:: with SMTP id m2mr1161269wrs.367.1601621390382;
-        Thu, 01 Oct 2020 23:49:50 -0700 (PDT)
-Received: from dell ([91.110.221.236])
-        by smtp.gmail.com with ESMTPSA id v204sm660429wmg.20.2020.10.01.23.49.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Oct 2020 23:49:49 -0700 (PDT)
-Date:   Fri, 2 Oct 2020 07:49:48 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Oct 1 (drivers/mfd/simple-mfd-i2c.o)
-Message-ID: <20201002064948.GQ6148@dell>
-References: <20201001213929.241c1006@canb.auug.org.au>
- <0dca758e-1b61-a4cd-db12-2e2060f7cf60@infradead.org>
- <20201002063203.GP6148@dell>
- <5974d448-a704-fd74-704c-b902b0ac9a8f@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i0BxTRWq9QLgI6hSEktstwE5J1XX/IGqSCCD9sxjccA=;
+        b=WVPzS8oelpwW4VDC0lngLATEycaAGmW0KIiVLxScAp5QByl96+56spRfpCnc0EO+D+
+         +1nUOr2UoiQm7ThDwMZ4PiWNXhVBQpatg/v5sSVsYW0CopSOWehmjra3qjBwy3sQw8Ar
+         3kViwC9QfYR88V2yE21hspfq133i4nnr3BMFvbtIA3GY4bKYIcT1YuANMuKcIloKbj4S
+         Wtl1J5aLN5aIMRtraDbXwO2254N/KeSs5WQ3jKruwS0EQOPG4AjUETbNK34LQe8x1I/C
+         kRlmfZP6ME6ZPgB7lJLtFBXI6Rqp0v7fXVAYcB7ywdOpHMPpFjC/wJvTvo0W0RD8yblm
+         cMTQ==
+X-Gm-Message-State: AOAM532hgCWQg0IGzlbQKsY0rvM82fA0/nJOKK4dng7tLSXVmOn9b05v
+        BOTztbdNCSVcSPxwzbVbbdNclEu6GiNND3vwelcj8p1s
+X-Google-Smtp-Source: ABdhPJwACY0SABTWY3mw/HvFFTMe+4lu1BY2IUjRwb4M/xt4Kuvc6m3aL1GqaRSX6pAbToniQcn7gF8uX2+ivCXDufI=
+X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr737978otp.107.1601623983253;
+ Fri, 02 Oct 2020 00:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5974d448-a704-fd74-704c-b902b0ac9a8f@infradead.org>
+References: <20201002130237.42fe476e@canb.auug.org.au>
+In-Reply-To: <20201002130237.42fe476e@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 2 Oct 2020 09:32:52 +0200
+Message-ID: <CAMuHMdVouviP6mUmTd1b1uvkmZWYXinECOvOLr-y-z-7C46cdA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 01 Oct 2020, Randy Dunlap wrote:
+Hi Stephen,
 
-> On 10/1/20 11:32 PM, Lee Jones wrote:
-> > On Thu, 01 Oct 2020, Randy Dunlap wrote:
-> > 
-> >> On 10/1/20 4:39 AM, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> Changes since 20200930:
-> >>>
-> >>
-> >> on x86_64:
-> >>
-> >> ld: drivers/mfd/simple-mfd-i2c.o: in function `simple_mfd_i2c_probe':
-> >> simple-mfd-i2c.c:(.text+0x48): undefined reference to `__devm_regmap_init_i2c'
-> >> ld: drivers/mfd/simple-mfd-i2c.o: in function `simple_mfd_i2c_driver_init':
-> >> simple-mfd-i2c.c:(.init.text+0x14): undefined reference to `i2c_register_driver'
-> >> ld: drivers/mfd/simple-mfd-i2c.o: in function `simple_mfd_i2c_driver_exit':
-> >> simple-mfd-i2c.c:(.exit.text+0xd): undefined reference to `i2c_del_driver'
-> >>
-> >>
-> >> CONFIG_I2C=m
-> >> CONFIG_MFD_SIMPLE_MFD_I2C=y
-> >> CONFIG_MFD_SL28CPLD=y
-> >>
-> >>
-> >> Is linux-next missing the source code for CONFIG_MFD_SL28CPLD?
-> > 
-> > There isn't any associated source code.  It's a virtual symbol.
-> > 
-> >> The build error is caused by:
-> >>
-> >> config MFD_SL28CPLD
-> >> 	tristate "Kontron sl28cpld Board Management Controller"
-> >> 	select MFD_SIMPLE_MFD_I2C
-> >>
-> >> that "select" when "depends on I2C" is absent/missing.
-> > 
-> > Okay, so CONFIG_MFD_SIMPLE_MFD_I2C needs to depend on I2C too?  I made
-> > the assumption that 'select REGMAP_I2C' would do the right thing.
-> 
-> "select" never follows any dependency chains, so Yes, the other symbol
-> needs to depend on I2C also.
+On Fri, Oct 2, 2020 at 5:02 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the net-next tree got a conflict in:
+>
+>   Documentation/devicetree/bindings/net/renesas,ravb.txt
+>
+> between commit:
+>
+>   307eea32b202 ("dt-bindings: net: renesas,ravb: Add support for r8a774e1 SoC")
+>
+> from the net tree and commit:
+>
+>   d7adf6331189 ("dt-bindings: net: renesas,etheravb: Convert to json-schema")
+>
+> from the net-next tree.
+>
+> I fixed it up (I deleted the file and added the following patch) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 2 Oct 2020 12:57:33 +1000
+> Subject: [PATCH] fix up for "dt-bindings: net: renesas,ravb: Add support for r8a774e1 SoC"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Makes sense.  Will fix, thanks.
+Thank you, that resolution looks good to me!
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/Documentation/devicetree/bindings/net/renesas,etheravb.yaml
+> +++ b/Documentation/devicetree/bindings/net/renesas,etheravb.yaml
+> @@ -31,6 +31,7 @@ properties:
+>                - renesas,etheravb-r8a774a1     # RZ/G2M
+>                - renesas,etheravb-r8a774b1     # RZ/G2N
+>                - renesas,etheravb-r8a774c0     # RZ/G2E
+> +              - renesas,etheravb-r8a774e1     # RZ/G2H
+>                - renesas,etheravb-r8a7795      # R-Car H3
+>                - renesas,etheravb-r8a7796      # R-Car M3-W
+>                - renesas,etheravb-r8a77961     # R-Car M3-W+
+> --
+> 2.28.0
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

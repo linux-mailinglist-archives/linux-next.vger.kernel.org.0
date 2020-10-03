@@ -2,90 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAAB2826F3
-	for <lists+linux-next@lfdr.de>; Sat,  3 Oct 2020 23:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240B6282762
+	for <lists+linux-next@lfdr.de>; Sun,  4 Oct 2020 01:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbgJCVyx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 3 Oct 2020 17:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1726141AbgJCXYs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 3 Oct 2020 19:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgJCVyu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Oct 2020 17:54:50 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E709C0613E7
-        for <linux-next@vger.kernel.org>; Sat,  3 Oct 2020 14:54:49 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t7so3287038pjd.3
-        for <linux-next@vger.kernel.org>; Sat, 03 Oct 2020 14:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RqVHPpZ6Wz7y1+qhwZaYda5zEvzwd+4/97qb+/erIeo=;
-        b=iVI4RMx/f3DX40AitIt+awPfWkymQBZUzPMOfOvbos7d+O0YpuhCZ0nZKLz1SAknKu
-         V6eh/IQPihzXGVhKVPDP33OdAiMOOmEnPjUUbBo+fDqmSf3euzzmJfeZTpOynE5EJH5R
-         e7MiKwdPDf2Cvk4qehTFpYc7rK4s24OyUDaW0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RqVHPpZ6Wz7y1+qhwZaYda5zEvzwd+4/97qb+/erIeo=;
-        b=K29q5WrSY6jlgFLvXYK7NbtI038RkLdylCN7B9AjoxRJXzlPrUosaI93F4z20glAFT
-         tSKyOQR9DdNH50I+rGUOxZPw+sISQooqVEXyQCcXKCub+6LRpoCc3lsda3uC1lbcB5oW
-         XW8Z2yXhNSbBBgjQWO8d82BGwSeRYSct/8+2mGwYfxoAOa4xRWmImZ4dJ9X/OsB37x6g
-         x4xlqEreDr/HSaAdzmaQv8QIxowiMHcSBgJbVlYzRZuei87u2stNBa7a4IfNbpQX9kcI
-         J30/lY6VG9H93Up4TyCsjJ77XAh1eBbyiyPgZIjLFIG18S6SBHktJX6GiSUyJKs1NOel
-         4zNw==
-X-Gm-Message-State: AOAM5336k9nLaxgO8xOhReYd7Xkdv4SZnmuRWMbL47g8nmQFFLjNHG18
-        Xou1MtB/YdV8zmToJgDv37ukIw==
-X-Google-Smtp-Source: ABdhPJxM2a12aykn6gYP6up7MCND60ZS6yo1DT9rpBCVWJnVU7cN/sF3yqufCX7M4KT2TFwREgrfqQ==
-X-Received: by 2002:a17:90b:3882:: with SMTP id mu2mr8605760pjb.29.1601762088609;
-        Sat, 03 Oct 2020 14:54:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id gp8sm5528308pjb.3.2020.10.03.14.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2020 14:54:47 -0700 (PDT)
-Date:   Sat, 3 Oct 2020 14:54:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S1726110AbgJCXYr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 3 Oct 2020 19:24:47 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9F5C0613D0;
+        Sat,  3 Oct 2020 16:24:47 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C3jcl41dWz9sRR;
+        Sun,  4 Oct 2020 10:24:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601767483;
+        bh=+ZE/zTQJKYBx8pO1SpKr3y496wGotYnyGzoLPzw4SpY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ed+PuLDoUN1CYQ/whWPJhRyA85YdYj4afjCoi/8v/z8LL7d/eRyouP+aNL1BjkV+Y
+         RfbqrohcRKQaovIy0+3WUGtt9lSTzCtUcYCHlSbIIu+sSry960KTEaQirPY/yDB5VS
+         bLJWxL4305kebm0e3LUH1H3Vrrjs3eg4PpkRLIoldYUCQgrCTmwCIemRprcSzV0wrs
+         9FICKs3Jw1sTCK+dAN+nn7SyPXn+28aISyLpOJT/nPN+RszkwTJn9N3ghyNyXx9qhO
+         7/rPgDNuWaV865t4qlt6sB3ojEgMJ4z2Y1U6Y5DBT30qv9+vOBaEaV+8SnJgsXQyM/
+         LAL+V9hu5VXPQ==
+Date:   Sun, 4 Oct 2020 10:24:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <202010031451.ABC49D88@keescook>
+Message-ID: <20201004102437.12fb0442@canb.auug.org.au>
+In-Reply-To: <202010031451.ABC49D88@keescook>
 References: <20200914132249.40c88461@canb.auug.org.au>
+        <202010031451.ABC49D88@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200914132249.40c88461@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/w4Uih05pMh=Xdxmu0J8qawp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 01:22:49PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> produced this warning:
-> 
-> x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kernel/trace/trace_selftest_dynamic.o' being placed in section `.ctors.65435'
-> [...]
+--Sig_/w4Uih05pMh=Xdxmu0J8qawp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Is it only trace that is warning?
+Hi Kees,
 
-> gcc (Debian 10.2.0-5) 10.2.0
-> GNU ld (GNU Binutils for Debian) 2.35
+On Sat, 3 Oct 2020 14:54:46 -0700 Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Sep 14, 2020 at 01:22:49PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > produced this warning:
+> >=20
+> > x86_64-linux-gnu-ld: warning: orphan section `.ctors.65435' from `kerne=
+l/trace/trace_selftest_dynamic.o' being placed in section `.ctors.65435'
+> > [...] =20
+>=20
+> Is it only trace that is warning?
 
-I can't reproduce this with:
+Yes, it is only trace.  it is always 65435 as well, in case that matters.
 
-gcc (Ubuntu 10.2.0-11ubuntu1) 10.2.0
-GNU ld (GNU Binutils for Ubuntu) 2.35.1
+> > gcc (Debian 10.2.0-5) 10.2.0
+> > GNU ld (GNU Binutils for Debian) 2.35 =20
+>=20
+> I can't reproduce this with:
+>=20
+> gcc (Ubuntu 10.2.0-11ubuntu1) 10.2.0
+> GNU ld (GNU Binutils for Ubuntu) 2.35.1
+>=20
+> Are you running Debian testing or unstable? (I see binutils 2.35.1 is
+> in both, so was this fixed in the .1?)
+>=20
+> I will go build a Debian testing container...
 
-Are you running Debian testing or unstable? (I see binutils 2.35.1 is
-in both, so was this fixed in the .1?)
+I am running testing.  Just upgraded to 2.35.1 and the messages are
+still there.  (I did a build of just tip/auto-latest - this is a cross
+build powerpc le hosted)
 
-I will go build a Debian testing container...
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Kees Cook
+--Sig_/w4Uih05pMh=Xdxmu0J8qawp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl95CDUACgkQAVBC80lX
+0Gw22Af+ONjqaLd975v8ykzfj+I+1lFXe0T1919l11n8RFqySmefHzwZJKDNozmF
+itSTJxzncc34Rjl51Sjg0ZnuIX4QZmXeN4h89pN7C4Z8/M3T7RSuWAt4b3QjrKX6
+aE+/Pp3gLhhrRpXMSapb8Cv1eViWp6j8L3Guwsmex8BAfpEZZVVzZwVP26QE3E3J
+E6X6AdmFaMozZnZwe/Xm8OYaItF+dmUMOdyxDR9o/6h5WkAMyiA4D/MlKe0jeTax
+wDgT+TQEYQJI/2jSMKG01XbkeE9+l9BE+LwPdBnYSOZWu55SUm7m2QLpuh0cYOgM
+XyPn5Jxor7p+vX+fomIk8abjbSLbbA==
+=MbXA
+-----END PGP SIGNATURE-----
+
+--Sig_/w4Uih05pMh=Xdxmu0J8qawp--

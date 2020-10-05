@@ -2,79 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEF428422C
-	for <lists+linux-next@lfdr.de>; Mon,  5 Oct 2020 23:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809C8284286
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 00:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgJEVh0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Oct 2020 17:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
+        id S1726057AbgJEWbW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Oct 2020 18:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgJEVh0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Oct 2020 17:37:26 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3742C0613CE;
-        Mon,  5 Oct 2020 14:37:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C4v7z0VqVzB3tZ;
-        Tue,  6 Oct 2020 08:37:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601933839;
-        bh=iqKQLzV/9MJ4NlJgoNl0vHUi9R13MPmpW2o15p6wdSQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qE6ZL/5iK1gljFs/d101JfILjdDIXvJJa6swE4QEwKSrGHqV6Q6g6YN7Gtw+DSN0B
-         xe6TimBl2LoOmM4TPJKp6pt5EzSdHWLsJKA8AMZSDSEvajZlZnHzKvSOVBhb1khWCd
-         y5dmjB/r2vnTOSjXnKCr9mY1zeOaUKVSbbcVI4eKdkLTLKXr8hVucKAVFGH7IRI6cf
-         I44TR11izDdriSINvFwbZHqwxv9QxMz482yfcNlqYGyyXxk9mdXJF9H6xdDz4ISOZP
-         WVUWDI1pRpcrU2DvnORNLXiFBKPRJcDIsAYfBGCoYc6KqQrNaWeaEGWeyu2v84oYI6
-         3eStAipXGfG4g==
-Date:   Tue, 6 Oct 2020 08:37:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the dma-mapping
- tree
-Message-ID: <20201006083718.4f3ef310@canb.auug.org.au>
+        with ESMTP id S1725934AbgJEWbW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Oct 2020 18:31:22 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC79C0613A7
+        for <linux-next@vger.kernel.org>; Mon,  5 Oct 2020 15:31:21 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id l4so6847643ota.7
+        for <linux-next@vger.kernel.org>; Mon, 05 Oct 2020 15:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aGJPhjJnGizWZ9cjlMtyvbh4s8GPun/neUKltdZk0Y0=;
+        b=E3BNLEwO4blu18AA9bBYPMj6KdaoOIvVuhzzTlO9SdwVRmMA2I1sF+4TC6R5gMuF/t
+         70UA+qS/l9JVHRzuN/wPuWxJDfn8ax9yN4TA4/WDU/sxhXEIIfAvbsb9CcVOnvYEU0T2
+         kHU/ZnYKgFMx6M0TDPusm2djOUMgcutEgfWz0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aGJPhjJnGizWZ9cjlMtyvbh4s8GPun/neUKltdZk0Y0=;
+        b=nI+9LwDP9NjLVDjF2b34We5UJCz1ft9netbFOp+nparlK66pZHsBXqX+/VdC32US6h
+         CKax2uEjYpgPzyjbE8Yj3hElLH8G/Uxd5JPPDniEnw+kEEWte71VV3UMwza84DLi2V5x
+         3vEmlwpm0LQ2JKa7cqyZIwgg10unRwtm1z4+Eos2fxUpUjHDBT5KokQKCozpo3lo8CZi
+         4UPwru9twAHO1f/DQA3LWgH4XyYw7oiQJ5QKypjKi4iQogoJGuOgQ9cJudQwDJGIVg8+
+         wq1+7Xnszy3EEPzYDpQ33gNjJl+DRJ+ngL1mWI7tKCOvQ5nOo4CkKpIask1vg5mMHfY6
+         gb4g==
+X-Gm-Message-State: AOAM531+sXUfwUuBqZy5B5dvBSn591uIiHnrRRu7BO19UU56ZmB4CgSF
+        7/VMXG5gR9BZurD5D8JlKAO/ZiPJ8jGkH6wwEDWhkw==
+X-Google-Smtp-Source: ABdhPJxnWbeNqcHTXdnaARCv/Zto+89buyW7FSld30l4eYbHTDn36gLjIFSYQDd9gbmM8YZlwLxRaLcHDFyluEPHV0o=
+X-Received: by 2002:a05:6830:1e56:: with SMTP id e22mr967660otj.303.1601937081198;
+ Mon, 05 Oct 2020 15:31:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Nej0ub_i+pHPOWozsaU0XVM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200930165212.GA8833@lst.de> <20201004141758.1013317-1-paul@crapouillou.net>
+ <20201004195921.GA556605@ravnborg.org> <ZE1PHQ.WGCBAFO9R38I3@crapouillou.net>
+ <20201005230150.5637fa42@canb.auug.org.au> <20201005140534.GT438822@phenom.ffwll.local>
+ <B3HQHQ.7DOFKW9A9TEX1@crapouillou.net>
+In-Reply-To: <B3HQHQ.7DOFKW9A9TEX1@crapouillou.net>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 6 Oct 2020 00:31:10 +0200
+Message-ID: <CAKMK7uEB7xHgnSpnT=Hd3Cw2+uwkimF=4uQuw3NOYz1DsnMY7g@mail.gmail.com>
+Subject: Re: [PATCH] Revert "gpu/drm: ingenic: Add option to mmap GEM buffers cached"
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, od@zcrc.me,
+        Dave Airlie <airlied@linux.ie>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Nej0ub_i+pHPOWozsaU0XVM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 5, 2020 at 4:47 PM Paul Cercueil <paul@crapouillou.net> wrote:
+>
+> Hi,
+>
+> Le lun. 5 oct. 2020 =C3=A0 16:05, Daniel Vetter <daniel@ffwll.ch> a =C3=
+=A9crit :
+> > On Mon, Oct 05, 2020 at 11:01:50PM +1100, Stephen Rothwell wrote:
+> >>  Hi Paul,
+> >>
+> >>  On Sun, 04 Oct 2020 22:11:23 +0200 Paul Cercueil
+> >> <paul@crapouillou.net> wrote:
+> >>  >
+> >>  > Pushed to drm-misc-next with the changelog fix, thanks.
+> >>  >
+> >>  > Stephen:
+> >>  > Now it should build fine again. Could you remove the BROKEN flag?
+> >>
+> >>  Thanks for letting me know, but the fix has not appeared in any drm
+> >>  tree included in linux-next yet ...
+> >>
+> >>  If it doesn't show up by the time I will merge the drm tree
+> >> tomorrow, I
+> >>  will apply this revert patch myself (instead of the patch marking
+> >> the
+> >>  driver BROKEN).
+> >
+> > Yeah it should have been pushed to drm-misc-next-fixes per
+> >
+> > https://drm.pages.freedesktop.org/maintainer-tools/committer-drm-misc.h=
+tml#where-do-i-apply-my-patch
+> >
+> > Paul, can you pls git cherry-pick -x this over to drm-misc-next-fixes?
+>
+> I had a few commits on top of it in drm-misc-next, so the revert
+> doesn't apply cleanly in drm-misc-next-fixes... I can revert it there,
+> but then we'd have a different revert commit in drm-misc-next and
+> drm-misc-next-next.
+>
+> Sorry for the mess. What should I do?
 
-Hi all,
+Hm not sure why, but the reply I thought I've typed didn't seem to
+have gone out.
 
-Commit
+Cherry pick up, fix up conflict and then fix up the conflict when
+rebuilding drm-tip. Please tell drm-misc maintainers, they probably
+want to do a backmerge once the drm-next merge window pull is merged
+in Linus tree.
 
-  82a18d4ce1ef ("cma: decrease CMA_ALIGNMENT lower limit to 2")
-
-is missing a Signed-off-by from its committer.
-
+If we don't fix this up then the drm-next pull goes nowhere.
+-Daniel
 --=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Nej0ub_i+pHPOWozsaU0XVM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl97kg4ACgkQAVBC80lX
-0GyYDgf8CSO8JWh0Cazr82eEloh7y4MIwr6XKgKVblTguuvlBFAKJv1Sf4zRpypM
-ON0nUBB8znqbm47U2r+Zs5Mloc0jiPN/bj7sP3NJE2XZycnEL0rx7TU0+R/6k1p4
-akH/sreJdjKxZ+xosPuxftA794th1cSIHTABO4ziFVnfreYThC+eqMgHLBmohKNA
-tM4eTBaOAKqkhfZaYhf8SKgG4Ia8MP6OWnF5aazd+nr1LgamrenVs92+32nfE/JN
-qMdNnhJYC5oFaiQj6PZ8tdtBkGGN9SEQNy27U0t4qoNhzbhDjLZ9wOwY7GmZdp5x
-NMj3FFE46aN3vQitB2+i9EVvs9cOxQ==
-=uJnf
------END PGP SIGNATURE-----
-
---Sig_/Nej0ub_i+pHPOWozsaU0XVM--
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

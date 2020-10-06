@@ -2,44 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CCC28489F
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 10:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A830E2848A1
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 10:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgJFIbJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 04:31:09 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:41133 "EHLO
+        id S1726165AbgJFIbO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 04:31:14 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:44201 "EHLO
         out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725891AbgJFIbJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 04:31:09 -0400
+        by vger.kernel.org with ESMTP id S1725891AbgJFIbO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 04:31:14 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D3F9E5C0079;
-        Tue,  6 Oct 2020 04:31:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 06 Oct 2020 04:31:07 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id B79D25C00A6;
+        Tue,  6 Oct 2020 04:31:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 06 Oct 2020 04:31:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=qsxax+C8iBK04xyZ9iWj06buPMs
-        EH6/hry72ZrWsnwY=; b=ng78Q+czopgIvLnzQTVa7xdPDD/FMGFf9wd0tLa+6Dc
-        Ik54/9p4s4NOkjLapIkphF4wSX1O1ASiD3yLVRwjE9dZky1dN9yy06kQhFmP4m0s
-        2eDtDG8664fQr6oK2NSbllhIRpY8FlYsZEQFGKY4bXxo9zKjNhUCusXzdYo7TQgK
-        p3nYh1riTUtbyh20EIL6TtrsC8X1/k3oiKsK2v47jIU6oy4zEsyrvejahJodk13a
-        //JX7dpGf1cnv7YAbeeUO6Eh3ScOkv5Zg/pFjnjHApRbGMlNFpOxd7cAz8V7Cye2
-        bLaR6nfpUG9FEg0bh9yttKlhDJRQ/sgSueTxF6QXiiQ==
+        :content-type:in-reply-to; s=fm2; bh=A0uEjs8ek2TiwpBw4iCwjm/gIfz
+        YDZHLIda4slMrPSM=; b=ulBkd0T64OyDJ/OlIOUECTmcUqo2QHTWX7zo5FVgevj
+        wrhSV3KJyGFQN0rurHEgjDB1jDIOJWEndsq3R0Q6xTZqcN0NNy3qr8W+yjGcQuPe
+        LEVJiDh7gyRmZme2hiyfPJbSx+AtHiZMZuK5yHhoYjckyg8k9jk4iqOXz8BROjdE
+        pkBAr9MRm7ZaQMtIEcVPeyEgEGZ/vu8gPW66z45Mcom2iiUthNxoLe8y4pDTy74X
+        TzmdCeReg+bS6u4iLJTCm7n5E0WuVeWzHYeXhNlcrMdcIlrSzALRkZzpisIy+iZ2
+        AfJF9bh3P60/ZBRHF23v/87mjJPytWGEOEDzcd1gC7Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=qsxax+
-        C8iBK04xyZ9iWj06buPMsEH6/hry72ZrWsnwY=; b=UF5674m+kllrRfryd3nABa
-        Bylc2Iw5IXnzfUIghNbO8aUd3rtChjhYnJSTRPnX7sKRvXkZ8D/47L7NiSjP+ym7
-        3U/VhPLnZjyz0dIp6Qt2aSl3iagyyJZW6SevjYPLKAgGVvKFKhITRVtgs7683I1n
-        WJsck/5UWax4+/+0L9eiMDStN9gwVZSnDN1SmzarwQj7p2vP1+4CrvzLM8a/psu3
-        vZVLVyOIKHbtvnDG3p85jqeoqS5p+p+b+x5g16TrRoJ4B6XJAmwdM0jPSCD1lJbc
-        /jQZ6ttGTsMDYWp5VU5WS0ook5XbfE+FLTgQ/v7CGjOjLh4rkbh3TwZ+/eA3QjHA
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=A0uEjs
+        8ek2TiwpBw4iCwjm/gIfzYDZHLIda4slMrPSM=; b=ctGZbV8LA4l7ydxU6/Vd4t
+        bSZmojZ9v8MxvAqwbNzuNIpgLNfj9gYOb65xpGNf2LtBturD60mTYD7g5CdofTxH
+        aGy5e8hvRGN2Cqmni9zJoW9PrP+v/ro5d5C8SMTe8SarC0CPuoFIePqosjbPHO/H
+        hHs4gQ2LtBv0qXU+5522uVnXAs+bqgEdwVv21rAT4eH3n1K4g0aoK3BkJ+heiT5Q
+        Ao9UnetDwnlADXCkelL87ORieofkIpWVGHLxr+2ewyZQNQChYdhigSqMJ5hUBc//
+        9ZnUf5oMJ3a0eCcKqoTA9oBJXaYxrkZakQSbCS52IPgAWeexw8PHyMj+T8HzK23Q
         ==
-X-ME-Sender: <xms:Sit8X5JsGA5D8-xX0tLpeE4ROy7ObemAU32q89b320FdWJlWoWUEcA>
-    <xme:Sit8X1KCf-xNlfv704zMyA9SoeXiWZVEWaCwV0CSzbNySoN3o768GB3qnrth94X5k
-    VK-iSgEVZyK4w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrgeeggddtfecutefuodetggdotefrodftvf
+X-ME-Sender: <xms:Tyt8X4enpkdT1-Uq0nPdeRM0MEBeV_zbl4CxeCTqSQZutMjM9-65gg>
+    <xme:Tyt8X6O64gafeyQIPC7qgL4bhEfVi8CAJGqJcB64Hg0oDLNgNoKvq2w0MfjyNHCmU
+    Iz4cbyKabV4VQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrgeeggddtgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
@@ -47,49 +47,51 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrgeeggddtfecutefuodetggdote
     ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
     keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:Sit8XxuBWHj824ha-gQxhY9ukLaU7SYiQvIJGhy0XeuqIypBQNe4MQ>
-    <xmx:Sit8X6amdHXkW5veGaCjy4bDaGdsbg3t45lHkG1vbTT_i1_kM2Luvw>
-    <xmx:Sit8Xwbdr6EIHnpZckIv-Gmlnc7FhyBAHiy86KdmSqrUKD-DpBNjzA>
-    <xmx:Syt8X4Edn0bwICKKJIDOfkYJzpmLGHctdaNmQxhv9vME7A-osqsegA>
+X-ME-Proxy: <xmx:Tyt8X5hB3AHUz3lh9Bbc_QDl7NF4Qz2Q5EJU3zMDB80iTQAOrxYN6w>
+    <xmx:Tyt8X9_puTqns5Mc0kWxLrF6ER9VRBzJp_ip2ZXCwF6h9ddl-Rs4Kg>
+    <xmx:Tyt8X0uyHkGAGsu0iglT9wyzU25hqu88wZj0xuCTmXvUbHICDA5dYw>
+    <xmx:UCt8X-Vk-jVakxAcWO4_F78H2lr3HXf7BDUqK3uBUv7UJGDq-aUf5Q>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 9BDC33280065;
-        Tue,  6 Oct 2020 04:31:06 -0400 (EDT)
-Date:   Tue, 6 Oct 2020 10:18:22 +0200
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9FB5F3064684;
+        Tue,  6 Oct 2020 04:31:11 -0400 (EDT)
+Date:   Tue, 6 Oct 2020 10:21:30 +0200
 From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Herring <robherring2@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the staging tree with the devicetree
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the powerpc
  tree
-Message-ID: <20201006081822.GA11962@kroah.com>
-References: <20201006184944.22985fd1@canb.auug.org.au>
+Message-ID: <20201006082130.GB12331@kroah.com>
+References: <20201006183506.186a3562@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201006184944.22985fd1@canb.auug.org.au>
+In-Reply-To: <20201006183506.186a3562@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 06:49:44PM +1100, Stephen Rothwell wrote:
+On Tue, Oct 06, 2020 at 06:35:06PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the staging tree got a conflict in:
+> Today's linux-next merge of the char-misc tree got a conflict in:
 > 
->   Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+>   drivers/misc/ocxl/Kconfig
 > 
 > between commit:
 > 
->   41fb845621ea ("dt-bindings: Another round of adding missing 'additionalProperties'")
+>   dde6f18a8779 ("ocxl: Don't return trigger page when allocating an interrupt")
 > 
-> from the devicetree tree and commit:
+> from the powerpc tree and commit:
 > 
->   3b17dd220432 ("dt-bindings: iio: adc: exynos-adc: require second interrupt with touch screen")
+>   4b53a3c72116 ("ocxl: fix kconfig dependency warning for OCXL")
 > 
-> from the staging tree.
+> from the char-misc tree.
 > 
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -102,29 +104,23 @@ On Tue, Oct 06, 2020 at 06:49:44PM +1100, Stephen Rothwell wrote:
 > Cheers,
 > Stephen Rothwell
 > 
-> diff --cc Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> index 16d76482b4ff,37d6591ff78c..000000000000
-> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> @@@ -107,8 -109,15 +109,17 @@@ allOf
->             items:
->               - const: adc
+> diff --cc drivers/misc/ocxl/Kconfig
+> index 0d815b2a40b3,947294f6d7f4..000000000000
+> --- a/drivers/misc/ocxl/Kconfig
+> +++ b/drivers/misc/ocxl/Kconfig
+> @@@ -9,9 -9,8 +9,9 @@@ config OCXL_BAS
 >   
-> +   - if:
-> +       required:
-> +         - has-touchscreen
-> +     then:
-> +       properties:
-> +         interrupts:
-> +           minItems: 2
-> +           maxItems: 2
-> + 
->  +additionalProperties: false
->  +
->   examples:
->     - |
->       adc: adc@12d10000 {
+>   config OCXL
+>   	tristate "OpenCAPI coherent accelerator support"
+>  -	depends on PPC_POWERNV && PCI && EEH && HOTPLUG_PCI_POWERNV
+>  +	depends on PPC_POWERNV && PCI && EEH && PPC_XIVE_NATIVE
+> ++	depends on HOTPLUG_PCI_POWERNV
+>   	select OCXL_BASE
+> - 	select HOTPLUG_PCI_POWERNV
+>   	default m
+>   	help
+>   	  Select this option to enable the ocxl driver for Open
 
-Looks good to me, thanks!
+Looks good, thanks!
 
 greg k-h

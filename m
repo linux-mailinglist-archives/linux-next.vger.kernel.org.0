@@ -2,145 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB71284A86
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 12:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E9A284AA9
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 13:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbgJFK6N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 06:58:13 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:48467 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725891AbgJFK6N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 06:58:13 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AD33B5802D4;
-        Tue,  6 Oct 2020 06:58:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 06 Oct 2020 06:58:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=QO5Cktwa7U/2cxe1mWgOsTKgbpB
-        WHkoWuoes5Mt0ow0=; b=0Bw0rz4AolMe9dxUfPAZmAXRCF1U0BIgsk1K+z3ltsS
-        6rOdjVSp44Zf4vvU0GFxgAklxRUtbxtNA9ArOvwGFSlHXLpn7RygijNcXgrEddTB
-        6Ey/tpiqCyBo3W/dU8RYt0zyeaeGBc2VkzPWVYJTP+yNqBGvNHtXYVBmgRgBjzlK
-        BNSFBG3boCq9tHRAWkpKTHG8odDSWBqLvGPzGx9oWmxb8sQExzChym6uTiSiSCXK
-        5u9XYxeOM7pDm/2V/F24mZWCKalMRQHkzPYREAn4mJL/6TKx3euz0BF7V8FVgOoQ
-        8iYU+W5HN6skzOZ8PSCgNQeLYoweI4rMwiH0sHaYSmQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=QO5Ckt
-        wa7U/2cxe1mWgOsTKgbpBWHkoWuoes5Mt0ow0=; b=iYb1qjidja2wtWYK0sBz3z
-        P5S2UxfMwN3IRYowpD06ZdjweByQxJZ/QbOuFlQQNOYFDft8iOFKok41FygSFs+9
-        DrSUOYZPLyvezbSMT3aisO09uYLdrlkhMWkhpULGT/EAJaY6dknZU71cOg9P3HSb
-        rzUo9C7fWxbiukivy5Gng+Od1+7dwXv7tXBm4ZZusBzG3LWaiFU+D8BrbHSUnyuC
-        EgAJF9YEKYBQBrD02krSxOEJZp+npFWnp8IcrIBQzhXLKnhIx4I03MrvD5jVQpTQ
-        dTSbtL6ccocjAcCmff+Z3JmpO/vkHiFnkIcp4G/cu/9gnsOTdvL5GBi2+ySIkLWA
-        ==
-X-ME-Sender: <xms:0k18XyjNdvMTjj40yuqjitCHVuKehteNJi70tidnLmUcwRSatW1u1w>
-    <xme:0k18XzBmvX5bEHmfOSXOd67HCjQ5rMOIgVAN7mSWRlguhYzHAPrQBaAtI7Nkhhfw_
-    4p6ys_z-MjStA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrgeeggdefgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
-    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:0k18X6H6E-xDFr_jMkz6-oR0PMjkgyViNUOjmBC_-EEev2Tbrmyvww>
-    <xmx:0k18X7TI_Wbq3lQpu_EA0YvXCNlm8Jjb907pDs3VrBHCA2bYbPBYdQ>
-    <xmx:0k18X_zwkzYQoMRpMT8-WwwSwBP3H5wlX-F15L5xZrR03EUVN_T1QQ>
-    <xmx:1E18X3d-prAVsuMhZ83XJ3VEnSKFOMOeiRuHrTGMLdWMRxoHrK03mw>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 24F0C306467D;
-        Tue,  6 Oct 2020 06:58:26 -0400 (EDT)
-Date:   Tue, 6 Oct 2020 12:58:24 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>, Arnd Bergmann <arnd@arndb.de>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the extcon tree with the drm-misc
+        id S1725939AbgJFLHP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 07:07:15 -0400
+Received: from ozlabs.org ([203.11.71.1]:42601 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725891AbgJFLHP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 6 Oct 2020 07:07:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5F6S31xxz9sS8;
+        Tue,  6 Oct 2020 22:07:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601982433;
+        bh=8ImrifGUmi7VURj7TBNSZenjHM+KYL36+UEt7USuaN8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ek/by9Lw/qKmsqoivyzZ4a9Vqzieubwoga5h64AUALTk04sOxk5tVDu22VpqELFWh
+         qYBxA6AxdtA0FaIdku/5qWr1t5Gw4ExDML/il3bKndO9bEpS5ZAWC4vu+7U81IuG/b
+         RHu1PmgIlBqsWLfYadG9f90vGyRQvRIVGJWupNF468yzzzd5pinvJLU6cYsi0j24b/
+         vhJ+cF/HJzwm6+52so904Sbl73NPSXeMyeA2CFK/Fm/HytMug0N6RR4lh5K/QBYdCJ
+         7Exxbsfh2mFEiystQ5VQmZV9OyV1tVkZyMJXoQw4FfK1i9TkMnzbWWBVJCku5mfuU5
+         El5QePvSjREYg==
+Date:   Tue, 6 Oct 2020 22:07:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Joe Perches <joe@perches.com>, John Hubbard <jhubbard@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm tree with the kselftest-fixes
  tree
-Message-ID: <20201006105824.GA26735@kroah.com>
-References: <20200910141854.1d4b1b10@canb.auug.org.au>
- <20201006200003.1be00223@canb.auug.org.au>
+Message-ID: <20201006220711.0ec49da3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201006200003.1be00223@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/jy/9B02r2lXeGj4L1pUyxT3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 08:00:03PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Thu, 10 Sep 2020 14:18:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the extcon tree got a conflict in:
-> > 
-> >   MAINTAINERS
-> > 
-> > between commit:
-> > 
-> >   f61249dddecc ("MAINTAINERS: Add entry for i.MX 8MQ DCSS driver")
-> > 
-> > from the drm-misc tree and commit:
-> > 
-> >   d0e3c25150dd ("MAINTAINERS: Add entry for NXP PTN5150A CC driver")
-> > 
-> > from the extcon tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> > 
-> > diff --cc MAINTAINERS
-> > index 623c53ab5bd5,da94c9b12f1b..000000000000
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@@ -12496,14 -12430,13 +12496,21 @@@ F:	drivers/iio/gyro/fxas21002c_core.
-> >   F:	drivers/iio/gyro/fxas21002c_i2c.c
-> >   F:	drivers/iio/gyro/fxas21002c_spi.c
-> >   
-> >  +NXP i.MX 8MQ DCSS DRIVER
-> >  +M:	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-> >  +R:	Lucas Stach <l.stach@pengutronix.de>
-> >  +L:	dri-devel@lists.freedesktop.org
-> >  +S:	Maintained
-> >  +F:	Documentation/devicetree/bindings/display/imx/nxp,imx8mq-dcss.yaml
-> >  +F:	drivers/gpu/drm/imx/dcss/
-> >  +
-> > + NXP PTN5150A CC LOGIC AND EXTCON DRIVER
-> > + M:	Krzysztof Kozlowski <krzk@kernel.org>
-> > + L:	linux-kernel@vger.kernel.org
-> > + S:	Maintained
-> > + F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
-> > + F:	drivers/extcon/extcon-ptn5150.c
-> > + 
-> >   NXP SGTL5000 DRIVER
-> >   M:	Fabio Estevam <festevam@gmail.com>
-> >   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-> 
-> This is now a conflict between the char-misc tree and the drm tree.
+--Sig_/jy/9B02r2lXeGj4L1pUyxT3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Looks fine, this should be easy for Linus to resolve :)
+Hi all,
 
-thanks,
+Today's linux-next merge of the akpm tree got a conflict in:
 
-greg k-h
+  tools/testing/selftests/vm/gup_test.c
+
+between commit:
+
+  aa803771a80a ("tools: Avoid comma separated statements")
+
+from the kselftest-fixes tree and commit:
+
+  5c64830675a6 ("mm/gup_benchmark: rename to mm/gup_test")
+
+from the akpm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/vm/gup_test.c
+index 1d4359341e44,e930135727a2..000000000000
+--- a/tools/testing/selftests/vm/gup_test.c
++++ b/tools/testing/selftests/vm/gup_test.c
+@@@ -104,17 -104,13 +104,17 @@@ int main(int argc, char **argv
+  	if (write)
+  		gup.flags |=3D FOLL_WRITE;
+ =20
+- 	fd =3D open("/sys/kernel/debug/gup_benchmark", O_RDWR);
++ 	fd =3D open("/sys/kernel/debug/gup_test", O_RDWR);
+ -	if (fd =3D=3D -1)
+ -		perror("open"), exit(1);
+ +	if (fd =3D=3D -1) {
+ +		perror("open");
+ +		exit(1);
+ +	}
+ =20
+  	p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
+ -	if (p =3D=3D MAP_FAILED)
+ -		perror("mmap"), exit(1);
+ +	if (p =3D=3D MAP_FAILED) {
+ +		perror("mmap");
+ +		exit(1);
+ +	}
+  	gup.addr =3D (unsigned long)p;
+ =20
+  	if (thp =3D=3D 1)
+
+--Sig_/jy/9B02r2lXeGj4L1pUyxT3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98T98ACgkQAVBC80lX
+0GyVGwf/cFeXKZjjCj3Z3CXP9NWmDJknD0xDuBBiXJlIxPsNHP+476/ZnsWlrX8x
+N89SmZO+VIyWdHTjv4SYLnDaF9vw0v4/qbhVbt8DB8kweGQizZ+9b76MA8B49e3I
+Yi/14S6TAJuaTMR2H06AF4jZuDO/6Mu3yVx9YJ6hev/4h/AbNUmHkM+LE2R2Aevu
+VN58RDLWjfBg+prQtgTqZ3UW6REVTF3QcCoTaeyzfxUe6j0Ojln1wwTm5BirgUiC
+/oXPH9LGSAskZT66DY4Pz6yDYka2vdir46i/ByC+bGTaJBcvPqBW6TfpOxMPa6QX
+QSM95IwBgTZkqRdRTv4dLQ/qUUy0Cg==
+=Tlm6
+-----END PGP SIGNATURE-----
+
+--Sig_/jy/9B02r2lXeGj4L1pUyxT3--

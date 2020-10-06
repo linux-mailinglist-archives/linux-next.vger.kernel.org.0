@@ -2,163 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EE9284A65
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 12:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB71284A86
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 12:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbgJFKjM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 06:39:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45871 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFKjM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 6 Oct 2020 06:39:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5DV36053z9ryj;
-        Tue,  6 Oct 2020 21:39:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601980748;
-        bh=88JnpQ7C+gTPN1c0ndqW0e0KCBQd0VM16IPzZbRxXPo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Wm0KbNw5+u9sHKyC5Qs6bZAvuZS9Ybh1uu/74QvtQ5SxJewQ2C/LU+JcArcUI8oJr
-         QxZptoPonhHfDqvic4+sghrMUTdsnKYKy264fMc4uHEV60cyi7mOAzmKp7WkOAo8tm
-         zzLeyq4nK1Ez0x6ShcSja5PpCXyjKozLEXnNZRXm4FiW8enLhNFYvM6zrpdaf2cNPh
-         R4cy67ANoBHm6TzfU0KEWCwomwFdAcTj0Kw+Orx1RE2THWIRbZ8awccUbJFF/wHzdh
-         1dNUb4ic++lBq1rOCdvH+B/KHCHHkYf4lSvgVBkMSUXb/0Cx1FevlrgRFRRe7r8AKk
-         N8+EMwDMHTX5A==
-Date:   Tue, 6 Oct 2020 21:39:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>
-Cc:     Atish Patra <atish.patra@wdc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1725902AbgJFK6N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 06:58:13 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:48467 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725891AbgJFK6N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 06:58:13 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id AD33B5802D4;
+        Tue,  6 Oct 2020 06:58:28 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 06 Oct 2020 06:58:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=QO5Cktwa7U/2cxe1mWgOsTKgbpB
+        WHkoWuoes5Mt0ow0=; b=0Bw0rz4AolMe9dxUfPAZmAXRCF1U0BIgsk1K+z3ltsS
+        6rOdjVSp44Zf4vvU0GFxgAklxRUtbxtNA9ArOvwGFSlHXLpn7RygijNcXgrEddTB
+        6Ey/tpiqCyBo3W/dU8RYt0zyeaeGBc2VkzPWVYJTP+yNqBGvNHtXYVBmgRgBjzlK
+        BNSFBG3boCq9tHRAWkpKTHG8odDSWBqLvGPzGx9oWmxb8sQExzChym6uTiSiSCXK
+        5u9XYxeOM7pDm/2V/F24mZWCKalMRQHkzPYREAn4mJL/6TKx3euz0BF7V8FVgOoQ
+        8iYU+W5HN6skzOZ8PSCgNQeLYoweI4rMwiH0sHaYSmQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=QO5Ckt
+        wa7U/2cxe1mWgOsTKgbpBWHkoWuoes5Mt0ow0=; b=iYb1qjidja2wtWYK0sBz3z
+        P5S2UxfMwN3IRYowpD06ZdjweByQxJZ/QbOuFlQQNOYFDft8iOFKok41FygSFs+9
+        DrSUOYZPLyvezbSMT3aisO09uYLdrlkhMWkhpULGT/EAJaY6dknZU71cOg9P3HSb
+        rzUo9C7fWxbiukivy5Gng+Od1+7dwXv7tXBm4ZZusBzG3LWaiFU+D8BrbHSUnyuC
+        EgAJF9YEKYBQBrD02krSxOEJZp+npFWnp8IcrIBQzhXLKnhIx4I03MrvD5jVQpTQ
+        dTSbtL6ccocjAcCmff+Z3JmpO/vkHiFnkIcp4G/cu/9gnsOTdvL5GBi2+ySIkLWA
+        ==
+X-ME-Sender: <xms:0k18XyjNdvMTjj40yuqjitCHVuKehteNJi70tidnLmUcwRSatW1u1w>
+    <xme:0k18XzBmvX5bEHmfOSXOd67HCjQ5rMOIgVAN7mSWRlguhYzHAPrQBaAtI7Nkhhfw_
+    4p6ys_z-MjStA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrgeeggdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeekfedr
+    keeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:0k18X6H6E-xDFr_jMkz6-oR0PMjkgyViNUOjmBC_-EEev2Tbrmyvww>
+    <xmx:0k18X7TI_Wbq3lQpu_EA0YvXCNlm8Jjb907pDs3VrBHCA2bYbPBYdQ>
+    <xmx:0k18X_zwkzYQoMRpMT8-WwwSwBP3H5wlX-F15L5xZrR03EUVN_T1QQ>
+    <xmx:1E18X3d-prAVsuMhZ83XJ3VEnSKFOMOeiRuHrTGMLdWMRxoHrK03mw>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 24F0C306467D;
+        Tue,  6 Oct 2020 06:58:26 -0400 (EDT)
+Date:   Tue, 6 Oct 2020 12:58:24 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>, Arnd Bergmann <arnd@arndb.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: linux-next: manual merge of the akpm-current tree with the risc-v
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the extcon tree with the drm-misc
  tree
-Message-ID: <20201006213906.08554ae2@canb.auug.org.au>
+Message-ID: <20201006105824.GA26735@kroah.com>
+References: <20200910141854.1d4b1b10@canb.auug.org.au>
+ <20201006200003.1be00223@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QuaTwP8UxkmkDMdTUVhTZAO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201006200003.1be00223@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QuaTwP8UxkmkDMdTUVhTZAO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 06, 2020 at 08:00:03PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Thu, 10 Sep 2020 14:18:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the extcon tree got a conflict in:
+> > 
+> >   MAINTAINERS
+> > 
+> > between commit:
+> > 
+> >   f61249dddecc ("MAINTAINERS: Add entry for i.MX 8MQ DCSS driver")
+> > 
+> > from the drm-misc tree and commit:
+> > 
+> >   d0e3c25150dd ("MAINTAINERS: Add entry for NXP PTN5150A CC driver")
+> > 
+> > from the extcon tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc MAINTAINERS
+> > index 623c53ab5bd5,da94c9b12f1b..000000000000
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@@ -12496,14 -12430,13 +12496,21 @@@ F:	drivers/iio/gyro/fxas21002c_core.
+> >   F:	drivers/iio/gyro/fxas21002c_i2c.c
+> >   F:	drivers/iio/gyro/fxas21002c_spi.c
+> >   
+> >  +NXP i.MX 8MQ DCSS DRIVER
+> >  +M:	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+> >  +R:	Lucas Stach <l.stach@pengutronix.de>
+> >  +L:	dri-devel@lists.freedesktop.org
+> >  +S:	Maintained
+> >  +F:	Documentation/devicetree/bindings/display/imx/nxp,imx8mq-dcss.yaml
+> >  +F:	drivers/gpu/drm/imx/dcss/
+> >  +
+> > + NXP PTN5150A CC LOGIC AND EXTCON DRIVER
+> > + M:	Krzysztof Kozlowski <krzk@kernel.org>
+> > + L:	linux-kernel@vger.kernel.org
+> > + S:	Maintained
+> > + F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
+> > + F:	drivers/extcon/extcon-ptn5150.c
+> > + 
+> >   NXP SGTL5000 DRIVER
+> >   M:	Fabio Estevam <festevam@gmail.com>
+> >   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+> 
+> This is now a conflict between the char-misc tree and the drm tree.
 
-Hi all,
+Looks fine, this should be easy for Linus to resolve :)
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+thanks,
 
-  arch/riscv/mm/init.c
-
-between commit:
-
-  c29c38fa2a8b ("RISC-V: Remove any memblock representing unusable memory a=
-rea")
-
-from the risc-v tree and commits:
-
-  3520eeb79142 ("arch, drivers: replace for_each_membock() with for_each_me=
-m_range()")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-It also looks like there is a bug in that risc-v tree patch: mem_start
-is used uninitialised in setup_bootmem().
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/riscv/mm/init.c
-index 812a48c91a95,bc72bb6b5fe0..000000000000
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@@ -152,20 -141,25 +152,20 @@@ disable
-  }
-  #endif /* CONFIG_BLK_DEV_INITRD */
- =20
- -static phys_addr_t dtb_early_pa __initdata;
- -
-  void __init setup_bootmem(void)
-  {
-- 	struct memblock_region *reg;
-- 	phys_addr_t mem_start, end =3D 0;
- -	phys_addr_t mem_size =3D 0;
- -	phys_addr_t total_mem =3D 0;
-+ 	phys_addr_t mem_start, start, end =3D 0;
-  	phys_addr_t vmlinux_end =3D __pa_symbol(&_end);
-  	phys_addr_t vmlinux_start =3D __pa_symbol(&_start);
-+ 	u64 i;
- =20
-  	/* Find the memory region containing the kernel */
-- 	for_each_memblock(memory, reg) {
-- 		end =3D reg->base + reg->size;
-+ 	for_each_mem_range(i, &start, &end) {
-+ 		phys_addr_t size =3D end - start;
- -		if (!total_mem)
- +		if (!mem_start)
-- 			mem_start =3D reg->base;
-- 		if (reg->base <=3D vmlinux_start && vmlinux_end <=3D end)
-- 			BUG_ON(reg->size =3D=3D 0);
-+ 			mem_start =3D start;
-+ 		if (start <=3D vmlinux_start && vmlinux_end <=3D end)
-+ 			BUG_ON(size =3D=3D 0);
- -		total_mem =3D total_mem + size;
-  	}
- =20
-  	/*
-@@@ -542,18 -455,11 +533,18 @@@ static void __init setup_vm_final(void
-  {
-  	uintptr_t va, map_size;
-  	phys_addr_t pa, start, end;
-- 	struct memblock_region *reg;
-+ 	u64 i;
- =20
- -	/* Set mmu_enabled flag */
- -	mmu_enabled =3D true;
- -
- +	/**
- +	 * MMU is enabled at this point. But page table setup is not complete ye=
-t.
- +	 * fixmap page table alloc functions should be used at this point
- +	 */
- +	pt_ops.alloc_pte =3D alloc_pte_fixmap;
- +	pt_ops.get_pte_virt =3D get_pte_virt_fixmap;
- +#ifndef __PAGETABLE_PMD_FOLDED
- +	pt_ops.alloc_pmd =3D alloc_pmd_fixmap;
- +	pt_ops.get_pmd_virt =3D get_pmd_virt_fixmap;
- +#endif
-  	/* Setup swapper PGD for fixmap */
-  	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
-  			   __pa_symbol(fixmap_pgd_next),
-
---Sig_/QuaTwP8UxkmkDMdTUVhTZAO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98SUoACgkQAVBC80lX
-0GzL2Qf6A/4fOgFUcUt8QAulXpyS4Qe60EepexdyNkCLlcrctE3HdI4fZNUxPrge
-ch84X2RyXhM1boNXoUhDOXQWuorreWkzJai75GSE/1G6o4rymjLI5YwmHoIWRzj+
-jhpIWxtPfVEmBfOP6duNry+g0le+PEU5HcOA5AgLO9Qaf2d/l5VbtyZE+OKMyHmD
-p1QijUc7H/9XRiC4TsifNFKm7WN8QMZGcw6ZU3FNNX7YZYVze4YxDIVj2zyKFZGk
-/UTw8nkRPVTcgxcYR02UKKDIXuPtaU3i20uOOPngklVDaCbztvbbiWk9O0P8SU+E
-xXYOn1a+/X5qunRCnyp24HiOWqKpeg==
-=oWC7
------END PGP SIGNATURE-----
-
---Sig_/QuaTwP8UxkmkDMdTUVhTZAO--
+greg k-h

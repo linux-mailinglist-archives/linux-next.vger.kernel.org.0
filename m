@@ -2,113 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB10A284490
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 06:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206C92844D8
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 06:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgJFESl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 00:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S1725945AbgJFEbE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 00:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgJFESi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 00:18:38 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05708C0613CE
-        for <linux-next@vger.kernel.org>; Mon,  5 Oct 2020 21:18:36 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id t18so585051plo.1
-        for <linux-next@vger.kernel.org>; Mon, 05 Oct 2020 21:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WcoaRr39n3pJ3sesrCDq8ky5x8Qln0X+2e7YbCVQ4pU=;
-        b=nsRLTz7VjwM0NuyZMyQDjOnbBBVnYbZxMdoaHHlw7HG2FTwnokTccs4Rf1Grupmb0z
-         owX3wtIxJCXzY768ohg5XAd5M3WTYk2buQ3sZ6PcJO+A9xrDNJU5ybmZS9gQR6r+yJ5C
-         9PxumrNW1jmPqNCXL8rz62k0Wiyrf0I7pHQBg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WcoaRr39n3pJ3sesrCDq8ky5x8Qln0X+2e7YbCVQ4pU=;
-        b=bCb23IG2x19DEfZZBBnwRWvXrdscrfilYkm2RXBU1UhSWuKJEBijSTo9FyhevNDguh
-         opQa2ffb4Fm3bo3ZvgGDnjX0rCgeYlM2vvIh2yiqvwNtxaKfknoNjrvHiLx2BdDj/U/r
-         IMSF0bfHRPB9l4J+HEZhh+nnlUs4fuc+toQ/eygsQth35iLbaPV304GBcM4JMSyNxofH
-         /kGSl9sklyqWuwKF/Qzh6hqmVTaBuUDljVD5n5r9d+L4zaM7BxC9TExeiX+icSXJfuOQ
-         zLo0SvQdEMR2Us/gfyHOdBKR1Dv2PFm2i47rg9Jxu93Ypp2PBqJZUVHUM7d/J5BVlyE0
-         yQzA==
-X-Gm-Message-State: AOAM532vsDR3Yo0lElR4b0qX5AclqWZA+CjwYaBA57iiMUvBW+/QLBpi
-        jgVMbVcXjy/IS00mxsISkPhEiFRlbbw1yJr7gb/yYg==
-X-Google-Smtp-Source: ABdhPJxicw6MQR7cluHUrvRs30Bprxs3MLmOY9NsL7Zxm8PzCKU233r0WZtTzaxg2zkmtvGZylOAlsYCzhxqviSx93E=
-X-Received: by 2002:a17:902:8693:b029:d3:9c6b:ca5f with SMTP id
- g19-20020a1709028693b02900d39c6bca5fmr1551836plo.67.1601957916321; Mon, 05
- Oct 2020 21:18:36 -0700 (PDT)
+        with ESMTP id S1725874AbgJFEbE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 00:31:04 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC690C0613A7;
+        Mon,  5 Oct 2020 21:31:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C54KH0vNDz9sS8;
+        Tue,  6 Oct 2020 15:30:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1601958661;
+        bh=n5g/8VmjM6MX7tsHQua98aEInXP4LOcxwGMFE4CgV6c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eTJXuTfVcg6haKx7VjmfiW0OlAB5OlXPvB6lmst090D8iGoV+2TUCntxMVW7Rb2Kz
+         s4NsQHQwHbYO0K7cs0YNk5A27WoZa7BKKzq42FX93XtgW7crDLe8JbptXv+mV83kvr
+         uiwpZbvqDFxOfPPWEgletecAj8jIanhPVYbQQXBtiCGTJ3wci1hXm8YnPn2kz7lr3Q
+         526nzB4/NnecA7IFu7SHKK/b0DFdFMFohI7aAr8F/ip52sp5IiG1vJS0E0XJQGxufL
+         3ajD58RlkWlv5AaDDugh1lal47YFGfUGRlz96OjOR/yr716j1/c9LLcFsAEViiIMP+
+         o7z2bvx+AuBLw==
+Date:   Tue, 6 Oct 2020 15:30:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, Christoph Hellwig <hch@lst.de>,
+        Dave Airlie <airlied@linux.ie>, od@zcrc.me,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "gpu/drm: ingenic: Add option to mmap GEM
+ buffers   cached"
+Message-ID: <20201006153057.39baeedb@canb.auug.org.au>
+In-Reply-To: <20201005230150.5637fa42@canb.auug.org.au>
+References: <20200930165212.GA8833@lst.de>
+        <20201004141758.1013317-1-paul@crapouillou.net>
+        <20201004195921.GA556605@ravnborg.org>
+        <ZE1PHQ.WGCBAFO9R38I3@crapouillou.net>
+        <20201005230150.5637fa42@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20201005225004.0d3b59a1@canb.auug.org.au> <CAATdQgB6aN8-BXwTG7=u8c+Q7mPmU+A9=O=_7u_wbPkuVNhjvA@mail.gmail.com>
-In-Reply-To: <CAATdQgB6aN8-BXwTG7=u8c+Q7mPmU+A9=O=_7u_wbPkuVNhjvA@mail.gmail.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Tue, 6 Oct 2020 12:18:25 +0800
-Message-ID: <CAATdQgAjk2fjtk+yprpeftihwJpKrNUWpQaB00R9vzFLc_30Tg@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the battery tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/o0ob=B9XXO9RERmdPqVSMfF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 11:57 AM Ikjoon Jang <ikjn@chromium.org> wrote:
+--Sig_/o0ob=B9XXO9RERmdPqVSMfF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Mon, 5 Oct 2020 23:01:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> On Mon, Oct 5, 2020 at 7:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Sun, 04 Oct 2020 22:11:23 +0200 Paul Cercueil <paul@crapouillou.net> w=
+rote:
 > >
-> > Hi all,
-> >
-> > In commit
-> >
-> >   f9d293364b45 ("power: supply: sbs-battery: keep error code when get_property() fails")
-> >
-> > Fixes tag
-> >
-> >   Fixes: c4f382930145 (power: supply: sbs-battery: don't assume i2c errors as battery disconnect)
-> >
-> > has these problem(s):
-> >
-> >   - Target SHA1 does not exist
-> >
-> > Maybe you meant
-> >
-> > Fixes: 395a7251dc2b ("power: supply: sbs-battery: don't assume i2c errors as battery disconnect")
-> >
->
-> Yes, you're right. I guess I made a mistake here.
-> I'll send a v2 patch.
+> > Pushed to drm-misc-next with the changelog fix, thanks.
+> >=20
+> > Stephen:
+> > Now it should build fine again. Could you remove the BROKEN flag? =20
+>=20
+> Thanks for letting me know, but the fix has not appeared in any drm
+> tree included in linux-next yet ...
+>=20
+> If it doesn't show up by the time I will merge the drm tree tomorrow, I
+> will apply this revert patch myself (instead of the patch marking the
+> driver BROKEN).
 
-Oh I'm sorry, it's from linux-next!
+Unfortunately, the revert patch does not apply to the drm tree merge,
+so I have just marked the driver BROKEN again today.
+--=20
+Cheers,
+Stephen Rothwell
 
-I found d6e24aa0bf15 ("power: supply: sbs-battery: keep error code
-when get_property() fails") on sre/for-next branch
-with a valid Fixes tag:
+--Sig_/o0ob=B9XXO9RERmdPqVSMfF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    power: supply: sbs-battery: keep error code when get_property() fails
+-----BEGIN PGP SIGNATURE-----
 
-    Commit c4f382930145 (power: supply: sbs-battery: don't assume
-    i2c errors as battery disconnect) overwrites the original error code
-    returned from internal functions. On such a sporadic i2c error,
-    a user will get a wrong value without errors.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl978wEACgkQAVBC80lX
+0Gy3kgf8CLWGQCMOPLy2gQCli86MZWSpicvk4sSiGQTGkHYZcfUK6fQGhZkkhIqA
+1B1V33q0Pp7/u9tp7XD2Wt62UeiWNA/GTk8crZMHbAp8Bf2qEcRo+2g7/liHq1WU
+goX7M3iois0cb3+fir54o89QSwEIqi7tVZ1HwQUbR2HeJ9csbHaymx3TXdLy7zxU
+hsriysf5Zk6YfjBzap1xMZSUjioBq1jUXhN/r/grXi/NpmgfT/0ysQAwu+7jUuG3
++AzzhTGciRHxavQur/+14dPgI09KjvHL4t2wxldnGC3TLyH2SZLfhPJNsWxVrclx
+raN7plyI723XwVZXhAmWIyOEg/he6A==
+=JUJe
+-----END PGP SIGNATURE-----
 
-    Fixes: 395a7251dc2b (power: supply: sbs-battery: don't assume i2c
-errors as battery disconnect)
-
-    Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-    Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-but there is still a wrong sha-1 hash in the commit message,
-Sebastian, can you please amend the commit message before merge?
-
-
->
-> Thank you!
->
-> > --
-> > Cheers,
-> > Stephen Rothwell
+--Sig_/o0ob=B9XXO9RERmdPqVSMfF--

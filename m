@@ -2,137 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B94E2848E9
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 11:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A9A284969
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 11:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgJFJAP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 05:00:15 -0400
-Received: from ozlabs.org ([203.11.71.1]:34613 "EHLO ozlabs.org"
+        id S1726002AbgJFJfM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 05:35:12 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42795 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFJAP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 6 Oct 2020 05:00:15 -0400
+        id S1725981AbgJFJfM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 6 Oct 2020 05:35:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5BHm6nJYz9sT6;
-        Tue,  6 Oct 2020 20:00:04 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5C4F28Gxz9sS8;
+        Tue,  6 Oct 2020 20:35:09 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601974812;
-        bh=8CfOUIbMt8fnTJfPAaJni1imQZSSTLb8IdHxm/8lC9A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EM5mBZ22SlHV3CHVixJkaN3v3ud9mmjXLADtHfAOEvwKw7p7+DCFrTjSJQKktY2Iz
-         3v2N7Ldue/9u51p2lZ0RLyOpxeM2Gro17oot2pnj25rtDOk+pzC/ulC8TixhZZkCwG
-         AS5UWYwHwwZ5ZBODbSL69s+T4HKqb+KnhoJQf3wVXBSdRsy0Gj7ArgfU0Omj8WJ8SQ
-         Zkf+PeKurTftZGSJVbXz3axeeU3mILyI+qcQLrd9r8pGaV99ypbeQVE9jUJ7lIr9V3
-         zAn2bUdsK8gA5hVi9I9lanz2WAJm8Cs/+5dkFJqWK44J0OfxmUwBMQSCMwIJSgkPSs
-         m4jwhgVhidXPg==
-Date:   Tue, 6 Oct 2020 20:00:03 +1100
+        s=201702; t=1601976910;
+        bh=a12/UVDR6zr+BYph3qJOSxMnY7GGVoasy0f3LxNxy2g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j6alsdsA3Uln7mQ1aTXbEIv6ck8MLWm+kik2fXDXlCvb1+f5H7f5GshceE8MR1Ntd
+         6dygfzpZ/zjhz59ckiWYO/mmODHqDg3qmrKSUT5819V0CG7rmYC2Cc84A6Hrnd58EC
+         PJd4Wy2miyf/MU0oD0gxTXBCBtJ30t86Vq5rLliMFzRxrsbHFvsaHAiXHeB6CLdUjp
+         ZVq9+lD5A0DZ1J/vHMnVoC3xNh70XqMNtzN0Pq0grjEjcb9RTHzbCpcXc8YRZnSGOy
+         IzHqdU69tALbls1TGgJWHE6ik/jSJCycjZvOOQZTq3ebf9lUJdSKztYO2W7rKDaG0V
+         +5Qwdr1Lz1wFw==
+Date:   Tue, 6 Oct 2020 20:35:08 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>, Greg KH <greg@kroah.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the extcon tree with the drm-misc
- tree
-Message-ID: <20201006200003.1be00223@canb.auug.org.au>
-In-Reply-To: <20200910141854.1d4b1b10@canb.auug.org.au>
-References: <20200910141854.1d4b1b10@canb.auug.org.au>
+To:     Jason Gunthorpe <jgg@mellanox.com>, Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Leon Romanovsky <leonro@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hmm tree
+Message-ID: <20201006203508.3cb3d0e3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HrwGoabrIGrrkf8jEjgNMeZ";
+Content-Type: multipart/signed; boundary="Sig_/6sFO0+9XXkLgtCyzVp9ZubH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/HrwGoabrIGrrkf8jEjgNMeZ
+--Sig_/6sFO0+9XXkLgtCyzVp9ZubH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 10 Sep 2020 14:18:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the extcon tree got a conflict in:
->=20
->   MAINTAINERS
->=20
-> between commit:
->=20
->   f61249dddecc ("MAINTAINERS: Add entry for i.MX 8MQ DCSS driver")
->=20
-> from the drm-misc tree and commit:
->=20
->   d0e3c25150dd ("MAINTAINERS: Add entry for NXP PTN5150A CC driver")
->=20
-> from the extcon tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc MAINTAINERS
-> index 623c53ab5bd5,da94c9b12f1b..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -12496,14 -12430,13 +12496,21 @@@ F:	drivers/iio/gyro/fxas21002c_core.
->   F:	drivers/iio/gyro/fxas21002c_i2c.c
->   F:	drivers/iio/gyro/fxas21002c_spi.c
->  =20
->  +NXP i.MX 8MQ DCSS DRIVER
->  +M:	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
->  +R:	Lucas Stach <l.stach@pengutronix.de>
->  +L:	dri-devel@lists.freedesktop.org
->  +S:	Maintained
->  +F:	Documentation/devicetree/bindings/display/imx/nxp,imx8mq-dcss.yaml
->  +F:	drivers/gpu/drm/imx/dcss/
->  +
-> + NXP PTN5150A CC LOGIC AND EXTCON DRIVER
-> + M:	Krzysztof Kozlowski <krzk@kernel.org>
-> + L:	linux-kernel@vger.kernel.org
-> + S:	Maintained
-> + F:	Documentation/devicetree/bindings/extcon/extcon-ptn5150.yaml
-> + F:	drivers/extcon/extcon-ptn5150.c
-> +=20
->   NXP SGTL5000 DRIVER
->   M:	Fabio Estevam <festevam@gmail.com>
->   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+After merging the hmm tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-This is now a conflict between the char-misc tree and the drm tree.
+
+Caused by commit
+
+  07da1223ec93 ("lib/scatterlist: Add support in dynamic allocation of SG t=
+able from pages")
+
+interacting with commit
+
+  707d561f77b5 ("drm: allow limiting the scatter list size.")
+
+from the drm tree.
+
+I have added the following merge fix patch
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 6 Oct 2020 20:22:51 +1100
+Subject: [PATCH] lib/scatterlist: merge fix for "drm: allow limiting the
+ scatter list size."
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/drm_prime.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+index 11fe9ff76fd5..83ac901b65a2 100644
+--- a/drivers/gpu/drm/drm_prime.c
++++ b/drivers/gpu/drm/drm_prime.c
+@@ -807,6 +807,7 @@ struct sg_table *drm_prime_pages_to_sg(struct drm_devic=
+e *dev,
+ 				       struct page **pages, unsigned int nr_pages)
+ {
+ 	struct sg_table *sg =3D NULL;
++	struct scatterlist *sl;
+ 	size_t max_segment =3D 0;
+ 	int ret;
+=20
+@@ -820,11 +821,13 @@ struct sg_table *drm_prime_pages_to_sg(struct drm_dev=
+ice *dev,
+ 		max_segment =3D dma_max_mapping_size(dev->dev);
+ 	if (max_segment =3D=3D 0 || max_segment > SCATTERLIST_MAX_SEGMENT)
+ 		max_segment =3D SCATTERLIST_MAX_SEGMENT;
+-	ret =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
++	sl =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
+ 					  nr_pages << PAGE_SHIFT,
+-					  max_segment, GFP_KERNEL);
+-	if (ret)
++					  max_segment, NULL, 0, GFP_KERNEL);
++	if (IS_ERR(sl)) {
++		ret =3D PTR_ERR(sl);
+ 		goto out;
++	}
+=20
+ 	return sg;
+ out:
+--=20
+2.28.0
+
+
+I assume that there may be more needed.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/HrwGoabrIGrrkf8jEjgNMeZ
+--Sig_/6sFO0+9XXkLgtCyzVp9ZubH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98MhMACgkQAVBC80lX
-0GxtOQf/Qsg+ZvC10zGeMGUucLd6WO1c+qikncq8KpWaOiPfL+qcfJylSpDAwF26
-soTu4wodcX1Mmz5jtKURs9tF4p25YmHN5C49v+1WVLlSznSS7a1qa5SUz4KIfyNz
-PftRDbswJPE5V4L/G1TGreoK8dcsfF6/zjlBkAvHGxugfwn+1xAloWwzUIH53hiK
-RIBPF1QLF9tpRyHNlSF0nGHFrjAyW98hhqapLze1Tgv95bb1w9Tuw/2HS+FODY54
-BDE8irKOz+qBNoQ4rqsVumQQpQyB6nZnIeP6aLGH3rKey1zUCx9VJuck+OGuUCZw
-arSyIx4vrOy5irLITAtJPU8nZXWeiw==
-=EzTU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98OkwACgkQAVBC80lX
+0GzOCQf+PBJgkIRZDEm5TYTOzNpFmT0Pl/eg915A/wCde0kLoswfxghraZDnlMwp
+AAU+CjSrdnnvYLX+AbU7+Vo281UYkyNaWhpv4DV/UZwO7xhog2EkOvZQoYuJRWdv
+fvcMIWyZ+Dyz61RmpluVOEmKapF8qRASCBlWwJc3YwQFrfiRk4Re/TDufFtlK9TE
+rTYmN7ZYW21kVHXyBRX69KhbMl2a4jTyReBFUEOB+BYytYB8CSQqEOrd1Gjs3BoB
+79gG0uh2rQhJ/ajjg+EGQBTF/YwjlB1Vqmy5gpc8q1IWZVBiWE8m6fdXUtccXSqX
+/GUbtuKVBF/MzdmMsdppRZHDIwywCw==
+=8ADh
 -----END PGP SIGNATURE-----
 
---Sig_/HrwGoabrIGrrkf8jEjgNMeZ--
+--Sig_/6sFO0+9XXkLgtCyzVp9ZubH--

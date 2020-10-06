@@ -2,102 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A917C284466
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 05:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E1B28446A
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 05:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgJFD4v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Oct 2020 23:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S1726917AbgJFD6L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Oct 2020 23:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbgJFD4v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Oct 2020 23:56:51 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA04CC0613CE;
-        Mon,  5 Oct 2020 20:56:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C53Yg5Ynsz9sSs;
-        Tue,  6 Oct 2020 14:56:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601956607;
-        bh=fs47VFkN5SJjvHvLpni591wkIF9hZauOUCb5aevTnvk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tfvHGPoaYFDskfbiet3P8vdxaJY8KjvlMdGvoJkbt3nESQ8KN6ywkEpYSb3dbFAsK
-         FbHsYgoDhAOr7DvxwGlJDlnl2qxB8LccRzKpaMwJAamVaVbtEtobIoGDp4KJNKIXjH
-         aOf9Qc7E6OfrtN2IuR1h6r+NyVw+uGsKOO1nZXZk6W1o61NlbwfYc5l7tVfy8i11Dz
-         dgN+CQ7zGPfzvlYIpUC+LLx/rJnmn798hwcpN87r0KAWqVE+UcX67rBrK4VoaEKY1h
-         GCLjHBmsF2L+8geb4lMgvHF76fHbYbyWU9IwTDwuVXNwzjVPHXC1nxYVBDc6H11HDi
-         NFvFPstRM/iGQ==
-Date:   Tue, 6 Oct 2020 14:56:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Yangtao Li <frank@allwinnertech.com>
-Subject: linux-next: manual merge of the sunxi tree with the arm-soc tree
-Message-ID: <20201006145637.57d20ba1@canb.auug.org.au>
+        with ESMTP id S1725977AbgJFD6K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Oct 2020 23:58:10 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372FEC0613A7
+        for <linux-next@vger.kernel.org>; Mon,  5 Oct 2020 20:58:09 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id g29so7248156pgl.2
+        for <linux-next@vger.kernel.org>; Mon, 05 Oct 2020 20:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rnIqJFtWSAyZ19daKyHf1KC1lAEPfa765t2Rk+is77o=;
+        b=Gk510JYVA1XNNjuaIk1hZk72EbY9oWolshIm8DiF535rPbK3cqCfIFAChz4TNWeuHy
+         jsjd4i5oA8fhzJBxHtQmaTjtEZW3LXhSgklS8npTKJGLhSTM1LMwmQKokqhklQ1+DHl/
+         HpSS0EpQ+uMFilKRJb7/7Dxy2rhEmN3E042qA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnIqJFtWSAyZ19daKyHf1KC1lAEPfa765t2Rk+is77o=;
+        b=LXuTrNzoUq/eMChqPQ1NToFB4us0ccWnHSNbpoRnbGSS6oUcLFy7yOV990yBsTeKqf
+         ISNrBH3phlpqFeHnCCE7dW2fqCSoSyvbe0sr9Kfo4+KvAof+SJx/TPwXb6nN5x35PQRi
+         80ELAUmO4edYxd7tpY+LXCUHZvzv9bxf+qnQ/+fHSFiSySHlcV3QJfaFdwm3BIi5sc5C
+         iRsR3q6ACBPodLyVkgfYrn0dZ3iSXnFXb/fauyxIRkeaiTgbHcHwxE7NJZRS2b7a6oGv
+         wSIFbFpdSxwYwT8Qd+AduBo8LhrViji0RPZjhM6GmaT7S4vE0H7phjIe9NbyNQhlWrsx
+         wP1Q==
+X-Gm-Message-State: AOAM531BOyK3KbFDn9iV12NKRdAP2I/wxVnYLNKh3Q2dEm+cNJYx6Ag1
+        nyUKpdrQZYCpgHJ7EqbnMSh+9HIZ0GLKrnlEl/QpmQ==
+X-Google-Smtp-Source: ABdhPJw8U2DsmZ1SvcwiAoupqxOL2Z0ez8LCiyz+B8ChVfA7yfo6FNRqB4UyUH+zJYnUh68yeTEx8oml1jziH2NDkGA=
+X-Received: by 2002:a63:e354:: with SMTP id o20mr2434905pgj.317.1601956688403;
+ Mon, 05 Oct 2020 20:58:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e0Q7Ztg09gC+KDrNArzZYmB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20201005225004.0d3b59a1@canb.auug.org.au>
+In-Reply-To: <20201005225004.0d3b59a1@canb.auug.org.au>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Tue, 6 Oct 2020 11:57:57 +0800
+Message-ID: <CAATdQgB6aN8-BXwTG7=u8c+Q7mPmU+A9=O=_7u_wbPkuVNhjvA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the battery tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/e0Q7Ztg09gC+KDrNArzZYmB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 5, 2020 at 7:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   f9d293364b45 ("power: supply: sbs-battery: keep error code when get_property() fails")
+>
+> Fixes tag
+>
+>   Fixes: c4f382930145 (power: supply: sbs-battery: don't assume i2c errors as battery disconnect)
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: 395a7251dc2b ("power: supply: sbs-battery: don't assume i2c errors as battery disconnect")
+>
 
-Hi all,
+Yes, you're right. I guess I made a mistake here.
+I'll send a v2 patch.
 
-Today's linux-next merge of the sunxi tree got a conflict in:
+Thank you!
 
-  arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-
-between commit:
-
-  0dea1794f3b4 ("arm64: allwinner: A100: add the basical Allwinner A100 DTS=
-I file")
-
-from the arm-soc tree and commit:
-
-  7e66a778cb8b ("arm64: allwinner: A100: add the basical Allwinner A100 DTS=
-I file")
-
-from the sunxi tree.
-
-These are 2 versions of the same patch.  For now I am just using the
-version in the arm-soc tree ... please sort this out.
-
-I fixed it up (see above) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/e0Q7Ztg09gC+KDrNArzZYmB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl976vUACgkQAVBC80lX
-0GxooggAnOftleaedfL1YdmpaEc9eObEeLx2rfR353dsQfTfJ+u2BizE7+Zjx3w1
-FdSwp6R/jh2/fIjG6aiXxCqD0iWiipvbTOoJJhVp9gLV16DH5zsjw83whm4deDv8
-Eqpc67S5RbgEqgN09/cZx/MkCGqjapXlqKYpcioh19Cy9fOYtJ+k4vHADZ6DJoER
-UOJPxyKtnMQ+bn7tRFLxKBUF/eUNxjOxwf/ITuJS/S0FZBpW/Ukf63AFH75VyxT8
-ghDwmGqrG9rIx5AuxEIuIApp/FysXbX5XUNO08YPLiPE8vCAU258mV9CTuI74Qj9
-Kh40+ZNFiMOdrIp5RbMXd8DfBu8VBA==
-=x5SO
------END PGP SIGNATURE-----
-
---Sig_/e0Q7Ztg09gC+KDrNArzZYmB--
+> --
+> Cheers,
+> Stephen Rothwell

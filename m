@@ -2,92 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E85284C32
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 15:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA10C284DAF
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgJFNFw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 09:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgJFNFw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 09:05:52 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAD1C061755;
-        Tue,  6 Oct 2020 06:05:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725946AbgJFOaY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 10:30:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47842 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725902AbgJFOaY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 10:30:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601994623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L0qPbFUZ/qt4FGGU6g+o4zEWbey9ptsPz5J7GxXywRQ=;
+        b=OkxfYjT44fUHLmDj6Uvdh5d7Hs3+c75hAEbmXgDtW1bSmDNP/vfWxTiUdqsdF5/FK4qgS1
+        eMxNoZJ9fnLMlBFzrSLPAJndMCuW8/kXH6ep+A0DSBgJmS/q0iLc6ts/klQMo6w2AyUkZZ
+        nBFZw0eJxOyueD2Uh3LY0Q24g7fLNI0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-166-daJnqIMbNcOIPacIa9Ds5Q-1; Tue, 06 Oct 2020 10:30:20 -0400
+X-MC-Unique: daJnqIMbNcOIPacIa9Ds5Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5HlG0kH8z9sTK;
-        Wed,  7 Oct 2020 00:05:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601989546;
-        bh=q9mpa/0KffrcwWOYPGlh8L15Eanc/pISr+9iZYcDjTA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z3LhaWQ63AkrZnv4Ays2nvFojIu78WkcEqwEcpcfR2TpahT2qxQhpUeye3fY6EV/W
-         osa/GG+0YVOV7nTv71lQZslfZSiQj6Ptm5zkmYzVXW0G8D0fU32eGtOhJXQCJ8x4cC
-         iW6wsPBN1sQPBlCtshTpUXjOs3jl0FAMqObGTLztYreYUUDHt0ApWTOKAxDcUeFgai
-         b/piRFkgtm508Jj4P+V+R6DUoyMr9hLRvMdJyO354YFVzzULJlmvGf37Vn68q5Vt1y
-         HvlVXnrPEHLjJ61+L03NVCKirVfH77NscHYP02QJK4C7C2iOIXsoef37YGJregrNXD
-         rfWJPGT2vmbmA==
-Date:   Wed, 7 Oct 2020 00:05:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 13EED425E5;
+        Tue,  6 Oct 2020 14:30:18 +0000 (UTC)
+Received: from treble (ovpn-120-58.rdu2.redhat.com [10.10.120.58])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D54041002C05;
+        Tue,  6 Oct 2020 14:30:15 +0000 (UTC)
+Date:   Tue, 6 Oct 2020 09:30:12 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the powerpc tree
-Message-ID: <20201007000544.48aabc91@canb.auug.org.au>
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: linux-next: build failure after merge of the vfs tree
+Message-ID: <20201006143012.fgpyujguzvcwszp4@treble>
+References: <20200924183038.3c6da86e@canb.auug.org.au>
+ <20200924200807.GU3421308@ZenIV.linux.org.uk>
+ <20200925220128.1604f09b@canb.auug.org.au>
+ <20200925133820.GW3421308@ZenIV.linux.org.uk>
+ <20200929041056.uj6gedgm6hfjaxrx@treble>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F60SFxaoty6HOU9ZG//eX4x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200929041056.uj6gedgm6hfjaxrx@treble>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/F60SFxaoty6HOU9ZG//eX4x
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 28, 2020 at 11:10:56PM -0500, Josh Poimboeuf wrote:
+> > Josh, any ideas?  We could, of course, make it "r"(size), but that would
+> > be unpleasant in all existing callers...
+> 
+> Sorry, I've been traveling.  I'd just vote for making it "r".
+> 
+> array_index_nospec() is always called after a usercopy.  I don't think
+> anyone will notice the extra mov, for the cases where it would be
+> propagated as an immediate.  And the argument *is* an unsigned long
+> after all.
+> 
+> Stephen, can you confirm this fixes it?
 
-Hi all,
+Still traveling, I didn't see an update on this.  Any objections to the
+below?  I assume it fixes Stephen's build issue.
 
-In commit
+> 
+> diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
+> index d158ea1fa250..69045ac62f58 100644
+> --- a/arch/x86/include/asm/barrier.h
+> +++ b/arch/x86/include/asm/barrier.h
+> @@ -40,7 +40,7 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
+>  
+>  	asm volatile ("cmp %1,%2; sbb %0,%0;"
+>  			:"=r" (mask)
+> -			:"g"(size),"r" (index)
+> +			:"r"(size), "r"(index)
+>  			:"cc");
+>  	return mask;
+>  }
+> 
 
-  3b6c3adbb2fa ("powerpc/perf: Exclude pmc5/6 from the irrelevant PMU group=
- constraints")
+-- 
+Josh
 
-Fixes tag
-
-  Fixes: 7ffd948 ("powerpc/perf: factor out power8 pmu functions")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
-Since Michael doesn't generally rebase his tree, this is more to be
-remebered for next time.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/F60SFxaoty6HOU9ZG//eX4x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98a6gACgkQAVBC80lX
-0GyhGgf/dKuWO59GS1sTLc4QQFWvP5GchwtYC0M3p6TOGGoofD6TtCvxmxR4DPG8
-DcOvgvWF5hMq4LOE0Ts2fUpGpps4HdYewvgi4SiCBr7VWYZHWNEVhSO/VQZ66gn5
-vEMVEozGw2JOwtSHvk/oNmT6sLeqpbYLzsQtdG32I5Oe+gh/odT6Eaz23T4NGW7J
-r/TINbteFZezngchveOIGyN0lb4cOuHMbu3LClivARydqzHFhftgEnh5JHhOWSAY
-ORrEHC5XkGPSv+OOTtfsWHYI6y4bjt1KkQ7vJ4IVbjxuYmQJcE7sNYy9Ku5/9kA3
-/aNNq1R8B5To65aFGwfPHxroB/uYoA==
-=oBxs
------END PGP SIGNATURE-----
-
---Sig_/F60SFxaoty6HOU9ZG//eX4x--

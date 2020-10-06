@@ -2,121 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E9A284AA9
-	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 13:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77500284B4B
+	for <lists+linux-next@lfdr.de>; Tue,  6 Oct 2020 14:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgJFLHP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 07:07:15 -0400
-Received: from ozlabs.org ([203.11.71.1]:42601 "EHLO ozlabs.org"
+        id S1726548AbgJFMFZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 08:05:25 -0400
+Received: from ozlabs.org ([203.11.71.1]:43043 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgJFLHP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 6 Oct 2020 07:07:15 -0400
+        id S1726248AbgJFMFZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 6 Oct 2020 08:05:25 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5F6S31xxz9sS8;
-        Tue,  6 Oct 2020 22:07:12 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5GPZ4Fz5z9sTK;
+        Tue,  6 Oct 2020 23:05:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1601982433;
-        bh=8ImrifGUmi7VURj7TBNSZenjHM+KYL36+UEt7USuaN8=;
+        s=201702; t=1601985922;
+        bh=V7t/KbI24qB0mFMuwivDsNixxT/ei5wb0/EpytKcEcg=;
         h=Date:From:To:Cc:Subject:From;
-        b=ek/by9Lw/qKmsqoivyzZ4a9Vqzieubwoga5h64AUALTk04sOxk5tVDu22VpqELFWh
-         qYBxA6AxdtA0FaIdku/5qWr1t5Gw4ExDML/il3bKndO9bEpS5ZAWC4vu+7U81IuG/b
-         RHu1PmgIlBqsWLfYadG9f90vGyRQvRIVGJWupNF468yzzzd5pinvJLU6cYsi0j24b/
-         vhJ+cF/HJzwm6+52so904Sbl73NPSXeMyeA2CFK/Fm/HytMug0N6RR4lh5K/QBYdCJ
-         7Exxbsfh2mFEiystQ5VQmZV9OyV1tVkZyMJXoQw4FfK1i9TkMnzbWWBVJCku5mfuU5
-         El5QePvSjREYg==
-Date:   Tue, 6 Oct 2020 22:07:11 +1100
+        b=F4NPPTfuBK9fkp+5BVY/ZtLKY4tkb/2vjl1z4hto0Z2MtxL7KzD2sNwL41CTuQ6N8
+         6VEILByjwUxNO03R7t1GlzCa+vZaEqGNoHM9fcwRUDU7sF6ybanFn7IMHWJGPZYvKN
+         W9kYXroIfddDYbbIKumCy1zkxuDEQ049jrf/fGK8t+/FTrALpcP37wFYsbZLWYRbrf
+         3mqSjc+lWAkYIrNseLhhrqmQ/9rCtSQ3BH2dpIgKBihoUT9z0Plkh44LJWx3N4MIOK
+         yKMH4hDjiTTTgR3Bt2WPf+xs3H/2Z5xga7dcmRHvy5iLekPZzqA7TDN9kL/mXgU+Ki
+         BH671miJJTVDA==
+Date:   Tue, 6 Oct 2020 23:05:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joe Perches <joe@perches.com>, John Hubbard <jhubbard@nvidia.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm tree with the kselftest-fixes
- tree
-Message-ID: <20201006220711.0ec49da3@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the akpm-current tree
+Message-ID: <20201006230516.64f7b17f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jy/9B02r2lXeGj4L1pUyxT3";
+Content-Type: multipart/signed; boundary="Sig_/VdaJs1DRKyd.OsHkFmrYWuN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jy/9B02r2lXeGj4L1pUyxT3
+--Sig_/VdaJs1DRKyd.OsHkFmrYWuN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the akpm tree got a conflict in:
+After merging the akpm-current tree, today's linux-next build (sparc
+defconfig) produced this warning:
 
-  tools/testing/selftests/vm/gup_test.c
+mm/memory.c: In function 'copy_present_page':
+mm/memory.c:800:20: warning: unused variable 'dst_mm' [-Wunused-variable]
+  struct mm_struct *dst_mm =3D dst_vma->vm_mm;
+                    ^~~~~~
+mm/memory.c: In function 'copy_present_pte':
+mm/memory.c:889:20: warning: unused variable 'dst_mm' [-Wunused-variable]
+  struct mm_struct *dst_mm =3D dst_vma->vm_mm;
+                    ^~~~~~
 
-between commit:
+Maybe introduced by commit
 
-  aa803771a80a ("tools: Avoid comma separated statements")
-
-from the kselftest-fixes tree and commit:
-
-  5c64830675a6 ("mm/gup_benchmark: rename to mm/gup_test")
-
-from the akpm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  7e6cdccef3df ("mm-remove-src-dst-mm-parameter-in-copy_page_range-v2")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/vm/gup_test.c
-index 1d4359341e44,e930135727a2..000000000000
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@@ -104,17 -104,13 +104,17 @@@ int main(int argc, char **argv
-  	if (write)
-  		gup.flags |=3D FOLL_WRITE;
- =20
-- 	fd =3D open("/sys/kernel/debug/gup_benchmark", O_RDWR);
-+ 	fd =3D open("/sys/kernel/debug/gup_test", O_RDWR);
- -	if (fd =3D=3D -1)
- -		perror("open"), exit(1);
- +	if (fd =3D=3D -1) {
- +		perror("open");
- +		exit(1);
- +	}
- =20
-  	p =3D mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
- -	if (p =3D=3D MAP_FAILED)
- -		perror("mmap"), exit(1);
- +	if (p =3D=3D MAP_FAILED) {
- +		perror("mmap");
- +		exit(1);
- +	}
-  	gup.addr =3D (unsigned long)p;
- =20
-  	if (thp =3D=3D 1)
-
---Sig_/jy/9B02r2lXeGj4L1pUyxT3
+--Sig_/VdaJs1DRKyd.OsHkFmrYWuN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98T98ACgkQAVBC80lX
-0GyVGwf/cFeXKZjjCj3Z3CXP9NWmDJknD0xDuBBiXJlIxPsNHP+476/ZnsWlrX8x
-N89SmZO+VIyWdHTjv4SYLnDaF9vw0v4/qbhVbt8DB8kweGQizZ+9b76MA8B49e3I
-Yi/14S6TAJuaTMR2H06AF4jZuDO/6Mu3yVx9YJ6hev/4h/AbNUmHkM+LE2R2Aevu
-VN58RDLWjfBg+prQtgTqZ3UW6REVTF3QcCoTaeyzfxUe6j0Ojln1wwTm5BirgUiC
-/oXPH9LGSAskZT66DY4Pz6yDYka2vdir46i/ByC+bGTaJBcvPqBW6TfpOxMPa6QX
-QSM95IwBgTZkqRdRTv4dLQ/qUUy0Cg==
-=Tlm6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl98XXwACgkQAVBC80lX
+0GxgdQf+LMC6YH2RSBoXYKVSZ0lOZ6kQ1c3TBGXk5ylUwoDGqRCwIYTr3uYe8OS7
+YFVRJugZxVRQbXj/Q6Ew1lOoGsQWXIygpRQdziHpxfaQBQ2hpTe4czZfHGtv+m2b
+FRaqa15wCCbOAL1WrqkDaZIAgU7LMfsv15DF52+rTHi9gl57W7ywVoLGpGSzxn5K
+Ewpuqsfx6LaEa3gbzB2mxLTbRwdraJPaJXJSF7Kwhb8DhqMy3gC/xtTIQaqGfOKx
+/yX5RPW7GAu/IBLm9k1c++iqjTA+NPCVNx7NRHFVaJ++jO9TaGDlm3bfsAC5Qwas
+9NsYcUXbZveBRD8aZqqYHrXetlXhbg==
+=/xoz
 -----END PGP SIGNATURE-----
 
---Sig_/jy/9B02r2lXeGj4L1pUyxT3--
+--Sig_/VdaJs1DRKyd.OsHkFmrYWuN--

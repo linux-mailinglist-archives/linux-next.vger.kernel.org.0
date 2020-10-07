@@ -2,88 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58729286966
-	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 22:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CBD2869CD
+	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 23:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727424AbgJGUxD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Oct 2020 16:53:03 -0400
-Received: from ozlabs.org ([203.11.71.1]:57155 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726013AbgJGUxD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 7 Oct 2020 16:53:03 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C663x0k8Jz9sSf;
-        Thu,  8 Oct 2020 07:53:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602103981;
-        bh=6On4I/lPQImdHo2JDVbFdEInIVX2xUyLpHkwtMClg/I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vFWXRighcPC3w6R90VdXugAczl6KKNmhEuBwRNEe0BRNjirmgVCEZZp2vkBYVN19K
-         fbsleaxqZrGEgVkkt9mifwQpzoiNjSGWHVRVJ0Do9sExWUAjyAwS8lQr4l53oMTIzv
-         LXmykfwGr6eG46KcLOa73MpW61jFCoyOMpLogbMDdGXnSwMXeiy9duvTMUzJHt0Xea
-         B3nz/kCGD4h1k/yL6PhHaytmb2+N53MUBvr7f6/m2oSbhti4jvIslifJigeYaOUJMm
-         QavccieupVYYDZ0XUybdX6G0yugkh7l9WAB5mwc/rn9SZUh8V2gy87IGw133pOV7sw
-         cOe51LdCV9oOg==
-Date:   Thu, 8 Oct 2020 07:52:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the gpio tree
-Message-ID: <20201008075259.3523669c@canb.auug.org.au>
+        id S1728499AbgJGVDg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Oct 2020 17:03:36 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15322 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgJGVDf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Oct 2020 17:03:35 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f7e2cba0001>; Wed, 07 Oct 2020 14:01:46 -0700
+Received: from [10.2.85.86] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 7 Oct
+ 2020 21:03:35 +0000
+Subject: Re: mmotm 2020-10-06-15-50 uploaded
+To:     <akpm@linux-foundation.org>, <broonie@kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-next@vger.kernel.org>,
+        <mhocko@suse.cz>, <mm-commits@vger.kernel.org>,
+        <sfr@canb.auug.org.au>, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Gary Gunthorpe <jgg@nvidia.com>
+References: <20201006225133.Y21m5SGLJ%akpm@linux-foundation.org>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <6a97eeaf-781b-f06b-050b-a56c9f8f1632@nvidia.com>
+Date:   Wed, 7 Oct 2020 14:03:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wFuAdb4w9bIXluHEu8aLUk4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20201006225133.Y21m5SGLJ%akpm@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1602104506; bh=JZfEZdS82MK5uL1Zki+SPS+QszJMiRQrlHgFw1PPP20=;
+        h=Subject:To:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=kIpxYqeZ1MCqIMXKYxFL/yzbz2v8z4MZXZxABnVPpduChvb6wcuqYrUzQb1fPLuIW
+         uDpb9BihN63L7B049pu8l+IFEMQ2s+UKQoZe2nxqnX9tth8Xmjh62Z4ydvJi0ur8cR
+         +gO16mqVLHXDruzxsoZrzaQXAmwNk3S1h/UObIkBbtOM6cZW/qIAFedV9Yu3srsGkT
+         DYOBuT1MeLvrCCVbY6T0Ipxqc0My0e3gUoQi6gLuW41tA6Pad5Zgin0SveWDYn96up
+         pOgTU3LjyeWYeRhywdoqQqW5YPuf3QOZC6/wIWgp0gZcwbj8w5KEWBWH/rFnn8lnfy
+         SrVj3f+TJWY6w==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wFuAdb4w9bIXluHEu8aLUk4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/6/20 3:51 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-10-06-15-50 has been uploaded to
+...
 
-Hi all,
+> * mm-frame-vec-drop-gup_flags-from-get_vaddr_frames.patch
+> * mm-frame-vec-use-foll_longterm.patch
 
-In commit
+That last one needs to be dropped--see my note about why in [1].
+And syzbot is also complaining [2], correctly, that you can't pass
+FOLL_LONGTERM to pin_user_pages_locked().
 
-  62ba77749ead ("docs: gpio: add a new document to its index.rst")
+And the patch right before it, while correct as it stands, should end
+up being unnecessary, because Daniel is taking a different approach.
 
-Fixes tag
+So probably best to drop both of those from mmotm and -next.
 
-  Fixes: fd1abe99e5fb ("Documentation: gpio: add documentation for gpio-moc=
-kup")
 
-has these problem(s):
+[1] https://lore.kernel.org/dri-devel/f5130c7f-eebe-7b21-62b8-68f08212b106@nvidia.com
 
-  - Target SHA1 does not exist
+[2] https://lore.kernel.org/r/000000000000f3c7f005b11111c9@google.com
 
-Maybe you ment
-
-Fixes: 2fd1abe99e5f ("Documentation: gpio: add documentation for gpio-mocku=
-p")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wFuAdb4w9bIXluHEu8aLUk4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9+KqsACgkQAVBC80lX
-0GyRAQf+LqNLB4tb5lYsmKjVAZM0leW1t++XeZbNp62kIuFl+vQekm6COUhdBhHO
-jHrIoTEN+kVCKR7HbdFJyPBRUAsEL5RQOFo1Vh7V8csBZT8B5IbzGjjgaTJhr548
-NNZ10uwZrhMaaPSR2ZXk14Ls1+oTK/rj6e91N7zxCG/Lcff7mqiMgmutP5FeJ6UQ
-qWkho3ABUTWutBd9QVXD646FWPDmvSER1WSiRpsOnhe49zvX4lPK1Qt5plIh9GeY
-jyxkJOIDJPEpezHW0wfB9hYHodvVIf6jLsjGJQSya4Xj2o24o0K7mlgEFsGItC6v
-rxlHPxr7uT4/EVtM8GzKJPjLiFcS8w==
-=pS6W
------END PGP SIGNATURE-----
-
---Sig_/wFuAdb4w9bIXluHEu8aLUk4--
+thanks,
+-- 
+John Hubbard
+NVIDIA

@@ -2,421 +2,1361 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F352860EE
-	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 16:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA25286101
+	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 16:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728532AbgJGOIg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Oct 2020 10:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728467AbgJGOIg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Oct 2020 10:08:36 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B02C061755
-        for <linux-next@vger.kernel.org>; Wed,  7 Oct 2020 07:08:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d6so1389136pfn.9
-        for <linux-next@vger.kernel.org>; Wed, 07 Oct 2020 07:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=mdy7/V0Ns9rJ2pounw04w07C54U2Ao4CI+idCGwpuF8=;
-        b=J4jbYxqSKEh2UBHWpHlLdXTvBxNBV6QnzKEBCnM0604fnrcih56DvZV69MqPBbVaN7
-         ehr6GgY5DxwNpJMOph4NbnelcFPcl7e7kHoz+6LYllAxTIgKyHnVTfdciFslMRPifeyZ
-         rEaw0aixeOYk+GPqsNLz9aKY3J8iv2fO2llhPOJspmmMQn1fRHe7TtD8aoeGZ0ou35BW
-         j/n/HrccLNY71beWKcAftPRStwNpi4YtPQZ4WyiGzic+LsQ2z4FmkPNdJG5MRDcOwQlC
-         4ERukFndhJqmyvj75kKoWv/q8qak66CGkAOI/Ka3ufEOym6JMDKpgT1ZT16p6eGqM4aO
-         OqWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=mdy7/V0Ns9rJ2pounw04w07C54U2Ao4CI+idCGwpuF8=;
-        b=cwDNgXcKwuwFqOuVhx6bMbRPmJQc/VtQCXqOvsvOQ0T4xQbxmJvbuVHDQ3mU3T+TYH
-         BSO2eNAu3GZi09F+r0NWUYJtu9YZ9M4pDIacI+HeEAclgy0EoSXsS8MQef5au7+d4u8j
-         gBLZtdUnFllBfcV6u7qFZHTbvs/LtjDb0WMRywKGESw8dS9cKsrYgCN+EdBs33q5cy2Z
-         HlgYvbuhkpfALcSCl2Xv91/SJzqEgW84eHT73UdaCRZgW8oScZJL3SNCUppotTo/T3vu
-         SYs/gtfqNxlj3QwiWB+B3poYnwMelAKyMS+c/5qWG83ZF0sCb3vHQpe1moouURibRK5x
-         /oDA==
-X-Gm-Message-State: AOAM530NMcjEzyISwU5IwSSidKHNiO/+4QuL4H3XfWAPTHY5nLRxunzN
-        u5sXhg//rBkjkEUFzndoAnCIjFyWzlQJ2A==
-X-Google-Smtp-Source: ABdhPJzDCTqrawrjsiNaTcnu6fc0HobvquKPA7YwjsJ1Nk66TdD1ldmbPDtd4dSRZn7cZIP4f47DXQ==
-X-Received: by 2002:a62:7cd4:0:b029:152:5198:3f19 with SMTP id x203-20020a627cd40000b029015251983f19mr3111481pfc.31.1602079714964;
-        Wed, 07 Oct 2020 07:08:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x16sm3320820pff.14.2020.10.07.07.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Oct 2020 07:08:34 -0700 (PDT)
-Message-ID: <5f7dcbe2.1c69fb81.ccbe7.617d@mx.google.com>
-Date:   Wed, 07 Oct 2020 07:08:34 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728565AbgJGOPI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Oct 2020 10:15:08 -0400
+Received: from a8-29.smtp-out.amazonses.com ([54.240.8.29]:57156 "EHLO
+        a8-29.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728053AbgJGOPI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Oct 2020 10:15:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=iv2huwi6zmqabdt6b4lbuyos6pcvh5gh; d=linaro.org; t=1602080100;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=LkaYmOC44rlKNlIpkUbathghuRZgcVXqN5PJpy0eS6c=;
+        b=DxVAVx4jHupMS4L8OgHMOW7zRza4k3EfBeeegbStB0RZW2igSBhnekdUP6uNiUO4
+        4MOSWzfG+u+HRtgHDa/afofM6RJLU3Rh4jKSQ2NlgRwH59WlsW4u/umJIp1iTef1KzY
+        iXdxWlAYT0j4SqtDBASfgLgdo5/3bJax1IFlFTTw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1602080100;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=LkaYmOC44rlKNlIpkUbathghuRZgcVXqN5PJpy0eS6c=;
+        b=cKbm6nrh4EsPirkBnPkythBauXvWfl2NsOEiAo7EERKlR0JpCl9O/xqpqg8h8Ypu
+        gSCjX5wdSZp4iKXJGFGRweh3nqm1OiwQK7gKmvr6cgDNF8c57J4+7494Usdhb2eF/5A
+        EcPgozS8cbUDjdbaoh4uXQw5CvhJL3gA9Hyom0t0=
+From:   LKFT <lkft@linaro.org>
+To:     lkft@linaro.org, lkft-triage@lists.linaro.org,
+        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     sfr@canb.auug.org.au, shuah@kernel.org
+Subject: [REGRESSION] kselftest: next-20201006
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20201007
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 431 runs, 8 regressions (next-20201007)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000175036a4f22-6e7a0bbb-d5af-41f5-b1d2-9b18874eb8ac-000000@email.amazonses.com>
+Date:   Wed, 7 Oct 2020 14:15:00 +0000
+X-SES-Outgoing: 2020.10.07-54.240.8.29
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 431 runs, 8 regressions (next-20201007)
-
-Regressions Summary
--------------------
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-at91-sama5d4_xplained | arm   | lab-baylibre  | gcc-8    | sama5_defconfig =
-             | 0/1    =
-
-bcm2836-rpi-2-b       | arm   | lab-collabora | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 0/1    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | clang-10 | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-OMIZE_BASE=3Dy | 3/4    =
-
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig       =
-             | 3/4    =
-
-hifive-unleashed-a00  | riscv | lab-baylibre  | gcc-8    | defconfig       =
-             | 0/1    =
-
-panda                 | arm   | lab-collabora | gcc-8    | omap2plus_defcon=
-fig          | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-201007/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20201007
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      8b787da7ba8cd2383988480d282ec1abc3917892 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-at91-sama5d4_xplained | arm   | lab-baylibre  | gcc-8    | sama5_defconfig =
-             | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d925d933a48c8d64ff42d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f7d925d933a48c8d64ff=
-42e
-      failing since 161 days (last pass: next-20200424, first fail: next-20=
-200428)  =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2836-rpi-2-b       | arm   | lab-collabora | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d945e3b8e355e5b4ff3e0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f7d945e3b8e355e5b4ff=
-3e1
-      failing since 6 days (last pass: next-20200929, first fail: next-2020=
-0930)  =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | clang-10 | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d938d62c9cefb184ff3e0
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20200708124224+ef32c=
-611aa2-1~exp1~20200707224822.188 )
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7d938d62c9cefb=
-184ff3e4
-      failing since 5 days (last pass: next-20200930, first fail: next-2020=
-1001)
-      1 lines
-
-    2020-10-07 10:06:12.183000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-07 10:06:12.183000  (user:khilman) is already connected
-    2020-10-07 10:06:26.920000  =00
-    2020-10-07 10:06:26.921000  =
-
-    2020-10-07 10:06:26.921000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-07 10:06:26.921000  =
-
-    2020-10-07 10:06:26.921000  DRAM:  948 MiB
-    2020-10-07 10:06:26.936000  RPI 3 Model B (0xa02082)
-    2020-10-07 10:06:27.024000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-07 10:06:27.056000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (379 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-_64K_PAGES=3Dy | 3/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d8fd5976c8fc6a04ff3ee
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-=
-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-=
-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7d8fd5976c8fc6=
-a04ff3f2
-      new failure (last pass: next-20201006)
-      1 lines
-
-    2020-10-07 09:50:14.676000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-07 09:50:14.676000  (user:khilman) is already connected
-    2020-10-07 09:50:30.423000  =00
-    2020-10-07 09:50:30.423000  =
-
-    2020-10-07 09:50:30.438000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-07 09:50:30.439000  =
-
-    2020-10-07 09:50:30.439000  DRAM:  948 MiB
-    2020-10-07 09:50:30.455000  RPI 3 Model B (0xa02082)
-    2020-10-07 09:50:30.544000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-07 09:50:30.576000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (379 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig+CON...=
-OMIZE_BASE=3Dy | 3/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d9073458ecf91ed4ff3e2
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7d9073458ecf91=
-ed4ff3e6
-      failing since 0 day (last pass: next-20201002, first fail: next-20201=
-006)
-      1 lines
-
-    2020-10-07 09:52:54.727000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-07 09:52:54.727000  (user:khilman) is already connected
-    2020-10-07 09:53:10.313000  =00
-    2020-10-07 09:53:10.313000  =
-
-    2020-10-07 09:53:10.313000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-07 09:53:10.314000  =
-
-    2020-10-07 09:53:10.332000  DRAM:  948 MiB
-    2020-10-07 09:53:10.344000  RPI 3 Model B (0xa02082)
-    2020-10-07 09:53:10.432000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-07 09:53:10.463000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (379 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre  | gcc-8    | defconfig       =
-             | 3/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d911190f53826ac4ff3fc
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7d911190f53826=
-ac4ff400
-      new failure (last pass: next-20201006)
-      1 lines
-
-    2020-10-07 09:55:31.226000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-07 09:55:31.227000  (user:khilman) is already connected
-    2020-10-07 09:55:47.686000  =00
-    2020-10-07 09:55:47.686000  =
-
-    2020-10-07 09:55:47.686000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-07 09:55:47.686000  =
-
-    2020-10-07 09:55:47.701000  DRAM:  948 MiB
-    2020-10-07 09:55:47.718000  RPI 3 Model B (0xa02082)
-    2020-10-07 09:55:47.806000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-07 09:55:47.839000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (380 line(s) more)
-      =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-hifive-unleashed-a00  | riscv | lab-baylibre  | gcc-8    | defconfig       =
-             | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d95ffe1b64e77084ff3ee
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/risc=
-v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/risc=
-v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/riscv/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f7d95ffe1b64e77084ff=
-3ef
-      failing since 27 days (last pass: next-20200818, first fail: next-202=
-00909)  =
-
-
-
-platform              | arch  | lab           | compiler | defconfig       =
-             | results
-----------------------+-------+---------------+----------+-----------------=
--------------+--------
-panda                 | arm   | lab-collabora | gcc-8    | omap2plus_defcon=
-fig          | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7d96840f205f25194ff407
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201007/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201007/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f7d96840f205f25194ff=
-408
-      failing since 77 days (last pass: next-20200706, first fail: next-202=
-00721)  =20
+## Kernel
+* kernel: 5.9.0-rc8
+* git repo: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: a804ab086e9de200e2e70600996db7fc14c91959
+* git describe: next-20201006
+* Test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201006
+
+## Regressions (compared to build next-20201002)
+
+x86:
+  kselftest-vsyscall-mode-none:
+    * rtc.rtctest
+  kselftest:
+    * net.mptcp.mptcp_connect.sh
+    * rtc.rtctest
+
+i386:
+  kselftest:
+    * rtc.rtctest
+
+## Fixes (compared to build next-20201002)
+
+x86:
+  kselftest-vsyscall-mode-native:
+    * net.mptcp.mptcp_connect.sh
+    * rtc.rtctest
+  kselftest-vsyscall-mode-none:
+    * proc.read
+    * tc-testing.tdc.sh
+
+i386:
+  kselftest:
+    * pidfd.pidfd_test
+
+## Summary
+### i386, kselftest
+* total: 676
+* pass: 410
+* fail: 215
+* skip: 51
+* xfail: 0
+### juno-r2, kselftest
+* total: 653
+* pass: 404
+* fail: 199
+* skip: 50
+* xfail: 0
+### x86, kselftest
+* total: 670
+* pass: 436
+* fail: 189
+* skip: 45
+* xfail: 0
+### x86, kselftest-vsyscall-mode-native
+* total: 671
+* pass: 439
+* fail: 187
+* skip: 45
+* xfail: 0
+### x86, kselftest-vsyscall-mode-none
+* total: 670
+* pass: 437
+* fail: 188
+* skip: 45
+* xfail: 0
+
+## Environments
+* dragonboard-410c
+* hi6220-hikey
+* i386
+* juno-r2
+* juno-r2-compat
+* juno-r2-kasan
+* nxp-ls2088
+* qemu_arm
+* qemu_arm64
+* qemu_i386
+* qemu_x86_64
+* x15
+* x86
+* x86-kasan
+
+## Suites
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+## Failures
+### i386, kselftest
+* bpf.test_verifier
+* bpf.test_maps
+* bpf.test_progs
+* bpf.test_dev_cgroup
+* bpf.test_tcpbpf_user
+* bpf.get_cgroup_id_user
+* bpf.test_socket_cookie
+* bpf.test_netcnt
+* bpf.test_tcpnotify_user
+* bpf.test_sysctl
+* bpf.test_progs-no_alu32
+* bpf.test_xdp_redirect.sh
+* bpf.test_xdp_meta.sh
+* bpf.test_sock_addr.sh
+* bpf.test_tunnel.sh
+* bpf.test_lwt_seg6local.sh
+* bpf.test_skb_cgroup_id.sh
+* bpf.test_flow_dissector.sh
+* bpf.test_xdp_vlan_mode_generic.sh
+* bpf.test_xdp_vlan_mode_native.sh
+* bpf.test_lwt_ip_encap.sh
+* bpf.test_tcp_check_syncookie.sh
+* bpf.test_tc_tunnel.sh
+* bpf.test_tc_edt.sh
+* bpf.test_xdping.sh
+* bpf.test_bpftool.sh
+* cgroup.test_memcontrol
+* cgroup.test_kmem
+* cgroup.test_core
+* cgroup.test_freezer
+* clone3.clone3_clear_sighand
+* clone3.clone3_cap_checkpoint_restore
+* core.close_range_test
+* filesystems.binderfs.binderfs_test
+* firmware.fw_run_tests.sh
+* ftrace.ftracetest
+* intel_pstate.run.sh
+* kvm.cr4_cpuid_sync_test
+* kvm.evmcs_test
+* kvm.hyperv_cpuid
+* kvm.mmio_warning_test
+* kvm.platform_info_test
+* kvm.set_sregs_test
+* kvm.smm_test
+* kvm.state_test
+* kvm.vmx_preemption_timer_test
+* kvm.svm_vmcall_test
+* kvm.sync_regs_test
+* kvm.vmx_close_while_nested_test
+* kvm.vmx_dirty_log_test
+* kvm.vmx_set_nested_state_test
+* kvm.vmx_tsc_adjust_test
+* kvm.xss_msr_test
+* kvm.debug_regs
+* kvm.clear_dirty_log_test
+* kvm.demand_paging_test
+* kvm.dirty_log_test
+* kvm.kvm_create_max_vcpus
+* kvm.set_memory_region_test
+* kvm.steal_time
+* lkdtm.BUG.sh
+* lkdtm.WARNING.sh
+* lkdtm.WARNING_MESSAGE.sh
+* lkdtm.EXCEPTION.sh
+* lkdtm.CORRUPT_LIST_ADD.sh
+* lkdtm.CORRUPT_LIST_DEL.sh
+* lkdtm.STACK_GUARD_PAGE_LEADING.sh
+* lkdtm.STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm.UNSET_SMEP.sh
+* lkdtm.DOUBLE_FAULT.sh
+* lkdtm.CORRUPT_PAC.sh
+* lkdtm.UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm.READ_AFTER_FREE.sh
+* lkdtm.READ_BUDDY_AFTER_FREE.sh
+* lkdtm.SLAB_FREE_DOUBLE.sh
+* lkdtm.SLAB_FREE_CROSS.sh
+* lkdtm.SLAB_FREE_PAGE.sh
+* lkdtm.EXEC_DATA.sh
+* lkdtm.EXEC_STACK.sh
+* lkdtm.EXEC_KMALLOC.sh
+* lkdtm.EXEC_VMALLOC.sh
+* lkdtm.EXEC_RODATA.sh
+* lkdtm.EXEC_USERSPACE.sh
+* lkdtm.EXEC_NULL.sh
+* lkdtm.ACCESS_USERSPACE.sh
+* lkdtm.ACCESS_NULL.sh
+* lkdtm.WRITE_RO.sh
+* lkdtm.WRITE_RO_AFTER_INIT.sh
+* lkdtm.WRITE_KERN.sh
+* lkdtm.REFCOUNT_INC_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_DEC_ZERO.sh
+* lkdtm.REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_INC_ZERO.sh
+* lkdtm.REFCOUNT_ADD_ZERO.sh
+* lkdtm.REFCOUNT_INC_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_SATURATED.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm.USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm.USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm.USERCOPY_STACK_FRAME_TO.sh
+* lkdtm.USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm.USERCOPY_STACK_BEYOND.sh
+* lkdtm.USERCOPY_KERNEL.sh
+* lkdtm.STACKLEAK_ERASING.sh
+* lkdtm.CFI_FORWARD_PROTO.sh
+* mincore.mincore_selftest.global.check_file_mmap
+* mincore.mincore_selftest
+* mqueue.mq_perf_tests
+* net.run_netsocktests
+* net.fib_tests.sh
+* net.fib-onlink-tests.sh
+* net.pmtu.sh
+* net.udpgso_bench.sh
+* net.psock_snd.sh
+* net.udpgro_bench.sh
+* net.test_vxlan_under_vrf.sh
+* net.l2tp.sh
+* net.traceroute.sh
+* net.altnames.sh
+* net.icmp_redirect.sh
+* net.txtimestamp.sh
+* net.vrf-xfrm-tests.sh
+* net.devlink_port_split.py
+* net.forwarding.bridge_igmp.sh
+* net.forwarding.bridge_port_isolation.sh
+* net.forwarding.bridge_sticky_fdb.sh
+* net.forwarding.bridge_vlan_aware.sh
+* net.forwarding.bridge_vlan_unaware.sh
+* net.forwarding.ethtool.sh
+* net.forwarding.gre_inner_v4_multipath.sh
+* net.forwarding.gre_inner_v6_multipath.sh
+* net.forwarding.gre_multipath.sh
+* net.forwarding.ip6gre_inner_v4_multipath.sh
+* net.forwarding.ip6gre_inner_v6_multipath.sh
+* net.forwarding.ipip_flat_gre_key.sh
+* net.forwarding.ipip_flat_gre_keys.sh
+* net.forwarding.ipip_flat_gre.sh
+* net.forwarding.ipip_hier_gre_key.sh
+* net.forwarding.ipip_hier_gre_keys.sh
+* net.forwarding.ipip_hier_gre.sh
+* net.forwarding.loopback.sh
+* net.forwarding.mirror_gre_bound.sh
+* net.forwarding.mirror_gre_bridge_1d.sh
+* net.forwarding.mirror_gre_bridge_1d_vlan.sh
+* net.forwarding.mirror_gre_bridge_1q_lag.sh
+* net.forwarding.mirror_gre_bridge_1q.sh
+* net.forwarding.mirror_gre_changes.sh
+* net.forwarding.mirror_gre_flower.sh
+* net.forwarding.mirror_gre_lag_lacp.sh
+* net.forwarding.mirror_gre_neigh.sh
+* net.forwarding.mirror_gre_nh.sh
+* net.forwarding.mirror_gre.sh
+* net.forwarding.mirror_gre_vlan_bridge_1q.sh
+* net.forwarding.mirror_gre_vlan.sh
+* net.forwarding.mirror_vlan.sh
+* net.forwarding.router_bridge.sh
+* net.forwarding.router_bridge_vlan.sh
+* net.forwarding.router_broadcast.sh
+* net.forwarding.router_mpath_nh.sh
+* net.forwarding.router_multicast.sh
+* net.forwarding.router_multipath.sh
+* net.forwarding.router.sh
+* net.forwarding.router_vid_1.sh
+* net.forwarding.sch_ets.sh
+* net.forwarding.sch_tbf_ets.sh
+* net.forwarding.sch_tbf_prio.sh
+* net.forwarding.sch_tbf_root.sh
+* net.forwarding.tc_actions.sh
+* net.forwarding.tc_chains.sh
+* net.forwarding.tc_flower_router.sh
+* net.forwarding.tc_flower.sh
+* net.forwarding.tc_shblocks.sh
+* net.forwarding.tc_vlan_modify.sh
+* net.forwarding.vxlan_asymmetric.sh
+* net.forwarding.vxlan_bridge_1d_port_8472.sh
+* net.forwarding.vxlan_bridge_1d.sh
+* net.forwarding.vxlan_bridge_1q_port_8472.sh
+* net.forwarding.vxlan_bridge_1q.sh
+* net.forwarding.vxlan_symmetric.sh
+* net.mptcp.simult_flows.sh
+* netfilter.nft_concat_range.sh
+* netfilter.nft_queue.sh
+* pidfd.pidfd_open_test
+* pidfd.pidfd_poll_test
+* proc.proc-self-syscall
+* proc.proc-fsconfig-hidepid
+* pstore.pstore_tests
+* ptrace.vmaccess.global.attach
+* ptrace.vmaccess
+* openat2.openat2_test
+* openat2.resolve_test
+* openat2.rename_attack_test
+* rseq.param_test
+* rseq.param_test_benchmark
+* rseq.param_test_compare_twice
+* rseq.run_param_test.sh
+* rtc.rtctest
+* seccomp.seccomp_bpf.global.user_notification_filter_empty
+* seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+* seccomp.seccomp_bpf.global.user_notification_addfd
+* seccomp.seccomp_bpf
+* seccomp.seccomp_benchmark
+* splice.short_splice_read.sh
+* vm.run_vmtests.sh
+### juno-r2, kselftest
+* bpf.test_verifier
+* bpf.test_tag
+* bpf.test_maps
+* bpf.test_lpm_map
+* bpf.test_progs
+* bpf.test_dev_cgroup
+* bpf.test_tcpbpf_user
+* bpf.get_cgroup_id_user
+* bpf.test_socket_cookie
+* bpf.test_netcnt
+* bpf.test_tcpnotify_user
+* bpf.test_sysctl
+* bpf.test_progs-no_alu32
+* bpf.test_xdp_redirect.sh
+* bpf.test_xdp_meta.sh
+* bpf.test_sock_addr.sh
+* bpf.test_tunnel.sh
+* bpf.test_lwt_seg6local.sh
+* bpf.test_skb_cgroup_id.sh
+* bpf.test_flow_dissector.sh
+* bpf.test_xdp_vlan_mode_generic.sh
+* bpf.test_xdp_vlan_mode_native.sh
+* bpf.test_lwt_ip_encap.sh
+* bpf.test_tcp_check_syncookie.sh
+* bpf.test_tc_tunnel.sh
+* bpf.test_tc_edt.sh
+* bpf.test_xdping.sh
+* bpf.test_bpftool.sh
+* cgroup.test_memcontrol
+* cgroup.test_kmem
+* cgroup.test_core
+* cgroup.test_freezer
+* clone3.clone3_cap_checkpoint_restore
+* core.close_range_test
+* cpufreq.main.sh
+* filesystems.binderfs.binderfs_test
+* firmware.fw_run_tests.sh
+* ftrace.ftracetest
+* lkdtm.BUG.sh
+* lkdtm.WARNING.sh
+* lkdtm.WARNING_MESSAGE.sh
+* lkdtm.EXCEPTION.sh
+* lkdtm.CORRUPT_LIST_ADD.sh
+* lkdtm.CORRUPT_LIST_DEL.sh
+* lkdtm.STACK_GUARD_PAGE_LEADING.sh
+* lkdtm.STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm.UNSET_SMEP.sh
+* lkdtm.CORRUPT_PAC.sh
+* lkdtm.UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm.READ_AFTER_FREE.sh
+* lkdtm.READ_BUDDY_AFTER_FREE.sh
+* lkdtm.SLAB_FREE_DOUBLE.sh
+* lkdtm.SLAB_FREE_CROSS.sh
+* lkdtm.SLAB_FREE_PAGE.sh
+* lkdtm.EXEC_DATA.sh
+* lkdtm.EXEC_STACK.sh
+* lkdtm.EXEC_KMALLOC.sh
+* lkdtm.EXEC_VMALLOC.sh
+* lkdtm.EXEC_RODATA.sh
+* lkdtm.EXEC_USERSPACE.sh
+* lkdtm.EXEC_NULL.sh
+* lkdtm.ACCESS_USERSPACE.sh
+* lkdtm.ACCESS_NULL.sh
+* lkdtm.WRITE_RO.sh
+* lkdtm.WRITE_RO_AFTER_INIT.sh
+* lkdtm.WRITE_KERN.sh
+* lkdtm.REFCOUNT_INC_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_DEC_ZERO.sh
+* lkdtm.REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_INC_ZERO.sh
+* lkdtm.REFCOUNT_ADD_ZERO.sh
+* lkdtm.REFCOUNT_INC_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_SATURATED.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm.USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm.USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm.USERCOPY_STACK_FRAME_TO.sh
+* lkdtm.USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm.USERCOPY_STACK_BEYOND.sh
+* lkdtm.USERCOPY_KERNEL.sh
+* lkdtm.STACKLEAK_ERASING.sh
+* lkdtm.CFI_FORWARD_PROTO.sh
+* memory-hotplug.mem-on-off-test.sh
+* mincore.mincore_selftest.global.check_file_mmap
+* mincore.mincore_selftest
+* net.run_netsocktests
+* net.fib_tests.sh
+* net.fib-onlink-tests.sh
+* net.pmtu.sh
+* net.udpgso_bench.sh
+* net.fib_rule_tests.sh
+* net.psock_snd.sh
+* net.udpgro_bench.sh
+* net.udpgro.sh
+* net.test_vxlan_under_vrf.sh
+* net.tcp_fastopen_backup_key.sh
+* net.l2tp.sh
+* net.fib_nexthops.sh
+* net.altnames.sh
+* net.icmp_redirect.sh
+* net.txtimestamp.sh
+* net.vrf-xfrm-tests.sh
+* net.devlink_port_split.py
+* net.forwarding.bridge_igmp.sh
+* net.forwarding.bridge_port_isolation.sh
+* net.forwarding.bridge_sticky_fdb.sh
+* net.forwarding.bridge_vlan_aware.sh
+* net.forwarding.bridge_vlan_unaware.sh
+* net.forwarding.ethtool.sh
+* net.forwarding.gre_inner_v4_multipath.sh
+* net.forwarding.gre_inner_v6_multipath.sh
+* net.forwarding.gre_multipath.sh
+* net.forwarding.ip6gre_inner_v4_multipath.sh
+* net.forwarding.ip6gre_inner_v6_multipath.sh
+* net.forwarding.ipip_flat_gre_key.sh
+* net.forwarding.ipip_flat_gre_keys.sh
+* net.forwarding.ipip_flat_gre.sh
+* net.forwarding.ipip_hier_gre_key.sh
+* net.forwarding.ipip_hier_gre_keys.sh
+* net.forwarding.ipip_hier_gre.sh
+* net.forwarding.loopback.sh
+* net.forwarding.mirror_gre_bound.sh
+* net.forwarding.mirror_gre_bridge_1d.sh
+* net.forwarding.mirror_gre_bridge_1d_vlan.sh
+* net.forwarding.mirror_gre_bridge_1q_lag.sh
+* net.forwarding.mirror_gre_bridge_1q.sh
+* net.forwarding.mirror_gre_changes.sh
+* net.forwarding.mirror_gre_flower.sh
+* net.forwarding.mirror_gre_lag_lacp.sh
+* net.forwarding.mirror_gre_neigh.sh
+* net.forwarding.mirror_gre_nh.sh
+* net.forwarding.mirror_gre.sh
+* net.forwarding.mirror_gre_vlan_bridge_1q.sh
+* net.forwarding.mirror_gre_vlan.sh
+* net.forwarding.mirror_vlan.sh
+* net.forwarding.router_bridge.sh
+* net.forwarding.router_bridge_vlan.sh
+* net.forwarding.router_broadcast.sh
+* net.forwarding.router_mpath_nh.sh
+* net.forwarding.router_multicast.sh
+* net.forwarding.router_multipath.sh
+* net.forwarding.router.sh
+* net.forwarding.router_vid_1.sh
+* net.forwarding.sch_ets.sh
+* net.forwarding.sch_tbf_ets.sh
+* net.forwarding.sch_tbf_prio.sh
+* net.forwarding.sch_tbf_root.sh
+* net.forwarding.tc_actions.sh
+* net.forwarding.tc_chains.sh
+* net.forwarding.tc_flower_router.sh
+* net.forwarding.tc_flower.sh
+* net.forwarding.tc_shblocks.sh
+* net.forwarding.tc_vlan_modify.sh
+* net.forwarding.vxlan_asymmetric.sh
+* net.forwarding.vxlan_bridge_1d_port_8472.sh
+* net.forwarding.vxlan_bridge_1d.sh
+* net.forwarding.vxlan_bridge_1q_port_8472.sh
+* net.forwarding.vxlan_bridge_1q.sh
+* net.forwarding.vxlan_symmetric.sh
+* net.mptcp.simult_flows.sh
+* netfilter.nft_nat.sh
+* netfilter.conntrack_icmp_related.sh
+* netfilter.nft_concat_range.sh
+* netfilter.nft_queue.sh
+* pidfd.pidfd_test
+* pidfd.pidfd_fdinfo_test
+* pidfd.pidfd_open_test
+* pidfd.pidfd_poll_test
+* proc.proc-fsconfig-hidepid
+* pstore.pstore_tests
+* ptrace.vmaccess.global.attach
+* ptrace.vmaccess
+* openat2.openat2_test
+* openat2.resolve_test
+* openat2.rename_attack_test
+* rseq.param_test
+* rseq.param_test_benchmark
+* rseq.param_test_compare_twice
+* rtc.rtctest
+* seccomp.seccomp_bpf.global.user_notification_filter_empty
+* seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+* seccomp.seccomp_bpf.global.user_notification_addfd
+* seccomp.seccomp_bpf
+* seccomp.seccomp_benchmark
+* splice.short_splice_read.sh
+* sysctl.sysctl.sh
+* tc-testing.tdc.sh
+* vm.run_vmtests.sh
+### x86, kselftest
+* bpf.test_verifier
+* bpf.test_maps
+* bpf.test_progs
+* bpf.test_dev_cgroup
+* bpf.test_tcpbpf_user
+* bpf.get_cgroup_id_user
+* bpf.test_socket_cookie
+* bpf.test_netcnt
+* bpf.test_tcpnotify_user
+* bpf.test_sysctl
+* bpf.test_progs-no_alu32
+* bpf.test_xdp_redirect.sh
+* bpf.test_xdp_meta.sh
+* bpf.test_sock_addr.sh
+* bpf.test_tunnel.sh
+* bpf.test_lwt_seg6local.sh
+* bpf.test_skb_cgroup_id.sh
+* bpf.test_flow_dissector.sh
+* bpf.test_xdp_vlan_mode_generic.sh
+* bpf.test_xdp_vlan_mode_native.sh
+* bpf.test_lwt_ip_encap.sh
+* bpf.test_tcp_check_syncookie.sh
+* bpf.test_tc_tunnel.sh
+* bpf.test_tc_edt.sh
+* bpf.test_xdping.sh
+* bpf.test_bpftool.sh
+* cgroup.test_memcontrol
+* cgroup.test_kmem
+* cgroup.test_core
+* cgroup.test_freezer
+* clone3.clone3_cap_checkpoint_restore
+* core.close_range_test
+* filesystems.binderfs.binderfs_test
+* firmware.fw_run_tests.sh
+* ftrace.ftracetest
+* intel_pstate.run.sh
+* lkdtm.BUG.sh
+* lkdtm.WARNING.sh
+* lkdtm.WARNING_MESSAGE.sh
+* lkdtm.EXCEPTION.sh
+* lkdtm.CORRUPT_LIST_ADD.sh
+* lkdtm.CORRUPT_LIST_DEL.sh
+* lkdtm.STACK_GUARD_PAGE_LEADING.sh
+* lkdtm.STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm.UNSET_SMEP.sh
+* lkdtm.CORRUPT_PAC.sh
+* lkdtm.UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm.READ_AFTER_FREE.sh
+* lkdtm.READ_BUDDY_AFTER_FREE.sh
+* lkdtm.SLAB_FREE_DOUBLE.sh
+* lkdtm.SLAB_FREE_CROSS.sh
+* lkdtm.SLAB_FREE_PAGE.sh
+* lkdtm.EXEC_DATA.sh
+* lkdtm.EXEC_STACK.sh
+* lkdtm.EXEC_KMALLOC.sh
+* lkdtm.EXEC_VMALLOC.sh
+* lkdtm.EXEC_RODATA.sh
+* lkdtm.EXEC_USERSPACE.sh
+* lkdtm.EXEC_NULL.sh
+* lkdtm.ACCESS_USERSPACE.sh
+* lkdtm.ACCESS_NULL.sh
+* lkdtm.WRITE_RO.sh
+* lkdtm.WRITE_RO_AFTER_INIT.sh
+* lkdtm.WRITE_KERN.sh
+* lkdtm.REFCOUNT_INC_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_DEC_ZERO.sh
+* lkdtm.REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_INC_ZERO.sh
+* lkdtm.REFCOUNT_ADD_ZERO.sh
+* lkdtm.REFCOUNT_INC_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_SATURATED.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm.USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm.USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm.USERCOPY_STACK_FRAME_TO.sh
+* lkdtm.USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm.USERCOPY_STACK_BEYOND.sh
+* lkdtm.USERCOPY_KERNEL.sh
+* lkdtm.STACKLEAK_ERASING.sh
+* lkdtm.CFI_FORWARD_PROTO.sh
+* mincore.mincore_selftest.global.check_file_mmap
+* mincore.mincore_selftest
+* mqueue.mq_perf_tests
+* net.run_netsocktests
+* net.xfrm_policy.sh
+* net.fib_tests.sh
+* net.fib-onlink-tests.sh
+* net.pmtu.sh
+* net.udpgso_bench.sh
+* net.psock_snd.sh
+* net.udpgro_bench.sh
+* net.udpgro.sh
+* net.test_vxlan_under_vrf.sh
+* net.l2tp.sh
+* net.traceroute.sh
+* net.altnames.sh
+* net.icmp_redirect.sh
+* net.txtimestamp.sh
+* net.vrf-xfrm-tests.sh
+* net.devlink_port_split.py
+* net.forwarding.bridge_igmp.sh
+* net.forwarding.bridge_port_isolation.sh
+* net.forwarding.bridge_sticky_fdb.sh
+* net.forwarding.bridge_vlan_aware.sh
+* net.forwarding.bridge_vlan_unaware.sh
+* net.forwarding.ethtool.sh
+* net.forwarding.gre_inner_v4_multipath.sh
+* net.forwarding.gre_inner_v6_multipath.sh
+* net.forwarding.gre_multipath.sh
+* net.forwarding.ip6gre_inner_v4_multipath.sh
+* net.forwarding.ip6gre_inner_v6_multipath.sh
+* net.forwarding.ipip_flat_gre_key.sh
+* net.forwarding.ipip_flat_gre_keys.sh
+* net.forwarding.ipip_flat_gre.sh
+* net.forwarding.ipip_hier_gre_key.sh
+* net.forwarding.ipip_hier_gre_keys.sh
+* net.forwarding.ipip_hier_gre.sh
+* net.forwarding.loopback.sh
+* net.forwarding.mirror_gre_bound.sh
+* net.forwarding.mirror_gre_bridge_1d.sh
+* net.forwarding.mirror_gre_bridge_1d_vlan.sh
+* net.forwarding.mirror_gre_bridge_1q_lag.sh
+* net.forwarding.mirror_gre_bridge_1q.sh
+* net.forwarding.mirror_gre_changes.sh
+* net.forwarding.mirror_gre_flower.sh
+* net.forwarding.mirror_gre_lag_lacp.sh
+* net.forwarding.mirror_gre_neigh.sh
+* net.forwarding.mirror_gre_nh.sh
+* net.forwarding.mirror_gre.sh
+* net.forwarding.mirror_gre_vlan_bridge_1q.sh
+* net.forwarding.mirror_gre_vlan.sh
+* net.forwarding.mirror_vlan.sh
+* net.forwarding.router_bridge.sh
+* net.forwarding.router_bridge_vlan.sh
+* net.forwarding.router_broadcast.sh
+* net.forwarding.router_mpath_nh.sh
+* net.forwarding.router_multicast.sh
+* net.forwarding.router_multipath.sh
+* net.forwarding.router.sh
+* net.forwarding.router_vid_1.sh
+* net.forwarding.sch_ets.sh
+* net.forwarding.sch_tbf_ets.sh
+* net.forwarding.sch_tbf_prio.sh
+* net.forwarding.sch_tbf_root.sh
+* net.forwarding.tc_actions.sh
+* net.forwarding.tc_chains.sh
+* net.forwarding.tc_flower_router.sh
+* net.forwarding.tc_flower.sh
+* net.forwarding.tc_shblocks.sh
+* net.forwarding.tc_vlan_modify.sh
+* net.forwarding.vxlan_asymmetric.sh
+* net.forwarding.vxlan_bridge_1d_port_8472.sh
+* net.forwarding.vxlan_bridge_1d.sh
+* net.forwarding.vxlan_bridge_1q_port_8472.sh
+* net.forwarding.vxlan_bridge_1q.sh
+* net.forwarding.vxlan_symmetric.sh
+* net.mptcp.mptcp_connect.sh
+* net.mptcp.simult_flows.sh
+* netfilter.nft_concat_range.sh
+* netfilter.nft_queue.sh
+* pidfd.pidfd_open_test
+* pidfd.pidfd_poll_test
+* proc.proc-fsconfig-hidepid
+* pstore.pstore_tests
+* ptrace.vmaccess.global.attach
+* ptrace.vmaccess
+* openat2.openat2_test
+* openat2.resolve_test
+* openat2.rename_attack_test
+* rtc.rtctest
+* seccomp.seccomp_bpf.global.user_notification_filter_empty
+* seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+* seccomp.seccomp_bpf.global.user_notification_addfd
+* seccomp.seccomp_bpf
+* seccomp.seccomp_benchmark
+* splice.short_splice_read.sh
+* vm.run_vmtests.sh
+* x86.syscall_numbering_64
+### x86, kselftest-vsyscall-mode-native
+* bpf.test_verifier
+* bpf.test_maps
+* bpf.test_progs
+* bpf.test_dev_cgroup
+* bpf.test_tcpbpf_user
+* bpf.get_cgroup_id_user
+* bpf.test_socket_cookie
+* bpf.test_netcnt
+* bpf.test_tcpnotify_user
+* bpf.test_sysctl
+* bpf.test_progs-no_alu32
+* bpf.test_xdp_redirect.sh
+* bpf.test_xdp_meta.sh
+* bpf.test_sock_addr.sh
+* bpf.test_tunnel.sh
+* bpf.test_lwt_seg6local.sh
+* bpf.test_skb_cgroup_id.sh
+* bpf.test_flow_dissector.sh
+* bpf.test_xdp_vlan_mode_generic.sh
+* bpf.test_xdp_vlan_mode_native.sh
+* bpf.test_lwt_ip_encap.sh
+* bpf.test_tcp_check_syncookie.sh
+* bpf.test_tc_tunnel.sh
+* bpf.test_tc_edt.sh
+* bpf.test_xdping.sh
+* bpf.test_bpftool.sh
+* cgroup.test_memcontrol
+* cgroup.test_kmem
+* cgroup.test_core
+* cgroup.test_freezer
+* clone3.clone3_cap_checkpoint_restore
+* core.close_range_test
+* filesystems.binderfs.binderfs_test
+* firmware.fw_run_tests.sh
+* ftrace.ftracetest
+* intel_pstate.run.sh
+* lkdtm.BUG.sh
+* lkdtm.WARNING.sh
+* lkdtm.WARNING_MESSAGE.sh
+* lkdtm.EXCEPTION.sh
+* lkdtm.CORRUPT_LIST_ADD.sh
+* lkdtm.CORRUPT_LIST_DEL.sh
+* lkdtm.STACK_GUARD_PAGE_LEADING.sh
+* lkdtm.STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm.UNSET_SMEP.sh
+* lkdtm.CORRUPT_PAC.sh
+* lkdtm.UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm.READ_AFTER_FREE.sh
+* lkdtm.READ_BUDDY_AFTER_FREE.sh
+* lkdtm.SLAB_FREE_DOUBLE.sh
+* lkdtm.SLAB_FREE_CROSS.sh
+* lkdtm.SLAB_FREE_PAGE.sh
+* lkdtm.EXEC_DATA.sh
+* lkdtm.EXEC_STACK.sh
+* lkdtm.EXEC_KMALLOC.sh
+* lkdtm.EXEC_VMALLOC.sh
+* lkdtm.EXEC_RODATA.sh
+* lkdtm.EXEC_USERSPACE.sh
+* lkdtm.EXEC_NULL.sh
+* lkdtm.ACCESS_USERSPACE.sh
+* lkdtm.ACCESS_NULL.sh
+* lkdtm.WRITE_RO.sh
+* lkdtm.WRITE_RO_AFTER_INIT.sh
+* lkdtm.WRITE_KERN.sh
+* lkdtm.REFCOUNT_INC_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_DEC_ZERO.sh
+* lkdtm.REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_INC_ZERO.sh
+* lkdtm.REFCOUNT_ADD_ZERO.sh
+* lkdtm.REFCOUNT_INC_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_SATURATED.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm.USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm.USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm.USERCOPY_STACK_FRAME_TO.sh
+* lkdtm.USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm.USERCOPY_STACK_BEYOND.sh
+* lkdtm.USERCOPY_KERNEL.sh
+* lkdtm.STACKLEAK_ERASING.sh
+* lkdtm.CFI_FORWARD_PROTO.sh
+* mincore.mincore_selftest.global.check_file_mmap
+* mincore.mincore_selftest
+* mqueue.mq_perf_tests
+* net.run_netsocktests
+* net.xfrm_policy.sh
+* net.fib_tests.sh
+* net.fib-onlink-tests.sh
+* net.pmtu.sh
+* net.udpgso_bench.sh
+* net.psock_snd.sh
+* net.udpgro_bench.sh
+* net.udpgro.sh
+* net.test_vxlan_under_vrf.sh
+* net.l2tp.sh
+* net.traceroute.sh
+* net.altnames.sh
+* net.icmp_redirect.sh
+* net.txtimestamp.sh
+* net.vrf-xfrm-tests.sh
+* net.devlink_port_split.py
+* net.forwarding.bridge_igmp.sh
+* net.forwarding.bridge_port_isolation.sh
+* net.forwarding.bridge_sticky_fdb.sh
+* net.forwarding.bridge_vlan_aware.sh
+* net.forwarding.bridge_vlan_unaware.sh
+* net.forwarding.ethtool.sh
+* net.forwarding.gre_inner_v4_multipath.sh
+* net.forwarding.gre_inner_v6_multipath.sh
+* net.forwarding.gre_multipath.sh
+* net.forwarding.ip6gre_inner_v4_multipath.sh
+* net.forwarding.ip6gre_inner_v6_multipath.sh
+* net.forwarding.ipip_flat_gre_key.sh
+* net.forwarding.ipip_flat_gre_keys.sh
+* net.forwarding.ipip_flat_gre.sh
+* net.forwarding.ipip_hier_gre_key.sh
+* net.forwarding.ipip_hier_gre_keys.sh
+* net.forwarding.ipip_hier_gre.sh
+* net.forwarding.loopback.sh
+* net.forwarding.mirror_gre_bound.sh
+* net.forwarding.mirror_gre_bridge_1d.sh
+* net.forwarding.mirror_gre_bridge_1d_vlan.sh
+* net.forwarding.mirror_gre_bridge_1q_lag.sh
+* net.forwarding.mirror_gre_bridge_1q.sh
+* net.forwarding.mirror_gre_changes.sh
+* net.forwarding.mirror_gre_flower.sh
+* net.forwarding.mirror_gre_lag_lacp.sh
+* net.forwarding.mirror_gre_neigh.sh
+* net.forwarding.mirror_gre_nh.sh
+* net.forwarding.mirror_gre.sh
+* net.forwarding.mirror_gre_vlan_bridge_1q.sh
+* net.forwarding.mirror_gre_vlan.sh
+* net.forwarding.mirror_vlan.sh
+* net.forwarding.router_bridge.sh
+* net.forwarding.router_bridge_vlan.sh
+* net.forwarding.router_broadcast.sh
+* net.forwarding.router_mpath_nh.sh
+* net.forwarding.router_multicast.sh
+* net.forwarding.router_multipath.sh
+* net.forwarding.router.sh
+* net.forwarding.router_vid_1.sh
+* net.forwarding.sch_ets.sh
+* net.forwarding.sch_tbf_ets.sh
+* net.forwarding.sch_tbf_prio.sh
+* net.forwarding.sch_tbf_root.sh
+* net.forwarding.tc_actions.sh
+* net.forwarding.tc_chains.sh
+* net.forwarding.tc_flower_router.sh
+* net.forwarding.tc_flower.sh
+* net.forwarding.tc_shblocks.sh
+* net.forwarding.tc_vlan_modify.sh
+* net.forwarding.vxlan_asymmetric.sh
+* net.forwarding.vxlan_bridge_1d_port_8472.sh
+* net.forwarding.vxlan_bridge_1d.sh
+* net.forwarding.vxlan_bridge_1q_port_8472.sh
+* net.forwarding.vxlan_bridge_1q.sh
+* net.forwarding.vxlan_symmetric.sh
+* net.mptcp.simult_flows.sh
+* netfilter.nft_concat_range.sh
+* netfilter.nft_queue.sh
+* pidfd.pidfd_open_test
+* pidfd.pidfd_poll_test
+* proc.proc-fsconfig-hidepid
+* pstore.pstore_tests
+* ptrace.vmaccess.global.attach
+* ptrace.vmaccess
+* openat2.openat2_test
+* openat2.resolve_test
+* openat2.rename_attack_test
+* seccomp.seccomp_bpf.global.user_notification_filter_empty
+* seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+* seccomp.seccomp_bpf.global.user_notification_addfd
+* seccomp.seccomp_bpf
+* seccomp.seccomp_benchmark
+* splice.short_splice_read.sh
+* vm.run_vmtests.sh
+* x86.syscall_numbering_64
+### x86, kselftest-vsyscall-mode-none
+* bpf.test_verifier
+* bpf.test_maps
+* bpf.test_progs
+* bpf.test_dev_cgroup
+* bpf.test_tcpbpf_user
+* bpf.get_cgroup_id_user
+* bpf.test_socket_cookie
+* bpf.test_netcnt
+* bpf.test_tcpnotify_user
+* bpf.test_sysctl
+* bpf.test_progs-no_alu32
+* bpf.test_xdp_redirect.sh
+* bpf.test_xdp_meta.sh
+* bpf.test_sock_addr.sh
+* bpf.test_tunnel.sh
+* bpf.test_lwt_seg6local.sh
+* bpf.test_skb_cgroup_id.sh
+* bpf.test_flow_dissector.sh
+* bpf.test_xdp_vlan_mode_generic.sh
+* bpf.test_xdp_vlan_mode_native.sh
+* bpf.test_lwt_ip_encap.sh
+* bpf.test_tcp_check_syncookie.sh
+* bpf.test_tc_tunnel.sh
+* bpf.test_tc_edt.sh
+* bpf.test_xdping.sh
+* bpf.test_bpftool.sh
+* cgroup.test_memcontrol
+* cgroup.test_kmem
+* cgroup.test_core
+* cgroup.test_freezer
+* clone3.clone3_cap_checkpoint_restore
+* core.close_range_test
+* filesystems.binderfs.binderfs_test
+* firmware.fw_run_tests.sh
+* ftrace.ftracetest
+* intel_pstate.run.sh
+* lkdtm.BUG.sh
+* lkdtm.WARNING.sh
+* lkdtm.WARNING_MESSAGE.sh
+* lkdtm.EXCEPTION.sh
+* lkdtm.CORRUPT_LIST_ADD.sh
+* lkdtm.CORRUPT_LIST_DEL.sh
+* lkdtm.STACK_GUARD_PAGE_LEADING.sh
+* lkdtm.STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm.UNSET_SMEP.sh
+* lkdtm.CORRUPT_PAC.sh
+* lkdtm.UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm.READ_AFTER_FREE.sh
+* lkdtm.READ_BUDDY_AFTER_FREE.sh
+* lkdtm.SLAB_FREE_DOUBLE.sh
+* lkdtm.SLAB_FREE_CROSS.sh
+* lkdtm.SLAB_FREE_PAGE.sh
+* lkdtm.EXEC_DATA.sh
+* lkdtm.EXEC_STACK.sh
+* lkdtm.EXEC_KMALLOC.sh
+* lkdtm.EXEC_VMALLOC.sh
+* lkdtm.EXEC_RODATA.sh
+* lkdtm.EXEC_USERSPACE.sh
+* lkdtm.EXEC_NULL.sh
+* lkdtm.ACCESS_USERSPACE.sh
+* lkdtm.ACCESS_NULL.sh
+* lkdtm.WRITE_RO.sh
+* lkdtm.WRITE_RO_AFTER_INIT.sh
+* lkdtm.WRITE_KERN.sh
+* lkdtm.REFCOUNT_INC_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm.REFCOUNT_DEC_ZERO.sh
+* lkdtm.REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm.REFCOUNT_INC_ZERO.sh
+* lkdtm.REFCOUNT_ADD_ZERO.sh
+* lkdtm.REFCOUNT_INC_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_SATURATED.sh
+* lkdtm.REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm.REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm.REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm.USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm.USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm.USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm.USERCOPY_STACK_FRAME_TO.sh
+* lkdtm.USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm.USERCOPY_STACK_BEYOND.sh
+* lkdtm.USERCOPY_KERNEL.sh
+* lkdtm.STACKLEAK_ERASING.sh
+* lkdtm.CFI_FORWARD_PROTO.sh
+* mincore.mincore_selftest.global.check_file_mmap
+* mincore.mincore_selftest
+* mqueue.mq_perf_tests
+* net.run_netsocktests
+* net.xfrm_policy.sh
+* net.fib_tests.sh
+* net.fib-onlink-tests.sh
+* net.pmtu.sh
+* net.udpgso_bench.sh
+* net.psock_snd.sh
+* net.udpgro_bench.sh
+* net.udpgro.sh
+* net.test_vxlan_under_vrf.sh
+* net.l2tp.sh
+* net.traceroute.sh
+* net.altnames.sh
+* net.icmp_redirect.sh
+* net.txtimestamp.sh
+* net.vrf-xfrm-tests.sh
+* net.devlink_port_split.py
+* net.forwarding.bridge_igmp.sh
+* net.forwarding.bridge_port_isolation.sh
+* net.forwarding.bridge_sticky_fdb.sh
+* net.forwarding.bridge_vlan_aware.sh
+* net.forwarding.bridge_vlan_unaware.sh
+* net.forwarding.ethtool.sh
+* net.forwarding.gre_inner_v4_multipath.sh
+* net.forwarding.gre_inner_v6_multipath.sh
+* net.forwarding.gre_multipath.sh
+* net.forwarding.ip6gre_inner_v4_multipath.sh
+* net.forwarding.ip6gre_inner_v6_multipath.sh
+* net.forwarding.ipip_flat_gre_key.sh
+* net.forwarding.ipip_flat_gre_keys.sh
+* net.forwarding.ipip_flat_gre.sh
+* net.forwarding.ipip_hier_gre_key.sh
+* net.forwarding.ipip_hier_gre_keys.sh
+* net.forwarding.ipip_hier_gre.sh
+* net.forwarding.loopback.sh
+* net.forwarding.mirror_gre_bound.sh
+* net.forwarding.mirror_gre_bridge_1d.sh
+* net.forwarding.mirror_gre_bridge_1d_vlan.sh
+* net.forwarding.mirror_gre_bridge_1q_lag.sh
+* net.forwarding.mirror_gre_bridge_1q.sh
+* net.forwarding.mirror_gre_changes.sh
+* net.forwarding.mirror_gre_flower.sh
+* net.forwarding.mirror_gre_lag_lacp.sh
+* net.forwarding.mirror_gre_neigh.sh
+* net.forwarding.mirror_gre_nh.sh
+* net.forwarding.mirror_gre.sh
+* net.forwarding.mirror_gre_vlan_bridge_1q.sh
+* net.forwarding.mirror_gre_vlan.sh
+* net.forwarding.mirror_vlan.sh
+* net.forwarding.router_bridge.sh
+* net.forwarding.router_bridge_vlan.sh
+* net.forwarding.router_broadcast.sh
+* net.forwarding.router_mpath_nh.sh
+* net.forwarding.router_multicast.sh
+* net.forwarding.router_multipath.sh
+* net.forwarding.router.sh
+* net.forwarding.router_vid_1.sh
+* net.forwarding.sch_ets.sh
+* net.forwarding.sch_tbf_ets.sh
+* net.forwarding.sch_tbf_prio.sh
+* net.forwarding.sch_tbf_root.sh
+* net.forwarding.tc_actions.sh
+* net.forwarding.tc_chains.sh
+* net.forwarding.tc_flower_router.sh
+* net.forwarding.tc_flower.sh
+* net.forwarding.tc_shblocks.sh
+* net.forwarding.tc_vlan_modify.sh
+* net.forwarding.vxlan_asymmetric.sh
+* net.forwarding.vxlan_bridge_1d_port_8472.sh
+* net.forwarding.vxlan_bridge_1d.sh
+* net.forwarding.vxlan_bridge_1q_port_8472.sh
+* net.forwarding.vxlan_bridge_1q.sh
+* net.forwarding.vxlan_symmetric.sh
+* net.mptcp.simult_flows.sh
+* netfilter.nft_concat_range.sh
+* netfilter.nft_queue.sh
+* pidfd.pidfd_open_test
+* pidfd.pidfd_poll_test
+* proc.proc-fsconfig-hidepid
+* pstore.pstore_tests
+* ptrace.vmaccess.global.attach
+* ptrace.vmaccess
+* openat2.openat2_test
+* openat2.resolve_test
+* openat2.rename_attack_test
+* rtc.rtctest
+* seccomp.seccomp_bpf.global.user_notification_filter_empty
+* seccomp.seccomp_bpf.global.user_notification_filter_empty_threaded
+* seccomp.seccomp_bpf.global.user_notification_addfd
+* seccomp.seccomp_bpf
+* seccomp.seccomp_benchmark
+* splice.short_splice_read.sh
+* vm.run_vmtests.sh
+* x86.syscall_numbering_64
+
+## Skips
+### i386, kselftest
+* breakpoints.breakpoint_test
+* breakpoints.step_after_suspend_test
+* net.msg_zerocopy.sh
+* net.rtnetlink.sh
+* net.udpgro.sh
+* net.xfrm_policy.sh
+* netfilter.bridge_brouter.sh
+* netfilter.conntrack_icmp_related.sh
+* netfilter.nft_flowtable.sh
+* netfilter.nft_nat.sh
+* netfilter.nft_trans_stress.sh
+* pidfd.pidfd_wait
+* zram.zram.sh
+* bpf.test_xdp_veth.sh
+* bpf.test_bpftool_metadata.sh
+* cgroup.test_stress.sh
+* efivarfs.efivarfs.sh
+* fpu.run_test_fpu.sh
+* ir.ir_loopback.sh
+* kexec.test_kexec_load.sh
+* kexec.test_kexec_file_load.sh
+* livepatch.test-livepatch.sh
+* livepatch.test-callbacks.sh
+* livepatch.test-shadow-vars.sh
+* livepatch.test-state.sh
+* livepatch.test-ftrace.sh
+* lkdtm.PANIC.sh
+* lkdtm.LOOP.sh
+* lkdtm.EXHAUST_STACK.sh
+* lkdtm.CORRUPT_STACK.sh
+* lkdtm.CORRUPT_STACK_STRONG.sh
+* lkdtm.OVERWRITE_ALLOCATION.sh
+* lkdtm.WRITE_AFTER_FREE.sh
+* lkdtm.WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm.SOFTLOCKUP.sh
+* lkdtm.HARDLOCKUP.sh
+* lkdtm.SPINLOCKUP.sh
+* lkdtm.HUNG_TASK.sh
+* lkdtm.REFCOUNT_TIMING.sh
+* lkdtm.ATOMIC_TIMING.sh
+* memory-hotplug.mem-on-off-test.sh
+* net.reuseport_bpf_numa
+* net.drop_monitor_tests.sh
+* net.mptcp.diag.sh
+* netfilter.ipvs.sh
+* netfilter.nft_conntrack_helper.sh
+* netfilter.nft_meta.sh
+* proc.proc-pid-vm
+* pstore.pstore_post_reboot_tests
+* tpm2.test_smoke.sh
+* tpm2.test_space.sh
+### juno-r2, kselftest
+* mqueue.mq_perf_tests
+* breakpoints.breakpoint_test_arm64
+* breakpoints.step_after_suspend_test
+* net.msg_zerocopy.sh
+* net.rtnetlink.sh
+* netfilter.bridge_brouter.sh
+* netfilter.nft_flowtable.sh
+* netfilter.nft_trans_stress.sh
+* pidfd.pidfd_wait
+* rseq.run_param_test.sh
+* zram.zram.sh
+* arm64.sve-ptrace
+* arm64.sve-probe-vls
+* bpf.test_xdp_veth.sh
+* bpf.test_bpftool_metadata.sh
+* cgroup.test_stress.sh
+* efivarfs.efivarfs.sh
+* fpu.run_test_fpu.sh
+* intel_pstate.run.sh
+* ir.ir_loopback.sh
+* livepatch.test-livepatch.sh
+* livepatch.test-callbacks.sh
+* livepatch.test-shadow-vars.sh
+* livepatch.test-state.sh
+* livepatch.test-ftrace.sh
+* lkdtm.PANIC.sh
+* lkdtm.LOOP.sh
+* lkdtm.EXHAUST_STACK.sh
+* lkdtm.CORRUPT_STACK.sh
+* lkdtm.CORRUPT_STACK_STRONG.sh
+* lkdtm.DOUBLE_FAULT.sh
+* lkdtm.OVERWRITE_ALLOCATION.sh
+* lkdtm.WRITE_AFTER_FREE.sh
+* lkdtm.WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm.SOFTLOCKUP.sh
+* lkdtm.HARDLOCKUP.sh
+* lkdtm.SPINLOCKUP.sh
+* lkdtm.HUNG_TASK.sh
+* lkdtm.REFCOUNT_TIMING.sh
+* lkdtm.ATOMIC_TIMING.sh
+* net.xfrm_policy.sh
+* net.drop_monitor_tests.sh
+* net.mptcp.diag.sh
+* netfilter.ipvs.sh
+* netfilter.nft_conntrack_helper.sh
+* netfilter.nft_meta.sh
+* proc.proc-pid-vm
+* pstore.pstore_post_reboot_tests
+* tpm2.test_smoke.sh
+* tpm2.test_space.sh
+### x86, kselftest
+* breakpoints.breakpoint_test
+* breakpoints.step_after_suspend_test
+* net.msg_zerocopy.sh
+* net.rtnetlink.sh
+* netfilter.bridge_brouter.sh
+* netfilter.conntrack_icmp_related.sh
+* netfilter.nft_flowtable.sh
+* netfilter.nft_nat.sh
+* netfilter.nft_trans_stress.sh
+* pidfd.pidfd_wait
+* proc.proc-pid-vm
+* zram.zram.sh
+* bpf.test_xdp_veth.sh
+* bpf.test_bpftool_metadata.sh
+* cgroup.test_stress.sh
+* efivarfs.efivarfs.sh
+* fpu.run_test_fpu.sh
+* ir.ir_loopback.sh
+* kexec.test_kexec_load.sh
+* kexec.test_kexec_file_load.sh
+* kvm.mmio_warning_test
+* kvm.svm_vmcall_test
+* lkdtm.PANIC.sh
+* lkdtm.LOOP.sh
+* lkdtm.EXHAUST_STACK.sh
+* lkdtm.CORRUPT_STACK.sh
+* lkdtm.CORRUPT_STACK_STRONG.sh
+* lkdtm.DOUBLE_FAULT.sh
+* lkdtm.OVERWRITE_ALLOCATION.sh
+* lkdtm.WRITE_AFTER_FREE.sh
+* lkdtm.WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm.SOFTLOCKUP.sh
+* lkdtm.HARDLOCKUP.sh
+* lkdtm.SPINLOCKUP.sh
+* lkdtm.HUNG_TASK.sh
+* lkdtm.REFCOUNT_TIMING.sh
+* lkdtm.ATOMIC_TIMING.sh
+* net.drop_monitor_tests.sh
+* net.mptcp.diag.sh
+* netfilter.ipvs.sh
+* netfilter.nft_conntrack_helper.sh
+* netfilter.nft_meta.sh
+* pstore.pstore_post_reboot_tests
+* tpm2.test_smoke.sh
+* tpm2.test_space.sh
+### x86, kselftest-vsyscall-mode-native
+* breakpoints.breakpoint_test
+* breakpoints.step_after_suspend_test
+* net.msg_zerocopy.sh
+* net.rtnetlink.sh
+* netfilter.bridge_brouter.sh
+* netfilter.conntrack_icmp_related.sh
+* netfilter.nft_flowtable.sh
+* netfilter.nft_nat.sh
+* netfilter.nft_trans_stress.sh
+* pidfd.pidfd_wait
+* proc.proc-pid-vm
+* zram.zram.sh
+* bpf.test_xdp_veth.sh
+* bpf.test_bpftool_metadata.sh
+* cgroup.test_stress.sh
+* efivarfs.efivarfs.sh
+* fpu.run_test_fpu.sh
+* ir.ir_loopback.sh
+* kexec.test_kexec_load.sh
+* kexec.test_kexec_file_load.sh
+* kvm.mmio_warning_test
+* kvm.svm_vmcall_test
+* lkdtm.PANIC.sh
+* lkdtm.LOOP.sh
+* lkdtm.EXHAUST_STACK.sh
+* lkdtm.CORRUPT_STACK.sh
+* lkdtm.CORRUPT_STACK_STRONG.sh
+* lkdtm.DOUBLE_FAULT.sh
+* lkdtm.OVERWRITE_ALLOCATION.sh
+* lkdtm.WRITE_AFTER_FREE.sh
+* lkdtm.WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm.SOFTLOCKUP.sh
+* lkdtm.HARDLOCKUP.sh
+* lkdtm.SPINLOCKUP.sh
+* lkdtm.HUNG_TASK.sh
+* lkdtm.REFCOUNT_TIMING.sh
+* lkdtm.ATOMIC_TIMING.sh
+* net.drop_monitor_tests.sh
+* net.mptcp.diag.sh
+* netfilter.ipvs.sh
+* netfilter.nft_conntrack_helper.sh
+* netfilter.nft_meta.sh
+* pstore.pstore_post_reboot_tests
+* tpm2.test_smoke.sh
+* tpm2.test_space.sh
+### x86, kselftest-vsyscall-mode-none
+* breakpoints.breakpoint_test
+* breakpoints.step_after_suspend_test
+* net.msg_zerocopy.sh
+* net.rtnetlink.sh
+* netfilter.bridge_brouter.sh
+* netfilter.conntrack_icmp_related.sh
+* netfilter.nft_flowtable.sh
+* netfilter.nft_nat.sh
+* netfilter.nft_trans_stress.sh
+* pidfd.pidfd_wait
+* proc.proc-pid-vm
+* zram.zram.sh
+* bpf.test_xdp_veth.sh
+* bpf.test_bpftool_metadata.sh
+* cgroup.test_stress.sh
+* efivarfs.efivarfs.sh
+* fpu.run_test_fpu.sh
+* ir.ir_loopback.sh
+* kexec.test_kexec_load.sh
+* kexec.test_kexec_file_load.sh
+* kvm.mmio_warning_test
+* kvm.svm_vmcall_test
+* lkdtm.PANIC.sh
+* lkdtm.LOOP.sh
+* lkdtm.EXHAUST_STACK.sh
+* lkdtm.CORRUPT_STACK.sh
+* lkdtm.CORRUPT_STACK_STRONG.sh
+* lkdtm.DOUBLE_FAULT.sh
+* lkdtm.OVERWRITE_ALLOCATION.sh
+* lkdtm.WRITE_AFTER_FREE.sh
+* lkdtm.WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm.SOFTLOCKUP.sh
+* lkdtm.HARDLOCKUP.sh
+* lkdtm.SPINLOCKUP.sh
+* lkdtm.HUNG_TASK.sh
+* lkdtm.REFCOUNT_TIMING.sh
+* lkdtm.ATOMIC_TIMING.sh
+* net.drop_monitor_tests.sh
+* net.mptcp.diag.sh
+* netfilter.ipvs.sh
+* netfilter.nft_conntrack_helper.sh
+* netfilter.nft_meta.sh
+* pstore.pstore_post_reboot_tests
+* tpm2.test_smoke.sh
+* tpm2.test_space.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org

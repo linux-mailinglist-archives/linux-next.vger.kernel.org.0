@@ -2,97 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F83285699
-	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 04:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20ADD2856AE
+	for <lists+linux-next@lfdr.de>; Wed,  7 Oct 2020 04:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbgJGCQZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Oct 2020 22:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgJGCQY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Oct 2020 22:16:24 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9830C061755;
-        Tue,  6 Oct 2020 19:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=nXek4RJi9uTxF+VRaNkUsahj/OZ3iK3n3IUnrhElzu4=; b=TqlIn+3B+GF53KTsWyNoJGvuRL
-        IQFzLbK1UX+/QX6DweTdDzp5DWs4OEty0JjroINPYUMhLdj/8qfv6eMd2iCWiYjOOXe8oqkUDJ7pL
-        g/y+HzOGh5Mw9d6wa5n+zrJ4PGzLthMFMQl77PUyDonXAvF2LHx74Zq0RZYWl0Y09nO3Bi7jiAhzJ
-        p7f3eDDnVYfrGEVJv81dYnQfPpVRlmhaN/1yq6859Fc+dvWrRV92VAA2YK7eU/+yGBLFnT71bVE15
-        HF6P8xhYxHQli01y+tCerel5LVePAhq+LqLsjHO0i/TSfidTsv9wmz5Z02l9eCvdvtQFPhs3JtWWi
-        L/pziVqA==;
-Received: from [2601:1c0:6280:3f0::2c9a] (helo=smtpauth.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kPz08-0004Rz-1w; Wed, 07 Oct 2020 02:16:20 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        linux-next@vger.kernel.org
-Subject: [PATCH bpf-next] kernel/bpf/verifier: fix build when NET is not enabled
-Date:   Tue,  6 Oct 2020 19:16:13 -0700
-Message-Id: <20201007021613.13646-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        id S1726596AbgJGCkC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Oct 2020 22:40:02 -0400
+Received: from ozlabs.org ([203.11.71.1]:45483 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726566AbgJGCkC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 6 Oct 2020 22:40:02 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C5dpl50DNz9sSG;
+        Wed,  7 Oct 2020 13:39:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1602038399;
+        bh=9/8ZpPAufnoZvpigaDUm8QlFsugRCHAfF/9+qSrtSfE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZuLcsFkTAGc0adCAL2ANwr7Q6cy4hj+L6Jq/zRWPzUcbWNUsRQMTO0dT1kB5hkSaA
+         34qvy7NPTXhPh/eXE0rSDnBmA5pbfyuPBPWTSFrQNDTg1KGsWX4H+iW/oJ2jExsfiX
+         t7Pk/kvXdxZ+Rl+dPiE5SFxedlSly/44f9TNQ6eNnOmdXNUrFPWruWO2szhhBtXaZC
+         +l2ZBb3krLp0VHKwmxtoAp7uxa3GGsj/RNuzgMyL/LpTsJw+b8huaZPluN6mo3pY+Y
+         YiPA9+yYQpaenPoMFruLMIFYMB6GNoKzc3zz/GRhHe/XiGep2g4rVas8clddzYqsVa
+         mJxw0kbWjodTQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the powerpc tree
+In-Reply-To: <20201007000544.48aabc91@canb.auug.org.au>
+References: <20201007000544.48aabc91@canb.auug.org.au>
+Date:   Wed, 07 Oct 2020 13:39:56 +1100
+Message-ID: <87h7r63gjn.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix build errors in kernel/bpf/verifier.c when CONFIG_NET is
-not enabled.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> Hi all,
+>
+> In commit
+>
+>   3b6c3adbb2fa ("powerpc/perf: Exclude pmc5/6 from the irrelevant PMU group constraints")
+>
+> Fixes tag
+>
+>   Fixes: 7ffd948 ("powerpc/perf: factor out power8 pmu functions")
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
+>
+> Since Michael doesn't generally rebase his tree, this is more to be
+> remebered for next time.
 
-../kernel/bpf/verifier.c:3995:13: error: ‘btf_sock_ids’ undeclared here (not in a function); did you mean ‘bpf_sock_ops’?
-  .btf_id = &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
+Yeah, if it was the wrong SHA I would rebase, but not just for a short
+SHA.
 
-../kernel/bpf/verifier.c:3995:26: error: ‘BTF_SOCK_TYPE_SOCK_COMMON’ undeclared here (not in a function); did you mean ‘PTR_TO_SOCK_COMMON’?
-  .btf_id = &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
+You can avoid this in future by doing:
 
-Fixes: 1df8f55a37bd ("bpf: Enable bpf_skc_to_* sock casting helper to networking prog type")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: linux-next@vger.kernel.org
----
-First reported by me in linux-next-20200928.
+$ git config --add core.abbrev 12
+$ git config --add pretty.fixes 'Fixes: %h ("%s")'
+$ git config --add alias.showfix 'log -1 --format=fixes'
 
- kernel/bpf/verifier.c |    4 ++++
- 1 file changed, 4 insertions(+)
+Then you can do:
 
---- mmotm-2020-1006-1550.orig/kernel/bpf/verifier.c
-+++ mmotm-2020-1006-1550/kernel/bpf/verifier.c
-@@ -3984,6 +3984,7 @@ static const struct bpf_reg_types sock_t
- 	},
- };
- 
-+#ifdef CONFIG_NET
- static const struct bpf_reg_types btf_id_sock_common_types = {
- 	.types = {
- 		PTR_TO_SOCK_COMMON,
-@@ -3994,6 +3995,7 @@ static const struct bpf_reg_types btf_id
- 	},
- 	.btf_id = &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
- };
-+#endif
- 
- static const struct bpf_reg_types mem_types = {
- 	.types = {
-@@ -4037,7 +4039,9 @@ static const struct bpf_reg_types *compa
- 	[ARG_PTR_TO_CTX]		= &context_types,
- 	[ARG_PTR_TO_CTX_OR_NULL]	= &context_types,
- 	[ARG_PTR_TO_SOCK_COMMON]	= &sock_types,
-+#ifdef CONFIG_NET
- 	[ARG_PTR_TO_BTF_ID_SOCK_COMMON]	= &btf_id_sock_common_types,
-+#endif
- 	[ARG_PTR_TO_SOCKET]		= &fullsock_types,
- 	[ARG_PTR_TO_SOCKET_OR_NULL]	= &fullsock_types,
- 	[ARG_PTR_TO_BTF_ID]		= &btf_ptr_types,
+$ git showfix 7ffd948
+Fixes: 7ffd948fae4c ("powerpc/perf: factor out power8 pmu functions")
+
+
+cheers

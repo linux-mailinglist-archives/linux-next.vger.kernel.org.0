@@ -2,49 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFD2286ED8
-	for <lists+linux-next@lfdr.de>; Thu,  8 Oct 2020 08:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F19286EE0
+	for <lists+linux-next@lfdr.de>; Thu,  8 Oct 2020 08:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726361AbgJHGue (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Oct 2020 02:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S1726216AbgJHGzp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Oct 2020 02:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbgJHGue (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Oct 2020 02:50:34 -0400
+        with ESMTP id S1726013AbgJHGzp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Oct 2020 02:55:45 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C87C061755;
-        Wed,  7 Oct 2020 23:50:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF48C061755;
+        Wed,  7 Oct 2020 23:55:44 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C6MKL1pdWz9sTK;
-        Thu,  8 Oct 2020 17:50:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C6MRL4byMz9sTK;
+        Thu,  8 Oct 2020 17:55:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602139830;
-        bh=flEQw/8k26vuSbjk5fEZZ/qgggGnG1wI97t/EHM/iYI=;
+        s=201702; t=1602140142;
+        bh=GSUYeyaXjavnuNWHa+CpYRwaUHsC2x849dwaFzdLqFc=;
         h=Date:From:To:Cc:Subject:From;
-        b=Fv6EFEXtF5uCZep7fG77WEJLjZRJKGuPXYwIYmqrdXC0f52VEDTcV57B7rRPgQGR/
-         pAa9l4PKT0mhkfJU60cweu/HtxGATDIQ7FEwryJR4BeWmKtDpknFukgTNRifl2/1o9
-         lvoMoY1Ya+O3sxSt5VtZAOcEuSnf9P3sNnW2+wMDOaS9OOI72pmD26oeg/PxPvdr7l
-         aRzhc7Hd939zBTplO74Rdz0K+PftYmJu3jqkeHiLda9MMtBX8lpRkaf5+y085p5mND
-         MBu2oM4yprCp+QK9KmRFfLN/LdD5TtBmnVFywC9p7OD/C1dW6Wc25MKDP06yHfMvXg
-         V9ZAE5XkNeSwA==
-Date:   Thu, 8 Oct 2020 17:50:29 +1100
+        b=N3mGEkFU4QBiDGt5DEdkzwAX+t9CBUgsHHD9DxAZRTvP0pLNxS7IUl+LYqTTcSrIv
+         dWtmXNWq+ys4JBIqCkqQY8NNaetCgqtpJ5ikhJSgjnve4mctzMTbE1zUfDhhVg7Rj7
+         4HcAGRZwGqXsqisMdAB28pMPfBInGXORtG/3LKwjuNiILnAvk5o9gGMZepMUvQqHgQ
+         WOYgOMI1SO7UlGcYx+zJkUkKiMdH7fNjCAQ2rYCRx85JudJ9ySbogi+EhZ4QPrQEcN
+         vN3d8C8Z2MB6jFJdb8BUsuvigXE4mImkv03XgecedLiv10M7hp3Mn+/C0/6J7q72XL
+         davSWYMAXAcEA==
+Date:   Thu, 8 Oct 2020 17:55:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: build failure after merge of the xarray tree
-Message-ID: <20201008175029.7dd2d637@canb.auug.org.au>
+Message-ID: <20201008175540.13dc645d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9AioJc0GunGqgrAWcz6Ns4C";
+Content-Type: multipart/signed; boundary="Sig_/98kucMDQfETZ6npwXVCbwH9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9AioJc0GunGqgrAWcz6Ns4C
+--Sig_/98kucMDQfETZ6npwXVCbwH9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -53,44 +53,37 @@ Hi all,
 After merging the xarray tree, today's linux-next build (x86_64
 allmodconfig) failed like this:
 
-lib/test_xarray.c: In function 'check_xa_mark_3':
-lib/test_xarray.c:305:3: error: implicit declaration of function 'assert' [=
--Werror=3Dimplicit-function-declaration]
-  305 |   assert(1);
-      |   ^~~~~~
-lib/test_xarray.c:11:1: note: 'assert' is defined in header '<assert.h>'; d=
-id you forget to '#include <assert.h>'?
-   10 | #include <linux/module.h>
-  +++ |+#include <assert.h>
-   11 |=20
+ERROR: modpost: "xa_delete_node" [lib/test_xarray.ko] undefined!
 
 Caused by commit
 
-  5c8052d7925b ("XArray test: Add new test")
+  e95150e70fe1 ("XArray: Add private interface for workingset node deletion=
+")
 
 I have added the following hack for today:
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 8 Oct 2020 17:46:26 +1100
-Subject: [PATCH] XArray test: remove assert()
+Date: Thu, 8 Oct 2020 17:52:11 +1100
+Subject: [PATCH] XArray: export xa_delete_node()
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- lib/test_xarray.c | 1 -
- 1 file changed, 1 deletion(-)
+ lib/xarray.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/lib/test_xarray.c b/lib/test_xarray.c
-index 9d9c09d1f781..21bb06c213a2 100644
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -302,7 +302,6 @@ static noinline void check_xa_mark_3(struct xarray *xa)
- 	rcu_read_lock();
- 	xas_for_each_marked(&xas, entry, ULONG_MAX, XA_MARK_0) {
- 		count++;
--		assert(1);
- 	}
- 	XA_BUG_ON(xa, count !=3D 1);
- 	rcu_read_unlock();
+diff --git a/lib/xarray.c b/lib/xarray.c
+index 3f0b143bfdcd..be9166b45db3 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1993,6 +1993,7 @@ void xa_delete_node(struct xa_node *node, xa_update_n=
+ode_t update)
+=20
+ 	xas_store(&xas, NULL);
+ }
++EXPORT_SYMBOL(xa_delete_node);
+=20
+ /**
+  * xa_destroy() - Free all internal data structures.
 --=20
 2.28.0
 
@@ -98,20 +91,20 @@ index 9d9c09d1f781..21bb06c213a2 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/9AioJc0GunGqgrAWcz6Ns4C
+--Sig_/98kucMDQfETZ6npwXVCbwH9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9+trUACgkQAVBC80lX
-0Gx0ngf/eY2vEEka+rkYgFHE3S/MDLuJcQGLnHlqBq8lVo+YwhrSnbgBwP9NVWX0
-ytA9dbRAaUKUSCbpRlP/qXAuTJzktepoD2mnMS8GoLD58PQ7cjHM7MxJ8zeDDmtV
-0KD87mcu9HxHM3NBzwMcp/Sj/ES6FoZQuK+iWt1m6q0tL7+PVXfNhyDsXY8ZIXXf
-je0oetn+8U+LDQHpMrXHIkCAJGPBmA88E8T71hvLloH3amEJ/z7nb4yD79RzpVP5
-U2a8IewWEENiegr9Nmfa/kELt4+1UuAyVjiy+Yf35znekIwZ95aU0CaePaFUb68N
-XQat6XGOAv1xwtUNR0zdNLeYeftdQQ==
-=KeBo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl9+t+wACgkQAVBC80lX
+0Gz3iggAlpzGfiU+h974Me1R9pDkRBsJ3j4OfhfHYfEst95nNazg/9yfJ0KiraRx
+XqCjX03f98kwaUCuFI6lNCDRLoWFhkeiZKxRYxkrHTbsShrDKicO3n3tfV5A/Uky
+O5pwT99dux0JRl3z/JlQdmKCw7T1H0XrBpntiZP7eFBhw8nHqgLSU1y5gSwMlQRb
+qtoiU4Dkytu9qZW+CfiwEG0P7BM6lY9E1MsUDO26eZnyqTCvcWpfqwlgcpfIYtMo
+66HX6/1bqZQJt5vNaE9m/jc/wmdMm3yJ09Y5omkSrLqVQt/QVvH0v92w1DWXKdLS
+hXTXpeGcN33Punc43d+eSwvrdzZpfg==
+=d62I
 -----END PGP SIGNATURE-----
 
---Sig_/9AioJc0GunGqgrAWcz6Ns4C--
+--Sig_/98kucMDQfETZ6npwXVCbwH9--

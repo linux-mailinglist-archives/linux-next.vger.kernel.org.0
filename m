@@ -2,140 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32577287A12
-	for <lists+linux-next@lfdr.de>; Thu,  8 Oct 2020 18:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36274287A58
+	for <lists+linux-next@lfdr.de>; Thu,  8 Oct 2020 18:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729449AbgJHQjb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Oct 2020 12:39:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35267 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728551AbgJHQj3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Oct 2020 12:39:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602175167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J9qYAierbVYrD4kZyI2nIgIqlbwIReYQoycMbbbHP0I=;
-        b=BUuRInHtc6cpGWuNsYxLolZasm838pnbDWYDaQoLW27D2dwbpTZzSDMBkpHvevgWRcXDck
-        4wilq9kcXfoi14tiO+YNno63d3DMjsnKl1XPrejjMBRun/ZEVbMWz7CABduHvM4HfY8fe6
-        JuWG4EjUMTFoLQN00OFchJR773rEbpc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-291-sx53bJcgMRWYuQ9WHrCSQQ-1; Thu, 08 Oct 2020 12:39:25 -0400
-X-MC-Unique: sx53bJcgMRWYuQ9WHrCSQQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A8C710BBEC3;
-        Thu,  8 Oct 2020 16:39:24 +0000 (UTC)
-Received: from ovpn-66-175.rdu2.redhat.com (unknown [10.10.67.175])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DEE7319C4F;
-        Thu,  8 Oct 2020 16:39:22 +0000 (UTC)
-Message-ID: <9dcf9f7a9005d5c5885fe8c5dcd4314d04dc9caf.camel@redhat.com>
-Subject: Re: misc I/O submission cleanups
-From:   Qian Cai <cai@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1730634AbgJHQvh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Oct 2020 12:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728218AbgJHQvh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Oct 2020 12:51:37 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB26C061755
+        for <linux-next@vger.kernel.org>; Thu,  8 Oct 2020 09:51:36 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id m17so6992417ioo.1
+        for <linux-next@vger.kernel.org>; Thu, 08 Oct 2020 09:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8/6RY8TKKj+W/1VmDo+d0IEG9PszfHwoIwLRWUh4HqQ=;
+        b=tEVYzXdqmEuMxhEQ0rTIN1mKGckoCsmqMQIjcB6YajNa/oz8WyoEoF1AVe91zYP6FT
+         nXVJn8QYYMX9zT8mnuQ2gU/9L0W1jBsEhei/V1Z+vyH4TDK7nlolKFf/V/K94bI75nwD
+         Xdk9tpFcAVnZyDHm2RWcMkKKfvx+2FE2IpS8JZtNZv7kaYAanz2dJUNYqUqiBJJS1mr7
+         JRtnDZ1w/uq69iQHoP3eg+MP6PtOslr6Ktl36/7hqHfjf5gsh+O3BSoDYScW/I+6aPEr
+         qR3jGjrUVwyDcsCojhCVpBEsHi94aU33bQTP7HKD0ttsTF45O6xH85mQLR7hVzKTj596
+         WQHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8/6RY8TKKj+W/1VmDo+d0IEG9PszfHwoIwLRWUh4HqQ=;
+        b=nVwRhSeLCjUSBOSBqNo56C+pP/C+RP/t5It1kLA2qCt3OnLnzJnbj29VtjmTDFQcGP
+         BkAKAfrBTetKH3r1ACVjjsxzFphbGAlPDy1I8MjqfosbogNILS2vF1olDlH9nLnhRAFP
+         zq2J477YOqSid/IlhUwryJuHHTNtBRcLOu36ggRT4WT/oEjTb2GOdPb6gMywFPWW0Au+
+         xtKfDfOCCLJvRgsx6q0BD6H/YbjU2B4WZOtBTslQMHkGOy2042WmLHAEfdPmPNZ80Vty
+         339vY934NvvFKozNfsKhR++GyJN8X0OPGlkHHPfEVgPafdjQ5tu5vtYcIgjck+HoX6Pj
+         j61g==
+X-Gm-Message-State: AOAM531XJxsxbErgOrS6s62cftmk+JBqBZPGgn5GlvBtCcID+Xpu/5Li
+        0hLkhjSfz51mSGNEz/EYMuPrqWbHR6jR+QqphYI3Sg==
+X-Google-Smtp-Source: ABdhPJyz8vN0rhjNpoi55kPcxH5V3GpQx2VePFa+C6kevoO60oURqttQCBcoFzUfKpSvkdcDDYTWKBsRnxXY3mK2Vwk=
+X-Received: by 2002:a5e:9b11:: with SMTP id j17mr6488597iok.176.1602175895571;
+ Thu, 08 Oct 2020 09:51:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200916054130.8685-1-Zhiqiang.Hou@nxp.com> <CAL_JsqJwgNUpWFTq2YWowDUigndSOB4rUcVm0a_U=FEpEmk94Q@mail.gmail.com>
+ <HE1PR0402MB3371F8191538F47E8249F048843F0@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <CAL_JsqLdQY_DqpduaTv4hMDM_-cvZ_+s8W+HdOuZVVYjTO4yxw@mail.gmail.com>
+ <HE1PR0402MB337180458625B05D1529535384390@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <20200928093911.GB12010@e121166-lin.cambridge.arm.com> <HE1PR0402MB33713A623A37D08AE3253DEB84320@HE1PR0402MB3371.eurprd04.prod.outlook.com>
+ <DM5PR12MB1276D80424F88F8A9243D5E2DA320@DM5PR12MB1276.namprd12.prod.outlook.com>
+ <CAL_JsqJJxq2jZzbzZffsrPxnoLJdWLLS-7bG-vaqyqs5NkQhHQ@mail.gmail.com>
+ <9ac53f04-f2e8-c5f9-e1f7-e54270ec55a0@ti.com> <CAL_JsqJEp8yyctJYUjHM4Ti6ggPb4ouYM_WDvpj_PiobnAozBw@mail.gmail.com>
+ <67ac959f-561e-d1a0-2d89-9a85d5f92c72@ti.com> <99d24fe08ecb5a6f5bba7dc6b1e2b42b@walle.cc>
+ <CA+G9fYtR5MwQ_Gd1=R=815eCAz+5uC67wXV2x094pc_=PtkA2g@mail.gmail.com>
+ <CA+G9fYsubwpT9HY7Dx-+zvYdM1t1m+mrnH8WfHJ-_BpMTt40vA@mail.gmail.com> <CAL_Jsq+uFJp5Vt=u2ZFhGCTTM62mb_1rKOz_Dj2=ez5bKJad1Q@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+uFJp5Vt=u2ZFhGCTTM62mb_1rKOz_Dj2=ez5bKJad1Q@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Oct 2020 22:21:24 +0530
+Message-ID: <CA+G9fYufopBTRdqdHy=m17mc2N2Y8o-bcqAz_nON7X6ZYAb7Ug@mail.gmail.com>
+Subject: Re: [PATCH] PCI: dwc: Added link up check in map_bus of dw_child_pcie_ops
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Z.Q. Hou" <Zhiqiang.Hou@nxp.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Date:   Thu, 08 Oct 2020 12:39:22 -0400
-In-Reply-To: <20201005084130.143273-1-hch@lst.de>
-References: <20201005084130.143273-1-hch@lst.de>
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-10-05 at 10:41 +0200, Christoph Hellwig wrote:
-> Hi Martin,
-> 
-> this series tidies up various loose ends in the SCSI I/O submission path.
+On Thu, 8 Oct 2020 at 20:42, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Oct 8, 2020 at 9:47 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > On Fri, 2 Oct 2020 at 14:59, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > On Thu, 1 Oct 2020 at 22:16, Michael Walle <michael@walle.cc> wrote:
+> > > >
+> > > > Am 2020-10-01 15:32, schrieb Kishon Vijay Abraham I:
+> > > >
+> > > > > Meanwhile would it be okay to add linkup check atleast for DRA7X so
+> > > > > that
+> > > > > we could have it booting in linux-next?
+> > > >
+> > > > Layerscape SoCs (at least the LS1028A) are also still broken in
+> > > > linux-next,
+> > > > did I miss something here?
+> > >
+> > > I have been monitoring linux next boot and functional testing on nxp devices
+> > > for more than two week and still the problem exists on nxp-ls2088.
+> > >
+> > > Do you mind checking the possibilities to revert bad patches on linux next tree
+> > > and continue to work on fixes please ?
+> > >
+> > > suspected bad commit: [ I have not bisected this problem ]
+> > > c2b0c098fbd1 ("PCI: dwc: Use generic config accessors")
+> > >
+> > > crash log snippet:
+> > > [    1.563008] SError Interrupt on CPU5, code 0xbf000002 -- SError
+> > > [    1.563010] CPU: 5 PID: 1 Comm: swapper/0 Not tainted
+> > > 5.9.0-rc7-next-20201001 #1
+> > > [    1.563011] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
+> > > [    1.563013] pstate: 20000085 (nzCv daIf -PAN -UAO -TCO BTYPE=--)
+> > > [    1.563014] pc : pci_generic_config_read+0x44/0xe8
+> > > [    1.563015] lr : pci_generic_config_read+0x2c/0xe8
+> >
+> >
+> > This reported issue is gone now on Linux next master branch.
 
-Reverting this patchset on the top of today's linux-next fixed the boot failures
-below with libata, i.e.,
+I am taking this verdict back.
+I have seen the boot pass and the reported issue is gone but after checking
+all 20 test jobs the 4 boot passes without the above reported error.
+and later the 16 boot failed with the reported error.
 
-git revert --no-edit 653eb7c99d84..ed7fb2d018fd
+> > I am not sure which is a fix commit.
+>
+> There isn't one, better double check that. We're still waiting on
+> respinning of the revert patch.
+>
+> BTW, why is the kernelci NXP lab almost always down? I have a branch
+> now to test things and I'm not done breaking the DWC driver. :)
 
-== Easy to reproduce using qemu-kvm "-hda" CONFIG_ATA_PIIX=y. ==
-.config: https://gitlab.com/cailca/linux-mm/-/blob/master/x86.config
+Now the NXP LAVA lab is back online after upgrade.
+LKFT running daily testing on device "nxp-ls2088" [1]
 
-[   46.047499][  T757] ata2.00: WARNING: zero len r/w req
-[   46.049734][  T644] ata2.00: WARNING: zero len r/w req
-[   46.051962][  T757] ata2.00: WARNING: zero len r/w req
-[   46.054182][  T644] ata2.00: WARNING: zero len r/w req
-[   46.058018][  T757] ata2.00: WARNING: zero len r/w req
-[   46.060514][  T644] ata2.00: WARNING: zero len r/w req
-[   46.065764][  T757] ata2.00: WARNING: zero len r/w req
-[   46.068005][  T644] ata2.00: WARNING: zero len r/w req
-[   46.070192][  T644] ata2.00: WARNING: zero len r/w req
-[   46.072379][  T644] ata2.00: WARNING: zero len r/w req
-[   46.074629][  T644] ata2.00: WARNING: zero len r/w req
-[   46.077255][  T644] ata2.00: WARNING: zero len r/w req
-[   46.081553][   C36] sr 1:0:0:0: [sr0] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=0x00 cmd_age=0s
-[   46.086336][   C36] sr 1:0:0:0: [sr0] tag#0 CDB: opcode=0x28 
-[   46.089171][   C36] blk_update_request: I/O error, dev sr0, sector 2097136 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
-[   46.094979][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.097526][  T757] blk_update_request: I/O error, dev sr0, sector 2097136 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.102364][  T757] Buffer I/O error on dev sr0, logical block 2097136, async page read
-[   46.106080][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.108590][  T757] blk_update_request: I/O error, dev sr0, sector 2097137 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.113234][  T757] Buffer I/O error on dev sr0, logical block 2097137, async page read
-[   46.117053][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.119581][  T757] blk_update_request: I/O error, dev sr0, sector 2097138 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.124382][  T757] Buffer I/O error on dev sr0, logical block 2097138, async page read
-[   46.128545][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.131038][  T757] blk_update_request: I/O error, dev sr0, sector 2097139 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.135905][  T757] Buffer I/O error on dev sr0, logical block 2097139, async page read
-[   46.139835][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.142422][  T757] blk_update_request: I/O error, dev sr0, sector 2097140 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.147240][  T757] Buffer I/O error on dev sr0, logical block 2097140, async page read
-[   46.150764][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.153248][  T757] blk_update_request: I/O error, dev sr0, sector 2097141 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.158439][  T757] Buffer I/O error on dev sr0, logical block 2097141, async page read
-[   46.162383][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.165062][  T757] blk_update_request: I/O error, dev sr0, sector 2097142 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.169785][  T757] Buffer I/O error on dev sr0, logical block 2097142, async page read
-[   46.173252][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.175968][  T757] blk_update_request: I/O error, dev sr0, sector 2097143 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-[   46.181049][  T757] Buffer I/O error on dev sr0, logical block 2097143, async page read
-[   46.184779][   C36] sr 1:0:0:0: [sr0] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=0x00 cmd_age=0s
-[   46.188966][   C36] sr 1:0:0:0: [sr0] tag#0 CDB: opcode=0x28 
-[   46.191731][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.194223][  T757] Buffer I/O error on dev sr0, logical block 0, async page read
-[   46.197976][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.200781][  T757] Buffer I/O error on dev sr0, logical block 1, async page read
-[   46.204221][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.207133][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.209790][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
-[   46.212464][  T757] sr 1:0:0:0: [sr0] tag#0 unaligned transfer
+You can monitor and check results on Linaro Linux next project [2]
 
-== baremetal with ahci ==
-[   14.560235][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560397][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560450][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560502][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560594][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560644][  T515] ata1.00: WARNING: zero len r/w req
-[   14.560709][  C100] sd 0:0:0:0: [sdb] tag#7 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=0x00 cmd_age=0s
-[   14.560790][  C100] sd 0:0:0:0: [sdb] tag#7 CDB: opcode=0x35 35 00 00 00 00 00 00 00 00 00
-[   14.560869][  C100] blk_update_request: I/O error, dev sdb, sector 0 op 0x1:(WRITE) flags 0x800 phys_seg 0 prio class 0
-[   14.562124][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562172][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562217][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562262][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562317][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562361][ T1274] ata1.00: WARNING: zero len r/w req
-[   14.562412][  C100] sd 0:0:0:0: [sdb] tag#8 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=0x00 cmd_age=0s
-[   14.562465][  C100] sd 0:0:0:0: [sdb] tag#8 CDB: opcode=0x35 35 00 00 00 00 00 00 00 00 00
-[   14.562517][  C100] blk_update_request: I/O error, dev sdb, sector 1880188816 op 0x1:(WRITE) flags 0x9800 phys_seg 1 prio class 0
+[1] https://lavalab.nxp.com/scheduler/device_type/nxp-ls2088
+[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201008/?results_layout=table&failures_only=false#!?details=995,999#test-results
 
-
+- Naresh

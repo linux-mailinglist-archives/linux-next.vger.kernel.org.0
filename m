@@ -2,138 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E0A28A173
-	for <lists+linux-next@lfdr.de>; Sat, 10 Oct 2020 23:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D2328A174
+	for <lists+linux-next@lfdr.de>; Sat, 10 Oct 2020 23:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387552AbgJJU0A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 10 Oct 2020 16:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730418AbgJJSxs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 10 Oct 2020 14:53:48 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10554C05BD39;
-        Sat, 10 Oct 2020 11:53:46 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S2387553AbgJJU0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 10 Oct 2020 16:26:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731406AbgJJTU1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 10 Oct 2020 15:20:27 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C7vGp3lzbz9sTD;
-        Sun, 11 Oct 2020 05:53:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602356021;
-        bh=0ZiYU2BgRkjQ0tmAd8YQC8T8NNHc+p4p/Aymc9T60Os=;
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D56B22258;
+        Sat, 10 Oct 2020 19:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602357626;
+        bh=1rFFenx5YaOoyjN6AOp5kOMJV7iSmN0ey8iVvvT9Ck0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gJURoGiaEEpoAj7KajOh3gSfnJdnFAGufWHRQkiRM08NwdjUv1T6jIIYHpxMgEUWW
-         fxaedqF1KKOOjJ1cpaxKU3inFqol0AIprW9OKDjljBJYtobNRZn3w8DwvxqfBX0IGY
-         y03M7FsSXyKSfF19dSvxB5mbc/ITchmxvQLKsugELUQn6NYX8V9SjPTpCEjx0c1SVR
-         IS0+dtJ4bg1r23LFNZY0H8J5fwLBUgfh8YNZNH+55b2taEG2LZkq7ohXyIyFQunlRj
-         9XDWi0eDRXgLH2XCtS8l50huLM8IreRqCrcIfsBMXx0H7M/Y2VHu82E4CN0ChvEEdZ
-         b/lpIu13sApRg==
-Date:   Sun, 11 Oct 2020 05:53:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Poonam Aggrwal <poonam.aggrwal@nxp.com>,
-        Rob Herring <robh@kernel.org>, Joerg Roedel <jroedel@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Weinberger <richard@nod.at>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mtd@lists.infradead.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Suram Suram <suram@nxp.com>, masonccyang@mxic.com.tw,
-        Will Deacon <will@kernel.org>,
-        "Z.Q. Hou" <Zhiqiang.Hou@nxp.com>, Christoph Hellwig <hch@lst.de>,
-        Jim Quinlan <james.quinlan@broadcom.com>
-Subject: Re: arm-smmu 5000000.iommu: Cannot accommodate DMA offset for IOMMU
- page tables
-Message-ID: <20201011055258.22337d66@canb.auug.org.au>
-In-Reply-To: <CA+G9fYtG6Ro-NdrP89ipDyUqVVT2=_8pTvjTSeFcWr795bp8AA@mail.gmail.com>
-References: <CA+G9fYvuq58q+GsWnzni0sKSHbubuQz-UaK3TASX26V_a7yBVw@mail.gmail.com>
-        <20200924090349.GF27174@8bytes.org>
-        <ecf71b34-a104-d42a-bfcd-9570e73520a7@arm.com>
-        <20200924092546.GJ27174@8bytes.org>
-        <e2186418-d4d6-e1f4-5eb4-3bfafb5cebb2@arm.com>
-        <20200924095629.GL27174@8bytes.org>
-        <CA+G9fYu42j_B+Rg2nq+KKBiKLqxVEqabQ15CujyJ+o6jqRj2uQ@mail.gmail.com>
-        <CA+G9fYtG6Ro-NdrP89ipDyUqVVT2=_8pTvjTSeFcWr795bp8AA@mail.gmail.com>
+        b=u1uXILE4wH+0QAJm6IeD5VwS/QkS3cEJnyAbweMQ2CZGsWfc1JVZHAL9qTYl/K+Fa
+         ZBu/bchAgrF/5CmgDG3BM/ajQaUBEbepcDnZGCLlSAZtSQpTg2f8wpmeJOsqKXixhy
+         cRBEorT0By3F6D1EY3DuANtfFgrE53GazWxPUNTc=
+Date:   Sat, 10 Oct 2020 12:20:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Petko Manolov <petkan@nucleusys.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] net: usb: rtl8150: don't incorrectly assign random MAC
+ addresses
+Message-ID: <20201010122024.0ec7c2f1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <e772b9f0-f5cd-c50b-86a7-fde22b6e13e3@gmail.com>
+References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
+        <20201010095302.5309c118@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <0de8e509-7ca5-7faf-70bf-5880ce0fc15c@gmail.com>
+        <20201010111645.334647af@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <e772b9f0-f5cd-c50b-86a7-fde22b6e13e3@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VDFBoy40HHV45rBGLSbjbCi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VDFBoy40HHV45rBGLSbjbCi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Naresh,
-
-Just adding Christoph and Jim to cc]
-
-On Fri, 9 Oct 2020 19:26:24 +0530 Naresh Kamboju <naresh.kamboju@linaro.org=
-> wrote:
->
-> On Fri, 9 Oct 2020 at 19:24, Naresh Kamboju <naresh.kamboju@linaro.org> w=
-rote:
-> >
-> >
-> >
-> > On Thu, 24 Sep 2020 at 15:26, Joerg Roedel <joro@8bytes.org> wrote: =20
-> > >
-> > > On Thu, Sep 24, 2020 at 10:36:47AM +0100, Robin Murphy wrote: =20
-> > > > Yes, the issue was introduced by one of the changes in "dma-mapping:
-> > > > introduce DMA range map, supplanting dma_pfn_offset", so it only ex=
-isted in
-> > > > the dma-mapping/for-next branch anyway. =20
-> > =20
+On Sun, 11 Oct 2020 00:14:05 +0530 Anant Thazhemadam wrote:
+> Ah, my apologies. You're right. It doesn't look like those helpers have m=
+ade
+> their way into the networking tree yet.
 >=20
-> FYI,
-> The reported problem still exists on 5.9.0-rc8-next-20201009.
+> (This gets mentioned here as well,
+> =C2=A0=C2=A0=C2=A0 https://www.mail-archive.com/netdev@vger.kernel.org/ms=
+g357843.html)
 >=20
-> [    1.843814] Driver must set ecc.strength when using hardware ECC
-> [    1.849847] WARNING: CPU: 4 PID: 1 at
-> drivers/mtd/nand/raw/nand_base.c:5687 nand_scan_with_ids+0x1450/0x1470
-> [    1.859676] Modules linked in:
-> [    1.862730] CPU: 4 PID: 1 Comm: swapper/0 Not tainted
-> 5.9.0-rc8-next-20201009 #1
-> [    1.870125] Hardware name: Freescale Layerscape 2088A RDB Board (DT)
-> [    1.876478] pstate: 40000005 (nZcv daif -PAN -UAO -TCO BTYPE=3D--)
-> [    1.882483] pc : nand_scan_with_ids+0x1450/0x1470
-> [    1.887183] lr : nand_scan_with_ids+0x1450/0x1470
+> The commit ID pointed to by the fixes tag is correct.
+> The change introduced by said commit looks right, but is logically incorr=
+ect.
 >=20
-> full test log,
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201009/=
-testrun/3284876/suite/linux-log-parser/test/check-kernel-warning-92014/log
+> get_registers() directly returns the return value of usb_control_msg_recv=
+(),
+> and usb_control_msg_recv() returns 0 on success and negative error number
+> otherwise.
 >=20
-> > >
-> > > Okay, alright then.
-> > > =20
+> (You can find more about the new helpers here
+> =C2=A0=C2=A0=C2=A0 https://lore.kernel.org/alsa-devel/20200914153756.3412=
+156-1-gregkh@linuxfoundation.org/ )
 >=20
-> - Naresh
+> The commit ID mentioned introduces a change that is supposed to copy over
+> the ethernet only when get_registers() succeeds, i.e., a complete read oc=
+curs,
+> and generate and set a random ethernet address otherwise (reading the
+> commit message should give some more insight).
+>=20
+> The condition that checks if get_registers() succeeds (as specified in f4=
+5a4248ea4c)
+> was,
+> =C2=A0=C2=A0=C2=A0 ret =3D=3D sizeof(node_id)
+> where ret is the return value of get_registers().
+>=20
+> However, ret will never equal sizeof(node_id), since ret can only be equa=
+l to 0
+> or a negative number.
+>=20
+> Thus, even in case where get_registers() succeeds, a randomly generated M=
+AC
+> address would get copied over, instead of copying the appropriate ethernet
+> address, which is logically incorrect and not optimal.
+>=20
+> Hence, we need to modify this to check if (ret =3D=3D 0), and copy over t=
+he correct
+> ethernet address in that case, instead of randomly generating one and ass=
+igning
+> that.
 
---=20
-Cheers,
-Stephen Rothwell
+I see... so we ended up with your fix applied to net, and Petko's
+rework applied to the usb/usb-next tree.
 
---Sig_/VDFBoy40HHV45rBGLSbjbCi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+What you're actually fixing is the improper resolution of the resulting
+conflict in linux-next!
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+CAzEACgkQAVBC80lX
-0Gyv1gf+OhvuoKZ7Dmo9fQYJq9511FjSgaqsakQ81Jh2iL8ekt5hPSz0Hss0+Crs
-kG4GTzQg9CiRbNN/JbDmIC2SPF59L6ht6kVddSJ8A6qb7o0b/+aBOCsKen4AxFER
-YfGofzrnHpWORu2/JyYdoOPbyaJL0ohW5oFW58icU8AyRNMGOq8GhDsrPXl3Ebf6
-4tNKIcz4PGXJO9HiuQUuKJSD4b/krtHkh2m0Xz3NC7zY6aRAxBWS8/OieouK0EiR
-E59fS4A/AaJQUheKpfcEkBiZXsLBx7bZ/ki4EQ1NlQakjpF4KMVhZKrlsB/kBimF
-41tdxnpjq4DzVLXrV9nAg2OBIS6TMw==
-=vHqX
------END PGP SIGNATURE-----
-
---Sig_/VDFBoy40HHV45rBGLSbjbCi--
+CCing Stephen and linux-next.

@@ -2,114 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AD128AAC9
-	for <lists+linux-next@lfdr.de>; Sun, 11 Oct 2020 23:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC7128AAE5
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 00:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729584AbgJKV7u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Oct 2020 17:59:50 -0400
-Received: from ozlabs.org ([203.11.71.1]:50185 "EHLO ozlabs.org"
+        id S2387656AbgJKWOf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Oct 2020 18:14:35 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56639 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729583AbgJKV7t (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Oct 2020 17:59:49 -0400
+        id S2387645AbgJKWOf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Oct 2020 18:14:35 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8bLx0V5tz9sT6;
-        Mon, 12 Oct 2020 08:59:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8bh54hRXz9sSG;
+        Mon, 12 Oct 2020 09:14:29 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602453587;
-        bh=yUJ1UPoxPiQCpn4SJhMOdDvYU8x5GRsU/XB8ZKtlfy8=;
+        s=201702; t=1602454471;
+        bh=mZvIGiWYUI2zqFWGL8GvHQkWoM+kEmNPm9h8dkDqO6w=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aIBwXXKxf1+JDkyhpESPlNJeYe+q7+MoIOK0sDpoTcMChj5JtADpSs9ozL69W1aCL
-         Bfnyt74zDXABtufUCkfw3szFsD4SxHuoaXsd3QivB3mnU/H/8fm3U+kFnEFNCTTj2v
-         arKKGEVi+Fa40SLZZk7PqzsDaTAYAJvCHAFbch1JHQ595KJCoBOj5nMc82847wICYJ
-         Xy8tbpRpIZpQFqkQdu+S/QskrSdtSCQhPzwSrY09rq0U8aeNiZz1RydAp583YbQvrl
-         wkXnicW8Okg65L/cJWf9kB2NYULK4+3DNjGBCYjFkzfLQgaLx/9cWhBDIq19GZIw3p
-         MsTN8mVJDkwJw==
-Date:   Mon, 12 Oct 2020 08:59:36 +1100
+        b=M8CTsaTMOwigYIzmyPiWUcUPwN+tDtawIjfTIU15QgvzCx83yoyqdPJtWpq3T9gjo
+         zgvvp23lLmSH1anq7WtNLI40Q6QTNcxQe+CXwn5pX3cD9mFhnEDkijksp78Gtk+jU/
+         /AjLC1vaZPCFBwpubQeuXwqfz6ogqOY4QBfA2Bb8eSifqYa2F80HEJ8MehuhQUrf5T
+         +49+huat3eww7IO+a3MLCJ/90tIbFOaLvDuSmHR33Ag7ZQzPCDnuRHejJTCLtFyTAM
+         BiHRsTrfpbxMIs4Uvmok/uk/skBbW67fd19wZGzoiLdSWzudUL7nsYCco0rsDi5YkF
+         4bQnEB48b7A0w==
+Date:   Mon, 12 Oct 2020 09:14:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH RESEND 1/1] perf build: Allow nested externs to enable
- BUILD_BUG() usage
-Message-ID: <20201012085936.241cc62d@canb.auug.org.au>
-In-Reply-To: <20201009124111.GD656950@krava>
-References: <20201009112327.GC656950@krava>
-        <cover.thread-251403.your-ad-here.call-01602244460-ext-7088@work.hours>
-        <patch-1.thread-251403.git-2514037e9477.your-ad-here.call-01602244460-ext-7088@work.hours>
-        <20201009124111.GD656950@krava>
+To:     Greg KH <greg@kroah.com>
+Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        petkan@nucleusys.com, davem@davemloft.net, kuba@kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-next@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
+ MAC addresses
+Message-ID: <20201012091428.103fc2be@canb.auug.org.au>
+In-Reply-To: <20201011173030.141582-1-anant.thazhemadam@gmail.com>
+References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
+        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wD4oiLBgMWinHtzhN4j9kbs";
+Content-Type: multipart/signed; boundary="Sig_/UgAcjbHUvajYlQ+TL+=e3lV";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wD4oiLBgMWinHtzhN4j9kbs
+--Sig_/UgAcjbHUvajYlQ+TL+=e3lV
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Greg,
 
-On Fri, 9 Oct 2020 14:41:11 +0200 Jiri Olsa <jolsa@redhat.com> wrote:
+On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam <anant.thazhemadam@gma=
+il.com> wrote:
 >
-> On Fri, Oct 09, 2020 at 02:25:23PM +0200, Vasily Gorbik wrote:
-> > Currently BUILD_BUG() macro is expanded to smth like the following:
-> >    do {
-> >            extern void __compiletime_assert_0(void)
-> >                    __attribute__((error("BUILD_BUG failed")));
-> >            if (!(!(1)))
-> >                    __compiletime_assert_0();
-> >    } while (0);
-> >=20
-> > If used in a function body this obviously would produce build errors
-> > with -Wnested-externs and -Werror.
-> >=20
-> > To enable BUILD_BUG() usage in tools/arch/x86/lib/insn.c which perf
-> > includes in intel-pt-decoder, build perf without -Wnested-externs.
-> >=20
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Signed-off-by: Vasily Gorbik <gor@linux.ibm.com> =20
+> In set_ethernet_addr(), if get_registers() succeeds, the ethernet address
+> that was read must be copied over. Otherwise, a random ethernet address
+> must be assigned.
 >=20
-> that one applied nicely ;-) thanks
+> get_registers() returns 0 if successful, and negative error number
+> otherwise. However, in set_ethernet_addr(), this return value is
+> incorrectly checked.
 >=20
-> Acked-by: Jiri Olsa <jolsa@redhat.com>
+> Since this return value will never be equal to sizeof(node_id), a
+> random MAC address will always be generated and assigned to the
+> device; even in cases when get_registers() is successful.
+>=20
+> Correctly modifying the condition that checks if get_registers() was
+> successful or not fixes this problem, and copies the ethernet address
+> appropriately.
+>=20
+> Fixes: f45a4248ea4c ("net: usb: rtl8150: set random MAC address when set_=
+ethernet_addr() fails")
+> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> ---
+> Changes in v2:
+>         * Fixed the format of the Fixes tag
+>         * Modified the commit message to better describe the issue being=
+=20
+>           fixed
+>=20
+> +CCing Stephen and linux-next, since the commit fixed isn't in the networ=
+king
+> tree, but is present in linux-next.
+>=20
+>  drivers/net/usb/rtl8150.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+> index f020401adf04..bf8a60533f3e 100644
+> --- a/drivers/net/usb/rtl8150.c
+> +++ b/drivers/net/usb/rtl8150.c
+> @@ -261,7 +261,7 @@ static void set_ethernet_addr(rtl8150_t *dev)
+> =20
+>  	ret =3D get_registers(dev, IDR, sizeof(node_id), node_id);
+> =20
+> -	if (ret =3D=3D sizeof(node_id)) {
+> +	if (!ret) {
+>  		ether_addr_copy(dev->netdev->dev_addr, node_id);
+>  	} else {
+>  		eth_hw_addr_random(dev->netdev);
+> --=20
+> 2.25.1
+>=20
 
-I will apply that patch to the merge of the tip tree today (instead of
-reverting the series I reverted in Friday) (unless I get an update of
-the tip tree containing it, of course).
+I will apply the above patch to the merge of the usb tree today to fix
+up a semantic conflict between the usb tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/wD4oiLBgMWinHtzhN4j9kbs
+--Sig_/UgAcjbHUvajYlQ+TL+=e3lV
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+DgEgACgkQAVBC80lX
-0GxWIwf+Kvv0XbRu8g+vdFqrbtpm10qIAkuowzDDCYI5wM5h8Mr/r7GHWR5XbsT5
-ediOu2d4z1srzHDeOl1+kb+DTrbUZpyu7XljfhIPGfe/45OBHG3jRjR21dFtfBJS
-P2R5haT3JfRKPY5lGhMG9p3CsesLQYNMGxmY0en6+GC0jTgAfH0BZ1MvvMhj9VPk
-uLIlZTJOE5rCp/Sygscp+bFsAyx/KxoLDZElCeuup+tWT3WgERQR/F19aJO2ijer
-FDTIQrFeacOiRJT2Mhspw7ywBwQovtuWA8Q1RqZPFHjA1Bhpch4EEs0RCADKsnjb
-RQEsT1iiO9Ey7joj+RVC/9979zfznw==
-=hRLL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Dg8QACgkQAVBC80lX
+0GzhMAf/fbC6R3v0ksr5x4jSQeQIxhEc/3Z0uzspPaHzbQEIl6yMGHBGI4b2gmGr
+1LzThwRKFwGd3yBeYFy0ug9lOQAwko+bbUHZaPMXefZn/1INQeLQZ+7BoqJ1tEnA
+YGv185+gtBEpobWro3b14mmoxInTjG0nOjAMtbEaqpLOtSAEmaGP2L6oE9HnF/Dk
+8up/QXkBsSq+zH/qrsIf+YyETkhqSvDQEBlRrxzGPJEPuAs4ml2DPhQme8zbXChW
+25u0MKcekdfOKvm+brSuF++0cr/k0Al8AvI10s7yOmbEoaeKCP/gI0SODASUjD5V
+UW8xiG8Bei3sXqck7YHemgrf+rX7gw==
+=+QPX
 -----END PGP SIGNATURE-----
 
---Sig_/wD4oiLBgMWinHtzhN4j9kbs--
+--Sig_/UgAcjbHUvajYlQ+TL+=e3lV--

@@ -2,133 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC7128AAE5
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 00:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB4528AAFF
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 00:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387656AbgJKWOf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Oct 2020 18:14:35 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56639 "EHLO ozlabs.org"
+        id S2387712AbgJKWwE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Oct 2020 18:52:04 -0400
+Received: from ozlabs.org ([203.11.71.1]:41801 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387645AbgJKWOf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Oct 2020 18:14:35 -0400
+        id S2387708AbgJKWwD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Oct 2020 18:52:03 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8bh54hRXz9sSG;
-        Mon, 12 Oct 2020 09:14:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8cWM6R68z9sSG;
+        Mon, 12 Oct 2020 09:51:59 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602454471;
-        bh=mZvIGiWYUI2zqFWGL8GvHQkWoM+kEmNPm9h8dkDqO6w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M8CTsaTMOwigYIzmyPiWUcUPwN+tDtawIjfTIU15QgvzCx83yoyqdPJtWpq3T9gjo
-         zgvvp23lLmSH1anq7WtNLI40Q6QTNcxQe+CXwn5pX3cD9mFhnEDkijksp78Gtk+jU/
-         /AjLC1vaZPCFBwpubQeuXwqfz6ogqOY4QBfA2Bb8eSifqYa2F80HEJ8MehuhQUrf5T
-         +49+huat3eww7IO+a3MLCJ/90tIbFOaLvDuSmHR33Ag7ZQzPCDnuRHejJTCLtFyTAM
-         BiHRsTrfpbxMIs4Uvmok/uk/skBbW67fd19wZGzoiLdSWzudUL7nsYCco0rsDi5YkF
-         4bQnEB48b7A0w==
-Date:   Mon, 12 Oct 2020 09:14:28 +1100
+        s=201702; t=1602456721;
+        bh=fIRvN6W5v39OZV/PI6qLoNzqSNymGAo8vtLl7AfgHr8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TRBSxgmAIqWxlUZfKB4DPCnxRBEs9iqHeJAaQol+PswBHQTgIixo3YYiJlv1cpO66
+         0d67Qu/4tzzSMmj9I/55TvEkP04tCE+e+eBzthaQIGEM2JMigw1SQ6SXa/kwbO+2n4
+         k4SmlwK524RVleJDbLDYTKfPQZeT1v1PatAm8h+SL2mwHEFVA+4Egv2rJw6FAhdUpz
+         nlYPtdV43icja9gRA4HGPJEF9gf7q9Ot9g86Lt3uOS1SQE3vuSKM3rAU+TkKXOqTua
+         rr+zxAZOnYbajBe3zQ2yzM5QcX1HY02muWNWNVwNLtrES/bw0+0ZR9v9BnP/9UR04f
+         4MP4EkAWn00Kg==
+Date:   Mon, 12 Oct 2020 09:51:58 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        petkan@nucleusys.com, davem@davemloft.net, kuba@kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-next@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
- MAC addresses
-Message-ID: <20201012091428.103fc2be@canb.auug.org.au>
-In-Reply-To: <20201011173030.141582-1-anant.thazhemadam@gmail.com>
-References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
-        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: linux-next: manual merge of the arm64 tree with the asm-generic
+ tree
+Message-ID: <20201012095158.779c6d9d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UgAcjbHUvajYlQ+TL+=e3lV";
+Content-Type: multipart/signed; boundary="Sig_/lN7TGM5Qqm/+r7wgw9jm1l8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UgAcjbHUvajYlQ+TL+=e3lV
+--Sig_/lN7TGM5Qqm/+r7wgw9jm1l8
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+Hi all,
 
-On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam <anant.thazhemadam@gma=
-il.com> wrote:
->
-> In set_ethernet_addr(), if get_registers() succeeds, the ethernet address
-> that was read must be copied over. Otherwise, a random ethernet address
-> must be assigned.
->=20
-> get_registers() returns 0 if successful, and negative error number
-> otherwise. However, in set_ethernet_addr(), this return value is
-> incorrectly checked.
->=20
-> Since this return value will never be equal to sizeof(node_id), a
-> random MAC address will always be generated and assigned to the
-> device; even in cases when get_registers() is successful.
->=20
-> Correctly modifying the condition that checks if get_registers() was
-> successful or not fixes this problem, and copies the ethernet address
-> appropriately.
->=20
-> Fixes: f45a4248ea4c ("net: usb: rtl8150: set random MAC address when set_=
-ethernet_addr() fails")
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> ---
-> Changes in v2:
->         * Fixed the format of the Fixes tag
->         * Modified the commit message to better describe the issue being=
-=20
->           fixed
->=20
-> +CCing Stephen and linux-next, since the commit fixed isn't in the networ=
-king
-> tree, but is present in linux-next.
->=20
->  drivers/net/usb/rtl8150.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
-> index f020401adf04..bf8a60533f3e 100644
-> --- a/drivers/net/usb/rtl8150.c
-> +++ b/drivers/net/usb/rtl8150.c
-> @@ -261,7 +261,7 @@ static void set_ethernet_addr(rtl8150_t *dev)
-> =20
->  	ret =3D get_registers(dev, IDR, sizeof(node_id), node_id);
-> =20
-> -	if (ret =3D=3D sizeof(node_id)) {
-> +	if (!ret) {
->  		ether_addr_copy(dev->netdev->dev_addr, node_id);
->  	} else {
->  		eth_hw_addr_random(dev->netdev);
-> --=20
-> 2.25.1
->=20
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-I will apply the above patch to the merge of the usb tree today to fix
-up a semantic conflict between the usb tree and Linus' tree.
+  arch/arm64/include/asm/mmu_context.h
+
+between commit:
+
+  f911c2a7c096 ("arm64: use asm-generic/mmu_context.h for no-op implementat=
+ions")
+
+from the asm-generic tree and commit:
+
+  48118151d8cc ("arm64: mm: Pin down ASIDs for sharing mm with devices")
+
+from the arm64 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UgAcjbHUvajYlQ+TL+=e3lV
+diff --cc arch/arm64/include/asm/mmu_context.h
+index fe2862aa1dad,0672236e1aea..000000000000
+--- a/arch/arm64/include/asm/mmu_context.h
++++ b/arch/arm64/include/asm/mmu_context.h
+@@@ -174,9 -174,16 +174,15 @@@ static inline void cpu_replace_ttbr1(pg
+   * Setting a reserved TTBR0 or EPD0 would work, but it all gets ugly when=
+ you
+   * take CPU migration into account.
+   */
+ -#define destroy_context(mm)		do { } while(0)
+  void check_and_switch_context(struct mm_struct *mm);
+ =20
+- #define init_new_context(tsk,mm)	({ atomic64_set(&(mm)->context.id, 0); 0=
+; })
++ static inline int
++ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
++ {
++ 	atomic64_set(&mm->context.id, 0);
++ 	refcount_set(&mm->context.pinned, 0);
++ 	return 0;
++ }
+ =20
+  #ifdef CONFIG_ARM64_SW_TTBR0_PAN
+  static inline void update_saved_ttbr0(struct task_struct *tsk,
+@@@ -245,8 -251,12 +251,11 @@@ switch_mm(struct mm_struct *prev, struc
+  void verify_cpu_asid_bits(void);
+  void post_ttbr_update_workaround(void);
+ =20
++ unsigned long arm64_mm_context_get(struct mm_struct *mm);
++ void arm64_mm_context_put(struct mm_struct *mm);
++=20
+ +#include <asm-generic/mmu_context.h>
+ +
+  #endif /* !__ASSEMBLY__ */
+ =20
+  #endif /* !__ASM_MMU_CONTEXT_H */
+
+--Sig_/lN7TGM5Qqm/+r7wgw9jm1l8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Dg8QACgkQAVBC80lX
-0GzhMAf/fbC6R3v0ksr5x4jSQeQIxhEc/3Z0uzspPaHzbQEIl6yMGHBGI4b2gmGr
-1LzThwRKFwGd3yBeYFy0ug9lOQAwko+bbUHZaPMXefZn/1INQeLQZ+7BoqJ1tEnA
-YGv185+gtBEpobWro3b14mmoxInTjG0nOjAMtbEaqpLOtSAEmaGP2L6oE9HnF/Dk
-8up/QXkBsSq+zH/qrsIf+YyETkhqSvDQEBlRrxzGPJEPuAs4ml2DPhQme8zbXChW
-25u0MKcekdfOKvm+brSuF++0cr/k0Al8AvI10s7yOmbEoaeKCP/gI0SODASUjD5V
-UW8xiG8Bei3sXqck7YHemgrf+rX7gw==
-=+QPX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+DjI4ACgkQAVBC80lX
+0GxFHAf7Bdi6RDISnaXZnrhn+rc6pobGbLcoahUYwnkk/DgpX4t34PRcYnbB5o2k
+XIJyXzEREqdmEHixrNv/Lro1XgINjIFHs7kH8TYebLAeoIgDUr4N2YLJ/sP8hFgf
+ZaM+/Kvw8NJA77/56GcDYYNrVp5REnUrMMTztaJ17S/+zm65d084sy81wFvKnGAU
+OQmWkQBdboyen2yDiG7mUKazaAGJvXF64qyr/U0MGZqntLPlBg3/Vu9UW0A2eYIg
+zhYHZBfZOYGi2HzOPVVYy0G4EGJIlmDkt0F1DKd4lEAVOK6lBfv7YKaNS1Ax/XNN
++UqyGKyI8lsIYVox7tm+9voe50YkLQ==
+=7BKA
 -----END PGP SIGNATURE-----
 
---Sig_/UgAcjbHUvajYlQ+TL+=e3lV--
+--Sig_/lN7TGM5Qqm/+r7wgw9jm1l8--

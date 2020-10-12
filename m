@@ -2,123 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F5528AEC3
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 09:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37D528AF93
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 10:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgJLHGc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Oct 2020 03:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbgJLHGb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Oct 2020 03:06:31 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFA9C0613CE;
-        Mon, 12 Oct 2020 00:06:31 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id q7so14971175ile.8;
-        Mon, 12 Oct 2020 00:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=SRoIVG6H/Y91QXxgqhGCHvTR9cPOGgBN0laolAnXTB8=;
-        b=Yliuc5PIIDYE3gdaIPk5I885ofQSSAeTB1cjLn38xOO1eZ9MCVMzSbcQZuwzoDrgWd
-         s7xonkYufqJkNGYWYHON783DAGCjAS/wQZ9vdQsGZhiSY2WwyDqPKQ02xwo4IWjzqlSw
-         lyZ6JWONaZeLnEDVwjXBytGO0U+aZEtJVf8I3a++o0KaeOCXb/uplt0V7WCEm31sejaX
-         NXj+kgZ14QNmo0adPHCUGo4jV5rYwE3gvje7QOgBch07vtgilC+DFc6qC11ibFUU1Jwf
-         bX7czaYK9NkS4WE/r0mfAsBqnrXBjttL8tSWXShwdGzFUheYqJJYs0lqG9QNUphZ4uii
-         ADCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=SRoIVG6H/Y91QXxgqhGCHvTR9cPOGgBN0laolAnXTB8=;
-        b=YJcHQgt8d4+FvJJ+HdfrHz4eyLLi+lnaKhKRq2GZZFh3LaKClcm8yz0vxu9eajTBg9
-         /HdFYZCmzD+/svxZYwfFJUgKcSdZWs12+cc4AhAf9sQQyxBTsp20C4oPLO2zWFY/Fgsw
-         uxieI2ztgzAcGzMTN5HcIHr09uDKHHzfQ+dCt8Rb0L8K3mOr2CW16/sS9L18QjjKnKyk
-         mI2qOqIalkmCB+BxSkSKoDkeX+HwllxoZPttjjjiERZwoO0f0GPLqdOKpMa5pWufAk8o
-         uwX/BwFOjcIZxGUkSKZjC2aLH/yLFeiMRFlnOfAW8hf1Edx+J98sKCirbqpWOG59vePp
-         bfOg==
-X-Gm-Message-State: AOAM532Vi6R783arnfo0qczP7sObzXh/leDI+rkjwnA7wT7HbWhiOTyu
-        ZOGHT4OzrzcKDdgsnWKb3CF4npcp4ugPfqcPjFZPYkoj0VA=
-X-Google-Smtp-Source: ABdhPJwFv69oxeR9rSNckDagw2DpAldHoeht35URq3zDQ0LOTiz62VTmJrRKYRHst/a5B169av6GUd3BhLnLDdxOnqs=
-X-Received: by 2002:a92:c986:: with SMTP id y6mr17476173iln.10.1602486390850;
- Mon, 12 Oct 2020 00:06:30 -0700 (PDT)
+        id S1726703AbgJLIDC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Oct 2020 04:03:02 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:53605 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbgJLIDC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Oct 2020 04:03:02 -0400
+Received: from mail-lf1-f53.google.com ([209.85.167.53]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1Mx0VH-1kHvLz2vvv-00yQ5g; Mon, 12 Oct 2020 10:03:00 +0200
+Received: by mail-lf1-f53.google.com with SMTP id c141so10789852lfg.5;
+        Mon, 12 Oct 2020 01:03:00 -0700 (PDT)
+X-Gm-Message-State: AOAM5329rPpF4X0jNpISzjyKGS9ElycpcARJDozJ56RnJ66uV3ypd9tX
+        3wzPkXSqMqnKu1qiwSZ5g87TZu1gGWijPS/Oe4E=
+X-Google-Smtp-Source: ABdhPJx11cXgd7NuyGgFGTokjzGvI9x76aNkz9qF5daELeSTHToGxJqvkn1G/zD5r3PdGT6e1Rse9dVo5HWd3YU1gAM=
+X-Received: by 2002:ac2:446b:: with SMTP id y11mr4705383lfl.403.1602489780126;
+ Mon, 12 Oct 2020 01:03:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201009112327.GC656950@krava> <cover.thread-251403.your-ad-here.call-01602244460-ext-7088@work.hours>
- <patch-1.thread-251403.git-2514037e9477.your-ad-here.call-01602244460-ext-7088@work.hours>
-In-Reply-To: <patch-1.thread-251403.git-2514037e9477.your-ad-here.call-01602244460-ext-7088@work.hours>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon, 12 Oct 2020 09:06:17 +0200
-Message-ID: <CA+icZUVk_OMN76PCug-QAAzMOw=EWFwt=-MdxDVGpj5NYQ-bvg@mail.gmail.com>
-Subject: Re: [PATCH RESEND 1/1] perf build: Allow nested externs to enable
- BUILD_BUG() usage
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+References: <20201012095158.779c6d9d@canb.auug.org.au>
+In-Reply-To: <20201012095158.779c6d9d@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 12 Oct 2020 10:02:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2gLDw8rOYPgg=-hnNcK_5NW-fGHmiJ3ntb0dbf1EjQOQ@mail.gmail.com>
+Message-ID: <CAK8P3a2gLDw8rOYPgg=-hnNcK_5NW-fGHmiJ3ntb0dbf1EjQOQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the arm64 tree with the asm-generic tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:xjt3PXPnjTuI/+1Dwfs2jLk7eSdwUQnP7mRB6hkbAUPLqqPBDoe
+ vVpzSDhsw3iVH2AdbC5t5lgvVhTflkVgXGeNVGemPiWNlyxYI0E78GrBEZX6wq+ry3r9r2d
+ SQy6t/tInQgWYmzWEBjo395Eh/ksXTA9h1g+C437WzJKcJg4l7yX7qTcZ+yjPvkClTkxu7L
+ X6xVKDmI4chPLMgVU08Rw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5A5TrkE48kY=:ZcYEY4RLldJ54grMBAQIMc
+ T7APgyTnY4Lo9n/iJup7Wr+9Fkpp9oa0fgJE41CiTDEfVauiRWyvr7Ffjh8rCU2xCCufKCy5X
+ 5y/CDc+JB9hdTX1ARA8UUxhr38GL69Zqcv9iBsZGGEHef7XLizzfPFmX0Po1i7jMbfpVm8M1Z
+ 7cXR5gyrLiWRESpzWU9aUFKll57JQlNEze1BdAzlyJlb2+DyHTzXjmVpkLhgRDJNPnF/87iRi
+ 8YlGpojFMq3dnPoMYQ8rrarvjkVMXKOAZczAKn/TO1jsldVZM4Hy8pqATctqXvorA/l3rYnCv
+ h8CaIOTu8c/blXqaiPK7vdXPlzKUtW7uvU2Jw7VfQQ+It0nEZa1/11P2nPQK+4rCVZbTaGINa
+ MGbgPx6EVGimce5u9ivGDZFB1cmia8lVtNPb0St6sYRQ8aB9Wv99louZRhX52ZPW8scahaoUs
+ hXe9AmbsnBVNAaugNtO83XOAQxWP92hYtc+q4LYdgiyUO3dgG3hEcIUY79JPTZ6h/2iI6LUhU
+ oLo9EFkAMUvO7KR4RN2EzcftRb/eEMq8h8yMCWqoMU1LkzCGioCPpgJO1Rx3spotyzGn1zCr+
+ IWSuFPXZfPoBDdSChUDk0ZJ3CxGFo+tbkNWLSsPnPReFGDJ0enwnFXaPkHtNtTzvUuqSekrYa
+ D+EaINPLuePNXXmqLhZeypaRxREmGnO2Ec9aAhF99eCxvR9RVvQ1kzcp/sUFVrdlpo91Mz1Gl
+ WKjO63jBFdeApOXVI7ewZhZNMpRVoTitii9s7pYEfepXvKlpyRPDykPqZECkqo9/Tg/SD9ooZ
+ dYSVuUBdrFQm7T+7t95OwTUngHYPBg7Fe3ZF10PHMeYHahdonefTVcZvMEWQLKsSnjfFs12M+
+ yTmc0bQwmIJX67OpztIABOCQDTClvcZ/7yspeBZ5H0GrYbfpNgp5vFhbBpurkVizp7YsvluHe
+ c1cUf3iGWrwBG7mFu6bv8lvggymVsXw9+V5kt1YqRk8ooRdGXomuO
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 8:35 PM Vasily Gorbik <gor@linux.ibm.com> wrote:
+On Mon, Oct 12, 2020 at 12:52 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Currently BUILD_BUG() macro is expanded to smth like the following:
+> Hi all,
+>
+> Today's linux-next merge of the arm64 tree got a conflict in:
+>
+>   arch/arm64/include/asm/mmu_context.h
+>
+> between commit:
+>
+>   f911c2a7c096 ("arm64: use asm-generic/mmu_context.h for no-op implementations")
+>
+> from the asm-generic tree and commit:
+>
+>   48118151d8cc ("arm64: mm: Pin down ASIDs for sharing mm with devices")
+>
+> from the arm64 tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
 
-Two feedbacks:
+Sorry about that, I had pushed my asm-generic branch to the correct
+location on Friday after I noticed it was missing. Removed it again now
+until the end up the merge window.
 
-#1: Greg KH told me to expand abbreviated words, here "smth = something".
-
-#2: Interesting to see an ASCII-art in the signature is causing such troubles.
-
-- Sedat -
-
-
->    do {
->            extern void __compiletime_assert_0(void)
->                    __attribute__((error("BUILD_BUG failed")));
->            if (!(!(1)))
->                    __compiletime_assert_0();
->    } while (0);
->
-> If used in a function body this obviously would produce build errors
-> with -Wnested-externs and -Werror.
->
-> To enable BUILD_BUG() usage in tools/arch/x86/lib/insn.c which perf
-> includes in intel-pt-decoder, build perf without -Wnested-externs.
->
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-> ---
->  Resend with no fancy signatures.
->
->  tools/perf/Makefile.config | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 854da830b5ca..834061e94e7c 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -16,7 +16,7 @@ $(shell printf "" > $(OUTPUT).config-detected)
->  detected     = $(shell echo "$(1)=y"       >> $(OUTPUT).config-detected)
->  detected_var = $(shell echo "$(1)=$($(1))" >> $(OUTPUT).config-detected)
->
-> -CFLAGS := $(EXTRA_CFLAGS) $(EXTRA_WARNINGS)
-> +CFLAGS := $(EXTRA_CFLAGS) $(filter-out -Wnested-externs,$(EXTRA_WARNINGS))
->
->  include $(srctree)/tools/scripts/Makefile.arch
->
-> --
-> 2.25.4
+       Arnd

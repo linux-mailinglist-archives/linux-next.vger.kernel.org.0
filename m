@@ -2,345 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4481C28C418
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 23:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCC428C563
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 01:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730053AbgJLVaf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Oct 2020 17:30:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726348AbgJLVae (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Oct 2020 17:30:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602538231;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ByWRY92fMU4wBwTlNUv/ZSHauYCNih98DAlLxy56we8=;
-        b=FLe0r+CiCWxBzbH6tx8w4PgxVFSQBZFS8rLIUttXz14hT8KKigsfYqV/AXnpGv4swFGs/w
-        nc8ZPI9s4s9UGeiMylst43Rk9dDjXf1xkl0Sb70jJh9HKIekPdOUGEYFQvwwgDBLz6ykMD
-        nttFCrE2L4uf07bZYgNfy0bqyQEOPuo=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-594-ZV8zBSspOFCvRxlX1iPYdA-1; Mon, 12 Oct 2020 17:30:29 -0400
-X-MC-Unique: ZV8zBSspOFCvRxlX1iPYdA-1
-Received: by mail-qv1-f70.google.com with SMTP id w16so2927589qvj.14
-        for <linux-next@vger.kernel.org>; Mon, 12 Oct 2020 14:30:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc:date
-         :in-reply-to:references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=ByWRY92fMU4wBwTlNUv/ZSHauYCNih98DAlLxy56we8=;
-        b=P/h6nyhtGHnrO0nTPZhmgmIKiCuCrPblvA3ONtNJ667d+PSorysnqbm5XvZ1h46IWj
-         /Ce3Io7VMvcKNe8zWxmBfHsAZpAdOCGcaDaVPuJiyBntUg5SRnna4CT3TyR9dpga5S1S
-         HbA4zPs28AAKEU3nXtF5gsmtAcsGkLrEPMovcDvqkNou7xocGZPVeDnteny25sURtf1M
-         BRS0T1SQuB6r0g/8DdfMaTz2IGpo7eku5c8X3DGTqkSSykhFMZzSL4aYYoZYJTfyHE3H
-         jXfaKHFraCV7mITC/Q7Q8LyGT3kWyfYhGewI3jYEc5kD6Cu+fJeX5gRwsB4CAihBHnuy
-         XAZQ==
-X-Gm-Message-State: AOAM532ziihZc5xeutywfP8q2vSrh8o070n05FER0eXB3oWCAVAf7VmV
-        iKIVWsRoHjukw9AeM9T/NDGPLTzNV52lv3vu0jfFMJePoZ+0YrwlkRccp7u5pr8erGD4Lx/VJZD
-        lQsFQmeCCgWtP8nCcAI1ZSw==
-X-Received: by 2002:ac8:688b:: with SMTP id m11mr10029823qtq.177.1602538227935;
-        Mon, 12 Oct 2020 14:30:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxoukR4gOSKG0pB8NrTDZ6vlc5dVaB6114hAedoRjjDKdoxqGAq1cbkVhXL29kXiz09KM6G1w==
-X-Received: by 2002:ac8:688b:: with SMTP id m11mr10029803qtq.177.1602538227505;
-        Mon, 12 Oct 2020 14:30:27 -0700 (PDT)
-Received: from Whitewolf.lyude.net (pool-108-49-102-102.bstnma.fios.verizon.net. [108.49.102.102])
-        by smtp.gmail.com with ESMTPSA id y125sm12791634qkb.114.2020.10.12.14.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 14:30:26 -0700 (PDT)
-Message-ID: <842b9325bc232a1333f58788d538684f4738fc6a.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/kms: Fix NULL pointer dereference in
- nouveau_connector_detect_depth
-From:   Lyude Paul <lyude@redhat.com>
-Reply-To: lyude@redhat.com
-To:     Alexander Kapshuk <alexander.kapshuk@gmail.com>, bskeggs@redhat.com
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Date:   Mon, 12 Oct 2020 17:30:25 -0400
-In-Reply-To: <20201009181120.2360-1-alexander.kapshuk@gmail.com>
-References: <20201009181120.2360-1-alexander.kapshuk@gmail.com>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S2389155AbgJLXsN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Oct 2020 19:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388855AbgJLXsN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Oct 2020 19:48:13 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B2CC0613D0;
+        Mon, 12 Oct 2020 16:48:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C9Fjd73Frz9sTf;
+        Tue, 13 Oct 2020 10:48:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1602546486;
+        bh=tsA+FpAYJ79DdkImsUuB55VqWEvgtK9G7BhifvUYuIg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R7fu8uy5xHzwglAwVG/HCIY6UElV04dIg1VvkgInLNDOKwhvshfQwDAj7Nkggj9qO
+         Ri2ncW8x2vQ8KE6craIsjzM65npAVMWDE7OsSKevpljiu4mQHuLP1pJuR7jV8D0Ps1
+         eCZ949jKPWtyhrpYwwkFZ4+ab4QMi9DuRmf5uzoj7JGdXYDiPRATzC3gZX/HhjA5vU
+         jOYSQRRyww5LyMnWqLvWktMj6LmPyY/lpPdOrMJMLbpMDhErxWToJ5mRqM6dXZrmWQ
+         1HiXm23iUMvQKsbVvKdLpe4OyhF4W1xtDPULDW8hZQy2JaAfP1NJnns2AKlxL5ZToc
+         I86B43phnIhtQ==
+Date:   Tue, 13 Oct 2020 10:47:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Max Reitz <mreitz@redhat.com>,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: linux-next: manual merge of the fuse tree with Linus' tree
+Message-ID: <20201013104747.559128e7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/h5hLElEIrFzfhb0L6gQk4_x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi! Thanks for the catch, just one comment down below
+--Sig_/h5hLElEIrFzfhb0L6gQk4_x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2020-10-09 at 21:11 +0300, Alexander Kapshuk wrote:
-> This oops manifests itself on the following hardware:
-> 01:00.0 VGA compatible controller: NVIDIA Corporation G98M [GeForce G 103M]
-> (rev a1)
-> 
-> Oct 09 14:17:46 lp-sasha kernel: BUG: kernel NULL pointer dereference,
-> address: 0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: #PF: supervisor read access in kernel mode
-> Oct 09 14:17:46 lp-sasha kernel: #PF: error_code(0x0000) - not-present page
-> Oct 09 14:17:46 lp-sasha kernel: PGD 0 P4D 0
-> Oct 09 14:17:46 lp-sasha kernel: Oops: 0000 [#1] SMP PTI
-> Oct 09 14:17:46 lp-sasha kernel: CPU: 1 PID: 191 Comm: systemd-udevd Not
-> tainted 5.9.0-rc8-next-20201009 #38
-> Oct 09 14:17:46 lp-sasha kernel: Hardware name: Hewlett-Packard Compaq
-> Presario CQ61 Notebook PC/306A, BIOS F.03 03/23/2009
-> Oct 09 14:17:46 lp-sasha kernel: RIP:
-> 0010:nouveau_connector_detect_depth+0x71/0xc0 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel: Code: 0a 00 00 48 8b 49 48 c7 87 b8 00 00 00
-> 06 00 00 00 80 b9 4d 0a 00 00 00 75 1e 83 fa 41 75 05 48 85 c0 75 29 8b 81 10
-> 0d 00 00 <39> 06 7c 25 f6 81 14 0d 00 00 02 75 b7 c3 80 b9 0c 0d 00 00 00 75
-> Oct 09 14:17:46 lp-sasha kernel: RSP: 0018:ffffc9000028f8c0 EFLAGS: 00010297
-> Oct 09 14:17:46 lp-sasha kernel: RAX: 0000000000014c08 RBX: ffff8880369d4000
-> RCX: ffff8880369d3000
-> Oct 09 14:17:46 lp-sasha kernel: RDX: 0000000000000040 RSI: 0000000000000000
-> RDI: ffff8880369d4000
-> Oct 09 14:17:46 lp-sasha kernel: RBP: ffff88800601cc00 R08: ffff8880051da298
-> R09: ffffffff8226201a
-> Oct 09 14:17:46 lp-sasha kernel: R10: ffff88800469aa80 R11: ffff888004c84ff8
-> R12: 0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: R13: ffff8880051da000 R14: 0000000000002000
-> R15: 0000000000000003
-> Oct 09 14:17:46 lp-sasha kernel: FS:  00007fd0192b3440(0000)
-> GS:ffff8880bc900000(0000) knlGS:0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
-> 0000000080050033
-> Oct 09 14:17:46 lp-sasha kernel: CR2: 0000000000000000 CR3: 0000000004976000
-> CR4: 00000000000006e0
-> Oct 09 14:17:46 lp-sasha kernel: Call Trace:
-> Oct 09 14:17:46 lp-sasha kernel:  nouveau_connector_get_modes+0x1e6/0x240
-> [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  ? kfree+0xb9/0x240
-> Oct 09 14:17:46 lp-sasha kernel:  ? drm_connector_list_iter_next+0x7c/0xa0
-> Oct 09 14:17:46 lp-sasha
-> kernel:  drm_helper_probe_single_connector_modes+0x1ba/0x7c0
-> Oct 09 14:17:46 lp-sasha kernel:  drm_client_modeset_probe+0x27e/0x1360
-> Oct 09 14:17:46 lp-sasha kernel:  ? nvif_object_sclass_put+0xc/0x20 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  ? nouveau_cli_init+0x3cc/0x440 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  ? ktime_get_mono_fast_ns+0x49/0xa0
-> Oct 09 14:17:46 lp-sasha kernel:  ? nouveau_drm_open+0x4e/0x180 [nouveau]
-> Oct 09 14:17:46 lp-sasha
-> kernel:  __drm_fb_helper_initial_config_and_unlock+0x3f/0x4a0
-> Oct 09 14:17:46 lp-sasha kernel:  ? drm_file_alloc+0x18f/0x260
-> Oct 09 14:17:46 lp-sasha kernel:  ? mutex_lock+0x9/0x40
-> Oct 09 14:17:46 lp-sasha kernel:  ? drm_client_init+0x110/0x160
-> Oct 09 14:17:46 lp-sasha kernel:  nouveau_fbcon_init+0x14d/0x1c0 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  nouveau_drm_device_init+0x1c0/0x880
-> [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  nouveau_drm_probe+0x11a/0x1e0 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel:  pci_device_probe+0xcd/0x140
-> Oct 09 14:17:46 lp-sasha kernel:  really_probe+0xd8/0x400
-> Oct 09 14:17:46 lp-sasha kernel:  driver_probe_device+0x4a/0xa0
-> Oct 09 14:17:46 lp-sasha kernel:  device_driver_attach+0x9c/0xc0
-> Oct 09 14:17:46 lp-sasha kernel:  __driver_attach+0x6f/0x100
-> Oct 09 14:17:46 lp-sasha kernel:  ? device_driver_attach+0xc0/0xc0
-> Oct 09 14:17:46 lp-sasha kernel:  bus_for_each_dev+0x75/0xc0
-> Oct 09 14:17:46 lp-sasha kernel:  bus_add_driver+0x106/0x1c0
-> Oct 09 14:17:46 lp-sasha kernel:  driver_register+0x86/0xe0
-> Oct 09 14:17:46 lp-sasha kernel:  ? 0xffffffffa044e000
-> Oct 09 14:17:46 lp-sasha kernel:  do_one_initcall+0x48/0x1e0
-> Oct 09 14:17:46 lp-sasha kernel:  ? _cond_resched+0x11/0x60
-> Oct 09 14:17:46 lp-sasha kernel:  ? kmem_cache_alloc_trace+0x19c/0x1e0
-> Oct 09 14:17:46 lp-sasha kernel:  do_init_module+0x57/0x220
-> Oct 09 14:17:46 lp-sasha kernel:  __do_sys_finit_module+0xa0/0xe0
-> Oct 09 14:17:46 lp-sasha kernel:  do_syscall_64+0x33/0x40
-> Oct 09 14:17:46 lp-sasha kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> Oct 09 14:17:46 lp-sasha kernel: RIP: 0033:0x7fd01a060d5d
-> Oct 09 14:17:46 lp-sasha kernel: Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90
-> f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
-> 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d e3 70 0c 00 f7 d8 64 89 01 48
-> Oct 09 14:17:46 lp-sasha kernel: RSP: 002b:00007ffc8ad38a98 EFLAGS: 00000246
-> ORIG_RAX: 0000000000000139
-> Oct 09 14:17:46 lp-sasha kernel: RAX: ffffffffffffffda RBX: 0000563f6e7fd530
-> RCX: 00007fd01a060d5d
-> Oct 09 14:17:46 lp-sasha kernel: RDX: 0000000000000000 RSI: 00007fd01a19f95d
-> RDI: 000000000000000f
-> Oct 09 14:17:46 lp-sasha kernel: RBP: 0000000000020000 R08: 0000000000000000
-> R09: 0000000000000007
-> Oct 09 14:17:46 lp-sasha kernel: R10: 000000000000000f R11: 0000000000000246
-> R12: 00007fd01a19f95d
-> Oct 09 14:17:46 lp-sasha kernel: R13: 0000000000000000 R14: 0000563f6e7fbc10
-> R15: 0000563f6e7fd530
-> Oct 09 14:17:46 lp-sasha kernel: Modules linked in: nouveau(+) ttm xt_string
-> xt_mark xt_LOG vgem v4l2_dv_timings uvcvideo ulpi udf ts_kmp ts_fsm ts_bm
-> snd_aloop sil164 qat_dh895xccvf nf_nat_sip nf_nat_irc nf_nat_ftp nf_nat
-> nf_log_ipv6 nf_log_ipv4 nf_log_common ltc2990 lcd intel_qat input_leds i2c_mux
-> gspca_main videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common
-> videodev mc drivetemp cuse fuse crc_itu_t coretemp ch7006 ath5k ath algif_hash
-> Oct 09 14:17:46 lp-sasha kernel: CR2: 0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: ---[ end trace 0ddafe218ad30017 ]---
-> Oct 09 14:17:46 lp-sasha kernel: RIP:
-> 0010:nouveau_connector_detect_depth+0x71/0xc0 [nouveau]
-> Oct 09 14:17:46 lp-sasha kernel: Code: 0a 00 00 48 8b 49 48 c7 87 b8 00 00 00
-> 06 00 00 00 80 b9 4d 0a 00 00 00 75 1e 83 fa 41 75 05 48 85 c0 75 29 8b 81 10
-> 0d 00 00 <39> 06 7c 25 f6 81 14 0d 00 00 02 75 b7 c3 80 b9 0c 0d 00 00 00 75
-> Oct 09 14:17:46 lp-sasha kernel: RSP: 0018:ffffc9000028f8c0 EFLAGS: 00010297
-> Oct 09 14:17:46 lp-sasha kernel: RAX: 0000000000014c08 RBX: ffff8880369d4000
-> RCX: ffff8880369d3000
-> Oct 09 14:17:46 lp-sasha kernel: RDX: 0000000000000040 RSI: 0000000000000000
-> RDI: ffff8880369d4000
-> Oct 09 14:17:46 lp-sasha kernel: RBP: ffff88800601cc00 R08: ffff8880051da298
-> R09: ffffffff8226201a
-> Oct 09 14:17:46 lp-sasha kernel: R10: ffff88800469aa80 R11: ffff888004c84ff8
-> R12: 0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: R13: ffff8880051da000 R14: 0000000000002000
-> R15: 0000000000000003
-> Oct 09 14:17:46 lp-sasha kernel: FS:  00007fd0192b3440(0000)
-> GS:ffff8880bc900000(0000) knlGS:0000000000000000
-> Oct 09 14:17:46 lp-sasha kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
-> 0000000080050033
-> Oct 09 14:17:46 lp-sasha kernel: CR2: 0000000000000000 CR3: 0000000004976000
-> CR4: 00000000000006e0
-> 
-> The disassembly:
-> Code: 0a 00 00 48 8b 49 48 c7 87 b8 00 00 00 06 00 00 00 80 b9 4d 0a 00 00 00
-> 75 1e 83 fa 41 75 05 48 85 c0 75 29 8b 81 10 0d 00 00 <39> 06 7c 25 f6 81 14
-> 0d 00 00 02 75 b7 c3 80 b9 0c 0d 00 00 00 75
-> All code
-> ========
->    0:   0a 00                   or     (%rax),%al
->    2:   00 48 8b                add    %cl,-0x75(%rax)
->    5:   49                      rex.WB
->    6:   48 c7 87 b8 00 00 00    movq   $0x6,0xb8(%rdi)
->    d:   06 00 00 00
->   11:   80 b9 4d 0a 00 00 00    cmpb   $0x0,0xa4d(%rcx)
->   18:   75 1e                   jne    0x38
->   1a:   83 fa 41                cmp    $0x41,%edx
->   1d:   75 05                   jne    0x24
->   1f:   48 85 c0                test   %rax,%rax
->   22:   75 29                   jne    0x4d
->   24:   8b 81 10 0d 00 00       mov    0xd10(%rcx),%eax
->   2a:*  39 06                   cmp    %eax,(%rsi)              <-- trapping
-> instruction
->   2c:   7c 25                   jl     0x53
->   2e:   f6 81 14 0d 00 00 02    testb  $0x2,0xd14(%rcx)
->   35:   75 b7                   jne    0xffffffffffffffee
->   37:   c3                      retq
->   38:   80 b9 0c 0d 00 00 00    cmpb   $0x0,0xd0c(%rcx)
->   3f:   75                      .byte 0x75
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0:   39 06                   cmp    %eax,(%rsi)
->    2:   7c 25                   jl     0x29
->    4:   f6 81 14 0d 00 00 02    testb  $0x2,0xd14(%rcx)
->    b:   75 b7                   jne    0xffffffffffffffc4
->    d:   c3                      retq
->    e:   80 b9 0c 0d 00 00 00    cmpb   $0x0,0xd0c(%rcx)
->   15:   75                      .byte 0x75
-> 
-> objdump -SF --disassemble=nouveau_connector_detect_depth
-> [...]
->         if (nv_connector->edid &&
->    c85e1:       83 fa 41                cmp    $0x41,%edx
->    c85e4:       75 05                   jne    c85eb
-> <nouveau_connector_detect_depth+0x6b> (File Offset: 0xc866b)
->    c85e6:       48 85 c0                test   %rax,%rax
->    c85e9:       75 29                   jne    c8614
-> <nouveau_connector_detect_depth+0x94> (File Offset: 0xc8694)
->             nv_connector->type == DCB_CONNECTOR_LVDS_SPWG)
->                 duallink = ((u8 *)nv_connector->edid)[121] == 2;
->         else
->                 duallink = mode->clock >= bios->fp.duallink_transition_clk;
-> 
->         if ((!duallink && (bios->fp.strapless_is_24bit & 1)) ||
->    c85eb:       8b 81 10 0d 00 00       mov    0xd10(%rcx),%eax
->    c85f1:       39 06                   cmp    %eax,(%rsi)
->    c85f3:       7c 25                   jl     c861a
-> <nouveau_connector_detect_depth+0x9a> (File Offset: 0xc869a)
->             ( duallink && (bios->fp.strapless_is_24bit & 2)))
->    c85f5:       f6 81 14 0d 00 00 02    testb  $0x2,0xd14(%rcx)
->    c85fc:       75 b7                   jne    c85b5
-> <nouveau_connector_detect_depth+0x35> (File Offset: 0xc8635)
->                 connector->display_info.bpc = 8;
-> [...]
-> 
-> % scripts/faddr2line /lib/modules/5.9.0-rc8-next-
-> 20201009/kernel/drivers/gpu/drm/nouveau/nouveau.ko
-> nouveau_connector_detect_depth+0x71/0xc0
-> nouveau_connector_detect_depth+0x71/0xc0:
-> nouveau_connector_detect_depth at /home/sasha/linux-
-> next/drivers/gpu/drm/nouveau/nouveau_connector.c:891
-> 
-> It is actually line 889. See the disassembly above.
-> 889                     duallink = mode->clock >= bios-
-> >fp.duallink_transition_clk;
-> 
-> The NULL pointer being dereferenced is mode.
-> 
-> Git bisect has identified the following commit as bad:
-> f28e32d3906e drm/nouveau/kms: Don't change EDID when it hasn't actually
-> changed
-> 
-> Here is the chain of events that causes the oops.
-> On entry to nouveau_connector_detect_lvds, edid is set to NULL.
-> The call to nouveau_connector_detect sets nv_connector->edid to valid
-> memory, with status being set to connector_status_connected and the flow
-> of execution branching to the out label.
-> 
-> The subsequent call to nouveau_connector_set_edid erronously clears
-> nv_connector->edid, via the local edid pointer which remains set to NULL.
-> 
-> Fix this by setting edid to the value of the just acquired
-> nv_connector->edid and call nouveau_connector_set_edid in the out label
-> only if nv_connector->edid and edid point to different memory addresses
-> thus preventing nv_connector->edid from being turned into a dangling
-> pointer.
-> 
-> Fixes: f28e32d3906e ("drm/nouveau/kms: Don't change EDID when it hasn't
-> actually changed")
-> Signed-off-by: Alexander Kapshuk <alexander.kapshuk@gmail.com>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_connector.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c
-> b/drivers/gpu/drm/nouveau/nouveau_connector.c
-> index 49dd0cbc332f..a3f53d2ac86e 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_connector.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
-> @@ -669,8 +669,10 @@ nouveau_connector_detect_lvds(struct drm_connector
-> *connector, bool force)
->  	/* Try retrieving EDID via DDC */
->  	if (!drm->vbios.fp_no_ddc) {
->  		status = nouveau_connector_detect(connector, force);
-> -		if (status == connector_status_connected)
-> +		if (status == connector_status_connected) {
-> +			edid = nv_connector->edid;
->  			goto out;
-> +		}
->  	}
-> 
->  	/* On some laptops (Sony, i'm looking at you) there appears to
-> @@ -720,7 +722,8 @@ nouveau_connector_detect_lvds(struct drm_connector
-> *connector, bool force)
->  		status = connector_status_unknown;
->  #endif
-> 
-> -	nouveau_connector_set_edid(nv_connector, edid);
-> +	if (nv_connector->edid != edid)
-> +		nouveau_connector_set_edid(nv_connector, edid);
+Hi all,
 
-Could we just update nouveau_connector_set_edid() to do the (nv_connector->edid
-!= edid) check instead of open coding it here?
+Today's linux-next merge of the fuse tree got a conflict in:
 
-With that fixed:
+  fs/fuse/file.c
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
->  	nouveau_connector_set_encoder(connector, nv_encoder);
->  	return status;
->  }
-> --
-> 2.28.0
-> 
--- 
-Sincerely,
-      Lyude Paul (she/her)
-      Software Engineer at Red Hat
+between commit:
 
+  933a3752babc ("fuse: fix the ->direct_IO() treatment of iov_iter")
+
+from Linus' tree and commit:
+
+  fcee216beb9c ("fuse: split fuse_mount off of fuse_conn")
+
+from the fuse tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/fuse/file.c
+index 43c165e796da,53d4dd1ab992..000000000000
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@@ -3120,17 -3156,10 +3146,18 @@@ fuse_direct_IO(struct kiocb *iocb, stru
+  	 * By default, we want to optimize all I/Os with async request
+  	 * submission to the client filesystem if supported.
+  	 */
+- 	io->async =3D ff->fc->async_dio;
+ -	io->async =3D async_dio;
+++	io->async =3D ff->fm->fc->async_dio;
+  	io->iocb =3D iocb;
+  	io->blocking =3D is_sync_kiocb(iocb);
+ =20
+ +	/* optimization for short read */
+ +	if (io->async && !io->write && offset + count > i_size) {
+- 		iov_iter_truncate(iter, fuse_round_up(ff->fc, i_size - offset));
+++		iov_iter_truncate(iter, fuse_round_up(ff->fm->fc,
+++				  i_size - offset));
+ +		shortened =3D count - iov_iter_count(iter);
+ +		count -=3D shortened;
+ +	}
+ +
+  	/*
+  	 * We cannot asynchronously extend the size of a file.
+  	 * In such case the aio will behave exactly like sync io.
+
+--Sig_/h5hLElEIrFzfhb0L6gQk4_x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+E6yMACgkQAVBC80lX
+0GwVLQf/Xcp+10ogecx1mL8vumFkhv4KP7guIxHq5/gp+XTvjgpU0mS9VlBnzb6W
+pEhSG+PIlw7mzy2tahwFJkYA4ljF5rhBVk/NQi7r6t8GMQdR2XCx5IUF8blSS925
+eBFQW5Ww4VjvfyUXxz/PCylw695nCicM8J8IGensszB1GYRwnr0mT0JMieybdJOY
+m+xg5ove3Alp2gSHIC+t0I9cbpb0W7qCQCWWeuUztv+4Mjpym6atzwCnDa8reX6D
+4xkKPhVL0DBKsEupWUzXMFYcQQpF/hHgWgQ7GRSw7QYiUOFEMMHg4PDZENdfyK6N
+SV+P9lcwpY/d3gMq0NwUBLKbKMN42w==
+=GCQ+
+-----END PGP SIGNATURE-----
+
+--Sig_/h5hLElEIrFzfhb0L6gQk4_x--

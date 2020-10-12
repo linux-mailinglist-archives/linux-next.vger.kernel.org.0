@@ -2,148 +2,201 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD30428ACB9
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 06:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D8028ACD8
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 06:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727520AbgJLETx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Oct 2020 00:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726706AbgJLETx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Oct 2020 00:19:53 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7216C0613CE;
-        Sun, 11 Oct 2020 21:19:52 -0700 (PDT)
+        id S1728203AbgJLEZA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Oct 2020 00:25:00 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44397 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726706AbgJLEZA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Oct 2020 00:25:00 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8lnd1x8Qz9sT6;
-        Mon, 12 Oct 2020 15:19:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8lvV5YHWz9sTr;
+        Mon, 12 Oct 2020 15:24:53 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602476389;
-        bh=6nzOIoDHDbw2mX03lk95gkKSdnAkCM8m8l/dKKO68TE=;
+        s=201702; t=1602476696;
+        bh=V42sruk0+lv2KrynPMxQFmIBmqyCNPJsMXYMk6z+xUs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LxAznhpnq8h6/CbKcUBguBKfGG5kU28tZB4xWboaQBB6g3XYA4X23q68Ugz3RgZF9
-         n3ixW2mLbUlUs6W2OsQXM66A/gLlUgZYlU87+waDCv5TJKoZPg8ILWetFh7nNZTW1j
-         s+JmRDO+Sg7wcdtjEzbKyDqQOdc7Eri7OXmAFmRd9LbdsVORLU0oXyF8CeGnOcTJAZ
-         7cS3nogYyAHSyMnKusy3a4OJCLpzZ2yicZW490+NCRg1+cjp4za9t55dIEXAx8UQyC
-         xFnWCxS2qjDvbB4UPdDQiWsDesvXTSI9UTtAueq+o+qczx929xTyXJi5wjdce0bbb6
-         sJyIGtA/rm82A==
-Date:   Mon, 12 Oct 2020 15:19:48 +1100
+        b=pEu8KRyuzcu0JerpjF/Dod+RgU5S9805mP5dJOyncw8NE942wFoYfqXMA6UL15RqF
+         1ds6SjHv8fk/De4eL7WOwjILSYj3fnzHVzpe3Za2jxYc1o6LH5kR2OQQt19WH4q3nD
+         J3oWYRfU6ZVur9u0hzbx6ZyszPEmLFF/eR4Ab9Rbn96COFZDR+zYor/bNvKwYzrL3M
+         HzCY06ulR2lm7q9Kgm6aheimun8YJl4RJ7bW7bzChybrwcvZN6SGaM/9jThvhCWImP
+         LxK8dHypm9NraldhduDQG53uiTZIBqiR8Wmo49prk0Ecyipi80qavVmhBeQNNWQI4a
+         /li+fNC9oeuWA==
+Date:   Mon, 12 Oct 2020 15:24:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>, Dave Airlie <airlied@linux.ie>,
-        Doug Ledford <dledford@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the hmm tree
-Message-ID: <20201012151948.3a840c00@canb.auug.org.au>
-In-Reply-To: <20201006164120.GI4734@nvidia.com>
-References: <20201006203508.3cb3d0e3@canb.auug.org.au>
-        <20201006164120.GI4734@nvidia.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20201012152452.432c4867@canb.auug.org.au>
+In-Reply-To: <20201008154202.175fbec7@canb.auug.org.au>
+References: <20201008140903.12a411b8@canb.auug.org.au>
+        <20201008154202.175fbec7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6gb=Pmpxd4aBBoRVlHZ1V50";
+Content-Type: multipart/signed; boundary="Sig_/mU+rg28WViFZLTuKkAevgnd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6gb=Pmpxd4aBBoRVlHZ1V50
+--Sig_/mU+rg28WViFZLTuKkAevgnd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 6 Oct 2020 13:41:20 -0300 Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Thu, 8 Oct 2020 15:42:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> On Tue, Oct 06, 2020 at 08:35:08PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the hmm tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> >=20
-> > Caused by commit
-> >=20
-> >   07da1223ec93 ("lib/scatterlist: Add support in dynamic allocation of =
-SG table from pages")
-> >=20
-> > interacting with commit
-> >=20
-> >   707d561f77b5 ("drm: allow limiting the scatter list size.")
-> >=20
-> > from the drm tree.
-> >=20
-> > I have added the following merge fix patch
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 6 Oct 2020 20:22:51 +1100
-> > Subject: [PATCH] lib/scatterlist: merge fix for "drm: allow limiting the
-> >  scatter list size."
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >  drivers/gpu/drm/drm_prime.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-> > index 11fe9ff76fd5..83ac901b65a2 100644
-> > +++ b/drivers/gpu/drm/drm_prime.c
-> > @@ -807,6 +807,7 @@ struct sg_table *drm_prime_pages_to_sg(struct drm_d=
-evice *dev,
-> >  				       struct page **pages, unsigned int nr_pages)
-> >  {
-> >  	struct sg_table *sg =3D NULL;
-> > +	struct scatterlist *sl;
-> >  	size_t max_segment =3D 0;
-> >  	int ret;
-> > =20
-> > @@ -820,11 +821,13 @@ struct sg_table *drm_prime_pages_to_sg(struct drm=
-_device *dev,
-> >  		max_segment =3D dma_max_mapping_size(dev->dev);
-> >  	if (max_segment =3D=3D 0 || max_segment > SCATTERLIST_MAX_SEGMENT)
-> >  		max_segment =3D SCATTERLIST_MAX_SEGMENT;
-> > -	ret =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
-> > +	sl =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
-> >  					  nr_pages << PAGE_SHIFT,
-> > -					  max_segment, GFP_KERNEL);
-> > -	if (ret)
-> > +					  max_segment, NULL, 0, GFP_KERNEL);
-> > +	if (IS_ERR(sl)) {
-> > +		ret =3D PTR_ERR(sl);
-> >  		goto out;
-> > +	}
-> > =20
-> >  	return sg;
-> >  out: =20
+> On Thu, 8 Oct 2020 14:09:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > After merging the drm-misc tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this: =20
 >=20
-> This looks OK to me, thanks
+> In file included from include/linux/clk.h:13,
+>                  from drivers/gpu/drm/ingenic/ingenic-drm-drv.c:10:
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c: In function 'ingenic_drm_updat=
+e_palette':
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:35: error: 'struct ingenic_=
+drm' has no member named 'dma_hwdescs'; did you mean 'dma_hwdesc_f0'?
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                                   ^~~~~~~~~~~
+> include/linux/kernel.h:47:33: note: in definition of macro 'ARRAY_SIZE'
+>    47 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_=
+be_array(arr))
+>       |                                 ^~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:35: error: 'struct ingenic_=
+drm' has no member named 'dma_hwdescs'; did you mean 'dma_hwdesc_f0'?
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                                   ^~~~~~~~~~~
+> include/linux/kernel.h:47:48: note: in definition of macro 'ARRAY_SIZE'
+>    47 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_=
+be_array(arr))
+>       |                                                ^~~
+> In file included from include/linux/bits.h:22,
+>                  from include/linux/bitops.h:5,
+>                  from drivers/gpu/drm/ingenic/ingenic-drm.h:10,
+>                  from drivers/gpu/drm/ingenic/ingenic-drm-drv.c:7:
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:35: error: 'struct ingenic_=
+drm' has no member named 'dma_hwdescs'; did you mean 'dma_hwdesc_f0'?
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                                   ^~~~~~~~~~~
+> include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_=
+ON_ZERO'
+>    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e));=
+ })))
+>       |                                                              ^
+> include/linux/compiler.h:224:46: note: in expansion of macro '__same_type'
+>   224 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a=
+)[0]))
+>       |                                              ^~~~~~~~~~~
+> include/linux/kernel.h:47:59: note: in expansion of macro '__must_be_arra=
+y'
+>    47 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_=
+be_array(arr))
+>       |                                                           ^~~~~~~=
+~~~~~~~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:18: note: in expansion of m=
+acro 'ARRAY_SIZE'
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                  ^~~~~~~~~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:35: error: 'struct ingenic_=
+drm' has no member named 'dma_hwdescs'; did you mean 'dma_hwdesc_f0'?
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                                   ^~~~~~~~~~~
+> include/linux/build_bug.h:16:62: note: in definition of macro 'BUILD_BUG_=
+ON_ZERO'
+>    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e));=
+ })))
+>       |                                                              ^
+> include/linux/compiler.h:224:46: note: in expansion of macro '__same_type'
+>   224 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a=
+)[0]))
+>       |                                              ^~~~~~~~~~~
+> include/linux/kernel.h:47:59: note: in expansion of macro '__must_be_arra=
+y'
+>    47 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_=
+be_array(arr))
+>       |                                                           ^~~~~~~=
+~~~~~~~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:18: note: in expansion of m=
+acro 'ARRAY_SIZE'
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                  ^~~~~~~~~~
+> include/linux/build_bug.h:16:51: error: bit-field '<anonymous>' width not=
+ an integer constant
+>    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e));=
+ })))
+>       |                                                   ^
+> include/linux/compiler.h:224:28: note: in expansion of macro 'BUILD_BUG_O=
+N_ZERO'
+>   224 | #define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a=
+)[0]))
+>       |                            ^~~~~~~~~~~~~~~~~
+> include/linux/kernel.h:47:59: note: in expansion of macro '__must_be_arra=
+y'
+>    47 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_=
+be_array(arr))
+>       |                                                           ^~~~~~~=
+~~~~~~~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:448:18: note: in expansion of m=
+acro 'ARRAY_SIZE'
+>   448 |  for (i =3D 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
+>       |                  ^~~~~~~~~~
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:453:9: error: 'struct ingenic_d=
+rm' has no member named 'dma_hwdescs'; did you mean 'dma_hwdesc_f0'?
+>   453 |   priv->dma_hwdescs->palette[i] =3D color;
+>       |         ^~~~~~~~~~~
+>       |         dma_hwdesc_f0
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c: In function 'ingenic_drm_plane=
+_atomic_update':
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:467:3: error: 'crtc_state' unde=
+clared (first use in this function); did you mean 'ctx_state'?
+>   467 |   crtc_state =3D state->crtc->state;
+>       |   ^~~~~~~~~~
+>       |   ctx_state
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:467:3: note: each undeclared id=
+entifier is reported only once for each function it appears in
+> At top level:
+> drivers/gpu/drm/ingenic/ingenic-drm-drv.c:443:13: warning: 'ingenic_drm_u=
+pdate_palette' defined but not used [-Wunused-function]
+>   443 | static void ingenic_drm_update_palette(struct ingenic_drm *priv,
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> > I noticed that the ingenic driver revert I had been waiting for appeared
+> > in hte drm-misc tree, so I removed the BROKEN dependency for it, but it
+> > produced the above errors, so I have marked it BROKEN again. =20
 
-This merge fix patch is now being applied to the merge of the drm tree
-since the rdma tree (that is merged before the drm tree) has merged the
-hmm tree.
-
+Any progress on this?  I am still marking CONFIG_DRM_INGENIC as BROKEN
+in the drm and drm-misc trees.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6gb=Pmpxd4aBBoRVlHZ1V50
+--Sig_/mU+rg28WViFZLTuKkAevgnd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+D2WQACgkQAVBC80lX
-0Gxs0Af5AZow+Krg9JnlYrOXglhcOIm9Lf9ArfZa6cwVBTP5GbCoUMdcMuTf7Zo8
-XOMNT67+/zn3R6faniiV/VSpKQDibWJWBxFkrNCsIgvU3OmWDYHZ4MOp3r7mn+z6
-8zNYjUKGwjnzhcwMij/Huzv+akLOVzrA3kMd+Kx+yd3GumC17Aril3XEACcZRn4n
-coXu4YhwGVTJcgZ31KvCIZblGlwxyjcE3/U9SjP44uj2T+TjhA4hG4XapGsAFRcK
-FRLeqavH+tlOLv0DrX33SwtnGLaj/zL4uMsKsLvzmqrd6e5rMhrWXYZiyTLoj+GB
-SIvnrvdkQRWBc8tBZVPcG4x2b8xsGg==
-=AlzX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+D2pQACgkQAVBC80lX
+0GwWswgAoQjqIMp6/EDG0a9l7HrawiqW+u8IT7Kz2YF8D2exgrPek75c0eSKWjHm
+Tgs0l9NVHZ/QQ1AZxwu2N9jwDZlJIgSUr7Y7jRsCOfAgkgi6Whdd0fIsJI4psgsf
+8m6Hbjl6zErvkxDGk2MMA7xUjxkzft7r8SC9gt6yViCAerbVvsCkYFCpdyiEY1ll
+Vsm9EQFF4NH5wZS4PcAfNn4kYv47h8rFRDvyToMjvWONPZYWutJ8D4LeBOFhTxCH
++d0Iod6poifszGtp/VJrub1C/f5Ue8lp2Nf/htLcg2DH0FFhA1tGr2wB3dn0dT3D
+0N1kL0EBG+N/Guiljcd8xEpaPRBh7Q==
+=3cru
 -----END PGP SIGNATURE-----
 
---Sig_/6gb=Pmpxd4aBBoRVlHZ1V50--
+--Sig_/mU+rg28WViFZLTuKkAevgnd--

@@ -2,130 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAEC28BA89
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 16:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225C628BC00
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 17:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729402AbgJLOOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Oct 2020 10:14:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39913 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728336AbgJLOOl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Oct 2020 10:14:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602512079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eKB8Wqie7OYpl/UN0uXAxDePkSzH8tlrt66e/5fdk04=;
-        b=R6nh+0Tciwy2+WQmiIe8nDONAkjoIHyKkTg+zEz/TnJKEZ5gBYLnWQ83OUJgGxl706HFkb
-        HEwJtHMMJtNnu/vI/O8jEoDdslPtQaEiKGZcxDuPs1Y5lrgx9IFuicQrOzDwYNBOAyqD0f
-        8nzfGvbJvO4t/AT+G00d64j/N//MZnM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-154-wZbc90LRMe-CAiE1EI5y8w-1; Mon, 12 Oct 2020 10:14:36 -0400
-X-MC-Unique: wZbc90LRMe-CAiE1EI5y8w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 30C631868403;
-        Mon, 12 Oct 2020 14:14:35 +0000 (UTC)
-Received: from ovpn-117-187.rdu2.redhat.com (ovpn-117-187.rdu2.redhat.com [10.10.117.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E63CA5C225;
-        Mon, 12 Oct 2020 14:14:33 +0000 (UTC)
-Message-ID: <7891baff68cef09f36c0cba88d9ae09eeff8e569.camel@redhat.com>
-Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-From:   Qian Cai <cai@redhat.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Date:   Mon, 12 Oct 2020 10:14:33 -0400
-In-Reply-To: <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
-         <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
-         <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+        id S2390046AbgJLPeD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Oct 2020 11:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388881AbgJLPeD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Oct 2020 11:34:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC686C0613D0;
+        Mon, 12 Oct 2020 08:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=b14no4l2W0cwTYuxAXqjsdbPmsvyURsrR0Rs82reQUE=; b=ZsQM1e848ya6X2CPTTVAHDqzs+
+        lPEBbvqqKt4/EbYEvcF/nWMj5gogkdSRLhqwlzkNj+rwjq7AzqoRfWEDq+0g9awZb0TuVABt/pmK3
+        iWHNGRwopkdBNabq7Z2XYASPvQntq9wZyAINv5+kKG6ni6CxsAxodcf9NgxSKPkAgtPIB5zfEyJJQ
+        lh2q+fxnQ8iGZqQXHRZRaaU8P+QvpelfliYjG7Vw/Sb55Zh7yOEx/pmQLD2/Ct1zIlhyAGbtFgFpQ
+        Qh0Zw89Q6d7f8UlqAP/uCWZzcxww90hItVLbDoGSe3fgxLgGCbUCwSigGNLdhrSOjqnYCccJi569t
+        SjdEjDNw==;
+Received: from [2601:1c0:6280:3f0::507c]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kRzpk-0008Ff-Gv; Mon, 12 Oct 2020 15:33:57 +0000
+Subject: Re: linux-next: Tree for Oct 12 (drivers/staging/media/atomisp/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20201012205906.51237c67@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e9339988-4ff0-ddf6-9a52-09863ca66963@infradead.org>
+Date:   Mon, 12 Oct 2020 08:33:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <20201012205906.51237c67@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-10-12 at 11:11 +0800, Boqun Feng wrote:
-> Hi,
+On 10/12/20 2:59 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Fri, Oct 09, 2020 at 09:41:24AM -0400, Qian Cai wrote:
-> > On Fri, 2020-10-09 at 07:58 +0000, tip-bot2 for Peter Zijlstra wrote:
-> > > The following commit has been merged into the locking/core branch of tip:
-> > > 
-> > > Commit-ID:     4d004099a668c41522242aa146a38cc4eb59cb1e
-> > > Gitweb:        
-> > > https://git.kernel.org/tip/4d004099a668c41522242aa146a38cc4eb59cb1e
-> > > Author:        Peter Zijlstra <peterz@infradead.org>
-> > > AuthorDate:    Fri, 02 Oct 2020 11:04:21 +02:00
-> > > Committer:     Ingo Molnar <mingo@kernel.org>
-> > > CommitterDate: Fri, 09 Oct 2020 08:53:30 +02:00
-> > > 
-> > > lockdep: Fix lockdep recursion
-> > > 
-> > > Steve reported that lockdep_assert*irq*(), when nested inside lockdep
-> > > itself, will trigger a false-positive.
-> > > 
-> > > One example is the stack-trace code, as called from inside lockdep,
-> > > triggering tracing, which in turn calls RCU, which then uses
-> > > lockdep_assert_irqs_disabled().
-> > > 
-> > > Fixes: a21ee6055c30 ("lockdep: Change hardirq{s_enabled,_context} to per-
-> > > cpu
-> > > variables")
-> > > Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> > 
-> > Reverting this linux-next commit fixed booting RCU-list warnings everywhere.
-> > 
-> 
-> I think this happened because in this commit debug_lockdep_rcu_enabled()
-> didn't adopt to the change that made lockdep_recursion a percpu
-> variable?
-> 
-> Qian, mind to try the following?
-
-Yes, it works fine.
-
-> 
-> Although, arguably the problem still exists, i.e. we still have an RCU
-> read-side critical section inside lock_acquire(), which may be called on
-> a yet-to-online CPU, which RCU doesn't watch. I think this used to be OK
-> because we don't "free" anything from lockdep, IOW, there is no
-> synchronize_rcu() or call_rcu() that _needs_ to wait for the RCU
-> read-side critical sections inside lockdep. But now we lock class
-> recycling, so it might be a problem.
-> 
-> That said, currently validate_chain() and lock class recycling are
-> mutually excluded via graph_lock, so we are safe for this one ;-)
-> 
-> ----------->8
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index 39334d2d2b37..35d9bab65b75 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -275,8 +275,8 @@ EXPORT_SYMBOL_GPL(rcu_callback_map);
->  
->  noinstr int notrace debug_lockdep_rcu_enabled(void)
->  {
-> -	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && debug_locks &&
-> -	       current->lockdep_recursion == 0;
-> +	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE &&
-> +	       __lockdep_enabled;
->  }
->  EXPORT_SYMBOL_GPL(debug_lockdep_rcu_enabled);
+> Changes since 20201009:
 > 
 
+
+on x86_64:
+
+In file included from ../drivers/staging/media/atomisp//pci/ia_css_control.h:25:0,
+                 from ../drivers/staging/media/atomisp//pci/ia_css.h:28,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat_css20.h:24,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat.h:22,
+                 from ../drivers/staging/media/atomisp/pci/mmu/sh_mmu_mrfld.c:23:
+../drivers/staging/media/atomisp//pci/ia_css_firmware.h:52:29: warning: ‘struct device’ declared inside parameter list will not be visible outside of this definition or declaration
+ ia_css_load_firmware(struct device *dev, const struct ia_css_env *env,
+                             ^~~~~~
+In file included from ../drivers/staging/media/atomisp//pci/ia_css.h:28:0,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat_css20.h:24,
+                 from ../drivers/staging/media/atomisp//pci/atomisp_compat.h:22,
+                 from ../drivers/staging/media/atomisp/pci/mmu/sh_mmu_mrfld.c:23:
+../drivers/staging/media/atomisp//pci/ia_css_control.h:49:24: warning: ‘struct device’ declared inside parameter list will not be visible outside of this definition or declaration
+ int ia_css_init(struct device           *dev,
+                        ^~~~~~
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,69 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB4528AAFF
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 00:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624B928AC44
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 04:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387712AbgJKWwE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Oct 2020 18:52:04 -0400
-Received: from ozlabs.org ([203.11.71.1]:41801 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387708AbgJKWwD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Oct 2020 18:52:03 -0400
+        id S1726267AbgJLCpV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Oct 2020 22:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726104AbgJLCpV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Oct 2020 22:45:21 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B0FC0613CE;
+        Sun, 11 Oct 2020 19:45:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8cWM6R68z9sSG;
-        Mon, 12 Oct 2020 09:51:59 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C8jhX2zbJz9sS8;
+        Mon, 12 Oct 2020 13:45:15 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602456721;
-        bh=fIRvN6W5v39OZV/PI6qLoNzqSNymGAo8vtLl7AfgHr8=;
+        s=201702; t=1602470716;
+        bh=mjGtmYaiKrM7DLhsF4b+HYazmeMtTIacQOJRXpDBvpI=;
         h=Date:From:To:Cc:Subject:From;
-        b=TRBSxgmAIqWxlUZfKB4DPCnxRBEs9iqHeJAaQol+PswBHQTgIixo3YYiJlv1cpO66
-         0d67Qu/4tzzSMmj9I/55TvEkP04tCE+e+eBzthaQIGEM2JMigw1SQ6SXa/kwbO+2n4
-         k4SmlwK524RVleJDbLDYTKfPQZeT1v1PatAm8h+SL2mwHEFVA+4Egv2rJw6FAhdUpz
-         nlYPtdV43icja9gRA4HGPJEF9gf7q9Ot9g86Lt3uOS1SQE3vuSKM3rAU+TkKXOqTua
-         rr+zxAZOnYbajBe3zQ2yzM5QcX1HY02muWNWNVwNLtrES/bw0+0ZR9v9BnP/9UR04f
-         4MP4EkAWn00Kg==
-Date:   Mon, 12 Oct 2020 09:51:58 +1100
+        b=bVRi1MSXDXH5opTzDVEHsoktz0RWKHHd/VxvQ/rHIJbkFBEHTxG5tpFWCQQdj5ss2
+         1k0r4pD6WOK+Sqpxabu3oD6Fh7GJ7qAGa43enl4k9v/e+UnU/uBjFiq5MeM9s4EV2T
+         l3suINV5zQVhkN6FpXCHE2FlOqDtY5Qq7UyFWJQgHfGgPpEflcgE1C0QAEYDUbetNw
+         nT3w3XCbxMdhN93aJ8iOJvU9KRZb0/iaACG2nbvXxi+DLoWOHhgBOES7BDNMXyN7NS
+         cD+qT66s8j4RkksrJLvZkvfp/dbE9eDSr3tqT249blaA8MbgWVgdoLY1pBGjuUP2c6
+         GkXcYXKg7vUnw==
+Date:   Mon, 12 Oct 2020 13:45:10 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Geliang Tang <geliangtang@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: linux-next: manual merge of the arm64 tree with the asm-generic
- tree
-Message-ID: <20201012095158.779c6d9d@canb.auug.org.au>
+        Paolo Abeni <pabeni@redhat.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20201012134510.51c0bd0a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lN7TGM5Qqm/+r7wgw9jm1l8";
+Content-Type: multipart/signed; boundary="Sig_/1.iFEXTbGlrHy2jUC.WPk+G";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lN7TGM5Qqm/+r7wgw9jm1l8
+--Sig_/1.iFEXTbGlrHy2jUC.WPk+G
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the arm64 tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  arch/arm64/include/asm/mmu_context.h
+  net/mptcp/protocol.h
 
 between commit:
 
-  f911c2a7c096 ("arm64: use asm-generic/mmu_context.h for no-op implementat=
-ions")
+  d582484726c4 ("mptcp: fix fallback for MP_JOIN subflows")
 
-from the asm-generic tree and commit:
+from the net tree and commit:
 
-  48118151d8cc ("arm64: mm: Pin down ASIDs for sharing mm with devices")
+  d0876b2284cf ("mptcp: add the incoming RM_ADDR support")
 
-from the arm64 tree.
+from the net-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -77,57 +79,68 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/include/asm/mmu_context.h
-index fe2862aa1dad,0672236e1aea..000000000000
---- a/arch/arm64/include/asm/mmu_context.h
-+++ b/arch/arm64/include/asm/mmu_context.h
-@@@ -174,9 -174,16 +174,15 @@@ static inline void cpu_replace_ttbr1(pg
-   * Setting a reserved TTBR0 or EPD0 would work, but it all gets ugly when=
- you
-   * take CPU migration into account.
-   */
- -#define destroy_context(mm)		do { } while(0)
-  void check_and_switch_context(struct mm_struct *mm);
+diff --cc net/mptcp/protocol.h
+index 972463642690,aa0ab18d2e57..000000000000
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@@ -203,9 -211,10 +212,11 @@@ struct mptcp_sock=20
+  	bool		fully_established;
+  	bool		rcv_data_fin;
+  	bool		snd_data_fin_enable;
+ +	bool		use_64bit_ack; /* Set when we received a 64-bit DSN */
+  	spinlock_t	join_list_lock;
+  	struct work_struct work;
++ 	struct sk_buff  *ooo_last_skb;
++ 	struct rb_root  out_of_order_queue;
+  	struct list_head conn_list;
+  	struct list_head rtx_queue;
+  	struct list_head join_list;
+@@@ -294,9 -309,10 +311,9 @@@ struct mptcp_subflow_context=20
+  		map_valid : 1,
+  		mpc_map : 1,
+  		backup : 1,
+- 		data_avail : 1,
+  		rx_eof : 1,
+ -		use_64bit_ack : 1, /* Set when we received a 64-bit DSN */
+  		can_ack : 1;	    /* only after processing the remote a key */
++ 	enum mptcp_data_avail data_avail;
+  	u32	remote_nonce;
+  	u64	thmac;
+  	u32	local_nonce;
+@@@ -349,11 -365,13 +366,14 @@@ void mptcp_subflow_fully_established(st
+  				     struct mptcp_options_received *mp_opt);
+  bool mptcp_subflow_data_available(struct sock *sk);
+  void __init mptcp_subflow_init(void);
+ +void mptcp_subflow_reset(struct sock *ssk);
++ void mptcp_subflow_shutdown(struct sock *sk, struct sock *ssk, int how);
++ void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
++ 		       struct mptcp_subflow_context *subflow,
++ 		       long timeout);
  =20
-- #define init_new_context(tsk,mm)	({ atomic64_set(&(mm)->context.id, 0); 0=
-; })
-+ static inline int
-+ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-+ {
-+ 	atomic64_set(&mm->context.id, 0);
-+ 	refcount_set(&mm->context.pinned, 0);
-+ 	return 0;
-+ }
+  /* called with sk socket lock held */
+- int __mptcp_subflow_connect(struct sock *sk, int ifindex,
+- 			    const struct mptcp_addr_info *loc,
++ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info=
+ *loc,
+  			    const struct mptcp_addr_info *remote);
+  int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock=
+);
  =20
-  #ifdef CONFIG_ARM64_SW_TTBR0_PAN
-  static inline void update_saved_ttbr0(struct task_struct *tsk,
-@@@ -245,8 -251,12 +251,11 @@@ switch_mm(struct mm_struct *prev, struc
-  void verify_cpu_asid_bits(void);
-  void post_ttbr_update_workaround(void);
- =20
-+ unsigned long arm64_mm_context_get(struct mm_struct *mm);
-+ void arm64_mm_context_put(struct mm_struct *mm);
-+=20
- +#include <asm-generic/mmu_context.h>
- +
-  #endif /* !__ASSEMBLY__ */
- =20
-  #endif /* !__ASM_MMU_CONTEXT_H */
 
---Sig_/lN7TGM5Qqm/+r7wgw9jm1l8
+--Sig_/1.iFEXTbGlrHy2jUC.WPk+G
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+DjI4ACgkQAVBC80lX
-0GxFHAf7Bdi6RDISnaXZnrhn+rc6pobGbLcoahUYwnkk/DgpX4t34PRcYnbB5o2k
-XIJyXzEREqdmEHixrNv/Lro1XgINjIFHs7kH8TYebLAeoIgDUr4N2YLJ/sP8hFgf
-ZaM+/Kvw8NJA77/56GcDYYNrVp5REnUrMMTztaJ17S/+zm65d084sy81wFvKnGAU
-OQmWkQBdboyen2yDiG7mUKazaAGJvXF64qyr/U0MGZqntLPlBg3/Vu9UW0A2eYIg
-zhYHZBfZOYGi2HzOPVVYy0G4EGJIlmDkt0F1DKd4lEAVOK6lBfv7YKaNS1Ax/XNN
-+UqyGKyI8lsIYVox7tm+9voe50YkLQ==
-=7BKA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+DwzYACgkQAVBC80lX
+0Gyjqwf+IGWQv9QTFfZKE05vuR5QVtzxP81b1PiK4YBeiKNQPrpKHBp8MH1Hm1eo
+eNhTEEyYv2XClkTSw3R/QAxawOpa4OZMupjXNGhjryt+q5fFZaJPX7M/GgJiFiW/
+rtH8amipgxuZ/rqY8IhNrzmbV6YgcyfnTrYL557MfpnbCVuzWXSmgYE0rWv713RP
+qXoWjX3LCCNpQ1uADLxIIBnj5dXQN06l9gWm1HYux0JjdDbXj9z6p+jWY4SrExtM
+6A981XJK5A0e7f8OMticnK+h6RMuSK8CCJELC8ZFF3G124h8xdWwEkVK1EmYqVMw
+uBftf3ZEqxHKYWr8jB5jfS1wA7DDkA==
+=pU71
 -----END PGP SIGNATURE-----
 
---Sig_/lN7TGM5Qqm/+r7wgw9jm1l8--
+--Sig_/1.iFEXTbGlrHy2jUC.WPk+G--

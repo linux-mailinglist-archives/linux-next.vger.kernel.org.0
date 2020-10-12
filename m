@@ -2,78 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76EB28B22C
-	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 12:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B6F28B565
+	for <lists+linux-next@lfdr.de>; Mon, 12 Oct 2020 15:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgJLKZW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Oct 2020 06:25:22 -0400
-Received: from aposti.net ([89.234.176.197]:54906 "EHLO aposti.net"
+        id S1728858AbgJLNAX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Mon, 12 Oct 2020 09:00:23 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:53332 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726510AbgJLKZW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Oct 2020 06:25:22 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] drm/ingenic: Fix bad revert
-Date:   Mon, 12 Oct 2020 12:25:09 +0200
-Message-Id: <20201012102509.10690-1-paul@crapouillou.net>
-In-Reply-To: <20201012152452.432c4867@canb.auug.org.au>
-References: <20201012152452.432c4867@canb.auug.org.au>
+        id S1728902AbgJLNAV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Oct 2020 09:00:21 -0400
+X-Greylist: delayed 564 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Oct 2020 09:00:21 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 6A3C35D792
+        for <linux-next@vger.kernel.org>; Mon, 12 Oct 2020 15:46:15 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 5D9E5605AC
+        for <linux-next@vger.kernel.org>; Mon, 12 Oct 2020 15:41:27 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 771FA641AE; Mon, 12 Oct 2020 15:08:45 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 2076E5CA8A;
+        Mon, 12 Oct 2020 15:02:19 +0300 (EEST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Mon, 12 Oct 2020 09:02:12 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201012121704.771FA641AE@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./n.,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201012 notchecked
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix a badly reverted commit. The revert commit was cherry-picked from
-drm-misc-next to drm-misc-next-fixes, and in the process some unrelated
-code was added.
+Hello Dear,
 
-Fixes: a3fb64c00d44 "Revert "gpu/drm: ingenic: Add option to mmap GEM buffers cached""
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 1be1235bd546..a3d1617d7c67 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -440,20 +440,6 @@ void ingenic_drm_plane_config(struct device *dev,
- 	}
- }
- 
--static void ingenic_drm_update_palette(struct ingenic_drm *priv,
--				       const struct drm_color_lut *lut)
--{
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(priv->dma_hwdescs->palette); i++) {
--		u16 color = drm_color_lut_extract(lut[i].red, 5) << 11
--			| drm_color_lut_extract(lut[i].green, 6) << 5
--			| drm_color_lut_extract(lut[i].blue, 5);
--
--		priv->dma_hwdescs->palette[i] = color;
--	}
--}
--
- static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
- 					    struct drm_plane_state *oldstate)
- {
-@@ -464,8 +450,6 @@ static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
- 	dma_addr_t addr;
- 
- 	if (state && state->fb) {
--		crtc_state = state->crtc->state;
--
- 		addr = drm_fb_cma_get_gem_addr(state->fb, state, 0);
- 		width = state->src_w >> 16;
- 		height = state->src_h >> 16;
--- 
-2.28.0
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
 
+Please get back to me if you are interested for more
+details.
+
+Yours faithfully,
+Hashim Bin 

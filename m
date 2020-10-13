@@ -2,147 +2,257 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C4D28D232
-	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 18:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A063928D234
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 18:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390136AbgJMQYn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Oct 2020 12:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390130AbgJMQYm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Oct 2020 12:24:42 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774F2C0613D0;
-        Tue, 13 Oct 2020 09:24:41 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id q202so14108534iod.9;
-        Tue, 13 Oct 2020 09:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bIGCYEfgq4tA5rYR7t+s/V/5c+QVNfCOp4tp8ujtghY=;
-        b=SinFAnDhCsYoEKqDS/VWNZYzgfyrEnxiN1JvJMudv2CyKuKTbBiPAyK5HgohdWuo3C
-         w45+sXW3OzsTDkmHJgjuPjM9ZXTWwCpvUS8Wucr/dPhJy7KJi4chidzhGxEJhs9UqZXn
-         dYRdzZfBBX6pH5avlio7EvIm6z/p9zqh6adodHu2jC2XX8V3UcqhWcZ46zJ2VQyUx5w/
-         eEoNsp25J0niB7JhgT3oZYQ/Ca7CRjzr2Gth50T9Gse/TzZtI9dmpb50q9uOKcReRANk
-         MN88fgK3GzlMGETQRcfLkFNQEORyrTxkX0vaohnsYYXiuV/R8u6XSBGBbc/FOv+eRdbv
-         gTbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bIGCYEfgq4tA5rYR7t+s/V/5c+QVNfCOp4tp8ujtghY=;
-        b=srxJaVs+hUUcr9Cjv+k2dsl+O/N4gfjxGIpt9LEaSYz29mVrZKgWGpYBORTJs+2hnc
-         6gdn3aqmSo9+zODlRl/3iy5vDpO2zSTI/VUfT1VorVyFVmPzHDfNqZ/H6vzblko/A/Yt
-         URyIpehYqH3/GiDezUbTH9mOCetjbPRcs6+BqmJv1JJgeSSUov/CtmUHpSOh/++5A/SW
-         sYgj+T0DXUEE18n9mP1Py6zsMpbyuVtpImfB+N3a5At7zsqMjpVY/Lt4f/95t6k5NvVp
-         2XRv3ljsf3ohbmTOLiTOTKImXMtLAVyVEj7EmJvcgLxHK44IUngvnYlgbYqH4mQK5Ud2
-         DXDg==
-X-Gm-Message-State: AOAM530VciW8UhXo0IymUvpoqlzu87RqXACq155TfOXklrfx/qNNx0VW
-        mLBqiGy5Zlm1yOJnRiErnv4=
-X-Google-Smtp-Source: ABdhPJyooy66hVSGiltM9zve0IFqEjC9GtPqKJlphYYK0PspUYcNjWR5rAh/VNMknY1Z+WjWohBrnQ==
-X-Received: by 2002:a6b:bfc7:: with SMTP id p190mr126273iof.121.1602606280839;
-        Tue, 13 Oct 2020 09:24:40 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id 2sm199442ill.78.2020.10.13.09.24.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Oct 2020 09:24:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B38A627C0054;
-        Tue, 13 Oct 2020 12:24:38 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 13 Oct 2020 12:24:38 -0400
-X-ME-Sender: <xms:xdSFX5TvFuZD9vPS8-PSSX2EOSQ_mv9ta39Iuba8AZrrP8I7cvsVsQ>
-    <xme:xdSFXywWaQ_-PMNGsFbjSriVxrZMweT9Zc7JcsQimI0ZcW3z5IOFBYalUDEHpmalC
-    vrM4UYUB19BduCfiw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrheelgddutdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepvdelieegudfggeevjefhjeevueevieetjeeikedvgfejfeduheefhffggedv
-    geejnecukfhppeehvddrudehhedrudduuddrjedunecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
-    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:xdSFX-1QmokdW7lm19K8_lxkMBJkFmf6HM7ygMjKyf8AVaTq9BEFMA>
-    <xmx:xdSFXxDPyKD6VqK0Mzvs6QMjiYt0PVmBnwcVE4D1sTDB6m2NFjX2Qw>
-    <xmx:xdSFXyhOjN5gentaXpv0IG_J5myjTCarkDPph-rBic9-nNy8Jwloxw>
-    <xmx:xtSFX7VO4-dl3L5X4EhdlFluyZnw4z4Xj20f1pLONXAJfFZaGVBsYSZDH2c>
-Received: from localhost (unknown [52.155.111.71])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F34743064610;
-        Tue, 13 Oct 2020 12:24:36 -0400 (EDT)
-Date:   Wed, 14 Oct 2020 00:24:35 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
+        id S1726463AbgJMQ0v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Oct 2020 12:26:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726438AbgJMQ0v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Oct 2020 12:26:51 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A4702528D;
+        Tue, 13 Oct 2020 16:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602606410;
+        bh=B2J+K0GkNCCf1aYoI9IUJUSBqMmj5wOS/PYuEmmK3mc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JqzU1Ru8T4gAWelQKKdpO7nTLULPllzSq3jjOsMy95R3SYbeTL700aOV/jBy9TuSl
+         mV46tFevFrJaOgCcmaaGk22zrV40Qf+5V8vjksfKfriTvIh3lT4lOP5jSaoIlFF5Jk
+         QU71mBpYprkXRS8ecoNRJULqyUDEXa+z9ZTXrWw8=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 3AD1B3522A36; Tue, 13 Oct 2020 09:26:50 -0700 (PDT)
+Date:   Tue, 13 Oct 2020 09:26:50 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Qian Cai <cai@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Qian Cai <cai@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
         linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Paul E. McKenney" <paulmck@kernel.org>
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-Message-ID: <20201013162435.GB39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+Message-ID: <20201013162650.GN3249@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
 References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
  <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
  <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <20201013102715.GX2628@hirez.programming.kicks-ass.net>
+ <20201012212812.GH3249@paulmck-ThinkPad-P72>
+ <20201013103406.GY2628@hirez.programming.kicks-ass.net>
+ <20201013104450.GQ2651@hirez.programming.kicks-ass.net>
+ <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201013102715.GX2628@hirez.programming.kicks-ass.net>
+In-Reply-To: <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 12:27:15PM +0200, Peter Zijlstra wrote:
-> On Mon, Oct 12, 2020 at 11:11:10AM +0800, Boqun Feng wrote:
-> 
-> > I think this happened because in this commit debug_lockdep_rcu_enabled()
-> > didn't adopt to the change that made lockdep_recursion a percpu
-> > variable?
+On Tue, Oct 13, 2020 at 01:25:44PM +0200, Peter Zijlstra wrote:
+> On Tue, Oct 13, 2020 at 12:44:50PM +0200, Peter Zijlstra wrote:
+> > On Tue, Oct 13, 2020 at 12:34:06PM +0200, Peter Zijlstra wrote:
+> > > On Mon, Oct 12, 2020 at 02:28:12PM -0700, Paul E. McKenney wrote:
+> > > > It is certainly an accident waiting to happen.  Would something like
+> > > > the following make sense?
+> > > 
+> > > Sadly no.
+> > > 
+> > > > ------------------------------------------------------------------------
+> > > > 
+> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > index bfd38f2..52a63bc 100644
+> > > > --- a/kernel/rcu/tree.c
+> > > > +++ b/kernel/rcu/tree.c
+> > > > @@ -4067,6 +4067,7 @@ void rcu_cpu_starting(unsigned int cpu)
+> > > >  
+> > > >  	rnp = rdp->mynode;
+> > > >  	mask = rdp->grpmask;
+> > > > +	lockdep_off();
+> > > >  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > > >  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+> > > >  	newcpu = !(rnp->expmaskinitnext & mask);
+> > > > @@ -4086,6 +4087,7 @@ void rcu_cpu_starting(unsigned int cpu)
+> > > >  	} else {
+> > > >  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > > >  	}
+> > > > +	lockdep_on();
+> > > >  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+> > > >  }
+> > > 
+> > > This will just shut it up, but will not fix the actual problem of that
+> > > spin-lock ending up in trace_lock_acquire() which relies on RCU which
+> > > isn't looking.
+> > > 
+> > > What we need here is to supress tracing not lockdep. Let me consider.
 > > 
-> > Qian, mind to try the following?
-> > 
-> > Although, arguably the problem still exists, i.e. we still have an RCU
-> > read-side critical section inside lock_acquire(), which may be called on
+> > We appear to have a similar problem with rcu_report_dead(), it's
+> > raw_spin_unlock()s can end up in trace_lock_release() while we just
+> > killed RCU.
 > 
-> There is actual RCU usage from the trace_lock_acquire().
+> So we can deal with the explicit trace_*() calls like the below, but I
+> really don't like it much. It also doesn't help with function tracing.
+> This is really early/late in the hotplug cycle and should be considered
+> entry, we shouldn't be tracing anything here.
 > 
-> > a yet-to-online CPU, which RCU doesn't watch. I think this used to be OK
-> > because we don't "free" anything from lockdep, IOW, there is no
-> > synchronize_rcu() or call_rcu() that _needs_ to wait for the RCU
-> > read-side critical sections inside lockdep. But now we lock class
-> > recycling, so it might be a problem.
-> > 
-> > That said, currently validate_chain() and lock class recycling are
-> > mutually excluded via graph_lock, so we are safe for this one ;-)
-> 
-> We should have a comment on that somewhere, could you write one?
-> 
+> Paul, would it be possible to use a scheme similar to IRQ/NMI for
+> hotplug? That seems to mostly rely on atomic ops, not locks.
 
-Sure, I will write something tomorrow.
+The rest of the rcu_node tree and the various grace-period/hotplug races
+makes that question non-trivial.  I will look into it, but I have no
+reason for optimism.
 
-Regards,
-Boqun
+But there is only one way to find out...  ;-)
 
-> > ----------->8
-> > diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> > index 39334d2d2b37..35d9bab65b75 100644
-> > --- a/kernel/rcu/update.c
-> > +++ b/kernel/rcu/update.c
-> > @@ -275,8 +275,8 @@ EXPORT_SYMBOL_GPL(rcu_callback_map);
-> >  
-> >  noinstr int notrace debug_lockdep_rcu_enabled(void)
-> >  {
-> > -	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && debug_locks &&
-> > -	       current->lockdep_recursion == 0;
-> > +	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE &&
-> > +	       __lockdep_enabled;
-> >  }
-> >  EXPORT_SYMBOL_GPL(debug_lockdep_rcu_enabled);
-> 
-> Urgh, I didn't expect (and forgot to grep) lockdep_recursion users
-> outside of lockdep itself :/ It looks like this is indeed the only one.
-> 
-> 
+							Thanx, Paul
+
+> ---
+> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> index d05db575f60f..22e3a3523ad3 100644
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -159,7 +159,7 @@ extern void lockdep_init_task(struct task_struct *task);
+>   */
+>  #define LOCKDEP_RECURSION_BITS	16
+>  #define LOCKDEP_OFF		(1U << LOCKDEP_RECURSION_BITS)
+> -#define LOCKDEP_RECURSION_MASK	(LOCKDEP_OFF - 1)
+> +#define LOCKDEP_TRACE_MASK	(LOCKDEP_OFF - 1)
+>  
+>  /*
+>   * lockdep_{off,on}() are macros to avoid tracing and kprobes; not inlines due
+> @@ -176,6 +176,16 @@ do {							\
+>  	current->lockdep_recursion -= LOCKDEP_OFF;	\
+>  } while (0)
+>  
+> +#define lockdep_trace_off()				\
+> +do {							\
+> +	current->lockdep_recursion++;			\
+> +} while (0)
+> +
+> +#define lockdep_trace_on()				\
+> +do {							\
+> +	current->lockdep_recursion--			\
+> +} while (0)
+> +
+>  extern void lockdep_register_key(struct lock_class_key *key);
+>  extern void lockdep_unregister_key(struct lock_class_key *key);
+>  
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index 3e99dfef8408..2df98abee82e 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -87,7 +87,7 @@ static inline bool lockdep_enabled(void)
+>  	if (raw_cpu_read(lockdep_recursion))
+>  		return false;
+>  
+> -	if (current->lockdep_recursion)
+> +	if (current->lockdep_recursion >> LOCKDEP_RECURSION_BITS)
+>  		return false;
+>  
+>  	return true;
+> @@ -5410,7 +5410,8 @@ void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>  {
+>  	unsigned long flags;
+>  
+> -	trace_lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
+> +	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
+> +		trace_lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
+>  
+>  	if (!debug_locks)
+>  		return;
+> @@ -5450,7 +5451,8 @@ void lock_release(struct lockdep_map *lock, unsigned long ip)
+>  {
+>  	unsigned long flags;
+>  
+> -	trace_lock_release(lock, ip);
+> +	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
+> +		trace_lock_release(lock, ip);
+>  
+>  	if (unlikely(!lockdep_enabled()))
+>  		return;
+> @@ -5662,7 +5664,8 @@ void lock_contended(struct lockdep_map *lock, unsigned long ip)
+>  {
+>  	unsigned long flags;
+>  
+> -	trace_lock_acquired(lock, ip);
+> +	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
+> +		trace_lock_acquired(lock, ip);
+>  
+>  	if (unlikely(!lock_stat || !lockdep_enabled()))
+>  		return;
+> @@ -5680,7 +5683,8 @@ void lock_acquired(struct lockdep_map *lock, unsigned long ip)
+>  {
+>  	unsigned long flags;
+>  
+> -	trace_lock_contended(lock, ip);
+> +	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
+> +		trace_lock_contended(lock, ip);
+>  
+>  	if (unlikely(!lock_stat || !lockdep_enabled()))
+>  		return;
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index edeabc232c21..dbd56603fc0a 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -4047,6 +4047,11 @@ void rcu_cpu_starting(unsigned int cpu)
+>  
+>  	rnp = rdp->mynode;
+>  	mask = rdp->grpmask;
+> +
+> +	/*
+> +	 * Lockdep will call tracing, which requires RCU, but RCU isn't on yet.
+> +	 */
+> +	lockdep_trace_off();
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+>  	newcpu = !(rnp->expmaskinitnext & mask);
+> @@ -4064,6 +4069,7 @@ void rcu_cpu_starting(unsigned int cpu)
+>  	} else {
+>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  	}
+> +	lockdep_trace_on();
+>  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+>  }
+>  
+> @@ -4091,6 +4097,11 @@ void rcu_report_dead(unsigned int cpu)
+>  
+>  	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
+>  	mask = rdp->grpmask;
+> +
+> +	/*
+> +	 * Lockdep will call tracing, which requires RCU, but we're switching RCU off.
+> +	 */
+> +	lockdep_trace_off();
+>  	raw_spin_lock(&rcu_state.ofl_lock);
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
+>  	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+> @@ -4101,8 +4112,10 @@ void rcu_report_dead(unsigned int cpu)
+>  		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>  	}
+>  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
+> +	/* RCU is off, locks must not call into tracing */
+>  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  	raw_spin_unlock(&rcu_state.ofl_lock);
+> +	lockdep_trace_on();
+>  
+>  	rdp->cpu_started = false;
+>  }
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index 39334d2d2b37..403b138f7cd4 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -275,8 +275,8 @@ EXPORT_SYMBOL_GPL(rcu_callback_map);
+>  
+>  noinstr int notrace debug_lockdep_rcu_enabled(void)
+>  {
+> -	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && debug_locks &&
+> -	       current->lockdep_recursion == 0;
+> +	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && __lockdep_enabled;
+> +
+>  }
+>  EXPORT_SYMBOL_GPL(debug_lockdep_rcu_enabled);
+>  

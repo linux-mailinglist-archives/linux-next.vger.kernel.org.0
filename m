@@ -2,179 +2,254 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA1328CC6D
-	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 13:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A7428CC71
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 13:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgJMLWt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Oct 2020 07:22:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57571 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726493AbgJMLWr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:22:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602588165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=ZnIDEDwpr8eBwiGr7pQeREGplO3SYMkRODVxaJ85l1g=;
-        b=DuSedm4onXyy4f2WZpFsW78Riv7ulda0KdBtEpbraQaSbXLWkXTzs0wigEb1gJjhgjD8Ua
-        6GzPWIkwFE6sGK4bnjxAnH28POBqt5tKVz8YzpJenq26qeCT9d8SFECZvMi0FbtCuwHbU+
-        hxfkl8yg1cike2t9zFjXo2SQ/yZMdak=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-485-Nv28aKXONLKvadgXPCDQ4Q-1; Tue, 13 Oct 2020 07:22:44 -0400
-X-MC-Unique: Nv28aKXONLKvadgXPCDQ4Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7ECED802B63;
-        Tue, 13 Oct 2020 11:22:42 +0000 (UTC)
-Received: from dresden.str.redhat.com (unknown [10.40.193.164])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9B4ED6EF53;
-        Tue, 13 Oct 2020 11:22:40 +0000 (UTC)
-Subject: Re: linux-next: manual merge of the fuse tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726623AbgJMLZ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Oct 2020 07:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726111AbgJMLZ5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Oct 2020 07:25:57 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E05C0613D0;
+        Tue, 13 Oct 2020 04:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b74t7/cK3eFyKnxyXESADYOB64/8vcBeVQ8J2/L5bq8=; b=F95bFAN6jttM9xCUp/DY4NimRF
+        eXowMUElLMS2tmajUCnAJHnVsHsctKpOz81JycP4RvZ6/HZP1Pvo249bFkYNfjNfyQ6UAotkosDIZ
+        IfBTukUrICDCLjxFC8nqFyjA/aSng6TXkv/PCs1sYbyZ9Ad0L2StD6AtPQTS07BA2EzpO8tyq0Qr1
+        eQvIDJPsV8Xp+lVv9AO0JpXUfyOSr+VVg1tToKpc+AMhNxfRoHdtkaEfauurh2Uaz5WjDc0E1TZgw
+        01q8TdFu2UN8ViPz3N5+pog3qvb0fOORoD1QfboINOmO3KwVMfufmajMX5VUpJbTlf3LBTnukg3KU
+        niFIKoNQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kSIR8-0002rz-8n; Tue, 13 Oct 2020 11:25:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B2437300DB4;
+        Tue, 13 Oct 2020 13:25:44 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 892032B4F9099; Tue, 13 Oct 2020 13:25:44 +0200 (CEST)
+Date:   Tue, 13 Oct 2020 13:25:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Qian Cai <cai@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miklos Szeredi <mszeredi@redhat.com>
-References: <20201013104747.559128e7@canb.auug.org.au>
-From:   Max Reitz <mreitz@redhat.com>
-Autocrypt: addr=mreitz@redhat.com; prefer-encrypt=mutual; keydata=
- mQENBFXOJlcBCADEyyhOTsoa/2ujoTRAJj4MKA21dkxxELVj3cuILpLTmtachWj7QW+TVG8U
- /PsMCFbpwsQR7oEy8eHHZwuGQsNpEtNC2G/L8Yka0BIBzv7dEgrPzIu+W3anZXQW4702+uES
- U29G8TP/NGfXRRHGlbBIH9KNUnOSUD2vRtpOLXkWsV5CN6vQFYgQfFvmp5ZpPeUe6xNplu8V
- mcTw8OSEDW/ZnxJc8TekCKZSpdzYoxfzjm7xGmZqB18VFwgJZlIibt1HE0EB4w5GsD7x5ekh
- awIe3RwoZgZDLQMdOitJ1tUc8aqaxvgA4tz6J6st8D8pS//m1gAoYJWGwwIVj1DjTYLtABEB
- AAG0HU1heCBSZWl0eiA8bXJlaXR6QHJlZGhhdC5jb20+iQFTBBMBCAA9AhsDBQkSzAMABQsJ
- CAcCBhUICQoLAgQWAgMBAh4BAheABQJVzie5FRhoa3A6Ly9rZXlzLmdudXBnLm5ldAAKCRD0
- B9sAYdXPQDcIB/9uNkbYEex1rHKz3mr12uxYMwLOOFY9fstP5aoVJQ1nWQVB6m2cfKGdcRe1
- 2/nFaHSNAzT0NnKz2MjhZVmcrpyd2Gp2QyISCfb1FbT82GMtXFj1wiHmPb3CixYmWGQUUh+I
- AvUqsevLA+WihgBUyaJq/vuDVM1/K9Un+w+Tz5vpeMidlIsTYhcsMhn0L9wlCjoucljvbDy/
- 8C9L2DUdgi3XTa0ORKeflUhdL4gucWoAMrKX2nmPjBMKLgU7WLBc8AtV+84b9OWFML6NEyo4
- 4cP7cM/07VlJK53pqNg5cHtnWwjHcbpGkQvx6RUx6F1My3y52vM24rNUA3+ligVEgPYBuQEN
- BFXOJlcBCADAmcVUNTWT6yLWQHvxZ0o47KCP8OcLqD+67T0RCe6d0LP8GsWtrJdeDIQk+T+F
- xO7DolQPS6iQ6Ak2/lJaPX8L0BkEAiMuLCKFU6Bn3lFOkrQeKp3u05wCSV1iKnhg0UPji9V2
- W5eNfy8F4ZQHpeGUGy+liGXlxqkeRVhLyevUqfU0WgNqAJpfhHSGpBgihUupmyUg7lfUPeRM
- DzAN1pIqoFuxnN+BRHdAecpsLcbR8sQddXmDg9BpSKozO/JyBmaS1RlquI8HERQoe6EynJhd
- 64aICHDfj61rp+/0jTIcevxIIAzW70IadoS/y3DVIkuhncgDBvGbF3aBtjrJVP+5ABEBAAGJ
- ASUEGAEIAA8FAlXOJlcCGwwFCRLMAwAACgkQ9AfbAGHVz0CbFwf9F/PXxQR9i4N0iipISYjU
- sxVdjJOM2TMut+ZZcQ6NSMvhZ0ogQxJ+iEQ5OjnIputKvPVd5U7WRh+4lF1lB/NQGrGZQ1ic
- alkj6ocscQyFwfib+xIe9w8TG1CVGkII7+TbS5pXHRxZH1niaRpoi/hYtgzkuOPp35jJyqT/
- /ELbqQTDAWcqtJhzxKLE/ugcOMK520dJDeb6x2xVES+S5LXby0D4juZlvUj+1fwZu+7Io5+B
- bkhSVPb/QdOVTpnz7zWNyNw+OONo1aBUKkhq2UIByYXgORPFnbfMY7QWHcjpBVw9MgC4tGeF
- R4bv+1nAMMxKmb5VvQCExr0eFhJUAHAhVg==
-Message-ID: <8d19d870-a9b2-d3e1-c3f1-c86d8f910e92@redhat.com>
-Date:   Tue, 13 Oct 2020 13:22:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
+Message-ID: <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
+References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
+ <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
+ <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
+ <20201012212812.GH3249@paulmck-ThinkPad-P72>
+ <20201013103406.GY2628@hirez.programming.kicks-ass.net>
+ <20201013104450.GQ2651@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20201013104747.559128e7@canb.auug.org.au>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mreitz@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="EsQqbSlWxec3Y7P46zVPPYUQ9VH7pXK5t"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201013104450.GQ2651@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---EsQqbSlWxec3Y7P46zVPPYUQ9VH7pXK5t
-Content-Type: multipart/mixed; boundary="vYDyOkLdLMLiQzSXpB4Q7J4nLDtWdztoi"
+On Tue, Oct 13, 2020 at 12:44:50PM +0200, Peter Zijlstra wrote:
+> On Tue, Oct 13, 2020 at 12:34:06PM +0200, Peter Zijlstra wrote:
+> > On Mon, Oct 12, 2020 at 02:28:12PM -0700, Paul E. McKenney wrote:
+> > > It is certainly an accident waiting to happen.  Would something like
+> > > the following make sense?
+> > 
+> > Sadly no.
+> > 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index bfd38f2..52a63bc 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -4067,6 +4067,7 @@ void rcu_cpu_starting(unsigned int cpu)
+> > >  
+> > >  	rnp = rdp->mynode;
+> > >  	mask = rdp->grpmask;
+> > > +	lockdep_off();
+> > >  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > >  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+> > >  	newcpu = !(rnp->expmaskinitnext & mask);
+> > > @@ -4086,6 +4087,7 @@ void rcu_cpu_starting(unsigned int cpu)
+> > >  	} else {
+> > >  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> > >  	}
+> > > +	lockdep_on();
+> > >  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+> > >  }
+> > 
+> > This will just shut it up, but will not fix the actual problem of that
+> > spin-lock ending up in trace_lock_acquire() which relies on RCU which
+> > isn't looking.
+> > 
+> > What we need here is to supress tracing not lockdep. Let me consider.
+> 
+> We appear to have a similar problem with rcu_report_dead(), it's
+> raw_spin_unlock()s can end up in trace_lock_release() while we just
+> killed RCU.
 
---vYDyOkLdLMLiQzSXpB4Q7J4nLDtWdztoi
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+So we can deal with the explicit trace_*() calls like the below, but I
+really don't like it much. It also doesn't help with function tracing.
+This is really early/late in the hotplug cycle and should be considered
+entry, we shouldn't be tracing anything here.
 
-On 13.10.20 01:47, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the fuse tree got a conflict in:
->=20
->   fs/fuse/file.c
->=20
-> between commit:
->=20
->   933a3752babc ("fuse: fix the ->direct_IO() treatment of iov_iter")
->=20
-> from Linus' tree and commit:
->=20
->   fcee216beb9c ("fuse: split fuse_mount off of fuse_conn")
->=20
-> from the fuse tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Paul, would it be possible to use a scheme similar to IRQ/NMI for
+hotplug? That seems to mostly rely on atomic ops, not locks.
 
-Thanks!  Semantically, the change looks good to me, I just noticed
-something about the indentation:
-
-> diff --cc fs/fuse/file.c
-> index 43c165e796da,53d4dd1ab992..000000000000
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@@ -3120,17 -3156,10 +3146,18 @@@ fuse_direct_IO(struct kiocb *iocb, str=
-u
->   =09 * By default, we want to optimize all I/Os with async request
->   =09 * submission to the client filesystem if supported.
->   =09 */
-> - =09io->async =3D ff->fc->async_dio;
->  -=09io->async =3D async_dio;
-> ++=09io->async =3D ff->fm->fc->async_dio;
->   =09io->iocb =3D iocb;
->   =09io->blocking =3D is_sync_kiocb(iocb);
->  =20
->  +=09/* optimization for short read */
->  +=09if (io->async && !io->write && offset + count > i_size) {
-> - =09=09iov_iter_truncate(iter, fuse_round_up(ff->fc, i_size - offset));
-> ++=09=09iov_iter_truncate(iter, fuse_round_up(ff->fm->fc,
-> ++=09=09=09=09  i_size - offset));
-
-Personally, I=92d align this second line to the opening parenthesis of
-fuse_round_up() (as it is done in fcee216beb9c, in a hunk not shown
-here, probably because it=92s been dropped in the merge.).
-
-Max
-
->  +=09=09shortened =3D count - iov_iter_count(iter);
->  +=09=09count -=3D shortened;
->  +=09}
->  +
->   =09/*
->   =09 * We cannot asynchronously extend the size of a file.
->   =09 * In such case the aio will behave exactly like sync io.
-
-
-
---vYDyOkLdLMLiQzSXpB4Q7J4nLDtWdztoi--
-
---EsQqbSlWxec3Y7P46zVPPYUQ9VH7pXK5t
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEkb62CjDbPohX0Rgp9AfbAGHVz0AFAl+Fjf4ACgkQ9AfbAGHV
-z0AZhwf/QNpKDlur+ESJiRf2IxJ57RHyTIgY3U3RD0f/XIW1MF9SOD9CvYx1/xlJ
-x5Vc0DQhw+JLNL6plWWfP932EoTNAktXoqzJ6ff08msFCWBxlBFebpvXKTZPvkzO
-K1nNW3CbZKJ0MT5V6Vt49lXq6NSYQctq/oTUWKmuCtLAuhB8JgVHmJIhXfl0B7sW
-cXWkw1ZHbrcJXMSc+8n98Yy+sIhBnyTDmN1dxA2Z2lme80Xm/SG3mljtknNj+wba
-QSwK6LHbbB46z2qd8XUXDSeT1CC2+Vsc9QoQbRydXLuf2jVFcIMFb/8nDxSU7mpf
-0woTu/EU8LwEAxXGV1vBIgw9sYUkRw==
-=ESf6
------END PGP SIGNATURE-----
-
---EsQqbSlWxec3Y7P46zVPPYUQ9VH7pXK5t--
-
+---
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index d05db575f60f..22e3a3523ad3 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -159,7 +159,7 @@ extern void lockdep_init_task(struct task_struct *task);
+  */
+ #define LOCKDEP_RECURSION_BITS	16
+ #define LOCKDEP_OFF		(1U << LOCKDEP_RECURSION_BITS)
+-#define LOCKDEP_RECURSION_MASK	(LOCKDEP_OFF - 1)
++#define LOCKDEP_TRACE_MASK	(LOCKDEP_OFF - 1)
+ 
+ /*
+  * lockdep_{off,on}() are macros to avoid tracing and kprobes; not inlines due
+@@ -176,6 +176,16 @@ do {							\
+ 	current->lockdep_recursion -= LOCKDEP_OFF;	\
+ } while (0)
+ 
++#define lockdep_trace_off()				\
++do {							\
++	current->lockdep_recursion++;			\
++} while (0)
++
++#define lockdep_trace_on()				\
++do {							\
++	current->lockdep_recursion--			\
++} while (0)
++
+ extern void lockdep_register_key(struct lock_class_key *key);
+ extern void lockdep_unregister_key(struct lock_class_key *key);
+ 
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 3e99dfef8408..2df98abee82e 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -87,7 +87,7 @@ static inline bool lockdep_enabled(void)
+ 	if (raw_cpu_read(lockdep_recursion))
+ 		return false;
+ 
+-	if (current->lockdep_recursion)
++	if (current->lockdep_recursion >> LOCKDEP_RECURSION_BITS)
+ 		return false;
+ 
+ 	return true;
+@@ -5410,7 +5410,8 @@ void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+ {
+ 	unsigned long flags;
+ 
+-	trace_lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
++	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
++		trace_lock_acquire(lock, subclass, trylock, read, check, nest_lock, ip);
+ 
+ 	if (!debug_locks)
+ 		return;
+@@ -5450,7 +5451,8 @@ void lock_release(struct lockdep_map *lock, unsigned long ip)
+ {
+ 	unsigned long flags;
+ 
+-	trace_lock_release(lock, ip);
++	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
++		trace_lock_release(lock, ip);
+ 
+ 	if (unlikely(!lockdep_enabled()))
+ 		return;
+@@ -5662,7 +5664,8 @@ void lock_contended(struct lockdep_map *lock, unsigned long ip)
+ {
+ 	unsigned long flags;
+ 
+-	trace_lock_acquired(lock, ip);
++	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
++		trace_lock_acquired(lock, ip);
+ 
+ 	if (unlikely(!lock_stat || !lockdep_enabled()))
+ 		return;
+@@ -5680,7 +5683,8 @@ void lock_acquired(struct lockdep_map *lock, unsigned long ip)
+ {
+ 	unsigned long flags;
+ 
+-	trace_lock_contended(lock, ip);
++	if (!(current->lockdep_recursion & LOCKDEP_TRACE_MASK))
++		trace_lock_contended(lock, ip);
+ 
+ 	if (unlikely(!lock_stat || !lockdep_enabled()))
+ 		return;
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index edeabc232c21..dbd56603fc0a 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4047,6 +4047,11 @@ void rcu_cpu_starting(unsigned int cpu)
+ 
+ 	rnp = rdp->mynode;
+ 	mask = rdp->grpmask;
++
++	/*
++	 * Lockdep will call tracing, which requires RCU, but RCU isn't on yet.
++	 */
++	lockdep_trace_off();
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+ 	newcpu = !(rnp->expmaskinitnext & mask);
+@@ -4064,6 +4069,7 @@ void rcu_cpu_starting(unsigned int cpu)
+ 	} else {
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	}
++	lockdep_trace_on();
+ 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+ }
+ 
+@@ -4091,6 +4097,11 @@ void rcu_report_dead(unsigned int cpu)
+ 
+ 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
+ 	mask = rdp->grpmask;
++
++	/*
++	 * Lockdep will call tracing, which requires RCU, but we're switching RCU off.
++	 */
++	lockdep_trace_off();
+ 	raw_spin_lock(&rcu_state.ofl_lock);
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
+ 	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+@@ -4101,8 +4112,10 @@ void rcu_report_dead(unsigned int cpu)
+ 		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	}
+ 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
++	/* RCU is off, locks must not call into tracing */
+ 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	raw_spin_unlock(&rcu_state.ofl_lock);
++	lockdep_trace_on();
+ 
+ 	rdp->cpu_started = false;
+ }
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index 39334d2d2b37..403b138f7cd4 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -275,8 +275,8 @@ EXPORT_SYMBOL_GPL(rcu_callback_map);
+ 
+ noinstr int notrace debug_lockdep_rcu_enabled(void)
+ {
+-	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && debug_locks &&
+-	       current->lockdep_recursion == 0;
++	return rcu_scheduler_active != RCU_SCHEDULER_INACTIVE && __lockdep_enabled;
++
+ }
+ EXPORT_SYMBOL_GPL(debug_lockdep_rcu_enabled);
+ 

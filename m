@@ -2,74 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CB628C927
-	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 09:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F73D28C92F
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 09:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389896AbgJMHU3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Oct 2020 03:20:29 -0400
-Received: from ozlabs.org ([203.11.71.1]:38799 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389829AbgJMHU2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Oct 2020 03:20:28 -0400
+        id S2390011AbgJMHYY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Oct 2020 03:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389874AbgJMHYY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Oct 2020 03:24:24 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0173FC0613D0;
+        Tue, 13 Oct 2020 00:24:23 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C9RlY02vRz9sTs;
-        Tue, 13 Oct 2020 18:20:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4C9Rr14YpBz9sTf;
+        Tue, 13 Oct 2020 18:24:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602573626;
-        bh=zc52PmRF4enBb3KdNeN/lkY7V5Sj3aLRPfM9ZwiVhy4=;
+        s=201702; t=1602573858;
+        bh=5v34ml565IrzQr1nr2/p7n95pD/pWe7WF7gUCqqLewA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S88ueZzMmWtgouo3f290oK8XH4AqwetRWbtM+P91NL+EvcurOwir41hoqYu1EqzzS
-         oajqb8/R1hpSYoDVaV1MxIXApL5frR54vp8prruEtM5Hh0uyYwWrMKJeWWg9OZkwG5
-         3AJbazqKcQRF+aJ40vJNhBQC64e0aiLLe+EIIDBXhSVA7uSOKo2XL1okHLVP9P8Fj+
-         D8hKCtztN1cP01Zw57S0q6vkEUUVzFwNuCNRbrCf29Qa84cqduCQa5ZPXCXoCDyNwv
-         8qmJJM7K9eJh0QoFxngsgF1UUsFxwaBSX9dcvFXXFmG3ALzpTQmXU+BwUqdo5FvwLB
-         70I6FG8qoRFYg==
-Date:   Tue, 13 Oct 2020 18:20:24 +1100
+        b=A9XyPoPt54lIBbHssH3QnmerxRo5Yhiqfc/df0ao5JaUhGdwD3LIzy0mgfbxDgzaZ
+         OZvn/Zh02GdO8yqLxLQxEd8VsAR5USbD9JVZ2nbiOutmZ/abRhxRwFvbMztTiu4ENm
+         DL0/f2RawWKBsLYnOvuC0ML8RmY2AlwHj0N2EtHvpRIP9ePfMmT8fU5FS4L2Slkgl6
+         SyZGKDQpDIIURNWOHf3yCpMhJcCVEsSVQhzCqyE/sFswSl6ngY99EkV7BmeX1n1WLo
+         r6+J2HDxVVCKq84icbHuLlwM/fJG+tgxDICPiwun0YesLq9jVAPeajzijQcORmsrYK
+         numWSFTsdFP2g==
+Date:   Tue, 13 Oct 2020 18:24:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+To:     Greg Ungerer <gerg@snapgear.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the mmc tree with the samsung-krzk
+Subject: Re: linux-next: manual merge of the m68knommu tree with the m68k
  tree
-Message-ID: <20201013182024.70938a91@canb.auug.org.au>
-In-Reply-To: <20200908144622.09385c88@canb.auug.org.au>
-References: <20200908144622.09385c88@canb.auug.org.au>
+Message-ID: <20201013182416.2cb8ecaf@canb.auug.org.au>
+In-Reply-To: <20200910093437.4098988b@canb.auug.org.au>
+References: <20200910093437.4098988b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0jvQS_1F3Tf7P_dHTbis07l";
+Content-Type: multipart/signed; boundary="Sig_/IUdstK6WEU=FI6tW9f5Bjaa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0jvQS_1F3Tf7P_dHTbis07l
+--Sig_/IUdstK6WEU=FI6tW9f5Bjaa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 8 Sep 2020 14:46:22 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Thu, 10 Sep 2020 09:34:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Today's linux-next merge of the mmc tree got a conflict in:
+> Today's linux-next merge of the m68knommu tree got a conflict in:
 >=20
->   drivers/mmc/host/Kconfig
+>   arch/m68k/Kconfig
 >=20
-> between commits:
+> between commit:
 >=20
->   cb6c03019cdd ("ARM: exynos: stop selecting PLAT_SAMSUNG")
->   db8230d29c3a ("ARM: s5pv210: don't imply CONFIG_PLAT_SAMSUNG")
+>   dc072012bc94 ("m68k: Sort selects in main Kconfig")
 >=20
-> from the samsung-krzk tree and commit:
+> from the m68k tree and commit:
 >=20
->   54d8454436a2 ("mmc: host: Enable compile testing of multiple drivers")
+>   ef03e4545eac ("m68knommu: switch to using asm-generic/uaccess.h")
 >=20
-> from the mmc tree.
+> from the m68knommu tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,42 +78,78 @@ rote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> diff --cc drivers/mmc/host/Kconfig
-> index 0d7c61d8d1d9,dc646359b4ff..000000000000
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@@ -289,7 -301,8 +301,8 @@@ config MMC_SDHCI_TEGR
+> diff --cc arch/m68k/Kconfig
+> index 93bbb74ea876,aefffebc0afa..000000000000
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@@ -6,32 -6,33 +6,33 @@@ config M68
+>   	select ARCH_HAS_BINFMT_FLAT
+>   	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
+>   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
+>  +	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
+>   	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
+>   	select ARCH_NO_PREEMPT if !COLDFIRE
+>  +	select ARCH_WANT_IPC_PARSE_VERSION
+>   	select BINFMT_FLAT_ARGVP_ENVP_ON_STACK
+>   	select DMA_DIRECT_REMAP if HAS_DMA && MMU && !COLDFIRE
+>  -	select HAVE_IDE
+>  -	select HAVE_AOUT if MMU
+>  -	select HAVE_ASM_MODVERSIONS
+>  -	select HAVE_DEBUG_BUGVERBOSE
+>  -	select GENERIC_IRQ_SHOW
+>   	select GENERIC_ATOMIC64
+>  -	select NO_DMA if !MMU && !COLDFIRE
+>  -	select HAVE_UID16
+>  -	select VIRT_TO_BUS
+>  -	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
+>   	select GENERIC_CPU_DEVICES
+>   	select GENERIC_IOMAP
+>  +	select GENERIC_IRQ_SHOW
+>   	select GENERIC_STRNCPY_FROM_USER if MMU
+>   	select GENERIC_STRNLEN_USER if MMU
+>  -	select UACCESS_MEMCPY if !MMU
+>  -	select ARCH_WANT_IPC_PARSE_VERSION
+>  +	select HAVE_AOUT if MMU
+>  +	select HAVE_ASM_MODVERSIONS
+>  +	select HAVE_DEBUG_BUGVERBOSE
+>   	select HAVE_FUTEX_CMPXCHG if MMU && FUTEX
+>  +	select HAVE_IDE
+>   	select HAVE_MOD_ARCH_SPECIFIC
+>  +	select HAVE_UID16
+>  +	select MMU_GATHER_NO_RANGE if MMU
+>   	select MODULES_USE_ELF_REL
+>   	select MODULES_USE_ELF_RELA
+>  -	select OLD_SIGSUSPEND3
+>  +	select NO_DMA if !MMU && !COLDFIRE
+>   	select OLD_SIGACTION
+>  -	select MMU_GATHER_NO_RANGE if MMU
+>  +	select OLD_SIGSUSPEND3
+> ++	select UACCESS_MEMCPY if !MMU
+>  +	select VIRT_TO_BUS
 >  =20
->   config MMC_SDHCI_S3C
->   	tristate "SDHCI support on Samsung S3C SoC"
-> - 	depends on MMC_SDHCI && (PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS)
-> + 	depends on MMC_SDHCI
->  -	depends on PLAT_SAMSUNG || COMPILE_TEST
-> ++	depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
->   	help
->   	  This selects the Secure Digital Host Controller Interface (SDHCI)
->   	  often referrered to as the HSMMC block in some of the Samsung S3C
+>   config CPU_BIG_ENDIAN
+>   	def_bool y
 
-This is now a conflict between the mmc tree and the arm-soc tree.
+This is now a conflict between the m68knommu tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/0jvQS_1F3Tf7P_dHTbis07l
+--Sig_/IUdstK6WEU=FI6tW9f5Bjaa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+FVTgACgkQAVBC80lX
-0GyZ7wgAj3Lt90XXfhTOJCW8tl887N62mOXdr097J3Ogr+0NyyEkaudfhqQBd/0m
-D39j+aVlSLzaEXuGZcSsayEUvQ88mOsQVZIsIwRLY/kO+kjsjBpSwhPkMJ0DSb49
-KvqvnKD/gRVNK8V7e8LEuwzH5TGe2Dcw0gqEJq4ozPSkpl96RqvUBbCw08h4m/4y
-dTEBR0aeYqPTBLMrH7julZUZzqwr8dirN2oAhQxStUJtw1o3LwVjk7JgBoep9MXN
-3zrO49+J51nGHC21carbaGEvRgOSUz2QuRW0ZG891jaO1F2ju2k3n3RFpIsX8jy3
-2tI5ddo0AFi6gQXIsnGEnp/kVL7D+Q==
-=3VR4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+FViAACgkQAVBC80lX
+0Gy1jQf/ZJsYPcEGfTnxeX9qr+pZcNje9wmWy2BARyrbd/Fr2m7sKQfycTMTm0/D
+sBrwhewXQauEuVXdEDpkTTDEUAZSaUN4Ypr7lEyWqA4ff3ILO72C32cUd7fnMMWc
+8yVWKM5X5Z1e/yJ7ny2L/S3G/I+vkulAGBbF1DVsdVducxrhVbUm0NGPRnjA/2w+
+zywmhYIAHwhZ9y19nbDu5xF6buib167HVwGJmpQcBqEKBM+0EfCPdNLqyYleBukY
+uiN5t1yyUHHhrE+vykRfd5AXdUDSIxBfCppRuv3EVDife1uN2YTOAeRpsWdvnSSI
+CECEWMMtZis5Z2EYyrxkz43a/K4axQ==
+=WKO5
 -----END PGP SIGNATURE-----
 
---Sig_/0jvQS_1F3Tf7P_dHTbis07l--
+--Sig_/IUdstK6WEU=FI6tW9f5Bjaa--

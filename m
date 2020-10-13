@@ -2,193 +2,321 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1F828D47E
-	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 21:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC6E28D480
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 21:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728205AbgJMTa0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Oct 2020 15:30:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35626 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725919AbgJMTa0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Oct 2020 15:30:26 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728332AbgJMTeJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Oct 2020 15:34:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39953 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728313AbgJMTeJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Oct 2020 15:34:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602617646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UfHyRKdM1jXzcI1NNXnTrYnbxIcTJ4h5krO896K+oKo=;
+        b=cuSQWWWllWaVMWS2zoGePKcQuwywWxjCZjejc5rmyZLZ5FX3ymTTJvuf1C6yUzrjFxV2lr
+        i5N6C+pOpTd2RHvtlWy5F3yrDuBPNU1U8kqu6zHCo1LsxUdH8pWPnGu6/z00faCfTdbp1h
+        rJy6HzkOvc1pocqdAethrD1l0KCux1k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-3-Eand1oZxM321DQw7eBawCA-1; Tue, 13 Oct 2020 15:34:02 -0400
+X-MC-Unique: Eand1oZxM321DQw7eBawCA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8179C208D5;
-        Tue, 13 Oct 2020 19:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602617425;
-        bh=sKfRn0G3r2QJ0n+zStMYMH4/lQ2Rvihck+3oEl1ZvRM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=R7sjL8Pg4SIQAhpyidIjl4QmhLEOJyFBsROOvFP4YxaQAr2UtPR+9W1tq4+6ZT8cX
-         OYUUCp0+T+8Z6y5dY6t7DTrbaXzs530PPuzZjONxbeNxqoEo0p4cpRLGqF9amoUePO
-         hY0Sy02C5iFegmKKL4YvGB4MclKKd6/Fjx550IOY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3506E3522A39; Tue, 13 Oct 2020 12:30:25 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 12:30:25 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Qian Cai <cai@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-Message-ID: <20201013193025.GA2424@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
- <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
- <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <20201012212812.GH3249@paulmck-ThinkPad-P72>
- <20201013103406.GY2628@hirez.programming.kicks-ass.net>
- <20201013104450.GQ2651@hirez.programming.kicks-ass.net>
- <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
- <20201013162650.GN3249@paulmck-ThinkPad-P72>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201013162650.GN3249@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C80C86ABCE;
+        Tue, 13 Oct 2020 19:33:59 +0000 (UTC)
+Received: from ovpn-118-16.rdu2.redhat.com (ovpn-118-16.rdu2.redhat.com [10.10.118.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1748A7512E;
+        Tue, 13 Oct 2020 19:33:57 +0000 (UTC)
+Message-ID: <90922c43c670e4b55e6cf421be19146333e2ae7b.camel@redhat.com>
+Subject: Re: [PATCH v2] powerpc/pci: unmap legacy INTx interrupts when a PHB
+ is removed
+From:   Qian Cai <cai@redhat.com>
+To:     =?ISO-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org
+Date:   Tue, 13 Oct 2020 15:33:57 -0400
+In-Reply-To: <fce8ffe1-521c-8344-c7ad-53550e408cdc@kaod.org>
+References: <20200807101854.844619-1-clg@kaod.org>
+         <9c5eca863c63e360662fae7597213e8927c2a885.camel@redhat.com>
+         <fce8ffe1-521c-8344-c7ad-53550e408cdc@kaod.org>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 09:26:50AM -0700, Paul E. McKenney wrote:
-> On Tue, Oct 13, 2020 at 01:25:44PM +0200, Peter Zijlstra wrote:
-> > On Tue, Oct 13, 2020 at 12:44:50PM +0200, Peter Zijlstra wrote:
-> > > On Tue, Oct 13, 2020 at 12:34:06PM +0200, Peter Zijlstra wrote:
-> > > > On Mon, Oct 12, 2020 at 02:28:12PM -0700, Paul E. McKenney wrote:
-> > > > > It is certainly an accident waiting to happen.  Would something like
-> > > > > the following make sense?
-> > > > 
-> > > > Sadly no.
-> > > > 
-> > > > > ------------------------------------------------------------------------
-> > > > > 
-> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > index bfd38f2..52a63bc 100644
-> > > > > --- a/kernel/rcu/tree.c
-> > > > > +++ b/kernel/rcu/tree.c
-> > > > > @@ -4067,6 +4067,7 @@ void rcu_cpu_starting(unsigned int cpu)
-> > > > >  
-> > > > >  	rnp = rdp->mynode;
-> > > > >  	mask = rdp->grpmask;
-> > > > > +	lockdep_off();
-> > > > >  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-> > > > >  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
-> > > > >  	newcpu = !(rnp->expmaskinitnext & mask);
-> > > > > @@ -4086,6 +4087,7 @@ void rcu_cpu_starting(unsigned int cpu)
-> > > > >  	} else {
-> > > > >  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-> > > > >  	}
-> > > > > +	lockdep_on();
-> > > > >  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
-> > > > >  }
-> > > > 
-> > > > This will just shut it up, but will not fix the actual problem of that
-> > > > spin-lock ending up in trace_lock_acquire() which relies on RCU which
-> > > > isn't looking.
-> > > > 
-> > > > What we need here is to supress tracing not lockdep. Let me consider.
+On Wed, 2020-09-23 at 09:06 +0200, Cédric Le Goater wrote:
+> On 9/23/20 2:33 AM, Qian Cai wrote:
+> > On Fri, 2020-08-07 at 12:18 +0200, Cédric Le Goater wrote:
+> > > When a passthrough IO adapter is removed from a pseries machine using
+> > > hash MMU and the XIVE interrupt mode, the POWER hypervisor expects the
+> > > guest OS to clear all page table entries related to the adapter. If
+> > > some are still present, the RTAS call which isolates the PCI slot
+> > > returns error 9001 "valid outstanding translations" and the removal of
+> > > the IO adapter fails. This is because when the PHBs are scanned, Linux
+> > > maps automatically the INTx interrupts in the Linux interrupt number
+> > > space but these are never removed.
 > > > 
-> > > We appear to have a similar problem with rcu_report_dead(), it's
-> > > raw_spin_unlock()s can end up in trace_lock_release() while we just
-> > > killed RCU.
+> > > To solve this problem, we introduce a PPC platform specific
+> > > pcibios_remove_bus() routine which clears all interrupt mappings when
+> > > the bus is removed. This also clears the associated page table entries
+> > > of the ESB pages when using XIVE.
+> > > 
+> > > For this purpose, we record the logical interrupt numbers of the
+> > > mapped interrupt under the PHB structure and let pcibios_remove_bus()
+> > > do the clean up.
+> > > 
+> > > Since some PCI adapters, like GPUs, use the "interrupt-map" property
+> > > to describe interrupt mappings other than the legacy INTx interrupts,
+> > > we can not restrict the size of the mapping array to PCI_NUM_INTX. The
+> > > number of interrupt mappings is computed from the "interrupt-map"
+> > > property and the mapping array is allocated accordingly.
+> > > 
+> > > Cc: "Oliver O'Halloran" <oohall@gmail.com>
+> > > Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
+> > > Signed-off-by: Cédric Le Goater <clg@kaod.org>
 > > 
-> > So we can deal with the explicit trace_*() calls like the below, but I
-> > really don't like it much. It also doesn't help with function tracing.
-> > This is really early/late in the hotplug cycle and should be considered
-> > entry, we shouldn't be tracing anything here.
+> > Some syscall fuzzing will trigger this on POWER9 NV where the traces pointed
+> > to
+> > this patch.
 > > 
-> > Paul, would it be possible to use a scheme similar to IRQ/NMI for
-> > hotplug? That seems to mostly rely on atomic ops, not locks.
+> > .config: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
 > 
-> The rest of the rcu_node tree and the various grace-period/hotplug races
-> makes that question non-trivial.  I will look into it, but I have no
-> reason for optimism.
+> OK. The patch is missing a NULL assignement after kfree() and that
+> might be the issue. 
 > 
-> But there is only one way to find out...  ;-)
+> I did try PHB removal under PowerNV, so I would like to understand 
+> how we managed to remove twice the PCI bus and possibly reproduce. 
+> Any chance we could grab what the syscall fuzzer (syzkaller) did ? 
 
-The aforementioned races get really ugly really fast.  So I do not
-believe that a lockless approach is a strategy to win here.
+Any update on this? Maybe Michael or Stephen could drop this for now, so our
+fuzzing could continue to find something else new?
 
-But why not use something sort of like a sequence counter, but adapted
-for local on-CPU use?  This should quiet the diagnostics for the full
-time that RCU needs its locks.  Untested patch below.
+It can still be reproduced on today's linux-next. BTW, this is running trinity
+from an unprivileged user. This is the snapshot of the each fuzzing thread when
+this happens.
 
-Thoughts?
+http://people.redhat.com/qcai/pcibios_remove_bus/trinity-post-mortem.log
 
-							Thanx, Paul
+It can be reproduced by simply keep running this for a while:
 
-------------------------------------------------------------------------
+$ trinity -C <total number of CPUs> --arch 64
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 1d42909..5b06886 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -1152,13 +1152,15 @@ bool rcu_lockdep_current_cpu_online(void)
- 	struct rcu_data *rdp;
- 	struct rcu_node *rnp;
- 	bool ret = false;
-+	unsigned long seq;
- 
- 	if (in_nmi() || !rcu_scheduler_fully_active)
- 		return true;
- 	preempt_disable_notrace();
- 	rdp = this_cpu_ptr(&rcu_data);
- 	rnp = rdp->mynode;
--	if (rdp->grpmask & rcu_rnp_online_cpus(rnp))
-+	seq = READ_ONCE(rnp->ofl_seq) & ~0x1;
-+	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || seq != READ_ONCE(rnp->ofl_seq))
- 		ret = true;
- 	preempt_enable_notrace();
- 	return ret;
-@@ -4065,6 +4067,8 @@ void rcu_cpu_starting(unsigned int cpu)
- 
- 	rnp = rdp->mynode;
- 	mask = rdp->grpmask;
-+	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-+	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
- 	newcpu = !(rnp->expmaskinitnext & mask);
-@@ -4084,6 +4088,8 @@ void rcu_cpu_starting(unsigned int cpu)
- 	} else {
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	}
-+	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-+	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
- 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
- }
- 
-@@ -4111,6 +4117,8 @@ void rcu_report_dead(unsigned int cpu)
- 
- 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
- 	mask = rdp->grpmask;
-+	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-+	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
- 	raw_spin_lock(&rcu_state.ofl_lock);
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
- 	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
-@@ -4123,6 +4131,8 @@ void rcu_report_dead(unsigned int cpu)
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	raw_spin_unlock(&rcu_state.ofl_lock);
-+	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
-+	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
- 
- 	rdp->cpu_started = false;
- }
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 805c9eb..7d802b6 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -57,6 +57,7 @@ struct rcu_node {
- 				/*  beginning of each grace period. */
- 	unsigned long qsmaskinitnext;
- 				/* Online CPUs for next grace period. */
-+	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
- 	unsigned long expmask;	/* CPUs or groups that need to check in */
- 				/*  to allow the current expedited GP */
- 				/*  to complete. */
+[19611.946827][T1717146] pci_bus 0035:03: busn_res: [bus 03-07] is released
+[19611.950956][T1717146] pci_bus 0035:08: busn_res: [bus 08-0c] is released
+[19611.951260][T1717146] =============================================================================
+[19611.952336][T1717146] BUG kmalloc-16 (Tainted: G        W  O     ): Object already free
+[19611.952365][T1717146] -----------------------------------------------------------------------------
+[19611.952365][T1717146] 
+[19611.952411][T1717146] Disabling lock debugging due to kernel taint
+[19611.952438][T1717146] INFO: Allocated in pcibios_scan_phb+0x104/0x3e0 age=1960714 cpu=4 pid=1
+[19611.952481][T1717146] 	__slab_alloc+0xa4/0xf0
+[19611.952500][T1717146] 	__kmalloc+0x294/0x330
+[19611.952519][T1717146] 	pcibios_scan_phb+0x104/0x3e0
+[19611.952549][T1717146] 	pcibios_init+0x84/0x124
+[19611.952578][T1717146] 	do_one_initcall+0xac/0x528
+[19611.952599][T1717146] 	kernel_init_freeable+0x35c/0x3fc
+[19611.952618][T1717146] 	kernel_init+0x24/0x148
+[19611.952646][T1717146] 	ret_from_kernel_thread+0x5c/0x80
+[19611.952665][T1717146] INFO: Freed in pcibios_remove_bus+0x70/0x90 age=0 cpu=16 pid=1717146
+[19611.952691][T1717146] 	kfree+0x49c/0x510
+[19611.952700][T1717146] 	pcibios_remove_bus+0x70/0x90
+[19611.952711][T1717146] 	pci_remove_bus+0xe4/0x110
+[19611.952730][T1717146] 	pci_remove_bus_device+0x74/0x170
+[19611.952749][T1717146] 	pci_remove_bus_device+0x4c/0x170
+[19611.952768][T1717146] 	pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.952798][T1717146] 	remove_store+0xc0/0xe0
+[19611.952819][T1717146] 	dev_attr_store+0x30/0x50
+[19611.952852][T1717146] 	sysfs_kf_write+0x68/0xb0
+[19611.952870][T1717146] 	kernfs_fop_write+0x114/0x260
+[19611.952904][T1717146] 	vfs_write+0xe4/0x260
+[19611.952922][T1717146] 	ksys_write+0x74/0x130
+[19611.952951][T1717146] 	system_call_exception+0xf8/0x1d0
+[19611.952970][T1717146] 	system_call_common+0xe8/0x218
+[19611.952990][T1717146] INFO: Slab 0x0000000099caaf22 objects=178 used=174 fp=0x00000000006a64b0 flags=0x7fff8000000201
+[19611.953004][T1717146] INFO: Object 0x00000000f360132d @offset=30192 fp=0x0000000000000000
+[19611.953004][T1717146] 
+[19611.953048][T1717146] Redzone 00000000acef7298: bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+[19611.953080][T1717146] Object 00000000f360132d: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+[19611.953114][T1717146] Redzone 0000000083758aaa: bb bb bb bb bb bb bb bb                          ........
+[19611.953146][T1717146] Padding 00000000cbb228a2: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
+[19611.953189][T1717146] CPU: 16 PID: 1717146 Comm: trinity-c8 Tainted: G    B   W  O      5.9.0-next-20201013 #1
+[19611.953223][T1717146] Call Trace:
+[19611.953242][T1717146] [c000200022557800] [c00000000064c208] dump_stack+0xec/0x144 (unreliable)
+[19611.953291][T1717146] [c000200022557840] [c000000000363688] print_trailer+0x278/0x2a0
+[19611.953323][T1717146] [c0002000225578d0] [c00000000035aa8c] free_debug_processing+0x57c/0x600
+[19611.953356][T1717146] [c0002000225579b0] [c00000000035af24] __slab_free+0x414/0x5b0
+[19611.953391][T1717146] [c000200022557a80] [c00000000035b55c] kfree+0x49c/0x510
+[19611.953423][T1717146] [c000200022557b10] [c0000000000432a0] pcibios_remove_bus+0x70/0x90
+pci_irq_map_dispose at arch/powerpc/kernel/pci-common.c:456
+(inlined by) pcibios_remove_bus at arch/powerpc/kernel/pci-common.c:461
+[19611.953454][T1717146] [c000200022557b40] [c000000000677f94] pci_remove_bus+0xe4/0x110
+[19611.953477][T1717146] [c000200022557b70] [c000000000678134] pci_remove_bus_device+0x74/0x170
+[19611.953510][T1717146] [c000200022557bb0] [c000000000678120] pci_remove_bus_device+0x60/0x170
+[19611.953543][T1717146] [c000200022557bf0] [c0000000006782a4] pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.953567][T1717146] [c000200022557c20] [c000000000687690] remove_store+0xc0/0xe0
+[19611.953599][T1717146] [c000200022557c70] [c0000000006e5320] dev_attr_store+0x30/0x50
+[19611.953621][T1717146] [c000200022557c90] [c0000000004a53b8] sysfs_kf_write+0x68/0xb0
+[19611.953652][T1717146] [c000200022557cd0] [c0000000004a45e4] kernfs_fop_write+0x114/0x260
+[19611.953684][T1717146] [c000200022557d20] [c0000000003aff74] vfs_write+0xe4/0x260
+[19611.953717][T1717146] [c000200022557d70] [c0000000003b02a4] ksys_write+0x74/0x130
+[19611.953762][T1717146] [c000200022557dc0] [c00000000002a3e8] system_call_exception+0xf8/0x1d0
+[19611.953795][T1717146] [c000200022557e20] [c00000000000d0a8] system_call_common+0xe8/0x218
+[19611.953821][T1717146] FIX kmalloc-16: Object at 0x00000000f360132d not freed
+[19611.954111][T1717146] =============================================================================
+[19611.954144][T1717146] BUG kmalloc-16 (Tainted: G    B   W  O     ): Wrong object count. Counter is 174 but counted were 176
+[19611.954176][T1717146] -----------------------------------------------------------------------------
+[19611.954176][T1717146] 
+[19611.954221][T1717146] INFO: Slab 0x0000000099caaf22 objects=178 used=174 fp=0x00000000006a64b0 flags=0x7fff8000000201
+[19611.954237][T1717146] CPU: 16 PID: 1717146 Comm: trinity-c8 Tainted: G    B   W  O      5.9.0-next-20201013 #1
+[19611.954269][T1717146] Call Trace:
+[19611.954286][T1717146] [c0002000225576f0] [c00000000064c208] dump_stack+0xec/0x144 (unreliable)
+[19611.954329][T1717146] [c000200022557730] [c000000000363368] slab_err+0x78/0xb0
+[19611.954364][T1717146] [c000200022557810] [c000000000359f94] on_freelist+0x364/0x390
+[19611.954390][T1717146] [c0002000225578b0] [c00000000035a798] free_debug_processing+0x288/0x600
+[19611.954428][T1717146] [c000200022557990] [c00000000035af24] __slab_free+0x414/0x5b0
+[19611.954459][T1717146] [c000200022557a60] [c00000000035b55c] kfree+0x49c/0x510
+[19611.954507][T1717146] [c000200022557af0] [c0000000002bd5a0] kfree_const+0x60/0x80
+[19611.954540][T1717146] [c000200022557b10] [c0000000006553ec] kobject_release+0x7c/0xd0
+[19611.954562][T1717146] [c000200022557b50] [c0000000006e66c0] put_device+0x20/0x40
+[19611.954594][T1717146] [c000200022557b70] [c00000000067820c] pci_remove_bus_device+0x14c/0x170
+[19611.954627][T1717146] [c000200022557bb0] [c000000000678120] pci_remove_bus_device+0x60/0x170
+[19611.954652][T1717146] [c000200022557bf0] [c0000000006782a4] pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.954686][T1717146] [c000200022557c20] [c000000000687690] remove_store+0xc0/0xe0
+[19611.954717][T1717146] [c000200022557c70] [c0000000006e5320] dev_attr_store+0x30/0x50
+[19611.954749][T1717146] [c000200022557c90] [c0000000004a53b8] sysfs_kf_write+0x68/0xb0
+[19611.954784][T1717146] [c000200022557cd0] [c0000000004a45e4] kernfs_fop_write+0x114/0x260
+[19611.954884][T1717146] [c000200022557d20] [c0000000003aff74] vfs_write+0xe4/0x260
+[19611.954972][T1717146] [c000200022557d70] [c0000000003b02a4] ksys_write+0x74/0x130
+[19611.955050][T1717146] [c000200022557dc0] [c00000000002a3e8] system_call_exception+0xf8/0x1d0
+[19611.955144][T1717146] [c000200022557e20] [c00000000000d0a8] system_call_common+0xe8/0x218
+[19611.955228][T1717146] FIX kmalloc-16: Object count adjusted.
+[19611.955300][T1717146] pci_bus 0035:0d: busn_res: [bus 0d-11] is released
+[19611.955394][T1717146] =============================================================================
+[19611.955493][T1717146] BUG kmalloc-16 (Tainted: G    B   W  O     ): Object already free
+[19611.955572][T1717146] -----------------------------------------------------------------------------
+[19611.955572][T1717146] 
+[19611.955732][T1717146] INFO: Allocated in pcibios_scan_phb+0x104/0x3e0 age=1960715 cpu=4 pid=1
+[19611.955847][T1717146] 	__slab_alloc+0xa4/0xf0
+[19611.955902][T1717146] 	__kmalloc+0x294/0x330
+[19611.955948][T1717146] 	pcibios_scan_phb+0x104/0x3e0
+[19611.955994][T1717146] 	pcibios_init+0x84/0x124
+[19611.956064][T1717146] 	do_one_initcall+0xac/0x528
+[19611.956101][T1717146] 	kernel_init_freeable+0x35c/0x3fc
+[19611.956164][T1717146] 	kernel_init+0x24/0x148
+[19611.956215][T1717146] 	ret_from_kernel_thread+0x5c/0x80
+[19611.956283][T1717146] INFO: Freed in pcibios_remove_bus+0x70/0x90 age=1 cpu=16 pid=1717146
+[19611.956385][T1717146] 	kfree+0x49c/0x510
+[19611.956419][T1717146] 	pcibios_remove_bus+0x70/0x90
+[19611.956481][T1717146] 	pci_remove_bus+0xe4/0x110
+[19611.956532][T1717146] 	pci_remove_bus_device+0x74/0x170
+[19611.956608][T1717146] 	pci_remove_bus_device+0x4c/0x170
+[19611.956652][T1717146] 	pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.956722][T1717146] 	remove_store+0xc0/0xe0
+[19611.956793][T1717146] 	dev_attr_store+0x30/0x50
+[19611.956850][T1717146] 	sysfs_kf_write+0x68/0xb0
+[19611.956914][T1717146] 	kernfs_fop_write+0x114/0x260
+[19611.956964][T1717146] 	vfs_write+0xe4/0x260
+[19611.957009][T1717146] 	ksys_write+0x74/0x130
+[19611.957055][T1717146] 	system_call_exception+0xf8/0x1d0
+[19611.957101][T1717146] 	system_call_common+0xe8/0x218
+[19611.957173][T1717146] INFO: Slab 0x0000000099caaf22 objects=178 used=175 fp=0x00000000f4222fd7 flags=0x7fff8000000201
+[19611.957304][T1717146] INFO: Object 0x00000000f360132d @offset=30192 fp=0x0000000000000000
+[19611.957304][T1717146] 
+[19611.957429][T1717146] Redzone 00000000acef7298: bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+[19611.957543][T1717146] Object 00000000f360132d: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+[19611.957684][T1717146] Redzone 0000000083758aaa: bb bb bb bb bb bb bb bb                          ........
+[19611.957781][T1717146] Padding 00000000cbb228a2: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
+[19611.957912][T1717146] CPU: 16 PID: 1717146 Comm: trinity-c8 Tainted: G    B   W  O      5.9.0-next-20201013 #1
+[19611.958033][T1717146] Call Trace:
+[19611.958085][T1717146] [c000200022557800] [c00000000064c208] dump_stack+0xec/0x144 (unreliable)
+[19611.958182][T1717146] [c000200022557840] [c000000000363688] print_trailer+0x278/0x2a0
+[19611.958261][T1717146] [c0002000225578d0] [c00000000035aa8c] free_debug_processing+0x57c/0x600
+[19611.958385][T1717146] [c0002000225579b0] [c00000000035af24] __slab_free+0x414/0x5b0
+[19611.958486][T1717146] [c000200022557a80] [c00000000035b55c] kfree+0x49c/0x510
+[19611.958555][T1717146] [c000200022557b10] [c0000000000432a0] pcibios_remove_bus+0x70/0x90
+[19611.958665][T1717146] [c000200022557b40] [c000000000677f94] pci_remove_bus+0xe4/0x110
+[19611.958745][T1717146] [c000200022557b70] [c000000000678134] pci_remove_bus_device+0x74/0x170
+[19611.958842][T1717146] [c000200022557bb0] [c000000000678120] pci_remove_bus_device+0x60/0x170
+[19611.958953][T1717146] [c000200022557bf0] [c0000000006782a4] pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.959062][T1717146] [c000200022557c20] [c000000000687690] remove_store+0xc0/0xe0
+[19611.959142][T1717146] [c000200022557c70] [c0000000006e5320] dev_attr_store+0x30/0x50
+[19611.959242][T1717146] [c000200022557c90] [c0000000004a53b8] sysfs_kf_write+0x68/0xb0
+[19611.959323][T1717146] [c000200022557cd0] [c0000000004a45e4] kernfs_fop_write+0x114/0x260
+[19611.959425][T1717146] [c000200022557d20] [c0000000003aff74] vfs_write+0xe4/0x260
+[19611.959506][T1717146] [c000200022557d70] [c0000000003b02a4] ksys_write+0x74/0x130
+[19611.959613][T1717146] [c000200022557dc0] [c00000000002a3e8] system_call_exception+0xf8/0x1d0
+[19611.959713][T1717146] [c000200022557e20] [c00000000000d0a8] system_call_common+0xe8/0x218
+[19611.959819][T1717146] FIX kmalloc-16: Object at 0x00000000f360132d not freed
+[19611.960653][T1717146] pci 0035:02     : [PE# fc] Releasing PE
+[19611.960831][T1717146] pci_bus 0035:02: busn_res: [bus 02-11] is released
+[19611.960913][T1717146] =============================================================================
+[19611.960934][T1717146] BUG kmalloc-16 (Tainted: G    B   W  O     ): Object already free
+[19611.960954][T1717146] -----------------------------------------------------------------------------
+[19611.960954][T1717146] 
+[19611.960991][T1717146] INFO: Allocated in pcibios_scan_phb+0x104/0x3e0 age=1960715 cpu=4 pid=1
+[19611.961024][T1717146] 	__slab_alloc+0xa4/0xf0
+[19611.961052][T1717146] 	__kmalloc+0x294/0x330
+[19611.961070][T1717146] 	pcibios_scan_phb+0x104/0x3e0
+[19611.961089][T1717146] 	pcibios_init+0x84/0x124
+[19611.961108][T1717146] 	do_one_initcall+0xac/0x528
+[19611.961169][T1717146] 	kernel_init_freeable+0x35c/0x3fc
+[19611.961213][T1717146] 	kernel_init+0x24/0x148
+[19611.961276][T1717146] 	ret_from_kernel_thread+0x5c/0x80
+[19611.961321][T1717146] INFO: Freed in pcibios_remove_bus+0x70/0x90 age=1 cpu=16 pid=1717146
+[19611.961441][T1717146] 	kfree+0x49c/0x510
+[19611.961497][T1717146] 	pcibios_remove_bus+0x70/0x90
+[19611.961554][T1717146] 	pci_remove_bus+0xe4/0x110
+[19611.961621][T1717146] 	pci_remove_bus_device+0x74/0x170
+[19611.961670][T1717146] 	pci_remove_bus_device+0x4c/0x170
+[19611.961730][T1717146] 	pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.961810][T1717146] 	remove_store+0xc0/0xe0
+[19611.961855][T1717146] 	dev_attr_store+0x30/0x50
+[19611.961912][T1717146] 	sysfs_kf_write+0x68/0xb0
+[19611.961965][T1717146] 	kernfs_fop_write+0x114/0x260
+[19611.962017][T1717146] 	vfs_write+0xe4/0x260
+[19611.962071][T1717146] 	ksys_write+0x74/0x130
+[19611.962127][T1717146] 	system_call_exception+0xf8/0x1d0
+[19611.962194][T1717146] 	system_call_common+0xe8/0x218
+[19611.962239][T1717146] INFO: Slab 0x0000000099caaf22 objects=178 used=174 fp=0x00000000253d72f3 flags=0x7fff8000000201
+[19611.962365][T1717146] INFO: Object 0x00000000f360132d @offset=30192 fp=0x0000000000000000
+[19611.962365][T1717146] 
+[19611.962501][T1717146] Redzone 00000000acef7298: bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+[19611.962628][T1717146] Object 00000000f360132d: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+[19611.962729][T1717146] Redzone 0000000083758aaa: bb bb bb bb bb bb bb bb                          ........
+[19611.962836][T1717146] Padding 00000000cbb228a2: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a  ZZZZZZZZZZZZZZZZ
+[19611.962962][T1717146] CPU: 16 PID: 1717146 Comm: trinity-c8 Tainted: G    B   W  O      5.9.0-next-20201013 #1
+[19611.963077][T1717146] Call Trace:
+[19611.963113][T1717146] [c000200022557840] [c00000000064c208] dump_stack+0xec/0x144 (unreliable)
+[19611.963210][T1717146] [c000200022557880] [c000000000363688] print_trailer+0x278/0x2a0
+[19611.963300][T1717146] [c000200022557910] [c00000000035aa8c] free_debug_processing+0x57c/0x600
+[19611.963395][T1717146] [c0002000225579f0] [c00000000035af24] __slab_free+0x414/0x5b0
+[19611.963490][T1717146] [c000200022557ac0] [c00000000035b55c] kfree+0x49c/0x510
+[19611.963585][T1717146] [c000200022557b50] [c0000000000432a0] pcibios_remove_bus+0x70/0x90
+[19611.963710][T1717146] [c000200022557b80] [c000000000677f94] pci_remove_bus+0xe4/0x110
+[19611.963788][T1717146] [c000200022557bb0] [c000000000678134] pci_remove_bus_device+0x74/0x170
+[19611.963883][T1717146] [c000200022557bf0] [c0000000006782a4] pci_stop_and_remove_bus_device_locked+0x34/0x50
+[19611.963988][T1717146] [c000200022557c20] [c000000000687690] remove_store+0xc0/0xe0
+[19611.964102][T1717146] [c000200022557c70] [c0000000006e5320] dev_attr_store+0x30/0x50
+[19611.964189][T1717146] [c000200022557c90] [c0000000004a53b8] sysfs_kf_write+0x68/0xb0
+[19611.964302][T1717146] [c000200022557cd0] [c0000000004a45e4] kernfs_fop_write+0x114/0x260
+[19611.964390][T1717146] [c000200022557d20] [c0000000003aff74] vfs_write+0xe4/0x260
+[19611.964493][T1717146] [c000200022557d70] [c0000000003b02a4] ksys_write+0x74/0x130
+[19611.964541][T1717146] [c000200022557dc0] [c00000000002a3e8] system_call_exception+0xf8/0x1d0
+[19611.964747][T1717146] [c000200022557e20] [c00000000000d0a8] system_call_common+0xe8/0x218
+[19611.964851][T1717146] FIX kmalloc-16: Object at 0x00000000f360132d not freed
+[19611.966211][T1717146] pci 0035:01     : [PE# fd] Releasing PE
+

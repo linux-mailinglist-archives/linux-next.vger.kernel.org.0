@@ -2,92 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1CA28D43D
-	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 21:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F129928D451
+	for <lists+linux-next@lfdr.de>; Tue, 13 Oct 2020 21:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729992AbgJMTJ1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Oct 2020 15:09:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58674 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729603AbgJMTJ1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Oct 2020 15:09:27 -0400
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1732409AbgJMTU0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Oct 2020 15:20:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53600 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726987AbgJMTUZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Oct 2020 15:20:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602616823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qfa7lTzv6HC1EJIEQgqPGNiVrmVRQHZtPinf12Efayg=;
+        b=CpsI3JLonTyJ22NCClwkR3j883O105X6Esau2qiXcLuwyyQxsL+W8WL0AEZniSR7d2QFtn
+        VJTDliwHFg6xfMexSvZCpyns9bOkFf1MiieTMoM5kK6tPGcmWh3KNII6jJB3pqrRwz/yhf
+        +t24PCZQOisa9nZPh2MIacMi5IyVq2E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-557-RA8MA6fNPdS-h5kW_l4Kqg-1; Tue, 13 Oct 2020 15:20:20 -0400
+X-MC-Unique: RA8MA6fNPdS-h5kW_l4Kqg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3340D20E65;
-        Tue, 13 Oct 2020 19:09:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602616166;
-        bh=kNQlVTeHNAfONSQgXkp3RK1JocNH8x9dldRu804OQHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=txJOU0N7+OPVuzvB9htxvbuAi/4kPjv0O/wPEPx981bTqxJ4eAQAg/7Z48gnwY1Bo
-         pyuUeZYt0zt5ak5/EDwEJpwCJjE8XHDgzX3WrqY/TpwW9c2TKMUxrGHHLPg0K8uiTd
-         TUEaIrYqVu7+js8b/zro2yVWX8bHjscURA4ZcG3k=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3339F4047F; Tue, 13 Oct 2020 16:09:24 -0300 (-03)
-Date:   Tue, 13 Oct 2020 16:09:24 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F7B81020901;
+        Tue, 13 Oct 2020 19:20:17 +0000 (UTC)
+Received: from w520.home (ovpn-113-35.phx2.redhat.com [10.3.113.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C960C76663;
+        Tue, 13 Oct 2020 19:20:16 +0000 (UTC)
+Date:   Tue, 13 Oct 2020 13:20:16 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+Cc:     Diana Craciun OSS <diana.craciun@oss.nxp.com>,
+        Bharat Bhushan <Bharat.Bhushan@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH RESEND 1/1] perf build: Allow nested externs to enable
- BUILD_BUG() usage
-Message-ID: <20201013190924.GB3100363@kernel.org>
-References: <20201009112327.GC656950@krava>
- <cover.thread-251403.your-ad-here.call-01602244460-ext-7088@work.hours>
- <patch-1.thread-251403.git-2514037e9477.your-ad-here.call-01602244460-ext-7088@work.hours>
- <20201009124111.GD656950@krava>
- <20201012085936.241cc62d@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the vfio tree
+Message-ID: <20201013132016.44af05f1@w520.home>
+In-Reply-To: <276bf3f3-108b-fe60-4d17-d3f314e61db4@oss.nxp.com>
+References: <20201013140744.64937ecd@canb.auug.org.au>
+        <276bf3f3-108b-fe60-4d17-d3f314e61db4@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201012085936.241cc62d@canb.auug.org.au>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Mon, Oct 12, 2020 at 08:59:36AM +1100, Stephen Rothwell escreveu:
-> Hi all,
-> 
-> On Fri, 9 Oct 2020 14:41:11 +0200 Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Fri, Oct 09, 2020 at 02:25:23PM +0200, Vasily Gorbik wrote:
-> > > Currently BUILD_BUG() macro is expanded to smth like the following:
-> > >    do {
-> > >            extern void __compiletime_assert_0(void)
-> > >                    __attribute__((error("BUILD_BUG failed")));
-> > >            if (!(!(1)))
-> > >                    __compiletime_assert_0();
-> > >    } while (0);
-> > > 
-> > > If used in a function body this obviously would produce build errors
-> > > with -Wnested-externs and -Werror.
-> > > 
-> > > To enable BUILD_BUG() usage in tools/arch/x86/lib/insn.c which perf
-> > > includes in intel-pt-decoder, build perf without -Wnested-externs.
-> > > 
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>  
-> > 
-> > that one applied nicely ;-) thanks
-> > 
-> > Acked-by: Jiri Olsa <jolsa@redhat.com>
-> 
-> I will apply that patch to the merge of the tip tree today (instead of
-> reverting the series I reverted in Friday) (unless I get an update of
-> the tip tree containing it, of course).
+On Tue, 13 Oct 2020 18:56:07 +0300
+Diana Craciun OSS <diana.craciun@oss.nxp.com> wrote:
 
-Applied to perf/core that will go to Linus this week, maybe even today.
+> Hi,
+> 
+> How does it fail? What's the error?
+> 
+> Thanks,
+> Diana
+> 
+> 
+> On 10/13/2020 6:07 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the vfio tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > 
+> > Caused by commit
+> > 
+> >    cc0ee20bd969 ("vfio/fsl-mc: trigger an interrupt via eventfd")
+> >    ac93ab2bf69a ("vfio/fsl-mc: Add support for device reset")
+> > 
+> > I have used the vfio tree from next-20201012 for today.
 
-- Arnaldo
+Thanks, Stephen.  Diana has posted a 32bit build fix which I've merged,
+maybe that was the error.  Also Diana's series in my branch is currently
+dependent on fsl-bus support in GregKH's char-misc-next branch.  Looking
+at the log from the successful build, I wonder if our branches are just
+in the wrong order (vfio/next processed on line 341, char-misc-next
+processed on 387).  I don't know if you regularly re-order for this
+sort of thing, otherwise it should work out when Greg's branch gets
+merged, but testing sooner in next would be preferred.  Thanks,
+
+Alex
+

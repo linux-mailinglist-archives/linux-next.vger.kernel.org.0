@@ -2,157 +2,215 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B923C28DA5B
-	for <lists+linux-next@lfdr.de>; Wed, 14 Oct 2020 09:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71B628DF59
+	for <lists+linux-next@lfdr.de>; Wed, 14 Oct 2020 12:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728084AbgJNHPy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Oct 2020 03:15:54 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:40358 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728036AbgJNHPy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Oct 2020 03:15:54 -0400
-Received: by mail-ej1-f67.google.com with SMTP id p15so3309842ejm.7;
-        Wed, 14 Oct 2020 00:15:52 -0700 (PDT)
+        id S1728419AbgJNKtc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Oct 2020 06:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgJNKtb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Oct 2020 06:49:31 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E88C061755
+        for <linux-next@vger.kernel.org>; Wed, 14 Oct 2020 03:49:31 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id k6so4462679ior.2
+        for <linux-next@vger.kernel.org>; Wed, 14 Oct 2020 03:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=HgHUYfl/RqdxqpyW+AYcy5yFjZFOcQH7eO1Foilj7+M=;
+        b=haUlUbdFu1nX6ivBcGnXd/sIrfe2L1qsMdVWShpufVqQ7p0owplfL1Z4v0KQPG/Xjj
+         diCS/zQrPg/IYK8pftdkIKiG5kxSati1CEPX0Kw62Dsjh5pQKfz2xZjzGNteU6vLXX0T
+         IWL1Ro/r26qkZxVYM0fCAy2LIzBgPQqNJ1siPtdSUkiwLUVcRVfuRn5tQDa4mr+FHYaT
+         GBWXd/qOx2OkpyjdaqnRTTmS6DnQlcmzIen8DllsRNOO6d/okNB9NncyQP9PQ/N1H7cy
+         7ZqgoXmhVmF1MWKZvpbMX+S/imATcAifojuGbYmTGjsEGn8Vmv+6JVe5wCD+KKmBdurU
+         heqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4MB/WEv7WVbXZ32vpSI6tjTzebAt77Hp+rVbyGH87qE=;
-        b=dvDSGQ0rBl3xy0xVJA73IF0AvHun8UjcSHxYrCJwvysNenGwvvlO5DxOOvmi3A+IwP
-         PUmUcm2AJuLf44TItHxHeaU77UAmeh/GkPwcvtGy/wSKxnyl+l9M6Gvul2Q0bsOpmE4o
-         xxeKDz3qFgu2ix4ojbAnWj4RRY1ErTpViIAkLL3lwMXFDas7XuKp+5VB40qT355PTahe
-         8D1ycfQ30wLNGZl8QVDHst3prXKB2EpZkMvynRa8A6KjOMjlOQXr+uguJLY5OCUIPMXW
-         jTZCH+hvG/sc1T8/iZU5tO+FRVpvzpLDh3NuMZu8YiffEk+wkcBggYPGnLSgjFSaqWL9
-         MXew==
-X-Gm-Message-State: AOAM5330Z1O51wRKJJihDPc/+7gQTT/CQ87cMjO+cwSjrsct5PX0N7uy
-        tMcbr2ZLDvnBs5Dy0Z6TsX0=
-X-Google-Smtp-Source: ABdhPJxuCAYjKRp/eva7cZT3owH1+7r57Z5oPnyVCvomekbZaEZKPotTUv597H2IZrn48haP5D4yzg==
-X-Received: by 2002:a17:906:f151:: with SMTP id gw17mr3759548ejb.119.1602659751468;
-        Wed, 14 Oct 2020 00:15:51 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.240])
-        by smtp.googlemail.com with ESMTPSA id me12sm1104240ejb.108.2020.10.14.00.15.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 14 Oct 2020 00:15:50 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 09:15:47 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: autofs crash with latest linux-next
-Message-ID: <20201014071547.GA2459@kozik-lap>
-References: <yt9d1ri3nakg.fsf@linux.ibm.com>
- <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=HgHUYfl/RqdxqpyW+AYcy5yFjZFOcQH7eO1Foilj7+M=;
+        b=icKRJoMxcoJlDSe9y/i7PI/V9FUXkJPPoArmB0WbJiYyzseSVep5VQpjH4xiKj0MQC
+         kKcQVZNTSB6A/x6sOsl6aYv9IUeuE05qg7hhB7hSubQWDMtJHYMceoNJqlcoe4IQU/c4
+         uVW0K9rCXF1ud3dbS243TazfPqCInXiT9+5kZCx/VbgMbLTr4aqUU77CoUkQTWXZrxst
+         a/ncsjm8Oiycadz7h5h4hBv1514ttfWD9AQ2e3+GrGtEt5ZTW0BwClYzIxt3FLdYmRMz
+         Ls0JItMcqO+O0SfK14jeVy3stbGaCbKn8iK/lUCdCMQC8aGH4DNoFlwnjcocmsmFsmG1
+         NBog==
+X-Gm-Message-State: AOAM5322lHSiIEsCJDMuOm9gRFs9jzlOjBDmlMiH3ylkfivMlgLTWF8T
+        d4Iou0bdYKa0yTxWec5dDfAXL9wnB01AA/Dk+kzc2T55sFqT6DgI
+X-Google-Smtp-Source: ABdhPJxrp5zVb72tEMqowWicQw1OH+2Aa2RXOawH6E7+WcmWA+b7TR1yip3sSjUy6V20MblnkIzEHslZQ53oqAm9cys=
+X-Received: by 2002:a02:c785:: with SMTP id n5mr2574048jao.128.1602672570049;
+ Wed, 14 Oct 2020 03:49:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Oct 2020 16:19:18 +0530
+Message-ID: <CA+G9fYt46oC7-BKryNDaaXPJ9GztvS2cs_7GjYRjanRi4+ryCQ@mail.gmail.com>
+Subject: BUG: KASAN: global-out-of-bounds in vprintk_store on x86_64
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 09:20:12AM +0200, Christian Borntraeger wrote:
-> CC linux-next, Al Viro.
-> 
-> On 12.10.20 09:54, Sven Schnelle wrote:
-> > Hi,
-> > 
-> > on s390 i see the following crash with linux-next:
-> > 
-> > [ 4525.432605] Unable to handle kernel pointer dereference in virtual kernel address space
-> > [ 4525.432612] Failing address: 0000000000000000 TEID: 0000000000000483
-> > [ 4525.432613] Fault in home space mode while using kernel ASCE.
-> > [ 4525.432616] AS:00000000cf048007 R3:00000001fffec007 S:00000001ffff1800 P:000000000000003d 
-> > [ 4525.432640] Oops: 0004 ilc:3 [#1] SMP 
-> > [ 4525.432644] Modules linked in: dm_crypt encrypted_keys lcs ctcm fsm nfsv3 nfs_acl nfs lockd grace quota_v2 quota_tree tun overlay ntfs exfat vfat fat sctp vfio_pci irqbypass vfio_virqfd scsi_debug vhost_vsock vmw_vsock_virtio_transport_common vsock vhost vhost_iotlb vfio_ap kvm loop nft_counter bridge stp llc dm_service_time nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink sunrpc dm_multipath dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua s390_trng vfio_ccw vfio_mdev mdev vfio_iommu_type1 vfio zcrypt_cex4 eadm_sch sch_fq_codel ip_tables x_tables ghash_s390 prng aes_s390 des_s390 libdes sha3_512_s390 sha3_256_s390 sha512_s390 sha256_s390 sha1_s390 sha_common pkey zcrypt rng_core autofs4 [last unloaded: dummy_del_mod]
-> > [ 4525.432691] CPU: 9 PID: 1050921 Comm: find Tainted: G           OE     5.9.0-20201011.rc8.git0.d67bc7812221.300.fc32.s390x+next #1
-> > [ 4525.432693] Hardware name: IBM 3906 M04 704 (LPAR)
-> > [ 4525.432694] Krnl PSW : 0704d00180000000 00000000cde29f70 (__kernel_write+0x1a0/0x2a0)
-> > [ 4525.432702]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:1 PM:0 RI:0 EA:3
-> > [ 4525.432704] Krnl GPRS: 0000000100067343 0000000000000000 0000000000000130 0000000000000001
-> > [ 4525.432705]            0000000000000006 000000005f82be2f 0000000000000130 000000008c6ab568
-> > [ 4525.432728]            0000000084441f00 0000000000000000 0000000000000130 0000000084441f00
-> > [ 4525.432729]            0000000081476000 0000000000000001 00000000cde29ef4 000003e002f5b6f0
-> > [ 4525.432735] Krnl Code: 00000000cde29f62: a7280000		lhi	%r2,0
-> >                           00000000cde29f66: a7f4ff9d		brc	15,00000000cde29ea0
-> >                          #00000000cde29f6a: e310f0f00004	lg	%r1,240(%r15)
-> >                          >00000000cde29f70: e31090000024	stg	%r1,0(%r9)
-> >                           00000000cde29f76: 9104b044		tm	68(%r11),4
-> >                           00000000cde29f7a: a784000f		brc	8,00000000cde29f98
-> >                           00000000cde29f7e: e31003400004	lg	%r1,832
-> >                           00000000cde29f84: b904002a		lgr	%r2,%r10
-> > [ 4525.432748] Call Trace:
-> > [ 4525.432750]  [<00000000cde29f70>] __kernel_write+0x1a0/0x2a0 
-> > [ 4525.432752] ([<00000000cde29ef4>] __kernel_write+0x124/0x2a0)
-> > [ 4525.432756]  [<000003ff80004cfa>] autofs_write+0x5a/0x140 [autofs4] 
-> > [ 4525.432758]  [<000003ff80005262>] autofs_notify_daemon.constprop.0+0x10a/0x1c8 [autofs4] 
-> > [ 4525.432760]  [<000003ff80005872>] autofs_wait+0x552/0x718 [autofs4] 
-> > [ 4525.432762]  [<000003ff800033ca>] autofs_mount_wait+0x5a/0xb0 [autofs4] 
-> > [ 4525.432764]  [<000003ff800048b2>] autofs_d_automount+0x102/0x278 [autofs4] 
-> > [ 4525.432766]  [<00000000cde398fe>] __traverse_mounts+0x9e/0x270 
-> > [ 4525.432768]  [<00000000cde3e7ee>] step_into+0x1de/0x280 
-> > [ 4525.432770]  [<00000000cde3f000>] open_last_lookups+0xb8/0x3f8 
-> > [ 4525.432772]  [<00000000cde3f726>] path_openat+0x86/0x1d0 
-> > [ 4525.432773]  [<00000000cde425b0>] do_filp_open+0x78/0x118 
-> > [ 4525.432776]  [<00000000cde278d0>] do_sys_openat2+0xa8/0x168 
-> > [ 4525.432778]  [<00000000cde27cfa>] __s390x_sys_openat+0x6a/0x98 
-> > [ 4525.432781]  [<00000000ce64f2e8>] system_call+0xdc/0x2a4 
-> > [ 4525.432782] Last Breaking-Event-Address:
-> > [ 4525.432783]  [<00000000cde29efc>] __kernel_write+0x12c/0x2a0
-> > 
-> > This seems to be caused by the result of merging 0fb702791bf ("autofs:
-> > use __kernel_write() for the autofs pipe writing") and 4d03e3cc5982
-> 
-> I cannot find the first commit ids. To me it looks like this should be 
-> 
-> commit 90fb702791bf99b959006972e8ee7bb4609f441b
-> Author:     Linus Torvalds <torvalds@linux-foundation.org>
-> AuthorDate: Tue Sep 29 17:18:34 2020 -0700
-> Commit:     Linus Torvalds <torvalds@linux-foundation.org>
-> CommitDate: Tue Sep 29 17:18:34 2020 -0700
-> 
->     autofs: use __kernel_write() for the autofs pipe writing
-> 
-> instead?
-> 
-> 
-> > ("fs: don't allow kernel reads and writes without iter
-> > ops"). __kernel_write() gets now called with a NULL pointer as pos
-> > argument, but __kernel_write expects a valid pointer as it
-> > fetches/stores the pos value there. Is there a fix pending somewhere?
+While testing LTP controllers testing on x86_64 KASAN enabled linux
+next 20201013 tag
+kernel this kernel BUG noticed. The oom-killer log also noticed while
+running tests.
 
-Hi All,
-
-+CC Kees Cook (reviewer),
-
-I hit this since few days as well. Although the bisect points to the
-merge, the issue looks like a result of mentioned commit 4d03e3cc5982
-("fs: don't allow kernel reads and writes without iter ops").
-
-The __kernel_read() last argument 'pos' can be NULL and it is
-dereferenced here (added by the commit):
-
- 525 ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
-...
- 547         kiocb.ki_pos = *pos;
- 548         iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: f2fb1afc57304f9dd68c20a08270e287470af2eb
+  git describe: next-20201013
+  make_kernelversion: 5.9.0
+  kernel-config:
+https://builds.tuxbuild.com/TXP6cqokP8BCYJrv7zf6kw/kernel.config
 
 
-The __kernel_read() is called with NULL in fs/autofs/waitq.c:
+steps to reproduce:
+-------------------------
+# cd /opt/ltp
+# ./runltp  -f controllers
 
- 45 static int autofs_write(struct autofs_sb_info *sbi,
- 46                         struct file *file, const void *addr, int bytes)
+Crash log:
+--------------
+[  221.921944] oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=c,mems_allowed=0,oom_memcg=/0,task_memcg=in
+[  221.922108] ==================================================================
+[  221.922111] BUG: KASAN: global-out-of-bounds in vprintk_store+0x362/0x3d0
+[  221.922112] Write of size 2 at addr ffffffffba51dbcd by task
+memcg_test_1/11282
+[  221.922113]
+[  221.922114] CPU: 1 PID: 11282 Comm: memcg_test_1 Not tainted
+5.9.0-next-20201013 #1
+[  221.922116] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  221.922116] Call Trace:
+[  221.922117]  dump_stack+0xa4/0xd9
+[  221.922118]  print_address_description.constprop.0+0x21/0x210
+[  221.922119]  ? _raw_write_lock_bh+0xe0/0xe0
+[  221.922120]  ? vprintk_store+0x362/0x3d0
+[  221.922121]  kasan_report.cold+0x37/0x7c
+[  221.922122]  ? vprintk_store+0x362/0x3d0
+[  221.922123]  check_memory_region+0x18c/0x1f0
+[  221.922124]  memcpy+0x3c/0x60
+[  221.922125]  vprintk_store+0x362/0x3d0
+[  221.922125]  ? __ia32_sys_syslog+0x50/0x50
+[  221.922126]  ? _raw_spin_lock_irqsave+0x9b/0x100
+[  221.922127]  ? _raw_spin_lock_irq+0xf0/0xf0
+[  221.922128]  ? __kasan_check_write+0x14/0x20
+[  221.922129]  vprintk_emit+0x8d/0x1f0
+[  221.922130]  vprintk_default+0x1d/0x20
+[  221.922131]  vprintk_func+0x5a/0x100
+[  221.922132]  printk+0xb2/0xe3
+[  221.922133]  ? swsusp_write.cold+0x189/0x189
+[  221.922134]  ? kernfs_vfs_xattr_set+0x60/0x60
+[  221.922134]  ? _raw_write_lock_bh+0xe0/0xe0
+[  221.922135]  ? trace_hardirqs_on+0x38/0x100
+[  221.922136]  pr_cont_kernfs_path.cold+0x49/0x4b
+[  221.922137]  mem_cgroup_print_oom_context.cold+0x74/0xc3
+[  221.922138]  dump_header+0x340/0x3bf
+[  221.922139]  oom_kill_process.cold+0xb/0x10
+[  221.922140]  out_of_memory+0x1e9/0x860
+[  221.922141]  ? oom_killer_disable+0x210/0x210
+[  221.922142]  mem_cgroup_out_of_memory+0x198/0x1c0
+[  221.922143]  ? mem_cgroup_count_precharge_pte_range+0x250/0x250
+[  221.922144]  try_charge+0xa9b/0xc50
+[  221.922145]  ? arch_stack_walk+0x9e/0xf0
+[  221.922146]  ? memory_high_write+0x230/0x230
+[  221.922146]  ? avc_has_extended_perms+0x830/0x830
+[  221.922147]  ? stack_trace_save+0x94/0xc0
+[  221.922148]  ? stack_trace_consume_entry+0x90/0x90
+[  221.922149]  __memcg_kmem_charge+0x73/0x120
+[  221.922150]  ? cred_has_capability+0x10f/0x200
+[  221.922151]  ? mem_cgroup_can_attach+0x260/0x260
+[  221.922152]  ? selinux_sb_eat_lsm_opts+0x2f0/0x2f0
+[  221.922153]  ? obj_cgroup_charge+0x16b/0x220
+[  221.922154]  ? kmem_cache_alloc+0x78/0x4c0
+[  221.922155]  obj_cgroup_charge+0x122/0x220
+[  221.922156]  ? vm_area_alloc+0x20/0x90
+[  221.922156]  kmem_cache_alloc+0x78/0x4c0
+[  221.922157]  vm_area_alloc+0x20/0x90
+[  221.922158]  mmap_region+0x3ed/0x9a0
+[  221.922159]  ? cap_mmap_addr+0x1d/0x80
+[  221.922160]  do_mmap+0x3ee/0x720
+[  221.922161]  vm_mmap_pgoff+0x16a/0x1c0
+[  221.922162]  ? randomize_stack_top+0x90/0x90
+[  221.922163]  ? copy_page_range+0x1980/0x1980
+[  221.922163]  ksys_mmap_pgoff+0xab/0x350
+[  221.922164]  ? find_mergeable_anon_vma+0x110/0x110
+[  221.922165]  ? __audit_syscall_entry+0x1a6/0x1e0
+[  221.922166]  __x64_sys_mmap+0x8d/0xb0
+[  221.922167]  do_syscall_64+0x38/0x50
+[  221.922168]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[  221.922169] RIP: 0033:0x7fe8f5e75103
+[  221.922172] Code: 54 41 89 d4 55 48 89 fd 53 4c 89 cb 48 85 ff 74
+56 49 89 d9 45 89 f8 45 89 f2 44 89 e2 4c 89 ee 48 89 ef b8 09 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 7d 5b 5d 41 5c 41 5d 41 5e 41 5f c3 66
+2e 0f
+[  221.922173] RSP: 002b:00007ffd38c90198 EFLAGS: 00000246 ORIG_RAX:
+0000000000000009
+[  221.922175] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe8f5e75103
+[  221.922176] RDX: 0000000000000003 RSI: 0000000000001000 RDI: 0000000000000000
+[  221.922178] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[  221.922179] R10: 0000000000002022 R11: 0000000000000246 R12: 0000000000000003
+[  221.922180] R13: 0000000000001000 R14: 0000000000002022 R15: 0000000000000000
+[  221.922181]
+[  213O[  221.922182] The buggy address belongs to the variable:
+[  221.922183]  clear_seq+0x2d/0x40
+[  221.922183]
+[  221.922184] Memory state around the buggy address:
+[  221.922185]  ffffffffba51da80: 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00
+[  221.922187]  ffffffffba51db00: 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00
+[  221.922188] >ffffffffba51db80: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9
+00 f9 f9 f9
+[  221.922189]                                               ^
+[  221.922190]  ffffffffba51dc00: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9
+00 f9 f9 f9
+[  221.922191]  ffffffffba51dc80: f9 f9 f9 f9 01 f9 f9 f9 f9 f9 f9 f9
+00 f9 f9 f9
+[  221.922193] ==================================================================
+[  221.922194] Disabling lock debugging due to kernel taint
+[  221.922196] ,task=memcg_test_1,pid=11280,uid=0
+[  221.922205] Memory cgroup out of memory: Killed process 11280
+(memcg_test_1) total-vm:4124kB, anon-rss:72kB, file-rss:0kB,
+shmem-rss:0kB, UID:0 pgtables:48kB oom_score_adj:0
+[  221.922509] memcg_test_1 invoked oom-killer:
+gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=0
+[  222.885676] CPU: 2 PID: 11283 Comm: memcg_test_1 Tainted: G    B
+         5.9.0-next-20201013 #1
+[  222.885678] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[  222.885679] Call Trace:
+[  222.885683]  dump_stack+0xa4/0xd9
+[  222.885686]  dump_header+0x8f/0x3bf
+[  222.885689]  oom_kill_process.cold+0xb/0x10
+[  222.885692]  out_of_memory+0x1e9/0x860
+[  222.885697]  ? oom_killer_disable+0x210/0x210
+[  222.923728]  mem_cgroup_out_of_memory+0x198/0x1c0
+[  222.923731]  ? mem_cgroup_count_precharge_pte_range+0x250/0x250
 
-...
- 54         mutex_lock(&sbi->pipe_mutex);
- 55         while (bytes) {
- 56                 wr = __kernel_write(file, data, bytes, NULL);
 
-Best regards,
-Krzysztof
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
+full test details and log link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201013/testrun/3302398/suite/linux-log-parser/tests/
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

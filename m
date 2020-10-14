@@ -2,163 +2,274 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6D028E190
-	for <lists+linux-next@lfdr.de>; Wed, 14 Oct 2020 15:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2827E28E1E0
+	for <lists+linux-next@lfdr.de>; Wed, 14 Oct 2020 16:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbgJNNnx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Oct 2020 09:43:53 -0400
-Received: from mail-eopbgr00059.outbound.protection.outlook.com ([40.107.0.59]:59454
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727620AbgJNNnx (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 14 Oct 2020 09:43:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SxeJDS8x2wD7UP0Y6fP480+Ep/dfPANnsmuwxEKbNxEMjFLXq12o1Xxjvp8QhW/6/GHQoa7wpQ6ki0N1OFzsoJwVXqUyW8E54OfZ0KiFjR7id1JPQb8E7yHOgOLtgbECeayIZq+Hd/5BeCFl67udGIca/HlBwErO6UWXat+ZwdiA5/06zGbV43Aj1aOGeLwnSypP6No8Gjd//5E5BLGAMER1TBPiuPUr0KyN+n+Xc6qZFo7rPaNY713pkYj97/n9licFl4fARtAy8ShXifTFaHyoo4iRXNzmhOhXUdJyIcutQpzhTJMwVW5Y0KUFisySEgKy4825pnIALlROuSDRiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V8Kn13Mof+8kEYFsyQSiNVy3ZPxnjgLja4wShPd29K8=;
- b=R43iOdGeNZh3p6ZlC4OZ8HaJToz3Lb3g+RRi2P94aq7qMuaxfDo/fwuqyDklclpBBjjhCN26uuwTkqYtYS3NL4EDdj0w1pfAUHwKpcI8RK4lYShH2tsIkIYouC7zU7ZMBo0ZM/+Z1vbwZyDTMVDUu3HiDL2clucpiGraOc6R6Ka7lFh4mydMbV3IvlQcIh8GpnLZNXZVR3sMyezm/6xn8IfnCCYnoVk63EpEJMc84BfHPomtqbQa4Z7iErvWRLjBFj7N9Jn8xHDohrxEMVl896WhIbAxokJl1muujibXlF8I/lfdTgMcEW1kL8SC5OWzELU4cc1cDPHZR8WTbiUjPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V8Kn13Mof+8kEYFsyQSiNVy3ZPxnjgLja4wShPd29K8=;
- b=BFLAv4cY+em11+kAxdDQRtzcJ1g3Yg5dVqF1lFz+aeXhWJd/q7B/saYc+j2hhLb0I7kVmShA47EkKJgO18QKxNWAIPcYE1D3pN1UP39shK4kKiypUuHH0jcvafD7cFmY+OphImFJA4F5MkH2BoXiaftkcJY05UDxXj/qWhnTFeY=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=oss.nxp.com;
-Received: from VI1PR0402MB2815.eurprd04.prod.outlook.com
- (2603:10a6:800:ae::16) by VI1PR0402MB3424.eurprd04.prod.outlook.com
- (2603:10a6:803:e::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Wed, 14 Oct
- 2020 13:43:48 +0000
-Received: from VI1PR0402MB2815.eurprd04.prod.outlook.com
- ([fe80::6cf3:a10a:8242:602f]) by VI1PR0402MB2815.eurprd04.prod.outlook.com
- ([fe80::6cf3:a10a:8242:602f%11]) with mapi id 15.20.3455.032; Wed, 14 Oct
- 2020 13:43:48 +0000
-Subject: Re: linux-next: build failure after merge of the vfio tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Bharat Bhushan <Bharat.Bhushan@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201013140744.64937ecd@canb.auug.org.au>
- <276bf3f3-108b-fe60-4d17-d3f314e61db4@oss.nxp.com>
- <20201014091653.0ec43501@canb.auug.org.au>
-From:   Diana Craciun OSS <diana.craciun@oss.nxp.com>
-Message-ID: <7b80cbae-43e9-cb5b-ddd1-c4590fd87e18@oss.nxp.com>
-Date:   Wed, 14 Oct 2020 16:43:45 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
-In-Reply-To: <20201014091653.0ec43501@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [188.27.189.94]
-X-ClientProxiedBy: AM0PR02CA0078.eurprd02.prod.outlook.com
- (2603:10a6:208:154::19) To VI1PR0402MB2815.eurprd04.prod.outlook.com
- (2603:10a6:800:ae::16)
+        id S2388859AbgJNOFX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Oct 2020 10:05:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54482 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726528AbgJNOFX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 14 Oct 2020 10:05:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1602684320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mY/jXV1h2vn/yDJei6QHbZyP772jxPE6iwtk0iRyK60=;
+        b=WmTxaImszTjWybIZukJ87mgRlpd4VdvnDTBkoR2Z0jFgqH+u2C6sSvsMgjUh9t1olvUM7r
+        XUSZj3/Bx0BEFWKzuuH/A6oN4SInAjhIr8A08+gr0RUQCz3YpyMfMPQ1VoezndrXWQRU7A
+        L5PEIctmmazm1AKVhFIVLk6ZH3GcVlg=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id AC177AD6B;
+        Wed, 14 Oct 2020 14:05:20 +0000 (UTC)
+Date:   Wed, 14 Oct 2020 16:05:14 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: BUG: KASAN: global-out-of-bounds in vprintk_store on x86_64
+Message-ID: <20201014140514.GB17231@alley>
+References: <CA+G9fYt46oC7-BKryNDaaXPJ9GztvS2cs_7GjYRjanRi4+ryCQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.122] (188.27.189.94) by AM0PR02CA0078.eurprd02.prod.outlook.com (2603:10a6:208:154::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20 via Frontend Transport; Wed, 14 Oct 2020 13:43:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: d6b720cf-b6e8-4b7b-1a25-08d870472d82
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3424:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <VI1PR0402MB3424792D8C2C1D1D2287EB80BE050@VI1PR0402MB3424.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 10nHLPFwhlgxeAb92SRmGr8kaqWagzR6vVRHCgsdS1C6E87LMo50vTh3VoXtVEFN9bUTkGJl3vOkG5sRf0/9mW8DsVmu6WG0NbiL3zxwFtae0nVlFpkbA2FnQPW213A3lm3TH7g9k4PqqTMqD9P9Iz3G96vLfM89HyKTz9sLMIBhglz9D8KBIAJYdvW+egcKUqSGF8tb8CkHANWjmnH5P0kkVgIfxbSgZ/px04h4VacEcQOe3Do8swwE8IHRph3qBpiL29n+hfny0I0CbpDEctu2l2VF8f0bTWscr4Qkh+4Mtt1ijsrcIJZBakW/hMiEY/7GxXV33JkWkBsUlQqP5cHtJhCu751es3VI++50seFzb6nSEqe6RNWc5bpQ3t++
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB2815.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(66476007)(66946007)(66556008)(2616005)(16526019)(186003)(8936002)(956004)(478600001)(6916009)(26005)(54906003)(2906002)(4326008)(52116002)(31686004)(86362001)(31696002)(316002)(16576012)(53546011)(6486002)(8676002)(5660300002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: CCsd5YtcCIDGxAHdRAQf4DIgewQxL4/U2Isup5MJrFnDSEZx2v3O89v6efNyQDDIwqA30s9P/K9MIoKxjJOU/jP61X2shtYCe6xynmlo+276w7Eqe1ZGpVsiTK23i4+L2JI+H2JNzNKKEfTkGeNuNNbsv0ffmTLMLbkwGU8tHyBcXkYAXbOhimIZkBeTxvjK4GSgYyuk2yFoc1qrvH1yXNgtLZ08vhC2l3r7JiwZ686TRZli3zzdHSWntMajx9K/wrw2HC8HqnddHT4+txHXONt5cbKVPPF8fkZtA7DAyDvDtzmkpA+f48WAStRyhuCIf87D44nPWwDeDFB+Xf+HaZ9DcT0lpOaYZ09b217h44mUf2nNKyH9BVsF/dgq4D6EZJ5q0fAfs9Enf0MVfccuvTNELvDObfawJCHfV6aYZPTIAwNVx9ajp2DAOuJjy3tNFkXxmBabCtFwhY5cl0fjuUrWrwnPaUuBktG8Ikz1DPOOvR1Yitnr9oyvYM7yM7fL2/s3i04MGIIrQcKviTXSuqDTYChsSy92jIRguCK1CvVvdxTtxvvGk9ZgyY9aGTsy2Uyb+38OqE9gl8OT8iGUXGJjDNuwBfVet3eheLZxcGihi89R2MMaQvvs5G1IY0J08GWn2f3HeYaetLgmxYAGOA==
-X-MS-Exchange-Transport-Forked: True
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6b720cf-b6e8-4b7b-1a25-08d870472d82
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB2815.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2020 13:43:48.6383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M9aZeKqDXe66HyiPeCVoNMrjzf2nEBY418PBHTtuifabe8K6d/s2gqDDjG9kghHjVVtIeRmt/Jldh9WeSXL+lQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3424
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYt46oC7-BKryNDaaXPJ9GztvS2cs_7GjYRjanRi4+ryCQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thank you. The errors indicate that, most likely, the fsl-mc-bus patches 
-from char-misc-next are missing at this point. I have added the vfio 
-patches on top of linux-next (which already contains the fsl-mc-bus 
-patches) and built x86_64 allmodconfig. There were no errors.
+On Wed 2020-10-14 16:19:18, Naresh Kamboju wrote:
+> While testing LTP controllers testing on x86_64 KASAN enabled linux
+> next 20201013 tag
+> kernel this kernel BUG noticed. The oom-killer log also noticed while
+> running tests.
+> 
+> metadata:
+>   git branch: master
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git commit: f2fb1afc57304f9dd68c20a08270e287470af2eb
+>   git describe: next-20201013
+>   make_kernelversion: 5.9.0
+>   kernel-config:
+> https://builds.tuxbuild.com/TXP6cqokP8BCYJrv7zf6kw/kernel.config
+> 
+> 
+> steps to reproduce:
+> -------------------------
+> # cd /opt/ltp
+> # ./runltp  -f controllers
+> 
+> Crash log:
+> --------------
+> [  221.921944] oom-kill:constraint=CONSTRAINT_MEMCG,nodemask=(null),cpuset=c,mems_allowed=0,oom_memcg=/0,task_memcg=in
 
-Thanks,
-Diana
+This is the last string stored in the ring buffer before KASAN trigerred.
 
-On 10/14/2020 1:16 AM, Stephen Rothwell wrote:
-> Hi Diana,
-> 
-> On Tue, 13 Oct 2020 18:56:07 +0300 Diana Craciun OSS <diana.craciun@oss.nxp.com> wrote:
->>
->> Hi,
->>
->> How does it fail? What's the error?
-> 
-> Sorry about that:
-> 
-> drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c: In function 'vfio_fsl_mc_set_irq_trigger':
-> drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c:121:8: error: implicit declaration of function 'fsl_mc_populate_irq_pool' [-Werror=implicit-function-declaration]
->    121 |  ret = fsl_mc_populate_irq_pool(mc_cont,
->        |        ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc_intr.c:122:4: error: 'FSL_MC_IRQ_POOL_MAX_TOTAL_IRQS' undeclared (first use in this function)
->    122 |    FSL_MC_IRQ_POOL_MAX_TOTAL_IRQS);
->        |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c: In function 'vfio_fsl_mc_release':
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:178:9: error: implicit declaration of function 'dprc_reset_container' [-Werror=implicit-function-declaration]
->    178 |   ret = dprc_reset_container(mc_cont->mc_io, 0,
->        |         ^~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:181:6: error: 'DPRC_RESET_OPTION_NON_RECURSIVE' undeclared (first use in this function)
->    181 |      DPRC_RESET_OPTION_NON_RECURSIVE);
->        |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:181:6: note: each undeclared identifier is reported only once for each function it appears in
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:191:3: error: implicit declaration of function 'fsl_mc_cleanup_irq_pool' [-Werror=implicit-function-declaration]
->    191 |   fsl_mc_cleanup_irq_pool(mc_cont);
->        |   ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c: In function 'vfio_fsl_mc_ioctl':
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:316:9: error: 'DPRC_RESET_OPTION_NON_RECURSIVE' undeclared (first use in this function)
->    316 |         DPRC_RESET_OPTION_NON_RECURSIVE);
->        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c: In function 'vfio_fsl_mc_mmap_mmio':
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:455:36: error: 'FSL_MC_REGION_CACHEABLE' undeclared (first use in this function)
->    455 |  region_cacheable = (region.type & FSL_MC_REGION_CACHEABLE) &&
->        |                                    ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:456:22: error: 'FSL_MC_REGION_SHAREABLE' undeclared (first use in this function)
->    456 |       (region.type & FSL_MC_REGION_SHAREABLE);
->        |                      ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c: In function 'vfio_fsl_mc_bus_notifier':
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:522:9: error: 'struct fsl_mc_device' has no member named 'driver_override'
->    522 |   mc_dev->driver_override = kasprintf(GFP_KERNEL, "%s",
->        |         ^~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:524:14: error: 'struct fsl_mc_device' has no member named 'driver_override'
->    524 |   if (!mc_dev->driver_override)
->        |              ^~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c: In function 'vfio_fsl_mc_init_device':
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:561:8: error: implicit declaration of function 'dprc_setup' [-Werror=implicit-function-declaration]
->    561 |  ret = dprc_setup(mc_dev);
->        |        ^~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:567:8: error: implicit declaration of function 'dprc_scan_container' [-Werror=implicit-function-declaration]
->    567 |  ret = dprc_scan_container(mc_dev, false);
->        |        ^~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:576:2: error: implicit declaration of function 'dprc_remove_devices' [-Werror=implicit-function-declaration]
->    576 |  dprc_remove_devices(mc_dev, NULL, 0);
->        |  ^~~~~~~~~~~~~~~~~~~
-> drivers/vfio/fsl-mc/vfio_fsl_mc.c:577:2: error: implicit declaration of function 'dprc_cleanup' [-Werror=implicit-function-declaration]
->    577 |  dprc_cleanup(mc_dev);
->        |  ^~~~~~~~~~~~
-> 
+> [  221.922108] ==================================================================
+> [  221.922111] BUG: KASAN: global-out-of-bounds in vprintk_store+0x362/0x3d0
+> [  221.922112] Write of size 2 at addr ffffffffba51dbcd by task
+> memcg_test_1/11282
 
+My guess is that the size 2 is related to the string "in" from the
+above line. It is likely done by
+
+void pr_cont_kernfs_path(struct kernfs_node *kn)
+{
+[...]
+    pr_cont("%s", kernfs_pr_cont_buf);
+
+called from
+
+void mem_cgroup_print_oom_context(struct mem_cgroup *memcg, struct
+task_struct *p)
+{
+[...]
+	if (p) {
+		pr_cont(",task_memcg=");
+		pr_cont_cgroup_path(task_cgroup(p, memory_cgrp_id));
+
+
+> [  221.922113]
+> [  221.922114] CPU: 1 PID: 11282 Comm: memcg_test_1 Not tainted
+> 5.9.0-next-20201013 #1
+> [  221.922116] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.0b 07/27/2017
+> [  221.922116] Call Trace:
+> [  221.922117]  dump_stack+0xa4/0xd9
+> [  221.922118]  print_address_description.constprop.0+0x21/0x210
+> [  221.922119]  ? _raw_write_lock_bh+0xe0/0xe0
+> [  221.922120]  ? vprintk_store+0x362/0x3d0
+> [  221.922121]  kasan_report.cold+0x37/0x7c
+> [  221.922122]  ? vprintk_store+0x362/0x3d0
+> [  221.922123]  check_memory_region+0x18c/0x1f0
+> [  221.922124]  memcpy+0x3c/0x60
+> [  221.922125]  vprintk_store+0x362/0x3d0
+
+It seems that vprintk() store was able to extend the last string
+by the two characters. So this is likely:
+
+static size_t log_output(int facility, int level, enum log_flags lflags,
+			 const struct dev_printk_info *dev_info,
+			 char *text, size_t text_len)
+{
+[...]
+		if (prb_reserve_in_last(&e, prb, &r, caller_id, LOG_LINE_MAX)) {
+			memcpy(&r.text_buf[r.info->text_len], text, text_len);
+
+But very likely the two characters were copied to wrong location.
+There are many similar lines in the full log and they always contain
+
+    task_memcg=/0
+
+It means that the size of the path is 2 characters but it should be
+"/0". I guess that "in" was in the log buffer from the previous
+wrap.
+
+So, it seems that prb_reserve_in_last() correctly updated the size
+of the extended record but it returned wrong pointer to the buffer
+or wrong current length.
+
+Anyway, prb_commit(&e) moved the buffer back to consistent state.
+
+> [  221.922125]  ? __ia32_sys_syslog+0x50/0x50
+> [  221.922126]  ? _raw_spin_lock_irqsave+0x9b/0x100
+> [  221.922127]  ? _raw_spin_lock_irq+0xf0/0xf0
+> [  221.922128]  ? __kasan_check_write+0x14/0x20
+> [  221.922129]  vprintk_emit+0x8d/0x1f0
+> [  221.922130]  vprintk_default+0x1d/0x20
+> [  221.922131]  vprintk_func+0x5a/0x100
+> [  221.922132]  printk+0xb2/0xe3
+> [  221.922133]  ? swsusp_write.cold+0x189/0x189
+> [  221.922134]  ? kernfs_vfs_xattr_set+0x60/0x60
+> [  221.922134]  ? _raw_write_lock_bh+0xe0/0xe0
+> [  221.922135]  ? trace_hardirqs_on+0x38/0x100
+> [  221.922136]  pr_cont_kernfs_path.cold+0x49/0x4b
+> [  221.922137]  mem_cgroup_print_oom_context.cold+0x74/0xc3
+> [  221.922138]  dump_header+0x340/0x3bf
+> [  221.922139]  oom_kill_process.cold+0xb/0x10
+> [  221.922140]  out_of_memory+0x1e9/0x860
+> [  221.922141]  ? oom_killer_disable+0x210/0x210
+> [  221.922142]  mem_cgroup_out_of_memory+0x198/0x1c0
+> [  221.922143]  ? mem_cgroup_count_precharge_pte_range+0x250/0x250
+> [  221.922144]  try_charge+0xa9b/0xc50
+> [  221.922145]  ? arch_stack_walk+0x9e/0xf0
+> [  221.922146]  ? memory_high_write+0x230/0x230
+> [  221.922146]  ? avc_has_extended_perms+0x830/0x830
+> [  221.922147]  ? stack_trace_save+0x94/0xc0
+> [  221.922148]  ? stack_trace_consume_entry+0x90/0x90
+> [  221.922149]  __memcg_kmem_charge+0x73/0x120
+> [  221.922150]  ? cred_has_capability+0x10f/0x200
+> [  221.922151]  ? mem_cgroup_can_attach+0x260/0x260
+> [  221.922152]  ? selinux_sb_eat_lsm_opts+0x2f0/0x2f0
+> [  221.922153]  ? obj_cgroup_charge+0x16b/0x220
+> [  221.922154]  ? kmem_cache_alloc+0x78/0x4c0
+> [  221.922155]  obj_cgroup_charge+0x122/0x220
+> [  221.922156]  ? vm_area_alloc+0x20/0x90
+> [  221.922156]  kmem_cache_alloc+0x78/0x4c0
+> [  221.922157]  vm_area_alloc+0x20/0x90
+> [  221.922158]  mmap_region+0x3ed/0x9a0
+> [  221.922159]  ? cap_mmap_addr+0x1d/0x80
+> [  221.922160]  do_mmap+0x3ee/0x720
+> [  221.922161]  vm_mmap_pgoff+0x16a/0x1c0
+> [  221.922162]  ? randomize_stack_top+0x90/0x90
+> [  221.922163]  ? copy_page_range+0x1980/0x1980
+> [  221.922163]  ksys_mmap_pgoff+0xab/0x350
+> [  221.922164]  ? find_mergeable_anon_vma+0x110/0x110
+> [  221.922165]  ? __audit_syscall_entry+0x1a6/0x1e0
+> [  221.922166]  __x64_sys_mmap+0x8d/0xb0
+> [  221.922167]  do_syscall_64+0x38/0x50
+> [  221.922168]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> [  221.922169] RIP: 0033:0x7fe8f5e75103
+> [  221.922172] Code: 54 41 89 d4 55 48 89 fd 53 4c 89 cb 48 85 ff 74
+> 56 49 89 d9 45 89 f8 45 89 f2 44 89 e2 4c 89 ee 48 89 ef b8 09 00 00
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 7d 5b 5d 41 5c 41 5d 41 5e 41 5f c3 66
+> 2e 0f
+> [  221.922173] RSP: 002b:00007ffd38c90198 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000009
+> [  221.922175] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe8f5e75103
+> [  221.922176] RDX: 0000000000000003 RSI: 0000000000001000 RDI: 0000000000000000
+> [  221.922178] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+> [  221.922179] R10: 0000000000002022 R11: 0000000000000246 R12: 0000000000000003
+> [  221.922180] R13: 0000000000001000 R14: 0000000000002022 R15: 0000000000000000
+> [  221.922181]
+> [  213O[  221.922182] The buggy address belongs to the variable:
+> [  221.922183]  clear_seq+0x2d/0x40
+
+I am slightly confused by this.
+
+The address ffffffffba51dbcd seems to be from the range of
+"module mapping space" adresses.
+
+"clear_seq" is static variable from kernel/printk/printk.c.
+I would expect that it is built-in and thus in the range
+"kernel text mapping".
+
+Anyway, the variable is defined as:
+
+       static u64 clear_seq;
+
+The size should be 8B. I wonder where 0x2d/0x40 comes from.
+
+Well, it probaly is not important. I guess that there is a bug
+somewhere in prb_reserve_in_last().
+
+
+> [  221.922183]
+> [  221.922184] Memory state around the buggy address:
+> [  221.922185]  ffffffffba51da80: 00 00 00 00 00 00 00 00 00 00 00 00
+> 00 00 00 00
+> [  221.922187]  ffffffffba51db00: 00 00 00 00 00 00 00 00 00 00 00 00
+> 00 00 00 00
+> [  221.922188] >ffffffffba51db80: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9
+> 00 f9 f9 f9
+> [  221.922189]                                               ^
+> [  221.922190]  ffffffffba51dc00: f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9
+> 00 f9 f9 f9
+> [  221.922191]  ffffffffba51dc80: f9 f9 f9 f9 01 f9 f9 f9 f9 f9 f9 f9
+> 00 f9 f9 f9
+> [  221.922193] ==================================================================
+> [  221.922194] Disabling lock debugging due to kernel taint
+> [  221.922196] ,task=memcg_test_1,pid=11280,uid=0
+
+This is the rest of the line that should have been concatenated. It
+means that the code.
+
+> [  221.922205] Memory cgroup out of memory: Killed process 11280
+> (memcg_test_1) total-vm:4124kB, anon-rss:72kB, file-rss:0kB,
+> shmem-rss:0kB, UID:0 pgtables:48kB oom_score_adj:0
+> [  221.922509] memcg_test_1 invoked oom-killer:
+> gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=0
+> [  222.885676] CPU: 2 PID: 11283 Comm: memcg_test_1 Tainted: G    B
+>          5.9.0-next-20201013 #1
+> [  222.885678] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.0b 07/27/2017
+> [  222.885679] Call Trace:
+> [  222.885683]  dump_stack+0xa4/0xd9
+> [  222.885686]  dump_header+0x8f/0x3bf
+> [  222.885689]  oom_kill_process.cold+0xb/0x10
+> [  222.885692]  out_of_memory+0x1e9/0x860
+> [  222.885697]  ? oom_killer_disable+0x210/0x210
+> [  222.923728]  mem_cgroup_out_of_memory+0x198/0x1c0
+> [  222.923731]  ? mem_cgroup_count_precharge_pte_range+0x250/0x250
+
+The OOM is likely expected. It seems that the test is testing OOM
+situations in memcg code.
+
+I am going to dig more into it.
+
+Best Regards,
+Petr

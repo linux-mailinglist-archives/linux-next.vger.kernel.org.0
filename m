@@ -2,87 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFD928F9D0
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 21:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D23C28F9DA
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 22:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392030AbgJOT6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 15:58:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35614 "EHLO mail.kernel.org"
+        id S2392050AbgJOUAm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 16:00:42 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:53570 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392022AbgJOT6w (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Oct 2020 15:58:52 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 39D46206DD;
-        Thu, 15 Oct 2020 19:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602791931;
-        bh=2GblqwhkPAkE0TtieY26EFCAPXf3227FX1JmTZGYNnI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XYfnpBcpyXx7zbOdzpxmxARFYf6LEuMwNeQhFznzqXISUOClvAW+YS298L/pb9Vl0
-         Wsr9chYIILNU2NVUFCf01DIBICAzSdUSzSEhMEnBNgc0858QOpnnW01lkjK0xEOjeo
-         DyKNNoWQZfJ8YOXUpu7cxa6AMbp7JTy5QKB6rXaA=
-Received: by mail-ej1-f48.google.com with SMTP id p5so5409463ejj.2;
-        Thu, 15 Oct 2020 12:58:51 -0700 (PDT)
-X-Gm-Message-State: AOAM532V02dL9KTpgEixMPG8VvkwT+gQImBmz9atAaW650zKc/wCgqyl
-        4L38i9jI/juisJaDdGOewxeCVD6m9Okb2dra8Yg=
-X-Google-Smtp-Source: ABdhPJxkkJvixPoc0B4sIIS51XrG3mX1copKltHAJdzHHi0Oa9u3vkZKJAkpTi3TwucBewdkY/8Zr3IvJLtfpdPf3d0=
-X-Received: by 2002:a17:906:6a07:: with SMTP id o7mr6275959ejr.454.1602791929686;
- Thu, 15 Oct 2020 12:58:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <yt9d1ri3nakg.fsf@linux.ibm.com> <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
- <20201014071547.GA2459@kozik-lap> <202010151226.7382E03@keescook>
-In-Reply-To: <202010151226.7382E03@keescook>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 15 Oct 2020 21:58:37 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPd6nDi6x+iZ8jke-7qFb=DDjnStkQS9=0PfTZExA7i6jQ@mail.gmail.com>
-Message-ID: <CAJKOXPd6nDi6x+iZ8jke-7qFb=DDjnStkQS9=0PfTZExA7i6jQ@mail.gmail.com>
-Subject: Re: autofs crash with latest linux-next
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+        id S2392040AbgJOUAm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 16:00:42 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B549C2007C4;
+        Thu, 15 Oct 2020 22:00:39 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A67C820060C;
+        Thu, 15 Oct 2020 22:00:39 +0200 (CEST)
+Received: from fsr-ub1864-126.ea.freescale.net (fsr-ub1864-126.ea.freescale.net [10.171.82.212])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 440C3202DA;
+        Thu, 15 Oct 2020 22:00:39 +0200 (CEST)
+From:   Ioana Ciornei <ioana.ciornei@nxp.com>
+To:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org
+Cc:     rdunlap@infradead.org, Jose.Abreu@synopsys.com, andrew@lunn.ch,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+Subject: [PATCH net-next] net: pcs-xpcs: depend on MDIO_BUS instead of selecting it
+Date:   Thu, 15 Oct 2020 23:00:23 +0300
+Message-Id: <20201015200023.15746-1-ioana.ciornei@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Reply-to: ioana.ciornei@nxp.com
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 15 Oct 2020 at 21:28, Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Oct 14, 2020 at 09:15:47AM +0200, Krzysztof Kozlowski wrote:
-> > I hit this since few days as well. Although the bisect points to the
-> > merge, the issue looks like a result of mentioned commit 4d03e3cc5982
-> > ("fs: don't allow kernel reads and writes without iter ops").
-> >
-> > The __kernel_read() last argument 'pos' can be NULL and it is
-> > dereferenced here (added by the commit):
-> >
-> >  525 ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
-> > ...
-> >  547         kiocb.ki_pos = *pos;
-> >  548         iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
-> >
-> >
-> > The __kernel_read() is called with NULL in fs/autofs/waitq.c:
-> >
-> >  45 static int autofs_write(struct autofs_sb_info *sbi,
-> >  46                         struct file *file, const void *addr, int bytes)
-> >
-> > ...
-> >  54         mutex_lock(&sbi->pipe_mutex);
-> >  55         while (bytes) {
-> >  56                 wr = __kernel_write(file, data, bytes, NULL);
->
-> I think the thread here is the same thing, but you've found it in
-> autofs...
-> https://lore.kernel.org/lkml/CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com/
+The below compile time error can be seen when PHYLIB is configured as a
+module.
 
-Indeed it looks the same. Thanks for the pointer.
+ ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_read':
+ pcs-xpcs.c:(.text+0x29): undefined reference to `mdiobus_read'
+ ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_soft_reset.constprop.7':
+ pcs-xpcs.c:(.text+0x80): undefined reference to `mdiobus_write'
+ ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_config_aneg':
+ pcs-xpcs.c:(.text+0x318): undefined reference to `mdiobus_write'
+ ld: pcs-xpcs.c:(.text+0x38e): undefined reference to `mdiobus_write'
+ ld: pcs-xpcs.c:(.text+0x3eb): undefined reference to `mdiobus_write'
+ ld: pcs-xpcs.c:(.text+0x437): undefined reference to `mdiobus_write'
+ ld: drivers/net/pcs/pcs-xpcs.o:pcs-xpcs.c:(.text+0xb1e): more undefined references to `mdiobus_write' follow
 
-Best regards,
-Krzysztof
+PHYLIB being a module leads to MDIO_BUS being a module as well while the
+XPCS is still built-in. What should happen in this configuration is that
+PCS_XPCS should be forced to build as module. However, that select only
+acts in the opposite way so we should turn it into a depends.
+
+Fix this up by explicitly depending on MDIO_BUS.
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Fixes: 2fa4e4b799e1 ("net: pcs: Move XPCS into new PCS subdirectory")
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+---
+ drivers/net/pcs/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/pcs/Kconfig b/drivers/net/pcs/Kconfig
+index 074fb3f5db18..22ba7b0b476d 100644
+--- a/drivers/net/pcs/Kconfig
++++ b/drivers/net/pcs/Kconfig
+@@ -7,8 +7,7 @@ menu "PCS device drivers"
+ 
+ config PCS_XPCS
+ 	tristate "Synopsys DesignWare XPCS controller"
+-	select MDIO_BUS
+-	depends on MDIO_DEVICE
++	depends on MDIO_DEVICE && MDIO_BUS
+ 	help
+ 	  This module provides helper functions for Synopsys DesignWare XPCS
+ 	  controllers.
+-- 
+2.17.1
+

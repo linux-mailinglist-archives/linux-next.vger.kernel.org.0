@@ -2,161 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A9128ED0E
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 08:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C51F28ED16
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 08:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgJOG1Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 02:27:25 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53541 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725208AbgJOG1Z (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Oct 2020 02:27:25 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBfTP5HMzz9sT6;
-        Thu, 15 Oct 2020 17:27:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602743243;
-        bh=eqeJWAJfbVhFMvpv4QGHZeVSz1eFH5jHmY13Cc1Net8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AoWGO7wi2MIDH7mK3ex46Ln1Iq7WaLSVk4pBcWxc7xApcyF1FtTyJEbeOP9j7akYE
-         Qpw8Ql9m/Oj9FsDQ2Ga2RJ9VwYISNi7A3G1lkevWbXg5tPkSuAkDpQqTyWmSE7Y2Nl
-         saFY+cNDR2SMHAxhJRAnjut8Yavv+PH39E9S7vLKgE3k4dcNi5oKpiANWtJ2qQCODH
-         CaLqry4SzBsPoTeiWFl+9+Fq8lBTV9oW08eeqPMjOCiJUkDQtjGl7/K0XKNaG3S6fF
-         cmtga9F90eJ9Z/PCSn5G1vbj5dnfAnxlqjthfl40HTpRTPsI34VwnLWPo3FxLC9jry
-         Pd9QLGbk4Xjpg==
-Date:   Thu, 15 Oct 2020 17:27:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: linux-next: manual merge of the akpm-current tree with the block
- tree
-Message-ID: <20201015172721.31ef7d5e@canb.auug.org.au>
+        id S1726684AbgJOGbm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 02:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbgJOGbm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 02:31:42 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7551C061755;
+        Wed, 14 Oct 2020 23:31:41 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id n9so1249666pgf.9;
+        Wed, 14 Oct 2020 23:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=unLyiKTH/EkbVuJB3NBfpT/3LKUpTBhnwnEORQ/5hr0=;
+        b=cK+HkO9w4p08cFRZVKjDccvUHV16t2KsRQsSrIc/aUCeT0yKsdauSkBmys9AB3jU7O
+         uIN/8vZxH8UL6iFuysJe5Nx3x13xYtB5bG1RmmazcP64UAOsx4QBmyS/095/ay5cukhp
+         m29z8018Ou7kZoF9f1/X/C8aG0lBzKpujssMQkBrxXIeJDAlA578SPG2VDUsbSC4jCZF
+         DBkGyS1+jMx2/ZqxCcnBvc0ugesU6lwbNcxnQClvO7tBcHk2jr8JabRctNvH44D+96t4
+         OUWBH4Ie4NCGcYh9vnKbzpU/KVuBClSK8Ydi7wHven6eD6Usu7/vjR2sZgMLgZxo3Ynf
+         SwOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=unLyiKTH/EkbVuJB3NBfpT/3LKUpTBhnwnEORQ/5hr0=;
+        b=toNad3vgvFmP9KRI2nxLrxgUQFvQO6UU4j/hUSVkW+eUDkEQX8QpiULhVmbXoCsJ9+
+         KQdte96QTQQYQMiUrqSz/LQpHDDTNreMs+jNTkEgtfRFub9HltPhYcf2Jv884/qFWK8t
+         Om9qaBrZuv7Z8KIuHRa6neDQznlvi27YHUw/ewDcnJeiOJr0c4IRnL7BG+nu3ljlhdfJ
+         SSHHnrQqxxH4uOb2gCfSrSxZgBpLPasYHFyd7NrHl78XC6CcFR28KcNDR4zadXzp9T/k
+         iZebyUZcejUqRXNx99GqAh0e6cqV+8RkCigTNJ59vN/iRyuyPov487jkFU1nWQrlHzgT
+         1V2g==
+X-Gm-Message-State: AOAM530YPqJnBTVzxR1jmxvD5LHnZzguIXEttJnnLaXhnnt00xxl2LW+
+        WZX3aGhfTv70tuvKsGXHlo0=
+X-Google-Smtp-Source: ABdhPJy1Dmz68MUB/Zc05m4DGKww5Xa4EJ/OX4HoWgEwnKYuOf0rRVacq1aZQ8FnpCkqOzwv+zUojw==
+X-Received: by 2002:a63:5a0a:: with SMTP id o10mr2115126pgb.77.1602743501127;
+        Wed, 14 Oct 2020 23:31:41 -0700 (PDT)
+Received: from localhost ([2409:10:2e40:5100:6e29:95ff:fe2d:8f34])
+        by smtp.gmail.com with ESMTPSA id z18sm1822440pfn.158.2020.10.14.23.31.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 23:31:40 -0700 (PDT)
+Date:   Thu, 15 Oct 2020 15:31:37 +0900
+From:   Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+To:     Petr Mladek <mladek.petr@gmail.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, LTP List <ltp@lists.linux.it>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH] printk: ringbuffer: Wrong data pointer when appending
+ small string
+Message-ID: <20201015063137.GA3668@jagdpanzerIV.localdomain>
+References: <CA+G9fYt46oC7-BKryNDaaXPJ9GztvS2cs_7GjYRjanRi4+ryCQ@mail.gmail.com>
+ <20201014140514.GB17231@alley>
+ <20201014151311.GB13775@alley>
+ <20201014175051.GC13775@alley>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jwGMZOKqcoOcNuv7ejq1dbK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201014175051.GC13775@alley>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jwGMZOKqcoOcNuv7ejq1dbK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On (20/10/14 19:50), Petr Mladek wrote:
+> diff --git a/kernel/printk/printk_ringbuffer.c b/kernel/printk/printk_ringbuffer.c
+> index 2493348a1631..24a960a89aa8 100644
+> --- a/kernel/printk/printk_ringbuffer.c
+> +++ b/kernel/printk/printk_ringbuffer.c
+> @@ -1125,7 +1125,10 @@ static char *data_realloc(struct printk_ringbuffer *rb,
+>  
+>  	/* If the data block does not increase, there is nothing to do. */
+>  	if (head_lpos - next_lpos < DATA_SIZE(data_ring)) {
+> -		blk = to_block(data_ring, blk_lpos->begin);
+> +		if (wrapped)
+> +			blk = to_block(data_ring, 0);
+> +		else
+> +			blk = to_block(data_ring, blk_lpos->begin);
+>  		return &blk->data[0];
+>  	}
 
-Hi all,
+Great catch.
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+Acked-by: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
 
-  mm/readahead.c
-
-between commit:
-
-  fd0ec96ec35d ("readahead: use limited read-ahead to satisfy read")
-
-from the block tree and commits:
-
-  16681dc9dd92 ("mm/readahead: pass readahead_control to force_page_cache_r=
-a")
-  f65bd470e7ed ("mm/readahead: add page_cache_sync_ra and page_cache_async_=
-ra")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc mm/readahead.c
-index e5975f4e0ee5,c6ffb76827da..000000000000
---- a/mm/readahead.c
-+++ b/mm/readahead.c
-@@@ -548,42 -545,23 +545,29 @@@ readit
-  		}
-  	}
- =20
-- 	ra_submit(ra, mapping, filp);
-+ 	ractl->_index =3D ra->start;
-+ 	do_page_cache_ra(ractl, ra->size, ra->async_size);
-  }
- =20
-- /**
--  * page_cache_sync_readahead - generic file readahead
--  * @mapping: address_space which holds the pagecache and I/O vectors
--  * @ra: file_ra_state which holds the readahead state
--  * @filp: passed on to ->readpage() and ->readpages()
--  * @index: Index of first page to be read.
--  * @req_count: Total number of pages being read by the caller.
--  *
--  * page_cache_sync_readahead() should be called when a cache miss happene=
-d:
--  * it will submit the read.  The readahead logic may decide to piggyback =
-more
--  * pages onto the read request if access patterns suggest it will improve
--  * performance.
--  */
-- void page_cache_sync_readahead(struct address_space *mapping,
-- 			       struct file_ra_state *ra, struct file *filp,
-- 			       pgoff_t index, unsigned long req_count)
-+ void page_cache_sync_ra(struct readahead_control *ractl,
-+ 		struct file_ra_state *ra, unsigned long req_count)
-  {
-- 	bool do_forced_ra =3D filp && (filp->f_mode & FMODE_RANDOM);
- -	/* no read-ahead */
- -	if (!ra->ra_pages)
- -		return;
-++	bool do_forced_ra =3D ractl->file && (ractl->file->f_mode & FMODE_RANDOM=
-);
- =20
- -	if (blk_cgroup_congested())
- -		return;
- +	/*
- +	 * Even if read-ahead is disabled, start this request as read-ahead.
- +	 * This makes regular read-ahead disabled use the same path as normal
- +	 * reads, instead of having to punt to ->readpage() manually. We limit
- +	 * ourselves to 1 page for this case, to avoid causing problems if
- +	 * we're congested or tight on memory.
- +	 */
- +	if (!ra->ra_pages || blk_cgroup_congested()) {
- +		req_count =3D 1;
- +		do_forced_ra =3D true;
- +	}
- =20
- -	/* be dumb */
- -	if (ractl->file && (ractl->file->f_mode & FMODE_RANDOM)) {
- +	if (do_forced_ra) {
-- 		force_page_cache_readahead(mapping, filp, index, req_count);
-+ 		force_page_cache_ra(ractl, ra, req_count);
-  		return;
-  	}
- =20
-
---Sig_/jwGMZOKqcoOcNuv7ejq1dbK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+H68kACgkQAVBC80lX
-0GzOYwf/X2RH5+5uO1Fo3UBHZx6M1rdO98rOPN0PpkaiyZcw5asOH5CEN6eCXkPW
-zUt80fTWyHJ53ZpKeFMTjHI2sDFyx++GWSdkFhlCajyTNlFnvAeCqPboLGzCxfY9
-GFm8jq4daVSOeGKyLnaePlX+ed/8hd72Aq/fYQcQkSilhr/K1umdHmN185Bmi1t5
-ATUrbKSdd5iCJN4sXuR6d9REpKV+XZTRiHADXSdyTmEkuhp9tHHY22KisJlmVYfl
-XtlfUlNKXZ7B81umTvqbTNOjuKtZqALXjGGd5Z6HszjuZWrVexnYvVMnpi7WIhNx
-J/4LiwDhFibiaXbvRJw28ibBgTp1Fg==
-=lJls
------END PGP SIGNATURE-----
-
---Sig_/jwGMZOKqcoOcNuv7ejq1dbK--
+	-ss

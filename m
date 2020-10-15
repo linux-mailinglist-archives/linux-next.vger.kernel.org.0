@@ -2,68 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F5828FB42
-	for <lists+linux-next@lfdr.de>; Fri, 16 Oct 2020 00:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D859E28FB7A
+	for <lists+linux-next@lfdr.de>; Fri, 16 Oct 2020 01:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731602AbgJOWhE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 18:37:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731449AbgJOWhE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Oct 2020 18:37:04 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728997AbgJOXMa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 19:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728776AbgJOXM3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 19:12:29 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E74BC061755;
+        Thu, 15 Oct 2020 16:12:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9CC382076A;
-        Thu, 15 Oct 2020 22:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602801423;
-        bh=BMOsWE4aVRcmEffotsqEU3bAwwqr/B4tqNeqo6EqSZ8=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CC4n427wSz9sTL;
+        Fri, 16 Oct 2020 10:12:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1602803546;
+        bh=dWKPxzoiUcikJnJnxCFQNswn2OsYq0ytMCnia6M3A6w=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eKkhfJzyd9CAGLCnNQz4n69pnUtmKxaWMJbcII+kR9FyuBUhL76wxmMh3lGn0pp+w
-         AJl+PrYiOPkiIiOncBMhXxPyeMTk4S4YJe+2HDFAYGBZ0hE+kyOJtw1feWG85MQJzT
-         sKlbe8qQt//mCCwsEhr/D9V+5b3cq+e+ujXmXXfQ=
-Date:   Thu, 15 Oct 2020 15:37:00 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        petkan@nucleusys.com, davem@davemloft.net,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
- MAC addresses
-Message-ID: <20201015153700.1e97b354@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201015152451.125895b1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
-        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
-        <20201012091428.103fc2be@canb.auug.org.au>
-        <20201016085922.4a2b90d1@canb.auug.org.au>
-        <20201015152451.125895b1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        b=ca6d69ZCUPRBQyzcnlnYnFSQsyIpU/BVWTCFltvrw7LogUz4SuSC5Bn/J9rns/1WM
+         gzjxLhd6BtDmMSKmvvIlGQ2W5KHTG45TvPWQbHEBc8Gi0Nl+znT5JMI6QwpZCBXWPj
+         DGKgN3EFC5XK6HfDn5WPmU6FEwj0jMTz2I1AKvU3ApdNoy6sRXH5yCYUXADwEiCCU8
+         6qKm9Lbqs7yK255z8FRtF8M2GdhwaI3NQKnPelF0Hd3wUPqY8v3jQUm0QoCu4SuXy0
+         OlWNJAwjW/nlXQu6owlzsf2QPV0hp0BN+XuY7Pksk5uLaOBD81nCz/Nsnal0Ukd2Gi
+         aYFjz8HDoBFxw==
+Date:   Fri, 16 Oct 2020 10:12:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the powerpc
+ tree
+Message-ID: <20201016101222.6fcf12bf@canb.auug.org.au>
+In-Reply-To: <20201006183506.186a3562@canb.auug.org.au>
+References: <20201006183506.186a3562@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Ks+.aphHl8n1UOgOWU7GiJT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 15 Oct 2020 15:24:51 -0700 Jakub Kicinski wrote:
-> On Fri, 16 Oct 2020 08:59:22 +1100 Stephen Rothwell wrote:
-> > > I will apply the above patch to the merge of the usb tree today to fix
-> > > up a semantic conflict between the usb tree and Linus' tree.    
-> > 
-> > It looks like you forgot to mention this one to Linus :-(
-> > 
-> > It should probably say:
-> > 
-> > Fixes: b2a0f274e3f7 ("net: rtl8150: Use the new usb control message API.")  
-> 
-> Umpf. I think Greg sent his changes first, so this is on me.
-> 
-> The networking PR is still outstanding, can we reply to the PR with
-> the merge guidance. Or is it too late?
+--Sig_/Ks+.aphHl8n1UOgOWU7GiJT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I take that back, this came through net, not net-next so our current
-PR is irrelevant :)
+Hi all,
+
+On Tue, 6 Oct 2020 18:35:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the char-misc tree got a conflict in:
+>=20
+>   drivers/misc/ocxl/Kconfig
+>=20
+> between commit:
+>=20
+>   dde6f18a8779 ("ocxl: Don't return trigger page when allocating an inter=
+rupt")
+>=20
+> from the powerpc tree and commit:
+>=20
+>   4b53a3c72116 ("ocxl: fix kconfig dependency warning for OCXL")
+>=20
+> from the char-misc tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/misc/ocxl/Kconfig
+> index 0d815b2a40b3,947294f6d7f4..000000000000
+> --- a/drivers/misc/ocxl/Kconfig
+> +++ b/drivers/misc/ocxl/Kconfig
+> @@@ -9,9 -9,8 +9,9 @@@ config OCXL_BAS
+>  =20
+>   config OCXL
+>   	tristate "OpenCAPI coherent accelerator support"
+>  -	depends on PPC_POWERNV && PCI && EEH && HOTPLUG_PCI_POWERNV
+>  +	depends on PPC_POWERNV && PCI && EEH && PPC_XIVE_NATIVE
+> ++	depends on HOTPLUG_PCI_POWERNV
+>   	select OCXL_BASE
+> - 	select HOTPLUG_PCI_POWERNV
+>   	default m
+>   	help
+>   	  Select this option to enable the ocxl driver for Open
+
+This is now a conflict between the powerpc tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ks+.aphHl8n1UOgOWU7GiJT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+I11YACgkQAVBC80lX
+0GxY9AgAosHo7vjQgJxRBniiUvTs53IzHJDCkNNL+1j9vfaVihhtYdUOkuJ0/4BE
+1inYmjVnPepEmMBNqUWx/0iy+G0Xnv4ST2ecxp1DS9fI62UiazeF3k3pDUZ6Uwgw
+o0IcujNgQW902xjB8BWvUhcQowvaNNx6ddYm3glZGtA5DgZyJ0hBG4Zug2yW+H9r
+YqTvYpWLAMf4KIMyt3dwNMFB1dacyWmSPmlV83uvmleLSBkKjmX3B9xt4oepQ3QR
+xG0MO054RF9xONL0Jprsb7jopalcz5H+9pDO/APyU32ovbeKZ20i/81Ypi+G76BQ
+laIosjGVKrhAKUJ4t4BHvLP2qD/mwA==
+=6yvo
+-----END PGP SIGNATURE-----
+
+--Sig_/Ks+.aphHl8n1UOgOWU7GiJT--

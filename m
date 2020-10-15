@@ -2,244 +2,213 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0418728F589
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 17:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3692828F681
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 18:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389536AbgJOPGy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 11:06:54 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:38708 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388764AbgJOPGy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Oct 2020 11:06:54 -0400
-Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B191AC00B2;
-        Thu, 15 Oct 2020 15:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1602774413; bh=YdFom8wOR2YuMmtRj9s/QbqVI/0fRfv4pVigCEa562s=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=ZJYpcgVMDgJTehsA5vynhir5AvHU5J60DGU/8iIlRaZYUEccNiEJirNr21Ny75bqm
-         oOTP4SMTaG4PYpmDwQzglclN/EQdcGHJOFBFGN7vg1Td4M2pAUBujvhe17O5SBxGWa
-         OQWXNhHkBP2oYQrO9ataXuUzrjy2w6p70dLsgMJ5tAlCCXLDKBet9feg4WutMSBpzw
-         bnFoP8GxHjwKw52RAl+RRRKSFSPt5W+GrfcRLilqEusXy7NL66sBu3mpTr3m+hvAUn
-         r36KR7yVml6FUnqQK7SQc9GVp5KjXWhL2I9AjIhAYQOSZmKqnViN9IxI0P1juqooeK
-         xVdX3F8nwt8sQ==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id ED524A008F;
-        Thu, 15 Oct 2020 15:06:46 +0000 (UTC)
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
+        id S2389532AbgJOQPD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 12:15:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49590 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389477AbgJOQPD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 12:15:03 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 7EE58800DF;
-        Thu, 15 Oct 2020 15:06:43 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=joabreu@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="wgn7t97Q";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2Y2whtTzV8rDBgFzuLD4bbn9tWWQK3KskxWv+qcWJqo+Rjh2ZGUu4GS7dVJqCHYWGwbRBSB2lHSFc1z0GLweLHSjhC99v5MZKmj3+F5FfKWhp7ddwUdqCOa7zsYYwSks8CXEmZSZkbXrJuCzhgRExUfWT7eKbcXjrWu4C/bVpi+BrHafuUHD13GV8CHSr9oGGWsfYWXMVNpPGjEpDc1NOE4yJrsNlpkDjRuZtQntSq/UW5hxuYgmcwAKL7EjwIdzRUpa/x27Gu4jtufSZhPZecBCK78HZFFZcxW5ZeRoMPHol6c6ME2suk7px8zsDDArh8Fdod9jEu70MpYRt/3Ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YdFom8wOR2YuMmtRj9s/QbqVI/0fRfv4pVigCEa562s=;
- b=b9QMorFORfuJ5BkoG1aAtVwAS5Og1eGtrll5YLy7YhAgiKr4XTIQ4BuGKwrjEfMr/eA7wmW8n2UK1KcHcQ+22cOZIxd1jaK2O03hb0M5HNxON46F2e22yQXdzJ4VNcDtdeFoUcWQWLztTRXrM7GQZ2MDcI1Q3SNNDKl5yVUhczOVryqkkgtye0rmEUIwEP96Lg4YBjsByVz5M6TrDnJHZ6dWFpinhGJ/0yuonBRl4evZKsjMrPQFRW9eHaRPtH1nlN9aofZQD4VXJQfNm8MeujS6b37a1dhNYQFBlLj8RGRod2fRM5Es8e8GcOjvJ2SAK9k2STF40+WdVe79giWRpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YdFom8wOR2YuMmtRj9s/QbqVI/0fRfv4pVigCEa562s=;
- b=wgn7t97QjWUbK3phc8I4KeyNJ5sMl8wUOuFNPnw4ACjTBBIGDCVp9NaphzlRis8GEy4zYtJeGWXhP7yL3WTxupimsN9sVR88QtcrvAi9jANsS2u8diQFep/qBsH0/y3fyP3hu8zZaPUEiXrscKOto/pxaum5rwB/MBgqKx7TWhQ=
-Received: from BN6PR12MB1779.namprd12.prod.outlook.com (2603:10b6:404:108::21)
- by BN6PR1201MB0259.namprd12.prod.outlook.com (2603:10b6:405:58::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.24; Thu, 15 Oct
- 2020 15:06:42 +0000
-Received: from BN6PR12MB1779.namprd12.prod.outlook.com
- ([fe80::dc42:664e:e7ab:543d]) by BN6PR12MB1779.namprd12.prod.outlook.com
- ([fe80::dc42:664e:e7ab:543d%4]) with mapi id 15.20.3477.020; Thu, 15 Oct 2020
- 15:06:42 +0000
-X-SNPS-Relay: synopsys.com
-From:   Jose Abreu <Jose.Abreu@synopsys.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 42C0621D7F;
+        Thu, 15 Oct 2020 16:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602778502;
+        bh=tj6lVIt8IEuRxmRb5E2pleBqTsJDfJjikhO5L+ETD0s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HDaMn30BhghFNShZ4cXBVFzP56ZTIz2hwV0GqIKp7FL0AJNPS4t0dZ7lIljNUDJVM
+         NyTibKf2yu/ttkI2c2QD//NQquIbbSvS5YqEk+LjmcqxMBJqySvjAuQrv8lq5kBw12
+         06Mb2lT9XVF2SXRHwb/Wa1Xe0725LucnimHV7XVs=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id CC284352078F; Thu, 15 Oct 2020 09:15:01 -0700 (PDT)
+Date:   Thu, 15 Oct 2020 09:15:01 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Qian Cai <cai@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jose Abreu <Jose.Abreu@synopsys.com>
-Subject: RE: linux-next: Tree for Oct 15 (drivers/net/pcs/pcs-xpcs.o)
-Thread-Topic: linux-next: Tree for Oct 15 (drivers/net/pcs/pcs-xpcs.o)
-Thread-Index: AQHWowH2shpB8H0ACU6Yrqi0kRxXlamYwz2g
-Date:   Thu, 15 Oct 2020 15:06:42 +0000
-Message-ID: <BN6PR12MB17798590707177F08FD60653D3020@BN6PR12MB1779.namprd12.prod.outlook.com>
-References: <20201015182859.7359c7be@canb.auug.org.au>
- <e507b1ec-a3ae-0eaa-8fed-6c77427325c3@infradead.org>
-In-Reply-To: <e507b1ec-a3ae-0eaa-8fed-6c77427325c3@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jYW05aFluSmxkVnhoY0hCa1lYUmhYSEp2WVcxcGJtZGNNRGxrT0RRNVlq?=
- =?utf-8?B?WXRNekprTXkwMFlUUXdMVGcxWldVdE5tSTROR0poTWpsbE16VmlYRzF6WjNO?=
- =?utf-8?B?Y2JYTm5MVEEyWXpWa09XTmhMVEJsWmpndE1URmxZaTFpTmpVeUxXTTRaamMx?=
- =?utf-8?B?TURrM1lqYzNObHhoYldVdGRHVnpkRnd3Tm1NMVpEbGpZeTB3WldZNExURXha?=
- =?utf-8?B?V0l0WWpZMU1pMWpPR1kzTlRBNU4ySTNOelppYjJSNUxuUjRkQ0lnYzNvOUlq?=
- =?utf-8?B?RTBORGNpSUhROUlqRXpNalEzTWpRNE1EQXdNek01T1RVNE15SWdhRDBpVUhW?=
- =?utf-8?B?WGNXcHhPRkJLTlU5ME9YWktRa2xSUkU5S1ZtUnRSWEZ2UFNJZ2FXUTlJaUln?=
- =?utf-8?B?WW13OUlqQWlJR0p2UFNJeElpQmphVDBpWTBGQlFVRkZVa2hWTVZKVFVsVkdU?=
- =?utf-8?B?a05uVlVGQlFsRktRVUZEWmtoNE4wcENTMUJYUVZJMFlUSlBSVTkyYVhCVlNH?=
- =?utf-8?B?aHlXVFJSTml0TGJGRlBRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVaEJRVUZCUTJ0RFFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVWQlFWRkJRa0ZCUVVGcVNFcElhMEZCUVVGQlFVRkJRVUZCUVVGQlFVRktO?=
- =?utf-8?B?RUZCUVVKdFFVZHJRV0puUW1oQlJ6UkJXWGRDYkVGR09FRmpRVUp6UVVkRlFX?=
- =?utf-8?B?Sm5RblZCUjJ0QlltZENia0ZHT0VGa2QwSm9RVWhSUVZwUlFubEJSekJCV1ZG?=
- =?utf-8?B?Q2VVRkhjMEZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUlVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?blFVRkJRVUZCYm1kQlFVRkhXVUZpZDBJeFFVYzBRVnBCUW5sQlNHdEJXSGRD?=
- =?utf-8?B?ZDBGSFJVRmpaMEl3UVVjMFFWcFJRbmxCU0UxQldIZENia0ZIV1VGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFWRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkRRVUZCUVVGQlEyVkJRVUZCV21kQ2RrRklWVUZpWjBKclFV?=
- =?utf-8?B?aEpRV1ZSUW1aQlNFRkJXVkZDZVVGSVVVRmlaMEpzUVVoSlFXTjNRbVpCU0Ux?=
- =?utf-8?B?QldWRkNkRUZJVFVGa1VVSjFRVWRqUVZoM1FtcEJSemhCWW1kQ2JVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUpCUVVGQlFVRkJRVUZCU1VGQlFVRkJRVW8wUVVGQlFtMUJSemhC?=
- =?utf-8?B?WkZGQ2RVRkhVVUZqWjBJMVFVWTRRV05CUW1oQlNFbEJaRUZDZFVGSFZVRmpa?=
- =?utf-8?B?MEo2UVVZNFFXTjNRbWhCUnpCQlkzZENNVUZITkVGYWQwSm1RVWhKUVZwUlFu?=
- =?utf-8?B?cEJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVGQlFXZEJRVUZCUVVGdVow?=
- =?utf-8?B?RkJRVWRaUVdKM1FqRkJSelJCV2tGQ2VVRklhMEZZZDBKM1FVZEZRV05uUWpC?=
- =?utf-8?B?QlJ6UkJXbEZDZVVGSVRVRllkMEo2UVVjd1FXRlJRbXBCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJVVUZCUVVGQlFVRkJRVU5C?=
- =?utf-8?B?UVVGQlFVRkRaVUZCUVVGYVowSjJRVWhWUVdKblFtdEJTRWxCWlZGQ1prRklR?=
- =?utf-8?B?VUZaVVVKNVFVaFJRV0puUW14QlNFbEJZM2RDWmtGSVRVRmtRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUWtGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGSlFVRkJRVUZCU2pSQlFVRkNiVUZIT0VGa1VVSjFRVWRSUVdO?=
- =?utf-8?B?blFqVkJSamhCWTBGQ2FFRklTVUZrUVVKMVFVZFZRV05uUW5wQlJqaEJaRUZD?=
- =?utf-8?B?ZWtGSE1FRlpkMEZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVVkJRVUZCUVVGQlFVRkJaMEZCUVVGQlFXNW5RVUZCUjFsQlluZENN?=
- =?utf-8?B?VUZITkVGYVFVSjVRVWhyUVZoM1FuZEJSMFZCWTJkQ01FRkhORUZhVVVKNVFV?=
- =?utf-8?B?aE5RVmgzUWpGQlJ6QkJXWGRCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZSUVVGQlFVRkJRVUZCUTBGQlFVRkJRVU5sUVVG?=
- =?utf-8?B?QlFWcDNRakJCU0UxQldIZENkMEZJU1VGaWQwSnJRVWhWUVZsM1FqQkJSamhC?=
- =?utf-8?B?WkVGQ2VVRkhSVUZoVVVKMVFVZHJRV0puUW01QlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQ1FVRkJRVUZCUVVGQlFVbEJR?=
- =?utf-8?B?VUZCUVVGS05FRkJRVUo2UVVkRlFXSkJRbXhCU0UxQldIZENhRUZIVFVGWmQw?=
- =?utf-8?B?SjJRVWhWUVdKblFqQkJSamhCWTBGQ2MwRkhSVUZpWjBGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJSVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZuUVVGQlFVRkJibWRCUVVGSVRVRlpVVUp6UVVkVlFXTjNRbVpC?=
- =?utf-8?B?U0VWQlpGRkNka0ZJVVVGYVVVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVZGQlFVRkJRVUZCUVVGRFFVRkJRVUZCUTJWQlFVRkJZM2RDZFVGSVFV?=
- =?utf-8?B?RmpkMEptUVVkM1FXRlJRbXBCUjFWQlltZENla0ZIVlVGWWQwSXdRVWRWUVdO?=
- =?utf-8?B?blFuUkJSamhCVFZGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVSkJRVUZCUVVGQlFVRkJTVUZCUVVGQlFVbzBRVUZC?=
- =?utf-8?B?UW5wQlJ6UkJZMEZDZWtGR09FRmlRVUp3UVVkTlFWcFJRblZCU0UxQldsRkNa?=
- =?utf-8?B?a0ZJVVVGYVVVSjVRVWN3UVZoM1FucEJTRkZCWkZGQ2EwRkhWVUZpWjBJd1FV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZGUVVGQlFVRkJRVUZCUVdkQlFV?=
- =?utf-8?B?RkJRVUZ1WjBGQlFVaFpRVnAzUW1aQlIzTkJXbEZDTlVGSVkwRmlkMEo1UVVk?=
- =?utf-8?B?UlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlVVRkJRVUZC?=
- =?utf-8?Q?QUFBQUNBQUFBQUFBPSIvPjwvbWV0YT4=3D?=
-authentication-results: infradead.org; dkim=none (message not signed)
- header.d=none;infradead.org; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [176.79.39.151]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 85715429-7fe6-4de0-6a4e-08d8711becd2
-x-ms-traffictypediagnostic: BN6PR1201MB0259:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN6PR1201MB025974E18DDB1D6EEE40D13AD3020@BN6PR1201MB0259.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TRtIZsd0NSwq//VNMSDFFw3I8yHAYzvayeC1H/1esx6rWXr8UIeJB7pLISJhyJYPY1C3WdepGLYrsau63s5zkIgT49KN9O44mNJluenJrl7aMecEtUGF64EtWhFzw4hJkbQD6y41DX7d6wnGlqiDlYsBd8EwaM4+m/oN9qpda2cIDjOHki7NNyJi713mUVBp2k/JenfFN3vsOhMmHebjALaxjDLcCfr9mj468BRmiSWp+/Oq4niE4Qi5ifZM8C+GtJ/cuQVfVgZhUPTfMe9Q+dTwPFkYaaAAeXlO7fUNt3BZQN80aG/UMV0lfIpfDGCYQ/253sFR17dyFED42Q5tjg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR12MB1779.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(346002)(376002)(396003)(136003)(316002)(54906003)(110136005)(71200400001)(55016002)(8676002)(5660300002)(186003)(9686003)(66476007)(76116006)(64756008)(66556008)(26005)(52536014)(2906002)(478600001)(66446008)(86362001)(6506007)(8936002)(107886003)(33656002)(53546011)(7696005)(4326008)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 4KPoeZ01YkiiCmf3/A+HFUFXrK+O/FVcGPajovrVbVkWD4UR1lpcAvitGXnxMmYE7rr597iyeYzYoXThtrCg0tyMsc836knvA1Udpgi5/ajFmvZmzYWk5/D4QoL33qNDJKolpclK7CODRDCqIlv/xgHhOcm65U+eqsoimg+qTok3gtITZJ9WR6vo2bDh8UjMS+R9qu6sQiN5DW0IfsmUvuHFHgXsK08khkGCxtapu/BD/H+pEsSxgrarVQJYgUL4lHQOg7418m/zGo+I2fIBq3HmeA55e34O6RD3mcyZsF8skU4QMNjsY2fAJ5gfzvxoO4NZyl53Nf/54o7+tdF4uFkSojzWBK9Fryc9n0HT6KvKnz6tmLCZKO3XWEYzirAgElKqUDlD//JhZqwwZWtdn40MgN2/JTV568+2JabHiK2P9d2Hh52Dxde6de0DwTTW38f/HpZnV2qL9rZOFF1ARRSVDFbCis9j5CT1A38frAZbhTsSWuejz8TyXMr1soky3ifwd/3VaD9r3C81eqJw6aN4619UE9saC8WN7/JySAbRjIC7NDhlwiQixrqL3FAqod8mjlU8DgubacwNj/0Gn8DFgV5Y7DSI+d779Z4d0SAs87oNDXlBO8gsZ3jUz2SsXmg75F6UXx2idsHxUPxoRQ==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
+Message-ID: <20201015161501.GV3249@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
+ <20201013162650.GN3249@paulmck-ThinkPad-P72>
+ <20201013193025.GA2424@paulmck-ThinkPad-P72>
+ <20201014183405.GA27666@paulmck-ThinkPad-P72>
+ <20201014215319.GF2974@worktop.programming.kicks-ass.net>
+ <20201014221152.GS3249@paulmck-ThinkPad-P72>
+ <20201014223954.GH2594@hirez.programming.kicks-ass.net>
+ <20201014235553.GU3249@paulmck-ThinkPad-P72>
+ <20201015034128.GA10260@paulmck-ThinkPad-P72>
+ <20201015094926.GY2611@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR12MB1779.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85715429-7fe6-4de0-6a4e-08d8711becd2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2020 15:06:42.3314
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y3p46yVPJp0wmOi4UKIgGbJ1iijVAIXyAHaudMsk62WtHpGJSBqTAlFN9kFAIv9oysy0Iu2geJ+81CWvgfPSgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0259
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201015094926.GY2611@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-RnJvbTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+DQpEYXRlOiBPY3QvMTUv
-MjAyMCwgMTU6NDU6NTcgKFVUQyswMDowMCkNCg0KPiBPbiAxMC8xNS8yMCAxMjoyOCBBTSwgU3Rl
-cGhlbiBSb3Rod2VsbCB3cm90ZToNCj4gPiBIaSBhbGwsDQo+ID4gDQo+ID4gU2luY2UgdGhlIG1l
-cmdlIHdpbmRvdyBpcyBvcGVuLCBwbGVhc2UgZG8gbm90IGFkZCBhbnkgdjUuMTEgbWF0ZXJpYWwg
-dG8NCj4gPiB5b3VyIGxpbnV4LW5leHQgaW5jbHVkZWQgYnJhbmNoZXMgdW50aWwgYWZ0ZXIgdjUu
-MTAtcmMxIGhhcyBiZWVuIHJlbGVhc2VkLg0KPiA+IA0KPiA+IE5ld3M6IHRoZXJlIHdpbGwgYmUg
-bm8gbGludXgtbmV4dCByZWxlYXNlcyBuZXh0IE1vbmRheSBvciBUdWVzZGF5Lg0KPiA+IA0KPiA+
-IENoYW5nZXMgc2luY2UgMjAyMDEwMTM6DQo+ID4gDQo+IA0KPiBvbiBpMzg2Og0KPiANCj4gbGQ6
-IGRyaXZlcnMvbmV0L3Bjcy9wY3MteHBjcy5vOiBpbiBmdW5jdGlvbiBgeHBjc19yZWFkJzoNCj4g
-cGNzLXhwY3MuYzooLnRleHQrMHgyOSk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYG1kaW9idXNf
-cmVhZCcNCj4gbGQ6IGRyaXZlcnMvbmV0L3Bjcy9wY3MteHBjcy5vOiBpbiBmdW5jdGlvbiBgeHBj
-c19zb2Z0X3Jlc2V0LmNvbnN0cHJvcC43JzoNCj4gcGNzLXhwY3MuYzooLnRleHQrMHg4MCk6IHVu
-ZGVmaW5lZCByZWZlcmVuY2UgdG8gYG1kaW9idXNfd3JpdGUnDQo+IGxkOiBkcml2ZXJzL25ldC9w
-Y3MvcGNzLXhwY3MubzogaW4gZnVuY3Rpb24gYHhwY3NfY29uZmlnX2FuZWcnOg0KPiBwY3MteHBj
-cy5jOigudGV4dCsweDMxOCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYG1kaW9idXNfd3JpdGUn
-DQo+IGxkOiBwY3MteHBjcy5jOigudGV4dCsweDM4ZSk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8g
-YG1kaW9idXNfd3JpdGUnDQo+IGxkOiBwY3MteHBjcy5jOigudGV4dCsweDNlYik6IHVuZGVmaW5l
-ZCByZWZlcmVuY2UgdG8gYG1kaW9idXNfd3JpdGUnDQo+IGxkOiBwY3MteHBjcy5jOigudGV4dCsw
-eDQzNyk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYG1kaW9idXNfd3JpdGUnDQo+IGxkOiBkcml2
-ZXJzL25ldC9wY3MvcGNzLXhwY3MubzpwY3MteHBjcy5jOigudGV4dCsweGIxZSk6IG1vcmUgdW5k
-ZWZpbmVkIHJlZmVyZW5jZXMgdG8gYG1kaW9idXNfd3JpdGUnIGZvbGxvdw0KPiANCj4gDQo+IEZ1
-bGwgcmFuZGNvbmZpZyBmaWxlIGlzIGF0dGFjaGVkLg0KPiANCj4gLS0gDQo+IH5SYW5keQ0KPiBS
-ZXBvcnRlZC1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+DQoNCisrIEFu
-ZHJldyBMdW5uDQoNCi0tLQ0KVGhhbmtzLA0KSm9zZSBNaWd1ZWwgQWJyZXUNCg==
+On Thu, Oct 15, 2020 at 11:49:26AM +0200, Peter Zijlstra wrote:
+> On Wed, Oct 14, 2020 at 08:41:28PM -0700, Paul E. McKenney wrote:
+> > So the (untested) patch below (on top of the other two) moves the delay
+> > to rcu_gp_init(), in particular, to the first loop that traverses only
+> > the leaf rcu_node structures handling CPU hotplug.
+> > 
+> > Hopefully getting closer!
+> 
+> So, if I composed things right, we end up with this. Comments below.
+> 
+> 
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1143,13 +1143,15 @@ bool rcu_lockdep_current_cpu_online(void
+>  	struct rcu_data *rdp;
+>  	struct rcu_node *rnp;
+>  	bool ret = false;
+> +	unsigned long seq;
+>  
+>  	if (in_nmi() || !rcu_scheduler_fully_active)
+>  		return true;
+>  	preempt_disable_notrace();
+>  	rdp = this_cpu_ptr(&rcu_data);
+>  	rnp = rdp->mynode;
+> -	if (rdp->grpmask & rcu_rnp_online_cpus(rnp))
+> +	seq = READ_ONCE(rnp->ofl_seq) & ~0x1;
+> +	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || seq != READ_ONCE(rnp->ofl_seq))
+>  		ret = true;
+>  	preempt_enable_notrace();
+>  	return ret;
+> @@ -1715,6 +1717,7 @@ static void rcu_strict_gp_boundary(void
+>   */
+>  static bool rcu_gp_init(void)
+>  {
+> +	unsigned long firstseq;
+>  	unsigned long flags;
+>  	unsigned long oldmask;
+>  	unsigned long mask;
+> @@ -1758,6 +1761,12 @@ static bool rcu_gp_init(void)
+>  	 */
+>  	rcu_state.gp_state = RCU_GP_ONOFF;
+>  	rcu_for_each_leaf_node(rnp) {
+> +		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
+> +		firstseq = READ_ONCE(rnp->ofl_seq);
+> +		if (firstseq & 0x1)
+> +			while (firstseq == smp_load_acquire(&rnp->ofl_seq))
+> +				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
+> +		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
+>  		raw_spin_lock(&rcu_state.ofl_lock);
+>  		raw_spin_lock_irq_rcu_node(rnp);
+>  		if (rnp->qsmaskinit == rnp->qsmaskinitnext &&
+> @@ -4047,6 +4056,9 @@ void rcu_cpu_starting(unsigned int cpu)
+>  
+>  	rnp = rdp->mynode;
+>  	mask = rdp->grpmask;
+> +	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+> +	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
+> +	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
+>  	newcpu = !(rnp->expmaskinitnext & mask);
+> @@ -4064,6 +4076,9 @@ void rcu_cpu_starting(unsigned int cpu)
+>  	} else {
+>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  	}
+> +	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+> +	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+> +	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
+>  	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+>  }
+>  
+> @@ -4091,6 +4106,9 @@ void rcu_report_dead(unsigned int cpu)
+>  
+>  	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
+>  	mask = rdp->grpmask;
+> +	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+> +	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
+> +	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+>  	raw_spin_lock(&rcu_state.ofl_lock);
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
+>  	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+> @@ -4103,6 +4121,9 @@ void rcu_report_dead(unsigned int cpu)
+>  	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
+>  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  	raw_spin_unlock(&rcu_state.ofl_lock);
+> +	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
+> +	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
+> +	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
+>  
+>  	rdp->cpu_started = false;
+>  }
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -56,6 +56,7 @@ struct rcu_node {
+>  				/*  Initialized from ->qsmaskinitnext at the */
+>  				/*  beginning of each grace period. */
+>  	unsigned long qsmaskinitnext;
+> +	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
+>  				/* Online CPUs for next grace period. */
+>  	unsigned long expmask;	/* CPUs or groups that need to check in */
+>  				/*  to allow the current expedited GP */
+> 
+> 
+> Lets see if I can understand this.
+> 
+>  - we seqcount wrap online/offline, such that they're odd while
+>    in-progress. Full memory barriers, such that, unlike with regular
+>    seqcount, it also orders later reads, important?
+
+Yes.
+
+>  - when odd, we ensure it is seen as online; notable detail seems to be
+>    that this function is expected to be called in PO relative to the
+>    seqcount ops. It is unsafe concurrently. This seems sufficient for
+>    our goals today.
+
+Where "this function" is rcu_lockdep_current_cpu_online(), yes it
+must be called on the CPU in question.  Otherwise, you might get
+racy results.  Which is sometimes OK.
+
+>  - when odd, we delay the current gp.
+
+Yes.
+
+> It is that last point where I think I'd like to suggest change. Given
+> that both rcu_cpu_starting() and rcu_report_dead() (the naming is
+> slightly inconsistent) are ran with IRQs disabled, spin-waiting seems
+> like a more natural match.
+> 
+> Also, I don't see the purpose of your smp_load_acquire(), you don't
+> actually do anything before then calling a full smp_mb().
+> 
+> 
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1764,8 +1764,7 @@ static bool rcu_gp_init(void)
+>  		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
+>  		firstseq = READ_ONCE(rnp->ofl_seq);
+>  		if (firstseq & 0x1)
+> -			while (firstseq == smp_load_acquire(&rnp->ofl_seq))
+> -				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
+> +			smp_cond_load_relaxed(&rnp->ofl_seq, VAL == firstseq);
+>  		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
+>  		raw_spin_lock(&rcu_state.ofl_lock);
+>  		raw_spin_lock_irq_rcu_node(rnp);
+
+This would work, and would be absolutely necessary if grace periods
+took only (say) 500 nanoseconds to complete.  But given that they take
+multiple milliseconds at best, and given that this race is extremely
+unlikely, and given the heavy use of virtualization, I have to stick
+with the schedule_timeout_idle().
+
+In fact, I have on my list to force this race to happen on the grounds
+that if it ain't tested, it don't work...
+
+							Thanx, Paul

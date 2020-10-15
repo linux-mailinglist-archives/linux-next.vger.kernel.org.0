@@ -2,98 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA028F964
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 21:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFD928F9D0
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 21:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391533AbgJOT2R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 15:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391528AbgJOT2R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 15:28:17 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F37C061755
-        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 12:28:17 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 144so21824pfb.4
-        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 12:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AMxq/RwNaZWayup8hauJHp0xGa8b+I81wo5Pu2yR8ac=;
-        b=PNOK+7k9nLNbWKtO0/Q6Zen9VFo9LNa+pJYVLC0Jf8ef6FxXEhsSLYZyFQuSrsvxk5
-         jUlpnsOLnpMkzbx3QNT5fE1NRIBfNXTzugrGGsEYjfA8iwZPvn8UReFVVRaswDdQwavb
-         ZupPllA4+dqX1oP8BHrM+GbWIuPYvufcWHEqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AMxq/RwNaZWayup8hauJHp0xGa8b+I81wo5Pu2yR8ac=;
-        b=GzpNUbmKAZlF/kaHWjsUxnWUAk/XmkPikCO7Ur1mwTLMZ5x77cTsRewXImzrCGsDfW
-         L/ZJcREet+/P5qOJdggpzkxf/OuH0VxFJ/0Tmmww2aY+JH0aJWUpu48U8n2Xz2D1hvSA
-         AEJQoCh7373CyTzP7vxAVF6mvNQMTwYrq5KEIk7hfqOjz2zvTTmKcMx/Th0QeDfMeNVk
-         wc4xfU7DwFGqBqNv1CtLOKVHmsnhlBjSa5o30rtfxqfkvw5hVWhamP9dbonSRhOmSkcF
-         PIopy2wPUJUIFtPzzw4ffMB87R2PfMoudbJ/syj9qZqOwK7oe2L6MCjqDJ5M89eYRhdJ
-         LHgg==
-X-Gm-Message-State: AOAM533cVJrFHGPD+Ldjg+YOXBuyejvW5BEnok7mlpxZ+70NYm39lEIv
-        C4l1DBJZ2EQxm9g39gvTx6LWaA==
-X-Google-Smtp-Source: ABdhPJxAb2dbhIWseZL7XHHx/FXpMP60Lig41n9UonyGLj8JxrAaRG+bSwetn/MdvvctxmkU0h+PHg==
-X-Received: by 2002:a65:5a0d:: with SMTP id y13mr94996pgs.436.1602790096823;
-        Thu, 15 Oct 2020 12:28:16 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4sm54688pjz.51.2020.10.15.12.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2020 12:28:15 -0700 (PDT)
-Date:   Thu, 15 Oct 2020 12:28:14 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+        id S2392030AbgJOT6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 15:58:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35614 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392022AbgJOT6w (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 15:58:52 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 39D46206DD;
+        Thu, 15 Oct 2020 19:58:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602791931;
+        bh=2GblqwhkPAkE0TtieY26EFCAPXf3227FX1JmTZGYNnI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XYfnpBcpyXx7zbOdzpxmxARFYf6LEuMwNeQhFznzqXISUOClvAW+YS298L/pb9Vl0
+         Wsr9chYIILNU2NVUFCf01DIBICAzSdUSzSEhMEnBNgc0858QOpnnW01lkjK0xEOjeo
+         DyKNNoWQZfJ8YOXUpu7cxa6AMbp7JTy5QKB6rXaA=
+Received: by mail-ej1-f48.google.com with SMTP id p5so5409463ejj.2;
+        Thu, 15 Oct 2020 12:58:51 -0700 (PDT)
+X-Gm-Message-State: AOAM532V02dL9KTpgEixMPG8VvkwT+gQImBmz9atAaW650zKc/wCgqyl
+        4L38i9jI/juisJaDdGOewxeCVD6m9Okb2dra8Yg=
+X-Google-Smtp-Source: ABdhPJxkkJvixPoc0B4sIIS51XrG3mX1copKltHAJdzHHi0Oa9u3vkZKJAkpTi3TwucBewdkY/8Zr3IvJLtfpdPf3d0=
+X-Received: by 2002:a17:906:6a07:: with SMTP id o7mr6275959ejr.454.1602791929686;
+ Thu, 15 Oct 2020 12:58:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <yt9d1ri3nakg.fsf@linux.ibm.com> <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
+ <20201014071547.GA2459@kozik-lap> <202010151226.7382E03@keescook>
+In-Reply-To: <202010151226.7382E03@keescook>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 15 Oct 2020 21:58:37 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPd6nDi6x+iZ8jke-7qFb=DDjnStkQS9=0PfTZExA7i6jQ@mail.gmail.com>
+Message-ID: <CAJKOXPd6nDi6x+iZ8jke-7qFb=DDjnStkQS9=0PfTZExA7i6jQ@mail.gmail.com>
+Subject: Re: autofs crash with latest linux-next
+To:     Kees Cook <keescook@chromium.org>
 Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: autofs crash with latest linux-next
-Message-ID: <202010151226.7382E03@keescook>
-References: <yt9d1ri3nakg.fsf@linux.ibm.com>
- <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
- <20201014071547.GA2459@kozik-lap>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201014071547.GA2459@kozik-lap>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 09:15:47AM +0200, Krzysztof Kozlowski wrote:
-> I hit this since few days as well. Although the bisect points to the
-> merge, the issue looks like a result of mentioned commit 4d03e3cc5982
-> ("fs: don't allow kernel reads and writes without iter ops").
-> 
-> The __kernel_read() last argument 'pos' can be NULL and it is
-> dereferenced here (added by the commit):
-> 
->  525 ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
-> ...
->  547         kiocb.ki_pos = *pos;
->  548         iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
-> 
-> 
-> The __kernel_read() is called with NULL in fs/autofs/waitq.c:
-> 
->  45 static int autofs_write(struct autofs_sb_info *sbi,
->  46                         struct file *file, const void *addr, int bytes)
-> 
-> ...
->  54         mutex_lock(&sbi->pipe_mutex);
->  55         while (bytes) {
->  56                 wr = __kernel_write(file, data, bytes, NULL);
+On Thu, 15 Oct 2020 at 21:28, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Oct 14, 2020 at 09:15:47AM +0200, Krzysztof Kozlowski wrote:
+> > I hit this since few days as well. Although the bisect points to the
+> > merge, the issue looks like a result of mentioned commit 4d03e3cc5982
+> > ("fs: don't allow kernel reads and writes without iter ops").
+> >
+> > The __kernel_read() last argument 'pos' can be NULL and it is
+> > dereferenced here (added by the commit):
+> >
+> >  525 ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
+> > ...
+> >  547         kiocb.ki_pos = *pos;
+> >  548         iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+> >
+> >
+> > The __kernel_read() is called with NULL in fs/autofs/waitq.c:
+> >
+> >  45 static int autofs_write(struct autofs_sb_info *sbi,
+> >  46                         struct file *file, const void *addr, int bytes)
+> >
+> > ...
+> >  54         mutex_lock(&sbi->pipe_mutex);
+> >  55         while (bytes) {
+> >  56                 wr = __kernel_write(file, data, bytes, NULL);
+>
+> I think the thread here is the same thing, but you've found it in
+> autofs...
+> https://lore.kernel.org/lkml/CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com/
 
-I think the thread here is the same thing, but you've found it in
-autofs...
-https://lore.kernel.org/lkml/CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com/
+Indeed it looks the same. Thanks for the pointer.
 
--- 
-Kees Cook
+Best regards,
+Krzysztof

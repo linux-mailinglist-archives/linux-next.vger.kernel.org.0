@@ -2,94 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 965A728EA4B
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 03:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8D728E982
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 02:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389169AbgJOBjj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Oct 2020 21:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389114AbgJOBji (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Oct 2020 21:39:38 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2950C0F26D2;
-        Wed, 14 Oct 2020 17:19:44 -0700 (PDT)
+        id S1728413AbgJOAfe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Oct 2020 20:35:34 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33569 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727790AbgJOAfe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 14 Oct 2020 20:35:34 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBVK76dyWz9sTL;
-        Thu, 15 Oct 2020 11:19:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBVgS1nSNz9sT6;
+        Thu, 15 Oct 2020 11:35:31 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602721181;
-        bh=2Tcp5S732htwqUBy5RB+MjIuctB4QUMXobgmn0fnjNM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FUx+//vxnKoP75TV5gzGLH3Ec0olLPSPR+6thvoT15s1ewq9pJuRXJEoomDDkxnyM
-         RJSssJ3osfNTVSukP/rprI/TCm/cRlYeZlkaeEt3tnAZPchz/q8ygUxg4HudeLx927
-         gyR1fXe8fUTPc6sT6Kojj5wQlh1ormNAci6Cc8eeNGkXXTCyEH0K87WfjOGbjeTFS0
-         UN4XPODiwg5Nhy+8Wc3W7F8NfuG2vVH+0bC2z1eQtE1AnruvrRf1maJZlFaK23xqQB
-         M/2HyNLHr5v1CsXHTm3EFo8Gax1K0SIrGCOzPtl4C2SqUuXI0R5T9wTOUWXS/xdTLq
-         rxSNXPrYAsrig==
-Date:   Thu, 15 Oct 2020 11:19:38 +1100
+        s=201702; t=1602722132;
+        bh=AEUzDcNpseI0zKOcofSjki/FWqNB2DYfmUv1ZA64ZT0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZAGOU5MnMIDN+6LKnJTogH0NDfPeinbdSTa7Y18yG0Wyc+e/4RzG3DBHkq4mIo9Jc
+         S6lgdXwIB6zFI1/Ff8RrULv6p+H8yaKi+LYr2f7mjPKe4S67rihGViE7Q3Hpis8PVK
+         N/HTtqagwb/M66/oxbSedFAcA3GpzGQwMSEegjDBiydQFzZJqQ0wIKoWonUhZned36
+         TCBoH24zFMIV7NJrsZO37cWUBn+yLBkA9vB5ySWgYVfI3GwBqb9rR9Sx+7jtoO8Jo5
+         nXWfKJF0oeR7LbxvUN8jLrXayC6cWrrB1yUwGn4ZzQsIWlokcacTgLNy57iggydnTq
+         0PzOr2TdEw0gw==
+Date:   Thu, 15 Oct 2020 11:35:30 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <20201015111938.5bd779c3@canb.auug.org.au>
-In-Reply-To: <202010141607.E9A032C686@keescook>
-References: <20200914132249.40c88461@canb.auug.org.au>
-        <202010031451.ABC49D88@keescook>
-        <20201004102437.12fb0442@canb.auug.org.au>
-        <202010040125.B5AD5B757@keescook>
-        <20201004210018.5bbc6126@canb.auug.org.au>
-        <202010041944.7FEE22407B@keescook>
-        <20201015092526.144df583@canb.auug.org.au>
-        <202010141607.E9A032C686@keescook>
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: linux-next: manual merge of the btrfs tree with Linus' tree
+Message-ID: <20201015113530.115e0361@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fBXYlQhN7kmOsjyMuhj6N.e";
+Content-Type: multipart/signed; boundary="Sig_/voInhO8v9bi.ZAxF+1MUQqx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fBXYlQhN7kmOsjyMuhj6N.e
+--Sig_/voInhO8v9bi.ZAxF+1MUQqx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+Hi all,
 
-On Wed, 14 Oct 2020 16:10:05 -0700 Kees Cook <keescook@chromium.org> wrote:
->=20
-> I've pinged the thread of the patch (from Oct 4th) that fixes this.
-> Hopefully that or this email will float to the top for an x86
-> maintainer. :) If it doesn't get picked up soon, I can try sending this
-> direct to Linus, though it makes more sense that it come through Ingo
-> (as he'd done the orphan tree pull request).
+Please do *not* rebase/rewrite your linux-next included tree and then
+immediately send it to Linus.  Or if you do, the please also update
+what you have in linux-next (so you can sneak it past me :-().
+(mutter, mutter, unnecessary conflicts :-().
 
-Thanks.
+I have dropped the brtfs tree from linux-next today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fBXYlQhN7kmOsjyMuhj6N.e
+--Sig_/voInhO8v9bi.ZAxF+1MUQqx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+HlZoACgkQAVBC80lX
-0Gz/FQf/Rx+9JlWEpBOajoa+TegPawUWU2z2r2/P3a6yM7qYdVuqOwvED1ghkuTs
-+fN28pYe2G9Q8OsvVywJfZv/oTKJfjX9ySEOnq/lRTvvN9VlHBN1z0AiX6x+2vgx
-2f1iHBZzHFSKzq3R52NfwZWeFOjPsAHekE0wS+zq2k5FA+9YLWTNFzp1WB1fT0hM
-UzcNYcwLncQRDAXR+noE0XKE08bTY35HIysYg8AkIPg2cVTU1jsSS52qRA5AMs9h
-Hjku9WAOpwqw02344AI4PfeM3HOa1FjkzOp3zChKTPznvetgP4iZexMVm380bHtw
-paPMstiIP+wkYUiYlO8x89/ziODpMA==
-=c0IV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+HmVMACgkQAVBC80lX
+0GyiVwf+N2NmWlhEJR1ugr0XXH+JlSXRtJCu05zTfm4ODJFdPkS0ZmSnE0H0znZe
+IiN9aArnRWSJ5BUqCDWUMnQ3Tg/pKNn0ZlGiuXER23LsVhI45Jh1ktF9RWLg9Run
+89olNZJZdqwHzJeCPfST/pBs7CF6rUeuWKCpF2+KvySD4esi87FnWEald1xhH7AP
+evdhMfn/WsfT4Ms6k1ud/f9HKE3a7GzMLDYxPlGScepVdWcueK8jWbeI2L5HkYp6
+0O8ZgY1TeXj1Hcb1ngOZYjdZ3s5R1o0FkgKL9JJiGR9WpxpUS+Yrc3qqLGlbT2HV
+0EiWPoRSFQInZBg/wFFNMsO/v87q7Q==
+=5OB4
 -----END PGP SIGNATURE-----
 
---Sig_/fBXYlQhN7kmOsjyMuhj6N.e--
+--Sig_/voInhO8v9bi.ZAxF+1MUQqx--

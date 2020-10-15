@@ -2,178 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597E228EBAC
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 05:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC3E28EC78
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 06:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728973AbgJODla (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Oct 2020 23:41:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48712 "EHLO mail.kernel.org"
+        id S1729327AbgJOEzw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 00:55:52 -0400
+Received: from ozlabs.org ([203.11.71.1]:60783 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728934AbgJODla (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 14 Oct 2020 23:41:30 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1729634AbgJOEzw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 00:55:52 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4617E20691;
-        Thu, 15 Oct 2020 03:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602733289;
-        bh=xFrCW4148ckM17ydN7CaAThkadlv2qP8pSAdSmybXcs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nlYLNSMFV4hSQCvImDl/Pa7ogKhAUZj91SvIV7C//M8i6DHpmZyD58tjzXAX4hwxa
-         GQirTEDNXtaXy4QJwgnNOVHzrHSa9XnZdqY0UVNshXjNRdU7YWnTXIe2XAtYlbP0h9
-         beYBQkVSXrzevxMxXdsA13HWlEwfT32hhtVAy5So=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D265E35229EB; Wed, 14 Oct 2020 20:41:28 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 20:41:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Qian Cai <cai@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-Message-ID: <20201015034128.GA10260@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20201013103406.GY2628@hirez.programming.kicks-ass.net>
- <20201013104450.GQ2651@hirez.programming.kicks-ass.net>
- <20201013112544.GZ2628@hirez.programming.kicks-ass.net>
- <20201013162650.GN3249@paulmck-ThinkPad-P72>
- <20201013193025.GA2424@paulmck-ThinkPad-P72>
- <20201014183405.GA27666@paulmck-ThinkPad-P72>
- <20201014215319.GF2974@worktop.programming.kicks-ass.net>
- <20201014221152.GS3249@paulmck-ThinkPad-P72>
- <20201014223954.GH2594@hirez.programming.kicks-ass.net>
- <20201014235553.GU3249@paulmck-ThinkPad-P72>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBcRp0dtWz9sTL;
+        Thu, 15 Oct 2020 15:55:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1602737750;
+        bh=k6WFsSJNWHlahUvXoLupeZUZSPIIxRYdmu2agNUGOOs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jChQbBChO1bcs8+tIX1iJNrYHPyMEMBVGGeiZAJVueRla3u7Ef5KfNJLhbCQhaePe
+         DpfraBn5aKyzrr+Nyc/ymg5Y5xwFgTQDrmO3Dxkpe333cNuSeUCLzDozZkLlNZPGX0
+         qnAwpBOhMj0ulGWRlsIVotYp6/9kmEJmtAgd9WKvPwV+/Itx9WBt36p+pHL+EydSF2
+         gzxV8HkpRQyePy9eYweeYOpaKjGf3482zJ309WpZ2yGlZSuuVn6neScOyVe3GL2F+2
+         6lvqpb6SBpMcweDuQ5uacJNY6BdgyyJp9wQyQbxUR2blHLjaedocz5tfkHwruoeGhB
+         ElodaJHOBBkmA==
+Date:   Thu, 15 Oct 2020 15:55:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the rpmsg tree
+Message-ID: <20201015155549.58724351@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201014235553.GU3249@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/Q1zMRKTsaIiKJBUPhz2pqns";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 14, 2020 at 04:55:53PM -0700, Paul E. McKenney wrote:
-> On Thu, Oct 15, 2020 at 12:39:54AM +0200, Peter Zijlstra wrote:
-> > On Wed, Oct 14, 2020 at 03:11:52PM -0700, Paul E. McKenney wrote:
-> > > On Wed, Oct 14, 2020 at 11:53:19PM +0200, Peter Zijlstra wrote:
-> > > > On Wed, Oct 14, 2020 at 11:34:05AM -0700, Paul E. McKenney wrote:
-> > > > > commit 7deaa04b02298001426730ed0e6214ac20d1a1c1
-> > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > Date:   Tue Oct 13 12:39:23 2020 -0700
-> > > > > 
-> > > > >     rcu: Prevent lockdep-RCU splats on lock acquisition/release
-> > > > >     
-> > > > >     The rcu_cpu_starting() and rcu_report_dead() functions transition the
-> > > > >     current CPU between online and offline state from an RCU perspective.
-> > > > >     Unfortunately, this means that the rcu_cpu_starting() function's lock
-> > > > >     acquisition and the rcu_report_dead() function's lock releases happen
-> > > > >     while the CPU is offline from an RCU perspective, which can result in
-> > > > >     lockdep-RCU splats about using RCU from an offline CPU.  In reality,
-> > > > >     aside from the splats, both transitions are safe because a new grace
-> > > > >     period cannot start until these functions release their locks.
-> > > > 
-> > > > But we call the trace_* crud before we acquire the lock. Are you sure
-> > > > that's a false-positive? 
-> > > 
-> > > You lost me on this one.
-> > > 
-> > > I am assuming that you are talking about rcu_cpu_starting(), because
-> > > that is the one where RCU is not initially watching, that is, the
-> > > case where tracing before the lock acquisition would be a problem.
-> > > You cannot be talking about rcu_cpu_starting() itself, because it does
-> > > not do any tracing before acquiring the lock.  But if you are talking
-> > > about the caller of rcu_cpu_starting(), then that caller should put the
-> > > rcu_cpu_starting() before the tracing.  But that would be the other
-> > > patch earlier in this thread that was proposing moving the call to
-> > > rcu_cpu_starting() much earlier in CPU bringup.
-> > > 
-> > > So what am I missing here?
-> > 
-> > rcu_cpu_starting();
-> >   raw_spin_lock_irqsave();
-> >     local_irq_save();
-> >     preempt_disable();
-> >     spin_acquire()
-> >       lock_acquire()
-> >         trace_lock_acquire() <--- *whoopsie-doodle*
-> > 	  /* uses RCU for tracing */
-> >     arch_spin_lock_flags() <--- the actual spinlock
-> 
-> Gah!  Idiot here left out the most important part, so good catch!!!
-> Much easier this way than finding out about it the hard way...
-> 
-> I should have asked myself harder questions earlier today about moving
-> the counter from the rcu_node structure to the rcu_data structure.
-> 
-> Perhaps something like the following untested patch on top of the
-> earlier patch?
+--Sig_/Q1zMRKTsaIiKJBUPhz2pqns
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Except that this is subtlely flawed also.  The delay cannot be at
-rcu_gp_cleanup() time because by the time we are working on the last
-leaf rcu_node structure, callbacks might already have started being
-invoked on CPUs corresponding to the earlier leaf rcu_node structures.
+Hi all,
 
-So the (untested) patch below (on top of the other two) moves the delay
-to rcu_gp_init(), in particular, to the first loop that traverses only
-the leaf rcu_node structures handling CPU hotplug.
+After merging the rpmsg tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Hopefully getting closer!
+drivers/remoteproc/mtk_scp.c: In function 'mt8192_scp_before_load':
+drivers/remoteproc/mtk_scp.c:326:2: error: implicit declaration of function=
+ 'dsb' [-Werror=3Dimplicit-function-declaration]
+  326 |  dsb(sy);
+      |  ^~~
+drivers/remoteproc/mtk_scp.c:326:6: error: 'sy' undeclared (first use in th=
+is function); did you mean 's8'?
+  326 |  dsb(sy);
+      |      ^~
+      |      s8
 
-Oh, and the second smp_mb() added to rcu_gp_init() is probably
-redundant given the full barrier implied by the later call to
-raw_spin_lock_irq_rcu_node().  But one thing at a time...
+Caused by commit
 
-							Thanx, Paul
+  fd0b6c1ff85a ("remoteproc/mediatek: Add support for mt8192 SCP")
 
-------------------------------------------------------------------------
+I have reverted that commit for today.
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 8b5215e..5904b63 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -1725,6 +1725,7 @@ static void rcu_strict_gp_boundary(void *unused)
-  */
- static bool rcu_gp_init(void)
- {
-+	unsigned long firstseq;
- 	unsigned long flags;
- 	unsigned long oldmask;
- 	unsigned long mask;
-@@ -1768,6 +1769,12 @@ static bool rcu_gp_init(void)
- 	 */
- 	rcu_state.gp_state = RCU_GP_ONOFF;
- 	rcu_for_each_leaf_node(rnp) {
-+		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
-+		firstseq = READ_ONCE(rnp->ofl_seq);
-+		if (firstseq & 0x1)
-+			while (firstseq == smp_load_acquire(&rnp->ofl_seq))
-+				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
-+		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
- 		raw_spin_lock(&rcu_state.ofl_lock);
- 		raw_spin_lock_irq_rcu_node(rnp);
- 		if (rnp->qsmaskinit == rnp->qsmaskinitnext &&
-@@ -1982,7 +1989,6 @@ static void rcu_gp_fqs_loop(void)
- static void rcu_gp_cleanup(void)
- {
- 	int cpu;
--	unsigned long firstseq;
- 	bool needgp = false;
- 	unsigned long gp_duration;
- 	unsigned long new_gp_seq;
-@@ -2020,12 +2026,6 @@ static void rcu_gp_cleanup(void)
- 	new_gp_seq = rcu_state.gp_seq;
- 	rcu_seq_end(&new_gp_seq);
- 	rcu_for_each_node_breadth_first(rnp) {
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
--		firstseq = READ_ONCE(rnp->ofl_seq);
--		if (firstseq & 0x1)
--			while (firstseq == smp_load_acquire(&rnp->ofl_seq))
--				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
- 		raw_spin_lock_irq_rcu_node(rnp);
- 		if (WARN_ON_ONCE(rcu_preempt_blocked_readers_cgp(rnp)))
- 			dump_blkd_tasks(rnp, 10);
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Q1zMRKTsaIiKJBUPhz2pqns
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+H1lUACgkQAVBC80lX
+0GyYwAgApDyvg3cfLWJzJvfbs8OnaL2w39VmvPj+xMbtP2dyQGXvTbaT2/nWWQNG
+Eq6wCbxmeFgVsKSW9j5OY2FFob9PzrgbmWXhHaZVCd+6Xe7tW5gA20TR5c+55xzN
+Y/ytQeVEjDakO+AjsEO9WiKNHP9OtX+MyZHCd4p5zHcwZ1lqDGE+P7RQGsoH7LHE
+4dD5+7mLXflLN4IwMrTHIk+txiAcXl/VWqu/AF77P1T5C0LwAbRyZTP74eEO2qY8
+qluaMY23+Z5xSP92sxTzxSpN0DZBgPBwsAPor+y9QH8v1zaISZzsf2vPrMCI2dlq
+/2I8w+PyRHcXem4CcifVPm+esj1/NA==
+=0bXn
+-----END PGP SIGNATURE-----
+
+--Sig_/Q1zMRKTsaIiKJBUPhz2pqns--

@@ -2,154 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135C828EB47
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 04:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3643B28EB72
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 05:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729356AbgJOCoE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Oct 2020 22:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S1728417AbgJODVj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Oct 2020 23:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgJOCoE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Oct 2020 22:44:04 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0B0C061755;
-        Wed, 14 Oct 2020 19:44:04 -0700 (PDT)
+        with ESMTP id S1725919AbgJODVj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Oct 2020 23:21:39 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20004C061755;
+        Wed, 14 Oct 2020 20:21:39 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBYWf74z8z9sTD;
-        Thu, 15 Oct 2020 13:43:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CBZM02HP7z9sT6;
+        Thu, 15 Oct 2020 14:21:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602729841;
-        bh=m5cs0oNpOpTeIHBQHDd7CVYZ56+P5MGav+h5RLhk3xI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kKGQ4qOgPNoEQZSPks+uUrtyZLCSRJ6O67SwzmY6VVfySIfIRN31wjT/E3PK6Gunx
-         lwvlJ+t4fvShXbIc+jqbMI3kySbB3bPQjkqACcagMc+0B6Plw1gLedM0BukJa3zcF4
-         R5WnVUbDL3OzE6znCzGH5JhkTYNwE1TZsNlCYDoaVv1fi1CL96LTOjI9ouYTm8SYud
-         TlFFInFgUUUuiIKZHylUIjULU5+Dsnw0gNYqJKYuOLUwhkTpdIMVhTMxrYpb70wah6
-         fqrVV8vtqSXVoT+GGoWWkA6Wp6Vq9izTk1BLL/ehSL+70E1tQ/tqRW7r7Wjcw6wYYu
-         NJff5+yc89yag==
-Date:   Thu, 15 Oct 2020 13:43:57 +1100
+        s=201702; t=1602732096;
+        bh=/OMQe24iAQN//EyN6R9KvD5E0PFWKFXZ9VWhvWYr+MI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JzWfvXIzrtBw2v+YhPI6lD6wRL0C+PxzxEyTMhM+ms6dqyKrsSxBl7/QITmPeHUB4
+         L10fEuBMzJ3QR6toIacG17aLDuxLf1jtzd2K8Ss/sh6E+8pWJ4cAKseCfEY16HYdPV
+         b701c0YWrDBPIMLaNHzxfaNaN+qwBuaDyROub+3K2fbQWIzMcK/jE2NdHi6hD0RQeo
+         VCiIsl04LYX5steyZDG045EO1ERBruXRlKCXe9APDEoeqcIBEdQoM3b2xNoDmeDhW2
+         ajPtFEc7j4NMuSvU7+J4L8iN0zXzYLCToZz682MAuKgRt0zoyxoQ5C/04fklgsro2T
+         QGrHwt3vaK5Jg==
+Date:   Thu, 15 Oct 2020 14:21:30 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     Joerg Roedel <joro@8bytes.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Tom Murphy <murphyt7@tcd.ie>,
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Kyung Min Park <kyung.min.park@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the iommu tree
-Message-ID: <20201015134357.0a4e61b3@canb.auug.org.au>
-In-Reply-To: <20201013183107.65c15fd5@canb.auug.org.au>
-References: <20200921140901.16adf8c2@canb.auug.org.au>
-        <20201013183107.65c15fd5@canb.auug.org.au>
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Rob Herring <robh@kernel.org>
+Subject: linux-next: manual merge of the devicetree tree with Linus' tree
+Message-ID: <20201015142130.20634f21@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/g+CJtaeZ+2OhcqY190MsVj5";
+Content-Type: multipart/signed; boundary="Sig_/Qx7D5BZw4X3OyzfQsqXmZpv";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/g+CJtaeZ+2OhcqY190MsVj5
+--Sig_/Qx7D5BZw4X3OyzfQsqXmZpv
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 13 Oct 2020 18:31:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Mon, 21 Sep 2020 14:09:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the iommu tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/msm/msm_iommu.c: In function 'msm_iommu_pagetable_unmap=
-':
-> > drivers/gpu/drm/msm/msm_iommu.c:46:2: error: implicit declaration of fu=
-nction 'iommu_flush_tlb_all'; did you mean 'iommu_flush_iotlb_all'? [-Werro=
-r=3Dimplicit-function-declaration]
-> >    46 |  iommu_flush_tlb_all(to_msm_iommu(pagetable->parent)->domain);
-> >       |  ^~~~~~~~~~~~~~~~~~~
-> >       |  iommu_flush_iotlb_all
-> >=20
-> > Caused by commit
-> >=20
-> >   aae4c8e27bd7 ("iommu: Rename iommu_tlb_* functions to iommu_iotlb_*")
-> >=20
-> > interacting with commit
-> >=20
-> >   b145c6e65eb0 ("drm/msm: Add support to create a local pagetable")
-> >=20
-> > from the drm-msm tree.
-> >=20
-> > I have applied the following merge fix patch.  Someone will need to tell
-> > Linus about this fix up when the trees get merged.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 21 Sep 2020 14:04:14 +1000
-> > Subject: [PATCH] merge fix upt for iommu_flush_iotlb_all() rename
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/msm/msm_iommu.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_=
-iommu.c
-> > index 3a83ffdb3b90..22ac7c692a81 100644
-> > --- a/drivers/gpu/drm/msm/msm_iommu.c
-> > +++ b/drivers/gpu/drm/msm/msm_iommu.c
-> > @@ -43,7 +43,7 @@ static int msm_iommu_pagetable_unmap(struct msm_mmu *=
-mmu, u64 iova,
-> >  		size -=3D 4096;
-> >  	}
-> > =20
-> > -	iommu_flush_tlb_all(to_msm_iommu(pagetable->parent)->domain);
-> > +	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
-> > =20
-> >  	return (unmapped =3D=3D size) ? 0 : -EINVAL;
-> >  }
-> > @@ -199,7 +199,7 @@ struct msm_mmu *msm_iommu_pagetable_create(struct m=
-sm_mmu *parent)
-> > =20
-> >  	/*
-> >  	 * TODO we would like each set of page tables to have a unique ASID
-> > -	 * to optimize TLB invalidation.  But iommu_flush_tlb_all() will
-> > +	 * to optimize TLB invalidation.  But iommu_flush_iotlb_all() will
-> >  	 * end up flushing the ASID used for TTBR1 pagetables, which is not
-> >  	 * what we want.  So for now just use the same ASID as TTBR1.
-> >  	 */
-> > --=20
-> > 2.28.0 =20
->=20
-> This merge fix up is now needed when the iommu tree and the drm tree are =
-merged.
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-This merge fix up is now needed when the drm tree is merged with Linus' tre=
-e.
+  Documentation/x86/index.rst
+
+between commit:
+
+  ea4e3bef4c94 ("Documentation/x86: Add documentation for /proc/cpuinfo fea=
+ture flags")
+
+from Linus' tree and commit:
+
+  441848282c59 ("dt: Remove booting-without-of.rst")
+
+from the devicetree tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/g+CJtaeZ+2OhcqY190MsVj5
+diff --cc Documentation/x86/index.rst
+index 740ee7f87898,1faf44f551bd..000000000000
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@@ -9,7 -9,7 +9,8 @@@ x86-specific Documentatio
+     :numbered:
+ =20
+     boot
++    booting-dt
+ +   cpuinfo
+     topology
+     exception-tables
+     kernel-stacks
+
+--Sig_/Qx7D5BZw4X3OyzfQsqXmZpv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Ht24ACgkQAVBC80lX
-0Gxw0AgApDz6ptrVcJejH6ge5V3fGIY2frQzMsaRMVsX3PDYms5GDDP62BWqHZ0w
-rD7OJS1Ja63i2CIVDvtN9WW7vquGgDyRAlQlM4T7rSDBlsU2yZbYM3UNlnzxdIqa
-B70JneSVV49fOO88DafNhHGGXmvd/jnMyKTsbqMjq0xZDAmi20SzE1x6FV25Nd2V
-rCm7o1uoyB14dW0Y7tZewRtreLVKZ1nC7F22Nz3vHNercgrAbdosuUPLE6+hxF5g
-16Bl8xn2oCGXCb+3CuMnF7QCgIZvvYSiVE2mieZvjFK4wUd6A83nNREYGBBkARQk
-cqsFzyR0MYDAuf56/yuXHF2KCbfj+w==
-=vWCx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+HwDoACgkQAVBC80lX
+0Gzn0wf+KShSjUabi1T9awpFGTJRVYJQktPEFhgzLgiU5+dHA3y9TcBDQft8Ll6M
+ggWccY74zmdCpvzsDfMW7DZuN8GGqf2Kw2PnyyymdH3Z87jD2Y5IIKRonNV1oSKb
+xHV+uWyFVKlggLWroPyutYvBs7mzlMgVzX6e4q8CMTDLGb8saHL40qBJmv64a9oJ
+b+5nYCrW7fluQSfBg30vGLlYl3H/Dc17fmjiB9UMimutcR8z8WQKSrK72twS8Ig4
+QvWxxxqhmacawfcqTKtOb6RVkJ8NwWQJZMqyQ9U9aAeA1KXpeSdeOUbQotCrhK0k
+Xf0hTvRq/mqhpl6Q+ojt8Ne0Jwzrpg==
+=TuZZ
 -----END PGP SIGNATURE-----
 
---Sig_/g+CJtaeZ+2OhcqY190MsVj5--
+--Sig_/Qx7D5BZw4X3OyzfQsqXmZpv--

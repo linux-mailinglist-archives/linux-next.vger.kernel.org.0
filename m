@@ -2,120 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628ED28F7C8
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 19:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6136F28F7E8
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 19:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727075AbgJORtE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 13:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S1731494AbgJOR4P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 13:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725977AbgJORtE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 13:49:04 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E886CC061755;
-        Thu, 15 Oct 2020 10:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IBDBfcB9UF38XCuy7sjNIvLeFBIX/xu0ZtYdH8cOzAQ=; b=oai4ij/gYzQ7yf7ANBlexuUl4l
-        epDB934iV9Uo103BQxT4i2WEWw3fU4fZ4jg0MibRjWYUPx/jCUR9V+ZR/KwlPdCNQU1LG4E5kLkwl
-        hgHuxW0dOVj8tfr+ukir83nDfQ2LH2YcBq9RBLopIZXD3Q0wwwX/5kjR8o3OPqMAG20r3y8d+R9bq
-        aqfU1d5RgocahSEXN2Eiz1hgFmX1W9XwEOGM688mn1rl0qRxR/Gzo+UoQ/VUzUieYRUfslrk9gwvu
-        JjzaG5fUjEj6rasjEMxx9Y3nNslIGRTyOKbbnFdJNBN1i54XlCxwrZEC4SQI9b4U28vctg+cbqFVa
-        6MBFu1Pw==;
-Received: from [2601:1c0:6280:3f0::507c]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kT7N6-0000w2-LT; Thu, 15 Oct 2020 17:49:00 +0000
-Subject: Re: linux-next: Tree for Oct 15 (drivers/net/pcs/pcs-xpcs.o)
-To:     Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
+        with ESMTP id S1731483AbgJOR4P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 13:56:15 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028B9C061755
+        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 10:56:15 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id m22so12855ots.4
+        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 10:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WhXHtRQLiNvlxA4Ve4EGkL4Yj2RyR9bAfejYfV8NKoY=;
+        b=LkXC4WB06ByVlUKUgEg92KmVPC9c/Lr6VceWMRdBnVynCIMxm/QJN29fJtLeyA/8JM
+         V71tbZYSR6gKPlYBmn96I5oGiLRE498NemTt/nGrhS2UvwC4DS6/oYde3SmHYGtWCpLA
+         I2nlg/XJzRzSEZoydxkttpkCLyNWZNPnp2l18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WhXHtRQLiNvlxA4Ve4EGkL4Yj2RyR9bAfejYfV8NKoY=;
+        b=hqI6upwB7i/QE4zV2YIAOy20AXx7T+zSqPhV6B8O79yHaGfHl/9C6bc4NxHa40Lkw6
+         TJ/KS4Q79Gduri+/ylXu/k52zqfWhvR7JqAL+udHC2GDYqzlj2yhanKBvLKaOVTiF8et
+         y8pwDAAjUCEyMuHHK1/gGB+aCkUX1CWEDUUArGXXgD6+p7OU5ExzlRjle2gqG69zgKJo
+         LdUgt3HfaESpyn9aN3cwLR4tJNrwZbmq7W/pBbTozbks+lbvQdsxx9GcCoDWpPMAh9IB
+         /jxQti+SQlKFU/4Y8zRFhEreh5GSgBSpomx4aldBUYBSu3xjSCswGhTpNlnm5bkU5eNu
+         SffA==
+X-Gm-Message-State: AOAM532BS195UiowMjgad0mX2ccJFRpXEiK4s5opeJKd4fSv3Xm85CSp
+        VwCDrL9Pw+49/HgHGoPlHMBhpA==
+X-Google-Smtp-Source: ABdhPJyWCGNwF/h+GQeALThlCZpGDJ2foEce5mnVm3bpnpgPTrjTgZU3WdDaCcvNyLQuFvVtVHFKlg==
+X-Received: by 2002:a9d:7308:: with SMTP id e8mr3653483otk.238.1602784574333;
+        Thu, 15 Oct 2020 10:56:14 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id n1sm1394096otr.16.2020.10.15.10.56.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2020 10:56:13 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ kunit-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Gow <davidgow@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20201015182859.7359c7be@canb.auug.org.au>
- <e507b1ec-a3ae-0eaa-8fed-6c77427325c3@infradead.org>
- <BN6PR12MB17798590707177F08FD60653D3020@BN6PR12MB1779.namprd12.prod.outlook.com>
- <20201015170204.bnnpgogczjiwntyc@skbuf>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <3418cac1-eff7-d06a-6ba7-9877f0f266e9@infradead.org>
-Date:   Thu, 15 Oct 2020 10:48:56 -0700
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201012195649.2047671f@canb.auug.org.au>
+ <20201015163806.1c5696bb@canb.auug.org.au>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <05a34f8f-075f-87b0-e13f-898399f480ac@linuxfoundation.org>
+Date:   Thu, 15 Oct 2020 11:56:12 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201015170204.bnnpgogczjiwntyc@skbuf>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20201015163806.1c5696bb@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/15/20 10:02 AM, Ioana Ciornei wrote:
-> On Thu, Oct 15, 2020 at 03:06:42PM +0000, Jose Abreu wrote:
->> From: Randy Dunlap <rdunlap@infradead.org>
->> Date: Oct/15/2020, 15:45:57 (UTC+00:00)
+On 10/14/20 11:38 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 12 Oct 2020 19:56:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >>
->>> On 10/15/20 12:28 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Since the merge window is open, please do not add any v5.11 material to
->>>> your linux-next included branches until after v5.10-rc1 has been released.
->>>>
->>>> News: there will be no linux-next releases next Monday or Tuesday.
->>>>
->>>> Changes since 20201013:
->>>>
->>>
->>> on i386:
->>>
->>> ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_read':
->>> pcs-xpcs.c:(.text+0x29): undefined reference to `mdiobus_read'
->>> ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_soft_reset.constprop.7':
->>> pcs-xpcs.c:(.text+0x80): undefined reference to `mdiobus_write'
->>> ld: drivers/net/pcs/pcs-xpcs.o: in function `xpcs_config_aneg':
->>> pcs-xpcs.c:(.text+0x318): undefined reference to `mdiobus_write'
->>> ld: pcs-xpcs.c:(.text+0x38e): undefined reference to `mdiobus_write'
->>> ld: pcs-xpcs.c:(.text+0x3eb): undefined reference to `mdiobus_write'
->>> ld: pcs-xpcs.c:(.text+0x437): undefined reference to `mdiobus_write'
->>> ld: drivers/net/pcs/pcs-xpcs.o:pcs-xpcs.c:(.text+0xb1e): more undefined references to `mdiobus_write' follow
->>>
->>>
+>> Today's linux-next merge of the akpm-current tree got a conflict in:
+>>
+>>    lib/kunit/test.c
+>>
+>> between commit:
+>>
+>>    45dcbb6f5ef7 ("kunit: test: add test plan to KUnit TAP format")
+>>
+>> from the kunit-next tree and commit:
+>>
+>>    e685acc91080 ("KUnit: KASAN Integration")
+>>
+>> from the akpm-current tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
+>> diff --cc lib/kunit/test.c
+>> index de07876b6601,dcc35fd30d95..000000000000
+>> --- a/lib/kunit/test.c
+>> +++ b/lib/kunit/test.c
+>> @@@ -15,11 -16,16 +16,6 @@@
+>>    #include "string-stream.h"
+>>    #include "try-catch-impl.h"
+>>    
+>> - static void kunit_set_failure(struct kunit *test)
+>>   -static void kunit_print_tap_version(void)
+>> --{
+>> - 	WRITE_ONCE(test->success, false);
+>>   -	static bool kunit_has_printed_tap_version;
+>>   -
+>>   -	if (!kunit_has_printed_tap_version) {
+>>   -		pr_info("TAP version 14\n");
+>>   -		kunit_has_printed_tap_version = true;
+>>   -	}
+>> --}
+>> --
+>>    /*
+>>     * Append formatted message to log, size of which is limited to
+>>     * KUNIT_LOG_SIZE bytes (including null terminating byte).
 > 
-> I think this stems from the fact that PHYLIB is configured as a module
-> which leads to MDIO_BUS being a module as well while the XPCS is still
-> built-in. What should happen in this configuration is that PCS_XPCS
-> should be forced to build as module. However, that select only acts in
-> the opposite way so we should turn it into a depends.
+> This is now a conflict between the kunit-next tree and Linus' tree.
 > 
-> Is the below patch acceptable? If it is, I can submit it properly.
 
-Hi,
-Did you copy-paste this patch?  It contains spaces instead of tabs
-so it doesn't apply cleanly/easily, but I managed to apply and test it, so
+Thanks Stephen. I will mention this conflict in my pull request to
+Linus.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-> diff --git a/drivers/net/pcs/Kconfig b/drivers/net/pcs/Kconfig
-> index 074fb3f5db18..22ba7b0b476d 100644
-> --- a/drivers/net/pcs/Kconfig
-> +++ b/drivers/net/pcs/Kconfig
-> @@ -7,8 +7,7 @@ menu "PCS device drivers"
-> 
->  config PCS_XPCS
->         tristate "Synopsys DesignWare XPCS controller"
-> -       select MDIO_BUS
-> -       depends on MDIO_DEVICE
-> +       depends on MDIO_DEVICE && MDIO_BUS
->         help
->           This module provides helper functions for Synopsys DesignWare XPCS
->           controllers.
-> 
-> Ioana
-
-thanks.
-
--- 
-~Randy
+Thanks,
+-- Shuah

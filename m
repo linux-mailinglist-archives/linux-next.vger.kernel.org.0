@@ -2,154 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B696B28FA6D
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 23:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1DA28FAC5
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 23:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404902AbgJOVLK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 17:11:10 -0400
-Received: from ozlabs.org ([203.11.71.1]:42139 "EHLO ozlabs.org"
+        id S1727931AbgJOVoY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 17:44:24 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:51873 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404899AbgJOVLK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Oct 2020 17:11:10 -0400
+        id S1727278AbgJOVoX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 17:44:23 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CC2545Z67z9sTD;
-        Fri, 16 Oct 2020 08:11:04 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CC2qS0xCTz9sTr;
+        Fri, 16 Oct 2020 08:44:20 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1602796266;
-        bh=44fxF+oYrK483Ri1cbruRSDb4FKtT/C1VuszkiRraRw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J3zl6ox/h0n5QOD/mq3UcOmC213znPOBCHQ70JvBgPFvgIC7SobRR0uZVoExq8wB0
-         HJRBRL0HosYpUBwI8BAiIcITx1RO97vlTx9XOuhAGPcRuUNOh0ZwE4fArEBnw1Er/t
-         s4IfvRseq/cvv9QJFPLvB+/eEyLQoaXMhWbz9SkzJQnXQuxqpqd/pW0XfXeJPFhndx
-         vfUGJFeSvRGVuZrunSkXqsO60GNXygxMwrujsrftwfPqTeKjS7DSB7PzyV2t0ZUDow
-         qX6W3rMhVhHBEcubckhG4mPbAE+8mURN+qy94VEVNn01R1t+JxFs+KSb6vqhEHykWj
-         U1Rxml8E8rkMA==
-Date:   Fri, 16 Oct 2020 08:11:03 +1100
+        s=201702; t=1602798261;
+        bh=xxCONTbIooCLH5Bf98YyysiRr38oie6ZZ6U5FiXcbkI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OG8ho/Li0M4Gw+DaySwLdtwJ9q3QxzeGwHplZcYWDKBLkGbFNhpzJztM2HoMbnk/9
+         /yWB6fQiXNdZwE5cJ5lXNGGhOXsxChpn3X4qaELOKbgdsxierhrPrOqBTvqs/GeAYa
+         /ieYU7MkdNAdtwTpr0iBNUP2NUIe8KeYP+Re8rijFU91QMFIZGVn07QVSshAeLAPcU
+         Em9J2pVgSajphckrLeKXVQPUVLyy1jYw+xaWCBZFZN2AA/MeCQjUoAN0dN30laeVvL
+         dpf/CO5svJYAOO0gf71zyW2bTWiwxniurMYpDHhV4UQ7iBDT0/og26Hu0l/0/pggIn
+         Eg0vY+N8kpRkw==
+Date:   Fri, 16 Oct 2020 08:44:19 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Doug Ledford <dledford@redhat.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Ido Schimmel <idosch@mellanox.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the hmm tree
-Message-ID: <20201016081103.797fa111@canb.auug.org.au>
-In-Reply-To: <20201012151948.3a840c00@canb.auug.org.au>
-References: <20201006203508.3cb3d0e3@canb.auug.org.au>
-        <20201006164120.GI4734@nvidia.com>
-        <20201012151948.3a840c00@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Jeanson <mjeanson@efficios.com>
+Subject: linux-next: manual merge of the wireless-drivers tree with the net
+ tree
+Message-ID: <20201016084419.3c6e048a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FBHmFb.fVVu/hjAcKh66QPz";
+Content-Type: multipart/signed; boundary="Sig_/gHa18ALDmab4h1Q=Y3a==d9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FBHmFb.fVVu/hjAcKh66QPz
+--Sig_/gHa18ALDmab4h1Q=Y3a==d9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 12 Oct 2020 15:19:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Tue, 6 Oct 2020 13:41:20 -0300 Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Tue, Oct 06, 2020 at 08:35:08PM +1100, Stephen Rothwell wrote: =20
-> > > Hi all,
-> > >=20
-> > > After merging the hmm tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > >=20
-> > >=20
-> > > Caused by commit
-> > >=20
-> > >   07da1223ec93 ("lib/scatterlist: Add support in dynamic allocation o=
-f SG table from pages")
-> > >=20
-> > > interacting with commit
-> > >=20
-> > >   707d561f77b5 ("drm: allow limiting the scatter list size.")
-> > >=20
-> > > from the drm tree.
-> > >=20
-> > > I have added the following merge fix patch
-> > >=20
-> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date: Tue, 6 Oct 2020 20:22:51 +1100
-> > > Subject: [PATCH] lib/scatterlist: merge fix for "drm: allow limiting =
-the
-> > >  scatter list size."
-> > >=20
-> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > >  drivers/gpu/drm/drm_prime.c | 9 ++++++---
-> > >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-> > > index 11fe9ff76fd5..83ac901b65a2 100644
-> > > +++ b/drivers/gpu/drm/drm_prime.c
-> > > @@ -807,6 +807,7 @@ struct sg_table *drm_prime_pages_to_sg(struct drm=
-_device *dev,
-> > >  				       struct page **pages, unsigned int nr_pages)
-> > >  {
-> > >  	struct sg_table *sg =3D NULL;
-> > > +	struct scatterlist *sl;
-> > >  	size_t max_segment =3D 0;
-> > >  	int ret;
-> > > =20
-> > > @@ -820,11 +821,13 @@ struct sg_table *drm_prime_pages_to_sg(struct d=
-rm_device *dev,
-> > >  		max_segment =3D dma_max_mapping_size(dev->dev);
-> > >  	if (max_segment =3D=3D 0 || max_segment > SCATTERLIST_MAX_SEGMENT)
-> > >  		max_segment =3D SCATTERLIST_MAX_SEGMENT;
-> > > -	ret =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
-> > > +	sl =3D __sg_alloc_table_from_pages(sg, pages, nr_pages, 0,
-> > >  					  nr_pages << PAGE_SHIFT,
-> > > -					  max_segment, GFP_KERNEL);
-> > > -	if (ret)
-> > > +					  max_segment, NULL, 0, GFP_KERNEL);
-> > > +	if (IS_ERR(sl)) {
-> > > +		ret =3D PTR_ERR(sl);
-> > >  		goto out;
-> > > +	}
-> > > =20
-> > >  	return sg;
-> > >  out:   =20
-> >=20
-> > This looks OK to me, thanks =20
->=20
-> This merge fix patch is now being applied to the merge of the drm tree
-> since the rdma tree (that is merged before the drm tree) has merged the
-> hmm tree.
+Today's linux-next merge of the wireless-drivers tree got a conflict in:
 
-This merge fix patch is now being applied to the merge of the rdma tree
-since the Linus has merged the drm tree.
+  tools/testing/selftests/net/Makefile
+
+between commit:
+
+  1a01727676a8 ("selftests: Add VRF route leaking tests")
+
+from the net tree and commit:
+
+  b7cc6d3c5c91 ("selftests: net: Add drop monitor test")
+
+from the wireless-drivers (presumably because it has merged part of the
+net-next tree) tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FBHmFb.fVVu/hjAcKh66QPz
+diff --cc tools/testing/selftests/net/Makefile
+index 3e7fb1e70c77,4773ce72edbd..000000000000
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@@ -19,7 -19,7 +19,8 @@@ TEST_PROGS +=3D txtimestamp.s
+  TEST_PROGS +=3D vrf-xfrm-tests.sh
+  TEST_PROGS +=3D rxtimestamp.sh
+  TEST_PROGS +=3D devlink_port_split.py
++ TEST_PROGS +=3D drop_monitor_tests.sh
+ +TEST_PROGS +=3D vrf_route_leaking.sh
+  TEST_PROGS_EXTENDED :=3D in_netns.sh
+  TEST_GEN_FILES =3D  socket nettest
+  TEST_GEN_FILES +=3D psock_fanout psock_tpacket msg_zerocopy reuseport_add=
+r_any
+
+--Sig_/gHa18ALDmab4h1Q=Y3a==d9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+IuucACgkQAVBC80lX
-0Gximgf/f130z0WkHFE2Pb4vbcxFGAbA0iZNvgwg7M5P+skaaEmYFsqjkryS5DVH
-OH4CKxDm/tyjfJC4jyq3t6mRiNudTQzMyop/lUZVnIZVve7yYwv7dMm8cnZYFrzO
-aAmnCvGZdEyQAmoXIQWdCQkIWP64OxQ4ZpEoqLJ9r5dUaZuw3wdKv5HB4iA1JSzz
-+Vr0dwanRdZkF4SGLf8cMKTW4NulRSSwO8Ubt8mZwJV8fv1TMUGu97ManyEvKvPv
-vKTUCcwKyVknjFPKCMsn4mQm2MyjVVlt36MY2ltCrQsq79vUeY7AIfi4wb2hbloP
-PCPVYSaFFfutD7XfCoWtHDqRbXAMAA==
-=C3tT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+IwrMACgkQAVBC80lX
+0GwW6Qf9GgMvt4wD9afGoWwR3PrZX5Fzbe5fqY+FJIrMG6yHYcyPxRG605Vl5gXo
+JwcjFo9xXxOtEb7EDC1uwLZouTpFtoArIyhJTa7ND1psay5yu3nrTKVljZeTE2ub
+DGZuF6NfGHQ7L1dE0szwqBVL99n17hF1Apvy9wRXd+lpMJllJs32orJ15h6aUdOa
+K7/r8yFN8GN0LEtIw5sgRZ/nArGn/aftRHUVv79jrEzTOYSCc8nS7IQWHNXl3aQH
+AQs7a5bEGg+GlI0AOCWwpDgFuCmzYFQyPlWfPEJzt9Y8+xiIiz3ep88IVKCHm5Kh
+2lhbecBDqNtsb+GZW/hgj5oCcYml8Q==
+=IQ4s
 -----END PGP SIGNATURE-----
 
---Sig_/FBHmFb.fVVu/hjAcKh66QPz--
+--Sig_/gHa18ALDmab4h1Q=Y3a==d9--

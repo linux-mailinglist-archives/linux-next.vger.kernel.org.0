@@ -2,99 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3DF28FAED
-	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 23:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FAC28FAF6
+	for <lists+linux-next@lfdr.de>; Thu, 15 Oct 2020 23:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbgJOV53 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Oct 2020 17:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbgJOV53 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Oct 2020 17:57:29 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF8DC0613CF
-        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 14:57:29 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id o7so139890pgv.6
-        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 14:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+HirN9imkTNenxnF1fARCZ++oG/BPbJh5tZatzn08Pk=;
-        b=NryStx+0D7n93j4bJ+39S+L/RJOrazFnYAsRRDiVE7ats47+CyDN/3kJNv+f9sea/O
-         Z8oyFOqrLTFunDVsds0hgV3+nIDFIcdrfJOjZWTaww0wJnqZppeXwDX6IGcC5sZtBghw
-         CukaZ4IKfMNGzJRKasMyR1cyCQ3ioP0G2omcw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+HirN9imkTNenxnF1fARCZ++oG/BPbJh5tZatzn08Pk=;
-        b=bwR+tmNUW935dJ0gOJGzlCKsmK42PvPNA9XKVNSTZWJtix2JHpV4Mcp83YGl4mQjV4
-         7PryAXm/bAC8Ht0cokWwzpNst7l3A9S9LpU0kDe8I0uTT2kpKG1QB0qkRFG4Y9SiH48H
-         vO0wkLyF7WeiBLO60de1tx0SOvrI4IRlSBTndK8B3AzB2jCfOBW9QGtHLEjpu1jJLBBd
-         hZIqZLgBf+utoqYW5pA6x0lEPA402JislIS+ULSAYxaJohd/kjtGYLTo/WHtS/SlhG36
-         1uNT7H1yq0HSc04vy8Rui+h6Irnyw5TezHE6vUtWVeTfhJ1TnDeUOqAl8hHpmKHylI7E
-         +3mg==
-X-Gm-Message-State: AOAM531BIO5MkYelji4VHjhqeEGrWbqX5n/88hFZc7kw+l9Ftztjv4QK
-        8dksLBF8EUfKRHi3Yy2jsGmUSQ==
-X-Google-Smtp-Source: ABdhPJwAvPB5af0CfJASapqoGe3tufGFbINTyn4eNTbKiWpIy7TpGbula57cC6HG75GjKrqYOt0Dbw==
-X-Received: by 2002:aa7:9828:0:b029:152:192d:9237 with SMTP id q8-20020aa798280000b0290152192d9237mr624696pfl.80.1602799048599;
-        Thu, 15 Oct 2020 14:57:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bx22sm278682pjb.40.2020.10.15.14.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2020 14:57:27 -0700 (PDT)
-Date:   Thu, 15 Oct 2020 14:57:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tim.Bird@sony.com, lkft-triage@lists.linaro.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Justin Cook <justin.cook@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] selftests/run_kselftest.sh: Make each test
- individually selectable
-Message-ID: <202010151336.3B30332@keescook>
-References: <20200928202650.2530280-1-keescook@chromium.org>
- <20200928202650.2530280-3-keescook@chromium.org>
- <CA+G9fYtqqzWtb65pk8J=-Afv0KZ9iy3_bA-WmiJjbe5Y6qXbAw@mail.gmail.com>
+        id S1730421AbgJOV72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Oct 2020 17:59:28 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40891 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729372AbgJOV72 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Oct 2020 17:59:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CC38q3d0Gz9sRk;
+        Fri, 16 Oct 2020 08:59:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1602799165;
+        bh=+pnzsjShTAYUFByi2kxPHD5vmPagopDyvYTnovjDFKo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r/sYPjtVXyWbfO7RIEbH/rOJ2P6pR810JvjkldvF82NIgXBG9clxZUpitNs9GdPfR
+         IYKieLHQuZYSh1fGuDcKFHpvowkvzdHEH6zwBQDTpvVW+xohEhLbyijK0zuXQAijyj
+         2wGA9gQBmqg3F7Q95D7EKdsLAOgJ4s+stZ0mKMgoBxRyKZVn9AS5fO3NnWjX+T5dKe
+         trJ8DINgEXz3r/CmNwcRZTbwO1sSb1t4eCCRQDTm2uDu6rLsHTbc1rdVXAbBUyfUVc
+         JRtNSFMuVcLeHKR+kEh8Maxmxhvqi/RsNPyfvV+9S1ranwWayZuJc5HXBFbrwxpx8n
+         Rd25nvflLo8sw==
+Date:   Fri, 16 Oct 2020 08:59:22 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        petkan@nucleusys.com, davem@davemloft.net, kuba@kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH v2] net: usb: rtl8150: don't incorrectly assign random
+ MAC addresses
+Message-ID: <20201016085922.4a2b90d1@canb.auug.org.au>
+In-Reply-To: <20201012091428.103fc2be@canb.auug.org.au>
+References: <20201010064459.6563-1-anant.thazhemadam@gmail.com>
+        <20201011173030.141582-1-anant.thazhemadam@gmail.com>
+        <20201012091428.103fc2be@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtqqzWtb65pk8J=-Afv0KZ9iy3_bA-WmiJjbe5Y6qXbAw@mail.gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/4scCr8VwCta4sNLSHfaz3O8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 02:57:34PM +0530, Naresh Kamboju wrote:
-> On Tue, 29 Sep 2020 at 01:56, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Currently with run_kselftest.sh there is no way to choose which test
-> > we could run. All the tests listed in kselftest-list.txt are all run
-> > every time. This patch enhanced the run_kselftest.sh to make the test
-> > collections (or tests) individually selectable. e.g.:
-> >
-> > $ ./run_kselftest.sh -c seccomp -t timers:posix_timers -t timers:nanosleep
-> >
-> > Additionally adds a way to list all known tests with "-l", usage
-> > with "-h", and perform a dry run without running tests with "-n".
-> 
-> 
-> While testing this patch set on LAVA the skip test functionality is not working.
-> We may have to revisit test definitions kselftest skip logic
-> or else
-> may add one more option to skip a given test on run_kselftest.sh script.
-> 
-> ref:
-> https://github.com/Linaro/test-definitions/blob/master/automated/linux/kselftest/kselftest.sh#L196
+--Sig_/4scCr8VwCta4sNLSHfaz3O8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, LAVA's hack to skip tests needs to be adjusted. Here's what it
-should probably look like:
-https://github.com/Linaro/test-definitions/pull/231
+Hi Greg,
 
--- 
-Kees Cook
+On Mon, 12 Oct 2020 09:14:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Sun, 11 Oct 2020 23:00:30 +0530 Anant Thazhemadam <anant.thazhemadam@g=
+mail.com> wrote:
+> >
+> > In set_ethernet_addr(), if get_registers() succeeds, the ethernet addre=
+ss
+> > that was read must be copied over. Otherwise, a random ethernet address
+> > must be assigned.
+> >=20
+> > get_registers() returns 0 if successful, and negative error number
+> > otherwise. However, in set_ethernet_addr(), this return value is
+> > incorrectly checked.
+> >=20
+> > Since this return value will never be equal to sizeof(node_id), a
+> > random MAC address will always be generated and assigned to the
+> > device; even in cases when get_registers() is successful.
+> >=20
+> > Correctly modifying the condition that checks if get_registers() was
+> > successful or not fixes this problem, and copies the ethernet address
+> > appropriately.
+> >=20
+> > Fixes: f45a4248ea4c ("net: usb: rtl8150: set random MAC address when se=
+t_ethernet_addr() fails")
+> > Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> > ---
+> > Changes in v2:
+> >         * Fixed the format of the Fixes tag
+> >         * Modified the commit message to better describe the issue bein=
+g=20
+> >           fixed
+> >=20
+> > +CCing Stephen and linux-next, since the commit fixed isn't in the netw=
+orking
+> > tree, but is present in linux-next.
+> >=20
+> >  drivers/net/usb/rtl8150.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+> > index f020401adf04..bf8a60533f3e 100644
+> > --- a/drivers/net/usb/rtl8150.c
+> > +++ b/drivers/net/usb/rtl8150.c
+> > @@ -261,7 +261,7 @@ static void set_ethernet_addr(rtl8150_t *dev)
+> > =20
+> >  	ret =3D get_registers(dev, IDR, sizeof(node_id), node_id);
+> > =20
+> > -	if (ret =3D=3D sizeof(node_id)) {
+> > +	if (!ret) {
+> >  		ether_addr_copy(dev->netdev->dev_addr, node_id);
+> >  	} else {
+> >  		eth_hw_addr_random(dev->netdev);
+> > --=20
+> > 2.25.1
+> >  =20
+>=20
+> I will apply the above patch to the merge of the usb tree today to fix
+> up a semantic conflict between the usb tree and Linus' tree.
+
+It looks like you forgot to mention this one to Linus :-(
+
+It should probably say:
+
+Fixes: b2a0f274e3f7 ("net: rtl8150: Use the new usb control message API.")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4scCr8VwCta4sNLSHfaz3O8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+IxjoACgkQAVBC80lX
+0Gy7GQgAgTCi7yUieCsVP9nVMN6eZTAGF0DOJf2MRoyZrb7YW1X8IOYZdnl7xJvZ
+Ek5GE39cs4iU/nxNNmBCRykM9csSdCl9oewJ8QU6lBL/kEedWaLYarf6s+S8LO3k
+piYQP7msA7erP9cG0dXFQt3Kql7YhLJi/QwQDXp4RGckZnAj9LOIHEvnETn1buMv
+QsHWAl06LLgYDqMFnQi143UJ6lhd1pbHt97nLALJsCdDwsYXmbKHjDlcpR/Gu3RV
+zyM+dQ20wO3cxWnHNeaFdXZJ+4IuHehBPD3AS5jj2zQFjei76f7YWQ1Kle37/UM6
+hbSNKOAmmt47m4iMGOykq1HOK8f6og==
+=ftXM
+-----END PGP SIGNATURE-----
+
+--Sig_/4scCr8VwCta4sNLSHfaz3O8--

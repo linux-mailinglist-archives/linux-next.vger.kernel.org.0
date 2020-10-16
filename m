@@ -2,113 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8430728FDC9
-	for <lists+linux-next@lfdr.de>; Fri, 16 Oct 2020 07:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433B228FDCD
+	for <lists+linux-next@lfdr.de>; Fri, 16 Oct 2020 07:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390708AbgJPFoe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Oct 2020 01:44:34 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38328 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388836AbgJPFod (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Oct 2020 01:44:33 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09G5VmKD118584;
-        Fri, 16 Oct 2020 01:44:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=vGnGKcU4E7DFgr62TsRxPZJdQvwxqE7vmufXuceXSX0=;
- b=KLn2/x9Ff852xiZl05nmDBtYc6oPdBJVbIxF4wWngKpnIxpkgUfVODAXZASaA6iUUi+o
- trDEGusvS/nkTtuFUJRoz3yfQkzimZDEIzRVLwnK6Hdu4xuJmgA7FlwYhq24xKnuyvvT
- M9dWTWzm1wTbRwY3pAInaY37rGhV5l4xmnA5ksrOO+ltvpgNUguQ9q2VU2ndd0YnzFTf
- gpOXtB84YwvxkxfvHx7qCx/5ReuyPQnsqMg+tYOyobx9/bwY5E7XxK5VtXx3uTeFcOt+
- vuGeZXOkQbd9ZZia1WztoEN+hIAuXFzV2qR5aZLwlePDxm0Jg9PzKr0F7vHdGmqvZtie EA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3475038x0d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Oct 2020 01:44:19 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09G5fxJW002683;
-        Fri, 16 Oct 2020 05:44:17 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3434k7wx26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Oct 2020 05:44:17 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09G5iFgm33489184
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Oct 2020 05:44:15 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9479FA405B;
-        Fri, 16 Oct 2020 05:44:15 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47A53A405C;
-        Fri, 16 Oct 2020 05:44:15 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 16 Oct 2020 05:44:15 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org,
+        id S1732446AbgJPFqx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Oct 2020 01:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390941AbgJPFpz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Oct 2020 01:45:55 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1B0C0613D2
+        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 22:45:55 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 144so838852pfb.4
+        for <linux-next@vger.kernel.org>; Thu, 15 Oct 2020 22:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Iox0f97PdfROSzFUQgLo8vkQuUFWUr6O8qnG9IL8Hyo=;
+        b=dzDzI5F39hY8jXbyQBZeBkaEMQ1ZUu2e1PeEZomBUhHUTuegJIaMQuLDzZK29keBQN
+         y/+Y2kOqQrME1RTptt8nGbzY67cj2Ivtum+T9IY4u9Di7KotQn4AHSWZBvfUc0DkeYSK
+         YcmS5TctGoYCjmusCTu8YyybT2YnZFreqxOwVOYsTm7V2A9tJrnZ7GheC1qWBZJvh4dp
+         3O/zPxmFvAMNaKBdHjMfoBIQmHwxYRpYBg/fiNAo/PfThRgzmZYSrINfoqXPqGbihWv4
+         9ZWpXC/axXlmH6inBm+CihWnVZ0MnR3DJorNrvDXv1IHK8v1K126P4inwa0nP/z44rp9
+         zyEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Iox0f97PdfROSzFUQgLo8vkQuUFWUr6O8qnG9IL8Hyo=;
+        b=ft4Vy8+xIwb2IgXwANRlkqsAAeKrsFt8C6EEyOC7Tk9r44tLIWf52GGI010caZh3+K
+         9AuqSlm4Bd7XcviHf8PXzxf0uk8Fun5aPRX/f5MycXoUNz/2quyeyzFURFIbcIypoLJf
+         hrF+Qvln+cSmlQSX2F3kKqMC0QIaLMitdo34Z5kBE4bCLPLrjndvKONh5a/GzB9xyASA
+         MS8btd4IApsEiDxVMgR8D5btpEqTRhPsLANPOK60CdcqUbHx9XmeD7DXdSO/z3MF06Wg
+         aUrwD6AuFUqWJf+vSrvUYKE8R6Pl3SEwzvS3/bzRCT2o2R9pQxOitWVhtqjmj7bqywRt
+         n43g==
+X-Gm-Message-State: AOAM531sE3GMvQJeO1+Y71ZRmE4RCWhtYMzq+ovPZC5Eu55jz4OEH3xg
+        mZUK+1kJ8WqgJq1uh5tDQiIamQ==
+X-Google-Smtp-Source: ABdhPJxDK+1Ye5nb3j+GL6B1SPF/7OIW2+L+AYAcXw/CnPftBnCxVYjZGLx8agf1VuGO2xSgTrpNaQ==
+X-Received: by 2002:a63:2dc1:: with SMTP id t184mr1853195pgt.325.1602827154725;
+        Thu, 15 Oct 2020 22:45:54 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id i126sm1236775pfc.48.2020.10.15.22.45.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 15 Oct 2020 22:45:53 -0700 (PDT)
+Date:   Fri, 16 Oct 2020 11:15:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Dave Gerlach <d-gerlach@ti.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: autofs crash with latest linux-next
-References: <yt9d1ri3nakg.fsf@linux.ibm.com>
-        <8a4c7324-4637-7f25-82b6-2fd30aacb73e@de.ibm.com>
-        <20201014071547.GA2459@kozik-lap> <202010151226.7382E03@keescook>
-Date:   Fri, 16 Oct 2020 07:44:14 +0200
-In-Reply-To: <202010151226.7382E03@keescook> (Kees Cook's message of "Thu, 15
-        Oct 2020 12:28:14 -0700")
-Message-ID: <yt9dblh2sp1t.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        lkft-triage@lists.linaro.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
+Subject: Re: WARNING: at drivers/opp/core.c:678
+ dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
+Message-ID: <20201016054551.jwxk2xdvvnk7o5yy@vireshk-i7>
+References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
+ <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
+ <20200827211832.3ebeda8a@canb.auug.org.au>
+ <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
+ <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
+ <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
+ <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
+ <20200831060203.7guhirtxb72odow2@vireshk-i7>
+ <CA+G9fYv5WKQkDvjZsc+xth54X_MK3qUmuUTXhUDVUHpS3UhNpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-16_01:2020-10-16,2020-10-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 mlxscore=0
- adultscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 clxscore=1031
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010160034
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYv5WKQkDvjZsc+xth54X_MK3qUmuUTXhUDVUHpS3UhNpQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
++Dave,
 
-> On Wed, Oct 14, 2020 at 09:15:47AM +0200, Krzysztof Kozlowski wrote:
->> I hit this since few days as well. Although the bisect points to the
->> merge, the issue looks like a result of mentioned commit 4d03e3cc5982
->> ("fs: don't allow kernel reads and writes without iter ops").
->> 
->> The __kernel_read() last argument 'pos' can be NULL and it is
->> dereferenced here (added by the commit):
->> 
->>  525 ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
->> ...
->>  547         kiocb.ki_pos = *pos;
->>  548         iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
->> 
->> 
->> The __kernel_read() is called with NULL in fs/autofs/waitq.c:
->> 
->>  45 static int autofs_write(struct autofs_sb_info *sbi,
->>  46                         struct file *file, const void *addr, int bytes)
->> 
->> ...
->>  54         mutex_lock(&sbi->pipe_mutex);
->>  55         while (bytes) {
->>  56                 wr = __kernel_write(file, data, bytes, NULL);
->
-> I think the thread here is the same thing, but you've found it in
-> autofs...
-> https://lore.kernel.org/lkml/CAHk-=wgj=mKeN-EfV5tKwJNeHPLG0dybq+R5ZyGuc4WeUnqcmA@mail.gmail.com/
+On 15-10-20, 15:26, Naresh Kamboju wrote:
+> The arm x15 boot failed on Linus 's mainline version 5.9.0.
 
-Indeed. Thanks, missed that.
+Don't mention the version as this doesn't give the right information.
+You tested it over 5.9 + 5.10-rc1 material.
 
-Sven
+> I have listed the latest commits on drivers/opp/ .
+> 
+> metadata:
+>   git branch: master
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+>   git commit: 3e4fb4346c781068610d03c12b16c0cfb0fd24a3
+>   git describe: v5.9-4105-g3e4fb4346c78
+>   make_kernelversion: 5.9.0
+>   kernel-config:
+> https://builds.tuxbuild.com/2BB2g61t29VaadVLXEl4cQ/kernel.config
+> 
+> 
+> ------------[ cut here ]------------
+> [   13.530971] sdhci-omap 4809c000.mmc: Got CD GPIO
+> [   13.535647] WARNING: CPU: 0 PID: 137 at drivers/opp/core.c:678
+> dev_pm_opp_set_rate+0x4cc/0x5d4
+
+Looks like the stuff from drivers/opp/ti-opp-supply.c supply didn't
+work as expected.
+
+One of the major changes came with these patches:
+
+dc279ac6e5b4 cpufreq: dt: Refactor initialization to handle probe deferral properly
+dd461cd9183f opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
+
+And that's where I think it may have gone wrong.
+
+Dave: Will you (or someone else from TI) can have a look at it as well
+?
+
+-- 
+viresh

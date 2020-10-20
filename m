@@ -2,131 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5684D29393F
-	for <lists+linux-next@lfdr.de>; Tue, 20 Oct 2020 12:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF84D29436B
+	for <lists+linux-next@lfdr.de>; Tue, 20 Oct 2020 21:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392167AbgJTKgW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Oct 2020 06:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392150AbgJTKgV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Oct 2020 06:36:21 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF4BC0613CE
-        for <linux-next@vger.kernel.org>; Tue, 20 Oct 2020 03:36:21 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id h4so766319pjk.0
-        for <linux-next@vger.kernel.org>; Tue, 20 Oct 2020 03:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xMyFD9aGKc1uxqgQqPeeOsvhMt6C8yiL5bwMNHZ2olo=;
-        b=GSMeM7NOjHfz41kQrfcTjo3+JWRn+PyrY3mFZMC2M7Mzs89wRF4FVzkzCX3S6+NOjB
-         zk57fp2xG9nMX7vfnuakibqPWCHF1dqli5JQZVtB7epDQDX30IRoXNZNw3hRhLvcnMG7
-         pes7iP9/6KdH0Aapb3g1e+xoPbZaOv/6/fxiCR7M4yzDnA5/Rhel6MyoO5DGRKiGrrJV
-         Re7WID/H5J23z/hqNWh87jJhavo/A8n1jxkgzhsk1Fi/uRIRUG7aLhk45P0gGFXKlA7m
-         I4wxUl0djcYJMx/BiPlyYNVL7TnodAnUuhUoUKuQGpOIs/lcPuNVZu9cVeL2aShEwg0a
-         vJMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xMyFD9aGKc1uxqgQqPeeOsvhMt6C8yiL5bwMNHZ2olo=;
-        b=A+t9iJ3EsDNN0aZEvSnEnUaD0cUMatHpN16LKGnpkt2JoMW5++rBlhvpshIJDz88sZ
-         ZapfB5sPlRSKcXFTBwxf6kaoWfFWsI6/Nc2KZBksy4U1T4aGG63qCC13eoP9zkWxUduB
-         uEz6JDzxCDs2c43lNpzxdCsUUv5FgLcbQlcguB2YMwTK2GZgsuKO0d4pZ0l/1pO0m+lf
-         vpbdsWtftZOo18sUIudkL2TOrBnNsbtlSt6pB2FE6+Ax7LR4+5eGxB4+VZP4N7djqxLK
-         d8gN6ePg3BOP32pKANYsmxvfAPGKreb5CFnpCSYVIUf8f2R2zCqGYm9eRutGarmzlL2R
-         wQvw==
-X-Gm-Message-State: AOAM5325MBCyT/PWxjPv5rm/jCrOyZErSzpLU81dJUhS9O3th2SNBX0V
-        vwV1oH4a7sIvBWcDHcoBtdu8ZQ==
-X-Google-Smtp-Source: ABdhPJxk4To5ufiwxPrTIXU0TYP0McrQLZP7E8JHmy9qgb+tIux4p/Hw0G7cVl1LQfteqOAETflXLw==
-X-Received: by 2002:a17:902:c252:b029:d3:d480:9e10 with SMTP id 18-20020a170902c252b02900d3d4809e10mr2364704plg.47.1603190180695;
-        Tue, 20 Oct 2020 03:36:20 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id 70sm1792610pfu.203.2020.10.20.03.36.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Oct 2020 03:36:19 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 16:06:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Dave Gerlach <d-gerlach@ti.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
-Subject: Re: WARNING: at drivers/opp/core.c:678
- dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
-Message-ID: <20201020103617.qramu2ejlp44qxcz@vireshk-i7>
-References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
- <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
- <20200827211832.3ebeda8a@canb.auug.org.au>
- <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
- <CA+G9fYsn1S-SieuP85-Z4qKO+aNyqJarrBR0xx0X-YbtF9eo0g@mail.gmail.com>
- <20200831044132.jb7aflr2sfbart2z@vireshk-i7>
- <CA+G9fYsLd77Wuz6Fdwr0w4eFvs=rX5ooewrztFtSe7MeyRJeGQ@mail.gmail.com>
- <20200831060203.7guhirtxb72odow2@vireshk-i7>
- <CA+G9fYv5WKQkDvjZsc+xth54X_MK3qUmuUTXhUDVUHpS3UhNpQ@mail.gmail.com>
- <20201016054551.jwxk2xdvvnk7o5yy@vireshk-i7>
+        id S2438273AbgJTTou convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 20 Oct 2020 15:44:50 -0400
+Received: from mail.al.ms.gov.br ([187.86.227.8]:57100 "EHLO mail.al.ms.gov.br"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2409306AbgJTTou (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 20 Oct 2020 15:44:50 -0400
+X-Greylist: delayed 43390 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Oct 2020 15:44:49 EDT
+Received: from localhost (s1369.ms [127.0.0.1])
+        by mail.al.ms.gov.br (Postfix) with ESMTP id 7BC95CA98D;
+        Tue, 20 Oct 2020 02:36:17 -0400 (-04)
+Received: from mail.al.ms.gov.br ([127.0.0.1])
+        by localhost (mail.al.ms.gov.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id S2qPCJqem9X3; Tue, 20 Oct 2020 02:36:17 -0400 (-04)
+Received: from localhost (s1369.ms [127.0.0.1])
+        by mail.al.ms.gov.br (Postfix) with ESMTP id 596FADACD8;
+        Tue, 20 Oct 2020 02:36:16 -0400 (-04)
+X-Virus-Scanned: amavisd-new at mail.al.ms.gov.br
+Received: from mail.al.ms.gov.br ([127.0.0.1])
+        by localhost (mail.al.ms.gov.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Po1LSIuHAl89; Tue, 20 Oct 2020 02:36:16 -0400 (-04)
+Received: from [156.96.116.26] (unknown [156.96.116.26])
+        by mail.al.ms.gov.br (Postfix) with ESMTPSA id C5C8B1A1DE0;
+        Tue, 20 Oct 2020 02:36:10 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201016054551.jwxk2xdvvnk7o5yy@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re
+To:     Recipients <cerimonial@al.ms.gov.br>
+From:   "Mr. J. Ward" <cerimonial@al.ms.gov.br>
+Date:   Mon, 19 Oct 2020 23:36:01 -0700
+Reply-To: mrandrewsmith22@gmail.com
+Message-Id: <20201020063610.C5C8B1A1DE0@mail.al.ms.gov.br>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 16-10-20, 11:15, Viresh Kumar wrote:
-> +Dave,
-> 
-> On 15-10-20, 15:26, Naresh Kamboju wrote:
-> > The arm x15 boot failed on Linus 's mainline version 5.9.0.
-> 
-> Don't mention the version as this doesn't give the right information.
-> You tested it over 5.9 + 5.10-rc1 material.
-> 
-> > I have listed the latest commits on drivers/opp/ .
-> > 
-> > metadata:
-> >   git branch: master
-> >   git repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-> >   git commit: 3e4fb4346c781068610d03c12b16c0cfb0fd24a3
-> >   git describe: v5.9-4105-g3e4fb4346c78
-> >   make_kernelversion: 5.9.0
-> >   kernel-config:
-> > https://builds.tuxbuild.com/2BB2g61t29VaadVLXEl4cQ/kernel.config
-> > 
-> > 
-> > ------------[ cut here ]------------
-> > [   13.530971] sdhci-omap 4809c000.mmc: Got CD GPIO
-> > [   13.535647] WARNING: CPU: 0 PID: 137 at drivers/opp/core.c:678
-> > dev_pm_opp_set_rate+0x4cc/0x5d4
-> 
-> Looks like the stuff from drivers/opp/ti-opp-supply.c supply didn't
-> work as expected.
-> 
-> One of the major changes came with these patches:
-> 
-> dc279ac6e5b4 cpufreq: dt: Refactor initialization to handle probe deferral properly
-> dd461cd9183f opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
-> 
-> And that's where I think it may have gone wrong.
-> 
-> Dave: Will you (or someone else from TI) can have a look at it as well
-> ?
+Greetings.
 
-http://lore.kernel.org/lkml/be911bcddc1dbf4a152513cb3d83f8eed7d2574c.1603189831.git.viresh.kumar@linaro.org
+Good day, and I hope you are safe from this pandemic troubling the world.
 
-I think this will fix it now.
+I work with an online lotto company as the lotto machine coordinator and the lotto supervisor.
 
--- 
-viresh
+I have discovered a way to fix the winning number with the lotto machine to make any person win the lotto jackpot of US$15.4 million.
+
+I  will send you the winning lotto numbers to play the game, and also send you the ticket to play.
+
+You will not spend your money to play the game, and all I need is your trust that you will keep my share of the winning safe. We shall share the winning 50/50%.
+
+I contacted you because we are not related and you are not my known friend, no one will suspect me if you win the jackpot price, because it's an online game and you are from another country far from mine.
+
+It's not illegal or a crime, it's a free game for all and you play just like every other player that plays the lottery and wins.
+
+If you are interested, please mail me back for more detailed information.
+
+Please I hope I can trust you to keep my share of the winning safe and also handle my conversations with you confidentially?
+
+The Lottery draw comes up every Wednesday, Fridays and Sundays.
+
+Regard
+Mr. J. Ward

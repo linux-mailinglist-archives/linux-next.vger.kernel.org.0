@@ -2,154 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB94329497F
-	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 10:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB07294E51
+	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 16:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441102AbgJUIxR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Oct 2020 04:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S2443322AbgJUOND (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Oct 2020 10:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441101AbgJUIxR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 04:53:17 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19699C0613CE
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 01:53:17 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 19so1068457pge.12
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 01:53:17 -0700 (PDT)
+        with ESMTP id S2443323AbgJUONC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 10:13:02 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D093C0613D4
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 07:13:02 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id q25so3309294ioh.4
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 07:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=yw0OGna3TikCnGoqg1uIzUyW5yfUR7cmva3EgFmSE64=;
-        b=sa9SPMPNkbJi00kHjIFvPDQNlpSNgbU+ku2K75DIA7PkN9gmTIdcENP3GcEZVfPdEi
-         wAUkxqvM6h7nAZK96J92DXzPKiUYOliYm3SD6f06oKuOTwf5NTqx65Mt7JZloC33A++F
-         BuSsyAD6G/49mmv7IE6wbNTKFkMw6gB2gh0AW8Q96XtMF7MwMUtE3jQOwv6+WPV2tPAz
-         /O5rNbhRyLthLrtox9qC2sYrlqYGIUrEpLh1Xkh7BFj1dYldaVWB6nogGzRbepxC+iM6
-         0ksJkNCNL/chZ5+xvGhZ4J0oak0JS7omtuBnnfX5wUjP0XjUo9wWv6qruiKPkbl51kl3
-         vipA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uIZP42Vh+ckbjFikdJfke/JG3gnAQkbegdmiTzAtVuQ=;
+        b=qr0IsgILjZxYrcVxGnK0xMFQSsO4X2yUBYbxxx5/nLK7I4WUdVcGC+34t4t24//QSL
+         lTi4C0rDLabB3WIATPVWq7Gx/tClFCZ26ycN9QS95x4RDvZp0J2sXw5D+VUWn4HeevL5
+         9mlEyDGjiTobyQUQ1YoHuLvss6/a2hI2Ib37yCMMxKF4C+EtpbfKXE2vZDIEdir5FO5t
+         bdD5Z5+CdQOc8gOIcQ1DIcd8CmBk0YUtQLxA/TQEDeSKFQWQ/gFiITJ6VXJsfUHk+84M
+         XmTk8SnOYNiwPKDMCnkIhk1n0PZuZLgZsSosmhg96ZH/wYjZ8O5PZ3awgID9f+9DFC98
+         DMGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=yw0OGna3TikCnGoqg1uIzUyW5yfUR7cmva3EgFmSE64=;
-        b=K5oSz5nuwAVuI2cKzLw288IT1SUAIpbXMwkoGO/oW69YdTfL9leswtliO7n+XoUcet
-         hi9606echINOfLUYgRhOYLGBVjKSSBIQkhLuzDK9nwqjB9NJtHiQpli2h9p+z6/V5rkI
-         1PpZWD+gUBmv7acjGiI9i1ZWDnSLWbwFm6c7hIvpoF/WueLMgP3ovudoJpWlVse2XrRI
-         PxEWUkYapcg9I96qHjCsEkaoCaWg2MZoezeeKpMPeKuQZ07kJni9oCRHdXVldR8MI02M
-         M7DVtHveOl05pXoOiS7w0uQwCpuOms6j4Yua0+uixrTz3QEX9CW006xdVRh+Bf9nVfEp
-         t0kw==
-X-Gm-Message-State: AOAM5315p6oHVmFaoB/xs4fQSSnCy1v5XD6O1/IsbxtjCPGndqLLBF70
-        0fwnwK78y7fxOg6O85OCAWlB3itriTfIuw==
-X-Google-Smtp-Source: ABdhPJyLYXiqkSC9pI8GO2nllYWya+PfAkfhtq+9JK0cXJq4elHWHCB1sQEeNb2rHYY1zJZtEGg6zA==
-X-Received: by 2002:a05:6a00:1742:b029:155:dcd2:9155 with SMTP id j2-20020a056a001742b0290155dcd29155mr2450950pfc.78.1603270396261;
-        Wed, 21 Oct 2020 01:53:16 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c127sm1471508pfc.115.2020.10.21.01.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 01:53:15 -0700 (PDT)
-Message-ID: <5f8ff6fb.1c69fb81.3458e.3d50@mx.google.com>
-Date:   Wed, 21 Oct 2020 01:53:15 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uIZP42Vh+ckbjFikdJfke/JG3gnAQkbegdmiTzAtVuQ=;
+        b=ILC5ivJ631GeGeexqQvzLm1yBEmhraNji2o5ex00jL7e7tjJB9tHz1xKt+hQ/BYzbx
+         QBp59WElZbSraLWcYqKAKpQNiW6xwLgw5Tk8fDdzyGFh3WhK6CwLyh0WyLTpbr0vcqf/
+         4dluZwYsOXpa1rQbzgPmJELBHRd1XT+iB/Ao4GeK4BAdt4ZoUYV3DGd0E5xRoHFO+NHY
+         f7FXLKyr7dFt1IkzpYBMFD/iNMJ4sh7UOiPS6p/Vrg3e7FSZl4bidfP6qFOr5umccUzG
+         wQGiDyXsn62NYF/vSuGtAudZmxpTkYCqZKJdnnG9vN6lIzP7i1aU5urp23dP/w8zU7aw
+         0y4g==
+X-Gm-Message-State: AOAM532KUMwuZr0XKyGf+I5juTahzhiPSo7rrIVueqD62PzuuTk11Xnc
+        a0jNzpF9404BVmz0bAC5phFXl5G8fXH9w1tQhB6afA==
+X-Google-Smtp-Source: ABdhPJwb36VWE/96YU44fNuEzYtyD4OBEaEHy05VO9xeNMg79V+hWEmkV1UktkKwfQgUqer4fxUfs/k/5T92j2nxOgY=
+X-Received: by 2002:a6b:8b95:: with SMTP id n143mr442371iod.36.1603289581571;
+ Wed, 21 Oct 2020 07:13:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20201021
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master baseline: 220 runs, 2 regressions (next-20201021)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CGME20201021063555eucas1p24f8486354866fea4640a8f28e487d3c4@eucas1p2.samsung.com>
+ <CA+G9fYuL9O2BLDfCWN7+aJRER3sQW=C-ayo4Tb7QKdffjMYKDw@mail.gmail.com> <12dfa2bb-e567-fb42-d74f-5aaa0c5c43df@samsung.com>
+In-Reply-To: <12dfa2bb-e567-fb42-d74f-5aaa0c5c43df@samsung.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 21 Oct 2020 19:42:50 +0530
+Message-ID: <CA+G9fYsoJgvVi0rU-HgvKWEYFTtXopxd+0-L0Um41-g2HMHL3Q@mail.gmail.com>
+Subject: Re: arm64 build broken on linux next 20201021 - include/uapi/asm-generic/unistd.h:862:26:
+ error: array index in initializer exceeds array bounds
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Netdev <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian@brauner.io>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 220 runs, 2 regressions (next-20201021)
+On Wed, 21 Oct 2020 at 12:06, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> Hi Naresh,
+>
+> On 21.10.2020 07:05, Naresh Kamboju wrote:
+> > arm64 build broken while building linux next 20201021 tag.
+> >
+> > include/uapi/asm-generic/unistd.h:862:26: error: array index in
+> > initializer exceeds array bounds
+> > #define __NR_watch_mount 441
+> >                           ^
+> >
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> Conflict resolution in commit 5394c6318b32f is incomplete.
+>
+> This fixes the build:
 
-Regressions Summary
--------------------
+Thanks for the patch.
+I have applied this patch and build pass on arm64.
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-platform        | arch | lab           | compiler | defconfig              =
-      | results
-----------------+------+---------------+----------+------------------------=
-------+--------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-8    | multi_v7_defc...CONFIG_=
-SMP=3Dn | 0/1    =
+>
+> diff --git a/arch/arm64/include/asm/unistd.h
+> b/arch/arm64/include/asm/unistd.h
+> index b3b2019f8d16..86a9d7b3eabe 100644
+> --- a/arch/arm64/include/asm/unistd.h
+> +++ b/arch/arm64/include/asm/unistd.h
+> @@ -38,7 +38,7 @@
+>   #define __ARM_NR_compat_set_tls (__ARM_NR_COMPAT_BASE + 5)
+>   #define __ARM_NR_COMPAT_END            (__ARM_NR_COMPAT_BASE + 0x800)
+>
+> -#define __NR_compat_syscalls           441
+> +#define __NR_compat_syscalls           442
+>   #endif
+>
+>   #define __ARCH_WANT_SYS_CLONE
+> diff --git a/include/uapi/asm-generic/unistd.h
+> b/include/uapi/asm-generic/unistd.h
+> index 094a685aa0f9..5df46517260e 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -863,7 +863,7 @@ __SYSCALL(__NR_process_madvise, sys_process_madvise)
+>   __SYSCALL(__NR_watch_mount, sys_watch_mount)
+>
+>   #undef __NR_syscalls
+> -#define __NR_syscalls 441
+> +#define __NR_syscalls 442
+>
+>   /*
+>    * 32 bit systems traditionally used different
+>
 
-panda           | arm  | lab-collabora | gcc-8    | omap2plus_defconfig    =
-      | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-201021/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20201021
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5302568121ba345f5c22528aefd72d775f25221e =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | results
-----------------+------+---------------+----------+------------------------=
-------+--------
-bcm2836-rpi-2-b | arm  | lab-collabora | gcc-8    | multi_v7_defc...CONFIG_=
-SMP=3Dn | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f8fc1c37a2b39aa284ff3e9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201021/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201021/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f8fc1c37a2b39aa284ff=
-3ea
-      failing since 20 days (last pass: next-20200929, first fail: next-202=
-00930)  =
-
-
-
-platform        | arch | lab           | compiler | defconfig              =
-      | results
-----------------+------+---------------+----------+------------------------=
-------+--------
-panda           | arm  | lab-collabora | gcc-8    | omap2plus_defconfig    =
-      | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f8fc2592e55d0148e4ff3f7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201021/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201021/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f8fc2592e55d0148e4ff=
-3f8
-      failing since 91 days (last pass: next-20200706, first fail: next-202=
-00721)  =20
+- Naresh

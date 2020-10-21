@@ -2,63 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A682A29514B
-	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 19:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE8D295174
+	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 19:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503352AbgJURF2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Oct 2020 13:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S2503412AbgJURXK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Oct 2020 13:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438032AbgJURF2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 13:05:28 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F06C0613CF
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 10:05:28 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y16so3457547ljk.1
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 10:05:27 -0700 (PDT)
+        with ESMTP id S2502657AbgJURXK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 13:23:10 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7086C0613CE
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 10:23:07 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id y20so4002859iod.5
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 10:23:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jZ8rX4nMXu9yVxF6VhEpyRT/HJL/yeSOHN33lmmqE3Q=;
-        b=d6nJua3ZU/+MbORwAQIhOyj2afUAGnde4GMpRV2HxlMNrYs0QlTInEU5dTEigbF5Df
-         dmv41P9p05B6BQtvCcM2OmGGKAdgaTWy1b42EvZb4/P124a6kJRtmA9iy0DRhNfGxKOc
-         95gwtWQc4/Bu6Cew4ZrJmy92LVxyerHew+FaU=
+        bh=7535FUlfM8DZDchGw8aykWjhU0FVacKPwMt6VunyyW4=;
+        b=ub1i2qnqq5gc5yWa++WfJbKGLRDF3XgcjuF4SNEwsZorMl0qqBlkzzk65jDvd1rIp6
+         lsc7BJmCFH+/nkMbVQcVwn4bYWFUNTGPYV9LnCocI598fe1uL6/mDLuJIxfahYegMgmV
+         O6P5shfiwBpbj5CWne+FmGk5phLqk0nId5IETHoA04NJ3VI8BSq+2EJbyBFyDYvD9KOQ
+         SIXqL0Q6SqAfgMBeJW3/ZMjqQX2LwKMlStEFUHBOIC/HAkX92HVDxbei5SvC4AtBDDgM
+         BjeK/N4wHt0pTqvRnrqr83fx4BR3FWwhR0strhBEMc39uPq0fD7cDyRbXeouxt7OuCWl
+         kfYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jZ8rX4nMXu9yVxF6VhEpyRT/HJL/yeSOHN33lmmqE3Q=;
-        b=fBPPHeJ77Up4TAX+ftW+cOhqY+lKKvnuhQvIlurpgzetvm4RKnhc4zdjCnaiFrbydh
-         O3xWWxiJuDYiOCHhGkpHKRBApJ6LKTLRSdyE6S7g98lKIBMJOb7SWq8XEV0bL2zs4txW
-         tXiOXfqnSB8lhHTOd1yKApxjw3bDFW0iQGcBiIrLf9t3mnN3xDXAQxHYR2Qp1MrjmgA1
-         5bwpyL5jxlPISKoVc6yaoJ1Lg5/KQW+cl6OxRNU9s6rNUWLan0DwFA0V6PtuV2te6NJ+
-         Rv/7wmur9yZVmKsnyS/1844s3pmxw+vgNZHg10ZmW1sU6VxQN++mS9mKGDR0TsVOKidY
-         O2fQ==
-X-Gm-Message-State: AOAM530hYcTLIEJdH2qJWhbiiVj5t5BlXaMGt1rvo6M69WdSHzCBGvIM
-        cl7pE8n+fhP334LjdaKPEThXi4K3MGhubg==
-X-Google-Smtp-Source: ABdhPJzqNa1jmIJvxE1rSFrKi1VQj/xVA9S+zkKsmjKjGAuB54AJ8nskqSXo9bAiuhFoL5zbD0xaQg==
-X-Received: by 2002:a2e:8ecc:: with SMTP id e12mr1919086ljl.98.1603299925993;
-        Wed, 21 Oct 2020 10:05:25 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id b13sm472543lfa.94.2020.10.21.10.05.22
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2020 10:05:23 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id r127so3962285lff.12
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 10:05:22 -0700 (PDT)
-X-Received: by 2002:a19:c703:: with SMTP id x3mr1474665lff.105.1603299922233;
- Wed, 21 Oct 2020 10:05:22 -0700 (PDT)
+        bh=7535FUlfM8DZDchGw8aykWjhU0FVacKPwMt6VunyyW4=;
+        b=MZhzuOEh/JC7082kPXIBgJBcX4gqVFIalcNET+lXCQTCMwkM857GKUO0HzfjXMvAIK
+         mWizOgaNstRUOoo7j4v7ffUHPdyz96Gu75YetqGTMiWQ7QKhYQdBUZrLdBkhzV11lyOu
+         4HXHjHVCQXXfDNmc4m/n73m/gfVbhl+I0ZQBmcyESwlxPzLYwOidQOeGU7iDrrBt5V9g
+         7DVHAK7pWFV6dyTEWkYrIFYfTmvIZ0e/W0VYaanm5MWX+PnZE27UnBf3AXjh/i+yW0hY
+         KW/8dU6kVrvvC6CCL0WvUYZn8oZ5mMeIWEEuLHmcLhtnT9sPvohBQyH30LL65JxuX+7X
+         kuYw==
+X-Gm-Message-State: AOAM530JGfoaxhxXpYPZtfyPl5JBPw3LcBdwadVVgzJgEm4V+7UvwntN
+        zJVup+sDCWngPC8XGvTCA7hTQVk64SUT43cy5qoqvg==
+X-Google-Smtp-Source: ABdhPJwAHwzHnXyK/Q61hpqVatVAWev4QhEe6lQZY+aucdSgk3iXPP53Fr7H1mN9nTWnRSkEsIkHirrQTjnUX0bFcLQ=
+X-Received: by 2002:a6b:5c06:: with SMTP id z6mr3661750ioh.49.1603300986883;
+ Wed, 21 Oct 2020 10:23:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
-In-Reply-To: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 21 Oct 2020 10:05:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
-Message-ID: <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
+ <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
+In-Reply-To: <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 21 Oct 2020 22:52:55 +0530
+Message-ID: <CA+G9fYv=DUanNfL2yza=y9kM7Y9bFpVv22Wd4L9NP28i0y7OzA@mail.gmail.com>
 Subject: Re: mmstress[1309]: segfault at 7f3d71a36ee8 ip 00007f3d77132bdf sp
  00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     open list <linux-kernel@vger.kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         X86 ML <x86@kernel.org>, LTP List <ltp@lists.linux.it>,
@@ -82,13 +76,22 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 9:58 AM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
+On Wed, 21 Oct 2020 at 22:35, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> LTP mm mtest05 (mmstress), mtest06_3 and mallocstress01 (mallocstress) tested on
-> x86 KASAN enabled build. But tests are getting PASS on Non KASAN builds.
-> This regression started happening from next-20201015 nowards
+> On Wed, Oct 21, 2020 at 9:58 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > LTP mm mtest05 (mmstress), mtest06_3 and mallocstress01 (mallocstress) tested on
+> > x86 KASAN enabled build. But tests are getting PASS on Non KASAN builds.
+> > This regression started happening from next-20201015 nowards
+>
+> Is it repeatable enough to be bisectable?
 
-Is it repeatable enough to be bisectable?
+Yes. This is easily reproducible.
+I will bisect and report here.
 
-             Linus
+>
+>              Linus
+
+- Naresh

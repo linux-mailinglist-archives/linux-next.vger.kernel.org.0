@@ -2,54 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9935295082
-	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 18:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B986C295132
+	for <lists+linux-next@lfdr.de>; Wed, 21 Oct 2020 18:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502906AbgJUQMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Oct 2020 12:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S2503260AbgJUQ6g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Oct 2020 12:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502902AbgJUQMi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 12:12:38 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A97C0613CF
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 09:12:37 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id z2so3020579ilh.11
-        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 09:12:37 -0700 (PDT)
+        with ESMTP id S2503244AbgJUQ6g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 12:58:36 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D5AC0613CE
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 09:58:36 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id y17so3196880ilg.4
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 09:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=4TUU6hGGI9Z94LbatnJF8LAX/xchi+VJPPQ2WB0pkiA=;
-        b=X4IV+nUsCYkk1vFe9xS8Jm3ZYugYDe7pbFXAmRInA7rBSgbvuHiayEK+i3chwYxRAV
-         BTE0Vl4w70eARrayWkfwMDXCZigXAi/0X0oIcCQtlZgBLdnibFbR4waujxJvAEPZPVGV
-         URjmwlV/WaApBIsB6NGSkdet2TRPKDVOmjY5BsIl5cKyxqCDeUXKMZLFz2Sb7teV7cTj
-         5zV5skOaIMYXUpp+wJT2CLbz7vnCKWetokTivIBiYHU9FG2DOIym/qGdDHr3iwUb9TDa
-         D8rf1ZIU87JzVD7sPqrJANTvBDugPUMAK4zSM+cAr+8BvrRX+gF5WN/MLLKXPBGy/irA
-         xNmw==
+        bh=qgxb83JHD/Tk385y5UPYGzutMkiNL5jV5+4Vfni0TYw=;
+        b=EWYTm/LYwVJy9ysDsTaB/HXzK3tXvOACX3FKHBKv0jTIRE4/y0p7cIpHe7Rfy9EIRy
+         qFvLUvg5XMaGPWna4ktpQJKC8yzP1nGqUqg7ti7R+h6K/+BDvynwZJAP81J3s8ANs9UA
+         eWacgETIvpOM5hzVXAYu7gpInggAAHkU3UtmwFnLq3YJaM8t8Yz9dY6D4FFlFt9AMheO
+         Trll6z4bMfztApf/+1hY6XctG5k8hacRCA9A7KTIuBBQSIefIWKrBjhhBQT2G3sEfP4N
+         VOzq7g0OfkJQ+WMl+VEWaQDd98NSPmfOv4bowSLRglgMIsdHZuLk3t5rmYT292RQTbML
+         xiwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=4TUU6hGGI9Z94LbatnJF8LAX/xchi+VJPPQ2WB0pkiA=;
-        b=k8F03LCWNYGFZIKiW5jKA8q1Lb53RUWHIuZtxV+NR4UR336EVba6e2Bt/t73Sy8DZs
-         88K0uSCYPGdBMnliXbXt+X7NRtCkjZy0Q4y+k2DuHxTcfDr+4tSgP7qlN/QTyRRog1Q2
-         fbaWc3i1Lh3BDhEKRjyIHpE0yqLPXtGqx+xAV0/lq/rLQnQrMTrYH6Qjdq7XnT/Hwb+n
-         wUI5NoiCytThVlm4DhqxIuSzz+DnMQeg6rDxGAtnyCV5Bz1s8SY3NDyHGbxDEH5m6bhh
-         vcHfruvNhGFRfd7GYWAJ4MPdopC9FwKAk/SEWDZEq28CcY9FX6b5BaphbBMOggX5Be8g
-         6izg==
-X-Gm-Message-State: AOAM5316MrUFbs1JkKtPnO7nYXysskh07enL0W0Vv5ATHRBb0gXkiCQH
-        Y/+PfRRu7xHv4u8p+h69OX5HIYcKW2Y1KDA2X/hvXQ==
-X-Google-Smtp-Source: ABdhPJz/ApjGKwRy8S99DcxVGawKQn5hiW1QKCDLCWkbzoXpW83eMI0U2jHt2ZzRsg33h08fQ6RREaznv5WzjW79QLk=
-X-Received: by 2002:a05:6e02:664:: with SMTP id l4mr3209239ilt.81.1603296756271;
- Wed, 21 Oct 2020 09:12:36 -0700 (PDT)
+        bh=qgxb83JHD/Tk385y5UPYGzutMkiNL5jV5+4Vfni0TYw=;
+        b=oxfiBazQ5KdZSgIUXvfeaFXbnGEtxPoEwjPl4G4s+Srs27raFpwNteAHHRdqOBaMJK
+         FlKlfeUNluei0vte3jZD7A/QoKrGqmJ0Qawm4iLc0wB6tOCKKs3vuKaOaypYGkwLyMjZ
+         Ql8jPw/fOKUDZ5gcEvEg428D4NSV9F3ZNvn0GybNz8ST6LexxWr5YK4i61Mk59LwM96J
+         PW0VQdk0k+h8Tr0n3Qod6bR1hmOBsmh6fnd7/IVwBsSrC3XfaTGsRGLszDH97p8RCGLK
+         rZdmYrc2wkoo59KfMrwWxYMr4QNJAqh1pyRKOo4okgfS9XJlpqpAHqocGEyfLv4720E1
+         3bFQ==
+X-Gm-Message-State: AOAM530/XkwhLeHsTtkkfHX0jF2UkvI5eb5e9386Wp1S9DysDzhpvxtx
+        NvTvjVqFTE2CQttsWRMgWESerRJaRUote/PtvJ6pnQ==
+X-Google-Smtp-Source: ABdhPJyFZf3mbpRcwfdOpKB1Uy/3lvfEtljL64okW2zfHcwy8Lm6mQskbjaISDXF6IQ0hUcLX83Ec88t9FvduMFEJwI=
+X-Received: by 2002:a92:9944:: with SMTP id p65mr3095346ili.127.1603299515027;
+ Wed, 21 Oct 2020 09:58:35 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 21 Oct 2020 21:42:25 +0530
-Message-ID: <CA+G9fYsZJXU+BDkhAXqxq=fq5hNr1RJaenDDW8P4gC6-=Q=dQg@mail.gmail.com>
-Subject: FAIL: LTP: clone08.c:135: FAIL: ctid != getpid() (0 != 1008)
+Date:   Wed, 21 Oct 2020 22:28:23 +0530
+Message-ID: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
+Subject: mmstress[1309]: segfault at 7f3d71a36ee8 ip 00007f3d77132bdf sp
+ 00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
 To:     open list <linux-kernel@vger.kernel.org>,
         linux-m68k@lists.linux-m68k.org, X86 ML <x86@kernel.org>,
         LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, kasan-dev@googlegroups.com
 Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
         Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -59,20 +61,32 @@ Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        zenglg.jy@cn.fujitsu.com, Stephen Rothwell <sfr@canb.auug.org.au>
+        zenglg.jy@cn.fujitsu.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Dmitry Vyukov <dvyukov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-LTP syscalls clone08 and clone301 FAILED on x86_64 KASAN enabled build
-But tests are getting PASS on Non KASAN build.
-This regression started happening from Linux next-20201015 nowards
-Please refer to the strace output at the bottom of this email.
+LTP mm mtest05 (mmstress), mtest06_3 and mallocstress01 (mallocstress) tested on
+x86 KASAN enabled build. But tests are getting PASS on Non KASAN builds.
+This regression started happening from next-20201015 nowards
 
-There are few more regression on linux next i will share those failure
-in a separate email,
- ltp-syscalls-tests:
+There are few more regression on linux next,
+  ltp-cve-tests:
+    * cve-2015-7550
+  ltp-math-tests:
+    * float_bessel
+    * float_exp_log
+    * float_iperb
+    * float_power
+    * float_trigo
+  ltp-mm-tests:
+    * mallocstress01
+    * mtest05
+    * mtest06_3
+  ltp-syscalls-tests:
     * clone08
     * clone301
     * fcntl34
@@ -92,211 +106,116 @@ https://builds.tuxbuild.com/SCI7Xyjb7V2NbfQ2lbKBZw/kernel.config
 steps to reproduce:
   # boot x86_64 with KASAN enabled kernel and run tests
   # cd /opt/ltp/testcases/bin
-  # ./clone08
-  # ./clone301
+  # ./mmstress
+  # ./mmap3 -x 0.002 -p
+  # ./mallocstress
 
-clone08:
----------
-clone08.c:71: INFO: running CLONE_PARENT
-clone08.c:115: PASS: clone and forked child has the same parent
-clone08.c:71: INFO: running CLONE_CHILD_SETTID
-clone08.c:135: FAIL: ctid != getpid() (0 != 1008)
-clone08.c:71: INFO: running CLONE_PARENT_SETTID
-clone08.c:145: FAIL: ptid != getpid() (0 != 1009)
-clone08.c:71: INFO: running CLONE_THREAD
-clone08.c:222: PASS: clone has the same thread id
-clone08.c:212: PASS: futex exit on ctid change, ctid: 0
+mtest05  (mmstress) :
+--------------------
+mmstress    0  TINFO  :  run mmstress -h for all options
+mmstress    0  TINFO  :  test1: Test case tests the race condition
+between simultaneous read faults in the same address space.
+[  279.469207] mmstress[1309]: segfault at 7f3d71a36ee8 ip
+00007f3d77132bdf sp 00007f3d71a36ee8 error 4 in
+libc-2.27.so[7f3d77058000+1aa000]
+[  279.469305] audit: type=1701 audit(1602818315.656:3):
+auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=1307
+comm=\"mmstress\" exe=\"/opt/ltp/testcases/bin/mmstress\" sig=11 res=1
+[  279.481636] Code: 2d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
+84 00 00 00 00 00 0f 1f 44 00 00 b8 18 00 00 00 0f 05 48 3d 01 f0 ff
+ff 73 01 <c3> 48 8b 0d 91 22 2d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e
+0f 1f
+[  279.498212] mmstress[1311]: segfault at 7f3d70a34ee8 ip
+00007f3d77132bdf sp 00007f3d70a34ee8 error 4 in
+libc-2.27.so[7f3d77058000+1aa000]
+[  279.516839] Code: 2d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f
+84 00 00 00 00 00 0f 1f 44 00 00 b8 18 00 00 00 0f 05 48 3d 01 f0 ff
+ff 73 01 <c3> 48 8b 0d 91 22 2d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e
+0f 1f
+tst_test.c:1246: INFO: Timeout per run is 0h 15m 00s
+tst_test.c:1246: INFO: Timeout per run is 0h 09m 00s
+tst_test.c:1291: BROK: Test killed by SIGBUS!
 
-clone301:
-----------
-clone301.c:159: PASS: Parent got correct signal SIGCHLD
-clone301.c:159: PASS: Parent got correct signal SIGUSR2
-clone301.c:159: PASS: Parent got correct signal SIGCHLD
-clone301.c:159: PASS: Parent got correct signal SIGCHLD
-clone301.c:138: FAIL: pidfd_send_signal() failed: EBADF (9)
-clone301.c:79: FAIL: Child haven't got signal
+mtest06_3 (mmap3 -x 0.002 -p) :
+-------------------------------
+mmap3.c:154: INFO: Seed 22
+mmap3.c:155: INFO: Number of loops 1000
+mmap3.c:156: INFO: Number of threads 40
+mmap3.c:157: INFO: MAP[  286.657788] mmap3[1350]: segfault at
+7f12179d4680 ip 00007f121859951d sp 00007f12179d1e10 error 6 in
+libpthread-2.27.so[7f1218589000+19000]
+_PRIVATE = 1
+mm[  286.671184] Code: c4 10 5b 5d 41 5c c3 66 0f 1f 44 00 00 48 8b 15
+99 8a 20 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff c3 48 8b 15 85 8a 20
+00 f7 d8 <64> 89 02 48 c7 c0 ff ff ff ff eb b6 0f 1f 80 00 00 00 00 b8
+01 00
+[  286.677386] audit: type=1701 audit(1602818322.844:6):
+auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=1348
+comm=\"mmap3\" exe=\"/opt/ltp/testcases/bin/mmap3\" sig=11 res=1
+ap3.c:158: INFO: Execution time 0.002000H
+
+mallocstress01 (mallocstress) :
+------------------------------
+pid[1496]: shmat_rd_wr(): shmget():success got segment id 32830
+pid[1496]: do_shmat_shmadt(): got shmat address = 0x7f301eae9000
+pid[1496]: shmat_rd_wr(): shmget():success got segment id 328[
+291.851376] mallocstress[1502]: segfault at 0 ip 0000000000000000 sp
+00007f80dea3ec50 error 14
+30
+pid[1496]: d[  291.851466] mallocstress[1507]: segfault at
+7f80dc239c98 ip 00007f80df2bf81c sp 00007f80dc239c98 error 4
+o_shmat_shmadt()[  291.851485] mallocstress[1505]: segfault at
+7f80dd23bc38 ip 00007f80df33fe93 sp 00007f80dd23bc38 error 4
+[  291.851490] Code: 00 00 00 00 0f 1f 00 41 52 52 4d 31 d2 ba 02 00
+00 00 be 80 00 00 00 39 d0 75 07 b8 ca 00 00 00 0f 05 89 d0 87 07 85
+c0 75 f1 <5a> 41 5a c3 66 0f 1f 84 00 00 00 00 00 56 52 c7 07 00 00 00
+00 be
+: got shmat addr[  291.851565] audit: type=1701
+audit(1602818328.038:7): auid=4294967295 uid=0 gid=0 ses=4294967295
+subj=kernel pid=1500 comm=\"mallocstress\"
+exe=\"/opt/ltp/testcases/bin/mallocstress\" sig=11 res=1
+[  291.852984] mallocstress[1504]: segfault at 7f80dda3cc38 ip
+00007f80df33fe93 sp 00007f80dda3cc38 error 4
+ess = 0x7f301e85[  291.852988] Code: 00 00 00 00 0f 1f 00 41 52 52 4d
+31 d2 ba 02 00 00 00 be 80 00 00 00 39 d0 75 07 b8 ca 00 00 00 0f 05
+89 d0 87 07 85 c0 75 f1 <5a> 41 5a c3 66 0f 1f 84 00 00 00 00 00 56 52
+c7 07 00 00 00 00 be
+[  291.853045] audit: type=1701 audit(1602818328.040:8):
+auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=1500
+comm=\"mallocstress\" exe=\"/opt/ltp/testcases/bin/mallocstress\"
+sig=11 res=1
+5000
+tst_test.c[  291.860373] Code: Unable to access opcode bytes at RIP
+0xffffffffffffffd6.
+[  291.860453] mallocstress[1506]: segfault at 7f80dca3ac98 ip
+00007f80df2bf81c sp 00007f80dca3ac98 error 4
+:1246: INFO: Tim[  291.860654] audit: type=1701
+audit(1602818328.047:9): auid=4294967295 uid=0 gid=0 ses=4294967295
+subj=kernel pid=1500 comm=\"mallocstress\"
+exe=\"/opt/ltp/testcases/bin/mallocstress\" sig=11 res=1
+[  291.871350]
+eout per run is [  291.871397] mallocstress[1501]: segfault at 0 ip
+0000000000000000 sp 00007f80df23fc50 error 14
+[  291.871401] Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+0h 30m 00s
+[  291.871467] audit: type=1701 audit(1602818328.058:10):
+auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=1500
+comm=\"mallocstress\" exe=\"/opt/ltp/testcases/bin/mallocstress\"
+sig=11 res=1
+[  291.882113]  in libc-2.27.so[7f80df241000+1aa000]
+[  291.900984] Code: ff 48 85 c0 75 d8 0f 1f 84 00 00 00 00 00 8b 35
+26 11 33 00 48 83 c1 10 85 f6 0f 85 42 01 00 00 48 81 c4 88 00 00 00
+48 89 c8 <5b> 5d 41 5c 41 5d 41 5e 41 5f c3 66 0f 1f 84 00 00 00 00 00
+4c 8b
+[  291.919351] Code: ff 48 85 c0 75 d8 0f 1f 84 00 00 00 00 00 8b 35
+26 11 33 00 48 83 c1 10 85 f6 0f 85 42 01 00 00 48 81 c4 88 00 00 00
+48 89 c8 <5b> 5d 41 5c 41 5d 41 5e 41 5f c3 66 0f 1f 84 00 00 00 00 00
+4c 8b
 
 Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
 full test log link,
-https://lkft.validation.linaro.org/scheduler/job/1844087
-
-strace output:
-+ strace -f ./clone08
-execve(\"./clone08\", [\"./clone08\"], 0x7ffe70dccb78 /* 22 vars */) = 0
-brk(NULL)                               = 0x2531000
-access(\"/etc/ld.so.preload\", R_OK)      = -1 ENOENT (No such file or
-directory)
-openat(AT_FDCWD, \"/etc/ld.so.cache\", O_RDONLY|O_CLOEXEC) = 3
-fstat(3, {st_mode=S_IFREG|0644, st_size=19408, ...}) = 0
-mmap(NULL, 19408, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f7e61446000
-close(3)                                = 0
-openat(AT_FDCWD, \"/lib/libc.so.6\", O_RDONLY|O_CLOEXEC) = 3
-read(3, \"\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0p\2\0\0\0\0\0\"...,
-832) = 832
-fstat(3, {st_mode=S_IFREG|0755, st_size=1771456, ...}) = 0
-mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
-0) = 0x7f7e61444000
-mmap(NULL, 3877600, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3,
-0) = 0x7f7e60e74000
-mprotect(0x7f7e6101e000, 2093056, PROT_NONE) = 0
-mmap(0x7f7e6121d000, 24576, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1a9000) = 0x7f7e6121d000
-mmap(0x7f7e61223000, 15072, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f7e61223000
-close(3)                                = 0
-arch_prctl(ARCH_SET_FS, 0x7f7e61445580) = 0
-mprotect(0x7f7e6121d000, 16384, PROT_READ) = 0
-mprotect(0x61c000, 4096, PROT_READ)     = 0
-mprotect(0x7f7e6144b000, 4096, PROT_READ) = 0
-munmap(0x7f7e61446000, 19408)           = 0
-getpid()                                = 525
-access(\"/dev/shm\", F_OK)                = 0
-getpid()                                = 525
-openat(AT_FDCWD, \"/dev/shm/ltp_clone08_525\", O_RDWR|O_CREAT|O_EXCL, 0600) = 3
-chmod(\"/dev/shm/ltp_clone08_525\", 0666) = 0
-ftruncate(3, 4096)                      = 0
-mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, 3, 0) = 0x7f7e6144a000
-unlink(\"/dev/shm/ltp_clone08_525\")      = 0
-close(3)                                = 0
-rt_sigaction(SIGALRM, {sa_handler=0x403e40, sa_mask=[ALRM],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
-rt_sigaction(SIGUSR1, {sa_handler=0x403ce0, sa_mask=[USR1],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
-ioctl(2, TCGETS, {B115200 opost isig icanon echo ...}) = 0
-write(2, \"tst_test.c:1246: INFO: [\"..., 64tst_test.c:1246: INFO:
-Timeout per run is 0h 05m 00s
-) = 64
-getpid()                                = 525
-alarm(300)                              = 0
-rt_sigaction(SIGINT, {sa_handler=0x403df0, sa_mask=[INT],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
-clone(strace: Process 526 attached
-child_stack=NULL,
-flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
-child_tidptr=0x7f7e61445850) = 526
-[pid   525] wait4(526,  <unfinished ...>
-[pid   526] rt_sigaction(SIGALRM, {sa_handler=SIG_DFL, sa_mask=[ALRM],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=0x403e40, sa_mask=[ALRM], sa_flags=SA_RESTORER|SA_RESTART,
-sa_restorer=0x7f7e60ea85b0}, 8) = 0
-[pid   526] rt_sigaction(SIGUSR1, {sa_handler=SIG_DFL, sa_mask=[USR1],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=0x403ce0, sa_mask=[USR1], sa_flags=SA_RESTORER|SA_RESTART,
-sa_restorer=0x7f7e60ea85b0}, 8) = 0
-[pid   526] rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[INT],
-sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x7f7e60ea85b0},
-{sa_handler=0x403df0, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART,
-sa_restorer=0x7f7e60ea85b0}, 8) = 0
-[pid   526] setpgid(0, 0)               = 0
-[pid   526] clock_gettime(CLOCK_MONOTONIC, {tv_sec=248, tv_nsec=252551861}) = 0
-[pid   526] getppid()                   = 525
-[pid   526] kill(525, SIGUSR1)          = 0
-[pid   525] <... wait4 resumed> 0x7ffc8bca80d8, 0, NULL) = ?
-ERESTARTSYS (To be restarted if SA_RESTART is set)
-[pid   525] --- SIGUSR1 {si_signo=SIGUSR1, si_code=SI_USER,
-si_pid=526, si_uid=0} ---
-[pid   525] alarm(300 <unfinished ...>
-[pid   526] brk(NULL <unfinished ...>
-[pid   525] <... alarm resumed> )       = 300
-[pid   526] <... brk resumed> )         = 0x2531000
-[pid   525] rt_sigreturn({mask=[]} <unfinished ...>
-[pid   526] brk(0x2552000 <unfinished ...>
-[pid   525] <... rt_sigreturn resumed> ) = 61
-[pid   526] <... brk resumed> )         = 0x2552000
-[pid   525] wait4(526,  <unfinished ...>
-[pid   526] getpid()                    = 526
-[pid   526] mmap(NULL, 1052672, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f7e61343000
-[pid   526] getpid()                    = 526
-[pid   526] write(2, \"clone08.c:71: INFO: r\"..., 52clone08.c:71:
-INFO: running CLONE_PARENT
-) = 52
-[pid   526] clone(child_stack=NULL,
-flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD,
-child_tidptr=0x7f7e61445850) = 527
-strace: Process 527 attached
-[pid   526] wait4(-1,  <unfinished ...>
-[pid   527] getppid()                   = 526
-[pid   527] clone(strace: Process 528 attached
- <unfinished ...>
-[pid   528] getppid( <unfinished ...>
-[pid   527] <... clone resumed> child_stack=0x7f7e61443000,
-flags=CLONE_PARENT|SIGCHLD) = 528
-[pid   528] <... getppid resumed> )     = 526
-[pid   527] exit_group(0)               = ?
-[pid   528] write(2, \"clone08.c:115: PASS: "..., 75clone08.c:115:
-PASS: clone and forked child has the same parent
-) = 75
-[pid   528] exit(0)                     = ?
-[pid   527] +++ exited with 0 +++
-[pid   526] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) ==
-0}], 0, NULL) = 527
-[pid   526] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED,
-si_pid=527, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
-[pid   526] wait4(-1,  <unfinished ...>
-[pid   528] +++ exited with 0 +++
-[pid   526] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) ==
-0}], 0, NULL) = 528
-[pid   526] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED,
-si_pid=528, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
-[pid   526] wait4(-1, 0x7ffc8bca809c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   526] getpid()                    = 526
-[pid   526] wait4(-1, 0x7ffc8bca809c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   526] write(2, \"clone08.c:71: INFO: r\"..., 58clone08.c:71:
-INFO: running CLONE_CHILD_SETTID
-) = 58
-[pid   526] clone(strace: Process 529 attached
-child_stack=0x7f7e61443000, flags=CLONE_CHILD_SETTID|SIGCHLD,
-child_tidptr=0x61d2e4) = 529
-[pid   529] getpid( <unfinished ...>
-[pid   526] wait4(-1,  <unfinished ...>
-[pid   529] <... getpid resumed> )      = 529
-[pid   529] getpid()                    = 529
-[pid   529] write(2, \"clone08.c:135: FAIL: "..., 60clone08.c:135:
-FAIL: ctid != getpid() (0 != 529)
-) = 60
-[pid   529] exit(0)                     = ?
-[pid   529] +++ exited with 0 +++
-[pid   526] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) ==
-0}], 0, NULL) = 529
-[pid   526] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED,
-si_pid=529, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
-[pid   526] wait4(-1, 0x7ffc8bca809c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   526] getpid()                    = 526
-[pid   526] wait4(-1, 0x7ffc8bca809c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   526] write(2, \"clone08.c:71: INFO: r\"..., 59clone08.c:71:
-INFO: running CLONE_PARENT_SETTID
-) = 59
-[pid   526] clone(strace: Process 530 attached
-child_stack=0x7f7e61443000,
-flags=CLONE_VM|CLONE_PARENT_SETTID|SIGCHLD, parent_tidptr=0x61d2e8) =
-530
-[pid   530] getpid( <unfinished ...>
-[pid   526] wait4(-1,  <unfinished ...>
-[pid   530] <... getpid resumed> )      = 530
-[pid   530] getpid()                    = 530
-[pid   530] write(2, \"clone08.c:145: FAIL: "..., 60clone08.c:145:
-FAIL: ptid != getpid() (0 != 530)
-) = 60
-[pid   530] exit(0)                     = ?
-[pid   530] +++ exited with 0 +++
-[pid   526] <... wait4 resumed> [{WIFEXITED(s) && WEXITSTATUS(s) ==
-0}], 0, NULL) = 530
-[pid   526] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED,
-si_pid=530, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
-[pid   526] wait4(-1, 0x7ffc8bca809c, 0, NULL) = -1 ECHILD (No child processes)
-[pid   526] getpid()                    = 526
-
-strace output log link,
-https://lkft.validation.linaro.org/scheduler/job/1865313#L2121
-
-Test case links:
-https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/clone/clone08.c
-https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/clone3/clone301.c
+https://lkft.validation.linaro.org/scheduler/job/1844090
 
 -- 
 Linaro LKFT

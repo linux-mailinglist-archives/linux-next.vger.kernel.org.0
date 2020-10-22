@@ -2,166 +2,233 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE21729554E
-	for <lists+linux-next@lfdr.de>; Thu, 22 Oct 2020 01:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EA2295682
+	for <lists+linux-next@lfdr.de>; Thu, 22 Oct 2020 04:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442349AbgJUXqR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Oct 2020 19:46:17 -0400
-Received: from ozlabs.org ([203.11.71.1]:51625 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2442347AbgJUXqR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Oct 2020 19:46:17 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CGnFL1KcCz9sSn;
-        Thu, 22 Oct 2020 10:46:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1603323974;
-        bh=kyztA3gDwEIjcE/H8P2RDcYyXZTsNoDKGn9tH3ysgxM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qYTmN+kJBwi6KY9d9hXIbEaRg/nRNY+oEizRdR4LnMc7n4qEfRVoMB7P4LyB6UXp/
-         yvDq+yjhqWagv1U7qCR6SU8hG8LHBKEi/snxS8UtP4NCUFquLQ+U0rEK24NGLKTTT6
-         28O85iX9PAroCWlDYlLJBfTDy0JOVjSicgQVDTSaE1ChA42DMsSsF9tQQtZ4VmoBIZ
-         GITHPgI7rfe9tH4lr/2wZspN3L9FDgKi19Ilmwtslsosrjj2Q+ORMb8/JfernaUVbn
-         FVJR8AYt2mMFi5Dxs4noSzXF3PweU/A0V5rDhYG7WHV1lzuU4rGesAz42i9exuM1Iz
-         Y1AeTYfZgX9PQ==
-Date:   Thu, 22 Oct 2020 10:46:13 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Jon Derrick <jonathan.derrick@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: linux-next: manual merge of the pci tree with the origin tree
-Message-ID: <20201022104613.7ccfd540@canb.auug.org.au>
+        id S2895204AbgJVCqc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Oct 2020 22:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2895201AbgJVCqc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Oct 2020 22:46:32 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1BEC0613CE
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 19:46:32 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id x13so217419pfa.9
+        for <linux-next@vger.kernel.org>; Wed, 21 Oct 2020 19:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=WSoKm6lcl/MYbHnLeOXqZfER4jj5qg6sLEPM6TWgOUw=;
+        b=xa/K5QAZI2zwebq3uY2ZVHYDPv+jMFUFC9LKawuPNvhZyJobFIPzMRtn7p32AvANUH
+         syYfisX+FuqDH52vOmd+DeWKtrDClXkrQWcQQvQBj0NQOCgbLCBpdOQwEE9AWT8MBpNr
+         Du9AZVOpztfwM8Y6WHQqtI8HHGKewmYOT/BplbmW0simGw/BO2iViQR9cKIdopoT/r3O
+         e0cv3P0rGvP4A8wfki8e42PtVZMjdSuR4z5sh0HrRIQlR45LiGoXCbBizSLvQJyNvoyH
+         wQts70gZBYJ8q2yr1z92hKhAzOYt/Y/L3d0MadvjZZy/Z05kvHghNTw7oR+3Fi8dZGWD
+         RTsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=WSoKm6lcl/MYbHnLeOXqZfER4jj5qg6sLEPM6TWgOUw=;
+        b=qUrjwVjx/H+wBR/kLs1jje/shMD5sB3GX3iZ72LU2cbVZAW0kt/odyNcmL2SRGhmee
+         njoA/wqSDGO95Ofl/PgwY0t+tL6eughhxqaaaUEj6Xroql37p9U25jU2R9ubJiX0KmJL
+         maOjnZtu+rSEMa+T6jefjnx/JADFOqgDtsqmOJbpt88q+9YakF+0m20G/Xqupe2WNjWR
+         4HCVUABdCf3wgG5YJ7+1LRRqfyVKsv66GEjp7b2f9v6p7h3TJMU6KZ7NOX6Z7FDr8rna
+         WJVDFIANEoj1EsAidRZde5fxeoP3ExqRJ7RwcgE9zSQNC01BXzfUqndWMzQQW1e5hf9k
+         Wflg==
+X-Gm-Message-State: AOAM531o4P8WRzGk5UnArYN+OI8C4KbcLqG1/6DzIbc9MI80zxJVlzb7
+        tUqSa12nDOLoXEXedrER1BmavqSjqn2+sw==
+X-Google-Smtp-Source: ABdhPJwfkekZpj2TfUIVgCFYYLpH/SNgywpmJ2zrOmkc+TUrOMThr5HSRKg2HaDsOKWlIL+E0MInCA==
+X-Received: by 2002:a62:5215:0:b029:156:6a80:a257 with SMTP id g21-20020a6252150000b02901566a80a257mr545172pfb.63.1603334790801;
+        Wed, 21 Oct 2020 19:46:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q8sm85355pfk.207.2020.10.21.19.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2020 19:46:30 -0700 (PDT)
+Message-ID: <5f90f286.1c69fb81.b974a.05c6@mx.google.com>
+Date:   Wed, 21 Oct 2020 19:46:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9/Io6Y=Uly8TY0P2q2_59hc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.9-12645-gfdba6f84e806
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes baseline: 321 runs,
+ 3 regressions (v5.9-12645-gfdba6f84e806)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9/Io6Y=Uly8TY0P2q2_59hc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 321 runs, 3 regressions (v5.9-12645-gfdba6f84e=
+806)
 
-Hi all,
+Regressions Summary
+-------------------
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
 
-Today's linux-next merge of the pci tree got a conflict in:
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
 
-  drivers/pci/controller/vmd.c
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
 
-between commit:
 
-  585dfe8abc44 ("PCI: vmd: Dont abuse vector irqomain as parent")
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.9-12645-gfdba6f84e806/plan/baseline/
 
-from the origin tree and commit:
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.9-12645-gfdba6f84e806
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      fdba6f84e806c8f95cda104af1a2496fabbbe8db =
 
-  1552b11ba15e ("PCI: vmd: Create IRQ Domain configuration helper")
 
-from the pci tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Test Regressions
+---------------- =
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc drivers/pci/controller/vmd.c
-index aa1b12bac9a1,c8d46bd01e87..000000000000
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@@ -298,6 -298,34 +298,34 @@@ static struct msi_domain_info vmd_msi_d
-  	.chip		=3D &vmd_msi_controller,
-  };
- =20
-+ static int vmd_create_irq_domain(struct vmd_dev *vmd)
-+ {
-+ 	struct fwnode_handle *fn;
-+=20
-+ 	fn =3D irq_domain_alloc_named_id_fwnode("VMD-MSI", vmd->sysdata.domain);
-+ 	if (!fn)
-+ 		return -ENODEV;
-+=20
-+ 	vmd->irq_domain =3D pci_msi_create_irq_domain(fn, &vmd_msi_domain_info,
- -						    x86_vector_domain);
-++						    NULL);
-+ 	if (!vmd->irq_domain) {
-+ 		irq_domain_free_fwnode(fn);
-+ 		return -ENODEV;
-+ 	}
-+=20
-+ 	return 0;
-+ }
-+=20
-+ static void vmd_remove_irq_domain(struct vmd_dev *vmd)
-+ {
-+ 	if (vmd->irq_domain) {
-+ 		struct fwnode_handle *fn =3D vmd->irq_domain->fwnode;
-+=20
-+ 		irq_domain_remove(vmd->irq_domain);
-+ 		irq_domain_free_fwnode(fn);
-+ 	}
-+ }
-+=20
-  static char __iomem *vmd_cfg_addr(struct vmd_dev *vmd, struct pci_bus *bu=
-s,
-  				  unsigned int devfn, int reg, int len)
-  {
-@@@ -568,24 -674,10 +674,16 @@@ static int vmd_enable_domain(struct vmd
- =20
-  	sd->node =3D pcibus_to_node(vmd->dev->bus);
- =20
-- 	fn =3D irq_domain_alloc_named_id_fwnode("VMD-MSI", vmd->sysdata.domain);
-- 	if (!fn)
-- 		return -ENODEV;
--=20
-- 	vmd->irq_domain =3D pci_msi_create_irq_domain(fn, &vmd_msi_domain_info,
-- 						    NULL);
--=20
-- 	if (!vmd->irq_domain) {
-- 		irq_domain_free_fwnode(fn);
-- 		return -ENODEV;
-- 	}
-+ 	ret =3D vmd_create_irq_domain(vmd);
-+ 	if (ret)
-+ 		return ret;
- =20
- +	/*
- +	 * Override the irq domain bus token so the domain can be distinguished
- +	 * from a regular PCI/MSI domain.
- +	 */
- +	irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
- +
-  	pci_add_resource(&resources, &vmd->resources[0]);
-  	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
-  	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
 
---Sig_/9/Io6Y=Uly8TY0P2q2_59hc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
+       | 3/4    =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+QyEUACgkQAVBC80lX
-0GwtDAgAmVUBAnX34862IaS8icR2n33zoKVrTtzdSLVyeurMYOJ1fE/h+T6SYMUq
-JR/30yaF89DSp0Ixf449KpArTry5O0EE3yWjATq5i8wrhp/35rUR+VSDfYEBnIcW
-1h4CFehSpEirrHWu/N1BhZW+XqgW0T46+IzV6buNWYzyOqvT/+Tqnx0kKOrEmPwI
-gWfP/OUGHQd/TTztBz1VLaJvRvK8R3qC40FVN8KNffVYxQ3lyd2EGDiOqw0MgLa6
-GKge+l/i5j06IQjfy4tkBtr2SV5E5j72oNTZgkDdxc92SK37kBj/kZXq/k+MkDyG
-U1WwePwRhor7IIfTqJxksUE5WgEJ8g==
-=1V/M
------END PGP SIGNATURE-----
+  Details:     https://kernelci.org/test/plan/id/5f90bb9433d06620f74ff3e0
 
---Sig_/9/Io6Y=Uly8TY0P2q2_59hc--
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.t=
+xt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f90bb9433d06620=
+f74ff3e4
+      failing since 0 day (last pass: v5.9-10224-g4054eebdfdd6, first fail:=
+ v5.9-12353-gd3f7f27bb8d1)
+      2 lines
+
+    2020-10-21 22:49:51.091000  Connected to bcm2837-rpi-3-b console [chann=
+el connected] (~$quit to exit)
+    2020-10-21 22:49:51.091000  (user:khilman) is already connected
+    2020-10-21 22:50:05.896000  =00
+    2020-10-21 22:50:05.897000  =
+
+    2020-10-21 22:50:05.897000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
+0)
+    2020-10-21 22:50:05.897000  =
+
+    2020-10-21 22:50:05.897000  DRAM:  948 MiB
+    2020-10-21 22:50:05.912000  RPI 3 Model B (0xa02082)
+    2020-10-21 22:50:06  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
+    2020-10-21 22:50:06.032000  Loading Environment from FAT... *** Warning=
+ - bad CRC, using default environment
+    ... (383 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
+_SMP=3Dn | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f90bcdf5f343c710c4ff3f0
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f90bcdf5f343c7=
+10c4ff3f6
+      failing since 77 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)
+      60 lines
+
+    2020-10-21 22:57:29.217000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c802
+    2020-10-21 22:57:29.223000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c803
+    2020-10-21 22:57:29.228000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c804
+    2020-10-21 22:57:29.234000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c805
+    2020-10-21 22:57:29.240000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c806
+    2020-10-21 22:57:29.246000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c807
+    2020-10-21 22:57:29.251000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c808
+    2020-10-21 22:57:29.257000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c809
+    2020-10-21 22:57:29.263000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80a
+    2020-10-21 22:57:29.269000  kern  :alert : BUG: Bad page state in proce=
+ss swapper  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | results
+----------------+-------+---------------+----------+-----------------------=
+-------+--------
+panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
+       | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f90beef69349d3f3b4ff3e9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: omap2plus_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-12645-=
+gfdba6f84e806/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f90beef69349d3f3b4ff=
+3ea
+      failing since 77 days (last pass: v5.8-1558-g0359180fcb42, first fail=
+: v5.8-3221-g983112062f35)  =20

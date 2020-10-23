@@ -2,47 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4C529761B
-	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 19:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20464297620
+	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 19:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1753840AbgJWRuZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Oct 2020 13:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S1753815AbgJWRvQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Oct 2020 13:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S462286AbgJWRuZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Oct 2020 13:50:25 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743AC0613D2
-        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:50:25 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id k6so2810558ior.2
-        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:50:25 -0700 (PDT)
+        with ESMTP id S1753792AbgJWRvQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Oct 2020 13:51:16 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD13C0613CE
+        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:51:15 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id 134so1441325ljj.3
+        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VHLmS2i+xk5cy1+Hh+6vgNtXSGGSQNTTVydbxoIIvxM=;
-        b=zC+oRhFaf2/DzBVi/uf1QHqmlqYAMFk/0Yiq6WYy9+Xgfh3NGCaUCcTJ5Q7xSOvUZb
-         xe6Nolg1AUdP4BtgPyn07pt0IrBoA9v6TPP5Zfonzu9OhuRJOOPnfM9l4P489FofeFwK
-         MfB12Fm281RSTLVc2auMXC/NjKcR9gM+7yPsbZGb6xRuj/RVIewwfCV+5XqaGZnYtALt
-         XJ/4OaJYvehbbklG3uz5H59+p1C9Jz2kLQ0URQd+x0aYhYZCEVAU/yJBvItYYSk/tetF
-         ss5gP7Je4RLLDflZH5pdRyLfYVhSwGK+kZrSB3N6p+ziSWiyM5NEFfOhAGetgintlI5G
-         I8qA==
+        bh=mjWltIsY/Tc/YTJZanmOnMdRvb0TAEPFdspWZ6zBj4M=;
+        b=ThO1o259d6kg56YqDsLmT8MiBOJwLSiD9qKO4kwi21uldYbpY5uyCtH8bMuSvipaQl
+         CAjmtz5HofISRTDvt16RteSXYTCR0nmL/dTW8wJ3RA9FrZ/uL5lQDuHg90R5IKGG2JeY
+         BhpUEEHod/4CuMNQE9mr91H2mLES9qJx1qZ1A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VHLmS2i+xk5cy1+Hh+6vgNtXSGGSQNTTVydbxoIIvxM=;
-        b=kOmkZgBTTgC79rqYMkzdjnR1hmnjT9HGQNYh5lTh0frJY5AfrDwZm3La3gBn7lL/4m
-         yeaQopl7hmEOFgygzVrlVqJ1N5PAgGcBuA3jsqH22pPFaByTBL4d/WqaDZRBW/5Mp8cD
-         im9o7VEFnzWeKAH8Yrsjv3ubjC+E2jjqi/byDAeFXncXdJjSx8vDtwDs5p/EzucliJU4
-         Xu9JDEpE0elq+3wZoo2l29mW/acpAq7/64kft3ujjedGjxI5S2MbnoWv7j9SUwNTw9e5
-         ZyjWBO3nzeHnQInZ6ecmcYEi1o0HL0BN8UqTOXdwWGfrUG4o+TidquBXMJZSE8SMSqrT
-         bO1A==
-X-Gm-Message-State: AOAM530PLNdjoPw89inb0cvM19ls/uPQyMtLMvDMmYcUEDtC4Qn1qP7S
-        1/fcX36ag84yknZGklxNcQm8kTIiKf8902RkkYFvyA==
-X-Google-Smtp-Source: ABdhPJyI9aI5b3pmXuhMgGrCrrMpBrygNRxfLkTQjP+IQ0Z6lG4mFD0G0YvJFmbR/nZxXl1QGX0zhYxPd3SDPBH82Q8=
-X-Received: by 2002:a02:a910:: with SMTP id n16mr2826341jam.35.1603475424367;
- Fri, 23 Oct 2020 10:50:24 -0700 (PDT)
+        bh=mjWltIsY/Tc/YTJZanmOnMdRvb0TAEPFdspWZ6zBj4M=;
+        b=SpjAoh+Duc6tZdQ5/iMbjwUIbS+UA4ZlIrlytCDuPb0hwjFZYE7/wlXRBP30JgdSsD
+         9JNJUf7cXjP4kijm70fdfpTwIsFwVNeEuBmfw57q/K7m4AgsJVMBwLAttOjnZnL0K6Yt
+         KyTqh2aRHABY9yPm3zD06MkohX8nmBJp2uYdhlBSqVXJphYWG22SMmd9z/+zXBdBYZCr
+         ii1wU+qBdRVIrJ/aXJ6CkGdRnq0PTHRuU/GuncmKDy/eDxVpyw6wfchSdrE8orhY8hEA
+         WmOTaCXYu9fBcz5fJ/gYaBu/z7p09w7znmbPZCeyenpVwyBBcs9IOsdP0WQfaeeH2Ucb
+         aT4g==
+X-Gm-Message-State: AOAM533XmbBbYhoUwfztFam6U66O1RWNR1XQrxAoe0baN5Zo2rpCSEnJ
+        C0/wPT38cMLlvPbrB7wBb5DjKKACSBKnrQ==
+X-Google-Smtp-Source: ABdhPJySACShnOC9ibFcQbw3zOn6kuJlKBpMAU9ROEhpOpwT6g7Nm3ccfUaBXHwcbqXHuc2Z7H92Gg==
+X-Received: by 2002:a2e:1614:: with SMTP id w20mr1359552ljd.103.1603475473835;
+        Fri, 23 Oct 2020 10:51:13 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id z11sm233795ljk.7.2020.10.23.10.51.12
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Oct 2020 10:51:12 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id m16so2463458ljo.6
+        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:51:12 -0700 (PDT)
+X-Received: by 2002:a2e:868b:: with SMTP id l11mr1279720lji.102.1603475472083;
+ Fri, 23 Oct 2020 10:51:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
  <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
@@ -51,22 +57,18 @@ References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
  <CAHk-=who8WmkWuuOJeGKa-7QCtZHqp3PsOSJY0hadyywucPMcQ@mail.gmail.com>
  <CAHk-=wi=sf4WtmZXgGh=nAp4iQKftCKbdQqn56gjifxWNpnkxw@mail.gmail.com>
  <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com>
- <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
- <20201023050214.GG23681@linux.intel.com> <356811ab-cb08-7685-ca01-fe58b5654953@rasmusvillemoes.dk>
- <CAHk-=whFb3wk0ff8jb3BCyoNvNJ1TSZxoYRKaAoW=Y43iQFNkw@mail.gmail.com> <CAHk-=whGbM1E0BbSVvxGRj5nBaNRXXD-oKcgrM40s4gvYV_C+w@mail.gmail.com>
-In-Reply-To: <CAHk-=whGbM1E0BbSVvxGRj5nBaNRXXD-oKcgrM40s4gvYV_C+w@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 23 Oct 2020 23:20:13 +0530
-Message-ID: <CA+G9fYtR9p_OqYNT6=tKh=hsQDXC_1m1TgERPFH0ubuZGcg-DA@mail.gmail.com>
+ <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com> <CA+G9fYu5aGbMHaR1tewV9dPwXrUR5cbGHJC1BT=GSLsYYwN6Nw@mail.gmail.com>
+In-Reply-To: <CA+G9fYu5aGbMHaR1tewV9dPwXrUR5cbGHJC1BT=GSLsYYwN6Nw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 23 Oct 2020 10:50:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjyp3Y_vXJwvoieBJpmmTrs46kc4GKbq5x_nvonHvPJBw@mail.gmail.com>
+Message-ID: <CAHk-=wjyp3Y_vXJwvoieBJpmmTrs46kc4GKbq5x_nvonHvPJBw@mail.gmail.com>
 Subject: Re: [LTP] mmstress[1309]: segfault at 7f3d71a36ee8 ip
  00007f3d77132bdf sp 00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        zenglg.jy@cn.fujitsu.com,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         X86 ML <x86@kernel.org>,
@@ -88,59 +90,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 23 Oct 2020 at 22:03, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, Oct 23, 2020 at 10:00 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
 >
-> On Fri, Oct 23, 2020 at 8:54 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Fri, Oct 23, 2020 at 12:14 AM Rasmus Villemoes
-> > <linux@rasmusvillemoes.dk> wrote:
-> > >
-> > > That's certainly garbage. Now, I don't know if it's a sufficient fix (or
-> > > could break something else), but the obvious first step of rearranging
-> > > so that the ptr argument is evaluated before the assignment to __val_pu
-> >
-> > Ack. We could do that.
-> >
-> > I'm more inclined to just bite the bullet and go back to the ugly
-> > conditional on the size that I had hoped to avoid, but if that turns
-> > out too ugly, mind signing off on your patch and I'll have that as a
-> > fallback?
+> [Old patch from yesterday]
 >
-> Actually, looking at that code, and the fact that we've used the
-> "register asm()" format forever for the get_user() side, I think your
-> approach is the right one.
->
-> I'd rename the internal ptr variable to "__ptr_pu", and make sure the
-> assignments happen just before the asm call (with the __val_pu
-> assignment being the final thing).
->
-> lso, it needs to be
->
->         void __user *__ptr_pu;
->
-> instead of
->
->         __typeof__(ptr) __ptr = (ptr);
->
-> because "ptr" may actually be an array, and we need to have the usual
-> C "array to pointer" conversions happen, rather than try to make
-> __ptr_pu be an array too.
->
-> So the patch would become something like the appended instead, but I'd
-> still like your sign-off (and I'd put you as author of the fix).
->
-> Narest, can you confirm that this patch fixes the issue for you?
+> After applying your patch on top on linux next tag 20201015
+> there are two observations,
+>   1) i386 build failed. please find build error build
 
-This patch fixed the reported problem.
+Yes, this was expected. That patch explicitly only works on x86-64,
+because 32-bit needs the double register handling for 64-bit values
+(mainly loff_t).
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>   2) x86_64 kasan test PASS and the reported error not found.
 
-Build location:
-https://builds.tuxbuild.com/uDAiW8jkN61oWoyxZDkEYA/
+Ok, good. That confirms that the problem you reported is indeed the
+register allocation.
 
-Test logs,
-https://lkft.validation.linaro.org/scheduler/job/1868045#L1597
+The patch I sent an hour ago (the one based on Rasmus' one from
+yesterday) should fix things too, and - unlike yesterday's - work on
+32-bit.
 
-- Naresh
+But I'll wait for confirmation (and hopefully a sign-off from Rasmus
+so that I can give him authorship) before actually committing it.
+
+              Linus

@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9B329756D
-	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 19:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4C529761B
+	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 19:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464852AbgJWRAY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Oct 2020 13:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S1753840AbgJWRuZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Oct 2020 13:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S465168AbgJWRAX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Oct 2020 13:00:23 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9124FC0613CE
-        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:00:23 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id g7so2016780ilr.12
-        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:00:23 -0700 (PDT)
+        with ESMTP id S462286AbgJWRuZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Oct 2020 13:50:25 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743AC0613D2
+        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:50:25 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id k6so2810558ior.2
+        for <linux-next@vger.kernel.org>; Fri, 23 Oct 2020 10:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=o1VEizSN6TM+raklNtIXpsapMZWxETouBV0mamAPQo0=;
-        b=V+Gg9uICyKn5tIe46atfWAON+AixWQBBQ6Pn1mKsJ9LTyk3eEKENj8UdU0jz8oEJ/T
-         iY3pDKKGEDsjM5zsL71qeD2upMbTwf/0oJPU2qhreG0VoH8Btr+eBgBDvB9g58CZSQ96
-         Sgr8eEMx01tJ+JJaSGqxsdIW8XuWtidjH3RUren590Av2KVvyiUDBkwd3pzRSI5r/akg
-         4Be7/bT6OAM0TaD6IR1KR8VzV6ouQZqBCGjLPr0uzK1WtJoC3shbqQqA3Z4hhhb9EDl9
-         hZ/RmeUyYqgXTzKPMWN2s3dmpVJISsGiyopT/jpiQLJijpHH+ZJruUA+qldH7HfKM+2Z
-         DsWA==
+         :cc;
+        bh=VHLmS2i+xk5cy1+Hh+6vgNtXSGGSQNTTVydbxoIIvxM=;
+        b=zC+oRhFaf2/DzBVi/uf1QHqmlqYAMFk/0Yiq6WYy9+Xgfh3NGCaUCcTJ5Q7xSOvUZb
+         xe6Nolg1AUdP4BtgPyn07pt0IrBoA9v6TPP5Zfonzu9OhuRJOOPnfM9l4P489FofeFwK
+         MfB12Fm281RSTLVc2auMXC/NjKcR9gM+7yPsbZGb6xRuj/RVIewwfCV+5XqaGZnYtALt
+         XJ/4OaJYvehbbklG3uz5H59+p1C9Jz2kLQ0URQd+x0aYhYZCEVAU/yJBvItYYSk/tetF
+         ss5gP7Je4RLLDflZH5pdRyLfYVhSwGK+kZrSB3N6p+ziSWiyM5NEFfOhAGetgintlI5G
+         I8qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=o1VEizSN6TM+raklNtIXpsapMZWxETouBV0mamAPQo0=;
-        b=Qnw8t/0Ycnn9Z2ySEVQIdqZp+ywNwnGS7N1oNrog/ra1Eh6N+fg4juTnaI+6vRGyrQ
-         nZmoh20oORb5Qcr5j2a7Jj3iHwMpKECOmTUPtofwEMRn4BQzgT647fVLYSAn1DlE+/oS
-         hRJkemSiXhP27OmoFx5NTYlWtK/BeSIhvingJpuO8UGLHf1YPizIPIakuxvVZXGFQ7MJ
-         sjQYynHyHUGrkaO4xgRRhRz2cKJmXGyOPtMpi6j/srLPXLTprcpi6Zkoo6Zow4RU9LAC
-         e14cYdOljJQ6Ki3NBHFCNopon1prrjApTt/ni4rsu+xj5lvmn7hiw9/ER/SAP/7gonRf
-         7WNA==
-X-Gm-Message-State: AOAM532M8zwhdz9H7xU6xYt8ZQuP/5FLp3IfmWoIc4VUrDiC5Opye5Lg
-        R1PTj/Aw0Ts2hE/hDdkRyI6JqxRwTRimFeX2ED2nUQ==
-X-Google-Smtp-Source: ABdhPJwrgJp/OuJrOp+n+UP8gE/pj8wa+8lsTQ0hX8+Y+rO4ME9yioa2pi9mLHL+KrbDWGnIoZjFUeIWTh+m6MuqhEo=
-X-Received: by 2002:a92:b6d2:: with SMTP id m79mr1190406ill.216.1603472422474;
- Fri, 23 Oct 2020 10:00:22 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=VHLmS2i+xk5cy1+Hh+6vgNtXSGGSQNTTVydbxoIIvxM=;
+        b=kOmkZgBTTgC79rqYMkzdjnR1hmnjT9HGQNYh5lTh0frJY5AfrDwZm3La3gBn7lL/4m
+         yeaQopl7hmEOFgygzVrlVqJ1N5PAgGcBuA3jsqH22pPFaByTBL4d/WqaDZRBW/5Mp8cD
+         im9o7VEFnzWeKAH8Yrsjv3ubjC+E2jjqi/byDAeFXncXdJjSx8vDtwDs5p/EzucliJU4
+         Xu9JDEpE0elq+3wZoo2l29mW/acpAq7/64kft3ujjedGjxI5S2MbnoWv7j9SUwNTw9e5
+         ZyjWBO3nzeHnQInZ6ecmcYEi1o0HL0BN8UqTOXdwWGfrUG4o+TidquBXMJZSE8SMSqrT
+         bO1A==
+X-Gm-Message-State: AOAM530PLNdjoPw89inb0cvM19ls/uPQyMtLMvDMmYcUEDtC4Qn1qP7S
+        1/fcX36ag84yknZGklxNcQm8kTIiKf8902RkkYFvyA==
+X-Google-Smtp-Source: ABdhPJyI9aI5b3pmXuhMgGrCrrMpBrygNRxfLkTQjP+IQ0Z6lG4mFD0G0YvJFmbR/nZxXl1QGX0zhYxPd3SDPBH82Q8=
+X-Received: by 2002:a02:a910:: with SMTP id n16mr2826341jam.35.1603475424367;
+ Fri, 23 Oct 2020 10:50:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
  <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
@@ -50,17 +50,23 @@ References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
  <CA+G9fYudry0cXOuSfRTqHKkFKW-sMrA6Z9BdQFmtXsnzqaOgPg@mail.gmail.com>
  <CAHk-=who8WmkWuuOJeGKa-7QCtZHqp3PsOSJY0hadyywucPMcQ@mail.gmail.com>
  <CAHk-=wi=sf4WtmZXgGh=nAp4iQKftCKbdQqn56gjifxWNpnkxw@mail.gmail.com>
- <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com> <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
+ <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com>
+ <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
+ <20201023050214.GG23681@linux.intel.com> <356811ab-cb08-7685-ca01-fe58b5654953@rasmusvillemoes.dk>
+ <CAHk-=whFb3wk0ff8jb3BCyoNvNJ1TSZxoYRKaAoW=Y43iQFNkw@mail.gmail.com> <CAHk-=whGbM1E0BbSVvxGRj5nBaNRXXD-oKcgrM40s4gvYV_C+w@mail.gmail.com>
+In-Reply-To: <CAHk-=whGbM1E0BbSVvxGRj5nBaNRXXD-oKcgrM40s4gvYV_C+w@mail.gmail.com>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 23 Oct 2020 22:30:11 +0530
-Message-ID: <CA+G9fYu5aGbMHaR1tewV9dPwXrUR5cbGHJC1BT=GSLsYYwN6Nw@mail.gmail.com>
+Date:   Fri, 23 Oct 2020 23:20:13 +0530
+Message-ID: <CA+G9fYtR9p_OqYNT6=tKh=hsQDXC_1m1TgERPFH0ubuZGcg-DA@mail.gmail.com>
 Subject: Re: [LTP] mmstress[1309]: segfault at 7f3d71a36ee8 ip
  00007f3d77132bdf sp 00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        zenglg.jy@cn.fujitsu.com,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         X86 ML <x86@kernel.org>,
@@ -78,118 +84,63 @@ Cc:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
         Ingo Molnar <mingo@redhat.com>, LTP List <ltp@lists.linux.it>,
         Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 23 Oct 2020 at 08:35, Linus Torvalds
+On Fri, 23 Oct 2020 at 22:03, Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> On Thu, Oct 22, 2020 at 6:36 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org>=
- wrote:
+> On Fri, Oct 23, 2020 at 8:54 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > The kernel Naresh originally referred to is here:
-> >   https://builds.tuxbuild.com/SCI7Xyjb7V2NbfQ2lbKBZw/
+> > On Fri, Oct 23, 2020 at 12:14 AM Rasmus Villemoes
+> > <linux@rasmusvillemoes.dk> wrote:
+> > >
+> > > That's certainly garbage. Now, I don't know if it's a sufficient fix (or
+> > > could break something else), but the obvious first step of rearranging
+> > > so that the ptr argument is evaluated before the assignment to __val_pu
+> >
+> > Ack. We could do that.
+> >
+> > I'm more inclined to just bite the bullet and go back to the ugly
+> > conditional on the size that I had hoped to avoid, but if that turns
+> > out too ugly, mind signing off on your patch and I'll have that as a
+> > fallback?
 >
-> is unnecessary (because the 8-byte case is still just a single
-> register, no %eax:%edx games needed), it would be interesting to hear
-> if the attached patch fixes it. That would confirm that the problem
-> really is due to some register allocation issue interaction (or,
-> alternatively, it would tell me that there's something else going on).
+> Actually, looking at that code, and the fact that we've used the
+> "register asm()" format forever for the get_user() side, I think your
+> approach is the right one.
+>
+> I'd rename the internal ptr variable to "__ptr_pu", and make sure the
+> assignments happen just before the asm call (with the __val_pu
+> assignment being the final thing).
+>
+> lso, it needs to be
+>
+>         void __user *__ptr_pu;
+>
+> instead of
+>
+>         __typeof__(ptr) __ptr = (ptr);
+>
+> because "ptr" may actually be an array, and we need to have the usual
+> C "array to pointer" conversions happen, rather than try to make
+> __ptr_pu be an array too.
+>
+> So the patch would become something like the appended instead, but I'd
+> still like your sign-off (and I'd put you as author of the fix).
+>
+> Narest, can you confirm that this patch fixes the issue for you?
 
-[Old patch from yesterday]
+This patch fixed the reported problem.
 
-After applying your patch on top on linux next tag 20201015
-there are two observations,
-  1) i386 build failed. please find build error build
-  2) x86_64 kasan test PASS and the reported error not found.
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
+Build location:
+https://builds.tuxbuild.com/uDAiW8jkN61oWoyxZDkEYA/
 
-i386 build failure,
-----------------------
-make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux -j16 ARCH=3Di386 HOSTCC=3Dgc=
-c
-CC=3D"sccache gcc" O=3Dbuild
-#
-In file included from ../include/linux/uaccess.h:11,
-                 from ../arch/x86/include/asm/fpu/xstate.h:5,
-                 from ../arch/x86/include/asm/pgtable.h:26,
-                 from ../include/linux/pgtable.h:6,
-                 from ../include/linux/mm.h:33,
-                 from ../include/linux/memblock.h:13,
-                 from ../fs/proc/page.c:2:
-../fs/proc/page.c: In function =E2=80=98kpagecgroup_read=E2=80=99:
-../arch/x86/include/asm/uaccess.h:217:2: error: inconsistent operand
-constraints in an =E2=80=98asm=E2=80=99
-  217 |  asm volatile("call __" #fn "_%P[size]"    \
-      |  ^~~
-../arch/x86/include/asm/uaccess.h:244:44: note: in expansion of macro
-=E2=80=98do_put_user_call=E2=80=99
-  244 | #define put_user(x, ptr) ({ might_fault();
-do_put_user_call(put_user,x,ptr); })
-      |                                            ^~~~~~~~~~~~~~~~
-../fs/proc/page.c:307:7: note: in expansion of macro =E2=80=98put_user=E2=
-=80=99
-  307 |   if (put_user(ino, out)) {
-      |       ^~~~~~~~
-make[3]: *** [../scripts/Makefile.build:283: fs/proc/page.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [../scripts/Makefile.build:500: fs/proc] Error 2
-In file included from ../include/linux/uaccess.h:11,
-                 from ../include/linux/sched/task.h:11,
-                 from ../include/linux/sched/signal.h:9,
-                 from ../include/linux/rcuwait.h:6,
-                 from ../include/linux/percpu-rwsem.h:7,
-                 from ../include/linux/fs.h:33,
-                 from ../include/linux/cgroup.h:17,
-                 from ../include/linux/memcontrol.h:13,
-                 from ../include/linux/swap.h:9,
-                 from ../include/linux/suspend.h:5,
-                 from ../kernel/power/user.c:10:
-../kernel/power/user.c: In function =E2=80=98snapshot_ioctl=E2=80=99:
-../arch/x86/include/asm/uaccess.h:217:2: error: inconsistent operand
-constraints in an =E2=80=98asm=E2=80=99
-  217 |  asm volatile("call __" #fn "_%P[size]"    \
-      |  ^~~
-../arch/x86/include/asm/uaccess.h:244:44: note: in expansion of macro
-=E2=80=98do_put_user_call=E2=80=99
-  244 | #define put_user(x, ptr) ({ might_fault();
-do_put_user_call(put_user,x,ptr); })
-      |                                            ^~~~~~~~~~~~~~~~
-../kernel/power/user.c:340:11: note: in expansion of macro =E2=80=98put_use=
-r=E2=80=99
-  340 |   error =3D put_user(size, (loff_t __user *)arg);
-      |           ^~~~~~~~
-../arch/x86/include/asm/uaccess.h:217:2: error: inconsistent operand
-constraints in an =E2=80=98asm=E2=80=99
-  217 |  asm volatile("call __" #fn "_%P[size]"    \
-      |  ^~~
-../arch/x86/include/asm/uaccess.h:244:44: note: in expansion of macro
-=E2=80=98do_put_user_call=E2=80=99
-  244 | #define put_user(x, ptr) ({ might_fault();
-do_put_user_call(put_user,x,ptr); })
-      |                                            ^~~~~~~~~~~~~~~~
-../kernel/power/user.c:346:11: note: in expansion of macro =E2=80=98put_use=
-r=E2=80=99
-  346 |   error =3D put_user(size, (loff_t __user *)arg);
-      |           ^~~~~~~~
-../arch/x86/include/asm/uaccess.h:217:2: error: inconsistent operand
-constraints in an =E2=80=98asm=E2=80=99
-  217 |  asm volatile("call __" #fn "_%P[size]"    \
-      |  ^~~
-../arch/x86/include/asm/uaccess.h:244:44: note: in expansion of macro
-=E2=80=98do_put_user_call=E2=80=99
-  244 | #define put_user(x, ptr) ({ might_fault();
-do_put_user_call(put_user,x,ptr); })
-      |                                            ^~~~~~~~~~~~~~~~
-../kernel/power/user.c:357:12: note: in expansion of macro =E2=80=98put_use=
-r=E2=80=99
-  357 |    error =3D put_user(offset, (loff_t __user *)arg);
-      |            ^~~~~~~~
-
-
-x86_64 Kasan tested and the reported issue not found.
-https://lkft.validation.linaro.org/scheduler/job/1868029#L2374
+Test logs,
+https://lkft.validation.linaro.org/scheduler/job/1868045#L1597
 
 - Naresh

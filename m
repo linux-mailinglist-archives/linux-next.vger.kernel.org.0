@@ -2,243 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3840D296898
-	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 04:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3FF2968A3
+	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 05:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S374733AbgJWCtL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Oct 2020 22:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S460262AbgJWDF1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Oct 2020 23:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S374715AbgJWCtL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Oct 2020 22:49:11 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0462C0613CE
-        for <linux-next@vger.kernel.org>; Thu, 22 Oct 2020 19:49:09 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id x13so44715pgp.7
-        for <linux-next@vger.kernel.org>; Thu, 22 Oct 2020 19:49:09 -0700 (PDT)
+        with ESMTP id S460253AbgJWDF1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Oct 2020 23:05:27 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDEAC0613CE
+        for <linux-next@vger.kernel.org>; Thu, 22 Oct 2020 20:05:27 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id h6so292602lfj.3
+        for <linux-next@vger.kernel.org>; Thu, 22 Oct 2020 20:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=xO9+TEs3h6Delwf6uK6I5WF9Sb+em1SmM8bffk0QYaM=;
-        b=DeoxnqUABD5J1KLRtXs9INucD6OW0EaFs3JNdxj8oOxz5PCa3SroJ8vvCIdIYqiDLW
-         CYmz8a2Mlde66XeH9OR4IgKqkj/at3+k9D4M09EGUo/ZidttEynsIRd8h4l/LqW3mRqN
-         Mgbrtlc3OgV9J/RWgUeC8RQfFSLzhveJCnm5hm6KFkJRQvyjsPHsL5BYXPFXIZ/39iLo
-         6qw/pcRTxoc4pVppdFuVQ0Srb1kSe2JD0fBSQzpweiWZr0nJfNB25GRsEwc+yPRLW5TO
-         pb5QH6ky+U+LyMAbYFbc5vtyEHFUsCamaCFfJC4J2Lj0yytdUQwF9KdB0ba5T+zPI7pb
-         +mmg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Na94wtC1BhSlnxPRS1UAdX72oiIY6E2rGP3IXkaaAPI=;
+        b=dvQpU+FB9bJIevPoyZUx0Zefem4fScj4c1Gi0SaeCK5Q9yI9nesRnzjd+UaB+pY0Io
+         MQlmn/KIjYgbmrUu++HqyEv1sajyLI/DtsrPFcq1odZmHAA9otSr14zvP3X3mR7rw59T
+         axPQewjAT8o4TjKIP1JKavPS6yuA49BTh5Ujg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=xO9+TEs3h6Delwf6uK6I5WF9Sb+em1SmM8bffk0QYaM=;
-        b=BmPam8ZHx661jaY+eYS2r/1czt2G3ONKDP3HQlHNHN2JrZdgA4HId/h50XSZgErVEf
-         dGhdGzyTAhiV4RyKAu7xXjUxwr8VnoX4k+d4JPDqBq8yUaLz0k8b44ZXHsSxbbuppLkJ
-         WB2cOewusvuClR6Tnq3VTt4utLbTX+MS6weZptzFwd7rw6KC/18J4ga+mob5komVOyMB
-         ZOZEaoh/ILETRh6ceJDRncbsLBXS5+qIEMuu4eLE8bAax827c5b2dC62rnQJ36V7DSf4
-         uvO1bIvHp7Skta5ifU3upArvp8DIZwTzDVkGlnj4XkagEiVSiB2MJZl4qbB/zlmNAKWB
-         ZuvA==
-X-Gm-Message-State: AOAM532eU/1DxND4V67u5TH/QRkbAv5CF+17I7h4NdmSWuH2RwQxZNDS
-        c+lPGW5o8AQWOxbSKp0AytdkYOALfwnVXA==
-X-Google-Smtp-Source: ABdhPJy1zLFMhe8AbYLc8NTMbbNgEEQ6kmG1kK/asnweb1pYXbhiYSVYutrJzlEdz9dLGpymIRWzeQ==
-X-Received: by 2002:a65:6a0a:: with SMTP id m10mr314920pgu.162.1603421348926;
-        Thu, 22 Oct 2020 19:49:08 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q24sm131443pfn.72.2020.10.22.19.49.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2020 19:49:08 -0700 (PDT)
-Message-ID: <5f9244a4.1c69fb81.6244e.06f4@mx.google.com>
-Date:   Thu, 22 Oct 2020 19:49:08 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Na94wtC1BhSlnxPRS1UAdX72oiIY6E2rGP3IXkaaAPI=;
+        b=t967eXs0dQCOKETXzdZbxkDzt05mcmCWhrXVhcriYpQ518hv04R2ZVdyujEcMz5qMN
+         J9bZkM3lAhExoblIY0DljwBrU2LT2ZxK9ULsVvoGxhG9bK/b0Jkanj+MWrL7ZmC/mR7o
+         ekEaMVaI3TM53j4ACJ5Rz65tKqvqpfEHucDmn+Imd829lrLjuKSkEQwkQeywenqqWmpP
+         XojmULZHeygcRprgr0G0AZT1Bwncmu0aIYd6mtLloAcu43ARknvp0Aw5cj5JSPeG3OC7
+         hBFDrpEi1af8I0MoP1u7cElkPRgL4olT/9tLDhqEbsvDYr70hnyGMXhxV4B/NCI3RcK8
+         cJLQ==
+X-Gm-Message-State: AOAM531nvcKeCT8A9wX0eMzBCOxWraFlrfzRehGdUsfU5vyoSP4nTV2T
+        4ql+J9cjEFgOFE0Qm70taJMHKqzLEp62Wg==
+X-Google-Smtp-Source: ABdhPJyW4GXaa86q5QjXjxmQGKOoXKNkZji9INOW1ADlyquzOTW4A4ZkUIyXIwvCgaYGEobDt338aw==
+X-Received: by 2002:a19:87:: with SMTP id 129mr33881lfa.164.1603422325004;
+        Thu, 22 Oct 2020 20:05:25 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id b14sm14334ljo.16.2020.10.22.20.05.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Oct 2020 20:05:22 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id j30so285412lfp.4
+        for <linux-next@vger.kernel.org>; Thu, 22 Oct 2020 20:05:22 -0700 (PDT)
+X-Received: by 2002:a19:83c9:: with SMTP id f192mr33971lfd.148.1603422321812;
+ Thu, 22 Oct 2020 20:05:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-13195-g0281c5220c40
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 323 runs,
- 3 regressions (v5.9-13195-g0281c5220c40)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
+ <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
+ <CA+G9fYv=DUanNfL2yza=y9kM7Y9bFpVv22Wd4L9NP28i0y7OzA@mail.gmail.com>
+ <CA+G9fYudry0cXOuSfRTqHKkFKW-sMrA6Z9BdQFmtXsnzqaOgPg@mail.gmail.com>
+ <CAHk-=who8WmkWuuOJeGKa-7QCtZHqp3PsOSJY0hadyywucPMcQ@mail.gmail.com>
+ <CAHk-=wi=sf4WtmZXgGh=nAp4iQKftCKbdQqn56gjifxWNpnkxw@mail.gmail.com> <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com>
+In-Reply-To: <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 22 Oct 2020 20:05:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
+Message-ID: <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
+Subject: Re: [LTP] mmstress[1309]: segfault at 7f3d71a36ee8 ip
+ 00007f3d77132bdf sp 00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
+To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        zenglg.jy@cn.fujitsu.com,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        X86 ML <x86@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ingo Molnar <mingo@redhat.com>, LTP List <ltp@lists.linux.it>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: multipart/mixed; boundary="000000000000eb07d805b24dd94f"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 323 runs, 3 regressions (v5.9-13195-g0281c5220=
-c40)
+--000000000000eb07d805b24dd94f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+On Thu, Oct 22, 2020 at 6:36 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org> w=
+rote:
+>
+> The kernel Naresh originally referred to is here:
+>   https://builds.tuxbuild.com/SCI7Xyjb7V2NbfQ2lbKBZw/
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
-       | 1          =
+Thanks.
 
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
-_SMP=3Dn | 1          =
+And when I started looking at it, I realized that my original idea
+("just look for __put_user_nocheck_X calls, there aren't so many of
+those") was garbage, and that I was just being stupid.
 
-panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
-       | 1          =
+Yes, the commit that broke was about __put_user(), but in order to not
+duplicate all the code, it re-used the regular put_user()
+infrastructure, and so all the normal put_user() calls are potential
+problem spots too if this is about the compiler interaction with KASAN
+and the asm changes.
 
+So it's not just a couple of special cases to look at, it's all the
+normal cases too.
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.9-13195-g0281c5220c40/plan/baseline/
+Ok, back to the drawing board, but I think reverting it is probably
+the right thing to do if I can't think of something smart.
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.9-13195-g0281c5220c40
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      0281c5220c40dd77262916430036b62e4a52e685 =
+That said, since you see this on x86-64, where the whole ugly trick with th=
+at
 
+   register asm("%"_ASM_AX)
 
+is unnecessary (because the 8-byte case is still just a single
+register, no %eax:%edx games needed), it would be interesting to hear
+if the attached patch fixes it. That would confirm that the problem
+really is due to some register allocation issue interaction (or,
+alternatively, it would tell me that there's something else going on).
 
-Test Regressions
----------------- =
+                  Linus
 
+--000000000000eb07d805b24dd94f
+Content-Type: application/octet-stream; name=patch
+Content-Disposition: attachment; filename=patch
+Content-Transfer-Encoding: base64
+Content-ID: <f_kglo76xr0>
+X-Attachment-Id: f_kglo76xr0
 
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig             =
-       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f920f882b08bacee3e0ddaf
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f920f882b08bace=
-e3e0ddb2
-        failing since 1 day (last pass: v5.9-10224-g4054eebdfdd6, first fai=
-l: v5.9-12353-gd3f7f27bb8d1)
-        2 lines
-
-    2020-10-22 23:00:16.402000+00:00  Connected to bcm2837-rpi-3-b console =
-[channel connected] (~$quit to exit)
-    2020-10-22 23:00:16.402000+00:00  (user:khilman) is already connected
-    2020-10-22 23:00:32.295000+00:00  =00
-    2020-10-22 23:00:32.295000+00:00  =
-
-    2020-10-22 23:00:32.296000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
-2 -0800)
-    2020-10-22 23:00:32.296000+00:00  =
-
-    2020-10-22 23:00:32.296000+00:00  DRAM:  948 MiB
-    2020-10-22 23:00:32.311000+00:00  RPI 3 Model B (0xa02082)
-    2020-10-22 23:00:32.399000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
-0: 1
-    2020-10-22 23:00:32.430000+00:00  Loading Environment from FAT... *** W=
-arning - bad CRC, using default environment =
-
-    ... (384 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFIG=
-_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f92103d332344e86be0dd80
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
-eline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
-eline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f92103d332344e=
-86be0dd84
-        failing since 78 days (last pass: v5.8-1558-g0359180fcb42, first fa=
-il: v5.8-3221-g983112062f35)
-        60 lines
-
-    2020-10-22 23:05:27.711000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c802
-    2020-10-22 23:05:27.717000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c803
-    2020-10-22 23:05:27.723000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c804
-    2020-10-22 23:05:27.729000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c805
-    2020-10-22 23:05:27.734000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c806
-    2020-10-22 23:05:27.740000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c807
-    2020-10-22 23:05:27.746000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c808
-    2020-10-22 23:05:27.752000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c809
-    2020-10-22 23:05:27.757000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c80a
-    2020-10-22 23:05:27.763000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c80b =
-
-    ... (49 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-panda           | arm   | lab-collabora | gcc-8    | omap2plus_defconfig   =
-       | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f920e88f70ebfaccce0dd89
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.9-13195-=
-g0281c5220c40/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f920e88f70ebfaccce0d=
-d8a
-        failing since 78 days (last pass: v5.8-1558-g0359180fcb42, first fa=
-il: v5.8-3221-g983112062f35) =
-
- =20
+IGFyY2gveDg2L2luY2x1ZGUvYXNtL3VhY2Nlc3MuaCB8IDQgKystLQogMSBmaWxlIGNoYW5nZWQs
+IDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9p
+bmNsdWRlL2FzbS91YWNjZXNzLmggYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS91YWNjZXNzLmgKaW5k
+ZXggZjEzNjU5NTIzMTA4Li4wZjNlMjAyZDllZWEgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2luY2x1
+ZGUvYXNtL3VhY2Nlc3MuaAorKysgYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS91YWNjZXNzLmgKQEAg
+LTIxMSwxNCArMjExLDE0IEBAIGV4dGVybiB2b2lkIF9fcHV0X3VzZXJfbm9jaGVja184KHZvaWQp
+OwogI2RlZmluZSBkb19wdXRfdXNlcl9jYWxsKGZuLHgscHRyKQkJCQkJXAogKHsJCQkJCQkJCQlc
+CiAJaW50IF9fcmV0X3B1OwkJCQkJCQlcCi0JcmVnaXN0ZXIgX190eXBlb2ZfXygqKHB0cikpIF9f
+dmFsX3B1IGFzbSgiJSJfQVNNX0FYKTsJCVwKKwlfX3R5cGVvZl9fKCoocHRyKSkgX192YWxfcHU7
+CQkJCQlcCiAJX19jaGtfdXNlcl9wdHIocHRyKTsJCQkJCQlcCiAJX192YWxfcHUgPSAoeCk7CQkJ
+CQkJCVwKIAlhc20gdm9sYXRpbGUoImNhbGwgX18iICNmbiAiXyVQW3NpemVdIgkJCQlcCiAJCSAg
+ICAgOiAiPWMiIChfX3JldF9wdSksCQkJCQlcCiAJCQlBU01fQ0FMTF9DT05TVFJBSU5UCQkJCVwK
+IAkJICAgICA6ICIwIiAocHRyKSwJCQkJCVwKLQkJICAgICAgICJyIiAoX192YWxfcHUpLAkJCQkJ
+XAorCQkgICAgICAgImEiIChfX3ZhbF9wdSksCQkJCQlcCiAJCSAgICAgICBbc2l6ZV0gImkiIChz
+aXplb2YoKihwdHIpKSkJCQlcCiAJCSAgICAgOiJlYngiKTsJCQkJCQlcCiAJX19idWlsdGluX2V4
+cGVjdChfX3JldF9wdSwgMCk7CQkJCQlcCg==
+--000000000000eb07d805b24dd94f--

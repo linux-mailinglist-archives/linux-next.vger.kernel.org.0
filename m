@@ -2,113 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F25E2978BD
-	for <lists+linux-next@lfdr.de>; Fri, 23 Oct 2020 23:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968132983CB
+	for <lists+linux-next@lfdr.de>; Sun, 25 Oct 2020 22:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1755640AbgJWVQI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Oct 2020 17:16:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40250 "EHLO mail.kernel.org"
+        id S1417989AbgJYVy2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 25 Oct 2020 17:54:28 -0400
+Received: from ozlabs.org ([203.11.71.1]:46489 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1755437AbgJWVQI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 23 Oct 2020 17:16:08 -0400
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1417968AbgJYVy2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 25 Oct 2020 17:54:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA74F24688;
-        Fri, 23 Oct 2020 21:16:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603487767;
-        bh=qQcFmOGTx12wPD63RiThRe7Vh0MNAYSb3WtVSv6KO9I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ylYjv002r5/d4PJz5MfpZMB4thciSwlk1eXkJiCA3bvenmoPxzuiHjvcXDcackAcE
-         w6VNJ7rBH6083fbGYBlG3chnrNZbtJNPqO54/g2gQKHUjVIOrFDXlaNINXtFbJdoKt
-         OK0nV4hNeaJ18/R+8VfmdHAtYYky9/5RkmV0QCgE=
-Received: by mail-lj1-f178.google.com with SMTP id h20so3011574lji.9;
-        Fri, 23 Oct 2020 14:16:06 -0700 (PDT)
-X-Gm-Message-State: AOAM5337x3XfZ2H+iQYCxwVuwsAo2l/BfiG/SaJARh8J72H8DUzAZiGl
-        2N/bhe5jmH8tCgkklWYJzAiC/vEHWJ8aRCVwm9M=
-X-Google-Smtp-Source: ABdhPJxMP4Oqfuc0h+oHI0VayAXX1a002RyckvG+CEYT7Qe0w/jJqsSdKxhG124OF9Ag+jl4aWynWIOTPbYK55JDXo0=
-X-Received: by 2002:a05:651c:cd:: with SMTP id 13mr1498277ljr.392.1603487764782;
- Fri, 23 Oct 2020 14:16:04 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CKBZR3LH4z9sSs;
+        Mon, 26 Oct 2020 08:54:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1603662866;
+        bh=TZzmsecreB+HQ3YoPylN9A9i8OGFAhec9UiaxQ+xX3M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tct5+d9pmKMaZxp01GVYVXYXDdcikr35LxojMRx8N0Kete3AD+QIK5prSWDQDbb2p
+         2FrewZ8oqASxemKKqIKl6TAAWO0IzpV+BUzGwr0V6p5Ar/WQIYh/kcShQW/ebN48G0
+         TnAX4PeTAxbLr0Rh9ya2Q4UWX9bfD32ws+4lROXiDm2j4G9zJDwi8yBXzGbwyavkHQ
+         ABEs//1JBh3BBGTCysBxJkAEqufjCgfn9nIZ+Zm6I69NS+4w5DrscdvsctBAmSaM4h
+         HUjXq+h3NC7VmgiGQGYmp13cYwpm8GiHfSOKjFIAlXjzP+YXoopyQyCAtDQfXva8n9
+         IMHaEpQGIUx5g==
+Date:   Mon, 26 Oct 2020 08:54:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yangtao Li <frank@allwinnertech.com>
+Subject: Re: linux-next: manual merge of the sunxi tree with the arm-soc
+ tree
+Message-ID: <20201026085421.1536d873@canb.auug.org.au>
+In-Reply-To: <20201008132017.ju5ih5prn4aifeml@gilmour.lan>
+References: <20201006145637.57d20ba1@canb.auug.org.au>
+        <20201008132017.ju5ih5prn4aifeml@gilmour.lan>
 MIME-Version: 1.0
-References: <CA+G9fYvHze+hKROmiB0uL90S8h9ppO9S9Xe7RWwv808QwOd_Yw@mail.gmail.com>
- <CAHk-=wg5-P79Hr4iaC_disKR2P+7cRVqBA9Dsria9jdVwHo0+A@mail.gmail.com>
- <CA+G9fYv=DUanNfL2yza=y9kM7Y9bFpVv22Wd4L9NP28i0y7OzA@mail.gmail.com>
- <CA+G9fYudry0cXOuSfRTqHKkFKW-sMrA6Z9BdQFmtXsnzqaOgPg@mail.gmail.com>
- <CAHk-=who8WmkWuuOJeGKa-7QCtZHqp3PsOSJY0hadyywucPMcQ@mail.gmail.com>
- <CAHk-=wi=sf4WtmZXgGh=nAp4iQKftCKbdQqn56gjifxWNpnkxw@mail.gmail.com>
- <CAEUSe78A4fhsyF6+jWKVjd4isaUeuFWLiWqnhic87BF6cecN3w@mail.gmail.com>
- <CAHk-=wgqAp5B46SWzgBt6UkheVGFPs2rrE6H4aqLExXE1TXRfQ@mail.gmail.com>
- <CA+G9fYu5aGbMHaR1tewV9dPwXrUR5cbGHJC1BT=GSLsYYwN6Nw@mail.gmail.com> <CAHk-=wjyp3Y_vXJwvoieBJpmmTrs46kc4GKbq5x_nvonHvPJBw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjyp3Y_vXJwvoieBJpmmTrs46kc4GKbq5x_nvonHvPJBw@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 23 Oct 2020 14:15:53 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6wZRVoT3Bu6YBVjWVm6JBz9n6_RoZKGM7KrVAXx89SFQ@mail.gmail.com>
-Message-ID: <CAPhsuW6wZRVoT3Bu6YBVjWVm6JBz9n6_RoZKGM7KrVAXx89SFQ@mail.gmail.com>
-Subject: Re: [LTP] mmstress[1309]: segfault at 7f3d71a36ee8 ip
- 00007f3d77132bdf sp 00007f3d71a36ee8 error 4 in libc-2.27.so[7f3d77058000+1aa000]
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        X86 ML <x86@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ingo Molnar <mingo@redhat.com>, LTP List <ltp@lists.linux.it>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/5cOVhmDMoOlKpr.yUM_Vpz4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 10:51 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Oct 23, 2020 at 10:00 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > [Old patch from yesterday]
-> >
-> > After applying your patch on top on linux next tag 20201015
-> > there are two observations,
-> >   1) i386 build failed. please find build error build
->
-> Yes, this was expected. That patch explicitly only works on x86-64,
-> because 32-bit needs the double register handling for 64-bit values
-> (mainly loff_t).
->
-> >   2) x86_64 kasan test PASS and the reported error not found.
->
-> Ok, good. That confirms that the problem you reported is indeed the
-> register allocation.
->
-> The patch I sent an hour ago (the one based on Rasmus' one from
-> yesterday) should fix things too, and - unlike yesterday's - work on
-> 32-bit.
->
-> But I'll wait for confirmation (and hopefully a sign-off from Rasmus
-> so that I can give him authorship) before actually committing it.
->
->               Linus
+--Sig_/5cOVhmDMoOlKpr.yUM_Vpz4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My test vm failed to boot since
+Hi Maxime,
 
-commit d55564cfc222326e944893eff0c4118353e349ec
-x86: Make __put_user() generate an out-of-line call
+On Thu, 8 Oct 2020 15:20:17 +0200 Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> On Tue, Oct 06, 2020 at 02:56:37PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Today's linux-next merge of the sunxi tree got a conflict in:
+> >=20
+> >   arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+> >=20
+> > between commit:
+> >=20
+> >   0dea1794f3b4 ("arm64: allwinner: A100: add the basical Allwinner A100=
+ DTSI file")
+> >=20
+> > from the arm-soc tree and commit:
+> >=20
+> >   7e66a778cb8b ("arm64: allwinner: A100: add the basical Allwinner A100=
+ DTSI file")
+> >=20
+> > from the sunxi tree.
+> >=20
+> > These are 2 versions of the same patch.  For now I am just using the
+> > version in the arm-soc tree ... please sort this out.
+>=20
+> The branch in arm-soc has a build breakage (that doesn't happen in
+> linux-next since the clk tree has the commit to fix it) so I sent a new
+> PR
+>=20
+> Once that PR is in arm-soc, I guess that merge issue will go away
 
-The patch also fixed it.
+I am still getting the same conflict (but between Linus' tree and the
+sunxi tree).  It looks like the sunxi tree has not been updated since
+October 6 ...
 
-Thanks!
-Song
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5cOVhmDMoOlKpr.yUM_Vpz4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+V9A0ACgkQAVBC80lX
+0GwtfQgAnV5elcf14NCyUDR6S3pnr+Okc/wu6aXUIrUVVwWuJ9aXnwcArhNoIs2t
+xT5LFpUVMgLV3lEqJGhsh0E53TOlVYULyKGk4HiLTW1vLlOTBKsIvhnL32mbx+zr
+76YWSJQmPlhwlgDYiFAHvAuczCAy3HxgECt2zPpn/oDDXw24KOmdJ1YKlMiW2sHr
+CQe3su6fMmw/8GraJbzPCxikG8Ry624iU+jFy8si6YnohnkYQSs4LiGld3i4Uezm
+xigeEMVrciADDqV4LMIBBXzy4e/dAohx2krsAbh76Q9wJ+nMNEbBquxguTbh1czg
+mpkeJq6L+17a7Vf3jSr1yhj2ZZPH2A==
+=0aUi
+-----END PGP SIGNATURE-----
+
+--Sig_/5cOVhmDMoOlKpr.yUM_Vpz4--

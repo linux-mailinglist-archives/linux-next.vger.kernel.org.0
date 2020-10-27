@@ -2,260 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF70329A90F
-	for <lists+linux-next@lfdr.de>; Tue, 27 Oct 2020 11:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C44829B94D
+	for <lists+linux-next@lfdr.de>; Tue, 27 Oct 2020 17:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388587AbgJ0KGu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Oct 2020 06:06:50 -0400
-Received: from mail-pl1-f182.google.com ([209.85.214.182]:34647 "EHLO
-        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733255AbgJ0KGs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Oct 2020 06:06:48 -0400
-Received: by mail-pl1-f182.google.com with SMTP id r3so507412plo.1
-        for <linux-next@vger.kernel.org>; Tue, 27 Oct 2020 03:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Ay0NjprJZt901ilPGdZ5Usam0oYsyTiU49+6ZmQC/vc=;
-        b=ho5KG+RC5+qN6nHKcH5UaPyvpCSPn4aC49MfffJ5T5KTGgdK0u9f7dBBAWom9gcWKQ
-         XWmjYC9zOCsYt6v6TV8uHiC3tRVKt+OXlNokzzl5ls6//7kLCoDMuh/YdxhyaoIPUWs2
-         rG5ISKduoX091GUUfkxYqsH1gJjaHvJ+24SZ7zg2mKnVxuBDwgqgRaGCckQaZwvRdl4t
-         nU2oIYtkuiEaEJoCi+1lPBbNyTG+tCVk4QVyUK0dfmlEYzz/XdJyVi6Hx6sGvH9dOQXZ
-         R5oaR9N+PSlzQT3MzKhETQc6fn8aTHVTSm7vEvarq68U9B0UETNhwsYyptGqxsWveu9w
-         bSTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Ay0NjprJZt901ilPGdZ5Usam0oYsyTiU49+6ZmQC/vc=;
-        b=lxUSdrd7PVuKsN6F9PZKJN58bFqp3+nRaRePN25uoWVd6+knS9/I894tix6kdv2zpZ
-         27AjVbZsG9yk3nTiLB89NzHsQe40JMUyHTeF7BSsaG/WLVDttyjgiysmfJn/Ii2PbEOM
-         qB6w+YFvNg+RdunbWNR4yl12wzP2/91Ke9DoUNJZlKNOMHWlwFyWjIF9iK6mS6m+uT1z
-         pTc9EX/P1t6vmkd1LOozQ2XnMQVFjOTpJEf7DEG0tcQ5be1qwtRW3YwLitr1tgf1IHV7
-         q2ljPwKhbf8fvf7DpDj5/txg3MpZ4I5L4XvV4QrGp3Yn/5cUGQG95Uly7uQYSKllS9wr
-         z92w==
-X-Gm-Message-State: AOAM532cGkqmKjCXAGZzA5nG0iAI/P+Rq7ax9wJ2n+n+UsJVj8fWCHTj
-        4jmL5XqIZsY+THlpKGpMWu8nxjHwjJhxiw==
-X-Google-Smtp-Source: ABdhPJxZRUj8nk4IJ0dmhKlpb/EkcIapdizrj5E6IoroBdS2mBQB5ZWhunWx9h8aXxhf/aXjUC6zLQ==
-X-Received: by 2002:a17:902:6b84:b029:d5:ef85:1a79 with SMTP id p4-20020a1709026b84b02900d5ef851a79mr1851092plk.32.1603793206638;
-        Tue, 27 Oct 2020 03:06:46 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z6sm1725476pfj.48.2020.10.27.03.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 03:06:45 -0700 (PDT)
-Message-ID: <5f97f135.1c69fb81.97b6.340b@mx.google.com>
-Date:   Tue, 27 Oct 2020 03:06:45 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1764136AbgJ0PrT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Oct 2020 11:47:19 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:58513 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1798571AbgJ0P24 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 27 Oct 2020 11:28:56 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C150B5C00B5;
+        Tue, 27 Oct 2020 11:28:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 27 Oct 2020 11:28:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=+j8L/tkOK2xm0FaOF8ANxNspBvG
+        k+kVCGp6EG43vYds=; b=bZJWU9CDejPu3gS6i5DJOfe0oweoztX3ZM9csU/yK66
+        eQBtl8n6janJuuK5/MMz64Awo5JC5YUUpQePD84OnHxWHspROtKOmztBzDUe9zOu
+        F+2nIkzPGPfgX2yBweVjGcxyTSIRJ03cMSjis86LnoQ/z7QwGnNcrxTv2fW+2LGc
+        ru0J/Ulhu3FRnL+FZCWQLfBaWhX8I6ST7765hT0JV1+ajU64GRznSmz+hyj22u9o
+        LHYdy0wmZ8RRm6MvFvc3L3qR78peuegezHkeojjlL0GRmIz6bthQjuQYfsOHRytY
+        1mXhiwzGsr8QMRsC731fWnlr0ajaFYaFarq9s0LaT9w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=+j8L/t
+        kOK2xm0FaOF8ANxNspBvGk+kVCGp6EG43vYds=; b=oh1GS3/aANesytbAkP4zuk
+        4+nRrdAwmbft7C8iYp3LBHQOtNbAGD7llnzsVtWiFOGXv2JAFoWWkUpvVSsP8QHg
+        /MDXCuZtWmI384vfJgZe+DSV1bHW+nX9EWCikNIAl4Xi94tEcJ+75uW1/6XunhnP
+        0QeYwTWqFoOaOLfaWsKbHON0Olc5UgAqOatqL0W2EChBXDFUvRbWi58pMvJlUatc
+        FFZTwlN3i+tyTuSETbfXXr894Hwy/I2guzv4im57OypNYuhuSSyfI/mD2gd5o9A5
+        /JDX3N/UVsHaCYClJSrdWJXCAXpsAnGfgTCsNtNQJsxRTNsvjwFjIZDyHhvAikXg
+        ==
+X-ME-Sender: <xms:tTyYX5saLanEbfKzl75eiF6oDLnQAnQJ3Gv1yyFAPgt_9JDmTdKckw>
+    <xme:tTyYXyey9cbRV4kKmDrODWzGmeIi6cFl93HUdXyANDHD4AM4DxH-TpxKtp06tN0q5
+    GSf1aob7hbseikcRJU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrkeelgdejiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedunecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:tTyYX8w8AHopgpT2a-gmlfOJQHAlkeul_KLR6xQaT1Wx9erVh1-00g>
+    <xmx:tTyYXwOXrGFMJ9IMYgAdmmH1flTe0GF9Pj8EuhvkH4GIWwREnzbYBQ>
+    <xmx:tTyYX5_CMLOh05M22pDbb_7blCrOggsJ2XCvqZ91uEJjdEwI6tJDag>
+    <xmx:tTyYX7Lk7wBVz7XzuYw0ZPCZ5KRGdVMdPl_oBdpmHkU9h7ucQ7N-7w>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E91383064682;
+        Tue, 27 Oct 2020 11:28:52 -0400 (EDT)
+Date:   Tue, 27 Oct 2020 16:28:51 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Yu-Tung Chang <mtwget@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sunxi tree
+Message-ID: <20201027152851.bndhe5y7hm6lbtjg@gilmour.lan>
+References: <20201027104220.0c8167d0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20201027
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 232 runs, 5 regressions (next-20201027)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2ggkixm6hracvjvk"
+Content-Disposition: inline
+In-Reply-To: <20201027104220.0c8167d0@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 232 runs, 5 regressions (next-20201027)
 
-Regressions Summary
--------------------
+--2ggkixm6hracvjvk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-at91-sama5d4_xplained    | arm  | lab-baylibre  | gcc-8    | sama5_defconfi=
-g              | 1          =
+Hi Stephen,
 
-bcm2836-rpi-2-b          | arm  | lab-collabora | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
+On Tue, Oct 27, 2020 at 10:42:20AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the sunxi tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>=20
+> arch/arm/boot/dts/sun8i-h3-zeropi.dts:53.25-63.4: ERROR (phandle_referenc=
+es): /gmac-3v3: Reference to non-existent node or label "gmac_power_pin_nan=
+opi"
+>=20
+> ERROR: Input tree has errors, aborting (use -f to force output)
+>=20
+> Caused by commit
+>=20
+>   89cfb6d76fdc ("ARM: dts: sun8i: add FriendlyArm ZeroPi support")
+>=20
+> I have reverted that commit for today.
 
-imx6q-sabresd            | arm  | lab-nxp       | gcc-8    | imx_v6_v7_defc=
-onfig          | 1          =
+Sorry for that, Yu-Tung sent a fix for it that is now in my branch for
+next, so all should be good tomorrow.
 
-imx6q-var-dt6customboard | arm  | lab-baylibre  | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
+Thanks!
+Maxime
 
-panda                    | arm  | lab-collabora | gcc-8    | omap2plus_defc=
-onfig          | 1          =
+--2ggkixm6hracvjvk
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-201027/plan/baseline/
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX5g8swAKCRDj7w1vZxhR
+xTMgAQD7fW3EjnSSqoW4lyqB1oCbuJuOb6sEPoYBMIR7KmTv9QEAi2F4D9uaweQg
+k/rsKnNY3QE98AZ71Ebgzm0PLClq0Ac=
+=vlbo
+-----END PGP SIGNATURE-----
 
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20201027
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      0dec50edcc9216535f82b1987c0a51efb3e23674 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-at91-sama5d4_xplained    | arm  | lab-baylibre  | gcc-8    | sama5_defconfi=
-g              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f97b64ec441ce9775381048
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201027/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201027/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f97b64ec441ce9775381=
-049
-        failing since 181 days (last pass: next-20200424, first fail: next-=
-20200428) =
-
- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-bcm2836-rpi-2-b          | arm  | lab-collabora | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f97baa7505d720dfa381013
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201027/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201027/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f97baa7505d720dfa381=
-014
-        failing since 26 days (last pass: next-20200929, first fail: next-2=
-0200930) =
-
- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-imx6q-sabresd            | arm  | lab-nxp       | gcc-8    | imx_v6_v7_defc=
-onfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f97ba56fe277cbcca38101c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201027/arm/=
-imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabresd.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201027/arm/=
-imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabresd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f97ba56fe277cbcca381=
-01d
-        failing since 1 day (last pass: next-20201023, first fail: next-202=
-01026) =
-
- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-imx6q-var-dt6customboard | arm  | lab-baylibre  | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f97b96d5acf55c67d38102e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201027/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-imx6q-var-dt6=
-customboard.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201027/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-imx6q-var-dt6=
-customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f97b96d5acf55c67d381=
-02f
-        new failure (last pass: next-20201026) =
-
- =
-
-
-
-platform                 | arch | lab           | compiler | defconfig     =
-               | regressions
--------------------------+------+---------------+----------+---------------=
----------------+------------
-panda                    | arm  | lab-collabora | gcc-8    | omap2plus_defc=
-onfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f97b8c9eaa8a8becd38102a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20201027/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20201027/arm/=
-omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f97b8c9eaa8a8becd381=
-02b
-        failing since 97 days (last pass: next-20200706, first fail: next-2=
-0200721) =
-
- =20
+--2ggkixm6hracvjvk--

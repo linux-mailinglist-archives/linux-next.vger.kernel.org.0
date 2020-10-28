@@ -2,111 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F629D351
-	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 22:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD4829D36C
+	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 22:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgJ1VmZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Oct 2020 17:42:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38142 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725849AbgJ1VmY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:42:24 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726454AbgJ1Vnw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Oct 2020 17:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbgJ1Vnv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Oct 2020 17:43:51 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49688C0613CF;
+        Wed, 28 Oct 2020 14:43:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 19729246CD;
-        Wed, 28 Oct 2020 21:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603918949;
-        bh=+Cj4JDv/9Kdz/kOl1C3lm3VVi/UOikFi55ZuJNA/YoI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=us4bztrI2KapLmU1CUulDdhGbWUnIfT0eq/O/r7fhD/uj1XbHv/m0fp59fI6Q6/ru
-         b9toWkeNm6ZmXCQHNgJQkal5IBZV89lV/0ZK5Xdn6K8bdbVp8uLd5lEhjPX7erC+Ub
-         AZ3EziopAvHlTGvy2wkA7iesN2CZyU4nwB2Kke6Q=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id B408435229CE; Wed, 28 Oct 2020 14:02:28 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 14:02:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qian Cai <cai@redhat.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-Message-ID: <20201028210228.GI3249@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
- <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
- <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
- <1db80eb9676124836809421e85e1aa782c269a80.camel@redhat.com>
- <20201028030130.GB3249@paulmck-ThinkPad-P72>
- <8194dca3b2e871f04c7f6e49672837f8df22546f.camel@redhat.com>
- <20201028155328.GC3249@paulmck-ThinkPad-P72>
- <7cd579ccdacb4f672cf2dc3a0d4553d1845e7ebf.camel@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CM1Ng6dFNz9sSn;
+        Thu, 29 Oct 2020 08:07:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1603919236;
+        bh=W2n5VWwBllSsH7rdOKp+MwgYDXy0yFzINN07H5vOOXc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gUSY4fEamKL/MhS6u92pulR8ZY/JEEugzlCP1p0u/Uyb1a2Ov0Ga8wE8LnkkD7Suo
+         dR60NscI7MQ6HThH2NpEkHwfkuXxb4fict/NYpGchLtUkUKuXCGjHrZTMs5k16ySWu
+         kTjvFhiEtr7krpYZ1eDmQ2j35LqBgDBM8DeeoF3JwKv8XTIopKwT7EzdqfIJeRAwgl
+         s49g3kbY5BxPC48VD9ftn/nI0HRadhE3yPfHDh3JnX05qlOPl0nfD0mXi8jGEfOGiA
+         V8QYvxB5fyGSJpwGhGjVJSevOZ3OrlMKQPNTjSS+rCNfY26LKTnUPCayaR+/nF1cBZ
+         yzNNrHJYxeHuA==
+Date:   Thu, 29 Oct 2020 08:07:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Micah Morton <mortonm@chromium.org>
+Cc:     Thomas Cedeno <thomascedeno@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning in Linus' tree
+Message-ID: <20201029080713.64c5f78c@canb.auug.org.au>
+In-Reply-To: <CAJ-EccOQCADagAb8YqRHL6aUVCrMuGOO=tA-TBorjO_AiXT7Gw@mail.gmail.com>
+References: <20201028142809.09f7f4b4@canb.auug.org.au>
+        <CAJ-EccOQCADagAb8YqRHL6aUVCrMuGOO=tA-TBorjO_AiXT7Gw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cd579ccdacb4f672cf2dc3a0d4553d1845e7ebf.camel@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/JT9K7rs4nx=+x9oFqfn_JtY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 04:08:59PM -0400, Qian Cai wrote:
-> On Wed, 2020-10-28 at 08:53 -0700, Paul E. McKenney wrote:
-> > On Wed, Oct 28, 2020 at 10:39:47AM -0400, Qian Cai wrote:
-> > > On Tue, 2020-10-27 at 20:01 -0700, Paul E. McKenney wrote:
-> > > > If I have the right email thread associated with the right fixes, these
-> > > > commits in -rcu should be what you are looking for:
-> > > > 
-> > > > 73b658b6b7d5 ("rcu: Prevent lockdep-RCU splats on lock
-> > > > acquisition/release")
-> > > > 626b79aa935a ("x86/smpboot:  Move rcu_cpu_starting() earlier")
-> > > > 
-> > > > And maybe this one as well:
-> > > > 
-> > > > 3a6f638cb95b ("rcu,ftrace: Fix ftrace recursion")
-> > > > 
-> > > > Please let me know if these commits do not fix things.
-> > > While those patches silence the warnings for x86. Other arches are still
-> > > suffering. It is only after applying the patch from Boqun below fixed
-> > > everything.
-> > 
-> > Fair point!
-> > 
-> > > Is it a good idea for Boqun to write a formal patch or we should fix all
-> > > arches
-> > > individually like "x86/smpboot: Move rcu_cpu_starting() earlier"?
-> > 
-> > By Boqun's patch, you mean the change to debug_lockdep_rcu_enabled()
-> > shown below?  Peter Zijlstra showed that real failures can happen, so we
-> 
-> Yes.
-> 
-> > do not want to cover them up.  So we are firmly in "fix all architectures"
-> > space here, sorry!
-> > 
-> > I am happy to accumulate those patches, but cannot commit to creating
-> > or testing them.
-> 
-> Okay, I posted 3 patches for each arch and CC'ed you.
+--Sig_/JT9K7rs4nx=+x9oFqfn_JtY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Very good!  I have acked them.
+Hi Micah,
 
->                                                       BTW, it looks like
-> something is wrong on @vger.kernel.org today where I received many of those,
-> 
-> 4.7.1 Hello [216.205.24.124], for recipient address <linux-kernel@vger.kernel.org> the policy analysis reported: zpostgrey: connect: Connection refused
-> 
-> and I can see your previous mails did not even reach there either.
-> 
-> https://lore.kernel.org/lkml/
+On Wed, 28 Oct 2020 08:56:00 -0700 Micah Morton <mortonm@chromium.org> wrot=
+e:
+>
+> Thanks for the heads up. I think someone sent a patch to fix this
+> yesterday: https://marc.info/?l=3Dlinux-doc&m=3D160379233902729&w=3D2
+>=20
+> Do I need to do anything else or should that cover it?
 
-It does seem to be having some difficulty, and some people are looking
-into it.  Hopefully soon someone who can actually make the needed
-changes.  ;-)
+That should be fine, thanks.
 
-							Thanx, Paul
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/JT9K7rs4nx=+x9oFqfn_JtY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Z3YEACgkQAVBC80lX
+0Gy9ZggAldySAgJfmE/sEXrBEoBEo6trpm1XBwz3QaNHmEp3uV5BjyBUKCxPveor
+cncCNyI2vK0QB5qnLUHcga5At+YuipUEbWt5Cmis73gM1rqjddfZPLgYDcikz981
+RQvz5lQWN4GWUG420Ksn7clLI7qMErS9r2zgbyxp2x+ktN9xz+eijlTCImEd2f+Q
+w0n9aMojT5tbetczeV6oZNhV8cFsLsrEcQKzcBTvIbV7H1PMUYwg8L/4sAUog+ES
+UmP7VoC7VQTW35vAV4riGmkYCNpzhUnmQlJKZodONR9Tk/yqoeVoJWAy3PzM/2bv
+0cOUY9i2pWveQElT0NgAqrgrvz/OtA==
+=EhPZ
+-----END PGP SIGNATURE-----
+
+--Sig_/JT9K7rs4nx=+x9oFqfn_JtY--

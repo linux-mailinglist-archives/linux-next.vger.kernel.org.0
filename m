@@ -2,110 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA6E29D5DE
-	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 23:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B5E29D99F
+	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 23:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730340AbgJ1WJ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Oct 2020 18:09:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37037 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730320AbgJ1WJ1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:09:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603922965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=284b5r+7PQhFjN0PmG3IKEcminvVA7d407HnU3mjfkE=;
-        b=VZS/5aq5iT7jByT+bagzx8vzPqQHXTY2ClAhq/IA8csEDMZG/rIpbmtlM2xM9TFENNtDM3
-        hf7B6pwDwmZfoqlZUlft9lP2h9HW6NPeWSbTYO1Bkxqt9AEfo5/VTq3n7LM2/wNPE/Mu3e
-        yz/HloZna19HQFNiC6Kk7/H0/o+8U9k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-416-KC48yM7BOjKGJFAyziTMpw-1; Wed, 28 Oct 2020 16:09:03 -0400
-X-MC-Unique: KC48yM7BOjKGJFAyziTMpw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1732980AbgJ1W6H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Oct 2020 18:58:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:56585 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389712AbgJ1W4k (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:56:40 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8ECDB8030DE;
-        Wed, 28 Oct 2020 20:09:01 +0000 (UTC)
-Received: from ovpn-66-92.rdu2.redhat.com (ovpn-66-92.rdu2.redhat.com [10.10.66.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4472D5B4B6;
-        Wed, 28 Oct 2020 20:09:00 +0000 (UTC)
-Message-ID: <7cd579ccdacb4f672cf2dc3a0d4553d1845e7ebf.camel@redhat.com>
-Subject: Re: [tip: locking/core] lockdep: Fix lockdep recursion
-From:   Qian Cai <cai@redhat.com>
-To:     paulmck@kernel.org
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, x86 <x86@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Date:   Wed, 28 Oct 2020 16:08:59 -0400
-In-Reply-To: <20201028155328.GC3249@paulmck-ThinkPad-P72>
-References: <160223032121.7002.1269740091547117869.tip-bot2@tip-bot2>
-         <e438b231c5e1478527af6c3e69bf0b37df650110.camel@redhat.com>
-         <20201012031110.GA39540@debian-boqun.qqnc3lrjykvubdpftowmye0fmh.lx.internal.cloudapp.net>
-         <1db80eb9676124836809421e85e1aa782c269a80.camel@redhat.com>
-         <20201028030130.GB3249@paulmck-ThinkPad-P72>
-         <8194dca3b2e871f04c7f6e49672837f8df22546f.camel@redhat.com>
-         <20201028155328.GC3249@paulmck-ThinkPad-P72>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CM3pr470Gz9sPB;
+        Thu, 29 Oct 2020 09:56:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1603925798;
+        bh=U7zRT4tgTv+o0KJnAOrrNaeHKJdfAIbgnQrSPG9X1JQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Q3baMf2ZiOMF06wTH2gfWFTazBRfijWDGQpM5bPlX+GoCUyymmUbbljxb2N9ZTnIG
+         kZgzTOHZa5txc2vRbjV3nt8L0ZimviHF+mZI0Iv6IWq7xbBDhhTsBUjXZbSSzSE4ic
+         4vhOz2frhRoWbrz3RAXfg0rSZ2XLs+y3KAm5HD+8MANcW+VhOUNLPlN6Y4QFPOF0DR
+         FT93rwWzsc916cgoR2uOByrWbZqJAreDAt5iHnFJBi4S1YeiZK9D8qOOD2toKqTWr6
+         aPlUPARIBQv3kBDOfB7GhNVZs6olouH5Zaj+mc9rzg6dLBdusCB4JCtF5f5fi8nr7X
+         IPKyDMomf7n0w==
+Date:   Thu, 29 Oct 2020 09:56:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the samsung-krzk-fixes tree with the
+ arm-soc-fixes tree
+Message-ID: <20201029095635.3c3996a3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/na9cRuTQKJHtlLNtLtJU.PA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 2020-10-28 at 08:53 -0700, Paul E. McKenney wrote:
-> On Wed, Oct 28, 2020 at 10:39:47AM -0400, Qian Cai wrote:
-> > On Tue, 2020-10-27 at 20:01 -0700, Paul E. McKenney wrote:
-> > > If I have the right email thread associated with the right fixes, these
-> > > commits in -rcu should be what you are looking for:
-> > > 
-> > > 73b658b6b7d5 ("rcu: Prevent lockdep-RCU splats on lock
-> > > acquisition/release")
-> > > 626b79aa935a ("x86/smpboot:  Move rcu_cpu_starting() earlier")
-> > > 
-> > > And maybe this one as well:
-> > > 
-> > > 3a6f638cb95b ("rcu,ftrace: Fix ftrace recursion")
-> > > 
-> > > Please let me know if these commits do not fix things.
-> > While those patches silence the warnings for x86. Other arches are still
-> > suffering. It is only after applying the patch from Boqun below fixed
-> > everything.
-> 
-> Fair point!
-> 
-> > Is it a good idea for Boqun to write a formal patch or we should fix all
-> > arches
-> > individually like "x86/smpboot: Move rcu_cpu_starting() earlier"?
-> 
-> By Boqun's patch, you mean the change to debug_lockdep_rcu_enabled()
-> shown below?  Peter Zijlstra showed that real failures can happen, so we
+--Sig_/na9cRuTQKJHtlLNtLtJU.PA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes.
+Hi all,
 
-> do not want to cover them up.  So we are firmly in "fix all architectures"
-> space here, sorry!
-> 
-> I am happy to accumulate those patches, but cannot commit to creating
-> or testing them.
+Today's linux-next merge of the samsung-krzk-fixes tree got a conflict in:
 
-Okay, I posted 3 patches for each arch and CC'ed you. BTW, it looks like
-something is wrong on @vger.kernel.org today where I received many of those,
+  MAINTAINERS
 
-4.7.1 Hello [216.205.24.124], for recipient address <linux-kernel@vger.kernel.org> the policy analysis reported: zpostgrey: connect: Connection refused
+between commit:
 
-and I can see your previous mails did not even reach there either.
+  421f2597bf42 ("MAINTAINERS: Move Kukjin Kim to credits")
 
-https://lore.kernel.org/lkml/
+from the arm-soc-fixes tree and commit:
 
+  215f06d7efc2 ("MAINTAINERS: move Kyungmin Park to credits")
 
+from the samsung-krzk-fixes tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 9bff94560b42,40b4a582b4cc..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -2374,7 -2374,8 +2374,7 @@@ F:	drivers/i2c/busses/i2c-rk3x.
+  F:	sound/soc/rockchip/
+  N:	rockchip
+ =20
+- ARM/SAMSUNG EXYNOS ARM ARCHITECTURES
++ ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES
+ -M:	Kukjin Kim <kgene@kernel.org>
+  M:	Krzysztof Kozlowski <krzk@kernel.org>
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+  L:	linux-samsung-soc@vger.kernel.org
+
+--Sig_/na9cRuTQKJHtlLNtLtJU.PA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Z9yMACgkQAVBC80lX
+0GzYWgf/VfHkAXBwa0wdo2/ometxew1bu3V65UyDqgpkEQUGcSHZfKxdYkNiGezb
+iat9HAWPaAykx5GC2ParPFTpzJ9iCcfReKxAl+NRtPNRPxbk9gCmQnpbkWZPbBtQ
+RkGonxF5okE6x22fFteYZN3LuFAK+tWXSok3qO8HUq/Ome+I2h2cHVamvy/EGQje
+ny6O3qOhWXgWyFQtIPp93snZMrDaxyqDfmb+Nxz6lemcE69NFbDUV+SmU+bWRL6n
+MUhwfMR6Y2kSrVHBCFY4RnOs4vZO6pomH7g+p8Gjr/AX5X1LtBrJLYWC2kexgs9P
+Kw9W50GGeDSCkgL+jhO9NqCdVrJCZA==
+=nNNA
+-----END PGP SIGNATURE-----
+
+--Sig_/na9cRuTQKJHtlLNtLtJU.PA--

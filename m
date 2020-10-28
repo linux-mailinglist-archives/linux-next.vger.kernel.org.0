@@ -2,99 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C41829D661
-	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 23:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B0D29D662
+	for <lists+linux-next@lfdr.de>; Wed, 28 Oct 2020 23:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731145AbgJ1WNy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        id S1731112AbgJ1WNy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
         Wed, 28 Oct 2020 18:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731141AbgJ1WNu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Oct 2020 18:13:50 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC820C0613CF;
-        Wed, 28 Oct 2020 15:13:49 -0700 (PDT)
+Received: from ozlabs.org ([203.11.71.1]:53829 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731102AbgJ1WNu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:13:50 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CLYnk4qtVz9sVZ;
-        Wed, 28 Oct 2020 14:23:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CLYtf3DXRz9sVm;
+        Wed, 28 Oct 2020 14:28:10 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1603855434;
-        bh=oJhuytnB292Ilh+yRwjz/kSE+ZRELSDD89xS25RdtzA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bOsixbOWOpmsOMNQlUbHGNiQHW5lPRaOlrV0r2qtV37gmGgaz75R5PAnCc1Fkxn19
-         OxgSO5PxsdOfghGNZE0hbBt58OzoTNAXTiqIq8NvDNACxxocM+6Ze66SadtYs1hvgM
-         dOjTkdeXSMXQtzR8xFetCMXqpvPePr+gVtRNrMnyYKPjc6P8o6QPfCetjvVEFd3fLe
-         Q3fhCRMsFMRbO50MxcNOYLsg69SqrxETBNja8fGj1nGHXYdy+qDV4n+ibfZ9IDWjyT
-         mJVm9Ff/C8T/VCoSwL7JUclV8PcgC/PAdPntbV+gZkZqEBN+7F3FqX30vqMUHOm+Cx
-         VNl5LIKmqDrng==
-Date:   Wed, 28 Oct 2020 14:23:54 +1100
+        s=201702; t=1603855690;
+        bh=x8iEWXpX3VRcXzbHeP1/0YLkUBA0/p+ybf5B8oj75dg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j9aBfHGJfd40R9ZZU8fv1cW1wH6aNuBKxttOq5WB7T+g+frMSpb3zoHU7q5dSynsb
+         twuUc9Tw5jab1Nq0I09PJQLLq7olzGWguBuJzUoCu21t18klNhBUN/Oehwopef4Nt0
+         sGCP5lPgMkc2IDjLO9+YARhUPITiQZbA2f7L5dWeyaRo4OR/awv9McrWCxEhAeF/JF
+         GUVicvL1+e186JY1xRrIF+s7iTezVoEqRZpQ8vv89B5PiMIkPNz+C6D/IKFZ4roFru
+         TXUKG6L3P3+hntOMF3nWu9BYbsRiZwbYBy8idBHk/wLsAO2ErIExwkmHKircmqPa/F
+         PEZqO81GH65GA==
+Date:   Wed, 28 Oct 2020 14:28:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Micah Morton <mortonm@chromium.org>
+Cc:     Thomas Cedeno <thomascedeno@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the counters tree
-Message-ID: <20201028142354.11d42e47@canb.auug.org.au>
-In-Reply-To: <20201028142039.6c7eb38a@canb.auug.org.au>
-References: <20201028142039.6c7eb38a@canb.auug.org.au>
+Subject: linux-next: build warning in Linus' tree
+Message-ID: <20201028142809.09f7f4b4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tR5wFMhIVnqkvtzkrEgxdnZ";
+Content-Type: multipart/signed; boundary="Sig_/qCP4iW3wX/8x6tq_IXpp.0w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tR5wFMhIVnqkvtzkrEgxdnZ
+--Sig_/qCP4iW3wX/8x6tq_IXpp.0w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 28 Oct 2020 14:20:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the counters tree, today's linux-next build (htmldocs)
-> produced these warnings:
->=20
->=20
-> Documentation/core-api/counters.rst:45: WARNING: undefined label: test co=
-unters module (if the link has no caption the label must precede a section =
-header)
-> Documentation/core-api/counters.rst:48: WARNING: undefined label: selftes=
-t for counters (if the link has no caption the label must precede a section=
- header)
-> Documentation/core-api/counters.rst:61: WARNING: undefined label: atomic_=
-ops (if the link has no caption the label must precede a section header)
->=20
-> Introduced by commit
->=20
->   37a0dbf631f6 ("counters: Introduce counter_atomic* counters")
+In Linus' tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Also:
+Documentation/admin-guide/LSM/SafeSetID.rst:110: WARNING: Title underline t=
+oo short.
 
-Documentation/core-api/counters.rst: WARNING: document isn't included in an=
-y toctree
+Introduced by commit
+
+  5294bac97e12 ("LSM: SafeSetID: Add GID security policy handling")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/tR5wFMhIVnqkvtzkrEgxdnZ
+--Sig_/qCP4iW3wX/8x6tq_IXpp.0w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Y5EoACgkQAVBC80lX
-0GzvAAgAoKmOxrb2OBqecpH5hSq6vGq+8aH2DYiEwNN3l8yMweHtPtZIy1KP8/fn
-vD2otOhmai1EE017z4E/UW7MBc8FjLSJQx7EwwtBRdKLN99tSHPvsom7IHAatzxm
-EKenwXEzBWfpBxPiIXlN9nuASKmvIvov9anNYnwJK0RECk8KpICBkVmy85RDfzaf
-gl6xaaRKyaaEBQFPKwlLYhdId9iBe2ytHqqp//0wH4g1wEf6F0kTZZrTgBvs31ZQ
-uUXdkxy812l1tbWzTrSywXuMi+CX6JQnqqSokjUnS6OoQQ0iFzsMSXZhheRVsf3C
-bFrbV4ZWHSbTqhtKujOlXZrxrj7lkA==
-=Sj3U
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+Y5UkACgkQAVBC80lX
+0Gxlrwf/Zdp5m6WnKB7xlIfXbB0VShqy4VmTvCJzCeuCkxBIgk1spfSW6vbkEbma
+OCqlutwnghdH/dsFpPWMOU4Ep17jFqguQiwcw22bn7xN6WNHn+5leG8GTUUD8H76
+bCzdR9iQGLV7mspLAhOU7dTyVHssVlqO99vfPexdFMKTWYy8UpNLZb+IGO3KjFcs
+NVGSjLjfZ4HzOkuDl6doel60f0aUb6ZYzhEXhRifHZ1rMKAlvZ2QmE8ESkNG/xFO
+PJMdW+9PZyl+rzj/R6Hk3kweDUYsr7n8SN9AZ8e6wnbk25pc8E3mJ5VvDWteoj53
+i+EDILhLNdbJ0KgA0SwQlviWc0Knpg==
+=2z7s
 -----END PGP SIGNATURE-----
 
---Sig_/tR5wFMhIVnqkvtzkrEgxdnZ--
+--Sig_/qCP4iW3wX/8x6tq_IXpp.0w--

@@ -2,61 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB7C29FF18
-	for <lists+linux-next@lfdr.de>; Fri, 30 Oct 2020 08:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8670829FF24
+	for <lists+linux-next@lfdr.de>; Fri, 30 Oct 2020 08:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726053AbgJ3HwK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Oct 2020 03:52:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726052AbgJ3HwK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 30 Oct 2020 03:52:10 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21B2022210;
-        Fri, 30 Oct 2020 07:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604043696;
-        bh=EzS4Q085qiKWq0D+PvSXvFRn693pGfvNpZNQQ9f3iFI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qjgCdNllhDqfGgLQRuI3A4WCt10168Nb/SKVoUozUmNGEGzJorCXdNGsQ1P/qzYEU
-         q1qGDmTsm5O7LhSJHy9/FDg797yJCoDx8uu1eULkFCBFTcD2W600xLmR4L0ydk/F3p
-         jfcBk7N2VW1FveWFJftEEsqavrTRHg1QsESuMRS4=
-Received: by mail-ed1-f42.google.com with SMTP id l16so5646108eds.3;
-        Fri, 30 Oct 2020 00:41:36 -0700 (PDT)
-X-Gm-Message-State: AOAM531JAGr49jsvUsgeM//fAObzvuJyfg+kbiq36w3NZB0SgDgpsy6n
-        MGPRf+m6WVKgx4NrIPXXr3TJsZG54CkTeKzH/yY=
-X-Google-Smtp-Source: ABdhPJxge1YztybJz+XVGLvussORcQAXRiCZsUYCxXGbaVy2UmWQavumA9JP59uf+LBXYWaM/uUmlEVySdUWx3per5Y=
-X-Received: by 2002:a05:6402:cf:: with SMTP id i15mr982230edu.246.1604043694545;
- Fri, 30 Oct 2020 00:41:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201030081018.11279822@canb.auug.org.au>
-In-Reply-To: <20201030081018.11279822@canb.auug.org.au>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 30 Oct 2020 08:41:22 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPfy-iXsL43S2AYrOXGzbKjxi_Cp6BvP5zNTGGe9+G3V9w@mail.gmail.com>
-Message-ID: <CAJKOXPfy-iXsL43S2AYrOXGzbKjxi_Cp6BvP5zNTGGe9+G3V9w@mail.gmail.com>
-Subject: Re: linux-next: failure while fetching the pinctrl-samsung-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726004AbgJ3Hxj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Oct 2020 03:53:39 -0400
+Received: from mail-bn8nam11on2076.outbound.protection.outlook.com ([40.107.236.76]:35168
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725808AbgJ3Hxj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 30 Oct 2020 03:53:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SNMAucOttP9vs4bo4dJueXQkvcevnYmXyx0uLHmg/5a20SsDGW43Xck72V2qD2/50osUPwK5dyE4bByA1rpiyZmd3AsKWBb85rw7yR9wAWFQLuvRsixrktaIYMgHu0Ey+TIIXNvWC2WwB0lCRFh1CngUOpFeb31E6b+sfKHZ8xB3Mw+dx0NYiBEFKLf1t7qdRoTrneNwFz3HO+S88716r8R9r2smgImEXXcNhF1Q17X/BR7qR+WBHRS7ToaR+Cuhez44slI6ckytwF4Z6FWjwyS734Jj0ho1p3avBTV+XXood+n7g0cM4LDS0/wE3b3IJ+sjIlBQNw0R0myy5GpcHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fzl5gviIFETWK+NjsJTopXHtk+UaM1dsBn2Zg6iI4bs=;
+ b=XIOX5ax87fcLMvkyGLZwq3Hf4fkuDxBO8Adp8mI2yX0DBMuKlRXULHteulu3k6z0zAdb91QmQ3WEXZzSXJnHZ0OXIuQm5V9USTChbQF9zRed/1ZvmvQPl9wtkvH0i4EdcAczz+rZIZnTzu0r5ajooKnFTfmTkKVchwqPqgMhUhJyBdDk7kJYjIrKJWcgEgeeAOletNG7w+FDHuZw7DXz/jVjj68Q10iZ1COM6q57/M0NAWsy5t10dalP+Zd+WBVQBpSeBJw3HOBTHh3qf+XuwsoecmpeRPhyZ7PxyNJ0knj8vwXuXMhggQ+7XTBFU8e6rjXVkKYlm/+gLOR5xzKpVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fzl5gviIFETWK+NjsJTopXHtk+UaM1dsBn2Zg6iI4bs=;
+ b=pEBiqpOeuYFp4u1cvoroD0DtShAU7tNA3+/1SVcmT2Qd5Raq3ZB3z5EfxhYQEAlvVh3cJ23+cVslt7iK7cVJzsIQiGZrwmHPNL/OMeDLvTvyldbwRVOtnwgvW2kIqTNnum/XZOi9rptpGtFjy2AUk8lt8AIzVqGZYHb9HPy1w6Q=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3764.namprd12.prod.outlook.com (2603:10b6:a03:1ac::17)
+ by BYAPR12MB3269.namprd12.prod.outlook.com (2603:10b6:a03:12f::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.25; Fri, 30 Oct
+ 2020 07:53:34 +0000
+Received: from BY5PR12MB3764.namprd12.prod.outlook.com
+ ([fe80::21a4:4ed1:c6bb:5437]) by BY5PR12MB3764.namprd12.prod.outlook.com
+ ([fe80::21a4:4ed1:c6bb:5437%5]) with mapi id 15.20.3499.027; Fri, 30 Oct 2020
+ 07:53:34 +0000
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20201030110712.040bc95f@canb.auug.org.au>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <3c46b1d9-3bf4-9a76-5328-0fb3bb0b42f2@amd.com>
+Date:   Fri, 30 Oct 2020 08:53:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20201030110712.040bc95f@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [2a02:908:1252:fb60:be8a:bd56:1f94:86e7]
+X-ClientProxiedBy: AM3PR07CA0071.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::29) To BY5PR12MB3764.namprd12.prod.outlook.com
+ (2603:10b6:a03:1ac::17)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7] (2a02:908:1252:fb60:be8a:bd56:1f94:86e7) by AM3PR07CA0071.eurprd07.prod.outlook.com (2603:10a6:207:4::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.10 via Frontend Transport; Fri, 30 Oct 2020 07:53:33 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 38d3431e-1ad5-499e-a138-08d87ca8e719
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3269:
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3269FE203325A0DB0098057883150@BYAPR12MB3269.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1013;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /FSlxOyKNiDpTqZMWCTo3ZSgS0RMknv1L8i8eJWtVelYyTfVNLUenhE9IwMKpAirL8XHlORdkiRuagEPG3KyZMxgnKX5WB5sb+DyXcVSlxFiZczvaViVEsSbrPeym3C3kaIoz2JNmZQ/FXzj8Y0ywKwFv3G3tM1W6QyJqF5hOgSReR5Swo/8M9C4jhfStT4ssugi1MEX0z4OIXrBRxssl2futtB5Q+8piiWAec7FxTd4gKAGpcyRsB7QfvZAUlHL64gDbkKTRYQ8tGo+XpXlCtnZSGEG3xHzMOJoUkH54k6M/MxuwsaDZwnTrOqfp4HsX2GFcBACvph49tR8Gde8xpvWFaobzux/SoiPsy24aQhnjmfLFa6wWfUvPRIKUVumDgEwzvsCg78WzpEYegh2Fqcs9v7ViaxYukVlHIsNUHM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3764.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(86362001)(5660300002)(54906003)(16526019)(52116002)(4326008)(8676002)(186003)(6486002)(4744005)(478600001)(6666004)(31686004)(8936002)(31696002)(2906002)(36756003)(66556008)(316002)(66476007)(110136005)(66946007)(2616005)(43740500002)(309714004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: dgBjwBf4JXjQPHmBEdnDHd5P4S0TGBk7KmGPmE66EGtgmSLWJSar+o9rPqpnXSAhGkVBv89H7CZq6FlHjAL0MZUaCDSev3TnDJC0n44NxbX0CokyCFXb2UKMXsZ8rpy3dCyZd0pkqUlqipDRyl+rziMXbgNdeB4hsYvJkdZhxsSbfW55Qp+5hnZYFMImNXc+7xWm0ERn+CDgVvxs4Fz5IxNiCPWJFMMLD+0zDBUYno731e1/CBonXg0R7cFqvuGb2DD3P0iX1D6/vcQcll6o5q2mkVCDHj8EK6xHqJ+Ngpkp8SHENmMA95eMb7N3+HDP7+L7Dlqn6En2k393nKQ62Y5QE7U/PM2nlEERWSD0a/n90MktDm4Nr1caO100QwKw2kHfQR2cToiKvkGx/RZCSd1rJbrcR7cM3yUIC0I7jgGqyrAIwghuUCfwNa7aMul9026Ql5G2LpXkYhM+EI+s+5+99VDlRGaV+AdusIc5GDCJAd773l1jjQs+uzEoJE8jLSjNMxjW0jLH4gsbTz+1wjwtqFnjE9OQKM3lzjXzopqvrMm/lUSk/jqRM8w58gAG2yk0Cy5JDZAcVjrRufp2++zlOF6pknG59XZF0jaL7Q2y/S0p+95oaOKu1/KErAqUJSL67a4+r8Pm+ZkCAgrWHVu89GCcE/KZ9Wx5tZDiyjJIwioSn+KRmHJDpF3kNVxY+aEY4wkpR8tsKuBY8QDcKA==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38d3431e-1ad5-499e-a138-08d87ca8e719
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3764.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2020 07:53:34.8240
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vzzb4Uwwd6sH//ETXIR8ICQQedrM/xDctapFXTc66F7wUdqfDxkGefUfOKPsOP/S
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3269
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 29 Oct 2020 at 22:10, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+Am 30.10.20 um 01:07 schrieb Stephen Rothwell:
 > Hi all,
 >
-> Fetching the pinctrl-samsung-fixes tree produces this error:
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 >
-> fatal: couldn't find remote ref refs/heads/pinctrl-fixes
+> drivers/gpu/drm/nouveau/nouveau_ttm.c: In function 'nouveau_ttm_init':
+> drivers/gpu/drm/nouveau/nouveau_ttm.c:320:19: error: implicit declaration of function 'swiotlb_nr_tbl' [-Werror=implicit-function-declaration]
+>    320 |  need_swiotlb = !!swiotlb_nr_tbl();
+>        |                   ^~~~~~~~~~~~~~
 
-That's my fault - I wanted to have unified naming across by
-repositories. Could you start fetching branch "fixes" instead?
+Mhm, thanks for the note. Looks like there is some merge conflict to me.
 
-Best Regards.
-Krzysztof
+In my tree there is an "#if IS_ENABLED(CONFIG_SWIOTLB) && 
+IS_ENABLED(CONFIG_X86)" around that line making sure the function is 
+available.
+
+Going to take a look later today.
+
+Christian.
+
+> Caused by commit
+>
+>    ee5d2a8e549e ("drm/ttm: wire up the new pool as default one v2")
+>
+> I have used the drm-misc tree from next-20201029 for today.
+>
+

@@ -2,76 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 548562A02E1
-	for <lists+linux-next@lfdr.de>; Fri, 30 Oct 2020 11:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7168F2A038B
+	for <lists+linux-next@lfdr.de>; Fri, 30 Oct 2020 12:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgJ3KaA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Oct 2020 06:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S1725876AbgJ3LBN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Oct 2020 07:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgJ3KaA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Oct 2020 06:30:00 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D105C0613CF
-        for <linux-next@vger.kernel.org>; Fri, 30 Oct 2020 03:29:58 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id n5so6037050ile.7
-        for <linux-next@vger.kernel.org>; Fri, 30 Oct 2020 03:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=9sx1pWoZJXcLY5Wm9TAUSmY3vOK4DUm68sL/ca16vuM=;
-        b=NR8L81S9+Q2rXA+eNj78mO7XRQt/RQds0XcWiIlxQrVyNS5GfvcsC4N6yEaw/f8ASU
-         s1m7i8Y+7SbD4J7dAmapYnZlltdUG/gVaPWBLa5DciSelzGlDb4qFKHJxhhksIajQ3P1
-         OH23wga6hVxGgb6M9F79k86YLkAf7XIVFvrwyt9Kc8eK7/KC+hcZCMuGZzLBPO4jZG1m
-         XzFwzagCmUmBPdx62fq2AGUwhruZGjTYo6sVz7mgGW+X9iJaETPm1vsTB0wnvj1mig2g
-         MeJ0D+uWfjT8t9XQsPkACY7Mdbu3JT+qtdhKxL8YfQ48DWL0j6q07HPYCE9rNVhbYR9m
-         1W2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=9sx1pWoZJXcLY5Wm9TAUSmY3vOK4DUm68sL/ca16vuM=;
-        b=fBXsHXD2LU9XDxkxAwGMwwqwJtOlfBoo9HQOaHMHhrVIGmZmy4hP84XWQNw8emklP4
-         PgsCXEp/sAzXpwwkCAgMf/JNs0cd4EATXb3PNmiDy/rA969wvCPSoB/+7BJ8cUBcJfuI
-         Eo4jWgX+yLCj3z370gYHye0JTrGDuS06tp+wFkc7Jn8VDhYZmKP3zYoxbmC3+Nb+gU9n
-         19PSSpp2LebmT3fxLoRCzKwmNLM8oFKw1ruRXHOka/UePDbi3ynJl/FXMZwDalcNnxzD
-         n2yjqI7XoF65ulKYCtjBQh3Vmvb6FmtmkG+cBG4urOW9SYfO8Y4tkzSaeLGO5v4aoY1A
-         PBUA==
-X-Gm-Message-State: AOAM5305N6vWsuodxu/+gd5sBIomiNsg9OIaRqsUGQUY1sv6Flnfz7gl
-        FODSPu+1vriZgPfP4QPw/xWbVQoqanrPToFxx2qJHC8h+1E9ZQBC
-X-Google-Smtp-Source: ABdhPJwKPzdHqKZmTe0eTTdzPBkY2P1Ps01r+uZ6c9N+iLdEzFKoIHdfBMck7ydrFn1gCt7CIdg8r7pdE9inLUPmDxw=
-X-Received: by 2002:a92:9ed1:: with SMTP id s78mr1294883ilk.71.1604053796854;
- Fri, 30 Oct 2020 03:29:56 -0700 (PDT)
+        with ESMTP id S1725355AbgJ3LBN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Oct 2020 07:01:13 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1A2C0613CF;
+        Fri, 30 Oct 2020 04:01:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CMzrN0dlRz9sRk;
+        Fri, 30 Oct 2020 22:01:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604055668;
+        bh=uEbNdyWgkBsqCmRQGYsCDMHY6jZJ6AZC3FBmS5PdPko=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P6nJ4foGeNUjTx8BdAOQPEfmepgGMSeAY4Fc2QIrkmPkk2b0A5RkMPazJJ6Eoy6TO
+         pRd3CWCF5Dlpv+td3uVxGp1zRzmxh55az7LAdgV5vOyoV+A1aBwvwzIdYNotm5F5FO
+         9C4r9yVCKbWIWcB3BDrfLDnAATqLkzEnPCu8KG96ep6Lo8uEG/snpguh9/yRyY1ccO
+         STMuLVzI0yRSqLxnaMxRMhRy0u1ALudNL1bgYKq8F1ZUB74w/livobnky2ZXi47PGZ
+         gZQYAqv6Ucd8/h3sW2qcazuEkWWOUle+3jCB5KlWtFPvPMGm8SQvmWNPwanTCFLtsg
+         awhAXWavMDZDw==
+Date:   Fri, 30 Oct 2020 22:01:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: failure while fetching the pinctrl-samsung-fixes
+ tree
+Message-ID: <20201030220104.5cb6b2c1@canb.auug.org.au>
+In-Reply-To: <CAJKOXPfy-iXsL43S2AYrOXGzbKjxi_Cp6BvP5zNTGGe9+G3V9w@mail.gmail.com>
+References: <20201030081018.11279822@canb.auug.org.au>
+        <CAJKOXPfy-iXsL43S2AYrOXGzbKjxi_Cp6BvP5zNTGGe9+G3V9w@mail.gmail.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 30 Oct 2020 15:59:45 +0530
-Message-ID: <CA+G9fYth+F1TnG6GQNKtrxvChvX9m+nGa8LKFG18WCzsqNJg5w@mail.gmail.com>
-Subject: arc: kernel/entry.S:310: Error: inappropriate arguments for opcode 'and'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, lkft-triage@lists.linaro.org
-Cc:     Christian Brauner <christian@brauner.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/bHnf/VFzpfbF5p.oxx3B4AB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-arc defconfig build failed on linux next 20201030 with gcc-8 and gcc-9.
+--Sig_/bHnf/VFzpfbF5p.oxx3B4AB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-make -sk KBUILD_BUILD_USER=TuxBuild -C/linux -j16 ARCH=arc
-CROSS_COMPILE=arc-elf32- HOSTCC=gcc CC="sccache arc-elf32-gcc" O=build
-uImage
-#
-../arch/arc/kernel/entry.S: Assembler messages:
-../arch/arc/kernel/entry.S:310: Error: inappropriate arguments for opcode 'and'
-make[3]: *** [../scripts/Makefile.build:364:
-arch/arc/kernel/entry-arcv2.o] Error 1
+Hi Krzysztof,
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+On Fri, 30 Oct 2020 08:41:22 +0100 Krzysztof Kozlowski <krzk@kernel.org> wr=
+ote:
+>
+> On Thu, 29 Oct 2020 at 22:10, Stephen Rothwell <sfr@canb.auug.org.au> wro=
+te:
+> >
+> > Fetching the pinctrl-samsung-fixes tree produces this error:
+> >
+> > fatal: couldn't find remote ref refs/heads/pinctrl-fixes =20
+>=20
+> That's my fault - I wanted to have unified naming across by
+> repositories. Could you start fetching branch "fixes" instead?
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Done.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bHnf/VFzpfbF5p.oxx3B4AB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+b8nAACgkQAVBC80lX
+0Gz+ggf+KISLVg+n1DviT0rgLLOWI+BQDrbaVSxcBRcolUFbmsQuRuJHQm8Sh8cY
+TpAh2ycotVwkH5C32+K30w3vWKBjcFjaAmNr+ZItsDA8S+GZgQtjLwOEahHN34oI
+1J33asOIB9pMEyRM0Lv7r6M98NeRMelMk6je1WrfklZ7OAaaSOoO0OjKBzhb8LHc
+oY2lljhXEVov1L4Vu2V/xvcWeKequ5MrCKuSWNiMyh7Vx/LnGHGyjSJy5OFVdmMI
+1PToUwoB9gi6ZvQq46YwhJbH07R2n4vfSdque7mwKdSzs8xvReBKDOvMaNrv4UFr
+aMQ6XhD75qZCNGTBK4+N6QmD4ajo4g==
+=trig
+-----END PGP SIGNATURE-----
+
+--Sig_/bHnf/VFzpfbF5p.oxx3B4AB--

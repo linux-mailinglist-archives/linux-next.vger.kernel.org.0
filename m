@@ -2,106 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADB52A0E14
-	for <lists+linux-next@lfdr.de>; Fri, 30 Oct 2020 19:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558D42A2056
+	for <lists+linux-next@lfdr.de>; Sun,  1 Nov 2020 18:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbgJ3SyN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Oct 2020 14:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727478AbgJ3SyL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Oct 2020 14:54:11 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA952C0613D2
-        for <linux-next@vger.kernel.org>; Fri, 30 Oct 2020 11:54:11 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id q1so7396068ilt.6
-        for <linux-next@vger.kernel.org>; Fri, 30 Oct 2020 11:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tMf9AMfk/yExuJKM8/1UQ09FC8NZ7U74R97RQRlMSQk=;
-        b=qbs2IpGzLhkpw0uwpAmPgsR/EZMviSXvaO1JC73XPnteDt9+10kEjCiAWbXnMYREqp
-         7uGQkGHqh3ltb6ZM0IHKXJKuH9Lb6jh8SG3AaHfnGyr+t+sUt8MQB+vsxyZ1u6+8pRZb
-         aCV7u0Z0vqg824GmoM0s5cGIuSlTvCnHGJSjh29uEOeFTaaihtiVpwyfRr4eXnLusqIM
-         W49Zj4iefGDGyfzOwpgygg7JB0lFWcViwKotbdYWxg1xcfOFo40Bo7QyeAQgHZUrTfoN
-         QfybkZsiFCK3XpVZlcZNXpqrqq8xkhNkqR16NYoIjKhRTjrsQsbioytcth8C+5VWUzCL
-         dtNA==
+        id S1727212AbgKARbI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 1 Nov 2020 12:31:08 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:33489 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727119AbgKARbI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 1 Nov 2020 12:31:08 -0500
+Received: by mail-qk1-f194.google.com with SMTP id l2so9638392qkf.0;
+        Sun, 01 Nov 2020 09:31:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tMf9AMfk/yExuJKM8/1UQ09FC8NZ7U74R97RQRlMSQk=;
-        b=HOffSpGW30v8+y/IGqufgUYZOaSbdX8EKoPgAPXLE6RBkHQrngKaBVNQ5QVM4rWMmT
-         9pxGeWc1qQtVDS/5eA251VoEYxCu2BFbVOmJtoRWVh277zqSCsobdb8UaC93IO6yGRhK
-         d8oOKSdVR1/TcO5YmKj3eraUKYTVXw7izloayoayYJxF9CzN4EKxv4A3wQUQGFojRFdE
-         p37bM7miYt1Sz/YJFQECI0DMMI/0ID1Z3MkNa+66iJew3d/cBgROXccR5DiCdohiMUk+
-         v0q7A3hbb/CrdhlRgO656JhYnZSfGMJvSigLluTlHKuWE2ao8bEYctcw/n9ex4P1Iyuh
-         q/qQ==
-X-Gm-Message-State: AOAM531eVYLIGO2gJ5cajY5Ca26PYoJc+yVvkgncTiBgTM/mcfEYGQu/
-        3xqvQ7vZUPhjjDbWIrrtYwZiQQ==
-X-Google-Smtp-Source: ABdhPJygEwBCwgS21Sv8OA1FMW1uGttXMamKu8Op1aaIHgTyd6UjfUohmMCrzJlkyGbxChkRrYxRKg==
-X-Received: by 2002:a05:6e02:dea:: with SMTP id m10mr3058662ilj.106.1604084050607;
-        Fri, 30 Oct 2020 11:54:10 -0700 (PDT)
-Received: from [192.168.1.30] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id n15sm5598618ilt.58.2020.10.30.11.54.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2020 11:54:10 -0700 (PDT)
-Subject: Re: arc: kernel/entry.S:310: Error: inappropriate arguments for
- opcode 'and'
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-References: <CA+G9fYth+F1TnG6GQNKtrxvChvX9m+nGa8LKFG18WCzsqNJg5w@mail.gmail.com>
- <5273a136-ac9c-94fc-b6e1-d7a0abf2b385@synopsys.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <33ead693-0cf6-adef-c513-fd3ba0c1a6eb@kernel.dk>
-Date:   Fri, 30 Oct 2020 12:54:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5TxGQj59r4R36o8V2KKsYZ1N9+Qp4l0BQbumIvYBoMc=;
+        b=NrvEQ7hDvXcRfHtwpnirRnYvhrIueTCmddMiZRgcmLIy6z+F7iBV4QYCp4Om8GxCGW
+         k1Qa4/LBcy26qRiJnRSW2Pr32+pJwbAvgUy6YsxHSPu7d8MRtFADgBaMqtHMhDuevRYJ
+         VTXgcqNe/Iew38TMpSot2iCZznVWcIRA1q81RPDfIsMZjSz3aBSldNDqNj6ur42hGnxf
+         H34qRyj5M082LNsr7D9U4NTs9MpMbtJb3NeO5aS/lgV/3LvGnVr5OGQsLFBqj/gZQz+P
+         ndy6x2oF3NC6E6e95kD01uUeYSSVTfdhXxbribJMDlBkENBhX8dHHj2uRtvIiQn+S/9o
+         MD0g==
+X-Gm-Message-State: AOAM532XSHc8hannoNWiqb0ajTqK4mCvrqquDUJOs/T8KpPSarmUKw4Y
+        90Jt39BauqAFsOTA5jrGPI9I7UaQEoDPpA==
+X-Google-Smtp-Source: ABdhPJzQLQ9k/lY1RhAPb/81V0g5gEghldV+tV+7+1mtiyO9ZTBZNL4kvtzpCdSDmnD26O3xxlx+Vg==
+X-Received: by 2002:ae9:e509:: with SMTP id w9mr11105749qkf.311.1604251866893;
+        Sun, 01 Nov 2020 09:31:06 -0800 (PST)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id t60sm784981qtd.65.2020.11.01.09.31.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Nov 2020 09:31:06 -0800 (PST)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+To:     kernel test robot <lkp@intel.com>, linux-next@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] compiler.h: Move barrier() back into compiler-*.h
+Date:   Sun,  1 Nov 2020 12:31:05 -0500
+Message-Id: <20201101173105.1723648-1-nivedita@alum.mit.edu>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <202010312104.Dk9VQJYb-lkp@intel.com>
+References: <202010312104.Dk9VQJYb-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <5273a136-ac9c-94fc-b6e1-d7a0abf2b385@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/30/20 12:53 PM, Vineet Gupta wrote:
-> Hi Naresh,
-> 
-> On 10/30/20 3:29 AM, Naresh Kamboju wrote:
->> arc defconfig build failed on linux next 20201030 with gcc-8 and gcc-9.
->>
->> make -sk KBUILD_BUILD_USER=TuxBuild -C/linux -j16 ARCH=arc
->> CROSS_COMPILE=arc-elf32- HOSTCC=gcc CC="sccache arc-elf32-gcc" O=build
->> uImage
->> #
->> ../arch/arc/kernel/entry.S: Assembler messages:
->> ../arch/arc/kernel/entry.S:310: Error: inappropriate arguments for opcode 'and'
->> make[3]: *** [../scripts/Makefile.build:364:
->> arch/arc/kernel/entry-arcv2.o] Error 1
->>
->> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> 
-> Thx for reporting this.  This is due to the series Add support for 
-> TIF_NOTIFY_SIGNAL 
-> <https://lore.kernel.org/io-uring/20201026203230.386348-1-axboe@kernel.dk/#r>where 
-> ARC patch is broken and I just replied to Jens about it. He will 
-> hopefully fix it and push updated series to -next
+Commit
+  b9de06783f01 ("compiler.h: fix barrier_data() on clang")
+moved the definition of barrier() into compiler.h.
 
-Done, will push it out now. Sorry about that.
+This causes build failures at least on alpha, because there are files
+that rely on barrier() being defined via the implicit include of
+compiler_types.h.
 
+Revert this portion of the commit to fix.
+
+Link: https://lore.kernel.org/linux-mm/202010312104.Dk9VQJYb-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Arvind Sankar <nivedita@alum.mit.edu>
+Fixes: b9de06783f01 ("compiler.h: fix barrier_data() on clang")
+Cc: <stable@vger.kernel.org>
+---
+ include/linux/compiler-clang.h | 6 ++++++
+ include/linux/compiler-gcc.h   | 5 +++++
+ include/linux/compiler.h       | 3 +--
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index dd7233c48bf3..230604e7f057 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -60,6 +60,12 @@
+ #define COMPILER_HAS_GENERIC_BUILTIN_OVERFLOW 1
+ #endif
+ 
++/* The following are for compatibility with GCC, from compiler-gcc.h,
++ * and may be redefined here because they should not be shared with other
++ * compilers, like ICC.
++ */
++#define barrier() __asm__ __volatile__("" : : : "memory")
++
+ #if __has_feature(shadow_call_stack)
+ # define __noscs	__attribute__((__no_sanitize__("shadow-call-stack")))
+ #endif
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index 50912ed00278..a572965c801a 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -15,6 +15,11 @@
+ # error Sorry, your version of GCC is too old - please use 4.9 or newer.
+ #endif
+ 
++/* Optimization barrier */
++
++/* The "volatile" is due to gcc bugs */
++#define barrier() __asm__ __volatile__("": : :"memory")
++
+ /*
+  * This macro obfuscates arithmetic on a variable address so that gcc
+  * shouldn't recognize the original var, and make assumptions about it.
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index b8fe0c23cfff..25c803f4222f 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -80,8 +80,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 
+ /* Optimization barrier */
+ #ifndef barrier
+-/* The "volatile" is due to gcc bugs */
+-# define barrier() __asm__ __volatile__("": : :"memory")
++# define barrier() __memory_barrier()
+ #endif
+ 
+ #ifndef barrier_data
 -- 
-Jens Axboe
+2.26.2
 

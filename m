@@ -2,366 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949A92A29F0
-	for <lists+linux-next@lfdr.de>; Mon,  2 Nov 2020 12:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FDF2A2EB3
+	for <lists+linux-next@lfdr.de>; Mon,  2 Nov 2020 16:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728464AbgKBLve (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Nov 2020 06:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728297AbgKBLve (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Nov 2020 06:51:34 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A51C0617A6
-        for <linux-next@vger.kernel.org>; Mon,  2 Nov 2020 03:51:32 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 13so10907934pfy.4
-        for <linux-next@vger.kernel.org>; Mon, 02 Nov 2020 03:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=31p2K0OZQYTs474Z0oi9xmfE7vEIPJ79J6mDJn6E1Bs=;
-        b=Axb3FGhh/YXCgXHONfJJ9k4zdpqVU/pwz2xf+varApmy1MCGrYlsx/KZ7+eU4IMEd+
-         YGdqYnYaFVm9nI+cmbm/l1SAFAYiEfswnrZG2wyyfueGw2bX1A93QNQHVqHeVeXDjV4c
-         mUZoo7koFKQJv5p4s/cRSe/FCGZ8f+9MZR2BLKgZQJYBS/AzafsuXvpT2P3IA0B87lHW
-         dB9gAdPr9VHkqFzg5KfcZ0CPX0Qsy9ImmVx/EcFV/rf7bfm53Q7WgUUB+ho+8MzBP7r0
-         G7dRf+iS1pcJ5kBVUZsvabfEmgPs4lr2WQswIZTjbHtci3p6WX6e0bBCaDJBVT2feQPi
-         0RWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=31p2K0OZQYTs474Z0oi9xmfE7vEIPJ79J6mDJn6E1Bs=;
-        b=fhWflSJ/5p2LahmK7oFa4c/32pcquvlOGL+VwOXfQNRrqXXvnrzBTWiugAeJi84ff1
-         0jkcrm8l0V5KMlWlfONd4Pj3r64Bnfb8Hm98dGmAraypCcmuvA345TUlUFIavUIooBBD
-         XOjwEdQ9f7tU9AfLGPtmksC9Bs9B/lwR8aK1l1oU8qV9AYw5gQdAuqDAkNbYxYdBXDdw
-         xDaGwnRMbVgbDpfRMCKwzVydgwZPOUh3gHObp4n48t9kuvihROdtAI6SCjbB4e/kUbWT
-         A7JstcrIcCpHVwjgi6IPIng2pXlex0o37QA+ImmWCu89AijPm1osDv79LwN1UcNvz3r3
-         65Zg==
-X-Gm-Message-State: AOAM53241QkOuQ8kHCvHBNVeSR30zCT3YFR4V56X2cFt3theUxjMzKVq
-        6gYjXMauR3KR7FZEDQpX9aEICRF0fO/Rcg==
-X-Google-Smtp-Source: ABdhPJyCOE9+CoPp1USgjUmp6K6VXIXRj5Nii5WIyakl8ZyNL5iPkxBtzAyIlWPuZik5OqtiQAQ8Vw==
-X-Received: by 2002:a63:495d:: with SMTP id y29mr12633063pgk.384.1604317891897;
-        Mon, 02 Nov 2020 03:51:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k5sm2981137pjs.14.2020.11.02.03.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 03:51:31 -0800 (PST)
-Message-ID: <5f9ff2c3.1c69fb81.f6792.80a2@mx.google.com>
-Date:   Mon, 02 Nov 2020 03:51:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726575AbgKBPyy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Nov 2020 10:54:54 -0500
+Received: from 4.mo52.mail-out.ovh.net ([178.33.43.201]:41823 "EHLO
+        4.mo52.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726630AbgKBPyy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Nov 2020 10:54:54 -0500
+X-Greylist: delayed 4198 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Nov 2020 10:54:53 EST
+Received: from mxplan5.mail.ovh.net (unknown [10.108.1.149])
+        by mo52.mail-out.ovh.net (Postfix) with ESMTPS id 4C11D202E3A;
+        Mon,  2 Nov 2020 15:39:30 +0100 (CET)
+Received: from kaod.org (37.59.142.104) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2044.4; Mon, 2 Nov 2020
+ 15:39:28 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-104R0056532ddeb-85b3-4075-ace5-1479fb1b9dae,
+                    8DD5A59BB4BDDF13F63AE8D0997EBD433013A0F2) smtp.auth=clg@kaod.org
+Subject: Re: [PATCH v2] powerpc/pci: unmap legacy INTx interrupts when a PHB
+ is removed
+To:     Alexey Kardashevskiy <aik@ozlabs.ru>, Qian Cai <cai@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Oliver O'Halloran <oohall@gmail.com>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200807101854.844619-1-clg@kaod.org>
+ <9c5eca863c63e360662fae7597213e8927c2a885.camel@redhat.com>
+ <fce8ffe1-521c-8344-c7ad-53550e408cdc@kaod.org>
+ <89726af2-00ca-9d47-f417-4bea8d5b8b1f@ozlabs.ru>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+Message-ID: <3497b725-9108-9f63-9cc2-ac7b1dd06c09@kaod.org>
+Date:   Mon, 2 Nov 2020 15:39:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.10-rc1-622-ga2808d2bc1fb
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 310 runs,
- 7 regressions (v5.10-rc1-622-ga2808d2bc1fb)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <89726af2-00ca-9d47-f417-4bea8d5b8b1f@ozlabs.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.104]
+X-ClientProxiedBy: DAG3EX2.mxp5.local (172.16.2.22) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 572cb46b-2a68-40ca-8586-e75424dab774
+X-Ovh-Tracer-Id: 1882504645398334316
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedujedruddtuddgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepffekffefvdfgtdduvefhveegjeevgffgjeehleeihfdvueegkeevkeduvdehfefhnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtoheprghikhesohiilhgrsghsrdhruh
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 310 runs, 7 regressions (v5.10-rc1-622-ga2808d=
-2bc1fb)
+On 10/14/20 4:55 AM, Alexey Kardashevskiy wrote:
+> 
+> 
+> On 23/09/2020 17:06, Cédric Le Goater wrote:
+>> On 9/23/20 2:33 AM, Qian Cai wrote:
+>>> On Fri, 2020-08-07 at 12:18 +0200, Cédric Le Goater wrote:
+>>>> When a passthrough IO adapter is removed from a pseries machine using
+>>>> hash MMU and the XIVE interrupt mode, the POWER hypervisor expects the
+>>>> guest OS to clear all page table entries related to the adapter. If
+>>>> some are still present, the RTAS call which isolates the PCI slot
+>>>> returns error 9001 "valid outstanding translations" and the removal of
+>>>> the IO adapter fails. This is because when the PHBs are scanned, Linux
+>>>> maps automatically the INTx interrupts in the Linux interrupt number
+>>>> space but these are never removed.
+>>>>
+>>>> To solve this problem, we introduce a PPC platform specific
+>>>> pcibios_remove_bus() routine which clears all interrupt mappings when
+>>>> the bus is removed. This also clears the associated page table entries
+>>>> of the ESB pages when using XIVE.
+>>>>
+>>>> For this purpose, we record the logical interrupt numbers of the
+>>>> mapped interrupt under the PHB structure and let pcibios_remove_bus()
+>>>> do the clean up.
+>>>>
+>>>> Since some PCI adapters, like GPUs, use the "interrupt-map" property
+>>>> to describe interrupt mappings other than the legacy INTx interrupts,
+>>>> we can not restrict the size of the mapping array to PCI_NUM_INTX. The
+>>>> number of interrupt mappings is computed from the "interrupt-map"
+>>>> property and the mapping array is allocated accordingly.
+>>>>
+>>>> Cc: "Oliver O'Halloran" <oohall@gmail.com>
+>>>> Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
+>>>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>>>
+>>> Some syscall fuzzing will trigger this on POWER9 NV where the traces pointed to
+>>> this patch.
+>>>
+>>> .config: https://gitlab.com/cailca/linux-mm/-/blob/master/powerpc.config
+>>
+>> OK. The patch is missing a NULL assignement after kfree() and that
+>> might be the issue.
+>>
+>> I did try PHB removal under PowerNV, so I would like to understand
+>> how we managed to remove twice the PCI bus and possibly reproduce.
+>> Any chance we could grab what the syscall fuzzer (syzkaller) did ?
+> 
+> 
+> How do you remove PHBs exactly? There is no such thing in the powernv platform, I thought someone added this and you are fixing it but no. PHBs on powernv are created at the boot time and there is no way to remove them, you can only try removing all the bridges.
+
+yes. I noticed that later when proposing the fix for the double 
+free.
+
+> So what exactly are you doing?
+
+What you just said above, with the commands : 
+
+  echo 1 >  /sys/devices/pci0031\:00/0031\:00\:00.0/remove
+  echo 1 >  /sys/devices/pci0031\:00/pci_bus/0031\:00/rescan
+
+
+C. 
 
-Regressions Summary
--------------------
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-at91-sama5d4_xplained       | arm  | lab-baylibre  | gcc-8    | sama5_defco=
-nfig              | 1          =
-
-beagle-xm                   | arm  | lab-baylibre  | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-imx6q-sabresd               | arm  | lab-nxp       | gcc-8    | imx_v6_v7_d=
-efconfig          | 1          =
-
-imx6q-var-dt6customboard    | arm  | lab-baylibre  | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-panda                       | arm  | lab-collabora | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-panda                       | arm  | lab-collabora | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-sun8i-r40-bananapi-m2-ultra | arm  | lab-clabbe    | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.10-rc1-622-ga2808d2bc1fb/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.10-rc1-622-ga2808d2bc1fb
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      a2808d2bc1fbfd71e47ffe18f53b4ab14ba1775f =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-at91-sama5d4_xplained       | arm  | lab-baylibre  | gcc-8    | sama5_defco=
-nfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fbe615c083ae7ca3fe812
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fbe615c083ae7ca3fe=
-813
-        failing since 181 days (last pass: v5.7-rc3-277-ga37f92ef57b2, firs=
-t fail: v5.7-rc4-211-g6d4315023bc9) =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-beagle-xm                   | arm  | lab-baylibre  | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fbc8753b8cf39903fe853
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beagle=
--xm.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beagle=
--xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fbc8753b8cf39903fe=
-854
-        new failure (last pass: v5.10-rc1-410-g125436cab6b8) =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-imx6q-sabresd               | arm  | lab-nxp       | gcc-8    | imx_v6_v7_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fbd7612ea79134d3fe89f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fbd7612ea79134d3fe=
-8a0
-        failing since 7 days (last pass: v5.9-13195-g0281c5220c40, first fa=
-il: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-imx6q-var-dt6customboard    | arm  | lab-baylibre  | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fc41c5e8acaa47f3fe7de
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-imx6q-var-dt6customboard.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-imx6q-var-dt6customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fc41c5e8acaa47f3fe=
-7df
-        failing since 7 days (last pass: v5.9-13195-g0281c5220c40, first fa=
-il: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-panda                       | arm  | lab-collabora | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fbee80cb0eb97063fe818
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f9fbee80cb0eb9=
-7063fe81e
-        failing since 89 days (last pass: v5.8-1558-g0359180fcb42, first fa=
-il: v5.8-3221-g983112062f35)
-        60 lines
-
-    2020-11-02 08:10:10.649000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c802
-    2020-11-02 08:10:10.655000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c803
-    2020-11-02 08:10:10.660000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c804
-    2020-11-02 08:10:10.665000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c805
-    2020-11-02 08:10:10.671000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c806
-    2020-11-02 08:10:10.677000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c807
-    2020-11-02 08:10:10.683000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c808
-    2020-11-02 08:10:10.689000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c809
-    2020-11-02 08:10:10.694000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c80a
-    2020-11-02 08:10:10.700000+00:00  kern  :alert : BUG: Bad page state in=
- process swapper  pfn:9c80b =
-
-    ... (49 line(s) more)  =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-panda                       | arm  | lab-collabora | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fbc8053b8cf39903fe7eb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda=
-.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/omap2plus_defconfig/gcc-8/lab-collabora/baseline-panda=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fbc8053b8cf39903fe=
-7ec
-        failing since 89 days (last pass: v5.8-1558-g0359180fcb42, first fa=
-il: v5.8-3221-g983112062f35) =
-
- =
-
-
-
-platform                    | arch | lab           | compiler | defconfig  =
-                  | regressions
-----------------------------+------+---------------+----------+------------=
-------------------+------------
-sun8i-r40-bananapi-m2-ultra | arm  | lab-clabbe    | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f9fd38934f8b66bba3fe7d5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-clabbe/bas=
-eline-sun8i-r40-bananapi-m2-ultra.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc1-6=
-22-ga2808d2bc1fb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-clabbe/bas=
-eline-sun8i-r40-bananapi-m2-ultra.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f9fd38934f8b66bba3fe=
-7d6
-        new failure (last pass: v5.10-rc1-327-ge6d922c77db2) =
-
- =20

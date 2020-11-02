@@ -2,84 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7002A35DA
-	for <lists+linux-next@lfdr.de>; Mon,  2 Nov 2020 22:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CACD2A35FE
+	for <lists+linux-next@lfdr.de>; Mon,  2 Nov 2020 22:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgKBVPu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Nov 2020 16:15:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51556 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725833AbgKBVPt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Nov 2020 16:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604351747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n8nC5dm2QcEcDOmnZj7Db/s9oem13/v8vyPc3hhuf6g=;
-        b=MePtIhso8KIg7t34ZImu3wD7IFw6yQez2Vj8Cqk+chCAoWIEHP+/V92XG1iUKbG+gIM6ff
-        gkr9hxVvnAB/hh7F4uGOA+ugCzT19SKS/bNwCBJc3Ba1qWtZa1bhdDyuOVo4Uc8fpmS1IP
-        ydCXnBkVRbRuqlX15MgIDQeLgsefqDg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-553-4m5bZXnGOneDcOI2Osgarg-1; Mon, 02 Nov 2020 16:15:41 -0500
-X-MC-Unique: 4m5bZXnGOneDcOI2Osgarg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1725852AbgKBVcF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Nov 2020 16:32:05 -0500
+Received: from ozlabs.org ([203.11.71.1]:56825 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725833AbgKBVcF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Nov 2020 16:32:05 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 40A8610199AC;
-        Mon,  2 Nov 2020 21:15:39 +0000 (UTC)
-Received: from ovpn-112-12.rdu2.redhat.com (ovpn-112-12.rdu2.redhat.com [10.10.112.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC88475121;
-        Mon,  2 Nov 2020 21:15:34 +0000 (UTC)
-Message-ID: <0bd01646f4b429e89359d0618d25f5d6cf92c4f5.camel@redhat.com>
-Subject: Re: [PATCH] s390: add support for TIF_NOTIFY_SIGNAL
-From:   Qian Cai <cai@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        oleg@redhat.com, tglx@linutronix.de,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Date:   Mon, 02 Nov 2020 16:15:34 -0500
-In-Reply-To: <b7b2fa41-fab2-7fd4-f10f-9c352bc9c692@kernel.dk>
-References: <20201101173153.GC9375 () osiris>
-         <362e3645e2c0891309c07e244a147f0c32f106da.camel@redhat.com>
-         <54c02fa6-8c8a-667f-af99-e83a1f150586@kernel.dk>
-         <d60d24de6b7c9b948333e4e288452fe0a39d2380.camel@redhat.com>
-         <b7b2fa41-fab2-7fd4-f10f-9c352bc9c692@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CQ5hy3w1yz9sRK;
+        Tue,  3 Nov 2020 08:32:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604352722;
+        bh=gtoqJfn9FIdEkbzAxub4iuBVUObrpUd1AOjxOPH8/eQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hTg5hh2YBpaLKYuKxTSrEZbnOqdhJMX/xxA6i1ZQDuZW1xOVqesrSS6YbpfZaDZlG
+         sL5Vvut9K62+FtgZ1d98Ed8Sj23csS35C9UxpUp55H8Ze9qMu9aVemnzBJzQudCnFf
+         mJSA/6cUPnY3XmqptC8p/JJAEtuRxIn203FKuZf9mJWsMX7Z/vqPRzbuSg8H+qPTy8
+         P5HKikqWtOCF6BHH/nGzcXhrV1Rr0kBUCEmVsXw/+4TKi7k/FzGUiUFn0A6LuHiXEs
+         BlarPUGLtHCO4OhgQaE40oBG6t2WdcjIRNbfbYiLBnVxhDrYQOygw6euK1WdEmywjh
+         Kz1WFDBb07gEw==
+Date:   Tue, 3 Nov 2020 08:32:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the printk tree
+Message-ID: <20201103083201.4c653eed@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/hc1z_9m0psR.L5Og6lAVvqh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-11-02 at 12:50 -0700, Jens Axboe wrote:
-> Ah, but that's because later patches assume that TIF_NOTIFY_SIGNAL is
-> always there once all archs have been converted. If you just want to back
-> out that patch, you'll need to just revert this one:
-> 
-> commit 82ef6998ed9d488e56bbfbcc2ec9adf62bf78f08
-> Author: Jens Axboe <axboe@kernel.dk>
-> Date:   Fri Oct 9 16:04:39 2020 -0600
-> 
->     kernel: remove checking for TIF_NOTIFY_SIGNAL
-> 
-> as well and I suspect it should build.
+--Sig_/hc1z_9m0psR.L5Og6lAVvqh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No, at the minimal, I'll need to revert those to build successfully.
+Hi all,
 
-7b074c15374c io_uring: remove 'twa_signal_ok' deadlock work-around
-eb48a0f216fa kernel: remove checking for TIF_NOTIFY_SIGNAL
-c634e6b63a81 signal: kill JOBCTL_TASK_WORK
-f8b667db31a3 io_uring: JOBCTL_TASK_WORK is no longer used by task_work
-4c3d9c3b415a s390: add support for TIF_NOTIFY_SIGNAL
+In commit
 
-Then, it will fix the boot issue as well.
+  8a8424bf2439 ("init/Kconfig: Fix CPU number in LOG_CPU_MAX_BUF_SHIFT desc=
+ription")
 
+Fixes tag
 
+  Fixes: 23b2899f7f ("printk: allow increasing the ring buffer depending on=
+ the number of CPUs")
 
+has these problem(s):
 
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hc1z_9m0psR.L5Og6lAVvqh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+getEACgkQAVBC80lX
+0Gz7RggAmFZG42PuTH117ZayMoNwr5k3+6pYp62xvpbHE9BdOaCxfNHoy0jWVEl3
+Hqhin3oYjtjBPVjEWCZLpohx5N20WfLGP04AUiKWenQd6RFKIOEWpclWLTyfuvhC
+6L5uolfumHR7Z8OZmek/YvLVQQmqhW47JZCVHypmEsdl41dvnOypBnytSoTuPoQv
+1iaQ9zygEjf7kvCZYF8UqChL/G1CMNjKizm55/s2U1dlalC04usRbg5myoIiPSDM
+isfQOat79XPN4ktv79gWvJCrpjRLfiTcss8vBHMXNdPetJ1781xxcARetsWyQSop
+sI6gBkYS7Ux+VUCDc/l+Brekg5MRDw==
+=w0Kh
+-----END PGP SIGNATURE-----
+
+--Sig_/hc1z_9m0psR.L5Og6lAVvqh--

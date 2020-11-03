@@ -2,116 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A24602A4065
-	for <lists+linux-next@lfdr.de>; Tue,  3 Nov 2020 10:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6892A407E
+	for <lists+linux-next@lfdr.de>; Tue,  3 Nov 2020 10:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbgKCJgI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Nov 2020 04:36:08 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:37069 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726013AbgKCJgI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Nov 2020 04:36:08 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 9F2B647B;
-        Tue,  3 Nov 2020 04:36:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 03 Nov 2020 04:36:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=JxU4guRP0kokkXgNKXrKatN5k3v
-        smVhnFnCYvoqD/QA=; b=CTkd6WvjWIpgaP7CXxIemCJLc9bT8akFL3sq1vB4oiT
-        QW7ILahxaxyJ2dhPmQ1JF6bJ/I+e56o23kBcKeT1Pl15ylnJB6yvoWCVQZMctDzG
-        CLPNFfP+s3bqzk1B4mWDAlgKl27n+uZNqPqEmVKc2IBZwMkshOG9nzbIi2yaf4Wk
-        TVfk57WnuO2RfNMD/DVre2yEf7j8Ojhmq3AhhhYBxfJI5KPLXJ3tQU6GmVy/cAwA
-        eeVG77Y+1oBhgUltmV+dfMPjgWNhYOlLhJj+D9mvQXhTzAOT93SSVwSjoPrKCWmi
-        fe/GmMRZInwrR9/VW5w2LDLKOCMZnhOSs/RdIGJocCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=JxU4gu
-        RP0kokkXgNKXrKatN5k3vsmVhnFnCYvoqD/QA=; b=ddJQ9Rb9k3rT2qSgeD+nJQ
-        nYOEqWxfs5PqONCgtfnGpsYQDbbyV7SHzngtorMVKDstddeVARRXBzyXNAvf56lv
-        QEyWdWXhlxUsssUkdhiGmq8tzJfsHBkraqyo4M48DZ6/rClGI3FlouaLSYx6DVBU
-        QzCP89u5660+8kEjgSzzyQG1aHZcQl1GaICpEMPxqivePD+WBIeZrVPieONg60vc
-        4oWqDxTUTX0VqCxt6gVCP5IsMZxNZvOSslSiRYHZzDqcnO7U2plo9RFKsBg3ba6E
-        mE19IrN+G7h4Uk1icEovu4J3UPCmldQxgJn/lg7gl5ui8VW+kfn7N4Ju6xXXQ4LA
-        ==
-X-ME-Sender: <xms:hSShX-9JqxH3mzEIKNwd5Wi0aNl4YxGJ7qoDfDLmWNuq5KSvlBD0RA>
-    <xme:hSShX-tQpRzQzNjsYVZixEJqtz8dTfEWhW2t5ukaCEJ8HwIc06MyLNvpXus269KBr
-    lx5lxU8FFtABR8seCc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtfedgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:hSShX0DuGhN4hN75UK9w7o6-RYGaQiGZ5xSDKkRGVpcd_WStCDOtPA>
-    <xmx:hSShX2ddaLxlo4K16R5o3m5srECuuEeqbFIDFcwSBelLMA1gXQlv0Q>
-    <xmx:hSShXzMTkqWqVhuvg-cM72ck0Tj5cgqtP89OdHgz3nKMBshKRYuGMg>
-    <xmx:hiShX8r4L9_4OYfjp2n-brspBy4QnC9A0-bIyJLvUoqgnn7iOF7g4w>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0F7ED3280065;
-        Tue,  3 Nov 2020 04:36:04 -0500 (EST)
-Date:   Tue, 3 Nov 2020 10:36:03 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-misc-fixes tree
-Message-ID: <20201103093603.mzmcvbzmna77vh4r@gilmour.lan>
-References: <20201103113121.4f1ffe17@canb.auug.org.au>
+        id S1725988AbgKCJnY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Nov 2020 04:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727798AbgKCJnX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Nov 2020 04:43:23 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978F6C0613D1
+        for <linux-next@vger.kernel.org>; Tue,  3 Nov 2020 01:43:21 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id t11so17466280edj.13
+        for <linux-next@vger.kernel.org>; Tue, 03 Nov 2020 01:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=FFd3mvhuQMY/+bsfnVKNY7hNDVTrPNGeeWvSKBTt/6w=;
+        b=arYDKw0T/wCpqExPGZaCoxeicaXqBaBLG/rtsFLovNIGxliIWwpjvyoeoIX4sLmmQ/
+         XcJeYYzamHLxiqIZVvh8ECoqpzi6zQuhnT8yHA2NI4i7Oj12Nu7NPW3/H2HRuAhxFS/f
+         m8UHRQjc5aVaOzzjo+9URvrphNdC8NtQCUjiXVPj6vXBJqVu1/u8sVFtS6Q6Rn/Eut9A
+         Pp6AzIsTVAnc421Fw+Jp0wXnOGkkUmdSdfGpfinV+YTNaPaJMglfAna460V9XmlJXzFC
+         sjzB/+B2mjgarsY/89FEJRgGoZGkfPCrRzBJOiTRwo3XgCpBvb9gI3Fo1VPEOR7o4jBF
+         5ETA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=FFd3mvhuQMY/+bsfnVKNY7hNDVTrPNGeeWvSKBTt/6w=;
+        b=TlLsJEC4bN3EkKviiP8EkdNu+n/hoxzingBWlzvueyhNd4Y2fSbplIBz/RPfFm/XiH
+         qv8qSFwj4a0ChebXtSOFD0dsAFfo8rFwsy3rp+x/2BMQXvIhI1GUbHJa77C0iosFHv3K
+         G7FiMhi0fpfp2HU0tCOtOjZicge5yq7KFoOQaKjRpS8PkASOh0UeWBlmPC1hO05x08JM
+         2h4qLsAM9QTusRnZnWpDdtgkGB6LNWaDtfQEKDYudByEX8fwuFK+RGo8hpUl7XQMalub
+         vZCQ70Y7WqAzH1htE3tEdQ69aidY31Mo5vMMxQ7T+8TJ7UmkNXng3Nk5C54JrqOpG1J7
+         LoJQ==
+X-Gm-Message-State: AOAM531/rC17Ym9pEoRlZY961TUnI9oVaraGtrecuDt0S3XGhe/mEjlf
+        JWCx+ZPHMHJ7hhRxkjcwGI/mbdp19kwD4mHucFfohtJIEFzt6o23
+X-Google-Smtp-Source: ABdhPJwGZRXstRG2NgMYG0hFSTe89LWHITcBb74FWuHjiKJrodeo1tE1qaHQHTez8XVyFSt3zX7Yx29h1pErpyUZhEc=
+X-Received: by 2002:a50:cc86:: with SMTP id q6mr21740872edi.78.1604396599677;
+ Tue, 03 Nov 2020 01:43:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gk5a7k24qfabtq46"
-Content-Disposition: inline
-In-Reply-To: <20201103113121.4f1ffe17@canb.auug.org.au>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 3 Nov 2020 15:13:08 +0530
+Message-ID: <CA+G9fYsqbbtYXaw3=upAMnhccjLezaN7RUjysEF4QhS6TfRr-A@mail.gmail.com>
+Subject: ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-btrfs@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Linux next 20201103 tag make modules failed for i386 and arm
+architecture builds.
 
---gk5a7k24qfabtq46
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Error log:
+  LD [M]  fs/btrfs/btrfs.o
+  MODPOST Module.symvers
+ERROR: modpost: "__udivdi3" [fs/btrfs/btrfs.ko] undefined!
+scripts/Makefile.modpost:111: recipe for target 'Module.symvers' failed
+make[2]: *** [Module.symvers] Error 1
 
-Hi Stephen,
+Full build log,
+https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=intel-core2-32,label=docker-lkft/891/consoleText
+https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=am57xx-evm,label=docker-lkft/891/consoleText
 
-On Tue, Nov 03, 2020 at 11:31:21AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the drm-misc-fixes tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> drivers/gpu/drm/vc4/vc4_drv.c: In function 'vc4_drm_unbind':
-> drivers/gpu/drm/vc4/vc4_drv.c:322:18: warning: unused variable 'vc4' [-Wu=
-nused-variable]
->   322 |  struct vc4_dev *vc4 =3D to_vc4_dev(drm);
->       |                  ^~~
->=20
-> Introduced by commit
->=20
->   dcda7c28bff2 ("drm/vc4: kms: Add functions to create the state objects")
-
-I just pushed a fix for that one, it should be resolved tomorrow
-
-Thanks!
-Maxime
-
---gk5a7k24qfabtq46
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX6EkgwAKCRDj7w1vZxhR
-xa7EAP4/4A3YLK6xqMRbgjbgjleRIoIpCAk2DyiaUKp0KsvDhAEApKtHtdCXkKBK
-6850n4kdukU0vDfZRT+HksVQqxlitAo=
-=5/0a
------END PGP SIGNATURE-----
-
---gk5a7k24qfabtq46--
+-- 
+Linaro LKFT
+https://lkft.linaro.org

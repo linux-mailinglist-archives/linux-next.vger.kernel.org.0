@@ -2,127 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDD32A826D
-	for <lists+linux-next@lfdr.de>; Thu,  5 Nov 2020 16:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEA62A832C
+	for <lists+linux-next@lfdr.de>; Thu,  5 Nov 2020 17:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730721AbgKEPmr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Nov 2020 10:42:47 -0500
-Received: from nat-hk.nvidia.com ([203.18.50.4]:47765 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730660AbgKEPmr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 5 Nov 2020 10:42:47 -0500
-Received: from HKMAIL102.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa41d750001>; Thu, 05 Nov 2020 23:42:45 +0800
-Received: from HKMAIL104.nvidia.com (10.18.16.13) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Nov
- 2020 15:42:45 +0000
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
- HKMAIL104.nvidia.com (10.18.16.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Thu, 5 Nov 2020 15:42:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gw66FIsvBsdqkhlUQJ31z/Zb3HlsbtV0sD2NBElZjqMJvDyLX+d6BdcwOjwHtM9vY9DIuPpotmpICadpQ2cwtbjPOYxQAzOhm05IFwHNqUgv0IovP6LXYQGTcfqBaG8alxsvdNAlEL6XZ6S1KwY89rxxWo6CoJFhruCBTEmQJ+vuykuFWsyAIZ9OOK/BXKVTdtUEym07Ih/6XV+cdl0kuE+5g2+ImGdUi/MIzQxvW6yiWtIDGHMC1oinpJekqW0S666woFNgV9HVsaOkrWB+SRt7kc+tA9xY3BH9hCviCwwH5TIkc8a+mRW2lUZ5/5ngSs50FNZeLgJNSi4sZirMTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UyQxcI9U4VSYvGOFt7PFjFA5hpcYXzBo013IFYhWNgk=;
- b=W691iisHIw9fvh5vT96DaYelNyvXnDIctfh7l7yHTz30IuJazkmaNHxPvh1atNQHPYQ5TDbFpRFeFnhYqqyiBRDopqIRST9FTDNsAVNOAYSNOFRY+IF8Nw3h8Zn9QjH/t29FSidaqua6n6wn/spIpQrmrQMS+5WtlQ9aDANcm4oFIeiP1BeTZvnQ8alMKvLlatxozlrDjBZl3sRVRCqEDCqcut9zJFdw+BcLw8WkmEJ1PLd0Y/B+gKMaQ98kj07z/aOH1rrpvAxMU/Mzv9D8Dj5jrVhoA6Q03N395yw6joSOsDFX3mfKX/kXaxaSaTPPMNzFWTf7kXt2Y8d8JKDyLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
- by DM6PR12MB4513.namprd12.prod.outlook.com (2603:10b6:5:2ad::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Thu, 5 Nov
- 2020 15:42:43 +0000
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::cdbe:f274:ad65:9a78]) by DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::cdbe:f274:ad65:9a78%7]) with mapi id 15.20.3499.032; Thu, 5 Nov 2020
- 15:42:43 +0000
-Date:   Thu, 5 Nov 2020 11:42:42 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Doug Ledford <dledford@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the rdma-fixes tree
-Message-ID: <20201105154242.GI2620339@nvidia.com>
-References: <20201105085458.5addbe44@canb.auug.org.au>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201105085458.5addbe44@canb.auug.org.au>
-X-ClientProxiedBy: MN2PR10CA0017.namprd10.prod.outlook.com
- (2603:10b6:208:120::30) To DM6PR12MB3834.namprd12.prod.outlook.com
- (2603:10b6:5:14a::12)
+        id S1730871AbgKEQOS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Nov 2020 11:14:18 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:42555 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730721AbgKEQOR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Nov 2020 11:14:17 -0500
+Received: by mail-il1-f199.google.com with SMTP id c8so1436836ilh.9
+        for <linux-next@vger.kernel.org>; Thu, 05 Nov 2020 08:14:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=tsd/JVbo3R0lY4M50qsZER+Cu6hHErV9thhnjy2cypU=;
+        b=K/7gpni0ICYU17mC6yQ684j8E0uJq8JhVyqrwj+C+Yh2kdF9IR3mRrySsCFcu1wtPl
+         GwMVRfUyuTYyTELQCqCg7YJrWDa5eK+1nL8Tq5XWrrYxX2x2fbp6IvrVdfhMKaL3d+yo
+         3KYWU7IdUHRyQojjEWu8TkGdw2g/6lfjDDBChBNNYLB4eF8Xdil0NzIfY8Di4//CsIIt
+         QKelAYCRpy2+TNsePTXVhBwRfa8UCOYo7PwkbICGq8rQmjzbafVws6cgs/+9trCxN2J5
+         E80z0R/hY5MUUQwhPeRlGPkRTYtugUGayLu77q7pRTUBHCHpCEOHgs1DSLPJGgu2Kt0r
+         d23A==
+X-Gm-Message-State: AOAM5339m23QYiCWSpyPiTvAVKogBaarH1PUyP3bZ2mftOeo22z62lD6
+        UzfRxXHO8PUO3sHEZMIRVHcHHkVhURfpJPSUDKVpZl22uIgR
+X-Google-Smtp-Source: ABdhPJxhBU7XP0YPUlFoo3F9BvxY+JfETUAVAXzwyqvRktu2JnDnleSvNEXC7V/oCl5n6+rOE+rM+QQRE03ffQEO3fKgBxqgmBoC
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR10CA0017.namprd10.prod.outlook.com (2603:10b6:208:120::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Thu, 5 Nov 2020 15:42:43 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1kahPO-00HR6k-6d; Thu, 05 Nov 2020 11:42:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604590965; bh=UyQxcI9U4VSYvGOFt7PFjFA5hpcYXzBo013IFYhWNgk=;
-        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
-         From:To:CC:Subject:Message-ID:References:Content-Type:
-         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
-         X-MS-Exchange-MessageSentRepresentingType;
-        b=i2ZyW/5Tqufu2uRtAstj1lxC3xRbqqwrEFyD9QGqGFkGxtvz2wtkJ7JPHsQutYKSL
-         AnTMQtqr6Zm0t8Cduo5segKaVhYFkVByAJAMugKaUO5dzXNFvyVSV7P4HwFCst8vXu
-         0HzfgXcLNvMz6zEFzTSuS+P+poGNGzP0FIu1/lkKI32oXDJYY3UEhI2nvVo/OBlu7+
-         jfD7Zu3LcG8ZxL0Xgv3o/fCBgumnZ/d6h6Nl7+HAbm8FosyhnDoGQZhVnc9hqsaY5N
-         ZsObV8AJ24aAujERycH9lhBsQViUMRcbQbAA1gh63lF+PVQqfgdTIj0Zae8TwQ9gob
-         R9MXgU6Y3PQvQ==
+X-Received: by 2002:a92:9903:: with SMTP id p3mr2573302ili.138.1604592857317;
+ Thu, 05 Nov 2020 08:14:17 -0800 (PST)
+Date:   Thu, 05 Nov 2020 08:14:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000045065c05b35e6365@google.com>
+Subject: linux-next test error: BUG: sleeping function called from invalid
+ context in sta_info_move_state
+From:   syzbot <syzbot+abed06851c5ffe010921@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 08:54:58AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rdma-fixes tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> drivers/infiniband/ulp/srpt/ib_srpt.c:630: warning: Function parameter or member 'port_cnt' not described in 'srpt_unregister_mad_agent'
-> 
-> Introduced by commit
-> 
->   372a1786283e ("IB/srpt: Fix memory leak in srpt_add_one")
+Hello,
 
-I patched it, thanks
+syzbot found the following issue on:
 
-Jason
+HEAD commit:    cf7cd542 Add linux-next specific files for 20201104
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b7bb82500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e8dc0c5ac73afb92
+dashboard link: https://syzkaller.appspot.com/bug?extid=abed06851c5ffe010921
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-From 21fcdeec09ff461b2f9a9ef4fcc3a136249e58a1 Mon Sep 17 00:00:00 2001
-From: Jason Gunthorpe <jgg@nvidia.com>
-Date: Thu, 5 Nov 2020 11:38:29 -0400
-Subject: [PATCH] RDMA/srpt: Fix typo in srpt_unregister_mad_agent docstring
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+abed06851c5ffe010921@syzkaller.appspotmail.com
 
-htmldocs fails with:
+BUG: sleeping function called from invalid context at net/mac80211/sta_info.c:1962
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 86, name: kworker/u4:3
+4 locks held by kworker/u4:3/86:
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: process_one_work+0x821/0x15a0 kernel/workqueue.c:2243
+ #1: ffffc9000108fda8 ((work_completion)(&sdata->work)){+.+.}-{0:0}, at: process_one_work+0x854/0x15a0 kernel/workqueue.c:2247
+ #2: ffff88801b714d00 (&wdev->mtx){+.+.}-{3:3}, at: sdata_lock net/mac80211/ieee80211_i.h:1021 [inline]
+ #2: ffff88801b714d00 (&wdev->mtx){+.+.}-{3:3}, at: ieee80211_ibss_work+0x93/0xe80 net/mac80211/ibss.c:1683
+ #3: ffffffff8b338160 (rcu_read_lock){....}-{1:2}, at: sta_info_insert_finish net/mac80211/sta_info.c:644 [inline]
+ #3: ffffffff8b338160 (rcu_read_lock){....}-{1:2}, at: sta_info_insert_rcu+0x680/0x2ba0 net/mac80211/sta_info.c:732
+Preemption disabled at:
+[<ffffffff88e8841f>] __mutex_lock_common kernel/locking/mutex.c:955 [inline]
+[<ffffffff88e8841f>] __mutex_lock+0x10f/0x1110 kernel/locking/mutex.c:1103
+CPU: 1 PID: 86 Comm: kworker/u4:3 Not tainted 5.10.0-rc2-next-20201104-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: phy3 ieee80211_iface_work
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ ___might_sleep.cold+0x1e8/0x22e kernel/sched/core.c:7298
+ sta_info_move_state+0x32/0x8d0 net/mac80211/sta_info.c:1962
+ sta_info_free+0x65/0x3b0 net/mac80211/sta_info.c:274
+ sta_info_insert_rcu+0x303/0x2ba0 net/mac80211/sta_info.c:738
+ ieee80211_ibss_finish_sta+0x212/0x390 net/mac80211/ibss.c:592
+ ieee80211_ibss_work+0x2c7/0xe80 net/mac80211/ibss.c:1700
+ ieee80211_iface_work+0x91f/0xa90 net/mac80211/iface.c:1478
+ process_one_work+0x933/0x15a0 kernel/workqueue.c:2272
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+ kthread+0x3af/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
 
-drivers/infiniband/ulp/srpt/ib_srpt.c:630: warning: Function parameter or member 'port_cnt' not described in 'srpt_unregister_mad_agent'
+=============================
+[ BUG: Invalid wait context ]
+5.10.0-rc2-next-20201104-syzkaller #0 Tainted: G        W        
+-----------------------------
+kworker/u4:3/86 is trying to lock:
+ffff888027f829d0 (&local->chanctx_mtx){+.+.}-{3:3}, at: ieee80211_recalc_min_chandef+0x49/0x140 net/mac80211/util.c:2740
+other info that might help us debug this:
+context-{4:4}
+4 locks held by kworker/u4:3/86:
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
+ #0: ffff88801afe0138 ((wq_completion)phy3){+.+.}-{0:0}, at: process_one_work+0x821/0x15a0 kernel/workqueue.c:2243
+ #1: ffffc9000108fda8 ((work_completion)(&sdata->work)){+.+.}-{0:0}, at: process_one_work+0x854/0x15a0 kernel/workqueue.c:2247
+ #2: ffff88801b714d00 (&wdev->mtx){+.+.}-{3:3}, at: sdata_lock net/mac80211/ieee80211_i.h:1021 [inline]
+ #2: ffff88801b714d00 (&wdev->mtx){+.+.}-{3:3}, at: ieee80211_ibss_work+0x93/0xe80 net/mac80211/ibss.c:1683
+ #3: ffffffff8b338160 (rcu_read_lock){....}-{1:2}, at: sta_info_insert_finish net/mac80211/sta_info.c:644 [inline]
+ #3: ffffffff8b338160 (rcu_read_lock){....}-{1:2}, at: sta_info_insert_rcu+0x680/0x2ba0 net/mac80211/sta_info.c:732
+stack backtrace:
+CPU: 1 PID: 86 Comm: kworker/u4:3 Tainted: G        W         5.10.0-rc2-next-20201104-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: phy3 ieee80211_iface_work
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4483 [inline]
+ check_wait_context kernel/locking/lockdep.c:4544 [inline]
+ __lock_acquire.cold+0x310/0x3a2 kernel/locking/lockdep.c:4781
+ lock_acquire kernel/locking/lockdep.c:5436 [inline]
+ lock_acquire+0x2a3/0x8c0 kernel/locking/lockdep.c:5401
+ __mutex_lock_common kernel/locking/mutex.c:956 [inline]
+ __mutex_lock+0x134/0x1110 kernel/locking/mutex.c:1103
+ ieee80211_recalc_min_chandef+0x49/0x140 net/mac80211/util.c:2740
+ sta_info_move_state+0x3cf/0x8d0 net/mac80211/sta_info.c:2019
+ sta_info_free+0x65/0x3b0 net/mac80211/sta_info.c:274
+ sta_info_insert_rcu+0x303/0x2ba0 net/mac80211/sta_info.c:738
+ ieee80211_ibss_finish_sta+0x212/0x390 net/mac80211/ibss.c:592
+ ieee80211_ibss_work+0x2c7/0xe80 net/mac80211/ibss.c:1700
+ ieee80211_iface_work+0x91f/0xa90 net/mac80211/iface.c:1478
+ process_one_work+0x933/0x15a0 kernel/workqueue.c:2272
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2418
+ kthread+0x3af/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
 
-Fixes: 372a1786283e ("IB/srpt: Fix memory leak in srpt_add_one")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+
 ---
- drivers/infiniband/ulp/srpt/ib_srpt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
-index 1b096305de1a45..53a8becac82761 100644
---- a/drivers/infiniband/ulp/srpt/ib_srpt.c
-+++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
-@@ -622,7 +622,7 @@ static int srpt_refresh_port(struct srpt_port *sport)
- /**
-  * srpt_unregister_mad_agent - unregister MAD callback functions
-  * @sdev: SRPT HCA pointer.
-- * #port_cnt: number of ports with registered MAD
-+ * @port_cnt: number of ports with registered MAD
-  *
-  * Note: It is safe to call this function more than once for the same device.
-  */
--- 
-2.28.0
-
- 
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,73 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 387152A7830
-	for <lists+linux-next@lfdr.de>; Thu,  5 Nov 2020 08:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52BF2A786B
+	for <lists+linux-next@lfdr.de>; Thu,  5 Nov 2020 09:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729744AbgKEHpS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Nov 2020 02:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S1726756AbgKEIAQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Nov 2020 03:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbgKEHpR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Nov 2020 02:45:17 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88A9C0613CF
-        for <linux-next@vger.kernel.org>; Wed,  4 Nov 2020 23:45:15 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id s10so866289ioe.1
-        for <linux-next@vger.kernel.org>; Wed, 04 Nov 2020 23:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gw4vmbm6+5GWDF0o5XQrpTP9RNmsK2gI8aXamFks1M4=;
-        b=OKOUfNxNRVhP5T2+TMkFnJ/zGX49hm358GxrWFrjQrThN468dkcuzvhnyvRT5PwMIj
-         Y+elqvzOdUbxaF6z6yzus1OIOM1iZ+7acUoDFVo63iCxVriRfze8i+CPCgtLy3Q/g1qM
-         EihToU9qbzTfLVJltYXNSZkUWBxxe8erOo4CXWg0SU20A/+zY3GvPx7+XREeZEmvm4Sv
-         Z/pYs0ivYeeqs4cdIDaiK9DpjWASjt6lqZkvGlg0NdiWzma+zTnlM1GPw2V4WbE2HVZA
-         IIzX/6wKxO5iKlBpccg2uwGiYlSWsGTfgPxSlzR8YA+8j4b5F60TZ53JNRRexxgwnft3
-         /+4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gw4vmbm6+5GWDF0o5XQrpTP9RNmsK2gI8aXamFks1M4=;
-        b=B8m1OslSpierDkE/14cXd5HGor5py50prx0BcBnSMz6lw18lVDeAzwI1Eu4zh9RA8v
-         wJSXTYDg0tZFxvNb+63uUXacINQQy6+B/0oPKvLXl4rntjECRq8NDct31TEG5puUBUrh
-         PhFra/i7+pmFlkuRahXGvVBjqcGkeZzh8ATa6pe7ocDS4W+krJ73hoBUU2dC/O4S+z1d
-         pao5/4R4amzCzrEA902492oVHRf3XTiqtqpTUVHAYKzvWI6cqBVS+au4Cn7TfKEMLAPC
-         cKr1AFjJuwY1Kr5AXkXHPsE3YPUWA61nvm/hyNBzHzXdfIWHnDxqFYldpZnD4bx+NguR
-         nm3A==
-X-Gm-Message-State: AOAM532Dtkc4taaq5nOyRH9i7t1rP1FoVCC84UyyNmuTi1IWde+kjZ/I
-        lK37mtLJqN0PbKbgMcQuUa8bIS7zxZjGwpMwZfLBew==
-X-Google-Smtp-Source: ABdhPJyDZ5pxgd2Wi2zKaLXYJKjVIIA0f7RlOZgGQat9zzZ2HsLcRi/sUQBYL5mE7CdjUT6xtNJyYJyea0xlUAPCc7Q=
-X-Received: by 2002:a02:1783:: with SMTP id 125mr1072347jah.121.1604562315167;
- Wed, 04 Nov 2020 23:45:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20201105174549.614c2de4@canb.auug.org.au> <20201105070311.GU4879@kernel.org>
- <CAATStaMD=w+onf==L-=MQ7suJf6EaNoup5o8yW-TEbfajkbdaQ@mail.gmail.com>
-In-Reply-To: <CAATStaMD=w+onf==L-=MQ7suJf6EaNoup5o8yW-TEbfajkbdaQ@mail.gmail.com>
-From:   "Anand K. Mistry" <amistry@google.com>
-Date:   Thu, 5 Nov 2020 18:45:04 +1100
-Message-ID: <CAATStaMEn_CSfvc=JTawGhL8yt3L0cci8XK9ru+F6RGzRcYJ7A@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S1725827AbgKEIAQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Nov 2020 03:00:16 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78A0C0613CF;
+        Thu,  5 Nov 2020 00:00:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CRbXr27Fqz9sSs;
+        Thu,  5 Nov 2020 19:00:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604563212;
+        bh=TWDRRuMCw/Tf8vHDRNlHBnlGH76tGij+q+YpcX1Il0A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bSALnh1wCxZUIFYeIXOghU68HV6qX8VftxeZJWsMp3SwaKbelKGMmn9JhPQFirzYH
+         Z15WnUfU/k8y/PUjAk5LzKywA/SZmlcxRsB+klL8buIotvX7LyU8Mk4Q0wOqZA40Vo
+         R/9oZXshwRJadiULcXI8cktE/ERxcKIyVoMYht04dyhj7jTNMjU5YfKVej30snVSly
+         rPrI2GeCRGY2/ggV5H6E7j9yraL7xKMK+a0QEEuh5rgKNJlYig/n8UH1rMDF0RGlXl
+         67q0vk9bU5Oob1Dn5K8HXJOO2IVc9nKLdNEbxmD8g7hAEl5yCYdABxntUgvix7g3Og
+         yWZQbjcWlxxzA==
+Date:   Thu, 5 Nov 2020 19:00:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Anand K. Mistry" <amistry@google.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20201105190011.7089f9a6@canb.auug.org.au>
+In-Reply-To: <CAATStaMD=w+onf==L-=MQ7suJf6EaNoup5o8yW-TEbfajkbdaQ@mail.gmail.com>
+References: <20201105174549.614c2de4@canb.auug.org.au>
+        <20201105070311.GU4879@kernel.org>
+        <CAATStaMD=w+onf==L-=MQ7suJf6EaNoup5o8yW-TEbfajkbdaQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/A_v0IHZraFCN9ujFvt9EH6x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-SNIPPED
+--Sig_/A_v0IHZraFCN9ujFvt9EH6x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> >
-> > Looks like left column became too wide, so rather than shift the right
-> > column to the right, I'd suggest to drop underscores in Speculation*.
+Hi Anand,
+
+On Thu, 5 Nov 2020 18:42:23 +1100 "Anand K. Mistry" <amistry@google.com> wr=
+ote:
 >
-> Hm. That makes it inconsistent with Speculation_Store_Bypass. I guess
-> it's the lesser of two evils.
+> How would I go about fixing this? Send a new (v2), fixed patch to the
+> mailing list? I'm not that familiar with how patches get merged
+> through the branches.
 
-Oh, do you mean renaming the existing Speculation_Store_Bypass? I
-thought that was a big no-no for the kernel?
+Since this is in Andrew's quilt series, either a v2, or an incremental
+patch (to wherever the original went - including cc'ing Andrew).  If
+you send a v2, he will probably turn it into an incremental patch and
+then squash it back before sending it to Linus.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/A_v0IHZraFCN9ujFvt9EH6x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+jsQsACgkQAVBC80lX
+0Gz/Cwf+IU99CX1nli0lJTqTCzJJPjJVafL0RFX2TVGdUSl7IkPCjZuows00NlLz
+nUATk12KMkxTAFlcl63L/NNcP0KS3bSAiXtta9aToDKBkkQXL987FRNvq/aXvWBJ
+9a3kP1Gfp0KcQ1yn0uvsfScDX3eKQgzD22fDpl2cBvHLAnkA7l3pjMT73//HkJ8d
+lCEsaWdvkZwoOGpYhGj6yvFvexVg8F/iVbJpV8rpxN38AsthINN64IraX4EuGiYj
+Y/P6Uy0h7zpZl1MoUvUvbxIu1cmEjP6AnPJV90SYWEJZFqy947z6tKpgsFW6GdJj
+IcyjYoppLF1trkcD83njO8kSPLXf9w==
+=NLpU
+-----END PGP SIGNATURE-----
+
+--Sig_/A_v0IHZraFCN9ujFvt9EH6x--

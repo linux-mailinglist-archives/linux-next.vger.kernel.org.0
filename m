@@ -2,99 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFED02A8D12
-	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 03:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359902A8D1E
+	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 03:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725885AbgKFCjJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Nov 2020 21:39:09 -0500
-Received: from ozlabs.org ([203.11.71.1]:50453 "EHLO ozlabs.org"
+        id S1725815AbgKFCq4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Nov 2020 21:46:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725847AbgKFCjJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 5 Nov 2020 21:39:09 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725616AbgKFCq4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 5 Nov 2020 21:46:56 -0500
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CS4Mt3mpMz9sRK;
-        Fri,  6 Nov 2020 13:39:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1604630347;
-        bh=lZsxZSHCrT5NJp2SEbtEK6+B1VqsBJ1+l4NBkDDoXVo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=H00AsdSz8g4hFbMs5Cii7H2jwfczXsIi7ntMFnoElWGQAI0NXhrC7t6Czx1Cp2AtD
-         f39wD6M3xxzvZ369ZWj5Lr1bR2urH1kXjDlOurvIKBsApRDLkSnEtTHEWS7F4SIjwe
-         UlZudTugxW/F8Au81ZAAdBHEgioWXdB9xPLiz8Hi5b1BqsLPzPJa/8GmgLIXeU0oJp
-         /5oCh3gYSbko8G7vZFXxTCvvJeCV/iTszV9Bb7EW7pg0hAteIo0eRMAnzAWuRx2BQL
-         Tu5GafRzRM8XJo8rTtuMQgL+Y7LfiqhClCs4wwj+fhho50b1QhYcegDdPEmhmX1OzV
-         BjzFK1ffDdJ2w==
-Date:   Fri, 6 Nov 2020 13:39:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 31A0F20782;
+        Fri,  6 Nov 2020 02:46:54 +0000 (UTC)
+Date:   Thu, 5 Nov 2020 21:46:52 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20201106133902.2ec6a1e9@canb.auug.org.au>
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with Linus' tree
+Message-ID: <20201105214652.4105c050@oasis.local.home>
+In-Reply-To: <20201106133902.2ec6a1e9@canb.auug.org.au>
+References: <20201106133902.2ec6a1e9@canb.auug.org.au>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_ZcUsGFamKAWrcnl6m0YsEb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_ZcUsGFamKAWrcnl6m0YsEb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 6 Nov 2020 13:39:02 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> I fixed it up (the latter removed the code updated by the former, so I
+> just used the latter) and can carry the fix as necessary. This is now
+> fixed as far as linux-next is concerned, but any non trivial conflicts
+> should be mentioned to your upstream maintainer when your tree is
+> submitted for merging.  You may also want to consider cooperating with
+> the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Today's linux-next merge of the tip tree got a conflict in:
+Thanks Stephen,
 
-  kernel/kprobes.c
+Yeah, updates caused errors that needed to be fixed, which we knew were
+just a work around till the next merge window. Which is why that commit
+had in the comments: "Nested is a workaround that will soon not be
+needed." ;-)
 
-between commit:
-
-  645f224e7ba2 ("kprobes: Tell lockdep about kprobe nesting")
-
-from Linus' tree and commits:
-
-  d741bf41d7c7 ("kprobes: Remove kretprobe hash")
-  6e426e0fcd20 ("kprobes: Replace rp->free_instance with freelist")
-
-from the tip tree.
-
-I fixed it up (the latter removed the code updated by the former, so I
-just used the latter) and can carry the fix as necessary. This is now
-fixed as far as linux-next is concerned, but any non trivial conflicts
-should be mentioned to your upstream maintainer when your tree is
-submitted for merging.  You may also want to consider cooperating with
-the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_ZcUsGFamKAWrcnl6m0YsEb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+kt0YACgkQAVBC80lX
-0GxKuQgAmFlmU9cSOb+GHKmEBUIKCO8b8LHafHcKgPCrClJcOCKiIQImdUSOF36j
-3S9JO+A5dxK69op0v8ii+M2k6GndPtf9TxoyOwaqlrcozDbr1O49yB49vxfrUJwn
-3ogMVmMJiDdh3A+xVoIMdET6ienrgWDjM/NZz4BkJwSKApsUC3n5tTMHhWtH2APf
-AEtYBxg7UoxWtyT/15z4A/TBi86LMueCgZ5/9uBZ7pFCQwn72NaR3a/aQUGWPnBK
-xahhc4B8yOQMdhXdPQd4YBm+2Fj1iH+7G8mXMEhZu9Pzxavt8PM8Jc0xjjf+MLjl
-24774NeR0RBt2N5kOgyF1sxJsfAdxg==
-=Ejmp
------END PGP SIGNATURE-----
-
---Sig_/_ZcUsGFamKAWrcnl6m0YsEb--
+-- Steve

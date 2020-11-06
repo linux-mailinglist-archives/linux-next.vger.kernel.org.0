@@ -2,132 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DE22A8819
-	for <lists+linux-next@lfdr.de>; Thu,  5 Nov 2020 21:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA8F2A8B58
+	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 01:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731899AbgKEU35 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Nov 2020 15:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726214AbgKEU35 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Nov 2020 15:29:57 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3B8C0613CF;
-        Thu,  5 Nov 2020 12:29:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=zdWW6brH1+DGRjR+miSgwIS5XWmxKhqw6LUMWKo+45c=; b=aM9sv2b8xov6sHzl6Whn4c9UzA
-        VIwEGx7ktjptspRFy26iS4e+CnMUr6M3hRuAWOs0cHuc9Qgpom0G+GdEL1m5RR6bxQcFnKO/klj0a
-        Fsyc+FEm2oQI79BIoW4zOEP9Z9rhN/612lpN0hv2lJwt1IyCsJo4ohaYo8TeJQv7BqgdFLNDogi/7
-        YJohBJVTXxXxwwb6Gq1Q2+hen282mACEynxr5h+qOp26cMGijnwhDIteDcIh+CWbj9QDlFVlAqDUx
-        OBTvi6LdmkhefLfXtmYVQngofDd2Hq2pT4efnDaZ6jTPsFq133p3BZEns3PJd0ZvOyvRciNkddTIr
-        NFEOeDMg==;
-Received: from [2601:1c0:6280:3f0::60d5]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kaltH-00057o-SK; Thu, 05 Nov 2020 20:29:52 +0000
-Subject: Re: linux-next: Tree for Nov 5
- [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko]
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Lin Lei <linlei@linux.alibaba.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20201105170604.6588a06e@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <1890051c-f317-af83-7cba-ff858c6d1f5c@infradead.org>
-Date:   Thu, 5 Nov 2020 12:29:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1732046AbgKFATZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Nov 2020 19:19:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:55911 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731860AbgKFATZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 5 Nov 2020 19:19:25 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CS1Gd1yv7z9sSn;
+        Fri,  6 Nov 2020 11:19:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604621963;
+        bh=Yo0g6bFZL2sBmHxL8yHJUvx5kULiPdsn6EWfyQUThxY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ou4kByinq3eyzjIatzeWiBRteHsWvvMBGm7npcSgTmdqC49FRH1c9sWLn4lQcKJR8
+         49yxMIP5BgtFd30PnK6pbzihWGjD3vt8pjInGrNncd3D4aSF9y21+yLIS4qvcDKSXY
+         cK4mrAZjTVzIyrbfeblr6C1FZbQ0H/0MmQ5EgdqZME/PMi+wkGhbSWOi34Vx6AVlzS
+         CtpP0jUKDy3J0aYFbEr+bwjR5jLDM6vKo8ct/QpZ/ERfbQ6v4RYLajRFWRAesdYFWo
+         ltOCrIB9N+6/U6a9LhOi/gWVfvnuBC+6CvmHkaM1OGViv3oCd0h61kSyNxg3H8InEu
+         oFsTyKAk9WyDg==
+Date:   Fri, 6 Nov 2020 11:19:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: linux-next: manual merge of the v4l-dvb tree with the v4l-dvb-fixes
+ tree
+Message-ID: <20201106111917.2d62e74b@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20201105170604.6588a06e@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/UuoFTWcXK907bbu4FPka9gf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/4/20 10:06 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20201104:
-> 
-> The drm-intel-fixes tree lost its build failure.
-> 
-> The drm-msm tree gained conflicts against the drm and drm-misc trees.
-> 
-> The mfd tree gained a build failure so I used the version from
-> next-20201104.
-> 
-> The pinctrl tree lost its build failure.
-> 
-> The akpm-current tree gained a build failure for which I reverted
-> a commit.
-> 
-> Non-merge commits (relative to Linus' tree): 3085
->  3498 files changed, 376683 insertions(+), 40297 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf. After
-> the final fixups (if any), I do an x86_64 modules_install followed by
-> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> kvm enabled).
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 327 trees (counting Linus' and 85 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
+--Sig_/UuoFTWcXK907bbu4FPka9gf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on x86_64:
+Hi all,
 
-CONFIG_STMMAC_ETH=m
-# CONFIG_STMMAC_PLATFORM is not set
-CONFIG_DWMAC_INTEL=m
-CONFIG_STMMAC_PCI=m
+Today's linux-next merge of the v4l-dvb tree got a conflict in:
 
-dwmac-thead.c is always built but it seems to expect (require) that
-stmmac_platform.c is also always built, but the latter has a Kconfig
-option that can be (is) disabled, resulting in build errors:
+  drivers/media/platform/marvell-ccic/mmp-driver.c
 
-ERROR: modpost: "stmmac_pltfr_pm_ops" [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko] undefined!
-ERROR: modpost: "stmmac_pltfr_remove" [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko] undefined!
-ERROR: modpost: "stmmac_remove_config_dt" [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko] undefined!
-ERROR: modpost: "stmmac_probe_config_dt" [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko] undefined!
-ERROR: modpost: "stmmac_get_platform_resources" [drivers/net/ethernet/stmicro/stmmac/dwmac-thead.ko] undefined!
+between commit:
 
+  e6fcf468c51d ("media: media/platform/marvell-ccic: fix warnings when CONF=
+IG_PM is not enabled")
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+from the v4l-dvb-fixes tree and commit:
+
+  009e3b8d9e28 ("media: marvell-ccic: Fix -Wunused-function warnings")
+
+from the v4l-dvb tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/media/platform/marvell-ccic/mmp-driver.c
+index 63fce1b85d26,032fdddbbecc..000000000000
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@@ -307,8 -307,7 +307,8 @@@ static int mmpcam_platform_remove(struc
+   * Suspend/resume support.
+   */
+ =20
+ +#ifdef CONFIG_PM
+- static int mmpcam_runtime_resume(struct device *dev)
++ static int __maybe_unused mmpcam_runtime_resume(struct device *dev)
+  {
+  	struct mmp_camera *cam =3D dev_get_drvdata(dev);
+  	struct mcam_camera *mcam =3D &cam->mcam;
+
+--Sig_/UuoFTWcXK907bbu4FPka9gf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+kloUACgkQAVBC80lX
+0Gyj4AgAi49OW1ljQBv4Q0Sm/cywHtCNtNsVcAvK9bdam6LCnGyBUw05U9XkFnz9
+tnlsITLgmVjQaQqh6IEDmi3FS73SOB6jLiLj6+64L4HbdN4yw91y2KZIn6Yk8oIS
+xyqtLNQZuYxSR9tT1nIUoQZAq0cFDH50b1Oyuy2KI9/fE28PtZJRh630IspeDh5R
+Wawhd2ZMbPWpfkPLGGcoVCnV79WEQV9QhxzKDjwMN0RLmoNH+p05TKwxE4U1E14t
+amHTEs6D1nG7l1MdMQUEStHqt8xK9PiETa1+yJYXGSvVkwahmwEsf+YqLOTrBOwE
+dm7JmQbhx5yJTc7L6K3D0NLTe2uSDQ==
+=ZiHW
+-----END PGP SIGNATURE-----
+
+--Sig_/UuoFTWcXK907bbu4FPka9gf--

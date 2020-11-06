@@ -2,102 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 815F52AA069
-	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 23:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCB82AA07C
+	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 23:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbgKFWbz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Nov 2020 17:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S1728912AbgKFWlz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Nov 2020 17:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728408AbgKFWby (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Nov 2020 17:31:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7539AC0613CF;
-        Fri,  6 Nov 2020 14:31:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=uKFp6ndH5gt97JZMTQlnD2RC9vnO3OIFv4HmGm7a2e4=; b=Fn6oKQaK7vWLVZGa5Y+vMLjcC3
-        Xd70zDJFJ1djl7SvZL0cpf9YV4Z3sTJaUBJVnp9MKc3omKtXSOa98pCk1CgKbfE0utgIJXPAXkCxV
-        zMU6Ysxye5xQxqZq7w6U4li7hRMgZyThYBrkSVST/mrI0gWGHzEI9eviMrsyzgMaywUbpRosFlXrH
-        7lHmfCkjCf5ymOap1etR2B9Htkha0CX+/ABFWji7i4Wrqmy+1qpM+PtluPjE7eOJ4ePvQlA/AuVQR
-        VmhaDw1kHAvfFkTcnbDHOsl8VdonN8e88XmWbQiKquXhSHv4bU+U2hmr3KVKNxfBXgsPFxeF86v1v
-        FXzVntrA==;
-Received: from [2601:1c0:6280:3f0::a1cb]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kbAGn-0007ZG-BZ; Fri, 06 Nov 2020 22:31:45 +0000
-Subject: Re: [Sound-open-firmware] linux-next: Tree for Nov 6
- (sound/soc/sof/sof-pci-dev.o)
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        sound-open-firmware@alsa-project.org,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>
-References: <20201106171834.64e4d6d5@canb.auug.org.au>
- <0a66a2b1-85b6-3515-47f4-2e861b991386@infradead.org>
- <7505ed68-f12b-d1d9-12e5-f8ae34a74ebd@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <0e8f0a8b-60c4-d146-90a2-a972d1748a4c@infradead.org>
-Date:   Fri, 6 Nov 2020 14:31:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        with ESMTP id S1728390AbgKFWly (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Nov 2020 17:41:54 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767E1C0613CF;
+        Fri,  6 Nov 2020 14:41:54 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id i7so1963088qti.6;
+        Fri, 06 Nov 2020 14:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=z7FzhduA30Tm2qYziVPMUtmZyLRgCN7aQ0VOcniLxfY=;
+        b=HJ3eU3myQMPuA6VE8cHM6/10KXPZMnaphEJVB3Wrm4mr18vUuECaCd9fy/IUt8KUpJ
+         KtL2QwgXfwA6p0zbrWnB/C6MtYYIS+OQNEQKQ6L0FKKzW+xV4IDXYbhWj/MA4h4HovI7
+         pinQUoyzFWmASq/Jxxss6GfF04D4BPyT1JZp24xjltmN6ox7QsSZLKocE8Wrv7ykihJH
+         jhQx5BADjQ1GzBvgG48C2ILsD5gOJxSC0pFo+ZAXkTeP+5Sac4ImPXajPvoFMnsuwa0v
+         fOmTRQhHGyGBTL+P4fSRJ5SPKDFYNou7amgFNusX4F6TapLGI9439WgX/AhBVHAQD36O
+         3aqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=z7FzhduA30Tm2qYziVPMUtmZyLRgCN7aQ0VOcniLxfY=;
+        b=rfJURQHid0AmNWgyH6NZxaiVFD+MwVQP3PC7rSfuOuwq2F6nxSYm+yawBxl35k0GwZ
+         GMrNOyz7ap1no5y3OKtkOnkn1brTNCOOV1Urem0VpuZJM7Qo+dbcrrl2KHpXBri9OZSt
+         uLV2onTPXU/y8EwFqcbF7z2/y2mQtWa1xZK5nvzY80uXYKzaL3dyE7hl0Cm16AjVohIw
+         CNhNXQDtxXj1lKsrJkQaiNm6IORY/qQYhzg+Zs2p5iv0rBcefiO3ZRJ90m+vilV3A130
+         zJqxCBbxQFNtZdFKMUb3nn+Kxz4T+NTvvNBwTUjCMzjletOfoIRZbxgiJChl/zdTMjzk
+         BW+Q==
+X-Gm-Message-State: AOAM5301PBgASb97dOxokhF/ODGI8jesHze5K0iMzQYgfuRVBYfM6PF9
+        tFE4lA7WdTZT7X+7LaK9Azc=
+X-Google-Smtp-Source: ABdhPJxKeA2me0EkL+mP07TIDmSCUWPJiEsceqjGfsRkB8cJn8NR84Q7ocq9nUHwYWQI50UgZEZpSw==
+X-Received: by 2002:ac8:5d53:: with SMTP id g19mr3762928qtx.306.1604702513581;
+        Fri, 06 Nov 2020 14:41:53 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id w54sm1563018qtb.0.2020.11.06.14.41.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Nov 2020 14:41:52 -0800 (PST)
+Date:   Fri, 6 Nov 2020 15:41:51 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>, linux-next@vger.kernel.org
+Subject: Re: [PATCH -next] clk: pm_clock: provide stubs for
+ pm_clk_runtime_suspend/_resume
+Message-ID: <20201106224151.GA3571170@ubuntu-m3-large-x86>
+References: <20201106180544.5681-1-rdunlap@infradead.org>
+ <20201106181713.GA3970874@ubuntu-m3-large-x86>
 MIME-Version: 1.0
-In-Reply-To: <7505ed68-f12b-d1d9-12e5-f8ae34a74ebd@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201106181713.GA3970874@ubuntu-m3-large-x86>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/6/20 12:53 PM, Pierre-Louis Bossart wrote:
+On Fri, Nov 06, 2020 at 11:17:13AM -0700, Nathan Chancellor wrote:
+> On Fri, Nov 06, 2020 at 10:05:44AM -0800, Randy Dunlap wrote:
+> > Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
+> > to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
+> > 
+> > Fixes these build errors:
+> > 
+> > ../drivers/clk/qcom/camcc-sc7180.c: In function â€˜cam_cc_sc7180_probeâ€™:
+> > ../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function â€˜pm_clk_runtime_resumeâ€™; did you mean â€˜pm_runtime_resumeâ€™? [-Werror=implicit-function-declaration]
+> >   ret = pm_clk_runtime_resume(&pdev->dev);
+> >         ^~~~~~~~~~~~~~~~~~~~~
+> > ../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function â€˜pm_clk_runtime_suspendâ€™; did you mean â€˜pm_runtime_suspendâ€™? [-Werror=implicit-function-declaration]
+> >    pm_clk_runtime_suspend(&pdev->dev);
+> >    ^~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Pavel Machek <pavel@ucw.cz>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: Michael Turquette <mturquette@baylibre.com>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: linux-clk@vger.kernel.org
+> > Cc: Taniya Das <tdas@codeaurora.org>
+> > Cc: linux-next@vger.kernel.org
 > 
->> on x86_64:
->>
->> ld: sound/soc/sof/sof-pci-dev.o: in function `sof_pci_probe':
->> sof-pci-dev.c:(.text+0x5c): undefined reference to `snd_intel_dsp_driver_probe'
->>
->>
->> Full randconfig file is attached.
+> This fixes the same build failure that I saw with s390 all{mod,yes}config.
 > 
-> Nice catch, thanks Randy! Looks like we put the select SND_INTEL_DSP_CONFIG in the wrong place, it's not dependent on the HDaudio link being selected. Clearly a bug we've had for a while.
-> 
-> The diff below makes the error go away but I have to run it past folks who are already enjoying their week-end. Will follow-up next week with a proper fix.
+> Build-tested-by: Nathan Chancellor <natechancellor@gmail.com>
+> Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
 
-Works for me. You can have an Ack if you use this patch.
-Thanks.
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Actually, this breaks certain powerpc configs:
 
-> diff --git a/sound/soc/sof/intel/Kconfig b/sound/soc/sof/intel/Kconfig
-> index a066e08860cb..5bfc2f8b13b9 100644
-> --- a/sound/soc/sof/intel/Kconfig
-> +++ b/sound/soc/sof/intel/Kconfig
-> @@ -271,6 +271,7 @@ config SND_SOC_SOF_JASPERLAKE
-> 
->  config SND_SOC_SOF_HDA_COMMON
->         tristate
-> +       select SND_INTEL_DSP_CONFIG
->         select SND_SOC_SOF_INTEL_COMMON
->         select SND_SOC_SOF_HDA_LINK_BASELINE
->         help
-> @@ -330,7 +331,6 @@ config SND_SOC_SOF_HDA
->         tristate
->         select SND_HDA_EXT_CORE if SND_SOC_SOF_HDA_LINK
->         select SND_SOC_HDAC_HDA if SND_SOC_SOF_HDA_AUDIO_CODEC
-> -       select SND_INTEL_DSP_CONFIG
->         help
->           This option is not user-selectable but automagically handled by
->           'select' statements at a higher level
-> 
-> 
+$ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc-linux- distclean ppc44x_defconfig drivers/base/power/common.o
+In file included from drivers/base/power/common.c:11:
+./include/linux/pm_clock.h:87:19: error: static declaration of 'pm_clk_runtime_suspend' follows non-static declaration
+   87 | static inline int pm_clk_runtime_suspend(struct device *dev)
+      |                   ^~~~~~~~~~~~~~~~~~~~~~
+./include/linux/pm_clock.h:23:12: note: previous declaration of 'pm_clk_runtime_suspend' was here
+   23 | extern int pm_clk_runtime_suspend(struct device *dev);
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+./include/linux/pm_clock.h:91:19: error: static declaration of 'pm_clk_runtime_resume' follows non-static declaration
+   91 | static inline int pm_clk_runtime_resume(struct device *dev)
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+./include/linux/pm_clock.h:24:12: note: previous declaration of 'pm_clk_runtime_resume' was here
+   24 | extern int pm_clk_runtime_resume(struct device *dev);
+      |            ^~~~~~~~~~~~~~~~~~~~~
+make[4]: *** [scripts/Makefile.build:283: drivers/base/power/common.o] Error 1
+make[4]: Target '__build' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:500: drivers/base/power] Error 2
+make[3]: Target '__build' not remade because of errors.
+make[2]: *** [scripts/Makefile.build:500: drivers/base] Error 2
+make[2]: Target '__build' not remade because of errors.
+make[1]: *** [Makefile:1797: drivers] Error 2
+make[1]: Target 'drivers/base/power/common.o' not remade because of errors.
+make: *** [Makefile:335: __build_one_by_one] Error 2
+make: Target 'distclean' not remade because of errors.
+make: Target 'ppc44x_defconfig' not remade because of errors.
+make: Target 'drivers/base/power/common.o' not remade because of errors.
 
+I think this should be moved into the CONFIG_PM block at the top of the
+file.
 
--- 
-~Randy
+> > ---
+> >  include/linux/pm_clock.h |    9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > --- linux-next-20201106.orig/include/linux/pm_clock.h
+> > +++ linux-next-20201106/include/linux/pm_clock.h
+> > @@ -83,6 +83,15 @@ static inline void pm_clk_remove(struct
+> >  static inline void pm_clk_remove_clk(struct device *dev, struct clk *clk)
+> >  {
+> >  }
+> > +
+> > +static inline int pm_clk_runtime_suspend(struct device *dev)
+> > +{
+> > +	return 0;
+> > +}
+> > +static inline int pm_clk_runtime_resume(struct device *dev)
+> > +{
+> > +	return 0;
+> > +}
+> >  #endif
+> >  
+> >  #ifdef CONFIG_HAVE_CLK

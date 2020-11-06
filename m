@@ -2,125 +2,163 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F332A9BB3
-	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 19:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B3C2A9E87
+	for <lists+linux-next@lfdr.de>; Fri,  6 Nov 2020 21:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727841AbgKFSRQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Nov 2020 13:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727183AbgKFSRQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Nov 2020 13:17:16 -0500
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30411C0613CF;
-        Fri,  6 Nov 2020 10:17:16 -0800 (PST)
-Received: by mail-qv1-xf41.google.com with SMTP id g13so871402qvu.1;
-        Fri, 06 Nov 2020 10:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=xpxktmvHGo+CaqevD+BoyqDDeQDal/1mY0CZMqQlRYQ=;
-        b=IQAyatVaE/uhtZdFF21kT1+BmaaKOzsyQ+RInMQqxRz7Xmr4DURZTI7pvPKVcn44z4
-         9IsQpUHzTSbORLNbOX7vmGYUtLzmhzvhTiInx771aeJk78orN39uVoqdurieqtPFeIwM
-         0I9CUDd2l8QqVqvIhKpDB2xHoEkmV8mn7JlYBH4jxLm0ksPgssQqqPK7hU2tofg3gnP0
-         euPRReHNbZejDZMhMirdxj4CTkVpQ5abGmV0mjFI9VW4/2K5wZ4SkrtG3M5TJXK8pQpT
-         gBIEo3lwgcVLkAKTIiYNWpzdRGzV5+zctC1XcsKLtMliUmqjnRtF+ciH9tb67GQvpUYm
-         USaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xpxktmvHGo+CaqevD+BoyqDDeQDal/1mY0CZMqQlRYQ=;
-        b=X7hgTy4/b2dGgEZ+Nv9+7kYIsDIBYqFlnVviTtxErf5L9TMiljnxy6JbZwzwhGhKba
-         a8S1sTP1yxDXRSgPHwIKczfJioD9tRMwSpSij6qmnbY7wMxEN3sqfH+PosjdOK2CUpE6
-         nddv7pTrxBkGfx67LKp9Z8FGtK0sTgYHrvDs8gQim57B2Dtvw5UHX6k3JBy2GTmCu134
-         r1wcSrDeqbwW0R9eES9g7LVmbTo+K4f1cUY+9tty/+ZRHt9v4QO25Bzq2pBQVSTxYnW7
-         mCge4s3iBqKNG72ap2ybS4GO8cX8xl725P50wrtci+SE3kHsc3qx3tZITZh4hH1Zf7s7
-         U2xw==
-X-Gm-Message-State: AOAM531Cctl0sBaTUvkj2vDm8KPsZMX+RYPJxXT8xDL1n6n244TtKing
-        NaFtM+wgfFZAMeeIM+QuT+8=
-X-Google-Smtp-Source: ABdhPJzzLjrmp5elXPE46DAm1ZvY6K4jJYerNwXzLzaDa3Vf8oKjY7bMuaGnrAkmUW8kQc0Lose/Zw==
-X-Received: by 2002:ad4:4a74:: with SMTP id cn20mr2672816qvb.61.1604686635391;
-        Fri, 06 Nov 2020 10:17:15 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id k3sm985419qtj.84.2020.11.06.10.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 10:17:14 -0800 (PST)
-Date:   Fri, 6 Nov 2020 11:17:13 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>, linux-next@vger.kernel.org
-Subject: Re: [PATCH -next] clk: pm_clock: provide stubs for
- pm_clk_runtime_suspend/_resume
-Message-ID: <20201106181713.GA3970874@ubuntu-m3-large-x86>
-References: <20201106180544.5681-1-rdunlap@infradead.org>
+        id S1728220AbgKFUTS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Nov 2020 15:19:18 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2994 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728140AbgKFUTS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Nov 2020 15:19:18 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A6KDO5N027486;
+        Fri, 6 Nov 2020 15:19:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
+ from : to : cc : subject : in-reply-to : references : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WwnHOnhR4BNXQcvGcBOUdFI8x/pDhmf+waIn+LTZu0k=;
+ b=VhbgRF3B2tfvOSXrEsW90cN8W0NjdTUP7UdnSGzkfvN1iBYAjq1VLDJ18jJIjffuw2uK
+ MfyTfHLAJFqxvvwXO1BdMdssYI3iuHUH5iZ7kOLzhjkmXiuzwzJ1VCd9/+3RKTCP235d
+ Hw+Xz6vdFkPYBPRb87Ln+FYC9N/3ERfQN5LRLT75Yqrz0rFO6fB0FZWFZTt3+O9TkNjo
+ v8H7t4Ir21YuWyDYwYOzkVSrFrDCd+dGfh8CcGR5QHeTdRv7RPK8wQgrq0Fv/LABSe8g
+ CZkLfcTC66zLvtUy7uztaiXlO4ugOXaKwahDM8TqiTHQwOTi222MdQ9Qf1dNjsNpM+Cq Qw== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34n6uanad2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Nov 2020 15:19:13 -0500
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A6KHPFC007896;
+        Fri, 6 Nov 2020 20:19:12 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma03wdc.us.ibm.com with ESMTP id 34h0fkjh8r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Nov 2020 20:19:12 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A6KJ5JM33620446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Nov 2020 20:19:05 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A26E86E04C;
+        Fri,  6 Nov 2020 20:19:10 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 562406E050;
+        Fri,  6 Nov 2020 20:19:10 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.16.170.189])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Nov 2020 20:19:10 +0000 (GMT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201106180544.5681-1-rdunlap@infradead.org>
+Date:   Fri, 06 Nov 2020 14:19:10 -0600
+From:   ljp <ljp@linux.vnet.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lijun Pan <ljp@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+In-Reply-To: <20201104114358.37e766a3@canb.auug.org.au>
+References: <20201104114358.37e766a3@canb.auug.org.au>
+Message-ID: <1a5f4fb788453dd8807bc5c225a9907f@linux.vnet.ibm.com>
+X-Sender: ljp@linux.vnet.ibm.com
+User-Agent: Roundcube Webmail/1.0.1
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-06_06:2020-11-05,2020-11-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011060140
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 10:05:44AM -0800, Randy Dunlap wrote:
-> Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
-> to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
+On 2020-11-03 18:43, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Fixes these build errors:
+> Today's linux-next merge of the net-next tree got a conflict in:
 > 
-> ../drivers/clk/qcom/camcc-sc7180.c: In function ‘cam_cc_sc7180_probe’:
-> ../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function ‘pm_clk_runtime_resume’; did you mean ‘pm_runtime_resume’? [-Werror=implicit-function-declaration]
->   ret = pm_clk_runtime_resume(&pdev->dev);
->         ^~~~~~~~~~~~~~~~~~~~~
-> ../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function ‘pm_clk_runtime_suspend’; did you mean ‘pm_runtime_suspend’? [-Werror=implicit-function-declaration]
->    pm_clk_runtime_suspend(&pdev->dev);
->    ^~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/ibm/ibmvnic.c
 > 
-> Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: Taniya Das <tdas@codeaurora.org>
-> Cc: linux-next@vger.kernel.org
+> between commit:
+> 
+>   1d8504937478 ("powerpc/vnic: Extend "failover pending" window")
+> 
+> from the net tree and commit:
+> 
+>   16b5f5ce351f ("ibmvnic: merge do_change_param_reset into do_reset")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your 
+> tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any 
+> particularly
+> complex conflicts.
+> 
 
-This fixes the same build failure that I saw with s390 all{mod,yes}config.
+Sorry I missed this email.
+The fix is correct.
+Thank you Stephen.
 
-Build-tested-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
-
-> ---
->  include/linux/pm_clock.h |    9 +++++++++
->  1 file changed, 9 insertions(+)
+> --
+> Cheers,
+> Stephen Rothwell
 > 
-> --- linux-next-20201106.orig/include/linux/pm_clock.h
-> +++ linux-next-20201106/include/linux/pm_clock.h
-> @@ -83,6 +83,15 @@ static inline void pm_clk_remove(struct
->  static inline void pm_clk_remove_clk(struct device *dev, struct clk *clk)
->  {
->  }
+> diff --cc drivers/net/ethernet/ibm/ibmvnic.c
+> index da15913879f8,f4167de30461..000000000000
+> --- a/drivers/net/ethernet/ibm/ibmvnic.c
+> +++ b/drivers/net/ethernet/ibm/ibmvnic.c
+> @@@ -1930,17 -1841,12 +1850,20 @@@ static int do_reset(struct 
+> ibmvnic_adap
+>   	netdev_dbg(adapter->netdev, "Re-setting driver (%d)\n",
+>   		   rwi->reset_reason);
+> 
+> - 	rtnl_lock();
+> + 	adapter->reset_reason = rwi->reset_reason;
+> + 	/* requestor of VNIC_RESET_CHANGE_PARAM already has the rtnl lock */
+> + 	if (!(adapter->reset_reason == VNIC_RESET_CHANGE_PARAM))
+> + 		rtnl_lock();
 > +
-> +static inline int pm_clk_runtime_suspend(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +static inline int pm_clk_runtime_resume(struct device *dev)
-> +{
-> +	return 0;
-> +}
->  #endif
->  
->  #ifdef CONFIG_HAVE_CLK
+>  +	/*
+>  +	 * Now that we have the rtnl lock, clear any pending failover.
+>  +	 * This will ensure ibmvnic_open() has either completed or will
+>  +	 * block until failover is complete.
+>  +	 */
+>  +	if (rwi->reset_reason == VNIC_RESET_FAILOVER)
+>  +		adapter->failover_pending = false;
+>  +
+>   	netif_carrier_off(netdev);
+> - 	adapter->reset_reason = rwi->reset_reason;
+> 
+>   	old_num_rx_queues = adapter->req_rx_queues;
+>   	old_num_tx_queues = adapter->req_tx_queues;
+> @@@ -2214,17 -2140,7 +2157,14 @@@ static void __ibmvnic_reset(struct 
+> work
+>   		}
+>   		spin_unlock_irqrestore(&adapter->state_lock, flags);
+> 
+> - 		if (rwi->reset_reason == VNIC_RESET_CHANGE_PARAM) {
+> - 			/* CHANGE_PARAM requestor holds rtnl_lock */
+> - 			rc = do_change_param_reset(adapter, rwi, reset_state);
+> - 		} else if (adapter->force_reset_recovery) {
+> + 		if (adapter->force_reset_recovery) {
+>  +			/*
+>  +			 * Since we are doing a hard reset now, clear the
+>  +			 * failover_pending flag so we don't ignore any
+>  +			 * future MOBILITY or other resets.
+>  +			 */
+>  +			adapter->failover_pending = false;
+>  +
+>   			/* Transport event occurred during previous reset */
+>   			if (adapter->wait_for_reset) {
+>   				/* Previous was CHANGE_PARAM; caller locked */

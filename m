@@ -2,100 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB44B2AADD0
-	for <lists+linux-next@lfdr.de>; Sun,  8 Nov 2020 23:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AA62AAE37
+	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 00:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbgKHWV7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 8 Nov 2020 17:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727570AbgKHWV7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 8 Nov 2020 17:21:59 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56795C0613CF;
-        Sun,  8 Nov 2020 14:21:59 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id ec16so3194149qvb.0;
-        Sun, 08 Nov 2020 14:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MQVOKvYXN6L2Rzqbl1xOYIU3tjbqeVAG8M7oQVuJt1g=;
-        b=dhwdS+QfDvqXT0Fgw9oRCbuSdPYbjJhrv4IPN/2BxwjApHV1HCr2bYLIvd8INrnRjp
-         eFImd8nVyTwuwcPKcWByKdS2GLcSjiD9XsIi1fwXdd/CDsFC0R8Yn/3hlWUdiuSUfXvN
-         Ee4oVKwvUpJl3YjyovaJfmPl5OgZIorGACpoqPkkbUPFxdNharOvviHdByuyf0Vud4TS
-         xsBQmVOAsp4vYevn6CsTJKxq2ExMNwUdeTuiBHmKaalJjLtFR5fKdb1TUzJh6d08ctpc
-         nYzmPUGaOv1Iib7udPIHYSPaRbagWUqtm6PnEI52GLyWL/hLJKdIbIHREbuO/OSOaSp9
-         OGZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MQVOKvYXN6L2Rzqbl1xOYIU3tjbqeVAG8M7oQVuJt1g=;
-        b=S3Th5IMknKQ8ce5m+R44NveDqMFeVP3Ac2UdY1gKw/kR0U5NsC4vje3oZMJ1+bg46N
-         oEh+Gr/6hAC/3q2I2BgLrWw+hxNAFOuYgAiHG7AP205Crqv59EQ7IS8i61lpPh+ybiwU
-         c1aTZ/cUdv5KRKacX+6TglvLiilQ+T02+m4q/4IBuMQSwPUDD3lnbgQ7Zcg28Izw1Auv
-         iO04TXsVN//TpsFB+zOfr+rxhW/Wak/MMd/ActaeEwd0tuRrLZCHF6u/RrfWbwV0N5jZ
-         4SvZ5AphCiIVSSfAQTPYaupQJp0eDX2+k8anAcTLp2rjbqtxKugy+q4t2ON4BeWnz+XB
-         c4cQ==
-X-Gm-Message-State: AOAM531oEBVMfLW1hJxVLRmtNj9Dowfaju7qJ0LME3/vIYetBfeBi2ag
-        +A9e+dA4oAcBsqVhdxL3sp4=
-X-Google-Smtp-Source: ABdhPJwbtdBLF6YA6w31BbHg7WNyNB9VfZcAV7phnPFwWNueLIpZCodqx+6CezVOmZ5ifg6vynSGZA==
-X-Received: by 2002:ad4:50a2:: with SMTP id d2mr11360069qvq.21.1604874118187;
-        Sun, 08 Nov 2020 14:21:58 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id f21sm5008031qkl.131.2020.11.08.14.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Nov 2020 14:21:57 -0800 (PST)
-Date:   Sun, 8 Nov 2020 15:21:56 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Valdis =?utf-8?Q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: next-20201105 - build issue with KASAN on ARM
-Message-ID: <20201108222156.GA1049451@ubuntu-m3-large-x86>
-References: <7021.1604774000@turing-police>
- <20201107200453.GA92349@ubuntu-m3-large-x86>
- <20201109091919.6e77162a@canb.auug.org.au>
+        id S1728006AbgKHXXE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 8 Nov 2020 18:23:04 -0500
+Received: from ozlabs.org ([203.11.71.1]:55171 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727949AbgKHXXE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 8 Nov 2020 18:23:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CTqtF5NZqz9sSf;
+        Mon,  9 Nov 2020 10:23:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1604877781;
+        bh=9Kz9jfaTBlizIbjTWQU2huAKZtn3zrpAZ1BRXUOk8Js=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ox5VqPsDXcxeYqzvcXh7llGzvnOhZN+o4wiGFc7stW/rMI5SEo1pg8UTAEjt0PtDV
+         Rkqkk/NWSv9Rq4ZN08TN+v3H6/w+cXX+sQ+sats2cCS+VX5Zdm/6QhQSSYIru+xmYr
+         TvxPzuC2jGSw784xWX25a8tJKKnKKtsYQcRn8vSuxFvt8DbNnYUjzTiFg8pvg9XQax
+         ziA92s6WpPOkHklwgR2bfxLO48tSp/zMqBXUSzJnij5ALX9ZemYau4sBk+yYgaBZ4F
+         n80O/YoW6/fmxGyT3c7r10O2RoY9yvAIiXFeRpOUkVUInoDvWAi/gm1eRRnlyM6pkt
+         6fM+7OG6qRZVA==
+Date:   Mon, 9 Nov 2020 10:23:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drivers-memory tree
+Message-ID: <20201109102300.539961bb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201109091919.6e77162a@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/mJTKNNHvjHNMfuQMXEoFU.h";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/mJTKNNHvjHNMfuQMXEoFU.h
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 09, 2020 at 09:19:19AM +1100, Stephen Rothwell wrote:
-> Hi Nathan,
-> 
-> On Sat, 7 Nov 2020 13:04:53 -0700 Nathan Chancellor <natechancellor@gmail.com> wrote:
-> >
-> > Because it builds fine if you check out Russell's branch. This build
-> > error only happens because of a treewide change in -mm that was applied
-> > after the ARM merge:
-> > 
-> > https://lore.kernel.org/linux-arm-kernel/20201106094434.GA3268933@ubuntu-m3-large-x86/
-> > 
-> > https://lore.kernel.org/linux-arm-kernel/20201106180929.GD2959494@ubuntu-m3-large-x86/
-> > 
-> > Stephen could apply that diff as a fixup for the -mm patch when he
-> > builds -next or I can send it as a formal patch for him to apply.
-> 
-> I have applied the patch by hand today, but please send a patch to
-> Andrew pointing out that it should go in his post -next series (or
-> possibly he should also move
-> treewide-remove-stringification-from-__alias-macro-definition.patch
-> into the post -next series).
+Hi all,
 
-Ack, thank you for the guidance, as I am unsure how exactly contexual
-changes like this are supposed to be handled when dealing with a quilt
-series. I will send a formal patch soon.
+After merging the drivers-memory tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+In file included from drivers/devfreq/tegra20-devfreq.c:18:
+include/soc/tegra/mc.h: In function 'devm_tegra_memory_controller_get':
+include/soc/tegra/mc.h:211:1: error: no return statement in function return=
+ing non-void [-Werror=3Dreturn-type]
+  211 | }
+      | ^
+
+Caused by commit
+
+  1f1997eb44b1 ("memory: tegra: Add and use devm_tegra_memory_controller_ge=
+t()")
+
+I have added the following fix patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 9 Nov 2020 10:19:44 +1100
+Subject: [PATCH] fix "memory: tegra: Add and use
+ devm_tegra_memory_controller_get()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/soc/tegra/mc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
+index 43876216de34..d731407e23bb 100644
+--- a/include/soc/tegra/mc.h
++++ b/include/soc/tegra/mc.h
+@@ -207,7 +207,7 @@ struct tegra_mc *devm_tegra_memory_controller_get(struc=
+t device *dev);
+ static inline struct tegra_mc *
+ devm_tegra_memory_controller_get(struct device *dev)
+ {
+-	ERR_PTR(-ENODEV);
++	return ERR_PTR(-ENODEV);
+ }
+ #endif
+=20
+--=20
+2.28.0
+
+--=20
 Cheers,
-Nathan
+Stephen Rothwell
+
+--Sig_/mJTKNNHvjHNMfuQMXEoFU.h
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+ofdQACgkQAVBC80lX
+0GwKsgf8C3c9FlIaMxyDQjiqU0F55uwZcreIZ96JWGLtlTRLB1adPo4m6vFshCAd
+EyWoj+fzd+Jdsd9Pja+6rOmr76zHw68mRyfcdZqgoe3WjS32CtBK0WViZAKfNyUO
+XokhE7Y2MuJP0BIDvGJcS6ZvRUIY4HhoYMit6qf2wD70VvQzj75LX6X3wX/m17dj
+4QdlAAFxAz4bTczn2Ief0PEEAoiGsHq3s11OPpOiV2iUTW+/5lumYjV5Yt8ZOBDb
+xbSU9kjPIoXr/xqfgS8johk4a4DLZ1NetFERgYotXMa6qeswsx8PJBUR1VBkEOeo
+5UXQC+qnVmbAUL6R/NaKgltLZkfuJQ==
+=Y3RR
+-----END PGP SIGNATURE-----
+
+--Sig_/mJTKNNHvjHNMfuQMXEoFU.h--

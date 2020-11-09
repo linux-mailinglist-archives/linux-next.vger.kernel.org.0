@@ -2,92 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD9E2AB35D
-	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 10:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BAB2AB3D7
+	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 10:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729107AbgKIJQO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Nov 2020 04:16:14 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:45306 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgKIJQO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Nov 2020 04:16:14 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A99FB4a084078;
-        Mon, 9 Nov 2020 09:16:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=SESB/eBQmsB5XbY8ocQHPHfBiORlRACTNaDWSyPh8Us=;
- b=UrN9R1d4RviMPVnd5rCNFNPr966taLsyeIAT3HcEayLmIfXdeF2y+aRglRU0qCT3MdzO
- 0C0Eq9pvr7iLd014J/aoaracAa4f0y/4g9DqlkdM9ZPUIJvKOCPkxIVSHAAZwXm00PAh
- y42IQJ5zI7fdtcOMLkaHeZ5Xf0ElOGMkv6LSD/3aBWXbHaLY6RG+hyg4I4cmMMqUOiJt
- odm0Q4zJQl/bv6ofDGRF8yOr3KEhDG0VGbFo2etq23ryY2gqzupjJrS+xCtvMNQPOv4s
- 0iPqFjlJHz5FJhWW9jHoMgZc+1CXjRIg22iKAT5txZs7VdvBamqnbTSlQ90kgMW7Cp60 DQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 34p72eay02-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 09 Nov 2020 09:16:06 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0A99G3BT148878;
-        Mon, 9 Nov 2020 09:16:05 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 34p5gv0wds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Nov 2020 09:16:05 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0A99G1Bb006946;
-        Mon, 9 Nov 2020 09:16:01 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 09 Nov 2020 01:16:01 -0800
-Date:   Mon, 9 Nov 2020 12:15:56 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1728767AbgKIJnr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Nov 2020 04:43:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20495 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728462AbgKIJnr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Nov 2020 04:43:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604915026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dyt2RPIryDUpKY3QdBsRG/hsGgQZ+lKraaiM8QPeOSM=;
+        b=DkGtZNWKVcTCVOq7+841ciVp71wMlphDAcCsPQ4c/HjSAOGyEC1AnSqvKQwHU0Ztqt/t2n
+        DgMVYqe/NvbqvoUnupW6RHguNYSRwGZ1FWWl3mQXPfyJyxVYn53s5zLQ+0BQN8K02+26TQ
+        CzKMZMmLr50nRMOZ6LpULfW1gOZNmc0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-91-Y42i76i3NDWOFMA1uA47NQ-1; Mon, 09 Nov 2020 04:43:45 -0500
+X-MC-Unique: Y42i76i3NDWOFMA1uA47NQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D5E00801F98;
+        Mon,  9 Nov 2020 09:43:43 +0000 (UTC)
+Received: from starship (unknown [10.35.206.112])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B217C5D98A;
+        Mon,  9 Nov 2020 09:43:41 +0000 (UTC)
+Message-ID: <a6a6e3936bd130e16ec341628e504adf9d3cb477.camel@redhat.com>
+Subject: Re: linux-next: Fixes tag needs some work in the kvm-fixes tree
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the nfsd tree
-Message-ID: <20201109091555.GK18329@kadam>
-References: <20201109082032.3bf8f58d@canb.auug.org.au>
- <20201108212936.GD14422@fieldses.org>
+Date:   Mon, 09 Nov 2020 11:43:39 +0200
+In-Reply-To: <20201109081444.6f15fca2@canb.auug.org.au>
+References: <20201109081444.6f15fca2@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201108212936.GD14422@fieldses.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9799 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 phishscore=0 adultscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011090060
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9799 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011090060
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Nov 08, 2020 at 04:29:36PM -0500, J. Bruce Fields wrote:
-> On Mon, Nov 09, 2020 at 08:20:32AM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Commit
-> > 
-> >   bfb5aa1685d5 ("net/sunrpc: fix useless comparison in proc_do_xprt()")
-> > 
-> > is missing a Signed-off-by from its author.
+On Mon, 2020-11-09 at 08:14 +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I split the original patch in 2 and fixed a bug in this second patch,
-> but unless I hear otherwise I'll assume Dan's OK with his Signed-off-by
-> staying on both....
+> In commit
+> 
+>   cc4cb017678a ("KVM: x86: use positive error values for msr emulation that causes #GP")
+> 
+> Fixes tag
+> 
+>   Fixes: 291f35fb2c1d1 ("KVM: x86: report negative values from wrmsr emulation to userspace")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 7dffecaf4eab ("KVM: x86: report negative values from wrmsr emulation to userspace")
+> 
 
-Yep.  Thanks!
+This is true. Looks like one of my local commits slipped though.
+Next time I'll check this more carefully.
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Can this be fixed or is it too late?
 
-regards,
-dan carpenter
+Best regards,
+	Maxim Levitsky
 

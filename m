@@ -2,135 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEC12AB1CE
-	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 08:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A23B2AB218
+	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 09:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgKIHkd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Nov 2020 02:40:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51166 "EHLO mail.kernel.org"
+        id S1729236AbgKIIEk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Nov 2020 03:04:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728038AbgKIHkc (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 9 Nov 2020 02:40:32 -0500
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        id S1727077AbgKIIEj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Nov 2020 03:04:39 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 144F42083B;
-        Mon,  9 Nov 2020 07:40:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B85FF20853;
+        Mon,  9 Nov 2020 08:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604907632;
-        bh=CdqrK974gDlyEi/kvuoxck4jtpAjC9LfgZm6/XYiZgY=;
+        s=default; t=1604909079;
+        bh=9Q7Ej8FMdv0rXKtUf/BmiCMGclVMonbVDAszmpw4Rro=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DEDESS5UTt89rYpFy1JTo9+eem+U8D0PsL3fFNaZMEE3KjiBJ03elc67iZw4FU1bB
-         mUCHsOebOnjlDvpmNwsrc6KtbCEsHjGYM+OqDZbmyt8Ed0JpSoV3utniogLonjsiOn
-         ABNS9Tkomj/MdnUmIA1AYQqsNKjurVKyqcJyGsJk=
-Received: by mail-ot1-f47.google.com with SMTP id g19so8030577otp.13;
-        Sun, 08 Nov 2020 23:40:32 -0800 (PST)
-X-Gm-Message-State: AOAM5335BhvIbH2xYNIN2geCrdjLnSQPlsqrMfBUL6YnDwLZE9ph/YZk
-        kNP7Cxzj1KhrrPm4/S8ZMu0LJWUU8bXqx7ybLg4=
-X-Google-Smtp-Source: ABdhPJzngTfH1SnBjj+5ECgJpfUB+wr03SXOGvAH4gaRFZ2p15uaAw/DgQYJzq6/q9wQlR70F3l67DMeWQ/5c/moYT8=
-X-Received: by 2002:a9d:62c1:: with SMTP id z1mr9182745otk.108.1604907631229;
- Sun, 08 Nov 2020 23:40:31 -0800 (PST)
+        b=fEv7N4IuoNOKteYwAEk3W8ryvp72P8eJ92KL4FxZMSMtnvXwqCyYt0zVIJ1eV1oN6
+         wd2BBlx/2Ysx/Cx/WND0aMqT8ZAD/oedu738XGZnk07thz9FCF+uq2iD7heJw5Fx81
+         H8iousTxxHZrwtgEQynVHWT1j8ZeZ4gFCD54U7eg=
+Received: by mail-ej1-f53.google.com with SMTP id o21so10894099ejb.3;
+        Mon, 09 Nov 2020 00:04:38 -0800 (PST)
+X-Gm-Message-State: AOAM531SrU9ZZa5SV0yUEmOGJw8Q4X8v+9l2rq/sp7zP8koGvKrcK2Xq
+        N9gRsL5+q6TSmxgGX7H9dzXrIW4+Dv9fIvnq7hI=
+X-Google-Smtp-Source: ABdhPJzW3tNsQSux6QOy2AxO7QtsbIO1pcMXUW86gfra2hc05tN5dtDZyrFCj3OBbDZgZifMNlOeSDEuxKBmBJ/s1mY=
+X-Received: by 2002:a17:906:8401:: with SMTP id n1mr13614998ejx.215.1604909077223;
+ Mon, 09 Nov 2020 00:04:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20201108222156.GA1049451@ubuntu-m3-large-x86> <20201109001712.3384097-1-natechancellor@gmail.com>
-In-Reply-To: <20201109001712.3384097-1-natechancellor@gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 9 Nov 2020 08:40:19 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEVX7za8JM3_STCeS8-j7WcvYq_vtUU7Or=yT+T9Jj7vw@mail.gmail.com>
-Message-ID: <CAMj1kXEVX7za8JM3_STCeS8-j7WcvYq_vtUU7Or=yT+T9Jj7vw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: boot: Quote aliased symbol names in string.c
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Abbott Liu <liuwenliang@huawei.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Joe Perches <joe@perches.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+References: <20201109102300.539961bb@canb.auug.org.au> <82fd8221-f903-2646-4b00-a20ae936ff25@gmail.com>
+In-Reply-To: <82fd8221-f903-2646-4b00-a20ae936ff25@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Mon, 9 Nov 2020 09:04:25 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPebMtfnj4v1j9o32rGfzTDFRq1J1hode4VErBTFLcaWWw@mail.gmail.com>
+Message-ID: <CAJKOXPebMtfnj4v1j9o32rGfzTDFRq1J1hode4VErBTFLcaWWw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the drivers-memory tree
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        =?UTF-8?Q?Valdis_Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 9 Nov 2020 at 01:19, Nathan Chancellor <natechancellor@gmail.com> w=
-rote:
+On Mon, 9 Nov 2020 at 02:01, Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> Patch "treewide: Remove stringification from __alias macro definition"
-> causes arguments to __alias to no longer be quoted automatically, which
-> breaks CONFIG_KASAN on ARM after commit d6d51a96c7d6 ("ARM: 9014/2:
-> Replace string mem* functions for KASan"):
+> 09.11.2020 02:23, Stephen Rothwell =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Hi all,
+> >
+> > After merging the drivers-memory tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > In file included from drivers/devfreq/tegra20-devfreq.c:18:
+> > include/soc/tegra/mc.h: In function 'devm_tegra_memory_controller_get':
+> > include/soc/tegra/mc.h:211:1: error: no return statement in function re=
+turning non-void [-Werror=3Dreturn-type]
+> >   211 | }
+> >       | ^
+> >
+> > Caused by commit
+> >
+> >   1f1997eb44b1 ("memory: tegra: Add and use devm_tegra_memory_controlle=
+r_get()")
+> >
+> > I have added the following fix patch for today:
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 9 Nov 2020 10:19:44 +1100
+> > Subject: [PATCH] fix "memory: tegra: Add and use
+> >  devm_tegra_memory_controller_get()"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  include/soc/tegra/mc.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
+> > index 43876216de34..d731407e23bb 100644
+> > --- a/include/soc/tegra/mc.h
+> > +++ b/include/soc/tegra/mc.h
+> > @@ -207,7 +207,7 @@ struct tegra_mc *devm_tegra_memory_controller_get(s=
+truct device *dev);
+> >  static inline struct tegra_mc *
+> >  devm_tegra_memory_controller_get(struct device *dev)
+> >  {
+> > -     ERR_PTR(-ENODEV);
+> > +     return ERR_PTR(-ENODEV);
+> >  }
+> >  #endif
 >
-> arch/arm/boot/compressed/string.c:24:1: error: attribute 'alias' argument=
- not a string
->    24 | void *__memcpy(void *__dest, __const void *__src, size_t __n) __a=
-lias(memcpy);
->       | ^~~~
-> arch/arm/boot/compressed/string.c:25:1: error: attribute 'alias' argument=
- not a string
->    25 | void *__memmove(void *__dest, __const void *__src, size_t count) =
-__alias(memmove);
->       | ^~~~
-> arch/arm/boot/compressed/string.c:26:1: error: attribute 'alias' argument=
- not a string
->    26 | void *__memset(void *s, int c, size_t count) __alias(memset);
->       | ^~~~
-> make[3]: *** [scripts/Makefile.build:283: arch/arm/boot/compressed/string=
-.o] Error 1
->
-> Quote the names like the treewide patch does so there is no more error.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reported-by: Valdis Kl=C4=93tnieks <valdis.kletnieks@vt.edu>
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> Krzysztof, will you be able correct this typo locally, or should I add a
+> new patch?
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Send a new patch please with Stephen's reported-by.
 
-> ---
->
-> Hi Andrew,
->
-> Stephen said I should send this along to you so that it can be applied
-> as part of the post -next series. Please let me know if you need any
-> more information or clarification, I tried to document it succinctly in
-> the commit message.
->
-> Cheers,
-> Nathan
->
->  arch/arm/boot/compressed/string.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/arm/boot/compressed/string.c b/arch/arm/boot/compressed=
-/string.c
-> index 8c0fa276d994..cc6198f8a348 100644
-> --- a/arch/arm/boot/compressed/string.c
-> +++ b/arch/arm/boot/compressed/string.c
-> @@ -21,9 +21,9 @@
->  #undef memcpy
->  #undef memmove
->  #undef memset
-> -void *__memcpy(void *__dest, __const void *__src, size_t __n) __alias(me=
-mcpy);
-> -void *__memmove(void *__dest, __const void *__src, size_t count) __alias=
-(memmove);
-> -void *__memset(void *s, int c, size_t count) __alias(memset);
-> +void *__memcpy(void *__dest, __const void *__src, size_t __n) __alias("m=
-emcpy");
-> +void *__memmove(void *__dest, __const void *__src, size_t count) __alias=
-("memmove");
-> +void *__memset(void *s, int c, size_t count) __alias("memset");
->  #endif
->
->  void *memcpy(void *__dest, __const void *__src, size_t __n)
-> --
-> 2.29.2
->
+Best regards,
+Krzysztof

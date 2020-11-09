@@ -2,114 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AA62AAE37
-	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 00:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BC82AAE7E
+	for <lists+linux-next@lfdr.de>; Mon,  9 Nov 2020 01:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgKHXXE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 8 Nov 2020 18:23:04 -0500
-Received: from ozlabs.org ([203.11.71.1]:55171 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727949AbgKHXXE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 8 Nov 2020 18:23:04 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CTqtF5NZqz9sSf;
-        Mon,  9 Nov 2020 10:23:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1604877781;
-        bh=9Kz9jfaTBlizIbjTWQU2huAKZtn3zrpAZ1BRXUOk8Js=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ox5VqPsDXcxeYqzvcXh7llGzvnOhZN+o4wiGFc7stW/rMI5SEo1pg8UTAEjt0PtDV
-         Rkqkk/NWSv9Rq4ZN08TN+v3H6/w+cXX+sQ+sats2cCS+VX5Zdm/6QhQSSYIru+xmYr
-         TvxPzuC2jGSw784xWX25a8tJKKnKKtsYQcRn8vSuxFvt8DbNnYUjzTiFg8pvg9XQax
-         ziA92s6WpPOkHklwgR2bfxLO48tSp/zMqBXUSzJnij5ALX9ZemYau4sBk+yYgaBZ4F
-         n80O/YoW6/fmxGyT3c7r10O2RoY9yvAIiXFeRpOUkVUInoDvWAi/gm1eRRnlyM6pkt
-         6fM+7OG6qRZVA==
-Date:   Mon, 9 Nov 2020 10:23:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drivers-memory tree
-Message-ID: <20201109102300.539961bb@canb.auug.org.au>
+        id S1728068AbgKIATQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 8 Nov 2020 19:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727929AbgKIATP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 8 Nov 2020 19:19:15 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F6CC0613CF;
+        Sun,  8 Nov 2020 16:19:15 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id m65so4939254qte.11;
+        Sun, 08 Nov 2020 16:19:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3LcMZKLiUPDXMEpD6ZsN+QTNJLzBAx+sHH3KFfJGyJ0=;
+        b=R8zuVCcdEeO0C5i/vvcm5HkmQPlTg9fjAhMuHmzfp6238Ab9nux7MHsAvHyVEFwDO+
+         xXOyJBVQ92hyI0zt5wxzCYWiWdNsESwhtV74DkxY/ZdjfBlF01azPxswWdUc0ombkp5M
+         7bLuwiv8USRYsvEfijTpW9IU6Ynpai653OR9Y/ipPTlyQ7A5lkPpp0kw0NYPlmwhKKGf
+         HGsokQK+v+fVutJ2yIlW5OhHGlCe5eifq0b1bm0/2eNyEkJUiyqZI90xsA0le08gpYAL
+         24OZDCB4C4//iGp+Iu97ibjZxVyvO8JwJtbwOFCT9KkeCz0oZ5oKKzzowHaWQaqpCRBz
+         xSWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3LcMZKLiUPDXMEpD6ZsN+QTNJLzBAx+sHH3KFfJGyJ0=;
+        b=gIJ2YAl8XU/vYHVlSWRrgq8OMEwEgEp1JY2OapOcmxFXMbyD+fMy56VCM7Bs3uhOrV
+         5LSzXaW+xCxbj0kKmelbUoF4zRhzPirhAxKEjilF3wWw1qSaVG/lbhGB6wpVKVPB0WZ/
+         U6axVARbt2M9tmPiw5tm3ZgD72pr+Gs/oKeio4qJHquWZ+P83K5HH6zgiLttZVFrCpNX
+         4C86Xoyut8AJQEs+hl1Qidass+ezyvfKWdOe4PxmOeBbfFyGuY1RKhr8LtCJfem/57uI
+         cX2bDZRnV3z9Ko/atKn3e+Nj5sRRlNdx1AxWFfSJW5VHrygktFwGAGMPjodQcE3VuKUO
+         GIVw==
+X-Gm-Message-State: AOAM532OQhGbI2x/9JvNHmfzErwHpkS7h3MwvQzvTts++zfOl4iYfB9q
+        PAngBRDpUQyTPVnVs+v6iSs=
+X-Google-Smtp-Source: ABdhPJyNLjeJUNhbcyqUseLKn/AOHETzyR0kNnjuJyNiW0lOPUD945guUsng+bjTQJfHD9zVJ5tCig==
+X-Received: by 2002:ac8:13cb:: with SMTP id i11mr11094139qtj.390.1604881154657;
+        Sun, 08 Nov 2020 16:19:14 -0800 (PST)
+Received: from localhost.localdomain ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id r19sm4851517qtm.4.2020.11.08.16.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Nov 2020 16:19:13 -0800 (PST)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Abbott Liu <liuwenliang@huawei.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Joe Perches <joe@perches.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kasan-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>
+Subject: [PATCH] ARM: boot: Quote aliased symbol names in string.c
+Date:   Sun,  8 Nov 2020 17:17:13 -0700
+Message-Id: <20201109001712.3384097-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201108222156.GA1049451@ubuntu-m3-large-x86>
+References: <20201108222156.GA1049451@ubuntu-m3-large-x86>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mJTKNNHvjHNMfuQMXEoFU.h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mJTKNNHvjHNMfuQMXEoFU.h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Patch "treewide: Remove stringification from __alias macro definition"
+causes arguments to __alias to no longer be quoted automatically, which
+breaks CONFIG_KASAN on ARM after commit d6d51a96c7d6 ("ARM: 9014/2:
+Replace string mem* functions for KASan"):
 
-Hi all,
+arch/arm/boot/compressed/string.c:24:1: error: attribute 'alias' argument not a string
+   24 | void *__memcpy(void *__dest, __const void *__src, size_t __n) __alias(memcpy);
+      | ^~~~
+arch/arm/boot/compressed/string.c:25:1: error: attribute 'alias' argument not a string
+   25 | void *__memmove(void *__dest, __const void *__src, size_t count) __alias(memmove);
+      | ^~~~
+arch/arm/boot/compressed/string.c:26:1: error: attribute 'alias' argument not a string
+   26 | void *__memset(void *s, int c, size_t count) __alias(memset);
+      | ^~~~
+make[3]: *** [scripts/Makefile.build:283: arch/arm/boot/compressed/string.o] Error 1
 
-After merging the drivers-memory tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Quote the names like the treewide patch does so there is no more error.
 
-In file included from drivers/devfreq/tegra20-devfreq.c:18:
-include/soc/tegra/mc.h: In function 'devm_tegra_memory_controller_get':
-include/soc/tegra/mc.h:211:1: error: no return statement in function return=
-ing non-void [-Werror=3Dreturn-type]
-  211 | }
-      | ^
-
-Caused by commit
-
-  1f1997eb44b1 ("memory: tegra: Add and use devm_tegra_memory_controller_ge=
-t()")
-
-I have added the following fix patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 9 Nov 2020 10:19:44 +1100
-Subject: [PATCH] fix "memory: tegra: Add and use
- devm_tegra_memory_controller_get()"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Reported-by: Valdis Klētnieks <valdis.kletnieks@vt.edu>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- include/soc/tegra/mc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
-index 43876216de34..d731407e23bb 100644
---- a/include/soc/tegra/mc.h
-+++ b/include/soc/tegra/mc.h
-@@ -207,7 +207,7 @@ struct tegra_mc *devm_tegra_memory_controller_get(struc=
-t device *dev);
- static inline struct tegra_mc *
- devm_tegra_memory_controller_get(struct device *dev)
- {
--	ERR_PTR(-ENODEV);
-+	return ERR_PTR(-ENODEV);
- }
- #endif
-=20
---=20
-2.28.0
+Hi Andrew,
 
---=20
+Stephen said I should send this along to you so that it can be applied
+as part of the post -next series. Please let me know if you need any
+more information or clarification, I tried to document it succinctly in
+the commit message.
+
 Cheers,
-Stephen Rothwell
+Nathan
 
---Sig_/mJTKNNHvjHNMfuQMXEoFU.h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ arch/arm/boot/compressed/string.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/arch/arm/boot/compressed/string.c b/arch/arm/boot/compressed/string.c
+index 8c0fa276d994..cc6198f8a348 100644
+--- a/arch/arm/boot/compressed/string.c
++++ b/arch/arm/boot/compressed/string.c
+@@ -21,9 +21,9 @@
+ #undef memcpy
+ #undef memmove
+ #undef memset
+-void *__memcpy(void *__dest, __const void *__src, size_t __n) __alias(memcpy);
+-void *__memmove(void *__dest, __const void *__src, size_t count) __alias(memmove);
+-void *__memset(void *s, int c, size_t count) __alias(memset);
++void *__memcpy(void *__dest, __const void *__src, size_t __n) __alias("memcpy");
++void *__memmove(void *__dest, __const void *__src, size_t count) __alias("memmove");
++void *__memset(void *s, int c, size_t count) __alias("memset");
+ #endif
+ 
+ void *memcpy(void *__dest, __const void *__src, size_t __n)
+-- 
+2.29.2
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+ofdQACgkQAVBC80lX
-0GwKsgf8C3c9FlIaMxyDQjiqU0F55uwZcreIZ96JWGLtlTRLB1adPo4m6vFshCAd
-EyWoj+fzd+Jdsd9Pja+6rOmr76zHw68mRyfcdZqgoe3WjS32CtBK0WViZAKfNyUO
-XokhE7Y2MuJP0BIDvGJcS6ZvRUIY4HhoYMit6qf2wD70VvQzj75LX6X3wX/m17dj
-4QdlAAFxAz4bTczn2Ief0PEEAoiGsHq3s11OPpOiV2iUTW+/5lumYjV5Yt8ZOBDb
-xbSU9kjPIoXr/xqfgS8johk4a4DLZ1NetFERgYotXMa6qeswsx8PJBUR1VBkEOeo
-5UXQC+qnVmbAUL6R/NaKgltLZkfuJQ==
-=Y3RR
------END PGP SIGNATURE-----
-
---Sig_/mJTKNNHvjHNMfuQMXEoFU.h--

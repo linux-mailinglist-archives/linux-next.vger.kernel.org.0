@@ -2,76 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47D82ADD87
-	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 18:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0322ADE7F
+	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 19:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbgKJR5y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Nov 2020 12:57:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbgKJR5y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Nov 2020 12:57:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB467C0613CF;
-        Tue, 10 Nov 2020 09:57:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=+zDhF1cewRznQmMlaJBM+aYh5OG2sBHH1iv62Jq/+Vg=; b=cmrWa9DhioliTzHETvj9OnEx0c
-        DuTZFUZGoIfxv25piFaT978APx/JY1ZzalHy6pLF562oPnH5K8YDBGw9YWqJJPI0rPfhHVUFnmvx8
-        IZdksGnD2V9h2VaoU2b2NNY6FCYkcpREfc80t/jKtzFoH+p10cjuo/l8HS2zQLT1Ymd2hr5Mkr6UH
-        jwqn9WPmZ8v1+9WpmOCt68uTe63f/0q/J1VzlopFNODxlDTLFR95q7EjbI38dZSvBW0sqHgok4JOO
-        g3mJ4sVDPG52XXPt5MD5KL6yOPGYcr9KCD5WN694WU5KDG7p40GTLsOqbRSNNaIw5q4hDf3XK8iL8
-        qoi4mgHw==;
-Received: from [2601:1c0:6280:3f0::662d] (helo=smtpauth.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kcXtv-0008Ot-Ez; Tue, 10 Nov 2020 17:57:52 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next] net: kcov: don't select SKB_EXTENSIONS when there is no NET
-Date:   Tue, 10 Nov 2020 09:57:46 -0800
-Message-Id: <20201110175746.11437-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        id S1730894AbgKJSib (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Nov 2020 13:38:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726557AbgKJSi2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Nov 2020 13:38:28 -0500
+Received: from paulmck-ThinkPad-P72.home (50-39-104-11.bvtn.or.frontiernet.net [50.39.104.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A2E76206F1;
+        Tue, 10 Nov 2020 18:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605033506;
+        bh=o1BESqzm8fBdi/X16H0n+RhuelYV3JhYq2tyea7TYx0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pyg1U9fcoUMM/AOVDy2cg0BRr2EGQN+i3y+JBKB0VE4LOzs6M0VoPHU47Xtsqt8CB
+         PmvuTUxTkX8dgGVF6UACpcNHL3Qn9crtbBlCXI5+FgtLWid5pQLsumuw/TuQCs4Uvx
+         wqDKP/HcDNd5bnd3/pjHETGyP3GkjaXJiiJES4JU=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 4B99E35226CB; Tue, 10 Nov 2020 10:38:26 -0800 (PST)
+Date:   Tue, 10 Nov 2020 10:38:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Colin Ian King <colin.king@canonical.com>
+Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Qian Cai <cai@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH][next] cpumask: allocate enough space for string and
+ trailing '\0' char
+Message-ID: <20201110183826.GV3249@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201109130447.2080491-1-colin.king@canonical.com>
+ <737d5be9eb5af55b1a61bd8bfb49b1829a3ff916.camel@redhat.com>
+ <e0458a3f-7635-bc80-9496-731bdfceed0d@windriver.com>
+ <20201110152437.GS3249@paulmck-ThinkPad-P72>
+ <6050d075-52cc-d1b8-51c4-4d0dac62a42e@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6050d075-52cc-d1b8-51c4-4d0dac62a42e@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix kconfig warning when CONFIG_NET is not set/enabled:
+On Tue, Nov 10, 2020 at 03:34:05PM +0000, Colin Ian King wrote:
+> On 10/11/2020 15:24, Paul E. McKenney wrote:
+> > On Mon, Nov 09, 2020 at 11:57:15PM -0500, Paul Gortmaker wrote:
+> >>
+> >>
+> >> On 2020-11-09 8:07 p.m., Qian Cai wrote:
+> >>> On Mon, 2020-11-09 at 13:04 +0000, Colin King wrote:
+> >>>> From: Colin Ian King <colin.king@canonical.com>
+> >>>>
+> >>>> Currently the allocation of cpulist is based on the length of buf but does
+> >>>> not include the addition end of string '\0' terminator. Static analysis is
+> >>>> reporting this as a potential out-of-bounds access on cpulist. Fix this by
+> >>>> allocating enough space for the additional '\0' terminator.
+> >>>>
+> >>>> Addresses-Coverity: ("Out-of-bounds access")
+> >>>> Fixes: 65987e67f7ff ("cpumask: add "last" alias for cpu list specifications")
+> >>>
+> >>> Yeah, this bad commit also introduced KASAN errors everywhere and then will
+> >>> disable lockdep that makes our linux-next CI miserable. Confirmed that this
+> >>> patch will fix it.
+> >>
+> >> I appreciate the reports reminding me why I hate touching string handling.
+> >>
+> >> But let us not lose sight of why linux-next exists.  We want to
+> >> encourage code to appear there as a sounding board before it goes
+> >> mainline, so we can fix things and not pollute mainline git history
+> >> with those trivialities.
+> >>
+> >> If you've decided to internalize linux-next as part of your CI, then
+> >> great, but do note that does not elevate linux-next to some pristine
+> >> status for the world at large.  That only means you have to watch more
+> >> closely what is going on.
+> >>
+> >> If you want to declare linux-next unbreakable -- well that would scare
+> >> away others to get the multi-arch or multi-config coverage that they may
+> >> not be able to do themselves.  We are not going to do that.
+> >>
+> >> I have (hopefully) fixed the "bad commit" in v2 -- as part of the
+> >> implicit linux-next rule "you broke it, you better fix it ASAP".
+> >>
+> >> But "bad" and "miserable" can be things that might scare people off of
+> >> making use of linux-next for what it is meant to be for.  And I am not
+> >> OK with that.
+> > 
+> > They would need to use much stronger language to scare me off.  That said,
+> > what on earth is the point of running tests if they do not from time to
+> > time find bugs?  ;-)
+> 
+> For me, part of the QA process is statically analyzing linux-next to
+> catch bugs before they land in linux. I think other testing is equally
+> worth while as catching bugs early saves time and money.
 
-WARNING: unmet direct dependencies detected for SKB_EXTENSIONS
-  Depends on [n]: NET [=n]
-  Selected by [y]:
-  - KCOV [=y] && ARCH_HAS_KCOV [=y] && (CC_HAS_SANCOV_TRACE_PC [=y] || GCC_PLUGINS [=n])
+All kidding aside, the fact that this appeared in -next was due to a
+mistake on my part, namely failing to push the changes before starting
+the test.  Please accept my apologies, and I will continue to do my
+best to avoid this sort of thing.
 
-Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Aleksandr Nogikh <nogikh@google.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-next@vger.kernel.org
-Cc: netdev@vger.kernel.org
----
-This is from linux-next. I'm only guessing that it is in net-next.
+							Thanx, Paul
 
- lib/Kconfig.debug |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20201110.orig/lib/Kconfig.debug
-+++ linux-next-20201110/lib/Kconfig.debug
-@@ -1874,7 +1874,7 @@ config KCOV
- 	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
- 	select DEBUG_FS
- 	select GCC_PLUGIN_SANCOV if !CC_HAS_SANCOV_TRACE_PC
--	select SKB_EXTENSIONS
-+	select SKB_EXTENSIONS if NET
- 	help
- 	  KCOV exposes kernel code coverage information in a form suitable
- 	  for coverage-guided fuzzing (randomized testing).
+> Colin
+> 
+> > 
+> >> Thanks,
+> >> Paul.
+> >> --
+> >>
+> >>>
+> >>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> >>>> ---
+> >>>>   lib/cpumask.c | 2 +-
+> >>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/lib/cpumask.c b/lib/cpumask.c
+> >>>> index 34ecb3005941..cb8a3ef0e73e 100644
+> >>>> --- a/lib/cpumask.c
+> >>>> +++ b/lib/cpumask.c
+> >>>> @@ -185,7 +185,7 @@ int __ref cpulist_parse(const char *buf, struct cpumask
+> >>>> *dstp)
+> >>>>   {
+> >>>>   	int r;
+> >>>>   	char *cpulist, last_cpu[5];	/* NR_CPUS <= 9999 */
+> >>>> -	size_t len = strlen(buf);
+> >>>> +	size_t len = strlen(buf) + 1;
+> >>>>   	bool early = !slab_is_available();
+> >>>>   	if (!strcmp(buf, "all")) {
+> >>>
+> 

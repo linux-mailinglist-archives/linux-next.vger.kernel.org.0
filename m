@@ -2,125 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DB22AD5D8
-	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 13:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAE02AD815
+	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 14:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgKJMFL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Nov 2020 07:05:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60094 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgKJMFL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Nov 2020 07:05:11 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D44F207BB
-        for <linux-next@vger.kernel.org>; Tue, 10 Nov 2020 12:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605009910;
-        bh=NjacH6bkcOERzYDNFL45MT7Ds4rqSNazlK8WgXpbazs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gzwnYvaiL8Hiu4yUfeLiaAQkp+6mfwgzNU5izEJVYn2kyUBV/B7ghEpmqurfQEFld
-         yHXYB9ZIKG3Ww/yNa+J9mcCJT5cR4AfmHKFedUHFYOE5aCPR6emsxLH4HIlqYXd1qz
-         klUtDLq9NKVogPjiAvjKAWg/XcAay81DqiudM24k=
-Received: by mail-oi1-f172.google.com with SMTP id t16so14002937oie.11
-        for <linux-next@vger.kernel.org>; Tue, 10 Nov 2020 04:05:10 -0800 (PST)
-X-Gm-Message-State: AOAM530MthWo37nOlgdKDmOdto4wc+HhHqaKcM5U4gAy2JUpyhRaxwsu
-        9qFs2xYleON0kBhd7jP//lcaVkY9Lh39DDPKqqA=
-X-Google-Smtp-Source: ABdhPJzSceMQUItQANolUTBd7Qkg1uc6HvQKnyle/28wSk5luTfJN+WxQ73JYHADIEnY2mfDP3qUOBnEPBfO2aM7Yb4=
-X-Received: by 2002:aca:d583:: with SMTP id m125mr2309350oig.47.1605009909177;
- Tue, 10 Nov 2020 04:05:09 -0800 (PST)
+        id S1730594AbgKJNy4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Nov 2020 08:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730254AbgKJNy4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Nov 2020 08:54:56 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F59C0613CF
+        for <linux-next@vger.kernel.org>; Tue, 10 Nov 2020 05:54:56 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id y22so12536294oti.10
+        for <linux-next@vger.kernel.org>; Tue, 10 Nov 2020 05:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lLfVBmh9MkTxoDFzoqNUDE/MZDm83UROmkhtqwZ64zY=;
+        b=at1jbtm+wrtqId5N9vtULTpT0fd5s7g2BGC8hYHVtWlLPYZpQi9ZFNKWoV4S0oyLPT
+         OxOqi+ZcGWTEfldLmYYJ+Ayyhx9X0a3VCYWC2mUAcrRKOyADJwa9OKSLcWNjVu3V8Oie
+         wMEM2anWzp5f7rkbrm/E2RBKs04g/tjhY06RQFRxpBWBMHJ4AgIqxnHkkSvv0oF96IZt
+         T58/FBhslp212iC97lIFK8dIx/7w9yel9ZK6/UiNS69AkE2sA5D5AZEyEv/4JElzfD8p
+         VuUOKRvmiUMtHw4/5/8WcD2Ba3yB4wCE/hZs5K4qg1XOLFzFIaGg3puVu0OyJdOM93CZ
+         dFEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lLfVBmh9MkTxoDFzoqNUDE/MZDm83UROmkhtqwZ64zY=;
+        b=cSY2oFVVcXbuupHPBUc/evwhNL1xR/kh/sapQxnwiInvI5kjABTWA3I5GHol4aRQto
+         BLy02UFOiQ8XBDWhKP/9VDXMHEm2DNII7suRyeXoltPTNMAPGnhOV7nCLEWFJmPIFLbl
+         2rqIVyTLuPcvEvmkilri1F5V5a2jYailiRf9rK+t8+Niw/BtNufylo1VBk51cINrTpR9
+         HL6UFkcpyFcLbD2TfPyMFGCRQsi01WMWEaTST9uurhpJ7nLdrzpR5uvOjt6HzUk0pOn7
+         ZmTfs8psnG8m5yMwqp9jsFtV3EVqiay8UoeUrQh9HOLqX++1Y1xYMGWb0AKu59kvvA6r
+         K4TQ==
+X-Gm-Message-State: AOAM531jAzbMd/TaAUbzwlMtPp0Y6RWk2TC1o88f6M/tTypAeJyNjroV
+        GtL9RjdFRujRtZpIThl2S5INp35AM+0GrKTRprcJrg==
+X-Google-Smtp-Source: ABdhPJxUU/epXdIimiw7Zx9ONQPApe+a/nTH78NUVGUOOq7N4PcnzbGf3Fl7WmvOM5kVFHqwG9rbAnr9eEZsQP2WZs8=
+X-Received: by 2002:a9d:f44:: with SMTP id 62mr14944693ott.17.1605016495304;
+ Tue, 10 Nov 2020 05:54:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20201019084140.4532-1-linus.walleij@linaro.org>
- <20201019084140.4532-3-linus.walleij@linaro.org> <CA+G9fYvfL8QqFkNDK69KBBnougtJb5dj6LTy=xmhBz33fjssgQ@mail.gmail.com>
- <CACRpkdZL7=0U6ns3tV972si-fLu3F_A6GbaPcCa9=m28KFZK0w@mail.gmail.com>
- <CAMj1kXFTbPL6J+p7LucwP-+eJhk7aeFFjhJdLW_ktRX=KiaoWQ@mail.gmail.com>
- <20201106094434.GA3268933@ubuntu-m3-large-x86> <CACRpkdaBnLsQB-b8fYaXGV=_i2y7pyEaVX=8pCAdjPEVHtqV4Q@mail.gmail.com>
- <20201106151554.GU1551@shell.armlinux.org.uk> <CACRpkdaaDMCmYsEptrcQdngqFW6E+Y0gWEZHfKQdUqgw7hiX1Q@mail.gmail.com>
- <20201109160643.GY1551@shell.armlinux.org.uk>
-In-Reply-To: <20201109160643.GY1551@shell.armlinux.org.uk>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 10 Nov 2020 13:04:57 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFpJNFNCSShKfNTTAhJofvDYjpuQDjRaBO1cvNuEBGe+A@mail.gmail.com>
-Message-ID: <CAMj1kXFpJNFNCSShKfNTTAhJofvDYjpuQDjRaBO1cvNuEBGe+A@mail.gmail.com>
-Subject: Re: [PATCH 2/5 v16] ARM: Replace string mem* functions for KASan
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+References: <20201105170604.6588a06e@canb.auug.org.au> <CADYN=9J0DQhizAGB0-jz4HOBBh+05kMBXb4c0cXMS7Qi5NAJiw@mail.gmail.com>
+ <CACT4Y+ZA5tv4siG7JsXqmrk2J5WOQOtW51g0DPNMPSGHKkixDw@mail.gmail.com>
+ <CADYN=9K4MY+zfB-0acmOQMyiqFnnt+CqiwZJK=-7ZvvztxdetA@mail.gmail.com> <CACT4Y+bR_oU7nSCTq1WgOMYFWHkmYW+jPuxhPkGO1YZEnHdyow@mail.gmail.com>
+In-Reply-To: <CACT4Y+bR_oU7nSCTq1WgOMYFWHkmYW+jPuxhPkGO1YZEnHdyow@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 10 Nov 2020 14:54:43 +0100
+Message-ID: <CANpmjNNaTUiK=j7tL2=WAHEG4pbXv6mS6Bf6jBwAwtVa4XbxeA@mail.gmail.com>
+Subject: Re: linux-next: Tree for Nov 5
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Abbott Liu <liuwenliang@huawei.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jann Horn <jannh@google.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 9 Nov 2020 at 17:07, Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Nov 09, 2020 at 05:02:09PM +0100, Linus Walleij wrote:
-> > On Fri, Nov 6, 2020 at 4:16 PM Russell King - ARM Linux admin
-> > <linux@armlinux.org.uk> wrote:
-> > > On Fri, Nov 06, 2020 at 02:37:21PM +0100, Linus Walleij wrote:
-> >
-> > > > Aha. So shall we submit this to Russell? I figure that his git will not
-> > > > build *without* the changes from mmotm?
+On Tue, 10 Nov 2020 at 10:36, Dmitry Vyukov <dvyukov@google.com> wrote:
+[...]
+> > > On Tue, Nov 10, 2020 at 8:50 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+[...]
+> > > > When building an arm64 allmodconfig and booting up that in qemu I see
 > > > >
-> > > > That tree isn't using git either is it?
+> > > > [10011.092394][   T28] task:kworker/0:2     state:D stack:26896 pid:
+> > > > 1840 ppid:     2 flags:0x00000428
+> > > > [10022.368093][   T28] Workqueue: events toggle_allocation_gate
+> > > > [10024.827549][   T28] Call trace:
+> > > > [10027.152494][   T28]  __switch_to+0x1cc/0x1e0
+> > > > [10031.378073][   T28]  __schedule+0x730/0x800
+> > > > [10032.164468][   T28]  schedule+0xd8/0x160
+> > > > [10033.886807][   T28]  toggle_allocation_gate+0x16c/0x220
+> > > > [10038.477987][   T28]  process_one_work+0x5c0/0x980
+> > > > [10039.900075][   T28]  worker_thread+0x428/0x720
+> > > > [10042.782911][   T28]  kthread+0x23c/0x260
+> > > > [10043.171725][   T28]  ret_from_fork+0x10/0x18
+> > > > [10046.227741][   T28] INFO: lockdep is turned off.
+> > > > [10047.732220][   T28] Kernel panic - not syncing: hung_task: blocked tasks
+> > > > [10047.741785][   T28] CPU: 0 PID: 28 Comm: khungtaskd Tainted: G
+> > > >   W         5.10.0-rc2-next-20201105-00006-g7af110e4d8ed #1
+> > > > [10047.755348][   T28] Hardware name: linux,dummy-virt (DT)
+> > > > [10047.763476][   T28] Call trace:
+> > > > [10047.769802][   T28]  dump_backtrace+0x0/0x420
+> > > > [10047.777104][   T28]  show_stack+0x38/0xa0
+> > > > [10047.784177][   T28]  dump_stack+0x1d4/0x278
+> > > > [10047.791362][   T28]  panic+0x304/0x5d8
+> > > > [10047.798202][   T28]  check_hung_uninterruptible_tasks+0x5e4/0x640
+> > > > [10047.807056][   T28]  watchdog+0x138/0x160
+> > > > [10047.814140][   T28]  kthread+0x23c/0x260
+> > > > [10047.821130][   T28]  ret_from_fork+0x10/0x18
+> > > > [10047.829181][   T28] Kernel Offset: disabled
+> > > > [10047.836274][   T28] CPU features: 0x0240002,20002004
+> > > > [10047.844070][   T28] Memory Limit: none
+> > > > [10047.853599][   T28] ---[ end Kernel panic - not syncing: hung_task:
+> > > > blocked tasks ]---
 > > > >
-> > > > Is this one of those cases where we should ask Stephen R
-> > > > to carry this patch on top of -next until the merge window?
-> > >
-> > > Another solution would be to drop 9017/2 ("Enable KASan for ARM")
-> > > until the following merge window, and queue up the non-conflicing
-> > > ARM KASan fixes in my "misc" branch along with the rest of KASan,
-> > > and the conflicting patches along with 9017/2 in the following
-> > > merge window.
-> > >
-> > > That means delaying KASan enablement another three months or so,
-> > > but should result in less headaches about how to avoid build
-> > > breakage with different bits going through different trees.
-> > >
-> > > Comments?
-> >
-> > I suppose I would survive deferring it. Or we could merge the
-> > smaller enablement patch towards the end of the merge
-> > window once the MM changes are in.
-> >
-> > If it is just *one* patch in the MM tree I suppose we could also
-> > just apply that one patch also to the ARM tree, and then this
-> > fixup on top. It does look a bit convoluted in the git history with
-> > two hashes and the same patch twice, but it's what I've done
-> > at times when there was no other choice that doing that or
-> > deferring development. It works as long as the patches are
-> > textually identical: git will cope.
+> > > > if I build with KFENCE=n it boots up eventually, here's my .config file [2].
+> > > >
+> > > > Any idea what may happen?
+> > > >
+> > > > it happens on next-20201109 also, but it takes longer until we get the
+> > > > "Call trace:".
+> > > >
+> > > > Cheers,
+> > > > Anders
+> > > > [1] http://ix.io/2Ddv
+> > > > [2] https://people.linaro.org/~anders.roxell/allmodconfig-next-20201105.config
+[...]
+> > oh I missed to say that this is the full boot log with the kernel
+> > panic http://ix.io/2Ddv
 >
-> I thought there was a problem that if I applied the fix then my tree
-> no longer builds without the changes in -mm?
+> Thanks!
+> The last messages before the hang are:
 >
+> [ 1367.791522][    T1] Running tests on all trace events:
+> [ 1367.815307][    T1] Testing all events:
+>
+> I can imagine tracing somehow interferes with kfence.
 
-Indeed. Someone is changing the __alias() wrappers [for no good reason
-afaict] in a way that does not allow for new users of those wrappers
-to come in concurrently.
+The reason is simply that that config on qemu is so slow (enabling
+lockdep helped), and the test that is running doesn't result in
+allocations for an extended time. Because of that our wait_event()
+just stalls, as there are no allocations coming in. My guess is that
+this scenario is unique to early boot, where we are not yet running
+user space, paired with running a selftest that results in no
+allocations for some time.
 
-Hency my suggestion to switch to the raw __attribute__((alias("..")))
-notation for the time being, and switch back to __alias() somewhere
-after v5.11-rc1.
+Try and give that a spin:
+https://lkml.kernel.org/r/20201110135320.3309507-1-elver@google.com
 
-Or we might add this to the file in question
-
-#undef __alias
-#define __alias(symbol) __attribute__((__alias__(symbol)))
-
-and switch to the quoted versions of the identifier. Then we can just
-drop these two lines again later, after v5.11-rc1
+Thanks,
+-- Marco

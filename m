@@ -2,90 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6898F2ACA06
-	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 02:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B1C2ACA15
+	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 02:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730521AbgKJBHR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Nov 2020 20:07:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41189 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730490AbgKJBHR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Nov 2020 20:07:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604970436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mTXlKfTWyct7ELa6NUDaZ2WTzRPRy3oG569ol0gWKuc=;
-        b=bB2rmL4gk0mc+6nOzR1T2/dWzIBcKodvotGx+zuxGQRikD0mLW296cj47EKZ2wEPsmdnLm
-        /SxXa3BPmulY4LrrcS/9Y0JJUAcZJWdFyoRrQQ5OYvQyOW7Q49GQpNz+2JpGzx/IXZ/Hxu
-        SPJJfFhXzdUh8o57KELBVRH1ueZkYCU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-471-n82JQp1uOrCTpvc-D-ELlg-1; Mon, 09 Nov 2020 20:07:14 -0500
-X-MC-Unique: n82JQp1uOrCTpvc-D-ELlg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DF1AD56C2E;
-        Tue, 10 Nov 2020 01:07:12 +0000 (UTC)
-Received: from ovpn-66-145.rdu2.redhat.com (unknown [10.10.67.145])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B433C100238C;
-        Tue, 10 Nov 2020 01:07:11 +0000 (UTC)
-Message-ID: <737d5be9eb5af55b1a61bd8bfb49b1829a3ff916.camel@redhat.com>
-Subject: Re: [PATCH][next] cpumask: allocate enough space for string and
- trailing '\0' char
-From:   Qian Cai <cai@redhat.com>
-To:     Colin King <colin.king@canonical.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Mon, 09 Nov 2020 20:07:10 -0500
-In-Reply-To: <20201109130447.2080491-1-colin.king@canonical.com>
-References: <20201109130447.2080491-1-colin.king@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        id S1731300AbgKJBJQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Nov 2020 20:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729968AbgKJBJP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Nov 2020 20:09:15 -0500
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2C1C0613D3;
+        Mon,  9 Nov 2020 17:09:15 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id q22so2712087qkq.6;
+        Mon, 09 Nov 2020 17:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2XKHZA23lqGXukkdu35/JyFEQPF6UYXMzYhhKw2rxGo=;
+        b=r/JRUTiK+47+y4OahAiRa1G+rapmvoJnFlgICYHcCVQHBVlYOgRE4uKBJmo5zoKszn
+         A5MlSiFBvleYXeWKkAqWUACMFq3LYbD6dvreXvgti4VOyZBnbxnqEdRGQFAPDGDgmDSb
+         UO7qdzFY2tnWHHXV9fBxEhQukAs5Xj36hJrH0261XPve/zoi1Rp0szsEcjEgyMpDd07N
+         UdGoxcQQiEhZzuBIdVt3M/SbhzU4xoI5wvUQGRKyBDZaVCZwgcWCGBMiOr81UWOL36zj
+         mh+tH5FVBWwE36hWwe3r+2bVm+xeqhm27Ag4rdl1N87aDt3lwI9TpCIxE4kflW7SRluo
+         obkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2XKHZA23lqGXukkdu35/JyFEQPF6UYXMzYhhKw2rxGo=;
+        b=NPvCTXds/ZTsdLwbx5E6XCYpDswYogoO5UUda7fl52bz9P5f+KpqLf13rfbUEVMYL8
+         5uOH2N/KW92fGSAjFZa1z/UZiUQaJkqgwiS8GUgi9u/wOcK07fPKEIQ+N923Lau+DIbX
+         Y06lFY1aGdFG4Ddg2tnWrWfedSUxiqgxMKqWAFTkByGPUabwSVJJnGHyoKTi4/6Yd9aP
+         B1zamVfhgC6ZN2PgKrcTO12U5Rd6Pw+UERIyQb82TqJoUGOPvA8cna2P7PBd5fR8fFEE
+         Frv16WvbedKIVRypU4+qBKu0xFKy8f6v8oz7rJosy2iN0iogtOTrMcqb7xAQUdbZTKe9
+         J2nw==
+X-Gm-Message-State: AOAM5307cc8NKNSH5gaVID6np2Lka+YXg5fF58eu7Lrin7/3HyJXwn9s
+        Ydc8grWfoOsVirCDX+MYKBo=
+X-Google-Smtp-Source: ABdhPJx7BbgcFLja6xvTiyyLD87hIKw5BHbWuSbxRVX/hG9Sz+pjezxp3cx51Lk6uWZNJVTZplGn9w==
+X-Received: by 2002:a37:a010:: with SMTP id j16mr10662108qke.347.1604970554741;
+        Mon, 09 Nov 2020 17:09:14 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id m25sm1816324qka.107.2020.11.09.17.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 17:09:14 -0800 (PST)
+Date:   Mon, 9 Nov 2020 18:09:12 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>, linux-next@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH -next v2] clk: pm_clock: provide stubs for
+ pm_clk_runtime_suspend/_resume
+Message-ID: <20201110010912.GA2018177@ubuntu-m3-large-x86>
+References: <20201109032115.10610-1-rdunlap@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201109032115.10610-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-11-09 at 13:04 +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Sun, Nov 08, 2020 at 07:21:15PM -0800, Randy Dunlap wrote:
+> Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
+> to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
 > 
-> Currently the allocation of cpulist is based on the length of buf but does
-> not include the addition end of string '\0' terminator. Static analysis is
-> reporting this as a potential out-of-bounds access on cpulist. Fix this by
-> allocating enough space for the additional '\0' terminator.
+> Fixes these build errors:
 > 
-> Addresses-Coverity: ("Out-of-bounds access")
-> Fixes: 65987e67f7ff ("cpumask: add "last" alias for cpu list specifications")
+> ../drivers/clk/qcom/camcc-sc7180.c: In function ‘cam_cc_sc7180_probe’:
+> ../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function ‘pm_clk_runtime_resume’; did you mean ‘pm_runtime_resume’? [-Werror=implicit-function-declaration]
+>   ret = pm_clk_runtime_resume(&pdev->dev);
+>         ^~~~~~~~~~~~~~~~~~~~~
+> ../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function ‘pm_clk_runtime_suspend’; did you mean ‘pm_runtime_suspend’? [-Werror=implicit-function-declaration]
+>    pm_clk_runtime_suspend(&pdev->dev);
+>    ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: Taniya Das <tdas@codeaurora.org>
+> Cc: linux-next@vger.kernel.org
+> Cc: Nathan Chancellor <natechancellor@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
 
-Yeah, this bad commit also introduced KASAN errors everywhere and then will
-disable lockdep that makes our linux-next CI miserable. Confirmed that this
-patch will fix it.
+Build-tested-by: Nathan Chancellor <natechancellor@gmail.com>
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
->  lib/cpumask.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: move the function stubs to be inside the #else (for !CONFIG_PM)
+>     as suggested by Nathan to fix another build error
 > 
-> diff --git a/lib/cpumask.c b/lib/cpumask.c
-> index 34ecb3005941..cb8a3ef0e73e 100644
-> --- a/lib/cpumask.c
-> +++ b/lib/cpumask.c
-> @@ -185,7 +185,7 @@ int __ref cpulist_parse(const char *buf, struct cpumask
-> *dstp)
->  {
->  	int r;
->  	char *cpulist, last_cpu[5];	/* NR_CPUS <= 9999 */
-> -	size_t len = strlen(buf);
-> +	size_t len = strlen(buf) + 1;
->  	bool early = !slab_is_available();
+>  include/linux/pm_clock.h |    8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> --- linux-next-20201106.orig/include/linux/pm_clock.h
+> +++ linux-next-20201106/include/linux/pm_clock.h
+> @@ -27,6 +27,14 @@ extern int pm_clk_runtime_resume(struct
+>  	.runtime_resume = pm_clk_runtime_resume,
+>  #else
+>  #define USE_PM_CLK_RUNTIME_OPS
+> +static inline int pm_clk_runtime_suspend(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +static inline int pm_clk_runtime_resume(struct device *dev)
+> +{
+> +	return 0;
+> +}
+>  #endif
 >  
->  	if (!strcmp(buf, "all")) {
-
+>  #ifdef CONFIG_PM_CLK

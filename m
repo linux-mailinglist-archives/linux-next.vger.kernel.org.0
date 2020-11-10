@@ -2,110 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC26F2ADD3A
-	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 18:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47D82ADD87
+	for <lists+linux-next@lfdr.de>; Tue, 10 Nov 2020 18:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731052AbgKJRnR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 10 Nov 2020 12:43:17 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43826 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729361AbgKJRnQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Nov 2020 12:43:16 -0500
-Received: by mail-ot1-f67.google.com with SMTP id y22so13346553oti.10;
-        Tue, 10 Nov 2020 09:43:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qnu8/T5bkd8G/CkLl66BCso+ilsoRzzCeunrKwYoy0s=;
-        b=OxxgmXKy3ao6hU2bPI2pP6F0MJWba3rvc9x31DgSVKcd3uol5QmgUFpGEvqmhcxw5A
-         EzvgPuLt7edrSu8qCabcANW7Yi2NEMyofRFHy+8vBvSQ9fQ4FWoqhczT+pgoeVOcMlDs
-         IdDlQicNlVIHXhtZHVn7iGW8VNPFw9vtv6sBKu+dWppAWYLIb5onT2UXBqjx6LdiX+G4
-         o3N70odwh3h02FQCSyLu0Bw4jKTcazuReo7G/BAPA8Us19uvtJOtimPZ5J8K6O/dLdG0
-         btbKnUDg4GGoV67Dt2/h58122vMx024UFIwpi1zLNLyYrP71lbD5ZXczk6ZzrYQgbCLZ
-         aLCQ==
-X-Gm-Message-State: AOAM530e1JtUM2Syo702RJiejnrtVFQtGMtDAVfVcLrBcZkj/p9Hmwka
-        s3boH7LGjJNiv7vyqM4djXrvFNDuMkXpaQmCimA=
-X-Google-Smtp-Source: ABdhPJzhrI7Y5KT3PFprtayKCcFjz+Fd5GTbsEZgmHb3dAz64E2uWYqzLe57EfTHryh28FKL9QkOfxa9w2O0JDT9sCk=
-X-Received: by 2002:a9d:222f:: with SMTP id o44mr15180360ota.321.1605030195675;
- Tue, 10 Nov 2020 09:43:15 -0800 (PST)
+        id S1726179AbgKJR5y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Nov 2020 12:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbgKJR5y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Nov 2020 12:57:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB467C0613CF;
+        Tue, 10 Nov 2020 09:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=+zDhF1cewRznQmMlaJBM+aYh5OG2sBHH1iv62Jq/+Vg=; b=cmrWa9DhioliTzHETvj9OnEx0c
+        DuTZFUZGoIfxv25piFaT978APx/JY1ZzalHy6pLF562oPnH5K8YDBGw9YWqJJPI0rPfhHVUFnmvx8
+        IZdksGnD2V9h2VaoU2b2NNY6FCYkcpREfc80t/jKtzFoH+p10cjuo/l8HS2zQLT1Ymd2hr5Mkr6UH
+        jwqn9WPmZ8v1+9WpmOCt68uTe63f/0q/J1VzlopFNODxlDTLFR95q7EjbI38dZSvBW0sqHgok4JOO
+        g3mJ4sVDPG52XXPt5MD5KL6yOPGYcr9KCD5WN694WU5KDG7p40GTLsOqbRSNNaIw5q4hDf3XK8iL8
+        qoi4mgHw==;
+Received: from [2601:1c0:6280:3f0::662d] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kcXtv-0008Ot-Ez; Tue, 10 Nov 2020 17:57:52 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next] net: kcov: don't select SKB_EXTENSIONS when there is no NET
+Date:   Tue, 10 Nov 2020 09:57:46 -0800
+Message-Id: <20201110175746.11437-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20201109032115.10610-1-rdunlap@infradead.org>
-In-Reply-To: <20201109032115.10610-1-rdunlap@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Nov 2020 18:43:04 +0100
-Message-ID: <CAJZ5v0jhJcL6uJw_Cm02SeUMff_s1L-mKzX3haAyejcCkKihNg@mail.gmail.com>
-Subject: Re: [PATCH -next v2] clk: pm_clock: provide stubs for pm_clk_runtime_suspend/_resume
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 9, 2020 at 4:21 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Add stubs for pm_clk_runtime_suspend() and pm_clk_runtime_resume()
-> to fix build errors when CONFIG_PM and CONFIG_PM_CLK are not enabled.
->
-> Fixes these build errors:
->
-> ../drivers/clk/qcom/camcc-sc7180.c: In function ‘cam_cc_sc7180_probe’:
-> ../drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function ‘pm_clk_runtime_resume’; did you mean ‘pm_runtime_resume’? [-Werror=implicit-function-declaration]
->   ret = pm_clk_runtime_resume(&pdev->dev);
->         ^~~~~~~~~~~~~~~~~~~~~
-> ../drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function ‘pm_clk_runtime_suspend’; did you mean ‘pm_runtime_suspend’? [-Werror=implicit-function-declaration]
->    pm_clk_runtime_suspend(&pdev->dev);
->    ^~~~~~~~~~~~~~~~~~~~~~
->
-> Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: Taniya Das <tdas@codeaurora.org>
-> Cc: linux-next@vger.kernel.org
-> Cc: Nathan Chancellor <natechancellor@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> v2: move the function stubs to be inside the #else (for !CONFIG_PM)
->     as suggested by Nathan to fix another build error
->
->  include/linux/pm_clock.h |    8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> --- linux-next-20201106.orig/include/linux/pm_clock.h
-> +++ linux-next-20201106/include/linux/pm_clock.h
-> @@ -27,6 +27,14 @@ extern int pm_clk_runtime_resume(struct
->         .runtime_resume = pm_clk_runtime_resume,
->  #else
->  #define USE_PM_CLK_RUNTIME_OPS
-> +static inline int pm_clk_runtime_suspend(struct device *dev)
-> +{
-> +       return 0;
-> +}
-> +static inline int pm_clk_runtime_resume(struct device *dev)
-> +{
-> +       return 0;
-> +}
->  #endif
->
->  #ifdef CONFIG_PM_CLK
+Fix kconfig warning when CONFIG_NET is not set/enabled:
 
-Applied to the PM tree as 5.10-rc material, thanks!
+WARNING: unmet direct dependencies detected for SKB_EXTENSIONS
+  Depends on [n]: NET [=n]
+  Selected by [y]:
+  - KCOV [=y] && ARCH_HAS_KCOV [=y] && (CC_HAS_SANCOV_TRACE_PC [=y] || GCC_PLUGINS [=n])
+
+Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Aleksandr Nogikh <nogikh@google.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: linux-next@vger.kernel.org
+Cc: netdev@vger.kernel.org
+---
+This is from linux-next. I'm only guessing that it is in net-next.
+
+ lib/Kconfig.debug |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- linux-next-20201110.orig/lib/Kconfig.debug
++++ linux-next-20201110/lib/Kconfig.debug
+@@ -1874,7 +1874,7 @@ config KCOV
+ 	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
+ 	select DEBUG_FS
+ 	select GCC_PLUGIN_SANCOV if !CC_HAS_SANCOV_TRACE_PC
+-	select SKB_EXTENSIONS
++	select SKB_EXTENSIONS if NET
+ 	help
+ 	  KCOV exposes kernel code coverage information in a form suitable
+ 	  for coverage-guided fuzzing (randomized testing).

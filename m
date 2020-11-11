@@ -2,112 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBDB2AE8BD
-	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 07:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48112AE8E8
+	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 07:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgKKGUs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Nov 2020 01:20:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgKKGUr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 01:20:47 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98D8C0613D1;
-        Tue, 10 Nov 2020 22:20:46 -0800 (PST)
+        id S1726134AbgKKGZB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Nov 2020 01:25:01 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44551 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726041AbgKKGYn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Nov 2020 01:24:43 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CWF3J6MmGz9s0b;
-        Wed, 11 Nov 2020 17:20:44 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CWF7r2cTlz9s0b;
+        Wed, 11 Nov 2020 17:24:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605075645;
-        bh=G/sLN+bge1UMOknjkYmz1l1u5lIQPHl0lMUV/OwH5VQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=t1n+6sQwBW1apddTnUl8URKCFeRkA7kEFK9KF6tgsDDKDWmmiuFx77okxCwJ1BIj9
-         JzJoDJ4jngIu+DNMK6gmjK3Pv1/mezEDtF5VtfFOPOxMD1aHEKau68hbyfvcAYN/Vg
-         V4CpWFdd93qpeYe99BS6McaJXPvJcqfgbZVqAd7dGdheZXkdLNGioll9I9CKRgUDpY
-         ZhL+KJ/OIIsUJJLp/UEyy3J9+Wha3qyzwcb35waK7XzDtBSmYDLxogOqOebbLyDKJN
-         C/e9+yHO3TkkZlVKp9h2x59yr+CSm/ZjFF2tvgH/vQsxwLR+QG47gq2mePy8GKUZsr
-         h0VRIKmguhpFQ==
-Date:   Wed, 11 Nov 2020 17:20:43 +1100
+        s=201702; t=1605075881;
+        bh=2xSwQqVyZ0Ecq7NEZnOipl3btYunLnZF2jGRnhP49eY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ObBFO/2SK+G8lOjwbMC1I772oAMlpclSsngB122Bgvie27NsL4714EuUsweksQb/5
+         jRouPmCkCKR3ANSkGjtAp2APs77NgDqW2zqsxi7zCWwLRKIouRt+bjItvveiJfuHOX
+         T9XttWJOQobau85twbnKm1EW/OJ+5cFZYjsiBvxu8xSUXsr8dTJA+hRxlAJTxBi6Nd
+         bRxCx3eKHsRo5dbqbp2rnvdTbFsSCERFvhCg6qdL8Hvx+8x4kXtqKQJB1WWbMJqmb3
+         zVXinq/fcaCFr2BJ8Ej09LNper2hJems5YDzddAfgsW/wx1xNk4UPJxrS+wcIP0V/M
+         1/YIwMphBGXHg==
+Date:   Wed, 11 Nov 2020 17:24:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
+To:     David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the akpm tree
-Message-ID: <20201111172043.6e56cc71@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: linux-next: manual merge of the notifications tree with Linus'
+ tree
+Message-ID: <20201111172439.60d5a8f0@canb.auug.org.au>
+In-Reply-To: <20201021124733.344e5107@canb.auug.org.au>
+References: <20201021124733.344e5107@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DIQ9vsIWFgMC6mDnU+Wc54r";
+Content-Type: multipart/signed; boundary="Sig_/Bn/SVxCl+1D9c_0C_p1jnnX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DIQ9vsIWFgMC6mDnU+Wc54r
+--Sig_/Bn/SVxCl+1D9c_0C_p1jnnX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi David,
 
-After merging the akpm tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Wed, 21 Oct 2020 12:47:33 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the notifications tree got conflicts in:
+>=20
+>   arch/alpha/kernel/syscalls/syscall.tbl
+>   arch/arm/tools/syscall.tbl
+>   arch/arm64/include/asm/unistd32.h
+>   arch/ia64/kernel/syscalls/syscall.tbl
+>   arch/m68k/kernel/syscalls/syscall.tbl
+>   arch/microblaze/kernel/syscalls/syscall.tbl
+>   arch/mips/kernel/syscalls/syscall_n32.tbl
+>   arch/mips/kernel/syscalls/syscall_n64.tbl
+>   arch/mips/kernel/syscalls/syscall_o32.tbl
+>   arch/parisc/kernel/syscalls/syscall.tbl
+>   arch/powerpc/kernel/syscalls/syscall.tbl
+>   arch/s390/kernel/syscalls/syscall.tbl
+>   arch/sh/kernel/syscalls/syscall.tbl
+>   arch/sparc/kernel/syscalls/syscall.tbl
+>   arch/x86/entry/syscalls/syscall_32.tbl
+>   arch/x86/entry/syscalls/syscall_64.tbl
+>   arch/xtensa/kernel/syscalls/syscall.tbl
+>   include/uapi/asm-generic/unistd.h
+>=20
+> between commit:
+>=20
+>   ecb8ac8b1f14 ("mm/madvise: introduce process_madvise() syscall: an exte=
+rnal memory hinting API")
+>=20
+> from Linus' tree and commit:
+>=20
+>   4cd92d064cb0 ("watch_queue: Implement mount topology and attribute chan=
+ge notifications")
+>=20
+> from the notifications tree.
 
-mm/kasan/shadow.c: In function 'kasan_poison_memory':
-mm/kasan/shadow.c:88:6: error: implicit declaration of function 'is_kfence_=
-address' [-Werror=3Dimplicit-function-declaration]
-   88 |  if (is_kfence_address(address))
-      |      ^~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  97f3d663343a ("kasan-split-out-shadowc-from-commonc-fix")
-
-I have applied this fix patch for today:
-
-=46rom e96c5bb419a2042483dcc914750e4e903d73e70e Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 11 Nov 2020 17:16:35 +1100
-Subject: [PATCH] kasan-split-out-shadowc-from-commonc-fix2
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/kasan/shadow.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index 1f8d713fa8a3..f45442ef42b1 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -14,6 +14,7 @@
- #include <linux/kasan.h>
- #include <linux/kernel.h>
- #include <linux/kmemleak.h>
-+#include <linux/kfence.h>
- #include <linux/memory.h>
- #include <linux/mm.h>
- #include <linux/string.h>
---=20
-2.28.0
+Do you intend to keep this change?  If so, will you rebase it?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DIQ9vsIWFgMC6mDnU+Wc54r
+--Sig_/Bn/SVxCl+1D9c_0C_p1jnnX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+rgrsACgkQAVBC80lX
-0GyyBAf9Fp/5QOysmNJ5SE6qgAOdV/lZuaPTVM/mKsm/G93WQ/pe1BSKVTd4ooXJ
-LMDGKPbeDkHzBgsxn/vkDP67Jtxz5TJMMKJUVg30L0hPr3P3xmSun4E6jdU8Upzk
-bJaktyDGAYqv+Glxt5twynTRD2pTZeyIfBmyLTbBNGIwGbqTcAT6PcO6lMuoOIXe
-6ckqObvO5z3p027mGTlmxKxf2k1O0eWVg9dC7LgasjxgAgHxI7fEQbQrpS8bMTI1
-YjGmf4AdRNKX61JREMK0UvnQxl/lhbiafpiWM2JpQBKLf48NACj6e3UkmvtQDi4R
-1TwWlVWdwhAus/O/wVQdyBjI4ACaHQ==
-=b3bX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+rg6cACgkQAVBC80lX
+0Gyl9Af+Ndf52osbMBJGqQzqNAzOvK+YECIUK37okJK+0CejhOzyGlqLynwjnj+T
+vcr2IsRYXTv61ZxCZPGcn1m2lWCARVgAabK0XodKi/fn9ZmiSQWHik6Jt7fpq+RS
+YPzjB1C2s2YfZyAw/0RXhkvBHDSm/97aGUcfeYz3pgmRBVwtHYi3FPfQA6SClxKE
+7Mz5fEJFhWvjXlqASfCCHSpYYo4RzrzKkVs0O4W1yqRCzUctQDo1KUBKOzfasDZ6
+cRMs7EuaZrqLYDmJ806Cy3wisG3XvdBldaP7KnG1Zh6RLQ++Rlz2FgJMBsEUaBJF
+XZstW0+LyM4qwYv+KFGvR6PlSEFBhw==
+=CQD0
 -----END PGP SIGNATURE-----
 
---Sig_/DIQ9vsIWFgMC6mDnU+Wc54r--
+--Sig_/Bn/SVxCl+1D9c_0C_p1jnnX--

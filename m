@@ -2,130 +2,234 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD8C2AF135
-	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 13:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFB32AF1E9
+	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 14:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725859AbgKKMsq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Nov 2020 07:48:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38566 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726207AbgKKMsp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Nov 2020 07:48:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605098924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zGXJ8V4La1S/QeUFBtdnXjusm+8Mn5insAGmUISpfHs=;
-        b=F1PZsI4a6hTKkBvvX/ZppGYJoY5vAo+DeBNUieutbG+qSQl07V3bNko6OnLkEZPg2w7XmQ
-        mpwv3wzSJqHa0iDkcmhY0RhqY3+1N06gCV7qw7WOgAgMPYz8cuQ8s5kgE2amRbBHl/hL8E
-        8j6nrQEh5oXFpEYzf41h7FI4KITPKss=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-223-RUX3uz6TNLyouJvaSrXywg-1; Wed, 11 Nov 2020 07:48:42 -0500
-X-MC-Unique: RUX3uz6TNLyouJvaSrXywg-1
-Received: by mail-wm1-f71.google.com with SMTP id o19so866800wme.2
-        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 04:48:42 -0800 (PST)
+        id S1726424AbgKKNTh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Nov 2020 08:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgKKNTg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 08:19:36 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749C7C0613D1
+        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 05:19:36 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id z3so1580282pfb.10
+        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 05:19:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=xOEBfNet2IIhnDUe7vU0nGIDIA0pb6oI0zqNSJX3sGc=;
+        b=fNBw1IQ/aEq7RWMfIUIzQjT709G+VAIVCghzD6LZK82XXprakxxNWb4sJBxrGI2vf3
+         9OufA6LfgQ5zguxV2Czkn5qqPg1hgN0QyGBJrOqPoVyaLxXPBAbUeoQ9//FJZXj8Z20g
+         b9HC2Nqm3YH0bAm6Ob4qhyWJ0a9k5qiQw9SQ+cAuxN9abBuS0zCPePBhJ7qyybAf/+be
+         tk2neFg9Zr6FRIBElISuzMo4YNBRaF2+R89HG+pXA7GpCd73w6iU00xt6ctHSTxzvavD
+         c+AHuV/PO8mMpnfO21bZFV6Yupu+w6vtL8c3cFhZtWHY58i6sbUgwJwT1ORosKNQO0jY
+         Dg7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zGXJ8V4La1S/QeUFBtdnXjusm+8Mn5insAGmUISpfHs=;
-        b=oswdGmbfFNoc+/r3nQAE8dXmDkRjcS6ReraEgVDtJECNdKwjt74RvAYx4ffmO1MDud
-         o0kGRlH19Qbn6PaDKycWLIl/ie1Pqh3+/Zq+xNebFB3lzoMz57Adqmnxow38lvMBTXhR
-         TvI20Qj3dSxJb3XRNaA4pc/ty1TlI2j3sEVSt0av2ROswad5qFHnhY2KwDWf0mJVs6pL
-         IXthYmGrYeB7xgZA1aHbEqWd4HGg6WF5p9hM3BCYJjxpi4x8nKZEOQLOoI+PH8egaTK4
-         MqUY0HlywOjokfkFIZC37UNc1Io/PixRPguUSlx+3NoA25QqXzgpbrIX77yHbJevmHDZ
-         HFIQ==
-X-Gm-Message-State: AOAM532jHzPN9eY3zECpgivPl8dO6/Bp0wl72dTGnDXf3bvjTvUUpIa7
-        +dC0xUt6JCOE87KaBjdfBIZcWlpR+BrjeJCxN+nL47tlpsb644vhbopVZqb5czVzQhH063+eGZx
-        I/yJ0ApbKTD7jP003453S4A==
-X-Received: by 2002:a5d:5446:: with SMTP id w6mr20336613wrv.122.1605098921358;
-        Wed, 11 Nov 2020 04:48:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzBamKw/bg5c7+XjuuJx3l1SVoJhclL/t8sfniS6v7UD+Th0hPny5TfD72A5b6eS01hmH1NbQ==
-X-Received: by 2002:a5d:5446:: with SMTP id w6mr20336594wrv.122.1605098921214;
-        Wed, 11 Nov 2020 04:48:41 -0800 (PST)
-Received: from redhat.com (bzq-79-181-34-244.red.bezeqint.net. [79.181.34.244])
-        by smtp.gmail.com with ESMTPSA id y11sm2305471wmj.36.2020.11.11.04.48.38
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=xOEBfNet2IIhnDUe7vU0nGIDIA0pb6oI0zqNSJX3sGc=;
+        b=rG1QGl7x8NMTkUUmqy1Zq6UUbbtWeTL/5R17pl48sCEihvGwMhsoePY9AzuUNAOBQI
+         bYfViGAgLbFcfCzPTOgpdyVeyEXFVxziWhMsOXoyt8A3zu4sqdp/t4xHsFrJZC+pk1dO
+         9Y85xQUcuACLXYjqDJJEOQ8vzxx4DXoE/NARpiv+G8DBQTWHdxzqF5XoG76BLG+1/73g
+         aGdMXh74SiXAJCL8E6VkTSCuDu1i6kN5/b2OS7Z7TgSC2mOhOZaSP1MG+NF0VxQDYu+0
+         T7hrSGaod6u/o9EtlswKYdyrm85xGdc7F0jpEkQzuxRp4O7Z48rRuQ26N7hqn7b+/kEP
+         RdSw==
+X-Gm-Message-State: AOAM532Y1flMVVbD9d0/8aninQV+3MXeg6PTBidJ6hRRLJUpQLM53XGn
+        SYnbvEJGAIIckTq3a7wUHkLazNDyq5E02g==
+X-Google-Smtp-Source: ABdhPJwhUXQpRpAYOzagge69HSqwv0tThKwn+Tg1guts4vfhPL/ttc+jfiPVEVu4dzS0//O+BPAfOA==
+X-Received: by 2002:a63:2145:: with SMTP id s5mr20483393pgm.288.1605100775648;
+        Wed, 11 Nov 2020 05:19:35 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z16sm2749525pfq.179.2020.11.11.05.19.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 04:48:40 -0800 (PST)
-Date:   Wed, 11 Nov 2020 07:48:36 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20201111074811-mutt-send-email-mst@kernel.org>
-References: <20201102124327.2f82b2a7@canb.auug.org.au>
- <20201102051822-mutt-send-email-mst@kernel.org>
- <20201111171015.631ffd0e@canb.auug.org.au>
+        Wed, 11 Nov 2020 05:19:35 -0800 (PST)
+Message-ID: <5fabe4e7.1c69fb81.dfb01.5d3d@mx.google.com>
+Date:   Wed, 11 Nov 2020 05:19:35 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201111171015.631ffd0e@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.10-rc3-315-g3c8bf35b8254
+Subject: next/pending-fixes baseline: 329 runs,
+ 4 regressions (v5.10-rc3-315-g3c8bf35b8254)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 05:10:15PM +1100, Stephen Rothwell wrote:
-> Hi Michael,
-> 
-> On Mon, 2 Nov 2020 05:19:06 -0500 "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> >
-> > On Mon, Nov 02, 2020 at 12:43:27PM +1100, Stephen Rothwell wrote:
-> > > 
-> > > After merging the drm-misc tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > > 
-> > > In file included from drivers/gpu/drm/nouveau/nouveau_ttm.c:26:
-> > > include/linux/swiotlb.h: In function 'swiotlb_max_mapping_size':
-> > > include/linux/swiotlb.h:99:9: error: 'SIZE_MAX' undeclared (first use in this function)
-> > >    99 |  return SIZE_MAX;
-> > >       |         ^~~~~~~~
-> > > include/linux/swiotlb.h:7:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-> > >     6 | #include <linux/init.h>
-> > >   +++ |+#include <stdint.h>
-> > >     7 | #include <linux/types.h>
-> > > include/linux/swiotlb.h:99:9: note: each undeclared identifier is reported only once for each function it appears in
-> > >    99 |  return SIZE_MAX;
-> > >       |         ^~~~~~~~
-> > > 
-> > > Caused by commit
-> > > 
-> > >   abe420bfae52 ("swiotlb: Introduce swiotlb_max_mapping_size()")
-> > > 
-> > > but only exposed by commit
-> > > 
-> > >   4dbafbd30aef ("drm/nouveu: fix swiotlb include")
-> > > 
-> > > I applied the following fix for today:
-> > > 
-> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date: Mon, 2 Nov 2020 12:34:57 +1100
-> > > Subject: [PATCH] swiotlb: using SIZE_MAX needs limits.h included
-> > > 
-> > > Fixes: abe420bfae52 ("swiotlb: Introduce swiotlb_max_mapping_size()")
-> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>  
-> > 
-> > Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> > 
-> > I guess it makes sense to pick this up for this release directly.
-> > I'll merge this unless there are any objections.
-> 
-> Christoph is right that the include should not be conditional.  But I
-> have not tested that that does not introduce some other problems.
+next/pending-fixes baseline: 329 runs, 4 regressions (v5.10-rc3-315-g3c8bf3=
+5b8254)
 
-If there's a problem it will be a build failure - I'll put
-it in next for a while, this way we'll find out.
+Regressions Summary
+-------------------
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
+onfig          | 1          =
+
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+meson-gxl-s805x-p241     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..BIG_ENDIAN=3Dy | 1          =
 
 
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.10-rc3-315-g3c8bf35b8254/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.10-rc3-315-g3c8bf35b8254
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      3c8bf35b825484117189bf15702deea14bd8b7b2 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
+onfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fabb0e0eeb227d04edb8875
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
+sd.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
+sd.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fabb0e0eeb227d04edb8=
+876
+        failing since 16 days (last pass: v5.9-13195-g0281c5220c40, first f=
+ail: v5.9-14860-gd56fc2efcc70) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fabb1e06b3ab638a4db8853
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fabb1e06b3ab638a4db8=
+854
+        failing since 16 days (last pass: v5.9-13195-g0281c5220c40, first f=
+ail: v5.9-14860-gd56fc2efcc70) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fabb373580929acd6db8854
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fabb373580929acd6db8=
+855
+        new failure (last pass: v5.10-rc3-245-gcb165dbb5aeb) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+meson-gxl-s805x-p241     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fabb20442d2b10b78db8857
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxl-s805x-p241.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
+15-g3c8bf35b8254/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxl-s805x-p241.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fabb20442d2b10b78db8=
+858
+        new failure (last pass: v5.10-rc3-245-gcb165dbb5aeb) =
+
+ =20

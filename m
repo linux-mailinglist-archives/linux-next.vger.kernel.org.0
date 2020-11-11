@@ -2,54 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EC22AED0E
-	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 10:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE2D2AEDCF
+	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 10:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgKKJMp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Nov 2020 04:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726995AbgKKJMC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 04:12:02 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD244C0613D4
-        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 01:12:01 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id z21so2145618lfe.12
-        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 01:12:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nbnt6veYw6qTwcMDRL4+mV8KXeaSuLnKhno6+5s2SFU=;
-        b=ty5YHZnWhYAcWsKkLNWiqJBKnBrNi5lXjTSZ32spL4wqL6UtA6AbHjprIxTz2iMOiE
-         7NvsJXhMLQXVaeyWfyE94zxEGVf4a01pagdCHqtXlvIdjqELf35c/jNzbcV3DDeU2odX
-         aIhx4RYmhkNYPo74YQ/Pfl2ewAKmoeUrL40WuyIxJ03UrfnVmanZnEEw+F0tR8vf2D79
-         yjDVk1rKlxp67wThAFS/KJqiEgssn3/2MiUCp8Z2YkNsnXdc4p1db9Gf9ilp3A2PguGA
-         Lvj0VM16+uUbPKSbLNMxTUGkl+Rq8zc3QrEknvEK6zb5emqqqP2QL6O3SgsTy/hhN/z/
-         UOvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nbnt6veYw6qTwcMDRL4+mV8KXeaSuLnKhno6+5s2SFU=;
-        b=KFtBNXhsUmJien+zcleJNlvRyYVOHrESRzfqf5Yd9kGHsF4IaEQCU4HaC/Ptos8+vd
-         sXp7Ti4F0rxO2jMTszdVnxU4pEbJG+baH4irdmxbXdkxjrH93HBS63TEmErENwwL5uR9
-         8EoM82m7C9fMgodQx/LhHexUF23lU6cJIPaR5YY3JEfmeEpQn6SPpRgVtTjnzwzeAaNn
-         ORwY9CeoW7xy1LBStqMFBS4JdVLHZ8WQHni0qFY+tiULL6ScyrKmz+UL8Lv3sWxxnX26
-         kekGPMj+3IvrjPVxnttyPMgbClLPyqPt1sMplEZDSyFMquCqpkr0SNd3RrtFgfFn0xcm
-         4D6g==
-X-Gm-Message-State: AOAM533p1eGdoZ9G2Dix+DnfQ98ejPlIgZU8ORKt+sMc92jY11Gj0XoM
-        wYoRRfzZv4Ktc45SimHJKgGopUDoQNTDIzufjfIXqw==
-X-Google-Smtp-Source: ABdhPJwos4mzSJfmoOsowN+ImAeNCfboX3OCQ3wQdi+b27K1mVTdppGK3LmHg1zytVgXlWp7fxJcgNHKY9Yn6AOigTo=
-X-Received: by 2002:ac2:50c1:: with SMTP id h1mr8771651lfm.333.1605085919810;
- Wed, 11 Nov 2020 01:11:59 -0800 (PST)
+        id S1726556AbgKKJb2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Nov 2020 04:31:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725986AbgKKJb1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Nov 2020 04:31:27 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B4C92067D;
+        Wed, 11 Nov 2020 09:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605087085;
+        bh=TaAgY+lXg95mPvCVhrS0CpZt2rhWBIm0s618ow6cMt8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JmQ2zAh4OMqK960v3coR9S3dRP14lKOZhwrdHkMHUT6Da8fZ+Fqe/YEDCeys2Y/p+
+         uBgw+FZsp4hrBpEYDIhT64E3puB3p+Ag3uZJbeXeZzqP17N6IYHb3DJTxaCLGJ4gmY
+         m7zpeET+8tJSmqw3CPfYmvhcl8ILzjtsKTMAEIvE=
+Received: by mail-ot1-f45.google.com with SMTP id n11so1559970ota.2;
+        Wed, 11 Nov 2020 01:31:25 -0800 (PST)
+X-Gm-Message-State: AOAM533RRMdIxQKrlkb5/FHqfQNX/+zmtkU9zZfGexCyP+CgKYQfWeUu
+        fhUh9HHox7Kcgf9muSAH2+t5GxBYetjAGa9U5Qc=
+X-Google-Smtp-Source: ABdhPJwh56XFQ+qKi+jJ10DljYIOI6NRvK286cnadP46C/BhAdmNh8psbFrdyLEk9DtGZrhVyiA2Oj30hSwDLP47dqI=
+X-Received: by 2002:a9d:65d5:: with SMTP id z21mr15863879oth.251.1605087084745;
+ Wed, 11 Nov 2020 01:31:24 -0800 (PST)
 MIME-Version: 1.0
 References: <CA+G9fYtrOq66zz8ux=G+SDH7ZUJevv-L0W+xvtERHAJCuCmj_g@mail.gmail.com>
  <CAMj1kXESZU2w98gX3uSc-uAw_w9KxSYTKUr6Ne6XHCPWsYT=jQ@mail.gmail.com>
 In-Reply-To: <CAMj1kXESZU2w98gX3uSc-uAw_w9KxSYTKUr6Ne6XHCPWsYT=jQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Nov 2020 10:11:48 +0100
-Message-ID: <CACRpkdbs__j01qQ5ZudiZ3HX7ifY0ENdF3Tk_8vpfKc9OW=7gg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 11 Nov 2020 10:31:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2a6onxox-aYY-o4e=LyMC_zqrKDydMM6hWrAkzbf+SfA@mail.gmail.com>
+Message-ID: <CAK8P3a2a6onxox-aYY-o4e=LyMC_zqrKDydMM6hWrAkzbf+SfA@mail.gmail.com>
 Subject: Re: arm: kasan: WARNING: CPU: 0 PID: 0 at arch/arm/kernel/insn.c:47 __arm_gen_branch
 To:     Ard Biesheuvel <ardb@kernel.org>
 Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
@@ -57,6 +45,7 @@ Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
+        Linus Walleij <linus.walleij@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -68,15 +57,187 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 On Wed, Nov 11, 2020 at 9:15 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-
+>
+> On Wed, 11 Nov 2020 at 07:13, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > The following kernel warning noticed on arm KASAN enabled config while booting.
+> >
+> > [    0.000000] Linux version 5.10.0-rc3-next-20201110
+> > (tuxmake@e15fe3b4fdc6) (arm-linux-gnueabihf-gcc (Debian 9.3.0-13)
+> > 9.3.0, GNU ld (GNU Binutils for Debian) 2.35.1) #2 SMP Tue Nov 10
+> > 07:49:47 UTC 2020
+> > [    0.000000] CPU: ARMv7 Processor [410fd034] revision 4 (ARMv7), cr=10c5383d
+> > <trim>
+> > [    0.000000] kasan: Truncating shadow for memory block at
+> > 0x40000000-0xffffffff to lowmem region at 0x70000000
+> > [    0.000000] kasan: Mapping kernel virtual memory block:
+> > c0000000-f0000000 at shadow: b7000000-bd000000
+> > [    0.000000] kasan: Mapping kernel virtual memory block:
+> > bf000000-c0000000 at shadow: b6e00000-b7000000
+> > [    0.000000] kasan: Kernel address sanitizer initialized
+> > <trim>
+> > [    0.000000] ftrace: allocating 57178 entries in 112 pages
+> > [    0.000000] ------------[ cut here ]------------
+> > [    0.000000] WARNING: CPU: 0 PID: 0 at arch/arm/kernel/insn.c:47
+> > __arm_gen_branch+0x78/0x80
+> > [    0.000000] Modules linked in:
+> > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+> > 5.10.0-rc3-next-20201110 #2
+> > [    0.000000] Hardware name: Generic DT based system
+> > [    0.000000] Backtrace:
+> > [    0.000000] [<c199f710>] (dump_backtrace) from [<c199fb94>]
+> > (show_stack+0x20/0x24)
+> > [    0.000000]  r9:00000080 r8:c2e00000 r7:c3023060 r6:600000d3
+> > r5:00000000 r4:c3023060
+> > [    0.000000] [<c199fb74>] (show_stack) from [<c19a7ad0>]
+> > (dump_stack+0xe8/0x10c)
+> > [    0.000000] [<c19a79e8>] (dump_stack) from [<c0366518>] (__warn+0x140/0x164)
+> > [    0.000000]  r10:00000009 r9:00000000 r8:c2e0e000 r7:00000009
+> > r6:c031986c r5:0000002f
+> > [    0.000000]  r4:c1a0bbe0 r3:c2e06f50
+> > [    0.000000] [<c03663d8>] (__warn) from [<c19a13ac>]
+> > (warn_slowpath_fmt+0xc0/0x128)
+> > [    0.000000]  r9:c031986c r8:0000002f r7:c1a0bbe0 r6:00000000
+> > r5:c2e03ec0 r4:b75c07cc
+> > [    0.000000] [<c19a12f0>] (warn_slowpath_fmt) from [<c031986c>]
+> > (__arm_gen_branch+0x78/0x80)
+> > [    0.000000]  r10:0000d247 r9:c4019238 r8:c400c104 r7:c2e070a0
+> > r6:c400c108 r5:c0319250
+> > [    0.000000]  r4:00000000
+> > [    0.000000] [<c03197f4>] (__arm_gen_branch) from [<c0319720>]
+> > (ftrace_make_nop+0x30/0x48)
+> > [    0.000000]  r5:c0319250 r4:c2b00354
+> > [    0.000000] [<c03196f0>] (ftrace_make_nop) from [<c04ac104>]
+> > (ftrace_process_locs+0x470/0x5f0)
+> > [    0.000000]  r5:00001248 r4:c400c100
+> > [    0.000000] [<c04abc94>] (ftrace_process_locs) from [<c2b2d8f4>]
+> > (ftrace_init+0xa8/0x158)
+> > [    0.000000]  r10:10c5387d r9:c1a87768 r8:c2cb9f98 r7:c2c82230
+> > r6:00000001 r5:c2e070a0
+> > [    0.000000]  r4:c37f5c40
+> > [    0.000000] [<c2b2d84c>] (ftrace_init) from [<c2b010ec>]
+> > (start_kernel+0x174/0x3f8)
+> > [    0.000000]  r9:00000001 r8:c2e06f00 r7:00000000 r6:c2e06f00
+> > r5:c37c0000 r4:ffffffff
+> > [    0.000000] [<c2b00f78>] (start_kernel) from [<00000000>] (0x0)
+> > [    0.000000]  r9:410fd034 r8:48000000 r7:ffffffff r6:10c0387d
+> > r5:00000051 r4:c2b00334
+> > [    0.000000] random: get_random_bytes called from
+> > print_oops_end_marker+0x30/0xa0 with crng_init=0
+> > [    0.000000] ---[ end trace 0000000000000000 ]---
+> > [ #
+> >    0.000000] ------------[ ftrace bug ]------------
+> > [    0.000000] ftrace failed to modify
+> > [    0.000000] [<c2b00354>] set_reset_devices+0x10/0x28
+> > [    0.000000]  actual:   0a:3d:04:eb
+> > [    0.000000] Initializing ftrace call sites
+> > [    0.000000] ftrace record flags: 0
+> > [    0.000000]  (0)
+> > [    0.000000]  expected tramp: c031925c
+> > [    0.000000] ------------[ cut here ]------------
+> > [    0.000000] WARNING: CPU: 0 PID: 0 at kernel/trace/ftrace.c:2065
+> > ftrace_bug+0x218/0x280
+> > [    0.000000] Modules linked in:
+> > [    0.000000] CPU: 0 PID: 0 Comm: swapper Tainted: G        W
+> > 5.10.0-rc3-next-20201110 #2
+> > [    0.000000] Hardware name: Generic DT based system
+> > [    0.000000] Backtrace:
+> > [    0.000000] [<c199f710>] (dump_backtrace) from [<c199fb94>]
+> > (show_stack+0x20/0x24)
+> > [    0.000000]  r9:00000080 r8:c2e00000 r7:c3023060 r6:600000d3
+> > r5:00000000 r4:c3023060
+> > [    0.000000] [<c199fb74>] (show_stack) from [<c19a7ad0>]
+> > (dump_stack+0xe8/0x10c)
+> > [    0.000000] [<c19a79e8>] (dump_stack) from [<c0366518>] (__warn+0x140/0x164)
+> > [    0.000000]  r10:00000009 r9:00000000 r8:c2e0e000 r7:00000009
+> > r6:c19a3790 r5:00000811
+> > [    0.000000]  r4:c1a863c0 r3:c2e06f50
+> > [    0.000000] [<c03663d8>] (__warn) from [<c19a13ac>]
+> > (warn_slowpath_fmt+0xc0/0x128)
+> > [    0.000000]  r9:c19a3790 r8:00000811 r7:c1a863c0 r6:00000000
+> > r5:c2e03ee0 r4:b75c07d0
+> > [    0.000000] [<c19a12f0>] (warn_slowpath_fmt) from [<c19a3790>]
+> > (ftrace_bug+0x218/0x280)
+> > [    0.000000]  r10:0000d247 r9:c4019238 r8:c400c104 r7:c37f5c40
+> > r6:c1a86960 r5:c401923c
+> > [    0.000000]  r4:c4019238
+> > [    0.000000] [<c19a3578>] (ftrace_bug) from [<c04abfc0>]
+> > (ftrace_process_locs+0x32c/0x5f0)
+> > [    0.000000]  r7:c2e070a0 r6:c400c108 r5:00001248 r4:c400c100
+> > [    0.000000] [<c04abc94>] (ftrace_process_locs) from [<c2b2d8f4>]
+> > (ftrace_init+0xa8/0x158)
+> > [    0.000000]  r10:10c5387d r9:c1a87768 r8:c2cb9f98 r7:c2c82230
+> > r6:00000001 r5:c2e070a0
+> > [    0.000000]  r4:c37f5c40
+> > [    0.000000] [<c2b2d84c>] (ftrace_init) from [<c2b010ec>]
+> > (start_kernel+0x174/0x3f8)
+> > [    0.000000]  r9:00000001 r8:c2e06f00 r7:00000000 r6:c2e06f00
+> > r5:c37c0000 r4:ffffffff
+> > [    0.000000] [<c2b00f78>] (start_kernel) from [<00000000>] (0x0)
+> > [    0.000000]  r9:410fd034 r8:48000000 r7:ffffffff r6:10c0387d
+> > r5:00000051 r4:c2b00334
+> > [    0.000000] ---[ end trace f68728a0d3053b52 ]---
+> > [    0.000000] ftrace: allocated 112 pages with 3 groups
+> >
+> > metadata:
+> >   git branch: master
+> >   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+> >   git describe: next-20201110
+> >   make_kernelversion: 5.10.0-rc3
+> >   build : https://builds.tuxbuild.com/1k5bYasxkHF7omMh7mjtxjRtkMe/
+> >
+> > The qemu boot command,
+> > -----------------------------------
+> > /usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
+> > virt-2.10,accel=kvm -nographic -net
+> > nic,model=virtio,macaddr=BA:DD:AD:CC:09:03 -net tap -m 2048 -monitor
+> > none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
+> > -hda rpb-console-image-lkft-am57xx-evm-20201022181203-3085.rootfs.ext4
+> > -m 4096 -smp 2 -nographic
+> >
+> > Full log:
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201110/testrun/3420437/suite/linux-log-parser/test/check-kernel-warning-1927841/log
+> >
+>
+> The kernel you are building is too big.
+>
+> An ordinary multi_v7_defconfig+thumb2 has
+>
+> (10240K kernel code, 2232K rwdata, 5344K rodata, 2048K init, 441K bss,
+> 144040K reserved, 65536K cma-reserved, 3340512K highmem)
+>
+> whereas your kernel has
+>
 > (23552K kernel code, 9970K rwdata, 16736K rodata, 3072K init, 4849K
 > bss, 189072K reserved, 65536K cma-reserved, 2293756K highmem)
 >
 > and so the kernel text section is too large to resolve relative branches.
+>
+> Which config are you building?
 
-Hm, that's really exotic but it's bound to happen. It'd be great if we
-could warn about that. Maybe even at link
-time, I wonder how hard it would be?
+The config available from the 'build' link above:
+https://builds.tuxbuild.com/1k5bYasxkHF7omMh7mjtxjRtkMe/config
 
-Yours,
-Linus Walleij
+This is a diff of that against multi_v7_defconfig: https://pastebin.com/v2uxkrCe
+I ran that on v5.10-rc1, so it's missing KASAN.
+
+I don't think any of the individual drivers is going to be a huge difference,
+but these are the ones that might add a percentage to the overall build:
+
+CONFIG_NAMESPACES
+CONFIG_KALLSYMS_ALL
+CONFIG_KPROBES
+CONFIG_KSM
+CONFIG_VIDEO_V4L2
+CONFIG_FUNCTION_TRACER
+CONFIG_DYNAMIC_FTRACE
+CONFIG_IRQSOFF_TRACER
+CONFIG_KPROBE_EVENTS
+CONFIG_FTRACE_MCOUNT_RECORD
+CONFIG_UNWINDER_FRAME_POINTER
+CONFIG_KASAN
+
+My guess is that the combination of a few of the above
+doubles the size.
+
+     Arnd

@@ -2,234 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFB32AF1E9
-	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 14:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7A2AF2F9
+	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 15:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgKKNTh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Nov 2020 08:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgKKNTg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 08:19:36 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749C7C0613D1
-        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 05:19:36 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id z3so1580282pfb.10
-        for <linux-next@vger.kernel.org>; Wed, 11 Nov 2020 05:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=xOEBfNet2IIhnDUe7vU0nGIDIA0pb6oI0zqNSJX3sGc=;
-        b=fNBw1IQ/aEq7RWMfIUIzQjT709G+VAIVCghzD6LZK82XXprakxxNWb4sJBxrGI2vf3
-         9OufA6LfgQ5zguxV2Czkn5qqPg1hgN0QyGBJrOqPoVyaLxXPBAbUeoQ9//FJZXj8Z20g
-         b9HC2Nqm3YH0bAm6Ob4qhyWJ0a9k5qiQw9SQ+cAuxN9abBuS0zCPePBhJ7qyybAf/+be
-         tk2neFg9Zr6FRIBElISuzMo4YNBRaF2+R89HG+pXA7GpCd73w6iU00xt6ctHSTxzvavD
-         c+AHuV/PO8mMpnfO21bZFV6Yupu+w6vtL8c3cFhZtWHY58i6sbUgwJwT1ORosKNQO0jY
-         Dg7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=xOEBfNet2IIhnDUe7vU0nGIDIA0pb6oI0zqNSJX3sGc=;
-        b=rG1QGl7x8NMTkUUmqy1Zq6UUbbtWeTL/5R17pl48sCEihvGwMhsoePY9AzuUNAOBQI
-         bYfViGAgLbFcfCzPTOgpdyVeyEXFVxziWhMsOXoyt8A3zu4sqdp/t4xHsFrJZC+pk1dO
-         9Y85xQUcuACLXYjqDJJEOQ8vzxx4DXoE/NARpiv+G8DBQTWHdxzqF5XoG76BLG+1/73g
-         aGdMXh74SiXAJCL8E6VkTSCuDu1i6kN5/b2OS7Z7TgSC2mOhOZaSP1MG+NF0VxQDYu+0
-         T7hrSGaod6u/o9EtlswKYdyrm85xGdc7F0jpEkQzuxRp4O7Z48rRuQ26N7hqn7b+/kEP
-         RdSw==
-X-Gm-Message-State: AOAM532Y1flMVVbD9d0/8aninQV+3MXeg6PTBidJ6hRRLJUpQLM53XGn
-        SYnbvEJGAIIckTq3a7wUHkLazNDyq5E02g==
-X-Google-Smtp-Source: ABdhPJwhUXQpRpAYOzagge69HSqwv0tThKwn+Tg1guts4vfhPL/ttc+jfiPVEVu4dzS0//O+BPAfOA==
-X-Received: by 2002:a63:2145:: with SMTP id s5mr20483393pgm.288.1605100775648;
-        Wed, 11 Nov 2020 05:19:35 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z16sm2749525pfq.179.2020.11.11.05.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 05:19:35 -0800 (PST)
-Message-ID: <5fabe4e7.1c69fb81.dfb01.5d3d@mx.google.com>
-Date:   Wed, 11 Nov 2020 05:19:35 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.10-rc3-315-g3c8bf35b8254
-Subject: next/pending-fixes baseline: 329 runs,
- 4 regressions (v5.10-rc3-315-g3c8bf35b8254)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1726903AbgKKODa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Nov 2020 09:03:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29759 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727235AbgKKODW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Nov 2020 09:03:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605103401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9esnXIxru8+RNVWB1D49REf+6KCKaBBBFOJUSavGUik=;
+        b=UccXZMT9TpBIv+Q1X76kGHNaIrRSENmZA55Zi8de8xYTeVfYdI3PTMUd7YOhBxfOasNnna
+        NOSSMI5jpA1gK5Pff52hJ2G33KgQxMEILy1a0xMq+R9gOc/eA154ZjmG7o97C11OemoU9o
+        nPZxQYP5GPD1E7cBIYSoCKU5U1lxGqA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-249-nXoT7eWxMHiz0r_o4PNLwA-1; Wed, 11 Nov 2020 09:03:17 -0500
+X-MC-Unique: nXoT7eWxMHiz0r_o4PNLwA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A6FC51017DC8;
+        Wed, 11 Nov 2020 14:03:15 +0000 (UTC)
+Received: from ovpn-66-204.rdu2.redhat.com (ovpn-66-204.rdu2.redhat.com [10.10.66.204])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BF6085DA74;
+        Wed, 11 Nov 2020 14:03:14 +0000 (UTC)
+Message-ID: <288207f247a2e1c6c7940f87e337d3b881c7de17.camel@redhat.com>
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+From:   Qian Cai <cai@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Date:   Wed, 11 Nov 2020 09:03:14 -0500
+In-Reply-To: <20201111120121.48dd970d@canb.auug.org.au>
+References: <20201111120121.48dd970d@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 329 runs, 4 regressions (v5.10-rc3-315-g3c8bf3=
-5b8254)
+On Wed, 2020-11-11 at 12:01 +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the bpf-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+> 
+> kernel/bpf/btf.c:4481:20: warning: 'btf_parse_module' defined but not used [-
+> Wunused-function]
+>  4481 | static struct btf *btf_parse_module(const char *module_name, const
+> void *data, unsigned int data_size)
+>       |                    ^~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   36e68442d1af ("bpf: Load and verify kernel module BTFs")
+> 
 
-Regressions Summary
--------------------
+It loos like btf_parse_module() is only used when
+CONFIG_DEBUG_INFO_BTF_MODULES=y, so this should fix it.
 
-platform                 | arch  | lab          | compiler | defconfig     =
-               | regressions
--------------------------+-------+--------------+----------+---------------=
----------------+------------
-imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
-onfig          | 1          =
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0f1fd2669d69..e877eeebc616 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4478,6 +4478,7 @@ struct btf *btf_parse_vmlinux(void)
+ 	return ERR_PTR(err);
+ }
+ 
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
+ {
+ 	struct btf_verifier_env *env = NULL;
+@@ -4546,6 +4547,7 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
+ 	}
+ 	return ERR_PTR(err);
+ }
++#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
+ 
+ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
+ {
 
-imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
-
-imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
-..OMIZE_BASE=3Dy | 1          =
-
-meson-gxl-s805x-p241     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
-..BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.10-rc3-315-g3c8bf35b8254/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.10-rc3-315-g3c8bf35b8254
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      3c8bf35b825484117189bf15702deea14bd8b7b2 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-               | regressions
--------------------------+-------+--------------+----------+---------------=
----------------+------------
-imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
-onfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fabb0e0eeb227d04edb8875
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5fabb0e0eeb227d04edb8=
-876
-        failing since 16 days (last pass: v5.9-13195-g0281c5220c40, first f=
-ail: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-               | regressions
--------------------------+-------+--------------+----------+---------------=
----------------+------------
-imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
-..CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fabb1e06b3ab638a4db8853
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-imx6q-var-dt6customboard.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-imx6q-var-dt6customboard.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5fabb1e06b3ab638a4db8=
-854
-        failing since 16 days (last pass: v5.9-13195-g0281c5220c40, first f=
-ail: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-               | regressions
--------------------------+-------+--------------+----------+---------------=
----------------+------------
-imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
-..OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fabb373580929acd6db8854
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
-seline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
-seline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5fabb373580929acd6db8=
-855
-        new failure (last pass: v5.10-rc3-245-gcb165dbb5aeb) =
-
- =
-
-
-
-platform                 | arch  | lab          | compiler | defconfig     =
-               | regressions
--------------------------+-------+--------------+----------+---------------=
----------------+------------
-meson-gxl-s805x-p241     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
-..BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/5fabb20442d2b10b78db8857
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxl-s805x-p241.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-3=
-15-g3c8bf35b8254/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxl-s805x-p241.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5fabb20442d2b10b78db8=
-858
-        new failure (last pass: v5.10-rc3-245-gcb165dbb5aeb) =
-
- =20

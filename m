@@ -2,112 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5B32AF7C9
-	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 19:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630BC2AF905
+	for <lists+linux-next@lfdr.de>; Wed, 11 Nov 2020 20:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbgKKSPf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Nov 2020 13:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S1726664AbgKKT1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Nov 2020 14:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgKKSPe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 13:15:34 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F8C0613D1;
-        Wed, 11 Nov 2020 10:15:33 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id i186so2752010ybc.11;
-        Wed, 11 Nov 2020 10:15:33 -0800 (PST)
+        with ESMTP id S1725955AbgKKT1A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Nov 2020 14:27:00 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F068FC0613D1;
+        Wed, 11 Nov 2020 11:26:59 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id l5so3490387edq.11;
+        Wed, 11 Nov 2020 11:26:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=r5V5gOPUpECRjofMGc2gIkhBp+lIfzZwhOaSjiXXcyY=;
-        b=UuZfH3Go2Fub4dfxG+k4rc9t2CBRgsiZhQZjuaVBzz4YYVVpvkGl01o762wh3AYPkh
-         VmBge2n/foCtB90+s44rgFz2txea7hPYPfSUo+qXtU6FjgLULfw4SdvZUZY8FMRrTznf
-         6/m12Z19ladiAt942a4GmjIjd+Xqh6ohKjXLa0q4ERES2NRre1qmjAmje/RfeDIyJelX
-         u/d7n4ZDndRHGtl9NlCLguQPlv2cwOXzu1vi6qR2vX6l060+zToyLiZxE7PtV2omEK+G
-         +FDSBieFrk60cqWb5rjIS1kuGBBfktsHrZBZStVlYc0DcZgrlrvh/had/+SSymAcuMMV
-         23sg==
+        bh=bMLjI/601C9OPQNA+LqIrQMDDAlDxJCIUFBAsIL0uwg=;
+        b=h4IYp7gble1Q0vh1fdFK2sJupdlvWR5d0OIhAe6P5UgZJy1fZvGi94CO54o5vE13t/
+         r77GkOUsUtPP7qmQU+ZVPii+N188Lr97JOAz2L06eFxv5YO3bkrlZH0zZwhVKtbaDoly
+         GDpwZ72xniQ9c4hqmscXHQ3XMD1sA2rE0KqrGNEIMhMA8WS9pTHabamdU/43SqZ4gS0W
+         vcZzR8O6+5nR5DCuN6PMtYFjdI+IRul12llL3HYSlxq9j6n1/W25a5jrKDWQW2s4F/Yb
+         8Uj2ANCjF9fFpjwS0T2gF5O4bDXVxbXUSHTzQugsr1zhdqb+NGdU5UBXfWqkSLpxcQ89
+         nz2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r5V5gOPUpECRjofMGc2gIkhBp+lIfzZwhOaSjiXXcyY=;
-        b=ryoy5D/LDjw89rfJdm2qK5YjFF3/7MmHvNWqQswufR8gIHqtYINzDURR9E+pW0antN
-         priC9S4tobVwT6HF0Q35EdIsmbSX6tb/DPg5qkBCKIz/Qoqk2LIvBaRzJgPAB6QV1HMM
-         wEpAsoqFSQPvIIxETAH5yKlQ9F7Hp3MJPWAiVh6QBGPrxclALqtcl5uhXn8Uml5LCP+x
-         JHGJO6C7i/DzwEQslfBq/041iWCYlzTZDrzHC/ONtTmigwzrBiohIBqu2rNh0FoChsgH
-         tsAM8i279/dH5bi9LGy7g2IfUUcZT8E2lpta4CJEaBL0shJPoFJmFFLrcJFYs0K96auu
-         p2pA==
-X-Gm-Message-State: AOAM533rzkJ7Byw3NKV8xT7Sm4G8jxXH2xLYASldgNFAGR4xvP91ThnE
-        hZKmwoUZkolr0VRYFGtfNaMx/DqspRMk+LQxs24=
-X-Google-Smtp-Source: ABdhPJw9OJD0GlL2oVuYFpbRTeF6cZU6okS1QTgfhmnQ8y9z1QQMcaQ26ycxOlIk/15eF9i0OX/EneDbP9WmpMRajMU=
-X-Received: by 2002:a25:585:: with SMTP id 127mr24244345ybf.425.1605118532756;
- Wed, 11 Nov 2020 10:15:32 -0800 (PST)
+        bh=bMLjI/601C9OPQNA+LqIrQMDDAlDxJCIUFBAsIL0uwg=;
+        b=qohmdC+AK71qKnbKyeXCs3v/8ALedXSwki6BGKPl9ny6W+MaWqOrXjccN517OtmB+v
+         YOVpOqQfW0fF/NyZFo/YKEc0JuA5DWrNXlO528t50npU0lKGUXK8qxU8jT0P1t/qRvnA
+         9fw0dE4HCXdCcXOZ0sEojL1j0ArSXt1aSHQhZEjtylkHOJnelF1DqIRsc7mpAjq3aQvq
+         JxoQhXjY7XP7u6kINdN3jaNOn7edEDFkP1qqBQTXqLagIZNkap5s0Tex9hDMHjINjjRM
+         mSVVaCbpIM0btKos8YgIRqmWsr9OWXbi+MQxFaUGbKmAQ8vcUjt71GB2nS2F8fsKMLsd
+         PqOA==
+X-Gm-Message-State: AOAM532gleKHk1cc4hEJ1Yici7aoOldXdEHtnTX2t3nXy7Rk8W1a2OLc
+        noaVnc6+/0B2h4brJGSSTt//yvEcr9eaa8GawLGt6tVJ2f8=
+X-Google-Smtp-Source: ABdhPJxwX1ejaYw2R2D2HuKudT6+qpe+Dp+KKAb0PZFN9O7AJvhP8s8QpEfz4dxZf82tDXK/9t8ojLT7bvfOi4z15kE=
+X-Received: by 2002:a50:eb0a:: with SMTP id y10mr1199265edp.342.1605122818353;
+ Wed, 11 Nov 2020 11:26:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20201111120121.48dd970d@canb.auug.org.au> <288207f247a2e1c6c7940f87e337d3b881c7de17.camel@redhat.com>
-In-Reply-To: <288207f247a2e1c6c7940f87e337d3b881c7de17.camel@redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Nov 2020 10:15:21 -0800
-Message-ID: <CAEf4BzZacfQWqS38AZfnP03Ai=OxYhZrX2CeHp-d1hwSw5FaNA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Qian Cai <cai@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <000000000000fe575905b3cff92c@google.com> <bf31020f4e50b303fd0dd3dfda0e50de79ed25db.camel@redhat.com>
+ <CAAeHK+yLgDYOS35sWT8=4_d-gZKU_B10D9ZEBPZDC1P6MO2D6Q@mail.gmail.com>
+In-Reply-To: <CAAeHK+yLgDYOS35sWT8=4_d-gZKU_B10D9ZEBPZDC1P6MO2D6Q@mail.gmail.com>
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+Date:   Wed, 11 Nov 2020 19:26:47 +0000
+Message-ID: <CAA5enKY8mBicpc7kZKKLG5LeVFhVJtRQ73MYVFM0Az2bbiGv8g@mail.gmail.com>
+Subject: Re: linux-next boot error: BUG: unable to handle kernel NULL pointer
+ dereference in mempool_init_node
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Qian Cai <cai@redhat.com>,
+        syzbot <syzbot+2d6f3dad1a42d86a5801@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 6:03 AM Qian Cai <cai@redhat.com> wrote:
->
-> On Wed, 2020-11-11 at 12:01 +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the bpf-next tree, today's linux-next build (powerpc
-> > ppc64_defconfig) produced this warning:
-> >
-> > kernel/bpf/btf.c:4481:20: warning: 'btf_parse_module' defined but not used [-
-> > Wunused-function]
-> >  4481 | static struct btf *btf_parse_module(const char *module_name, const
-> > void *data, unsigned int data_size)
-> >       |                    ^~~~~~~~~~~~~~~~
-> >
-> > Introduced by commit
-> >
-> >   36e68442d1af ("bpf: Load and verify kernel module BTFs")
-> >
->
-> It loos like btf_parse_module() is only used when
-> CONFIG_DEBUG_INFO_BTF_MODULES=y, so this should fix it.
+On Wed, 11 Nov 2020 at 17:44, Andrey Konovalov <andreyknvl@google.com> wrote:
+> I'll try to reproduce this and figure out the issue. Thanks for letting us know!
 
-Fixed already in [0].
+I hope you don't mind me diving in here, I was taking a look just now
+and managed to reproduce this locally - I bisected the issue to
+105397399 ("kasan: simplify kasan_poison_kfree").
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201111040645.903494-1-andrii@kernel.org/
+If I stick a simple check in as below it fixes the issue, so I'm
+guessing something is violating the assumptions in 105397399?
 
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 0f1fd2669d69..e877eeebc616 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -4478,6 +4478,7 @@ struct btf *btf_parse_vmlinux(void)
->         return ERR_PTR(err);
->  }
->
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
->  {
->         struct btf_verifier_env *env = NULL;
-> @@ -4546,6 +4547,7 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
->         }
->         return ERR_PTR(err);
->  }
-> +#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
->
->  struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
->  {
->
+
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 7a94cebc0324..16163159a017 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -387,6 +387,11 @@ void __kasan_slab_free_mempool(void *ptr, unsigned long ip)
+        struct page *page;
+
+        page = virt_to_head_page(ptr);
++
++       if (!PageSlab(page)) {
++               return;
++       }
++
+        ____kasan_slab_free(page->slab_cache, ptr, ip, false);
+ }
+
+
+--
+Lorenzo Stoakes
+https://ljs.io

@@ -2,61 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA982B0FE5
-	for <lists+linux-next@lfdr.de>; Thu, 12 Nov 2020 22:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F472B12B8
+	for <lists+linux-next@lfdr.de>; Fri, 13 Nov 2020 00:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727214AbgKLVOJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Nov 2020 16:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727149AbgKLVOJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Nov 2020 16:14:09 -0500
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC9CC0613D1;
-        Thu, 12 Nov 2020 13:14:09 -0800 (PST)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kdJux-004ZYO-Pz; Thu, 12 Nov 2020 21:14:07 +0000
-Date:   Thu, 12 Nov 2020 21:14:07 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the vfs-fixes tree
-Message-ID: <20201112211407.GE3576660@ZenIV.linux.org.uk>
-References: <20201113080239.2fbbc615@canb.auug.org.au>
+        id S1726017AbgKLXZY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Nov 2020 18:25:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725929AbgKLXZY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Nov 2020 18:25:24 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0F006216C4;
+        Thu, 12 Nov 2020 23:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605223523;
+        bh=+M+SFw0G+ApwR9Ct4A6HcDsdhooPuMpK4hkQ9kX4VyI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FwRFYfDWdwAZwz503N3gol3RK2E2bokFGBlw1h5gInLan2B88Ylwzw29dHaEmLYsb
+         pPmHCQrD3t3IOLt/Yn320/qgKBe+AfVxZp8Uv+n9WwjY9d1iGhD1SSdo0qKbH3yPRu
+         70GDnVUuWpfOMHUIV109+zJaMr/xxasII5CnV00A=
+Date:   Thu, 12 Nov 2020 15:25:22 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-next@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] net: kcov: don't select SKB_EXTENSIONS when
+ there is no NET
+Message-ID: <20201112152522.02af9fa2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201110175746.11437-1-rdunlap@infradead.org>
+References: <20201110175746.11437-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201113080239.2fbbc615@canb.auug.org.au>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 08:02:39AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Tue, 10 Nov 2020 09:57:46 -0800 Randy Dunlap wrote:
+> Fix kconfig warning when CONFIG_NET is not set/enabled:
 > 
-> In commit
+> WARNING: unmet direct dependencies detected for SKB_EXTENSIONS
+>   Depends on [n]: NET [=n]
+>   Selected by [y]:
+>   - KCOV [=y] && ARCH_HAS_KCOV [=y] && (CC_HAS_SANCOV_TRACE_PC [=y] || GCC_PLUGINS [=n])
 > 
->   5f85b351d3d6 ("fix return values of seq_read_iter()")
-> 
-> Fixes tag
-> 
->   Fixes: d4d50710a8b (seq_file: add seq_read_iter)
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
+> Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-Dealt with and force-pushed...
+> This is from linux-next. I'm only guessing that it is in net-next.
 
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
-> 
-> Also, just use
-> 
->   git log -1 --format='Fixes: %h ("%s")' <commit>
-> 
-> to generate Fixes tags.
-
-OK, will keep that in mind next time...
+Yup, applied, thanks!

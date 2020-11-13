@@ -2,111 +2,287 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B092B13C9
-	for <lists+linux-next@lfdr.de>; Fri, 13 Nov 2020 02:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178F82B149E
+	for <lists+linux-next@lfdr.de>; Fri, 13 Nov 2020 04:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbgKMBUy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Nov 2020 20:20:54 -0500
-Received: from mail-eopbgr20071.outbound.protection.outlook.com ([40.107.2.71]:46990
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726005AbgKMBUy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Nov 2020 20:20:54 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TQXcLGNIf1dKfEISX/+KyFkE7o4WVDnDxjZigR6vJvGaONBYN5cvF85flun8FkhnSyfs+dtCTvDt8ShIxa4m/qSmOQ+0FGG1MS5M3u6+W5YWVfj3hKRLhEl50FyJroy3L1gxl3D0Kr6B0tQuKZht4KZqjPkF+TFVx/Tg5FdwhN1xtLYpiOk69o3rcxc4tvO/3xT+YFxHebHOvl1Uq8sVYfeWbfolRgT/xNBi7jSOxaWgg8V64pRUEf/HQ2We2orRyk8ntWWRdPwBIhl2r/AfwvIMEvITqCrKLhEf3NqcDg9UlXrHmN+B0Rpl7nPGxz18X+0gqvW8LMca4Lg96q2dmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XpGe9GTOn7Wyd0kwBlIk9C73L3u3wBl4FspzRSFY3dk=;
- b=EaOvhdHnyUNrzcaP29V8fDI4EmQL0PxSLVZprHJJoZiieQ5xvbcxlMhqsfxdPAe1xB1LT47Wds89IHqKFD10lgtY831O0P7h3TOb/zNj8L/RYViWDSS9gGx0d308xQrFZ7bqvFy2I1tAvMqcEZgcvgtoW3vbjpyqKMii8szcmXQQAJtTuUnmEb09Hz/LuyfynlzEBya75n5w/M8AOhjr0n/J4tR++mRhC0NJSsFTrVmrbQqMh8ggb0mFMWtKAA8OTX9OT1FNgpb+cB+wt7VkyhOoWFyTbWYR15bt2YY9Hb1EUykybxNn4kt88r64M1xLvQDloJd8icHNvryDwv1Dzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XpGe9GTOn7Wyd0kwBlIk9C73L3u3wBl4FspzRSFY3dk=;
- b=YUcHePFE+nNzQhPDWh/qXPmbG2K2Sv04dqB3HctD72mgxCsxLiyKp7KaWy7yJfo0tzc5MjD+VzhJgWq1lICE9LUcqFMWzz/s2vw/Mm0qYtY483JykZ9EGwHVtFeRmRAt6iocR2sGS1IWTvbAqjjVe1uX4z+T/rBpE7h2N7hlwsI=
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com (2603:10a6:10:1ec::9)
- by DB6PR0401MB2376.eurprd04.prod.outlook.com (2603:10a6:4:51::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Fri, 13 Nov
- 2020 01:20:45 +0000
-Received: from DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c]) by DBBPR04MB7979.eurprd04.prod.outlook.com
- ([fe80::c8c:888f:3e0c:8d5c%5]) with mapi id 15.20.3541.025; Fri, 13 Nov 2020
- 01:20:44 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: RE: linux-next: Fixes tag needs some work in the usb-chipidea-fixes
- tree
-Thread-Topic: linux-next: Fixes tag needs some work in the usb-chipidea-fixes
- tree
-Thread-Index: AQHWuTajWC+N8wpv7EaQ3cmiIgcva6nFQy2A
-Date:   Fri, 13 Nov 2020 01:20:44 +0000
-Message-ID: <DBBPR04MB7979F255D713A1539F195EA28BE60@DBBPR04MB7979.eurprd04.prod.outlook.com>
-References: <20201113075838.53122e1e@canb.auug.org.au>
-In-Reply-To: <20201113075838.53122e1e@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 52ba3449-a1f1-467d-fa21-08d88772583e
-x-ms-traffictypediagnostic: DB6PR0401MB2376:
-x-microsoft-antispam-prvs: <DB6PR0401MB2376254B9F6FF374DA51D3A48BE60@DB6PR0401MB2376.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KdSHr+b4V5vKkH4g1gqrQDjhsk+cb1/L9GZfqI8a1fbvXbD0JcjZtgR/fTAOp2lbwukWdzLWzCinmxmJr5mzF4fFHdGK6CyhZnu2m7JRp00xYZOsl+nSgZdVatp5lNpHSfwbUcAa6Keu9qntwK7c47qd3GWT8JVNYesk7gD36q9A/dBSkGo2rGLV/wZyQuH6/1+bAZCyvdtDSo9QFlAVxJ7pLMKJaofGVX6Q8m1FhSxAay5pNBLS1u3dmbQDXCWBeGxPFwhd1GSgB0kvLzPraxdvsSg6ERM52HER/uLuIcSjzI99RJa4ypbSMml5GW2b
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7979.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(376002)(366004)(346002)(396003)(136003)(6506007)(33656002)(2906002)(44832011)(71200400001)(186003)(66476007)(26005)(7696005)(55016002)(5660300002)(9686003)(86362001)(4744005)(66556008)(64756008)(76116006)(66446008)(8936002)(52536014)(66946007)(54906003)(478600001)(4326008)(6916009)(8676002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: jTMv0C9c2hQxa0gaqlwiViMvLmssdeXLVGpaSG1b1qyw01hJpRi3AaYtmX4qFz+DXIsopXAECpyZeaxjjfuXjd/T65NnuwmWQ4UiUYGG+iUzsNvXYfL4pI/XGtrZMJjOWoVkiIQQXZ9puHQ+BiZkccNZG2UvhCn1ffgd5naz+hMUAlBIojXKFrQ18BcaKmjaju9RuV3PxKCnThdF5E8/+CeXpE+z7Xt3Nqy1Ww2k/rIkEiNq0azjvUA7qxT0WYjascuyjWz/XupjB/l2w/sfyjgRCmagYdGbQKUv3o0BPRL32KbFKONiDKy7883Df4OVRRq2B0c0weyq1YmnJ2FSYjUxQpD9C4cnOKsbCjqmEjgtfH+1mO98ErMiBZq8N+tF+yg2xfkDDF5yM1fQhA4RbUZcaGW6spNC5sIZdnHsGRZo3pJx4adD5I2EdT0h5tniqB9DzyhZlPPrGesEMWEWJ7jjKcMwoeb0zlIiaM5McKXApBetlUanXvib7hF2phjbHHmeg/7C20i2+lC3a5TEdlnj8Pb0DmOyT3mtUz8DmsS8MRta8A/jyowZ4uhi+8djKtT6oPTRcf7WZKI7dNZ85SH71vND6f9lO0lv1KthP+JGg4cLYWJDb+RuhJ++NkQV8zrRyyX2OD0AQwj0WAen5w==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726268AbgKMDSy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Nov 2020 22:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbgKMDSx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Nov 2020 22:18:53 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B09C0613D1
+        for <linux-next@vger.kernel.org>; Thu, 12 Nov 2020 19:18:52 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b3so3853440pls.11
+        for <linux-next@vger.kernel.org>; Thu, 12 Nov 2020 19:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=9hVdeOXnJMFVbk09Ki/+V/nWA4YZabAo4RrS5BUYqCY=;
+        b=sHjofCdPMrem1srEbmRUxc8DF+VAGY7fgeq7TJxIPar6xeom9XdpVKlifhSErh54Hy
+         5twkgv7M3Oe0J00SQeOmHwKvLDiI9QDaSTT63OgXBH7Hcv/4mYjtHAW6sr2NPLS8KdHC
+         5T6UnPoWw9kzp/TJnP8LDC5uqyWFMlVGeg8WqECJs3vOsGd+PXZJvjmo9sKzc1s45yrX
+         CRUMyVskWWPk8AM9iidvoVSjBbANc9eKFk8fTeuIFFQ8TXPsMqOlcnqD6K0HprMEcWzc
+         Ioiyun9XahBHaGXOGbSRIAsm4HbBkrcIF7nQKMKNR8F9wguZNriWXeCP1hG73Ctj00gt
+         D6Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=9hVdeOXnJMFVbk09Ki/+V/nWA4YZabAo4RrS5BUYqCY=;
+        b=AkqrXBK5X7E4Tu7aSbW8WPYqcz+OzvY2c4WBmt7ezNohM9VM/Et7sHOxpG4ibGxek8
+         P4B/lyhppnB2sUtdqfixy20IYT92BNa/iw1BFaRlmi2oSEB4hAAv+wtfaM6xWdmUZ2u/
+         3iESpU0UhQr8Y7Nv2qu6PD6Y9nyQhyHBsoE0BOJ9RV5/C8BWBGD+WL3xYoiCMhL54WM5
+         lTorO8rIcrpy4yARt6I7+ECgkP4PYXcmj77XvoN2EqMzT7mYGlrNDgVIZYR7dC7nzC9c
+         gdj+iLTyN90P2WSevhgf4XW7uMYkoOiEyGR18XoweqwndCmBmZWfGeL3OmOpllBpV5T9
+         3V/A==
+X-Gm-Message-State: AOAM532pM8KBgatN3936g40zKVJI711eS8RD4PSTay9S/HqLpNbKy13m
+        /Anca8ijXhxhpxT5B85imTI5SB5od1IPAw==
+X-Google-Smtp-Source: ABdhPJyTJPsADfU5DbVfoqoouesWrth5RdNgKULQvDA7/KsYbe79mJY8bb7ZrC48T0TkDgEcanqFpQ==
+X-Received: by 2002:a17:902:bf48:b029:d8:abd5:7670 with SMTP id u8-20020a170902bf48b02900d8abd57670mr344607pls.85.1605237531573;
+        Thu, 12 Nov 2020 19:18:51 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r12sm7869294pfh.213.2020.11.12.19.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Nov 2020 19:18:50 -0800 (PST)
+Message-ID: <5fadfb1a.1c69fb81.8fe4f.0c24@mx.google.com>
+Date:   Thu, 12 Nov 2020 19:18:50 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7979.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52ba3449-a1f1-467d-fa21-08d88772583e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2020 01:20:44.8473
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YYIZkMYuHy4xXVnK8V7ULNdbHjRREO+mNjAljr6usGvkPbQ5RGzf/pZ33GmT/hpyf/9xBz67J3XW9KL54cGjDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2376
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.10-rc3-420-g5364e201065c
+Subject: next/pending-fixes baseline: 288 runs,
+ 5 regressions (v5.10-rc3-420-g5364e201065c)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-=20
->=20
-> In commit
->=20
->   3d4ee0b42f65 ("usb: cdns3: gadget: initialize link_trb as NULL")
->=20
-> Fixes tag
->=20
->   Fixes: 4e218882eb5a ("usb: cdns3: gadget: improve the dump TRB operatio=
-n
->=20
-> has these problem(s):
->=20
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
->=20
-> Please do not split Fixes tags over more than one line.
->=20
-> --
-=20
-Thanks, Stephen. I fixed it.
-I wonder if checkpatch.pl could report this issue?
+next/pending-fixes baseline: 288 runs, 5 regressions (v5.10-rc3-420-g5364e2=
+01065c)
 
-Peter
+Regressions Summary
+-------------------
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig     =
+               | 1          =
+
+imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
+onfig          | 1          =
+
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig     =
+               | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.10-rc3-420-g5364e201065c/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.10-rc3-420-g5364e201065c
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      5364e201065c479f2234e7b9de7511d0a5a97a74 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig     =
+               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fadc6a44e6f13cc83db8871
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-=
+b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-=
+b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5fadc6a44e6f13cc=
+83db8874
+        new failure (last pass: v5.10-rc3-337-ge83d2e1f2d190)
+        1 lines
+
+    2020-11-12 23:32:56.404000+00:00  Connected to bcm2837-rpi-3-b console =
+[channel connected] (~$quit to exit)
+    2020-11-12 23:32:56.404000+00:00  (user:khilman) is already connected
+    2020-11-12 23:33:12.163000+00:00  =00
+    2020-11-12 23:33:12.163000+00:00  =
+
+    2020-11-12 23:33:12.163000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
+2 -0800)
+    2020-11-12 23:33:12.163000+00:00  =
+
+    2020-11-12 23:33:12.163000+00:00  DRAM:  948 MiB
+    2020-11-12 23:33:12.178000+00:00  RPI 3 Model B (0xa02082)
+    2020-11-12 23:33:12.266000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
+0: 1
+    2020-11-12 23:33:12.297000+00:00  Loading Environment from FAT... *** W=
+arning - bad CRC, using default environment =
+
+    ... (379 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-sabresd            | arm   | lab-nxp      | gcc-8    | imx_v6_v7_defc=
+onfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fadc3cec15c824992db887b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
+sd.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
+sd.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fadc3cec15c824992db8=
+87c
+        failing since 18 days (last pass: v5.9-13195-g0281c5220c40, first f=
+ail: v5.9-14860-gd56fc2efcc70) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fadc6f2f8470d32b5db8860
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fadc6f2f8470d32b5db8=
+861
+        failing since 17 days (last pass: v5.9-13195-g0281c5220c40, first f=
+ail: v5.9-14860-gd56fc2efcc70) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fadc3e36ce27c5b19db8853
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fadc3e36ce27c5b19db8=
+854
+        new failure (last pass: v5.10-rc3-337-ge83d2e1f2d190) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig     =
+               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5fadc80706ddc9a494db8857
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.10-rc3-4=
+20-g5364e201065c/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5fadc80706ddc9a494db8=
+858
+        new failure (last pass: v5.10-rc3-337-ge83d2e1f2d190) =
+
+ =20

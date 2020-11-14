@@ -2,95 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A126A2B2A58
-	for <lists+linux-next@lfdr.de>; Sat, 14 Nov 2020 02:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0B32B2A5E
+	for <lists+linux-next@lfdr.de>; Sat, 14 Nov 2020 02:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgKNBLT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Nov 2020 20:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgKNBLT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Nov 2020 20:11:19 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5DBC0613D1;
-        Fri, 13 Nov 2020 17:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=KyvIJI3NYsbSLBCCLSp/r5FozbXe6DUDrCSrMc6HNfY=; b=kBmQ2iLCQrKZ/8pOBocGDz84VH
-        GUwhykQprA6NUyuweh5WtmMpBae3Be9kd6yyqmLDhERoBScl+D20do+PaSjieyto9VscalqvMrloo
-        LfPYFompuHjsvP85yGLIvgTMwLblI964WgFehPSq46MH3dwwdZv2gVtbVUntkwB8j2Rgcw9kOhitX
-        DygHK/kJMqKslzPAquRdifbMEf2Wd46JCKKbHEXgimVNUPY8mJVZka/lLjZX5giV4T81fuKbHMC7W
-        ro5WSPBlxQpexgMROTNamSOlaL5lbiEUYMC1/82HkTIZXk5uM3GVwirKWYQ+8Rtnz2w+N7Z0al7gm
-        VWns5VDg==;
-Received: from [2601:1c0:6280:3f0::662d] (helo=smtpauth.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kdk60-0001pd-2b; Sat, 14 Nov 2020 01:11:16 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next] net: linux/skbuff.h: combine NET + KCOV handling
-Date:   Fri, 13 Nov 2020 17:11:10 -0800
-Message-Id: <20201114011110.21906-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726148AbgKNBOz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Nov 2020 20:14:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47702 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725885AbgKNBOz (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 13 Nov 2020 20:14:55 -0500
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 78C1B22254;
+        Sat, 14 Nov 2020 01:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605316493;
+        bh=V3npB1aPYP4lVCtMAU8V/YQcHbHCwd9pHDIoLT814I4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sbj/IcAsYQ3iqYg5JLpu5idNyVXqWNl7JXNts9qG4W4WwyjEt2bpA4diKJtdQOAz/
+         iJWWY3xMyK8h6RF1WYthYyYTRlVy52WGCTpq6S5ji68yIKz/ROVcrg6lE90ZRNCJO7
+         NNL4t/2EFutNIaSsayf6ADKuzL0uZtH3JxMoBdPc=
+Date:   Fri, 13 Nov 2020 17:14:52 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+Message-Id: <20201113171452.087c489c1ef58e472667577e@linux-foundation.org>
+In-Reply-To: <20201113180239.0ee06fd2@canb.auug.org.au>
+References: <20201113180239.0ee06fd2@canb.auug.org.au>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The previous Kconfig patch led to some other build errors as
-reported by the 0day bot and my own overnight build testing.
+On Fri, 13 Nov 2020 18:02:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-These are all in <linux/skbuff.h> when KCOV is enabled but
-NET is not enabled, so fix those by combining those conditions
-in the header file.
+> Hi all,
+> 
+> After merging the akpm tree, today's linux-next build (i386 defconfig)
+> failed like this:
+> 
+> mm/secretmem.c: In function 'secretmem_memcg_charge':
+> mm/secretmem.c:72:4: error: 'struct page' has no member named 'memcg_data'
+>    72 |   p->memcg_data = page->memcg_data;
+>       |    ^~
+> mm/secretmem.c:72:23: error: 'struct page' has no member named 'memcg_data'
+>    72 |   p->memcg_data = page->memcg_data;
+>       |                       ^~
+> mm/secretmem.c: In function 'secretmem_memcg_uncharge':
+> mm/secretmem.c:86:4: error: 'struct page' has no member named 'memcg_data'
+>    86 |   p->memcg_data = 0;
+>       |    ^~
+> 
+> ...
+>
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -69,7 +69,9 @@ static int secretmem_memcg_charge(struct page *page, gfp_t gfp, int order)
+>  	for (i = 1; i < nr_pages; i++) {
+>  		struct page *p = page + i;
+>  
+> +#ifdef CONFIG_MEMCG
+>  		p->memcg_data = page->memcg_data;
+> +#endif
+>  	}
+>  
+>  	return 0;
 
-Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
-Fixes: 85ce50d337d1 ("net: kcov: don't select SKB_EXTENSIONS when there is no NET")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Aleksandr Nogikh <nogikh@google.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-next@vger.kernel.org
-Cc: netdev@vger.kernel.org
----
- include/linux/skbuff.h |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks, that'll work for now.
 
---- linux-next-20201113.orig/include/linux/skbuff.h
-+++ linux-next-20201113/include/linux/skbuff.h
-@@ -4151,7 +4151,7 @@ enum skb_ext_id {
- #if IS_ENABLED(CONFIG_MPTCP)
- 	SKB_EXT_MPTCP,
- #endif
--#if IS_ENABLED(CONFIG_KCOV)
-+#if IS_ENABLED(CONFIG_KCOV) && IS_ENABLED(CONFIG_NET)
- 	SKB_EXT_KCOV_HANDLE,
- #endif
- 	SKB_EXT_NUM, /* must be last */
-@@ -4608,7 +4608,7 @@ static inline void skb_reset_redirect(st
- #endif
- }
- 
--#ifdef CONFIG_KCOV
-+#if IS_ENABLED(CONFIG_KCOV) && IS_ENABLED(CONFIG_NET)
- static inline void skb_set_kcov_handle(struct sk_buff *skb,
- 				       const u64 kcov_handle)
- {
-@@ -4636,7 +4636,7 @@ static inline u64 skb_get_kcov_handle(st
- static inline void skb_set_kcov_handle(struct sk_buff *skb,
- 				       const u64 kcov_handle) { }
- static inline u64 skb_get_kcov_handle(struct sk_buff *skb) { return 0; }
--#endif /* CONFIG_KCOV */
-+#endif /* CONFIG_KCOV &&  CONFIG_NET */
- 
- #endif	/* __KERNEL__ */
- #endif	/* _LINUX_SKBUFF_H */
+I guess we're looking at adding a set_page_memcg() (I'd prefer
+page_memcg_set()).
+
+But probably these functions shouldn't be compiled at all if
+CONFIG_MEMCG=n.

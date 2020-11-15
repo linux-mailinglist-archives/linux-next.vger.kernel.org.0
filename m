@@ -2,62 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5D82B3215
-	for <lists+linux-next@lfdr.de>; Sun, 15 Nov 2020 05:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CB32B3320
+	for <lists+linux-next@lfdr.de>; Sun, 15 Nov 2020 10:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgKOEMm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 14 Nov 2020 23:12:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33750 "EHLO mail.kernel.org"
+        id S1726738AbgKOJBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Nov 2020 04:01:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37580 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726177AbgKOEMm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 14 Nov 2020 23:12:42 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (c-67-180-217-166.hsd1.ca.comcast.net [67.180.217.166])
+        id S1726719AbgKOJBL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Nov 2020 04:01:11 -0500
+Received: from kernel.org (unknown [77.125.7.142])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6FE322284;
-        Sun, 15 Nov 2020 04:12:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA8702242E;
+        Sun, 15 Nov 2020 09:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605413562;
-        bh=Sijvv8+8FcMxce7kTnEwo5dOMyK6gmCi0lMIyXxdd4U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mnsUCTy7QUDKdI6vtG2pWNLT6LIL67Mtxyp7K7MUeTpA0+39GK6O81LZBf/1+YVfi
-         jghAdQrtI5A2PlfEkPSEKUzJgxdQCNw1cIKifYo2u9TVDW6EcV+fwGWCW2qho9xr6c
-         f6cCbuutfE1SfX6lmqzVy2UrxVWYPxvFrB1XfosY=
-Date:   Sat, 14 Nov 2020 20:12:41 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-next@vger.kernel.org, netdev@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH net-next v3] net: linux/skbuff.h: combine SKB_EXTENSIONS
- + KCOV handling
-Message-ID: <20201114201235.604486e2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201115011043.8159-1-rdunlap@infradead.org>
-References: <20201115011043.8159-1-rdunlap@infradead.org>
+        s=default; t=1605430870;
+        bh=lClu43aq77zb7RcYXePPH7+GNjpHQB6AUPoBtNZQ5A8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qq2GEptS7OQ4MB/8fLjMsz7q0eOA2SBwx4uzZs3aGt+/ZVq9CwI1ZxIB0xvO/Z0G6
+         IQeCpN16Y2YQEySv3Uy2n2xLUPwPwPuhl8XRdDkYZtCFCSjVwCBMzv3HzmIahS0Iru
+         ByGSlvc0KRQyjDqyCqM87ktV0blqeIpMuy44YmS4=
+Date:   Sun, 15 Nov 2020 11:01:05 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+Message-ID: <20201115090105.GX4758@kernel.org>
+References: <20201113180239.0ee06fd2@canb.auug.org.au>
+ <20201113171452.087c489c1ef58e472667577e@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113171452.087c489c1ef58e472667577e@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 14 Nov 2020 17:10:43 -0800 Randy Dunlap wrote:
-> The previous Kconfig patch led to some other build errors as
-> reported by the 0day bot and my own overnight build testing.
+On Fri, Nov 13, 2020 at 05:14:52PM -0800, Andrew Morton wrote:
+> On Fri, 13 Nov 2020 18:02:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
-> These are all in <linux/skbuff.h> when KCOV is enabled but
-> SKB_EXTENSIONS is not enabled, so fix those by combining those conditions
-> in the header file.
+> > Hi all,
+> > 
+> > After merging the akpm tree, today's linux-next build (i386 defconfig)
+> > failed like this:
+> > 
+> > mm/secretmem.c: In function 'secretmem_memcg_charge':
+> > mm/secretmem.c:72:4: error: 'struct page' has no member named 'memcg_data'
+> >    72 |   p->memcg_data = page->memcg_data;
+> >       |    ^~
+> > mm/secretmem.c:72:23: error: 'struct page' has no member named 'memcg_data'
+> >    72 |   p->memcg_data = page->memcg_data;
+> >       |                       ^~
+> > mm/secretmem.c: In function 'secretmem_memcg_uncharge':
+> > mm/secretmem.c:86:4: error: 'struct page' has no member named 'memcg_data'
+> >    86 |   p->memcg_data = 0;
+> >       |    ^~
+> > 
+> > ...
+> >
+> > --- a/mm/secretmem.c
+> > +++ b/mm/secretmem.c
+> > @@ -69,7 +69,9 @@ static int secretmem_memcg_charge(struct page *page, gfp_t gfp, int order)
+> >  	for (i = 1; i < nr_pages; i++) {
+> >  		struct page *p = page + i;
+> >  
+> > +#ifdef CONFIG_MEMCG
+> >  		p->memcg_data = page->memcg_data;
+> > +#endif
+> >  	}
+> >  
+> >  	return 0;
 > 
-> Also, add stubs for skb_ext_add() and skb_ext_find() to reduce the
-> amount of ifdef-ery. (Jakub)
+> Thanks, that'll work for now.
 > 
-> Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
-> Fixes: 85ce50d337d1 ("net: kcov: don't select SKB_EXTENSIONS when there is no NET")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
+> I guess we're looking at adding a set_page_memcg() (I'd prefer
+> page_memcg_set()).
+> 
+> But probably these functions shouldn't be compiled at all if
+> CONFIG_MEMCG=n.
 
-Thanks, LGTM! Let's give it a day on the ML so that build bot can take
-it for a spin just in case.
+My preference would be to put the entire function body in '#ifdef
+CONFIG_MEMCG' here.
+
+-- 
+Sincerely yours,
+Mike.

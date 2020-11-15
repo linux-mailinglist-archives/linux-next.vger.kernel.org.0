@@ -2,92 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CB32B3320
-	for <lists+linux-next@lfdr.de>; Sun, 15 Nov 2020 10:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF242B39D4
+	for <lists+linux-next@lfdr.de>; Sun, 15 Nov 2020 23:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgKOJBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Nov 2020 04:01:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37580 "EHLO mail.kernel.org"
+        id S1727922AbgKOWS0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Nov 2020 17:18:26 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35993 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726719AbgKOJBL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Nov 2020 04:01:11 -0500
-Received: from kernel.org (unknown [77.125.7.142])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727443AbgKOWSZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Nov 2020 17:18:25 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DA8702242E;
-        Sun, 15 Nov 2020 09:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605430870;
-        bh=lClu43aq77zb7RcYXePPH7+GNjpHQB6AUPoBtNZQ5A8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qq2GEptS7OQ4MB/8fLjMsz7q0eOA2SBwx4uzZs3aGt+/ZVq9CwI1ZxIB0xvO/Z0G6
-         IQeCpN16Y2YQEySv3Uy2n2xLUPwPwPuhl8XRdDkYZtCFCSjVwCBMzv3HzmIahS0Iru
-         ByGSlvc0KRQyjDqyCqM87ktV0blqeIpMuy44YmS4=
-Date:   Sun, 15 Nov 2020 11:01:05 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZ66F4k2Vz9s0b;
+        Mon, 16 Nov 2020 09:18:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1605478698;
+        bh=ObCA8HN2tG6i5xFH74HFyEHh30uOaZaaQ/NKJ3dg0UY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XCdCeOoFUmKbEzPr59upwGw1YOI6dL5jIM5AkUUWkqRBtJg1bpH/Wi44nhHggW6mx
+         wxL7PRewdWdwbKoCiewWV3IDZn8p5MCE4zdTA//6E/hROIpG44xx49IzcOCT6nHDg5
+         W8akhlSq5SfWx63u9vWk+eeNMC+pnOiwBRqqDRd8dbveWuRVKwQF93yj+cpPR+NSrr
+         ZJXda/jBJ9elLLlqv8hiVNxp/rWwJ8BagdFQ8Cq0U89CSYTpaOJEaTgdmCRrRBIR6x
+         QWSBRzogdqnE4hf4wUmjax6cNjnSoIYq19E6YfEUYmfnvIH3+arPIY3efYw7x2S8lY
+         Kc+Dm/fZ0MtWw==
+Date:   Mon, 16 Nov 2020 09:17:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Balbir Singh <sblbir@amazon.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm tree
-Message-ID: <20201115090105.GX4758@kernel.org>
-References: <20201113180239.0ee06fd2@canb.auug.org.au>
- <20201113171452.087c489c1ef58e472667577e@linux-foundation.org>
+Subject: Re: linux-next: build warning after merge of the tip tree
+Message-ID: <20201116091751.64131fe0@canb.auug.org.au>
+In-Reply-To: <20201028142300.34ed89b1@canb.auug.org.au>
+References: <20201028142300.34ed89b1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201113171452.087c489c1ef58e472667577e@linux-foundation.org>
+Content-Type: multipart/signed; boundary="Sig_/X3Au2nx0pXlbAz83kRNd1XT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 05:14:52PM -0800, Andrew Morton wrote:
-> On Fri, 13 Nov 2020 18:02:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> > Hi all,
-> > 
-> > After merging the akpm tree, today's linux-next build (i386 defconfig)
-> > failed like this:
-> > 
-> > mm/secretmem.c: In function 'secretmem_memcg_charge':
-> > mm/secretmem.c:72:4: error: 'struct page' has no member named 'memcg_data'
-> >    72 |   p->memcg_data = page->memcg_data;
-> >       |    ^~
-> > mm/secretmem.c:72:23: error: 'struct page' has no member named 'memcg_data'
-> >    72 |   p->memcg_data = page->memcg_data;
-> >       |                       ^~
-> > mm/secretmem.c: In function 'secretmem_memcg_uncharge':
-> > mm/secretmem.c:86:4: error: 'struct page' has no member named 'memcg_data'
-> >    86 |   p->memcg_data = 0;
-> >       |    ^~
-> > 
-> > ...
-> >
-> > --- a/mm/secretmem.c
-> > +++ b/mm/secretmem.c
-> > @@ -69,7 +69,9 @@ static int secretmem_memcg_charge(struct page *page, gfp_t gfp, int order)
-> >  	for (i = 1; i < nr_pages; i++) {
-> >  		struct page *p = page + i;
-> >  
-> > +#ifdef CONFIG_MEMCG
-> >  		p->memcg_data = page->memcg_data;
-> > +#endif
-> >  	}
-> >  
-> >  	return 0;
-> 
-> Thanks, that'll work for now.
-> 
-> I guess we're looking at adding a set_page_memcg() (I'd prefer
-> page_memcg_set()).
-> 
-> But probably these functions shouldn't be compiled at all if
-> CONFIG_MEMCG=n.
+--Sig_/X3Au2nx0pXlbAz83kRNd1XT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My preference would be to put the entire function body in '#ifdef
-CONFIG_MEMCG' here.
+Hi all,
 
--- 
-Sincerely yours,
-Mike.
+On Wed, 28 Oct 2020 14:23:00 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Hi all,
+>=20
+> After merging the tip tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> Documentation/admin-guide/hw-vuln/l1d_flush.rst:25: WARNING: undefined la=
+bel: documentation/userspace-api/spec_ctrl.rst (if the link has no caption =
+the label must precede a section header)
+>=20
+> Introduced by commit
+>=20
+>   767d46ab566d ("Documentation: Add L1D flushing Documentation")
+
+I am still getting this warning.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/X3Au2nx0pXlbAz83kRNd1XT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+xqQ8ACgkQAVBC80lX
+0Gw4Sgf/RtOIyfPxrOAF9JSEK171GzqEJvqCUN3NxPD5NqwMOeHd3f4dbUoi8Oyo
+s1Shz2ngo50p117oFPlEW1UiYCBR21RnvtAQJ63oSzw1ceQysGZpLOFinH/0m+UN
+R58Y4FZbnPKR7wEjeiyo7kmqUK5R9wfTlnU4g9bKzpqGBeGK9c+G3AelXjkTypkK
+Azcza90IxCdWoYg6s1bFOfxy1KMuCaFAyN8Ksz/VtzLzXRxHWvwa5e4KSM+e1499
+NekB1s+dPFUE38mlX1pIWxAiSRa5gApnXnAceo95WKKtL4uQFGAyL4Mq3rZzUsQD
+7LSSewvE0snE4b7CvZcxTUiYN7+7BA==
+=gHxz
+-----END PGP SIGNATURE-----
+
+--Sig_/X3Au2nx0pXlbAz83kRNd1XT--

@@ -2,97 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1B32B3AAC
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 01:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CCE2B3AC0
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 01:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbgKPABb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Nov 2020 19:01:31 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45037 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727018AbgKPABa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Nov 2020 19:01:30 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZ8PN4XcLz9sRR;
-        Mon, 16 Nov 2020 11:01:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605484889;
-        bh=3TJ+uhMg//iK6QrVgIKwTAVbcFD1Pz5T71IObVLaifM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jlz29JWTINun98yqF+LxldA6XNTU84ramTMuTX4bdcyWCepkQnMcq+SYC1nvXXb7R
-         alSyMtJeshAvyU88XRQVrz6to/91/wraFXMq3moCaBRPWsYvp3nllxYfAti7xPIUIa
-         rqo30/uSw9c1ZSRkhQSwd3+ZtV0Uo9CAgoRGOhyp/37CvX90h73y6hSHfmeqEC+o4K
-         JyYMGDP4NuZLhKDeHlvCzmqBda0LqWF6O2M6qNXe1PbBQQa4L54E5de7bc9/4YTG3h
-         A/Rbvz/hzY4fcwLC0j5AKSKrEyo1ogCe8o+8jdGechxmi8/Wa7fcJVa2BAzfWgj4PJ
-         Nwq4lANkqwQcA==
-Date:   Mon, 16 Nov 2020 11:01:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
+        id S1728218AbgKPAYs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Nov 2020 19:24:48 -0500
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:42427 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727618AbgKPAYr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Nov 2020 19:24:47 -0500
+Received: by mail-pf1-f169.google.com with SMTP id 131so1438437pfb.9;
+        Sun, 15 Nov 2020 16:24:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nIvBqkNHZoGMDnxUtw6GpyeKSPZCfiNrlQpFKraauoo=;
+        b=m3QxLNiT78BohDtOVy43jqZ0afEOxA0hHZQv5ESKlvuj6JajFjFzRFpqqOqwDqyWEN
+         nlICnfiua7Dl35MKK11nus/SNa9pvvwYcDcmP2JP8NdVGTCiWYji1S6x7ATsyYSmuhZh
+         rkAOpfNt6GdYqT/4XKehyu6V/sRdWSBRxDy0pCrRX3oDvQESxSLqZ04hTSAQlUEIKK9q
+         eHhP9hXhomWKjkBdN2LmudrjTzqJyorPs/R5N1twiObjln8N+2y3LRcCaEABytCyQQ1W
+         f+qvDHHgS7iggRJH01o/Gw8PYXZ4A9PNeLq408sRqXq0mOGr7MyJFYGsWiBNBfH9Y/3S
+         fyIA==
+X-Gm-Message-State: AOAM533g5Wg9pRXDxEnFTuBQPmaiafvu5IrgjMRuDVsa95j1crlUkrIC
+        f0lKHCvXPdjYV4znABaDY1Y=
+X-Google-Smtp-Source: ABdhPJw0BRnfdNJJ/fR4kJzx7vmF80SE72Bj8puzn42r6IyPTDotqhWej2HOT7kHxXiVHupKVLr8jA==
+X-Received: by 2002:a17:90b:3844:: with SMTP id nl4mr12727502pjb.93.1605486287135;
+        Sun, 15 Nov 2020 16:24:47 -0800 (PST)
+Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
+        by smtp.gmail.com with ESMTPSA id c2sm15959275pfb.196.2020.11.15.16.24.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Nov 2020 16:24:46 -0800 (PST)
+Date:   Sun, 15 Nov 2020 16:24:45 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Moritz Fischer <mdf@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Message-ID: <20201116110127.256b5a2c@canb.auug.org.au>
-In-Reply-To: <20201105180250.549f2eda@canb.auug.org.au>
-References: <20201105180250.549f2eda@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the fpga tree
+Message-ID: <X7HGzW8kvimYCUO9@epycbox.lan>
+References: <20201116095240.52d70d6e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cTWeLK16nf7CLNMo.5JdCH8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201116095240.52d70d6e@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cTWeLK16nf7CLNMo.5JdCH8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Stephen,
-
-On Thu, 5 Nov 2020 18:02:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
+On Mon, Nov 16, 2020 at 09:52:40AM +1100, Stephen Rothwell wrote:
 > Hi all,
->=20
-> After merging the drm tree, today's linux-next build (htmldocs) produced
-> this warning:
->=20
-> Documentation/gpu/drm-kms:466: drivers/gpu/drm/drm_crtc.c:236: WARNING: U=
-nexpected indentation.
-> Documentation/gpu/drm-kms:466: drivers/gpu/drm/drm_crtc.c:237: WARNING: B=
-lock quote ends without a blank line; unexpected unindent.
-> Documentation/gpu/drm-kms:472: drivers/gpu/drm/drm_blend.c:203: WARNING: =
-Unexpected indentation.
-> Documentation/gpu/drm-kms:472: drivers/gpu/drm/drm_blend.c:204: WARNING: =
-Block quote ends without a blank line; unexpected unindent.
->=20
-> Introduced by commit
->=20
->   5c759eda9b04 ("drm: Introduce plane and CRTC scaling filter properties")
+> 
+> Commits
+> 
+>   aaf8fe39c952 ("Revert "fpga: dfl: fix the definitions of type & feature_id for dfl devices"")
+>   9922e71f43ac ("Revert "fpga: dfl: move dfl_device_id to mod_devicetable.h"")
+>   3ae706b58b0b ("Revert "fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()"")
+>   dd57ca7ddec5 ("Revert "fpga: dfl: move dfl bus related APIs to include/linux/dfl.h"")
+> 
+> are missing a Signed-off-by from their author and committer.
+> 
+> Reverts are commits, too.  It is also very useful for the commit message
+> of a revert to contain some reason(s) for the revert as this may help
+> future developers.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-I am still getting these warnings.
+Sorry, thanks for catching that, for posterity the reason was
+that Greg had some further comments and didn't take the pull-request
+as-is, so I wanted to have the next-tree reflect that.
 
---=20
-Cheers,
-Stephen Rothwell
+I'll be more careful next time,
 
---Sig_/cTWeLK16nf7CLNMo.5JdCH8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+xwVcACgkQAVBC80lX
-0GxYwwf/a8n+rl2rMjBjpPIRBDSENPHIPQSyTehzHMi5K4ZFIcdKpva+WzRgCrMN
-f2GftS9lWBQ4SYBwRcudafORsBV0wl5cIFc2giKbUA3D7W3UCg1O0XOhxEhE6QJ3
-3Cj08B3V2NxsLXH7Y0z8tEayMX/kOXnhclTGsKVU2wBk/XjWiS6InYT4i0a6dBFL
-YqzUYZO70gaXe3Ik1B0pDUlQbC0sf1bVefToAHsbpxVnOYWxcEUT6vNaDhTvjbO3
-Ee9eJJ1SNzq1cXHWfVx/nZ9lZjftEcb7ChgkysfjFn7tTGpbbatc1Dj6gMG0z/y1
-ZM6ks8GXvLSYjU8nnXfkUAlHoK4WZg==
-=9f6T
------END PGP SIGNATURE-----
-
---Sig_/cTWeLK16nf7CLNMo.5JdCH8--
+- Moritz

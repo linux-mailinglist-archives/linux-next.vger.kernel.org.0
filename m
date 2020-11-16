@@ -2,78 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0509D2B5104
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 20:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD4C2B5219
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 21:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729088AbgKPTYe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Nov 2020 14:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729060AbgKPTYe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 14:24:34 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3C1C0613CF;
-        Mon, 16 Nov 2020 11:24:34 -0800 (PST)
-Received: from lwn.net (localhost [127.0.0.1])
+        id S1730948AbgKPUMe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 15:12:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51120 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726527AbgKPUMe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Nov 2020 15:12:34 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id AD20E6D9;
-        Mon, 16 Nov 2020 19:24:33 +0000 (UTC)
-Date:   Mon, 16 Nov 2020 12:24:32 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
+        by mail.kernel.org (Postfix) with ESMTPSA id 6519B21D7E;
+        Mon, 16 Nov 2020 20:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605557553;
+        bh=rsDDNAP7QStHKITYGKzN3atRZqTmeb4ZPqllqmP94BE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IfQLAn6d26yWdO9aHkuuDskTBbSu3f9N7swkyAmj33Dg/INRO6wITCEp+62Y4RJgm
+         T1ksmjel8si46L7Tiy5o4MV1JifT539iwOpGI0rk0vxgRqBJ5cqBSZ5lSWxvyjFJXQ
+         06xeXePYVD+S+sZR5CX1c38z6nAOmnAVSWB7hmEE=
+Date:   Mon, 16 Nov 2020 12:12:32 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the ftrace tree
-Message-ID: <20201116122432.796af13b@lwn.net>
-In-Reply-To: <20201116124338.76a522e1@gandalf.local.home>
-References: <20201116173502.392a769c@canb.auug.org.au>
-        <20201116124338.76a522e1@gandalf.local.home>
-Organization: LWN.net
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: linux-next: Tree for Nov 16 (net/core/stream.o)
+Message-ID: <20201116121232.7d74b577@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <8a1d4d64-d8cf-f19b-b425-594e10f3fc5a@infradead.org>
+References: <20201116175912.5f6a78d9@canb.auug.org.au>
+        <8a1d4d64-d8cf-f19b-b425-594e10f3fc5a@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 16 Nov 2020 12:43:38 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> > After merging the ftrace tree, today's linux-next build (htmldocs)
-> > produced this warning:
+On Mon, 16 Nov 2020 09:46:21 -0800 Randy Dunlap wrote:
+> On 11/15/20 10:59 PM, Stephen Rothwell wrote:
+> > Hi all,
 > > 
-> > Documentation/trace/ftrace-uses.rst:123: WARNING: Unexpected indentation.
-> > 
-> > Introduced by commit
-> > 
-> >   a25d036d939a ("ftrace: Reverse what the RECURSION flag means in the ftrace_ops")
-> >   
+> > Changes since 20201113:
+>
+> on x86_64:
 > 
-> I'm not good at rst markup. Not sure how to fix this.
+> # CONFIG_INET is not set
+> 
+> ld: net/core/stream.o: in function `sk_stream_write_space':
+> stream.c:(.text+0x68): undefined reference to `tcp_stream_memory_free'
+> ld: stream.c:(.text+0x80): undefined reference to `tcp_stream_memory_free'
+> ld: net/core/stream.o: in function `sk_stream_wait_memory':
+> stream.c:(.text+0x5b3): undefined reference to `tcp_stream_memory_free'
+> ld: stream.c:(.text+0x5c8): undefined reference to `tcp_stream_memory_free'
+> ld: stream.c:(.text+0x6f8): undefined reference to `tcp_stream_memory_free'
+> ld: net/core/stream.o:stream.c:(.text+0x70d): more undefined references to `tcp_stream_memory_free' follow
 
-Looking at the commit in question:
-
-> +Protect your callback
-> +=====================
-> +
-> +As functions can be called from anywhere, and it is possible that a function
-> +called by a callback may also be traced, and call that same callback,
-> +recursion protection must be used. There are two helper functions that
-> +can help in this regard. If you start your code with:
-> +
-> +	int bit;
-> +
-> +	bit = ftrace_test_recursion_trylock();
-> +	if (bit < 0)
-> +		return;
-
-The problem is those literal blocks.  The easiest fix will be to just use
-the double-colon notation to indicate a literal block, so the paragraph
-above would end with "...start your code with::".  Note that there's a few
-of them to fix.
-
-Thanks,
-
-jon
+Must be: d3cd4924e385 ("tcp: uninline tcp_stream_memory_free()")

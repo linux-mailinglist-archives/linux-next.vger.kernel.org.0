@@ -2,135 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3932B3BC9
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 04:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62AD2B3CC2
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 07:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725969AbgKPDR0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Nov 2020 22:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S1725710AbgKPGDJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 01:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbgKPDRZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Nov 2020 22:17:25 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6658DC0613CF;
-        Sun, 15 Nov 2020 19:17:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=rLL9X6jjJCna5p7PH8EM+yh73syISaST57XUG2k8t6o=; b=dMjzwsf13RWSgZG0yQSp+ZfBIO
-        hZJ8SP9NPiwlYkvjNTYTl6o4xmcFzVqZWY2JcWZVoS+SyXAgS96FDE67uF9ebaaFzyH6pYVbluNBo
-        KWJiBwLmHOu9QViMXNZSH7vmF6+k9XyMUOrKr9K0/EH64Ofgy2JIvJuxwk35NRJFZUfcVtL2WAYyF
-        aLKgiOePUojFUbT9xntuGNikS9/fEztKX8e20/wAu6E3R1nqQRJh3/BrYZPnL6BGX1mcyU7X8mNAR
-        rAkXwUfTJQwgbV8r5//S5I+6Z4EGSxdwmVLrww52f4z04ohIqfQTVhJm619MmftxpFCg798Wvudef
-        7uL286VQ==;
-Received: from [2601:1c0:6280:3f0::f32] (helo=smtpauth.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1keV17-0008Q3-J9; Mon, 16 Nov 2020 03:17:22 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: [PATCH net-next v4] net: linux/skbuff.h: combine SKB_EXTENSIONS + KCOV handling
-Date:   Sun, 15 Nov 2020 19:17:15 -0800
-Message-Id: <20201116031715.7891-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S1725379AbgKPGDJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 01:03:09 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC35C0613CF;
+        Sun, 15 Nov 2020 22:03:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZJQd12sjz9s0b;
+        Mon, 16 Nov 2020 17:03:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1605506585;
+        bh=MEsqj4CzN1LusJtnTWYmpp8ADH+y7KXD7w6a7qOD+Fw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ftFpfhAXeMfO5OcEmbEj30qRUAsjyRY1Olg5A1Wd5LrtoD0kGHmzAzK6DYh9ldfvY
+         Hxwmy8KLwroIk92Q7V0lh+tWzlg27+gKJz6+F4+MGsjoMd0JE9c4SiPnHuNuAvU5x8
+         YpqI3pcJYRomfjV5s+ZzrdVw6ZCxUq17POXABt4ztFDl13bdrV/WcD6xrtQC4eCYy+
+         /avzz0KZnnJ6+eaHA/dmZb9JOZ9l6gypj7GpW+Bg8YfDUK9Ci2EYFRQPb0Z7DKLMVF
+         eSI6Ke9Rdw8cg7FcFzsM0AW799CvnDuJJiTrEAeoWrQydruGSC033dLmS1zOQvDMWY
+         +6P734JFQgxcg==
+Date:   Mon, 16 Nov 2020 17:03:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Wang Qing <wangqing@vivo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the jc_docs tree
+Message-ID: <20201116170303.0d457d04@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/7aFWdwMJzY8el1qf5XI+N2H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The previous Kconfig patch led to some other build errors as
-reported by the 0day bot and my own overnight build testing.
+--Sig_/7aFWdwMJzY8el1qf5XI+N2H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-These are all in <linux/skbuff.h> when KCOV is enabled but
-SKB_EXTENSIONS is not enabled, so fix those by combining those conditions
-in the header file.
+Hi all,
 
-Also, add stubs for skb_ext_add() and skb_ext_find() to reduce the
-amount of ifdef-ery. (Jakub)
+After merging the jc_docs tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Fixes: 6370cc3bbd8a ("net: add kcov handle to skb extensions")
-Fixes: 85ce50d337d1 ("net: kcov: don't select SKB_EXTENSIONS when there is no NET")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Aleksandr Nogikh <nogikh@google.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-next@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: Matthieu Baerts <matthieu.baerts@tessares.net>
----
-v4: The enum for SKB_EXT_KCOV_HANDLE needs to be exposed unconditionally
-  because it is used in skb_get/set_kcov_handle(), which are always
-  present since v3.
-v3: (as suggested by Jakub Kicinski <kuba@kernel.org>)
-  add stubs for skb_ext_add() and skb_ext_find() to reduce the ifdef-ery
-v2: (as suggested by Matthieu Baerts <matthieu.baerts@tessares.net>)
-  drop an extraneous space in a comment;
-  use CONFIG_SKB_EXTENSIONS instead of CONFIG_NET;
+Documentation/translations/zh_CN/filesystems/tmpfs.rst:5: WARNING: undefine=
+d label: tmpfs_index (if the link has no caption the label must precede a s=
+ection header)
 
- include/linux/skbuff.h |   14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+Introduced by commit
 
---- linux-next-20201113.orig/include/linux/skbuff.h
-+++ linux-next-20201113/include/linux/skbuff.h
-@@ -4137,7 +4137,6 @@ static inline void skb_set_nfct(struct s
- #endif
- }
- 
--#ifdef CONFIG_SKB_EXTENSIONS
- enum skb_ext_id {
- #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
- 	SKB_EXT_BRIDGE_NF,
-@@ -4151,12 +4150,11 @@ enum skb_ext_id {
- #if IS_ENABLED(CONFIG_MPTCP)
- 	SKB_EXT_MPTCP,
- #endif
--#if IS_ENABLED(CONFIG_KCOV)
- 	SKB_EXT_KCOV_HANDLE,
--#endif
- 	SKB_EXT_NUM, /* must be last */
- };
- 
-+#ifdef CONFIG_SKB_EXTENSIONS
- /**
-  *	struct skb_ext - sk_buff extensions
-  *	@refcnt: 1 on allocation, deallocated on 0
-@@ -4252,6 +4250,10 @@ static inline void skb_ext_del(struct sk
- static inline void __skb_ext_copy(struct sk_buff *d, const struct sk_buff *s) {}
- static inline void skb_ext_copy(struct sk_buff *dst, const struct sk_buff *s) {}
- static inline bool skb_has_extensions(struct sk_buff *skb) { return false; }
-+static inline void *skb_ext_add(struct sk_buff *skb, enum skb_ext_id id)
-+{ return NULL; }
-+static inline void *skb_ext_find(const struct sk_buff *skb, enum skb_ext_id id)
-+{ return NULL; }
- #endif /* CONFIG_SKB_EXTENSIONS */
- 
- static inline void nf_reset_ct(struct sk_buff *skb)
-@@ -4608,7 +4610,6 @@ static inline void skb_reset_redirect(st
- #endif
- }
- 
--#ifdef CONFIG_KCOV
- static inline void skb_set_kcov_handle(struct sk_buff *skb,
- 				       const u64 kcov_handle)
- {
-@@ -4632,11 +4633,6 @@ static inline u64 skb_get_kcov_handle(st
- 
- 	return kcov_handle ? *kcov_handle : 0;
- }
--#else
--static inline void skb_set_kcov_handle(struct sk_buff *skb,
--				       const u64 kcov_handle) { }
--static inline u64 skb_get_kcov_handle(struct sk_buff *skb) { return 0; }
--#endif /* CONFIG_KCOV */
- 
- #endif	/* __KERNEL__ */
- #endif	/* _LINUX_SKBUFF_H */
+  09028e60fcea ("doc: zh_CN: add translatation for tmpfs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7aFWdwMJzY8el1qf5XI+N2H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+yFhcACgkQAVBC80lX
+0Gwz7Qf9F9rsC6LZwYdg16DtoNlVjCaVl/K7349iQ1I7AK7pMBX4Qo6Iz7UeP2jN
+FTQSKNYlZlhM7cJcynMw7XdXX8tYrDvOtBE3i8JLzMfsG8f+HjK7X/JyJav7X2V1
++dVWN0BOaKnAfDNOLQ8sxWBHyCgA1VBqWN4sTjpLYF04+X51eru5dRiLTUrmaRLB
+kGHLS1sQ5BVCLyP1DLIqAWNJZLY0AToqqrYdKKWAD6l2Kp4cRm+Gtbb5NAzeqcQU
+uVHF/AXjbtk8bksaz2QXyE4wxWrwgyd9ruyLAzYJy47mL0NQbSO4fZZ0wdr8gILh
+D9EtyMJcHhhmYkCu0/trHEAM383vpg==
+=i4ow
+-----END PGP SIGNATURE-----
+
+--Sig_/7aFWdwMJzY8el1qf5XI+N2H--

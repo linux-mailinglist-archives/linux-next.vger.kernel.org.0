@@ -2,55 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2866B2B4E48
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8E82B4E64
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 18:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388016AbgKPRnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Nov 2020 12:43:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388010AbgKPRnk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 16 Nov 2020 12:43:40 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E47DB2231B;
-        Mon, 16 Nov 2020 17:43:39 +0000 (UTC)
-Date:   Mon, 16 Nov 2020 12:43:38 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org
+        id S1733186AbgKPRq1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 12:46:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731834AbgKPRq1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 12:46:27 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE53C0613CF;
+        Mon, 16 Nov 2020 09:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=9sZyEPf94X/5U3dKsvhB39LKcRrFqi6aC5GNtt9/TYk=; b=XRffYaPEUEfNIxJ7YWf4c/snqH
+        Gw+iEKkux7fTwIVqFSLInxzWfr25qpPYbNbQIov9uuIzuyiXLJJ5Ip9fpX4xpZg0VP5fdDMp3NVPA
+        FFp4MAjHX9xRsJMMZjFQ7qANqs1fGxBMIJZyr3DcytFWAyQ4sUBzMCZWzNYtMivlWwZJAP5O1y8Hy
+        AYqkg3YJ6JXvq61K4igVnvUE61mqWDW1GAv5maOWTwIAV6uT74yg9zN6na7Sq1arfI1Bg170zl6kT
+        LjoTjAl80+GkT+j43vJtYOygmVcD4vxH+S11kOh9czp9WLKapFJFg5i8+PCSmzVlqVAHoQEFn1bN8
+        Gwo8kF6A==;
+Received: from [2601:1c0:6280:3f0::f32]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1keia8-000251-BA; Mon, 16 Nov 2020 17:46:24 +0000
+Subject: Re: linux-next: Tree for Nov 16 (net/core/stream.o)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: linux-next: build warning after merge of the ftrace tree
-Message-ID: <20201116124338.76a522e1@gandalf.local.home>
-In-Reply-To: <20201116173502.392a769c@canb.auug.org.au>
-References: <20201116173502.392a769c@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20201116175912.5f6a78d9@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <8a1d4d64-d8cf-f19b-b425-594e10f3fc5a@infradead.org>
+Date:   Mon, 16 Nov 2020 09:46:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20201116175912.5f6a78d9@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 16 Nov 2020 17:35:02 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
+On 11/15/20 10:59 PM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the ftrace tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> Documentation/trace/ftrace-uses.rst:123: WARNING: Unexpected indentation.
-> 
-> Introduced by commit
-> 
->   a25d036d939a ("ftrace: Reverse what the RECURSION flag means in the ftrace_ops")
+> Changes since 20201113:
 > 
 
-I'm not good at rst markup. Not sure how to fix this.
 
-Thanks,
+on x86_64:
 
--- Steve
+# CONFIG_INET is not set
+
+ld: net/core/stream.o: in function `sk_stream_write_space':
+stream.c:(.text+0x68): undefined reference to `tcp_stream_memory_free'
+ld: stream.c:(.text+0x80): undefined reference to `tcp_stream_memory_free'
+ld: net/core/stream.o: in function `sk_stream_wait_memory':
+stream.c:(.text+0x5b3): undefined reference to `tcp_stream_memory_free'
+ld: stream.c:(.text+0x5c8): undefined reference to `tcp_stream_memory_free'
+ld: stream.c:(.text+0x6f8): undefined reference to `tcp_stream_memory_free'
+ld: net/core/stream.o:stream.c:(.text+0x70d): more undefined references to `tcp_stream_memory_free' follow
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,80 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A4C2B4C6C
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 18:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2866B2B4E48
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 18:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731706AbgKPRQI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Nov 2020 12:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730459AbgKPRQI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 12:16:08 -0500
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02524C0613CF;
-        Mon, 16 Nov 2020 09:16:08 -0800 (PST)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1kei6i-0007at-NP; Mon, 16 Nov 2020 18:16:00 +0100
-Date:   Mon, 16 Nov 2020 18:16:00 +0100
-From:   Florian Westphal <fw@strlen.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Florian Westphal <fw@strlen.de>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-next@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4] net: linux/skbuff.h: combine SKB_EXTENSIONS
- + KCOV handling
-Message-ID: <20201116171600.GD22792@breakpoint.cc>
-References: <20201116031715.7891-1-rdunlap@infradead.org>
- <ffe01857-8609-bad7-ae89-acdaff830278@tessares.net>
- <20201116143121.GC22792@breakpoint.cc>
- <20201116073013.24d45385@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <53e73344-3a3a-4a11-9914-8490efa1a3b9@infradead.org>
+        id S2388016AbgKPRnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 12:43:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388010AbgKPRnk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Nov 2020 12:43:40 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E47DB2231B;
+        Mon, 16 Nov 2020 17:43:39 +0000 (UTC)
+Date:   Mon, 16 Nov 2020 12:43:38 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: linux-next: build warning after merge of the ftrace tree
+Message-ID: <20201116124338.76a522e1@gandalf.local.home>
+In-Reply-To: <20201116173502.392a769c@canb.auug.org.au>
+References: <20201116173502.392a769c@canb.auug.org.au>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53e73344-3a3a-4a11-9914-8490efa1a3b9@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 11/16/20 7:30 AM, Jakub Kicinski wrote:
-> > On Mon, 16 Nov 2020 15:31:21 +0100 Florian Westphal wrote:
-> >>>> @@ -4151,12 +4150,11 @@ enum skb_ext_id {
-> >>>>   #if IS_ENABLED(CONFIG_MPTCP)
-> >>>>   	SKB_EXT_MPTCP,
-> >>>>   #endif
-> >>>> -#if IS_ENABLED(CONFIG_KCOV)
-> >>>>   	SKB_EXT_KCOV_HANDLE,
-> >>>> -#endif  
-> >>>
-> >>> I don't think we should remove this #ifdef: the number of extensions are
-> >>> currently limited to 8, we might not want to always have KCOV there even if
-> >>> we don't want it. I think adding items in this enum only when needed was the
-> >>> intension of Florian (+cc) when creating these SKB extensions.
-> >>> Also, this will increase a tiny bit some structures, see "struct skb_ext()".  
-> >>
-> >> Yes, I would also prefer to retrain the ifdef.
-> >>
-> >> Another reason was to make sure that any skb_ext_add(..., MY_EXT) gives
-> >> a compile error if the extension is not enabled.
-> > 
-> > Oh well, sorry for taking you down the wrong path Randy!
+On Mon, 16 Nov 2020 17:35:02 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+
+> Hi all,
 > 
-> No problem.
-> So we are back to v2, right?
+> After merging the ftrace tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/trace/ftrace-uses.rst:123: WARNING: Unexpected indentation.
+> 
+> Introduced by commit
+> 
+>   a25d036d939a ("ftrace: Reverse what the RECURSION flag means in the ftrace_ops")
+> 
 
-Yes, you can still drop the line
+I'm not good at rst markup. Not sure how to fix this.
 
->> +#if IS_ENABLED(CONFIG_KCOV) && IS_ENABLED(CONFIG_SKB_EXTENSIONS)
+Thanks,
 
-for enum skb_ext_id (alreadyt under SKB_EXTENSIONS).
-
-Other than that v2 looks good to me.
-
-Thanks!
+-- Steve

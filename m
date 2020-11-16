@@ -2,171 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C122B487F
-	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 16:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB9B2B48F7
+	for <lists+linux-next@lfdr.de>; Mon, 16 Nov 2020 16:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729964AbgKPPGa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Nov 2020 10:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbgKPPGZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 10:06:25 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82408C0613D1
-        for <linux-next@vger.kernel.org>; Mon, 16 Nov 2020 07:06:25 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id h16so12177528otq.9
-        for <linux-next@vger.kernel.org>; Mon, 16 Nov 2020 07:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=LXmaNST6ELpIVrVhrObsBHBWBQVHEVfnGhKfEMBr9+I=;
-        b=DQPR0DsXw/+bJPTZBZdWjkL6AleNn7hrMuzZ8NbwKT3iz6O2gJHaQLELmAF43WMFfI
-         Mb+WzlMO17A5NnTzKPQ166g4hDLtfVttXI/Svio3LVDKYjgpnSClota7y+LsUqsz9dJp
-         OgQDfP8rMJgM2+jt0ok4nTCK3Gtb6cXDtV6mrA8ux5/xya9XsvqavrR093ofJSqtsmSI
-         u7lPIvEnwWXkSOfbJqTFrpR+/gN/L1UC+sNTab+JcB5n/H5VL6jU/g88R8+8KrIXQNJx
-         HeKa0CMyUgE3RixDMC6PuVAJXbQe8ByEANRPVuJ8y3l7LMJQHEHuzN2CvFVL/Y8vEmNL
-         KmAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=LXmaNST6ELpIVrVhrObsBHBWBQVHEVfnGhKfEMBr9+I=;
-        b=hFMK1uD8DaO94k8TWCGFaQW7e4JWtBDue8ogO449T5R2lc9X1HARadRK21Hc6WVPHp
-         UM5jNcrwZTyTxIH8SlPPlDpbhsL3haC0Piy62QtCIqa5hIjeK6wI0/I9m9JU094qTzIS
-         UKPHatXVfeDH3tGTqHW74NOnD4+fP5lyUwpb9DlzZdBHdosduHOHeWAnaaguSETk5Lhb
-         w2xcSwx1aA7BMUJLSmY3Ar2OSHBjuEftdtlNi0GN/YZBUSbX5WyUnT2h0GnChCpGbyJL
-         ASKR1W7QIgh8EHJjrkiIlC7iYxEPsFOoQyBl8/k7OxjD/HKOUsDpMuKVQqC1EwRuC3SJ
-         PSFw==
-X-Gm-Message-State: AOAM532E9HeYjvyceqqD6zXj9WWFDwx25VUsdfIaZ+KjcHTGoA4IO61E
-        MP0GeN7i8IjcHjqPZ9iWySBSH37+DEcXwrJjzkRBNg==
-X-Google-Smtp-Source: ABdhPJwoJLdgJGuEMJHhrydqP2w4fhs+SkStd4rOUF5UnwED3adsc7G1t+6HETfoF8yiTOwA9QTncOKKOaTGNbCY2Jg=
-X-Received: by 2002:a05:6830:225a:: with SMTP id t26mr11205825otd.266.1605539184494;
- Mon, 16 Nov 2020 07:06:24 -0800 (PST)
+        id S1730310AbgKPPRN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 10:17:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730179AbgKPPRN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Nov 2020 10:17:13 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9CDE20DD4
+        for <linux-next@vger.kernel.org>; Mon, 16 Nov 2020 15:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605539832;
+        bh=e1HQYiwm1KTWlMXlYVtIGSInMYW1f6CbIyrdNrjQM1w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DYCEsQqUHzypvuDoA3QH7/BpgCDEHRRR/lYHnhV1dGmhHV/kdsGrAQGNNRNXRhlSv
+         NcBq+tXRJOLuTyVPzVoszOmgCdyVsjj47rdHRStaCqxMlvDty0Mwpibz/p31QVLu3K
+         fHp6j0JaKqb9k5RyvhpNrzj56TjbbIwL28F50aqM=
+Received: by mail-oi1-f176.google.com with SMTP id f11so5446272oij.6
+        for <linux-next@vger.kernel.org>; Mon, 16 Nov 2020 07:17:12 -0800 (PST)
+X-Gm-Message-State: AOAM531zMx0b4EwksKpplMDIzlcv14VyLGubwjsYbBQadXRHnodikXIF
+        9SpRxHLwE9oxJCVOQVB7jXrA3cEYrSTx/sQPl9o=
+X-Google-Smtp-Source: ABdhPJzIX9uSkSBDpa98QYmM1gkjMrN5Kf2eL2O4I4ozWhXuuZLyCBicuVQCTGVMuUz86HI7IczZAmNX4pNOi4o7Ozk=
+X-Received: by 2002:aca:c60c:: with SMTP id w12mr10610302oif.174.1605539832094;
+ Mon, 16 Nov 2020 07:17:12 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 16 Nov 2020 20:36:10 +0530
-Message-ID: <CA+G9fYvbcYvGP90VDuxHHTRSpc+yh=uZxUC5ZOzDm-7dcmkQnA@mail.gmail.com>
-Subject: [ arm ] BUG: KASAN: stack-out-of-bounds in save_trace+0xf8/0x14c
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org
+References: <CACRpkdZL7=0U6ns3tV972si-fLu3F_A6GbaPcCa9=m28KFZK0w@mail.gmail.com>
+ <CAMj1kXFTbPL6J+p7LucwP-+eJhk7aeFFjhJdLW_ktRX=KiaoWQ@mail.gmail.com>
+ <20201106094434.GA3268933@ubuntu-m3-large-x86> <CACRpkdaBnLsQB-b8fYaXGV=_i2y7pyEaVX=8pCAdjPEVHtqV4Q@mail.gmail.com>
+ <20201106151554.GU1551@shell.armlinux.org.uk> <CACRpkdaaDMCmYsEptrcQdngqFW6E+Y0gWEZHfKQdUqgw7hiX1Q@mail.gmail.com>
+ <20201109160643.GY1551@shell.armlinux.org.uk> <CAMj1kXFpJNFNCSShKfNTTAhJofvDYjpuQDjRaBO1cvNuEBGe+A@mail.gmail.com>
+ <CACRpkdZ1PwT13-mdPBw=ATAGOifu4Rr0mxUgb7qm-gN5Ssn0mg@mail.gmail.com>
+ <CAMj1kXGXPnC8k2MRxVzCtGu4X=nZ8yHg7F3NUM8S_9xMxreA9Q@mail.gmail.com> <20201112175216.GB934563@ubuntu-m3-large-x86>
+In-Reply-To: <20201112175216.GB934563@ubuntu-m3-large-x86>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 16 Nov 2020 16:16:58 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGjw4-a-Qsh6W8Kp8RaLGU3LXq-VU6paZ5EucJJuP0ScQ@mail.gmail.com>
+Message-ID: <CAMj1kXGjw4-a-Qsh6W8Kp8RaLGU3LXq-VU6paZ5EucJJuP0ScQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5 v16] ARM: Replace string mem* functions for KASan
+To:     Nathan Chancellor <natechancellor@gmail.com>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Abbott Liu <liuwenliang@huawei.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The following kernel warning noticed on arm KASAN enabled config while
-booting on qemu arm on Linux next 20201116 tag.
+On Thu, 12 Nov 2020 at 18:52, Nathan Chancellor
+<natechancellor@gmail.com> wrote:
+>
+> On Thu, Nov 12, 2020 at 04:05:52PM +0100, Ard Biesheuvel wrote:
+> > On Thu, 12 Nov 2020 at 14:51, Linus Walleij <linus.walleij@linaro.org> wrote:
+> > >
+> > > On Tue, Nov 10, 2020 at 1:05 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > On Mon, 9 Nov 2020 at 17:07, Russell King - ARM Linux admin
+> > > > <linux@armlinux.org.uk> wrote:
+> > > > >
+> > > > > On Mon, Nov 09, 2020 at 05:02:09PM +0100, Linus Walleij wrote:
+> > > > > > On Fri, Nov 6, 2020 at 4:16 PM Russell King - ARM Linux admin
+> > > > > > <linux@armlinux.org.uk> wrote:
+> > > > > > > On Fri, Nov 06, 2020 at 02:37:21PM +0100, Linus Walleij wrote:
+> > > > > >
+> > > > > > > > Aha. So shall we submit this to Russell? I figure that his git will not
+> > > > > > > > build *without* the changes from mmotm?
+> > > > > > > >
+> > > > > > > > That tree isn't using git either is it?
+> > > > > > > >
+> > > > > > > > Is this one of those cases where we should ask Stephen R
+> > > > > > > > to carry this patch on top of -next until the merge window?
+> > > > > > >
+> > > > > > > Another solution would be to drop 9017/2 ("Enable KASan for ARM")
+> > > > > > > until the following merge window, and queue up the non-conflicing
+> > > > > > > ARM KASan fixes in my "misc" branch along with the rest of KASan,
+> > > > > > > and the conflicting patches along with 9017/2 in the following
+> > > > > > > merge window.
+> > > > > > >
+> > > > > > > That means delaying KASan enablement another three months or so,
+> > > > > > > but should result in less headaches about how to avoid build
+> > > > > > > breakage with different bits going through different trees.
+> > > > > > >
+> > > > > > > Comments?
+> > > > > >
+> > > > > > I suppose I would survive deferring it. Or we could merge the
+> > > > > > smaller enablement patch towards the end of the merge
+> > > > > > window once the MM changes are in.
+> > > > > >
+> > > > > > If it is just *one* patch in the MM tree I suppose we could also
+> > > > > > just apply that one patch also to the ARM tree, and then this
+> > > > > > fixup on top. It does look a bit convoluted in the git history with
+> > > > > > two hashes and the same patch twice, but it's what I've done
+> > > > > > at times when there was no other choice that doing that or
+> > > > > > deferring development. It works as long as the patches are
+> > > > > > textually identical: git will cope.
+> > > > >
+> > > > > I thought there was a problem that if I applied the fix then my tree
+> > > > > no longer builds without the changes in -mm?
+> > > > >
+> > > >
+> > > > Indeed. Someone is changing the __alias() wrappers [for no good reason
+> > > > afaict] in a way that does not allow for new users of those wrappers
+> > > > to come in concurrently.
+> > > >
+> > > > Hency my suggestion to switch to the raw __attribute__((alias("..")))
+> > > > notation for the time being, and switch back to __alias() somewhere
+> > > > after v5.11-rc1.
+> > > >
+> > > > Or we might add this to the file in question
+> > > >
+> > > > #undef __alias
+> > > > #define __alias(symbol) __attribute__((__alias__(symbol)))
+> > > >
+> > > > and switch to the quoted versions of the identifier. Then we can just
+> > > > drop these two lines again later, after v5.11-rc1
+> > >
+> > > I was under the impression that there was some "post-next"
+> > > trick that mmot apply this patch after -next has been merged
+> > > so it's solved now?
+> > >
+> >
+> > Yes, it appears that [0] has been picked up, I guess we weren't cc'ed
+> > on the version that was sent to akpm [which is fine btw, although a
+> > followup reply here that things are all good now would have been
+> > appreciated]
+> >
+> >
+> > https://lore.kernel.org/linux-arm-kernel/20201109001712.3384097-1-natechancellor@gmail.com/
+>
+> Hi Ard,
+>
+> Odd, you were on the list of people to receive that patch and you acked
+> it but it seems that Andrew did not CC you when he actually applied the
+> patch:
+>
+> https://lore.kernel.org/mm-commits/20201110212436.yGYhesom8%25akpm@linux-foundation.org/
+>
+> My apologies for not following up, we appear to be all good now for the
+> time being (aside from the futex issue that I reported earlier).
+>
 
-[   10.811824] BUG: KASAN: stack-out-of-bounds in save_trace+0xf8/0x14c
-[   10.814330] Read of size 4 at addr c7aa37bc by task udevadm/192
-[   10.816669]
-[   10.817310] CPU: 0 PID: 192 Comm: udevadm Not tainted
-5.10.0-rc3-next-20201116 #2
-[   10.820576] Hardware name: Generic DT based system
-[   10.822886] [<c0315abc>] (unwind_backtrace) from [<c030ebf8>]
-(show_stack+0x10/0x14)
-[   10.827114] [<c030ebf8>] (show_stack) from [<c16c91cc>]
-(dump_stack+0xc8/0xe0)
-[   10.830696] [<c16c91cc>] (dump_stack) from [<c051b4ec>]
-(print_address_description.constprop.0+0x34/0x2dc)
-[   10.835673] [<c051b4ec>] (print_address_description.constprop.0)
-from [<c051b9e0>] (kasan_report+0x1a8/0x1c4)
-[   10.840888] [<c051b9e0>] (kasan_report) from [<c030e624>]
-(save_trace+0xf8/0x14c)
-[   10.844773] [<c030e624>] (save_trace) from [<c030e50c>]
-(walk_stackframe+0x1c/0x3c)
-[   10.848513] [<c030e50c>] (walk_stackframe) from [<c030e79c>]
-(__save_stack_trace+0x124/0x12c)
-[   10.852745] [<c030e79c>] (__save_stack_trace) from [<c040bc9c>]
-(stack_trace_save+0x90/0xc0)
-[   10.856653] [<c040bc9c>] (stack_trace_save) from [<c051aeb8>]
-(kasan_save_stack+0x1c/0x40)
-[   10.860463] [<c051aeb8>] (kasan_save_stack) from [<c051afac>]
-(kasan_set_track+0x28/0x30)
-[   10.864263] [<c051afac>] (kasan_set_track) from [<c051c748>]
-(kasan_set_free_info+0x20/0x34)
-[   10.868176] [<c051c748>] (kasan_set_free_info) from [<c051ae74>]
-(____kasan_slab_free+0xd4/0xfc)
-[   10.872253] [<c051ae74>] (____kasan_slab_free) from [<c0519194>]
-(kmem_cache_free+0x80/0x4a0)
-[   10.876217] [<c0519194>] (kmem_cache_free) from [<c040032c>]
-(rcu_core+0x384/0x7f4)
-[   10.879852] [<c040032c>] (rcu_core) from [<c03014d8>]
-(__do_softirq+0x188/0x3d0)
-[   10.883309] [<c03014d8>] (__do_softirq) from [<c0361f88>]
-(irq_exit+0x100/0x124)
-[   10.886748] [<c0361f88>] (irq_exit) from [<c03e712c>]
-(__handle_domain_irq+0x7c/0xdc)
-[   10.890378] [<c03e712c>] (__handle_domain_irq) from [<c09a8e04>]
-(gic_handle_irq+0xb4/0xe0)
-[   10.894268] [<c09a8e04>] (gic_handle_irq) from [<c0300b8c>]
-(__irq_svc+0x6c/0x94)
-[   10.897739] Exception stack(0xc7aa3698 to 0xc7aa36e0)
-[   10.900109] 3680:
-    c03000c0 c25e6660
-[   10.903902] 36a0: c263bb70BUG: KASAN: stack-out-of-bounds in
-save_trace+0xf8/0x14c c263fd88 c7aa37e0 c315c5e0 c312d9a0 c7aa3880
-c040bc9c c03000c0
-[   10.907859] 36c0: a0030013 c7aa38ec c312d9a0 c7aa36e8 c0315330
-c031508c a0030013 ffffffff
-[   10.912344] [<c0300b8c>] (__irq_svc) from [<c031508c>]
-(search_index+0x8/0xec)
-[   10.916050] [<c031508c>] (search_index) from [<c0564990>]
-(__d_lookup_rcu+0x58/0x2a8)
-[   10.920147] [<c0564990>] (__d_lookup_rcu) from [<c03000c0>]
-(ret_fast_syscall+0x0/0x58)
-[   10.924242] Exception stack(0xc7aa3780 to 0xc7aa37c8)
-[   10.926923] 3780: c25f18a0 c7aa4000 00000000 00000000 00000003
-1312d000 5fb25e68 00000000
-[   10.931004] 37a0: 00000000 80000000 ffffffff 7fffffff 5fb25e68
-00000000 ee7e2590 00000000
-[   10.935188] 37c0: 41b58ab3 c247c3ec
-[   10.936910]
-[   10.937652] The buggy address belongs to the page:
-[   10.939933] page:(ptrval) refcount:0 mapcount:0 mapping:00000000
-index:0x0 pfn:0x47aa3
-[   10.943733] flags: 0x0()
-[   10.944995] raw: 00000000 ee60cef0 ee60cef0 00000000 00000000
-00000000 ffffffff 00000000
-[   10.948786] raw: 00000000
-[   10.950037] page dumped because: kasan: bad access detected
-[   10.952655]
-[   10.953405] addr c7aa37bc is located in stack of task udevadm/192
-at offset 156 in frame:
-[   10.957194]  unwind_frame+0x0/0x8c0
-[   10.958853]
-[   10.959616] this frame has 1 object:
-[   10.961322]  [32, 116) 'ctrl'
-[   10.961329]
-[   10.963476] Memory state around the buggy address:
-[   10.965699]  c7aa3680: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-[   10.968752]  c7aa3700: 00 00 00 00 f1 f1 f1 f1 00 00 00 00 00 00 00 00
-[   10.971846] >c7aa3780: 00 00 04 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00
-[   10.974831]                                 ^
-[   10.976883]  c7aa3800: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 04 f2 f2
-[   10.979907]  c7aa3880: 00 00 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
-[   10.982919] ==================================================================
-[   10.986244] Disabling lock debugging due to kernel taint
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-full boot log link,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201116/testrun/3445674/suite/linux-log-parser/test/check-kernel-bug-1944975/log
-
-metadata:
-  git branch: master
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git describe: next-20201116
-  kernel-config: https://builds.tuxbuild.com/1kMYEMmo35DocMgHZ9AtJReL3rN/config
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+No worries - at least it is fixed now. And KASAN is already shaking
+out bugs, so it is great that we finally managed to enable this for
+ARM.

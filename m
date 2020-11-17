@@ -2,99 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBED2B58B3
-	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 05:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 258332B58C5
+	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 05:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbgKQEMa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Nov 2020 23:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S1726598AbgKQEUZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Nov 2020 23:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727188AbgKQEMa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 23:12:30 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17856C0613CF;
-        Mon, 16 Nov 2020 20:12:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZswV2yygz9sT6;
-        Tue, 17 Nov 2020 15:12:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605586346;
-        bh=d7GAmyjiegBzV3JAcUGPU5HieHk4/RFJ3NQYF5JYiAM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oI4rfedWtmEoqGZHYamOHZhTnZzZaE2SVvz4u7xAcpFlTMmUiOjnC22Z8Gx5YHS07
-         xByK/SRBLmw1FRkJ+I8XHAoLvqnomFlh4qLm41MXxYRhaG1CFNJOeEEoh4/mjhxRqZ
-         v60fmnBpzFJ2nYZFmlDm74ycR1TzubbTJNUHIK6M288pQCXb8bKxrWJ2yFKHo44mT9
-         hsT1dOmmJZBts3ZvmLfVTYcvUCt1GUQWSSJvQ4u0uDhrgJzntwt9Bh1K6+taT5UL13
-         y3rWI1r2fRqFlO6qSs6qMvkIv2+fNp7MGwUWBKy2Vgskd0pCGlvnXSbCMdD4Lo6ZAM
-         Pp0I7WbYD0aGA==
-Date:   Tue, 17 Nov 2020 15:12:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mhi tree
-Message-ID: <20201117151225.6a50abf8@canb.auug.org.au>
+        with ESMTP id S1726266AbgKQEUZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Nov 2020 23:20:25 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53C4C0613CF;
+        Mon, 16 Nov 2020 20:20:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=VJ/8WYCytLsitHhMZNrjI6xJw+7NDmdyC47TyOP1Bss=; b=l3+xTcuopylvTuEGmi4iZmy6xj
+        tN7JrXmI1Z8PooKGQaqatc9m1hH4HazWhVyxH9wnyjhxiazUlzIj0Yg16pDP5rAhj0hIC9gxASLxd
+        lgr+EJOrTWV04jutNYtx0PcVhk1yw/FqPtyKS2kCdPLiNApt9hWhGCHb7CVQfNGKzk2Web1QVavyg
+        GExq2P0Ug5XttjxL2l8xSni/9bWtbgNmmTiGDoauwMGfBnPF/iyXIaCZClx26Pl8SO+rytKvZazfA
+        dyzbPMJqEA4N68HXTF5v5ayMS4W3lOw5aN4n9eENTL0U1aP7SCGa6XlGhgXwPNVpndOlK7yrANcD7
+        md48QyPg==;
+Received: from [2601:1c0:6280:3f0::f32]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kesTZ-0001CQ-M5; Tue, 17 Nov 2020 04:20:18 +0000
+Subject: Re: mmotm 2020-11-16-16-47 uploaded (m/secretmem.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Mike Rapoport <rppt@kernel.org>
+References: <20201117004837.VMxSd_ozW%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e7cc79ce-2448-98bc-6ae9-306f6991986f@infradead.org>
+Date:   Mon, 16 Nov 2020 20:20:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kr5GD.ghTM1kevu1_5kZ4Uf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20201117004837.VMxSd_ozW%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kr5GD.ghTM1kevu1_5kZ4Uf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/16/20 4:48 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-11-16-16-47 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+> 
+> This tree is partially included in linux-next.  To see which patches are
+> included in linux-next, consult the `series' file.  Only the patches
+> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> linux-next.
+> 
+> 
+> A full copy of the full kernel tree with the linux-next and mmotm patches
+> already applied is available through git within an hour of the mmotm
+> release.  Individual mmotm releases are tagged.  The master branch always
+> points to the latest release, so it's constantly rebasing.
+> 
+> 	https://github.com/hnaz/linux-mm
+> 
+> The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+> contains daily snapshots of the -mm tree.  It is updated more frequently
+> than mmotm, and is untested.
+> 
 
-Hi all,
 
-After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+on x86_64:
 
-drivers/net/wireless/ath/ath11k/mhi.c:27:4: error: 'struct mhi_channel_conf=
-ig' has no member named 'auto_start'
-   27 |   .auto_start =3D false,
-      |    ^~~~~~~~~~
-drivers/net/wireless/ath/ath11k/mhi.c:42:4: error: 'struct mhi_channel_conf=
-ig' has no member named 'auto_start'
-   42 |   .auto_start =3D false,
-      |    ^~~~~~~~~~
-drivers/net/wireless/ath/ath11k/mhi.c:57:4: error: 'struct mhi_channel_conf=
-ig' has no member named 'auto_start'
-   57 |   .auto_start =3D true,
-      |    ^~~~~~~~~~
-drivers/net/wireless/ath/ath11k/mhi.c:72:4: error: 'struct mhi_channel_conf=
-ig' has no member named 'auto_start'
-   72 |   .auto_start =3D true,
-      |    ^~~~~~~~~~
+as reported on 2020-11-12:
 
-Caused by commit
+when CONFIG_MEMCG is not set:
 
-  0cc1f3a385b2 ("bus: mhi: Remove auto-start option")
+../mm/secretmem.c: In function ‘secretmem_memcg_charge’:
+../mm/secretmem.c:72:4: error: ‘struct page’ has no member named ‘memcg_data’
+   p->memcg_data = page->memcg_data;
+    ^~
+../mm/secretmem.c:72:23: error: ‘struct page’ has no member named ‘memcg_data’
+   p->memcg_data = page->memcg_data;
+                       ^~
+../mm/secretmem.c: In function ‘secretmem_memcg_uncharge’:
+../mm/secretmem.c:86:4: error: ‘struct page’ has no member named ‘memcg_data’
+   p->memcg_data = 0;
+    ^~
 
-I have used the mhi tree from next-20201116 for today.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Kr5GD.ghTM1kevu1_5kZ4Uf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+zTakACgkQAVBC80lX
-0GxQQQf/Yb5EKThmd2nKKxg+N7AKOXWnFRAPs/A2JyM6D0IAUcXZdtrTVe+6NNbW
-umbHy/dPOu3ZpPM4xmuPHL2n1hKi6bNbiywEk6hHWDZP7Mq3+MxVyvPYuZiWh0O9
-q09u/BiHXzgHy7DC+DoWLi+rhRL5DUpUCFmfieYNuUhZNsMm6lvu9Ke01wfsBvIX
-FLRJxm3aCUZIN9KL9BKcRk/rWlOfSN/HTH3alo25cjHNr0D9hazbiog92n/Ghkpw
-y7pleMHPjh0rEEX1OmN98AaA2YsSQoZb15sA5NBNIEBt1OtIuMSx0fwoF3eMOkT0
-LfgOf+emAaxFvYSim/TPGRfhnnXUaQ==
-=yiRm
------END PGP SIGNATURE-----
-
---Sig_/Kr5GD.ghTM1kevu1_5kZ4Uf--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,157 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C182B5AAA
-	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 09:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3540E2B5B9A
+	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 10:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbgKQIEv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Nov 2020 03:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbgKQIEv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Nov 2020 03:04:51 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C42C0613CF;
-        Tue, 17 Nov 2020 00:04:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725747AbgKQJQW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Nov 2020 04:16:22 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:26695 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726332AbgKQJQV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Nov 2020 04:16:21 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1605604581; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=JNhM4hrT1K1sbdfbah3onfXovQ1gmk2bbDbUgt68rWk=; b=WzOQ0OHDdM2xk8/voc0fHRWRcCqBvUNBwXrk8M2/27eDyh3dCi2AEqNUtVudek6tI7W9iXnm
+ j/STOoZZGOxAgTYit5n03awDjWueUU3v5bQRQ1YOZz9ONp7zYW09/cthZAZgx/mkTXtbLGhS
+ eigEYizXT2fcaYtpsOrje9mgmhU=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 5fb394d1d6e6336a4ea7b8ec (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Nov 2020 09:16:01
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8AF5DC433C6; Tue, 17 Nov 2020 09:16:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZz4b48q5z9sPB;
-        Tue, 17 Nov 2020 19:04:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605600288;
-        bh=NjL8hIMNpCvvdKt+wRji+N9A9xxFSIKxFlC7GA1f5Ok=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kjRmzsZflfhF7KGOmmE21huOZ0iy5T0Y1SW2PQckDGN7sf5UaMcfQ7s8SV/lJyvTA
-         wDer8o8W/sLAqA2Ys5ti4oRvEdxJB5EDEWdpXc89kA35GAHpyF25UegD0DJTiIvQb6
-         l5PcFp7bgsPY3Gf4N15NLgry/XZUWt2Nb6hdUppLfXwO+axuoTHVc2kVD4JW6mReW1
-         qS8O4crbgcP2KHHWfg/8r3MizLLZ9aZWxbUAbhe601sUph/2Iy9sNOYlv4kuRIfcI6
-         hpld+CEjOZpg+aCxdXlIYTcdbfImKPcz5/VJPU7dQQWm7ekbjBT4rxGH6t3qWmkMNm
-         DOjZCZs1VP+Jg==
-Date:   Tue, 17 Nov 2020 19:04:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0DEA7C433C6;
+        Tue, 17 Nov 2020 09:15:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0DEA7C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the v4l-dvb tree
-Message-ID: <20201117190446.62d7cab3@canb.auug.org.au>
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the mhi tree
+References: <20201117151225.6a50abf8@canb.auug.org.au>
+        <20201117042359.GB7787@work> <20201117042841.GC7787@work>
+Date:   Tue, 17 Nov 2020 11:15:55 +0200
+In-Reply-To: <20201117042841.GC7787@work> (Manivannan Sadhasivam's message of
+        "Tue, 17 Nov 2020 09:58:41 +0530")
+Message-ID: <87blfwz6lw.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qgxPS.LulgcZXu/TAltTBbZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qgxPS.LulgcZXu/TAltTBbZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> writes:
 
-Hi all,
+> On Tue, Nov 17, 2020 at 09:53:59AM +0530, Manivannan Sadhasivam wrote:
+>> +ath11k list, kalle
+>> 
+>
+> Oops... adding now
+>
+>> On Tue, Nov 17, 2020 at 03:12:25PM +1100, Stephen Rothwell wrote:
+>> > Hi all,
+>> > 
+>> > After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
+>> > failed like this:
+>> > 
+>> > drivers/net/wireless/ath/ath11k/mhi.c:27:4: error: 'struct
+>> > mhi_channel_config' has no member named 'auto_start'
+>> >    27 |   .auto_start = false,
+>> >       |    ^~~~~~~~~~
+>> > drivers/net/wireless/ath/ath11k/mhi.c:42:4: error: 'struct
+>> > mhi_channel_config' has no member named 'auto_start'
+>> >    42 |   .auto_start = false,
+>> >       |    ^~~~~~~~~~
+>> > drivers/net/wireless/ath/ath11k/mhi.c:57:4: error: 'struct
+>> > mhi_channel_config' has no member named 'auto_start'
+>> >    57 |   .auto_start = true,
+>> >       |    ^~~~~~~~~~
+>> > drivers/net/wireless/ath/ath11k/mhi.c:72:4: error: 'struct
+>> > mhi_channel_config' has no member named 'auto_start'
+>> >    72 |   .auto_start = true,
+>> >       |    ^~~~~~~~~~
+>> > 
+>> > Caused by commit
+>> > 
+>> >   0cc1f3a385b2 ("bus: mhi: Remove auto-start option")
+>> > 
+>> 
+>> The fixing patch [1] should've landed in ath-next. Kalle can you please
+>> apply the patch on top of immutable branch?
+>> 
+>> Stephen, feel free to pick it up in the meantime.
 
-In commit
+I think this fix should be included in commit 0cc1f3a385b2 ("bus: mhi:
+Remove auto-start option"), otherwise the build will always fail. I can
+then pull this commmit from the MHI immutable branch to my ath.git tree
+and from there it will go to wireless-drivers-next.
 
-  cf7f34777a5b ("media: vim2m: Register video device after setting up inter=
-nals")
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-Fixes tag
-
-  Fixes: commit 96d8eab5d0a1 ("V4L/DVB: [v5,2/2] v4l: Add a mem-to-mem vide=
-obuf framework test device")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
-
-In commit
-
-  eff5ce02e170 ("media: venus: put dummy vote on video-mem path after last =
-session release")
-
-Fixes tag
-
-  Fixes: 07f8f22a33a9e ("media: venus: core: remove CNOC voting while device
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes: tags over more than one line. (And the second
-line of *above* the first :-()
-
-In commit
-
-  e44fb034b032 ("media: venus: core: vote with average bandwidth and peak b=
-andwidth as zero")
-
-Fixes tag
-
-  Fixes: 07f8f22a33a9e ("media: venus: core: remove CNOC voting while device
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes: tags over more than one line. (And the second
-line of *above* the first :-()
-
-In commit
-
-  9e8efdb57879 ("media: venus: core: vote for video-mem path")
-
-Fixes tag
-
-  Fixes: 07f8f22a33a9e ("media: venus: core: remove CNOC voting while device
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes: tags over more than one line. (And the second
-line of *above* the first :-()
-
-In commit
-
-  21926d466e3a ("media: venus: core: change clk enable and disable order in=
- resume and suspend")
-
-Fixes tag
-
-  Fixes: 07f8f22a33a9e ("media: venus: core: remove CNOC voting while device
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes: tags over more than one line. (And the second
-line of *above* the first :-()
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/qgxPS.LulgcZXu/TAltTBbZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+zhB4ACgkQAVBC80lX
-0Gx6UwgAoJtXX1lrTSMPD4ZYLlbg7Fdkv4hA2gbtZ+iiJLI+HK9BmF+jCd4Boe6d
-DCO9THOLMSoaWEsuzyu7NortdcM6qteAcJeJAxvUIzgUpXsK4JWAt37Y64CQpsDP
-3mfuZeP3XByrCJyaZ7N7tOLDZ6zYuc+VDNmz5pKLPSyr0CaSt6WCywv0OUKLqCt6
-eQyJoMuaWUTlLAvdEoNCVjfGlZtB9i3bIVm2DZEP44ebFj+gjm/g3Xq/JQ73YXiG
-ZwBw350xkheZaiyyud1KCAR418/MeIzruYMyuICoeRule4vsh8QhkaiuzAUBfIHL
-bcCBCNCw3wFPUJE+sBQ2i8Ze/FEi0w==
-=uhor
------END PGP SIGNATURE-----
-
---Sig_/qgxPS.LulgcZXu/TAltTBbZ--
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

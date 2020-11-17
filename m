@@ -2,100 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7AB2B5902
-	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 06:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE192B5912
+	for <lists+linux-next@lfdr.de>; Tue, 17 Nov 2020 06:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725613AbgKQFFd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Nov 2020 00:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbgKQFFd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Nov 2020 00:05:33 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8FBC0613CF;
-        Mon, 16 Nov 2020 21:05:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CZv5j4h5Wz9sPB;
-        Tue, 17 Nov 2020 16:05:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605589530;
-        bh=C5KjgF0SiWdqCYc1oAuQ/UH1AFK/PWdYDX0JLs83AHo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VFodMqoHOr0b49+x3BJuBbs8ZF3/vA+KUIzAM4qv9pvNVBkZjTALXyUx+hs8H0kIT
-         6MZp2pfa97RZQTvBgiX1nruaYSLxD+o1djUH/KfqxwTMUjuCyoiZFW0G+Hc1PFQ2Bp
-         Fq23Tavs1i4VxXLx8t4M7HcQq4lbVVpgkWEI8caefpL23Ur/0iBjdQQcr2RtLooqH1
-         iIWgQ5uaxWZPCXL9uEc3F/RKpoEaU3qJKrT4sCoaT73UpZtBJRavbur7XjNE3fPBby
-         DHCqjdh5fEPiUDcP6kgCnDW+DFa3J3na0TU9IJnGfcLlYGd6rL9FZR3DvY/pP8mBob
-         D5Kr7DnO+fzpg==
-Date:   Tue, 17 Nov 2020 16:05:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the akpm-current tree with the block
- tree
-Message-ID: <20201117160528.41a907a0@canb.auug.org.au>
+        id S1725804AbgKQFVq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Nov 2020 00:21:46 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:7647 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgKQFVp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Nov 2020 00:21:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1605590505; x=1637126505;
+  h=from:to:cc:references:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=vHpNoShI7LbC3muKG5w8nt5MVX3+Fnn0Z+E1/h5TXO8=;
+  b=EupYrJrv7p7eTxZlJqf+EjiRA7+7THf3IZvYa9HOdkXyn0v81x7DmKli
+   yaPzJFirDUPo5qfixbHersh+F6NKvHGn850ChbiXnBaxct0tyW+x4ble+
+   DOas4iHlTowVgoIbxThdYCgjZBqRlrtcRixEGHje1vaqqeEObg1y0YrA3
+   I=;
+X-IronPort-AV: E=Sophos;i="5.77,484,1596499200"; 
+   d="scan'208";a="94769631"
+Subject: Re: linux-next: build warning after merge of the tip tree
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-42f764a0.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 17 Nov 2020 05:21:38 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1e-42f764a0.us-east-1.amazon.com (Postfix) with ESMTPS id ECF44B2C30;
+        Tue, 17 Nov 2020 05:21:35 +0000 (UTC)
+Received: from EX13D01UWB002.ant.amazon.com (10.43.161.136) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 17 Nov 2020 05:21:35 +0000
+Received: from uc18d6cc16d755e.ant.amazon.com (10.43.161.237) by
+ EX13d01UWB002.ant.amazon.com (10.43.161.136) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 17 Nov 2020 05:21:33 +0000
+From:   Balbir Singh <sblbir@amazon.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+References: <20201028142300.34ed89b1@canb.auug.org.au>
+ <4614a858-3719-f8c0-3543-faab3524b8b8@amazon.com>
+Message-ID: <7590a38a-12f1-3648-f5c0-6bc9773e7a9a@amazon.com>
+Date:   Tue, 17 Nov 2020 16:21:31 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S2=30Yqu9+ZMjhPjQJC6F75";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <4614a858-3719-f8c0-3543-faab3524b8b8@amazon.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.43.161.237]
+X-ClientProxiedBy: EX13D49UWC003.ant.amazon.com (10.43.162.10) To
+ EX13d01UWB002.ant.amazon.com (10.43.161.136)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/S2=30Yqu9+ZMjhPjQJC6F75
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+On 11/16/20 9:23 AM, Balbir Singh wrote:
+> 
+> 
+> On 10/28/20 2:23 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the tip tree, today's linux-next build (htmldocs) produced
+>> this warning:
+>>
+>> Documentation/admin-guide/hw-vuln/l1d_flush.rst:25: WARNING: undefined label: documentation/userspace-api/spec_ctrl.rst (if the link has no caption the label must precede a section header)
+>>
+>> Introduced by commit
+>>
+>>   767d46ab566d ("Documentation: Add L1D flushing Documentation")
+>>
+> 
+> Looking at it thanks, I am no expert with sphinx, but it seems like I need angular braces around the link
+> 
+> Balbir Singh.
+> 
 
-  mm/filemap.c
+I am testing a fix by pointing the ref to a label, will send it out (hopefully soon), seems to work at my end.
 
-between commit:
-
-  0abed7c69b95 ("mm: never attempt async page lock if we've transferred dat=
-a already")
-
-from the block tree and commit:
-
-  b5c7e73f6bd3 ("mm/filemap/c: break generic_file_buffered_read up into mul=
-tiple functions")
-
-from the akpm-current tree.
-
-I just used the latter version for today, if more is needed, please let
-me know.
-
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/S2=30Yqu9+ZMjhPjQJC6F75
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+zWhgACgkQAVBC80lX
-0Gwl/wf+InLHogofgLuBAdRaTJD/sPQNnM9vmThUCtmGmcAy9QDuZ7NvlzrjTY6P
-zsry+Hv/5r1SurlzPBwKmO4Wr65kzjEYDgSjeLEI020oriyB8VqTAgf/6bJ8YH22
-NAIIbPwXbjs71OzCg+YU8M73e5PE6BrzVpJigY2p26fkAN+gO54XsTrudDRdHGi0
-oE53O2fMjpzPo5JAu5im7i/CQ0xNtbTv36gJVHwq4BsXInUDtPPoOrqjVMPQ1+F8
-RciHimv0MOkG9JnS9VKVdBBOI0HzSTGWJ9YRTj8mH54kmZcLnlT/Q79SCBSiSwvQ
-OG38rzteXSwUfE8fMRuxfaS4M1ePdA==
-=PrSk
------END PGP SIGNATURE-----
-
---Sig_/S2=30Yqu9+ZMjhPjQJC6F75--
+Balbir Singh.

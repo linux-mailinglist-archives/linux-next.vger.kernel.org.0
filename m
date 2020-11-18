@@ -2,76 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16232B7C0A
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 12:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C055A2B7DCE
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 13:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbgKRLA7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 06:00:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57040 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726510AbgKRLA7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Nov 2020 06:00:59 -0500
-Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1657F238E6;
-        Wed, 18 Nov 2020 11:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605697258;
-        bh=LtPEeV37jqaOG4N9SOqPyVH8faRroDw/Z5ZgYdxXRZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xFl5Ac2BRrER3nj5aMDBXN0McTSlR/sLpDPCkWLgqgJS9Q5xlkgPD4kTUrE8TQYYI
-         sx8OfcQSC4t80HOf2jHMVz9iq4sLsIhEW7w8m8wZPfOIXEIMZZi/VFU/PPzfSUofcL
-         NrP2We1WuNGcWzXZM/8uBTXDmkYLE6Q2ssyShfU0=
-Date:   Wed, 18 Nov 2020 05:00:57 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S1726315AbgKRMr4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 07:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbgKRMr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 07:47:56 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A524C0613D4;
+        Wed, 18 Nov 2020 04:47:56 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 34so1113978pgp.10;
+        Wed, 18 Nov 2020 04:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2DjGzshzKdHWrGiaGRKCB67Oy3hkCcTIVQFEgISUXfQ=;
+        b=bbkvjKynxttrfV7/oq9VBdsZRxyp8CYW0iQnwyHY2HQbZ8N8VD6K/YIk13UnytI6GI
+         FS3/dNG0wZ0GJHZP04YZWas/v7pnHBBsaIG8OXl9vAgg0MB3TNdLE+n5XY1Kt583X//w
+         XC3qfJjF1HP1MaY2pJD173Z3fvTvOJuOWCMF3LILbG6FygQvRsTCf+gWRKKs+q+q8HSe
+         TzKGXQLOUSaSZkRuq0lY+xwT0ncLPPzN/ocG2nM5lXvj0wxncVW5YcxtwSm/K+tDDlcz
+         9SakYjXuMYyhd+lMWqVve1RaJmL/8zEm/l1ZAkZTzM/H+Jm+yVt3bN58dfWbZuDXs9b3
+         1N7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2DjGzshzKdHWrGiaGRKCB67Oy3hkCcTIVQFEgISUXfQ=;
+        b=kd2I2O97+hRALMHkPLkP12MG6t/xF2NavIjVtBqfBDF7i/Nf+VHAB6bNKKtZbc9zdx
+         W/WpgbFzq+0ceqnVdY9lE6qKOTYTsg+8yrMbXC+ergHxtxYGGQnIv5fd+RjRLZ0hAcEw
+         7IPQNwG9YihfvOA5AmSS81TEdoh1LLf/Y+5zjvwe9+kJLkplhewVojPYd50a6ZLT5EQr
+         ds4tozPIa6VOnj9qdMa/IXbcZh+fgcy65ccQMwG9vXZpPLwz8I+78d1zBxQ4eArekzek
+         Bxg+uDWgh64u3d0YYz1e/MiseDAP8OagjfsBaFTMmQGNhFSfdVMywBFVRV/apcvDeFeC
+         SvPQ==
+X-Gm-Message-State: AOAM530op2DWFUpZtvH+b1mGA6er4qPBxhyoHme7FzXPr602s4Wq+aQ0
+        KXzAPRdDddghKKwru2s2FRYCYt7VFWr+eQtFExA=
+X-Google-Smtp-Source: ABdhPJzEg5T27QrloGArlelWEc+01Ji/j5nHAavxP4ExA5OBq3+ypXhnjgCr0vYLdLvWm8tjsZULsf4bGi5Faa//Kds=
+X-Received: by 2002:a63:1d0b:: with SMTP id d11mr5357330pgd.368.1605703676179;
+ Wed, 18 Nov 2020 04:47:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20201118161959.1537d7cc@canb.auug.org.au>
+In-Reply-To: <20201118161959.1537d7cc@canb.auug.org.au>
+From:   Xie He <xie.he.0141@gmail.com>
+Date:   Wed, 18 Nov 2020 04:47:46 -0800
+Message-ID: <CAJht_ENp-AHgOj4GZhSgg7P3mXtN6AYqeiZTYObji3qJWkw0pw@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the gpio tree with the kspp-gustavo
- tree
-Message-ID: <20201118110057.GA30719@embeddedor>
-References: <20201118142445.461d3792@canb.auug.org.au>
- <CACRpkdahE38tamkVZLx+m3nkE_dDfaN-u7gEwH48BEnf1BvsFg@mail.gmail.com>
- <CAHp75VevuYCZVPw8HHcaoGdHBvXxHTNnujbf2BUyBECmFHZFDQ@mail.gmail.com>
- <CAHp75Vcuxc1Ypo6GV_a2hACWPFqg4m8mZr8mLHD=LgWpLLEWMg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vcuxc1Ypo6GV_a2hACWPFqg4m8mZr8mLHD=LgWpLLEWMg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Andy,
+On Tue, Nov 17, 2020 at 9:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> After merging the net-next tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/networking/index.rst:6: WARNING: toctree contains reference to nonexisting document 'networking/framerelay'
+>
+> Introduced by commit
+>
+>   f73659192b0b ("net: wan: Delete the DLCI / SDLA drivers")
 
-On Wed, Nov 18, 2020 at 12:52:25PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 18, 2020 at 11:29 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Nov 18, 2020 at 9:53 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > > On Wed, Nov 18, 2020 at 4:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > >   b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang")
-> > > >
-> > > > from the kspp-gustavo tree and commit:
-> 
-> Gustavo, one remark though. It's not okay to hide changes from
-> maintainers. I have checked
-> b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang") and found
-> nothing except your SoB.
-> 
-> Please, inform maintainers about changes you are doing in their realm(s).
-
-Sorry about that. I'll remove that change from my tree. I just wanted to
-test some changes in linux-next.
-
-Thanks for the feedback.
---
-Gustavo
-
-
+Thanks for reporting! I submitted another patch to remove the
+reference to the deleted document. Thanks!

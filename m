@@ -2,61 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3112B7F5D
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 15:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D80A92B800A
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 16:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbgKRO0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 09:26:18 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34932 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgKRO0R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 09:26:17 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 62E5F1F411B3
-Subject: Re: linux-next: build warnings after merge of the v4l-dvb tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacob Chen <jacob2.chen@rock-chips.com>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <20201118163229.1cda4547@canb.auug.org.au>
-From:   Helen Koike <helen.koike@collabora.com>
-Message-ID: <0dfef3a5-dc8c-a892-866f-a509e3c12f45@collabora.com>
-Date:   Wed, 18 Nov 2020 11:26:10 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726780AbgKRPCj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 10:02:39 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:41712 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726672AbgKRPCj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 10:02:39 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AIF22VO116792;
+        Wed, 18 Nov 2020 09:02:02 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1605711722;
+        bh=rWpMzBY3yWlur1yTtazbVTURw/ATtp1VKkyOXw91Bj4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ry8M1VDyb5KRKxRQ2InLF8zUvU1rC4pB8+s3k3adL3TqlsDZj1f6MsU7mwZUrQOzz
+         OmRwd7jsS6WXKBAIObtCoYBB6ub3EhofMxc6WIDoRppJAFsDuU1KiDS7gL3opqSolp
+         xLytG7+/O2SPL+iz2z/xouIa6M56Iq+ohL5qhZ+Q=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AIF229k083984
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Nov 2020 09:02:02 -0600
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 18
+ Nov 2020 09:02:01 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 18 Nov 2020 09:02:01 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AIF2170038838;
+        Wed, 18 Nov 2020 09:02:01 -0600
+Date:   Wed, 18 Nov 2020 09:02:01 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, <lkft-triage@lists.linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [arm] BUG: KASAN: slab-out-of-bounds in memcmp+0x30/0x5c
+Message-ID: <20201118150201.7orvzppzd4rikg3m@shrine>
+References: <CA+G9fYuk4imvhyCN7D7T6PMDH6oNp6HDCRiTUKMQ6QXXjBa4ag@mail.gmail.com>
+ <CAK8P3a2MmA257e486D2hj_qj9Wk0ybkfg9yk9f5hR=h-KWUHVg@mail.gmail.com>
+ <20201117232343.rg37fkacw43matmh@revered>
+ <CAK8P3a0+RKdNj4q3GTh26jrwBkF-BgWiEUuFB4xbh8gZj4Q4-g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201118163229.1cda4547@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0+RKdNj4q3GTh26jrwBkF-BgWiEUuFB4xbh8gZj4Q4-g@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On 09:14-20201118, Arnd Bergmann wrote:
+> On Wed, Nov 18, 2020 at 12:24 AM Nishanth Menon <nm@ti.com> wrote:
+> > On 16:25-20201117, Arnd Bergmann wrote:
+> >
+> > Yes, this was indeed a bug that has been around for some time now :(
+> >
+> > I tested with a variant of the above (did'nt like that
+> > oinfo was being assigned an invalid address)
+> > Boot log: https://pastebin.ubuntu.com/p/nZfz3HF8N6/ (with the same
+> > config as in the report): Would you prefer to me to send the following
+> > as a formal patch?
+> 
+> Awesome, thanks for the new patch and testing it!
+> 
+> Yes, please send this as a proper patch to have it picked up
+> into the regulator tree as a bugfix.
+> 
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-On 11/18/20 2:32 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the v4l-dvb tree, today's linux-next build (htmldocs)
-> produced these warnings:
-> 
-> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-meta-fmt-rk-isp1-params (if the link has no caption the label must precede a section header)
-> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-meta-fmt-rk-isp1-stat-3a (if the link has no caption the label must precede a section header)
-> 
-> Introduced by commit
-> 
->   df22026aebd8 ("media: videodev2.h, v4l2-ioctl: add rkisp1 meta buffer format")
-> 
 
-Thanks for catching this, fix sent:
+Done. And thanks for the triage, Arnd.
+https://patchwork.kernel.org/project/linux-omap/patch/20201118145009.10492-1-nm@ti.com/
 
-    https://patchwork.linuxtv.org/project/linux-media/patch/20201118142400.3540109-1-helen.koike@collabora.com/
+Naresh,
+Thanks for reporting the bug. That was an ancient one.. Glad we
+could find it.
 
+-- 
 Regards,
-Helen
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

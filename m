@@ -2,86 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FD22B7B82
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 11:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C0E2B7BD2
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 11:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725814AbgKRKlL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 05:41:11 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49773 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725497AbgKRKlL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Nov 2020 05:41:11 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CbfVY2vL1z9s1l;
-        Wed, 18 Nov 2020 21:41:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1605696069;
-        bh=SCySA/wn6QQF8qPRAczBg9qAxU0dJBy6SjnKwYcAFGQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jANG97vukQgf5/0I8/IZkFDiOEvwvgf8J55/yNiViRVFQf4G94vnDHIsee1im0djA
-         cXn6TSmyek6cfsdvfYJLvQ3KxOyBE0tIcWnMgd69sR9NVO439Fk6D6ZGf9esvkKKs4
-         F5PcAZe2ZaJuHvBGAMHFLovhzyPCfNDlbVycgBRiv7Vh+XFjbTapggi5y6SQd73Fo3
-         Ij7OC/Kscd5W9owY64mUggTNirgwIUVD0GtyjT0urMOek123d5NXSV0DDbZuBapdXM
-         0nbcllckktj3H+Hbi+FCiQWQRxkoIf+k0mnfsw32U8vCUZl1UEpAoRd/DrXY8q7bVY
-         t7x5fmamjOfNQ==
-Date:   Wed, 18 Nov 2020 21:41:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        id S1726044AbgKRKvh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 05:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725781AbgKRKvh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 05:51:37 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46971C0613D4;
+        Wed, 18 Nov 2020 02:51:37 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id l11so793293plt.1;
+        Wed, 18 Nov 2020 02:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t0Vuto0BUviguXwWoDKUrrYjmCgOjaYTtItUfZn24f8=;
+        b=aRqvIq63nsVYtqPC1fxcpPY9WaU5nNW89Eb4LqWdUKdAyjtt1srhfUc1ZX0xTNWZL3
+         RtQlmqyr6jfS5xfwKfQPrpstXGas3S99+NWUMSppfLZrIpMRo/nLg627CT1Nhlc6nV+8
+         xv8ZraHr8bXNd+5wp/asKP99Ub2TmyKXj8WL4XDUTJoYUwKpk2bxF/YhE8oXGM4tkLKK
+         EJP74SL4UIPrGFfvPG+fM7ns8Gota9wDbmarN/ukqilw9PC+d5vQJXzje93+zK1w4XKC
+         xwocTT5sZe1+KJW5Enp3ufMi1vi13Iw1vxA+/CEDcql/+rLvCTGODQMj6lsPkyjY4yVf
+         V3qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t0Vuto0BUviguXwWoDKUrrYjmCgOjaYTtItUfZn24f8=;
+        b=G04o6/2mVmpG2hJkmJqL3BCAPcCV3ZGaNsEZqiSpnA8WTG0C59EzAcQOCaar+ccCTd
+         8zMeECZBNfWuFui0aCtpo17WBHoNip7Es3fpuie4j8KnnKsGqRYt1ONf0a9k5bBjP3BB
+         LC9FcZ7mCm9lZ3XkP9xmaAorLMeNxmhUmPLj6xynRvBg49d5oFDEorqY/0QpUAsLpbRx
+         TV7nWwHBFQJXruTOZVOHXQ2dNYKY91ldGepb9FcqgW0mF88/L97TKp2khlAejjWz6z0A
+         05X8qP8z0h4dQxN6UviZGeOgBkRrHRoHQjv1xZ6tRVaWQrwOub/TEHBHMw+SY5giiTjY
+         A/jg==
+X-Gm-Message-State: AOAM533OGtMlT/xOtEkDMlnT6AyozyihI4Vdn843Ti678PasyRxIssuJ
+        D1qkWrQwFAcERNim8lSK5ARIvfJ6sC7KUqtcJ/TYsfvYV1RM6g==
+X-Google-Smtp-Source: ABdhPJzg2s+W6+97hC0LdMtXMA4BFRILwDU9cUYcGnPn/uZ+dwsEabPin4jdS7cCNf6gNlRyr+MZdPC/QDhua77vmTE=
+X-Received: by 2002:a17:90a:9f8e:: with SMTP id o14mr3325407pjp.181.1605696696846;
+ Wed, 18 Nov 2020 02:51:36 -0800 (PST)
+MIME-Version: 1.0
+References: <20201118142445.461d3792@canb.auug.org.au> <CACRpkdahE38tamkVZLx+m3nkE_dDfaN-u7gEwH48BEnf1BvsFg@mail.gmail.com>
+ <CAHp75VevuYCZVPw8HHcaoGdHBvXxHTNnujbf2BUyBECmFHZFDQ@mail.gmail.com>
+In-Reply-To: <CAHp75VevuYCZVPw8HHcaoGdHBvXxHTNnujbf2BUyBECmFHZFDQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 18 Nov 2020 12:52:25 +0200
+Message-ID: <CAHp75Vcuxc1Ypo6GV_a2hACWPFqg4m8mZr8mLHD=LgWpLLEWMg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the gpio tree with the kspp-gustavo tree
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mhi tree
-Message-ID: <20201118214107.08eb9b7b@canb.auug.org.au>
-In-Reply-To: <20201118093900.GD3286@work>
-References: <20201117151225.6a50abf8@canb.auug.org.au>
-        <20201117042359.GB7787@work>
-        <20201118153912.1decf6cf@canb.auug.org.au>
-        <20201118154500.127aaba6@canb.auug.org.au>
-        <20201118155128.64c97667@canb.auug.org.au>
-        <20201118050640.GA3286@work>
-        <20201118093900.GD3286@work>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_WFM473AmapmYpnSN35ey7G";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_WFM473AmapmYpnSN35ey7G
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 18, 2020 at 11:29 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Wed, Nov 18, 2020 at 9:53 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Wed, Nov 18, 2020 at 4:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > >   b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang")
+> > >
+> > > from the kspp-gustavo tree and commit:
 
-Hi Manivannan,
+Gustavo, one remark though. It's not okay to hide changes from
+maintainers. I have checked
+b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang") and found
+nothing except your SoB.
 
-On Wed, 18 Nov 2020 15:09:00 +0530 Manivannan Sadhasivam <manivannan.sadhas=
-ivam@linaro.org> wrote:
->
-> Patch applied to immutable branch and merged into mhi-next. Now you can
-> remove the fix patch.
+Please, inform maintainers about changes you are doing in their realm(s).
 
-Thanks for letting me know.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_WFM473AmapmYpnSN35ey7G
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+0+kMACgkQAVBC80lX
-0GyBHQgAmc2nI2PQleoLzKs7OS9dzIV2YNLqVrGIV+siLZDW6Z98VpELec7tzwiy
-xV5TuNfk8okk4Y0PYpTdn1SAv37EpXOYdJbf4lYDeetS+fMPeOXvYl1Wqcr5JLX1
-zTD0Ps1SVW25R/dtcr4u9Sl/bSxxQRT4/ECfy0Exvq61OHjnFaTh8JBKKiFRC5uQ
-GkYnr4bLv7va6IRinkT1M5i/vpllVM/xP8mXVQpj503FO19MO79MZjOBw3AWX9h0
-ph0t0ImnNeLT2UPth430GaYVPNuI59dSctZ12uj9wlb+mhyN/+BXM56XWz4tIcSF
-4VbW5gTM/zPWxLOLrHOYGuNx41JmiQ==
-=fKPR
------END PGP SIGNATURE-----
-
---Sig_/_WFM473AmapmYpnSN35ey7G--
+-- 
+With Best Regards,
+Andy Shevchenko

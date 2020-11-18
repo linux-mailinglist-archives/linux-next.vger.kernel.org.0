@@ -2,77 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 945742B755D
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 05:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D552B756D
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 05:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbgKREYD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Nov 2020 23:24:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38560 "EHLO mail.kernel.org"
+        id S1726512AbgKREjQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Nov 2020 23:39:16 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45815 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725613AbgKREYD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Nov 2020 23:24:03 -0500
-Received: from localhost (unknown [122.171.203.152])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725834AbgKREjQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Nov 2020 23:39:16 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 46580206B6;
-        Wed, 18 Nov 2020 04:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605673443;
-        bh=EE4RE2vUaW+LMJCvm5ivbId3HhZ8VlGzj64e+W8E+Fs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OgxK86tvrvvi5i9SQzVB1ZedFCzHOUU5NLhZZ2Y2LP9NjckicT2w9S3a2UriJWvvq
-         UFj5YNDI+3TuMMGcLXtxwXTzq+Wi3vo5TFMr2TPJstzW26tE9amawY9ToEQcn8XEJ1
-         gLT7mLQtq91C1YR9G6ttIM+rftltl8yQWqIxjokM=
-Date:   Wed, 18 Nov 2020 09:53:58 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Yejune Deng <yejune.deng@gmail.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CbVSx5BS0z9sRR;
+        Wed, 18 Nov 2020 15:39:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1605674353;
+        bh=Gucab2yI14o6zvvOYqLkW+9J8GFKEzd/VbbCZuXBYiE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KeEohY5wFCYEz90vSl6jMYLsu0JwUxda0yFj+FR2BUm+hwaxhcKK9AddF0w82et2O
+         m37jc6lK+AsMIK5qOx3m8+PhsIsN0nU9RkWVkjqL8hcodvexRydZMk1smwF3R9DhCp
+         SD437hOdU150fXbJ9mvcqkrJzNrIcYqGgJF2BWD8+J19YjQtknmr/PykUJAOhxnA/W
+         zBw6yLgPgzMNAyfTyE2BWe3FKuwWgkLgnLYa8lJp/BBGhTON2rztswePpP7JP6bSMM
+         KIOhk8l7EYiw6Flb1bddb+V8kHDIeTeu63K1JheeGis0XcD0WMB8oQNPsUaFi2/+9E
+         fkvJLQO7p+Lig==
+Date:   Wed, 18 Nov 2020 15:39:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the phy-next tree
-Message-ID: <20201118042358.GJ50232@vkoul-mobl>
-References: <20201117134046.569d58b8@canb.auug.org.au>
- <20201117100056.GF50232@vkoul-mobl>
- <20201118135619.4a4bf4c5@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the mhi tree
+Message-ID: <20201118153912.1decf6cf@canb.auug.org.au>
+In-Reply-To: <20201117042359.GB7787@work>
+References: <20201117151225.6a50abf8@canb.auug.org.au>
+        <20201117042359.GB7787@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201118135619.4a4bf4c5@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/ogDxEJSofVVf92VZ1KduOKX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 18-11-20, 13:56, Stephen Rothwell wrote:
-> Hi Vinod,
-> 
-> On Tue, 17 Nov 2020 15:30:56 +0530 Vinod Koul <vkoul@kernel.org> wrote:
-> >
-> > On 17-11-20, 13:40, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > After merging the phy-next tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > > 
-> > > drivers/soc/amlogic/meson-ee-pwrc.c: In function 'meson_ee_pwrc_init_domain':
-> > > drivers/soc/amlogic/meson-ee-pwrc.c:416:65: error: expected ';' before 'if'
-> > >   416 |   dom->rstc = devm_reset_control_array_get_exclusive(&pdev->dev)
-> > >       |                                                                 ^
-> > >       |                                                                 ;
-> > >   417 |   if (IS_ERR(dom->rstc))
-> > >       |   ~~                                                             
-> > > 
-> > > Caused by commit
-> > > 
-> > >   3cc8e86721ad ("phy: amlogic: Replace devm_reset_control_array_get()")
-> > > 
-> > > I have used the phy-next tree from next-20201116 for today.  
-> > 
-> > I have reverted this commit
-> 
-> Thanks, but forgot to push out?
+--Sig_/ogDxEJSofVVf92VZ1KduOKX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Precisely :( Fixed now, sorry for the trouble
+Hi Manivannan,
 
--- 
-~Vinod
+On Tue, 17 Nov 2020 09:53:59 +0530 Manivannan Sadhasivam <manivannan.sadhas=
+ivam@linaro.org> wrote:
+>
+> +ath11k list, kalle
+>=20
+> On Tue, Nov 17, 2020 at 03:12:25PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the mhi tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > failed like this:
+> >=20
+> > drivers/net/wireless/ath/ath11k/mhi.c:27:4: error: 'struct mhi_channel_=
+config' has no member named 'auto_start'
+> >    27 |   .auto_start =3D false,
+> >       |    ^~~~~~~~~~
+> > drivers/net/wireless/ath/ath11k/mhi.c:42:4: error: 'struct mhi_channel_=
+config' has no member named 'auto_start'
+> >    42 |   .auto_start =3D false,
+> >       |    ^~~~~~~~~~
+> > drivers/net/wireless/ath/ath11k/mhi.c:57:4: error: 'struct mhi_channel_=
+config' has no member named 'auto_start'
+> >    57 |   .auto_start =3D true,
+> >       |    ^~~~~~~~~~
+> > drivers/net/wireless/ath/ath11k/mhi.c:72:4: error: 'struct mhi_channel_=
+config' has no member named 'auto_start'
+> >    72 |   .auto_start =3D true,
+> >       |    ^~~~~~~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   0cc1f3a385b2 ("bus: mhi: Remove auto-start option")
+>=20
+> The fixing patch [1] should've landed in ath-next. Kalle can you please
+> apply the patch on top of immutable branch?
+>=20
+> Stephen, feel free to pick it up in the meantime.
+
+Why isn't that "fix patch" in the mhi tree (with necessary Acked-bys)?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ogDxEJSofVVf92VZ1KduOKX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+0pXAACgkQAVBC80lX
+0Gyl0gf/XjG1Uu80fmwth2c0nFuemW4VyqKUBgQGUNNIBi5Z9Y1rB6D9fig0gz1W
+byX+37r1JGxcw8ed6JTriRLQPTi0IemrTP7BbZ4QNDJwYjL8IAE9yIBeH+5UbvcP
++k+eEpQIMezgKcM/z/n73NxNQR2QnHIzF8wKuIpCcnRoEXaezKLxEH0ZBkdaiU40
+j2Vcxx9lJKZoAbt5ezCDRmTHfucxeAPMNKNZw01nVjtxOoBEZA2nbtHVo//943q8
+KnVtgq5ld7PIvrrnc0UEPYZsIbr+U58kuBCvdnot4KqB50MIkCTf1PkY/92QD3Ee
+fXdnxhXVWw4MWzDowE3WLoXsGKNCyQ==
+=dRxm
+-----END PGP SIGNATURE-----
+
+--Sig_/ogDxEJSofVVf92VZ1KduOKX--

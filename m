@@ -2,75 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C055A2B7DCE
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 13:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCF82B7F38
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 15:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbgKRMr4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 07:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbgKRMr4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 07:47:56 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A524C0613D4;
-        Wed, 18 Nov 2020 04:47:56 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 34so1113978pgp.10;
-        Wed, 18 Nov 2020 04:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2DjGzshzKdHWrGiaGRKCB67Oy3hkCcTIVQFEgISUXfQ=;
-        b=bbkvjKynxttrfV7/oq9VBdsZRxyp8CYW0iQnwyHY2HQbZ8N8VD6K/YIk13UnytI6GI
-         FS3/dNG0wZ0GJHZP04YZWas/v7pnHBBsaIG8OXl9vAgg0MB3TNdLE+n5XY1Kt583X//w
-         XC3qfJjF1HP1MaY2pJD173Z3fvTvOJuOWCMF3LILbG6FygQvRsTCf+gWRKKs+q+q8HSe
-         TzKGXQLOUSaSZkRuq0lY+xwT0ncLPPzN/ocG2nM5lXvj0wxncVW5YcxtwSm/K+tDDlcz
-         9SakYjXuMYyhd+lMWqVve1RaJmL/8zEm/l1ZAkZTzM/H+Jm+yVt3bN58dfWbZuDXs9b3
-         1N7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2DjGzshzKdHWrGiaGRKCB67Oy3hkCcTIVQFEgISUXfQ=;
-        b=kd2I2O97+hRALMHkPLkP12MG6t/xF2NavIjVtBqfBDF7i/Nf+VHAB6bNKKtZbc9zdx
-         W/WpgbFzq+0ceqnVdY9lE6qKOTYTsg+8yrMbXC+ergHxtxYGGQnIv5fd+RjRLZ0hAcEw
-         7IPQNwG9YihfvOA5AmSS81TEdoh1LLf/Y+5zjvwe9+kJLkplhewVojPYd50a6ZLT5EQr
-         ds4tozPIa6VOnj9qdMa/IXbcZh+fgcy65ccQMwG9vXZpPLwz8I+78d1zBxQ4eArekzek
-         Bxg+uDWgh64u3d0YYz1e/MiseDAP8OagjfsBaFTMmQGNhFSfdVMywBFVRV/apcvDeFeC
-         SvPQ==
-X-Gm-Message-State: AOAM530op2DWFUpZtvH+b1mGA6er4qPBxhyoHme7FzXPr602s4Wq+aQ0
-        KXzAPRdDddghKKwru2s2FRYCYt7VFWr+eQtFExA=
-X-Google-Smtp-Source: ABdhPJzEg5T27QrloGArlelWEc+01Ji/j5nHAavxP4ExA5OBq3+ypXhnjgCr0vYLdLvWm8tjsZULsf4bGi5Faa//Kds=
-X-Received: by 2002:a63:1d0b:: with SMTP id d11mr5357330pgd.368.1605703676179;
- Wed, 18 Nov 2020 04:47:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118161959.1537d7cc@canb.auug.org.au>
-In-Reply-To: <20201118161959.1537d7cc@canb.auug.org.au>
-From:   Xie He <xie.he.0141@gmail.com>
-Date:   Wed, 18 Nov 2020 04:47:46 -0800
-Message-ID: <CAJht_ENp-AHgOj4GZhSgg7P3mXtN6AYqeiZTYObji3qJWkw0pw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S1726216AbgKROOn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 09:14:43 -0500
+Received: from mga12.intel.com ([192.55.52.136]:2450 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726019AbgKROOn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Nov 2020 09:14:43 -0500
+IronPort-SDR: WEF/MeA3Fl6FCldwDWSvp+bh5rdWz9pCz19x0pEF8+mIh9hxhf9HP+C12KU2ic9XDa87pCQSib
+ 0FMamdxRvkNw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9808"; a="150390228"
+X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
+   d="scan'208";a="150390228"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 06:14:37 -0800
+IronPort-SDR: D7WY4oclhyy/VoROe0p8bFypYOQlnkov4eqdcYFhBg4MNxPK7dw4S7lNirv+5OyrqNhZYGsxuX
+ ZnzQT08TBGaA==
+X-IronPort-AV: E=Sophos;i="5.77,486,1596524400"; 
+   d="scan'208";a="534307437"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 06:14:35 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1kfOFF-007e7W-PU; Wed, 18 Nov 2020 16:15:37 +0200
+Date:   Wed, 18 Nov 2020 16:15:37 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: manual merge of the gpio tree with the kspp-gustavo
+ tree
+Message-ID: <20201118141537.GU4077@smile.fi.intel.com>
+References: <20201118142445.461d3792@canb.auug.org.au>
+ <CACRpkdahE38tamkVZLx+m3nkE_dDfaN-u7gEwH48BEnf1BvsFg@mail.gmail.com>
+ <CAHp75VevuYCZVPw8HHcaoGdHBvXxHTNnujbf2BUyBECmFHZFDQ@mail.gmail.com>
+ <CAHp75Vcuxc1Ypo6GV_a2hACWPFqg4m8mZr8mLHD=LgWpLLEWMg@mail.gmail.com>
+ <20201118110057.GA30719@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118110057.GA30719@embeddedor>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 9:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> After merging the net-next tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/networking/index.rst:6: WARNING: toctree contains reference to nonexisting document 'networking/framerelay'
->
-> Introduced by commit
->
->   f73659192b0b ("net: wan: Delete the DLCI / SDLA drivers")
+On Wed, Nov 18, 2020 at 05:00:57AM -0600, Gustavo A. R. Silva wrote:
+> On Wed, Nov 18, 2020 at 12:52:25PM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 18, 2020 at 11:29 AM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Wed, Nov 18, 2020 at 9:53 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > > > On Wed, Nov 18, 2020 at 4:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > >
+> > > > >   b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang")
+> > > > >
+> > > > > from the kspp-gustavo tree and commit:
+> > 
+> > Gustavo, one remark though. It's not okay to hide changes from
+> > maintainers. I have checked
+> > b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang") and found
+> > nothing except your SoB.
+> > 
+> > Please, inform maintainers about changes you are doing in their realm(s).
+> 
+> Sorry about that. I'll remove that change from my tree. I just wanted to
+> test some changes in linux-next.
+> 
+> Thanks for the feedback.
 
-Thanks for reporting! I submitted another patch to remove the
-reference to the deleted document. Thanks!
+No problem, thanks for taking care of this.
+
+As Linus mentioned, please send a formal patch he will include in his tree.
+(I have noticed that there are two drivers in the same change, I recommend
+ to split, so should be two separated patches)
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

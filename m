@@ -2,57 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABB72B772A
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 08:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1F82B7743
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 08:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbgKRHtw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 02:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S1726851AbgKRHvC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 02:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725772AbgKRHtw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 02:49:52 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F353C0613D4
-        for <linux-next@vger.kernel.org>; Tue, 17 Nov 2020 23:49:52 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id 74so1593437lfo.5
-        for <linux-next@vger.kernel.org>; Tue, 17 Nov 2020 23:49:52 -0800 (PST)
+        with ESMTP id S1726204AbgKRHvC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 02:51:02 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAA2C0613D4
+        for <linux-next@vger.kernel.org>; Tue, 17 Nov 2020 23:51:02 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id l11so1628270lfg.0
+        for <linux-next@vger.kernel.org>; Tue, 17 Nov 2020 23:51:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qpwNtBtS0AiBZf/1XElP9IWaoZooLdEmkzOBdTyXQDU=;
-        b=UtQVRpMtEScbhPN9aWVDQaPgL/y8m1RcJSrBepPS3DdzBTnnbZcZbWENe1C5WoUFNG
-         v9RBSt9AmEsbuW0EBPGGjeIZcjUS96wk/BYw9oe3abcDp2W3mNDbBoZOQWq35noUIB8W
-         yFPwhLFdtXEpSu9SJ4lZ9nEpASsz0ypuCZ1pD5st6XAOnpjVFPQ08Rqminm2YtlDFZsT
-         DJsoYCWdGXMiYWBpNjgVm3sbExjdzNsr2TgGWhbwYJP9+rAMykMIOnYogX13wTP4Eo4F
-         V/j/zqcyIgn9ewupn0GohiwRckUh4pNmUnkYmDmV4/pGXCq6+umEOLSt2khGIkNwLcVz
-         q4MA==
+        bh=nURpr5ov7X95SvLLKy2lkPIJH+JjfdX/rQVQdnuFd1g=;
+        b=s14qkvV5paJ7J6mI/ajn2/Y/Gxn7p2v9QVXPa8/w2DK94QMpSw4p0028up0SpYUVzc
+         pZ2FgFTTiQ2NCZ4rB0YwzIjTWoQ2bUbicM7/Dv68jPyOjO7iA9MrKmajrgKfsRrvYL6D
+         8Tjj4IcuuuSXaNgPcoTv2Yji9wM7K/sZjRkyjzviZAJUBpNpdbmwuqyj1wYF1Lm11m4F
+         bG88koXS+gxnadOqHac36lajnV56qv4kr915CZVDx8lJE2xRb3SgT4gD9PQleMEqqacy
+         rm/6afJ2sHM6KJHWoF5g6zEr8X9ZhSnlDu7TH0sx/PVaFoc8Mu0WrwBr01r/uE5ljCyU
+         MzPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qpwNtBtS0AiBZf/1XElP9IWaoZooLdEmkzOBdTyXQDU=;
-        b=Sc4JtHHElCvqDZWnWJzkrWUJerCzTZi0Z4vYOMbidK3iyR482y4PlgKaFWam17MgRV
-         KNor+0sETGgUW319kmsu6PqSU+VmexhsCgeLL9O/Yu5VjMxtI9sM4r8cVNHh6d+zLqjr
-         X06r+FpNTS3iBjLZUTbws0g1Y64xmDkiSX8e5DuB1QY6chhHP9oO15Nys+HaZZwipC3I
-         XbhXq+YO8c0ufoIRJEnqhxX1YsJSZyUbQPqlIzAg8EGpo0uSJsTnCbwzKLpmlMQXzmMl
-         AHJg98U+qJlSKwects9tilusYAmhj47IhMNhhe4SZ56Pf7PS0mDWxPA1yAcWzBcRAW4A
-         TGZw==
-X-Gm-Message-State: AOAM533dA/mGQvLo/dd2dAYcFueJulTKluI9GbNEjuxBc7Rddy7jEbgr
-        XGshMHyry9gA9sCOc7I7POc2sp9DAjUxp/sFi4VEblIz+may+Q==
-X-Google-Smtp-Source: ABdhPJw/Bs6fCsoaNtO/fMxb3ayxlfAN8J7JhoCsVLZA5cWMd7BteyBUxU9GD/gNcsJ4ionlZoi2pKIuFYNUzi1O4jU=
-X-Received: by 2002:a19:546:: with SMTP id 67mr2986407lff.502.1605685790813;
- Tue, 17 Nov 2020 23:49:50 -0800 (PST)
+        bh=nURpr5ov7X95SvLLKy2lkPIJH+JjfdX/rQVQdnuFd1g=;
+        b=uI2HIuvKxBC5o2WTPqUSiiuRh67me5qTaLdc3Cat69NdfocLuL3Pn+jP0Ex17d6uyY
+         1Kw9YrFPUjDdFW9SL7fNWj0+Pqro4o37ONoJRGwmO/qX6TpDXRpvipzFuHm/7579wZ3d
+         JOgNlMLZimLxMnxGIRP9/LDPH9+XIhRwCt8hAm2hri0xsjuiKPsiAW6XAmQKiFHHBMXu
+         eCaAFoGKDRIy1P808naG0Zk08Ma/ozQHUlNJQq8YkMBlF6VZCwiKdo9exm8yQ3kX/oD0
+         Kd1bn5dkXdqjGFWS4WkFtlR6y9s4lB0IAlRerA20HOmctcUHGvtd1ea25GAPxEZSR3qj
+         gL6w==
+X-Gm-Message-State: AOAM531QDvBdRiFmDirsrJwTYIXSKG2jMaLYh2sS5rl9PyuHU6DgucW2
+        N55nSqw5QQVOrCAwcamWLY2ZLPWHI16Id/bQ5bsP/Spv0hO7uw==
+X-Google-Smtp-Source: ABdhPJzftdofGTDH82fljYiqAsjomn3HTKrhzXm8n4LFPcN0Wryvjf4aAskijgV/qGKOSgCyMCSpqLwt7KF8GtpmGhE=
+X-Received: by 2002:ac2:4ac7:: with SMTP id m7mr3049595lfp.572.1605685860624;
+ Tue, 17 Nov 2020 23:51:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20201118142445.461d3792@canb.auug.org.au>
-In-Reply-To: <20201118142445.461d3792@canb.auug.org.au>
+References: <20201118143049.337c37d9@canb.auug.org.au>
+In-Reply-To: <20201118143049.337c37d9@canb.auug.org.au>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 18 Nov 2020 08:49:39 +0100
-Message-ID: <CACRpkdahE38tamkVZLx+m3nkE_dDfaN-u7gEwH48BEnf1BvsFg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the gpio tree with the kspp-gustavo tree
+Date:   Wed, 18 Nov 2020 08:50:49 +0100
+Message-ID: <CACRpkdYJtZJs7CNR7tagGuwjD6OXmH8rHWWS7nW4NDz1HujkKw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the gpio tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -60,15 +59,19 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 4:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Nov 18, 2020 at 4:30 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
->   b8e0b635e6e6 ("gpio: Fix fall-through warnings for Clang")
+> drivers/gpio/gpio-xilinx.c: In function 'xgpio_remove':
+> drivers/gpio/gpio-xilinx.c:275:2: error: implicit declaration of function 'pm_runtime_disable' [-Werror=implicit-function-declaration]
+>   275 |  pm_runtime_disable(&pdev->dev);
+>       |  ^~~~~~~~~~~~~~~~~~
 >
-> from the kspp-gustavo tree and commit:
+> Caused by commit
+>
+>   fbbeb6c0a1d0 ("gpio: gpio-xilinx: Add remove function")
 
-Interesting I guess this is a clang tree?
-Please rebase on the GPIO tree and send me + Andy this patch so we
-can integrate it properly.
+Ooops my fault for merging patches out-of-order, I'll go in
+and fix it up manually by removing the pm call from remove().
 
 Yours,
 Linus Walleij

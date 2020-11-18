@@ -2,102 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80A92B800A
-	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 16:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AE42B80A0
+	for <lists+linux-next@lfdr.de>; Wed, 18 Nov 2020 16:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgKRPCj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Nov 2020 10:02:39 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:41712 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726672AbgKRPCj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Nov 2020 10:02:39 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0AIF22VO116792;
-        Wed, 18 Nov 2020 09:02:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1605711722;
-        bh=rWpMzBY3yWlur1yTtazbVTURw/ATtp1VKkyOXw91Bj4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ry8M1VDyb5KRKxRQ2InLF8zUvU1rC4pB8+s3k3adL3TqlsDZj1f6MsU7mwZUrQOzz
-         OmRwd7jsS6WXKBAIObtCoYBB6ub3EhofMxc6WIDoRppJAFsDuU1KiDS7gL3opqSolp
-         xLytG7+/O2SPL+iz2z/xouIa6M56Iq+ohL5qhZ+Q=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0AIF229k083984
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Nov 2020 09:02:02 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 18
- Nov 2020 09:02:01 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 18 Nov 2020 09:02:01 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0AIF2170038838;
-        Wed, 18 Nov 2020 09:02:01 -0600
-Date:   Wed, 18 Nov 2020 09:02:01 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-CC:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, <lkft-triage@lists.linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [arm] BUG: KASAN: slab-out-of-bounds in memcmp+0x30/0x5c
-Message-ID: <20201118150201.7orvzppzd4rikg3m@shrine>
-References: <CA+G9fYuk4imvhyCN7D7T6PMDH6oNp6HDCRiTUKMQ6QXXjBa4ag@mail.gmail.com>
- <CAK8P3a2MmA257e486D2hj_qj9Wk0ybkfg9yk9f5hR=h-KWUHVg@mail.gmail.com>
- <20201117232343.rg37fkacw43matmh@revered>
- <CAK8P3a0+RKdNj4q3GTh26jrwBkF-BgWiEUuFB4xbh8gZj4Q4-g@mail.gmail.com>
+        id S1726306AbgKRPfG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Nov 2020 10:35:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46958 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726268AbgKRPfG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Nov 2020 10:35:06 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 25E1A24779;
+        Wed, 18 Nov 2020 15:35:05 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 10:35:02 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] ftrace/documentation: Fix RST C code blocks
+Message-ID: <20201118103502.24e90f7c@gandalf.local.home>
+In-Reply-To: <20201116132929.7f59943e@lwn.net>
+References: <20201116173502.392a769c@canb.auug.org.au>
+        <20201116124338.76a522e1@gandalf.local.home>
+        <20201116122432.796af13b@lwn.net>
+        <20201116152552.11572354@gandalf.local.home>
+        <20201116132929.7f59943e@lwn.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0+RKdNj4q3GTh26jrwBkF-BgWiEUuFB4xbh8gZj4Q4-g@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 09:14-20201118, Arnd Bergmann wrote:
-> On Wed, Nov 18, 2020 at 12:24 AM Nishanth Menon <nm@ti.com> wrote:
-> > On 16:25-20201117, Arnd Bergmann wrote:
-> >
-> > Yes, this was indeed a bug that has been around for some time now :(
-> >
-> > I tested with a variant of the above (did'nt like that
-> > oinfo was being assigned an invalid address)
-> > Boot log: https://pastebin.ubuntu.com/p/nZfz3HF8N6/ (with the same
-> > config as in the report): Would you prefer to me to send the following
-> > as a formal patch?
-> 
-> Awesome, thanks for the new patch and testing it!
-> 
-> Yes, please send this as a proper patch to have it picked up
-> into the regulator tree as a bugfix.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
+Some C code in the ftrace-users.rst document is missing RST C block
+annotation, which has to be added.
 
-Done. And thanks for the triage, Arnd.
-https://patchwork.kernel.org/project/linux-omap/patch/20201118145009.10492-1-nm@ti.com/
+Link: https://lore.kernel.org/r/20201116173502.392a769c@canb.auug.org.au
 
-Naresh,
-Thanks for reporting the bug. That was an ancient one.. Glad we
-could find it.
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ Documentation/trace/ftrace-uses.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
+diff --git a/Documentation/trace/ftrace-uses.rst b/Documentation/trace/ftrace-uses.rst
+index 5981d5691745..f7d98ae5b885 100644
+--- a/Documentation/trace/ftrace-uses.rst
++++ b/Documentation/trace/ftrace-uses.rst
+@@ -116,6 +116,8 @@ called by a callback may also be traced, and call that same callback,
+ recursion protection must be used. There are two helper functions that
+ can help in this regard. If you start your code with:
+ 
++.. code-block:: c
++
+ 	int bit;
+ 
+ 	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+@@ -124,6 +126,8 @@ can help in this regard. If you start your code with:
+ 
+ and end it with:
+ 
++.. code-block:: c
++
+ 	ftrace_test_recursion_unlock(bit);
+ 
+ The code in between will be safe to use, even if it ends up calling a
+@@ -145,6 +149,8 @@ protection, it is best to make sure that RCU is "watching", otherwise
+ that data or critical section will not be protected as expected. In this
+ case add:
+ 
++.. code-block:: c
++
+ 	if (!rcu_is_watching())
+ 		return;
+ 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.25.4
+

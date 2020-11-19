@@ -2,94 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7322B9A67
-	for <lists+linux-next@lfdr.de>; Thu, 19 Nov 2020 19:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CA32B9C43
+	for <lists+linux-next@lfdr.de>; Thu, 19 Nov 2020 21:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728590AbgKSSMk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Nov 2020 13:12:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
+        id S1725853AbgKSUuw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Nov 2020 15:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728509AbgKSSMk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Nov 2020 13:12:40 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590C6C0613CF;
-        Thu, 19 Nov 2020 10:12:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Fo7XA1P7L7ydAINyh811w5lW8AIHaI8eTME21i7qTwg=; b=V7ahkSEbh8W1W/0PwZOAXxUU2c
-        yzevupau9gfPxZ8mowU+Xg9Fkq/5Y26Tng93lxjNb5Tb6Kp5LRv/K39nqa5sw3+fj2F/U9FSPlcIl
-        68PjBeKjC96HmTaPgxYgwfXcSrTExosF/puNJvIt5cx87Ja+Uw4oyf6C/PayrAEk7KKJbisDLMFrg
-        vkgOsR29npRmZAAuavmgFZt2FHk1mu1VzjJ2hWibg4QxiDjwTlK/MZS7XC17nCN3wDcavp8MQVedg
-        jDreCleJxU+oG5hAQhuCxHQbNADFp2QLE3BHpHpcVchJYOp3rLuEAfr2Gj7trPLC65uldmpcl9Typ
-        nhDqHwLQ==;
-Received: from [2601:1c0:6280:3f0::bcc4]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kfoQ5-0005pf-0B; Thu, 19 Nov 2020 18:12:33 +0000
-Subject: Re: linux-next: Tree for Nov 19 (drivers/edac/igen6_edac.c)
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        with ESMTP id S1725843AbgKSUuw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Nov 2020 15:50:52 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6790C0613CF;
+        Thu, 19 Nov 2020 12:50:51 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CcWzX2xh2z9sVH;
+        Fri, 20 Nov 2020 07:50:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1605819048;
+        bh=ancD0vDXsDof1Nrduu4iULpz4Ohy0ZPow08RTMYCDjc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=H12YLo3M5n4KAE3IWyeEXzzFC6d1kfW+87Q4ryvkZtHR0bt6ry5PXQnngqT0hK0fg
+         0boFDuCPE1cU5Q+EFM4ms9uK1WIsG1gFhfY8knhPkRo2eNzGyUmMtg/WZ3aEDocfdJ
+         dXhx3E3kMFl1e9KLqwwot8kKRXNAMkqAusSmROvdc+QizoeP7uSvy0hcYMgj3InCQk
+         JJg0iX7/z7v7P37qhilVEjFD7qapKxK78TebMn0xIfRzx9ul8xFrDfmOeE/rftqe89
+         yOnI89UR6Y2ZdsbgvvRkune8Xjp6mNtRQAjTisX0ZZOz22ko7uuMGH8vGboAjpiUFC
+         Jf8Arc39QpaNA==
+Date:   Fri, 20 Nov 2020 07:50:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dominique Martinet <asmadeus@codewreck.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>
-References: <20201119170832.614bf46d@canb.auug.org.au>
- <6d36cd23-2647-f3b1-5f55-1e00105698eb@infradead.org>
- <0ad9aeffcd5342f59bae6fe64218d011@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d8880e79-40a0-4d92-29dd-82b0b59d653b@infradead.org>
-Date:   Thu, 19 Nov 2020 10:12:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the v9fs tree
+Message-ID: <20201120075047.7646f817@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <0ad9aeffcd5342f59bae6fe64218d011@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/2PmK_7c1mTPGAUn4yEDGE/6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/19/20 9:53 AM, Luck, Tony wrote:
->> ../drivers/edac/igen6_edac.c: In function 'ecclog_nmi_handler':
->> ../drivers/edac/igen6_edac.c:525:10: error: 'NMI_DONE' undeclared (first use in this function); did you mean 'DMI_NONE'?
->>    return NMI_DONE;
-> 
-> This driver has a #include <linux/nmi.h>
-> 
-> But inside that file it says:
-> 
-> #if defined(CONFIG_HAVE_NMI_WATCHDOG)
-> #include <asm/nmi.h>
-> #endif
-> 
-> and the randconfig used doesn't set CONFIG_HAVE_NMI_WATCHDOG
-> 
-> 
-> Some options:
-> 
-> 1) Drop that #ifdef from <linux/nmi.h>
-> It was introduced as part of this commit:
-> f2e0cff85ed1 ("kernel/watchdog: introduce arch_touch_nmi_watchdog()")
-> presumably for some good reason.
-> 
-> 2) Make this edac driver select CONFIG_HAVE_NMI_WATCHDOG
-> Yuck!
-> 
-> 3) Make this driver #include <asm/nmi.h> instead of <linux/nmi.h>
-> This fixes this build error, but I thought that general policy was to
-> use the <linux/*.h> if it exists rather than the <asm/*.h> one.
-> Maybe that's ok here because this is an x86 specific driver?
-> 
-> I'm leaning toward option #3.
+--Sig_/2PmK_7c1mTPGAUn4yEDGE/6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I lean toward option #1 but #3 would be OK.
+Hi all,
 
-We generally try NOT to surround #include lines
-with ifdef/endif as was done here for some reason.
+In commit
 
+  5bfe97d7382b ("9p: Fix writeback fid incorrectly being attached to dentry=
+")
 
--- 
-~Randy
+Fixes tag
 
+  Fixes: 6636b6dcc3db ("fs/9p: track open fids")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Maybe you meant
+
+Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
+
+or
+
+Fixes: 987a64850996 ("fs/9p: track open fids")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2PmK_7c1mTPGAUn4yEDGE/6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+22qcACgkQAVBC80lX
+0Gxe4Qf+NDseKslueXWXJoCkzj3IYlcnuldHEYoTxLDVeILFejEhnpUzQlwqHmbH
+8yfey4DtowQFtmqYp7PufWo3XWls7mFqVpCtI80WydOzjAV/UniR5m2S2rz2mRso
+oAhB4IRMJPmwHVPs5T764Ufx4hWvOKe6y31XYwh9wF4Re2ZdWY1SykzGSgQdmshH
+cBcaRyGqUwNFhHSE7x/5kGR4XYmOdc27PE8VBzy/8LiprHcfZZKGP89riXLsw8B5
+7xUdhxBQPycik9Mt+m5JwjGZA4eVjqsvKCJdyfrJqop06KXwnJhIDQghAgVeU4Cg
+kkC1p5vLV9ga2igX7eZSSHUx9gv3dg==
+=DjhC
+-----END PGP SIGNATURE-----
+
+--Sig_/2PmK_7c1mTPGAUn4yEDGE/6--

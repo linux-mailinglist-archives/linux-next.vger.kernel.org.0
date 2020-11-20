@@ -2,77 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23462BAAC0
-	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 14:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962282BAB79
+	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 14:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728335AbgKTNBs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Nov 2020 08:01:48 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34484 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727962AbgKTNBs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Nov 2020 08:01:48 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 55F2A8000BBC;
-        Fri, 20 Nov 2020 13:01:43 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OJCB8JQy-CxY; Fri, 20 Nov 2020 16:01:42 +0300 (MSK)
-Date:   Fri, 20 Nov 2020 16:01:41 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1727083AbgKTNnL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Nov 2020 08:43:11 -0500
+Received: from elvis.franken.de ([193.175.24.41]:45254 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726553AbgKTNnK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 20 Nov 2020 08:43:10 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kg6gt-0005PV-00; Fri, 20 Nov 2020 14:43:07 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 3A2F7C0259; Fri, 20 Nov 2020 14:41:23 +0100 (CET)
+Date:   Fri, 20 Nov 2020 14:41:23 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the nand tree
-Message-ID: <20201120130141.dq7mp27qaxvvcixm@mobilestation>
-References: <20201120113929.0aff2f32@canb.auug.org.au>
- <20201120122359.0bb7d98f@xps13>
- <20201120130123.1ca9e7af@collabora.com>
+        linux-mips@vger.kernel.org
+Subject: Re: linux-next: Tree for Nov 20
+Message-ID: <20201120134123.GA10351@alpha.franken.de>
+References: <20201120165614.0830df43@canb.auug.org.au>
+ <CADVatmPzUv4zzzHJx23rFJgop1dHZrr7ReVoh48+Q5NAOkhzXA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201120130123.1ca9e7af@collabora.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <CADVatmPzUv4zzzHJx23rFJgop1dHZrr7ReVoh48+Q5NAOkhzXA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 01:01:23PM +0100, Boris Brezillon wrote:
-> On Fri, 20 Nov 2020 12:23:59 +0100
-> Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+On Fri, Nov 20, 2020 at 11:57:07AM +0000, Sudip Mukherjee wrote:
+> Hi,
 > 
-> > Hi Serge,
-> > 
-> > Stephen Rothwell <sfr@canb.auug.org.au> wrote on Fri, 20 Nov 2020
-> > 11:39:29 +1100:
-> > 
-> > > Hi all,
-> > > 
-> > > After merging the nand tree, today's linux-next build (x86_64
-> > > allmodconfig) produced this warning:
-> > > 
-> > > drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_read':
-> > > drivers/mtd/maps/physmap-bt1-rom.c:39:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-> > >    39 |  shift = (unsigned int)src & 0x3;
-> > >       |          ^
-> > > drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_copy_from':
-> > > drivers/mtd/maps/physmap-bt1-rom.c:78:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-> > >    78 |  shift = (unsigned int)src & 0x3;
-> > >       |          ^
-> > > 
-> > > Introduced by commit
-> > > 
-> > >   69a75a1a47d8 ("mtd: physmap: physmap-bt1-rom: Fix __iomem addrspace removal warning")
-> > >   
-> > 
-> > Too bad :/ I'll drop this patch for now, let's look for another
-> > solution...
+> On Fri, Nov 20, 2020 at 5:59 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > Changes since 20201119:
 > 
-> uintptr_t cast?
+> mips allmodconfig fails for next-20201120 with the error:
+> /home/sudip/linux/drivers/video/fbdev/udlfb.c: In function 'dlfb_ops_mmap':
+> /home/sudip/linux/drivers/video/fbdev/udlfb.c:343:52: error:
+> 'PAGE_SHARED' undeclared (first use in this function)
+>   343 |   if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
+> 
+> Which has been caused by 0df162e1377a ("MIPS: mm: Clean up setup of
+> protection map") which removed "PAGE_SHARED".
 
-unsigned long shall also work here...
+I'm working on it.
 
--Sergey
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

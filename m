@@ -2,87 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1D52BA4FA
-	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 09:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2059C2BA8F4
+	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 12:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgKTIns (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Nov 2020 03:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727348AbgKTInr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Nov 2020 03:43:47 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2108C0613CF
-        for <linux-next@vger.kernel.org>; Fri, 20 Nov 2020 00:43:45 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id v12so7173168pfm.13
-        for <linux-next@vger.kernel.org>; Fri, 20 Nov 2020 00:43:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=APjFGaRYRNS0lue8pp3IHECjfVnuoZeFCADut6bOXUs=;
-        b=R6T3oY6DpA3kK6qQy/PQ3ucgZXFZeZD9dq2vqw3YdMB//ZVstCmOHy4bSr8NpD9uYI
-         ks6vGIUQ1ugWh5urzgRmcD3AM3ffLsmaiW8f9CCv0eI3H5bSDHutlaM+rKxd/9fiyE9U
-         RkgJpsEYmtRiMxmCKVIGTFKLJQHJ7MnUyPGyc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=APjFGaRYRNS0lue8pp3IHECjfVnuoZeFCADut6bOXUs=;
-        b=fycNIERcH5aOqhUJEZl7SsrTlDqWBqaYX2SsNuQUAzMqh+8V9ChOzaFzG/4Gp2rhgl
-         +RimpaTu5kmviDepc5uW+NXvPNSdR2dza4IB2DmLmtX1mD/p1B3KNOeFWcAnwUMk1n6f
-         JMFIS1sa9SdYUwuE2S7IbmboIA7RopTcl1SrVU2Uou9nRPEtmSsF+7lv57KofG/VfSfD
-         Rfh0w3UddldG/OWWKZNlhnyjFuhy1XA10mFb7ox2MKhYztl+WaDf+3Mct+85aOYm+QIy
-         TCsRcFnKMw1cn/K7kxUfHruwf0QZs7xsHzuah2xOLbKDkzDdyIHglDNPWbmtiKSdrbD5
-         2qLg==
-X-Gm-Message-State: AOAM532J3nKy1u/TdGgArYfOBDhysyHDYiEf0EdYQad3PYGeQW2pwbRh
-        GUrlqhTewXLIstcgjNJMr4LSuA==
-X-Google-Smtp-Source: ABdhPJwHb1R7a+7YQB9x0cqzbdVy0rO48W++GLzGtDidniQjI/y3ExkeCP6tcEKDiVg9no9CmKPlSA==
-X-Received: by 2002:aa7:9a50:0:b029:18b:fa6b:f738 with SMTP id x16-20020aa79a500000b029018bfa6bf738mr13154465pfj.64.1605861825325;
-        Fri, 20 Nov 2020 00:43:45 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
-        by smtp.gmail.com with ESMTPSA id q12sm2831518pjl.41.2020.11.20.00.43.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 00:43:44 -0800 (PST)
-Date:   Fri, 20 Nov 2020 00:43:43 -0800
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: Fix num_altmodes kernel-doc error
-Message-ID: <20201120084343.GC4160865@google.com>
-References: <20201120063523.4159877-1-pmalani@chromium.org>
- <X7eBMRWAopEYu78r@kroah.com>
+        id S1727197AbgKTLYF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Fri, 20 Nov 2020 06:24:05 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:59431 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgKTLYE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Nov 2020 06:24:04 -0500
+X-Originating-IP: 91.224.148.103
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 8F5FE60009;
+        Fri, 20 Nov 2020 11:24:00 +0000 (UTC)
+Date:   Fri, 20 Nov 2020 12:23:59 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the nand tree
+Message-ID: <20201120122359.0bb7d98f@xps13>
+In-Reply-To: <20201120113929.0aff2f32@canb.auug.org.au>
+References: <20201120113929.0aff2f32@canb.auug.org.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <X7eBMRWAopEYu78r@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 09:41:21AM +0100, Greg KH wrote:
-> On Thu, Nov 19, 2020 at 10:35:22PM -0800, Prashant Malani wrote:
-> > The commit to introduce the num_altmodes attribute for partner had an
-> > error where one of the parameters was named differently in the comment
-> > and the function signature. Fix the version in the comment to align with
-> > what is in the function signature.
-> > 
-> > This fixes the following htmldocs warning:
-> > 
-> > drivers/usb/typec/class.c:632: warning: Excess function parameter
-> > 'num_alt_modes' description in 'typec_partner_set_num_altmodes'
-> > 
-> > Fixes: a0ccdc4a77a1 ("usb: typec: Add number of altmodes partner attr")
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Hi Serge,
+
+Stephen Rothwell <sfr@canb.auug.org.au> wrote on Fri, 20 Nov 2020
+11:39:29 +1100:
+
+> Hi all,
 > 
-> You forgot a "Reported-by:" tag here :(
+> After merging the nand tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
 > 
-> I'll go add it by hand...
+> drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_read':
+> drivers/mtd/maps/physmap-bt1-rom.c:39:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+>    39 |  shift = (unsigned int)src & 0x3;
+>       |          ^
+> drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_copy_from':
+> drivers/mtd/maps/physmap-bt1-rom.c:78:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+>    78 |  shift = (unsigned int)src & 0x3;
+>       |          ^
+> 
+> Introduced by commit
+> 
+>   69a75a1a47d8 ("mtd: physmap: physmap-bt1-rom: Fix __iomem addrspace removal warning")
+> 
 
-My bad :(, thank you for making the addition.
+Too bad :/ I'll drop this patch for now, let's look for another
+solution...
 
-Best regards,
-
--Prashant
+Thanks,
+Miquèl

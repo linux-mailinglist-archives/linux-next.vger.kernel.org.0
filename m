@@ -2,82 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BEB2BA9AA
-	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 12:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6771A2BA9BC
+	for <lists+linux-next@lfdr.de>; Fri, 20 Nov 2020 13:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727933AbgKTL5p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Nov 2020 06:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S1727858AbgKTMB3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Nov 2020 07:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbgKTL5o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Nov 2020 06:57:44 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAF5C0613CF;
-        Fri, 20 Nov 2020 03:57:44 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id 2so8300422ybc.12;
-        Fri, 20 Nov 2020 03:57:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Gxcx568MbenUBQL8qRrYNH7PiNalGtjlP2qusXbObJ4=;
-        b=UmNZ4qbkM8AGFVGQ0gdCGBUWClZgLoGn6GuHgLUs8nhBnQYk7PvGzChRppV3DP//Ah
-         r7a26LEAcSy2RUdc2rjNBRUSlc0sB9E4WCI7H5nbDSwh8Rx8a45MJJw3+ybvaI+avhoL
-         BiedAe4VpT82HL1iibmI6aLgxssRXEQmpZ4plfdntmsy+W6+0xodgQVQvIsIeb+f022w
-         r4LlYntpu89Hc4g5HeeLGwfG7uz4mHktQ1Hh3MuqMwhEMsKjnNSpugePmwzKRSMYlD2z
-         sIdQ/MppN/hMrBRNhM+XEhPTkv/2LAUXwJhMNN5FaabUC/h52sW9cv0hG2OuJDi83DrY
-         6/kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Gxcx568MbenUBQL8qRrYNH7PiNalGtjlP2qusXbObJ4=;
-        b=bQil+4LbKWzGOnu/mOMbzdtQ6/yw7csVihE0paeV6SJPEl2bwZ464hdtRi2nYrMVFo
-         p5YjkaOcgItF9hKIAWEmuHLwu/T6EoyLtmXWlqz0z6QZZ0YNJMJQk+kM1f3FvdaNjYTL
-         CTH5sJ8LaHWPW6Er02XxgXldl5qCMxl/x+jdaWNk6WgAAEe7PQF4lrJ1Qj+ZILGdd6rj
-         U9+ftkQboIthzls2tXnDbxazPzypjV/5JrYRRPCLYiXXgjimdqdcj+rq6YbXhSSmfzVB
-         umAW4h7fe5l+2WiwG3QVbaO4XWgpnV3JEXOFdBDL4v6+6O833oJeIBRoO+SqimRE3gJa
-         zjKw==
-X-Gm-Message-State: AOAM5304m4ocub1fV8p8+ee/ksk0/SVbhqwGHaIPAnLl+NyHylHHl7hq
-        y0UB8tiUNrRqSfxUkdDIMuSnrC4sRa1Fvak24Dku6Qjg3Ef/QQ==
-X-Google-Smtp-Source: ABdhPJznPp55KdRTACETWjNz0ss4tcdPuFnqYg0BJZso5gthhIdbOxQnEYn7HmiYuLqp2RbqzURSGIx501YXCqRgZgM=
-X-Received: by 2002:a25:16c4:: with SMTP id 187mr9656935ybw.39.1605873463954;
- Fri, 20 Nov 2020 03:57:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20201120165614.0830df43@canb.auug.org.au>
-In-Reply-To: <20201120165614.0830df43@canb.auug.org.au>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 20 Nov 2020 11:57:07 +0000
-Message-ID: <CADVatmPzUv4zzzHJx23rFJgop1dHZrr7ReVoh48+Q5NAOkhzXA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Nov 20
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S1727815AbgKTMB2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Nov 2020 07:01:28 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EAFC0613CF;
+        Fri, 20 Nov 2020 04:01:28 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 28F571F45EFD;
+        Fri, 20 Nov 2020 12:01:26 +0000 (GMT)
+Date:   Fri, 20 Nov 2020 13:01:23 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the nand tree
+Message-ID: <20201120130123.1ca9e7af@collabora.com>
+In-Reply-To: <20201120122359.0bb7d98f@xps13>
+References: <20201120113929.0aff2f32@canb.auug.org.au>
+        <20201120122359.0bb7d98f@xps13>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On Fri, 20 Nov 2020 12:23:59 +0100
+Miquel Raynal <miquel.raynal@bootlin.com> wrote:
 
-On Fri, Nov 20, 2020 at 5:59 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Changes since 20201119:
+> Hi Serge,
+> 
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote on Fri, 20 Nov 2020
+> 11:39:29 +1100:
+> 
+> > Hi all,
+> > 
+> > After merging the nand tree, today's linux-next build (x86_64
+> > allmodconfig) produced this warning:
+> > 
+> > drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_read':
+> > drivers/mtd/maps/physmap-bt1-rom.c:39:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+> >    39 |  shift = (unsigned int)src & 0x3;
+> >       |          ^
+> > drivers/mtd/maps/physmap-bt1-rom.c: In function 'bt1_rom_map_copy_from':
+> > drivers/mtd/maps/physmap-bt1-rom.c:78:10: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+> >    78 |  shift = (unsigned int)src & 0x3;
+> >       |          ^
+> > 
+> > Introduced by commit
+> > 
+> >   69a75a1a47d8 ("mtd: physmap: physmap-bt1-rom: Fix __iomem addrspace removal warning")
+> >   
+> 
+> Too bad :/ I'll drop this patch for now, let's look for another
+> solution...
 
-mips allmodconfig fails for next-20201120 with the error:
-/home/sudip/linux/drivers/video/fbdev/udlfb.c: In function 'dlfb_ops_mmap':
-/home/sudip/linux/drivers/video/fbdev/udlfb.c:343:52: error:
-'PAGE_SHARED' undeclared (first use in this function)
-  343 |   if (remap_pfn_range(vma, start, page, PAGE_SIZE, PAGE_SHARED))
-
-Which has been caused by 0df162e1377a ("MIPS: mm: Clean up setup of
-protection map") which removed "PAGE_SHARED".
-
-
--- 
-Regards
-Sudip
+uintptr_t cast?

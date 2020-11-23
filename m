@@ -2,93 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4189C2C1872
-	for <lists+linux-next@lfdr.de>; Mon, 23 Nov 2020 23:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF6D2C191D
+	for <lists+linux-next@lfdr.de>; Tue, 24 Nov 2020 00:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731220AbgKWWb0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Nov 2020 17:31:26 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:36457 "EHLO ozlabs.org"
+        id S2388103AbgKWXDI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Nov 2020 18:03:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54856 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728305AbgKWWb0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Nov 2020 17:31:26 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1733244AbgKWXDI (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Nov 2020 18:03:08 -0500
+Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cg21d1ZnDz9sSf;
-        Tue, 24 Nov 2020 09:31:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606170683;
-        bh=3e332xL2aimc79/LA762XWtBQ+l1Duqb8e2E0dlZqvM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F5tEHVTsN+uq84/53cKbJ0iAhKIm0bDBdRxUlA2xQHuVcKdc5qDsMVSUnE1sqHuTK
-         BurUDVKPjv/bMNWzcH2mHix9hIwGJWpgldePI7kjGuvF36H/pqp7k3Hbwe1lX+xRHW
-         4Gbq8jNQOMveHDfBdufUJxfYjSVg1UkmWeX/0QkjoaHkDIyJDVQMIRnv3o6IXN+epV
-         x5mQeU0mt3ngjoEtPGZIoAr7wz3axRHqQ1cdqWOx2F4m2EIDwA6zYR5wwxnZP4jvHt
-         v3xj+FdgJgQRfuPsoH0dKM1kHe6kwAAtaurJ3k5l3KAtta6aClmV+6ckD05dUPtoGV
-         UQbyC/joGoJxw==
-Date:   Tue, 24 Nov 2020 09:31:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Christoph Hellwig <hch@lst.de>,
+        by mail.kernel.org (Postfix) with ESMTPSA id C7BB2204FD;
+        Mon, 23 Nov 2020 23:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606172587;
+        bh=ZhmGo0oSk5XXd1LXAD+u/c2dVEFHzErGV2v5+UbM/lw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CjRci32eiIy8WSlYvCUZ2prJcaZZn3lYIH+Oh0G4V/Mxmx1xWzb92WA60C9FTrC2F
+         DkfQUd3WWAtQtrtx7Yv0XjrrY0TWQ/U5CKuYm0NwqGfQD7o/PJbLxrEB2OXzE2zSOx
+         b4Hf8gO9QeX2a+8GEnEvPwd62QPlTWeOEstsdu3k=
+Date:   Tue, 24 Nov 2020 01:03:02 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the arm-soc tree
-Message-ID: <20201124093115.0f358046@canb.auug.org.au>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20201123230302.GD19839@kernel.org>
+References: <20201123181922.0c009406@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i2j6NpuFv9FrvFeuSiMUv8e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201123181922.0c009406@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i2j6NpuFv9FrvFeuSiMUv8e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 23, 2020 at 06:19:22PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (htmldocs) produced
+> these warnings:
+> 
+> arch/x86/kernel/cpu/sgx/ioctl.c:666: warning: Function parameter or member 'encl' not described in 'sgx_ioc_enclave_provision'
+> arch/x86/kernel/cpu/sgx/ioctl.c:666: warning: Excess function parameter 'enclave' description in 'sgx_ioc_enclave_provision'
+> 
+> Introduced by commit
+> 
+>   c82c61865024 ("x86/sgx: Add SGX_IOC_ENCLAVE_PROVISION")
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Hi all,
+Thanks, was about sending a fix but saw that Boris put already one out,
+when adding "Link: https://lore.kernel.org/linux-next/20201123101334.GC29678@zn.tnic/"
 
-After merging the arm-soc tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
-
-drivers/soc/sunxi/sunxi_mbus.c: In function 'sunxi_mbus_notifier':
-drivers/soc/sunxi/sunxi_mbus.c:93:8: error: implicit declaration of functio=
-n 'dma_direct_set_offset' [-Werror=3Dimplicit-function-declaration]
-   93 |  ret =3D dma_direct_set_offset(dev, PHYS_OFFSET, 0, SZ_4G);
-      |        ^~~~~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a central pl=
-ace")
-
-probably interacting with commit
-
-  16fee29b0735 ("dma-mapping: remove the dma_direct_set_offset export")
-
-which is also in the arm-soc tree ...
-
-I have used the arm-soc tree from next-20201123 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/i2j6NpuFv9FrvFeuSiMUv8e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+8ODQACgkQAVBC80lX
-0Gx28gf9E09r++xNv4Qg+ELzyjfPKImETDdE/+G1ASnpiSuYtCsxlrOqJfTIOYYv
-dcstfKPLN+gxNuHwr0IEGH1F8cQqbRbn1S7zij0mC930D0fbTJupKm3VI3iJVv/9
-j+geXeFMgrrCzlIBDobL2+W5+7g4knHkfQOcBfBsFkvzRKALCzY1Q6yP8dZMbenb
-7k8n66l++2H308wQHOASXwgEILLEyQ7JBuuYXQPl2717onnY8ghSFRCXYg2UH5EO
-7IVDduTi+E4AMstj64rmbTEUWiCOHFa1p7XI78DHwmR2FawEPLvMlzYKLvgdvhUj
-51x58iHure9UWxhLx4rhuUlmEczLNw==
-=1xOk
------END PGP SIGNATURE-----
-
---Sig_/i2j6NpuFv9FrvFeuSiMUv8e--
+/Jarkko

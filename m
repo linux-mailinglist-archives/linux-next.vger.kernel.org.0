@@ -2,154 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B502C1969
-	for <lists+linux-next@lfdr.de>; Tue, 24 Nov 2020 00:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA8E2C197E
+	for <lists+linux-next@lfdr.de>; Tue, 24 Nov 2020 00:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbgKWXZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Nov 2020 18:25:21 -0500
-Received: from ozlabs.org ([203.11.71.1]:35003 "EHLO ozlabs.org"
+        id S1727656AbgKWXjR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Nov 2020 18:39:17 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57557 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726781AbgKWXZT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Nov 2020 18:25:19 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cg3Cw1Vnfz9sSs;
-        Tue, 24 Nov 2020 10:25:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606173916;
-        bh=U0b4WFh9tzIMKyMK25/hRq6XCQdlyVDVgYC507y3xPw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gQHBLv0dG3DYsw7XxirEi1lR6MFTsUytyk079pQ7ZzlkxY/5VDaqwurx/6415i5hJ
-         rLzZF3nu1GneZrE4eZFYG3x38nTTNYEDF84jUC/ryT/KpqSos+cVKIc2fUtQOMW/hw
-         Qr6MeZDFLeqiXQgk/AYjQe58wqUZJ5/WkCwEfLsUPtsmIWX22zwZPJiVgEBblV8yrz
-         YeqRe+U04oAW1OJ6Y8MmH+GdSKsj/sy/vfiqCmr8fOO88dOsL7T1DFOrd8dmqWOgyX
-         ThqXkX5VJQcVvuRz8vLd4J12NRyZoOE+sFda9DspfcTXgcEE0LzTqBq5KiLAFKj5jq
-         +oEa4HEQZbkUQ==
-Date:   Tue, 24 Nov 2020 10:25:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727637AbgKWXjR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Nov 2020 18:39:17 -0500
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 4Cg3X33gPhz9sSs; Tue, 24 Nov 2020 10:39:15 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Axtens <dja@axtens.net>,
         Nicholas Piggin <npiggin@gmail.com>
-Subject: linux-next: manual merge of the s390 tree with the asm-generic tree
-Message-ID: <20201124102514.0bea1349@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j26pNq_K4+qMt.pBWQUb7rc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20201123184016.693fe464@canb.auug.org.au>
+References: <20201123184016.693fe464@canb.auug.org.au>
+Subject: Re: linux-next: build failure in Linus' tree
+Message-Id: <160617472873.1817800.16473753588453276266.b4-ty@ellerman.id.au>
+Date:   Tue, 24 Nov 2020 10:39:15 +1100 (AEDT)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/j26pNq_K4+qMt.pBWQUb7rc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 23 Nov 2020 18:40:16 +1100, Stephen Rothwell wrote:
+> After merging most of the trees, today's linux-next build (powerpc64
+> allnoconfig) failed like this:
+> 
+> In file included from arch/powerpc/include/asm/kup.h:18,
+>                  from arch/powerpc/include/asm/uaccess.h:9,
+>                  from include/linux/uaccess.h:11,
+>                  from include/linux/sched/task.h:11,
+>                  from include/linux/sched/signal.h:9,
+>                  from include/linux/rcuwait.h:6,
+>                  from include/linux/percpu-rwsem.h:7,
+>                  from include/linux/fs.h:33,
+>                  from include/linux/compat.h:17,
+>                  from arch/powerpc/kernel/asm-offsets.c:14:
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:66:1: warning: data definition has no type or storage class
+>    66 | DECLARE_STATIC_KEY_FALSE(uaccess_flush_key);
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:66:1: error: type defaults to 'int' in declaration of 'DECLARE_STATIC_KEY_FALSE' [-Werror=implicit-int]
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:66:1: warning: parameter names (without types) in function declaration
+> arch/powerpc/include/asm/book3s/64/kup-radix.h: In function 'prevent_user_access':
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:180:6: error: implicit declaration of function 'static_branch_unlikely' [-Werror=implicit-function-declaration]
+>   180 |  if (static_branch_unlikely(&uaccess_flush_key))
+>       |      ^~~~~~~~~~~~~~~~~~~~~~
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:180:30: error: 'uaccess_flush_key' undeclared (first use in this function)
+>   180 |  if (static_branch_unlikely(&uaccess_flush_key))
+>       |                              ^~~~~~~~~~~~~~~~~
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:180:30: note: each undeclared identifier is reported only once for each function it appears in
+> arch/powerpc/include/asm/book3s/64/kup-radix.h: In function 'prevent_user_access_return':
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:189:30: error: 'uaccess_flush_key' undeclared (first use in this function)
+>   189 |  if (static_branch_unlikely(&uaccess_flush_key))
+>       |                              ^~~~~~~~~~~~~~~~~
+> arch/powerpc/include/asm/book3s/64/kup-radix.h: In function 'restore_user_access':
+> arch/powerpc/include/asm/book3s/64/kup-radix.h:198:30: error: 'uaccess_flush_key' undeclared (first use in this function)
+>   198 |  if (static_branch_unlikely(&uaccess_flush_key) && flags == AMR_KUAP_BLOCKED)
+>       |                              ^~~~~~~~~~~~~~~~~
+> 
+> [...]
 
-Hi all,
+Applied to powerpc/fixes.
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+[1/1] powerpc/64s: Fix allnoconfig build since uaccess flush
+      https://git.kernel.org/powerpc/c/b6b79dd53082db11070b4368d85dd6699ff0b063
 
-Today's linux-next merge of the s390 tree got a conflict in:
-
-  arch/s390/include/asm/mmu_context.h
-
-between commit:
-
-  93e2dfd39438 ("s390: use asm-generic/mmu_context.h for no-op implementati=
-ons")
-
-from the asm-generic tree and commits:
-
-  ab177c5d00cd ("s390/mm: remove unused clear_user_asce()")
-  87d598634521 ("s390/mm: remove set_fs / rework address space handling")
-
-from the s390 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/s390/include/asm/mmu_context.h
-index 66f9cf0a07e3,87a84fc59fc3..000000000000
---- a/arch/s390/include/asm/mmu_context.h
-+++ b/arch/s390/include/asm/mmu_context.h
-@@@ -70,23 -69,8 +70,6 @@@ static inline int init_new_context(stru
-  	return 0;
-  }
- =20
-- static inline void set_user_asce(struct mm_struct *mm)
-- {
-- 	S390_lowcore.user_asce =3D mm->context.asce;
-- 	__ctl_load(S390_lowcore.user_asce, 1, 1);
-- 	clear_cpu_flag(CIF_ASCE_PRIMARY);
-- }
--=20
-- static inline void clear_user_asce(void)
-- {
-- 	S390_lowcore.user_asce =3D S390_lowcore.kernel_asce;
-- 	__ctl_load(S390_lowcore.kernel_asce, 1, 1);
-- 	set_cpu_flag(CIF_ASCE_PRIMARY);
-- }
--=20
-- mm_segment_t enable_sacf_uaccess(void);
-- void disable_sacf_uaccess(mm_segment_t old_fs);
- -#define destroy_context(mm)             do { } while (0)
---
-  static inline void switch_mm(struct mm_struct *prev, struct mm_struct *ne=
-xt,
-  			     struct task_struct *tsk)
-  {
-@@@ -121,18 -98,18 +97,18 @@@ static inline void finish_arch_post_loc
-  		__tlb_flush_mm_lazy(mm);
-  		preempt_enable();
-  	}
-- 	set_fs(current->thread.mm_segment);
-+ 	__ctl_load(S390_lowcore.user_asce, 7, 7);
-  }
- =20
- -#define enter_lazy_tlb(mm,tsk)	do { } while (0)
- -#define deactivate_mm(tsk,mm)	do { } while (0)
- -
- +#define activate_mm activate_mm
-  static inline void activate_mm(struct mm_struct *prev,
-                                 struct mm_struct *next)
-  {
-  	switch_mm(prev, next, current);
-  	cpumask_set_cpu(smp_processor_id(), mm_cpumask(next));
-- 	set_user_asce(next);
-+ 	__ctl_load(S390_lowcore.user_asce, 7, 7);
-  }
- =20
- +#include <asm-generic/mmu_context.h>
- +
-  #endif /* __S390_MMU_CONTEXT_H */
-
---Sig_/j26pNq_K4+qMt.pBWQUb7rc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+8RNoACgkQAVBC80lX
-0GwDMgf/fxU6cyadfi2N0vsOLrSvBOpdjDa7jMDL+DlPEvLfxP5BN6T4QkcaAO77
-tvx5y8PowVdvdgA0Fh7LZlclXc67j0tWhRLUgm7PSC+4iTUyA2t9KcUNukefMmnb
-lgD5rDgMfGORiG34oQuJ0MP6vsR7+w8kmTClHmWdAJ0XVuZiaYqXZdQyHA8nyGmy
-GUPWES5SlQ5TqJ+CfPPzQqm4IAArFRPtNSSlNOMY6/PTfVPiruq2xR66Ntu8vLpK
-pzLoBPJ+L0R7R9yx7YKCJbWj2Le4MiOCYa8baUZX2GcbgfAQzLF07cGf//+yJXZS
-cRoQ1gxud1IgPqNzW0YBKoyFiaCKrw==
-=cvHF
------END PGP SIGNATURE-----
-
---Sig_/j26pNq_K4+qMt.pBWQUb7rc--
+cheers

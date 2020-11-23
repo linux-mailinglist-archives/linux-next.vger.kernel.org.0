@@ -2,85 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DAD2C172E
-	for <lists+linux-next@lfdr.de>; Mon, 23 Nov 2020 22:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4189C2C1872
+	for <lists+linux-next@lfdr.de>; Mon, 23 Nov 2020 23:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729128AbgKWVBi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Nov 2020 16:01:38 -0500
-Received: from ozlabs.org ([203.11.71.1]:52513 "EHLO ozlabs.org"
+        id S1731220AbgKWWb0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Nov 2020 17:31:26 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:36457 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729041AbgKWVBh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Nov 2020 16:01:37 -0500
+        id S1728305AbgKWWb0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Nov 2020 17:31:26 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cg0274T0Vz9sRR;
-        Tue, 24 Nov 2020 08:01:35 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cg21d1ZnDz9sSf;
+        Tue, 24 Nov 2020 09:31:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606165296;
-        bh=6WqTPvVrk4DrbRnfWcKb8zJuICCbIIK+2h1ib4tSU/U=;
+        s=201702; t=1606170683;
+        bh=3e332xL2aimc79/LA762XWtBQ+l1Duqb8e2E0dlZqvM=;
         h=Date:From:To:Cc:Subject:From;
-        b=DebVeoqWUkd8uHdwvwbfyGZnMDJQTB/XAXsqqljuU/amH9OS5Oq5SQiUInBuUA24z
-         a3QDUnx7A/la5PtcJ/ymFqECEbCjlBbvHJ9LI+CoXHrKPVRBmX97yXh4hmNpQa0eZq
-         Wge8iZvRj9YzWdCK3Nn7d1/yPIRbJXKS18oC78bKIGhDJUVKixcEEkrqHweATfHJWq
-         RlotFvDVzsoACA5ZIew0iRZbiPucEzUOWa72zeXf/mD2E8hV1zTZIFsykzq9nhF4Kh
-         DVdCRzbzmCnJb8DG5/7EqR6kkdo3pCAMfGjDETtFFihTwDwjiy2pTKwaz0QfrMopWD
-         Gko/vGwRRU5FQ==
-Date:   Tue, 24 Nov 2020 08:01:34 +1100
+        b=F5tEHVTsN+uq84/53cKbJ0iAhKIm0bDBdRxUlA2xQHuVcKdc5qDsMVSUnE1sqHuTK
+         BurUDVKPjv/bMNWzcH2mHix9hIwGJWpgldePI7kjGuvF36H/pqp7k3Hbwe1lX+xRHW
+         4Gbq8jNQOMveHDfBdufUJxfYjSVg1UkmWeX/0QkjoaHkDIyJDVQMIRnv3o6IXN+epV
+         x5mQeU0mt3ngjoEtPGZIoAr7wz3axRHqQ1cdqWOx2F4m2EIDwA6zYR5wwxnZP4jvHt
+         v3xj+FdgJgQRfuPsoH0dKM1kHe6kwAAtaurJ3k5l3KAtta6aClmV+6ckD05dUPtoGV
+         UQbyC/joGoJxw==
+Date:   Tue, 24 Nov 2020 09:31:15 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Yong Mao <yong.mao@mediatek.com>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the mmc-fixes tree
-Message-ID: <20201124080134.3f222582@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the arm-soc tree
+Message-ID: <20201124093115.0f358046@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p.jD877KEFyO3HyhEOJv7wq";
+Content-Type: multipart/signed; boundary="Sig_/i2j6NpuFv9FrvFeuSiMUv8e";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/p.jD877KEFyO3HyhEOJv7wq
+--Sig_/i2j6NpuFv9FrvFeuSiMUv8e
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+After merging the arm-soc tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  effbafb07dd6 ("mmc: mediatek: Extend recheck_sdio_irq fix to more variant=
-s")
+drivers/soc/sunxi/sunxi_mbus.c: In function 'sunxi_mbus_notifier':
+drivers/soc/sunxi/sunxi_mbus.c:93:8: error: implicit declaration of functio=
+n 'dma_direct_set_offset' [-Werror=3Dimplicit-function-declaration]
+   93 |  ret =3D dma_direct_set_offset(dev, PHYS_OFFSET, 0, SZ_4G);
+      |        ^~~~~~~~~~~~~~~~~~~~~
 
-Fixes tag
+Caused by commit
 
-  Fixes: 9e2582e574 ("mmc: mediatek: fix SDIO irq issue")
+  b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a central pl=
+ace")
 
-has these problem(s):
+probably interacting with commit
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  16fee29b0735 ("dma-mapping: remove the dma_direct_set_offset export")
+
+which is also in the arm-soc tree ...
+
+I have used the arm-soc tree from next-20201123 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/p.jD877KEFyO3HyhEOJv7wq
+--Sig_/i2j6NpuFv9FrvFeuSiMUv8e
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+8Iy4ACgkQAVBC80lX
-0GxsEQf/RCu2HuAHAbU6P9HWRMN7NseEU+zqUgZUstrCAyHlxrNylPvx5++19Swt
-fdXLaya4gZHCSTMtD2ceTv5GxaI5HAHyccUYSsDZGEPx3g999JtLUKM8l3etgQUV
-lcqKjVuyqYnnVh/H5rs97mC482p2xlcteU0FNGW4A/N75wHgjHuoBdLxQNHAqbPM
-5+wmSjeubYdApcveorJiNS6AN5qctG+7Y7rICY72eyMiYEThuvcpNb9Ct5EX6gcT
-T7ngT1nx9ejlyJcifhjq57NDlZJaxx+6c4Ls0eZ9S3J00LiRe+QotvV9luBlmMIF
-L6CDh2aTDgLEOgy6MeIKtve463JiFw==
-=XjLj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+8ODQACgkQAVBC80lX
+0Gx28gf9E09r++xNv4Qg+ELzyjfPKImETDdE/+G1ASnpiSuYtCsxlrOqJfTIOYYv
+dcstfKPLN+gxNuHwr0IEGH1F8cQqbRbn1S7zij0mC930D0fbTJupKm3VI3iJVv/9
+j+geXeFMgrrCzlIBDobL2+W5+7g4knHkfQOcBfBsFkvzRKALCzY1Q6yP8dZMbenb
+7k8n66l++2H308wQHOASXwgEILLEyQ7JBuuYXQPl2717onnY8ghSFRCXYg2UH5EO
+7IVDduTi+E4AMstj64rmbTEUWiCOHFa1p7XI78DHwmR2FawEPLvMlzYKLvgdvhUj
+51x58iHure9UWxhLx4rhuUlmEczLNw==
+=1xOk
 -----END PGP SIGNATURE-----
 
---Sig_/p.jD877KEFyO3HyhEOJv7wq--
+--Sig_/i2j6NpuFv9FrvFeuSiMUv8e--

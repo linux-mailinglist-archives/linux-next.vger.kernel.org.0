@@ -2,80 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93152C291D
-	for <lists+linux-next@lfdr.de>; Tue, 24 Nov 2020 15:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E93642C2E3C
+	for <lists+linux-next@lfdr.de>; Tue, 24 Nov 2020 18:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731656AbgKXOOL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Nov 2020 09:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730566AbgKXOOK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Nov 2020 09:14:10 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B24C0617A6
-        for <linux-next@vger.kernel.org>; Tue, 24 Nov 2020 06:14:10 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id t143so23890135oif.10
-        for <linux-next@vger.kernel.org>; Tue, 24 Nov 2020 06:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Hz2P2WPL1KrEPUlVDM13R5/lRmiVmQvTmZ2t096gK7I=;
-        b=BuHOigF/7Vdcojt/ZD/BdAjNsubYUWz1psl6JtgnuMzs+Pp3SNjgx7E+ANSgpkyJYC
-         PO+5vvizSnDU0R+DMz5TSdxewBHKMxGVsipqgrML2jiNbgSaa00KjZbzCTNmo5RJ77hi
-         iSzOilufJSPMP9cODFm48MGiVamh9X0VKcl5dAMyMShyxyeHQ8Qv3JIx2ea76CzGZpRU
-         ijM8nRUp2vNiF7mHHBS//oT4wY4fvv505qVrQNTA8zjlI0i3ZKmT1YsEbdVwiDKJflwb
-         4tr4hbNZKJAiTyfU9e+zS0jgOweMp3wOdTEp+dI9GDsig+q1zHpQMVEpv/CYhTxHRuwS
-         EU2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hz2P2WPL1KrEPUlVDM13R5/lRmiVmQvTmZ2t096gK7I=;
-        b=SU1BoXH+TB40osteR4ZFwIjC6GwGSwr/9f8XduNeX2g/ojQ2dtx9lUAXi7amdJVypu
-         TjhnTvPs58pWbC8/r/lq7hhhOLGf57f00Zm7RCT5h1sjW8HB0uWUan+B+yaO24p2ybBA
-         2I729wxxobabXXCbK3vIHyhnC5qazE98hT33VVIv5KNkECPKWRree+BzALpkY/ZUKnjI
-         1fO8/wsgNFmGagocMmNaSUT8FCMyty3loDF0pMDCGiSWgJh2Z48Dw8vZUgjVTdUhvXfV
-         VbA+REG6q7gJYqG6zkD51C2R2l7vwzH5rBk26/OjpCFteQyW/YlIe3SBKWyWdvkAfqPy
-         dZUg==
-X-Gm-Message-State: AOAM533+1sLydrPJ+lUIN4PEzyZbCKvau7iuHyOd6dIOef3dVw344s32
-        Dnmg3dO+WRdBcTSroG3mzBVyRA==
-X-Google-Smtp-Source: ABdhPJy8NCNmgnxEIPdXXoQnpW4iEmbZkWduC2RmKNv+z7ymjReFm++owUrGvbEvIHTXNQd9ydO5oQ==
-X-Received: by 2002:aca:3205:: with SMTP id y5mr2907934oiy.162.1606227249741;
-        Tue, 24 Nov 2020 06:14:09 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id u63sm9283170oia.50.2020.11.24.06.14.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2020 06:14:09 -0800 (PST)
-Date:   Tue, 24 Nov 2020 08:14:07 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>, Jonathan Marek <jonathan@marek.ca>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the qcom tree
-Message-ID: <20201124141407.GA185852@builder.lan>
-References: <20201124181938.11046212@canb.auug.org.au>
+        id S2389846AbgKXRQd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Nov 2020 12:16:33 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44554 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728342AbgKXRQd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Nov 2020 12:16:33 -0500
+Date:   Tue, 24 Nov 2020 18:16:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1606238190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=21CneeHv4WjigQFLsDRnBPjDyqomDe8iqs+F8eXUq54=;
+        b=YNuNJPCqi1woBBDIVq9RGDhGKE6iS0zVkDg/F+0aJMJ0GY5xTotuc0YTbaaoOBOj4GJ55+
+        Gq+cffSqonZhuVk0cyn+hqZxeb1PQNAscVhFfR13mG0F6nBjyzWpwWcGWgM9+2bDYlgKGM
+        8aYGROcTmFdhOjzOxKT9NhzhHZiPQkH6B6T04lOXv3sdkt0zcQ1SreZRl4z/KoxQw8DIXw
+        4jJhy4udc8nLLigI1DXPlSR8/lNCeRoSYVRKXLqsfAqELDICFn6jaZvr9MnqvgiGIi6j1b
+        6v0XS65uq0uQUjbeoaKovB4FmWzoCzg3CLVwOdWv9adlVMvh0zcyRqzP3NsM9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1606238190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=21CneeHv4WjigQFLsDRnBPjDyqomDe8iqs+F8eXUq54=;
+        b=5oMOmvZiz3+HJ0TFxE+1+ihsPdEcvXf76vE9EuoLCpFxRMC2ycJ9jAKLjiw2kZYcDmtSfZ
+        4t6U78aUx76DFyCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
+        LTP List <ltp@lists.linux.it>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        torvalds@linuxfoundation.org, Yang Shi <shy828301@gmail.com>,
+        Jan Kara <jack@suse.cz>, Michal Hocko <mhocko@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mel Gorman <mgorman@suse.de>, Song Liu <songliubraving@fb.com>,
+        Zi Yan <ziy@nvidia.com>, vtolkm@googlemail.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: kernel BUG at mm/highmem.c:417! invalid opcode: 0000 EIP:
+ zero_user_segments
+Message-ID: <20201124171628.dk6tle5lh3sx2jxg@linutronix.de>
+References: <CA+G9fYuKZGaHVvAv=ZwOL_p6UM3YhOHy0DcJRRM_DOLGYXg1Dw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201124181938.11046212@canb.auug.org.au>
+In-Reply-To: <CA+G9fYuKZGaHVvAv=ZwOL_p6UM3YhOHy0DcJRRM_DOLGYXg1Dw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 24 Nov 01:19 CST 2020, Stephen Rothwell wrote:
+On 2020-11-24 18:52:44 [+0530], Naresh Kamboju wrote:
+> While running LTP test case access01 the following kernel BUG
+> noticed on linux next 20201124 tag kernel on i386.
+> 
+> git short log:
+> ----------------
+> git log --oneline next-20201120..next-20201124 -- mm/highmem.c
+> d9927d46febf Merge branch 'akpm-current/current'
+> 72d22a0d0e86 mm: support THPs in zero_user_segments
+> 2a656cad337e mm/highmem: Take kmap_high_get() properly into account
+> 
+> Please find these easy steps to reproduce the kernel build and boot.
 
-> Hi all,
-> 
-> Commit
-> 
->   872b41c9a255 ("arm64: dts: qcom: sort sm8150 usb_2 node")
-> 
-> is missing a Signed-off-by from its author.
-> 
+This BUG_ON() is in zero_user_segments() which ash been added in commit
+   72d22a0d0e86 mm: support THPs in zero_user_segments
 
-Thanks for spotting this Stephen! The mistake has been corrected.
+> [   50.852189] kernel BUG at mm/highmem.c:417!
 
-Regards,
-Bjorn
+I managed to capture one invocation with:
+zero_user_segments(0xd4367a90,
+		   0x1000, 0x1000,
+		   0x0, 0x50)
+page_compound() -> 1
+page_size() -> 4096
+
+And at the end it BUGs because end2 is still 0x50.
+
+because:
+|         for (i = 0; i < compound_nr(page); i++) {
+|                 void *kaddr;
+|                 unsigned this_end;
+| 
+|                 if (end1 == 0 && start2 >= PAGE_SIZE) {
+|                         start2 -= PAGE_SIZE;
+|                         end2 -= PAGE_SIZE;
+|                         continue;
+|                 }
+| 
+|                 if (start1 >= PAGE_SIZE) {
+start1 0x1000 is >= PAGE_SIZE.
+|                         start1 -= PAGE_SIZE;
+|                         end1 -= PAGE_SIZE;
+|                         if (start2) {
+start2 is 0.
+|                                 start2 -= PAGE_SIZE;
+|                                 end2 -= PAGE_SIZE;
+|                         }
+|                         continue;
+|                 }
+
+I don't know why the logic for start1/end1 and start2/end2 is coupled
+here.  Based on how __block_write_begin_int() invokes it seems to zero
+two independent blocks (or it is a bug in caller).
+The generic implementation would do nothing for start1/end1 and for
+second part if would memset(page + 0, 0, 0x50 - 0).
+
+Sebastian

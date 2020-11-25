@@ -2,127 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0472C3915
-	for <lists+linux-next@lfdr.de>; Wed, 25 Nov 2020 07:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D67652C3925
+	for <lists+linux-next@lfdr.de>; Wed, 25 Nov 2020 07:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726034AbgKYGY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Nov 2020 01:24:57 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:46548 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726027AbgKYGY5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 25 Nov 2020 01:24:57 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=alex.shi@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UGTbpu3_1606285491;
-Received: from IT-FVFX43SYHV2H.local(mailfrom:alex.shi@linux.alibaba.com fp:SMTPD_---0UGTbpu3_1606285491)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 25 Nov 2020 14:24:51 +0800
-Subject: Re: linux-next boot error: WARNING in prepare_kswapd_sleep
-To:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        syzbot <syzbot+ce635500093181f39c1c@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1726114AbgKYGia (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Nov 2020 01:38:30 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:36419 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725848AbgKYGia (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 25 Nov 2020 01:38:30 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CgrnG3ynvz9sSf;
+        Wed, 25 Nov 2020 17:38:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606286308;
+        bh=cTPEJS09EHhWMwCmle3xYTW+xJkeXBNxP/JaqwEO6Jw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=apph+BCREdTIXyGW8Ei6n1dIDAuQH9a5UovBJI9T/31g549amhZFZ7+0EuewrlQkw
+         DkpXuoCBaTSbocuwbmku/4roXkq694+zHx9a5higPF2bt3lj646Cyxj5O6fHjmknT6
+         erpMlJdkaXOMoqDDNDvEIrCUniD+YkiWc/NrDMDL78GfLBBFA41XsPRRuqQkSp9DZb
+         0pNoJj37rnLkA9ICxWJdEAebBOqHgwkrbW5r9VXcTGyD3vC1s0OpYes6uv3cAY2sb2
+         2Splp4glm8r+IfDERXWdhs7jfycCsiQaLBNfkPZebiH+HkvhsXcYbThaFVVdAUUhyd
+         v2rWA4Iv2aQLQ==
+Date:   Wed, 25 Nov 2020 17:38:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>, Guo Ren <ren_guo@c-sky.com>
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Hui Su <sh_def@163.com>
-References: <00000000000054aea005b4d59e71@google.com>
- <CAA5enKZ=6=AoknavW4RJ+T+aiPBFSf8uEjJ+ODcc+nMTD2k5kQ@mail.gmail.com>
-From:   Alex Shi <alex.shi@linux.alibaba.com>
-Message-ID: <bda71012-f2e2-9a4c-5dcb-7ad14655c2f5@linux.alibaba.com>
-Date:   Wed, 25 Nov 2020 14:24:51 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        YiFei Zhu <yifeifz2@illinois.edu>
+Subject: linux-next: manual merge of the seccomp tree with the csky tree
+Message-ID: <20201125173824.0e3dbcd7@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CAA5enKZ=6=AoknavW4RJ+T+aiPBFSf8uEjJ+ODcc+nMTD2k5kQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/xt.V3T5AihCa0pLxffcwI3h";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/xt.V3T5AihCa0pLxffcwI3h
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-在 2020/11/25 上午1:59, Lorenzo Stoakes 写道:
-> On Tue, 24 Nov 2020 at 07:54, syzbot
-> <syzbot+ce635500093181f39c1c@syzkaller.appspotmail.com> wrote:
->> syzbot found the following issue on:
->>
->> HEAD commit:    d9137320 Add linux-next specific files for 20201124
-> 
-> This appears to be a product of 4b2904f3 ("mm/memcg: add missed
-> warning in mem_cgroup_lruvec") adding a VM_WARN_ON_ONCE() to
-> mem_cgroup_lruvec, which when invoked from a function other than
-> mem_cgroup_page_lruvec() can in fact be called with the condition
-> false.
-> If we move the check back into mem_cgroup_page_lruvec() it resolves
-> the issue. I enclose a simple version of this below, happy to submit
-> as a proper patch if this is the right approach:
-> 
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 87ed56dc75f9..27cc40a490b2 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -618,7 +618,6 @@ static inline struct lruvec
-> *mem_cgroup_lruvec(struct mem_cgroup *memcg,
->                 goto out;
->         }
-> 
-> -       VM_WARN_ON_ONCE(!memcg);
->         if (!memcg)
->                 memcg = root_mem_cgroup;
-> 
-> @@ -645,6 +644,7 @@ static inline struct lruvec
-> *mem_cgroup_lruvec(struct mem_cgroup *memcg,
->  static inline struct lruvec *mem_cgroup_page_lruvec(struct page *page,
->                                                 struct pglist_data *pgdat)
->  {
-> +       VM_WARN_ON_ONCE_PAGE(!page_memcg(page), page);
->         return mem_cgroup_lruvec(page_memcg(page), pgdat);
->  }
-> 
+Today's linux-next merge of the seccomp tree got a conflict in:
 
-Acked.
+  arch/csky/include/asm/Kbuild
 
-Right. Would you like to remove the bad commit 4b2904f3 ("mm/memcg: add missed
- warning in mem_cgroup_lruvec") and replace yours.
+between commit:
 
-and further more, could you like try another patch?
+  fed76f8679a6 ("csky: Add QUEUED_SPINLOCKS supported")
 
-Thanks
-Alex
+from the csky tree and commit:
 
-From 073b222bd06a96c39656b0460c705e48c7eedafc Mon Sep 17 00:00:00 2001
-From: Alex Shi <alex.shi@linux.alibaba.com>
-Date: Wed, 25 Nov 2020 14:06:33 +0800
-Subject: [PATCH] mm/memcg: bail out early when !memcg in mem_cgroup_lruvec
+  6e9ae6f98809 ("csky: Enable seccomp architecture tracking")
 
-In some scenarios, we call NULL memcg in mem_cgroup_lruvec(NULL, pgdat)
-so we could get out early to skip unnecessary check.
+from the seccomp tree.
 
-Also warning if both parameter are NULL.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
----
- include/linux/memcontrol.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 3a995bb3157f..5e4da83eb9ce 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -613,7 +613,9 @@ static inline struct lruvec *mem_cgroup_lruvec(struct mem_cgroup *memcg,
- 	struct mem_cgroup_per_node *mz;
- 	struct lruvec *lruvec;
- 
--	if (mem_cgroup_disabled()) {
-+	VM_WARN_ON_ONCE(!memcg && !pgdat);
-+
-+	if (mem_cgroup_disabled() || !memcg) {
- 		lruvec = &pgdat->__lruvec;
- 		goto out;
- 	}
--- 
-2.29.GIT
+diff --cc arch/csky/include/asm/Kbuild
+index f814d46d347f,93372255984d..000000000000
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@@ -3,9 -3,6 +3,8 @@@ generic-y +=3D asm-offsets.
+  generic-y +=3D gpio.h
+  generic-y +=3D kvm_para.h
+  generic-y +=3D local64.h
+ +generic-y +=3D mcs_spinlock.h
+  generic-y +=3D qrwlock.h
+ +generic-y +=3D qspinlock.h
+- generic-y +=3D seccomp.h
+  generic-y +=3D user.h
+  generic-y +=3D vmlinux.lds.h
 
+--Sig_/xt.V3T5AihCa0pLxffcwI3h
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+9++AACgkQAVBC80lX
+0Gx8pAgAm2WZ0wRCD7OxzawfY1FAQRDTKch3X8tnhF283L9KOID3N4Y8Vt9WM6/b
++eBD552vIYZUQhm1EixH/KiKkS+Mp2d9CnXDX3zyAVxvuCMawWbDAgz9j+0xn9me
+Vn5ElL0pTgy3jK10vTb7+my1whvVtZF1JrmcOog969Uzjx7EN2qm/TK78lqJ++Lu
+HONQNAUvG604iClYf5Q4M//GZnrPsCl8XXVWpvurfHgK48lIyYIwUZORaiIFpT1Q
+GdzfB7c1OCmnPhBxUxUdL1/vBsQv4QNRLLf/ly6nmYLqcraUkMFFl8ZRWhE/ySDt
+0kLaAX4l6Vw6z9XwL0GAaBd9UVn8Hw==
+=yD2O
+-----END PGP SIGNATURE-----
+
+--Sig_/xt.V3T5AihCa0pLxffcwI3h--

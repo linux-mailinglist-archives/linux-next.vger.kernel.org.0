@@ -2,153 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFED22C35B7
-	for <lists+linux-next@lfdr.de>; Wed, 25 Nov 2020 01:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E8D2C3643
+	for <lists+linux-next@lfdr.de>; Wed, 25 Nov 2020 02:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727621AbgKYAqk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Nov 2020 19:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
+        id S1728186AbgKYBeB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Nov 2020 20:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727495AbgKYAqj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Nov 2020 19:46:39 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61347C0613D4;
-        Tue, 24 Nov 2020 16:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nqi5GITho3z+SfilHsBCZVHw/SyTqLLJCGfQpf9o3uc=; b=A6/g4yiHt9hfRYsnfjLurXxAAd
-        JCP/BYsja1/nM5Tmri1eIdjD1AIAC80NOPB2lM2HDjRkvWnsJ5b7q65xPK+h9s5YsnUr8qtMafdwI
-        gjNcOZ2WuW1uR/9Uy2JnTxhKUJPzC2EwihfRH6FoD14vG8Mm2dYl4nnTEPtcgsv7ISEjakwm2Ip9Q
-        cF9cbvrQlrLQw1aKr4Fx99mcB/Ui/zM1jAOmRkTEh6rol5+GNHn8J/jQ3qRF1sR3wAb/lBOXvj9f/
-        ahYWw7eXJthvk5mSgZ1q4qJ1dD/5+uphFikmUnVErtdZLT/7m4ZBK/ArtiNSpgNCfyPF4OjDa6Ppr
-        0VzBHdQQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1khix6-00075q-Sg; Wed, 25 Nov 2020 00:46:33 +0000
-Date:   Wed, 25 Nov 2020 00:46:32 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, lkft-triage@lists.linaro.org,
-        LTP List <ltp@lists.linux.it>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        torvalds@linuxfoundation.org, Yang Shi <shy828301@gmail.com>,
-        Jan Kara <jack@suse.cz>, Michal Hocko <mhocko@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mel Gorman <mgorman@suse.de>, Song Liu <songliubraving@fb.com>,
-        Zi Yan <ziy@nvidia.com>, vtolkm@googlemail.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: kernel BUG at mm/highmem.c:417! invalid opcode: 0000 EIP:
- zero_user_segments
-Message-ID: <20201125004632.GG4327@casper.infradead.org>
-References: <CA+G9fYuKZGaHVvAv=ZwOL_p6UM3YhOHy0DcJRRM_DOLGYXg1Dw@mail.gmail.com>
- <20201124171628.dk6tle5lh3sx2jxg@linutronix.de>
+        with ESMTP id S1726973AbgKYBeB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Nov 2020 20:34:01 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DC7C0613D4;
+        Tue, 24 Nov 2020 17:34:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cgk1t0pGQz9sRK;
+        Wed, 25 Nov 2020 12:33:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606268036;
+        bh=AWtRg8TumvQihE/WyzTXYZtvD9YcdKbFYVNmhBEpn1w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MJIa4GYPiLQAHPU5M07/XpHw9XtfylubXLGaRRZ5NDnNyA2VflfQ3KCfi48KIxMH9
+         R7vgJTFGgYISqaWioUx1SUi7zqDO/+HA+TgNG0qKzDvSBicVKK7b4tzGUxRODTdaDw
+         gfFvUesBcWGUrXyPh5wW5RVfXD+x03wAcA52t+oLPM9hG24TMAbZ1BZ3LRQrymndUG
+         Akn9eNgghwamsUOC9Z3Uzr4SiHAyYXjlH52W4CXj+6sF8f7BEK/hofXT1/5eXQRouN
+         G4hBZfRgY2akixN9xbLP3mbCID+mGBkaGaxpGrMmTwlSPP3d8hFS7osX4K4iSV0uQC
+         TvH5Qm3W3Q1eA==
+Date:   Wed, 25 Nov 2020 12:33:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rdma tree with the arm-soc tree
+Message-ID: <20201125123351.16954b02@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201124171628.dk6tle5lh3sx2jxg@linutronix.de>
+Content-Type: multipart/signed; boundary="Sig_/bfMy2K.YtjQ=qTc/ptdtmWe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 06:16:28PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2020-11-24 18:52:44 [+0530], Naresh Kamboju wrote:
-> > While running LTP test case access01 the following kernel BUG
-> > noticed on linux next 20201124 tag kernel on i386.
-> > 
-> > git short log:
-> > ----------------
-> > git log --oneline next-20201120..next-20201124 -- mm/highmem.c
-> > d9927d46febf Merge branch 'akpm-current/current'
-> > 72d22a0d0e86 mm: support THPs in zero_user_segments
-> > 2a656cad337e mm/highmem: Take kmap_high_get() properly into account
-> > 
-> > Please find these easy steps to reproduce the kernel build and boot.
-> 
-> This BUG_ON() is in zero_user_segments() which ash been added in commit
->    72d22a0d0e86 mm: support THPs in zero_user_segments
-> 
-> > [   50.852189] kernel BUG at mm/highmem.c:417!
-> 
-> I managed to capture one invocation with:
-> zero_user_segments(0xd4367a90,
-> 		   0x1000, 0x1000,
-> 		   0x0, 0x50)
-> page_compound() -> 1
-> page_size() -> 4096
+--Sig_/bfMy2K.YtjQ=qTc/ptdtmWe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for debugging this!  I didn't realise start1 was allowed to be
-less than start2.  Try this ... (systemd is sabotaging my efforts to
-test an i386 kernel)
+Hi all,
 
-diff --git a/mm/highmem.c b/mm/highmem.c
-index 3e1087f2b735..6306a535dd9c 100644
---- a/mm/highmem.c
-+++ b/mm/highmem.c
-@@ -369,46 +369,39 @@ void zero_user_segments(struct page *page, unsigned start1, unsigned end1,
- 	BUG_ON(end1 > page_size(page) || end2 > page_size(page));
- 
- 	for (i = 0; i < compound_nr(page); i++) {
--		void *kaddr;
--		unsigned this_end;
-+		void *kaddr = NULL;
- 
--		if (end1 == 0 && start2 >= PAGE_SIZE) {
--			start2 -= PAGE_SIZE;
--			end2 -= PAGE_SIZE;
--			continue;
--		}
-+		if (start1 < PAGE_SIZE || start2 < PAGE_SIZE)
-+			kaddr = kmap_atomic(page + i);
- 
- 		if (start1 >= PAGE_SIZE) {
- 			start1 -= PAGE_SIZE;
- 			end1 -= PAGE_SIZE;
--			if (start2) {
--				start2 -= PAGE_SIZE;
--				end2 -= PAGE_SIZE;
--			}
--			continue;
--		}
--
--		kaddr = kmap_atomic(page + i);
-+		} else {
-+			unsigned this_end = min_t(unsigned, end1, PAGE_SIZE);
- 
--		this_end = min_t(unsigned, end1, PAGE_SIZE);
--		if (end1 > start1)
--			memset(kaddr + start1, 0, this_end - start1);
--		end1 -= this_end;
--		start1 = 0;
-+			if (end1 > start1)
-+				memset(kaddr + start1, 0, this_end - start1);
-+			end1 -= this_end;
-+			start1 = 0;
-+		}
- 
- 		if (start2 >= PAGE_SIZE) {
- 			start2 -= PAGE_SIZE;
- 			end2 -= PAGE_SIZE;
- 		} else {
--			this_end = min_t(unsigned, end2, PAGE_SIZE);
-+			unsigned this_end = min_t(unsigned, end2, PAGE_SIZE);
-+
- 			if (end2 > start2)
- 				memset(kaddr + start2, 0, this_end - start2);
- 			end2 -= this_end;
- 			start2 = 0;
- 		}
- 
--		kunmap_atomic(kaddr);
--		flush_dcache_page(page + i);
-+		if (kaddr) {
-+			kunmap_atomic(kaddr);
-+			flush_dcache_page(page + i);
-+		}
- 
- 		if (!end1 && !end2)
- 			break;
+Today's linux-next merge of the rdma tree got a conflict in:
+
+  include/linux/dma-mapping.h
+
+between commit:
+
+  16fee29b0735 ("dma-mapping: remove the dma_direct_set_offset export")
+
+from the arm-soc tree and commit:
+
+  172292be01db ("dma-mapping: remove dma_virt_ops")
+
+from the rdma tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/dma-mapping.h
+index 199d85285246,2aaed35b556d..000000000000
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@@ -558,6 -558,11 +558,4 @@@ static inline int dma_mmap_wc(struct de
+  #define dma_unmap_len_set(PTR, LEN_NAME, VAL)    do { } while (0)
+  #endif
+ =20
+- extern const struct dma_map_ops dma_virt_ops;
+ -/*
+ - * Legacy interface to set up the dma offset map.  Drivers really should =
+not
+ - * actually use it, but we have a few legacy cases left.
+ - */
+ -int dma_direct_set_offset(struct device *dev, phys_addr_t cpu_start,
+ -		dma_addr_t dma_start, u64 size);
+--
+  #endif /* _LINUX_DMA_MAPPING_H */
+
+--Sig_/bfMy2K.YtjQ=qTc/ptdtmWe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+9tH8ACgkQAVBC80lX
+0GwsuQf+LRWaNr+QF+EYHAWRZVUyaFa/Ly0ucbRfzavNZDh8HtZRkvH9uJpWCSNZ
+6j/zK7WQ+A20YSJVjDHMu4EIsChaUKOJraTiiMHwiYk3nFgpR1HccoBE/MH4qPcl
+61cm4fE4w/gB5TyUajlZF0yBpvZuR5LgsBwcFSiwY9yY+hhKHsWP/FgNSFN/nCby
+AFkwHaekHOWX/Ma1daUaDkUZoca6y061FLgYPU35O4lFXMNWAeg1Z0WBecmZwgtd
+zM7QW8MYW39Ht9YtOfz+dyrbHPsSrOwxJAZ644dMRPCc11aBfRGhqGlfLIotMCEl
+FntRx5l+5dPFQdtj046TUQ8v0sv9zQ==
+=wPSm
+-----END PGP SIGNATURE-----
+
+--Sig_/bfMy2K.YtjQ=qTc/ptdtmWe--

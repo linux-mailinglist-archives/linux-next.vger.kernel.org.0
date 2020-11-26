@@ -2,120 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECC62C4F20
-	for <lists+linux-next@lfdr.de>; Thu, 26 Nov 2020 08:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761C62C4F6A
+	for <lists+linux-next@lfdr.de>; Thu, 26 Nov 2020 08:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388270AbgKZHGG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Nov 2020 02:06:06 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56805 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388266AbgKZHGG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 26 Nov 2020 02:06:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4ChTLg4sPPz9sRK;
-        Thu, 26 Nov 2020 18:06:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606374364;
-        bh=RSw8f9gnygzj81ImNkvKDJ+GoE5urlFQ5Kg7cRV/RCI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m6/1fwVn0zvZoq7YOd00OFSR9pgggYWBEvRWWLK4XfeuhYHX05kbvWkiB47DI5Ygj
-         D0+UTCYsNL1DlcyHKfFl+vfU44gYCHJ9s0Pl0EkAl2OGGTpaI6/vkKvl3PkgHv/HUm
-         2JYJRHym4iVNS1esb2D/2zp6u5hnkxsLaotWxjdjw+55IGAj7kOlDTWbu5DyDTiMvP
-         l5WpceFqi9+nyLRezTILV3uPIk3Lw1QV8BV1OP85x4ezZD1txTOtgo9ciA2s2aM1iX
-         nZCmp4QscJJe0+7fuzM3FNeoj1iH4+zReImhQj+2Qznr7Dh9rhpiY/Pyqngz4k1qZ9
-         i6R9F7NnUwtbg==
-Date:   Thu, 26 Nov 2020 18:06:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        id S1727558AbgKZH0C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Nov 2020 02:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726357AbgKZH0C (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Nov 2020 02:26:02 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB5EC0617A7
+        for <linux-next@vger.kernel.org>; Wed, 25 Nov 2020 23:26:02 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id k8so952166ilr.4
+        for <linux-next@vger.kernel.org>; Wed, 25 Nov 2020 23:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IdH5sNcCidQoJHh/1cXHUKfxcMl+Hxemgo79qY+CGoo=;
+        b=gqeN0CKSF6Wp5sGxx80oIhKp4HJyOuk4Dh8Wik4IzMKU/uUWUbw1HZH1QG57EdXOHd
+         JXJKzt7XoU2u+SaX+v8a+JvjCVzeruSkhp4PfYLI3r18HryAipMBgSSPkOt2eHQjAjzh
+         PaQUtznzmEyOhDGuwTVZwj8+JwmyuDHb9x0S5KBfXOzmmrSS+9dyS/VLwU6q/f2b8S2e
+         8WEO5+kbjsVhx20Te5aHiMwuYxJak4kUmtVW1W77Hpeiq1D3MMbihXVkyli+PYXsuk7p
+         pu7hv6KgvUID0mFVUwjpevB3tpY9vADbk3ZCRImLec9dGiJVXsdkySajczacXIFSMluk
+         2YGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IdH5sNcCidQoJHh/1cXHUKfxcMl+Hxemgo79qY+CGoo=;
+        b=VIpjLvBF0VDM15Jne0+EdeC8wgHNcM+ZWxtVF1dUmVcaA6Nqkw2fb2t9z3dwz2B8zZ
+         r1bkDZ1m0QSEpC4ZjM5nDjYA07lh5CYHk9boI2omSgNaRWrRXr+3d87J/GryyG3jU5Bf
+         7mQC9QSZ3vTjrIIUIj5nzBb1eUL+6VBI2/5jRA8nRzI4xue+bISOfOx2+AwFlAnOhsPr
+         soVlt0BtZwdLZTevKI4xkOY1ux9Z/C04nHWzesi5aWcMNuK7O2hLIZE3Un28W+5mr0NC
+         hDP5ZE3i1Z8oeyheg1sjG90zb5iF+Y5VYbxVGACA0ETPbI54l60Mk66WZEMeTqj7/zCL
+         hHPA==
+X-Gm-Message-State: AOAM532OHBgMFFi9GrO1ftInosUYyJfEJyyFm985J8HPpFYTk5TO2IQ7
+        cCjoZWrTjnD0FeXuIBgW1jp+LmdsA1u7ZxzUd3HKhw==
+X-Google-Smtp-Source: ABdhPJy/5/HP9sYr++o8RHSJb64XcVDXdddUBtC96ZAshVgdKNW2HxMMBoYqP0S03cdycM/VuqpG+zHsg9b018t3cEg=
+X-Received: by 2002:a92:8b12:: with SMTP id i18mr1415991ild.278.1606375561153;
+ Wed, 25 Nov 2020 23:26:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20201126180602.002588dd@canb.auug.org.au>
+In-Reply-To: <20201126180602.002588dd@canb.auug.org.au>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Wed, 25 Nov 2020 23:25:49 -0800
+Message-ID: <CAMn1gO5hnUzF682kvfWb+5VZR7OkzORHm41ve1ZUsdqzh1ozMw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the akpm tree with the arm64 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: linux-next: manual merge of the akpm tree with the arm64 tree
-Message-ID: <20201126180602.002588dd@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/90nwctSvEorm8C=pwjepCv.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/90nwctSvEorm8C=pwjepCv.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 25, 2020 at 11:06 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the akpm tree got a conflict in:
+>
+>   arch/arm64/mm/proc.S
+>
+> between commit:
+>
+>   49b3cf035edc ("kasan: arm64: set TCR_EL1.TBID1 when enabled")
+>
+> from the arm64 tree and commit:
+>
+>   68cd215d6529 ("arm64: kasan: allow enabling in-kernel MTE")
+>
+> from the akpm tree.
+>
+> I fixed it up (I think, see below) and can carry the fix as necessary.
+> This is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc arch/arm64/mm/proc.S
+> index a0831bf8a018,0d85e6df42bc..000000000000
+> --- a/arch/arm64/mm/proc.S
+> +++ b/arch/arm64/mm/proc.S
+> @@@ -40,9 -40,15 +40,15 @@@
+>   #define TCR_CACHE_FLAGS       TCR_IRGN_WBWA | TCR_ORGN_WBWA
+>
+>   #ifdef CONFIG_KASAN_SW_TAGS
+> - #define TCR_KASAN_FLAGS TCR_TBI1 | TCR_TBID1
+>  -#define TCR_KASAN_SW_FLAGS TCR_TBI1
+> ++#define TCR_KASAN_SW_FLAGS TCR_TBI1 | TCR_TBID1
+>   #else
+> - #define TCR_KASAN_FLAGS 0
+> + #define TCR_KASAN_SW_FLAGS 0
+> + #endif
+> +
+> + #ifdef CONFIG_KASAN_HW_TAGS
+>  -#define TCR_KASAN_HW_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1
+> ++#define TCR_KASAN_HW_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1 | TCR_TBID1
+> + #else
+> + #define TCR_KASAN_HW_FLAGS 0
+>   #endif
+>
+>   /*
 
-Hi all,
+Thanks Stephen, that resolution looks correct to me.
 
-Today's linux-next merge of the akpm tree got a conflict in:
-
-  arch/arm64/mm/proc.S
-
-between commit:
-
-  49b3cf035edc ("kasan: arm64: set TCR_EL1.TBID1 when enabled")
-
-from the arm64 tree and commit:
-
-  68cd215d6529 ("arm64: kasan: allow enabling in-kernel MTE")
-
-from the akpm tree.
-
-I fixed it up (I think, see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/mm/proc.S
-index a0831bf8a018,0d85e6df42bc..000000000000
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@@ -40,9 -40,15 +40,15 @@@
-  #define TCR_CACHE_FLAGS	TCR_IRGN_WBWA | TCR_ORGN_WBWA
- =20
-  #ifdef CONFIG_KASAN_SW_TAGS
-- #define TCR_KASAN_FLAGS TCR_TBI1 | TCR_TBID1
- -#define TCR_KASAN_SW_FLAGS TCR_TBI1
-++#define TCR_KASAN_SW_FLAGS TCR_TBI1 | TCR_TBID1
-  #else
-- #define TCR_KASAN_FLAGS 0
-+ #define TCR_KASAN_SW_FLAGS 0
-+ #endif
-+=20
-+ #ifdef CONFIG_KASAN_HW_TAGS
- -#define TCR_KASAN_HW_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1
-++#define TCR_KASAN_HW_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1 | TCR_TBID1
-+ #else
-+ #define TCR_KASAN_HW_FLAGS 0
-  #endif
- =20
-  /*
-
---Sig_/90nwctSvEorm8C=pwjepCv.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+/U9sACgkQAVBC80lX
-0Gx1MQgAgOqIBQ9YXWNRs54LfH56EHpGUS4SoL2ALUXmrgtqdzgZAvGQuX4DQy1/
-8UMnraNVKQgLR1c5wcxS2sgP9YT8X4dSkI5C2DmQlDsMt2WLlU+Oi/WcdICQZW2P
-GxMBypxoKRMfQAD96P2gJKkp2zi0s2+Rnb0s041d3Z+ei/EsiPqxVMK0ZRs0hzyD
-eyQt2+Kal1SakUI9/fF7SIWpRFf9LsIV3cmU1cgaho4OVW0OBkYISAWijgyPgaT/
-MY5zn7EHQh87wQbtOam5C19fPENDsRrBUKjc3p5lJkiUst2QAeGOLBz2kx0ig0ED
-tMil9WVCPTjVKBIwUnZJo8gLzifVuA==
-=DgvC
------END PGP SIGNATURE-----
-
---Sig_/90nwctSvEorm8C=pwjepCv.--
+Peter

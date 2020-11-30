@@ -2,160 +2,235 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DABBE2C8E60
-	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 20:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10382C8E79
+	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 20:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728181AbgK3Trt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Nov 2020 14:47:49 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:58954 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbgK3Trs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 14:47:48 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51])
-        by out01.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kjp8a-004x2k-Rs; Mon, 30 Nov 2020 12:47:04 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kjp8W-0003R8-An; Mon, 30 Nov 2020 12:47:04 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20201127200457.1ffb6aaf@canb.auug.org.au>
-        <155a20fd-09c4-df35-9cc6-8526a89c2933@infradead.org>
-        <20201128084414.3daa87d2@canb.auug.org.au>
-        <87pn3unbtv.fsf@x220.int.ebiederm.org>
-        <87blfen46a.fsf_-_@x220.int.ebiederm.org>
-        <5117dfaf-637d-34c2-048c-dd8dbbd15625@infradead.org>
-Date:   Mon, 30 Nov 2020 13:46:31 -0600
-In-Reply-To: <5117dfaf-637d-34c2-048c-dd8dbbd15625@infradead.org> (Randy
-        Dunlap's message of "Mon, 30 Nov 2020 11:15:14 -0800")
-Message-ID: <87im9miq5k.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S2388182AbgK3TxN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Nov 2020 14:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388184AbgK3TxN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 14:53:13 -0500
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DB2C0613D2
+        for <linux-next@vger.kernel.org>; Mon, 30 Nov 2020 11:52:32 -0800 (PST)
+Received: by mail-ed1-x542.google.com with SMTP id q16so17879071edv.10
+        for <linux-next@vger.kernel.org>; Mon, 30 Nov 2020 11:52:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=X3Vr4E8wMiXiu3IrKPCoWETeTkfDfowMAdH4jJJqcSs=;
+        b=J7onZtiB8FF/YfyJqSV4J4xoMMpY0muTQW5BekU8QlURrIk7y2RjX0At1f4im7h2vA
+         rH60zwQQ8WHrpr+HQM81ryOIAJwtT6V5ZMcJopCQiwQ4vNw8NMUQtRd2liXr8AOkdDO2
+         2NlhykdHR3GAruQTIBsfOllVHtTJtFafyPkicsF3RYX511VD5Ku1Pg1zL9VzOc0p6JBD
+         VHc6O1SAiUmNpwXM2af7pNB4cjOTYwOMXCHXvnGt591rBsXVzqg6iOw2IQe7EilgQPVc
+         b0rT5IJs0eFXrAVWMIxQ4bBzCYVBEmHoOSf26CWWB1kKjo9tnWF04YQs1TGf3I8zO4mH
+         ylFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=X3Vr4E8wMiXiu3IrKPCoWETeTkfDfowMAdH4jJJqcSs=;
+        b=XK9rTV3elWH/7z4BUx7rFDn4OKb0VwmPggGD0mgJiB/PxeALJP7iKlFt56yz4muy5I
+         aTnv6gAL311mxIl92QFdiPjAN+fO3gVl2ux7joR6ZF7OImEJRO4F/C2LE01NEakxZArf
+         kU8ohISfL+V+Ye/yOsHspJV6QLAmgZS7KSNJPfmA784V/bgfzi6ER7ywGTJwsobPApXb
+         iiY9Dd0mwDPCgXqJtRtrZ4glvgAbJvVNcR02N1Chk61rAGX8zjJN4pW9RSS8pMMnGDv5
+         arjbHvW9LaefI1iOr7HWjD6uvF+5jNchi+2yuXZlzLJRFuOtXFLmr2G/2JDQGktZQiRE
+         fkDQ==
+X-Gm-Message-State: AOAM532XjCo37mtHzrTtCYFIDC568rnXXJ4h5rzOqWg62ZzWSycixUwQ
+        13CKg/rVceUVnWtwZDARDhVeUVEskEDk6FVz6k3WkQ==
+X-Google-Smtp-Source: ABdhPJwrBMcV5iMotncini/yphYOvmkVe5DRzQWCZRzahW8KJRd6XyHIwFuSaRXkcs/MnoihQ/ybPhNa5EixfnqyeEA=
+X-Received: by 2002:a05:6402:229b:: with SMTP id cw27mr8616543edb.23.1606765950795;
+ Mon, 30 Nov 2020 11:52:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1kjp8W-0003R8-An;;;mid=<87im9miq5k.fsf@x220.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18Eseo5lOU4qoZhbdcbNJPIFA/SGzsDf18=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
-        XMGappySubj_01,XMSubLong autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4976]
-        *  0.7 XMSubLong Long Subject
-        *  0.5 XMGappySubj_01 Very gappy subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Randy Dunlap <rdunlap@infradead.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 4132 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 8 (0.2%), b_tie_ro: 7 (0.2%), parse: 0.85 (0.0%),
-        extract_message_metadata: 15 (0.4%), get_uri_detail_list: 1.77 (0.0%),
-        tests_pri_-1000: 14 (0.3%), tests_pri_-950: 1.24 (0.0%),
-        tests_pri_-900: 1.04 (0.0%), tests_pri_-90: 145 (3.5%), check_bayes:
-        143 (3.5%), b_tokenize: 8 (0.2%), b_tok_get_all: 8 (0.2%),
-        b_comp_prob: 3.1 (0.1%), b_tok_touch_all: 121 (2.9%), b_finish: 0.76
-        (0.0%), tests_pri_0: 223 (5.4%), check_dkim_signature: 0.53 (0.0%),
-        check_dkim_adsp: 2.6 (0.1%), poll_dns_idle: 3691 (89.3%),
-        tests_pri_10: 2.0 (0.0%), tests_pri_500: 3718 (90.0%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH] signal/parics: Remove parsic specific definition of __ARCH_UAPI_SA_FLAGS
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 1 Dec 2020 01:22:19 +0530
+Message-ID: <CA+G9fYtk3fKy7ct-rT=T8iFDhE4CbjGgdfxsOBrKT9y8ntwXyg@mail.gmail.com>
+Subject: BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0x1e0
+To:     inux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Muchun Song <songmuchun@bytedance.com>,
+        alex.shi@linux.alibaba.com, alexander.h.duyck@linux.intel.com,
+        Yafang Shao <laoar.shao@gmail.com>, richard.weiyang@gmail.co,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+While running LTP syscalls ioctl_sg01 test case this kernel crash reported on
+x86_64 and i386 running today's Linux next tag 20201130.
 
-> On 11/30/20 9:30 AM, Eric W. Biederman wrote:
->> 
->> Randy Dunlap wrote:
->>> On 11/27/20 10:43 AM, Randy Dunlap wrote:
->>>
->>>> on parisc, _SA_SIGGFAULT is undefined and causing build errors.
->>>>
->>>> commit 23acdc76f1798b090bb9dcc90671cd29d929834e
->>>> Author: Peter Collingbourne <pcc@google.com>
->>>> Date:   Thu Nov 12 18:53:34 2020 -0800
->>>>
->>>>     signal: clear non-uapi flag bits when passing/returning sa_flags
->>>>
->>>>
->>>>
->>>> _SA_SIGGFAULT is not used or defined anywhere else in the
->>>> kernel source tree.
->>>
->>>
->>> Here is the build error (although it should be obvious):
->>>
->>> ../kernel/signal.c: In function 'do_sigaction':
->>> ../arch/parisc/include/asm/signal.h:24:30: error: '_SA_SIGGFAULT' undeclared (first use in this function)
->>>    24 | #define __ARCH_UAPI_SA_FLAGS _SA_SIGGFAULT
->>>       |                              ^~~~~~~~~~~~~
->> 
->> Stephen Rothwell pointed out:
->>> _SA_SIGGFAULT was removed by commit
->>>
->>>   41f5a81c07cd ("parisc: Drop HP-UX specific fcntl and signal flags")
->>>
->>> which was added to Linus' tree in v5.10-rc1.
->> 
->> Solve this by removing the the parisc specific definition of
->> __ARCH_UAPI_SA_FLAGS that was just added.
->> 
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> Fixes: 23acdc76f179 ("signal: clear non-uapi flag bits when passing/returning sa_flags")
->> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->
-> Thanks, Eric.
->
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
->
->
-> BTW, there are 2 typos for "parisc" in the Subject: line...
+Steps to reproduce:
+--------------------
+# TuxMake is a command line tool and Python library that provides
+# portable and repeatable Linux kernel builds across a variety of
+# architectures, toolchains, kernel configurations, and make targets.
+#
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
 
-Oops.  Fixed now.  Thank you for testing.
+# tuxmake --runtime docker --target-arch x86 --toolchain gcc-9
+--kconfig defconfig --kconfig-add
+https://builds.tuxbuild.com/1l0FDtgxYSNunuG5ERIXtvPjZ7R/config
+# run LTP
+# cd /opt/ltp
+# ./runltp -s ioctl_sg01
+# you see below crash
 
-Eric
+Crash log:
+-----------
+ioctl_sg01.c:81: TINFO: Found SCSI device /dev/sg1
+[  285.862123] ==================================================================
+[  285.863025] BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0x1e0
+[  285.863025] Read of size 4 at addr 00000000000000c8 by task kswapd0/245
+[  285.863025]
+[  285.863025] CPU: 1 PID: 245 Comm: kswapd0 Not tainted
+5.10.0-rc5-next-20201130 #2
+[  285.863025] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  285.863025] Call Trace:
+[  285.863025]  dump_stack+0xa4/0xd9
+[  285.863025]  ? workingset_eviction+0xf2/0x1e0
+[  285.863025]  kasan_report.cold+0x108/0x10a
+[  285.863025]  ? workingset_eviction+0xf2/0x1e0
+[  285.863025]  __asan_load4+0x88/0xb0
+[  285.863025]  workingset_eviction+0xf2/0x1e0
+[  285.863025]  ? __kasan_check_read+0x11/0x20
+[  285.863025]  __remove_mapping+0x2b6/0x350
+[  285.863025]  shrink_page_list+0xcfb/0x16e0
+[  285.863025]  ? pageout+0x670/0x670
+[  285.863025]  ? __kasan_check_write+0x14/0x20
+[  285.863025]  ? shrink_inactive_list+0x2cc/0x6b0
+[  285.863025]  ? shrink_lruvec+0x680/0x9b0
+[  285.863025]  shrink_inactive_list+0x361/0x6b0
+[  285.863025]  ? isolate_lru_pages+0x710/0x710
+[  285.863025]  ? lruvec_lru_size+0xab/0x130
+[  285.863025]  shrink_lruvec+0x680/0x9b0
+[  285.863025]  ? shrink_active_list+0x810/0x810
+[  285.863025]  ? __update_load_avg_cfs_rq+0x1b7/0x560
+[  285.863025]  ? mem_cgroup_iter+0xde/0x4d0
+[  285.863025]  shrink_node+0x753/0xcc0
+[  285.863025]  balance_pgdat+0x42a/0x7b0
+[  285.863025]  ? __node_reclaim+0x3d0/0x3d0
+[  285.863025]  ? __schedule+0x6cc/0x11d0
+[  285.863025]  ? find_next_bit+0x14/0x20
+[  285.863025]  ? cpumask_next+0x1a/0x20
+[  285.863025]  kswapd+0x3a8/0x650
+[  285.863025]  ? balance_pgdat+0x7b0/0x7b0
+[  285.863025]  ? _raw_spin_unlock_irqrestore+0x34/0x40
+[  285.863025]  ? __kthread_parkme+0x6d/0xb0
+[  285.863025]  ? wait_woken+0x120/0x120
+[  285.863025]  ? __kasan_check_read+0x11/0x20
+[  285.863025]  ? balance_pgdat+0x7b0/0x7b0
+[  285.863025]  kthread+0x1bd/0x210
+[  285.863025]  ? kthread_create_on_node+0xd0/0xd0
+[  285.863025]  ret_from_fork+0x22/0x30
+[  285.863025] ==================================================================
+[  285.863025] Disabling lock debugging due to kernel taint
+[  285.863025] BUG: kernel NULL pointer dereference, address: 00000000000000c8
+[  285.863025] #PF: supervisor read access in kernel mode
+[  285.863025] #PF: error_code(0x0000) - not-present page
+[  285.863025] PGD 1060fd067 P4D 1060fd067 PUD 108d6e067 PMD 0
+[  285.863025] Oops: 0000 [#1] SMP KASAN NOPTI
+[  285.863025] CPU: 1 PID: 245 Comm: kswapd0 Tainted: G    B
+  5.10.0-rc5-next-20201130 #2
+[  285.863025] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  285.863025] RIP: 0010:workingset_eviction+0xf2/0x1e0
+[  285.863025] Code: 0f 1f 44 00 00 49 8d bf a8 02 00 00 e8 f7 ee 07
+00 4d 8b a7 a8 02 00 00 0f 1f 44 00 00 49 8d bc 24 c8 00 00 00 e8 7e
+ed 07 00 <41> 0f b7 94 24 c8 00 00 00 4d 8d 67 68 be 08 00 00 00 48 89
+55 d0
+[  285.863025] RSP: 0018:ffff8881021e7550 EFLAGS: 00010082
+[  285.863025] RAX: 0000000000000001 RBX: ffffea000429c200 RCX: ffffffff980ac1d7
+[  285.863025] RDX: 1ffffffff33692dc RSI: 0000000000000046 RDI: ffffffff99b496e0
+[  285.863025] RBP: ffff8881021e7580 R08: 0000000000000001 R09: fffffbfff335d4d9
+[  285.863025] R10: ffffffff99aea6c7 R11: fffffbfff335d4d8 R12: 0000000000000000
+[  285.863025] R13: ffff88813fffa000 R14: ffff88813fffd440 R15: ffff88813fffd520
+[  285.863025] FS:  0000000000000000(0000) GS:ffff88811b480000(0000)
+knlGS:0000000000000000
+[  285.863025] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  285.863025] CR2: 00000000000000c8 CR3: 000000010a998000 CR4: 00000000003506e0
+[  285.863025] Call Trace:
+[  285.863025]  ? __kasan_check_read+0x11/0x20
+[  285.863025]  __remove_mapping+0x2b6/0x350
+[  285.863025]  shrink_page_list+0xcfb/0x16e0
+[  285.863025]  ? pageout+0x670/0x670
+[  285.863025]  ? __kasan_check_write+0x14/0x20
+[  285.863025]  ? shrink_inactive_list+0x2cc/0x6b0
+[  285.863025]  ? shrink_lruvec+0x680/0x9b0
+[  285.863025]  shrink_inactive_list+0x361/0x6b0
+[  285.863025]  ? isolate_lru_pages+0x710/0x710
+[  285.863025]  ? lruvec_lru_size+0xab/0x130
+[  285.863025]  shrink_lruvec+0x680/0x9b0
+[  285.863025]  ? shrink_active_list+0x810/0x810
+[  285.863025]  ? __update_load_avg_cfs_rq+0x1b7/0x560
+[  285.863025]  ? mem_cgroup_iter+0xde/0x4d0
+[  285.863025]  shrink_node+0x753/0xcc0
+[  285.863025]  balance_pgdat+0x42a/0x7b0
+[  285.863025]  ? __node_reclaim+0x3d0/0x3d0
+[  285.863025]  ? __schedule+0x6cc/0x11d0
+[  285.863025]  ? find_next_bit+0x14/0x20
+[  285.863025]  ? cpumask_next+0x1a/0x20
+[  285.863025]  kswapd+0x3a8/0x650
+[  285.863025]  ? balance_pgdat+0x7b0/0x7b0
+[  285.863025]  ? _raw_spin_unlock_irqrestore+0x34/0x40
+[  285.863025]  ? __kthread_parkme+0x6d/0xb0
+[  285.863025]  ? wait_woken+0x120/0x120
+[  285.863025]  ? __kasan_check_read+0x11/0x20
+[  285.863025]  ? balance_pgdat+0x7b0/0x7b0
+[  285.863025]  kthread+0x1bd/0x210
+[  285.863025]  ? kthread_create_on_node+0xd0/0xd0
+[  285.863025]  ret_from_fork+0x22/0x30
+[  285.863025] Modules linked in: tun
+[  285.863025] CR2: 00000000000000c8
+[  285.863025] ---[ end trace 060018eba39c640c ]---
+[  285.863025] RIP: 0010:workingset_eviction+0xf2/0x1e0
+[  285.863025] Code: 0f 1f 44 00 00 49 8d bf a8 02 00 00 e8 f7 ee 07
+00 4d 8b a7 a8 02 00 00 0f 1f 44 00 00 49 8d bc 24 c8 00 00 00 e8 7e
+ed 07 00 <41> 0f b7 94 24 c8 00 00 00 4d 8d 67 68 be 08 00 00 00 48 89
+55 d0
+[  285.863025] RSP: 0018:ffff8881021e7550 EFLAGS: 00010082
+[  285.863025] RAX: 0000000000000001 RBX: ffffea000429c200 RCX: ffffffff980ac1d7
+[  285.863025] RDX: 1ffffffff33692dc RSI: 0000000000000046 RDI: ffffffff99b496e0
+[  285.863025] RBP: ffff8881021e7580 R08: 0000000000000001 R09: fffffbfff335d4d9
+[  285.863025] R10: ffffffff99aea6c7 R11: fffffbfff335d4d8 R12: 0000000000000000
+[  285.863025] R13: ffff88813fffa000 R14: ffff88813fffd440 R15: ffff88813fffd520
+[  285.863025] FS:  0000000000000000(0000) GS:ffff88811b480000(0000)
+knlGS:0000000000000000
+[  285.863025] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  285.863025] CR2: 00000000000000c8 CR3: 000000010a998000 CR4: 00000000003506e0
+[  285.863025] note: kswapd0[245] exited with preempt_count 1
 
->
->
->> ---
->>  arch/parisc/include/asm/signal.h | 2 --
->>  1 file changed, 2 deletions(-)
->> 
->> I am applying this trivial fix to my signal-for-v5.11 branch.  Catalin
->> you shouldn't need to do anything unless someone tests your tree on
->> parisc.
->> 
->> diff --git a/arch/parisc/include/asm/signal.h b/arch/parisc/include/asm/signal.h
->> index 30dd1e43ef88..715c96ba2ec8 100644
->> --- a/arch/parisc/include/asm/signal.h
->> +++ b/arch/parisc/include/asm/signal.h
->> @@ -21,8 +21,6 @@ typedef struct {
->>  	unsigned long sig[_NSIG_WORDS];
->>  } sigset_t;
->>  
->> -#define __ARCH_UAPI_SA_FLAGS	_SA_SIGGFAULT
->> -
->>  #include <asm/sigcontext.h>
->>  
->>  #endif /* !__ASSEMBLY */
->> 
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+Full test log link,
+https://lkft.validation.linaro.org/scheduler/job/1993290#L7948
+https://lkft.validation.linaro.org/scheduler/job/1993236#L8528
+
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: c6b11acc5f85b6e11d128fad8e0b7b223aa7e33f
+  git describe: next-20201130
+  make_kernelversion: 5.10.0-rc5
+  kernel-config: https://builds.tuxbuild.com/1l0FDtgxYSNunuG5ERIXtvPjZ7R/config
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

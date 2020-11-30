@@ -2,124 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3CB2C7EFD
-	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 08:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0372C7F17
+	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 08:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbgK3Hoy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Nov 2020 02:44:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46906 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727012AbgK3Hox (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Nov 2020 02:44:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606722207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xCxrKQgKWaomcz1R6EnYBYk4nw48KMWwjloNms5mrbw=;
-        b=Xl6enHbUChC4WlNbFkbHfoLSiaQLk68BzNSeEFw8ILl/KrqJjGgEJMR3MOybO7Q2iLU6Lo
-        aO/vcCEcgZZauhqrZh+zBC1Ak4Di79ck9o3loQygsf+xef0lWm660WAqHu8aoaiQ8Qu3+4
-        5qZPgguBYctqNd4Pf6DfG4AlLWwg45k=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-337-1Jeswzf_MfGY3LX0LtRhxQ-1; Mon, 30 Nov 2020 02:43:24 -0500
-X-MC-Unique: 1Jeswzf_MfGY3LX0LtRhxQ-1
-Received: by mail-ej1-f69.google.com with SMTP id f21so5342737ejf.11
-        for <linux-next@vger.kernel.org>; Sun, 29 Nov 2020 23:43:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xCxrKQgKWaomcz1R6EnYBYk4nw48KMWwjloNms5mrbw=;
-        b=YS8L7wWp96JOvyY3bo8cYjOxWrZfcllSYtVwdoKvV8EaOhaxtLnqb2A3b6GorPtM9l
-         rSi6brObYs7oKewbkqCvDGitCRR5XZ8Zj28jSPhThXEFMFwRUVpHYK7KxRA2bMeJwDDT
-         26adCtxWYmFnlBVj5UIikWWGFu0Zzc9B9fkhMj3gATqIB+k+sDFeR0ekUMtJvbxj4MFt
-         fRIU9J1WQ08DW+itp+/IzKQIa9GZhtcYLrGVKJWhgVxqWlzRBgAzNjEswcJOQMh8zEZ5
-         /rrkNt3SbmoL7VE3xsJcA0BIf/djjDqq3KcR7XGsBwn2rvH1ypUNQCgC+UDVNf+M0t9j
-         PMmw==
-X-Gm-Message-State: AOAM532TpFW+8u8I9WGRAyvtwtVuHPaVwBMsrNbuOedCFa9wldcF+5Xe
-        w3aVh4eFcI0a4dxHSQG8Gqz9LN51ITdgRHXoc+1PepNIGgOc5t7jmA7BAFreG6BDzuI342lcEOs
-        5Pa0oN94mRTDDj+z8Jumwq/V5yOIvB5s2E2ExD27ksyXRb2+xmPuef1jUkpceU+HPVgpjDTsdPQ
-        ==
-X-Received: by 2002:a50:e715:: with SMTP id a21mr20384613edn.285.1606722203211;
-        Sun, 29 Nov 2020 23:43:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwdLbND8D4t/lHAwTW2/Hfo6cgLDGhelhwR/5DnlD4aaxnvHJOCvXp/vDjEV6qQQxUOJLkYXA==
-X-Received: by 2002:a50:e715:: with SMTP id a21mr20384596edn.285.1606722203000;
-        Sun, 29 Nov 2020 23:43:23 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id p4sm6203746ejx.64.2020.11.29.23.43.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Nov 2020 23:43:22 -0800 (PST)
-Subject: Re: linux-next: Fixes tag needs some work in the drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Vadim Pasternak <vadimp@nvidia.com>,
+        id S1727331AbgK3HtT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Nov 2020 02:49:19 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39967 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727326AbgK3HtT (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Nov 2020 02:49:19 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cky5w1qRGz9sTv;
+        Mon, 30 Nov 2020 18:48:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606722517;
+        bh=+Jt2KVYAfNJFjtEWvuejPncpO/lG5iglAE4GRC7JIUk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Idwo9h5btQXUC1+yGg+mh8WQ0Fy8lt9Z18blqQBGTps5ihj5MCoMpuXDBwRJHsYgR
+         ED0883eCciXsUBlmrCTJmC+MHTuU55i/biPYGDpKw97hf25PY+shuY/KvKOIkwGJiR
+         6GZga1NRFR7bq2ghuONY6Jrhp403q7Sn4a6kvXsLo33dE6ULTvKwTi4jx2X3fWl2Sj
+         FQxmzgCkoBOlw8bm1narEKuYbHC8ZOEY8dpbkiHgCwQGZesvRaSDgzPmUmVgxuQPU6
+         UII9Zdoq8o8xWPtkPPvaPc7SgqfEzi0kDJlm41eK5rMwyjlne5W5y1cneMhyC34Y+J
+         cp6AvqWJWLK7A==
+Date:   Mon, 30 Nov 2020 18:48:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201130044331.4abf7b91@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <ae231b40-e1c8-6995-d45b-ddab6a04810e@redhat.com>
-Date:   Mon, 30 Nov 2020 08:43:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: linux-next: manual merge of the akpm tree with the arm64 tree
+Message-ID: <20201130184835.18b5f4de@canb.auug.org.au>
+In-Reply-To: <20201130182840.02a96a67@canb.auug.org.au>
+References: <20201130182840.02a96a67@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20201130044331.4abf7b91@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/+qcc3kBYJTSeupgUXQ.OQFz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/+qcc3kBYJTSeupgUXQ.OQFz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 11/29/20 6:43 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   912b341585e3 ("platform/x86: mlx-platform: Remove PSU EEPROM from MSN274x platform configuration")
-> 
-> Fixes tag
-> 
->   Fixes: ef08e14a3 ("platform/x86: mlx-platform: Add support for new msn274x system type")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
-> 
-> In commit
-> 
->   2bf5046bdb64 ("platform/x86: mlx-platform: Remove PSU EEPROM from default platform configuration")
-> 
-> Fixes tags
-> 
->   Fixes: c6acad68e ("platform/mellanox: mlxreg-hotplug: Modify to use a regmap interface")
->   Fixes: ba814fdd0 ("platform/x86: mlx-platform: Use defines for bus assignment")
-> 
-> have these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
+Hi all,
 
-Hmm, for some reason checkpatch did not catch these, while AFAIK it will complain
-about short hashes in the normal part of the commit msg.
+On Mon, 30 Nov 2020 18:28:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the akpm tree got a conflict in:
+>=20
+>   arch/arm64/kernel/mte.c
+>=20
+> between commit:
+>=20
+>   e710c29e0177 ("arm64: mte: make the per-task SCTLR_EL1 field usable els=
+ewhere")
+>=20
+> from the arm64 tree and commit:
+>=20
+>   44a7127eb3a4 ("arm64: mte: add in-kernel MTE helpers")
+>=20
+> from the akpm tree.
+>=20
+> I fixed it up (the former just removed some of the context for what the
+> latter added) and can carry the fix as necessary. This is now fixed as
+> far as linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
 
-Question, how important is it to fix these ? I normally never do forced pushes
-to the for-next branch. But if this is considered important to fix I guess I
-can make an exception.
+A couple of the following patches in the akpm tree also conflicted with
+the arm64 tree.
 
-> These can be fixed in the future by setting core.abbrev to 12 (or more)
-> or (for git v2.11 or later) just making sure it is not set (or set to
-> "auto").
+--=20
+Cheers,
+Stephen Rothwell
 
-Will git rewrite the commit msg when this is set ?  I'm at 2.28 and don't
-have core.abbrev set. But I guess this needs to be set in the gitconfig
-of the creator of the patch; and this has no impact on "git am" ?
+--Sig_/+qcc3kBYJTSeupgUXQ.OQFz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Regards,
+-----BEGIN PGP SIGNATURE-----
 
-Hans
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/Eo9MACgkQAVBC80lX
+0GwJBAf/d3W226dGpYVcwvf9H7gd3yWNX6zVDLnJ3DsgNA74aWA6pMJlrM8XZZPN
+JgiwqrbNlfWhe1S1ZSJ2q54o6TsiC5KqlRuKpyd3gr7Jw88fC6iJJ3+Sa+8LG7HD
+zFCoNpnHeCWxdyl4o8GdmvDF8ZbsJY3Z3JSyFKunoITfxphEYFaQwrGMTiLX337n
+8dcZpOxamQ4CQsJLLAg3C9cjQb29ORbq43IA64ShdeXt4JrtwWIi+Qgmk7Dfy6fB
+7RHcDk/8IRQKLu86xgpa/SUVrEDXy181xXNisyhcqKOfRRXJyn3d00HvYdpq8RYd
+xb4To1YWhvNQU7+4sPfEFjHdRRUqvA==
+=/omq
+-----END PGP SIGNATURE-----
 
+--Sig_/+qcc3kBYJTSeupgUXQ.OQFz--

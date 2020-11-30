@@ -2,187 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E722C83F4
-	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 13:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D2D2C870B
+	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 15:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgK3MPi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Mon, 30 Nov 2020 07:15:38 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41773 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgK3MPi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 07:15:38 -0500
-Received: by mail-ot1-f67.google.com with SMTP id f48so2535182otf.8;
-        Mon, 30 Nov 2020 04:15:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5qb1CWw5PmfOkyZxBUuxqZGbsX8FHBs0TJS0C52QqhU=;
-        b=Oq3OcF96FybsjIsfW2VvKsmgJKgCl2sMrw4vKEc40TMzbv2SWUgG53GjvTN7X7Vjas
-         ERmcE18EsF8/3ugWzrpYIAyyRmVIYKrM11yx2xnEDKlt0/qD2Q8QrVwreoNrQ5Ceo6Le
-         3hI0DdlD0z0jNBa5NGtPTFvkljaCWq+ODPYLDDeSLQ8wbxgxlH14XDdYc7PTpvnjaoq2
-         rygHFA1cblP7HBcSpyzjjtAw3XAlCy4DWvG5Buj6QdoKoOa78dib/PqXPqQGiOJ9nv4L
-         vER3CCeuJhRmGcPlCQvoTXc9ol2vDVEnNXbAh8Tz9WAMSq0Awv2cgihev/Wv96NUkkvX
-         rFKA==
-X-Gm-Message-State: AOAM530Ujp6C+CVMRJa4Sd+RRasHS6MV6R3s4xruzzUbNv8DpfPPQ4Fm
-        RMSfROLb/WAsBkvKu+DqydKwn3KD1naapLCWpno=
-X-Google-Smtp-Source: ABdhPJzqOK1Q7fe5+sI/z81EMBGrzOpf7l2i1KenIH3yL3ceHNgKylUaW1ZxIAXULlF3ZetnmBf32qdcPR0AlLlaY4s=
-X-Received: by 2002:a9d:686:: with SMTP id 6mr15367631otx.107.1606738496717;
- Mon, 30 Nov 2020 04:14:56 -0800 (PST)
+        id S1726376AbgK3OqA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Nov 2020 09:46:00 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:42162 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgK3Op7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 09:45:59 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kjkQY-000kSf-4d; Mon, 30 Nov 2020 07:45:18 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kjkQU-001Uc9-1V; Mon, 30 Nov 2020 07:45:17 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+References: <20201127200457.1ffb6aaf@canb.auug.org.au>
+        <155a20fd-09c4-df35-9cc6-8526a89c2933@infradead.org>
+        <20201128084414.3daa87d2@canb.auug.org.au>
+Date:   Mon, 30 Nov 2020 08:44:44 -0600
+In-Reply-To: <20201128084414.3daa87d2@canb.auug.org.au> (Stephen Rothwell's
+        message of "Sat, 28 Nov 2020 08:44:13 +1100")
+Message-ID: <87pn3unbtv.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20201117133214.29114-1-ardb@kernel.org> <CAMuHMdUzFLk=oYo1aK80d0H-qZ1_1BcdSULkYCxBnLWT_qUR2A@mail.gmail.com>
- <CAMj1kXGuxuB2iv-k60PCSkmec-=_+kKRnE3XSXeqNLihqrH9vQ@mail.gmail.com> <CAMj1kXH5SCe-v37BJrv3m2T6sHFkRfB6fPPk_+tvTtCZEZSkxQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXH5SCe-v37BJrv3m2T6sHFkRfB6fPPk_+tvTtCZEZSkxQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 30 Nov 2020 13:14:45 +0100
-Message-ID: <CAMuHMdWRA6fSxnY7D1kYvxXPy0UkA7=1iJU+hYxJFM-5zOtf9g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] crypto: aegis128 enhancements
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ondrej Mosnacek <omosnacek@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Next <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-XM-SPF: eid=1kjkQU-001Uc9-1V;;;mid=<87pn3unbtv.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18L++z/WGJY5Gw4SH8IUJ/lWI0CwB3Tf5E=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.0 required=8.0 tests=ALL_TRUSTED,BAYES_40,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubMetaSx_00
+        autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+        *      [score: 0.3684]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 XMSubMetaSx_00 1+ Sexy Words
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Stephen Rothwell <sfr@canb.auug.org.au>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 3570 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 3.5 (0.1%), b_tie_ro: 2.4 (0.1%), parse: 0.63
+        (0.0%), extract_message_metadata: 10 (0.3%), get_uri_detail_list: 0.79
+        (0.0%), tests_pri_-1000: 4.8 (0.1%), tests_pri_-950: 1.02 (0.0%),
+        tests_pri_-900: 0.81 (0.0%), tests_pri_-90: 178 (5.0%), check_bayes:
+        175 (4.9%), b_tokenize: 4.1 (0.1%), b_tok_get_all: 5 (0.1%),
+        b_comp_prob: 1.21 (0.0%), b_tok_touch_all: 162 (4.5%), b_finish: 0.78
+        (0.0%), tests_pri_0: 133 (3.7%), check_dkim_signature: 0.37 (0.0%),
+        check_dkim_adsp: 2.4 (0.1%), poll_dns_idle: 3208 (89.8%),
+        tests_pri_10: 1.75 (0.0%), tests_pri_500: 3234 (90.6%), rewrite_mail:
+        0.00 (0.0%)
+Subject: Re: linux-next: Tree for Nov 27 (parisc: signal flags)
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Ard,
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-On Mon, Nov 30, 2020 at 10:45 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Mon, 30 Nov 2020 at 10:43, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Mon, 30 Nov 2020 at 10:37, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, Nov 17, 2020 at 2:38 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > This series supersedes [0] '[PATCH] crypto: aegis128/neon - optimize tail
-> > > > block handling', which is included as patch #3 here, but hasn't been
-> > > > modified substantially.
-> > > >
-> > > > Patch #1 should probably go to -stable, even though aegis128 does not appear
-> > > > to be widely used.
-> > > >
-> > > > Patches #2 and #3 improve the SIMD code paths.
-> > > >
-> > > > Patch #4 enables fuzz testing for the SIMD code by registering the generic
-> > > > code as a separate driver if the SIMD code path is enabled.
-> > > >
-> > > > Changes since v2:
-> > > > - add Ondrej's ack to #1
-> > > > - fix an issue spotted by Ondrej in #4 where the generic code path would still
-> > > >   use some of the SIMD helpers
-> > > >
-> > > > Cc: Ondrej Mosnacek <omosnacek@gmail.com>
-> > > > Cc: Eric Biggers <ebiggers@kernel.org>
-> > > >
-> > > > [0] https://lore.kernel.org/linux-crypto/20201107195516.13952-1-ardb@kernel.org/
-> > > >
-> > > > Ard Biesheuvel (4):
-> > > >   crypto: aegis128 - wipe plaintext and tag if decryption fails
-> > > >   crypto: aegis128/neon - optimize tail block handling
-> > > >   crypto: aegis128/neon - move final tag check to SIMD domain
-> > >
-> > > crypto/aegis128-core.c: In function ‘crypto_aegis128_decrypt’:
-> > > crypto/aegis128-core.c:454:40: error: passing argument 2 of
-> > > ‘crypto_aegis128_process_crypt’ from incompatible pointer type
-> > > [-Werror=incompatible-pointer-types]
-> > >   454 |    crypto_aegis128_process_crypt(NULL, req, &walk,
-> > >       |                                        ^~~
-> > >       |                                        |
-> > >       |                                        struct aead_request *
-> > > crypto/aegis128-core.c:335:29: note: expected ‘struct skcipher_walk *’
-> > > but argument is of type ‘struct aead_request *’
-> > >   335 |       struct skcipher_walk *walk,
-> > >       |       ~~~~~~~~~~~~~~~~~~~~~~^~~~
-> > > crypto/aegis128-core.c:454:45: error: passing argument 3 of
-> > > ‘crypto_aegis128_process_crypt’ from incompatible pointer type
-> > > [-Werror=incompatible-pointer-types]
-> > >   454 |    crypto_aegis128_process_crypt(NULL, req, &walk,
-> > >       |                                             ^~~~~
-> > >       |                                             |
-> > >       |                                             struct skcipher_walk *
-> > > crypto/aegis128-core.c:336:14: note: expected ‘void (*)(struct
-> > > aegis_state *, u8 *, const u8 *, unsigned int)’ {aka ‘void (*)(struct
-> > > aegis_state *, unsigned char *, const unsigned char *, unsigned int)’}
-> > > but argument is of type ‘struct skcipher_walk *’
-> > >   336 |       void (*crypt)(struct aegis_state *state,
-> > >       |       ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   337 |              u8 *dst, const u8 *src,
-> > >       |              ~~~~~~~~~~~~~~~~~~~~~~~
-> > >   338 |              unsigned int size))
-> > >       |              ~~~~~~~~~~~~~~~~~~
-> > > crypto/aegis128-core.c:454:4: error: too many arguments to function
-> > > ‘crypto_aegis128_process_crypt’
-> > >   454 |    crypto_aegis128_process_crypt(NULL, req, &walk,
-> > >       |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > crypto/aegis128-core.c:334:5: note: declared here
-> > >   334 | int crypto_aegis128_process_crypt(struct aegis_state *state,
-> > >       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > cc1: some warnings being treated as errors
-> > > make[1]: *** [scripts/Makefile.build:283: crypto/aegis128-core.o] Error 1
-> > >
-> > > >   crypto: aegis128 - expose SIMD code path as separate driver
-> > >
-> > > Fixes the above, but causes
-> > >
-> > > ERROR: modpost: "crypto_aegis128_update_simd" [crypto/aegis128.ko] undefined!
-> > >
-> > > as reported by noreply@ellerman.id.au for m68k/defconfig and
-> > > m68k/sun3_defconfig.
-> > > (neon depends on arm).
-> > >
-> >
-> > Thanks for the report.
-> >
-> > It seems like GCC is not optimizing away calls to routines that are
-
-The code is not unreachable. Both crypto_aegis128_encrypt_simd() and
-crypto_aegis128_decrypt_simd() call crypto_aegis128_process_ad(..., true);
-
-> > unreachable. Which GCC version are you using?
-
-I'm using 9.3.0, Kisskb is using 8.1.0.
-
-> Also, mind checking whether the below works around this?
+> Hi all,
 >
-> diff --git a/crypto/aegis128-core.c b/crypto/aegis128-core.c
-> index 2b05f79475d3..89dc1c559689 100644
-> --- a/crypto/aegis128-core.c
-> +++ b/crypto/aegis128-core.c
-> @@ -89,7 +89,7 @@ static void crypto_aegis128_update_a(struct
-> aegis_state *state,
->                                      const union aegis_block *msg,
->                                      bool do_simd)
->  {
-> -       if (do_simd) {
-> +       if (IS_ENABLED(CONFIG_CRYPTO_AEGIS128_SIMD) && do_simd) {
->                 crypto_aegis128_update_simd(state, msg);
->                 return;
->         }
-> @@ -101,7 +101,7 @@ static void crypto_aegis128_update_a(struct
-> aegis_state *state,
->  static void crypto_aegis128_update_u(struct aegis_state *state, const
-> void *msg,
->                                      bool do_simd)
->  {
-> -       if (do_simd) {
-> +       if (IS_ENABLED(CONFIG_CRYPTO_AEGIS128_SIMD) && do_simd) {
->                 crypto_aegis128_update_simd(state, msg);
->                 return;
->         }
+> On Fri, 27 Nov 2020 10:43:07 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> On 11/27/20 1:04 AM, Stephen Rothwell wrote:
+>> > Hi all,
+>> > 
+>> > Changes since 20201126:
+>> >   
+>> 
+>> on parisc, _SA_SIGGFAULT is undefined and causing build errors.
+>> 
+>> commit 23acdc76f1798b090bb9dcc90671cd29d929834e
+>> Author: Peter Collingbourne <pcc@google.com>
+>> Date:   Thu Nov 12 18:53:34 2020 -0800
+>> 
+>>     signal: clear non-uapi flag bits when passing/returning sa_flags
+>> 
+>> 
+>> 
+>> _SA_SIGGFAULT is not used or defined anywhere else in the
+>> kernel source tree.
+>
+>
+> _SA_SIGGFAULT was removed by commit
+>
+>   41f5a81c07cd ("parisc: Drop HP-UX specific fcntl and signal flags")
+>
+> which was added to Linus' tree in v5.10-rc1.
 
-Thanks, that fixes the build for me.
+Thanks.
 
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+It looks like one of the patches in the patchset took so long it got out
+of date.  I will sort it out.
 
-Gr{oetje,eeting}s,
+Eric
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

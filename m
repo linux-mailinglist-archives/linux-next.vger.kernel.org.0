@@ -2,95 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 451D22C7D7F
-	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 05:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF112C7E61
+	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 08:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbgK3EEX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Nov 2020 23:04:23 -0500
-Received: from ozlabs.org ([203.11.71.1]:60113 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726312AbgK3EEW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 29 Nov 2020 23:04:22 -0500
+        id S1725976AbgK3HFv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Nov 2020 02:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725972AbgK3HFu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 02:05:50 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C516C0613CF;
+        Sun, 29 Nov 2020 23:05:10 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cks6L0dRHz9sTR;
-        Mon, 30 Nov 2020 15:03:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ckx7g6d6Rz9sTR;
+        Mon, 30 Nov 2020 18:05:03 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606709021;
-        bh=GA9GndMZeNm8gRJHPrWROI3tCqFXGq4bM7SYpeaZIfg=;
+        s=201702; t=1606719906;
+        bh=cLNf0rgmPwC7nqFGsDIsAzmTEpNLT/6a7pNcPmuzZBY=;
         h=Date:From:To:Cc:Subject:From;
-        b=FkD8Wdp6NBar9cqwVmw7SIGfhBBCK6DM0WRnpgGsX9zY9DoplPo5EWf3sr2/A9mT+
-         G9E3tiR6yp5Esypq9w6udInTsATt+5MOi3DyKRHB2xSexjK3C98+QNpsbpX+jFy/fK
-         uCtSqyfSR9vyIYVG63YC4/z73BhTRUHoJuRPvwoD6pKZMt+M0EDkPMbbkVutYh+AWx
-         3BAXy8pS0PJjmfLpxAjfHvVma2r7zqJJEJaGKwH8IKIEAObrC06iLUjwRrr8FVPoOO
-         TOFM3zC6WZ3PqaWheahBh8NpAzAv7FBouTSnQQUly/DFeR6BB/iaZ9S8T8t6np4rby
-         Wi/q+TRkqi8aQ==
-Date:   Mon, 30 Nov 2020 15:03:36 +1100
+        b=fmp5Hp2T9+Hfm2PUHtaHydjmVmlNfD2ODRPRTTlLzlwPR01hAVgLQS09pOiFbnLZE
+         CAFDg8wr79KWL7ru4uO+8+bsWdMmsZ8eJx673e9ZxLE4bahSZeccZ9GEnnVicswcWt
+         T41Y0ej12+cMyvaAKT39dneEu7u06Z2af1XDrDhFznK7jv+KUTPAJcAgvRJSqW2Dzp
+         o+PMgtQyb7U2xHddGzA82CUUFfOPvYqD07OVmeYmu3D7sJHUE3rP61+zy6agkdCp/n
+         aIREBkxtyuaCWiN/W4t2qKW9T5yRoCZIe0qUrS2omgb6rcD0c9+QOvMv6HQNGqBa2E
+         Pw7aZaHJyfIUw==
+Date:   Mon, 30 Nov 2020 18:05:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
-        Borislav Petkov <bp@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>, Justin Ernst <justin.ernst@hpe.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the pci tree
-Message-ID: <20201130150336.128b84a0@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of the tip tree
+Message-ID: <20201130180503.5c173e05@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mrnim1ZVGKreF79yAS6jXaG";
+Content-Type: multipart/signed; boundary="Sig_/jpA689yidw_7328zjw_W7+R";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mrnim1ZVGKreF79yAS6jXaG
+--Sig_/jpA689yidw_7328zjw_W7+R
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+After merging the tip tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-  arch/x86/pci/i386.c
+Documentation/ABI/testing/sysfs-firmware-sgi_uv:2: WARNING: Unexpected inde=
+ntation.
+Documentation/ABI/testing/sysfs-firmware-sgi_uv:2: WARNING: Unexpected inde=
+ntation.
+Documentation/ABI/testing/sysfs-firmware-sgi_uv:2: WARNING: Unexpected inde=
+ntation.
 
-between commit:
+Introduced by commit
 
-  ace091d17272 ("x86/PCI: Fix kernel-doc markup")
-
-from the pci tree and commit:
-
-  638920a66a17 ("x86/PCI: Make a kernel-doc comment a normal one")
-
-from the tip tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  7ac2f1017115 ("x86/platform/uv: Update ABI documentation of /sys/firmware=
+/sgi_uv/")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mrnim1ZVGKreF79yAS6jXaG
+--Sig_/jpA689yidw_7328zjw_W7+R
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/EbxgACgkQAVBC80lX
-0GzUgggAn8uNCqKbtziMCOBVS4X/MtZM0V0ZzR07HjiECjmob1mWT1ZfcCzB4Med
-VF60PCOF1ONpF+96RnVdgvr3UxV/TlDNw4isnYZctT3ryYKWo8+MR3Z7lJXEBP05
-yHNP5m5E4UQM7GzcZuzjPB+jzQ+OGrg92N3597vgSoA8s7nEtxkYJWuqtAWix29M
-u6ZprsfAlykeZ5AQNZbOcK6HIT4gtckE+eDbjMwwOEbDIUGK0LTZ4U+WFLGt0j62
-ZMbZHEonZmqkG3AH+i6EYkZZTDzLiWW0ntQme7SXhIneQ0eE6brocVHIW9ughFGH
-8XmS9+nZggoDf3Jh6aJqDu8J9Zy+Vg==
-=EVeU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/EmZ8ACgkQAVBC80lX
+0Gyybwf/b5iwP+CriYTDzgYCju9o+9FLxj9WnfdWRlE3i1Ae+ii3PFROPqfrwiYa
+h6Zgw0oPXzgUJdFhxEckl4K3HW1MGey6XgVYEaU27H41qGIwHtrNu5xU5da53Sof
+RzvP8AEchbsDAVOTZT+SAu8ylyT0M5nTD9lkfAHs+4pM5I9kJCQiaK8FPbpMlmF2
+sEMExOmp1uRqkTKyfkJszYrO48QDvonmWZgtrp8+RysMOjSSROu2/iDEnAxwTnJ6
+aQE1dBe8BkyFlmxelvV8+InMcVIg9zULx+wok/KDe4sC4+sAdVuLn8v6WGIVCgNA
+Jq9qrKUlaBuTFaO/+qCfIfNkUKIQ5Q==
+=EGCK
 -----END PGP SIGNATURE-----
 
---Sig_/mrnim1ZVGKreF79yAS6jXaG--
+--Sig_/jpA689yidw_7328zjw_W7+R--

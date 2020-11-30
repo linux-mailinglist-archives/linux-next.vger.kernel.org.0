@@ -2,77 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0D02C8E98
-	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 21:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06AC2C8F7C
+	for <lists+linux-next@lfdr.de>; Mon, 30 Nov 2020 21:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729130AbgK3UDN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Nov 2020 15:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S1730184AbgK3UyI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Nov 2020 15:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729127AbgK3UDM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 15:03:12 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41334C0613CF;
-        Mon, 30 Nov 2020 12:02:32 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id m16so17980635edr.3;
-        Mon, 30 Nov 2020 12:02:32 -0800 (PST)
+        with ESMTP id S1728687AbgK3UyH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Nov 2020 15:54:07 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E19C0613D3
+        for <linux-next@vger.kernel.org>; Mon, 30 Nov 2020 12:53:26 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id d7so4431444iok.1
+        for <linux-next@vger.kernel.org>; Mon, 30 Nov 2020 12:53:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wkgGZlXFTsc7rTynWbLSdwUFsTUmKl5GnDvKV+LtZYY=;
-        b=PJ3KLIGamaGWru818Udw4jyMnVi7uD8Q1uTb8kV+YBiT8qN7akbLHVgO0WLRSFdVi6
-         UAodIxUJbgfUcH2vqemO+bsC75Qjcdfx/N2ACm805ScjGXWrtLDfoze8RcOF0QepVLR2
-         sqb/KPY2atxNIKr+MgTkoIDK3x4gM17F1F0lVClMCY+WKrrvpuQxJ0p51DsHF4/kcPeD
-         Q8VnB221mfw4f3xKn6W1W7YwsanYztAiIlCAh4c/4PS6iaHNBuB8d7XReDv6V7MqHI05
-         dyAcUVNB+U52efW/K8hRDKbuKmvoy643zzMZ/6P+SMLmC78+V3A2qbDqGhKH5ZBBVRvF
-         Ctlg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=n9rDynQqHXhgZs9ftFTlmJDLgTibcXlW3yFxe96RFBI=;
+        b=iGcC1c2hU3KQgI2w6wqHMPB6GtcOK5VoRew9n+BLojZC8SXEmvbk0KxdJq5e0QwAEk
+         LU8MfhdLCx+dv0Ng1gYOVI6jmujT9HFNJfD6Kp4wCqDjdvtUXAJszPyPkOzVvh2X8y9M
+         ohxnjFajCfnOuXGyrGvDsBV2+dNz7gwbahwic=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wkgGZlXFTsc7rTynWbLSdwUFsTUmKl5GnDvKV+LtZYY=;
-        b=fWCrh2VGL3RKhgpPSQRA5H5D0yMFiSoyeJg/Wbo8ZgePlxKEFPwdOUTUUMRzL+HJnL
-         mh+YAoWBUrPOkN6wqf/9nF4fsKxOC/C1gUdaB4DcALPrm2HKsT5aUFeGe8dWoLCYvuIE
-         7DKaoFdYoxyD1wlm6iSXHMKyGxp2nKmoPGigsnEAso3F8v8fxkFLoCpvTy7O9R8KpFMi
-         oakA7Ie50cInJzsGOIQNQcIQbp1b98qHvI/EPcU0XstJfsGSAElsi0Snr4cELh+P6atZ
-         XSPnZwuOegPxjzetO9jnsJ8ZKeYM9TwJkWcpZhgYitIg3arb9epaqwLUaNrm2vJWk0ww
-         KARQ==
-X-Gm-Message-State: AOAM5309hK4q0TYKhfFKnb3TPsFL1ImXyQrrjRaMRLk4DUB25WF6HT1W
-        x2esslowWfML5nJjCrqskFVQFYRsNgBzMlMEchU=
-X-Google-Smtp-Source: ABdhPJwHIuqK4ERjf3h8hnoUvfTUBi4YeRiMoPaRdAwh8zM/moiXdvG8RmXSVTdsXLTvqMNgpojjbcBCCuYeAGpP21w=
-X-Received: by 2002:a50:d490:: with SMTP id s16mr23385494edi.187.1606766550997;
- Mon, 30 Nov 2020 12:02:30 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=n9rDynQqHXhgZs9ftFTlmJDLgTibcXlW3yFxe96RFBI=;
+        b=h2Y0YEF//WgFlG/tblgxzsg/43c6r1hKMjQ6hJnE023gvG5fz4PNf/PZpiog7Amgi4
+         N3VxBFdDqVwUc/vuJt+G15o7Hlrk/QQKdEQ59SEx1m8m3CsYmdpVo8rM0lKcju6w3WaW
+         7puAGvMiloqhQOj8xKBPU4Y7PA49i1rYAjNYQueUOCau1+diLQ98E0eb2UP1LwNUYxvP
+         fmUHVId+P8+XrwpMvHRQu4icLsS3KvZXDd+ibu8XsuEznzL8OokfqH2pyoGF/3vqp44v
+         KLeRRI4LfhgML00U4RBmYbamYHV8pFk/61a+ylxMjCAeFAvjqtyKq48kdP3bIPYtaahF
+         pYCg==
+X-Gm-Message-State: AOAM531hXoY7phXJenC9OKNgUW/GQTDJjSsMWNNXeGjdA5atqvwdhzfy
+        R1HFk7C5gkpg6C7l04nhpxsakkW2T5MGrA==
+X-Google-Smtp-Source: ABdhPJzpLX/1Xj+NdKPbYjj9zSIm6cXU7z4S5oKnJz/TXHAVXI8FskRRkiOizmoXCyJNAcAnMgc+Jg==
+X-Received: by 2002:a02:a419:: with SMTP id c25mr13981481jal.91.1606769605942;
+        Mon, 30 Nov 2020 12:53:25 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id l6sm11963425ili.78.2020.11.30.12.53.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Nov 2020 12:53:25 -0800 (PST)
+Subject: Re: linux-next: manual merge of the tip tree with the cpupower tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Borislav Petkov <bp@suse.de>
+Cc:     Brahadambal Srinivasan <latha@linux.vnet.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20201123134259.2dc63db7@canb.auug.org.au>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e66c627b-0666-ee4f-fc3e-57cb2ad98fb9@linuxfoundation.org>
+Date:   Mon, 30 Nov 2020 13:53:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-References: <CA+G9fYtk3fKy7ct-rT=T8iFDhE4CbjGgdfxsOBrKT9y8ntwXyg@mail.gmail.com>
-In-Reply-To: <CA+G9fYtk3fKy7ct-rT=T8iFDhE4CbjGgdfxsOBrKT9y8ntwXyg@mail.gmail.com>
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-Date:   Mon, 30 Nov 2020 20:02:20 +0000
-Message-ID: <CAA5enKbujU+PRwA3qeYqx-Ydcj7owJnYkeTYJFdBweQJjWU78w@mail.gmail.com>
-Subject: Re: BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0x1e0
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     inux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        alexander.h.duyck@linux.intel.com,
-        Yafang Shao <laoar.shao@gmail.com>, richard.weiyang@gmail.co,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201123134259.2dc63db7@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 30 Nov 2020 at 19:52, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> [  285.863025] BUG: kernel NULL pointer dereference, address: 00000000000000c8
+On 11/22/20 7:42 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the tip tree got a conflict in:
+> 
+>    tools/power/cpupower/utils/helpers/misc.c
+> 
+> between commit:
+> 
+>    748f0d70087c ("cpupower: Provide online and offline CPU information")
+> 
+> from the cpupower tree and commit:
+> 
+>    8113ab20e850 ("tools/power/cpupower: Read energy_perf_bias from sysfs")
+> 
+> from the tip tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-This looks to be the same as
-https://lore.kernel.org/linux-mm/20201130132345.GJ17338@dhcp22.suse.cz/T/#t
+Thanks. Fix looks good to me. I will mention it in my pull
+request to Rafael.
+
+thanks,
+--Shuah

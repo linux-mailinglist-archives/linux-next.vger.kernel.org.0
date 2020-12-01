@@ -2,88 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7832C9A11
-	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 09:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993722C9C5D
+	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 10:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgLAIzI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Dec 2020 03:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S2389156AbgLAJRZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Dec 2020 04:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729040AbgLAIzH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 03:55:07 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C793FC0613D3
-        for <linux-next@vger.kernel.org>; Tue,  1 Dec 2020 00:54:21 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id b23so747808pls.11
-        for <linux-next@vger.kernel.org>; Tue, 01 Dec 2020 00:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=niYaq/JRpKzB99MWM85q+70GJ2PSdrtB0S69IuuZNQw=;
-        b=l0RgZkr/ooILtuQNf9RcVw8IoO2KP6POtGiNC/rcv5cNIRvSz9UPSEkkRN0q+ZduaQ
-         pssQKPNZ79aC1+B83P54e2Du+lK6TMRWg2ZzIffub/R03C3mnsN5LA6VxjJi/J+PwSy8
-         WwZ9X65aTRsj2ulLLDCFKXrkRHOMW/0yeb73X6TKbhFdHdcGOrnGcRQlnGlbAbbFViS7
-         xEVIDudge5yRqV3e07lfxvmIVeoLZz9srEH1gVzQZV5yEiAweAq51wOv6eWi5nrDrs8h
-         w8syYqUaaQ7WUfaRxU23EvFdAb4k0gTz0F8YDslH7Qwv4VHnGzCL+z0jvKcZyjCOtUmh
-         4bjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=niYaq/JRpKzB99MWM85q+70GJ2PSdrtB0S69IuuZNQw=;
-        b=O9UrvkzE/93Otm2RiOCBfqqgguGsjCn2/Rg1rSk+oRjM1DS910I8YZevBlatp+pb52
-         bn9H4idMHKGhCsM5Lc3G+pnZNfaekL8YLPpp0vDsvHFPz0+G81RNYkYhkwBd0saD7p6D
-         Ay/Ai9MJXjS+DsqZfPVx7hxTo2GwP4ezJ3zl/6UWaiC1/39gX34rJZQnJRfNnln5gqYT
-         ea8L7CFobQ4zatw8vJCIRHxA7MhBnbtmeGb6n1dnDONbOHhmACvfhzOOME4xttfQIXa8
-         /r8FHi4tYCvq31+tMHJcEv0thp01FqWRhWK78dSBdHbVaor8sL8/CjTAzGa/yy/hCQt2
-         /4DQ==
-X-Gm-Message-State: AOAM532DKQu5dF7qfaZiEC7OZ+vemuHcL+TDcajFANPo8QBl9yXek1YS
-        xrfaN/eAIjLie+c6ert71SneNzUeKg3fGqHM3MjBFw==
-X-Google-Smtp-Source: ABdhPJwo8+fWwdRXF65E5blWn6IRolCg3aG0zKG6QXDMLIDW3SB6+ovX2dcMxBJQjXU7RrgwmROOOyCmkMiy0xq4xeo=
-X-Received: by 2002:a17:90a:ae14:: with SMTP id t20mr1771540pjq.13.1606812861293;
- Tue, 01 Dec 2020 00:54:21 -0800 (PST)
+        with ESMTP id S2389873AbgLAJLx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 04:11:53 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D173C0613D2;
+        Tue,  1 Dec 2020 01:11:13 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Clbth4xPPz9sW4;
+        Tue,  1 Dec 2020 20:11:08 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606813869;
+        bh=V2oVLU7Ya8T1FEbPhjvbw0g0LWUsablXABJKhT4Kzbk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LhIgp8E0q4gIucbZRK1uQkuvu/ua0oZ67pa67HWUINZN1VKu8aOkAWbBSEJl+8wO2
+         nVF8DiGxVOiy023Z014p0m3n8lZWK5louusNA3ulz8flG5sWVQEiCnpbv5X8D/THu1
+         fuPFPUreNUAlphbqYb7VATVPb55iOLKMoISa4T2FTm+7UHjK3MT6xc0r+3YI+g/m7n
+         Tf4RgohMlAAblqymqxoOcdagrk91xs13GJGanYbrmBN/0odVGCaBnu3CMrj/YccXCI
+         r8AD2qAkJdjfn6pDEZaQDy8U565rGWWTvavOO1inhAbIXUNvoZr8CSMOBXDwH+rqNf
+         XRYszY0qQuZkw==
+Date:   Tue, 1 Dec 2020 20:11:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Soheil Hassas Yeganeh <soheil@google.com>
+Subject: linux-next: manual merge of the akpm tree with the bpf-next tree
+Message-ID: <20201201201106.3ab8fbce@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYtk3fKy7ct-rT=T8iFDhE4CbjGgdfxsOBrKT9y8ntwXyg@mail.gmail.com>
- <CAA5enKbujU+PRwA3qeYqx-Ydcj7owJnYkeTYJFdBweQJjWU78w@mail.gmail.com>
-In-Reply-To: <CAA5enKbujU+PRwA3qeYqx-Ydcj7owJnYkeTYJFdBweQJjWU78w@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 1 Dec 2020 16:53:45 +0800
-Message-ID: <CAMZfGtUQMmH566CTT2G0KugLsX_3ouOM_80Kqk1R6b1N_NGB-Q@mail.gmail.com>
-Subject: Re: [External] Re: BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0x1e0
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        inux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        alexander.h.duyck@linux.intel.com,
-        Yafang Shao <laoar.shao@gmail.com>, richard.weiyang@gmail.co,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Gaz1/bh1l39mvpyLfdfqLGw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 4:02 AM Lorenzo Stoakes <lstoakes@gmail.com> wrote:
->
-> On Mon, 30 Nov 2020 at 19:52, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > [  285.863025] BUG: kernel NULL pointer dereference, address: 00000000000000c8
->
-> This looks to be the same as
-> https://lore.kernel.org/linux-mm/20201130132345.GJ17338@dhcp22.suse.cz/T/#t
+--Sig_/Gaz1/bh1l39mvpyLfdfqLGw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I am sure it is the same issue.
+Hi all,
 
+Today's linux-next merge of the akpm tree got a conflict in:
 
+  fs/eventpoll.c
 
--- 
-Yours,
-Muchun
+between commits:
+
+  7fd3253a7de6 ("net: Introduce preferred busy-polling")
+  7c951cafc0cb ("net: Add SO_BUSY_POLL_BUDGET socket option")
+
+from the bpf-next tree and commit:
+
+  cc2687004c9d ("epoll: simplify and optimize busy loop logic")
+
+from the akpm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/eventpoll.c
+index a80a290005c4,88f5b26806e5..000000000000
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@@ -393,15 -395,19 +395,20 @@@ static bool ep_busy_loop(struct eventpo
+  {
+  	unsigned int napi_id =3D READ_ONCE(ep->napi_id);
+ =20
+- 	if ((napi_id >=3D MIN_NAPI_ID) && net_busy_loop_on())
++ 	if ((napi_id >=3D MIN_NAPI_ID) && net_busy_loop_on()) {
+ -		napi_busy_loop(napi_id, nonblock ? NULL : ep_busy_loop_end, ep);
+ +		napi_busy_loop(napi_id, nonblock ? NULL : ep_busy_loop_end, ep, false,
+ +			       BUSY_POLL_BUDGET);
+- }
+-=20
+- static inline void ep_reset_busy_poll_napi_id(struct eventpoll *ep)
+- {
+- 	if (ep->napi_id)
++ 		if (ep_events_available(ep))
++ 			return true;
++ 		/*
++ 		 * Busy poll timed out.  Drop NAPI ID for now, we can add
++ 		 * it back in when we have moved a socket with a valid NAPI
++ 		 * ID onto the ready list.
++ 		 */
+  		ep->napi_id =3D 0;
++ 		return false;
++ 	}
++ 	return false;
+  }
+ =20
+  /*
+
+--Sig_/Gaz1/bh1l39mvpyLfdfqLGw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/GCKoACgkQAVBC80lX
+0GzrkAf/XHydBRC0Cy49lYG5Rk9J0M4sT9MUOuRmLut4KQauDrIW3wh4gD9W2Lgg
+io+WtsselVsi7HSS0jXmOsq9DARsS4tF2y6Ec/t+FLRjBfTKDjBQPvrixIpzEmE1
+Ym6h48+62dDHzH2swol/sPRfmEU4LeH89y9uxwrE4LNH94KycQwL0otHfOnuuOdl
+14IkmIHdzW0G+DdxUlcm5eULpH+S45/0QHamcq9ni5+DPLAKvka0Gh37l+/qx+jJ
+5U5x6YaL89OpO7/ama7yr1dEYpk2GC2t3nKJ1wFDsaxOy91ykGJbNFARMU6iPvr1
+Au3m2DCIvqts708x6liO/igSoNtApg==
+=l2DX
+-----END PGP SIGNATURE-----
+
+--Sig_/Gaz1/bh1l39mvpyLfdfqLGw--

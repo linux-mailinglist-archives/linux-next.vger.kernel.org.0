@@ -2,58 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB0E2CA0A2
-	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 12:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6A72CA0A6
+	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 12:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730296AbgLAK47 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Dec 2020 05:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S1730327AbgLAK5C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Dec 2020 05:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730281AbgLAK46 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 05:56:58 -0500
+        with ESMTP id S1730281AbgLAK5B (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 05:57:01 -0500
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C339BC0613D3;
-        Tue,  1 Dec 2020 02:56:17 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id v14so2141344wml.1;
-        Tue, 01 Dec 2020 02:56:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E7EC0613D6;
+        Tue,  1 Dec 2020 02:56:21 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id d3so2121448wmb.4;
+        Tue, 01 Dec 2020 02:56:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3GxGy9xqXVVSiWYrcgBKhtSzhPUbjkEF5wnI2eWh00k=;
-        b=PRRMW5mAJIRG4uFf6m9lYzRpeqO/vzYTNjq0vGEX9k5dRbs+e3ATKUzMKmaLUaRSZq
-         CCEVRWn+iE69blokqOTg8AEfKfLlpjthyBs3EohG332sd7+RzkV79FICFW5eCLc54Sz0
-         msErZPj5ilmXCdOPRYhDyhHtSuA/X7EUEoCSWXWcoicDqMihJ/dKEAKmd1Z1usMBRSyo
-         WSoK4ko7mlxcC7hzSbOS+NR321gbffVJtSGbVMAp3GOaE1PXjbnyjwrhGxJ8DSWg72SR
-         iHa4unmbkBkYr3K2loElS+0fB1ffLU05nd/rzzDIHod3uvn9dAx9Zb0Z2TokMfrRVQ0D
-         1DJA==
+        bh=R4ckBwxZKMeIrRYpqbJom2hXs/293kRyY1Ug4C+A7wo=;
+        b=LD/ulT6r/c9oJ/OCck9DfDOZY+iEHPT1cb/2v7plVA+g2HHkvAK17vkuqS/Jgf75rX
+         x63fnUrOqic9CTv2Oi3BUAfioXn/djvw/4gc8OCncZQojOSHq5Agh7JrfmbSNaJcdOmr
+         a0kt51TpsPzeoaf99BeoDOPMzTEXey5xAtt3LhN3rU6J37SLHXqEHkKUikGU5qptYXkm
+         qbsqVN0boOmdVClkbifZ3uTa3iGzmNX/5G9IgsBcPy8OPG5rnMKRYOTaFnM3HzIwOZA4
+         eFpB9PB5XodsE5FLLlY2Jx8n8rJlBCTYq8+f0Tgs57hRurU9jjf/tdFOGCR6IGvB9fUA
+         dhvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3GxGy9xqXVVSiWYrcgBKhtSzhPUbjkEF5wnI2eWh00k=;
-        b=jHQ25Y4F8IAkW+WsZJcehhLAxP3ZqgNyowe7KpzzR71/uoRmamWvDpZ+Lwt2cPUm0h
-         +jPajnhxFW/VGG0CtIilopQt2adpYTM7/oelJtE8/Lhi4eWXqyJHuvu3v3eyrsryObAq
-         P4ERzHA9ynhtYFdITqXZgeo7/mqSrrbGQAKthsnLJrTGYBq5XwV5fn1QRJL5a/dSFM7N
-         u05uT3WYlThBiQXdj0tJLY7hzZU+tPfhVoMK5pNl/1giGLlPmi/wiGiPsAcKobXGDY8k
-         QtS9+NoTIhD1db7cLvOdyAemI+uKOMX5tBJkH61kL6DD0Fy+V5JV3tY7Y5fSDi4kNswl
-         iP5Q==
-X-Gm-Message-State: AOAM5305RNGALKSYjfGDXCAOYA1MJ6hJ7c1zs4YPyKkIAmD6+YK7p1Ll
-        F4MSJ5y2OvPCMYBv/3uCNDg=
-X-Google-Smtp-Source: ABdhPJywq+ag4aGPb4SzzHF4ujLHJ+o+aKF8rtHQCVO4ZcjiSud7/0o7fDdPnyjHitaZKCOc9qk2bw==
-X-Received: by 2002:a1c:730c:: with SMTP id d12mr2046824wmb.3.1606820176522;
-        Tue, 01 Dec 2020 02:56:16 -0800 (PST)
+        bh=R4ckBwxZKMeIrRYpqbJom2hXs/293kRyY1Ug4C+A7wo=;
+        b=qxbYhsvVSAfBaq5KixCosHIv0Sn6TGzVC85ZpFj4IX9SmHMOpcCbhs+ZxO9mlUl4Mt
+         z7eQzBofJZVK4WDoUMPsL26m+GlfGM2jETq5gtx//0v/ME7MAWLDtQvrvoDTfOFhCFta
+         ipTmWGi9vSKrjxnHjPOV+ZSW+TZH7ql7UCNUTi3+TU8wMUNYYvawn3Z8H63FYr83KQjy
+         9I8w5CqACPIzw1Nj+gBUEpZlREDMhTikU7gfWwBN9pRneFcvLvjiiwmKVLyWr1g2A5ow
+         t/4BLYTqGwGQnLd8auAPOcorqXcuDls+h2xlC452wvaYiTVt7CDKqdmMIozvRLMTntnf
+         VlGA==
+X-Gm-Message-State: AOAM532ZZ0Wk3a7OBcWHadxWcDtDyZO5Rk9Jy2JYNJE6c3xlsIIqXMGt
+        GE63EluDc7GV1DxrCYqslFU=
+X-Google-Smtp-Source: ABdhPJws+z8oMurPg4of0gMftdZwaD9rBy8cM1CjHEV6FPCZ1sw2h9tZkPhml+rLcs+Xripc2z1rRw==
+X-Received: by 2002:a7b:cb84:: with SMTP id m4mr2033922wmi.157.1606820177570;
+        Tue, 01 Dec 2020 02:56:17 -0800 (PST)
 Received: from localhost.localdomain (188.red-81-44-87.dynamicip.rima-tde.net. [81.44.87.188])
-        by smtp.gmail.com with ESMTPSA id u66sm2318138wmg.2.2020.12.01.02.56.15
+        by smtp.gmail.com with ESMTPSA id u66sm2318138wmg.2.2020.12.01.02.56.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Dec 2020 02:56:16 -0800 (PST)
+        Tue, 01 Dec 2020 02:56:17 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     vkoul@kernel.org
 Cc:     sfr@canb.auug.org.au, kishon@ti.com, linux-kernel@vger.kernel.org,
         linux-next@vger.kernel.org
-Subject: [PATCH v2 1/3] phy: ralink: phy-mt7621-pci: add include search path in Makefile
-Date:   Tue,  1 Dec 2020 11:56:11 +0100
-Message-Id: <20201201105613.23252-2-sergio.paracuellos@gmail.com>
+Subject: [PATCH v2 2/3] phy: ralink: phy-mt7621-pci: avoid warning if COMPILE_TEST is enabled
+Date:   Tue,  1 Dec 2020 11:56:12 +0100
+Message-Id: <20201201105613.23252-3-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201201105613.23252-1-sergio.paracuellos@gmail.com>
 References: <20201201105613.23252-1-sergio.paracuellos@gmail.com>
@@ -63,39 +63,32 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This driver includes the following two files directly:
-- mt7621.h
-- ralink_regs.h
+This driver can be enabled for COMPILE_TEST. Casting to unsigned
+int for address shows a compilation warning because of size of the
+pointer in x86_64 architecture using 'make allmodconfig' target.
+Avoid the warning in any architecture casting to unsigned long and
+properly setting format also for 'dev_info' macro.
 
-Compilation for its related platform properly works because
-its real path is included in 'arch/mips/ralink/Platform' as
-cflags.
-
-This driver depends on RALINK but also is enabled for COMPILE_TEST
-where nothing about its platform is known and this directly
-included files are not found at all breaking compilation.
-
-Fix this problem adding include search path for ralink in
-ralink phy directory Makefile.
-
-Fixes: d87da32372a0 ("phy: ralink: Add PHY driver for MT7621 PCIe PHY")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- drivers/phy/ralink/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/phy/ralink/phy-mt7621-pci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/ralink/Makefile b/drivers/phy/ralink/Makefile
-index cda2a4a7ca5e..c8f9adba0d82 100644
---- a/drivers/phy/ralink/Makefile
-+++ b/drivers/phy/ralink/Makefile
-@@ -1,3 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+ccflags-y	+= -I$(srctree)/arch/mips/include/asm/mach-ralink
-+
- obj-$(CONFIG_PHY_MT7621_PCI)	+= phy-mt7621-pci.o
- obj-$(CONFIG_PHY_RALINK_USB)	+= phy-ralink-usb.o
+diff --git a/drivers/phy/ralink/phy-mt7621-pci.c b/drivers/phy/ralink/phy-mt7621-pci.c
+index db79088d5362..befa282e2447 100644
+--- a/drivers/phy/ralink/phy-mt7621-pci.c
++++ b/drivers/phy/ralink/phy-mt7621-pci.c
+@@ -272,8 +272,8 @@ static struct phy *mt7621_pcie_phy_of_xlate(struct device *dev,
+ 
+ 	mt7621_phy->has_dual_port = args->args[0];
+ 
+-	dev_info(dev, "PHY for 0x%08x (dual port = %d)\n",
+-		 (unsigned int)mt7621_phy->port_base, mt7621_phy->has_dual_port);
++	dev_info(dev, "PHY for 0x%08lx (dual port = %d)\n",
++		 (unsigned long)mt7621_phy->port_base, mt7621_phy->has_dual_port);
+ 
+ 	return mt7621_phy->phy;
+ }
 -- 
 2.25.1
 

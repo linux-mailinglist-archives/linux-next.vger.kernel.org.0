@@ -2,106 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 545022CA09F
-	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 12:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB0E2CA0A2
+	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 12:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730282AbgLAK45 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Dec 2020 05:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S1730296AbgLAK47 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Dec 2020 05:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730281AbgLAK45 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 05:56:57 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F4AC0613D2;
-        Tue,  1 Dec 2020 02:56:16 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id v14so2141264wml.1;
-        Tue, 01 Dec 2020 02:56:16 -0800 (PST)
+        with ESMTP id S1730281AbgLAK46 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 05:56:58 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C339BC0613D3;
+        Tue,  1 Dec 2020 02:56:17 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id v14so2141344wml.1;
+        Tue, 01 Dec 2020 02:56:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=98T7yvmxwJNuYReheK/WRvR4azv53/hMDfFHmnj8JAo=;
-        b=aylhf/cChK/A+g+oQfp0ak+LFbmPYu+l29I9ZokGkkPoe48Ud71Gh757EUCdZ4ZRHz
-         AzXUCIVBOEmPgtoBFD73Z611UScxlgtmJsWXRpMaROBgE0vWywZMy/zbBOvBHdLmYSrM
-         big0Pjiu886cUyobh7zB7VhytHNfGe5bQZs8VL/p114NmYHWkFFkYkkma/O7cnZRYCNq
-         C4zG+7RP/bAl/9gYLem2LvZipn3ISCDny0WInlVvUYXAkXurEY0lP6HDr38KTbYCffUq
-         VQl4GxRXf3siJt2hW2gimUY+e27ppXLDXewZ9Im+Eu5ik2dNQshu056elE/oG5yDuqC3
-         gEzA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3GxGy9xqXVVSiWYrcgBKhtSzhPUbjkEF5wnI2eWh00k=;
+        b=PRRMW5mAJIRG4uFf6m9lYzRpeqO/vzYTNjq0vGEX9k5dRbs+e3ATKUzMKmaLUaRSZq
+         CCEVRWn+iE69blokqOTg8AEfKfLlpjthyBs3EohG332sd7+RzkV79FICFW5eCLc54Sz0
+         msErZPj5ilmXCdOPRYhDyhHtSuA/X7EUEoCSWXWcoicDqMihJ/dKEAKmd1Z1usMBRSyo
+         WSoK4ko7mlxcC7hzSbOS+NR321gbffVJtSGbVMAp3GOaE1PXjbnyjwrhGxJ8DSWg72SR
+         iHa4unmbkBkYr3K2loElS+0fB1ffLU05nd/rzzDIHod3uvn9dAx9Zb0Z2TokMfrRVQ0D
+         1DJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=98T7yvmxwJNuYReheK/WRvR4azv53/hMDfFHmnj8JAo=;
-        b=WUfLz3G8bFyJ/c4JHcle7AedEFvY3G7KqGpdgrU3GgFnHr3ICosSuEigm2gV6vWjo0
-         Jp2ZVAMMvqVyodLEbkxEFbFcUrhistEculrBRfpXe3Yc9FLjnCICBQ5NTrFn+mgHBfIL
-         YEzXKbxu+WBiBNPQgKcT5tv6UkBMJtBUw2huTi6D7TMnTKmXNqyRsjB5lh3Kmwbn+qX9
-         NON7O/yUgw3zeNQARNbiqOQ3zYxIhxhKFY6HZ0HwdKTa7eIF6XNHCSjbzjryadvEpnV3
-         7MYNwaC1VL6D1uKgLXCzU4ET51hL/dqUsNLBCC6/ed5qaGcTBahPT/uoEa3ouoNVYdFt
-         eCBA==
-X-Gm-Message-State: AOAM531QalteobIhR4M0LRzD/zmOFIRZKO0fdbaMaaM1n7hnS5xK5gZ1
-        kW2Cg2QAN6WEg1TMjIH3Dj+Lk54vH7I=
-X-Google-Smtp-Source: ABdhPJzi8W0j373ES1lFCGrl6tQ0fXdeZAo87UvDl/XHLAFYaKwfX9oG8hhR1Jo9kXjv5QcKBg1biw==
-X-Received: by 2002:a1c:1d08:: with SMTP id d8mr2085407wmd.159.1606820175537;
-        Tue, 01 Dec 2020 02:56:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3GxGy9xqXVVSiWYrcgBKhtSzhPUbjkEF5wnI2eWh00k=;
+        b=jHQ25Y4F8IAkW+WsZJcehhLAxP3ZqgNyowe7KpzzR71/uoRmamWvDpZ+Lwt2cPUm0h
+         +jPajnhxFW/VGG0CtIilopQt2adpYTM7/oelJtE8/Lhi4eWXqyJHuvu3v3eyrsryObAq
+         P4ERzHA9ynhtYFdITqXZgeo7/mqSrrbGQAKthsnLJrTGYBq5XwV5fn1QRJL5a/dSFM7N
+         u05uT3WYlThBiQXdj0tJLY7hzZU+tPfhVoMK5pNl/1giGLlPmi/wiGiPsAcKobXGDY8k
+         QtS9+NoTIhD1db7cLvOdyAemI+uKOMX5tBJkH61kL6DD0Fy+V5JV3tY7Y5fSDi4kNswl
+         iP5Q==
+X-Gm-Message-State: AOAM5305RNGALKSYjfGDXCAOYA1MJ6hJ7c1zs4YPyKkIAmD6+YK7p1Ll
+        F4MSJ5y2OvPCMYBv/3uCNDg=
+X-Google-Smtp-Source: ABdhPJywq+ag4aGPb4SzzHF4ujLHJ+o+aKF8rtHQCVO4ZcjiSud7/0o7fDdPnyjHitaZKCOc9qk2bw==
+X-Received: by 2002:a1c:730c:: with SMTP id d12mr2046824wmb.3.1606820176522;
+        Tue, 01 Dec 2020 02:56:16 -0800 (PST)
 Received: from localhost.localdomain (188.red-81-44-87.dynamicip.rima-tde.net. [81.44.87.188])
-        by smtp.gmail.com with ESMTPSA id u66sm2318138wmg.2.2020.12.01.02.56.13
+        by smtp.gmail.com with ESMTPSA id u66sm2318138wmg.2.2020.12.01.02.56.15
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Dec 2020 02:56:14 -0800 (PST)
+        Tue, 01 Dec 2020 02:56:16 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     vkoul@kernel.org
 Cc:     sfr@canb.auug.org.au, kishon@ti.com, linux-kernel@vger.kernel.org,
         linux-next@vger.kernel.org
-Subject: [PATCH v2 0/3] phy: ralink: phy-mt7621-pci: some fixes for COMPILE_TEST
-Date:   Tue,  1 Dec 2020 11:56:10 +0100
-Message-Id: <20201201105613.23252-1-sergio.paracuellos@gmail.com>
+Subject: [PATCH v2 1/3] phy: ralink: phy-mt7621-pci: add include search path in Makefile
+Date:   Tue,  1 Dec 2020 11:56:11 +0100
+Message-Id: <20201201105613.23252-2-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201201105613.23252-1-sergio.paracuellos@gmail.com>
+References: <20201201105613.23252-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Vinod,
+This driver includes the following two files directly:
+- mt7621.h
+- ralink_regs.h
 
-After merging the phy-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Compilation for its related platform properly works because
+its real path is included in 'arch/mips/ralink/Platform' as
+cflags.
 
-drivers/phy/ralink/phy-mt7621-pci.c:17:10: fatal error: mt7621.h: No such file or directory
-17 | #include <mt7621.h>
- |          ^~~~~~~~~~
+This driver depends on RALINK but also is enabled for COMPILE_TEST
+where nothing about its platform is known and this directly
+included files are not found at all breaking compilation.
 
-This driver has two includes which are in
-"arch/mips/include/asm/mach-ralink" and are directly included in the
-driver:
-* mt7621.h
-* ralink_regs.h
+Fix this problem adding include search path for ralink in
+ralink phy directory Makefile.
 
-This is because this path is directly included in 'arch/mips/ralink/Platform'
-for "ralink".
+Fixes: d87da32372a0 ("phy: ralink: Add PHY driver for MT7621 PCIe PHY")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+ drivers/phy/ralink/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Adding the include search path to the phy ralink directory fix the problem.
-
-Making 'allmodconfig' in x86_64 also showed two warnings for this driver
-because of pointer size and not valid name for MODULE_DEVICE_TABLE ids.
-
-This two have been also fixed and included in this series.
-
-Changes in v2:
-    - Added 'Reported-by' tag in PATCH 1/3.
-
-Best regards,
-    Sergio Paracuellos
-
-Sergio Paracuellos (3):
-  phy: ralink: phy-mt7621-pci: add include search path in Makefile
-  phy: ralink: phy-mt7621-pci: avoid warning if COMPILE_TEST is enabled
-  phy: ralink: phy-mt7621-pci: set correct name in MODULE_DEVICE_TABLE
-    macro
-
- drivers/phy/ralink/Makefile         | 3 +++
- drivers/phy/ralink/phy-mt7621-pci.c | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/phy/ralink/Makefile b/drivers/phy/ralink/Makefile
+index cda2a4a7ca5e..c8f9adba0d82 100644
+--- a/drivers/phy/ralink/Makefile
++++ b/drivers/phy/ralink/Makefile
+@@ -1,3 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++
++ccflags-y	+= -I$(srctree)/arch/mips/include/asm/mach-ralink
++
+ obj-$(CONFIG_PHY_MT7621_PCI)	+= phy-mt7621-pci.o
+ obj-$(CONFIG_PHY_RALINK_USB)	+= phy-ralink-usb.o
 -- 
 2.25.1
 

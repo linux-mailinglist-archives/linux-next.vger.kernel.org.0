@@ -2,146 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4545F2C9D27
-	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 10:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDA32C9D1A
+	for <lists+linux-next@lfdr.de>; Tue,  1 Dec 2020 10:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390617AbgLAJTf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Dec 2020 04:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S2389705AbgLAJS6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Dec 2020 04:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388721AbgLAJJn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 04:09:43 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3859C0613CF
-        for <linux-next@vger.kernel.org>; Tue,  1 Dec 2020 01:09:03 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id g20so1992218ejb.1
-        for <linux-next@vger.kernel.org>; Tue, 01 Dec 2020 01:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=S+Ngn4W/oQtuMxlBFu4kHeU3p7nhm6p8xjw9712a+hg=;
-        b=a1xDBC0NB1WegU5JwLnZPeJz2v97WB28CL0vAfurTSZNAoShRCXmC95d3JszRXT8V2
-         t47DSCSTXBLukV4RQqIXsQnrhr/HM/xRMmAlJs5xV8uW8100Cy9Z++tUUSqc9mt/66r+
-         C7zlSHICvqkcIRc7XolTcgpJitMlO1FBjS1utDfmAwsQkNaZVOZEyw2JFuyf0w+WfxLT
-         e2I8DpbCs7yCV7cmmNDt4SphJREPbyXf81PsCX3pEukIGegJ1hbWRaWt89vhrqdqhFyK
-         oAjflrkxgLhtnaAtj0D13J65wTDkcPV++R8Dc3ox0c3PdP1EchtZPQlqRlCsdZXqesef
-         TA0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S+Ngn4W/oQtuMxlBFu4kHeU3p7nhm6p8xjw9712a+hg=;
-        b=CPhvy0nxuxjSnqbfjcbehFB2zGkvcSlHejpW00ujYXixy2Qe9pDXgiQqBadmz3gUrD
-         Uzb2ah2QvslHchZfOsk7LRZKCw7pgvzPVDAB8QJ0lOvZzjUl9zJw1ebPD9IGvqFx4kE5
-         rR/fNlODCIbr+Iuc4XurmjGn+hUOouDpbZcx6rW+B4d9qPMH2sLlh4Eibe4hWqKQAOuC
-         XKyqupBfSBIcqs3zIasqFRt5NI7XaarwmKPxb9SqGeY1XoPWvttEa2/AM4BKQL0xMG5d
-         DeFw8qYCroGi9IbTlyBz1LQlPudCeEeKVdJPhrkqRMukMqTvVRLFV++suNpXM2MK5U7j
-         gWxw==
-X-Gm-Message-State: AOAM531HGWY3vsvuBJEG0AbjunQQl0ROYUIiAR/BaedzGBNKV/am4SRA
-        PxwBR9Tn7UNSuaspCxirkqRgiTRAwn7vLEZaRwQhgQ==
-X-Google-Smtp-Source: ABdhPJz9Uhhox7ZTrrku2Jm0H/oZM/zXk9l4/6aLl25sq93H6GDa8EkVqs78ul1nVveVbLKnNiLpc/83txz7DeAOR9c=
-X-Received: by 2002:a17:906:1498:: with SMTP id x24mr2014665ejc.170.1606813742234;
- Tue, 01 Dec 2020 01:09:02 -0800 (PST)
+        with ESMTP id S2390575AbgLAJSz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Dec 2020 04:18:55 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B6C0613CF;
+        Tue,  1 Dec 2020 01:18:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Clc2r05pcz9sVk;
+        Tue,  1 Dec 2020 20:18:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606814293;
+        bh=5zJ9IuqI4gLBzisy31CtAwLvFcCEejz2ewdPwr5ZIXc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XSoRTh+EHwvFZY78Bf2irWcrLekZ2C+PGMrccxGEqnd85wF9DEVmI4kJG5cc9SQqD
+         s5ZfS+62iYm+R9Ney8uoxuEemKkMGPyjsV/JAD0ESElLAe7/Kt5nnQdOLvz2mt9BP+
+         AAYJFpkwb25isMoCDhkCNl6VzsXdOVzV181sX9JChIdnr53bI48oQYHcDvbAsehYKb
+         3tmNS2cRqTwhuYELoQpJw3+3tMIrqVwOuAEOznWh4q65iOU0FhL6jXsWVI+ws0J6bG
+         YuQiJrcEpu0SfIJHp5RiFGMw27Qjz8YrMB0QUqO5l107VlCKPBaJ0/sl3BqTHtoiYi
+         /yPpRKftEN26A==
+Date:   Tue, 1 Dec 2020 20:18:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Andrew Klychkov <andrew.a.klyckov@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the akpm tree with the jc_docs tree
+Message-ID: <20201201201811.72273de8@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYtk3fKy7ct-rT=T8iFDhE4CbjGgdfxsOBrKT9y8ntwXyg@mail.gmail.com>
- <58f66f22-fd5f-685d-e608-99c35d89c1a3@linux.alibaba.com>
-In-Reply-To: <58f66f22-fd5f-685d-e608-99c35d89c1a3@linux.alibaba.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Dec 2020 14:38:50 +0530
-Message-ID: <CA+G9fYs8jzvh6c3sfaMoCetQydtSrzsmcUvG4DpPW33bad7Q0A@mail.gmail.com>
-Subject: Re: BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0x1e0
-To:     Alex Shi <alex.shi@linux.alibaba.com>
-Cc:     inux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Muchun Song <songmuchun@bytedance.com>,
-        alexander.h.duyck@linux.intel.com,
-        Yafang Shao <laoar.shao@gmail.com>, richard.weiyang@gmail.co,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/Ik6Kq09lnXxTrI8ZCP38H7.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Alex,
+--Sig_/Ik6Kq09lnXxTrI8ZCP38H7.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 1 Dec 2020 at 13:14, Alex Shi <alex.shi@linux.alibaba.com> wrote:
->
->
->
-> =E5=9C=A8 2020/12/1 =E4=B8=8A=E5=8D=883:52, Naresh Kamboju =E5=86=99=E9=
-=81=93:
-> > Crash log:
-> > -----------
-> > ioctl_sg01.c:81: TINFO: Found SCSI device /dev/sg1
-> > [  285.862123] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > [  285.863025] BUG: KASAN: null-ptr-deref in workingset_eviction+0xf2/0=
-x1e0
-> > [  285.863025] Read of size 4 at addr 00000000000000c8 by task kswapd0/=
-245
->
-> Hi Naresh,
->
-> Good to know you again. :)
+Hi all,
 
-Same here :)
+Today's linux-next merge of the akpm tree got a conflict in:
 
->
-> Would you like to use command to check whichh line cause the panic:
->
-> scripts/faddr2line vmlinux workingset_eviction+0xf2/0x1e0
+  Documentation/dev-tools/kasan.rst
 
-scripts/faddr2line vmlinux workingset_eviction+0xf2/0x1e0
-workingset_eviction+0xf2/0x1e0:
-workingset_eviction at ??:?
+between commit:
 
+  1a37e18bd4b9 ("Documentation: fix typos in dev-tools/kasan.rst")
 
-vmlinux and system.map files available in this location,
-https://builds.tuxbuild.com/1l0FDtgxYSNunuG5ERIXtvPjZ7R/
+from the jc_docs tree and commit:
 
->
-> I can't reproduce it. and my gcc version mismatch with yours.
+  bb26c2574ff9 ("kasan: update documentation")
 
-Please run below easy steps to reproduce.
-you may install docker and tuxmake.
+from the akpm tree.
 
-Please share if you have any debug patch or proposed fix patch,
-I would be happy to test.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Steps to reproduce:
---------------------
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+--=20
+Cheers,
+Stephen Rothwell
 
-# tuxmake --runtime docker --target-arch x86_64 --toolchain gcc-9 \
---kconfig defconfig \
---kconfig-add https://builds.tuxbuild.com/1l0FDtgxYSNunuG5ERIXtvPjZ7R/confi=
-g
+diff --cc Documentation/dev-tools/kasan.rst
+index 6d9abe57feaa,0d5d77919b1a..000000000000
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@@ -357,37 -410,30 +410,30 @@@ Or, if one of the tests failed:
+ =20
+          not ok 1 - kasan
+ =20
+- (1) Loadable Module
+- ~~~~~~~~~~~~~~~~~~~~
++=20
++ There are a few ways to run KUnit-compatible KASAN tests.
++=20
++ 1. Loadable module
++ ~~~~~~~~~~~~~~~~~~
+ =20
+  With ``CONFIG_KUNIT`` enabled, ``CONFIG_KASAN_KUNIT_TEST`` can be built as
+- a loadable module and run on any architecture that supports KASAN
+- using something like insmod or modprobe. The module is called ``test_kasa=
+n``.
++ a loadable module and run on any architecture that supports KASAN by load=
+ing
++ the module with insmod or modprobe. The module is called ``test_kasan``.
+ =20
+- (2) Built-In
+- ~~~~~~~~~~~~~
++ 2. Built-In
++ ~~~~~~~~~~~
+ =20
+  With ``CONFIG_KUNIT`` built-in, ``CONFIG_KASAN_KUNIT_TEST`` can be built-=
+in
+- on any architecture that supports KASAN. These and any other KUnit
+- tests enabled will run and print the results at boot as a late-init
+- call.
+ -on any architecure that supports KASAN. These and any other KUnit tests e=
+nabled
+++on any architecture that supports KASAN. These and any other KUnit tests =
+enabled
++ will run and print the results at boot as a late-init call.
+ =20
+- (3) Using kunit_tool
+- ~~~~~~~~~~~~~~~~~~~~~
++ 3. Using kunit_tool
++ ~~~~~~~~~~~~~~~~~~~
+ =20
+- With ``CONFIG_KUNIT`` and ``CONFIG_KASAN_KUNIT_TEST`` built-in, we can al=
+so
+- use kunit_tool to see the results of these along with other KUnit
+- tests in a more readable way. This will not print the KASAN reports
+- of tests that passed. Use `KUnit documentation <https://www.kernel.org/do=
+c/html/latest/dev-tools/kunit/index.html>`_ for more up-to-date
+- information on kunit_tool.
++ With ``CONFIG_KUNIT`` and ``CONFIG_KASAN_KUNIT_TEST`` built-in, it's also
++ possible use ``kunit_tool`` to see the results of these and other KUnit t=
+ests
++ in a more readable way. This will not print the KASAN reports of the test=
+s that
++ passed. Use `KUnit documentation <https://www.kernel.org/doc/html/latest/=
+dev-tools/kunit/index.html>`_
++ for more up-to-date information on ``kunit_tool``.
+ =20
+  .. _KUnit: https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.h=
+tml
+-=20
+- ``CONFIG_TEST_KASAN_MODULE`` is a set of KASAN tests that could not be
+- converted to KUnit. These tests can be run only as a module with
+- ``CONFIG_TEST_KASAN_MODULE`` built as a loadable module and
+- ``CONFIG_KASAN`` built-in. The type of error expected and the
+- function being run is printed before the expression expected to give
+- an error. Then the error is printed, if found, and that test
+- should be interpreted to pass only if the error was the one expected
+- by the test.
 
-# run LTP
-# cd /opt/ltp
-# ./runltp -s ioctl_sg01
-# you see below crash
+--Sig_/Ik6Kq09lnXxTrI8ZCP38H7.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-- Naresh
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/GClMACgkQAVBC80lX
+0GyGYAgAoBoLHvFv49xYYr413PvNhwnQYZX5kt2A6owS0+uNuuSPNB7jwMnryNUH
+oXc1viN/bXp+JfDOZ4MumELIG31lf+5qCHQrFv49015Lp4Lxh3V6sw+hy9OsiVaZ
+mpD/R3bRU1z2EN0kprEzufh+vO09egZUCxhMMrEoonGYXSCrtz3mKKigCGDU06o6
+Va/trUCpvATjLIYmNYI/BBox42gp9uFPF47mTdSg50IlrRwpnkmwpPd2cwUzlNSJ
+tYpDZyNBsQWW2IDJ1ulDG+CdCR1ol/bJ6F+M7ch0xzKNca9/LzCPGaJF0yPI8385
+Bsx5MkMw8LTnZlmHvOXx7D+N/s74TQ==
+=180w
+-----END PGP SIGNATURE-----
+
+--Sig_/Ik6Kq09lnXxTrI8ZCP38H7.--

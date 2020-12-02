@@ -2,75 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D1F2CB2E2
-	for <lists+linux-next@lfdr.de>; Wed,  2 Dec 2020 03:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C782CB3A6
+	for <lists+linux-next@lfdr.de>; Wed,  2 Dec 2020 05:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgLBCoA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Dec 2020 21:44:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56640 "EHLO mail.kernel.org"
+        id S1728086AbgLBECf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Dec 2020 23:02:35 -0500
+Received: from ozlabs.org ([203.11.71.1]:60617 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726245AbgLBCoA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 1 Dec 2020 21:44:00 -0500
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727005AbgLBECf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 1 Dec 2020 23:02:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F3C8206A1;
-        Wed,  2 Dec 2020 02:43:18 +0000 (UTC)
-Date:   Tue, 1 Dec 2020 21:43:15 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jassi Brar <jaswinder.singh@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cm4zN5Q9Bz9sSf;
+        Wed,  2 Dec 2020 15:01:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606881713;
+        bh=B9J8C0KrgdXeYlmEmzq3VAVeilwaaAUPotN8wo9Ayok=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BIvrcCAf0DhaD38btlsV94fX26Z0KG9UR8gdW/WR26y+NYVStzGx2s+6OAqoTvDRQ
+         V5yztQnr0nKd8wfLAb6Uw9/KJUuyWMkwARhHtVVEf1MHiknUTkx/iItYBXb78MdXjO
+         oYMnrXW+6VRZ7JiEp5/o7AinCF+GAlQKkSZm+y4arWTvztuyDUwVK+jT+sGfPolDmh
+         c7mgjGlhoGEEylDUmYeIJJhewp1+M/hDZR79Npr/NzFzSiAiVyUMjGXgkveN0i1YSE
+         pUKhbPdP8Iw+5IqhLrLkIQj21D2TEulytX/oEgTaVtZex7g67qQ5rTs42EVZ5L2036
+         HRtMtA6mbXHIg==
+Date:   Wed, 2 Dec 2020 15:01:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.com>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the mailbox tree
-Message-ID: <20201201214315.523923a0@oasis.local.home>
-In-Reply-To: <20201202123939.4a9e7549@canb.auug.org.au>
-References: <20201202123939.4a9e7549@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20201202150149.42543862@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/gZra8JwowWxMDVPKQPN+6ov";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 2 Dec 2020 12:39:39 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/gZra8JwowWxMDVPKQPN+6ov
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> In commit
-> 
->   983df5f2699f ("samples/ftrace: Mark my_tramp[12]? global")
-> 
-> Fixes tag
-> 
->   Fixes: 9d907f1ae80b8 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
-> 
-> has these problem(s):
-> 
->   - Subject does not match target commit subject
-> 
-> Maybe you meant
-> 
-> Fixes: 9d907f1ae80b ("samples/ftrace: Fix asm function ELF annotations")
-> 
-> or
-> 
-> Fixes: ae0cc3b7e7f5 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
-> 
+Hi all,
 
-Bah! Too late, it already made it into Linus's tree.
+After merging the block tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-I goofed. I was looking at both commits to see which one to apply it
-for, and ended up mixing the two.
+fs/btrfs/zoned.c: In function 'btrfs_get_dev_zone_info':
+fs/btrfs/zoned.c:168:21: error: 'struct block_device' has no member named '=
+bd_part'; did you mean 'bd_partno'?
+  168 |  nr_sectors =3D bdev->bd_part->nr_sects;
+      |                     ^~~~~~~
+      |                     bd_partno
+fs/btrfs/zoned.c: In function 'btrfs_sb_log_location_bdev':
+fs/btrfs/zoned.c:508:21: error: 'struct block_device' has no member named '=
+bd_part'; did you mean 'bd_partno'?
+  508 |  nr_sectors =3D bdev->bd_part->nr_sects;
+      |                     ^~~~~~~
+      |                     bd_partno
+fs/btrfs/zoned.c: In function 'btrfs_reset_sb_log_zones':
+fs/btrfs/zoned.c:606:21: error: 'struct block_device' has no member named '=
+bd_part'; did you mean 'bd_partno'?
+  606 |  nr_sectors =3D bdev->bd_part->nr_sects;
+      |                     ^~~~~~~
+      |                     bd_partno
 
-It was meant for:
+Caused by commits
 
-Fixes: ae0cc3b7e7f5 ("ftrace/samples: Add a sample module that implements modify_ftrace_direct()")
+  a782483cc1f8 ("block: remove the nr_sects field in struct hd_struct")
+  0d02129e76ed ("block: merge struct block_device and struct hd_struct")
 
-I'll have to add a script to my tests that makes sure the Fixes tag
-matches the description.
+interacting with commits
 
--- Steve
+  ab3ea6d0e65c ("btrfs: get zone information of zoned block devices")
+  1a4b440a1c2b ("btrfs: implement log-structured superblock for ZONED mode")
+
+from the btrfs tree.
+
+I applied the following merge fix patch (which may, or may not, be
+correct but fixes the build).
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 2 Dec 2020 14:55:04 +1100
+Subject: [PATCH] fixup for "block: merge struct block_device and struct
+ hd_struct"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/btrfs/zoned.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+index 155545180046..c38846659019 100644
+--- a/fs/btrfs/zoned.c
++++ b/fs/btrfs/zoned.c
+@@ -165,7 +165,7 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device)
+ 	if (!zone_info)
+ 		return -ENOMEM;
+=20
+-	nr_sectors =3D bdev->bd_part->nr_sects;
++	nr_sectors =3D bdev_nr_sectors(bdev);
+ 	zone_sectors =3D bdev_zone_sectors(bdev);
+ 	/* Check if it's power of 2 (see is_power_of_2) */
+ 	ASSERT(zone_sectors !=3D 0 && (zone_sectors & (zone_sectors - 1)) =3D=3D =
+0);
+@@ -505,7 +505,7 @@ int btrfs_sb_log_location_bdev(struct block_device *bde=
+v, int mirror, int rw,
+ 		return -EINVAL;
+ 	zone_size =3D zone_sectors << SECTOR_SHIFT;
+ 	zone_sectors_shift =3D ilog2(zone_sectors);
+-	nr_sectors =3D bdev->bd_part->nr_sects;
++	nr_sectors =3D bdev_nr_sectors(bdev);
+ 	nr_zones =3D nr_sectors >> zone_sectors_shift;
+=20
+ 	sb_zone =3D sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
+@@ -603,7 +603,7 @@ int btrfs_reset_sb_log_zones(struct block_device *bdev,=
+ int mirror)
+=20
+ 	zone_sectors =3D bdev_zone_sectors(bdev);
+ 	zone_sectors_shift =3D ilog2(zone_sectors);
+-	nr_sectors =3D bdev->bd_part->nr_sects;
++	nr_sectors =3D bdev_nr_sectors(bdev);
+ 	nr_zones =3D nr_sectors >> zone_sectors_shift;
+=20
+ 	sb_zone =3D sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
+--=20
+2.29.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gZra8JwowWxMDVPKQPN+6ov
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/HEa0ACgkQAVBC80lX
+0Gxa1Qf9Ea4iqccc3oQt0k/44YdydlXN0MI91ZunY6rhUcLYpJmx/JJ9JjZoGhCu
+FntKQpqZptvxmxk0fIPN+0apPzOsz9GN/Sz0yvImqm64TLhUtmGSrllnt0unCXTw
+xZef4MBMZTjj4GqS7cfHmBrpn2ocmzLQrTRrVl4fYEv3JIinbkXInV0NuC8T2qI+
+vb7ynJ84QwFQ3hbaEwpDGpf1jyQ5IhMNUMk41gCZFe8/iJpPN6l0dTtB81rQvs9A
+e0XLmJ7+d6zJy8nYEkF5eODTTJX0kU50EjsC2k3dgybLfGAkpVcxb5Qkm+1wJTPe
+YrgWWkSQeDHDN9z2tOii7Z8s4+Fv7w==
+=B42h
+-----END PGP SIGNATURE-----
+
+--Sig_/gZra8JwowWxMDVPKQPN+6ov--

@@ -2,108 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6072CBE1A
-	for <lists+linux-next@lfdr.de>; Wed,  2 Dec 2020 14:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0F92CC332
+	for <lists+linux-next@lfdr.de>; Wed,  2 Dec 2020 18:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgLBNUk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Dec 2020 08:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbgLBNUk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Dec 2020 08:20:40 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F69C0613CF;
-        Wed,  2 Dec 2020 05:20:00 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id iq13so1000537pjb.3;
-        Wed, 02 Dec 2020 05:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=taPUUzmWyx71JJ+EyPrlnb1liqlHwH94GdsdOoFOyjs=;
-        b=I9Q3qQbO7ZZ0jhafpTImuGaDyAR388ReHqJDt7wJth2miuZcjcrpUthnmNQTphpQ1g
-         WJNJ78oPCRm9oHImWLxvCq2bWQPZKH3puLQ69x+pHbxrfiECpcdvwUzv3WunGi+S22om
-         oHNMUsTCC4qSwixXo5jQXZvjVKofL+WIuaZ1DslUA8eEwl6AaTuYBwn2Kb+Vbd67tAlT
-         nrqPtm9RdDBFWJLLZ+jOhzU+E7LEfRHlcHkmjSyPKI8GTAXp1F+/XmUg4ssL1tzT92iA
-         2QgYKN8ZIONt8RTOt8x2Fl79c7T0geroX9uHCSvJhEerz1umGa6K9fPv3Rrz/n8GrjDn
-         hLPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=taPUUzmWyx71JJ+EyPrlnb1liqlHwH94GdsdOoFOyjs=;
-        b=O4WH6bcMnJSvNX/0WAsk/vEBwr6QW5tXyq5eYLjSI5nnpX7Wy37+l8C3fP/WGx6jq4
-         vbKZABxhvhJ5g4KeWoVH0OvMhGR6heCTcmc5QQ5jzMwIN1g+2Ib7x29VXKJfmutmcsYt
-         y4GVQGvadNSilgqZ9ZavZG1lKYI5iO8TRe5TJ3gZnHhLoiV9S6p0pVdTW+Bs2i1PXg25
-         6W8PPa+SVCShLssJz2YNwGSH6abrHszHQmeIXvzCASWgaNXZuqbO5U5D5s4UCc8V1YnD
-         tXPUFJlRNaa4wDyD/Pn5lJIrRCtYV/hqYBuJMbRUHp4ZkAQO2xLpZo2RjCmQDEauBwCK
-         RYsw==
-X-Gm-Message-State: AOAM532R23fABS3xxfBTtv8FhTtfC+p1gSovHxHx07h8B2pT0TXIaJZh
-        gV+wKG43ZG7vEkLdmWWpnfQ=
-X-Google-Smtp-Source: ABdhPJwU5kOQ5WeBcuxnv2+Y2qYmI4Cuqt40VPsuoq9e0crbwLJa6Py/3qzM75nTtoM5H4lVfXH5QQ==
-X-Received: by 2002:a17:902:d90d:b029:da:5114:7275 with SMTP id c13-20020a170902d90db02900da51147275mr2637399plz.64.1606915199889;
-        Wed, 02 Dec 2020 05:19:59 -0800 (PST)
-Received: from localhost.localdomain ([223.228.6.132])
-        by smtp.gmail.com with ESMTPSA id gp14sm1978287pjb.6.2020.12.02.05.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 05:19:59 -0800 (PST)
-From:   Divya Bharathi <divya27392@gmail.com>
-X-Google-Original-From: Divya Bharathi <divya.bharathi@dell.com>
-To:     dvhart@infradead.org, Hans de Goede <hdegoede@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Divya Bharathi <divya.bharathi@dell.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Prasanth KSR <prasanth.ksr@dell.com>
-Subject: [PATCH] platform/x86: dell-wmi-sysman: work around for BIOS bug
-Date:   Wed,  2 Dec 2020 18:49:35 +0530
-Message-Id: <20201202131935.307372-1-divya.bharathi@dell.com>
-X-Mailer: git-send-email 2.25.1
+        id S1728661AbgLBROK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Dec 2020 12:14:10 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16936 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726276AbgLBROK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Dec 2020 12:14:10 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2H4whL062017;
+        Wed, 2 Dec 2020 12:13:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0H2V1uDjEplQbB3pXgQHeoAFLdGws8lRhW4VbogIoR0=;
+ b=Txdfj6ET+WszriMirFy8YPK7IiELBXZti8bzOjVzR/JUTrNth02H0/AWjVEcJCRJrBrV
+ cSNsxM1pud77k+RO7wfwXJeyYUdW93e0cEZvHj7YDZDTmjR3XpQQDu5bt96pZWVZgu5i
+ UedxgDa6FRC9LPqx2synDtIWRD3ssRmIhPUoCd9JrnmUOpRVg8o8qXCypnGBwW38u1o3
+ blKNupkyJx3Gzoj6C+W3C5x/mxY0AzitwGqqf6Q75ESFpquSsudGWqpLwHkrvSYDtrU3
+ rk9KkDxYP9U/YzXv5AF2uZDpm9GrvR5WbarbXr3XwYy/3PepLAUeUPxkPJBxuiVq9JVx Mg== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355k19nxn2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 12:13:21 -0500
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B2HCgNK002941;
+        Wed, 2 Dec 2020 17:13:18 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma04dal.us.ibm.com with ESMTP id 353e69jkhg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 17:13:18 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B2HDID011862592
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Dec 2020 17:13:18 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0123112063;
+        Wed,  2 Dec 2020 17:13:17 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B676112062;
+        Wed,  2 Dec 2020 17:13:17 +0000 (GMT)
+Received: from oc7186267434.ibm.com (unknown [9.65.222.207])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Dec 2020 17:13:17 +0000 (GMT)
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "Dwip N. Banerjee" <dnbanerg@us.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20201202122009.0fe25caf@canb.auug.org.au>
+From:   Thomas Falcon <tlfalcon@linux.ibm.com>
+Message-ID: <0f612db3-9ac8-0e8d-0437-5cc1243db326@linux.ibm.com>
+Date:   Wed, 2 Dec 2020 11:13:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201202122009.0fe25caf@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_08:2020-11-30,2020-12-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020096
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-BIOS sets incorrect value (zero) when SET value passed for integer attribute
-with + sign. Added workaround to remove + sign before passing input to BIOS
-
-Co-developed-by: Mario Limonciello <mario.limonciello@dell.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
-Co-developed-by: Prasanth KSR <prasanth.ksr@dell.com>
-Signed-off-by: Prasanth KSR <prasanth.ksr@dell.com>
-Signed-off-by: Divya Bharathi <divya.bharathi@dell.com>
----
- drivers/platform/x86/dell-wmi-sysman/int-attributes.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/x86/dell-wmi-sysman/int-attributes.c b/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-index ea773d8e8d3a..75aedbb733be 100644
---- a/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-+++ b/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-@@ -39,7 +39,7 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
-  * @instance_id: The instance on which input is validated
-  * @buf: Input value
-  */
--static int validate_integer_input(int instance_id, const char *buf)
-+static int validate_integer_input(int instance_id, char *buf)
- {
- 	int in_val;
- 	int ret;
-@@ -51,6 +51,12 @@ static int validate_integer_input(int instance_id, const char *buf)
- 			in_val > wmi_priv.integer_data[instance_id].max_value)
- 		return -EINVAL;
- 
-+	/* workaround for BIOS error.
-+	 * validate input to avoid setting 0 when integer input passed with + sign
-+	 */
-+	if (*buf == '+')
-+		memmove(buf, (buf + 1), strlen(buf + 1) + 1);
-+
- 	return ret;
- }
- 
--- 
-2.25.1
-
+On 12/1/20 7:20 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the net-next tree got a conflict in:
+>
+>    drivers/net/ethernet/ibm/ibmvnic.c
+>
+> between commit:
+>
+>    b71ec9522346 ("ibmvnic: Ensure that SCRQ entry reads are correctly ordered")
+>
+> from the net tree and commit:
+>
+>    ec20f36bb41a ("ibmvnic: Correctly re-enable interrupts in NAPI polling routine")
+>
+> from the net-next tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+Hi, Stephen, thank you for fixing that conflict. Sorry for the 
+inconvenience.

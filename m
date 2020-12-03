@@ -2,128 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 098072CD1D6
-	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 09:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264452CD22E
+	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 10:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728407AbgLCIxf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Dec 2020 03:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727473AbgLCIxd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Dec 2020 03:53:33 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5CAC061A4D;
-        Thu,  3 Dec 2020 00:52:53 -0800 (PST)
+        id S2388586AbgLCJJV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Dec 2020 04:09:21 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43633 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388383AbgLCJJV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 3 Dec 2020 04:09:21 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CmqNc5QNnz9sPB;
-        Thu,  3 Dec 2020 19:52:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cmqkt0Svcz9sVx;
+        Thu,  3 Dec 2020 20:08:38 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1606985569;
-        bh=CVr4YX+Bk9HsWwon3ivVVAYTYd1URPLmyoPl5JfykA8=;
+        s=201702; t=1606986518;
+        bh=v57HY7yzbu2n48GAoHI2xpG949ISV126+/mBCGIwqoU=;
         h=Date:From:To:Cc:Subject:From;
-        b=jrLsUZrJW+SWJH4BB1ePcJgfPWplMsjupll4kqGtZXbtEwfWAewVnboZiJlV/XEb5
-         LHOZKMuuW9fLvNu4Qq3lZmAuiXDB560bxVxF91kVEoTqiZ88NP5cJVi8tc68js8knf
-         yha2htEwKSrPsXrxm54ILFxQvA1d8zhYE+UrE8ESDBbZlRlXwtN5PtUUs8fb8w/X1k
-         IShLcCpd+KaGQx3oKroPplHLHcYDMiyy3MLeq1RaXUKe3uHAKuHeYft2r13bBcB78/
-         VVA4fpqKSxYDk6mdVb12SbNvVExI4m/cxhG4gtkPPpXxTfZFrhmVp6stNbfpIIq7Jh
-         JkTqx5x3whd9Q==
-Date:   Thu, 3 Dec 2020 19:52:46 +1100
+        b=ludUBYFzWyrkcybz9c3U+f55oDtA+OaG0GOW6y3K3m8Nwmc+GSYBiXnuuUsR2jDGr
+         3SgYgdv6aNBRWOkmJpTkOcVnENoJCQgHDPSOlDp4DN6bFDuWIX/vfxoaf7Sj25JYya
+         yNxMxVwkujATCYNPR6ywsULMaaveSUy6Z53bg/QeRVtR1vXhCnAM3eiHnWDLa1EpgJ
+         epuJeaJ0s43bw6E3MXc02bXLH08BrMPqgyFsYCx7WOJf3iXMwa+rbAnO+Hq/f/aS1g
+         Zy9elv3K8pz+o9bLXjfNd6/XzfcoVosuhdheIgsXHeX6rQrjdsWV5vHEIySqKDKe3w
+         aUMICVAaDvwVg==
+Date:   Thu, 3 Dec 2020 20:08:37 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
+Cc:     Rui Salvaterra <rsalvaterra@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-Subject: linux-next: build failure after merge of the akpm tree
-Message-ID: <20201203195247.498b7ac1@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20201203200837.68df59a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cvdHHyu7fxt9F+8JOd4hM..";
+Content-Type: multipart/signed; boundary="Sig_/uDw.SJl9/QsNuxOCE4QhoGW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/cvdHHyu7fxt9F+8JOd4hM..
+--Sig_/uDw.SJl9/QsNuxOCE4QhoGW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the akpm tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the akpm-current tree, today's linux-next build (powerpc
+ppc44x_defconfig) failed like this:
 
-mm/kasan/quarantine.c: In function 'quarantine_put':
-mm/kasan/quarantine.c:197:15: error: 'info' undeclared (first use in this f=
-unction)
-  197 |   qlink_free(&info->quarantine_link, cache);
-      |               ^~~~
-mm/kasan/quarantine.c:197:15: note: each undeclared identifier is reported =
-only once for each function it appears in
-mm/kasan/quarantine.c:199:3: error: 'return' with no value, in function ret=
-urning non-void [-Werror=3Dreturn-type]
-  199 |   return;
-      |   ^~~~~~
-mm/kasan/quarantine.c:171:6: note: declared here
-  171 | bool quarantine_put(struct kmem_cache *cache, void *object)
-      |      ^~~~~~~~~~~~~~
+WARNING: unmet direct dependencies detected for CRYPTO_LZO
+  Depends on [m]: CRYPTO [=3Dm]
+  Selected by [y]:
+  - ZRAM_DEF_COMP_LZORLE [=3Dy] && <choice>
+  Selected by [m]:
+  - UBIFS_FS [=3Dm] && MISC_FILESYSTEMS [=3Dy] && MTD_UBI [=3Dm] && UBIFS_F=
+S_LZO [=3Dy]
 
-Caused by patches
+WARNING: unmet direct dependencies detected for CRYPTO_LZO
+  Depends on [m]: CRYPTO [=3Dm]
+  Selected by [y]:
+  - ZRAM_DEF_COMP_LZORLE [=3Dy] && <choice>
+  Selected by [m]:
+  - UBIFS_FS [=3Dm] && MISC_FILESYSTEMS [=3Dy] && MTD_UBI [=3Dm] && UBIFS_F=
+S_LZO [=3Dy]
 
-  "kasan: rename get_alloc/free_info"
-  "kasan: sanitize objects when metadata doesn't fit"
+WARNING: unmet direct dependencies detected for CRYPTO_LZO
+  Depends on [m]: CRYPTO [=3Dm]
+  Selected by [y]:
+  - ZRAM_DEF_COMP_LZORLE [=3Dy] && <choice>
+  Selected by [m]:
+  - UBIFS_FS [=3Dm] && MISC_FILESYSTEMS [=3Dy] && MTD_UBI [=3Dm] && UBIFS_F=
+S_LZO [=3Dy]
 
-I have applied the following fix patch:
+WARNING: unmet direct dependencies detected for CRYPTO_LZO
+  Depends on [m]: CRYPTO [=3Dm]
+  Selected by [y]:
+  - ZRAM_DEF_COMP_LZORLE [=3Dy] && <choice>
+  Selected by [m]:
+  - UBIFS_FS [=3Dm] && MISC_FILESYSTEMS [=3Dy] && MTD_UBI [=3Dm] && UBIFS_F=
+S_LZO [=3Dy]
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 3 Dec 2020 19:41:49 +1100
-Subject: [PATCH] kasan-rename-get_alloc-free_info-fix
+WARNING: unmet direct dependencies detected for CRYPTO_LZO
+  Depends on [m]: CRYPTO [=3Dm]
+  Selected by [y]:
+  - ZRAM_DEF_COMP_LZORLE [=3Dy] && <choice>
+  Selected by [m]:
+  - UBIFS_FS [=3Dm] && MISC_FILESYSTEMS [=3Dy] && MTD_UBI [=3Dm] && UBIFS_F=
+S_LZO [=3Dy]
+ld: crypto/lzo.o: in function `lzo_compress':
+lzo.c:(.text+0xbc): undefined reference to `lzo1x_1_compress'
+ld: crypto/lzo.o: in function `lzo_scompress':
+lzo.c:(.text+0x228): undefined reference to `lzo1x_1_compress'
+ld: crypto/lzo.o: in function `lzo_mod_fini':
+lzo.c:(.exit.text+0x1c): undefined reference to `crypto_unregister_alg'
+ld: lzo.c:(.exit.text+0x34): undefined reference to `crypto_unregister_scom=
+p'
+ld: crypto/lzo.o: in function `lzo_mod_init':
+lzo.c:(.init.text+0x20): undefined reference to `crypto_register_alg'
+ld: lzo.c:(.init.text+0x30): undefined reference to `crypto_register_scomp'
+ld: lzo.c:(.init.text+0x40): undefined reference to `crypto_unregister_alg'
+ld: crypto/lzo-rle.o: in function `lzorle_compress':
+lzo-rle.c:(.text+0xbc): undefined reference to `lzorle1x_1_compress'
+ld: crypto/lzo-rle.o: in function `lzorle_scompress':
+lzo-rle.c:(.text+0x228): undefined reference to `lzorle1x_1_compress'
+ld: crypto/lzo-rle.o: in function `lzorle_mod_fini':
+lzo-rle.c:(.exit.text+0x1c): undefined reference to `crypto_unregister_alg'
+ld: lzo-rle.c:(.exit.text+0x34): undefined reference to `crypto_unregister_=
+scomp'
+ld: crypto/lzo-rle.o: in function `lzorle_mod_init':
+lzo-rle.c:(.init.text+0x20): undefined reference to `crypto_register_alg'
+ld: lzo-rle.c:(.init.text+0x30): undefined reference to `crypto_register_sc=
+omp'
+ld: lzo-rle.c:(.init.text+0x40): undefined reference to `crypto_unregister_=
+alg'
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/kasan/quarantine.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Caused by commit
 
-diff --git a/mm/kasan/quarantine.c b/mm/kasan/quarantine.c
-index feae26ea5cbb..d98b516f372f 100644
---- a/mm/kasan/quarantine.c
-+++ b/mm/kasan/quarantine.c
-@@ -194,9 +194,9 @@ bool quarantine_put(struct kmem_cache *cache, void *obj=
-ect)
-=20
- 	q =3D this_cpu_ptr(&cpu_quarantine);
- 	if (q->offline) {
--		qlink_free(&info->quarantine_link, cache);
-+		qlink_free(&meta->quarantine_link, cache);
- 		local_irq_restore(flags);
--		return;
-+		return false;
- 	}
- 	qlist_put(q, &meta->quarantine_link, cache->size);
- 	if (unlikely(q->bytes > QUARANTINE_PERCPU_SIZE)) {
---=20
-2.29.2
+  a6d52df2d8bc ("zram: break the strict dependency from lzo")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/cvdHHyu7fxt9F+8JOd4hM..
+--Sig_/uDw.SJl9/QsNuxOCE4QhoGW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/Ip18ACgkQAVBC80lX
-0GxR4Qf/dq19EiH/ubACSjcTch4TfIUOuBPP2/cBkbNo+fihPxUgQ8kUd5+2oMDj
-hZGrFGZV/k2NRTaG9+PRMObiaO3cCfzpLkO4fInictNbqRjXfPE4pzDD240dLmbX
-/hJFkLcCQp+90kJ9+ho/NAEeZzCEbQknQhWssGroqQpUcuL/3ReurDXtWgrZf8Vy
-9rlSU+XAOeqKZGxsrrsqHpw3e3UkOPbrY34f87OKhrrNCVDuXAwr8rT/ZIOPX9fm
-kxBzo3WNmmOzzTOoXHFcG6sE3RsqSbeV9DRGc2r36vhqTJM9UtdDh9WJVO21ivqC
-TEeDicbOk8hzAghB3GOp6k47m3YpqA==
-=na+e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/IqxUACgkQAVBC80lX
+0GyZkQgAmQbfqBv+DG62p7CPvkKkeuA1UVe0Fq8l5ghEHnT75/jJBYsoDjGqTH6B
+BN7x61bMHezcMtkVT/o9gwsc0oKPO8cKevCqM6sOVsP4esQIatPSefUVW0iDkImp
+BYkH7QZ44xN03O40TMDtjwBu2+ko9mWvCkdsRoNYIubC6istZwc4akqtP/jFx24R
+Q+ZBWClBdhLrvyuUqLPF8Vgh0/moONwRAp1yrNSzj4Wl5ARIjvMNTKaIudx9AV8m
+4XsM7X77n7OmJPzR2t7xdtlxPhZ3bO/KuBTV5aIHp31szWyhv3fFCmGbCcQ+ELLt
+5cN7K5L+XO01i0qLcW7G6WRKchZ6JQ==
+=qfgH
 -----END PGP SIGNATURE-----
 
---Sig_/cvdHHyu7fxt9F+8JOd4hM..--
+--Sig_/uDw.SJl9/QsNuxOCE4QhoGW--

@@ -2,74 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC722CCD70
-	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 04:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF3E2CCDAA
+	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 04:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727075AbgLCDsd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Dec 2020 22:48:33 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8182 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726734AbgLCDsd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Dec 2020 22:48:33 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CmhcD1YJvz15WqW;
-        Thu,  3 Dec 2020 11:47:24 +0800 (CST)
-Received: from [10.136.114.67] (10.136.114.67) by smtp.huawei.com
- (10.3.19.212) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 3 Dec 2020
- 11:47:49 +0800
-Subject: Re: linux-next: manual merge of the block tree with the f2fs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>, Jaegeuk Kim <jaegeuk@kernel.org>
-CC:     Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        id S1727929AbgLCD6Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Dec 2020 22:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727449AbgLCD6P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Dec 2020 22:58:15 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A66C061A4D;
+        Wed,  2 Dec 2020 19:57:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cmhqv627Gz9sT5;
+        Thu,  3 Dec 2020 14:57:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1606967853;
+        bh=Ebk9NTXJeBR3VNzbERK43Lbken/T5duu1b6F5A4LySA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cdMIhsZ6unNX9nybG/UZCwhy2aMvb0ZmJ1qPhia44GEQ/frrZlnDLuX/mZW6S2XcM
+         0t4r7ZeFFbIqWBnkyuYAflbXy9qBJk6bSlcsglk8ocvkkX2/0nCFRe+FsO4/0irneT
+         gTpB8zI8TL04EM5GR2u75q3SbiQPO53ySylinv7crJ1bKPGuy3luDFI0LV+rzhWlIL
+         gra5ZWaPXuUqdeltNVQd1dqA8hWf7i002lqBXYEwZnzP4kgIDdPN1dl7rB73nNNT1r
+         uM3ncjx2RJDhwUpoAARg7/FIZ/C5TQtRbt8vSm2RpptcA2WNEr9rhXTpTEzvFhBkWJ
+         JQbaF0/mUx22g==
+Date:   Thu, 3 Dec 2020 14:57:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Chao Yu <chao@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201203144348.70f139a9@canb.auug.org.au>
-From:   Chao Yu <yuchao0@huawei.com>
-Message-ID: <047a6e22-2e8a-4c36-bcbc-3108606c58ff@huawei.com>
-Date:   Thu, 3 Dec 2020 11:47:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
+Subject: Re: linux-next: manual merge of the block tree with the f2fs tree
+Message-ID: <20201203145731.1894ec90@canb.auug.org.au>
 In-Reply-To: <20201203144348.70f139a9@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.136.114.67]
-X-CFilter-Loop: Reflected
+References: <20201203144348.70f139a9@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=1bMG=H84QhTOnL5l.E88d9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020/12/3 11:43, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the block tree got conflicts in:
-> 
->    fs/f2fs/checkpoint.c
->    fs/f2fs/f2fs.h
->    fs/f2fs/super.c
-> 
-> between commit:
-> 
->    5c0602188dc7 ("f2fs: fix kbytes written stat for multi-device case")
-> 
-> from the f2fs tree and commits:
-> 
->    8446fe9255be ("block: switch partition lookup to use struct block_device")
->    9499ffc75217 ("f2fs: remove a few bd_part checks")
-> 
-> from the block tree.
-> 
-> I fixed it up (I think, see below, fs/f2fs/f2fs.h and fs/f2fs/super.c
-> used the versions from the f2fs tree) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
+--Sig_/=1bMG=H84QhTOnL5l.E88d9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The fix looks good to me. :)
+Hi all,
 
-Thanks,
+On Thu, 3 Dec 2020 14:43:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> diff --cc fs/f2fs/checkpoint.c
+> index 14ba1519639e,54a1905af052..000000000000
+> --- a/fs/f2fs/checkpoint.c
+> +++ b/fs/f2fs/checkpoint.c
+> @@@ -1385,27 -1385,6 +1385,26 @@@ static void commit_checkpoint(struct f2
+>   	f2fs_submit_merged_write(sbi, META_FLUSH);
+>   }
+>  =20
+>  +static inline u64 get_sectors_written(struct block_device *bdev)
+>  +{
+> - 	return bdev->bd_part ?
+> - 		(u64)part_stat_read(bdev->bd_part, sectors[STAT_WRITE]) : 0;
+> ++	return (u64)part_stat_read(bdev, sectors[STAT_WRITE]) : 0;
+                                                             ^^^^
+Clearly, that should have been removed - I have done that now.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=1bMG=H84QhTOnL5l.E88d9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/IYisACgkQAVBC80lX
+0GzA0Af9EVTFd6o4vzJy7V5wrgoxVwrEz7vZl+Ck4cc4P0kjILMQfxjd4eFbV4yI
+kcdigSNERQkmgEW8ctraHxoF77P+59FIV7IgdGSBDxYrXP06BAoezjzbYlpBxtGe
+px97p2lCByi9vY1wBGab+fd7hAso/OR7KV4HuteYjdNnuC55In5R7bcNIPujcKdw
+Em5YhcFR7Z5Y8/SNdD/uvU23kscVY6bzvIIPwpuU6BjW/omHVm6DPIW1MvrEtpMG
+W/Qt5UA49BDoIWg+ND/8CB0t03f6RQFSg1LDoRml9+MBaHWaSspPOaLjcEhZYIKI
+FCP9ImwwMZXfato1/WR9QbAfGHkaGw==
+=pMwz
+-----END PGP SIGNATURE-----
+
+--Sig_/=1bMG=H84QhTOnL5l.E88d9--

@@ -2,128 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE2B2CD574
-	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 13:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECABE2CD5B6
+	for <lists+linux-next@lfdr.de>; Thu,  3 Dec 2020 13:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730366AbgLCMYo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Dec 2020 07:24:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730367AbgLCMYn (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 3 Dec 2020 07:24:43 -0500
-Date:   Thu, 3 Dec 2020 14:23:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1606998242;
-        bh=8PfaNyzlXErk0Sdz7tJupSx2Z12MU7j+3qVRGGvHsEk=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tdvTfdzav8GcY1bgFKYdql8UU+pbBvpBuk7TO/SMUviH9cpZoJbWxQPQs5cfop7cg
-         exzH/9lTGypSJCg+VcYsgERYc/+mR5FNBYjUgR2lDk8JYrK0g+4gxAdusJrjO053kL
-         VHm/9uRAgjOKCkAbc1n+o8LwWnBqWMS2SZYh9BM53dZJVOPmtObbDaKkfDGIMaXUOB
-         8c0TUX36luhsfzMsrXr9jktlQ/Rz0CFTfo2YqUgICzjEkFgc6rQlZ9d72BIj+CnhUa
-         9K0aCQj2aFNMpCN/S01Bf8p7lMwYHE/DAOvMq/8toXVzd7IBnKoQw5HyHjC8qFKcSy
-         FSEaqLQUDz3Pg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     syzbot <syzbot+86800a8349c0f3f9466e@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Subject: Re: linux-next boot error: kernel BUG at
- include/linux/page-flags.h:LINE!
-Message-ID: <20201203122354.GI751215@kernel.org>
-References: <00000000000056f29e05b58d448f@google.com>
+        id S1726463AbgLCMp5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Dec 2020 07:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726390AbgLCMp4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Dec 2020 07:45:56 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10894C061A4E;
+        Thu,  3 Dec 2020 04:45:16 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a16so3266792ejj.5;
+        Thu, 03 Dec 2020 04:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ua2t1e5AwG+8Whsthixj6dJL63Xm4ciJTr6SvcxO+VE=;
+        b=tq2HpIvz2T+iWc6SwIgX+ENFuDhiFtTYbk1yehIivW7DytCmof17H6VHIka+KLA3AI
+         hW6IAv1IoRTRnvgvEuwkrGK93nXkgpjGFG9KDiuVaa1ykchQVY7lXdJN1qXvsWVE754/
+         oGfeB6r4/m1cWR1opvyYhCq2uNKQOFQNiDNAHGcZX0AqTNQ+jz5fH7vFiY3cD68nbfdJ
+         85F31GLzFNMpfX1GndGkLRybPGpzeryLwwvFA1/+NnUL6hqt8yytb3I8tIteyZUIwSFH
+         xyw+/WEccXkRFjtHEHHDArQtsjrcjaKZQ2LX5VggubhCh9KzCd+8e3bLQ97fA1E9Tdmr
+         aa9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ua2t1e5AwG+8Whsthixj6dJL63Xm4ciJTr6SvcxO+VE=;
+        b=Ef4zzI3wE6d75FUGiskrulBTBVVhPdpWZirOOrPRKMnZFbTtsUudVpwxvT7t0TDYZ2
+         GmM4kPTqux/vNBIdQAbaZOJMhC+fSvqHXhejmaGi98JuhiKtT/mTAxVjuM8WBJnAo9AF
+         cpLW/adwX2ZtPgdCQABzFu8oxd34jrHLPS6uCM67jfnuBxFKuBmnDL5dinFTwUW27iy5
+         eclKaO3i9G1VgcJX0K1xp9YS7lYUZc4GjmYF2PTpDhIBjWJGZFbH3/vxwrMGk3t5pzSr
+         jhGiRTYP+vFqSHojssyuBfYvNePxe9qJ5i95Wrq+Zmyx3hP14ujmTGEO++jMKk7MGhTD
+         r4gg==
+X-Gm-Message-State: AOAM532e9fWfaptlLLEedHmHHLxH1Tshh5mgVaqZrgXdsUosh8AtD0Vc
+        HUGe6wCxnNXucJnVFBjHgK0RNlxzEOCTX9iH8Bg=
+X-Google-Smtp-Source: ABdhPJxHFFCie/ax3UXHBk55fHUvmgnSPhYP3vdgsahjV/nwul6L+/1gWEvPCEQS31CLYyzZFiot/wacnqM7w4SbgJs=
+X-Received: by 2002:a17:906:d8a1:: with SMTP id qc1mr2278901ejb.294.1606999514839;
+ Thu, 03 Dec 2020 04:45:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000056f29e05b58d448f@google.com>
+References: <00000000000056f29e05b58d448f@google.com> <20201203122354.GI751215@kernel.org>
+In-Reply-To: <20201203122354.GI751215@kernel.org>
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+Date:   Thu, 3 Dec 2020 12:45:03 +0000
+Message-ID: <CAA5enKZ23Fy3KsHbR3cOxRm6+=JLfU3Lko+JFn7DKM951B_mMQ@mail.gmail.com>
+Subject: Re: linux-next boot error: kernel BUG at include/linux/page-flags.h:LINE!
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     syzbot <syzbot+86800a8349c0f3f9466e@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 03:00:25AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    bfd521e1 Add linux-next specific files for 20201203
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14d5d403500000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=76090eb4ba939f87
-> dashboard link: https://syzkaller.appspot.com/bug?extid=86800a8349c0f3f9466e
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+86800a8349c0f3f9466e@syzkaller.appspotmail.com
+On Thu, 3 Dec 2020 at 12:24, Mike Rapoport <rppt@kernel.org> wrote:
+> Yeah, the change to initialization of "unavailable" memory missed pfn 0 :(
+> This should fix it:
 
-...
-
-> page:ffffea0000000000 is uninitialized and poisoned
-> raw: ffffffffffffffff ffffea0000000008 ffffea0000000008 ffffffffffffffff
-> raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff
-> page dumped because: VM_BUG_ON_PAGE(1 && PageCompound(page))
-> ------------[ cut here ]------------
-> kernel BUG at include/linux/page-flags.h:356!
-
-Yeah, the change to initialization of "unavailable" memory missed pfn 0 :(
-This should fix it:
-
-From 84a1c2531374706f3592a638523278aa29aaa448 Mon Sep 17 00:00:00 2001
-From: Mike Rapoport <rppt@linux.ibm.com>
-Date: Thu, 3 Dec 2020 11:40:17 +0200
-Subject: [PATCH] fixup for "mm: refactor initialization of stuct page for holes"
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- mm/page_alloc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ce2bdaabdf96..86fde4424e87 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6227,7 +6227,8 @@ void __init __weak memmap_init(unsigned long size, int nid,
- 			       unsigned long zone,
- 			       unsigned long range_start_pfn)
- {
--	unsigned long start_pfn, end_pfn, next_pfn = 0;
-+	static unsigned long hole_start_pfn;
-+	unsigned long start_pfn, end_pfn;
- 	unsigned long range_end_pfn = range_start_pfn + size;
- 	u64 pgcnt = 0;
- 	int i;
-@@ -6235,7 +6236,6 @@ void __init __weak memmap_init(unsigned long size, int nid,
- 	for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
- 		start_pfn = clamp(start_pfn, range_start_pfn, range_end_pfn);
- 		end_pfn = clamp(end_pfn, range_start_pfn, range_end_pfn);
--		next_pfn = clamp(next_pfn, range_start_pfn, range_end_pfn);
- 
- 		if (end_pfn > start_pfn) {
- 			size = end_pfn - start_pfn;
-@@ -6243,10 +6243,10 @@ void __init __weak memmap_init(unsigned long size, int nid,
- 					 MEMINIT_EARLY, NULL, MIGRATE_MOVABLE);
- 		}
- 
--		if (next_pfn < start_pfn)
--			pgcnt += init_unavailable_range(next_pfn, start_pfn,
--							zone, nid);
--		next_pfn = end_pfn;
-+		if (hole_start_pfn < start_pfn)
-+			pgcnt += init_unavailable_range(hole_start_pfn,
-+							start_pfn, zone, nid);
-+		hole_start_pfn = end_pfn;
- 	}
- 
- 	/*
-@@ -6256,8 +6256,8 @@ void __init __weak memmap_init(unsigned long size, int nid,
- 	 * considered initialized. Make sure that memmap has a well defined
- 	 * state.
- 	 */
--	if (next_pfn < range_end_pfn)
--		pgcnt += init_unavailable_range(next_pfn, range_end_pfn,
-+	if (hole_start_pfn < range_end_pfn)
-+		pgcnt += init_unavailable_range(hole_start_pfn, range_end_pfn,
- 						zone, nid);
- 
- 	if (pgcnt)
--- 
-2.28.0
-
+Tried locally and it fixes the issue for me :)

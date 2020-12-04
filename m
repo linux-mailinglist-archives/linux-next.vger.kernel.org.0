@@ -2,98 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF90A2CE981
-	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 09:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E34A2CEABE
+	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 10:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727511AbgLDI0N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Dec 2020 03:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S1729016AbgLDJUv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Dec 2020 04:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727069AbgLDI0N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Dec 2020 03:26:13 -0500
+        with ESMTP id S1727518AbgLDJUv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Dec 2020 04:20:51 -0500
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B57C061A4F;
-        Fri,  4 Dec 2020 00:25:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB474C061A4F;
+        Fri,  4 Dec 2020 01:20:10 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CnQkd4hnhz9s0b;
-        Fri,  4 Dec 2020 19:25:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CnRxf2ZMXz9sWt;
+        Fri,  4 Dec 2020 20:20:06 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607070329;
-        bh=RKQ/0KSALkz92r6pcBPR62y4zwCSR2/gn2uxYc4+cr8=;
+        s=201702; t=1607073607;
+        bh=bAsk8n7gqFwKjHWwsHSOXYDy5wkPoQQyApSqZbNhf4E=;
         h=Date:From:To:Cc:Subject:From;
-        b=Ww69xVGbUUdia/X5JR/nsFVtRzhtL+uW/jVN3WhBfkRzFgGZ0nNeufcfbydnn7H9n
-         2GJ6chRzrQEL55H17mgQKtRg/I2zFaGzU8I0td8jOrn2i/WjAqYRa8Hmev4sK66HJE
-         aFQQa9LqGowpVbyP/aLwYyAOtLwLB/oKIP4st/gzERNYWOg0OjMYigsfpY81OC32UD
-         qczYbVRiEr6rhC67sMeWv3AEW4EMpHyp51gu66Z0b5n26nlj0/ms1YxOXxQ2lcnoCT
-         Xxi9JkLuX0O9mZ7WBuICc6ZevoFrQYouLD7lHMOvSl9gTXMvrkxT+ZpNWlYcLGD5V3
-         03nO/6qaPy8WA==
-Date:   Fri, 4 Dec 2020 19:25:26 +1100
+        b=COBC7McCpEGqFC/wJt6Ji1ZUxqSBbcsgMDiH0OSauzjbuvowuzHXDpraMKu0hK4vo
+         O7oTfw65+pxvnA2eT5Qa3+Y9Lijmwh52qTME9LTd1w40IfgIwnA7S6hZ2tD9Dez3E4
+         fAEigSI2laov23FS/NMJYNdM+nLBx2sTJFXlNdSpHCJJIUtLDu4yenyNtBCW0k8M7l
+         vFUqArdK1JxBKBJvRW+RSGjJYoQzLbhbqz8tEzOKrsRYFY8IhhVjhPBUo1zuG5TTl2
+         gypIgfpy9vd78mZbvxThAwnqPxMtI0nasSwYOBeqbKAhwiBI0vn8OypJV9k24Gm9Yf
+         DsI/GZ4c5blEA==
+Date:   Fri, 4 Dec 2020 20:20:05 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the rcu tree
-Message-ID: <20201204192526.0b38fb02@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>
+Subject: linux-next: manual merge of the akpm-current tree with the bpf-next
+ tree
+Message-ID: <20201204202005.3fb1304f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i/_kt//s4/F7sxLnsqyqfNO";
+Content-Type: multipart/signed; boundary="Sig_/+K=st_HCMWn3JpH6IhaFwtk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i/_kt//s4/F7sxLnsqyqfNO
+--Sig_/+K=st_HCMWn3JpH6IhaFwtk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the rcu tree, today's linux-next build (sparc defconfig)
-failed like this:
+Today's linux-next merge of the akpm-current tree got conflicts in:
 
-mm/slab_common.o: In function `kmem_last_alloc':
-slab_common.c:(.text+0xc4): undefined reference to `kmem_cache_last_alloc'
+  include/linux/memcontrol.h
+  mm/memcontrol.c
 
-Caused by commit
+between commit:
 
-  f7c3fb4fc476 ("mm: Add kmem_last_alloc() to return last allocation for me=
-mory block")
+  bcfe06bf2622 ("mm: memcontrol: Use helpers to read page's memcg data")
 
-in mm/slab.c, kmem_cache_last_alloc() is only defined when CONFIG_NUMA
-is set - which is not for this build.
+from the bpf-next tree and commits:
 
-I applied the following hack fix patch for today.
+  6771a349b8c3 ("mm/memcg: remove incorrect comment")
+  c3970fcb1f21 ("mm: move lruvec stats update functions to vmstat.h")
 
-=46rom ac5dcf78be1e6da530302966369a3bd63007cf81 Mon Sep 17 00:00:00 2001
+from the akpm-current tree.
+
+I fixed it up (see below - I used the latter version of memcontrol.h)
+and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+I also added this merge fix patch:
+
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 4 Dec 2020 19:11:01 +1100
-Subject: [PATCH] fixup for "mm: Add kmem_last_alloc() to return last
- allocation for memory block"
+Date: Fri, 4 Dec 2020 19:53:40 +1100
+Subject: [PATCH] fixup for "mm: move lruvec stats update functions to vmsta=
+t.h"
+
+conflict against "mm: memcontrol: Use helpers to read page's memcg data"
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- mm/slab.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/memcontrol.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/mm/slab.c b/mm/slab.c
-index 1f3b263f81ee..064707ac9f54 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3650,6 +3650,11 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t=
- flags,
- 	return __do_kmalloc_node(size, flags, node, caller);
- }
- EXPORT_SYMBOL(__kmalloc_node_track_caller);
-+#else
-+void *kmem_cache_last_alloc(struct kmem_cache *cachep, void *object)
-+{
-+	return NULL;
-+}
- #endif /* CONFIG_NUMA */
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 6f5733779927..3b6db4e906b5 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -851,16 +851,17 @@ void __mod_lruvec_page_state(struct page *page, enum =
+node_stat_item idx,
+ 			     int val)
+ {
+ 	struct page *head =3D compound_head(page); /* rmap on tail pages */
++	struct mem_cgroup *memcg =3D page_memcg(head);
+ 	pg_data_t *pgdat =3D page_pgdat(page);
+ 	struct lruvec *lruvec;
 =20
- /**
+ 	/* Untracked pages have no memcg, no lruvec. Update only the node */
+-	if (!head->mem_cgroup) {
++	if (!memcg) {
+ 		__mod_node_page_state(pgdat, idx, val);
+ 		return;
+ 	}
+=20
+-	lruvec =3D mem_cgroup_lruvec(head->mem_cgroup, pgdat);
++	lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
+ 	__mod_lruvec_state(lruvec, idx, val);
+ }
+=20
 --=20
 2.29.2
 
@@ -101,20 +126,55 @@ index 1f3b263f81ee..064707ac9f54 100644
 Cheers,
 Stephen Rothwell
 
---Sig_/i/_kt//s4/F7sxLnsqyqfNO
+diff --cc include/linux/memcontrol.h
+index 320369c841f5,ff02f831e7e1..000000000000
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+diff --cc mm/memcontrol.c
+index 7535042ac1ec,c9a5dce4343d..000000000000
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@@ -2880,9 -2984,9 +2975,9 @@@ static void cancel_charge(struct mem_cg
+ =20
+  static void commit_charge(struct page *page, struct mem_cgroup *memcg)
+  {
+ -	VM_BUG_ON_PAGE(page->mem_cgroup, page);
+ +	VM_BUG_ON_PAGE(page_memcg(page), page);
+  	/*
+- 	 * Any of the following ensures page->mem_cgroup stability:
++ 	 * Any of the following ensures page's memcg stability:
+  	 *
+  	 * - the page lock
+  	 * - LRU isolation
+@@@ -6977,11 -7012,10 +6997,10 @@@ void mem_cgroup_migrate(struct page *ol
+  		return;
+ =20
+  	/* Page cache replacement: new page already charged? */
+ -	if (newpage->mem_cgroup)
+ +	if (page_memcg(newpage))
+  		return;
+ =20
+- 	/* Swapcache readahead pages can get replaced before being charged */
+ -	memcg =3D oldpage->mem_cgroup;
+ +	memcg =3D page_memcg(oldpage);
+  	if (!memcg)
+  		return;
+ =20
+
+--Sig_/+K=st_HCMWn3JpH6IhaFwtk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/J8nYACgkQAVBC80lX
-0GzYewf+MuMlF7OJqQG0ckjT4czx5ZUQCvkKrGtFLljpQrJsXnA7c1NrM/0YfL5w
-X3Gzggx7w/V8aDX6cKQrt6EUPREQTNwWtPUJstxrR3nl6bksMgkpvPeIYOt8OfeR
-LLQlt5dFhMvP/QylWDUFOr5lYz3kW/C60mXJG1f5z8aSBF5jwqvm7P8vcwYrJI+M
-nHgsJd5YkmBhMlG/+DIv+tNaV4A76DD/LBitKOKzXCJOx5YdXLNtfCRTanTp/XZa
-YHQXLy4Dgz2K/FEQOvVtkRBkOHr8Xwmb3TTG+2tA/ZLg6qNELUyP4yl054GgpyRZ
-/MDquwWBMxi+Apr8BwKCaGPLb71Tmw==
-=J0hT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/J/0UACgkQAVBC80lX
+0GykHAf9ENaQyGwvRrQbXCkHZza/eM9habEfZViXxqugniIt/xpHxIioPAu5LIyi
+zBMYr+/rGhg8EOtuDFNGoRmjP9YUU6Q6714o9arCHE1uO7edQVK20jCthVF1MwTR
+IfJ3hCAj9h/hj5VS5U5TACTMAoCXYcdbQW/PzCVf65Uz29XVnOwQDR2BkjiGZ/g3
+7nao9ycs8AR3C8yFkoyXQ7V4p1c8KKafgbYSGQ/tVPmWQg47pAkL0WZK+9+6sgcK
+yhhoW88ZE3bcn3tFmYXsAf2XIGiIesoLfNyIvygPkso8YIXtVBtzfZjLAkG2mQHS
+lv9G2Hc03BoO7ey4wydgqJyvl/339g==
+=QOWV
 -----END PGP SIGNATURE-----
 
---Sig_/i/_kt//s4/F7sxLnsqyqfNO--
+--Sig_/+K=st_HCMWn3JpH6IhaFwtk--

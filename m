@@ -2,89 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB402CEB8B
-	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 11:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D142CEB9E
+	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 11:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgLDKAq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Dec 2020 05:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbgLDKAp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Dec 2020 05:00:45 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641E5C0613D1;
-        Fri,  4 Dec 2020 02:00:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1729673AbgLDKC4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Dec 2020 05:02:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22451 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727096AbgLDKCz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Dec 2020 05:02:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607076089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XlvcJUka0tYhtcNhhsL+bNUMPIgts9pFj1H8hxUelvI=;
+        b=ihVYhE8s09EB3m6V91ITxM62T/CQkcTfRS7oAszihlQ9w+jXxloHObdU7dJj2E+SL5Ww9p
+        +OwC0ZqfKLpfLVOP1Dhk3jWod5O7SNfOujEzlgDfly8Pb8OVF9uwfhxHBiqeeAnSy6dLjr
+        v8x182NqyMie+/9c7s/jSLWurqPZC4c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-529-08q1DeYmMMWwk6PPLGRg6Q-1; Fri, 04 Dec 2020 05:01:27 -0500
+X-MC-Unique: 08q1DeYmMMWwk6PPLGRg6Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CnSqj0xJWz9sWs;
-        Fri,  4 Dec 2020 21:00:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607076001;
-        bh=KyOLmJk+bbh08zuaMRqMB14NVXFXl63sBfY60oWJWkQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DIm3UP/p7k0x/QrI+q0NDfWPKEANJ/vPsTZMh93/uoHzvv9hvAKzqpmUPPROykf2v
-         pnW+sw6oLhscCfi/+x7CypnimRGCmXq2CmDJxtdrWhsJdJBmHByGHIBrw08R1hTmew
-         Pk5Ni98FWJXPYtVxGFpfv1AkOfe7k0M0LnyTgQaZo0WzNGBcnmJGXaXe6KIZ3ts1K6
-         lFr6mR5PzmXEbiUUW/Tr5gKvbOsRX9V6dEs3+2oaO9AsHd+oT5bJbYpQgLm31Yo/Hm
-         CDkHRWc+NW8oFyBg1pnJXdqhrkXwBAb/jmv1pSm+DljdxP2kgN+9cMcctHJbBhEu36
-         3lhb9E9WUAvUw==
-Date:   Fri, 4 Dec 2020 21:00:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm tree
-Message-ID: <20201204210000.660293c6@canb.auug.org.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4AAE1180A086;
+        Fri,  4 Dec 2020 10:01:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-116-67.rdu2.redhat.com [10.10.116.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8ADA310021AA;
+        Fri,  4 Dec 2020 10:01:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20201111172439.60d5a8f0@canb.auug.org.au>
+References: <20201111172439.60d5a8f0@canb.auug.org.au> <20201021124733.344e5107@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: linux-next: manual merge of the notifications tree with Linus' tree
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ApxreD=mQyBp_zuXIq+7bZW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <93331.1607076081.1@warthog.procyon.org.uk>
+Date:   Fri, 04 Dec 2020 10:01:21 +0000
+Message-ID: <93332.1607076081@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ApxreD=mQyBp_zuXIq+7bZW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Do you intend to keep this change?  If so, will you rebase it?
 
-After merging the akpm tree, today's linux-next build (powerpc
-allyesconfig) produced warnings like this:
+At the moment, I don't know.  It needs something like fsinfo() so that you can
+retrieve the mount change counter in the event of an overrun - but adding it
+to /proc/self/mountinfo is too heavy and too slow.
 
-kernel/kcov.c:296:14: warning: conflicting types for built-in function '__s=
-anitizer_cov_trace_switch'; expected 'void(long unsigned int,  void *)' [-W=
-builtin-declaration-mismatch]
-  296 | void notrace __sanitizer_cov_trace_switch(u64 val, u64 *cases)
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+David
 
-ld: warning: orphan section `.data..Lubsan_data177' from `arch/powerpc/opro=
-file/op_model_pa6t.o' being placed in section `.data..Lubsan_data177'
-
-(lots of these latter ones)
-
-I don't know what produced these, but it is in the akpm-current or
-akpm trees.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ApxreD=mQyBp_zuXIq+7bZW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/KCKAACgkQAVBC80lX
-0Gycfgf+Jpu0lbksstLRA0C8i17lPCMxSvQg4IcskZLWUbUk2SLrP5ga3KdgSN7V
-YBhl30kZuGGNWxpQGdpDkV4AhpqouvJUpeek0ZNOgP/IwzboFT5R4oLDjI3JbF+U
-c1E3w4lUHGza2+bodp5dZcWlda2mfIt62h7wqK0qS+JF8YIIjT8a6Y1jJoVQvR4l
-rCZhV1dT9LoYSYSwG5Unco9X3ZrX2Uj1lDztFh17pU8NzmcpVcOeo+20TeRHPdqm
-hXsfWChIlaxne+kQeQvgzzdTnJIi5n8+Q8jyrFb3EtLzvBzR9v/UK8uuyRkZMEvW
-3OsyufLWp6pqc+wh1Dn2gZ9gkv3JdA==
-=/yDS
------END PGP SIGNATURE-----
-
---Sig_/ApxreD=mQyBp_zuXIq+7bZW--

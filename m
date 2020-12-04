@@ -2,93 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 114DA2CF34D
-	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 18:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D00572CF4A6
+	for <lists+linux-next@lfdr.de>; Fri,  4 Dec 2020 20:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731093AbgLDRoL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Dec 2020 12:44:11 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3153 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730782AbgLDRoL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Dec 2020 12:44:11 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fca75430001>; Fri, 04 Dec 2020 09:43:31 -0800
-Received: from [10.26.72.142] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 4 Dec
- 2020 17:43:23 +0000
-Subject: Re: [PATCH] mm/memblock:use a more appropriate order calculation when
- free memblock pages
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Qian Cai <qcai@redhat.com>, <carver4lio@163.com>,
-        <rppt@kernel.org>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Hailong Liu <liu.hailong6@zte.com.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20201203152311.5272-1-carver4lio@163.com>
- <a5bc444ec40a2248009d0894fda61b822d030235.camel@redhat.com>
- <CGME20201204160751eucas1p13cc7aad8c68dd2a495c4bbf422c4228c@eucas1p1.samsung.com>
- <adc36428-05eb-f885-9394-080cc805818f@samsung.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <3d709122-0364-5bca-9247-3f212096b389@nvidia.com>
-Date:   Fri, 4 Dec 2020 17:43:21 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730270AbgLDTVO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Dec 2020 14:21:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55324 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726392AbgLDTVO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 4 Dec 2020 14:21:14 -0500
+Date:   Fri, 4 Dec 2020 11:20:32 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607109632;
+        bh=/XhZcYZ5JIA1PupN+XZqIdVnLydGrcJFS1sKBQ5lWX0=;
+        h=From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IXhPDkfkpAdhrnOXCRz73rGo8liOLaITMhwtX7K6IMUGF7NL+tyVPogXQwt7yOuD7
+         pFLLv20r4JMRSs2tuSZlwyphpez5o3YHfI1zZH1B1m0qZjlKoidX0BSypb6JfQ+ALZ
+         d1/EgKFsXpN6Y55HbypNP/nO+lniIlTtc0mh+EWYMZKuncBK+AOTH3nbIm+26utiRZ
+         oc6j1yqysz5cAXWBje0B2b+0pAUoVt5nT/vXcIpvGMZBFPt7PB613S5eOorKRBuNb3
+         VKVIKH6GVNWlsmuzG5EFuKdBzuAbooorr+nY1Jc7jXCeHo9DO1On4kPgpZ0JwPKDRn
+         VSr0GMKeyLUlg==
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the rcu tree
+Message-ID: <20201204192032.GA1437@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201204192526.0b38fb02@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <adc36428-05eb-f885-9394-080cc805818f@samsung.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1607103811; bh=IgGdlLuQS16IZLAWFCNIGBVZxQ+IIVFfpXGYwQb1klc=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=FVg+MJmjt2AMhdRUox9urOJdfPsfGxCByjMrp+4uu3Dimtf4Y4VONLwIJtOgWp7Ny
-         bK4V2Q8gpRAfwbBi9TcvjLoUSankrGmH4PpXQxlIBJ7ACszcbLpwJxhsRdbdOXqfZE
-         5C9WKJLEvQVyxvG8uPVfGT6CGVDwXYxCOAv+vguJr5f6Wi73F09U4RX+/0zXPtoi4x
-         TVFHPY/TlJrJGPGLvq+hjKh2Uc8omWEWOCKmXjKOjsva1zwvtWT5FpJ8WB+E/o2Ucn
-         cy++evZ3n6CYkMEkKcRAWztAv8u0fj5CWG9OHobpgsQq9ZS5wi30K0bmvtkWrGLoSM
-         KXwn4ItI/GdaA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204192526.0b38fb02@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-On 04/12/2020 16:07, Marek Szyprowski wrote:
-> Hi All,
+On Fri, Dec 04, 2020 at 07:25:26PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 04.12.2020 14:42, Qian Cai wrote:
->> On Thu, 2020-12-03 at 23:23 +0800, carver4lio@163.com wrote:
->>> From: Hailong Liu <liu.hailong6@zte.com.cn>
->>>
->>> When system in the booting stage, pages span from [start, end] of a memblock
->>> are freed to buddy in a order as large as possible (less than MAX_ORDER) at
->>> first, then decrease gradually to a proper order(less than end) in a loop.
->>>
->>> However, *min(MAX_ORDER - 1UL, __ffs(start))* can not get the largest order
->>> in some cases.
->>> Instead, *__ffs(end - start)* may be more appropriate and meaningful.
->>>
->>> Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
->> Reverting this commit on the top of today's linux-next fixed boot crashes on
->> multiple NUMA systems.
+> After merging the rcu tree, today's linux-next build (sparc defconfig)
+> failed like this:
 > 
-> I confirm. Reverting commit 4df001639c84 ("mm/memblock: use a more 
-> appropriate order calculation when free memblock pages") on top of linux 
-> next-20201204 fixed booting of my ARM32bit test systems.
+> mm/slab_common.o: In function `kmem_last_alloc':
+> slab_common.c:(.text+0xc4): undefined reference to `kmem_cache_last_alloc'
+> 
+> Caused by commit
+> 
+>   f7c3fb4fc476 ("mm: Add kmem_last_alloc() to return last allocation for memory block")
+> 
+> in mm/slab.c, kmem_cache_last_alloc() is only defined when CONFIG_NUMA
+> is set - which is not for this build.
+> 
+> I applied the following hack fix patch for today.
+> 
+> From ac5dcf78be1e6da530302966369a3bd63007cf81 Mon Sep 17 00:00:00 2001
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 4 Dec 2020 19:11:01 +1100
+> Subject: [PATCH] fixup for "mm: Add kmem_last_alloc() to return last
+>  allocation for memory block"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
+Apologies for the hassle and thank you for the very helpful "hack
+fix patch".  The kbuild test robot also found this, but I hadn't
+quite gotten it through my head that the only slab definition of the
+kmem_cache_last_alloc() was under CONFIG_NUMA.
 
-FWIW, I also confirm that this is causing several 32-bit Tegra platforms
-to crash on boot and reverting this fixes the problem.
+Does the following patch fix things?  (Sigh.  It won't apply on the
+rcu/next that you used.  Or even on this moment's dev branch.  I will
+fold it in with attribution and update.  But just to show you what my
+thought is.)
 
-Jon
+							Thanx, Paul
 
--- 
-nvpublic
+------------------------------------------------------------------------
+
+diff --git a/mm/slab.c b/mm/slab.c
+index 87aa2c0..ae1a74c 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3602,27 +3602,6 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
+ #endif
+ 
+-void *kmem_cache_last_alloc(struct kmem_cache *cachep, void *object, void **stackp, int nstackp)
+-{
+-#ifdef DEBUG
+-	unsigned int objnr;
+-	void *objp;
+-	struct page *page;
+-
+-	if (!(cachep->flags & SLAB_STORE_USER))
+-		return ERR_PTR(-KMEM_LA_NO_DEBUG);
+-	objp = object - obj_offset(cachep);
+-	page = virt_to_head_page(objp);
+-	objnr = obj_to_index(cachep, page, objp);
+-	objp = index_to_obj(cachep, page, objnr);
+-	if (stackp && nstackp)
+-		stackp[0] = NULL;
+-	return *dbg_userword(cachep, objp);
+-#else
+-	return NULL;
+-#endif
+-}
+-
+ static __always_inline void *
+ __do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
+ {
+@@ -3654,6 +3633,27 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
+ EXPORT_SYMBOL(__kmalloc_node_track_caller);
+ #endif /* CONFIG_NUMA */
+ 
++void *kmem_cache_last_alloc(struct kmem_cache *cachep, void *object, void **stackp, int nstackp)
++{
++#ifdef DEBUG
++	unsigned int objnr;
++	void *objp;
++	struct page *page;
++
++	if (!(cachep->flags & SLAB_STORE_USER))
++		return ERR_PTR(-KMEM_LA_NO_DEBUG);
++	objp = object - obj_offset(cachep);
++	page = virt_to_head_page(objp);
++	objnr = obj_to_index(cachep, page, objp);
++	objp = index_to_obj(cachep, page, objnr);
++	if (stackp && nstackp)
++		stackp[0] = NULL;
++	return *dbg_userword(cachep, objp);
++#else
++	return NULL;
++#endif
++}
++
+ /**
+  * __do_kmalloc - allocate memory
+  * @size: how many bytes of memory are required.

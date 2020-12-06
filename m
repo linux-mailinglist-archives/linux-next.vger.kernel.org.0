@@ -2,86 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D972D0715
-	for <lists+linux-next@lfdr.de>; Sun,  6 Dec 2020 21:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C642D073D
+	for <lists+linux-next@lfdr.de>; Sun,  6 Dec 2020 22:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727375AbgLFURd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Dec 2020 15:17:33 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49779 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726731AbgLFURd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 6 Dec 2020 15:17:33 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CpyQV141wz9sVx;
-        Mon,  7 Dec 2020 07:16:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607285810;
-        bh=K971ZTQdRzNtZFt93vuIi22S6tgu7F8ha3iBWUkfbME=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CLOtZdgNL9XRJ07qZqLF3HEjdOcjO9PfWSyT6HOJgWUrnxIW/YZ6HpNyj2PlP/f9X
-         t2cjxG2ct8KoFokx3StDgqVct0MFyZSY+NhXOiqoANeZ1WQybzGZzc4D+xz1mGp7fK
-         OgLUScExZvDX4GV9pgLa/b1RSrlXNrNbO4wS4AbJfOW4LfCme6fkBysrOFn9bcL/cQ
-         VuPkkv+Vk/tsVHmq5t37gYB9ZnHIjw1XdDbrb3d67cLifvF+xp3OcqkIkCjGJBQbJ2
-         tw1bJAgDhLChJ67Oh/Z0WoRV1kmZ8P4xqIErKPinCWbvCHvPuSHP8Bud93IpwkRbbA
-         1tbg2EaSS4p+A==
-Date:   Mon, 7 Dec 2020 07:16:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the pinctrl tree
-Message-ID: <20201207071649.272eba1e@canb.auug.org.au>
+        id S1727974AbgLFVGV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Dec 2020 16:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727892AbgLFVGV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Dec 2020 16:06:21 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0627CC0613D0;
+        Sun,  6 Dec 2020 13:05:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cw27so11579840edb.5;
+        Sun, 06 Dec 2020 13:05:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=0m779MRexPoP7pQQyysjLrE0HDQY6yPdqg+0AgAzsMo=;
+        b=ZBGEA5HhKJ9yfKvxbHQCM6MomKnKY3cE7z/iUKKiVvemLO5EjQSb+jG2QDB60EVYiN
+         jHF7flalpOIK0pwkdeastN/HY8JrymO/+IPZaiacdZcbb25q2/fbg1EncJDaG1BV/qbd
+         HpXnOMv2sh27w3FbtLFaaS7+vQ0+3XmFGCp5QFrCCUyVpVi55K4KeEiA32w3DuAJKm0W
+         Zm9/Ny2ujYQvJ5Dwf5CHmN4TRNjLwJT4oqmqrSiwbRlYLh8AsRgD2XUp1X9NxMQ5ouR3
+         VTVBIgIPsfkmLT5khSClMUDDykPQTJk0r7rO1D7ujUCOUmXOhGCl6gAdSKAf+neKXWAa
+         ClKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=0m779MRexPoP7pQQyysjLrE0HDQY6yPdqg+0AgAzsMo=;
+        b=ksVo+xS9dlXgTKIZKkRYS+Heep2So+ZxbpYFpkrdfTV0ID6zy3/kBPXgxvAo7/LmKt
+         y0BQkfZgyIhTpyap6Tg85vxmZ3SMIl0sG1tivrdaX1xSiAnlOJWfm0PaBVSxonXUxhfL
+         XUnx0urUEP8hE+us1S8LoHmNqMDRLsbYMWDmDGMK4D1vUf/iTdL6lhvx+OQD/aKM7bmr
+         MVqLFjcO5n+GQMYWmKnokbOWCMJpqeoeTbLGKQPVwEghk5ew6hjavmzEEsV3g611NUY6
+         wxK9+N6G9lCZbuM4GvVqQu4EnU4IuTO/b9xBTwoRNJ86pdR2Cravk5kS14Fp7IMJDxAo
+         TfaQ==
+X-Gm-Message-State: AOAM530mzUNvik3juWyB3clKodtET8Ic2liE61aRVr9nVbABJcoWNQRJ
+        ApGAKLc028uKOpmTw+OcXEM=
+X-Google-Smtp-Source: ABdhPJxm64BpyTW9k7eJC6vOAIIyPl3R1EKDNIz+CCc3TcDTWBDwo715prwC7d12bA+NZ+TCuzQzMQ==
+X-Received: by 2002:a05:6402:1d9a:: with SMTP id dk26mr17225283edb.283.1607288733318;
+        Sun, 06 Dec 2020 13:05:33 -0800 (PST)
+Received: from [192.168.74.106] (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
+        by smtp.gmail.com with ESMTPSA id r24sm7361007edo.4.2020.12.06.13.05.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Dec 2020 13:05:32 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the drm-msm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20201207070517.28951ed0@canb.auug.org.au>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+Message-ID: <5820a22b-6fce-20ee-2a48-58c2d57b4ac4@gmail.com>
+Date:   Sun, 6 Dec 2020 23:05:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Q/Wf3cS9Ij4js4y.9MpkJPB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20201207070517.28951ed0@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Q/Wf3cS9Ij4js4y.9MpkJPB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/6/20 10:05 PM, Stephen Rothwell wrote:
+ > Hi all,
+ >
+ > In commit
+ >
+ >   9b73bde39cf2 ("drm/msm: Fix use-after-free in msm_gem with carveout")
+ >
+ > Fixes tag
+ >
+ >   Fixes: 4b85f7f5cf7 ("drm/msm: support for an arbitrary number of 
+address spaces")
+ >
+ > has these problem(s):
+ >
+ >   - SHA1 should be at least 12 digits long
+ >
+ > In the furture, this can be avoided by setting core.abbrev to 12 (or 
+more)
+ > or (for git v2.11 or later) just making sure it is not set (or set to
+ > "auto").
 
-Hi all,
+I'm sorry, I copied and truncated the hash by hand. I should have used
 
-In commit
+     git log --pretty=reference
 
-  c3c882898d07 ("pinctrl: aspeed: Fix GPIO requests on pass-through banks")
+Also scripts/checkpatch.pl didn't notice it. Should I submit v3 of the
+patch or it's too late.
 
-Fixes tag
+Regards,
+Iskren
 
-  Fixes: 6726fbff19bf ("pinctrl: aspeed: Fix GPI only function problem.")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 9b92f5c51e9a ("pinctrl: aspeed: Fix GPI only function problem.")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Q/Wf3cS9Ij4js4y.9MpkJPB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/NPDEACgkQAVBC80lX
-0Gz8pAf/VFrShv4SKrvjksSj2+EvmbxE4KBNTjdVHASh80V/o3tSvgXuep59IT5i
-kyPHA7ZZyQt4yLxk79le8xB6p9mRooLdjrFMAy/1Lkc/eW7iKGx8oqByV4ZPsjwf
-SqSfZwI71eYs/FUZs7zW+eYN5LP2uOgxvVLFIs43BwkH1E/ha1L8B4E12GijKgWc
-yruR42pjYbBuCPErBudbulk/zmVn3+z4eER/3QCv3f5/dbTbwUS+jaqT7XQt61+B
-u01f3RYBOrOd761oyq5ipcUUC5YrKLL4slqEAGe9u9G2MlvrnH9YnIC4jribDrQZ
-xr4fATyHUWgWt6a3aD6AO7c7bL173A==
-=WxIq
------END PGP SIGNATURE-----
-
---Sig_/Q/Wf3cS9Ij4js4y.9MpkJPB--

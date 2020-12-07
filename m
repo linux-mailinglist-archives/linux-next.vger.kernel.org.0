@@ -2,135 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17E72D1316
-	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 15:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91C32D16C0
+	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 17:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbgLGOHX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Dec 2020 09:07:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50078 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725822AbgLGOHX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Dec 2020 09:07:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607349957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=afa9i0Bef4Cb3mOnPuAfy6fMFqpa+/My9xmYdxXU/TQ=;
-        b=Je4Qnlb5UV1uNBOBZfZCtxoLXZedsdLvEFE479HKbCBH6z4Y19xbhR+g/bMJpPtjgHjWX7
-        uN+tCli/Rh1DvXc3eae6URzETAZ7iXsARaXX4agyKkffggGWC0WH7g7I8D7/hUZtvZI3V3
-        Q5gPGfPjwGqUqaquqz44Xk10GuMgnVA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-89-OKrjAj-nObqxzH1rH6NNiQ-1; Mon, 07 Dec 2020 09:05:55 -0500
-X-MC-Unique: OKrjAj-nObqxzH1rH6NNiQ-1
-Received: by mail-ed1-f70.google.com with SMTP id i15so5822689edx.9
-        for <linux-next@vger.kernel.org>; Mon, 07 Dec 2020 06:05:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=afa9i0Bef4Cb3mOnPuAfy6fMFqpa+/My9xmYdxXU/TQ=;
-        b=Y9AEHEOGC0XBmHLvIQxjXGPyOFJoYWeGF/Q7QWrvArAbZsOGXCF/jo8KSJasTCiiRp
-         zIRRdlQ8vYgAD368nP0YzXso2/I4MZ3ydstzK+J97aqFB1yT+Pmxl8BLAFviUZhzX2Ei
-         LMH321JYhlqFLOu0D+R2KmOxUJZVI86mgakgRqTqcFMPQBVVopAh/q2JcIH+iLiTVTw+
-         jqc5F0f/lDnA5FvJ6wRAi/xnZh9P9KQxADpK27b0K5lJYpWBqtHZcltSArc6nXYRn1z5
-         w5iIcgHn90nbRn8KOR3DNmsQJFTADakGyRDBYbKhp485plPDzLh+npt8vQ5+AfVMmYJ4
-         QGIg==
-X-Gm-Message-State: AOAM530nW2YMI/vqRw/dIhJumJWywYB53SHoCkNcFXU/nC8xLl0+KWKC
-        7ftSUkihmHptyviJ4QEDomN2k79vZvYqIqHbmWEVzcMkY1DvERrS/CjshWrDsLpbcYBTlUKn4xJ
-        Q2RC5WYUvBlhfW56ebv8E7w==
-X-Received: by 2002:a17:906:1199:: with SMTP id n25mr18736567eja.293.1607349954413;
-        Mon, 07 Dec 2020 06:05:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwraVwT1JcG9eO2qX/pyTXO58k7gNNbrJ+XGPs1jOdznikQXAjUUeHwWvUuK1v++EvFYzp4fg==
-X-Received: by 2002:a17:906:1199:: with SMTP id n25mr18736540eja.293.1607349954217;
-        Mon, 07 Dec 2020 06:05:54 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id cb21sm13461039edb.57.2020.12.07.06.05.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Dec 2020 06:05:53 -0800 (PST)
-Subject: Re: [PATCH] platform/x86: dell-wmi-sysman: work around for BIOS bug
-To:     Divya Bharathi <divya27392@gmail.com>, dvhart@infradead.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Divya Bharathi <divya.bharathi@dell.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Prasanth KSR <prasanth.ksr@dell.com>
-References: <20201202131935.307372-1-divya.bharathi@dell.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <39f8a3a5-88ff-7e1d-8ce3-ebec8c01427e@redhat.com>
-Date:   Mon, 7 Dec 2020 15:05:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726840AbgLGQrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Dec 2020 11:47:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42996 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725804AbgLGQro (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:47:44 -0500
+Date:   Mon, 7 Dec 2020 08:47:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607359624;
+        bh=Po6SGiB8kC8wpl8vbPA6UxUzzWrt2PKdruHXPI8zeGo=;
+        h=From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ETPYTkXa/dwkVxgcqtpb/jnyoegGlYqlIAYrFtVGg70vhekpau+xABZt9bGIq57P6
+         WDW6grxAxsMEkGI4U6JT9+bKP6GVDluP9oDrAGNOyGdzJ0FnGtpRazTSGpOx3+esQt
+         WX5legyJIXLYoqa4QmSyOLdGPJz+ts8V+9FhX5ox/Q/T9Pa/3K4RwCCKefYWgukbv2
+         9adH+U/KqfCWED3jZJ7iQNYcx1glgxAAcoMREKbJrYHVg8gkYe2KSgpmNzQboQ/rlx
+         DOgWOLKondGyI893H1Fox2hFpR/0WD2ze2Bv/ka4dMdTYTrd0Bw+s9U+U6U9BSOV7r
+         6czzQhnJSEYbg==
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the rcu tree
+Message-ID: <20201207164704.GH2657@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201207192028.5333e4d7@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20201202131935.307372-1-divya.bharathi@dell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207192028.5333e4d7@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
-
-On 12/2/20 2:19 PM, Divya Bharathi wrote:
-> BIOS sets incorrect value (zero) when SET value passed for integer attribute
-> with + sign. Added workaround to remove + sign before passing input to BIOS
+On Mon, Dec 07, 2020 at 07:20:28PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Co-developed-by: Mario Limonciello <mario.limonciello@dell.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
-> Co-developed-by: Prasanth KSR <prasanth.ksr@dell.com>
-> Signed-off-by: Prasanth KSR <prasanth.ksr@dell.com>
-> Signed-off-by: Divya Bharathi <divya.bharathi@dell.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-> ---
->  drivers/platform/x86/dell-wmi-sysman/int-attributes.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> After merging the rcu tree, today's linux-next build (htmldocs) produced
+> this warning:
 > 
-> diff --git a/drivers/platform/x86/dell-wmi-sysman/int-attributes.c b/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-> index ea773d8e8d3a..75aedbb733be 100644
-> --- a/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-> +++ b/drivers/platform/x86/dell-wmi-sysman/int-attributes.c
-> @@ -39,7 +39,7 @@ static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *a
->   * @instance_id: The instance on which input is validated
->   * @buf: Input value
->   */
-> -static int validate_integer_input(int instance_id, const char *buf)
-> +static int validate_integer_input(int instance_id, char *buf)
->  {
->  	int in_val;
->  	int ret;
-> @@ -51,6 +51,12 @@ static int validate_integer_input(int instance_id, const char *buf)
->  			in_val > wmi_priv.integer_data[instance_id].max_value)
->  		return -EINVAL;
->  
-> +	/* workaround for BIOS error.
-> +	 * validate input to avoid setting 0 when integer input passed with + sign
-> +	 */
-> +	if (*buf == '+')
-> +		memmove(buf, (buf + 1), strlen(buf + 1) + 1);
-> +
->  	return ret;
->  }
->  
+> Documentation/core-api/mm-api:49: mm/slab_common.c:569: WARNING: Inline literal start-string without end-string.
+> Documentation/core-api/mm-api:49: mm/slab_common.c:595: WARNING: Inline literal start-string without end-string.
 > 
+> Maybe introduced by commit
+> 
+>   f7c3fb4fc476 ("mm: Add kmem_last_alloc() to return last allocation for memory block")
+> 
+> (or one of the following ones).
 
+I freely confess that I have absolutely no idea what it doesn't like.
+It is complaining about this header comment, correct?
+
+/**
+ * kmem_last_alloc_stack - Get return address and stack for last allocation
+ * @object: object for which to find last-allocation return address.
+ * @stackp: %NULL or pointer to location to place return-address stack.
+ * @nstackp: maximum number of return addresses that may be stored.
+ *
+ * If the pointer references a slab-allocated object and if sufficient
+ * debugging is enabled, return the return address for the corresponding
+ * allocation.  If stackp is non-%NULL in %CONFIG_STACKTRACE kernels running
+ * the slub allocator, also copy the return-address stack into @stackp,
+ * limited by @nstackp.  Otherwise, return %NULL or an appropriate error
+ * code using %ERR_PTR().
+ *
+ * Return: return address from last allocation, %NULL or negative error code.
+ */
+
+							Thanx, Paul

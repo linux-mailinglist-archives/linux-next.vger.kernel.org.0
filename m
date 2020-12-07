@@ -2,44 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C37D32D1A55
-	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 21:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8A42D1A6E
+	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 21:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgLGUME (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Dec 2020 15:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S1726063AbgLGUVh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Dec 2020 15:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726063AbgLGUME (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Dec 2020 15:12:04 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EECBC061749;
-        Mon,  7 Dec 2020 12:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=AzQdQH/N4S5LuRIFI8YYIJtAGFK4/kjv9ZrabkrtxIQ=; b=NU/Ubsec8MCyxXI/U9NW2N43RG
-        1kzImbaagnRF5NtFv5LOyNOLesIp6oafYMRqlKFYrk7AYMh+T/a0DVfhC9+d7abI73bfAJysOwO6D
-        2E56Ni4Tfffn188DS8/p+0jBvKuwfterKYyRd9D0QKOxFmRzYJU+zVDFu6pDxtv7T+o9P4nKnootY
-        O15W0orSpYiiGV3eFkSMXoG8WC9JPqCgy2WHvwURB9YA7DLiOlc8TkLS6GwSYifOwOyZC/bhZYmZy
-        oMgp8sUEtMEv57wcsMNsFlQ95GlGCBm5XarbPeYfMejoo6ycYZvyflwPqvlwYkppxfcK06cHLc2AZ
-        /4Uq66PQ==;
-Received: from [2601:1c0:6280:3f0::1494]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kmMqv-0005CW-4X; Mon, 07 Dec 2020 20:11:21 +0000
-Subject: Re: [PATCH bpf-next v2] bpf: Only call sock_from_file with CONFIG_NET
-To:     Florent Revest <revest@chromium.org>, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@chromium.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201207200605.650192-1-revest@chromium.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <85e90d44-6577-c208-9732-c16d540e22a5@infradead.org>
-Date:   Mon, 7 Dec 2020 12:11:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        with ESMTP id S1725853AbgLGUVh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Dec 2020 15:21:37 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37080C0617B0
+        for <linux-next@vger.kernel.org>; Mon,  7 Dec 2020 12:20:57 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id g1so13436282ilk.7
+        for <linux-next@vger.kernel.org>; Mon, 07 Dec 2020 12:20:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Tej9GY05mZXgV9mNE704/sNm7beFt5nAhjB/8/aBReQ=;
+        b=qVz/hPJJWHdcZHxyVJ8JMM9+L35D4za6j+qkK2Wtztfzdb3ErEPtrM9mH/UQTJeDHI
+         7BvEq6Zh/3hXeOPvRPvsc3cIG7l0ez3EpuqYLqGEtbIMmNcBOM8Iea36oLC/YnTgxN7x
+         SP4lPrG7E4kLDqKtAvvdiA/SbyENzgRWvpYTJ/14QC8VSIvLtWi/oLwDVUlF83qQVPm0
+         AH7IakvwgEJuxvUXzQ5vqmoOiZ0gCtwMEyJCAiCZDXPJLxOkQzcwrKFEE+DJvh8+Wjez
+         fMjLxxrviZtTsvUpQ6cqL3XeWlzKBdsX0DWUzV3u0UFbx8MB1aWPN4OT5qqBWYQf1I0/
+         M3kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Tej9GY05mZXgV9mNE704/sNm7beFt5nAhjB/8/aBReQ=;
+        b=dw/lOX1OAJwj4mYiBiWftBKpsrxzeNhUXtu/mnOyiQmAYnk02cu16Vg5OyCDo2roxF
+         BHbzqm095IXCvWi7GvPi1hPTTiF1ypxO8rNHdfPUkAq/DT3q/MT2w5tldlSmbnYazidO
+         VIktzzS/TnY05e9S3Ksrx/FbnQKg7X12DU2n7ANCt11ilLEaLKuZ7fwsJjyaIZlj4uU6
+         vs+AJI8gWqK/hcMF3skhGf5N+YYwfl74Nbh7d/Xbxad3qQBLJIs6kDloCng1RdcAI8g7
+         80NHBsRQTF83H3lqRwjB9Xm8jPBepfmo0vZnmSRChHDhDFNqdP5hj1/RQbfADDPPNYGz
+         tQwA==
+X-Gm-Message-State: AOAM530DmlILcAI/fbM0+aI70q7dDgPBRGMaQ4ACg7d/CaqdH6cBFzmL
+        rlitQt6QM/AcyapdBlyOXXX+AUeQBdE8Gw==
+X-Google-Smtp-Source: ABdhPJy0Jnsr7/OtLB3lcu38tiaUnDGbRUb9mNjvFf3jY7wBcRk6npkyOfNJF05HCytsclSzwVrwaQ==
+X-Received: by 2002:a05:6e02:13cf:: with SMTP id v15mr22654778ilj.222.1607372456254;
+        Mon, 07 Dec 2020 12:20:56 -0800 (PST)
+Received: from [192.168.1.30] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id s17sm7855074ilj.25.2020.12.07.12.20.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Dec 2020 12:20:55 -0800 (PST)
+Subject: Re: store a pointer to the block_device in struct bio (again)
+To:     Christoph Hellwig <hch@lst.de>, Qian Cai <qcai@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Coly Li <colyli@suse.de>,
+        Song Liu <song@kernel.org>, dm-devel@redhat.com,
+        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-block@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20201201165424.2030647-1-hch@lst.de>
+ <920899710c9e8dcce16e561c6d832e4e9c03cd73.camel@redhat.com>
+ <20201207190149.GA22524@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <ed7a484d-91d5-50fa-7927-2703b9426d65@kernel.dk>
+Date:   Mon, 7 Dec 2020 13:20:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201207200605.650192-1-revest@chromium.org>
+In-Reply-To: <20201207190149.GA22524@lst.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -47,43 +73,15 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/7/20 12:06 PM, Florent Revest wrote:
-> This avoids
->   ld: kernel/trace/bpf_trace.o: in function `bpf_sock_from_file':
->   bpf_trace.c:(.text+0xe23): undefined reference to `sock_from_file'
-> When compiling a kernel with BPF and without NET.
+On 12/7/20 12:01 PM, Christoph Hellwig wrote:
+> Thanks for the report.
 > 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Florent Revest <revest@chromium.org>
+> Jens, can you revert the series for now?  I think waiting any longer
+> with a report like this is not helpful.  I'll look into it with
+> Qian in the meantime.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-
-Thanks.
-
-> ---
->  kernel/trace/bpf_trace.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 0cf0a6331482..29ec2b3b1cc4 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1272,7 +1272,11 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
->  
->  BPF_CALL_1(bpf_sock_from_file, struct file *, file)
->  {
-> +#ifdef CONFIG_NET
->  	return (unsigned long) sock_from_file(file);
-> +#else
-> +	return 0;
-> +#endif
->  }
->  
->  BTF_ID_LIST(bpf_sock_from_file_btf_ids)
-> 
-
+Agree, I reverted it.
 
 -- 
-~Randy
+Jens Axboe
 

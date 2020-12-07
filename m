@@ -2,81 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFEE2D19F4
-	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 20:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D382D1A1D
+	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 20:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgLGTov (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Dec 2020 14:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S1726024AbgLGT5M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Dec 2020 14:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgLGTou (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Dec 2020 14:44:50 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DD8C06179C
-        for <linux-next@vger.kernel.org>; Mon,  7 Dec 2020 11:44:04 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id d17so21200826ejy.9
-        for <linux-next@vger.kernel.org>; Mon, 07 Dec 2020 11:44:04 -0800 (PST)
+        with ESMTP id S1725774AbgLGT5M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Dec 2020 14:57:12 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BFBC061793
+        for <linux-next@vger.kernel.org>; Mon,  7 Dec 2020 11:56:31 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id k10so330857wmi.3
+        for <linux-next@vger.kernel.org>; Mon, 07 Dec 2020 11:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=+ne0GIKqTiBoOHj/8BINlg1y+EHZi6FtbaG0qha9YKQ=;
-        b=XMDhzv28iCECmyEscX+hfMAVVuWQzHZp21Zavjrcx4by2MNxNKPEGVN4xig6SqXmD6
-         behzcE5w4VrBRU0Bm3KXkqIfRxMOGuZjmbXccGzOVMD+cmAwfmrOMV/8+7wBxpdibUdg
-         azgPkB+oLeBs715NusjgSL+qzg4fnFZVxH9Sg=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eA/fhHttmx4BYSoIV7Y3PyW0Xgp8HedWJZ3kSwGd7qM=;
+        b=Rx2kkCmZ+FgKln8FUJd506TxOlujIx2a854tc5Lv/wbSoF4I3D5Y3UTDvOiPf4BEU0
+         9b9A8fmyTZZ/BvEcc6/iQ4yZ7S4SkzfURcxY6jir+78TKz30w2hxqARUgdOrkXfeOUB9
+         OUjSXC+UW2mecPfAlRcn4bc31TC7dogLu/4Xs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=+ne0GIKqTiBoOHj/8BINlg1y+EHZi6FtbaG0qha9YKQ=;
-        b=MGx5EfZ/9BRlXf8/8J0CEr/7ED0/Aqe2/QrUtFsA+nQW5TKr+8m4RmykfRdEiMWA+n
-         n6Iep4ioF6ukTcr0PL2ymQX4WK1WostMEPePOgkABpKy+cGcuXXMme10Z34xOEO0i2G7
-         N31XViCNv0wzSpDvltUwNjoQOx9Ke0Iec1OTyT8EwpAiUSlQZnWLQJKLVz5sB8KsJwnt
-         /GLEpn5IaWo6IxeyB85/XB1JG7qsnJkoxizOBotA5GbEgMTyWPRJ7HETCkT7wrF10pTF
-         QT+LyquU5SNdUimkJqlZbhaf3UVLmQ/C4OWQMlDPtX2G13H+F1+bvigC1by6O3C4xkeB
-         b0tA==
-X-Gm-Message-State: AOAM533Mb0nEeNSrj7f3TgGVZlHp9UOBGSslaO1Qzy50oMdrW6xq3jeA
-        lmf1+rxEhkRofQiMsuVguRUgTw==
-X-Google-Smtp-Source: ABdhPJzAqqtK5ms3jsKRJ7blt5YhUU/Pinq3V4LDDazyb22nUxTY2Foq5JSyPO8x0h93y+xc2Yqnew==
-X-Received: by 2002:a17:906:c408:: with SMTP id u8mr20213768ejz.364.1607370243525;
-        Mon, 07 Dec 2020 11:44:03 -0800 (PST)
-Received: from ?IPv6:2a04:ee41:4:1318:ea45:a00:4d43:48fc? ([2a04:ee41:4:1318:ea45:a00:4d43:48fc])
-        by smtp.gmail.com with ESMTPSA id cc8sm14275838edb.17.2020.12.07.11.44.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eA/fhHttmx4BYSoIV7Y3PyW0Xgp8HedWJZ3kSwGd7qM=;
+        b=apdDRnFrSc6LMMwbgdAL9Qdm+7BkwTmW6ZwszGM+yEQvU5zFMQr56kx1iHhbQ9+0/H
+         TFO/5jyc4fiPfAUW2AA9cEK50Ensx617SXU8Ji31Yfv3MHZMEqvuJKsc/UNMl4Ia07TZ
+         +m+1csP66FSlZn8XU3UeKIMtBB4VYA5R7h8QiPXKRLT4AU9iKt4l+Se20Sz2tDtvds/F
+         w8sVvJaS7T8OrPO5Q8YJNYm0xeHDlwV6ee3CgwhODrcBAyZh6LqicP2IFwvJScVVT9pt
+         s6Gc3p2qA/XjsITFnDIXEM8eO1pwh9kZ2G+Y/15t/1u7H30y1wlOntTUWfdg3jdl3xPG
+         9sfQ==
+X-Gm-Message-State: AOAM530N219uJNX3ob2Tb1Dn3oTWEtUkri6mjpVkm7P5ZU9Oq3Q5Xnq6
+        IbbZRUf9oD1ZM1/nbPX1/sg6vw==
+X-Google-Smtp-Source: ABdhPJwRr3c35YwXYieC6vSlSfluvpB8QKErxv59vR3tfD4WwjdeDPBfFZj0sPyFG8L9BtVzgSKjvA==
+X-Received: by 2002:a1c:2ec6:: with SMTP id u189mr469286wmu.31.1607370990290;
+        Mon, 07 Dec 2020 11:56:30 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
+        by smtp.gmail.com with ESMTPSA id v20sm325722wml.34.2020.12.07.11.56.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 11:44:02 -0800 (PST)
-Message-ID: <bc37337ff82e187e39d029ee9f488d81e2b4fb44.camel@chromium.org>
-Subject: Re: linux-next: Tree for Dec 7 (bpf: sock_from_file)
+        Mon, 07 Dec 2020 11:56:29 -0800 (PST)
 From:   Florent Revest <revest@chromium.org>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florent Revest <revest@google.com>, bpf <bpf@vger.kernel.org>
-Date:   Mon, 07 Dec 2020 20:44:01 +0100
-In-Reply-To: <b8f2e76b-a35e-55c5-e937-eea81700c994@infradead.org>
-References: <20201207202520.3ced306c@canb.auug.org.au>
-         <b8f2e76b-a35e-55c5-e937-eea81700c994@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.4-2 
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@chromium.org, rdunlap@infradead.org,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>
+Subject: [PATCH bpf-next] bpf: Only call sock_from_file with CONFIG_NET
+Date:   Mon,  7 Dec 2020 20:55:39 +0100
+Message-Id: <20201207195539.609787-1-revest@chromium.org>
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-12-07 at 10:39 -0800, Randy Dunlap wrote:
-> On 12/7/20 1:25 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20201204:
-> > 
-> 
-> on i386:
-> # CONFIG_NET is not set
-> 
-> ld: kernel/trace/bpf_trace.o: in function `bpf_sock_from_file':
-> bpf_trace.c:(.text+0xe23): undefined reference to `sock_from_file'
-> 
+This avoids
+  ld: kernel/trace/bpf_trace.o: in function `bpf_sock_from_file':
+  bpf_trace.c:(.text+0xe23): undefined reference to `sock_from_file'
+When compiling a kernel with BPF and without NET.
 
-Thanks Randy! I'm on it, I'll send a fix to bpf-next.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Florent Revest <revest@chromium.org>
+---
+ kernel/trace/bpf_trace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 0cf0a6331482..877123bae71f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1272,7 +1272,11 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
+ 
+ BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+ {
++#ifdef CONFIG_NET
+ 	return (unsigned long) sock_from_file(file);
++#else
++	return NULL;
++#endif
+ }
+ 
+ BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+-- 
+2.29.2.576.ga3fc446d84-goog
 

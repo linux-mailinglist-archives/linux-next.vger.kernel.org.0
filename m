@@ -2,130 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D69432D0946
-	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 04:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F022D09D4
+	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 05:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbgLGDKg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Dec 2020 22:10:36 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39345 "EHLO ozlabs.org"
+        id S1728711AbgLGEtW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Dec 2020 23:49:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50852 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726482AbgLGDKf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 6 Dec 2020 22:10:35 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cq7b36XfXz9sVs;
-        Mon,  7 Dec 2020 14:09:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607310593;
-        bh=5bh4tlGoUL+1XncBIhF/LpWGb65TQqPGNgtGe+PXrV0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jxmi+mSGmjZITruorZ0kkMOF9O5pg0Vvo2xrLAVm2Q9Z9gAvfF0FvvoZVENeEgEWt
-         MSFoC7P7inCFz83TsGqzyss4t6MIlGxTjYyiHiWRNckA1LMREDPasGybn6KwsxQfw8
-         z4J5Gawg1XRLDfDfo8j40i4qoUHUQO7peDRBtoJ1mo6CUKTq69ioIFCDPwIObRnaGU
-         XbjhtiwZq93as04l1exa+SSFQihZ9z0rkPhi1IVyELPTBhhBFcfROAEOXDOxWLPfuO
-         RBezhvI3oAIf/io4Gd2xO731hs3iyXcjR0u9zZTXp/FiQwpZq67gk7eZpVjV9V2OsF
-         DUt8YOH9t5+Sw==
-Date:   Mon, 7 Dec 2020 14:09:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Florent Revest <revest@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726482AbgLGEtW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 6 Dec 2020 23:49:22 -0500
+Date:   Sun, 6 Dec 2020 20:48:41 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607316521;
+        bh=k9A4ZjiahANn8gsfT1SVU57Lhq9aeLLkNBsXD3AhHm0=;
+        h=From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=VbcIptQzIhzaXEPytXTvpytzksPn7Xww6mGCKxmWI4/rprgPkggobag8zcUiWdBBS
+         p/sSWd2szFuVLeCWyh0CaGVl+5IHnmktPQelC00D8h+c6aB7OgCN/6i2jIsKk4m3zZ
+         jyVKUuEremfmgzIJ1g89SE1w2k4ODkNF+kVckMkEvhio7QW12KvEfo0JN+kXPkrZa/
+         G/ph+InNpZYC9Vug/PJhbu8jtup6RiFJBy+XBYgZeICAgpHNetVUMf5rFrCANjg4dy
+         qA5U1k4ywNzO8ecQv45w9kXThaeq+Jhs7f9awqK5Ka7irtibvuIKJ29cdM/4HP718b
+         aBHWab6/QHb1Q==
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20201207140951.4c04f26f@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the rcu tree
+Message-ID: <20201207044841.GD2657@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20201204192526.0b38fb02@canb.auug.org.au>
+ <20201204192032.GA1437@paulmck-ThinkPad-P72>
+ <20201207083920.2f64f4dc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5kRkZNS/rNEXgq/a/ECeDM6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207083920.2f64f4dc@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5kRkZNS/rNEXgq/a/ECeDM6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Dec 07, 2020 at 08:39:20AM +1100, Stephen Rothwell wrote:
+> Hi Paul,
+> 
+> On Fri, 4 Dec 2020 11:20:32 -0800 "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> >
+> > Does the following patch fix things?  (Sigh.  It won't apply on the
+> > rcu/next that you used.  Or even on this moment's dev branch.  I will
+> > fold it in with attribution and update.  But just to show you what my
+> > thought is.)
+> 
+> Sorry I didn't get the chance to test your patch, but it seems to make
+> sense.  I notice that you have added this to the rcu tree for today, so
+> I guess we will see :-)
 
-Hi all,
+Fair enough!  ;-)
 
-After merging the block tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
-
-fs/io_uring.c: In function 'io_shutdown':
-fs/io_uring.c:3782:9: error: too many arguments to function 'sock_from_file'
- 3782 |  sock =3D sock_from_file(req->file, &ret);
-      |         ^~~~~~~~~~~~~~
-In file included from fs/io_uring.c:63:
-include/linux/net.h:243:16: note: declared here
-  243 | struct socket *sock_from_file(struct file *file);
-      |                ^~~~~~~~~~~~~~
-
-Caused by commit
-
-  36f4fa6886a8 ("io_uring: add support for shutdown(2)")
-
-interacting with commit
-
-  dba4a9256bb4 ("net: Remove the err argument from sock_from_file")
-
-from the bpf-next tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 7 Dec 2020 14:04:10 +1100
-Subject: [PATCH] fixup for "net: Remove the err argument from sock_from_fil=
-e"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/io_uring.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index cd997264dbab..91d08408f1fe 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3779,9 +3779,9 @@ static int io_shutdown(struct io_kiocb *req, bool for=
-ce_nonblock)
- 	if (force_nonblock)
- 		return -EAGAIN;
-=20
--	sock =3D sock_from_file(req->file, &ret);
-+	sock =3D sock_from_file(req->file);
- 	if (unlikely(!sock))
--		return ret;
-+		return -ENOTSOCK;
-=20
- 	ret =3D __sys_shutdown_sock(sock, req->shutdown.how);
- 	io_req_complete(req, ret);
---=20
-2.29.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5kRkZNS/rNEXgq/a/ECeDM6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/NnP8ACgkQAVBC80lX
-0Gy0WQf9GaIM5CBSqUjd7N8Mw2U6mjQytrpDmJxXIlAEOic/wBwRrwkQBzjYm4Bh
-qW68SyvoswdL/oYgw3N07QXs3Ktf7P0f3Ul5w70ugh0rHVMW6Q7E7dnuwtxRPCI6
-qKKyBe0yXMHj/jJLSP6L4ki+N5ltUdULO3V22XrqPGbYt0xBs1BSXn3nYlQEHn8L
-MwX8O69VO260FJHPz6+7MglxFW7df2WaRBsprGqfUHMY6QDVcENafpIu9wWyinRH
-lhyCL09pO0l4S21N6JXbJCUbXdY4bDS3EC+fgd3t5FpIzCkCy8XGwlywTmVBc/ow
-2VKP4fiZVOEsoxpbeHA6Bl41dZYeHw==
-=ds5/
------END PGP SIGNATURE-----
-
---Sig_/5kRkZNS/rNEXgq/a/ECeDM6--
+							Thanx, Paul

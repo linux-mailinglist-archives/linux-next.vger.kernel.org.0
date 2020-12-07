@@ -2,112 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DE52D0936
-	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 03:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D69432D0946
+	for <lists+linux-next@lfdr.de>; Mon,  7 Dec 2020 04:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgLGCpA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Dec 2020 21:45:00 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34373 "EHLO ozlabs.org"
+        id S1726484AbgLGDKg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Dec 2020 22:10:36 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39345 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbgLGCpA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 6 Dec 2020 21:45:00 -0500
+        id S1726482AbgLGDKf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 6 Dec 2020 22:10:35 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cq71X0bp7z9sVn;
-        Mon,  7 Dec 2020 13:44:15 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cq7b36XfXz9sVs;
+        Mon,  7 Dec 2020 14:09:51 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607309058;
-        bh=QYMU9f/5ucXLmPvZ0OBO4kYJURzAAl3ykFJOon2aLso=;
+        s=201702; t=1607310593;
+        bh=5bh4tlGoUL+1XncBIhF/LpWGb65TQqPGNgtGe+PXrV0=;
         h=Date:From:To:Cc:Subject:From;
-        b=T/ZQKmKalhBArHmm6xld550VpiJLQBtZNS+6GP7NtB9OLN+raCk4pksm6fw8vhDtl
-         Rwg7RdL4ucxiYua9Vy4PYI05IB8acsczW2AC3NzJFXXIDOS3EBVougvlew4rHELm2a
-         pr3P9TMzIFmvI4xpBTaGRgFX39EgmO/CNcT6yWaJnqqJVv2Uc6QQPJEiVP1mlYsq4e
-         RAhpbGFckobVihUzKd52b51WYaFtgYH6z0ibc0tXwa5olOn2gR5sAoxBf35Dfkwtht
-         E0m2JMVxkZ7pqJ3EBG/Z9DP4vt2EYjnFFOrHlFR3nYS0EbReph8PEdrkbmEgHE7E0c
-         4GVaTRRAtEkSw==
-Date:   Mon, 7 Dec 2020 13:44:13 +1100
+        b=jxmi+mSGmjZITruorZ0kkMOF9O5pg0Vvo2xrLAVm2Q9Z9gAvfF0FvvoZVENeEgEWt
+         MSFoC7P7inCFz83TsGqzyss4t6MIlGxTjYyiHiWRNckA1LMREDPasGybn6KwsxQfw8
+         z4J5Gawg1XRLDfDfo8j40i4qoUHUQO7peDRBtoJ1mo6CUKTq69ioIFCDPwIObRnaGU
+         XbjhtiwZq93as04l1exa+SSFQihZ9z0rkPhi1IVyELPTBhhBFcfROAEOXDOxWLPfuO
+         RBezhvI3oAIf/io4Gd2xO731hs3iyXcjR0u9zZTXp/FiQwpZq67gk7eZpVjV9V2OsF
+         DUt8YOH9t5+Sw==
+Date:   Mon, 7 Dec 2020 14:09:51 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.cz>
-Cc:     Christoph Hellwig <hch@lst.de>, David Sterba <dsterba@suse.com>,
+To:     Jens Axboe <axboe@kernel.dk>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Florent Revest <revest@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the block tree with the btrfs tree
-Message-ID: <20201207134413.37094de6@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20201207140951.4c04f26f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5yNNZRKdA7YErfo4BZaW60V";
+Content-Type: multipart/signed; boundary="Sig_/5kRkZNS/rNEXgq/a/ECeDM6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5yNNZRKdA7YErfo4BZaW60V
+--Sig_/5kRkZNS/rNEXgq/a/ECeDM6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  fs/btrfs/check-integrity.c
+fs/io_uring.c: In function 'io_shutdown':
+fs/io_uring.c:3782:9: error: too many arguments to function 'sock_from_file'
+ 3782 |  sock =3D sock_from_file(req->file, &ret);
+      |         ^~~~~~~~~~~~~~
+In file included from fs/io_uring.c:63:
+include/linux/net.h:243:16: note: declared here
+  243 | struct socket *sock_from_file(struct file *file);
+      |                ^~~~~~~~~~~~~~
 
-between commit:
+Caused by commit
 
-  068afafa2589 ("btrfs: drop casts of bio bi_sector")
+  36f4fa6886a8 ("io_uring: add support for shutdown(2)")
 
-from the btrfs tree and commit:
+interacting with commit
 
-  051707baf43b ("block: store a block_device pointer in struct bio")
+  dba4a9256bb4 ("net: Remove the err argument from sock_from_file")
 
-from the block tree.
+from the bpf-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 7 Dec 2020 14:04:10 +1100
+Subject: [PATCH] fixup for "net: Remove the err argument from sock_from_fil=
+e"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/io_uring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index cd997264dbab..91d08408f1fe 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3779,9 +3779,9 @@ static int io_shutdown(struct io_kiocb *req, bool for=
+ce_nonblock)
+ 	if (force_nonblock)
+ 		return -EAGAIN;
+=20
+-	sock =3D sock_from_file(req->file, &ret);
++	sock =3D sock_from_file(req->file);
+ 	if (unlikely(!sock))
+-		return ret;
++		return -ENOTSOCK;
+=20
+ 	ret =3D __sys_shutdown_sock(sock, req->shutdown.how);
+ 	io_req_complete(req, ret);
+--=20
+2.29.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/btrfs/check-integrity.c
-index 6ff44e53814c,8791ad9b3ca5..000000000000
---- a/fs/btrfs/check-integrity.c
-+++ b/fs/btrfs/check-integrity.c
-@@@ -2690,9 -2693,10 +2690,9 @@@ static void __btrfsic_submit_bio(struc
-  		bio_is_patched =3D 0;
-  		if (dev_state->state->print_mask &
-  		    BTRFSIC_PRINT_MASK_SUBMIT_BIO_BH)
-- 			pr_info("submit_bio(rw=3D%d,0x%x, bi_vcnt=3D%u, bi_sector=3D%llu (byte=
-nr %llu), bi_disk=3D%p)\n",
-+ 			pr_info("submit_bio(rw=3D%d,0x%x, bi_vcnt=3D%u, bi_sector=3D%llu (byte=
-nr %llu), bi_bdev=3D%p)\n",
-  			       bio_op(bio), bio->bi_opf, segs,
-- 			       bio->bi_iter.bi_sector, dev_bytenr, bio->bi_disk);
- -			       (unsigned long long)bio->bi_iter.bi_sector,
- -			       dev_bytenr, bio->bi_bdev);
-++			       bio->bi_iter.bi_sector, dev_bytenr, bio->bi_bdev);
- =20
-  		mapped_datav =3D kmalloc_array(segs,
-  					     sizeof(*mapped_datav), GFP_NOFS);
-
---Sig_/5yNNZRKdA7YErfo4BZaW60V
+--Sig_/5kRkZNS/rNEXgq/a/ECeDM6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/Nlv0ACgkQAVBC80lX
-0Gyy6Qf/bDimpDLsISjg5euSTeL53GgTtMCNxCh2wqikJtTLnSnxhqJmcpTEChyL
-0zo0hgxyLPUK8++yIOrODa02mv7IBWCsz+L/K64N3jo3uOMCWnEUpr/GJnziJ98N
-OP7eJnx6FKi1AwS2eoZfiB4HLg1UCO1GU6axPyFCHg0zl9zrRw/jEq00bD6LxouQ
-xmG06V8iiPUmAKVP7PH+pte4nTVsfxCG7Ukey9qVdmfl3gIlu6Fighwnf2OgVSe8
-guy57sx5KA5A2uLYRsnGLaMq+5jc8JRNMcT8oBQ2gWkhRmOjKSOkJYdvSq5HMmHX
-7OzBSzAnXkVncWO/H03QfBKD8E1DZg==
-=n8bU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/NnP8ACgkQAVBC80lX
+0Gy0WQf9GaIM5CBSqUjd7N8Mw2U6mjQytrpDmJxXIlAEOic/wBwRrwkQBzjYm4Bh
+qW68SyvoswdL/oYgw3N07QXs3Ktf7P0f3Ul5w70ugh0rHVMW6Q7E7dnuwtxRPCI6
+qKKyBe0yXMHj/jJLSP6L4ki+N5ltUdULO3V22XrqPGbYt0xBs1BSXn3nYlQEHn8L
+MwX8O69VO260FJHPz6+7MglxFW7df2WaRBsprGqfUHMY6QDVcENafpIu9wWyinRH
+lhyCL09pO0l4S21N6JXbJCUbXdY4bDS3EC+fgd3t5FpIzCkCy8XGwlywTmVBc/ow
+2VKP4fiZVOEsoxpbeHA6Bl41dZYeHw==
+=ds5/
 -----END PGP SIGNATURE-----
 
---Sig_/5yNNZRKdA7YErfo4BZaW60V--
+--Sig_/5kRkZNS/rNEXgq/a/ECeDM6--

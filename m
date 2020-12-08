@@ -2,107 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C552D26AA
-	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 09:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0A02D279E
+	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 10:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgLHIy7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Dec 2020 03:54:59 -0500
-Received: from so254-31.mailgun.net ([198.61.254.31]:35768 "EHLO
-        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728559AbgLHIy7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 03:54:59 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1607417679; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=dPCdplZ+XxOGGp7/+lsbg8A1a02KAIt7v+rAxEUucJU=; b=MMkow5J0+4yhkpRd23XGHicYl4ctP5MQr01w3uc3VGteychY5ohVcOcZi9FCQtc+YAWRPjZY
- 5TkhkrtHk1k7riwvqT9R+UNvaleUSOYvtVrGhvVv8+LNx65GdeX8F9wiNXOvGbHgnzee9Zq6
- maUplQdVtprL47cZPPPRmdU+glc=
-X-Mailgun-Sending-Ip: 198.61.254.31
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5fcf3f334afea88893f32a70 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 08 Dec 2020 08:54:11
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 595E0C433CA; Tue,  8 Dec 2020 08:54:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728671AbgLHJ3k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Dec 2020 04:29:40 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37347 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726584AbgLHJ3k (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Dec 2020 04:29:40 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 24025C433C6;
-        Tue,  8 Dec 2020 08:54:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 24025C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cqvxy3PWHz9sWC;
+        Tue,  8 Dec 2020 20:28:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1607419736;
+        bh=ZIwefV1ijdrVyr9jXrKWDROeAatEmGo9ATyFcJRUVnA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gt2ZEpq6nGT33L3okHfa3xKZP+ahtmQwTKY2Ak2k7V90QM0jwPiJisSehytWN5ey4
+         /lL3A7EPZpmig9CFHEChTGXFRkYV+9elTPi8sN8a6CVg9Vjh7TyHhwFUx1+A+zbKMq
+         CLhcPW3UbpP2VrSgBTpVcvEUZeMsFhu8CK6f3u5YcrL3qrajTD5/0On4ofeLmQ7Clx
+         SFo7Ym4R5WpoVqTasOwDGYwP8lqgWvkL/1jESSCqd3ycLNLHok1yRN3gXabALlCDTD
+         5afI/kFgMIoxB3FlcD4O1+ulg+iX5bqhkAfDG+uPFOko56hXeZn1ePi5wf4FFEyGY6
+         kitVWhCXAp6PA==
+Date:   Tue, 8 Dec 2020 20:28:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Can Guo <cang@codeaurora.org>, Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.de>, Jens Axboe <axboe@kernel.dk>,
+        Stanley Chu <stanley.chu@mediatek.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the wireless-drivers-next tree
-References: <20201208194944.19ee46f4@canb.auug.org.au>
-Date:   Tue, 08 Dec 2020 10:54:05 +0200
-In-Reply-To: <20201208194944.19ee46f4@canb.auug.org.au> (Stephen Rothwell's
-        message of "Tue, 8 Dec 2020 19:49:43 +1100")
-Message-ID: <87im9cel02.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+Subject: linux-next: build failure after merge of the scsi-mkp tree
+Message-ID: <20201208202853.186ae136@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/TgGmYSiCvy6LQk_oEJFuOEW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+--Sig_/TgGmYSiCvy6LQk_oEJFuOEW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> After merging the wireless-drivers-next tree, today's linux-next build
-> (powerpc allyesconfig) failed like this:
->
-> ld: drivers/net/wireless/realtek/rtw88/rtw8822ce.o:(.rodata.rtw_pm_ops+0x0): multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/rtw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
-> ld: drivers/net/wireless/realtek/rtw88/rtw8723de.o:(.rodata.rtw_pm_ops+0x0): multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/rtw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
-> ld: drivers/net/wireless/realtek/rtw88/rtw8821ce.o:(.rodata.rtw_pm_ops+0x0): multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/rtw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
-> ld: drivers/net/wireless/realtek/rtw88/pci.o:(.rodata.rtw_pm_ops+0x0): multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/rtw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
->
-> Caused by commit
->
->   2e86ef413ab3 ("rtw88: pci: Add prototypes for .probe, .remove and .shutdown")
->
-> I have applied the following patch:
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 8 Dec 2020 19:35:18 +1100
-> Subject: [PATCH] rtw88: pci: "extern" is necessary for header declarations of data
->
-> Fixes: 2e86ef413ab3 ("rtw88: pci: Add prototypes for .probe, .remove and .shutdown")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/net/wireless/realtek/rtw88/pci.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/realtek/rtw88/pci.h b/drivers/net/wireless/realtek/rtw88/pci.h
-> index cda56919a5f0..7cdefe229824 100644
-> --- a/drivers/net/wireless/realtek/rtw88/pci.h
-> +++ b/drivers/net/wireless/realtek/rtw88/pci.h
-> @@ -214,7 +214,7 @@ struct rtw_pci {
->  	void __iomem *mmap;
->  };
->  
-> -const struct dev_pm_ops rtw_pm_ops;
-> +extern const struct dev_pm_ops rtw_pm_ops;
+Hi all,
 
-Thanks, just an hour ago I applied an identical patch from Ping:
+After merging the scsi-mkp tree, today's linux-next build (sparc64
+defconfig) failed like this:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-drivers-next.git/commit/?id=91aeaf09a6eed83cae0d0fad20a97699b1c8b812
+drivers/mtd/nand/raw/intel-nand-controller.c:17:10: fatal error: linux/mtd/=
+nand_ecc.h: No such file or directory
+   17 | #include <linux/mtd/nand_ecc.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Caused by commit
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+  81a395cdc176 ("scsi: block: Do not accept any requests while suspended")
+
+# CONFIG_PM is not set
+
+I have applied the following patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 8 Dec 2020 20:12:33 +1100
+Subject: [PATCH] scsi: block: fix for "scsi: block: Do not accept any reque=
+sts while suspended"
+
+Fixes: 81a395cdc176 ("scsi: block: Do not accept any requests while suspend=
+ed")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ block/blk-core.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/block/blk-core.c b/block/blk-core.c
+index a71a5c9429d6..9c9aec1382be 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -421,6 +421,18 @@ void blk_cleanup_queue(struct request_queue *q)
+ }
+ EXPORT_SYMBOL(blk_cleanup_queue);
+=20
++#ifdef CONFIG_PM
++static bool rq_suspended(struct request_queue *q)
++{
++	return q->rpm_status =3D=3D RPM_SUSPENDED;
++}
++#else
++static bool rq_suspended(struct request_queue *q)
++{
++	return false;
++}
++#endif
++
+ /**
+  * blk_queue_enter() - try to increase q->q_usage_counter
+  * @q: request queue pointer
+@@ -440,12 +452,10 @@ int blk_queue_enter(struct request_queue *q, blk_mq_r=
+eq_flags_t flags)
+ 			 * responsible for ensuring that that counter is
+ 			 * globally visible before the queue is unfrozen.
+ 			 */
+-			if ((pm && q->rpm_status !=3D RPM_SUSPENDED) ||
+-			    !blk_queue_pm_only(q)) {
++			if ((pm && !rq_suspended(q)) || !blk_queue_pm_only(q))
+ 				success =3D true;
+-			} else {
++			else
+ 				percpu_ref_put(&q->q_usage_counter);
+-			}
+ 		}
+ 		rcu_read_unlock();
+=20
+--=20
+2.29.2
+
+
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/TgGmYSiCvy6LQk_oEJFuOEW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/PR1UACgkQAVBC80lX
+0GxP0Af/bWpugxzTg9UEnaXMq/YocIVlc5gOTgBFR9OC3eaVR2xNT7kid6ieeQ/u
+HJNsR1hnIcjb2enGJ9peC6eflgQ0Uu+xS6so9asa3Y+CbVakdsOvS55bqdcqBa1l
+l0ee5FoE9Zv5ZWtg6+rA1gnM2TnmTp0KzBUUnK6o7DExYa6GsmOKvx0zJ3dtNGvK
+s42imF1znP+kAToQBX3ZcIS8tAwzVVMoDhsHyIU6b/9hpsg9hnPdDPoXW7uHmNnu
+5SpFG4WKMeyaF8B8t8uExSphLQ9syFXcfYWM/4amzHrJFBlUo6gWeagUfbjrtFov
+EEJJTpzd+I76oq2xwhWSJIXNrHcrBg==
+=x9ij
+-----END PGP SIGNATURE-----
+
+--Sig_/TgGmYSiCvy6LQk_oEJFuOEW--

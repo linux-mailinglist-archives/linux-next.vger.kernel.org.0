@@ -2,72 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A26182D33B8
-	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 21:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACE92D3380
+	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 21:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbgLHUYP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Dec 2020 15:24:15 -0500
-Received: from mail-il1-f172.google.com ([209.85.166.172]:33931 "EHLO
-        mail-il1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbgLHUYO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 15:24:14 -0500
-Received: by mail-il1-f172.google.com with SMTP id x15so16712922ilq.1;
-        Tue, 08 Dec 2020 12:23:53 -0800 (PST)
+        id S1727920AbgLHUUH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Dec 2020 15:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727391AbgLHUUG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 15:20:06 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A55DC06179C
+        for <linux-next@vger.kernel.org>; Tue,  8 Dec 2020 12:19:26 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id x22so3031139wmc.5
+        for <linux-next@vger.kernel.org>; Tue, 08 Dec 2020 12:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=BUN76cwequ+/VYM+TfjP/RsLBiO7tCwwH45rVFT1fYU=;
+        b=GB9bF4dH48O1e0DK+jTsZh4B37OqnHwxnW+X5RHvICetlFihb9vuCkPErxfa23tjrb
+         Pet2IVW6VLn5YeD89+e5zaijde05qQ4JWh83Pt17ENTtvzAzVkliryrrbMcqEsxJE6QH
+         B4TGkcNp24Rpfo2uezXlz/XhLgR1KdnggvwIY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Q6NWRu0JKYjkSKoX9I3d4KbPD1VXfKxekQuoiZAo6xY=;
-        b=GQpkVNGzQHoAryWeOu2uD7PKDafeBbn+3P9QZtInYaggpt2EPSdhbKZej4RG6JB1Wi
-         ItPS3wdyNatCYtkxHCQAMqdGpctI2K/+jTD+svhJh+qd3bTVPGeDI9aq0etXpbXCOtAj
-         UUczEFTWS9SgtKcWaUOCVdwDZZJAMSoDNNikLP67/EGbMsDwRl25OkEM7Rf6oS2HDPT4
-         d7cX4vXC4ZZ6GyoVQi8eov2AXZbuW1wv2j0rsmgxKuB3sjE8ek0ZPCbpIZ0zbSdRxhtz
-         MuDdh4HyUNx2KVVsUcMcuj/MYpso3+EZn1sv0l41juTw2ePwTtFBTl2YaQzu4JKqfIsk
-         D/eg==
-X-Gm-Message-State: AOAM530KC15G2GlQiHNp9UCtE3bdgjFD9IOry6iHniiq3qpcr6IMjisO
-        +Ni2DJ2rM7oBN5u2uVAkQXX+PU8G6V4=
-X-Google-Smtp-Source: ABdhPJy43iErXqaJbEI+KdAzzThDnBtZL2L9D5ebJ78wffo3zIpgAH6EZzghH6bB62zYW4mWiEdN/g==
-X-Received: by 2002:a65:5ac4:: with SMTP id d4mr14854746pgt.50.1607457416741;
-        Tue, 08 Dec 2020 11:56:56 -0800 (PST)
-Received: from [192.168.4.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id h7sm19344124pgi.90.2020.12.08.11.56.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Dec 2020 11:56:55 -0800 (PST)
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Can Guo <cang@codeaurora.org>, Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.de>, Jens Axboe <axboe@kernel.dk>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201208202853.186ae136@canb.auug.org.au>
- <20201208203859.686f83eb@canb.auug.org.au>
- <20201208175526.GH1298255@rowland.harvard.edu>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <367308ee-25e7-e40e-ba3a-6b2138c20969@acm.org>
-Date:   Tue, 8 Dec 2020 11:56:53 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=BUN76cwequ+/VYM+TfjP/RsLBiO7tCwwH45rVFT1fYU=;
+        b=CmEFziLl7qGfAApleLbhs8gM77bMLSwMDRXSDq4k4ND9ygUmNLWXlH5s3Z1Je3Rnyq
+         wKh2yXTmjX6F2nZp9ZrvOnP0MM8WvzVz6dZjBaSS3zMvlcJXwq6Is+0PDltl9HaCaf+I
+         yqtCdKIdY6c13HeoxOhtVGhnsmrr4iWaZKmCtPi/jCnOUiaLjO8sRDJqy4dIIp7783W2
+         3XNo7nrJ2ZI0wRi6/PyltK48r08ejv1oa1PNb8UUQV7itNkkeQbVQXhwUij19IjXXfrT
+         OblRK3jHhAn8bzKcCgo+/Rd4tWRV3PTXwdMkz3WivryVr6U1pzOvOIgv+KW5ZKNUHTDY
+         hK/g==
+X-Gm-Message-State: AOAM5302NySqguM8dq8k32nAMpwXYSnqsYexT/T3zK+ghUp+HyrUX2l6
+        1F3tGe7HVkveHLhxo8lUeNlszQ==
+X-Google-Smtp-Source: ABdhPJy9OAXN0byqbLPrYyv3q1GNjdlrT9zw1o/Vgfw3TCvskm6gQE5bhU9On/i/pWGL2X7bDHg0xw==
+X-Received: by 2002:a1c:6a0e:: with SMTP id f14mr5240281wmc.102.1607458765212;
+        Tue, 08 Dec 2020 12:19:25 -0800 (PST)
+Received: from ?IPv6:2a04:ee41:4:1318:ea45:a00:4d43:48fc? ([2a04:ee41:4:1318:ea45:a00:4d43:48fc])
+        by smtp.gmail.com with ESMTPSA id k18sm10472971wrd.45.2020.12.08.12.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 12:19:24 -0800 (PST)
+Message-ID: <a057c7ee47aa82acebd0438b786cd424ad67f6d8.camel@chromium.org>
+Subject: Re: [PATCH bpf-next v3] bpf: Only provide bpf_sock_from_file with
+ CONFIG_NET
+From:   Florent Revest <revest@chromium.org>
+To:     Randy Dunlap <rdunlap@infradead.org>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@chromium.org, kafai@fb.com, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Date:   Tue, 08 Dec 2020 21:19:17 +0100
+In-Reply-To: <c8dd9a41-3e45-fb32-1074-e23ebe3cb2e5@infradead.org>
+References: <20201208173623.1136863-1-revest@chromium.org>
+         <c8dd9a41-3e45-fb32-1074-e23ebe3cb2e5@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-In-Reply-To: <20201208175526.GH1298255@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/8/20 9:55 AM, Alan Stern wrote:
-> Yes, that certainly is the proper fix.  It's all to easy to miss these
-> issues that depend on your kernel configuration.
+On Tue, 2020-12-08 at 12:06 -0800, Randy Dunlap wrote:
+> On 12/8/20 9:36 AM, Florent Revest wrote:
+> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
 > 
-> Bart, can you fold it into a new version of the patch?
+> I would say that I didn't ack this version of the patch (hey,
+> it's 3x the size of the v1/v2 patches), but I have just
+> rebuilt with v3, so the Ack is OK.  :)
 
-Sure, I will do that.
+Oops! I'll be more careful in the future, thank you Randy. ;)
 
-Thanks,
-
-Bart.

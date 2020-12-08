@@ -2,72 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0402D2A38
-	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 13:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C242D2A40
+	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 13:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729313AbgLHMC6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Dec 2020 07:02:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729306AbgLHMC6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Dec 2020 07:02:58 -0500
-X-Gm-Message-State: AOAM533DYu3wfDmOSERkPzGEK8OtXNGj3ZH4ifLAFHSBNKyDk8uM45id
-        9siU2VSSJJVe7JuAluuMvy5HZruhLDpnu5/nQak=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607428938;
-        bh=6E+/xx8/WgeZGFQ9PAz+biDFk84qEvMiX+TLWzxAc0s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eZqGpb4vyQpsBgB/VHXFLrHn8qKeDEwAHHfBBD0snhpb9X0fFe6Eghog9WdbtG3+p
-         uq/cwBSy3H5NShsT5l1BxKZsoZ1dSQRmUFa9Nq20s8xb89sXot0yCZqDoxsLgLDnAT
-         yPLpBUGc4Wfqhd//3Dh7I/a3pcJxR7ov4WgMY+y4PudVvPmhAY8ru6beVCPwePAzsm
-         OjMhv1N7idC7/AQHJ+WPAg0UO7FZskVcToI8L+4vSKufWrmHbCwA9XO9HaVU6aZgb9
-         iccjruwyzKhr20nqOw7cZ+KzmW1nWX8ViVmjuoCffk5FSKmaViRxu+51yJVUhDUyIu
-         qWCjjnBTNNung==
-X-Google-Smtp-Source: ABdhPJy8TyuvYY9m2GjZ8f5847BNI2ptrWVvXgT01U1tPx3NcnIAx3w6HYeFoub3BUT46klH8XLYvWwMkyvrOpuKWCU=
-X-Received: by 2002:a9d:12c:: with SMTP id 41mr16162083otu.77.1607428937220;
- Tue, 08 Dec 2020 04:02:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20201208223919.18a80092@canb.auug.org.au>
-In-Reply-To: <20201208223919.18a80092@canb.auug.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 8 Dec 2020 13:02:05 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHmQV+CCMS7HAnZP-4U=j3jSq83tvX+2O9ke8biJUcCvg@mail.gmail.com>
-Message-ID: <CAMj1kXHmQV+CCMS7HAnZP-4U=j3jSq83tvX+2O9ke8biJUcCvg@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the arm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Russell King <linux@armlinux.org.uk>,
+        id S1727569AbgLHMEi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Dec 2020 07:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbgLHMEi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 07:04:38 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956D8C061794;
+        Tue,  8 Dec 2020 04:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=nZaYsLuvHfKwLulf6ZtVf9YzHfwxVIDXtVk5mkADo4s=; b=HBN6ollIgYTtUkmnWwRMk/0L+
+        K7bolROOxlrR5DVVnxJjOySfuVimK/ry7Si0kH9VN/4WnEtbBRKsJnAM1P3BIGXTJiAVC1C23P4vu
+        KvFKcRjlq9nd+SatFfZITIDf0/ENJrNh1fPC3JICQZ8d2XiWSf5yAEKbtkidPuLA4NJfYpmL61spV
+        chtKzpHKaHMpfUfFuPDqeBGyWvjw68Hs+c9WcgZ2vQ2p7yokPkaKpe2QY2qtGG1oZJyoQBZeQf/Yk
+        dqPNZx7skGr6L2Hz49jrEcTZ9Ms09sikeLLMOBQ9E3KQ4MZS1jp3dy+y+lnNsa7apfHMcWLW8GIZi
+        Kl5oFwQeg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41326)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1kmbim-0000ey-3T; Tue, 08 Dec 2020 12:03:56 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1kmbil-0005aQ-Bc; Tue, 08 Dec 2020 12:03:55 +0000
+Date:   Tue, 8 Dec 2020 12:03:55 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: Fixes tag needs some work in the arm tree
+Message-ID: <20201208120355.GQ1551@shell.armlinux.org.uk>
+References: <20201208223919.18a80092@canb.auug.org.au>
+ <CAMj1kXHmQV+CCMS7HAnZP-4U=j3jSq83tvX+2O9ke8biJUcCvg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHmQV+CCMS7HAnZP-4U=j3jSq83tvX+2O9ke8biJUcCvg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 8 Dec 2020 at 12:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   4812d516af55 ("ARM: 9027/1: head.S: explicitly map DT even if it lives in the first physical section")
->
-> Fixes tag
->
->   Fixes: 149a3ffe62b9dbc3 ("9012/1: move device tree mapping out of linear region")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
->
+On Tue, Dec 08, 2020 at 01:02:05PM +0100, Ard Biesheuvel wrote:
+> On Tue, 8 Dec 2020 at 12:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > In commit
+> >
+> >   4812d516af55 ("ARM: 9027/1: head.S: explicitly map DT even if it lives in the first physical section")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 149a3ffe62b9dbc3 ("9012/1: move device tree mapping out of linear region")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
+> >
+> 
+> Oops, my bad.
+> 
+> I think we can drop the Fixes tag entirely - I added it to the patch
+> when I sent it to the mailing list because it fixes a patch that had
+> already been queued up by Russell at that point. However, I don't
+> think it is that important to capture this relation in the future,
+> given that they will all end up in the same mainline -rc
 
-Oops, my bad.
+I've already dropped it and fixed the SHA1 reference in the commit
+message.
 
-I think we can drop the Fixes tag entirely - I added it to the patch
-when I sent it to the mailing list because it fixes a patch that had
-already been queued up by Russell at that point. However, I don't
-think it is that important to capture this relation in the future,
-given that they will all end up in the same mainline -rc
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

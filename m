@@ -2,82 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466E72D265D
-	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 09:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DE12D2692
+	for <lists+linux-next@lfdr.de>; Tue,  8 Dec 2020 09:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728469AbgLHIhw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Dec 2020 03:37:52 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:46033 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728194AbgLHIhv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 03:37:51 -0500
-Received: by mail-ot1-f42.google.com with SMTP id h18so11189350otq.12;
-        Tue, 08 Dec 2020 00:37:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aXDyhPzCieRdhaMthbBXKCwOlq6T9ABtAlajnQOA5AM=;
-        b=jwm037JpRGY64ZC6PTPZ+uFpQfsy1vTw9BsYrhHOvKef8ZuQClWjFICKS8s+h/BY3y
-         2nVcB8XuBX+3CSRZsTm5L/K5GoeN65JQdJUjcJkoUerjpvW+6JukYhBLI/cMO2UE4rYF
-         AABduVI6LSjQXF5i8HRCATdGpAU7z6hPIs1k+7rjkKdjW74NqtRWkfg3wcu3GRkhcVwz
-         94F2ANe9x4MMO6G+EXBhtZkJSUUqHRmfbzXZOABxrQTjBEAxh3HMLAPwYGYAtNZ+hKqv
-         Ug9hcunuBHXQISK9rWvR4bM9tb9gDp56OjX+kfxK7jX1AMIYYMqFI4aabcHRslWiU4wC
-         ho/Q==
-X-Gm-Message-State: AOAM531a2es07/w5dZJlH/5A67Wd4ofRRcowXnjhgG2L5vnK+5jX84uo
-        TN2w0j6/F0dMPM5utp6BS9XdJwCFDctrLeyCQ28=
-X-Google-Smtp-Source: ABdhPJwWi/EZNXz2SL/GMnB/3DnxeKJphp+46T0VmWUZdjOnLvhzG+mxughwd3GBz26RT6HuqDjLxuNa3YH2C0DDS1I=
-X-Received: by 2002:a9d:2203:: with SMTP id o3mr16002385ota.107.1607416631045;
- Tue, 08 Dec 2020 00:37:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20201208090555.7159b138@canb.auug.org.au>
-In-Reply-To: <20201208090555.7159b138@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Dec 2020 09:37:00 +0100
-Message-ID: <CAMuHMdVYoxUOUL0zNAPzTJUSR3vGzcJWMzvtCKK=ZxyM=8hk+A@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the clk tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1727788AbgLHIua (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Dec 2020 03:50:30 -0500
+Received: from ozlabs.org ([203.11.71.1]:60591 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725927AbgLHIua (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Dec 2020 03:50:30 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cqv4q2vXrz9sWK;
+        Tue,  8 Dec 2020 19:49:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1607417387;
+        bh=m50Uy9hZiiibvZwbvLRlzopRh9M4axzuEr+t92E0AW0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q+7saXO5Plf/h5DonDEbRrA4oO7G3oool0uv1pt8FNgE8QAEeoGNqACpl3PkjaKGJ
+         5UqrpOBcLOJ27uX2wPDfHqeBJmaho8GyZRLc1Fzqv0/7+WVQ7C5BWw2hikjoH5QVv+
+         hb1J33NjF7DJ9MlTelKrdw7uFzaJu5X55AV3/1lCQEKcMzRmgnJBRW/eUiKl8ZYfDY
+         7x4EIucPo81hVt8nIX8KE+oAym3mBjvNSkj4kn+VT3A9cFzTmr5OrXErt+1pyn92dW
+         zQ0V11Lpeh5PQEqwrCsMlJuDMRy2HK/zEFa4O9YtXcDYj7KUphBkTGvaNMAbVCZEiw
+         LawUXFfMU4ZGg==
+Date:   Tue, 8 Dec 2020 19:49:43 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the wireless-drivers-next
+ tree
+Message-ID: <20201208194944.19ee46f4@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/2HR/L28mlXBwHzQoeCzS3l1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/2HR/L28mlXBwHzQoeCzS3l1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 7, 2020 at 11:06 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> In commit
->
->   c3f207f6d23d ("clk: renesas: r8a779a0: Make rcar_r8a779a0_cpg_clk_register() static")
->
-> Fixes tag
->
->   Fixes: c07439dea94050b6 ("clk: renesas: cpg-mssr: Add support for R-Car V3U")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
+Hi all,
 
-Oops, my bad.
+After merging the wireless-drivers-next tree, today's linux-next build
+(powerpc allyesconfig) failed like this:
 
-> Maybe you meant
->
-> Fixes: 17bcc8035d2d ("clk: renesas: cpg-mssr: Add support for R-Car V3U")
+ld: drivers/net/wireless/realtek/rtw88/rtw8822ce.o:(.rodata.rtw_pm_ops+0x0)=
+: multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/r=
+tw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
+ld: drivers/net/wireless/realtek/rtw88/rtw8723de.o:(.rodata.rtw_pm_ops+0x0)=
+: multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/r=
+tw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
+ld: drivers/net/wireless/realtek/rtw88/rtw8821ce.o:(.rodata.rtw_pm_ops+0x0)=
+: multiple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/r=
+tw8822be.o:(.rodata.rtw_pm_ops+0x0): first defined here
+ld: drivers/net/wireless/realtek/rtw88/pci.o:(.rodata.rtw_pm_ops+0x0): mult=
+iple definition of `rtw_pm_ops'; drivers/net/wireless/realtek/rtw88/rtw8822=
+be.o:(.rodata.rtw_pm_ops+0x0): first defined here
 
-Yes I did.
+Caused by commit
 
-Mike/Stephen: do you want me to respin my pull requests?
+  2e86ef413ab3 ("rtw88: pci: Add prototypes for .probe, .remove and .shutdo=
+wn")
 
-Gr{oetje,eeting}s,
+I have applied the following patch:
 
-                        Geert
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 8 Dec 2020 19:35:18 +1100
+Subject: [PATCH] rtw88: pci: "extern" is necessary for header declarations =
+of data
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Fixes: 2e86ef413ab3 ("rtw88: pci: Add prototypes for .probe, .remove and .s=
+hutdown")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/wireless/realtek/rtw88/pci.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/net/wireless/realtek/rtw88/pci.h b/drivers/net/wireles=
+s/realtek/rtw88/pci.h
+index cda56919a5f0..7cdefe229824 100644
+--- a/drivers/net/wireless/realtek/rtw88/pci.h
++++ b/drivers/net/wireless/realtek/rtw88/pci.h
+@@ -214,7 +214,7 @@ struct rtw_pci {
+ 	void __iomem *mmap;
+ };
+=20
+-const struct dev_pm_ops rtw_pm_ops;
++extern const struct dev_pm_ops rtw_pm_ops;
+=20
+ int rtw_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id);
+ void rtw_pci_remove(struct pci_dev *pdev);
+--=20
+2.29.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2HR/L28mlXBwHzQoeCzS3l1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/PPigACgkQAVBC80lX
+0Gy2FQf+PxaKbTnyOH0/6sZ9BmI4PsmGjnAZIr/LuB50TvMb993fvkLPw3MBK7vK
+wqgDFydXtIQNciPgpFGQYa+ngc491YTNCRwTPEEeXSvQ8tU/sztf/1+NQrzzD/F+
+Yd/Cg4oTG9LguDPKBIFJOdZYPZinjKLj7HvXsbCEgA/Aw+660nSZYShlQ209mU3a
+pmWLVvOdRZg9Pi0yMxoDj/geZQAA+G+lMRePbFw51RI8T/oooEwwyKWy/2L7CQnt
+sVQ0HZAfLoFUA1IWfa+nskV6YfJbn5zclOu6tJpkoNkdtrSYDkndkU5QqIaFL4k8
+NkhQWzbBTU79TC6NQozHthlS5/V18g==
+=gl18
+-----END PGP SIGNATURE-----
+
+--Sig_/2HR/L28mlXBwHzQoeCzS3l1--

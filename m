@@ -2,66 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9470A2D479D
-	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 18:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97912D47FA
+	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 18:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732507AbgLIRNw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Dec 2020 12:13:52 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:48776 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732429AbgLIRNw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Dec 2020 12:13:52 -0500
-Received: by mail-io1-f72.google.com with SMTP id 191so1718006iob.15
-        for <linux-next@vger.kernel.org>; Wed, 09 Dec 2020 09:13:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=uTT0y5Nz9NOP7sMbpRnqT8y6zo7MZEhRe2Khd85knH4=;
-        b=iR3iRFIzOeRqE10ihSAd6JewmDEHlSh95u1AswRMo+lgXH98WimNL4O81zTvmUwyqo
-         uK1aJrAWt61/cOBZ9F8eQK8duRfys4O8T2HGiMwmOsx5VUNuQAkZF4PjX/EfHEVRzghF
-         M6jVpafse/XtWFZy/JFM5Otn8vhIQ90fb0lQGkr4QE+WUeZxJBTDXzLY4qcVi1NLDGru
-         /Y2IYVIQtt8JDOaz0bUEGm70JQjZR82Q2oP6Kb2weRtbckpSlkNcXShDf6XVdO91F0mq
-         bf3HLyR7Vw3Adq8ZdYHB6BWeZ1dA8vqOSQl3XH3LWnpLpelkD/4RFJetFjTleqAeQvxd
-         vpQg==
-X-Gm-Message-State: AOAM533Et8seVovQeRt/DwK80itloXrC/nc6CJlX4s+eSKZqQs/VzLGr
-        Ot8yuVdQWxHAVUNG6TuTLyKdFmY2ADbhkAFN2liwVh7dZEA3
-X-Google-Smtp-Source: ABdhPJxylq4V3p6fnj7Omw7lvfBWkiL4T32Vk2N22Tc0sZ0G8J6rUyk8fYNVjcopXH89x7dwIWASek+rTI/J9Cf5LLUEUsIddlt+
+        id S1732825AbgLIRad (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Dec 2020 12:30:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729855AbgLIRaZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Dec 2020 12:30:25 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607534984;
+        bh=X3mrye1KXGcDNVeDxCVeGHxOE9WePBKAXTYWezNgwdw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=X5w+RnP9Xg+bFUlLwlLPQpCBrQ5xqjKLesd9e+6aGdwrZIXjkTSNtpxmwF0zy1UAz
+         pQvfLuT1IJXM5vR4NaCAXzWRJUVqh567p64Ssuggv9GI85fbWGd9FAHF9k3My8jr6t
+         ojF3/i5zjhQGEFkbe6s8qLyAJJ7L/eV8pPdMJ3ai4GiZhk6v3A0ThFTX0WZQMcBpb5
+         L4bw3mRq7EbzYOUXHmw4d/BrPRJPdSHLkn9cauEPrEip5h/bgh3FCnJ9gMs4VPj2NF
+         Enj1ZoNSx0DuE2VPApG9YjGQJiQeQhbR66oF5pgtU45aieOa/U8/MZpwRUZvB9OLtc
+         qHMiwvBioe04g==
 MIME-Version: 1.0
-X-Received: by 2002:a02:8790:: with SMTP id t16mr4403722jai.80.1607533991526;
- Wed, 09 Dec 2020 09:13:11 -0800 (PST)
-Date:   Wed, 09 Dec 2020 09:13:11 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008789b505b60b2c3d@google.com>
-Subject: linux-next build error (11)
-From:   syzbot <syzbot+79023dbd85f19ddbe8cc@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMuHMdVYoxUOUL0zNAPzTJUSR3vGzcJWMzvtCKK=ZxyM=8hk+A@mail.gmail.com>
+References: <20201208090555.7159b138@canb.auug.org.au> <CAMuHMdVYoxUOUL0zNAPzTJUSR3vGzcJWMzvtCKK=ZxyM=8hk+A@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the clk tree
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Date:   Wed, 09 Dec 2020 09:29:43 -0800
+Message-ID: <160753498332.1580929.15118515893187584689@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+Quoting Geert Uytterhoeven (2020-12-08 00:37:00)
+> Hi Stephen,
+>=20
+> On Mon, Dec 7, 2020 at 11:06 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> > In commit
+> >
+> >   c3f207f6d23d ("clk: renesas: r8a779a0: Make rcar_r8a779a0_cpg_clk_reg=
+ister() static")
+> >
+> > Fixes tag
+> >
+> >   Fixes: c07439dea94050b6 ("clk: renesas: cpg-mssr: Add support for R-C=
+ar V3U")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+>=20
+> Oops, my bad.
+>=20
+> > Maybe you meant
+> >
+> > Fixes: 17bcc8035d2d ("clk: renesas: cpg-mssr: Add support for R-Car V3U=
+")
+>=20
+> Yes I did.
+>=20
+> Mike/Stephen: do you want me to respin my pull requests?
+>=20
 
-syzbot found the following issue on:
-
-HEAD commit:    2f1d5c77 Add linux-next specific files for 20201209
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13aa845b500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fcc0aafc1380dee5
-dashboard link: https://syzkaller.appspot.com/bug?extid=79023dbd85f19ddbe8cc
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+79023dbd85f19ddbe8cc@syzkaller.appspotmail.com
-
-failed to run ["make" "-j" "64" "ARCH=x86_64" "CC=/syzkaller/gcc/bin/gcc" "oldconfig"]: exit status 2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Sure a respin is fine. I can fix it up in clk tree. Any chance your
+trees can be pulled into linux-next? That would find this earlier.

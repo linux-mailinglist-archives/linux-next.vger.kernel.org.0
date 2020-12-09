@@ -2,105 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247C82D43CA
-	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 15:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECCA2D43E8
+	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 15:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbgLIOBf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Dec 2020 09:01:35 -0500
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.2]:39681 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728855AbgLIOBZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Dec 2020 09:01:25 -0500
-Received: from [100.112.1.102] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-b.us-east-1.aws.symcld.net id F0/C3-00973-897D0DF5; Wed, 09 Dec 2020 13:56:40 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnleJIrShJLcpLzFFi42JJl3vFrjvt+oV
-  4g59twhZPDrQzWrw5Pp3J4vKuOWwWBxe2MVqcOX2J1WLr3qvsDmwejTdusHks7pvM6vF+31U2
-  jy1X21k8Pm+SC2CNYs3MS8qvSGDNeN1yi7ngFWfFp/bPrA2Mqzm6GLk4hAT+M0rMnPWWCcJ5z
-  igxY95k5i5GDg5hAR+Jb/8zQEwRgVCJe7eyQEqYBXYzSjzuWcMEEhcSMJPYusC7i5GTg01AW2
-  LLll9sIDavgK3E1P6dYDaLgIrEvzd/GEFsUYFwifVLVjJC1AhKnJz5hAXE5hQwl7i85RMziM0
-  sYCBxZNEcVghbXOLWk/lMELa8xPa3c8BqJAQUJPrf9LFD2AkSy17eYZ7AKDgLydhZSEbNQjJq
-  FpJRCxhZVjGaJhVlpmeU5CZm5ugaGhjoGhoa6RrqmhjoJVbpJumVFuumJhaX6BrqJZYX6xVX5
-  ibnpOjlpZZsYgTGT0oBo8YOxs43H/QOMUpyMCmJ8k69dCFeiC8pP6UyI7E4I76oNCe1+BCjDA
-  eHkgTv1KtAOcGi1PTUirTMHGAsw6QlOHiURHhFrwGleYsLEnOLM9MhUqcYFaXEecNB+gRAEhm
-  leXBtsPRxiVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5IwbzXIeJ7MvBK46a+AFjMBLea5dB5k
-  cUkiQkqqgUlTo9b7X7NlukrZ70rmJwbW029rXhacFnhtzgK1FW/blv1Uuxx/PVqp+czVGYs6e
-  bKkHlXF1l5r/3/e/LPnhPKa+ujMqHCn89fMjoTc6PY7Fb7gZqbUtboGWZfcb7YyMQv90tb7Vp
-  Xqc6c8rA/6syz/gHmD6xNN7o9ab7+cmXAq/6NlCk98euupru+fqm43Hbll7eh1KbhC+/LUqd9
-  i9+6SCzwr0rekWL7LIWyTT6+cdRXz9a3X7/0rO8nwzHsn36aTe+X5vY8qCAiIz9GrYTtZd2iN
-  dviSz+EBKcIvvpyPstT8WlH8e++j2JOsWx5NffMzP+mufP/R/fZsNpM8rvQz2nxrfLYr4y671
-  DWZtUosxRmJhlrMRcWJAOnvF96aAwAA
-X-Env-Sender: markpearson@lenovo.com
-X-Msg-Ref: server-9.tower-396.messagelabs.com!1607522196!74709!1
-X-Originating-IP: [103.30.234.7]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 7929 invoked from network); 9 Dec 2020 13:56:38 -0000
-Received: from unknown (HELO lenovo.com) (103.30.234.7)
-  by server-9.tower-396.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 9 Dec 2020 13:56:38 -0000
-Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by Forcepoint Email with ESMTPS id 7D8A8C6CC430F0FD5DFA;
-        Wed,  9 Dec 2020 21:56:34 +0800 (CST)
-Received: from localhost.localdomain (10.38.54.222) by reswpmail04.lenovo.com
- (10.62.32.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2044.4; Wed, 9 Dec 2020
- 05:56:32 -0800
-Subject: Re: [External] linux-next: build failure after merge of the pm tree
+        id S1732884AbgLIOGd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Dec 2020 09:06:33 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2234 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729353AbgLIOGX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Dec 2020 09:06:23 -0500
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Crdzg3h15z67MD1;
+        Wed,  9 Dec 2020 22:02:55 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 9 Dec 2020 15:05:32 +0100
+Received: from [10.210.171.175] (10.210.171.175) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 9 Dec 2020 14:05:31 +0000
+Subject: Re: linux-next: Tree for Dec 9
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     Jonathan Corbet <corbet@lwn.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201209205754.41ac2424@canb.auug.org.au>
-From:   Mark Pearson <markpearson@lenovo.com>
-Message-ID: <203934b6-dd68-b02d-757f-c0336352d397@lenovo.com>
-Date:   Wed, 9 Dec 2020 08:56:31 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20201209214447.3bfdeb87@canb.auug.org.au>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <d6aab80c-c5e3-77cf-bb16-378b7de63f4e@huawei.com>
+Date:   Wed, 9 Dec 2020 14:04:56 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <20201209205754.41ac2424@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <20201209214447.3bfdeb87@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.38.54.222]
-X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
- reswpmail04.lenovo.com (10.62.32.23)
+X-Originating-IP: [10.210.171.175]
+X-ClientProxiedBy: lhreml738-chm.china.huawei.com (10.201.108.188) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 09/12/2020 04:57, Stephen Rothwell wrote:
+On 09/12/2020 10:44, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the pm tree, today's linux-next build (htmldocs) failed
-> like this:
-> 
-> Sphinx parallel build error:
-> docutils.utils.SystemMessage: /home/sfr/next/next/Documentation/ABI/testing/sysfs-platform_profile.rst:1: (SEVERE/4) Missing matching underline for section title overline.
-> 
-> =======================================================================
->  Platform Profile Selection (e.g. :ref:`\/sys\/firmware\/acpi\/platform_profile <abi_sys_firmware_acpi_platform_profile>`)
-> 
-> Caused by commit
-> 
->   ff950bebd0e0 ("Documentation: Add documentation for new platform_profile sysfs attribute")
-> 
-My apologies - I hadn't run the 'make htmldocs' command so I missed this
-one.
+> Changes since 20201208:
 
-I've been able to reproduce the error and fix the error. I do see:
-   WARNING: document isn't included in any toctree
-but I think this is benign - I believe I'm getting it just because I
-converted the file to .rst (as requested by Andy Shevchenko). If this is
-important and needs to be addressed urgently as well let me know.
+Just seeing this today:
 
-Rafael - I want to run a couple more sanity tests and will push the
-update for this (with the other fixes for the platform_profile.c code)
-for review later today.
+john@localhost:~/linux-next> git checkout next-20201209
+Previous HEAD position was bfd521e1af51 Add linux-next specific files 
+for 20201203
+HEAD is now at 2f1d5c77f13f Add linux-next specific files for 20201209
+john@localhost:~/linux-next> make defconfig
+*** Default configuration is based on 'defconfig'
+/usr/bin/env: invalid option -- 'S'
+Try '/usr/bin/env --help' for more information.
+init/Kconfig:39: syntax error
+init/Kconfig:38: invalid statement
+make[1]: *** [scripts/kconfig/Makefile:81: defconfig] Error 1
+make: *** [Makefile:602: defconfig] Error 2
+john@localhost:~/linux-next>
 
-Thanks
-Mark
+next-20201203 was fine.
+
+john@localhost:~/linux-next> git checkout next-20201203
+Updating files: 100% (9420/9420), done.
+Previous HEAD position was c062db039f40 iommu/vt-d: Update domain 
+geometry in iommu_ops.at(de)tach_dev
+HEAD is now at bfd521e1af51 Add linux-next specific files for 20201203
+john@localhost:~/linux-next> git checkout next-20201203^C
+john@localhost:~/linux-next> make defconfig
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.[ch]
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTCC  scripts/kconfig/util.o
+  HOSTLD  scripts/kconfig/conf
+*** Default configuration is based on 'defconfig'
+#
+# configuration written to .config
+#
+
+Known issue? I did do a fetch and checkout.
+
+Thanks,
+John
+
+> 
+> The pm tree gained a build failure when building htmldocs.
+> 
+> The wireless-drivers-next tree lost its build failure.
+> 
+> The nand tree still had its build failure so I used the version from
+> next-20201207.
+> 
+> The drm tree gained a semantic conflict against the drm-intel-fixes tree.
+> 
+> The scsi-mkp tree still had its build failure for which I applied a patch.
+> 
+> Non-merge commits (relative to Linus' tree): 11114
+>   10115 files changed, 753493 insertions(+), 186283 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 327 trees (counting Linus' and 85 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
+> 
+

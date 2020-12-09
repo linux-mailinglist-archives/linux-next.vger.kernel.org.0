@@ -2,97 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB4C2D39DE
-	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 05:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DFA2D3A6F
+	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 06:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727475AbgLIEpW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Dec 2020 23:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727293AbgLIEpV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Dec 2020 23:45:21 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12491C0613CF;
-        Tue,  8 Dec 2020 20:44:41 -0800 (PST)
+        id S1727421AbgLIF0V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Dec 2020 00:26:21 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54501 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726943AbgLIF0V (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Dec 2020 00:26:21 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CrPbV2x6Zz9sWL;
-        Wed,  9 Dec 2020 15:44:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1607489078;
-        bh=KZ5wgpAwKiYgJzOPspqhqBP0PP7NjKGB38+vQR6Jig0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=PlVCAeMh/RycrGV8mp4Iyl0iSEjrcAbVXERIan3iGmed1cXLHg63sSOUhoT4rsYFt
-         O7bFKxlRsLDQFLNGTxk/sQllwvTvCUhTIrjwPgFaiA3x/3bHKMNZxRHnfg1yh81kP0
-         GOmJdJ4ypiy4toslx5oJBqNnNa/rcm4EW+1q1OK9XJG2p7dBr+0NXuxe+rZMcsofyp
-         bzC1lOSWALJzrCu5k5BsbJBm3qXvoQca3byDNHO5HqHc0Q/+j10NDktlmjWyHGHXbv
-         g8QYV0ptd6or9kPK+7lPPqddeP+qx+ddjPxQYglcMmwDUttorPjt7VNhgeyJY8PEEs
-         qzYcHg8pZv3Ug==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Mathieu Malaterre <malat@debian.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: linux-next: build warning after merge of the akpm tree
-In-Reply-To: <20201208230157.42c42789@canb.auug.org.au>
-References: <20201204210000.660293c6@canb.auug.org.au> <20201208230157.42c42789@canb.auug.org.au>
-Date:   Wed, 09 Dec 2020 15:44:35 +1100
-Message-ID: <87r1nzsi4s.fsf@mpe.ellerman.id.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CrQVl3D2Rz9sWK;
+        Wed,  9 Dec 2020 16:25:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1607491535;
+        bh=MKm4YaY54mjqQIyd8PdoeI0X0w5w3qrs01+JxPtWH+o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qJsTL8N+5C5RPvw4bU9LKO0l78qaCsQgXqBOgzatTk6omk/0TsgCk7b8KGiXogR8b
+         MnVy/M2y5AwI9Hp0tuobm0j9TwUMfDxzvNjfqpN5GKrZxRJoE5dwO7OhPWK5Fr8nCE
+         Ro9Wh3ap7sGl2TYGp9QoIgQ1LLpViHWZLfT4xZoZoOp2HLi4Or7v0HP+asGA1e3TEs
+         1F1aSyDyHhYiFtWn8PXRZ6O9doTfYgFA3Nv/GfJRfkLycHxiq3616kzsiFRPu/hPoa
+         jvF47JGGjahch0GwYo8aJ0oKwbbv+VFX9COyu0QTVBRrpjc1/WKTwvWrN1fJ3RK6xH
+         xdWYtFKlEqjEA==
+Date:   Wed, 9 Dec 2020 16:25:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Mackerras <paulus@ozlabs.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the kvm-ppc tree
+Message-ID: <20201209162531.4280c64c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/Lc/qF7pK5aKwhOR94Lv+UsV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi Stephen,
->
-> On Fri, 4 Dec 2020 21:00:00 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->> 
->> After merging the akpm tree, today's linux-next build (powerpc
->> allyesconfig) produced warnings like this:
->> 
->> ld: warning: orphan section `.data..Lubsan_data177' from `arch/powerpc/oprofile/op_model_pa6t.o' being placed in section `.data..Lubsan_data177'
->> 
->> (lots of these latter ones)
->
-> 781584 of them today!
->
->> I don't know what produced these, but it is in the akpm-current or
->> akpm trees.
->
-> Presumably the result of commit
->
->   186c3e18dba3 ("ubsan: enable for all*config builds")
->
-> from the akpm-current tree.
->
-> arch/powerpc/kernel/vmlinux.lds.S has:
->
-> #ifdef CONFIG_PPC32
->         .data : AT(ADDR(.data) - LOAD_OFFSET) {
->                 DATA_DATA
-> #ifdef CONFIG_UBSAN
->                 *(.data..Lubsan_data*)
->                 *(.data..Lubsan_type*)
-> #endif
->                 *(.data.rel*)
->                 *(SDATA_MAIN)
->
-> added by commit
->
->   beba24ac5913 ("powerpc/32: Add .data..Lubsan_data*/.data..Lubsan_type* sections explicitly")
->
-> in 2018, but no equivalent for 64 bit.
+--Sig_/Lc/qF7pK5aKwhOR94Lv+UsV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-They should really be in DATA_DATA or similar shouldn't they?
+Hi all,
 
-cheers
+Commit
+
+  2259c17f0188 ("kvm: x86: Sink cpuid update into vendor-specific set_cr4 f=
+unctions")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Lc/qF7pK5aKwhOR94Lv+UsV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/QX8sACgkQAVBC80lX
+0Gy8CAf+OOZ65xPguEYDcWvr3OpIL9NWhNwdkhiczLFIj22julIjkxLnKOwqBHvx
+pNVGmcbT0PsRkvxbBD9IEkeBWmH274K21lUJI5v3jDR6AONqmv4Pg9YuX9F5lO+g
+K+ZTz2jvDxrH4RKO3tugl2GL9Eb45z5LxDTLtWV4xf2997tQa+dXBbTtiMuXZ+7o
+0BDQMevbJ773nTWcmwHD8wnKKvOdJ2Y/l6QmrEp9I+rv/f79z6a6lma2FUQ1O3Qg
+cRuFl4NPe7o8SsizJyODY9MAfqXFqMALqpSutF1eqDrdr7lb9lLTHAjProJpzZHC
+hm3r97V+K/hOiEa80GBB0yxIbjkNmQ==
+=geIM
+-----END PGP SIGNATURE-----
+
+--Sig_/Lc/qF7pK5aKwhOR94Lv+UsV--

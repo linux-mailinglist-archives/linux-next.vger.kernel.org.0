@@ -2,107 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A642D451B
-	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 16:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9F22D4679
+	for <lists+linux-next@lfdr.de>; Wed,  9 Dec 2020 17:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbgLIPJc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Dec 2020 10:09:32 -0500
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.113]:62520 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726456AbgLIPJQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Dec 2020 10:09:16 -0500
-Received: from [100.112.4.31] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-c.us-east-1.aws.symcld.net id 00/05-29078-287E0DF5; Wed, 09 Dec 2020 15:04:34 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleJIrShJLcpLzFFi42JJl3vFrlv7/EK
-  8we9GY4snB9oZLd4cn85kcXnXHDaLgwvbGC3OnL7EarF171V2BzaPxhs32DwW901m9Xi/7yqb
-  x5ar7SwenzfJBbBGsWbmJeVXJLBmbHnxha3gGmfF3GvNbA2MT9m7GLk4hAT+M0pc37qfCcJ5z
-  iix4fQnIIeDQ1jAR+Lb/wwQU0RAReJVZxhICbPAG0aJ/c9fMXYxcgLV9zBKHOgUBLHZBLQltm
-  z5xQZi8wrYSmxavooRpJcFqHfVZF2QsKhAuMT6JSsZIUoEJU7OfMICYnMK6Else74TbCuzgKb
-  E+l36IGFmAXGJW0/mM0HY8hLb385hBrElBBQk+t/0sUPYCRLLXt5hnsAoOAvJ1FkIk2YhmTQL
-  yaQFjCyrGM2SijLTM0pyEzNzdA0NDHQNDY10TXQNTY31Eqt0k/VKi3VTE4tLdA31EsuL9Yorc
-  5NzUvTyUks2MQKjJ6WAZeYOxrY3H/QOMUpyMCmJ8k69dCFeiC8pP6UyI7E4I76oNCe1+BCjDA
-  eHkgTvtmdAOcGi1PTUirTMHGAkw6QlOHiURHj3gKR5iwsSc4sz0yFSpxgVpcR57z0FSgiAJDJ
-  K8+DaYMnjEqOslDAvIwMDgxBPQWpRbmYJqvwrRnEORiVh3lMgU3gy80rgpr8CWswEtJjn0nmQ
-  xSWJCCmpBqbQfu68r23bHrx8nu12xPdN5a07X5r/sFqy7o/y35X0qnGVyu7NHe51qhdMgtvio
-  tpTXU+9vvuRQ5BB8HhNW2ocS9tmhzWBDmd8vMufXLha/8LjlYfUduajKjJdXQ2LRNSebjt1IC
-  j6r4/sjrkH4/f/E+Ni3rjk7vXe+SG+auJvjN5/SZu5nstDu7LwpPV/t+dn98be6N/QcF1x7dG
-  aj4+83HP/GqXknQmewsrmqjZbZX1VwUcz/qqHL122OK46J1VaqNWs3fP41KKatZwSFvuDX7of
-  Pl74c5aXRNlez/iNzTxP1sg+9gz4/oyRa6WCw/5dc/UW/pXW0nVRWn9mdsYk1wDtZ8o/Df/Z6
-  wRdY1RiKc5INNRiLipOBAAZFfAPmQMAAA==
-X-Env-Sender: markpearson@lenovo.com
-X-Msg-Ref: server-4.tower-415.messagelabs.com!1607526267!80840!1
-X-Originating-IP: [103.30.234.7]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 21445 invoked from network); 9 Dec 2020 15:04:29 -0000
-Received: from unknown (HELO lenovo.com) (103.30.234.7)
-  by server-4.tower-415.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 9 Dec 2020 15:04:29 -0000
-Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by Forcepoint Email with ESMTPS id D2755ED5D3E749A687E0;
-        Wed,  9 Dec 2020 23:04:25 +0800 (CST)
-Received: from localhost.localdomain (10.38.54.222) by reswpmail04.lenovo.com
- (10.62.32.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2044.4; Wed, 9 Dec 2020
- 07:04:23 -0800
-Subject: Re: [External] linux-next: build failure after merge of the pm tree
-To:     Jonathan Corbet <corbet@lwn.net>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Hans de Goede <hdegoede@redhat.com>,
+        id S1729303AbgLIQLs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Dec 2020 11:11:48 -0500
+Received: from mail-dm6nam10on2066.outbound.protection.outlook.com ([40.107.93.66]:16961
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727415AbgLIQLs (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Dec 2020 11:11:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q5pS1KCK5WKJR6K+oUXWY8odqERAZ5Lnf7y26FEh/XKgvGLTpnYc8gpI0kFr7rIwzuAv/ekmfHNcO7rU+GZTiTxRa4rl1r0Xg2S5jTFzj0CP5zmHBl37wLVwJ+tO1YQAwk4RsDjFY7NOzdLWmQYgeQ4kj3gZBywyjRZ1FJnDjuz+bNbY15gm6wOQQ/7T6kFkvpSwuwnkokakPn/6UCVgVa7ynMJJMCKtHF0aMx9deiHTkp2aS4rUbKrCGN8bjekrv7qUQknyit1Nj4+/mxazZa5v8xcTFT+BCC4PyONuDsDIYtrAOPEBxvxgBe84/ptFgdB6K5bCYmJqC2XEXVor+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w7HlXYyvyJ7UQ5TJcbB/wsgmxLfytwe9GV+qTwWdXuc=;
+ b=j9cVpDc+sxxhrNFOB/abrAuoZdhAGtCjhx8GjmWnW1Pb85YRLyPH1pb71a0U9FiG4hY4Kf6q7yxGZ72Ew05pTCb3lqN3ec2bE8sKY1PovyLOfpgNtM2XW82/bzqN1QTsg5Z591Egrxidw3RRN3pzYpBG28FciCD1Xa8E7Lpath8rsGGssZslB4B/JnJVHvgMiVovamWu63QWAxc7zAgxxxF5vHFDFUFzc5yeefsEqTmzj2ZGIRYFecaYTRuisE5aT72WB2nkSE2oGbsLdeorVibaKCoHIhi52A08oUgWz4BwvMQ9wrNS3qkmVuA3vU2w1VMC0iGjDJkC10vXl82L6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w7HlXYyvyJ7UQ5TJcbB/wsgmxLfytwe9GV+qTwWdXuc=;
+ b=r3SrVZ9Lnmwh+ymUH410sjLAitat1iKB1dTP0MzmBdK8pUwotIbAu8HtPeJUMLmGTYTI9pCC8qh6aBOaSs6D4CBPaB1fCwFh2CJwES9IUVfaGBXbo1Xoc1BE9N91OFqrbALYPzqEMORchXnWrZCv6YhsGWGx1OghIevJhWo0kbM=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3962.namprd12.prod.outlook.com (2603:10b6:5:1ce::21)
+ by DM6PR12MB2795.namprd12.prod.outlook.com (2603:10b6:5:41::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.18; Wed, 9 Dec
+ 2020 16:10:55 +0000
+Received: from DM6PR12MB3962.namprd12.prod.outlook.com
+ ([fe80::d055:19dc:5b0f:ed56]) by DM6PR12MB3962.namprd12.prod.outlook.com
+ ([fe80::d055:19dc:5b0f:ed56%6]) with mapi id 15.20.3654.012; Wed, 9 Dec 2020
+ 16:10:55 +0000
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20201209205754.41ac2424@canb.auug.org.au>
- <203934b6-dd68-b02d-757f-c0336352d397@lenovo.com>
- <20201209073352.178d5027@lwn.net>
-From:   Mark Pearson <markpearson@lenovo.com>
-Message-ID: <8e670c7b-b7e7-80aa-343b-4e9d429b61ec@lenovo.com>
-Date:   Wed, 9 Dec 2020 10:04:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201209073352.178d5027@lwn.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+References: <20201209210211.306f3c61@canb.auug.org.au>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Message-ID: <4005f7bb-1a46-0357-cccd-5febae8c4fe1@amd.com>
+Date:   Wed, 9 Dec 2020 11:10:51 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
+In-Reply-To: <20201209210211.306f3c61@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-CA
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.38.54.222]
-X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
- reswpmail04.lenovo.com (10.62.32.23)
+X-Originating-IP: [165.204.54.211]
+X-ClientProxiedBy: YT1PR01CA0149.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::28) To DM6PR12MB3962.namprd12.prod.outlook.com
+ (2603:10b6:5:1ce::21)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [172.31.18.65] (165.204.54.211) by YT1PR01CA0149.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:2f::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Wed, 9 Dec 2020 16:10:53 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 225e9c0e-38c8-4993-0969-08d89c5d01fc
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2795:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR12MB2795E3EE1FD690D8837362BC99CC0@DM6PR12MB2795.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:983;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kiDsXg3dqSJ5bdNQSX3+1KOw6CKySxc3dTRmyojkoYxkrKHoNMdfrnQvuLjDIBL30+lpxDBiB2CUWAOrpoMnGzIKzrvkGYp5sdN5hLb5pnFXZF8IWLU1d4mvfJ2UozriF672P+xUt3ZorKAmthj9edc2LWGMW/bT2WfrY8I00lE9MBjh+XrjTa5WaC3kvpyFHOgMeOvZDIObeGmkmgnFrCFdmKoRf2XBQ1fL0I0KtKLPr3pmdBwB98c3T9dcYF1TGsO1BPrvn+KcqxcWgI86uSd0EODV6XlCHFJbYv892eH3tvwdk6hjP+GqHwcfm98tV2RjeL2ZlpfoF2d0kSjBZQ0patbfuXd+vBGdLs6HGo2uDjCzwe9eD8FUQsErw06HfoCymf4Eq0pLEJb5UihgP7NhM9TE74sX4uBrGvEXKgI12oN4+3sv3UZeIBKQW/h/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3962.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(136003)(508600001)(8676002)(2906002)(4326008)(8936002)(54906003)(53546011)(34490700003)(44832011)(66946007)(66476007)(186003)(2616005)(31686004)(956004)(83380400001)(4744005)(16526019)(66556008)(110136005)(86362001)(52116002)(5660300002)(16576012)(36756003)(26005)(31696002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?AiBLBMimMsy7ve7GfhX/rYVv2+qCEwqxsW8RzR13TTbyt3hHggdSqalG?=
+ =?Windows-1252?Q?FNRs/V+gv/inkNYTXn973NOIlprJWNdD0PlyO1Y8DByKIcrqdyROPy/L?=
+ =?Windows-1252?Q?JaE9ELYW6ev/me7msZRUN8u1dqjKJybnKTgaaa90MydmNcnJlfrSKI8d?=
+ =?Windows-1252?Q?L2XS5JUrUHJq2Bcjgno/FBjXA/tjQX5WhFISwPIOawaHUrZ5QPXU/kN+?=
+ =?Windows-1252?Q?GQFJPfa1GfyKjms2pIpHomfCEobmT71au9EuxKpKcfdsL7VqmYBXLOrJ?=
+ =?Windows-1252?Q?XT90HKoj+2TghhT0Eb4KVj4thDxMUsT3KItJYiptE3H/7U86nxMTEF2i?=
+ =?Windows-1252?Q?8xGtJGlXwWaGb7+Pp4FKvxMYJjPwMx0UIA0ikAXnwrlII0okm2X8ZMwr?=
+ =?Windows-1252?Q?kMxhaFeI7WMHp18RY4nd0bYzJE2UJO05p/6R+yB/iY8p2OUuRgog/lvp?=
+ =?Windows-1252?Q?6JO5hcJ9KwBRtMlje5viMaPdxrPGxmxncHqxoZ3qwOR34oRweaumedVZ?=
+ =?Windows-1252?Q?fTk/FcUm0LJhMV9UM36mVtQ+Caha4ZlBpi1uuGG4ria8nqoy9j1D5czn?=
+ =?Windows-1252?Q?1RJiY1ZbNt7dsyuFuUjErBVNvEt6p9omVZkKpoyd3h86TyOu7NPqD/62?=
+ =?Windows-1252?Q?khMjv4dBYIbR1Y6Ai+aBwFKmMUcccWuqq/TAk50O1oqPxI2BBZh34Ub8?=
+ =?Windows-1252?Q?Gzjwz7yZGVet7+6aQkQZZ00sSxn0ktLIsRFcmqqTUBlzIBLi8CNYoTpF?=
+ =?Windows-1252?Q?5m7Bg2y+qJQ+WJTE+Ifl+8GMlA4SFbym3omndVP9fUx5Mqt9HO663fQz?=
+ =?Windows-1252?Q?cVDo7FswhWJ462kDw3T6r3Gr5d7ta5MsyGmOfOrM0KGQ6MGgTXqr1tWl?=
+ =?Windows-1252?Q?hr6dzsg2rR4eBDPjXbLv/Gi5pFuYou3eJo/yYFhlE0oeb1Fqp7aGGUmZ?=
+ =?Windows-1252?Q?vmmSjH/ZZZWnhcfeaEbGZH+GwiKRHk80rC8fmwghBDcL9lUDnOwmHXLc?=
+ =?Windows-1252?Q?9RORjpLrFp42DV26Jle3M/roeP57L06IkY3h3yNAuRd8TiMkG0GN1YN6?=
+ =?Windows-1252?Q?AFThnY6kvhgbsuAg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3962.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2020 16:10:55.1321
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 225e9c0e-38c8-4993-0969-08d89c5d01fc
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sHeQyS9spUhjaVgRB3sxP/ADhrjnj5pD+KcqaTn493f2Bc25YNS7+5Wvyqki7NjR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2795
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Jon,
-
-On 09/12/2020 09:33, Jonathan Corbet wrote:
-> On Wed, 9 Dec 2020 08:56:31 -0500 Mark Pearson
-> <markpearson@lenovo.com> wrote:
+On 2020-12-09 05:02, Stephen Rothwell wrote:
+> Hi all,
 > 
->> I do see: WARNING: document isn't included in any toctree but I
->> think this is benign - I believe I'm getting it just because I 
->> converted the file to .rst (as requested by Andy Shevchenko). If
->> this is important and needs to be addressed urgently as well let me
->> know.
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> Normally this is solved by adding the newly created document to the 
-> index.rst file in the same directory.
+> include/drm/gpu_scheduler.h:201: warning: Function parameter or member 'list' not described in 'drm_sched_job'
 > 
-> There isn't one in Documentation/ABI/testing, though; in fact, there
-> are no RST files there.  Files in Documentation/ABI are in a special
-> format that is processed into RST during the docs build.  If we want
-> to add information outside of any specific ABI entry there, we're
-> going to have to decide how we want to do that.  It may well be,
-> though, that the introductory information just belongs in the admin
-> guide instead.
+> Introduced by commit
+> 
+>   8935ff00e3b1 ("drm/scheduler: "node" --> "list"")
 > 
 
-Should I just revert this file to plain text format?
+Thanks for the notification.
 
-I converted it to rst (as was requested) but I'm wondering if I'm just
-causing a bunch of headaches and people are going to be cursing the one
-weird random rst file in that directory going forwards :)
+I'll send out a patch to fix this.
 
-Mark
+Regards,
+Luben

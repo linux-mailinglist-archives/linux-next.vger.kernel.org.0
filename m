@@ -2,127 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0252D5431
-	for <lists+linux-next@lfdr.de>; Thu, 10 Dec 2020 07:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278832D54E9
+	for <lists+linux-next@lfdr.de>; Thu, 10 Dec 2020 08:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387626AbgLJGvV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Dec 2020 01:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730932AbgLJGvR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Dec 2020 01:51:17 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230EC0613D6;
-        Wed,  9 Dec 2020 22:50:37 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id h18so3927490otq.12;
-        Wed, 09 Dec 2020 22:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d75p4fmQcIoYTfVRN5/LQXekYssU3dbuRUo+X/xP0qo=;
-        b=AcckApLQxgopq53MO6NXNCgMzDhabXdJ0YBSSvRxKNTga3m6MfV3kYBh5V1GX5GG37
-         Z4wYQpIMkMu0sB93hngk6c1OGi3Y93Bj1sZNPrL0qgdvQtBw6shOdSMCK3GiBQqAQCUO
-         muKde3styzwUylS5vK7Yu7CghtdQ139UowlpgnTVhokiquVCPFRHMItQ6QBCpQNrz71C
-         wpU2bfC/SKCk3kzovzk9oGBXNUN9hwn31lQ3SdGnCDXx7csKWXTBx554A2pdyN2n7zGC
-         htauwh5srbq4VECfNIGVZBV7fPz3TgdLJLd0JvcFpFeOFuePlXB54Qztw7R8UbKYjiDU
-         17/g==
+        id S1727567AbgLJHxg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Thu, 10 Dec 2020 02:53:36 -0500
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:34556 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbgLJHxd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Dec 2020 02:53:33 -0500
+Received: by mail-oo1-f49.google.com with SMTP id t63so1068103ooa.1;
+        Wed, 09 Dec 2020 23:53:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d75p4fmQcIoYTfVRN5/LQXekYssU3dbuRUo+X/xP0qo=;
-        b=GKpZ6lS5wLcKds7J/r9j04Ak0M4wLl/lYXRQ8kFK85nkDrt9rn4INLLXuIqXkzU441
-         EJ+g9SjmVg/uQgacQqaJGyN9a5dMjJLrU2AuCLG2N4sERlfA8i1f5khZhRdIrNTHcrXK
-         YnHz51aacI/YiX/MapcwAnrQs+Sh8IqUauAkEfpsr0qDM8lqPW0jCqbRnzmjYynEEVU0
-         g+DV+uC39LWJleZszSnRtmvm/xnvpM8jzQYz8tJ9bp32k5Oai54tYJLx6ySJ6RqR0KE8
-         HVYueBipxtT5BhRLMk4bFpyR2vcPUDFtmeXM1j9zmdGmQkMmpU0RVuNe98iVtKaNkWQP
-         FuQg==
-X-Gm-Message-State: AOAM530Lxq+S7XJtEZTVQaZQ8m3L80N+oXbv8xyofCzOL9j5LcxygE6d
-        duOv01RUyYp+4CdoSuFEPMIPwjkTSsE4dGAjFAGSisYM
-X-Google-Smtp-Source: ABdhPJzkl5jegoJipOiVDt8wp+ap3KzjmSPKv0LRYwWHyaWZjcy/a1y4DDLc/cV+A69NiZMHgZrmEEnWArAoKINe+1E=
-X-Received: by 2002:a9d:589:: with SMTP id 9mr4908951otd.72.1607583036573;
- Wed, 09 Dec 2020 22:50:36 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=od3/SfRw9owkKLE3PuBGLkFJU3SpegkIJpaUukly2Vk=;
+        b=JNGAswZJgw6G0f7sfYLArmVMPETQkOdi4WVTn3tDEcQEYy9uzznWJPblaiBP2UAMNy
+         PdxeUyjh4ruD7LBdXl7Juj6KlwvOT80RWB/1mfFUToReLe+xTEv0npfSNhUAoxw3IYH+
+         uX7RL1yxjPH1mVvGn8qjGz99GSPVXyM8TV+WZE7vhKRK95oc9Rmnno6djRJyP2tKBo2y
+         mMOrE0SwVG/3ptIFPVkMYypW2wKphU7AI4IHfkpYOEjdzG4+fgO+MW3Mo7oVRcp+f8kE
+         mJ9uc7i8zTjtd+IoUOOHdWZCLjp9XjxN1ZXDgfX5OlNTnl/MbfiG7OmkkZuDCRzBXUuZ
+         UOUQ==
+X-Gm-Message-State: AOAM531JvlolDAR5avDk5Ft7UbHQYZsipO6TL6TS2GgkaL7NlEGSUmqC
+        w7m/WcCTtsR/gTDCvkrOqvHZE6lamiCPMbZGqBE=
+X-Google-Smtp-Source: ABdhPJxGEReNaUAoEWLa0HGLv4p5Io511aYSPbxsxPU1JS4b7LjrRk/vkrhMzPmZaTIQuvMfZ+9gkXCgxq6TDijg2cc=
+X-Received: by 2002:a4a:ca14:: with SMTP id w20mr5069865ooq.11.1607586772264;
+ Wed, 09 Dec 2020 23:52:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20201210174047.3d1f8aaa@canb.auug.org.au>
-In-Reply-To: <20201210174047.3d1f8aaa@canb.auug.org.au>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 10 Dec 2020 07:50:25 +0100
-Message-ID: <CAMhs-H-Xv8V+pfAGZcURZrd7he6UGEadyAJvnoPSF03Y3RftTA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the staging tree with the phy-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+References: <20201208090555.7159b138@canb.auug.org.au> <CAMuHMdVYoxUOUL0zNAPzTJUSR3vGzcJWMzvtCKK=ZxyM=8hk+A@mail.gmail.com>
+ <160753498332.1580929.15118515893187584689@swboyd.mtv.corp.google.com>
+In-Reply-To: <160753498332.1580929.15118515893187584689@swboyd.mtv.corp.google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 10 Dec 2020 08:52:41 +0100
+Message-ID: <CAMuHMdWAtUK6qDOAXZ3-qy69ZzbfZb_Z=bSvx-0S-42dfUiw9w@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the clk tree
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi Stephen²,
 
-On Thu, Dec 10, 2020 at 7:40 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Dec 9, 2020 at 6:29 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Geert Uytterhoeven (2020-12-08 00:37:00)
+> > On Mon, Dec 7, 2020 at 11:06 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > In commit
+> > >
+> > >   c3f207f6d23d ("clk: renesas: r8a779a0: Make rcar_r8a779a0_cpg_clk_register() static")
+> > >
+> > > Fixes tag
+> > >
+> > >   Fixes: c07439dea94050b6 ("clk: renesas: cpg-mssr: Add support for R-Car V3U")
+> > >
+> > > has these problem(s):
+> > >
+> > >   - Target SHA1 does not exist
+> >
+> > Oops, my bad.
+> >
+> > > Maybe you meant
+> > >
+> > > Fixes: 17bcc8035d2d ("clk: renesas: cpg-mssr: Add support for R-Car V3U")
+> >
+> > Yes I did.
+> >
+> > Mike/Stephen: do you want me to respin my pull requests?
 >
-> Hi all,
->
-> Today's linux-next merge of the staging tree got conflicts in:
->
->   drivers/staging/Kconfig
->   drivers/staging/Makefile
->
-> between commit:
->
->   53e7c92c7fa0 ("staging: mt7621-pci-phy: remove driver from staging")
->
-> from the phy-next tree and commit:
->
->   518b466a21ad ("pinctrl: ralink: add a pinctrl driver for the rt2880 family")
->
-> from the staging tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> Sure a respin is fine. I can fix it up in clk tree. Any chance your
 
-Thanks for doing this. Removing both in staging is the correct thing to do.
+Done, sorry for the mess.
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+> trees can be pulled into linux-next? That would find this earlier.
 
-Best regards,
-    Sergio Paracuellos
->
-> diff --cc drivers/staging/Kconfig
-> index 4d7a5ddf9992,c42708e60afc..000000000000
-> --- a/drivers/staging/Kconfig
-> +++ b/drivers/staging/Kconfig
-> @@@ -94,8 -92,8 +92,6 @@@ source "drivers/staging/pi433/Kconfig
->
->   source "drivers/staging/mt7621-pci/Kconfig"
->
-> - source "drivers/staging/mt7621-pinctrl/Kconfig"
->  -source "drivers/staging/mt7621-pci-phy/Kconfig"
-> --
->   source "drivers/staging/mt7621-dma/Kconfig"
->
->   source "drivers/staging/ralink-gdma/Kconfig"
-> diff --cc drivers/staging/Makefile
-> index 89bde2370eee,ebcc646d7b51..000000000000
-> --- a/drivers/staging/Makefile
-> +++ b/drivers/staging/Makefile
-> @@@ -37,7 -36,7 +36,6 @@@ obj-$(CONFIG_GREYBUS)         += greybus
->   obj-$(CONFIG_BCM2835_VCHIQ)   += vc04_services/
->   obj-$(CONFIG_PI433)           += pi433/
->   obj-$(CONFIG_PCI_MT7621)      += mt7621-pci/
-> - obj-$(CONFIG_PINCTRL_RT2880)  += mt7621-pinctrl/
->  -obj-$(CONFIG_PCI_MT7621_PHY)  += mt7621-pci-phy/
->   obj-$(CONFIG_SOC_MT7621)      += mt7621-dma/
->   obj-$(CONFIG_DMA_RALINK)      += ralink-gdma/
->   obj-$(CONFIG_SOC_MT7621)      += mt7621-dts/
+That sounds like a great idea, also for pinctrl.
+Can you please add the following:
+    git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+renesas-clk
+    git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+renesas-pinctrl
+?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,150 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F1B2D7561
-	for <lists+linux-next@lfdr.de>; Fri, 11 Dec 2020 13:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909582D7600
+	for <lists+linux-next@lfdr.de>; Fri, 11 Dec 2020 13:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389830AbgLKMO2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Dec 2020 07:14:28 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:41332 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405676AbgLKMN7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Dec 2020 07:13:59 -0500
-Received: by mail-io1-f71.google.com with SMTP id v21so6332298iol.8
-        for <linux-next@vger.kernel.org>; Fri, 11 Dec 2020 04:13:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=trAsHS3H3DwMvQCSOWs0SnFO00Wxs6W+MX8Qz0q0h0Y=;
-        b=J1/lNifp/E/IWzSa+NHnMfeFtNwAwsiUx04mkpOs8w5Hn1v3p25D3YgdOIEeODShaj
-         B8A1CqNyYJny2SmHvqlAHhCVnZVyRJx1DLdOyKkvIcXMHbQrirDzDq1pd/2rC5JDUbb2
-         GSSoH9mqgNzRNM2+HLWPbK6LkjMPyc16w0sgP0edQJ4HcJ+E2iL6eTFfE5Alz9NXspyK
-         OcWGCrV+s1hkAuZWjh2d4f8kHZDph3wgOsEYL783U00SbBmwygOoYVZ75nlBw6nCZ8Eu
-         QtLcbf7UsLLcjD5RGUoHSB3pjL2iVn4pZ36AF7ORqQnafG+ayyDQwdvBguUi6UT5Sj0s
-         Lcdw==
-X-Gm-Message-State: AOAM531i2TEqHELe1+QVdqPJ3jytD0QzJXprfh3tCJH9UjjIcuJknnV4
-        4oAeMlQlbOo3GCpWz7PpwKRUdGCX/FmjbLPmEJfoLKf2RvlR
-X-Google-Smtp-Source: ABdhPJw103nl5XZexMP/Dze6TbQjtTSh4v5ad2agj7aF7mBg8DKEPUECmme1q/0fnJVh1b+js7kUYzVzfymqz/pnetkd6cKyywK0
+        id S2405492AbgLKMsh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Dec 2020 07:48:37 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2003 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405906AbgLKMsJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Dec 2020 07:48:09 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fd36a600004>; Fri, 11 Dec 2020 04:47:28 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 11 Dec
+ 2020 12:47:28 +0000
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Fri, 11 Dec 2020 12:47:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ajjlhPC2dYJtzy8+dn81WytJrgl6Rb8sdoPpqXZ2jxsN/8Zf1Pl+d727B9L+kraojLymBRVKv1xkgtVxUHmYYl5fDZjXCZziNJateh0k8IhKLYkjXcl1Pr2jzrBGa/zhyV5O7rYMzXkRn/jkie350CnFgJ5wYB38zND5FLl48rkq/qkm/RqYuEz4TM7BcMCmqWYd7CY7Fplu55N6Lotwu23BgPLIQ0nUmLKiFte3rbMQoIxcWa3yq1zZU1E/rOdyVM1r9K0Yut4qQr8YM06B2JfdZvzGCogk+QKGSHdIYX59dnmKXLixaOcKwE6wJ/ZGGhML6iLPXbGcqBzxfUEl/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K3Pc2+gxrqDcz1bXwXDCnkbOeGEz9hf2MsDqKcLqN3c=;
+ b=jSAoKLJ6J6FKrzUwRRHCLJQA1KGiP5gDGOzBHvo2zT6SdqBSJWNZWMLtOWz0xem91gXNL/0YM9DhSsPzYsFmf9udmDoSBTFDhtR8kosyOYyc3AtGw/hLUDawHBttRCbKcyPvN2gYbVYw1HQ/8YXUjUeevPkcLnbYKQf9EbVb+s/ekgLt/gxjdRel75JjsOJ8yR0+jM4BCIztGnY6VkjxQATjzw2eMTi9kF00GYkcV2yTinW2M/WPgdqGfyhN00d6kkLjH75G6UKJ6GgZY1gFVLFDkMc/IN0E0ztNOVpwEoVWl2L4I3t8ypVVU3HCKvzi2CbFifztvctK/I5zel+IWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB3737.namprd12.prod.outlook.com (2603:10b6:5:1c5::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Fri, 11 Dec
+ 2020 12:47:27 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::1ce9:3434:90fe:3433]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::1ce9:3434:90fe:3433%3]) with mapi id 15.20.3654.018; Fri, 11 Dec 2020
+ 12:47:27 +0000
+Date:   Fri, 11 Dec 2020 08:47:25 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the tip
+ tree
+Message-ID: <20201211124725.GD552508@nvidia.com>
+References: <20201211195654.6b414f90@canb.auug.org.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20201211195654.6b414f90@canb.auug.org.au>
+X-ClientProxiedBy: BL1PR13CA0079.namprd13.prod.outlook.com
+ (2603:10b6:208:2b8::24) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
 MIME-Version: 1.0
-X-Received: by 2002:a02:23ce:: with SMTP id u197mr15323145jau.113.1607688797893;
- Fri, 11 Dec 2020 04:13:17 -0800 (PST)
-Date:   Fri, 11 Dec 2020 04:13:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b53deb05b62f3777@google.com>
-Subject: linux-next boot error: KASAN: global-out-of-bounds Read in fs_validate_description
-From:   syzbot <syzbot+37dba74686ae4898e969@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (142.162.115.133) by BL1PR13CA0079.namprd13.prod.outlook.com (2603:10b6:208:2b8::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.7 via Frontend Transport; Fri, 11 Dec 2020 12:47:26 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1knhpV-009CG6-9i; Fri, 11 Dec 2020 08:47:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1607690848; bh=K3Pc2+gxrqDcz1bXwXDCnkbOeGEz9hf2MsDqKcLqN3c=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
+         From:To:CC:Subject:Message-ID:References:Content-Type:
+         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType;
+        b=qv+fA6yK3+ZRVLGVX+s78OOKoli/mvLkptoTsP71IUZTc4R/Ce2ymqf4p08lnjJjj
+         FyJBv/N/XSOi1fzwqCWA4l9K8HdpAdWv/IIfDdfhThOMJoWwxROD49M+Amlp7+3+/v
+         oHSYmUgpW/sKJE2sYwrc/fXswx0ERp3NDV5w34l8WmCPdJlDSkYQvwvCy/Wm5of4vG
+         10LIGC03WUjr0gLBO4yF5MuTRCKp6Nhy+ciUpEb8MoXcPdFh4GTNuVtJIMbwMxCV76
+         vaqEu2DIT+vBVMVA60w5whTvyeiuCjzYDUF8bR7niLoREspRKu2/Swrl1eUsSiwKnH
+         VxQEv+SmsfB8g==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Fri, Dec 11, 2020 at 07:56:54PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+> 
+>   mm/gup.c
+> 
+> between commit:
+> 
+>   2a4a06da8a4b ("mm/gup: Provide gup_get_pte() more generic")
+> 
+> from the tip tree and commit:
+> 
+>   1eb2fe862a51 ("mm/gup: combine put_compound_head() and unpin_user_page()")
+> 
+> from the akpm-current tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-syzbot found the following issue on:
+Looks OK
 
-HEAD commit:    3cc2bd44 Add linux-next specific files for 20201211
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11627b13500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6dbe20fdaa5aaebe
-dashboard link: https://syzkaller.appspot.com/bug?extid=37dba74686ae4898e969
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+37dba74686ae4898e969@syzkaller.appspotmail.com
-
-FS-Cache: Loaded
-CacheFiles: Loaded
-TOMOYO: 2.6.0
-Mandatory Access Control activated.
-AppArmor: AppArmor Filesystem Enabled
-pnp: PnP ACPI init
-pnp: PnP ACPI: found 7 devices
-clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
-NET: Registered protocol family 2
-tcp_listen_portaddr_hash hash table entries: 4096 (order: 6, 327680 bytes, vmalloc)
-TCP established hash table entries: 65536 (order: 7, 524288 bytes, vmalloc)
-TCP bind hash table entries: 65536 (order: 10, 4718592 bytes, vmalloc)
-TCP: Hash tables configured (established 65536 bind 65536)
-MPTCP token hash table entries: 8192 (order: 7, 720896 bytes, vmalloc)
-UDP hash table entries: 4096 (order: 7, 655360 bytes, vmalloc)
-UDP-Lite hash table entries: 4096 (order: 7, 655360 bytes, vmalloc)
-NET: Registered protocol family 1
-RPC: Registered named UNIX socket transport module.
-RPC: Registered udp transport module.
-RPC: Registered tcp transport module.
-RPC: Registered tcp NFSv4.1 backchannel transport module.
-NET: Registered protocol family 44
-pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
-pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
-pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
-pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfefff window]
-pci 0000:00:00.0: Limiting direct PCI/PCI transfers
-pci 0000:00:05.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
-PCI: CLS 0 bytes, default 64
-PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
-software IO TLB: mapped [mem 0x00000000b5c00000-0x00000000b9c00000] (64MB)
-RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-kvm: already loaded the other module
-clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x212735223b2, max_idle_ns: 440795277976 ns
-clocksource: Switched to clocksource tsc
-Initialise system trusted keyrings
-workingset: timestamp_bits=40 max_order=21 bucket_order=0
-zbud: loaded
-DLM installed
-squashfs: version 4.0 (2009/01/31) Phillip Lougher
-FS-Cache: Netfs 'nfs' registered for caching
-NFS: Registering the id_resolver key type
-Key type id_resolver registered
-Key type id_legacy registered
-nfs4filelayout_init: NFSv4 File Layout Driver Registering...
-Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
-FS-Cache: Netfs 'cifs' registered for caching
-Key type cifs.spnego registered
-Key type cifs.idmap registered
-==================================================================
-BUG: KASAN: global-out-of-bounds in fs_validate_description+0x1a5/0x1d0 fs/fs_parser.c:371
-Read of size 8 at addr ffffffff899b8320 by task swapper/0/1
-
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.10.0-rc7-next-20201211-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- print_address_description.constprop.0.cold+0x5/0x2f8 mm/kasan/report.c:230
- __kasan_report mm/kasan/report.c:396 [inline]
- kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
- fs_validate_description+0x1a5/0x1d0 fs/fs_parser.c:371
- register_filesystem+0x78/0x320 fs/filesystems.c:78
- init_cifs+0x7a4/0x8cf fs/cifs/cifsfs.c:1609
- do_one_initcall+0x103/0x690 init/main.c:1220
- do_initcall_level init/main.c:1293 [inline]
- do_initcalls init/main.c:1309 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x600/0x684 init/main.c:1535
- kernel_init+0xe/0x1e0 init/main.c:1418
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-
-The buggy address belongs to the variable:
- smb3_fs_parameters+0xc60/0xf40
-
-Memory state around the buggy address:
- ffffffff899b8200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffffff899b8280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffffff899b8300: 00 00 00 00 f9 f9 f9 f9 05 f9 f9 f9 f9 f9 f9 f9
-                               ^
- ffffffff899b8380: 06 f9 f9 f9 f9 f9 f9 f9 06 f9 f9 f9 f9 f9 f9 f9
- ffffffff899b8400: 00 01 f9 f9 f9 f9 f9 f9 00 f9 f9 f9 f9 f9 f9 f9
-==================================================================
+Thanks,
+Jason
+ 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

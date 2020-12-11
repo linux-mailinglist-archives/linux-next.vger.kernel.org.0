@@ -2,575 +2,289 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C8E2D7B14
-	for <lists+linux-next@lfdr.de>; Fri, 11 Dec 2020 17:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3D82D7B52
+	for <lists+linux-next@lfdr.de>; Fri, 11 Dec 2020 17:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387455AbgLKQfx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Dec 2020 11:35:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:39252 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbgLKQf0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 11 Dec 2020 11:35:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 844A031B;
-        Fri, 11 Dec 2020 08:34:37 -0800 (PST)
-Received: from [10.57.61.6] (unknown [10.57.61.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C82CC3F66B;
-        Fri, 11 Dec 2020 08:34:33 -0800 (PST)
-Subject: Re: [PATCH v2 16/17] driver core: Refactor fw_devlink feature
-To:     Qian Cai <qcai@redhat.com>, Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
+        id S2387673AbgLKQrF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Dec 2020 11:47:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35324 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389752AbgLKQqv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 11 Dec 2020 11:46:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607705123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bRiADumk9vvfb6+78YVWiTdGlJMqeBFewFK1nJKLGKs=;
+        b=i2KgeUiQgBW7FFGDMEz1ALzwzuGMuGgHRpoSG8Xre9ZcBQM7b/GGUjpCp2QiNvhrh0gtUa
+        24xChcz0jyHDLKjNTiK5cT0Zoj6sjroVzW1pFUpWyWNdE2BnAOSOaVMs5CYH2ZwoI/W5cQ
+        ds/bEaJNeSclYVq6sgEXvg0+UyEd8Bg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-545-E4ONbMsQPJ6ImPPylj5y7w-1; Fri, 11 Dec 2020 11:45:18 -0500
+X-MC-Unique: E4ONbMsQPJ6ImPPylj5y7w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0DCC0180A087;
+        Fri, 11 Dec 2020 16:45:17 +0000 (UTC)
+Received: from ovpn-114-43.rdu2.redhat.com (ovpn-114-43.rdu2.redhat.com [10.10.114.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 41F405F708;
+        Fri, 11 Dec 2020 16:45:15 +0000 (UTC)
+Message-ID: <8b8eaefd5a6555742cf0384dd14bb864d8aac1f8.camel@redhat.com>
+Subject: Re: [PATCH 3/3] driver core: platform: use bus_type functions
+From:   Qian Cai <qcai@redhat.com>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     devicetree@vger.kernel.org,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        kernel-team@android.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20201121020232.908850-1-saravanak@google.com>
- <20201121020232.908850-17-saravanak@google.com>
- <02e7047071f0b54b046ac472adeeb3fafabc643c.camel@redhat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <788ee1c7-0ea2-33ec-658e-50707f7515a6@arm.com>
-Date:   Fri, 11 Dec 2020 16:34:31 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-MIME-Version: 1.0
-In-Reply-To: <02e7047071f0b54b046ac472adeeb3fafabc643c.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Date:   Fri, 11 Dec 2020 11:45:14 -0500
+In-Reply-To: <20201119124611.2573057-3-u.kleine-koenig@pengutronix.de>
+References: <20201119124611.2573057-1-u.kleine-koenig@pengutronix.de>
+         <20201119124611.2573057-3-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020-12-11 14:11, Qian Cai wrote:
-> On Fri, 2020-11-20 at 18:02 -0800, Saravana Kannan wrote:
->> The current implementation of fw_devlink is very inefficient because it
->> tries to get away without creating fwnode links in the name of saving
->> memory usage. Past attempts to optimize runtime at the cost of memory
->> usage were blocked with request for data showing that the optimization
->> made significant improvement for real world scenarios.
->>
->> We have those scenarios now. There have been several reports of boot
->> time increase in the order of seconds in this thread [1]. Several OEMs
->> and SoC manufacturers have also privately reported significant
->> (350-400ms) increase in boot time due to all the parsing done by
->> fw_devlink.
->>
->> So this patch uses all the setup done by the previous patches in this
->> series to refactor fw_devlink to be more efficient. Most of the code has
->> been moved out of firmware specific (DT mostly) code into driver core.
->>
->> This brings the following benefits:
->> - Instead of parsing the device tree multiple times during bootup,
->>    fw_devlink parses each fwnode node/property only once and creates
->>    fwnode links. The rest of the fw_devlink code then just looks at these
->>    fwnode links to do rest of the work.
->>
->> - Makes it much easier to debug probe issue due to fw_devlink in the
->>    future. fw_devlink=on blocks the probing of devices if they depend on
->>    a device that hasn't been added yet. With this refactor, it'll be very
->>    easy to tell what that device is because we now have a reference to
->>    the fwnode of the device.
->>
->> - Much easier to add fw_devlink support to ACPI and other firmware
->>    types. A refactor to move the common bits from DT specific code to
->>    driver core was in my TODO list as a prerequisite to adding ACPI
->>    support to fw_devlink. This series gets that done.
->>
->> [1] - https://lore.kernel.org/linux-omap/ea02f57e-871d-cd16-4418-c1da4bbc4696@ti.com/
->> Signed-off-by: Saravana Kannan <saravanak@google.com>
->> Tested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> Tested-by: Grygorii Strashko <grygorii.strashko@ti.com>
+On Thu, 2020-11-19 at 13:46 +0100, Uwe Kleine-König wrote:
+> This works towards the goal mentioned in 2006 in commit 594c8281f905
+> ("[PATCH] Add bus_type probe, remove, shutdown methods.").
 > 
-> Reverting this commit and its dependency:
+> The functions are moved to where the other bus_type functions are
+> defined and renamed to match the already established naming scheme.
 > 
-> 2d09e6eb4a6f driver core: Delete pointless parameter in fwnode_operations.add_links
-> 
-> from today's linux-next fixed a boot crash on an arm64 Thunder X2 server.
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Since the call stack implicates the platform-device-wrangling we do in 
-IORT code I took a quick look; AFAICS my guess would be it's blowing up 
-trying to walk a zeroed list head since "driver core: Add fwnode_init()" 
-missed acpi_alloc_fwnode_static().
+Reverting this commit from today's linux-next fixed a crash during shutdown.
 
-Robin.
+.config: https://cailca.coding.net/public/linux/mm/git/files/master/x86.config
 
-> .config: https://cailca.coding.net/public/linux/mm/git/files/master/arm64.config
+[ 9771.596916][T113465] BUG: unable to handle page fault for address: ffffffffffffffe8
+[ 9771.604627][T113465] #PF: supervisor read access in kernel mode
+[ 9771.610581][T113465] #PF: error_code(0x0000) - not-present page
+[ 9771.616533][T113465] PGD 19c1e17067 P4D 19c1e17067 PUD 19c1e19067 PMD 0 
+[ 9771.623279][T113465] Oops: 0000 [#1] SMP KASAN PTI
+[ 9771.628098][T113465] CPU: 22 PID: 113465 Comm: reboot Tainted: G          IO      5.10.0-rc7-next-20201211 #1
+[ 9771.638071][T113465] Hardware name: HPE ProLiant DL560 Gen10/ProLiant DL560 Gen10, BIOS U34 11/13/2019
+[ 9771.647431][T113465] RIP: 0010:platform_shutdown+0x44/0x70
+platform_shutdown at drivers/base/platform.c:1357
+[ 9771.652956][T113465] Code: fa 48 c1 ea 03 80 3c 02 00 75 3d 48 b8 00 00 00 00 00 fc ff df 48 8b 6b 68 48 8d 7d e8 48 89 fa 48 c1 ea 03 80 3c 02 00 75 17 <48> 8b 45 e8 48 85 c0 74 0b 48 8d 7b f0 5b 5d e9 08 45 6c 00 5b 5d
+[ 9771.672623][T113465] RSP: 0018:ffffc90008a77d38 EFLAGS: 00010246
+[ 9771.678665][T113465] RAX: dffffc0000000000 RBX: ffff888860d78810 RCX: ffff888860d78870
+[ 9771.686628][T113465] RDX: 1ffffffffffffffd RSI: 0000000000000001 RDI: ffffffffffffffe8
+[ 9771.694591][T113465] RBP: 0000000000000000 R08: ffffed110c1af166 R09: ffffed110c1af166
+[ 9771.702555][T113465] R10: ffff888860d78b2b R11: ffffed110c1af165 R12: ffff888860d78810
+[ 9771.710516][T113465] R13: ffff888860d78920 R14: fffffbfff2db0008 R15: ffff888860d78818
+[ 9771.718478][T113465] FS:  00007f3434549540(0000) GS:ffff88901f500000(0000) knlGS:0000000000000000
+[ 9771.727402][T113465] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 9771.733966][T113465] CR2: ffffffffffffffe8 CR3: 000000092e9c0004 CR4: 00000000007706e0
+[ 9771.741929][T113465] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 9771.749890][T113465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 9771.757852][T113465] PKRU: 55555554
+[ 9771.761359][T113465] Call Trace:
+[ 9771.764604][T113465]  device_shutdown+0x2ec/0x540
+[ 9771.769335][T113465]  kernel_restart+0xe/0x40
+[ 9771.773721][T113465]  __do_sys_reboot+0x143/0x2b0
+[ 9771.778450][T113465]  ? kernel_power_off+0xa0/0xa0
+[ 9771.783269][T113465]  ? debug_object_deactivate+0x3b0/0x3b0
+[ 9771.788877][T113465]  ? syscall_enter_from_user_mode+0x17/0x40
+[ 9771.794747][T113465]  ? rcu_read_lock_sched_held+0xa1/0xd0
+[ 9771.800267][T113465]  ? lockdep_hardirqs_on_prepare+0x27c/0x3d0
+[ 9771.806221][T113465]  ? syscall_enter_from_user_mode+0x1c/0x40
+[ 9771.812087][T113465]  do_syscall_64+0x33/0x40
+[ 9771.816472][T113465]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 9771.822340][T113465] RIP: 0033:0x7f343379b857
+[ 9771.826724][T113465] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 89 fa be 69 19 12 28 bf ad de e1 fe b8 a9 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 01 86 2c 00 f7 d8 64 89 02 b8
+[ 9771.846392][T113465] RSP: 002b:00007ffef9f85e58 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
+[ 9771.854791][T113465] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f343379b857
+[ 9771.862752][T113465] RDX: 0000000001234567 RSI: 0000000028121969 RDI: 00000000fee1dead
+[ 9771.870713][T113465] RBP: 00007ffef9f85ea0 R08: 0000000000000002 R09: 0000000000000000
+[ 9771.878673][T113465] R10: 000000000000004b R11: 0000000000000246 R12: 0000000000000001
+[ 9771.886635][T113465] R13: 00000000fffffffe R14: 0000000000000006 R15: 0000000000000000
+[ 9771.894596][T113465] Modules linked in: isofs cdrom fuse loop nls_ascii nls_cp437 vfat fat kvm_intel kvm ses enclosure irqbypass efivarfs ip_tables x_tables sd_mod tg3 nvme firmware_class smartpqi nvme_core libphy scsi_transport_sas dm_mirror dm_region_hash dm_log dm_mod [last unloaded: dummy_del_mod]
+[ 9771.921472][T113465] CR2: ffffffffffffffe8
+[ 9771.925590][T113465] ---[ end trace 8a3c9cffc1068bd2 ]---
+[ 9771.931017][T113465] RIP: 0010:platform_shutdown+0x44/0x70
+[ 9771.936535][T113465] Code: fa 48 c1 ea 03 80 3c 02 00 75 3d 48 b8 00 00 00 00 00 fc ff df 48 8b 6b 68 48 8d 7d e8 48 89 fa 48 c1 ea 03 80 3c 02 00 75 17 <48> 8b 45 e8 48 85 c0 74 0b 48 8d 7b f0 5b 5d e9 08 45 6c 00 5b 5d
+[ 9771.956204][T113465] RSP: 0018:ffffc90008a77d38 EFLAGS: 00010246
+
+> ---
+>  drivers/base/platform.c | 132 ++++++++++++++++++++--------------------
+>  1 file changed, 65 insertions(+), 67 deletions(-)
 > 
-> [   57.413929][    T1] ACPI: 5 ACPI AML tables successfully acquired and loaded
-> [   60.571643][    T1] ACPI: Interpreter enabled
-> [   60.576104][    T1] ACPI: Using GIC for interrupt routing
-> [   60.582474][    T1] ACPI: MCFG table detected, 1 entries
-> [   60.588051][    T1] ACPI: IORT: SMMU-v3[402300000] Mapped to Proximity domain 0
-> [   60.601374][    T1] Unable to handle kernel paging request at virtual address dfff800000000000
-> [   60.610146][    T1] Mem abort info:
-> [   60.613694][    T1]   ESR = 0x96000004
-> [   60.617496][    T1]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   60.623616][    T1]   SET = 0, FnV = 0
-> [   60.627420][    T1]   EA = 0, S1PTW = 0
-> [   60.631304][    T1] Data abort info:
-> [   60.634957][    T1]   ISV = 0, ISS = 0x00000004
-> [   60.639546][    T1]   CM = 0, WnR = 0
-> [   60.643255][    T1] [dfff800000000000] address between user and kernel address ranges
-> [   60.651226][    T1] Internal error: Oops: 96000004 [#1] SMP
-> [   60.656864][    T1] Modules linked in:
-> [   60.660658][    T1] CPU: 38 PID: 1 Comm: swapper/0 Tainted: G        W         5.10.0-rc7-next-20201211 #2
-> [   60.670424][    T1] Hardware name: HPE Apollo 70             /C01_APACHE_MB         , BIOS L50_5.13_1.16 07/29/2020
-> [   60.680979][    T1] pstate: 10400009 (nzcV daif +PAN -UAO -TCO BTYPE=--)
-> [   60.687757][    T1] pc : device_add+0xf60/0x16b0
-> [   60.692430][    T1] lr : device_add+0xf08/0x16b0
-> [   60.697098][    T1] sp : ffff0000063bf7d0
-> [   60.701147][    T1] x29: ffff0000063bf7d0 x28: ffff00001f760810
-> [   60.707226][    T1] x27: fffffffffffffff8 x26: ffff00001f760858
-> [   60.713304][    T1] x25: ffff00001f760c58 x24: fffffffffffffff8
-> [   60.719381][    T1] x23: 1fffe00003eec10b x22: ffff8000190d0260
-> [   60.725458][    T1] x21: ffff800011dba708 x20: 0000000000000000
-> [   60.731535][    T1] x19: 1fffe00000c77f10 x18: 1fffe001cf0d53ed
-> [   60.737616][    T1] x17: 0000000000000000 x16: 1ffff000033676f1
-> [   60.743709][    T1] x15: 0000000000000000 x14: ffff800011731e34
-> [   60.749786][    T1] x13: ffff700003217fb9 x12: 1ffff00003217fb8
-> [   60.755864][    T1] x11: 1ffff00003217fb8 x10: ffff700003217fb8
-> [   60.761940][    T1] x9 : dfff800000000000 x8 : ffff8000190bfdc7
-> [   60.768017][    T1] x7 : 0000000000000001 x6 : ffff700003217fb9
-> [   60.774094][    T1] x5 : ffff700003217fb9 x4 : ffff000006324a80
-> [   60.780170][    T1] x3 : 1fffe00000c64951 x2 : 0000000000000000
-> [   60.786247][    T1] x1 : 0000000000000000 x0 : dfff800000000000
-> [   60.792324][    T1] Call trace:
-> [   60.795495][    T1]  device_add+0xf60/0x16b0
-> __fw_devlink_link_to_consumers at drivers/base/core.c:1583
-> (inlined by) fw_devlink_link_device at drivers/base/core.c:1726
-> (inlined by) device_add at drivers/base/core.c:3088
-> [   60.799813][    T1]  platform_device_add+0x274/0x628
-> [   60.804833][    T1]  acpi_iort_init+0x9d8/0xc50
-> [   60.809415][    T1]  acpi_init+0x45c/0x4e8
-> [   60.813556][    T1]  do_one_initcall+0x170/0xb70
-> [   60.818224][    T1]  kernel_init_freeable+0x6a8/0x734
-> [   60.823332][    T1]  kernel_init+0x18/0x12c
-> [   60.827566][    T1]  ret_from_fork+0x10/0x1c
-> [   60.831890][    T1] Code: f2fbffe0 d100205b d343fc41 aa1b03f8 (38e06820)
-> [   60.838756][    T1] ---[ end trace fa5c8ce17a226d83 ]---
-> [   60.844127][    T1] Kernel panic - not syncing: Oops: Fatal exception
-> [   60.850881][    T1] SMP: stopping secondary CPUs
-> [   60.855733][    T1] ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
->> ---
->>   drivers/base/core.c    | 325 ++++++++++++++++++++++++++++++-----------
->>   include/linux/device.h |   5 -
->>   2 files changed, 238 insertions(+), 92 deletions(-)
->>
->> diff --git a/drivers/base/core.c b/drivers/base/core.c
->> index 1873cecb0cc4..9edf9084fc98 100644
->> --- a/drivers/base/core.c
->> +++ b/drivers/base/core.c
->> @@ -46,8 +46,6 @@ early_param("sysfs.deprecated", sysfs_deprecated_setup);
->>   #endif
->>   
->>   /* Device links support. */
->> -static LIST_HEAD(wait_for_suppliers);
->> -static DEFINE_MUTEX(wfs_lock);
->>   static LIST_HEAD(deferred_sync);
->>   static unsigned int defer_sync_state_count = 1;
->>   static DEFINE_MUTEX(fwnode_link_lock);
->> @@ -803,74 +801,6 @@ struct device_link *device_link_add(struct device *consumer,
->>   }
->>   EXPORT_SYMBOL_GPL(device_link_add);
->>   
->> -/**
->> - * device_link_wait_for_supplier - Add device to wait_for_suppliers list
->> - * @consumer: Consumer device
->> - *
->> - * Marks the @consumer device as waiting for suppliers to become available by
->> - * adding it to the wait_for_suppliers list. The consumer device will never be
->> - * probed until it's removed from the wait_for_suppliers list.
->> - *
->> - * The caller is responsible for adding the links to the supplier devices once
->> - * they are available and removing the @consumer device from the
->> - * wait_for_suppliers list once links to all the suppliers have been created.
->> - *
->> - * This function is NOT meant to be called from the probe function of the
->> - * consumer but rather from code that creates/adds the consumer device.
->> - */
->> -static void device_link_wait_for_supplier(struct device *consumer,
->> -					  bool need_for_probe)
->> -{
->> -	mutex_lock(&wfs_lock);
->> -	list_add_tail(&consumer->links.needs_suppliers, &wait_for_suppliers);
->> -	consumer->links.need_for_probe = need_for_probe;
->> -	mutex_unlock(&wfs_lock);
->> -}
->> -
->> -static void device_link_wait_for_mandatory_supplier(struct device *consumer)
->> -{
->> -	device_link_wait_for_supplier(consumer, true);
->> -}
->> -
->> -static void device_link_wait_for_optional_supplier(struct device *consumer)
->> -{
->> -	device_link_wait_for_supplier(consumer, false);
->> -}
->> -
->> -/**
->> - * device_link_add_missing_supplier_links - Add links from consumer devices to
->> - *					    supplier devices, leaving any
->> - *					    consumer with inactive suppliers on
->> - *					    the wait_for_suppliers list
->> - *
->> - * Loops through all consumers waiting on suppliers and tries to add all their
->> - * supplier links. If that succeeds, the consumer device is removed from
->> - * wait_for_suppliers list. Otherwise, they are left in the wait_for_suppliers
->> - * list.  Devices left on the wait_for_suppliers list will not be probed.
->> - *
->> - * The fwnode add_links callback is expected to return 0 if it has found and
->> - * added all the supplier links for the consumer device. It should return an
->> - * error if it isn't able to do so.
->> - *
->> - * The caller of device_link_wait_for_supplier() is expected to call this once
->> - * it's aware of potential suppliers becoming available.
->> - */
->> -static void device_link_add_missing_supplier_links(void)
->> -{
->> -	struct device *dev, *tmp;
->> -
->> -	mutex_lock(&wfs_lock);
->> -	list_for_each_entry_safe(dev, tmp, &wait_for_suppliers,
->> -				 links.needs_suppliers) {
->> -		int ret = fwnode_call_int_op(dev->fwnode, add_links, dev);
->> -		if (!ret)
->> -			list_del_init(&dev->links.needs_suppliers);
->> -		else if (ret != -ENODEV)
->> -			dev->links.need_for_probe = false;
->> -	}
->> -	mutex_unlock(&wfs_lock);
->> -}
->> -
->>   #ifdef CONFIG_SRCU
->>   static void __device_link_del(struct kref *kref)
->>   {
->> @@ -1195,9 +1125,8 @@ void device_links_driver_bound(struct device *dev)
->>   	 * the device links it needs to or make new device links as it needs
->>   	 * them. So, it no longer needs to wait on any suppliers.
->>   	 */
->> -	mutex_lock(&wfs_lock);
->> -	list_del_init(&dev->links.needs_suppliers);
->> -	mutex_unlock(&wfs_lock);
->> +	if (dev->fwnode && dev->fwnode->dev == dev)
->> +		fwnode_links_purge_suppliers(dev->fwnode);
->>   	device_remove_file(dev, &dev_attr_waiting_for_supplier);
->>   
->>   	device_links_write_lock();
->> @@ -1488,10 +1417,6 @@ static void device_links_purge(struct device *dev)
->>   	if (dev->class == &devlink_class)
->>   		return;
->>   
->> -	mutex_lock(&wfs_lock);
->> -	list_del(&dev->links.needs_suppliers);
->> -	mutex_unlock(&wfs_lock);
->> -
->>   	/*
->>   	 * Delete all of the remaining links from this device to any other
->>   	 * devices (either consumers or suppliers).
->> @@ -1561,19 +1486,246 @@ static void fw_devlink_parse_fwtree(struct fwnode_handle *fwnode)
->>   		fw_devlink_parse_fwtree(child);
->>   }
->>   
->> -static void fw_devlink_link_device(struct device *dev)
->> +/**
->> + * fw_devlink_create_devlink - Create a device link from a consumer to fwnode
->> + * @con - Consumer device for the device link
->> + * @sup_handle - fwnode handle of supplier
->> + *
->> + * This function will try to create a device link between the consumer device
->> + * @con and the supplier device represented by @sup_handle.
->> + *
->> + * The supplier has to be provided as a fwnode because incorrect cycles in
->> + * fwnode links can sometimes cause the supplier device to never be created.
->> + * This function detects such cases and returns an error if it cannot create a
->> + * device link from the consumer to a missing supplier.
->> + *
->> + * Returns,
->> + * 0 on successfully creating a device link
->> + * -EINVAL if the device link cannot be created as expected
->> + * -EAGAIN if the device link cannot be created right now, but it may be
->> + *  possible to do that in the future
->> + */
->> +static int fw_devlink_create_devlink(struct device *con,
->> +				     struct fwnode_handle *sup_handle, u32 flags)
->> +{
->> +	struct device *sup_dev;
->> +	int ret = 0;
->> +
->> +	sup_dev = get_dev_from_fwnode(sup_handle);
->> +	if (sup_dev) {
->> +		/*
->> +		 * If this fails, it is due to cycles in device links.  Just
->> +		 * give up on this link and treat it as invalid.
->> +		 */
->> +		if (!device_link_add(con, sup_dev, flags))
->> +			ret = -EINVAL;
->> +
->> +		goto out;
->> +	}
->> +
->> +	/*
->> +	 * DL_FLAG_SYNC_STATE_ONLY doesn't block probing and supports
->> +	 * cycles. So cycle detection isn't necessary and shouldn't be
->> +	 * done.
->> +	 */
->> +	if (flags & DL_FLAG_SYNC_STATE_ONLY)
->> +		return -EAGAIN;
->> +
->> +	/*
->> +	 * If we can't find the supplier device from its fwnode, it might be
->> +	 * due to a cyclic dependency between fwnodes. Some of these cycles can
->> +	 * be broken by applying logic. Check for these types of cycles and
->> +	 * break them so that devices in the cycle probe properly.
->> +	 *
->> +	 * If the supplier's parent is dependent on the consumer, then
->> +	 * the consumer-supplier dependency is a false dependency. So,
->> +	 * treat it as an invalid link.
->> +	 */
->> +	sup_dev = fwnode_get_next_parent_dev(sup_handle);
->> +	if (sup_dev && device_is_dependent(con, sup_dev)) {
->> +		dev_dbg(con, "Not linking to %pfwP - False link\n",
->> +			sup_handle);
->> +		ret = -EINVAL;
->> +	} else {
->> +		/*
->> +		 * Can't check for cycles or no cycles. So let's try
->> +		 * again later.
->> +		 */
->> +		ret = -EAGAIN;
->> +	}
->> +
->> +out:
->> +	put_device(sup_dev);
->> +	return ret;
->> +}
->> +
->> +/**
->> + * __fw_devlink_link_to_consumers - Create device links to consumers of a device
->> + * @dev - Device that needs to be linked to its consumers
->> + *
->> + * This function looks at all the consumer fwnodes of @dev and creates device
->> + * links between the consumer device and @dev (supplier).
->> + *
->> + * If the consumer device has not been added yet, then this function creates a
->> + * SYNC_STATE_ONLY link between @dev (supplier) and the closest ancestor device
->> + * of the consumer fwnode. This is necessary to make sure @dev doesn't get a
->> + * sync_state() callback before the real consumer device gets to be added and
->> + * then probed.
->> + *
->> + * Once device links are created from the real consumer to @dev (supplier), the
->> + * fwnode links are deleted.
->> + */
->> +static void __fw_devlink_link_to_consumers(struct device *dev)
->> +{
->> +	struct fwnode_handle *fwnode = dev->fwnode;
->> +	struct fwnode_link *link, *tmp;
->> +
->> +	list_for_each_entry_safe(link, tmp, &fwnode->consumers, s_hook) {
->> +		u32 dl_flags = fw_devlink_get_flags();
->> +		struct device *con_dev;
->> +		bool own_link = true;
->> +		int ret;
->> +
->> +		con_dev = get_dev_from_fwnode(link->consumer);
->> +		/*
->> +		 * If consumer device is not available yet, make a "proxy"
->> +		 * SYNC_STATE_ONLY link from the consumer's parent device to
->> +		 * the supplier device. This is necessary to make sure the
->> +		 * supplier doesn't get a sync_state() callback before the real
->> +		 * consumer can create a device link to the supplier.
->> +		 *
->> +		 * This proxy link step is needed to handle the case where the
->> +		 * consumer's parent device is added before the supplier.
->> +		 */
->> +		if (!con_dev) {
->> +			con_dev = fwnode_get_next_parent_dev(link->consumer);
->> +			/*
->> +			 * However, if the consumer's parent device is also the
->> +			 * parent of the supplier, don't create a
->> +			 * consumer-supplier link from the parent to its child
->> +			 * device. Such a dependency is impossible.
->> +			 */
->> +			if (con_dev &&
->> +			    fwnode_is_ancestor_of(con_dev->fwnode, fwnode)) {
->> +				put_device(con_dev);
->> +				con_dev = NULL;
->> +			} else {
->> +				own_link = false;
->> +				dl_flags = DL_FLAG_SYNC_STATE_ONLY;
->> +			}
->> +		}
->> +
->> +		if (!con_dev)
->> +			continue;
->> +
->> +		ret = fw_devlink_create_devlink(con_dev, fwnode, dl_flags);
->> +		put_device(con_dev);
->> +		if (!own_link || ret == -EAGAIN)
->> +			continue;
->> +
->> +		list_del(&link->s_hook);
->> +		list_del(&link->c_hook);
->> +		kfree(link);
->> +	}
->> +}
->> +
->> +/**
->> + * __fw_devlink_link_to_suppliers - Create device links to suppliers of a device
->> + * @dev - The consumer device that needs to be linked to its suppliers
->> + * @fwnode - Root of the fwnode tree that is used to create device links
->> + *
->> + * This function looks at all the supplier fwnodes of fwnode tree rooted at
->> + * @fwnode and creates device links between @dev (consumer) and all the
->> + * supplier devices of the entire fwnode tree at @fwnode.
->> + *
->> + * The function creates normal (non-SYNC_STATE_ONLY) device links between @dev
->> + * and the real suppliers of @dev. Once these device links are created, the
->> + * fwnode links are deleted. When such device links are successfully created,
->> + * this function is called recursively on those supplier devices. This is
->> + * needed to detect and break some invalid cycles in fwnode links.  See
->> + * fw_devlink_create_devlink() for more details.
->> + *
->> + * In addition, it also looks at all the suppliers of the entire fwnode tree
->> + * because some of the child devices of @dev that have not been added yet
->> + * (because @dev hasn't probed) might already have their suppliers added to
->> + * driver core. So, this function creates SYNC_STATE_ONLY device links between
->> + * @dev (consumer) and these suppliers to make sure they don't execute their
->> + * sync_state() callbacks before these child devices have a chance to create
->> + * their device links. The fwnode links that correspond to the child devices
->> + * aren't delete because they are needed later to create the device links
->> + * between the real consumer and supplier devices.
->> + */
->> +static void __fw_devlink_link_to_suppliers(struct device *dev,
->> +					   struct fwnode_handle *fwnode)
->>   {
->> -	int fw_ret;
->> +	bool own_link = (dev->fwnode == fwnode);
->> +	struct fwnode_link *link, *tmp;
->> +	struct fwnode_handle *child = NULL;
->> +	u32 dl_flags;
->> +
->> +	if (own_link)
->> +		dl_flags = fw_devlink_get_flags();
->> +	else
->> +		dl_flags = DL_FLAG_SYNC_STATE_ONLY;
->>   
->> -	device_link_add_missing_supplier_links();
->> +	list_for_each_entry_safe(link, tmp, &fwnode->suppliers, c_hook) {
->> +		int ret;
->> +		struct device *sup_dev;
->> +		struct fwnode_handle *sup = link->supplier;
->> +
->> +		ret = fw_devlink_create_devlink(dev, sup, dl_flags);
->> +		if (!own_link || ret == -EAGAIN)
->> +			continue;
->>   
->> -	if (fw_devlink_flags && fwnode_has_op(dev->fwnode, add_links)) {
->> -		fw_ret = fwnode_call_int_op(dev->fwnode, add_links, dev);
->> -		if (fw_ret == -ENODEV && !fw_devlink_is_permissive())
->> -			device_link_wait_for_mandatory_supplier(dev);
->> -		else if (fw_ret)
->> -			device_link_wait_for_optional_supplier(dev);
->> +		list_del(&link->s_hook);
->> +		list_del(&link->c_hook);
->> +		kfree(link);
->> +
->> +		/* If no device link was created, nothing more to do. */
->> +		if (ret)
->> +			continue;
->> +
->> +		/*
->> +		 * If a device link was successfully created to a supplier, we
->> +		 * now need to try and link the supplier to all its suppliers.
->> +		 *
->> +		 * This is needed to detect and delete false dependencies in
->> +		 * fwnode links that haven't been converted to a device link
->> +		 * yet. See comments in fw_devlink_create_devlink() for more
->> +		 * details on the false dependency.
->> +		 *
->> +		 * Without deleting these false dependencies, some devices will
->> +		 * never probe because they'll keep waiting for their false
->> +		 * dependency fwnode links to be converted to device links.
->> +		 */
->> +		sup_dev = get_dev_from_fwnode(sup);
->> +		__fw_devlink_link_to_suppliers(sup_dev, sup_dev->fwnode);
->> +		put_device(sup_dev);
->>   	}
->> +
->> +	/*
->> +	 * Make "proxy" SYNC_STATE_ONLY device links to represent the needs of
->> +	 * all the descendants. This proxy link step is needed to handle the
->> +	 * case where the supplier is added before the consumer's parent device
->> +	 * (@dev).
->> +	 */
->> +	while ((child = fwnode_get_next_available_child_node(fwnode, child)))
->> +		__fw_devlink_link_to_suppliers(dev, child);
->> +}
->> +
->> +static void fw_devlink_link_device(struct device *dev)
->> +{
->> +	struct fwnode_handle *fwnode = dev->fwnode;
->> +
->> +	if (!fw_devlink_flags)
->> +		return;
->> +
->> +	fw_devlink_parse_fwtree(fwnode);
->> +
->> +	mutex_lock(&fwnode_link_lock);
->> +	__fw_devlink_link_to_consumers(dev);
->> +	__fw_devlink_link_to_suppliers(dev, fwnode);
->> +	mutex_unlock(&fwnode_link_lock);
->>   }
->>   
->>   /* Device links support end. */
->> @@ -2431,7 +2583,6 @@ void device_initialize(struct device *dev)
->>   #endif
->>   	INIT_LIST_HEAD(&dev->links.consumers);
->>   	INIT_LIST_HEAD(&dev->links.suppliers);
->> -	INIT_LIST_HEAD(&dev->links.needs_suppliers);
->>   	INIT_LIST_HEAD(&dev->links.defer_sync);
->>   	dev->links.status = DL_DEV_NO_DRIVER;
->>   }
->> diff --git a/include/linux/device.h b/include/linux/device.h
->> index 1e771ea4dca6..89bb8b84173e 100644
->> --- a/include/linux/device.h
->> +++ b/include/linux/device.h
->> @@ -351,18 +351,13 @@ enum dl_dev_state {
->>    * struct dev_links_info - Device data related to device links.
->>    * @suppliers: List of links to supplier devices.
->>    * @consumers: List of links to consumer devices.
->> - * @needs_suppliers: Hook to global list of devices waiting for suppliers.
->>    * @defer_sync: Hook to global list of devices that have deferred sync_state.
->> - * @need_for_probe: If needs_suppliers is on a list, this indicates if the
->> - *		    suppliers are needed for probe or not.
->>    * @status: Driver status information.
->>    */
->>   struct dev_links_info {
->>   	struct list_head suppliers;
->>   	struct list_head consumers;
->> -	struct list_head needs_suppliers;
->>   	struct list_head defer_sync;
->> -	bool need_for_probe;
->>   	enum dl_dev_state status;
->>   };
->>   
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index b847f5f8f992..8ad06daa2eaa 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -743,70 +743,6 @@ struct platform_device *platform_device_register_full(
+>  }
+>  EXPORT_SYMBOL_GPL(platform_device_register_full);
+>  
+> -static int platform_probe_fail(struct platform_device *pdev);
+> -
+> -static int platform_drv_probe(struct device *_dev)
+> -{
+> -	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> -	struct platform_device *dev = to_platform_device(_dev);
+> -	int ret;
+> -
+> -	/*
+> -	 * A driver registered using platform_driver_probe() cannot be bound
+> -	 * again later because the probe function usually lives in __init code
+> -	 * and so is gone. For these drivers .probe is set to
+> -	 * platform_probe_fail in __platform_driver_probe(). Don't even
+> -	 * prepare clocks and PM domains for these to match the traditional
+> -	 * behaviour.
+> -	 */
+> -	if (unlikely(drv->probe == platform_probe_fail))
+> -		return -ENXIO;
+> -
+> -	ret = of_clk_set_defaults(_dev->of_node, false);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	ret = dev_pm_domain_attach(_dev, true);
+> -	if (ret)
+> -		goto out;
+> -
+> -	if (drv->probe) {
+> -		ret = drv->probe(dev);
+> -		if (ret)
+> -			dev_pm_domain_detach(_dev, true);
+> -	}
+> -
+> -out:
+> -	if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
+> -		dev_warn(_dev, "probe deferral not supported\n");
+> -		ret = -ENXIO;
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+> -static int platform_drv_remove(struct device *_dev)
+> -{
+> -	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> -	struct platform_device *dev = to_platform_device(_dev);
+> -	int ret = 0;
+> -
+> -	if (drv->remove)
+> -		ret = drv->remove(dev);
+> -	dev_pm_domain_detach(_dev, true);
+> -
+> -	return ret;
+> -}
+> -
+> -static void platform_drv_shutdown(struct device *_dev)
+> -{
+> -	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> -	struct platform_device *dev = to_platform_device(_dev);
+> -
+> -	if (drv->shutdown)
+> -		drv->shutdown(dev);
+> -}
+> -
+>  /**
+>   * __platform_driver_register - register a driver for platform-level devices
+>   * @drv: platform driver structure
+> @@ -817,9 +753,6 @@ int __platform_driver_register(struct platform_driver *drv,
+>  {
+>  	drv->driver.owner = owner;
+>  	drv->driver.bus = &platform_bus_type;
+> -	drv->driver.probe = platform_drv_probe;
+> -	drv->driver.remove = platform_drv_remove;
+> -	drv->driver.shutdown = platform_drv_shutdown;
+>  
+>  	return driver_register(&drv->driver);
+>  }
+> @@ -1349,6 +1282,68 @@ static int platform_uevent(struct device *dev, struct kobj_uevent_env *env)
+>  	return 0;
+>  }
+>  
+> +static int platform_probe(struct device *_dev)
+> +{
+> +	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> +	struct platform_device *dev = to_platform_device(_dev);
+> +	int ret;
+> +
+> +	/*
+> +	 * A driver registered using platform_driver_probe() cannot be bound
+> +	 * again later because the probe function usually lives in __init code
+> +	 * and so is gone. For these drivers .probe is set to
+> +	 * platform_probe_fail in __platform_driver_probe(). Don't even prepare
+> +	 * clocks and PM domains for these to match the traditional behaviour.
+> +	 */
+> +	if (unlikely(drv->probe == platform_probe_fail))
+> +		return -ENXIO;
+> +
+> +	ret = of_clk_set_defaults(_dev->of_node, false);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = dev_pm_domain_attach(_dev, true);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (drv->probe) {
+> +		ret = drv->probe(dev);
+> +		if (ret)
+> +			dev_pm_domain_detach(_dev, true);
+> +	}
+> +
+> +out:
+> +	if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
+> +		dev_warn(_dev, "probe deferral not supported\n");
+> +		ret = -ENXIO;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int platform_remove(struct device *_dev)
+> +{
+> +	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> +	struct platform_device *dev = to_platform_device(_dev);
+> +	int ret = 0;
+> +
+> +	if (drv->remove)
+> +		ret = drv->remove(dev);
+> +	dev_pm_domain_detach(_dev, true);
+> +
+> +	return ret;
+> +}
+> +
+> +static void platform_shutdown(struct device *_dev)
+> +{
+> +	struct platform_driver *drv = to_platform_driver(_dev->driver);
+> +	struct platform_device *dev = to_platform_device(_dev);
+> +
+> +	if (drv->shutdown)
+> +		drv->shutdown(dev);
+> +}
+> +
+> +
+>  int platform_dma_configure(struct device *dev)
+>  {
+>  	enum dev_dma_attr attr;
+> @@ -1375,6 +1370,9 @@ struct bus_type platform_bus_type = {
+>  	.dev_groups	= platform_dev_groups,
+>  	.match		= platform_match,
+>  	.uevent		= platform_uevent,
+> +	.probe		= platform_probe,
+> +	.remove		= platform_remove,
+> +	.shutdown	= platform_shutdown,
+>  	.dma_configure	= platform_dma_configure,
+>  	.pm		= &platform_dev_pm_ops,
+>  };
+

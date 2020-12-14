@@ -2,116 +2,190 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 365592DA158
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200802DA167
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502847AbgLNUTY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388136AbgLNUTV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:19:21 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80913C0613D3
-        for <linux-next@vger.kernel.org>; Mon, 14 Dec 2020 12:18:41 -0800 (PST)
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2503206AbgLNUWv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:22:51 -0500
+Received: from ozlabs.org ([203.11.71.1]:55687 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2503125AbgLNUWn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Dec 2020 15:22:43 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E512F2C1;
-        Mon, 14 Dec 2020 20:17:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E512F2C1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1607977064; bh=QLI/egtl/FomJoWgApEqMIP5NgPgYuRFAI2eyPIlVK0=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cvt8j6SJ2z9sTL;
+        Tue, 15 Dec 2020 07:21:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1607977320;
+        bh=B3wuRWTcLJoeWP3BtRp0iftn36UsXN/g07DQz0v7oqE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=G04smzzbupfuSYIT2doemW6+DddWm9fDKYjHMZtEeMr9KDgGFK0lTotg4pTOk+BWu
-         oNgJevOGttLeWPYQR3bJF9KDeHeds5C2hEJ2cgFA2pnvxk9D1wZcfLr1DZ08dscK5B
-         KMTeb6zyn2QTnHpGLjuAGHFmfQ8AOHbkQDRbyzw051iM5Tber7RUHjMHWFALFC+5/v
-         hiUMdf+V+rgrgOsEhEk5pTilg/s6fCw5soQwyduZQhlUI0jC5EcY8nO0NoqQwMZuqk
-         0orElOBUnGFdl0+urICeEO4AVen3BQxCEfsN76wwMAkBx6cx8PpqA4c+9zq/kjEbl1
-         9k0vdUPARrUGQ==
-Date:   Mon, 14 Dec 2020 13:17:42 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wang Qing <wangqing@vivo.com>,
+        b=rh/abQmriFXZR/ZDdJVrQ4W8qHsKY7MYlbzOkR2Boe6bKW73yXpnQqmIn4hxI4MSL
+         Y9AtYb+BQ0BI30nPZ5vrirUkxQhZr1d79JYoqj/UiPrL5ubNFKkB11Msl+GZ66C9iB
+         hY0JYEpDt7A3lv8jXuuZNsRklBcteEfBp8RfDvHoaNfWr9aAvIst9GFBojdAislOSI
+         4oIY3EnIf+D1q1N66MUtZMcvc2WVUcyxp3jhk/ujJfEQ/KqFK/eM6ARRMLknuN5fAL
+         waMuFJljVjMzWupLCfBFN3tzuk1GYPeoQ/U3DPzalJUf9iPvjTBcWgDAWo2pi5rJf2
+         qMLSqjKFijqUQ==
+Date:   Tue, 15 Dec 2020 07:21:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alex Shi <alex.shi@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: linux-next: build warning after merge of the jc_docs tree
-Message-ID: <20201214131742.20d2252f@lwn.net>
-In-Reply-To: <20201215065143.65ccf365@canb.auug.org.au>
-References: <20201116170303.0d457d04@canb.auug.org.au>
-        <20201215065143.65ccf365@canb.auug.org.au>
-Organization: LWN.net
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ bpf-next tree
+Message-ID: <20201215072156.1988fabe@canb.auug.org.au>
+In-Reply-To: <20201204202005.3fb1304f@canb.auug.org.au>
+References: <20201204202005.3fb1304f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/IG37xDU4Ku3Zo8Iw2=8I4Ig";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 15 Dec 2020 06:51:43 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/IG37xDU4Ku3Zo8Iw2=8I4Ig
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, 16 Nov 2020 17:03:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the jc_docs tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >=20
-> > Documentation/translations/zh_CN/filesystems/tmpfs.rst:5: WARNING: unde=
-fined label: tmpfs_index (if the link has no caption the label must precede=
- a section header)
-> >=20
-> > Introduced by commit
-> >=20
-> >   09028e60fcea ("doc: zh_CN: add translatation for tmpfs") =20
+Hi all,
+
+On Fri, 4 Dec 2020 20:20:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the akpm-current tree got conflicts in:
 >=20
-> I am still getting this warning.
+>   include/linux/memcontrol.h
+>   mm/memcontrol.c
+>=20
+> between commit:
+>=20
+>   bcfe06bf2622 ("mm: memcontrol: Use helpers to read page's memcg data")
+>=20
+> from the bpf-next tree and commits:
+>=20
+>   6771a349b8c3 ("mm/memcg: remove incorrect comment")
+>   c3970fcb1f21 ("mm: move lruvec stats update functions to vmstat.h")
+>=20
+> from the akpm-current tree.
+>=20
+> I fixed it up (see below - I used the latter version of memcontrol.h)
+> and can carry the fix as necessary. This is now fixed as far as
+> linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
+>=20
+> I also added this merge fix patch:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 4 Dec 2020 19:53:40 +1100
+> Subject: [PATCH] fixup for "mm: move lruvec stats update functions to vms=
+tat.h"
+>=20
+> conflict against "mm: memcontrol: Use helpers to read page's memcg data"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  mm/memcontrol.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 6f5733779927..3b6db4e906b5 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -851,16 +851,17 @@ void __mod_lruvec_page_state(struct page *page, enu=
+m node_stat_item idx,
+>  			     int val)
+>  {
+>  	struct page *head =3D compound_head(page); /* rmap on tail pages */
+> +	struct mem_cgroup *memcg =3D page_memcg(head);
+>  	pg_data_t *pgdat =3D page_pgdat(page);
+>  	struct lruvec *lruvec;
+> =20
+>  	/* Untracked pages have no memcg, no lruvec. Update only the node */
+> -	if (!head->mem_cgroup) {
+> +	if (!memcg) {
+>  		__mod_node_page_state(pgdat, idx, val);
+>  		return;
+>  	}
+> =20
+> -	lruvec =3D mem_cgroup_lruvec(head->mem_cgroup, pgdat);
+> +	lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
+>  	__mod_lruvec_state(lruvec, idx, val);
+>  }
+> =20
+> --=20
+> 2.29.2
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc include/linux/memcontrol.h
+> index 320369c841f5,ff02f831e7e1..000000000000
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> diff --cc mm/memcontrol.c
+> index 7535042ac1ec,c9a5dce4343d..000000000000
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@@ -2880,9 -2984,9 +2975,9 @@@ static void cancel_charge(struct mem_cg
+>  =20
+>   static void commit_charge(struct page *page, struct mem_cgroup *memcg)
+>   {
+>  -	VM_BUG_ON_PAGE(page->mem_cgroup, page);
+>  +	VM_BUG_ON_PAGE(page_memcg(page), page);
+>   	/*
+> - 	 * Any of the following ensures page->mem_cgroup stability:
+> + 	 * Any of the following ensures page's memcg stability:
+>   	 *
+>   	 * - the page lock
+>   	 * - LRU isolation
+> @@@ -6977,11 -7012,10 +6997,10 @@@ void mem_cgroup_migrate(struct page *ol
+>   		return;
+>  =20
+>   	/* Page cache replacement: new page already charged? */
+>  -	if (newpage->mem_cgroup)
+>  +	if (page_memcg(newpage))
+>   		return;
+>  =20
+> - 	/* Swapcache readahead pages can get replaced before being charged */
+>  -	memcg =3D oldpage->mem_cgroup;
+>  +	memcg =3D page_memcg(oldpage);
+>   	if (!memcg)
+>   		return;
+>  =20
 
-OK, enough of that; I've just tacked on the following patch to address
-this problem, thanks for the report.
+Just a reminder that this conflict still exists.  Commit bcfe06bf2622
+is now in the net-next tree.
 
-Thanks,
-
-jon
-
-=46rom 47e44ed01434e51e2e42b188482d837c01e5d16e Mon Sep 17 00:00:00 2001
-From: Jonathan Corbet <corbet@lwn.net>
-Date: Mon, 14 Dec 2020 13:14:22 -0700
-Subject: [PATCH] docs: fix broken cross reference in translations/zh_CN
-
-Commit 09028e60fcea ("doc: zh_CN: add translatation for tmpfs") introduced
-a cross reference without adding the appropriate target tag, leading to
-this docs-build warning:
-
-  Documentation/translations/zh_CN/filesystems/tmpfs.rst:5: WARNING: undefi=
-ned label: tmpfs_index (if the link has no caption the label must precede a=
- section header)
-
-With automarkup, we don't actually need an explicit reference here at all,
-so just take it out.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 09028e60fcea ("doc: zh_CN: add translatation for tmpfs")
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/translations/zh_CN/filesystems/tmpfs.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/translations/zh_CN/filesystems/tmpfs.rst b/Docum=
-entation/translations/zh_CN/filesystems/tmpfs.rst
-index cf3ccab20e50..6fd9d83b2db5 100644
---- a/Documentation/translations/zh_CN/filesystems/tmpfs.rst
-+++ b/Documentation/translations/zh_CN/filesystems/tmpfs.rst
-@@ -2,7 +2,7 @@
-=20
- .. include:: ../disclaimer-zh_CN.rst
-=20
--:Original: :ref:`Documentation/filesystems/tmpfs.rst <tmpfs_index>`
-+:Original: Documentation/filesystems/tmpfs.rst
-=20
- translated by Wang Qing<wangqing@vivo.com>
-=20
 --=20
-2.28.0
+Cheers,
+Stephen Rothwell
 
+--Sig_/IG37xDU4Ku3Zo8Iw2=8I4Ig
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XyWQACgkQAVBC80lX
+0GwynQgAlfCe0thKDt294OVZOl+2aA785d1wRdcPUy+DIReItT2L/MRLre2OW9K0
++BGeGIV5hxuxnpdkC81DOCFIIUbAi+jLWDI69ob1RTRfO5iGIzkz9EhLTrsg/aBv
+wI9XomYFLIViQFKo5oPums3GjJ6Fv+cE6HW387DRFtRS5Viw5EpFidw1QrV5hGOv
+SzFwKR6f2xUmzbOqZkD9iLfNhEydPdO/+SIvhe9LDWGePdeiE8rhx+mbzp257O/7
+RH3XW2h5NVhxb5ofe0TXdZl9JH5TqVgpy47IcB14Tio7vBwn85JbyST1IVUwFYRw
+74wnExMTPyxIiGL2a57qQwQiRreE/g==
+=K/ll
+-----END PGP SIGNATURE-----
+
+--Sig_/IG37xDU4Ku3Zo8Iw2=8I4Ig--

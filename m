@@ -2,136 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EEE2DA18E
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A972DA199
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503317AbgLNUa3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:30:29 -0500
-Received: from ozlabs.org ([203.11.71.1]:60493 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388483AbgLNUa2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Dec 2020 15:30:28 -0500
+        id S2503334AbgLNUba (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503343AbgLNUbX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:31:23 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1110C0613D6;
+        Mon, 14 Dec 2020 12:30:43 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvtKc0wX8z9sS8;
-        Tue, 15 Dec 2020 07:29:40 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvtLk10y1z9sS8;
+        Tue, 15 Dec 2020 07:30:38 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607977781;
-        bh=oCRoJqFc/+FmU+nNV9clfFzmex118Yv1qsU3bjLcBnE=;
+        s=201702; t=1607977841;
+        bh=/s2WPvDJ27wPzNAJfhUULDr9Sv85rl1/IxJ0YMrcCA8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i6tne6tcJtRXZHFQLpAsZA1tPQ67yQhTER+d7zEcSRu4Ik2ZD+QIAxp0KrpPTbOd8
-         GRhrL8rD2aU3rzmEUxuzHjQBpOqT0rvfgTJZQ1BYmr1z/2ibmzt0AL+2Oa6Wvas64f
-         ww6QnzzqpZqwpuquovArQqST/2uSVTJcvLlSFfayirl2UYD3/EJDEU9YbhXNL+kIJd
-         Q9TXTKDIBkVgpLc7CrzTkaqEH9g6MTTqXqs4ZHU25Wu4JKdiF72xvL/TbNIinF1PJe
-         EuMcRCpQ4lln0p65Td8AI3bH8YezsBRORyMjIsrLY8A75kZHzEdyAZru6H3QYFO8SX
-         0gRAYte5g/FZA==
-Date:   Tue, 15 Dec 2020 07:29:39 +1100
+        b=gdiHp/PWMNs6ECEuVxcIc7eXKPreghrv2N7c1Ve6xb2oH7t4aqyAI0teiIKlEofNt
+         FjbB0DauEZY39ntfTTz1ttRb3WgpGKMCoRmgzbfzi/LFClOAhvpX0g8VmzurTKcFef
+         XddZQj5/NBP3G8WDLJcq/JNxY57CI1HPQZOLWQIE4h54Ibeag7+66Ypou4LFzK1KMs
+         X/boeStrRgrRJV6bGy9QunKZDcVnBA4TfJYyczXx4CoXa+05vO8oF8SomaJ6nLf7ur
+         NbsTqSjL8MBcGvZEWtCOL4CYwfmLs3lJI2ufWFWYt++hO14Y/coOI5QHhAo40YAHm5
+         Z6dcmQd5kb8vA==
+Date:   Tue, 15 Dec 2020 07:30:37 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Florent Revest <revest@google.com>,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the block tree
-Message-ID: <20201215072939.6a665cf3@canb.auug.org.au>
-In-Reply-To: <20201207140951.4c04f26f@canb.auug.org.au>
-References: <20201207140951.4c04f26f@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin Cerveny <m.cerveny@computer.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: linux-next: manual merge of the v4l-dvb tree with the arm-soc
+ tree
+Message-ID: <20201215073037.5bb96437@canb.auug.org.au>
+In-Reply-To: <20201208110413.04400395@canb.auug.org.au>
+References: <20201208110413.04400395@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T3rfAfpL0zH0ZZAbOzmD5q/";
+Content-Type: multipart/signed; boundary="Sig_/0VqBaD1pA7DIpvY0Y=8=wM5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T3rfAfpL0zH0ZZAbOzmD5q/
+--Sig_/0VqBaD1pA7DIpvY0Y=8=wM5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 7 Dec 2020 14:09:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Tue, 8 Dec 2020 11:04:13 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >
-> After merging the block tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> Today's linux-next merge of the v4l-dvb tree got a conflict in:
 >=20
-> fs/io_uring.c: In function 'io_shutdown':
-> fs/io_uring.c:3782:9: error: too many arguments to function 'sock_from_fi=
-le'
->  3782 |  sock =3D sock_from_file(req->file, &ret);
->       |         ^~~~~~~~~~~~~~
-> In file included from fs/io_uring.c:63:
-> include/linux/net.h:243:16: note: declared here
->   243 | struct socket *sock_from_file(struct file *file);
->       |                ^~~~~~~~~~~~~~
+>   drivers/staging/media/sunxi/cedrus/cedrus.c
 >=20
-> Caused by commit
+> between commit:
 >=20
->   36f4fa6886a8 ("io_uring: add support for shutdown(2)")
+>   c6e95daab1cc ("media: cedrus: Remove the MBUS quirks")
 >=20
-> interacting with commit
+> from the arm-soc tree and commits:
 >=20
->   dba4a9256bb4 ("net: Remove the err argument from sock_from_file")
+>   503dab0b8a56 ("media: cedrus: Register all codecs as capability")
+>   68b4a01f88af ("media: cedrus: Make VP8 codec as capability")
 >=20
-> from the bpf-next tree.
+> from the v4l-dvb tree.
 >=20
-> I have applied the following merge fix patch.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 >=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 7 Dec 2020 14:04:10 +1100
-> Subject: [PATCH] fixup for "net: Remove the err argument from sock_from_f=
-ile"
+> --=20
+> Cheers,
+> Stephen Rothwell
 >=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/io_uring.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index cd997264dbab..91d08408f1fe 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -3779,9 +3779,9 @@ static int io_shutdown(struct io_kiocb *req, bool f=
-orce_nonblock)
->  	if (force_nonblock)
->  		return -EAGAIN;
-> =20
-> -	sock =3D sock_from_file(req->file, &ret);
-> +	sock =3D sock_from_file(req->file);
->  	if (unlikely(!sock))
-> -		return ret;
-> +		return -ENOTSOCK;
-> =20
->  	ret =3D __sys_shutdown_sock(sock, req->shutdown.how);
->  	io_req_complete(req, ret);
+> diff --cc drivers/staging/media/sunxi/cedrus/cedrus.c
+> index d5fca10ea5b4,18d54f9fd715..000000000000
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@@ -522,7 -584,11 +584,10 @@@ static const struct cedrus_variant sun5
+>  =20
+>   static const struct cedrus_variant sun50i_h6_cedrus_variant =3D {
+>   	.capabilities	=3D CEDRUS_CAPABILITY_UNTILED |
+> - 			  CEDRUS_CAPABILITY_H265_DEC,
+> + 			  CEDRUS_CAPABILITY_MPEG2_DEC |
+> + 			  CEDRUS_CAPABILITY_H264_DEC |
+> + 			  CEDRUS_CAPABILITY_H265_DEC |
+> + 			  CEDRUS_CAPABILITY_VP8_DEC,
+>  -	.quirks		=3D CEDRUS_QUIRK_NO_DMA_OFFSET,
+>   	.mod_rate	=3D 600000000,
+>   };
+>  =20
 
-Just a reminder that I am still applying this merge fix.
+Just a reminder that this conflict still exists.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T3rfAfpL0zH0ZZAbOzmD5q/
+--Sig_/0VqBaD1pA7DIpvY0Y=8=wM5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XyzMACgkQAVBC80lX
-0GwWUggAn7ql1hC2UGt+piu1oNbFBTkKpQNJI+21jK5WrWX/d+g5vSUIY8irk49Z
-8amRkh7n+b8Bk1IIpIjsYswk431MWYaXJ4s2iQ+/GW8PFZz2aTpVlMWmvyhh8uV3
-F6IwGPSB3q7Kcq3AH0/eRQQf8J3HB11r+l0CJzZ6TMMiFZMSIIHvKaUertWbHK0w
-2Z8tXXwJjr4uVQjl90T0HLWlRsorAf6BMfDQ8/mfgcJrVS+1O55/MzTOZ7VobJGu
-NbBtxK1WVCC5zWY04CjWDVVhlYTsE9sb5jfW43mu7sH3GQ8TLZUiaONaIuqqqfQc
-6Gg1Q6c4ZYL55G2rL9zr/e/u4fmNhg==
-=RpZP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/Xy20ACgkQAVBC80lX
+0GxD+AgAkoniNsSje1GKDmeTzhWU/P6h9lax50ZAoOUqaSBten7vfx0EhOhVfTfs
++EmfiSoLXq2KNiNdMfpARwFCYTBa1GBbpH4wwogjMjl39FFsc2uX/Y3/EL/sTNvW
+2h94FSGLbhl9q8cpo47gTi2GOa06NXyz5X+afQRxIugWkG1WnuEm41QktPaqEjSf
+NKMR7iNT0twvE6z5ryAKoFFe4FhE8aE995/fBnpE7XTTeq22sLfbdbzMcD3m4xOM
+18vB0b62GdSRqhbTKgIklQk8qbtlOINioKETfPsP5FjJQY0w1V58HvZW/jbN1So3
+yf1VksxR+khrGZhSL3/YL6XYnkx58A==
+=7/OA
 -----END PGP SIGNATURE-----
 
---Sig_/T3rfAfpL0zH0ZZAbOzmD5q/--
+--Sig_/0VqBaD1pA7DIpvY0Y=8=wM5--

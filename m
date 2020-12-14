@@ -2,128 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E162DA153
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365592DA158
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502934AbgLNUR4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:17:56 -0500
-Received: from ozlabs.org ([203.11.71.1]:52253 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2503137AbgLNURt (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Dec 2020 15:17:49 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S2502847AbgLNUTY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388136AbgLNUTV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:19:21 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80913C0613D3
+        for <linux-next@vger.kernel.org>; Mon, 14 Dec 2020 12:18:41 -0800 (PST)
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cvt364hHFz9sSC;
-        Tue, 15 Dec 2020 07:17:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607977027;
-        bh=xAQjEWZYRy/0ACS8i64gbqRXnwwQuolLHTU6ZvyQSDI=;
+        by ms.lwn.net (Postfix) with ESMTPSA id E512F2C1;
+        Mon, 14 Dec 2020 20:17:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E512F2C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1607977064; bh=QLI/egtl/FomJoWgApEqMIP5NgPgYuRFAI2eyPIlVK0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AOUMOU8BsVSrcTv4iAFNPdodd9Tk/wDrE+7mSg1zrEEngR42QHKmpPjjPaHrUJxQk
-         855ty+pyTtFovm7PAgjNsOPV5vLNMxB5J8J9C/QRGzW2+GuYwyIq4/S9C9ZdgVp4dL
-         z/4U/HAcnaqpDyPQf5rPIYoaYfh1aNkGxtshwY5GbMn25SOLZZTckKjVYahmhK5oFj
-         ihHbpXdw1u73QYLFvJ2AYDnKmsqaYm/hlWCdymc6Z6vKVe2DrN/aLvje02vz8Mq7Ip
-         m0EQdWRB3nTrri7jy8fwnl5jC9y27AZ1viKqhwPH2x/ltPYTplditD4puShKenU+lM
-         6jv9WX5OsXipA==
-Date:   Tue, 15 Dec 2020 07:17:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        b=G04smzzbupfuSYIT2doemW6+DddWm9fDKYjHMZtEeMr9KDgGFK0lTotg4pTOk+BWu
+         oNgJevOGttLeWPYQR3bJF9KDeHeds5C2hEJ2cgFA2pnvxk9D1wZcfLr1DZ08dscK5B
+         KMTeb6zyn2QTnHpGLjuAGHFmfQ8AOHbkQDRbyzw051iM5Tber7RUHjMHWFALFC+5/v
+         hiUMdf+V+rgrgOsEhEk5pTilg/s6fCw5soQwyduZQhlUI0jC5EcY8nO0NoqQwMZuqk
+         0orElOBUnGFdl0+urICeEO4AVen3BQxCEfsN76wwMAkBx6cx8PpqA4c+9zq/kjEbl1
+         9k0vdUPARrUGQ==
+Date:   Mon, 14 Dec 2020 13:17:42 -0700
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wang Qing <wangqing@vivo.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: linux-next: manual merge of the block tree with the arm64 tree
-Message-ID: <20201215071705.09df4f1a@canb.auug.org.au>
-In-Reply-To: <20201203142530.4d962ea5@canb.auug.org.au>
-References: <20201203142530.4d962ea5@canb.auug.org.au>
+        linux-doc@vger.kernel.org
+Subject: Re: linux-next: build warning after merge of the jc_docs tree
+Message-ID: <20201214131742.20d2252f@lwn.net>
+In-Reply-To: <20201215065143.65ccf365@canb.auug.org.au>
+References: <20201116170303.0d457d04@canb.auug.org.au>
+        <20201215065143.65ccf365@canb.auug.org.au>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4eAMd=wntc8LGknjiIt36yx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4eAMd=wntc8LGknjiIt36yx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 15 Dec 2020 06:51:43 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> On Mon, 16 Nov 2020 17:03:03 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the jc_docs tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> >=20
+> > Documentation/translations/zh_CN/filesystems/tmpfs.rst:5: WARNING: unde=
+fined label: tmpfs_index (if the link has no caption the label must precede=
+ a section header)
+> >=20
+> > Introduced by commit
+> >=20
+> >   09028e60fcea ("doc: zh_CN: add translatation for tmpfs") =20
+>=20
+> I am still getting this warning.
 
-On Thu, 3 Dec 2020 14:25:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the block tree got a conflict in:
->=20
->   arch/arm64/include/asm/thread_info.h
->=20
-> between commit:
->=20
->   b5a5a01d8e9a ("arm64: uaccess: remove addr_limit_user_check()")
->=20
-> from the arm64 tree and commit:
->=20
->   192caabd4dd9 ("arm64: add support for TIF_NOTIFY_SIGNAL")
->=20
-> from the block tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc arch/arm64/include/asm/thread_info.h
-> index 015beafe58f5,cdcf307764aa..000000000000
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@@ -63,7 -66,9 +63,8 @@@ void arch_release_task_struct(struct ta
->   #define TIF_NOTIFY_RESUME	2	/* callback before returning to user */
->   #define TIF_FOREIGN_FPSTATE	3	/* CPU's FP state is not current's */
->   #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
-> - #define TIF_MTE_ASYNC_FAULT	5	/* MTE Asynchronous Tag Check Fault */
->  -#define TIF_FSCHECK		5	/* Check FS is USER_DS on return */
-> ++#define TIF_NOTIFY_SIGNAL	5	/* signal notifications exist */
-> + #define TIF_MTE_ASYNC_FAULT	6	/* MTE Asynchronous Tag Check Fault */
->  -#define TIF_NOTIFY_SIGNAL	7	/* signal notifications exist */
->   #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
->   #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
->   #define TIF_SYSCALL_TRACEPOINT	10	/* syscall tracepoint for ftrace */
-> @@@ -96,7 -103,8 +98,8 @@@
->  =20
->   #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
->   				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> - 				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT)
->  -				 _TIF_UPROBE | _TIF_FSCHECK | _TIF_MTE_ASYNC_FAULT | \
-> ++				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT | \
-> + 				 _TIF_NOTIFY_SIGNAL)
->  =20
->   #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->   				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+OK, enough of that; I've just tacked on the following patch to address
+this problem, thanks for the report.
 
-Just a reminder that this conflict still exists.
+Thanks,
 
+jon
+
+=46rom 47e44ed01434e51e2e42b188482d837c01e5d16e Mon Sep 17 00:00:00 2001
+From: Jonathan Corbet <corbet@lwn.net>
+Date: Mon, 14 Dec 2020 13:14:22 -0700
+Subject: [PATCH] docs: fix broken cross reference in translations/zh_CN
+
+Commit 09028e60fcea ("doc: zh_CN: add translatation for tmpfs") introduced
+a cross reference without adding the appropriate target tag, leading to
+this docs-build warning:
+
+  Documentation/translations/zh_CN/filesystems/tmpfs.rst:5: WARNING: undefi=
+ned label: tmpfs_index (if the link has no caption the label must precede a=
+ section header)
+
+With automarkup, we don't actually need an explicit reference here at all,
+so just take it out.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 09028e60fcea ("doc: zh_CN: add translatation for tmpfs")
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/translations/zh_CN/filesystems/tmpfs.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/translations/zh_CN/filesystems/tmpfs.rst b/Docum=
+entation/translations/zh_CN/filesystems/tmpfs.rst
+index cf3ccab20e50..6fd9d83b2db5 100644
+--- a/Documentation/translations/zh_CN/filesystems/tmpfs.rst
++++ b/Documentation/translations/zh_CN/filesystems/tmpfs.rst
+@@ -2,7 +2,7 @@
+=20
+ .. include:: ../disclaimer-zh_CN.rst
+=20
+-:Original: :ref:`Documentation/filesystems/tmpfs.rst <tmpfs_index>`
++:Original: Documentation/filesystems/tmpfs.rst
+=20
+ translated by Wang Qing<wangqing@vivo.com>
+=20
 --=20
-Cheers,
-Stephen Rothwell
+2.28.0
 
---Sig_/4eAMd=wntc8LGknjiIt36yx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XyEEACgkQAVBC80lX
-0GxjSAf/RnqycqI23zexQq10ZD9Z35PYnc3Befoq0cNqAGBQnwolXfhlLWACLOuT
-z2HE89HiKtuDrNhMtAL+cwlhz6dHUj0/MknnxCd/LBPR5/hBlr5vsCHZjV3g3MFy
-K2XzV8yVXCCqG6XmjJPJGKjWGRGqJu+zLrOzvDOZ/ALoZw7EkaegRn8dyJA6HBfZ
-eJnFmO3Sniu5yqlSbBfACkq7capFE0m2Lc4RdVfvgC5nEiE5fsiz32WkDH5zEYZc
-P544j7/SLkpu9n8B7fl5bhID5qCEUMrJAH6pP39yRLIV6JnkpjtY9zyvqWIB7eXS
-JqyI94qJBqhLaznEBkg9mmesXS0BzQ==
-=p304
------END PGP SIGNATURE-----
-
---Sig_/4eAMd=wntc8LGknjiIt36yx--

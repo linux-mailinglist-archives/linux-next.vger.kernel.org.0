@@ -2,56 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB0F2DA298
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 22:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE512DA29B
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 22:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387395AbgLNVek (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 16:34:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44464 "EHLO mail.kernel.org"
+        id S1730595AbgLNVie (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 16:38:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33808 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502979AbgLNVej (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Dec 2020 16:34:39 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE82C20731;
-        Mon, 14 Dec 2020 21:33:58 +0000 (UTC)
-Date:   Mon, 14 Dec 2020 16:33:57 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1727156AbgLNVid (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Dec 2020 16:38:33 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3059DAC7F;
+        Mon, 14 Dec 2020 21:37:52 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 28C83DA7C3; Mon, 14 Dec 2020 22:36:13 +0100 (CET)
+Date:   Mon, 14 Dec 2020 22:36:12 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Sterba <dsterba@suse.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the ftrace tree with Linus' tree
-Message-ID: <20201214163357.6413989c@gandalf.local.home>
-In-Reply-To: <20201215073725.42abe121@canb.auug.org.au>
-References: <20201208160222.04ad114f@canb.auug.org.au>
-        <20201215073725.42abe121@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: Re: linux-next: build failure after merge of the block tree
+Message-ID: <20201214213612.GS6430@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Jens Axboe <axboe@kernel.dk>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Sterba <dsterba@suse.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20201202150149.42543862@canb.auug.org.au>
+ <20201215070956.6852e939@canb.auug.org.au>
+ <25c43226-f937-0866-9c0b-46867bd04cc7@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25c43226-f937-0866-9c0b-46867bd04cc7@kernel.dk>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 15 Dec 2020 07:37:25 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
-
-> > + 			check_buffer(cpu_buffer, info, CHECK_FULL_PAGE);
-> >   		return rb_move_tail(cpu_buffer, tail, info);
-> >   	}
-> >     
+On Mon, Dec 14, 2020 at 01:12:46PM -0700, Jens Axboe wrote:
+> On 12/14/20 1:09 PM, Stephen Rothwell wrote:
+> > Just a reminder that I am still applying the above merge fix.
 > 
-> Just a reminder that this conflict still exists.
-> 
+> I sent in my core changes, but they haven't been pulled yet. So I guess
+> we're dealing with a timing situation... David, did you send in the btrfs
+> pull yet?
 
-Thanks for the reminder. Both updates were done by me, and I assumed that
-the fix was trivial enough for Linus to figure out.
-
-But I'll try to remember to include a note about it before sending to Linus.
-
-Cheers,
-
--- Steve
-
+Yes
+https://lore.kernel.org/lkml/cover.1607955523.git.dsterba@suse.com/

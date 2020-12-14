@@ -2,212 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBBB2D923B
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 05:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684EE2D9292
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 06:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438550AbgLNESr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 13 Dec 2020 23:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgLNESr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 13 Dec 2020 23:18:47 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9555C0613CF;
-        Sun, 13 Dec 2020 20:18:06 -0800 (PST)
+        id S1727418AbgLNFXs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 00:23:48 -0500
+Received: from ozlabs.org ([203.11.71.1]:39829 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726058AbgLNFXs (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Dec 2020 00:23:48 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvSmX4mstz9sT6;
-        Mon, 14 Dec 2020 15:18:04 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvVCY1zrRz9sRR;
+        Mon, 14 Dec 2020 16:23:05 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607919484;
-        bh=Ap4veYE6g8S6YKlenbtrX+KmmgQamRiHcRuH1VqFN+s=;
+        s=201702; t=1607923386;
+        bh=+oc58BFd9GTC71c2MqO8zbZYYiN7Wh77Xoxqmw6xYJw=;
         h=Date:From:To:Cc:Subject:From;
-        b=V1vNNohqhMdlrFbS4ZZYvngSMFee7gyh97cqz97pWhDiVPHQ3W+37m+OicYCvzBNs
-         35VbiBgIa3+H60yTvjMsoCIiVHvSTKHJAcmG9uJ8PpHA8bwQCYXW+IjLbB4AbdsjLm
-         QknQECl8GNvV+myaxH/3ynDOt84b/mqtmGNx2mqCXF0Za7CEKE8hoKOxW6rCr8GACg
-         ClQLit/z1Q9nsseSvLo0/nqHxrWTW+0zZ+bqIDKARFShx3dWmSqppmiFQhyuesnW64
-         URNx8PH32Zdhk0GhODELBUFxdWyUjxXWG0pcGTo5c3vZxgJoorV0SU3F1OQJyhFaWx
-         e0pnOjUbqO0Sw==
-Date:   Mon, 14 Dec 2020 15:18:03 +1100
+        b=dgXiLoqhlA5cFDVyjIAGCBaz5RhDqlNizrksI2YB5ioy9tWoGEPkDUM3drMlaRorB
+         BQTnbzK3H37hbFb/unINaw1PPJ57AJ5X2+gbhawu59fQ5kFzTIdfazuFoUENYJOfXo
+         PA51mSwUXfBI/hp7vqrJ3HVGSgPix94SOl2GhNzjSCEBhAF5dnBkG1J+qYJytK1X2J
+         m+fxngfh0o1tUFadTtt1xy2BYeFTbP+GGI4+7Uph7v4w/+TRvxJ0zPMON5U+H169Pf
+         +JKaA1gno+HbrE1kkKMQNPt8KHT+3Z84fyGMCE+be7VtGPIJDkX0B9Nccp5gE2OijG
+         5NFUina8kOgqA==
+Date:   Mon, 14 Dec 2020 16:23:04 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, Song Liu <songliubraving@fb.com>,
+To:     Wim Van Sebroeck <wim@iguana.be>
+Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20201214151803.411b3b41@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the watchdog tree
+Message-ID: <20201214162129.79efb225@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rgN3xbXPFOB5eCTLP4HJp/x";
+Content-Type: multipart/signed; boundary="Sig_/D3opSEnozh=SxapMLpIvbkI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rgN3xbXPFOB5eCTLP4HJp/x
+--Sig_/D3opSEnozh=SxapMLpIvbkI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the block tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+After merging the watchdog tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-drivers/md/raid0.c: In function 'raid0_handle_discard':
-drivers/md/raid0.c:511:26: error: passing argument 1 of 'trace_block_bio_re=
-map' from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
-  511 |    trace_block_bio_remap(bdev_get_queue(rdev->bdev),
-      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                          |
-      |                          struct request_queue *
-In file included from include/trace/events/block.h:11,
-                 from drivers/md/raid0.c:17:
-include/trace/events/block.h:458:23: note: expected 'struct bio *' but argu=
-ment is of type 'struct request_queue *'
-  458 |  TP_PROTO(struct bio *bio, dev_t dev, sector_t from),
-      |           ~~~~~~~~~~~~^~~
-include/linux/tracepoint.h:238:34: note: in definition of macro '__DECLARE_=
-TRACE'
-  238 |  static inline void trace_##name(proto)    \
-      |                                  ^~~~~
-include/linux/tracepoint.h:411:24: note: in expansion of macro 'PARAMS'
-  411 |  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
-      |                        ^~~~~~
-include/linux/tracepoint.h:547:2: note: in expansion of macro 'DECLARE_TRAC=
-E'
-  547 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-      |  ^~~~~~~~~~~~~
-include/linux/tracepoint.h:547:22: note: in expansion of macro 'PARAMS'
-  547 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-      |                      ^~~~~~
-include/trace/events/block.h:456:1: note: in expansion of macro 'TRACE_EVEN=
-T'
-  456 | TRACE_EVENT(block_bio_remap,
-      | ^~~~~~~~~~~
-include/trace/events/block.h:458:2: note: in expansion of macro 'TP_PROTO'
-  458 |  TP_PROTO(struct bio *bio, dev_t dev, sector_t from),
-      |  ^~~~~~~~
-drivers/md/raid0.c:512:5: warning: passing argument 2 of 'trace_block_bio_r=
-emap' makes integer from pointer without a cast [-Wint-conversion]
-  512 |     discard_bio, disk_devt(mddev->gendisk),
-      |     ^~~~~~~~~~~
-      |     |
-      |     struct bio *
-In file included from include/trace/events/block.h:11,
-                 from drivers/md/raid0.c:17:
-include/trace/events/block.h:458:34: note: expected 'dev_t' {aka 'unsigned =
-int'} but argument is of type 'struct bio *'
-  458 |  TP_PROTO(struct bio *bio, dev_t dev, sector_t from),
-      |                            ~~~~~~^~~
-include/linux/tracepoint.h:238:34: note: in definition of macro '__DECLARE_=
-TRACE'
-  238 |  static inline void trace_##name(proto)    \
-      |                                  ^~~~~
-include/linux/tracepoint.h:411:24: note: in expansion of macro 'PARAMS'
-  411 |  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
-      |                        ^~~~~~
-include/linux/tracepoint.h:547:2: note: in expansion of macro 'DECLARE_TRAC=
-E'
-  547 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-      |  ^~~~~~~~~~~~~
-include/linux/tracepoint.h:547:22: note: in expansion of macro 'PARAMS'
-  547 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-      |                      ^~~~~~
-include/trace/events/block.h:456:1: note: in expansion of macro 'TRACE_EVEN=
-T'
-  456 | TRACE_EVENT(block_bio_remap,
-      | ^~~~~~~~~~~
-include/trace/events/block.h:458:2: note: in expansion of macro 'TP_PROTO'
-  458 |  TP_PROTO(struct bio *bio, dev_t dev, sector_t from),
-      |  ^~~~~~~~
-drivers/md/raid0.c:511:4: error: too many arguments to function 'trace_bloc=
-k_bio_remap'
-  511 |    trace_block_bio_remap(bdev_get_queue(rdev->bdev),
-      |    ^~~~~~~~~~~~~~~~~~~~~
-In file included from include/trace/events/block.h:11,
-                 from drivers/md/raid0.c:17:
-include/linux/tracepoint.h:238:21: note: declared here
-  238 |  static inline void trace_##name(proto)    \
-      |                     ^~~~~~
-include/linux/tracepoint.h:411:2: note: in expansion of macro '__DECLARE_TR=
-ACE'
-  411 |  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
-      |  ^~~~~~~~~~~~~~~
-include/linux/tracepoint.h:547:2: note: in expansion of macro 'DECLARE_TRAC=
-E'
-  547 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-      |  ^~~~~~~~~~~~~
-include/trace/events/block.h:456:1: note: in expansion of macro 'TRACE_EVEN=
-T'
-  456 | TRACE_EVENT(block_bio_remap,
-      | ^~~~~~~~~~~
+In file included from include/linux/device.h:15,
+                 from include/linux/acpi.h:15,
+                 from drivers/watchdog/iTCO_wdt.c:48:
+drivers/watchdog/iTCO_wdt.c: In function 'iTCO_wdt_start':
+drivers/watchdog/iTCO_wdt.c:280:17: error: 'struct watchdog_device' has no =
+member named 'dev'
+  280 |   dev_err(wd_dev->dev, "failed to reset NO_REBOOT flag, reboot disa=
+bled by hardware/BIOS\n");
+      |                 ^~
+include/linux/dev_printk.h:112:11: note: in definition of macro 'dev_err'
+  112 |  _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+      |           ^~~
 
 Caused by commit
 
-  1c02fca620f7 ("block: remove the request_queue argument to the block_bio_=
-remap tracepoint")
+  9c612b338fdf ("watchdog: iTCO_wdt: use dev_*() instead of pr_*() for logg=
+ing")
 
-interacting with commit
-
-  57a0f3a81ef2 ("Revert "md: add md_submit_discard_bio() for submitting dis=
-card bio"")
-
-from Linus' tree.
-
-I have applied the following merge fix:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 14 Dec 2020 15:14:26 +1100
-Subject: [PATCH] fixup for "block: remove the request_queue argument to the=
- block_bio_remap tracepoint"
-
-conflicting with
-
-"Revert "md: add md_submit_discard_bio() for submitting discard bio""
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/md/raid0.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/md/raid0.c b/drivers/md/raid0.c
-index 8f5b0143d8c6..67f157f2525d 100644
---- a/drivers/md/raid0.c
-+++ b/drivers/md/raid0.c
-@@ -508,8 +508,8 @@ static void raid0_handle_discard(struct mddev *mddev, s=
-truct bio *bio)
- 		bio_chain(discard_bio, bio);
- 		bio_clone_blkg_association(discard_bio, bio);
- 		if (mddev->gendisk)
--			trace_block_bio_remap(bdev_get_queue(rdev->bdev),
--				discard_bio, disk_devt(mddev->gendisk),
-+			trace_block_bio_remap(discard_bio,
-+				disk_devt(mddev->gendisk),
- 				bio->bi_iter.bi_sector);
- 		submit_bio_noacct(discard_bio);
- 	}
---=20
-2.29.2
+I have used the wtchdog tree from next-20201211 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rgN3xbXPFOB5eCTLP4HJp/x
+--Sig_/D3opSEnozh=SxapMLpIvbkI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/W53sACgkQAVBC80lX
-0GwR3wf/VaRztQkjmysC3E5kSROkNLTnSAoLIAi6it6wcBMXe0I+SK5E+DJK/pOt
-QMVrL2Xx235qjTU3Zuqjr470XVtvrTX8PfBZnLOeiIqZ0IpyZ8xdbWyyQLWwc2O/
-t621f+alBHBW0Q9F+YwuL6CQY0PV3S9Pw+9OJ+Q12VQ9niyRQXecrNfr9yJnJJxj
-Msp0KdhKuNRqzGZmtjn+gFUkmIDyAVVCboKgr5CwnwQsdqzyfScuwnJiKWiCGtqm
-ewdk2HwlqgA6PuKoeTGTbJ66x7bSQ7sPt6uRpeQmaXnaWSH5N9XUX4S1v91OtSvs
-ZUdg+A6TMqMZXmFncMjaW88mPf7f9A==
-=QpF7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/W9rgACgkQAVBC80lX
+0GzdVgf/S6Q1XMkVnQbbe8+nTlRbg+MXDsI2NNSfRLXGXUYymI44HmUHWw1i8caw
+ziPyIJigDhiciDSNACDy/XNLYv6cHyqLoKd4Jx8lJGwnDwuUGj0mPb0Wu1agCRI4
+SWFbrWOU/uNyq8RQXSa8qdYyOO4tBsNbIH/xa/BXfF6l9izdLjys1VIUlkpEDDFA
+ruKCJxqVRmW8fn3KglXE9Gc8KyEh1JSSJtAMkNXJsiSIkVu19+00dp6Hgpg9UnGD
+cozVb7J8zb6Ll+RXb5n/VLhXaBdUgCpFFOyXmDTgFzsAjd3BVyxoHnEfd4piKamy
+bN37m8gj29Fk1MugW0kS/yS+wlxJsA==
+=SjeT
 -----END PGP SIGNATURE-----
 
---Sig_/rgN3xbXPFOB5eCTLP4HJp/x--
+--Sig_/D3opSEnozh=SxapMLpIvbkI--

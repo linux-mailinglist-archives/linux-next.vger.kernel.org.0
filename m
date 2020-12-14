@@ -2,157 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505FD2DA138
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFE12DA13F
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502963AbgLNUNk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S2503085AbgLNUNf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:13:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503086AbgLNUM4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:12:56 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516DFC0613D3;
-        Mon, 14 Dec 2020 12:12:16 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvsxT4rXxz9sSC;
-        Tue, 15 Dec 2020 07:12:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607976734;
-        bh=SU7b1V6EG24XZl9vVlq5d3Y4Ir/oFzQ9rKpHOm1QFWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fsHQxxdlNzmsEAo4JCF7skiT9TSNpvXCMXcjRMwQ/lxZ/0KBalCvDh5LuZiUTDHzf
-         mJdxdN6X0LeCJJ+oBpS84rEjO3PrTv5ZClqZNqTkflx2pkbl6SXsTyXtIWkjywELEj
-         20HLSAbtyyBhcs1hpx3j6HZNEcwmMaL5bKjWOK/kEjIiB2w6ZmxWHfBqr1c0tFjc4h
-         TT5Ttqs6k1kzVUfhtMAFk5rZThSMunTJOwWImmPzwdAVzducK+ImE/Ad4U2pKzhR2u
-         AHDnm4hMwL8U9PXJ2VvAf9cFdrjEcbce+E2HnYA2Gn9xqUNeF/RQhNFwrfziru4+t7
-         htReU3Z+ad9/w==
-Date:   Tue, 15 Dec 2020 07:12:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Chao Yu <chao@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+        with ESMTP id S2502894AbgLNUN2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:13:28 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1164C061794
+        for <linux-next@vger.kernel.org>; Mon, 14 Dec 2020 12:12:48 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id k8so17035816ilr.4
+        for <linux-next@vger.kernel.org>; Mon, 14 Dec 2020 12:12:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=R0djdFVfiLhwXdPF2sC9wzpfiMJReCx8378wS8crAdQ=;
+        b=pzzIA8Xr2kWo6YeaYZQFCcJ3kK0f8401/xEebM0O0EzI2aLnrHSHPLZ1PPXCUmfXXT
+         7cficpyqJPnmKFUyKyGakkBHKJx55Y4IhTGX1oS5WZn7DXqKIsXP3CM0tmI9QgQUv/vu
+         w/rTD2bxwdXn2HSUgYjipNKFAexktjoGxY2rrrSo6HmMCig35Bm5dQHcMurBfVdtZkG1
+         9133kDZVHLUZ2Ezio2UbfYz//hfQmEHEz10KuqS6BELq0qOPLKIxtXXSw/oOJXL1HnFo
+         49FsLXLmvloJgKBqY3wMxak3+sTvidjAXn1SbZCix5fH/Kbev+vZkBdKJOy2wubXnUvx
+         LI4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=R0djdFVfiLhwXdPF2sC9wzpfiMJReCx8378wS8crAdQ=;
+        b=mimn53EhG1iPO6vR5BAmHqmEc+eaYFqtGCbAn1fG8LXqWDcGzBijWTRzlm/PAAmvcV
+         T8Zy7VKDw3HYlGBvN82EUEpS5uYSMYr8GlocHY+iORcWNNu5OqhkYyoiKEVzpsL9kJLm
+         2D0evYeIblA115dm9rqQr52FUQp6HHApV5xFZW47d2yKjDNAN+tUHIddMQFANks/XfRO
+         fyT0jJU0VdAG0zbYOrkAcO+bME/b5CqDWS6q1QTnUgP3ukmG0FdRxCBecReSdARFrmSp
+         GXJjd+x/rwV9sTul9HSmYUGqxKqjoXIfGNCOLs629tpB+/TzJNrQ4L9ijPXtXaEAWSlN
+         6IgQ==
+X-Gm-Message-State: AOAM533grlP12kfAS3j8P8t28ng6zz4mQrrPVS5plFEAnjdCiHOjLR8Y
+        1wqrIBx5RplLQrSN6sUzXFerQMCBLHO+uQ==
+X-Google-Smtp-Source: ABdhPJyWvwY0fr/Z+wReYHmlL4RUVHFaF5Dfr2o72c7PuHUh42UbVrPCveuFak52cuHdYL0KPhG5ZA==
+X-Received: by 2002:a05:6e02:b28:: with SMTP id e8mr38310171ilu.240.1607976767621;
+        Mon, 14 Dec 2020 12:12:47 -0800 (PST)
+Received: from [192.168.1.30] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id y15sm11746584ili.65.2020.12.14.12.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Dec 2020 12:12:47 -0800 (PST)
+Subject: Re: linux-next: build failure after merge of the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Sterba <dsterba@suse.com>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
         Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the f2fs tree
-Message-ID: <20201215071212.7a83aade@canb.auug.org.au>
-In-Reply-To: <20201203144348.70f139a9@canb.auug.org.au>
-References: <20201203144348.70f139a9@canb.auug.org.au>
+References: <20201202150149.42543862@canb.auug.org.au>
+ <20201215070956.6852e939@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <25c43226-f937-0866-9c0b-46867bd04cc7@kernel.dk>
+Date:   Mon, 14 Dec 2020 13:12:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yCpfLPQDDZ9nFjJj8zrYkrI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20201215070956.6852e939@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yCpfLPQDDZ9nFjJj8zrYkrI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/14/20 1:09 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Wed, 2 Dec 2020 15:01:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> After merging the block tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> fs/btrfs/zoned.c: In function 'btrfs_get_dev_zone_info':
+>> fs/btrfs/zoned.c:168:21: error: 'struct block_device' has no member named 'bd_part'; did you mean 'bd_partno'?
+>>   168 |  nr_sectors = bdev->bd_part->nr_sects;
+>>       |                     ^~~~~~~
+>>       |                     bd_partno
+>> fs/btrfs/zoned.c: In function 'btrfs_sb_log_location_bdev':
+>> fs/btrfs/zoned.c:508:21: error: 'struct block_device' has no member named 'bd_part'; did you mean 'bd_partno'?
+>>   508 |  nr_sectors = bdev->bd_part->nr_sects;
+>>       |                     ^~~~~~~
+>>       |                     bd_partno
+>> fs/btrfs/zoned.c: In function 'btrfs_reset_sb_log_zones':
+>> fs/btrfs/zoned.c:606:21: error: 'struct block_device' has no member named 'bd_part'; did you mean 'bd_partno'?
+>>   606 |  nr_sectors = bdev->bd_part->nr_sects;
+>>       |                     ^~~~~~~
+>>       |                     bd_partno
+>>
+>> Caused by commits
+>>
+>>   a782483cc1f8 ("block: remove the nr_sects field in struct hd_struct")
+>>   0d02129e76ed ("block: merge struct block_device and struct hd_struct")
+>>
+>> interacting with commits
+>>
+>>   ab3ea6d0e65c ("btrfs: get zone information of zoned block devices")
+>>   1a4b440a1c2b ("btrfs: implement log-structured superblock for ZONED mode")
+>>
+>> from the btrfs tree.
+>>
+>> I applied the following merge fix patch (which may, or may not, be
+>> correct but fixes the build).
+>>
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Date: Wed, 2 Dec 2020 14:55:04 +1100
+>> Subject: [PATCH] fixup for "block: merge struct block_device and struct
+>>  hd_struct"
+>>
+>> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>> ---
+>>  fs/btrfs/zoned.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+>> index 155545180046..c38846659019 100644
+>> --- a/fs/btrfs/zoned.c
+>> +++ b/fs/btrfs/zoned.c
+>> @@ -165,7 +165,7 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device)
+>>  	if (!zone_info)
+>>  		return -ENOMEM;
+>>  
+>> -	nr_sectors = bdev->bd_part->nr_sects;
+>> +	nr_sectors = bdev_nr_sectors(bdev);
+>>  	zone_sectors = bdev_zone_sectors(bdev);
+>>  	/* Check if it's power of 2 (see is_power_of_2) */
+>>  	ASSERT(zone_sectors != 0 && (zone_sectors & (zone_sectors - 1)) == 0);
+>> @@ -505,7 +505,7 @@ int btrfs_sb_log_location_bdev(struct block_device *bdev, int mirror, int rw,
+>>  		return -EINVAL;
+>>  	zone_size = zone_sectors << SECTOR_SHIFT;
+>>  	zone_sectors_shift = ilog2(zone_sectors);
+>> -	nr_sectors = bdev->bd_part->nr_sects;
+>> +	nr_sectors = bdev_nr_sectors(bdev);
+>>  	nr_zones = nr_sectors >> zone_sectors_shift;
+>>  
+>>  	sb_zone = sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
+>> @@ -603,7 +603,7 @@ int btrfs_reset_sb_log_zones(struct block_device *bdev, int mirror)
+>>  
+>>  	zone_sectors = bdev_zone_sectors(bdev);
+>>  	zone_sectors_shift = ilog2(zone_sectors);
+>> -	nr_sectors = bdev->bd_part->nr_sects;
+>> +	nr_sectors = bdev_nr_sectors(bdev);
+>>  	nr_zones = nr_sectors >> zone_sectors_shift;
+>>  
+>>  	sb_zone = sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
+> 
+> Just a reminder that I am still applying the above merge fix.
 
-Hi all,
+I sent in my core changes, but they haven't been pulled yet. So I guess
+we're dealing with a timing situation... David, did you send in the btrfs
+pull yet?
 
-On Thu, 3 Dec 2020 14:43:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the block tree got conflicts in:
->=20
->   fs/f2fs/checkpoint.c
->   fs/f2fs/f2fs.h
->   fs/f2fs/super.c
->=20
-> between commit:
->=20
->   5c0602188dc7 ("f2fs: fix kbytes written stat for multi-device case")
->=20
-> from the f2fs tree and commits:
->=20
->   8446fe9255be ("block: switch partition lookup to use struct block_devic=
-e")
->   9499ffc75217 ("f2fs: remove a few bd_part checks")
->=20
-> from the block tree.
->=20
-> I fixed it up (I think, see below, fs/f2fs/f2fs.h and fs/f2fs/super.c
-> used the versions from the f2fs tree) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc fs/f2fs/checkpoint.c
-> index 14ba1519639e,54a1905af052..000000000000
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@@ -1385,27 -1385,6 +1385,26 @@@ static void commit_checkpoint(struct f2
->   	f2fs_submit_merged_write(sbi, META_FLUSH);
->   }
->  =20
->  +static inline u64 get_sectors_written(struct block_device *bdev)
->  +{
-> - 	return bdev->bd_part ?
-> - 		(u64)part_stat_read(bdev->bd_part, sectors[STAT_WRITE]) : 0;
-> ++	return (u64)part_stat_read(bdev, sectors[STAT_WRITE]) : 0;
-                                                             ^^^^
-With this rmeoved.
+-- 
+Jens Axboe
 
->  +}
->  +
->  +u64 f2fs_get_sectors_written(struct f2fs_sb_info *sbi)
->  +{
->  +	if (f2fs_is_multi_device(sbi)) {
->  +		u64 sectors =3D 0;
->  +		int i;
->  +
->  +		for (i =3D 0; i < sbi->s_ndevs; i++)
->  +			sectors +=3D get_sectors_written(FDEV(i).bdev);
->  +
->  +		return sectors;
->  +	}
->  +
->  +	return get_sectors_written(sbi->sb->s_bdev);
->  +}
->  +
->   static int do_checkpoint(struct f2fs_sb_info *sbi, struct cp_control *c=
-pc)
->   {
->   	struct f2fs_checkpoint *ckpt =3D F2FS_CKPT(sbi);
-> diff --cc fs/f2fs/f2fs.h
-> index 5cd1b9f7cc53,49681a8d2b14..000000000000
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> diff --cc fs/f2fs/super.c
-> index 47858e0c5e95,af9f449da64b..000000000000
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-
-Just a reminder that the above conflict still exists.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yCpfLPQDDZ9nFjJj8zrYkrI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XxxwACgkQAVBC80lX
-0Gw6fgf+KbraBx1jjwvQm/fHrY51Azzhobf/rlWhg5CzNZyaxnKPPoF/efqu9PaF
-AYqOWO6+Cd1K8WxOUbnHhQC9s/X63mm1uJbklE+k3mrQJbzvSXZ7pNhfzQVFaoAh
-aI31HJdtl2txXbcHzqBvsMu9vZGKLYsIfZJePaqmYkYvNQ7PrKCJRQ1G45CrFKWL
-vo9WihOJyvlxhUXzL7OhQE7VBs8cp9vR0B4us5Ra6KGrU4aa2AHeN8eet9AmVEIx
-rwpsycnvnlykzUJQcPmDdLFXrtGrYb4/vPbSYMY0lsway/EDLR8zQJ3F7Obugz0t
-V90MhFmhQKBu6eCz1+OJpxe94ZOKRQ==
-=yKM8
------END PGP SIGNATURE-----
-
---Sig_/yCpfLPQDDZ9nFjJj8zrYkrI--

@@ -2,116 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CE42DA177
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5862DA184
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502799AbgLNUZr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502983AbgLNUZh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:25:37 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4B5C0613D3;
-        Mon, 14 Dec 2020 12:24:57 -0800 (PST)
+        id S2503149AbgLNU2e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:28:34 -0500
+Received: from ozlabs.org ([203.11.71.1]:33155 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502880AbgLNU2V (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Dec 2020 15:28:21 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvtD64wtSz9s0b;
-        Tue, 15 Dec 2020 07:24:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CvtH95KYQz9sTL;
+        Tue, 15 Dec 2020 07:27:33 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607977495;
-        bh=geJe/dQTScUt1rlFSJVvjotS+qgEY1WuqzHhLRBERnI=;
+        s=201702; t=1607977658;
+        bh=DfhluT4S4Y8v8FRe9QpVkJAPtSsILegesMre6oxvJKw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AUttmobgOXzU0zVDxipPlDPyymHYSH8FiM+e5AKb5levX3TD6OPAgm+C19yiHKcC1
-         5MISZ4MP0Xe/DxiGVasopArg+RL2TvHkQCLf67KBpI1hYu+5l3B3/5Ee9ZNVdil0bN
-         SbRR03ChRFiwU1BHRFX9OQzcl+E/rfKgWNysBlZxHsWEYN+25vb9XXo3r4tmdvQjMj
-         /GOhnSNTk4Dlr0Uzx+w0sKrI2R6sBuCKzLqGWl/WHiXIl868EyrfCJGxOzk+4xqOEE
-         7qD7btq7eUqESnmu62+3TdeL+tEv8J6uiaxZTN3Biaz2eUS4G3MsUVJDJqewmj5GZW
-         pQ0Dq4OmpnH4Q==
-Date:   Tue, 15 Dec 2020 07:24:53 +1100
+        b=AS9KA2hEMHFjXYybbBaGtBl4akJLvK4TLDrx/5qtrqdnirDc92FUuGZzVTBhhwTOW
+         mtcd1CEKM0TPdwbOzxmRUw1MHzA7Qkk3k5VV3mrsO913b4fQWBccbIl2IVEUvFHlc4
+         cqwD8uKJvE454wfQBFzg5H7P+MDXd/7qdSWdcu8FbpopEYdOxNXFeGV31o8c4fU/8K
+         Pf5qFFxulTHM1gTh/Fa5fX/rlEUgd1lL6BocSWwPOol5uXTKFUnfQK3cPK0uijzs7c
+         9ag3uE7Djh+sO1uUotFxWb6JgdMnw/HIyiJMy52QIkJ7J9Ppl39rUtktALv/iYuLCB
+         ihYKEm3aHIytQ==
+Date:   Tue, 15 Dec 2020 07:27:32 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: linux-next: manual merge of the notifications tree with Linus'
- tree
-Message-ID: <20201215072453.3b61bdc9@canb.auug.org.au>
-In-Reply-To: <20201021124733.344e5107@canb.auug.org.au>
-References: <20201021124733.344e5107@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the staging tree
+Message-ID: <20201215072732.39529a15@canb.auug.org.au>
+In-Reply-To: <20201207164601.2b9cefc8@canb.auug.org.au>
+References: <20201207164601.2b9cefc8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jtq9dvA+9Kfd8J/YkiGFfeL";
+Content-Type: multipart/signed; boundary="Sig_/S+vopx2qEjnH6_YV4gZaT=a";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jtq9dvA+9Kfd8J/YkiGFfeL
+--Sig_/S+vopx2qEjnH6_YV4gZaT=a
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 21 Oct 2020 12:47:33 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, 7 Dec 2020 16:46:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Today's linux-next merge of the notifications tree got conflicts in:
+> Hi all,
 >=20
->   arch/alpha/kernel/syscalls/syscall.tbl
->   arch/arm/tools/syscall.tbl
->   arch/arm64/include/asm/unistd32.h
->   arch/ia64/kernel/syscalls/syscall.tbl
->   arch/m68k/kernel/syscalls/syscall.tbl
->   arch/microblaze/kernel/syscalls/syscall.tbl
->   arch/mips/kernel/syscalls/syscall_n32.tbl
->   arch/mips/kernel/syscalls/syscall_n64.tbl
->   arch/mips/kernel/syscalls/syscall_o32.tbl
->   arch/parisc/kernel/syscalls/syscall.tbl
->   arch/powerpc/kernel/syscalls/syscall.tbl
->   arch/s390/kernel/syscalls/syscall.tbl
->   arch/sh/kernel/syscalls/syscall.tbl
->   arch/sparc/kernel/syscalls/syscall.tbl
->   arch/x86/entry/syscalls/syscall_32.tbl
->   arch/x86/entry/syscalls/syscall_64.tbl
->   arch/xtensa/kernel/syscalls/syscall.tbl
->   include/uapi/asm-generic/unistd.h
+> After merging the staging tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 >=20
-> between commit:
+> drivers/iio/trigger/iio-trig-sysfs.c: In function 'iio_sysfs_trigger_prob=
+e':
+> drivers/iio/trigger/iio-trig-sysfs.c:164:21: error: 'struct irq_work' has=
+ no member named 'flags'
+>   164 |  atomic_set(&t->work.flags, IRQ_WORK_HARD_IRQ);
+>       |                     ^
 >=20
->   ecb8ac8b1f14 ("mm/madvise: introduce process_madvise() syscall: an exte=
-rnal memory hinting API")
+> Caused by commit
 >=20
-> from Linus' tree and commit:
+>   0449fc4eead7 ("iio: sysfs-trigger: Mark irq_work to expire in hardirq c=
+ontext")
 >=20
->   4cd92d064cb0 ("watch_queue: Implement mount topology and attribute chan=
-ge notifications")
+> interacting with commit
 >=20
-> from the notifications tree.
+>   7a9f50a05843 ("irq_work: Cleanup")
+>=20
+> from the tip tree.
+>=20
+> I applied the following merge fix patch:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 7 Dec 2020 16:42:18 +1100
+> Subject: [PATCH] fixup for "irq_work: Cleanup"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/iio/trigger/iio-trig-sysfs.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/iio/trigger/iio-trig-sysfs.c b/drivers/iio/trigger/i=
+io-trig-sysfs.c
+> index 10a3fd29362b..0f6b512a5c37 100644
+> --- a/drivers/iio/trigger/iio-trig-sysfs.c
+> +++ b/drivers/iio/trigger/iio-trig-sysfs.c
+> @@ -160,8 +160,7 @@ static int iio_sysfs_trigger_probe(int id)
+>  	t->trig->dev.parent =3D &iio_sysfs_trig_dev;
+>  	iio_trigger_set_drvdata(t->trig, t);
+> =20
+> -	init_irq_work(&t->work, iio_sysfs_trigger_work);
+> -	atomic_set(&t->work.flags, IRQ_WORK_HARD_IRQ);
+> +	t->work =3D IRQ_WORK_INIT_HARD(iio_sysfs_trigger_work);
+> =20
+>  	ret =3D iio_trigger_register(t->trig);
+>  	if (ret)
 
-Just a reminder that I am still getting this conflict.
-
+Just a reminder that I am still applying this merge fix.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/jtq9dvA+9Kfd8J/YkiGFfeL
+--Sig_/S+vopx2qEjnH6_YV4gZaT=a
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XyhUACgkQAVBC80lX
-0GxHqAf9ETA8/9ciUkjrUQ8ndi8rudKmhSezfjxNZzrtGUP22uRZdANAJLHXVpHM
-AU+raGQ5nyOtogtGTcxv2Zis11TRDKajBKyJ2tGjbjyOpljEWo8ujFKUvmd6EAn0
-xKXwh9GO6IwgSpMtPQwX4lFdGB+w+00+zfZ/gwYlTqYOAG3i8tkv1S+i7l+WfX32
-zy9DTUv5bxJn1qaKkqQbSy10EIIGCkLoFFVCImDWI9lhaaf53r9KCqz5so0eX1ll
-dPneAKPfdvyfmA+V8AC7fkVY2na8mIkvOWniDLms91oKUQwAQWnuBk+f++fz5YjX
-CoI7U7L+lnj+EOVQ3GrlszWeANMuXw==
-=efIM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XyrQACgkQAVBC80lX
+0GxbnQgAgzkV5vh8nAroR2rOssT2ORPDVGBnn5v78f0zPg6ycRwt4vu1qpsjdd8A
+ttBmuOsB8c7WInW1FKj/WGa2PtQSuNgagVy0PnXIOGXxjvWglBfFMdnA8i9M6SCF
+cG3+JDaIRJ+izLvuxziMgTFtO3PKWXqyhRgIYDmPzO/uNDOq8FgNlYYfBhZZ3QgG
+eg9ST2MujYEJqStXDB3SLmNV+rhujWc8pwZw4urlb7qz7CZEPEQdllz3G4BPBZkl
+mOJqAh06aocjqrrG6rOWYu6cFU4wqtQ7pftz/k7FIEn8r/Is0F/5h95vahxoYbjQ
+rm/1GuTrXbiWjZKqsnzep+LJ7ZOyrw==
+=hcRC
 -----END PGP SIGNATURE-----
 
---Sig_/jtq9dvA+9Kfd8J/YkiGFfeL--
+--Sig_/S+vopx2qEjnH6_YV4gZaT=a--

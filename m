@@ -2,202 +2,168 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFDB2DA111
-	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275412DA151
+	for <lists+linux-next@lfdr.de>; Mon, 14 Dec 2020 21:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502906AbgLNUFr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 15:05:47 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42849 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502885AbgLNUFd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Dec 2020 15:05:33 -0500
+        id S2502931AbgLNURS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 15:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729523AbgLNUKr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Dec 2020 15:10:47 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CF4C0613D3;
+        Mon, 14 Dec 2020 12:10:00 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cvsmw4KZ8z9sSC;
-        Tue, 15 Dec 2020 07:04:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cvsts4m7Dz9sTX;
+        Tue, 15 Dec 2020 07:09:57 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1607976289;
-        bh=oL63cv0DHfgA/xVGOOVPl/zQ1j5ovfcaXlp1rfCYqOk=;
+        s=201702; t=1607976598;
+        bh=bOGZIK/EC9dOWE8oJ5/EF1E5GiCSPIErQvZ4/oVKtHk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m5tnWk4oJzcI9ElSUjTDGZMbsFL57PwSL0HNbykqW08wkujRBJvQ9hcRXLJlmXWbE
-         nq0BrmJzkcLNWcZFydWHX2r9p3uIJajEGWnJa+f4lSC2bIqUMGmWz21uk68wQiyTwO
-         QrGDYiAEVGRcOaeujf+kispoFPeOmGHChI4o56q6JeBWkXHenMKQx17SUM17LDNjxA
-         aQhPsu5M+qz20kQv1kr2ntiBeMKtg0XDRdXwmM2O9E67smfNF3woKir3qsDQgpLADE
-         K7Tlc0x4x8LJLwhCn04KObaPyP1Pu3i8yVH9LICO5xFd+YOXYit/tlI8G2wcUZgQ0r
-         8NlV6I0selKFA==
-Date:   Tue, 15 Dec 2020 07:04:47 +1100
+        b=ZH6JVIgfgS5BqpFH6DYnnCcxYmySaWdzxYDUB7ubFw7A4JeioJko7wED2SyY7Y3xs
+         beCWzatZoHKsF0BJou/BJKd1zB9/RS3U7XGlvFuqgjo5tGlQgvGFlO2JP66hF9iYtJ
+         uLtyGZ/XXmWE4YYn846uyLdXV4BJ7xUlFhstdCJnfoLj7BRP1HgsdhXBIGswJRnyXN
+         ie8el/QzC2hBUx3fsrRHAyqNyGuvlkZkTcR5W+MxzPXUv4Xd/K44T1fLu5bZYFRWTK
+         83l3TDD937xlIwnE5mkK+zkaHUDYZOH0+Fl2V3CSyaOfsjYJ8ZyzLm5K/CAdk8eew6
+         s6YvfS/Mlmw4w==
+Date:   Tue, 15 Dec 2020 07:09:56 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>, David Sterba <dsterba@suse.com>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: linux-next: manual merge of the userns tree with the bpf-next
- tree
-Message-ID: <20201215070447.6b1f8bd9@canb.auug.org.au>
-In-Reply-To: <20201126162248.7e7963fe@canb.auug.org.au>
-References: <20201126162248.7e7963fe@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the block tree
+Message-ID: <20201215070956.6852e939@canb.auug.org.au>
+In-Reply-To: <20201202150149.42543862@canb.auug.org.au>
+References: <20201202150149.42543862@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gJkgLvE2aGolAWX_AKyXp3F";
+Content-Type: multipart/signed; boundary="Sig_/V+8HwfLtgijqLM864dR=WCo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gJkgLvE2aGolAWX_AKyXp3F
+--Sig_/V+8HwfLtgijqLM864dR=WCo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 26 Nov 2020 16:22:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Wed, 2 Dec 2020 15:01:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Today's linux-next merge of the userns tree got a conflict in:
+> Hi all,
 >=20
->   kernel/bpf/task_iter.c
+> After merging the block tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 >=20
-> between commit:
+> fs/btrfs/zoned.c: In function 'btrfs_get_dev_zone_info':
+> fs/btrfs/zoned.c:168:21: error: 'struct block_device' has no member named=
+ 'bd_part'; did you mean 'bd_partno'?
+>   168 |  nr_sectors =3D bdev->bd_part->nr_sects;
+>       |                     ^~~~~~~
+>       |                     bd_partno
+> fs/btrfs/zoned.c: In function 'btrfs_sb_log_location_bdev':
+> fs/btrfs/zoned.c:508:21: error: 'struct block_device' has no member named=
+ 'bd_part'; did you mean 'bd_partno'?
+>   508 |  nr_sectors =3D bdev->bd_part->nr_sects;
+>       |                     ^~~~~~~
+>       |                     bd_partno
+> fs/btrfs/zoned.c: In function 'btrfs_reset_sb_log_zones':
+> fs/btrfs/zoned.c:606:21: error: 'struct block_device' has no member named=
+ 'bd_part'; did you mean 'bd_partno'?
+>   606 |  nr_sectors =3D bdev->bd_part->nr_sects;
+>       |                     ^~~~~~~
+>       |                     bd_partno
 >=20
->   91b2db27d3ff ("bpf: Simplify task_file_seq_get_next()")
+> Caused by commits
 >=20
-> from the bpf-next tree and commit:
+>   a782483cc1f8 ("block: remove the nr_sects field in struct hd_struct")
+>   0d02129e76ed ("block: merge struct block_device and struct hd_struct")
 >=20
->   edc52f17257a ("bpf/task_iter: In task_file_seq_get_next use task_lookup=
-_next_fd_rcu")
+> interacting with commits
 >=20
-> from the userns tree.
+>   ab3ea6d0e65c ("btrfs: get zone information of zoned block devices")
+>   1a4b440a1c2b ("btrfs: implement log-structured superblock for ZONED mod=
+e")
 >=20
-> I fixed it up (I think, see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> from the btrfs tree.
 >=20
-> --=20
-> Cheers,
-> Stephen Rothwell
+> I applied the following merge fix patch (which may, or may not, be
+> correct but fixes the build).
 >=20
-> diff --cc kernel/bpf/task_iter.c
-> index 0458a40edf10,4ec63170c741..000000000000
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@@ -136,41 -135,29 +135,30 @@@ struct bpf_iter_seq_task_file_info=20
->   };
->  =20
->   static struct file *
->  -task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info,
->  -		       struct task_struct **task)
->  +task_file_seq_get_next(struct bpf_iter_seq_task_file_info *info)
->   {
->   	struct pid_namespace *ns =3D info->common.ns;
-> - 	u32 curr_tid =3D info->tid, max_fds;
-> - 	struct files_struct *curr_files;
-> + 	u32 curr_tid =3D info->tid;
->   	struct task_struct *curr_task;
-> - 	int curr_fd =3D info->fd;
-> + 	unsigned int curr_fd =3D info->fd;
->  =20
->   	/* If this function returns a non-NULL file object,
-> - 	 * it held a reference to the task/files_struct/file.
-> + 	 * it held a reference to the task/file.
->   	 * Otherwise, it does not hold any reference.
->   	 */
->   again:
->  -	if (*task) {
->  -		curr_task =3D *task;
->  +	if (info->task) {
->  +		curr_task =3D info->task;
-> - 		curr_files =3D info->files;
->   		curr_fd =3D info->fd;
->   	} else {
->   		curr_task =3D task_seq_get_next(ns, &curr_tid, true);
->  -		if (!curr_task)
->  +		if (!curr_task) {
->  +			info->task =3D NULL;
-> - 			info->files =3D NULL;
->   			return NULL;
->  +		}
->  =20
-> - 		curr_files =3D get_files_struct(curr_task);
-> - 		if (!curr_files) {
-> - 			put_task_struct(curr_task);
-> - 			curr_tid =3D ++(info->tid);
-> - 			info->fd =3D 0;
-> - 			goto again;
-> - 		}
-> -=20
-> - 		info->files =3D curr_files;
-> + 		/* set *task and info->tid */
->  -		*task =3D curr_task;
->  +		info->task =3D curr_task;
->   		if (curr_tid =3D=3D info->tid) {
->   			curr_fd =3D info->fd;
->   		} else {
-> @@@ -198,10 -183,8 +184,8 @@@
->  =20
->   	/* the current task is done, go to the next task */
->   	rcu_read_unlock();
-> - 	put_files_struct(curr_files);
->   	put_task_struct(curr_task);
->  -	*task =3D NULL;
->  +	info->task =3D NULL;
-> - 	info->files =3D NULL;
->   	info->fd =3D 0;
->   	curr_tid =3D ++(info->tid);
->   	goto again;
-> @@@ -210,13 -193,18 +194,12 @@@
->   static void *task_file_seq_start(struct seq_file *seq, loff_t *pos)
->   {
->   	struct bpf_iter_seq_task_file_info *info =3D seq->private;
->  -	struct task_struct *task =3D NULL;
->   	struct file *file;
->  =20
->  -	file =3D task_file_seq_get_next(info, &task);
->  -	if (!file) {
->  -		info->task =3D NULL;
->  -		return NULL;
->  -	}
->  -
->  -	if (*pos =3D=3D 0)
->  +	info->task =3D NULL;
-> - 	info->files =3D NULL;
->  +	file =3D task_file_seq_get_next(info);
->  +	if (file && *pos =3D=3D 0)
->   		++*pos;
->  -	info->task =3D task;
->  =20
->   	return file;
->   }
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 2 Dec 2020 14:55:04 +1100
+> Subject: [PATCH] fixup for "block: merge struct block_device and struct
+>  hd_struct"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/btrfs/zoned.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+> index 155545180046..c38846659019 100644
+> --- a/fs/btrfs/zoned.c
+> +++ b/fs/btrfs/zoned.c
+> @@ -165,7 +165,7 @@ int btrfs_get_dev_zone_info(struct btrfs_device *devi=
+ce)
+>  	if (!zone_info)
+>  		return -ENOMEM;
+> =20
+> -	nr_sectors =3D bdev->bd_part->nr_sects;
+> +	nr_sectors =3D bdev_nr_sectors(bdev);
+>  	zone_sectors =3D bdev_zone_sectors(bdev);
+>  	/* Check if it's power of 2 (see is_power_of_2) */
+>  	ASSERT(zone_sectors !=3D 0 && (zone_sectors & (zone_sectors - 1)) =3D=
+=3D 0);
+> @@ -505,7 +505,7 @@ int btrfs_sb_log_location_bdev(struct block_device *b=
+dev, int mirror, int rw,
+>  		return -EINVAL;
+>  	zone_size =3D zone_sectors << SECTOR_SHIFT;
+>  	zone_sectors_shift =3D ilog2(zone_sectors);
+> -	nr_sectors =3D bdev->bd_part->nr_sects;
+> +	nr_sectors =3D bdev_nr_sectors(bdev);
+>  	nr_zones =3D nr_sectors >> zone_sectors_shift;
+> =20
+>  	sb_zone =3D sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
+> @@ -603,7 +603,7 @@ int btrfs_reset_sb_log_zones(struct block_device *bde=
+v, int mirror)
+> =20
+>  	zone_sectors =3D bdev_zone_sectors(bdev);
+>  	zone_sectors_shift =3D ilog2(zone_sectors);
+> -	nr_sectors =3D bdev->bd_part->nr_sects;
+> +	nr_sectors =3D bdev_nr_sectors(bdev);
+>  	nr_zones =3D nr_sectors >> zone_sectors_shift;
+> =20
+>  	sb_zone =3D sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
 
-Just a reminder that this conflict still exists.  Commit 91b2db27d3ff
-is now in the net-next tree.
+Just a reminder that I am still applying the above merge fix.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gJkgLvE2aGolAWX_AKyXp3F
+--Sig_/V+8HwfLtgijqLM864dR=WCo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XxV8ACgkQAVBC80lX
-0GxgRwf/aZijf0vP/9l9ZObx8C3NOh1EJQG2Nw0WU+YVp3JaCf/JntvagICq7F4A
-pGap0QaPA5ze1YNPldJCX7n5S3mJ+CGj7NTVYM6QE123r0ppcMB1p004HJPZinBK
-DSIfdu7qrN6ENHChnDL6ahUM/xgwMEeflzpwBiwzajg0HeFQC8sMu4jYoyGb73VR
-jO32N2nC8YYMZLuskivHiF00cqXl5SnOuVEQSsLXoAomtfW4lzifTmTHpSsu+1G8
-Bvrwg6OQQM2C20R3vn5bY/ovHpBtdhBqKH6BAeT1MyoCtRue4ppcO5LVV0MwDVMt
-Tx20JUe1ZvUEABwiiIKUYASaPJfEiQ==
-=aohr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/XxpQACgkQAVBC80lX
+0GxhNwgAhiawlO9QrGibxvUMdbTgEUUrZd+IUONEPsj8nwuflNiyn3wDnIEwetlS
+9eF4TbD47ETTC588SASuLdfyOwDuC8VzbW570n6wzk6qNrtsYha0Uq4w2Ye+SC9n
+lrCYhYlRXySq9YajvAGaS+uUJkVd2O5nhqXbQVfj4dFAmL4Q6I3BP2Ln8k+RZYUl
+KjJpLFHpOCemUGdiEc+HxQlb8gI+cjhLvT5ttLzVGUBmIZsH98MvjsIcGfV3NeBp
+UH2U2sPxZwD6EzwLlhALDKjaK/oV2LMNmBd6svf5R7QSbuhPXqJ4yh4nwZGC4o43
+HnxWCKVTF5El1ZDz8QluIA0Mp8HyYg==
+=OCtM
 -----END PGP SIGNATURE-----
 
---Sig_/gJkgLvE2aGolAWX_AKyXp3F--
+--Sig_/V+8HwfLtgijqLM864dR=WCo--

@@ -2,30 +2,36 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC25C2DA607
-	for <lists+linux-next@lfdr.de>; Tue, 15 Dec 2020 03:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FFD2DA65E
+	for <lists+linux-next@lfdr.de>; Tue, 15 Dec 2020 03:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbgLOCO1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Dec 2020 21:14:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40526 "EHLO mail.kernel.org"
+        id S1727255AbgLOCYM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Dec 2020 21:24:12 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59811 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726412AbgLOCOV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Dec 2020 21:14:21 -0500
-Date:   Mon, 14 Dec 2020 18:13:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607998421;
-        bh=j+mo+RL8S/hnsnS3PJ9sF0CcyLg7yIw0RyPIdNZ6Ttg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PX51nWb470XdHiAuALDAHwzGHnJX6Nm4ykO4U0DkESK/AapXTTeODMVBzdQphv41W
-         QcYRRAzaM9ohGjxjW/Xegc+XiUVGVMjCswiiFaDUVJhdfiiBKmSoFvPH/uwKZZ0FKa
-         B3eAheBUcYhtrsdiWcAcYfvERWHuo53emenIsIZPcKEVEj/TwuMJdYk1tSs/6gKhn+
-         ErTG7DWosWJ2PW/B6zZN3+r3VUEB1+QF5aedyXjJ4utxu9qZXvAGz5lWAa10zTryRN
-         roJ+0/NHIsTRZfd0gQQN1UwSUDoLxLQpaNV7w41KuYQfFvCUKCx6/XIwqPM2GWNX8B
-         ZMgFOyZQsRNFA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Roman Gushchin <guro@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1727175AbgLOCXt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Dec 2020 21:23:49 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Cw29Q0XTWz9s1l;
+        Tue, 15 Dec 2020 13:23:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1607998987;
+        bh=eId5oZC52tK4KiejMx9Sb2FQbEe9Ct3l7rQSdlOZqZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B+GwPaLP+AS428yj6TRvCsk23N31ZI061I9CDIiRXm2p9xXO//VB5W6EL5EYWEzKl
+         WlA71rSp7RINIqr5rMSf5VbjcOgwTvhmxGzUtSD/6Pb/gTVLwgTcuQzR5shjuXwHJS
+         dsMJNBoGdu29sGGeEAFQenMykY3cHb1tDSGoSniDOE5PMhVjnWkxTwOjQYTyfAGsfm
+         kwx13YQkyuQmJTIkS5DZ5bp2GOyLOri4fkNuHIEHsnEXwQ1SQmEtB84yJh5bb0DzFR
+         GaeCnqCO/IyyNcsvW9uL/RL/nmuNwH4zii0DWypiK9KEqcN8PHxJby60wcqwO4xH+U
+         BkQePURGuMMjQ==
+Date:   Tue, 15 Dec 2020 13:23:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
         David Miller <davem@davemloft.net>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -36,37 +42,51 @@ Cc:     Roman Gushchin <guro@fb.com>,
         Shakeel Butt <shakeelb@google.com>
 Subject: Re: linux-next: manual merge of the akpm-current tree with the
  bpf-next tree
-Message-ID: <20201214181339.621c4dcd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201214181121.afe9628c62c4b5de1f5fee94@linux-foundation.org>
+Message-ID: <20201215132305.5f5a1c2b@canb.auug.org.au>
+In-Reply-To: <20201214180629.4fee48ae@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 References: <20201204202005.3fb1304f@canb.auug.org.au>
         <20201215072156.1988fabe@canb.auug.org.au>
         <20201215012943.GA3079589@carbon.DHCP.thefacebook.com>
         <20201214174021.2dfc2fbd99ca3e72b3e4eb02@linux-foundation.org>
         <20201214180629.4fee48ae@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201214181121.afe9628c62c4b5de1f5fee94@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Y._2ICox=dBWFXc9VQNNpAE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 14 Dec 2020 18:11:21 -0800 Andrew Morton wrote:
-> On Mon, 14 Dec 2020 18:06:29 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
-> > Hm. The code is in net-next by now. I was thinking of sending the
-> > Networking PR later today (tonight?) as well. I'm happy to hold off 
-> > or do whatever you require, but I'd appreciate more explicit / noob
-> > friendly instructions.  
-> 
-> Linus tends not to like it when tree maintainers do last-minute
-> conflict fixes.
+--Sig_/Y._2ICox=dBWFXc9VQNNpAE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Good to know.
+Hi Jakub,
 
-> > AFAIU all we can do is tell Linus about the merge issue, and point 
-> > at Stephen's resolution.  
-> 
-> That's the way to do it - including a (tested?) copy in the email would
-> be nice.
+On Mon, 14 Dec 2020 18:06:29 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> AFAIU all we can do is tell Linus about the merge issue, and point=20
+> at Stephen's resolution.
 
-Okay, great. Will try this, thanks!
+This is the correct response.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Y._2ICox=dBWFXc9VQNNpAE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/YHgkACgkQAVBC80lX
+0Gw4pAgAi4awFlvffFlzIO8jDZlNVtxte5b/dM4GOGRk0QS/qSUswgO4sWKgY53a
+6gWS8iQ2QmS9kiwUTU2jcojiq23YzWPQuaiw1C/DiZTg5ALZFFTrgy3ne3svvTh6
+MGkwPOo5HxL5eDeCDA+IU2jVMaqOCfKEVQdMnOY1i5m5OVcVYVzd2Bp/HxCHr07H
+q9+S052sbcdgBQcm/yUJqwZFn4pxCk8Xs61YqX5oq/9hGJbzB5I4SMdSwuUbo6GO
+f6UIobubXpEHbRhAc2omI7gD+3Vf8XxdVitRllZKIXaYXSO4sEAvxXcCMCcKZtZQ
+TNipvxwef437z5RCnfAxyBkRGBmy/A==
+=AN7C
+-----END PGP SIGNATURE-----
+
+--Sig_/Y._2ICox=dBWFXc9VQNNpAE--

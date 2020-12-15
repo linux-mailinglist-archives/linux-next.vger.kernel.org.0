@@ -2,95 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA232DAA53
-	for <lists+linux-next@lfdr.de>; Tue, 15 Dec 2020 10:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DF82DAA84
+	for <lists+linux-next@lfdr.de>; Tue, 15 Dec 2020 11:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbgLOJng (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Dec 2020 04:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728411AbgLOJn1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Dec 2020 04:43:27 -0500
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0CAC0617A7
-        for <linux-next@vger.kernel.org>; Tue, 15 Dec 2020 01:42:47 -0800 (PST)
-Received: by mail-ot1-x341.google.com with SMTP id w3so18714526otp.13
-        for <linux-next@vger.kernel.org>; Tue, 15 Dec 2020 01:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nrfZzU8i2XI5TReL11FPZCA/DbKh6MmkKEx+RvfbNo0=;
-        b=dLTcIZbmqXjw8OiNhLJT1Ued66pU3oyhulfg+tGUp4w/1OLIaRLdvkLDV73Dh6gWu/
-         6nRHfpqmnVVihgRe5iyrDWu3KY3QX72LyXXg7naKkSCK6vf0EYcpPipqwbpul7mILvbw
-         6RfB7mRva/KJopM6kHFoYfm2Zt10K8sGCjrsk=
+        id S1727077AbgLOJ7o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Dec 2020 04:59:44 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:37170 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727075AbgLOJ7o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Dec 2020 04:59:44 -0500
+Received: by mail-ot1-f68.google.com with SMTP id o11so18759415ote.4;
+        Tue, 15 Dec 2020 01:59:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nrfZzU8i2XI5TReL11FPZCA/DbKh6MmkKEx+RvfbNo0=;
-        b=X87pXdIfWXXDbGsCr/fJ0U5mzEMdoxAYM3+M17aSzUqXZJhHWzhDATj89dyv8K7PMD
-         GssGLBo9hllUdUY+g/Ylnu3HLQlkbOHO1lsX14HM4jgOHoMDGCsLmGOlArmwJPGflw5j
-         IcUZb9o8xxoRv3X5Mu1WoQ22ND7n5YJxTyO7e1zTWTOuV3t7C2TA2xU4/jDDEHJnipC4
-         HA3ifHAdeZkM2hGWdncI5VzpgnvA4Degye42to5faWZlbL9kav1Xu332G+KRLXNYtr2j
-         lkJIuonyzopv39v8OBkGIo/lFdPS+3o4kg6gUSQmiKk+dyjQtyXtQNnSctQ68t5AofTD
-         H09A==
-X-Gm-Message-State: AOAM531bw0/NpoNB5ZB0m03ErOpnaOnrNgW6tbMvWGLZVPcGo+SCLoJ1
-        llLTPHtNGac21z1pWIf2NfX8X4sfsZA93lPwwApDfNN86ys=
-X-Google-Smtp-Source: ABdhPJzqz52kCcy3Sd/fp9IWZ2qXtHhaK/T3eI017Kprgk6vEXCoVAsTgaMPPVLtQ2gCS/U3TYMOqnT0/0cx+e7+SLU=
-X-Received: by 2002:a9d:23ca:: with SMTP id t68mr22774532otb.281.1608025366091;
- Tue, 15 Dec 2020 01:42:46 -0800 (PST)
+        bh=2tYDUx6SI753W7Hldtg8DzizZYg8W92/yzDFr2NF0Jc=;
+        b=FrW/FBtfpz6KgzpY+die90Y4luCoSgmkVqYbkVRwSvSM38dHi7N8bvZOEYVj+ssfmH
+         dj/2xxh2vm2Yt5D31r2hIJBPwdIYI3j6dklXN5OjDwyPqbRJ3Lh5Ff0X2226dBMNPp9p
+         VxKr3XqDgVXNm97xfAArqZq311Im5vvcPtkA/7/3TOyW5oh5Fp6csD462grUikbpmnBp
+         h+ys4owE4tmnSm2YMhUu9Bw8GUaX+alF3O6UIOhr1qqf5cvvuKDCUcYII9D8aoa4TKGA
+         6NhUEm7GH3mlwwKuc4PoCNoJWhMByuCrrpVniEqI7cSkH2GAskzPmfSYwQSfpQbQ9J5M
+         hfJQ==
+X-Gm-Message-State: AOAM532CBwsLvcSIHBgpVkZXWjAwA2TSUf1mwV5kOD8EeUJi4qX5m1GO
+        HZ/VfnYW2uifztU3YmgleT9CMuZRlnxJVEaytv3jb304irM=
+X-Google-Smtp-Source: ABdhPJyyNRhC2Vw49xndoQcAupIZbC+RrIVipadrop2ecq63H3T7mySSTLO496si4WWnsrh5cgZ2HmOOGuWj5wTt9T0=
+X-Received: by 2002:a9d:2203:: with SMTP id o3mr22660508ota.107.1608026343634;
+ Tue, 15 Dec 2020 01:59:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20201105175031.00e0b081@canb.auug.org.au> <20201116104444.044486ea@canb.auug.org.au>
- <20201215065045.66421c34@canb.auug.org.au> <20201215134702.37a12a03@canb.auug.org.au>
-In-Reply-To: <20201215134702.37a12a03@canb.auug.org.au>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 15 Dec 2020 10:42:34 +0100
-Message-ID: <CAKMK7uECzCHd-q5T4P8F02jppLP+kuMWc9Nznp-65kgKBGPSEg@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the drm tree
+References: <20201214135453.16e76e9d@canb.auug.org.au>
+In-Reply-To: <20201214135453.16e76e9d@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Dec 2020 10:58:52 +0100
+Message-ID: <CAMuHMdWYBLqUVRyNRbOZm=oxv+_uLJ9FK6ebPPvgHcN4Y-YUSQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drm tree with the crypto tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Dave Airlie <airlied@linux.ie>,
         DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Healy <mikex.healy@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 15, 2020 at 3:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Mon, Dec 14, 2020 at 2:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Today's linux-next merge of the drm tree got a conflict in:
 >
-> Hi all,
+>   MAINTAINERS
 >
-> On Tue, 15 Dec 2020 06:50:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Mon, 16 Nov 2020 10:44:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > On Thu, 5 Nov 2020 17:50:31 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > >
-> > > > After merging the drm tree, today's linux-next build (htmldocs) produced
-> > > > these warnings:
-> > > >
-> > > > include/linux/dma-buf-map.h:106: warning: Excess function parameter 'vaddr' description in 'DMA_BUF_MAP_INIT_VADDR'
-> > > > include/linux/dma-buf-map.h:106: warning: Function parameter or member 'vaddr_' not described in 'DMA_BUF_MAP_INIT_VADDR'
-> > > > include/linux/dma-buf-map.h:106: warning: Excess function parameter 'vaddr' description in 'DMA_BUF_MAP_INIT_VADDR'
-> > > >
-> > > > Introduced by commit
-> > > >
-> > > >   20e76f1a7059 ("dma-buf: Use struct dma_buf_map in dma_buf_vunmap() interfaces")
-> > >
-> > > I am still getting these warnings.
-> >
-> > I am still getting these warnings.
+> between commit:
 >
-> These warnings are now from Linus' tree.
+>   885743324513 ("crypto: keembay - Add support for Keem Bay OCS AES/SM4")
+>
+> from the crypto tree and commit:
+>
+>   ed794057b052 ("drm/kmb: Build files for KeemBay Display driver")
+>
+> from the drm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc MAINTAINERS
+> index 3b358262de8f,eb18459c1d16..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
 
-We had a stuck pull request which should have been included in the
-main merge pull. This should be fixed now in drm-next. Well in a few
-minutes when the compile testing is done.
--Daniel
+> @@@ -8985,16 -8962,13 +8993,23 @@@ M:   Deepak Saxena <dsaxena@plexity.net
+>   S:    Maintained
+>   F:    drivers/char/hw_random/ixp4xx-rng.c
+>
+> + INTEL KEEMBAY DRM DRIVER
+
+Is it KEEMBAY?
+
+> + M:    Anitha Chrisanthus <anitha.chrisanthus@intel.com>
+> + M:    Edmund Dea <edmund.j.dea@intel.com>
+> + S:    Maintained
+> + F:    Documentation/devicetree/bindings/display/intel,kmb_display.yaml
+
+I was just going to comment about "intel,kmb_*" vs. "intel,keembay-*", until
+I noticed intel,kmb_display.yaml does not exist, but is called
+Documentation/devicetree/bindings/display/intel,keembay-display.yaml
+in next-20201214.
+
+> + F:    drivers/gpu/drm/kmb/
+> +
+>  +INTEL KEEM BAY OCS AES/SM4 CRYPTO DRIVER
+
+or KEEM BAY?
+
+Or Keem Bay? Keembay? KeemBay?
+
+All of them are present in next-20201214.
+
+>  +M:    Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+>  +S:    Maintained
+>  +F:    Documentation/devicetree/bindings/crypto/intel,keembay-ocs-aes.yaml
+>  +F:    drivers/crypto/keembay/Kconfig
+>  +F:    drivers/crypto/keembay/Makefile
+>  +F:    drivers/crypto/keembay/keembay-ocs-aes-core.c
+>  +F:    drivers/crypto/keembay/ocs-aes.c
+>  +F:    drivers/crypto/keembay/ocs-aes.h
+>  +
+>   INTEL MANAGEMENT ENGINE (mei)
+>   M:    Tomas Winkler <tomas.winkler@intel.com>
+>   L:    linux-kernel@vger.kernel.org
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

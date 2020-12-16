@@ -2,90 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE982DC338
-	for <lists+linux-next@lfdr.de>; Wed, 16 Dec 2020 16:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6372DC3A3
+	for <lists+linux-next@lfdr.de>; Wed, 16 Dec 2020 17:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725274AbgLPPiK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Dec 2020 10:38:10 -0500
-Received: from infomag.iguana.be ([185.87.124.46]:46728 "EHLO
-        infomag.iguana.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726437AbgLPPiK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Dec 2020 10:38:10 -0500
-X-Greylist: delayed 615 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Dec 2020 10:38:09 EST
-Received: by infomag.iguana.be (Postfix, from userid 1001)
-        id 1C12E603CACE; Wed, 16 Dec 2020 16:27:13 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 infomag.iguana.be 1C12E603CACE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iguana.be;
-        s=infomag-20180602; t=1608132433;
-        bh=crXq0eOTk+/NC8kObHABh/A3umyH9RXhcey96vhyFi8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O4kOtd4Mfuqs5s8vyspqkXbo6gW2m06JU/LGuM4HmM1DBqFJsJN1rbHVKlshDMFzp
-         RglvqYjGMoMRp04ndeSUPHRWSawyBsRTuGF/RI+9SiFKIUWcYYy1jvbiqizFepSTTV
-         yG69cf9Ne5AQ95a3mZ+ff4UUQliXFZY+AMoiASvM=
-Date:   Wed, 16 Dec 2020 16:27:13 +0100
-From:   Wim Van Sebroeck <wim@iguana.be>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the watchdog tree
-Message-ID: <20201216152713.GA13666@infomag.iguana.be>
-References: <20201214162129.79efb225@canb.auug.org.au>
- <81ec0eee-0f22-b8ad-5a71-1690d4c4ec27@roeck-us.net>
- <20201216135608.4e7a72e5@canb.auug.org.au>
+        id S1725766AbgLPQBz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Dec 2020 11:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725287AbgLPQBz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Dec 2020 11:01:55 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D2C06179C;
+        Wed, 16 Dec 2020 08:01:14 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id u18so49609617lfd.9;
+        Wed, 16 Dec 2020 08:01:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kx/f87ywu7inr0rh378haTMjHJCyIdAT53Dvjxsco78=;
+        b=A5t1TGQFhCxRFhcoiRpwJQ3bbWC+enUDoYMD1JcqT1wRzOGnlIeYc/s1M5QI0DgEV6
+         kEnCzeuxPF/kGCPh3bu0M5ZfcWVH19hCuSJSgrzyhhBAIs+6quv40gooDF3Iw6Mbpa95
+         oKmpwJ3bzWVz520ew8+I/uy5ilkgT16MNKbBYpCgIawIGl9/ZtH14w6F/W6EkfDs+lF8
+         3hNKMolyXcsrkxmjQHznVtsISDZ83gT+V1JJ0MM7/BxaWm49WpeqilMc9BJ3cRic3HuM
+         BTU9pVLzVbaralwq0GSXRh58ethvPl4OJnH07seM0jLlp0DbkJXa5bsx1C21dIwQRUzZ
+         K4Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kx/f87ywu7inr0rh378haTMjHJCyIdAT53Dvjxsco78=;
+        b=rRuwJhh3xcuK9VhgxwoeB28wtrH0D/rfYKAry1TVVyOiQAe4EAFAx5AY+u3pA4AslI
+         ac3aSGs5Klra3KeZLbFXMM/+MiK6vm7U71zXp3EQEc5OBZpk/3qcX41Qu+sYHh04CkM6
+         eOBbbdafZaZA4wDlP1w6afjlr6fX5PKe7ESBFm40qSfjx323PWDKisHCTBM4J+iUjJU5
+         ajcXAop/hf3MBs23ZtccAmnP7da4N5fhi0xmN8Z+0fm8yOjbt53YyG2mTVcfVTsNdQDh
+         jkZwzolBeH25DMBFQPdClXGliGCwLuTX8Opk8OSHh3E72UWSO6Y3TFeqqIaGxeN4FiOF
+         ESwA==
+X-Gm-Message-State: AOAM530gcCubZI4qwAu91asaJA7ok6Obz7oVKuPgAOj6rS+d75iyHrmc
+        u40tBuWWMpqMs6a7SxQb2DtMG4/xKapibRatsu87DL2xo1Y=
+X-Google-Smtp-Source: ABdhPJxQKVaJZkKfZDM4v/nBEO60fq6pocpcPSL45goi2KrIOZ2kU+rwSF4iGE0GZMf3iNOHL+ZQc9JfT2J9sb+oIdA=
+X-Received: by 2002:a2e:87cb:: with SMTP id v11mr14384454ljj.218.1608134471054;
+ Wed, 16 Dec 2020 08:01:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201216135608.4e7a72e5@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <SN6PR2101MB1069AC2DC98C74F7C2A71EA3E4C59@SN6PR2101MB1069.namprd21.prod.outlook.com>
+ <20201216210735.2893dd92@canb.auug.org.au>
+In-Reply-To: <20201216210735.2893dd92@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 16 Dec 2020 10:00:59 -0600
+Message-ID: <CAH2r5mt8ZeX1j2doiZOwJQr_gkDACgeR=F5k1fxXpW8eXYvJew@mail.gmail.com>
+Subject: Re: [EXTERNAL] Re: linux-next: build failure after merge of the
+ net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Steven French <Steven.French@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Samuel Cabrero <scabrero@suse.de>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-It's on my todo list for today.
-
-Kind ergards,
-Wim.
-
-> Hi all,
-> 
-> On Sun, 13 Dec 2020 22:09:55 -0800 Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Dec 16, 2020 at 4:08 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Steven,
+>
+> On Wed, 16 Dec 2020 02:21:26 +0000 Steven French <Steven.French@microsoft.com> wrote:
 > >
-> > On 12/13/20 9:23 PM, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > After merging the watchdog tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > > 
-> > > In file included from include/linux/device.h:15,
-> > >                  from include/linux/acpi.h:15,
-> > >                  from drivers/watchdog/iTCO_wdt.c:48:
-> > > drivers/watchdog/iTCO_wdt.c: In function 'iTCO_wdt_start':
-> > > drivers/watchdog/iTCO_wdt.c:280:17: error: 'struct watchdog_device' has no member named 'dev'
-> > >   280 |   dev_err(wd_dev->dev, "failed to reset NO_REBOOT flag, reboot disabled by hardware/BIOS\n");
-> > >       |                 ^~  
-> > 
-> > Yes, that should have been wd_dev->parent. Sorry I didn't notice that earlier.
-> > 
-> > Guenter
-> > 
-> > > include/linux/dev_printk.h:112:11: note: in definition of macro 'dev_err'
-> > >   112 |  _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
-> > >       |           ^~~
-> > > 
-> > > Caused by commit
-> > > 
-> > >   9c612b338fdf ("watchdog: iTCO_wdt: use dev_*() instead of pr_*() for logging")
-> > 
-> > > I have used the wtchdog tree from next-20201211 for today.
-> 
-> I am still getting this build failure.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> > I applied your patch to the tip of my tree (cifs-2.6.git for-next) -
+> > hopefully that makes it easier when I sent the PR in a day or two for
+> > cifs/smb3 changes.
+>
+> I think you have just made your tree fail to build as nla_strscpy does
+> not exist in your tree ... Just remove that commit and tell Linus about
+> the necessary change and he can add it to the merge.
+
+Done. Removed.
 
 
+-- 
+Thanks,
+
+Steve

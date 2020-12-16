@@ -2,146 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6925A2DB82F
+	by mail.lfdr.de (Postfix) with ESMTP id D66A22DB830
 	for <lists+linux-next@lfdr.de>; Wed, 16 Dec 2020 02:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727373AbgLPBDG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Dec 2020 20:03:06 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45599 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727334AbgLPBDF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Dec 2020 20:03:05 -0500
+        id S1727713AbgLPBEf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Dec 2020 20:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727741AbgLPBEb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Dec 2020 20:04:31 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D98EC0613D3;
+        Tue, 15 Dec 2020 17:03:51 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CwcKp4L3Yz9sSn;
-        Wed, 16 Dec 2020 12:02:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CwcMQ28Lhz9sSn;
+        Wed, 16 Dec 2020 12:03:45 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608080542;
-        bh=GRJrQmpTMXq9rGDkMakHSa6LsiyRsrp0g4xaRIol/dI=;
+        s=201702; t=1608080627;
+        bh=cQaV2jbS3HmMgFsTkGbTXR5ExwBawARpfAYivTjhXt0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nTfDdmXx+ytOVcXTR1pcDO4afblmdIhRCa/I3SZFBIpUa8wkz7EfcZMMGdhY4d/X1
-         csqXWEH6WfrcJck2GaU9MZXd93hJuOmFpHX4B50uCzhdqDTcxSKUrPfnGC4xR8XoCJ
-         uIg5xxbbMKB7BRmWe6sw7lts5YkH9Sf9wT9zMUM113pixx9qNCufhzYzh+ciS79vZg
-         mnof6wPhPCBDqv0HWSrM6h1nfZRtnOek4dmr2Wfn+kvCH3vAVI2W2yoCs5z+N2CDc8
-         2mw0hAO7jwdWUFK1wYvZ1dOhzQkx7mHvuZXLeMsdfjJLS8g8OLuHvqfn6r6OXsP+bP
-         35X7Jhrp04sGA==
-Date:   Wed, 16 Dec 2020 12:02:21 +1100
+        b=nN2Juom3On3n3ghtqBd5FVXxrPvyxpHPrfWvaFeNOaQCmJTJal/hmsf6tVpYh77Rn
+         Lc+3V+2uZ6LUlqdN6ylbVqxSUVxivVTxEzHev/xEbDAl4ysf5j6dQ82GKcwEdZ+5oz
+         Z0xRTCpxOyblSDBqumqxRnTdlKOZtFxwOEZ0wQsSI8qJ5mfV8S/4y49iUSSPUQnFJb
+         MItw+D2uGlY4LBzC2msOrV7fA7YOCx18xC1or3GQt+vuk0485T3EL5kUA7iTt5FTNT
+         OJWYr5J19CS8gPutSeqYiRXGPmm+5Oi7tZ0GS4+LpKlpFZqJYNG7XS9clq+aJN5ito
+         9wy2Kr7bucc7A==
+Date:   Wed, 16 Dec 2020 12:03:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     Steve French <stfrench@microsoft.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Samuel Cabrero <scabrero@suse.de>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the userns tree with the tip tree
-Message-ID: <20201216120221.3cd7bfce@canb.auug.org.au>
-In-Reply-To: <20201211182453.2522566c@canb.auug.org.au>
-References: <20201211182453.2522566c@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20201216120345.429d9e21@canb.auug.org.au>
+In-Reply-To: <20201214131438.7c9b2f30@canb.auug.org.au>
+References: <20201214131438.7c9b2f30@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oUyf/sp7r7eLkMog8MUQLJf";
+Content-Type: multipart/signed; boundary="Sig_/q5eVTRs0yh/ptO8mBQFA_t5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oUyf/sp7r7eLkMog8MUQLJf
+--Sig_/q5eVTRs0yh/ptO8mBQFA_t5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 11 Dec 2020 18:24:53 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 14 Dec 2020 13:14:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the userns tree got a conflict in:
+> After merging the net-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 >=20
->   kernel/events/core.c
+> fs/cifs/cifs_swn.c: In function 'cifs_swn_notify':
+> fs/cifs/cifs_swn.c:450:4: error: implicit declaration of function 'nla_st=
+rlcpy'; did you mean 'nla_strscpy'? [-Werror=3Dimplicit-function-declaratio=
+n]
+>   450 |    nla_strlcpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME=
+],
+>       |    ^~~~~~~~~~~
+>       |    nla_strscpy
 >=20
-> between commit:
+> Caused by commit
 >=20
->   78af4dc949da ("perf: Break deadlock involving exec_update_mutex")
+>   872f69034194 ("treewide: rename nla_strlcpy to nla_strscpy.")
 >=20
-> from the tip tree and commit:
+> interacting with commit
 >=20
->   f7cfd871ae0c ("exec: Transform exec_update_mutex into a rw_semaphore")
+>   27228d73f4d2 ("cifs: Set witness notification handler for messages from=
+ userspace daemon")
 >=20
-> from the userns tree.
+> from the cifs tree.
 >=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> I have applied the following merge fix patch.
 >=20
-> diff --cc kernel/events/core.c
-> index 19ae6c931c52,55b2330b556c..000000000000
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@@ -11958,24 -11864,6 +11958,24 @@@ SYSCALL_DEFINE5(perf_event_open
->   		goto err_context;
->   	}
->  =20
->  +	if (task) {
-> - 		err =3D mutex_lock_interruptible(&task->signal->exec_update_mutex);
-> ++		err =3D down_read_interruptible(&task->signal->exec_update_lock);
->  +		if (err)
->  +			goto err_file;
->  +
->  +		/*
->  +		 * Preserve ptrace permission check for backwards compatibility.
->  +		 *
-> - 		 * We must hold exec_update_mutex across this and any potential
-> ++		 * We must hold exec_update_lock across this and any potential
->  +		 * perf_install_in_context() call for this new event to
->  +		 * serialize against exec() altering our credentials (and the
->  +		 * perf_event_exit_task() that could imply).
->  +		 */
->  +		err =3D -EACCES;
->  +		if (!perfmon_capable() && !ptrace_may_access(task, PTRACE_MODE_READ_R=
-EALCREDS))
->  +			goto err_cred;
->  +	}
->  +
->   	if (move_group) {
->   		gctx =3D __perf_event_ctx_lock_double(group_leader, ctx);
->  =20
-> @@@ -12151,10 -12039,7 +12151,10 @@@ err_locked
->   	if (move_group)
->   		perf_event_ctx_unlock(group_leader, gctx);
->   	mutex_unlock(&ctx->mutex);
->  -/* err_file: */
->  +err_cred:
->  +	if (task)
-> - 		mutex_unlock(&task->signal->exec_update_mutex);
-> ++		up_read(&task->signal->exec_update_lock);
->  +err_file:
->   	fput(event_file);
->   err_context:
->   	perf_unpin_context(ctx);
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 14 Dec 2020 13:09:27 +1100
+> Subject: [PATCH] fixup for "treewide: rename nla_strlcpy to nla_strscpy."
+>=20
+> conflicting with
+>=20
+> "cifs: Set witness notification handler for messages from userspace daemo=
+n"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/cifs/cifs_swn.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
+> index 642c9eedc8ab..d762d442dfa5 100644
+> --- a/fs/cifs/cifs_swn.c
+> +++ b/fs/cifs/cifs_swn.c
+> @@ -447,7 +447,7 @@ int cifs_swn_notify(struct sk_buff *skb, struct genl_=
+info *info)
+>  		int state;
+> =20
+>  		if (info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME]) {
+> -			nla_strlcpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME],
+> +			nla_strscpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME],
+>  					sizeof(name));
+>  		} else {
+>  			cifs_dbg(FYI, "%s: missing resource name attribute\n", __func__);
 
-This is now a conflict between the userns tree and Linus's tree.
+This fixup is now needed when the cifs tree is merged with Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/oUyf/sp7r7eLkMog8MUQLJf
+--Sig_/q5eVTRs0yh/ptO8mBQFA_t5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/ZXJ0ACgkQAVBC80lX
-0GwkOAf/bL9OWPSNIHmEvInDuyJOtDuNkqkmQVi3s4gv7ArjarRgzh6vrgOwA2rb
-2yu8Cg40mG+OONcNJfJDn8/aDSXC7n8A29WgGuye4ZV3wSWpXqQll1ypPO3Id4jM
-ska5Krip9tbQ1pmaUkrgYCycoULsF74qeeFPHAs4CAbietjt2FDDTHRsSFKA/Jh/
-1Etpvgibi22fI9zfA+P7TRzlflHJpw+fRwMOhEfs9HNxNrmKAYSkdrj1VXi/h/AQ
-061Jm3W35NAi57Zz9E6Kn9qUqaxZjGEIQ4qUS1ic38kBQPQmQmEkKgL1rI6tk2M+
-piaaTemonOShK86XkpJ2DiSz/oFWfg==
-=Tz70
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/ZXPEACgkQAVBC80lX
+0Gz6pAf7BFuB7xg7zQktIrJKkz76aJ4SijfmcLvfTb3OszPio5j3ydCke4MmV0Ny
++opqZU94f58XBT67cuz8lpg/wfabx8F5QJoN28p+MgBKvCcOf6r1mZdReqeD2vqi
+tWBBsiLeCNkT8mpw/M+PxS7k2Jlx7+ghcw9nxvVkWJFT+Hsqo3KLBHOt00QhzrRA
+ObxMwDPaaaopaMFLu071bN2kSnqbrmvnZBr6BZeRkKbykMpynFl8Qgq88oTGdnua
+FXLAnW43ox66XI6j4v9e281ziC7siU5Sqz2q8cV+MJheyuD9GOtfpFw1eUNL4H/x
+253339KfOPZp0ArWe51xy0tzn4VqWg==
+=Eaao
 -----END PGP SIGNATURE-----
 
---Sig_/oUyf/sp7r7eLkMog8MUQLJf--
+--Sig_/q5eVTRs0yh/ptO8mBQFA_t5--

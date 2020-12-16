@@ -2,138 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D66A22DB830
-	for <lists+linux-next@lfdr.de>; Wed, 16 Dec 2020 02:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6402DB843
+	for <lists+linux-next@lfdr.de>; Wed, 16 Dec 2020 02:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727713AbgLPBEf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Dec 2020 20:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727741AbgLPBEb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Dec 2020 20:04:31 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D98EC0613D3;
-        Tue, 15 Dec 2020 17:03:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CwcMQ28Lhz9sSn;
-        Wed, 16 Dec 2020 12:03:45 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608080627;
-        bh=cQaV2jbS3HmMgFsTkGbTXR5ExwBawARpfAYivTjhXt0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nN2Juom3On3n3ghtqBd5FVXxrPvyxpHPrfWvaFeNOaQCmJTJal/hmsf6tVpYh77Rn
-         Lc+3V+2uZ6LUlqdN6ylbVqxSUVxivVTxEzHev/xEbDAl4ysf5j6dQ82GKcwEdZ+5oz
-         Z0xRTCpxOyblSDBqumqxRnTdlKOZtFxwOEZ0wQsSI8qJ5mfV8S/4y49iUSSPUQnFJb
-         MItw+D2uGlY4LBzC2msOrV7fA7YOCx18xC1or3GQt+vuk0485T3EL5kUA7iTt5FTNT
-         OJWYr5J19CS8gPutSeqYiRXGPmm+5Oi7tZ0GS4+LpKlpFZqJYNG7XS9clq+aJN5ito
-         9wy2Kr7bucc7A==
-Date:   Wed, 16 Dec 2020 12:03:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <stfrench@microsoft.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Samuel Cabrero <scabrero@suse.de>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
+        id S1726166AbgLPBL0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Dec 2020 20:11:26 -0500
+Received: from mga06.intel.com ([134.134.136.31]:61055 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725275AbgLPBLZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Dec 2020 20:11:25 -0500
+IronPort-SDR: AC7vtsAq5eHsvhgcxsNp0lKK0yvoBzDcv3Sm2k5Ozh42uh9STF/IL2RCkLrxab5+D8Vskqp7EB
+ Bp4NdADi1C7g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9836"; a="236560119"
+X-IronPort-AV: E=Sophos;i="5.78,423,1599548400"; 
+   d="scan'208";a="236560119"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 17:09:38 -0800
+IronPort-SDR: RU9tWlTsZCIOuXYyqvu9cECu6EZoHttatFgsVIZwtruFTVtcBbrZ/0/3IT6+IoHB60TAVdN/qk
+ qWiQoArHUlyw==
+X-IronPort-AV: E=Sophos;i="5.78,423,1599548400"; 
+   d="scan'208";a="556586381"
+Received: from smtp.ostc.intel.com ([10.54.29.231])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2020 17:09:38 -0800
+Received: from localhost (mtg-dev.jf.intel.com [10.54.74.10])
+        by smtp.ostc.intel.com (Postfix) with ESMTP id E77316363;
+        Tue, 15 Dec 2020 17:09:37 -0800 (PST)
+Date:   Tue, 15 Dec 2020 17:09:37 -0800
+From:   mark gross <mgross@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20201216120345.429d9e21@canb.auug.org.au>
-In-Reply-To: <20201214131438.7c9b2f30@canb.auug.org.au>
-References: <20201214131438.7c9b2f30@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Healy <mikex.healy@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "Paul J. Murphy" <paul.j.murphy@intel.com>
+Subject: Re: linux-next: manual merge of the drm tree with the crypto tree
+Message-ID: <20201216010937.GA6517@linux.intel.com>
+Reply-To: mgross@linux.intel.com
+References: <20201214135453.16e76e9d@canb.auug.org.au>
+ <CAMuHMdWYBLqUVRyNRbOZm=oxv+_uLJ9FK6ebPPvgHcN4Y-YUSQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/q5eVTRs0yh/ptO8mBQFA_t5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWYBLqUVRyNRbOZm=oxv+_uLJ9FK6ebPPvgHcN4Y-YUSQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/q5eVTRs0yh/ptO8mBQFA_t5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 15, 2020 at 10:58:52AM +0100, Geert Uytterhoeven wrote:
+> On Mon, Dec 14, 2020 at 2:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Today's linux-next merge of the drm tree got a conflict in:
+> >
+> >   MAINTAINERS
+> >
+> > between commit:
+> >
+> >   885743324513 ("crypto: keembay - Add support for Keem Bay OCS AES/SM4")
+> >
+> > from the crypto tree and commit:
+> >
+> >   ed794057b052 ("drm/kmb: Build files for KeemBay Display driver")
+> >
+> > from the drm tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> >
+> > diff --cc MAINTAINERS
+> > index 3b358262de8f,eb18459c1d16..000000000000
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> 
+> > @@@ -8985,16 -8962,13 +8993,23 @@@ M:   Deepak Saxena <dsaxena@plexity.net
+> >   S:    Maintained
+> >   F:    drivers/char/hw_random/ixp4xx-rng.c
+> >
+> > + INTEL KEEMBAY DRM DRIVER
+> 
+> Is it KEEMBAY?
+> 
+> > + M:    Anitha Chrisanthus <anitha.chrisanthus@intel.com>
+> > + M:    Edmund Dea <edmund.j.dea@intel.com>
+> > + S:    Maintained
+> > + F:    Documentation/devicetree/bindings/display/intel,kmb_display.yaml
+> 
+> I was just going to comment about "intel,kmb_*" vs. "intel,keembay-*", until
+> I noticed intel,kmb_display.yaml does not exist, but is called
+> Documentation/devicetree/bindings/display/intel,keembay-display.yaml
+> in next-20201214.
+> 
+> > + F:    drivers/gpu/drm/kmb/
+> > +
+> >  +INTEL KEEM BAY OCS AES/SM4 CRYPTO DRIVER
+> 
+> or KEEM BAY?
+> 
+> Or Keem Bay? Keembay? KeemBay?
+It should be Keem Bay.  I googled sandybridge, ivybridge, baytrail,
+cherrytrail, medfield and merrifiled and for the *bridge and *trail products
+the words are split up and capitalized.  For the *fields they are one-word.
 
-Hi all,
+We'll update the KEEMBAY,KeemBay, KEEM BAY instances to Keem Bay to mimic SDB,
+IVB, BYT and CHT since those are the majority. I'm not sure I'm going to rename
+the file names however but, within the files wherever we talk about Keem Bay we
+will use "Keem Bay" consistently.
 
-On Mon, 14 Dec 2020 13:14:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> fs/cifs/cifs_swn.c: In function 'cifs_swn_notify':
-> fs/cifs/cifs_swn.c:450:4: error: implicit declaration of function 'nla_st=
-rlcpy'; did you mean 'nla_strscpy'? [-Werror=3Dimplicit-function-declaratio=
-n]
->   450 |    nla_strlcpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME=
-],
->       |    ^~~~~~~~~~~
->       |    nla_strscpy
->=20
-> Caused by commit
->=20
->   872f69034194 ("treewide: rename nla_strlcpy to nla_strscpy.")
->=20
-> interacting with commit
->=20
->   27228d73f4d2 ("cifs: Set witness notification handler for messages from=
- userspace daemon")
->=20
-> from the cifs tree.
->=20
-> I have applied the following merge fix patch.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 14 Dec 2020 13:09:27 +1100
-> Subject: [PATCH] fixup for "treewide: rename nla_strlcpy to nla_strscpy."
->=20
-> conflicting with
->=20
-> "cifs: Set witness notification handler for messages from userspace daemo=
-n"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/cifs/cifs_swn.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/cifs/cifs_swn.c b/fs/cifs/cifs_swn.c
-> index 642c9eedc8ab..d762d442dfa5 100644
-> --- a/fs/cifs/cifs_swn.c
-> +++ b/fs/cifs/cifs_swn.c
-> @@ -447,7 +447,7 @@ int cifs_swn_notify(struct sk_buff *skb, struct genl_=
-info *info)
->  		int state;
-> =20
->  		if (info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME]) {
-> -			nla_strlcpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME],
-> +			nla_strscpy(name, info->attrs[CIFS_GENL_ATTR_SWN_RESOURCE_NAME],
->  					sizeof(name));
->  		} else {
->  			cifs_dbg(FYI, "%s: missing resource name attribute\n", __func__);
+Sorry for the variances,
 
-This fixup is now needed when the cifs tree is merged with Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/q5eVTRs0yh/ptO8mBQFA_t5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/ZXPEACgkQAVBC80lX
-0Gz6pAf7BFuB7xg7zQktIrJKkz76aJ4SijfmcLvfTb3OszPio5j3ydCke4MmV0Ny
-+opqZU94f58XBT67cuz8lpg/wfabx8F5QJoN28p+MgBKvCcOf6r1mZdReqeD2vqi
-tWBBsiLeCNkT8mpw/M+PxS7k2Jlx7+ghcw9nxvVkWJFT+Hsqo3KLBHOt00QhzrRA
-ObxMwDPaaaopaMFLu071bN2kSnqbrmvnZBr6BZeRkKbykMpynFl8Qgq88oTGdnua
-FXLAnW43ox66XI6j4v9e281ziC7siU5Sqz2q8cV+MJheyuD9GOtfpFw1eUNL4H/x
-253339KfOPZp0ArWe51xy0tzn4VqWg==
-=Eaao
------END PGP SIGNATURE-----
-
---Sig_/q5eVTRs0yh/ptO8mBQFA_t5--
+--mark

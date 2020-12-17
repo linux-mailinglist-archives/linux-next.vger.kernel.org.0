@@ -2,57 +2,39 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584302DCCA0
-	for <lists+linux-next@lfdr.de>; Thu, 17 Dec 2020 07:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7A52DCCAF
+	for <lists+linux-next@lfdr.de>; Thu, 17 Dec 2020 07:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbgLQGn6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Dec 2020 01:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgLQGn5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Dec 2020 01:43:57 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49928C0617B0
-        for <linux-next@vger.kernel.org>; Wed, 16 Dec 2020 22:43:17 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id q22so18516543eja.2
-        for <linux-next@vger.kernel.org>; Wed, 16 Dec 2020 22:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=2E2IRKEI0E+4fYbd4aolEHId9cIRGJRcY4qJxFLCTNY=;
-        b=ux7LL3mZctbUVr6Qn/cj+GvAouxYh8Ff4eiwmFaav39GyXLE7UPBbinIoIWgcYgwwa
-         SocrNn8RD/yq3Mf7TLe67zW84WyQagmmYT1ui4+X/6P4z+J3KDZJHgarHyxRgvMGiHpA
-         xOiA3Avv+7Y1SnhtAY/6IrNun1JvTiNOITROY5qTVR0u+SgWvB7YTEs90xbVGlcEuAuC
-         KlurAedgPMqPyogrmSIZmS2K7s1jwx44peoYGuRslxQHmliLscLfDRkHdSMHZv4UrcWH
-         uz9fU1Cy9iau28KumIK/PrHOTZPmEG3VpWVx3qX2UFuz0NwITsD1D0GON69kkIjiGdvl
-         Q9xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=2E2IRKEI0E+4fYbd4aolEHId9cIRGJRcY4qJxFLCTNY=;
-        b=twAAbR0Fkg1QBgu+u6uGkn2H0Kll6y0GiycaIjPloQebmaccaTUpzjlHqSh3X5cRj2
-         GT7hPulLwTHQEjpNkudexG0h+0/bAoist3D09LwCqVjI2iDjZAKAQghfez87pT0Njc0g
-         Wz17Id47VNb+YQ9j7mAa1Bx+bQ+w2a8ptL7SDsJc9MhLM/Zw75L3ZUkyBXNTDPbZ/oWJ
-         UN3a/VUqfj9oUd2s0txwXE+OvCDFkb6QCgO9czkzGWzAIlHNvrw/osx8nLQ97CLOfCPC
-         3LJEZeEtYTn3CQdzEojxplJMo3kK6k8hjLmJJjbDzmT8AcYKx1qdojNL0NwnEl32hGbv
-         w4CQ==
-X-Gm-Message-State: AOAM5311allAMv4bPmpv0lcJfqksjZL/eohNTdFw13bMz7b/kPygPJhs
-        qEcAHzwihWQdSQEXg2FUCyBijqSddAVAtUiPUiFu1GlCbtNeVRme
-X-Google-Smtp-Source: ABdhPJy7HNskfwVp3ThIspYC4Ccdzj43u6x1IlcBsmNfy4vSHjEowpisjy0Wcq0L2d7aiHrnx69C/EEJGi2XhqQMl9g=
-X-Received: by 2002:a17:906:edc8:: with SMTP id sb8mr34272376ejb.247.1608187394890;
- Wed, 16 Dec 2020 22:43:14 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 17 Dec 2020 12:13:03 +0530
-Message-ID: <CA+G9fYtHimKZDuJGAzF86OY_F9j93oLPcohJRVLU+RLKEDCrbg@mail.gmail.com>
-Subject: arm64: entry.S:774: Error: immediate out of range at operand 3 --
- `and x2,x19,
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727147AbgLQGrD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Dec 2020 01:47:03 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58121 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727145AbgLQGrC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Dec 2020 01:47:02 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CxMwC4jNtz9sW8;
+        Thu, 17 Dec 2020 17:46:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1608187580;
+        bh=zzxyExe56gGMPnZtWltbM/UtqBs1rZ5hul4IrgQJAqg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eyQkDON8rZTvQ190s8jlnad8WLhMpCqqf+9qZE9UkeiuT3u6vX4wg3x51pSnoQpww
+         MTiF7TSzqC8o+qkqAfknGtllPdmcnlkYvZuhJv0OwqmzEgnBsCfa1KvKqtVp3oa9az
+         +k+wHDW74oNPdz2XHfGn+q6mGpLKREzeP4lCl7CgQ2b3GO/YoOv0yuRAHbqD8H9giU
+         PcUSwLSEZzm7xQREmspbHiXe1S1hJB8hsu9Biq9BsAp+AFjE3cjwjxVfkCt/4ikbJF
+         HkNHjiiO48KolSwMxkD4CZ8CL9hHctd4o7BYqfS1dqnhY5btOZzkUCnx97q6v9MCeI
+         7X/vk0BPrJ1pA==
+Date:   Thu, 17 Dec 2020 17:46:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -61,45 +43,65 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: arm64: entry.S:774: Error: immediate out of range at operand 3
+ -- `and x2,x19,
+Message-ID: <20201217174618.401f2dc8@canb.auug.org.au>
+In-Reply-To: <CA+G9fYtHimKZDuJGAzF86OY_F9j93oLPcohJRVLU+RLKEDCrbg@mail.gmail.com>
+References: <CA+G9fYtHimKZDuJGAzF86OY_F9j93oLPcohJRVLU+RLKEDCrbg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/gTpo6cq9fwsY9HvS/9w7mB7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-arm64 build failed on Linux next 20201217 tag with gcc-8, gcc-9 and gcc-10.
+--Sig_/gTpo6cq9fwsY9HvS/9w7mB7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/2/tmp ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-arch/arm64/kernel/entry.S: Assembler messages:
-arch/arm64/kernel/entry.S:774: Error: immediate out of range at
-operand 3 -- `and
-x2,x19,#((1<<1)|(1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<5)|(1<<7))'
-make[3]: *** [scripts/Makefile.build:360: arch/arm64/kernel/entry.o] Error 1
+Hi Naresh,
 
+On Thu, 17 Dec 2020 12:13:03 +0530 Naresh Kamboju <naresh.kamboju@linaro.or=
+g> wrote:
+>
+> arm64 build failed on Linux next 20201217 tag with gcc-8, gcc-9 and gcc-1=
+0.
+>=20
+> make --silent --keep-going --jobs=3D8
+> O=3D/home/tuxbuild/.cache/tuxmake/builds/2/tmp ARCH=3Darm64
+> CROSS_COMPILE=3Daarch64-linux-gnu- 'CC=3Dsccache aarch64-linux-gnu-gcc'
+> 'HOSTCC=3Dsccache gcc'
+> arch/arm64/kernel/entry.S: Assembler messages:
+> arch/arm64/kernel/entry.S:774: Error: immediate out of range at
+> operand 3 -- `and
+> x2,x19,#((1<<1)|(1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<5)|(1<<7))'
+> make[3]: *** [scripts/Makefile.build:360: arch/arm64/kernel/entry.o] Erro=
+r 1
 
-steps to reproduce:
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+This is fixed by commit
 
-tuxmake --runtime docker --target-arch arm64 --toolchain gcc-9
---kconfig defconfig
+  870d16757ba8 ("arm64: make _TIF_WORK_MASK bits contiguous")
 
-Full build log link,
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/917491444
+in Linus' tree which will be in linux-next tomorrow.
 
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+--Sig_/gTpo6cq9fwsY9HvS/9w7mB7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/a/rsACgkQAVBC80lX
+0GwVVAf9F8gMswhzGzPSLBocjcICVFyIk0gdzipet/ZG7T/Tb509CakZw1tp5DtA
+4S2f5lck3C9OvG66/qDJvFZr4ME3JAmJZexeZHIMYusPjrqhmFuXta9/ZYIhMWNs
+UH+bB9XZ5DJu/IHAdX6ICrEhPuhD3Lh+NoOdNJIhzw/nLjbtnGVjZ6MnmAQBa9Gr
+eEwuPjbE//mMttkQVW+FKgiTDKCMmBN1LPwxTkphdd3DJ+m8CtYDT/9hElAq2NEm
+eaKpAmwAyu3/BxXJsqP87Z4vZeavWZRPQ5K4fLCxWpV9Vu+lcHKROMv19msgHje5
+kMSm64npuZ8U7TaIa9C0yFyhsXuwgQ==
+=ZAGG
+-----END PGP SIGNATURE-----
+
+--Sig_/gTpo6cq9fwsY9HvS/9w7mB7--

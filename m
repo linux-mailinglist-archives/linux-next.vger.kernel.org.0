@@ -2,81 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDC02DCA28
-	for <lists+linux-next@lfdr.de>; Thu, 17 Dec 2020 01:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099782DCA81
+	for <lists+linux-next@lfdr.de>; Thu, 17 Dec 2020 02:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbgLQAtb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Dec 2020 19:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S2388949AbgLQBYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Dec 2020 20:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgLQAtb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Dec 2020 19:49:31 -0500
+        with ESMTP id S1731391AbgLQBYk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Dec 2020 20:24:40 -0500
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7425C061794;
-        Wed, 16 Dec 2020 16:48:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE024C061794;
+        Wed, 16 Dec 2020 17:23:59 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CxCzf3ncRz9sTK;
-        Thu, 17 Dec 2020 11:48:46 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CxDmC3yH1z9sTX;
+        Thu, 17 Dec 2020 12:23:55 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608166127;
-        bh=es0EnsoCQ2ifCTtAA+adaRfzfcRnwMUs2I8Ux5lFmD8=;
+        s=201702; t=1608168237;
+        bh=TnFujtbZ+cKkokGS0FUWxHGmo/iJu4wjsqoiJItDnPE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kLR639NcfbLoXZUlgkG4fIGl19uM4kCYDARQzm/b+0MYzgb2tddZtktyajhX8fjqF
-         nw0ndWXzphISZcPy63dtAW6dOSqnrp8/dIb+ApuffRw1Va8x5nzttGhVz10gt68nYp
-         5IcyecRBp2nCR31rHhz+cxv/ZBXtS71XsPGJJQOegcolxD+OjbHIqnOj32z8rMdSfB
-         c2rkQlQX8o5PngZzgYcQIGBHnCzy9zjUAgp0wg0Epm9+TCwfBpxvU2oLMXng1NuR2I
-         Q3kXfWlfgKTridgquKZSkFH3+JwksOek98Ccj+yYdoUs9DpLv+J3yUYKbLqCxTRG1P
-         hSywz+pPz7krw==
-Date:   Thu, 17 Dec 2020 11:48:45 +1100
+        b=iyz4hzeTPD2R9vkZGfL2dA2jENrCamZCLhVnHBlQ1nNI18Jfwbf40U9mSi2JsfsJR
+         JI+lhSR2Cr63OQfumtF5OxPaW/K14IUANyWhobctS9o/cW99vhSI6Y46GXK+TeK4B5
+         EhTiuXek4LutFiKuSWX5ijgn2Di4i7ltgRe/9liMuSOi2dKHqaMzkg1/E0R4uK5FhO
+         iwOp4a5jYFdbA63rNYgAcTlit5wx+N/bxEiftCTpsEmSiuolwVNoOCVA1zmX6R3rYg
+         95O7xAFV5qDznk91S9GimUWYuO5C3zMQ/NPLNR/OtuCX7wQMU3XnR1ZU/LrcBmX1CM
+         lUH/YgS2YdOsA==
+Date:   Thu, 17 Dec 2020 12:23:54 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Ganesh Goudar <ganeshgr@linux.ibm.com>,
+To:     Guo Ren <ren_guo@c-sky.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mahesh Salgaonkar <mahesh@linux.ibm.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the
- powerpc tree
-Message-ID: <20201217114845.47fe50fb@canb.auug.org.au>
-In-Reply-To: <20201208204016.4eb18ca4@canb.auug.org.au>
-References: <20201208204016.4eb18ca4@canb.auug.org.au>
+        YiFei Zhu <yifeifz2@illinois.edu>
+Subject: Re: linux-next: manual merge of the seccomp tree with the csky tree
+Message-ID: <20201217122354.6ad6b052@canb.auug.org.au>
+In-Reply-To: <20201125173824.0e3dbcd7@canb.auug.org.au>
+References: <20201125173824.0e3dbcd7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T61_sMexRa0TWOjwLJzjnGx";
+Content-Type: multipart/signed; boundary="Sig_/_YEESlslusO/vFPud8uiykD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T61_sMexRa0TWOjwLJzjnGx
+--Sig_/_YEESlslusO/vFPud8uiykD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi aa,
 
-On Tue, 8 Dec 2020 20:40:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Wed, 25 Nov 2020 17:38:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Today's linux-next merge of the akpm-current tree got conflicts in:
+> Today's linux-next merge of the seccomp tree got a conflict in:
 >=20
->   drivers/misc/lkdtm/Makefile
->   drivers/misc/lkdtm/lkdtm.h
->   tools/testing/selftests/lkdtm/tests.txt
+>   arch/csky/include/asm/Kbuild
 >=20
 > between commit:
 >=20
->   3ba150fb2120 ("lkdtm/powerpc: Add SLB multihit test")
+>   fed76f8679a6 ("csky: Add QUEUED_SPINLOCKS supported")
 >=20
-> from the powerpc tree and commit:
+> from the csky tree and commit:
 >=20
->   014a486edd8a ("drivers/misc/lkdtm: add new file in LKDTM to test fortif=
-ied strscpy")
+>   6e9ae6f98809 ("csky: Enable seccomp architecture tracking")
 >=20
-> from the akpm-current tree.
+> from the seccomp tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -85,66 +79,45 @@ ied strscpy")
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
+> --=20
+> Cheers,
+> Stephen Rothwell
 >=20
-> diff --cc drivers/misc/lkdtm/Makefile
-> index 5a92c74eca92,d898f7b22045..000000000000
-> --- a/drivers/misc/lkdtm/Makefile
-> +++ b/drivers/misc/lkdtm/Makefile
-> @@@ -10,7 -10,7 +10,8 @@@ lkdtm-$(CONFIG_LKDTM)		+=3D rodata_objcop
->   lkdtm-$(CONFIG_LKDTM)		+=3D usercopy.o
->   lkdtm-$(CONFIG_LKDTM)		+=3D stackleak.o
->   lkdtm-$(CONFIG_LKDTM)		+=3D cfi.o
-> + lkdtm-$(CONFIG_LKDTM)		+=3D fortify.o
->  +lkdtm-$(CONFIG_PPC_BOOK3S_64)	+=3D powerpc.o
->  =20
->   KASAN_SANITIZE_stackleak.o	:=3D n
->   KCOV_INSTRUMENT_rodata.o	:=3D n
-> diff --cc drivers/misc/lkdtm/lkdtm.h
-> index 79ec05c18dd1,6aa6d6a1a839..000000000000
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@@ -102,7 -104,7 +104,10 @@@ void lkdtm_STACKLEAK_ERASING(void)
->   /* cfi.c */
->   void lkdtm_CFI_FORWARD_PROTO(void);
->  =20
-> + /* fortify.c */
-> + void lkdtm_FORTIFIED_STRSCPY(void);
-> +=20
->  +/* powerpc.c */
->  +void lkdtm_PPC_SLB_MULTIHIT(void);
->  +
->   #endif
-> diff --cc tools/testing/selftests/lkdtm/tests.txt
-> index 18e4599863c0,92ba4cc41314..000000000000
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@@ -68,4 -68,4 +68,5 @@@ USERCOPY_STACK_BEYON
->   USERCOPY_KERNEL
->   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
->   CFI_FORWARD_PROTO
-> + FORTIFIED_STRSCPY
->  +PPC_SLB_MULTIHIT Recovered
+> diff --cc arch/csky/include/asm/Kbuild
+> index f814d46d347f,93372255984d..000000000000
+> --- a/arch/csky/include/asm/Kbuild
+> +++ b/arch/csky/include/asm/Kbuild
+> @@@ -3,9 -3,6 +3,8 @@@ generic-y +=3D asm-offsets.
+>   generic-y +=3D gpio.h
+>   generic-y +=3D kvm_para.h
+>   generic-y +=3D local64.h
+>  +generic-y +=3D mcs_spinlock.h
+>   generic-y +=3D qrwlock.h
+>  +generic-y +=3D qspinlock.h
+> - generic-y +=3D seccomp.h
+>   generic-y +=3D user.h
+>   generic-y +=3D vmlinux.lds.h
 
-These conflicts are now between the powerpc tree and Linus' tree.
+This is now a conflict between the csky tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/T61_sMexRa0TWOjwLJzjnGx
+--Sig_/_YEESlslusO/vFPud8uiykD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/aqu0ACgkQAVBC80lX
-0Gzh1Qf/YjaYBc6q7yRUBcnVpD/l9a4dHyHV/exrXAIx6st0ZX4YNtRXKt3p9LJ+
-S6kpR3lntIc61u/YV1zMgD0rT6wPRk9cPYc9iqz+mW7iyXlPgh2h7diuF1WNNpgt
-ChBgpuHNdi+E6KZ7rhhCwJIEzSmzPb6kD13eMCxgjVGOQFGf1W4oWPhBGVcJTbzc
-XwXGWun+BtsASn2VTIeMzVsJWYaHYnkGrF8ZtKo31kSt4wStiYCDA3xw8r/wlRue
-lTqqJsmJ5qxmbzc5oRWX9KuhHDjYRVZzMriNuERQvVcPNmifRzB9basXdfi+MNTl
-S3RZk4xR66z1DyZHjZ4UkfaN1gJRMw==
-=BO9i
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/asyoACgkQAVBC80lX
+0GyzmwgApaL3mGGiGQANYUuXgT4qThPujLzmYt3JqHLWamGbLmpZnoCtQzK/Aw4d
+Bwyhc+nHe5PEWnPH6/8vWoFdjj1JE7FdWREnvZvAD1nj4N7mX1CczAEbbnEcLLqO
+8ZMak2e7UDW0aNJfdvqXTbMSV3oDqeB0bPlLpkB8Kim3SOMGSyGPg0ZPuZ4rlKv+
+AKiuRAJ6R1rb1n7Em5iIUJsCcxQxWdO/o45j8gdc0LOnY4eTJr0g7LLTdB4M6Fxm
+Ch95I3QX8PVhA8ruHcVbaklntnfnc1WVsuBqknuyMe4vv453QQz7qDZhhFhpBOnM
+EaUjGVPCbwaRRq0tjMrxI2q/8R3S3g==
+=kmnD
 -----END PGP SIGNATURE-----
 
---Sig_/T61_sMexRa0TWOjwLJzjnGx--
+--Sig_/_YEESlslusO/vFPud8uiykD--

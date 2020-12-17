@@ -2,75 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 099782DCA81
+	by mail.lfdr.de (Postfix) with ESMTP id E2AAD2DCA83
 	for <lists+linux-next@lfdr.de>; Thu, 17 Dec 2020 02:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388949AbgLQBYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Dec 2020 20:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731391AbgLQBYk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Dec 2020 20:24:40 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE024C061794;
-        Wed, 16 Dec 2020 17:23:59 -0800 (PST)
+        id S1731398AbgLQB0H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Dec 2020 20:26:07 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33835 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728002AbgLQB0H (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 16 Dec 2020 20:26:07 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CxDmC3yH1z9sTX;
-        Thu, 17 Dec 2020 12:23:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CxDnt4js6z9sSf;
+        Thu, 17 Dec 2020 12:25:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608168237;
-        bh=TnFujtbZ+cKkokGS0FUWxHGmo/iJu4wjsqoiJItDnPE=;
+        s=201702; t=1608168324;
+        bh=ANxjHRTARFBHBjOythRT7P1h03IlPXQyCzi51DZAg4o=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iyz4hzeTPD2R9vkZGfL2dA2jENrCamZCLhVnHBlQ1nNI18Jfwbf40U9mSi2JsfsJR
-         JI+lhSR2Cr63OQfumtF5OxPaW/K14IUANyWhobctS9o/cW99vhSI6Y46GXK+TeK4B5
-         EhTiuXek4LutFiKuSWX5ijgn2Di4i7ltgRe/9liMuSOi2dKHqaMzkg1/E0R4uK5FhO
-         iwOp4a5jYFdbA63rNYgAcTlit5wx+N/bxEiftCTpsEmSiuolwVNoOCVA1zmX6R3rYg
-         95O7xAFV5qDznk91S9GimUWYuO5C3zMQ/NPLNR/OtuCX7wQMU3XnR1ZU/LrcBmX1CM
-         lUH/YgS2YdOsA==
-Date:   Thu, 17 Dec 2020 12:23:54 +1100
+        b=EK3mfK7k7e/7l64XRi+ktKYGWfrVgIlbWIW8PxiOt1bNpRXy7/EwQvALBLivI4JZG
+         xB83gb3Gom0HPl8ldv9kUbljjOOR5mV7BqySSmhuIrRUvVYt4ONfXg3IBj4myJEhMa
+         H5qS8vceLwLnoEb29wT8JtqSwtnRUkys6oe2jvyjogXtJqYEUi/BcmYqMlWDR3NzmP
+         pZWpuxR9CFAywJqVsFjDVGW7sy6jfFHZwNS/qKuNhsHA/gu6tOsuIsY1apTCNib25t
+         PTkfr66Fyp00gO36Ggx2lEu8bSnIlu2BBGwv9wme/hkEx5X8Y95TRPTefWFhW87Xsa
+         +rRhBdw6CHl8w==
+Date:   Thu, 17 Dec 2020 12:25:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guo Ren <ren_guo@c-sky.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>
-Subject: Re: linux-next: manual merge of the seccomp tree with the csky tree
-Message-ID: <20201217122354.6ad6b052@canb.auug.org.au>
-In-Reply-To: <20201125173824.0e3dbcd7@canb.auug.org.au>
-References: <20201125173824.0e3dbcd7@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ risc-v tree
+Message-ID: <20201217122521.23a6d7f2@canb.auug.org.au>
+In-Reply-To: <20201214202107.66932c18@canb.auug.org.au>
+References: <20201214202107.66932c18@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_YEESlslusO/vFPud8uiykD";
+Content-Type: multipart/signed; boundary="Sig_/.5zph_I2oF6jMOWw+.elo/j";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_YEESlslusO/vFPud8uiykD
+--Sig_/.5zph_I2oF6jMOWw+.elo/j
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi aa,
+Hi all,
 
-On Wed, 25 Nov 2020 17:38:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 14 Dec 2020 20:21:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
->
-> Today's linux-next merge of the seccomp tree got a conflict in:
 >=20
->   arch/csky/include/asm/Kbuild
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+>=20
+>   lib/Makefile
 >=20
 > between commit:
 >=20
->   fed76f8679a6 ("csky: Add QUEUED_SPINLOCKS supported")
+>   527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
 >=20
-> from the csky tree and commit:
+> from the risc-v tree and commits:
 >=20
->   6e9ae6f98809 ("csky: Enable seccomp architecture tracking")
+>   8250e121c672 ("lib/list_kunit: follow new file name convention for KUni=
+t tests")
+>   17bf776cf09a ("lib/linear_ranges_kunit: follow new file name convention=
+ for KUnit tests")
+>   23fa4e39ee62 ("lib/bits_kunit: follow new file name convention for KUni=
+t tests")
+>   1987f84faec6 ("lib/cmdline_kunit: add a new test suite for cmdline API")
 >=20
-> from the seccomp tree.
+> from the akpm-current tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -79,45 +82,45 @@ wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
-> --=20
-> Cheers,
-> Stephen Rothwell
 >=20
-> diff --cc arch/csky/include/asm/Kbuild
-> index f814d46d347f,93372255984d..000000000000
-> --- a/arch/csky/include/asm/Kbuild
-> +++ b/arch/csky/include/asm/Kbuild
-> @@@ -3,9 -3,6 +3,8 @@@ generic-y +=3D asm-offsets.
->   generic-y +=3D gpio.h
->   generic-y +=3D kvm_para.h
->   generic-y +=3D local64.h
->  +generic-y +=3D mcs_spinlock.h
->   generic-y +=3D qrwlock.h
->  +generic-y +=3D qspinlock.h
-> - generic-y +=3D seccomp.h
->   generic-y +=3D user.h
->   generic-y +=3D vmlinux.lds.h
+> diff --cc lib/Makefile
+> index bcedd691ef63,dc623561ef9d..000000000000
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@@ -350,8 -350,7 +350,9 @@@ obj-$(CONFIG_PLDMFW) +=3D pldmfw
+>  =20
+>   # KUnit tests
+>   obj-$(CONFIG_BITFIELD_KUNIT) +=3D bitfield_kunit.o
+> - obj-$(CONFIG_LIST_KUNIT_TEST) +=3D list-test.o
+> - obj-$(CONFIG_LINEAR_RANGES_TEST) +=3D test_linear_ranges.o
+> - obj-$(CONFIG_BITS_TEST) +=3D test_bits.o
+> + obj-$(CONFIG_BITS_TEST) +=3D bits_kunit.o
+> + obj-$(CONFIG_CMDLINE_KUNIT_TEST) +=3D cmdline_kunit.o
+> + obj-$(CONFIG_LINEAR_RANGES_TEST) +=3D linear_ranges_kunit.o
+> + obj-$(CONFIG_LIST_KUNIT_TEST) +=3D list_kunit.o
+>  +
+>  +obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
 
-This is now a conflict between the csky tree and Linus' tree.
+This is now a conflict between the risc-v tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/_YEESlslusO/vFPud8uiykD
+--Sig_/.5zph_I2oF6jMOWw+.elo/j
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/asyoACgkQAVBC80lX
-0GyzmwgApaL3mGGiGQANYUuXgT4qThPujLzmYt3JqHLWamGbLmpZnoCtQzK/Aw4d
-Bwyhc+nHe5PEWnPH6/8vWoFdjj1JE7FdWREnvZvAD1nj4N7mX1CczAEbbnEcLLqO
-8ZMak2e7UDW0aNJfdvqXTbMSV3oDqeB0bPlLpkB8Kim3SOMGSyGPg0ZPuZ4rlKv+
-AKiuRAJ6R1rb1n7Em5iIUJsCcxQxWdO/o45j8gdc0LOnY4eTJr0g7LLTdB4M6Fxm
-Ch95I3QX8PVhA8ruHcVbaklntnfnc1WVsuBqknuyMe4vv453QQz7qDZhhFhpBOnM
-EaUjGVPCbwaRRq0tjMrxI2q/8R3S3g==
-=kmnD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/as4EACgkQAVBC80lX
+0GwfUgf6AyqcrcOI0HCuROEg4EiL3P5K/BSAxGVnF7PwRCZLeA8Gvvnf2wVTcSuP
+FuhLvR+uApk3DCX6WdfhoGLiHGue9DY3ocXtd92SfZI55pDdbov9x4p5TrZFsZKT
+NJKdzBs2S/GRGseQ/L5M5lcM4PGPUjW4TPlC6/PGz4Z3EnNJwtDR81qbaaib3k7/
+3SCWcb0DKyl7THtc8lJ5Gu7cMsiEleSiZCdZunL28y27Oc8B5LwbDU7GgVfw6A4S
+e34QBTgav4bhCd1MtasLJW0X4vhIA2FmtE7jVN2l7NvfiCT3ieJ8F4M4uvx11qfH
+uKijsm9kWraiV0RK6eChvGSM7q77Xg==
+=HJel
 -----END PGP SIGNATURE-----
 
---Sig_/_YEESlslusO/vFPud8uiykD--
+--Sig_/.5zph_I2oF6jMOWw+.elo/j--

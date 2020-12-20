@@ -2,111 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2220D2DF6E8
-	for <lists+linux-next@lfdr.de>; Sun, 20 Dec 2020 22:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEF12DF6FD
+	for <lists+linux-next@lfdr.de>; Sun, 20 Dec 2020 23:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbgLTVgN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Dec 2020 16:36:13 -0500
-Received: from ozlabs.org ([203.11.71.1]:52071 "EHLO ozlabs.org"
+        id S1726683AbgLTWLA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Dec 2020 17:11:00 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45193 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726593AbgLTVgM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 20 Dec 2020 16:36:12 -0500
+        id S1726507AbgLTWK7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 20 Dec 2020 17:10:59 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CzbVb4DBMz9sVj;
-        Mon, 21 Dec 2020 08:35:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CzcGs6V7yz9sVm;
+        Mon, 21 Dec 2020 09:10:13 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1608500125;
-        bh=qF+qCkedQK7QMmZ9A2Uw7sX/ShESWgakVFo45yxtuqY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rSd1jTiOFEAHr7sWzpIfzTFwN6A1C8adWUM2Fk90hu86iXg3Ls8ZQWv+5GTFGipra
-         4uZJOwoyM1E0ToGBqhTwPELfoCm1hH/WYTCGFv3Gf+YvvD82V7f3pKzGPv4LQnYVRK
-         j14kz7hnFGyi7FhIXLpr93d57zjFUcpHhlNfNG1ldTGi6rwEiukvG9jc4sSQxj4BJy
-         KydtBxgk5BHq26kxRW2XafCBu53W0+Zq/NviNyZoGyISxV2VZ1F/NFZNkRD5Ks+AKb
-         HT2xTz3/5n0XJQEUGxQ2BAEXtigPtusONWTH+ujH/tBudcSHuI/gy4tyB23QNW24Cj
-         jo3ah8mjRpyXQ==
-Date:   Mon, 21 Dec 2020 08:35:18 +1100
+        s=201702; t=1608502214;
+        bh=2k5vfmdFAKjKBf6mx3OzTwu3YohWl2zu5fwtrUiQb50=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hZeszk5LZ+xXBP2lWhuVfm9Z4deNaanwc2X8oblxuiu4yXR7MOJT5350rCK9W9svm
+         avADfY9vobOxQQkf+XqWgxJB0QgvjiSTR2hJV1j+5aW5P/T1kTh4J15/f8RCPQwrB+
+         aC63nlJbCBdujo3mWlCp9otVnIbyC16r4DsJ42DpGLsExS0ofpEJi90ZyPAv2xf3Ou
+         j4fEe6DrMyaHUBbzad5f10qEzcMc2g4peOEktM/xH9vx6M1j8dK6bZhLMz88BHCKzD
+         vnvC9drDGcn/ZGaKmk+4tqBD55gIni7U403ZCpuzI+4KflETPJK9QJj8J+AoKS0Eg6
+         Q/iHvoSaPxcRw==
+Date:   Mon, 21 Dec 2020 09:10:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the clk tree
-Message-ID: <20201221083518.5ef7357c@canb.auug.org.au>
-In-Reply-To: <CAMuHMdWAtUK6qDOAXZ3-qy69ZzbfZb_Z=bSvx-0S-42dfUiw9w@mail.gmail.com>
-References: <20201208090555.7159b138@canb.auug.org.au>
-        <CAMuHMdVYoxUOUL0zNAPzTJUSR3vGzcJWMzvtCKK=ZxyM=8hk+A@mail.gmail.com>
-        <160753498332.1580929.15118515893187584689@swboyd.mtv.corp.google.com>
-        <CAMuHMdWAtUK6qDOAXZ3-qy69ZzbfZb_Z=bSvx-0S-42dfUiw9w@mail.gmail.com>
+Subject: linux-next: build warning after merge of the kbuild tree
+Message-ID: <20201221091013.526f538f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wl28/xdXoEpx_aD2uWBr3mn";
+Content-Type: multipart/signed; boundary="Sig_/H_Q0i5T4uTXLi5iYBTvktjX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Wl28/xdXoEpx_aD2uWBr3mn
+--Sig_/H_Q0i5T4uTXLi5iYBTvktjX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
+Hi all,
 
-On Thu, 10 Dec 2020 08:52:41 +0100 Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
->
-> > trees can be pulled into linux-next? That would find this earlier. =20
->=20
-> That sounds like a great idea, also for pinctrl.
-> Can you please add the following:
->     git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.g=
-it
-> renesas-clk
->     git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.g=
-it
-> renesas-pinctrl
-> ?
+After merging the kbuild tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Added from today.  Called clk-renesas and pinctrl-renesas respectively.
+Documentation/kbuild/makefiles.rst:1617: WARNING: Inline emphasis start-str=
+ing without end-string.
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Maybe introduced by commit
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  663e29430e12 ("kbuild: doc: replace arch/$(ARCH)/ with arch/$(SRCARCH)/")
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+But am not sure about this.
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/Wl28/xdXoEpx_aD2uWBr3mn
+--Sig_/H_Q0i5T4uTXLi5iYBTvktjX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/fw5YACgkQAVBC80lX
-0GwDzggAgADeVZ0ZJDNfRCTsw8nanqshO91BVHA/MQdeEbjBSZa86oEops/jTd6n
-PO3av4QSMgYZMEcB5KNqHDyEFgJRL7G+OuQPUF4EPJ0ey1g96FPFRJxdnUjevCKl
-yvu7xG+7NO8W2CWuDLUpSRoTjXYeywpqUD1GdAl7KrF418PrXQrPCTSe/e/nK+tD
-+Iy9PVX+d6qShAAuwc84CPvD+DvZn3UTs3CUO6v9QeGo9XbKp5KmJkRjLu6lO8+d
-y3W7FLywZMprjqJ3cVBfZwB+CemYZOALj9Pt3u2wRMNTttPBfXxaOZgwYissM+sA
-e+vCaTKdDvTKpB3n9wNBkcHbGIekzw==
-=sfV2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/fy8UACgkQAVBC80lX
+0GwrqAf+KCZ72cpNDpeyLqnO7FX64+LwiiI7OiBvZaGk9E8BDF6Kn/+ZZ+WUcSad
+oDpIiV6U6BeuPvAlevkJl1cCaw+9uz8IWDIHDTEfX/EHrxBpRxqVBtiMcmy4JUsv
+fN7Fl07X+E3CuaG8LrxisF3Dwv3UA9Pt/YUdGcaBBgUowUK4Apds//L+362pXpXV
+tv8tE/fsmJvQfUs/cHmzhb9X1cw+8Ei1HLHV4LG/6rv1HT+ITNfoss8Z8RCwC+0q
+VqQyIGVVBHEM3JgsIfp/eOEp99SMf7j6wX7woe0EK+3d2qMxkxUmLf5+l+68nVdS
+znnjkzrJIgHvuWXJrfSoodqk8SAsrQ==
+=zt6z
 -----END PGP SIGNATURE-----
 
---Sig_/Wl28/xdXoEpx_aD2uWBr3mn--
+--Sig_/H_Q0i5T4uTXLi5iYBTvktjX--

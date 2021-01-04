@@ -2,137 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4062E97C6
-	for <lists+linux-next@lfdr.de>; Mon,  4 Jan 2021 15:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B022E9924
+	for <lists+linux-next@lfdr.de>; Mon,  4 Jan 2021 16:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbhADO4L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Jan 2021 09:56:11 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:53477 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727219AbhADO4K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Jan 2021 09:56:10 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 12659172D;
-        Mon,  4 Jan 2021 09:55:23 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 04 Jan 2021 09:55:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=AxARTzbgs463HULr+SRfRHOKnXs
-        /WKBB5ueaan5NvR4=; b=XA6SsbxWwBtGc9ezdlorudN4v4Tz6P6MCFaSgUe22Rm
-        73x2EV3Tij8sK5XAEs3tysrZbS1ynZTNsHS62qQTLA31E9uw9X7jkakukMNIhB/f
-        PxJacjJe/iG1R1mDrAWbaXE5PW8cruge7veKD5doUr8d4a5pV0DcT8HIZ0O5B5Ch
-        8mHycl86Rr0uuVcS99GpQwp6h+/N9WI+vCVVRL3JeeEMZRcX1xL0cRNdxJ30em10
-        xysHg7WNMQBK2VGkftFMjO/nx21U7mBTfWdNqY3sxzoisrb+YC3Ps8H/zCeX4hTZ
-        cgLvAat4h/dkOzDONVakVQR8sUuUQZVG5FhZpXvIX5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=AxARTz
-        bgs463HULr+SRfRHOKnXs/WKBB5ueaan5NvR4=; b=ax9jWUPPSU17namfX3GEYR
-        rkCMMxawETTmd1Ql8Ln+Mu59jO1AYZy1Q1/ZBoGbTj3Kb/+eu1xFYj0grsQVYJj6
-        Z7TRZ75P2uEVrfr+mlIjLxXSqAguu4kkxczvUPtcRWCODhKvjdgpMGFHLlfGf/b2
-        zElvFdcfQ9OqjM0gqaPMpl6BlmCwasLCQswYU4/9vwlAFCxU4jq80Fw5KwV8pP5y
-        1C+MTjFjB9oGZGBvFGwR3cXf5gQshk32jouyxPN9c1OeyXO0/chOFpX1mYCl6Tod
-        nnYdXPF4Ce7GoSMOfg9uqA+7XYx6q3rKFiLSQnu2i77yBEQtAZUR/d/VDFwzoq4A
-        ==
-X-ME-Sender: <xms:WCzzXwY0RbuI9AwxDH5J-hJ02OdLhiFeQ3C-qj4cLcuiqZCgjN_06g>
-    <xme:WCzzX7amslpOfUWixOJXtJ29O1kvK1BKUcFVCx5XVdJXPRJ4SQtuHRMectS-gWmp2
-    cI7-AcuX0NIrQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdeffedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
-    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
-    nhepkhgvrhhnvghlrdhorhhgnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghh
-    rdgtohhm
-X-ME-Proxy: <xmx:WCzzX6_XAJusIT21SRFkpwY8-Ne3p-TG7OIKdAR-3OY6pEBXvHkrTA>
-    <xmx:WCzzX6p7Wp2vXJZHAX9KyXQmiLtZk4qCpxufRRZAG3JNwJpBdUvkSw>
-    <xmx:WCzzX7onnfNZq-ZfaSuBhzeMflCIemDMxEGJQCyStoIwl9Mpa3PeTw>
-    <xmx:WizzXy2ymwPnU-ruRpRSG4_qUBO-sCqtSOwFVSvNQgSsGfwbMXx_yg>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A35C924005C;
-        Mon,  4 Jan 2021 09:55:20 -0500 (EST)
-Date:   Mon, 4 Jan 2021 15:56:47 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Song Chen <chensong_2000@189.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failures after merge of the staging tree
-Message-ID: <X/Msr8Dqbxk3YO0v@kroah.com>
-References: <20210104122653.6f35b9bb@canb.auug.org.au>
- <CAMuHMdXWqO2WPKSxsfbr=-_rrXenEwJRW3rYko7VJCPwCnyeLA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXWqO2WPKSxsfbr=-_rrXenEwJRW3rYko7VJCPwCnyeLA@mail.gmail.com>
+        id S1725889AbhADPtF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Jan 2021 10:49:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33115 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727418AbhADPtE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Jan 2021 10:49:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1609775258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GdVjsGRGqcz2Bp3755zL9bg1/osM9yZ5XLo7yMYYsTA=;
+        b=VFa2F8oGwTpi8o41U91j1ii2nmEiqUL2TmK7+YG6r5Jg+pEgnBKWhkD8VWpR82yYrK0qOa
+        k081qh6jOHgbHpUXEZTFSMvc4B6cq96eacHG1xLUZ6++1+gPxuOF3pKqWJn+sLtZd1eyfP
+        LfDUcaaRzQ6Ip1N8oMwTATw6SOVWPx8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-235-k2tGDxxXOsuqoOETBhFf3w-1; Mon, 04 Jan 2021 10:47:33 -0500
+X-MC-Unique: k2tGDxxXOsuqoOETBhFf3w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D3E2801AA9;
+        Mon,  4 Jan 2021 15:47:31 +0000 (UTC)
+Received: from ovpn-66-203.rdu2.redhat.com (unknown [10.10.67.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 872551007613;
+        Mon,  4 Jan 2021 15:47:30 +0000 (UTC)
+Message-ID: <703e1b5f2db1631e8f9c55619909fe66eb069f25.camel@redhat.com>
+Subject: Re: [PATCH] KVM: arm64: Don't access PMCR_EL0 when no PMU is
+ available
+From:   Qian Cai <qcai@redhat.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+Cc:     kernel-team@android.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>
+Date:   Mon, 04 Jan 2021 10:47:30 -0500
+In-Reply-To: <20201210083059.1277162-1-maz@kernel.org>
+References: <20201210083059.1277162-1-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 09:27:01AM +0100, Geert Uytterhoeven wrote:
-> On Mon, Jan 4, 2021 at 6:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > After merging the staging tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >
-> > In file included from include/linux/printk.h:6,
-> >                  from include/linux/kernel.h:16,
-> >                  from drivers/staging/board/kzm9d.c:4:
-> > drivers/staging/board/kzm9d.c:28:17: error: initialization of 'initcall_t' {aka 'int (*)(void)'} from incompatible pointer type 'void (*)(void)' [-Werror=incompatible-pointer-types]
-> >    28 | device_initcall(kzm9d_init);
-> >       |                 ^~~~~~~~~~
-> > include/linux/init.h:197:50: note: in definition of macro '___define_initcall'
-> >   197 |   __attribute__((__section__(#__sec ".init"))) = fn;
-> >       |                                                  ^~
-> > include/linux/init.h:229:30: note: in expansion of macro '__define_initcall'
-> >   229 | #define device_initcall(fn)  __define_initcall(fn, 6)
-> >       |                              ^~~~~~~~~~~~~~~~~
-> > drivers/staging/board/kzm9d.c:28:1: note: in expansion of macro 'device_initcall'
-> >    28 | device_initcall(kzm9d_init);
-> >       | ^~~~~~~~~~~~~~~
-> > cc1: some warnings being treated as errors
-> > In file included from include/linux/printk.h:6,
-> >                  from include/linux/kernel.h:16,
-> >                  from include/asm-generic/bug.h:20,
-> >                  from arch/arm/include/asm/bug.h:60,
-> >                  from include/linux/bug.h:5,
-> >                  from include/linux/thread_info.h:12,
-> >                  from include/asm-generic/current.h:5,
-> >                  from ./arch/arm/include/generated/asm/current.h:1,
-> >                  from include/linux/sched.h:12,
-> >                  from include/linux/ratelimit.h:6,
-> >                  from include/linux/dev_printk.h:16,
-> >                  from include/linux/device.h:15,
-> >                  from include/linux/dma-mapping.h:7,
-> >                  from drivers/staging/board/armadillo800eva.c:12:
-> > drivers/staging/board/armadillo800eva.c:90:17: error: initialization of 'initcall_t' {aka 'int (*)(void)'} from incompatible pointer type 'void (*)(void)' [-Werror=incompatible-pointer-types]
-> >    90 | device_initcall(armadillo800eva_init);
-> >       |                 ^~~~~~~~~~~~~~~~~~~~
-> > include/linux/init.h:197:50: note: in definition of macro '___define_initcall'
-> >   197 |   __attribute__((__section__(#__sec ".init"))) = fn;
-> >       |                                                  ^~
-> > include/linux/init.h:229:30: note: in expansion of macro '__define_initcall'
-> >   229 | #define device_initcall(fn)  __define_initcall(fn, 6)
-> >       |                              ^~~~~~~~~~~~~~~~~
-> > drivers/staging/board/armadillo800eva.c:90:1: note: in expansion of macro 'device_initcall'
-> >    90 | device_initcall(armadillo800eva_init);
-> >       | ^~~~~~~~~~~~~~~
-> >
-> > Caused by commit
-> >
-> >   850c35bb28ec ("staging: board: Remove macro board_staging")
-> >
-> > I have used the staging tree from next-20201223 for today.
+On Thu, 2020-12-10 at 08:30 +0000, Marc Zyngier wrote:
+> We reset the guest's view of PMCR_EL0 unconditionally, based on
+> the host's view of this register. It is however legal for an
+> imnplementation not to provide any PMU, resulting in an UNDEF.
 > 
-> Note that a similar patch was (IMHO rightfully) rejected 3 years ago:
-> https://lore.kernel.org/lkml/20170220175506.GA30142@kroah.com/
+> The obvious fix is to skip the reset of this shadow register
+> when no PMU is available, sidestepping the issue entirely.
+> If no PMU is available, the guest is not able to request
+> a virtual PMU anyway, so not doing nothing is the right thing
+> to do!
 > 
-> So please drop it. Thanks!
+> It is unlikely that this bug can hit any HW implementation
+> though, as they all provide a PMU. It has been found using nested
+> virt with the host KVM not implementing the PMU itself.
+> 
+> Fixes: ab9468340d2bc ("arm64: KVM: Add access handler for PMCR register")
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 
-Now reverted, thanks.
+Reverting this commit on the top of today's linux-next fixed a qemu-kvm coredump
+issue on TX2 while starting a guest.
 
-greg k-h
+- host kernel .config:
+https://cailca.coding.net/public/linux/mm/git/files/master/arm64.config
+
+# /usr/libexec/qemu-kvm -name ubuntu-20.04-server-cloudimg -cpu host -smp 2 -m 2g
+-drive if=none,format=qcow2,file=./ubuntu-20.04-server-cloudimg.qcow2,id=hd 
+-device virtio-scsi -device scsi-hd,drive=hd -cdrom ./ubuntu-20.04-server-cloudimg.iso
+-bios /usr/share/AAVMF/AAVMF_CODE.fd -M gic-version=host -nographic 
+-nic user,model=virtio,hostfwd=tcp::2222-:22
+
+qemu-kvm: /builddir/build/BUILD/qemu-4.2.0/target/arm/helper.c:1812:
+pmevcntr_rawwrite: Assertion `counter < pmu_num_counters(env)' failed.
+
+> ---
+>  arch/arm64/kvm/sys_regs.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index bc15246775d0..6c64d010102b 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -923,6 +923,10 @@ static void reset_pmcr(struct kvm_vcpu *vcpu, const
+> struct sys_reg_desc *r)
+>  {
+>  	u64 pmcr, val;
+>  
+> +	/* No PMU available, PMCR_EL0 may UNDEF... */
+> +	if (!kvm_arm_support_pmu_v3())
+> +		return;
+> +
+>  	pmcr = read_sysreg(pmcr_el0);
+>  	/*
+>  	 * Writable bits of PMCR_EL0 (ARMV8_PMU_PMCR_MASK) are reset to UNKNOWN
+

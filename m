@@ -2,79 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE252E9E38
-	for <lists+linux-next@lfdr.de>; Mon,  4 Jan 2021 20:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B572EA014
+	for <lists+linux-next@lfdr.de>; Mon,  4 Jan 2021 23:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbhADTdY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Jan 2021 14:33:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57174 "EHLO mail.kernel.org"
+        id S1726026AbhADWhA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Jan 2021 17:37:00 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54145 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726655AbhADTdY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 4 Jan 2021 14:33:24 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726168AbhADWhA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 4 Jan 2021 17:37:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3AB9720784;
-        Mon,  4 Jan 2021 19:32:43 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1kwVar-005IJG-4e; Mon, 04 Jan 2021 19:32:41 +0000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4D8r815Xx1z9sVk;
+        Tue,  5 Jan 2021 09:36:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1609799777;
+        bh=UN/pxO4Hm2dtXu35TV2Rqf85blFWW77FjLybnLVDm4Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OL/IJ5J8rH7J+EwltKHJsB2w6mRAjWkQoF/Ej+Y5vRSi031TEP+Su2JrbQUQPJSoY
+         AoiDoYMC5tv/eQkQ/fsD8NbfWMcugAQJE6ZCKdCBGviX4QlYycK7RqOCSeCKzSN5wz
+         tNM0cnpkHNLaDBGCDMJplCCO0FzMf2fLdFCbdS0k+72Pyt1b+XyT5T9gG7a8l8be6j
+         rWSc/V8q0gJknqlw5fNYiIh3IRDYq0CXlbUPIm2274KI/oPR8W+JqoJmpS+dgrDwV9
+         ly6yr/oAhUvZ/uZng0UaLA90WdlPreZePx/s0u59z/irYW9Pzc2U9rTknSefbbIQcF
+         oaVLSQXJcxGfA==
+Date:   Tue, 5 Jan 2021 09:36:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs tree
+Message-ID: <20210105093616.5712e36f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 04 Jan 2021 19:32:41 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Qian Cai <qcai@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kernel-team@android.com, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>
-Subject: Re: [PATCH] KVM: arm64: Don't access PMCR_EL0 when no PMU is
- available
-In-Reply-To: <22cd2b3e8b8b278f110a3540755583efee7189fd.camel@redhat.com>
-References: <20201210083059.1277162-1-maz@kernel.org>
- <703e1b5f2db1631e8f9c55619909fe66eb069f25.camel@redhat.com>
- <579c839a0016107af66e704f147f9814@kernel.org>
- <f4300d00b9d2540bf90a6b1baadf030a2e4c92ed.camel@redhat.com>
- <bd725a533e4754b0d5634574bcab4b0d@kernel.org>
- <a0fcd5a4a595deddd990a6327568c82a1e94948a.camel@redhat.com>
- <f7b97771ed29c7630f678a8939a591dd@kernel.org>
- <22cd2b3e8b8b278f110a3540755583efee7189fd.camel@redhat.com>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <81607700b5de4860a6f281c68ee17669@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: qcai@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kernel-team@android.com, sfr@canb.auug.org.au, linux-next@vger.kernel.org, alexandru.elisei@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: multipart/signed; boundary="Sig_/jjlLmamDKI_6n2l+k/ymSLl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2021-01-04 18:42, Qian Cai wrote:
-> On Mon, 2021-01-04 at 18:26 +0000, Marc Zyngier wrote:
->> What I'm suggesting is this [1], which is to get rid of KVM_ARM_PMU
->> completely. At least, the kernel configuration will be consistent.
->> 
-> 
-> Do you have a patch for CONFIG_KVM to select HW_PERF_EVENTS then? I 
-> could cook
-> one if not.
+--Sig_/jjlLmamDKI_6n2l+k/ymSLl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I don't think there should be such a patch. People do disable
-HW_PERF_EVENTS in production in some cases, and we should
-honor that. All I am trying to guarantee at the moment is
-that the KVM configuration is consistent, as I believe that's
-what broke in your particular case.
+Hi all,
 
-What needs doing is to hide the PMU registers from userspace
-when no PMU is configured, or even available. I'll try and post
-something to that effect tomorrow (hey, I'm still officially
-on holiday...).
+After merging the vfs tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+In file included from arch/x86/include/asm/elf.h:8,
+                 from include/linux/elf.h:6,
+                 from include/linux/elfcore-compat.h:5,
+                 from fs/compat_binfmt_elf.c:17:
+fs/binfmt_elf.c: In function 'fill_thread_core_info':
+arch/x86/include/asm/elfcore-compat.h:23:20: error: 'TIF_X32' undeclared (f=
+irst use in this function)
+   23 |  (test_thread_flag(TIF_X32) \
+      |                    ^~~~~~~
+include/linux/thread_info.h:116:45: note: in definition of macro 'test_thre=
+ad_flag'
+  116 |  test_ti_thread_flag(current_thread_info(), flag)
+      |                                             ^~~~
+fs/binfmt_elf.c:1744:5: note: in expansion of macro 'PRSTATUS_SIZE'
+ 1744 |     PRSTATUS_SIZE, &t->prstatus);
+      |     ^~~~~~~~~~~~~
+arch/x86/include/asm/elfcore-compat.h:23:20: note: each undeclared identifi=
+er is reported only once for each function it appears in
+   23 |  (test_thread_flag(TIF_X32) \
+      |                    ^~~~~~~
+include/linux/thread_info.h:116:45: note: in definition of macro 'test_thre=
+ad_flag'
+  116 |  test_ti_thread_flag(current_thread_info(), flag)
+      |                                             ^~~~
+fs/binfmt_elf.c:1744:5: note: in expansion of macro 'PRSTATUS_SIZE'
+ 1744 |     PRSTATUS_SIZE, &t->prstatus);
+      |     ^~~~~~~~~~~~~
+
+Caused by commit
+
+  5a9b7f382248 ("binfmt_elf: partially sanitize PRSTATUS_SIZE and SET_PR_FP=
+VALID")
+
+or maybe commit
+
+  9866fcab1c65 ("[elfcore-compat][amd64] clean PRSTATUS_SIZE/SET_PR_FPVALID=
+ up properly")
+
+I have used the vfs tree from next-20210104 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/jjlLmamDKI_6n2l+k/ymSLl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/zmGEACgkQAVBC80lX
+0GyxSggAhrIb7vW+lXFvt3Y7mBGkivMIYoZxzE92fmvGQ+dkS7L/P6/QapixJy/8
+wxd88xvQpBUcuAMDUsjtnQVoHnO0y9nAhrzIoYQ29Ew7vfS3YDLKX/4bIXtW5EPP
+Xm4tOJiGtpaeP9DUdvDgWZzBEZVy8zCjVsFxmUdO84Cpct79od8b7Ys6UfX+zMEL
+5pP+9cM7z8NZDEM1+DrWrgzPHp+cMW4wJCgBUIaSFEZ/z+XHWGvoN6XF47gkSkfy
+LblLmrzBqffiONImeboj3aY54uO/86eGn0akG8iVc0CSJWye81YhEgbNmsJ71OR8
+pR8K/jhIWyeq80D4AK+4FYjgI3A5VQ==
+=4w/b
+-----END PGP SIGNATURE-----
+
+--Sig_/jjlLmamDKI_6n2l+k/ymSLl--

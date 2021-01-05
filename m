@@ -2,55 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF482EB465
-	for <lists+linux-next@lfdr.de>; Tue,  5 Jan 2021 21:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817362EB46B
+	for <lists+linux-next@lfdr.de>; Tue,  5 Jan 2021 21:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729155AbhAEUnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Jan 2021 15:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S1729068AbhAEUtK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Jan 2021 15:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728536AbhAEUnk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Jan 2021 15:43:40 -0500
+        with ESMTP id S1727304AbhAEUtK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Jan 2021 15:49:10 -0500
 Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483FBC061574;
-        Tue,  5 Jan 2021 12:43:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE45C061795;
+        Tue,  5 Jan 2021 12:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Content-Type:In-Reply-To:MIME-Version:
         Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JbN+HMZ/9weBxuvqhJsY41VfPV8oYhfLS/2rAErwowg=; b=LRDAbSWQyOsm14feNbI4YqhNAk
-        AnkraAjfoUyoUFuyOvsbxubPFhR2keoGf0beHi/TQCy+rJJFh3EuhXJZL+W2GEgwgWYVeVpQVqelN
-        WjK3C3EiWW0Eqv5Xh8LvVVON7MtHfo5QRrx96wnaDkU9gBfygVqxOGDI4td6NntCCZz48znW5lSsg
-        rXE/KlAnMUq5FHxrywtb0lKRVSxf6+0nnCQtBIgCbhZpMWeEQZxsrq+6Ozm7/UKAm7H87D6xdBCQ9
-        N3jepP87SESyZLgvIAEgnXSmkb6ZrkFQAnWpeA/Y8svPq4viMhwOUA1ftq0CIACW5dOfXnlPmiH6f
-        0FTYrU4A==;
+        bh=gyptP/3L6Vku0mDe2XkH5hLZ9O2xX4hmFGV8NXLzlaE=; b=WilJU/nOeXYYf0yeuYoJvpRPz4
+        j81gmzMJyvmW4jhJvF+Y32Mkb/OGPpCoAxl+h/PsKXJ4tAO4pNCN1uFki5dXPM861rS9hmnpKxMWC
+        XjbdrYG0f0VqrMETm/7guLibRo54nDxxfzyHsDjPdZtWSIrQ69hZgIqq/FbeL8LKFiPEgqqx2WcxA
+        30B5kKtETiPRT5cGRPKhlRclqN5PZYdT+QI1Ye6ciouJxKUqMLI8+/numXtM7aTHoO636hIBrlf5L
+        zZtrHYhm8XVxrgZQojuz7QX0O4q9s1cyZbcdfZO4/do7sWc/BukGaqFB/aapDxziPdWZJO32s46A1
+        WlBnDo+Q==;
 Received: from [2601:1c0:6280:3f0::64ea]
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kwtAK-0006iV-Tq; Tue, 05 Jan 2021 20:42:53 +0000
-Subject: Re: linux-next: Tree for Jan 5 (drivers/usb/cdns3/cdnsp-pci.o)
+        id 1kwtFh-000749-GA; Tue, 05 Jan 2021 20:48:26 +0000
+Subject: Re: linux-next: Tree for Jan 5 (objtool: 3 warnings)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Pawel Laszczak <pawell@cadence.com>
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
 References: <20210105135007.0c5d549e@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <347451d4-bd62-75e5-4634-12e114ece6cf@infradead.org>
-Date:   Tue, 5 Jan 2021 12:42:47 -0800
+Message-ID: <8e050360-ca95-acde-31bd-1afe97dc652b@infradead.org>
+Date:   Tue, 5 Jan 2021 12:48:20 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
 In-Reply-To: <20210105135007.0c5d549e@canb.auug.org.au>
 Content-Type: multipart/mixed;
- boundary="------------EB75F764A51811E51EA8485E"
+ boundary="------------9A799925045CC9DE9A04DD98"
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------EB75F764A51811E51EA8485E
+--------------9A799925045CC9DE9A04DD98
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
@@ -62,10 +61,9 @@ On 1/4/21 6:50 PM, Stephen Rothwell wrote:
 
 on x86_64:
 
-ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_remove':
-cdnsp-pci.c:(.text+0x80): undefined reference to `cdns_remove'
-ld: drivers/usb/cdns3/cdnsp-pci.o: in function `cdnsp_pci_probe':
-cdnsp-pci.c:(.text+0x34c): undefined reference to `cdns_init'
+vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x47: call to syscall_enter_from_user_mode_work() leaves .noinstr.text section
+vmlinux.o: warning: objtool: __sev_es_nmi_complete()+0xc7: call to sev_es_wr_ghcb_msr() leaves .noinstr.text section
+vmlinux.o: warning: objtool: lock_is_held_type()+0xb: call to lockdep_enabled() leaves .noinstr.text section
 
 
 Full randconfig file is attached.
@@ -74,7 +72,7 @@ Full randconfig file is attached.
 ~Randy
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
---------------EB75F764A51811E51EA8485E
+--------------9A799925045CC9DE9A04DD98
 Content-Type: application/gzip;
  name="config-r7037.gz"
 Content-Transfer-Encoding: base64
@@ -578,4 +576,4 @@ R5voYYuu4faVDCagawpin8uoBQ0kHdlBhLVs/SkVqtyxi53seEk9CT8mFd4W2QyxVGqrXd0Q
 mdUjVNk4N9gbxvJu7EIs7jeLOHAuVeamIjhat1lzSPyMLSgFzcEyJz/qykLPFIBgeGFs+opy
 msQ4D4YCsaKMViPlMZy94luHnvPPgE5Oaic7fyiPRtbKdLVY6uUk3SZlMjj24X9QbgaP6JMB
 AA==
---------------EB75F764A51811E51EA8485E--
+--------------9A799925045CC9DE9A04DD98--

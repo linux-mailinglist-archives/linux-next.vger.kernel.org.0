@@ -2,152 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 441092EA560
-	for <lists+linux-next@lfdr.de>; Tue,  5 Jan 2021 07:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BD52EA692
+	for <lists+linux-next@lfdr.de>; Tue,  5 Jan 2021 09:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbhAEGUj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Jan 2021 01:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbhAEGUi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Jan 2021 01:20:38 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219FEC061574;
-        Mon,  4 Jan 2021 22:19:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4D92Qx1twMz9sWT;
-        Tue,  5 Jan 2021 17:19:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1609827594;
-        bh=nDCX2HW9Z7M29EWUeQPgoiP8gTCsHWtWuXpbap0SK9I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N9IPCLaPV1y3i+yViI2X+WdKVSifdIEn8xES3D6e7W5UHDR/WllJNmEAjfQykuuoh
-         guWDRDClDE3gWKfhXx1/La1bZBl4lUb/8O467sifYDOCjeRltmPUHyM24PeySk41B6
-         nKDvloHSpQUsxt/nnNaJ/m+qzvyI1HXQfrX8e+/6gUzxmb0VDhChtumSbrzWX5HTIx
-         gEPXQFKlv8FBi41nHRdPAF3CCPfG4lvrxryuP82o5od7up6WE2JsivDA7Y/Nn6ye6d
-         rf4yIEmKBhm74B4TIGVjyJEx1wOlIAtgMlYu3WW7zlFzsl+oBFba+2H/VIA7In9y/P
-         5+GZUrFTrgzXQ==
-Date:   Tue, 5 Jan 2021 17:19:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Carl Huang <cjhuang@codeaurora.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Abhishek Kumar <kuabhs@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build warnings after merge of the net-next tree
-Message-ID: <20210105171951.0216f0f3@canb.auug.org.au>
-In-Reply-To: <20201221122839.72d29127@canb.auug.org.au>
-References: <20201214201025.60cee658@canb.auug.org.au>
-        <20201221122839.72d29127@canb.auug.org.au>
+        id S1727436AbhAEIYx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Jan 2021 03:24:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725766AbhAEIYx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 5 Jan 2021 03:24:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 296DF22257;
+        Tue,  5 Jan 2021 08:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609835052;
+        bh=deo8XaMfgbGmmhIV9cJBRWOZv+tbhfFZQyP36FphooY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j6YWQpFOYWm8WD30VXbBNK4tnO6776SRQtl4XHWsjEGJwbRKJ0dGc3jsddNiWjwmD
+         UJz3s0IGYF3QhgGjIWCQHCP8GR0YKeCRFhONE1PUdCrwwPRfTT0L6D5W4jC8ZWFqb6
+         SSfrfn/R5+thvYLUkWB4WW/I11QgpjmcYGWC73PpDfL9dklmJJdRXtUS4n6tIbyPUd
+         oMMfdIM9bxKiu7oq6I5LXzVkyeQBAiHb7KK0v/njrHlxA15FeArvr5XQeCbdAvionA
+         ELSTXSKcvg3KuOaQx3Xw9e9hJECW39rL1SrIohHAXyM5ChKdro4YmipwsgRzK5t8tz
+         /l+npEFq9PQDg==
+Date:   Tue, 5 Jan 2021 10:24:03 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Qian Cai <qcai@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Baoquan He <bhe@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, stable@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] mm: fix initialization of struct page for holes
+ in memory layout
+Message-ID: <20210105082403.GA1106298@kernel.org>
+References: <20201209214304.6812-1-rppt@kernel.org>
+ <20201209214304.6812-3-rppt@kernel.org>
+ <768cb57d6ef0989293b3f9fbe0af8e8851723ea1.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5y73/z05TAB2IUywJlzhiGn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <768cb57d6ef0989293b3f9fbe0af8e8851723ea1.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5y73/z05TAB2IUywJlzhiGn
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+On Mon, Jan 04, 2021 at 02:03:00PM -0500, Qian Cai wrote:
+> On Wed, 2020-12-09 at 23:43 +0200, Mike Rapoport wrote:
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> > 
+> > Interleave initialization of pages that correspond to holes with the
+> > initialization of memory map, so that zone and node information will be
+> > properly set on such pages.
+> > 
+> > Fixes: 73a6e474cb37 ("mm: memmap_init: iterate over memblock regions rather
+> > that check each PFN")
+> > Reported-by: Andrea Arcangeli <aarcange@redhat.com>
+> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Reverting this commit on the top of today's linux-next fixed a crash while
+> reading /proc/kpagecount on a NUMA server.
 
-On Mon, 21 Dec 2020 12:28:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Mon, 14 Dec 2020 20:10:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > After merging the net-next tree, today's linux-next build (htmldocs)
-> > produced these warnings:
-> >=20
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:1759: warning: Cannot understand  * @struct cfg8=
-0211_sar_chan_ranges - sar frequency ranges
-> >  on line 1759 - I thought it was a doc line
-> > include/net/cfg80211.h:5073: warning: Function parameter or member 'sar=
-_capa' not described in 'wiphy'
-> >=20
-> > Introduced by commit
-> >=20
-> >   6bdb68cef7bf ("nl80211: add common API to configure SAR power limitat=
-ions") =20
->=20
-> I am now getting these warnings from Linus' tree.
+Can you please post the entire dmesg?
+Is it possible to get the pfn that triggered the crash?
+ 
+> [ 8858.006726][T99897] BUG: unable to handle page fault for address: fffffffffffffffe
+> [ 8858.014814][T99897] #PF: supervisor read access in kernel mode
+> [ 8858.020686][T99897] #PF: error_code(0x0000) - not-present page
+> [ 8858.026557][T99897] PGD 1371417067 P4D 1371417067 PUD 1371419067 PMD 0 
+> [ 8858.033224][T99897] Oops: 0000 [#1] SMP KASAN NOPTI
+> [ 8858.038710][T99897] CPU: 28 PID: 99897 Comm: proc01 Tainted: G           O      5.11.0-rc1-next-20210104 #1
+> [ 8858.048515][T99897] Hardware name: HPE ProLiant DL385 Gen10/ProLiant DL385 Gen10, BIOS A40 03/09/2018
+> [ 8858.057794][T99897] RIP: 0010:kpagecount_read+0x1be/0x5e0
+> PageSlab at include/linux/page-flags.h:342
+> (inlined by) kpagecount_read at fs/proc/page.c:69
 
-I am still getting these warnings ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5y73/z05TAB2IUywJlzhiGn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/0BQcACgkQAVBC80lX
-0GxmvQf/eRQx/UG7oUz0cLzIPEX8ae8XnL/S2TLLoOXerz24VtzCXD97IbnELaeM
-RY2PgLNXxSpvle9eH+i7JygaXnEwABsfwR3cMRAL4DJ2Nsua+aDkqhX4fHggTs6U
-uNGFDrU1VFUCwmJ1oUUgKfVuyd1ea6ficp65OMkMjl2+DhdHiFH6+dau/rR897rW
-POdpBDdD/k1RZVNLZG+jiAY2bFdb3Wjd71tX7ububqYkXLg4Ti7ALCEFTnhpaXTO
-AKIUm1FqZiLRau/SaQyw0QIz+RJxdfboqmDAKNlpO5O2+sbB+kdMhbr6vX4C2Ssk
-GS0e0Cc8H2QtsNuoXIoliXRfc1iEvQ==
-=L2Du
------END PGP SIGNATURE-----
-
---Sig_/5y73/z05TAB2IUywJlzhiGn--
+-- 
+Sincerely yours,
+Mike.

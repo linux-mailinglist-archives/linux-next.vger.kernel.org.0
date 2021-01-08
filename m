@@ -2,74 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2712ED6B5
-	for <lists+linux-next@lfdr.de>; Thu,  7 Jan 2021 19:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267C02EEA62
+	for <lists+linux-next@lfdr.de>; Fri,  8 Jan 2021 01:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbhAGSap (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Jan 2021 13:30:45 -0500
-Received: from bosmailout07.eigbox.net ([66.96.188.7]:37049 "EHLO
-        bosmailout07.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbhAGSap (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Jan 2021 13:30:45 -0500
-X-Greylist: delayed 1919 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Jan 2021 13:30:44 EST
-Received: from bosmailscan09.eigbox.net ([10.20.15.9])
-        by bosmailout07.eigbox.net with esmtp (Exim)
-        id 1kxZWj-0001My-KH; Thu, 07 Jan 2021 12:56:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=cdcusgov.info; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nArWNjM9YacFnJk0AgQcdTXbPTsLfJR8SfZgzpVO+qA=; b=AC5tumoXKaDp/HfcSvY6On79CZ
-        QlPJQpACpjeja9vWCV7T6lwbIgyd5N+EjmkxOlKYzuBJUpcQpirTu1TJNYUgH9vkBnfOPIF2HostS
-        vdUCWpkgqbvJb0K9tGaOY6A4NM1IbNJXfoynJ4Xjym3tgGWN6hIa9gMbjXg/vaWuvM6UGI0bykDc/
-        lvOvdS1/aC/kojVtmrHpdJsKiIgWTuTgn/l4D7db8SHHKeigm4YnAlwiXP9CO6lA9O26C0P3O/AKh
-        W+ADloI2vqgsY18qGU6h0bHHNw+LFiGTjUz4x1izhjlUn5SYG/MnQrYhL8fKUPTVd2sCbtgev3Xfw
-        ShBVyerg==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan09.eigbox.net with esmtp (Exim)
-        id 1kxZWj-0000e8-BQ; Thu, 07 Jan 2021 12:56:49 -0500
-Received: from boswebmail13.eigbox.net ([10.20.16.13])
-        by bosimpout12 with 
-        id DtwC240050Gud5E01twXv2; Thu, 07 Jan 2021 12:56:49 -0500
-X-Authority-Analysis: v=2.3 cv=WuawzeXv c=1 sm=1 tr=0
- a=sHJPpiqmOLyIDgchiyROMA==:117 a=MweTYWCsk8q7ca3IHEZN4A==:17
- a=hl1P28mwDW0A:10 a=kj9zAlcOel0A:10 a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10
- a=EmqxpYm9HcoA:10 a=F6r8zlrsbE8A:10 a=x7bEGLp0ZPQA:10 a=ZZnuYtJkoWoA:10
- a=yHlkxsexxgbaJ3K3CLkA:9 a=CjuIK1q_8ugA:10 a=mju8rTeU4J3FGJi5f2yl:22
- a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=jd6J4Gguk5HxikPWLKER:22
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail13.eigbox.net with esmtp (Exim)
-        id 1kxZWQ-0001ae-S3; Thu, 07 Jan 2021 12:56:30 -0500
-Received: from [102.178.3.36]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Thu, 07 Jan 2021 12:56:30 -0500
+        id S1729544AbhAHA1h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Jan 2021 19:27:37 -0500
+Received: from ozlabs.org ([203.11.71.1]:44733 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729514AbhAHA1h (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 7 Jan 2021 19:27:37 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DBkSF43Llz9sVy;
+        Fri,  8 Jan 2021 11:26:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1610065615;
+        bh=mS4M6o3uvcn7ORG7o4f7rFpKYsO8/j0ox8ada/Qz2Mo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EHJj1mi7hyRAVHrpAXHYGfx+shPWx08E+bj/ZVv2XO8WRfS2OCzZly1JfuBZojEv9
+         mJV/+vPUL0pJz17VFlkVSeXeGkdgfgN/7lTE1FqFLqtQRoKxEziT6e745JcfogXqyy
+         9WKMuGCdZN7S+szTy9TRS3Us5LUBmzksOUUvEuLPKz27pmtnhUQVzR79mOBmGxRcPO
+         s5fqRNh7qXdQa89AtIK2ZyAs4lu/ZyEleLgXXdDGKBqLIybMB3B+SeiCOKUufxbQua
+         dHuKA2FYqVPCCqFpE+8IpHgglRK2ayrRQYCGRZ6igyzeVzy62/ZTSAdRzTsthBjnaU
+         gAR8pjPTcx4lg==
+Date:   Fri, 8 Jan 2021 11:26:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20210108112651.671ba0b0@canb.auug.org.au>
 MIME-Version: 1.0
-Date:   Thu, 07 Jan 2021 17:56:30 +0000
-From:   Mrs Rose <y6445@cdcusgov.info>
-To:     undisclosed-recipients:;
-Subject: Regards!!!
-Reply-To: mrallent002@gmail.com
-Mail-Reply-To: mrallent002@gmail.com
-Message-ID: <fed3aa2c544fc18de70ef2a803f8bec1@cdcusgov.info>
-X-Sender: y6445@cdcusgov.info
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: y6445@cdcusgov.info
-Sender:  Mrs Rose <y6445@cdcusgov.info>
+Content-Type: multipart/signed; boundary="Sig_/R41lvpKas/jS7CyceB/qobx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/R41lvpKas/jS7CyceB/qobx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-My dear friend,
+Today's linux-next merge of the net-next tree got a conflict in:
 
-why are you not responding to me, it's me Mrs Rose Raya from Indonesia, 
-get back to me as soon as possible? it's important:
+  drivers/net/can/m_can/tcan4x5x-core.c
 
-Regards,
-Mrs Rose
+between commit:
+
+  aee2b3ccc8a6 ("can: tcan4x5x: fix bittiming const, use common bittiming f=
+rom m_can driver")
+
+from the net tree and commit:
+
+  7813887ea972 ("can: tcan4x5x: rename tcan4x5x.c -> tcan4x5x-core.c")
+
+from the net-next tree.
+
+I fixed it up (just removed the struct instances removed by the former)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/R41lvpKas/jS7CyceB/qobx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/3pssACgkQAVBC80lX
+0GxO5Af/TyldfLmPw7DLxwDAE5QaBz7hwsFs1bj+6LlfMEQXGNjtpZzoZhOsKJlu
+WsjIQOrVqp0X+FWMvsOm2UipcZx9tm5u/KwGj7o8/PWYv56A3cPOvG3MdFnVMfLl
+WS3xtXrRXrM+pHkOmWSHEXlVk/Lx95A8EUu6zonqfR/62HzFLHi+yU4Y40vzYevz
+8JGEKSGHj0aMdy+p51cqgSV+WMK1fG4rJbRoRBQSJfQQ4R+fC4dXe/ldhCcoVPl5
+zbzhQPO9U6i195PPrOW/BhkQQlQj9uI7lh7Mz40RcwXC0qjQl8nuuyR+fHLu4vp8
+c0pBja8iKBLGGqkGNzpFtg/P7Eq1FA==
+=3UsL
+-----END PGP SIGNATURE-----
+
+--Sig_/R41lvpKas/jS7CyceB/qobx--

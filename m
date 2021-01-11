@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A43A2F0D1C
-	for <lists+linux-next@lfdr.de>; Mon, 11 Jan 2021 08:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497172F0D27
+	for <lists+linux-next@lfdr.de>; Mon, 11 Jan 2021 08:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbhAKHLF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Jan 2021 02:11:05 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:58103 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725536AbhAKHLF (ORCPT
+        id S1725917AbhAKHZ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Jan 2021 02:25:29 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:38703 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725897AbhAKHZ3 (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Jan 2021 02:11:05 -0500
+        Mon, 11 Jan 2021 02:25:29 -0500
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 36A5A216E;
-        Mon, 11 Jan 2021 02:09:59 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 11 Jan 2021 02:09:59 -0500
+        by mailnew.west.internal (Postfix) with ESMTP id 584282246;
+        Mon, 11 Jan 2021 02:24:22 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 11 Jan 2021 02:24:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=TNeA/yTsR0+oK6Ng70juGZgECWI
-        ptNKcAMCaYK9UAPs=; b=iFpiPHr8Hb940k+DDO1pPdW6J1h5h46J7f/zTYHgKR2
-        0rcuoMtP5ZR7OvmM9s+JMxOqUC+yYUDLdTmByHxe99k04NlnnyW6ZACIG5u6LdG0
-        0bIUlY51h0AOLgWyt0rKXw52ZJZ3WIiUioDdvbF34HKxHGEUdL016yelSANWFT22
-        ATEopLNjsMb/Ejy6t7A0jV6qjdFgVziGgR3NQpTG3atyNQmpz1/XrY9Tedum3Sqc
-        3eG5ssNjHkIgH4K6lDEyHVHtZ/cNXx0/t93ljWAoi66Wz33jX5dqCfZyTbA3vVae
-        e7DlNLaaM8wFY0OWLD0/Zohnh1ec22VyzPRS0ng0h4w==
+        :content-type:in-reply-to; s=fm2; bh=oTk9qxjggj8k3+Jk6DND6iSQdC6
+        Ga0j20+wE6NXltGY=; b=5MYhJGyr7kD08MauMhWMTdmuJOJou1czYlyOgK/mdmJ
+        zdjz0BlK0FylnQgLcbQDy80nsuf+DTGB+T+BJ+Tfz0WYOcv+FDKIWn1dW5oiDePF
+        iN4xzwzNVL1/ERR4yk+X1clWR+8xG92BvWlUPNmJdeai5oWWg92jeWmtmFg17k4p
+        OHdEUf6umHwGA+uX/TIGLR5H6LWQoxvK/8Jrr+6kWGmF3Go98SNPvPmoejfBzzBH
+        BUx93qfVoCS5mWT4Xl7OVWLjzAV7KqLN6SjT1JgVtSzY+ULw7RbTprNvLkyuW/zw
+        DE2UWsx2tPgLofHnc5epAtiY0eGnMsDZ+u7AH+g22Kg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=TNeA/y
-        TsR0+oK6Ng70juGZgECWIptNKcAMCaYK9UAPs=; b=oAG+Fbf3apGjAuFBiMOKK9
-        mVUURGPWTU2Q9HnqH50IM/l8cC/+rmB5WtGV3oKtInkMeqTNaycK6Q5CyXV/LZnB
-        lZ+imON4KvMTw1fDbReNalWTHE3xlS0/JdU83GCfNYW0xp+uwvZcSsiUWNxvVSsQ
-        DpdIjlgkszDzfX4aKC+th4A1sS7mc2kIqetVgqcGTU7tkMkipDEFhJJY6aZEw/P3
-        x6mQuOhNNWju39jK9NUBATZ0Qmp1lzhm35dmB9QAyTJb5mqUFXqB+mSKFdRVG+rm
-        nyXMGfbHPK+XdPdW0SnuZUIbqjnETdg8I+XeW5vz7tGfqZ8KnfP/wqZa4PJH8MOg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=oTk9qx
+        jggj8k3+Jk6DND6iSQdC6Ga0j20+wE6NXltGY=; b=O8QBLDiBEFsZ1PzxHwqmW+
+        t2RJcrWgX3lpeAhUlATqcYDHuhfNlfZUfx9kh4ffQMq3KtA2/+qnCWap7nioWu1c
+        XvUmWpaKnLq02P+gzGY9QImauBzNSMoORD1LYQhxFZ9CMlw7FZkeuHmRSRjwH3LA
+        q5djFnOZYzHLwI+flfMmPgIFONxyR92fdYaeMVK4FURyxNQamkXq5LjcEOt1e9ic
+        3fQ70WSZInH8QMSXJb2O7JQmr/lQ/L+8wUJzPZGixiC3JNQeHdM1bh0XtPz35zvg
+        9NMNPg7g/vpYvaZoMoq9NB0mEkzf3S1BA4TKlQf0x9rNwY5EBNHkqxz8JInXfpeg
         ==
-X-ME-Sender: <xms:xvn7X6Lqw9mfo4lHENaUpC01zt7gsQvesXuE3uvOsYcXv4AfJpk5Tw>
-    <xme:xvn7XyKPhs58qvW3ltC7EYOXcIDKjUFlIcbvsnl0aj2Td-v6iCC0edMzKxDHLfldq
-    EMRirdHOwY0Kw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehtddguddtudcutefuodetggdotefrod
+X-ME-Sender: <xms:JP37Xz4CMa3dFDkiOYuQKZBQEfJxE8blDan2o4EsvJqkBe1mrpxTiQ>
+    <xme:JP37X47E_-LQVe2nVU0rvP2s69uiUDjBsfDlhdwEx2Yb2pZXkcRNPJWuq2TsgHBQK
+    GHbRvqJRIQMFw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehtddguddtgecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
@@ -48,47 +48,56 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdehtddguddtudcutefuodetgg
     ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
     fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
     hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:xvn7X6vVmzqbYkQO-wK9IXI-53NUUe5a0p6rcVMMBJ5jUG89xONKbQ>
-    <xmx:xvn7X_YH2X51oHxIJ6pUPEK8FUJRG3s1Gu5pv_u9dt5DkyVCTbtVFA>
-    <xmx:xvn7XxYsm-bIIfEU4Y0qkS5JO_BZEMLGZeJmeuQCrlTFgVObK8lqoA>
-    <xmx:xvn7Xwzc0DFUy66lmJmlTMjYm0Wbq1giAUSo4Y35yeNuH-qWh7_xAg>
+X-ME-Proxy: <xmx:JP37X6ecxr84qGvVhAXlcFkBidA9Z7z4n544g8Ji-NVszs2Ph_IeTg>
+    <xmx:JP37X0IpJpm3hUlbQ3r47I1Ar2iShJLZWAVRG3sKRgc6M87CRqfsRA>
+    <xmx:JP37X3KhbP_tsD9WvsXrHWNcu-QXaExMZO-bbB5_7LBrS-j517MkTg>
+    <xmx:Jf37X4UeAL5aPHcywkYazKGY5PE9uMXyiy4_1ZCqZ06_y6mm08zb-MrmGD8>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1EC8C240057;
-        Mon, 11 Jan 2021 02:09:58 -0500 (EST)
-Date:   Mon, 11 Jan 2021 08:11:10 +0100
+        by mail.messagingengine.com (Postfix) with ESMTPA id AD6061080057;
+        Mon, 11 Jan 2021 02:24:19 -0500 (EST)
+Date:   Mon, 11 Jan 2021 08:25:32 +0100
 From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mark.gross@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <X/v6Dtuc1KZLbv8p@kroah.com>
-References: <20210106115014.28009565@canb.auug.org.au>
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ drivers-x86 tree
+Message-ID: <X/v9bAznWVNMupY7@kroah.com>
+References: <20210111130851.374bf4ea@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210106115014.28009565@canb.auug.org.au>
+In-Reply-To: <20210111130851.374bf4ea@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 11:50:14AM +1100, Stephen Rothwell wrote:
+On Mon, Jan 11, 2021 at 01:08:51PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the usb tree got a conflict in:
+> Today's linux-next merge of the char-misc tree got conflicts in:
 > 
->   drivers/usb/dwc3/gadget.c
+>   include/linux/mod_devicetable.h
+>   scripts/mod/devicetable-offsets.c
+>   scripts/mod/file2alias.c
 > 
 > between commit:
 > 
->   a1383b3537a7 ("usb: dwc3: gadget: Restart DWC3 gadget when enabling pullup")
+>   eb0e90a82098 ("platform/surface: aggregator: Add dedicated bus and device type")
 > 
-> from the usb.current tree and commit:
+> from the drivers-x86 tree and commits:
 > 
->   77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+>   9326eecd9365 ("fpga: dfl: move dfl_device_id to mod_devicetable.h")
+>   4a224acec597 ("fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()")
 > 
-> from the usb tree.
+> from the char-misc tree.
 > 
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -96,26 +105,8 @@ On Wed, Jan 06, 2021 at 11:50:14AM +1100, Stephen Rothwell wrote:
 > is submitted for merging.  You may also want to consider cooperating
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/dwc3/gadget.c
-> index 25f654b79e48,85736dd6673b..000000000000
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@@ -2146,8 -2212,7 +2213,9 @@@ static int dwc3_gadget_pullup(struct us
->   			dwc->ev_buf->lpos = (dwc->ev_buf->lpos + count) %
->   						dwc->ev_buf->length;
->   		}
-> + 		dwc->connected = false;
->  +	} else {
->  +		__dwc3_gadget_start(dwc);
->   	}
->   
->   	ret = dwc3_gadget_run_stop(dwc, is_on, false);
 
-Thanks for this, should now be fixed up.
+Thanks, this looks correct, and expected as new subsystems add
+auto-loading capabilities at the same time.
 
 greg k-h

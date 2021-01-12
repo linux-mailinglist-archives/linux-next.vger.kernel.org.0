@@ -2,84 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3F92F3D0D
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 01:43:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DC62F3D0F
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 01:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437122AbhALVhZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        id S2438113AbhALVhZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
         Tue, 12 Jan 2021 16:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436994AbhALUjM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jan 2021 15:39:12 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1E2C061794;
-        Tue, 12 Jan 2021 12:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=k6lEBkORUS2MIUUFLMjUpYs9sBD3vnQq1nQpFeRGsZ0=; b=g6odQrZ7u3cYNZnQG3QjejfxzN
-        O1f0IN6wC1zuwUZvVPpVw/GsxuWMPffmCf2c4TPLdMNygd1iihBJZVOGPt1q1kMJw7+yLDHrv4k+I
-        84Q29lHYt3zCRPL8CIMpsMAZ94Z7UJBCjYkTM95vAYJMGAYgjhVqZcNq5mTMdNdlcYwyr2QESIRDv
-        jOe+SA49Bbf3XXpD/nc2EcrBSOOOtc4yeN/VVI9GRp8S+WxrQiPFE4r+pgNtfDk4Rvy/Qk2PHru5X
-        qfPLCerlnyELrstiyCTYceC+J6j2yc6TwPjvU1ffv7lg7QHwsNl+htEJUZztOlr7tivpz4ayTiGuY
-        3IZbJrwA==;
-Received: from [2601:1c0:6280:3f0::79df]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kzQQr-0002Y7-Bn; Tue, 12 Jan 2021 20:38:25 +0000
-Subject: Re: mmotm 2021-01-12-01-57 uploaded (NR_SWAPCACHE in mm/)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Shakeel Butt <shakeelb@google.com>
-References: <20210112095806.I2Z6as5al%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ac517aa0-2396-321c-3396-13aafba46116@infradead.org>
-Date:   Tue, 12 Jan 2021 12:38:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46429 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437026AbhALUpB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Jan 2021 15:45:01 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFjH60767z9t0G;
+        Wed, 13 Jan 2021 07:44:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1610484259;
+        bh=yqCpSAk8Sc1V2NH2uugA0JZeTYMnho1fhkaaYPpYzV4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fAbopmsNEiS5sva8a4lF2Dh1UYSCzMGEw7fdiPBSC7Mwq2SNChaKEtecrHtzG5E5s
+         MEFXXwG6zsazNnrqmJIrhs8wbqfO7j/efoPXu+6hxaFG35DI80MkPPTy1ACzmofmFc
+         NxJzlOJYOD+GREeG9IDMPnwSecKu6ZayvMM2lgp7PwUfHm0GvLU121qJkWqbmec26M
+         28HALYiN/q7sUoDXsS1fUq6gI64bPB2nC7iyUtwfls0LFBKWajM9g7hyCjVZQNh5Fq
+         aMuqVvEE9yzwBRuaU8zzZY3J8fbFRjY81pQkXkJjgs5I5lII1LAMxqbhSuF9QCQNLt
+         977EJqzprjS1g==
+Date:   Wed, 13 Jan 2021 07:44:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Naushir Patuck <naush@raspberrypi.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the v4l-dvb-fixes tree
+Message-ID: <20210113074417.4ba59594@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210112095806.I2Z6as5al%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/xcjI6mp_f__drN++xQURaG1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/12/21 1:58 AM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2021-01-12-01-57 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
+--Sig_/xcjI6mp_f__drN++xQURaG1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on i386 and x86_64:
+Hi all,
 
-when CONFIG_SWAP is not set/enabled:
+In commit
 
-../mm/migrate.c: In function ‘migrate_page_move_mapping’:
-../mm/migrate.c:504:35: error: ‘NR_SWAPCACHE’ undeclared (first use in this function); did you mean ‘QC_SPACE’?
-    __mod_lruvec_state(old_lruvec, NR_SWAPCACHE, -nr);
-                                   ^~~~~~~~~~~~
+  95e9295daa84 ("media: Revert "media: videobuf2: Fix length check for sing=
+le plane dmabuf queueing"")
 
-../mm/memcontrol.c:1529:20: error: ‘NR_SWAPCACHE’ undeclared here (not in a function); did you mean ‘SGP_CACHE’?
-  { "swapcached",   NR_SWAPCACHE   },
-                    ^~~~~~~~~~~~
+Fixes tag
 
+  Fixes: 961d3b27 ("media: videobuf2: Fix length check for single plane dma=
+buf queueing")
 
+has these problem(s):
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/xcjI6mp_f__drN++xQURaG1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+CiEACgkQAVBC80lX
+0Gyefgf/WGj3z88wyhQUJh2GW/lGx6p3Xc77z+aEjJcZkOwAQSEJ1GH2oJ+PwcwP
+Hp2YLiFEvbgBJG5JhEwPNvhCfD2D9W49UHn8clgGk+rnd6DXeKxQGIm1cYeQr1e+
+24Munl5m6DYO356ge41OLk5VXzLdBCtfzFG3rSKeCvQu/e6eqLmWQS9lRR42E8Zv
+IZRdAJy7dmFi5xdWNfrY5bi1l9yEI0yVkp9nMW7Bbboac6NLXeuBjlvYY57BG5wY
+mpgz5PMqyFAZH1owrUgDtKllLqYfQJszDZbExVL3hgj3E3RB1oqlFnGU9ajrj0ff
+wc+XX47zqMGYLUT9RvQZu9Xm0UCyIg==
+=8LCk
+-----END PGP SIGNATURE-----
+
+--Sig_/xcjI6mp_f__drN++xQURaG1--

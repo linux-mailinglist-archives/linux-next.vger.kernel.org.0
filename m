@@ -2,80 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E1A2F42EF
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 05:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79582F4300
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 05:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbhAMEPJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Jan 2021 23:15:09 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55643 "EHLO ozlabs.org"
+        id S1725880AbhAMETK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Jan 2021 23:19:10 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:49467 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726220AbhAMEPI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 Jan 2021 23:15:08 -0500
+        id S1725372AbhAMETJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Jan 2021 23:19:09 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFvGV4tJNz9sVR;
-        Wed, 13 Jan 2021 15:14:26 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFvM72kBLz9sVR;
+        Wed, 13 Jan 2021 15:18:26 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610511266;
-        bh=+ZbEZLIkSczrRychOk9i8iuvCgJR2W+mqBsX4xrWMs8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eUBjRJgqRc89rPHG8WZuf5JV2mtHR/3SoX6Bjvx9lawTkFFDkQHUl0w+GUQ+/sGpE
-         YbWJU81coVll11d5+alQNDdPgguX4cUtNHl0t2bBE0/2it16QKb86vPrDczBwjGr7g
-         8ELDVWc9TrtNZvv+I/qWf8Orvn4pDv+3xz7BqEiF5QGODRTkr1m6F9xYEo3b0dAfdl
-         fS2NqJRhoXBHRe735t/DVd09kssdbP8sK+dPOPfZB5U2wRaNwlO/9tCT/O9Ifrundp
-         wzcts45gCBFpJXtAfWedfbmFlqFxIml4qOP6CZ0oW/F8LRWn0vrWcyBA35eCIl12J1
-         dHLsJL0tD6RTw==
-Date:   Wed, 13 Jan 2021 15:14:25 +1100
+        s=201702; t=1610511507;
+        bh=IlUxPAYnSr4hw1LXKEuVmx8u+KU3KYGYTEv56jfUBYA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jymkbG1SMauBdMsQ9ipftrEfRBIqkYID5bDlX3mdBeYTvpqmy9y3/TR8EJMn0PJ7A
+         xNGJEVhJFLJNpL5RIL8Kg5tNwE/rXUYldoI3PIL+LDoMML6YWgwHlCbFkFEIRi0Ec0
+         EMtEu4odxSDP/ynTyMD5NA2e91U00/lYNz+mBQcCpBAghNnRxRJ5EPfbTw7GDL+Uoz
+         Mocym4N9tb+kNUyzV7AQV007TRUatIYePBiUH0aDLwwRiWgwPhjhfn9s82CcwoakjW
+         SKpJ2BCHyhvAU1F1u/H+8Nm9Lf5DjGD2jzmlUjmP5Zw9vt/Yp6pbjLGWji4LvYjNFo
+         tES22e8swRgIQ==
+Date:   Wed, 13 Jan 2021 15:18:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     Yanteng Si <siyanteng@loongson.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the jc_docs tree
-Message-ID: <20210113151425.524d34e5@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the jc_docs tree
+Message-ID: <20210113151825.31669f1a@canb.auug.org.au>
+In-Reply-To: <20210113151254.74b9a295@canb.auug.org.au>
+References: <20210113151254.74b9a295@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4.9qb/8o7XZrzRhEFAB/LfO";
+Content-Type: multipart/signed; boundary="Sig_/7.dBLHBoEm_ATVUaJ_BJ1Ve";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4.9qb/8o7XZrzRhEFAB/LfO
+--Sig_/7.dBLHBoEm_ATVUaJ_BJ1Ve
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the jc_docs tree, today's linux-next build (htmldocs)
-produced this warning:
+On Wed, 13 Jan 2021 15:12:54 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the jc_docs tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> Documentation/translations/zh_CN/mips/booting.rst:5: WARNING: undefined l=
+abel: booting (if the link has no caption the label must precede a section =
+header)
+>=20
+> Introduced by commit
+>=20
+>   7fd3954b0c52 ("doc/zh_CN: add mips booting.rst translation")
 
-Documentation/translations/zh_CN/mips/index.rst:5: WARNING: undefined label=
-: index (if the link has no caption the label must precede a section header)
+Similarly,
 
-Introduced by commit
+Documentation/translations/zh_CN/mips/features.rst:5: WARNING: undefined la=
+bel: features (if the link has no caption the label must precede a section =
+header)
 
-  b8e724fd7117 ("doc/zh_CN: add mips index.rst translation")
+from commit
+
+  72bc9d08868d ("doc/zh_CN: add mips features.rst translation")
+
+and
+
+Documentation/translations/zh_CN/mips/ingenic-tcu.rst:5: WARNING: undefined=
+ label: ingenic-tcu (if the link has no caption the label must precede a se=
+ction header)
+
+from commit
+
+  419b1d4ed1cb ("doc/zh_CN: add mips ingenic-tcu.rst translation")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4.9qb/8o7XZrzRhEFAB/LfO
+--Sig_/7.dBLHBoEm_ATVUaJ_BJ1Ve
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+c6IACgkQAVBC80lX
-0GyTiQf+NyMTvdQR19J4rqb7ziRb1D0qgZPcrCxzN9KNqsTLAfMyb5MwRD4xqAEQ
-k6RzNsiEA8OFMSJY0sH2I+s8f1yLk8bOe2yKXXhE9nBjN25FgPM0EhN6IQ9y00tE
-OpXBjlwn6kNwmZeDX1DyAwH5Aue3WWBpWgtnmIpEM4JqTpa2ak/wgZPjXtPRpPwn
-NG6XzKdkXR3Vz1ZsUgMKJo5/uMZxG5OAmA3l+BdJV4qETPVEg048UvtSTOvRRAbO
-sad8QeCFucRYV0NK7GQJ0DZ75qoqg1Dfo7T2fokHpAtinKuhdgmTUWXiyzoxI/OX
-tZHNVDKau5gVVBZgdJYBWtX656ed6g==
-=7EHx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+dJEACgkQAVBC80lX
+0Gw2kAf/Xr22YMpT+xF1yQv4RiLTvS2JVpXF79OlB40oVKDG1LfvvtGdszu4E+fj
+K+j479S5l+18zKeHaRQ0BxcXNIHLkCsCRhmo/I7jlY8rt3s4ie5c44FnZSadDnWh
+w/bowTn26Lws1lSMLtLE19swUrX1Z2mN48rs24oXJAnhYWPHbcIKSvAQ6YJMCiAm
+3/opYJIS5iTQlTzhCiPQA7hLGJEMjTCFtovUSzt+n4S8aeoNgkvWW1PMTYe3Dk8O
+GJaWmBUm2dvWvCZBnlWzoR66uJ3QonboXiFfGJT975froo9AHKQwqNP6xOfvVxNj
+LrSQ8UlmM0YaiqndzRUTKe11jNZFMQ==
+=MbEr
 -----END PGP SIGNATURE-----
 
---Sig_/4.9qb/8o7XZrzRhEFAB/LfO--
+--Sig_/7.dBLHBoEm_ATVUaJ_BJ1Ve--

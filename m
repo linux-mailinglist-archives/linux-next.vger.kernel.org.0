@@ -2,76 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E062F3FA8
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 01:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CB42F4038
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 01:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394931AbhALW6A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Jan 2021 17:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394929AbhALW6A (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jan 2021 17:58:00 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C3C061575;
-        Tue, 12 Jan 2021 14:57:19 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id f4so317914ejx.7;
-        Tue, 12 Jan 2021 14:57:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jgonOAH3Wwn1HxalGc+7artiADZIPJ4uTKWNQPhxHvo=;
-        b=f6pdAy4F/Pe/pntaG11Q+05GPc5RZ3uZob0nHFoxLyLKBMOJv6fE1gaKYEZ7kqkZJB
-         WQ8AsNtADCiWjcPUueJ1yDi44sVJIMNkn+KTMgPO5t4ccul2JGaciBQ1mgzBw2RaW25u
-         1GGdUA2r4hX/HbzcOvmciwbg/9arKcltgwgxfK7ZFXSGp3TbHCOP2AoBEeaU6xhPj4yk
-         bnyk2Z9C4NjX0AkN+IrxPiLEDleM0WV9HFzvd4/6jeAVTcvW3SAaU47OUYl5yuM6F07O
-         3WQR+q/285yN4X/IdlOWDmTmzppPW0zkedjxbTgYHLO7lIcwhXxnEGBnflgBrPJ7IIKa
-         sqvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jgonOAH3Wwn1HxalGc+7artiADZIPJ4uTKWNQPhxHvo=;
-        b=Vfp26y4NbdB+y8iba8zrV1IBgHon7iBCPp9KHqn8b104ajql0DJG6rlGTSa+07wPfG
-         452Jq7bdFrYIhG7SitisO2VzyRnp78zXPIZmg6LddS1yEd8sPmYNQqdUh8l3mn91SU7V
-         0otCCbzjbhuwhYdAi9LLvzEfvOHPg0n3tjHHCN/ikW67mD/IvqAnzZ6jhLmNOvw0E68i
-         uD9GV0ys26YZz/qmgwWBD+iYS8GfKYsY7ZUC2509e5bJfTSVxBqEAsvEGXlr/PRJFWHo
-         1jQK/4s7+QOCkEWAKn7ikEz68RQ1zXLg0W1GdW80UDANsGRyT8kALd/Wb1Qh2S09gEK9
-         Hq2Q==
-X-Gm-Message-State: AOAM532i4FaYa+vgdATWVpX1U7qpeTiYps3S3N5PxqIeBueRSFtiA3ng
-        NO6ViMpbw9c804sy6VI46y/Gw9I6ztNBuci+aB4CXkc=
-X-Google-Smtp-Source: ABdhPJzuS0dEj3Zchd5Q4xPhugka8ptm6jFACjEcsVRd6HjYgIfTVV3RwZDdgBTuV9H7toKPTdLLnntzW3QcduKRBJA=
-X-Received: by 2002:a17:906:ae43:: with SMTP id lf3mr687903ejb.130.1610492238269;
- Tue, 12 Jan 2021 14:57:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210113092845.0ed42cf2@canb.auug.org.au>
-In-Reply-To: <20210113092845.0ed42cf2@canb.auug.org.au>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Tue, 12 Jan 2021 16:57:06 -0600
-Message-ID: <CAL_Jsq+pyCs17v84pdnJTL0bDMyxYmxBG-v=CgJfeLZcfp=vgA@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the devicetree tree
+        id S2393935AbhAMAnP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Jan 2021 19:43:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392342AbhAMAUk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Jan 2021 19:20:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0767623120;
+        Wed, 13 Jan 2021 00:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610497200;
+        bh=Wn1iOrNk2oDkf48K6nW1qlxJTGCky6NIywERUoMPzkw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ORD9hj6SCGHt4ZRxxVygaXS7f/wbj1909zbzdQCCMbOankJGS2/3ahx6StfPjxXVl
+         ZWipJ6zund2T/7V5IFbrrphCZNvDXbFz3/h0jU56E8SMg2IFbcw10gC5JM4BKfGrSz
+         SDCUS8tnozWYup6K5+V3leUcA8WBcNmbIWPwH2O6nQRZAXyvx79cITKXz6QVUqT7BT
+         X/tY3fOi9O+0PyGoyc/AsK9pgD9+aKwzMN5bL0AtJzhnVbSxrVHcHYu8fDs85b4XAL
+         k86hZqrvCoZLGqzboN8ORBpsABADz71GM4M7505358MCayYQl/QXyrm75vMINF8AIK
+         qqVz2c+Gq/wJg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id CF3B43522AC3; Tue, 12 Jan 2021 16:19:59 -0800 (PST)
+Date:   Tue, 12 Jan 2021 16:19:59 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sameer Pujar <spujar@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: Signed-off-by missing for commits in the rcu tree
+Message-ID: <20210113001959.GO2743@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20210113090356.3ef1b139@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210113090356.3ef1b139@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 4:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+On Wed, Jan 13, 2021 at 09:03:56AM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> Commit
->
->   e9805cb2a361 ("dt-bindings: Remove plain text OF graph binding")
->
-> is missing a Signed-off-by from its author.
+> 
+> Commits
+> 
+>   32678deac9cd ("timer: Report ignored local enqueue in nohz mode")
+>   8beeef08bd76 ("entry: Report local wake up on resched blind zone while resuming to user")
+>   7b3f45a1ad1f ("sched: Report local wake up on resched blind zone within idle loop")
+>   4d19f38bb06c ("entry: Explicitly flush pending rcuog wakeup before last rescheduling points")
+>   a5b60c670b22 ("rcu/nocb: Trigger self-IPI on late deferred wake up before user resume")
+>   679a2750284c ("rcu/nocb: Perform deferred wake up before last idle's need_resched() check")
+>   785ff6abc514 ("rcu: Pull deferred rcuog wake up to rcu_eqs_enter() callers")
+>   d32f638a57e4 ("rcu: Remove superfluous rdp fetch")
+>   97e90370b8f3 ("rcu/nocb: Detect unsafe checks for offloaded rdp")
+> 
+> are missing a Signed-off-by from their committer.
 
-I meant to make myself the author here because what Sameer wrote
-really ended up in the dt-schema repo. For this commit, I wrote the 1
-line remaining in graph.txt and the commit message. Now fixed unless
-there's any objection.
+Thank you, fixed, and apologies for the hassle.
 
-Rob
+(This is what happens when "git am" doesn't like a patch series,
+so I enlist git's help by pulling it from the author's tree to its
+natural location, rebasing it, but then forgetting to manually add my
+Signed-off-by...)
+
+							Thanx, Paul

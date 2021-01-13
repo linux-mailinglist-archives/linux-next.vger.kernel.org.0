@@ -2,152 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444C42F4288
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 04:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 546CE2F42DA
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 05:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728664AbhAMDcZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Jan 2021 22:32:25 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58285 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726310AbhAMDcZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 Jan 2021 22:32:25 -0500
+        id S1726662AbhAMEId (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Jan 2021 23:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbhAMEIc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Jan 2021 23:08:32 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0557FC061575;
+        Tue, 12 Jan 2021 20:07:52 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFtK92Qg1z9sRK;
-        Wed, 13 Jan 2021 14:31:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFv6s4yjcz9sVy;
+        Wed, 13 Jan 2021 15:07:49 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610508701;
-        bh=df+PBbrEhpZVbvdtf2ZFLzNzjs4lW9MwPOq5lRWon78=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BJQcjoyq/rS41N1eGXY0KOuJOqLKpHDbAAnR1D/49tMldR0fSUZGx1CwdGz0s1Pbh
-         Lpgrl13jGBpfdVS4pmZI2e57EKVdCfO1KxcA+kB02mUAZYQN5vp+5R1XjEd+MsDE6S
-         rWbWLMmjPREvFLX7mHT/xgnKwbMfRj4PUZiqTf+D4pAFhsyF7l9ULg3HAUV9zt+17i
-         8GsZGr3d96jr7DyWFsbiU+EJs2rY80Ilv1VWhB2y0qCTWWLeeqdEqPzGbF7jMczvwA
-         ZSxBRIb1/YcWdCK1HVzhI+qFkVN+xJpfpNWcH6v0L2DuhMaL9MEIxe2EcFBhMGMcmb
-         fh2PaL/t6+4iw==
-Date:   Wed, 13 Jan 2021 14:31:40 +1100
+        s=201702; t=1610510870;
+        bh=cPCprq+igt09bDytTuJWW1YSwjM9mNKZqXRpo9xf/Wc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i34Nbfj3DD05TJxn9cQwq+FSy8IOty6PThdv5n02x/M4oT5Sj68njUgtIaJh3Ns9G
+         DISYsqCEA1Z4JfoU37JfPPu3Hb0Z0bNWmW6pz2seBkwPIbpCCyRa+CHYPQBqrXGJTX
+         Iw/3xn+L9x/cxz5046J2ePI7jzgdAMicuLbWjglShGQBr7EkFrHWXgD21yfvjfr01b
+         1RQBfr7NSTSR1Dhk5d+nZfEyp/13OgUpLdZSnBBgFEx/isPBDyKbo5no475rKHdOzM
+         dTtS2rJyG1MX/bc2WF3ANLP+v6CCI/VQHZCk7aNJsgkgqQ2HtdtsuHQ4Yr5FEKX5Qx
+         VOjEPH7gMV83A==
+Date:   Wed, 13 Jan 2021 15:07:48 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
-Subject: Re: mmotm 2021-01-12-01-57 uploaded (NR_SWAPCACHE in mm/)
-Message-ID: <20210113143140.568dbf53@canb.auug.org.au>
-In-Reply-To: <20210112135010.267508efa85fe98f670ed9e9@linux-foundation.org>
-References: <20210112095806.I2Z6as5al%akpm@linux-foundation.org>
-        <ac517aa0-2396-321c-3396-13aafba46116@infradead.org>
-        <20210112135010.267508efa85fe98f670ed9e9@linux-foundation.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Yanteng Si <siyanteng@loongson.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the jc_docs tree
+Message-ID: <20210113150748.1efc75aa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w7eI=p7dXr=HbdLnMuWAzs3";
+Content-Type: multipart/signed; boundary="Sig_/A=stXcj/=6v.FTDSelqBLqg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w7eI=p7dXr=HbdLnMuWAzs3
+--Sig_/A=stXcj/=6v.FTDSelqBLqg
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 12 Jan 2021 13:50:10 -0800 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
->
-> On Tue, 12 Jan 2021 12:38:18 -0800 Randy Dunlap <rdunlap@infradead.org> w=
-rote:
->=20
-> > On 1/12/21 1:58 AM, akpm@linux-foundation.org wrote: =20
-> > > The mm-of-the-moment snapshot 2021-01-12-01-57 has been uploaded to
-> > >=20
-> > >    https://www.ozlabs.org/~akpm/mmotm/
-> > >=20
-> > > mmotm-readme.txt says
-> > >=20
-> > > README for mm-of-the-moment:
-> > >=20
-> > > https://www.ozlabs.org/~akpm/mmotm/
-> > >=20
-> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopeful=
-ly
-> > > more than once a week.
-> > >  =20
-> >=20
-> > on i386 and x86_64:
-> >=20
-> > when CONFIG_SWAP is not set/enabled:
-> >=20
-> > ../mm/migrate.c: In function =E2=80=98migrate_page_move_mapping=E2=80=
-=99:
-> > ../mm/migrate.c:504:35: error: =E2=80=98NR_SWAPCACHE=E2=80=99 undeclare=
-d (first use in this function); did you mean =E2=80=98QC_SPACE=E2=80=99?
-> >     __mod_lruvec_state(old_lruvec, NR_SWAPCACHE, -nr);
-> >                                    ^~~~~~~~~~~~
-> >=20
-> > ../mm/memcontrol.c:1529:20: error: =E2=80=98NR_SWAPCACHE=E2=80=99 undec=
-lared here (not in a function); did you mean =E2=80=98SGP_CACHE=E2=80=99?
-> >   { "swapcached",   NR_SWAPCACHE   },
-> >                     ^~~~~~~~~~~~ =20
->=20
-> Thanks.  I did the below.
->=20
-> But we're still emitting "Node %d SwapCached: 0 kB" in sysfs when
-> CONFIG_SWAP=3Dn, which is probably wrong.  Shakeel, can you please have a
-> think?
->=20
->=20
-> --- a/mm/memcontrol.c~mm-memcg-add-swapcache-stat-for-memcg-v2-fix
-> +++ a/mm/memcontrol.c
-> @@ -1521,7 +1521,9 @@ static const struct memory_stat memory_s
->  	{ "file_mapped",		NR_FILE_MAPPED			},
->  	{ "file_dirty",			NR_FILE_DIRTY			},
->  	{ "file_writeback",		NR_WRITEBACK			},
-> +#ifdef CONFIG_SWAP
->  	{ "swapcached",			NR_SWAPCACHE			},
-> +#endif
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->  	{ "anon_thp",			NR_ANON_THPS			},
->  	{ "file_thp",			NR_FILE_THPS			},
-> --- a/mm/migrate.c~mm-memcg-add-swapcache-stat-for-memcg-v2-fix
-> +++ a/mm/migrate.c
-> @@ -500,10 +500,12 @@ int migrate_page_move_mapping(struct add
->  			__mod_lruvec_state(old_lruvec, NR_SHMEM, -nr);
->  			__mod_lruvec_state(new_lruvec, NR_SHMEM, nr);
->  		}
-> +#ifdef CONFIG_SWAP
->  		if (PageSwapCache(page)) {
->  			__mod_lruvec_state(old_lruvec, NR_SWAPCACHE, -nr);
->  			__mod_lruvec_state(new_lruvec, NR_SWAPCACHE, nr);
->  		}
-> +#endif
->  		if (dirty && mapping_can_writeback(mapping)) {
->  			__mod_lruvec_state(old_lruvec, NR_FILE_DIRTY, -nr);
->  			__mod_zone_page_state(oldzone, NR_ZONE_WRITE_PENDING, -nr);
-> _
->=20
+After merging the jc_docs tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Applied to linux-next today.
+Documentation/translations/zh_CN/mips/ingenic-tcu.rst:61: WARNING: Malforme=
+d table.
+Text in column margin in table line 6.
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D         =3D=3D=3D=3D=3D
+=E6=97=B6=E9=92=9F                drivers/clk/ingenic/tcu.c
+=E4=B8=AD=E6=96=AD                drivers/irqchip/irq-ingenic-tcu.c
+=E5=AE=9A=E6=97=B6=E5=99=A8              drivers/clocksource/ingenic-timer.c
+OST                 drivers/clocksource/ingenic-ost.c
+=E8=84=89=E5=86=B2=E5=AE=BD=E5=BA=A6=E8=B0=83=E5=88=B6=E5=99=A8      driver=
+s/pwm/pwm-jz4740.c
+=E7=9C=8B=E9=97=A8=E7=8B=97              drivers/watchdog/jz4740_wdt.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D         =3D=3D=3D=3D=3D
+
+Introduced by commit
+
+  419b1d4ed1cb ("doc/zh_CN: add mips ingenic-tcu.rst translation")
+
+This looks different in my editor :-(  I guess the font matters.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/w7eI=p7dXr=HbdLnMuWAzs3
+--Sig_/A=stXcj/=6v.FTDSelqBLqg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+aZwACgkQAVBC80lX
-0GwRXAf8D166bsfL4hwZk8RE1CvR5PUSAH3voBHK5q1Ip0AmXERUKNgQMRzOZVRf
-MA0vlUaxSmQ618gbWKyBlI2oZP2B7iGl4vfWxO27obeZ1NrU6Jk8Zob28/aNgSWp
-S9jwafnxTCHGnM6CDYZSbdf1PpLfCEq9c3adQLDNpzLfucr/3buAWDEvN2HpqhTI
-tlqRTMWQ4tiOdxYBZRsBLHY2am/YMzeUECIfX4m5x/qLWHZGS6wv7DpbPT8URH02
-tGyHcxMQriK/eLws8PYdT9ErVRCexgTTHYEI3YcmIAjl7UCGxQoV80KYQudOmn1l
-5/nzBOYySlK4k7V5j+HozaZU3+fuGg==
-=6zS1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+chQACgkQAVBC80lX
+0GzPUgf9HtHTzlqiIIFckftFTCTuoKIAbG/j9OGh9HdfjB4ZhGsxbB3AtjF+P7gR
+CrfZSXV0P9/EXxlpO9kTx1cfNKnHzHp+IN1L840iTx5+bGbSnd2SLPjT3LvaRUEK
+7Dcnh9X18ubCB/lUqw9/ZpYt5bUn92aOzzsyP+4Ittedeu/u34EOh4S0jpz1LHPM
+HS8CPd77ZVOUoQZjiKWc3dBiC6VnUEYr4NJYKCOgUA8cB4NvfRDj3cyGzGEsJBOZ
+ZxD9gWku7zAo+2PkaHQ2Sb7F3p4r9aQy+Wl1h2NbSW1eZXbBWTFcDVXkknoXIbNx
+Chay1EemPp2DjJsBphFsWsFhu67eUQ==
+=U4p0
 -----END PGP SIGNATURE-----
 
---Sig_/w7eI=p7dXr=HbdLnMuWAzs3--
+--Sig_/A=stXcj/=6v.FTDSelqBLqg--

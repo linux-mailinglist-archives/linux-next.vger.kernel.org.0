@@ -2,135 +2,451 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 222792F43E0
-	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 06:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C732F4412
+	for <lists+linux-next@lfdr.de>; Wed, 13 Jan 2021 06:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbhAMFag (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Jan 2021 00:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S1725805AbhAMFsB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Jan 2021 00:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbhAMFaf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jan 2021 00:30:35 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBC0C061786;
-        Tue, 12 Jan 2021 21:29:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DFwxV65jBz9sWC;
-        Wed, 13 Jan 2021 16:29:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610515791;
-        bh=SI0r/t0oBzICi+KzkQ6IgbE8oDRpYOaIZyP2b0PncjY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=S3emQvTj/tn097dxd7a3rVrgoObnx21MWkHkpNFLUaINHkEpIWSUr5y54QyL3UGh3
-         /OR0ET4BtDZqY3/gSw9cf6cXOzrzXMkrzn2iJrZ0/yG7r1v0IA6KKnBrPI/2bfjanV
-         nOWcedBQDsEBzUijlKI9sXmWb+RxWRG4ZBnTUiCfe9oCv9z6Ke7RSD2ib72x/B1N4k
-         CqU91oith8GM9kcJmPXMW/CpN05Oazd3vP+03BCXd7IVZG9ne/33GakjG6B1UIm7Mk
-         a7R0YB1Njcg645iElx5xp/LlPu5z5F7rZyezAogbToePojY7V3Ko1HbmQ8VNmbMw5O
-         T9e9cyMKI7oww==
-Date:   Wed, 13 Jan 2021 16:29:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: boot failure after merge of the iomem-mmap-vs-gup tree
-Message-ID: <20210113162948.45b0fbfd@canb.auug.org.au>
+        with ESMTP id S1725536AbhAMFsA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Jan 2021 00:48:00 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7443C061575
+        for <linux-next@vger.kernel.org>; Tue, 12 Jan 2021 21:47:20 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id p12so435883pju.5
+        for <linux-next@vger.kernel.org>; Tue, 12 Jan 2021 21:47:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=KU/cs7Ro6Vg7wA+La1XfTwKplpCLOMn/zMmndK2xy9I=;
+        b=L4jPZjeMrU8GI66pQTNG5hdo7O6tjyaGztvXD8K7UY1gnURuougX5dNhhiUphSQECn
+         EFhC7f91grFMmRQdsuY71tv/B/bvfuw/jiXguBP1pMnlY9rSIe/Nqb5fuskBi4Q+4UyJ
+         ew4fxkTVv0VboDWNde1YbT78aurQeE/Cl/Y01JGtFU/Z4+/2OwVGlwRrHiJbNBYfBHNW
+         OYbNviCw521C9Sc35zLgMcC1Ra4oubWKeH4idzP7AG2tvPV1Jw+PdnF0NZHilqimfcs6
+         ULVkQsLDsnvLOSIRJibOMaDbEGDctRM2WiltgW6jbBq+6+8VxwwIr9uqfHoP0R37HxJ4
+         X5TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=KU/cs7Ro6Vg7wA+La1XfTwKplpCLOMn/zMmndK2xy9I=;
+        b=VHA4/1SqalROLFdYNFyyVbWBsknbWEvw2f4QAcbGvO7h+95YBsr54kgdJhbKO76dPy
+         SOJUSEGPBE5/dmBW/yTHoDVU5kko+AhC75Aae09sldKZv7UoxtGVVyCRV9azkb5bWTnc
+         bVgCUlh758yGqqm3fWsgFCEtXyTu6Fukh8eqDr8k0ronaoGNin6lZUZjy3qzXduRKxcc
+         7Mjch5JWn0KVQdVJ8/id19E30Q1PculL1NVkTMxPI0dPCVPuNZbS6zLSYAeZ4FpHiM7s
+         DcjpoALuYOuOw5bsw0f+6wb8uNaH96d9+wQ6ZIdlFFSP7toqW7ajOyurFxTDGaTPBxG4
+         6YnQ==
+X-Gm-Message-State: AOAM530C8loBG7QRG9gtuE82qHC5PLa054SiNQWIF9K2tXcefLdiZ9GB
+        HwoFfWdFyKT3JVtcNWQbOF96pGt+pGla1Q==
+X-Google-Smtp-Source: ABdhPJyV2hH13Q6Bb3Opk3kiC0vDwtlPJwTlSugvSMrM4v1hrS+j89iJoxty3c+fQxzX4RsMLbnTEQ==
+X-Received: by 2002:a17:902:c517:b029:d6:e179:2097 with SMTP id o23-20020a170902c517b02900d6e1792097mr604301plx.70.1610516839928;
+        Tue, 12 Jan 2021 21:47:19 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id gj1sm973820pjb.11.2021.01.12.21.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jan 2021 21:47:19 -0800 (PST)
+Message-ID: <5ffe8967.1c69fb81.87dd3.26bc@mx.google.com>
+Date:   Tue, 12 Jan 2021 21:47:19 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xl/I/+IEpLdrbrNhAa0F3Hs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.11-rc3-264-g8042c2115f7eb
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 363 runs,
+ 10 regressions (v5.11-rc3-264-g8042c2115f7eb)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xl/I/+IEpLdrbrNhAa0F3Hs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 363 runs, 10 regressions (v5.11-rc3-264-g8042c=
+2115f7eb)
 
-Hi all,
+Regressions Summary
+-------------------
 
-After merging the iomem-mmap-vs-gup tree, today's linux-next boot test
-(powerpc pseries_le_defconfig) failed like this:
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+imx6q-sabresd              | arm   | lab-nxp         | gcc-8    | imx_v6_v7=
+_defconfig          | 1          =
 
-    EEH: pSeries platform initialized
-    PCI: Probing PCI hardware
-    BUG: Kernel NULL pointer dereference on write at 0x00000030
-    Faulting instruction address: 0xc00000000013bf4c
-    Oops: Kernel access of bad area, sig: 11 [#1]
-    LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D2048 NUMA pSeries
-    Modules linked in:
-    CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.11.0-rc3 #2
-    NIP:  c00000000013bf4c LR: c0000000007a9ee8 CTR: 0000000000000000
-    REGS: c0000000063a3610 TRAP: 0380   Not tainted  (5.11.0-rc3)
-    MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 84002440  XER: 0=
-0000000
-    CFAR: c0000000007a9ee4 IRQMASK: 0=20
-    GPR00: c0000000007a9ee8 c0000000063a38b0 c0000000013d8100 c000000006061=
-300=20
-    GPR04: 0000000000000000 0000000000000b20 c000000000f11738 000000000000f=
-fff=20
-    GPR08: c0000000007a7ab0 0000000000000000 c0000000007a7a40 2d6770696f730=
-000=20
-    GPR12: 0000000000000000 c0000000015b0000 c000000000013120 0000000000000=
-000=20
-    GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000=
-000=20
-    GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000=
-000=20
-    GPR24: c000000006210de8 c000000006167120 c000000006620b20 0000000000000=
-000=20
-    GPR28: c000000006167120 0000000000000180 c000000006061300 c000000006167=
-000=20
-    NIP [c00000000013bf4c] iomem_get_mapping+0x1c/0x30
-    LR [c0000000007a9ee8] pci_create_legacy_files+0xa8/0x1c0
-    Call Trace:
-    [c0000000063a38b0] [c0000000007a9e84] pci_create_legacy_files+0x44/0x1c=
-0 (unreliable)
-    [c0000000063a3930] [c000000000795198] pci_register_host_bridge+0x288/0x=
-510
-    [c0000000063a3a60] [c000000000795514] pci_create_root_bus+0xf4/0x150
-    [c0000000063a3ac0] [c00000000006d424] pcibios_scan_phb+0xe4/0x270
-    [c0000000063a3b70] [c000000001010b40] pcibios_init+0x8c/0x128
-    [c0000000063a3bf0] [c000000000012b70] do_one_initcall+0x60/0x2c0
-    [c0000000063a3cc0] [c0000000010046b4] kernel_init_freeable+0x2e8/0x380
-    [c0000000063a3da0] [c000000000013144] kernel_init+0x2c/0x168
-    [c0000000063a3e10] [c00000000000dff0] ret_from_kernel_thread+0x5c/0x6c
-    Instruction dump:
-    7c634850 4e800020 60000000 60000000 60420000 3c4c012a 3842c1d0 7c0802a6=
-=20
-    60000000 3d22000d e929caf8 7c2004ac <e8690030> 4e800020 60000000 600000=
-00=20
-    ---[ end trace 77f55ece72f02708 ]---
-   =20
-    Kernel panic - not syncing: Attempted to kill init! exitcode=3D0x000000=
-0b
+imx6q-var-dt6customboard   | arm   | lab-baylibre    | gcc-8    | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
 
-Caused by commit
+imx8mp-evk                 | arm64 | lab-nxp         | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
 
-  85482fbab59e ("PCI: Revoke mappings like devmem")
+meson-gxl-s905x-khadas-vim | arm64 | lab-baylibre    | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
 
-Reverting that commit fixes the boot, so I have done that for today.
+meson-gxl-s905x-khadas-vim | arm64 | lab-baylibre    | gcc-8    | defconfig=
++CON...BIG_ENDIAN=3Dy | 1          =
 
---=20
-Cheers,
-Stephen Rothwell
+qemu_arm-versatilepb       | arm   | lab-baylibre    | gcc-8    | versatile=
+_defconfig          | 1          =
 
---Sig_/xl/I/+IEpLdrbrNhAa0F3Hs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+qemu_arm-versatilepb       | arm   | lab-broonie     | gcc-8    | versatile=
+_defconfig          | 1          =
 
------BEGIN PGP SIGNATURE-----
+qemu_arm-versatilepb       | arm   | lab-cip         | gcc-8    | versatile=
+_defconfig          | 1          =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl/+hUwACgkQAVBC80lX
-0Gz9gAf/ZesBaFYq8ZzpSnxmIgdoBaU2UQwjDI9g5DygmAguit4aOZZlsr+F0PPt
-Y3oxZ36iOYGzFx1BZHvTxyb6B1jYPpgJlUgEcKsAF9ZDvxVo1uB5XDwI3KMxXjC3
-Au0+6XV878O2cbIwjJ9j8M1cv0u8+Jxd/DghI+sxp4ZDR2HsXz5ppd2yzuTXymF+
-D4+jaseRWPMHGoNMzO7V1mskuQtuLbBrZqLU6XZggacoU7kMV2rXC2OM7+dw/CIf
-/VQ3gJ7SpmBZtWdy7IkAh+ipJEh3pvL9KgWZizunYex//6HfYSOgM6Ai0a8lyqFM
-RdawRd+RjplnZlyNNN6FGuXvs7p1mw==
-=Dlet
------END PGP SIGNATURE-----
+qemu_arm-versatilepb       | arm   | lab-collabora   | gcc-8    | versatile=
+_defconfig          | 1          =
 
---Sig_/xl/I/+IEpLdrbrNhAa0F3Hs--
+qemu_arm-versatilepb       | arm   | lab-linaro-lkft | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-rc3-264-g8042c2115f7eb/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-rc3-264-g8042c2115f7eb
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      8042c2115f7eb81b0fcae98d5bb5da963d88df2e =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+imx6q-sabresd              | arm   | lab-nxp         | gcc-8    | imx_v6_v7=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe558ba6f407cccbc94ce8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v6_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabr=
+esd.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabr=
+esd.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe558ba6f407cccbc94=
+ce9
+        failing since 79 days (last pass: v5.9-13195-g0281c5220c40, first f=
+ail: v5.9-14860-gd56fc2efcc70) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+imx6q-var-dt6customboard   | arm   | lab-baylibre    | gcc-8    | multi_v7_=
+defc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe5a95a5a7b8b07ac94ccb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/=
+baseline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/=
+baseline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe5a95a5a7b8b07ac94=
+ccc
+        failing since 26 days (last pass: v5.10-9016-g31c318f75dc4, first f=
+ail: v5.10-11328-gc41c506b38eb) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+imx8mp-evk                 | arm64 | lab-nxp         | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe58a4c67dcf65f9c94cc3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/b=
+aseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/b=
+aseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe58a4c67dcf65f9c94=
+cc4
+        failing since 5 days (last pass: v5.11-rc2-384-g0bac5ecdd304, first=
+ fail: v5.11-rc2-439-g7507456d8b0c) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-khadas-vim | arm64 | lab-baylibre    | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe5725b5f77d9550c94d27
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-bayli=
+bre/baseline-meson-gxl-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-bayli=
+bre/baseline-meson-gxl-s905x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe5725b5f77d9550c94=
+d28
+        new failure (last pass: v5.11-rc2-703-g273380159754) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+meson-gxl-s905x-khadas-vim | arm64 | lab-baylibre    | gcc-8    | defconfig=
++CON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe57beaef98dad12c94cee
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-bayli=
+bre/baseline-meson-gxl-s905x-khadas-vim.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-bayli=
+bre/baseline-meson-gxl-s905x-khadas-vim.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe57beaef98dad12c94=
+cef
+        failing since 2 days (last pass: v5.11-rc2-506-g48b46fac6daa, first=
+ fail: v5.11-rc2-703-g273380159754) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+qemu_arm-versatilepb       | arm   | lab-baylibre    | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe54021c2ab7b6acc94cd0
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: versatile_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_=
+arm-versatilepb.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_=
+arm-versatilepb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe54021c2ab7b6acc94=
+cd1
+        failing since 57 days (last pass: v5.10-rc3-420-g5364e201065c, firs=
+t fail: v5.10-rc3-639-ga24d51ed9363) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+qemu_arm-versatilepb       | arm   | lab-broonie     | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe54071c2ab7b6acc94cd7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: versatile_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_a=
+rm-versatilepb.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_a=
+rm-versatilepb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe54071c2ab7b6acc94=
+cd8
+        failing since 57 days (last pass: v5.10-rc3-420-g5364e201065c, firs=
+t fail: v5.10-rc3-639-ga24d51ed9363) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+qemu_arm-versatilepb       | arm   | lab-cip         | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe5415e61cd39440c94cdd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: versatile_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-v=
+ersatilepb.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-v=
+ersatilepb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe5415e61cd39440c94=
+cde
+        failing since 57 days (last pass: v5.10-rc3-420-g5364e201065c, firs=
+t fail: v5.10-rc3-639-ga24d51ed9363) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+qemu_arm-versatilepb       | arm   | lab-collabora   | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe55dc33f6cb4259c94ccb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: versatile_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu=
+_arm-versatilepb.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu=
+_arm-versatilepb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe55dc33f6cb4259c94=
+ccc
+        failing since 57 days (last pass: v5.10-rc3-420-g5364e201065c, firs=
+t fail: v5.10-rc3-639-ga24d51ed9363) =
+
+ =
+
+
+
+platform                   | arch  | lab             | compiler | defconfig=
+                    | regressions
+---------------------------+-------+-----------------+----------+----------=
+--------------------+------------
+qemu_arm-versatilepb       | arm   | lab-linaro-lkft | gcc-8    | versatile=
+_defconfig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ffe56d0bbb000733bc94cea
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: versatile_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qe=
+mu_arm-versatilepb.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc3-2=
+64-g8042c2115f7eb/arm/versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qe=
+mu_arm-versatilepb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ffe56d0bbb000733bc94=
+ceb
+        failing since 57 days (last pass: v5.10-rc3-420-g5364e201065c, firs=
+t fail: v5.10-rc3-639-ga24d51ed9363) =
+
+ =20

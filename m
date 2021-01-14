@@ -2,111 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2082F6E1B
-	for <lists+linux-next@lfdr.de>; Thu, 14 Jan 2021 23:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C962F6E82
+	for <lists+linux-next@lfdr.de>; Thu, 14 Jan 2021 23:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730595AbhANWXx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Jan 2021 17:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730584AbhANWXx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Jan 2021 17:23:53 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0CC0613C1;
-        Thu, 14 Jan 2021 14:23:12 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DGzND3V0bz9sVX;
-        Fri, 15 Jan 2021 09:23:08 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610662989;
-        bh=FYJ/k0W9Ty7RWBAAi6vztPgKWINJpYMQQ8/JzNdEgpY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aUhxoJfI7yZOIbh3nZYoj2JQWjXBQz3F8Ia2HaLeALEnBwATyaiU4wDkuHPlzA5ri
-         kWT0GoEhreytc0lJLUgteS/RxgPW+JAYW2w4d3fDqZ1tm0xzLV2BQ6IJompeLjJ0gb
-         K6AFrFAgI+DOhpLxI1AvBbRUZYskrK31Xyr7fblHmOs8TI1w7L/8lIESHRjxJrZg9Z
-         DgeA0vlkF7JPzAFfucYqsAzQSBh3/vwzc6oHMDVL4IhttlhrkB6S08utqxKJ8ewInl
-         zUMSvHd6fUFOrepyz4xCUXBZ/vaL/YMmQHCg35InbOcRVWsYpcRXigxcfKwef3IuzA
-         L9rjydPG2w2YQ==
-Date:   Fri, 15 Jan 2021 09:23:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
+        id S1730701AbhANWqB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Jan 2021 17:46:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58760 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730660AbhANWqA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Jan 2021 17:46:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D3E3623435;
+        Thu, 14 Jan 2021 22:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610664320;
+        bh=IBGkG3CnkOtbMmVWZtUacB2eKWvCsPvXkLU7ce8QxyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GcB+SBqjgTzwqRUqiVczurF6zNoO+M4GyxGqLhtNKcL/6YeETnJ5il5ulWzbsE8KT
+         lUopkz0GlFK2kk90LrXtrZMTOMAM+o1liQwCFDVTDjl+Q9Oj7a+c8VKJPgKCAPNwI5
+         aFBYu8R/ZQ/g4GX6q290OtuYu2yICe8LT8WXv6Hts5ZrU4k90y+1ycPPlDUJMyVGMV
+         OUbFZwipTwgCaw8qPV4j/Vgx3qTNcMiCD+Na+p9lkMNpsoZ7Skc8CJZaXpgejvdNCv
+         MGMS89cFv/Rqtcd94w6rr81LySJge30fjh2yzdnM+Dnp0zz31ZCtpg+1oVpHmn0WiP
+         b3RuGgjJODpZw==
+Received: by earth.universe (Postfix, from userid 1000)
+        id B7FD53C0C94; Thu, 14 Jan 2021 23:45:17 +0100 (CET)
+Date:   Thu, 14 Jan 2021 23:45:17 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tags need some work in the battery tree
-Message-ID: <20210115092301.4c1f4893@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the battery tree
+Message-ID: <20210114224517.wkeuujwbxr4j5mjo@earth.universe>
+References: <20210115063935.30edd44a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NxvgCWvkJb1GkFF=pgSiY=_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cha6musilkoi7xkf"
+Content-Disposition: inline
+In-Reply-To: <20210115063935.30edd44a@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NxvgCWvkJb1GkFF=pgSiY=_
-Content-Type: text/plain; charset=US-ASCII
+
+--cha6musilkoi7xkf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Stephen,
 
-In commit
+On Fri, Jan 15, 2021 at 06:39:35AM +1100, Stephen Rothwell wrote:
+> In commit
+>=20
+>   e1cc2d7d3868 ("power: supply: bq256xx: Fix BQ256XX_NUM_WD_VAL and bq256=
+xx_watchdog_time[] overrun")
+>=20
+> Fixes tag
+>=20
+>   Fixes: 32e4978bb92 ("power: supply: bq256xx: Introduce the BQ256XX char=
+ger driver")
+>=20
+> has these problem(s):
+>=20
+>   - SHA1 should be at least 12 digits long
+>=20
+> Probably not worth rebasing to fix.
+>=20
+> Can be fixed in the future by setting core.abbrev to 12 (or more) or (for
+> git v2.11 or later) just making sure it is not set (or set to "auto").
 
-  c339b3aec780 ("power: supply: cpcap-battery: Fix missing power_supply_put=
-()")
+Thanks for the report. I rebased and fixed this up, since there were
+also Tony's incorrect fixes Tags.
 
-Fixes tag
+-- Sebastian
 
-  Fixes: b0134cc14b9 ("power: supply: cpcap-battery: Fix handling of lowere=
-d charger voltage")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 8b0134cc14b9 ("power: supply: cpcap-battery: Fix handling of lowered=
- charger voltage")
-
-In commit
-
-  efa32492629a ("power: supply: cpcap-charger: Fix missing power_supply_put=
-()")
-
-Fixes tag
-
-  Fixes: 688ea049233 ("power: supply: cpcap-charger: Allow changing constan=
-t charge voltage")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 5688ea049233 ("power: supply: cpcap-charger: Allow changing constant=
- charge voltage")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NxvgCWvkJb1GkFF=pgSiY=_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--cha6musilkoi7xkf
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAAxEUACgkQAVBC80lX
-0GzQtAf7BcZ3rT3zMvzMPVfozgewG6DsfLL/7l5Fb0zIXOwDKfL0+AXd+hZsnXJB
-0tr28mNEEY2ZtgaOLeMMyPAO+kiDjvV8TVvhsDAlgO1c2b9vSwJ1Di8K7R4ubF2a
-sRTbOkV4Rk1D3AXmu8XJyR97MF98HTZTdk7JGP/rS3EoM1DyZ8Lq/Dt+LCWP4X7l
-eOLvm4nSZZPY7dZgEugmZatlR0wcrL/xyZ4NcvJBAGSdQWXUXIfEQkQh2AAMZpqM
-iBdYq7PNqCwRPrxPEqOhBn+7sq5ZVwT8fF2TuAlFd9NcKKkMtOaWaiZdACyQj+G2
-opBGxDGSdFJa/qBHUHcLoD7/xPaq4Q==
-=xreV
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmAAyX0ACgkQ2O7X88g7
++pqKxw/+IhHyNmtsd7uoot3xuz1IoPgaMDdrIZno3BzIuGwmK6W40rec91YYCLLx
+p6Ub4hJV9GdsAZGSkaWuTo3uxOqAhzn5YC4sPZMH06r/0JeNk3bGB/LI1D/10tmk
+iJ1XtPqKcDoXIAJxkRODnScXCqQt2uX/PN+t62JKGuwXCO6cdWvsCYmFmuvNvLc+
+zji6/n6SIHAMghXClrG7yolvDRUBYB36xKDacnSP7NzDPW/Vl8sN6UEQb6uveNHb
+ea4xX2W7qWGQ4HiyAOVyj1s8eHHA9nWLMkDgtAItkU8xvcCEFVzDwBvgdvDjhyV0
+qIR2CkPXuKOVVtRAj4QM6ci2v63F6DxQ751yqzuyRzKVhLKxxkvqVsuy0AlMaTxL
+lYvvY9HuTm98BJricr6sbetcGQnMW4sezgSD4ZyBlztxIq2MD8xRu7jWMXAdcoy1
+kcuh613Hfuzr/RryFomSTJd3zocv4A6twJPgY3DXZcwQ5iESZ6L6qxAqynwDCTyf
+HAmrfDAzBLI17DA2DDSzNVPgCACE4QfP7n46qoy1tYsViwd5PLy7+GnFUJLtTLX9
+/MQcsAcfl+O2yQadeXzaxN8FUVBIEHQGAXITaQ6iLRFccesHxpVAQA6qoOlA6oWE
+8LBGo/41ByhCvAdbwE7UWw5LVUxoJyX917QwaqtjBXp1Hawh8tI=
+=Dlei
 -----END PGP SIGNATURE-----
 
---Sig_/NxvgCWvkJb1GkFF=pgSiY=_--
+--cha6musilkoi7xkf--

@@ -2,120 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA70D2F5FA7
-	for <lists+linux-next@lfdr.de>; Thu, 14 Jan 2021 12:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9309B2F6AE7
+	for <lists+linux-next@lfdr.de>; Thu, 14 Jan 2021 20:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbhANLR0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Jan 2021 06:17:26 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53314 "EHLO mx2.suse.de"
+        id S1726523AbhANTZc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Jan 2021 14:25:32 -0500
+Received: from ozlabs.org ([203.11.71.1]:35803 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726458AbhANLR0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 Jan 2021 06:17:26 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E5D7AB7A6;
-        Thu, 14 Jan 2021 11:16:43 +0000 (UTC)
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1725854AbhANTZc (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Jan 2021 14:25:32 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DGvQT5Dc1z9sWC;
+        Fri, 15 Jan 2021 06:24:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1610652289;
+        bh=FSjGlIsasFFClfDzysM0SDh6teWCJZLen5r7JeIuKF0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=II8Mi0rDGjX53qP6Kt4nCI2tU2Z0E5pbgzX+89K4XqdpHBYBdAIwpy/1J6F+1XF1j
+         DPACt6FSLonRP8rjf3JxxwjiTWRE0Tw411MM9Ur247+v930GtQ/kZ2dae43X2kJcds
+         VBcFjSTrsSOahzW+d4q78lbqkld8BmrLIqvR7Cae26e9ol+sHnGsFcVHtzzOMduBw1
+         uZdEVASA6KV7xLI304yYTq0cmvWe+71wSzv+po3KO5pZt/b4B7HolRYyn9St9UximE
+         Id2keYI2c8SJSqnLCuPJI2HLy1jbxvqNtDculwUr2QdBJppoiKHo+fUKMKATL3jnuU
+         wA8nG1KwnvB1w==
+Date:   Fri, 15 Jan 2021 06:24:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210114113107.622102e0@canb.auug.org.au>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Message-ID: <524351d0-506d-bd49-ab50-66316d7e5105@suse.de>
-Date:   Thu, 14 Jan 2021 12:16:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+Subject: linux-next: Signed-off-by missing for commit in the arm64-fixes
+ tree
+Message-ID: <20210115062448.484390ab@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210114113107.622102e0@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="jJL4pOPwDC6gspy7p5JwzKT8iKU9cxx8Y"
+Content-Type: multipart/signed; boundary="Sig_/qkFg.5To/jTBhiwyZHWIr13";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---jJL4pOPwDC6gspy7p5JwzKT8iKU9cxx8Y
-Content-Type: multipart/mixed; boundary="oYbDUBfhMYZhf86gzX4V6y4JZK6TwFz2I";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- Intel Graphics <intel-gfx@lists.freedesktop.org>,
- DRI <dri-devel@lists.freedesktop.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Message-ID: <524351d0-506d-bd49-ab50-66316d7e5105@suse.de>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-References: <20210114113107.622102e0@canb.auug.org.au>
-In-Reply-To: <20210114113107.622102e0@canb.auug.org.au>
-
---oYbDUBfhMYZhf86gzX4V6y4JZK6TwFz2I
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+--Sig_/qkFg.5To/jTBhiwyZHWIr13
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi
+Hi all,
 
-Am 14.01.21 um 01:31 schrieb Stephen Rothwell:
-> Hi all,
->=20
-> After merging the drm-misc tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
-> drivers/gpu/drm/drm_cache.c: In function 'drm_need_swiotlb':
-> drivers/gpu/drm/drm_cache.c:202:6: error: implicit declaration of funct=
-ion 'mem_encrypt_active' [-Werror=3Dimplicit-function-declaration]
->    202 |  if (mem_encrypt_active())
->        |      ^~~~~~~~~~~~~~~~~~
->=20
->=20
-> Caused by commit
->=20
->    3abc66706385 ("drm: Implement drm_need_swiotlb() in drm_cache.c")
->=20
-> I have used the drm-misc tree from next-20210107 again for today.
+Commit
 
-Sorry for the breakage. Fixed in drm-misc-next.
+  b5639879902a ("arm64: syscall: include prototype for EL0 SVC functions")
 
-Best regards
-Thomas
-
->=20
+is missing a Signed-off-by from its author.
 
 --=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=FCrnberg, Germany
-(HRB 36809, AG N=FCrnberg)
-Gesch=E4ftsf=FChrer: Felix Imend=F6rffer
+Cheers,
+Stephen Rothwell
 
-
---oYbDUBfhMYZhf86gzX4V6y4JZK6TwFz2I--
-
---jJL4pOPwDC6gspy7p5JwzKT8iKU9cxx8Y
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+--Sig_/qkFg.5To/jTBhiwyZHWIr13
+Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmAAKBoFAwAAAAAACgkQlh/E3EQov+Bt
-zA//b9VYy7/b8sble+TS3HnmjvwcuMbp5ETrD8Ju40SU8bM+8Qb9NT6TL9FeAQro5UFKzMt1Jmci
-zXK+lkNyUxUo44hoDIUTVVlvvQQqUYbtB/wMWS6FoKHODyG/jfR9JtTPzmRuSmn2gesrBmZcCGe5
-0FL6UEJHH+U7Xw9Lmlxo7GSsVx6SUbDFNMz82DDoWU5lOd0Z0wMbJO/FVv5nGrlj3LuvDv+bUxf+
-BOWPyseaVLGYCu6ZfSfTWjNF8sN/ZI6XIrWidRjWeBK+rQFMKTqkkZFb+QtfPQLvcHiHlPEFv5FN
-bUfM65PZ4hxLWsdW6qhMSInDEqU6BwmWXph12UvX7ZvROz8xm3u/LqhGX3xNo/plmr/xFY4CkH8p
-BWWrO43zVbrqK1SEj8rQkPECiXXVhu8fD493WOT/dTaZkGbhqUrokLnATUdVBlfSFDurbr30JPSb
-8qAXS/40K6xNYUwpvCkSOxnvmjTH5GLGB8OjMGGhz/bEUx/mQNwIC3uRSjRioiBd+9DA9KMz3lvG
-C0nnQd7i9KwQVrAs3Me/cPmzcEYQUv39vmSLxoPaCGmyxG8VX/rwdPTSZ5EBm68jisj9quvzyEJx
-Kz7QoaUeG4dP6DGtezZ78rH5Yt8FyfPfCrc/YDdqApG4CojSLAPZ22aBQLLPnJM/dBwxtGVbHFt5
-jqU=
-=0oEf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAAmoAACgkQAVBC80lX
+0GyCUQf/TFE8oM2e71+/LW5hLMEyI81AkYieb1mrziROHBxlC1gVBRljRYkfbUJC
+mwmZJoyDS78FJzjOgD7geVP5ieNMGqNPPsKXGckbZmWuMQP5+u6K3h6NnZGAnRmr
+4z/luuD7J2Z8M7dEIN+rly3mqpJUf3vpzoegsWg5olskN185dYaV2uiAy4ThfbJG
+m6bDw1lASqSs33uL/+UhcWAJKBJKmHRo2133b4hEuMK/2Wd+LPKrsRHP9d6e9kxF
+unrJRkDYIVu+OINe/j4qJ5DuiP1wV4yyAyTvE88WmBAVe9TBtSnF48NojRZ2Rgs5
+RFIdW1dEKoRlQTLQBgymYDR6yNvq5w==
+=WVqv
 -----END PGP SIGNATURE-----
 
---jJL4pOPwDC6gspy7p5JwzKT8iKU9cxx8Y--
+--Sig_/qkFg.5To/jTBhiwyZHWIr13--

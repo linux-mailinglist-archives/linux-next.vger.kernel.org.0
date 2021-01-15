@@ -2,124 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E85F2F7EA8
-	for <lists+linux-next@lfdr.de>; Fri, 15 Jan 2021 15:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119302F7EE6
+	for <lists+linux-next@lfdr.de>; Fri, 15 Jan 2021 16:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728559AbhAOO52 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Jan 2021 09:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726402AbhAOO52 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Jan 2021 09:57:28 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7546C061757;
-        Fri, 15 Jan 2021 06:56:47 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id x203so2253086ooa.9;
-        Fri, 15 Jan 2021 06:56:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NO0K0dXCtZelpuNUhec8CuaDzfXTrQY8G8j/RO4RKUQ=;
-        b=FmdnjoGeom+NzYjZMF8xspzWt7P4wbaYEKKf4CoWFs3Kdkd0A87H5cVKvHJ0Bte5sR
-         RBoMKG6eibhcoufqOS9aUBHTUScKunWrFdK73ZroK4w/fgwm64bAWF680q3D5t4uH69j
-         Pz7K5AlL8RflekVrpU5iwcyz8uhTibWljAJ9HJOHIRD1JuY8isVS9AesQAt4K+zpoonY
-         naozFAfBXLDWh/l6aLqCxrLMZ3TuWwEe0zESi4qRkY12Plo5Kx4MkaHW9Y8lf6QWMd0E
-         LbUtjaqLnBBtFQC+iLKe5UaVEBAVJV1o72PeVwDDCLsJr2nJzNJPGA5MScBQ+ZcmyC1/
-         DeYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NO0K0dXCtZelpuNUhec8CuaDzfXTrQY8G8j/RO4RKUQ=;
-        b=n2o1N2DmJzRlC/6mfJqorOF8K/K8AeVoqVBYcFKViRE8pwGeinjrY+R9FvX7gW/Ezh
-         zF/WnfYq/d2dUBCMtZk25PEvkvRbacI39PyopcPh3ukXjVbYI/2fk9D/q25Bmf+cOFCS
-         3LPxnE8akHgj8JUZqoDsBveWyo5MWYhbPX2vk3OkbQc8zsQoTAgAvHbV+dsEWt6BTK9o
-         urWcUyWpV/uyt7bJV+IfP+NUGmt7ZgSyNmvVT/LBiWxopm0aGDlKKwGOM39f9NcVH6ZM
-         vvjihAwF/CDxlTAwB1vchx2niwSw3cVjrRxMPNx616tBXVFCXTwNkH/HbLiXxufAWpxa
-         t8zw==
-X-Gm-Message-State: AOAM531D6a9kiSpDtMjJT1SQUEu5YHQQFg2PWzfxQnl9g1Mboy51f8bn
-        8ZA2UJ5PayWuV4GHu/OnVdHJ7enCE+7gjD1OZVk=
-X-Google-Smtp-Source: ABdhPJzgaiG/3gsS8pa90VDlTf938WbevA6Pure/5BnlbJkOOiwQbElE6ZbMNYsLwSg7BYtcN/GEmRXgm2aCIvqR4R4=
-X-Received: by 2002:a4a:a2c5:: with SMTP id r5mr8405442ool.72.1610722606624;
- Fri, 15 Jan 2021 06:56:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20210115163505.4132a5b3@canb.auug.org.au> <20210115055703.GA1258199@hr-amd>
- <MWHPR12MB12481AE693629C4F60368519ECA70@MWHPR12MB1248.namprd12.prod.outlook.com>
-In-Reply-To: <MWHPR12MB12481AE693629C4F60368519ECA70@MWHPR12MB1248.namprd12.prod.outlook.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 15 Jan 2021 09:56:35 -0500
-Message-ID: <CADnq5_NqvfQZLfuYFqz7rimPA82qGxA2RUP=gyzt-mqSFrVyTw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     "Huang, Ray" <Ray.Huang@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1731525AbhAOPE7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Jan 2021 10:04:59 -0500
+Received: from mail-bn7nam10on2073.outbound.protection.outlook.com ([40.107.92.73]:21984
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726019AbhAOPE7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 15 Jan 2021 10:04:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SJ5kBHXA2/4i8kq671qXo3ye4jSQo9f2ViYB/Qt5rs9PgcChUO8as6PKlFo2l09H7U2434XRj9GMbdHnKIjE90FaKfjEMVplzNPHTqU6aw9zwfD+te9TjBl92lVzDRbkmBYHYoWuB6yHV64HScfGLqaDsu22rIhXAnsS+Ni8Ho70s+XZ5908kaAJJOlus6i/JCE9rTGTgvK2uvKlbk29LQxjwEZrA/SQAbvz1h2R6DBh2UinGhOqTA/Joi13F27aONaJL7GgyHFCbvN3328EW3lVLiJ4mrsh4LihqRwaY5JOf7AL4U+MotcdLIsIf6iLaIU2GZD1s0kGn8gSPp4+iA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2u97677o1xT7Y5Pcq8UXX0toGys6bFBdhxtFRH/nl3o=;
+ b=Jbf/9EDeMaMkQ2F6Fa3F83sBSgs6OQwuZxRjoKPNOc1rq7jTnC3c0jJH+Mv0jWmIFeNLMbdyUaRBPuq/SYglMRGkevBIxDNC4qf9RJ7Jmji9xZgsnf+le3FWbWBV67hoanQel45BLvrstmXmHm0v081QhEmnCZhOFq9DyLtq069qnUsa5HSrlAQHsCbooU77d1BmR5z1Fo8QpGw3zC1LtnmEStPJQIWb5rzTKd2HcO6dhmIRpYo3PW6Ri4hDbIPov6Tnc/F7nGamY4agkZnoAz22+/mm9oPgEkzJzg3Ic7xE4QGAuUZwrSPB/HXat8ItHJaD1lmbbm01PERzwYTn3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2u97677o1xT7Y5Pcq8UXX0toGys6bFBdhxtFRH/nl3o=;
+ b=oL27IsW1dem9HweBMW/8jwgpfBmOiWCAF4zNdU7GS4px3SiH449QVHX58Dr58prr+v8Rr+wDWN8S6U2svd1EJF01y0Fhm5Z49DAvvhJ7sbCgN0/Lq7SrCUukIKIVswnt9QV8QO1feIYcYflqxP0EDhSe1NI5yiUuRwYRlKel/6Y=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3916.namprd12.prod.outlook.com (2603:10b6:5:1ca::21)
+ by DM6PR12MB3355.namprd12.prod.outlook.com (2603:10b6:5:115::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Fri, 15 Jan
+ 2021 15:04:05 +0000
+Received: from DM6PR12MB3916.namprd12.prod.outlook.com
+ ([fe80::f872:3677:28c3:660b]) by DM6PR12MB3916.namprd12.prod.outlook.com
+ ([fe80::f872:3677:28c3:660b%5]) with mapi id 15.20.3763.012; Fri, 15 Jan 2021
+ 15:04:05 +0000
+Subject: Re: linux-next: build warnings after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Darren Salt <devspam@moreofthesa.me.uk>,
+        Nirmoy Das <nirmoy.das@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210115122310.7dd6bb11@canb.auug.org.au>
+From:   Nirmoy <nirmodas@amd.com>
+Message-ID: <9bb019ff-cbaa-3b1e-4688-80440a6d5c10@amd.com>
+Date:   Fri, 15 Jan 2021 16:03:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+In-Reply-To: <20210115122310.7dd6bb11@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [165.204.84.11]
+X-ClientProxiedBy: BN4PR12CA0020.namprd12.prod.outlook.com
+ (2603:10b6:403:2::30) To DM6PR12MB3916.namprd12.prod.outlook.com
+ (2603:10b6:5:1ca::21)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (165.204.84.11) by BN4PR12CA0020.namprd12.prod.outlook.com (2603:10b6:403:2::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Fri, 15 Jan 2021 15:04:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 57d19b76-9661-4c2b-3584-08d8b966ccc0
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3355:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR12MB33554351990901A7A4BAFDD18BA70@DM6PR12MB3355.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:32;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j/1fVnVLuqPdPeB9IDrcRnfm1IdQiqJnuXgdgxle5wuPNj9/xfEMrqjIc5AHbRyyiMVnAaNb6jaTjipRyIllj7n55p8TZrx7QJrOTSuR5x6jHgvTF4CM82JwikHOXfC2nXoAhjP4mYUg6oarZcMikdl9u14zzl8tFNp3k4qluzyP+8IVZe7qMpg+cZPr3Qkv/knAw5OLvME6HBUOTum/B3QLXtUZmbJ5bip3JkSxXri76uicc8MOCkNzN3Vj0bPBXvSvlpy+cp1HVaS3kjFtdNMcxxf18Nr8pU09p/huRvIEkg3ziJXzkIlGARFPu32Mue9vzJdtv4RKfmntvGhumZNUym7Rprrh2h3HxyRj+hPyn8EavpifM4JPMgTh+7WLDW0VTeyP6bc2UYkCy8naIbqRrioTsBSatMtC4qg5aDoH2XFk0It4pO9H8O8WbF192HDLRweD9lWf+B1ijEhylJzd7E6JV0QzyCv5s1BLfzhA3cDZDEPQLwFHZ2IH8m2DX+Ie9341rwiEj9XInGvKzgSox6ZukVvViLJB//cIdmvAhc9eXYZHEBBwzzDdvbUit548dT24H3xO8fhTQWBZnAIKI6rrYftBu5q9/l2X17Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3916.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(8676002)(110136005)(956004)(53546011)(2616005)(6512007)(66476007)(186003)(26005)(6506007)(54906003)(4326008)(316002)(52116002)(16526019)(5660300002)(6666004)(6486002)(478600001)(31686004)(2906002)(8936002)(66556008)(83380400001)(36756003)(66946007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?sixYt3kUxBbXuRC0BhqQK2XUicZoicliDqMq+tMfVoxEwN3or2oJlrJM?=
+ =?Windows-1252?Q?DBlJ97cZMtUcwzsVbukrpCQIH/3LJn61BD9ASvJ7jqfodFJuyG/jZuKY?=
+ =?Windows-1252?Q?851GfMZ3mS6GndmYsAf9JHmGbEAtR3Mm+4cUmfxYOuVwUbanbGVYumrW?=
+ =?Windows-1252?Q?//sNDVHeXPa5ZrIf6iuW/GrctZVKLxu8KlXdfEOVG3ziCPSfK1MBTPEg?=
+ =?Windows-1252?Q?ANPcxIiI+1Zsk2jn7Q2yXW5A9vCyfRuP+FiV+63VUmoQ3j8AQyKFUyN0?=
+ =?Windows-1252?Q?k9H6EjvRKG2gE9N4s2ACHUlt1evNlN6gVHwyj/C8h6b+2Od/6BVa0GGH?=
+ =?Windows-1252?Q?tjfmVVqu9zEJoQN19g3I8AA3Crxsyl2WvMaMsyUHeln32FWnmh2pLvAd?=
+ =?Windows-1252?Q?7JGz8huFgKSJ0Ycj+uTtcAPQErVIHPA1JWOW+YhpfOBW1N7gzDqUf3Aq?=
+ =?Windows-1252?Q?UQXqo6IovPrMvdKNOztW6DzvpbEPPm6t1clzCzHNgaHB/1t1+3ku1ze0?=
+ =?Windows-1252?Q?JO0/jPE3GS/cytwnIiVL743xOK8TsEceUnrvTLkD5wcLOppKIqoL1rLI?=
+ =?Windows-1252?Q?ySxLmdzOc7F9iO1Hpd4VFcW/DFeG5krI+vjDCltcE8cHJTJaaa41rt8S?=
+ =?Windows-1252?Q?HYPJ9LnVTwmtKBL9PBVkxue2AZZLVH5vYedmHeEzXwCb1jzP6Jhs402E?=
+ =?Windows-1252?Q?LyvEVpU4vLWgifrduSw66GiNrzEMpGM1wteUozk+KlLeB1Ffyzt8tWch?=
+ =?Windows-1252?Q?SzfwhzJo62oQ8lCMRjuS2vPeZHrGQFPTn/KV065tVwqsj8XET8tI1YlM?=
+ =?Windows-1252?Q?4kfn6X9pl41SkClIXI5kdNHGVpgREWNuCy1klCbf7LVhYIWkIKk6Wx9i?=
+ =?Windows-1252?Q?pXK2h2qZjXcwcwl/TW0fIdYWX3LqlyNoQKNWBNgFgVDwswl2AaZFqOEf?=
+ =?Windows-1252?Q?01v+1ECatcwEnhqDMsgCajPbXgqKOlblKtH8pRjCQ79E/wrP1ixCFL4/?=
+ =?Windows-1252?Q?6cKaLNyyMas0uJt8iFuCDw77bp5Iy8ePeDoIXLZ7U+qDOZemMvl/kI3n?=
+ =?Windows-1252?Q?nROFiPlRI7YxXKDJ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57d19b76-9661-4c2b-3584-08d8b966ccc0
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3916.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2021 15:04:04.8804
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q/GDQYF7+nRJqDu7o3i+BgHfPqi7cbPxrcr4jwAUv46H7otcZYsSFPWDxq0czzZnjfiqKGrk1oCt6CZHWF6cMg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3355
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 3:46 AM Huang, Ray <Ray.Huang@amd.com> wrote:
->
-> [AMD Public Use]
->
-> Could you please help to check whether this patch can fix the issue?
+Hi Stephen,
 
-Looks good.  Might want to add a comment where you set cpu_core_num
-that this is only used on APUs which are x86 only.
+On 1/15/21 2:23 AM, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+>
+> drivers/gpu/drm/amd/amdgpu/amdgpu_display.c: In function 'amdgpu_display_user_framebuffer_create':
+> drivers/gpu/drm/amd/amdgpu/amdgpu_display.c:929:24: warning: unused variable 'adev' [-Wunused-variable]
+>    929 |  struct amdgpu_device *adev = drm_to_adev(dev);
+>        |                        ^~~~
+>
+> Introduced by commit
+>
+>    8f66090b7bb7 ("drm/amdgpu: Remove references to struct drm_device.pdev")
 
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+
+I just sent a patch for this.
+
 
 >
-> Thanks,
-> Ray
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_device_resize_fb_bar':
+> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:1109:6: warning: unused variable 'space_needed' [-Wunused-variable]
+>   1109 |  u64 space_needed = roundup_pow_of_two(adev->gmc.real_vram_size);
+>        |      ^~~~~~~~~~~~
 >
-> -----Original Message-----
-> From: Huang, Ray <ray.huang@amd.com>
-> Sent: Friday, January 15, 2021 1:57 PM
-> To: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Alex Deucher <alexdeucher@gmail.com>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-next@vger.kernel.org>
-> Subject: Re: linux-next: build failure after merge of the amdgpu tree
+> Introduced by commit
 >
-> On Fri, Jan 15, 2021 at 01:35:05PM +0800, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the amdgpu tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
-> >
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c: In function 'vangogh_get_smu_metrics_data':
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:300:10: error: 'boot_cpu_data' undeclared (first use in this function); did you mean 'boot_cpuid'?
->
-> Ah, vangogh is an x86 cpu, let me look at this issue.
->
-> Could you share me the config file you tested?
->
-> Thanks,
-> Ray
->
-> >   300 |          boot_cpu_data.x86_max_cores * sizeof(uint16_t));
-> >       |          ^~~~~~~~~~~~~
-> >       |          boot_cpuid
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c: In function 'vangogh_read_sensor':
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1320:11: error: 'boot_cpu_data' undeclared (first use in this function); did you mean 'boot_cpuid'?
-> >  1320 |   *size = boot_cpu_data.x86_max_cores * sizeof(uint16_t);
-> >       |           ^~~~~~~~~~~~~
-> >       |           boot_cpuid
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c: In function 'vangogh_od_edit_dpm_table':
-> > drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1460:19: error: 'boot_cpu_data' undeclared (first use in this function); did you mean 'boot_cpuid'?
-> >  1460 |   if (input[0] >= boot_cpu_data.x86_max_cores) {
-> >       |                   ^~~~~~~~~~~~~
-> >       |                   boot_cpuid
-> >
-> > Caused by commits
-> >
-> >   517cb957c43b ("drm/amd/pm: implement the processor clocks which read by metric")
-> >   0d90d0ddd10e ("drm/amd/pm: implement processor fine grain feature for vangogh (v3)")
-> >
-> > The only thing I could do easily is to disable CONFIG_DRM_AMDGPU for today.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
+>    453f617a30aa ("drm/amdgpu: Resize BAR0 to the maximum available size, even if it doesn't cover VRAM")
+
+
+We have a fix already merged in drm-misc-next for this.
+
+
+Thanks,
+
+Nirmoy
+
 >

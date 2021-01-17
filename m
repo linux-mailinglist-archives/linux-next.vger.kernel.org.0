@@ -2,84 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7AD2F95A0
-	for <lists+linux-next@lfdr.de>; Sun, 17 Jan 2021 22:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D822F966C
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jan 2021 00:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729331AbhAQVuF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Jan 2021 16:50:05 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55181 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728042AbhAQVuC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 17 Jan 2021 16:50:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DJpTq4RLfz9sVn;
-        Mon, 18 Jan 2021 08:49:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610920159;
-        bh=5z6wkdBTCB/75/iPjTRc2GPKy8SLN9/ijjIZK51xKM8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GF2/cK5crvlIXSoIFlOOaQaBbPPTSEDc44NBn/+l28ZN4DoT4KI/NpbJHxyXiX+pg
-         X7lTXRGtRu9fCJiE5TQwsymd5El+1RVXZGv9xEC5QhPhz/6oEspA35PBRL4e7l/IiG
-         luP5AalFrVtKc6bcXvGDUgBxwwB4cjw1Xtu84suRMypV/k9pNUy78LpFKsmSBn0x9f
-         DSzY4APCKSuVNXnKSl/aEaK0QV2+JrDAn7A6TMs25tizNfIuKJfjvEtmcgzGifhapY
-         F6pLgQjIl+rnk5at1gdJ5ruQXxGw9LCUt6onZeXy5nu0CRuElb+G/k4T04GU8krMX2
-         ABkdGABWeHnYw==
-Date:   Mon, 18 Jan 2021 08:49:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guo Ren <ren_guo@c-sky.com>
-Cc:     Zhenzhong Duan <zhenzhong.duan@gmail.com>,
+        id S1726298AbhAQXtF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 17 Jan 2021 18:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730464AbhAQXsw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Jan 2021 18:48:52 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D044C061575;
+        Sun, 17 Jan 2021 15:48:12 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id md11so8331250pjb.0;
+        Sun, 17 Jan 2021 15:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EmCHmedBg9aRizqqRS6XhjxGld3VF0s5zIWola8U/lA=;
+        b=OeD10PE2Mtfp075FZt/mPkAa9M73J7nW2oESa7M87ZvxLwc1hPCGn3Jh3j3nBm3zMP
+         K6qZp4O2mvgagpyadKsgz8o+eieDtNk+fbG7/HxYfMhEI8fcPGFfPtz/lEKJPsCQR1om
+         Gqi8BAUWQM3Nq/cw0eiic96keMoSQJY4VVkF3Y7p0HFyOBQnZgsuqchX4IU6mQ3lw6Ho
+         +IMPgq4Pe1/tDvsq5q7+02rZwssc7GW+fbKuElwKycKxAKSOuC6qTAx2i0poZph4lFNn
+         M6BkggOIoiSpHnRA1hPN+F3kTKh382F1AFlWBLfEC6Et+jGPwxzb7mW5x32lk3pF7P3C
+         pttQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EmCHmedBg9aRizqqRS6XhjxGld3VF0s5zIWola8U/lA=;
+        b=XayUWzj88RnQQP16mKUQAEHYVDsTlfhb3qyTSXVRC2I/5KenPD6FwCh8rpJ7ez6Iku
+         fxKEmg1DW22WH3reTbY0Ls+NfHZ4U6zj+U3mWfUs6fDx3LAtmjMBqMPyIwAmHSxappsO
+         s7tdsEzuAUmje705SUGqdI6mLZyU0aBCF9d0RBzCUvsmaAyvhon5t7WmnWB284yphFns
+         WlUTmdpSaJRlm4nG0K2krUKm5RQbCHkm4TcLCFvOWEIj4BoJLOxqdajWPPwl2hV1iZrD
+         ltPCY4qUBz04gM7xyDHH6Ap5xlupdDzBSA6TGd++2oeB1Kg8BIGXJUD/XFYzbes1gDTM
+         BBgg==
+X-Gm-Message-State: AOAM533IXbqyjrqN4BReEbivzjFHtQMm0TG5S6ZXB1YZm8NpWvnCBW27
+        wiIFPFY2EIZ3P7wG0cj3Cz/XGhVEuu0=
+X-Google-Smtp-Source: ABdhPJwownJ25eQ4nDOqZMN5rJcNq6v11z0e0Q3pTP1NZPlhVz4cbSChG+9U+gcljpxZpJr2W4E8ew==
+X-Received: by 2002:a17:90a:9ac:: with SMTP id 41mr23334109pjo.46.1610927291611;
+        Sun, 17 Jan 2021 15:48:11 -0800 (PST)
+Received: from sol (106-69-181-154.dyn.iinet.net.au. [106.69.181.154])
+        by smtp.gmail.com with ESMTPSA id c5sm14507363pgt.73.2021.01.17.15.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jan 2021 15:48:10 -0800 (PST)
+Date:   Mon, 18 Jan 2021 07:48:06 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the csky tree
-Message-ID: <20210118084918.356050f3@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tags need some work in the gpio-brgl-fixes tree
+Message-ID: <20210117234806.GA6731@sol>
+References: <20210118082109.725aff1a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=F8TlDbitBZsH4gKP+lZDrI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210118082109.725aff1a@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=F8TlDbitBZsH4gKP+lZDrI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 18, 2021 at 08:21:09AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   ec6c3364b816 ("tools: gpio: fix %llu warning in gpio-watch.c")
+> 
+> Fixes tag
+> 
+>   Fixes: commit 33f0c47b8fb4 ("tools: gpio: implement gpio-watch")
+> 
+> has these problem(s):
+> 
+>   - leading word 'commit' unexpected
+> 
+> In commit
+> 
+>   56835f1c14bc ("tools: gpio: fix %llu warning in gpio-event-mon.c")
+> 
+> Fixes tag
+> 
+>   Fixes: commit 03fd11b03362 ("tools/gpio/gpio-event-mon: fix warning")
+> 
+> has these problem(s):
+> 
+>   - leading word 'commit' unexpected
+> 
 
-Hi all,
+Damn - not sure why I started doing that - it is in one of my selftest
+patches as well, and checkpatches.pl doesn't pick it up :-(.
 
-In commit
-
-  8bfb676492da ("csky: Fix a size determination in gpr_get()")
-
-Fixes tag
-
-  Fixes: dcad7854fcce ("sky: switch to ->regset_get()")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
---=20
 Cheers,
-Stephen Rothwell
+Kent.
 
---Sig_/=F8TlDbitBZsH4gKP+lZDrI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAEsN4ACgkQAVBC80lX
-0GyjpAf/d09FYbinZ8MzHMKpDogEZ3pa6SUPQhyqimcDjBP1aqsZ5wbzLp/lR4Sz
-0k7KAeKBWFkFchLIf25YDqtdwURdKv7ANkgTCtZVrNmsZsENnGCbOH2JJ1LUH1og
-zl7RuaouWSQRt32z4ujyAlCgEg9+t1wpqW8gOoN4ihLiBxfm2BUd7sILUsAywfoD
-UX02pQJ9tQ3tCqfTLG4myNUGUNQ8BBwXAWRHYTuEvy+Ue89DL/Qt/znrm1ULxO68
-N0uAYa1bTsTYj10qszWmxep1pRA96V5bBrSfeL417etCSVsN5XojznEK2AF0ZHGt
-igNC7pzhpnDv5s+fBusqUCyE2qYabg==
-=i48N
------END PGP SIGNATURE-----
-
---Sig_/=F8TlDbitBZsH4gKP+lZDrI--

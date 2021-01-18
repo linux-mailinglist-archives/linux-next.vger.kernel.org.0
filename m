@@ -2,96 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 948B82F9878
-	for <lists+linux-next@lfdr.de>; Mon, 18 Jan 2021 05:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412542F9948
+	for <lists+linux-next@lfdr.de>; Mon, 18 Jan 2021 06:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731297AbhAREI6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Jan 2021 23:08:58 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:48215 "EHLO ozlabs.org"
+        id S1726390AbhARFaE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Jan 2021 00:30:04 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33265 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730993AbhAREIw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 17 Jan 2021 23:08:52 -0500
+        id S1725794AbhARFaD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 Jan 2021 00:30:03 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DJytt01Mdz9sVr;
-        Mon, 18 Jan 2021 15:08:05 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DK0hc63rPz9sW0;
+        Mon, 18 Jan 2021 16:29:20 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1610942890;
-        bh=9ji3rG4AewVlQsEVCx9uSjgE1CJ98CjDp+kMa3WXxrc=;
+        s=201702; t=1610947761;
+        bh=3MS6saTof63YUUk9qgRAG/TGCLAihp885ihoC9lMxqU=;
         h=Date:From:To:Cc:Subject:From;
-        b=Iim22ibSSar2UWb47HnE0mQP3RFLg6/FBqtnrwl6CXrdMufmLx0+dH1RnjlTo/I0+
-         9kvhDjDdC8zVVSM1XB7WLmxKTu8g5nwwptQw1oBtZaWMP+zCrOiUqso2yc+GqFh51m
-         sVVKSRnnJ+o7zWrtJecZmyi+rE4QP/8jal8i/PacoTqaV35copqXHzFJwJfJpYpZ4V
-         kwYzOcK08YiUm/bj5+bVxSDIJq6kF0o8zomx0ywpsOvfj2h2MDr+E+CDZPEGdaU/8I
-         lGq5PEgbIt6VFRZBTvp2a/la9hPgiF9ppPkktvHIrOuHuSrr9wMWQlLWkMaAhn7O0e
-         tqt4eaVtFsWUQ==
-Date:   Mon, 18 Jan 2021 15:08:04 +1100
+        b=eHZLHsVjfzF4X30UukVGlbDWvyJFQeGJ8cSYOzb3d4D0COQRz0HLZ+y1O36YJn6M7
+         q9Zva/Ur3akQDmlzxGUXzF0rqeNwrP4IZdqhiB8qumoFKVNHi3SA332QxxgCzZTeXB
+         efYOZiZ721XeWJBCzNq65148R2q6fL2Qb35ZR24nk6uD6Z5LLeB+lD1GVI3wBcz+p8
+         hv65tjrc9KAE6up3DOURfJDlspPgNUoj/+AiJh0DouTbIbW6TuDVo/NItr+beQjg/I
+         71zC3/S3syqD1ENM3pmjmWk6slA2TsMaiW1smFXPCMztBnCWTI/fFVbVG5YP5/qH8V
+         N8w5AKYqMJong==
+Date:   Mon, 18 Jan 2021 16:29:19 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Huang Rui <ray.huang@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: linux-next: manual merge of the kspp tree with the mips tree
-Message-ID: <20210118150804.378ac9f3@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20210118162919.51f2dd3a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dB7MnGXiui1776_s0n8kdSu";
+Content-Type: multipart/signed; boundary="Sig_/TCH=uEu946f5k6yvaWa/C52";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dB7MnGXiui1776_s0n8kdSu
+--Sig_/TCH=uEu946f5k6yvaWa/C52
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kspp tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) gave this warning:
 
-  include/asm-generic/vmlinux.lds.h
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c: In function 'va=
+ngogh_init_smc_tables':
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:338:5: warning: =
+"CONFIG_X86" is not defined, evaluates to 0 [-Wundef]
+  338 | #if CONFIG_X86
+      |     ^~~~~~~~~~
 
-between commits:
+Caused by commit
 
-  9a427556fb8e ("vmlinux.lds.hf41b233de0ae: catch compound literals into da=
-ta and BSS")
-  f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data")
-
-from the mips tree and commit:
-
-  dc5723b02e52 ("kbuild: add support for Clang LTO")
-
-from the kspp tree.
-
-I fixed it up (9a427556fb8e and dc5723b02e52 made the same change to
-DATA_MAIN, which conflicted with the change in f41b233de0ae) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging. You may
-also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
+  9dd19d5232a6 ("drm/amdgpu: fix build error without x86 kconfig")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dB7MnGXiui1776_s0n8kdSu
+--Sig_/TCH=uEu946f5k6yvaWa/C52
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAFCaQACgkQAVBC80lX
-0GxP+Qf/fOmAeOySNZbDQqmFzQ3j0wOU3uotsQPWTuyt8clh0am68S0/pG6qUtO6
-IMZGYTweG+2kUrZoIJNjhVjAEBSjbwSUgzkXvMLiE/ziwuuCj0RSDiOcYW2DUoPs
-o/Ex7clslt1htbXKCpSaSkYb/y4dghPqrNDP3aX3bFb+emfG6O3j9AHxtIVGqRd/
-eey16CK/eyk6kUrrEKbYh4M/msHsf/HwAbkLCKbJ9/gnLzovtEqQuvMMHLFWM2RW
-fzWxm9CrKoHrlftw15si9WU0myyGTfs5ROpvVA+2WjACaQGewJSF8Q2hsjrHGuQ6
-V78DGtr/eDOVbl6LCmw8sdwGZVJ7YA==
-=v9bB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAFHK8ACgkQAVBC80lX
+0Gzrowf+MfsT3l4zdB+4vywetZw5XNAlo7/NxDGt9Sua8OiSunA1ZGypMO78e1Vq
+JH9DxE0Odv/WaCX/SVzLloqeVIVmXDCBXcMYvmYz26mzPmxTpCi1c35KPlAQP3Is
+HIaRU9IVOU/CAt+1VumGZ2bVGtZmLcPd7atJthv4nxrUHvnpkA/RQZX81FTtGz3B
+GbaVyoi3C72qN5zo0LBjbr6mmPH9vxEDBsevZ8xKD/201zJ6IYX3lARAwQk/qWpg
+G+p+0HV8tzQ7bXPlMnAbO2spDxbpzxVhpUNlKRIb2D44x7cpmoYbYeTJyaPb5jjA
+JQ2DAw1+IIPmkXcM2wU7A9wbPDFLWw==
+=WzUs
 -----END PGP SIGNATURE-----
 
---Sig_/dB7MnGXiui1776_s0n8kdSu--
+--Sig_/TCH=uEu946f5k6yvaWa/C52--

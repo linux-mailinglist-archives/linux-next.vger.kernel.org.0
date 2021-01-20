@@ -2,91 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F092FCAFD
-	for <lists+linux-next@lfdr.de>; Wed, 20 Jan 2021 07:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A3D2FCB0B
+	for <lists+linux-next@lfdr.de>; Wed, 20 Jan 2021 07:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729002AbhATGR4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jan 2021 01:17:56 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:48613 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728411AbhATGPp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 20 Jan 2021 01:15:45 -0500
+        id S1728424AbhATGUu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jan 2021 01:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728240AbhATGUH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jan 2021 01:20:07 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12E1C061575;
+        Tue, 19 Jan 2021 22:19:26 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DLFcQ5Blnz9sVy;
-        Wed, 20 Jan 2021 17:15:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DLFjQ0bvCz9sVy;
+        Wed, 20 Jan 2021 17:19:21 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611123302;
-        bh=fZzZa6Ejo+/Pl7W1xYcUoSns0+O+AX52JKnE/iQuOpQ=;
+        s=201702; t=1611123565;
+        bh=r5xVdPO4m7P2mwJrkoTxUEM32+9FIwPonFrWByCzuA8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SPDmJs/bCMMzhPpZJFjK7dc9/jfniWDP7oGwil16z+Hz6S8HFVvKMCcgh+3riDP5t
-         vDFQ3RCdeoiTzfBxeUhyZ0s8mWQFyHpmt3FGzl+XkwRmFWZ3+P8yWAkiodQVYUHvkM
-         K5Mvq+lR2U6rJILWqpnBxbLTjM5VGwuuVp31HhZU8x88HqNW6hmWaYoMQS/AzdaezU
-         Ja3FH/Qzx3lJiMkaOlVokCxT+ZWTjdaKnkQZ0IyOG/BJBBQe3uzLYPvsjlm7dqDj2M
-         eoDNCMBGa7+U0vfls1ElMbXv0EOJQz2MD1AFi/mOr8rKYx2B7PndtHWls19ZuqhGfb
-         mgOser8PgFzLw==
-Date:   Wed, 20 Jan 2021 17:15:01 +1100
+        b=KAHh3o2AHr4brWlCRKaGN8txAMIMhed1/wQ0dWloOwrpwnf1XuOQIvbscJUow9coI
+         yfC1kfHxRaIcEs5W83j51aKc8TX068bKgdurtwOI9Mu2lfJELyH/Q89Ny6i2gw6jsq
+         yg2r0HATDS7q9/ZQumBnf3Iu5i36TmG1/N3sRBtHqmVvt69M/pkdID7UBvJY1WTaAx
+         Er2Qxt2FJRWNg0xPS8mUG6dY03A/fblEup9/4j59MDBRcbCkTv3h0BiikCl2bhGP1O
+         XFtzV6X751noNHQMO9MgW06eyvCN3r2aNmu1bEbyBWtKz2FuQ+2EixZbQ/Nuni3+RK
+         46kkbYNwhHj+w==
+Date:   Wed, 20 Jan 2021 17:19:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+To:     David Howells <dhowells@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20210120171501.61aa0786@canb.auug.org.au>
-In-Reply-To: <20210115120014.4211dec6@canb.auug.org.au>
-References: <20210115120014.4211dec6@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Willem de Bruijn <willemb@google.com>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: linux-next: manual merge of the notifications tree with Linus'
+ tree
+Message-ID: <20210120171921.11d9d463@canb.auug.org.au>
+In-Reply-To: <20201221120209.5c5cb5d8@canb.auug.org.au>
+References: <20201221120209.5c5cb5d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/t88OOVC7pcSBAvlrNtrM6bs";
+Content-Type: multipart/signed; boundary="Sig_/F_LbjlTpWuHb8oUDvSHydok";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/t88OOVC7pcSBAvlrNtrM6bs
+--Sig_/F_LbjlTpWuHb8oUDvSHydok
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi David,
 
-On Fri, 15 Jan 2021 12:00:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 21 Dec 2020 12:02:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
+>
+> Hi all,
 >=20
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Today's linux-next merge of the notifications tree got conflicts in:
 >=20
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function =
-'dm_set_vblank':
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5380:33: warn=
-ing: unused variable 'dm' [-Wunused-variable]
->  5380 |  struct amdgpu_display_manager *dm =3D &adev->dm;
->       |                                 ^~
+>   arch/alpha/kernel/syscalls/syscall.tbl
+>   arch/arm/tools/syscall.tbl
+>   arch/arm64/include/asm/unistd.h
+>   arch/arm64/include/asm/unistd32.h
+>   arch/ia64/kernel/syscalls/syscall.tbl
+>   arch/m68k/kernel/syscalls/syscall.tbl
+>   arch/microblaze/kernel/syscalls/syscall.tbl
+>   arch/mips/kernel/syscalls/syscall_n32.tbl
+>   arch/mips/kernel/syscalls/syscall_n64.tbl
+>   arch/mips/kernel/syscalls/syscall_o32.tbl
+>   arch/parisc/kernel/syscalls/syscall.tbl
+>   arch/powerpc/kernel/syscalls/syscall.tbl
+>   arch/s390/kernel/syscalls/syscall.tbl
+>   arch/sh/kernel/syscalls/syscall.tbl
+>   arch/sparc/kernel/syscalls/syscall.tbl
+>   arch/x86/entry/syscalls/syscall_32.tbl
+>   arch/x86/entry/syscalls/syscall_64.tbl
+>   arch/xtensa/kernel/syscalls/syscall.tbl
+>   include/uapi/asm-generic/unistd.h
 >=20
-> Caused by commit
+> between commits:
 >=20
->   98ab5f3513f9 ("drm/amd/display: Fix deadlock during gpu reset v3")
+>   b0a0c2615f6f ("epoll: wire up syscall epoll_pwait2")
+>   450f68e2425e ("epoll: fix compat syscall wire up of epoll_pwait2")
+>   ecb8ac8b1f14 ("mm/madvise: introduce process_madvise() syscall: an exte=
+rnal memory hinting API")
+>=20
+> from Linus' tree and commit:
+>=20
+>   4cd92d064cb0 ("watch_queue: Implement mount topology and attribute chan=
+ge notifications")
+>=20
+> from the notifications tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> If this is not submitted to Linus during this merge window, please
+> either drop it from your linux-next included branch, or at least fix it
+> up wrt to the sate of Linus' tree.
 
-I am still getting this warning.
+How are you going with this?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/t88OOVC7pcSBAvlrNtrM6bs
+--Sig_/F_LbjlTpWuHb8oUDvSHydok
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAHymUACgkQAVBC80lX
-0GxkTwgApj7kDx9tIJuzN8TSNAryaVW466ScnO5gWAxb5GtNPtpFAx2OgdEdGKUG
-Oo9jS1titDFN6cevOW6laH9a1wsX2XupEIqPGC1BzLwAgtueFrX5h630VGjvKuFN
-5l25RvvrCzJmPLOGeirIehqLPgIR5Z0+88RfV9rFRI3wEUxNx5K3310B1M3T2tUe
-qsdIhDOxLDPwgAC3C5zcipwBXxmU8g6zDTYw07w+OKBX/ZRvxqm/Dghrg8tRX1Y0
-QMfo7LOrIzN8vhOYbYKBz7zYDAG90XNpbvYGf1FSLpkjHSZrrHhj2CEgQKz4vMCW
-yHfYDxpvt2/dcTnzeIo+cADVeg/qOw==
-=ynEO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAHy2kACgkQAVBC80lX
+0GyBeAf/SUwFQX6naVdoMVsMXmXYAieE6h7oWn5x/oKN0iT+WtSvIaTD5bbbdsiR
+B615ASysYOTXdx4QUMh12AnxnetIb6unVAv3Bqy01ykOAyCebHlnFnmiAuA5PbtZ
+M6sGPrFU8Hid0G3O+2hkDZVJPrDmb6RTXEp8nxSFv+0LMSSF7c31KM850OGc+EGE
+/KATq8CuA4rGG0d3El7DjF7W6B96VB9+Z20FuBWUSTCRJHGSH6aZn9QmqwiSYPeE
+Gd/YcE/BBTA865o6l4C53mvv5jKUgYJGqDeHG0vg5vnOQ32Bkx5gjmdKMvXTpN/W
+9MWYwMCDx1SJx/4JjSLq4gSWva5skQ==
+=KIJd
 -----END PGP SIGNATURE-----
 
---Sig_/t88OOVC7pcSBAvlrNtrM6bs--
+--Sig_/F_LbjlTpWuHb8oUDvSHydok--

@@ -2,113 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E63E42FE512
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 09:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2E22FE560
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 09:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727354AbhAUIeB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jan 2021 03:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S1727996AbhAUIvS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jan 2021 03:51:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbhAUIdm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jan 2021 03:33:42 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EF0C0613C1
-        for <linux-next@vger.kernel.org>; Thu, 21 Jan 2021 00:33:01 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id 9so1364906oiq.3
-        for <linux-next@vger.kernel.org>; Thu, 21 Jan 2021 00:33:01 -0800 (PST)
+        with ESMTP id S1727145AbhAUIvP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jan 2021 03:51:15 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9E0C0613C1
+        for <linux-next@vger.kernel.org>; Thu, 21 Jan 2021 00:50:27 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id q20so1098832pfu.8
+        for <linux-next@vger.kernel.org>; Thu, 21 Jan 2021 00:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uX11i9ntHKvjXSr2VUaKfVVivjbrt/oL5DMR5Av1mfQ=;
-        b=Waj5/Hh9QiVwxjR4nEz5y7b01uPWEmRMy/6wqmXtXcfpKDHMGBiKtBZRZfHBNYRvsS
-         8G1lfiJ1/4cmnM3eKji6pjpCYGh9STOXBBPHdEQmT3Q3g3wWwmGnWDoYL56mbi1XU2iI
-         bpUQccinaAKzE9oQk31XcfFtfv6GDskoDLYNY=
+        bh=kxeABTwKrp5jAkyYCl41DNW06QqjOBvc5g/VHYkvxFg=;
+        b=v/hwrp4dy4L4iMVa4yYX+2VsKRPl0Y33S5OKbzNy1leDJBCcj0k2hMDcu1aYVgFnoW
+         JSDF/FUaXePzzLqV5RKMQigb7pXPloNzB/a5CKo6Z4YI5dv/9mLcvlNI+2Jg07nuvBVq
+         FHDpzcHiirZI272P7r8hXOJWsRL+GRsCemSb2oWk9nfx4ZKO+78edOD4cTSEFQRyqM3b
+         McGgDFYHNdF4TsNbIoJt/X4IbLYDc8SdI1CKIiFSGYoVd0g5VBq4QK0OfKBfPd5lMaF8
+         c5HipIkJdW95uuyoMvHoD6JuBABaV5dA53F4aYZ6E6r7zTM9Xg6PYLvHBxr/q4iKGElT
+         hHsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uX11i9ntHKvjXSr2VUaKfVVivjbrt/oL5DMR5Av1mfQ=;
-        b=k6p4q1Z2/p0B+b/pf5PROzzhEdS5uk56kOPvzWOi6tiZQzngnTCfxpG3gmUGdPc673
-         qNnJnM4upGCXgDzireyoTpk6L090Yfli/1Bt6RpYFdZNET6QpF5EU5iEnwA8WgGlX3+6
-         UWpgh4xrCRqAM8Bt6XkEaWNsdAfD2cCKV8ZwpTtwo6OOi0uEIAh/wXMXi8Qi9NoSx6TI
-         tLyVY/OHdTqwoW2d30kb4HryChILXScyP5waXwEfixKfSmLX32phgjiTR3xAo1Yw611y
-         zupBne8JaVnMOwWqX1RPUOR8jrg82d+xysBmIZ0WXY3HQi2IhuVH281cRdyZE7FgsNz2
-         7KGQ==
-X-Gm-Message-State: AOAM532wNMmvSJ5DnmslIR4in/WRinU7ifdAYGRpIHvoyDFnYRplP2Hm
-        9PzI6pNU/nT/wDvope1eXFYp4MTsC3bOhpHom2LMzg==
-X-Google-Smtp-Source: ABdhPJw+4IsAgRHo2MtvXqtNHIi15f7EcB4J/2s7VVzDrmrcmIIQo+1zUjeULyIuUrzgvFuyBO2o90wnLGPb4+F9yEY=
-X-Received: by 2002:aca:4ac5:: with SMTP id x188mr5164573oia.14.1611217981254;
- Thu, 21 Jan 2021 00:33:01 -0800 (PST)
+        bh=kxeABTwKrp5jAkyYCl41DNW06QqjOBvc5g/VHYkvxFg=;
+        b=Z+emRhwYQApOkrcKxdTuigKjrLCrBdUVhJWOb0PwKXj+bC2+XkSHlL7l8VfyiYsoH6
+         swbheWzoMa/4BGfyY/FwxSvrXAQ0P6NORmxeVHy/Cv9t7R75NYIKV2cxCWU6j1LcJMkK
+         dm0dk/kgqhZ0LgRCjLagZFgoqP2MZfQxIan67Af4uvZPjTq5+LaKnrlxz3YO5y92BhCQ
+         osuWXpoj/INsBkTEH863VgzCMnXzwg3OS6jYvCofKXNEfWBq/GtnzdcOczeNR6IScQsV
+         3umTKHwC1MoodY5Ru6VH0tMPZ5H+guj5RhGdyMkKu5YPaoIfZ4DPknh5L7l7krGJZpAE
+         5VOQ==
+X-Gm-Message-State: AOAM531Z3VdHQExLLBIT+ThrIuekodmms1qPSnp4o36ZUldGFyy7swiQ
+        J0doXqiwqDkdFR8SvtwqYh9o1DYMJxFAXs4sp7WUfg==
+X-Google-Smtp-Source: ABdhPJxTk/OtbD6zGhUq09a8X9z6O9WR0eoO0GnaaPSY1RSrBUsWrxeZ4ANACpTuP7BsBGU0WjRwPZn8Zq+t6iury4I=
+X-Received: by 2002:a63:e049:: with SMTP id n9mr13504415pgj.339.1611219026528;
+ Thu, 21 Jan 2021 00:50:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20210115120014.4211dec6@canb.auug.org.au> <20210120171501.61aa0786@canb.auug.org.au>
- <20210121115341.012c1a55@canb.auug.org.au> <CADnq5_PuH6RNpkAKfUD011rDEXCRd5-0_ad0Rv40k_2gqiQaYA@mail.gmail.com>
-In-Reply-To: <CADnq5_PuH6RNpkAKfUD011rDEXCRd5-0_ad0Rv40k_2gqiQaYA@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 21 Jan 2021 09:32:50 +0100
-Message-ID: <CAKMK7uF8U8X54DFjRpovw1UO6B2xv16nzBrX1t2HQ6bZOmskcw@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the amdgpu tree
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+References: <20210121184136.43c30669@canb.auug.org.au>
+In-Reply-To: <20210121184136.43c30669@canb.auug.org.au>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 21 Jan 2021 09:50:15 +0100
+Message-ID: <CAG3jFyttW6eGw3FHfr2U657bTT2=kmWTr3MjV04S6_0diECrig@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 4:07 AM Alex Deucher <alexdeucher@gmail.com> wrote:
+Hey Stephen,
+
+On Thu, 21 Jan 2021 at 08:41, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Wed, Jan 20, 2021 at 7:53 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > On Wed, 20 Jan 2021 17:15:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > On Fri, 15 Jan 2021 12:00:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > >
-> > > > After merging the amdgpu tree, today's linux-next build (x86_64
-> > > > allmodconfig) failed like this:
-> > > >
-> > > > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'dm_set_vblank':
-> > > > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5380:33: warning: unused variable 'dm' [-Wunused-variable]
-> > > >  5380 |  struct amdgpu_display_manager *dm = &adev->dm;
-> > > >       |                                 ^~
-> > > >
-> > > > Caused by commit
-> > > >
-> > > >   98ab5f3513f9 ("drm/amd/display: Fix deadlock during gpu reset v3")
-> > >
-> > > I am still getting this warning.
-> >
-> > I now get this warning from the drm tree merge.
-
-Drat, I missed that when merging.
-
-> Bhawan sent out the fix today:
-> https://patchwork.freedesktop.org/patch/415092/
-
-Applied directly to drm-next, thanks.
--Daniel
-
+> Hi all,
 >
-> Alex
+> In commit
 >
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>   d4863ef399a2 ("arm64: dts: qcom: sdm845-db845c: Fix reset-pin of ov8856 node")
+>
+> Fixes tag
+>
+>   Fixes: d4919a44564b ("arm64: dts: qcom: sdm845-db845c: Add ov8856 & ov7251
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> Pleas do not split Fixes tags over more than one line.  Also, keep all
+> the commit message tags together at the end of the message.
+>
 
+That's on me. Would you like a resubmission with the above fixes?
 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> --
+> Cheers,
+> Stephen Rothwell

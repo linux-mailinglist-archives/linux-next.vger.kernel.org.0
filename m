@@ -2,99 +2,240 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2665C2FE21C
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 06:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6BE2FE20B
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 06:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbhAUDcA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jan 2021 22:32:00 -0500
-Received: from ozlabs.org ([203.11.71.1]:51047 "EHLO ozlabs.org"
+        id S1726004AbhAUDfb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jan 2021 22:35:31 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33217 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730664AbhAUAy2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 20 Jan 2021 19:54:28 -0500
+        id S2391964AbhAUBYy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 20 Jan 2021 20:24:54 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DLkRB2yKrz9sRR;
-        Thu, 21 Jan 2021 11:53:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DLl6M0M08z9sW1;
+        Thu, 21 Jan 2021 12:24:11 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611190423;
-        bh=yNIC3ySAkmU8uUU/dSr0EAUBxC+3f7iysDW4nBcI5A4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O5/4ic9Tz8kRCe/xHqQ3AbKMDrCiQqGngPDczsVdM95UP9u3hdKdwuk3oe2df+I8+
-         2yF+6yB0NiOjwFZCzfesFIizXxG9fDlhIo5/Fse9rqUh7MaCLOC3lJ2R3XiyEh//z0
-         kAnUBJesss08SbyDwJktYAHRQo9VBdfX5oaUbeqfltgeoy6c9WCH4oQg71nU72wWLb
-         KHe+apbBaNQtHyXV/9R//HTCDXDKJblTznxpd8PWqBcAoKnf0xxZBdvXi3xAvaDzxO
-         l1sT0MTZ9WBqwgvTOIQ+CDHcG0nf5gnfHWB4E4kSFT7WykONFDr6s2FhYcYtdaHUt3
-         jL3k3x6iOTBLg==
-Date:   Thu, 21 Jan 2021 11:53:41 +1100
+        s=201702; t=1611192251;
+        bh=fJgsWSD+vSfoKKK5J0FULDzWwW0DmcDHglLGMSyXTz0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EKdThzj1fPxTC6h7erGvYI5qiJtbo774JaJyuVjY5dBJui2qZul7b1op6hVZndj0O
+         ooQ6yp8pTjyaNJ6/IVzZxCvo+yE1Mn17UfLBZ76uOhO1NTeceNabumaj4z3KmT7H6s
+         YhO/gWSrsi++Ct24PiRcKgpMCLELaDQLqIWAa+O67MPV5ZUrsBLpzjny17/ioVb3Jz
+         9G+MadsR4BHT0grN8hliYqA+6PqqweiCYd7CxIBMj1rjhAyD1qiYU2fAsxQisZkxmr
+         Ko2eS+bOP9PooY+RcE7OPjtB79BCju/L3Bi3fG6GDOZtO9wwwDrBfgheq1BQ4LcLlh
+         MLUkamtJ7RLMA==
+Date:   Thu, 21 Jan 2021 12:24:10 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
         DRI <dri-devel@lists.freedesktop.org>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20210121115341.012c1a55@canb.auug.org.au>
-In-Reply-To: <20210120171501.61aa0786@canb.auug.org.au>
-References: <20210115120014.4211dec6@canb.auug.org.au>
-        <20210120171501.61aa0786@canb.auug.org.au>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20210121122410.1b804d28@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DDRRKSW0y.hCdmhLur.FD1r";
+Content-Type: multipart/signed; boundary="Sig_/oXO+eC.o1Sp6EZP+P.ON6IT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DDRRKSW0y.hCdmhLur.FD1r
+--Sig_/oXO+eC.o1Sp6EZP+P.ON6IT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 20 Jan 2021 17:15:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Fri, 15 Jan 2021 12:00:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >=20
-> > After merging the amdgpu tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In functio=
-n 'dm_set_vblank':
-> > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5380:33: wa=
-rning: unused variable 'dm' [-Wunused-variable]
-> >  5380 |  struct amdgpu_display_manager *dm =3D &adev->dm;
-> >       |                                 ^~
-> >=20
-> > Caused by commit
-> >=20
-> >   98ab5f3513f9 ("drm/amd/display: Fix deadlock during gpu reset v3") =20
->=20
-> I am still getting this warning.
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-I now get this warning from the drm tree merge.
+  drivers/gpu/drm/ttm/ttm_pool.c
+
+between commit:
+
+  bb52cb0dec8d ("drm/ttm: make the pool shrinker lock a mutex")
+
+from Linus' tree and commits:
+
+  ba051901d10f ("drm/ttm: add a debugfs file for the global page pools")
+  f987c9e0f537 ("drm/ttm: optimize ttm pool shrinker a bit")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DDRRKSW0y.hCdmhLur.FD1r
+diff --cc drivers/gpu/drm/ttm/ttm_pool.c
+index 11e0313db0ea,e0617717113f..000000000000
+--- a/drivers/gpu/drm/ttm/ttm_pool.c
++++ b/drivers/gpu/drm/ttm/ttm_pool.c
+@@@ -503,11 -505,14 +506,13 @@@ void ttm_pool_init(struct ttm_pool *poo
+  	pool->use_dma_alloc =3D use_dma_alloc;
+  	pool->use_dma32 =3D use_dma32;
+ =20
+- 	for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i)
+- 		for (j =3D 0; j < MAX_ORDER; ++j)
+- 			ttm_pool_type_init(&pool->caching[i].orders[j],
+- 					   pool, i, j);
++ 	if (use_dma_alloc) {
++ 		for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i)
++ 			for (j =3D 0; j < MAX_ORDER; ++j)
++ 				ttm_pool_type_init(&pool->caching[i].orders[j],
++ 						   pool, i, j);
++ 	}
+  }
+ -EXPORT_SYMBOL(ttm_pool_init);
+ =20
+  /**
+   * ttm_pool_fini - Cleanup a pool
+@@@ -521,9 -526,34 +526,33 @@@ void ttm_pool_fini(struct ttm_pool *poo
+  {
+  	unsigned int i, j;
+ =20
+- 	for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i)
+- 		for (j =3D 0; j < MAX_ORDER; ++j)
+- 			ttm_pool_type_fini(&pool->caching[i].orders[j]);
++ 	if (pool->use_dma_alloc) {
++ 		for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i)
++ 			for (j =3D 0; j < MAX_ORDER; ++j)
++ 				ttm_pool_type_fini(&pool->caching[i].orders[j]);
++ 	}
++ }
+ -EXPORT_SYMBOL(ttm_pool_fini);
++=20
++ /* As long as pages are available make sure to release at least one */
++ static unsigned long ttm_pool_shrinker_scan(struct shrinker *shrink,
++ 					    struct shrink_control *sc)
++ {
++ 	unsigned long num_freed =3D 0;
++=20
++ 	do
++ 		num_freed +=3D ttm_pool_shrink();
++ 	while (!num_freed && atomic_long_read(&allocated_pages));
++=20
++ 	return num_freed;
++ }
++=20
++ /* Return the number of pages available or SHRINK_EMPTY if we have none */
++ static unsigned long ttm_pool_shrinker_count(struct shrinker *shrink,
++ 					     struct shrink_control *sc)
++ {
++ 	unsigned long num_pages =3D atomic_long_read(&allocated_pages);
++=20
++ 	return num_pages ? num_pages : SHRINK_EMPTY;
+  }
+ =20
+  #ifdef CONFIG_DEBUG_FS
+@@@ -553,6 -594,35 +593,35 @@@ static void ttm_pool_debugfs_orders(str
+  	seq_puts(m, "\n");
+  }
+ =20
++ /* Dump the total amount of allocated pages */
++ static void ttm_pool_debugfs_footer(struct seq_file *m)
++ {
++ 	seq_printf(m, "\ntotal\t: %8lu of %8lu\n",
++ 		   atomic_long_read(&allocated_pages), page_pool_size);
++ }
++=20
++ /* Dump the information for the global pools */
++ static int ttm_pool_debugfs_globals_show(struct seq_file *m, void *data)
++ {
++ 	ttm_pool_debugfs_header(m);
++=20
+ -	spin_lock(&shrinker_lock);
+++	mutex_lock(&shrinker_lock);
++ 	seq_puts(m, "wc\t:");
++ 	ttm_pool_debugfs_orders(global_write_combined, m);
++ 	seq_puts(m, "uc\t:");
++ 	ttm_pool_debugfs_orders(global_uncached, m);
++ 	seq_puts(m, "wc 32\t:");
++ 	ttm_pool_debugfs_orders(global_dma32_write_combined, m);
++ 	seq_puts(m, "uc 32\t:");
++ 	ttm_pool_debugfs_orders(global_dma32_uncached, m);
+ -	spin_unlock(&shrinker_lock);
+++	mutex_unlock(&shrinker_lock);
++=20
++ 	ttm_pool_debugfs_footer(m);
++=20
++ 	return 0;
++ }
++ DEFINE_SHOW_ATTRIBUTE(ttm_pool_debugfs_globals);
++=20
+  /**
+   * ttm_pool_debugfs - Debugfs dump function for a pool
+   *
+@@@ -565,23 -635,14 +634,14 @@@ int ttm_pool_debugfs(struct ttm_pool *p
+  {
+  	unsigned int i;
+ =20
+- 	mutex_lock(&shrinker_lock);
+-=20
+- 	seq_puts(m, "\t ");
+- 	for (i =3D 0; i < MAX_ORDER; ++i)
+- 		seq_printf(m, " ---%2u---", i);
+- 	seq_puts(m, "\n");
+-=20
+- 	seq_puts(m, "wc\t:");
+- 	ttm_pool_debugfs_orders(global_write_combined, m);
+- 	seq_puts(m, "uc\t:");
+- 	ttm_pool_debugfs_orders(global_uncached, m);
++ 	if (!pool->use_dma_alloc) {
++ 		seq_puts(m, "unused\n");
++ 		return 0;
++ 	}
+ =20
+- 	seq_puts(m, "wc 32\t:");
+- 	ttm_pool_debugfs_orders(global_dma32_write_combined, m);
+- 	seq_puts(m, "uc 32\t:");
+- 	ttm_pool_debugfs_orders(global_dma32_uncached, m);
++ 	ttm_pool_debugfs_header(m);
+ =20
+ -	spin_lock(&shrinker_lock);
+++	mutex_lock(&shrinker_lock);
+  	for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i) {
+  		seq_puts(m, "DMA ");
+  		switch (i) {
+@@@ -597,12 -658,9 +657,9 @@@
+  		}
+  		ttm_pool_debugfs_orders(pool->caching[i].orders, m);
+  	}
+-=20
+- 	seq_printf(m, "\ntotal\t: %8lu of %8lu\n",
+- 		   atomic_long_read(&allocated_pages), page_pool_size);
+-=20
+ -	spin_unlock(&shrinker_lock);
+ +	mutex_unlock(&shrinker_lock);
+ =20
++ 	ttm_pool_debugfs_footer(m);
+  	return 0;
+  }
+  EXPORT_SYMBOL(ttm_pool_debugfs);
+
+--Sig_/oXO+eC.o1Sp6EZP+P.ON6IT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAI0JUACgkQAVBC80lX
-0GweBAf9H9CGW9h/lNEJuiCaeWMYnza/MyzkFy48votPkAd9AJ2/WoSk/Rn/n3M6
-QSUKO/EdJohktVc0hcAXbxsE1mJs5B63ht/jsV8D6U3p7kgASTxJH9grd57sd05E
-5LwfS9f+4VGWMy0Ny5/j3Q5fWfQfFdFYnW97NIjtucsKSHYMcORUJId1n8XGc0j0
-JILzdXyCCACc5/rohmWeCSxST04YZ0g9E2NQI8OTEa7IZ7HVc7INtwjwo1jLZ7CN
-sQiDIFsQ2ZHTCI4up678k+OpzxBHD2rkrg4JPiyNtqMM3PlgnhLTCdLp2IpzL9Nx
-op3kFT5Q55sn3jMVK/uDWg1++dkdGw==
-=SEhV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAI17oACgkQAVBC80lX
+0Gyttgf/S7HYCIBsCN70DVdqIdUxLAekKp2nj7dBoYmemiFGY1hGBVKfw8/ITi41
+w7Q8HzGTayI0Ah8uXdvTMc69m4aH2ldDkYJSIyKq4CyFLeoDdsqa62sr3HsiDZkZ
+JTFMFo7kKouUCMteBI96p30xl0hgvApIyRBrChtuXCAVrge9lWPzQsCECOyJLT5r
+5WAvSUxRysQHXFoZ7nPRp7d7SYcJ+0HxYjMvnV8aULEE55vb2KjVy2j+Nju4xnV2
+MCmp7JzUFpXazyKhjUfSFytIlCTmN2+HnQ5swuzGAVwPer0aei7VvU3SfmAwNRxp
+jQ1QdGeqJGrCk6jlN9Rq1qmP0VJTAA==
+=/m5T
 -----END PGP SIGNATURE-----
 
---Sig_/DDRRKSW0y.hCdmhLur.FD1r--
+--Sig_/oXO+eC.o1Sp6EZP+P.ON6IT--

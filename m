@@ -2,88 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EAB2FF787
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 22:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCF92FF7F7
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 23:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727409AbhAUVp0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jan 2021 16:45:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40698 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727286AbhAUVoj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 21 Jan 2021 16:44:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A78D923A56;
-        Thu, 21 Jan 2021 21:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611265438;
-        bh=tYYWE4pXBYgJiVQbHPNuH4bTBYvHpqbYdDRF8lYnB6s=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=liu8wzDXnkRgcXAWnTvlsopRARgJJt+SEtmo3fLAh+G3Yu/uAUIoOxolzRF0SDio6
-         HhKt2jHMvaLIYftcpZzPhu4WjRUHtKbkOo6Nes0AyKu0BDofUFhcAG457EfQeWTnpJ
-         WdQM3SeA3vu0j7Xhc8kj3EPxlnUfJCgsyH+6Yy32QZQdHU3/jgEIS4fTP/Po4fyCaH
-         p20bZsHurxWvVHuy3nQqHIxyXglB4Y4Kr9vzX1SMJNnS1XOO4BMqarin7+j9haHIYk
-         IADOWwhbJDgBtXJGkgxEqedve/J40mnThssxewjixo4TU3TbJyHy5GcMXr/3i42Q0z
-         7JngHprjTc0uQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 61D2435226D8; Thu, 21 Jan 2021 13:43:58 -0800 (PST)
-Date:   Thu, 21 Jan 2021 13:43:58 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725268AbhAUWbx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jan 2021 17:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726182AbhAUWbq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jan 2021 17:31:46 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BB9C0613D6;
+        Thu, 21 Jan 2021 14:31:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DMHD62TsXz9sCD;
+        Fri, 22 Jan 2021 09:31:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611268262;
+        bh=uVaQ65fEPi72B62bEe+ohl4M6CtunMGDfjs6tVElKmo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dZCa/N5jtJbt2gckDY0h6iK7P32nbtALrYKYNvA7I3ntku2CEc3isserLIP6fjdAu
+         P/dcssaVS3uswMoECBAALA58XIFQKtNVpoRzU0Coviq6R7/GweMlnHfleeNcdxfJPu
+         tcIHBhU1gKCNLU0zan785QJUFK629DJDW0MNkLkIHGlVZsXKgJxvVbH9dwa5jZIpq9
+         M43ZL4NzdvoNlI09FrGOezzcub9fNLyY3vyOBv/W4yeikBwIJJ25irutfdEoLJvw5q
+         L7gOeLNmmt0kQdkc2nhpTvjEzooHlOCMn/+vGabO/iPiCazY027RjhYZzV1pyDlkD7
+         GwakTxOnJyxCA==
+Date:   Fri, 22 Jan 2021 09:31:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Subject: Re: [PATCH] s390: allow reschedule on syscall restart
-Message-ID: <20210121214358.GX2743@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20210121143926.21440-1-svens@linux.ibm.com>
- <20210121143926.21440-2-svens@linux.ibm.com>
- <20210122083249.60d29c33@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20210122093101.058cbc6a@canb.auug.org.au>
 In-Reply-To: <20210122083249.60d29c33@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210121143926.21440-1-svens@linux.ibm.com>
+        <20210121143926.21440-2-svens@linux.ibm.com>
+        <20210122083249.60d29c33@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/CzqynzLpR=zJy.WU4h/xyDt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 08:32:49AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Thu, 21 Jan 2021 15:39:26 +0100 Sven Schnelle <svens@linux.ibm.com> wrote:
-> >
-> > Commit 845f44e8ef28 ("sched: Report local wake up on resched blind zone
-> > within idle loop") from next-20210121 causes a warning because s390
-> > doesn't call sched_resched_local_allow() when restarting a syscall.
-> > 
-> > Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> > ---
-> >  arch/s390/kernel/syscall.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/s390/kernel/syscall.c b/arch/s390/kernel/syscall.c
-> > index bc8e650e377d..2b39ac40f970 100644
-> > --- a/arch/s390/kernel/syscall.c
-> > +++ b/arch/s390/kernel/syscall.c
-> > @@ -162,6 +162,7 @@ void noinstr __do_syscall(struct pt_regs *regs, int per_trap)
-> >  		do_syscall(regs);
-> >  		if (!test_pt_regs_flag(regs, PIF_SYSCALL_RESTART))
-> >  			break;
-> > +		sched_resched_local_allow();
-> >  		local_irq_enable();
-> >  	}
-> >  	exit_to_user_mode();
-> 
+--Sig_/CzqynzLpR=zJy.WU4h/xyDt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Fri, 22 Jan 2021 08:32:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
 > I add that today as a merge fixup patch to the merge of the rcu tree
 > (which contains commit 845f44e8ef28 ("sched: Report local wake up on
 > resched blind zone within idle loop") ).
 
-If Frederic has no objections, I will fold this in with attribution.
+That is now commit
 
-Either way, good catch!
+  0932934fd95e ("sched: Report local wake up on resched blind zone within i=
+dle loop")
 
-							Thanx, Paul
+in the rcu tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CzqynzLpR=zJy.WU4h/xyDt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAKAKUACgkQAVBC80lX
+0GzlYQf9FfgFaTc08lXMGDpckNE6vyrnGiwmjbFAW9i7Tyx0npcJVS6zFj+Wv89P
+EqLT1lveFrgcYklR2JgrewzRGwcX8aIUU95m3btWge3I/pEvHqiwbQXmnj2eZUOD
+RSQKWLG8RtEOW2DSaD2cHVHLNkPp0jkYn2G2dAcBGvLVbGpu89Mdr6FyymcgSKef
+wnR3ymrujOe1R6I/euwjpuuwgqP6mM5NLka8HuyiZ54IEinTKHgnsP6yCV0yZu12
+SLrEsLHJmSrPiG7cBDdXLo/a/HTv0zvdH0rvOU00szPecBbEkxctIjz/GprW4Bxg
+pAvTq94p9WQI9OstjfV6LoKTPJPkaQ==
+=nX5+
+-----END PGP SIGNATURE-----
+
+--Sig_/CzqynzLpR=zJy.WU4h/xyDt--

@@ -2,115 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EEA2FE013
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 04:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CD22FE014
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 04:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727264AbhAUDgi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Jan 2021 22:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S1727307AbhAUDhF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Jan 2021 22:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436844AbhAUC1d (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jan 2021 21:27:33 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7FAC061575;
-        Wed, 20 Jan 2021 18:26:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DLmVZ2Nctz9sW4;
-        Thu, 21 Jan 2021 13:26:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611196008;
-        bh=adam7o31byAmsNO7PyJ+PTMYjYvnxJ3L+Eo0CAo9M+M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TzN/DIkCkWPSi6nhvSZKyGdEfEGkuTL+dt3TYTumpJ/E8aW+UoBqUhGSnm38vYG/g
-         5wgPobZ9dnhykV6S86sdD1Nine931g4zpMdY/TZAq2dAQ01nRk3Gix4+LCC1QqlbP9
-         aFHiNXGgqaz48wkAjrFlVTjjg/P8XXLw8Y8fr6tibMrbeQKyCgw1XhKtL1EsJRYxf2
-         NTjyH4dkJ2s+KPZvfYVEwewVgNLsdNHu4ftwrInhfaeD/84YgOInposJ91gU+sMQJY
-         MEm5141mLGIgRyeauiRxZKswGDaZw48TNSv3OgI/KnvrfPOVG8wXbTd5EBpEFuXoxi
-         E/YoAzU3Ad6SQ==
-Date:   Thu, 21 Jan 2021 13:26:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the net-next
- tree
-Message-ID: <20210121132645.0a9edc15@canb.auug.org.au>
+        with ESMTP id S1726472AbhAUDIS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Jan 2021 22:08:18 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA68C061575;
+        Wed, 20 Jan 2021 19:07:35 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id 15so680660oix.8;
+        Wed, 20 Jan 2021 19:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BG1xLGWcnyY9xQR12boOLCRylQDrIp7cDoolAVHFjIY=;
+        b=GcOMpy6ipAWgydQzaw2NMeLsPnmNTu8VU43mYpvLc+MvOT3YxULe4T31AL7VE0WZ7t
+         PSwY2DegOZXBphfMoWMp+/qxtmymjpf9D6F+2fIBLyrjLabAzdDVlj38eRGXpJvsj+X7
+         UTSlPMYRMCFLP7a4NDbbr8eqZT85YdppPZ2AqT74Pusow2p/onJOCdQWvuT9RjuYH//t
+         q2wRZNTWgKOWwaGNqT/UUJSrg20+f4ItRlckLfSec8DWqq2fMM4L0BAMA4mEzkl375MB
+         ULn7/qmE8pHD91XWdaWA1GsmTrlB5oNwj81Q44V3UCbnsGSLQt6GO24yCD8EDRMnLHPT
+         p3DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BG1xLGWcnyY9xQR12boOLCRylQDrIp7cDoolAVHFjIY=;
+        b=V5hRlmwmxnLLguGBWHExjoEJxcI//ONuu/nu32Vg64ToQz75JJY3Sa6sBODXLp2c5z
+         oCkde0YLowCQMPKo+/7nJEJV6Y73659G9gL/RBKqzk/KfpeTW860046jrzK6H0Yy72vd
+         9h/jFRHhFuySAbpznJePNDwrHt4N/9Vh7Gh/WmxdTMyAJTnJm4AKBNc+zRLsQzSCRqN6
+         DEm3Ttn+TDlPGcPcYEdlzr2YeVqrH0WnV7TEElyA4AuqPZNjccDaTPyxpph+s3R943D/
+         NXPYuCe2dAX0W2lACKTz8sQzinRZHZmUAUgmgW3L7oFRRemvqx7TIYlBCq2n4ydaYXUG
+         M8XA==
+X-Gm-Message-State: AOAM533lmd6Rpt1rpHukUqAgwF/fnsI1YGPV9XqLQ/dIWvk0YBprDbpp
+        2NzCZrm3KqwAaRpEqNAzkMvL7UbIbn9CtVnqrrk=
+X-Google-Smtp-Source: ABdhPJzLb2aGPpWZaLInDmWBYV6zXb9BIywLTNbMJZ2rVC4CBpAmeacPihmMLdnl1xm6+LBEpB3z9zH6KUEINwdM2Z0=
+X-Received: by 2002:aca:1a17:: with SMTP id a23mr4749105oia.120.1611198454758;
+ Wed, 20 Jan 2021 19:07:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4Mltm=817k1qngRGqT7LIAG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210115120014.4211dec6@canb.auug.org.au> <20210120171501.61aa0786@canb.auug.org.au>
+ <20210121115341.012c1a55@canb.auug.org.au>
+In-Reply-To: <20210121115341.012c1a55@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 20 Jan 2021 22:07:23 -0500
+Message-ID: <CADnq5_PuH6RNpkAKfUD011rDEXCRd5-0_ad0Rv40k_2gqiQaYA@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4Mltm=817k1qngRGqT7LIAG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 20, 2021 at 7:53 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Wed, 20 Jan 2021 17:15:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > On Fri, 15 Jan 2021 12:00:14 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > After merging the amdgpu tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >
+> > > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'dm_set_vblank':
+> > > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:5380:33: warning: unused variable 'dm' [-Wunused-variable]
+> > >  5380 |  struct amdgpu_display_manager *dm = &adev->dm;
+> > >       |                                 ^~
+> > >
+> > > Caused by commit
+> > >
+> > >   98ab5f3513f9 ("drm/amd/display: Fix deadlock during gpu reset v3")
+> >
+> > I am still getting this warning.
+>
+> I now get this warning from the drm tree merge.
 
-Hi all,
+Bhawan sent out the fix today:
+https://patchwork.freedesktop.org/patch/415092/
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+Alex
 
-  Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-
-between commit:
-
-  19d9a846d9fc ("dt-binding: net: ti: k3-am654-cpsw-nuss: update bindings f=
-or am64x cpsw3g")
-
-from the net-next tree and commit:
-
-  0499220d6dad ("dt-bindings: Add missing array size constraints")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-index 3fae9a5f0c6a,097c5cc6c853..000000000000
---- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-@@@ -72,7 -66,8 +72,8 @@@ properties
-    dma-coherent: true
- =20
-    clocks:
-+     maxItems: 1
- -    description: CPSW2G NUSS functional clock
- +    description: CPSWxG NUSS functional clock
- =20
-    clock-names:
-      items:
-
---Sig_/4Mltm=817k1qngRGqT7LIAG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAI5mUACgkQAVBC80lX
-0GytuwgAjhKNzn/qra4GuNZvh50dYrJ+NpEzKxx1r3Dy0OWlM3yHOHW2oIHrhVni
-EkIGgwybxYV44kcQKUzCDDpHG+SvFYkOI4sq4zFxHXqFkUVDdbH72X/ptc1TycPa
-uRzqH+krnkrDM+KCm2plwkd6ZEbAr90kiRQWGITKJm82gweCAWCQO2TXa2yRa5ef
-WM/EhuzvqCboEMk/VVhskgcCycUhVEW3PKetDLQS/GGTycgCJCwUQtVNmIeRdJJD
-wsYPMghPVk9xRF8DYn8Br3YnyEYk83iTKD2bN0DBTcGJjGCbxFOhNSgVsq0TtM3+
-Z8aQXG3opmWMLW04kqagsB2kE7oQxA==
-=Uoaj
------END PGP SIGNATURE-----
-
---Sig_/4Mltm=817k1qngRGqT7LIAG--
+>
+> --
+> Cheers,
+> Stephen Rothwell

@@ -2,85 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D23B2FF758
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 22:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B06E2FF75B
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 22:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbhAUVdI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jan 2021 16:33:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727305AbhAUVb6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 21 Jan 2021 16:31:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E23E23A53;
-        Thu, 21 Jan 2021 21:31:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611264675;
-        bh=L5lsmNVyN/gM7eKC23++Z8NFz5Zp1K8u7Gf3EzsLgTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s3E9tnK1u5bQtDZDhFxLwTEjQoye8OEe0JSXIIJXh59aGqORZ3Q8zdNRiWOaMY+g0
-         TyUNgL3pMTFaj2i3ooCy4cYUQgvFaWz8j3pr7ekeyTHWMRQm9QUVerC+yaSarK3yAv
-         k+nnKZRsH9DipeZjI+Gyv2WfmmJpfAvnKNk38ZgnZtopWjVX/ds6YZFCJlf7Fzsgmw
-         rtNd74QkiodsM0W+U02QglBYZ24GfAaF4uX1/H7V2igVdCZbkDbyUU9SgJ8QuK+MpZ
-         bvOiVG6YGB0g+tiI+r4SIy132vvXRgO3YyF2zsSGpEidBTJBECm2W4/wcn4D2sWSrO
-         m+qCinZgzKkHw==
-Date:   Thu, 21 Jan 2021 21:31:10 +0000
-From:   Will Deacon <will@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, rcu@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com
-Subject: Re: rcu-torture: Internal error: Oops: 96000006
-Message-ID: <20210121213110.GB23234@willie-the-truck>
-References: <CA+G9fYvV5SZ47M-XpABya11okgR7BJQk-3dDuFWzgVmGN3Lurg@mail.gmail.com>
- <20210121185521.GQ2743@paulmck-ThinkPad-P72>
+        id S1726347AbhAUVdt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jan 2021 16:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727412AbhAUVdk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Jan 2021 16:33:40 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E61EC06174A;
+        Thu, 21 Jan 2021 13:32:55 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DMFwy29jpz9rx8;
+        Fri, 22 Jan 2021 08:32:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611264771;
+        bh=WqD6nMsWfm8wkWrN0VuKrvbVqutP657Jy9gvshg5kEM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qvc01sF+zowe5R5ce2pTR9hN4IWaUabGoFuaWi4QOVuo1c+AXSkE/rubP7VGYCdzd
+         XcOKVMmQKt+lyyeBnJEN1dE6OGCBPwDv5pkz9/3hf3zW2zgSNAcvCF9d+gUIwoxugK
+         PINlw+HWTvA0jVGA9091WwCYprg7v7+j+MCLlrG58rwgudxnctNrTlqTwcvrPa3kR2
+         klS/8015j15T++9d7VCToiwEl+2QxOybn7b96Mmu/qEwc6Fw+aLVVRgjamIURkTPed
+         3UJgckaWeicOKE7/BBojdUOUXwwnpv8E6FOwkN9lusgFTSW4KYyoGkkHhadQlu6z44
+         JSsx92tUdmDTQ==
+Date:   Fri, 22 Jan 2021 08:32:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH] s390: allow reschedule on syscall restart
+Message-ID: <20210122083249.60d29c33@canb.auug.org.au>
+In-Reply-To: <20210121143926.21440-2-svens@linux.ibm.com>
+References: <20210121143926.21440-1-svens@linux.ibm.com>
+        <20210121143926.21440-2-svens@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121185521.GQ2743@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/03Jr4fuQBFBteIb9I_.t_qw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 10:55:21AM -0800, Paul E. McKenney wrote:
-> On Thu, Jan 21, 2021 at 10:37:21PM +0530, Naresh Kamboju wrote:
-> > While running rcu-torture test on qemu_arm64 and arm64 Juno-r2 device
-> > the following kernel crash noticed. This started happening from Linux next
-> > next-20210111 tag to next-20210121.
-> > 
-> > metadata:
-> >   git branch: master
-> >   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-> >   git describe: next-20210111
-> >   kernel-config: https://builds.tuxbuild.com/1muTTn7AfqcWvH5x2Alxifn7EUH/config
-> > 
-> > output log:
-> > 
-> > [  621.538050] mem_dump_obj() slab test: rcu_torture_stats =
-> > ffff0000c0a3ac40, &rhp = ffff800012debe40, rhp = ffff0000c8cba000, &z
-> > = ffff8000091ab8e0
-> > [  621.546662] mem_dump_obj(ZERO_SIZE_PTR):
-> > [  621.546696] Unable to handle kernel NULL pointer dereference at
-> > virtual address 0000000000000008
+--Sig_/03Jr4fuQBFBteIb9I_.t_qw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+Hi all,
 
-> Huh.  I am relying on virt_addr_valid() rejecting NULL pointers and
-> things like ZERO_SIZE_PTR, which is defined as ((void *)16).  It looks
-> like your configuration rejects NULL as an invalid virtual address,
-> but does not reject ZERO_SIZE_PTR.  Is this the intent, given that you
-> are not allowed to dereference a ZERO_SIZE_PTR?
-> 
-> Adding the ARM64 guys on CC for their thoughts.
+On Thu, 21 Jan 2021 15:39:26 +0100 Sven Schnelle <svens@linux.ibm.com> wrot=
+e:
+>
+> Commit 845f44e8ef28 ("sched: Report local wake up on resched blind zone
+> within idle loop") from next-20210121 causes a warning because s390
+> doesn't call sched_resched_local_allow() when restarting a syscall.
+>=20
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+>  arch/s390/kernel/syscall.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/arch/s390/kernel/syscall.c b/arch/s390/kernel/syscall.c
+> index bc8e650e377d..2b39ac40f970 100644
+> --- a/arch/s390/kernel/syscall.c
+> +++ b/arch/s390/kernel/syscall.c
+> @@ -162,6 +162,7 @@ void noinstr __do_syscall(struct pt_regs *regs, int p=
+er_trap)
+>  		do_syscall(regs);
+>  		if (!test_pt_regs_flag(regs, PIF_SYSCALL_RESTART))
+>  			break;
+> +		sched_resched_local_allow();
+>  		local_irq_enable();
+>  	}
+>  	exit_to_user_mode();
 
-Spooky timing, there was a thread _today_ about that:
+I add that today as a merge fixup patch to the merge of the rcu tree
+(which contains commit 845f44e8ef28 ("sched: Report local wake up on
+resched blind zone within idle loop") ).
 
-https://lore.kernel.org/r/ecbc7651-82c4-6518-d4a9-dbdbdf833b5b@arm.com
+--=20
+Cheers,
+Stephen Rothwell
 
-Will
+--Sig_/03Jr4fuQBFBteIb9I_.t_qw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAJ8wEACgkQAVBC80lX
+0GyRKwgApHeYDUXwAm0A6CmTZ8jd0sYi6V7cHZ1/MRl+HsHUYYRKL6JMe+a79DMp
+FDZpBDX2SkA85O/LUyHCACNQffK7gj7hMnuippWjygnS/FPeKtjLsv20+dmAkkWx
+Yb5zSo5eGrmyJebiXZZttcMjyXiYQWnlR1ylPT+TDUlWEXXGJNrcylqwiZzyuANU
+RVc02VRwuplx9eyVdGG4VWiKoQ5IWE23zxxq7x3BV9Q5LCVMwZ3H+1dY57lKFODg
+Pd/plnSLmHzX3UesHtA+tPCzj6J4mT7CaQeHU5pV//V0XDW95g8EQZiHpfCTK8OD
+tc47l8lFX4Q2oVcLm/yNna+UjOJBQQ==
+=+0ME
+-----END PGP SIGNATURE-----
+
+--Sig_/03Jr4fuQBFBteIb9I_.t_qw--

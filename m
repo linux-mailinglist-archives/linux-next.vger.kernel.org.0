@@ -2,87 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 933D52FF6CC
-	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 22:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D23B2FF758
+	for <lists+linux-next@lfdr.de>; Thu, 21 Jan 2021 22:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727329AbhAUVH5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Jan 2021 16:07:57 -0500
-Received: from ozlabs.org ([203.11.71.1]:44605 "EHLO ozlabs.org"
+        id S1727366AbhAUVdI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Jan 2021 16:33:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38276 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727473AbhAUU6u (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 21 Jan 2021 15:58:50 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DMF8X3v6Cz9s1l;
-        Fri, 22 Jan 2021 07:57:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611262668;
-        bh=e4hR1kPAHbwnex+QqprC9WLpJ5biZMKwufiDGhGGoiQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=COr8aJ2/DqjAmeRFhRZNhnTmeQ7wUiVHTuIYtpJpgYLUTldtBCC5GCZVn/rWobtrt
-         5D7CI3rDrPyPY9718R/i9nGT36LmDSgi0L023nPgDY/woXjiCdz7/L1VZNTCPwnYqN
-         qA7hjLkqT4uvHC4eLHhlA38Bm46RM6AxxFa99rb+rAP3KAkiIiHZn6Z3WBwEr+YLrn
-         INYEdR0mg0KvHdc7RZM89B4JBCArDpISV5zFTSmJW3Mi0p+ur8clt3ulKsbtlE3JvC
-         cG1cfin0yypBjPp8UyO8MyCWJzdjXrqwRPFg+TaHwNY/EKhSNAzuTlHCGAQE90+050
-         fuEeuxU87IR3Q==
-Date:   Fri, 22 Jan 2021 07:57:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Kir Kolyshkin <kolyshkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the jc_docs tree
-Message-ID: <20210122075747.3622cd8e@canb.auug.org.au>
+        id S1727305AbhAUVb6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 21 Jan 2021 16:31:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E23E23A53;
+        Thu, 21 Jan 2021 21:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611264675;
+        bh=L5lsmNVyN/gM7eKC23++Z8NFz5Zp1K8u7Gf3EzsLgTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s3E9tnK1u5bQtDZDhFxLwTEjQoye8OEe0JSXIIJXh59aGqORZ3Q8zdNRiWOaMY+g0
+         TyUNgL3pMTFaj2i3ooCy4cYUQgvFaWz8j3pr7ekeyTHWMRQm9QUVerC+yaSarK3yAv
+         k+nnKZRsH9DipeZjI+Gyv2WfmmJpfAvnKNk38ZgnZtopWjVX/ds6YZFCJlf7Fzsgmw
+         rtNd74QkiodsM0W+U02QglBYZ24GfAaF4uX1/H7V2igVdCZbkDbyUU9SgJ8QuK+MpZ
+         bvOiVG6YGB0g+tiI+r4SIy132vvXRgO3YyF2zsSGpEidBTJBECm2W4/wcn4D2sWSrO
+         m+qCinZgzKkHw==
+Date:   Thu, 21 Jan 2021 21:31:10 +0000
+From:   Will Deacon <will@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, rcu@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com
+Subject: Re: rcu-torture: Internal error: Oops: 96000006
+Message-ID: <20210121213110.GB23234@willie-the-truck>
+References: <CA+G9fYvV5SZ47M-XpABya11okgR7BJQk-3dDuFWzgVmGN3Lurg@mail.gmail.com>
+ <20210121185521.GQ2743@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RD_ah6h49n0YX1J3I=fksSp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121185521.GQ2743@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RD_ah6h49n0YX1J3I=fksSp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 21, 2021 at 10:55:21AM -0800, Paul E. McKenney wrote:
+> On Thu, Jan 21, 2021 at 10:37:21PM +0530, Naresh Kamboju wrote:
+> > While running rcu-torture test on qemu_arm64 and arm64 Juno-r2 device
+> > the following kernel crash noticed. This started happening from Linux next
+> > next-20210111 tag to next-20210121.
+> > 
+> > metadata:
+> >   git branch: master
+> >   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+> >   git describe: next-20210111
+> >   kernel-config: https://builds.tuxbuild.com/1muTTn7AfqcWvH5x2Alxifn7EUH/config
+> > 
+> > output log:
+> > 
+> > [  621.538050] mem_dump_obj() slab test: rcu_torture_stats =
+> > ffff0000c0a3ac40, &rhp = ffff800012debe40, rhp = ffff0000c8cba000, &z
+> > = ffff8000091ab8e0
+> > [  621.546662] mem_dump_obj(ZERO_SIZE_PTR):
+> > [  621.546696] Unable to handle kernel NULL pointer dereference at
+> > virtual address 0000000000000008
 
-Hi all,
+[...]
 
-In commit
+> Huh.  I am relying on virt_addr_valid() rejecting NULL pointers and
+> things like ZERO_SIZE_PTR, which is defined as ((void *)16).  It looks
+> like your configuration rejects NULL as an invalid virtual address,
+> but does not reject ZERO_SIZE_PTR.  Is this the intent, given that you
+> are not allowed to dereference a ZERO_SIZE_PTR?
+> 
+> Adding the ARM64 guys on CC for their thoughts.
 
-  cf9cadf16b19 ("docs/admin-guide: cgroup-v2: typos and spaces")
+Spooky timing, there was a thread _today_ about that:
 
-Fixes tag
+https://lore.kernel.org/r/ecbc7651-82c4-6518-d4a9-dbdbdf833b5b@arm.com
 
-  Fixes: 5f9a4f4a70960
-
-has these problem(s):
-
-  - missing subject
-
-Maybe you meant
-
-Fixes: 5f9a4f4a7096 ("mm: memcontrol: add the missing numa_stat interface f=
-or cgroup v2")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RD_ah6h49n0YX1J3I=fksSp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAJ6ssACgkQAVBC80lX
-0GxUwQf/d86s1Rxw+HRyYejUVAnecM4HHUk5jR5CZ5n0ugtfiKZxndqanuEz6LXa
-92nIXbb0qHj0lHRY4UcUXjVUFatlXWYR36T6TEzmDYGREQXn2mqZ9E+IWigPcgpz
-QbrNSzkzra7EnVfCxov2IRx4ZHhbAqnedjPBtP0Unna0lxEBSHk6Kh79A0VvPWxo
-FPXAAnce607+6wxguhG1aw8t2YzyC+CpaoaRKpRyzEexlDE8cumwJOvwvpVOw2tp
-pZuDTSMhrKOCKuxcLHrBtJP0SsTQ9BCkpseRqO/Yb5WG2fEmGSoXwwurKhyjwj0W
-n5lldv+pRPBuyIdcrHYiq31hsMo+7w==
-=qI88
------END PGP SIGNATURE-----
-
---Sig_/RD_ah6h49n0YX1J3I=fksSp--
+Will

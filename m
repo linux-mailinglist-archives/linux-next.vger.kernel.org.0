@@ -2,107 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740442FFE69
-	for <lists+linux-next@lfdr.de>; Fri, 22 Jan 2021 09:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2A22FFFBA
+	for <lists+linux-next@lfdr.de>; Fri, 22 Jan 2021 11:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbhAVImM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Jan 2021 03:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S1727116AbhAVKFD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Jan 2021 05:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbhAVIlk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jan 2021 03:41:40 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13879C0613D6
-        for <linux-next@vger.kernel.org>; Fri, 22 Jan 2021 00:41:00 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id j21so1212750oou.11
-        for <linux-next@vger.kernel.org>; Fri, 22 Jan 2021 00:41:00 -0800 (PST)
+        with ESMTP id S1727723AbhAVKA6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Jan 2021 05:00:58 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA46C061353
+        for <linux-next@vger.kernel.org>; Fri, 22 Jan 2021 01:51:19 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id gx5so6768868ejb.7
+        for <linux-next@vger.kernel.org>; Fri, 22 Jan 2021 01:51:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wOljwRCTbqyi57Y0Livy/H/EyT5660ugsfV4DuzfwqY=;
-        b=O0p5VKMoY2x8AgqrSCwbvRe2f+uh5jMDWo8v1uN5BFnIpTYeylv7jXtmw2xwBF6CvZ
-         cvAidVCqZX4yBuePIjcFU+6pgnI6q/Ep1Z5C+g7Iacpr5DV3r+R36zNMnln8Q8Lzl9lz
-         E1uzZCGg7oqS3+ZlEG+gNKDcsFMA0JCZIyhoo=
+        bh=6SOZ0cafIsQ2pjxZKEsji3NjTpPSIIGuynZ9xZcUToY=;
+        b=ztKqHymKyLAIKP1qDj25Z0vFnV8lkexGar1wlQhZ7Rfg8c4jimASSEu3EMx6QNc9xt
+         /UvDVuSdpibwYuUfHMvcomb5tGn1OeKvoi71lF5ZwUl6ePE7Mfc57I4uQf5xNJ8tXEEy
+         mOyktrWbjdAv6URUuvt7PwLdEnteAaSEkHPyO8vXOhNbrfQHerbzre3VYp/h/evQYlJB
+         fouV9L1yJo/0dB4OCITN92tMCAmOB1RGGoybCsptJuKlo3e3nsyMl5diLyQRC9L816BZ
+         BD9BAva69CDiC6VvjgBjZ04DmOq03Vlb5IxAl8CNhdH54iD+BlXZAk6UeQKt99ShdIVL
+         dbIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wOljwRCTbqyi57Y0Livy/H/EyT5660ugsfV4DuzfwqY=;
-        b=PCvkKc9h5iUrwWFgtekFK+DQBoojnBznnK8vM/4LgavNnHv6MjhgMrkpcD/4Gc2SVx
-         OL+ms9JKAU693d+VLqaSRJWgpQ5IADEiAlfgb6pfD0ZVr8hsmjSk3CEdu79+Lvr41I8+
-         Ql5t+s+rbtj9+YejtXxh7wHjLGEFb8Z16bmOx4TzYkSgQRtW6+LmCiSrl+B6TbZ7+FS2
-         essvJltlm+1JidGuUBJfCwBfWKjOwHuIaRGtrGX65pu9HE9i0QQYBHQO/vYlN/nKCgzs
-         Jgmsn3dNAEaIrZNOpoRLH4X5m5TXmcLNoSNu17pPDu0u3D47Vhcr1cGaAc6LHRpwo8Ia
-         vvcw==
-X-Gm-Message-State: AOAM533gZiuy0CrxonyVntJeHraWg45Gwfu9RU7EHkOgQgcPMqrGZVJv
-        xyptFtgmGJyqJ2US0axz3CQ/vdopQkveYXAfZorLDA==
-X-Google-Smtp-Source: ABdhPJxDy+y1OaANdzA4wIMi5FJQjgdMKPG0dL2eTTJxJ2qmVIP8X8bscBmGEkbq8xeEe5veGwWsHRsLPQr71Q6nkYA=
-X-Received: by 2002:a4a:9722:: with SMTP id u31mr2968367ooi.28.1611304859529;
- Fri, 22 Jan 2021 00:40:59 -0800 (PST)
+        bh=6SOZ0cafIsQ2pjxZKEsji3NjTpPSIIGuynZ9xZcUToY=;
+        b=e+pSKnlnE0Fc6tp6C4ChMZekwxui63srtvvQDvQaFvdOHR3Ej77Un4Wv8NbktZZ+CI
+         gXW4TggjeSB8wM74usngvxWKzogL7n5z44pl3B8uNo3hBnda23U94JSwYNnRd+sgi3RG
+         xG3aUrm0qRKf6VL5/dWbLoJUru/otQW6Dh1YELNxlbR+wF+ixo5NM766XbE0zTHznK+/
+         +8YLTws/vqMpevEq2xfizX0VmCf3YYHuBKZCqoclMbPxk/wG9RkGLfY6dDFDqUIU5t69
+         t4HY0SV7A7uin+KMQ+LmfGrzDsrDYS03iy3O1oMuHEPkl5IuO1a5vDcgD0oRkvxcjCTj
+         FVLw==
+X-Gm-Message-State: AOAM532mRNRN6h08APJ6Bz6phy4iHv7MxlzO4zEHGNUfg1B5GHccSeFK
+        kKTNxD49Rmwif7tUI98iQC3Ye5tzwLK5QI2KuAJ+mQ==
+X-Google-Smtp-Source: ABdhPJzEjn5GEPrffd5+4rTlgY2BHDNhZMRsd9H/LHyaUqgXSrIVK7mTGKR12AKLBujzMON638tkxawvFlPiVqhItq8=
+X-Received: by 2002:a17:906:4443:: with SMTP id i3mr2288434ejp.133.1611309078552;
+ Fri, 22 Jan 2021 01:51:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20210122115918.63b56fa1@canb.auug.org.au> <CAKMK7uEuJa1J66mo5dS+QRPy9NOENTx95SZ4rU2MeVRTWj7Kcw@mail.gmail.com>
- <20210122182946.6beb10b7@canb.auug.org.au>
-In-Reply-To: <20210122182946.6beb10b7@canb.auug.org.au>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Fri, 22 Jan 2021 09:40:48 +0100
-Message-ID: <CAKMK7uFWFVC0be2foiP8+2=vrqyh1e4mqkuk+2xY+fgSWAExyQ@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Nikula, Jani" <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>
+References: <CA+G9fYvV5SZ47M-XpABya11okgR7BJQk-3dDuFWzgVmGN3Lurg@mail.gmail.com>
+ <20210121185521.GQ2743@paulmck-ThinkPad-P72> <20210121213110.GB23234@willie-the-truck>
+ <20210121214314.GW2743@paulmck-ThinkPad-P72>
+In-Reply-To: <20210121214314.GW2743@paulmck-ThinkPad-P72>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 22 Jan 2021 15:21:07 +0530
+Message-ID: <CA+G9fYvZ5oE2bAkZqTYE87N0ONWoo2Q6VZBXihu4NQ_+C07qgA@mail.gmail.com>
+Subject: Re: rcu-torture: Internal error: Oops: 96000006
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Will Deacon <will@kernel.org>, rcu@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 8:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Fri, 22 Jan 2021 at 03:13, Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Hi Daniel,
->
-> On Fri, 22 Jan 2021 08:17:58 +0100 Daniel Vetter <daniel@ffwll.ch> wrote:
+> On Thu, Jan 21, 2021 at 09:31:10PM +0000, Will Deacon wrote:
+> > On Thu, Jan 21, 2021 at 10:55:21AM -0800, Paul E. McKenney wrote:
+> > > On Thu, Jan 21, 2021 at 10:37:21PM +0530, Naresh Kamboju wrote:
+> > > > While running rcu-torture test on qemu_arm64 and arm64 Juno-r2 device
+> > > > the following kernel crash noticed. This started happening from Linux next
+> > > > next-20210111 tag to next-20210121.
+> > > >
+> > > > metadata:
+> > > >   git branch: master
+> > > >   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+> > > >   git describe: next-20210111
+> > > >   kernel-config: https://builds.tuxbuild.com/1muTTn7AfqcWvH5x2Alxifn7EUH/config
+> > > >
+> > > > output log:
+> > > >
+> > > > [  621.538050] mem_dump_obj() slab test: rcu_torture_stats =
+> > > > ffff0000c0a3ac40, &rhp = ffff800012debe40, rhp = ffff0000c8cba000, &z
+> > > > = ffff8000091ab8e0
+> > > > [  621.546662] mem_dump_obj(ZERO_SIZE_PTR):
+> > > > [  621.546696] Unable to handle kernel NULL pointer dereference at
+> > > > virtual address 0000000000000008
 > >
-> > Hm that has been in drm-intel-gt-next for a few days, is that tree not
-> > in linux-next?
+> > [...]
+> >
+> > > Huh.  I am relying on virt_addr_valid() rejecting NULL pointers and
+> > > things like ZERO_SIZE_PTR, which is defined as ((void *)16).  It looks
+> > > like your configuration rejects NULL as an invalid virtual address,
+> > > but does not reject ZERO_SIZE_PTR.  Is this the intent, given that you
+> > > are not allowed to dereference a ZERO_SIZE_PTR?
+> > >
+> > > Adding the ARM64 guys on CC for their thoughts.
+> >
+> > Spooky timing, there was a thread _today_ about that:
+> >
+> > https://lore.kernel.org/r/ecbc7651-82c4-6518-d4a9-dbdbdf833b5b@arm.com
 >
-> It is not.
+> Very good, then my workaround (shown below for Naresh's ease of testing)
+> is only a short-term workaround.  Yay!  ;-)
 
-Adding -intel maintainers to get that sorted.
--Daniel
+Paul, thanks for your (short-term workaround) patch.
 
-> These are the drm branches currently in linux-next:
+I have applied your patch and tested rcu-torture test on qemu_arm64 and
+the reported issues has been fixed.
 
-Oh for ordering maybe put drm-misc ahead of the other subtrees, -misc
-is where nowadays a lot of refactorings and core changes land.
-Probably doesn't matter in practice.
--Daniel
-
-> drm-fixes       git://git.freedesktop.org/git/drm/drm.git       drm-fixes
-> amdgpu-fixes    git://people.freedesktop.org/~agd5f/linux       drm-fixes
-> drm-intel-fixes git://anongit.freedesktop.org/drm-intel         for-linux-next-fixes
-> drm-misc-fixes  git://anongit.freedesktop.org/drm/drm-misc      for-linux-next-fixes
-> drm             git://git.freedesktop.org/git/drm/drm.git       drm-next
-> amdgpu          https://gitlab.freedesktop.org/agd5f/linux      drm-next
-> drm-intel       git://anongit.freedesktop.org/drm-intel         for-linux-next
-> drm-tegra       git://anongit.freedesktop.org/tegra/linux.git   drm/tegra/for-next
-> drm-misc        git://anongit.freedesktop.org/drm/drm-misc      for-linux-next
-> drm-msm         https://gitlab.freedesktop.org/drm/msm.git      msm-next
-> imx-drm         https://git.pengutronix.de/git/pza/linux        imx-drm/next
-> etnaviv         https://git.pengutronix.de/git/lst/linux        etnaviv/next
->
-> --
-> Cheers,
-> Stephen Rothwell
-
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+- Naresh

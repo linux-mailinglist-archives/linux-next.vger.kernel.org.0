@@ -2,82 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E013047B8
+	by mail.lfdr.de (Postfix) with ESMTP id 324D23047B7
 	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 20:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbhAZF55 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jan 2021 00:57:57 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55103 "EHLO ozlabs.org"
+        id S1728165AbhAZF6A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jan 2021 00:58:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727097AbhAYJoM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:44:12 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DPQ0f22stz9sSs;
-        Mon, 25 Jan 2021 20:43:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611567810;
-        bh=TKvlSRsstD9csvjNrMrpEVFbR7nj0PeMBVSeIXOnVaw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qgF+Gofy3eYFArE4yXSkTQoFzBXfkbBQlLJjZzHS4z9Ywpir3GNxSNpbkhT/II3hW
-         lIEhzR9tw56dqUZ+DW9hwERSYkYyrS5WJvfEcGnk9RKJ9QMp9SM8T1iivflr5Xj72F
-         usOtoOwRy9nI+5qN6TFWDiLg5YJpR1bOZhLrkyow2GMH5HvCWM9pI9Gz27HCwPjfi0
-         fQRLtkTO40zKz5tx/HRYQDSF1V8miebqQoaLg/wYr86ldYbBe4b+KbdNdshXfA4eZ9
-         ti+D8ay47nwUFdkn7QukmIxjgls1do5mAzx/jNT29AphMMBOkQOpK48v4JcjJLobSj
-         XSE1AaPs5zBSQ==
-Date:   Mon, 25 Jan 2021 20:43:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Bijan Mottahedeh <bijan.mottahedeh@oracle.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the block tree
-Message-ID: <20210125204329.22a4964c@canb.auug.org.au>
+        id S1727021AbhAYJq0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 Jan 2021 04:46:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE6D922D57;
+        Mon, 25 Jan 2021 09:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611567880;
+        bh=u6boge7fxbWaIkvX2C8PHSGb3b9pegYZfrTBtvLYU1s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K0nfHg8qMuF2HQM7LNCOmVD0+W2bhl+oEPxwXcvm6WPe1/sqgwCPfl7qbGi44q++W
+         CKRkYPTHQP5vaYBx3pXehhmYv7hNXwF/wbKDn0Vr12J3ZMoMrWYKMPmLFTa2jbUFbV
+         wEG/sQ9YOa0Uu2Z2MEx1Rxxb41YrlM1OwBwmf2V4wSpHSA395SDOTV948bn6crOC1P
+         woOqPaiRhB6Oz70DZ2BIfAuuRLC2WHAN2inq/gFKuWbyfOEDDZaeQxucB5UUbfzwU2
+         8bP+RqdyPs0PA3YXZmz8/18qP8/0T0rsOU0Yy2QTMFYOqLgDfPEwQci4wKXCXkdiXA
+         jj5XhWvD2WMNg==
+Received: by mail-ot1-f42.google.com with SMTP id h14so12164756otr.4;
+        Mon, 25 Jan 2021 01:44:39 -0800 (PST)
+X-Gm-Message-State: AOAM531MfIoGrxqg6gheix6Gp9h4kyi5Kiw68sPjb8zFhp8yfwpfAb7l
+        rtZNVJZwWVkzb9Ua9cIsQZWQTPzfzhVkn8dYnkg=
+X-Google-Smtp-Source: ABdhPJx5bK63LxQdSz83vvgGvjc6te6I6zTut9vNIMSPOcLt0olx7YgMNrNj2+6Kv3w4X2taztS/GS3pOQU3GhUs5II=
+X-Received: by 2002:a9d:3bb7:: with SMTP id k52mr124882otc.251.1611567878981;
+ Mon, 25 Jan 2021 01:44:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8b+VE46D+8rlMXcYXUCHCs/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210125091256.302fd411@canb.auug.org.au>
+In-Reply-To: <20210125091256.302fd411@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 25 Jan 2021 10:44:23 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0QSicc8kQbdCnBUxcCfYDxe6rTLuijstOqpiTkwf3cSw@mail.gmail.com>
+Message-ID: <CAK8P3a0QSicc8kQbdCnBUxcCfYDxe6rTLuijstOqpiTkwf3cSw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the risc-v tree with the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8b+VE46D+8rlMXcYXUCHCs/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jan 24, 2021 at 11:14 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Looks good, thanks!
 
-Commits
-
-  36962a1e4186 ("io_uring: create common fixed_rsrc_data allocation routine=
-s")
-  5bc97865b3b6 ("io_uring: create common fixed_rsrc_ref_node handling routi=
-nes")
-  b2315a2cda1f ("io_uring: generalize io_queue_rsrc_removal")
-  a63c1259317d ("io_uring: rename file related variables to rsrc")
-
-are missing a Signed-off-by from their author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8b+VE46D+8rlMXcYXUCHCs/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAOksEACgkQAVBC80lX
-0Gzp9Qf/anHqnbnFxmIosUkRQv71WbRxuec6DuwHAR6pxHLJanH7qD4LawyiShT+
-nPKqiYQV9vGGNRY0hV3NeilSIt7ymEnrvs+p2j5XfWvFGl+r8Anj+9mGWeV/phKX
-LQ6u0Fr3joOrZgrlIfn+tOh9jx/bjaKToblseLo3xptKVwmYPcTvBrhO93s9hH8/
-rOE59PnP7qcPXBh27eqmyBtUD1RagcTOFsxG5C6NYRy36SLmuEFEeXxUcc6yqGiY
-s6nwZ3VWrBkK5znxkv9xuGOJjaq8dbaG6x2M8ijhGYb4vtKveZiLisuqnowK+GEb
-wIOtGZ3BLc/FC9GBbuPowV6co4wuwA==
-=WWbZ
------END PGP SIGNATURE-----
-
---Sig_/8b+VE46D+8rlMXcYXUCHCs/--
+      Arnd

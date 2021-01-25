@@ -2,100 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0521A302227
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 07:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A418730237B
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 11:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727173AbhAYGcm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Jan 2021 01:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726714AbhAYGcF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Jan 2021 01:32:05 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC339C061573;
-        Sun, 24 Jan 2021 22:31:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DPKkx21W9z9s24;
-        Mon, 25 Jan 2021 17:31:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611556281;
-        bh=tpU/E/0bVPrr7Tn36QNdlHcCQh3nwC+ZZpOR9eeH2yU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=S+Qmv9Tx697as9kIS4VhDPszfPczI4eE1WaiDKtn1t9hJ6DBy+XDQFSrigUyjLn6v
-         5KoCB5YheIkm088k0meUordYn9utm0FllPWA4CfM2L0ioyRoIdXR0BRXRxJBtD32RS
-         g5FOtu2ro/J4RNDrpGVD3CBkDOCKtaC0bQfMUazX5Zs8jfyd4/xIOY0/YVFfDqFbtI
-         WjnwTjh3GlDWZALuiqJv99sB9v3WVm2/aZ3rXKLbovL0mRAr+5UKXj+1UHgF9U15x6
-         o/KeXOkgUisWYmHe7F4V67oqQBEYf4yL83rV7CxvEMLXYIky0LUkC1FupFpfrS5REI
-         r6Yd3Rp3H9+rA==
-Date:   Mon, 25 Jan 2021 17:31:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Subject: linux-next: manual merge of the pidfd tree with the integrity tree
-Message-ID: <20210125173120.28b94105@canb.auug.org.au>
+        id S1727087AbhAYKIA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Jan 2021 05:08:00 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48721 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbhAYKCf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Jan 2021 05:02:35 -0500
+Received: by mail-io1-f69.google.com with SMTP id v25so18146711ioj.15
+        for <linux-next@vger.kernel.org>; Mon, 25 Jan 2021 02:01:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=m8wT6/GYAr4kqq+Vd6zCqDzhuX6QAA8Z8W9ZsMMjKCE=;
+        b=FMHvPfzDdvdpMp80tganWUcOMOTjZJ7zBGtVJpsvch4CaDbbT9al/3VSoT5QWcm3Tf
+         Eu9q6NSQT1dpD/Qf59rH61ZOr9Tazugs/zFi6zyVXIuvFJqVn5IWzqyuuqj8Cwj5Ci16
+         PAr0PUHNsW/Eo0Nm3qGE6tPnO9GrGlWAVSpqKsj7MDBjALR4X5YYb08nEbDLMRWXWBnZ
+         lg3pfqpdOVLPY9bKkTcWkZYKT20eOZ0BvgKJKH3vOQ9jTmM0sdfOYuGXP7/IBXsRZBuh
+         rVQRPAwssfR701pKTBZmKMvoLWpAqaJJ0MO/kT8iGtOcL7p0F5pu8kXYeRIdjYzszW4g
+         yy5g==
+X-Gm-Message-State: AOAM532kfC8SNESvhWZ8nXzTOHc4XbNDkBLQJdLt3V5x8jcmHuZN+KIQ
+        koOTdlTtqxMTIbh5WVQDbfU6yhW7QlHse8+D/pE1xB3pym5u
+X-Google-Smtp-Source: ABdhPJweWOBaRR6+1DFNitHtqFYy1jDn+gBsR8Ey2l3LhOiuPFc+x9BnI+mWxs83IYguPYqtKj3hDzaPgfF61aAIqfwScP21KZff
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QcBChY=cbjHOgxvRZNyQHnO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Received: by 2002:a6b:e204:: with SMTP id z4mr3719ioc.28.1611568334421; Mon,
+ 25 Jan 2021 01:52:14 -0800 (PST)
+Date:   Mon, 25 Jan 2021 01:52:14 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001ac5af05b9b67e2d@google.com>
+Subject: linux-next boot error: WARNING in cfg80211_register_netdevice
+From:   syzbot <syzbot+2c4a63c6480a7457eca5@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QcBChY=cbjHOgxvRZNyQHnO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+HEAD commit:    59fa6a16 Add linux-next specific files for 20210125
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1647f4bf500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ae5f53cc82a45e0d
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c4a63c6480a7457eca5
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-Today's linux-next merge of the pidfd tree got a conflict in:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2c4a63c6480a7457eca5@syzkaller.appspotmail.com
 
-  security/integrity/ima/ima_main.c
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+libphy: Fixed MDIO Bus: probed
+tun: Universal TUN/TAP device driver, 1.6
+vcan: Virtual CAN interface driver
+vxcan: Virtual CAN Tunnel driver
+slcan: serial line CAN interface driver
+slcan: 10 dynamic interface channels.
+CAN device driver interface
+usbcore: registered new interface driver usb_8dev
+usbcore: registered new interface driver ems_usb
+usbcore: registered new interface driver esd_usb2
+usbcore: registered new interface driver gs_usb
+usbcore: registered new interface driver kvaser_usb
+usbcore: registered new interface driver mcba_usb
+usbcore: registered new interface driver peak_usb
+e100: Intel(R) PRO/100 Network Driver
+e100: Copyright(c) 1999-2006 Intel Corporation
+e1000: Intel(R) PRO/1000 Network Driver
+e1000: Copyright (c) 1999-2006 Intel Corporation.
+e1000e: Intel(R) PRO/1000 Network Driver
+e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+mkiss: AX.25 Multikiss, Hans Albas PE1AYX
+AX.25: 6pack driver, Revision: 0.3.0
+AX.25: bpqether driver version 004
+PPP generic driver version 2.4.2
+PPP BSD Compression module registered
+PPP Deflate Compression module registered
+PPP MPPE Compression module registered
+NET: Registered protocol family 24
+PPTP driver version 0.8.5
+SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
+CSLIP: code copyright 1989 Regents of the University of California.
+SLIP linefill/keepalive option.
+hdlc: HDLC support module revision 1.22
+LAPB Ethernet driver version 0.02
+usbcore: registered new interface driver ath9k_htc
+usbcore: registered new interface driver carl9170
+usbcore: registered new interface driver ath6kl_usb
+usbcore: registered new interface driver ar5523
+usbcore: registered new interface driver ath10k_usb
+usbcore: registered new interface driver rndis_wlan
+mac80211_hwsim: initializing netlink
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at net/wireless/core.c:1336 cfg80211_register_netdevice+0x235/0x330 net/wireless/core.c:1336
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.11.0-rc4-next-20210125-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:cfg80211_register_netdevice+0x235/0x330 net/wireless/core.c:1336
+Code: f9 be ff ff ff ff bf e8 05 00 00 e8 95 e8 c6 00 31 ff 41 89 c4 89 c6 e8 89 99 3b f9 45 85 e4 0f 85 73 fe ff ff e8 fb 91 3b f9 <0f> 0b e8 f4 91 3b f9 48 85 ed 0f 85 6c fe ff ff e8 e6 91 3b f9 0f
+RSP: 0000:ffffc90000c679a8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffffffff8d2511bc RCX: 0000000000000000
+RDX: ffff888140758000 RSI: ffffffff88378355 RDI: 0000000000000003
+RBP: ffff88801b408bd0 R08: 0000000000000000 R09: ffffffff8cc6c227
+R10: ffffffff88378347 R11: 00000000ffff8000 R12: 0000000000000000
+R13: ffff88801b408000 R14: ffff88801b40972c R15: ffff88801b408000
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000b28e000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ ieee80211_if_add+0xfb8/0x18f0 net/mac80211/iface.c:1984
+ ieee80211_register_hw+0x31dc/0x3c40 net/mac80211/main.c:1285
+ mac80211_hwsim_new_radio+0x20d9/0x48d0 drivers/net/wireless/mac80211_hwsim.c:3333
+ init_mac80211_hwsim+0x5d0/0x761 drivers/net/wireless/mac80211_hwsim.c:4550
+ do_one_initcall+0x103/0x650 init/main.c:1226
+ do_initcall_level init/main.c:1299 [inline]
+ do_initcalls init/main.c:1315 [inline]
+ do_basic_setup init/main.c:1335 [inline]
+ kernel_init_freeable+0x605/0x689 init/main.c:1536
+ kernel_init+0xd/0x1b8 init/main.c:1424
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
 
-between commits:
 
-  2b4a2474a202 ("IMA: generalize keyring specific measurement constructs")
-  291af651b350 ("IMA: add support to measure buffer data hash")
-  d6e645012d97 ("IMA: define a hook to measure kernel integrity critical da=
-ta")
-  9f5d7d23cc5e ("IMA: extend critical data hook to limit the measurement ba=
-sed on a label")
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-from the integrity tree and commit:
-
-  a2d2329e30e2 ("ima: handle idmapped mounts")
-
-from the pidfd tree.
-
-At this point, the whole thing just got too hard, so I dropped the
-pidfd tree for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QcBChY=cbjHOgxvRZNyQHnO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAOZbgACgkQAVBC80lX
-0Gy/hgf/fbVkmln8clINAm+zrAUGJXLd7QWN5xBjmSEiZLBGd+ZCMhzwzEtdfZf9
-FQ6l59Bp9iJYNOqNhPxdlRaS9oGARECHPpIuNqTvO+/ZI2OhCsntHhVWaASJeY9W
-WxnoE39oyuaOWAyL5Lvj8NOfeD6oFN5utPo6KyrpVhCtHY7SrZcUU1fYVNW5wBBe
-D2zdz5PtpilxeeazDfzUyh6t6tQWw/sZrteu6fJKaWG7wIqNR5zRz9Q07krLi5M/
-OBOW8M/sKr+vA0zHiSIHdF4hSnW6Q7A4E/nkQ2wOfOOvadGTcDBg0fNrBO97D1NS
-WbCFKkGf+pa8s1qbX0S0LoRovbxd7g==
-=UC5o
------END PGP SIGNATURE-----
-
---Sig_/QcBChY=cbjHOgxvRZNyQHnO--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

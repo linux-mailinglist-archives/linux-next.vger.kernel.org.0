@@ -2,110 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0AE302001
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 02:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DAB302030
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 03:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbhAYBsc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Jan 2021 20:48:32 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:37243 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726247AbhAYBsa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 24 Jan 2021 20:48:30 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DPCRl6TGJz9sS8;
-        Mon, 25 Jan 2021 12:47:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611539268;
-        bh=KSEdUoDB87VxC5V6yN1WB8TD5zs3k3W0KpqUBV+/5kI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OzilgZB+ElG042b5Sh/q9Ttm90U8WIqVqy195dVOIjVv2Sw9wKd06i8V0BHWZl61L
-         AOjucamqKGc0FfJEcZtwkN2TH/BhVFQpvGW8lrhm25lVMvjBx4EkuhApJ18PXOqpxs
-         PfgEKrT2EbS1YqATdB5qRh0XOk6PfMPtWgQEpMauaU22NvDy8lfmO4cR2OCKUq2xgL
-         C5HAv4b2Mt3YPkSqhb/PofZqhWuKRSXK+M9UggLm3ftmuhBNybviXF5Dm8klQGqZh8
-         F/8t2dJOG+OOo4FbVpJZb3JG2/F8lK0uT4EnXhZv3NUAN4KAGNyJGj2B0UMkW9cAW/
-         D3GmMOV7r9YvQ==
-Date:   Mon, 25 Jan 2021 12:47:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Stafford Horne <shorne@gmail.com>
+        id S1727081AbhAYCIE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Jan 2021 21:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727075AbhAYCHG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Jan 2021 21:07:06 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20280C061573;
+        Sun, 24 Jan 2021 18:06:18 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id cq1so7396241pjb.4;
+        Sun, 24 Jan 2021 18:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dJotwfyRiNvMA2JUWu/JdXPCefXCZhv30V+8f8cWdbc=;
+        b=JZVXM3B0nywR9s6BtSUdcVekC9BKl92Ivhxa6IwhBdJRMuNjbijJUt6V2KjrKzJ0/E
+         bgTk5GB0lwIsNPeRbSqZuc9xanAzEzB+bqlsvsGwYygx/wVh4ntqeOX+u2u4yZcIaYdd
+         sqC1QgJ8BuGD5mjVTylvLzyKD7QYkxmNe+K8wwWJr4abG9Javr09s/Cd71yPNN75uVKT
+         oJbxQf1T3/oDNT5+m0U90nzhVgy2KWg8P292uiXsd9SSB53XxDlSPGRZQyprVs/K48SM
+         ViqTuYEk/+qLU/+g5chYYamO84wKVIBEJLrGHqZChQGHgQJgib+loWHcLH+CtacCIBrW
+         WGRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dJotwfyRiNvMA2JUWu/JdXPCefXCZhv30V+8f8cWdbc=;
+        b=RjQHAT1Vd+0m5ftE95n7oIysJpX/KQqq0N3my7FNElLPd/DGp9cGqZkt1XQ43L1OaG
+         3kxMI2xSrK0i1eShR1uU9QSAf6waWINkyifxJ3nIfEi3dKQwUdAi5ReXc/IMABeTBBSI
+         S9uFkPCoqfK1V9iAydKd7P6jrqbBYi2ROXpGc9U0NTyb/sbT01NTAxoqP5eM1ddUdXQY
+         L/OqB2RwNnVfb398g5Vah/nAU08BuULb7LJtzYnfwa5p1oJFDJ4V0EenCpDxMJjuOwOH
+         wTZRR1Be7WgCzmBmNEqRO59THcYRyauxMdqnWPFtg7FR6JP/4kjowpP4DNFo6Muo8cog
+         ilmQ==
+X-Gm-Message-State: AOAM531qAzzDWHaYK78zKbr5KLr+3jbYCOssEPN06NoDCFctk42hfftj
+        XYDjf9mKiDAwleQY75F95OIt+Af6JpE=
+X-Google-Smtp-Source: ABdhPJytq+LS4ij4D7XRl5F7Ax/WUiGR4m6QVCZjCrYHJIIfoULzrZLDv3NMSlEGS7/n+eQ/rhnVGw==
+X-Received: by 2002:a17:90b:2286:: with SMTP id kx6mr6555938pjb.92.1611540377603;
+        Sun, 24 Jan 2021 18:06:17 -0800 (PST)
+Received: from localhost (g54.222-224-210.ppp.wakwak.ne.jp. [222.224.210.54])
+        by smtp.gmail.com with ESMTPSA id b206sm14417100pfb.73.2021.01.24.18.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jan 2021 18:06:16 -0800 (PST)
+Date:   Mon, 25 Jan 2021 11:06:13 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the openrisc tree with Linus' tree
-Message-ID: <20210125124746.40e2638d@canb.auug.org.au>
-In-Reply-To: <20210125010446.GS2002709@lianli.shorne-pla.net>
+Message-ID: <20210125020613.GT2002709@lianli.shorne-pla.net>
 References: <20210125090506.35337fa2@canb.auug.org.au>
-        <20210125010446.GS2002709@lianli.shorne-pla.net>
+ <20210125010446.GS2002709@lianli.shorne-pla.net>
+ <20210125124746.40e2638d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/N9ObBHMlHl_T7XVWQHiGCRs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210125124746.40e2638d@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/N9ObBHMlHl_T7XVWQHiGCRs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 25, 2021 at 12:47:46PM +1100, Stephen Rothwell wrote:
+> Hi Stafford,
+> 
+> On Mon, 25 Jan 2021 10:04:46 +0900 Stafford Horne <shorne@gmail.com> wrote:
+> >
+> > Thank's I knew about this conflict but I was not sure the best way to handle, I
+> > was/am going to rebase the openrisc/for-next branch onto 5.11-rc5 once released.
+> > I will resolve the conflict during the rebase so you should be able to drop the
+> > conflict patch after that.
+> 
+> Its a pretty trivial conflict, so I wouldn't do the rebase just for this.
 
-Hi Stafford,
+Alright, I will not rebase.
 
-On Mon, 25 Jan 2021 10:04:46 +0900 Stafford Horne <shorne@gmail.com> wrote:
->
-> Thank's I knew about this conflict but I was not sure the best way to han=
-dle, I
-> was/am going to rebase the openrisc/for-next branch onto 5.11-rc5 once re=
-leased.
-> I will resolve the conflict during the rebase so you should be able to dr=
-op the
-> conflict patch after that.
+> > The issue is I had a fix that went straight to 5.11.  Should I usually put these
+> > kind of fixes on my for-next and my fixes branches in parallel, that way I can
+> > resolve conflicts on for-next before hand?
+> 
+> I notice that the version in Linus' tree was merged from a separate
+> branch.  The easiest that to do is for you to merge that same branch
+> into your for-next branch - that way you only get your own changes, not
+> any other stuff that might be in Linus' tree.
+> 
+> > I don't usually do that as in my mind for next is for 5.12 and fixes for 5.11 go
+> > straight to 5.11.  Also, I don't like putting the same patch in 2 queues.  But
+> > if I got any advice on how to avoid this in the future it would be appreciated.
+> 
+> Like I said, just merge your fixes branch into you for-next branch
+> when/if you think the fixes are important for further development, or
+> the conflicts become to great.
 
-Its a pretty trivial conflict, so I wouldn't do the rebase just for this.
+That sounds like a good idea.  Let me do that.
 
-> The issue is I had a fix that went straight to 5.11.  Should I usually pu=
-t these
-> kind of fixes on my for-next and my fixes branches in parallel, that way =
-I can
-> resolve conflicts on for-next before hand?
+> I can also add you fixes branch to linux-next if you like (I already
+> have 86 other "fixes" branches).
 
-I notice that the version in Linus' tree was merged from a separate
-branch.  The easiest that to do is for you to merge that same branch
-into your for-next branch - that way you only get your own changes, not
-any other stuff that might be in Linus' tree.
+I think that should be alright for now, I'll maintain merging the fixes branch
+myself when I think it's needed.
 
-> I don't usually do that as in my mind for next is for 5.12 and fixes for =
-5.11 go
-> straight to 5.11.  Also, I don't like putting the same patch in 2 queues.=
-  But
-> if I got any advice on how to avoid this in the future it would be apprec=
-iated.
+Thank you,
 
-Like I said, just merge your fixes branch into you for-next branch
-when/if you think the fixes are important for further development, or
-the conflicts become to great.
-
-I can also add you fixes branch to linux-next if you like (I already
-have 86 other "fixes" branches).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/N9ObBHMlHl_T7XVWQHiGCRs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAOI0IACgkQAVBC80lX
-0GzCCQf/YAKPxZ+ay2vixNCpBYtW/DiUJpY60hz+ovo+1ndm0mg/QX1NXL9Ej8ld
-+TqLacmnH6WEBaDj1SxJv90+bZWCyVLw1FjN1bRyJ9kfTAhapNReXXEpoG9mbO94
-bhkE9mTDk/w75Lso1MTCNrHMhooPHojMMJZvEwJfp2CntDFRpke68zQ25itW8xUy
-9Tixk18OhrNhd5GA8kyKaGilYzY9YAJHq1mexDgCzvbUF1YCVZcRYNs1SgTd0p3E
-ZlcF0bV4+YP2WY+2Pfa6PFfb7oau8sV+kGszgz7UJeydx19msalbneYB1aEDbZF9
-HKXCGYoJozEvkFL+2QMVqw9FptGxTA==
-=YQbB
------END PGP SIGNATURE-----
-
---Sig_/N9ObBHMlHl_T7XVWQHiGCRs--
+-Stafford

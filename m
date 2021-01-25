@@ -2,70 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 829C0301FB2
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 01:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2EF301FC6
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 01:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbhAYAQb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Jan 2021 19:16:31 -0500
-Received: from ozlabs.org ([203.11.71.1]:55989 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725986AbhAYAPN (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 24 Jan 2021 19:15:13 -0500
+        id S1726434AbhAYAre (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Jan 2021 19:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbhAYArd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Jan 2021 19:47:33 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E66C061573;
+        Sun, 24 Jan 2021 16:46:52 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DP9Kj34RLz9sS8;
-        Mon, 25 Jan 2021 11:12:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DPB5L0VGNz9sCq;
+        Mon, 25 Jan 2021 11:46:45 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611533546;
-        bh=44tq4/OfMcgWECL37VZAQvGTgZNPvpAZkSSqPeepzqU=;
+        s=201702; t=1611535610;
+        bh=nHdxDyfkK9GBPLAjs71LKqnjaCHPvX7x7DbWhmOho1o=;
         h=Date:From:To:Cc:Subject:From;
-        b=grYIoux24BKw04Evb9w4AKMmyBnYLqxLLpRrSkiydfs52Qd1f60w5JFa+DhKNZbxe
-         m3bZjcAtzm3aPCz4qQoz3uf3J1ddXtoOfWsqwFODaEa0obhEn58Wk8sFhZMZ6trtHA
-         XbgwsGNM8zlNVxYVi3ULc75MFjWQ4Bd2Uz+nnzH+Hs80+WBtzieH/EQcvv2REl2XGq
-         ei9lgEAlLfCm3MtkvBq/wEKCzLS83NxxHSnw1xFzA8L2Tot/O8CVCk7/9vvvGXrYgf
-         UHjZ5uaPXaiItLrnCwoixw4P32JlTaNUVGgenMQVnn/KjfpI5/tdxY4Kt4xAQut5/h
-         nwCTJJ+X94ciA==
-Date:   Mon, 25 Jan 2021 11:12:23 +1100
+        b=omIlNslOCgdzSoKlhAmi9gsbfzuDTmEAoe7b2xj18PgPCWey0v6wKgY1HcIRh0hlJ
+         oKpNhck7WIF2IFeWeodSbtD+8fTOTP4qp/TJeOLrgTm0bJJHk5dvaGcQnTN0QCc/8J
+         54YJaR8UZBevjnaZ5S2mcvkG0y6MArUdqewPl7AY+xWaRoLsp+PGod8HSYaH5YI718
+         enPGLyxoDb6FKipWvd5BZgiqU9urgwV+CjAXT7UL0gXoizkCotFcvfXhhhsOjf5RkA
+         s1fjSqwaSW6BkD6mq7FlI1ZW3wtvtg4ZF8T0wOipSPAbE20ACmNj2P9L2A/py/aGfq
+         +QIQe4NLJ2yvg==
+Date:   Mon, 25 Jan 2021 11:46:44 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Arjun Roy <arjunroy@google.com>, Jakub Kicinski <kuba@kernel.org>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Chris Wilson <chris@chris-wilson.co.uk>,
+        Imre Deak <imre.deak@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: linux-next: manual merge of the bpf-next tree with the net-next
- tree
-Message-ID: <20210125111223.2540294c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20210125114644.7b7cec67@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9JTGJ/xWlo3l.+DokjWso99";
+Content-Type: multipart/signed; boundary="Sig_/PgZHLRLUstc9bdqLlXUvmG/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9JTGJ/xWlo3l.+DokjWso99
+--Sig_/PgZHLRLUstc9bdqLlXUvmG/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-  net/ipv4/tcp.c
+  drivers/gpu/drm/i915/gem/i915_gem_object.h
 
 between commit:
 
-  7eeba1706eba ("tcp: Add receive timestamp support for receive zerocopy.")
+  41a9c75d0acf ("drm/i915/gem: Move stolen node into GEM object union")
 
-from the net-next tree and commit:
+from the drm tree and commit:
 
-  9cacf81f8161 ("bpf: Remove extra lock_sock for TCP_ZEROCOPY_RECEIVE")
+  5fbc2c2bfa5c ("drm/i915/gem: Add a helper to read data from a GEM object =
+page")
 
-from the bpf-next tree.
+from the drm-intel tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,49 +84,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc net/ipv4/tcp.c
-index e1a17c6b473c,26aa923cf522..000000000000
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@@ -4160,18 -4098,13 +4160,20 @@@ static int do_tcp_getsockopt(struct soc
-  		if (copy_from_user(&zc, optval, len))
-  			return -EFAULT;
-  		lock_sock(sk);
- -		err =3D tcp_zerocopy_receive(sk, &zc);
- +		err =3D tcp_zerocopy_receive(sk, &zc, &tss);
-+ 		err =3D BPF_CGROUP_RUN_PROG_GETSOCKOPT_KERN(sk, level, optname,
-+ 							  &zc, &len, err);
-  		release_sock(sk);
- -		if (len >=3D offsetofend(struct tcp_zerocopy_receive, err))
- -			goto zerocopy_rcv_sk_err;
- +		if (len >=3D offsetofend(struct tcp_zerocopy_receive, msg_flags))
- +			goto zerocopy_rcv_cmsg;
-  		switch (len) {
- +		case offsetofend(struct tcp_zerocopy_receive, msg_flags):
- +			goto zerocopy_rcv_cmsg;
- +		case offsetofend(struct tcp_zerocopy_receive, msg_controllen):
- +		case offsetofend(struct tcp_zerocopy_receive, msg_control):
- +		case offsetofend(struct tcp_zerocopy_receive, flags):
- +		case offsetofend(struct tcp_zerocopy_receive, copybuf_len):
- +		case offsetofend(struct tcp_zerocopy_receive, copybuf_address):
-  		case offsetofend(struct tcp_zerocopy_receive, err):
-  			goto zerocopy_rcv_sk_err;
-  		case offsetofend(struct tcp_zerocopy_receive, inq):
+diff --cc drivers/gpu/drm/i915/gem/i915_gem_object.h
+index 5274e9d139b4,ae83737f1d48..000000000000
+--- a/drivers/gpu/drm/i915/gem/i915_gem_object.h
++++ b/drivers/gpu/drm/i915/gem/i915_gem_object.h
+@@@ -548,6 -546,6 +554,8 @@@ i915_gem_object_invalidate_frontbuffer(
+  		__i915_gem_object_invalidate_frontbuffer(obj, origin);
+  }
+ =20
+ +bool i915_gem_object_is_shmem(const struct drm_i915_gem_object *obj);
+ +
++ int i915_gem_object_read_from_page(struct drm_i915_gem_object *obj, u64 o=
+ffset, void *dst, int size);
++=20
+  #endif
 
---Sig_/9JTGJ/xWlo3l.+DokjWso99
+--Sig_/PgZHLRLUstc9bdqLlXUvmG/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAODOcACgkQAVBC80lX
-0Gx1IAf8DfeFGwju4aCfqdSEJEz4kyxubepTOBzSK/aqu+WE4/o+iEVO0n16n1YG
-vM4lgVwCONu/O9XB9S1EKBbac7/q/ZujX/fdOOOVboYM3gSnEHTXeUkbdquiuVEc
-kDWuSFLlGuQl5Ya2+t8zt62h0irGJMr7U/hsFsbFwgTr9ajZq9ditFxHPAvx269y
-Ooo98XiQ49+u21tyGFMGxOlrUZvj0P0AAnRJAC14XOEUirUpTphWsmVngC+vNElh
-lqtvttfJTYB0ZCfjbwPs5hKymnwvR7luPwjYOJcoJeRYs70TqoB29350q0VWXrMD
-MOdLtECEpczC6ZNMhR0x3k/kXsRetA==
-=UY0M
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAOFPQACgkQAVBC80lX
+0Gz7LAf/TjcOO+YgVZYw+gPIYCLggFUAn0h47d/ZJC4FOuDF643UsqClylEBQCdK
+VO2j5NewDHP1H6cEBBUtjYISJ8mSAwVQG5FfN9O26WWZSb9epLJVy3B1Jy84P+GL
+GOwH3+Z2tb8KedjGz20+89XOImZ7JKtq1x99I7sLxNEy7VS9FzilSPfAyY5H4CbR
++NyWajYZTGonjXUklRxI90GRaKV2aV1ZRkr1OY6pJZw0uoev2ggft2uu94Es/zw4
+cG+7z2suIQsacXB+jYbQP+q0K/aYvGRxd9AlquXGCw152SPPIzePM+BK32Ae6+Qx
+yh/QrfTIU1mfVef6Ez5/elx2UG21vw==
+=UCtQ
 -----END PGP SIGNATURE-----
 
---Sig_/9JTGJ/xWlo3l.+DokjWso99--
+--Sig_/PgZHLRLUstc9bdqLlXUvmG/--

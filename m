@@ -2,147 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A418730237B
-	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 11:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4236C302727
+	for <lists+linux-next@lfdr.de>; Mon, 25 Jan 2021 16:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbhAYKIA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Jan 2021 05:08:00 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:48721 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726230AbhAYKCf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Jan 2021 05:02:35 -0500
-Received: by mail-io1-f69.google.com with SMTP id v25so18146711ioj.15
-        for <linux-next@vger.kernel.org>; Mon, 25 Jan 2021 02:01:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=m8wT6/GYAr4kqq+Vd6zCqDzhuX6QAA8Z8W9ZsMMjKCE=;
-        b=FMHvPfzDdvdpMp80tganWUcOMOTjZJ7zBGtVJpsvch4CaDbbT9al/3VSoT5QWcm3Tf
-         Eu9q6NSQT1dpD/Qf59rH61ZOr9Tazugs/zFi6zyVXIuvFJqVn5IWzqyuuqj8Cwj5Ci16
-         PAr0PUHNsW/Eo0Nm3qGE6tPnO9GrGlWAVSpqKsj7MDBjALR4X5YYb08nEbDLMRWXWBnZ
-         lg3pfqpdOVLPY9bKkTcWkZYKT20eOZ0BvgKJKH3vOQ9jTmM0sdfOYuGXP7/IBXsRZBuh
-         rVQRPAwssfR701pKTBZmKMvoLWpAqaJJ0MO/kT8iGtOcL7p0F5pu8kXYeRIdjYzszW4g
-         yy5g==
-X-Gm-Message-State: AOAM532kfC8SNESvhWZ8nXzTOHc4XbNDkBLQJdLt3V5x8jcmHuZN+KIQ
-        koOTdlTtqxMTIbh5WVQDbfU6yhW7QlHse8+D/pE1xB3pym5u
-X-Google-Smtp-Source: ABdhPJweWOBaRR6+1DFNitHtqFYy1jDn+gBsR8Ey2l3LhOiuPFc+x9BnI+mWxs83IYguPYqtKj3hDzaPgfF61aAIqfwScP21KZff
+        id S1730365AbhAYPqS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Jan 2021 10:46:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40604 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730353AbhAYPp5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 Jan 2021 10:45:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC37D22EBF;
+        Mon, 25 Jan 2021 15:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611587503;
+        bh=r5Uo07IQYlBEdLUN4JJ8iBXUHjeKUZXycoL6vpJfGJ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XFWbHp7KHXEFjyM6C90aTj6/8cIhEeua3UZRyetUsW/pffyrn4bL0U3jptBLjrHzB
+         P1r0zm2u5P92v3WAPqZNmyb3eNmVPXUoXm+SCVDkaW7p7nr/rSy9rN918ITvCYdsyL
+         8AtqBm4jGT+dyQf99Ki0fecuONmWBSkbCc81y/psVEBIcV7YMVCUejscCcVujcSk4D
+         4dSxx5vidN/eVL1bSpIlV5cjr2rbDKUJnJPmlITGS1pN+0gYaHZ4I3Wlr/nyi5Ivpc
+         mRmwp13Igu+okBVasvZKPeRXYXteRCPRwqkilfJAtopvbAw5h+7zp4046O0Rb+lFrd
+         hrDQkhUxSLH1g==
+Received: by mail-oi1-f172.google.com with SMTP id g69so14289420oib.12;
+        Mon, 25 Jan 2021 07:11:43 -0800 (PST)
+X-Gm-Message-State: AOAM5300vdMihRKPY3vcu8rwZgzTCQqFkJCLl3USDlFE5y+8LpqTMjYw
+        WHWZcidolO6nu3Z0KoSZEDdAPX5WAfDEDFDGKWY=
+X-Google-Smtp-Source: ABdhPJxdJ3BJcGsYMDL3f90oYHHi/YyWcPc/WE/CEaHqFC/PG55A6VPahWUH0/LFCBt9e0OYCoUW465Pd+6s+5408mw=
+X-Received: by 2002:aca:e103:: with SMTP id y3mr396747oig.11.1611587502910;
+ Mon, 25 Jan 2021 07:11:42 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e204:: with SMTP id z4mr3719ioc.28.1611568334421; Mon,
- 25 Jan 2021 01:52:14 -0800 (PST)
-Date:   Mon, 25 Jan 2021 01:52:14 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ac5af05b9b67e2d@google.com>
-Subject: linux-next boot error: WARNING in cfg80211_register_netdevice
-From:   syzbot <syzbot+2c4a63c6480a7457eca5@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+References: <CA+G9fYsvDWDogC+xgeG2V9MMofV5svTipDigDiUBje+2jSRK8g@mail.gmail.com>
+In-Reply-To: <CA+G9fYsvDWDogC+xgeG2V9MMofV5svTipDigDiUBje+2jSRK8g@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 25 Jan 2021 16:11:26 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2OeeW29ekbD70Ns4LTjGRJRT9P0wM-SAxUin1zAxP7TA@mail.gmail.com>
+Message-ID: <CAK8P3a2OeeW29ekbD70Ns4LTjGRJRT9P0wM-SAxUin1zAxP7TA@mail.gmail.com>
+Subject: Re: LTP: madvise08.c:203: TFAIL: No sequence in dump after MADV_DODUMP.
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org,
+        chrubis <chrubis@suse.cz>, Jan Stancek <jstancek@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <christian@brauner.io>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Vorel <pvorel@suse.cz>,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Joerg.Vehlow@aox-tech.de, Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Mon, Jan 25, 2021 at 3:48 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> LTP syscalls madvise08 test case failed on all devices from
+> Linux next 20210118 to till day.
+> strace log attached to this email and link provided below.
+>
+> BAD: next-20210118
+> GOOD: next-20210115
+>
+> This failure is easily reproducible on Linux next tag 20210118 above.
+>
+> tst_test.c:1250: TINFO: Timeout per run is 0h 15m 00s
+> madvise08.c:73: TINFO: Temporary core pattern is
+> '/scratch/ltp-2nftQzNI1K/HclFMH/dump-%p'
+> madvise08.c:112: TINFO: Dump file should be dump-10109
+> madvise08.c:196: TPASS: madvise(..., MADV_DONTDUMP)
+> madvise08.c:112: TINFO: Dump file should be dump-10110
+> madvise08.c:203: TFAIL: No sequence in dump after MADV_DODUMP.
+>
+> strace log,
+> https://lkft.validation.linaro.org/scheduler/job/2184866#L1257
 
-syzbot found the following issue on:
+Ok, so in this part of the log,
 
-HEAD commit:    59fa6a16 Add linux-next specific files for 20210125
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1647f4bf500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ae5f53cc82a45e0d
-dashboard link: https://syzkaller.appspot.com/bug?extid=2c4a63c6480a7457eca5
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+[pid   485] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_DUMPED,
+si_pid=487, si_uid=0, si_status=SIGABRT, si_utime=0, si_stime=0} ---
+[pid   485] write(2, \"madvise08.c:117: \33[1;34mTINFO: \33\"...,
+64madvise08.c:117: [1;34mTINFO: [0mDump file should be dump-487
+) = 64
+[pid   485] access(\"dump-487\", F_OK)    = 0
+[pid   485] openat(AT_FDCWD, \"dump-487\", O_RDONLY) = 3
+[pid   485] read(3,
+\"\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\4\0>\0\1\0\0\0\0\0\0\0\0\0\0\0\"...,
+1024) = 1024
+[pid   485] read(3,
+\"\0\320\3\0\0\0\0\0\0\340\375\24\304\177\0\0\0\0\0\0\0\0\0\0\0\20\0\0\0\0\0\0\"...,
+1024) = 292
+[pid   485] read(3, \"\", 1024)           = 0
+[pid   485] close(3)                    = 0
+[pid   485] write(2, \"madvise08.c:208: \33[1;31mTFAIL: \33\"...,
+74madvise08.c:208: [1;31mTFAIL: [0mNo sequence in dump after
+MADV_DODUMP.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2c4a63c6480a7457eca5@syzkaller.appspotmail.com
+it seems that the data that was requested to be dumped with MADV_DODUMP is
+indeed completely absent.
 
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-libphy: Fixed MDIO Bus: probed
-tun: Universal TUN/TAP device driver, 1.6
-vcan: Virtual CAN interface driver
-vxcan: Virtual CAN Tunnel driver
-slcan: serial line CAN interface driver
-slcan: 10 dynamic interface channels.
-CAN device driver interface
-usbcore: registered new interface driver usb_8dev
-usbcore: registered new interface driver ems_usb
-usbcore: registered new interface driver esd_usb2
-usbcore: registered new interface driver gs_usb
-usbcore: registered new interface driver kvaser_usb
-usbcore: registered new interface driver mcba_usb
-usbcore: registered new interface driver peak_usb
-e100: Intel(R) PRO/100 Network Driver
-e100: Copyright(c) 1999-2006 Intel Corporation
-e1000: Intel(R) PRO/1000 Network Driver
-e1000: Copyright (c) 1999-2006 Intel Corporation.
-e1000e: Intel(R) PRO/1000 Network Driver
-e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-mkiss: AX.25 Multikiss, Hans Albas PE1AYX
-AX.25: 6pack driver, Revision: 0.3.0
-AX.25: bpqether driver version 004
-PPP generic driver version 2.4.2
-PPP BSD Compression module registered
-PPP Deflate Compression module registered
-PPP MPPE Compression module registered
-NET: Registered protocol family 24
-PPTP driver version 0.8.5
-SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
-CSLIP: code copyright 1989 Regents of the University of California.
-SLIP linefill/keepalive option.
-hdlc: HDLC support module revision 1.22
-LAPB Ethernet driver version 0.02
-usbcore: registered new interface driver ath9k_htc
-usbcore: registered new interface driver carl9170
-usbcore: registered new interface driver ath6kl_usb
-usbcore: registered new interface driver ar5523
-usbcore: registered new interface driver ath10k_usb
-usbcore: registered new interface driver rndis_wlan
-mac80211_hwsim: initializing netlink
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at net/wireless/core.c:1336 cfg80211_register_netdevice+0x235/0x330 net/wireless/core.c:1336
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.11.0-rc4-next-20210125-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:cfg80211_register_netdevice+0x235/0x330 net/wireless/core.c:1336
-Code: f9 be ff ff ff ff bf e8 05 00 00 e8 95 e8 c6 00 31 ff 41 89 c4 89 c6 e8 89 99 3b f9 45 85 e4 0f 85 73 fe ff ff e8 fb 91 3b f9 <0f> 0b e8 f4 91 3b f9 48 85 ed 0f 85 6c fe ff ff e8 e6 91 3b f9 0f
-RSP: 0000:ffffc90000c679a8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffffff8d2511bc RCX: 0000000000000000
-RDX: ffff888140758000 RSI: ffffffff88378355 RDI: 0000000000000003
-RBP: ffff88801b408bd0 R08: 0000000000000000 R09: ffffffff8cc6c227
-R10: ffffffff88378347 R11: 00000000ffff8000 R12: 0000000000000000
-R13: ffff88801b408000 R14: ffff88801b40972c R15: ffff88801b408000
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000b28e000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- ieee80211_if_add+0xfb8/0x18f0 net/mac80211/iface.c:1984
- ieee80211_register_hw+0x31dc/0x3c40 net/mac80211/main.c:1285
- mac80211_hwsim_new_radio+0x20d9/0x48d0 drivers/net/wireless/mac80211_hwsim.c:3333
- init_mac80211_hwsim+0x5d0/0x761 drivers/net/wireless/mac80211_hwsim.c:4550
- do_one_initcall+0x103/0x650 init/main.c:1226
- do_initcall_level init/main.c:1299 [inline]
- do_initcalls init/main.c:1315 [inline]
- do_basic_setup init/main.c:1335 [inline]
- kernel_init_freeable+0x605/0x689 init/main.c:1536
- kernel_init+0xd/0x1b8 init/main.c:1424
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+There was exactly one commit that got merged between next-20210115 and
+next-20120118
+related to core dumps: 8a3cc755b138 ("coredump: don't bother with
+do_truncate()").
+Adding Al Viro to Cc for that.
 
+Naresh, could you try reverting that patch?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+     Arnd

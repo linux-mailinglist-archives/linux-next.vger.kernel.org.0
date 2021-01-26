@@ -2,138 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E996530573F
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 10:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F5730584C
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 11:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbhA0Jpj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jan 2021 04:45:39 -0500
-Received: from ozlabs.org ([203.11.71.1]:43053 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231140AbhA0JmO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 27 Jan 2021 04:42:14 -0500
+        id S235702AbhA0KY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jan 2021 05:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S314113AbhAZXBX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jan 2021 18:01:23 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BB0C061573;
+        Tue, 26 Jan 2021 15:00:42 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQdsP580rz9sVr;
-        Wed, 27 Jan 2021 20:41:29 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQMdz75lKz9sVs;
+        Wed, 27 Jan 2021 10:00:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611740490;
-        bh=gbCxXC/9cZ2rCTAjdXLQuLBZccJtX7Qa5BmPKnZH7WQ=;
+        s=201702; t=1611702040;
+        bh=uj6BXrMfCRtLVphjvZUedMhazXjoD4M1lHDCfld0vd8=;
         h=Date:From:To:Cc:Subject:From;
-        b=ixYFn0Hy4b5BlTm4Ags7Eoc2F/pTRcF+FtudoAKU4s8lLmVafZeSfBpSS+Y/gLw3P
-         3uCzm5HynrzP9EH8ezTa3XmSHv6V1e1ngA8ZjdNEK8rX0JI+y5YaOgyRp/6NRIHiWk
-         UKw14LwIKsSulbEv8FbOy09xcT/Uo6+UfdJuzauxoJPyIEJxW3PAD0imw3AftPiIsx
-         gm91PDSeTymnUW3pet0ksFYdadCbPpTCdGuvxuiGDFen5FMM3ztRsGtnV+tsLgxwCG
-         P2zcuzrxz9Qjh8RSmfLiqLNT1VV8vyUT2y/mzQ50XGelfAjIzX480XKyJKNXoEApUk
-         gb3cvo49ngHMA==
-Date:   Wed, 27 Jan 2021 20:41:26 +1100
+        b=TeqHUAhPWhT3cDPGTCUbQ68y9cNlwLuSNUmIw44UBnd3W+hksYm2OczWI4ICA67lT
+         0e2ZHj49FgfYqE35gHx8W1GzxUmuQfzMXJLyGY6KM39Q33NC2TLFtgp/bBPHgGrmvQ
+         OgIgxkf90wlcF9Wiq5cyQ7lEEt+iCY9NRaRzVUb7bpbbSG2NahesHeUoNpoqkvVp7h
+         EC0xY95YPGzkR5K5owUlLyOvQm4jeJ22Ye6EK/NZaqDORqtUI6TZWC+N+oPKNlXaXY
+         /zKXWP8h2actqVqu/xnb8bOge30TUpiwavTKiCfoUJtCTMwR/+7Nx5/oi5x7V0OSUO
+         NCK72oQlKEd4Q==
+Date:   Wed, 27 Jan 2021 10:00:38 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: linux-next: build failure after merge of the pinctrl tree
-Message-ID: <20210127204126.484d8f0a@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the fscache tree with the pidfd tree
+Message-ID: <20210127100038.1d04e444@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ij63wwrJNJq70tk8tdZLIrr";
+Content-Type: multipart/signed; boundary="Sig_/o1pPZ0R_Cs.wsiYsyiFWkP1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ij63wwrJNJq70tk8tdZLIrr
+--Sig_/o1pPZ0R_Cs.wsiYsyiFWkP1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pinctrl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the fscache tree got a conflict in:
 
-In file included from include/linux/wait.h:9,
-                 from include/linux/pid.h:6,
-                 from include/linux/sched.h:14,
-                 from include/linux/ratelimit.h:6,
-                 from include/linux/dev_printk.h:16,
-                 from include/linux/device.h:15,
-                 from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:14:
-drivers/pinctrl/samsung/pinctrl-s3c64xx.c: In function 's3c64xx_irq_set_fun=
-ction':
-drivers/pinctrl/samsung/pinctrl-s3c64xx.c:289:20: error: passing argument 1=
- of 'spinlock_check' from incompatible pointer type [-Werror=3Dincompatible=
--pointer-types]
-  289 |  spin_lock_irqsave(&bank->slock, flags);
-      |                    ^~~~~~~~~~~~
-      |                    |
-      |                    raw_spinlock_t * {aka struct raw_spinlock *}
-include/linux/spinlock.h:252:34: note: in definition of macro 'raw_spin_loc=
-k_irqsave'
-  252 |   flags =3D _raw_spin_lock_irqsave(lock); \
-      |                                  ^~~~
-drivers/pinctrl/samsung/pinctrl-s3c64xx.c:289:2: note: in expansion of macr=
-o 'spin_lock_irqsave'
-  289 |  spin_lock_irqsave(&bank->slock, flags);
-      |  ^~~~~~~~~~~~~~~~~
-In file included from include/linux/wait.h:9,
-                 from include/linux/pid.h:6,
-                 from include/linux/sched.h:14,
-                 from include/linux/ratelimit.h:6,
-                 from include/linux/dev_printk.h:16,
-                 from include/linux/device.h:15,
-                 from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:14:
-include/linux/spinlock.h:327:67: note: expected 'spinlock_t *' {aka 'struct=
- spinlock *'} but argument is of type 'raw_spinlock_t *' {aka 'struct raw_s=
-pinlock *'}
-  327 | static __always_inline raw_spinlock_t *spinlock_check(spinlock_t *l=
-ock)
-      |                                                       ~~~~~~~~~~~~^=
-~~~
-drivers/pinctrl/samsung/pinctrl-s3c64xx.c:296:25: error: passing argument 1=
- of 'spin_unlock_irqrestore' from incompatible pointer type [-Werror=3Dinco=
-mpatible-pointer-types]
-  296 |  spin_unlock_irqrestore(&bank->slock, flags);
-      |                         ^~~~~~~~~~~~
-      |                         |
-      |                         raw_spinlock_t * {aka struct raw_spinlock *}
-In file included from include/linux/wait.h:9,
-                 from include/linux/pid.h:6,
-                 from include/linux/sched.h:14,
-                 from include/linux/ratelimit.h:6,
-                 from include/linux/dev_printk.h:16,
-                 from include/linux/device.h:15,
-                 from drivers/pinctrl/samsung/pinctrl-s3c64xx.c:14:
-include/linux/spinlock.h:407:64: note: expected 'spinlock_t *' {aka 'struct=
- spinlock *'} but argument is of type 'raw_spinlock_t *' {aka 'struct raw_s=
-pinlock *'}
-  407 | static __always_inline void spin_unlock_irqrestore(spinlock_t *lock=
-, unsigned long flags)
-      |                                                    ~~~~~~~~~~~~^~~~
+  include/linux/fs.h
 
-Caused by commit
+between commit:
 
-  1f306ecbe0f6 ("pinctrl: samsung: use raw_spinlock for locking")
+  ba73d98745be ("namei: handle idmapped mounts in may_*() helpers")
 
-I have used the pinctrl tree from next-20210125 for today.
+from the pidfd tree and commit:
+
+  0de0bdfa19fa ("vfs: Export rw_verify_area() for use by cachefiles")
+
+from the fscache tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Ij63wwrJNJq70tk8tdZLIrr
+diff --cc include/linux/fs.h
+index 7762d3d75230,493804856ab3..000000000000
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@@ -2839,22 -2756,11 +2839,23 @@@ static inline int bmap(struct inode *in
+  }
+  #endif
+ =20
+ -extern int notify_change(struct dentry *, struct iattr *, struct inode **=
+);
+ -extern int inode_permission(struct inode *, int);
+ -extern int generic_permission(struct inode *, int);
+ -extern int __check_sticky(struct inode *dir, struct inode *inode);
+ +int notify_change(struct user_namespace *, struct dentry *,
+ +		  struct iattr *, struct inode **);
+ +int inode_permission(struct user_namespace *, struct inode *, int);
+ +int generic_permission(struct user_namespace *, struct inode *, int);
+ +static inline int file_permission(struct file *file, int mask)
+ +{
+ +	return inode_permission(file_mnt_user_ns(file),
+ +				file_inode(file), mask);
+ +}
+ +static inline int path_permission(const struct path *path, int mask)
+ +{
+ +	return inode_permission(mnt_user_ns(path->mnt),
+ +				d_inode(path->dentry), mask);
+ +}
+ +int __check_sticky(struct user_namespace *mnt_userns, struct inode *dir,
+ +		   struct inode *inode);
++ extern int rw_verify_area(int, struct file *, const loff_t *, size_t);
+ =20
+  static inline bool execute_ok(struct inode *inode)
+  {
+
+--Sig_/o1pPZ0R_Cs.wsiYsyiFWkP1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmARNUYACgkQAVBC80lX
-0GwMpAf9FzmsaQx5Bko0MCwze7xCtHjciEFi4O19kBnkqO7o/eE5Of7cUUErdlDt
-AoQZGbs9Oirs6SVZJWE6rslFPo3aRf4sZxzN03T881ioMxlstgoS3kgn/ojxXJpl
-9vyx/ur1dg267GtLdnQbrou2Ft/spGsoC/ItLB7TfmDtAbozAZzZda2fCLh0+LKX
-wE5HesmD6hHC+r66GUrn0b2o3kgBb1WBLxBWW+RgRAgKYsnbK7++Ioax3QSUE0hD
-zG5+hdzAB4IYpqiTqXuEePy8/gJqI5Bjo3DAp1uc8R38fWnhEyJXfkCxsJASzWZ0
-SwniBYMDlr/x0rFCypM3v62/ACAj8Q==
-=ZZyh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAQnxYACgkQAVBC80lX
+0Gz8zAf8CUJDtteYC9fjMlr4cZZhmV93k89gqGSAw9h6iUoMh7G0fj3/3NOy6rUl
+JJeuEMsxxotCO14ePRsIpzGRaI6zPi8genXVmnKtu6zRcPm2PoUZkakyAOIHaxr5
+/TW+5eITlLOuI0SGRKP0bA+iYXx8hyXroiAwYPJv+6N/4kevfaAC5Z7DAe2vFGxA
+RGf5ezzKrUL61OFdW/nlQjisDiKHbgkOAn0TBBRzlkOrTc78U8tNSJUGTOd1aI7e
+IAgs8jelE/mcu1TE8YLaZhoH+kobFTHQWHWOoUhBwi68QJV5EQimrP4A/O9aaKGv
+W1f+88KWwTEIDgJfGrJ35U9/wytx8A==
+=xbu9
 -----END PGP SIGNATURE-----
 
---Sig_/Ij63wwrJNJq70tk8tdZLIrr--
+--Sig_/o1pPZ0R_Cs.wsiYsyiFWkP1--

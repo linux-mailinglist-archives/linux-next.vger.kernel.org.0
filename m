@@ -2,100 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFEC3041E6
-	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 16:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DED304316
+	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 16:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406151AbhAZPNG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jan 2021 10:13:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39240 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406146AbhAZPND (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:13:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7643022D58;
-        Tue, 26 Jan 2021 15:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611673937;
-        bh=w5ozOYZ3HxfzVfJmXXR2CxVeoHVuWxUEYSte4Jx+PkE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Poong0rJYeogSdCf8+uThGqrNP1E3P3YunCLcazrTkIbq4Pe6S9i49f7NbgSx4PTW
-         K9Auj81dwa3zYS6KM7lzlJ1n24Hq+QPN+40Ym93BGqbsSUi5SDIuMwokpzEoPyrxHs
-         zZZhfClQzzBRApJ/RIAMQGcoJV/uh9yWouGXZdGvv3m70qlYhDehLRp6xKXJxF9OaP
-         8nsKuSWmo9lHaoPcrXBt27AShXWqD+8K1JEXn+8zbkvivT/Lpsw/9LqxM9QpS5ojY0
-         2nWn0aRJxwl9fny6/TH8fNuduxdJFO1yWetp/RX6hl4dCyYGCi1A7QHM1Ul+R9CIw6
-         ru+noguW8IZWw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 44C67352268C; Tue, 26 Jan 2021 07:12:17 -0800 (PST)
-Date:   Tue, 26 Jan 2021 07:12:17 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S2391730AbhAZPtX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jan 2021 10:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392699AbhAZPsj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jan 2021 10:48:39 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859CC061D7F
+        for <linux-next@vger.kernel.org>; Tue, 26 Jan 2021 07:47:57 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id m6so10665416pfk.1
+        for <linux-next@vger.kernel.org>; Tue, 26 Jan 2021 07:47:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1x9LcmflL/RTdretuBZJnXxKrfKid3zNWQywy21TUpc=;
+        b=qaKSUwQtZ2h/z3VY8p3dor+qBdjQvTF50BJYaN/IFpwDvVfRwsY/7gKmpff4psZmDo
+         EIAhDAhUxcEfgckDZ9YnAG+HuWDSEtDTVW2qbbaL13bV51sjtzdGAy2JkvrRsRyDahvh
+         0GfK3PvWWYyISL/+FRHmaOfqUBy1nx4KiXuUEmVoJrY9aVc+qV/d18ZTwySSbuv41lo+
+         xv66T++ko3TmO8LQPyeEzLUNwpClh+6vSjA6QurcUKj1KCIZUVvXK5iquJJK9AdmkF0p
+         5neCeQ4iU0plRWfdr5N1/rq+iMWOVrKMfjQn3bzBVoz7mQqbYP65jfW+PoPvhl1H+lmk
+         ArGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1x9LcmflL/RTdretuBZJnXxKrfKid3zNWQywy21TUpc=;
+        b=c75Mrrw+EpMBzKFB3OJKrNeBMzdV/Y7hU4b3ka1v1eOMFj4WuLF7d/5Pj1eaR0BMF2
+         3AJZDPtKtqhPi6yOfGb/97heTM00624BGQlTNo9TmZUGri0MGMp4sFGW+lypTu0u4IUC
+         pF3WxspsL+TahC5sPHDYog4X1mGn5c4bzdNefWvrcaN3LBBYs7edbvvsPEpbBADkeeMw
+         fCBUMP1J1pHjENkURgl49LJOaQmWPB0sYmWL8NsG5DJ/Qvrbw4g4eFq60wdL8ZfXMc91
+         csAc3p2l9/ExrSPr6+TUaMmcogXdWFGyC+HY5AKYdRUXVdMDm82gmeB963APpYk4nCCp
+         5X1g==
+X-Gm-Message-State: AOAM531RbOIlZuDt55/rV+16dUfTL3bpLgKcXE+SkmK6C/mPCDeQykMQ
+        io9L43OvIflQ+PZfkHszf0yWhJnG7R1CyA==
+X-Google-Smtp-Source: ABdhPJzpVv6puQt3HY7WsP4woZzvAy3kkO5fdI8te5lGrQBAdCBMyyIzLbeEnD9ZmYABOohmWggLcA==
+X-Received: by 2002:a63:450d:: with SMTP id s13mr6063176pga.443.1611676077130;
+        Tue, 26 Jan 2021 07:47:57 -0800 (PST)
+Received: from [192.168.4.41] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id fv12sm2610575pjb.22.2021.01.26.07.47.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jan 2021 07:47:56 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Jan Kara <jack@suse.cz>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jia Cheng Hu <jia.jiachenghu@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH] s390: allow reschedule on syscall restart
-Message-ID: <20210126151217.GD2743@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20210121143926.21440-1-svens@linux.ibm.com>
- <20210121143926.21440-2-svens@linux.ibm.com>
- <a522c1ac-703a-ba99-c44c-3dd09e4cc4be@de.ibm.com>
- <20210126212553.5d5a21b8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210125204032.6b6a604b@canb.auug.org.au>
+ <3F91181A-EDF2-4F01-9839-17B40D6EA07F@linaro.org>
+ <fb60bac7-f572-d131-d761-f6ce10a05f69@kernel.dk>
+ <20210126132946.GC10966@quack2.suse.cz>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <a2d6399c-ba61-472b-1bf2-aa261d7dbbbe@kernel.dk>
+Date:   Tue, 26 Jan 2021 08:47:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126212553.5d5a21b8@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210126132946.GC10966@quack2.suse.cz>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 09:25:53PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 1/26/21 6:29 AM, Jan Kara wrote:
+> On Mon 25-01-21 11:39:50, Jens Axboe wrote:
+>> On 1/25/21 11:35 AM, Paolo Valente wrote:
+>>>
+>>>
+>>>> Il giorno 25 gen 2021, alle ore 10:40, Stephen Rothwell <sfr@canb.auug.org.au> ha scritto:
+>>>>
+>>>> Hi all,
+>>>>
+>>>> In commit
+>>>>
+>>>>  d4fc3640ff36 ("block, bfq: set next_rq to waker_bfqq->next_rq in waker injection")
+>>>>
+>>>> Fixes tag
+>>>>
+>>>>  Fixes: c5089591c3ba ("block, bfq: detect wakers and unconditionally inject their I/O")
+>>>>
+>>>> has these problem(s):
+>>>>
+>>>>  - Target SHA1 does not exist
+>>>>
+>>>> Maybe you meant
+>>>>
+>>>> Fixes: 13a857a4c4e8 ("block, bfq: detect wakers and unconditionally inject their I/O")
+>>>>
+>>>
+>>> Hi Jens,
+>>> how to proceed in such a case (with patches already applied by you)?
+>>> Shall I send you a v2 with only this change?
+>>
+>> We just have to ignore it... But in the future, always double check that
+>> you are using the right shas, not some sha from an internal tree.
 > 
-> On Tue, 26 Jan 2021 07:59:51 +0100 Christian Borntraeger <borntraeger@de.ibm.com> wrote:
-> >
-> > On 21.01.21 15:39, Sven Schnelle wrote:
-> > > Commit 845f44e8ef28 ("sched: Report local wake up on resched blind zone
-> > > within idle loop") from next-20210121 causes a warning because s390
-> > > doesn't call sched_resched_local_allow() when restarting a syscall.
-> > > 
-> > > Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> > > ---
-> > >  arch/s390/kernel/syscall.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/arch/s390/kernel/syscall.c b/arch/s390/kernel/syscall.c
-> > > index bc8e650e377d..2b39ac40f970 100644
-> > > --- a/arch/s390/kernel/syscall.c
-> > > +++ b/arch/s390/kernel/syscall.c
-> > > @@ -162,6 +162,7 @@ void noinstr __do_syscall(struct pt_regs *regs, int per_trap)
-> > >  		do_syscall(regs);
-> > >  		if (!test_pt_regs_flag(regs, PIF_SYSCALL_RESTART))
-> > >  			break;
-> > > +		sched_resched_local_allow();
-> > >  		local_irq_enable();
-> > >  	}
-> > >  	exit_to_user_mode();  
-> > 
-> > Yesterdays next now fails with
-> > 
-> > 
-> > arch/s390/kernel/syscall.c: In function '__do_syscall':
-> > arch/s390/kernel/syscall.c:165:3: error: implicit declaration of function 'sched_resched_local_allow' [-Werror=implicit-function-declaration]
-> >   165 |   sched_resched_local_allow();
-> >       |   ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > cc1: some warnings being treated as errors
-> > make[2]: *** [scripts/Makefile.build:288: arch/s390/kernel/syscall.o] Error 1
-> > make[2]: *** Waiting for unfinished jobs....
-> > make[1]: *** [scripts/Makefile.build:530: arch/s390/kernel] Error 2
-> > make[1]: *** Waiting for unfinished jobs....
-> 
-> I have now removed the merge fix up for tomorrow.  It seems that the
-> commits that needed it have been removed :-(
+> FWIW I have a commit hook in my git tree that just refuses a commit with
+> unknown Fixes tag SHA. Exactly to catch such mishaps in the patches I
+> merge...
 
-Review comments mean that they need rework, apologies for the hassle!
+That's not a bad idea, would help catch it upfront. Can you share the
+hook?
 
-							Thanx, Paul
+-- 
+Jens Axboe
+

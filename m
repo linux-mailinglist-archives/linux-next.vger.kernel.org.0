@@ -2,81 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 152AC3044E9
-	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 18:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B703044EB
+	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 18:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390338AbhAZRSR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jan 2021 12:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390686AbhAZIzU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jan 2021 03:55:20 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2197EC06174A
-        for <linux-next@vger.kernel.org>; Tue, 26 Jan 2021 00:54:40 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id c2so18497552edr.11
-        for <linux-next@vger.kernel.org>; Tue, 26 Jan 2021 00:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=GGyBTb5u2IaUHbKiQ/SJcFo7rVvuCNL30ZstU8LYN/E=;
-        b=BJF5+4SDPOkOCjs/4jNBihoQpnOZDsoC6XVRVTS2IXkC8sVxCVyNh1urW7WxOrRozy
-         /yolIxrdnurMrhSzgq0YxbEOG+IgutS86Dgx5KXErqpeCLY+Q/b5NWyYFloYeAK5gKFI
-         HF7sL+SzoCH82bT/koETLFf3o5kEwgNYMpUTxzJreCPEZxJBoCJF80dcsHEfw4STm1S3
-         lamrPDYxrfzCSGyMdNMqkpzx/hVp3q/NcGWqgROMCYlq2mk3qttUYxETdp5dSdhHOF2d
-         42xlWPg+yQtQnSQ7+Oah/LyNKnDhjV3pEmi8untGU6M933S8mkfFkSMu6J9WrgP/6onq
-         o2fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=GGyBTb5u2IaUHbKiQ/SJcFo7rVvuCNL30ZstU8LYN/E=;
-        b=I1h6bFJ0sifz/jsgoVoOIRliIIXr7ybSbSCRfAb84Zhkw1Pwi6r8lzKO7h7uzB1a/2
-         jlZabd2G9kcHKi0hIaX7EqlpCE2LOo10UXHpHBy4vQy2GVS4y04EMNbBTyanSBLV3CdY
-         8AJr0Y3Ef8GPhmE+Ing1d5Q6i81qwMxOkSS8VIv84zOkdFiQkIupaJUIclho0m5ccXO4
-         tJg9hyj0r8GXaoWYVkDI9WoausWk6YkKORxComcY1x62uh6ZU2/vrAtR2mHH85Ct4WkT
-         IJtVH+sL3YxWIYvNNFeO8gpo0zDVcEDmtWkKiVibrAzKvIc7v7uLshT+7A+Wh5rincAJ
-         93dQ==
-X-Gm-Message-State: AOAM531WqdT7XH5jiM45sJM9XWHWIVvo07vamD6LRSpGfO2tm2CoY8mb
-        jL7U3gFrOi8tApljM8iRbIYr4C2Fgp7gF2V/GIPUgEef0EoBrmM9
-X-Google-Smtp-Source: ABdhPJwT/9Wb6/ynC7ThfNRIUvGN5jTnfb2/1aNKw0X7NVF05sImHp6YY/JgB91UAukCwenk83S3pKDmx3C7e1Gap08=
-X-Received: by 2002:aa7:d905:: with SMTP id a5mr3900786edr.78.1611651277854;
- Tue, 26 Jan 2021 00:54:37 -0800 (PST)
+        id S2390370AbhAZRSc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jan 2021 12:18:32 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59533 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390663AbhAZI7G (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Jan 2021 03:59:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQ0xs4kd3z9sCD;
+        Tue, 26 Jan 2021 19:58:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611651489;
+        bh=TBpZeftSzKSn8HpL/hx97ig1oEsAGu1xl/QL1rnKROU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=T2V2WN9UbiHShKhdc0MazIppoH9JqzBHmVv70R4K0mbz3Nej1UyAlW70Kvkeg2Uo1
+         RV5oJa0R0xwaUD/b38NPv55iHAk2Wf9/bLrEzrG31IZRMNPyJErsovaX974UXEf1Mg
+         JQKmgMkgSgwJ/II79xkg2CLVlCmwx0A2XWN8lpYxTCg4VVYqc7Cfm6pIGM9GTtZYoL
+         3U+kTDFrJMmzijmEfMj/aeyofhi54z8efokPS6sgvqJPwllIQoXlfnMMCRch5gmgJd
+         qMr1gU1bh0wmGOevCKGdkBBWeH+2Og1mgFqU72T4XAPJLBNRntvog+FA8gATy2J15T
+         9fOC11JOBQ87A==
+Date:   Tue, 26 Jan 2021 19:58:07 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20210126195807.668bdcef@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 26 Jan 2021 14:24:26 +0530
-Message-ID: <CA+G9fYuWbKX6o1HS-9vAs4PHQKhv0d33V6x0TZ6_UHVy6yp-qA@mail.gmail.com>
-Subject: s390: syscall.c:165:3: error: implicit declaration of function 'sched_resched_local_allow'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-s390@vger.kernel.org, lkft-triage@lists.linaro.org
-Cc:     hca@linux.ibm.com, gor@linux.ibm.com,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/YcQgAf.64RqVBy72W9Tayh8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-s390 build failed on Linux next 20210125 due to below error and suspected patch.
+--Sig_/YcQgAf.64RqVBy72W9Tayh8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=s390
-CROSS_COMPILE=s390x-linux-gnu- 'CC=sccache s390x-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-arch/s390/kernel/syscall.c: In function '__do_syscall':
-arch/s390/kernel/syscall.c:165:3: error: implicit declaration of
-function 'sched_resched_local_allow'
-[-Werror=implicit-function-declaration]
-  165 |   sched_resched_local_allow();
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
+Hi all,
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+In commit
 
-Link to suspected patch,
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/s390/kernel/syscall.c?id=29819dc5f5e3dbb1770ee2062140b6566755ba00
+  289970f0be61 ("drm/amd/display: Fix unused variable warning")
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Fixes tag
+
+  Fixes: e177af8a43da ("drm/amd/display: Fix deadlock during gpu reset v3")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 98ab5f3513f9 ("drm/amd/display: Fix deadlock during gpu reset v3")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YcQgAf.64RqVBy72W9Tayh8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAP2Z8ACgkQAVBC80lX
+0Gw0dAf7Bbz5boTMU/5m+LKYTMhbC2lLTlKsk9BIoaHDt6HYhes4zH0MsfqUnG5H
+nTcZk8MLKkz3MB/EjvKdYdZNNmWGjTSlydk4l67CvbS9fpDr1mbrqoxxsLnReIjL
+s7+A3aclHkR23eDDe1wvIUXmkiXi91lOdbVUlo9R8dvp0f0ElKmiVTYefXV5i2Gl
++mq/JxlsfpxGLjluyzoBBihc07xgGFegiOSx8aHao0xx73O1b2fUH7yLdAEoNsGQ
+/xEBXvmybbCppf1mU6VO9kB8zudvjWEAgoiDH9MGjuS9X4x7Gog2LXDilhphbmfR
+XgtlArBmUrBgoPgzqyCWkYnQgx9lyQ==
+=Sdka
+-----END PGP SIGNATURE-----
+
+--Sig_/YcQgAf.64RqVBy72W9Tayh8--

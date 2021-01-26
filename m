@@ -2,82 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E8A3046EC
-	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 19:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3917D3046F0
+	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 19:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390344AbhAZRS2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jan 2021 12:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390687AbhAZIz1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jan 2021 03:55:27 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF7C0613ED;
-        Tue, 26 Jan 2021 00:54:46 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQ0sw029nz9sCD;
-        Tue, 26 Jan 2021 19:54:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611651284;
-        bh=I3s1EpOWv+y62ui6MVTuNwPkXzAWpBfawc34KNcJQLY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XgNPtOths/PcYpcPvxamvHx/uIUFcyMdEoOBn6m39GsNjW3UyBPhk/qOE6gVtBQGs
-         GXO7r1t1m26z3/K0viBmGh+3FxeYA8d9qXjH9qI7C1tHzK4MqVx3LBpYKk6u0sySY7
-         zjq4/yXfZunh5wyemRFGZ/I0SY6u00SFe61BMlc3mVneaCfkOiXk2MBL0U2eQKvEAK
-         Ay0RVoB6d+lbevVXMXT3VqGWB+wUXjMX6XWFRFyY/+pv9P151fFM/4UNNeJc3aYChV
-         KZMqWUjgzIF8fiBRcI9CZNSi9YFhvdemzjC86xvJB4Ebl/M56kp3MUsrT6ipqqRU2l
-         ETNk4h/kZgvFA==
-Date:   Tue, 26 Jan 2021 19:54:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Florian Dollinger <dollinger.florian@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S2390411AbhAZRSh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jan 2021 12:18:37 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57550 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389259AbhAZJTl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Jan 2021 04:19:41 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1A990AF85;
+        Tue, 26 Jan 2021 09:17:16 +0000 (UTC)
+Message-ID: <3f563185539b346477ca19b350d0ac8c96632398.camel@suse.de>
+Subject: Re: linux-next: Signed-off-by missing for commit in the raspberrypi
+ tree
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
-Message-ID: <20210126195441.69c45ad9@canb.auug.org.au>
+Date:   Tue, 26 Jan 2021 10:17:14 +0100
+In-Reply-To: <20210126191117.47fffe80@canb.auug.org.au>
+References: <20210126191117.47fffe80@canb.auug.org.au>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-XT0h9IerV7y34lokR1n/"
+User-Agent: Evolution 3.38.3 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BmVtMDl89ADAvxfWA1h0GMF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BmVtMDl89ADAvxfWA1h0GMF
-Content-Type: text/plain; charset=US-ASCII
+
+--=-XT0h9IerV7y34lokR1n/
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, 2021-01-26 at 19:11 +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Commits
+>=20
+> =C2=A0=C2=A07a5936445053 ("ARM: dts: bcm2711: Add the BSC interrupt contr=
+oller")
+> =C2=A0=C2=A069894e0baa0c ("ARM: bcm: Select BRCMSTB_L2_IRQ for bcm2835")
+>=20
+> are missing a Signed-off-by from their committer.
+>=20
 
-Commit
+Sorry for that, I fixed the branch right away but forgot to push it.
 
-  98d2c3e17310 ("Bluetooth: L2CAP: Try harder to accept device not knowing =
-options")
+Regards,
+Nicolas
 
-is missing a Signed-off-by from its author.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BmVtMDl89ADAvxfWA1h0GMF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--=-XT0h9IerV7y34lokR1n/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAP2NEACgkQAVBC80lX
-0GwKwAgAmU5gtV87Z+KrIlM1yHD2+tDHiaT5i9Qmxk5l0iHZW/eKcz1AtEeOyiEh
-So7JtLfJWOZbNkgvgdM+AEOWfar+SFRIWvzIWW36awJoPfS4+k6pgI1/HEWlUF+6
-P1d7jcSzWAKbDykaRaJPdfSTwsieRGWFNIXrjAv2CifeqYu3iIJI1cKPNReGPn1m
-a6XKSHvHX+wNmmmWHdrBtUljW1RbrM08IBA/m5D2PDNMjnhrxO5tEqWjXV/7Lw8r
-bCKBqDqzgWR8+I2cFTtmRoNuDuNXOFR1N/thmn0ha3sL2acVHvImKy+690yCubdE
-N4THJQtRwCexejXjPw/M1BXUElOv/g==
-=4jbi
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAmAP3hoACgkQlfZmHno8
+x/7RMgf/VIKtjrAqjvBP4Ymnv8dC/4VMnq2Y2C2Ki7LRJIH/+5c2G9L45uk7dC4e
+RhQv4An+byKbow90CYp+SmWoTpnWX8EXjF6/eCD5r5+WnltmkaTgIYcwkcvEkbWk
+KMxwRzR+fQu87oRfMP/likuPVk1o6WPEyuP9UGrVmRdEKebmo5of1vNJ0WI0iZBV
+wZIQysAq0Qi2Rb6GT1ryYgxk0zAUvvthY5BMs8MhVLC1vqaa6bBbEGAkXe+RM8Md
+WZNV/zOFAVpXRg1LDRnm4VSsokIwilOp7tPt6i4YM5IY/g6ZhoppRxh8tc74JTBu
+09XfJfW8aTWweNWv3Zl+hWnR9XOa9A==
+=Ip+l
 -----END PGP SIGNATURE-----
 
---Sig_/BmVtMDl89ADAvxfWA1h0GMF--
+--=-XT0h9IerV7y34lokR1n/--
+

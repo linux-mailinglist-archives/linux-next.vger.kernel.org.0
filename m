@@ -2,54 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AFC303959
-	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 10:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2B4303C21
+	for <lists+linux-next@lfdr.de>; Tue, 26 Jan 2021 12:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391285AbhAZJrC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Jan 2021 04:47:02 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:32803 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390506AbhAZJqz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Jan 2021 04:46:55 -0500
-X-Originating-IP: 78.199.60.242
-Received: from [192.168.1.150] (unknown [78.199.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 4A0141BF204;
-        Tue, 26 Jan 2021 09:46:08 +0000 (UTC)
-Message-ID: <b92aca941b344ce4552b9e4d25d4f438aff4e6d5.camel@hadess.net>
-Subject: Re: linux-next: Signed-off-by missing for commit in the bluetooth
- tree
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Florian Dollinger <dollinger.florian@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S2405424AbhAZLti (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Jan 2021 06:49:38 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53023 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405346AbhAZLlu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Jan 2021 06:41:50 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQ4Yj3MN0z9sXL;
+        Tue, 26 Jan 2021 22:40:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611661257;
+        bh=kXOSJMneAtNOFNRD65aRZUm/wZ4oxaUfXKIDxWLpRAY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sTDMuSgL2kXxawL2eExGfJUAkyvMl1RnpXa2ZiaFEai7Jeq4zJfzOCaByntIFH9a8
+         WF8koByUrI3vtTK2bsTYw7NpZ74JhC/dWLttrlgAjztJNvV1YteRqxD+oLyIzEXoey
+         gveHDfM82lQzNbEZAxsGqG9Dcbhmys8Ds23BPhbE1PMrLFLMahN9RrOThXWWZhyCnf
+         xyJHSubyLHTuVc4yDYYDsXSTm9VvcGiBuX1MI+zHg7HtzMUv+C2v76nTPIpAjLpsqB
+         1GByEGq9ATtF7ZnfZyjKx8gWixNGTKQap5xARvMjPZ91ImQiD1PrirZBXzOWcwtRuv
+         qdPiji4yEvaLA==
+Date:   Tue, 26 Jan 2021 22:40:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Tue, 26 Jan 2021 10:46:08 +0100
-In-Reply-To: <20210126195441.69c45ad9@canb.auug.org.au>
-References: <20210126195441.69c45ad9@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.2 (3.38.2-1.fc33) 
+Subject: linux-next: Signed-off-by missing for commit in the fscache tree
+Message-ID: <20210126224049.2841074b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/.rKWTC28mapsLIC4ei9nNqJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 2021-01-26 at 19:54 +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   98d2c3e17310 ("Bluetooth: L2CAP: Try harder to accept device not
-> knowing options")
-> 
-> is missing a Signed-off-by from its author.
+--Sig_/.rKWTC28mapsLIC4ei9nNqJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Marcel, is it possible to amend this to add my Signed-off-by?
+Hi all,
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
+Commits
 
-Cheers
+  daa94e1d8977 ("NFS: Convert readpage to readahead and use netfs_readahead=
+ for fscache")
+  08a636bcf023 ("NFS: Convert to the netfs API and nfs_readpage to use netf=
+s_readpage")
+  56ee45bd6a23 ("NFS: Allow internal use of read structs and functions")
+  31d24fb6dff4 ("NFS: Add nfs_pageio_complete_read() and remove nfs_readpag=
+e_async()")
+  9cf28394cb4a ("NFS: Call readpage_async_filler() from nfs_readpage_async(=
+)")
+  cdb77ce77d41 ("NFS: Refactor nfs_readpage() and nfs_readpage_async() to u=
+se nfs_readdesc")
+  70d842718007 ("NFS: In nfs_readpage() only increment NFSIOS_READPAGES whe=
+n read succeeds")
+  150c02f5ba86 ("NFS: Clean up nfs_readpage() and nfs_readpages()")
 
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.rKWTC28mapsLIC4ei9nNqJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAP/8EACgkQAVBC80lX
+0GzKFwf/UG9b6YM+YJylqLpMce1kMtjXTOlFc32fkMYOcujEjHOitDaLq9R3hwDb
+7zCn6r10ifxjop+00GIGc43LWHBme3v5qJK3+1JmVMF8GgYy9obH5NK5dBohSH8X
+CjP4M4mYVnkQUflReoGNltU7MK8cTHegoj1c8cHJ551d7+rPEpCE7S6aB5+xJDRL
+YUKnXiIZPdFGcwpcVbbv8egO/zUQ/N4Z93JWaeJ9PxeAc3rypM67Z/DtnnxRpETB
+zMdeWoMqf3sPpNsStXwyWEHNGiz6kF80A4gIklYTRSQgXaM+VIGqmdb5fioljpAE
+QcpIhnhek5DfKq8qerMtPYW+bwm6TA==
+=hCJv
+-----END PGP SIGNATURE-----
+
+--Sig_/.rKWTC28mapsLIC4ei9nNqJ--

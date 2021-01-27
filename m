@@ -2,144 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBC63052A9
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 07:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D03A305312
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 07:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbhA0F71 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jan 2021 00:59:27 -0500
-Received: from mga18.intel.com ([134.134.136.126]:42570 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237608AbhA0Dzf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Jan 2021 22:55:35 -0500
-IronPort-SDR: 4neyQmTp2DOKMZJuGVDs3fR8/QFsQotwmgwOREQAU85OiK5MfOIwuV+XwR5JHcDTr2yG/6QB5s
- H0aSLWKfJvhA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9876"; a="167684743"
-X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
-   d="scan'208";a="167684743"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 19:54:54 -0800
-IronPort-SDR: zUQpenv7S1YPTdoCBnbHAiu/wM0L/F0BKuoVZbQJ78z1FKrzRPZThfc/ZEYvVgPHqjCfKsTLBO
- yWxpBD5vmXPg==
-X-IronPort-AV: E=Sophos;i="5.79,378,1602572400"; 
-   d="scan'208";a="362253675"
-Received: from yuankuns-mobl.ccr.corp.intel.com ([10.249.169.180])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 19:54:53 -0800
-Message-ID: <e1fcf35b21e7e4af67621bd4f037e3f07af756e1.camel@intel.com>
-Subject: Re: linux-next: build warning after merge of the pm tree
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S233477AbhA0F7b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jan 2021 00:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234826AbhA0FY4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jan 2021 00:24:56 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFD0C061573;
+        Tue, 26 Jan 2021 21:24:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQX8X31Xzz9sW8;
+        Wed, 27 Jan 2021 16:24:11 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611725053;
+        bh=/JAM5q+VErmzCB+wD8zfoahFNxWaRfiQ7fX/mkhZKyk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JnSqVluGrJnRM/QpLmJDBPW3coy9++a20HOI1EIjdxyukkqVG1NnZ5ERrF5PKzPeI
+         9O3nmnvHp8fgG1jUqYXDzXpB/6ePxFfATtK4oh3zbMgwXFKN3HNusudHElG/+l7wE9
+         vS3fRazrdU2Kp382x3VhURX2GF4eSRxZR2wkw/w84tsIZOgAJvpKWLI5SuDw4h3DMl
+         XOQDyu09KJlz0+A/a8U7Sv/HkfBREQYsAyoZK7uWg9OHAiWgFn1tW7C83sTBcrQ3hQ
+         8aSDaJ1xy6tKulnIx7+h4IMUQC6fvhrKvodxwtDmo8qxYn9+ZRr5fouiCrcWKJjrXm
+         6EhQK6FnTN2Lg==
+Date:   Wed, 27 Jan 2021 16:24:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     David Brazdil <dbrazdil@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Wed, 27 Jan 2021 11:54:50 +0800
-In-Reply-To: <20210127124324.29b7c4d4@canb.auug.org.au>
-References: <20210127124324.29b7c4d4@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20210127162409.45bea5e8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ujyzvWu02HsuFo04IhnRn=+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi, Stephen,
+--Sig_/ujyzvWu02HsuFo04IhnRn=+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry that I missed this build warning in the first place, thanks for
-reporting.
-The patch below fixes it.
+Hi all,
 
-BTW, Rafael, I think acpi_fpdt_init() also needs to be fixed to have
-proper return value.
-Do you prefer an incremental patch or a V2 of 208757d71098 ("ACPI:
-tables: introduce support for FPDT table"), which includes all these
-fixes?
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-thanks,
-rui
+  arch/arm64/include/asm/kvm_asm.h
 
-From 2b8ed148351875b4bf227602a97edba12d08af7e Mon Sep 17 00:00:00 2001
-From: Zhang Rui <rui.zhang@intel.com>
-Date: Wed, 27 Jan 2021 11:33:33 +0800
-Subject: [PATCH] ACPI: FPDT: fix build warning
+between commit:
 
-Fix a build warning,
-In file included from ./include/linux/printk.h:7:0,
-                 from ./include/linux/kernel.h:16,
-                 from ./include/linux/list.h:9,
-                 from ./include/linux/kobject.h:19,
-                 from ./include/linux/of.h:17,
-                 from ./include/linux/irqdomain.h:35,
-                 from ./include/linux/acpi.h:13,
-                 from drivers/acpi/acpi_fpdt.c:11:
-drivers/acpi/acpi_fpdt.c: In function ‘acpi_init_fpdt’:
-./include/linux/kern_levels.h:5:18: warning: too many arguments for format [-Wformat-extra-args]
- #define KERN_SOH "\001"  /* ASCII Start Of Header */
-                  ^
-./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
- #define KERN_INFO KERN_SOH "6" /* informational */
-                   ^~~~~~~~
-./include/linux/printk.h:373:9: note: in expansion of macro ‘KERN_INFO’
-  printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-         ^~~~~~~~~
-drivers/acpi/acpi_fpdt.c:255:4: note: in expansion of macro ‘pr_info’
-    pr_info(FW_BUG, "Invalid subtable type %d found.\n",
-    ^~~~~~~
+  7001d4af926b ("arm64: Drop workaround for broken 'S' constraint with GCC =
+4.9")
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/acpi/acpi_fpdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+from the arm64 tree and commit:
 
-diff --git a/drivers/acpi/acpi_fpdt.c b/drivers/acpi/acpi_fpdt.c
-index b8108117262a..64d5733dca0b 100644
---- a/drivers/acpi/acpi_fpdt.c
-+++ b/drivers/acpi/acpi_fpdt.c
-@@ -252,7 +252,7 @@ void acpi_init_fpdt(void)
- 					      subtable->type);
- 			break;
- 		default:
--			pr_info(FW_BUG, "Invalid subtable type %d found.\n",
-+			pr_info(FW_BUG "Invalid subtable type %d found.\n",
- 			       subtable->type);
- 			return;
- 		}
--- 
-2.17.1
+  247bc166e6b3 ("KVM: arm64: Remove hyp_symbol_addr")
 
+from the kvm-arm tree.
 
-On Wed, 2021-01-27 at 12:43 +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pm tree, today's linux-next build (x86_64
-> allmodconfig)
-> produced this warning:
-> 
-> In file included from include/linux/printk.h:7,
->                  from include/linux/kernel.h:16,
->                  from include/linux/list.h:9,
->                  from include/linux/kobject.h:19,
->                  from include/linux/of.h:17,
->                  from include/linux/irqdomain.h:35,
->                  from include/linux/acpi.h:13,
->                  from drivers/acpi/acpi_fpdt.c:11:
-> drivers/acpi/acpi_fpdt.c: In function 'acpi_init_fpdt':
-> include/linux/kern_levels.h:5:18: warning: too many arguments for
-> format [-Wformat-extra-args]
->     5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
->       |                  ^~~~~~
-> include/linux/kern_levels.h:14:19: note: in expansion of macro
-> 'KERN_SOH'
->    14 | #define KERN_INFO KERN_SOH "6" /* informational */
->       |                   ^~~~~~~~
-> include/linux/printk.h:373:9: note: in expansion of macro 'KERN_INFO'
->   373 |  printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
->       |         ^~~~~~~~~
-> drivers/acpi/acpi_fpdt.c:255:4: note: in expansion of macro 'pr_info'
->   255 |    pr_info(FW_BUG, "Invalid subtable type %d found.\n",
->       |    ^~~~~~~
-> 
-> Introduced by commit
-> 
->   208757d71098 ("ACPI: tables: introduce support for FPDT table")
-> 
+I fixed it up (the latter removed the code updated by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ujyzvWu02HsuFo04IhnRn=+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAQ+PkACgkQAVBC80lX
+0GxLjAgAnIhWZRcid/ixaJYoXKZ8X+9yUi5rB6P/y40jZOkGTYR2EAvYa3yaX0b3
+ENG/+ncuG3NkEpj/c5fWCVBn/z35ukmhT8AJJiatjKr3k90Wfx9m4lpzQZbamiwu
+ZvqCFswL1pPEkU+VcI0Gp/EOWS7hwYIE58+IH4Zvd5efKIkjd3MSt0tXrMy+cxri
+Kw7r/QL2kJOg0WpV7OBac4TnaJj+MGA+bQrMWVUvvXwZhIsz4MDEcoLv/lXOuQt7
+HaXXV9XEq3eki498CUW0pvhB32wFQfJAj0RwfvHfMYz4GcMIEE53E6kHs6ngIJYb
+t/ZUR6dcLOQB0wK/9DRp5a2LoUuRtA==
+=kChN
+-----END PGP SIGNATURE-----
+
+--Sig_/ujyzvWu02HsuFo04IhnRn=+--

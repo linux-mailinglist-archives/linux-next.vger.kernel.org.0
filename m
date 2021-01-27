@@ -2,52 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3B9305A3B
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 12:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFCB305A65
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 12:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237160AbhA0Lqt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jan 2021 06:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbhA0Loj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jan 2021 06:44:39 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A59FC061574;
-        Wed, 27 Jan 2021 03:43:57 -0800 (PST)
+        id S231205AbhA0LyU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jan 2021 06:54:20 -0500
+Received: from ozlabs.org ([203.11.71.1]:51565 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237388AbhA0Lu3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 27 Jan 2021 06:50:29 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQhZc4rjCz9sVn;
-        Wed, 27 Jan 2021 22:43:52 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DQhjN3mtXz9sS8;
+        Wed, 27 Jan 2021 22:49:44 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611747833;
-        bh=tcnGzuwBPDoxl75YFW6S22VO0qdePNURHS1pblHw7mA=;
+        s=201702; t=1611748184;
+        bh=g2q/HZguZ1ZnDiCFKZnmDOfmIZPxicnT9F3kFhQh6/U=;
         h=Date:From:To:Cc:Subject:From;
-        b=r6Emgf0OtOukzXrfsI0HC4BvltbGV0d5NdpIvdqX3mwPx2N7wRqP2SeTqAHyDTbti
-         bOdJZfdQJ68twwP+wbyUVOfdAGeLsH7xtJR97xwcrR1Dl5YNA10SdS3hQrHvoKLP/Y
-         5EfZ8oDcDkai1zPi17o1boG5rt13uiLjuhZU0vY1XGk/QoD5wniSj+wd+dXSqwy7iz
-         PJyJz9VWt1JG9mvCSpDQ/XcX0I+5rv8vzHZF6jmGDQEuZGjBbrldtZJUgEJSwQcSDX
-         kwO852/v4zYe/svnvqZngHfdsKRovqAeJXPXHcAvBHIjuXopUrcaGjMzmt4v2UMpTT
-         nEC20BrtbM7Bg==
-Date:   Wed, 27 Jan 2021 22:43:51 +1100
+        b=vGeN01SJRFi3oa6W1dtEWxaivfUJWTwZ7TcAslTSKX9Ytt8LWa5mm4zw7dpr7VVq+
+         QmcRqwm9M4AH1H/7EVf5gBCGGBs9WideTVlpFOtmgTYvVRpqnXhej6IB2tVYD9jhql
+         jwuHiik51yaymnrALmADfeKK4Qpo7lPLFKlecsEOzw4efBpXDPzQjRe7lOVgprW7Pc
+         yg6gbq1MUAbYkAUIxhRNdD4ikN7hHe3plJkTAoWy0TVxZlbMQBiaCrWn5j7nENSS5s
+         RU2gNH+2eBQIuj/NImzxDkzFkmQVSWjruCEye4kvAymT4iqwJAgl79nvNs8W1htCzK
+         o7IENrbK1ABsg==
+Date:   Wed, 27 Jan 2021 22:49:43 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>
+        David Howells <dhowells@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Subject: linux-next: manual merge of the akpm-current tree with the pidfd
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: linux-next: manual merge of the akpm-current tree with the fscache
  tree
-Message-ID: <20210127224351.486fd977@canb.auug.org.au>
+Message-ID: <20210127224943.34b087ef@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0Qle1JKigF6Fw.QS9r+Wv_8";
+Content-Type: multipart/signed; boundary="Sig_/Hr.Q4ImlBSuL2U6G_8T8iwT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0Qle1JKigF6Fw.QS9r+Wv_8
+--Sig_/Hr.Q4ImlBSuL2U6G_8T8iwT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -55,16 +52,18 @@ Hi all,
 
 Today's linux-next merge of the akpm-current tree got a conflict in:
 
-  fs/hugetlbfs/inode.c
+  include/linux/pagemap.h
 
-between commit:
+between commits:
 
-  2f221d6f7b88 ("attr: handle idmapped mounts")
+  fa4910177245 ("vm: Add wait/unlock functions for PG_fscache")
+  13aecd8259dc ("mm: Implement readahead_control pageset expansion")
 
-from the pidfd tree and commit:
+from the fscache tree and commits:
 
-  57d3629b7a9a ("hugetlbfs: remove useless BUG_ON(!inode) in hugetlbfs_seta=
-ttr()")
+  f5614fc4780c ("mm/filemap: pass a sleep state to put_and_wait_on_page_loc=
+ked")
+  7335e3449f74 ("mm/filemap: add mapping_seek_hole_data")
 
 from the akpm-current tree.
 
@@ -79,36 +78,66 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/hugetlbfs/inode.c
-index c5c32eb59498,ca9e25427f2d..000000000000
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@@ -760,9 -766,7 +767,7 @@@ static int hugetlbfs_setattr(struct use
-  	unsigned int ia_valid =3D attr->ia_valid;
-  	struct hugetlbfs_inode_info *info =3D HUGETLBFS_I(inode);
+diff --cc include/linux/pagemap.h
+index 4935ad6171c1,20225b067583..000000000000
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@@ -682,21 -681,7 +682,20 @@@ static inline int wait_on_page_locked_k
+  	return wait_on_page_bit_killable(compound_head(page), PG_locked);
+  }
  =20
-- 	BUG_ON(!inode);
+ +/**
+ + * wait_on_page_fscache - Wait for PG_fscache to be cleared on a page
+ + * @page: The page
+ + *
+ + * Wait for the fscache mark to be removed from a page, usually signifyin=
+g the
+ + * completion of a write from that page to the cache.
+ + */
+ +static inline void wait_on_page_fscache(struct page *page)
+ +{
+ +	if (PagePrivate2(page))
+ +		wait_on_page_bit(compound_head(page), PG_fscache);
+ +}
+ +
+- extern void put_and_wait_on_page_locked(struct page *page);
 -=20
- -	error =3D setattr_prepare(dentry, attr);
- +	error =3D setattr_prepare(&init_user_ns, dentry, attr);
-  	if (error)
-  		return error;
++ int put_and_wait_on_page_locked(struct page *page, int state);
+  void wait_on_page_writeback(struct page *page);
+  extern void end_page_writeback(struct page *page);
+  void wait_for_stable_page(struct page *page);
+@@@ -771,11 -756,11 +770,13 @@@ int add_to_page_cache_lru(struct page *
+  				pgoff_t index, gfp_t gfp_mask);
+  extern void delete_from_page_cache(struct page *page);
+  extern void __delete_from_page_cache(struct page *page, void *shadow);
+- int replace_page_cache_page(struct page *old, struct page *new, gfp_t gfp=
+_mask);
++ void replace_page_cache_page(struct page *old, struct page *new);
+  void delete_from_page_cache_batch(struct address_space *mapping,
+  				  struct pagevec *pvec);
+ +void readahead_expand(struct readahead_control *ractl,
+ +		      loff_t new_start, size_t new_len);
++ loff_t mapping_seek_hole_data(struct address_space *, loff_t start, loff_=
+t end,
++ 		int whence);
  =20
+  /*
+   * Like add_to_page_cache_locked, but used to add newly allocated pages:
 
---Sig_/0Qle1JKigF6Fw.QS9r+Wv_8
+--Sig_/Hr.Q4ImlBSuL2U6G_8T8iwT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmARUfcACgkQAVBC80lX
-0GwYGQf+OWsT4aPV7MArkXB5/KnLQoYnpt+UU2P8zbytn9A8u6qT5iIbbL8vXL1S
-aLSgGVTk4ptWDk4tbYaO+Pg0hup+cxKo8rDBBKObcO19JryagaNavFsGd44OqVd4
-n4EnNsYAyJq70BzJnrpPGQI4XChFWVbOy3I/0p3nU9LJ0VxOTq4Jb/tnUVi/CdTI
-n9TzWyUxH8PZ2GavFCuv0kdNjteMrjz87FOAaeYoptE2/EL0xTrgATCPenhAdw+d
-IxSpSrNp+fNiMusf+bbKIIQ+6+614eyOUrSuJvc0TQsvI/6EWKhirAOajthNqUiG
-84IBvp/oVjWY8RpQJ0BXf21KUQ3erw==
-=a4AN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmARU1cACgkQAVBC80lX
+0Gw/2wf/Yi3SJ7hLGwzQ4duzqkhsIDk/h8g6QgXmUbPJtkqAu9v1VbOXyXND+nNx
+vZwcRQjU7hl4rqwnyCgUMP8lursyIcGyuxVsCGQx4aherCCgVU8aEOxKCzLKWg5a
+qNVspP6U+h15Uy87PMaF3I/IlRDKL+X/VTqzMVCN/vEig3332iw19+5osjmvN4Od
+g29Q/JZIK4Y0l1lzRxnBmxw5txChBmbKYeMl2rtMRtJyFkXw6PDzj7qPMA4LqImK
+85s/xcjut/9qRRDkuTH/bapXv/AEDWA35jxViutPOEjvA1Wm0+E3IlY1DREMI5of
+h0LJZ8CGVJF6svB2XmpYAgwXC2iIaw==
+=6iN8
 -----END PGP SIGNATURE-----
 
---Sig_/0Qle1JKigF6Fw.QS9r+Wv_8--
+--Sig_/Hr.Q4ImlBSuL2U6G_8T8iwT--

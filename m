@@ -2,73 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E9E30640E
-	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 20:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C939D30643E
+	for <lists+linux-next@lfdr.de>; Wed, 27 Jan 2021 20:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbhA0TbT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Jan 2021 14:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S1344568AbhA0TiA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Jan 2021 14:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbhA0TbS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jan 2021 14:31:18 -0500
+        with ESMTP id S1344587AbhA0Tg5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Jan 2021 14:36:57 -0500
 Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F1FC061573;
-        Wed, 27 Jan 2021 11:30:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A25BC061573;
+        Wed, 27 Jan 2021 11:36:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=NggY11F5bHVB0CVZTN9Izuj9i9PL4oNzJYxr25pZC5U=; b=1d/uim2qcNKJjsbEm8wQPYYxDe
-        SW3voU4iz6FsunX1cxneyTpJAgV/GWgcok10V3tqGBcJOsvPXqKSGicVQE7vDVPBLJbV5twJxjbeg
-        5K4PSP8TpVXTXNqqklJdX88chFXirI4rVCKnqFL3L3FTxZqzABvdKRWockevcU2lPH1FP6GSZQuXr
-        KH3MYY9NNxtC3u8/YAyD+iz085tpMQ/FApCXPigaJ3oZYFblOLBLuLdk3zGCHT4RCf5rVyLIRB/8X
-        f+dMYGO085FXjHVihDl9EBspZ71oFl8lyeXirqsn1e9dlN56rOjXUKRzErWlGfEkMQc7EBQ+5N0uU
-        sSfj7bvg==;
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=e8MHSFAxiS7UdxXBZlqFbrVKBNkvXqogAmgOIMEikQ8=; b=yvGMjwoP/+k3rHesHCE2f9nLbG
+        gUEDn2qyX4KQfjBPkeO/5HRFsYk5/WO5eAMK4s/c32DNGpbsxZNole9VkwCxML/ZvMfMDhprCutw2
+        37RcmBVLFLVxuNwVxxfmu006aE0vToyIicusfdagBwrPaPeGhKyDFxOzvE6uw9dNAhXHq9xoB/ib9
+        KlPCwdV9ots8gUxsOBp0qbIE3Y88d9FheNRK9C8AlkcbMJuwRQ0lggO22QAdzRyYdB5BcwNuF+dTn
+        sNRM1+A4fzKWkwLOl1fRyvInSpaIiWIBp5BzrqM+fupHzHAoLEBVQjghRQeXSGGtd90WaAd1n4cBX
+        HfO6NuFg==;
 Received: from [2601:1c0:6280:3f0::7650]
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l4qWL-0001c0-Dg; Wed, 27 Jan 2021 19:30:29 +0000
-Subject: Re: linux-next: Tree for Jan 27 (drm/i915)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id 1l4qbp-0002hL-Ag; Wed, 27 Jan 2021 19:36:09 +0000
+Subject: Re: mmotm 2021-01-25-21-18 uploaded (drm/i915/Kconfig.debug)
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
         dri-devel <dri-devel@lists.freedesktop.org>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         Chris Wilson <chris@chris-wilson.co.uk>
-References: <20210128014419.55ea9ae4@canb.auug.org.au>
- <f173c63a-d71f-15bd-02ef-518736600cf1@infradead.org>
-Message-ID: <669b3538-9edb-cb32-6746-10615d0500b0@infradead.org>
-Date:   Wed, 27 Jan 2021 11:30:23 -0800
+References: <20210126051917.rcgrHGfQS%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0f9e7192-622d-c016-561f-7b5d5ee9ecd1@infradead.org>
+Date:   Wed, 27 Jan 2021 11:36:01 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <f173c63a-d71f-15bd-02ef-518736600cf1@infradead.org>
+In-Reply-To: <20210126051917.rcgrHGfQS%akpm@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/27/21 11:08 AM, Randy Dunlap wrote:
-> On 1/27/21 6:44 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Note: the patch file has failed to upload :-(
->>
->> Changes since 20210125:
->>
+On 1/25/21 9:19 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2021-01-25-21-18 has been uploaded to
 > 
-> on x86_64:
+>    https://www.ozlabs.org/~akpm/mmotm/
 > 
-> ../drivers/gpu/drm/i915/i915_gem.c: In function ‘i915_gem_freeze_late’:
-> ../drivers/gpu/drm/i915/i915_gem.c:1182:2: error: implicit declaration of function ‘wbinvd_on_all_cpus’; did you mean ‘wrmsr_on_cpus’? [-Werror=implicit-function-declaration]
->   wbinvd_on_all_cpus();
+> mmotm-readme.txt says
 > 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
 
-My apologies: this was in Andrew's mmotm 2021-01-25.
-Sorry about that.
+on x86_64:
+
+when CONFIG_COMPILE_TEST=y:
+
+WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+  Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=y]
+  Selected by [m]:
+  - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && EXPERT [=y] && DRM_I915 [=m]
+
 
 -- 
 ~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
 

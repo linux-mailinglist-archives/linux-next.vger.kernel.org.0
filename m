@@ -2,53 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E8F308299
-	for <lists+linux-next@lfdr.de>; Fri, 29 Jan 2021 01:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDCA3082B2
+	for <lists+linux-next@lfdr.de>; Fri, 29 Jan 2021 01:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbhA2AoN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Jan 2021 19:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbhA2An6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Jan 2021 19:43:58 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645CAC061574;
-        Thu, 28 Jan 2021 16:43:17 -0800 (PST)
+        id S231506AbhA2AvB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Jan 2021 19:51:01 -0500
+Received: from ozlabs.org ([203.11.71.1]:56867 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231601AbhA2Atc (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 28 Jan 2021 19:49:32 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DRdqP3P6Lz9sVF;
-        Fri, 29 Jan 2021 11:43:12 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DRdxl4GwYz9sVF;
+        Fri, 29 Jan 2021 11:48:43 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1611880993;
-        bh=l4vnBR+mEzBF2GR6eNUHnAasrn2FIlCfc5gxL8Fgj9c=;
+        s=201702; t=1611881324;
+        bh=88acUbfYTRBOBCPuXAqi5VimIreMPtP2EqSf1zjse/w=;
         h=Date:From:To:Cc:Subject:From;
-        b=DDOHeZLSSgQhmq3lnp6T/Gv+2uVKPfHvUMt+Vn8O9+sXZ4MKOf88E6ACytjsjAoq8
-         2+dTxhymvtwJMPVAIqwyve9JyOGMoBEyodCq/BO54lA5oxxFWmBISJuKBJRuA81lEO
-         SYdmLRVWbv2fvppZHp5+s8SYaHU+gtl3W+fBPsn49OEaywiipZk5up2Wrk/yzcgHZd
-         tN3cUpukEb/zu+HL9LsRo2yymetSltgo1G+0E3A6qyZccItR8SW+buYBA/KCtPB2MC
-         lTUUWCDGg5UtymY9Mhu9KbxXQ1okQu0qFSq19q/mGK0jFwWiWHS/Io98OClHD6Zjqe
-         cTwz0EYk9JL9A==
-Date:   Fri, 29 Jan 2021 11:43:09 +1100
+        b=GNDv/dtM1i45G+pPLwEZkZB5OmHLRRpDX0heUBdM7Ng2s4W4l+K+lE4gOAXZFKNhb
+         GFh+lgt0v0RPUhDkfR1uAgKeVMwCc0mh08BHQkLUdrDb0WzdTVF87t4UyPShUE0d3d
+         KA0xJk0zJsMJZG77lf6vSXKk10bUMr9hIx1fIlA90VmZcVrvVeU+7qJWh5X4QAcbTt
+         ZvHmTiWLheR4s7Ve1qfC1hoO/YWDVS9dCVoWsLGXX5QZzUPkWEDrf2g8ycMaiOGkEZ
+         qm+wOhQXFRhGekTL+if37aVI+84hkhT9Im4Xd3E7/hn+yQhXb0SO81AdzcY0Oz6Cdn
+         GzYKeveW2gyWw==
+Date:   Fri, 29 Jan 2021 11:48:42 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>
 Cc:     Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
 Subject: linux-next: manual merge of the net-next tree with Linus' tree
-Message-ID: <20210129114309.451562f7@canb.auug.org.au>
+Message-ID: <20210129114842.1174a9c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LPYlfJqKMu6H8elNXBz.Rdm";
+Content-Type: multipart/signed; boundary="Sig_/Dlvl3zBc_yGdX10nioAsaxH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LPYlfJqKMu6H8elNXBz.Rdm
+--Sig_/Dlvl3zBc_yGdX10nioAsaxH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -56,16 +53,19 @@ Hi all,
 
 Today's linux-next merge of the net-next tree got a conflict in:
 
-  drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
+  net/switchdev/switchdev.c
 
 between commit:
 
-  57ac4a31c483 ("net/mlx5e: Correctly handle changing the number of queues =
-when the interface is down")
+  20776b465c0c ("net: switchdev: don't set port_obj_info->handled true when=
+ -EOPNOTSUPP")
 
-from Linus' tree and commit:
+from Linus' tree and commits:
 
-  214baf22870c ("net/mlx5e: Support HTB offload")
+  ffb68fc58e96 ("net: switchdev: remove the transaction structure from port=
+ object notifiers")
+  bae33f2b5afe ("net: switchdev: remove the transaction structure from port=
+ attributes")
 
 from the net-next tree.
 
@@ -80,46 +80,55 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-index 302001d6661e,2e5a0696374a..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_ethtool.c
-@@@ -447,7 -447,18 +447,18 @@@ int mlx5e_ethtool_set_channels(struct m
-  		goto out;
+diff --cc net/switchdev/switchdev.c
+index 2c1ffc9ba2eb,855a10feef3d..000000000000
+--- a/net/switchdev/switchdev.c
++++ b/net/switchdev/switchdev.c
+@@@ -460,11 -388,9 +388,10 @@@ static int __switchdev_handle_port_obj_
+  	extack =3D switchdev_notifier_info_to_extack(&port_obj_info->info);
+ =20
+  	if (check_cb(dev)) {
+- 		err =3D add_cb(dev, port_obj_info->obj, port_obj_info->trans,
+- 			     extack);
+ -		/* This flag is only checked if the return value is success. */
+ -		port_obj_info->handled =3D true;
+ -		return add_cb(dev, port_obj_info->obj, extack);
+++		err =3D add_cb(dev, port_obj_info->obj, extack);
+ +		if (err !=3D -EOPNOTSUPP)
+ +			port_obj_info->handled =3D true;
+ +		return err;
   	}
  =20
-+ 	/* Don't allow changing the number of channels if HTB offload is active,
-+ 	 * because the numeration of the QoS SQs will change, while per-queue
-+ 	 * qdiscs are attached.
-+ 	 */
-+ 	if (priv->htb.maj_id) {
-+ 		err =3D -EINVAL;
-+ 		netdev_err(priv->netdev, "%s: HTB offload is active, cannot change the =
-number of channels\n",
-+ 			   __func__);
-+ 		goto out;
-+ 	}
-+=20
- -	new_channels.params =3D priv->channels.params;
- +	new_channels.params =3D *cur_params;
-  	new_channels.params.num_channels =3D count;
+  	/* Switch ports might be stacked under e.g. a LAG. Ignore the
+@@@ -570,10 -493,8 +495,10 @@@ static int __switchdev_handle_port_attr
+  	int err =3D -EOPNOTSUPP;
  =20
-  	if (!test_bit(MLX5E_STATE_OPENED, &priv->state)) {
+  	if (check_cb(dev)) {
+- 		err =3D set_cb(dev, port_attr_info->attr, port_attr_info->trans);
+ -		port_attr_info->handled =3D true;
+ -		return set_cb(dev, port_attr_info->attr);
+++		err =3D set_cb(dev, port_attr_info->attr);
+ +		if (err !=3D -EOPNOTSUPP)
+ +			port_attr_info->handled =3D true;
+ +		return err;
+  	}
+ =20
+  	/* Switch ports might be stacked under e.g. a LAG. Ignore the
 
---Sig_/LPYlfJqKMu6H8elNXBz.Rdm
+--Sig_/Dlvl3zBc_yGdX10nioAsaxH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmATWh0ACgkQAVBC80lX
-0Gy6FQf+KL/nYs4V4lNxbox255v8cOEjIMUA5cnDyrPw+NefhGi8GUfPUCozSYnV
-pDqSr3u2WEMCfufZ0Nre297nsW/TSErgh9MagQc+eaXtgugOpVW/SaEmmar/3dwV
-KTQfHOuiScV3Ip2ju5YHlW3+5t6CAXgIjK0Qlp90xNODdK9EXLOKEcOY1qOOeov2
-lCd7PM1htSLwRLD+oGNSHsYJVrcTxZaHYGu7ChMXmDM118y40ms4JBgTJgTz/+u7
-xJzqtj3IIbfOhREYGQDJ13r9MuaSXfht18froaiP/xmUOAwX6mFrYTof8fuKA4o+
-nlgUNUCAh0gj7VGZMqNADDSEIJALoQ==
-=77xB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmATW2oACgkQAVBC80lX
+0GwgrggAl2ACJCQVH2rteoxv0XN3FoaD6N4rTG7f8HOGNVK8pks8QeEEpIuj3s2H
+PWRkI+TxrCmlmwV6xBwf2/Rc+dTA2ytkuFzCwvAGkN6kME6FUd+Qba+G8KGA+klQ
+bCMAgPbakEbXFwAkIqBpAzMD1N2BMR0dJtVsnQSl4ucb8Cv8N2ESlqWscn/KQWhm
+/GUr0IaqP3w/YNvn9bvEPKCLKoHrmfjmjdJoJrjVvflj2ayW6N6o1tj2JPxeM8nv
+W0StOqsmbp6tIqmxT+segyI047W/0N5VLi3sI0+pfgJ1JOzBIVS7pbUeqwfOMJ+n
+Wyj+J0P1+uyv3wLBCnx920pYeAhe3Q==
+=k3Dn
 -----END PGP SIGNATURE-----
 
---Sig_/LPYlfJqKMu6H8elNXBz.Rdm--
+--Sig_/Dlvl3zBc_yGdX10nioAsaxH--

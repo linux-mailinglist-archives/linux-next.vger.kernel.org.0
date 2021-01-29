@@ -2,108 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5149C308635
-	for <lists+linux-next@lfdr.de>; Fri, 29 Jan 2021 08:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB7030863C
+	for <lists+linux-next@lfdr.de>; Fri, 29 Jan 2021 08:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbhA2HFz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Jan 2021 02:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S232157AbhA2HIP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Jan 2021 02:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbhA2HFw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Jan 2021 02:05:52 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E19C061573;
-        Thu, 28 Jan 2021 23:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=GlH3x83KNd6bGiBeIIa+b8g26rMegA1+emYY6KXmkjA=; b=Gs0pRHF6QxNBf+BvuOtwoweAWI
-        eZkW1ipxH4x/BMhgTys2SIwbX0oF7ilkRUSUgAKqb98hYH41VylhFgSWWKebVJjlkxuBw4Ja7eWkW
-        ORM4i8jVXVKdK3S0Vl9cCdJmC0vISTRKk7qQ86gHaUVzASQaCnoVdk3fTg33QsYXmR8fIMDz/lnIU
-        i0tb1YS2QL7QBZK5k/BPaCMjnleyWsKxCohFtXoKPv8dqO+9N/XoLRhMWQ/LNie7mwLZdYwR/n7tI
-        Jwvt1JbeVc9pWegPbTPrWcSR1y5QyBwk4h7x6ODnvS41S0ovplEcbyB51m9fDK57QhFLgCrlA8xoj
-        3QvcWHlg==;
-Received: from [2601:1c0:6280:3f0::7650]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l5Nq6-0007vp-C5; Fri, 29 Jan 2021 07:05:06 +0000
-Subject: Re: [PATCH] crypto: octeontx2 - Add dependency on NET_VENDOR_MARVELL
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        kernel test robot <lkp@intel.com>
-References: <b1397a30-0018-ac78-2a89-4fc0db1d1ec8@infradead.org>
- <20210129054856.GA20020@gondor.apana.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <eadfb919-ee53-2e4c-3134-62d6c53e1695@infradead.org>
-Date:   Thu, 28 Jan 2021 23:04:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        with ESMTP id S232201AbhA2HIO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Jan 2021 02:08:14 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC16C061573;
+        Thu, 28 Jan 2021 23:07:34 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DRpLp3nY8z9sSC;
+        Fri, 29 Jan 2021 18:07:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1611904052;
+        bh=CBnQX/9BT4fWvnBH2HpYrwl4g+Tim3wZzojPaFHiCHs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=g+KnLKbggV6TK9VbQfS92U4RjYAfYTRJRN4SRcwc+I7ps4B6/REAEuvyyZTpJz1NF
+         8m56CaieOwcWOPcFUy/kthnDkeiQ93yjJKThx/gdR1wo6FIv9jP2dDHdiX17PfQRl9
+         rTNiZBVrIpC+IaBl60Bc3NNedQFN2VmR9ocZjhls1jIRsuFKzgWkVdc1IF87ELlWLY
+         dM/BGWVE/hVqL9LsRvzftk+LSCjvPxaPK8wt3O837IhbklL9Rc/EhfJIAmWqnN3slr
+         ASwyjE/w7nZyoG59PqM4q6GreKjp2Y96wsKygrVBF9uWczAcZ9UQHLEeS8H3IX65l7
+         54skAqn22NbKg==
+Date:   Fri, 29 Jan 2021 18:07:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the char-misc tree
+Message-ID: <20210129180729.44e79afe@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210129054856.GA20020@gondor.apana.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/EgVFxuPFb4xK8jtf67GEl.b";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/28/21 9:48 PM, Herbert Xu wrote:
-> On Mon, Jan 25, 2021 at 09:41:12AM -0800, Randy Dunlap wrote:
->> on x86_64:
->>
->> ld: drivers/crypto/marvell/octeontx2/otx2_cptpf_main.o: in function `cptpf_flr_wq_handler':
->> otx2_cptpf_main.c:(.text+0x2b): undefined reference to `otx2_mbox_alloc_msg_rsp'
-> 
-> Thanks for the report.  The issue is that the crypto driver depends
-> on code that sits under net so if that option is off then you'll end
-> up with these errors.
-> 
-> ---8<---
-> The crypto octeontx2 driver depends on the mbox code in the network
-> tree.  It tries to select the MBOX Kconfig option but that option
-> itself depends on many other options which are not selected, e.g.,
-> CONFIG_NET_VENDOR_MARVELL.  It would be inappropriate to select them
-> all as randomly prompting the user for network options which would
-> oterhwise be disabled just because a crypto driver has been enabled
-> makes no sense.
-> 
-> This patch fixes this by adding a dependency on NET_VENDOR_MARVELL.
-> This makes the crypto driver invisible if the network option is off.
-> 
-> If the crypto driver must be visible even without the network stack
-> then the shared mbox code should be moved out of drivers/net.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 5e8ce8334734 ("crypto: marvell - add Marvell OcteonTX2 CPT...")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+--Sig_/EgVFxuPFb4xK8jtf67GEl.b
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, Herbert.
+Hi all,
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+After merging the char-misc tree, today's linux-next build (htmldocs)
+produced this warning:
 
+Documentation/driver-api/index.rst:14: WARNING: toctree contains reference =
+to nonexisting document 'driver-api/pti_intel_mid'
 
-> diff --git a/drivers/crypto/marvell/Kconfig b/drivers/crypto/marvell/Kconfig
-> index 2efbd79180ce..a188ad1fadd3 100644
-> --- a/drivers/crypto/marvell/Kconfig
-> +++ b/drivers/crypto/marvell/Kconfig
-> @@ -41,6 +41,7 @@ config CRYPTO_DEV_OCTEONTX2_CPT
->  	depends on ARM64 || COMPILE_TEST
->  	depends on PCI_MSI && 64BIT
->  	depends on CRYPTO_LIB_AES
-> +	depends on NET_VENDOR_MARVELL
->  	select OCTEONTX2_MBOX
->  	select CRYPTO_DEV_MARVELL
->  	select CRYPTO_SKCIPHER
-> 
+Introduced by commit
 
+  8ba59e9dee31 ("misc: pti: Remove driver for deprecated platform")
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/EgVFxuPFb4xK8jtf67GEl.b
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmATtDEACgkQAVBC80lX
+0Gx/cgf/b4hAL9TgC6QRHQQJSm02cc5W8mGwrGr3BdCH9eRm+m1UzLA2HyC+rOYR
+yR0M6rkT2dQWlYZ6jqbp+FAQRseeKlcWGyYf8RDcbkcUJlHbQbrEBp5aKQ4ZpFhJ
+JcPmzRfvSy+4OiQOx1g4czXR/7Y7SBzn29U69jfjbxD5MvQnkEV2L7AoM2lNw7JC
+CZeU12mPLOcI7FcFNP4MYY73kB713VlvTQt5pYGePkoi+8aPBs8n9iJcyQf2gnJ+
+pVoN8e2/4Sv568DVMFMA7UXG0k5YLVbv7CTC6gjrB8d7hgEowpFPJhJ3Yi2it/2Y
+0/LdVm7JPuzsNIxSRDeZdvX+G46/pA==
+=23Lj
+-----END PGP SIGNATURE-----
+
+--Sig_/EgVFxuPFb4xK8jtf67GEl.b--

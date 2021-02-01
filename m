@@ -2,71 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1536730AA20
-	for <lists+linux-next@lfdr.de>; Mon,  1 Feb 2021 15:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E29030AABB
+	for <lists+linux-next@lfdr.de>; Mon,  1 Feb 2021 16:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbhBAOoe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Feb 2021 09:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S229549AbhBAPOF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Feb 2021 10:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbhBAOmg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Feb 2021 09:42:36 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6869FC061573;
-        Mon,  1 Feb 2021 06:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ao/81DetTUj9Oijf6UqzNjcJKUmoksPRJNzcAIa0ZIQ=; b=KafbwzfIrLFeN2e9RtrZPMO2uY
-        Tgd8PlIpRfmc5TJH1p5JivHTYkAwZ2bhAvO3VgFHP+GA8V/XDmjhibYs8V3vcRQZwuMVZ7Z1R6q5A
-        6LTQCst9IfX5JFruko0ST9QBRLfadVYKhUQLfYbO7/w80iLndCsK/kUG7yFN6QlyhotfQPxW+vn4W
-        3X5NLY8KaN2K9yaB895ov8gqXMxY8rlOoLXB/H01dIBxWHjdqGxZdIggIEqFedRJoVimiUzWqPJ7g
-        MVZ9OccARltVFENyNYZS/C7muGZLIM2Zz+9BziAvb7XM/XSDJYG/eRPkoKZqxPnHoSKJuFP0KEs3q
-        lWV7peRQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l6aNB-00DtQM-V9; Mon, 01 Feb 2021 14:40:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E4B7F3003D8;
-        Mon,  1 Feb 2021 15:40:12 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B120F2C967E83; Mon,  1 Feb 2021 15:40:12 +0100 (CET)
-Date:   Mon, 1 Feb 2021 15:40:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: qemu boot failure after merge of the tip tree
-Message-ID: <YBgSzPcVILEtk4Yy@hirez.programming.kicks-ass.net>
-References: <20210201200918.386682c5@canb.auug.org.au>
- <jhjv9bcym5d.mognet@arm.com>
+        with ESMTP id S229931AbhBAPB3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Feb 2021 10:01:29 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563FEC06178C
+        for <linux-next@vger.kernel.org>; Mon,  1 Feb 2021 07:01:18 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id z22so19197953edb.9
+        for <linux-next@vger.kernel.org>; Mon, 01 Feb 2021 07:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hZ3xD2/2lcYcAhtu708AbjR6mIFxqFO7i7RlxJAZ5ZU=;
+        b=vgNYmiNTNpQzx2jV86jycjLWMXZ6nJ4tSwFTGE5x9SuV+VLEyH6rZomNo5oqBVo48Z
+         DsUNK+cQyv8QkSJJyXCZV4tv7cR0lGYCjwpm+TwjNSzGMAIRQxs9GEmw8ufWoEShxBYa
+         GurBr5HHFFkdq90UWzoaiYGIUkN3QyDzID/0qAL8SuJUtIPCsK6PqLwuBRW7lZ+fqOpE
+         JjjRgi3SE94pzzb3u1PKCrV1lkLEtli/cajzD6YV9W7lzHADaLkPi5/ewt2oaZw4uKdu
+         tgk1m8Lrv1Qvlu+q7sAxQ2juiqAdpdQe2746+17+ZmPEo8rXHJ5J2rZ6cKbFzR+uOsZh
+         Rltg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hZ3xD2/2lcYcAhtu708AbjR6mIFxqFO7i7RlxJAZ5ZU=;
+        b=audfyoGW/+QUt8KwXPFMrYGPUjyRB7866qZzW/iOpzsd7tvT+IGC7cWMYGI13DqcWL
+         VLICGK53Alz1tsfHqhLErS/3ymC7lCZT6vqb9S6tu9bcZR6KiwcpJMAEdgtnnAtnaol1
+         6cXx8up5YkmMDCyD4XBC5OujQQJI+6tZVHG4KALlxrM7kyNRV+2rpdKpyGvPKeeIKPk7
+         43HpzXRFMZe5rA+5KThZ0CDLSDhM3TCHe01+wd/fkyTtBB3YLeRXs5OvhR37QOCxAHxi
+         fK4SeTuAQteDReCtMyvJZ8mVoeyyNsLoGUn0BhlsTY129Hm0l3jilayhzfCoa3DEAROR
+         RC+Q==
+X-Gm-Message-State: AOAM531FEoYxqYyXrFuvNQ4Q2AZm0e0AUqoMuTxSYlYkP2FuXnuOAl3i
+        nhPiMm7bFvZQ+vayeArnoGOoB4JCHg8Cwv+lw069aA==
+X-Google-Smtp-Source: ABdhPJyUKDJgotj2iV/EZDBBDNQh6SKgJOObpqGbdfNKm6jwpeZr7z46WvIqVVcQo2wc5dGjzyguHOPwSCGKOdVqhQ8=
+X-Received: by 2002:a05:6402:26c9:: with SMTP id x9mr19192479edd.365.1612191676837;
+ Mon, 01 Feb 2021 07:01:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <jhjv9bcym5d.mognet@arm.com>
+References: <CA+G9fYvzh5GEssPJHM=r2TVUKOhsFJ8jqrY+pP4t7+jF8ctz9A@mail.gmail.com>
+ <5f072f84c7c9b03ded810e56687935b2@kernel.org>
+In-Reply-To: <5f072f84c7c9b03ded810e56687935b2@kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 1 Feb 2021 20:31:05 +0530
+Message-ID: <CA+G9fYs4u=E+jMxTds8A-gYWchC4OSdx26cCw7079+w3_bUiZQ@mail.gmail.com>
+Subject: Re: arm64: gen-hyprel.c:40:10: fatal error: generated/autoconf.h: No
+ such file or directory
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        kvmarm@lists.cs.columbia.edu,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 01:04:30PM +0000, Valentin Schneider wrote:
-> On 01/02/21 20:09, Stephen Rothwell wrote:
-> > Hi all,
+On Mon, 1 Feb 2021 at 19:15, Marc Zyngier <maz@kernel.org> wrote:
+>
+> On 2021-02-01 13:38, Naresh Kamboju wrote:
+> > Linux next 20210201 tag arm64 builds failed.
+> > kernel config attached to this email.
 > >
-> 
-> Hi Stephen,
-> 
-> > After merging the tip tree, today's linux-next qemu boot test (powerpc
-> > pseries_le_defconfig) failed like this:
-> 
-> In case you haven't seen it, Dietmar did the dirty work and fixed my fail
-> at
-> 
->   http://lore.kernel.org/r/6000e39e-7d28-c360-9cd6-8798fd22a9bf@arm.com
+> > BAD:    next-20210201
+> > GOOD: next-20210129
+> >
+> > make --silent --keep-going --jobs=8
+> > O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=arm64
+> > CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+> > 'HOSTCC=sccache gcc'
+> > arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:40:10: fatal error:
+> > generated/autoconf.h: No such file or directory
+> >    40 | #include <generated/autoconf.h>
+> >       |          ^~~~~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> >
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> Could you please check with the fix suggested at [1]?
 
-Right, picked that up, I'll try and push it before the next next ;-)
+Here is the change I have applied and the arm64 builds successful now.
+
+diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+index 09d04dd50eb8..ed10fcf1b345 100644
+--- a/arch/arm64/kvm/hyp/nvhe/Makefile
++++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+@@ -7,7 +7,7 @@ asflags-y := -D__KVM_NVHE_HYPERVISOR__
+ ccflags-y := -D__KVM_NVHE_HYPERVISOR__
+
+ hostprogs := gen-hyprel
+-HOST_EXTRACFLAGS += -I$(srctree)/include
++HOST_EXTRACFLAGS += -I$(objtree)/include
+
+ obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
+         hyp-main.o hyp-smp.o psci-relay.o
+
+
+> [1] https://lore.kernel.org/r/20210201104251.5foc64qq3ewgnhuz@google.com
+
+
+- Naresh

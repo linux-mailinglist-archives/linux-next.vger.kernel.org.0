@@ -2,122 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C409A30A0A7
-	for <lists+linux-next@lfdr.de>; Mon,  1 Feb 2021 04:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6847030A246
+	for <lists+linux-next@lfdr.de>; Mon,  1 Feb 2021 08:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbhBADn4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 31 Jan 2021 22:43:56 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44699 "EHLO ozlabs.org"
+        id S231591AbhBAHAu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Feb 2021 02:00:50 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56701 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229842AbhBADn4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 31 Jan 2021 22:43:56 -0500
+        id S230370AbhBAHA0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 1 Feb 2021 02:00:26 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DTYgV0YRCz9sxS;
-        Mon,  1 Feb 2021 14:43:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DTf2H4gPkz9tkd;
+        Mon,  1 Feb 2021 17:59:34 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612150993;
-        bh=KTqaMDzVhMEl7jSCUPV87n/UtiRDFVgt/JT3j7vOrCY=;
+        s=201702; t=1612162775;
+        bh=6EUWeozn2gOtd6OsNWzU6TOpVifdYqCM/JwIhZZ9ooQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=cyEBtM01FQkGAsT+F6J49gi/82x8Oph++A/5TH3ZOrIJC/4YHos14/U5b/D+MyLKE
-         knAn2ybx04Cs+eStOIsgli+ILPgOZ5ePoyWKDb3wvQ2hX9x/BL92x7KKiNCOI+r+e8
-         FuOrcSpToqUfoyDjqu2si4phvedyq+XgUOqFJ53K1DWgg9vUkB4bdRMxOK/5o5oEqP
-         Up/r6k7GTwyLQI8V5AbknCz63oEZ1xjQxbSTmfnQToeS17YoFn27TkCjSbxByb5SB0
-         cXigv9vdz+izDwW11Bp+Pd9qGhSbbDfbnYwt4DV5kfiOtpJXL4MAdTfr8svUS5HrDY
-         XfA6yC9habCpQ==
-Date:   Mon, 1 Feb 2021 14:42:59 +1100
+        b=RVheMq0gPg1+ieiVbtFxPinHSqFSohAgC0FWh9nfyG2t7O1evViWLATGMLEZnFnQT
+         ViiTcaJu85PFqostk04UATDWpQiGgA4NscV/R2UVT8bVSRIngzWuXQA6csJbJPQ7AJ
+         230eDImrdI8/p6rjZM+T2T7jXuLuWv6szcg4z52qB3fusPrDR1yFoPIlGGc032RhOl
+         sPqcTvoxj5lY+Yu6Y2ZtrIeiWj/5vH9+7Gr9/q7636tTqtHJgBlp97KBgWJsGXJN55
+         zkLSODOnwRpzeaLt8+92sFZ3c39KdIsbqwDN51Kb/Txs0bjxRfX4Qyz9ldiGTPqfIQ
+         WwLCPlDPt8qFQ==
+Date:   Mon, 1 Feb 2021 17:59:33 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Paul Kocialkowski <contact@paulk.fr>,
-        Samuel Holland <samuel@sholland.org>
-Subject: linux-next: manual merge of the irqchip tree with the sunxi tree
-Message-ID: <20210201144259.102ae6ab@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Parav Pandit <parav@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the net-next tree
+Message-ID: <20210201175933.12cbc38c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YF/wh=zL265Gz=mmcmH.iKk";
+Content-Type: multipart/signed; boundary="Sig_/WfIzfcW3RCLJxfPwZPxL=R0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YF/wh=zL265Gz=mmcmH.iKk
+--Sig_/WfIzfcW3RCLJxfPwZPxL=R0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the irqchip tree got a conflict in:
+After merging the net-next tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  Documentation/devicetree/bindings/interrupt-controller/allwinner,sun7i-a2=
-0-sc-nmi.yaml
+Documentation/networking/device_drivers/ethernet/mellanox/mlx5.rst:16: WARN=
+ING: Unknown target name: "mlx5 port function".
 
-between commit:
+Introduced by commit
 
-  752b0aac99c7 ("dt-bindings: irq: sun7i-nmi: Add binding documentation for=
- the V3s NMI")
-
-from the sunxi tree and commit:
-
-  ad6b47cdef76 ("dt-bindings: irq: sun6i-r: Split the binding from sun7i-nm=
-i")
-
-from the irqchip tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  142d93d12dc1 ("net/mlx5: Add devlink subfunction port documentation")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/interrupt-controller/allwinner,=
-sun7i-a20-sc-nmi.yaml
-index 4fd1e2780026,f34ecc8c7093..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/allwinner,sun7=
-i-a20-sc-nmi.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/allwinner,sun7=
-i-a20-sc-nmi.yaml
-@@@ -25,17 -25,7 +25,10 @@@ properties
-        - const: allwinner,sun6i-a31-sc-nmi
-          deprecated: true
-        - const: allwinner,sun7i-a20-sc-nmi
--       - items:
--           - const: allwinner,sun8i-a83t-r-intc
--           - const: allwinner,sun6i-a31-r-intc
- +      - items:
- +          - const: allwinner,sun8i-v3s-nmi
- +          - const: allwinner,sun9i-a80-nmi
-        - const: allwinner,sun9i-a80-nmi
--       - items:
--           - const: allwinner,sun50i-a64-r-intc
--           - const: allwinner,sun6i-a31-r-intc
-        - items:
-            - const: allwinner,sun50i-a100-nmi
-            - const: allwinner,sun9i-a80-nmi
-
---Sig_/YF/wh=zL265Gz=mmcmH.iKk
+--Sig_/WfIzfcW3RCLJxfPwZPxL=R0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAXeMMACgkQAVBC80lX
-0GyrsggAonTf1sRAIjnS1f19ragVdJNtLT9m/7JBHrOswNyWaA+3OdlljtSzHyHY
-ANyPCZj77w1+6WclEPFNqCHtb4FfNw0zjaErXPy30iE3hcs12uJdhJ1LcsA1xj2P
-nvrN0j1BMpi9fRLq/6lGMsZVk86hBGD0CN7RgffnVsmq+hjMEIyH5mxFgAKqaCkj
-wgXeHKYWgQUMCy8HQb9RPUnJbniVA+23fVehZpH+7eOzIqGMRv1+0eytA241zAvp
-FG6iJPgWBMyQaM5UHJVEz6PDkvCdDmzcgF7Q6HHDwZYqrLDxUmuyKucF6zhVTkWs
-Urds/P/aguo6przyk1gq0LR2/uHQiQ==
-=uP0U
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAXptUACgkQAVBC80lX
+0Gz1cAgAiVJzZbT9ypLlFxOR79WTntr8/TU78Oqh99x2xdvCVsbC/ARE1Q9/wWaW
+9ZfqD4esknaAPttEy+WUz0+1BdPlFSDMlwwwwna8V3rYJj0Uo3XrgoX0nTxH47qs
+FVydBBzelRs53t1bzI4AeAPfdic44/S+CBP/hMtE2PDGRitwEeIjM89H+5pRtml3
+Ih9nnkblWpJOYI4oFv5p/J88i6MYkUDBS1BkB4pM/3DMBeIG1v8Thf6x2ztyM8SB
+D28eghVry1yoQbOlRkcMGf0uYctdAdUYA6rrrcEVG8khpimKPvjCvztvF/CKEi41
+GIYepwNqkGd/AginQJx/TyPUAfeJ9w==
+=OBaQ
 -----END PGP SIGNATURE-----
 
---Sig_/YF/wh=zL265Gz=mmcmH.iKk--
+--Sig_/WfIzfcW3RCLJxfPwZPxL=R0--

@@ -2,94 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B0B30CD10
-	for <lists+linux-next@lfdr.de>; Tue,  2 Feb 2021 21:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5977630CD1B
+	for <lists+linux-next@lfdr.de>; Tue,  2 Feb 2021 21:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbhBBU2A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Feb 2021 15:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233369AbhBBU0d (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Feb 2021 15:26:33 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF9C061788;
-        Tue,  2 Feb 2021 12:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=4PFyUqlONvTFczA/ru8USrCCxtLyJRVmXtgqRn7jk0Q=; b=cA2l8yWFP7TqGbGYHST/vX4jJ4
-        oU/wOCIbjwkQGnFDnNccnYiLD2ycDgnh2uHbNGnb2vX6eedToXdzbjBeQWyVYuubytSu/jleYmrBP
-        LeXVIZnAIVn18r9JviHYmiGrSH141NbC1BhGdyQbc/fu6GtLirjoDAwWjaKrJ2P/MtrUndjTaWp/x
-        DH0+Etj6LuEbB2CvQjYdS0WqOheaBw80sYJL7XnAvShkCy5brdsjrRQ82MF7onQgGKdBa+r/j+Kkg
-        uDkR4af74ZyqvpKJ6rwPBgRxrnY4MjK1hAWIVp3CYVjy/bBuOBX8JgmlvytYxFmsEjvcjeMKdvdUe
-        FIT1kAlg==;
-Received: from [2601:1c0:6280:3f0::2a53]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l72EN-0007eY-2V; Tue, 02 Feb 2021 20:24:59 +0000
-Subject: Re: [PATCH 1/1] ipu3-cio2: Build bridge only if ACPI is enabled
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Dan Scally <djrscally@gmail.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Yong Zhi <yong.zhi@intel.com>
-References: <20210202201440.10613-1-sakari.ailus@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <070d3585-e21c-0bef-3740-d38fcd106f25@infradead.org>
-Date:   Tue, 2 Feb 2021 12:24:54 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S231354AbhBBUbX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Feb 2021 15:31:23 -0500
+Received: from ozlabs.org ([203.11.71.1]:34115 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232292AbhBBUaY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 2 Feb 2021 15:30:24 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DVbyX1kT8z9tlG;
+        Wed,  3 Feb 2021 07:29:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1612297781;
+        bh=c7crrQEODf2qbx/knCVkXS1+eHCfuTc2GtRcGMFLPa8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QlbartB2Z29fbdFcfsFkde64ZHvi8MDRLScImSH8Swif6sXJL0Mdw1D2K3Xkql5qb
+         fGMO6ZsB9auQBMlATX+o5LJ0F3lQ0BbEZrVc7SfdWs3ZhVp7G/V44rhKttEP8Sc9YN
+         /f1FxTdQkSt13gVto/TJhtwHnlVTe4aRgTqi5jcIRIs/yHrCvmc+fpN7Z2DrLtOD8N
+         3rQ9MdZK6kpnLwJ6CDOIDdScCZ6B+xttpOJdL9Y64Q6jafzRvWcLq9Cy7dZqxz1156
+         1EQhIUiWhJ6Bw0LneFU1e9u1CC5Gz0zFd5f+Dkj0yfd5VbqtuhgxSptqUamLxnVI4l
+         cBTiLQPEmhsVA==
+Date:   Wed, 3 Feb 2021 07:29:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: arch/arm64/kernel/mte.c:121:15: error: 'mte_enable_kernel_sync'
+ undeclared here (not in a function); did you mean 'mte_enable_kernel'?
+Message-ID: <20210203072938.62be70f5@canb.auug.org.au>
+In-Reply-To: <CAAeHK+yUm_LAe54mBwFrjVwcSpLrxYHZFzDorUvFvRNsP7fjaA@mail.gmail.com>
+References: <CADYN=9Ljjx6GRPk45jkY1N7dVDOFFjMB8yy5QRzVE-1tzEnUjw@mail.gmail.com>
+        <CAAeHK+yUm_LAe54mBwFrjVwcSpLrxYHZFzDorUvFvRNsP7fjaA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210202201440.10613-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/zxCl9viMoN_X5j/RVEP/jkr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/2/21 12:14 PM, Sakari Ailus wrote:
-> ipu3-cio2-bridge uses several features of the ACPI framework that have no
-> meaningful replacement when ACPI is disabled. Instead of adding #ifdefs to
-> the affected places, only build the bridge code if CONFIG_ACPI is enabled.
-> 
-> Fixes: 803abec64ef9 ("media: ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+--Sig_/zxCl9viMoN_X5j/RVEP/jkr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Hi all,
 
-Thanks.
+On Tue, 2 Feb 2021 14:46:24 +0100 Andrey Konovalov <andreyknvl@google.com> =
+wrote:
+>
+> On Tue, Feb 2, 2021 at 11:09 AM Anders Roxell <anders.roxell@linaro.org> =
+wrote:
+> >
+> > I've seen this failure on tag next-20210202:
+> > arch/arm64/kernel/mte.c:121:15: error: 'mte_enable_kernel_sync'
+> > undeclared here (not in a function); did you mean 'mte_enable_kernel'?
+> >
+> > I think it may be a merge conflict that didn't get resolved correctly? =
+=20
+>=20
+> Yes, that patch was supposed to go on top of another one (which
+> actually renames mte_enable_kernel to mte_enable_kernel_sync), but the
+> latter wasn't picked up into mm.
+>=20
+> > The below change fixed the issue:
+> >
+> > diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+> > index 275b5d0f38b8..8f5bd1293496 100644
+> > --- a/arch/arm64/kernel/mte.c
+> > +++ b/arch/arm64/kernel/mte.c
+> > @@ -118,7 +118,7 @@ void mte_set_report_once(bool state)
+> >  {
+> >   WRITE_ONCE(report_fault_once, state);
+> >  }
+> > -EXPORT_SYMBOL(mte_enable_kernel_sync);
+> > +EXPORT_SYMBOL(mte_enable_kernel);
+> >  EXPORT_SYMBOL(mte_set_report_once);
+> >
+> >  bool mte_report_once(void) =20
+>=20
+> The changed export also needs to be moved next to mte_enable_kernel().
+>=20
+> Thanks!
 
-> ---
-> Hi Randy,
-> 
-> Thanks for reporting this.
-> 
-> This patch should address the problem.
-> 
->  drivers/media/pci/intel/ipu3/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
-> index 24f4e79fe0cb..dce8274c81e6 100644
-> --- a/drivers/media/pci/intel/ipu3/Kconfig
-> +++ b/drivers/media/pci/intel/ipu3/Kconfig
-> @@ -20,7 +20,7 @@ config VIDEO_IPU3_CIO2
->  
->  config CIO2_BRIDGE
->  	bool "IPU3 CIO2 Sensors Bridge"
-> -	depends on VIDEO_IPU3_CIO2
-> +	depends on VIDEO_IPU3_CIO2 && ACPI
->  	help
->  	  This extension provides an API for the ipu3-cio2 driver to create
->  	  connections to cameras that are hidden in the SSDB buffer in ACPI.
-> 
+I have applied the following to linux-next today:
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 3 Feb 2021 07:22:35 +1100
+Subject: [PATCH] arm64-kasan-export-mte-symbols-for-kasan-tests-fix
 
--- 
-~Randy
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/arm64/kernel/mte.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index 275b5d0f38b8..8c7e32054172 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -113,12 +113,12 @@ void mte_enable_kernel(void)
+ 	sysreg_clear_set(sctlr_el1, SCTLR_ELx_TCF_MASK, SCTLR_ELx_TCF_SYNC);
+ 	isb();
+ }
++EXPORT_SYMBOL(mte_enable_kernel);
+=20
+ void mte_set_report_once(bool state)
+ {
+ 	WRITE_ONCE(report_fault_once, state);
+ }
+-EXPORT_SYMBOL(mte_enable_kernel_sync);
+ EXPORT_SYMBOL(mte_set_report_once);
+=20
+ bool mte_report_once(void)
+--=20
+2.30.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zxCl9viMoN_X5j/RVEP/jkr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAZtjIACgkQAVBC80lX
+0Gxj9ggAko0IF9Ur0pUQN+pZWvqEnnJh583lS9rGICT3O3GtavRhSN+GShlKJ+3P
+3nVZ/pE88hRTehjcjGDGvwUupPeDQ6m2GX+zYefOeW7RmbKJqvVOuAqvAkuy13vw
+K38pOjaEraT/fK/GyK2Y1a4gF9Sgxzb/Cpoj8pXYaPlithIUSh3ZC2VWDrF5tyCq
+c36gVhLoFtWYhGboiatclIhR+jGkSlbZtMvA2P8qWjBjcZQK1DMYWNBmI9hkV1jk
+jVBXn+uVfs4g0FttugD6kzP7ztxjiFiAJ94EfMFwGYmYqhbJJCJrxMfT10D74S51
+FkU5MGhn4vJzPrdNBXLPXMEzFW3Y/A==
+=n402
+-----END PGP SIGNATURE-----
+
+--Sig_/zxCl9viMoN_X5j/RVEP/jkr--

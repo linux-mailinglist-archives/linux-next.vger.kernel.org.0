@@ -2,83 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF5A30CCD5
-	for <lists+linux-next@lfdr.de>; Tue,  2 Feb 2021 21:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E1230CCE6
+	for <lists+linux-next@lfdr.de>; Tue,  2 Feb 2021 21:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240494AbhBBUKM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Feb 2021 15:10:12 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:32979 "EHLO ozlabs.org"
+        id S230371AbhBBURf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Feb 2021 15:17:35 -0500
+Received: from retiisi.eu ([95.216.213.190]:49876 "EHLO hillosipuli.retiisi.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240488AbhBBUJ6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 2 Feb 2021 15:09:58 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DVbVz6mXjz9tl7;
-        Wed,  3 Feb 2021 07:09:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612296556;
-        bh=tbOypyd8KY8FX7ans6NU/EulP2Nyi/rkMwWZTX0QPb8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Fk9bYFDhCWX3Z2y0c4zOM9WM+c5VEu/u/AFXSN6ajm0XU7ihe1jAEaQZQ/PfljKyo
-         aanwidZIsDm87fRKjBvftXpGf9kTSt2iw1C9k7PyqqZ5Ek/ykgy0dGCy6q3DEi8E2R
-         VDEC/V/YPZv2YDgqVKmEQ0ratGo6XsuDmaKoJJu8dKwUVM9vSTsP6/rbOa6+5KrUac
-         uypCde/ZMOlhEYtwfJ+Zg6VkIG63yYnk4rTEXOdXHxjUnMUrXfb9NBaxzOP48uBb8B
-         r9AXWOIqQ5GE/MvQY009TcCUAI7iUNjuvAgtWqtR3W2K1TwiWEWPBVOxy+EzYE6lsB
-         w5bMRGTc3qlEQ==
-Date:   Wed, 3 Feb 2021 07:09:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the fscache tree
-Message-ID: <20210203070915.06a1a574@canb.auug.org.au>
+        id S232682AbhBBUQb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 2 Feb 2021 15:16:31 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id 78215634C8D;
+        Tue,  2 Feb 2021 22:14:36 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Dan Scally <djrscally@gmail.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>
+Subject: [PATCH 1/1] ipu3-cio2: Build bridge only if ACPI is enabled
+Date:   Tue,  2 Feb 2021 22:14:40 +0200
+Message-Id: <20210202201440.10613-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//NSZVaMyddnlu+peJXIJPMj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//NSZVaMyddnlu+peJXIJPMj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+ipu3-cio2-bridge uses several features of the ACPI framework that have no
+meaningful replacement when ACPI is disabled. Instead of adding #ifdefs to
+the affected places, only build the bridge code if CONFIG_ACPI is enabled.
 
-Hi all,
+Fixes: 803abec64ef9 ("media: ipu3-cio2: Add cio2-bridge to ipu3-cio2 driver")
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+Hi Randy,
 
-In commit
+Thanks for reporting this.
 
-  51721d69bb95 ("afs: Fix error handling in afs_req_issue_op()")
+This patch should address the problem.
 
-Fixes tag
+ drivers/media/pci/intel/ipu3/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Fixes: 0dd1a43b5d74 ("afs: Fix error handling in afs_req_issue_op()")
+diff --git a/drivers/media/pci/intel/ipu3/Kconfig b/drivers/media/pci/intel/ipu3/Kconfig
+index 24f4e79fe0cb..dce8274c81e6 100644
+--- a/drivers/media/pci/intel/ipu3/Kconfig
++++ b/drivers/media/pci/intel/ipu3/Kconfig
+@@ -20,7 +20,7 @@ config VIDEO_IPU3_CIO2
+ 
+ config CIO2_BRIDGE
+ 	bool "IPU3 CIO2 Sensors Bridge"
+-	depends on VIDEO_IPU3_CIO2
++	depends on VIDEO_IPU3_CIO2 && ACPI
+ 	help
+ 	  This extension provides an API for the ipu3-cio2 driver to create
+ 	  connections to cameras that are hidden in the SSDB buffer in ACPI.
+-- 
+2.29.2
 
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-I have no idea which commit you meant :-(
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//NSZVaMyddnlu+peJXIJPMj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAZsWsACgkQAVBC80lX
-0Gz0eAf+OgewCqE7g3a23ijoTvcnfwF+pyxc677fv+d9MmLtrpECCqNSkZK6nWU6
-NNcVL/ClEvibREsUIVrYPSx4s70VbSIimJiOJgVcNefpg453QErwmhN0chxL3QD5
-fhXV/WWiR2rb6kpKcenRb8D1RQN8NzPGpJSb3oBw2GmQWbCj8cVKckLTvf+OnX2t
-KNb4F8NYbYFIUFwny3QxFXDnaOxPoFhlDYG8nRhWc/kFFL0ZwssnhNzQbWAGamba
-2lOe8DjHTylJQZGRiiGWs1WcOTLUwFNLvxlF9wZTknlYhadJPs8OZiiskhGEO8mx
-ARM5g7lR2cjNwasL6xRsH40Z61LQVQ==
-=d3cl
------END PGP SIGNATURE-----
-
---Sig_//NSZVaMyddnlu+peJXIJPMj--

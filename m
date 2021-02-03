@@ -2,129 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1059730DEBA
-	for <lists+linux-next@lfdr.de>; Wed,  3 Feb 2021 16:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A0030E093
+	for <lists+linux-next@lfdr.de>; Wed,  3 Feb 2021 18:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbhBCPwW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Feb 2021 10:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbhBCPwK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Feb 2021 10:52:10 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4A3C06178A
-        for <linux-next@vger.kernel.org>; Wed,  3 Feb 2021 07:51:29 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id bl23so36554000ejb.5
-        for <linux-next@vger.kernel.org>; Wed, 03 Feb 2021 07:51:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=8ZiZgrXUKTPqtav3uMw7TC7Q+Aei5KWAfNt52U+dlDQ=;
-        b=rH0DqReYRnjwzpX31BARiullKEije5kg479qo/hGnERWhpgzpT4X1769vLah48SIwg
-         v+RJT5IyfS6o/zlQKNZCKMovJUucHYl2vvVPHFmEM6RJtNQeyp604riUlPBTsVpDW373
-         wo6gr7iWes5a1p9YYKBqNkERLiuQa+aqmylO8FIz7HD7P1E4gYQGlAco5XquUZvZim6b
-         25bJTvBTgrihKk16rJPk3ZK6Q5Hpvm9ehj9Qkj2TgX7rYqHsAofeovyxj3iO85X6TK3i
-         WqoqVY6lPLaJxyt3zE3Pq5HvpMDWIDK9VhhRy1IYd38sM452Mq7O4TGohXZartCXVE46
-         Gf5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=8ZiZgrXUKTPqtav3uMw7TC7Q+Aei5KWAfNt52U+dlDQ=;
-        b=XMRa7BtkIMOOILO/jvvo75+3qAZz28lV6TpUfwOidFbBZfXmVO2CwSwQAXdCm6dksy
-         ueW4cIFZh7JRGP12kdLQvgLPj6xZIZYDrvTfidHCm+ks/Jht1lvwMjIuI+EUAEP8+1q1
-         6f3+yjl5cKnOZZOMzBsJHAzv6/Qh8fPiet58z9YC6hF14XGLe7esk2RwCIONxc4pWvl9
-         Is3NaSdK5cdULrgMpvpglrNRF5InoRn8tsR8+DNcmj0YDOVyvbvq4wJ1g/S6x16UhhWu
-         6p64WIWs2NBxKTwPNy/GH8qNnuL5LiYR40QVksYQmBCjaGGcA4rPfLVJUV+TBCGX1Z4j
-         IlGw==
-X-Gm-Message-State: AOAM530POJBN958srli0xnEO8hVU0hWj4xrWBN6QEraV4hNHhCM+GVYd
-        743UXRrCbbGR+B/7AeDzvbbaHeqqGoEMTYifo8P5TeVqlE8vmxJG
-X-Google-Smtp-Source: ABdhPJw325Fj8DcUghMscoJ2RIXBEp961uIMC8z8Cv3Nbs+QLRe4xLzgr/K6gPQUWefmsx1FIqrtaU0BHyw9vjMq0Pc=
-X-Received: by 2002:a17:906:ca0d:: with SMTP id jt13mr3721106ejb.170.1612367488351;
- Wed, 03 Feb 2021 07:51:28 -0800 (PST)
+        id S232005AbhBCRKx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Feb 2021 12:10:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37732 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232013AbhBCRKt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 3 Feb 2021 12:10:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B3E864F5D;
+        Wed,  3 Feb 2021 17:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612372208;
+        bh=nQETsKaXi6oufw4kuZ5Eytq8DCwUI85JEjUsc1C8gAg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cT/2B1eLsL61Ysv/HqMAouZ9kPQgzuSC9IratmGQtvH3wav/AMwc+FsiJqt1dEYYL
+         fSV2v0y35CjEZSm8Y4jsWghL6W6vCrWxwEVWfUhIn6VmBmAJsE/H4K4oQQNdLnikGn
+         CIgzTWKOPNa/3JIgPaA1oxOlCaTf/sN+4H8aB58ZF4y+sVJMbVxhqu+wNM2b5Qe+8o
+         9xWBR0uBjs9DVMTRX+r/z5ldvVPWLdQqfaExJjWIH7i+HoRIJK2EUN4ZGHi32cdodW
+         wGNMVXlGcIjKu/ieI2CNWHk6igVwIV6Pu1ZL6bKVnRE47mGOQbuslavt7U/gIuCBW+
+         skz6ibf5Cr6AQ==
+Received: by mail-ot1-f44.google.com with SMTP id 36so578277otp.2;
+        Wed, 03 Feb 2021 09:10:08 -0800 (PST)
+X-Gm-Message-State: AOAM530HpSsPDmvnZj1W6V1DOGW3/cKjPWRZTr3wv4AU8UZ9/g6t/uOD
+        qE56sW80h2EDIOk07e2ZkIFrEJ8/9mgURm5DZbM=
+X-Google-Smtp-Source: ABdhPJzjecSPR278MfEY/4Nn2UgkqXfz70UdyPsqX527Cl5z6fwF0+HIHATVMkO9uhicOQGg8NqCJGxurPq4PvqsJAM=
+X-Received: by 2002:a05:6830:1256:: with SMTP id s22mr2788459otp.251.1612372207595;
+ Wed, 03 Feb 2021 09:10:07 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 3 Feb 2021 21:21:16 +0530
-Message-ID: <CA+G9fYv-=GdpLK3-6M9P4J1N-4ypS=GO8T2N15JFWXSmsG1adQ@mail.gmail.com>
-Subject: memory_model.h:64:14: error: implicit declaration of function 'page_to_section'
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <20210202200324.5179db33@canb.auug.org.au>
+In-Reply-To: <20210202200324.5179db33@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 3 Feb 2021 18:09:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3uJfyt6vsgTdSjnE23V4E_Mw=N89nrMPLJ6bhA363nqw@mail.gmail.com>
+Message-ID: <CAK8P3a3uJfyt6vsgTdSjnE23V4E_Mw=N89nrMPLJ6bhA363nqw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mips@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pavel Tatashin <pasha.tatashin@oracle.com>
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Linux next tag 20210203 the mips and sh builds failed due to below errors.
-Following builds failed with gcc-8, gcc-9 and gcc-10,
-  - mips (cavium_octeon_defconfig)
-  - sh (defconfig)
-  - sh (shx3_defconfig)
+On Tue, Feb 2, 2021 at 10:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
-CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-'HOSTCC=sccache gcc' uImage.gz
-In file included from arch/mips/include/asm/page.h:258,
-                 from arch/mips/include/asm/io.h:29,
-                 from include/linux/io.h:13,
-                 from arch/mips/include/asm/mips-cps.h:10,
-                 from arch/mips/include/asm/smp-ops.h:16,
-                 from arch/mips/include/asm/smp.h:21,
-                 from include/linux/smp.h:84,
-                 from arch/mips/include/asm/cpu-type.h:12,
-                 from arch/mips/include/asm/timex.h:19,
-                 from include/linux/timex.h:65,
-                 from include/linux/time32.h:13,
-                 from include/linux/time.h:60,
-                 from include/linux/compat.h:10,
-                 from arch/mips/kernel/asm-offsets.c:12:
-include/linux/mm.h: In function 'is_pinnable_page':
-include/asm-generic/memory_model.h:64:14: error: implicit declaration
-of function 'page_to_section'; did you mean 'present_section'?
-[-Werror=implicit-function-declaration]
-  int __sec = page_to_section(__pg);   \
-              ^~~~~~~~~~~~~~~
-include/asm-generic/memory_model.h:81:21: note: in expansion of macro
-'__page_to_pfn'
- #define page_to_pfn __page_to_pfn
-                     ^~~~~~~~~~~~~
-include/linux/mm.h:1135:15: note: in expansion of macro 'page_to_pfn'
-   is_zero_pfn(page_to_pfn(page));
-               ^~~~~~~~~~~
-In file included from arch/mips/kernel/asm-offsets.c:15:
-include/linux/mm.h: At top level:
-include/linux/mm.h:1512:29: error: conflicting types for 'page_to_section'
- static inline unsigned long page_to_section(const struct page *page)
-                             ^~~~~~~~~~~~~~~
-Steps to reproduce:
---------------------------
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+>
+>   983cb10d3f90 ("mm/gup: do not migrate zero page")
+>
+> I have applied the following patch for today:
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 2 Feb 2021 19:49:00 +1100
+> Subject: [PATCH] make is_pinnable_page a macro
+>
+> As it is currently defined before page_to_section() which it needs.
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
+I still see the same problem in next-20210203, and your patch below
+fixes it for me.
+Did you drop it from the latest build?
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig cavium_octeon_defconfig
+       Arnd
 
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 58f250cabea6..a608feb0d42e 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1128,11 +1128,9 @@ static inline bool is_zone_movable_page(const struct page *page)
+>  }
+>
+>  /* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
+> -static inline bool is_pinnable_page(struct page *page)
+> -{
+> -       return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
+> -               is_zero_pfn(page_to_pfn(page));
+> -}
+> +#define is_pinnable_page(page)         \
+> +       (!(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||  \
+> +               is_zero_pfn(page_to_pfn(page)))
+>
+>  #ifdef CONFIG_DEV_PAGEMAP_OPS
+>  void free_devmap_managed_page(struct page *page);

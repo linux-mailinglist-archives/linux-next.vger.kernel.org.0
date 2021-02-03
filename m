@@ -2,87 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F1430E75A
-	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 00:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF7F30E76B
+	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 00:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbhBCX3V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Feb 2021 18:29:21 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56497 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232733AbhBCX3U (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 3 Feb 2021 18:29:20 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DWHtX1PGCz9sWC;
-        Thu,  4 Feb 2021 10:28:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612394917;
-        bh=VMnjnNXiZrDzJ55HtSmfigzckd0NP1aA+A4Q99Qj/a8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=snmtaSBKhtmYXPW70pGjCXQ7N2Q/HjQFjncALOdUFuoQplA7E13jhce3GM1nQNf6L
-         x70Sn6VkP7ia6dP9sw9WzcWP/PyOiTDfGI9xjh6yVOg/2TL9guI7BD7oOpRLni4+7f
-         wyLQZ4ciFUoIhSd3vajB5lM+/M9kCUdaI1mFCqdPeh5STJFtWCTU4Sa6pTY6wFHN0i
-         rF5xEUxKU+PUB5JRQF00Jm/Vsu2G2MPNxTW0OQl1Gzo/7SPln9di526pYqbXGW+CY0
-         8pMZqAb8BaVE6Ea63p/Ndoc9H1hC8NfM1WxISuSEKR0LZ2QADXEsMGGd2kSG9TqpiR
-         V78I8gzsHOUrQ==
-Date:   Thu, 4 Feb 2021 10:28:32 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
+        id S232609AbhBCXeH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Feb 2021 18:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233255AbhBCXeG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Feb 2021 18:34:06 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94091C061786
+        for <linux-next@vger.kernel.org>; Wed,  3 Feb 2021 15:33:25 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id z22so1771430edb.9
+        for <linux-next@vger.kernel.org>; Wed, 03 Feb 2021 15:33:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=83sGorfu69qhIgwYTH9eGJ4bZproVEYl+EVcReOX+GE=;
+        b=FTFs8FyNRotwcUi9o0JvkzLsTDXOqIjzkxMnYVFJM6coYzs29ef6sxU0o1XidbScOz
+         0Sb/fXkJoLjPuPujzSHaxUEvK2FrApi9C5HT2JOeTcaxhpd2Y9EtyWYfFYtozkrdCQRO
+         m+rb33mTHUwNBpIXpcc8ZCQC8E1MYGBbq1s/EwFWc3cGTa6reOavSoxcEtpM7ps6Eyqw
+         ti855HcFxiqBQbIlRAEMJslqqUKiGZcLgyggpI2bG4mhbqkSVZUB85xxHRIIOJjKqtw1
+         uLuVsYsAMOn9s3Xy2ssYsyCYnNFx7chOkiSHQiiLmQaPPeWMHoMsyHU00y3HwopuBiKC
+         0p2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=83sGorfu69qhIgwYTH9eGJ4bZproVEYl+EVcReOX+GE=;
+        b=mDMlSJ3SdoAT17MbQwA30H90Fkicl5fqEXe9WDlYoD5ysiXvFovvOOaZI0f5Ldv42l
+         DPJeZf7tK4QogYU+OUKQOiguG9dUGXgEvFXNz91w7PkmCnDFpR/YFLpW0BlGbrFtnsw8
+         EhfpXnRS5prtQZyh1rKtqZD0NHznh/n+K29vQBV2zcHzoC7X8E3baW+29HQN+99heSuo
+         so/xlFbSTVgDpKq+o5NBrONvbf+/eNxhHluE0TZf4MIaq8k2dqdT/3Ew2C2A4PubdtGk
+         kYyPYwnGDx0QQRBOFlZntl4d8AvPcHFE3OXr0JNSYqSUMD6/tLlDpLOXRZGxh2yc/oHl
+         /zsw==
+X-Gm-Message-State: AOAM531ahrbgIyHrOw5otJhsauISZV5poOiunYuCvmwm6GGap0GWwvDB
+        G+GZGyEYkpykobHoLapdyG6Cbuw87Na5p1J0z0V/RMsMV0M3ew==
+X-Google-Smtp-Source: ABdhPJy3kKi0diCxktiePXaN4krEpfMFX9UBPvX4g/pI1jopfEON7AoKoc7OhB2AMt/gAkKPveVcm2dOplxucXeAvck=
+X-Received: by 2002:a50:ee10:: with SMTP id g16mr5552708eds.62.1612395204324;
+ Wed, 03 Feb 2021 15:33:24 -0800 (PST)
+MIME-Version: 1.0
+References: <20210202200324.5179db33@canb.auug.org.au> <CAK8P3a3uJfyt6vsgTdSjnE23V4E_Mw=N89nrMPLJ6bhA363nqw@mail.gmail.com>
+ <5504da4f-7eec-ecb0-c47d-7821d06dc880@infradead.org> <CAK8P3a2Y9-5dhk1MaZhhnKQkbOtqOSqfqZA0c4ncBXgD8tJTZg@mail.gmail.com>
+ <CA+CK2bC9oMvtkT3MZzxNMtCn1b0hafYPbLH3GM_Z_66j_NQeJA@mail.gmail.com>
+ <CA+CK2bBpuiLf7y7qVDoo3k6vajoaTkrDNx+pnNBTMYY616iDwA@mail.gmail.com> <20210204102832.4b5539a1@canb.auug.org.au>
+In-Reply-To: <20210204102832.4b5539a1@canb.auug.org.au>
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+Date:   Wed, 3 Feb 2021 18:32:48 -0500
+Message-ID: <CA+CK2bBmAZ972bJvvaaLUMJw9sQwkCAOnNXXSiSHEmiacjcqTw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Arnd Bergmann <arnd@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20210204102832.4b5539a1@canb.auug.org.au>
-In-Reply-To: <CA+CK2bBpuiLf7y7qVDoo3k6vajoaTkrDNx+pnNBTMYY616iDwA@mail.gmail.com>
-References: <20210202200324.5179db33@canb.auug.org.au>
-        <CAK8P3a3uJfyt6vsgTdSjnE23V4E_Mw=N89nrMPLJ6bhA363nqw@mail.gmail.com>
-        <5504da4f-7eec-ecb0-c47d-7821d06dc880@infradead.org>
-        <CAK8P3a2Y9-5dhk1MaZhhnKQkbOtqOSqfqZA0c4ncBXgD8tJTZg@mail.gmail.com>
-        <CA+CK2bC9oMvtkT3MZzxNMtCn1b0hafYPbLH3GM_Z_66j_NQeJA@mail.gmail.com>
-        <CA+CK2bBpuiLf7y7qVDoo3k6vajoaTkrDNx+pnNBTMYY616iDwA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MKHeHt7nA_CP1.GmjzpsSoZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MKHeHt7nA_CP1.GmjzpsSoZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Pavel,
-
-On Wed, 3 Feb 2021 18:21:07 -0500 Pavel Tatashin <pasha.tatashin@soleen.com=
-> wrote:
+> >
+> > Stephen, do you want to send a new patch based on the current
+> > linux-next, or do you want me to send an updated version?
 >
-> Stephen, do you want to send a new patch based on the current
-> linux-next, or do you want me to send an updated version?
+> I'll send another one and include it in linux-next today.
 
-I'll send another one and include it in linux-next today.
+I appreciate it.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MKHeHt7nA_CP1.GmjzpsSoZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAbMaAACgkQAVBC80lX
-0GwdAwf/XtStpm7c2xZ/FPbq3UOMisN0sWut43Y4eddGGbv8XPVYEdap7rILn1ji
-XG8OemMRn+QuFxqlJoPO++HIpvCZXxkH6hySuCAAe7ggyoO0y8IBpDZY21hYI6G0
-NpJUHBATRoy1MBCNKbNZKqmw0ZZQHc7ViZetYTNovP/zfG9inokex4xyqCzWfLYY
-QRHsrIMr5rnAOC+B77j7x0SOKPxZKTQc1f03pASPUpV51ZKPgqIOvC42VTYsQDIJ
-SKoNj6C99pTTy4YXQkIccmN8k5XKKRdEiUPjmvq9I+5o90U2l0k5NWvcJGBmq8FX
-rNFHVuzwVpRHzwfiIWoJjGp1SCYaoQ==
-=vuAN
------END PGP SIGNATURE-----
-
---Sig_/MKHeHt7nA_CP1.GmjzpsSoZ--
+Pasha

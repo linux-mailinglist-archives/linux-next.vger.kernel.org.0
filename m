@@ -2,159 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D0D30EB30
-	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 04:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F81E30EBA9
+	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 05:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbhBDDxJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Feb 2021 22:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbhBDDxB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Feb 2021 22:53:01 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266BCC0613ED
-        for <linux-next@vger.kernel.org>; Wed,  3 Feb 2021 19:52:21 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id e132so1819528ybh.8
-        for <linux-next@vger.kernel.org>; Wed, 03 Feb 2021 19:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DTbQuqDgftJHyEjgUZ53qqE2GLvug2RthYORKONmJnA=;
-        b=fKFmn6G4Gfcvpduh4jqVWeOKN+SFpsRhlVPOm6PDL8uJ4neFU13Qr37PqAiAKwknxr
-         M3/axZFZaSNRvW2AoAkWw/pdu2JAEIy4U7Cxs8WuHXtv+Ket5yS9QE3QuoUUxEEIP0Mu
-         ux7PvimGsRNvNxfYt4qnv7p5IiAJ/Kd80haGbuh6BfCH5eTRhj0peYdPSoGw3+HHsot3
-         sVzeQN2gMxpwCLZo1Du+HlAQxmJjmyDkxbnJkPccM4bugHS+NKzUhYztHvBvZw4zQqFH
-         6BtW4naZohotxE+Vk8xzPj25pwFuGtN38BsgadZn4vM0Pdgu1QXFpDONGGI+Uh4RpZma
-         4bjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DTbQuqDgftJHyEjgUZ53qqE2GLvug2RthYORKONmJnA=;
-        b=dGflN07r26OaJTEDfZX+3UXXkX9W5zbZeCtPLhpRwibCKc/asQU+WY6YjQ8eqhKpto
-         t4HQx3iVUVVYz3/TQARu2eXsV5EwuCqWyXsFtWsmVN/tfjDY1qNnfBk3dP7ra/CZ8N/s
-         WvU0Qnx/EoiA5kZeRt6MTKjJo9/AZnE80ouLMit54TumRjMQoJ01byyfeGJ5dhVY15+g
-         dRG5kdTGzSpxGRFNeQUcUoq4KYwOwxBlsT7ptSygwl7HsHboTM4nl9JhnMlhTGpgJBLa
-         iMyEQWuwnuz3EC6GIE1nOsV1s7QmgaBdrdiOYUYUFbY/sVh5gaHRFGhoU8DODsMVlueW
-         VV4w==
-X-Gm-Message-State: AOAM531x5GdZafnax/T6j7F6V+a04WK5a9vkv4q5DzzfLBQmEGXAMtvp
-        qTt4QgQCKldihTfdyChVi/gg/vdSSTTyHo0t2zCxQw==
-X-Google-Smtp-Source: ABdhPJyrNWC8Z23u1QzxD8RKdn2OmMWUinNwzXsyuQIyMMWnQAyqlUiGmylA0J6AAajpbdZqAu71xsery3qJ/sAVDA4=
-X-Received: by 2002:a25:244:: with SMTP id 65mr9660395ybc.511.1612410739666;
- Wed, 03 Feb 2021 19:52:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204123331.21e4598b@canb.auug.org.au>
-In-Reply-To: <20210204123331.21e4598b@canb.auug.org.au>
-From:   Brian Vazquez <brianvv@google.com>
-Date:   Wed, 3 Feb 2021 19:52:08 -0800
-Message-ID: <CAMzD94RaWQM3J8LctNE_C1fHKYCW8WkbVMda4UV95YbYskQXZw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S230355AbhBDE7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Feb 2021 23:59:36 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:49495 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230273AbhBDE7f (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 3 Feb 2021 23:59:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DWRCZ069Nz9sxS;
+        Thu,  4 Feb 2021 15:58:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1612414733;
+        bh=o8GSPtJAR94fDp96R4qjjwurgzky4QNCyNbf1MHRNUo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kGBJSCMAXBwtRdGIxCxVpmvWVNrtd4tvYkaz3A11UfhcllC25yfZv2eoELUGg9pcl
+         G4spDJ3RXSxcDBBKxbM/988UYnJaG5y+Nr18pZFeBbrVF/aAR8l4br8HY9XsVwZ+BC
+         vbT+zJyuTbZ87c1n1HOhoBshKl9/vWrkWugXwFXyUxF6d97oiPs7fTz0mpWaJwzHGk
+         LeFiOL7emIUZ7ChVOrREVdFE5oVfyxjp8hnaedusjYX/MnyseCGBhm3+QFgxnpKiUJ
+         jSTCOULWkGD+Eu3it5IK+uDluKs4SosZ+OCKLd4VKN0npJCsZk46JRkKTMiyYk4NNv
+         YTpjQ58HNKp8w==
+Date:   Thu, 4 Feb 2021 15:58:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mark.gross@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drivers-x86 tree with the drm-misc
+ tree
+Message-ID: <20210204155846.5aef94a8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/vXMANa1gQE/6.UO58AyQ+3L";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen, thanks for the report. I'm having trouble trying to
-compile for ppc, but I believe this should fix the problem, could you
-test this patch, please? Thanks!
+--Sig_/vXMANa1gQE/6.UO58AyQ+3L
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/include/linux/indirect_call_wrapper.h
-b/include/linux/indirect_call_wrapper.h
-index 54c02c84906a..077f96be65c6 100644
---- a/include/linux/indirect_call_wrapper.h
-+++ b/include/linux/indirect_call_wrapper.h
-@@ -36,6 +36,7 @@
+Hi all,
 
- #define INDIRECT_CALLABLE_DECLARE(f)   f
- #define INDIRECT_CALLABLE_SCOPE
-+#define INDIRECT_CALLABLE_EXPORT(f)    EXPORT_SYMBOL(f)
+Today's linux-next merge of the drivers-x86 tree got a conflict in:
 
- #else
- #define INDIRECT_CALL_1(f, f1, ...) f(__VA_ARGS__)
-@@ -44,6 +45,7 @@
- #define INDIRECT_CALL_4(f, f4, f3, f2, f1, ...) f(__VA_ARGS__)
- #define INDIRECT_CALLABLE_DECLARE(f)
- #define INDIRECT_CALLABLE_SCOPE                static
-+#define INDIRECT_CALLABLE_EXPORT(f)
- #endif
+  drivers/gpu/drm/gma500/Kconfig
+  drivers/gpu/drm/gma500/mdfld_device.c
+  drivers/gpu/drm/gma500/mdfld_dsi_output.c
+  drivers/gpu/drm/gma500/mdfld_output.c
+  drivers/gpu/drm/gma500/tc35876x-dsi-lvds.c
 
- /*
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 9e6537709794..9dd8ff3887b7 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1206,7 +1206,7 @@ INDIRECT_CALLABLE_SCOPE struct dst_entry
-*ipv4_dst_check(struct dst_entry *dst,
-                return NULL;
-        return dst;
- }
--EXPORT_SYMBOL(ipv4_dst_check);
-+INDIRECT_CALLABLE_EXPORT(ipv4_dst_check);
+between commits:
 
- static void ipv4_send_dest_unreach(struct sk_buff *skb)
- {
-@@ -1337,7 +1337,7 @@ INDIRECT_CALLABLE_SCOPE unsigned int
-ipv4_mtu(const struct dst_entry *dst)
+  b51035c200bd ("drm/gma500: Remove Medfield support")
+  837f23bb4b60 ("drm/gma500: Drop DRM_GMA3600 config option")
 
-        return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
- }
--EXPORT_SYMBOL(ipv4_mtu);
-+INDIRECT_CALLABLE_EXPORT(ipv4_mtu);
+from the drm-misc tree and commit:
 
- static void ip_del_fnhe(struct fib_nh_common *nhc, __be32 daddr)
- {
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index f447f82e6819..75d6a0db1fa6 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -2644,7 +2644,7 @@ INDIRECT_CALLABLE_SCOPE struct dst_entry
-*ip6_dst_check(struct dst_entry *dst,
+  bfc838f8598e ("drm/gma500: Convert to use new SCU IPC API")
+  25ded39ad064 ("drm/gma500: Get rid of duplicate NULL checks")
 
-        return dst_ret;
- }
--EXPORT_SYMBOL(ip6_dst_check);
-+INDIRECT_CALLABLE_EXPORT(ip6_dst_check);
+from the drivers-x86 tree.
 
- static struct dst_entry *ip6_negative_advice(struct dst_entry *dst)
- {
-@@ -3115,7 +3115,7 @@ INDIRECT_CALLABLE_SCOPE unsigned int
-ip6_mtu(const struct dst_entry *dst)
+I fixed it up (the former removed the text that was updated by the
+latter and removed the last 4 files) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-        return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
- }
--EXPORT_SYMBOL(ip6_mtu);
-+INDIRECT_CALLABLE_EXPORT(ip6_mtu);
+--=20
+Cheers,
+Stephen Rothwell
 
- /* MTU selection:
-  * 1. mtu on route is locked - use it
+--Sig_/vXMANa1gQE/6.UO58AyQ+3L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-On Wed, Feb 3, 2021 at 5:33 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the net-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> ERROR: modpost: "ip6_dst_check" [vmlinux] is a static EXPORT_SYMBOL
-> ERROR: modpost: "ipv4_dst_check" [vmlinux] is a static EXPORT_SYMBOL
-> ERROR: modpost: "ipv4_mtu" [vmlinux] is a static EXPORT_SYMBOL
-> ERROR: modpost: "ip6_mtu" [vmlinux] is a static EXPORT_SYMBOL
->
-> Caused by commits
->
->   f67fbeaebdc0 ("net: use indirect call helpers for dst_mtu")
->   bbd807dfbf20 ("net: indirect call helpers for ipv4/ipv6 dst_check functions")
->
-> I have used the net-next tree from next-20210203 fot today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAbfwYACgkQAVBC80lX
+0GwxMwf/QawMM9sngMztt4iWCkh2mZAwbY53aT65k+mzk/du8vDr+MMA8NGnYAFY
+UUp0zhhDvmdrClHEIOl4R3QnXabIzWcBiURnrcKiSJXbTVapYGXXJ26hkgJDGuRO
+sOdwtCS+rzTKZqk+fMwgqU9vPokz21UMjCgCFC9ZBrzoAHyWa5KhyZMTqy+hE+15
+vmajV32ryu9tP+al4lwKyfGRKia6vNA8YTfiV4+8uGg+nk1r0vJDnAFXsrwk+yzF
+SWse70ZbtRCvShFb/d3+z/hT4aEzm+PPaW88nwO8LL9tsc3AtoFs3zD/DbH151V+
+EDRLDV/a5YdWb0vMM9U0xCNxoJQBrQ==
+=/Zsb
+-----END PGP SIGNATURE-----
+
+--Sig_/vXMANa1gQE/6.UO58AyQ+3L--

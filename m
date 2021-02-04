@@ -2,156 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9309A30ED11
-	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 08:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E3930ED8A
+	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 08:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbhBDHOp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Feb 2021 02:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbhBDHOn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Feb 2021 02:14:43 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C943C0613D6
-        for <linux-next@vger.kernel.org>; Wed,  3 Feb 2021 23:14:03 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id t5so2780616eds.12
-        for <linux-next@vger.kernel.org>; Wed, 03 Feb 2021 23:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=m4Svsks4F1WJxXzmQuHWNGVoFSZ6gcnQj15bvC/Ooz0=;
-        b=gMJ2xTHUNIpcuu/J7Ya68NOeZt8o6s5Bm08ruKNPXOLhlWPlMOvYXz8LPxzMvU6L2S
-         LvI9BCHyUYNmsUX6Rzw8OYCjGHNevqWkTFeuypfGy8utzB6L8Ojv0k3D/espzd4LnVaR
-         /3I6K8ccbFwphf19PdJuVENBaf8TXRk5AWWehZqAkEQSC5yBtdigfVMm5wiB2C9+rd8t
-         UCxKjEUjdi3AHCbtT3mNDhosYNFVHMTuJOaGqeui72nWtkJOk9Z2ryOkhL17y5uLypUQ
-         AbzxoZ2u0YBHzUZqlWKIIfKL7OMlBJGCOlBa/XpyotPIdYdWe2q1uE6vSuYECNYuTMCg
-         lVhA==
+        id S234712AbhBDHkN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Feb 2021 02:40:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32169 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234633AbhBDHkK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Feb 2021 02:40:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612424324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQ0eTVPL8hjhBEzJ8ELtfQWdOLooTVyajO3Fy8uNSZ8=;
+        b=UJI7kkUhslW0gxJmlNJfci5wKcRbJZX5Vy1aJclFfYGOJIeCpFrRrJXfOXgFmMDHwS95bk
+        EYVPWejsocMes33JEgMudxPPO4I+VF83XiT8Gmgf5YzSLuusjXCaeNJdkGqXsNEiZ+ckhn
+        MlTUvPw/SzcZ5szNqBBqvuuazKdk7cw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-557-aBlIyxrMO0GYd_N0hM7Nnw-1; Thu, 04 Feb 2021 02:38:42 -0500
+X-MC-Unique: aBlIyxrMO0GYd_N0hM7Nnw-1
+Received: by mail-ed1-f71.google.com with SMTP id f21so2096953edx.23
+        for <linux-next@vger.kernel.org>; Wed, 03 Feb 2021 23:38:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=m4Svsks4F1WJxXzmQuHWNGVoFSZ6gcnQj15bvC/Ooz0=;
-        b=aSARkJ5iadTHO2NM9Vq1Iwt3Uy86nKCRFppJZBwC2gFSGB/XLxyHXPq4f8YkfDMMvX
-         xRvoRlDbAvzLoAIjzyvstDqHcIs8lEbG58idUcjBbogZit9Jl/SayO4gxQtro9Pp+Vr1
-         nEhMwjUA7L6O09ZthqO5nJ80tcmKDNMKCyo+TG4eL9lk7VxQZNyYW2cdDL2kfomfHMOf
-         veD0U3SsR+5gy5RpgRTFe9KUpIQ0lsq1JYPJwapyg/FEV7U9Rer2D+IQYb9ajkPeRTm8
-         9XlAeiuKwVKVaiZyEp5eQzb6H+RhEN9ZWQH6dGdvKfFe1nZRpszt1CnfkvOrSf0kiXWk
-         /IEw==
-X-Gm-Message-State: AOAM532tipGBvnPfX7ES0ZQK5Nfsy6o+bFh5iYif9YUTsckkAcQw8gbA
-        ufySas+hrvdRASjhQkHixUgCAWs3F+A2Hb+if5HuwQ==
-X-Google-Smtp-Source: ABdhPJyYwBxPZZFNMfZ6eK3qbEHv7r/5IBUDsRkUWrmY0fAIbVrg23GHDeCz0j6nrUS+TJpHNk46L0SMENrXvYa0CB0=
-X-Received: by 2002:a05:6402:26c9:: with SMTP id x9mr6736383edd.365.1612422841623;
- Wed, 03 Feb 2021 23:14:01 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UQ0eTVPL8hjhBEzJ8ELtfQWdOLooTVyajO3Fy8uNSZ8=;
+        b=piGEn3r+raEp86UZSO1Aq8LdhZag09PW9Qib0ipYfotulAvfrnpOclAW5WtKbA4fyd
+         QUxuFQYrPCH8xykEIIzUqK3+YpKTNUrLIGquyJFC8rK858AX+C2udNgfNzPqc6boCu1K
+         XX+MyKjpTlLFapCIwuF2TonSJgHs1xI/QrMVhJsJXWaGj+05lFbP/llGcw9jrIM2wzji
+         TcbaphjIDxIYSDDahKLEti8vDwiiKbM+8qJ2C/0mcAhWoSE/M6iqwRliHShKE8+VTdgi
+         LeQNcE9BvSzslybenORCTU5JLx/DgMTypAIfAJ4g8QAavTa+eoz+OsIPx7GuIx6f3H3S
+         ab7w==
+X-Gm-Message-State: AOAM532Wb4ZBZLQ1MHgs3WSR1/G4xMDGnbLoheJuX5mNLv89dPTEWbxD
+        zdEnVNsDUVazLc8Jcko7Q+eiOveVrCCbIV3YUWkP+2BQGCs1RzdvWrLTCcrY5Bbp/UAPnGt8R+b
+        JGX5r1MbxMVUmcAYqq2VaEeTab+q6cH4UsAuUGHe4RyoLHf6JJn49Xl/uH9Xiqkyy/D+7vTeCLw
+        ==
+X-Received: by 2002:a17:906:7191:: with SMTP id h17mr7044016ejk.54.1612424321404;
+        Wed, 03 Feb 2021 23:38:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqMJ/NojtP+0ID/tXGNmwGoEtk5rny6JED/4q/QSBepALPvSdTcf9hvXY/ZLz3BCvMVUv/9g==
+X-Received: by 2002:a17:906:7191:: with SMTP id h17mr7044003ejk.54.1612424321208;
+        Wed, 03 Feb 2021 23:38:41 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
+        by smtp.gmail.com with ESMTPSA id a15sm2009838edy.86.2021.02.03.23.38.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Feb 2021 23:38:40 -0800 (PST)
+Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <mark.gross@intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210204161351.5c934ea2@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <5461d70a-39a0-0322-e2ae-6434e0d1e0a3@redhat.com>
+Date:   Thu, 4 Feb 2021 08:38:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 4 Feb 2021 12:43:50 +0530
-Message-ID: <CA+G9fYsDsB5WNs5hjQiOY-NH0B8HdzqCyju7Xg1UXi-BvPfj6g@mail.gmail.com>
-Subject: [next] Unable to handle kernel NULL pointer dereference at - pc : gpiodevice_release
-To:     linux-gpio@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210204161351.5c934ea2@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-While running kselftest gpio mockup test case on qualcomm dragonboard 410c
-the following kernel crash reported on Linux next tag 20210203.
+Hi Stephen, Andy,
 
-# selftests: gpio: gpio-mockup.sh
-# 1.  Module load tests
-# 1.1.  dynamic allocation of gpio
-# ./gpio-mockup.sh: line 106: ./gpio-mockup-cdev: No such file or directory
-# test failed: line value is 127 when 1 was expected
-# GPIO gpio-mockup test FAIL
-[  124.539778] Unable to handle kernel NULL pointer dereference at
-virtual address 00000000000005a8
-[  124.539864] Mem abort info:
-[  124.547998]   ESR = 0x96000006
-[  124.550188]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  124.553473]   SET = 0, FnV = 0
-[  124.558926]   EA = 0, S1PTW = 0
-[  124.561646] Data abort info:
-[  124.564863]   ISV = 0, ISS = 0x00000006
-[  124.567933]   CM = 0, WnR = 0
-[  124.571507] user pgtable: 4k pages, 48-bit VAs, pgdp=000000008b721000
-[  124.574694] [00000000000005a8] pgd=0000000091cd2003,
-p4d=0000000091cd2003, pud=00000000917ac003, pmd=0000000000000000
-[  124.581396] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-[  124.591499] Modules linked in: gpio_mockup(-) snd_soc_hdmi_codec
-adv7511 cec rfkill snd_soc_msm8916_analog qcom_spmi_temp_alarm
-qcom_pon rtc_pm8xxx msm snd_soc_lpass_apq8016 snd_soc_lpass_cpu
-snd_soc_lpass_platform snd_soc_msm8916_digital qcom_camss
-videobuf2_dma_sg snd_soc_apq8016_sbc v4l2_fwnode snd_soc_qcom_common
-videobuf2_memops videobuf2_v4l2 mdt_loader videobuf2_common
-drm_kms_helper qnoc_msm8916 qcom_rng i2c_qcom_cci icc_smd_rpm
-crct10dif_ce socinfo rmtfs_mem display_connector drm qrtr ns fuse
-[  124.619092] CPU: 0 PID: 5055 Comm: modprobe Not tainted
-5.11.0-rc6-next-20210203 #1
-[  124.641324] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[  124.648877] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-[  124.655819] pc : gpiodevice_release+0x38/0x80
-[  124.661806] lr : device_release+0x3c/0x98
-[  124.666058] sp : ffff800013f23b30
-[  124.670051] x29: ffff800013f23b30 x28: ffff0000157baf80
-[  124.673351] x27: 0000000000000000 x26: 0000000000000000
-[  124.678734] x25: 0000000000000045 x24: ffff00000b5d6cd0
-[  124.684029] x23: ffff800013f23c88 x22: 0000000000000000
-[  124.689324] x21: ffff00000fb5f080 x20: ffff000002334e00
-[  124.694619] x19: 0000000000000000 x18: ffff800012dd6a50
-[  124.699914] x17: 0000000000000000 x16: 0000000000000000
-[  124.705210] x15: 00000000000694e0 x14: 00000000ffffffff
-[  124.710512] x13: 0000000000000001 x12: 000000000000e107
-[  124.715799] x11: 000000000000e10a x10: ffff800012d34a50
-[  124.721096] x9 : ffff80001344a000 x8 : 00000000512c1926
-[  124.726391] x7 : 000000000cb44760 x6 : ffff800013f23a40
-[  124.731685] x5 : dead000000000100 x4 : dead000000000122
-[  124.736981] x3 : ffff800012891000 x2 : 2be62a0e7519e400
-[  124.742275] x1 : ffff800010829ad0 x0 : ffff800012a694e0
-[  124.747571] Call trace:
-[  124.752862]  gpiodevice_release+0x38/0x80
-[  124.755035]  device_release+0x3c/0x98
-[  124.759201]  kobject_put+0x90/0x220
-[  124.762846]  put_device+0x24/0x30
-[  124.766145]  gpiochip_remove+0xf4/0x120
-[  124.769618]  devm_gpio_chip_release+0x20/0x30
-[  124.773263]  devm_action_release+0x20/0x30
-[  124.777777]  release_nodes+0x150/0x248
-[  124.781771]  devres_release_all+0x3c/0x60
-[  124.785503]  device_release_driver_internal+0x128/0x1f0
-[  124.789584]  driver_detach+0x5c/0xe8
-[  124.794618]  bus_remove_driver+0x64/0x118
-[  124.798439]  driver_unregister+0x34/0x60
-[  124.802344]  platform_driver_unregister+0x20/0x30
-[  124.806339]  gpio_mockup_exit+0x30/0x3d0 [gpio_mockup]
-[  124.810939]  __arm64_sys_delete_module+0x1c8/0x2b8
-[  124.815973]  el0_svc_common+0x88/0x1b8
-[  124.820745]  do_el0_svc+0x38/0x90
-[  124.824478]  el0_svc+0x1c/0x28
-[  124.827864]  el0_sync_handler+0x8c/0xb0
-[  124.830815]  el0_sync+0x13c/0x140
-[  124.834555] Code: f2fbd5a4 90011200 91124000 91014000 (f942d663)
-[  124.838029] ---[ end trace 15e9a0840604e538 ]---
+On 2/4/21 6:13 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the drivers-x86 tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+> 
+> drivers/platform/x86/intel_scu_wdt.c: In function 'register_mid_wdt':
+> drivers/platform/x86/intel_scu_wdt.c:66:28: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+>    66 |  wdt_dev.dev.platform_data = (const struct intel_mid_wdt_pdata *)id->driver_data;
+>       |                            ^
+> 
+> Introduced by commit
+> 
+>   a507e5d90f3d ("platform/x86: intel_scu_wdt: Get rid of custom x86 model comparison")
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Thank you for the bug report.
 
-full test log link,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210203/testrun/3878290/suite/linux-log-parser/test/check-kernel-oops-2224485/log
+Andy can you send me a fix for this please ?
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git describe: next-20210203
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/952/config
-  build: http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/952/
-vmlinux: http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/952/vmlinux
+Regards,
 
+Hans
 
--- 
-Linaro LKFT
-https://lkft.linaro.org

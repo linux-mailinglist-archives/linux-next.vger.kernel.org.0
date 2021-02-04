@@ -2,77 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2332E30F67E
-	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 16:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A1A30F7A7
+	for <lists+linux-next@lfdr.de>; Thu,  4 Feb 2021 17:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237102AbhBDPht (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Feb 2021 10:37:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237406AbhBDPg4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Feb 2021 10:36:56 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC1EC061786;
-        Thu,  4 Feb 2021 07:36:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id df22so4711293edb.1;
-        Thu, 04 Feb 2021 07:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Apc5zhyVA0QX3lxOc0IBBanCOB57QvWUV3wpenXTIf0=;
-        b=u/YwAtGxyWgGHi8bvWMpuF5DXWiuqvhW52n2oj2rcvRe1I0Z9TqVZ6b7MPv8oVLDzv
-         M2DH4tR/dY62QFI9+QWnfMalsur63QLpT3XtzJh+R3vGr1SPnkv5/Q5TaqqfWyh1ajSI
-         GjsozjEJIFFpPWFUYhnByJ8EjjUfJH60l0OVwNFE50l6a3nAOqq1gthsQOCrdECX0vha
-         e7uKlli402rIEmLor6EO0AJ6zGpsizB/Xf4v9ucHKnc+yx8tFNe83apzAiS+hO7o5zBh
-         EjihL4wZH3jd5rD93WOaalMz0ZPJnlWwNQmVSTjd21Eia9HOGVMLii7yIUmKJszVV4JQ
-         ujpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Apc5zhyVA0QX3lxOc0IBBanCOB57QvWUV3wpenXTIf0=;
-        b=N7JNpV2Yi9+0fZtJ4dHbGbmhjMAJVuej+I+MIxuAJNSdUAQUdfG5REftnGmQ3l5vO2
-         SRrmjDg8Sm1mbB1QRNlPhxQo1SflRHDCM/IGPTOvdFrPg9J6ayzVOSc5tMSRoZwaAyYh
-         teJG51Gr3tesCSaS8P4SE6g7svolScPMpTCiwDVel1HoWkOwGFGWP9BWXKdBIYMGlMs1
-         mnVuAI9GHe3Xq8F7WOpUnki8YZk3wboGWnFsrTStcfsHPtjGe7dxT8JN+TyuBhfO8s/y
-         p0og0V5FLwHZoHOdSYF/Ym6cf8BhqsRvAt6V4O+pBCArPR1xmSIYhScW6XM1T1wiVlbU
-         hDrw==
-X-Gm-Message-State: AOAM531kYb9cbdh5+ocmY7764CQYf7r/fXIic3OXxb8PE5wf25PuXwaw
-        uGiKIy3C5MiF7OZt7t49T4Q=
-X-Google-Smtp-Source: ABdhPJzWlZxKNpce/klndMz2fmdu5OZ8EbNS5lQWyITfVfisl2JroTKniOW02JkR6N7nmrzgj9Bnqw==
-X-Received: by 2002:a05:6402:378:: with SMTP id s24mr8723062edw.376.1612452974040;
-        Thu, 04 Feb 2021 07:36:14 -0800 (PST)
-Received: from skbuf (5-12-227-87.residential.rdsnet.ro. [5.12.227.87])
-        by smtp.gmail.com with ESMTPSA id x21sm2591860eje.118.2021.02.04.07.36.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 07:36:13 -0800 (PST)
-Date:   Thu, 4 Feb 2021 17:36:11 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Brian Vazquez <brianvv@google.com>
+        id S237166AbhBDQXY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Feb 2021 11:23:24 -0500
+Received: from mga12.intel.com ([192.55.52.136]:62963 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237042AbhBDPHh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 4 Feb 2021 10:07:37 -0500
+IronPort-SDR: IeMgd1RmCdrLHewfCP5nkj2MyMsY17rk04+6NvBtekd3QkPWUH579pPrvZMkYK2nEYzkmZ6Wn1
+ 6fOeTSzyXnAA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9884"; a="160420162"
+X-IronPort-AV: E=Sophos;i="5.79,401,1602572400"; 
+   d="scan'208";a="160420162"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 07:05:51 -0800
+IronPort-SDR: poRwnzyt7zxPp5Ci3mDHcdCKs79uKBOse0v7tl+uRAVzIK7YF8TVE7sVnl8mIsdzw0bsvJJYGo
+ arDlJe3hvjiA==
+X-IronPort-AV: E=Sophos;i="5.79,401,1602572400"; 
+   d="scan'208";a="415395862"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2021 07:05:50 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1l7gCZ-001vYb-6A; Thu, 04 Feb 2021 17:05:47 +0200
+Date:   Thu, 4 Feb 2021 17:05:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Mark Gross <mark.gross@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210204153611.iqpok4ligorpujyo@skbuf>
-References: <20210204123331.21e4598b@canb.auug.org.au>
- <CAMzD94RaWQM3J8LctNE_C1fHKYCW8WkbVMda4UV95YbYskQXZw@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
+Message-ID: <YBwNS6iO1RhY+2Lf@smile.fi.intel.com>
+References: <20210204161351.5c934ea2@canb.auug.org.au>
+ <5461d70a-39a0-0322-e2ae-6434e0d1e0a3@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMzD94RaWQM3J8LctNE_C1fHKYCW8WkbVMda4UV95YbYskQXZw@mail.gmail.com>
+In-Reply-To: <5461d70a-39a0-0322-e2ae-6434e0d1e0a3@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Brian,
+On Thu, Feb 04, 2021 at 08:38:40AM +0100, Hans de Goede wrote:
+> Hi Stephen, Andy,
+> 
+> On 2/4/21 6:13 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the drivers-x86 tree, today's linux-next build (x86_64
+> > allmodconfig) produced this warning:
+> > 
+> > drivers/platform/x86/intel_scu_wdt.c: In function 'register_mid_wdt':
+> > drivers/platform/x86/intel_scu_wdt.c:66:28: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+> >    66 |  wdt_dev.dev.platform_data = (const struct intel_mid_wdt_pdata *)id->driver_data;
+> >       |                            ^
+> > 
+> > Introduced by commit
+> > 
+> >   a507e5d90f3d ("platform/x86: intel_scu_wdt: Get rid of custom x86 model comparison")
+> 
+> Thank you for the bug report.
+> 
+> Andy can you send me a fix for this please ?
 
-On Wed, Feb 03, 2021 at 07:52:08PM -0800, Brian Vazquez wrote:
-> Hi Stephen, thanks for the report. I'm having trouble trying to
-> compile for ppc, but I believe this should fix the problem, could you
-> test this patch, please? Thanks!
+Fix just has been sent.
 
-Could you please submit the patch formally to net-next? Thanks.
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,120 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358663103D5
-	for <lists+linux-next@lfdr.de>; Fri,  5 Feb 2021 04:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD3C3103DB
+	for <lists+linux-next@lfdr.de>; Fri,  5 Feb 2021 04:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbhBEDqZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Feb 2021 22:46:25 -0500
-Received: from ozlabs.org ([203.11.71.1]:40683 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229979AbhBEDqY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Feb 2021 22:46:24 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DX1Xk2vJcz9sVb;
-        Fri,  5 Feb 2021 14:45:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612496742;
-        bh=QfWsKzcgs3CT5TN3x1n4KGoVfJ3XRtC5/yGO5p540fg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=awMO1hN2lccbRrFPp3/1QMajbyNKTVOvtmU83NZFnL2WNKVelrCJOpf68NB8JNas+
-         7ZiRmK5JITcVzsiWdLd0WK0+bqw6D9PCo4uczHwQs51Kk8qBu+CBRWB54Wkf/yfmde
-         Dbj+GOawxXLjN6fcomn60Icftf9IUD2CNHJOyw45QQhKOoQECdSGgtMNezC06TzGMI
-         m8L3o7IG/0xSH1e/PzU536fNfOMGfujZXstSwouaAJvYmHs5HFDTFmtmJQ41ZoY1sJ
-         1Bd8H469K4Jb1c/NYvHpt3cOgf4j9++LNCgSReaAlas+ZuN7ycQdzBGVhfN+NhJLhH
-         emIUMKtJc0IUw==
-Date:   Fri, 5 Feb 2021 14:45:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: linux-next: manual merge of the devicetree tree with the kbuild
- tree
-Message-ID: <20210205144540.1438cc3c@canb.auug.org.au>
+        id S230136AbhBEDuf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Feb 2021 22:50:35 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:2935 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229692AbhBEDuf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Feb 2021 22:50:35 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B601cc0630000>; Thu, 04 Feb 2021 19:49:55 -0800
+Received: from [10.2.60.31] (172.20.145.6) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb
+ 2021 03:49:54 +0000
+Subject: Re: [PATCH] xfs: fix unused variable build warning in xfs_log.c
+To:     "Darrick J. Wong" <djwong@kernel.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-xfs@vger.kernel.org>,
+        Linux Next <linux-next@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Allison Henderson <allison.henderson@oracle.com>
+References: <20210205031814.414649-1-jhubbard@nvidia.com>
+ <20210205033030.GL7193@magnolia>
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <11a20ea7-3d58-d102-0fcb-6bc92cfc86d5@nvidia.com>
+Date:   Thu, 4 Feb 2021 19:49:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:85.0) Gecko/20100101
+ Thunderbird/85.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Q1nJy/2MJTuDaL58gb34Tw0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210205033030.GL7193@magnolia>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1612496995; bh=aVWP6jGi6yMses/G7c+2YFcawvLkfOUygGY3+F5TXgI=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=KWALDuMdgil2trdKyD9hNMG7KVtlXqK7G8/mnFLVzxIKItIhlT1O+MkL5vdgysNFN
+         ckLMZyqhjMzE7YL0ZZoafYWo735tZBdeikGUWfjtCf3uj1NdxVDi25+gn6BbWd+4EL
+         3Ln0AoNV2yXLFAbT9LMsExozEX5IMb0LzVVrEb2TwBRFHfwugSI1YVsbtn3kBxhe6c
+         pF3ltoZ0xeF4sBSgsjPdZpPX5QVzF7NTwaE0iTh3wrjqhVIRsZKwy9OCw55cfrCJq0
+         e3tXUK6bslFVoN2Wh7dGMImquZSG/z6LX+Wev0r9x0CW7+M2USLkAdzqJvOMZJTreN
+         5MO65EV4Ww7pw==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Q1nJy/2MJTuDaL58gb34Tw0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/4/21 7:30 PM, Darrick J. Wong wrote:
+> On Thu, Feb 04, 2021 at 07:18:14PM -0800, John Hubbard wrote:
+>> Delete the unused "log" variable in xfs_log_cover().
+>>
+>> Fixes: 303591a0a9473 ("xfs: cover the log during log quiesce")
+>> Cc: Brian Foster <bfoster@redhat.com>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Cc: Darrick J. Wong <djwong@kernel.org>
+>> Cc: Allison Henderson <allison.henderson@oracle.com>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+>> Hi,
+>>
+>> I just ran into this on today's linux-next, so here you go!
+> 
+> Thanks for the tipoff, I just realized with horror that I got the git
+> push wrong and never actually updated xfs-linux.git#for-next.  This (and
+> all the other gcc warnings) are fixed in "xfs-for-next" which ... is not
+> for-next.
+> 
+> Sigh.....  so much for trying to get things in for testing. :(
+> 
+Well, if it's any consolation, this is the *only* warning that fired during
+my particular build, in linux-next. :)
 
-Hi all,
 
-Today's linux-next merge of the devicetree tree got a conflict in:
-
-  scripts/Makefile.lib
-
-between commit:
-
-  d73a6a04c76a ("kbuild: use always-y instead of extra-y")
-
-from the kbuild tree and commit:
-
-  ce88c9c79455 ("kbuild: Add support to build overlays (%.dtbo)")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc scripts/Makefile.lib
-index 6f248ff91982,b00855b247e0..000000000000
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@@ -85,12 -81,14 +85,14 @@@ always-y +=3D $(userprogs-always-y) $(use
- =20
-  # DTB
-  # If CONFIG_OF_ALL_DTBS is enabled, all DT blobs are built
- -extra-y				+=3D $(dtb-y)
- -extra-$(CONFIG_OF_ALL_DTBS)	+=3D $(dtb-)
- +always-y			+=3D $(dtb-y)
- +always-$(CONFIG_OF_ALL_DTBS)	+=3D $(dtb-)
- =20
-  ifneq ($(CHECK_DTBS),)
- -extra-y +=3D $(patsubst %.dtb,%.dt.yaml, $(dtb-y))
- -extra-y +=3D $(patsubst %.dtbo,%.dt.yaml, $(dtb-y))
- -extra-$(CONFIG_OF_ALL_DTBS) +=3D $(patsubst %.dtb,%.dt.yaml, $(dtb-))
- -extra-$(CONFIG_OF_ALL_DTBS) +=3D $(patsubst %.dtbo,%.dt.yaml, $(dtb-))
- +always-y +=3D $(patsubst %.dtb,%.dt.yaml, $(dtb-y))
-++always-y +=3D $(patsubst %.dtbo,%.dt.yaml, $(dtb-y))
- +always-$(CONFIG_OF_ALL_DTBS) +=3D $(patsubst %.dtb,%.dt.yaml, $(dtb-))
-++always-$(CONFIG_OF_ALL_DTBS) +=3D $(patsubst %.dtbo,%.dt.yaml, $(dtb-))
-  endif
- =20
-  # Add subdir path
-
---Sig_/Q1nJy/2MJTuDaL58gb34Tw0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAcv2QACgkQAVBC80lX
-0Gy0xAf+PRYXIy6feQvq7zVUTxg869jUJLfEBcBRuybpTiCymDa8+vWrK37E+7fD
-RZvD6lWOsze5fgZIZ/cAlJX/c+EIf/LUtw/q7QomMzvdvoAzaqtmmxtmQweCo18B
-jr8ranuxVwG6iv23Ig6m5g4gPV0fU5byUj/Hhoo9zoxpKYvq08wQ08BKQBzuyeWz
-DeZ8ZvC/DfSE3WjMcActmWkv3lChOsEKZpYTOgEOYJPGWOzFDQsvjoFI0rwcGuSm
-Dg3Q2n0A0vDoSo19EU/TZ9RZAmGzRe1+FXlaoE3x8AD8hFmZo9gBqU2uQOi7VOzF
-Zt1tV7u3pMQB8fqXbERHuIcQTQTPHg==
-=zeNo
------END PGP SIGNATURE-----
-
---Sig_/Q1nJy/2MJTuDaL58gb34Tw0--
+thanks,
+-- 
+John Hubbard
+NVIDIA

@@ -2,89 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D385D31029B
-	for <lists+linux-next@lfdr.de>; Fri,  5 Feb 2021 03:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950F4310342
+	for <lists+linux-next@lfdr.de>; Fri,  5 Feb 2021 04:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhBECMz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Feb 2021 21:12:55 -0500
-Received: from ozlabs.org ([203.11.71.1]:48531 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229487AbhBECMz (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Feb 2021 21:12:55 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DWzSn0Q8yz9sWd;
-        Fri,  5 Feb 2021 13:12:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612491132;
-        bh=9+YNYgOvs+LvDUb5QbSEuc4VS2ZKmFRzV9IFnBYP47c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RXStvPBpmTG/hL0RIHUavwUxVKDPK79dbRVeGANdInTCB3KZV418Lm3KS3OyQ+4++
-         ed9U0eY5x2T2mO9vsmhbVWacqmzmS8EvmMqDRLJJzpNXNhSQSNFdZ3F3HD8Jhvfp5l
-         uS7+O3c15NGDlfjYb8g6ubObuB078FZaBuR86SdyQoz3oMGbsaVKLWsSZuGDhXBMBc
-         fAR0pNMFc2WA1McV98Vvw1CD+NL1M49VSbP59VcUHup7CBtBem7Lu5l+7ZQ9of+N++
-         +Tz6DRCj9pOgOJapoE1kjuygrYf5j5eTQU0fQNmSo1sTMqwQgxuF7ahh9C2BGfG4Ff
-         LmwcZp6PYaiNg==
-Date:   Fri, 5 Feb 2021 13:12:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20210205131208.3c1bfcc6@canb.auug.org.au>
+        id S230097AbhBEDJd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Feb 2021 22:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229742AbhBEDJ0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Feb 2021 22:09:26 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCB8C061794;
+        Thu,  4 Feb 2021 19:08:36 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m13so5939408wro.12;
+        Thu, 04 Feb 2021 19:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=fhPHySbut4dTAWvmnaTXTJM+XUEQ8MW2l8njFAAthh188LYbdzoPC8kI7eWPY/CxiS
+         jsMvnipBXfgyxdX/NSpMo/EW66E+55qlp7OM493EMYVvkq7b3CyzJBwevr8vY6w3zBQG
+         mM6s5ndcQV3U8sMPnieGuwTn5CET3I/BhAHhxZAmpT9+/guwWCYf4o6wMt6FVaC1/Mz+
+         /KT/eiEWNDQjqbKuqil3YCUvKHrBZBPNwmWtUcMAIqzf5K7ZFEv+LCpqZY0dzxf279nm
+         mYOfMs5c8QvmKEFEE6q7gA2zSHyIhwXqoh+U8bHlA/w+eJWdZbzbyx3GZZukk2oIVY+4
+         yjdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=hqf55dXwvcYwwL4sAkoYuOM6RPu6wxeec88n5sMRYiY=;
+        b=PMn5+7DeVG2YJOUDhVnv8M4TS2JYa13vsHSRYwNLtQMFNzJv+MxbvoHaw/V/51Kjlg
+         HQ7Coq/PvOqP0vGmpL5koiC8WJdg527e5FL+ST46QDhCT7ebWAXKcw6BCrUYCpxymZBb
+         Mo8hrWV1D+igd75MgSXQ1ICeOHNSHtol1QXbCw6M6b4DLl/P0iE6XiBu34dgo7Tpjoqn
+         GtzXH1inTMnmvlugY4I+99RqDSm2r4WwHdV2BMfgvYPlmKqTcj9mVqWfwboXSmz2nhXM
+         vdPd9SRaVk5aufnq9DxGJyrHr2MSFgzM92N+DqmCbkwoShqwTI21/stIW1CGN/gUVx+8
+         /90Q==
+X-Gm-Message-State: AOAM533kCSoyAk56AW4A3YPIqoAgF38mggiXQN8PeuoV1O+50PW1bnor
+        Aoo7dykE6B8S/il4JrwpokzN8WjUjwHzuA==
+X-Google-Smtp-Source: ABdhPJwVSDyzwcKSIGphbs26ptRVznnc9HY+sJTAWfILOOdiRayxAO7YreNbxMj83QPwrMluTti4tg==
+X-Received: by 2002:a5d:5502:: with SMTP id b2mr2426293wrv.245.1612494514742;
+        Thu, 04 Feb 2021 19:08:34 -0800 (PST)
+Received: from [192.168.1.6] ([154.124.28.35])
+        by smtp.gmail.com with ESMTPSA id n9sm10836813wrq.41.2021.02.04.19.08.31
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Thu, 04 Feb 2021 19:08:34 -0800 (PST)
+Message-ID: <601cb6b2.1c69fb81.5ea54.2eab@mx.google.com>
+Sender: Skylar Anderson <barr.markimmbayie@gmail.com>
+From:   calantha camara <sgt.andersonskylar0@gmail.com>
+X-Google-Original-From: calantha camara
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zwipi3XuVJ2FCTtb1VezoeB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hi dear
+To:     Recipients <calantha@vger.kernel.org>
+Date:   Fri, 05 Feb 2021 03:08:28 +0000
+Reply-To: calanthac20@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zwipi3XuVJ2FCTtb1VezoeB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-
-Caused by commit
-
-  13a75af50484 ("drm/amd/display: Fix unused variable warning")
-
-interacting with commit
-
-  4c3a3292730c ("drm/amd/display: fix unused variable warning")
-
-from the drm tree.
-
-I reverted the drm tree commit for now.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zwipi3XuVJ2FCTtb1VezoeB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAcqXgACgkQAVBC80lX
-0GwSagf+Oews8YCbCtU+/5+h8Og5tffUqqVFMZXXwHSVO4wo5JjWgtkwm8MS9you
-qB5B1pDA9msLAUW010IukWwkppTLI2ceF3SlwIOnBj9aUgl0y9kjyYdTHJYhsRm6
-ouKjuM8uVH5qLGpSB0mi6hlpVFHEYTe3m1T1jk3tmqFeaHB0+33n5Ac30uT5QC1M
-zKfm5a0EBW/pSEuZAWY9W67RPeSdocki1jUHUagZcax2w+Lcn1+LWlLWoWCUvRi0
-54I9Liv0vLjrjwwWXWs50X648MdDxCtU+uu47ozTYBCqmiEEvHqpPMaGaSlbA+ZN
-Oyin8IXfpMF3uB74ZqoJLDnVro7EUA==
-=ng4a
------END PGP SIGNATURE-----
-
---Sig_/zwipi3XuVJ2FCTtb1VezoeB--
+do you speak Eglish

@@ -2,96 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 676C3311E96
-	for <lists+linux-next@lfdr.de>; Sat,  6 Feb 2021 17:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE353123B4
+	for <lists+linux-next@lfdr.de>; Sun,  7 Feb 2021 12:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbhBFQPp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 6 Feb 2021 11:15:45 -0500
-Received: from smht-116-28.dattaweb.com ([200.58.116.28]:35383 "EHLO
-        smht-116-28.dattaweb.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhBFQPo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 6 Feb 2021 11:15:44 -0500
-X-Greylist: delayed 2153 seconds by postgrey-1.27 at vger.kernel.org; Sat, 06 Feb 2021 11:15:43 EST
-Received: from smarthost03-ded.dattaweb.com (localhost [127.0.0.1])
-        by smarthost03-ded.dattaweb.com (Postfix) with ESMTPS id 8467247A39;
-        Sat,  6 Feb 2021 12:39:06 -0300 (-03)
-Received: from vps-1625202-x.dattaweb.com (vps-1625202-x.dattaweb.com [66.97.40.69])
-        by smarthost03-ded.dattaweb.com (Postfix) with ESMTPS id 663BD18003D5C;
-        Sat,  6 Feb 2021 12:39:06 -0300 (-03)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=forumemprendedores.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Subject:From:Reply-To:Sender:Message-ID:To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=kLlDurTU8N/ECEgo3vfakmaVFX3kbJi+vqZU8wlNFfA=; b=UkkrjNeCDhOdYxCjgw6qgD8r+p
-        A/FzF9tOoNFb0zh679kX3KtPL0ULi50omNbmOPn9l4Nmb9PrD/GklILfX58UcukX/GLLQ8O91MF3q
-        ccLLZDQfPAVAfE1hM0GJXXjA+SEjNdgtlzYyDFAVHGePa+1rduLsJz27xhFtndqAW/Jo=;
-Received: from [105.96.16.85] (helo=User)
-        by vps-1625202-x.dattaweb.com with esmtpa (Exim 4.92.2)
-        (envelope-from <info@office.com>)
-        id 1l8PjX-0004kK-3I; Sat, 06 Feb 2021 12:42:51 -0300
-Reply-To: <drmackjohn222@gmail.com>
-From:   "Dr. Mack John" <info@office.com>
-Subject: RE:DONATION FOR YOU!
-Date:   Sat, 6 Feb 2021 16:38:51 +0100
+        id S229596AbhBGK7q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 7 Feb 2021 05:59:46 -0500
+Received: from ozlabs.org ([203.11.71.1]:46721 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229590AbhBGK7p (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 7 Feb 2021 05:59:45 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DYR3n3lvHz9sCD;
+        Sun,  7 Feb 2021 21:59:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1612695542;
+        bh=/I7fNZAOAjhvTsy13VVZEWwmE79v1IGag6Aa52s48MQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Y49DNtSjkVemEyEMu+XXZTr6kJeADvpb8zF++cqSlNcyKyydFSViByjBkJ88dDl2n
+         Ky/YX/oqQZ8aM8Z8jE49KQmOqYkH3Lq2mT8B6CQVLtpNs48qqj9hW7vxrsl7krzTX1
+         RWlmJ1QLT8VLU3l5Bke0nE8mPNcWLPVf+E/VgoOfG2sVS/3BJHQCEeZd6PuOcQDyVu
+         KWMkZRb5NA8nymQk+5Et7zPCvNOPi0khs+ZztgqEUdSvUKl+hCp8b7WFOCMdBSUuFG
+         sN+ChfNnCuVszJORnx+phz9t95YrTfrQ1m3i7JsUPc1dTZANk1OdlxlFCdwzisi+dk
+         W1kmBN2MtdVgA==
+Date:   Sun, 7 Feb 2021 21:59:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the soundwire tree
+Message-ID: <20210207215900.1223b0ca@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Spam-Score: 15.8
-X-Spam-Score-Int: 157
-X-Spam-Bar: +++++++++++++++
-X-Spam-Report: Action: no action
- Symbol: HAS_REPLYTO(0.00)
- Symbol: RCVD_VIA_SMTP_AUTH(0.00)
- Symbol: BAYES_SPAM(3.99)
- Symbol: FORGED_MUA_OUTLOOK(3.00)
- Symbol: RCVD_HELO_USER(3.00)
- Symbol: HAS_X_PRIO_THREE(0.00)
- Symbol: SUBJ_ALL_CAPS(1.27)
- Symbol: MISSING_TO(2.00)
- Symbol: RCVD_COUNT_ONE(0.00)
- Symbol: SUBJECT_ENDS_EXCLAIM(0.00)
- Symbol: FROM_EQ_ENVFROM(0.00)
- Symbol: MIME_TRACE(0.00)
- Symbol: RCVD_NO_TLS_LAST(0.10)
- Symbol: ASN(0.00)
- Symbol: ARC_NA(0.00)
- Symbol: FAKE_REPLY(1.00)
- Symbol: FROM_HAS_DN(0.00)
- Symbol: FREEMAIL_ENVRCPT(0.00)
- Symbol: TAGGED_RCPT(0.00)
- Symbol: FREEMAIL_REPLYTO(0.00)
- Symbol: REPLYTO_DOM_NEQ_FROM_DOM(0.00)
- Symbol: MIME_GOOD(-0.10)
- Symbol: MISSING_MID(2.50)
- Symbol: AUTHENTICATED_LOCAL_USER(-5.00)
- Symbol: FROM_NAME_HAS_TITLE(1.00)
- Symbol: REPLYTO_EMAIL_HAS_TITLE(2.00)
- Symbol: R_NO_SPACE_IN_FROM(1.00)
- Message-ID: undef
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vps-1625202-x.dattaweb.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [502 502] / [502 502]
-X-AntiAbuse: Sender Address Domain - office.com
-Message-Id: <20210206153906.8467247A39@smarthost03-ded.dattaweb.com>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; boundary="Sig_/T.Ffr+Nq7jbltv01kb3MCkK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Via del Campidoglio 1 00186.
-Roma RM, ITALIAN.
+--Sig_/T.Ffr+Nq7jbltv01kb3MCkK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi all,
 
-How are you? Mrs Amelia Kennedy gave me your contact and asked me to contact you before she died, She is donating sum $6.5 million for you to help her set up a charity organisation in your country and use part of the money for yourself and your family, Get back to me so I can give you directives on how to contact the finance company to get the money, I am the lawyer of Mrs Amelia Kennedy, Reply my mail:( drmackjohn222@gmail.com ) and also whats-app me on this number: +17047262900, Do not call this number, It's only for whats-app.
+In commit
 
-Regards.
-Dr. Mack John.
+  531f45f2bdf6 ("soundwire: export sdw_write/read_no_pm functions")
+
+Fixes tag
+
+  Fixes: 60ee9be25571 ('soundwire: bus: add PM/no-PM versions of
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/T.Ffr+Nq7jbltv01kb3MCkK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAfx/QACgkQAVBC80lX
+0GySrQf/dWcUHlrOsaFEk0zcNaSGyg5nXtINOiWGlIsC77aVBS73AW643pLdXUVa
+C3WNM2raBTXyR/DbqUZpCmKSGhTfmdTNmRgloSmGq/PX9xpFU8f4aY3DYq/KB0EN
+67bk3YPDFzN3RDMwq6WAebgBZLqQBnfYmT8hXMfjM/sXJ9oj0znczqlsgGhn+8LL
+ZvXwIQhAPSOnOGP9qm4DvAiTyqRFOOMWTLb34gvinuhBgE1Be/7TafGrInIrHWD8
+S2x6EM8oYNOh7D9hQvFK+cPDId4iUbGXn0uTRQcDMfSy7hqlJjGYNR6yIJ6x/l7g
+Fd1NXo+cKwAJ5XXkoRe3/FA+ShXaAA==
+=EUMx
+-----END PGP SIGNATURE-----
+
+--Sig_/T.Ffr+Nq7jbltv01kb3MCkK--

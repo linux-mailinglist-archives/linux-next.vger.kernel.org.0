@@ -2,388 +2,2779 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7432314208
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 22:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9808E314275
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 22:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236824AbhBHVkH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 16:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S231779AbhBHV7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 16:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbhBHVjw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 16:39:52 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FACC06178A;
-        Mon,  8 Feb 2021 13:39:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1egEIN9KAVLmkDNA/9Y5jCb9sIIE0jslDFi4d7XGroY=; b=BRBS1iWvf/PH+Yla7MgefPnIBn
-        /x0opwjRjhs6rquANk+314TDwCuFMPYP8wbg3ql97k7cTo/AyTWJNdaTDY+Z1MDh+sqMvh5LfWUje
-        pjwz0pi0Vl6cENuCoAeQ68qp+W920cqJizFpRmWkQUY5ZG64lDo0nuZn1/2YTZI635wCM8HT6luVe
-        fOjdfQ6zwxm89uT0IviNXHqRxS6uOzjDkWSRyXq96sM/pkCGMVPzeVSHUopUvxZRy7IqLvaXXUTB6
-        JAjUOT8813O4G6rDaj9RSbB0Y8oe9JBO+8P1qJit1zKnnxUHQm6H/QzZlEMHJkWMVNCMSI8LWkKPz
-        7rNrBH5w==;
-Received: from [2601:1c0:6280:3f0::cf3b]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l9EFO-0002ab-TY; Mon, 08 Feb 2021 21:39:09 +0000
-Subject: Re: linux-next: Tree for Feb 8 (objtool: warnings: 5)
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20210208235246.01cb4daf@canb.auug.org.au>
- <2000eae0-89f4-a88f-a113-7fa47f16def7@infradead.org>
- <20210208212153.vs2v7k2c55a3syvo@treble>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <9fd03d53-8001-b76f-feea-179c13633a8b@infradead.org>
-Date:   Mon, 8 Feb 2021 13:39:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        with ESMTP id S233341AbhBHV7Z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 16:59:25 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD603C061786
+        for <linux-next@vger.kernel.org>; Mon,  8 Feb 2021 13:58:41 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id q72so366402pjq.2
+        for <linux-next@vger.kernel.org>; Mon, 08 Feb 2021 13:58:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=IeRlwBt2AVPXAydjKHVV/UoKB71I4xeWfuvp9YfKOvI=;
+        b=FF8CGlVrBaVq7rjTZqUQqfnWF9KK0BWn7Ygx4eOWR6sFyckQOI8MYZX76rUudb6lIN
+         HXd1zR3DFyZ1gdMbo477ufOK9ur3uO7+Hw+FlpBYdBcJWWGLvKUY8cqvQUCo3AsOQO1F
+         sa0pZNKtk4MgGduQcOE3CKni2GKJOqwsI73TL1o9Abutl8R8QMfZQh39U0Kj9FWET1gV
+         1KRL50NEubSW6n77dEaiGrBlkx1noG0hATFUixLzTDPHRICBD1p3Ba+qeOM97qMFp/CN
+         l3pf2OnYa3dptBHh35Li3vMOkjKQxBXzH/jIXFLIrISBlXfaOM1n29sXExv4aV4/Xhiq
+         +JhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=IeRlwBt2AVPXAydjKHVV/UoKB71I4xeWfuvp9YfKOvI=;
+        b=BSVpJy8kjtEH/bQCvuHs/+owfbdu0ZUzaC7Vt+x1zitGVnHc42FpStrjSbWloQ3VDj
+         WaUXZ6iGcmcvn+4dqNca652SXdc6Bm94ISu92Q7xbeFU6kwUsqUvj9jFPpLBBYZOkQtV
+         BLDtSVnuU4431NZBeKYVoqyij1VL2O1C5eO/W5yXRWTNqlyGkwzNsK8zpWeXV2C/SRKz
+         031C3Q6nrFnCIdZhOW+ng3SuWj+muTaZ1pwalFJmhPs93+zAz9hEs0Cd1K+mBfLZz/5d
+         NkxQCBY9JrqjM1pKYzvYXwF+BvftLEEBXNEGQnwWbrIY+lKqCBSOPcl2iJMLx2hX0Z10
+         RZBA==
+X-Gm-Message-State: AOAM531Z/5Y3Ts6BjW4leURIL+JY0djEDGhR7BZQ0jESzzwkIKR/r5Ol
+        Sg1vbpky8mNxZYlOTBRQWmcwIv1gSXoUGw==
+X-Google-Smtp-Source: ABdhPJw8d6nR/DS0gsOjWM8IKHeikQUibM2RemDqnDK+z03i+OSEZs1DzxKxhBnoTEF1xdmroc9+5A==
+X-Received: by 2002:a17:90a:420c:: with SMTP id o12mr821004pjg.193.1612821518374;
+        Mon, 08 Feb 2021 13:58:38 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s23sm20112200pgj.29.2021.02.08.13.58.36
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 13:58:37 -0800 (PST)
+Message-ID: <6021b40d.1c69fb81.2347e.d2c9@mx.google.com>
+Date:   Mon, 08 Feb 2021 13:58:37 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210208212153.vs2v7k2c55a3syvo@treble>
-Content-Type: multipart/mixed;
- boundary="------------CEF5BBE61C7ED1D59BC64DDA"
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20210208
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master build: 232 builds: 7 failed, 225 passed, 22 errors,
+ 373 warnings (next-20210208)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------CEF5BBE61C7ED1D59BC64DDA
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+next/master build: 232 builds: 7 failed, 225 passed, 22 errors, 373 warning=
+s (next-20210208)
 
-On 2/8/21 1:21 PM, Josh Poimboeuf wrote:
-> On Mon, Feb 08, 2021 at 11:30:59AM -0800, Randy Dunlap wrote:
->> On 2/8/21 4:52 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20210205:
->>>
->>
->> on x86_64:
->>
->> objtool warnings: (from 3 different randconfig builds)
->>
->> drivers/input/touchscreen/elants_i2c.o: warning: objtool: elants_i2c_initialize() falls through to next function elants_i2c_resume()
-> 
-> Randy, can you share the .o?  (you may need to gzip it, still waiting on
-> corporate IT to allow me to receive .o files)
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20210208/
 
-Sure, no problem. It's attached.
+Tree: next
+Branch: master
+Git Describe: next-20210208
+Git Commit: 8d374d0d441acf14b3f182cfc37450f27658b32c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
->> fs/select.o: warning: objtool: do_sys_poll()+0x8e9: call to __ubsan_handle_sub_overflow() with UACCESS enabled
->> lib/iov_iter.o: warning: objtool: iovec_from_user.part.12()+0x2db: call to __ubsan_handle_add_overflow() with UACCESS enabled
-> 
-> Peter, we need the patch to prevent UBSAN with gcc7?
-> 
->> vmlinux.o: warning: objtool: do_machine_check()+0x7ee: call to queue_task_work() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: lock_is_held_type()+0x107: call to warn_bogus_irq_restore() leaves .noinstr.text section
-> 
-> Peter?
+Build Failures Detected:
 
+arm64:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (clang-11) FAIL
 
-thanks.
--- 
-~Randy
+arm:
+    aspeed_g5_defconfig: (clang-10) FAIL
 
+i386:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (clang-11) FAIL
 
---------------CEF5BBE61C7ED1D59BC64DDA
-Content-Type: application/gzip;
- name="elants_i2c.o.gz"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="elants_i2c.o.gz"
+x86_64:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (clang-11) FAIL
 
-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
-+AAA
---------------CEF5BBE61C7ED1D59BC64DDA--
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+    allmodconfig (clang-10): 1 error
+    allmodconfig (gcc-8): 61 warnings
+    allmodconfig (clang-11): 1 error
+    defconfig (clang-11): 1 warning
+    defconfig (clang-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-11): 1 warning
+
+arm:
+    allmodconfig (clang-10): 49 warnings
+    allmodconfig (clang-11): 47 warnings
+    allmodconfig (gcc-8): 60 warnings
+    aspeed_g5_defconfig (clang-10): 12 errors
+    omap1_defconfig (gcc-8): 2 warnings
+
+i386:
+    allmodconfig (clang-10): 3 errors, 29 warnings
+    allmodconfig (clang-11): 3 errors, 30 warnings
+
+mips:
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+    rm200_defconfig (gcc-8): 1 warning
+    xway_defconfig (gcc-8): 2 warnings
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-11): 1 warning
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+    allmodconfig (clang-10): 1 error, 3 warnings
+    allmodconfig (gcc-8): 66 warnings
+    allmodconfig (clang-11): 1 error, 6 warnings
+    tinyconfig (gcc-8): 1 warning
+    x86_64_defconfig (clang-11): 2 warnings
+    x86_64_defconfig (clang-10): 2 warnings
+
+Errors summary:
+
+    2    ld.lld: error: undefined symbol: __compiletime_assert_420
+    2    ld.lld: error: undefined symbol: __compiletime_assert_1282
+    2    drivers/gpu/drm/i915/gt/selftest_execlists.c:1783:4: error: format=
+ string is not a string literal (potentially insecure) [-Werror,-Wformat-se=
+curity]
+    2    drivers/gpu/drm/i915/gt/selftest_execlists.c:1766:4: error: format=
+ string is not a string literal (potentially insecure) [-Werror,-Wformat-se=
+curity]
+    2    drivers/gpu/drm/i915/gt/selftest_execlists.c:143:4: error: format =
+string is not a string literal (potentially insecure) [-Werror,-Wformat-sec=
+urity]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3774C): reloca=
+tion R_ARM_PREL31 out of range: 2135589356 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x376AC): reloca=
+tion R_ARM_PREL31 out of range: 2135589516 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3769C): reloca=
+tion R_ARM_PREL31 out of range: 2135589532 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3764C): reloca=
+tion R_ARM_PREL31 out of range: 2135589612 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3763C): reloca=
+tion R_ARM_PREL31 out of range: 2135589628 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x37624): reloca=
+tion R_ARM_PREL31 out of range: 2135589652 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3760C): reloca=
+tion R_ARM_PREL31 out of range: 2135589676 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x375DC): reloca=
+tion R_ARM_PREL31 out of range: 2135589724 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x375AC): reloca=
+tion R_ARM_PREL31 out of range: 2135589772 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3756C): reloca=
+tion R_ARM_PREL31 out of range: 2135589836 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x37554): reloca=
+tion R_ARM_PREL31 out of range: 2135589860 is not in [-1073741824, 10737418=
+23]
+    1    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x34F38): reloca=
+tion R_ARM_PREL31 out of range: 2135534080 is not in [-1073741824, 10737418=
+23]
+
+Warnings summary:
+
+    42   1 warning generated.
+    11   2 warnings generated.
+    5    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_verify_id' exported twice. Previous export was in drivers/media/i2c/rdacm=
+20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_translation' exported twice. Previous export was in drivers/media/i2c=
+/rdacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_serial_link' exported twice. Previous export was in drivers/media/i2c=
+/rdacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_high_threshold' exported twice. Previous export was in drivers/media/=
+i2c/rdacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm=
+20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_deserializer_address' exported twice. Previous export was in drivers/=
+media/i2c/rdacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_set_address' exported twice. Previous export was in drivers/media/i2c/rda=
+cm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_enable_gpios' exported twice. Previous export was in drivers/media/i2c/rd=
+acm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_disable_gpios' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_configure_i2c' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_configure_gmsl_link' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    5    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max927=
+1_clear_gpios' exported twice. Previous export was in drivers/media/i2c/rda=
+cm20-camera_module.ko
+    4    drivers/media/i2c/imx334.c:793:55: warning: variable 'ret' is unin=
+itialized when used here [-Wuninitialized]
+    4    drivers/media/i2c/imx334.c:783:9: note: initialize the variable 'r=
+et' to silence this warning
+    4    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least=
+ version 4.6 of GCC [-W#warnings]
+    4    aarch64-linux-gnu-strip: warning: /scratch/linux/_modules_/lib/mod=
+ules/5.11.0-rc6-next-20210208/kernel/drivers/media/tuners/tuner-types.ko: u=
+nsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    4    #warning This code requires at least version 4.6 of GCC
+    3    ld.lld: warning: <internal>:(.eh_frame) is being placed in '.eh_fr=
+ame'
+    2    lib/bitfield_kunit.c:93:1: warning: the frame size of 11296 bytes =
+is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/tee/optee/rpc.c:494:6: warning: stack frame size of 1072 b=
+ytes in function 'optee_handle_rpc' [-Wframe-larger-than=3D]
+    2    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    2    drivers/staging/fbtft/fbtft-core.c:903:12: warning: stack frame si=
+ze of 1072 bytes in function 'fbtft_init_display_from_property' [-Wframe-la=
+rger-than=3D]
+    2    drivers/net/wireless/ralink/rt2x00/rt73usb.c:1283:1: warning: the =
+frame size of 2656 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/net/wireless/cisco/airo.c:3076:12: warning: stack frame si=
+ze of 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    2    drivers/net/ethernet/mellanox/mlx5/core/ipoib/ipoib.c:137:6: warni=
+ng: stack frame size of 1040 bytes in function 'mlx5i_get_stats' [-Wframe-l=
+arger-than=3D]
+    2    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: s=
+tack frame size of 1208 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe=
+-larger-than=3D]
+    2    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: s=
+tack frame size of 1148 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe=
+-larger-than=3D]
+    2    drivers/media/tuners/r820t.c:1327:1: warning: the frame size of 28=
+32 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/pci/saa7134/saa7134-cards.c:8074:1: warning: the fra=
+me size of 2128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/stv090x.c:3419:1: warning: the frame s=
+ize of 5280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/stv090x.c:3078:1: warning: the frame s=
+ize of 5888 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/stv090x.c:2125:1: warning: the frame s=
+ize of 2096 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/stv090x.c:1940:1: warning: the frame s=
+ize of 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/stv0367.c:1902:1: warning: the frame s=
+ize of 3296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/media/dvb-frontends/cxd2841er.c:3640:1: warning: the frame=
+ size of 2784 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/tiny/ili9225.c:281:1: warning: the frame size of 2=
+720 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack fra=
+me size of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_=
+calc_30.c:963:13: warning: stack frame size of 1036 bytes in function 'dml_=
+rq_dlg_get_dlg_params' [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.c:450:13:=
+ warning: stack frame size of 1564 bytes in function 'dcn_bw_calc_rq_dlg_tt=
+u' [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: =
+warning: stack frame size of 5704 bytes in function 'calculate_bandwidth' [=
+-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3005:6:=
+ warning: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-la=
+rger-than=3D]
+    2    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame=
+ size of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    2    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    {standard input}:39: Warning: macro instruction expanded into mult=
+iple instructions
+    1    net/wireless/nl80211.c:7349:1: warning: the frame size of 2272 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:7349:1: warning: the frame size of 2256 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:7349:1: warning: the frame size of 2240 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:5962:1: warning: the frame size of 2912 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:5962:1: warning: the frame size of 2904 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:5962:1: warning: the frame size of 2872 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:2787:1: warning: the frame size of 5360 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:2787:1: warning: the frame size of 5296 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:2787:1: warning: the frame size of 5248 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:1969:1: warning: the frame size of 2248 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:1969:1: warning: the frame size of 2216 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/wireless/nl80211.c:1969:1: warning: the frame size of 2208 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/ipv4/tcp.c:3893:1: warning: the frame size of 2056 bytes is la=
+rger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2256 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2224 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2216 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/caif/cfctrl.c:549:1: warning: the frame size of 2624 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/caif/cfctrl.c:549:1: warning: the frame size of 2592 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/caif/cfctrl.c:549:1: warning: the frame size of 2576 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:306:1: warning: the frame size of 2200 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:306:1: warning: the frame size of 2152 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:306:1: warning: the frame size of 2144 byt=
+es is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2744 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2696 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2672 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/test_kasan.c:804:1: warning: the frame size of 2416 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/test_kasan.c:804:1: warning: the frame size of 2384 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/test_kasan.c:804:1: warning: the frame size of 2160 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/test_kasan.c:787:1: warning: the frame size of 2160 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/test_kasan.c:787:1: warning: the frame size of 2128 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0xf2: call to=
+ do_strnlen_user() with UACCESS enabled
+    1    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x398: call t=
+o __ubsan_handle_add_overflow() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x3=
+ce: call to __ubsan_handle_add_overflow() with UACCESS enabled
+    1    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x1=
+3c: call to do_strncpy_from_user() with UACCESS enabled
+    1    lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 2=
+384 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 2=
+112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    lib/bitfield_kunit.c:93:1: warning: the frame size of 11216 bytes =
+is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2368 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2336 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2184 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/super.c:1197:1: warning: the frame size of 3184 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/super.c:1197:1: warning: the frame size of 3176 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/super.c:1197:1: warning: the frame size of 2688 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/namei.c:2072:1: warning: the frame size of 2064 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2616 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2592 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2480 bytes is =
+larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/dlm/dlmrecovery.c:737:1: warning: the frame size of 2112 =
+bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/dlm/dlmrecovery.c:737:1: warning: the frame size of 2072 =
+bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/aops.c:1884:1: warning: the frame size of 2128 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    fs/ocfs2/aops.c:1884:1: warning: the frame size of 2112 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/staging/wlan-ng/cfg80211.c:272:12: warning: stack frame si=
+ze of 1032 bytes in function 'prism2_scan' [-Wframe-larger-than=3D]
+    1    drivers/staging/rtl8723bs/hal/HalBtc8723b2Ant.c:2756:1: warning: t=
+he frame size of 2504 bytes is larger than 2048 bytes [-Wframe-larger-than=
+=3D]
+    1    drivers/staging/media/atomisp/pci/atomisp_cmd.c:5600:5: warning: s=
+tack frame size of 1068 bytes in function 'atomisp_set_fmt' [-Wframe-larger=
+-than=3D]
+    1    drivers/staging/media/atomisp/pci/atomisp_cmd.c:5600:5: warning: s=
+tack frame size of 1048 bytes in function 'atomisp_set_fmt' [-Wframe-larger=
+-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:995:5: warning: stack frame siz=
+e of 1216 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:995:5: warning: stack frame siz=
+e of 1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    1    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size=
+ of 1856 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-la=
+rger-than=3D]
+    1    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size=
+ of 1848 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-la=
+rger-than=3D]
+    1    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size=
+ of 1756 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-la=
+rger-than=3D]
+    1    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size=
+ of 1752 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-la=
+rger-than=3D]
+    1    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: wa=
+rning: the frame size of 4240 bytes is larger than 2048 bytes [-Wframe-larg=
+er-than=3D]
+    1    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: wa=
+rning: the frame size of 4224 bytes is larger than 2048 bytes [-Wframe-larg=
+er-than=3D]
+    1    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: wa=
+rning: the frame size of 4216 bytes is larger than 2048 bytes [-Wframe-larg=
+er-than=3D]
+    1    drivers/net/wireless/ralink/rt2x00/rt73usb.c:1283:1: warning: the =
+frame size of 2688 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the=
+ frame size of 2568 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the=
+ frame size of 2472 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the=
+ frame size of 2464 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992=
+:1: warning: the frame size of 2544 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992=
+:1: warning: the frame size of 2480 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992=
+:1: warning: the frame size of 2448 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894=
+:1: warning: the frame size of 3184 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894=
+:1: warning: the frame size of 3136 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894=
+:1: warning: the frame size of 3128 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552=
+:1: warning: the frame size of 3256 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552=
+:1: warning: the frame size of 3168 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552=
+:1: warning: the frame size of 3152 bytes is larger than 2048 bytes [-Wfram=
+e-larger-than=3D]
+    1    drivers/net/wireguard/selftest/allowedips.c:675:1: warning: the fr=
+ame size of 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/wireguard/selftest/allowedips.c:675:1: warning: the fr=
+ame size of 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2120 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2088 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2080 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/macsec.c:3252:1: warning: the frame size of 4176 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/macsec.c:3252:1: warning: the frame size of 4080 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/macsec.c:3252:1: warning: the frame size of 4040 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the fra=
+me size of 2400 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the fra=
+me size of 2368 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the fra=
+me size of 2360 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/ethernet/lantiq_etop.c:281:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unuse=
+d_result [-Wunused-result]
+    1    drivers/net/ethernet/lantiq_etop.c:273:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unuse=
+d_result [-Wunused-result]
+    1    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size =
+of 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size =
+of 2104 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size =
+of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/mtd/chips/cfi_cmdset_0001.c:1871:12: warning: stack frame =
+size of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=
+=3D]
+    1    drivers/mtd/chips/cfi_cmdset_0001.c:1871:12: warning: stack frame =
+size of 1056 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=
+=3D]
+    1    drivers/media/tuners/r820t.c:1327:1: warning: the frame size of 28=
+16 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/pci/saa7134/saa7134-cards.c:8074:1: warning: the fra=
+me size of 2144 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3992=
+ bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3968=
+ bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3952=
+ bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame s=
+ize of 2128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame s=
+ize of 2104 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame s=
+ize of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame s=
+ize of 4880 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame s=
+ize of 2808 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame s=
+ize of 2784 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:3419:1: warning: the frame s=
+ize of 5248 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:3078:1: warning: the frame s=
+ize of 5872 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame s=
+ize of 2336 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame s=
+ize of 2328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame s=
+ize of 2296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2125:1: warning: the frame s=
+ize of 2136 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame s=
+ize of 2576 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame s=
+ize of 2568 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame s=
+ize of 2544 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1940:1: warning: the frame s=
+ize of 3296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame s=
+ize of 3016 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame s=
+ize of 3008 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame s=
+ize of 3000 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame s=
+ize of 5328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame s=
+ize of 5320 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame s=
+ize of 5312 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame s=
+ize of 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame s=
+ize of 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame s=
+ize of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame s=
+ize of 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame s=
+ize of 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame s=
+ize of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1111:1: warning: the frame s=
+ize of 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv090x.c:1111:1: warning: the frame s=
+ize of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/stv0367.c:1902:1: warning: the frame s=
+ize of 3328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/cxd2841er.c:3640:1: warning: the frame=
+ size of 2816 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame=
+ size of 2768 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame=
+ size of 2736 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame=
+ size of 2720 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/tiny/ili9225.c:281:1: warning: the frame size of 2=
+768 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the =
+frame size of 2152 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the =
+frame size of 2096 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the =
+frame size of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_prefault_relocations()+0xc6: stack state mismatch: cfa1=3D7+8 cfa2=3D-1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_prefault_relocations()+0xb8: stack state mismatch: cfa1=3D7+8 cfa2=3D-1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_copy_relocations()+0x259: stack state mismatch: cfa1=3D7+104 cfa2=3D-1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_copy_relocations()+0x249: stack state mismatch: cfa1=3D7+104 cfa2=3D-1+0
+    1    drivers/gpu/drm/bridge/tc358768.c:843:1: warning: the frame size o=
+f 2064 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/bridge/tc358768.c:843:1: warning: the frame size o=
+f 2056 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dml1_display_rq_dlg_c=
+alc.c:979:6: warning: stack frame size of 1228 bytes in function 'dml1_rq_d=
+lg_get_dlg_params' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dml1_display_rq_dlg_c=
+alc.c:979:6: warning: stack frame size of 1180 bytes in function 'dml1_rq_d=
+lg_get_dlg_params' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_=
+calc_21.c:811:13: warning: stack frame size of 1036 bytes in function 'dml_=
+rq_dlg_get_dlg_params' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3393:6: warning: stack frame size of 1548 bytes in function 'dml21_M=
+odeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:3393:6: warning: stack frame size of 1532 bytes in function 'dml21_M=
+odeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1463:13: warning: stack frame size of 1212 bytes in function 'DISPCL=
+KDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation=
+' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vb=
+a_21.c:1463:13: warning: stack frame size of 1164 bytes in function 'DISPCL=
+KDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation=
+' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: warning: stack frame size of 1452 bytes in function 'dml20=
+v2_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:3393:6: warning: stack frame size of 1436 bytes in function 'dml20=
+v2_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: warning: stack frame size of 1212 bytes in function 'dml2=
+0v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceC=
+alculation' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20v2.c:1145:13: warning: stack frame size of 1196 bytes in function 'dml2=
+0v2_DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceC=
+alculation' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: warning: stack frame size of 1436 bytes in function 'dml20_M=
+odeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:3286:6: warning: stack frame size of 1420 bytes in function 'dml20_M=
+odeSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: warning: stack frame size of 1228 bytes in function 'dml20_=
+DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcu=
+lation' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vb=
+a_20.c:1085:13: warning: stack frame size of 1196 bytes in function 'dml20_=
+DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcu=
+lation' [-Wframe-larger-than=3D]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    crypto/wp512.c:782:13: warning: stack frame size of 1272 bytes in =
+function 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1    crypto/wp512.c:782:13: warning: stack frame size of 1256 bytes in =
+function 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1    clang: warning: argument unused during compilation: '-no-pie' [-Wu=
+nused-command-line-argument]
+    1    arch/x86/kvm/x86.c:5042:1: warning: the frame size of 2096 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    arch/x86/kernel/cpu/mshyperv.c:443:1: warning: the frame size of 3=
+880 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    arch/arm/mach-omap1/board-h2.c:347:34: warning: =E2=80=98isp1301_g=
+piod_table=E2=80=99 defined but not used [-Wunused-variable]
+    1    arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =E2=80=98am=
+s_delta_camera_power=E2=80=99 defined but not used [-Wunused-function]
+    1    /tmp/test-arm-85acc5.s:18792: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/test-arm-85acc5.s:18717: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/test-arm-704502.s:18794: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/test-arm-704502.s:18719: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/cccRRknP.s:18195: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/cccRRknP.s:18123: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1182:warning: override: UNWINDER_GUESS changes choice state
+    1    ./usr/include/linux/bcache.h:355:2: warning: field '' with variabl=
+e sized type 'union jset::(anonymous at ./usr/include/linux/bcache.h:355:2)=
+' not at the end of a struct or class is a GNU extension [-Wgnu-variable-si=
+zed-type-not-at-end]
+    1    ./usr/include/linux/bcache.h:354:2: warning: field '' with variabl=
+e sized type 'union jset::(anonymous at ./usr/include/linux/bcache.h:354:2)=
+' not at the end of a struct or class is a GNU extension [-Wgnu-variable-si=
+zed-type-not-at-end]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-10) =E2=80=94 FAIL, 1 error, 3 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __compiletime_assert_1282
+
+Warnings:
+    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x3ce: c=
+all to __ubsan_handle_add_overflow() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0x398: call to __u=
+bsan_handle_add_overflow() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 49 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame size=
+ of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1 warning generated.
+    /tmp/test-arm-704502.s:18719: Warning: using r15 results in unpredictab=
+le behaviour
+    /tmp/test-arm-704502.s:18794: Warning: using r15 results in unpredictab=
+le behaviour
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    crypto/wp512.c:782:13: warning: stack frame size of 1272 bytes in funct=
+ion 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack frame si=
+ze of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size of 1=
+848 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/net/wireless/cisco/airo.c:3076:12: warning: stack frame size of=
+ 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/media/i2c/imx334.c:793:55: warning: variable 'ret' is uninitial=
+ized when used here [-Wuninitialized]
+    drivers/media/i2c/imx334.c:783:9: note: initialize the variable 'ret' t=
+o silence this warning
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3005:6: warn=
+ing: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-larger-=
+than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: warni=
+ng: stack frame size of 5704 bytes in function 'calculate_bandwidth' [-Wfra=
+me-larger-than=3D]
+    2 warnings generated.
+    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: stack =
+frame size of 1208 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe-larg=
+er-than=3D]
+    1 warning generated.
+    drivers/staging/wlan-ng/cfg80211.c:272:12: warning: stack frame size of=
+ 1032 bytes in function 'prism2_scan' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/ethernet/mellanox/mlx5/core/ipoib/ipoib.c:137:6: warning: s=
+tack frame size of 1040 bytes in function 'mlx5i_get_stats' [-Wframe-larger=
+-than=3D]
+    1 warning generated.
+    drivers/mtd/chips/cfi_cmdset_0001.c:1871:12: warning: stack frame size =
+of 1056 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/staging/fbtft/fbtft-core.c:995:5: warning: stack frame size of =
+1216 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    drivers/staging/fbtft/fbtft-core.c:903:12: warning: stack frame size of=
+ 1072 bytes in function 'fbtft_init_display_from_property' [-Wframe-larger-=
+than=3D]
+    2 warnings generated.
+    drivers/tee/optee/rpc.c:494:6: warning: stack frame size of 1072 bytes =
+in function 'optee_handle_rpc' [-Wframe-larger-than=3D]
+    1 warning generated.
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_serial_link' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_high_threshold' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/=
+rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_cle=
+ar_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ena=
+ble_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20=
+-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_dis=
+able_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ver=
+ify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_deserializer_address' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_translation' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 66 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    arch/x86/kernel/cpu/mshyperv.c:443:1: warning: the frame size of 3880 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    arch/x86/kvm/x86.c:5042:1: warning: the frame size of 2096 bytes is lar=
+ger than 2048 bytes [-Wframe-larger-than=3D]
+    lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 2384 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    lib/test_kasan.c:787:1: warning: the frame size of 2128 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    lib/test_kasan.c:804:1: warning: the frame size of 2384 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    lib/bitfield_kunit.c:93:1: warning: the frame size of 11216 bytes is la=
+rger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/bridge/tc358768.c:843:1: warning: the frame size of 206=
+4 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:1969:1: warning: the frame size of 2216 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:7349:1: warning: the frame size of 2240 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/tiny/ili9225.c:281:1: warning: the frame size of 2720 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:2787:1: warning: the frame size of 5296 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:5962:1: warning: the frame size of 2904 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the frame=
+ size of 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size of 20=
+80 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireguard/selftest/allowedips.c:675:1: warning: the frame s=
+ize of 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2088 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552:1: w=
+arning: the frame size of 3152 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894:1: w=
+arning: the frame size of 3128 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992:1: w=
+arning: the frame size of 2448 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: warning=
+: the frame size of 4216 bytes is larger than 2048 bytes [-Wframe-larger-th=
+an=3D]
+    drivers/media/tuners/r820t.c:1327:1: warning: the frame size of 2832 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3952 byte=
+s is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the fram=
+e size of 2472 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/ralink/rt2x00/rt73usb.c:1283:1: warning: the frame=
+ size of 2656 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2696 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:306:1: warning: the frame size of 2152 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/macsec.c:3252:1: warning: the frame size of 4040 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/pci/saa7134/saa7134-cards.c:8074:1: warning: the frame si=
+ze of 2128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame size o=
+f 2328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame size o=
+f 3016 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame size o=
+f 2104 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1940:1: warning: the frame size o=
+f 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame size o=
+f 5320 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame size o=
+f 2568 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2125:1: warning: the frame size o=
+f 2096 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1111:1: warning: the frame size o=
+f 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame size o=
+f 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame size o=
+f 2808 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame size o=
+f 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3078:1: warning: the frame size o=
+f 5888 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3419:1: warning: the frame size o=
+f 5280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv0367.c:1902:1: warning: the frame size o=
+f 3296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame size=
+ of 2720 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3640:1: warning: the frame size=
+ of 2784 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/dlm/dlmrecovery.c:737:1: warning: the frame size of 2072 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/staging/rtl8723bs/hal/HalBtc8723b2Ant.c:2756:1: warning: the fr=
+ame size of 2504 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/aops.c:1884:1: warning: the frame size of 2112 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    net/caif/cfctrl.c:549:1: warning: the frame size of 2592 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2224 bytes =
+is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2616 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the frame si=
+ze of 2360 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/super.c:1197:1: warning: the frame size of 3176 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2336 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_serial_link' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_high_threshold' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/=
+rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_cle=
+ar_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ena=
+ble_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20=
+-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_dis=
+able_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ver=
+ify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_deserializer_address' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_translation' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __compiletime_assert_420
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 61 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/crypto/curve25519-hacl64.c:601:1: warning: the frame size of 2112 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    lib/test_kasan.c:787:1: warning: the frame size of 2160 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    lib/test_kasan.c:804:1: warning: the frame size of 2416 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:1969:1: warning: the frame size of 2208 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:7349:1: warning: the frame size of 2256 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:2787:1: warning: the frame size of 5360 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    lib/bitfield_kunit.c:93:1: warning: the frame size of 11296 bytes is la=
+rger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:5962:1: warning: the frame size of 2912 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2672 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:306:1: warning: the frame size of 2144 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/caif/cfctrl.c:549:1: warning: the frame size of 2624 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2256 bytes =
+is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/tiny/ili9225.c:281:1: warning: the frame size of 2720 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the frame=
+ size of 2096 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size of 21=
+12 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/dlm/dlmrecovery.c:737:1: warning: the frame size of 2112 bytes=
+ is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/aops.c:1884:1: warning: the frame size of 2128 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/namei.c:2072:1: warning: the frame size of 2064 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2592 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2368 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/super.c:1197:1: warning: the frame size of 3184 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2080 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552:1: w=
+arning: the frame size of 3168 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894:1: w=
+arning: the frame size of 3136 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992:1: w=
+arning: the frame size of 2544 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/macsec.c:3252:1: warning: the frame size of 4176 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/tuners/r820t.c:1327:1: warning: the frame size of 2832 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3968 byte=
+s is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: warning=
+: the frame size of 4224 bytes is larger than 2048 bytes [-Wframe-larger-th=
+an=3D]
+    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the fram=
+e size of 2464 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/ralink/rt2x00/rt73usb.c:1283:1: warning: the frame=
+ size of 2656 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/pci/saa7134/saa7134-cards.c:8074:1: warning: the frame si=
+ze of 2128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame size o=
+f 2336 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame size o=
+f 3008 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame size o=
+f 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1940:1: warning: the frame size o=
+f 3280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame size o=
+f 5312 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame size o=
+f 2576 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2125:1: warning: the frame size o=
+f 2096 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1111:1: warning: the frame size o=
+f 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame size o=
+f 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame size o=
+f 2784 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame size o=
+f 2080 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3078:1: warning: the frame size o=
+f 5888 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3419:1: warning: the frame size o=
+f 5280 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv0367.c:1902:1: warning: the frame size o=
+f 3296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the frame si=
+ze of 2368 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame size=
+ of 2736 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3640:1: warning: the frame size=
+ of 2784 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_serial_link' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_high_threshold' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/=
+rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_cle=
+ar_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ena=
+ble_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20=
+-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_dis=
+able_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ver=
+ify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_deserializer_address' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_translation' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-11) =E2=80=94 FAIL, 1 error, 6 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __compiletime_assert_1282
+
+Warnings:
+    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    ./usr/include/linux/bcache.h:354:2: warning: field '' with variable siz=
+ed type 'union jset::(anonymous at ./usr/include/linux/bcache.h:354:2)' not=
+ at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-t=
+ype-not-at-end]
+    ./usr/include/linux/bcache.h:355:2: warning: field '' with variable siz=
+ed type 'union jset::(anonymous at ./usr/include/linux/bcache.h:355:2)' not=
+ at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-t=
+ype-not-at-end]
+    2 warnings generated.
+    lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x13c: c=
+all to do_strncpy_from_user() with UACCESS enabled
+    lib/strnlen_user.o: warning: objtool: strnlen_user()+0xf2: call to do_s=
+trnlen_user() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-10) =E2=80=94 FAIL, 3 errors, 29 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:143:4: error: format strin=
+g is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:1766:4: error: format stri=
+ng is not a string literal (potentially insecure) [-Werror,-Wformat-securit=
+y]
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:1783:4: error: format stri=
+ng is not a string literal (potentially insecure) [-Werror,-Wformat-securit=
+y]
+
+Warnings:
+    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size of 1=
+756 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/media/i2c/imx334.c:793:55: warning: variable 'ret' is uninitial=
+ized when used here [-Wuninitialized]
+    drivers/media/i2c/imx334.c:783:9: note: initialize the variable 'ret' t=
+o silence this warning
+    1 warning generated.
+    drivers/staging/media/atomisp/pci/atomisp_cmd.c:5600:5: warning: stack =
+frame size of 1068 bytes in function 'atomisp_set_fmt' [-Wframe-larger-than=
+=3D]
+    1 warning generated.
+    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: stack =
+frame size of 1148 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe-larg=
+er-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.c:450:13: warn=
+ing: stack frame size of 1564 bytes in function 'dcn_bw_calc_rq_dlg_ttu' [-=
+Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dml1_display_rq_dlg_calc.c=
+:979:6: warning: stack frame size of 1180 bytes in function 'dml1_rq_dlg_ge=
+t_dlg_params' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_rq_dlg_calc_=
+21.c:811:13: warning: stack frame size of 1036 bytes in function 'dml_rq_dl=
+g_get_dlg_params' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:963:13: warning: stack frame size of 1036 bytes in function 'dml_rq_dl=
+g_get_dlg_params' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: warning: stack frame size of 1196 bytes in function 'dml20_DISPC=
+LKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculatio=
+n' [-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: warning: stack frame size of 1420 bytes in function 'dml20_ModeSu=
+pportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: warning: stack frame size of 1196 bytes in function 'dml20v2_D=
+ISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcul=
+ation' [-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: warning: stack frame size of 1436 bytes in function 'dml20v2_Mo=
+deSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1463:13: warning: stack frame size of 1164 bytes in function 'DISPCLKDPPC=
+LKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-W=
+frame-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3393:6: warning: stack frame size of 1548 bytes in function 'dml21_ModeSu=
+pportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-11) =E2=80=94 FAIL, 3 errors, 30 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:143:4: error: format strin=
+g is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:1766:4: error: format stri=
+ng is not a string literal (potentially insecure) [-Werror,-Wformat-securit=
+y]
+    drivers/gpu/drm/i915/gt/selftest_execlists.c:1783:4: error: format stri=
+ng is not a string literal (potentially insecure) [-Werror,-Wformat-securit=
+y]
+
+Warnings:
+    WARNING: unmet direct dependencies detected for DRM_I915_WERROR
+    ld.lld: warning: <internal>:(.eh_frame) is being placed in '.eh_frame'
+    ld.lld: warning: <internal>:(.eh_frame) is being placed in '.eh_frame'
+    ld.lld: warning: <internal>:(.eh_frame) is being placed in '.eh_frame'
+    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size of 1=
+752 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/media/i2c/imx334.c:793:55: warning: variable 'ret' is uninitial=
+ized when used here [-Wuninitialized]
+    drivers/media/i2c/imx334.c:783:9: note: initialize the variable 'ret' t=
+o silence this warning
+    1 warning generated.
+    drivers/staging/media/atomisp/pci/atomisp_cmd.c:5600:5: warning: stack =
+frame size of 1048 bytes in function 'atomisp_set_fmt' [-Wframe-larger-than=
+=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dcn_calcs.c:450:13: warn=
+ing: stack frame size of 1564 bytes in function 'dcn_bw_calc_rq_dlg_ttu' [-=
+Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: stack =
+frame size of 1148 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe-larg=
+er-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dml1_display_rq_dlg_calc.c=
+:979:6: warning: stack frame size of 1228 bytes in function 'dml1_rq_dlg_ge=
+t_dlg_params' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:1085:13: warning: stack frame size of 1228 bytes in function 'dml20_DISPC=
+LKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculatio=
+n' [-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:1145:13: warning: stack frame size of 1212 bytes in function 'dml20v2_D=
+ISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalcul=
+ation' [-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
+c:3286:6: warning: stack frame size of 1436 bytes in function 'dml20_ModeSu=
+pportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20v=
+2.c:3393:6: warning: stack frame size of 1452 bytes in function 'dml20v2_Mo=
+deSupportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    2 warnings generated.
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:1463:13: warning: stack frame size of 1212 bytes in function 'DISPCLKDPPC=
+LKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-W=
+frame-larger-than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn21/display_mode_vba_21.=
+c:3393:6: warning: stack frame size of 1532 bytes in function 'dml21_ModeSu=
+pportAndSystemConfigurationFull' [-Wframe-larger-than=3D]
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_rq_dlg_calc_=
+30.c:963:13: warning: stack frame size of 1036 bytes in function 'dml_rq_dl=
+g_get_dlg_params' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 1836 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-11) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    ld.lld: error: undefined symbol: __compiletime_assert_420
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-11) =E2=80=94 PASS, 0 errors, 47 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame size=
+ of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1 warning generated.
+    /tmp/test-arm-85acc5.s:18717: Warning: using r15 results in unpredictab=
+le behaviour
+    /tmp/test-arm-85acc5.s:18792: Warning: using r15 results in unpredictab=
+le behaviour
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    crypto/wp512.c:782:13: warning: stack frame size of 1256 bytes in funct=
+ion 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack frame si=
+ze of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/scsi/bfa/bfa_fcs_lport.c:1900:1: warning: stack frame size of 1=
+856 bytes in function 'bfa_fcs_lport_fdmi_build_rhba_pyld' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/net/wireless/cisco/airo.c:3076:12: warning: stack frame size of=
+ 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/media/i2c/imx334.c:793:55: warning: variable 'ret' is uninitial=
+ized when used here [-Wuninitialized]
+    drivers/media/i2c/imx334.c:783:9: note: initialize the variable 'ret' t=
+o silence this warning
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3005:6: warn=
+ing: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-larger-=
+than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: warni=
+ng: stack frame size of 5704 bytes in function 'calculate_bandwidth' [-Wfra=
+me-larger-than=3D]
+    2 warnings generated.
+    drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:638:12: warning: stack =
+frame size of 1208 bytes in function 'mlx5e_hairpin_rss_init' [-Wframe-larg=
+er-than=3D]
+    1 warning generated.
+    drivers/net/ethernet/mellanox/mlx5/core/ipoib/ipoib.c:137:6: warning: s=
+tack frame size of 1040 bytes in function 'mlx5i_get_stats' [-Wframe-larger=
+-than=3D]
+    1 warning generated.
+    drivers/mtd/chips/cfi_cmdset_0001.c:1871:12: warning: stack frame size =
+of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/staging/fbtft/fbtft-core.c:995:5: warning: stack frame size of =
+1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    drivers/staging/fbtft/fbtft-core.c:903:12: warning: stack frame size of=
+ 1072 bytes in function 'fbtft_init_display_from_property' [-Wframe-larger-=
+than=3D]
+    2 warnings generated.
+    drivers/tee/optee/rpc.c:494:6: warning: stack frame size of 1072 bytes =
+in function 'optee_handle_rpc' [-Wframe-larger-than=3D]
+    1 warning generated.
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_serial_link' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_high_threshold' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/=
+rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_cle=
+ar_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ena=
+ble_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20=
+-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_dis=
+able_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ver=
+ify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_deserializer_address' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_translation' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 60 warnings, 0 section =
+mismatches
+
+Warnings:
+    net/ipv4/tcp.c:3893:1: warning: the frame size of 2056 bytes is larger =
+than 2048 bytes [-Wframe-larger-than=3D]
+    /tmp/cccRRknP.s:18123: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/cccRRknP.s:18195: Warning: using r15 results in unpredictable beha=
+viour
+    lib/test_kasan.c:804:1: warning: the frame size of 2160 bytes is larger=
+ than 2048 bytes [-Wframe-larger-than=3D]
+    lib/bitfield_kunit.c:93:1: warning: the frame size of 11296 bytes is la=
+rger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:1969:1: warning: the frame size of 2248 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:2787:1: warning: the frame size of 5248 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:7349:1: warning: the frame size of 2272 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/wireless/nl80211.c:5962:1: warning: the frame size of 2872 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/tiny/ili9225.c:281:1: warning: the frame size of 2768 b=
+ytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/bridge/tc358768.c:843:1: warning: the frame size of 205=
+6 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/gpu/drm/panel/panel-sitronix-st7701.c:195:1: warning: the frame=
+ size of 2152 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:1663:1: warning: the frame size of 2744 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/bridge/br_netlink.c:306:1: warning: the frame size of 2200 bytes is=
+ larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/bonding/bond_netlink.c:685:1: warning: the frame size of 21=
+04 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireguard/selftest/allowedips.c:675:1: warning: the frame s=
+ize of 2088 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/tuners/r820t.c:1327:1: warning: the frame size of 2816 by=
+tes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/i2c/tvp5150.c:273:1: warning: the frame size of 3992 byte=
+s is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552:1: w=
+arning: the frame size of 3256 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16894:1: w=
+arning: the frame size of 3184 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:25992:1: w=
+arning: the frame size of 2480 bytes is larger than 2048 bytes [-Wframe-lar=
+ger-than=3D]
+    drivers/net/usb/r8152.c:5524:1: warning: the frame size of 2120 bytes i=
+s larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/caif/cfctrl.c:549:1: warning: the frame size of 2576 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/realtek/rtl818x/rtl8180/rtl8225se.c:386:1: warning=
+: the frame size of 4240 bytes is larger than 2048 bytes [-Wframe-larger-th=
+an=3D]
+    drivers/net/macsec.c:3252:1: warning: the frame size of 4080 bytes is l=
+arger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/ralink/rt2x00/rt2500usb.c:880:1: warning: the fram=
+e size of 2568 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/wireless/ralink/rt2x00/rt73usb.c:1283:1: warning: the frame=
+ size of 2688 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/pci/saa7134/saa7134-cards.c:8074:1: warning: the frame si=
+ze of 2144 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    net/ieee802154/nl802154.c:541:1: warning: the frame size of 2216 bytes =
+is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1842:1: warning: the frame size o=
+f 3000 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2125:1: warning: the frame size o=
+f 2136 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2496:1: warning: the frame size o=
+f 2296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4568:1: warning: the frame size o=
+f 2128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1940:1: warning: the frame size o=
+f 3296 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1583:1: warning: the frame size o=
+f 5328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1195:1: warning: the frame size o=
+f 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:4253:1: warning: the frame size o=
+f 4880 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:1152:1: warning: the frame size o=
+f 2112 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:2057:1: warning: the frame size o=
+f 2544 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3078:1: warning: the frame size o=
+f 5872 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv090x.c:3419:1: warning: the frame size o=
+f 5248 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/stv0367.c:1902:1: warning: the frame size o=
+f 3328 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3640:1: warning: the frame size=
+ of 2816 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/media/dvb-frontends/cxd2841er.c:3124:1: warning: the frame size=
+ of 2768 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/net/ethernet/rocker/rocker_ofdpa.c:560:1: warning: the frame si=
+ze of 2400 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/namei.c:1694:1: warning: the frame size of 2480 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/super.c:1197:1: warning: the frame size of 2688 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    fs/ocfs2/xattr.c:3678:1: warning: the frame size of 2184 bytes is large=
+r than 2048 bytes [-Wframe-larger-than=3D]
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_cle=
+ar_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/=
+rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_con=
+figure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_dis=
+able_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm2=
+0-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ena=
+ble_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20=
+-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-=
+camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_deserializer_address' exported twice. Previous export was in drivers/media=
+/i2c/rdacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_high_threshold' exported twice. Previous export was in drivers/media/i2c/r=
+dacm20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_serial_link' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set=
+_translation' exported twice. Previous export was in drivers/media/i2c/rdac=
+m20-camera_module.ko
+    WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_ver=
+ify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-ca=
+mera_module.ko
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 FAIL, 12 errors, 0 warnings, =
+0 section mismatches
+
+Errors:
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x34F38): relocation =
+R_ARM_PREL31 out of range: 2135534080 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x37554): relocation =
+R_ARM_PREL31 out of range: 2135589860 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3756C): relocation =
+R_ARM_PREL31 out of range: 2135589836 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x375AC): relocation =
+R_ARM_PREL31 out of range: 2135589772 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x375DC): relocation =
+R_ARM_PREL31 out of range: 2135589724 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3760C): relocation =
+R_ARM_PREL31 out of range: 2135589676 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x37624): relocation =
+R_ARM_PREL31 out of range: 2135589652 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3763C): relocation =
+R_ARM_PREL31 out of range: 2135589628 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3764C): relocation =
+R_ARM_PREL31 out of range: 2135589612 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3769C): relocation =
+R_ARM_PREL31 out of range: 2135589532 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x376AC): relocation =
+R_ARM_PREL31 out of range: 2135589516 is not in [-1073741824, 1073741823]
+    ld.lld: error: .tmp_vmlinux.kallsyms1:(.ARM.exidx+0x3774C): relocation =
+R_ARM_PREL31 out of range: 2135589356 is not in [-1073741824, 1073741823]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-11) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    aarch64-linux-gnu-strip: warning: /scratch/linux/_modules_/lib/modules/=
+5.11.0-rc6-next-20210208/kernel/drivers/media/tuners/tuner-types.ko: unsupp=
+orted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    aarch64-linux-gnu-strip: warning: /scratch/linux/_modules_/lib/modules/=
+5.11.0-rc6-next-20210208/kernel/drivers/media/tuners/tuner-types.ko: unsupp=
+orted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 PASS, 0 er=
+rors, 1 warning, 0 section mismatches
+
+Warnings:
+    aarch64-linux-gnu-strip: warning: /scratch/linux/_modules_/lib/modules/=
+5.11.0-rc6-next-20210208/kernel/drivers/media/tuners/tuner-types.ko: unsupp=
+orted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-11) =E2=80=94 PASS, 0 er=
+rors, 1 warning, 0 section mismatches
+
+Warnings:
+    aarch64-linux-gnu-strip: warning: /scratch/linux/_modules_/lib/modules/=
+5.11.0-rc6-next-20210208/kernel/drivers/media/tuners/tuner-types.ko: unsupp=
+orted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-11) =E2=80=94 PASS, 0 errors, 1 warn=
+ing, 0 section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-no-pie' [-Wunused=
+-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    {standard input}:39: Warning: macro instruction expanded into multiple =
+instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-11) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/mach-omap1/board-h2.c:347:34: warning: =E2=80=98isp1301_gpiod_=
+table=E2=80=99 defined but not used [-Wunused-variable]
+    arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =E2=80=98ams_del=
+ta_camera_power=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    .config:1182:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-11) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_pr=
+efault_relocations()+0xb8: stack state mismatch: cfa1=3D7+8 cfa2=3D-1+0
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_co=
+py_relocations()+0x259: stack state mismatch: cfa1=3D7+104 cfa2=3D-1+0
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_pr=
+efault_relocations()+0xc6: stack state mismatch: cfa1=3D7+8 cfa2=3D-1+0
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_co=
+py_relocations()+0x249: stack state mismatch: cfa1=3D7+104 cfa2=3D-1+0
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/net/ethernet/lantiq_etop.c:273:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_res=
+ult [-Wunused-result]
+    drivers/net/ethernet/lantiq_etop.c:281:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_res=
+ult [-Wunused-result]
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---
+For more info write to <info@kernelci.org>

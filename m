@@ -2,104 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C94313F87
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 20:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9062F314063
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 21:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbhBHTup (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 14:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236492AbhBHTtW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 14:49:22 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F38C06178A;
-        Mon,  8 Feb 2021 11:48:42 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id u143so4164883pfc.7;
-        Mon, 08 Feb 2021 11:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1fPnxhE6fFGIPEhit0ESVSOZWCpc1SGO+mkWO2gbahM=;
-        b=kWBoCHMew4BYyhsY0g0hsrwgyfyxM9nJYCD6xmbJIiwqiZXahaWqvy0RLC3NXBvcES
-         aZQ9Y88vfnW4+eb7tz5L+f2OmkgigZQhp4kGWDumBViXjanTsh0GoBgYsq6xbY4hx9Zo
-         kNmhFveJiWoB9E8oc+UZVG/SBvVTbGVwppR5N4iKGa84JOEBAh/917mknf7ro7AJsSiU
-         qcKNpoLIqDbwXsA28vpDoYDu+kP6bUGilkU4dUVtENQunwgiOe1scFxoMOYtRBVyT/XA
-         sHLQXVPJwukOYA5oEwEWuJEtBhPOojNmUk//o1RCSA163+9U6F6Ozgvxm3YGhMUX5g+h
-         Fg6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1fPnxhE6fFGIPEhit0ESVSOZWCpc1SGO+mkWO2gbahM=;
-        b=HVTjVMN0e/O5DDgrnPPfMKNnZFrinKvJIl3NZ7GmkdOl6IsJChCpBVt2AbUDT9I1Cq
-         YXlndF/XXjHs+UeMd31CI7nsVKisXQP7DJRMhbuxl6Rc583/H+RGt5mtd4NRr5WaSz+d
-         xzPIpYEUq2TuAYK8e9AwketmdZ1WRzQkKz4vnSQhIbvniZPJlcaQ1Agrlb4w3NmUdPFu
-         qejhB6pDC5gNBx9wi3F88m8LyYZHULBGY6wAufY5o2pBazr8Md0JnF0Aom6hdvmYana3
-         sMpfXLG73090VIbL/e1EjdGFANPM9A59sbBOeKNgcYheSFxNRMH+vrkEIvFpWPdQ+CXs
-         zH+A==
-X-Gm-Message-State: AOAM532AYoc5CGbAYyQj0+vwy4dxkwgvmw+al0nrRk9GuahrM+yt8QN2
-        1J3ft7lHJfxuCFC+UEfhH5/kG49pUV9lz15qBMI=
-X-Google-Smtp-Source: ABdhPJwna7HMJ3JIYqemfJkRAh2VJqn5btLVb+ORnXuyyKuHq2LsqughYNMcQrax44PQu97+rcTykLHE8k3zSTF8HIM=
-X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
- 66-20020a6204450000b029019c162bbbefmr19817254pfe.40.1612813722069; Mon, 08
- Feb 2021 11:48:42 -0800 (PST)
+        id S235825AbhBHUY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 15:24:57 -0500
+Received: from mga02.intel.com ([134.134.136.20]:51829 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236833AbhBHUXh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 8 Feb 2021 15:23:37 -0500
+IronPort-SDR: zzYnv3LtoB005kWmfBDBMZDWhlcyrGGaW7owBxSl/Z5ZBxXUrzoGIxmrbNnjzsRqzMidI4zAK+
+ 9hbKhX4RjeBQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="168898420"
+X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
+   d="scan'208";a="168898420"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 12:21:51 -0800
+IronPort-SDR: D3ifbHwtH5uTd1WA/Ljp2FMEDMmcEdeaxPZP6u3SGlkNCW81vNNfUbNzuieTVgq+6wO7qTobuJ
+ XOxPH7wqgN7g==
+X-IronPort-AV: E=Sophos;i="5.81,163,1610438400"; 
+   d="scan'208";a="411187625"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 12:21:49 -0800
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 79D17209D5; Mon,  8 Feb 2021 22:21:47 +0200 (EET)
+Date:   Mon, 8 Feb 2021 22:21:47 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
+Message-ID: <20210208202147.GZ32460@paasikivi.fi.intel.com>
+References: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-References: <20210205115153.799dc024@canb.auug.org.au> <CAHp75VfiyAtxg+wqZ30kSzCfFFsLndLjzrUc1njZG0x6vQeyBQ@mail.gmail.com>
- <CAHp75Vdrnmnu3vfmtEmnU=dH9tjoZtSZUtgDNXp29E90tT+j7A@mail.gmail.com>
- <3936997.7vkU7uULjK@kreacher> <CAHp75VcUP1475T_jWQkZkjhZrfNEZ6UaOopm5v1WBOPoriTE3Q@mail.gmail.com>
-In-Reply-To: <CAHp75VcUP1475T_jWQkZkjhZrfNEZ6UaOopm5v1WBOPoriTE3Q@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Feb 2021 21:48:26 +0200
-Message-ID: <CAHp75VfS=LgZfY6KTZeM7B+PgKpV3x_4zytszdaS=43A7BJEZQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 9:47 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Mon, Feb 8, 2021 at 9:30 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrot=
-e:
-> >
-> > On Friday, February 5, 2021 12:15:22 PM CET Andy Shevchenko wrote:
-> > > On Fri, Feb 5, 2021 at 11:14 AM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Friday, February 5, 2021, Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> > >
-> > > >> After merging the pm tree, today's linux-next build (x86_64 allmod=
-config)
-> > > >> failed like this:
-> > > >>
-> > > >
-> > > > Rafael, maybe I was unclear when explaining to you the dependencies=
- with the series of series, but all three parts should go ordered. In any c=
-ase it=E2=80=99s easy to fix. I will send you a PR late today of the immuta=
-ble tag (part 1) that needs to be included in order to avoid the above.
-> > >
-> > > PR had just been sent to linux-acpi@ and Rafael in Cc.
-> >
-> > I haven't seen that PR, though, in any of my inboxes etc.
-> >
-> > Can you please point me to an archive or similar where I can find it?
->
-> Sure, lore has it
->
-> https://lore.kernel.org/linux-acpi/YB0mPPgpIpQzhNXS@smile.fi.intel.com/T/=
-#u
+Hi Jacopo,
 
-If it is possible, please pull that PR and on top of that (re-)apply
-the MFD related series.
+On Mon, Feb 08, 2021 at 07:20:06PM +0100, Jacopo Mondi wrote:
+> With the introduction of the RDACM21 camera module support in
+> commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+> the symbols defined by the max9271 library were exported twice
+> if multiple users of the library were compiled in at the same time.
+> 
+> In example:
+> WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
+> 'max9271_set_serial_link' exported twice. Previous export was in
+> drivers/media/i2c/rdacm20-camera_module.ko
+> 
+> Fix this by making the rdacm21 file a module and have the driver
+> using its functions select it.
+> 
+> Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> ---
+>  drivers/media/i2c/Kconfig  | 5 +++++
+>  drivers/media/i2c/Makefile | 7 +++----
+>  2 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 2d3dc0d82f9e..84645f751da3 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
+> 
+>  source "drivers/media/i2c/m5mols/Kconfig"
+> 
+> +config VIDEO_MAX9271
 
---=20
-With Best Regards,
-Andy Shevchenko
+How about calling this VIDEO_MAX9271_HELPER instead? It's not a driver in
+the proper sense of the word.
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+> +	tristate
+> +
+>  config VIDEO_RDACM20
+>  	tristate "IMI RDACM20 camera support"
+>  	depends on I2C
+>  	select V4L2_FWNODE
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select MEDIA_CONTROLLER
+> +	select VIDEO_MAX9271
+>  	help
+>  	  This driver supports the IMI RDACM20 GMSL camera, used in
+>  	  ADAS systems.
+> @@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
+>  	select V4L2_FWNODE
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select MEDIA_CONTROLLER
+> +	select VIDEO_MAX9271
+>  	help
+>  	  This driver supports the IMI RDACM21 GMSL camera, used in
+>  	  ADAS systems.
+> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+> index 6bd22d63e1a7..c34a7de3158b 100644
+> --- a/drivers/media/i2c/Makefile
+> +++ b/drivers/media/i2c/Makefile
+> @@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
+>  obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
+>  obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+>  obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
+> -rdacm20-camera_module-objs	:= rdacm20.o max9271.o
+> -obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
+> -rdacm21-camera_module-objs	:= rdacm21.o max9271.o
+> -obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
+> +obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
+> +obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
+> +obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
+>  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+> 
+>  obj-$(CONFIG_SDR_MAX2175) += max2175.o
+
+-- 
+Kind regards,
+
+Sakari Ailus

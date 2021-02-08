@@ -2,179 +2,214 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986E4312D46
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 10:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E47312D5B
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 10:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbhBHJ2z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 04:28:55 -0500
-Received: from mga18.intel.com ([134.134.136.126]:24640 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231485AbhBHJ0w (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 8 Feb 2021 04:26:52 -0500
-IronPort-SDR: S/ISST09jyy+SUtOmfOlWAIbfIuC77OMlpSg9QeUcffugya2Uwt5tnZoqY4xVaCfZVwDtP+HHI
- ZLrhAJX4YLkw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9888"; a="169367583"
-X-IronPort-AV: E=Sophos;i="5.81,161,1610438400"; 
-   d="scan'208";a="169367583"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 01:24:59 -0800
-IronPort-SDR: XYpLvQcUd8ACZzWwabhcolCGs9tvWytDztxdqt31uv3R2FeAha3J2H6UmpoVe1LOhvp8Sn/oOr
- muZR2i5HUOJg==
-X-IronPort-AV: E=Sophos;i="5.81,161,1610438400"; 
-   d="scan'208";a="435568358"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 01:24:57 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 0DCF22082C; Mon,  8 Feb 2021 11:24:25 +0200 (EET)
-Date:   Mon, 8 Feb 2021 11:24:25 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: fix max9271 build dependencies
-Message-ID: <20210208092424.GP32460@paasikivi.fi.intel.com>
-References: <20210208113208.35449879@canb.auug.org.au>
- <20210208065315.1914616-1-mchehab+huawei@kernel.org>
- <20210208072701.GI32460@paasikivi.fi.intel.com>
- <20210208083616.3iulzo56mhn4ymmq@uno.localdomain>
- <20210208084147.GN32460@paasikivi.fi.intel.com>
- <20210208100822.76ca0c2e@coco.lan>
+        id S231393AbhBHJfd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 04:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231683AbhBHJcd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 04:32:33 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8231C061788
+        for <linux-next@vger.kernel.org>; Mon,  8 Feb 2021 01:31:52 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id jj19so23508282ejc.4
+        for <linux-next@vger.kernel.org>; Mon, 08 Feb 2021 01:31:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=U1QXB/h23taU5h8F+8gtZlTYZ1RSyUzqB5LCB1YoKQw=;
+        b=xwVJhtnKflT/7gBIuc+B8as2yXVLmx4VPg+cYPzntDEm0pTIFZfS174xy4E2DC6755
+         FNbshXgfUDlcAYq59axokXpixR2VXiOrVoHTK0imQnjySOJGfWO0S2qWzdZUMgXrWt8G
+         d/rXexGkiOrQCiS4YRT+qMBmiJKML+6tmPg4USyPiJd5wDAgdC48mzZ3OHcEuD26mi7C
+         NDr/S8L6yLy8TLGrvEmpEL7QNaPKCXzbM/eqsrMcuCdQvnp+g6f+yAiuZaeO3dWEFB3H
+         d9ZwKt2bDzBjRSOozkEr5EU6X3rmKkdSl5dMD/IxqQIHOKTjbLKW+Xk/DKl69j2iVfMy
+         LJVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=U1QXB/h23taU5h8F+8gtZlTYZ1RSyUzqB5LCB1YoKQw=;
+        b=lMhG/zxGK9+Dzqz1wG/yokCqXTrmF+INFTDnrDe1aLuX7579/cyjREygoMatIcd6lb
+         7jI5KH1ctpEbwfe5hsg9yiFtdBLJmNy/c9nBLk2nhMB6Vsj7qzWbv0tWQ1bwKM9w075i
+         7isXrDo46BtGA+vTkrG/P6apQQF6BZH9eK9Ubmq8+a8SCmr2R8dnBu+Gpr/9OpRFctVw
+         zvyyb+jnm9SlyD8MUDT7AqbZruz2y0R96SaS6V3JU3IWL2VyyDUG3KhiSlN58UJ78z1v
+         KF1q9k1/rrb6KGakyNwhRzNP2sEmJy7clccEx+61PT15dxvJLNCZmcxFkDGQKTb8sQbX
+         XTcg==
+X-Gm-Message-State: AOAM532sVO29RqrUzqqg+PX2s4f4mpNxc+7J3PzYskyNGExtE/6Tf+oh
+        py4tcPgm8aGyBNurvrmc0kJfmAch+bOUDE3Fr2OyTRzt/b9lUyF6
+X-Google-Smtp-Source: ABdhPJx7xohRsvqRJeFvRZPsXTmoE7tn2u2NdFkdO3+KXZNGvVUOJnu5QXaiQYPrAggUCxu/B7v6rKc56NK3zAhPLYU=
+X-Received: by 2002:a17:906:24d1:: with SMTP id f17mr15973206ejb.503.1612776711165;
+ Mon, 08 Feb 2021 01:31:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210208100822.76ca0c2e@coco.lan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 8 Feb 2021 15:01:39 +0530
+Message-ID: <CA+G9fYtURD4R+KT+5mFHxYNZSPbmhBF9rS+RXaFqyZhV+k-U3g@mail.gmail.com>
+Subject: WARNING: at arch/x86/kernel/irq.c:390 thermal_set_handler
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        rcu@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, rui.zhang@intel.com,
+        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 10:08:22AM +0100, Mauro Carvalho Chehab wrote:
-> Em Mon, 8 Feb 2021 10:41:47 +0200
-> Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
-> 
-> > Hi Jacopo,
-> > 
-> > On Mon, Feb 08, 2021 at 09:36:16AM +0100, Jacopo Mondi wrote:
-> > > Hello everyone,
-> > > 
-> > > On Mon, Feb 08, 2021 at 09:27:01AM +0200, Sakari Ailus wrote:  
-> > > > Hi Mauro,
-> > > >
-> > > > Thanks for the patch.  
-> > > 
-> > > Sorry, that's cleary an oversight from my side.
-> > > Thanks for tackling it.
-> > >   
-> > > >
-> > > > On Mon, Feb 08, 2021 at 07:53:15AM +0100, Mauro Carvalho Chehab wrote:  
-> > > > > As described on its c file, the Maxim MAX9271 GMSL serializer isn't a
-> > > > > self-contained driver, as MAX9271 is usually embedded in camera modules
-> > > > > with at least one image sensor and optional additional components,
-> > > > > such as uController units or ISPs/DSPs.
-> > > > >
-> > > > > After chanseset a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module"),
-> > > > > there are now two drivers currently needing it: rdacm20 and rdacm21.
-> > > > >
-> > > > > Building with allmodconfig is now causing those warnings:
-> > > > >
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_serial_link' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_configure_i2c' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_high_threshold' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_configure_gmsl_link' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_clear_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_enable_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_disable_gpios' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_verify_id' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_deserializer_address' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > > 	WARNING: modpost: drivers/media/i2c/rdacm21-camera_module: 'max9271_set_translation' exported twice. Previous export was in drivers/media/i2c/rdacm20-camera_module.ko
-> > > > >
-> > > > > Address the issue by adding a Kconfig item for it, that it is
-> > > > > seleced if either one of the modules that need max9271 is used.
-> > > > >
-> > > > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > > Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > > > > ---
-> > > > >  drivers/media/i2c/Kconfig  | 10 ++++++++++
-> > > > >  drivers/media/i2c/Makefile |  8 ++++----
-> > > > >  2 files changed, 14 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> > > > > index 2d3dc0d82f9e..a6802195d583 100644
-> > > > > --- a/drivers/media/i2c/Kconfig
-> > > > > +++ b/drivers/media/i2c/Kconfig
-> > > > > @@ -712,6 +712,16 @@ config VIDEO_ST_MIPID02
-> > > > >  	  module will be called st-mipid02.
-> > > > >  endmenu
-> > > > >
-> > > > > +#
-> > > > > +# Camera ancillary chips
-> > > > > +#
-> > > > > +
-> > > > > +# MAX9271 is usually embedded in camera modules
-> > > > > +config VIDEO_MAX9271_SERIALIZER
-> > > > > +	tristate
-> > > > > +	default y
-> > > > > +	depends on VIDEO_RDACM20 || VIDEO_RDACM21
-> > > > > +  
-> > > >
-> > > > I'd instead make the RDACM drivers depend on this one instead. The RDACM20
-> > > > driver directly depends on the symbols in the MAX9271 driver.
-> 
-> While such solution is technically OK, it will make harder for the ones
-> wanting to use the RDACM drivers, because those two drivers will be
-> ridden at the config menu, until MAX9271 got selected.
-> 
-> With the above solution, this driver will be auto-selected if either
-> RDACM20 or RDACM21 is needed.
-> 
-> Btw, this is exactly the same strategy we use for tuner I2C modules:
-> the user doesn't need to know that his board uses tuner "foo" or "bar".
-> All it needs is to know that it will require, for instance, the em28xx
-> driver.
-> 
-> > > >  
-> > > 
-> > > OTOH I it makes sense to have MAX9271 depend on the camera modules, as
-> > > selecting the serializer alone is not that useful.
-> > > 
-> > > Could the two camera modules symbols instead select the MAX9271 one ?  
-> > 
-> > MAX9271 could be used elsewhere than in RDACM* devices.
-> 
-> Sure, but then it is just a matter of adding the other driver there:
-> 
-> 	depends on VIDEO_RDACM20 || VIDEO_RDACM21 || VIDEO_FOO
-> 
-> To be frank, I doubt that we'll end having dozens of boards with this.
-> If we end having lots of drivers, we can work on a different
-> solution.
+The following kernel warning noticed on Linux next tag 20210205 while booting
+x86_64 and i386.
 
-Also note that there will be combinations of something compiled as a module
-and another driver linked directly to the kernel.
+step to reproduce:
+  - Boot linux next tag 20210205 on x86_64
+  - While booting you will notice the below warning
 
-So each of the RDACM drivers would likely also need:
 
-	depends on VIDEO_MAX9271_SERIALIZER || !VIDEO_MAX9271_SERIALIZER
+[    1.046552] ------------[ cut here ]------------
+[    1.046552] WARNING: CPU: 1 PID: 0 at arch/x86/kernel/irq.c:390
+thermal_set_handler+0x31/0x40
+[    1.046552] Modules linked in:
+[    1.046552] CPU: 1 PID: 0 Comm: swapper/1 Not tainted
+5.11.0-rc6-next-20210205 #2
+[    1.046552] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[    1.046552] RIP: 0010:thermal_set_handler+0x31/0x40
+[    1.046552] Code: 89 e5 48 85 ff 74 16 48 81 3d 3f 75 99 01 33 59
+8a a1 75 16 48 89 3d 36 75 99 01 5d c3 48 c7 05 29 75 99 01 33 59 8a
+a1 5d c3 <0f> 0b eb e6 cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00
+55 45
+[    1.046552] RSP: 0000:ffffb351800afe60 EFLAGS: 00010093
+[    1.046552] RAX: 0000000000000003 RBX: ffffa27d9fc91460 RCX: 00000000000001b2
+[    1.046552] RDX: 0000000000000000 RSI: 00000000000100fa RDI: ffffffffa1505340
+[    1.046552] RBP: ffffb351800afe60 R08: 0000000000000000 R09: 0000000000000020
+[    1.046552] R10: 0000000000000100 R11: 0000000000000000 R12: 0000000000000000
+[    1.046552] R13: 0000000000000003 R14: 0000000000000000 R15: 0000000000000000
+[    1.046552] FS:  0000000000000000(0000) GS:ffffa27d9fc80000(0000)
+knlGS:0000000000000000
+[    1.046552] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.046552] CR2: 0000000000000000 CR3: 00000003ff610001 CR4: 00000000003706a0
+[    1.046552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    1.046552] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    1.046552] Call Trace:
+[    1.046552]  intel_init_thermal+0x152/0x410
+[    1.046552]  init_intel+0x113/0x480
+[    1.046552]  identify_cpu+0x343/0x7b0
+[    1.046552]  identify_secondary_cpu+0x18/0x90
+[    1.046552]  smp_store_cpu_info+0x4e/0x60
+[    1.046552]  start_secondary+0x55/0x150
+[    1.046552]  secondary_startup_64_no_verify+0xc2/0xcb
+[    1.046552] ---[ end trace 88e67487dd39a322 ]---
+[    1.330140]  #2
+[    1.046552] ------------[ cut here ]------------
+[    1.046552] WARNING: CPU: 2 PID: 0 at arch/x86/kernel/irq.c:390
+thermal_set_handler+0x31/0x40
+[    1.046552] Modules linked in:
+[    1.046552] CPU: 2 PID: 0 Comm: swapper/2 Tainted: G        #
+W         5.11.0-rc6-next-20210205 #2
+[    1.046552] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[    1.046552] RIP: 0010:thermal_set_handler+0x31/0x40
+[    1.046552] Code: 89 e5 48 85 ff 74 16 48 81 3d 3f 75 99 01 33 59
+8a a1 75 16 48 89 3d 36 75 99 01 5d c3 48 c7 05 29 75 99 01 33 59 8a
+a1 5d c3 <0f> 0b eb e6 cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00
+55 45
+[    1.046552] RSP: 0000:ffffb351800b7e60 EFLAGS: 00010093
+[    1.046552] RAX: 0000000000000003 RBX: ffffa27d9fd11460 RCX: 00000000000001b2
+[    1.046552] RDX: 0000000000000000 RSI: 00000000000100fa RDI: ffffffffa1505340
+[    1.046552] RBP: ffffb351800b7e60 R08: 0000000000000000 R09: 0000000000000020
+[    1.046552] R10: 0000000000000100 R11: 0000000000000000 R12: 0000000000000000
+[    1.046552] R13: 0000000000000003 R14: 0000000000000000 R15: 0000000000000000
+[    1.046552] FS:  0000000000000000(0000) GS:ffffa27d9fd00000(0000)
+knlGS:0000000000000000
+[    1.046552] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.046552] CR2: 0000000000000000 CR3: 00000003ff610001 CR4: 00000000003706a0
+[    1.046552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    1.046552] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    1.046552] Call Trace:
+[    1.046552]  intel_init_thermal+0x152/0x410
+[    1.046552]  init_intel+0x113/0x480
+[    1.046552]  identify_cpu+0x343/0x7b0
+[    1.046552]  identify_secondary_cpu+0x18/0x90
+[    1.046552]  smp_store_cpu_info+0x4e/0x60
+[    1.046552]  start_secondary+0x55/0x150
+[    1.046552]  secondary_startup_64_no_verify+0xc2/0xcb
+[    1.046552] ---[ end trace 88e67487dd39a323 ]---
+[    1.500028]  #3
+[    1.046552] ------------[ cut here ]------------
+[    1.046552] WARNING: CPU: 3 PID: 0 at arch/x86/kernel/irq.c:390
+thermal_set_handler+0x31/0x40
+[    1.046552] Modules linked in:
+[    1.046552] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G        W
+  5.11.0-rc6-next-20210205#
+ #2
+[    1.046552] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[    1.046552] RIP: 0010:thermal_set_handler+0x31/0x40
+[    1.046552] Code: 89 e5 48 85 ff 74 16 48 81 3d 3f 75 99 01 33 59
+8a a1 75 16 48 89 3d 36 75 99 01 5d c3 48 c7 05 29 75 99 01 33 59 8a
+a1 5d c3 <0f> 0b eb e6 cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00
+55 45
+[    1.046552] RSP: 0000:ffffb351800bfe60 EFLAGS: 00010093
+[    1.046552] RAX: 0000000000000003 RBX: ffffa27d9fd91460 RCX: 00000000000001b2
+[    1.046552] RDX: 0000000000000000 RSI: 00000000000100fa RDI: ffffffffa1505340
+[    1.046552] RBP: ffffb351800bfe60 R08: 0000000000000000 R09: 0000000000000020
+[    1.046552] R10: 0000000000000100 R11: 0000000000000000 R12: 0000000000000000
+[    1.046552] R13: 0000000000000003 R14: 0000000000000000 R15: 0000000000000000
+[    1.046552] FS:  0000000000000000(0000) GS:ffffa27d9fd80000(0000)
+knlGS:0000000000000000
+[    1.046552] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.046552] CR2: 0000000000000000 CR3: 00000003ff610001 CR4: 00000000003706a0
+[    1.046552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    1.046552] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    1.046552] Call Trace:
+[    1.046552]  intel_init_thermal+0x152/0x410
+[    1.046552]  init_intel+0x113/0x480
+[    1.046552]  identify_cpu+0x343/0x7b0
+[    1.046552]  identify_secondary_cpu+0x18/0x90
+[    1.046552]  smp_store_cpu_info+0x4e/0x60
+[    1.046552]  start_secondary+0x55/0x150
+[    1.046552]  secondary_startup_64_no_verify+0xc2/0xcb
+[    1.046552] ---[ end trace 88e67487dd39a324 ]---
+[    1.670074] smp: Brought up 1 node, 4 CPUs
+[    1.670523] smpboot: Max logical packages: 1
+[    1.671522] smpboot: Total of 4 processors activated (24000.00 BogoMIPS)
+[    1.673543] devtmpfs: initialized
+[    1.674629] PM: Registering ACPI NVS region [mem
+0x8879d000-0x8879dfff] (4096 bytes)
+[    1.675523] PM: Registering ACPI N#
+VS region [mem 0x8d11f000-0x8d891fff] (7811072 bytes)
+[    1.676615] clocksource: jiffies: mask: 0xffffffff max_cycles:
+0xffffffff, max_idle_ns: 1911260446275000 ns
+[    1.677523] futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+[    1.678701] PM: RTC time: 11:53:55, date: 2021-02-05
+[    1.679575] NET: Registered protocol family 16
+[    1.680593] audit: initializing netlink subsys (disabled)
+[    1.681526] audit: type=2000 audit(1612526033.562:1):
+state=initialized audit_enabled=0 res=1
+[    1.681583] thermal_sys: Registered thermal governor 'step_wise'
+[    1.682523] thermal_sys: Registered thermal governor 'user_space'
+[    1.683530] cpuidle: using governor menu
 
-> 
-> > 
-> > Also, as select does not handle dependencies, all drivers that need MAX9271
-> > would have to include the dependencies of MAX9271.
-> 
-> Yes. "Depends on" handles any dependencies that are required for building
-> MAX9271. In this specific case, the dependencies are the same, so select
-> could equally work.
 
-Sure.
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
--- 
-Kind regards,
+Full test log link,
+https://lkft.validation.linaro.org/scheduler/job/2233628#L498
 
-Sakari Ailus
+
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git describe: next-20210205
+  kernel-config: https://builds.tuxbuild.com/1o3nLyZtkkU2dUsallc286STyPX/config
+  build link: https://builds.tuxbuild.com/1o3nLyZtkkU2dUsallc286STyPX/
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,153 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91857313B36
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 18:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E713313D3F
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 19:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbhBHRnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 12:43:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233936AbhBHRk7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 8 Feb 2021 12:40:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4BE364E5D;
-        Mon,  8 Feb 2021 17:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612806018;
-        bh=4iDteBdt+LxfoAbchv32DupyFja6g5XYVYcXWSdw+L0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OSQk4fIG5gUoWlw+bFgtCrMU1E7LchG1SQaXJLQD9r2sJR+gnJ7jymSL4bnU1ExQa
-         2njrjxcNpwtb+xrngh2wE7A32j3R8HDjHnGMVFhFw17E9KAF179b+Kut/95SEmpoTu
-         cSMC1pDt78PYaCJWKrZWdSJ8jm6ir4Hp4VLOUFkcsDgWhVMUkQI4n3owvmFtS22I8X
-         8oj4+MN2VBYGn/8vXyiijnXlUOqHkrYeZBjLtOgUXc8UJkEen3l9Oqty2jfy31x7dm
-         6HZnI6bgzVfwbdMx29K21wkAcZ16qBMZQBYsUFW1pebZmDyZ+SD9yt7TXRMZ99Bik6
-         YVlnlJbPADHvA==
-Date:   Mon, 8 Feb 2021 18:40:14 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-Message-ID: <20210208184014.55128fb5@coco.lan>
-In-Reply-To: <4af499f5931d6b04a42787ae17525c63247573e6.camel@collabora.com>
-References: <20210208233716.16d962ad@canb.auug.org.au>
-        <56cd99bbf526b43507579b5775bac5f885319866.camel@collabora.com>
-        <20210208164618.GY32460@paasikivi.fi.intel.com>
-        <4af499f5931d6b04a42787ae17525c63247573e6.camel@collabora.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S235595AbhBHSWF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 13:22:05 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:58371 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235544AbhBHSU4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 13:20:56 -0500
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2AFF8200008;
+        Mon,  8 Feb 2021 18:19:53 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
+Date:   Mon,  8 Feb 2021 19:20:06 +0100
+Message-Id: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Mon, 08 Feb 2021 13:57:56 -0300
-Ezequiel Garcia <ezequiel@collabora.com> escreveu:
+With the introduction of the RDACM21 camera module support in
+commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+the symbols defined by the max9271 library were exported twice
+if multiple users of the library were compiled in at the same time.
 
-> On Mon, 2021-02-08 at 18:46 +0200, Sakari Ailus wrote:
-> > Hi Ezequiel,
-> >=20
-> > Thanks for addressing this.
-> >=20
-> > On Mon, Feb 08, 2021 at 01:42:21PM -0300, Ezequiel Garcia wrote: =20
-> > > Hi Stephen,
-> > >=20
-> > > On Mon, 2021-02-08 at 23:37 +1100, Stephen Rothwell wrote: =20
-> > > > Hi all,
-> > > >=20
-> > > > After merging the v4l-dvb tree, today's linux-next build (htmldocs)
-> > > > produced this warning:
-> > > >=20
-> > > > include/media/v4l2-async.h:178: warning: expecting prototype for v4=
-l2_async_notifier_add_fwnode_subdev(). Prototype was for
-> > > > __v4l2_async_notifier_add_fwnode_subdev() instead
-> > > > include/media/v4l2-async.h:207: warning: expecting prototype for v4=
-l2_async_notifier_add_fwnode_remote_subdev(). Prototype was for
-> > > > __v4l2_async_notifier_add_fwnode_remote_subdev() instead
-> > > > include/media/v4l2-async.h:230: warning: expecting prototype for v4=
-l2_async_notifier_add_i2c_subdev(). Prototype was for
-> > > > __v4l2_async_notifier_add_i2c_subdev() instead
-> > > >=20
-> > > > Maybe introduced by commit
-> > > >=20
-> > > > =C2=A0 c1cc23625062 ("media: v4l2-async: Discourage use of v4l2_asy=
-nc_notifier_add_subdev")
-> > > >  =20
-> > >=20
-> > > Thanks for spotting this. Should be fixed by:
-> > >=20
-> > > diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-> > > index 6f22daa6f067..3785445282fc 100644
-> > > --- a/include/media/v4l2-async.h
-> > > +++ b/include/media/v4l2-async.h
-> > > @@ -157,7 +157,7 @@ int __v4l2_async_notifier_add_subdev(struct v4l2_=
-async_notifier *notifier,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_as=
-ync_subdev *asd);
-> > > =C2=A0
-> > > =C2=A0/**
-> > > - * v4l2_async_notifier_add_fwnode_subdev - Allocate and add a fwnode=
- async
-> > > + * __v4l2_async_notifier_add_fwnode_subdev - Allocate and add a fwno=
-de async =20
-> >=20
-> > The problem with the approach is that this no longer documents the API =
-that
-> > drivers are intended to use, but the intermediate one.
+In example:
+WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
+'max9271_set_serial_link' exported twice. Previous export was in
+drivers/media/i2c/rdacm20-camera_module.ko
 
-Yep. the better would be to keep documenting what will be used.
+Fix this by making the rdacm21 file a module and have the driver
+using its functions select it.
 
-> >  I guess fixing
-> > this properly could require changes to kerneldoc so I have no objection=
-s to
-> > the approach.
+Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/Kconfig  | 5 +++++
+ drivers/media/i2c/Makefile | 7 +++----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-It is not a simple kernel-doc change.=20
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 2d3dc0d82f9e..84645f751da3 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
 
-The problem is that Kernel-doc expects:
+ source "drivers/media/i2c/m5mols/Kconfig"
 
++config VIDEO_MAX9271
++	tristate
++
+ config VIDEO_RDACM20
+ 	tristate "IMI RDACM20 camera support"
+ 	depends on I2C
+ 	select V4L2_FWNODE
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select MEDIA_CONTROLLER
++	select VIDEO_MAX9271
+ 	help
+ 	  This driver supports the IMI RDACM20 GMSL camera, used in
+ 	  ADAS systems.
+@@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
+ 	select V4L2_FWNODE
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select MEDIA_CONTROLLER
++	select VIDEO_MAX9271
+ 	help
+ 	  This driver supports the IMI RDACM21 GMSL camera, used in
+ 	  ADAS systems.
+diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+index 6bd22d63e1a7..c34a7de3158b 100644
+--- a/drivers/media/i2c/Makefile
++++ b/drivers/media/i2c/Makefile
+@@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
+ obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
+ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+ obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
+-rdacm20-camera_module-objs	:= rdacm20.o max9271.o
+-obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
+-rdacm21-camera_module-objs	:= rdacm21.o max9271.o
+-obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
++obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
++obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
++obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
+ obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
 
-	/**
-	 * foo - something
-	 */
-	void foo(...)
+ obj-$(CONFIG_SDR_MAX2175) += max2175.o
+--
+2.30.0
 
-As it parses the file lines sequentially, using the parameters at
-foo(...) to double-check if everything is ok.
-
-In order for it to parse things like:
-
-	/**
-	 * foo - something
-	 */
-
-	... (some other functions in the middle)
-=09
-	void foo(...)
-
-Would require kernel-doc to first parse all the file, storing markups
-on a separate struct, and then, on a second step, produce an output.
-
-Even if modified to do that, there's a question if the result would
-be what it is expected.
-
-A separate thing would be to do things like:
-
-
-	/**
-	 * foo - something
-	 */
-	void __foo(...)
-
-The problem here is that usually the arguments for __foo() are
-different than the ones for foo(). See for example the macros that
-have a __foo() functions with an owner argument, that are solved
-on a macro called foo().
-
-Thanks,
-Mauro

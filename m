@@ -2,106 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E713313D3F
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 19:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B9D313E21
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 19:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbhBHSWF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 13:22:05 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:58371 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235544AbhBHSU4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 13:20:56 -0500
-Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2AFF8200008;
-        Mon,  8 Feb 2021 18:19:53 +0000 (UTC)
-From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
-Date:   Mon,  8 Feb 2021 19:20:06 +0100
-Message-Id: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
-X-Mailer: git-send-email 2.30.0
+        id S234689AbhBHSyC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 13:54:02 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:39764 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233805AbhBHSxx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 13:53:53 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 881841F44B0B
+Message-ID: <fa453b6516f709b23bb046a1d956f0598966cd99.camel@collabora.com>
+Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Date:   Mon, 08 Feb 2021 15:53:00 -0300
+In-Reply-To: <20210208184014.55128fb5@coco.lan>
+References: <20210208233716.16d962ad@canb.auug.org.au>
+         <56cd99bbf526b43507579b5775bac5f885319866.camel@collabora.com>
+         <20210208164618.GY32460@paasikivi.fi.intel.com>
+         <4af499f5931d6b04a42787ae17525c63247573e6.camel@collabora.com>
+         <20210208184014.55128fb5@coco.lan>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-With the introduction of the RDACM21 camera module support in
-commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-the symbols defined by the max9271 library were exported twice
-if multiple users of the library were compiled in at the same time.
+On Mon, 2021-02-08 at 18:40 +0100, Mauro Carvalho Chehab wrote:
+> Em Mon, 08 Feb 2021 13:57:56 -0300
+> Ezequiel Garcia <ezequiel@collabora.com> escreveu:
+> 
+> > On Mon, 2021-02-08 at 18:46 +0200, Sakari Ailus wrote:
+> > > Hi Ezequiel,
+> > > 
+> > > Thanks for addressing this.
+> > > 
+> > > On Mon, Feb 08, 2021 at 01:42:21PM -0300, Ezequiel Garcia wrote:  
+> > > > Hi Stephen,
+> > > > 
+> > > > On Mon, 2021-02-08 at 23:37 +1100, Stephen Rothwell wrote:  
+> > > > > Hi all,
+> > > > > 
+> > > > > After merging the v4l-dvb tree, today's linux-next build (htmldocs)
+> > > > > produced this warning:
+> > > > > 
+> > > > > include/media/v4l2-async.h:178: warning: expecting prototype for v4l2_async_notifier_add_fwnode_subdev(). Prototype was for
+> > > > > __v4l2_async_notifier_add_fwnode_subdev() instead
+> > > > > include/media/v4l2-async.h:207: warning: expecting prototype for v4l2_async_notifier_add_fwnode_remote_subdev(). Prototype was for
+> > > > > __v4l2_async_notifier_add_fwnode_remote_subdev() instead
+> > > > > include/media/v4l2-async.h:230: warning: expecting prototype for v4l2_async_notifier_add_i2c_subdev(). Prototype was for
+> > > > > __v4l2_async_notifier_add_i2c_subdev() instead
+> > > > > 
+> > > > > Maybe introduced by commit
+> > > > > 
+> > > > >   c1cc23625062 ("media: v4l2-async: Discourage use of v4l2_async_notifier_add_subdev")
+> > > > >   
+> > > > 
+> > > > Thanks for spotting this. Should be fixed by:
+> > > > 
+> > > > diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+> > > > index 6f22daa6f067..3785445282fc 100644
+> > > > --- a/include/media/v4l2-async.h
+> > > > +++ b/include/media/v4l2-async.h
+> > > > @@ -157,7 +157,7 @@ int __v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
+> > > >                                    struct v4l2_async_subdev *asd);
+> > > >  
+> > > >  /**
+> > > > - * v4l2_async_notifier_add_fwnode_subdev - Allocate and add a fwnode async
+> > > > + * __v4l2_async_notifier_add_fwnode_subdev - Allocate and add a fwnode async  
+> > > 
+> > > The problem with the approach is that this no longer documents the API that
+> > > drivers are intended to use, but the intermediate one.
+> 
+> Yep. the better would be to keep documenting what will be used.
+> 
 
-In example:
-WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
-'max9271_set_serial_link' exported twice. Previous export was in
-drivers/media/i2c/rdacm20-camera_module.ko
+Is there a way to silence/ignore the warning for a specific function(s)?
 
-Fix this by making the rdacm21 file a module and have the driver
-using its functions select it.
-
-Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
----
- drivers/media/i2c/Kconfig  | 5 +++++
- drivers/media/i2c/Makefile | 7 +++----
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 2d3dc0d82f9e..84645f751da3 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
-
- source "drivers/media/i2c/m5mols/Kconfig"
-
-+config VIDEO_MAX9271
-+	tristate
-+
- config VIDEO_RDACM20
- 	tristate "IMI RDACM20 camera support"
- 	depends on I2C
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
-+	select VIDEO_MAX9271
- 	help
- 	  This driver supports the IMI RDACM20 GMSL camera, used in
- 	  ADAS systems.
-@@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
-+	select VIDEO_MAX9271
- 	help
- 	  This driver supports the IMI RDACM21 GMSL camera, used in
- 	  ADAS systems.
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 6bd22d63e1a7..c34a7de3158b 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
- obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
- obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
- obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
--rdacm20-camera_module-objs	:= rdacm20.o max9271.o
--obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
--rdacm21-camera_module-objs	:= rdacm21.o max9271.o
--obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
-+obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
-+obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
-+obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
- obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-
- obj-$(CONFIG_SDR_MAX2175) += max2175.o
---
-2.30.0
+Ezequiel 
 

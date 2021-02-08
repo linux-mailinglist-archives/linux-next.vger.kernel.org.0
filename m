@@ -2,90 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2FE3140C0
-	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 21:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44793141A9
+	for <lists+linux-next@lfdr.de>; Mon,  8 Feb 2021 22:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbhBHUoN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Feb 2021 15:44:13 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:33132 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233895AbhBHUnc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 15:43:32 -0500
-Received: by mail-oi1-f169.google.com with SMTP id g84so3267013oib.0;
-        Mon, 08 Feb 2021 12:43:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lqbgn1lmL2cL5DYt9q9nSP49gv4U9EE3rDHuAVIFwLs=;
-        b=qft/sYYcFols294PwjcWccS/8VoqdKqyiSBSO1dy0mEKZw8g3BDBih3TRlzM1rl89x
-         v5jXmEjGvcU7F9Pxog1yOvWroSCwD06NmzErxUpMEt/fqd2iZg3KfNwwQb51wJUrUowY
-         JdZvCfPPfXI2Ps829WLfl2/PVH1Ap14zhC0UFHfZzTWAYAFVedEWipbjV21BuBie42h5
-         u4fher8C8z4TRJJH5lPE2p1LoAfuPnlrWyuCBk7diRutxuDa5kODwzd3jivE/DoEJG1L
-         uz98IulDElB2oIFYRgC9pPQpQja+dRPLuelu24fQaS4ARJ/9nGqLvbst8ulF8cxw2fDJ
-         c/8A==
-X-Gm-Message-State: AOAM532MmTg1RYfrLCiwEqfGpMUOFU2MBbhzBYEncG8OYl6deJALiFr7
-        /pfRmspWbXnRKwGPj6OhhiJLjhF7D5k5zdUcszA=
-X-Google-Smtp-Source: ABdhPJz342gs0SyK+2LHxFAU3QnGS+KMkgrV2esOCBS31UAWInYufgEEIXTFIpfhS9P27GfLBpAqGa3aFe5x61xVjPs=
-X-Received: by 2002:aca:d8c6:: with SMTP id p189mr386047oig.54.1612816971168;
- Mon, 08 Feb 2021 12:42:51 -0800 (PST)
+        id S235825AbhBHVYn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Feb 2021 16:24:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45001 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232925AbhBHVXe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Feb 2021 16:23:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612819322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7rPLQAElgHees9+1oAOIuOVL0/2tuTufKerlPtBFQmU=;
+        b=UoJhOfj3YYNlJom5YNtz+YJdTRM+plrcfjlYz6PwBuizVG2u4od6iuaXGJigj1bmQQBkIl
+        SdLthbVKLwck17AxEeboA2cm2jRouFg6qAJsEubvhzfFqXu7foDg0mzI9bWBKsrr6HgotD
+        oaFvoO7YKn6JcMX1T5lm0eNyNsFVdfg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-356-PhagjMyaO0Czeap8eyEjTg-1; Mon, 08 Feb 2021 16:21:58 -0500
+X-MC-Unique: PhagjMyaO0Czeap8eyEjTg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B5318107ACE3;
+        Mon,  8 Feb 2021 21:21:56 +0000 (UTC)
+Received: from treble (ovpn-120-159.rdu2.redhat.com [10.10.120.159])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AD4AF1346F;
+        Mon,  8 Feb 2021 21:21:55 +0000 (UTC)
+Date:   Mon, 8 Feb 2021 15:21:53 -0600
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Feb 8 (objtool: warnings: 5)
+Message-ID: <20210208212153.vs2v7k2c55a3syvo@treble>
+References: <20210208235246.01cb4daf@canb.auug.org.au>
+ <2000eae0-89f4-a88f-a113-7fa47f16def7@infradead.org>
 MIME-Version: 1.0
-References: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
-In-Reply-To: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 Feb 2021 21:42:39 +0100
-Message-ID: <CAMuHMdVgci8nJr_JDSPX1BdXpJkS9asBH7htsEdNVPSR9m06iQ@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-Next <linux-next@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2000eae0-89f4-a88f-a113-7fa47f16def7@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Jacopo,
+On Mon, Feb 08, 2021 at 11:30:59AM -0800, Randy Dunlap wrote:
+> On 2/8/21 4:52 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20210205:
+> > 
+> 
+> on x86_64:
+> 
+> objtool warnings: (from 3 different randconfig builds)
+> 
+> drivers/input/touchscreen/elants_i2c.o: warning: objtool: elants_i2c_initialize() falls through to next function elants_i2c_resume()
 
-Thanks for your patch!
+Randy, can you share the .o?  (you may need to gzip it, still waiting on
+corporate IT to allow me to receive .o files)
 
-On Mon, Feb 8, 2021 at 7:22 PM Jacopo Mondi <jacopo+renesas@jmondi.org> wrote:
-> With the introduction of the RDACM21 camera module support in
-> commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-> the symbols defined by the max9271 library were exported twice
-> if multiple users of the library were compiled in at the same time.
->
-> In example:
-> WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
-> 'max9271_set_serial_link' exported twice. Previous export was in
-> drivers/media/i2c/rdacm20-camera_module.ko
->
-> Fix this by making the rdacm21 file a module and have the driver
+> fs/select.o: warning: objtool: do_sys_poll()+0x8e9: call to __ubsan_handle_sub_overflow() with UACCESS enabled
+> lib/iov_iter.o: warning: objtool: iovec_from_user.part.12()+0x2db: call to __ubsan_handle_add_overflow() with UACCESS enabled
 
-max9271
+Peter, we need the patch to prevent UBSAN with gcc7?
 
-> using its functions select it.
->
-> Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> vmlinux.o: warning: objtool: do_machine_check()+0x7ee: call to queue_task_work() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: lock_is_held_type()+0x107: call to warn_bogus_irq_restore() leaves .noinstr.text section
 
-With the above fixed:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Peter?
 
-Gr{oetje,eeting}s,
+-- 
+Josh
 
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

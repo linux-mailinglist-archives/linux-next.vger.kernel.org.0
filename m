@@ -2,89 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D24C314CD8
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 11:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61DF314DEF
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 12:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbhBIKWJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 05:22:09 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:48639 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231285AbhBIKUG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 05:20:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DZf562rbmz9rx8;
-        Tue,  9 Feb 2021 21:19:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612865962;
-        bh=O151gfDDdxSnbws+w5Gl/2M/gAxACw1PS+d+7Fwc/dg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TS+Xn5HrWhjfN+wQ1BlEtDfB6vTMI4J9eJkOpjIVbggn366im563T1EfJjN+BLlzf
-         2gi+jo3ambUWRff+PajW9Tu4iCHa6Gjp7a2FTH51eiZwdeJ2nJuqd8kPBHoW+eQTKK
-         nCgM/FcYBbsYIspZr3dowD9Z1Z+STEKCWdq6np3f3GszDzPdDnjOXeS3TCtQUCAJyb
-         BLbdLezSOXIEfysnDERHDHLeuL+5ddOgXE06SKSC7gIgSRd/GfNi+CeYMwZQzRmP7Y
-         XgHhsPrdfVARDTg8GtaAbepekXHpNSFPTLPCfUFgjpFxkcehPIt5xR0GhbpyH79IVX
-         rTnO0GVP1M8Aw==
-Date:   Tue, 9 Feb 2021 21:19:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the powerpc tree
-Message-ID: <20210209211921.777e3053@canb.auug.org.au>
+        id S232032AbhBILK5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 06:10:57 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:39071 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232120AbhBILKF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 06:10:05 -0500
+X-Originating-IP: 93.34.118.233
+Received: from uno.lan (93-34-118-233.ip49.fastwebnet.it [93.34.118.233])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 45BB76000A;
+        Tue,  9 Feb 2021 11:09:18 +0000 (UTC)
+From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] media: i2c: Kconfig: Make MAX9271 a module
+Date:   Tue,  9 Feb 2021 12:09:21 +0100
+Message-Id: <20210209110921.20653-1-jacopo+renesas@jmondi.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qgUhga/cX7TmqXbGpC=4w=A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qgUhga/cX7TmqXbGpC=4w=A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+With the introduction of the RDACM21 camera module support in commit
+a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module") the
+symbols defined by the max9271 library were exported twice if multiple
+users of the library were compiled in at the same time.
 
-Hi all,
+In example:
+WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
+'max9271_set_serial_link' exported twice. Previous export was in
+drivers/media/i2c/rdacm20-camera_module.ko
 
-After merging the powerpc tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Fix this by making the max9271 file a module and have the driver
+using its functions select it.
 
-arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x0): relocation truncated to f=
-it: R_PPC64_REL24 (OPD) against symbol `do_page_fault' defined in .opd sect=
-ion in arch/powerpc/mm/fault.o
-arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x8): relocation truncated to f=
-it: R_PPC64_REL24 (OPD) against symbol `do_page_fault' defined in .opd sect=
-ion in arch/powerpc/mm/fault.o
-arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x28): relocation truncated to =
-fit: R_PPC64_REL24 (OPD) against symbol `unknown_exception' defined in .opd=
- section in arch/powerpc/kernel/traps.o
+Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+---
+ drivers/media/i2c/Kconfig  | 5 +++++
+ drivers/media/i2c/Makefile | 7 +++----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-Not sure exactly which commit caused this, but it is most likkely part
-of a series in the powerpc tree.
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 2d3dc0d82f9e..462c0e059754 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
 
-I have left the allyesconfig build broken for today.
+ source "drivers/media/i2c/m5mols/Kconfig"
 
---=20
-Cheers,
-Stephen Rothwell
++config VIDEO_MAX9271_LIB
++	tristate
++
+ config VIDEO_RDACM20
+ 	tristate "IMI RDACM20 camera support"
+ 	depends on I2C
+ 	select V4L2_FWNODE
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select MEDIA_CONTROLLER
++	select VIDEO_MAX9271_LIB
+ 	help
+ 	  This driver supports the IMI RDACM20 GMSL camera, used in
+ 	  ADAS systems.
+@@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
+ 	select V4L2_FWNODE
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select MEDIA_CONTROLLER
++	select VIDEO_MAX9271_LIB
+ 	help
+ 	  This driver supports the IMI RDACM21 GMSL camera, used in
+ 	  ADAS systems.
+diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+index 6bd22d63e1a7..0c067beca066 100644
+--- a/drivers/media/i2c/Makefile
++++ b/drivers/media/i2c/Makefile
+@@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
+ obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
+ obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+ obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
+-rdacm20-camera_module-objs	:= rdacm20.o max9271.o
+-obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
+-rdacm21-camera_module-objs	:= rdacm21.o max9271.o
+-obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
++obj-$(CONFIG_VIDEO_MAX9271_LIB)	+= max9271.o
++obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
++obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
+ obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
 
---Sig_/qgUhga/cX7TmqXbGpC=4w=A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ obj-$(CONFIG_SDR_MAX2175) += max2175.o
+--
+2.30.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAiYakACgkQAVBC80lX
-0GzODgf6Av3auGL+x8wwz7etJ4YrThQzj3Q3WnEYs/01uB6rUjwanMOKk26gwIbd
-vJIaFavzViS6MSyTci0bm/VY1kDNGkZHpeluF78dnMbUVAeHxKA+NLw3/Ha0TEjs
-y3a8JB5UoavVSga0eB2d5Dlqfzbncxcah22eChlC1D0yUKqbU0h/6NtwuAATp1xU
-WUGTEROUjigx7yO+Rb/me+41hHfpNTmDucIFT6jeFXeLAi4322W+WFemBIKQiIdf
-Vh/NPzs5HkhvW5hvOn9Pn3t1kJzMCGMO7yNExMFY1vc8IOj/g+g9b53FM7DZdcRt
-yuLEAHl3cvVmDfJu4kll/cnG742KwQ==
-=mhS3
------END PGP SIGNATURE-----
-
---Sig_/qgUhga/cX7TmqXbGpC=4w=A--

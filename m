@@ -2,107 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95B4315280
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 16:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E2931530D
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 16:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbhBIPRI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 10:17:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231674AbhBIPRG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 10:17:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4F8164EB1;
-        Tue,  9 Feb 2021 15:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612883785;
-        bh=gLOoCljiYS+637We3rAhCj7YRtsqPvjKsdzaIB7M2Wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lzRmksQj72FH/f7Fxm152+12w7tSjkJSk26QH0fXbcz5BCwj77/5bE5JMxGN6xjkQ
-         Qws9fzr1bfIvmCOUnRujMu4Ke4jUWjo0ENTdBqxC8nyQ7uNGmpkSdnO85w6Q71z7FR
-         8AzCe0UVwFamNLSWNg88PLVGHNwHPHgF7jMFAQzLhVB3iYAq537wdMwk0/oarQioxz
-         F701L2phy7RSjHpjiS3s+VF8mYJjrNC2TeQGmuxhGwY7xrpPVR3t3SmIZtWCzVFqDz
-         pOvC6GkPrk4amV1ZJHDJmKXLgm9sfzYgYhu6D25cKp9F9PbjcD//CpeyIHfP8u24ne
-         ksAMub0R1bbmw==
-Date:   Tue, 9 Feb 2021 16:16:20 +0100
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-next: build failure after merge of the modules tree
-Message-ID: <YCKnRPRTDyfGxnBC@gunter>
-References: <20210209210843.3af66662@canb.auug.org.au>
+        id S232542AbhBIPo0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 10:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbhBIPoX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 10:44:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F477C061788;
+        Tue,  9 Feb 2021 07:43:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s5g4oRzdusm7nzm3YBSDj6A0RZP/j9xutjAb4yxZeGc=; b=AqnQ8e/H7bgSWr6o6uJ5Ri8lBW
+        IP8Vfk7QFeBFOmPAiXDbeix0b1Fmot0QgGrDEUSbY16LgAopd/aAWe8BnimcxQxkqstCng1eYdlnx
+        4inPGo4f92RRVnCDzjdVpzp+RIK3i1Ee4llLmJdYepKFNBBsWBQamycXysxFKN6Ti5v1j0YIEG8O/
+        FHBymeP5SsGB3VV4hhnrKZwz6SGe1MJpgD2N2pf15VOp59F1f8cvuzgwtMvNgu5N07mWbMWyeGqtM
+        UCNqWz0wp7/eqpbaac+o5qjn6lddECFfwuHPlXfmdNeCzjnIEKLju273SRILFYBz7pKi+HMbo55qY
+        fJhldnRw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1l9VAx-007dEz-Na; Tue, 09 Feb 2021 15:43:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA4983010D2;
+        Tue,  9 Feb 2021 16:43:38 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C6FE22BC9353D; Tue,  9 Feb 2021 16:43:38 +0100 (CET)
+Date:   Tue, 9 Feb 2021 16:43:38 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH] uprobes: add missing get_uprobe() in __find_uprobe()
+Message-ID: <YCKtqnOu9IaEWeM3@hirez.programming.kicks-ass.net>
+References: <20210209150711.36778-1-svens@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210209210843.3af66662@canb.auug.org.au>
-X-OS:   Linux gunter 5.10.12-1-default x86_64
+In-Reply-To: <20210209150711.36778-1-svens@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+++ Stephen Rothwell [09/02/21 21:08 +1100]:
->Hi all,
->
->After merging the modules tree, today's linux-next build (powerpc
->allyesconfig) failed like this:
->
->In file included from include/linux/export.h:123,
->                 from include/linux/linkage.h:7,
->                 from arch/powerpc/include/asm/unistd.h:18,
->                 from <stdin>:2:
->./include/generated/autoksyms.h:5:9: warning: missing whitespace after the macro name
->    5 | #define __KSYM_.HT_update_self_and_peer_setting 1
->      |         ^~~~~~~
->./include/generated/autoksyms.h:6:9: warning: missing whitespace after the macro name
->    6 | #define __KSYM_.RemovePeerTS 1
->      |         ^~~~~~~
->./include/generated/autoksyms.h:6: warning: "__KSYM_" redefined
->    6 | #define __KSYM_.RemovePeerTS 1
->      |
->./include/generated/autoksyms.h:5: note: this is the location of the previous definition
->
->and on and on :-(
->
->Caused by commit
->
->  367948220fce ("module: remove EXPORT_UNUSED_SYMBOL*")
->
->I have reverted that commit for today.
+On Tue, Feb 09, 2021 at 04:07:11PM +0100, Sven Schnelle wrote:
+> commit c6bc9bd06dff49fa4c("rbtree, uprobes: Use rbtree helpers") from
+> next-20210208 accidentally removed the refcount increase. Add it again.
+> 
 
-[ Adding Michael and Masahiro to CC ]
-
-Hi Stephen,
-
-Hmm, these errors don't look like it's related to that particular commit. I was
-able to reproduce these weird autoksym errors even without any modules-next
-patches applied, and on a clean v5.11-rc7 tree. To reproduce it,
-CONFIG_TRIM_UNUSED_KSYMS needs to be enabled. I guess that's why we run into
-these errors with allyesconfig. I used a gcc-7 ppc64le cross compiler and got
-the same compiler warnings. It seems to not compile on powerpc properly because
-it looks like some symbols have an extra dot "." prefix, for example in
-kthread.o:
-
-    168: 0000000000000318    24 NOTYPE  GLOBAL DEFAULT    6 kthread_create_worker
-    169: 0000000000001d90   104 FUNC    GLOBAL DEFAULT    1 .kthread_create_worker
-    170: 0000000000000330    24 NOTYPE  GLOBAL DEFAULT    6 kthread_create_worker_on_cpu
-    171: 0000000000001e00    88 FUNC    GLOBAL DEFAULT    1 .kthread_create_worker_on_cpu
-    172: 0000000000000348    24 NOTYPE  GLOBAL DEFAULT    6 kthread_queue_work
-    173: 0000000000001e60   228 FUNC    GLOBAL DEFAULT    1 .kthread_queue_work
-
-So I suppose this dot prefix is specific to powerpc. From the ppc64 elf abi docs:
-
-     Symbol names with a dot (.) prefix are reserved for holding entry point
-     addresses. The value of a symbol named ".FN", if it exists, is the entry point
-     of the function "FN".
-
-I guess the presence of the extra dot symbols is confusing
-scripts/gen_autoksyms.sh, so we get the dot symbols in autoksyms.h, which the
-preprocessor doesn't like. I am wondering how this was never caught until now
-and also now curious if this feature was ever functional on powerpc..
-
-Thanks,
-
-Jessica
+Thanks, and sorry about that!

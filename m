@@ -2,76 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29337314EAF
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 13:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D213531501C
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 14:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbhBIMH2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 07:07:28 -0500
-Received: from ozlabs.org ([203.11.71.1]:52375 "EHLO ozlabs.org"
+        id S230465AbhBINZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 08:25:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:51664 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhBIMGC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 07:06:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DZhRM2yKhz9sVw;
-        Tue,  9 Feb 2021 23:05:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612872319;
-        bh=7Dm65XLDTc0HjMEgLtgdWqz4Zap69IwRvoyHjrsvPT4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MvGdKrazJZt4pMy2hHkMrefg+jC8lcDWeFZ1TE9aD9FE/Rm9uXDZoiG4BAcdvYKog
-         jvDS/OqJ10wVZanmHbZy+nxi65cP3ONOatx0YnOz7yDgHmFTX5+73WOQYX2F8awnMV
-         9tcMOwNLUtjIAs0wdXhaCdhFpzonu/au/UAoGHCb0I/ZFjDvubCmqOWaqKsAHKzLB6
-         SIwub5+2BtusVmIDo/LRhlS8d6+GJ72by80/A1fk8EptRG8x0oJAbZM3ozy+BT0vh+
-         fxALRPnLQz25jaFwH41ssjTbnk+nnPIPHlALj5Dc2HnuW6PNYbuNQUJO0r+X/Tbxw/
-         wzkF5OTxALPMA==
-Date:   Tue, 9 Feb 2021 23:05:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the extcon tree
-Message-ID: <20210209230517.7d698e81@canb.auug.org.au>
+        id S230414AbhBINZU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 9 Feb 2021 08:25:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 114E0ED1;
+        Tue,  9 Feb 2021 05:24:34 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.42.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF71E3F719;
+        Tue,  9 Feb 2021 05:24:32 -0800 (PST)
+Date:   Tue, 9 Feb 2021 13:24:30 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] lockdep: Noinstr annotate warn_bogus_irq_restore()
+Message-ID: <20210209132430.GB71297@C02TD0UTHF1T.local>
+References: <20210208235246.01cb4daf@canb.auug.org.au>
+ <2000eae0-89f4-a88f-a113-7fa47f16def7@infradead.org>
+ <YCJJAoC+r414zO+2@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dYQ491Hw0/pdPLn=Ll7Fgr/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YCJJAoC+r414zO+2@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dYQ491Hw0/pdPLn=Ll7Fgr/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Feb 09, 2021 at 09:34:10AM +0100, Peter Zijlstra wrote:
+> 
+> Subject: lockdep: Noinstr annotate warn_bogus_irq_restore()
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Tue Feb 9 09:30:03 CET 2021
+> 
+>   vmlinux.o: warning: objtool: lock_is_held_type()+0x107: call to warn_bogus_irq_restore() leaves .noinstr.text section
+> 
+> As per the general rule that WARNs are allowed to violate noinstr to
+> get out, annotate it away.
+> 
+> Fixes: 997acaf6b4b5 ("lockdep: report broken irq restoration")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Hi all,
+Whoops; sorry for missing that!
 
-Commit
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-  d8cc19be483a ("extcon: sm5502: Detect OTG when USB_ID is connected to gro=
-und")
+Mark.
 
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dYQ491Hw0/pdPLn=Ll7Fgr/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAien0ACgkQAVBC80lX
-0Gzaywf+IEvgBh6JKrQ0rvvk76qOy8Y5eJO1WoW2mD0h4LwGX4nr0Ufo9HUr4WOu
-usVScr3ee+sABgwHUewdAbWgzcGA6C/D89PMtBX4uCdaWgYoLw1TPsJOp5iWZ34y
-CNu2hNx+PSbMaupWRJDhvNdMggH2sk/3d423/gE20JaiJ/WALWL1ak3rHi+70zfS
-DN4jW/RKW7bg7DUuIskUkuaqz7fKL8PFNqQGko0b9hXe2D7bzGBH2G7KAIwxkVME
-OWw4kfqH1P1yg2nc5DZV0D+nj7xCEkVlDeQaRjWVsMG9RcphrkjrQX6zgXGbu8+Y
-uTBq8wInhj5KgS8mVhIQsJilqF/jog==
-=d3My
------END PGP SIGNATURE-----
-
---Sig_/dYQ491Hw0/pdPLn=Ll7Fgr/--
+> ---
+>  include/linux/irqflags.h |    5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> --- a/include/linux/irqflags.h
+> +++ b/include/linux/irqflags.h
+> @@ -153,8 +153,11 @@ do {						\
+>  extern void warn_bogus_irq_restore(void);
+>  #define raw_check_bogus_irq_restore()			\
+>  	do {						\
+> -		if (unlikely(!arch_irqs_disabled()))	\
+> +		if (unlikely(!arch_irqs_disabled())) {	\
+> +			instrumentation_begin();	\
+>  			warn_bogus_irq_restore();	\
+> +			instrumentation_end();		\
+> +		}					\
+>  	} while (0)
+>  #else
+>  #define raw_check_bogus_irq_restore() do { } while (0)

@@ -2,59 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C525A314CCD
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 11:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D24C314CD8
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 11:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbhBIKUB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 05:20:01 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54608 "EHLO mx2.suse.de"
+        id S231533AbhBIKWJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 05:22:09 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48639 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231534AbhBIKRy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 05:17:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6A5C5AE03;
-        Tue,  9 Feb 2021 10:17:12 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 11:17:13 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 8 (Warning at arch/x86/kernel/irq.c:390)
-Message-ID: <20210209101713.GB15909@zn.tnic>
-References: <20210208235246.01cb4daf@canb.auug.org.au>
- <62fecf7b-e660-8bf6-c9d7-634c599494dd@infradead.org>
+        id S231285AbhBIKUG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 9 Feb 2021 05:20:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DZf562rbmz9rx8;
+        Tue,  9 Feb 2021 21:19:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1612865962;
+        bh=O151gfDDdxSnbws+w5Gl/2M/gAxACw1PS+d+7Fwc/dg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TS+Xn5HrWhjfN+wQ1BlEtDfB6vTMI4J9eJkOpjIVbggn366im563T1EfJjN+BLlzf
+         2gi+jo3ambUWRff+PajW9Tu4iCHa6Gjp7a2FTH51eiZwdeJ2nJuqd8kPBHoW+eQTKK
+         nCgM/FcYBbsYIspZr3dowD9Z1Z+STEKCWdq6np3f3GszDzPdDnjOXeS3TCtQUCAJyb
+         BLbdLezSOXIEfysnDERHDHLeuL+5ddOgXE06SKSC7gIgSRd/GfNi+CeYMwZQzRmP7Y
+         XgHhsPrdfVARDTg8GtaAbepekXHpNSFPTLPCfUFgjpFxkcehPIt5xR0GhbpyH79IVX
+         rTnO0GVP1M8Aw==
+Date:   Tue, 9 Feb 2021 21:19:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the powerpc tree
+Message-ID: <20210209211921.777e3053@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62fecf7b-e660-8bf6-c9d7-634c599494dd@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/qgUhga/cX7TmqXbGpC=4w=A";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 08, 2021 at 07:33:17PM -0800, Randy Dunlap wrote:
-> On 2/8/21 4:52 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20210205:
-> > 
-> 
-> on x86_64:
-> 
-> Re: commit 1dba8a9538f5164eb8874eed4c7d6799a3c64963
-> Author: Borislav Petkov <bp@suse.de>
-> Date:   Thu Jan 7 13:29:05 2021 +0100
->     thermal: Move therm_throt there from x86/mce
+--Sig_/qgUhga/cX7TmqXbGpC=4w=A
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-That one is replaced with a better variant now and it should land in the
-next linux-next, the one after next-20210208.
+Hi all,
 
-Thx.
+After merging the powerpc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
--- 
-Regards/Gruss,
-    Boris.
+arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x0): relocation truncated to f=
+it: R_PPC64_REL24 (OPD) against symbol `do_page_fault' defined in .opd sect=
+ion in arch/powerpc/mm/fault.o
+arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x8): relocation truncated to f=
+it: R_PPC64_REL24 (OPD) against symbol `do_page_fault' defined in .opd sect=
+ion in arch/powerpc/mm/fault.o
+arch/powerpc/kernel/head_64.o:(__ftr_alt_97+0x28): relocation truncated to =
+fit: R_PPC64_REL24 (OPD) against symbol `unknown_exception' defined in .opd=
+ section in arch/powerpc/kernel/traps.o
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Not sure exactly which commit caused this, but it is most likkely part
+of a series in the powerpc tree.
+
+I have left the allyesconfig build broken for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qgUhga/cX7TmqXbGpC=4w=A
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAiYakACgkQAVBC80lX
+0GzODgf6Av3auGL+x8wwz7etJ4YrThQzj3Q3WnEYs/01uB6rUjwanMOKk26gwIbd
+vJIaFavzViS6MSyTci0bm/VY1kDNGkZHpeluF78dnMbUVAeHxKA+NLw3/Ha0TEjs
+y3a8JB5UoavVSga0eB2d5Dlqfzbncxcah22eChlC1D0yUKqbU0h/6NtwuAATp1xU
+WUGTEROUjigx7yO+Rb/me+41hHfpNTmDucIFT6jeFXeLAi4322W+WFemBIKQiIdf
+Vh/NPzs5HkhvW5hvOn9Pn3t1kJzMCGMO7yNExMFY1vc8IOj/g+g9b53FM7DZdcRt
+yuLEAHl3cvVmDfJu4kll/cnG742KwQ==
+=mhS3
+-----END PGP SIGNATURE-----
+
+--Sig_/qgUhga/cX7TmqXbGpC=4w=A--

@@ -2,151 +2,290 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1011E314ADE
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 09:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DBD314B5D
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 10:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbhBIIwh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 03:52:37 -0500
-Received: from mga09.intel.com ([134.134.136.24]:28279 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230194AbhBIIuB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 03:50:01 -0500
-IronPort-SDR: CDHLnO0bOVrm7JGJpS2F/Ox7gTxjg5EPfG+CHvf/9FEnDgbMYokVxKFpLtiUL8u0HdfUR7kfhQ
- GM9R3y2PJCTg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="181993764"
-X-IronPort-AV: E=Sophos;i="5.81,164,1610438400"; 
-   d="scan'208";a="181993764"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 00:48:11 -0800
-IronPort-SDR: qBsvc/XA4yLsyr+Vdzc1wwSuT5sOxC7ubpfvD3hivgS3vif8ljX7K9bQ8dhLq0AlBWv4y9sQd9
- +rulLZqr11Ug==
-X-IronPort-AV: E=Sophos;i="5.81,164,1610438400"; 
-   d="scan'208";a="398715389"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2021 00:48:09 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 38B6E206D0; Tue,  9 Feb 2021 10:48:07 +0200 (EET)
-Date:   Tue, 9 Feb 2021 10:48:07 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] media: i2c: Kconfig: Make MAX9271 a module
-Message-ID: <20210209084807.GA32460@paasikivi.fi.intel.com>
-References: <20210208182006.178740-1-jacopo+renesas@jmondi.org>
- <20210208202147.GZ32460@paasikivi.fi.intel.com>
- <YCG6mV9v+KXT7K+W@pendragon.ideasonboard.com>
+        id S229669AbhBIJVE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 04:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230294AbhBIJQh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 04:16:37 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B3BC06178A
+        for <linux-next@vger.kernel.org>; Tue,  9 Feb 2021 01:15:56 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id x9so9403868plb.5
+        for <linux-next@vger.kernel.org>; Tue, 09 Feb 2021 01:15:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=CDouO9FAUaqphNHV2NuiCdbjSUrn0cdh95g20vVtw68=;
+        b=Z0rh0lZx/fPRBS21g5fshiYeaQgyFzF83V3F5kc6mjhm2m1qgOf9YVWiE7pYx2nY28
+         pig2h3aehcUQT52JU0GCEfBliv+3l4VtsoyKA0TZPZhHUv6lJitvijpbIqBRk/IR8OYz
+         lk2gVYf2Jk+//hGGcCjuDIdTuzCSUWTU2Eq6L33y2imCvPiU21lbryXkB/S4IO3twafY
+         nH/eSp3R8XoSIg88SOLSWHqVTBf968ErwfgVvNnR4tZ+kCrFfJ4KSt4Xwcwl/dIJLM3w
+         5h33aHntbitsOmniTCxpe0JJqkCvzIfIxZFHX7ZKZgETl44C067PQ4Ert+XUaAxMt+yz
+         H4lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=CDouO9FAUaqphNHV2NuiCdbjSUrn0cdh95g20vVtw68=;
+        b=QTiLHzv1KZlz9OH7f5ej7ADO7ag23vMOddJQw003PhaS82UkVRiUHwA9PmauJXi75N
+         GxEhE0ezGUPJdBB/09yXriL9+0Gj8wEOggDAjFNo7Y8OU/hq/qmHIFGWsWLPkOuS99VO
+         DSJPYcC4Y8Ay13fHEgqYeFIdOEBoFoZJuWaNJ9drmKtvI4wiN8kLS4mS2sHhiwKnHKJT
+         cspgj9Gdhi5CtiFpGOj5/jYjRyLUdE/kx2EyGR0ANtyECF06/gO9K1IIDLxw+nQ3zODK
+         ZPakQqEVAsdtNFNvqt/6hieQK+xf2V61hAfbmmG5KCRRWaOuvK++vYWXid93bMh+XI49
+         fIhw==
+X-Gm-Message-State: AOAM533y9byGyzi8EPhpCgKl5utMqpgawFo4q4bRMcbr+/fYK1mEkzmp
+        sJOBQiU25TFlZGPjWDym++jYm9+Ac0jASA==
+X-Google-Smtp-Source: ABdhPJxLI/ohwxDaibOiQp6baPUa3AAuHh9QFg/egYUxpqH9kBurmOlQCcu7Xf3WEB3hn9N0uGb8bA==
+X-Received: by 2002:a17:90b:11c9:: with SMTP id gv9mr3152827pjb.196.1612862156034;
+        Tue, 09 Feb 2021 01:15:56 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g15sm20556695pfb.30.2021.02.09.01.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 01:15:55 -0800 (PST)
+Message-ID: <602252cb.1c69fb81.d050f.e0c1@mx.google.com>
+Date:   Tue, 09 Feb 2021 01:15:55 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YCG6mV9v+KXT7K+W@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.11-rc7-121-gdfed2943da0a
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 166 runs,
+ 6 regressions (v5.11-rc7-121-gdfed2943da0a)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Feb 09, 2021 at 12:26:33AM +0200, Laurent Pinchart wrote:
-> Hi Sakari and Jacopo,
-> 
-> On Mon, Feb 08, 2021 at 10:21:47PM +0200, Sakari Ailus wrote:
-> > On Mon, Feb 08, 2021 at 07:20:06PM +0100, Jacopo Mondi wrote:
-> > > With the introduction of the RDACM21 camera module support in
-> > > commit a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-> > > the symbols defined by the max9271 library were exported twice
-> > > if multiple users of the library were compiled in at the same time.
-> > > 
-> > > In example:
-> > > WARNING: modpost: drivers/media/i2c/rdacm21-camera_module:
-> > > 'max9271_set_serial_link' exported twice. Previous export was in
-> > > drivers/media/i2c/rdacm20-camera_module.ko
-> > > 
-> > > Fix this by making the rdacm21 file a module and have the driver
-> > > using its functions select it.
-> > > 
-> > > Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Suggested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> > > ---
-> > >  drivers/media/i2c/Kconfig  | 5 +++++
-> > >  drivers/media/i2c/Makefile | 7 +++----
-> > >  2 files changed, 8 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> > > index 2d3dc0d82f9e..84645f751da3 100644
-> > > --- a/drivers/media/i2c/Kconfig
-> > > +++ b/drivers/media/i2c/Kconfig
-> > > @@ -1240,12 +1240,16 @@ config VIDEO_NOON010PC30
-> > > 
-> > >  source "drivers/media/i2c/m5mols/Kconfig"
-> > > 
-> > > +config VIDEO_MAX9271
-> > 
-> > How about calling this VIDEO_MAX9271_HELPER instead? It's not a driver in
-> > the proper sense of the word.
-> 
-> Not all Kconfig symbols refer to drivers. Should we rename V4L2_FWNODE
-> to V4L2_FWNODE_HELPER ? :-)
-> 
-> Of course the MAX9271 name may lead someone to believe that the symbol
-> refers to a driver. If you think we should really make this explicit,
-> I'd have a preference for LIB instead of HELPER.
+next/pending-fixes baseline: 166 runs, 6 regressions (v5.11-rc7-121-gdfed29=
+43da0a)
 
-LIB sounds good to me, too.
+Regressions Summary
+-------------------
 
-> 
-> Either way,
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > 
-> > > +	tristate
-> > > +
-> > >  config VIDEO_RDACM20
-> > >  	tristate "IMI RDACM20 camera support"
-> > >  	depends on I2C
-> > >  	select V4L2_FWNODE
-> > >  	select VIDEO_V4L2_SUBDEV_API
-> > >  	select MEDIA_CONTROLLER
-> > > +	select VIDEO_MAX9271
-> > >  	help
-> > >  	  This driver supports the IMI RDACM20 GMSL camera, used in
-> > >  	  ADAS systems.
-> > > @@ -1259,6 +1263,7 @@ config VIDEO_RDACM21
-> > >  	select V4L2_FWNODE
-> > >  	select VIDEO_V4L2_SUBDEV_API
-> > >  	select MEDIA_CONTROLLER
-> > > +	select VIDEO_MAX9271
-> > >  	help
-> > >  	  This driver supports the IMI RDACM21 GMSL camera, used in
-> > >  	  ADAS systems.
-> > > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> > > index 6bd22d63e1a7..c34a7de3158b 100644
-> > > --- a/drivers/media/i2c/Makefile
-> > > +++ b/drivers/media/i2c/Makefile
-> > > @@ -125,10 +125,9 @@ obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
-> > >  obj-$(CONFIG_VIDEO_IMX334)	+= imx334.o
-> > >  obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
-> > >  obj-$(CONFIG_VIDEO_MAX9286)	+= max9286.o
-> > > -rdacm20-camera_module-objs	:= rdacm20.o max9271.o
-> > > -obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20-camera_module.o
-> > > -rdacm21-camera_module-objs	:= rdacm21.o max9271.o
-> > > -obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21-camera_module.o
-> > > +obj-$(CONFIG_VIDEO_MAX9271)	+= max9271.o
-> > > +obj-$(CONFIG_VIDEO_RDACM20)	+= rdacm20.o
-> > > +obj-$(CONFIG_VIDEO_RDACM21)	+= rdacm21.o
-> > >  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-> > > 
-> > >  obj-$(CONFIG_SDR_MAX2175) += max2175.o
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b-32       | arm   | lab-baylibre | gcc-8    | bcm2835_defcon=
+fig            | 2          =
 
--- 
-Sakari Ailus
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defco=
+nfig           | 1          =
+
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+meson-gxl-s905d-p230     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..BIG_ENDIAN=3Dy | 1          =
+
+meson-gxm-q200           | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-rc7-121-gdfed2943da0a/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-rc7-121-gdfed2943da0a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      dfed2943da0a57c59d9cdcd390cbbec2bf7d0da5 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b-32       | arm   | lab-baylibre | gcc-8    | bcm2835_defcon=
+fig            | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60221d7a53bfe9a0ff3abe76
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: bcm2835_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-=
+rpi-3-b-32.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-=
+rpi-3-b-32.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/60221d7a53bfe9a=
+0ff3abe7c
+        new failure (last pass: v5.11-rc6-436-gda0c88a4d23e)
+        4 lines
+
+    2021-02-09 05:28:14.185000+00:00  kern  :alert : Unable to handle kerne=
+l paging request at virtual address 30240ffe
+    2021-02-09 05:28:14.186000+00:00  kern  :ale<8>[   13.856218] <LAVA_SIG=
+NAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dlines MEASUREMENT=
+=3D4>   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/60221d7a53bfe9a=
+0ff3abe7d
+        new failure (last pass: v5.11-rc6-436-gda0c88a4d23e)
+        39 lines
+
+    2021-02-09 05:28:14.193000+00:00  kern  :alert : [30240ffe] *pgd=3D0000=
+0000
+    2021-02-09 05:28:14.235000+00:00  kern  :emerg : Internal error: Oops: =
+80000005 [#1] ARM
+    2021-02-09 05:28:14.237000+00:00  kern  :emerg : Process S10udev (pid: =
+94, stack limit =3D 0xf7dc103<8>[   13.899133] <LAVA_SIGNAL_TESTCASE TEST_C=
+ASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D39>
+    2021-02-09 05:28:14.237000+00:00  d)   =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defco=
+nfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602221f0f6d980c77b3abe63
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-v=
+ar-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-v=
+ar-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602221f0f6d980c77b3ab=
+e64
+        new failure (last pass: v5.11-rc6-436-gda0c88a4d23e) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602223acef32defcff3abe7f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602223acef32defcff3ab=
+e80
+        failing since 19 days (last pass: v5.11-rc4-275-g31be679b2913, firs=
+t fail: v5.11-rc4-315-gcbe1658e272d) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+meson-gxl-s905d-p230     | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602223e4ef32defcff3abf76
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxl-s905d-p230.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxl-s905d-p230.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602223e4ef32defcff3ab=
+f77
+        new failure (last pass: v5.11-rc6-436-gda0c88a4d23e) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+meson-gxm-q200           | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602221727e119ac9df3abe81
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxm-q200.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+21-gdfed2943da0a/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
+re/baseline-meson-gxm-q200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602221727e119ac9df3ab=
+e82
+        new failure (last pass: v5.11-rc6-436-gda0c88a4d23e) =
+
+ =20

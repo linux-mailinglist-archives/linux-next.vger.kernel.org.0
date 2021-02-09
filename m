@@ -2,99 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D048D314CB6
-	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 11:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2116314CC5
+	for <lists+linux-next@lfdr.de>; Tue,  9 Feb 2021 11:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbhBIKQg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 05:16:36 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41407 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231239AbhBIKJ1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 05:09:27 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DZdrr4jM0z9sVX;
-        Tue,  9 Feb 2021 21:08:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612865324;
-        bh=/SoBVY0DwnmgqVEpAvVXXUjz5nrTYZHSVN+Li9R+fZg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dSTQ5QbFTlFIRI1ezMy9sqfRM6VE4tWndSudl8BZ7RqinnDyrstn7liHTLVJK0xwx
-         /lEyBZRZDCqc/L4C9dfarNTzlToQaTn9hq73fGEKI+T7Id0X6PbQZGPu5mYLtRyX1w
-         GRQ6liy42iBgLpB3U6vJ653txUnwRSw3OTM1v6Z3h5Sx1h+g1KZOCbuj7vyi6aythW
-         +ftlAmSoNvhVRyrghfGhT0t/0ytByGfX+WFAodvhSy3hSoR0YLVcjj6ECDXB4Ce2+Q
-         SK0BBDbbc4MlI2Y7yT0xalzGJYng0xsndGIOfCp++2/rsk5/SRmVuajwjhAWnJPeZh
-         PNjtLI6cV3HNg==
-Date:   Tue, 9 Feb 2021 21:08:43 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the modules tree
-Message-ID: <20210209210843.3af66662@canb.auug.org.au>
+        id S231286AbhBIKSn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 05:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231432AbhBIKQd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 05:16:33 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22244C061793
+        for <linux-next@vger.kernel.org>; Tue,  9 Feb 2021 02:15:45 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id w2so30297668ejk.13
+        for <linux-next@vger.kernel.org>; Tue, 09 Feb 2021 02:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zeO3sY4fbSBwh5uWv4Oqzo1Gi6tqlkYzvN/i5rqf3qU=;
+        b=spw3R/IQ+ixH4qYVWy1fvUGlrOVdgInPdBvFjZeqyzbtEOqs1+X95sHl/HLLJ4VLLk
+         f/zCWcsYsIGVxFo3DtWdh4loosYk4PDaki0Z66TJGdxEAn1X4uIO411xgU0w+TS32yES
+         TgNwhsLlSeYp5zOMvXfik/iwxbNg17Iyfg06o/2vjPLVXLaoyrwuS7yL3HPnMSj+CEc3
+         WCn62lyieJuwi6KV8qL+aBhCZ8EGrYKboHcc1VltCLlKjUceTsCqerLZaAod0AlBTQot
+         bk/P7uysddwFDcJ+kmfogaC16xgoU6kBDC61vr+NFK0MDgPRUaQMOmzc5Xf+Fylvnazi
+         WHWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zeO3sY4fbSBwh5uWv4Oqzo1Gi6tqlkYzvN/i5rqf3qU=;
+        b=EZetL2GV6BNrSz+sKKiK48lfya51Noi9lGth4yLMVkAFEAJm4d8FBdNsciwzXU9GtW
+         7BT4erK/Xr/q0sCqbGzBQb7keF3kM+lqN96ZZ+8S0U7f+I6UQTUXYvadHGqCq5ekhNvw
+         SbvSJub+ED0dkYFWtxC/RGoslPLgv9nDaiGkU+fs5u3DaQdePGYQi9mdZ9/U+ClTS+ET
+         eUSr/WchPJXTquhSPEGtqyIl2LuNcO2Ltmdh+8SYCUa9/PuP4Ecg8d68sUH+1pwmjUaL
+         bUjj3vfvz47PSzDDRTbBEh2JyGvVN7vXb7Dq+/1K6h+giGRiLPsI5EfxrtEU9ww/XyYR
+         NyZQ==
+X-Gm-Message-State: AOAM532zSU7FwUjo0wGmtEJYNiE6WoTJPw2aGYYJuGVzvuAaxsqUwhfL
+        O+CE5heGitK3ymf1N3loGVtXE+UQ/I8wyraHXv/sYQ==
+X-Google-Smtp-Source: ABdhPJyivaUoVOHT/b59A0UT7hjGtf3I5Gw7XQw0zN+7mKUdmfdZvWXnEWoEcRnJ8KO3EMcS0vOSEk4+NNJqOGmhDGk=
+X-Received: by 2002:a17:906:d8ca:: with SMTP id re10mr1468224ejb.18.1612865743771;
+ Tue, 09 Feb 2021 02:15:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j9i=zWo53.+8wjPox=w_cyC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210104065503.199631-1-jasowang@redhat.com> <20210104065503.199631-17-jasowang@redhat.com>
+In-Reply-To: <20210104065503.199631-17-jasowang@redhat.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 9 Feb 2021 15:45:32 +0530
+Message-ID: <CA+G9fYteUN=s5Mp+BhdMPZt96B3qDa+2HwudmWgEmmrDELLPdw@mail.gmail.com>
+Subject: Re: [PATCH V3 16/19] virtio-pci: introduce modern device module
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        open list <linux-kernel@vger.kernel.org>, shahafs@mellanox.com,
+        lulu@redhat.com, sgarzare@redhat.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/j9i=zWo53.+8wjPox=w_cyC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Jason,
 
-Hi all,
+On Mon, 4 Jan 2021 at 12:28, Jason Wang <jasowang@redhat.com> wrote:
+>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/Kconfig                 |  10 +-
+>  drivers/virtio/Makefile                |   1 +
+>  drivers/virtio/virtio_pci_common.h     |  27 +-
+>  drivers/virtio/virtio_pci_modern.c     | 617 -------------------------
+>  drivers/virtio/virtio_pci_modern_dev.c | 599 ++++++++++++++++++++++++
+>  include/linux/virtio_pci_modern.h      | 111 +++++
+>  6 files changed, 721 insertions(+), 644 deletions(-)
+>  create mode 100644 drivers/virtio/virtio_pci_modern_dev.c
+>  create mode 100644 include/linux/virtio_pci_modern.h
+>
+> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> index 7b41130d3f35..6b9b81f4b8c2 100644
+> --- a/drivers/virtio/Kconfig
+> +++ b/drivers/virtio/Kconfig
+> @@ -12,6 +12,14 @@ config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+>           This option is selected if the architecture may need to enforce
+>           VIRTIO_F_ACCESS_PLATFORM
+>
+> +config VIRTIO_PCI_MODERN
+> +       tristate "Modern Virtio PCI Device"
+> +       depends on PCI
+> +       help
+> +         Modern PCI device implementation. This module implements the
+> +         basic probe and control for devices which are based on modern
+> +         PCI device with possible vendor specific extensions.
+> +
+>  menuconfig VIRTIO_MENU
+>         bool "Virtio drivers"
+>         default y
+> @@ -20,7 +28,7 @@ if VIRTIO_MENU
+>
+>  config VIRTIO_PCI
+>         tristate "PCI driver for virtio devices"
+> -       depends on PCI
+> +       depends on VIRTIO_PCI_MODERN
 
-After merging the modules tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+While booting Linux next tag 20210208 kernel on qemu_arm64 and qemu_arm
+mount rootfs failed.  The root cause seems to be due to missing configs
+CONFIG_VIRTIO_PCI=y
+CONFIG_VIRTIO_PCI_LEGACY=y
 
-In file included from include/linux/export.h:123,
-                 from include/linux/linkage.h:7,
-                 from arch/powerpc/include/asm/unistd.h:18,
-                 from <stdin>:2:
-./include/generated/autoksyms.h:5:9: warning: missing whitespace after the =
-macro name
-    5 | #define __KSYM_.HT_update_self_and_peer_setting 1
-      |         ^~~~~~~
-./include/generated/autoksyms.h:6:9: warning: missing whitespace after the =
-macro name
-    6 | #define __KSYM_.RemovePeerTS 1
-      |         ^~~~~~~
-./include/generated/autoksyms.h:6: warning: "__KSYM_" redefined
-    6 | #define __KSYM_.RemovePeerTS 1
-      |=20
-./include/generated/autoksyms.h:5: note: this is the location of the previo=
-us definition
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-and on and on :-(
+Then I have to force to enable this MODERN config
+CONFIG_VIRTIO_PCI_MODERN=y
+and which enabled
+CONFIG_VIRTIO_PCI=y
+CONFIG_VIRTIO_PCI_LEGACY=y
 
-Caused by commit
+and the qemu_arm64 and qemu_arm boot pass.
 
-  367948220fce ("module: remove EXPORT_UNUSED_SYMBOL*")
 
-I have reverted that commit for today.
+New build link,
+https://builds.tuxbuild.com/1oEse4EFsoQr1FkKBfiLmhMCe7j/
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/j9i=zWo53.+8wjPox=w_cyC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAiXysACgkQAVBC80lX
-0GwJTgf9Eb64fcnjZcIlXzRtYKmKfmdlb00alNAxjocUa9bFG01DpfLTVdLo/n5r
-kabCE3yqmAU8S0hrLawjDomUd4dMzen7QQpBxapEv7Ah6fSY3eBLCKms8aWZoo/b
-+UiJJllO6lZOtYMUBv6jFBlR8ny4CgrpE1pfdtDjvZ+QTTxMMJYcbc9poVzvo9ZP
-aWOcNQOI/vt9/QXHUiPIzWIK2Arg+W5ECnT+bLA9S2iOG2c0SkcZwovZAe/i6tff
-pNImEJPz2LyKkScDYelCF+0pz7+vODZvvORPlC/gCBxrU0ZXoZV4zP5UvdBRzsxe
-jG1kM9AYnVzw/i6o3vaUhQTW84we1A==
-=AwX1
------END PGP SIGNATURE-----
-
---Sig_/j9i=zWo53.+8wjPox=w_cyC--
+-- 
+Linaro LKFT
+https://lkft.linaro.org

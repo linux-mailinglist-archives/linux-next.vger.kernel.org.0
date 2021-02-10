@@ -2,132 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3148316931
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 15:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F233169B3
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 16:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhBJOcz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Feb 2021 09:32:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:1095 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229639AbhBJOcy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 10 Feb 2021 09:32:54 -0500
-IronPort-SDR: D40Zc3DGVrt9bQTmqVlD9tJeynD4CCPXpja715CFqTRuguPlAnVomcoh8eTSaxL9awxT2ccQvf
- lyutunM/AC8A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="246144354"
-X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="246144354"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 06:31:07 -0800
-IronPort-SDR: iokoZIAq5W+IsiPfGY0fW94n0g4TrEXc4wSF8e5IDWFjF0IZb6ZkO1c5yyZCXpUkztDKNPTE2o
- 0h/LtnmMMKkA==
-X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
-   d="scan'208";a="380123320"
-Received: from bartoszo-mobl1.ger.corp.intel.com (HELO [10.252.56.156]) ([10.252.56.156])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 06:31:05 -0800
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210210141138.11a6ad09@canb.auug.org.au>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Message-ID: <670f6c7e-1f71-ffce-f9dd-07c7f6164c22@linux.intel.com>
-Date:   Wed, 10 Feb 2021 15:31:03 +0100
+        id S230362AbhBJPEg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Feb 2021 10:04:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46004 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231939AbhBJPES (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 10 Feb 2021 10:04:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612969371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5MXaPbc/42qFdop710unD1yxd2cY2cL3Z6ntoAVSBA8=;
+        b=K9AhFRAsLCk2c4Isn3xotPOuqlxlvoPAXY2uJb5kaQjqG2QDxLY1F9OzeQ+WOxwipFmh8h
+        f91v/CuNRza34uPJgmIr/prNy3VTHgNsVNQtsa0KlpQ1BJFaJmwZc3GWwxa2du4aoOWMFG
+        Q6IdSKU1RjOeK14KkLsrIPMyX0hzZ8Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-222-bQQyr9rGOxeqh9cI2Wqvww-1; Wed, 10 Feb 2021 10:02:45 -0500
+X-MC-Unique: bQQyr9rGOxeqh9cI2Wqvww-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED8B4427CF;
+        Wed, 10 Feb 2021 15:02:42 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-115-20.rdu2.redhat.com [10.10.115.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 470F460C15;
+        Wed, 10 Feb 2021 15:02:41 +0000 (UTC)
+Subject: Re: [next] [mips] spinlock.h:17:28: error: redefinition of
+ 'queued_spin_unlock'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Paul Burton <paul.burton@mips.com>, Will Deacon <will@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <8e1322cf-4498-43b6-1dbd-665b7f016815@redhat.com>
+Date:   Wed, 10 Feb 2021 10:02:40 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210210141138.11a6ad09@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <CA+G9fYtkWdeL7-nfXW8+VbaCK7swinU_Ksn67RW4FFD+cx8VYg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Op 2021-02-10 om 04:11 schreef Stephen Rothwell:
-> Hi all,
+On 2/10/21 12:30 AM, Naresh Kamboju wrote:
+> While building Linux next tag 20210209 mips uImage.gz failed with below configs
 >
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+>    - mips (cavium_octeon_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (malta_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (nlm_xlp_defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
+>    - mips (defconfig) with gcc-8, gcc-9 and gcc-10 - FAILED
 >
-> drivers/gpu/drm/v3d/v3d_sched.c:263:1: error: return type is an incomplete type
->   263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_gpu_reset_for_timeout':
-> drivers/gpu/drm/v3d/v3d_sched.c:289:9: error: 'return' with a value, in function returning void [-Werror=return-type]
->   289 |  return DRM_GPU_SCHED_STAT_NOMINAL;
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:263:1: note: declared here
->   263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-> drivers/gpu/drm/v3d/v3d_sched.c:298:1: error: return type is an incomplete type
->   298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue q,
->       | ^~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_cl_job_timedout':
-> drivers/gpu/drm/v3d/v3d_sched.c:309:10: error: 'return' with a value, in function returning void [-Werror=return-type]
->   309 |   return DRM_GPU_SCHED_STAT_NOMINAL;
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:298:1: note: declared here
->   298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue q,
->       | ^~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-> drivers/gpu/drm/v3d/v3d_sched.c:316:1: error: return type is an incomplete type
->   316 | v3d_bin_job_timedout(struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:325:1: error: return type is an incomplete type
->   325 | v3d_render_job_timedout(struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:334:1: error: return type is an incomplete type
->   334 | v3d_generic_job_timedout(struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:342:1: error: return type is an incomplete type
->   342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_csd_job_timedout':
-> drivers/gpu/drm/v3d/v3d_sched.c:353:10: error: 'return' with a value, in function returning void [-Werror=return-type]
->   353 |   return DRM_GPU_SCHED_STAT_NOMINAL;
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:342:1: note: declared here
->   342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
->       | ^~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-> drivers/gpu/drm/v3d/v3d_sched.c:362:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
->   362 |  .timedout_job = v3d_bin_job_timedout,
->       |                  ^~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:362:18: note: (near initialization for 'v3d_bin_sched_ops.timedout_job')
-> drivers/gpu/drm/v3d/v3d_sched.c:369:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
->   369 |  .timedout_job = v3d_render_job_timedout,
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:369:18: note: (near initialization for 'v3d_render_sched_ops.timedout_job')
-> drivers/gpu/drm/v3d/v3d_sched.c:376:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
->   376 |  .timedout_job = v3d_generic_job_timedout,
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:376:18: note: (near initialization for 'v3d_tfu_sched_ops.timedout_job')
-> drivers/gpu/drm/v3d/v3d_sched.c:383:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
->   383 |  .timedout_job = v3d_csd_job_timedout,
->       |                  ^~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:383:18: note: (near initialization for 'v3d_csd_sched_ops.timedout_job')
-> drivers/gpu/drm/v3d/v3d_sched.c:390:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
->   390 |  .timedout_job = v3d_generic_job_timedout,
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/v3d/v3d_sched.c:390:18: note: (near initialization for 'v3d_cache_clean_sched_ops.timedout_job')
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc' uImage.gz
+> In file included from /include/linux/spinlock.h:90,
+>                   from /include/linux/ipc.h:5,
+>                   from /include/uapi/linux/sem.h:5,
+>                   from /include/linux/sem.h:5,
+>                   from /include/linux/compat.h:14,
+>                   from /arch/mips/kernel/asm-offsets.c:12:
+> /arch/mips/include/asm/spinlock.h:17:28: error: redefinition of
+> 'queued_spin_unlock'
+>     17 | #define queued_spin_unlock queued_spin_unlock
+>        |                            ^~~~~~~~~~~~~~~~~~
 >
-> Caused by commit
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 >
->   c10983e14e8f ("drm/scheduler: Job timeout handler returns status (v3)")
+> build link,
+> https://builds.tuxbuild.com/1oF9lkBAeWM2WvR11O2Yun8ERNT/
 >
-> I have used the drm-misc tree from next-20210209 for today.
->
-Hey,
+I have just posted a patch to reorder qspinlock.h and qrwlock.h include 
+ordering. Hopefully that can fix the compilation problem though I don't 
+have a mips building environment to verify that.
 
-I reverted the commit in drm-misc-next-fixes. It should be good now. :)
-
-I must have accidentally cherry picked it when grabbing all fixes.
-
-~Maarten
+Cheers,
+Longman
 

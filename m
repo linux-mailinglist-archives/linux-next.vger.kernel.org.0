@@ -2,125 +2,174 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE7F315D11
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 03:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BCA315DBE
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 04:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbhBJCRR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 21:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbhBJCQ1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 21:16:27 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00385C061756;
-        Tue,  9 Feb 2021 18:15:46 -0800 (PST)
+        id S231408AbhBJDM2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 22:12:28 -0500
+Received: from ozlabs.org ([203.11.71.1]:39057 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229761AbhBJDMZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 9 Feb 2021 22:12:25 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Db3Jb3B5Hz9sBJ;
-        Wed, 10 Feb 2021 13:15:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Db4Y90HD5z9sB4;
+        Wed, 10 Feb 2021 14:11:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612923345;
-        bh=HrYbbPkMd2CSwFO3wUv8R0fp87DNVHaZ1SFMINQnFfY=;
+        s=201702; t=1612926702;
+        bh=eAbbv1c4473lc/U2iVCN8pX8dVi4lHGQNHEtlCAMwAk=;
         h=Date:From:To:Cc:Subject:From;
-        b=LXC2eHbSDUAoWxFirQGlvSBQ+WaR3LoAOi/NikbL6P4eL1Vob9eW28WKR4OtgtZ37
-         Zk8aMGYp3sJGy5KDxhBqoQXrB08T1U/1ytpTSXYUWDpqZjM5N6//X00/I3vFwDaHE7
-         6MuGUx6myWcW+QWe7RzUSDpdKYqbbPQ/DXfXTqJN0bljKN2Jl1Cvv/c3fwqaFtFtNX
-         FwK5rckPbVTW/aEMmntrey9FT+NzlrsfGaY/cMVzv4ceP5/Y/2ZFJnWtms7zFZtKXM
-         b5WN4D3Ry4rac8LcmyCCkn1NNXxv0AbRfKTWr7OE9f9OeknvNRBwVs/77BlKT1YZ9A
-         izOApkLvhPLgA==
-Date:   Wed, 10 Feb 2021 13:15:42 +1100
+        b=dcpWlTYZSobEHLhKLput+sRfS+UXNTa7KFrR/rGVzA/n8T2qBQJQ/79XmjhZEKb2W
+         zCUuQUXv7yWRckVi1GNl0lJd9JgeqsxaPw+qXkJCrP7txXuYWgtx89vEZcied/8RNw
+         KXyzIUA1I6GeS7N4DIZHSANgC7vtWSNmMaTOwsMPebrOi304u2s8TTl5DQpga0LSH+
+         goTG3GGGLyO0TPubSdqhBJMGH/oUv3TZr86HA63hUfqUsxpMPqas4wZnhi5xjzee+b
+         1+y73C4Qz9muXLIi+P030lRrNofbyNTnvJWZ+J3jfYPJWACPVsR9HEOEVhDjh/qi57
+         MyiRfuzCHeaHw==
+Date:   Wed, 10 Feb 2021 14:11:38 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Bob Pearson <rpearson@hpe.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Wilck <mwilck@suse.com>
-Subject: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20210210131542.215ea67c@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20210210141138.11a6ad09@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xWYV/P/qx5xr6A5ADcnhg/+";
+Content-Type: multipart/signed; boundary="Sig_/yMIn+23mpOqpJVxRcPfp7s0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xWYV/P/qx5xr6A5ADcnhg/+
+--Sig_/yMIn+23mpOqpJVxRcPfp7s0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rdma tree got a conflict in:
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/infiniband/sw/rxe/rxe_net.c
+drivers/gpu/drm/v3d/v3d_sched.c:263:1: error: return type is an incomplete =
+type
+  263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job=
+ *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_gpu_reset_for_timeout':
+drivers/gpu/drm/v3d/v3d_sched.c:289:9: error: 'return' with a value, in fun=
+ction returning void [-Werror=3Dreturn-type]
+  289 |  return DRM_GPU_SCHED_STAT_NOMINAL;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:263:1: note: declared here
+  263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job=
+ *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+drivers/gpu/drm/v3d/v3d_sched.c:298:1: error: return type is an incomplete =
+type
+  298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue=
+ q,
+      | ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_cl_job_timedout':
+drivers/gpu/drm/v3d/v3d_sched.c:309:10: error: 'return' with a value, in fu=
+nction returning void [-Werror=3Dreturn-type]
+  309 |   return DRM_GPU_SCHED_STAT_NOMINAL;
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:298:1: note: declared here
+  298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue=
+ q,
+      | ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+drivers/gpu/drm/v3d/v3d_sched.c:316:1: error: return type is an incomplete =
+type
+  316 | v3d_bin_job_timedout(struct drm_sched_job *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:325:1: error: return type is an incomplete =
+type
+  325 | v3d_render_job_timedout(struct drm_sched_job *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:334:1: error: return type is an incomplete =
+type
+  334 | v3d_generic_job_timedout(struct drm_sched_job *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:342:1: error: return type is an incomplete =
+type
+  342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_csd_job_timedout':
+drivers/gpu/drm/v3d/v3d_sched.c:353:10: error: 'return' with a value, in fu=
+nction returning void [-Werror=3Dreturn-type]
+  353 |   return DRM_GPU_SCHED_STAT_NOMINAL;
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:342:1: note: declared here
+  342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
+      | ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+drivers/gpu/drm/v3d/v3d_sched.c:362:18: error: initialization of 'enum drm_=
+gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
+'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
+  362 |  .timedout_job =3D v3d_bin_job_timedout,
+      |                  ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:362:18: note: (near initialization for 'v3d=
+_bin_sched_ops.timedout_job')
+drivers/gpu/drm/v3d/v3d_sched.c:369:18: error: initialization of 'enum drm_=
+gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
+'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
+  369 |  .timedout_job =3D v3d_render_job_timedout,
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:369:18: note: (near initialization for 'v3d=
+_render_sched_ops.timedout_job')
+drivers/gpu/drm/v3d/v3d_sched.c:376:18: error: initialization of 'enum drm_=
+gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
+'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
+  376 |  .timedout_job =3D v3d_generic_job_timedout,
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:376:18: note: (near initialization for 'v3d=
+_tfu_sched_ops.timedout_job')
+drivers/gpu/drm/v3d/v3d_sched.c:383:18: error: initialization of 'enum drm_=
+gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
+'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
+  383 |  .timedout_job =3D v3d_csd_job_timedout,
+      |                  ^~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:383:18: note: (near initialization for 'v3d=
+_csd_sched_ops.timedout_job')
+drivers/gpu/drm/v3d/v3d_sched.c:390:18: error: initialization of 'enum drm_=
+gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
+'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
+  390 |  .timedout_job =3D v3d_generic_job_timedout,
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/v3d/v3d_sched.c:390:18: note: (near initialization for 'v3d=
+_cache_clean_sched_ops.timedout_job')
 
-between commit:
+Caused by commit
 
-  f1b0a8ea9f12 ("Revert "RDMA/rxe: Remove VLAN code leftovers from RXE"")
+  c10983e14e8f ("drm/scheduler: Job timeout handler returns status (v3)")
 
-from Linus' tree and commit:
-
-  899aba891cab ("RDMA/rxe: Fix FIXME in rxe_udp_encap_recv()")
-
-from the rdma tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the drm-misc tree from next-20210209 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/infiniband/sw/rxe/rxe_net.c
-index 943914c2a50c,36d56163afac..000000000000
---- a/drivers/infiniband/sw/rxe/rxe_net.c
-+++ b/drivers/infiniband/sw/rxe/rxe_net.c
-@@@ -153,15 -152,14 +153,19 @@@ static struct dst_entry *rxe_find_route
-  static int rxe_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
-  {
-  	struct udphdr *udph;
-+ 	struct rxe_dev *rxe;
-  	struct net_device *ndev =3D skb->dev;
- +	struct net_device *rdev =3D ndev;
-- 	struct rxe_dev *rxe =3D rxe_get_dev_from_net(ndev);
-  	struct rxe_pkt_info *pkt =3D SKB_TO_PKT(skb);
- =20
-+ 	/* takes a reference on rxe->ib_dev
-+ 	 * drop when skb is freed
-+ 	 */
-+ 	rxe =3D rxe_get_dev_from_net(ndev);
- +	if (!rxe && is_vlan_dev(rdev)) {
- +		rdev =3D vlan_dev_real_dev(ndev);
- +		rxe =3D rxe_get_dev_from_net(rdev);
- +	}
-  	if (!rxe)
-  		goto drop;
- =20
-
---Sig_/xWYV/P/qx5xr6A5ADcnhg/+
+--Sig_/yMIn+23mpOqpJVxRcPfp7s0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAjQc4ACgkQAVBC80lX
-0GxvnQf9EAkvQXgABaVqlGlyAIt2+/7I0vWTkZINwx1w+krym2rqbhFGVzVNPqp8
-7AIcqRcc3s25s2P5Gshq/caSL0tIT4GeI/pehskbzz+rKt6CKbWs0niblpn5TjxN
-hN1sG+0sAvlygjqsz8MWRTYBIK/R4K3HOFTQ5kbeDlkv1G7Qr8rMzsbPXydg6YgT
-O8weWLePFBI1koYlPW7BpuPfNEPtBuBj4X2prmBEC9OuhiJM30VbXFOIt7CgI+EB
-jlBs0z/MsNryTM1uiHAw9H5lyG+fKUf8xSLzTnP97RUitYclN5R9s27gZ5mS92+Q
-DsqGNB1A+CDhkTNcuq+f7sLnRaCisA==
-=8IWq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAjTuoACgkQAVBC80lX
+0GzGLAf/d/58uMidoc4JmHnMyZCbt7HY3jpGVAKuh0UnM4qOq+vkKLg/owG+EGe3
+4zZycTr+XR091TCvbo7kEsozJzJ/h341hNcl43tQK2oWdVGpylXxZ8ot4ijJvs6k
+A/Lgiqc1mU8kRd2ox9ugSOl9iZGE4Dn3s8Uk7BVelsYeXaz5tGPHuKh/4aTgQiK2
+o/loR3kqI/acoAvJg6Gccu2mazld4v7qRPflmbRMTs4nvIoKSItkhP09t2SiTRXH
+51Xl1SFhUsFJmXiLl+mkNYe2nlkSCW7qGU/YCpn9AUTCGVBcJN4Zb37TjlBWfCk4
+JYLjBbGC4rQr0Q1zlVhsLc41lEJZtQ==
+=PUsP
 -----END PGP SIGNATURE-----
 
---Sig_/xWYV/P/qx5xr6A5ADcnhg/+--
+--Sig_/yMIn+23mpOqpJVxRcPfp7s0--

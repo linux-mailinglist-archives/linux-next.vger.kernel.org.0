@@ -2,107 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BC4317179
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 21:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B791E317199
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 21:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbhBJUh2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Feb 2021 15:37:28 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:1160 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbhBJUh0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Feb 2021 15:37:26 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B602443dc0000>; Wed, 10 Feb 2021 12:36:44 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Feb
- 2021 20:36:44 +0000
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Wed, 10 Feb 2021 20:36:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QLkZ0nyeA3eTviQNuytse6YuvjjDUcjB8GrR7rdf7Cf2Ld/1PAz6D6dncuE3TeT1fEN432slzaQG9gHMiENW/CMhyIxCb14/1ncymRaNAKHBt6twVZEoKxO8Q2zv7GNFMtsYIuAh149955KdbRdaNzIaENKWoJ1Lz9WSHqqYtbud/IeFhDdtYGz4MNmDuIIca7vm9hzQFU7Ivbky3zkvBm9gi1kV9DA8X2PyTkN2m//MTcvQ7RZQgm5gZCILAFGmMd0/gNTM9Qn+QfzP3Q1isvnRKjdreCZaU4dSHCXcqC+KYqhtTixxyoeUBZPAiCSwAqzOY9HUsjoqlNUw0wZvTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CB2khyyuZBH8C7YPXIuhUnxN+QIrDWDKTGQDY0EKefk=;
- b=VsZzd0NgespBpsPLbwBXzLI7GtfMjOqm1lineyw9fHZ6tNWTQp+F6xJBjelpIfjqT3eKwbcAlbQgncablh0e2DlkZb7cZ1IYw557BH/wdbe3dHVvqCtcfbOJ4AyQ8cGoK5Nu4aXE2dLhFZmRiKp+9Dp07l9Tp04ujejexvYYiEqlq+E1VdEQxEVGtNncQs8Yv2VLbnnF+0Xp9jQHzmxUDWFF+ebB+hWNQTe8AWo36Zk2Fs7kTTAwi6W+htNdNWCBTq2leSFjjpzprA20ystmLh0xh2e1/QBigB1C8LqzXxTPvvP1xtc/HfF+oXbaPxvPBuyOINIuoYUhD3kw37Jwqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
- by DM6PR12MB4943.namprd12.prod.outlook.com (2603:10b6:5:1bc::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27; Wed, 10 Feb
- 2021 20:36:43 +0000
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::d6b:736:fa28:5e4]) by DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::d6b:736:fa28:5e4%7]) with mapi id 15.20.3846.027; Wed, 10 Feb 2021
- 20:36:43 +0000
-Date:   Wed, 10 Feb 2021 16:36:41 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Pearson, Robert B" <robert.pearson2@hpe.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Doug Ledford <dledford@redhat.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Martin Wilck <mwilck@suse.com>
-Subject: Re: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20210210203641.GG4247@nvidia.com>
-References: <20210210131542.215ea67c@canb.auug.org.au>
- <CS1PR8401MB0821C1E95BE58300FF3B87C8BC8D9@CS1PR8401MB0821.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CS1PR8401MB0821C1E95BE58300FF3B87C8BC8D9@CS1PR8401MB0821.NAMPRD84.PROD.OUTLOOK.COM>
-X-ClientProxiedBy: MN2PR13CA0017.namprd13.prod.outlook.com
- (2603:10b6:208:160::30) To DM6PR12MB3834.namprd12.prod.outlook.com
- (2603:10b6:5:14a::12)
+        id S233417AbhBJUpH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Feb 2021 15:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233378AbhBJUpC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Feb 2021 15:45:02 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676D8C06178B
+        for <linux-next@vger.kernel.org>; Wed, 10 Feb 2021 12:44:06 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id p186so3402624ybg.2
+        for <linux-next@vger.kernel.org>; Wed, 10 Feb 2021 12:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8f1XjpNELN9zsfANF+FH1lk4KW13Kba1bid4uzYN8Ws=;
+        b=oy6sII0U3E3uIbMdr3LS1uwg/JacXpfPdfQILUh6etskJImlykEHzzQjuQP40GmMZJ
+         ABRwUIaDOpvvJ2YdD1qDm4VhSfrAOaPc6j4JpYL34kYXNqbxn8UR0IUuNgYptKgRWCOd
+         m6iwJU6LQQY4KNeSzE2L+LG0JQMQJVHbKVEfOIYF1OmsZwPoOx8aXAhsRlsAQPTwQhuc
+         M9BiFNFC8bL35R7qAyw7X7LL2Jx3uFXeySCvWsfvkU64mTmFf9nCbEEnwuALPHqZsfYz
+         qpDYuLZQ4sx5MQmY5E7ly1EqP0WDacjdHWiGyvpG7H0UlkJ+Wc+/ALPYlomlk6mG9Inb
+         TIrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8f1XjpNELN9zsfANF+FH1lk4KW13Kba1bid4uzYN8Ws=;
+        b=F1WgaoBj8OBVKrg2ELQWKqW4HC1vLLbOa7J45DptK9Hgnv/JEW/WjqSbKuNPjE1Dy2
+         sZcagNxzrB0NM38V6OE439sHRJ7W5P0qEyrvaAyy+l92lkbK7thnMeT8e4EquUhcI6Ux
+         WW8f6tIktsl60VaBzkn4sc331Gc0vlhwnzdOxFqlYwrnHvFbj3p+wuzZkAHXMTheUBYs
+         7TizrnJ6Jc0VkF/4tBmJVnmi8SnymlvtS4Ovo4HZsI8ZaOwENAgQ91f7j5cDztoh43Ah
+         k1uWm3IAvmj6NRHjqe/7XIthsHihe5K1QhOlGBneSY17/W/YaIo+bBsYlOspHkp19Oaq
+         SAPA==
+X-Gm-Message-State: AOAM5313xUcWT4ScF/585Kcm/b/Bj7/9LJ6G6AprT96+zsrcjmVdgQxf
+        G9QUDAaOdnGW9LKBunsjESg0g+FaBwWQKIUtYUuFmqXwTpab0A==
+X-Google-Smtp-Source: ABdhPJzHRkwwySiKSgHdTLepBiBJmKQc2WktlG1U/Wcb3SY6WEPBKAi8xHvRcVe/FZIAsAWokyaNW4lzuG7DDUU62NU=
+X-Received: by 2002:a25:718b:: with SMTP id m133mr7034554ybc.412.1612989845498;
+ Wed, 10 Feb 2021 12:44:05 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (142.162.115.133) by MN2PR13CA0017.namprd13.prod.outlook.com (2603:10b6:208:160::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.11 via Frontend Transport; Wed, 10 Feb 2021 20:36:42 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1l9wE5-006EJN-OS; Wed, 10 Feb 2021 16:36:41 -0400
-X-Header: ProcessedBy-CMR-outbound
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1612989404; bh=CB2khyyuZBH8C7YPXIuhUnxN+QIrDWDKTGQDY0EKefk=;
-        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
-         From:To:CC:Subject:Message-ID:References:Content-Type:
-         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
-         X-MS-Exchange-MessageSentRepresentingType:X-Header;
-        b=Y47YSrdLcCYDgrlyVSEOOpoDisEmW3FacadXtHyVMdLEK8qbioMwuDxnyG74kbHAT
-         7LpmX8q/f41da9fotXm71BM6CcZyh5LszqZUq9X2ria2hGZBNGCDxZdAnxBjQhKFVs
-         FMOnBhJpzxO4dq215qsXegYtfvsKFN5O//WnhM89PyHN18xRrwFNW52wkwOa+/ql52
-         9IM1irtkuFW7ZB9nE4Vv1kMyHMAPFeJtU3xJuRuA9Yy3UsYYs6ntr9NuD29DPcjsm3
-         chSlZL55B0Rxqay4RIUakl54Tjk9KW2cN5fYssEneUaRT8VherpyIPDMOoUHN9nnVV
-         cMWxlNCOofJ4g==
+References: <20210210214720.02e6a6be@canb.auug.org.au> <YCQjfqH415zIhhyz@kroah.com>
+ <CAGETcx88Ln2XxuLN7P2BVhzB=OQxPLLsBN7WLL1j2JtR4+Z8ow@mail.gmail.com>
+ <CAGETcx9zM2OdbNDcC7pXGtY9yqRgb-wt0YzFv6wfNgQi0gM+8w@mail.gmail.com> <CAL_JsqLrRQs2Q_ui2SLdEBJ7FuYNpC-_K+9yoQjyMDbhaRbLiQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqLrRQs2Q_ui2SLdEBJ7FuYNpC-_K+9yoQjyMDbhaRbLiQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 10 Feb 2021 12:43:29 -0800
+Message-ID: <CAGETcx9dPER2NoOx5vcS7BbCNw=Bao20kKk82uMe_8Bjf-XoFw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the driver-core tree
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 06:57:24PM +0000, Pearson, Robert B wrote:
+On Wed, Feb 10, 2021 at 12:15 PM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Wed, Feb 10, 2021 at 1:17 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Wed, Feb 10, 2021 at 11:06 AM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > On Wed, Feb 10, 2021 at 10:18 AM Greg KH <greg@kroah.com> wrote:
+> > > >
+> > > > On Wed, Feb 10, 2021 at 09:47:20PM +1100, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > >
+> > > > > After merging the driver-core tree, today's linux-next build (sparc64
+> > > > > defconfig) failed like this:
+> > > > >
+> > > > > drivers/of/property.o: In function `parse_interrupts':
+> > > > > property.c:(.text+0x14e0): undefined reference to `of_irq_parse_one'
+> > > > >
+> > > > > Caused by commit
+> > > > >
+> > > > >   f265f06af194 ("of: property: Fix fw_devlink handling of interrupts/interrupts-extended")
+> > > > >
+> > > > > CONFIG_OF_IRQ depends on !SPARC so of_irq_parse_one() needs a stub.
+>
+> It's always Sparc!
+>
+> > > > > I have added the following patch for today.
+> > > > >
+> > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > Date: Wed, 10 Feb 2021 21:27:56 +1100
+> > > > > Subject: [PATCH] of: irq: make a stub for of_irq_parse_one()
+> > > > >
+> > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > ---
+> > > > >  include/linux/of_irq.h | 9 +++++++--
+> > > > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > >
+> > > Thanks Stephen!
+> >
+> > Actually the stub needs to return an error. 0 indicates it found the interrupt.
+>
+> I have a slight preference if you could add an 'if
+> (!IS_ENABLED(CONFIG_OF_IRQ))' at the caller instead.
+>
+> If you grep of_irq_parse_one, you'll see there's only a few users
+> which means it's on my hit list to make it private. Stub functions
+> give the impression 'use everywhere'.
 
-> It looks like f1b0a8ea9f12 ("Revert "RDMA/rxe: Remove VLAN code
-> leftovers from RXE"") has not been applied to rdma for-next which is
-> where I do my work. Not sure how it got upstream.
+I already sent out a fix :(
 
-It was sent to the rc tree, don't worry this is stuff I fix up.
+Will that check optimize out the code and not cause build errors? If
+so, I can send out a patch later.
 
-Stephen's note is to help ensure it is fixed properly, does the change
-look OK? It looks like this when applied (I changed Stephen's slightly)
-
-static int rxe_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
-{
-	struct udphdr *udph;
-	struct rxe_dev *rxe;
-	struct net_device *ndev = skb->dev;
-	struct rxe_pkt_info *pkt = SKB_TO_PKT(skb);
-
-	/* takes a reference on rxe->ib_dev
-	 * drop when skb is freed
-	 */
-	rxe = rxe_get_dev_from_net(ndev);
-	if (!rxe && is_vlan_dev(rdev))
-		rxe = rxe_get_dev_from_net(vlan_dev_real_dev(ndev));
-	if (!rxe)
-		goto drop;
-
-Jason
+-Saravana

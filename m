@@ -2,174 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BCA315DBE
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 04:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0055315E46
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 05:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbhBJDM2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Feb 2021 22:12:28 -0500
-Received: from ozlabs.org ([203.11.71.1]:39057 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229761AbhBJDMZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Feb 2021 22:12:25 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S230301AbhBJEkW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Feb 2021 23:40:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20195 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230231AbhBJEkU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Feb 2021 23:40:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612931934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/OTZsXH2tD0HeIgH/lI8h+bZrxEF7HhE4ZNU7vfxtAk=;
+        b=Tf5KBnboQJ5qtvco2SMComO6P3SklBQ+Q240vxgDfAy3uzepRI0GD/BgEu5xuhXFmoX21R
+        CagjaXtew6Ucmq1OHkBnvZaneI9q6TN6kmilG1ov/rQcGki0vTWeh3g3lsnKbkYXSnhsWk
+        x7uxqMXc/aPpzn1k/kvLKnInqt6CX6k=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-395-f0srScS3Nb6YY6KHfMJKew-1; Tue, 09 Feb 2021 23:38:50 -0500
+X-MC-Unique: f0srScS3Nb6YY6KHfMJKew-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Db4Y90HD5z9sB4;
-        Wed, 10 Feb 2021 14:11:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612926702;
-        bh=eAbbv1c4473lc/U2iVCN8pX8dVi4lHGQNHEtlCAMwAk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dcpWlTYZSobEHLhKLput+sRfS+UXNTa7KFrR/rGVzA/n8T2qBQJQ/79XmjhZEKb2W
-         zCUuQUXv7yWRckVi1GNl0lJd9JgeqsxaPw+qXkJCrP7txXuYWgtx89vEZcied/8RNw
-         KXyzIUA1I6GeS7N4DIZHSANgC7vtWSNmMaTOwsMPebrOi304u2s8TTl5DQpga0LSH+
-         goTG3GGGLyO0TPubSdqhBJMGH/oUv3TZr86HA63hUfqUsxpMPqas4wZnhi5xjzee+b
-         1+y73C4Qz9muXLIi+P030lRrNofbyNTnvJWZ+J3jfYPJWACPVsR9HEOEVhDjh/qi57
-         MyiRfuzCHeaHw==
-Date:   Wed, 10 Feb 2021 14:11:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20210210141138.11a6ad09@canb.auug.org.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2B3C3100A8FC;
+        Wed, 10 Feb 2021 04:38:48 +0000 (UTC)
+Received: from [10.72.12.223] (ovpn-12-223.pek2.redhat.com [10.72.12.223])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA6B460C4D;
+        Wed, 10 Feb 2021 04:38:35 +0000 (UTC)
+Subject: Re: [PATCH V3 16/19] virtio-pci: introduce modern device module
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        open list <linux-kernel@vger.kernel.org>, shahafs@mellanox.com,
+        lulu@redhat.com, sgarzare@redhat.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20210104065503.199631-1-jasowang@redhat.com>
+ <20210104065503.199631-17-jasowang@redhat.com>
+ <CA+G9fYteUN=s5Mp+BhdMPZt96B3qDa+2HwudmWgEmmrDELLPdw@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <9cc9d649-e891-8bcc-e5f8-cec7c0d40077@redhat.com>
+Date:   Wed, 10 Feb 2021 12:38:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yMIn+23mpOqpJVxRcPfp7s0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <CA+G9fYteUN=s5Mp+BhdMPZt96B3qDa+2HwudmWgEmmrDELLPdw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yMIn+23mpOqpJVxRcPfp7s0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2021/2/9 下午6:15, Naresh Kamboju wrote:
+> Hi Jason,
+>
+> On Mon, 4 Jan 2021 at 12:28, Jason Wang <jasowang@redhat.com> wrote:
+>> Signed-off-by: Jason Wang <jasowang@redhat.com>
+>> ---
+>>   drivers/virtio/Kconfig                 |  10 +-
+>>   drivers/virtio/Makefile                |   1 +
+>>   drivers/virtio/virtio_pci_common.h     |  27 +-
+>>   drivers/virtio/virtio_pci_modern.c     | 617 -------------------------
+>>   drivers/virtio/virtio_pci_modern_dev.c | 599 ++++++++++++++++++++++++
+>>   include/linux/virtio_pci_modern.h      | 111 +++++
+>>   6 files changed, 721 insertions(+), 644 deletions(-)
+>>   create mode 100644 drivers/virtio/virtio_pci_modern_dev.c
+>>   create mode 100644 include/linux/virtio_pci_modern.h
+>>
+>> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+>> index 7b41130d3f35..6b9b81f4b8c2 100644
+>> --- a/drivers/virtio/Kconfig
+>> +++ b/drivers/virtio/Kconfig
+>> @@ -12,6 +12,14 @@ config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+>>            This option is selected if the architecture may need to enforce
+>>            VIRTIO_F_ACCESS_PLATFORM
+>>
+>> +config VIRTIO_PCI_MODERN
+>> +       tristate "Modern Virtio PCI Device"
+>> +       depends on PCI
+>> +       help
+>> +         Modern PCI device implementation. This module implements the
+>> +         basic probe and control for devices which are based on modern
+>> +         PCI device with possible vendor specific extensions.
+>> +
+>>   menuconfig VIRTIO_MENU
+>>          bool "Virtio drivers"
+>>          default y
+>> @@ -20,7 +28,7 @@ if VIRTIO_MENU
+>>
+>>   config VIRTIO_PCI
+>>          tristate "PCI driver for virtio devices"
+>> -       depends on PCI
+>> +       depends on VIRTIO_PCI_MODERN
+> While booting Linux next tag 20210208 kernel on qemu_arm64 and qemu_arm
+> mount rootfs failed.  The root cause seems to be due to missing configs
+> CONFIG_VIRTIO_PCI=y
+> CONFIG_VIRTIO_PCI_LEGACY=y
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> Then I have to force to enable this MODERN config
+> CONFIG_VIRTIO_PCI_MODERN=y
+> and which enabled
+> CONFIG_VIRTIO_PCI=y
+> CONFIG_VIRTIO_PCI_LEGACY=y
+>
+> and the qemu_arm64 and qemu_arm boot pass.
+>
+>
+> New build link,
+> https://builds.tuxbuild.com/1oEse4EFsoQr1FkKBfiLmhMCe7j/
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
 
-drivers/gpu/drm/v3d/v3d_sched.c:263:1: error: return type is an incomplete =
-type
-  263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job=
- *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_gpu_reset_for_timeout':
-drivers/gpu/drm/v3d/v3d_sched.c:289:9: error: 'return' with a value, in fun=
-ction returning void [-Werror=3Dreturn-type]
-  289 |  return DRM_GPU_SCHED_STAT_NOMINAL;
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:263:1: note: declared here
-  263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job=
- *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-drivers/gpu/drm/v3d/v3d_sched.c:298:1: error: return type is an incomplete =
-type
-  298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue=
- q,
-      | ^~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_cl_job_timedout':
-drivers/gpu/drm/v3d/v3d_sched.c:309:10: error: 'return' with a value, in fu=
-nction returning void [-Werror=3Dreturn-type]
-  309 |   return DRM_GPU_SCHED_STAT_NOMINAL;
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:298:1: note: declared here
-  298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue=
- q,
-      | ^~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-drivers/gpu/drm/v3d/v3d_sched.c:316:1: error: return type is an incomplete =
-type
-  316 | v3d_bin_job_timedout(struct drm_sched_job *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:325:1: error: return type is an incomplete =
-type
-  325 | v3d_render_job_timedout(struct drm_sched_job *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:334:1: error: return type is an incomplete =
-type
-  334 | v3d_generic_job_timedout(struct drm_sched_job *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:342:1: error: return type is an incomplete =
-type
-  342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_csd_job_timedout':
-drivers/gpu/drm/v3d/v3d_sched.c:353:10: error: 'return' with a value, in fu=
-nction returning void [-Werror=3Dreturn-type]
-  353 |   return DRM_GPU_SCHED_STAT_NOMINAL;
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:342:1: note: declared here
-  342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
-      | ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c: At top level:
-drivers/gpu/drm/v3d/v3d_sched.c:362:18: error: initialization of 'enum drm_=
-gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
-'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
-  362 |  .timedout_job =3D v3d_bin_job_timedout,
-      |                  ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:362:18: note: (near initialization for 'v3d=
-_bin_sched_ops.timedout_job')
-drivers/gpu/drm/v3d/v3d_sched.c:369:18: error: initialization of 'enum drm_=
-gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
-'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
-  369 |  .timedout_job =3D v3d_render_job_timedout,
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:369:18: note: (near initialization for 'v3d=
-_render_sched_ops.timedout_job')
-drivers/gpu/drm/v3d/v3d_sched.c:376:18: error: initialization of 'enum drm_=
-gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
-'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
-  376 |  .timedout_job =3D v3d_generic_job_timedout,
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:376:18: note: (near initialization for 'v3d=
-_tfu_sched_ops.timedout_job')
-drivers/gpu/drm/v3d/v3d_sched.c:383:18: error: initialization of 'enum drm_=
-gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
-'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
-  383 |  .timedout_job =3D v3d_csd_job_timedout,
-      |                  ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:383:18: note: (near initialization for 'v3d=
-_csd_sched_ops.timedout_job')
-drivers/gpu/drm/v3d/v3d_sched.c:390:18: error: initialization of 'enum drm_=
-gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type =
-'void (*)(struct drm_sched_job *)' [-Werror=3Dincompatible-pointer-types]
-  390 |  .timedout_job =3D v3d_generic_job_timedout,
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/v3d/v3d_sched.c:390:18: note: (near initialization for 'v3d=
-_cache_clean_sched_ops.timedout_job')
+Thanks for the reporting.
 
-Caused by commit
+I will post a patch to fix the def config to enable VIRTIO_PCI_MODERN.
 
-  c10983e14e8f ("drm/scheduler: Job timeout handler returns status (v3)")
+Thanks
 
-I have used the drm-misc tree from next-20210209 for today.
 
---=20
-Cheers,
-Stephen Rothwell
+>
+>
 
---Sig_/yMIn+23mpOqpJVxRcPfp7s0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAjTuoACgkQAVBC80lX
-0GzGLAf/d/58uMidoc4JmHnMyZCbt7HY3jpGVAKuh0UnM4qOq+vkKLg/owG+EGe3
-4zZycTr+XR091TCvbo7kEsozJzJ/h341hNcl43tQK2oWdVGpylXxZ8ot4ijJvs6k
-A/Lgiqc1mU8kRd2ox9ugSOl9iZGE4Dn3s8Uk7BVelsYeXaz5tGPHuKh/4aTgQiK2
-o/loR3kqI/acoAvJg6Gccu2mazld4v7qRPflmbRMTs4nvIoKSItkhP09t2SiTRXH
-51Xl1SFhUsFJmXiLl+mkNYe2nlkSCW7qGU/YCpn9AUTCGVBcJN4Zb37TjlBWfCk4
-JYLjBbGC4rQr0Q1zlVhsLc41lEJZtQ==
-=PUsP
------END PGP SIGNATURE-----
-
---Sig_/yMIn+23mpOqpJVxRcPfp7s0--

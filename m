@@ -2,140 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F6F316445
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 11:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1F931650E
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 12:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbhBJKuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Feb 2021 05:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S231451AbhBJLVI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Feb 2021 06:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbhBJKsG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Feb 2021 05:48:06 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E7C06174A;
-        Wed, 10 Feb 2021 02:47:26 -0800 (PST)
+        with ESMTP id S229736AbhBJLS6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Feb 2021 06:18:58 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E530C0613D6;
+        Wed, 10 Feb 2021 03:18:18 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DbGfy0P8sz9sBJ;
-        Wed, 10 Feb 2021 21:47:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DbHLb1h0Lz9sS8;
+        Wed, 10 Feb 2021 22:18:15 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1612954042;
-        bh=Mr0rqSF8gviw0zM3gWdSV76YgCsysYNr9O7McGVF3cw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sylSplzBW0/PzbbcWxQQ4PezNE6Bt4EB4McVsvo4EJPfdSdYBbsZCgM4Tb2XRNvTR
-         8BdaA7BtUqfUYstfIH9/1aldaj7BJ2ek0evsqDVsMcMN3vg23tMaSuZ+6lvHpt7EIH
-         UP7WLsb4PQmjrwiDpOa+dujKgIrZaJFqFvhCcBnSsXAh46J75pxE+LLvfB2ZA91C2w
-         nxsRdRJ04wbWKSBBa6/vgxGaC/f1aQxTU1qbo89t0wGHObH8aAqVGAozpcC5EA3NnX
-         8rViRLhh3FtO72WHXhPkDnfhuXVILSfwa7E4wrG8HfX5mSDoxuJ9/unCqbtGEgTObL
-         /+HJbFiJ/rlmA==
-Date:   Wed, 10 Feb 2021 21:47:20 +1100
+        s=201702; t=1612955895;
+        bh=oBO5OiuYs+2sa+05/4gDmvfXPteEllUKO90Wa7brXDw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZI1am5IssN6OKcV5bRcGLem9S6LTb3ViSdEUR49FjsjyV1o83/PCTwKFbESf87lwu
+         It7t6EmuYs9zjM73sJjEnBgiHKKcda0cKu4pXwmmhZ7FdJVDN/zxpGtO8jfJKBqTmD
+         TQyNzLkJzZtcaqvychS8NtCsYwr8/OJfsB2oeMPqBSngoImuoHiXazvWCczQWvgbfr
+         pTw+4WrW6fNXFhFuOd8dnTlwsnnw4BiNmfh0gg8xTi9z7wJ96mtvpHE0wAUxjRXYKD
+         F+98iiFTs7BvwIH6e7mPj99cCmEP6JS2iyA9yRyJrREBhiQVE0x/B7ulYdSlYSKBRd
+         McrSUDoyF+wiQ==
+Date:   Wed, 10 Feb 2021 22:18:14 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20210210214720.02e6a6be@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the powerpc tree
+Message-ID: <20210210221814.22c3ab52@canb.auug.org.au>
+In-Reply-To: <1612945076.ng7h3tp2jn.astroid@bobo.none>
+References: <20210209211921.777e3053@canb.auug.org.au>
+        <1612945076.ng7h3tp2jn.astroid@bobo.none>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uW/byZSY6=kYP7Dn7xO4Mr6";
+Content-Type: multipart/signed; boundary="Sig_/DQzo9u+quVcAVqwzkONhjpI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uW/byZSY6=kYP7Dn7xO4Mr6
+--Sig_/DQzo9u+quVcAVqwzkONhjpI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Nick,
 
-After merging the driver-core tree, today's linux-next build (sparc64
-defconfig) failed like this:
+On Wed, 10 Feb 2021 18:20:54 +1000 Nicholas Piggin <npiggin@gmail.com> wrot=
+e:
+>
+> Thanks for that, it's due to .noinstr section being put on the other=20
+> side of .text, so all our interrupt handler asm code can't reach them=20
+> directly anymore since the ppc interrupt wrappers patch added noinstr
+> attribute.
+>=20
+> That's not strictly required though, we've used NOKPROBE_SYMBOL okay
+> until now. If you can take this patch for now, it should get=20
+> allyesconfig to build again. I'll fix it in the powerpc tree before the=20
+> merge window.
+>=20
+> --
+>=20
+> diff --git a/arch/powerpc/include/asm/interrupt.h b/arch/powerpc/include/=
+asm/interrupt.h
+> index 4badb3e51c19..fee1e4dd1e84 100644
+> --- a/arch/powerpc/include/asm/interrupt.h
+> +++ b/arch/powerpc/include/asm/interrupt.h
+> @@ -172,6 +172,8 @@ static inline void interrupt_nmi_exit_prepare(struct =
+pt_regs *regs, struct inter
+>  #define DECLARE_INTERRUPT_HANDLER_RAW(func)				\
+>  	__visible long func(struct pt_regs *regs)
+> =20
+> +#define ppc_noinstr         noinline notrace __no_kcsan __no_sanitize_ad=
+dress
+> +
+>  /**
+>   * DEFINE_INTERRUPT_HANDLER_RAW - Define raw interrupt handler function
+>   * @func:	Function name of the entry point
+> @@ -198,7 +200,7 @@ static inline void interrupt_nmi_exit_prepare(struct =
+pt_regs *regs, struct inter
+>  #define DEFINE_INTERRUPT_HANDLER_RAW(func)				\
+>  static __always_inline long ____##func(struct pt_regs *regs);		\
+>  									\
+> -__visible noinstr long func(struct pt_regs *regs)			\
+> +__visible ppc_noinstr long func(struct pt_regs *regs)			\
+>  {									\
+>  	long ret;							\
+>  									\
+> @@ -228,7 +230,7 @@ static __always_inline long ____##func(struct pt_regs=
+ *regs)
+>  #define DEFINE_INTERRUPT_HANDLER(func)					\
+>  static __always_inline void ____##func(struct pt_regs *regs);		\
+>  									\
+> -__visible noinstr void func(struct pt_regs *regs)			\
+> +__visible ppc_noinstr void func(struct pt_regs *regs)			\
+>  {									\
+>  	struct interrupt_state state;					\
+>  									\
+> @@ -262,7 +264,7 @@ static __always_inline void ____##func(struct pt_regs=
+ *regs)
+>  #define DEFINE_INTERRUPT_HANDLER_RET(func)				\
+>  static __always_inline long ____##func(struct pt_regs *regs);		\
+>  									\
+> -__visible noinstr long func(struct pt_regs *regs)			\
+> +__visible ppc_noinstr long func(struct pt_regs *regs)			\
+>  {									\
+>  	struct interrupt_state state;					\
+>  	long ret;							\
+> @@ -297,7 +299,7 @@ static __always_inline long ____##func(struct pt_regs=
+ *regs)
+>  #define DEFINE_INTERRUPT_HANDLER_ASYNC(func)				\
+>  static __always_inline void ____##func(struct pt_regs *regs);		\
+>  									\
+> -__visible noinstr void func(struct pt_regs *regs)			\
+> +__visible ppc_noinstr void func(struct pt_regs *regs)			\
+>  {									\
+>  	struct interrupt_state state;					\
+>  									\
+> @@ -331,7 +333,7 @@ static __always_inline void ____##func(struct pt_regs=
+ *regs)
+>  #define DEFINE_INTERRUPT_HANDLER_NMI(func)				\
+>  static __always_inline long ____##func(struct pt_regs *regs);		\
+>  									\
+> -__visible noinstr long func(struct pt_regs *regs)			\
+> +__visible ppc_noinstr long func(struct pt_regs *regs)			\
+>  {									\
+>  	struct interrupt_nmi_state state;				\
+>  	long ret;							\
 
-drivers/of/property.o: In function `parse_interrupts':
-property.c:(.text+0x14e0): undefined reference to `of_irq_parse_one'
-
-Caused by commit
-
-  f265f06af194 ("of: property: Fix fw_devlink handling of interrupts/interr=
-upts-extended")
-
-CONFIG_OF_IRQ depends on !SPARC so of_irq_parse_one() needs a stub.
-I have added the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 10 Feb 2021 21:27:56 +1100
-Subject: [PATCH] of: irq: make a stub for of_irq_parse_one()
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/of_irq.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
-index e8b78139f78c..f898d838d201 100644
---- a/include/linux/of_irq.h
-+++ b/include/linux/of_irq.h
-@@ -33,8 +33,6 @@ static inline int of_irq_parse_oldworld(struct device_nod=
-e *device, int index,
- #endif /* CONFIG_PPC32 && CONFIG_PPC_PMAC */
-=20
- extern int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *ou=
-t_irq);
--extern int of_irq_parse_one(struct device_node *device, int index,
--			  struct of_phandle_args *out_irq);
- extern unsigned int irq_create_of_mapping(struct of_phandle_args *irq_data=
-);
- extern int of_irq_to_resource(struct device_node *dev, int index,
- 			      struct resource *r);
-@@ -42,6 +40,8 @@ extern int of_irq_to_resource(struct device_node *dev, in=
-t index,
- extern void of_irq_init(const struct of_device_id *matches);
-=20
- #ifdef CONFIG_OF_IRQ
-+extern int of_irq_parse_one(struct device_node *device, int index,
-+			  struct of_phandle_args *out_irq);
- extern int of_irq_count(struct device_node *dev);
- extern int of_irq_get(struct device_node *dev, int index);
- extern int of_irq_get_byname(struct device_node *dev, const char *name);
-@@ -57,6 +57,11 @@ extern struct irq_domain *of_msi_map_get_device_domain(s=
-truct device *dev,
- extern void of_msi_configure(struct device *dev, struct device_node *np);
- u32 of_msi_map_id(struct device *dev, struct device_node *msi_np, u32 id_i=
-n);
- #else
-+static inline int of_irq_parse_one(struct device_node *device, int index,
-+				   struct of_phandle_args *out_irq)
-+{
-+	return 0;
-+}
- static inline int of_irq_count(struct device_node *dev)
- {
- 	return 0;
---=20
-2.30.0
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>  # allyesconfig build
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/uW/byZSY6=kYP7Dn7xO4Mr6
+--Sig_/DQzo9u+quVcAVqwzkONhjpI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAjubgACgkQAVBC80lX
-0GwiVgf/YH8Bz3xdKRsC3kErh0gLgtafzLPtEeCwJB2fT7UBrJRiXwSLiLg4qgCS
-t+d3S9teZWTHUTFLvXSDRwIEKES4UiNPKUJKL7M4eaJ8jkAurdQKknpY8u+RVhQQ
-QIH8O0EebQT9Jln7Ru02JgwlBmrF7ImIklJZ+Ap8lN+JiDx2QWojteqjUUcT+2l+
-RS3JhpkmVQ+zMiKuHEm5PaT1Yeda7fAq9vpi66y9MtqZY/Jc5g9/WNOUGk5knd+y
-EnxNbxZiPnIKs98v0GyV8PmCDJoPq71fQ+LBiVfsI64Ef72lm3KOrSwrsoQGHGBf
-vfwRhHM0pbGrKgYYs6SDS9Jtb8S/bw==
-=Igqk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAjwPYACgkQAVBC80lX
+0GyJ2wf/R6r3VqXBfy1DrsHhX6qAJjS3H4IdvG8McdGJg3R7BEKTzhYjsJTE/Gjd
+Wxzyx43pbVCow5FirOr7EHX91682ST4Jgwm+DTTe2q5A7TroV71YgmSW+ll4h7k0
+xyxUW/qvTqzcuxlRnR3q1EVKNRijWXxSr1uQyOzPMTLumnsEHxEcCE+ZA5EkzAJ0
+uRHNgvoA41/y8rVto97ci5JoJ1QU2ICztCou1/upA74kVb3eWCZH4GE1juUxYLgm
+b8j0xmilQK453L4cYFQuETCEQ72XAm5n4UJR3G+4/dUL+nOWLaD5ule87+dcrHMk
+de4IsPE4bxg9TPOpid3XqiVRLfPYCA==
+=XdXn
 -----END PGP SIGNATURE-----
 
---Sig_/uW/byZSY6=kYP7Dn7xO4Mr6--
+--Sig_/DQzo9u+quVcAVqwzkONhjpI--

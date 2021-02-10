@@ -2,112 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488F3316851
-	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 14:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3148316931
+	for <lists+linux-next@lfdr.de>; Wed, 10 Feb 2021 15:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbhBJNvM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Feb 2021 08:51:12 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:6666 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbhBJNuw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Feb 2021 08:50:52 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B6023e4930001>; Wed, 10 Feb 2021 05:50:11 -0800
-Received: from HKMAIL102.nvidia.com (10.18.16.11) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Feb
- 2021 13:50:10 +0000
-Received: from HKMAIL102.nvidia.com (10.18.16.11) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Feb
- 2021 13:47:46 +0000
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
- by HKMAIL102.nvidia.com (10.18.16.11) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Wed, 10 Feb 2021 13:47:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RfRRdTEtsNmcXTjHCuNBqH4B4vXRiGyITERvTF7uCS/khwvNTHWfnMEGZJnFqCRYtiUpwBuGygAvHFXitoXXjXNfYhtTZF85XOkLCyEYezG+IeqeU8aMSs7odP0UQBWMTnhGoE94Hg0es7tWHtOu5Nb7MjGpIYDXobcGVnvvANMnYVBS2uO8p2CO+IGKrRG8nhfPG6e+oEbMt6oLaLQfYbsPvPVnPEuD47MvkNXgGKk+3fuDqimJnbDnkKyhXaeO3KkEcK9Gbu9v7EWyo5nTwi83z+0i82ULgkt1Q/hq4+h+6Eqd66lMNwIj2tVqE9YsUCRr09YGr04VyeWq+IJyQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fE9wrQLs05M1Mn/6HILf2376t69HuWUqZmT/HXrY1+4=;
- b=dtFuLTcN2+nJUZXKxQjbTwepA1jxsYvq+WcgJzMqbS5mD19ijygKgqr+4Cr9LIJVLbqETQtgNvzbiMXsG3jQpL00yHE5g+y+EAw4HTsNNJ81o4vD8rAUJ11EAn/AUb6Lcff1iJCdXlgzGmsS4dGL/IXddbqIlcK5OeQ8uurXwsjPXVUWijPBtgxGwOqC1P7UTEy6pbYgGvCBNSqaggrMfokqDCGHQc6by1H/GoG7l+AAMyoqLYnEFJ8Ti9FGaY8YWq7DcxSle79zMKHNOhOlYTN0RDzT3L9GUszGKaCPiYagj5EYfHaKb1v2Js7g/Ir3EAVMru0wNtACyY6oJ2NxWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
- by DM6PR12MB3513.namprd12.prod.outlook.com (2603:10b6:5:18a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.17; Wed, 10 Feb
- 2021 13:47:43 +0000
-Received: from DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::d6b:736:fa28:5e4]) by DM6PR12MB3834.namprd12.prod.outlook.com
- ([fe80::d6b:736:fa28:5e4%7]) with mapi id 15.20.3846.027; Wed, 10 Feb 2021
- 13:47:43 +0000
-Date:   Wed, 10 Feb 2021 09:47:42 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
+        id S230263AbhBJOcz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Feb 2021 09:32:55 -0500
+Received: from mga07.intel.com ([134.134.136.100]:1095 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229639AbhBJOcy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 10 Feb 2021 09:32:54 -0500
+IronPort-SDR: D40Zc3DGVrt9bQTmqVlD9tJeynD4CCPXpja715CFqTRuguPlAnVomcoh8eTSaxL9awxT2ccQvf
+ lyutunM/AC8A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9890"; a="246144354"
+X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
+   d="scan'208";a="246144354"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 06:31:07 -0800
+IronPort-SDR: iokoZIAq5W+IsiPfGY0fW94n0g4TrEXc4wSF8e5IDWFjF0IZb6ZkO1c5yyZCXpUkztDKNPTE2o
+ 0h/LtnmMMKkA==
+X-IronPort-AV: E=Sophos;i="5.81,168,1610438400"; 
+   d="scan'208";a="380123320"
+Received: from bartoszo-mobl1.ger.corp.intel.com (HELO [10.252.56.156]) ([10.252.56.156])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2021 06:31:05 -0800
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     Doug Ledford <dledford@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the rdma tree
-Message-ID: <20210210134742.GY4247@nvidia.com>
-References: <20210210211149.3498db8a@canb.auug.org.au>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210210211149.3498db8a@canb.auug.org.au>
-X-ClientProxiedBy: BL0PR05CA0007.namprd05.prod.outlook.com
- (2603:10b6:208:91::17) To DM6PR12MB3834.namprd12.prod.outlook.com
- (2603:10b6:5:14a::12)
+References: <20210210141138.11a6ad09@canb.auug.org.au>
+From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Message-ID: <670f6c7e-1f71-ffce-f9dd-07c7f6164c22@linux.intel.com>
+Date:   Wed, 10 Feb 2021 15:31:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (142.162.115.133) by BL0PR05CA0007.namprd05.prod.outlook.com (2603:10b6:208:91::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.11 via Frontend Transport; Wed, 10 Feb 2021 13:47:43 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1l9pqI-005ukD-65; Wed, 10 Feb 2021 09:47:42 -0400
-X-Header: ProcessedBy-CMR-outbound
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1612965011; bh=fE9wrQLs05M1Mn/6HILf2376t69HuWUqZmT/HXrY1+4=;
-        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
-         From:To:CC:Subject:Message-ID:References:Content-Type:
-         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
-         X-MS-Exchange-MessageSentRepresentingType:X-Header;
-        b=nQjUW1xPdsb8nfBwRnWV07FVddX32uPHV+EjBwLvDvyr0VxiJr63eqIt/Fh2DXPow
-         +nMpE7vcLFN5Q8L/UpkMnNFUxT5bkdjAsTK7nwMO0ueok8zWqiJM7tnMpDRRHASjo/
-         GrUT7sfN5EFvvyartxoNX/IMlEQel9YY+nRDtwS+wM/Rt0mqaEM70FcaHs/+xAbG8H
-         N2uCs704/HT+VmgrjgdSW4HG+PmHdfRY65N2BowZU4tjurInfMm0wwLsaI/MTSFqxk
-         qwgck7dqpiyXwGgc6kU4acTi7KrFZz4qicqQW3+xn9u9JFKF5k/63+txg1j2geieVE
-         Fi7RblFWIh/Mg==
+In-Reply-To: <20210210141138.11a6ad09@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:11:49PM +1100, Stephen Rothwell wrote:
+Op 2021-02-10 om 04:11 schreef Stephen Rothwell:
 > Hi all,
-> 
-> After merging the rdma tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> drivers/infiniband/core/device.c:859: warning: Function parameter or member 'dev' not described in 'ib_port_immutable_read'
-> drivers/infiniband/core/device.c:859: warning: Function parameter or member 'port' not described in 'ib_port_immutable_read'
-> 
-> Introduced by commit
-> 
->   7416790e2245 ("RDMA/core: Introduce and use API to read port immutable data")
+>
+> After merging the drm-misc tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/gpu/drm/v3d/v3d_sched.c:263:1: error: return type is an incomplete type
+>   263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_gpu_reset_for_timeout':
+> drivers/gpu/drm/v3d/v3d_sched.c:289:9: error: 'return' with a value, in function returning void [-Werror=return-type]
+>   289 |  return DRM_GPU_SCHED_STAT_NOMINAL;
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:263:1: note: declared here
+>   263 | v3d_gpu_reset_for_timeout(struct v3d_dev *v3d, struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+> drivers/gpu/drm/v3d/v3d_sched.c:298:1: error: return type is an incomplete type
+>   298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue q,
+>       | ^~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_cl_job_timedout':
+> drivers/gpu/drm/v3d/v3d_sched.c:309:10: error: 'return' with a value, in function returning void [-Werror=return-type]
+>   309 |   return DRM_GPU_SCHED_STAT_NOMINAL;
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:298:1: note: declared here
+>   298 | v3d_cl_job_timedout(struct drm_sched_job *sched_job, enum v3d_queue q,
+>       | ^~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+> drivers/gpu/drm/v3d/v3d_sched.c:316:1: error: return type is an incomplete type
+>   316 | v3d_bin_job_timedout(struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:325:1: error: return type is an incomplete type
+>   325 | v3d_render_job_timedout(struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:334:1: error: return type is an incomplete type
+>   334 | v3d_generic_job_timedout(struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:342:1: error: return type is an incomplete type
+>   342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: In function 'v3d_csd_job_timedout':
+> drivers/gpu/drm/v3d/v3d_sched.c:353:10: error: 'return' with a value, in function returning void [-Werror=return-type]
+>   353 |   return DRM_GPU_SCHED_STAT_NOMINAL;
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:342:1: note: declared here
+>   342 | v3d_csd_job_timedout(struct drm_sched_job *sched_job)
+>       | ^~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c: At top level:
+> drivers/gpu/drm/v3d/v3d_sched.c:362:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
+>   362 |  .timedout_job = v3d_bin_job_timedout,
+>       |                  ^~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:362:18: note: (near initialization for 'v3d_bin_sched_ops.timedout_job')
+> drivers/gpu/drm/v3d/v3d_sched.c:369:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
+>   369 |  .timedout_job = v3d_render_job_timedout,
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:369:18: note: (near initialization for 'v3d_render_sched_ops.timedout_job')
+> drivers/gpu/drm/v3d/v3d_sched.c:376:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
+>   376 |  .timedout_job = v3d_generic_job_timedout,
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:376:18: note: (near initialization for 'v3d_tfu_sched_ops.timedout_job')
+> drivers/gpu/drm/v3d/v3d_sched.c:383:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
+>   383 |  .timedout_job = v3d_csd_job_timedout,
+>       |                  ^~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:383:18: note: (near initialization for 'v3d_csd_sched_ops.timedout_job')
+> drivers/gpu/drm/v3d/v3d_sched.c:390:18: error: initialization of 'enum drm_gpu_sched_stat (*)(struct drm_sched_job *)' from incompatible pointer type 'void (*)(struct drm_sched_job *)' [-Werror=incompatible-pointer-types]
+>   390 |  .timedout_job = v3d_generic_job_timedout,
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/v3d/v3d_sched.c:390:18: note: (near initialization for 'v3d_cache_clean_sched_ops.timedout_job')
+>
+> Caused by commit
+>
+>   c10983e14e8f ("drm/scheduler: Job timeout handler returns status (v3)")
+>
+> I have used the drm-misc tree from next-20210209 for today.
+>
+Hey,
 
-drivers/infinband is W=1 clean right now in linux-next
+I reverted the commit in drm-misc-next-fixes. It should be good now. :)
 
-But how can I build *only* drivers/infiniband using W=1 so I can keep
-it that way?
+I must have accidentally cherry picked it when grabbing all fixes.
 
-The rest of the kernel is not clean and creates too much warning noise
-to be usable, even with my mini config.
-
-Just doing a 'make W=1 drivers/infiniband' is sort of OK, but then I
-end up compiling things twice
-
-Does anyone know a good solution?
-
-Jason
-
-
-
+~Maarten
 

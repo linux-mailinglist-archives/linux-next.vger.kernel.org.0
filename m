@@ -2,136 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBD2319484
-	for <lists+linux-next@lfdr.de>; Thu, 11 Feb 2021 21:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DC93194C9
+	for <lists+linux-next@lfdr.de>; Thu, 11 Feb 2021 21:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbhBKUbm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Feb 2021 15:31:42 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5870 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230239AbhBKUba (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 11 Feb 2021 15:31:30 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11BKCGIG064089;
-        Thu, 11 Feb 2021 15:30:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ROz2wy+tfHmzyk8OFNNn20qMGn94yfZ2/J6Kwdt1ltQ=;
- b=AvpP70iVjdpliwPUEVuBbKmU3t+fF2z5vopY6TADyoJi9FwikljaIgpey4ljZS2Ye0pP
- MWPpCKZwg/ylhBMHcR0tf+YSCDJGVIWLyty7Sk4xNBelISPYTR5kUYDkudHYjTQxFQtU
- Wqg1dxgzUi/VlzhTE+7GXl+FoH28T0v6+Qcx2JjUJ2Mx1syZtWCLpaQSEzfU+qNknm/e
- BmzwBKS6X7dMI8ThXgl3jAkR3RL9a68vNk7xM/DvdNg94MKZ9XtXSc+Ksg7BVZ7bTwO/
- FuwjViLbfxf9KTX+lagLs7GVQr+745dmC6ng+iXx5u5NUtE/qOkeYccTAcJaSrehsZwY IA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36nbdhrcm3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 15:30:39 -0500
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11BKN0OZ012344;
-        Thu, 11 Feb 2021 20:30:37 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 36m1m2t86j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 20:30:37 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11BKUZqw46072274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Feb 2021 20:30:35 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 63E324204C;
-        Thu, 11 Feb 2021 20:30:35 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CBFC42047;
-        Thu, 11 Feb 2021 20:30:35 +0000 (GMT)
-Received: from osiris (unknown [9.171.6.148])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 11 Feb 2021 20:30:34 +0000 (GMT)
-Date:   Thu, 11 Feb 2021 21:30:33 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Dmytro Linkin <dlinkin@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 11
-Message-ID: <YCWT6TZCGQOXlf6B@osiris>
-References: <20210211222604.51bd537c@canb.auug.org.au>
+        id S229617AbhBKU6P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Feb 2021 15:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229768AbhBKU6N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Feb 2021 15:58:13 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11286C061756;
+        Thu, 11 Feb 2021 12:57:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dc88T4s7Gz9sBJ;
+        Fri, 12 Feb 2021 07:57:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613077049;
+        bh=GSMK+eAvChXb51RTmJDZ4dZtCAnDMPEQQgYTm5wyJTs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HfekXgDVuPHBfZfkolY+PBvuymCl+TeqIgOk4TluqONIz1g8ay18wlSLeSC/LACIl
+         ML1oWfdlnvqVcG+veKavYr3bOogUn0/Cven2r5qlZLnAwQUBZjKRaB64E57A1kdBqP
+         BEq1dknuseqzWSs1RCfX+1LggRE9Epkth7hy5SHqi9oslt7R7ZJRF4xgOPM8wmL/KF
+         0BZGElVSRsgSAPet4LHha5o44XFn0S/dm9uMTecd6lB0LAgXXLUcGH6/GTQWqiOuf5
+         gPksOcRWQdCeja4LfbORz4HlpOjfdB0RDpTzA4s1tE7rXD9tzuvn3mR41fMn6Zueut
+         XYY88B/IG7PhQ==
+Date:   Fri, 12 Feb 2021 07:57:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Tom Zanussi <zanussi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the ftrace tree
+Message-ID: <20210212075728.36941e15@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210211222604.51bd537c@canb.auug.org.au>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-11_07:2021-02-11,2021-02-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 clxscore=1011
- impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2102110153
+Content-Type: multipart/signed; boundary="Sig_//c.OM7nBOyJTKurYq=GrEjQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 10:26:04PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20210210:
-> 
-> The powerpc tree still had its build failure in the allyesconfig for
-> which I applied a supplied patch.
-> 
-> The v4l-dvb tree lost its build failure.
-> 
-> The drm-misc tree lost its build failure.
-> 
-> The modules tree lost its build failure.
-> 
-> The device-mapper tree gained a build failure so I used the version
-> from next-20210210.
-> 
-> The tip tree lost its boot failure.
-> 
-> The rcu tree gained conflicts against the block tree.
-> 
-> The driver-core tree lost its build failure.
-> 
-> The akpm-current tree gained conflicts against the fscache tree.
-> 
-> Non-merge commits (relative to Linus' tree): 9533
->  9470 files changed, 385794 insertions(+), 266880 deletions(-)
-> 
-> ----------------------------------------------------------------------------
+--Sig_//c.OM7nBOyJTKurYq=GrEjQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Build fails on s390 using defconfig with:
+Hi all,
 
-In file included from drivers/net/ethernet/mellanox/mlx5/core/en_tc.h:40,
-                 from drivers/net/ethernet/mellanox/mlx5/core/en_main.c:45:
-drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h:24:29: error: field 'match_level' has incomplete type
-   24 |  enum mlx5_flow_match_level match_level;
-      |                             ^~~~~~~~~~~
-drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h:27:26: warning: 'struct mlx5e_encap_entry' declared inside parameter list will not be visible outside of this definition or declaration
-   27 |  int (*calc_hlen)(struct mlx5e_encap_entry *e);
-      |                          ^~~~~~~~~~~~~~~~~
+In commit
 
-caused by this:
-commit 0d9f96471493d5483d116c137693f03604332a04 (HEAD, refs/bisect/bad)
-Author: Vlad Buslov <vladbu@nvidia.com>
-Date:   Sun Jan 24 22:07:04 2021 +0200
+  b5e7014fe1c4 ("selftests/ftrace: Update synthetic event syntax errors")
 
-    net/mlx5e: Extract tc tunnel encap/decap code to dedicated file
-    
-    Following patches in series extend the extracted code with routing
-    infrastructure. To improve code modularity created a dedicated
-    tc_tun_encap.c source file and move encap/decap related code to the new
-    file. Export code that is used by both regular TC code and encap/decap code
-    into tc_priv.h (new header intended to be used only by TC module). Rename
-    some exported functions by adding "mlx5e_" prefix to their names.
-    
-    Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
-    Signed-off-by: Dmytro Linkin <dlinkin@nvidia.com>
-    Reviewed-by: Roi Dayan <roid@nvidia.com>
-    Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes tag
 
-Note: switching on NET_SWITCHDEV fixes the build error.
+  Fixes: 81ff92a93d95 (selftests/ftrace: Add test case for synthetic
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+
+Please do not split Fixes tags over more than one line.  Also, keep all
+the commit message tags together at the end of the message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//c.OM7nBOyJTKurYq=GrEjQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAlmjgACgkQAVBC80lX
+0GwqbQf/SXKu+Q2p9ZCWREmiPd8T07I+QOiUhorHtz2LLBngELcio7Z7gJGXnOJD
+3ihDWmrQEotjy+z6ChxEOsghIX+PiWzUTre+9Hx4inoDl82Ly0UGgZ+a9ovGOFFb
+ueSUjtksAfE/zsVZxn6Nn5Sn1DoyaqrcJJZ0gMNk4bAi7G6CghU0N+43+h6KZRtm
+03KT6Xn+PzInOwNgWzYhxnIe4p18otP/ZYcPsINCU3BtsEpw0QpeTQ269BGx2bjF
++jGZu83tdtJ3qU6UmuUfz78vGdQ6SwcSeTuFRERaZ4bhcwGtZNiES5B2UFa3UooR
+ncQFxl5ZBMwgPtYUsmTu7BCvoie3mg==
+=5Sgg
+-----END PGP SIGNATURE-----
+
+--Sig_//c.OM7nBOyJTKurYq=GrEjQ--

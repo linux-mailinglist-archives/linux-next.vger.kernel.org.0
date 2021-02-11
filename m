@@ -2,152 +2,303 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5125D31852A
-	for <lists+linux-next@lfdr.de>; Thu, 11 Feb 2021 07:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D16318534
+	for <lists+linux-next@lfdr.de>; Thu, 11 Feb 2021 07:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229467AbhBKGVP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Feb 2021 01:21:15 -0500
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:52374 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbhBKGVO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Feb 2021 01:21:14 -0500
-X-Greylist: delayed 78087 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Feb 2021 01:21:13 EST
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 11B6KGuG003048;
-        Thu, 11 Feb 2021 15:20:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 11B6KGuG003048
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1613024417;
-        bh=18Ac+joCd35mcZvtzwWkqtE7ib4nBE3U+pSc4292Spg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lTp9Xxong/96zw90ZdcFEqbTaJJIt7eh+0sOlzp/VODKqsUXDhuzPFycwYYjcCBCl
-         i0vQiulFmnmPk2i4jVBoRnkpr1Jrjnd25GMduU01p/x2qRQkpb3hpwK55OWQF0ZCQC
-         pGKLxK/8w8qxBufgmdi1cNMOu3M/UGoLB8EtUaeeGoShvcuEAt71n5lWNxbbeuQd9p
-         dL8kPBSC/zFcRHwhVYFmkvIAWxFXwehbwX6bL9V5StEsCZpsSsuhHybYFMpbvmOlMi
-         kHrnxByuZI/9CJgwUb5UI9b2on3hsawftBKBjhC+nUppWwcHijCiE46U63JUtJHThL
-         mpNd8bumpMlGg==
-X-Nifty-SrcIP: [209.85.216.43]
-Received: by mail-pj1-f43.google.com with SMTP id cv23so2830566pjb.5;
-        Wed, 10 Feb 2021 22:20:16 -0800 (PST)
-X-Gm-Message-State: AOAM530A7lGCNCbsNidFjP4TalrlHyAonf5u7Fpmso6T99u/Zcc98Ce8
-        aEDOCF+f16YAWNfvSI4RK3fKjh2Q3bVxlxFZc2g=
-X-Google-Smtp-Source: ABdhPJzNjm19cShZSpkhPKpuzRe8AurU1AlWGwv0P5ielYIXxMSCzEDIv08HIaNMcnUtkqmpBUqECAU9sDYT+9Glvk0=
-X-Received: by 2002:a17:902:bb87:b029:e1:d1f:2736 with SMTP id
- m7-20020a170902bb87b02900e10d1f2736mr6332156pls.1.1613024415986; Wed, 10 Feb
- 2021 22:20:15 -0800 (PST)
+        id S229501AbhBKGYT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Feb 2021 01:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229467AbhBKGYQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Feb 2021 01:24:16 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A435C061574
+        for <linux-next@vger.kernel.org>; Wed, 10 Feb 2021 22:23:36 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id z9so2844204pjl.5
+        for <linux-next@vger.kernel.org>; Wed, 10 Feb 2021 22:23:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=jw2joto0ycumV0U105pGz2eBQ7kFFltrv693bC8E6yA=;
+        b=EyXI5Fb7WIemfGTID7VGqr/QIFs1yG1J+QYmQ/l7dWmNiC5FyfaaeAo0H80e3BDWqq
+         VXbgmM+2BMgfOy9MALOjRvOvTi4fqa0MiPpg3ffHGvZJmnP07vonUcHVRhnJY4yNfa72
+         QXtRahwLQBJoTq/CJPd780YNQKnEL2/SH5kcGJMxAx04cCgYCC72d2wsswCWlUE4Lr+O
+         9eE91+pW0DeYYhQ4oDeRbDNhFCHn/kxWwG4x7IWRiKZXbTADA2iDuDbHvjRZig3SYTDJ
+         MZnl6DRktfgOLmW/PDyo6V2x8xJDvXy1WRVjSy4fPendFGHokmMpYnNQaP80Smjf8V9y
+         9egg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=jw2joto0ycumV0U105pGz2eBQ7kFFltrv693bC8E6yA=;
+        b=ahxvMmy08MCvB7thsD+KGqzsPPQA9sUsiLN6YhK8cO4UIuyEyJ6itPS96/blOk+GYO
+         uI8EtRhh5XdVcATZXMDgnduqG6N3WbGUTIPsRyC3HU72vAT+OtKSl7MC9bfBeVlITNsN
+         OTP1VIO7nIZjEwzHuFl2wZSXVM7izyZZkUqTxbnxv7pdrXpWvkyO+wbyMxiihHM3H/gX
+         QficHagb5XJc1i34rgAvRIyE0trnFCShjvYkvkx/rIhhw+FUyrr1IuJ6tV2AMDLctkJ8
+         lLYPL2fkaJcl7pYpiyeAn4N1vLhWC7aBY6ujdCjgks+S7jK4aaEZRNpr2IPHWotA0hYB
+         xN/A==
+X-Gm-Message-State: AOAM5339MUCLUAHC6LNkLNGhROywizOoOcmmfIrH8qMbCjDaSPnhJKTM
+        SqVCjbDZUnu/Tl60qGgyzladQzVOx/0iSA==
+X-Google-Smtp-Source: ABdhPJyFYOHz7PSHmrPnSntOigzuoxMm2NI6HTVwQRxlOFilbS9PAGj0Tgu7HsLfi8QU6fIbL79+ew==
+X-Received: by 2002:a17:90b:1a87:: with SMTP id ng7mr2580747pjb.211.1613024615331;
+        Wed, 10 Feb 2021 22:23:35 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id v26sm3988627pff.195.2021.02.10.22.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 22:23:34 -0800 (PST)
+Message-ID: <6024cd66.1c69fb81.1cfd6.9c19@mx.google.com>
+Date:   Wed, 10 Feb 2021 22:23:34 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210209210843.3af66662@canb.auug.org.au> <YCKnRPRTDyfGxnBC@gunter>
- <20210210085051.7fb951d1@canb.auug.org.au> <YCOUGGJtUJ+Nf0ZA@gunter> <CAK7LNAQn8BX9H577Mfp8WMzzaZZ=oZdEti1Lx2XptZY8aHmzuQ@mail.gmail.com>
-In-Reply-To: <CAK7LNAQn8BX9H577Mfp8WMzzaZZ=oZdEti1Lx2XptZY8aHmzuQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 11 Feb 2021 15:19:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARvuaULBJ_Y-n6x6d6uzmr2jaSG-TjmGxrFLJvR7+u9gg@mail.gmail.com>
-Message-ID: <CAK7LNARvuaULBJ_Y-n6x6d6uzmr2jaSG-TjmGxrFLJvR7+u9gg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the modules tree
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.11-rc7-180-g4a7073d1d81e
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 193 runs,
+ 6 regressions (v5.11-rc7-180-g4a7073d1d81e)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 5:37 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Wed, Feb 10, 2021 at 5:06 PM Jessica Yu <jeyu@kernel.org> wrote:
-> >
-> > +++ Stephen Rothwell [10/02/21 08:50 +1100]:
-> > >Hi Jessica,
-> > >
-> > >On Tue, 9 Feb 2021 16:16:20 +0100 Jessica Yu <jeyu@kernel.org> wrote:
-> > >>
-> > >> Hmm, these errors don't look like it's related to that particular commit. I was
-> > >
-> > >I found this commit by bisection and then tested by reverting it.
-> > >
-> > >Before this commit, CONFIG_TRIM_UNUSED_KSYMS would not be set in the
-> > >allyesconfig build because CONFIG_UNUSED_SYMBOLS was set.  After this
-> > >commit, CONFIG_TRIM_UNUSED_KSYMS will be set in the allyesconfig build.
-> >
-> > Ah, that makes sense then. I would get the error on powerpc whenever
-> > CONFIG_TRIM_UNUSED_KSYMS was enabled.
-> >
-> > >> able to reproduce these weird autoksym errors even without any modules-next
-> > >> patches applied, and on a clean v5.11-rc7 tree. To reproduce it,
-> > >> CONFIG_TRIM_UNUSED_KSYMS needs to be enabled. I guess that's why we run into
-> > >> these errors with allyesconfig. I used a gcc-7 ppc64le cross compiler and got
-> > >> the same compiler warnings. It seems to not compile on powerpc properly because
-> > >> it looks like some symbols have an extra dot "." prefix, for example in
-> > >> kthread.o:
-> > >>
-> > >>     168: 0000000000000318    24 NOTYPE  GLOBAL DEFAULT    6 kthread_create_worker
-> > >>     169: 0000000000001d90   104 FUNC    GLOBAL DEFAULT    1 .kthread_create_worker
-> > >>     170: 0000000000000330    24 NOTYPE  GLOBAL DEFAULT    6 kthread_create_worker_on_cpu
-> > >>     171: 0000000000001e00    88 FUNC    GLOBAL DEFAULT    1 .kthread_create_worker_on_cpu
-> > >>     172: 0000000000000348    24 NOTYPE  GLOBAL DEFAULT    6 kthread_queue_work
-> > >>     173: 0000000000001e60   228 FUNC    GLOBAL DEFAULT    1 .kthread_queue_work
-> > >>
-> > >> So I suppose this dot prefix is specific to powerpc. From the ppc64 elf abi docs:
-> > >>
-> > >>      Symbol names with a dot (.) prefix are reserved for holding entry point
-> > >>      addresses. The value of a symbol named ".FN", if it exists, is the entry point
-> > >>      of the function "FN".
-> > >>
-> > >> I guess the presence of the extra dot symbols is confusing
-> > >> scripts/gen_autoksyms.sh, so we get the dot symbols in autoksyms.h, which the
-> > >> preprocessor doesn't like. I am wondering how this was never caught until now
-> > >> and also now curious if this feature was ever functional on powerpc..
-> > >
-> > >Which feature?
-> >
-> > Sorry, by "feature" I meant CONFIG_TRIM_UNUSED_KSYMS. This config
-> > option was introduced around v4.7. If simply enabling it produces
-> > these compilation errors I was wondering if it ever built properly on
-> > powerpc.
-> >
-> > Thanks,
-> >
-> > Jessica
->
->
-> Thanks for the report.
->
-> I think the following will fix the issue,
-> but modpost needs fixing too.
->
->
-> diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-> index 16c0b2ddaa4c..996a7109167b 100755
-> --- a/scripts/gen_autoksyms.sh
-> +++ b/scripts/gen_autoksyms.sh
-> @@ -44,7 +44,7 @@ sed 's/ko$/mod/' $modlist |
->  xargs -n1 sed -n -e '2{s/ /\n/g;/^$/!p;}' -- |
->  cat - "$ksym_wl" |
->  sort -u |
-> -sed -e 's/\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
-> +sed -e 's/^\.\{,1\}\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
->
->  # Special case for modversions (see modpost.c)
->  if [ -n "$CONFIG_MODVERSIONS" ]; then
-> m
+next/pending-fixes baseline: 193 runs, 6 regressions (v5.11-rc7-180-g4a7073=
+d1d81e)
+
+Regressions Summary
+-------------------
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig     =
+               | 1          =
+
+meson-g12b-odroid-n2     | arm64 | lab-baylibre | gcc-8    | defconfig     =
+               | 2          =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-rc7-180-g4a7073d1d81e/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-rc7-180-g4a7073d1d81e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      4a7073d1d81e68341c8776a443494218212220c4 =
 
 
 
-After some more tests, I noticed the code above was not correct.
-I still saw a lot of modpost errors.
-
-ERROR: modpost: "_mcount" [arch/powerpc/oprofile/oprofile.ko] undefined!
-ERROR: modpost: "._mcount" [arch/powerpc/oprofile/oprofile.ko] undefined!
-
-
-I just posted a patch, which fixes the error as far as I tested.
-https://patchwork.kernel.org/project/linux-kbuild/patch/20210211061416.3747231-1-masahiroy@kernel.org/
+Test Regressions
+---------------- =
 
 
 
--- 
-Best Regards
-Masahiro Yamada
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+bcm2837-rpi-3-b          | arm64 | lab-baylibre | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602498480fb628eb923abe62
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
+re/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
+re/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/602498480fb628eb=
+923abe67
+        new failure (last pass: v5.11-rc7-135-gfeb8c1ad740c)
+        2 lines
+
+    2021-02-11 02:34:41.070000+00:00  Connected to bcm2837-rpi-3-b console =
+[channel connected] (~$quit to exit)
+    2021-02-11 02:34:41.070000+00:00  (user:khilman) is already connected
+    2021-02-11 02:34:55.859000+00:00  =00
+    2021-02-11 02:34:55.859000+00:00  =
+
+    2021-02-11 02:34:55.875000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
+2 -0800)
+    2021-02-11 02:34:55.875000+00:00  =
+
+    2021-02-11 02:34:55.875000+00:00  DRAM:  948 MiB
+    2021-02-11 02:34:55.891000+00:00  RPI 3 Model B (0xa02082)
+    2021-02-11 02:34:55.981000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
+0: 1
+    2021-02-11 02:34:56.013000+00:00  Loading Environment from FAT... *** W=
+arning - bad CRC, using default environment =
+
+    ... (389 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre | gcc-8    | multi_v7_defc.=
+..CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6024995e18a2d537fc3abe7c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
+aseline-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6024995e18a2d537fc3ab=
+e7d
+        failing since 21 days (last pass: v5.11-rc4-275-g31be679b2913, firs=
+t fail: v5.11-rc4-315-gcbe1658e272d) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602499761778efbb1b3abe62
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/ba=
+seline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602499761778efbb1b3ab=
+e63
+        new failure (last pass: v5.11-rc7-135-gfeb8c1ad740c) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+imx8mp-evk               | arm64 | lab-nxp      | gcc-8    | defconfig     =
+               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60249b059100894a573abe78
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/60249b059100894a573ab=
+e79
+        new failure (last pass: v5.11-rc6-329-g3463a75620c7) =
+
+ =
+
+
+
+platform                 | arch  | lab          | compiler | defconfig     =
+               | regressions
+-------------------------+-------+--------------+----------+---------------=
+---------------+------------
+meson-g12b-odroid-n2     | arm64 | lab-baylibre | gcc-8    | defconfig     =
+               | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60249930981e0568473abe63
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-odr=
+oid-n2.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-rc7-1=
+80-g4a7073d1d81e/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-odr=
+oid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/60249930981e056=
+8473abe69
+        new failure (last pass: v5.11-rc6-329-g3463a75620c7)
+        7 lines
+
+    2021-02-11 02:40:27.269000+00:00  :alert :   ESR =3D 0x86000004   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/60249930981e056=
+8473abe6a
+        new failure (last pass: v5.11-rc6-329-g3463a75620c7)
+        2 lines
+
+    2021-02-11 02:40:27.270000+00:00  kern  :alert :   SET =3D 0, FnV =3D 0
+    2021-02-11 02:40:27.270000+00:00  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2021-02-11 02:40:27.271000+00:00  kern  :alert : [00163b00000000<8>[   =
+16.288164] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=
+=3Dlines MEASUREMENT=3D2>
+    2021-02-11 02:40:27.271000+00:00  00] addres<8>[   16.297523] <LAVA_SIG=
+NAL_ENDRUN 0_dmesg 708636_1.5.2.4.1>   =
+
+ =20

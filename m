@@ -2,130 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6D9319BF4
-	for <lists+linux-next@lfdr.de>; Fri, 12 Feb 2021 10:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1761F319C28
+	for <lists+linux-next@lfdr.de>; Fri, 12 Feb 2021 10:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhBLJhU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Feb 2021 04:37:20 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8611 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbhBLJhQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Feb 2021 04:37:16 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B60264c220000>; Fri, 12 Feb 2021 01:36:34 -0800
-Received: from reg-r-vrt-018-180.nvidia.com (172.20.145.6) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 12 Feb 2021 09:36:31 +0000
-References: <20210211222604.51bd537c@canb.auug.org.au>
- <YCWT6TZCGQOXlf6B@osiris>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Vlad Buslov <vladbu@nvidia.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dmytro Linkin <dlinkin@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        id S230063AbhBLJyi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Feb 2021 04:54:38 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44799 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229844AbhBLJyh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 12 Feb 2021 04:54:37 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DcTNL34pyz9s1l;
+        Fri, 12 Feb 2021 20:53:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613123635;
+        bh=V6tZ9bJN3keYQ3P1n6itNnuQN6FwhXmN58WXFjXklwY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eSti4RUW+giXxWypA9JYzNr3vkb7z9otoxT3qVTARSZ7zLSfMuF2js7s449/4iH2E
+         hnW7W556gOWjN1DTbr46ZxSTm53HM+nAmt+vUhKzJbJQttlw7IAJ+uuelJFufTO1vB
+         bR297bEX0onPIgXu81YhFsbP6u13BLuRCeqjpK7+TZ/6eHyqEDK8GzKNwZKZwQsUow
+         19htF/5wGIugHii4sWMH3UUzAPuLgo80qixT7v5fQEra4fDhRa8jZ+IfW8+/KAV3QB
+         q3yBEQ+t2LN1A47sJcKwaY/35peR2foyPThyRr2bJyCwaXe14QMVuR6TSyjTSBpHF+
+         KMGCZz40bMelw==
+Date:   Fri, 12 Feb 2021 20:53:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 11
-In-Reply-To: <YCWT6TZCGQOXlf6B@osiris>
-Date:   Fri, 12 Feb 2021 11:36:29 +0200
-Message-ID: <ygnh8s7tsk4i.fsf@nvidia.com>
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: linux-next: manual merge of the akpm-current tree with the fscache
+ tree
+Message-ID: <20210212205353.3db305ee@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1613122594; bh=RserMEccpievJi4knvPI7JSCL0bayUw+P38G/ozwRCw=;
-        h=References:User-agent:From:To:CC:Subject:In-Reply-To:Date:
-         Message-ID:MIME-Version:Content-Type:X-Originating-IP:
-         X-ClientProxiedBy;
-        b=K3ot1ngeO8zwBjXPrrPdbKUyijcy/bjwcy+awyTuIEXEas0fpWzpMw46d5/CLEDMb
-         T4JRvpg4NOQU/37PN/ZHLOolQPOfyA/MJOWVIMr5fSeMHSPyLLslJhRo5ga3jv0iPa
-         wOnoyHxwjLKASlr/FNIUPIbQuFiKuCjKGNV9TBDTXB/w/9oqplJ1ScJdtSJMR3PTsp
-         jHuVy1mq9VGxl/pngp30heMIsBZ1ayRPqiHhlvkzeauDuE8bXXLz7Pr1dlrsgHUxSN
-         NE/tstRel2mbXeFrakCT49wrk1mzVOTgFwXpZ5ixSVmSrhOCbALubsdgsAqX03flR7
-         8owCRSVIxeZBw==
+Content-Type: multipart/signed; boundary="Sig_/NGUf4dhp2i/IsNpftn1P90=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu 11 Feb 2021 at 22:30, Heiko Carstens <hca@linux.ibm.com> wrote:
-> On Thu, Feb 11, 2021 at 10:26:04PM +1100, Stephen Rothwell wrote:
->> Hi all,
->> 
->> Changes since 20210210:
->> 
->> The powerpc tree still had its build failure in the allyesconfig for
->> which I applied a supplied patch.
->> 
->> The v4l-dvb tree lost its build failure.
->> 
->> The drm-misc tree lost its build failure.
->> 
->> The modules tree lost its build failure.
->> 
->> The device-mapper tree gained a build failure so I used the version
->> from next-20210210.
->> 
->> The tip tree lost its boot failure.
->> 
->> The rcu tree gained conflicts against the block tree.
->> 
->> The driver-core tree lost its build failure.
->> 
->> The akpm-current tree gained conflicts against the fscache tree.
->> 
->> Non-merge commits (relative to Linus' tree): 9533
->>  9470 files changed, 385794 insertions(+), 266880 deletions(-)
->> 
->> ----------------------------------------------------------------------------
->
-> Build fails on s390 using defconfig with:
->
-> In file included from drivers/net/ethernet/mellanox/mlx5/core/en_tc.h:40,
->                  from drivers/net/ethernet/mellanox/mlx5/core/en_main.c:45:
-> drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h:24:29: error: field 'match_level' has incomplete type
->    24 |  enum mlx5_flow_match_level match_level;
->       |                             ^~~~~~~~~~~
-> drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.h:27:26: warning: 'struct mlx5e_encap_entry' declared inside parameter list will not be visible outside of this definition or declaration
->    27 |  int (*calc_hlen)(struct mlx5e_encap_entry *e);
->       |                          ^~~~~~~~~~~~~~~~~
->
-> caused by this:
-> commit 0d9f96471493d5483d116c137693f03604332a04 (HEAD, refs/bisect/bad)
-> Author: Vlad Buslov <vladbu@nvidia.com>
-> Date:   Sun Jan 24 22:07:04 2021 +0200
->
->     net/mlx5e: Extract tc tunnel encap/decap code to dedicated file
->     
->     Following patches in series extend the extracted code with routing
->     infrastructure. To improve code modularity created a dedicated
->     tc_tun_encap.c source file and move encap/decap related code to the new
->     file. Export code that is used by both regular TC code and encap/decap code
->     into tc_priv.h (new header intended to be used only by TC module). Rename
->     some exported functions by adding "mlx5e_" prefix to their names.
->     
->     Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
->     Signed-off-by: Dmytro Linkin <dlinkin@nvidia.com>
->     Reviewed-by: Roi Dayan <roid@nvidia.com>
->     Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
->
-> Note: switching on NET_SWITCHDEV fixes the build error.
+--Sig_/NGUf4dhp2i/IsNpftn1P90=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Heiko,
+Hi all,
 
-This problem is supposed to be fixed by 36280f0797df ("net/mlx5e: Fix
-tc_tun.h to verify MLX5_ESWITCH config"). I'm trying to reproduce with
-config supplied by test robot in another thread (config: s390-defconfig)
-and current net-next builds fine for me. I've also verified that config
-option you mentioned is not set in that config:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-$ grep NET_SWITCHDEV .config
-# CONFIG_NET_SWITCHDEV is not set
+  include/linux/pagemap.h
 
-Can you help me reproduce?
+between commit:
 
-Thanks,
-Vlad
+  13aecd8259dc ("mm: Implement readahead_control pageset expansion")
+
+from the fscache tree and commit:
+
+  3ad6bba07ad0 ("mm/filemap: add mapping_seek_hole_data")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/pagemap.h
+index d2786607d297,20225b067583..000000000000
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@@ -758,11 -756,11 +757,13 @@@ int add_to_page_cache_lru(struct page *
+  				pgoff_t index, gfp_t gfp_mask);
+  extern void delete_from_page_cache(struct page *page);
+  extern void __delete_from_page_cache(struct page *page, void *shadow);
+- int replace_page_cache_page(struct page *old, struct page *new, gfp_t gfp=
+_mask);
++ void replace_page_cache_page(struct page *old, struct page *new);
+  void delete_from_page_cache_batch(struct address_space *mapping,
+  				  struct pagevec *pvec);
+ +void readahead_expand(struct readahead_control *ractl,
+ +		      loff_t new_start, size_t new_len);
++ loff_t mapping_seek_hole_data(struct address_space *, loff_t start, loff_=
+t end,
++ 		int whence);
+ =20
+  /*
+   * Like add_to_page_cache_locked, but used to add newly allocated pages:
+
+--Sig_/NGUf4dhp2i/IsNpftn1P90=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAmUDEACgkQAVBC80lX
+0GzwuQf7BleQYh5H8zpxZL+Wu64753zcgfTvI4DY4weFf26AvogNAq07FVoJFqHm
+vWKrUZzjeQuvD6w9a/8O1C36wm+zRr020K52fEz+eCrDnBCmA2S7Ihm4U2gv2J+u
+33LcMyO9NyOI8IjmuQAbX5Wj6Ua54kqdYnquoaIrOpetDw32ltIdXsGgtBeLf4DG
+zz5QNJf/R0i/hLVnp3Dx4eNR1HV2FsnmE3ltQLXAKyAPMUNPG8zaiYMJE3CXnCbj
+bkCxWa/opQvDCkXZ7YyqXvJWDFnAOoYDnbncI78ese9smmQ3mSVS7qFewDEu1GCs
+mhaBnxRPeHDiybiobUBrTjqvCf2cFQ==
+=zOmJ
+-----END PGP SIGNATURE-----
+
+--Sig_/NGUf4dhp2i/IsNpftn1P90=--

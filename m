@@ -2,114 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ECD319926
-	for <lists+linux-next@lfdr.de>; Fri, 12 Feb 2021 05:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56BE319961
+	for <lists+linux-next@lfdr.de>; Fri, 12 Feb 2021 05:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbhBLEc0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Feb 2021 23:32:26 -0500
-Received: from ozlabs.org ([203.11.71.1]:35925 "EHLO ozlabs.org"
+        id S229505AbhBLE6n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Feb 2021 23:58:43 -0500
+Received: from mga01.intel.com ([192.55.52.88]:48254 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229457AbhBLEcZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 11 Feb 2021 23:32:25 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DcLDb0s9Fz9sB4;
-        Fri, 12 Feb 2021 15:31:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613104303;
-        bh=itmzlFUyHqeL4s3wEw4G0ZaKppPV6xrZiajsKNwmq5c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UWUD/EHB9ckSxYY0kjmpwWrx71QXjtyZnvxMKXWJG/Mq3dYgBM1jv4JgF+Pe30SBl
-         bvq6hAflYEWrJgYvTUO2RQokAxjvVhPFjBTqk+gsJLjNvY5t/yRxHtzEf7gBXmKOG4
-         3hEavcGsxOdz135dumfadoXTP2GzhOm6JMmIdqTR7jWcJiwbIruLqHSOrobdoQPnsT
-         IkRUG6UnXQ4OOeaLvs500DxCiEaSksEpOFc/6q7vhfJy2KmH51nPpEY2acfHuOLYHy
-         1YW2Is6gTeKUMQc+GHFQ36l4I8RYCD8S7iBDkCpGKdQA7FnaBiYWLmrAV27AUE6YdR
-         +lmS6VJETSdVQ==
-Date:   Fri, 12 Feb 2021 15:31:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the spi tree with the powerpc tree
-Message-ID: <20210212152755.5c82563a@canb.auug.org.au>
+        id S229602AbhBLE6m (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 11 Feb 2021 23:58:42 -0500
+IronPort-SDR: +5+AAlqeXo0w8Rxg2IOxxt1S+Q5DLaUdp+QudbpEM9QhjoU+Fll96qBIhpdTNY9AlzztZm1FjA
+ Z9WcqAcWxMVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9892"; a="201507727"
+X-IronPort-AV: E=Sophos;i="5.81,172,1610438400"; 
+   d="scan'208";a="201507727"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2021 20:57:58 -0800
+IronPort-SDR: Bhb41Hyof9aCFk7Ijnlwr7J0Ptu9BWnWM+RXJ9xfmsYD53WXvIJMmJ8v/pz9ZDc7x2uomRd340
+ RuuIdx+gFeFw==
+X-IronPort-AV: E=Sophos;i="5.81,172,1610438400"; 
+   d="scan'208";a="397789020"
+Received: from shsi6026.sh.intel.com (HELO localhost) ([10.239.147.88])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2021 20:57:56 -0800
+From:   shuo.a.liu@intel.com
+To:     linux-next@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Shuo Liu <shuo.a.liu@intel.com>
+Subject: [PATCH] virt: acrn: Fix vCPU removing code build error
+Date:   Fri, 12 Feb 2021 12:57:24 +0800
+Message-Id: <20210212045724.77846-1-shuo.a.liu@intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QoTe.d1fVIKxU/bYVpVZf7q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QoTe.d1fVIKxU/bYVpVZf7q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Shuo Liu <shuo.a.liu@intel.com>
 
-Hi all,
+vCPU removing code depends on CONFIG_HOTPLUG_CPU as it uses remove_cpu()
+and add_cpu(). Make the vCPU removing interface building with
+CONFIG_HOTPLUG_CPU.
 
-Today's linux-next merge of the spi tree got a conflict in:
+../drivers/virt/acrn/hsm.c: In function ‘remove_cpu_store’:
+../drivers/virt/acrn/hsm.c:389:3: error: implicit declaration of function ‘remove_cpu’; [-Werror=implicit-function-declaration]
+   remove_cpu(cpu);
 
-  drivers/spi/spi-mpc52xx.c
+../drivers/virt/acrn/hsm.c:402:2: error: implicit declaration of function ‘add_cpu’; [-Werror=implicit-function-declaration]
+   add_cpu(cpu);
 
-between commit:
+Fixes: 279dcf693ac7 ("virt: acrn: Introduce an interface for Service VM to control vCPU")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Signed-off-by: Shuo Liu <shuo.a.liu@intel.com>
+---
+ drivers/virt/acrn/hsm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-  e10656114d32 ("spi: mpc52xx: Avoid using get_tbl()")
+diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+index 1f6b7c54a1a4..e340788aacdf 100644
+--- a/drivers/virt/acrn/hsm.c
++++ b/drivers/virt/acrn/hsm.c
+@@ -372,6 +372,7 @@ static int acrn_dev_release(struct inode *inode, struct file *filp)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_HOTPLUG_CPU
+ static ssize_t remove_cpu_store(struct device *dev,
+ 				struct device_attribute *attr,
+ 				const char *buf, size_t count)
+@@ -403,9 +404,12 @@ static ssize_t remove_cpu_store(struct device *dev,
+ 	return ret;
+ }
+ static DEVICE_ATTR_WO(remove_cpu);
++#endif
+ 
+ static struct attribute *acrn_attrs[] = {
++#ifdef CONFIG_HOTPLUG_CPU
+ 	&dev_attr_remove_cpu.attr,
++#endif
+ 	NULL
+ };
+ 
 
-from the powerpc tree and commit:
+base-commit: 671176b0016c80b3943cb5387312c886aba3308d
+-- 
+2.28.0
 
-  258ea99fe25a ("spi: spi-mpc52xx: Use new structure for SPI transfer delay=
-s")
-
-from the spi tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-BTW Mark: the author's address in 258ea99fe25a uses a non existent domain :=
--(
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/spi/spi-mpc52xx.c
-index e6a30f232370,36f941500676..000000000000
---- a/drivers/spi/spi-mpc52xx.c
-+++ b/drivers/spi/spi-mpc52xx.c
-@@@ -247,8 -247,10 +247,10 @@@ static int mpc52xx_spi_fsmstate_transfe
-  	/* Is the transfer complete? */
-  	ms->len--;
-  	if (ms->len =3D=3D 0) {
- -		ms->timestamp =3D get_tbl();
- +		ms->timestamp =3D mftb();
-- 		ms->timestamp +=3D ms->transfer->delay_usecs * tb_ticks_per_usec;
-+ 		if (ms->transfer->delay.unit =3D=3D SPI_DELAY_UNIT_USECS)
-+ 			ms->timestamp +=3D ms->transfer->delay.value *
-+ 					 tb_ticks_per_usec;
-  		ms->state =3D mpc52xx_spi_fsmstate_wait;
-  		return FSM_CONTINUE;
-  	}
-
---Sig_/QoTe.d1fVIKxU/bYVpVZf7q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAmBK4ACgkQAVBC80lX
-0GxwDgf+LQNlltZd+xuYSuIXW0zN7QqigfOzpezCQv4daK7jfPropPYZyTsC87JK
-lj0vZmkheBapZvKKtKbA1VvhJfeqZsy6ojIc2DsegOmFlBtTiv00xvQ8HKsVvYJs
-bumKRtrExhWzPJb4HiUmJ8OgFbOkwzwxULIsRtmDaNjUrElIOHsq0806OjkmMAJ5
-p92zn/KegmuUjHRzcxU9OqUOffOIvsHDbcrFRg7UyPvw4ZHJgkzMtiobqkYk5MRj
-VIdXT8E7WsSrghK+lbqi7hnmyrB8td65QCzllR6z7kitCDgWFQ9S2Hk6MH8XSTnv
-NFYF5HMm8RprUx/cvXw6PhBQ1CHXQg==
-=9ePJ
------END PGP SIGNATURE-----
-
---Sig_/QoTe.d1fVIKxU/bYVpVZf7q--

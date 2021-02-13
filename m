@@ -2,115 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65A331A617
-	for <lists+linux-next@lfdr.de>; Fri, 12 Feb 2021 21:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DE731A98F
+	for <lists+linux-next@lfdr.de>; Sat, 13 Feb 2021 02:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbhBLUd7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Feb 2021 15:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S229693AbhBMB7N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Feb 2021 20:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhBLUd4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Feb 2021 15:33:56 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286C4C061574;
-        Fri, 12 Feb 2021 12:33:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=9uw9IAr8lyqmrfip3LyZc7NlrzYPAAm/36VrnVIikDg=; b=eoBsNoHgUjJxhXfuNEv5Yz2LMQ
-        jPN5Kq6W+kpMzV52pkqwqKK8A+ctKUoFLzdnTG2SHwrh46QnXJU9pFTm02MXbqkZzFqGguQvrs236
-        EvtAM2JJ/PdvTffkVLJgThfhKnfmWmWNGUPxudIWs8Y8u8WKdNueKd2VS/KV48rvMrQJK5R09iJ83
-        CBVkHJQ5Rpnx8v3X9dJ4YG4sEHSLoLkrhTru+dnk/wHsHJZ5fbzZKrIqJLaf++wzd12nP8lUhqmsi
-        mgFsY2AvPw/YopThXX2ECKR7CV9Ux4ImXNEBUzTEEAFgmdyDLUXt8lpIYIwpdrFmlyXV+5iW52sOs
-        WXWZCiOQ==;
-Received: from [2601:1c0:6280:3f0::cf3b]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1lAf7o-0007qq-7W; Fri, 12 Feb 2021 20:33:12 +0000
-Subject: Re: [PATCH v2 1/2] cpu/hotplug: Fix build error of using
- {add,remove}_cpu() with !CONFIG_SMP
-To:     shuo.a.liu@intel.com, linux-next@vger.kernel.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Qais Yousef <qais.yousef@arm.com>, linux-kernel@vger.kernel.org
-References: <20210212165519.82126-1-shuo.a.liu@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <e3095871-ac55-baba-8712-9afaa94b41f8@infradead.org>
-Date:   Fri, 12 Feb 2021 12:33:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        with ESMTP id S229650AbhBMB7N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Feb 2021 20:59:13 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175C3C061756;
+        Fri, 12 Feb 2021 17:58:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DctnH0xtyz9rx8;
+        Sat, 13 Feb 2021 12:58:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613181509;
+        bh=H/iqb4/Z+4UY6kU+XCeQ5sqbttHmMobg3wFbG3ZbMSA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eCvMYWohyum8n0Sxk9UBbdYuJkbqjymit253wql3yKEpz+8eE8Hr345BOfOQj6gta
+         ztmkU0dkWDWWSA7rkzC6lfh0iE1NoPeLM8BXKOU+2xbeOpqRiuhKrYVymgRe1vhULx
+         UY37/d+S1kFXWB3Ox3AVKHGFvcO6LgALotTJT2HhCZdtup/s82uhhYdBZI5y/t4ZGM
+         /lTtTiiwuUptnsGkgsG/HKqi+rTQ3H4iBj6/NngPw+rrRduqOW58qQN28RfoMCK+JE
+         uPg/XHaE81wOarrfH27w0fGE3jbSLLM9CshSpRNTVaXF8P9GNL4Hv+SPUuGHibR6cz
+         jlVM8wK7zVEaw==
+Date:   Sat, 13 Feb 2021 12:58:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the powerpc tree
+Message-ID: <20210213125825.6aa0da4d@canb.auug.org.au>
+In-Reply-To: <20210212122759.GA6057@sirena.org.uk>
+References: <20210212152755.5c82563a@canb.auug.org.au>
+        <20210212122759.GA6057@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20210212165519.82126-1-shuo.a.liu@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/qv/XSwTuxVuIrfv4MLHh6Xa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/12/21 8:55 AM, shuo.a.liu@intel.com wrote:
-> From: Shuo Liu <shuo.a.liu@intel.com>
-> 
-> 279dcf693ac7 ("virt: acrn: Introduce an interface for Service VM to
-> control vCPU") introduced {add,remove}_cpu() usage and it hit below
-> error with !CONFIG_SMP:
-> 
-> ../drivers/virt/acrn/hsm.c: In function ‘remove_cpu_store’:
-> ../drivers/virt/acrn/hsm.c:389:3: error: implicit declaration of function ‘remove_cpu’; [-Werror=implicit-function-declaration]
->    remove_cpu(cpu);
-> 
-> ../drivers/virt/acrn/hsm.c:402:2: error: implicit declaration of function ‘add_cpu’; [-Werror=implicit-function-declaration]
->    add_cpu(cpu);
-> 
-> Add add_cpu() function prototypes with !CONFIG_SMP and remove_cpu() with
-> !CONFIG_HOTPLUG_CPU for such usage.
-> 
-> Fixes: 279dcf693ac7 ("virt: acrn: Introduce an interface for Service VM to control vCPU")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Shuo Liu <shuo.a.liu@intel.com>
-> ---
-> I followed Greg's idea that add {add,remove}_cpu() functions prototypes.
-> The v2 solution is different from the v1, so i removed Randy's Acked-by.
-> Randy, please help have a look on v2.
-> 
-> v2:
->   - Drop the #ifdef in .c solution. Add {add,remove}_cpu() prototypes. (Suggested by Greg)
-> 
->  include/linux/cpu.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-> index 3aaa0687e8df..94a578a96202 100644
-> --- a/include/linux/cpu.h
-> +++ b/include/linux/cpu.h
-> @@ -108,6 +108,8 @@ static inline void cpu_maps_update_done(void)
->  {
->  }
->  
-> +static inline int add_cpu(unsigned int cpu) { return 0;}
-> +
->  #endif /* CONFIG_SMP */
->  extern struct bus_type cpu_subsys;
->  
-> @@ -137,6 +139,7 @@ static inline int  cpus_read_trylock(void) { return true; }
->  static inline void lockdep_assert_cpus_held(void) { }
->  static inline void cpu_hotplug_disable(void) { }
->  static inline void cpu_hotplug_enable(void) { }
-> +static inline int remove_cpu(unsigned int cpu) { return -EPERM; }
+--Sig_/qv/XSwTuxVuIrfv4MLHh6Xa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I would have done: return 0;
+Hi Mark,
 
-Anyway:
+On Fri, 12 Feb 2021 12:27:59 +0000 Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Feb 12, 2021 at 03:31:42PM +1100, Stephen Rothwell wrote:
+>=20
+> > BTW Mark: the author's address in 258ea99fe25a uses a non existent doma=
+in :-( =20
+>=20
+> Ugh, I think that's something gone wrong with b4 :(  A bit late now to
+> try to fix it up.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Not sure about that, the email (following the link to lore from the
+commit) has the same address (...@public.gmane.com) and that domain
+does not exist. In fact the email headers (in lore) look like this:
 
+From: Sergiu Cuciurean <sergiu.cuciurean-OyLXuOCK7orQT0dZR+AlfA@public.gman=
+e.org>
+To: <broonie-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>,
+	<linux-spi-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>,
+	<linux-kernel-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
+Cc: Sergiu Cuciurean
+	<sergiu.cuciurean-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
 
->  static inline void smp_shutdown_nonboot_cpus(unsigned int primary_cpu) { }
->  #endif	/* !CONFIG_HOTPLUG_CPU */
+So I am suprised that it was received by anyone.  Maybe gmane has an
+internal reply system that is screwed.
+--=20
+Cheers,
+Stephen Rothwell
 
-thanks.
+--Sig_/qv/XSwTuxVuIrfv4MLHh6Xa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-~Randy
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAnMkEACgkQAVBC80lX
+0GzNFQgAmMzKZk5SdO78cr1fRqI6oOzGll9twzHgagqcjZwg9FFtyRIWl414wLQO
+pg3Ssi1yGW/GOhf3EYAU/N01QesP2TSL/LJi8IjwGUqOWvAt0RAkIeb2pNSaW2P6
+erhATifFN/F2xA87A3iXBOJ52JZ9zx5MJlDxLdqwRyVTd4H6W46QfFRHz9tFhz2V
+UwaI/Ri79DA2uBq8RPqxvQy3D4Zoq63heeO9aQqK/pkQwbA2gdDfLuEcPMkEM1kX
+Hym355gGoQt987niv+jsPjmFj7Pmb7nt6D+5W6pA2RME2vyNY6oMk5stCrDDNNjZ
+3zsBX5x5bqMwFXii9zIK5Fk7+68t1g==
+=eq/W
+-----END PGP SIGNATURE-----
+
+--Sig_/qv/XSwTuxVuIrfv4MLHh6Xa--

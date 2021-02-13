@@ -2,102 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DE731A98F
-	for <lists+linux-next@lfdr.de>; Sat, 13 Feb 2021 02:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DA531A998
+	for <lists+linux-next@lfdr.de>; Sat, 13 Feb 2021 03:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhBMB7N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Feb 2021 20:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S229718AbhBMCGC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Feb 2021 21:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbhBMB7N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Feb 2021 20:59:13 -0500
+        with ESMTP id S229708AbhBMCGB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Feb 2021 21:06:01 -0500
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175C3C061756;
-        Fri, 12 Feb 2021 17:58:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49D7C061574;
+        Fri, 12 Feb 2021 18:05:21 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DctnH0xtyz9rx8;
-        Sat, 13 Feb 2021 12:58:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DctxC3hcFz9rx8;
+        Sat, 13 Feb 2021 13:05:19 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613181509;
-        bh=H/iqb4/Z+4UY6kU+XCeQ5sqbttHmMobg3wFbG3ZbMSA=;
+        s=201702; t=1613181919;
+        bh=XsSI0kKcuiqW8vPfo9ITlUSKmuSdJcyqoYRVGlk/jew=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eCvMYWohyum8n0Sxk9UBbdYuJkbqjymit253wql3yKEpz+8eE8Hr345BOfOQj6gta
-         ztmkU0dkWDWWSA7rkzC6lfh0iE1NoPeLM8BXKOU+2xbeOpqRiuhKrYVymgRe1vhULx
-         UY37/d+S1kFXWB3Ox3AVKHGFvcO6LgALotTJT2HhCZdtup/s82uhhYdBZI5y/t4ZGM
-         /lTtTiiwuUptnsGkgsG/HKqi+rTQ3H4iBj6/NngPw+rrRduqOW58qQN28RfoMCK+JE
-         uPg/XHaE81wOarrfH27w0fGE3jbSLLM9CshSpRNTVaXF8P9GNL4Hv+SPUuGHibR6cz
-         jlVM8wK7zVEaw==
-Date:   Sat, 13 Feb 2021 12:58:25 +1100
+        b=RxrgEDPXk9xqmvA1Z2MCy1lcMAEptWpDL62YFKqjZo/loqm8ETS25XaAp898yubeU
+         LqqiVGbU9HvvXBvOLqcfdZNahnxSWKiP93GIWecXewIhQulXWsYUS7/1ztIUKJpSi1
+         Sr8wpav0sH/OmRvdW/c32uChwNugADjr7wArgpagZeOK8irQYIlnR/AsctNaYYbmx7
+         qYzhyP8Q28QdEbz6Jq30foJ9BUPEjsApg+x58UIQ7MCoRJjtDdMajxrQOtf/90iMDR
+         kGL+Eluvj5bRHFW00r9FiE5pgP4J3U2ZiVIUqjK+ddhpmyY8gEndnKmyHhztYxRtOS
+         gRYzUFS2lDv8g==
+Date:   Sat, 13 Feb 2021 13:05:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the spi tree with the powerpc tree
-Message-ID: <20210213125825.6aa0da4d@canb.auug.org.au>
-In-Reply-To: <20210212122759.GA6057@sirena.org.uk>
-References: <20210212152755.5c82563a@canb.auug.org.au>
-        <20210212122759.GA6057@sirena.org.uk>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: linux-next: manual merge of the rcu tree with the block tree
+Message-ID: <20210213130518.3747a678@canb.auug.org.au>
+In-Reply-To: <858e7874-83c9-e4b9-a0a9-31be5a0c853e@kernel.dk>
+References: <20210211164852.7489b87d@canb.auug.org.au>
+        <20210212151853.GC94816@lothringen>
+        <858e7874-83c9-e4b9-a0a9-31be5a0c853e@kernel.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qv/XSwTuxVuIrfv4MLHh6Xa";
+Content-Type: multipart/signed; boundary="Sig_/I2YT3FdOFfP0ik0SKo8Ba3u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qv/XSwTuxVuIrfv4MLHh6Xa
+--Sig_/I2YT3FdOFfP0ik0SKo8Ba3u
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+Hi all,
 
-On Fri, 12 Feb 2021 12:27:59 +0000 Mark Brown <broonie@kernel.org> wrote:
+On Fri, 12 Feb 2021 08:30:27 -0700 Jens Axboe <axboe@kernel.dk> wrote:
 >
-> On Fri, Feb 12, 2021 at 03:31:42PM +1100, Stephen Rothwell wrote:
+> On 2/12/21 8:18 AM, Frederic Weisbecker wrote:
+> > On Thu, Feb 11, 2021 at 04:48:52PM +1100, Stephen Rothwell wrote: =20
+> >> Hi all,
+> >>
+> >> Today's linux-next merge of the rcu tree got conflicts in:
+> >>
+> >>   include/linux/rcupdate.h
+> >>   kernel/rcu/tree.c
+> >>   kernel/rcu/tree_plugin.h
+> >>
+> >> between commits:
+> >>
+> >>   3a7b5c87a0b2 ("rcu/nocb: Perform deferred wake up before last idle's=
+ need_resched() check")
+> >>   e4234f21d2ea ("rcu: Pull deferred rcuog wake up to rcu_eqs_enter() c=
+allers")
+> >>   14bbd41d5109 ("entry/kvm: Explicitly flush pending rcuog wakeup befo=
+re last
+> >>   rescheduling point")
+> >> from the block tree and commits: =20
+> >=20
+> > Isn't it tip:/sched/core instead of block? =20
 >=20
-> > BTW Mark: the author's address in 258ea99fe25a uses a non existent doma=
-in :-( =20
->=20
-> Ugh, I think that's something gone wrong with b4 :(  A bit late now to
-> try to fix it up.
+> It must be, maybe block just got merged first? It's just sched/core in a
+> topic branch, to satisfy a dependency.
 
-Not sure about that, the email (following the link to lore from the
-commit) has the same address (...@public.gmane.com) and that domain
-does not exist. In fact the email headers (in lore) look like this:
+Well, yes, it is a topic branch merge into the block tree.  However,
+that topic branch has not been merged into the tip/auto-latest branch
+which is what linux-next pulls in as the tip tree.  (And the tip tree
+and block trees were both merged before the rcu tree.)
 
-From: Sergiu Cuciurean <sergiu.cuciurean-OyLXuOCK7orQT0dZR+AlfA@public.gman=
-e.org>
-To: <broonie-DgEjT+Ai2ygdnm+yROfE0A@public.gmane.org>,
-	<linux-spi-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>,
-	<linux-kernel-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-Cc: Sergiu Cuciurean
-	<sergiu.cuciurean-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-
-So I am suprised that it was received by anyone.  Maybe gmane has an
-internal reply system that is screwed.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/qv/XSwTuxVuIrfv4MLHh6Xa
+--Sig_/I2YT3FdOFfP0ik0SKo8Ba3u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAnMkEACgkQAVBC80lX
-0GzNFQgAmMzKZk5SdO78cr1fRqI6oOzGll9twzHgagqcjZwg9FFtyRIWl414wLQO
-pg3Ssi1yGW/GOhf3EYAU/N01QesP2TSL/LJi8IjwGUqOWvAt0RAkIeb2pNSaW2P6
-erhATifFN/F2xA87A3iXBOJ52JZ9zx5MJlDxLdqwRyVTd4H6W46QfFRHz9tFhz2V
-UwaI/Ri79DA2uBq8RPqxvQy3D4Zoq63heeO9aQqK/pkQwbA2gdDfLuEcPMkEM1kX
-Hym355gGoQt987niv+jsPjmFj7Pmb7nt6D+5W6pA2RME2vyNY6oMk5stCrDDNNjZ
-3zsBX5x5bqMwFXii9zIK5Fk7+68t1g==
-=eq/W
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAnM94ACgkQAVBC80lX
+0Gx7Agf9EoLO6f4jX0seNCyDmYzGJ9dPRMu1V08p0HvcfRJ71r/iLUg4iw4iSBVd
+h9yMLTxxYuQlzdwSqZTY/ABu1H9jletypGDa1LKmqTP5IaQYBXYvdo38Wo/qBDhM
+2ojeiRsf5/Pj08vnn1Sfzk48gu/c+zniDZ3uTkyON0cRHFKoxiFeLvrYMwF1bUlT
+M7gmsBf2Id3JOfymSI01o7QAVGj0Eqct3EZ+Cht+/hUp211hnXMUgXP+Nf2W7zCU
+548EGdv57rG1m/l4MRpZ7Yw9GGe4PSBtz+0OLzG6dM+fvrV9V+Wjmr/RgHeUVaep
+C3o6961PnB67oyQ+/cdiBzY4NLUFyg==
+=kQd+
 -----END PGP SIGNATURE-----
 
---Sig_/qv/XSwTuxVuIrfv4MLHh6Xa--
+--Sig_/I2YT3FdOFfP0ik0SKo8Ba3u--

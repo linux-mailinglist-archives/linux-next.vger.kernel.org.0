@@ -2,82 +2,294 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DE131B2EF
-	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 23:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DBE31B2F5
+	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 23:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbhBNWEY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Feb 2021 17:04:24 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42109 "EHLO ozlabs.org"
+        id S229916AbhBNWIi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Feb 2021 17:08:38 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59293 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229881AbhBNWEV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 14 Feb 2021 17:04:21 -0500
+        id S229789AbhBNWIi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 14 Feb 2021 17:08:38 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df1TP72Xjz9sBJ;
-        Mon, 15 Feb 2021 09:03:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df1ZH3TxNz9sCD;
+        Mon, 15 Feb 2021 09:07:50 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613340219;
-        bh=sbr/yBgbfhgTN/oEnoD2FwzCjNixJMFLOleNMlXrBQs=;
+        s=201702; t=1613340474;
+        bh=T6vKJLf8K1ImqLZ0H0gH4EVJO5DREMNbD0S+Klgld0Q=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oiCEE6PHqxpmhj93Wk3acMgZoyffkjde8P7i0bPQx2DlozwCOxhRhvMQ80pDhf18J
-         zMtSn/dYtn8xpVCNHWS/210nUSZa1EPKswuIh8oEPqzpiw4l6mUNwvNsL4uXUYdOAv
-         OBrw+JAvWpWF7xnLMyZGcT4hLRq06PHOCAesFBOu+HyXTVfr4igjDtvATw+NpK1NNC
-         loUbUbBPMEZUE0WefSlmHQp+wpWFTL+6vAhVNCfmTBypzEBSDUysr6uBCzqioJzkqa
-         3oe209NF7FRgOaeKaKml0lZsyih2miLnJctLllNRwdKtzn5DHcAoqbGOncF9zHLplH
-         bzqK+f/8fmv/w==
-Date:   Mon, 15 Feb 2021 09:03:36 +1100
+        b=psHJEoeb4dg77+in/XY8RU4x1mgmbmOsaIeIvNF6PHJO/A0xXmbUAiQ73815U8qEu
+         nXwKK6039EK061WaHcUb933iexd9OqGNqvRYXOBDrks3v0hkwrdI3y+Cxye6m1DI58
+         BGiiZK0x8Espj3gz+cU+LV1ZLDb3ICn53T6YSim1qRop0N/tDIQ4JYSPMlnjb4/S6s
+         lP4kcZ70h5C5JyfzNQGPssFzH/wSh/GjSoRcBIfie0EDzxKoa6LxioqH6M2QstNvOL
+         LZSSVhRhfOUFBAQnGGx/aurkdW2V9rTrBx2gN4kFIWANbmfZB0+Hj+RP0cyGN5JYV5
+         vb2dHABYqsjtw==
+Date:   Mon, 15 Feb 2021 09:07:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the tty
- tree
-Message-ID: <20210215090336.1b149ab3@canb.auug.org.au>
-In-Reply-To: <20210129155341.1868ef9e@canb.auug.org.au>
-References: <20210129155341.1868ef9e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ryan Taylor <Ryan.Taylor@amd.com>
+Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20210215090750.47bff3b6@canb.auug.org.au>
+In-Reply-To: <20210201123012.139b3978@canb.auug.org.au>
+References: <20210201123012.139b3978@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LG_ORBR17HIlJmSW01dMyYx";
+Content-Type: multipart/signed; boundary="Sig_/SoXVXKz8=V0HvaYI9nRVo/M";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LG_ORBR17HIlJmSW01dMyYx
+--Sig_/SoXVXKz8=V0HvaYI9nRVo/M
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 29 Jan 2021 15:53:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, 1 Feb 2021 12:30:12 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >=20
-> Today's linux-next merge of the char-misc tree got conflicts in:
+> Today's linux-next merge of the drm tree got a conflict in:
 >=20
->   drivers/tty/n_tracerouter.c
->   drivers/tty/n_tracesink.c
+>   drivers/gpu/drm/amd/pm/inc/amdgpu_smu.h
 >=20
 > between commit:
 >=20
->   3b830a9c34d5 ("tty: convert tty_ldisc_ops 'read()' function to take a k=
-ernel pointer")
+>   a119f87b86bc ("Revert "drm/amdgpu/swsmu: drop set_fan_speed_percent (v2=
+)"")
 >=20
-> from the tty tree and commit:
+> from Linus' tree and commit:
 >=20
->   8ba59e9dee31 ("misc: pti: Remove driver for deprecated platform")
+>   d8a0b8dd690b ("drm/amd/pm: add pptable_funcs documentation (v3)")
 >=20
-> from the char-misc tree.
+> from the drm tree.
 >=20
-> I fixed it up (I just removed the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/gpu/drm/amd/pm/inc/amdgpu_smu.h
+> index 0d797fa9f5cc,a087e00382e6..000000000000
+> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_smu.h
+> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_smu.h
+> @@@ -551,39 -924,199 +924,201 @@@ struct pptable_funcs=20
+>   	int (*display_clock_voltage_request)(struct smu_context *smu, struct
+>   					     pp_display_clock_request
+>   					     *clock_req);
+> +=20
+> + 	/**
+> + 	 * @get_fan_control_mode: Get the current fan control mode.
+> + 	 */
+>   	uint32_t (*get_fan_control_mode)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @set_fan_control_mode: Set the fan control mode.
+> + 	 */
+>   	int (*set_fan_control_mode)(struct smu_context *smu, uint32_t mode);
+> +=20
+>  +	int (*set_fan_speed_percent)(struct smu_context *smu, uint32_t speed);
+> ++
+> + 	/**
+> + 	 * @set_fan_speed_rpm: Set a static fan speed in RPM.
+> + 	 */
+>   	int (*set_fan_speed_rpm)(struct smu_context *smu, uint32_t speed);
+> +=20
+> + 	/**
+> + 	 * @set_xgmi_pstate: Set inter-chip global memory interconnect pstate.
+> + 	 * &pstate: Pstate to set. D0 if Nonzero, D3 otherwise.
+> + 	 */
+>   	int (*set_xgmi_pstate)(struct smu_context *smu, uint32_t pstate);
+> +=20
+> + 	/**
+> + 	 * @gfx_off_control: Enable/disable graphics engine poweroff.
+> + 	 */
+>   	int (*gfx_off_control)(struct smu_context *smu, bool enable);
+> +=20
+> +=20
+> + 	/**
+> + 	 * @get_gfx_off_status: Get graphics engine poweroff status.
+> + 	 *
+> + 	 * Return:
+> + 	 * 0 - GFXOFF(default).
+> + 	 * 1 - Transition out of GFX State.
+> + 	 * 2 - Not in GFXOFF.
+> + 	 * 3 - Transition into GFXOFF.
+> + 	 */
+>   	uint32_t (*get_gfx_off_status)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @register_irq_handler: Register interupt request handlers.
+> + 	 */
+>   	int (*register_irq_handler)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @set_azalia_d3_pme: Wake the audio decode engine from d3 sleep.
+> + 	 */
+>   	int (*set_azalia_d3_pme)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @get_max_sustainable_clocks_by_dc: Get a copy of the max sustainable
+> + 	 *                                    clock speeds table.
+> + 	 *
+> + 	 * Provides a way for the display component (DC) to get the max
+> + 	 * sustainable clocks from the SMU.
+> + 	 */
+>   	int (*get_max_sustainable_clocks_by_dc)(struct smu_context *smu, struc=
+t pp_smu_nv_clock_table *max_clocks);
+> +=20
+> + 	/**
+> + 	 * @baco_is_support: Check if GPU supports BACO (Bus Active, Chip Off).
+> + 	 */
+>   	bool (*baco_is_support)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @baco_get_state: Get the current BACO state.
+> + 	 *
+> + 	 * Return: Current BACO state.
+> + 	 */
+>   	enum smu_baco_state (*baco_get_state)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @baco_set_state: Enter/exit BACO.
+> + 	 */
+>   	int (*baco_set_state)(struct smu_context *smu, enum smu_baco_state sta=
+te);
+> +=20
+> + 	/**
+> + 	 * @baco_enter: Enter BACO.
+> + 	 */
+>   	int (*baco_enter)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @baco_exit: Exit Baco.
+> + 	 */
+>   	int (*baco_exit)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @mode1_reset_is_support: Check if GPU supports mode1 reset.
+> + 	 */
+>   	bool (*mode1_reset_is_support)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @mode1_reset: Perform mode1 reset.
+> + 	 *
+> + 	 * Complete GPU reset.
+> + 	 */
+>   	int (*mode1_reset)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @mode2_reset: Perform mode2 reset.
+> + 	 *
+> + 	 * Mode2 reset generally does not reset as many IPs as mode1 reset. The
+> + 	 * IPs reset varies by asic.
+> + 	 */
+>   	int (*mode2_reset)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @get_dpm_ultimate_freq: Get the hard frequency range of a clock
+> + 	 *                         domain in MHz.
+> + 	 */
+>   	int (*get_dpm_ultimate_freq)(struct smu_context *smu, enum smu_clk_typ=
+e clk_type, uint32_t *min, uint32_t *max);
+> +=20
+> + 	/**
+> + 	 * @set_soft_freq_limited_range: Set the soft frequency range of a clo=
+ck
+> + 	 *                               domain in MHz.
+> + 	 */
+>   	int (*set_soft_freq_limited_range)(struct smu_context *smu, enum smu_c=
+lk_type clk_type, uint32_t min, uint32_t max);
+> +=20
+> + 	/**
+> + 	 * @set_power_source: Notify the SMU of the current power source.
+> + 	 */
+>   	int (*set_power_source)(struct smu_context *smu, enum smu_power_src_ty=
+pe power_src);
+> +=20
+> + 	/**
+> + 	 * @log_thermal_throttling_event: Print a thermal throttling warning to
+> + 	 *                                the system's log.
+> + 	 */
+>   	void (*log_thermal_throttling_event)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @get_pp_feature_mask: Print a human readable table of enabled
+> + 	 *                       features to buffer.
+> + 	 */
+>   	size_t (*get_pp_feature_mask)(struct smu_context *smu, char *buf);
+> +=20
+> + 	/**
+> + 	 * @set_pp_feature_mask: Request the SMU enable/disable features to
+> + 	 *                       match those enabled in &new_mask.
+> + 	 */
+>   	int (*set_pp_feature_mask)(struct smu_context *smu, uint64_t new_mask);
+> +=20
+> + 	/**
+> + 	 * @get_gpu_metrics: Get a copy of the GPU metrics table from the SMU.
+> + 	 *
+> + 	 * Return: Size of &table
+> + 	 */
+>   	ssize_t (*get_gpu_metrics)(struct smu_context *smu, void **table);
+> +=20
+> + 	/**
+> + 	 * @enable_mgpu_fan_boost: Enable multi-GPU fan boost.
+> + 	 */
+>   	int (*enable_mgpu_fan_boost)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @gfx_ulv_control: Enable/disable ultra low voltage.
+> + 	 */
+>   	int (*gfx_ulv_control)(struct smu_context *smu, bool enablement);
+> +=20
+> + 	/**
+> + 	 * @deep_sleep_control: Enable/disable deep sleep.
+> + 	 */
+>   	int (*deep_sleep_control)(struct smu_context *smu, bool enablement);
+> +=20
+> + 	/**
+> + 	 * @get_fan_parameters: Get fan parameters.
+> + 	 *
+> + 	 * Get maximum fan speed from the power play table.
+> + 	 */
+>   	int (*get_fan_parameters)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @post_init: Helper function for asic specific workarounds.
+> + 	 */
+>   	int (*post_init)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @interrupt_work: Work task scheduled from SMU interrupt handler.
+> + 	 */
+>   	void (*interrupt_work)(struct smu_context *smu);
+> +=20
+> + 	/**
+> + 	 * @gpo_control: Enable/disable graphics power optimization if support=
+ed.
+> + 	 */
+>   	int (*gpo_control)(struct smu_context *smu, bool enablement);
+> +=20
+> + 	/**
+> + 	 * @gfx_state_change_set: Send the current graphics state to the SMU.
+> + 	 */
+>   	int (*gfx_state_change_set)(struct smu_context *smu, uint32_t state);
+> +=20
+> + 	/**
+> + 	 * @set_fine_grain_gfx_freq_parameters: Set fine grain graphics clock
+> + 	 *                                      parameters to defaults.
+> + 	 */
+>   	int (*set_fine_grain_gfx_freq_parameters)(struct smu_context *smu);
+>   };
+>  =20
 
 With the merge window about to open, this is a reminder that this
 conflict still exists.
@@ -86,20 +298,20 @@ conflict still exists.
 Cheers,
 Stephen Rothwell
 
---Sig_/LG_ORBR17HIlJmSW01dMyYx
+--Sig_/SoXVXKz8=V0HvaYI9nRVo/M
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApnjkACgkQAVBC80lX
-0GwKPAf/Vn7TFcB+Bgo+3xAleSUPBL8mJr0WRApdixN3C0CPvqF6BSQxY7WOg4rV
-n+hVzE7nIe5pX+PrhleS1ciC0k/sa5Dca7LLdHxlV4rH8uW6Bskpdi//fdmXZVzB
-j3gnzXMp5BIr0FX6y1z3d4zTdpSIL6qMFdxVeB/QbLo0Rk+9xSTjUn8eT2691zMR
-R/0O4A7y23cWHO4+uw7be7QgPznUrQasVImdiA3Ek6URJcU/AbsUFKzmt4EpFvNc
-JunPNl2mE+IkJpCTBZKDDbQ8nlEhtCXJlP54HnH7tlqDAkjfR3tZcmwsk6ld71qD
-W0V7gciEyTMQhvNB32ZyH70tKquE3w==
-=q2Sb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApnzYACgkQAVBC80lX
+0GxIdQf+LfMOX24iNRnSuo6tXsIlTiYnuzr66hyRKjrBDnX9yh1NYX9g3g3WqiVi
+kZcXQLg2Zzf0YdIICkAwRnZyYnAPNmad5gxDZQFboUssHmWHDB7NznYeLyfJmvfi
+3RKIwxpdqAXAEvmJmHQeZVig3abwaGsvkFWYflzJ7kuuh5RgTZQr8H1YqwLqDlYV
+y94YjyOpx3dJE98dO26I7U0nPgqmQBxCSyNZLZ1xQbt8ckTBbC26kX2xk8WoMDVB
+v64QGD4pk+VJHVhuAlY1KJplnkvXxDs/q04I3RKveMHpTFo6/bVKq844StdNWPSg
+hD2wOZdsqnzBGWIj3jDfR17wD1pogg==
+=AXK9
 -----END PGP SIGNATURE-----
 
---Sig_/LG_ORBR17HIlJmSW01dMyYx--
+--Sig_/SoXVXKz8=V0HvaYI9nRVo/M--

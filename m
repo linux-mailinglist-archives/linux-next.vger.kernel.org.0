@@ -2,125 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE38F31B313
-	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 23:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADFB31B317
+	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 23:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbhBNWj5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Feb 2021 17:39:57 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52349 "EHLO ozlabs.org"
+        id S229969AbhBNWmR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Feb 2021 17:42:17 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57501 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbhBNWjz (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 14 Feb 2021 17:39:55 -0500
+        id S229793AbhBNWmQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 14 Feb 2021 17:42:16 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df2GP3p41z9rx8;
-        Mon, 15 Feb 2021 09:39:09 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df2K841kYz9rx8;
+        Mon, 15 Feb 2021 09:41:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613342353;
-        bh=VMHVI12n/sYnj/11+gz6BWBErWtIiDEN9XaqwRspFDg=;
+        s=201702; t=1613342493;
+        bh=QLZBeFxDio/kBYUVXICWtsw0jOXBe2K+8pgxtSzlIVs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q5UFaagv1VaKmBvQCvXt+ry3l6YMuxH1CffIWUubOAutw4CXE2ZhJdZpDWx0EGEb5
-         Texqy0X+K0clqEwC2oDzsCuLGHLiBcxrnaYDzWam7Q0zbg5OJgH4haeQG0Y1l/BnJC
-         TOpI0T5NxkLYYaOBSGhXMjMDu4Pxh6ah8JJit2SoIHVOvmLnkXEt/Q5ytuRIhPOLRK
-         qZ86Uk9l7Yu8iut7dxfHmp6Vx3uTM5e7+mpBrQlL3d8PIloxLA0N9DhUERpjz9DVH3
-         ak6nxqeZGLgiH5Pp9DPWP1K+NY5uedchMD9ahmdr+u09FSA3oHIfeT8vhWxT+AHaTg
-         Y2qJ0/FyXk0DQ==
-Date:   Mon, 15 Feb 2021 09:39:08 +1100
+        b=Jo7lsxxSqfKMkqZOS+H/WoXGH9/HCgqkcmXuvcFy9REyapOoi/gKHyrw5P8WR+vuP
+         lFs1eWNIi5/eCvOo6ZEIIkgJ751PXAeKTuGgVZkkL2KFukbsvwuT/Lz3oK4iHdRFM9
+         w/P6rKHOMdc1WfZB/l11PjYYpO4el1F+np79X/8lo43u5ahU3hMoaEwVSv8GRPO1eh
+         XH3GPe0Se1r9x9P1fEIY2q6oyGYPnCd8v8OZ4D7eQiF+cp1Y37AMCrfifkODA9zYql
+         NS99rxFymkkfhM5BAJES6TSdojftnn/FbyuCJWuVzZwg7gYVDGR8IHo4Q5VwNXzCxb
+         JI5M3BHK9CE3w==
+Date:   Mon, 15 Feb 2021 09:41:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: linux-next: manual merge of the drivers-x86 tree with the
- drm-misc tree
-Message-ID: <20210215093908.06e349bf@canb.auug.org.au>
-In-Reply-To: <20210204155846.5aef94a8@canb.auug.org.au>
-References: <20210204155846.5aef94a8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the xfs tree with the pidfd tree
+Message-ID: <20210215094131.7b47c1c5@canb.auug.org.au>
+In-Reply-To: <20210208103348.1a0beef9@canb.auug.org.au>
+References: <20210208103348.1a0beef9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fcEgAKpFpYpY8sFQopChY8R";
+Content-Type: multipart/signed; boundary="Sig_/6AZ6gwpjRrqFrLqMtudqeMW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fcEgAKpFpYpY8sFQopChY8R
+--Sig_/6AZ6gwpjRrqFrLqMtudqeMW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 4 Feb 2021 15:58:46 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Mon, 8 Feb 2021 10:33:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
+>
+> Today's linux-next merge of the xfs tree got a conflict in:
 >=20
-> Today's linux-next merge of the drivers-x86 tree got a conflict in:
+>   fs/xfs/xfs_ioctl.c
 >=20
->   drivers/gpu/drm/gma500/Kconfig
->   drivers/gpu/drm/gma500/mdfld_device.c
->   drivers/gpu/drm/gma500/mdfld_dsi_output.c
->   drivers/gpu/drm/gma500/mdfld_output.c
->   drivers/gpu/drm/gma500/tc35876x-dsi-lvds.c
+> between commit:
 >=20
-> between commits:
+>   f736d93d76d3 ("xfs: support idmapped mounts")
 >=20
->   b51035c200bd ("drm/gma500: Remove Medfield support")
-
-Now
-
-  e1da811218d2 ("drm/gma500: Remove Medfield support")
-
->   837f23bb4b60 ("drm/gma500: Drop DRM_GMA3600 config option")
-
-Now
-
-  26499e0518a7 ("drm/gma500: Drop DRM_GMA3600 config option")
-
+> from the pidfd tree and commit:
 >=20
-> from the drm-misc tree and commit:
+>   7317a03df703 ("xfs: refactor inode ownership change transaction/inode/q=
+uota allocation idiom")
 >=20
->   bfc838f8598e ("drm/gma500: Convert to use new SCU IPC API")
->   25ded39ad064 ("drm/gma500: Get rid of duplicate NULL checks")
+> from the xfs tree.
 >=20
-> from the drivers-x86 tree.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 >=20
-> I fixed it up (the former removed the text that was updated by the
-> latter and removed the last 4 files) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> diff --cc fs/xfs/xfs_ioctl.c
+> index 3d4c7ca080fb,248083ea0276..000000000000
+> --- a/fs/xfs/xfs_ioctl.c
+> +++ b/fs/xfs/xfs_ioctl.c
+> @@@ -1280,9 -1275,9 +1280,10 @@@ xfs_ioctl_setattr_prepare_dax
+>    */
+>   static struct xfs_trans *
+>   xfs_ioctl_setattr_get_trans(
+> - 	struct file		*file)
+>  -	struct xfs_inode	*ip,
+> ++	struct file		*file,
+> + 	struct xfs_dquot	*pdqp)
+>   {
+>  +	struct xfs_inode	*ip =3D XFS_I(file_inode(file));
+>   	struct xfs_mount	*mp =3D ip->i_mount;
+>   	struct xfs_trans	*tp;
+>   	int			error =3D -EROFS;
+> @@@ -1470,9 -1461,9 +1469,9 @@@ xfs_ioctl_setattr
+>  =20
+>   	xfs_ioctl_setattr_prepare_dax(ip, fa);
+>  =20
+> - 	tp =3D xfs_ioctl_setattr_get_trans(file);
+>  -	tp =3D xfs_ioctl_setattr_get_trans(ip, pdqp);
+> ++	tp =3D xfs_ioctl_setattr_get_trans(file, pdqp);
+>   	if (IS_ERR(tp)) {
+> - 		code =3D PTR_ERR(tp);
+> + 		error =3D PTR_ERR(tp);
+>   		goto error_free_dquots;
+>   	}
+>  =20
+> @@@ -1615,7 -1599,7 +1606,7 @@@ xfs_ioc_setxflags
+>  =20
+>   	xfs_ioctl_setattr_prepare_dax(ip, &fa);
+>  =20
+> - 	tp =3D xfs_ioctl_setattr_get_trans(filp);
+>  -	tp =3D xfs_ioctl_setattr_get_trans(ip, NULL);
+> ++	tp =3D xfs_ioctl_setattr_get_trans(filp, NULL);
+>   	if (IS_ERR(tp)) {
+>   		error =3D PTR_ERR(tp);
+>   		goto out_drop_write;
 
 With the merge window about to open, this is a reminder that this
 conflict still exists.
 
-The two drivers-x86 tree commits have also been merged into the pm tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fcEgAKpFpYpY8sFQopChY8R
+--Sig_/6AZ6gwpjRrqFrLqMtudqeMW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAppowACgkQAVBC80lX
-0Gxl3wgAhhEyvRY4qiXMEtT4FpGLU1UyQNXQFRtdXb/dKQVXzZZCuqH3Gx5V18i/
-mcXC55FKpS2uPSBUdk37HTQTdrhtolvI2CN52jB3afpcVQgIt+g13WkPl1oYil9v
-NxvZsMn8RV1Hdy/9ROGxb5I3ASENJsCEpTwzByMU19C3udFB/PGTBSkanYoxuES+
-fsrBPbGw9/s6GQWsrC4opfCDE+gUdehkRambSJhWjbAS0MeWdOD6oaqLJp5bZm3A
-55AO0txPTZLKfbcW5l/sXCHJz3OUulfLNnih0LlZtvxtPJ8TDwzWmpP2uAeV0ZX0
-I/gYSyPFNwwlMmXbToELUic6I6BStA==
-=wY4n
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAppxsACgkQAVBC80lX
+0GwZZAf/YbK/41Cdc4yYXPJk1ft3VGQWAqH4hk7tvT+ncycbyk/JAcm+HIvOVByo
+oQ9kW89RXjF+AQ7RPTYZDUkI6vtauSwR+9TbAEWgMz2hRybCKID0oeBPHttdPFrR
+kF1lGQivugLXrfJVLUBuxFMEIgSyFPcc9cNsjyncKPM67eTg7iRde/sdf6Y/Aocw
+YOvcODmDxCgkFZkOyX+UWfz9cRFD7gBXep5MbBKbo70k1Q29kx3bVuyg2JZrAGBU
+Hgn0i8Frs/WnasKlMAoOQu7HL+02gBXGPYOEI62y6DFCy1K/8aft3zo4kDef6BPi
+yN8l8EZnPJdCEGWJvmSg/G0rbJX+jA==
+=dApK
 -----END PGP SIGNATURE-----
 
---Sig_/fcEgAKpFpYpY8sFQopChY8R--
+--Sig_/6AZ6gwpjRrqFrLqMtudqeMW--

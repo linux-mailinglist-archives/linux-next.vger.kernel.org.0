@@ -2,227 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D58831B280
-	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 21:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6976531B282
+	for <lists+linux-next@lfdr.de>; Sun, 14 Feb 2021 21:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbhBNUpV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Feb 2021 15:45:21 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49249 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229642AbhBNUpS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 14 Feb 2021 15:45:18 -0500
+        id S229793AbhBNUsT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Feb 2021 15:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbhBNUsO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Feb 2021 15:48:14 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699C1C061574;
+        Sun, 14 Feb 2021 12:47:33 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ddzk82MP4z9sBJ;
-        Mon, 15 Feb 2021 07:44:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DdznW2sL9z9s1l;
+        Mon, 15 Feb 2021 07:47:27 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613335474;
-        bh=quTtIuJEhbzEWdTi+iLe11h/NeD1XRmXeikBFV92s1Q=;
+        s=201702; t=1613335650;
+        bh=YLcFRnFRUl32GsBiD84KfQ6NqrZpCb8tXOYwNq/9U1M=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HMSdPrfXG7R/As0HPocHptKYYr7BpzVYgZR/jlfoTIih6AOwH6Npuo4byxnbBDCZu
-         8tQiIWjWLOeC5dUnFefjEvcg3/DiHPARY/Nomy1TexMsqEAw1oV77eM6LAAkNX1z0T
-         hdpuzoLsYpypWRdto3dm79Ynm3ltXJJHo+cx8TnKDZGG1S+UcqnDsPlKfmRcVd8Rie
-         pHmVZ6n6Ipw7fIc7gFNgp9nligdcG0PX3EIl/OGWb8TED7KRs2fnwUv6bxlWVGesYS
-         c9wkY5TBwezJxcEiAmFSv3sVU1eE19umtJ2wct1aWPiajYgXQIRW2Brr+g7EhxlpeX
-         /knc86jhXRibw==
-Date:   Mon, 15 Feb 2021 07:44:31 +1100
+        b=F8AXDXRjYUuthPKOBy8yzDpYEfBjMumVE+XQU799uJ8WICRa/0I08VU6HvwsBNsRO
+         89oAo5gwjJOud9/zHI8juzaJio9VFT/bIALfndJszNOF5/jqp78e5cHIxotluattBG
+         I3CqZJiKNJgI88t/Utvys60RpqLL/3RvUg17RLr5xTWGHxMX9zffsdTNVbEw0fI9ZP
+         8/gWIH8VLyKW1sVFzrMFL/cwBZ9O8BUCGywzQ6DDlRNGlysxWCFxvlqE+F6kZwATWb
+         Gyt43TG3RlNjTbrgAYpUe01s+I1RHYzjABiNgGte+zS8E9ZS7GULEc2EKOZnlKHB3I
+         3tS81Q1WO9qFw==
+Date:   Mon, 15 Feb 2021 07:47:26 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Kees Cook <keescook@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the
- drivers-x86 tree
-Message-ID: <20210215074431.7a06b223@canb.auug.org.au>
-In-Reply-To: <20210111130851.374bf4ea@canb.auug.org.au>
-References: <20210111130851.374bf4ea@canb.auug.org.au>
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: linux-next: manual merge of the kspp tree with the mips tree
+Message-ID: <20210215074726.60c45281@canb.auug.org.au>
+In-Reply-To: <20210118150804.378ac9f3@canb.auug.org.au>
+References: <20210118150804.378ac9f3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AFa=90iz+XLLOKtQtxySib1";
+Content-Type: multipart/signed; boundary="Sig_/nS549xQolZZpAWCMJA.39+J";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AFa=90iz+XLLOKtQtxySib1
+--Sig_/nS549xQolZZpAWCMJA.39+J
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 11 Jan 2021 13:08:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 18 Jan 2021 15:08:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
->
-> Today's linux-next merge of the char-misc tree got conflicts in:
 >=20
->   include/linux/mod_devicetable.h
->   scripts/mod/devicetable-offsets.c
->   scripts/mod/file2alias.c
+> Today's linux-next merge of the kspp tree got a conflict in:
 >=20
-> between commit:
+>   include/asm-generic/vmlinux.lds.h
 >=20
->   eb0e90a82098 ("platform/surface: aggregator: Add dedicated bus and devi=
-ce type")
+> between commits:
 >=20
-> from the drivers-x86 tree and commits:
+>   9a427556fb8e ("vmlinux.lds.hf41b233de0ae: catch compound literals into =
+data and BSS")
+>   f41b233de0ae ("vmlinux.lds.h: catch UBSAN's "unnamed data" into data")
 >=20
->   9326eecd9365 ("fpga: dfl: move dfl_device_id to mod_devicetable.h")
->   4a224acec597 ("fpga: dfl: add dfl bus support to MODULE_DEVICE_TABLE()")
+> from the mips tree and commit:
 >=20
-> from the char-misc tree.
+>   dc5723b02e52 ("kbuild: add support for Clang LTO")
 >=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> from the kspp tree.
 >=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc include/linux/mod_devicetable.h
-> index 935060955152,b8dae34eca10..000000000000
-> --- a/include/linux/mod_devicetable.h
-> +++ b/include/linux/mod_devicetable.h
-> @@@ -846,22 -846,28 +846,46 @@@ struct auxiliary_device_id=20
->   	kernel_ulong_t driver_data;
->   };
->  =20
->  +/* Surface System Aggregator Module */
->  +
->  +#define SSAM_MATCH_TARGET	0x1
->  +#define SSAM_MATCH_INSTANCE	0x2
->  +#define SSAM_MATCH_FUNCTION	0x4
->  +
->  +struct ssam_device_id {
->  +	__u8 match_flags;
->  +
->  +	__u8 domain;
->  +	__u8 category;
->  +	__u8 target;
->  +	__u8 instance;
->  +	__u8 function;
->  +
->  +	kernel_ulong_t driver_data;
->  +};
->  +
-> + /*
-> +  * DFL (Device Feature List)
-> +  *
-> +  * DFL defines a linked list of feature headers within the device MMIO =
-space to
-> +  * provide an extensible way of adding features. Software can walk thro=
-ugh these
-> +  * predefined data structures to enumerate features. It is now used in =
-the FPGA.
-> +  * See Documentation/fpga/dfl.rst for more information.
-> +  *
-> +  * The dfl bus type is introduced to match the individual feature devic=
-es (dfl
-> +  * devices) for specific dfl drivers.
-> +  */
-> +=20
-> + /**
-> +  * struct dfl_device_id -  dfl device identifier
-> +  * @type: DFL FIU type of the device. See enum dfl_id_type.
-> +  * @feature_id: feature identifier local to its DFL FIU type.
-> +  * @driver_data: driver specific data.
-> +  */
-> + struct dfl_device_id {
-> + 	__u16 type;
-> + 	__u16 feature_id;
-> + 	kernel_ulong_t driver_data;
-> + };
-> +=20
->   #endif /* LINUX_MOD_DEVICETABLE_H */
-> diff --cc scripts/mod/devicetable-offsets.c
-> index f078eeb0a961,1b14f3cde4e5..000000000000
-> --- a/scripts/mod/devicetable-offsets.c
-> +++ b/scripts/mod/devicetable-offsets.c
-> @@@ -246,13 -246,9 +246,17 @@@ int main(void
->   	DEVID(auxiliary_device_id);
->   	DEVID_FIELD(auxiliary_device_id, name);
->  =20
->  +	DEVID(ssam_device_id);
->  +	DEVID_FIELD(ssam_device_id, match_flags);
->  +	DEVID_FIELD(ssam_device_id, domain);
->  +	DEVID_FIELD(ssam_device_id, category);
->  +	DEVID_FIELD(ssam_device_id, target);
->  +	DEVID_FIELD(ssam_device_id, instance);
->  +	DEVID_FIELD(ssam_device_id, function);
->  +
-> + 	DEVID(dfl_device_id);
-> + 	DEVID_FIELD(dfl_device_id, type);
-> + 	DEVID_FIELD(dfl_device_id, feature_id);
-> +=20
->   	return 0;
->   }
-> diff --cc scripts/mod/file2alias.c
-> index d21d2871387b,7ebabeb1e9c9..000000000000
-> --- a/scripts/mod/file2alias.c
-> +++ b/scripts/mod/file2alias.c
-> @@@ -1375,28 -1375,18 +1375,40 @@@ static int do_auxiliary_entry(const cha
->   	return 1;
->   }
->  =20
->  +/*
->  + * Looks like: ssam:dNcNtNiNfN
->  + *
->  + * N is exactly 2 digits, where each is an upper-case hex digit.
->  + */
->  +static int do_ssam_entry(const char *filename, void *symval, char *alia=
-s)
->  +{
->  +	DEF_FIELD(symval, ssam_device_id, match_flags);
->  +	DEF_FIELD(symval, ssam_device_id, domain);
->  +	DEF_FIELD(symval, ssam_device_id, category);
->  +	DEF_FIELD(symval, ssam_device_id, target);
->  +	DEF_FIELD(symval, ssam_device_id, instance);
->  +	DEF_FIELD(symval, ssam_device_id, function);
->  +
->  +	sprintf(alias, "ssam:d%02Xc%02X", domain, category);
->  +	ADD(alias, "t", match_flags & SSAM_MATCH_TARGET, target);
->  +	ADD(alias, "i", match_flags & SSAM_MATCH_INSTANCE, instance);
->  +	ADD(alias, "f", match_flags & SSAM_MATCH_FUNCTION, function);
->  +
->  +	return 1;
->  +}
->  +
-> + /* Looks like: dfl:tNfN */
-> + static int do_dfl_entry(const char *filename, void *symval, char *alias)
-> + {
-> + 	DEF_FIELD(symval, dfl_device_id, type);
-> + 	DEF_FIELD(symval, dfl_device_id, feature_id);
-> +=20
-> + 	sprintf(alias, "dfl:t%04Xf%04X", type, feature_id);
-> +=20
-> + 	add_wildcard(alias);
-> + 	return 1;
-> + }
-> +=20
->   /* Does namelen bytes of name exactly match the symbol? */
->   static bool sym_is(const char *name, unsigned namelen, const char *symb=
-ol)
->   {
-> @@@ -1472,7 -1462,7 +1484,8 @@@ static const struct devtable devtable[
->   	{"wmi", SIZE_wmi_device_id, do_wmi_entry},
->   	{"mhi", SIZE_mhi_device_id, do_mhi_entry},
->   	{"auxiliary", SIZE_auxiliary_device_id, do_auxiliary_entry},
->  +	{"ssam", SIZE_ssam_device_id, do_ssam_entry},
-> + 	{"dfl", SIZE_dfl_device_id, do_dfl_entry},
->   };
->  =20
->   /* Create MODULE_ALIAS() statements.
+> I fixed it up (9a427556fb8e and dc5723b02e52 made the same change to
+> DATA_MAIN, which conflicted with the change in f41b233de0ae) and can
+> carry the fix as necessary. This is now fixed as far as linux-next is
+> concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging. You may
+> also want to consider cooperating with the maintainer of the
+> conflicting tree to minimise any particularly complex conflicts.
 
 With the merge window about to open, this is a reminder that this
 conflict still exists.
@@ -231,20 +89,20 @@ conflict still exists.
 Cheers,
 Stephen Rothwell
 
---Sig_/AFa=90iz+XLLOKtQtxySib1
+--Sig_/nS549xQolZZpAWCMJA.39+J
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApi68ACgkQAVBC80lX
-0Gzf7QgAkuaBdN3b7Q5FQ0k9HR0ionAQbr/4eNOOOeeQdUOUKSq7w+fOJhTGsDmS
-XCE0dtcx9HW8VMvwnBBFgBVdvMjVgA0FerYPQS7ZjDsO/u6HlRi7IdgyzfKwU2k5
-sBkyOfeUV0yhjx9HzRsrpk1Il5OxI9MJk2NU1wlvJFFvwMtUFl6wMxlev6zePO+w
-s4mfTalMMY1N1+Eo8CKYAQoZbH9zH+WgJauIdfind3dniOYXCK2lQ73hyB+DzVJd
-05msjcCw5Q4l728kyFrVqEv86gswjvpeMKuOtgW8ALFI2uQo8Uhww7xj5krqDea0
-3FDiDnDGCrROxnMAF9ye4S9Rqu6DtQ==
-=zL56
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApjF4ACgkQAVBC80lX
+0GzWvgf/Y69q/cVrjpJd4RCXHUDA8W1MOwX3uLH0BokkbDXx1HzNlyEp+t71cSgw
+LWVpkSXeQyF5iq4Nfq4Bed1Z30x+xV30izcuVIUcCdwX898fCu0XC1pE15W8HOLe
+e9BIKSZl6SUN5a3KbrSozjSLYGCXrTiCbk8Ha9ME1mxMsPjVJzecdcTtI3kp2Lyl
+gJOApeQqXWHsv1L+QuCTy3M79neshYPfsJt9nlZ0kk50Hga9owZX4E4Uxn62fHu6
+q1GgrjvmHTAGt5B6Els5LxeWMBMVIn1M5MBZqK4r19mSqYAOrGp1z7in9kYRocje
+3SndlImvhMFHAIhQxIyMPM1fSbZy2A==
+=bekH
 -----END PGP SIGNATURE-----
 
---Sig_/AFa=90iz+XLLOKtQtxySib1--
+--Sig_/nS549xQolZZpAWCMJA.39+J--

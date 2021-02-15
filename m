@@ -2,105 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0A31B3A4
-	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 01:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BEC31B3A7
+	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 01:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbhBOAk2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 14 Feb 2021 19:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S229889AbhBOAoj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 14 Feb 2021 19:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbhBOAk1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Feb 2021 19:40:27 -0500
+        with ESMTP id S229818AbhBOAoi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 14 Feb 2021 19:44:38 -0500
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF23C061574;
-        Sun, 14 Feb 2021 16:39:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F4EC061574;
+        Sun, 14 Feb 2021 16:43:58 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df4xT22D4z9sCD;
-        Mon, 15 Feb 2021 11:39:41 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Df52N0LCJz9sCD;
+        Mon, 15 Feb 2021 11:43:55 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613349583;
-        bh=uFXs6FazZwdmJJXEDY5BMxYgEb6dBY8CHEHbCc+nb8g=;
+        s=201702; t=1613349836;
+        bh=86KdjeaJAcMvnL7hlmPOF/VXH2fiYIn9Fa7T7CI5BpQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=Yc31lJoiwdrZ3b8r9XLxGiC0W9oyIHxCk3e0XmiinlKyv6bgpxhlLrfQnIFWteiMD
-         IIqp6hKnuZ1FVHBM+jnUFvgUDZebfItBriXn7Xt/cCNSf1K1kwokcGmMs0rfWqDH85
-         mKdzeGbjX+DZa3vdQQQyG4A9Scu3+aa7Ek/+k3uU0eiocx86obE1SsgeSzG7IiGX9x
-         ugd7btL3PZ1JJGlw8uO4Kj50oPjzgEOYtJbgaxrp5rrJxPJZ2w5XGPJHlYuNGqRgBh
-         XNB1WOGXua57LsjPr9OhmR+7unJ3BnIQgXb5Qg3JNiD7vg6KS/1+HSbxIv3oZQKeB1
-         1Yj4xJBA1VbYA==
-Date:   Mon, 15 Feb 2021 11:39:39 +1100
+        b=DNuEZskSYfVGUk2a5JoY7psm6psYdm6DXQgFKXGTnawr2bsfr94XRdtik/lmDQwUH
+         G0jBenoS0ddMYmA+81n/RGyrsTzpqCZW9Dk3jJj9bDYUjorC9Ap5OBYT/ppGKev0dN
+         /eI/bQPW092/0dyVN/Fh09kRYbryriX6hXGXNdRRBk6UEHnF7tAx4IOUo/7Aw2icRV
+         xFp7mmrylc8ku2qD6NoU0gH3JMSRadl7rvdfjpBr70q80X+vCo9L/764RdQqr4buM2
+         bLt1PLBwRSKU89qjaJ97+6sAt1eSbXItFFKb62RGai7p0c210R6XN6ylSD6DuSRmy9
+         tsyW4/zwAip/w==
+Date:   Mon, 15 Feb 2021 11:43:54 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Davide Caratti <dcaratti@redhat.com>,
+        Guillaume Nault <gnault@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the pm tree
-Message-ID: <20210215113939.03e44e3c@canb.auug.org.au>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20210215114354.6ddc94c7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PDghjjOr9SVghXChJ=m6El4";
+Content-Type: multipart/signed; boundary="Sig_/+ZLGq3v5TI5CsElH3sQs4O_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PDghjjOr9SVghXChJ=m6El4
+--Sig_/+ZLGq3v5TI5CsElH3sQs4O_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-In file included from drivers/gpu/drm/gma500/mdfld_output.c:28:
-arch/x86/include/asm/intel_scu_ipc.h:23:12: warning: 'struct module' declar=
-ed inside parameter list will not be visible outside of this definition or =
-declaration
-   23 |     struct module *owner);
-      |            ^~~~~~
-arch/x86/include/asm/intel_scu_ipc.h:33:17: warning: 'struct module' declar=
-ed inside parameter list will not be visible outside of this definition or =
-declaration
-   33 |          struct module *owner);
-      |                 ^~~~~~
+  tools/testing/selftests/net/forwarding/tc_flower.sh
 
-Introduced by commit
+between commit:
 
-  bfc838f8598e ("drm/gma500: Convert to use new SCU IPC API")
+  d2126838050c ("flow_dissector: fix TTL and TOS dissection on IPv4 fragmen=
+ts")
 
-OK, these will go away when the drm-misc tree removes this file in commit
+from the net tree and commits:
 
-  e1da811218d2 ("drm/gma500: Remove Medfield support")
+  203ee5cd7235 ("selftests: tc: Add basic mpls_* matching support for tc-fl=
+ower")
+  c09bfd9a5df9 ("selftests: tc: Add generic mpls matching support for tc-fl=
+ower")
 
-So, if you don't want to see these warnings in Linus' build testing,
-you need to make sure that the drm-misc tree is merged before the pm
-tree (or the drivers-x86 tree).  Or you need to include module.h in
-mdfld_output.c before intel_scu_ipc.h (or in intel_scu_ipc.h itself).
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/PDghjjOr9SVghXChJ=m6El4
+diff --cc tools/testing/selftests/net/forwarding/tc_flower.sh
+index b11d8e6b5bc1,a554838666c4..000000000000
+--- a/tools/testing/selftests/net/forwarding/tc_flower.sh
++++ b/tools/testing/selftests/net/forwarding/tc_flower.sh
+@@@ -3,7 -3,9 +3,9 @@@
+ =20
+  ALL_TESTS=3D"match_dst_mac_test match_src_mac_test match_dst_ip_test \
+  	match_src_ip_test match_ip_flags_test match_pcp_test match_vlan_test \
+- 	match_ip_tos_test match_indev_test match_ip_ttl_test"
++ 	match_ip_tos_test match_indev_test match_mpls_label_test \
++ 	match_mpls_tc_test match_mpls_bos_test match_mpls_ttl_test \
+ -	match_mpls_lse_test"
+++	match_mpls_lse_test match_ip_ttl_test"
+  NUM_NETIFS=3D2
+  source tc_common.sh
+  source lib.sh
+
+--Sig_/+ZLGq3v5TI5CsElH3sQs4O_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApwswACgkQAVBC80lX
-0Gx1PAgApAm7IJ91caUkHXOEEGcUtLHEugWxn52HSOHgE7cxWCbdbjiZs0rJMfk/
-J0miNgljVhx6JZ/MfpGuzdDLGeJjZu/zuqFf6V9ues4oXwS0FjSxWc28lJyGDcQL
-K2qgZQTFFnWtxP7Cr1sPAgzWR/IuJKttUNXkiAe+686+hOJwGRHN6s/bRKbyVWeN
-rYTXgpnuuKhJjUfaccsCtqZd4gqpgfg1e2zfvI/bVLJgrtmWzouu4D/U/pDH0s7C
-6HhHlct01UccTWFlxG+45pD+lSRtnxLl+4srJ1KLvBZmXD2Z4zvlTXEIKLkW0Wwm
-GkrCLriLDcDfP6zXcVpCkTnEgV5s5A==
-=nKkW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmApw8oACgkQAVBC80lX
+0Gwu9wf/cQmDGCsSWvXDL+14L8Ilf+wkZyUPY05t8NbzmLxn7vy7MMiFiIMSs17E
+NOTImHrCc7RO51fltvEAdpOn6lHXqCaOSmmy4MWGzSwmgfS5ugJc3y78ZWR9psnn
+IJq0JgHS9cu1w6GKqZZ2AJGNPl10VSEP72LsRCwqG7T90088W6G/cMcTKSb5kjWk
+CvjRPSziLTgx3QcNLaxtgeyWK4YzmZQe7skT9UMFBG6n6i0uHx10dFA8oCj1ql01
+oAlNZHvZXuEkYToYH29InWEhlC3cL46Ht4q2D/PEHuAwi6kgYjMdQ5tIFD6yeGh7
+/k4Se32GUkVjCfKOdol3nFBlVX4Fuw==
+=X6Um
 -----END PGP SIGNATURE-----
 
---Sig_/PDghjjOr9SVghXChJ=m6El4--
+--Sig_/+ZLGq3v5TI5CsElH3sQs4O_--

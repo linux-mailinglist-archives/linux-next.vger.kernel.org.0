@@ -2,71 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D7531B818
-	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 12:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E02831B865
+	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 12:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbhBOLhL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Feb 2021 06:37:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:57796 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229805AbhBOLhJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 15 Feb 2021 06:37:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613388943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sF9dZJuqlvEevgCfQYdSkQXkmgKjtqzSRW7Dqt0w1yM=;
-        b=XTl0Ergn2+3T6CSludaMIAcnTF4zbMFXfWtAehZM3fRQlEhy/XM0FdJCGg3Qjk1oORHT2U
-        T8Eg5QyK3Yf4pgYfSEqGgs1L6ZZ+eyCQajR9DP/aVSLEiDp83Newy6k71JBvcLwQilLb0r
-        PWTNWLcSzhabVN7iHR7UsJBEwt3m1vo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-488-vHJ4j4Z-Me2HQsaEmEXUpA-1; Mon, 15 Feb 2021 06:35:42 -0500
-X-MC-Unique: vHJ4j4Z-Me2HQsaEmEXUpA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S229936AbhBOLw7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Feb 2021 06:52:59 -0500
+Received: from ozlabs.org ([203.11.71.1]:54097 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229974AbhBOLwt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 15 Feb 2021 06:52:49 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D8BF910066EF;
-        Mon, 15 Feb 2021 11:35:40 +0000 (UTC)
-Received: from [10.40.194.204] (unknown [10.40.194.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 09D285C3F8;
-        Mon, 15 Feb 2021 11:35:38 +0000 (UTC)
-Message-ID: <72bb7b9fc0cf7afc308e284c72c363e80df8e734.camel@redhat.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-From:   Davide Caratti <dcaratti@redhat.com>
-To:     Guillaume Nault <gnault@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DfMsL06wJz9sS8;
+        Mon, 15 Feb 2021 22:52:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613389926;
+        bh=MsFd0H1vboXWoJgTolHQFt3c8tMk6G8b9iiP36p17kk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ie4zeLmtZsdjPF5/RkIBnRskfeMoI9LKBOH2cOTH5vKv8aoLqSbejddJNThIjo+KT
+         1pt5gpTXT5/9euKKm5sR4oxJFC/yZIihzm9MlLVjoz9YUUzhhE7juFA2zS7QIdSAje
+         O79jld2H45ZlFZhMuk3Fr/puxuVYlZWZnlO1/qeJXwDElcw41JLBwLLIwhJ9fE7Fpc
+         xc0AxLAE/1hq3WjDEVcxgYkiHTQ3i2hthWlqXcBcCHVm3eefvAJerszuO/3ncGxe80
+         QlUd0Csua7mRyRtPPnHqE/114SPVg1IQt7BGes2J01b+0WAxQ29x6j8qFY7t7+uGU1
+         U8zVAMtxf79pg==
+Date:   Mon, 15 Feb 2021 22:52:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Davide Caratti <dcaratti@redhat.com>
+Cc:     Guillaume Nault <gnault@redhat.com>,
+        David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-In-Reply-To: <20210215110154.GA28453@linux.home>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20210215225204.744d43c4@canb.auug.org.au>
+In-Reply-To: <72bb7b9fc0cf7afc308e284c72c363e80df8e734.camel@redhat.com>
 References: <20210215114354.6ddc94c7@canb.auug.org.au>
-         <20210215110154.GA28453@linux.home>
-Organization: red hat
-Content-Type: text/plain; charset="UTF-8"
-Date:   Mon, 15 Feb 2021 12:35:37 +0100
+        <20210215110154.GA28453@linux.home>
+        <72bb7b9fc0cf7afc308e284c72c363e80df8e734.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Evolution 3.38.3 (3.38.3-1.fc33) 
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: multipart/signed; boundary="Sig_/nGeH_70nOB4WzFqrUL/3fcj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2021-02-15 at 12:01 +0100, Guillaume Nault wrote:
-> Before these commits, ALL_TESTS listed the tests in the order they were
-> implemented in the rest of the file. So I'd rather continue following
-> this implicit rule, if at all possible. Also it makes sense to keep
-> grouping all match_ip_*_test together.
+--Sig_/nGeH_70nOB4WzFqrUL/3fcj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-yes, it makes sense. I can follow-up with a commit for net-next (when
-tree re-opens), where the "ordering" in ALL_TESTS is restored. Ok?
+Hi Davide,
 
-thanks,
--- 
-davide
+On Mon, 15 Feb 2021 12:35:37 +0100 Davide Caratti <dcaratti@redhat.com> wro=
+te:
+>
+> On Mon, 2021-02-15 at 12:01 +0100, Guillaume Nault wrote:
+> > Before these commits, ALL_TESTS listed the tests in the order they were
+> > implemented in the rest of the file. So I'd rather continue following
+> > this implicit rule, if at all possible. Also it makes sense to keep
+> > grouping all match_ip_*_test together. =20
+>=20
+> yes, it makes sense. I can follow-up with a commit for net-next (when
+> tree re-opens), where the "ordering" in ALL_TESTS is restored. Ok?
 
+The ordering is not set in stone yet (I have only done the merge in the
+linux-next tree), just make sure that Dave knows what it should look
+like when he merges the net and net-next trees.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nGeH_70nOB4WzFqrUL/3fcj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAqYGQACgkQAVBC80lX
+0GwAtwf/R7yQPmv5KYJEjloWrlfUFfpTbD4F0C9RPbM9H4ckozF0WypKlfE5b6i0
+4K89y1Hoxicz1XfTkNLDIDGdgvYIp6LEX8nexv1NSZdxRBd2lhkKciA/ubAhNtxQ
+9YNi0rhIbkJ7vbOMo85xqTeYOha6/ezoeyuBpgUaCmnayYw/9s0cjBMN1N5HXkJ6
+M8nzSLdd8DmZ8+H+lboUrEzg65K6b3F5j97VGJIFFOwqWscoy2rhRZgeQo7xrtSp
+nCRHlZf5jDiQJu6DRSUFDUR5idh7vtTLOADPyGpjnXzDMVJDdc0uXHR18FiCABHD
+QSWWoIAlvEDGwdEP+2LmQ/ldRVqvgw==
+=1lUg
+-----END PGP SIGNATURE-----
+
+--Sig_/nGeH_70nOB4WzFqrUL/3fcj--

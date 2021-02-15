@@ -2,92 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E02831B865
-	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 12:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231D131BB29
+	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 15:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhBOLw7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Feb 2021 06:52:59 -0500
-Received: from ozlabs.org ([203.11.71.1]:54097 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229974AbhBOLwt (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 15 Feb 2021 06:52:49 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DfMsL06wJz9sS8;
-        Mon, 15 Feb 2021 22:52:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613389926;
-        bh=MsFd0H1vboXWoJgTolHQFt3c8tMk6G8b9iiP36p17kk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ie4zeLmtZsdjPF5/RkIBnRskfeMoI9LKBOH2cOTH5vKv8aoLqSbejddJNThIjo+KT
-         1pt5gpTXT5/9euKKm5sR4oxJFC/yZIihzm9MlLVjoz9YUUzhhE7juFA2zS7QIdSAje
-         O79jld2H45ZlFZhMuk3Fr/puxuVYlZWZnlO1/qeJXwDElcw41JLBwLLIwhJ9fE7Fpc
-         xc0AxLAE/1hq3WjDEVcxgYkiHTQ3i2hthWlqXcBcCHVm3eefvAJerszuO/3ncGxe80
-         QlUd0Csua7mRyRtPPnHqE/114SPVg1IQt7BGes2J01b+0WAxQ29x6j8qFY7t7+uGU1
-         U8zVAMtxf79pg==
-Date:   Mon, 15 Feb 2021 22:52:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Davide Caratti <dcaratti@redhat.com>
-Cc:     Guillaume Nault <gnault@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210215225204.744d43c4@canb.auug.org.au>
-In-Reply-To: <72bb7b9fc0cf7afc308e284c72c363e80df8e734.camel@redhat.com>
-References: <20210215114354.6ddc94c7@canb.auug.org.au>
-        <20210215110154.GA28453@linux.home>
-        <72bb7b9fc0cf7afc308e284c72c363e80df8e734.camel@redhat.com>
+        id S229934AbhBOOfX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Feb 2021 09:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229652AbhBOOfW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Feb 2021 09:35:22 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0964C061756;
+        Mon, 15 Feb 2021 06:34:41 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lBewx-00EHAn-AI; Mon, 15 Feb 2021 14:34:07 +0000
+Date:   Mon, 15 Feb 2021 14:34:07 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org,
+        chrubis <chrubis@suse.cz>, Jan Stancek <jstancek@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <christian@brauner.io>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Vorel <pvorel@suse.cz>,
+        Richard Palethorpe <rpalethorpe@suse.com>,
+        Joerg.Vehlow@aox-tech.de
+Subject: Re: LTP: madvise08.c:203: TFAIL: No sequence in dump after
+ MADV_DODUMP.
+Message-ID: <YCqGX36I+KR7SoA8@zeniv-ca.linux.org.uk>
+References: <CA+G9fYsvDWDogC+xgeG2V9MMofV5svTipDigDiUBje+2jSRK8g@mail.gmail.com>
+ <CAK8P3a2OeeW29ekbD70Ns4LTjGRJRT9P0wM-SAxUin1zAxP7TA@mail.gmail.com>
+ <CA+G9fYv89bfbixjuudPWkBAucTYg7qhNxcV54RMEkRP5is-bnQ@mail.gmail.com>
+ <YCmAGNyFAOZs7GCG@zeniv-ca.linux.org.uk>
+ <CA+G9fYsZnBv4wAEKYb0mgMd-BsgXcPUGBQ=VRKcONqAZry_4XQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nGeH_70nOB4WzFqrUL/3fcj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsZnBv4wAEKYb0mgMd-BsgXcPUGBQ=VRKcONqAZry_4XQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nGeH_70nOB4WzFqrUL/3fcj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 15, 2021 at 02:11:15PM +0530, Naresh Kamboju wrote:
 
-Hi Davide,
+> fs/coredump.c:903:9: error: 'return' with a value, in function
+> returning void [-Werror=return-type]
+>  903 | return 0;
+>         | ^
+> 
+> Build failed due to above error.
 
-On Mon, 15 Feb 2021 12:35:37 +0100 Davide Caratti <dcaratti@redhat.com> wro=
-te:
->
-> On Mon, 2021-02-15 at 12:01 +0100, Guillaume Nault wrote:
-> > Before these commits, ALL_TESTS listed the tests in the order they were
-> > implemented in the rest of the file. So I'd rather continue following
-> > this implicit rule, if at all possible. Also it makes sense to keep
-> > grouping all match_ip_*_test together. =20
->=20
-> yes, it makes sense. I can follow-up with a commit for net-next (when
-> tree re-opens), where the "ordering" in ALL_TESTS is restored. Ok?
+FWIW, here the test results in
+Running tests.......
+<<<test_start>>>
+tag=madvise08 stime=1613398818
+cmdline="madvise08"
+contacts=""
+analysis=exit
+<<<test_output>>>
+incrementing stop
+tst_test.c:1250: TINFO: Timeout per run is 0h 05m 00s
+madvise08.c:78: TINFO: Temporary core pattern is '/tmp/ltp-tgvQ3Lz1UZ/B6lwy6/dump-%p'                              
+madvise08.c:117: TINFO: Dump file should be dump-2276
+madvise08.c:201: TPASS: madvise(..., MADV_DONTDUMP)
+madvise08.c:117: TINFO: Dump file should be dump-2277
+madvise08.c:205: TPASS: madvise(..., MADV_DODUMP)
 
-The ordering is not set in stone yet (I have only done the merge in the
-linux-next tree), just make sure that Dave knows what it should look
-like when he merges the net and net-next trees.
+Summary:
+passed   2
+failed   0
+skipped  0
+warnings 0
+<<<execution_status>>>
+initiation_status="ok"
+duration=0 termination_type=exited termination_id=0 corefile=no
+cutime=0 cstime=0
+<<<test_end>>>
 
---=20
-Cheers,
-Stephen Rothwell
+(built without -Werror=return-type, so I'd missed the warnings)
 
---Sig_/nGeH_70nOB4WzFqrUL/3fcj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAqYGQACgkQAVBC80lX
-0GwAtwf/R7yQPmv5KYJEjloWrlfUFfpTbD4F0C9RPbM9H4ckozF0WypKlfE5b6i0
-4K89y1Hoxicz1XfTkNLDIDGdgvYIp6LEX8nexv1NSZdxRBd2lhkKciA/ubAhNtxQ
-9YNi0rhIbkJ7vbOMo85xqTeYOha6/ezoeyuBpgUaCmnayYw/9s0cjBMN1N5HXkJ6
-M8nzSLdd8DmZ8+H+lboUrEzg65K6b3F5j97VGJIFFOwqWscoy2rhRZgeQo7xrtSp
-nCRHlZf5jDiQJu6DRSUFDUR5idh7vtTLOADPyGpjnXzDMVJDdc0uXHR18FiCABHD
-QSWWoIAlvEDGwdEP+2LmQ/ldRVqvgw==
-=1lUg
------END PGP SIGNATURE-----
-
---Sig_/nGeH_70nOB4WzFqrUL/3fcj--
+Anyway, I've folded the fix (with those stray return 0 removed, of course)
+into #work.coredump and #for-next; works here.  Could you test either
+branch (in git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git)?

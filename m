@@ -2,312 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB6C31B785
-	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 11:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3D631B7BA
+	for <lists+linux-next@lfdr.de>; Mon, 15 Feb 2021 12:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbhBOKoJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Feb 2021 05:44:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44920 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230245AbhBOKnr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 15 Feb 2021 05:43:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 476B264E08;
-        Mon, 15 Feb 2021 10:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613385783;
-        bh=rFDzWO+Yc0upGnKKctB4dw2q/4fjyFSfnCtQF+mJIro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DuZnkahDGALbfhsWPRf3nHHz07TTsAjb6O7tQXgPB+Bh38SxEHQRrZDPJT+6YP8t+
-         WlnPLJOX4710DDO6IX/g6gZ9N9iDFXnxwquI1Mq5Wj0Cfx8LCKXqfgv+9FN/tU1o+N
-         w8PztBPOvNhSewMo3VPOsypNdqvnc14M6zynix5ESTLxO01t+ke1qfU6HbdHAqj5vq
-         Bg2yIYZfhxeH+ZffPIwF2OtTaNFPG8SRWpts14FxhI/YcMAWL0GLAwe33AjTgYJ8Xm
-         e5Xo96vO8BjzjKkCwu9Z03MwWBpCwQJ8m0EindGMONxhsuPBaYSTHKQc1mDlF+CfMZ
-         rBfA+EViSQl5g==
-Date:   Mon, 15 Feb 2021 11:42:57 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S229873AbhBOLD2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Feb 2021 06:03:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59269 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229779AbhBOLD2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 15 Feb 2021 06:03:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613386921;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tWBUts84ZakMrFm1RZc/6Za4l9KVFtjkE6h0wbdwb28=;
+        b=Gs2/Bmi3xVZ4nEfNxQh7gz8GjBa2qneio8C/IpZ8keuG1s/JiRZ43Sx49Fqc04oDuS9pHu
+        cIAoIptMMY7yKP3q+Xu7936oZuz9Uk0bHTgb/+Nm1P2OzNqnpAhotTJIFZ2t9GwEFA5Of9
+        TVQPvqNt0GKUDvJXHrKP0MkHt00vXtc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-246-l4gY89tcNDiNC-OtyvNqTA-1; Mon, 15 Feb 2021 06:01:59 -0500
+X-MC-Unique: l4gY89tcNDiNC-OtyvNqTA-1
+Received: by mail-wr1-f72.google.com with SMTP id s18so9457782wrf.0
+        for <linux-next@vger.kernel.org>; Mon, 15 Feb 2021 03:01:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tWBUts84ZakMrFm1RZc/6Za4l9KVFtjkE6h0wbdwb28=;
+        b=Inh2lKUHAb9fSdgOd6xKfPL9WW+8MidNW3DCcsTWllsCqkDQouVWJ7ipJXyFWt5we+
+         yTvARWfAMslarg/MhKAeyIeqehb0Cgq5rA0HR4F8AiNrLAWiJlFGki/y6cRq/UB/S/j6
+         5PIC5lVlh7fQCqfCLflViI8RYCJt5VDEoCQJ4VcwJTCuXGMZ4b4ZuMKbHNlYG6Q+hcjB
+         iePWnnc9MSAeH7tdou3OIQiEduSPK4bF5dHCAuTo7+Z7Yq6TykAAXXYnbSBe4y1LoCOM
+         9sfLUr/kx8t6tiqOVBAs2RmxmRezsMLKvckpYHlQtVBf4RMMDmiUudbg0XST8E9DGpmU
+         LQlA==
+X-Gm-Message-State: AOAM533mnr9gj118sdABHJSyNgUjhABLgBg543HEEpVUhLQdfAXtaJXP
+        aFXCEYtCmCQwn4ADPf49piYyWYEgSn0z9g1mC35eSHemwhG9YaK5YtgKlWvunAhFW+RUe0zLakC
+        kmWt6t+LR+btFMGcXI8hF4A==
+X-Received: by 2002:adf:9f54:: with SMTP id f20mr18149950wrg.362.1613386917382;
+        Mon, 15 Feb 2021 03:01:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwXQq08i+/RQsXj5NKZe5iGT+5VgnUN92wMUe264vdcFESWjc/jTZFgDiK6vCqqQA2VKRGdBg==
+X-Received: by 2002:adf:9f54:: with SMTP id f20mr18149925wrg.362.1613386917119;
+        Mon, 15 Feb 2021 03:01:57 -0800 (PST)
+Received: from linux.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id x4sm22579304wrn.64.2021.02.15.03.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Feb 2021 03:01:56 -0800 (PST)
+Date:   Mon, 15 Feb 2021 12:01:54 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Davide Caratti <dcaratti@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-Message-ID: <20210215114257.5dc0fd00@coco.lan>
-In-Reply-To: <20210215112024.22ebdd4c@coco.lan>
-References: <20210208233716.16d962ad@canb.auug.org.au>
-        <56cd99bbf526b43507579b5775bac5f885319866.camel@collabora.com>
-        <20210208164618.GY32460@paasikivi.fi.intel.com>
-        <4af499f5931d6b04a42787ae17525c63247573e6.camel@collabora.com>
-        <20210208184014.55128fb5@coco.lan>
-        <fa453b6516f709b23bb046a1d956f0598966cd99.camel@collabora.com>
-        <20210215112024.22ebdd4c@coco.lan>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20210215110154.GA28453@linux.home>
+References: <20210215114354.6ddc94c7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210215114354.6ddc94c7@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Mon, 15 Feb 2021 11:20:24 +0100
-Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
+On Mon, Feb 15, 2021 at 11:43:54AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the net-next tree got a conflict in:
+> 
+>   tools/testing/selftests/net/forwarding/tc_flower.sh
+> 
+> between commit:
+> 
+>   d2126838050c ("flow_dissector: fix TTL and TOS dissection on IPv4 fragments")
+> 
+> from the net tree and commits:
+> 
+>   203ee5cd7235 ("selftests: tc: Add basic mpls_* matching support for tc-flower")
+>   c09bfd9a5df9 ("selftests: tc: Add generic mpls matching support for tc-flower")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc tools/testing/selftests/net/forwarding/tc_flower.sh
+> index b11d8e6b5bc1,a554838666c4..000000000000
+> --- a/tools/testing/selftests/net/forwarding/tc_flower.sh
+> +++ b/tools/testing/selftests/net/forwarding/tc_flower.sh
+> @@@ -3,7 -3,9 +3,9 @@@
+>   
+>   ALL_TESTS="match_dst_mac_test match_src_mac_test match_dst_ip_test \
+>   	match_src_ip_test match_ip_flags_test match_pcp_test match_vlan_test \
+> - 	match_ip_tos_test match_indev_test match_ip_ttl_test"
+> + 	match_ip_tos_test match_indev_test match_mpls_label_test \
+> + 	match_mpls_tc_test match_mpls_bos_test match_mpls_ttl_test \
+>  -	match_mpls_lse_test"
+> ++	match_mpls_lse_test match_ip_ttl_test"
 
-> Em Mon, 08 Feb 2021 15:53:00 -0300
-> Ezequiel Garcia <ezequiel@collabora.com> escreveu:
->=20
-> > On Mon, 2021-02-08 at 18:40 +0100, Mauro Carvalho Chehab wrote:
-> > > Em Mon, 08 Feb 2021 13:57:56 -0300
-> > > Ezequiel Garcia <ezequiel@collabora.com> escreveu:
-> > >  =20
-> > > > On Mon, 2021-02-08 at 18:46 +0200, Sakari Ailus wrote: =20
-> > > > > Hi Ezequiel,
-> > > > >=20
-> > > > > Thanks for addressing this.
-> > > > >=20
-> > > > > On Mon, Feb 08, 2021 at 01:42:21PM -0300, Ezequiel Garcia wrote:=
-=C2=A0  =20
-> > > > > > Hi Stephen,
-> > > > > >=20
-> > > > > > On Mon, 2021-02-08 at 23:37 +1100, Stephen Rothwell wrote:=C2=
-=A0  =20
-> > > > > > > Hi all,
-> > > > > > >=20
-> > > > > > > After merging the v4l-dvb tree, today's linux-next build (htm=
-ldocs)
-> > > > > > > produced this warning:
-> > > > > > >=20
-> > > > > > > include/media/v4l2-async.h:178: warning: expecting prototype =
-for v4l2_async_notifier_add_fwnode_subdev(). Prototype was for
-> > > > > > > __v4l2_async_notifier_add_fwnode_subdev() instead
-> > > > > > > include/media/v4l2-async.h:207: warning: expecting prototype =
-for v4l2_async_notifier_add_fwnode_remote_subdev(). Prototype was for
-> > > > > > > __v4l2_async_notifier_add_fwnode_remote_subdev() instead
-> > > > > > > include/media/v4l2-async.h:230: warning: expecting prototype =
-for v4l2_async_notifier_add_i2c_subdev(). Prototype was for
-> > > > > > > __v4l2_async_notifier_add_i2c_subdev() instead
-> > > > > > >=20
-> > > > > > > Maybe introduced by commit
-> > > > > > >=20
-> > > > > > > =C2=A0 c1cc23625062 ("media: v4l2-async: Discourage use of v4=
-l2_async_notifier_add_subdev")
-> > > > > > > =C2=A0  =20
-> > > > > >=20
-> > > > > > Thanks for spotting this. Should be fixed by:
-> > > > > >=20
-> > > > > > diff --git a/include/media/v4l2-async.h b/include/media/v4l2-as=
-ync.h
-> > > > > > index 6f22daa6f067..3785445282fc 100644
-> > > > > > --- a/include/media/v4l2-async.h
-> > > > > > +++ b/include/media/v4l2-async.h
-> > > > > > @@ -157,7 +157,7 @@ int __v4l2_async_notifier_add_subdev(struct=
- v4l2_async_notifier *notifier,
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v=
-4l2_async_subdev *asd);
-> > > > > > =C2=A0
-> > > > > > =C2=A0/**
-> > > > > > - * v4l2_async_notifier_add_fwnode_subdev - Allocate and add a =
-fwnode async
-> > > > > > + * __v4l2_async_notifier_add_fwnode_subdev - Allocate and add =
-a fwnode async=C2=A0  =20
-> > > > >=20
-> > > > > The problem with the approach is that this no longer documents th=
-e API that
-> > > > > drivers are intended to use, but the intermediate one. =20
-> > >=20
-> > > Yep. the better would be to keep documenting what will be used.
-> > >  =20
-> >=20
-> > Is there a way to silence/ignore the warning for a specific function(s)?
->=20
-> No. The warning is there for a very good reason: if you do something like:
->=20
->=20
-> 	/**
-> 	 * delete - delete some file
-> 	 *
-> 	 * This function deletes something.
-> 	 */
-> 	void insert() {}
-> 	/**
-> 	 * insert - creates a new file
-> 	 *
-> 	 * This function creates a file and inserts something.
-> 	 */
-> 	void delete() {}
->=20
-> the output of it will be:
->=20
-> 	$ ./scripts/kernel-doc -sphinx-version 3.0.0 silly.c
-> 	.. c:function:: void insert ()
-> =09
-> 	   delete some file
-> =09
-> 	**Parameters**
-> =09
-> 	**Description**
-> =09
-> =09
-> 	This function deletes something.
-> =09
-> =09
-> 	.. c:function:: void delete ()
-> =09
-> 	   creates a new file
-> =09
-> 	**Parameters**
-> =09
-> 	**Description**
-> =09
-> =09
-> 	This function creates a file and inserts something.
->=20
-> Which is completely wrong. If someone tries to write a code using the
-> above, the result will be just the opposite than what it was documented.
->=20
-> Btw, I noticed several places where things like that happened, because
-> some code were added between a Kernel-doc markup and some function.
+That's technically right. But I think it'd be nicer to have
+"match_ip_ttl_test" appear between "match_ip_tos_test" and
+"match_indev_test", rather than at the end of the list.
 
-Btw, in the specific case of this change, something like the above
-quick hack would fix it.
+Before these commits, ALL_TESTS listed the tests in the order they were
+implemented in the rest of the file. So I'd rather continue following
+this implicit rule, if at all possible. Also it makes sense to keep
+grouping all match_ip_*_test together.
 
-PS:  I didn't think much when I wrote the __type description.
+>   NUM_NETIFS=2
+>   source tc_common.sh
+>   source lib.sh
 
-Also, keeping the symbols that should be documented as __foo
-doesn't seem the right thing to me :-)
-
-
----
-
-[PATCH] v4l2-async.h: Fix kerneldoc markups
-
-Document the functions that should be used by the kAPI clients,
-instead of the internal functions.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
-index 6f22daa6f067..91dbeaa4e6ee 100644
---- a/include/media/v4l2-async.h
-+++ b/include/media/v4l2-async.h
-@@ -156,42 +156,38 @@ void v4l2_async_notifier_init(struct v4l2_async_notif=
-ier *notifier);
- int __v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
- 				   struct v4l2_async_subdev *asd);
-=20
-+struct v4l2_async_subdev *
-+__v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifi=
-er,
-+					struct fwnode_handle *fwnode,
-+					unsigned int asd_struct_size);
- /**
-  * v4l2_async_notifier_add_fwnode_subdev - Allocate and add a fwnode async
-  *				subdev to the notifier's master asd_list.
-  *
-- * @notifier: pointer to &struct v4l2_async_notifier
-- * @fwnode: fwnode handle of the sub-device to be matched
-- * @asd_struct_size: size of the driver's async sub-device struct, includi=
-ng
-- *		     sizeof(struct v4l2_async_subdev). The &struct
-- *		     v4l2_async_subdev shall be the first member of
-- *		     the driver's async sub-device struct, i.e. both
-- *		     begin at the same memory address.
-+ * @__notifier: pointer to &struct v4l2_async_notifier
-+ * @__fwnode: fwnode handle of the sub-device to be matched
-+ * @__type: type of the struct that contains a struct v4l2_async_subdev.
-  *
-  * Allocate a fwnode-matched asd of size asd_struct_size, and add it to the
-  * notifiers @asd_list. The function also gets a reference of the fwnode w=
-hich
-  * is released later at notifier cleanup time.
-  */
--struct v4l2_async_subdev *
--__v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifi=
-er,
--					struct fwnode_handle *fwnode,
--					unsigned int asd_struct_size);
- #define v4l2_async_notifier_add_fwnode_subdev(__notifier, __fwnode, __type=
-)	\
- ((__type *)__v4l2_async_notifier_add_fwnode_subdev(__notifier, __fwnode,	\
- 						   sizeof(__type)))
-=20
-+struct v4l2_async_subdev *
-+__v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier =
-*notif,
-+					       struct fwnode_handle *endpoint,
-+					       unsigned int asd_struct_size);
- /**
-  * v4l2_async_notifier_add_fwnode_remote_subdev - Allocate and add a fwnode
-  *						  remote async subdev to the
-  *						  notifier's master asd_list.
-  *
-- * @notif: pointer to &struct v4l2_async_notifier
-- * @endpoint: local endpoint pointing to the remote sub-device to be match=
-ed
-- * @asd_struct_size: size of the driver's async sub-device struct, includi=
-ng
-- *		     sizeof(struct v4l2_async_subdev). The &struct
-- *		     v4l2_async_subdev shall be the first member of
-- *		     the driver's async sub-device struct, i.e. both
-- *		     begin at the same memory address.
-+ * @__notifier: pointer to &struct v4l2_async_notifier
-+ * @__ep: local endpoint pointing to the remote sub-device to be matched
-+ * @__type: type of the struct that contains a struct v4l2_async_subdev.
-  *
-  * Gets the remote endpoint of a given local endpoint, set it up for fwnode
-  * matching and adds the async sub-device to the notifier's @asd_list. The
-@@ -201,33 +197,25 @@ __v4l2_async_notifier_add_fwnode_subdev(struct v4l2_a=
-sync_notifier *notifier,
-  * This is just like @v4l2_async_notifier_add_fwnode_subdev, but with the
-  * exception that the fwnode refers to a local endpoint, not the remote on=
-e.
-  */
--struct v4l2_async_subdev *
--__v4l2_async_notifier_add_fwnode_remote_subdev(struct v4l2_async_notifier =
-*notif,
--					       struct fwnode_handle *endpoint,
--					       unsigned int asd_struct_size);
- #define v4l2_async_notifier_add_fwnode_remote_subdev(__notifier, __ep, __t=
-ype)	\
- ((__type *)__v4l2_async_notifier_add_fwnode_remote_subdev(__notifier, __ep=
-,	\
- 							  sizeof(__type)))
-=20
-+struct v4l2_async_subdev *
-+__v4l2_async_notifier_add_i2c_subdev(struct v4l2_async_notifier *notifier,
-+				     int adapter_id, unsigned short address,
-+				     unsigned int asd_struct_size);
- /**
-  * v4l2_async_notifier_add_i2c_subdev - Allocate and add an i2c async
-  *				subdev to the notifier's master asd_list.
-  *
-- * @notifier: pointer to &struct v4l2_async_notifier
-- * @adapter_id: I2C adapter ID to be matched
-- * @address: I2C address of sub-device to be matched
-- * @asd_struct_size: size of the driver's async sub-device struct, includi=
-ng
-- *		     sizeof(struct v4l2_async_subdev). The &struct
-- *		     v4l2_async_subdev shall be the first member of
-- *		     the driver's async sub-device struct, i.e. both
-- *		     begin at the same memory address.
-+ * @__notifier: pointer to &struct v4l2_async_notifier
-+ * @__adap: I2C adapter ID to be matched
-+ * @__addr: I2C address of sub-device to be matched
-+ * @__type: type of the struct that contains a struct v4l2_async_subdev.
-  *
-  * Same as above but for I2C matched sub-devices.
-  */
--struct v4l2_async_subdev *
--__v4l2_async_notifier_add_i2c_subdev(struct v4l2_async_notifier *notifier,
--				     int adapter_id, unsigned short address,
--				     unsigned int asd_struct_size);
- #define v4l2_async_notifier_add_i2c_subdev(__notifier, __adap, __addr, __t=
-ype)	\
- ((__type *)__v4l2_async_notifier_add_i2c_subdev(__notifier, __adap, __addr=
-,	\
- 						sizeof(__type)))
-
-
-Thanks,
-Mauro

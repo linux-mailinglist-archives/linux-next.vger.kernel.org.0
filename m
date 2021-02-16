@@ -2,107 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A3831CA87
-	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 13:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FC931CB68
+	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 14:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhBPM3c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Feb 2021 07:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbhBPM3c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Feb 2021 07:29:32 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36093C061574
-        for <linux-next@vger.kernel.org>; Tue, 16 Feb 2021 04:28:51 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id j9so1638454edp.1
-        for <linux-next@vger.kernel.org>; Tue, 16 Feb 2021 04:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ad0+hgLlbWAESKKkbH6rvkNj9FtIWIxrAmb+RGMe7ic=;
-        b=hmdEOrq8aGYVphRb0xLQbltwSKM1v64gQ7+Z1usYWrz4e6Npg5tiGyhS8XrkDdozDz
-         jd9bn9AzBl96asFpAUtYo6TWuwjIXKz5vXFOL6O8Y/dlxTCCoFfsmGyYjRvJCempXIu9
-         EiLMDj1v9w30TYSyrpWVs+cOqbTJ1fk4yqrk7cd7CPqwLtlmYedcYSCowk1cTtBHE0N0
-         qQeXgt1HoZMNazcGjZWcZbW0cEldV2Ncf64qh6OCBw9724pX0zWHF7BTPt/ppWBrPUxE
-         rM3LGdT+04W+qjUbDh3+tV5TRLpwITOkPLqfYsbwjUmI2I9mKi7KIZI5A70XsL6VG/dx
-         6Z6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ad0+hgLlbWAESKKkbH6rvkNj9FtIWIxrAmb+RGMe7ic=;
-        b=GPieG3sO9vxkplQnEqBoA9+mbgSfirIFirCQQPzNuYkhyO2gLv/KSRsZc6Nr3x2743
-         s5pRcZ3j3zPXS3HpZWZyq4YEvKpg7urnzav0us18L+yxZ9oPs7P3XcDicfc8SLtNxLPn
-         dqKaXKpv0XaxsfaI+xWpxv7xr0rk/eNNeNpAyC3XNB9JZYeTkEUTTT+ytAZL+Ymy1Z+u
-         +jdPUaEnV2J5UugeLZUUmMJjXCRwGDnPsqtfV9fGLaADHCemuBxKIy5j9VkMH87krlm3
-         ZgZr6Qtxt7cI+kEwfuzETRbVSvlf0/CQ9YXL0Hl7allxiZkn6skHFLUK6sdpxkxaDDFM
-         hkOw==
-X-Gm-Message-State: AOAM5313oUNOiMGnj6QeG37bM37EyVrrBSOJBHhPlln+OERCjOCrxTNi
-        4JjZIq4r6rP6JlntgWXML/nfjDK/ggVAsQ0oU1Y2aw==
-X-Google-Smtp-Source: ABdhPJx1kTTMrI1vyBayi9doeB7HmGyLN/m0li19/DR4J5ALuju+ZbVIXbvEL2KZzwzShAQySLZCByQL+KjH1b9u8uc=
-X-Received: by 2002:a05:6402:2053:: with SMTP id bc19mr20101713edb.230.1613478529527;
- Tue, 16 Feb 2021 04:28:49 -0800 (PST)
+        id S229803AbhBPNuX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Feb 2021 08:50:23 -0500
+Received: from mo-csw1116.securemx.jp ([210.130.202.158]:32820 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229744AbhBPNuW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Feb 2021 08:50:22 -0500
+Received: by mo-csw.securemx.jp (mx-mo-csw1116) id 11GDlYLu016877; Tue, 16 Feb 2021 22:47:34 +0900
+X-Iguazu-Qid: 2wGr679RaPzzBbRgxs
+X-Iguazu-QSIG: v=2; s=0; t=1613483254; q=2wGr679RaPzzBbRgxs; m=tb65jn7FIuNFo2VnfA85gKn0GTVb2lZQdz90Y5O7yuo=
+Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
+        by relay.securemx.jp (mx-mr1110) id 11GDlU85039532;
+        Tue, 16 Feb 2021 22:47:31 +0900
+Received: from enc01.toshiba.co.jp ([106.186.93.100])
+        by imx2.toshiba.co.jp  with ESMTP id 11GDlU6g004234;
+        Tue, 16 Feb 2021 22:47:30 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 11GDlT2N031327;
+        Tue, 16 Feb 2021 22:47:29 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NPzRYqvII/5dVup35a4cPgAA6ozQzV9XDaRQJ4o5MZNgpJt3U0ykE516ixHFRxDVQ14qXiriBtVjopypKoFmeLfUqbV/7iEQ2JTT5HZH/ovu5qwFxuffrXeJOzBZjrse8vFfAFG/R5sm67UTQYE1zOTLRjGI0RLhvjxBwGvRD3nGHhfeK0Cxd46SF/JJcHCK4StSOOKnn4FCSDUTgGpaBkrr1c57Xlnfwb67mxT0pnilKpDxU+qxtXUiGFBWfATjRepUbrBIMooIek4+9MI7i2G8J/9HSdEfVeepqMc71kvTHylQhxcUGWKv8foqyLuCfdrsyw9au4TAUfjeEMOZ7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lM5PiJhBKkca8BTrb+vSydLwKcsUGY8hgi8YN4jCpTU=;
+ b=HWtpB9BnYYlLaf4zJ7xwo7L9orIxs2TK1Ymf+sCuFNZnhR/VR0edHYxk7vx9B/wYb9NizuLDv/UYPjUF3lf+5WUNOa+RJxEo8ERImM67Bszw7ChxngfYuchHnn8HcFz2Hk6QsrOIgySMHrENVgTjiUUFf1GeHMVHV8gqQicxDbHc5cMSpMQitEbfbLRDrEnlLKbGTszUjJWTiLKe4DXCPcicfe+eSvtRNPYsdF2dZKuFRKmnj+G58KPq9J/rTIRlH4F/0Ime+nh3cNVRwOx9Ho1oW1XECLow2I4VkHTGo5SzI2Ae43Q0HgJntjyJX/z4MVCBDzAAwumK/571cq1qPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
+ header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
+From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     <naresh.kamboju@linaro.org>, <yoshihiro.shimoda.uh@renesas.com>,
+        <sfr@canb.auug.org.au>
+CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>, <olof@lixom.net>,
+        <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
+        <bgolaszewski@baylibre.com>, <linux-next@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lkft-triage@lists.linaro.org>
+Subject: RE: linux-next: manual merge of the net-next tree with the arm-soc
+ tree
+Thread-Topic: linux-next: manual merge of the net-next tree with the arm-soc
+ tree
+Thread-Index: AQHXBAg4vV8NxMrm20q1gNg3jtvtOKparL4AgAAJsgCAABTF8A==
+Date:   Tue, 16 Feb 2021 13:47:27 +0000
+X-TSB-HOP: ON
+Message-ID: <TYAPR01MB29904A0E8BE08D4BDFDA517C92879@TYAPR01MB2990.jpnprd01.prod.outlook.com>
+References: <20210216130449.3d1f0338@canb.auug.org.au>
+ <TY2PR01MB3692F75AF6192AB0B082B493D8879@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+ <CA+G9fYs=hDh7mYb0E=9hC14f5dSNocH=dANLrvMfxk+hSjS5bg@mail.gmail.com>
+In-Reply-To: <CA+G9fYs=hDh7mYb0E=9hC14f5dSNocH=dANLrvMfxk+hSjS5bg@mail.gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+authentication-results: linaro.org; dkim=none (message not signed)
+ header.d=none;linaro.org; dmarc=none action=none header.from=toshiba.co.jp;
+x-originating-ip: [103.91.184.0]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: efef16c9-3c32-4530-b9ba-08d8d28165da
+x-ms-traffictypediagnostic: TYAPR01MB2704:
+x-microsoft-antispam-prvs: <TYAPR01MB27041487D7652101341BBCF592879@TYAPR01MB2704.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:608;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U7/ZIhqPL3/9dBvN7yEi73Klw4AJ+QuCDyLOnel+BDKntO/zcZuMZbwxcN6CPHsB9yZV700nKbGVfQylYxfZxuxOOmUhLygG7Ynla5yQMyABH0IdUby7ngoOMTDSySy4UvGKTZQibjJ0usqp0ESUvsxweq+CaaHyPymKYAd0gANkX3xyIrKiNviwPZ/r322SJ4cnCJ7+DJ2/cOOURjLS/OxynlMQBEmTnBAfLQaMnkUM9giyeK8UFMxgPKpitHbJQYVDWrWdMZgdx8iBquathy7H7xwdKSArvJS/Co7h/Og9F32DXBSzs1c/JWGoronVOsaOdJbc1vjMj5K+2KIO8SUP79UNOUF1VZyIrfKQOh+Fc//YB2AJqMV6i6BZqXR1C7l3nppGsGzjVC07fFP0ftAZdQrXX/diwhh4CU9gbrHMQJr9gQ27JZ6M2BI7f3808ccrevEwpIUpL+zR6rgL1OZEWb4BvGhsq2dF3nMePk5jlFR6NjAJg6F1sM3e4Sa61gf4Xb2govA7ytp77UAJxuYJMUvMCkjZrlil9o6I9fYJo35BpitaLrtJoe4I6UrqzxdAVSTzzGT65/SVgaK0y7BTsAAIDJS7hB4btXGNU9I=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB2990.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(39860400002)(136003)(396003)(346002)(66556008)(66476007)(110136005)(33656002)(64756008)(66446008)(66946007)(9686003)(55016002)(83380400001)(54906003)(26005)(6506007)(76116006)(316002)(186003)(2906002)(966005)(478600001)(71200400001)(7696005)(4326008)(8936002)(7416002)(8676002)(86362001)(52536014)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?ZjcyN1R3Y040SHdSTkNpMG95QXBqdTQwZVRtdzE0VkkycVl6QWowVjFlblVj?=
+ =?utf-8?B?RHN3a1RhdW9ieFJ6M2FSSGp1NmNSMjZLNVNJcTdGRDlQWFJGMDgvNkN0U25P?=
+ =?utf-8?B?MGQrZUlTRVpqWWJud0ttSjBqMkMvNkxZNHZqUFRxWEswNllNV2NZYmZNaE5z?=
+ =?utf-8?B?aXNJL21FQWpYTnNjdXA1ZFg0OTliVE9vaXVETmNRZE1kNXZLOTh4Tkd4TW5R?=
+ =?utf-8?B?aGloZDlUSmljSzVmTE96Si9ITGswVXl4dnhVOFI3VXJDZ0FKSFpZMDAxMDlr?=
+ =?utf-8?B?WE1pNEh5V1E0MzBlSUoxcDh1ajhlRHRVL1JFOXhKaXZGamtpMEZ5eUlHeWJu?=
+ =?utf-8?B?bERtUWExSmNOc2Vjd2F1Qk9oSmxBQlhNckg3RUxiZ0MwRVJLb3ovWXpMdEFL?=
+ =?utf-8?B?WFJiOXQvMTE3Wi9BcEN4aEZoRzdxb0xHQkN1N3hVWjhhbkhPNS91MXpkMzRQ?=
+ =?utf-8?B?ZU1kTkE4UWJ5b0FMVHVSU2h4aHJGOVRiTmZlQ0FxbkRZMGloVE4wRzBUY0Nk?=
+ =?utf-8?B?Q3lTVkZtVW8wMWJ4OVJiNm9jK3B6T1hDMXlQL0ZCM0RqVEI2d09tQml6blBy?=
+ =?utf-8?B?cm9Zd2ljSE5YS3BWMFF0YU1nSUVSOU1sS2d4d1BZdVlmQXhtYWVSZWFwQk44?=
+ =?utf-8?B?aWs5enpQSEFyVTFRR01DWkNoRG4zY29IUGRiNmFlMlVubkwrTzBRRE1Ic1h3?=
+ =?utf-8?B?Mmg0NjgxYkdRM0xZVllURUNGOFc1UFg4b1crUzNoek5CSDY3ZU5DVXd2Vy9E?=
+ =?utf-8?B?bEtrZndOZmhxWXhiS2xzS2g3VU4zejA0Y3UvV3R1L2tnckFoUGcvWlRJYVBI?=
+ =?utf-8?B?VGs5OTl3UnlDM3ZsZXlnSEJiODF2UzhjZER4VTFyN1FOYWYxbmJPZlhUenl5?=
+ =?utf-8?B?VVpIZVBtcnV0WUlXQzVRNnVmV3RreDlOL1NJb2tIaHZ4Q1k2U3JJemFXK3A5?=
+ =?utf-8?B?MkJKcEp5ZEM0eVZmL3I5Nm1nYWxXNG9SdmtsN2h3U0FKa3lEL3grMnIrb1Y5?=
+ =?utf-8?B?WThxaFJMZXdnV0dUKzM2U3VzWXg0SWU0R1dsYWFTVmcxRW1XWTB1N2lVZFds?=
+ =?utf-8?B?dnpLOCtZSUJGTThZTTlWaEZJdUpCYWVNM2xBYVVmQXkzbmw4eG5vSHVLanVp?=
+ =?utf-8?B?enVNNXpiWmtlcmlueEhjTzlDVzYvWkFsSkE1RXpXbHFmekE4MnNoMGhqZUJC?=
+ =?utf-8?B?cmF4RHpWMGNqOUNLT09tUExBVDNaNkp3N0gzVGJvYzkxekN3MHFqZm81T3M1?=
+ =?utf-8?B?VlBDc04vTGZvRGxCb2JPVnhIakFabU9uc3JERXgyd2ZXSE81WnA3UFRYUjFk?=
+ =?utf-8?B?alhUSU8vOU5ncVNPbm9ZQmxyZzVEYmN5RDY0N1hWeHI5MWlOOFY1RGcrV0V2?=
+ =?utf-8?B?R1gyWDdrbm5HajljNVVoVTdBQlVQM2twYUcxdEx4dmpCTnRQUVMzMERjLzdR?=
+ =?utf-8?B?M1ovN3pHY0Y1VGJ3Um9JdnM2TjB0ek14SmhBK2dRai9LV1JnOGJhdTVmVTBy?=
+ =?utf-8?B?MExTQUJpTlhaZUEyOTNzSDl1Wnp6ZjlvMUV2K1plSzNwR1ljaWVVZ3JNQis5?=
+ =?utf-8?B?RkRZKy82eEdkUlVMRm5oSU13SGhLeFp4alBYM1ZEM2FWM0dtV0Q1ZWU0OHlv?=
+ =?utf-8?B?UGU3VkFrbTM2MHFpZlFiWklsck4vbGxZaXBlVlZUUDQvTUg3SUIrYzAxSk9P?=
+ =?utf-8?B?eFpqem1pRTVIN2ZpVTdmZmJqVHpxL2poVjNqZWlwdDhWajdJajNRSUgzUnY3?=
+ =?utf-8?Q?sJtItY8ieV3YESj6Yw=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20210216130449.3d1f0338@canb.auug.org.au> <TY2PR01MB3692F75AF6192AB0B082B493D8879@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY2PR01MB3692F75AF6192AB0B082B493D8879@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 Feb 2021 17:58:38 +0530
-Message-ID: <CA+G9fYs=hDh7mYb0E=9hC14f5dSNocH=dANLrvMfxk+hSjS5bg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the arm-soc tree
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB2990.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efef16c9-3c32-4530-b9ba-08d8d28165da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2021 13:47:27.3343
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: umJWgPYtcO/U+gqwk+aVugh43Ij+w8Pn09iaPpn96p3IOmSO9dq9T0qPaSZaq3J9v5j5kKtOE/WbvNbbMGDaMMJRa7xOgszGfdCcGrXwuo7YissGASqR9gIN9s4Nvr8n
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2704
+X-OriginatorOrg: toshiba.co.jp
+MSSCP.TransferMailToMossAgent: 103
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 16 Feb 2021 at 17:26, Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
->
-> Hi,
->
-> > From: Stephen Rothwell, Sent: Tuesday, February 16, 2021 11:05 AM
-> <snip>
-> > diff --cc arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
-> > index 2407b2d89c1e,48fa8776e36f..000000000000
-> > --- a/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
-> > +++ b/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
-> > @@@ -42,11 -42,20 +42,29 @@@
-> >       clock-names = "apb_pclk";
-> >   };
-> >
-> >  +&wdt {
-> >  +    status = "okay";
-> >  +    clocks = <&wdt_clk>;
-> >  +};
-> >  +
-> >  +&gpio {
-> >  +    status = "okay";
-> > ++};`
->
-
-LKFT builders also found this problem while building arm64 dtb.
-
-> This ` causes the following build error on the next-20210216.
->
->   DTC     arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dtb
-> Error: arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts:52.3-4 syntax error
-> FATAL ERROR: Unable to parse input tree
-> scripts/Makefile.lib:336: recipe for target 'arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dtb' failed
-> make[2]: *** [arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dtb] Error 1
-> scripts/Makefile.build:530: recipe for target 'arch/arm64/boot/dts/toshiba' failed
-
-ref:
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1033072509#L382
-
-- Naresh
+SGksDQoNClRobmFrcyBmb3IgeW91ciByZXBvcnQuDQoNCj4gTEtGVCBidWlsZGVycyBhbHNvIGZv
+dW5kIHRoaXMgcHJvYmxlbSB3aGlsZSBidWlsZGluZyBhcm02NCBkdGIuDQo+IA0KPiA+IFRoaXMg
+YCBjYXVzZXMgdGhlIGZvbGxvd2luZyBidWlsZCBlcnJvciBvbiB0aGUgbmV4dC0yMDIxMDIxNi4N
+Cj4gPg0KPiA+ICAgRFRDICAgICBhcmNoL2FybTY0L2Jvb3QvZHRzL3Rvc2hpYmEvdG1wdjc3MDgt
+cm0tbWJyYy5kdGINCj4gPiBFcnJvcjogYXJjaC9hcm02NC9ib290L2R0cy90b3NoaWJhL3RtcHY3
+NzA4LXJtLW1icmMuZHRzOjUyLjMtNCBzeW50YXggZXJyb3INCj4gPiBGQVRBTCBFUlJPUjogVW5h
+YmxlIHRvIHBhcnNlIGlucHV0IHRyZWUNCj4gPiBzY3JpcHRzL01ha2VmaWxlLmxpYjozMzY6IHJl
+Y2lwZSBmb3IgdGFyZ2V0ICdhcmNoL2FybTY0L2Jvb3QvZHRzL3Rvc2hpYmEvdG1wdjc3MDgtcm0t
+bWJyYy5kdGInIGZhaWxlZA0KPiA+IG1ha2VbMl06ICoqKiBbYXJjaC9hcm02NC9ib290L2R0cy90
+b3NoaWJhL3RtcHY3NzA4LXJtLW1icmMuZHRiXSBFcnJvciAxDQo+ID4gc2NyaXB0cy9NYWtlZmls
+ZS5idWlsZDo1MzA6IHJlY2lwZSBmb3IgdGFyZ2V0ICdhcmNoL2FybTY0L2Jvb3QvZHRzL3Rvc2hp
+YmEnIGZhaWxlZA0KPiANCj4gcmVmOg0KPiBodHRwczovL2dpdGxhYi5jb20vTGluYXJvL2xrZnQv
+bWlycm9ycy9uZXh0L2xpbnV4LW5leHQvLS9qb2JzLzEwMzMwNzI1MDkjTDM4Mg0KPiANCg0KVGhp
+cyBzZWVtcyB0byBiZSBhIHByb2JsZW0gZml4aW5nIHRoZSBjb25mbGljdC4NCg0KaHR0cHM6Ly9n
+aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbmV4dC9saW51eC1uZXh0Lmdp
+dC9jb21taXQvP2lkPWM1ZTE4OGVhMDgyOTBkOWI2NjI1YjRiZWYzMjIwMTJjMGIxOTAyZDcNCg0K
+YGBgDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0cy90b3NoaWJhL3RtcHY3NzA4LXJt
+LW1icmMuZHRzIGIvYXJjaC9hcm02NC9ib290L2R0cy90b3NoaWJhL3RtcHY3NzA4LXJtLW1icmMu
+ZHRzDQppbmRleCAyNDA3YjJkODljMWU5Li4zNzYwZGY5M2E4OWI1IDEwMDY0NA0KLS0tIGEvYXJj
+aC9hcm02NC9ib290L2R0cy90b3NoaWJhL3RtcHY3NzA4LXJtLW1icmMuZHRzDQorKysgYi9hcmNo
+L2FybTY0L2Jvb3QvZHRzL3Rvc2hpYmEvdG1wdjc3MDgtcm0tbWJyYy5kdHMNCkBAIC00OSw0ICs0
+OSwyMiBAQA0KIA0KICZncGlvIHsNCiAJc3RhdHVzID0gIm9rYXkiOw0KK307YA0KKw0KKyZwaWV0
+aGVyIHsNCisJc3RhdHVzID0gIm9rYXkiOw0KKwlwaHktaGFuZGxlID0gPCZwaHkwPjsNCisJcGh5
+LW1vZGUgPSAicmdtaWktaWQiOw0KKwljbG9ja3MgPSA8JmNsazMwMG1oej4sIDwmY2xrMTI1bWh6
+PjsNCisJY2xvY2stbmFtZXMgPSAic3RtbWFjZXRoIiwgInBoeV9yZWZfY2xrIjsNCisNCisJbWRp
+bzAgew0KKwkJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQorCQkjc2l6ZS1jZWxscyA9IDwwPjsNCisJ
+CWNvbXBhdGlibGUgPSAic25wcyxkd21hYy1tZGlvIjsNCisJCXBoeTA6IGV0aGVybmV0LXBoeUAx
+IHsNCisJCQlkZXZpY2VfdHlwZSA9ICJldGhlcm5ldC1waHkiOw0KKwkJCXJlZyA9IDwweDE+Ow0K
+KwkJfTsNCisJfTsNCiB9Ow0KYGBgDQoNClN0ZXBoZW4sIGNvdWxkIHlvdSBmaXggdGhpcz8NCg0K
+QmVzdCByZWdhcmRzLA0KICBOb2J1aGlybw0K

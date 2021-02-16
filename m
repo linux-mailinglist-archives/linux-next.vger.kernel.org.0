@@ -2,133 +2,192 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB8631C4BE
-	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 02:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409231C53E
+	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 03:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbhBPBEW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Feb 2021 20:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S229802AbhBPCFp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Feb 2021 21:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbhBPBEF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Feb 2021 20:04:05 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D777FC061756
-        for <linux-next@vger.kernel.org>; Mon, 15 Feb 2021 17:03:24 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id do6so3639745ejc.3
-        for <linux-next@vger.kernel.org>; Mon, 15 Feb 2021 17:03:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zrjbMWbLD5k1YU1gY6sgg8lrLPs48sMOTQtq5qr6+JE=;
-        b=LIupk08tNIWocLfmHYdevHIaMUM6xGoaBpAWMYTkuBgf3r3EGTFB209egHvSXfoGNS
-         GWCWd7fEN/Bq4pnpKID2URgFbQqUTAU0x5/K9yCIWixQjRfUYcasFfnfI4Dz/HnBRG54
-         dhmq2a26jT7RKOsFjj3UmPANSPpO/7HeXa05EhfgHmDdrRYh0xun30YVkTlAlSliJdOU
-         x9oPZ9Mw5Y+RDjR1FrWgrdAicmx3f7lHd4l1LWa9dYQyyqjqsWggjk61PKX40m4ENZxw
-         pC5aJ3gDug4zgcA1QWzS75Qk5sOiWwwLuPUfn3cSlR4bGI7xeUwEbZSP01Nb3XKKQ4gp
-         NviA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zrjbMWbLD5k1YU1gY6sgg8lrLPs48sMOTQtq5qr6+JE=;
-        b=cC7Mx+kVTSYTcUs1cpeQ/Z5QdhZsMSekegJ3GbvxCcEbv288tlvxIMkqrI1Hgbvoj6
-         r8W4vNNGzD8o3vP5tDS9lpgCYw7qKpw/B6dCjsJD7lL0flrSJYiMlyVUgcTCnajayAbY
-         u8MqQPzxe0vB7Cm00U0Rx3o4XZhco9+30CJXGCjrlMZSQ4QnLVxaOQdqNpV7SiQk/1DY
-         ZpTxd8Wt6uLNNaKsKc0rhLlVaXnjl2EQfDhV394ul3Y7ef1xw+LnPWtbw/Ve51vbY4Y2
-         f2UhMFcN1fNBv03eCGzH3/8gyvgHnbjx/AC4+tNcV6xiMUURi4AMjQR+BH29SZZcVPaY
-         bQvQ==
-X-Gm-Message-State: AOAM532fqyfnvefyhssoTX2KRR5O8tzonBJhYC3sar1Mga4G9FhcSPvb
-        O4wtl7BS/DIIv9FE5/q+7LMasi8jTB+WAmwyIxa6iw==
-X-Google-Smtp-Source: ABdhPJy8c/0gVUxzxzOu465gevLaW/oq5+vXZq8cBcdf0ZCueZjV3UO69BfxcbMCkyHxtXaBOFrKeIBIx/oCPyWBv/g=
-X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr17896470eju.375.1613437403417;
- Mon, 15 Feb 2021 17:03:23 -0800 (PST)
+        with ESMTP id S229662AbhBPCFo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Feb 2021 21:05:44 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A447CC061574;
+        Mon, 15 Feb 2021 18:05:03 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DfknH0vRTz9sVR;
+        Tue, 16 Feb 2021 13:04:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613441099;
+        bh=kvCcIU1t45YHZth8tA+kMgS21Ahdt4LFOatlqMWBQIQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=We+Qpfac7qm3Mp5ItKtb5TTIfodvAOIkocJ6SU5VlNwKRZj6l/NgLEtrIG8y4WKCm
+         suJ94IcSj8Kcu8C0oAszGY72GdXgNa4V/XiNJSuoRTZmgpXRSau3HZcXRiAJqSrPdo
+         V/ag24wa4yePGUr/w3l3LwHdVvcTMsubOzC3XbgN8iJ+BgdEEy8JSYGA18Avoaxt0v
+         07COM7yOzyPBJRbLrW/48a5NB4zHXp3H0fn+kIo0e6xCTStf3Cahc6dPt9dpOnQ4oh
+         uveoa6ZqNJjpvgAoU0ZHMPMHBjqddZ9yk82f36c01/mT/GX6tz8E/O9ZzjcbjnlYEU
+         1SzCkfymJQOpw==
+Date:   Tue, 16 Feb 2021 13:04:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: linux-next: manual merge of the net-next tree with the arm-soc tree
+Message-ID: <20210216130449.3d1f0338@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYsvDWDogC+xgeG2V9MMofV5svTipDigDiUBje+2jSRK8g@mail.gmail.com>
- <CAK8P3a2OeeW29ekbD70Ns4LTjGRJRT9P0wM-SAxUin1zAxP7TA@mail.gmail.com>
- <CA+G9fYv89bfbixjuudPWkBAucTYg7qhNxcV54RMEkRP5is-bnQ@mail.gmail.com>
- <YCmAGNyFAOZs7GCG@zeniv-ca.linux.org.uk> <CA+G9fYsZnBv4wAEKYb0mgMd-BsgXcPUGBQ=VRKcONqAZry_4XQ@mail.gmail.com>
- <YCqGX36I+KR7SoA8@zeniv-ca.linux.org.uk>
-In-Reply-To: <YCqGX36I+KR7SoA8@zeniv-ca.linux.org.uk>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 Feb 2021 06:33:12 +0530
-Message-ID: <CA+G9fYuq7bpDhY3cA5O66bf0nxKUkbtiTMcLMqBYvWKLhNfrjQ@mail.gmail.com>
-Subject: Re: LTP: madvise08.c:203: TFAIL: No sequence in dump after MADV_DODUMP.
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org,
-        chrubis <chrubis@suse.cz>, Jan Stancek <jstancek@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <christian@brauner.io>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Vorel <pvorel@suse.cz>,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Joerg.Vehlow@aox-tech.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/LZtJ7tX3KO73GqKh+6aYHk0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 15 Feb 2021 at 20:05, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Mon, Feb 15, 2021 at 02:11:15PM +0530, Naresh Kamboju wrote:
->
-> > fs/coredump.c:903:9: error: 'return' with a value, in function
-> > returning void [-Werror=return-type]
-> >  903 | return 0;
-> >         | ^
-> >
-> > Build failed due to above error.
->
-> FWIW, here the test results in
-> Running tests.......
-> <<<test_start>>>
-> tag=madvise08 stime=1613398818
-> cmdline="madvise08"
-> contacts=""
-> analysis=exit
-> <<<test_output>>>
-> incrementing stop
-> tst_test.c:1250: TINFO: Timeout per run is 0h 05m 00s
-> madvise08.c:78: TINFO: Temporary core pattern is '/tmp/ltp-tgvQ3Lz1UZ/B6lwy6/dump-%p'
-> madvise08.c:117: TINFO: Dump file should be dump-2276
-> madvise08.c:201: TPASS: madvise(..., MADV_DONTDUMP)
-> madvise08.c:117: TINFO: Dump file should be dump-2277
-> madvise08.c:205: TPASS: madvise(..., MADV_DODUMP)
->
-> Summary:
-> passed   2
-> failed   0
-> skipped  0
-> warnings 0
-> <<<execution_status>>>
-> initiation_status="ok"
-> duration=0 termination_type=exited termination_id=0 corefile=no
-> cutime=0 cstime=0
-> <<<test_end>>>
->
-> (built without -Werror=return-type, so I'd missed the warnings)
->
-> Anyway, I've folded the fix (with those stray return 0 removed, of course)
-> into #work.coredump and #for-next; works here.  Could you test either
-> branch (in git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git)?
+--Sig_/LZtJ7tX3KO73GqKh+6aYHk0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-By using Linaro tuxsuite [1] I have built your tree and tested on x86_64 and
-the reported test PASS now.
+Hi all,
 
-LTP syscalls [2] and LTP fs [3] tested on x86_64 and both PASS.
+Today's linux-next merge of the net-next tree got conflicts in:
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+  arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+  arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
 
+between commits:
 
-[1] https://gitlab.com/Linaro/tuxsuite
-[2] https://lkft.validation.linaro.org/results/2278012
-[3] https://lkft.validation.linaro.org/results/2280979
+  4fd18fc38757 ("arm64: dts: visconti: Add watchdog support for TMPV7708 So=
+C")
+  0109a17564fc ("arm: dts: visconti: Add DT support for Toshiba Visconti5 G=
+PIO driver")
 
-- Naresh
+from the arm-soc tree and commit:
+
+  ec8a42e73432 ("arm: dts: visconti: Add DT support for Toshiba Visconti5 e=
+thernet controller")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+index 2407b2d89c1e,48fa8776e36f..000000000000
+--- a/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
++++ b/arch/arm64/boot/dts/toshiba/tmpv7708-rm-mbrc.dts
+@@@ -42,11 -42,20 +42,29 @@@
+  	clock-names =3D "apb_pclk";
+  };
+ =20
+ +&wdt {
+ +	status =3D "okay";
+ +	clocks =3D <&wdt_clk>;
+ +};
+ +
+ +&gpio {
+ +	status =3D "okay";
+++};`
+++
++ &piether {
++ 	status =3D "okay";
++ 	phy-handle =3D <&phy0>;
++ 	phy-mode =3D "rgmii-id";
++ 	clocks =3D <&clk300mhz>, <&clk125mhz>;
++ 	clock-names =3D "stmmaceth", "phy_ref_clk";
++=20
++ 	mdio0 {
++ 		#address-cells =3D <1>;
++ 		#size-cells =3D <0>;
++ 		compatible =3D "snps,dwmac-mdio";
++ 		phy0: ethernet-phy@1 {
++ 			device_type =3D "ethernet-phy";
++ 			reg =3D <0x1>;
++ 		};
++ 	};
+  };
+diff --cc arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+index 4264f3e6ac9c,3366786699fc..000000000000
+--- a/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
++++ b/arch/arm64/boot/dts/toshiba/tmpv7708.dtsi
+@@@ -134,12 -134,20 +134,26 @@@
+  		#clock-cells =3D <0>;
+  	};
+ =20
+ +	wdt_clk: wdt-clk {
+ +		compatible =3D "fixed-clock";
+ +		clock-frequency =3D <150000000>;
+ +		#clock-cells =3D <0>;
+ +	};
+ +
++ 	clk125mhz: clk125mhz {
++ 		compatible =3D "fixed-clock";
++ 		clock-frequency =3D <125000000>;
++ 		#clock-cells =3D <0>;
++ 		clock-output-names =3D "clk125mhz";
++ 	};
++=20
++ 	clk300mhz: clk300mhz {
++ 		compatible =3D "fixed-clock";
++ 		clock-frequency =3D <300000000>;
++ 		#clock-cells =3D <0>;
++ 		clock-output-names =3D "clk300mhz";
++ 	};
++=20
+  	soc {
+  		#address-cells =3D <2>;
+  		#size-cells =3D <2>;
+@@@ -402,11 -399,16 +416,22 @@@
+  			status =3D "disabled";
+  		};
+ =20
+ +		wdt: wdt@28330000 {
+ +			compatible =3D "toshiba,visconti-wdt";
+ +			reg =3D <0 0x28330000 0 0x1000>;
+ +			status =3D "disabled";
+ +		};
+++
++ 		piether: ethernet@28000000 {
++ 			compatible =3D "toshiba,visconti-dwmac", "snps,dwmac-4.20a";
++ 			reg =3D <0 0x28000000 0 0x10000>;
++ 			interrupts =3D <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
++ 			interrupt-names =3D "macirq";
++ 			snps,txpbl =3D <4>;
++ 			snps,rxpbl =3D <4>;
++ 			snps,tso;
++ 			status =3D "disabled";
++ 		};
+  	};
+  };
+ =20
+
+--Sig_/LZtJ7tX3KO73GqKh+6aYHk0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmArKEIACgkQAVBC80lX
+0GxUgAf/Xo7rh9vMOYzUGBvGckdIQeqet/arxxs3LaHOteUk55CqPywpESGYqh4z
+cbz4gopENeufOenC/l0p6F+uNkoNcmUhBKUrPivzSBxxvA3DQeNG2uJoI/oeYbJj
+gJJTxSx836S9aSJ3Kx2ZrTHJwG2v8YCtqPwNuJA4up4pIIeoyWQ2aDaPeEGNviuv
+1nqyU3h0ShrHv4AjDC1KQx/QPQejT4d1s1Meh+Xxo61yqxLT0+vx6WGDLYID245M
+jBOY+M0ELUMweqI/E8hOqZdFHXr3bRpA6OqYXQQZbd0SZoffZTkjSvsJb8eOutrW
+1A/HkDpwD1Sl81l9umDkE8/yJ9y1cw==
+=bDdD
+-----END PGP SIGNATURE-----
+
+--Sig_/LZtJ7tX3KO73GqKh+6aYHk0--

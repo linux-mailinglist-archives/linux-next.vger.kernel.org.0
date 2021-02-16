@@ -2,82 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D8231C857
-	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 10:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC9731C883
+	for <lists+linux-next@lfdr.de>; Tue, 16 Feb 2021 11:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbhBPJrl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Feb 2021 04:47:41 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52151 "EHLO ozlabs.org"
+        id S229787AbhBPKMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Feb 2021 05:12:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230064AbhBPJrI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 16 Feb 2021 04:47:08 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dfx1t1pNSz9sVF;
-        Tue, 16 Feb 2021 20:46:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613468786;
-        bh=mhNRPRlD0jLWUQYUSdG7QkkCZ3e0fk0jXhX5UZ0n6MY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XVs4qbdUQfys2JTS2Sk6Csyve3o2DKCVvwWDphjFROy4wLFf5uGjZ11kn2/k1PiW8
-         bCFZdAAuyi8eS3vy1kPBMXbK8NT/yAkEZmtlQ00pUuz2HrCPEfnj8W9ATSTSk5zi8y
-         P8Ljxh/RIu/k1rez4CVSWE7Bj8zM7/14nACA4tE4BDVmnadvYTCFXFP3NoU+iMbKKv
-         QwGesYUHSoxqQVJ9AlfjU5x5ZmXolLOQdScxycfoSgDENzel9pclLhwXN/tF47q5U6
-         pxSLHxT1hMDmAsJfSb4CRBDvwSvsq+3jqf24Lhpp11qvc0mIEStr3RA9YGn6Dub3mC
-         SVoNIi0V2fFNA==
-Date:   Tue, 16 Feb 2021 20:46:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Ben Widawsky <ben.widawsky@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the nvdimm tree
-Message-ID: <20210216204624.65a2940a@canb.auug.org.au>
+        id S229771AbhBPKMj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 16 Feb 2021 05:12:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 64EF864D9E;
+        Tue, 16 Feb 2021 10:11:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613470318;
+        bh=O9zZWr1BTSfSC7SFTtkQBQ/xVE2twCkTfF2UAJOatvY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LbATF5kC6aiAcsZiQxoiwOyFy2ZGUj0vA+H2IP8rvzsFynEgS7cZbOnjEmM2GoUyn
+         TyQN96KPs5t2+58U2GLEFvUi/z/mMFeO+wU7Erc45C7SbZfAm1Dq1irE+hTX+3yWZa
+         f313M6wAnbu6w7+Zna5BYl5+VSHNiL5LS6/bKTvEZK87gQdPzRgRG8tSoq3l1jSkR3
+         8UPzruHnZDwjBHyXD2jO5K6VdIHboZw2Xq0OqLGzcm3VgcD8schBjAYk7dvwK+VvCA
+         2p4K5fGpkaNtVWfr4H7OIYjpdAvUUxYQu5NjT1t0BZlZ+e94QGqblRCeH0MCK6lCwh
+         TO6csrcxjnbdw==
+Received: by mail-oi1-f177.google.com with SMTP id l19so10667558oih.6;
+        Tue, 16 Feb 2021 02:11:58 -0800 (PST)
+X-Gm-Message-State: AOAM530UANs0iv5VRC9nJp9BrIlvOQh1d/MVPGTqboxWrNe0kc3xddC4
+        ajlofLCobWh2RFffBye8iAFohA3asL5X/VHS3GE=
+X-Google-Smtp-Source: ABdhPJzG/H3wVcslxTEnqeZi/ylklV0MYm3BcuNOjYzDqles36eR+lldIhLS+bHC1krCppp8jFjbRAV5JR99yHVjGsE=
+X-Received: by 2002:aca:e103:: with SMTP id y3mr1963362oig.11.1613470317705;
+ Tue, 16 Feb 2021 02:11:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xPa+kqWI1+vmB9bFlwx4HgE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210216130449.3d1f0338@canb.auug.org.au> <OSBPR01MB2983FDFEF1D1E24E7C2DF0F692879@OSBPR01MB2983.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB2983FDFEF1D1E24E7C2DF0F692879@OSBPR01MB2983.jpnprd01.prod.outlook.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 16 Feb 2021 11:11:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3CYkfOvta9pRwLXkOsARQF=YNWzdh0z1-r6rMDAEGYig@mail.gmail.com>
+Message-ID: <CAK8P3a3CYkfOvta9pRwLXkOsARQF=YNWzdh0z1-r6rMDAEGYig@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the arm-soc tree
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xPa+kqWI1+vmB9bFlwx4HgE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Feb 16, 2021 at 3:20 AM <nobuhiro1.iwamatsu@toshiba.co.jp> wrote:
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+>
+> This is because the DTS changes are included in net-next. This patch should be merged via the soc tree.
+> I had the same problem before. How is it correct to send a DTS patch?
+> Should I separate into different series?
 
-Hi all,
+I have already sent the pull requests for the dts files to Linus, so that's
+not changing any more for this time, and he will just have to fix it up
+when he pulls both branches.
 
-After merging the nvdimm tree, today's linux-next build (htmldocs)
-produced these warnings:
+In the future, please send all dts updates to soc@kernel.org (after the
+binding and driver is merged) rather than together with the device drivers.
 
-Documentation/driver-api/cxl/memory-devices:112: /home/sfr/next/next/driver=
-s/cxl/mem.c:474: WARNING: Inline literal start-string without end-string.
-Documentation/driver-api/cxl/memory-devices:112: /home/sfr/next/next/driver=
-s/cxl/mem.c:474: WARNING: Inline literal start-string without end-string.
+Sending the devicetree binding updates is a little trickier, as we tend to
+want them merged both with the driver and the dts files. One way to do
+this is to have a shared branch for the bindings updates, and then base both
+the driver branch and the dts branch on top of the same commits for that.
 
-Introduced by commit
+A simpler alternative is to merge only the driver and binding changes in
+one release, and send the dts changes for the following release. This
+obviously takes longer to complete.
 
-  b754ffbbc0ee ("cxl/mem: Add basic IOCTL interface")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xPa+kqWI1+vmB9bFlwx4HgE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmArlHEACgkQAVBC80lX
-0GzOwggAmHiOak/0/WRp3H0McpnGASte7k2lGfCM3g+/NtBvigIrgWTW6L5IUdSf
-//HfGO3mIWrt48sJrmUL4D9jcchVWKYMsixg9JSGcp5qH6xBlPcMAvyyLFLEJZTI
-/8O4uv6z/c09h3RK+9GdV2d7uZnlyWkGrzf9sK7qRbSRTJu12uAw7815oQbGFezZ
-I412dZnuM+SyegNBaAXAqFkE3jVX/z2aaUIea//vCPznWJ1zdWP0BBLVWbMSPAao
-PHn9kbhQXk0fOT1phOLBWd7Xz3hLqDpHpuTyNoPsp1KnZEsb1Ao3KHf6p6JxScYn
-Dy/KnnkWbghGrN9ZlqEw3dlXKocotg==
-=U6Di
------END PGP SIGNATURE-----
-
---Sig_/xPa+kqWI1+vmB9bFlwx4HgE--
+       Arnd

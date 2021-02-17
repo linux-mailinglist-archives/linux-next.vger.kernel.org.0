@@ -2,140 +2,356 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F07731D3D7
-	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 02:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D39C731D3DB
+	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 02:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbhBQBoZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Feb 2021 20:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S229947AbhBQBxn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Feb 2021 20:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhBQBoX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Feb 2021 20:44:23 -0500
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBA0C061574;
-        Tue, 16 Feb 2021 17:43:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DgLGL4tglz9sBy;
-        Wed, 17 Feb 2021 12:43:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613526219;
-        bh=YxHG4aTt8Q+DJqmCsA/7VHsTg8HAhTeywx2/Ow/y8mk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QET1vpacsoO/PsOPZm50Zg9AUU6GXGCBMqBu9uz0ujKGRaXrMjvevwqqVInfVqwbw
-         Xizy4XdoTryCce0Y1tUQquHrmLvg9kYYs1O8Ewj5+9m1y9mHZx4vaBaJaOqHCc28bo
-         1pRHFtSvcmUevRyvr6nJW6k6FwC4O07Eo4NbpaCy5kWAgKkpzRmDqpk0RLnsGpQW1O
-         1F+wvPksGVIhVWh41lS3KehEs0hvyFsFJS+2D0HoK3V5RCnerTE+bQcxjPKXJxe0u4
-         cRMxkFNBPKUywk6kBJ0eBo76kjLcjJcjcTeoSOXPDc1o61xoc5LSMtj1b4HUfWysR8
-         CPI8UwmHty//Q==
-Date:   Wed, 17 Feb 2021 12:43:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Lijun Pan <lijunp213@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210217124337.47db7c69@canb.auug.org.au>
+        with ESMTP id S229753AbhBQBxk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Feb 2021 20:53:40 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A1EC061574
+        for <linux-next@vger.kernel.org>; Tue, 16 Feb 2021 17:53:00 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id m2so7499495pgq.5
+        for <linux-next@vger.kernel.org>; Tue, 16 Feb 2021 17:53:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=MDLztJedM6JwBifHkzCYYtEQxsPj3JtWNRX7sml6XB4=;
+        b=RBtiKzc/EkGxmt/JT95ouy5Tu3OYrdClv9ZVPjNGNJdyBEepdsubbZDHZIYOS1o2U7
+         BA6baXz/LGoWsjdv8skQY20QXsKU8Ne7hpFRLhqy4XAX7dh0nrZmMt8Sn9HI7tRhNCEY
+         mKb9ejg2fSjtgk5h7fTDDJacHXbyw6PCgy3rW3Txctz6HX06TuNPjW50NBdJzDPliAU2
+         w0hQKPpS0d0pKbKDgCrc1F8UpIJ43vcTHqbkEddFK0OEIgNI7OECE5V8xhJCzIoguTCY
+         vJS0rMWKnXmlX/ogvMPnQBWKmg1zJBv0qPxUgP5WoxDa/48gZoPqs+sgKkaP/yhePb17
+         +rEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=MDLztJedM6JwBifHkzCYYtEQxsPj3JtWNRX7sml6XB4=;
+        b=MVKRPTcxyg5oIm/LqFOqqegPwQj3aujhLyPgcn6uOOBLr8dL8tHvGgWhqxILbSbD3i
+         3fib31ZJCvb7WsSgp90nUR8NGW8CSf3/7hntESMT5DaibU+76hYbM2E391H4ypuiPydR
+         VEMVLH2/2fkqR97VWG/KmFTRq1ACKjyUh1VDwiKWti/RIxTwPbCmpAuRhse3rXjpNo4b
+         aVowgLjbdgEGvC/dt/XXBKzmBXK8XpRmJodOwGgc5RNrdJPn52Lh09yKuJqZ7hD1ROtB
+         MSvsI1LxHk2R0baKfFm1gMWdqfFotRsfZ0+2gm0SY3AXY4kAONQOPrM9NIFtVTJ6wthO
+         gzBg==
+X-Gm-Message-State: AOAM532Mg5WGXfPq5nYgobPxHCfY0Pq8zlrFXEokk10zukKY0FpL7wUb
+        w+esf0dLBaL0z6EfGp7G+QBB6sCZE0styg==
+X-Google-Smtp-Source: ABdhPJwSLAWq3PmINhqoMbTMj7MuecVmk9I6qDadB/TXhWfo7cMakBvVPdJM3Z0j072xM4TrhGkifA==
+X-Received: by 2002:a63:5f11:: with SMTP id t17mr22021140pgb.391.1613526779071;
+        Tue, 16 Feb 2021 17:52:59 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g6sm238142pfi.15.2021.02.16.17.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Feb 2021 17:52:58 -0800 (PST)
+Message-ID: <602c76fa.1c69fb81.558d9.13e0@mx.google.com>
+Date:   Tue, 16 Feb 2021 17:52:58 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LS2qvUpNPap5oaYhIxbUHgR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.11-629-gdcd372394d935
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 164 runs,
+ 7 regressions (v5.11-629-gdcd372394d935)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LS2qvUpNPap5oaYhIxbUHgR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 164 runs, 7 regressions (v5.11-629-gdcd372394d=
+935)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the net-next tree got conflicts in:
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+am57xx-beagle-x15        | arm   | lab-linaro-lkft | gcc-8    | multi_v7_de=
+fconfig           | 1          =
 
-  drivers/net/ethernet/ibm/ibmvnic.c
-  drivers/net/ethernet/ibm/ibmvnic.h
+bcm2837-rpi-3-b          | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...OMIZE_BASE=3Dy | 1          =
 
-between commit:
+imx6q-var-dt6customboard | arm   | lab-baylibre    | gcc-8    | multi_v7_de=
+fc...CONFIG_SMP=3Dn | 1          =
 
-  4a41c421f367 ("ibmvnic: serialize access to work queue on remove")
+meson-gxl-s805x-p241     | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
 
-from the net tree and commits:
+meson-gxm-q200           | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
 
-  bab08bedcdc3 ("ibmvnic: fix block comments")
-  a369d96ca554 ("ibmvnic: add comments for spinlock_t definitions")
+meson-gxm-q200           | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...OMIZE_BASE=3Dy | 2          =
 
-from the net-next tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-629-gdcd372394d935/plan/baseline/
 
---=20
-Cheers,
-Stephen Rothwell
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-629-gdcd372394d935
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      dcd372394d935b8dc4e15cfb84bc45aec536a77d =
 
-diff --cc drivers/net/ethernet/ibm/ibmvnic.c
-index 13ae7eee7ef5,927d5f36d308..000000000000
---- a/drivers/net/ethernet/ibm/ibmvnic.c
-+++ b/drivers/net/ethernet/ibm/ibmvnic.c
-@@@ -2395,10 -2288,7 +2294,9 @@@ static int ibmvnic_reset(struct ibmvnic
-  	unsigned long flags;
-  	int ret;
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+am57xx-beagle-x15        | arm   | lab-linaro-lkft | gcc-8    | multi_v7_de=
+fconfig           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c4165b2829b3d6baddcb2
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm/multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-=
+beagle-x15.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm/multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-=
+beagle-x15.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602c4165b2829b3d6badd=
+cb3
+        failing since 3 days (last pass: v5.11-rc7-121-gdfed2943da0a, first=
+ fail: v5.11-rc7-192-g055e690de1b2) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+bcm2837-rpi-3-b          | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c43a481334de4ebaddcc9
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
+baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
+baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/602c43a481334de4=
+ebaddccc
+        new failure (last pass: v5.11-619-gde196b2f354e)
+        1 lines
+
+    2021-02-16 22:11:33.641000+00:00  Connected to bcm2837-rpi-3-b console =
+[channel connected] (~$quit to exit)
+    2021-02-16 22:11:33.642000+00:00  (user:khilman) is already connected
+    2021-02-16 22:11:48.996000+00:00  =00
+    2021-02-16 22:11:48.996000+00:00  =
+
+    2021-02-16 22:11:48.997000+00:00  U-Boot 2018.11 (Dec 04 2018 - 10:54:3=
+2 -0800)
+    2021-02-16 22:11:48.997000+00:00  =
+
+    2021-02-16 22:11:48.997000+00:00  DRAM:  948 MiB
+    2021-02-16 22:11:49.012000+00:00  RPI 3 Model B (0xa02082)
+    2021-02-16 22:11:49.100000+00:00  MMC:   mmc@7e202000: 0, sdhci@7e30000=
+0: 1
+    2021-02-16 22:11:49.132000+00:00  Loading Environment from FAT... *** W=
+arning - bad CRC, using default environment =
+
+    ... (389 line(s) more)  =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+imx6q-var-dt6customboard | arm   | lab-baylibre    | gcc-8    | multi_v7_de=
+fc...CONFIG_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c4298c9eedab82caddcb1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/base=
+line-imx6q-var-dt6customboard.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/base=
+line-imx6q-var-dt6customboard.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602c4298c9eedab82cadd=
+cb2
+        failing since 2 days (last pass: v5.11-rc7-192-g055e690de1b2, first=
+ fail: v5.11-rc7-273-g095727507311) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+meson-gxl-s805x-p241     | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c4395b9d051ace8addcb4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxl-s805x-p241.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxl-s805x-p241.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602c4395b9d051ace8add=
+cb5
+        new failure (last pass: v5.11-619-gde196b2f354e) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+meson-gxm-q200           | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...BIG_ENDIAN=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c417472a5a6158daddcb1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxm-q200.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxm-q200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64be/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/602c417472a5a6158dadd=
+cb2
+        new failure (last pass: v5.11-619-gde196b2f354e) =
+
+ =
+
+
+
+platform                 | arch  | lab             | compiler | defconfig  =
+                  | regressions
+-------------------------+-------+-----------------+----------+------------=
+------------------+------------
+meson-gxm-q200           | arm64 | lab-baylibre    | gcc-8    | defconfig+C=
+ON...OMIZE_BASE=3Dy | 2          =
+
+
+  Details:     https://kernelci.org/test/plan/id/602c439081334de4ebaddcb7
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxm-q200.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-629-g=
+dcd372394d935/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
+baseline-meson-gxm-q200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/602c439081334de=
+4ebaddcbb
+        new failure (last pass: v5.11-619-gde196b2f354e)
+        11 lines
+
+    2021-02-16 22:13:18.476000+00:00  kern  :alert : Mem abort in<8>[   45.=
+793683] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3Dli=
+nes MEASUREMENT=3D11>
+    2021-02-16 22:13:18.476000+00:00  fo:
+    2021-02-16 22:13:18.476000+00:00  kern  :alert :   ESR =3D 0x9600004e
+    2021-02-16 22:13:18.477000+00:00  kern  :alert :   EC =3D 0x25: DABT (c=
+urrent EL), IL =3D 32 bits
+    2021-02-16 22:13:18.477000+00:00  kern  :alert :   SET =3D 0, FnV =3D 0
+    2021-02-16 22:13:18.477000+00:00  kern  :alert :   EA =3D 0, S1PTW =3D 0
+    2021-02-16 22:13:18.477000+00:00  kern  :alert : Data abort info:
+    2021-02-16 22:13:18.477000+00:00  kern  :alert :   ISV =3D 0, ISS =3D 0=
+x0000004e   =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/602c439081334de=
+4ebaddcbc
+        new failure (last pass: v5.11-619-gde196b2f354e)
+        2 lines
+
+    2021-02-16 22:13:18.519000+00:00  kern  <8>[   45.826518] <LAVA_SIGNAL_=
+TESTCASE TEST_CASE_ID=3Demerg RESULT=3Dfail UNITS=3Dlines MEASUREMENT=3D2>
+    2021-02-16 22:13:18.519000+00:00  :alert : swapper pgta<8>[   45.836398=
+] <LAVA_SIGNAL_ENDRUN 0_dmesg 732351_1.5.2.4.1>
+    2021-02-16 22:13:18.519000+00:00  ble: 4k pages, 48-bit VAs, pgdp=3D000=
+00000025f1000
+    2021-02-16 22:13:18.519000+00:00  kern  :alert : [ffff8000110c1178] pgd=
+=3D000000007ffff003, p4d=3D000000007ffff003, pud=3D000000007fffe003, pmd=3D=
+0060000002000f81
+    2021-02-16 22:13:18.520000+00:00  kern  :emerg : Internal error: Oops: =
+9600004e [#1] PREEMPT SMP   =
+
  =20
- +	spin_lock_irqsave(&adapter->rwi_lock, flags);
- +
-- 	/*
-- 	 * If failover is pending don't schedule any other reset.
-+ 	/* If failover is pending don't schedule any other reset.
-  	 * Instead let the failover complete. If there is already a
-  	 * a failover reset scheduled, we will detect and drop the
-  	 * duplicate reset when walking the ->rwi_list below.
-diff --cc drivers/net/ethernet/ibm/ibmvnic.h
-index 72fea3b1c87d,270d1cac86a4..000000000000
---- a/drivers/net/ethernet/ibm/ibmvnic.h
-+++ b/drivers/net/ethernet/ibm/ibmvnic.h
-@@@ -1080,10 -1081,12 +1081,16 @@@ struct ibmvnic_adapter=20
- =20
-  	struct tasklet_struct tasklet;
-  	enum vnic_state state;
- -	/* Used for serializatin of state field */
-++	/* Used for serialization of state field. When taking both state
-++	 * and rwi locks, take state lock first.
-++	 */
-+ 	spinlock_t state_lock;
-  	enum ibmvnic_reset_reason reset_reason;
-- 	/* when taking both state and rwi locks, take state lock first */
-- 	spinlock_t rwi_lock;
-  	struct list_head rwi_list;
- -	/* Used for serialization of rwi_list */
-++	/* Used for serialization of rwi_list. When taking both state
-++	 * and rwi locks, take state lock first
-++	 */
-+ 	spinlock_t rwi_lock;
-  	struct work_struct ibmvnic_reset;
-  	struct delayed_work ibmvnic_delayed_reset;
-  	unsigned long resetting;
-
---Sig_/LS2qvUpNPap5oaYhIxbUHgR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAsdMkACgkQAVBC80lX
-0Gzo1Af/WN8ZaEECThEe1tEdCs7VQuezb+570ogkGwa7mRW+6+jfe1eUXEqsMcRh
-y6HkWZLIeUqF3JL3a/QJutpxz2orsZJksSohEEzuOL9UW6KFmBmDo8bT+JaU175S
-wh0cquRKBuuMf41rWCo5i3McFllK1IfITDcz5HKXakACMtddkmvCd5doleDovx8f
-VsnheZoqE/Awg9NxIFw1UgPn0J4e4kI+VXvRhTzdtoMU5Z/sq54S5+upkRpRPIdQ
-o39CH+rm79Wuad49QGPbjH70Yd7e/Nj9xbVKqAXbkjnYSS/o6G/4R1kxBWkWZU6i
-7y+OOSjcXkpO/BLNhrcgf1UX6v84Pw==
-=eiXC
------END PGP SIGNATURE-----
-
---Sig_/LS2qvUpNPap5oaYhIxbUHgR--

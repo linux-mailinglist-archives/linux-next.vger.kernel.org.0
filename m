@@ -2,124 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BD531D733
-	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 11:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3984731D766
+	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 11:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbhBQKAd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Feb 2021 05:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S232245AbhBQKRy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Feb 2021 05:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbhBQKAa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Feb 2021 05:00:30 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA47C06174A;
-        Wed, 17 Feb 2021 01:59:50 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id t25so8183917pga.2;
-        Wed, 17 Feb 2021 01:59:50 -0800 (PST)
+        with ESMTP id S232272AbhBQKQ2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Feb 2021 05:16:28 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1713FC061574;
+        Wed, 17 Feb 2021 02:15:48 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id z21so8202940pgj.4;
+        Wed, 17 Feb 2021 02:15:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U7SfXVPuTP/KtJpCtQU42RjJKMn82tTLAowjEG2x4Ds=;
-        b=J0j9cOFjTF3pDIznsbrvoXaJP/5OqFxDAPVGg/FxlJYiHWcXLGNOdhwUu5rcirAHOV
-         4aHU3PePKxYkQk3NVXjXJ/gnorJd31kIvDcpsgWqQlpHFLl1lz/3OuFBissCD2Uscjl9
-         vDeBBM8IST3IFTO4mapjucnes2+W3xplH1cg5zjSLQ1/bsAUGmhWIBDJeyvofZcsfb2i
-         n0FdKX0oUXQltQkmEHzMcy5T0KQBSkmG7aKDvFu2eOfxFzQiL01KcD+GXBaSS4VcRcdn
-         9T6mgEUckO7THYoJtGqlCnoU74vX4yO9aRisTl9gaP+3h7tENSHYNYTeTrQ2+4cdslvx
-         6vsQ==
+        bh=PWMDkLyuoQFnyVhCDSKForjRIrCz/CYTz/aboHVEpC0=;
+        b=eXnnMZ0G51shDdPz9jSetL9ouwoklyGpi6GXDgzmGA/IhXc3e0OLuOhL/3RprTM9zl
+         v5qQysQaMy8cc53O1uOSFAPyWH6/la5kQdmLn3vh6Kkrc6kFsU5f6kkEwozSrYtzSjsV
+         NK9FU8EHz+lkksLxqGlskgn2lEwGKoCQ40jyS4FcvcojLCnf/FBvisns/8x/YbxxVfh2
+         FJPr2ZKubgsMStm3/zjyW4qdrTo685KTLHDTwRR6/mTPiU8RlnNjZIDTY0k3mYGOWEtg
+         /YBeazO9MCdIiTrlM23bAuQQM2cGQlnsSTxJIt3jQqf/W8Vq4SiRgwwUTBNN3Xmwk97x
+         W6Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U7SfXVPuTP/KtJpCtQU42RjJKMn82tTLAowjEG2x4Ds=;
-        b=jQFHFw6JaG/ZDk68OI6bG7zGaNxjKEGpzZj0sKi1jw2M4TqyKZsn2mwQ1gDL4upeB0
-         GDtoziBZct/hPfGRUuygdhnk+6Ie3V1bofzxQzT9UYCjcUbd1/uU/nFOBy0rrObuANQg
-         E5kpfJqCz04K2dwVTv3hB90QEbLVTFrDiEBlOUoJbQNMcyOeJMlQoK5xCIe4CmvHbIoW
-         zgjTBMg8e2WlECMnLK+3Rhpdmln7T1EkYfe1eOsDdA2tSDUnfDSgwnJuqCR2A6mtWJM5
-         JxFlS0PxRsRAV+Mxpg7+ZdyyOfQTF50m8wlWS0q3NApThHQTkgyHrmLxQJ2CETuXPmR8
-         8vAg==
-X-Gm-Message-State: AOAM530+p38fl0fwQ+y7vo7wHtP3ofKb8uulUgUQZB+Oyfx7PZN2nctY
-        clVN5jI3D4BXIfJOryjmf8p+y1axFJqDDXxJdeUiPay0LC9pNQ==
-X-Google-Smtp-Source: ABdhPJwyASzfs+76tCL85GTNa/uSjIXIUkgPW0bfGzKmj6Z83o3Ry4y2DpOcbsCnNG6fB1S5bNAsxugVw1j3+KaxhUs=
-X-Received: by 2002:a65:4c08:: with SMTP id u8mr14935565pgq.203.1613555990217;
- Wed, 17 Feb 2021 01:59:50 -0800 (PST)
+        bh=PWMDkLyuoQFnyVhCDSKForjRIrCz/CYTz/aboHVEpC0=;
+        b=qhvcHOUdi5J/i/fQIKaE79pkksCerJplUAMT/IIiTR6mWy+Q4kfgf5Gwyr+CPs4w3I
+         q7Sw8RFWiRphtqDaZFlGTyQg7OPeETzaXyfuzftMe9RLpUGqom15OSIfh9fMQhhzE07p
+         i0Gpui5fHcitWRjr9LjehiguVxc/bGGtBQj3Ic61pPDi+huyTcDcKClmw9NHMzrK8qcL
+         WANaO8otCZVypBd1zRVrVABToFlddqPX3rra6EUon5JJxA7Xy74rYlnbh3E4sCg4e7YJ
+         7oQbgqXcLZFPcXwnZH85D5HfvYYS8hIi9zLC36grrVdxR3BrVBVQKXMPW77kkb7d1EQg
+         4P/Q==
+X-Gm-Message-State: AOAM533p2zJGbED0E/sB8AxNO6DcU7AS7CyrOZNbE9npCdRrGpfhlE4r
+        lAmDr0Pg+5P1h2Ha11fKDtyaFO5OsWW+3OFWWRU=
+X-Google-Smtp-Source: ABdhPJwHxbyGWzMtxJ7ItogY45paozuwlLwLEJTb3PI0WJC3v/QIzWFZMZLh+4YKBsP/k03seyM7MK3flJOTxz74IU0=
+X-Received: by 2002:a62:384c:0:b029:1e3:8bca:5701 with SMTP id
+ f73-20020a62384c0000b02901e38bca5701mr23579306pfa.7.1613556947563; Wed, 17
+ Feb 2021 02:15:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20210217120617.61b22e5e@canb.auug.org.au>
-In-Reply-To: <20210217120617.61b22e5e@canb.auug.org.au>
+References: <20210217160714.7c1fcaac@canb.auug.org.au>
+In-Reply-To: <20210217160714.7c1fcaac@canb.auug.org.au>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 17 Feb 2021 11:59:34 +0200
-Message-ID: <CAHp75Ve54gR54b5bTozqEVFogaGBE8UsuPbvJD4Ozr0wT27tRA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pm tree with the i3c tree
+Date:   Wed, 17 Feb 2021 12:15:31 +0200
+Message-ID: <CAHp75VdhLLWFm414G8TQUnkaXbsi0DcF1v1fZpsAa1_rtoBS3g@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the pm tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 4:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Feb 17, 2021 at 7:38 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> Today's linux-next merge of the pm tree got a conflict in:
+> Today's linux-next merge of the tip tree got a conflict in:
 >
->   MAINTAINERS
+>   arch/x86/platform/intel-mid/device_libs/platform_bt.c
 >
 > between commit:
 >
->   f06a1af8e739 ("MAINTAINERS: Add Silvaco I3C master")
->
-> from the i3c tree and commit:
->
 >   4590d98f5a4f ("sfi: Remove framework for deprecated firmware")
 >
-> from the pm tree.
+> from the pm tree and commit:
 >
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>   bdb154f074a6 ("x86/platform/intel-mid: Convert comma to semicolon")
+>
+> from the tip tree.
+>
+> I fixed it up (the former removed the file, so I did that) and can
+> carry the fix as necessary. This is now fixed as far as linux-next is
+> concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
+Yes, the file removal is the right thing to do.
 Thanks!
-Looks good to me!
-
-> diff --cc MAINTAINERS
-> index fdb32f96ede9,f7ec274a3e5a..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -16221,21 -16235,6 +16218,14 @@@ S: Maintaine
->   F:    Documentation/fb/sm712fb.rst
->   F:    drivers/video/fbdev/sm712*
->
->  +SILVACO I3C DUAL-ROLE MASTER
->  +M:    Miquel Raynal <miquel.raynal@bootlin.com>
->  +M:    Conor Culhane <conor.culhane@silvaco.com>
->  +L:    linux-i3c@lists.infradead.org
->  +S:    Maintained
->  +F:    Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
->  +F:    drivers/i3c/master/svc-i3c-master.c
->  +
-> - SIMPLE FIRMWARE INTERFACE (SFI)
-> - S:    Obsolete
-> - W:    http://simplefirmware.org/
-> - F:    arch/x86/platform/sfi/
-> - F:    drivers/sfi/
-> - F:    include/linux/sfi*.h
-> -
->   SIMPLEFB FB DRIVER
->   M:    Hans de Goede <hdegoede@redhat.com>
->   L:    linux-fbdev@vger.kernel.org
-
-
 
 -- 
 With Best Regards,

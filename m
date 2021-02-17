@@ -2,97 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4ED31D4C3
-	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 06:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59BD531D733
+	for <lists+linux-next@lfdr.de>; Wed, 17 Feb 2021 11:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbhBQFID (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Feb 2021 00:08:03 -0500
-Received: from ozlabs.org ([203.11.71.1]:32839 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229459AbhBQFIC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 17 Feb 2021 00:08:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DgQnH429jz9sBy;
-        Wed, 17 Feb 2021 16:07:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613538439;
-        bh=HQjL0w5hzGU39nX6zl1CFqYXPyGjIVpcJad29S9dcOw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eV3NInWOGLnX7DXzMu5rkNfkptXhUgMiZUaU9SXvesRtAuZmRvsJWLLNIFYj4S4mQ
-         q5SzGVjfZFMuVH2BAPG6x2Zh1n1E5IWXJUDO6AZ49JtRD1Tu9etTvsKmXfgIT2J8K6
-         IloQGrUtLN1B2GWhzBVDGRp8epazvN9p2EWkhIAsda94h6I6IICkP9CQxwculcan9H
-         juIbkyRq+6N7RSwKGtB8MhKiEyi64wdOGF1twyLe6C6VfC3rq7Qvec5g/Y8j8TKDml
-         HB04FPRxjwejEL6GPne58REkuQSOiwqEQr5N9OLogaDVM/Io+rgCoCwjrCQCFtDZAx
-         bBjTwa/bjTteQ==
-Date:   Wed, 17 Feb 2021 16:07:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
+        id S231470AbhBQKAd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Feb 2021 05:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230045AbhBQKAa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Feb 2021 05:00:30 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA47C06174A;
+        Wed, 17 Feb 2021 01:59:50 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id t25so8183917pga.2;
+        Wed, 17 Feb 2021 01:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U7SfXVPuTP/KtJpCtQU42RjJKMn82tTLAowjEG2x4Ds=;
+        b=J0j9cOFjTF3pDIznsbrvoXaJP/5OqFxDAPVGg/FxlJYiHWcXLGNOdhwUu5rcirAHOV
+         4aHU3PePKxYkQk3NVXjXJ/gnorJd31kIvDcpsgWqQlpHFLl1lz/3OuFBissCD2Uscjl9
+         vDeBBM8IST3IFTO4mapjucnes2+W3xplH1cg5zjSLQ1/bsAUGmhWIBDJeyvofZcsfb2i
+         n0FdKX0oUXQltQkmEHzMcy5T0KQBSkmG7aKDvFu2eOfxFzQiL01KcD+GXBaSS4VcRcdn
+         9T6mgEUckO7THYoJtGqlCnoU74vX4yO9aRisTl9gaP+3h7tENSHYNYTeTrQ2+4cdslvx
+         6vsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U7SfXVPuTP/KtJpCtQU42RjJKMn82tTLAowjEG2x4Ds=;
+        b=jQFHFw6JaG/ZDk68OI6bG7zGaNxjKEGpzZj0sKi1jw2M4TqyKZsn2mwQ1gDL4upeB0
+         GDtoziBZct/hPfGRUuygdhnk+6Ie3V1bofzxQzT9UYCjcUbd1/uU/nFOBy0rrObuANQg
+         E5kpfJqCz04K2dwVTv3hB90QEbLVTFrDiEBlOUoJbQNMcyOeJMlQoK5xCIe4CmvHbIoW
+         zgjTBMg8e2WlECMnLK+3Rhpdmln7T1EkYfe1eOsDdA2tSDUnfDSgwnJuqCR2A6mtWJM5
+         JxFlS0PxRsRAV+Mxpg7+ZdyyOfQTF50m8wlWS0q3NApThHQTkgyHrmLxQJ2CETuXPmR8
+         8vAg==
+X-Gm-Message-State: AOAM530+p38fl0fwQ+y7vo7wHtP3ofKb8uulUgUQZB+Oyfx7PZN2nctY
+        clVN5jI3D4BXIfJOryjmf8p+y1axFJqDDXxJdeUiPay0LC9pNQ==
+X-Google-Smtp-Source: ABdhPJwyASzfs+76tCL85GTNa/uSjIXIUkgPW0bfGzKmj6Z83o3Ry4y2DpOcbsCnNG6fB1S5bNAsxugVw1j3+KaxhUs=
+X-Received: by 2002:a65:4c08:: with SMTP id u8mr14935565pgq.203.1613555990217;
+ Wed, 17 Feb 2021 01:59:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20210217120617.61b22e5e@canb.auug.org.au>
+In-Reply-To: <20210217120617.61b22e5e@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 17 Feb 2021 11:59:34 +0200
+Message-ID: <CAHp75Ve54gR54b5bTozqEVFogaGBE8UsuPbvJD4Ozr0wT27tRA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pm tree with the i3c tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>
-Subject: linux-next: manual merge of the tip tree with the pm tree
-Message-ID: <20210217160714.7c1fcaac@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wKSUvSh6GRuIdKDk0BS3huY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wKSUvSh6GRuIdKDk0BS3huY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 17, 2021 at 4:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the pm tree got a conflict in:
+>
+>   MAINTAINERS
+>
+> between commit:
+>
+>   f06a1af8e739 ("MAINTAINERS: Add Silvaco I3C master")
+>
+> from the i3c tree and commit:
+>
+>   4590d98f5a4f ("sfi: Remove framework for deprecated firmware")
+>
+> from the pm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Thanks!
+Looks good to me!
 
-Today's linux-next merge of the tip tree got a conflict in:
+> diff --cc MAINTAINERS
+> index fdb32f96ede9,f7ec274a3e5a..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -16221,21 -16235,6 +16218,14 @@@ S: Maintaine
+>   F:    Documentation/fb/sm712fb.rst
+>   F:    drivers/video/fbdev/sm712*
+>
+>  +SILVACO I3C DUAL-ROLE MASTER
+>  +M:    Miquel Raynal <miquel.raynal@bootlin.com>
+>  +M:    Conor Culhane <conor.culhane@silvaco.com>
+>  +L:    linux-i3c@lists.infradead.org
+>  +S:    Maintained
+>  +F:    Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
+>  +F:    drivers/i3c/master/svc-i3c-master.c
+>  +
+> - SIMPLE FIRMWARE INTERFACE (SFI)
+> - S:    Obsolete
+> - W:    http://simplefirmware.org/
+> - F:    arch/x86/platform/sfi/
+> - F:    drivers/sfi/
+> - F:    include/linux/sfi*.h
+> -
+>   SIMPLEFB FB DRIVER
+>   M:    Hans de Goede <hdegoede@redhat.com>
+>   L:    linux-fbdev@vger.kernel.org
 
-  arch/x86/platform/intel-mid/device_libs/platform_bt.c
 
-between commit:
 
-  4590d98f5a4f ("sfi: Remove framework for deprecated firmware")
-
-from the pm tree and commit:
-
-  bdb154f074a6 ("x86/platform/intel-mid: Convert comma to semicolon")
-
-from the tip tree.
-
-I fixed it up (the former removed the file, so I did that) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wKSUvSh6GRuIdKDk0BS3huY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAspIIACgkQAVBC80lX
-0Gy8+gf6Au1D5ZF9dOgQcwyGjpaEhmEEgtKbzzQapBnAAbP9D2CXn8AO39JM43EX
-VyzAOJzjA//Xg9aClM1l1ibYf+ebHYmAkzZuP2zJve0DHOJ6HHEC3ivgrWHyrBYO
-8SlkvNGmySBHtTF8bgI5GPG1//ODR75PS92/2cw2brb/7/5zlI7MdJAvBB7nz3vx
-kkWqD/umK7v+u4F/L+XSx7jXpCPlUGIvFgd/3fIzjzDZGnwigPLBELNAfvb93SHQ
-Tgri3ckmOZvamhl5F/oBfXJFUq/hiy8HQRwInHYXIWlXCjYkD7mM64uuKyiwQqX7
-zg5glPL+okSXhzS6afh4Eb3aG/ZWew==
-=o5t4
------END PGP SIGNATURE-----
-
---Sig_/wKSUvSh6GRuIdKDk0BS3huY--
+-- 
+With Best Regards,
+Andy Shevchenko

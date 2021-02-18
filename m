@@ -2,99 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5057831E498
-	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 04:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1FD31E538
+	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 05:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbhBRDtB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Feb 2021 22:49:01 -0500
-Received: from ozlabs.org ([203.11.71.1]:57847 "EHLO ozlabs.org"
+        id S229953AbhBREtw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Feb 2021 23:49:52 -0500
+Received: from ozlabs.org ([203.11.71.1]:37617 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229806AbhBRDs7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 17 Feb 2021 22:48:59 -0500
+        id S229864AbhBREtv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 17 Feb 2021 23:49:51 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dh0zg6Ydjz9sRN;
-        Thu, 18 Feb 2021 14:48:15 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dh2Kk58Ssz9sSC;
+        Thu, 18 Feb 2021 15:48:58 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613620096;
-        bh=KZLShXknssbpHlq1mybpWLCAMvICgyJu4jRRWIiyKgo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZDfpj8ZG3oKts+IdL6Y38RQlPa+KYEqyuxHEygWL28oa/bdKVGjh4RCcXNyMZH12Z
-         juifl/axtQYyFiASJSzdL4pDxmuwuENMLkCha9xzMX+3GcdmEy9/2Rm1hxjqwF2Uhb
-         oI3FGH/+A87axb5TdsDnKem75/QK84+bl4jswsaoyXBMLOODdmtt+vTHiSzweIvju5
-         hRW9SQJLxZavF6204jferllrGD5X+ebB1/iZ/JSqO7CKItaaB/hMouXniDQWdrj/bn
-         6/X1mSHSWAFbTXbvUblTtk7VBOOSX/w3iyEBUqlUrrRFS+i+5cKrlqhTfvD5avNp9h
-         sJFc+NdTlTNow==
-Date:   Thu, 18 Feb 2021 14:48:15 +1100
+        s=201702; t=1613623747;
+        bh=U3pXJmB/9mHsJ9I2grqn2rpy0G5O3rUt2PR33nNR7ts=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WOdFP5BWDC4PVDQX3aHnTLcUXgg7NgiMvsXIe092iiFP+sItHIJyZ7jqKY/ROhkDV
+         3x7pEEsI9ubfWAtVPJm20Qwx7uxfd4wIsAdLSP2ogvpclA4+H7ek+a3KGoML2Lb32s
+         +CvhmGrJH9t3lGXlY8X06vwaOjIMp3+Ln2OTuk4rP2Te/7AOjbzkEGBG4RKGI9EhIb
+         uz9BnfqBvNx8SKspw9HQGGzbh8jaOUVr4GCCgwH72EQ8zy9Wc1IEhFWXjhIDR+PRRX
+         mlqTZd45h0sOiLALxj/RN9znQ3Sdpc+vIHHhL7jSkmdwXgVWx/ASvUxLZ/j0g4NIoh
+         +B9/sYTlgXRkQ==
+Date:   Thu, 18 Feb 2021 15:48:57 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Hari Bathini <hbathini@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: linux-next: manual merge of the devicetree tree with the powerpc
+        Maxime Ripard <maxime@cerno.tech>,
+        Paul Kocialkowski <contact@paulk.fr>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: linux-next: manual merge of the irqchip tree with the sunxi
  tree
-Message-ID: <20210218144815.5673ae6f@canb.auug.org.au>
+Message-ID: <20210218154857.75bad5df@canb.auug.org.au>
+In-Reply-To: <20210215091124.46c005ad@canb.auug.org.au>
+References: <20210201144259.102ae6ab@canb.auug.org.au>
+        <20210215091124.46c005ad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GQSo81TZbEJK8U/wnAHYYnY";
+Content-Type: multipart/signed; boundary="Sig_/81Mwa=wdGo=IUKVht5j+jdK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GQSo81TZbEJK8U/wnAHYYnY
+--Sig_/81Mwa=wdGo=IUKVht5j+jdK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+On Mon, 15 Feb 2021 09:11:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Mon, 1 Feb 2021 14:42:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > Today's linux-next merge of the irqchip tree got a conflict in:
+> >=20
+> >   Documentation/devicetree/bindings/interrupt-controller/allwinner,sun7=
+i-a20-sc-nmi.yaml
+> >=20
+> > between commit:
+> >=20
+> >   752b0aac99c7 ("dt-bindings: irq: sun7i-nmi: Add binding documentation=
+ for the V3s NMI")
+> >=20
+> > from the sunxi tree and commit:
+> >=20
+> >   ad6b47cdef76 ("dt-bindings: irq: sun6i-r: Split the binding from sun7=
+i-nmi")
+> >=20
+> > from the irqchip tree.
+> >=20
+> > I fixed it up (I think - see below) and can carry the fix as
+> > necessary. This is now fixed as far as linux-next is concerned, but any
+> > non trivial conflicts should be mentioned to your upstream maintainer
+> > when your tree is submitted for merging.  You may also want to consider
+> > cooperating with the maintainer of the conflicting tree to minimise any
+> > particularly complex conflicts.
+> >=20
+> > diff --cc Documentation/devicetree/bindings/interrupt-controller/allwin=
+ner,sun7i-a20-sc-nmi.yaml
+> > index 4fd1e2780026,f34ecc8c7093..000000000000
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/allwinner,=
+sun7i-a20-sc-nmi.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/allwinner,=
+sun7i-a20-sc-nmi.yaml
+> > @@@ -25,17 -25,7 +25,10 @@@ properties
+> >         - const: allwinner,sun6i-a31-sc-nmi
+> >           deprecated: true
+> >         - const: allwinner,sun7i-a20-sc-nmi
+> > -       - items:
+> > -           - const: allwinner,sun8i-a83t-r-intc
+> > -           - const: allwinner,sun6i-a31-r-intc
+> >  +      - items:
+> >  +          - const: allwinner,sun8i-v3s-nmi
+> >  +          - const: allwinner,sun9i-a80-nmi
+> >         - const: allwinner,sun9i-a80-nmi
+> > -       - items:
+> > -           - const: allwinner,sun50i-a64-r-intc
+> > -           - const: allwinner,sun6i-a31-r-intc
+> >         - items:
+> >             - const: allwinner,sun50i-a100-nmi
+> >             - const: allwinner,sun9i-a80-nmi =20
+>=20
+> With the merge window about to open, this is a reminder that this
+> conflict still exists.  It is now between the arm-soc tree and the
+> irqchip tree.
 
-  arch/powerpc/kexec/elf_64.c
-
-between commit:
-
-  2377c92e37fe ("powerpc/kexec_file: fix FDT size estimation for kdump kern=
-el")
-
-from the powerpc tree and commit:
-
-  130b2d59cec0 ("powerpc: Use common of_kexec_alloc_and_setup_fdt()")
-
-from the devicetree tree.
-
-I can't easily see how to resolve these, so for now I have just used
-the latter' changes to this file.
-
-I fixed it up and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+This is now a conflict between the arm-soc tree and the tip tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/GQSo81TZbEJK8U/wnAHYYnY
+--Sig_/81Mwa=wdGo=IUKVht5j+jdK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAt438ACgkQAVBC80lX
-0Gw7PQf/a1d0NWQIgPhB7xouP3AzhGRerfWA6mMtdHA5mq8rTcHBuoBtwuXyLevF
-KyiQvwpAXo5ETgcdKyJ2q+kzkNsDzo5fzJkKD1tzCX6x12rZcdd0GUWiIBXmMVwb
-Gzst/oZMrxHsPqTlN8ubrGHqSzRGkMBBXamy4HuXdAAAq+E/C369jxbH/Kb/+sBs
-jApDC8xPpOSc4xNqwPvtrObiuVvpJPovAHJkbb5eVpTHz6W5DhSBIFhM28mtZXwA
-MRt2YnLiQqIDVFk2s/NG83Ig3YccPMb406Xt8TSwF2R/JDLOEEuPGfb5pYATU8zP
-o7Ze4sqM31shYat0Cc3JYjgnUTwS7A==
-=MsIt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAt8bkACgkQAVBC80lX
+0GxAmgf/QddCsP/621qMYpNzwzYcGTi0/qD4s82f14UQzRZ1/0U60Pj0Bm5hr7Ci
+a4mY58RUibDy/ODyBJI7HfYdiNhH6Dqz6WY2SCKZ+scVMXgKzlJS6qyRlPUFQmCB
+3q64uLJhoMySuvpN34xHu43RwYGnCe3NfpouLu5acOINQAlQFKQy8OtusmEmc3zl
+3l1rv/uIuJwF3Ylt6ukBlt6OThMCWsJ3+WqnN+kCes8QA4OuBbQ2ipGzGqB5qCRd
+bLfYG4HmRByeO1b6SEZgjPtXsMouDUeQE+cDHSlvw04sTs5AHrRecZZ2n0n+druW
+vVFxdE9kgr6Ajr5GVSTiXaOUX7sJKw==
+=NeFd
 -----END PGP SIGNATURE-----
 
---Sig_/GQSo81TZbEJK8U/wnAHYYnY--
+--Sig_/81Mwa=wdGo=IUKVht5j+jdK--

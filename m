@@ -2,114 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2439031EFCE
-	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 20:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EE731F112
+	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 21:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhBRT0x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Feb 2021 14:26:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26566 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230119AbhBRSlm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 18 Feb 2021 13:41:42 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11IIXSQV179304;
-        Thu, 18 Feb 2021 13:40:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=26iu0Ri9szM48Q0na4vGUFYyvrkaYkvyhlIX68WERkQ=;
- b=lRNicBhGuReJOTx92PTGnoHbDAoXkGhkv+aXYpT18u7LnMHPEHhNrUEP3EGL9dTiPbIl
- LK2Eoq7NTyRqoDPIXAvI66cp/Fxb2wZ02DsUTGmroFKG7CC3yZB4aYNddrg88iZLzck9
- h6PqGup2ka44iqvNALNfmIC8eVrDD1heolDZI1f+VsBj9dxK75j1aj2a5O3mqh/8sJIh
- YFEBBLQa1h0iURbnkT5X1w6cU8uFT/nyVWa9Zf3n0IIysvpJJ2khK7nHorGGXy5y1Fmk
- TyRRP9tRpYDqkU0D/Y1J8E73u23PmES7lsctPkjvobXTSMfHXvKH3pFgzURdv5zFuZRh EA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36sv2kk7ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 13:40:54 -0500
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11IIXihA180049;
-        Thu, 18 Feb 2021 13:40:53 -0500
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36sv2kk7a1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 13:40:53 -0500
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11IIRqoA007599;
-        Thu, 18 Feb 2021 18:40:52 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma04wdc.us.ibm.com with ESMTP id 36p6d9g3uw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 18:40:52 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11IIepO122610334
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Feb 2021 18:40:51 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83EB1136055;
-        Thu, 18 Feb 2021 18:40:51 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5182E136051;
-        Thu, 18 Feb 2021 18:40:51 +0000 (GMT)
-Received: from suka-w540.localdomain (unknown [9.85.163.18])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Feb 2021 18:40:51 +0000 (GMT)
-Received: by suka-w540.localdomain (Postfix, from userid 1000)
-        id 52FDA2E1880; Thu, 18 Feb 2021 10:40:48 -0800 (PST)
-Date:   Thu, 18 Feb 2021 10:40:48 -0800
-From:   Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Lijun Pan <lijunp213@gmail.com>,
+        id S229652AbhBRUdb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Feb 2021 15:33:31 -0500
+Received: from ozlabs.org ([203.11.71.1]:53681 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230033AbhBRUck (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 18 Feb 2021 15:32:40 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DhRFc2P3Hz9sBJ;
+        Fri, 19 Feb 2021 07:31:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613680309;
+        bh=T7NkwprmT9RkSXY9BhJPx5gnQ8fIAkwLW7VbvdNNmmA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BT0oUzaN2r8Yj0e49LDCpG6EcpLktyqFC54wiM/aOPBihxmLTgU9VgLtMC+Z6H10+
+         RlWOVfBVc6g+kR2W1MJHyY9jvPYE/hrJtiwIDWUTeOOMeJ9tFWMgoNbxyxu/sW+sZI
+         /LewTN6KD05w0leCLiw51BneD3JvXcvZuCGU6ElyVVhJmlsLrCGoYwdPRgIo35N1KP
+         aJH6zPs53NYmXAuxfQwis3Q4LEvgmmyYFomp3kZnSFr0g0/qGHdv1Ib0HuqeqxMiz6
+         JzVcVGHbxz9JxBRiplITV0D1vrGMtD902R4UTgIPC4oALK6rSM8q7h63uxfimleZnC
+         urX+xyvd3O8xQ==
+Date:   Fri, 19 Feb 2021 07:31:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210218184048.GA1017500@us.ibm.com>
-References: <20210217124337.47db7c69@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the devicetree tree with the
+ powerpc tree
+Message-ID: <20210219073147.478c3dda@canb.auug.org.au>
+In-Reply-To: <CAL_JsqJ9Ske4hkWn3uo8-nef29MQ1DkNdtE=gxbqj8CKrtQorg@mail.gmail.com>
+References: <20210218144815.5673ae6f@canb.auug.org.au>
+        <874ki9vene.fsf@mpe.ellerman.id.au>
+        <20210218223427.77109d83@canb.auug.org.au>
+        <CAL_JsqJ9Ske4hkWn3uo8-nef29MQ1DkNdtE=gxbqj8CKrtQorg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210217124337.47db7c69@canb.auug.org.au>
-X-Operating-System: Linux 2.0.32 on an i486
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-18_09:2021-02-18,2021-02-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 clxscore=1011 suspectscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 adultscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102180153
+Content-Type: multipart/signed; boundary="Sig_/VL/IDpRzhxGm.r6/d2BAaVo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell [sfr@canb.auug.org.au] wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the net-next tree got conflicts in:
-> 
->   drivers/net/ethernet/ibm/ibmvnic.c
->   drivers/net/ethernet/ibm/ibmvnic.h
-> 
-> between commit:
-> 
->   4a41c421f367 ("ibmvnic: serialize access to work queue on remove")
-> 
-> from the net tree and commits:
-> 
->   bab08bedcdc3 ("ibmvnic: fix block comments")
->   a369d96ca554 ("ibmvnic: add comments for spinlock_t definitions")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/VL/IDpRzhxGm.r6/d2BAaVo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The changes look good to me. Thanks.
+Hi all,
 
-Sukadev
+On Thu, 18 Feb 2021 07:52:52 -0600 Rob Herring <robherring2@gmail.com> wrot=
+e:
+>
+> On Thu, Feb 18, 2021 at 5:34 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > On Thu, 18 Feb 2021 21:44:37 +1100 Michael Ellerman <mpe@ellerman.id.au=
+> wrote: =20
+> > >
+> > > I think it just needs this?
+> > >
+> > > diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
+> > > index 87e34611f93d..0492ca6003f3 100644
+> > > --- a/arch/powerpc/kexec/elf_64.c
+> > > +++ b/arch/powerpc/kexec/elf_64.c
+> > > @@ -104,7 +104,7 @@ static void *elf64_load(struct kimage *image, cha=
+r *kernel_buf,
+> > >
+> > >       fdt =3D of_kexec_alloc_and_setup_fdt(image, initrd_load_addr,
+> > >                                          initrd_len, cmdline,
+> > > -                                        fdt_totalsize(initial_boot_p=
+arams));
+> > > +                                        kexec_fdt_totalsize_ppc64(im=
+age));
+> > >       if (!fdt) {
+> > >               pr_err("Error setting up the new device tree.\n");
+> > >               ret =3D -EINVAL;
+> > > =20
+> >
+> > I thought about that, but the last argument to
+> > of_kexec_alloc_and_setup_fdt() is extra_fdt_size and the allocation
+> > done is for this:
+> >
+> > fdt_size =3D fdt_totalsize(initial_boot_params) +
+> >                    (cmdline ? strlen(cmdline) : 0) +
+> >                    FDT_EXTRA_SPACE +
+> >                    extra_fdt_size;
+> >
+> > and kexec_fdt_totalsize_ppc64() also includes
+> > fdt_totalsize(initial_boot_params) so I was not sure.  Maybe
+> > kexec_fdt_totalsize_ppc64() needs modification as well? =20
+>=20
+> You're both right. Michael's fix is sufficient for the merge. The only
+> risk with a larger size is failing to allocate it, but we're talking
+> only 10s of KB. Historically until the commit causing the conflict,
+> PPC was just used 2x fdt_totalsize(initial_boot_params). You could
+> drop 'fdt_size =3D fdt_totalsize(initial_boot_params) + (2 *
+> COMMAND_LINE_SIZE);' from kexec_fdt_totalsize_ppc64() as well, but
+> then the function name is misleading.
+>=20
+> Lakshmi can send a follow-up patch to fine tune the size and rename
+> kexec_fdt_totalsize_ppc64.
+
+OK, I have mode Michael's suggested change to my resolution from today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VL/IDpRzhxGm.r6/d2BAaVo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAuzrMACgkQAVBC80lX
+0Gz/sQf2Oa4cPoAqWhSG0uktD7yrbzN7VOp5Au+0oPJY/sO/e33kIOdNrY+6VoRT
+QlPVZRxA0R8HaFBTND8hnBSyorOuvzATF5W6NQQ1v8x9i1iojZ1wil+F8SJS7b5g
+ODlcpHsqeqk1wygkRAyZJENGeh3tClpYdZlGushVYfDO4gUD8BFsr0aILVk7HPH1
+xN2NKv0/aH8JjqlLSElJWQwozmHiEKlgizR3whi9jGHe52dFhPVt/4JKzwvTpT/U
+dnydBS5ao8FGtCXAegqHcXzEJd27bX229zUdwmOcA5miLURBcrYIfP93QnMjy4TN
+EXoFPaY8KweEJhquoypTwAbkCl6B
+=/1tk
+-----END PGP SIGNATURE-----
+
+--Sig_/VL/IDpRzhxGm.r6/d2BAaVo--

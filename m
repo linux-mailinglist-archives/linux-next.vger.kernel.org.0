@@ -2,91 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7633531F16E
-	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 21:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F8531F179
+	for <lists+linux-next@lfdr.de>; Thu, 18 Feb 2021 22:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhBRUyl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Feb 2021 15:54:41 -0500
-Received: from ozlabs.org ([203.11.71.1]:52873 "EHLO ozlabs.org"
+        id S229958AbhBRVAC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Feb 2021 16:00:02 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48019 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231438AbhBRUxj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 18 Feb 2021 15:53:39 -0500
+        id S229652AbhBRU7i (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 18 Feb 2021 15:59:38 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DhRk14YVSz9sBJ;
-        Fri, 19 Feb 2021 07:52:56 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DhRrw1S1Zz9sBJ;
+        Fri, 19 Feb 2021 07:58:56 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613681577;
-        bh=mbks+mMscNaIdkDjqnY7Nnb54RoU2CCcSOK6AZlVAfI=;
+        s=201702; t=1613681936;
+        bh=QZmrNoUiHrUHOZbgMkUkeCVI5lmFPhODzWot7rpjZiM=;
         h=Date:From:To:Cc:Subject:From;
-        b=OTCcrfp/+Y1l/VLnYNEF393XECP67TRy0shjuEAFMt/bsqEhThLjJyySkK5v+5oM5
-         SuNs+MX6COEByVHkYRQnWcKGwxNMQU9D+vqEaJvhLQCfg4K0+CpkM5m8HoyvWYatvc
-         VJ3IOsz5w/YEqKGVoBQFT7N1bYZho00D2q0EQHXi4NkJ2DF4xoVHxZXhi6/N+1z3K3
-         kgRKk4h+6dx6bhNomJTiWfYT7/qNycfEq/rPnHqnazSpDp9AOqAhdh1wxPVRN0rgQD
-         Ed0sWQFph8SRfNEVLYM0yiJs73fTG48jiaButaITHlBO9GVj76uQYFaV9SJ2iHGITp
-         3Lj6UntjH0A2A==
-Date:   Fri, 19 Feb 2021 07:52:56 +1100
+        b=n9H7ljDXyJO1LQC3SDpkXJ+xGGfVOIhitEQZz1o4pck+lUobqLt877PhZesVNiFhS
+         d9pEWywosU9NmP17ZXuCCsmqQA/9JsuhJSzX4b5ozLAmtpd7eUBLvoukwmT5zsrlej
+         OEeqBRMe9dt/XOQDud4jEtoLZ7PlQU2AKIw5iwDlFvsa9jsrcB2FJar15iBMn4XKtK
+         h1n8JyH94PlxpWfLXbyA194mOYzPchITlejD6J6AIzTv8AR8B/KsobU5vj4BP+EAOD
+         HA/dQdHJIj9Qm/idJu/A/PJDzx33BeE3MAOW5zqaNT+xLiUgFVCiy+5SR+QG1EKodh
+         0uvMdUDTvehBQ==
+Date:   Fri, 19 Feb 2021 07:58:53 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>,
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Justin Ernst <justin.ernst@hpe.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the net-next tree
-Message-ID: <20210219075256.7af60fb0@canb.auug.org.au>
+Subject: linux-next: build warning in Linus' tree
+Message-ID: <20210219075853.0514c9f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lFxdG8TW_eZZr4dQ8a5F=aP";
+Content-Type: multipart/signed; boundary="Sig_/Gid4EuZzXzY+gJs8ME8EeM.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lFxdG8TW_eZZr4dQ8a5F=aP
+--Sig_/Gid4EuZzXzY+gJs8ME8EeM.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (htmldocs)
-produced these warnings:
+Building Linus' tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-st=
-ring without end-string.
-Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-st=
-ring without end-string.
-Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-st=
-ring without end-string.
-Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-st=
-ring without end-string.
+Documentation/ABI/testing/sysfs-firmware-sgi_uv:2: WARNING: Unexpected inde=
+ntation.
 
 Introduced by commit
 
-  91c960b00566 ("bpf: Rename BPF_XADD and prepare to encode other atomics i=
-n .imm")
+  c159376490ee ("x86/platform/uv: Update ABI documentation of /sys/firmware=
+/sgi_uv/")
 
-Sorry that I missed these earlier.
+Or maybe an ealier one.
+
+This has been around for some time.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lFxdG8TW_eZZr4dQ8a5F=aP
+--Sig_/Gid4EuZzXzY+gJs8ME8EeM.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAu06gACgkQAVBC80lX
-0GzBCAgApTtuAAay2d4m9sdTUCRpHQWD5TyPja7zZTYF6rFWWybt9nO6Oa/8ssbj
-afIn7P+hTps2SqPBzDkmtbJP9zczwIvHSAC9n4J2g/IMFK+omJl0Inx77QcYnljc
-VNjwgzOJDEfnODGmIGqvohcRpMaGUfrmAQqHhAn07OqRvTs3+qeA9sPi5hn3HGJ/
-nr1xGPTgumvTn6mvs+GvxhcaI2NZjS84pszgeNLSImM27HSYqmOKeuF35TExreXd
-q2PJx+XGqPn3VWEPVE2NesLYgKUKT17A8pFYb8jLLfXJle9n5r4dvrZFx64NNCcT
-TeBaHjCRu7HXOIwdiGcciTkKBCvsRA==
-=MK4p
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAu1Q0ACgkQAVBC80lX
+0Gy/fwgAl/ImXhty0H2kgp1MpIJQcrku4RJ2YpHbgVO+7ztL7jNFw45oObtzjnEo
+iB+SibP465wZs93fRQqjYyZ1veW2chj9w1UTbKiB/Hqv6zJINlOyLdI1OKNarIVX
+NTsj56vbtmxK6L0CHFzJ1reaNgzz9wWwGhj38/dT7t/BMK1EKRKzwZUahnoWp1Tl
+n2aLVfST//Bc/FUW6+T3BhOYQTEYVBAerUlB25wXt48OMD1Rtc0h+u+cWfnuEwwR
+lYIX6gyOCfDLp5k0iOY6YG5cBiLBcoQo0j4WKUm4mN4EMcJ3T+8gxyeLkZl0AAW2
+mkymlcSlIxya9rdKTeSUk+ztUbI7Bg==
+=P/JT
 -----END PGP SIGNATURE-----
 
---Sig_/lFxdG8TW_eZZr4dQ8a5F=aP--
+--Sig_/Gid4EuZzXzY+gJs8ME8EeM.--

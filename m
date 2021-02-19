@@ -2,62 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448D431FB7D
-	for <lists+linux-next@lfdr.de>; Fri, 19 Feb 2021 15:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FDA31FC19
+	for <lists+linux-next@lfdr.de>; Fri, 19 Feb 2021 16:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhBSO62 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Feb 2021 09:58:28 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:55472 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229546AbhBSO61 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 19 Feb 2021 09:58:27 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1613746682; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=xF5d0AE+xCt+zGgDt1pFO1QgGtL9JnfLXGOvSzH34zc=; b=YRQNkqt0Lp2ze77HcZIhq8eQ/NTz7GLjtdvtzng1Eo5H7FsUGBc6mhscopRRZ8kYnJmB06So
- f7c/WljS0/H1t52fZHp60VHSa/NcFXwA2NIE2cZY7KBzj3zWuBKVaBcz5PgyeRs+/aarPtGv
- cGi38ucxyO/4kgPZ+cDseUGfrEA=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 602fd1efe87943df30d1ad90 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 19 Feb 2021 14:57:51
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 25331C43464; Fri, 19 Feb 2021 14:57:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tynnyri.adurom.net (tynnyri.adurom.net [51.15.11.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 51166C433CA;
-        Fri, 19 Feb 2021 14:57:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 51166C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Brendan Jackman <jackmanb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229876AbhBSPf1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Feb 2021 10:35:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24052 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229889AbhBSPfV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 19 Feb 2021 10:35:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613748834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wiPV+XH0xFOgqDkzIrgb9hABVC++P8dZu7eY2s6gSdA=;
+        b=I2JSZTPmEhM5cx/rr+GGOfSodkxUUpu0eD/x0agp/FbQI8fo1cfz0ZgHWfrtZ6EUpKRwgv
+        jkGo+IQRAuoj2OFRW8ikKctK7d8ewRqKNk4L4FZAofXwwOPqdbx3orQFTuMF/nk7dl8v3Z
+        mB12nTtQ9twArFDrfoh/ML9mR2Ny+kc=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-474-pViR6YNqNK6Eka-2sgpjdg-1; Fri, 19 Feb 2021 10:33:52 -0500
+X-MC-Unique: pViR6YNqNK6Eka-2sgpjdg-1
+Received: by mail-ej1-f70.google.com with SMTP id jz15so2101980ejc.12
+        for <linux-next@vger.kernel.org>; Fri, 19 Feb 2021 07:33:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=wiPV+XH0xFOgqDkzIrgb9hABVC++P8dZu7eY2s6gSdA=;
+        b=Vu+7Sioo7jnckjflxDj4TyAgm/DmmXQCo1v66mC+ifrdHrHv6DZCpo3vSfKEiP98Sj
+         57Fqj5nFvCBiL5icT0x3J9AtpkqMzFJDbJHM7FV/AuEFNAnHrzcrQp6ZTZsWbvioIGal
+         ViBrzxpYf5Tsh01K+773C5MfX/xqUJ+W4hlmKPNgiYHZRSv2lJUzAc5oKUkodgH0Sze7
+         K0Zk03DSlBaV8jD4Ojto806Ij/HhrS8cR6c21/nxqdm21+zbwaBvXm5gUs1Bs5WqBxEr
+         VglAn6EMW6q9Ni7rS6A6pJnO3FITzRzizAqZCLM4qy36FXhfgy+sRe3EJIindNqXnl0R
+         fO+Q==
+X-Gm-Message-State: AOAM531TL7PDol+0DIAPAXhtq0mWASAk5RDJO0rNiFhijDHBh0aKHsOo
+        9tocpTNdMHIwhifsXWe+SuPkGWX98HZv0exY5goGuyhKRCuL7R35VBUepjv8o/0THGwP6wg4KXH
+        v1dpYZ9QMuDqU5vPAVbZQ1E0ZlWxM+wXofyQc9re2uFDn501NW5N3U2JJfxqsi9fQgkukPmG70w
+        ==
+X-Received: by 2002:a17:906:2e90:: with SMTP id o16mr8977210eji.467.1613748830822;
+        Fri, 19 Feb 2021 07:33:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwfbZljLDPsUAwh5LeSvRWiYEyzY3MDR1IKkjscARvyz7vX3Z12ildCjoY1bECMuqPNsruyXA==
+X-Received: by 2002:a17:906:2e90:: with SMTP id o16mr8977193eji.467.1613748830551;
+        Fri, 19 Feb 2021 07:33:50 -0800 (PST)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id rh22sm4718599ejb.105.2021.02.19.07.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 07:33:50 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the net-next tree
-References: <20210219075256.7af60fb0@canb.auug.org.au>
-        <20210219194416.3376050f@canb.auug.org.au>
-Date:   Fri, 19 Feb 2021 16:57:44 +0200
-In-Reply-To: <20210219194416.3376050f@canb.auug.org.au> (Stephen Rothwell's
-        message of "Fri, 19 Feb 2021 19:44:16 +1100")
-Message-ID: <87czwwf6l3.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Subject: Re: linux-next: build warnings after merge of the origin tree
+In-Reply-To: <20210219080235.52c8c7f4@canb.auug.org.au>
+References: <20210219080235.52c8c7f4@canb.auug.org.au>
+Date:   Fri, 19 Feb 2021 16:33:49 +0100
+Message-ID: <87pn0w3wde.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -68,35 +71,23 @@ Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
 > Hi all,
 >
-> On Fri, 19 Feb 2021 07:52:56 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the net-next tree, today's linux-next build (htmldocs)
->> produced these warnings:
->> 
->> Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-string without end-string.
->> Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-string without end-string.
->> Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-string without end-string.
->> Documentation/networking/filter.rst:1053: WARNING: Inline emphasis start-string without end-string.
->> 
->> Introduced by commit
->> 
->>   91c960b00566 ("bpf: Rename BPF_XADD and prepare to encode other atomics in .imm")
->> 
->> Sorry that I missed these earlier.
+> Building Linus' tree, today's linux-next build (htmldocs) produced
+> these warnings:
 >
-> These have been fixed in the net-next tree, actually.  I was fooled
-> because an earlier part of the net-next tree has been included in the
-> wireless-drivers (not -next) tree today so these warnings popped up
-> earlier, but are gone one the rest of the net-next tree is merged.
+> Documentation/virt/kvm/api.rst:4537: WARNING: Unexpected indentation.
+> Documentation/virt/kvm/api.rst:4539: WARNING: Block quote ends without a blank line; unexpected unindent.
 >
-> Sorry for the noise.
+> Introduced by commit
+>
+>   c21d54f0307f ("KVM: x86: hyper-v: allow KVM_GET_SUPPORTED_HV_CPUID as a system ioctl")
+>
+> These have been around for some time.
 
-Argh, sorry about that Stephen. I was preparing wireless-drivers for
-followup fixes sent during the merge window, but didn't realise that it
-will mess up your tree building. I need to avoid this in the future and
-wireless-drivers should only follow the net tree.
+I remember seeing a patch fixing these:
+https://lore.kernel.org/kvm/20210104095938.24838-1-lukas.bulwahn@gmail.com/
+
+Paolo, could you please queue it up? Thanks!
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Vitaly
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

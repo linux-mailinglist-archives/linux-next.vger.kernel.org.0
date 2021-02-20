@@ -2,88 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768633203B2
-	for <lists+linux-next@lfdr.de>; Sat, 20 Feb 2021 05:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E13E3203B5
+	for <lists+linux-next@lfdr.de>; Sat, 20 Feb 2021 05:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbhBTEwX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Feb 2021 23:52:23 -0500
-Received: from ozlabs.org ([203.11.71.1]:37573 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229725AbhBTEwW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 19 Feb 2021 23:52:22 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DjGHv6prKz9sBy;
-        Sat, 20 Feb 2021 15:51:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613796700;
-        bh=grLBHBn1q4Xz+1A2+TcFQVI7GILqnVyfk95GqmefIrk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WE1r9rwMhfrWEkDPl6B70jd187DKbKHwKW6FgkPidc+G1qz7h5eP86nbBFmUYI7yc
-         BbtBCwYgST0fCIZeR7YCLFCCpWB4N3dtvWY9/s5/4u1CHZgqEiKE2diOqJpIxYPT32
-         VzuJrSLZdnVYacXWZC+bQMTyhgNmGuDgt7q1m6tId4cIxPFlO4ZlAT0AeJntqap/ty
-         eWGg/DFiOE+NtV0Y8ikeKrgJSwZ68XBwduvjLQwLXjDc93csH1h1HHtpNjp40RTV9Q
-         KU+afIGjQ1VkckWCQK2XvuA8OpjEemRkAOLIRfrgSQEfbgb4NfOp2hzZxd071bcd9c
-         LBzo3zpUYYFCw==
-Date:   Sat, 20 Feb 2021 15:51:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+        id S230014AbhBTE6j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Feb 2021 23:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229985AbhBTE6h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Feb 2021 23:58:37 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6421FC06178A
+        for <linux-next@vger.kernel.org>; Fri, 19 Feb 2021 20:57:57 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id q20so3214227pfu.8
+        for <linux-next@vger.kernel.org>; Fri, 19 Feb 2021 20:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=r74lReab8L6uDtW72KN0mZaNUmKgZAWV3ibkdpZJZVI=;
+        b=V8PHBkS2UPu1wK5+96DwTaRf76hBwCntJMtSdYDsagQglfQVtG+qs8714yXjSK9Vye
+         b1Z3ofLfztxDkdMeCIrTfcpZn59/NAiWfOvQKPQrzwqwIYmbBBbosUIvAoHQMGUphIIH
+         yYBw00opk0X3/Wa/M+fAWT7ITQglRhTuW+TW1KSsusAYAtG3u1aqgGid7NsaYWQFKnes
+         G766ja39QJf0tbmCgUAATUdkbBgwRIr4ektpj7Uz1GuKUDOXesVI5TKU5QFVSJeyZfh8
+         r050czDCpIPh5hvam1YAOvXqNbwVujFYP9XEKbVbI5cC4GbkbFmdRO7eKHPOGm1GRcJZ
+         k1UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=r74lReab8L6uDtW72KN0mZaNUmKgZAWV3ibkdpZJZVI=;
+        b=cX40H0aqC56EaDb7uKDJh1N2aYum0LOH1FLi1iPwDMksg5vLOxutDlLpjWrqy5nzlD
+         ppfewxTEFiBJxCJwCzcRYYnAOHotSHf3mbc6nPAEWwwWx1amzBA1KkFNbF3iPD8U67pb
+         C0ewONw7MtAmLrbp+74fTFEin9HMVSjfttpuJOZhO7lX/LsKepBP7qGjBW1a5mgp5jQo
+         3aC1ZjalaufbXQ2p8erh+YO1zXP1+8wn45cSB25yWri3YbAH6fs+HenaE/BytVWP75nX
+         0wIecVui1Y5zPF6Jyx6Vv6/j6YKi77WP2z0i0vEYgBjiS7e4Y9Uy403Tbbbe1wBx8sC7
+         QUBg==
+X-Gm-Message-State: AOAM531MDMRB4h1LWAE2+O3pKdH3tJ2nMTX8dt+4Tcvm4p3LYigEKeAT
+        j0dikfEtjtXBQkjj3Znbaej0qRmVyRrZXA==
+X-Google-Smtp-Source: ABdhPJwo9MsDbxnjC8+IaTGrIUmrYdvQbJZTabNx24zpnuxpi+Whv0XITSS4m3j1j9HP7przt+cvjg==
+X-Received: by 2002:a05:6a00:80e:b029:1b6:39dd:8b2a with SMTP id m14-20020a056a00080eb02901b639dd8b2amr5056218pfk.23.1613797075790;
+        Fri, 19 Feb 2021 20:57:55 -0800 (PST)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id k24sm10936825pfg.40.2021.02.19.20.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Feb 2021 20:57:55 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Pavel Begunkov <asml.silence@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20210220155124.4bffc798@canb.auug.org.au>
+References: <20210220155124.4bffc798@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <cd8430b8-6f82-056a-d9a9-ff04dcf7c749@kernel.dk>
+Date:   Fri, 19 Feb 2021 21:57:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DdWa2VbhhZTtwiIi7XXkooM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210220155124.4bffc798@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DdWa2VbhhZTtwiIi7XXkooM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/19/21 9:51 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   76676c992506 ("io_uring: fix io_rsrc_ref_quiesce races")
+> 
+> Fixes tag
+> 
+>   Fixes: 0ce4a72632317 ("io_uring: don't hold uring_lock when calling io_run_task_work*")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: a4f2225d1cb2 ("io_uring: don't hold uring_lock when calling io_run_task_work*")
 
-Hi all,
+Fixed it up, thanks Stephen.
 
-In commit
+-- 
+Jens Axboe
 
-  76676c992506 ("io_uring: fix io_rsrc_ref_quiesce races")
-
-Fixes tag
-
-  Fixes: 0ce4a72632317 ("io_uring: don't hold uring_lock when calling io_ru=
-n_task_work*")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: a4f2225d1cb2 ("io_uring: don't hold uring_lock when calling io_run_t=
-ask_work*")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DdWa2VbhhZTtwiIi7XXkooM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAwlUwACgkQAVBC80lX
-0GyrewgAlyY0XF+4mAPmWkbzTIzADeuRWPsyXfpTeOy62gDJQ/Tk6omWQlpBzw4A
-r0hVA1AybfhtPTffuFg3cXqcgo8mbSD9DVUYvwFrtM62pc5cmQ0wCPV1rJT4rieL
-/ujd8kSt2E806BJR1FegE/lYaT4wxy05gVmxHNTBUkoGtwYpXduwnTWytIx78emX
-9CHKoBDaTwDoqQ2UtKg61Bo5NDm9i3/8Y8GBXGtIC+bTlJ/yHR3UcEML8nIz4YKM
-EXSiXZpnoh2lgFRGzgA2qoIg6lGrHhK9CsFDRAxRi+GPkcjFzx62IB+LzP4mzvHd
-xPmAKziarWMvQvbUlWo8KdZWy68d0A==
-=iGks
------END PGP SIGNATURE-----
-
---Sig_/DdWa2VbhhZTtwiIi7XXkooM--

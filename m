@@ -2,90 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD13B320AA6
-	for <lists+linux-next@lfdr.de>; Sun, 21 Feb 2021 14:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B012320DC3
+	for <lists+linux-next@lfdr.de>; Sun, 21 Feb 2021 21:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbhBUNos (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Feb 2021 08:44:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:6143 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229871AbhBUNoq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 21 Feb 2021 08:44:46 -0500
-IronPort-SDR: NNSvCNG1vYVTAnDNlt6oMvFxoSchgs71PObvJRYvAAV+jyqnTjvuhoMOUOd3I1jaoQm+2BEvs5
- M7wzPkE2jh1g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9901"; a="163424738"
-X-IronPort-AV: E=Sophos;i="5.81,194,1610438400"; 
-   d="scan'208";a="163424738"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2021 05:44:05 -0800
-IronPort-SDR: 4ihhKjWve1eadzPCXBle+NrQwC6/gIPjABq0xwf2KD0DmlvlfzQoRB4D1V2kH80gBLz+L22x7B
- psmAbCFnviuA==
-X-IronPort-AV: E=Sophos;i="5.81,194,1610438400"; 
-   d="scan'208";a="402012838"
-Received: from shsi6026.sh.intel.com (HELO localhost) ([10.239.147.88])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2021 05:44:03 -0800
-From:   shuo.a.liu@intel.com
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Shuo Liu <shuo.a.liu@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Qais Yousef <qais.yousef@arm.com>
-Subject: [PATCH RESEND v2 2/2] virt: acrn: Make remove_cpu sysfs invisible with !CONFIG_HOTPLUG_CPU
-Date:   Sun, 21 Feb 2021 21:43:39 +0800
-Message-Id: <20210221134339.57851-2-shuo.a.liu@intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210221134339.57851-1-shuo.a.liu@intel.com>
-References: <20210221134339.57851-1-shuo.a.liu@intel.com>
+        id S230296AbhBUU5Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Feb 2021 15:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230203AbhBUU5J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Feb 2021 15:57:09 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FD3C061574;
+        Sun, 21 Feb 2021 12:56:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DkHfZ1p6Wz9sRN;
+        Mon, 22 Feb 2021 07:56:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1613940984;
+        bh=AGhqqkKGVT9zLlM0vMv4krjRShEVU6ptqeB+ncq720o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DSY5JnLnObT88i27GEOwaj8PW7DSfKsBtNr7wjfsslE0zHC9XITLJFeouf0t/CUMj
+         QhlwLPy9JTzezQ/SrZXvpM8CLFzGtrvXZBZQo3+Txvr+TYelFy3pMPEYA9C/+Ie9Cv
+         GrmmrhYxQUxjXjBQbJhlM/ARVWGonlqbecYmcjbUcAafpmBuG+wv5v/2EY28TEvAcS
+         3xrmGf5aFRHPfARlzHL0z9R2PKM+1xJpF7QB/QGp40R/CPWvh10LaTMXPsJtCnu4Cg
+         ubse7vXiG/5cdFZTtc3+8aRZX2kvaZWdPn5K3LEG5npbs4xdRBR1HbZVRpw/h7FukM
+         j3ZOJ/VCfj/bg==
+Date:   Mon, 22 Feb 2021 07:56:20 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: manual merge of the sparc tree with Linus' tree
+Message-ID: <20210222075620.419a6965@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/uCUahW6fSs9fSMr.4RU5iVL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Shuo Liu <shuo.a.liu@intel.com>
+--Sig_/uCUahW6fSs9fSMr.4RU5iVL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Without cpu hotplug support, vCPU cannot be removed from a Service VM.
-Don't expose remove_cpu sysfs when CONFIG_HOTPLUG_CPU disabled.
+Hi all,
 
-Signed-off-by: Shuo Liu <shuo.a.liu@intel.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Qais Yousef <qais.yousef@arm.com>
----
- drivers/virt/acrn/hsm.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Today's linux-next merge of the sparc tree got a conflict in:
 
-diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
-index 1f6b7c54a1a4..6996ea6219e5 100644
---- a/drivers/virt/acrn/hsm.c
-+++ b/drivers/virt/acrn/hsm.c
-@@ -404,6 +404,14 @@ static ssize_t remove_cpu_store(struct device *dev,
- }
- static DEVICE_ATTR_WO(remove_cpu);
- 
-+static umode_t acrn_attr_visible(struct kobject *kobj, struct attribute *a, int n)
-+{
-+       if (a == &dev_attr_remove_cpu.attr)
-+               return IS_ENABLED(CONFIG_HOTPLUG_CPU) ? a->mode : 0;
-+
-+       return a->mode;
-+}
-+
- static struct attribute *acrn_attrs[] = {
- 	&dev_attr_remove_cpu.attr,
- 	NULL
-@@ -411,6 +419,7 @@ static struct attribute *acrn_attrs[] = {
- 
- static struct attribute_group acrn_attr_group = {
- 	.attrs = acrn_attrs,
-+	.is_visible = acrn_attr_visible,
- };
- 
- static const struct attribute_group *acrn_attr_groups[] = {
--- 
-2.28.0
+  arch/sparc/Kconfig
 
+between commit:
+
+  41026c343540 ("Kconfig: regularize selection of CONFIG_BINFMT_ELF")
+
+from Linus' tree and commit:
+
+  80bddf5c93a9 ("sparc64: only select COMPAT_BINFMT_ELF if BINFMT_ELF is se=
+t")
+
+from the sparc tree.
+
+I fixed it up (I used the former) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uCUahW6fSs9fSMr.4RU5iVL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAyyPQACgkQAVBC80lX
+0GzxdAf/RiD8GRt7zyLOQ1p7M9TxVfeNTCu5Xk8lBgqQRLiuVL6x9m8rT219h6oM
+HxKH+JsYlhZx4um/yuywKLWZyWJ1hrW3K9g4WqSadGTEqlIpswvpBy8PwEHxHmTk
+h08SgvqN4Z5KWwa/Zx05W1V+393IipX3Eri2A3rma1DDe2apSOhla4SXtCriGdeY
+Sb0AfXD9R2sL2fNe/Tw3Rr4/jtpm3V7ZWMH7nokgS76A1dKJS+N9UIGkaz/QlxYc
+i8V1J5ZgDMWg461lsBU2FUO8wrpXMbQtJEoTx6q1q/rRH8/fTNFzbGktaF0M+ZdP
+RaQ2Btcf2eeaNHOl/LtpspTfPG8iAQ==
+=/fqB
+-----END PGP SIGNATURE-----
+
+--Sig_/uCUahW6fSs9fSMr.4RU5iVL--

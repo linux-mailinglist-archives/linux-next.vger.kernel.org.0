@@ -2,149 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5D5320E6A
-	for <lists+linux-next@lfdr.de>; Sun, 21 Feb 2021 23:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56384320E85
+	for <lists+linux-next@lfdr.de>; Mon, 22 Feb 2021 00:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbhBUW4t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Feb 2021 17:56:49 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38379 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232059AbhBUW4r (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 21 Feb 2021 17:56:47 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DkLJh4glwz9sRN;
-        Mon, 22 Feb 2021 09:56:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613948164;
-        bh=mDb9WwHcqGhZ4bPpDkU7BjvQ4JztEbZDcd5OtQn9M60=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Hh6SoziSSNowpGMX3kRkdtK2fRkUhdvZZb+gVDkARtzE2EWm8DzV2J2WK2oDEsF5Q
-         n/MRR+hfzHbAXuSvlZrZ683u6Si/jO20uR1zBPDMekZWrmnEib96bUyRqNjkKrF/CX
-         D48ybrYBPq9bZ7ivsMym8My9ckkCGySlkrbwk7WkAIABhYrix7UBqy4eOx/TxAaLBy
-         dvkz3uskIrBdcXi3lGyaVv++pH+8ryeihLJ0jiPo7bYfCEehHRFUpEmsC48jD8+Ynf
-         UyRlc4a/H2+gU3uiCWUCREajKAJxA46mbdmL0LxaFeK3ZZWcoi/l+JiA6w1UvnrGCM
-         +sZ1wjx7MvDxg==
-Date:   Mon, 22 Feb 2021 09:56:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the xfs tree with the pidfd tree
-Message-ID: <20210222095604.1e63eaaf@canb.auug.org.au>
-In-Reply-To: <20210215094131.7b47c1c5@canb.auug.org.au>
-References: <20210208103348.1a0beef9@canb.auug.org.au>
-        <20210215094131.7b47c1c5@canb.auug.org.au>
+        id S233583AbhBUXXZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Feb 2021 18:23:25 -0500
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:26853 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233564AbhBUXXQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Feb 2021 18:23:16 -0500
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 11LNLvT1018221;
+        Mon, 22 Feb 2021 08:21:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 11LNLvT1018221
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1613949718;
+        bh=Wz6w9jbD0+jY3ddA1WQ0MnvnDOU4v6d+nnyElFXD534=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h9WONg9xqjA4KLNu3WTd0Qftl3O5spjcMGQQOHZtxGj+EDGuiR556nRrRHJMDvQxM
+         Dn2pF979wn6jACBx6PExwx3YBCsQlJKcddmFyuh6RrHlx5JAtlLcNMY0BlqyWqgiS2
+         SnGc+rtGauUT5L4V3qX9YJeqEqRA9GL5XiYdoG0k7HHmAbf4k7WKBM1FRmFa3k4pho
+         Rw2yK0rttoFJmAsN6JrguGNDM8ANFcBaf/4JkB6qyrH2IPydz5w7qxLVtLbpTJZ066
+         8lwxZPcmTkjeMkqDGvc9Djuv+X3rN4PvKU0+ftorGPUYtoy4NHGPw6kkK2JSA1wP+o
+         So+d/HmeWS9sQ==
+X-Nifty-SrcIP: [209.85.214.175]
+Received: by mail-pl1-f175.google.com with SMTP id p5so1729026plo.4;
+        Sun, 21 Feb 2021 15:21:58 -0800 (PST)
+X-Gm-Message-State: AOAM530YLfofnEnMdAuljmobrnWPdXgX20mRbR40rN6HJu/12HHp5Kb4
+        JOika0vVvJNmcmfVnO5u7YLJmgTRlZWlIQvNqwI=
+X-Google-Smtp-Source: ABdhPJzGxXkm/cgQK/ytlRkpsDtbDL5q33QwSQ3RAKxGe0Stwf8N6Ht99pS2ufSUhYoub/IwQOxRkILuLxrWjauwFOk=
+X-Received: by 2002:a17:90a:609:: with SMTP id j9mr20640090pjj.198.1613949717277;
+ Sun, 21 Feb 2021 15:21:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RZeV=9Mhs3FldC0XQDQoHZI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210222083315.39fbe380@canb.auug.org.au>
+In-Reply-To: <20210222083315.39fbe380@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 22 Feb 2021 08:21:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASe5POj98NsaAE=zxZzWN3bpmCsA5cHvSP6gZLY8eTrFw@mail.gmail.com>
+Message-ID: <CAK7LNASe5POj98NsaAE=zxZzWN3bpmCsA5cHvSP6gZLY8eTrFw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RZeV=9Mhs3FldC0XQDQoHZI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
-
-On Mon, 15 Feb 2021 09:41:31 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, Feb 22, 2021 at 6:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Mon, 8 Feb 2021 10:33:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >
-> > Today's linux-next merge of the xfs tree got a conflict in:
-> >=20
-> >   fs/xfs/xfs_ioctl.c
-> >=20
-> > between commit:
-> >=20
-> >   f736d93d76d3 ("xfs: support idmapped mounts")
-> >=20
-> > from the pidfd tree and commit:
-> >=20
-> >   7317a03df703 ("xfs: refactor inode ownership change transaction/inode=
-/quota allocation idiom")
-> >=20
-> > from the xfs tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > diff --cc fs/xfs/xfs_ioctl.c
-> > index 3d4c7ca080fb,248083ea0276..000000000000
-> > --- a/fs/xfs/xfs_ioctl.c
-> > +++ b/fs/xfs/xfs_ioctl.c
-> > @@@ -1280,9 -1275,9 +1280,10 @@@ xfs_ioctl_setattr_prepare_dax
-> >    */
-> >   static struct xfs_trans *
-> >   xfs_ioctl_setattr_get_trans(
-> > - 	struct file		*file)
-> >  -	struct xfs_inode	*ip,
-> > ++	struct file		*file,
-> > + 	struct xfs_dquot	*pdqp)
-> >   {
-> >  +	struct xfs_inode	*ip =3D XFS_I(file_inode(file));
-> >   	struct xfs_mount	*mp =3D ip->i_mount;
-> >   	struct xfs_trans	*tp;
-> >   	int			error =3D -EROFS;
-> > @@@ -1470,9 -1461,9 +1469,9 @@@ xfs_ioctl_setattr
-> >  =20
-> >   	xfs_ioctl_setattr_prepare_dax(ip, fa);
-> >  =20
-> > - 	tp =3D xfs_ioctl_setattr_get_trans(file);
-> >  -	tp =3D xfs_ioctl_setattr_get_trans(ip, pdqp);
-> > ++	tp =3D xfs_ioctl_setattr_get_trans(file, pdqp);
-> >   	if (IS_ERR(tp)) {
-> > - 		code =3D PTR_ERR(tp);
-> > + 		error =3D PTR_ERR(tp);
-> >   		goto error_free_dquots;
-> >   	}
-> >  =20
-> > @@@ -1615,7 -1599,7 +1606,7 @@@ xfs_ioc_setxflags
-> >  =20
-> >   	xfs_ioctl_setattr_prepare_dax(ip, &fa);
-> >  =20
-> > - 	tp =3D xfs_ioctl_setattr_get_trans(filp);
-> >  -	tp =3D xfs_ioctl_setattr_get_trans(ip, NULL);
-> > ++	tp =3D xfs_ioctl_setattr_get_trans(filp, NULL);
-> >   	if (IS_ERR(tp)) {
-> >   		error =3D PTR_ERR(tp);
-> >   		goto out_drop_write; =20
->=20
-> With the merge window about to open, this is a reminder that this
-> conflict still exists.
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> cc1: fatal error: FORCE: No such file or directory
+> compilation terminated.
+>
+> Presuably caused by commit
+>
+>   15bb90419621 ("arch: syscalls: add missing FORCE and fix 'targets' to make if_changed work")
 
-This is now a conflict between the pidfd tree and Linus' tree.
+Sorry, this happens only when CONFIG_XEN=y,
+and I did not cover all cases.
 
---=20
-Cheers,
-Stephen Rothwell
+I will fix it for tomorrow's linux-next.
 
---Sig_/RZeV=9Mhs3FldC0XQDQoHZI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+If it is not too late, you can apply the following locally.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAy5QQACgkQAVBC80lX
-0Gyt/QgAg6nywpR7+H3R+TIxr7Ww32PrnCqnq3RwYLG+y8N4hMR3B4WPqMR99UWs
-YljuazspcYx4n/T13b06yVMfmvkgt8xE54nT3vLG4ghv8zLlBu4sCBnii/8+QSak
-z78WGednA8sVQEdiu2Xd7bXdKczQlcWb7RTjJhSEXnZG+Ru69IjGqyCwam1pshfF
-wP7gpK3qs3MYpVGfbWow+fYlkcOksoxCmmhclQgwKatV3eYPw7zSxm4UduPcjxEr
-P+LjOPOk4FvCAo+unHpxi80XOSQUssixgk2+SMa0/mRr9oRVLo/ToyIzRikFcIyS
-bNT+3+fKJYdEo5bm+II950JLFgjtTw==
-=Lzdc
------END PGP SIGNATURE-----
 
---Sig_/RZeV=9Mhs3FldC0XQDQoHZI--
+
+diff --git a/arch/x86/entry/syscalls/Makefile b/arch/x86/entry/syscalls/Makefile
+index e1c7ddb7546b..ea6ffb51b9a3 100644
+--- a/arch/x86/entry/syscalls/Makefile
++++ b/arch/x86/entry/syscalls/Makefile
+@@ -21,7 +21,7 @@ quiet_cmd_systbl = SYSTBL  $@
+       cmd_systbl = $(CONFIG_SHELL) '$(systbl)' $< $@
+
+ quiet_cmd_hypercalls = HYPERCALLS $@
+-      cmd_hypercalls = $(CONFIG_SHELL) '$<' $@ $(filter-out $<,$^)
++      cmd_hypercalls = $(CONFIG_SHELL) '$<' $@ $(filter-out $<,$(real-prereqs))
+
+ syshdr_abi_unistd_32 := i386
+ $(uapi)/unistd_32.h: $(syscall32) $(syshdr) FORCE
+
+
+
+
+
+
+> I have used the kbuild tree from next-20210219 for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

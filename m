@@ -2,99 +2,198 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25356320FB7
-	for <lists+linux-next@lfdr.de>; Mon, 22 Feb 2021 04:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CDF321013
+	for <lists+linux-next@lfdr.de>; Mon, 22 Feb 2021 05:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbhBVDYQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Feb 2021 22:24:16 -0500
-Received: from ozlabs.org ([203.11.71.1]:34165 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230071AbhBVDYO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 21 Feb 2021 22:24:14 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DkSFH2HgFz9s1l;
-        Mon, 22 Feb 2021 14:23:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613964212;
-        bh=DwuiH7S2B/BTlVrR8jipesfJzt/46PcYIOIZpoSp+AU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EbWcb5C2so1I8JzTtZXkxQR5yQHK7+jcYbgUQm+FDjzLtbs+S6SxsafEm4QIxO8/+
-         V2mER2lJY0DJZMoknIuZ+tFBnF6lUyhe6FRfd7B0XhbsUoHguiNDV6Zl9rrUfNWztt
-         EF6IhKuh+ln2EfQ68xpoz63tKsriGoqB/wvpZNCQs1aM9/7BMBOFNRqY4kcJDlzfMM
-         o88IG02C2I8QDTkov0Qurpq2TC9QYcWlFW7vv7BESERntywxeVknbx7diTEKXVJ2+u
-         OKx5U6qikMKrWaZEAjz+TtxzHjRpcR+/InUN2m3RJc1abU05sd4BveVdwH1UZ8J2V0
-         7VYsBh0wmD6dA==
-Date:   Mon, 22 Feb 2021 14:23:30 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        qiuguorui1 <qiuguorui1@huawei.com>
-Subject: linux-next: manual merge of the devicetree tree with the
- arm64-fixes tree
-Message-ID: <20210222142330.72b89798@canb.auug.org.au>
+        id S230063AbhBVEvz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Feb 2021 23:51:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230029AbhBVEvz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Feb 2021 23:51:55 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47FAC061574
+        for <linux-next@vger.kernel.org>; Sun, 21 Feb 2021 20:51:14 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z6so5881696pfq.0
+        for <linux-next@vger.kernel.org>; Sun, 21 Feb 2021 20:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=0gIDFqhiBX5gm7c5tJ23OnpaYN/iVrSuRjmv6jZhaDs=;
+        b=Fixwh0tQHgnjs5QmVx/aU2zEsPDD/miB64A4OEnMl+8ca8cV86ptx1rcCelPEe/D7p
+         AthjxuiuTKlph8rRZWSLFwjFrK2c9poeBWOxaSciYhQrTDEUKlHGxYFh94e1fAYbzVvS
+         /+OHvQZrbu5xtgmXyKH1Ex1yfF813HXlprysopGeSlGYPjeswbXfBvBawawG8wDJ2bD/
+         GhIHFc+1aM5vpTWrzLl5TcZ3a6sR1W0i2EBDCc3jsrxukdoO/IvzcYlTHFLEQq+tF58o
+         dNdiVJQ69T1nfnR7qg0ZKbvJfHxr/Kc8nqVG7WI6dqyRY8hcwcGRgeV1+vRoi07lse9X
+         hCtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=0gIDFqhiBX5gm7c5tJ23OnpaYN/iVrSuRjmv6jZhaDs=;
+        b=CYFrBtZGxahxgjvR+ETZifKJBpfIjI2wPVaVcUP3jfa6rOraPYyFhnfSNzaIUgSQI6
+         KjMIQSBk2TiE9cgoB4y391UDt2tTKWqFFtfrpdzEbPyXxFK1+GlXzGdTTo44hhG3hYrP
+         aikT/sIaHMY1hTLbMumkQuZYdw+45lvkCoyd/RQsqf1TRTawaMelwiZTymD8QIfPyFvs
+         2lfBrA+LSrRLWC0TADBPuAA7qvWMGQblQ2E/vcWWd/vtkuESUznSYyWQCDg3Fq6hB1iP
+         l/wHZ+8YPqaEHbwap8Z9Q3KHAradKEwGDuP8zKkO+dUgZdvqRyIsV80U9JkQyDyROv36
+         vomg==
+X-Gm-Message-State: AOAM530TJVKRdfEnbwTWxz6URJMaBIO4zDKLPTtoU7/Tup1HOhiIeoDS
+        sLJg2WaA8vETo0Lksgy2RBcf7LoWXpachA==
+X-Google-Smtp-Source: ABdhPJwTxTqkui91Nm76asLH5aVdjyrbD5zngEvOZkj3xcbVfXYFwTaoevowE7ill1RvMhYFpGd3XQ==
+X-Received: by 2002:a05:6a00:847:b029:1b3:b9c3:11fb with SMTP id q7-20020a056a000847b02901b3b9c311fbmr20056798pfk.44.1613969474016;
+        Sun, 21 Feb 2021 20:51:14 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 134sm17630215pfc.113.2021.02.21.20.51.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Feb 2021 20:51:13 -0800 (PST)
+Message-ID: <60333841.1c69fb81.2fa55.6b09@mx.google.com>
+Date:   Sun, 21 Feb 2021 20:51:13 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/78Tvumly.LP5wMYcFng2vuL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.11-5016-ge82d5d2555f2
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 185 runs,
+ 3 regressions (v5.11-5016-ge82d5d2555f2)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/78Tvumly.LP5wMYcFng2vuL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 185 runs, 3 regressions (v5.11-5016-ge82d5d255=
+5f2)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+bcm2836-rpi-2-b  | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
+G_SMP=3Dn | 1          =
 
-  arch/arm64/kernel/machine_kexec_file.c
+beaglebone-black | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
+G_SMP=3Dn | 1          =
 
-between commit:
-
-  656d1d58d8e0 ("arm64: kexec_file: fix memory leakage in create_dtb() when=
- fdt_open_into() fails")
-
-from the arm64-fixes tree and commit:
-
-  c6844a608e43 ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
-
-from the devicetree tree.
-
-I fixed it up (the latter removed the code updated by the former, so I
-just did that) and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+imx8mp-evk       | arm64 | lab-nxp       | gcc-8    | defconfig+CON...OMIZE=
+_BASE=3Dy | 1          =
 
 
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-5016-ge82d5d2555f2/plan/baseline/
 
---=20
-Cheers,
-Stephen Rothwell
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-5016-ge82d5d2555f2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      e82d5d2555f206145d3882c1aa76842e89623761 =
 
---Sig_/78Tvumly.LP5wMYcFng2vuL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAzI7IACgkQAVBC80lX
-0Gwy/gf/fawMKUGqVtVeUq2wYs+fD5eA/4y2OkPLLJ9ehcC4ar3sLI5sWdQdTGyG
-Q82P093+UMZnZdxQ00imQkI1IBGTMvroEpX377PyFPlitAQPrll0V+sAvmeDNnVs
-4oy7tovEmrwutXptDw49ATswT39zj6ooOQn0L1O5NA9jBEArwyAbQxzppZo2a2Hn
-Km0juQKHVcXuKTNjtuox+E4JmFTUj08J92mEJBfbdiFBbU8bZCIm3y3uv0TkAQF7
-UsG+bfOgf95fb92BVTgWuNd/vZEELFOlQOvCtfQ7sLeRJZ+wReoc1eGbQWYmo9OD
-qqFOTZVhKy+9TmD5HH3LbRl8EDKvIA==
-=9U4+
------END PGP SIGNATURE-----
+Test Regressions
+---------------- =
 
---Sig_/78Tvumly.LP5wMYcFng2vuL--
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+bcm2836-rpi-2-b  | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
+G_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60331a5fcf07d0236daddcc7
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/60331a5fcf07d0236dadd=
+cc8
+        failing since 17 days (last pass: v5.11-rc6-256-gf889022827dc, firs=
+t fail: v5.11-rc6-298-g490f4659faae) =
+
+ =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+beaglebone-black | arm   | lab-collabora | gcc-8    | multi_v7_defc...CONFI=
+G_SMP=3Dn | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6033284011836462e5addcbd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-beaglebone-black.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/bas=
+eline-beaglebone-black.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6033284011836462e5add=
+cbe
+        new failure (last pass: v5.11-2286-g3c15bb8df3365) =
+
+ =
+
+
+
+platform         | arch  | lab           | compiler | defconfig            =
+        | regressions
+-----------------+-------+---------------+----------+----------------------=
+--------+------------
+imx8mp-evk       | arm64 | lab-nxp       | gcc-8    | defconfig+CON...OMIZE=
+_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/603306a5b24c0aac40addd13
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/basel=
+ine-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-5016-=
+ge82d5d2555f2/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/basel=
+ine-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/603306a5b24c0aac40add=
+d14
+        new failure (last pass: v5.11-2286-g3c15bb8df3365) =
+
+ =20

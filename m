@@ -2,88 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4439C321318
-	for <lists+linux-next@lfdr.de>; Mon, 22 Feb 2021 10:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0B032143E
+	for <lists+linux-next@lfdr.de>; Mon, 22 Feb 2021 11:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhBVJ2c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Feb 2021 04:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbhBVJ23 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Feb 2021 04:28:29 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82811C06178A;
-        Mon, 22 Feb 2021 01:27:48 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DkcKY2Gfgz9sRf;
-        Mon, 22 Feb 2021 20:27:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1613986065;
-        bh=+1E1Q2T0Ud2vgUYPaj/UQ+Agr1ONiKE57xZk0zhNF6U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UV0XkxD898HmPaAM5AEUg22Ni3qlmYbfF5ToqFYYWSlGn/79DptTnEX7llsv67zbf
-         W05k2udlMrHWopwc65ZoAJMZobdT947DGgdT+VpPqNr8slHixOanZan81IUTVe0q3Y
-         8vn/q9FLsVPgfqdcJwLu6Q3vVDK7bMeuuvnW2f3J8DMVRnv8i49Vj9pWvQTg3bTzoc
-         nuebg1RWF3JhbqWTwlKo7OW2Qo20p9bLgGVg9Fqq9YqS3NQNjMHKxZs3kmLXjFXSqm
-         T/TUjv8oepRGKhYPArD52zvzZkUSwYNSg7Rcz11S+02HZ73B2D79G5kCxjm9ZjBezV
-         WmXQfmXBNLO/A==
-Date:   Mon, 22 Feb 2021 20:27:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ley Foon Tan <lftan@altera.com>
-Cc:     Andreas Oetken <andreas.oetken@siemens.com>,
+        id S230062AbhBVKhG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Feb 2021 05:37:06 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:50196 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230134AbhBVKg7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Feb 2021 05:36:59 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 11MAZE4x020286;
+        Mon, 22 Feb 2021 04:35:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1613990114;
+        bh=1frvgHuwt9UE4V3scZaSJep38W1gkW3f9joP9vN7Sds=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=p+dl95Aa3fEp+HKrSCJKVXnxtQoc0/qmL28hLJXTB+0z20RrBDs0Q2du+1kD4vGxp
+         rjuiMXKWk7Em3jSPZK36u3QQr/r8D3tU3Cc2ckDkQ0axdMOmlWohWV+wX2PTtQPBdK
+         pugAG9QrapMhZoefDdWBRVhnYmku/Srff5X5xuHc=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 11MAZEAo096611
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Feb 2021 04:35:14 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 22
+ Feb 2021 04:35:13 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 22 Feb 2021 04:35:13 -0600
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 11MAZBj9122528;
+        Mon, 22 Feb 2021 04:35:11 -0600
+Subject: Re: linux-next: manual merge of the devicetree tree with the net-next
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robherring2@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+CC:     Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the nios2 tree
-Message-ID: <20210222202744.29be8d08@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20210121132645.0a9edc15@canb.auug.org.au>
+ <20210215075321.0f3ea0de@canb.auug.org.au>
+ <20210222192306.400c6a50@canb.auug.org.au>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <bbddedcf-fa9b-95bd-1e10-5a46da88f305@ti.com>
+Date:   Mon, 22 Feb 2021 12:35:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/44mClM0qDSs4WecIej/I/Xu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210222192306.400c6a50@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/44mClM0qDSs4WecIej/I/Xu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-In commit
+On 22/02/2021 10:23, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 15 Feb 2021 07:53:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> On Thu, 21 Jan 2021 13:26:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>
+>>> Today's linux-next merge of the devicetree tree got a conflict in:
+>>>
+>>>    Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>>
+>>> between commit:
+>>>
+>>>    19d9a846d9fc ("dt-binding: net: ti: k3-am654-cpsw-nuss: update bindings for am64x cpsw3g")
+>>>
+>>> from the net-next tree and commit:
+>>>
+>>>    0499220d6dad ("dt-bindings: Add missing array size constraints")
+>>>
+>>> from the devicetree tree.
+>>>
+>>> I fixed it up (see below) and can carry the fix as necessary. This
+>>> is now fixed as far as linux-next is concerned, but any non trivial
+>>> conflicts should be mentioned to your upstream maintainer when your tree
+>>> is submitted for merging.  You may also want to consider cooperating
+>>> with the maintainer of the conflicting tree to minimise any particularly
+>>> complex conflicts.
+>>>
+>>> diff --cc Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> index 3fae9a5f0c6a,097c5cc6c853..000000000000
+>>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>>> @@@ -72,7 -66,8 +72,8 @@@ properties
+>>>      dma-coherent: true
+>>>    
+>>>      clocks:
+>>> +     maxItems: 1
+>>>   -    description: CPSW2G NUSS functional clock
+>>>   +    description: CPSWxG NUSS functional clock
+>>>    
+>>>      clock-names:
+>>>        items:
+>>
+>> With the merge window about to open, this is a reminder that this
+>> conflict still exists.
+> 
+> This is now a conflict between the devicetree tree and Linus' tree.
+> 
 
-  9abcfcb20320 ("nios2: fixed broken sys_clone syscall")
+Sorry for inconvenience, is there anything I can do to help resolve it?
+(Changes went through a different trees)
 
-Fixes tag
-
-  Fixes: 04bd52fb ("nios2: enable HAVE_COPY_THREAD_TLS, switch to kernel_cl=
-one_args")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/44mClM0qDSs4WecIej/I/Xu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmAzeRAACgkQAVBC80lX
-0GyZ0gf+PCkmlYvmZKiVNIz2//wqZOB4cWhzUg2+yofu3988lbgVMKACmhJavhaD
-x2HTrJL1lqdjZIK6DWp1cJi075vQ8cooOyTVtHVxMDZu+exzWCNS6bdXjf46unUh
-wY/zzvt+rfdiTmh6Kop+A9uuzVy/N+3JBYKUejwekVztP3SnYWTYVqNm6RfLHd1q
-SvLVAwuJ/t2rfvtRy/Q3u+GdTo8j1YgHL9W207lcFfeGXUwt6UdBs3GPnuWJC0l8
-BKAEtokbVrXWjy8SalqQi/+3kMbXZfU/td/e1qKH3I7MsM1gUoxpankuAZBXsM1h
-Jc7loBn3p+TDVP4pW4WNJo1IAtxLxQ==
-=qjsB
------END PGP SIGNATURE-----
-
---Sig_/44mClM0qDSs4WecIej/I/Xu--
+-- 
+Best regards,
+grygorii

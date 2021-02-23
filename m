@@ -2,142 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 829CC3222E8
-	for <lists+linux-next@lfdr.de>; Tue, 23 Feb 2021 01:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83E6322313
+	for <lists+linux-next@lfdr.de>; Tue, 23 Feb 2021 01:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbhBWABW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Feb 2021 19:01:22 -0500
-Received: from ozlabs.org ([203.11.71.1]:41991 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230010AbhBWABV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 22 Feb 2021 19:01:21 -0500
+        id S230314AbhBWAT4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Feb 2021 19:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230295AbhBWATz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Feb 2021 19:19:55 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A676C061574;
+        Mon, 22 Feb 2021 16:19:15 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dkzhh5GJbz9sCD;
-        Tue, 23 Feb 2021 11:00:36 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dl0686zyfz9sW2;
+        Tue, 23 Feb 2021 11:19:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1614038438;
-        bh=1ikac/fuTaR8vulwWvUG3F5HVVlmbUMrBrNHfXaFPb4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j9oRyOExlUMfXTNiNkAKsKITCW2eQ/vY+JU/p1ss7G0EgS3kwRukukaf6/kLa/Jdk
-         4qWeDU345Pn43l9pDIo8i0nwT7nOVarPVW0krrX9+s7ZtQs+ykCKJ0xoPldS3/Pgzq
-         Zde2WGoasHdHaNuJihwV7tPoW2l6M9qtcJSmUazyuTzCep4bP2ti8XgHfgha/j6NBe
-         j4hfQ5uuTHG6gJLhj8Pz+eI5jOjuDifB1BNpMdTCdth2C+5HIiV4sFBG3CpGFn6I+b
-         iasfjd0D3rcJ21dp4MUYUbHkkRPD+c+dnj7RB0LJ9rTbQ3GQ5thussbLUEBvYNyYNV
-         DsHMIN5BrJBSw==
-Date:   Tue, 23 Feb 2021 11:00:35 +1100
+        s=201702; t=1614039553;
+        bh=cXslD8pfwrbp/o1ZONJWmsTNOkb3cNTVgGJgtGCHlLU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Mg6WcubO8PMZsxexGIyP+pA7XVwXBN4OvBQizfbe/wXQXVDJdvhdkGVEcvLFjdRwM
+         n5IzmHYOGaj0ZiLbQRB2s9yOY6dH5Qd0iWTFHAK8uBBVruaw2TT8yiZVeTua4dJDjl
+         sWappDddpXv0GEMjOib8ssYhTX4uI6YCxfHnddyZYzGWJIQFlHy0zI+sKieg7r9o1A
+         +piG2fVF1eSmehYCO/Nhs9pkYafZSkSIaPxwprEIrRjTp/ltDimvzJ7IGToYtrfEKY
+         BdC3Aqo1r8zQSm6n1oXErH84IIWmxUp3rrXruDNeA/shKecEnoPhOq5rHRRyTDs2EU
+         kor/lpjRZ+3OA==
+Date:   Tue, 23 Feb 2021 11:19:11 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Subject: Re: linux-next: manual merge of the pidfd tree with the integrity
- tree
-Message-ID: <20210223110035.54ca2a0c@canb.auug.org.au>
-In-Reply-To: <20210215080717.24bc532e@canb.auug.org.au>
-References: <20210125171818.286f08b9@canb.auug.org.au>
-        <20210215080717.24bc532e@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20210223111911.54ea7503@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/utbKQ7iYHnw5A.UC3+vfRQg";
+Content-Type: multipart/signed; boundary="Sig_/t.wZ22U=pIOyM2H7wJLYLup";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/utbKQ7iYHnw5A.UC3+vfRQg
+--Sig_/t.wZ22U=pIOyM2H7wJLYLup
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 15 Feb 2021 08:07:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> On Mon, 25 Jan 2021 17:18:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >=20
-> > Today's linux-next merge of the pidfd tree got a conflict in:
-> >=20
-> >   security/integrity/ima/ima_api.c
-> >=20
-> > between commit:
-> >=20
-> >   2b4a2474a202 ("IMA: generalize keyring specific measurement construct=
-s")
-> >=20
-> > from the integrity tree and commit:
-> >=20
-> >   a2d2329e30e2 ("ima: handle idmapped mounts")
-> >=20
-> > from the pidfd tree.
-> >=20
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >=20
-> > diff --cc security/integrity/ima/ima_api.c
-> > index 1dd70dc68ffd,ed410efb3597..000000000000
-> > --- a/security/integrity/ima/ima_api.c
-> > +++ b/security/integrity/ima/ima_api.c
-> > @@@ -183,17 -184,18 +184,18 @@@ err_out
-> >    * Returns IMA_MEASURE, IMA_APPRAISE mask.
-> >    *
-> >    */
-> > - int ima_get_action(struct inode *inode, const struct cred *cred, u32 =
-secid,
-> > - 		   int mask, enum ima_hooks func, int *pcr,
-> > + int ima_get_action(struct user_namespace *mnt_userns, struct inode *i=
-node,
-> > + 		   const struct cred *cred, u32 secid, int mask,
-> > + 		   enum ima_hooks func, int *pcr,
-> >   		   struct ima_template_desc **template_desc,
-> >  -		   const char *keyring)
-> >  +		   const char *func_data)
-> >   {
-> >   	int flags =3D IMA_MEASURE | IMA_AUDIT | IMA_APPRAISE | IMA_HASH;
-> >  =20
-> >   	flags &=3D ima_policy_flag;
-> >  =20
-> > - 	return ima_match_policy(inode, cred, secid, func, mask, flags, pcr,
-> > - 				template_desc, func_data);
-> > + 	return ima_match_policy(mnt_userns, inode, cred, secid, func, mask,
-> >  -				flags, pcr, template_desc, keyring);
-> > ++				flags, pcr, template_desc, func_data);
-> >   }
-> >  =20
-> >   /* =20
->=20
-> With the merge window about to open, this is a reminder that this
-> conflict still exists.
+Today's linux-next merge of the pci tree got a conflict in:
 
-This is now a conflict between the pidfd tree and Linus' tree.
+  drivers/pci/pci.c
+
+between commit:
+
+  40fb68c7725a ("Revert "PCI/ASPM: Save/restore L1SS Capability for suspend=
+/resume"")
+
+from Linus' tree and commit:
+
+  d2bb2f9e1af6 ("PCI/ASPM: Move LTR, ASPM L1SS save/restore into PCIe save/=
+restore")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/utbKQ7iYHnw5A.UC3+vfRQg
+diff --cc drivers/pci/pci.c
+index b67c4327d307,13b89b1e29ed..000000000000
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@@ -1434,6 -1474,9 +1474,8 @@@ static int pci_save_pcie_state(struct p
+  	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &cap[i++]);
+  	pcie_capability_read_word(dev, PCI_EXP_SLTCTL2, &cap[i++]);
+ =20
++ 	pci_save_ltr_state(dev);
+ -	pci_save_aspm_l1ss_state(dev);
++=20
+  	return 0;
+  }
+ =20
+@@@ -1447,6 -1490,9 +1489,8 @@@ static void pci_restore_pcie_state(stru
+  	if (!save_state)
+  		return;
+ =20
++ 	pci_restore_ltr_state(dev);		/* LTR enabled in DEVCTL2 */
+ -	pci_restore_aspm_l1ss_state(dev);	/* ASPM L1 enabled in LNKCTL */
++=20
+  	cap =3D (u16 *)&save_state->cap.data[0];
+  	pcie_capability_write_word(dev, PCI_EXP_DEVCTL, cap[i++]);
+  	pcie_capability_write_word(dev, PCI_EXP_LNKCTL, cap[i++]);
+
+--Sig_/t.wZ22U=pIOyM2H7wJLYLup
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmA0RaMACgkQAVBC80lX
-0GxjAgf/emEN4gdvNYEye7ltF1Vvy6LlcaeXg0VlDOyA87OhQADQL/H2mMWyhszk
-HBqZr3KIs0VzRmpFOngwRg9/zka0Wd9P3LTg8RPfM0kfU8IeFQWwhf1MF+FMnIB7
-AA9n3MsqF/qr67lZG3egucWLGdDtAo5BeFGO6Qg1YiC0vnK62xVrbwYaU5Gg/Ju1
-aI1oBa46edsWQIeCgdJxgF0j/NMVBETwyEqbXYz7aAS3WPuAFtDipAQteJAwC/j0
-/hHtgha2LKWeQyroC+4gFB31qIzIpxHj6dahd6n1jD15yFx56tsRbxz1VWOZ6/8l
-2M3aWCc5TGZQHKmPdSbBN7buKTdlAA==
-=KvRU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmA0Sf8ACgkQAVBC80lX
+0GwzaAf/fYl6EnABTq2lKmIhYSSQG7rkKkczl3qzh0lFQIKaBLTC9ekwxpEa7Yia
++DneqnzIvuUrFp9fCbB7J/E69E5ubz3wVLKYqhuwmji1rHUb5DXcHojSMvZ9hZbl
+s8wU3r1Er3Xjd4SPBZi3FHA9GrRsZdRYy4qXhiIh30vezm4Cb5jOc4LCF2OXbhjj
+B/7CrLLEUPgJSsSoKpgOlFQq8sRuaFzAuv9n7LnVVQWf8GW6Tkba5caAphWq2Bk8
+8pao3rCw1jS0OLBArdEYkQTW9e3WjtZOtJUkrOGKLCDwf22ApE7qnhrGo5UL2lHu
+myg7g89uqpGvt8bWQozg3uFio4QXrw==
+=F0BL
 -----END PGP SIGNATURE-----
 
---Sig_/utbKQ7iYHnw5A.UC3+vfRQg--
+--Sig_/t.wZ22U=pIOyM2H7wJLYLup--

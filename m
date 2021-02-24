@@ -2,96 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10EF323510
-	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 02:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85F3235AE
+	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 03:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbhBXBOx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Feb 2021 20:14:53 -0500
-Received: from mga07.intel.com ([134.134.136.100]:63176 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234668AbhBXBMi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 23 Feb 2021 20:12:38 -0500
-IronPort-SDR: Vj4XR2QglwdpQMhBAzMB+3aTZcTfRCLvlKlIJxb0an04bFqlx6vvSEg+GxNX3XXCuizL6nEcHu
- qyPpITEHi0Ag==
-X-IronPort-AV: E=McAfee;i="6000,8403,9904"; a="249065603"
-X-IronPort-AV: E=Sophos;i="5.81,201,1610438400"; 
-   d="scan'208";a="249065603"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 17:11:51 -0800
-IronPort-SDR: WaACZKmiY0IRR9yOQtd09Mbo11q6wWM3zuPagSCaqco92Vn8GlIr6Tbj1KJm5pNZ37BSlMmvly
- eZGWDG1yCsGg==
-X-IronPort-AV: E=Sophos;i="5.81,201,1610438400"; 
-   d="scan'208";a="499373345"
-Received: from shuo-intel.sh.intel.com (HELO localhost) ([10.239.154.30])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 17:11:49 -0800
-Date:   Wed, 24 Feb 2021 09:11:47 +0800
-From:   Shuo A Liu <shuo.a.liu@intel.com>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH RESEND v2 2/2] virt: acrn: Make remove_cpu sysfs
- invisible with !CONFIG_HOTPLUG_CPU
-Message-ID: <20210224011147.GD30008@shuo-intel.sh.intel.com>
-References: <20210221134339.57851-1-shuo.a.liu@intel.com>
- <20210221134339.57851-2-shuo.a.liu@intel.com>
- <20210223152530.y2qfyozdaowmfcat@e107158-lin>
+        id S232076AbhBXC3f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Feb 2021 21:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232069AbhBXC3e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Feb 2021 21:29:34 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324D0C06174A;
+        Tue, 23 Feb 2021 18:28:54 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DlfxG5d7pz9sVR;
+        Wed, 24 Feb 2021 13:28:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1614133730;
+        bh=kEJN/s7n1Org9UskoU7vvPrWoElvp1X6pfjRPHvJOXg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KOE9GvppnI7lSkeUlgH5656faNNxd1l1uExf47ia9RV1PY4V7PjxJvNN5tE8Sw/zZ
+         FBHCqEkyBYsLxBjISoQpnjCI7S1CLZBXlHSjekOQ9n88TCasoDPlbNgIKMNCnmhMpv
+         Cwww19XK8JaPTbD3wwg8aQ/O0W8mSAFCco6Vky3IIOvdn3boz+a8Yn5NVFBx6N7U71
+         MhRNm3UQEWEGLuZDmyqGwsUK4+WVbk7RYw1J5+6BU5PMmeyvihr5P0g+8k4zcPp75P
+         qpvI9/5fMZHetgg0exo8D3WLuyqrnIV5GRQG+lK2GzCMWPOIF/qs2UPUoSV/WPlaKd
+         6ZZq36NLglCIQ==
+Date:   Wed, 24 Feb 2021 13:28:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20210224132849.439973d5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210223152530.y2qfyozdaowmfcat@e107158-lin>
-User-Agent: Mutt/1.8.3 (2017-05-23)
+Content-Type: multipart/signed; boundary="Sig_/Y3w=68c/7c2xhxac/lTfvOe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/Y3w=68c/7c2xhxac/lTfvOe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue 23.Feb'21 at 15:25:30 +0000, Qais Yousef wrote:
->On 02/21/21 21:43, shuo.a.liu@intel.com wrote:
->> From: Shuo Liu <shuo.a.liu@intel.com>
->>
->> Without cpu hotplug support, vCPU cannot be removed from a Service VM.
->> Don't expose remove_cpu sysfs when CONFIG_HOTPLUG_CPU disabled.
->>
->> Signed-off-by: Shuo Liu <shuo.a.liu@intel.com>
->> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
->> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Qais Yousef <qais.yousef@arm.com>
->> ---
->>  drivers/virt/acrn/hsm.c | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
->> index 1f6b7c54a1a4..6996ea6219e5 100644
->> --- a/drivers/virt/acrn/hsm.c
->> +++ b/drivers/virt/acrn/hsm.c
->> @@ -404,6 +404,14 @@ static ssize_t remove_cpu_store(struct device *dev,
->>  }
->>  static DEVICE_ATTR_WO(remove_cpu);
->>
->> +static umode_t acrn_attr_visible(struct kobject *kobj, struct attribute *a, int n)
->> +{
->> +       if (a == &dev_attr_remove_cpu.attr)
->> +               return IS_ENABLED(CONFIG_HOTPLUG_CPU) ? a->mode : 0;
->> +
->> +       return a->mode;
->> +}
->> +
->
->I can't find this code in Linus' master. But this looks fine from my narrow
+Hi all,
 
-Now, the code is still in linux-next tree only.
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced these warnings:
 
->PoV. Protecting the attribute with ifdef CONFIG_HOTPLUG_CPU is easier to read
->for me, but this doesn't mean this approach is not fine.
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:380: warning: Function pa=
+rameter or member 'vblank_lock' not described in 'amdgpu_display_manager'
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:380: warning: Function pa=
+rameter or member 'vblank_workqueue' not described in 'amdgpu_display_manag=
+er'
 
-Just FYI, Greg prefers this solution.
-https://lore.kernel.org/lkml/20210212045724.77846-1-shuo.a.liu@intel.com/
+Introduced by commit
 
-Thanks
-shuo
+  3cfd14b67b2c ("drm/amd/display: Fix system hang after multiple hotplugs (=
+v2)")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Y3w=68c/7c2xhxac/lTfvOe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmA1ueEACgkQAVBC80lX
+0GzRZgf7BkQDCvY/14IYRb/7LKGWiQVbSuEdK1Pssvh8dSxWUR5ldM2Wupk/Cyy2
+UeGN2sBgrRIYgx1KrV9cknoBniqI0ZM1arp03Rr0cMli2WRkAw79vyDheXHRxUmC
+xVQPYhvcx0DOy4cyywylDc5CscBWphCdKHMOx/ndqbxfwV4vC5OdlgNRCcW3czUa
+NcCxVOvgc72lgOnRfOZUrD1A6hT23W8VVmGcfBl78ARRAXGKnbENI6hdjJFD8AT9
+iVxI+ARKPqdFqYI1IKoxaiWbkYZ5brvF2v9ESbCNtuJ3eXVfeoY7dlVD+7BxJrbR
+4Rp7g9NKeDhClU2YfZ3hPxv7b+GAzQ==
+=eNul
+-----END PGP SIGNATURE-----
+
+--Sig_/Y3w=68c/7c2xhxac/lTfvOe--

@@ -2,172 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B74D8323BE4
-	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 13:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA04B3244CC
+	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 20:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbhBXMbm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Feb 2021 07:31:42 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62436 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231895AbhBXMbk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 24 Feb 2021 07:31:40 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11OCRmhp127435;
-        Wed, 24 Feb 2021 07:30:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=sDGC3IlHnY0OT5SHt5UoDvKYvNTYjnotwLh/JHfl0AQ=;
- b=m0FTg3y/GgC3VwoBsf/sPzK4i5i5Mmn4Dkh7nYS43xoxkXxYrna1o83rsOHeywFpsV+K
- 42M9/2DjSNo2+8+16bL99hdE7Qwwxfwboz4dH7maxz4jpfcekDyZ7c047OZZdpnpx92P
- sNAX1JuaPQ/iv0cPq4sgk0DYEkQ8hER3cbg1ZmL+wNGgU0mi+1QwZfuGU9mzrrTcALHz
- lywYuuIgomS/Mp7ZjcbLDcQXMoIW6eXV6UfJr98VzvljXqVPMyWhXabj5xorBZ6mtmb6
- sJ/yJt1vywD5KyIpl022gTHlqjF7N+OLai9AU/DE4sXefdUTVhDpjxDLqbUUXRZ2JBzb tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36wptrr23r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Feb 2021 07:30:36 -0500
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11OCTIDr130659;
-        Wed, 24 Feb 2021 07:30:34 -0500
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36wptrr229-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Feb 2021 07:30:34 -0500
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11OCN4ML003610;
-        Wed, 24 Feb 2021 12:30:30 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 36tt289v2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Feb 2021 12:30:30 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11OCURjk34013614
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Feb 2021 12:30:27 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB4904C046;
-        Wed, 24 Feb 2021 12:30:27 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE97D4C050;
-        Wed, 24 Feb 2021 12:30:26 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.171.95.10])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 24 Feb 2021 12:30:26 +0000 (GMT)
-Subject: Re: [PATCH V4 1/3] virtio: don't prompt CONFIG_VIRTIO_PCI_MODERN
-To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, shahafs@mellanox.com,
-        sgarzare@redhat.com, rdunlap@infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-References: <20210223061905.422659-1-jasowang@redhat.com>
- <20210223061905.422659-2-jasowang@redhat.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <536d6fe7-f4b1-09bb-0883-b03d6f60a229@de.ibm.com>
-Date:   Wed, 24 Feb 2021 13:30:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        id S235402AbhBXT44 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Feb 2021 14:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235116AbhBXTyu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Feb 2021 14:54:50 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518D6C061A2D
+        for <linux-next@vger.kernel.org>; Wed, 24 Feb 2021 11:52:30 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id e6so2193511pgk.5
+        for <linux-next@vger.kernel.org>; Wed, 24 Feb 2021 11:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pW2C6NKjGyt6KQ8+k1qyLF2XZOuZgCEPgzOEOX+G/TU=;
+        b=jII3h0LfcraMEzGpz++PaDMsso6tQ948UPu5IeTERMD+dQ9KYfarJLK1Y47zo5gHf/
+         C9/gwsZG5ztl1s+yJqEpa0utHhZqu0v3wuFHLH3BNlkCjOoRk4QwW4gjiLXUQB/NrgF4
+         QtI8hF+cuEhE+AGXx3ybbs7l2v0obeI0jV9x4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pW2C6NKjGyt6KQ8+k1qyLF2XZOuZgCEPgzOEOX+G/TU=;
+        b=fgG7VObWX3bXxdyZRoaB9C5d1sPiyTMDvIrL8uR2yZJvntRt9pAgTO3W5Z3CZg7rAw
+         //QadaZ1beZ3ADjPOys3WRwBd2fTAyaEK+hSgRQqqrynVy8XPvpSlq2h3wtK1LpT0mAS
+         HYnk6BtbOHPKKd+NvB2CIi83MlwhBEpy7sG67O9K9pc+NI+6YqjeKPMdkf+G8QWOww6E
+         tFtn6GH03YKVIjqjQWEYhatTRq5ZV47sOmevqYHL5p9MbLsv6J0wOVBtfC5bv1qilDod
+         hkM3F96Ziit/kMrnSScEINyBEDBPxnK1N+i3jCB5tsYiaPgVduMkTdqW1X6jrSujZk2w
+         Xeqg==
+X-Gm-Message-State: AOAM532yBXJYMW7V1tcBM4peNREvnZEdRzE1119kEBRkTLMM+3Y6zuRY
+        r8ef/lcH3aic/pVexVXgCCoZJQ==
+X-Google-Smtp-Source: ABdhPJyn1pvDuBlEZKKlKObpB9wbGJvJ+y8ZK/DYNUycR51QmY333M+rJ9PkRqFvrdw8YRitHAEC0g==
+X-Received: by 2002:a62:ea08:0:b029:1ec:a029:c04a with SMTP id t8-20020a62ea080000b02901eca029c04amr8908418pfh.40.1614196349914;
+        Wed, 24 Feb 2021 11:52:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v126sm3385435pfv.163.2021.02.24.11.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Feb 2021 11:52:29 -0800 (PST)
+Date:   Wed, 24 Feb 2021 11:52:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in Linus' tree
+Message-ID: <202102241146.97ACF2F@keescook>
+References: <20210224113108.4c05915e@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210223061905.422659-2-jasowang@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-24_04:2021-02-24,2021-02-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2102240096
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210224113108.4c05915e@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 23.02.21 07:19, Jason Wang wrote:
-> We used to prompt CONFIG_VIRTIO_PCI_MODERN to user which may bring a
-> lot of confusion. E.g it may break various default configs which want
-> virtio devices.
+On Wed, Feb 24, 2021 at 11:31:08AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> So this patch fixes this by hiding the prompot and documenting the
-> dependency. While at it, rename the module to VIRTIO_PCI_LIB.
+> Commits
 > 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anders Roxell <anders.roxell@linaro.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 86b87c9d858b6 ("virtio-pci: introduce modern device module")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-
-Michael,
-
-Can we please add this NOW to next? virtio-pci is broken without it on
-many defconfigs including s390. So linux-next is broken for more than 
-2 weeks now and it actively breaks several parts of our CI.
-I guess there are other CIs that will not run several testcases because
-of this. And Naresh reported that on Feb 9th.
-There IS value in CI tools on next. Not caring about regressions introduced
-by a tree in next is harmful. Especially when we are close or in the
-merge window. So please: either fix things quickly OR revert.
-
-Christian
-
-
-
-> ---
->  drivers/virtio/Kconfig  | 11 ++++++-----
->  drivers/virtio/Makefile |  2 +-
->  2 files changed, 7 insertions(+), 6 deletions(-)
+>   b33fff07e3e3 ("x86, build: allow LTO to be selected")
+>   d2dcd3e37475 ("x86, cpu: disable LTO for cpu.c")
+>   e242db40be27 ("x86, vdso: disable LTO only for vDSO")
+>   b1a1a1a09b46 ("kbuild: lto: postpone objtool")
+>   41425ebe2024 ("objtool: Split noinstr validation from --vmlinux")
+>   6dafca978033 ("x86, build: use objtool mcount")
+>   22c8542d7b22 ("tracing: add support for objtool mcount")
+>   0e731dbc1824 ("objtool: Don't autodetect vmlinux.o")
+>   18a14575ae31 ("objtool: Fix __mcount_loc generation with Clang's assembler")
+>   99d0021569c7 ("objtool: Add a pass for generating __mcount_loc")
 > 
-> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-> index 6b9b81f4b8c2..ce1b3f6ec325 100644
-> --- a/drivers/virtio/Kconfig
-> +++ b/drivers/virtio/Kconfig
-> @@ -12,13 +12,13 @@ config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->  	  This option is selected if the architecture may need to enforce
->  	  VIRTIO_F_ACCESS_PLATFORM
->  
-> -config VIRTIO_PCI_MODERN
-> -	tristate "Modern Virtio PCI Device"
-> -	depends on PCI
-> +config VIRTIO_PCI_LIB
-> +	tristate
->  	help
->  	  Modern PCI device implementation. This module implements the
->  	  basic probe and control for devices which are based on modern
-> -	  PCI device with possible vendor specific extensions.
-> +	  PCI device with possible vendor specific extensions. Any
-> +	  module that selects this module must depend on PCI.
->  
->  menuconfig VIRTIO_MENU
->  	bool "Virtio drivers"
-> @@ -28,7 +28,8 @@ if VIRTIO_MENU
->  
->  config VIRTIO_PCI
->  	tristate "PCI driver for virtio devices"
-> -	depends on VIRTIO_PCI_MODERN
-> +	depends on PCI
-> +	select VIRTIO_PCI_LIB
->  	select VIRTIO
->  	help
->  	  This driver provides support for virtio based paravirtual device
-> diff --git a/drivers/virtio/Makefile b/drivers/virtio/Makefile
-> index f097578aaa8f..699bbea0465f 100644
-> --- a/drivers/virtio/Makefile
-> +++ b/drivers/virtio/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_VIRTIO) += virtio.o virtio_ring.o
-> -obj-$(CONFIG_VIRTIO_PCI_MODERN) += virtio_pci_modern_dev.o
-> +obj-$(CONFIG_VIRTIO_PCI_LIB) += virtio_pci_modern_dev.o
->  obj-$(CONFIG_VIRTIO_MMIO) += virtio_mmio.o
->  obj-$(CONFIG_VIRTIO_PCI) += virtio_pci.o
->  virtio_pci-y := virtio_pci_modern.o virtio_pci_common.o
-> 
+> are missing a Signed-off-by from their committer.
+
+Ieeeee! Ugh, yes, my bad, entirely. I screwed up when rebuilding the
+LTO "part 2" series for the -rc1 window (missed the -s on the cherry-pick).
+
+Since we can't change git history, the best fix I can do is send it here
+to the list. Obviously, these should all be considered:
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Again, apologies. I, too, will add a commit hook to check for this. (Is
+there an existing script anyone else is already using?)
+
+-- 
+Kees Cook

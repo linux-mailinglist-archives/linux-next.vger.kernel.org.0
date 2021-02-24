@@ -2,214 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF85732350C
-	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 02:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10EF323510
+	for <lists+linux-next@lfdr.de>; Wed, 24 Feb 2021 02:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbhBXBOV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Feb 2021 20:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbhBXAul (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Feb 2021 19:50:41 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD05C06174A;
-        Tue, 23 Feb 2021 16:49:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dlckv41qMz9sSC;
-        Wed, 24 Feb 2021 11:49:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1614127783;
-        bh=bnDN3TXRjKDpkKhYvxNe5IKs2vkMZYjwDtv7yz4jTtk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uaPDwgv/mzrylxoSyF71NM0JVbbWy5IJ2CUD4+1q6EvPLTZpGshvVWlN780Oj1mbC
-         n8xhASv3cLVKNiFXtgIdTftE8faL+gblk7QIUvFAsupcauzPk2nTjodpA6zvn4dD9w
-         bqGbSQ+jebaZMs1gvxRnFzCYkUg1zFZe8SKdRdhxa6OzDTG8htFO5IW+O2oW/g/XxY
-         edW84BOflir8DZOPVxUIkCkFmpiEb4BnIXLYoGvpl2n2VpmIWc6bJg//IPozS0QXI0
-         lmEDoykBOAzXgGiU3fMlPw07FhQITESSN9wuNHw625N3SoNbwp9/0Vw8ccMv7G89u5
-         b/QWwgrv/to7g==
-Date:   Wed, 24 Feb 2021 11:49:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commits in Linus' tree
-Message-ID: <20210224114942.4b07cece@canb.auug.org.au>
-In-Reply-To: <CAHk-=wi1FEJfk9r4Jw90kU3aayXka4Y4HOWdgAtVQHRFTgpQ+A@mail.gmail.com>
-References: <20210224113108.4c05915e@canb.auug.org.au>
-        <CAHk-=wi1FEJfk9r4Jw90kU3aayXka4Y4HOWdgAtVQHRFTgpQ+A@mail.gmail.com>
+        id S232058AbhBXBOx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Feb 2021 20:14:53 -0500
+Received: from mga07.intel.com ([134.134.136.100]:63176 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234668AbhBXBMi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 23 Feb 2021 20:12:38 -0500
+IronPort-SDR: Vj4XR2QglwdpQMhBAzMB+3aTZcTfRCLvlKlIJxb0an04bFqlx6vvSEg+GxNX3XXCuizL6nEcHu
+ qyPpITEHi0Ag==
+X-IronPort-AV: E=McAfee;i="6000,8403,9904"; a="249065603"
+X-IronPort-AV: E=Sophos;i="5.81,201,1610438400"; 
+   d="scan'208";a="249065603"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 17:11:51 -0800
+IronPort-SDR: WaACZKmiY0IRR9yOQtd09Mbo11q6wWM3zuPagSCaqco92Vn8GlIr6Tbj1KJm5pNZ37BSlMmvly
+ eZGWDG1yCsGg==
+X-IronPort-AV: E=Sophos;i="5.81,201,1610438400"; 
+   d="scan'208";a="499373345"
+Received: from shuo-intel.sh.intel.com (HELO localhost) ([10.239.154.30])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 17:11:49 -0800
+Date:   Wed, 24 Feb 2021 09:11:47 +0800
+From:   Shuo A Liu <shuo.a.liu@intel.com>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH RESEND v2 2/2] virt: acrn: Make remove_cpu sysfs
+ invisible with !CONFIG_HOTPLUG_CPU
+Message-ID: <20210224011147.GD30008@shuo-intel.sh.intel.com>
+References: <20210221134339.57851-1-shuo.a.liu@intel.com>
+ <20210221134339.57851-2-shuo.a.liu@intel.com>
+ <20210223152530.y2qfyozdaowmfcat@e107158-lin>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BsGPOjVp_W0f6GbW3.iJhPs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20210223152530.y2qfyozdaowmfcat@e107158-lin>
+User-Agent: Mutt/1.8.3 (2017-05-23)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BsGPOjVp_W0f6GbW3.iJhPs
-Content-Type: multipart/mixed; boundary="MP_/dZsoABLINH_ZYBpnWH.bwBW"
+Hi,
 
---MP_/dZsoABLINH_ZYBpnWH.bwBW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-
-Hi Linus,
-
-On Tue, 23 Feb 2021 16:33:47 -0800 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
+On Tue 23.Feb'21 at 15:25:30 +0000, Qais Yousef wrote:
+>On 02/21/21 21:43, shuo.a.liu@intel.com wrote:
+>> From: Shuo Liu <shuo.a.liu@intel.com>
+>>
+>> Without cpu hotplug support, vCPU cannot be removed from a Service VM.
+>> Don't expose remove_cpu sysfs when CONFIG_HOTPLUG_CPU disabled.
+>>
+>> Signed-off-by: Shuo Liu <shuo.a.liu@intel.com>
+>> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+>> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Qais Yousef <qais.yousef@arm.com>
+>> ---
+>>  drivers/virt/acrn/hsm.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+>> index 1f6b7c54a1a4..6996ea6219e5 100644
+>> --- a/drivers/virt/acrn/hsm.c
+>> +++ b/drivers/virt/acrn/hsm.c
+>> @@ -404,6 +404,14 @@ static ssize_t remove_cpu_store(struct device *dev,
+>>  }
+>>  static DEVICE_ATTR_WO(remove_cpu);
+>>
+>> +static umode_t acrn_attr_visible(struct kobject *kobj, struct attribute *a, int n)
+>> +{
+>> +       if (a == &dev_attr_remove_cpu.attr)
+>> +               return IS_ENABLED(CONFIG_HOTPLUG_CPU) ? a->mode : 0;
+>> +
+>> +       return a->mode;
+>> +}
+>> +
 >
-> On Tue, Feb 23, 2021 at 4:31 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > are missing a Signed-off-by from their committer. =20
->=20
-> Gaah. Maybe I should do some pre-pull hook or something to notice this
-> automatically (like you clearly do).
+>I can't find this code in Linus' master. But this looks fine from my narrow
 
-I have attached the scripts I run over things after fetching them, but
-before merging them (so not a hook, sorry).  check_commits runs
-check_fixes - but just for my convenience.
+Now, the code is still in linux-next tree only.
 
---=20
-Cheers,
-Stephen Rothwell
+>PoV. Protecting the attribute with ifdef CONFIG_HOTPLUG_CPU is easier to read
+>for me, but this doesn't mean this approach is not fine.
 
---MP_/dZsoABLINH_ZYBpnWH.bwBW
-Content-Type: application/x-shellscript
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=check_commits
+Just FYI, Greg prefers this solution.
+https://lore.kernel.org/lkml/20210212045724.77846-1-shuo.a.liu@intel.com/
 
-IyEvYmluL2Jhc2gKCmlmIFsgIiQjIiAtbHQgMSBdOyB0aGVuCglwcmludGYgJ1VzYWdlOiAlcyA8
-Y29tbWl0IHJhbmdlPlxuJyAiJDAiIDE+JjIKCWV4aXQgMQpmaQoKY29tbWl0cz0kKGdpdCByZXYt
-bGlzdCAtLW5vLW1lcmdlcyAiJEAiKQppZiBbIC16ICIkY29tbWl0cyIgXTsgdGhlbgoJcHJpbnRm
-ICdObyBjb21taXRzXG4nCglleGl0IDAKZmkKCiIkKHJlYWxwYXRoICIkKGRpcm5hbWUgIiQwIiki
-KS9jaGVja19maXhlcyIgIiRAIgoKZGVjbGFyZSAtYSBhdXRob3JfbWlzc2luZyBjb21taXR0ZXJf
-bWlzc2luZwoKcHJpbnRfY29tbWl0cygpCnsKCWlmIFsgIiQjIiAtZXEgMSBdOyB0aGVuCgkJcmV0
-dXJuCglmaQoKCWxvY2FsIHQ9IiQxIgoKCXNoaWZ0CgoJcz0KCWlzPSdpcycKCWl0cz0naXRzJwoJ
-aWYgWyAiJCMiIC1ndCAxIF07IHRoZW4KCQlzPSdzJwoJCWlzPSdhcmUnCgkJaXRzPSd0aGVpcicK
-CWZpCglwcmludGYgJ0NvbW1pdCVzXG5cbicgIiRzIgoJZ2l0IGxvZyAtLW5vLXdhbGsgLS1wcmV0
-dHk9J2Zvcm1hdDogICVoICgiJXMiKScgIiRAIgoJcHJpbnRmICdcbiVzIG1pc3NpbmcgYSBTaWdu
-ZWQtb2ZmLWJ5IGZyb20gJXMgJXMlcy5cblxuJyBcCgkJIiRpcyIgIiRpdHMiICIkdCIgIiRzIgp9
-CgpjaGVja191bmV4cGVjdGVkX2ZpbGVzKCkKewoJbG9jYWwgZmlsZXMKCglyZWFkYXJyYXkgZmls
-ZXMgPCA8KGdpdCBkaWZmLXRyZWUgLXIgLS1kaWZmLWZpbHRlcj1BIC0tbmFtZS1vbmx5IC0tbm8t
-Y29tbWl0LWlkICIkMSIgJyoucmVqJyAnKi5vcmlnJykKCWlmIFsgIiR7I2ZpbGVzW0BdfSIgLWVx
-IDAgXTsgdGhlbgoJCXJldHVybgoJZmkKCglzPQoJdGhpcz0ndGhpcycKCWlmIFsgIiR7I2ZpbGVz
-W0BdfSIgLWd0IDEgXTsgdGhlbgoJCXM9J3MnCgkJdGhpcz0ndGhlc2UnCglmaQoKCXByaW50ZiAn
-Q29tbWl0XG5cbicKCWdpdCBsb2cgLS1uby13YWxrIC0tcHJldHR5PSdmb3JtYXQ6ICAlaCAoIiVz
-IiknICIkMSIKCXByaW50ZiAnXG5hZGRlZCAlcyB1bmV4cGVjdGVkIGZpbGUlczpcblxuJyAiJHRo
-aXMiICIkcyIKCXByaW50ZiAnICAlc1xuJyAiJHtmaWxlc1tAXX0iCn0KCmZvciBjIGluICRjb21t
-aXRzOyBkbwoJYWU9JChnaXQgbG9nIC0xIC0tZm9ybWF0PSc8JWFlPiVuPCVhRT4lbiAlYW4gJW4g
-JWFOICcgIiRjIiB8IHNvcnQgLXUpCgljZT0kKGdpdCBsb2cgLTEgLS1mb3JtYXQ9JzwlY2U+JW48
-JWNFPiVuICVjbiAlbiAlY04gJyAiJGMiIHwgc29ydCAtdSkKCXNvYj0kKGdpdCBsb2cgLTEgLS1m
-b3JtYXQ9JyViJyAiJGMiIHwKCQlzZWQgLUVuICdzL15ccypTaWduZWQtb2ZmLWJ5Oj9ccyovIC9p
-cCcpCgoJaWYgISBncmVwIC1pIC1GIC1xICIkYWUiIDw8PCIkc29iIjsgdGhlbgoJCWF1dGhvcl9t
-aXNzaW5nKz0oIiRjIikKCWZpCglpZiAhIGdyZXAgLWkgLUYgLXEgIiRjZSIgPDw8IiRzb2IiOyB0
-aGVuCgkJY29tbWl0dGVyX21pc3NpbmcrPSgiJGMiKQoJZmkKCgljaGVja191bmV4cGVjdGVkX2Zp
-bGVzICIkYyIKZG9uZQoKcHJpbnRfY29tbWl0cyAnYXV0aG9yJyAiJHthdXRob3JfbWlzc2luZ1tA
-XX0iCnByaW50X2NvbW1pdHMgJ2NvbW1pdHRlcicgIiR7Y29tbWl0dGVyX21pc3NpbmdbQF19IgoK
-ZXhlYyBnaXRrICIkQCIK
-
---MP_/dZsoABLINH_ZYBpnWH.bwBW
-Content-Type: application/x-shellscript
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=check_fixes
-
-IyEvYmluL2Jhc2gKCnNob3B0IC1zIGV4dGdsb2IKCmlmIFsgIiQjIiAtbHQgMSBdOyB0aGVuCiAg
-ICAgICAgcHJpbnRmICdVc2FnZTogJXMgPGNvbW1pdCByYW5nZT5cbicsICIkMCIgMT4mMgogICAg
-ICAgIGV4aXQgMQpmaQoKY29tbWl0cz0kKGdpdCByZXYtbGlzdCAtLW5vLW1lcmdlcyAtaSAtLWdy
-ZXA9J15bWzpzcGFjZTpdXSpGaXhlczonICIkQCIpCmlmIFsgLXogIiRjb21taXRzIiBdOyB0aGVu
-CiAgICAgICAgZXhpdCAwCmZpCgojIFRoaXMgc2hvdWxkIGJlIGEgZ2l0IHRyZWUgdGhhdCBjb250
-YWlucyAqb25seSogTGludXMnIHRyZWUKTGludXNfdHJlZT0iJHtIT01FfS9rZXJuZWxzL2xpbnVz
-LmdpdCIKCnNwbGl0X3JlPSdeKFtDY11bT29dW01tXVtNbV1bSWldW1R0XSk/W1s6c3BhY2U6XV0q
-KFtbOnhkaWdpdDpdXXs1LH0pKFtbOnNwYWNlOl1dKikoLiopJCcKbmw9JCdcbicKdGFiPSQnXHQn
-CgojIFN0cmlwIHRoZSBsZWFkaW5nIGFuZCB0cmFpbmluZyBzcGFjZXMgZnJvbSBhIHN0cmluZwpz
-dHJpcF9zcGFjZXMoKQp7Cglsb2NhbCBzdHI9IiR7MSMjKihbWzpzcGFjZTpdXSl9IgoJc3RyPSIk
-e3N0ciUlKihbWzpzcGFjZTpdXSl9IgoJZWNobyAiJHN0ciIKfQoKZm9yIGMgaW4gJGNvbW1pdHM7
-IGRvCgoJcHJpbnRmIC12IGNvbW1pdF9tc2cgJ0luIGNvbW1pdFxuXG4gICVzXG5cbicgXAoJCSIk
-KGdpdCBsb2cgLTEgLS1mb3JtYXQ9JyVoICgiJXMiKScgIiRjIikiCgoJcmVhZGFycmF5IC10IGZp
-eGVzX2xpbmVzIDwgPChnaXQgbG9nIC0xIC0tZm9ybWF0PSclQicgIiRjIiB8CgkJCQkJZ3JlcCAt
-aSAnXltbOnNwYWNlOl1dKkZpeGVzOicpCglmaXhlc19saW5lcz0oICIke2ZpeGVzX2xpbmVzW0Bd
-IyMqKFtbOnNwYWNlOl1dKX0iICkKCWZpeGVzX2xpbmVzPSggIiR7Zml4ZXNfbGluZXNbQF0lJSoo
-W1s6c3BhY2U6XV0pfSIgKQoKCWZvciBmbGluZSBpbiAiJHtmaXhlc19saW5lc1tAXX0iOyBkbwoJ
-CWY9IiR7ZmxpbmUjI1tGZl1bSWldW1h4XVtFZV1bU3NdOiooW1s6c3BhY2U6XV0pfSIKCQlwcmlu
-dGYgLXYgZml4ZXNfbXNnICdGaXhlcyB0YWdcblxuICAlc1xuXG5oYXMgdGhlc2UgcHJvYmxlbShz
-KTpcblxuJyAiJGZsaW5lIgoJCXNoYT0KCQlzdWJqZWN0PQoJCW1zZz0KCQlpZiBbWyAiJGYiID1+
-ICRzcGxpdF9yZSBdXTsgdGhlbgoJCQlmaXJzdD0iJHtCQVNIX1JFTUFUQ0hbMV19IgoJCQlzaGE9
-IiR7QkFTSF9SRU1BVENIWzJdfSIKCQkJc3BhY2VzPSIke0JBU0hfUkVNQVRDSFszXX0iCgkJCXN1
-YmplY3Q9IiR7QkFTSF9SRU1BVENIWzRdfSIKCQkJaWYgWyAiJGZpcnN0IiBdOyB0aGVuCgkJCQlt
-c2c9IiR7bXNnOiske21zZ30ke25sfX0gIC0gbGVhZGluZyB3b3JkICckZmlyc3QnIHVuZXhwZWN0
-ZWQiCgkJCWZpCgkJCWlmIFsgLXogIiRzdWJqZWN0IiBdOyB0aGVuCgkJCQltc2c9IiR7bXNnOisk
-e21zZ30ke25sfX0gIC0gbWlzc2luZyBzdWJqZWN0IgoJCQllbGlmIFsgLXogIiRzcGFjZXMiIF07
-IHRoZW4KCQkJCW1zZz0iJHttc2c6KyR7bXNnfSR7bmx9fSAgLSBtaXNzaW5nIHNwYWNlIGJldHdl
-ZW4gdGhlIFNIQTEgYW5kIHRoZSBzdWJqZWN0IgoJCQlmaQoJCWVsc2UKCQkJcHJpbnRmICclcyVz
-ICAtICVzXG4nICIkY29tbWl0X21zZyIgIiRmaXhlc19tc2ciICdObyBTSEExIHJlY29nbmlzZWQn
-CgkJCWNvbW1pdF9tc2c9JycKCQkJY29udGludWUKCQlmaQoJCWlmICEgZ2l0IHJldi1wYXJzZSAt
-cSAtLXZlcmlmeSAiJHNoYSIgPi9kZXYvbnVsbDsgdGhlbgoJCQlwcmludGYgJyVzJXMgIC0gJXNc
-bicgIiRjb21taXRfbXNnIiAiJGZpeGVzX21zZyIgJ1RhcmdldCBTSEExIGRvZXMgbm90IGV4aXN0
-JwoJCQljb21taXRfbXNnPScnCgkJCWNvbnRpbnVlCgkJZmkKCgkJaWYgWyAiJHsjc2hhfSIgLWx0
-IDEyIF07IHRoZW4KCQkJbXNnPSIke21zZzorJHttc2d9JHtubH19ICAtIFNIQTEgc2hvdWxkIGJl
-IGF0IGxlYXN0IDEyIGRpZ2l0cyBsb25nJHtubH0gICAgQ2FuIGJlIGZpeGVkIGJ5IHNldHRpbmcg
-Y29yZS5hYmJyZXYgdG8gMTIgKG9yIG1vcmUpIG9yIChmb3IgZ2l0IHYyLjExJHtubH0gICAgb3Ig
-bGF0ZXIpIGp1c3QgbWFraW5nIHN1cmUgaXQgaXMgbm90IHNldCAob3Igc2V0IHRvIFwiYXV0b1wi
-KS4iCgkJZmkKCQkjIHJlZHVjZSB0aGUgc3ViamVjdCB0byB0aGUgcGFydCBiZXR3ZWVuICgpIGlm
-IHRoZXJlCgkJaWYgW1sgIiRzdWJqZWN0IiA9fiBeXCgoLiopXCkgXV07IHRoZW4KCQkJc3ViamVj
-dD0iJHtCQVNIX1JFTUFUQ0hbMV19IgoJCWVsaWYgW1sgIiRzdWJqZWN0IiA9fiBeXCgoLiopIF1d
-OyB0aGVuCgkJCXN1YmplY3Q9IiR7QkFTSF9SRU1BVENIWzFdfSIKCQkJbXNnPSIke21zZzorJHtt
-c2d9JHtubH19ICAtIFN1YmplY3QgaGFzIGxlYWRpbmcgYnV0IG5vIHRyYWlsaW5nIHBhcmVudGhl
-c2VzIgoJCWZpCgoJCSMgc3RyaXAgbWF0Y2hpbmcgcXVvdGVzIGF0IHRoZSBzdGFydCBhbmQgZW5k
-IG9mIHRoZSBzdWJqZWN0CgkJIyB0aGUgdW5pY29kZSBjaGFyYWN0ZXJzIGluIHRoZSBjbGFzc2Vz
-IGFyZQoJCSMgVSsyMDFDIExFRlQgRE9VQkxFIFFVT1RBVElPTiBNQVJLCgkJIyBVKzIwMUQgUklH
-SFQgRE9VQkxFIFFVT1RBVElPTiBNQVJLCgkJIyBVKzIwMTggTEVGVCBTSU5HTEUgUVVPVEFUSU9O
-IE1BUksKCQkjIFUrMjAxOSBSSUdIVCBTSU5HTEUgUVVPVEFUSU9OIE1BUksKCQlyZTE9JCdeW1wi
-XHUyMDFDXSguKilbXCJcdTIwMURdJCcKCQlyZTI9JCdeW1wnXHUyMDE4XSguKilbXCdcdTIwMTld
-JCcKCQlyZTM9JCdeW1wiXCdcdTIwMUNcdTIwMThdKC4qKSQnCgkJaWYgW1sgIiRzdWJqZWN0IiA9
-fiAkcmUxIF1dOyB0aGVuCgkJCXN1YmplY3Q9IiR7QkFTSF9SRU1BVENIWzFdfSIKCQllbGlmIFtb
-ICIkc3ViamVjdCIgPX4gJHJlMiBdXTsgdGhlbgoJCQlzdWJqZWN0PSIke0JBU0hfUkVNQVRDSFsx
-XX0iCgkJZWxpZiBbWyAiJHN1YmplY3QiID1+ICRyZTMgXV07IHRoZW4KCQkJc3ViamVjdD0iJHtC
-QVNIX1JFTUFUQ0hbMV19IgoJCQltc2c9IiR7bXNnOiske21zZ30ke25sfX0gIC0gU3ViamVjdCBo
-YXMgbGVhZGluZyBidXQgbm8gdHJhaWxpbmcgcXVvdGVzIgoJCWZpCgoJCXN1YmplY3Q9JChzdHJp
-cF9zcGFjZXMgIiRzdWJqZWN0IikKCgkJdGFyZ2V0X3N1YmplY3Q9JChnaXQgbG9nIC0xIC0tZm9y
-bWF0PSclcycgIiRzaGEiKQoJCXRhcmdldF9zdWJqZWN0PSQoc3RyaXBfc3BhY2VzICIkdGFyZ2V0
-X3N1YmplY3QiKQoKCQkjIG1hdGNoIHdpdGggZWxsaXBzZXMKCQljYXNlICIkc3ViamVjdCIgaW4K
-CQkqLi4uKQlzdWJqZWN0PSIke3N1YmplY3QlLi4ufSIKCQkJdGFyZ2V0X3N1YmplY3Q9IiR7dGFy
-Z2V0X3N1YmplY3Q6MDokeyNzdWJqZWN0fX0iCgkJCTs7CgkJLi4uKikJc3ViamVjdD0iJHtzdWJq
-ZWN0Iy4uLn0iCgkJCXRhcmdldF9zdWJqZWN0PSIke3RhcmdldF9zdWJqZWN0OiAtJHsjc3ViamVj
-dH19IgoJCQk7OwoJCSpcIC4uLlwgKikKCQkJczE9IiR7c3ViamVjdCUgLi4uICp9IgoJCQlzMj0i
-JHtzdWJqZWN0IyogLi4uIH0iCgkJCXN1YmplY3Q9IiRzMSAkczIiCgkJCXQxPSIke3RhcmdldF9z
-dWJqZWN0OjA6JHsjczF9fSIKCQkJdDI9IiR7dGFyZ2V0X3N1YmplY3Q6IC0keyNzMn19IgoJCQl0
-YXJnZXRfc3ViamVjdD0iJHQxICR0MiIKCQkJOzsKCQllc2FjCgkJc3ViamVjdD0kKHN0cmlwX3Nw
-YWNlcyAiJHN1YmplY3QiKQoJCXRhcmdldF9zdWJqZWN0PSQoc3RyaXBfc3BhY2VzICIkdGFyZ2V0
-X3N1YmplY3QiKQoKCQlpZiBbICIkc3ViamVjdCIgIT0gIiR7dGFyZ2V0X3N1YmplY3Q6MDokeyNz
-dWJqZWN0fX0iIF07IHRoZW4KCQkJbXNnPSIke21zZzorJHttc2d9JHtubH19ICAtIFN1YmplY3Qg
-ZG9lcyBub3QgbWF0Y2ggdGFyZ2V0IGNvbW1pdCBzdWJqZWN0JHtubH0gICAgSnVzdCB1c2Uke25s
-fSR7dGFifWdpdCBsb2cgLTEgLS1mb3JtYXQ9J0ZpeGVzOiAlaCAoXCIlc1wiKSciCgkJZmkKCQls
-c2hhPSQoY2QgIiRMaW51c190cmVlIiAmJiBnaXQgcmV2LXBhcnNlIC1xIC0tdmVyaWZ5ICIkc2hh
-IikKCQlpZiBbIC16ICIkbHNoYSIgXTsgdGhlbgoJCQljb3VudD0kKGdpdCByZXYtbGlzdCAtLWNv
-dW50ICIkc2hhIi4uIiRjIikKCQkJaWYgWyAiJGNvdW50IiAtZXEgMCBdOyB0aGVuCgkJCQltc2c9
-IiR7bXNnOiske21zZ30ke25sfX0gIC0gVGFyZ2V0IGlzIG5vdCBhbiBhbmNlc3RvciBvZiB0aGlz
-IGNvbW1pdCIKCQkJZmkKCQlmaQoJCWlmIFsgIiRtc2ciIF07IHRoZW4KCQkJcHJpbnRmICclcyVz
-JXNcbicgIiRjb21taXRfbXNnIiAiJGZpeGVzX21zZyIgIiRtc2ciCgkJCWNvbW1pdF9tc2c9JycK
-CQlmaQoJZG9uZQpkb25lCgpleGl0IDAK
-
---MP_/dZsoABLINH_ZYBpnWH.bwBW--
-
---Sig_/BsGPOjVp_W0f6GbW3.iJhPs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmA1oqYACgkQAVBC80lX
-0Gylxwf/bmhRfokZ7reh1H9MkM8SSg0oXPE64H3chOPYXe2P7nplScrECxZ9hJJ6
-O4cLwfcn+3DASL/WKCX4EZpWELXnGMVKuN0Kb5tX4bWt7OuiVcTA0lUVyGKpXaWQ
-MxNQntjrLBbwtSM/A1MkCykFiTFc/xvwITa5iGwyeyZsJHIyaMz222JR09MqAeAa
-1yBPc9pDI3afBjV0IkOikqH3Ypxqgmrv25BionBtj7QmnCkyxpGb8N0QADKqOFaA
-vU+0oOEuD6iCzxda4spfY5C5JMHwG+f8uQ18JdFmiiPZDiiA9E6X2d34hhO1e+YO
-1BpDM4tBb4Xb89wXLAKCdhd/Y57ZjQ==
-=TjW4
------END PGP SIGNATURE-----
-
---Sig_/BsGPOjVp_W0f6GbW3.iJhPs--
+Thanks
+shuo

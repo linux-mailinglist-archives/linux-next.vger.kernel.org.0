@@ -2,114 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A0F3259B7
-	for <lists+linux-next@lfdr.de>; Thu, 25 Feb 2021 23:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2154C325A36
+	for <lists+linux-next@lfdr.de>; Fri, 26 Feb 2021 00:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbhBYWg4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Feb 2021 17:36:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230386AbhBYWgy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 25 Feb 2021 17:36:54 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11PMWu7O194326;
-        Thu, 25 Feb 2021 17:36:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=mHKwSgepPZfDmj38IHgbJ9+M5MpnFlYOsbj2cozvhSU=;
- b=U3CvZK/FK4wwk6nclbyIGaOYAS1S1Rxf8jEyZtYTiS6/XMqeChMBbs4bMR82Gc+Wmh6w
- TccfZSEyuMpnGah6NSAYvn9VkBTfLQWaDpmLe+6kPFHTXdS25RSvsdjrMzSyHL1GdIGE
- MOtc3/UA9DEU98ndKXEmG8JkXk8aV7xcMZh3J3MGOWLV0HaFLY6/Z8uT7yPNm4IBop8r
- WfWkKNC/iqpir0R0vu31717vOfFDWgSj2YqWgU390v8Er4K8cHpIU4n2wXOnKY9rSrpY
- aMGu5EKNpBQYceHjHvvXeEhKHbJTb6rq0lPcR2RbCcHTcyKgziB8IAj2MScXHHWqP+RS Eg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36xfck1yx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Feb 2021 17:36:08 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11PMThmr018850;
-        Thu, 25 Feb 2021 22:36:05 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 36tsph4t8c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Feb 2021 22:36:05 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11PMZowT35389916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Feb 2021 22:35:50 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 806494C08B;
-        Thu, 25 Feb 2021 22:36:03 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 373614C086;
-        Thu, 25 Feb 2021 22:36:03 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 25 Feb 2021 22:36:03 +0000 (GMT)
-Received: from [9.206.188.228] (unknown [9.206.188.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S229954AbhBYXdi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Feb 2021 18:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbhBYXdi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Feb 2021 18:33:38 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB10C061574;
+        Thu, 25 Feb 2021 15:32:57 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id DA6BE6023F;
-        Fri, 26 Feb 2021 09:35:59 +1100 (AEDT)
-Subject: Re: linux-next: Fixes tag needs some work in the jc_docs tree
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210226083433.1419e9c9@canb.auug.org.au>
- <87a6rrbze2.fsf@meer.lwn.net>
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-Message-ID: <89ce7fd6-f71c-b9b2-febd-bbfafdd7b484@linux.ibm.com>
-Date:   Fri, 26 Feb 2021 09:35:54 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DmpxH4lPhz9sBJ;
+        Fri, 26 Feb 2021 10:32:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1614295974;
+        bh=eQ6kffqDVHJ2uzHeKjRoPUaCZwkfCTZSsKybnP6LcIo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BRzyLAt0uvOGcDlP32qk5RNrfneXetL2OdlYSMNQjcylb17fIv7KRZdvT3LGV4wXo
+         AegvrOGj8ZZmadFttVkyUPDwA8jswncIhSCroEQ136bP7AhbiSQaSykesN3FJz3pnq
+         DsSMsmDdT68HF/wHGEnHINlGwoMDFSwHs1bXsvLSSeedRq2pxaKaMGzGI+baBkMJ05
+         MI7jDn2XPklcVFziUrwr63jQp4qsylmSfLt0kVhiXiS1vEVh6D1nGlLtx3+fCuu23f
+         gTfPeNfmcsCmri/762lWkloyxEM7okiIz0ZAvx8TiSTSwDPcdFGlANL8fPCtXKmD4y
+         WbopmqwfgaCQw==
+Date:   Fri, 26 Feb 2021 10:32:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin Raiber <martin@urbackup.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ btrfs tree
+Message-ID: <20210226103250.7b08a233@canb.auug.org.au>
+In-Reply-To: <20210215084634.06c1b430@canb.auug.org.au>
+References: <20210127223918.1b3e4b3f@canb.auug.org.au>
+        <20210215084634.06c1b430@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <87a6rrbze2.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-25_14:2021-02-24,2021-02-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- mlxlogscore=999 mlxscore=0 adultscore=0 impostorscore=0 suspectscore=0
- bulkscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102250170
+Content-Type: multipart/signed; boundary="Sig_/uo1/9bbAQ8+im9In9I57Sx6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 26/2/21 8:39 am, Jonathan Corbet wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> 
->> Hi all,
->>
->> In commit
->>
->>    36eaf08fc283 ("docs: powerpc: Fix tables in syscall64-abi.rst")
->>
->> Fixes tag
->>
->>    Fixes: 209b44c804c ("docs: powerpc: syscall64-abi.rst: fix a malformed table")
->>
->> has these problem(s):
->>
->>    - SHA1 should be at least 12 digits long
->>
->> I don't think this is worth rebasing for, but in the future it can be
->> fixed by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
->> just making sure it is not set (or set to "auto").
-> 
-> I made that tag by hand while "fixing" the changlog on that commit,
-> which included the full ID.  Obviously, counting to 12 is a challenging
-> task for a slow guy like me...:)
+--Sig_/uo1/9bbAQ8+im9In9I57Sx6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No, no, my local tree tells me that *I* made that tag by hand and failed 
-to count properly... sorry for the noise!
+Hi all,
 
--- 
-Andrew Donnellan              OzLabs, ADL Canberra
-ajd@linux.ibm.com             IBM Australia Limited
+On Mon, 15 Feb 2021 08:46:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Wed, 27 Jan 2021 22:39:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > Today's linux-next merge of the akpm-current tree got a conflict in:
+> >=20
+> >   fs/btrfs/file.c
+> >=20
+> > between commit:
+> >=20
+> >   0225a20db6d8 ("btrfs: Prevent nowait or async read from doing sync IO=
+")
+> >=20
+> > from the btrfs tree and commit:
+> >=20
+> >   ddcd14c48a30 ("mm/filemap: rename generic_file_buffered_read to filem=
+ap_read")
+> >=20
+> > from the akpm-current tree.
+> >=20
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >=20
+> > diff --cc fs/btrfs/file.c
+> > index 5282f456c99c,898ef7b792b7..000000000000
+> > --- a/fs/btrfs/file.c
+> > +++ b/fs/btrfs/file.c
+> > @@@ -3629,18 -3639,7 +3629,18 @@@ static ssize_t btrfs_file_read_iter(s=
+tr
+> >   			return ret;
+> >   	}
+> >  =20
+> >  -	return filemap_read(iocb, to, ret);
+> >  +	if (iocb->ki_flags & IOCB_NOWAIT)
+> >  +		iocb->ki_flags |=3D IOCB_NOIO;
+> >  +
+> > - 	ret =3D generic_file_buffered_read(iocb, to, ret);
+> > ++	ret =3D filemap_read(iocb, to, ret);
+> >  +
+> >  +	if (iocb->ki_flags & IOCB_NOWAIT) {
+> >  +		iocb->ki_flags &=3D ~IOCB_NOIO;
+> >  +		if (ret =3D=3D 0)
+> >  +			ret =3D -EAGAIN;
+> >  +	}
+> >  +
+> >  +	return ret;
+> >   }
+> >  =20
+> >   const struct file_operations btrfs_file_operations =3D { =20
+>=20
+> With the merge window about to open, this is a reminder that this
+> conflict still exists.
+>=20
+> The btrfs tree commit is now
+>=20
+>   1605f1b63c76 ("btrfs: Prevent nowait or async read from doing sync IO")
+
+Now
+
+  5b1c5c4216f2 ("btrfs: Prevent nowait or async read from doing sync IO")
+
+> The akpm-current commit is now
+>=20
+>   de45c82ebea8 ("mm/filemap: rename generic_file_buffered_read to filemap=
+_read")
+
+Now in Linus' tree as
+
+  87fa0f3eb267 ("mm/filemap: rename generic_file_buffered_read to filemap_r=
+ead")
+
+This ia now a conflict between the btrfs tree and Linus' tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uo1/9bbAQ8+im9In9I57Sx6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmA4M6IACgkQAVBC80lX
+0Gw/Qgf9F4Gq3mkCg6vBGD9ub3M4dJbLl9ep6unGy1Mg6ueS2Yr6PP12tt5Gh1/f
+B4W4h45TVoFeyO1WoDcojr4rXrSh1rlwYY1uXbgpyPn38ip7xj4Zqtf7Km5vnq93
+0N0QkxGryNQix6yAM2G2LZa6bCeQ+jK4i34RdvsuVaFh7GwY3NOZqvzSzUZ5a+To
+KFLSueQNVApD4MJQ6NyhYsdcP8AnmgnK6inZRfosKlwhTR+ITlpeRhfAjfoAwzw1
+1C5NO7MNTp+hNuWdhtvrJD5LMU1B4jzr/cdrKHEJydyIAzqhdhP17w2Tu0ZzX+PX
+KC6BOS26nJMdpRxUlRO2r6FDl+Ykcw==
+=cBHK
+-----END PGP SIGNATURE-----
+
+--Sig_/uo1/9bbAQ8+im9In9I57Sx6--

@@ -2,91 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61EC324BD5
-	for <lists+linux-next@lfdr.de>; Thu, 25 Feb 2021 09:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17570324DE3
+	for <lists+linux-next@lfdr.de>; Thu, 25 Feb 2021 11:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbhBYIOX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Feb 2021 03:14:23 -0500
-Received: from m42-2.mailgun.net ([69.72.42.2]:23667 "EHLO m42-2.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233001AbhBYIOU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 25 Feb 2021 03:14:20 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1614240839; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=mjpCUN75mxBIkE9oG7YOQEDH03kOxOJ1QPxbXjijrOo=; b=BLdiYrPUdpnZhFuNjYHgcKPtdTUK6PBKLUAo6/+gLIFL/fjNzWd+dz1owZGkaDxbKlDBk85z
- DQ8ViM/d0TK+YrEtO1k38I+Ms6+VSnawPw74ySiF46bRo2p4tXjGXb18/x9yBah0Z0EM73Y3
- vCLGsugmbY8Ucz8GAy4jgR+KWhY=
-X-Mailgun-Sending-Ip: 69.72.42.2
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 60375c47669548ff7a814e70 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 25 Feb 2021 08:13:59
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D0A1CC433C6; Thu, 25 Feb 2021 08:13:58 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tynnyri.adurom.net (tynnyri.adurom.net [51.15.11.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A05B6C433CA;
-        Thu, 25 Feb 2021 08:13:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A05B6C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 23 [drivers/net/wireless/intel/iwlwifi/iwlwifi.ko]
-References: <20210223173539.049dd40d@canb.auug.org.au>
-        <a3f440a5-2178-ffd8-a043-25b18fa42f0f@infradead.org>
-Date:   Thu, 25 Feb 2021 10:13:50 +0200
-In-Reply-To: <a3f440a5-2178-ffd8-a043-25b18fa42f0f@infradead.org> (Randy
-        Dunlap's message of "Tue, 23 Feb 2021 11:52:13 -0800")
-Message-ID: <87r1l4ef9d.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S232767AbhBYKSp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Feb 2021 05:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234675AbhBYKPr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Feb 2021 05:15:47 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89FC06174A
+        for <linux-next@vger.kernel.org>; Thu, 25 Feb 2021 02:13:46 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id a24so2916729plm.11
+        for <linux-next@vger.kernel.org>; Thu, 25 Feb 2021 02:13:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=X54RFClwcXqB/1UofqcFe5e+kL+Nr4BFCbhBOfYR2Hc=;
+        b=Km23wriBV9qigbgR+kC/7Ty92DoGjsVl0RP2uIBieS9QGyCPoKfR/i1ESYjZepvIZd
+         0zYbhZC2S/pz/2xO9ud439RHCB3hzs388mNz1GwR4cmCosNwAuTxfC1Arcoy6u8p+RQ2
+         a1itlTFDageVgJhXUxM4MSnRmsZtiQELf/8fpy/YUotUdmHzqRDogXwCCeZYi87z4vjC
+         RNbtjtmI2goiZMhl6oS/p1EKDrL8NEs49q81oTMYZ/wf1MvlT8j93kwQamJrOAh6bdAl
+         KK6gzUdpgz+LxLle/tla2XtNjFi33UF+2H2weZocAxThUvxdj/6kKavqJKm0RltcOvxg
+         HPXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=X54RFClwcXqB/1UofqcFe5e+kL+Nr4BFCbhBOfYR2Hc=;
+        b=Jaa66+gu1eRJMiKw9fOH0HOrYlGNdjjR3NGyKacDNvDi2rMrb77YF3lQLxm5CKvsWr
+         IXfwxyFBj/WxCQ08XTUvAEkM0dWLOOSOTJ8vPaXA2k3LH0EODnG4FzOqWs/EIKRbdekA
+         pqNgMCdqvcE8hbL75OIRhHDKk/Q5D1hKVTyhr7lk4uqBCHKGUzltzHjWQuh5lTh9jS2t
+         ccOCo/1bbZRck3SEAe0YFVhzQCPy6bB32w5JWz1Bf7Tau5wa5xshx8e/NirkWzQ4lPco
+         yjGWyxa1D60oKX6pm12nC/A3xR3jOJ2zwLtEA3oXEVxu2NnZfc7l7E7IB+DXoGD9NnNT
+         LZSQ==
+X-Gm-Message-State: AOAM531N31ukrapx/azhn1UG7LnDLF/sCBuKWzJO67ZNsgj7zx60sJtf
+        wJeCpxzi3tXwYq5VD5UH460GMG8R25i/5g==
+X-Google-Smtp-Source: ABdhPJzlhQSwgMm8L/Y8FijjlcoQ3KMy74bWgH5t50DV2SNjlMQ4/caYMFJLQyyXWspv1BZH5pBCQQ==
+X-Received: by 2002:a17:90b:4a0b:: with SMTP id kk11mr2594592pjb.95.1614248026200;
+        Thu, 25 Feb 2021 02:13:46 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x22sm5614016pjr.49.2021.02.25.02.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Feb 2021 02:13:45 -0800 (PST)
+Message-ID: <60377859.1c69fb81.6082d.c068@mx.google.com>
+Date:   Thu, 25 Feb 2021 02:13:45 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.11-10823-g633a3e57c64c0
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 160 runs,
+ 2 regressions (v5.11-10823-g633a3e57c64c0)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+next/pending-fixes baseline: 160 runs, 2 regressions (v5.11-10823-g633a3e57=
+c64c0)
 
-> On 2/22/21 10:35 PM, Stephen Rothwell wrote:
->> Hi all,
->> 
->> Please do not add any changes destined for v5.13 to your linux-next
->> included branches until after v5.12-rc1 has been released.
->> 
->> Changes since 20210222:
->> 
->
-> Still seeing this build error on x86_64:
->
-> ERROR: modpost: "iwl_so_trans_cfg" [drivers/net/wireless/intel/iwlwifi/iwlwifi.ko] undefined!
->
->
-> Full randconfig file is attached.
+Regressions Summary
+-------------------
 
-Still? I don't recall seeing this report before, but maybe I have missed
-it. Anyway, I sent a fix but it would be great if you can test it:
+platform          | arch  | lab             | compiler | defconfig         =
+           | regressions
+------------------+-------+-----------------+----------+-------------------=
+-----------+------------
+am57xx-beagle-x15 | arm   | lab-linaro-lkft | gcc-8    | multi_v7_defconfig=
+           | 1          =
 
-https://patchwork.kernel.org/project/linux-wireless/patch/1614236661-20274-1-git-send-email-kvalo@codeaurora.org/
+imx8mp-evk        | arm64 | lab-nxp         | gcc-8    | defconfig+CON...OM=
+IZE_BASE=3Dy | 1          =
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.11-10823-g633a3e57c64c0/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.11-10823-g633a3e57c64c0
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      633a3e57c64c04fa49bc60a0139a14d2e9d48338 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform          | arch  | lab             | compiler | defconfig         =
+           | regressions
+------------------+-------+-----------------+----------+-------------------=
+-----------+------------
+am57xx-beagle-x15 | arm   | lab-linaro-lkft | gcc-8    | multi_v7_defconfig=
+           | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/60374cd45cd295b60faddcb9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-10823=
+-g633a3e57c64c0/arm/multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57x=
+x-beagle-x15.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-10823=
+-g633a3e57c64c0/arm/multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57x=
+x-beagle-x15.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/60374cd45cd295b60fadd=
+cba
+        failing since 1 day (last pass: v5.11-5016-ge82d5d2555f2, first fai=
+l: v5.11-10049-g5933851d9e7bf) =
+
+ =
+
+
+
+platform          | arch  | lab             | compiler | defconfig         =
+           | regressions
+------------------+-------+-----------------+----------+-------------------=
+-----------+------------
+imx8mp-evk        | arm64 | lab-nxp         | gcc-8    | defconfig+CON...OM=
+IZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6037433ccf7b408660addcc4
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.11-10823=
+-g633a3e57c64c0/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/bas=
+eline-imx8mp-evk.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.11-10823=
+-g633a3e57c64c0/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/bas=
+eline-imx8mp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/6037433ccf7b408660add=
+cc5
+        failing since 1 day (last pass: v5.11-9380-gef8173f75639, first fai=
+l: v5.11-10049-g5933851d9e7bf) =
+
+ =20

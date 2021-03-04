@@ -2,289 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB00732D63A
-	for <lists+linux-next@lfdr.de>; Thu,  4 Mar 2021 16:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B58332D894
+	for <lists+linux-next@lfdr.de>; Thu,  4 Mar 2021 18:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbhCDPNY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Mar 2021 10:13:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37726 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233942AbhCDPNL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Mar 2021 10:13:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57DE564F8C;
-        Thu,  4 Mar 2021 15:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614870751;
-        bh=25xF9sxBXzHuPYFIpFmZ8ZpVOt0/JIv2FsYeZt7ebbc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M4LwAL4AChLycJdhLSAJh2Xp4vSt8v3D7rIWX/4Sai9Zd7dNnQZLu6kQ+Zes7fGKm
-         ggXD2xslVNoJHvm/HKfsBGSNPmt+peGw8jy+X5VmhvSnUagah6AZoHMw2l4dG9dJdZ
-         pJup9xKDMcmNlorPJsJQn+XOmlBlnxdkqSucI3jXVnPTHbOW6+Uh8UH59aPO95feRw
-         lKr0pFbHtXrlPaU9zPburnYE8SBEUyJXXqLGd/pr6sbvjwuFJlrB4/jp6Py5qTMNeU
-         mAEkqHsjogWHyVKS5RIKKZVt8bWTrwA8x8urYFBbxoMwsblCkNWKfZ/u5fPv2wRFUz
-         AqT7tZBLkyJLw==
-Date:   Thu, 4 Mar 2021 16:12:27 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: linux-next: build warnings after merge of the v4l-dvb tree
-Message-ID: <20210304161227.6bd94bc7@coco.lan>
-In-Reply-To: <20210304125042.68cc1041@canb.auug.org.au>
-References: <20210304125042.68cc1041@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S231773AbhCDR0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Mar 2021 12:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239318AbhCDRZt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 12:25:49 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7613CC06175F
+        for <linux-next@vger.kernel.org>; Thu,  4 Mar 2021 09:25:09 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id m9so7377976edd.5
+        for <linux-next@vger.kernel.org>; Thu, 04 Mar 2021 09:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dd7KDNO7pXIdpuZcWLRKydfKVZxOAkBI513NtjiUXYg=;
+        b=Mm9ylSDEP1rqfd0aVL1Di4z7YCAEZYd/dpG3P6vR3IkqX8ZMMiFfgYAKG3A43crKUc
+         wf1HqeMvDdrAxM00Ku1xpoPGq5dxO8bnXVjID5DBG5NsoHu2LeFZQdDhG4DEOZayGpEm
+         yU+2tmol8R+C7UYNI4+rBwOBDEW4CpIDfRb/KKjXZiH+c6ukV80gPtKr4wfOSPewRDue
+         NFSRfJaRRY3TKHLizFYcOSszDHS5zA7o+NiLkWIr65TG8+RPZwFir8s9xrPjxFg4exSU
+         dXLrzbLNpiHV1moyridKAushV2o6onEzhTsdoAX7VBQpoosJFMpzHNvzklAohMguka07
+         w5Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dd7KDNO7pXIdpuZcWLRKydfKVZxOAkBI513NtjiUXYg=;
+        b=aNUqjSuxYRC7NbfEKwIHF7Z/o1hhq6eFQp3Lh1L63Qlf4hrT7c3gAhPJpcSKMFizcV
+         8B9YmYQ9FlRx8J3hP7wRY50WFPI6WKW/VFhpuLKFP6ktbw7TFQxTYBs1B9u1kA26pIpw
+         bFKVpO10qQQ3UhK9zxUKUh7OWUrCpEPA3tTjf+OCq2n907ctVTtBh6MhJm6XaoMqll3l
+         KQpazmDiojvksGfIcDFDN2wLb3fnqwLigb9WXw/kg5etTBF1XNVj+DMABDHXYSDPdsFh
+         y+OTBJrd7rCaHmOJSusyIRC4Dtmz7xH4vb90CMXhtvVgJAVXrPiOyFF55hPMGOMt2puB
+         hAQQ==
+X-Gm-Message-State: AOAM531FS1FG9PW01uucaNaHxPiQGHdIrAu8QtLaZ8o30RdUaZ8KYs/P
+        vXJipQ2M/bEedKO+yWPE0vFDTSNa5YjjP82RLQbvng==
+X-Google-Smtp-Source: ABdhPJysnDIHieJcbdfHeNgL/sMVb+rIR8ooa1wFRpFL2X9KykSKEnKjaXWf1t6w7e5hqXA2FugzD+PsQVjqmfHVstE=
+X-Received: by 2002:aa7:dd99:: with SMTP id g25mr5459320edv.230.1614878707950;
+ Thu, 04 Mar 2021 09:25:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210222115149.3606776-1-raychi@google.com> <20210222115149.3606776-2-raychi@google.com>
+In-Reply-To: <20210222115149.3606776-2-raychi@google.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 4 Mar 2021 22:54:56 +0530
+Message-ID: <CA+G9fYvVdQ7t3AkguKXJDG5iNEpSXfF=U189ZPVz21tWQ3r+dg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: dwc3: add a power supply for current control
+To:     Ray Chi <raychi@google.com>, linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>, kyletso@google.com,
+        badhri@google.com, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Thu, 4 Mar 2021 12:50:42 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
+While building linux next 20210304 the following builds failed,
+ - mips (cavium_octeon_defconfig) with gcc-8
+ - mips (cavium_octeon_defconfig) with gcc-9
+ - mips (cavium_octeon_defconfig) with gcc-10
 
-> Hi all,
-> 
-> After merging the v4l-dvb tree, today's linux-next build (htmldocs)
-> produced these warnings:
-> 
-> Documentation/userspace-api/media/v4l/hist-v4l2.rst:818: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/hist-v4l2.rst:853: WARNING: undefined label: reserved-formats (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/pixfmt-v4l2.rst:47: WARNING: undefined label: reserved-formats (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:39: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:53: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:67: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:83: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:97: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/subdev-formats.rst:140: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst:75: WARNING: undefined label: decoder-cmds (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-dqevent.rst:234: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst:156: WARNING: undefined label: dv-bt-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:41: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:246: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:269: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst:100: WARNING: undefined label: modulator-txsubchans (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst:119: WARNING: undefined label: tuner-rxsubchans (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:167: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:245: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:396: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-> Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst:73: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-> 
-> I don't know what caused this, sorry.
-> 
+On Mon, 22 Feb 2021 at 17:24, Ray Chi <raychi@google.com> wrote:
+>
+> Currently, VBUS draw callback does no action when the
+> generic PHYs are used. This patch adds an additional
+> path to control charging current through power supply
+> interface.
+>
+> Signed-off-by: Ray Chi <raychi@google.com>
+> ---
+>  drivers/usb/dwc3/core.c | 15 +++++++++++++++
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index f2448d0a9d39..d15f065849cd 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1238,6 +1238,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>         u8                      rx_max_burst_prd;
+>         u8                      tx_thr_num_pkt_prd;
+>         u8                      tx_max_burst_prd;
+> +       const char              *usb_psy_name;
+> +       int                     ret;
+>
+>         /* default to highest possible threshold */
+>         lpm_nyet_threshold = 0xf;
+> @@ -1263,6 +1265,13 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>         else
+>                 dwc->sysdev = dwc->dev;
+>
+> +       ret = device_property_read_string(dev, "usb-psy-name", &usb_psy_name);
+> +       if (ret >= 0) {
+> +               dwc->usb_psy = power_supply_get_by_name(usb_psy_name);
+> +               if (!dwc->usb_psy)
+> +                       dev_err(dev, "couldn't get usb power supply\n");
+> +       }
+> +
+>         dwc->has_lpm_erratum = device_property_read_bool(dev,
+>                                 "snps,has-lpm-erratum");
+>         device_property_read_u8(dev, "snps,lpm-nyet-threshold",
+> @@ -1619,6 +1628,9 @@ static int dwc3_probe(struct platform_device *pdev)
+>  assert_reset:
+>         reset_control_assert(dwc->reset);
+>
+> +       if (!dwc->usb_psy)
+> +               power_supply_put(dwc->usb_psy);
+> +
+>         return ret;
+>  }
+>
+> @@ -1641,6 +1653,9 @@ static int dwc3_remove(struct platform_device *pdev)
+>         dwc3_free_event_buffers(dwc);
+>         dwc3_free_scratch_buffers(dwc);
+>
+> +       if (!dwc->usb_psy)
+> +               power_supply_put(dwc->usb_psy);
 
-Those are because the identifiers are misplaced. There are several
-modifiers that will affect how a table will be displayed:
+# to reproduce this build locally:
 
-	.. tabularcolumns::
-	.. cssclass::
-	.. raw:: latex
+ tuxmake --target-arch=mips --kconfig=cavium_octeon_defconfig
+--toolchain=gcc-8 --wrapper=sccache
+--environment=SCCACHE_BUCKET=sccache.tuxbuild.com --runtime=podman
+--image=public.ecr.aws/tuxmake/mips_gcc-8 config default kernel
+xipkernel modules dtbs dtbs-legacy debugkernel headers
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc' cavium_octeon_defconfig
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+kernel/sched/fair.c:8384:13: warning: 'update_nohz_stats' defined but
+not used [-Wunused-function]
+ static bool update_nohz_stats(struct rq *rq)
+             ^~~~~~~~~~~~~~~~~
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_remove':
+drivers/usb/dwc3/core.c:1657: undefined reference to `power_supply_put'
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_get_properties':
+drivers/usb/dwc3/core.c:1270: undefined reference to `power_supply_get_by_name'
+mips-linux-gnu-ld: drivers/usb/dwc3/core.o: in function `dwc3_probe':
+drivers/usb/dwc3/core.c:1632: undefined reference to `power_supply_put'
 
-Those three above are needed to adjust LaTeX PDF font size on big 
-tables and:
+Build link,
+https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1071668201#L146
 
-	.. _identifier:
-
-to create an identifier (named `identifier` on this example).
-
-Such tags need to be on a very specific order. When the order
-is wrong, Sphinx will ignore some of the tags.
-
-Unfortunately, I never saw anywhere at Sphinx/docutils what
-would be the expected order for such tags.
-
-The enclosed patch fix the warnings, but I need to double check
-if it won't break the PDF output (because the other tags
-could be silently ignored).
-
-If the patch is OK, I'll merge it via my tree either today
-or tomorrow (if something goes wrong).
-
-Thanks,
-Mauro
-
-
-[PATCH] media: v4l docs: move some cross-reference identifiers
-
-Sphinx doesn't allow placing those cross-reference identifies
-everywhere. Misplacing them cause those warnings:
-
-  Documentation/userspace-api/media/v4l/hist-v4l2.rst:818: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/hist-v4l2.rst:853: WARNING: undefined label: reserved-formats (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/pixfmt-v4l2.rst:47: WARNING: undefined label: reserved-formats (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:39: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:53: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:67: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:83: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:97: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/subdev-formats.rst:140: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst:75: WARNING: undefined label: decoder-cmds (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-dqevent.rst:234: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst:156: WARNING: undefined label: dv-bt-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:41: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:246: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst:269: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst:100: WARNING: undefined label: modulator-txsubchans (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst:119: WARNING: undefined label: tuner-rxsubchans (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:167: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:245: WARNING: undefined label: control-flags (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst:396: WARNING: undefined label: ctrl-class (if the link has no caption the label must precede a section header)
-  Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst:73: WARNING: undefined label: v4l2-subdev-mbus-code-flags (if the link has no caption the label must precede a section header)
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-index 253e4bcc949d..0b879c0da713 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-@@ -19,12 +19,12 @@ please make a proposal on the linux-media mailing list.
- 
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.5cm}|
- 
--.. _reserved-formats:
--
- .. raw:: latex
- 
-     \small
- 
-+.. _reserved-formats:
-+
- .. flat-table:: Reserved Image Formats
-     :header-rows:  1
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst b/Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst
-index 7a8f490131d8..7ccae3b91616 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-decoder-cmd.rst
-@@ -129,12 +129,12 @@ introduced in Linux 3.3. They are, however, mandatory for stateful mem2mem decod
-       -
- 
- 
--.. _decoder-cmds:
--
- .. tabularcolumns:: |p{5.6cm}|p{0.6cm}|p{11.1cm}|
- 
- .. cssclass:: longtable
- 
-+.. _decoder-cmds:
-+
- .. flat-table:: Decoder Commands
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst b/Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst
-index dfc45427ea23..6518d857c131 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-dv-timings.rst
-@@ -240,12 +240,12 @@ EPERM
- 	There are no horizontal syncs/porches at all in this format.
- 	Total blanking timings must be set in hsync or vsync fields only.
- 
--_dv-bt-flags:
--
- .. tabularcolumns:: |p{7.7cm}|p{9.8cm}|
- 
- .. cssclass:: longtable
- 
-+.. _dv-bt-flags:
-+
- .. flat-table:: DV BT Timing flags
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index a90c433e430c..01773f01c4a7 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -342,12 +342,12 @@ still cause this situation.
- 
- 	Ignored if ``count`` equals zero.
- 
--.. _ctrl-class:
--
- .. tabularcolumns:: |p{7.3cm}|p{2.0cm}|p{8.0cm}|
- 
- .. cssclass:: longtable
- 
-+.. _ctrl-class:
-+
- .. flat-table:: Control classes
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst b/Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst
-index e73d24f12054..6bdf925f9a4a 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-modulator.rst
-@@ -119,12 +119,12 @@ To change the radio frequency the
- 
- 	Drivers and applications must set the array to zero.
- 
--.. _modulator-txsubchans:
--
- .. tabularcolumns:: |p{6.0cm}|p{2.0cm}|p{9.3cm}|
- 
- .. cssclass:: longtable
- 
-+.. _modulator-txsubchans:
-+
- .. flat-table:: Modulator Audio Transmission Flags
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst b/Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst
-index d392e37f080d..b0522f1ff7a4 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-tuner.rst
-@@ -296,10 +296,10 @@ To change the radio frequency the
- 	instead of 62.5 kHz.
- 
- 
--.. _tuner-rxsubchans:
--
- .. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.5cm}|
- 
-+.. _tuner-rxsubchans:
-+
- .. flat-table:: Tuner Audio Reception Flags
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 583fa551f0a1..9af43f913694 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -494,12 +494,12 @@ See also the examples in :ref:`control`.
- 
-    \normalsize
- 
--.. _control-flags:
--
- .. tabularcolumns:: |p{7.3cm}|p{1.8cm}|p{8.2cm}|
- 
- .. cssclass:: longtable
- 
-+.. _control-flags:
-+
- .. flat-table:: Control Flags
-     :header-rows:  0
-     :stub-columns: 0
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-index 4c8d5a15fd29..417f1a19bcc4 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-@@ -79,14 +79,14 @@ information about the try formats.
- 
- 
- 
--.. _v4l2-subdev-mbus-code-flags:
--
- .. raw:: latex
- 
-    \footnotesize
- 
- .. tabularcolumns:: |p{8.8cm}|p{2.2cm}|p{6.3cm}|
- 
-+.. _v4l2-subdev-mbus-code-flags:
-+
- .. flat-table:: Subdev Media Bus Code Enumerate Flags
-     :header-rows:  0
-     :stub-columns: 0
-
+-- 
+Linaro LKFT
+https://lkft.linaro.org

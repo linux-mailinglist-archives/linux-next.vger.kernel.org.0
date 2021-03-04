@@ -2,103 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7EA32DDF8
-	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 00:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83BB32DE0E
+	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 00:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbhCDXok (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Mar 2021 18:44:40 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:62740 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233236AbhCDXoj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 18:44:39 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 124NYuhF050759;
-        Thu, 4 Mar 2021 18:44:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dKxQSV0s+AzGR22eYmP20n9pQj18t3CtP+UNUhBaF8A=;
- b=Vf4wFkq7K1QxA45HPP9oWsbvaCLG4W2pjM8jSYgcTtkMmXABp1uVQLh/itk7kwHmDOyt
- t23avwApNxGdVBfXiBnuq94lgCeCbEuo3hcVfxzXxCSNV0eP7FG6sLTPuG4jotEiWPzI
- cxWrCawFH5nKFQSgCNahhPmW9FS00ZWPn0eJPWRO5tUVK6/Fj1FJhqmzeq860tCkewLz
- se0CpX6BmWu/VfS6a+PCbRVmXFm02cq2Zd1Xyg9cbGhTiFSwp8ddPebP/2xp0hAwxyK0
- dJyuSTtbLLLKyZxKWpMsxDOo7jekx9QUbGAOsdYwUpfL60R2gQmaMJEpUU/hWsADZky7 kQ== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3739ae07ty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Mar 2021 18:44:30 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 124NaqXG003630;
-        Thu, 4 Mar 2021 23:44:30 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03wdc.us.ibm.com with ESMTP id 37128gue3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Mar 2021 23:44:30 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 124NiTNc23200028
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Mar 2021 23:44:29 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35096BE054;
-        Thu,  4 Mar 2021 23:44:29 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 500DCBE04F;
-        Thu,  4 Mar 2021 23:44:28 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.44.137])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  4 Mar 2021 23:44:28 +0000 (GMT)
-Subject: Re: linux-next: Fixes tags need some work in the scsi-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S232543AbhCDXwq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Mar 2021 18:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231695AbhCDXwq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 18:52:46 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F72C061574;
+        Thu,  4 Mar 2021 15:52:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ds72w53ghz9sRR;
+        Fri,  5 Mar 2021 10:52:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1614901962;
+        bh=bNffpLVDpps/kOIp14nDznUZTPEd2xiR/OXEqWuSeQk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UaV45GePCesTS45KE0oE/8b/ngd3ScBL+yxuKfpHkB/OcU5VgO3MQgdHRi9xbsoLs
+         l1BdP1d14iDG30TVstJRa18rdGULa3nHTYTWAZ+heGxAbZNNydYRd4bg/uiQOdwika
+         Ug2p1EQIDM8wZzL1ZT4fHWfX9HJO7VEZm34Z4E26vsi/fsmVbSIXrtPgHI8LbkF+MZ
+         iUEkbCQ9y+g0VLNTFJhb+UKenW51cAgCW1sY4o9V/NuEKrqUT9Ge4QPtNPX58q1EsG
+         0Gtku5GNGQ5EV8AKdLoYFbt7PElteSWId4Y0oqNkrNLjQ7/1R3Ch9gHSa1bLhJc1V6
+         DpBZyYtUw0PoQ==
+Date:   Fri, 5 Mar 2021 10:52:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Daniel Wagner <dwagner@suse.de>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210305081233.6b8ad732@canb.auug.org.au>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <92184036-e187-7b7f-394e-9ad29a35c162@linux.ibm.com>
-Date:   Thu, 4 Mar 2021 15:44:27 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20210305105239.377577b5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210305081233.6b8ad732@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-04_09:2021-03-03,2021-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 malwarescore=0 clxscore=1011
- bulkscore=0 phishscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103040117
+Content-Type: multipart/signed; boundary="Sig_/CCjWRInJC51MwsxRC4xBDm_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/4/21 1:12 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   f4c5e949056d ("scsi: ibmvfc: Reinitialize sub-CRQs and perform channel enquiry after LPM")
-> 
-> Fixes tag
-> 
->   Fixes: 3034ebe26389 ("ibmvfc: add alloc/dealloc routines for SCSI Sub-CRQ Channels")
-> 
-> has these problem(s):
-> 
->   - Subject does not match target commit subject
-> 
+--Sig_/CCjWRInJC51MwsxRC4xBDm_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Well crap. I realized I botched them in v4, and fixed up the commit ids in v5
-but clearly not the subjects.
+Hi all,
 
-> Plese just use
-> 	git log -1 --format='Fixes: %h ("%s")'
-> 
+In commit
 
-Noted.
+  284e4cdb0c0b ("nvme-hwmon: Return error code when registration fails")
 
--Tyrel
+Fixes tag
 
+  Fixes: ec420cdcfab4 ("nvme/hwmon: rework to avoid devm allocation")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: ed7770f66286 ("nvme-hwmon: rework to avoid devm allocation")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CCjWRInJC51MwsxRC4xBDm_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBBcscACgkQAVBC80lX
+0Gwyxwf9FKLDYUOHkAMABBu66jz1mAIwuYRNJlWQObBFAQWdT7t0sjCUcg6ghE+f
+9KJkkXEZdtllhJDOMCbutUh2UcJg2SOP3nO0CtTsbkG3lzLMC+ZxT48i7nYWnDuu
+FDsFW1mtFGdncCJCbkp79dMRCXJ7JvjwN7aQ9tN885zSuRfOEpOYgmoJIKRlMn2e
+W/ueoNEESfM1d1OZAgmWUqsvnz9zbqUCjg60XzyIgYBZMUiXJoN21tMp4LqDZtkv
+8xOE0QKfAacWP8gj+epa8/0FU3R6K24qDv7ED4bcJbV4IX70uvRBJe9YAGzKX+L0
+nozkzVGHnegN5xMTZ6EVOgZJoePtaA==
+=m1Wg
+-----END PGP SIGNATURE-----
+
+--Sig_/CCjWRInJC51MwsxRC4xBDm_--

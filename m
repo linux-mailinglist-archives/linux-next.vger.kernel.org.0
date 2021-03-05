@@ -2,78 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7112B32DE32
-	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1CF32DE43
+	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbhCEAEQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Mar 2021 19:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S229559AbhCEAVf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Mar 2021 19:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhCEAEL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 19:04:11 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AEAC061574;
-        Thu,  4 Mar 2021 16:04:11 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229437AbhCEAVe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 19:21:34 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E95C061574;
+        Thu,  4 Mar 2021 16:21:34 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9B1791280606;
+        Thu,  4 Mar 2021 16:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1614903691;
+        bh=eew3oq7VQDIoDJo21SjosiBCWbqB3d2W64nn6CW6XKY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=jakFpu/t4MwFPnydlAXV6nsPNpbGcEhUfXlp2BfVE5mykleAHmkpavqVZUN3vHuWh
+         rMj30/F+DbFA5I0mUhsaNFKdnQPTMWGfhDvd5o5jkNH+XW8olCEXX6Z2K1I+dvq56S
+         wSk99jpaALFukPo3ir6aU/lfXuXuj/Pana83jXw0=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eWCfSk2Ry1ba; Thu,  4 Mar 2021 16:21:31 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ds7J370Jjz9sSC;
-        Fri,  5 Mar 2021 11:04:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1614902649;
-        bh=AN30twrd6tkzHV6B93awH18ER6sEDLxGk8NgrJ4M9lU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GHJVRkJ6JUrqeclg1VPUkrqRqURJAyM08cLMo4cRPebbxHTwNRzOA9d3DTLF3PcpU
-         g8j6I3DFoBctN+mKn2byWrxoDmqp8uQaMWyhusZjnxnefYy7u34+Fum5UsWsWuanTX
-         t/NCgrVWhwVYuzW+0/yCCzR9OldMEimPJ5PG1cZ2YvXbNUyeHqjxnqxsGHfjVcCUDz
-         u0A9lxQ0JjhgK/4AP/obaA792pBItves5hcqU7/UvYr0WLQjWa3I8vavkx9eXE1KGu
-         qAPXh2VAitjyZdjQQ6MA8a1obUwjLgyesOH82FWh3O1RrwJBUj5EaEG+YIx9vcl0LP
-         WUpphUvXqEqhA==
-Date:   Fri, 5 Mar 2021 11:04:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3FC671280602;
+        Thu,  4 Mar 2021 16:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1614903691;
+        bh=eew3oq7VQDIoDJo21SjosiBCWbqB3d2W64nn6CW6XKY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=jakFpu/t4MwFPnydlAXV6nsPNpbGcEhUfXlp2BfVE5mykleAHmkpavqVZUN3vHuWh
+         rMj30/F+DbFA5I0mUhsaNFKdnQPTMWGfhDvd5o5jkNH+XW8olCEXX6Z2K1I+dvq56S
+         wSk99jpaALFukPo3ir6aU/lfXuXuj/Pana83jXw0=
+Message-ID: <9a15538c1cc29270d306a4fff6fd9089c9ca56ec.camel@HansenPartnership.com>
+Subject: Re: linux-next: rebase of the scsi-mkp tree
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: rebase of the scsi-mkp tree
-Message-ID: <20210305110402.70ff1080@canb.auug.org.au>
+Date:   Thu, 04 Mar 2021 16:21:20 -0800
+In-Reply-To: <20210305110402.70ff1080@canb.auug.org.au>
+References: <20210305110402.70ff1080@canb.auug.org.au>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-DdVS56qsxir+ljF6RfnE"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KuIQu.YyvGTpyb.Qj2aB3._";
- protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KuIQu.YyvGTpyb.Qj2aB3._
-Content-Type: text/plain; charset=US-ASCII
+
+--=-DdVS56qsxir+ljF6RfnE
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Martin,
+On Fri, 2021-03-05 at 11:04 +1100, Stephen Rothwell wrote:
+> Hi Martin,
+>=20
+> I notice that you have rebased the scsi-mkp tree.  Unfotunately James
+> has already merged part of the old version of the scsi-mkp tree int
+> the scsi tree so that commits f69d02e37a85..39ae3edda325 in the scsi-
+> mkp tree are the same patches as commits fe07bfda2fb9..100d21c4ff29
+> in the scsi tree.
 
-I notice that you have rebased the scsi-mkp tree.  Unfotunately James has
-already merged part of the old version of the scsi-mkp tree int the scsi
-tree so that commits f69d02e37a85..39ae3edda325 in the scsi-mkp tree are
-the same patches as commits fe07bfda2fb9..100d21c4ff29 in the scsi tree.
+It's just the flux from Linus announcing he's screwed up -rc1 and we
+shouldn't base on it ... it should all be fixed soon.
 
---=20
-Cheers,
-Stephen Rothwell
+James
 
---Sig_/KuIQu.YyvGTpyb.Qj2aB3._
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+
+--=-DdVS56qsxir+ljF6RfnE
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBBdXIACgkQAVBC80lX
-0GyIMAgAgV1g54gqI/uaoe6OziKF9w/37WE4kKeAcGusE0y9QabWxF12hdlMMwLD
-FLx+U3HUzIHw+08ScoGSPRRO5ggA1SfXd2cHqa5EWT01bVQfjwcmOCzJgDR3yICP
-Tq4TZ15yOPDcBk+nP4pOP29kjh74uOoY95FclIK4rCtqsX1TvLAbHJnEli6N0gq1
-O0MsqeEy3yyDzyvT22eSYPJ4laLj3BUZ4WlCGvezCopqVfE8D6Zao9Y6g3bzrTwr
-BpalpZ5ARIUd95TPOopxcKGZcyiXh+aHnx4xcNDXndyEZrpkCLahGKxCZBzesns5
-XDi4+iLjcrj6zU4+mQuuOTeeXlInuw==
-=DAb4
+iHUEABMIAB0WIQTnYEDbdso9F2cI+arnQslM7pishQUCYEF5gAAKCRDnQslM7pis
+hTP3AP463dSQhrj5tMLNwRvscqMRtCZjirSX5dNeotvjtDImaQD+IuG7gc2WzkIV
+o/VfFlKDaK0Byyn1xM/eIfwpr2QEsrc=
+=8wfl
 -----END PGP SIGNATURE-----
 
---Sig_/KuIQu.YyvGTpyb.Qj2aB3._--
+--=-DdVS56qsxir+ljF6RfnE--
+

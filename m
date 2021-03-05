@@ -2,89 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F55532DE51
-	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD18432DE68
+	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbhCEAcP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Mar 2021 19:32:15 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54693 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229601AbhCEAcO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Mar 2021 19:32:14 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ds7wY1DqPz9sW1;
-        Fri,  5 Mar 2021 11:32:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1614904333;
-        bh=utaOnAlq6zISU7KfJhEnBiiEFwY0iUvHewbg+F3sDVY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Cr7O3yks8KKoCjTKw0MaOCU/bPZjBKWkWImecbLLF7fUj+rgVnxnKcG14cP1npvXK
-         l5FF6PSgj7K9PYcyeW/3ssYFt2aYZ1JTpZ9qiPMCwtI9yWqa7bJp6u9kZkNeLVpkhp
-         Ad9Iu1sGkqzjxBx7aAxcyTCyswfNZmXHh/F+pygy9UOi9y0EWkPkhgtthHuJisTsjU
-         +TMc7HbnF4xQVtyBw0aQCg8qZvmbxvvE9Qg5PNeya8dpzFUVp5290Y3R19J6nOK3Vr
-         ReuEE0s6E8XcG9R8Atl6RhyqZOAjpo436tIYw1B6i1JYldo0mQjbrwWaMYuQA9cyDD
-         qI9n9NpXXbYTw==
-Date:   Fri, 5 Mar 2021 11:32:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        id S230466AbhCEAnc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Mar 2021 19:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230051AbhCEAnc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 19:43:32 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A795DC061574
+        for <linux-next@vger.kernel.org>; Thu,  4 Mar 2021 16:43:31 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z11so930036lfb.9
+        for <linux-next@vger.kernel.org>; Thu, 04 Mar 2021 16:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HgjUsYyNPY4yZXLAKbwff0hARy73LXck0x1rGp74pGs=;
+        b=qS671o59ZmTLc4L3782I1RvzzA78UWPNaEHX92gAZ5J5MZvQXLDb/CyY6aKUyO6630
+         MQAyVklghHneBlFbTxsnu57JEk+5Y7oODyN1chUrstYcCUuRG5gCSLUCJhZzwS+Kcp4x
+         f8hkl3FJUIi7kfq6GEkVaNjpi5nBWfpStdPtGXzuFi5TF44gSIfjy35LO89zEW0WH9jc
+         QoNFVJXLQQ46gajlwjCp/5QB7mHiW9u91xXCpPDIjehi6EvyVFR1oxbKwIun7Nzq1tFh
+         rzlGlvjbrtGfFXF5RVAryyxSK2E6zQafv+uLuujSKO5bmIDTH5bYXh0LWMvg5tIWgCot
+         5law==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HgjUsYyNPY4yZXLAKbwff0hARy73LXck0x1rGp74pGs=;
+        b=bq/kr0qkpFJztMjZUffyMFRy0QLFa2l9Q1tWF3+m4RA3/VGIzXaBJF5Q9Ml20ard5r
+         krlRV7IXzLjJcyDJk1eOkrhLBY7o0hwaXmdXNzj1Tt+G8xploPOBYmbgxhPQp+OJozJ3
+         h8sqSnXV6aUkxEwps3qRH7CkVzfmkEyb4EIWL02ThApFc9+ZtdEV0aBL0XSfvEpgiarX
+         8bCgB+ZKN4k1stP0+BeQArPgd9nPg5IFiocyXlx1mcflFog77vYOhpB1fJytZifsyPZB
+         ZX0JJgwe1KuUGouvx2boGc7o4RdrKRmZqJdl8ABxYpxS/lc6vyS+S/ZZzcGzJevAOwW7
+         FeZg==
+X-Gm-Message-State: AOAM533EnTjUMSYds4vYJ4K0vJmlIHFP6YVd+ZiGe4dAu+Y4QVfvxJho
+        c+o/A2ng4EmUjmrPA9L9XhjVueXXcUG1TTyuGpfwsoUkSV3okw==
+X-Google-Smtp-Source: ABdhPJyNWdP8ys2vWKileWPlFYfUpJrCPa7a2HuO+f4p3oaYXTr9mcpHrA8TmmrWi6dAIy1X/lvcUJMuVXlKxhXaXuo=
+X-Received: by 2002:a19:548:: with SMTP id 69mr3804625lff.465.1614905010192;
+ Thu, 04 Mar 2021 16:43:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20210304121206.3a7ed310@canb.auug.org.au> <CACRpkdai3LnvJgaKKtP+Y+zgxyQ2Rir1k-CbX-6cbJPnYuvOaw@mail.gmail.com>
+ <202103050813501649431@rock-chips.com>
+In-Reply-To: <202103050813501649431@rock-chips.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 5 Mar 2021 01:43:18 +0100
+Message-ID: <CACRpkdadRm8xXENJNM+yrJp3w-gyB=hejcYMF6qpQErwbYL69A@mail.gmail.com>
+Subject: Re: Re: linux-next: build failure after merge of the pinctrl tree
+To:     "jay.xu@rock-chips.com" <jay.xu@rock-chips.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: rebase of the scsi-mkp tree
-Message-ID: <20210305113212.66f8f965@canb.auug.org.au>
-In-Reply-To: <9a15538c1cc29270d306a4fff6fd9089c9ca56ec.camel@HansenPartnership.com>
-References: <20210305110402.70ff1080@canb.auug.org.au>
-        <9a15538c1cc29270d306a4fff6fd9089c9ca56ec.camel@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kqR8xFx9bOcCpYpkrsV9=4c";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kqR8xFx9bOcCpYpkrsV9=4c
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 5, 2021 at 1:13 AM jay.xu@rock-chips.com
+<jay.xu@rock-chips.com> wrote:
 
-Hi James,
+> Could you show me the issue log ?
 
-On Thu, 04 Mar 2021 16:21:20 -0800 James Bottomley <James.Bottomley@HansenP=
-artnership.com> wrote:
->
-> On Fri, 2021-03-05 at 11:04 +1100, Stephen Rothwell wrote:
-> >=20
-> > I notice that you have rebased the scsi-mkp tree.  Unfotunately James
-> > has already merged part of the old version of the scsi-mkp tree int
-> > the scsi tree so that commits f69d02e37a85..39ae3edda325 in the scsi-
-> > mkp tree are the same patches as commits fe07bfda2fb9..100d21c4ff29
-> > in the scsi tree. =20
->=20
-> It's just the flux from Linus announcing he's screwed up -rc1 and we
-> shouldn't base on it ... it should all be fixed soon.
+It's attached to Stephen's original mail in this thread.
 
-Thanks.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/kqR8xFx9bOcCpYpkrsV9=4c
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBBfAwACgkQAVBC80lX
-0Gxf2Qf+JhwJ/RrXbIRiJkSr8uLeGyX3UD9K8x39dKUbs9jQhmh2pIQmArjU8kGi
-SZ7A+jPnCTuMszQ513Z+CFJJQuFKVYxbPGYjB6fxasyJcbkltagKHhn8+X4LTnz+
-SmmTeVKUDADOW9I/hIULjERC/4IbbFo/BQyvPkTBk1MxXodxJnUaxVNZMpQ5mBbq
-kxZt+tR5Whyf7THR9NBfDAkVQKwwxDuX1J2HsyACuFx5BJkbz0x+ey2DhL7RCsTD
-s2cGj97UNYYkqwaUHXgvMckxavN/TYn25RP4iI7EFNY0vJM3d+OH+BM2ZqwfxLVD
-ocAPJ3V3i8Tpc8NVzn2DlkbTUmIXJQ==
-=hxfq
------END PGP SIGNATURE-----
-
---Sig_/kqR8xFx9bOcCpYpkrsV9=4c--
+Yours,
+Linus Walleij

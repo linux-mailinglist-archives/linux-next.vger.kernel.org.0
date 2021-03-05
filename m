@@ -2,93 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1CF32DE43
-	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E52532DE4C
+	for <lists+linux-next@lfdr.de>; Fri,  5 Mar 2021 01:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbhCEAVf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Mar 2021 19:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S231229AbhCEA0s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Mar 2021 19:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhCEAVe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 19:21:34 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E95C061574;
-        Thu,  4 Mar 2021 16:21:34 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9B1791280606;
-        Thu,  4 Mar 2021 16:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1614903691;
-        bh=eew3oq7VQDIoDJo21SjosiBCWbqB3d2W64nn6CW6XKY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=jakFpu/t4MwFPnydlAXV6nsPNpbGcEhUfXlp2BfVE5mykleAHmkpavqVZUN3vHuWh
-         rMj30/F+DbFA5I0mUhsaNFKdnQPTMWGfhDvd5o5jkNH+XW8olCEXX6Z2K1I+dvq56S
-         wSk99jpaALFukPo3ir6aU/lfXuXuj/Pana83jXw0=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eWCfSk2Ry1ba; Thu,  4 Mar 2021 16:21:31 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3FC671280602;
-        Thu,  4 Mar 2021 16:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1614903691;
-        bh=eew3oq7VQDIoDJo21SjosiBCWbqB3d2W64nn6CW6XKY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=jakFpu/t4MwFPnydlAXV6nsPNpbGcEhUfXlp2BfVE5mykleAHmkpavqVZUN3vHuWh
-         rMj30/F+DbFA5I0mUhsaNFKdnQPTMWGfhDvd5o5jkNH+XW8olCEXX6Z2K1I+dvq56S
-         wSk99jpaALFukPo3ir6aU/lfXuXuj/Pana83jXw0=
-Message-ID: <9a15538c1cc29270d306a4fff6fd9089c9ca56ec.camel@HansenPartnership.com>
-Subject: Re: linux-next: rebase of the scsi-mkp tree
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S231217AbhCEA0s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Mar 2021 19:26:48 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1872DC061756
+        for <linux-next@vger.kernel.org>; Thu,  4 Mar 2021 16:26:47 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id m6so871347pfk.1
+        for <linux-next@vger.kernel.org>; Thu, 04 Mar 2021 16:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0OJ650cc3bleSBx+mJgi4qu1UohhUOj7m//L8ZaYoHI=;
+        b=xcv/gH5BsOkDFZUL24Mg/OICBHIxlsRePddDJ4aUnZ4IQuL5py1bw3UkpEtHunkkeR
+         m0cEMhqN80cqJANwxx+0lbnxFxWi7O4lMmVGY+QQPNPOJMLEFE5tE1wDTDMr9uoQXTHn
+         nSuUcp6tk+4o3BxwvNiTGhtOkKPANNlUXk4AT9MrKpY2SpEh5eBrYyVs1rmt1zdcuYM5
+         3w4Mlg+yyDs1d4PXPHtVwXOn05kvFelJ+LH+4+homIKjsgS2PPSPeNlQWBRQepiSK7v4
+         cXEI20MLzET5Sko6Z76fWMjHdLl8Vkl0LsBe8dp7+wi1Wvg8ciyzzx5+lRWJDrxGKdO1
+         xbcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0OJ650cc3bleSBx+mJgi4qu1UohhUOj7m//L8ZaYoHI=;
+        b=Xb/wuyN/9o1tE3lTg4sgnf5Vjnw6wHkwYtUCDunb1+66kDLYNmj4UTOsrS+luZ7nuq
+         loMdvykx5Ay+WeyatDGOdQzmZpsBav5f5I+oTpXT/IYWQkTSONBmB6VJXBW2d8OT7nwq
+         0fDYMfS0y3rJtmcqZBJJ2kRKoEzO89BloN6Dyier6PJUOwE7BLFHeWiBc9YE68QYYPOk
+         SOwTFXbeuNr9WoS0yz208Jx9NUyXkvxUQ8lakl754wm0xTQzRfhCps3SxWRcDOunQC3U
+         SMdoDKUB40HlhJPvrF87RnlmPUZy8iFwYsVLlrV/Qh1xhUt2N2KFVFzvsodw/X68BNFw
+         qj4Q==
+X-Gm-Message-State: AOAM531zBjE83BBqBRTcHyZJFEp2pAvtFCH+f8VUgVFqATg8ccWOTdn6
+        cNNQWqSV18WRgTR+jVoUN8gqT20KCAWfJA==
+X-Google-Smtp-Source: ABdhPJxqT8uX6QIoib5qjmJbI5Dd5+zlsc/+lH1gaI2ttusRPalDlG94Ta7g4iml9o6CJMSfV3QgKg==
+X-Received: by 2002:a63:7885:: with SMTP id t127mr5617475pgc.237.1614904005518;
+        Thu, 04 Mar 2021 16:26:45 -0800 (PST)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id s10sm457132pgl.90.2021.03.04.16.26.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Mar 2021 16:26:44 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Wagner <dwagner@suse.de>, Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Thu, 04 Mar 2021 16:21:20 -0800
-In-Reply-To: <20210305110402.70ff1080@canb.auug.org.au>
-References: <20210305110402.70ff1080@canb.auug.org.au>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-DdVS56qsxir+ljF6RfnE"
-User-Agent: Evolution 3.34.4 
+References: <20210305105239.377577b5@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <726a90e9-7139-8d0c-6e05-fcf8c15ac6ca@kernel.dk>
+Date:   Thu, 4 Mar 2021 17:26:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20210305105239.377577b5@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 3/4/21 4:52 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   284e4cdb0c0b ("nvme-hwmon: Return error code when registration fails")
+> 
+> Fixes tag
+> 
+>   Fixes: ec420cdcfab4 ("nvme/hwmon: rework to avoid devm allocation")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: ed7770f66286 ("nvme-hwmon: rework to avoid devm allocation")
 
---=-DdVS56qsxir+ljF6RfnE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, 2021-03-05 at 11:04 +1100, Stephen Rothwell wrote:
-> Hi Martin,
->=20
-> I notice that you have rebased the scsi-mkp tree.  Unfotunately James
-> has already merged part of the old version of the scsi-mkp tree int
-> the scsi tree so that commits f69d02e37a85..39ae3edda325 in the scsi-
-> mkp tree are the same patches as commits fe07bfda2fb9..100d21c4ff29
-> in the scsi tree.
-
-It's just the flux from Linus announcing he's screwed up -rc1 and we
-shouldn't base on it ... it should all be fixed soon.
-
-James
+Christoph, since there's multiple commits with issues, mind resending
+a fixed branch? Then I'll drop the one I pulled today.
 
 
---=-DdVS56qsxir+ljF6RfnE
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABMIAB0WIQTnYEDbdso9F2cI+arnQslM7pishQUCYEF5gAAKCRDnQslM7pis
-hTP3AP463dSQhrj5tMLNwRvscqMRtCZjirSX5dNeotvjtDImaQD+IuG7gc2WzkIV
-o/VfFlKDaK0Byyn1xM/eIfwpr2QEsrc=
-=8wfl
------END PGP SIGNATURE-----
-
---=-DdVS56qsxir+ljF6RfnE--
+-- 
+Jens Axboe
 

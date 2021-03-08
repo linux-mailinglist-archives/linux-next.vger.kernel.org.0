@@ -2,88 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F5B3307C2
-	for <lists+linux-next@lfdr.de>; Mon,  8 Mar 2021 07:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A1533090F
+	for <lists+linux-next@lfdr.de>; Mon,  8 Mar 2021 08:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbhCHGGf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Mar 2021 01:06:35 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34715 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234615AbhCHGG0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 8 Mar 2021 01:06:26 -0500
+        id S232745AbhCHH6S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Mar 2021 02:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229742AbhCHH5t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Mar 2021 02:57:49 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32BC06174A;
+        Sun,  7 Mar 2021 23:57:47 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dv7Bm3pmnz9sWF;
-        Mon,  8 Mar 2021 17:06:24 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dv9gB5TSBz9sW1;
+        Mon,  8 Mar 2021 18:57:42 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615183585;
-        bh=PSoCQVSwRStwmrBqQ5apuNF4di9uKf0hD0zJzWP++tA=;
+        s=201702; t=1615190263;
+        bh=j8w3I6+itaVr2X0H3+gppTWL7fiby7bIz3HAvBq6Shk=;
         h=Date:From:To:Cc:Subject:From;
-        b=kB8iPykO4mUht+FPdUE7/7tfnSXs57rLIU6gTsm5r2Iv+EyD1KWziqPyogOoxAj05
-         FjdCrH1+hsdmABqJFFFQ+bnh8eWViH2WGdrRNpSzOrxQvYQv9Da/MZSPE7wbzgXCmf
-         YKdIN6PSA/VkCB7bwW8OAyXXvb0j0YuX6tcpRwCNWwIywU9afBRwQq8xCsTc/cgplq
-         zUjhR7vcwGHg7QpUZXLQMqoMvDDX2PDLwNf169xzHhac8hqcdHgeSkk9K7NYIHwWVz
-         cUMX2rtoz2EPzxC6ARidH15btHna1zEntuNGaPvNQ/XaEEFTPZSvKloeslPdeLiF8h
-         Paopc113TGz8g==
-Date:   Mon, 8 Mar 2021 17:06:23 +1100
+        b=H1hEQXny4KcMXawH0kdDpAjBFiZAFtlGzpNnbqtJOgc0Bl36yfrM/16KJBWoC29MI
+         tNRzLlGBlESllM7TSoob+840hAZ93HuUC7YDkNwj3HP+mPoBrqXZ3ewaThGK5gYGni
+         4XNWSGPMxtAuPjD7ot409dC4C+EC2YjzVL1Kg8HYr90UwH4sCCychosZ5HfMybke5P
+         3pUAITRfVrTXF5c8Sz6G7GBh9eCorQ/c3Mm9Utm/BaI7pmysqAUzHi6DGjXDXPejal
+         Xt9yPiib0vHPwk0SzmG7No9SDJUUhXaF2k1B22Il3SuihB/fv4XImIjug+2z/phOVn
+         oNKMsvNXGX1wQ==
+Date:   Mon, 8 Mar 2021 18:57:41 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the drivers-x86 tree
-Message-ID: <20210308170623.1304b12a@canb.auug.org.au>
+Subject: linux-next: error fetching the arm-soc-fixes tree
+Message-ID: <20210308185741.56900784@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7h=xHRjaK=Te_.+u5Rpn9AK";
+Content-Type: multipart/signed; boundary="Sig_/r6ZEGB=EHiqQa23pa6G4aHf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7h=xHRjaK=Te_.+u5Rpn9AK
+--Sig_/r6ZEGB=EHiqQa23pa6G4aHf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Fetching the arm-soc-fixes tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git#arm/fixes)
+produces this error:
 
-  b5b5ff84fd93 ("platform/surface: aggregator: Make SSAM_DEFINE_SYNC_REQUES=
-T_x define static functions")
-
-Fixes tag
-
-  Fixes: 510c8114fc74 ("platform/surface: Add platform profile driver")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: b78b4982d763 ("platform/surface: Add platform profile driver")
+fatal: couldn't find remote ref refs/heads/arm/fixes
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7h=xHRjaK=Te_.+u5Rpn9AK
+--Sig_/r6ZEGB=EHiqQa23pa6G4aHf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBFvt8ACgkQAVBC80lX
-0Gw1Wwf/WQwC6mzi6Qol1hcMg98vgOy3BguEV1qj0sCJlLOnx6gcs24zkFFa8Ftq
-LDOz6ol6FWOYWtm9dyK/OywoMBg/Cqb/fSfpgARC5/KaEsTYBzZm+TkKpy6v7KQP
-m3rNKSu5xZtm9i2/BZa6Sb29SqKzMk1q3QJM5VJdlfVLopdAE6aTnyD/jPdRb1GP
-FJd+enBfpWJUbmm3QPsJoEhPcYweUUcbiPznuTAutwGUbIqZxucSENIpoJL1QT1m
-zT8444mNnJXNWYGxLJMAZ7B0jgBfzczp30t2EBzRS8UOVH8RVzeTZeKX7zUh0fFW
-TUChGnrNEa/b42hLIskZQCTKRUQkQA==
-=JTGj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBF2PUACgkQAVBC80lX
+0Gx9RAgAksI8KHNpl4JElB0OrifE2tUVrwTe52gVVLuxQLBxryOZPjsK2bwaB+tA
+yk/tb45eBms6MDWOA8ty+POzvtAOsouaAPguXOGLBWBebjDOYF2x9i6fXgPJs7c0
+pqwLZB18aYEAB2LdCCKOjn7HhjzjHsYJiBRjNDWWUJAPc9CXwk8L0LbEIBetPje5
+tCXzeo50SMUgKJlxwGtjFEv6K1syBhmxIRTY63eT6RtLWSs3osX1/RlNyI0raQkO
+Yfhf/j6Tjr7CDBGO9YOBxyPi/cxpPKB/Ekw4FpBTaUjj1ETHAVdv/U47ER3in5+/
+UbOjtKoEW8aRdQx3hur7Vhhlbq0ung==
+=+VHx
 -----END PGP SIGNATURE-----
 
---Sig_/7h=xHRjaK=Te_.+u5Rpn9AK--
+--Sig_/r6ZEGB=EHiqQa23pa6G4aHf--

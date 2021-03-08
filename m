@@ -2,84 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B666433097D
-	for <lists+linux-next@lfdr.de>; Mon,  8 Mar 2021 09:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F042330B5A
+	for <lists+linux-next@lfdr.de>; Mon,  8 Mar 2021 11:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbhCHIit (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Mar 2021 03:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbhCHIiU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Mar 2021 03:38:20 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEC8C06174A;
-        Mon,  8 Mar 2021 00:38:20 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m9so13379492edd.5;
-        Mon, 08 Mar 2021 00:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8N6zycd2yrKbam+OR3bOq1SNQG2SBp6TImAUSmdj4kM=;
-        b=YHYzr+5jM2EQX9SwVJJE1oFqP1APTa8yt5FbhR9XeIKjSgS8ZQCmiJc8+5IXfmeBko
-         7e//ub/KDnANa/+KvF187OEHxp79w4sA/8oztCn/rnVECdxOQxZ1vhxNSpwUCf8KoriQ
-         YkmTKhSpD49ds4p5nHNV+5zXpMBjcyPcMSQaHisE5+uSAFkD4b+DpW+mTDnxTyUV2WK6
-         bcqDdNjaZiLMfy07/Ln/hYCzC4eXVsNzFIXe3jaRV5a77hbsqP6yaYIEulNoZc5zhe8N
-         5qmFina6ULJfbkzT4sRkgSm2FpyGpd2UuW8vlKd+DDJwq3QVs04iBjJq120ERDYIEBFU
-         UdvA==
+        id S230165AbhCHKg1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Mar 2021 05:36:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43978 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230455AbhCHKgL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Mar 2021 05:36:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615199770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RMwsh4rVWEMwbXiqVdffM9tN14wTQl3j4nwiD5Xat2g=;
+        b=CuXB7CamyDHkWi+z01CmYCCEWM6OlgpIdQJG2L+aKL3j3/tuCFTJf0/6JaV8nFcZPNjcoX
+        /6QRcouZtQgirBdAPI5hJUU1FKLKOaexiyZb9m1qFV1u9hOu/+S9wNaqdkvGM7D69moIMN
+        3FXyDdQNnOCVXeObhrRo0eSVoRfoHS4=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-248-4YtYNSiKNpuRkh3MZbvUxA-1; Mon, 08 Mar 2021 05:36:09 -0500
+X-MC-Unique: 4YtYNSiKNpuRkh3MZbvUxA-1
+Received: by mail-lj1-f199.google.com with SMTP id v9so4105321ljc.9
+        for <linux-next@vger.kernel.org>; Mon, 08 Mar 2021 02:36:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8N6zycd2yrKbam+OR3bOq1SNQG2SBp6TImAUSmdj4kM=;
-        b=pMjx9T+jFWz59G+DBArj6YJTsq8AcSWDJ6U6V0fuNHMmNpxeSFSd5PaQnb/i87GvBQ
-         BG9RAKOPMIbZIy9l3B7abN/UxffS5xmFd2jA+fgZNFHRbK+eX9Qb4FytxVUcKKqlBt5O
-         ejtBxLNtU4dKW5ZwyTuIknpmFgJXNP7LZGKXycAVUGpTqR8ihV8XOEpV6k1ARW4cxAe8
-         yaLomxp6gPuj0QvEF4hJJ8cJmwppKB6mZUC9xWJZGU7A6puKCttMVye4bkkGvUmmuLMQ
-         ad5eAGRWl5rRcilU+yBuXsXqp2bJd9+gZ2uTvTCardZyHN7a4J9k6Q55KfynUfEpvZBE
-         K6Og==
-X-Gm-Message-State: AOAM533++bLcMVvIASL4S0jvIcv/2ZNfaDGfAW+TNREOMD+esyk0ZMUU
-        aB39wWxTIHBk0AkXa9fCyymsdul5cJw=
-X-Google-Smtp-Source: ABdhPJyYNbv1Oa/jyJ4xV6QmCCiIdiJYRaqMHi0NbiGCoAbAdLE3Ow9EqitR7DYR0tLUyaD8aPbtdA==
-X-Received: by 2002:aa7:d917:: with SMTP id a23mr9881117edr.122.1615192698724;
-        Mon, 08 Mar 2021 00:38:18 -0800 (PST)
-Received: from gmail.com (20014C4E1CB4EF00D119361004A17E82.dsl.pool.telekom.hu. [2001:4c4e:1cb4:ef00:d119:3610:4a1:7e82])
-        by smtp.gmail.com with ESMTPSA id c17sm7083261edw.32.2021.03.08.00.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 00:38:18 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 8 Mar 2021 09:38:16 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RMwsh4rVWEMwbXiqVdffM9tN14wTQl3j4nwiD5Xat2g=;
+        b=puhEWOCS6j8UvMlTlVweMwQzpMdOE1d2+PVLXGb5AduGhDAd9+6ut3dl7DVMS82zkL
+         FpinJKZK9baPjbx0CVh+6A7vGf8xH1FHRsvzd60v/7I7QQ7sYqMvjUtwlepDoHtIGxqE
+         nboI7U6GWy5S5N7J00xbzn1n38xs0bf3g2yPIJeaEWgqe1qY1vZys1ejyLqt857jCtsn
+         AAd/iXy3UDXqxsK3I0YbxaV1ZXFBpfNnXKVtJ7ANni+pn34kopCMgXaXXeqAqe5Z78/h
+         S6nImbRjwFg3vXNxIVTZkbBykt0RsvxPB259NLclU3cAV/KMgr6xyCgi8yjsSGz4wTvg
+         vzcg==
+X-Gm-Message-State: AOAM530DadY5Nb3DterLTH36QB8YfRcuaEjLj/kLKRw/rhNX+yF1eutG
+        Y9vtZtEmlo9vigy9Tx3JhZDiAoG7a5zoXG86wTQKLXjkbS23+QNGZ3NxFed+90NEXuJSsfBViBQ
+        J4MuMns5t7prW2GEKeUHPdqivB5FxFUubpWfes1zCKHVnxgXHKK5424k/ubrU0f+tXd+An+mp8g
+        ==
+X-Received: by 2002:ac2:5e27:: with SMTP id o7mr14004241lfg.371.1615199767729;
+        Mon, 08 Mar 2021 02:36:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzGb4nLGRHcHCuZOPQfMFnx/n+Fm0RfscsbxImZfY5iHcNsmrWFVj/zvrFYrXj/ZtdpY9I8hg==
+X-Received: by 2002:a05:6402:b2d:: with SMTP id bo13mr21218084edb.120.1615199766786;
+        Mon, 08 Mar 2021 02:36:06 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id jx22sm6318527ejc.105.2021.03.08.02.36.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 02:36:06 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the drivers-x86 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <mark.gross@intel.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tags need some work in the tip tree
-Message-ID: <20210308083816.GA797670@gmail.com>
-References: <20210308131651.68446a90@canb.auug.org.au>
+References: <20210308170623.1304b12a@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <7919164f-b5dc-3081-b7f0-5746235c7358@redhat.com>
+Date:   Mon, 8 Mar 2021 11:36:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210308131651.68446a90@canb.auug.org.au>
+In-Reply-To: <20210308170623.1304b12a@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi,
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
+On 3/8/21 7:06 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
 > In commit
 > 
->   eca8f0c80a00 ("hrtimer: Update softirq_expires_next correctly after __hrtimer_get_next_event()")
+>   b5b5ff84fd93 ("platform/surface: aggregator: Make SSAM_DEFINE_SYNC_REQUEST_x define static functions")
 > 
 > Fixes tag
 > 
->   Fixes: da70160462e ("hrtimer: Implement support for softirq based hrtimers")
+>   Fixes: 510c8114fc74 ("platform/surface: Add platform profile driver")
 > 
 > has these problem(s):
 > 
@@ -87,8 +92,12 @@ X-Mailing-List: linux-next@vger.kernel.org
 > 
 > Maybe you meant
 > 
-> Fixes: 5da70160462e ("hrtimer: Implement support for softirq based hrtimers")
+> Fixes: b78b4982d763 ("platform/surface: Add platform profile driver")
 
-Thanks - fixed.
+Yeah, this was caused by rebasing my branches from v5.12-rc1 as base to v5.12-rc2 as base,
+I've fixed this now, thank you for the report.
 
-	Ingo
+Regards,
+
+Hans
+

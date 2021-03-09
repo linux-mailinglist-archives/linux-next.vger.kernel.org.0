@@ -2,115 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC7D331CA9
-	for <lists+linux-next@lfdr.de>; Tue,  9 Mar 2021 02:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B25331D2C
+	for <lists+linux-next@lfdr.de>; Tue,  9 Mar 2021 03:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhCIB7L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Mar 2021 20:59:11 -0500
-Received: from ozlabs.org ([203.11.71.1]:34135 "EHLO ozlabs.org"
+        id S229599AbhCICzk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Mar 2021 21:55:40 -0500
+Received: from ozlabs.org ([203.11.71.1]:34723 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229475AbhCIB6k (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 8 Mar 2021 20:58:40 -0500
+        id S229379AbhCICzL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 8 Mar 2021 21:55:11 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DvdfQ0NHGz9sW5;
-        Tue,  9 Mar 2021 12:58:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dvfvb3g4Fz9sVv;
+        Tue,  9 Mar 2021 13:55:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615255118;
-        bh=b02qCUSk+8Dtz++zYg6GWz8qUm89BxbuOTm1R/MeNz0=;
+        s=201702; t=1615258507;
+        bh=I2atnsURNCx0AQ0lKEMYIfhWnoXp+Om5a1Eh2ifNoa0=;
         h=Date:From:To:Cc:Subject:From;
-        b=fbtw53knS34/xKwHub0u+ey45KybumnXK51FJrTQtFw13SGHb+ozPJQsEbinO2AzT
-         LCui8/yw2Q52VsYYGtG7Paj0k9AbZ/J3jfc+JXdhJp4FeyKGrzTHUvPaYwC8mGVcaD
-         +Ydyujy/J25xFntNPhcp2P3spjOOgqqjiNwb37eiv2+nZV15HCkwq4ydudXXdGDnde
-         TTsJHI9WHv5WP3JXh/nWDQTLO+7+e+e32XUyXgLHfM7pcfx85GjaLwaS6hLKOp9Zl2
-         6nMG6RPfZpuynMC6dUOcB78jQpGbIcCblo1GNCNigYDoFB/9ANdcha1UuwOAJdOQFa
-         CbvUN8R3qTP9w==
-Date:   Tue, 9 Mar 2021 12:58:33 +1100
+        b=jMwv/L5LzH1VIG//vQlBl6pyeNz4lHOb6VmPlUgDBEmwW7rxTVT8uLaWhTyGQPxGP
+         SVw6NRDDur9jZTsr2nELWYS/TDeygk0KHAP9UwVFHmtEtyu1rdlpRIjE7ddFv6lU/y
+         rw9UHgunPAjfWFEqmJSdE/E6aZ7+us4g+CeXk6V9a/OF2O7vHsE0O1P/zY2R1UoSH2
+         dmEdDSs9UL1PfwpjY/qBv24A9/cO9G69OlJPQKrI0aT1G0gAhYq5+iG5tM5b8NXU+M
+         HKPFIxE6yZ0NUHjZ6cIxZiJwLsr20F6CrU+y9a6RDuM4Fm4jc6sOW0uGT1EBUHo9ji
+         S+DSQItcReGSw==
+Date:   Tue, 9 Mar 2021 13:55:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>, Takashi Iwai <tiwai@suse.de>
-Cc:     Anton Yakovlev <anton.yakovlev@opensynergy.com>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Wayne Lin <Wayne.Lin@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vhost tree with the sound tree
-Message-ID: <20210309125833.0355a754@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20210309135506.3db99688@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XseBjs6DCsd10DardSdYt5T";
+Content-Type: multipart/signed; boundary="Sig_/ymHNEbazt37WVESKSZznpIj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XseBjs6DCsd10DardSdYt5T
+--Sig_/ymHNEbazt37WVESKSZznpIj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vhost tree got conflicts in:
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  sound/virtio/virtio_card.c
-  sound/virtio/virtio_card.h
-  sound/virtio/virtio_ctl_msg.c
-  sound/virtio/virtio_pcm.c
-  sound/virtio/virtio_pcm.h
-  sound/virtio/virtio_pcm_msg.c
-  sound/virtio/virtio_pcm_ops.c
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:380: warning: Function pa=
+rameter or member 'crc_rd_wrk' not described in 'amdgpu_display_manager'
 
-between commits:
+Introduced by commit
 
-  de3a9980d8c3 ("ALSA: virtio: add virtio sound driver")
-  9d45e514da88 ("ALSA: virtio: handling control messages")
-  29b96bf50ba9 ("ALSA: virtio: build PCM devices and substream hardware des=
-criptors")
-  f40a28679e0b ("ALSA: virtio: handling control and I/O messages for the PC=
-M device")
-  da76e9f3e43a ("ALSA: virtio: PCM substream operators")
-  ca61a41f389c ("ALSA: virtio: introduce jack support")
-  19325fedf245 ("ALSA: virtio: introduce PCM channel map support")
-  575483e90a32 ("ALSA: virtio: introduce device suspend/resume support")
-
-from the sound tree and commits:
-
-  1e2fb08629e5 ("ALSA: virtio: add virtio sound driver")
-  3fb7ce161568 ("ALSA: virtio: handling control messages")
-  83ec5db56076 ("ALSA: virtio: build PCM devices and substream hardware des=
-criptors")
-  68742d8557b8 ("ALSA: virtio: handling control and I/O messages for the PC=
-M device")
-  def2208d373b ("ALSA: virtio: PCM substream operators")
-  613515055d34 ("ALSA: virtio: introduce jack support")
-  96db428c31f1 ("ALSA: virtio: introduce PCM channel map support")
-  1f77f124f2f2 ("ALSA: virtio: introduce device suspend/resume support")
-
-from the vhost tree.
-
-I fixed it up (the sound tree commits have newer author dates, so I just
-used them) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
+  9a65df193108 ("drm/amd/display: Use PSP TA to read out crc")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XseBjs6DCsd10DardSdYt5T
+--Sig_/ymHNEbazt37WVESKSZznpIj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBG1kkACgkQAVBC80lX
-0GzU4Qf+OfDU1QFNa0JIlHbEk4MehOIAOhXGYr1pkShbCB/V4QCw5ko3RkTb6Ymg
-q81F0jPvrxwsNdVdBpHfC4WUwj/LEsMIxfbf/tJcU4EWp6B+ZuPeCB1lYIm6Mmx6
-xkYxvsNaTu+3PtMf8iPytgs5ZCnl7UNhWaw4hbf7rbyEPB8nlompUwaBDK+EjTNQ
-UAMnzvIngIfA1z+2tB1kBvs4DRVdvDyF9DGMzPjWbo8iOmXrM+oswa+5I+Z2DfAq
-eh86CYK2NR9PayrZQl6pk86PQeLB76Ap3pGlriz0Mp8CMXOzkS/ANgYnY89CmSh1
-C398Fg2K+KeLpVs08kyejPL6FXTpzA==
-=flhv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBG44oACgkQAVBC80lX
+0Gyl7ggApNRopCChPuxc6NEAwUvAr25UwRsXljp8GXmbcvuLX+5YHQzjGm184zlh
+NQpPNnoKdjXfhvC4WKAoooynIkzpXWGkh2EdQ5QbcoWkTEi0kSZnpXMmlkL+KJ04
+TApaENdj8bxnyWJqoYPaITD0jKwZWj4LMIO8CU+GJRitpbrI3gOE92TjgEtG+Qxf
+QJ5g2ZDpjHz7ZvSHStiYzflHoKHDWK82z5eJkpa35gPOL74e/wXP4u5LH7T19WLH
+gbbYhTzbLwIFeO0eFy8110x3WJu8IEGv22F20PGktG6/I9c4b2To6S2bLyGjHwTS
+jid5bmLO/3k5n8vr9PRtCKpQDtcSxg==
+=PTNx
 -----END PGP SIGNATURE-----
 
---Sig_/XseBjs6DCsd10DardSdYt5T--
+--Sig_/ymHNEbazt37WVESKSZznpIj--

@@ -2,92 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AD73318FE
-	for <lists+linux-next@lfdr.de>; Mon,  8 Mar 2021 22:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC7D331CA9
+	for <lists+linux-next@lfdr.de>; Tue,  9 Mar 2021 02:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhCHVCc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 8 Mar 2021 16:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhCHVCB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 8 Mar 2021 16:02:01 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BE3C06174A;
-        Mon,  8 Mar 2021 13:02:01 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id v14so312695pgq.2;
-        Mon, 08 Mar 2021 13:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EfA28O/UsViP+yPLk+j0rLpQWpebcKOAsJiqskjZxXc=;
-        b=sK+yWK70ZHNSJmaL2ofWWUqCWFkE7WFerRIeyuSI/6B+xPw6APL/2/tncdwTcP2DRn
-         IPOWAJGVGA5dkMw1I62xYWV0kcAm2rWmJvSGjM0UdKCfN546Mm/f5b/jpOFFslwVr7/I
-         9ZkARM5NhwxB03N5M6WtjdbBmm93F7WSjxDt5jOxWegC6dyFYjS4z/Hrnk/TSxvsBOLd
-         JEs7MxKFfBOEUopLh4Jxplj3kLM09u/yq4oVFP1QNMFe06kidhVp+qB8V5s/Hd+jKkW0
-         XUI2kKuuwscUseAOknon1C57+TT4s7wy9T/AMr4/ZUdMLBqAzW/mmNOZcw9ia4VX46/2
-         ySCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EfA28O/UsViP+yPLk+j0rLpQWpebcKOAsJiqskjZxXc=;
-        b=iXvvoDZDYtQUl/dFVgemhW+c6ae5f1tL97wV5Ddb/sZ6KfdJEosBt9rMuem+qalpau
-         PUezW+eXZS1ir1SrP6rpTC9ha2IYNi6398dsNPDOEp+DQoqJhFUx0MqBQy1pv0oyibZS
-         F7Fd6t4lkK2vRDHnziMe+e9Gth9kv3MHXAr8m7PnoKemCiXB1lYhH8GLj6/Zxbun+uZi
-         UcqWfToedwgqln2S7qN+YwOTN+Vf0NJ2P7ryVdDcG6fegFr561wUAxT/qxFJXszuIJJU
-         8rr6PXcfuUUo4JoLuRkoyjK6eKFp063WuKQxOSfFbLNP+XEnUovNy9Xlv8lT96JOain9
-         L3eQ==
-X-Gm-Message-State: AOAM530St9LGXmtA5wD20fGawywVDTo23AWdJn0bpI7oTyxaz9z5yaqx
-        kxcMY0QIxuanFwufepOFqj2e7aodZJg7E7+u4A0=
-X-Google-Smtp-Source: ABdhPJxVM01lybOdYwckGRoBjfKBf6vBKHhaBl9GWPCZE2wFJgtwn9WuQ+iwgS/3gF0lF2S6Uc2LtMK4qwQA9MTqMT0=
-X-Received: by 2002:a63:ce15:: with SMTP id y21mr22299306pgf.4.1615237321252;
- Mon, 08 Mar 2021 13:02:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20210309072620.656e8078@canb.auug.org.au> <20210309073211.392a838d@canb.auug.org.au>
-In-Reply-To: <20210309073211.392a838d@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Mar 2021 23:01:44 +0200
-Message-ID: <CAHp75Ve2qGd5fFC9ztaEk9d+YBa-aTu-gMn_9dRUbpkWGY9YTw@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the
- gpio-brgl-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        id S229599AbhCIB7L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 8 Mar 2021 20:59:11 -0500
+Received: from ozlabs.org ([203.11.71.1]:34135 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229475AbhCIB6k (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 8 Mar 2021 20:58:40 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DvdfQ0NHGz9sW5;
+        Tue,  9 Mar 2021 12:58:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1615255118;
+        bh=b02qCUSk+8Dtz++zYg6GWz8qUm89BxbuOTm1R/MeNz0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fbtw53knS34/xKwHub0u+ey45KybumnXK51FJrTQtFw13SGHb+ozPJQsEbinO2AzT
+         LCui8/yw2Q52VsYYGtG7Paj0k9AbZ/J3jfc+JXdhJp4FeyKGrzTHUvPaYwC8mGVcaD
+         +Ydyujy/J25xFntNPhcp2P3spjOOgqqjiNwb37eiv2+nZV15HCkwq4ydudXXdGDnde
+         TTsJHI9WHv5WP3JXh/nWDQTLO+7+e+e32XUyXgLHfM7pcfx85GjaLwaS6hLKOp9Zl2
+         6nMG6RPfZpuynMC6dUOcB78jQpGbIcCblo1GNCNigYDoFB/9ANdcha1UuwOAJdOQFa
+         CbvUN8R3qTP9w==
+Date:   Tue, 9 Mar 2021 12:58:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>, Takashi Iwai <tiwai@suse.de>
+Cc:     Anton Yakovlev <anton.yakovlev@opensynergy.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: manual merge of the vhost tree with the sound tree
+Message-ID: <20210309125833.0355a754@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/XseBjs6DCsd10DardSdYt5T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 10:34 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Tue, 9 Mar 2021 07:26:20 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Commits
-> >
-> >   eb441337c714 ("gpio: pca953x: Set IRQ type when handle Intel Galileo Gen 2")
-> >   809390219fb9 ("gpiolib: acpi: Allow to find GpioInt() resource by name and index")
-> >   62d5247d239d ("gpiolib: acpi: Add ACPI_GPIO_QUIRK_ABSOLUTE_NUMBER quirk")
-> >   6e5d5791730b ("gpiolib: acpi: Add missing IRQF_ONESHOT")
-> >
-> > are missing a Signed-off-by from their committers.
->
-> This also applies to the gpio-intel-fixes tree (since it is now headed
-> by the same commit as the gpio-brgl-fixes tree).
+--Sig_/XseBjs6DCsd10DardSdYt5T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I rebased my branch according to Linus, but I have decided to take
-directly Bart's tree.
-So when original will be fixed I'll fix mine.
+Hi all,
 
-Thanks!
+Today's linux-next merge of the vhost tree got conflicts in:
 
-P.S. Bart, you may simply merge my tag even on top of v5.12-rc2. It
-will save you time and keep the original SHA IDs.
+  sound/virtio/virtio_card.c
+  sound/virtio/virtio_card.h
+  sound/virtio/virtio_ctl_msg.c
+  sound/virtio/virtio_pcm.c
+  sound/virtio/virtio_pcm.h
+  sound/virtio/virtio_pcm_msg.c
+  sound/virtio/virtio_pcm_ops.c
 
--- 
-With Best Regards,
-Andy Shevchenko
+between commits:
+
+  de3a9980d8c3 ("ALSA: virtio: add virtio sound driver")
+  9d45e514da88 ("ALSA: virtio: handling control messages")
+  29b96bf50ba9 ("ALSA: virtio: build PCM devices and substream hardware des=
+criptors")
+  f40a28679e0b ("ALSA: virtio: handling control and I/O messages for the PC=
+M device")
+  da76e9f3e43a ("ALSA: virtio: PCM substream operators")
+  ca61a41f389c ("ALSA: virtio: introduce jack support")
+  19325fedf245 ("ALSA: virtio: introduce PCM channel map support")
+  575483e90a32 ("ALSA: virtio: introduce device suspend/resume support")
+
+from the sound tree and commits:
+
+  1e2fb08629e5 ("ALSA: virtio: add virtio sound driver")
+  3fb7ce161568 ("ALSA: virtio: handling control messages")
+  83ec5db56076 ("ALSA: virtio: build PCM devices and substream hardware des=
+criptors")
+  68742d8557b8 ("ALSA: virtio: handling control and I/O messages for the PC=
+M device")
+  def2208d373b ("ALSA: virtio: PCM substream operators")
+  613515055d34 ("ALSA: virtio: introduce jack support")
+  96db428c31f1 ("ALSA: virtio: introduce PCM channel map support")
+  1f77f124f2f2 ("ALSA: virtio: introduce device suspend/resume support")
+
+from the vhost tree.
+
+I fixed it up (the sound tree commits have newer author dates, so I just
+used them) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XseBjs6DCsd10DardSdYt5T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBG1kkACgkQAVBC80lX
+0GzU4Qf+OfDU1QFNa0JIlHbEk4MehOIAOhXGYr1pkShbCB/V4QCw5ko3RkTb6Ymg
+q81F0jPvrxwsNdVdBpHfC4WUwj/LEsMIxfbf/tJcU4EWp6B+ZuPeCB1lYIm6Mmx6
+xkYxvsNaTu+3PtMf8iPytgs5ZCnl7UNhWaw4hbf7rbyEPB8nlompUwaBDK+EjTNQ
+UAMnzvIngIfA1z+2tB1kBvs4DRVdvDyF9DGMzPjWbo8iOmXrM+oswa+5I+Z2DfAq
+eh86CYK2NR9PayrZQl6pk86PQeLB76Ap3pGlriz0Mp8CMXOzkS/ANgYnY89CmSh1
+C398Fg2K+KeLpVs08kyejPL6FXTpzA==
+=flhv
+-----END PGP SIGNATURE-----
+
+--Sig_/XseBjs6DCsd10DardSdYt5T--

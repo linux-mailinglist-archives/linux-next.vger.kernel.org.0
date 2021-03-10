@@ -2,152 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5169C33464C
-	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 19:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89523349CB
+	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 22:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbhCJSKE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Mar 2021 13:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S232030AbhCJVY2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Mar 2021 16:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbhCJSJt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Mar 2021 13:09:49 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194DC061761
-        for <linux-next@vger.kernel.org>; Wed, 10 Mar 2021 10:09:45 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id c10so40475774ejx.9
-        for <linux-next@vger.kernel.org>; Wed, 10 Mar 2021 10:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gJAsZyfDCDLDzspGcP+6q6V8qY1kikL05fqsU033Nz4=;
-        b=SC7BwuYMthuL7KnQIhtiddqRok9XAh9gcjM97rHzKdVXjJpoh6TkW0z0O+K8Zudu8x
-         JPZTUm5toVVXQGCslw/S1cHIfiE36I8q0tGDT+YUSeqev1f6ry4L/RmPVaOTBefWmXSo
-         VJ6sLW9YJ11CsRbnwn8LMwY0qDXVBCq24MmN+vSBu/GArQoA0cFoaPxoGeSRIjBDDt3v
-         i7ujukCxirP5KWnulJ/he7BEN4ok063e0yjjW6fabwUtF11T98Is57KmdWXULwDKO9ba
-         sMPY67YmABfaj67e/ifXPkGu86Md7n+sRzOqGMvtAmbqKBJuZWIvrW0ZabkxH7Yrh0kY
-         8pEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gJAsZyfDCDLDzspGcP+6q6V8qY1kikL05fqsU033Nz4=;
-        b=eiKnv/dyJw+Eph786g3Q6O5ukmN5nF1TqaVZkv+5Z+rzcYEJ+7Br8tLvxNDSmkemhM
-         gnDPh0kEAGJaVyPIeMltIVhGSij+McOdE6sZ6nS3BQGz3uKg8K/LPCSggF1dqA3aaJap
-         10dfHwvJ7+OTpgaKl28d9NbVW2RAynoDJZffCxaQbdGZmO1x8wvHFFjg2z65OulF/+iy
-         IPRa3eo+PX/CS6vSoy0CLFjdq57kus1Xhl+5FDVsxlKPNQ9jv+XlrR04XlFVTyGsP2Bu
-         Q7elWM4/OFTkG4ivCVUBq8oHMmK3rGFY6ByJUALmldse2djwBszUS6JG8qeR9MMuTi2e
-         I28Q==
-X-Gm-Message-State: AOAM530XlsyKY+Lkzt21vIKMqAQ/NLG1wznnM5I+w9I9xZQ99praoblP
-        X1+/Br4PYNiIPUY7PeO5rPc+6qsZoMDXnSTRcR3D8Q==
-X-Google-Smtp-Source: ABdhPJz7X8EAeavYVAMuOixYYEkGqm/ao9bUZTWDvbUa0pzwfhRvQpKr+aPzlD7TsVVjXIoYOXXFZ88PdEVAqY4wc8U=
-X-Received: by 2002:a17:906:a052:: with SMTP id bg18mr5034455ejb.18.1615399783815;
- Wed, 10 Mar 2021 10:09:43 -0800 (PST)
+        with ESMTP id S231207AbhCJVYB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Mar 2021 16:24:01 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718CC061574;
+        Wed, 10 Mar 2021 13:23:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DwlSW1pPXz9sVw;
+        Thu, 11 Mar 2021 08:23:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1615411435;
+        bh=hyy07TdsQZqq+6ZbszW2WD5wRcvxFeHpA3xz8f60kuo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FjDy3Zpfjs0FgrWMhNCmXYFbkYEFu0ey0yy5cZeEzp22IMmP4avQYmUXxPBNQOzSf
+         mq4Y40kSueU+gvRBmbFQH2knOm3FozPbAmhh8BFYjsDF0OlKlSrI7VszpKnTEISPVR
+         XONnbqwmTbktLb/81AExGp/0n/KDHJw5vNGq1BL37E2rA/qJHROTB+z1tRxeRsNmBG
+         NNCF2Gs2LRh42inHbt/YT2iHlUY/qFoGeW1MQ+BTldiyJ5/+kZ6AtUTE2mg+/Kw676
+         upsxl9m5WRuc+Mv5W0FRCDjGy1Q8pmyGe1om1mYWzo2YtQmgtcbrb06Tyrfw71dTm9
+         W7Yx1fZqj5WgA==
+Date:   Thu, 11 Mar 2021 08:23:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Xen Devel <Xen-devel@lists.xensource.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the xen-tip tree
+Message-ID: <20210311082354.0f149e1c@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20210218230633.15028-1-peterx@redhat.com> <20210218231202.15426-1-peterx@redhat.com>
- <CA+G9fYvyQ=9cZgGDNzN_PH09WRk0yu=5CDfa1mxPQ+uzfonnkg@mail.gmail.com> <20210310165713.GB6530@xz-x1>
-In-Reply-To: <20210310165713.GB6530@xz-x1>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Mar 2021 23:39:32 +0530
-Message-ID: <CA+G9fYs7wZ7EfOs1eB=2zf94=pYEkWig=usYF=Hfs5sM6iqYKw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] hugetlb/userfaultfd: Forbid huge pmd sharing when
- uffd enabled
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/fML9M7KD_SWHiQ1yTH0NtvG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 10 Mar 2021 at 22:27, Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Mar 10, 2021 at 01:18:42PM +0530, Naresh Kamboju wrote:
-> > Hi Peter,
->
-> Hi, Naresh,
->
-> >
-> > On Fri, 19 Feb 2021 at 04:43, Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > Huge pmd sharing could bring problem to userfaultfd.  The thing is that
-> > > userfaultfd is running its logic based on the special bits on page table
-> > > entries, however the huge pmd sharing could potentially share page table
-> > > entries for different address ranges.  That could cause issues on either:
-> > >
-> > >   - When sharing huge pmd page tables for an uffd write protected range, the
-> > >     newly mapped huge pmd range will also be write protected unexpectedly, or,
-> > >
-> > >   - When we try to write protect a range of huge pmd shared range, we'll first
-> > >     do huge_pmd_unshare() in hugetlb_change_protection(), however that also
-> > >     means the UFFDIO_WRITEPROTECT could be silently skipped for the shared
-> > >     region, which could lead to data loss.
-> > >
-> > > Since at it, a few other things are done altogether:
-> > >
-> > >   - Move want_pmd_share() from mm/hugetlb.c into linux/hugetlb.h, because
-> > >     that's definitely something that arch code would like to use too
-> > >
-> > >   - ARM64 currently directly check against CONFIG_ARCH_WANT_HUGE_PMD_SHARE when
-> > >     trying to share huge pmd.  Switch to the want_pmd_share() helper.
-> > >
-> > > Since at it, move vma_shareable() from huge_pmd_share() into want_pmd_share().
-> > >
-> > > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > > Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
-> > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > ---
-> > >  arch/arm64/mm/hugetlbpage.c   |  3 +--
-> > >  include/linux/hugetlb.h       |  2 ++
-> > >  include/linux/userfaultfd_k.h |  9 +++++++++
-> > >  mm/hugetlb.c                  | 20 ++++++++++++++------
-> > >  4 files changed, 26 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> > > index 6e3bcffe2837..58987a98e179 100644
-> > > --- a/arch/arm64/mm/hugetlbpage.c
-> > > +++ b/arch/arm64/mm/hugetlbpage.c
-> > > @@ -284,8 +284,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
-> > >                  */
-> > >                 ptep = pte_alloc_map(mm, pmdp, addr);
-> > >         } else if (sz == PMD_SIZE) {
-> > > -               if (IS_ENABLED(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) &&
-> > > -                   pud_none(READ_ONCE(*pudp)))
-> > > +               if (want_pmd_share(vma, addr) && pud_none(READ_ONCE(*pudp)))
-> >
-> > While building Linux next 20210310 tag for arm64 architecture with
-> >
-> >   - CONFIG_ARM64_64K_PAGES=y
-> >
-> > enabled the build failed due to below errors / warnings
-> >
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=arm64
-> > CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-> > 'HOSTCC=sccache gcc'
-> > aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> > aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> > aarch64-linux-gnu-ld: arch/arm64/mm/hugetlbpage.o: in function `huge_pte_alloc':
-> > hugetlbpage.c:(.text+0x7d8): undefined reference to `want_pmd_share'
-> >
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
->
-> Sorry for the issue & thanks for the report.  Would you please check whether
-> the patch attached could fix the issue?
+--Sig_/fML9M7KD_SWHiQ1yTH0NtvG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The attached patch build tested and build pass for arm64
-including 64k pages config.
+Hi all,
 
- CONFIG_ARM64_64K_PAGES=y
+In commit
 
-- Naresh
+  1103e2826a9f ("xen/events: don't unmask an event channel when an eoi is p=
+ending")
+
+Fixes tag
+
+  Fixes: 54c9de89895e0a36047 ("xen/events: add a new late EOI evtchn framew=
+ork")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fML9M7KD_SWHiQ1yTH0NtvG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBJOOoACgkQAVBC80lX
+0GxsGgf/bklAmv7OF8puwVjmyBLICRBDo/j0zy3NFRUgHASx4IEO+HS5nJwr6R5D
+Zq+h13nNyf6kPgxdsas9o8sV8tDLAGtRrq6jq05KXd4ZOTvTyISEBhdmqEbZgUrI
+IoQB1czSn7Lq5bc3Wg8mA6zRkLu4Ce6mXWvxdy1PDIFUW6e5NLB2V349//+kIj6P
+RUmXHKkGWe+YzWHW1nE2sP2HiNwLVXlBUCDr2W2pFcVY7dyPj5QruesTZACPVY6X
+FIW64pmgYFz3nwLmMbuJe31OAUk2N5ddQ/z1C6yBKRLIca0IDdIuoBVHRFYg6DZN
+kqXVn8cm+Yn7s8KZ22ACGRjk+tAD/g==
+=bbos
+-----END PGP SIGNATURE-----
+
+--Sig_/fML9M7KD_SWHiQ1yTH0NtvG--

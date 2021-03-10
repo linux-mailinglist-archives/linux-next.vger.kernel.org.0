@@ -2,84 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5470333B4E
-	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 12:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A2B333CD9
+	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 13:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbhCJL0E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Mar 2021 06:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbhCJLZ7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Mar 2021 06:25:59 -0500
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA621C06174A;
-        Wed, 10 Mar 2021 03:24:44 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DwV961y7dz9sRf;
-        Wed, 10 Mar 2021 22:24:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615375482;
-        bh=V+V8sLOoFHc4RKm9lLu93GG2y5UNHz1wUBDpBk2W6C4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jiZOpEju8c4EAgfnR2Q83/iE3qMGwG2wC/ZJ4Knvn2r2Cn30G4fO1KftywaYLCjzR
-         sc3U99aqVyYaKNscOylAMvXoO3ltC6cmBqeOiYESM95PCWWpasuCX4h55HcKzahf15
-         S3wFlpAIM2ceo0WhL8c/I60yYPbHWjEAMvjTmNiS+C90t+YedcOQ+RO7AmyQh2zoWt
-         dhbaZvos8elsZAr3PFz64TtuYI1LfsaOhmaSwW0gTJ0hdbjX9HWUs77KUVCS9n0i/P
-         BQkmqy0J9gccuG84fZmk5O7+G0nPur2IY94YbjNPfb2ai/5Qwn7MGMdhgXFOUyD4yw
-         /IU9MkgkDI7ZQ==
-Date:   Wed, 10 Mar 2021 22:24:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Oded Gabbay <ogabbay@kernel.org>,
+        id S232294AbhCJMrU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Mar 2021 07:47:20 -0500
+Received: from mga02.intel.com ([134.134.136.20]:25217 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232073AbhCJMrO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 10 Mar 2021 07:47:14 -0500
+IronPort-SDR: ZygM77M6tVaV4KF5TQlhn8AHI1hcW48v76llp/r+iMb+otX465XWiw4HS+bSQC+x/VUUlrIhaY
+ Fow1K+B4Lchw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9917"; a="175561587"
+X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
+   d="scan'208";a="175561587"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 04:47:13 -0800
+IronPort-SDR: mkZd9NPhZV8mqinPhj/J5qulMfCqbHh9mLaLKOvFG+uASkZzyVGHPpGwBHstCrFpNu4n67FBeR
+ CXrpk42Aux8w==
+X-IronPort-AV: E=Sophos;i="5.81,237,1610438400"; 
+   d="scan'208";a="410172155"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2021 04:47:12 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lJyF3-00BK7V-SC; Wed, 10 Mar 2021 14:47:09 +0200
+Date:   Wed, 10 Mar 2021 14:47:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commits in the
- char-misc.current tree
-Message-ID: <20210310222441.6a8dcb10@canb.auug.org.au>
-In-Reply-To: <YEiphZVhmY4rYzbJ@kroah.com>
-References: <20210310220404.086c426c@canb.auug.org.au>
-        <YEiphZVhmY4rYzbJ@kroah.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ gpio-brgl-fixes tree
+Message-ID: <YEi/zYdmQFViE/Va@smile.fi.intel.com>
+References: <20210309072620.656e8078@canb.auug.org.au>
+ <20210309073211.392a838d@canb.auug.org.au>
+ <CAHp75Ve2qGd5fFC9ztaEk9d+YBa-aTu-gMn_9dRUbpkWGY9YTw@mail.gmail.com>
+ <YEdCeICFjpbgD4UT@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Cz69z98RP9qNCKyzcY1iS=7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YEdCeICFjpbgD4UT@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Cz69z98RP9qNCKyzcY1iS=7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 09, 2021 at 11:40:08AM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 08, 2021 at 11:01:44PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 8, 2021 at 10:34 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > On Tue, 9 Mar 2021 07:26:20 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > >
+> > > > Commits
+> > > >
+> > > >   eb441337c714 ("gpio: pca953x: Set IRQ type when handle Intel Galileo Gen 2")
+> > > >   809390219fb9 ("gpiolib: acpi: Allow to find GpioInt() resource by name and index")
+> > > >   62d5247d239d ("gpiolib: acpi: Add ACPI_GPIO_QUIRK_ABSOLUTE_NUMBER quirk")
+> > > >   6e5d5791730b ("gpiolib: acpi: Add missing IRQF_ONESHOT")
+> > > >
+> > > > are missing a Signed-off-by from their committers.
+> > >
+> > > This also applies to the gpio-intel-fixes tree (since it is now headed
+> > > by the same commit as the gpio-brgl-fixes tree).
+> > 
+> > I rebased my branch according to Linus, but I have decided to take
+> > directly Bart's tree.
+> > So when original will be fixed I'll fix mine.
+> > 
+> > Thanks!
+> > 
+> > P.S. Bart, you may simply merge my tag even on top of v5.12-rc2. It
+> > will save you time and keep the original SHA IDs.
+> 
+> I think I have to elaborate.
+> 1/ you need to drop those commits from your tree (yeah, rebase :-(, nut you may
+>    do it interactively and inject the merge in the same location in the
+>    history)
+> 2/ instead of cherry-picking them run something like
+>   git fetch git@gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel.git intel-gpio-v5.12-2
+>   git merge FETCH_HEAD
 
-Hi Greg,
+Linus applied as is.
+Problem solved :-)
 
-On Wed, 10 Mar 2021 12:12:05 +0100 Greg KH <greg@kroah.com> wrote:
->
-> Ah, yeah, oh well, I'll just live with this, I don't want to rebase
-> again :(
+-- 
+With Best Regards,
+Andy Shevchenko
 
-At least the -rc1 booby trap is gone.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Cz69z98RP9qNCKyzcY1iS=7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBIrHkACgkQAVBC80lX
-0GwdHAf9HWPRXFNXDrZBGgv30sIUwXZ0mv6P+2O+46VQHYFZxpEq6KmLdb+xzoKk
-HjEWTA+iPC3BU60yAIIhCbjCDgcm1VaFpcw8QFkysfrLH//Fa/gsOvxTbjxUNEke
-kFeFAxnz3azwdF6oVKlOgmKp75lh7B4T3SPyFIZCbKcQhV+H4QLXEcwzfan3pMoW
-QNbbrXlALUmqUMR/sdGegiJ+We5dbbcKWjXltilO/Ol/Hc/vaflQ4lXGoUdGv6bG
-W6LrUpR+oGJMBl0Zu/GNkGYLroGjvaBzJ9lvbW0DKrbe8US1wyMugOFETHKA2gJk
-hto+E5HuXfuKkN8rJNLk8H/3Prm0yw==
-=56lY
------END PGP SIGNATURE-----
-
---Sig_/Cz69z98RP9qNCKyzcY1iS=7--

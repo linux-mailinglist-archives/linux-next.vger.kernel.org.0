@@ -2,163 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4126933369B
-	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 08:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C56333791
+	for <lists+linux-next@lfdr.de>; Wed, 10 Mar 2021 09:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbhCJHtG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 10 Mar 2021 02:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbhCJHsz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 10 Mar 2021 02:48:55 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24958C061760
-        for <linux-next@vger.kernel.org>; Tue,  9 Mar 2021 23:48:55 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id dx17so36599172ejb.2
-        for <linux-next@vger.kernel.org>; Tue, 09 Mar 2021 23:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UYIAYFhn9jv5jndPR2ePIIH3j9f4IGqFq4xY6Rn35ck=;
-        b=braAeI90Nb4I9UfvR7erd8SSxj9A/vwLm6IcYkkdG1V8lsbJfUXqxxNVPxmc1o2zD5
-         USyRAFdzI2rzcYdxKTw36cbczuQyPUTpiyNmXacEQhRR/2f9JaBlI+w8quQrllcBespS
-         e1eb1VJDP0R0U0TweLlfRbY6WqtAnRfwOL0zM4vPGXuKY+u/C8ivpxjjsc0PMnc4QkxF
-         TgEK1Bg4dgHt6rGP/Z58bhy3XUGCU5HG56UTok8bezkvdLHj2xMFJ8NZxf9FX5bnFD4m
-         kEEdyNinARJBnWD5V9I+tMJAm1t/HgRpNZbNBglhRIwxapMl7FqUbUGscWgAjojWh3e3
-         h9+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UYIAYFhn9jv5jndPR2ePIIH3j9f4IGqFq4xY6Rn35ck=;
-        b=YlKudGf62fKAOHWxj5wiRD4kLiGmk2p3CHVtz5G2OngfWwMSUlGHP/Vi4YfT77Bn0d
-         wok5aBxhU/VQT3vYGN7XqFj7q9cFYxFGUUAmNrYeFRFq3iSmxOEJaJLt5B9cIbE5ugnb
-         SkyoOg+Ikd7Im/wpY5D7/T/CMX4/+0y9gxCEDTc3FPl6EWjgP912N4d8PtXppmCNeKWm
-         P4JtKvq5/8YhzPgNdb9dCjcDw5Y+hLqBKYhnzjEDQaqo4CGx6/whMOiMjm7dMqXnLfME
-         A7nru+1bqDsyp/pAuPa3aDJdo0EJKj9SQ+sUT2Jv2G9/uRp0Zfx6LJXtbx/L4jwMz9tM
-         um8Q==
-X-Gm-Message-State: AOAM531dyF0uG55ctEi1/oL2H5RNEq/HygGvss0bApBJKR6lck+AsU8S
-        qaWoOC7EwdStGCAJd4revJgmEniO/m9mGcE0/KaJykpGmtux4ffK
-X-Google-Smtp-Source: ABdhPJzWLk1+GHbweU/Gu0GuvGkG0Dsq0G+OcfGNZanks6CE76sr07/IWmGLcJAyOtypC8yEDdCjY5TeBojPrD04G2o=
-X-Received: by 2002:a17:906:229b:: with SMTP id p27mr2327796eja.287.1615362533619;
- Tue, 09 Mar 2021 23:48:53 -0800 (PST)
+        id S229643AbhCJIld (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 10 Mar 2021 03:41:33 -0500
+Received: from m34-101.88.com ([104.250.34.101]:41169 "EHLO 88.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231735AbhCJIlD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 10 Mar 2021 03:41:03 -0500
+X-Greylist: delayed 360 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Mar 2021 03:41:02 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cn;
+        s=dkim; h=Date:From:To; bh=5g4I0r/DGg6RJLF1PGE/mXjosHacIgb1ONExj
+        xL+IEk=; b=Md1VgYbQ1e7UjkYsG2OznmBYOUdKKNgeBW00F6cN2COaToPz+BKWg
+        d950Es2TvlkeJDQ/NrhyeO8oTio+CGhFAmjkvH7XfTt1VvssfWWROrTdkrWyIHmp
+        y6a78QAxULhlo5y9vlDW4mDK3WoKEcZRBGgSoTYkgBxzg3v6jloFB4=
+Received: from mipc (unknown [110.64.86.229])
+        by v_coremail2-frontend-2 (Coremail) with SMTP id GiKnCgCnMiNhhEhgjH4hAA--.23797S2;
+        Wed, 10 Mar 2021 16:33:39 +0800 (CST)
+Date:   Wed, 10 Mar 2021 16:33:37 +0800
+From:   Wu XiangCheng <bobwxc@email.cn>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] docs/zh_CN: fix original link unknown document warning
+Message-ID: <20210310083335.GA17722@mipc>
+References: <20210310142019.27b9aa7b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20210218230633.15028-1-peterx@redhat.com> <20210218231202.15426-1-peterx@redhat.com>
-In-Reply-To: <20210218231202.15426-1-peterx@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Mar 2021 13:18:42 +0530
-Message-ID: <CA+G9fYvyQ=9cZgGDNzN_PH09WRk0yu=5CDfa1mxPQ+uzfonnkg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] hugetlb/userfaultfd: Forbid huge pmd sharing when
- uffd enabled
-To:     Peter Xu <peterx@redhat.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        lkft-triage@lists.linaro.org, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210310142019.27b9aa7b@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CM-TRANSID: GiKnCgCnMiNhhEhgjH4hAA--.23797S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4Utw1fGw4rWFW5Jw4Utwb_yoW8Aryrpa
+        4vkryIk3ZrAFy3Cr4kWry7tF17tF4xW398GF1j9wn5XFs5Ar1vqr42gr9rK3ZxXr40qay8
+        XrWSgryF9r4jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUqqb7Iv0xC_KF4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+        cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+        v20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2
+        z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcx
+        kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VWx
+        Jr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l42
+        xK82IY6x8ErcxFaVAv8VWxJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
+        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+        wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+        4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUUOzVUUU
+        UUU==
+X-Originating-IP: [110.64.86.229]
+X-CM-SenderInfo: pere453f6hztlloou0/
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Peter,
+fix original link unknown document warning in zh_CN/admin-guide/README.rst
+and admin-guide/unicode.rst which introduced by commit:
 
-On Fri, 19 Feb 2021 at 04:43, Peter Xu <peterx@redhat.com> wrote:
->
-> Huge pmd sharing could bring problem to userfaultfd.  The thing is that
-> userfaultfd is running its logic based on the special bits on page table
-> entries, however the huge pmd sharing could potentially share page table
-> entries for different address ranges.  That could cause issues on either:
->
->   - When sharing huge pmd page tables for an uffd write protected range, the
->     newly mapped huge pmd range will also be write protected unexpectedly, or,
->
->   - When we try to write protect a range of huge pmd shared range, we'll first
->     do huge_pmd_unshare() in hugetlb_change_protection(), however that also
->     means the UFFDIO_WRITEPROTECT could be silently skipped for the shared
->     region, which could lead to data loss.
->
-> Since at it, a few other things are done altogether:
->
->   - Move want_pmd_share() from mm/hugetlb.c into linux/hugetlb.h, because
->     that's definitely something that arch code would like to use too
->
->   - ARM64 currently directly check against CONFIG_ARCH_WANT_HUGE_PMD_SHARE when
->     trying to share huge pmd.  Switch to the want_pmd_share() helper.
->
-> Since at it, move vma_shareable() from huge_pmd_share() into want_pmd_share().
->
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  arch/arm64/mm/hugetlbpage.c   |  3 +--
->  include/linux/hugetlb.h       |  2 ++
->  include/linux/userfaultfd_k.h |  9 +++++++++
->  mm/hugetlb.c                  | 20 ++++++++++++++------
->  4 files changed, 26 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index 6e3bcffe2837..58987a98e179 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -284,8 +284,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
->                  */
->                 ptep = pte_alloc_map(mm, pmdp, addr);
->         } else if (sz == PMD_SIZE) {
-> -               if (IS_ENABLED(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) &&
-> -                   pud_none(READ_ONCE(*pudp)))
-> +               if (want_pmd_share(vma, addr) && pud_none(READ_ONCE(*pudp)))
+  550c8399d017 ("docs/zh_CN: Add zh_CN/admin-guide/README.rst")
 
-While building Linux next 20210310 tag for arm64 architecture with
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
+---
+Sorry for the inconvenience. This is a fix patch. 
+Or I could re-submit the two original patches if you need.
 
-  - CONFIG_ARM64_64K_PAGES=y
+ Documentation/translations/zh_CN/admin-guide/README.rst  | 2 +-
+ Documentation/translations/zh_CN/admin-guide/unicode.rst | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-enabled the build failed due to below errors / warnings
-
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: arch/arm64/mm/hugetlbpage.o: in function `huge_pte_alloc':
-hugetlbpage.c:(.text+0x7d8): undefined reference to `want_pmd_share'
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-Steps to reproduce:
-----------------------------
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-
-
-tuxmake --runtime podman --target-arch arm64 --toolchain gcc-9
---kconfig defconfig --kconfig-add
-https://builds.tuxbuild.com/1pYCSoc1oGtPWlPgLAJxbHx07kL/config
-
-Build link,
-https://builds.tuxbuild.com/1pYCSoc1oGtPWlPgLAJxbHx07kL/
-
-
+diff --git a/Documentation/translations/zh_CN/admin-guide/README.rst b/Documentation/translations/zh_CN/admin-guide/README.rst
+index 939aee115e48..99b708a416d8 100644
+--- a/Documentation/translations/zh_CN/admin-guide/README.rst
++++ b/Documentation/translations/zh_CN/admin-guide/README.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: :ref:`Documentation/admin-guide/README.rst <Linux kernel release 5.x>`
++:Original: :doc:`../../../admin-guide/README`
+ 
+ :译者:
+ 
+diff --git a/Documentation/translations/zh_CN/admin-guide/unicode.rst b/Documentation/translations/zh_CN/admin-guide/unicode.rst
+index ef7f3cb2c02e..814f9ecf562b 100644
+--- a/Documentation/translations/zh_CN/admin-guide/unicode.rst
++++ b/Documentation/translations/zh_CN/admin-guide/unicode.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: :ref:`Documentation/admin-guide/unicode.rst`
++:Original: :doc:`../../../admin-guide/unicode`
+ 
+ :译者:
+ 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+2.20.1
+

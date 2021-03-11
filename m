@@ -2,84 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD07337D2C
-	for <lists+linux-next@lfdr.de>; Thu, 11 Mar 2021 20:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7928337FD9
+	for <lists+linux-next@lfdr.de>; Thu, 11 Mar 2021 22:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbhCKTFv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Mar 2021 14:05:51 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:54943 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229469AbhCKTFW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 11 Mar 2021 14:05:22 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Mar 2021 14:05:22 EST
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id KQVblQTce5C8yKQVelfDg4; Thu, 11 Mar 2021 19:58:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1615489092; bh=rGQzsKKVQqP3T3ghfKUlCc12zOtlotJYl/Bz3P2nXAc=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=hQriWclP0oLvKGcdipJRXOGkr2UfEu4WRTvGcUsWpBbnreBhh+LPMgmMnfUKx9tPH
-         K8zSoj00/Sq5B3r7myFwv1dt6gNVJPVClZhyrVnFmvSAK6GbSmTj9Axki8loQIUXjX
-         lFH3o/s+dAcq1VxIG+UTMvnPJfLPg8oE02rOyjK2fmpvxGhA2/VQsctG2Irx8IGU+a
-         WC701E4GJHTGlLDQpkfP5xBY9c21Uj1ck2i/VC4d3jmBm65/86LAUBOIWWn5H3KYud
-         k2OxHdcreuGEdtXWJUb91GclZQvnAYPL7bSlgJwR/x3C9j41pgCleUyFM7zm1jeXxK
-         vz5ACLy+3LPXw==
-Subject: Re: linux-next: Tree for Mar 11 (media/cec/core/cec-notifier.o)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>
+        id S229555AbhCKVrM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Mar 2021 16:47:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36252 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229827AbhCKVqy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 11 Mar 2021 16:46:54 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1F1B7AC54;
+        Thu, 11 Mar 2021 21:46:53 +0000 (UTC)
+Date:   Thu, 11 Mar 2021 22:46:50 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: linux-next: Tree for Mar 11 (vmemmap)
+Message-ID: <YEqPypUK2hSOYjA7@localhost.localdomain>
 References: <20210311161449.7f58e7a3@canb.auug.org.au>
- <b79f8dec-df6a-70d2-f8e8-807308a59a98@infradead.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <456e8b16-d303-fb29-5f64-e65dc3eb6387@xs4all.nl>
-Date:   Thu, 11 Mar 2021 19:58:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.7.1
+ <1a39f572-8c04-4bb1-2384-cf0f10cd3333@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <b79f8dec-df6a-70d2-f8e8-807308a59a98@infradead.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfON67THe0ThtRxpDhOlcBrs1VMZIdothIIguZiFhSpe38fztNs1ryneiEaPK07bh+i3EANY7s7ZCrA1Yu51m2dcjdaHb+3eU+2SUF/IZbRNRjH/k5ig9
- MIbeiGAIXyDf98gVFVd76GOv20gm7RhNa39HGq/+cbQRiw9HAw6hsRTXz/zxBr15K4s/9f986Y/08TAQSWteAiQuBosH6365/Qv5b/ehwd8g1QD7q065bq1g
- DfKp/OGVddU3lteDsmTWu1aHq2A0GiZb0SYqHJcYj1NYSXvlc1DCyk/iAA9TA2mUc/hABHFZoguFD7meq1toxbS7UaXK6Oa4PWv57PC31y3G0uFWxrMNreVi
- 8V9kAxUb
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1a39f572-8c04-4bb1-2384-cf0f10cd3333@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/03/2021 18:37, Randy Dunlap wrote:
+On Thu, Mar 11, 2021 at 10:51:14AM -0800, Randy Dunlap wrote:
 > On 3/10/21 9:14 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Warning: Some of the branches in linux-next are still based on v5.12-rc1,
->> so please be careful if you are trying to bisect a bug.
->>
->> News: if your -next included tree is based on Linus' tree tag
->> v5.12-rc1{,-dontuse} (or somewhere between v5.11 and that tag), please
->> consider rebasing it onto v5.12-rc2. Also, please check any branches
->> merged into your branch.
->>
->> Changes since 20210310:
->>
+> > Hi all,
+> > 
+> > Warning: Some of the branches in linux-next are still based on v5.12-rc1,
+> > so please be careful if you are trying to bisect a bug.
+> > 
+> > News: if your -next included tree is based on Linus' tree tag
+> > v5.12-rc1{,-dontuse} (or somewhere between v5.11 and that tag), please
+> > consider rebasing it onto v5.12-rc2. Also, please check any branches
+> > merged into your branch.
+> > 
+> > Changes since 20210310:
+> > 
 > 
+> on x86_64:
 > 
-> on i386:
-> 
-> ld: drivers/media/cec/core/cec-notifier.o: in function `cec_notifier_parse_hdmi_phandle':
-> cec-notifier.c:(.text+0xb3): undefined reference to `of_find_i2c_device_by_node'
-> 
-> Full randconfig file is  attached.
-> 
-> 
+> ../arch/x86/mm/init_64.c: In function ‘vmemmap_populate_hugepages’:
+> ../arch/x86/mm/init_64.c:1585:6: error: implicit declaration of function ‘vmemmap_use_new_sub_pmd’ [-Werror=implicit-function-declaration]
+>       vmemmap_use_new_sub_pmd(addr, next);
+>       ^~~~~~~~~~~~~~~~~~~~~~~
+> ../arch/x86/mm/init_64.c:1591:4: error: implicit declaration of function ‘vmemmap_use_sub_pmd’ [-Werror=implicit-function-declaration]
+>     vmemmap_use_sub_pmd(addr, next);
+>     ^~~~~~~~~~~~~~~~~~~
 
-Fix for this is pending (waiting for Mauro to return from his vacation to
-merge it).
+It seems that next-20210311 contains v5, which still had this issue.
+I sent out v6 yesterday fixing this up [1].
 
-Regards,
+I cannot reproduce with your config there.
 
-	Hans
+
+[1] https://patchwork.kernel.org/project/linux-mm/cover/20210309214050.4674-1-osalvador@suse.de/
+
+-- 
+Oscar Salvador
+SUSE L3

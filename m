@@ -2,328 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F01336FE4
-	for <lists+linux-next@lfdr.de>; Thu, 11 Mar 2021 11:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF2E3370BB
+	for <lists+linux-next@lfdr.de>; Thu, 11 Mar 2021 12:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbhCKKX3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Mar 2021 05:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S232466AbhCKLAt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Mar 2021 06:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbhCKKXO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Mar 2021 05:23:14 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915B6C061574
-        for <linux-next@vger.kernel.org>; Thu, 11 Mar 2021 02:23:14 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id kr3-20020a17090b4903b02900c096fc01deso9117040pjb.4
-        for <linux-next@vger.kernel.org>; Thu, 11 Mar 2021 02:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ttbPYWIpobKhGMW+ylM0nNhCWe0t1yxvQMD66P4z7Ao=;
-        b=JILfnG4mYU19WxmFagwTHQtnvT65SSl1zq2EQgnKwQ874nOlNHNnjfj3g0FWWKXOel
-         FLfTfQxJThSqDZvy9u1ZbunJE8/MZsbPG96PqvGqTHoduxpScm1b02DdkP4jS6CZ0SWt
-         gCk239Ms/Q/gmJK5E0bGVB002hejcFFvSNxzOskGBwaSrD3z3f5euctBDfp3gAv0eKOe
-         E6joXVQwtzVvsNpmvo6W/j/LFpiGmmfmIARr2PVSHjPIT9xqJJbB2KyMQz6SrHEAJjWj
-         LxPPLrDOF4WQr2WNYProJtNpy2ziV7Kv/IsF/EMPsBqA3oWzjgAH/pOc6BmwBBfAXsRQ
-         9aTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ttbPYWIpobKhGMW+ylM0nNhCWe0t1yxvQMD66P4z7Ao=;
-        b=hEvsVHpCM3Klk1h6wZeX8NsHCyPF/b3wtOUCHnKyAwDlR8cqtTuoUHuvyF+7YXt9bb
-         /03U6dA9EV4DwZ471UKI6D6159e6wDA1jVuC+f73v1lwzpSmNjjReFpOAn6Z4uxCGZFG
-         3HMXiBVD7z1AqUvRzIey8m2J87wOExvRzzmhj3MzleXeRXbtiUBMPLK/YFsZiJdVa2sT
-         H+mFn40/qJwZtfRMXkqkqpbTGL+/m3/vM8JL92WBpcbZ3Ad+1K/yVZNpJNGFVcjS8Uue
-         BFCws4VgzAkf7XdmhQHVRlERMrkxkG9kMKK9vWdwmgP26sFBdkV0TXUN72CrALnFGzEc
-         cB9Q==
-X-Gm-Message-State: AOAM531y+XQbTCdT6lPnh5npxC2g59MicMQrLigOJ3VJiE5yEkTwNzSb
-        2XnHDrcHVKh2jxR9jsLiLL9QBMe9KPd0jRlF
-X-Google-Smtp-Source: ABdhPJxBlff754kY3NJO+e8xppZPSE9TkFEqBtGiSyGU6fyhjrwrqeUv7diXLKfiKZTgKnjVGWsHjw==
-X-Received: by 2002:a17:90a:a789:: with SMTP id f9mr8508126pjq.192.1615458194001;
-        Thu, 11 Mar 2021 02:23:14 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id p17sm1914745pjv.49.2021.03.11.02.23.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 02:23:13 -0800 (PST)
-Message-ID: <6049ef91.1c69fb81.4b813.54f3@mx.google.com>
-Date:   Thu, 11 Mar 2021 02:23:13 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232538AbhCKLAj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Mar 2021 06:00:39 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6349DC061574;
+        Thu, 11 Mar 2021 03:00:39 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dx5Zq3LL2z9sWX;
+        Thu, 11 Mar 2021 22:00:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1615460435;
+        bh=6l/sE8p/M9mVTwFP/ZIQWgmyUh4aBe0dUA5pbIYix+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qFr+8QdyjNg3N3wmN+Z1LgWO+SX3Zk2v+mJP72zg0Ut8qWNAMZdrFkyBcjWdZeE6E
+         KKLXzf5vQONxyeEWC5wOAlaATcv3Yx/+TtrIZDSNgs2SloHdZjKtDXlGq0iLzncHiL
+         L3Y9zk58VvNzCB3JO/LCj3mB3ofkghWO7tZymPMbAPZT24dZXD/J4cB4S2HEjpmFVt
+         wCvpMzx/4DJqJfKwlALLk/6U6PkSetOZqdhiK7GN0dGD5mIv2dNUPCPAEa1GHZq5KJ
+         gVZRgGYeWqYndZ1UmeNVSKiIN/cFVnsHePGG95SE9dn82/emwHaupfje5opt8cYy1K
+         1E7nVKWI+dsSA==
+Date:   Thu, 11 Mar 2021 22:00:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Zhan Liu <zhan.liu@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20210311220033.7c5fe548@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20210311
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 251 runs, 7 regressions (next-20210311)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/edLuGdRjo7ZtZFTo=skh3o9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 251 runs, 7 regressions (next-20210311)
-
-Regressions Summary
--------------------
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx8mp-evk           | arm64 | lab-nxp         | clang-10 | defconfig      =
-              | 1          =
-
-imx8mp-evk           | arm64 | lab-nxp         | clang-11 | defconfig      =
-              | 1          =
-
-imx8mp-evk           | arm64 | lab-nxp         | gcc-8    | defconfig+CON..=
-.OMIZE_BASE=3Dy | 1          =
-
-qemu_arm-versatilepb | arm   | lab-broonie     | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-cip         | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-collabora   | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-linaro-lkft | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-210311/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20210311
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      98546348153dee5f8ced572fd6c4690461d20f51 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx8mp-evk           | arm64 | lab-nxp         | clang-10 | defconfig      =
-              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049b9d2fa84b2bff4addccb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20200708124224+ef32c=
-611aa2-1~exp1~20200707224822.188 )
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig/clang-10/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig/clang-10/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049b9d2fa84b2bff4add=
-ccc
-        failing since 1 day (last pass: next-20210309, first fail: next-202=
-10310) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx8mp-evk           | arm64 | lab-nxp         | clang-11 | defconfig      =
-              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049b854de72d208d0addcd9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig/clang-11/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig/clang-11/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049b854de72d208d0add=
-cda
-        new failure (last pass: next-20210310) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx8mp-evk           | arm64 | lab-nxp         | gcc-8    | defconfig+CON..=
-.OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049b68b1ae1d9679caddce0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049b68b1ae1d9679cadd=
-ce1
-        new failure (last pass: next-20210310) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-broonie     | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049afbeab5de96f04addcc5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049afbeab5de96f04add=
-cc6
-        failing since 113 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-cip         | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049afb2ab5de96f04addcc0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049afb2ab5de96f04add=
-cc1
-        failing since 113 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-collabora   | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049af7782c5d525f3addcb1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049af7782c5d525f3add=
-cb2
-        failing since 113 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-linaro-lkft | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6049afe11a90873757addcb1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210311/arm/=
-versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-4-g97706c5d9567/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6049afe11a90873757add=
-cb2
-        failing since 113 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =20
+--Sig_/edLuGdRjo7ZtZFTo=skh3o9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
+
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:143: warning: Function pa=
+rameter or member 'list' not described in 'dal_allocation'
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:143: warning: Function pa=
+rameter or member 'bo' not described in 'dal_allocation'
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:143: warning: Function pa=
+rameter or member 'cpu_ptr' not described in 'dal_allocation'
+drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:143: warning: Function pa=
+rameter or member 'gpu_addr' not described in 'dal_allocation'
+
+Introduced by commit
+
+  1ace37b873c2 ("drm/amdgpu/display: Implement functions to let DC allocate=
+ GPU memory")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/edLuGdRjo7ZtZFTo=skh3o9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBJ+FEACgkQAVBC80lX
+0GzgxAf+LUycni2F07f93tsuUu63nuhJVSpJpy4I4W3mVk7gyKsa5nn1vxIdqQYp
+83visQvd/vkQDaYcJ61xMOaFMbcsmjzUGFETQ57/VX/kKJlZUQkah0aSoEMAMw/h
+SuFaOB+6uESzMQxuN4X5LbFjkFd5epgUpeCDnxOVdMYgDYPckIz5Nhk2a2piPjVS
+Vrri2mJwaeYvm8WV4lHI0OBD6O1QJTb9RzI0FVZgk2CUwrjXeHaQ3SRwEFt4W3EF
+nWbprLyWxBfMD6ja8zRBPcMIw4Q/9AIBXZgP76y2v0fhEMQ38HPfEhvAylLqg7vz
+k80b3D8PeqPHTDaOdwXiqJczrvzrdw==
+=bJbc
+-----END PGP SIGNATURE-----
+
+--Sig_/edLuGdRjo7ZtZFTo=skh3o9--

@@ -2,73 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7928337FD9
-	for <lists+linux-next@lfdr.de>; Thu, 11 Mar 2021 22:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0453382F9
+	for <lists+linux-next@lfdr.de>; Fri, 12 Mar 2021 02:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhCKVrM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 11 Mar 2021 16:47:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36252 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229827AbhCKVqy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:46:54 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1F1B7AC54;
-        Thu, 11 Mar 2021 21:46:53 +0000 (UTC)
-Date:   Thu, 11 Mar 2021 22:46:50 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S229569AbhCLBAb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 11 Mar 2021 20:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhCLBAW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 11 Mar 2021 20:00:22 -0500
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92B3C061574;
+        Thu, 11 Mar 2021 17:00:21 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DxSCh5CFBz9sS8;
+        Fri, 12 Mar 2021 12:00:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1615510818;
+        bh=K1mjmvJnS0hdZYQYBLWAyCAHxLXVq2cl3kLuR2P/fHE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D9tyytCzbB72I+MrDKkJVPCxJS3YA4GRg5oY6AYCpNJeA6W0bJ0w5+YAuTQW5dwMH
+         1k3KoYxKweh2HOvyH2/3eBh9ujDV/1/+JLkqLgHOpNqnLcd1nwbj3pl3RnRX8yqB2s
+         n0vZAxymBBK+w1U2yGONB02viRFiPvN54f4xS+8iRn3zOKi9/68B9rkHsX/Ivk4kyO
+         06pwB2HGlCUODtYSX3i3g60l1pkRzZC+CEPnQBEW2dC8MIRRRSqOG3zlVoDXZpKOJP
+         wbTcNKY8F8ofe3a70nT0zjmEm4gVQC23QpgtVB3JE0q5x68drFhQ41EvC2nty6zNjl
+         qGrce/aZYl3rA==
+Date:   Fri, 12 Mar 2021 12:00:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: linux-next: Tree for Mar 11 (vmemmap)
-Message-ID: <YEqPypUK2hSOYjA7@localhost.localdomain>
-References: <20210311161449.7f58e7a3@canb.auug.org.au>
- <1a39f572-8c04-4bb1-2384-cf0f10cd3333@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20210312120014.62ced6dd@canb.auug.org.au>
+In-Reply-To: <bad04c3d-c80e-16c1-0f5a-4d4556555a81@intel.com>
+References: <20210311114723.352e12f8@canb.auug.org.au>
+        <bad04c3d-c80e-16c1-0f5a-4d4556555a81@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a39f572-8c04-4bb1-2384-cf0f10cd3333@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/t=a52UBf41bT3PeQ019YY2H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 11, 2021 at 10:51:14AM -0800, Randy Dunlap wrote:
-> On 3/10/21 9:14 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Warning: Some of the branches in linux-next are still based on v5.12-rc1,
-> > so please be careful if you are trying to bisect a bug.
-> > 
-> > News: if your -next included tree is based on Linus' tree tag
-> > v5.12-rc1{,-dontuse} (or somewhere between v5.11 and that tag), please
-> > consider rebasing it onto v5.12-rc2. Also, please check any branches
-> > merged into your branch.
-> > 
-> > Changes since 20210310:
-> > 
-> 
-> on x86_64:
-> 
-> ../arch/x86/mm/init_64.c: In function ‘vmemmap_populate_hugepages’:
-> ../arch/x86/mm/init_64.c:1585:6: error: implicit declaration of function ‘vmemmap_use_new_sub_pmd’ [-Werror=implicit-function-declaration]
->       vmemmap_use_new_sub_pmd(addr, next);
->       ^~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/x86/mm/init_64.c:1591:4: error: implicit declaration of function ‘vmemmap_use_sub_pmd’ [-Werror=implicit-function-declaration]
->     vmemmap_use_sub_pmd(addr, next);
->     ^~~~~~~~~~~~~~~~~~~
+--Sig_/t=a52UBf41bT3PeQ019YY2H
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-It seems that next-20210311 contains v5, which still had this issue.
-I sent out v6 yesterday fixing this up [1].
+Hi Bj=C3=B6rn,
 
-I cannot reproduce with your config there.
+[Cc'ing a few (maybe) interested parties]
 
+On Thu, 11 Mar 2021 07:47:03 +0100 Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel=
+.com> wrote:
+>
+> On 2021-03-11 01:47, Stephen Rothwell wrote:
+> >=20
+> > After merging the bpf-next tree, today's linux-next build (perf) failed
+> > like this:
+> >=20
+> > make[3]: *** No rule to make target 'libbpf_util.h', needed by '/home/s=
+fr/next/perf/staticobjs/xsk.o'.  Stop.
+>=20
+> It's an incremental build issue, as pointed out here [1], that is
+> resolved by cleaning the build.
 
-[1] https://patchwork.kernel.org/project/linux-mm/cover/20210309214050.4674-1-osalvador@suse.de/
+Does this mean there is a deficiency in the dependencies in our build syste=
+m?
 
--- 
-Oscar Salvador
-SUSE L3
+> [1] https://lore.kernel.org/bpf/CAEf4BzYPDF87At4=3D_gsndxof84OiqyJxgAHL7_=
+jvpuntovUQ8w@mail.gmail.com/
+>=20
+> > Caused by commit
+> >=20
+> >    7e8bbe24cb8b ("libbpf: xsk: Move barriers from libbpf_util.h to xsk.=
+h")
+> >=20
+> > I have used the bpf tree from next-20210310 for today.
+
+I have set my system to remove the object directory before building
+after merging the bpf-next tree for now.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/t=a52UBf41bT3PeQ019YY2H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBKvR4ACgkQAVBC80lX
+0Gw3IggApbt1eN7iGnvSh74cALvXoRNEnZoycNxv73WF4O98GYRQlQsi73lCmdx8
+xwEkwWXEqDAs/eYyVOdP47m7rnVT0uS+pcYn9fypHZyJ9XS62ohBOLwCQqIhfQH7
+oOlP7IOSL9ZdVCBSLW1ppNQV0QLek+LleIVDzLQn9733VYU2cC4eTBD53Nsiefz4
+e1A6txZ0MfKitgdNg1UUFhlN1m9RnVRHPONdl3zjPq+XMq0BgBeM5xe+pMXhKAMA
+TNOxm2BaEHPhVwv/DC3DqcRxncHUAJS4CsxUDSaEe0pJ33kAH0/jDFrt/qXOTw/X
+84AOrV6lkIvgLf3PLs+eIBkBEc3OFw==
+=P8+W
+-----END PGP SIGNATURE-----
+
+--Sig_/t=a52UBf41bT3PeQ019YY2H--

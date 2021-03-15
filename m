@@ -2,83 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FA233C8A8
-	for <lists+linux-next@lfdr.de>; Mon, 15 Mar 2021 22:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B894233C8E6
+	for <lists+linux-next@lfdr.de>; Mon, 15 Mar 2021 22:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbhCOVoB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Mar 2021 17:44:01 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52205 "EHLO ozlabs.org"
+        id S232192AbhCOV5V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Mar 2021 17:57:21 -0400
+Received: from ozlabs.org ([203.11.71.1]:54931 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233496AbhCOVnw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 15 Mar 2021 17:43:52 -0400
+        id S232152AbhCOV5K (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 15 Mar 2021 17:57:10 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Dzqg40HHWz9sPf;
-        Tue, 16 Mar 2021 08:43:43 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DzqyX3Klxz9sPf;
+        Tue, 16 Mar 2021 08:57:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615844624;
-        bh=pzSgS6SZK+/2EAIaayZSti1CLkcH7qhe3iwxwCkoGUU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qsjMDLe/TBQ/iW3IdYZWRLzuy9wzc/afG3PFzNW6rilc++PefqvKcxj7TirZwI/6q
-         kZCkTdojoHPevTNgav2Sz+j5ALAcbhRA36X2nPisImtpJtrN06UGx6UXF5oZuc7CcK
-         2hSxpeep+gAjlV8hFrp3HfnaQXlTWg7085xIWbLc+L4BmkV7qMby1GIEV4yKfdxPvv
-         1j2qZpkWs+c71mANp2pGOdwx/YKHMUwqKZpDLIndRDHAZct+o4Mgf8vE5XwZSk/9IG
-         Zhd4MGkiwE/ibuR5hr76/rbPvfArh+1g3kJSqzmUCrh7p9L5pJSBK0HprpQabEsExE
-         6uG/XJWA6pqXw==
-Date:   Tue, 16 Mar 2021 08:43:42 +1100
+        s=201702; t=1615845429;
+        bh=NoHwXOgxdwjCIOsOUn+xBqlS8d+1WIyWDoDRzsElZZo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pY8NqhyUGMjvyoNidA5BrVXjUAAFLwyDtO0BtEeC3US8azX6RmzsLvi378wDZ/+7G
+         L/qCS3RVMJTWtNFaov4OS6wAY9grU/kTTm1iXw9BbhK9247sg+h/UPtzSllM9sr4ef
+         +Q/hjUCli6fdwj1j6CzuIyPAelfmPSr3kp0MOEOFDPMcbgMzRZ5DClXEGhsd9qSIET
+         5Sfe2gO/WNY4fEhlScfnKBwJ7oS1IN2s3OreAy86JLBdu9s+gmuhyoGDtj9w7OnHyX
+         yFncbzdTHxar8kEJikpWEYKt/3w3WaEp5Sgl4UhVVsjPjrMwTLC5bWV11njvA33l25
+         LU3n/eqavgDog==
+Date:   Tue, 16 Mar 2021 08:57:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Alexander Ovechkin <ovov@yandex-team.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: error fetching the arm-soc-fixes tree
-Message-ID: <20210316084342.13b804f3@canb.auug.org.au>
-In-Reply-To: <20210308185741.56900784@canb.auug.org.au>
-References: <20210308185741.56900784@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20210316085706.7df472fd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RbEsTR__O2bC4dTh.gjhAvu";
+Content-Type: multipart/signed; boundary="Sig_/Sf=EHNm.5=al3VQJ3TPwgtA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RbEsTR__O2bC4dTh.gjhAvu
+--Sig_/Sf=EHNm.5=al3VQJ3TPwgtA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 8 Mar 2021 18:57:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Fetching the arm-soc-fixes tree
-> (git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git#arm/fixes)
-> produces this error:
->=20
-> fatal: couldn't find remote ref refs/heads/arm/fixes
+In commit
 
-Ping?
+  7233da86697e ("tcp: relookup sock for RST+ACK packets handled by obsolete=
+ req sock")
+
+Fixes tag
+
+  Fixes: e0f9759f530 ("tcp: try to keep packet if SYN_RCV race is lost")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This is not worth rebasing for, but can be avoided in the future by
+setting core.abbrev to 12 (or more) or (for git v2.11 or later) just
+making sure it is not set (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/RbEsTR__O2bC4dTh.gjhAvu
+--Sig_/Sf=EHNm.5=al3VQJ3TPwgtA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBP1Q4ACgkQAVBC80lX
-0Gywawf+LdpReXl794TW6RnTvZ3I0RHWzNzvPLXxGXKVsq15pAlhmvaCCudaClqy
-Z7WdUjkXBXclz6wZADIhEmoqTNb1AqESy+J2fF8ADoEH5QH8VyEpdqd2vfW/KQP+
-9P6bTw/OOf60z81J+BCa7Z4OKh97RodyigSY847VMWBnDzCtLi5bLdGBW/ynUUbh
-I9PE6kJsJbydHcYXw0n+oh7NyEadwB3MBP5ikPqsyZiZ44DxCZbHTnexl7kaU2Xi
-zyWSn4FE07UsnvKKEMy6EH7v8biLAUO3VPbqfcWhAJVpNhG3Il5pxzq3bS14RDYT
-nfodsGIAOb9Xsas8OyyhAeIDpGjmuA==
-=ry9l
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBP2DIACgkQAVBC80lX
+0Gxe8gf+K4Kgh7RbXGOjeH2USp2hnorFzHLPbWenmg1Z0ps/eovVxlMJ+e58gdmM
+AjRgyaUQspJfhnbqWvn4tE7wM+iQ7x49znaH42t2jAwC3JKS+jVSj20L8zHzC9jT
+K5xRcofCX7N0TYWCT8/oefvedJDOHHtGA2A1igISrp1lFVuNZ+TWn0ESPq29viyv
+2AC9mv2slBIe4I4EUPwAqpLADay4XG2HatDsbKIB1HtuyelohCpbym2/DWT6TEGD
+5cuipYJfwp2BnZQu+glentR7xkG9KjPp12h3fxi7aYW8OTiqouVMTaew2jSEqIAD
+4KQHrDdXUMTUNa0A6+Mr3idAnzekSw==
+=MM0W
 -----END PGP SIGNATURE-----
 
---Sig_/RbEsTR__O2bC4dTh.gjhAvu--
+--Sig_/Sf=EHNm.5=al3VQJ3TPwgtA--

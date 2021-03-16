@@ -2,109 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C710233D677
-	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 16:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEB433DC6A
+	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 19:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhCPPGP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Mar 2021 11:06:15 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:46834 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237763AbhCPPGA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Mar 2021 11:06:00 -0400
-Received: by mail-wm1-f49.google.com with SMTP id d139-20020a1c1d910000b029010b895cb6f2so1647314wmd.5;
-        Tue, 16 Mar 2021 08:05:59 -0700 (PDT)
+        id S236022AbhCPSS3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Mar 2021 14:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239934AbhCPSSP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Mar 2021 14:18:15 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794F8C061762;
+        Tue, 16 Mar 2021 11:18:14 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 16so16741275pgo.13;
+        Tue, 16 Mar 2021 11:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+8MVe2A9jN3BC6k8+aXGfRVSRAYyFjS7b+watDuerM0=;
+        b=HmiBulnAWNW/H37EVUjin9X0OUhr9H5V8DHIuveuavs/cREL5pU1aaQ8L6rDhCYP3T
+         0Kh5zPokkX2/pHOsZdAYqEQgEQriIeUclAA2MLUKfZPimoDpDN8h+Zt4VaQtetDmAhjz
+         RaEXHkUOCwG9tGaB1cLljl2/QFth308IlNoaLfVer4yZKcbqCdopUZW6AArdvIHPXEkK
+         fzErrDh3vkmotH3OBDaTGpwsp8t4WissnUyrhTgWamlTR+jmLZe0rQ3ONVjT+/OFBPL5
+         2VwbCHVZJe0PrJc+pU218NttR7UjyU/eRGh6jnGxrD8VicaqtkP7kG5bxKyAq2P/reye
+         HO/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=o+PiWHDEHupz02UsLHDLwfvKsdht9yaP3C9CO8u659w=;
-        b=m58w/zy805ZiZXIZlF8qLmtajNJwg+pqEeN2n1FjbCxTyYEcgxk8M6/RV3y1JAcpf5
-         ZECswjQMAfuivx1aTE1oVfhOYl/M/1nb2bhzj7C8U8TEtNgcNefDNwc89UooVaNtI+kV
-         Tw7mKIWG7/r3qKJK/rBYNnVZ47Y9N8AW7U40qMhnDDypn8SC0H5ozbnUKqcGYCsMpwKW
-         Yw9eyRug+9PKjV7yEtgALQbSRPdKm5vp5AMWc0JVGnV0bxYfs/l7O+0hPErfN8nG3Ig0
-         cScHrR+FcAG7CINZfddUNHA2abByuQ3jkaw2IvS5BuLumxREilKdBRsmDyrj0DtbR9eW
-         jm0g==
-X-Gm-Message-State: AOAM5309l/XQlfera1tItaSqmB5myMQvn3yNe/9lXRFT5BdDdR4Z5Seu
-        6TfiaSaLbUdqbpqQ86YD+Ew=
-X-Google-Smtp-Source: ABdhPJwQJNdzrVoiD2MaOD9WmvNzm8l6HIhBnhOOf5ISEfZVq+i43rXX50QB6+7dAlmDFOAs1+ed8w==
-X-Received: by 2002:a1c:1d14:: with SMTP id d20mr139110wmd.36.1615907156743;
-        Tue, 16 Mar 2021 08:05:56 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id j203sm3559102wmj.40.2021.03.16.08.05.56
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+8MVe2A9jN3BC6k8+aXGfRVSRAYyFjS7b+watDuerM0=;
+        b=VUuWeLxbTnTZAnfDidDYwT+kfqvIVScBYgSMJQyR7dHkvZzX2VgLnyhhjBZg2DoOMw
+         qMYVkx/yglyATIz5SbDlL6qgbewYL7kFt8O3pwj6eP+pi8Jk9WyJZRCAjzQ1K+sFffQC
+         4JObqM6VLadb2h7l7obxmAu7NMYUbSuvgIJuO/VrI7Ef6Asnkl/fWRlIJGgJP4FJOzHQ
+         GAAKAvTVW9VQ5HEs9dzABbNKIhoHml0quBWOjjJoQOvkU+t2sEwb4y79qRt28VraUJ3c
+         2qb+CFhiapdn+T9UUwLCyN22SDlUM4sZrCdz6f7ePUJ9EyZMCZGNdt9BZc+MaHjcQ2Ts
+         z2YQ==
+X-Gm-Message-State: AOAM53038t7CNqwHowyeL1Ov0fWQQmhb/LTJQL0MAC2RPuA8+P9gFFBf
+        /7W0Ki3XsWnu1ZXYo4u9zvm3RLTiqTY=
+X-Google-Smtp-Source: ABdhPJwYWrBl9apAnMlDOvtNBc5VCTtwgU0L3d7R3y1lbuKWeRTkPGSjSDKyxFbZwlQT/lOWTpA8qw==
+X-Received: by 2002:aa7:9a94:0:b029:1f4:ec7:fd2 with SMTP id w20-20020aa79a940000b02901f40ec70fd2mr618109pfi.48.1615918693992;
+        Tue, 16 Mar 2021 11:18:13 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:4160:1d48:d43e:7513])
+        by smtp.gmail.com with ESMTPSA id u2sm17192423pfn.79.2021.03.16.11.18.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 08:05:56 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 15:05:54 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
+        Tue, 16 Mar 2021 11:18:12 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 16 Mar 2021 11:18:11 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: linux-next: manual merge of the hyperv tree with the tip tree
-Message-ID: <20210316150554.32xtihkhvdkup3eq@liuwe-devbox-debian-v2>
-References: <20210315143505.35af617b@canb.auug.org.au>
- <20210316150254.GC18822@zn.tnic>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <YFD2Y++LQHmWMx68@google.com>
+References: <20210315163522.589bc67a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210316150254.GC18822@zn.tnic>
+In-Reply-To: <20210315163522.589bc67a@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 04:02:54PM +0100, Borislav Petkov wrote:
-> On Mon, Mar 15, 2021 at 02:35:05PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the hyperv tree got a conflict in:
-> > 
-> >   arch/x86/include/asm/mshyperv.h
-> > 
-> > between commit:
-> > 
-> >   a0e2bf7cb700 ("x86/paravirt: Switch time pvops functions to use static_call()")
-> > 
-> > from the tip tree and commit:
-> > 
-> >   eb3e1d370b4c ("clocksource/drivers/hyper-v: Handle sched_clock differences inline")
-> > 
-> > from the hyperv tree.
-> > 
-> > I fixed it up (I used the latter version of this file and then applied the
-> > following patch) and can carry the fix as necessary. This is now fixed
-> > as far as linux-next is concerned, but any non trivial conflicts should
-> > be mentioned to your upstream maintainer when your tree is submitted for
-> > merging.  You may also want to consider cooperating with the maintainer
-> > of the conflicting tree to minimise any particularly complex conflicts.
+On Mon, Mar 15, 2021 at 04:35:22PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Right,
+> After merging the akpm-current tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> so tglx and I took a quick look and came to the conclusion that it would
-> be best if you - provided it is not too much trouble - keep applying
-> this patch so that linux-next can get tested properly and we - Wei or I
-> - explain this merge conflict in our pull requests during the next merge
-> window and ask Linus to merge your patch ontop. This way we'll save us
-> the cross-tree merging dance.
+> Documentation/ABI/testing/sysfs-kernel-mm-cma:2: WARNING: Inline interpreted text or phrase reference start-string without end-string.
+> 
+> Introduced by commit
+> 
+>   439d477342a3 ("mm: cma: support sysfs")
+> 
 
-Totally agreed. :-)
-
-I've made a note to inform Linus about this in the next merge window.
-
-Thanks,
-Wei.
-
-> 
-> Thx!
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Hmm, I don't get it what happened here. Was it false-positive?

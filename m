@@ -2,97 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849BC33DFC8
-	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 22:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C0F33E006
+	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 22:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbhCPVIQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Mar 2021 17:08:16 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:35277 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229584AbhCPVHu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 16 Mar 2021 17:07:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F0Qq70RfNz9sVm;
-        Wed, 17 Mar 2021 08:07:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615928868;
-        bh=KOfhboZ2EAC/BynPOrI8fT0IbPi+1mIjnRowCgT+YQo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KUB0csnqr3khC2vUcnOlttFhjF5QZ/bZ1RwojvGWUJkuS7KjmGjPGKx69SSsJuNo+
-         TNeCA45q4BRHE8QiDusVHJdGsrJz07ZkOzzRsFT5YICqVO0w9QvSw0fJ+GkY2a8njf
-         gFbtyrlNNMrUIUUHiZXwrIrXTSJhOmMHfGT6GDwjaIYIEabWtC8ARNIT+VaVy3jSCv
-         czMcYCq1am7P4FSroeL7rCVCOcAAgODkwOG3odR80v6yViUCl67A3GrcPZnasgaEm4
-         fAej9UpnXsuAAaCgDXq0K9leWeH+9rOQcZFXkyTAlN2E9s2ohvvp9pSvomZ8NYVf73
-         YFHFNet9RsnJQ==
-Date:   Wed, 17 Mar 2021 08:07:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: linux-next: manual merge of the hyperv tree with the tip tree
-Message-ID: <20210317080744.33f5c6a9@canb.auug.org.au>
-In-Reply-To: <20210316150554.32xtihkhvdkup3eq@liuwe-devbox-debian-v2>
-References: <20210315143505.35af617b@canb.auug.org.au>
-        <20210316150254.GC18822@zn.tnic>
-        <20210316150554.32xtihkhvdkup3eq@liuwe-devbox-debian-v2>
+        id S231396AbhCPVJU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Mar 2021 17:09:20 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10206 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232315AbhCPVIy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 16 Mar 2021 17:08:54 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12GL3Faw110040;
+        Tue, 16 Mar 2021 17:08:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=bkf5EjZqWML/TQagRmf6SCI88TpyhsUNJY5pNxgxxMk=;
+ b=I96f+qAcRViuFDdm3G6MdFRUxEbNB6QFf+HgyTkbutDlyJXhKQ+kKcUKByTLkjn4NBaa
+ O1dtEfgLJDBRITCM45CTJ/CZ4IgpbtNQz4b6/Qx5CjQVFDO0A+5cmE+yKlj1yzwfK5AK
+ metC+4jCch9HgL4SCbcn47VzQ+ZTEl62VJCE/RAJkW4ky1mcMydxEynhY+ojV9RchRsw
+ Dh7QtICqPH+FoJ86NKol6XIJtVc7mvpj/9HAYtuBaF/+DwWhs85pmwkjZjZL7HjTARzA
+ M2MWmAw2yCxceqPKAMueFeuuSIuzzaJ0jeYd+7BNkhBlqYgJjSUghW/PqN4I30dUhh+j 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37b0pnntky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 17:08:48 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12GL3Foq110065;
+        Tue, 16 Mar 2021 17:08:47 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37b0pnntk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 17:08:47 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12GL8Ksw031290;
+        Tue, 16 Mar 2021 21:08:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 378n181p8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Mar 2021 21:08:45 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12GL8gWk38994332
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Mar 2021 21:08:42 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36ECFA405F;
+        Tue, 16 Mar 2021 21:08:42 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE79AA4054;
+        Tue, 16 Mar 2021 21:08:41 +0000 (GMT)
+Received: from osiris (unknown [9.171.48.4])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 16 Mar 2021 21:08:41 +0000 (GMT)
+Date:   Tue, 16 Mar 2021 22:08:40 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-mm@kvack.org,
+        linux-next@vger.kernel.org
+Subject: [BUG -next] "memcg: charge before adding to swapcache on swapin"
+ broken
+Message-ID: <YFEeWD7LMPYngtbA@osiris>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WLrdil7jlpsOmUPVPVSbx0I";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-16_08:2021-03-16,2021-03-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 mlxlogscore=225 clxscore=1011
+ bulkscore=0 impostorscore=0 phishscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=1 mlxscore=1
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103160135
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WLrdil7jlpsOmUPVPVSbx0I
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Shakeel,
 
-Hi all,
+your commit 3a9ca1b0ac0f ("memcg: charge before adding to swapcache on
+swapin") in linux-next 20210316 appears to cause user process faults /
+crashes on s390 like:
 
-On Tue, 16 Mar 2021 15:05:54 +0000 Wei Liu <wei.liu@kernel.org> wrote:
->
-> > Right,
-> >=20
-> > so tglx and I took a quick look and came to the conclusion that it would
-> > be best if you - provided it is not too much trouble - keep applying
-> > this patch so that linux-next can get tested properly and we - Wei or I
-> > - explain this merge conflict in our pull requests during the next merge
-> > window and ask Linus to merge your patch ontop. This way we'll save us
-> > the cross-tree merging dance. =20
->=20
-> Totally agreed. :-)
->=20
-> I've made a note to inform Linus about this in the next merge window.
+User process fault: interruption code 003b ilc:3 in sshd[2aa15280000+df000]
+Failing address: 0000000000000000 TEID: 0000000000000800
+Fault in primary space mode while using user ASCE.
+AS:00000000966b41c7 R3:0000000000000024 
+CPU: 0 PID: 401 Comm: sshd Not tainted 5.12.0-rc3-00048-geba7667a8534 #10
+Hardware name: IBM 8561 T01 703 (z/VM 7.2.0)
+User PSW : 0705000180000000 0000000000000000
+           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:1 AS:0 CC:0 PM:0 RI:0 EA:3
+User GPRS: 0000000000000000 fffffffffffff000 0000000000000001 000002aa157b88f0
+           000002aa157c43c0 0000000000000000 0000000000000000 0000000000000000
+           0000000000000000 0000000000000000 0000000000000000 0000000000000000
+           0000000000000000 0000000000000000 0000000000000000 0000000000000000
+User Code: Bad PSW.
 
-No worries, I will keep applying the patch (my setup allows that to
-happen automatically).  Linus should apply it as a part of the merge
-resolution (as do I).
+This was bisected using elfutils selftests:
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WLrdil7jlpsOmUPVPVSbx0I
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBRHiAACgkQAVBC80lX
-0Gx+Rgf/bfAhsBXyqL5Zai6OUKdZbC1+XfBnAGJ8k/fENNYMje8yQ6/h2+T9hsmG
-5I6uoiXQjWwonUfGbDqJ5hu525Ap/qZdYVok7M0GxgtE5Q/reSr8rg51GLY8MFYz
-trZhPblpvMncwQ4QdfvssgZVILz6cnennHAvDDXu//qZM7gYIAwKRg8jZlC/+6uK
-MPuh+OOQw+R+HQGNdUMKJCy91vzGYxO/tHZgvgD5zcDC4RfZeNkiTt6mqT4NUqET
-eTQCFb+F2WP4FhL8HvJ6UiiugGmyFIl5uX9NxLi6Fvp9yc8j6Lj2sdZkuxkZzD4+
-JUTrP4sUmJv5FBXxu0YyRsjKKVhQbw==
-=wI+K
------END PGP SIGNATURE-----
-
---Sig_/WLrdil7jlpsOmUPVPVSbx0I--
+autoreconf -fi
+./configure --enable-maintainer-mode --disable-debuginfod
+make -j $(nproc)
+cd tests
+make -j $(nproc) check

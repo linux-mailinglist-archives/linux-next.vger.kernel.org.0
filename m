@@ -2,93 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A82B533D5C0
-	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 15:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7971D33D655
+	for <lists+linux-next@lfdr.de>; Tue, 16 Mar 2021 16:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbhCPOaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Mar 2021 10:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236478AbhCPOaD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Mar 2021 10:30:03 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A353C06174A;
-        Tue, 16 Mar 2021 07:30:02 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 15so20724354ljj.0;
-        Tue, 16 Mar 2021 07:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0+3HYnpibIcAWdkNbHU8fQYPX0pnfBpvfaWaXWPc9D0=;
-        b=KXRt6RBh5FHmcv9V9i+17SwAhbYc2pH59PJWVd3+Hf/fqUL6220xlZLkccPjtMeud0
-         jVT5vqfc6uRyeVm1EEJTUcOmHlh56J4WgwFhj14RRLvCaulJCw7ZHn+KIupxhLZ10sn6
-         0ikdB27oe6dzlDmNAZogqjxgPLqss4sEHUlEN3mDSLWo/3WAMcZIoRsu15GMefVsYEtK
-         ZyekhO4P/nRch7uNjxAukg/aJ8YcxwiFrPFdGHLH8GqRu/UzhuJLRVGxpcMgATTQQeKe
-         CmfEUdfUmOsml2dYDqv/L6BqZMicII3Amn0vjkSGE5yDHFRqpBAXt7Rqhvu4mZRzWXiN
-         2ujg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0+3HYnpibIcAWdkNbHU8fQYPX0pnfBpvfaWaXWPc9D0=;
-        b=Amr7rHbzKK9LzKh+jLqMxuDE/7SmGFTcp/UKNHwBXpSwBODPjGt3qjM9YHglQeppNq
-         nALOZUrE+d8DnLcxZ3qH0o9UPnUVK5lJdvHBL/YzIGVntQcwUSqWfFITiS529Wi4pj/s
-         uHlO2pBstI0kKpsUqjswn4sICG+aKoUu+J2awqzqWsdVrQWPlZ3gzb3+HYqGHxuZDDT6
-         Mrc3x8Xz0f45j5xF4FKn+ST1tnN7zp19Dgd8s411Qca3GHmsIzWVCnzE/piVIXhWqmE+
-         JveiTfvuFFkauzUbm1XqvnQxkBBswg5Vz1UsOSipCKrHY80js84bCY+Qk/6sgBibKa2M
-         TrwA==
-X-Gm-Message-State: AOAM532XRmCSGiV/lrFvU+NklMsGKrp+/PUJXmHqm1tZvaG8rJIQXC6/
-        aOuM81YhtSwfOa7DKSgAJjkAIme4cz8=
-X-Google-Smtp-Source: ABdhPJwY+dN5TsowQYTflJHCYDOkOAGIpd/ibq/P0t9Dh1zNMiJ9jRQs21fQ5sq/Qy8fGFNq3G7MVg==
-X-Received: by 2002:a2e:144c:: with SMTP id 12mr2846379lju.113.1615905000455;
-        Tue, 16 Mar 2021 07:30:00 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id b25sm3109013lfo.72.2021.03.16.07.29.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 07:29:59 -0700 (PDT)
-Subject: Re: linux-next: build warning after merge of the opp tree
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210316111511.64e7bf21@canb.auug.org.au>
- <20210316044828.lhl3ex5672kaydhn@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <203906fb-b83e-881f-254e-349f4c9806fb@gmail.com>
-Date:   Tue, 16 Mar 2021 17:29:59 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S237672AbhCPPDD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Mar 2021 11:03:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49708 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237673AbhCPPC7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 16 Mar 2021 11:02:59 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id BC8E9AC75;
+        Tue, 16 Mar 2021 15:02:57 +0000 (UTC)
+Date:   Tue, 16 Mar 2021 16:02:54 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wei Liu <wei.liu@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juergen Gross <jgross@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: linux-next: manual merge of the hyperv tree with the tip tree
+Message-ID: <20210316150254.GC18822@zn.tnic>
+References: <20210315143505.35af617b@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210316044828.lhl3ex5672kaydhn@vireshk-i7>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210315143505.35af617b@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-16.03.2021 07:48, Viresh Kumar пишет:
-> On 16-03-21, 11:15, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the opp tree, today's linux-next build (powerpc
->> ppc64_defconfig) produced this warning:
->>
->> In file included from include/linux/devfreq.h:15,
->>                  from drivers/base/power/main.c:36:
->> include/linux/pm_opp.h:341:1: warning: 'devm_pm_opp_register_set_opp_helper' defined but not used [-Wunused-function]
->>   341 | devm_pm_opp_register_set_opp_helper(struct device *dev,
->>       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> Introduced by commit
->>
->>   357b804aa0b9 ("opp: Change return type of devm_pm_opp_register_set_opp_helper()")
->>
->> The "inline" was removed :-(
+On Mon, Mar 15, 2021 at 02:35:05PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Fixed and pushed. Thanks.
+> Today's linux-next merge of the hyperv tree got a conflict in:
 > 
+>   arch/x86/include/asm/mshyperv.h
+> 
+> between commit:
+> 
+>   a0e2bf7cb700 ("x86/paravirt: Switch time pvops functions to use static_call()")
+> 
+> from the tip tree and commit:
+> 
+>   eb3e1d370b4c ("clocksource/drivers/hyper-v: Handle sched_clock differences inline")
+> 
+> from the hyperv tree.
+> 
+> I fixed it up (I used the latter version of this file and then applied the
+> following patch) and can carry the fix as necessary. This is now fixed
+> as far as linux-next is concerned, but any non trivial conflicts should
+> be mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
 
-Thanks!
+Right,
+
+so tglx and I took a quick look and came to the conclusion that it would
+be best if you - provided it is not too much trouble - keep applying
+this patch so that linux-next can get tested properly and we - Wei or I
+- explain this merge conflict in our pull requests during the next merge
+window and ask Linus to merge your patch ontop. This way we'll save us
+the cross-tree merging dance.
+
+Thx!
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

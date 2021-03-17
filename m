@@ -2,87 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 045AC33E851
-	for <lists+linux-next@lfdr.de>; Wed, 17 Mar 2021 05:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B7533E929
+	for <lists+linux-next@lfdr.de>; Wed, 17 Mar 2021 06:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhCQEJc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Mar 2021 00:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S229739AbhCQFgw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Mar 2021 01:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbhCQEJP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Mar 2021 00:09:15 -0400
+        with ESMTP id S229492AbhCQFgS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Mar 2021 01:36:18 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D00C06175F;
-        Tue, 16 Mar 2021 21:09:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB0EC06174A;
+        Tue, 16 Mar 2021 22:36:17 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F0c985vXmz9sWH;
-        Wed, 17 Mar 2021 15:09:00 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F0f5p4RqPz9sTD;
+        Wed, 17 Mar 2021 16:36:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1615954142;
-        bh=Diatv00U0N4F/ZC73u+RQ8ic+Jh6CzZ5uTBozzfJxCs=;
+        s=201702; t=1615959374;
+        bh=CnyrabrdrJ+4UmHK2R6l8Up66FhixEO27wKX7hXq4EQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=WQ6rM7sUxxMVcDr+ncAvCw/OwnForlqHx3nSQhCugQ4v1JDNOT6t7XIptbH2BDcSu
-         UvN/oVDxscxiv+UqJLR06O1pFbMkxQqkay8MvdCtlNHjLurgC/jQn8zZnfnko3WM5r
-         qHyM8UQZBMRvNNf7rZl1K8EY+zVF+MMEKSxSSe36enoTTZUnn+qgyjbP2ALUSfZYnJ
-         qaKIecvjudwxqXjRU498qdi2XADURZJyZw912RwbumEeDz/xCjftPwAZuAZKzgIucn
-         XFJVa7VSHOvnBtLDfVkdezxMOfYQZEly/lD3ShusmLQCoJ35mSgosdpCs5rMiteatR
-         /P9Pjrosn7BIg==
-Date:   Wed, 17 Mar 2021 15:08:58 +1100
+        b=eaS0lZYrmAeNQar9LHwQY49QgOe7FW/ziScnZgS4CnLyC/3m0YVxILLyJd6IWoSnM
+         fay6tBROkX7v27Bea5vK1jTIOtAyTnHpabBj1ZiwJ5ZkTTEeYgNiK8gwHWJILHSRbo
+         Y8MEFOnPqGGAR+HG6Nmem1WPH/MmQil9acokJhxFWr3HJ6uWX7z1NSneFkJkUhlKqL
+         lD2jpyyMMVHlM3bo1W8tKOg7oM12yRSzxMzzYOxwgmciaLLafM9xkyMaPVjeuP1fyT
+         oxVdYrRG48gTPU/MRyJDHDOIYxk7VHTwX71VZXqyUHxxKDd9t4uF+MnJB7eGJ1dvCZ
+         KO/n7basxB68A==
+Date:   Wed, 17 Mar 2021 16:36:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20210317150858.02b1bbc8@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the rcu tree
+Message-ID: <20210317163613.02cd2246@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IFhsR6z3yG1pgUq_Q3p/dH9";
+Content-Type: multipart/signed; boundary="Sig_/fV9IrDaYSrWySGf1saGp8P8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IFhsR6z3yG1pgUq_Q3p/dH9
+--Sig_/fV9IrDaYSrWySGf1saGp8P8
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (native perf)
+After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
 failed like this:
 
-In file included from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
-util/intel-pt-decoder/../../../arch/x86/lib/insn.c:14:10: fatal error: asm/=
-inat.h: No such file or directory
-   14 | #include <asm/inat.h> /*__ignore_sync_check__ */
-      |          ^~~~~~~~~~~~
+ERROR: modpost: "rcu_read_lock_longwait_held" [kernel/rcu/rcutorture.ko] un=
+defined!
+ERROR: modpost: "rcu_read_unlock_longwait" [kernel/rcu/rcutorture.ko] undef=
+ined!
+ERROR: modpost: "rcu_read_lock_longwait" [kernel/rcu/rcutorture.ko] undefin=
+ed!
 
-This is a powerpc build of perf.  I can't see what caused this failure,
-so I have used the version of the tip tree from next-20210316 for today.
+Caused by commit
+
+  bd6ae31d1b1f ("rcutorture: Add the ability to torture RCU longsleep")
+
+CONFIG_LONGWAIT_RCU=3Dy
+CONFIG_RCU_TORTURE_TEST=3Dm
+
+I have used the rcu tree from next-20210316 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/IFhsR6z3yG1pgUq_Q3p/dH9
+--Sig_/fV9IrDaYSrWySGf1saGp8P8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBRgNoACgkQAVBC80lX
-0Gzx3gf/YItlGrogp8m+ykfqB2YmX9v4Bx0Js+7DchHD6Eur21TNNwxp3M7FE3ze
-OpUjmlcFpZRUmq1SvxMWaggzfh/SatQ9Vx7UMoY/tsjgiUY0J8l3uA9Vi6ACnByA
-zuOD75YNfBsKxgrt7tRISVNdDhzlUcor5Kq5dFOLk0nmgjfwF2a0YeT1K/r8Dp22
-trtr2hOcCRvliClus7KNUJ8Em5kQOmqk4DwJePfI67fTwm01tdyP3Y4xlQpOLp1x
-pUYoLt5wvkodZxbEAlKKIoFj/tqmDn31bbI3oGRBSrrHRBiE6oPYmn2XbQ43gajI
-ao04SXLYpEsskQ48WHRRMRf7cfRpcA==
-=1+Yb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBRlU0ACgkQAVBC80lX
+0GzxSwf+IRNKAeVaKoo85XK3LavAx0fm/fx+XkY3Pr1tUoTYq5VkrtjmIl8wvpjI
+4h1F/2nDYJUKYVgeEdjOlFaEN25NAc9fYXuc+/PnxL7D9cIzxJgJwOwatWaHYwxt
+Kwe+ehSLOE9YMGxDbEAXjlcQVgmMzJDMtUt9HXGIk0TWhnz1Z8ddw0gNxNNAKnhq
+58W/TH2X0/+c5iKgoQuUm4GOtA0SPk1yc3v9aOwn3lEnZRK7c5w0dEt1No0NN27e
+MzZhl71mCNvBvY7FxgUPjyYt6r3pNAIT+APBcepxxxqMzyq9xfTTOdMIXRTeNKDa
+CIWQODMrdG5OQSA7Y9ch60yuGJs7hA==
+=DiyJ
 -----END PGP SIGNATURE-----
 
---Sig_/IFhsR6z3yG1pgUq_Q3p/dH9--
+--Sig_/fV9IrDaYSrWySGf1saGp8P8--

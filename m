@@ -2,73 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F21534108C
-	for <lists+linux-next@lfdr.de>; Thu, 18 Mar 2021 23:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C225C3410BA
+	for <lists+linux-next@lfdr.de>; Fri, 19 Mar 2021 00:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbhCRW40 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Mar 2021 18:56:26 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:45143 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbhCRW4I (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Mar 2021 18:56:08 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N17l4-1lotDg0UlG-012ZqQ; Thu, 18 Mar 2021 23:56:06 +0100
-Received: by mail-oi1-f173.google.com with SMTP id n140so2742027oig.9;
-        Thu, 18 Mar 2021 15:56:05 -0700 (PDT)
-X-Gm-Message-State: AOAM533efNNV5cf8edVY5uOMMr885pkbswE9vvU2Pq3SDQQnwmvLrQfG
-        y2Lej9DK1PpuqO+vBwBAlXrl40TpCT6YbKuJaxU=
-X-Google-Smtp-Source: ABdhPJzF+BOjv5UApfsqhmVhd0NbItbf2o91DJI9ybHCy3fIIrAnZLbN8+p0+u6MltDrASl16jwBg8tCH+5O81fvSlg=
-X-Received: by 2002:a05:6808:3d9:: with SMTP id o25mr4812049oie.4.1616108164854;
- Thu, 18 Mar 2021 15:56:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210308185741.56900784@canb.auug.org.au> <20210316084342.13b804f3@canb.auug.org.au>
-In-Reply-To: <20210316084342.13b804f3@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 18 Mar 2021 23:55:48 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a31py=31dMgb+XKOwJo70v6Cab1yUJAB5zaF-0_ReP4sw@mail.gmail.com>
-Message-ID: <CAK8P3a31py=31dMgb+XKOwJo70v6Cab1yUJAB5zaF-0_ReP4sw@mail.gmail.com>
-Subject: Re: linux-next: error fetching the arm-soc-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        id S230239AbhCRXRQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Mar 2021 19:17:16 -0400
+Received: from ozlabs.org ([203.11.71.1]:46451 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230368AbhCRXRA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 18 Mar 2021 19:17:00 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F1jbD0mJVz9sVb;
+        Fri, 19 Mar 2021 10:16:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616109416;
+        bh=u971zd4AL+gjDq8s6KdVmGrQunn+YdaPqDpnjFJmzHk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c8LmudIgkaU01EI6JEpIh77a04RIV3TZDGnKQiQd6wvi0/qBGsJqnBti5c7qh5OjZ
+         jNeKEiiIJmYQmm+g+OMJqA0kJrhkUAoMHnDD3EmC2rDJ91COBxULiEbuewKxmjiIR+
+         GjOV9FNZ+IXEdZf9XrJ7sX6QBJH6KrhOat8XP9A3kd1LxFdiAH/johg8yP8ZOS7m+3
+         x6F45r9suRd73/PJxbbJ+tJErnaQyFOZqghXw4Bi4jQ6oXL2ZiV6OMXyj986xYxYtv
+         or0lMXjqEfOw7sIhr9fu/2QSh9RObd6Soc+ka/GB7UbPzdzb8O3ny15CRGLgGzbRLZ
+         dgisD+jdLRZeQ==
+Date:   Fri, 19 Mar 2021 10:16:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Stefan Metzmacher <metze@samba.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VNKPocAmQmiVayj+NcUtQcLC1/k+0+WBmw/m6OyWT+KGmeAMtN5
- TWc9YUzblY5vCFvgc2l57NElPscM3sLyCCEgdM3FGO6mWWPvNki8Um2ZTUqr5IU8UMx5L7s
- 8QFwcrhgPuZwgfssNfXGB214NsMOIt/tXWGkMjWfdiSS66ZhL8YqYbOY1PVUWKTQ/4ERQvk
- 0AllGY4QjbovJjO/ZCkeQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:y7dEi7I/Wzg=:NK+DXl17R/n01B5jX5lDJs
- vRvrCcIc2StbuywHxBVEZ5sMbx1sV1+41GDU+8uJ3vlove72nyfTTiDizGTArNXFEc4IGcprp
- z88G4YuzkNAwm4BO6sxfxKPod0WryHqABG4A+NgjuNugA7TqEjQfgIIJgK8oavk1FCUPxG0U0
- lGhGYwDdUtljHEau3JuDm/XRPcEOYuSxYwQxk3Sc0TqRT53ngdWJkca4kAxvyqQAxtN/4/Y6b
- uihh9AaKzREXQnw/s0Tf3lJdCBile+V30K5tU9+Zq6krIffKD7Aykz/ZL1aR8GhX9TD6HavNs
- maSPT6F126+Ax2t2oZfYvj8ZVLh/PgprS64g0JG8Z9byaOuAkY5V0H4Nf6d0PTq5IuoiMGFpd
- mS3cOg01utbjBx49XPUcBkJeIe1rhgUzxyNo2E8vDp7XcicmWbCM+8vU8RjPvW5RhrYlqvYjd
- GFGcMdkQ4ZsVaJAEtvysQp7tpxbhCewJTitSCzWKb+WshcZ4PuvewGmArXjAtyRoV19yc7NlD
- qYwDSplyK0Rsn1xbB4sey+n/QtMgYlFknszfkSXSPCzyXefQyM72q9ovVtomxClsg==
+Subject: linux-next: Signed-off-by missing for commit in the block tree
+Message-ID: <20210319101654.638e8e95@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/PAhkMnap=lVFA0X8Bhu+UQL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 15, 2021 at 10:43 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Mon, 8 Mar 2021 18:57:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Fetching the arm-soc-fixes tree
-> > (git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git#arm/fixes)
-> > produces this error:
-> >
-> > fatal: couldn't find remote ref refs/heads/arm/fixes
->
-> Ping?
+--Sig_/PAhkMnap=lVFA0X8Bhu+UQL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for the delay. I had cleaned out the old branches while updating to -rc2
-and forgot to upload the new fixes. I just pushed the branch with the latest
-fixes.
+Hi all,
 
-        Arnd
+Commit
+
+  c2c6c067c050 ("io_uring: remove structures from include/linux/io_uring.h")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PAhkMnap=lVFA0X8Bhu+UQL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBT32YACgkQAVBC80lX
+0GwrSAf/e5iVy/4fJ+dSwLB2Cf2XJQHpQWz2ZqGq/eXLynjLFqRXBirzXjDgfROg
+J+xm0MxiPgAwWCM6G2O65QLaLFLlczhgWDa9LxJa8BajwhApFF7FrZ1Ota2bckwp
+XfvhAJ1N9DsAgBXAP4qZCcSC0JnTUgY49tOFeaC82xDCL5SSyEe/qw5YNV4zH8Lx
+t4KxwFyOcLEtv26nlJ3trxdoQbHHmK9qvPHmb0w5pqL3d784QJOVV+NM/LAU2EL2
+nqPgQKu9t90vdswjtcy1+HG6fUiwsOtHTopEtNFxO6fluCfapoXmGI0QpN81pnuF
+cLKCULCLQPcZCLUNlD7kJezQZ/f+4g==
+=Sf4x
+-----END PGP SIGNATURE-----
+
+--Sig_/PAhkMnap=lVFA0X8Bhu+UQL--

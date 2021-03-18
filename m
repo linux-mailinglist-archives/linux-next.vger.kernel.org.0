@@ -2,92 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40EB340DA3
-	for <lists+linux-next@lfdr.de>; Thu, 18 Mar 2021 19:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAE7340FD0
+	for <lists+linux-next@lfdr.de>; Thu, 18 Mar 2021 22:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbhCRS6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Mar 2021 14:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbhCRS6h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Mar 2021 14:58:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE02DC06174A;
-        Thu, 18 Mar 2021 11:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=3PjOp+lk4bp+j1ybJzbccJCr44SWPFydI7o9KoqHLQs=; b=EBJEDA+bSKteXzmolNEj5iWl9m
-        q6nJjUmAnJkUIhDdaoeP8Y/7V+XatW5vMwwXrNmTjmT9rDFZetrav2sdVoIo2vC/v4/ndZSM0XXfO
-        m3Hdcqmy8SIWO1mcocYrcWeLxvRDLWI3jL9yxbE/ph+zqtGiEY973dZVYyQwZsW+3X5iEOy+qg26F
-        K51/lvIZK1LL+Ayrb4kopqBSqaO5PX1wUiCcRFyy5Nbx3AXiFrrXf7yqO5wO+JS44oSqbxWPPCrRm
-        aaLS+l3/UPzYqeve92nf3lKvB1o919Je5j1+Agxr2a454P+q624/5zZPNheCPUnuXzUhaYrqr9w6X
-        QS/sUrEw==;
-Received: from [2601:1c0:6280:3f0::9757]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lMxq0-003NeF-Kl; Thu, 18 Mar 2021 18:57:44 +0000
-Subject: Re: linux-next: Tree for Mar 18 (cifsd: Kconfig)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        linux-cifsd-devel@lists.sourceforge.net,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Namjae Jeon <namjae.jeon@samsung.com>
-References: <20210318210844.5e9adf1e@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <3497bc60-51be-04ba-50c8-4bc258df7f31@infradead.org>
-Date:   Thu, 18 Mar 2021 11:57:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S231688AbhCRVaI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Mar 2021 17:30:08 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35409 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233062AbhCRV3s (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 18 Mar 2021 17:29:48 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F1gCT2Zw9z9sPf;
+        Fri, 19 Mar 2021 08:29:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616102984;
+        bh=dImQ9Q8YbnZ5lkjgluzlxpGofG/ZC41gl3FTs7zLiLE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ky5YH/6ig05gpVVtockWm2iDHSUVhRkhgJXha/qEN5u8NdQBQHJEmWm2IOZJhsTdR
+         3KEs2xicLNFJGGQkjJ74qqpGI6aNiGwyBX+gdnYW4LUV9MdHLojvgStPb5x21NhR0u
+         y6NzanDwTf1+ayCMGHoS87ARncoagbeHZ0y0iQwc7/Ckc3OkFuiCW/PeF0yl/i0qI8
+         zt+UghiWZfEdlEsF+IC8SOyq7sh/UYO8JHweSqqFkO2PqslSpMSyoJe0Iat7sfQfoz
+         15dR/OAT7tRuWL6I2JGao7cx9/PNyPQfyPeVd0hatqA4LvKRcbrGHz4SVNrLefYlOz
+         guMQhadyDoM+g==
+Date:   Fri, 19 Mar 2021 08:29:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: linux-next: manual merge of the net tree with Linus' tree
+Message-ID: <20210319082939.77495e55@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210318210844.5e9adf1e@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/4Jk=GQk2VBhorYAi6PLLpZd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/18/21 3:08 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> News: there will be no linux-next release on Friday this week.
-> 
-> Warning: Some of the branches in linux-next are still based on v5.12-rc1,
-> so please be careful if you are trying to bisect a bug.
-> 
-> News: if your -next included tree is based on Linus' tree tag
-> v5.12-rc1{,-dontuse} (or somewhere between v5.11 and that tag), please
-> consider rebasing it onto v5.12-rc2. Also, please check any branches
-> merged into your branch.
-> 
-> Changes since 20210317:
-> 
-> The cifsd tree lost its build failure.
+--Sig_/4Jk=GQk2VBhorYAi6PLLpZd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-kconfig warning in cifsd:
+Hi all,
 
-WARNING: unmet direct dependencies detected for CRYPTO_ARC4
-  Depends on [n]: CRYPTO [=y] && CRYPTO_USER_API_ENABLE_OBSOLETE [=n]
-  Selected by [y]:
-  - SMB_SERVER [=y] && NETWORK_FILESYSTEMS [=y] && INET [=y]
+Today's linux-next merge of the net tree got a conflict in:
 
+  drivers/net/can/usb/peak_usb/pcan_usb_fd.c
 
+between commit:
 
-Either
-	select CRYPTO_ARC4 if CRYPTO_USER_API_ENABLE_OBSOLETE
-or add
-	select CRYPTO_USER_API
-	select CRYPTO_USER_API_ENABLE_OBSOLETE
+  6417f03132a6 ("module: remove never implemented MODULE_SUPPORTED_DEVICE")
 
-The first choice is certainly more palatable if it is OK.
+from Linus' tree and commit:
 
+  59ec7b89ed3e ("can: peak_usb: add forgotten supported devices")
 
-thanks.
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+from the net tree.
+
+I fixed it up (I just removed the new MODULE_SUPPORTED_DEVICE() lines)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4Jk=GQk2VBhorYAi6PLLpZd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBTxkMACgkQAVBC80lX
+0GwsdggAlsccwbdg8QLGdCJk5OrYzWfravCvmBB3WWmqg4yE8C2myLejN1avSKxe
+8+3DYI+FzL2ahH6YcP7YEnSAHDl1E5wrLNR4ua9Atpt2BbLhKRfTMn79yK4HZ8Be
+gMN5pay/4J1JRlHKZYUPEeZyGmSs6+1a1rxUTlMOaT2PaeN8kUGOLMbXUCp0tRPl
+bb8T19nngEUDLIb/1zs8wTBINJ6zqkoiHffFTDo1Xh3vbT5+61Ek0dwuxNSHqSU2
+qcebl5q9eOThwLgtGXcwGdrdT55c4qLiomfAdKp78BplvNehvy5QuX0FgQoRaPQy
+TOYD/ZJlf1pJwBW6/7dpDXZPImvgEA==
+=4g4C
+-----END PGP SIGNATURE-----
+
+--Sig_/4Jk=GQk2VBhorYAi6PLLpZd--

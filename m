@@ -2,123 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBA233FC2D
-	for <lists+linux-next@lfdr.de>; Thu, 18 Mar 2021 01:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E4433FC30
+	for <lists+linux-next@lfdr.de>; Thu, 18 Mar 2021 01:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbhCRAW7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Mar 2021 20:22:59 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50197 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230104AbhCRAWi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 17 Mar 2021 20:22:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F175L1t6Dz9sW5;
-        Thu, 18 Mar 2021 11:22:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616026950;
-        bh=fUNm5nsTmJbb/LA9qfxZfL2ehsv3SnIPO3IcMpOAQeU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=h3MTzyx5Z6OKNK+j/VGeAhL20bhlpOubHaHhdkzcIjFKQZeFYbmreYDcio2+LVfWp
-         z0P2TgTT9sGss8qwkoUYbBix4Q/H6yvbA0tOvkBZo+6Nw+Q4mPwiMbtS4r6a1jSx0v
-         F9sBVJHy122nvO+ZCLXc1OtNo3t4n27CWk3yoQhzoYt4CqUtlh9UhDCEYAsEcBSfgt
-         LL6JJR97PmMxo9iSxt8NcPFSD8nbLXmmL0Zdulndj0LHR5lMLfQw13KbZHre+7z51g
-         rh3q+xt/P6NoGICqQpxpmhdbEWr5YzHoDs2ha0tTYdRQ9S60n4NljD5TVgHf9vfSjF
-         4qtOD/QV7snYg==
-Date:   Thu, 18 Mar 2021 11:22:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shannon Nelson <snelson@pensando.io>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210318112226.331beab9@canb.auug.org.au>
+        id S230129AbhCRAXe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Mar 2021 20:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230119AbhCRAXU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Mar 2021 20:23:20 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13496C06174A
+        for <linux-next@vger.kernel.org>; Wed, 17 Mar 2021 17:23:19 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z7so1721108lfd.5
+        for <linux-next@vger.kernel.org>; Wed, 17 Mar 2021 17:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qdeLCRQNx93p7KXnnXp7pVWMHGb2Aan+xzQMuMpfLuc=;
+        b=KtTFu3obYd+2Wuiod7MhzCP/71wWAPzmCO7htBRVUPCmp/FqNaKBg8SExZEmBV/GJW
+         EAAHrNgJefOqwlcctKQoWP9RP+stvITagdOrNiMDYR/zoAHzfo/QLC2OUoI/vJmGrvQB
+         KFa7i9UZsphY53DhdJNkPGQEWWUasOodFGmd4O0QRHmb6c45RuuFAOb76UMbOWXvNcLB
+         pvgbl2KvglicattGFZbH+rRzk1xG1ZhAYfSNpl+Nl/LEqhkTZ0JZ09QPpp6FVYH5x5K6
+         ybJ0bipD8MkNaAhJUKXiNG5cXHDz0cFp9zRdFtwPZJtfK0JFELKsld+FhLD/ZD4sznUA
+         OG/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qdeLCRQNx93p7KXnnXp7pVWMHGb2Aan+xzQMuMpfLuc=;
+        b=p2pJtKQ9vyBKQ+7Iur/E7Dxk7Zz0OlCbtM83y8evbNTQQu3f63Kv3y8LAjaZYUKnec
+         3y/ns3kW8f/WsDIjCkshIBCNq3SHEYXrSMTZ1pfd2jt9tmdOzXDnB/Wz3DRQAOFRufHT
+         NX2pjLmv+xyARfGuD3I/jFjqDRJkf96x7duFLDkuOjuQJqptbX9dwBVFD+id4MtxciC8
+         j5264ZT4qtniV4gj87Db2rlmTIni1F+mBJ/uV3x7wf5zVF82pA9b+HRRj4PK4w8Imsn3
+         VTeASPBOxWS55FNHgGfjwI5D2doWsxPQdDdnQBKwY66oM3IZz6L3trRH6/9OGDL49TME
+         cyAA==
+X-Gm-Message-State: AOAM531X2MGakX3ss12WJvKA0tSpJINAXl6IIpk/AuqU37HphyNNLPBF
+        /b/x8S2HSYQss15qBOB4oLV9dcZULAtKcILrxF4kKQ==
+X-Google-Smtp-Source: ABdhPJz3/bDxbj0h3gPjjr2oxsV0RNgVgq1Du7S3XCjwLMWtmr5teSUTbDYXiQgl47snmj6f6vTwjFNcadodn18KXyo=
+X-Received: by 2002:a05:6512:6c6:: with SMTP id u6mr3555998lff.347.1616026997164;
+ Wed, 17 Mar 2021 17:23:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XJm9SaulWTFxoLmTZi2g.lB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <YFEeWD7LMPYngtbA@osiris> <CALvZod5ju+rWRNtVTjka0PgOPTrWnQ0mStaVEi2wEYEZEprBiA@mail.gmail.com>
+ <YFFRcPUtddlIB21l@osiris> <CALvZod5k5wgE-d=U=thhQp5bwQ6t0ugKDtZj75qSSYVB27uCuQ@mail.gmail.com>
+ <YFIfjPzLzeJKs3hE@osiris> <CALvZod6GxjppjNuX5BQD+2WwWsdOcDqbKmCy6XGJyBsT_p2SxA@mail.gmail.com>
+ <YFJqJeMDc/JCjfSv@osiris> <YFJwZoUalBM/lBBr@osiris> <CALvZod6EEyqyQD_AvcyTfxj+f0M+X1D1b50HWdaqL1qX69iaMQ@mail.gmail.com>
+In-Reply-To: <CALvZod6EEyqyQD_AvcyTfxj+f0M+X1D1b50HWdaqL1qX69iaMQ@mail.gmail.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 17 Mar 2021 17:23:04 -0700
+Message-ID: <CALvZod5QjGy+WDOX=2mLB4ZgaRLk4kSu3y8ge+YqfHDacF2kKQ@mail.gmail.com>
+Subject: Re: [BUG -next] "memcg: charge before adding to swapcache on swapin" broken
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XJm9SaulWTFxoLmTZi2g.lB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+CC: Minchan
 
-Hi all,
+On Wed, Mar 17, 2021 at 2:39 PM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> On Wed, Mar 17, 2021 at 2:11 PM Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
+> > On Wed, Mar 17, 2021 at 09:44:21PM +0100, Heiko Carstens wrote:
+> > > On Wed, Mar 17, 2021 at 08:44:14AM -0700, Shakeel Butt wrote:
+> > > > > Config below. And the fun thing is that I cannot reproduce it today
+> > > > > anymore with the elfutils test case - what _seems_ to be different is
+> > > > > that the test suite runs much faster than yesterday evening. Usually
+> > > > > an indication that there is no steal time (other guests which steal
+> > > > > cpu time), which again _could_ indicate a race / lack of locking
+> > > > > somewhere.
+> > > > > This is kind of odd, since yesterday evening it was very reliable to
+> > > > > trigger the bug :/
+> > > > >
+> > > >
+> > > > Thanks for the config. One question regarding swap, is it disk based
+> > > > swap or zram?
+> > >
+> > > Swap device is a real disk.
+> > >
+> > > > By guests, do you mean there was another significant workload running
+> > > > on the machine in parallel to the tests?
+> > >
+> > > That I don't know. I didn't check. I still can't reproduce with
+> > > elfutils anymore, however...
+> > >
+> > > > If you don't mind can you try swapping01 as well.
+> > >
+> > > ltp's swapping01 test triggers immediately random processes being
+> > > killed with SIGSEGV. I also tested with linux-next 20210316 and _only_
+> > > "memcg: charge before adding to swapcache on swapin" being reverted on
+> > > top, and the problem is away - so it looks like the result of
+> > > yesterday's bisect is indeed valid.
+> >
+> > I have to correct myself, actually the system has both: a real disk
+> > _and_ zram as swap devices:
+> >
+> > # swapon -s
+> > Filename                                Type            Size    Used    Priority
+> > /dev/dasdb1                             partition       21635084        0       -2
+> > /dev/zram0                              partition       1014780 0       100
+> >
+> > When I disable /dev/zram with "swapoff /dev/zram0" the problem is away
+> > as well, even with your patch applied.
+>
+> Thanks a lot. This was really helpful. I will try with zram on my setup.
+>
+> Can you also try with just one type of swap at the time for both? I
+> really appreciate your help.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Never mind I think I found the issue. Can you please add
+set_page_private(page, entry.val) before swap_readpage(page, true) in
+function do_swap_page() in mm/memory.c and try the swapping01 test
+again?
 
-  drivers/net/ethernet/pensando/ionic/ionic_txrx.c
+Michan, for SWP_SYNCHRONOUS_IO swap, do we ever reset page->private?
+Normally for swapcache pages, it gets reset on delete from swap cache
+but these types of swap skips swapcache, so, I think we never reset
+page->private.
 
-between commit:
-
-  d2c21422323b ("ionic: linearize tso skb with too many frags")
-
-from the net tree and commit:
-
-  f37bc3462e80 ("ionic: optimize fastpath struct usage")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/pensando/ionic/ionic_txrx.c
-index 4087311f7082,03e00a6c413a..000000000000
---- a/drivers/net/ethernet/pensando/ionic/ionic_txrx.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_txrx.c
-@@@ -1077,19 -1082,16 +1082,18 @@@ static int ionic_tx(struct ionic_queue=20
- =20
-  static int ionic_tx_descs_needed(struct ionic_queue *q, struct sk_buff *s=
-kb)
-  {
-- 	int sg_elems =3D q->lif->qtype_info[IONIC_QTYPE_TXQ].max_sg_elems;
-  	struct ionic_tx_stats *stats =3D q_to_tx_stats(q);
- +	int ndescs;
-  	int err;
- =20
- -	/* If TSO, need roundup(skb->len/mss) descs */
- +	/* Each desc is mss long max, so a descriptor for each gso_seg */
-  	if (skb_is_gso(skb))
- -		return (skb->len / skb_shinfo(skb)->gso_size) + 1;
- +		ndescs =3D skb_shinfo(skb)->gso_segs;
- +	else
- +		ndescs =3D 1;
- =20
-- 	if (skb_shinfo(skb)->nr_frags <=3D sg_elems)
- -	/* If non-TSO, just need 1 desc and nr_frags sg elems */
-+ 	if (skb_shinfo(skb)->nr_frags <=3D q->max_sg_elems)
- -		return 1;
- +		return ndescs;
- =20
-  	/* Too many frags, so linearize */
-  	err =3D skb_linearize(skb);
-
---Sig_/XJm9SaulWTFxoLmTZi2g.lB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBSnUIACgkQAVBC80lX
-0GzusQf/cp8auZp9Tm5VS6+lEbYfLLX2UR4s+rvgCTni1HZ3oSTkbdLe9BS5ASGh
-7wWkSveIKkt5OLm7vVA1w8EcROaAXgf2nI+RUhOag1X7FWAhwSuDiMyx9eB6eaEh
-DzpH/uB+0Affx7gNhbj8q0zDI1vL3UhItCwStOdJETfEQT/iHX1iNLDKVOSlqpnu
-0RajT2Hed+o9ZLprxhq41FLXyN/lXICNkTs9FK1UnPrKt6u683J4sTiYTYM4+9Ty
-eGi2EAIFNECx8bTA+ieEiMwF1oyqmhbTv1tbmzE/9GisUysiFA926EugiF1jRZaH
-NOxVq3o728pYJ1SVDB8fl9kYyIbuCQ==
-=SfxJ
------END PGP SIGNATURE-----
-
---Sig_/XJm9SaulWTFxoLmTZi2g.lB--
+The simplest solution I can think of is to do set_page_private(page,
+entry.val) before swap_readpage(page, true) and set_page_private(page,
+0) after.

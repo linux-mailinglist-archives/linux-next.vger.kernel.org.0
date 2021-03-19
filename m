@@ -2,116 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBEB3420BE
-	for <lists+linux-next@lfdr.de>; Fri, 19 Mar 2021 16:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A43342102
+	for <lists+linux-next@lfdr.de>; Fri, 19 Mar 2021 16:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbhCSPTb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Mar 2021 11:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S230136AbhCSPeD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Mar 2021 11:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbhCSPTV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Mar 2021 11:19:21 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242DAC06174A
-        for <linux-next@vger.kernel.org>; Fri, 19 Mar 2021 08:19:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a7so10313961ejs.3
-        for <linux-next@vger.kernel.org>; Fri, 19 Mar 2021 08:19:21 -0700 (PDT)
+        with ESMTP id S230051AbhCSPdv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Mar 2021 11:33:51 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCAAC06174A;
+        Fri, 19 Mar 2021 08:33:50 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id z8so12446634ljm.12;
+        Fri, 19 Mar 2021 08:33:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ESHJ/xpoPLprVXdQr5aaOZYnopxfXbBpJirRzC/e87Y=;
-        b=E1MyGjANCGe2v1YDOi96jNvi7AX9CiZZmnHh1dSazPD1exZJyAptoayn8NzA5DugW2
-         S9Bq3IxiqzonMdby7vQqkLZymeQ/YqoQKl6AHc1DIs74zoWGSinBLjNjpW/wgApb5JWR
-         NTgx2Luub+h+oYIdTdrmV16G45JfxJCMAoreKRCpkkh7wIa9JiBUovV2I3jO/eRL9BYe
-         +JM9GSDfCUxIQkNFnfGWclE0C8KqDnkSwA86q/8JV8M9zZcWSm/+eUZHrtCUkq/w29Jp
-         7wPTc2ntAdVDdoocZ2GaWP/RvQyE8jADbYDJ2Hz8FgLm3bYrcMf+jcS9iOhlxknUN2Cd
-         jl/w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r2m7MTSjA4rnSzTDMPsjd8IDozpayK6VTsVZGZVnC1Q=;
+        b=uBjF5lQLBZiiumq0YZ5me9gHwz34Ik/vbGc+KXTVVVgjOYROvvRpBv87eilAzMX/db
+         2HuTU6C4hBb0xMBfYZM6whHLwNQVXu+yUwQ9IKWjL+U1z9DkaOVHTZ8S0+pP/vT1c4Zw
+         h1JLdx8A4V1SG80obBn0EhYQXSbh8Ti2AbleFkTeWTNfubzZWRBQalc2eGMVuKL+5Syn
+         evSQuiW7qoi+8eWQzSBTR416zmrHLIRlWtX62SnPluoKHimHduIymANlQxvbg21vASWH
+         2W2ECN4p1niH/XAr11DkzWeQTnyQj9O4kZ2urusfMWLsJQhP1uLvFOzQBNT9EwRoqLve
+         DpcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ESHJ/xpoPLprVXdQr5aaOZYnopxfXbBpJirRzC/e87Y=;
-        b=IA1dC6YfUxndRnq9BOsHAAsHsKVTzsRKVWntKc8WphFDErulqUF/80hGjXlMbNFcD4
-         jDmnYGBL1upFKpC7aP7b4dMo2XDMstPSnYn/ICIV/ZJlev0Stwp1V+vy8dQldMTFpOYh
-         sT2USrfNn6vKK95WuKZg6h8kKmAwK9wWbLJqwFwgofz73FiD241jVo6d4LSF7OGpAI4w
-         S6FklgPEwb8WvXqKi97jOZ52qzIRkqC4eRuXYfJ937gvnqeRRtdzkkpEdi52lwHxQyfh
-         xNT+TGARE121ezdBs1qAMtHp3REjw7swlhEo/3dcXqA0TWU1eFSlpQzbRPNorbWAGSPd
-         AJsA==
-X-Gm-Message-State: AOAM531A60a4LBGcpBQ5VBS0Cr11fkizDkUYQ3vLMKHijQ7eGQo5tEcm
-        kwRfk3Jzm89f1YmWsqfwykFyNXQzVTprUslMGbumox8ppz1S1nNG
-X-Google-Smtp-Source: ABdhPJwf2apA+WfsgXrym8IqCYDGSzycBSor+WUmQjtqmk0mRHE7fsQ5goyIyML5cG3xukXE3lSGhjODQL4SmWPmlLo=
-X-Received: by 2002:a17:906:4c85:: with SMTP id q5mr4861822eju.375.1616167158632;
- Fri, 19 Mar 2021 08:19:18 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r2m7MTSjA4rnSzTDMPsjd8IDozpayK6VTsVZGZVnC1Q=;
+        b=uCqtyDWyW2sTTjuE1hvJNEtSAkBQ0HiGfyT4v68+7WZQRDE2PQV4QdfKEwUfO5RPeF
+         m4iYKCLG8Lda106BjvAz2pk5R0vKEeuMFa53tC08jXJwARkGKSwSvnGGKz60JhrBYpJv
+         ePfZYof2dHr7TwR7lHCojZXAx+ynCWlgEoqU0E52rnuxKsgQOp9QBIZJklB3HptoNTYD
+         5Esnt7v7imJupSabqa/ENaCGKXg8cyqTCuXw53awvy1ApjgbzWSNUzjqJL/PPJ2ZsIU/
+         pr7FLiy7RH760qa6GkywEq2KixwZhLWgvky2pmoXspi/Bk0fuF1eK3RRrAxSY/BtgbM0
+         oytQ==
+X-Gm-Message-State: AOAM532MzbW1C+gqhiBe2gR24BHh9s32az3EypzNa4AloE3jopjnGSOl
+        TDioOmimZdfTbZFAgs/hE4VrVelT5GeTWSCzAuC+8EJ8
+X-Google-Smtp-Source: ABdhPJzpF4TWQznngDJXH3QO0WjoeBLQP65YZc6vf4KMW/QuCClTsO+FT2ub1TWw/Uj0nD3WKm7G1ArhIBnPW0LuyI4=
+X-Received: by 2002:a2e:981a:: with SMTP id a26mr1278220ljj.204.1616168029442;
+ Fri, 19 Mar 2021 08:33:49 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 19 Mar 2021 20:49:07 +0530
-Message-ID: <CA+G9fYu-t_JwoBVXKhiDUY-FRdX3F3LgbDw9bFeiuciwC70TaQ@mail.gmail.com>
-Subject: arm64: compiler_types.h:320:38: error: call to __compiletime_assert_417
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, glittao@gmail.com,
-        Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
+References: <20210319111652.474c0939@canb.auug.org.au> <CAFzhf4pCdJStzBcveahKYQFHJCKenuT+VZAP+8PWSEQcooKLgQ@mail.gmail.com>
+ <4f90ff09-966c-4d86-a3bc-9b52107b6d8a@iogearbox.net> <70b99c99-ed58-3b05-92c9-3eaa1e18d722@fb.com>
+In-Reply-To: <70b99c99-ed58-3b05-92c9-3eaa1e18d722@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 19 Mar 2021 08:33:37 -0700
+Message-ID: <CAADnVQJTXiqZYY1bbKCKwm8_sUvLfUoNaMo8b_Buf=CMhOa+CA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Piotr Krysiuk <piotras@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[This email landed to Spam for some reason, sending it again with modified
-subject]
+On Fri, Mar 19, 2021 at 8:17 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 3/19/21 12:21 AM, Daniel Borkmann wrote:
+> > On 3/19/21 3:11 AM, Piotr Krysiuk wrote:
+> >> Hi Daniel,
+> >>
+> >> On Fri, Mar 19, 2021 at 12:16 AM Stephen Rothwell <sfr@canb.auug.org.au>
+> >> wrote:
+> >>
+> >>> diff --cc kernel/bpf/verifier.c
+> >>> index 44e4ec1640f1,f9096b049cd6..000000000000
+> >>> --- a/kernel/bpf/verifier.c
+> >>> +++ b/kernel/bpf/verifier.c
+> >>> @@@ -5876,10 -6056,22 +6060,23 @@@ static int
+> >>> retrieve_ptr_limit(const str
+> >>>                  if (mask_to_left)
+> >>>                          *ptr_limit = MAX_BPF_STACK + off;
+> >>>                  else
+> >>>   -                      *ptr_limit = -off;
+> >>>   -              return 0;
+> >>>   +                      *ptr_limit = -off - 1;
+> >>>   +              return *ptr_limit >= max ? -ERANGE : 0;
+> >>> +       case PTR_TO_MAP_KEY:
+> >>> +               /* Currently, this code is not exercised as the only use
+> >>> +                * is bpf_for_each_map_elem() helper which requires
+> >>> +                * bpf_capble. The code has been tested manually for
+> >>> +                * future use.
+> >>> +                */
+> >>> +               if (mask_to_left) {
+> >>> +                       *ptr_limit = ptr_reg->umax_value + ptr_reg->off;
+> >>> +               } else {
+> >>> +                       off = ptr_reg->smin_value + ptr_reg->off;
+> >>> +                       *ptr_limit = ptr_reg->map_ptr->key_size - off;
+> >>> +               }
+> >>> +               return 0;
+> >>>
+> >>
+> >> PTR_TO_MAP_VALUE logic above looks like copy-paste of old
+> >> PTR_TO_MAP_VALUE
+> >> code from before "bpf: Fix off-by-one for area size in creating mask to
+> >> left" and is apparently affected by the same off-by-one, except this time
+> >> on "key_size" area and not "value_size".
+> >>
+> >> This needs to be fixed in the same way as we did with PTR_TO_MAP_VALUE.
+> >> What is the best way to proceed?
+> >
+> > Hm, not sure why PTR_TO_MAP_KEY was added by 69c087ba6225 in the first
+> > place, I
+> > presume noone expects this to be used from unprivileged as the comment
+> > says.
+> > Resolution should be to remove the PTR_TO_MAP_KEY case entirely from
+> > that switch
+> > until we have an actual user.
+>
+> Alexei suggested so that we don't forget it in the future if
+> bpf_capable() requirement is removed.
+>     https://lore.kernel.org/bpf/c837ae55-2487-2f39-47f6-a18781dc6fcc@fb.com/
+>
+> I am okay with either way, fix it or remove it.
 
-While building arm64 kernel modules the following kernel warnings /
-errors noticed on linux next 20210318 tag the gcc version is 7.3.0.
-Build PASS with gcc-8, gcc-9 and gcc-10.
-
- In file included from <command-line>:0:0:
- In function 'resiliency_test',
-     inlined from 'test_slub_init' at   lib/test_slub.c:120:2:
-   include/linux/compiler_types.h:320:38: error: call to
-'__compiletime_assert_417' declared with attribute error: BUILD_BUG_ON
-failed: KMALLOC_MIN_SIZE > 16 | KMALLOC_SHIFT_HIGH < 10
-   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                       ^
-   include/linux/compiler_types.h:301:4: note: in definition of macro
-'__compiletime_assert'
-     prefix ## suffix();    \
-     ^~~~~~
-   include/linux/compiler_types.h:320:2: note: in expansion of macro
-'_compiletime_assert'
-   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro
-'compiletime_assert'
-  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                      ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:2: note: in expansion of macro
-'BUILD_BUG_ON_MSG'
-   BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-   ^~~~~~~~~~~~~~~~
-   lib/test_slub.c:101:2: note: in expansion of macro 'BUILD_BUG_ON'
-   BUILD_BUG_ON(KMALLOC_MIN_SIZE > 16 | KMALLOC_SHIFT_HIGH < 10);
-   ^~~~~~~~~~~~
- make[2]: *** [  scripts/Makefile.build:273: lib/test_slub.o] Error 1
- make[1]: *** [  Makefile:1980: lib] Error 2
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=juno,label=docker-buster-lkft/984/consoleFull
-
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=juno,label=docker-buster-lkft/984/consoleFull
-
---
-Linaro LKFT
-https://lkft.linaro.org
+I prefer to fix it.

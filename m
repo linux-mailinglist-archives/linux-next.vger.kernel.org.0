@@ -2,82 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D494134334D
-	for <lists+linux-next@lfdr.de>; Sun, 21 Mar 2021 16:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54CF3434CE
+	for <lists+linux-next@lfdr.de>; Sun, 21 Mar 2021 21:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhCUP5l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Mar 2021 11:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbhCUP5U (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Mar 2021 11:57:20 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42AEC061574;
-        Sun, 21 Mar 2021 08:57:19 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id x82so3891944ybg.5;
-        Sun, 21 Mar 2021 08:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h+sV6kItpzOoxa/owujtpfoPS6Krenk7d7kji7uHD8Y=;
-        b=AXRiArA+N7m+lJjxGLBMGag2x8p+oyrSDX7REudDbmoVllmletHDCbk4133HxY8qZJ
-         ni0/VEQJmwvO+yQ07o/0+GWCD+LN7ox4TtZPB+dYrisoLeBnCwiaB98XbMRq9Mn1aCJD
-         tJJnj4dXKOOGtlja4ejiXofKWuMm1a9yiI+MkfyptEQWiT/risQ4MR5YEhardZVhaZuq
-         hezCwtJiPqzklba5dRBUCldha+Xu7m4hUdJqJhSGB0fy8DsEw33eydU3Eq2g9gGqyrar
-         qNBSZWFDNTu4wjp8sxvu8+txHE6a3tGMJEmVAiRsmCe4uftnxssaJp2Y4GomdhLClMg+
-         mzLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h+sV6kItpzOoxa/owujtpfoPS6Krenk7d7kji7uHD8Y=;
-        b=d0MjvSvuu+1yxIKJiuQqrz2btIbBjDHPGUIivl29Mnj5/7QGbRWuAt5UpjVrxT5emg
-         b+NshiOElbqYPKyMqH/P5X6wjsEUcIEiQeEddvb6zqyHaPsnQms99YdH89s3ITcFrorH
-         zbA0fCGLvYfnbYUI1He4JkPiVsQWjflS6mBX9yUFgIyt08PT6BLi5RKLZGmfSjt+t6hi
-         aHTctx/8zIFYoKXe7pWnNakp8Gc3Mj/Nmi3POC7brznDBkSBKQbuM8g7yPyBRXt4Sehs
-         LomwSGEvUAgL/VL5oQrML8VkQxuQ/xU0H6LPVXTXYSov+8eRhMRUjfljvS0GvGNuJ+HZ
-         5fqQ==
-X-Gm-Message-State: AOAM530+WfRdVGLKLfyyHTDtjP5uHNPRsB50YKtZwLsuQoSfm+L//B9I
-        NQCsLB4hhNpQhBvPJvo2XYYZolBZ+kMP0FZStoU=
-X-Google-Smtp-Source: ABdhPJyjl/4f2AJtPh85RzYT2TXLjMWtWrU4SJXWlj8nLA87oFLQk1DSylUheFSRhE8uSDJ7TOMSyYwVSW52DCNGxBo=
-X-Received: by 2002:a25:3b55:: with SMTP id i82mr19904659yba.422.1616342238952;
- Sun, 21 Mar 2021 08:57:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210319175950.509fcbd0@canb.auug.org.au> <YFS1h6h+71sRlwFR@osiris>
- <20210320162734.1630cc55@elm.ozlabs.ibm.com> <CANiq72nKJBVsuvqr17qa0xnkQTUz9aaAGRi8SfXZAn-G=RYQXw@mail.gmail.com>
- <CANiq72n+-9vtpvvHTD=QzpskCbZEvTWhDXUaHrkwsJn4M3fjXg@mail.gmail.com>
- <CANiq72mp4=4FZ_Vq1pzA07vkJ1mKFKOFFhcVoH9zTJjLtrBc9A@mail.gmail.com> <8735woit8r.fsf@mpe.ellerman.id.au>
-In-Reply-To: <8735woit8r.fsf@mpe.ellerman.id.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 21 Mar 2021 16:57:08 +0100
-Message-ID: <CANiq72m986+NTBVAZLVaD=3dg_PVdNx5bV9Uo5hVmgbMtta9BQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Mar 19
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S231235AbhCUUs5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Mar 2021 16:48:57 -0400
+Received: from ozlabs.org ([203.11.71.1]:40957 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229990AbhCUUsi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 21 Mar 2021 16:48:38 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F3V8b4nG3z9sS8;
+        Mon, 22 Mar 2021 07:48:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616359713;
+        bh=PM3mc5URKC4fT+ts9F6ePl8Ad5BqKjldkxwwww/NuUA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KsL2rg2oYvdiFCR1/mqv2EOVrIFCRzzvg1XOOZU8RWa2i5VcmL57GrHitTBHbDJL3
+         R6BIxq4H0EiZ4BCI41fqtRCSYqTpij8sCzyiFjRlhkpbmnylYq4S0VaIwVje1FJsk+
+         zT9P5ZBAQF2byM84zB692ZWXPsCoU/LMoAWcdY5HfjiIH9wfo2tjRTjmmSS1EL6y1/
+         +Y6hcev1Daa/8FS8FYJTxmA3Ei+haZgLNNhGk5si0ueBkEaLB0HvjmWipVN1Y1r2Rh
+         GkprqtAPUPd700coip+SYSt+/OCaa3DWewbdMtAeGu4s5SRDGMYPoULwSoZfXBuoIN
+         0YM8OpY1TnE2A==
+Date:   Mon, 22 Mar 2021 07:48:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Daniel Axtens <dja@axtens.net>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20210322074829.5ce59a97@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Wuc7qK1JLYnP+HJpGwSifxg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Mar 21, 2021 at 1:30 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Yes. But Monday in UTC+11 :)
+--Sig_/Wuc7qK1JLYnP+HJpGwSifxg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah :-) I'm on it.
+Hi all,
 
+In commit
+
+  014dfa26ce1c ("net: stmmac: dwmac-sun8i: Provide TX and RX fifo sizes")
+
+Fixes tag
+
+  Fixes: 9f93ac8d408 ("net-next: stmmac: Add dwmac-sun8i")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+I don't think this is worth rebasing to fix, but it can be fixed for
+future commits by setting core.abbrev to 12 (or more) or (for git v2.11
+or later) just making sure it is not set (or set to "auto").
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/Wuc7qK1JLYnP+HJpGwSifxg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBXsR0ACgkQAVBC80lX
+0GzR/QgAmf7iGMxbO6xURCcfc3ghMiUDvN/58O+pLv2xbvq7u+J73msuQBWYDttE
+gGzzPu5NKxc86TcMPns8UksoaM/YjLNvQrxPPcF0ZzE/G8ehHB2vJZchHXV97yUE
+XcNG88JUd5kE8fAmFGFybKDdtIbQjTz1QSSKKT4LAeQkNvD++oMAVFUyxc7qVvaC
+mFA7llFwqFjeIP7zloOekHiXyMyGzLSbNvBVYI92x9Av6Ak5STanKO1fsxV9JEGa
+oZgRXVmsZSRn1iu2H2LJb6x/Y2t6zpcOJ8iegCpCJr/WNVbs7mtjVWQ5/FTUwCQW
+GfjEQ/D4CQhGPNbJGqnzLwH7KHEYJg==
+=mLda
+-----END PGP SIGNATURE-----
+
+--Sig_/Wuc7qK1JLYnP+HJpGwSifxg--

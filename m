@@ -2,114 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19D7343962
-	for <lists+linux-next@lfdr.de>; Mon, 22 Mar 2021 07:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1DB3439A6
+	for <lists+linux-next@lfdr.de>; Mon, 22 Mar 2021 07:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbhCVGX5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Mar 2021 02:23:57 -0400
-Received: from ozlabs.org ([203.11.71.1]:43915 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229771AbhCVGXe (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 22 Mar 2021 02:23:34 -0400
+        id S230076AbhCVGki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Mar 2021 02:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230029AbhCVGk2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Mar 2021 02:40:28 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B426C061574;
+        Sun, 21 Mar 2021 23:40:27 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F3kvs1s45z9sSC;
-        Mon, 22 Mar 2021 17:23:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F3lHX2qYkz9sS8;
+        Mon, 22 Mar 2021 17:40:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616394206;
-        bh=G/Hei2rK04hoRQOJRCj2hfl/JRiY9ViA/jYugRzehak=;
+        s=201702; t=1616395225;
+        bh=1nixCOUzlIxfcWyrKNO05b2wI9KlMHWHaMpD+huHV50=;
         h=Date:From:To:Cc:Subject:From;
-        b=qbPcmhZ2JcGnLwLhXKKhtixupE/TZyRBZ0p5F6aWdOTjavpLnoEdoWnPWflsR1HjV
-         ePF2Mo/p6Ae/EvUZOufFYa+Lu7G7ZiNBej9L9JqL/Go533Ll2kwx/1+Kw1nwKsqbW1
-         UWx/0y8FExpMyE/3zWVlDG0th1qseSYcB7o9hiQ9IePvAI/bK1ODVwLeMIq9Bs/VY1
-         a60DhI6DRSNx4qnzJRHlgBPtl71E/WdI/0hf8iO4yKXzmY7qwtJgXifqndKqLW5yrH
-         h1kpa0K0EmctBX8DOJoCPmcjdwFtRRWjXuefIWVQPgqfZgTDyCZ3NnfeNty3XoAyK0
-         lGYlvMccBsDNA==
-Date:   Mon, 22 Mar 2021 17:23:20 +1100
+        b=ceQiKo4JilnACfC/u2LG8c6c06QATLMBMBRYNz+eYb7hc2x4fRT3CrfNe9AQX6/Ux
+         Hy2WWCe9ENY+6yiD88oWJvRA1uazzuuM3ELuIMbu1DwddT/F7PlzqurPwqSGCXLIJr
+         FLThTA5oZaVhIgVIHUMRZRc/6nc5waz0oSj/uQL6w2mjFdQNJcMwRC2ZJNmURCw2Zd
+         ahns8TN5dj1JE+p5IvvNCYcandRnJn2N16quCsboS5Az4cf2UDD0Pp8FvPcha+7PpW
+         zKlSMaYURw/7cwx9h3sdGDtxAGPEF9wJfKA+WRKfkKFS/drDz6TV9NNMjbmdasDm5L
+         rRdb7MajAAwsw==
+Date:   Mon, 22 Mar 2021 17:40:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Namjae Jeon <namjae.jeon@samsung.com>,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the cifsd tree
-Message-ID: <20210322172320.5c83f16a@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: linux-next: manual merge of the akpm tree with the arm64 tree
+Message-ID: <20210322174023.602a110b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+Htx8DM.WB1ZakJr4jyhqvp";
+Content-Type: multipart/signed; boundary="Sig_/gF60RUGOCeApvhNL8GKktWw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+Htx8DM.WB1ZakJr4jyhqvp
+--Sig_/gF60RUGOCeApvhNL8GKktWw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cifsd tree, today's linux-next build (htmldocs)
-produced these warnings:
+Today's linux-next merge of the akpm tree got a conflict in:
 
-Documentation/filesystems/cifs/cifsd.rst:13: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:14: WARNING: Block quote ends with=
-out a blank line; unexpected unindent.
-Documentation/filesystems/cifs/cifsd.rst:14: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:18: WARNING: Block quote ends with=
-out a blank line; unexpected unindent.
-Documentation/filesystems/cifs/cifsd.rst:23: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:23: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:24: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:25: WARNING: Definition list ends =
-without a blank line; unexpected unindent.
-Documentation/filesystems/cifs/cifsd.rst:28: WARNING: Unexpected indentatio=
-n.
-Documentation/filesystems/cifs/cifsd.rst:31: WARNING: Block quote ends with=
-out a blank line; unexpected unindent.
-Documentation/filesystems/cifs/cifsd.rst:38: WARNING: Unexpected indentatio=
-n.
-Documentation/filesystems/cifs/cifsd.rst:32: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:32: WARNING: Inline substitution_r=
-eference start-string without end-string.
-Documentation/filesystems/cifs/cifsd.rst:39: WARNING: Block quote ends with=
-out a blank line; unexpected unindent.
-Documentation/filesystems/cifs/cifsd.rst:14: WARNING: Undefined substitutio=
-n referenced: "--- ksmbd/3 - Client 3 |-------".
-Documentation/filesystems/cifs/cifsd.rst:0: WARNING: Undefined substitution=
- referenced: "____________________________________________________".
-Documentation/filesystems/cifs/cifsd.rst:25: WARNING: Undefined substitutio=
-n referenced: "--- ksmbd/0(forker kthread) ---------------|".
-Documentation/filesystems/cifs/cifsd.rst:32: WARNING: Undefined substitutio=
-n referenced: "______________________________________________".
+  arch/arm64/mm/mmu.c
 
-Introduced by commit
+between commit:
 
-  30f44e929aa6 ("cifsd: update cifsd.rst document")
+  87143f404f33 ("arm64: mm: use XN table mapping attributes for the linear =
+region")
+
+from the arm64 tree and commit:
+
+  0a2634348ef8 ("set_memory: allow querying whether set_direct_map_*() is a=
+ctually enabled")
+
+from the akpm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+Htx8DM.WB1ZakJr4jyhqvp
+diff --cc arch/arm64/mm/mmu.c
+index 4c2305cca6d2,fb675069a3b7..000000000000
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@@ -503,20 -490,11 +504,20 @@@ static void __init map_mem(pgd_t *pgdp
+  	phys_addr_t kernel_start =3D __pa_symbol(_stext);
+  	phys_addr_t kernel_end =3D __pa_symbol(__init_begin);
+  	phys_addr_t start, end;
+ -	int flags =3D 0;
+ +	int flags =3D NO_EXEC_MAPPINGS;
+  	u64 i;
+ =20
+ +	/*
+ +	 * Setting hierarchical PXNTable attributes on table entries covering
+ +	 * the linear region is only possible if it is guaranteed that no table
+ +	 * entries at any level are being shared between the linear region and
+ +	 * the vmalloc region. Check whether this is true for the PGD level, in
+ +	 * which case it is guaranteed to be true for all other levels as well.
+ +	 */
+ +	BUILD_BUG_ON(pgd_index(direct_map_end - 1) =3D=3D pgd_index(direct_map_e=
+nd));
+ +
+- 	if (rodata_full || crash_mem_map || debug_pagealloc_enabled())
++ 	if (can_set_direct_map() || crash_mem_map)
+ -		flags =3D NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ +		flags |=3D NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ =20
+  	/*
+  	 * Take care not to create a writable alias for the
+@@@ -1468,9 -1446,8 +1469,8 @@@ int arch_add_memory(int nid, u64 start
+  	 * KFENCE requires linear map to be mapped at page granularity, so that
+  	 * it is possible to protect/unprotect single pages in the KFENCE pool.
+  	 */
+- 	if (rodata_full || debug_pagealloc_enabled() ||
+- 	    IS_ENABLED(CONFIG_KFENCE))
++ 	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+ -		flags =3D NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ +		flags |=3D NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ =20
+  	__create_pgd_mapping(swapper_pg_dir, start, __phys_to_virt(start),
+  			     size, params->pgprot, __pgd_pgtable_alloc,
+
+--Sig_/gF60RUGOCeApvhNL8GKktWw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBYN9gACgkQAVBC80lX
-0GyZBQf+MYu3paF65QUfk8HZxIn/eMffMIkLpdzbfw6le0iHwWC9Wn/XUIchex0A
-6U7xZZ8bJLpHVtZIjTeGmMmXTOk08Y+R/DY0YGcvYEdS0lN7Na2ZjEDBWS9PuK7L
-t9huN/FaMI+TsbgL4uCdYHXql+89P6aH+2eXaMTNWY2qOmJAwrGGzyGkNVwvc8ju
-00z94cqv8KiSqatSF2wAe0MsEIfCbMMlRa0hJGTy+S631DPabSddnogCLRCb8Ybf
-jsK2u/85bEaGYrxL+ZOaClBkIXx/2egT0/tYUcoYIWx8X9xkNkt1cw+yM/8Eg+ix
-dxnWku/QQs5tGdCANr3ZgnVMetxdqg==
-=rVkJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBYO9cACgkQAVBC80lX
+0GzopQgAkFk4g2CloXVbQ7aGEuYVvztOWu0M6JXZe742iQPibykojvIKMk0Kc0GK
+o0cNm8ZM8ekUpf3pLfpipIJzCcF2e4Di4mW9/c9JzC74Klv6re5L+XlyrzkZRjv6
+Ij3bwor6pz5zmUwvEIq6E2Dav+mLp/qF0Q5DUbMx0YRf4iznA0SoMhxJHwuGxGNx
+Ei+MoKAEWD22QWk2fBD6KCszGKN0ZhUcP0kzaj7lN9ls8NxomYJfuVGFv4glZkk+
+SSY2l7VMLI8DP5yqa6+T/BCM8e1pkna276WuPdQ3QrcNr/BsFcTnH+OBZSGlFgPS
+xh5r2rRr3+rmL01FdQyVnfn+2Z0heA==
+=KAyZ
 -----END PGP SIGNATURE-----
 
---Sig_/+Htx8DM.WB1ZakJr4jyhqvp--
+--Sig_/gF60RUGOCeApvhNL8GKktWw--

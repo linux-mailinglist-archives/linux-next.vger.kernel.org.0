@@ -2,73 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE96345364
-	for <lists+linux-next@lfdr.de>; Tue, 23 Mar 2021 00:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8903A3453D5
+	for <lists+linux-next@lfdr.de>; Tue, 23 Mar 2021 01:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbhCVXxV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Mar 2021 19:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbhCVXw7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Mar 2021 19:52:59 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F39C061574;
-        Mon, 22 Mar 2021 16:52:58 -0700 (PDT)
+        id S230368AbhCWA11 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Mar 2021 20:27:27 -0400
+Received: from ozlabs.org ([203.11.71.1]:41225 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230166AbhCWA1K (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 22 Mar 2021 20:27:10 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F4BBr4sYlz9sW1;
-        Tue, 23 Mar 2021 10:52:52 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F4ByL3Mvlz9sSC;
+        Tue, 23 Mar 2021 11:27:06 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616457173;
-        bh=MJi017oQotYoOildABLQeMibodaWQ4ZO3V5ZD6wZvrA=;
+        s=201702; t=1616459226;
+        bh=eFN2ccEoIxgAK/hFX9cj0zHHYca0TUOx9QjALavqtyk=;
         h=Date:From:To:Cc:Subject:From;
-        b=jC4hbi9EMy1UH1hRO7SyE4CZTq5A/KA7y+Tes6VSkuBH53ZoZZhlYsxj6rNwwg3AE
-         VI9O5Vg2OReyyHFIQf/3HUlH45u2Qbz2/WdreNMBWAPUr7+aZZGOGLpEiwkCgIvjVB
-         WL+YhuRMIfmfKcE0kqjyc8mgbzuFYfRnrN96l9zZYLjSsAySB642m4tyzXBOuIX6Bo
-         6TIOL8GPO9BM4EFvziNeqPrDpPdIXCqBUIWAokQvh2RHZx47y2XaJmnGBXbG/3VL2M
-         ntZahBAWhM3xFl83TQLx4aeh/dGf0w5r0pChpg36vKkC7Fc5Tetqc0U1HJQJ9YsFpv
-         BxA6MmYbZkuiw==
-Date:   Tue, 23 Mar 2021 10:52:51 +1100
+        b=LAvMixINFOXO4Mh5o2MJG6ftHadiKc7CDXrf8Wzv7/P7okl+ds/TFG8/Cf20HO4vZ
+         ROsUx7qotLucVkXNULfKcqWGMmwWiDk4XuSqpKxFdxC14ynZgTQEcCFXFPzPd2FeyZ
+         k/L3cySycllPxIEhJvfKde+j+xgDUJKDdmYJ0VT9GzUE9jVk5Qsa+e0P45LyIkYGqH
+         1aMlAninRo2C2XbMk6K07FQ/eXe5Co2QJlRGKNeeqiJ9unW8YrdGx5UFEqtgxVZn+R
+         hTcfmop6oKbOXyYZJ/uEWxBQwavtKnj4hI093dJ6jOJjSJi75vMmiy7UKRxUO3NR/6
+         VVfjx47l1Hziw==
+Date:   Tue, 23 Mar 2021 11:27:05 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jonas Malaco <jonas@protocubo.io>,
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>
-Subject: linux-next: manual merge of the v4l-dvb tree with the hwmon-staging
- tree
-Message-ID: <20210323105251.3532acea@canb.auug.org.au>
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: linux-next: manual merge of the opp tree with the v4l-dvb tree
+Message-ID: <20210323112705.3094525d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P15woK9_pXrb171nAFb+RFk";
+Content-Type: multipart/signed; boundary="Sig_/I1qCCZIArNB4+41BasbJ/YD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/P15woK9_pXrb171nAFb+RFk
+--Sig_/I1qCCZIArNB4+41BasbJ/YD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the v4l-dvb tree got a conflict in:
+Today's linux-next merge of the opp tree got a conflict in:
 
-  MAINTAINERS
+  drivers/media/platform/qcom/venus/pm_helpers.c
 
 between commit:
 
-  38f15506d965 ("hwmon: add driver for NZXT Kraken X42/X52/X62/X72")
+  08b1cf474b7f ("media: venus: core, venc, vdec: Fix probe dependency error=
+")
 
-from the hwmon-staging tree and commit:
+from the v4l-dvb tree and commit:
 
-  be157db0a3d8 ("media: Add maintainer for IMX jpeg v4l2 driver")
+  857219ae4043 ("media: venus: Convert to use resource-managed OPP API")
 
-from the v4l-dvb tree.
+from the opp tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -81,48 +79,98 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index dda782e9e578,04e6df934eb0..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -12941,13 -12910,14 +12941,21 @@@ L:	linux-nfc@lists.01.org (moderated =
-fo
-  S:	Supported
-  F:	drivers/nfc/nxp-nci
+diff --cc drivers/media/platform/qcom/venus/pm_helpers.c
+index e349d01422c5,e61317220b9a..000000000000
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@@ -750,12 -753,11 +750,11 @@@ static int venc_power_v4(struct device=20
+  	return ret;
+  }
  =20
-+ NXP i.MX 8QXP/8QM JPEG V4L2 DRIVER
-+ M:	Mirela Rabulea <mirela.rabulea@nxp.com>
-+ R:	NXP Linux Team <linux-imx@nxp.com>
-+ L:	linux-media@vger.kernel.org
-+ S:	Maintained
-+ F:	Documentation/devicetree/bindings/media/imx8-jpeg.yaml
-+ F:	drivers/media/platform/imx-jpeg
-+=20
- +NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
- +M:	Jonas Malaco <jonas@protocubo.io>
- +L:	linux-hwmon@vger.kernel.org
- +S:	Maintained
- +F:	Documentation/hwmon/nzxt-kraken2.rst
- +F:	drivers/hwmon/nzxt-kraken2.c
- +
-  OBJAGG
-  M:	Jiri Pirko <jiri@nvidia.com>
-  L:	netdev@vger.kernel.org
+ -static int vcodec_domains_get(struct device *dev)
+ +static int vcodec_domains_get(struct venus_core *core)
+  {
+  	int ret;
+- 	struct opp_table *opp_table;
+  	struct device **opp_virt_dev;
+ -	struct venus_core *core =3D dev_get_drvdata(dev);
+ +	struct device *dev =3D core->dev;
+  	const struct venus_resources *res =3D core->res;
+  	struct device *pd;
+  	unsigned int i;
+@@@ -826,13 -825,11 +821,11 @@@ skip_pmdomains
+ =20
+  	if (core->opp_dl_venus)
+  		device_link_del(core->opp_dl_venus);
+-=20
+- 	dev_pm_opp_detach_genpd(core->opp_table);
+  }
+ =20
+ -static int core_get_v4(struct device *dev)
+ +static int core_get_v4(struct venus_core *core)
+  {
+ -	struct venus_core *core =3D dev_get_drvdata(dev);
+ +	struct device *dev =3D core->dev;
+  	const struct venus_resources *res =3D core->res;
+  	int ret;
+ =20
+@@@ -871,35 -867,24 +863,24 @@@
+  		}
+  	}
+ =20
+ -	ret =3D vcodec_domains_get(dev);
+ +	ret =3D vcodec_domains_get(core);
+- 	if (ret) {
+- 		if (core->has_opp_table)
+- 			dev_pm_opp_of_remove_table(dev);
+- 		dev_pm_opp_put_clkname(core->opp_table);
++ 	if (ret)
+  		return ret;
+- 	}
+ =20
+  	return 0;
+  }
+ =20
+ -static void core_put_v4(struct device *dev)
+ +static void core_put_v4(struct venus_core *core)
+  {
+- 	struct device *dev =3D core->dev;
+-=20
+  	if (legacy_binding)
+  		return;
+ =20
+ -	vcodec_domains_put(dev);
+ +	vcodec_domains_put(core);
+-=20
+- 	if (core->has_opp_table)
+- 		dev_pm_opp_of_remove_table(dev);
+- 	dev_pm_opp_put_clkname(core->opp_table);
+-=20
+  }
+ =20
+ -static int core_power_v4(struct device *dev, int on)
+ +static int core_power_v4(struct venus_core *core, int on)
+  {
+ -	struct venus_core *core =3D dev_get_drvdata(dev);
+ +	struct device *dev =3D core->dev;
+  	struct device *pmctrl =3D core->pmdomains[0];
+  	int ret =3D 0;
+ =20
 
---Sig_/P15woK9_pXrb171nAFb+RFk
+--Sig_/I1qCCZIArNB4+41BasbJ/YD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBZLdMACgkQAVBC80lX
-0GyYQAf/RygOCF8VnQJtn7NxjWMGYO14vMKBJW7MAYQ4jNC6wb827QqVSHTiXdmL
-UBqHn2N0bAPHtIZ/8VXVqs5DKokwQ+ou7dFXEKzTEhDBuTc2rB0eA0o2J5uwR7I9
-LhlBUJqGaI5zziOu6xuIM4hy5iPcEvxkwaWdkhFnq7M6S0+6+twwzV5hTjzJB4s/
-f2veS+oMy2aKHG/YTpOBUCiVWzG9NUckW19ZVKEJkHlj7Cs319q5rfKAbhE7aWqI
-weXLD7ZBSm+PTqqs2tSshKc4wBbGXl1dWTBByKOKOuwG+ffeZb+D17W5+IIPukVB
-pH7lJEnwukzssWt6bc52sKrxErZkgg==
-=XYet
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBZNdkACgkQAVBC80lX
+0GyHHQf/YHTo3fHYKpoXF+D6dkaYMBAJfV/uiOmsewn7fDOz38nw0vbxrCo+yT4I
+MWpR1MmBMdUNa+cMAh26LJ8y95smgyH7LJb85ejkM4LuTW7JMtYeCrrCcvJpgiHp
+R8neocYehQFH49qoNzWVTKcN4OJouMMXNQqlsuFzfOwKdN4bCY1kXiKSbFJRu4oj
+uC/1bbgmoox6hvP7DP2ENpwSRKcd0qBi2C2Jz9WXGRGA3pj1Dsj5O8toIiwpw0Z+
+sA3oQ/fw7UVoo7Rh8wU7NtxAy0HHHDknvZJbmvcpxXTdKzsE+OCvZxOK3s/QFXZg
+cJL2LaXYhaWXda/YFnjIiqEl1Evf1w==
+=oY2V
 -----END PGP SIGNATURE-----
 
---Sig_/P15woK9_pXrb171nAFb+RFk--
+--Sig_/I1qCCZIArNB4+41BasbJ/YD--

@@ -2,57 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA033347E1D
-	for <lists+linux-next@lfdr.de>; Wed, 24 Mar 2021 17:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228FF348495
+	for <lists+linux-next@lfdr.de>; Wed, 24 Mar 2021 23:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbhCXQqb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Mar 2021 12:46:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:36282 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236991AbhCXQqB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 24 Mar 2021 12:46:01 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92A1DD6E;
-        Wed, 24 Mar 2021 09:46:00 -0700 (PDT)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EF203F7D7;
-        Wed, 24 Mar 2021 09:45:59 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 16:45:51 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>,
+        id S232781AbhCXWZY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Mar 2021 18:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229642AbhCXWZG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Mar 2021 18:25:06 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90175C06174A;
+        Wed, 24 Mar 2021 15:25:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F5N8T3WjPz9sWS;
+        Thu, 25 Mar 2021 09:24:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616624700;
+        bh=Lt1046lPm+M0t+PnUEF/7zYkeQkAleAyRe/nHCtvliQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n97owxz9QYJoqMkBquoOBIbQ3m85Fn5VJrXFdU8xakKvYG7bPyTsEmTK6KrHVv+1A
+         wzgBTsDbTG5zvav6L1oxzvYrf5DFfbA+Og3AiddKpHAZI1TYjxrmb+/lWM6+2+oGSc
+         7AwGwYX0i6UmPW33OXpYA/zqQQRqMdgLKsXca865Emjt/WzHNimyDq+n5ssgaegFcj
+         JHpbZLlSa/bE3Tu7AbEp1z3BBhRhGfE9NMlLyGCL6d7VYNq7TxBY/Xnrk45pWTDNt7
+         P4jJLnjKj2YPx/gGvntMX+tO4j7nHvqU8+BeG7ygFjC8OjTOgO4XZ7L087v5TOQdno
+         bIokMdizzJIQg==
+Date:   Thu, 25 Mar 2021 09:24:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Imre Deak <imre.deak@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the arm64 tree
-Message-ID: <20210324164551.7fedf89c@slackpad.fritz.box>
-In-Reply-To: <20210324154613.GA3709@arm.com>
-References: <20210324081445.7db17c31@canb.auug.org.au>
-        <20210324154613.GA3709@arm.com>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
+Subject: linux-next: build warning after merge of the drm-intel-fixes tree
+Message-ID: <20210325092455.7a629047@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/nicSjGR_B/XICY4AoVrQOrA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 24 Mar 2021 15:46:14 +0000
-Catalin Marinas <catalin.marinas@arm.com> wrote:
+--Sig_/nicSjGR_B/XICY4AoVrQOrA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Wed, Mar 24, 2021 at 08:14:45AM +1100, Stephen Rothwell wrote:
-> > Commits
-> > 
-> >   b17f265bb4cc ("kselftest/arm64: mte: Fix MTE feature detection")
-> >   4dfc9d30a8ab ("kselftest/arm64: mte: common: Fix write() warnings")
-> > 
-> > are missing a Signed-off-by from their author.  
-> 
-> Thanks Stephen. Now fixed.
+Hi all,
 
-Thanks Catalin, and apologies for the blunder, that's what I get from
-trying multitasking with just a single X chromosome ;-)
+After merging the drm-intel-fixes tree, today's linux-next build
+(htmldocs) produced this warning:
 
+Documentation/gpu/i915:22: /home/sfr/next/next/drivers/gpu/drm/i915/intel_r=
+untime_pm.c:423: WARNING: Inline strong start-string without end-string.
+
+Introduced by commit
+
+  8840e3bd981f ("drm/i915: Fix the GT fence revocation runtime PM logic")
+
+--=20
 Cheers,
-Andre
+Stephen Rothwell
+
+--Sig_/nicSjGR_B/XICY4AoVrQOrA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBbvDcACgkQAVBC80lX
+0Gwu7gf6AipS7+ub2HMWch7KBKGHskD98Lxo/DuFL9WVwNXFWpXDOdVJ6pT9wsHs
+DlBBT1/4uSXzY2SDIQ+bxSlANTond+9Mc6ne6a+0JlrI3mMu9Q9R8nfKPNi327GJ
+qTOq3NtPovhJZqzg4EhNjM+H0jF5L6NUbaeA2b5fW5j3BszhdouKOtyG6OPd74l8
+bqLYAsLOMmyisDDanymY9lumMw7we4e2kZdmzLYmqPt0+Vhfa74UJre2OzAluVpm
++d7GniRz61rLuqUgKzZxIpxBZbmkdbt6LYYvFzxMOr4Ut+G4Ueo8ywvxJTcBX1IV
+1yQNdIDrukr8nQYS4v6fpAr5Lbh2+g==
+=dyCb
+-----END PGP SIGNATURE-----
+
+--Sig_/nicSjGR_B/XICY4AoVrQOrA--

@@ -2,78 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3DB349B65
-	for <lists+linux-next@lfdr.de>; Thu, 25 Mar 2021 22:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF41349BAD
+	for <lists+linux-next@lfdr.de>; Thu, 25 Mar 2021 22:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbhCYVGj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Mar 2021 17:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbhCYVGO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Mar 2021 17:06:14 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF15C06174A;
-        Thu, 25 Mar 2021 14:06:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F5yLx4q4mz9sW4;
-        Fri, 26 Mar 2021 08:06:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616706361;
-        bh=/bbsaWFrT3mbTxmmmEwMNqEr2ymMLIXimsZsQ6SJKa4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kQqNBK4jeX2Ty2M8LP0E98g7n3E2gQwVVFecBbK1SCwuDdMJQnha2LMf3i754+H60
-         W1uL+E5aCwfe4Qq21TMSbwRPRh3OVdez7civtdH/1uYrCMnuxy4JUkNY/4ad1tQLz6
-         JNUjxIj7d5eTnOtuZQEi68gYHQFGayqauPWl32GyivQTpHvZonk4ciGnXTkHNzWZau
-         0U1m+MZizN/Y2htNhK52ezyo8EKO3Rc12OE3TWOXzv3QuG/GekO6a0/rFd+CGsq2yw
-         pqOw4eT8NHJEAcLHcYPoYvVrnsCnc8S61UJtZw0oI9taM3cHJJKoTTicsZHwGLgQ0W
-         BIFkIPEXWxtsQ==
-Date:   Fri, 26 Mar 2021 08:06:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Pavel Machek <pavel@ucw.cz>
+        id S230325AbhCYVc5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Mar 2021 17:32:57 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:58462 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230285AbhCYVcj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Mar 2021 17:32:39 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id F08761C0B95; Thu, 25 Mar 2021 22:32:36 +0100 (CET)
+Date:   Thu, 25 Mar 2021 22:32:36 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the leds tree
-Message-ID: <20210326080600.5b707e08@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the leds tree
+Message-ID: <20210325213236.GA1589@duo.ucw.cz>
+References: <20210326080600.5b707e08@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1MVUZ/VJueeChGdDPd9s6vs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
+Content-Disposition: inline
+In-Reply-To: <20210326080600.5b707e08@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1MVUZ/VJueeChGdDPd9s6vs
-Content-Type: text/plain; charset=US-ASCII
+
+--uAKRQypu60I7Lcqm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi!
 
-Commit
+> Commit
+>=20
+>   feac7685def1 ("leds: Kconfig: LEDS_CLASS is usually selected.")
+>=20
+> is missing a Signed-off-by from its author and committer.
 
-  feac7685def1 ("leds: Kconfig: LEDS_CLASS is usually selected.")
+Thank you, fixed.
+								Pavel
 
-is missing a Signed-off-by from its author and committer.
 
 --=20
-Cheers,
-Stephen Rothwell
+http://www.livejournal.com/~pavelmachek
 
---Sig_/1MVUZ/VJueeChGdDPd9s6vs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--uAKRQypu60I7Lcqm
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBc+zgACgkQAVBC80lX
-0GwRDQf+O1IiCSLzP3AJTfG7q9yDm9GCpkjqaz0LrJTGJ6OQyrlUyBuyA5tUBY6Y
-ES/8fH9vvMcfSIAIOC2ORxaQhswcjvCoUzgOquCvrKK0cjQ2Bdhs/+OxB1zuWqW1
-H782Ld2UWN0PexipvI0JcqOb15naPPE7fkNRcsXb+Ec1sJI/gy8TIv1dK4wnyd1W
-LD/2hoAS5TzusEYP6/JFvbq6bq32sBzi2PDoTZLIx91+t6fbS1KzibH1kg6muaue
-QMzA93eJHYW5XIvo/iFDl7lUzzM3QeAUVNMl3W1KOgbiwcZNGC/OkHMOd0LEv4u3
-V0CrWWDu4vvIWzn1xqylZ7X+99MW4w==
-=EpAI
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYF0BdAAKCRAw5/Bqldv6
+8qypAJsEU5IBffMDsPHKMfocV2eElZ0MwQCfYjfLygSU/QCcHOLMM68y1ornDEA=
+=JbhL
 -----END PGP SIGNATURE-----
 
---Sig_/1MVUZ/VJueeChGdDPd9s6vs--
+--uAKRQypu60I7Lcqm--

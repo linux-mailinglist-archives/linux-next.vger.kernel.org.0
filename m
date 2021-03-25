@@ -2,117 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8850434855E
-	for <lists+linux-next@lfdr.de>; Thu, 25 Mar 2021 00:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897913487E3
+	for <lists+linux-next@lfdr.de>; Thu, 25 Mar 2021 05:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234809AbhCXXhF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Mar 2021 19:37:05 -0400
-Received: from ozlabs.org ([203.11.71.1]:53893 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231889AbhCXXgk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 24 Mar 2021 19:36:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F5Pl83D74z9sRR;
-        Thu, 25 Mar 2021 10:36:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616628997;
-        bh=q8R9yTxNJakJ1zemN4cY0UWAXrRQAlD2+IhQFTngk+k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dpS+gFVYvttDEeDnNwXvLWbI8lQf5IAiEaqHIJwEcxqyflpf1ZRtyG6YSJHacKRWQ
-         AyPtEEgcaY1pMoApG7CVvrAEml3ISLst4/5fmJzYwojUNilnXp1tZj8NOm/Z5tHgxx
-         gExiVgxUon//1UELcH1RVQFQxXOIOPe83b2zIiS9iSSVdMiemDyZu2jHfroTV8CvRa
-         gFKRJzBlEJnuFABmZjJzk1iN/HHsOc3Eo3qG3MGcgY2pXO38HYQbCMVeC+Oa+Q21C+
-         hG/rbARcgNvQinEfBtgNQwt6NtoJM5KraCuELd5dDgIvGZklinsfousakO7TOEkEh4
-         QwYLRpI7dCbcQ==
-Date:   Thu, 25 Mar 2021 10:36:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229533AbhCYE0C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Mar 2021 00:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhCYEZk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Mar 2021 00:25:40 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6C1C06175F
+        for <linux-next@vger.kernel.org>; Wed, 24 Mar 2021 21:25:40 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id f10so527416pgl.9
+        for <linux-next@vger.kernel.org>; Wed, 24 Mar 2021 21:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/u+4i8WYF2c9ZDk59mboHoPw3gCeJqiy4ub9J1NWaIM=;
+        b=HTlTOhHuU7HjQBzgmqwLdtDrpQBdQvzt8BYq6m+XnP22XJY4SqLD8OHTwDwApXMgve
+         ADnv4V5CqBgIpHR+awfc61/FoB10kDS6FrWxhDukxdy2dl/FeJiJjUK2e9/erMKyAn+U
+         k7Gxflo+Cn2UnDXm7HH+qfIGTol5WKVB2UKvCXaAukWEjJiIpA5dl0T6ZFVYkjXPC5y6
+         aCRXV47/PHzCCV9EVp9HkqjNd9OYUPz2i2tjTyC4cpDHp774F+v+hYAn9eJnBFih7EV6
+         6pkdUHNww092Ojj2IC2vAqIt5JZywy+Q6SjN+RgZhIy/Ab0i1EyZgdHvdhaV2KpoHnui
+         BijA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/u+4i8WYF2c9ZDk59mboHoPw3gCeJqiy4ub9J1NWaIM=;
+        b=EwZbbfH0esFfuOb8J2pNzaIhnmFi2o6UXlU4qs0V78aDDkjSldAiODDL9YICNzrnut
+         tg+Vn9yU4LuZr4wzK4g/pArjlB8AsluwnRCl9cHs1x3LxkR7HTx4KwSLY2E1XQ5uUEt5
+         P1JYipwjZCPoPE1GwV7CAXwmKWoznGcvJCe7GLrBjZAzxzw90cjyMjdI7RperOekgXz3
+         a8x2T00/rZTsTlGxx8tUZADOfelpGMXOMmHduEOJq+MJ1j6pH3USwhwSLHXr8gG+MWg6
+         OqLJbr5KizdLxlMKdaApA/9QkxxAmmjicOBa31/2C3vCHyY0Ay23gqLqf6drfb6fNBTh
+         VD2A==
+X-Gm-Message-State: AOAM533PvDBf962pJ6a4ilIc6vXf1zZ1Fdgmg5F4S9JnnXT64jddCCuo
+        Nd0d5FMnUHex+q0fK/wpYAc4YQ==
+X-Google-Smtp-Source: ABdhPJyV0pAWZrk/xXM5q2xRaOqjnbfc9z7mmc5Hv9ZoCLFh8hyN2xXw2JnZ7m9fFmnVB2O7+YNsiA==
+X-Received: by 2002:a17:902:a715:b029:e7:147e:fe90 with SMTP id w21-20020a170902a715b02900e7147efe90mr2242738plq.66.1616646339598;
+        Wed, 24 Mar 2021 21:25:39 -0700 (PDT)
+Received: from localhost ([122.172.6.13])
+        by smtp.gmail.com with ESMTPSA id u2sm3780197pjy.14.2021.03.24.21.25.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 24 Mar 2021 21:25:35 -0700 (PDT)
+Date:   Thu, 25 Mar 2021 09:55:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: linux-next: manual merge of the fscache tree with Linus' tree
-Message-ID: <20210325103634.6e26fade@canb.auug.org.au>
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: Re: linux-next: manual merge of the opp tree with the v4l-dvb tree
+Message-ID: <20210325042530.5clexogqy77v75sm@vireshk-i7>
+References: <20210323112705.3094525d@canb.auug.org.au>
+ <20225c7e-1151-7865-2bc6-a1e5694c3d65@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xEY9JO1boMf=mPg5HxmA.DG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20225c7e-1151-7865-2bc6-a1e5694c3d65@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xEY9JO1boMf=mPg5HxmA.DG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 24-03-21, 16:49, Stanimir Varbanov wrote:
+> Thanks Stephen!
+> 
+> On 3/23/21 2:27 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the opp tree got a conflict in:
+> > 
+> >   drivers/media/platform/qcom/venus/pm_helpers.c
+> > 
+> > between commit:
+> > 
+> >   08b1cf474b7f ("media: venus: core, venc, vdec: Fix probe dependency error")
+> > 
+> > from the v4l-dvb tree and commit:
+> > 
+> >   857219ae4043 ("media: venus: Convert to use resource-managed OPP API")
+> > 
+> > from the opp tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> 
+> I don't know what is the best solution here.
+> 
+> Viresh, Can I take the OPP API changes through media-tree to avoid
+> conflicts?
 
-Hi all,
+I already suggested something similar earlier, and I was expecting
+Thierry to respond to that.. Not sure who should pick those patches.
 
-Today's linux-next merge of the fscache tree got a conflict in:
+https://lore.kernel.org/lkml/20210318103250.shjyd66pxw2g2nsd@vireshk-i7/
 
-  fs/afs/write.c
+Can you please respond to this series then ?
 
-between commit:
-
-  75b69799610c ("afs: Use wait_on_page_writeback_killable")
-
-from Linus' tree and commit:
-
-  721597fd1aa6 ("afs: Prepare for use of THPs")
-
-from the fscache tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/afs/write.c
-index eb737ed63afb,b2e03de09c24..000000000000
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@@ -848,13 -845,16 +845,15 @@@ vm_fault_t afs_page_mkwrite(struct vm_f
-  	 * be modified.  We then assume the entire page will need writing back.
-  	 */
-  #ifdef CONFIG_AFS_FSCACHE
-- 	fscache_wait_on_page_write(vnode->cache, vmf->page);
-+ 	if (PageFsCache(page) &&
-+ 	    wait_on_page_bit_killable(page, PG_fscache) < 0)
-+ 		return VM_FAULT_RETRY;
-  #endif
- =20
-- 	if (wait_on_page_writeback_killable(vmf->page))
- -	if (PageWriteback(page) &&
- -	    wait_on_page_bit_killable(page, PG_writeback) < 0)
-++	if (wait_on_page_writeback_killable(page))
-  		return VM_FAULT_RETRY;
- =20
-- 	if (lock_page_killable(vmf->page) < 0)
-+ 	if (lock_page_killable(page) < 0)
-  		return VM_FAULT_RETRY;
- =20
-  	/* We mustn't change page->private until writeback is complete as that
-
---Sig_/xEY9JO1boMf=mPg5HxmA.DG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBbzQIACgkQAVBC80lX
-0GxxbAgAgSuT3VJ8P4NW9gbL2WuSTF+XlWuuShvg2x6/m+rw8vNIX3ndMiNxWc/9
-UoWTyBBOQ52rX6O5RLD6GDwU3AvnGT9UYhaPM7ZRbp5i4x9IW7cCIMCcRMWqhEoh
-+CtPbX5MBPGqBf0ar9XIpmFPQjCXDCDX5mbtLd1HDW0J7zQNfWu1Kr6ZlvpS4ZWa
-LUYD4neNYdULLoLO8rTFF87icAYMDNM/NAF99NFcTdSpYbSo1MFNeFjuMhKNfbSK
-nOQDtm+TGUEy+3F+lxgXAayguyWN9nB2fYDhq/ezRUPGn5MSnJ+Zey4nnH+CXNfh
-DoNP0UTNJ3R4ko81yXaUc37nAESaCg==
-=mu3o
------END PGP SIGNATURE-----
-
---Sig_/xEY9JO1boMf=mPg5HxmA.DG--
+-- 
+viresh

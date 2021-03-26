@@ -2,88 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 961DB34AE89
-	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 19:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FA234AF45
+	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 20:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbhCZS1U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Mar 2021 14:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S230266AbhCZTU5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Mar 2021 15:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbhCZS1Q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 14:27:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7969EC0613AA;
-        Fri, 26 Mar 2021 11:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=8Ae93rKXbABJtGx3FxazTivwVoSUyF1RzcrMzGIW5rU=; b=hcB5eQg1sEj8cqW4B5F0SkSx/s
-        4FcNeIJ5qmCIdR8Eng4rrfZkEqe3WieOm2J8eiJHoBkyzcWQqxv53bnhy+WODXeHywsdHgExYClu3
-        FoXQTCiyCwzgjidzh01BDNm5cZVkEsghV9GQVUZBNAK0pXbRJfCa/khYPISN5LpElcoVF9FUUjT5D
-        pc3Nzb0oFPE48N2JbyC6kfyVxSPDsVo/HmQgwrKIrv2iqmCEf06fpbqgEo/AWHeQO31o336IdJ0sU
-        Gu+qbyvq4ZLcFlmxeszP6eO6SKysLKnXxxPFjicgNiDbQG241O51epr9fEk9HgFv5p7jkStY0V0Zp
-        OkGYssRA==;
-Received: from [2601:1c0:6280:3f0::4557]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lPrAP-00FGpt-L2; Fri, 26 Mar 2021 18:26:47 +0000
-Subject: Re: linux-next: Tree for Mar 26 (drivers/mfd/lpc_sch.c)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S230476AbhCZTUn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 15:20:43 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D6BC0613B1
+        for <linux-next@vger.kernel.org>; Fri, 26 Mar 2021 12:20:43 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 230A277D;
+        Fri, 26 Mar 2021 19:20:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 230A277D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1616786430; bh=ySavWd7T6baG1vIEe9iwuQtggu6hMLn9YYqag7TxA9o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OqipJfZ0eirwbLm64uUi4vWSZF7mExSoZWCP+z6LJTsEmKJXfyR61VB9El8aeTIhk
+         hVmPwYl1urGiodE2oGthN6jz/5VTEngj7eFMOqSTIn4BlEKcaE3Oo7JxKjH8etTQNC
+         2MuKQRu2+W2+UmAmycTHHpF+SOwtVbzwxYjDQSUCis8rFt+73zYurKs618shA5inYq
+         B1s5tD9UtFdvcZE9rSzgtkffOgV5qjuO9tdXGtUKQ06+bWCyjYj7e7fbxrnT3tGehj
+         KdHzP5Op9P2pU61sK3Du6lxjjhpHJHnJctq+Lnf7fpZAtRZ2QeMvgZXm0wjLPJeBDp
+         +xtvK1IbtxqHQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Denis Turischev <denis@compulab.co.il>,
-        Lee Jones <lee.jones@linaro.org>
-References: <20210326193457.7887e09e@canb.auug.org.au>
- <39a89498-6b81-4d4c-503f-c87805ca620a@infradead.org>
-Message-ID: <1833e29a-3d16-7041-dd75-784ae4e07faf@infradead.org>
-Date:   Fri, 26 Mar 2021 11:26:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+Subject: Re: linux-next: build warnings after merge of the jc_docs tree
+In-Reply-To: <20210326185440.42ea948a@canb.auug.org.au>
+References: <20210326185440.42ea948a@canb.auug.org.au>
+Date:   Fri, 26 Mar 2021 13:20:29 -0600
+Message-ID: <87pmzlvi0y.fsf@meer.lwn.net>
 MIME-Version: 1.0
-In-Reply-To: <39a89498-6b81-4d4c-503f-c87805ca620a@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/26/21 11:20 AM, Randy Dunlap wrote:
-> On 3/26/21 1:34 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20210325:
->>
-> 
-> on i386 or x86_64:
-> aha:
-> # CONFIG_PCI is not set
-> 
-> 
-> ../drivers/mfd/lpc_sch.c:204:1: warning: data definition has no type or storage class
->  module_pci_driver(lpc_sch_driver);
->  ^~~~~~~~~~~~~~~~~
-> ../drivers/mfd/lpc_sch.c:204:1: error: type defaults to ‘int’ in declaration of ‘module_pci_driver’ [-Werror=implicit-int]
-> ../drivers/mfd/lpc_sch.c:204:1: warning: parameter names (without types) in function declaration
-> ../drivers/mfd/lpc_sch.c:197:26: warning: ‘lpc_sch_driver’ defined but not used [-Wunused-variable]
->  static struct pci_driver lpc_sch_driver = {
->                           ^~~~~~~~~~~~~~
-> 
-> 
-> Full x86_64 randconfig file is attached.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-This is the root of the problem I think:
+> Hi all,
+>
+> After merging the jc_docs tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>
+> include/linux/pstore_zone.h:55: warning: Function parameter or member 'write' not described in 'pstore_zone_info'
+> include/linux/pstore_blk.h:43: warning: Function parameter or member 'write' not described in 'pstore_device_info'
+> include/media/v4l2-mediabus.h:127: warning: Function parameter or member 'type' not described in 'v4l2_mbus_config'
+>
+> and many more similar. These appear to be false positives :-(
+>
+> Introduced by commit
+>
+>   8d295fbad687 ("kernel-doc: better handle '::' sequences")
+>
+> I have reverted that commit for today.
 
-WARNING: unmet direct dependencies detected for LPC_SCH
-  Depends on [n]: HAS_IOMEM [=y] && PCI [=n]
-  Selected by [m]:
-  - GPIO_SCH [=m] && GPIOLIB [=y] && X86 [=y] && (X86 [=y] || COMPILE_TEST [=y]) && ACPI [=y]
+Argh, that was bad, sorry, I should have caught that.
 
+Just added the following to fix it.
 
-Denis, that still looks like it's your territory.
+Thanks,
 
-thanks.
+jon
+
+From 212209cff89fe497bc47abcd017aa95e4e8a5196 Mon Sep 17 00:00:00 2001
+From: Jonathan Corbet <corbet@lwn.net>
+Date: Fri, 26 Mar 2021 13:16:35 -0600
+Subject: [PATCH] docs: kernel-doc: properly recognize parameter lines with
+ colons
+
+The previous attempt to properly handle literal blocks broke parsing of
+parameter lines containing colons; fix it by tweaking the regex to
+specifically exclude the "::" pattern while accepting lines containing
+colons in general.  Add a little documentation to the regex while in the
+neighborhood.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 8d295fbad687 ("kernel-doc: better handle '::' sequences")
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ scripts/kernel-doc | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index 0ecd71477a16..d6d2b6e0b4eb 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -391,8 +391,14 @@ my $doc_com = '\s*\*\s*';
+ my $doc_com_body = '\s*\* ?';
+ my $doc_decl = $doc_com . '(\w+)';
+ # @params and a strictly limited set of supported section names
++# Specifically:
++#   Match @word:
++#	  @...:
++#         @{section-name}:
++# while trying to not match literal block starts like "example::"
++#
+ my $doc_sect = $doc_com .
+-    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|notes?|examples?)\s*:([^:]*)$';
++    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|notes?|examples?)\s*:([^:].*)?$';
+ my $doc_content = $doc_com_body . '(.*)';
+ my $doc_block = $doc_com . 'DOC:\s*(.*)?';
+ my $doc_inline_start = '^\s*/\*\*\s*$';
 -- 
-~Randy
+2.30.2
 

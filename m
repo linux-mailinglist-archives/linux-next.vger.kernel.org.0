@@ -2,90 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 733E134A371
-	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 09:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26D634A381
+	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 09:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbhCZIxT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Mar 2021 04:53:19 -0400
-Received: from ozlabs.org ([203.11.71.1]:47957 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229639AbhCZIwo (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 26 Mar 2021 04:52:44 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F6G2J5vQYz9sS8;
-        Fri, 26 Mar 2021 19:52:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616748762;
-        bh=g09iU8hR/lAv9pnKVSRRWFYJQmCD/sDHaaa1nfzr3Kg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NUwuxVmTnprNkytMDu7We7whdOv9p8mqSXN76vvT9DspgqCQDD0/iIo9WXXwzUOmT
-         tEp8F7vIRkrVyfuFfEy28Xfsprno80Ji/ZuGr8lpAgDubmL4zHAGkFOO0kEmAdjykG
-         ZN8v4TBn921FQFCnWp/bsmzj9Hi8aH0tUCfvCMTBmCihFZcwAidZ3a1iYu+HVdPZHv
-         8AIq5kzXMOMnq747wu9sZqD8VKVGrxGtr6YCf2JfvPiryJMRUqf+0OKaI7IqnI49x5
-         4PAS0Xj7bwH4CjOLbyeqj/n3VOO0yfoVs4KKY0ioAR9alkAB83Z37Q78Pms+Io7ZsE
-         wNN7Z6BbaYvHg==
-Date:   Fri, 26 Mar 2021 19:52:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Will Deacon <will@kernel.org>
-Cc:     Qi Liu <liuqi115@huawei.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        id S229984AbhCZI6o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Mar 2021 04:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbhCZI6U (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 04:58:20 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E2FC0613AA;
+        Fri, 26 Mar 2021 01:58:20 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id w2so3976579ilj.12;
+        Fri, 26 Mar 2021 01:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=l9gbWzCZ8sOW1i9QHPhtjOrMNdak/ShYPTyDf3NGDKA=;
+        b=c+ynMnCmKrVQ1yuNyPCQ2R34kJotwByI5mKeVlXe5fmJYu7rf3JgxA6FVNJrODpZHq
+         vb3c8++5tjvoVdWH71RAPsZW7w6TQF3zPCAv8Tqtw4321M3RUNuLHyFoFM3eNjdR9SiM
+         EuYnZLigXKC8l2tq+eqXSbXAjqDD+LlYW33dYM6nY94YxP/QFy86YVtT1EjXBtswlYyk
+         j87Aik23OGx+4/G0OyvMWpnvSchBX7D6+3OuzWOzyfe627A7xqTq8Fj2+PRdGsKGy3iD
+         USFNFyJAwFcnF3tvzZFFcQXLIu2xOQE6Q+IftkGsEoAWDKb9/kmbCERbPYMWPjmN2QzV
+         wGLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=l9gbWzCZ8sOW1i9QHPhtjOrMNdak/ShYPTyDf3NGDKA=;
+        b=mpFqo6b+siV2Iss22qyaT3ouH/i85GGvNo9cE1OJMbs7F4TeUyz/awd8yIttUJEAcb
+         WTU8fyKCLk06DY0BrdfW95ntj2WrU24/nhHnofeSCEfiEV4UQSoq0y5/ilnP4wjMoMRB
+         QQ0HyCo15iuPx5hDaGoI2a00JhACrjKxopS3aIG1X6Fnob6D3CKBvxhUm5uCdavUMZHw
+         iKzuGLGTGhR8Chg8h2cAvKlCHOFT/99/rpqKPw+zMlny7KqZPZuYwGItW/9rXzO+gkSu
+         8eOFsxSJ0r/Eg6DRPynuYEvEqInr1C3/uTAAbXeucvYrC7q0bMVW0gp4QIUGPj2WKrdp
+         98wQ==
+X-Gm-Message-State: AOAM531Fjuzkf9agcHZ79MrVjx/gb6IAjHTNFKhSt0sDzQpSmvzE9WSq
+        3Z3i8/cmeaQ33RnMh/b76PFXQ4qVj6cIrcaZYIw=
+X-Google-Smtp-Source: ABdhPJxRSRmZPkaFJ9lIZ2i2BYVsNFqjiz0yKj1NZKgvoYdQ57SsLPTRUlA6PL29NXfGRbHLKzFKHiVybIsTnfw89uA=
+X-Received: by 2002:a92:d78f:: with SMTP id d15mr8934897iln.112.1616749099521;
+ Fri, 26 Mar 2021 01:58:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210322143714.494603ed@canb.auug.org.au> <20210322090036.GB10031@zn.tnic>
+In-Reply-To: <20210322090036.GB10031@zn.tnic>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 26 Mar 2021 09:57:43 +0100
+Message-ID: <CA+icZUVkE73_31m0UCo-2mHOHY5i1E54_zMb7yp18UQmgN5x+A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the arm-perf tree
-Message-ID: <20210326195240.7b937560@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5fJIKHBOWq+C8_hbA/zUxi0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5fJIKHBOWq+C8_hbA/zUxi0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 22, 2021 at 10:02 AM Borislav Petkov <bp@suse.de> wrote:
+>
+> On Mon, Mar 22, 2021 at 02:37:14PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> >
+> > arch/x86/net/bpf_jit_comp.c: In function 'arch_prepare_bpf_trampoline':
+> > arch/x86/net/bpf_jit_comp.c:2015:16: error: 'ideal_nops' undeclared (first use in this function)
+> >  2015 |   memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
+> >       |                ^~~~~~~~~~
+> > arch/x86/net/bpf_jit_comp.c:2015:16: note: each undeclared identifier is reported only once for each function it appears in
+> > arch/x86/net/bpf_jit_comp.c:2015:27: error: 'NOP_ATOMIC5' undeclared (first use in this function); did you mean 'GFP_ATOMIC'?
+> >  2015 |   memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
+> >       |                           ^~~~~~~~~~~
+> >       |                           GFP_ATOMIC
+> >
+> > Caused by commit
+> >
+> >   a89dfde3dc3c ("x86: Remove dynamic NOP selection")
+> >
+> > interacting with commit
+> >
+> >   b90829704780 ("bpf: Use NOP_ATOMIC5 instead of emit_nops(&prog, 5) for BPF_TRAMP_F_CALL_ORIG")
+> >
+> > from the net tree.
+> >
+> > I have applied the following merge fix patch.
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 22 Mar 2021 14:30:37 +1100
+> > Subject: [PATCH] x86: fix up for "bpf: Use NOP_ATOMIC5 instead of
+> >  emit_nops(&prog, 5) for BPF_TRAMP_F_CALL_ORIG"
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  arch/x86/net/bpf_jit_comp.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index db50ab14df67..e2b5da5d441d 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -2012,7 +2012,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+> >               /* remember return value in a stack for bpf prog to access */
+> >               emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
+> >               im->ip_after_call = prog;
+> > -             memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
+> > +             memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
+> >               prog += X86_PATCH_SIZE;
+> >       }
+> >
+> > --
+>
+> I guess we can do the same as with the hyperv tree - the folks who send the
+> respective branches to Linus in the next merge window should point to this patch
+> of yours which Linus can apply after merging the second branch in order.
+>
+> Thx.
+>
 
-Hi all,
+The commit b90829704780 "bpf: Use NOP_ATOMIC5 instead of
+emit_nops(&prog, 5) for BPF_TRAMP_F_CALL_ORIG" is now in Linus Git
+(see [1]).
 
-After merging the arm-perf tree, today's linux-next build (htmldocs)
-produced these warnings:
+Where will Stephen's fixup-patch be carried?
+Linux-next?
+net-next?
+<tip.git#x86/cpu>?
 
-Documentation/admin-guide/perf/hisi-pmu.rst:61: WARNING: Unexpected indenta=
-tion.
-Documentation/admin-guide/perf/hisi-pmu.rst:62: WARNING: Block quote ends w=
-ithout a blank line; unexpected unindent.
-Documentation/admin-guide/perf/hisi-pmu.rst:69: WARNING: Unexpected indenta=
-tion.
-Documentation/admin-guide/perf/hisi-pmu.rst:70: WARNING: Block quote ends w=
-ithout a blank line; unexpected unindent.
-Documentation/admin-guide/perf/hisi-pmu.rst:83: WARNING: Unexpected indenta=
-tion.
+Thanks.
 
-Introduced by commit
+- Sedat -
 
-  9b86b1b41e0f ("docs: perf: Add new description on HiSilicon uncore PMU v2=
-")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5fJIKHBOWq+C8_hbA/zUxi0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBdoNgACgkQAVBC80lX
-0GyFyAf/bGlTBxPfl3UbcX+uBELL6v+S9/rnnLcXk4hmlvVXc2oZmLb2rZd4vbTO
-zeQa/r8TVqeaj78LdrPtqIWOmkQj+gV8aETATdDjOus35U/BD/F7uLocbDSn+UzF
-BzReiJhWUfvwzTbCMTGY5yjX9cXVDjuLB6weiIPugE8U7oqM9TcVMkLD/EWAsFVy
-gTphNCqCMiFAIcrrLRZpfzlEAr4FqHt3rKJf7dAbAD+yGvR/aECkiusiDiE9u0fv
-fVY4NRNRnyJ9UnqWnA0adVlW24CmElOSb7Xh/DXhfSktwUCgoZfjhoU4XAPEJJfo
-ZihpidhNCqvHH8EoFjse03DSyXXxbA==
-=IKy+
------END PGP SIGNATURE-----
-
---Sig_/5fJIKHBOWq+C8_hbA/zUxi0--
+[1] https://git.kernel.org/linus/b9082970478009b778aa9b22d5561eef35b53b63

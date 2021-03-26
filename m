@@ -2,115 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FA234AF45
-	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 20:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC7B34B26F
+	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 00:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbhCZTU5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Mar 2021 15:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
+        id S230442AbhCZXDy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Mar 2021 19:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbhCZTUn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 15:20:43 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D6BC0613B1
-        for <linux-next@vger.kernel.org>; Fri, 26 Mar 2021 12:20:43 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230465AbhCZXDe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 19:03:34 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC506C0613AA;
+        Fri, 26 Mar 2021 16:03:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 230A277D;
-        Fri, 26 Mar 2021 19:20:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 230A277D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1616786430; bh=ySavWd7T6baG1vIEe9iwuQtggu6hMLn9YYqag7TxA9o=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OqipJfZ0eirwbLm64uUi4vWSZF7mExSoZWCP+z6LJTsEmKJXfyR61VB9El8aeTIhk
-         hVmPwYl1urGiodE2oGthN6jz/5VTEngj7eFMOqSTIn4BlEKcaE3Oo7JxKjH8etTQNC
-         2MuKQRu2+W2+UmAmycTHHpF+SOwtVbzwxYjDQSUCis8rFt+73zYurKs618shA5inYq
-         B1s5tD9UtFdvcZE9rSzgtkffOgV5qjuO9tdXGtUKQ06+bWCyjYj7e7fbxrnT3tGehj
-         KdHzP5Op9P2pU61sK3Du6lxjjhpHJHnJctq+Lnf7fpZAtRZ2QeMvgZXm0wjLPJeBDp
-         +xtvK1IbtxqHQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F6cw24Bzcz9sRR;
+        Sat, 27 Mar 2021 10:03:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616799811;
+        bh=oGsI+iyCmO62DOlPCWBz+yEM9Er6qmZ9DIaLppcrLcw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XdjBqPp0L+qKw3aCoGtVMP/6dJV14B6LPT8v+gxBXpOUKBrPAK74PbhXMPreqktSE
+         vh7gTlnUHE/U+BD1WSaVMPr4tO4RERQJYORu48Z6yBK/skPIL14v6oqbYk29aMKwMd
+         nKIlHurqd6I2XRNFYIy8QXnS4OlIRfHEVDLP0I0tueDdnYVjocqkiPwwozIQImmIsj
+         qWCVB+l4eF0ISkPTu+/LlDWxkZfoZw3IJuQcf1rLrKzOB5apwn9BcR0+k1YDFkTVNN
+         e2zHZ8QCToGkGUfTwmhQqmLtEPAZybf8P3/8ojwoW1qW57vbXHNe6GCd7c6cat6yip
+         TZaCywQlszKjA==
+Date:   Sat, 27 Mar 2021 10:03:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the jc_docs tree
-In-Reply-To: <20210326185440.42ea948a@canb.auug.org.au>
-References: <20210326185440.42ea948a@canb.auug.org.au>
-Date:   Fri, 26 Mar 2021 13:20:29 -0600
-Message-ID: <87pmzlvi0y.fsf@meer.lwn.net>
+Subject: linux-next: Fixes tag needs some work in the net-next tree
+Message-ID: <20210327100328.1f486e9e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+--Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
->
-> After merging the jc_docs tree, today's linux-next build (htmldocs)
-> produced these warnings:
->
-> include/linux/pstore_zone.h:55: warning: Function parameter or member 'write' not described in 'pstore_zone_info'
-> include/linux/pstore_blk.h:43: warning: Function parameter or member 'write' not described in 'pstore_device_info'
-> include/media/v4l2-mediabus.h:127: warning: Function parameter or member 'type' not described in 'v4l2_mbus_config'
->
-> and many more similar. These appear to be false positives :-(
->
-> Introduced by commit
->
->   8d295fbad687 ("kernel-doc: better handle '::' sequences")
->
-> I have reverted that commit for today.
+Hi all,
 
-Argh, that was bad, sorry, I should have caught that.
+In commit
 
-Just added the following to fix it.
+  63c173ff7aa3 ("net: stmmac: Fix kernel panic due to NULL pointer derefere=
+nce of fpe_cfg")
 
-Thanks,
+Fixes tag
 
-jon
+  Fixes: 5a5586112b92 ("net: stmmac: support FPE link partner hand-shaking
 
-From 212209cff89fe497bc47abcd017aa95e4e8a5196 Mon Sep 17 00:00:00 2001
-From: Jonathan Corbet <corbet@lwn.net>
-Date: Fri, 26 Mar 2021 13:16:35 -0600
-Subject: [PATCH] docs: kernel-doc: properly recognize parameter lines with
- colons
+has these problem(s):
 
-The previous attempt to properly handle literal blocks broke parsing of
-parameter lines containing colons; fix it by tweaking the regex to
-specifically exclude the "::" pattern while accepting lines containing
-colons in general.  Add a little documentation to the regex while in the
-neighborhood.
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 8d295fbad687 ("kernel-doc: better handle '::' sequences")
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- scripts/kernel-doc | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Please do not split Fixes tags over more than one line.
 
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 0ecd71477a16..d6d2b6e0b4eb 100755
---- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -391,8 +391,14 @@ my $doc_com = '\s*\*\s*';
- my $doc_com_body = '\s*\* ?';
- my $doc_decl = $doc_com . '(\w+)';
- # @params and a strictly limited set of supported section names
-+# Specifically:
-+#   Match @word:
-+#	  @...:
-+#         @{section-name}:
-+# while trying to not match literal block starts like "example::"
-+#
- my $doc_sect = $doc_com .
--    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|notes?|examples?)\s*:([^:]*)$';
-+    '\s*(\@[.\w]+|\@\.\.\.|description|context|returns?|notes?|examples?)\s*:([^:].*)?$';
- my $doc_content = $doc_com_body . '(.*)';
- my $doc_block = $doc_com . 'DOC:\s*(.*)?';
- my $doc_inline_start = '^\s*/\*\*\s*$';
--- 
-2.30.2
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBeaEAACgkQAVBC80lX
+0GxhHwgApM2BCTp73PRTSGiKAvGgnGAnOW0697Fm6c09hS8NXSZ5Oww2r73uzciJ
+E62aMrQ5B5RRAkr6bA4M0/Vmr6qUDQtIJhSCz7KGrl1VQTJ6mcu05I03rekabZXK
+LIVtHC/luSVboOaBbO70/vCMWgNBuf8qraDW/HfKZSEmauh66zt737GPO/XQ6+w1
+ylBQDoDEbyn0WTRWHobVS5TjEcu8J4ODw2xmsn0GdQWi1b+q1aksdFHxW1AbU+nH
+I1FnlOAvT4yEC/bQzjQxuDR0ga+XTlHRjTptiXmEETXKBOXxPDK4ayIlkjN3qViv
+gbje6eTd9rtbRMWA62CfefHlGiZwTw==
+=7+rM
+-----END PGP SIGNATURE-----
+
+--Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU--

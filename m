@@ -2,1356 +2,790 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A77A934A932
-	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 15:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31A334AE70
+	for <lists+linux-next@lfdr.de>; Fri, 26 Mar 2021 19:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbhCZOBY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Mar 2021 10:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S230196AbhCZSV4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Mar 2021 14:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbhCZOBO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 10:01:14 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815BBC0613AA
-        for <linux-next@vger.kernel.org>; Fri, 26 Mar 2021 07:01:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o2so950229plg.1
-        for <linux-next@vger.kernel.org>; Fri, 26 Mar 2021 07:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=QAWH+DhMckpdov6ajoar7dRvMUCQlFK4Im56dAoutvg=;
-        b=GtDPXPTH8//kl2wLaXSkCybK6g8u6hqVlL5v7rwylhaDoR+rv7KPqzTmc26yYlnlRT
-         t88bWNMal7M7u/WPnejsoOJSm82yjv7xeqKIdHrkbHUwE/Gan6vHr23Zk6jXgyqKYgAE
-         /jdN+25LnaycA4SumyBiKf6Oxb/FdLERiYIsRFLbNRU/kxiuYoC/flk44gLz9d5m6wDy
-         8gpygFQIRaQQDA28t6o9OFyn6u58g4vRrjyQUHgsiOxyp64icZUF2WAlI3fuFMG3yZZN
-         rEd1r7QA0XL0KmlcyWiBND9xwbJd/cTFcrqzDAkrR+B2ykFoO2ongqxfnwo3SOwWX+5h
-         zx/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=QAWH+DhMckpdov6ajoar7dRvMUCQlFK4Im56dAoutvg=;
-        b=jg9P+p3CT2lvJE6JrtfbYaoaWC8OUzp87fLWqONrgyfZpjk0BP49Z27aupDgfrpEMn
-         yYjzZBZqsl8CHLW9MgNh9n8nwSziVnq8R/+ksJPgivGZ0vzUti5VbnuWVsARMvJc6wbn
-         mBh7un6pVkqPdaIo6ecRBAEgIKt4/VsaBilVT5Wcm+h05l5M5ylMv+qAbDENoMSn7jSP
-         3X00tsljRpiOCODwUpM02u0ombBD96JkhMScLUYV03Mayl8pSyOI1lKXrdPg9jn4toe+
-         7hBuOmewtB7s5FlQh9T77irpx22s/zVYWar+PN3zvcIFXTpqjXG0us5EHJ8X/UwX2ha1
-         8tZQ==
-X-Gm-Message-State: AOAM531H57Q8ls2/eqNWk4kz174k1kN/9J5bmFGDPg/CZRq4ZYJ4UREh
-        jNP8fakL3he71yxZN3d3iRxqwOVuVcNzqg==
-X-Google-Smtp-Source: ABdhPJyKr+yRmfu3QfMsb5kxLGaVKAzT9Wb3LQ2fbclwZQ2v3rwZAJtv1hhpHlD0o/cqCFNhP50U6g==
-X-Received: by 2002:a17:902:8a89:b029:e7:1029:8a46 with SMTP id p9-20020a1709028a89b02900e710298a46mr14434742plo.33.1616767272190;
-        Fri, 26 Mar 2021 07:01:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f14sm9800693pfk.92.2021.03.26.07.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 07:01:11 -0700 (PDT)
-Message-ID: <605de927.1c69fb81.410ac.7b09@mx.google.com>
-Date:   Fri, 26 Mar 2021 07:01:11 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230076AbhCZSVc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 14:21:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F0C0613AA;
+        Fri, 26 Mar 2021 11:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Rq1Wkfe97TAP70mWDQfISz+xukVofSXtbnoGrmbQ9J8=; b=io0FbbSM3/BD/ydzt3Ysi+iaye
+        MR04hu7SShsQpM+tIB6OZwZHzewWuBhZFC67jt2hAKJpf+/j9H/NgcA/AQbsKnV0efldjthHdAwWa
+        fTY0H1V5CoaveBLLrMm5sTZFVnR/zpaFJ1NGmd78oyzCTp9mItcciwsYyHIGkSY5qkiHjuqm/imSe
+        +0VUY7MAQKe175aA8slRkhG3IhqSwkp8ls4LUVwlGtScUXT78dghQ4BL5XdndjSjGHBY5nI7Nozqx
+        Ska/eLLfWErsiLUrIAxMNmZOpLKfKmUJiTzd3in+wwrzVAh/lrhBBpslYGiYnVTev6WGAPSCAj46+
+        yas48kiQ==;
+Received: from [2601:1c0:6280:3f0::4557]
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lPr4u-00FGSJ-76; Fri, 26 Mar 2021 18:21:06 +0000
+Subject: Re: linux-next: Tree for Mar 26 (drivers/mfd/lpc_sch.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Denis Turischev <denis@compulab.co.il>,
+        Lee Jones <lee.jones@linaro.org>
+References: <20210326193457.7887e09e@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <39a89498-6b81-4d4c-503f-c87805ca620a@infradead.org>
+Date:   Fri, 26 Mar 2021 11:20:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: next-20210326
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 326 runs, 36 regressions (next-20210326)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20210326193457.7887e09e@canb.auug.org.au>
+Content-Type: multipart/mixed;
+ boundary="------------977D343F67033B31386DE1CF"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 326 runs, 36 regressions (next-20210326)
-
-Regressions Summary
--------------------
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-bcm2837-rpi-3-b-32           | arm  | lab-baylibre    | gcc-8    | bcm2835_=
-defconfig            | 1          =
-
-ox820-clouden...lug-series-3 | arm  | lab-baylibre    | gcc-8    | oxnas_v6=
-_defconfig           | 1          =
-
-qemu_arm-versatilepb         | arm  | lab-baylibre    | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-qemu_arm-versatilepb         | arm  | lab-broonie     | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-qemu_arm-versatilepb         | arm  | lab-cip         | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-qemu_arm-versatilepb         | arm  | lab-collabora   | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-qemu_arm-versatilepb         | arm  | lab-linaro-lkft | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-rk3288-rock2-square          | arm  | lab-collabora   | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-rk3288-rock2-square          | arm  | lab-collabora   | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defc...G_ARM_LPAE=3Dy | 1          =
-
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-stm32mp157c-dk2              | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-stm32mp157c-dk2              | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-stm32mp157c-dk2              | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-stm32mp157c-dk2              | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-210326/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20210326
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      931294922e65a23e1aad6398b9ae02df74044679 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-bcm2837-rpi-3-b-32           | arm  | lab-baylibre    | gcc-8    | bcm2835_=
-defconfig            | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dafce4d3f52ad9faf02b5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: bcm2835_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b-32.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b-32.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dafce4d3f52ad9faf0=
-2b6
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-ox820-clouden...lug-series-3 | arm  | lab-baylibre    | gcc-8    | oxnas_v6=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db26e38f7285d40af02f5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: oxnas_v6_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
-series-3.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
-series-3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db26e38f7285d40af0=
-2f6
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-qemu_arm-versatilepb         | arm  | lab-baylibre    | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dafe00e3c0d8f10af02bb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dafe00e3c0d8f10af0=
-2bc
-        failing since 128 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-qemu_arm-versatilepb         | arm  | lab-broonie     | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dafdf22374223adaf02bc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dafdf22374223adaf0=
-2bd
-        failing since 128 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-qemu_arm-versatilepb         | arm  | lab-cip         | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dafee5e304c2230af02b2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dafee5e304c2230af0=
-2b3
-        failing since 128 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-qemu_arm-versatilepb         | arm  | lab-collabora   | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605daf7f25e858da03af02d1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605daf7f25e858da03af0=
-2d2
-        failing since 128 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-qemu_arm-versatilepb         | arm  | lab-linaro-lkft | gcc-8    | versatil=
-e_defconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db4e2cabf2ce95baf02ba
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db4e2cabf2ce95baf0=
-2bb
-        failing since 128 days (last pass: next-20201113, first fail: next-=
-20201117) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-rk3288-rock2-square          | arm  | lab-collabora   | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dc486cec521b095af02b8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-collabora/baseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-collabora/baseline-rk3288-rock2-square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dc486cec521b095af0=
-2b9
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-rk3288-rock2-square          | arm  | lab-collabora   | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db6c6130ad99458af02c2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-collabora/baseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-collabora/baseline-rk3288-rock2-square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db6c6130ad99458af0=
-2c3
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defc...G_ARM_LPAE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db3f17347861a79af02c6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-8/lab-collabora/b=
-aseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy/gcc-8/lab-collabora/b=
-aseline-rk3288-rock2-square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db3f17347861a79af0=
-2c7
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db96e2293458fefaf02cf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-rock2-square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-rock2-square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db96e2293458fefaf0=
-2d0
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-rk3288-rock2-square          | arm  | lab-collabora   | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dc040b756897897af030f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-rk3288-rock2=
--square.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-rk3288-rock2=
--square.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dc040b756897897af0=
-310
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-stm32mp157c-dk2              | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db8c36caea23305af02b8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-stm32mp157c-dk2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-stm32mp157c-dk2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db8c36caea23305af0=
-2b9
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-stm32mp157c-dk2              | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db4c631ee21807caf02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-stm32mp157c-dk2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-stm32mp157c-dk2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db4c631ee21807caf0=
-2af
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-stm32mp157c-dk2              | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db61b7333785f29af02dc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-stm32mp157c-dk2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-stm32mp157c-dk2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db61b7333785f29af0=
-2dd
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-stm32mp157c-dk2              | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db76fcd21ba3094af02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-stm32mp157c-d=
-k2.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-stm32mp157c-d=
-k2.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db76fcd21ba3094af0=
-2af
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db9551b4c50c9f4af02b1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h2-plus-libretech-a=
-ll-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h2-plus-libretech-a=
-ll-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db9551b4c50c9f4af0=
-2b2
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db5098fe15cbf5daf02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h2-plus-libretech-a=
-ll-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h2-plus-libretech-a=
-ll-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db5098fe15cbf5daf0=
-2af
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db68523770d868eaf02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-libretech-all-=
-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-libretech-all-=
-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db68523770d868eaf0=
-2af
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db7edbbe7d506d4af02af
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h2-plus=
--libretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h2-plus=
--libretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db7edbbe7d506d4af0=
-2b0
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db15c3dca33818eaf02c5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sunxi_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-libretech-all-h3-=
-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-libretech-all-h3-=
-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db15c3dca33818eaf0=
-2c6
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dba2d6ec8630ae1af02ca
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h2-plus-orangepi-ze=
-ro.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h2-plus-orangepi-ze=
-ro.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dba2d6ec8630ae1af0=
-2cb
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db52d670f20f005af02c5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h2-plus-orangepi-ze=
-ro.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h2-plus-orangepi-ze=
-ro.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db52d670f20f005af0=
-2c6
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db721e1a0b4dfc3af02ba
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.=
-txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db721e1a0b4dfc3af0=
-2bb
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db89dcc213b8a3daf0322
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h2-plus=
--orangepi-zero.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h2-plus=
--orangepi-zero.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db89dcc213b8a3daf0=
-323
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db16cbff28f620faf02cb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sunxi_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h2-plus-orangepi-zero.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db16cbff28f620faf0=
-2cc
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605dbb14624247f804af02d4
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605dbb14624247f804af0=
-2d5
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db4e7cabf2ce95baf02bf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db4e7cabf2ce95baf0=
-2c0
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db6dbe1a0b4dfc3af02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db6dbe1a0b4dfc3af0=
-2af
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db8f8893ba600baaf02c6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h3-bana=
-napi-m2-plus.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h3-bana=
-napi-m2-plus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db8f8893ba600baaf0=
-2c7
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-bananapi-m2-plus    | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db16381ee03de16af02e9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sunxi_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-bananapi-m2-plus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db16381ee03de16af0=
-2ea
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | clang-10 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db6c884dd2a3d57af02ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3=
--cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-10/lab-baylibre/baseline-sun8i-h3-libretech-all-h3=
--cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db6c884dd2a3d57af0=
-2af
-        failing since 1 day (last pass: next-20210323, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | clang-11 | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db4f5acd590bb0faf02c7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-11 (Debian clang version 11.1.0-++20210204120158+1fdec=
-59bffc1-1~exp1~20210203230823.159)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h3-libretech-all-h3=
--cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/clang-11/lab-baylibre/baseline-sun8i-h3-libretech-all-h3=
--cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db4f5acd590bb0faf0=
-2c8
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db54c5d84868266af02cf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc=
-.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db54c5d84868266af0=
-2d0
-        new failure (last pass: next-20210324) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | multi_v7=
-_defc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db6712ab3b17b38af02f0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h3-libr=
-etech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/baseline-sun8i-h3-libr=
-etech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db6712ab3b17b38af0=
-2f1
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g                    | regressions
------------------------------+------+-----------------+----------+---------=
----------------------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre    | gcc-8    | sunxi_de=
-fconfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/605db1673dca33818eaf02db
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sunxi_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210326/arm/=
-sunxi_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h3-libretech-all-h3-cc.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/605db1673dca33818eaf0=
-2dc
-        failing since 1 day (last pass: next-20210324, first fail: next-202=
-10325) =
-
- =20
+This is a multi-part message in MIME format.
+--------------977D343F67033B31386DE1CF
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+On 3/26/21 1:34 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20210325:
+> 
+
+on i386 or x86_64:
+aha:
+# CONFIG_PCI is not set
+
+
+../drivers/mfd/lpc_sch.c:204:1: warning: data definition has no type or storage class
+ module_pci_driver(lpc_sch_driver);
+ ^~~~~~~~~~~~~~~~~
+../drivers/mfd/lpc_sch.c:204:1: error: type defaults to ‘int’ in declaration of ‘module_pci_driver’ [-Werror=implicit-int]
+../drivers/mfd/lpc_sch.c:204:1: warning: parameter names (without types) in function declaration
+../drivers/mfd/lpc_sch.c:197:26: warning: ‘lpc_sch_driver’ defined but not used [-Wunused-variable]
+ static struct pci_driver lpc_sch_driver = {
+                          ^~~~~~~~~~~~~~
+
+
+Full x86_64 randconfig file is attached.
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+--------------977D343F67033B31386DE1CF
+Content-Type: application/gzip;
+ name="config-r8469.gz"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="config-r8469.gz"
+
+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
+gw9XZd26/heLtw+AFFoCAA==
+--------------977D343F67033B31386DE1CF--

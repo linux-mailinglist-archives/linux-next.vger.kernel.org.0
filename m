@@ -2,90 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC7B34B26F
-	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 00:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C6C34B6DF
+	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 12:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhCZXDy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Mar 2021 19:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S230471AbhC0Lvf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 27 Mar 2021 07:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbhCZXDe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Mar 2021 19:03:34 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC506C0613AA;
-        Fri, 26 Mar 2021 16:03:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F6cw24Bzcz9sRR;
-        Sat, 27 Mar 2021 10:03:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616799811;
-        bh=oGsI+iyCmO62DOlPCWBz+yEM9Er6qmZ9DIaLppcrLcw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XdjBqPp0L+qKw3aCoGtVMP/6dJV14B6LPT8v+gxBXpOUKBrPAK74PbhXMPreqktSE
-         vh7gTlnUHE/U+BD1WSaVMPr4tO4RERQJYORu48Z6yBK/skPIL14v6oqbYk29aMKwMd
-         nKIlHurqd6I2XRNFYIy8QXnS4OlIRfHEVDLP0I0tueDdnYVjocqkiPwwozIQImmIsj
-         qWCVB+l4eF0ISkPTu+/LlDWxkZfoZw3IJuQcf1rLrKzOB5apwn9BcR0+k1YDFkTVNN
-         e2zHZ8QCToGkGUfTwmhQqmLtEPAZybf8P3/8ojwoW1qW57vbXHNe6GCd7c6cat6yip
-         TZaCywQlszKjA==
-Date:   Sat, 27 Mar 2021 10:03:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        with ESMTP id S230322AbhC0Lvd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 27 Mar 2021 07:51:33 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CBFC0613B1;
+        Sat, 27 Mar 2021 04:51:32 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id z9so7288626ilb.4;
+        Sat, 27 Mar 2021 04:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=/vGWWqK1/Olw4o2ExeQgX6UQxN4NCuhW5Q/AlSkWG+s=;
+        b=hFDpvqG+oPctLMM9QhB2UtjGqHpIOKomedazA5d1WNB0tI1pIQ7ibhQSAQDsg49rMd
+         x2WzQcP3pDj/zJcO1aRvo7aZ4sJSXKlxx1z6zmzqEQCm0QZhg7N04vhcIB3ImNEWQHpg
+         +R17I7ey/6YLo3oQ10OV5KuEAdgsplZBTD7yKX5qkLvMzbMFiQbR70lhhP6bMhfkqpET
+         wea8j/6KijJXM16lrL9wjZDK7JGG2cXrQ0Ru+KXOhFHJVYd3fI8WO0mb+Y95DeQf5+Pl
+         BpGBlT/ok2blT/i+6LkRDb8LNlWQNi1w4viuNSyb49gTB7nJ8+puV71w6J40sgiuJ/Ny
+         h6tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=/vGWWqK1/Olw4o2ExeQgX6UQxN4NCuhW5Q/AlSkWG+s=;
+        b=Uwoof5WnEI0hq7XAOev6MrnI22pRpzBss91cp5X26w2XfdrzmBTdMT9dVSzuwZLW+y
+         FUCAg/TOo2QNvSJxXU9QuLcNIaa08pXVc/dF9JLd8Xr9/6W1cIHwVAoBOeHDEgDGQpzr
+         o8cGWKyrlwaLAia6xc8fu+vK1Cxg7IqbVAzcII3KWkW39AjmgcmXFbLbOL8eZsXmElCw
+         6bwSms4GhbIAuXWIkl8Au3LDlcYZ6wGZQnjVv4cmir4eWAjhwjMwIGs1a3Q3Gw7DRMXb
+         AnX+B4b4KUabmwrKitYPXChEYv+W//wvpm5PdfNiwPT5yMXSu/AjE2XHK09zT8Pe1v0a
+         s0Tw==
+X-Gm-Message-State: AOAM530aQFOewgk6WK/cHw+ScBS5immVwzGqyVZQGmGko08zxvZLbH1c
+        RdmaozIkW/QYMPLrRZGCW3Nfg8jYmnAut8xY1hoYbb3ZiUl1BA==
+X-Google-Smtp-Source: ABdhPJwQ9iTxiPMa7n7QoOhCN3oct3cVVdCKkNqEuVuM98xrZ+ZkHqAar33WAktTuU6Z09kKod6OHyPnA9VmZg7DKi4=
+X-Received: by 2002:a92:c545:: with SMTP id a5mr13139278ilj.209.1616845891800;
+ Sat, 27 Mar 2021 04:51:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210322143714.494603ed@canb.auug.org.au> <20210322090036.GB10031@zn.tnic>
+ <CA+icZUVkE73_31m0UCo-2mHOHY5i1E54_zMb7yp18UQmgN5x+A@mail.gmail.com> <20210326131101.GA27507@zn.tnic>
+In-Reply-To: <20210326131101.GA27507@zn.tnic>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 27 Mar 2021 12:50:55 +0100
+Message-ID: <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net-next tree
-Message-ID: <20210327100328.1f486e9e@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 26, 2021 at 2:11 PM Borislav Petkov <bp@suse.de> wrote:
+>
+> On Fri, Mar 26, 2021 at 09:57:43AM +0100, Sedat Dilek wrote:
+> > The commit b90829704780 "bpf: Use NOP_ATOMIC5 instead of
+> > emit_nops(&prog, 5) for BPF_TRAMP_F_CALL_ORIG" is now in Linus Git
+> > (see [1]).
+> >
+> > Where will Stephen's fixup-patch be carried?
+> > Linux-next?
+> > net-next?
+> > <tip.git#x86/cpu>?
+>
+> I guess we'll resolve it on our end and pick up sfr's patch, most
+> likely.
+>
+> Thanks for letting me know.
+>
 
-Hi all,
+Sounds good to me.
 
-In commit
+So you need:
 
-  63c173ff7aa3 ("net: stmmac: Fix kernel panic due to NULL pointer derefere=
-nce of fpe_cfg")
+$ grep CONFIG_BPF_JIT= .config
+1795:CONFIG_BPF_JIT=y
 
-Fixes tag
+$ git grep CONFIG_BPF_JIT arch/x86/net/Makefile
+arch/x86/net/Makefile:        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+arch/x86/net/Makefile:        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
 
-  Fixes: 5a5586112b92 ("net: stmmac: support FPE link partner hand-shaking
+I wonder why Stephen's fixup-patch was not carried in recent
+Linux-next releases.
+Wild speculation - no random-config with x86(-64) plus CONFIG_BPF_JIT=y?
 
-has these problem(s):
+Anyway, I integrated Stephen's fixup-patch into my custom patchset.
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
+$ git log --oneline --author="Stephen Rothwell" v5.12-rc4..
+600417efac59 (for-5.12/x86-cpu-20210315-net-bpf-sfr) x86: fix up for
+"bpf: Use NOP_ATOMIC5 instead of emit_nops(&prog, 5) for
+BPF_TRAMP_F_CALL_ORIG"
 
-Please do not split Fixes tags over more than one line.
+Feel free to add my:
 
---=20
-Cheers,
-Stephen Rothwell
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v12.0.0-rc3 (x86-64)
 
---Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBeaEAACgkQAVBC80lX
-0GxhHwgApM2BCTp73PRTSGiKAvGgnGAnOW0697Fm6c09hS8NXSZ5Oww2r73uzciJ
-E62aMrQ5B5RRAkr6bA4M0/Vmr6qUDQtIJhSCz7KGrl1VQTJ6mcu05I03rekabZXK
-LIVtHC/luSVboOaBbO70/vCMWgNBuf8qraDW/HfKZSEmauh66zt737GPO/XQ6+w1
-ylBQDoDEbyn0WTRWHobVS5TjEcu8J4ODw2xmsn0GdQWi1b+q1aksdFHxW1AbU+nH
-I1FnlOAvT4yEC/bQzjQxuDR0ga+XTlHRjTptiXmEETXKBOXxPDK4ayIlkjN3qViv
-gbje6eTd9rtbRMWA62CfefHlGiZwTw==
-=7+rM
------END PGP SIGNATURE-----
-
---Sig_/fz1W8CjW9ZKjdjEM9sQ+mFU--
+- Sedat -

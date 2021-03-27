@@ -2,59 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C6C34B6DF
-	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 12:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A39534B984
+	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 22:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbhC0Lvf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 27 Mar 2021 07:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbhC0Lvd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 27 Mar 2021 07:51:33 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CBFC0613B1;
-        Sat, 27 Mar 2021 04:51:32 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id z9so7288626ilb.4;
-        Sat, 27 Mar 2021 04:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=/vGWWqK1/Olw4o2ExeQgX6UQxN4NCuhW5Q/AlSkWG+s=;
-        b=hFDpvqG+oPctLMM9QhB2UtjGqHpIOKomedazA5d1WNB0tI1pIQ7ibhQSAQDsg49rMd
-         x2WzQcP3pDj/zJcO1aRvo7aZ4sJSXKlxx1z6zmzqEQCm0QZhg7N04vhcIB3ImNEWQHpg
-         +R17I7ey/6YLo3oQ10OV5KuEAdgsplZBTD7yKX5qkLvMzbMFiQbR70lhhP6bMhfkqpET
-         wea8j/6KijJXM16lrL9wjZDK7JGG2cXrQ0Ru+KXOhFHJVYd3fI8WO0mb+Y95DeQf5+Pl
-         BpGBlT/ok2blT/i+6LkRDb8LNlWQNi1w4viuNSyb49gTB7nJ8+puV71w6J40sgiuJ/Ny
-         h6tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=/vGWWqK1/Olw4o2ExeQgX6UQxN4NCuhW5Q/AlSkWG+s=;
-        b=Uwoof5WnEI0hq7XAOev6MrnI22pRpzBss91cp5X26w2XfdrzmBTdMT9dVSzuwZLW+y
-         FUCAg/TOo2QNvSJxXU9QuLcNIaa08pXVc/dF9JLd8Xr9/6W1cIHwVAoBOeHDEgDGQpzr
-         o8cGWKyrlwaLAia6xc8fu+vK1Cxg7IqbVAzcII3KWkW39AjmgcmXFbLbOL8eZsXmElCw
-         6bwSms4GhbIAuXWIkl8Au3LDlcYZ6wGZQnjVv4cmir4eWAjhwjMwIGs1a3Q3Gw7DRMXb
-         AnX+B4b4KUabmwrKitYPXChEYv+W//wvpm5PdfNiwPT5yMXSu/AjE2XHK09zT8Pe1v0a
-         s0Tw==
-X-Gm-Message-State: AOAM530aQFOewgk6WK/cHw+ScBS5immVwzGqyVZQGmGko08zxvZLbH1c
-        RdmaozIkW/QYMPLrRZGCW3Nfg8jYmnAut8xY1hoYbb3ZiUl1BA==
-X-Google-Smtp-Source: ABdhPJwQ9iTxiPMa7n7QoOhCN3oct3cVVdCKkNqEuVuM98xrZ+ZkHqAar33WAktTuU6Z09kKod6OHyPnA9VmZg7DKi4=
-X-Received: by 2002:a92:c545:: with SMTP id a5mr13139278ilj.209.1616845891800;
- Sat, 27 Mar 2021 04:51:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210322143714.494603ed@canb.auug.org.au> <20210322090036.GB10031@zn.tnic>
- <CA+icZUVkE73_31m0UCo-2mHOHY5i1E54_zMb7yp18UQmgN5x+A@mail.gmail.com> <20210326131101.GA27507@zn.tnic>
-In-Reply-To: <20210326131101.GA27507@zn.tnic>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 27 Mar 2021 12:50:55 +0100
-Message-ID: <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S230176AbhC0V1G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 27 Mar 2021 17:27:06 -0400
+Received: from ozlabs.org ([203.11.71.1]:48485 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230372AbhC0V0t (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 27 Mar 2021 17:26:49 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F7Bjt4xsNz9sVt;
+        Sun, 28 Mar 2021 08:26:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1616880407;
+        bh=acqgKxCeO7hqTrXVeIMMyhTANXyE6FspskuhoHoabeI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VTK1Wur+ztX/rjZhjerfEtw5jDfJg1L0kSK7tpi5PoQvX0CakzIYjrlBH+JW+T8oq
+         ax8PWaa+rluZstWR1suGQ1y85Akrt75Jt+a6MpZLuLKz8WKX89JXSSfr30ZP1UT79Y
+         K0xvO0x4qTC9sMnflkqfxVARvXF9dCgJcmG5ywUW5xt3reyYfwrSqCThdphVetFJ/D
+         OLKBdPUg7tkvJdjoLZduZapFFjXtX6KZSjzqE2zvXL5rwe7WOV6y9EWCMbif6Rm8D0
+         PSOzVxniWak9g84aT//smz5o8TrSytJrVSc1/K8TK2hspnJTimAFxLaFV0VXYRzN8x
+         V2RYBuRlvp6fw==
+Date:   Sun, 28 Mar 2021 08:26:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         David Miller <davem@davemloft.net>,
@@ -64,53 +40,58 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20210328082641.7afcb938@canb.auug.org.au>
+In-Reply-To: <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
+References: <20210322143714.494603ed@canb.auug.org.au>
+        <20210322090036.GB10031@zn.tnic>
+        <CA+icZUVkE73_31m0UCo-2mHOHY5i1E54_zMb7yp18UQmgN5x+A@mail.gmail.com>
+        <20210326131101.GA27507@zn.tnic>
+        <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/nk1dXU/2q6Bom9V335gGlVC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 2:11 PM Borislav Petkov <bp@suse.de> wrote:
+--Sig_/nk1dXU/2q6Bom9V335gGlVC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Sedat,
+
+On Sat, 27 Mar 2021 12:50:55 +0100 Sedat Dilek <sedat.dilek@gmail.com> wrot=
+e:
 >
-> On Fri, Mar 26, 2021 at 09:57:43AM +0100, Sedat Dilek wrote:
-> > The commit b90829704780 "bpf: Use NOP_ATOMIC5 instead of
-> > emit_nops(&prog, 5) for BPF_TRAMP_F_CALL_ORIG" is now in Linus Git
-> > (see [1]).
-> >
-> > Where will Stephen's fixup-patch be carried?
-> > Linux-next?
-> > net-next?
-> > <tip.git#x86/cpu>?
->
-> I guess we'll resolve it on our end and pick up sfr's patch, most
-> likely.
->
-> Thanks for letting me know.
->
+> I wonder why Stephen's fixup-patch was not carried in recent
+> Linux-next releases.
 
-Sounds good to me.
+It is part of the tip tree merge commit.  So it is not an explicit
+commit on its own, but the needed change is there.
 
-So you need:
+> Wild speculation - no random-config with x86(-64) plus CONFIG_BPF_JIT=3Dy?
 
-$ grep CONFIG_BPF_JIT= .config
-1795:CONFIG_BPF_JIT=y
+I detected it with an X86_64 allmodconfig build (which I do all day).
 
-$ git grep CONFIG_BPF_JIT arch/x86/net/Makefile
-arch/x86/net/Makefile:        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
-arch/x86/net/Makefile:        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
+--=20
+Cheers,
+Stephen Rothwell
 
-I wonder why Stephen's fixup-patch was not carried in recent
-Linux-next releases.
-Wild speculation - no random-config with x86(-64) plus CONFIG_BPF_JIT=y?
+--Sig_/nk1dXU/2q6Bom9V335gGlVC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Anyway, I integrated Stephen's fixup-patch into my custom patchset.
+-----BEGIN PGP SIGNATURE-----
 
-$ git log --oneline --author="Stephen Rothwell" v5.12-rc4..
-600417efac59 (for-5.12/x86-cpu-20210315-net-bpf-sfr) x86: fix up for
-"bpf: Use NOP_ATOMIC5 instead of emit_nops(&prog, 5) for
-BPF_TRAMP_F_CALL_ORIG"
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBfoxEACgkQAVBC80lX
+0GzmwQf/evaG3lEgE8Y63F70vODeFxpDYZeNvb+TMW8giGd04pBDi3JHjhYb0T1N
+DiaCiO+g4uiUwkahozzptlu2Ms5vDOYj2T88nh+S51TCHiBS9Jt7/JoSI8JVbUUp
+HEp3zJ+8DYEUJcUQFIU+N91pwWrteHrpYM+xznrMiWnjP42bMLxehD9ccOa2tu8b
+6mJLcB1CqAWUP6eZorOfhmk7NBiyyLtSmIgXbMgV/r0F4UQqZh4YaNAwln8Mc+FK
+Qn8+gPpooqVA4wZeW7baqJc6ppg60X7tf2mMgW8huCNUtpbc9Am9Jq1jz69SsMql
+6W5tKtqG8IJtKCTmn8WNwa1rgEvEGw==
+=g84u
+-----END PGP SIGNATURE-----
 
-Feel free to add my:
-
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v12.0.0-rc3 (x86-64)
-
-- Sedat -
+--Sig_/nk1dXU/2q6Bom9V335gGlVC--

@@ -2,96 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A39534B984
-	for <lists+linux-next@lfdr.de>; Sat, 27 Mar 2021 22:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2876D34BF45
+	for <lists+linux-next@lfdr.de>; Sun, 28 Mar 2021 23:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbhC0V1G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 27 Mar 2021 17:27:06 -0400
-Received: from ozlabs.org ([203.11.71.1]:48485 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230372AbhC0V0t (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 27 Mar 2021 17:26:49 -0400
+        id S231459AbhC1VYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Mar 2021 17:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbhC1VYV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Mar 2021 17:24:21 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36059C061756;
+        Sun, 28 Mar 2021 14:24:21 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F7Bjt4xsNz9sVt;
-        Sun, 28 Mar 2021 08:26:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F7pcd4WKrz9sWm;
+        Mon, 29 Mar 2021 08:24:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616880407;
-        bh=acqgKxCeO7hqTrXVeIMMyhTANXyE6FspskuhoHoabeI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VTK1Wur+ztX/rjZhjerfEtw5jDfJg1L0kSK7tpi5PoQvX0CakzIYjrlBH+JW+T8oq
-         ax8PWaa+rluZstWR1suGQ1y85Akrt75Jt+a6MpZLuLKz8WKX89JXSSfr30ZP1UT79Y
-         K0xvO0x4qTC9sMnflkqfxVARvXF9dCgJcmG5ywUW5xt3reyYfwrSqCThdphVetFJ/D
-         OLKBdPUg7tkvJdjoLZduZapFFjXtX6KZSjzqE2zvXL5rwe7WOV6y9EWCMbif6Rm8D0
-         PSOzVxniWak9g84aT//smz5o8TrSytJrVSc1/K8TK2hspnJTimAFxLaFV0VXYRzN8x
-         V2RYBuRlvp6fw==
-Date:   Sun, 28 Mar 2021 08:26:41 +1100
+        s=201702; t=1616966657;
+        bh=IGLnPqS1N2c54wBdV60WDs9h7JPWi2Jfhvczel1jzW8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h2XPPL0UCofdwxfRqW0Ky5X9K1FjrG36pNaCiMEBqMX7mCG6K7/BDFxBdbXIq1joS
+         /171h87aESmq5v8DNE5bETSWeOGEa8v/dRgQwnvrJuLoUxJ2q0LHOOxEPW1lP+uql9
+         vTHv+mLYkoQ3g8BM1eh2KotjbKIujpEBS3fEI0QdGMiJwDEfYcDnPb5VtgFt1EPW+B
+         1h+gbi+spwbIdmY3lkfMJb2n2XMRbBCWfWWhAHedWsiDQwTRbodf/fzghP9hzDsKBv
+         d26uRAxVjuemb6FU0yeGZZSG4trvSlun637wBxGmFYneR/EDl5sBOKDsX9gd4BFBf9
+         yXkhSL19DVd6Q==
+Date:   Mon, 29 Mar 2021 08:24:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Borislav Petkov <bp@suse.de>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Mark Yacoub <markyacoub@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20210328082641.7afcb938@canb.auug.org.au>
-In-Reply-To: <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
-References: <20210322143714.494603ed@canb.auug.org.au>
-        <20210322090036.GB10031@zn.tnic>
-        <CA+icZUVkE73_31m0UCo-2mHOHY5i1E54_zMb7yp18UQmgN5x+A@mail.gmail.com>
-        <20210326131101.GA27507@zn.tnic>
-        <CA+icZUVGvo7jVxMHoCYdU6Y1x=q3n6hVW4EoU_AsGvzozQLG5w@mail.gmail.com>
+Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
+Message-ID: <20210329082416.40b7f449@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nk1dXU/2q6Bom9V335gGlVC";
+Content-Type: multipart/signed; boundary="Sig_/2P1chjycQd+Ag4CgBhF6Sko";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nk1dXU/2q6Bom9V335gGlVC
+--Sig_/2P1chjycQd+Ag4CgBhF6Sko
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Sedat,
+Hi all,
 
-On Sat, 27 Mar 2021 12:50:55 +0100 Sedat Dilek <sedat.dilek@gmail.com> wrot=
-e:
->
-> I wonder why Stephen's fixup-patch was not carried in recent
-> Linux-next releases.
+Commit
 
-It is part of the tip tree merge commit.  So it is not an explicit
-commit on its own, but the needed change is there.
+  0ea5088407fa ("drm/amdgpu: Ensure that the modifier requested is supporte=
+d by plane.")
 
-> Wild speculation - no random-config with x86(-64) plus CONFIG_BPF_JIT=3Dy?
+is missing a Signed-off-by from its author.
 
-I detected it with an X86_64 allmodconfig build (which I do all day).
+The author is "Mark Yacoub <markyacoub@google.com>", but the SOB is
+"default avatarMark Yacoub <markyacoub@chromium.org>" :-(
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nk1dXU/2q6Bom9V335gGlVC
+--Sig_/2P1chjycQd+Ag4CgBhF6Sko
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBfoxEACgkQAVBC80lX
-0GzmwQf/evaG3lEgE8Y63F70vODeFxpDYZeNvb+TMW8giGd04pBDi3JHjhYb0T1N
-DiaCiO+g4uiUwkahozzptlu2Ms5vDOYj2T88nh+S51TCHiBS9Jt7/JoSI8JVbUUp
-HEp3zJ+8DYEUJcUQFIU+N91pwWrteHrpYM+xznrMiWnjP42bMLxehD9ccOa2tu8b
-6mJLcB1CqAWUP6eZorOfhmk7NBiyyLtSmIgXbMgV/r0F4UQqZh4YaNAwln8Mc+FK
-Qn8+gPpooqVA4wZeW7baqJc6ppg60X7tf2mMgW8huCNUtpbc9Am9Jq1jz69SsMql
-6W5tKtqG8IJtKCTmn8WNwa1rgEvEGw==
-=g84u
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBg9AAACgkQAVBC80lX
+0GzxEAgAgB3BUAEs1wZoEvJOHndoBddTkgP5EihRSSoZkE2H4tLGH82Y+/236aaO
+dEOI/9ph4i1lwRCUbkEbuVcwLXeUNc8FojUjU8E/q+cClBq2lg9dVak4Z1LVB2Wf
+tbk2fkvR8ydIug2uQ/JCMqKnSzy+kL2qWR+cdqtgUM/oT+nJeBpmPaKVwAuRlWoc
+1WPxc2by512Bly2sCoS5C4YDNbYKmJCi392gxSxSv+jLtMYUtgqmYoRXtRDwUsNF
+V3im4hCiTAFK7EyNzbhUgG0fo6qm+oRePXie0bOLrd6rUrsrSeqmBZu/68WIzSaV
+1eDud0RZyu0xzqd6JaZp/sIHA1GzWw==
+=oR91
 -----END PGP SIGNATURE-----
 
---Sig_/nk1dXU/2q6Bom9V335gGlVC--
+--Sig_/2P1chjycQd+Ag4CgBhF6Sko--

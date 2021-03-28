@@ -2,96 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E1034BF87
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 00:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D7034BF96
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 00:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbhC1WB0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Mar 2021 18:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbhC1WBX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Mar 2021 18:01:23 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B63C061756;
-        Sun, 28 Mar 2021 15:01:23 -0700 (PDT)
+        id S229950AbhC1WaN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Mar 2021 18:30:13 -0400
+Received: from ozlabs.org ([203.11.71.1]:53253 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229656AbhC1W3o (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 28 Mar 2021 18:29:44 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F7qRM31Fyz9sRf;
-        Mon, 29 Mar 2021 09:01:18 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F7r456X41z9sW1;
+        Mon, 29 Mar 2021 09:29:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1616968881;
-        bh=5HhQHmCdYgsPA8RXY8VYh1EyFWPd5mOOiVguF7B+feg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kd3Gu2MbJnjuLrePT/Dbc+t+TFMjNcfw8hENvAuymA+KFzIUMx0BqPRZZWRdMB10a
-         5ncEz6+Exr2VdJ/UBV6lqZMubK+0V+uo7vyZEtgxS55Kq8UCjfukUXO3vdhHBy7rqJ
-         OiE47UGHnsF60GQ/lfdNuxE5m+7fv1TxnGShi0Z4vCpN05HB02mX2QHjsC6rH0//dQ
-         amNX4zSyfwkUlUoqZ/ci0ICJJEQ5498SI9xJyOGVXArACZw2FkBlvTL+98YmnWtlNn
-         Qtt+ySEp+KbyOgtsQ6TANXYcbk0NvnXDGlaDVMGNoHg/IJUi4gMSKhZMnd5Ywza5Br
-         NmuTU/8Ez5V+g==
-Date:   Mon, 29 Mar 2021 09:01:17 +1100
+        s=201702; t=1616970582;
+        bh=/Yk/uP3DYf8BIbNht5Dxzz7iypK1cDTflMQYlH5EqdI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TR8/v4bVZ2ICKnSPstoX/gVQOrusbI413SiExBEsNm6h8yblDVVAxX3oZTSToeqF4
+         3ASwSHGLKOS+GnWIYBlp7VvJnoh+yEtLEYpifr+/kaXSmcYDtM1ZN3fa/mPcrbk2X3
+         2Hva4eNDE5L9li0bGl9JBabz//NS8FlOy6WZvYR+N+Bxpl2trA1rgmQaZEUCV8HpL2
+         Ng0R4INDjv6oCK2oVrr4P0bHISHxDYmpHdJbqFarBuVRLyoQMnm1uGtvOZMNHpI6+K
+         OlHUAdSe5hZr1F1zOByt/tnKhEN31QLf8XqOG+jKwq07kyN4zHvZJ1nQhyzfFQtQlt
+         WlEErzTBqY5Kg==
+Date:   Mon, 29 Mar 2021 09:29:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Imre Deak <imre.deak@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-intel-fixes
- tree
-Message-ID: <20210329090117.6b224931@canb.auug.org.au>
-In-Reply-To: <20210326195838.5ad4973b@canb.auug.org.au>
-References: <20210326195838.5ad4973b@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rich Wiley <rwiley@nvidia.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>
+Subject: linux-next: manual merge of the arm64 tree with Linus' tree
+Message-ID: <20210329092940.6363f0bb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//QsD_AfuZfie_FBZKD_mLXq";
+Content-Type: multipart/signed; boundary="Sig_/Z_H77_2QRaEQDJCFqAixY7d";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//QsD_AfuZfie_FBZKD_mLXq
+--Sig_/Z_H77_2QRaEQDJCFqAixY7d
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 26 Mar 2021 19:58:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the drm-intel-fixes tree, today's linux-next build
-> (htmldocs) produced this warning:
->=20
-> Documentation/gpu/i915:22: /drivers/gpu/drm/i915/intel_runtime_pm.c:423: =
-WARNING: Inline strong start-string without end-string.
->=20
-> Introduced by commit
->=20
->   8840e3bd981f ("drm/i915: Fix the GT fence revocation runtime PM logic")
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-This warning now exists in Linus' tree.
+  arch/arm64/include/asm/cpucaps.h
+
+between commit:
+
+  20109a859a9b ("arm64: kernel: disable CNP on Carmel")
+
+from Linus' tree and commit:
+
+  18107f8a2df6 ("arm64: Support execute-only permissions with Enhanced PAN")
+
+from the arm64 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//QsD_AfuZfie_FBZKD_mLXq
+diff --cc arch/arm64/include/asm/cpucaps.h
+index c40f2490cd7b,9e3ec4dd56d8..000000000000
+--- a/arch/arm64/include/asm/cpucaps.h
++++ b/arch/arm64/include/asm/cpucaps.h
+@@@ -66,8 -66,8 +66,9 @@@
+  #define ARM64_WORKAROUND_1508412		58
+  #define ARM64_HAS_LDAPR				59
+  #define ARM64_KVM_PROTECTED_MODE		60
+ -#define ARM64_HAS_EPAN				61
+ +#define ARM64_WORKAROUND_NVIDIA_CARMEL_CNP	61
+++#define ARM64_HAS_EPAN				62
+ =20
+--#define ARM64_NCAPS				62
+++#define ARM64_NCAPS				63
+ =20
+  #endif /* __ASM_CPUCAPS_H */
+
+--Sig_/Z_H77_2QRaEQDJCFqAixY7d
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBg/K0ACgkQAVBC80lX
-0GyYwggAj9F/JN4TaL4WF+9DYWxOQ/V8lMzzerBR+N65DxX/5p01HhKhdU/sJUVS
-wbrnNAJViURVtHEpnl28m9jSBgdXVnoCBgt/kMQCtIv+vGREZ9isJ2T0KOw11F2I
-1OeHLooITppCjoFM7Kngnt4yJXWXirSSQk68DD+TWyRAgHDPec7rv+3562nBcfny
-F643OjjAHwkC2AbofvDk/FrlbNR9+3oTYP4FpVna8HNmOgWvYIPEcWZB+maFJwgt
-xPLR5ryD4ReYvIvSILrfo2syTRR0mj11eyiKlH3cDp0FFRfqqOpolKtSc4N3q9eE
-j9CqoH1WiURuS0+Z+C3SAj8jSBXD/w==
-=pIB0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBhA1QACgkQAVBC80lX
+0Gy2YggAh8C5PgKUKq1ULP2wMr9BSF3AA5tRSEq4oPvFXOVECZrea7mzePpZMLFN
+LAppINAydSh5+jt2y5k4EGafk0JYJgp+JiW3imRvsdcUL7RXUmHKHUrNZjXOzjAk
+T0qHphRgCKtkLGzkOhSoBtIBJqpTvypn9nfI9hjOwT8E6QFRlAsuIp0sXDR7jABL
+I2kUnLfYOHGP7kEglbF7c3PA0b93s4hs82NX5ji5kFh+dxDvwHknwbzdJvkd/44I
+wQeMeENyAiDMyETX8WxAFcvVZ/b3tCNa/vkWwzmk1Yqz7cEoC6+SRT9KKIK5w2qk
+P/URdClZ61W0q73fb0Iee4s+zQq6Gw==
+=or59
 -----END PGP SIGNATURE-----
 
---Sig_//QsD_AfuZfie_FBZKD_mLXq--
+--Sig_/Z_H77_2QRaEQDJCFqAixY7d--

@@ -2,56 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B54C134CCF0
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE12834CD04
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbhC2JXQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 05:23:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231587AbhC2JWv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 29 Mar 2021 05:22:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15BAC6192E;
-        Mon, 29 Mar 2021 09:22:49 +0000 (UTC)
-Date:   Mon, 29 Mar 2021 10:22:47 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
+        id S231659AbhC2J1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 05:27:00 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2744 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbhC2J05 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 05:26:57 -0400
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4F86Xq4FKBz684bW;
+        Mon, 29 Mar 2021 17:22:03 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 29 Mar 2021 11:26:56 +0200
+Received: from localhost (10.47.26.85) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Mon, 29 Mar
+ 2021 10:26:55 +0100
+Date:   Mon, 29 Mar 2021 10:25:34 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Will Deacon <will@kernel.org>,
+CC:     Greg KH <greg@kroah.com>, Sudeep Holla <sudeep.holla@arm.com>,
+        "Cristian Marussi" <cristian.marussi@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rich Wiley <rwiley@nvidia.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>
-Subject: Re: linux-next: manual merge of the arm64 tree with Linus' tree
-Message-ID: <20210329092247.GA6556@arm.com>
-References: <20210329092940.6363f0bb@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the staging tree with the scmi tree
+Message-ID: <20210329102534.00001a6a@Huawei.com>
+In-Reply-To: <20210329163700.673b51e9@canb.auug.org.au>
+References: <20210329163700.673b51e9@canb.auug.org.au>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329092940.6363f0bb@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.26.85]
+X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 09:29:40AM +1100, Stephen Rothwell wrote:
-> diff --cc arch/arm64/include/asm/cpucaps.h
-> index c40f2490cd7b,9e3ec4dd56d8..000000000000
-> --- a/arch/arm64/include/asm/cpucaps.h
-> +++ b/arch/arm64/include/asm/cpucaps.h
-> @@@ -66,8 -66,8 +66,9 @@@
->   #define ARM64_WORKAROUND_1508412		58
->   #define ARM64_HAS_LDAPR				59
->   #define ARM64_KVM_PROTECTED_MODE		60
->  -#define ARM64_HAS_EPAN				61
->  +#define ARM64_WORKAROUND_NVIDIA_CARMEL_CNP	61
-> ++#define ARM64_HAS_EPAN				62
->   
-> --#define ARM64_NCAPS				62
-> ++#define ARM64_NCAPS				63
->   
->   #endif /* __ASM_CPUCAPS_H */
+On Mon, 29 Mar 2021 16:37:00 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Thanks Stephen, it looks fine.
+> Hi all,
+> 
+> Today's linux-next merge of the staging tree got a conflict in:
+> 
+>   drivers/iio/common/scmi_sensors/scmi_iio.c
+> 
+> between commit:
+> 
+>   fc91d6b6f0ba ("iio/scmi: port driver to the new scmi_sensor_proto_ops interface")
+> 
+> from the scmi tree and commit:
+> 
+>   1b33dfa5d5f1 ("Merge remote-tracking branch 'local/ib-iio-scmi-5.12-rc2-take3' into togreg")
+> 
+> from the staging tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
 
--- 
-Catalin
+Thanks Stephen,
+
+Looks right. I'll check the overall result once your tree is public.
+
+Jonathan

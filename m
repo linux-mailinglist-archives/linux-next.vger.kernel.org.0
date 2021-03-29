@@ -2,89 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E837E34CCCA
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54C134CCF0
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbhC2JOy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 05:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbhC2JOf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 05:14:35 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F4AC061574;
-        Mon, 29 Mar 2021 02:14:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F86N25K2Lz9rx6;
-        Mon, 29 Mar 2021 20:14:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617009267;
-        bh=Gavol2XtuiEbDNv1Cl+fnnhJIOGpbKjp17lcBgR0KdU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ud6hfwzZXfmeHU3Uv2FMSAk4HdxNNQihp/c2bgPaIHUy82CmDhhgH7idYBZAo48+L
-         icoRnDAfO9O3VmPi4TBdsXLdBZjswfAXW8h1PYrxQ7bljuaeMo0w9Kugq7A3LiIc7F
-         u7edZN64/+Drr12OqAksCfek92eyctIdEZIc1z7nNE1WCdnxJnDIXD6MnqdsCfHRTG
-         K45Rpu56F/rG1M9wtDxRQf4NcVWf9EkQAUS3u5/mHIw8W8eL0K1LvPucb8pFT/aB2o
-         HQy2vznG3jSTxSWWndmC7KpQQ2uKqBqk6INGhq3VkRbNCVTxgREv0bQOZetKdWLiX7
-         sjZkm5trSqjqg==
-Date:   Mon, 29 Mar 2021 20:14:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>,
+        id S231490AbhC2JXQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 05:23:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54964 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231587AbhC2JWv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Mar 2021 05:22:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 15BAC6192E;
+        Mon, 29 Mar 2021 09:22:49 +0000 (UTC)
+Date:   Mon, 29 Mar 2021 10:22:47 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the overlayfs tree
-Message-ID: <20210329201426.78d4b28b@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rich Wiley <rwiley@nvidia.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>
+Subject: Re: linux-next: manual merge of the arm64 tree with Linus' tree
+Message-ID: <20210329092247.GA6556@arm.com>
+References: <20210329092940.6363f0bb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8_Y0NtmKr0EF6j0hJdQY_dZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329092940.6363f0bb@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8_Y0NtmKr0EF6j0hJdQY_dZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 29, 2021 at 09:29:40AM +1100, Stephen Rothwell wrote:
+> diff --cc arch/arm64/include/asm/cpucaps.h
+> index c40f2490cd7b,9e3ec4dd56d8..000000000000
+> --- a/arch/arm64/include/asm/cpucaps.h
+> +++ b/arch/arm64/include/asm/cpucaps.h
+> @@@ -66,8 -66,8 +66,9 @@@
+>   #define ARM64_WORKAROUND_1508412		58
+>   #define ARM64_HAS_LDAPR				59
+>   #define ARM64_KVM_PROTECTED_MODE		60
+>  -#define ARM64_HAS_EPAN				61
+>  +#define ARM64_WORKAROUND_NVIDIA_CARMEL_CNP	61
+> ++#define ARM64_HAS_EPAN				62
+>   
+> --#define ARM64_NCAPS				62
+> ++#define ARM64_NCAPS				63
+>   
+>   #endif /* __ASM_CPUCAPS_H */
 
-Hi all,
+Thanks Stephen, it looks fine.
 
-After merging the overlayfs tree, today's linux-next build (htmldocs)
-produced this warning:
-
-Documentation/devicetree/kernel-api:56: /home/sfr/next/next/drivers/of/over=
-lay.c:1184: WARNING: Inline emphasis start-string without end-string.
-
-Introduced by commit
-
-  24789c5ce5a3 ("of: overlay: detect cases where device tree may become cor=
-rupt")
-
-Probably exposed by commit
-
-  8c8239c2c1fb ("of: Add missing 'Return' section in kerneldoc comments")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8_Y0NtmKr0EF6j0hJdQY_dZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBhmnIACgkQAVBC80lX
-0GyDSgf9GL0kmLqm1QkF4JVZen2Ma8CZLnBrL6BedGtmmBthdCZdX3C+Fdg6Amq0
-6+MXVNNINyhZ14y+m/Soh94YPvvQRky14/SOweBI+R7Pkpkrakxe7aMDLo+Hiaky
-IL/I3JNKINGLTnGy7ikzyhOddgdrmobNPHkHVHCtvZmnY9koBZ75wEJHcH1ZDl9G
-vs4RbxmoD0v/EYfOHKh2Cd68NGyL+2eVPLVYscRa09vXHHeVOWo/S+naM9k6pq6T
-kjfvkYsS1lAR+8Qab7C0zp91c8UpcPcxEwmr+zE/1uMZ4HcxdHswxOZ1y/ADoXC9
-HXvvXGdRlbxykyDJ784FLbjFgfhQwA==
-=qkFu
------END PGP SIGNATURE-----
-
---Sig_/8_Y0NtmKr0EF6j0hJdQY_dZ--
+-- 
+Catalin

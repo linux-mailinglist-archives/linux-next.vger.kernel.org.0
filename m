@@ -2,117 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E24BD34CF24
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 13:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0249134D07B
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 14:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhC2Lc5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 07:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbhC2LcW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 07:32:22 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888ECC061574;
-        Mon, 29 Mar 2021 04:32:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d8so4250978plh.11;
-        Mon, 29 Mar 2021 04:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TwCNUI2IXe0SVeP2zDv3NgU8ThjpzCczkm9IKaW8+e8=;
-        b=IXWW2R9psjyfQ6Hz2lQvPrDrJrz+3VXwIqSnc4PtQ2IXYha/GI7nchwVVoH6WVcQd+
-         oajcG6o9tU2oAqMpL79GOmq3z6rfDlTTYaf3Pw9+SLwfm/5k3ezBrpgerx5q0hruTbWZ
-         YHBoKoe/AI/17stjEY7A+EzjT+5fSX8mgV57LIH17I85mFbRVY1o1KcwWtSZXUnuz4Ux
-         rjRhvNh3pJUhUiQIKimLi22s8jVZ8VZlURb69uz+icJ6gvJSbFybIydYhLgCMnOMhVvF
-         tqHAJEu6CeZha3tFo7V2E0RxIWllpD6bDcs5+BUVH5BJplcdg8swFhlMXMaDxntIVfag
-         XQaA==
+        id S231480AbhC2Mxk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 08:53:40 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:35805 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231384AbhC2MxW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 08:53:22 -0400
+Received: by mail-io1-f72.google.com with SMTP id v24so10773507ion.2
+        for <linux-next@vger.kernel.org>; Mon, 29 Mar 2021 05:53:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TwCNUI2IXe0SVeP2zDv3NgU8ThjpzCczkm9IKaW8+e8=;
-        b=asKZ7odExHsxnioBC+f5wbFiLBj1uaBs8BTg2K070erdTL5KVF44x4Yx+AorAe87aY
-         s3llVTstgOIxF3nmSiYGDef4Q5u+PYf4LReYGBGTGYrxoUAQ1evdIfNkQcZyqYi70pjp
-         QLdwcHudfVe9tupe3I2pQud9+TUdPhmghYCGGbW/21Rj0CwTvqx88umWD2BiYWw0EQqo
-         lQWwGZM4ZC7sIFpwKp9+E0+lb3y1asSZu/FsMfDaAnZVsiNF5NatP0IfUpGctFvTPdiA
-         G7zyAFwFpTNCVRPdrE6ghbO3XsJLP83k1bvLS8hvlImsBVpUFxCCDyKJqXITSDpbF6vD
-         VgUQ==
-X-Gm-Message-State: AOAM531ywTRwPpVZe63YHjTxyv3/KCbXFF1wBZTMOOJU2rv4cHbSyp8l
-        ALnnDq9Z0f9IIzCfJLVZd4nbKEyEZXWWc3xbCJkvLNVzagekOg==
-X-Google-Smtp-Source: ABdhPJzunwKWuEyrRiU1hdw/Vg8CKcbpCoNEivUT68tHY55yxPhzuKcqXufpft0DDp/CwLsJb5nwG8RGYjLB29cu+7Q=
-X-Received: by 2002:a17:90a:b311:: with SMTP id d17mr26657786pjr.228.1617017542094;
- Mon, 29 Mar 2021 04:32:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=V0Gwi+wlQ5f2PIPh/oIaNPNKDX012AEGSBqQqGQNeM4=;
+        b=T8W1ogdtI6szg/1qqHzU6WMZk/BJCJuXnNkz/SaG9OV5QZ5dX2hw8sM4JzUShbJtqQ
+         FvTHb1wGG03e6nqjOKCXkk4uKHudpGc2XGtKVMdGe2ziDuQ8lF3fakUWghYEfq35O4ze
+         wlu0dBJsfoPU0N/NkW6vBNQgiRYTuC2oxoCQIvVspSUDug3MtyPBQZ7QlfBCJj3Qnli1
+         Py2j3erNF8+tYN3SXa0qTig9kzWKzhj9lgKm/eq2/QKxG5lJhxwPzwjBZrIcnJxI+A4X
+         anCBBTXHHWKclJkGkg9zhGxyiwSZSN5oZ4J0KJjBixg+/yrzkvCTNRvvjUQ58ketTnZy
+         LvnQ==
+X-Gm-Message-State: AOAM533v4Phqgh0zJ7JLUVwz2/dCUrvbOscmA22on/a7GFE6dzxOnhwm
+        bBQDkKKpamF97MwXABllPUPXPXq31JtTn94vWxAXvokAX1RD
+X-Google-Smtp-Source: ABdhPJzALXmBUJbjNSgnodaCXGOwJKmmYf/zr9EtbxJc+pFtfOk6o574AeYN56Wys/uJsEGvQPg+okH7c2Zanfmbg8fEP1lc0EIU
 MIME-Version: 1.0
-References: <20210329194719.6d37fe53@canb.auug.org.au>
-In-Reply-To: <20210329194719.6d37fe53@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 29 Mar 2021 14:32:06 +0300
-Message-ID: <CAHp75VdSUVLknw11BcmZY=tLmOKYZWjUeo7PokMEHHSbm--qng@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the
- gpio-brgl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+X-Received: by 2002:a5d:9ac4:: with SMTP id x4mr19534296ion.117.1617022401535;
+ Mon, 29 Mar 2021 05:53:21 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 05:53:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d662d805beac5df7@google.com>
+Subject: [syzbot] linux-next build error (12)
+From:   syzbot <syzbot+78983c59ee6ab57e6fcb@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 12:07 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the akpm-current tree got a conflict in:
->
->   include/linux/bitmap.h
->
-> between commit:
->
->   f7d5fbad07a4 ("lib: bitmap: order includes alphabetically")
->
-> from the gpio-brgl tree and commit:
->
->   f3b90426c407 ("kernel.h: drop inclusion in bitmap.h")
->
-> from the akpm-current tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hello,
 
-Looks good to me, thanks, Stephen!
+syzbot found the following issue on:
 
-> diff --cc include/linux/bitmap.h
-> index 73d039476fa4,6cbcd9d9edd2..000000000000
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@@ -4,12 -4,11 +4,13 @@@
->
->   #ifndef __ASSEMBLY__
->
-> + #include <linux/align.h>
->  -#include <linux/types.h>
->   #include <linux/bitops.h>
-> - #include <linux/kernel.h>
-> + #include <linux/limits.h>
->   #include <linux/string.h>
->  +#include <linux/types.h>
->  +
->  +struct device;
->
->   /*
->    * bitmaps provide bit arrays that consume one or more unsigned
+HEAD commit:    9d49ed9c Add linux-next specific files for 20210329
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=159b39aad00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b55345a2d39e7782
+dashboard link: https://syzkaller.appspot.com/bug?extid=78983c59ee6ab57e6fcb
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+78983c59ee6ab57e6fcb@syzkaller.appspotmail.com
 
+failed to run ["make" "-j" "64" "ARCH=x86_64" "bzImage"]: exit status 2
 
--- 
-With Best Regards,
-Andy Shevchenko
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

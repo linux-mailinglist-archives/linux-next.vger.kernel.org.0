@@ -2,65 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0249134D07B
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 14:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F61634D243
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 16:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbhC2Mxk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 08:53:40 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:35805 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbhC2MxW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 08:53:22 -0400
-Received: by mail-io1-f72.google.com with SMTP id v24so10773507ion.2
-        for <linux-next@vger.kernel.org>; Mon, 29 Mar 2021 05:53:21 -0700 (PDT)
+        id S230052AbhC2OSj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 10:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229628AbhC2OSL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 10:18:11 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F73CC061574
+        for <linux-next@vger.kernel.org>; Mon, 29 Mar 2021 07:18:11 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v23so4458625ple.9
+        for <linux-next@vger.kernel.org>; Mon, 29 Mar 2021 07:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XkWm2uoX5PGUd0zTaPdRUkrT9tpPWJ/vjLUkOrtu204=;
+        b=UA30wCfs5nO+qxQceTlHPRwZMSd8MOIfNshtSoUs7cBBtGOsLJtJ662UUZGduUhTUD
+         PAr4/XYr2pRzFmO06086UJ+zaQpL/YHNKVQeSscCUpBXPKffbStpwoHxFYtK6/P7DSEZ
+         ZSYkfb+/+VYBx6/7WX+uPwWXJBohiyAWsz6iFXUKyjG33X9LDEbQdV+NbdeLl0Q5cD3N
+         q710mocMdyU0q3Umyx8CzkC48QhnOpj3lEVxMyePPGLNFZ/EOMwl8VxhQLWCWRuOKwEA
+         lqGLf9A2ZWwUrAnjTn965VZ52V6tZ/TnNmJTTep5zRT0nzzS+HlVJjZQ3j8hHC1b3pd8
+         7Mow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=V0Gwi+wlQ5f2PIPh/oIaNPNKDX012AEGSBqQqGQNeM4=;
-        b=T8W1ogdtI6szg/1qqHzU6WMZk/BJCJuXnNkz/SaG9OV5QZ5dX2hw8sM4JzUShbJtqQ
-         FvTHb1wGG03e6nqjOKCXkk4uKHudpGc2XGtKVMdGe2ziDuQ8lF3fakUWghYEfq35O4ze
-         wlu0dBJsfoPU0N/NkW6vBNQgiRYTuC2oxoCQIvVspSUDug3MtyPBQZ7QlfBCJj3Qnli1
-         Py2j3erNF8+tYN3SXa0qTig9kzWKzhj9lgKm/eq2/QKxG5lJhxwPzwjBZrIcnJxI+A4X
-         anCBBTXHHWKclJkGkg9zhGxyiwSZSN5oZ4J0KJjBixg+/yrzkvCTNRvvjUQ58ketTnZy
-         LvnQ==
-X-Gm-Message-State: AOAM533v4Phqgh0zJ7JLUVwz2/dCUrvbOscmA22on/a7GFE6dzxOnhwm
-        bBQDkKKpamF97MwXABllPUPXPXq31JtTn94vWxAXvokAX1RD
-X-Google-Smtp-Source: ABdhPJzALXmBUJbjNSgnodaCXGOwJKmmYf/zr9EtbxJc+pFtfOk6o574AeYN56Wys/uJsEGvQPg+okH7c2Zanfmbg8fEP1lc0EIU
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XkWm2uoX5PGUd0zTaPdRUkrT9tpPWJ/vjLUkOrtu204=;
+        b=ILCGaJ74/c2IWn7PM70xS4bMzUkVyptCImCS6M3WRtPymLO1ScDvhOxhBNGa8nx1R+
+         M3SoUzei6dDCBRkGC1yf1dUucMrraGuanS6dzIM6AGn7P14rrhfI5Q8ipooe8HSkF4k7
+         F0FN0/dwk22xlHAi6Kix8EBRe+pqSr3qFOxj03+pWffifhQP8QUglLk48WvKBqtqP/kR
+         IEix8+Dk1zADjjf+TpiRlzjCjozmVas9SGHG3sRtXh3hxNhB3jGGdEc15KESC8iSTWRV
+         0LrmPgENG6od9SdpdpEz4NMeRlYTY+MSCE0TBYHfbILk5S59fh4EXIagGYFntcWJWh4o
+         Fdvw==
+X-Gm-Message-State: AOAM530pvOo1z015Nfzn49n6Z3V6DD43GBKr8EQlilQV6QlfflzfROXr
+        5BQnlReR9E7PxGBOAfyMN33/YluSocuxo2VdQNuBjQ==
+X-Google-Smtp-Source: ABdhPJwRl43yxX2wogTr17ggEWSJRHuhBCv1opItQmAerLNpbYmDuMsp+DH3dlo7xrZ4+tbHg5yIahu6UX1G5IoPJlA=
+X-Received: by 2002:a17:902:7404:b029:e4:503b:f83d with SMTP id
+ g4-20020a1709027404b02900e4503bf83dmr28417127pll.35.1617027490669; Mon, 29
+ Mar 2021 07:18:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9ac4:: with SMTP id x4mr19534296ion.117.1617022401535;
- Mon, 29 Mar 2021 05:53:21 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 05:53:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d662d805beac5df7@google.com>
-Subject: [syzbot] linux-next build error (12)
-From:   syzbot <syzbot+78983c59ee6ab57e6fcb@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+References: <20210329082416.40b7f449@canb.auug.org.au>
+In-Reply-To: <20210329082416.40b7f449@canb.auug.org.au>
+From:   Mark Yacoub <markyacoub@google.com>
+Date:   Mon, 29 Mar 2021 10:17:59 -0400
+Message-ID: <CAC0gqY5+tcmNOoRrjiNMsffWbrQEF_pwjvne-oP+sGbr+84suA@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+oh this sucks. I'll look into my config and fix it. Thanks Stephen for
+bringing it to my attention!
 
-syzbot found the following issue on:
-
-HEAD commit:    9d49ed9c Add linux-next specific files for 20210329
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=159b39aad00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b55345a2d39e7782
-dashboard link: https://syzkaller.appspot.com/bug?extid=78983c59ee6ab57e6fcb
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+78983c59ee6ab57e6fcb@syzkaller.appspotmail.com
-
-failed to run ["make" "-j" "64" "ARCH=x86_64" "bzImage"]: exit status 2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On Sun, Mar 28, 2021 at 5:24 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   0ea5088407fa ("drm/amdgpu: Ensure that the modifier requested is supported by plane.")
+>
+> is missing a Signed-off-by from its author.
+>
+> The author is "Mark Yacoub <markyacoub@google.com>", but the SOB is
+> "default avatarMark Yacoub <markyacoub@chromium.org>" :-(
+>
+> --
+> Cheers,
+> Stephen Rothwell

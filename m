@@ -2,94 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C358F34CCA1
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C5434CCC3
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbhC2JEz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 05:04:55 -0400
-Received: from ozlabs.org ([203.11.71.1]:48089 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237499AbhC2JEM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 29 Mar 2021 05:04:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F868B6F3rz9rx6;
-        Mon, 29 Mar 2021 20:04:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617008651;
-        bh=3qlcorbKE/WPrfj99cXC8R6wsLqCHbeOJ6lOtj+arhw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mE8j05+qrhwDTkLAvsxl4voEy4Eryd2e46TrnjQFERVVQyfKDAx8UclxNIOWCQXQ/
-         1n5T+44CiGGMeRKLtRhE+Qs20nyFmzPsBuUffnrPkFeYWSlk5TNOUqUR8bv+GZP9T4
-         nhUUob1PJpOR9QysnGFGynmmWHDBFyaweiXFbFPR9Fn7hUmft/HrCUFMhkG+P/8gli
-         kHA1rxm8eYEJIDyBfgT9Ju5DANT6AexzJx42olk4vhWwPNHz3o0bDc4PIBG1o4zsQ1
-         sHMy4/Z2rf+Lq8pybMtUFiYUrQFEA40pQBuN0Sa2Bh13Ktjh96dpwDnFAZP54uJ9qq
-         E9YBNdR1FLCwQ==
-Date:   Mon, 29 Mar 2021 20:04:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grant Likely <grant.likely@linaro.org>,
+        id S231911AbhC2JIN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 05:08:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14946 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235976AbhC2JGe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 05:06:34 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F868W49QtzyN7t;
+        Mon, 29 Mar 2021 17:04:27 +0800 (CST)
+Received: from [127.0.0.1] (10.69.38.203) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Mon, 29 Mar 2021
+ 17:06:21 +0800
+Subject: Re: linux-next: build warnings after merge of the arm-perf tree
+To:     Will Deacon <will@kernel.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of Linus' tree
-Message-ID: <20210329200348.24a9a8be@canb.auug.org.au>
+References: <20210326195240.7b937560@canb.auug.org.au>
+ <c39fe821-3eee-9f2a-3539-6a1f2f415414@hisilicon.com>
+ <20210329084751.GA2965@willie-the-truck>
+From:   "liuqi (BA)" <liuqi115@huawei.com>
+Message-ID: <57d692c4-8469-c3d0-4e8a-3f01953ac5e4@huawei.com>
+Date:   Mon, 29 Mar 2021 17:06:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//vAhXD8SJIwHkVn8dXqsR7c";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210329084751.GA2965@willie-the-truck>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.38.203]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//vAhXD8SJIwHkVn8dXqsR7c
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging Linus' tree, today's linux-next build (htmldocs) produced
-these warnings:
+On 2021/3/29 16:47, Will Deacon wrote:
+> On Fri, Mar 26, 2021 at 05:07:41PM +0800, Shaokun Zhang wrote:
+>> Apologies for the mistake.
+>>
+>> Will, shall I send a new version v5 to fix this issue or other?
+> 
+> Please send additional patches on top now that these are queued.
+> 
+> Thanks,
+> 
+> Will
+> 
+> .
+> 
+We'll send a new patch to fix these warnings today, apologies for the 
+mistake again.
 
-include/linux/of.h:1211: warning: Function parameter or member 'output' not=
- described in 'of_property_read_string_index'
-include/linux/of.h:1211: warning: Excess function parameter 'out_string' de=
-scription in 'of_property_read_string_index'
+Thanks,
+Qi
 
-Introduced by commit
-
-  a87fa1d81a9f ("of: Fix overflow bug in string property parsing functions")
-
-include/linux/of.h:1480: warning: cannot understand function prototype: 'en=
-um of_overlay_notify_action '
-
-Introduced by commit
-
-  39a842e22c1b ("of/overlay: add of overlay notifications")
-
-I assume that these warnings have turned up now due to better(?) tooling.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//vAhXD8SJIwHkVn8dXqsR7c
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBhmAoACgkQAVBC80lX
-0GzcmggAgaAHsihegR6B/BLamV8sUI1bQFHJ4idRs3WGWmkkxWVUW1NfRbfk0U2U
-JkQ+YBWFRIkeLbr/j6J+Kt2onaYLRBZIW7jBSqt8Of9LOnDqqVvgVN9Pk3/aPsp3
-WtxziOeUpMaDkHGoEidtD+TeNsIYFLD05imzm3fo66VnSs7p/xjcyvOxTGPW3nVb
-raC0REvIN6dC7vD7s+w3tFS/X6O/cn9Zsj7jn1g6caIk7AXC/kvrgpTbYF61bWyU
-zYJys4LQuUnKvLyr4LdmvjzCuNy590DZyghEYxtk0/npSVb5uTviwLZvBvuF/Aji
-srcogS3AdUag44WTNrCQKshl0Jv3Ew==
-=NvnD
------END PGP SIGNATURE-----
-
---Sig_//vAhXD8SJIwHkVn8dXqsR7c--

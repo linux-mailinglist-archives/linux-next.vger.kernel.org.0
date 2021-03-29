@@ -2,90 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D19D34CC12
-	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C358F34CCA1
+	for <lists+linux-next@lfdr.de>; Mon, 29 Mar 2021 11:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235806AbhC2Iz2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Mar 2021 04:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbhC2Ix4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Mar 2021 04:53:56 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC167C061574;
-        Mon, 29 Mar 2021 01:53:55 -0700 (PDT)
+        id S234080AbhC2JEz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Mar 2021 05:04:55 -0400
+Received: from ozlabs.org ([203.11.71.1]:48089 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237499AbhC2JEM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Mar 2021 05:04:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F85wJ0VSpz9rx6;
-        Mon, 29 Mar 2021 19:53:52 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F868B6F3rz9rx6;
+        Mon, 29 Mar 2021 20:04:10 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617008032;
-        bh=9FpZTIiAkO/KGWTSSQIdoqFfbj5h3r5oJRwFFZQa5no=;
+        s=201702; t=1617008651;
+        bh=3qlcorbKE/WPrfj99cXC8R6wsLqCHbeOJ6lOtj+arhw=;
         h=Date:From:To:Cc:Subject:From;
-        b=oPg6t4s8hf7jnwNkkGgWauv+71ojy2Lr0iEBVzZAnxl+zkLRIL0A8yMSQVgwRrOia
-         /4OGskR55mpwZR8eaSJK2OSNUN7m0RoiEBt60nu7mC2SAB+Cq6jNVf7fhUNO708I5O
-         EdpSQywshkt7ObmxdlkoT5+HmtXOJCWjy/k/Al8s2n78DKkxF/QPspv2WO7lrdaLiu
-         tKTEZMdngr3kRZCiIbTR2uRoOaa0+tf5OX41c55mmUY81m1w+TByl0CjTnXjjkqPNe
-         V9r6mf0Y7fI2hlwIyTcYZgX8mkkG+LbfVugSAyTeSj34PwGb++q9WzRXWtneSCJjcy
-         WlCz8uq7WflLQ==
-Date:   Mon, 29 Mar 2021 19:53:51 +1100
+        b=mE8j05+qrhwDTkLAvsxl4voEy4Eryd2e46TrnjQFERVVQyfKDAx8UclxNIOWCQXQ/
+         1n5T+44CiGGMeRKLtRhE+Qs20nyFmzPsBuUffnrPkFeYWSlk5TNOUqUR8bv+GZP9T4
+         nhUUob1PJpOR9QysnGFGynmmWHDBFyaweiXFbFPR9Fn7hUmft/HrCUFMhkG+P/8gli
+         kHA1rxm8eYEJIDyBfgT9Ju5DANT6AexzJx42olk4vhWwPNHz3o0bDc4PIBG1o4zsQ1
+         sHMy4/Z2rf+Lq8pybMtUFiYUrQFEA40pQBuN0Sa2Bh13Ktjh96dpwDnFAZP54uJ9qq
+         E9YBNdR1FLCwQ==
+Date:   Mon, 29 Mar 2021 20:04:10 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Rob Herring <robherring2@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grant Likely <grant.likely@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the devicetree tree
-Message-ID: <20210329195351.3322aee1@canb.auug.org.au>
+Subject: linux-next: build warnings after merge of Linus' tree
+Message-ID: <20210329200348.24a9a8be@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7+1rzaokd/d=75ydLZbYNgw";
+Content-Type: multipart/signed; boundary="Sig_//vAhXD8SJIwHkVn8dXqsR7c";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7+1rzaokd/d=75ydLZbYNgw
+--Sig_//vAhXD8SJIwHkVn8dXqsR7c
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the devicetree tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging Linus' tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-drivers/of/base.c:1781: warning: Excess function parameter 'prob' descripti=
-on in '__of_add_property'
-drivers/of/base.c:1804: warning: Excess function parameter 'prob' descripti=
-on in 'of_add_property'
-drivers/of/base.c:1855: warning: Function parameter or member 'prop' not de=
-scribed in 'of_remove_property'
-drivers/of/base.c:1855: warning: Excess function parameter 'prob' descripti=
-on in 'of_remove_property'
+include/linux/of.h:1211: warning: Function parameter or member 'output' not=
+ described in 'of_property_read_string_index'
+include/linux/of.h:1211: warning: Excess function parameter 'out_string' de=
+scription in 'of_property_read_string_index'
 
 Introduced by commit
 
-  3637d49e1121 ("of: base: Fix some formatting issues and provide missing d=
-escriptions")
+  a87fa1d81a9f ("of: Fix overflow bug in string property parsing functions")
+
+include/linux/of.h:1480: warning: cannot understand function prototype: 'en=
+um of_overlay_notify_action '
+
+Introduced by commit
+
+  39a842e22c1b ("of/overlay: add of overlay notifications")
+
+I assume that these warnings have turned up now due to better(?) tooling.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7+1rzaokd/d=75ydLZbYNgw
+--Sig_//vAhXD8SJIwHkVn8dXqsR7c
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBhlZ8ACgkQAVBC80lX
-0GzeRwgAnMWic/qIZ6hmld7934po26vsc0QOzwY8UZto7aiDmTyx5ujmy8T+roHR
-phryMNZzZyntqBMbwqxJZYowD63dXcLIfpIyWZvN6KnIjb1i0Fuct+PJgTAIZx4E
-x9dxJkAWxcdiWy1Ak9ShBtYvLPKuRRCS21BNBKVxygmgkh6YQSBk8FZVQxh1Mxa3
-B3t22W3x7QjGUCC/CDsiJakiqDHwnxUhAZ2N/r/ZGCqz3UACJhyU0/pW1YUvTL3R
-M/4sGhTBOumyaTofWfuXUYM1OdtFr//5G6EXPAa0wEDABCsiZIi44zE3VGlIUPRR
-yU9qbYrXGmwj5vTYAV6uzV5pySO7jg==
-=xASS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBhmAoACgkQAVBC80lX
+0GzcmggAgaAHsihegR6B/BLamV8sUI1bQFHJ4idRs3WGWmkkxWVUW1NfRbfk0U2U
+JkQ+YBWFRIkeLbr/j6J+Kt2onaYLRBZIW7jBSqt8Of9LOnDqqVvgVN9Pk3/aPsp3
+WtxziOeUpMaDkHGoEidtD+TeNsIYFLD05imzm3fo66VnSs7p/xjcyvOxTGPW3nVb
+raC0REvIN6dC7vD7s+w3tFS/X6O/cn9Zsj7jn1g6caIk7AXC/kvrgpTbYF61bWyU
+zYJys4LQuUnKvLyr4LdmvjzCuNy590DZyghEYxtk0/npSVb5uTviwLZvBvuF/Aji
+srcogS3AdUag44WTNrCQKshl0Jv3Ew==
+=NvnD
 -----END PGP SIGNATURE-----
 
---Sig_/7+1rzaokd/d=75ydLZbYNgw--
+--Sig_//vAhXD8SJIwHkVn8dXqsR7c--

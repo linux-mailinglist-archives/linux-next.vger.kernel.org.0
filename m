@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC0534FFA2
-	for <lists+linux-next@lfdr.de>; Wed, 31 Mar 2021 13:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492F8350298
+	for <lists+linux-next@lfdr.de>; Wed, 31 Mar 2021 16:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235253AbhCaLn3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 31 Mar 2021 07:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S236156AbhCaOp5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 31 Mar 2021 10:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbhCaLnZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 07:43:25 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B4C061574
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 04:43:25 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id g10so7760413plt.8
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 04:43:25 -0700 (PDT)
+        with ESMTP id S236166AbhCaOpu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 10:45:50 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDB4C06175F
+        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 07:45:50 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id v10so9362324pfn.5
+        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 07:45:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UGpodPHkfXLm7iN56tDwGRyDh5EuD8H1YpMxQufPMD0=;
-        b=rwKHgWGBF7LbXnXNy5oGtdkj7nZFlz59noFuMNooFY6kaShHxbzRMz2I7d5nGgL7/t
-         +ok1CQz/P9V4NcwZTV2I0zxbXSPqbmClTwg/N6NxPY284O20IoD6Z14MbEqsJBz9AdNY
-         sjAmyPj74zOc/MnKuHRJS1kkUxVPpGUyhANWVh2yPxPTsW1uNnlblhzlrnN6pCrjWjSW
-         IBe48QfLRzk3/tqGPuo0GP3N63V3cnkBIG7dd0nll8vo3JVEl7KOi6ueOuAFcw+0L71G
-         vezVPvBBidgrSFC5btdWIO8bQk8h0Rkgcb0BZKA/blokIIYpu1h8vSipqhLmUXsk96rC
-         Ibfw==
+        bh=tuR3Hv076e26+xlhfVy+RVU9YGaEZoZ+Lpr3C0PuPj0=;
+        b=12oUV8qvnOtZlVRKX4+66fhJzTPpAlBAdDPmqnXbelpoS1psN2NsG6+yvWAXHkdfzR
+         pGr/aIhSbJpBDAUGUxG1w0MQRo+x0yfMZkhLkP2aKwQsUcg1jwmnt5lzNtlynqTpgMsu
+         +0txxi1AVE2pR1DYjnCJ1b52jDm6rGdpckh7Wa/wbDAcUVFdOQPXXxK3CflbZoG9OLAw
+         ZEImbz7L5c7G2zIV8JCj4Z0dsmUiO3t4SiobKVzIHzXC4XWRhpMu5Mmnkq5t2TQigD33
+         JFyYiqhLKgkYTPA/+k+Es7wroXG3oMIzwdTQRajYjOuiG+ffMc0nnsYbCnuDMOrC/hmy
+         U6ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UGpodPHkfXLm7iN56tDwGRyDh5EuD8H1YpMxQufPMD0=;
-        b=OVXkGenl4UzDqXXseYQU0pJ9H2vZFAt8ygS2xbx47mHhz+Ed4wPLPNdtk2fzJZsSDa
-         4QUpUu7KVwm+iku73fYsXyDhMySsXA7D6PITjSmyPad6UdfvbI09FFi+avGpyYAWdtPV
-         W0wBt7keGoFjX7P9bNPdQjijDEEhUGDXOoWrJApllTid5/gRwcOOJpLeCaX/TcLdD/JA
-         wEf+AC0LVw+i35eq89qmVftc1ze4L+r0AIUV5AbhZ9dxJJFMKgB0OvSue4ipZghJVpCm
-         ZBEpyyI0ivbjbq2ZS2urC/TdzcSnXCAWtigUEN1HdI48awontkEGdsYOX9e0bhiCH9Hz
-         ywRA==
-X-Gm-Message-State: AOAM530RqJHOX9jYzep2ovfPUesMcf9WsHTpl/agYBj1SNZZkf6kg704
-        Q5rA6FYmainbJ6nKUfPmFp3flBysiHXclUHP/XSBFg==
-X-Google-Smtp-Source: ABdhPJyQeEccOchdfuIdOfAs7vnS1u5W66NAQF5XOs+4FxaBFfEy50turP6fbzyVPqbmyOQiVacohw7vfOhJFSVtnrU=
-X-Received: by 2002:a17:902:da91:b029:e5:e7cf:d737 with SMTP id
- j17-20020a170902da91b02900e5e7cfd737mr2747859plx.24.1617191005204; Wed, 31
- Mar 2021 04:43:25 -0700 (PDT)
+        bh=tuR3Hv076e26+xlhfVy+RVU9YGaEZoZ+Lpr3C0PuPj0=;
+        b=CTylI+KmRzlWAKLcah5lE3pZKdjGrr95FRHNaINrv/xW+2IS25c35+daaB2bPpzrrF
+         pimIX2FM0efwSsQFM7ZKgELXL/zjy6QfmNSB3RtC8ZWHkBFSDzxw9Q+Q4AG7Q8np9J6s
+         CdWOdmQWl03DB+9KjBKhm1zxIxN5Hgpbr7K/q5EdV7wNdcULQdkoD14POzjYHO+OxHvb
+         pOMKbTvENruT74SrMcxyMa2DA0lha68GKIJsee/M/cvdkmLOEn61SYc/brUu6H4XNkPn
+         Q7k1QPBC0S6Ern6QLu+JV/qiiq++U5Z8sDyAjsONMB2919i+vRH9uqjlDsLKXZdC+Am6
+         pfOg==
+X-Gm-Message-State: AOAM530rtr3AUT/Z11M/ka6wEH7Q09rEurwHTCFoNr0Wc9WDTR3MmyM7
+        RmfCsFqgD0hhTTPcoTf9gxy9MWAzeoIWOCz260H44Q==
+X-Google-Smtp-Source: ABdhPJxkhEmyeADfWNgTHDVOe1oy2q+K3PVRvPiuuzPcDmxT3WXsOIdVzQgiycPQd4b3/r0/NQfTuSY7wqkPQUDakhc=
+X-Received: by 2002:a05:6a00:8c7:b029:20f:1cf4:d02 with SMTP id
+ s7-20020a056a0008c7b029020f1cf40d02mr3352305pfu.49.1617201949962; Wed, 31 Mar
+ 2021 07:45:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210329205249.6b557510@canb.auug.org.au> <83263d0d-1f3f-8a3c-8a95-49e0cfa15051@de.ibm.com>
  <4419611b-3282-2197-884c-332025cdada8@de.ibm.com> <CAMZfGtUaTdmpcw1dr_rWQZTz3UTh9ZFavr0WBSa_obENPasgFw@mail.gmail.com>
@@ -51,14 +51,14 @@ References: <20210329205249.6b557510@canb.auug.org.au> <83263d0d-1f3f-8a3c-8a95-
  <179f84ad-7b98-4bc5-f895-c19faabbb311@de.ibm.com>
 In-Reply-To: <179f84ad-7b98-4bc5-f895-c19faabbb311@de.ibm.com>
 From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 31 Mar 2021 19:42:48 +0800
-Message-ID: <CAMZfGtX0MvsXCE2DgBo=jsmTGWa5wcS40vaOJSBZ1U6Wnkx8Fw@mail.gmail.com>
+Date:   Wed, 31 Mar 2021 22:45:12 +0800
+Message-ID: <CAMZfGtVhL14_mLKKcPA+QFbKUDBSwKRR_srrGODk0nhcVH6KoA@mail.gmail.com>
 Subject: Re: [External] RE: kernel warning percpu ref in obj_cgroup_release
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-s390 <linux-s390@vger.kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -127,8 +127,20 @@ On Wed, Mar 31, 2021 at 2:22 PM Christian Borntraeger
 > >   }
 > >
 > >   #ifdef CONFIG_MEMCG_SWAP
+
+Hi Andrew,
+
+Now we have two choices to fix this issue.
+
+1) Send a v6 patchset (Use obj_cgroup APIs to charge kmem pages)
+    to fix this issue.
+2) Send a separate fix patch (Just like above).
+
+Both ways are ok for me. But I want to know which one is more
+convenient for you.
+
+Thanks.
+
 > >
 >
 > This one seems to do the trick, I can no longer see the warning.
-
-Thanks for your testing. I will send a fix patch.

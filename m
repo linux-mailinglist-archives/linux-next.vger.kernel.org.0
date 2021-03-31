@@ -2,55 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F6A3509E0
-	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 00:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DC93509E7
+	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 00:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbhCaV7y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 31 Mar 2021 17:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S232523AbhCaWAZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 31 Mar 2021 18:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbhCaV7p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 17:59:45 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8209AC061574
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 14:59:45 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id k23-20020a17090a5917b02901043e35ad4aso1916423pji.3
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 14:59:45 -0700 (PDT)
+        with ESMTP id S230284AbhCaWAD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 18:00:03 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FD5C061574
+        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 14:59:52 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id f17so8613132plr.0
+        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 14:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=o6cVP/Hyd+IJoAbbWeUqu70F8kY7jqZxnvxhQO4a7+E=;
-        b=J12K7YicqdLYYU1F6pb1bg/UgvJ7wVtUVaqnUZqNXzT3MDNvZFWYxPyUemdEjMP8TA
-         37Eah0fGI9crTuDJcKy7d4P3t4tK3iWzt4N/ZyyEwBfCP3urj8Zbc3LgQMpox8SdqLqb
-         FP6E1XWz+T84zJTnqc3APgoEcBgA4oSqjA+98=
+        bh=XTclIebc2gFw1AUuvlOqXBN/cAE04kAcYPmgSPAB9m8=;
+        b=ReObV+EuPukLxWh/51FutC15x91tOj+OUIMeKAzr/+bQMYDA9CEDsvj6D9wZkY5ToR
+         JjqbaV+DRZT3KX+uGG/m1MJ+5Rgas1N8c2Q9JiSmG/56dD9nsYTikbyWq6GtT99T1HlI
+         k4upMOeq088mRelDGhDTwIuVq45P6PN8kvM6A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=o6cVP/Hyd+IJoAbbWeUqu70F8kY7jqZxnvxhQO4a7+E=;
-        b=PnD0HWH8/Lq+rUbFW4KL8w6k9DrNxjiZrIoyRVNPV1rqSFDpi30kSbRLdoxNXhEkF0
-         YgEFeJ+TtWwxhsyKs5CDqZojX3dXJdRckuvMGCI2WedRjtRjIQMNNpef1cdB8vzOmWG5
-         UzC3Z4w92xwq/LANX/GafPcNUxQ7hk3u077R40q06trJe33M1gX6z9E5SXqIhT4Kbo0d
-         CPcFLVsrzYJTQF3ihtDwF6N7xDz5UTzdhHh6nshGAJbOj99FmbtzPCoxVxop/RKR+TTr
-         fa+VTI/RgDAGJpRpvqcoLLGNQw7cohBQyLHdBgWX1oDpSIjcQTh2g5k4cuunqmAWqqEF
-         QENQ==
-X-Gm-Message-State: AOAM530RMWeNuz9I0M6fJmiaEzau4YBP0YbD4JDR2QJwD6ICTzv7cfgG
-        bwBv2muu+pjN/QHk70AGVMj+8h6lYFU5pg==
-X-Google-Smtp-Source: ABdhPJw3IAweAz7FWYovvvotd5+zDf41UIjG/njGExPOfV4vCqAqmICRiktNQOJv4aLP+csI3Ckkxw==
-X-Received: by 2002:a17:90a:d58a:: with SMTP id v10mr5613036pju.36.1617227985157;
-        Wed, 31 Mar 2021 14:59:45 -0700 (PDT)
+        bh=XTclIebc2gFw1AUuvlOqXBN/cAE04kAcYPmgSPAB9m8=;
+        b=M6xN4Ce+ecChHAycCNNANrdtg6tSOECT1gHzbaw8P7jpwyfOmp1TAEKecQNvmHTIqk
+         lbpvcCCiShsPPlOURelnscKfWw2YYISDwJBU0BE/UVJ4Rz0TEcwS1hmWauK71pZhJS/w
+         vyBbfrTuIa75flG+uN+sccw92ykvsZB7EEdWpw7ZWTOrscDnU1USPCBbcpauqp+8WNyi
+         bmhLn4jlGshd3gq6IFI2NrmLfjs1AICdWU6H8dPZq6pn7xdQiMCplK/ZikQD7pJnVBLZ
+         DnCEO1hCHbc4bizUZvKFUFnYhV+kNW2RwvnW8Q8Ajuz7sU6Vr5yh8XEhoj5eWhgJ9sbD
+         huJQ==
+X-Gm-Message-State: AOAM531NFFYoa7ZcUtSuqfZatUobkmd7/2QxOKmmIbkdfZbR8bxbnMlF
+        5rl4x90b8IkbLE6TN8hIf2THIw==
+X-Google-Smtp-Source: ABdhPJwyQYa7wjDnYdv3AI7M654iXH6YkzCqKci09+3ot/Qq+AaJ0+V9X1HaY2WGNBNUALZvGs0pbw==
+X-Received: by 2002:a17:90a:7344:: with SMTP id j4mr5251307pjs.223.1617227992142;
+        Wed, 31 Mar 2021 14:59:52 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 11sm3393600pfn.146.2021.03.31.14.59.44
+        by smtp.gmail.com with ESMTPSA id t12sm3602156pga.85.2021.03.31.14.59.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 14:59:44 -0700 (PDT)
+        Wed, 31 Mar 2021 14:59:51 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Wed, 31 Mar 2021 14:59:44 -0700
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+Date:   Wed, 31 Mar 2021 14:59:51 -0700
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: mcp251xfd_dump_rx_ring(): Memory - illegal accesses
-Message-ID: <202103311459.93EB7DEBDC@keescook>
+Subject: Coverity: qcom_swrm_irq_handler(): Control flow issues
+Message-ID: <202103311459.82A93D8@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,26 +70,26 @@ You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
   None
-    e0ab3dd5f98f ("can: mcp251xfd: add dev coredump support")
+    c7d49c76d1d5 ("soundwire: qcom: add support to new interrupts")
 
 Coverity reported the following:
 
-*** CID 1503585:  Memory - illegal accesses  (OVERRUN)
-/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c: 190 in mcp251xfd_dump_rx_ring()
-184     static void mcp251xfd_dump_rx_ring(const struct mcp251xfd_priv *priv,
-185     				   struct mcp251xfd_dump_iter *iter)
-186     {
-187     	struct mcp251xfd_rx_ring *rx_ring;
-188     	unsigned int i;
-189
-vvv     CID 1503585:  Memory - illegal accesses  (OVERRUN)
-vvv     Overrunning array of 1 8-byte elements at element index 1 (byte offset 15) by dereferencing pointer "priv->rx + i".
-190     	mcp251xfd_for_each_rx_ring(priv, rx_ring, i)
-191     		mcp251xfd_dump_rx_ring_one(priv, iter, rx_ring);
-192     }
-193
-194     static void mcp251xfd_dump_tx_ring(const struct mcp251xfd_priv *priv,
-195     				   struct mcp251xfd_dump_iter *iter)
+*** CID 1503584:  Control flow issues  (NO_EFFECT)
+/drivers/soundwire/qcom.c: 446 in qcom_swrm_irq_handler()
+440     			if (!value)
+441     				continue;
+442
+443     			switch (value) {
+444     			case SWRM_INTERRUPT_STATUS_SLAVE_PEND_IRQ:
+445     				devnum = qcom_swrm_get_alert_slave_dev_num(swrm);
+vvv     CID 1503584:  Control flow issues  (NO_EFFECT)
+vvv     This less-than-zero comparison of an unsigned value is never true. "devnum < 0".
+446     				if (devnum < 0) {
+447     					dev_err_ratelimited(swrm->dev,
+448     					    "no slave alert found.spurious interrupt\n");
+449     				} else {
+450     					sdw_handle_slave_status(&swrm->bus, swrm->status);
+451     				}
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -95,8 +97,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1503585 ("Memory - illegal accesses")
-Fixes: e0ab3dd5f98f ("can: mcp251xfd: add dev coredump support")
+Addresses-Coverity-ID: 1503584 ("Control flow issues")
+Fixes: c7d49c76d1d5 ("soundwire: qcom: add support to new interrupts")
 
 Thanks for your attention!
 

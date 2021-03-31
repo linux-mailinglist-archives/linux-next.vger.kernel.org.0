@@ -2,104 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22F73509EC
-	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 00:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6133B350A1D
+	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 00:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbhCaWEY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 31 Mar 2021 18:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S232406AbhCaWUo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 31 Mar 2021 18:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhCaWDz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 18:03:55 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790BAC061574
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 15:03:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id nh23-20020a17090b3657b02900c0d5e235a8so2025266pjb.0
-        for <linux-next@vger.kernel.org>; Wed, 31 Mar 2021 15:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=9H7T43Cz6yUrqvvSm/QPDG7xiExrWpaXoxXTt8KFwjQ=;
-        b=BDbQvlPKacxqWUJc9Nv0uqpIJV/Wa2vjfjdON2MWCtAuzXuQqfgA06eMwHHeYaVJ2F
-         e9LRcYFFIizpUYzP1qYqq+W7LASKJczCDoqn7B+yD5VsatTCwHsBXI2QzlitVqiclqeL
-         vt24HtgLawGhQJIWk/5U9Diom3VdtXgUx0cLk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9H7T43Cz6yUrqvvSm/QPDG7xiExrWpaXoxXTt8KFwjQ=;
-        b=rHKQ4E62T7nTh8BhfnpUEGA1TWa68Qma31f5sSiX+pRjqEuZVGm6jPGAIy8hrNmFHq
-         kynqjwr6SEmnIV6oZGKrRjPK6lA+YQEPiP3GKNf6brLyMV/UMm9sQa1L9U0895E6Syp9
-         4PEYGBlWcAfUMyATLM/bZdEyrrlMoEs71qvZ87zvxYu9bDExNVmRChMLWYYJOUQowZiq
-         IDZ65sqS/xlwHUBAKvHKo2WnwMJ4Ez7pja8OhPbSSGSC8ubrP/LXWTo/E54kPr05eh9s
-         vvUktmi9Ybct8cYHAIBGvEknT/Ka4KIncdD5+vNNoyhQjbw+hXELe09YKE5WmFW1Qwuw
-         dhKQ==
-X-Gm-Message-State: AOAM531pZxNVh72PbgPubumG0eVpFdwCtsgzFuqYKYWrgkocwE6CjS/D
-        3OfFJlX9pZdideOPR8UcaaU9RQ==
-X-Google-Smtp-Source: ABdhPJz+xRtTeMc3BDNTyRV4j1De9zzI9D1MjfGZVUcx50QjGRjZ+He4wV9sSZIEsKj4g5AryzMJZw==
-X-Received: by 2002:a17:90a:b311:: with SMTP id d17mr5611127pjr.228.1617228235115;
-        Wed, 31 Mar 2021 15:03:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 202sm3250515pfu.46.2021.03.31.15.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 15:03:54 -0700 (PDT)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Wed, 31 Mar 2021 15:03:54 -0700
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Coverity: snd_ctl_disconnect_layer(): Possible Control flow issues
-Message-ID: <202103311503.E6CA7884@keescook>
+        with ESMTP id S229787AbhCaWUe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 18:20:34 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899ABC061574;
+        Wed, 31 Mar 2021 15:20:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F9gk455jmz9sVt;
+        Thu,  1 Apr 2021 09:20:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1617229230;
+        bh=fuNgT7aS+dH8rWhmk4dHk2bAcDwGs9Dhi1zxbtfYiTY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a6hxe7DGfFvO4ohAbbjfEaIzCbVBxm9Ue5YSfzmrKUNv6y+sSnJ71/f6VLNVCjbcj
+         XEcljaH65kYbmhTcOBAXsm5L6MmxJaNobyGNHv4tO1r+X0vE8X8Ta9/iR5fu9rYdPA
+         54cvsXdlQ81wsoWhhLiFaGGzDaR0NcV1nkOVeajdZVYYvpOlNhDCoeEHt/cslzer5G
+         1eijrdcc0mm2coUP+A3VJPr3DhYcR5Gm+Wt1Ir7kBSOTV+o9KSjXIX1wxzHtaixY2q
+         f+h9pKGSWY/ZLKAhdGypnoKbAM+0r4zbwgt9WCD7xkYZj7v9/DByFFq6TKGKC81Ckg
+         ir3lxuNF4wt5Q==
+Date:   Thu, 1 Apr 2021 09:20:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: linux-next: manual merge of the mediatek tree with the imx-mxs tree
+Message-ID: <20210401092027.1e4c8b05@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/A_Z4F_MLvA02L7lFY4gbo7T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+--Sig_/A_Z4F_MLvA02L7lFY4gbo7T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20210331 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Hi all,
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+Today's linux-next merge of the mediatek tree got a conflict in:
 
-  None
-    3f0638a0333b ("ALSA: control - add layer registration routines")
+  arch/arm64/configs/defconfig
 
-Coverity reported the following:
+between commit:
 
-*** CID 1503580:  Possible Control flow issues  (DEADCODE)
-/sound/core/control.c: 2082 in snd_ctl_disconnect_layer()
-2076     	down_write(&snd_ctl_layer_rwsem);
-2077     	for (lops2 = snd_ctl_layer, prev_lops2 = NULL; lops2; lops2 = lops2->next)
-2078     		if (lops2 == lops) {
-2079     			if (!prev_lops2)
-2080     				snd_ctl_layer = lops->next;
-2081     			else
-vvv     CID 1503580:  Possible Control flow issues  (DEADCODE)
-vvv     Execution cannot reach this statement: "prev_lops2->next = lops->next;".
-2082     				prev_lops2->next = lops->next;
-2083     			break;
-2084     		}
-2085     	up_write(&snd_ctl_layer_rwsem);
-2086     }
-2087     EXPORT_SYMBOL_GPL(snd_ctl_disconnect_layer);
+  94c586e5941a ("arm64: configs: enable FlexTimer alarm timer")
 
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
+from the imx-mxs tree and commit:
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1503580 ("Possible Control flow issues")
-Fixes: 3f0638a0333b ("ALSA: control - add layer registration routines")
+  fbbe38309d56 ("arm64: defconfig: Allow mt8173-based boards to boot from u=
+sb")
 
-Thanks for your attention!
+from the mediatek tree.
 
--- 
-Coverity-bot
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/configs/defconfig
+index ec94b0438ab2,f2dc42c9b932..000000000000
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@@ -996,7 -998,7 +1006,8 @@@ CONFIG_OWL_PM_DOMAINS=3D
+  CONFIG_RASPBERRYPI_POWER=3Dy
+  CONFIG_FSL_DPAA=3Dy
+  CONFIG_FSL_MC_DPIO=3Dy
+ +CONFIG_FSL_RCPM=3Dy
++ CONFIG_MTK_PMIC_WRAP=3Dy
+  CONFIG_QCOM_AOSS_QMP=3Dy
+  CONFIG_QCOM_COMMAND_DB=3Dy
+  CONFIG_QCOM_GENI_SE=3Dy
+
+--Sig_/A_Z4F_MLvA02L7lFY4gbo7T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBk9asACgkQAVBC80lX
+0GzhsQf/TLnYB/2EyzOfDsB+FGBzqUVDdU/aZyMKgfg/ck86PrpFzSKVbpCd0NTS
+c3oLa8Ry9n6iytpuqzHJuPdyK0pg4wgyhRe16PaX4UdxNbD1VZ/EBtie2xIuyDur
+9LAKQ+qXDLwBfUcStMs/OgDbWaPrLXlzodH2hn31pet6bqwe+hlPZacErwu7meE9
+nQBbl1+MSiewbAJ8T8nfolnCNu8ACnM8vfSJw+3j6iff1jopp7qVYljGSeMmgk6b
+lMJwyjXvTbzUF2y8uS0ZAa5WzqATn/Tk6Rbm/7X5o8Z6t5Cp/tGYFoYl7GpJQ5pC
+f9XicnQeJZMwx77tb4niBNqvpoxPUA==
+=WeGX
+-----END PGP SIGNATURE-----
+
+--Sig_/A_Z4F_MLvA02L7lFY4gbo7T--

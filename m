@@ -2,111 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6133B350A1D
-	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 00:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA104350B1D
+	for <lists+linux-next@lfdr.de>; Thu,  1 Apr 2021 02:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbhCaWUo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 31 Mar 2021 18:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbhCaWUe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 31 Mar 2021 18:20:34 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899ABC061574;
-        Wed, 31 Mar 2021 15:20:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4F9gk455jmz9sVt;
-        Thu,  1 Apr 2021 09:20:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617229230;
-        bh=fuNgT7aS+dH8rWhmk4dHk2bAcDwGs9Dhi1zxbtfYiTY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=a6hxe7DGfFvO4ohAbbjfEaIzCbVBxm9Ue5YSfzmrKUNv6y+sSnJ71/f6VLNVCjbcj
-         XEcljaH65kYbmhTcOBAXsm5L6MmxJaNobyGNHv4tO1r+X0vE8X8Ta9/iR5fu9rYdPA
-         54cvsXdlQ81wsoWhhLiFaGGzDaR0NcV1nkOVeajdZVYYvpOlNhDCoeEHt/cslzer5G
-         1eijrdcc0mm2coUP+A3VJPr3DhYcR5Gm+Wt1Ir7kBSOTV+o9KSjXIX1wxzHtaixY2q
-         f+h9pKGSWY/ZLKAhdGypnoKbAM+0r4zbwgt9WCD7xkYZj7v9/DByFFq6TKGKC81Ckg
-         ir3lxuNF4wt5Q==
-Date:   Thu, 1 Apr 2021 09:20:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229486AbhDAA0I (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 31 Mar 2021 20:26:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230291AbhDAAZr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 31 Mar 2021 20:25:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 54D2261008;
+        Thu,  1 Apr 2021 00:25:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1617236735;
+        bh=Ab/glsGI/Ay+0LKOxR15reT0g9n63sQ4EYBQkme/glk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sMNXmhP3VVvCLhrMsSNFJr93GA4t1FuSeAcAd1dsATz1H1ETHQe+7j1Pn9x5H/7I7
+         KilZRTncCp0oluT34j17LH7TKlKo3hOG/jwO5/OgTf0r6WpCiKVo2srh5WLZ5SimbT
+         cvcnJYM0EWuv4qhJkCy9N90zSUEazUzCl5hZKj2M=
+Date:   Wed, 31 Mar 2021 17:25:34 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Walle <michael@walle.cc>
-Subject: linux-next: manual merge of the mediatek tree with the imx-mxs tree
-Message-ID: <20210401092027.1e4c8b05@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A_Z4F_MLvA02L7lFY4gbo7T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Yang Shi <shy828301@gmail.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>
+Subject: Re: [External] RE: kernel warning percpu ref in obj_cgroup_release
+Message-Id: <20210331172534.4ea75eda7e7accd166eef8b4@linux-foundation.org>
+In-Reply-To: <CAMZfGtVhL14_mLKKcPA+QFbKUDBSwKRR_srrGODk0nhcVH6KoA@mail.gmail.com>
+References: <20210329205249.6b557510@canb.auug.org.au>
+        <83263d0d-1f3f-8a3c-8a95-49e0cfa15051@de.ibm.com>
+        <4419611b-3282-2197-884c-332025cdada8@de.ibm.com>
+        <CAMZfGtUaTdmpcw1dr_rWQZTz3UTh9ZFavr0WBSa_obENPasgFw@mail.gmail.com>
+        <7c27fc2e-5cea-5a17-6e30-8ae1cb291274@de.ibm.com>
+        <CAMZfGtV9w24cJAwYsQuhvVpdLiYssjdfwfXApNK51zacr31c3w@mail.gmail.com>
+        <179f84ad-7b98-4bc5-f895-c19faabbb311@de.ibm.com>
+        <CAMZfGtVhL14_mLKKcPA+QFbKUDBSwKRR_srrGODk0nhcVH6KoA@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/A_Z4F_MLvA02L7lFY4gbo7T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 31 Mar 2021 22:45:12 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
 
-Hi all,
+> 
+> Hi Andrew,
+> 
+> Now we have two choices to fix this issue.
+> 
+> 1) Send a v6 patchset (Use obj_cgroup APIs to charge kmem pages)
+>     to fix this issue.
+> 2) Send a separate fix patch (Just like above).
+> 
+> Both ways are ok for me. But I want to know which one is more
+> convenient for you.
 
-Today's linux-next merge of the mediatek tree got a conflict in:
-
-  arch/arm64/configs/defconfig
-
-between commit:
-
-  94c586e5941a ("arm64: configs: enable FlexTimer alarm timer")
-
-from the imx-mxs tree and commit:
-
-  fbbe38309d56 ("arm64: defconfig: Allow mt8173-based boards to boot from u=
-sb")
-
-from the mediatek tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/configs/defconfig
-index ec94b0438ab2,f2dc42c9b932..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -996,7 -998,7 +1006,8 @@@ CONFIG_OWL_PM_DOMAINS=3D
-  CONFIG_RASPBERRYPI_POWER=3Dy
-  CONFIG_FSL_DPAA=3Dy
-  CONFIG_FSL_MC_DPIO=3Dy
- +CONFIG_FSL_RCPM=3Dy
-+ CONFIG_MTK_PMIC_WRAP=3Dy
-  CONFIG_QCOM_AOSS_QMP=3Dy
-  CONFIG_QCOM_COMMAND_DB=3Dy
-  CONFIG_QCOM_GENI_SE=3Dy
-
---Sig_/A_Z4F_MLvA02L7lFY4gbo7T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBk9asACgkQAVBC80lX
-0GzhsQf/TLnYB/2EyzOfDsB+FGBzqUVDdU/aZyMKgfg/ck86PrpFzSKVbpCd0NTS
-c3oLa8Ry9n6iytpuqzHJuPdyK0pg4wgyhRe16PaX4UdxNbD1VZ/EBtie2xIuyDur
-9LAKQ+qXDLwBfUcStMs/OgDbWaPrLXlzodH2hn31pet6bqwe+hlPZacErwu7meE9
-nQBbl1+MSiewbAJ8T8nfolnCNu8ACnM8vfSJw+3j6iff1jopp7qVYljGSeMmgk6b
-lMJwyjXvTbzUF2y8uS0ZAa5WzqATn/Tk6Rbm/7X5o8Z6t5Cp/tGYFoYl7GpJQ5pC
-f9XicnQeJZMwx77tb4niBNqvpoxPUA==
-=WeGX
------END PGP SIGNATURE-----
-
---Sig_/A_Z4F_MLvA02L7lFY4gbo7T--
+Either is OK.  2) is easier.

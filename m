@@ -2,86 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78713548A9
-	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 00:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FA33548AB
+	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 00:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbhDEWhc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Apr 2021 18:37:32 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45281 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233018AbhDEWhb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 5 Apr 2021 18:37:31 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FDlsH2Vw5z9sV5;
-        Tue,  6 Apr 2021 08:37:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617662243;
-        bh=KmYqLvIVloHRtDcUxm3zTHqSNmjOOTi85OC+1VxA51Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ozRi5pH5Lvo53wIsNaMB/3aNV/2YSPLrkSMNfjsUyjG64rcYx9WWefhPAXoSRWH3U
-         71eotvDNaD9ykdnzmmTESVlGu6pLE72PKMaYTGdM+28eQMMCuUkQU8SdZcXr4F3Bgu
-         oh349s8mxndoIMjLcEZGf7Ad2IId45Jyv0uJxZUlYRLaT/MrEHhfzLoJMmKYLPYhQn
-         G53lEuWqo1DUaYpT2ayFbXlu/T9iM8DiXRKWGFUPnOk7YYgu5zGMHD8ihcEKApKmMk
-         E7oxUqi80iWw/uzvUEShnRtd6xAiJl8EORIKcEpOcXBSrxj7WQIAhenad4KtNoHAJD
-         4Rz6RL5w5q1gg==
-Date:   Tue, 6 Apr 2021 08:37:22 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S233053AbhDEWjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Apr 2021 18:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233018AbhDEWjs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Apr 2021 18:39:48 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A30C06174A
+        for <linux-next@vger.kernel.org>; Mon,  5 Apr 2021 15:39:40 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id f12so6187457wro.0
+        for <linux-next@vger.kernel.org>; Mon, 05 Apr 2021 15:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EEzk1zAVkLj1XoOLcUxtr/QN1pNMeMW9ckBMVbWeu5c=;
+        b=CrZ8IZ9ad6jmgzbY0P3H+Bnd+RihRC3P3I2EEhspU3h5/8RSFMIkswXKlzoLZ9FFJt
+         xR6EDdthzkgL7ImvmFtEDs2TDNi6lHSj7Q02M51j+/RPqgBw70S8udo+D1ymn72pZjva
+         Z/PkdinE2P3SfxtTQC1ocxugaKb95WSpkcJXS1XdtJRIcf8WoxhloOndC7vKpT16rzBI
+         W+Uk6i8ITuoRW16MlT7HRVxrdSAHIkosMtXTVYnSaZqQjEy6cwlJY1LooZze5XmXFvLg
+         P4MZ5k2mNdaCKWeqKiEm6YDeflLoHM9Z//IgAC2G5akHU12oPkTFdVODDy82WeHUNtPv
+         E72g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EEzk1zAVkLj1XoOLcUxtr/QN1pNMeMW9ckBMVbWeu5c=;
+        b=oxVeQM6M/NEDavsNF4D5gX98823N8r3sD8+s9IIQzkC28SmsdqNaMNOBj525wg2ZuJ
+         HyIaOvwYy4pZMf0h+4kt4X7a6Fz0wa2g+XVpgyCHrSM+0yjFWLjU5HADKCyBsoT7YMa8
+         97lyxqEhkBg3y7LQtAfTw7XXalcg3gOVOy5dlve6qCJh61MhF1CGKej3N36LI1tDHLQ1
+         mVHPUBeVNedoimN8eq1xQAZSpfbVEJuZIyjk3iXE+8tyQDY8ojtlYbDnNzlC1Lgdrz9M
+         NscHGybcyCeVh1JMzs4ev05e1Z2meCb2irR7xPW8b6RlAj+t5j2xdUu2pmYF0dE+/9vN
+         csGw==
+X-Gm-Message-State: AOAM533+vD/x/tUFnh43kIK1Wom5SE18vn3yudL41Pi/lyFW3YLZ/FJ3
+        TYIIig1ZFQ/XVSTlfv+RDQesMI5FLhQ2YQ==
+X-Google-Smtp-Source: ABdhPJw3sXRyr9l7X/GE2pwmLUKpWCQEHF3APbhgzEe1EJHT8iNsuyKhykpITLGLwuDGdKzzGWypxQ==
+X-Received: by 2002:a5d:4537:: with SMTP id j23mr5271079wra.249.1617662379523;
+        Mon, 05 Apr 2021 15:39:39 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d506:6f5d:adb6:da14? ([2a01:e34:ed2f:f020:d506:6f5d:adb6:da14])
+        by smtp.googlemail.com with ESMTPSA id s9sm909578wmh.31.2021.04.05.15.39.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Apr 2021 15:39:39 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the thermal tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Guangqing Zhu <zhuguangqing83@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the thermal tree
-Message-ID: <20210406083722.74cbadcd@canb.auug.org.au>
+References: <20210406083545.150ae47e@canb.auug.org.au>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <5f17e143-246f-b1c4-2582-60db790ee0cd@linaro.org>
+Date:   Tue, 6 Apr 2021 00:39:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/StOpH8LohzsGZYQReRC+u9J";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210406083545.150ae47e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/StOpH8LohzsGZYQReRC+u9J
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 06/04/2021 00:35, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   5845dd350432 ("thermal/drivers/tsens: Fix missing put_device error")
+> 
+> Fixes tag
+> 
+>   Fixes: a7ff82976122 ("drivers: thermal: tsens: Merge tsens-common.c into
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+> 
+> Please do not split Fixes tages over more than one line.  Also, please
+> keep all the commit message tags together at the end of the commit
+> message.
 
-Hi all,
+Fixed, thanks!
 
-Commits
+  -- Daniel
 
-  523d7429aa26 ("dt-bindings: thermal: tsens: Document ipq8064 bindings")
-  96303bc4a751 ("thermal/drivers/tsens: Add support for ipq8064-tsens")
-  b60f78d26926 ("thermal/drivers/tsens: Drop unused define for msm8960")
-  09343bf70f9a ("thermal/drivers/tsens: Replace custom 8960 apis with gener=
-ic apis")
-  b7037a445f88 ("thermal/drivers/tsens: Fix bug in sensor enable for msm896=
-0")
-  fab775f3ad71 ("thermal/drivers/tsens: Use init_common for msm8960")
-  4d1d1e492db9 ("thermal/drivers/tsens: Convert msm8960 to reg_field")
-  3e7bf6fc5fe9 ("thermal/drivers/tsens: Don't hardcode sensor slope")
-  8a50bc57ffdb ("thermal/drivers/tsens: Add VER_0 tsens version")
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/StOpH8LohzsGZYQReRC+u9J
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBrkSIACgkQAVBC80lX
-0GzJ/wf9HkKH0q8E+WBABBacxu9CNc//qcd8EphZEw/RadpQjBXfEBywx2OIriwq
-zOUjg+iPtRz+A4q+7PPFfaU1mQEpXhecRZMVgHyyO60np4y1rGmltIpm8Ie3Rx/q
-QVUF3CM+FLCVu7RR/Ruc3Z7JCR7f6FlRbe/AXDWqf7rwb+zV/9vi5gNE25asnJn+
-3uWW5wY0QWPj8tNNzQ2ztzlqR/+SVNxhQVaaDDjZjay8fRQknfHLkR8d3m9G2HEj
-L5D0otA19g4sFrcZGKAhv5qUfokafwi9t2jxUHvbom2Vva4+vGgLKfRrNVNwAKYL
-C23cK2YM53pFM//FS6dCKCmJzokCOA==
-=qn1W
------END PGP SIGNATURE-----
-
---Sig_/StOpH8LohzsGZYQReRC+u9J--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

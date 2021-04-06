@@ -2,161 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9763D355561
-	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 15:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D80355615
+	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 16:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344571AbhDFNkM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Apr 2021 09:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbhDFNkL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Apr 2021 09:40:11 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3D4C06174A
-        for <linux-next@vger.kernel.org>; Tue,  6 Apr 2021 06:40:01 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bg21so4897377pjb.0
-        for <linux-next@vger.kernel.org>; Tue, 06 Apr 2021 06:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8AA1NTxNDOTyKv+8dG6e+QZFsMQstwucZfPgvAZgnaM=;
-        b=YRxPVldfi5tymfvXsHHfXSXCO+QyOT8R7hTiF/cVEHA197eAvWLMTlTT56/X9wHX/F
-         vsV71RGOilt9m26xj61uFUj816gpNrc0m+xHRgfNKGGH1tpYhHbatmiXiu+Ia6Ba0kcS
-         YXcAtbZaG+M+qvFd7FRCr3FXUoH2q0Tm5S0lzKuo7EltkYRRVzgVGs7/gsK46/fjGIZI
-         7RCHMiXvT0iH1CgA4Ie0B5SjWZOBw07Zxs8pGn38CysAMU+9KCpiMSI/LzD8OZWRDUw5
-         yDD2blznv+4KwkVzLwM/aC2P4QiLu9OkH5STllgudoAPe3bjR/y7K2HeHfc7RNWp95fM
-         UV+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8AA1NTxNDOTyKv+8dG6e+QZFsMQstwucZfPgvAZgnaM=;
-        b=muIRZ3L27uXi8PKvAy0nxN8yomxjTU5hXesr+pTkMUjhrWEsaHGUDWY4ISmgFYdyTe
-         0jPB7odQj3nLLiKaRGA7teu4E108tO9nHUUYs7F3afVa+Wp6eLjscdKUC8DYgqtIld72
-         ccTX/MkmEmZQC9OXj5ANCFe57FcXL1JZNex0h3gqBiE/w/Vy+dzOVYIzYRl49FvUkiQH
-         RoiUZAkBP8GGibJl8MvD6h+sbBl2QzJr0smJhWuo40neIlCsZHGMF7DKDA+sa9VmBn9i
-         9MeX3txH62PjMrXoA5NAbDSEG8RZXCRHolhqIXxBW63Pb6Fqtb0R04mf8+Wa8Z2Hf7z9
-         5qNg==
-X-Gm-Message-State: AOAM532N7NeQ048elS80EzWQrI+MaDuDA/lBmRz0XCAR7NPor0nALMfz
-        /vMyIpHwMhZ44uTZjUae538mzcKXWGwTWsK7
-X-Google-Smtp-Source: ABdhPJw2uPavhO200OnMliqx5krqEXF1F+WKWItBwx/jj4exkYwn3DhdTUnyvYha43p/w56pYact9Q==
-X-Received: by 2002:a17:902:9002:b029:e6:c95f:2a1d with SMTP id a2-20020a1709029002b02900e6c95f2a1dmr29072516plp.79.1617716401316;
-        Tue, 06 Apr 2021 06:40:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z16sm18514869pfc.139.2021.04.06.06.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 06:40:01 -0700 (PDT)
-Message-ID: <606c64b1.1c69fb81.effb6.e8cc@mx.google.com>
-Date:   Tue, 06 Apr 2021 06:40:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S232586AbhDFOHf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Apr 2021 10:07:35 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:50385 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233348AbhDFOHf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Apr 2021 10:07:35 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.nyi.internal (Postfix) with ESMTP id 82CC45C013A;
+        Tue,  6 Apr 2021 10:07:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 06 Apr 2021 10:07:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=/0Wz5dj/+IJAQKiJXxZGuUsNcOc
+        A/ivdlPyloiyjg7A=; b=C8Fx0OYhnahB2JZkXdAXd51Eo+c4hbTis0u4Rt35X0d
+        Fh5mttaU3nWqutgKa+/KgaIOfcyuvIah8UQPG/PnNhbzpEdvVt3nIkzyeDr/wLEN
+        5T6efiLYMKX7T1GaUSYE/qR+nePXzn1VKhJ17ZvoCLSDWO5IX4kgTEZk+kGjfXVb
+        XqIySIlJ7nM7O5R1h7KV3oNZBFJVbI2XghiGCP+sJKBREu01LtnroRt+enExB6lE
+        Ps7JYUALj2dkQmy9Wi4Wgtvu2SzaoDHq/pLw6qHjrbPk0z9ssJ9Un4ZTl25C+XuA
+        G9owpdVvOHbR8wAhhn3IIxZDSFvruMYXUnAULzGjjag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/0Wz5d
+        j/+IJAQKiJXxZGuUsNcOcA/ivdlPyloiyjg7A=; b=LocmciT57hPSRJ0mHcMZNG
+        bFnXj9a/8fLRb+R5wlnTXHvBjEFkmveVBh9bjbZUhGz71wnAobf3yjEJ1Dus79CC
+        rIuYGqQl6rjNy2zhWAlR95VE8+dNDGaLRszgzqXFbC1J/wsjKJxbWyrw3iryWTU8
+        vZy1/xOOpcwop1Ed9YHMQACSr6dh78I8iifn3IrNxptbyCD1Bu25H7n12cB7peBf
+        TAoM2fAbGBf8kYv5EgaGrC3TgDy6hofAHyYXBZ8bedQZmOtsOwTjazhgGzH+eV8H
+        eIjvpb+qR9tBBZP4NbukvG5AAqLSx/ehf14eAOgh0mzyh2QpJWeyeOJFpmYj9nUA
+        ==
+X-ME-Sender: <xms:HmtsYOR9knLYNl34TX8LJs7Czk9f0dI-pi2BD0mu5yOvFKrQS_PZBA>
+    <xme:HmtsYOV_lJk-RBmvtRuqxeT_bqM7ptxT8AwR51YvM88p3PeVFE7KAUvO8lXTsgego
+    u9-h_rMCMOTbg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudejhedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
+    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:HmtsYIZAXiVaNIJuh3xc-WfKQDUpVCXqcNh-vfGOyzMNdDhn0EqIFw>
+    <xmx:HmtsYM0S4_PXHuSkXONVm4omJ20Xdydj8C4TfDO0fPKEfqjkvlEEjw>
+    <xmx:HmtsYCh9JUSuwGHfyQWCjA7YzByGrQaeiNgqFmjI-l_lZdi71qqTkg>
+    <xmx:H2tsYFNC8u19bFVASUVltO8J1rl4c4g_x8Eyx6NZQe9iZtYHZypErg>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0263524005E;
+        Tue,  6 Apr 2021 10:07:25 -0400 (EDT)
+Date:   Tue, 6 Apr 2021 16:07:23 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the char-misc tree
+Message-ID: <YGxrG16+8n8Wxs/c@kroah.com>
+References: <20210406214441.5744648c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.12-rc6-279-gbfdbc2a91ef8
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 232 runs,
- 2 regressions (v5.12-rc6-279-gbfdbc2a91ef8)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210406214441.5744648c@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 232 runs, 2 regressions (v5.12-rc6-279-gbfdbc2=
-a91ef8)
+On Tue, Apr 06, 2021 at 09:44:41PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the char-misc tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/misc-devices/dw-xdata-pcie.rst:20: WARNING: Unexpected indentation.
+> Documentation/misc-devices/dw-xdata-pcie.rst:24: WARNING: Unexpected indentation.
+> Documentation/misc-devices/dw-xdata-pcie.rst:25: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/misc-devices/dw-xdata-pcie.rst:30: WARNING: Unexpected indentation.
+> Documentation/misc-devices/dw-xdata-pcie.rst:34: WARNING: Unexpected indentation.
+> Documentation/misc-devices/dw-xdata-pcie.rst:35: WARNING: Block quote ends without a blank line; unexpected unindent.
+> Documentation/misc-devices/dw-xdata-pcie.rst:40: WARNING: Unexpected indentation.
+> 
+> Introduced by commit
+> 
+>   e1181b5bbc3c ("Documentation: misc-devices: Add Documentation for dw-xdata-pcie driver")
 
-Regressions Summary
--------------------
+Gustavo, can you send a follow-on patch to fix this up?
 
-platform           | arch  | lab             | compiler | defconfig        =
-   | regressions
--------------------+-------+-----------------+----------+------------------=
----+------------
-imx6ul-pico-hobbit | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_defconf=
-ig | 1          =
+thanks,
 
-imx8mp-evk         | arm64 | lab-nxp         | gcc-8    | defconfig        =
-   | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.12-rc6-279-gbfdbc2a91ef8/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.12-rc6-279-gbfdbc2a91ef8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      bfdbc2a91ef8f4c5d3466dbb03735eea5744e52d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab             | compiler | defconfig        =
-   | regressions
--------------------+-------+-----------------+----------+------------------=
----+------------
-imx6ul-pico-hobbit | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_defconf=
-ig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/606c2c667fbbdd4931dac6bc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc6-2=
-79-gbfdbc2a91ef8/arm/imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc6-2=
-79-gbfdbc2a91ef8/arm/imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/606c2c667fbbdd4931dac=
-6bd
-        new failure (last pass: v5.12-rc5-292-g896505d11915b) =
-
- =
-
-
-
-platform           | arch  | lab             | compiler | defconfig        =
-   | regressions
--------------------+-------+-----------------+----------+------------------=
----+------------
-imx8mp-evk         | arm64 | lab-nxp         | gcc-8    | defconfig        =
-   | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/606c2e4b8ec180dcf3dac6e0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc6-2=
-79-gbfdbc2a91ef8/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc6-2=
-79-gbfdbc2a91ef8/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/606c2e4b8ec180dcf3dac=
-6e1
-        failing since 13 days (last pass: v5.12-rc4-316-g8d59c115a79a, firs=
-t fail: v5.12-rc4-389-ga27dcf51dcf16) =
-
- =20
+greg k-h

@@ -2,99 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADDF355C9C
-	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 21:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA53D355DFD
+	for <lists+linux-next@lfdr.de>; Tue,  6 Apr 2021 23:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbhDFT5P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 6 Apr 2021 15:57:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47794 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233018AbhDFT5P (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 6 Apr 2021 15:57:15 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 09872AF9A;
-        Tue,  6 Apr 2021 19:57:06 +0000 (UTC)
-Date:   Tue, 6 Apr 2021 21:57:03 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S237726AbhDFVfU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 6 Apr 2021 17:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbhDFVfU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 6 Apr 2021 17:35:20 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C48C06174A;
+        Tue,  6 Apr 2021 14:35:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FFLQx2xL3z9sRR;
+        Wed,  7 Apr 2021 07:35:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1617744906;
+        bh=D5FUnZGLBFWs8c1n7JY8+Rn8VtoPmFFQRtrn0yIw3X4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ean501GsBLULVXqzUeuofVTJM4ZqUGx/2YVnI7NOWlI/Ttg9+N6EuDQ8iw4y7FB0n
+         4ZpbjY7pVv1k1vIVjzSmWulcBb4Vp535rVJvF5vn/RpLwcNW/OkMAFyGvfEPCq0wzg
+         VWfnRUB3e/3X8/zSHqNafKts6HUHOZRsG8JTqGOdLFLKgkH2VTKOiNqdz8dlzh1WQS
+         eQEVSBvBOPx2pV02ZFy4nmbkSC1hjyowDKTvkPXazp2W+LpsTyAdnzhnFVlDp4QEMR
+         syyK3pjF+p8DDxXpvGkjwvNN9QCkXpq1l0+HL67C8Vkf1mbfMguLOpfaiwCHrP8yop
+         i/fxMAv+DvJPQ==
+Date:   Wed, 7 Apr 2021 07:35:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Xen Devel <Xen-devel@lists.xensource.com>
+Cc:     Luca Fancellu <luca.fancellu@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: linux-next: Tree for Apr 6 (arch/x86/mm/init_64.c)
-Message-ID: <YGy9DwRZ+dFKi9/c@localhost.localdomain>
-References: <20210406223109.50ebe35a@canb.auug.org.au>
- <58d0c74b-ef4d-447b-9285-3d2c192fd3eb@infradead.org>
- <a7895e6e-b00a-4b75-6506-ca38af495829@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the xen-tip tree
+Message-ID: <20210407073504.0758735d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7895e6e-b00a-4b75-6506-ca38af495829@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/sKlmEgpapb9bvM.80.P8UpD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 11:39:47AM -0700, Randy Dunlap wrote:
- 
-> > Looks like that compound "if" is too much for gcc 7.5.0 to handle:
-> > 
-> > 			} else if (IS_ENABLED(CONFIG_SPARSEMEM_VMEMMAP) &&
-> > 				   vmemmap_pmd_is_unused(addr, next)) {
-> > 					free_hugepage_table(pmd_page(*pmd),
-> > 							    altmap);
-> > 					spin_lock(&init_mm.page_table_lock);
-> > 					pmd_clear(pmd);
-> > 					spin_unlock(&init_mm.page_table_lock);
-> > 			}
-> > 
-> > 
-> 
-> This is what I am using for now:
+--Sig_/sKlmEgpapb9bvM.80.P8UpD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Randy
+Hi all,
 
-Yeah, that is what v4 was using [1].
-We decided to get rid of the ifdef for costimetic reasons but it seems
-it does not do the trick.
+In commit
 
-I will ask Andrew to squash that on top.
+  da3b45cbcb0f ("xen/evtchn: Change irq_info lock to raw_spinlock_t")
 
-[1] https://patchwork.kernel.org/project/linux-mm/patch/20210301083230.30924-4-osalvador@suse.de/
+Fixes tag
 
-Thanks
+  Fixes: 25da4618af24 ("xen/events: don't unmask an event channel
 
-> 
-> ---
-> ---
->  arch/x86/mm/init_64.c |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> --- linux-next-20210406.orig/arch/x86/mm/init_64.c
-> +++ linux-next-20210406/arch/x86/mm/init_64.c
-> @@ -1123,14 +1123,16 @@ remove_pmd_table(pmd_t *pmd_start, unsig
->  				pmd_clear(pmd);
->  				spin_unlock(&init_mm.page_table_lock);
->  				pages++;
-> -			} else if (IS_ENABLED(CONFIG_SPARSEMEM_VMEMMAP) &&
-> -				   vmemmap_pmd_is_unused(addr, next)) {
-> +			}
-> +#ifdef CONFIG_SPARSEMEM_VMEMMAP
-> +			else if (vmemmap_pmd_is_unused(addr, next)) {
->  					free_hugepage_table(pmd_page(*pmd),
->  							    altmap);
->  					spin_lock(&init_mm.page_table_lock);
->  					pmd_clear(pmd);
->  					spin_unlock(&init_mm.page_table_lock);
->  			}
-> +#endif
->  
->  			continue;
->  		}
-> 
+has these problem(s):
 
--- 
-Oscar Salvador
-SUSE L3
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.  Also, please
+keep all the commit message tags together at the end of te commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/sKlmEgpapb9bvM.80.P8UpD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBs1AgACgkQAVBC80lX
+0GyBmgf/XgdY3XYRU5C8z7NlQ5NqwiWO6GWz0CEJEXq6hKOSx2im8VwNBFENnLmr
+JafHjaO7gjzjidJL+xfxk3FEmhwWImucojt1xk9bcxztEAiSILLlhGuUwNRKdYoO
+ZmJmZ+IDVetgNCLwPb+0c5iaKOQO3bMP3aVdfoarwCarlstpAtDXW29cQ3gELty9
+Tw9XhAqstjNTKrrIZIQrAERflgbbrubFgOG2RBxm2G8Oe6BAA4hPgyvfz6mwQTEi
+bsFvM3irQ8yA3qkK302NYlXuVD/ELqiKCgFsgYJI8I2aQAdjziBoJMK+c53xHTDe
+MP4IsxHkQ9voU5ogUU3pf58UEYXozw==
+=VnhB
+-----END PGP SIGNATURE-----
+
+--Sig_/sKlmEgpapb9bvM.80.P8UpD--

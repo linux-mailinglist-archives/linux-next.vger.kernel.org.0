@@ -2,76 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA413577E9
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 00:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F413577FC
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 00:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbhDGWqh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Apr 2021 18:46:37 -0400
-Received: from ozlabs.org ([203.11.71.1]:43521 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhDGWqh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 7 Apr 2021 18:46:37 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FFzyh6hjwz9sPf;
-        Thu,  8 Apr 2021 08:46:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617835581;
-        bh=2AI9kqyrCkEU8kUxXeNdqaGbAN/vm2MR4Xc+goQbAoI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=V+hKP1zpuULfqr6tCKb5/pJFwTjtasX0J+AkiU+E0amYbs1ANsMO8mIh/Pz/ROqYo
-         P+R79b3zYVEmcjGJbYiInsdxPW6MvTAcrODCaq4wL//Xcqv0phKhdIvQ8mX/syha1s
-         Fk3uHgafELo5ANsapotnSEEDF3h5SyxZrsIs1P7dRqCS31gtuTOA+7qqjcBxLFFDhJ
-         odzzJR37+43Ok840DcGQNm1B12ry3bDdmRNNN2/BY4HivhxlWUPMyX2smA7R4xfpXR
-         mDXciSww7O6W3vUH02VxJdzRRx3JvpCoSMYmGZXZHxjqEN/KoiIyL6JQrnrzLv3i9z
-         U7/xg22pLphtQ==
-Date:   Thu, 8 Apr 2021 08:46:20 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the pinctrl tree
-Message-ID: <20210408084620.3b1e9bd8@canb.auug.org.au>
+        id S229515AbhDGWv5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Apr 2021 18:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhDGWv5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Apr 2021 18:51:57 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA5C061760;
+        Wed,  7 Apr 2021 15:51:47 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id lr1-20020a17090b4b81b02900ea0a3f38c1so3798967pjb.0;
+        Wed, 07 Apr 2021 15:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FgPfAhHXqMoy6vJnPfG5IIOlPZRwNfuNehQ3+fiErZg=;
+        b=WBPzgtBaGILmG5MWe1cdPTLspW1zWPgzBxOHeRFyI9oNgTBRoOzxlnCjHPxfxsOC1/
+         m5xMiCcbeIlSQhSeBCZvi3j1iz8OwIZbuVA9308Nzf8lh3p9CtlaneD4kLEtFK5QISVF
+         etkA/4s5UMX0nod2rmWZCCNOvfHlIjnSs8wLjHDMGht5idehxHRlvY4Yo7yCssj68Q6G
+         sCnbxhLo+tydgph4Pt3/NWPmoez+FUc0fayrCVydlixpjkCV8/1cnDr45HwexuOHTEKM
+         mVNFyAz6Nk8SxoTYEnwavg9uAqYm7mxdcper0f3ut4YLX0d9+sma51NWlKp/uQ3uqfZe
+         IMHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FgPfAhHXqMoy6vJnPfG5IIOlPZRwNfuNehQ3+fiErZg=;
+        b=YlHnMRcT5G6Ft52FucN7M+hJ3MNoIeCH16Hxa6mBY0YdtlFXUiJlfFEtXHyci417AZ
+         qK52UKedcWe1D91dihapKSGCdM3bNISiY0Q8ehPlBfuLM9EDcLEamZyS6v0Bx1JUvjt1
+         vPt2bp8aKt2n6P+oj86QjqtjVDX3v7hX4pVM1n28mry+PGQY301s7PHwDjFn6SN0gLxl
+         A48O4wEoxQphugl2Ls7HY1Dge7dZhaUcGT/i6H3Sc3oK7OTiL3LmZI3aV77UBC70tvtO
+         26xEesFrbLgR3k5WngT8qIX/spmbLL93goqaicyJJDFWysJNeQth1xZvxHUsKM186xnx
+         WYzQ==
+X-Gm-Message-State: AOAM53332I/ySdXlQQDrvY+Phx9eiD9IdMxpeoHdTvpd+GCGdpzJGRQU
+        lbruDVTDB1ZNKzpA91p5PwQvgGS1sK1PBYsr5BM=
+X-Google-Smtp-Source: ABdhPJy9stg3QYcMaqURxTma45eWavwwq9g44GznI2BjzG6qp/K16EWCe6Sb/5WyxsV3R7ja14c87YL720P9Ph2eWzU=
+X-Received: by 2002:a17:90a:5407:: with SMTP id z7mr5559293pjh.228.1617835906867;
+ Wed, 07 Apr 2021 15:51:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/27cZD7fZ1N6aqkO3TQ/G9LM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+In-Reply-To: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 8 Apr 2021 01:51:28 +0300
+Message-ID: <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/27cZD7fZ1N6aqkO3TQ/G9LM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> While running kselftest recently added gpio gpio-sim.sh test case the following
+> warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+> and hikey devices.
+>
+> GOOD: next-20210326
+> BAD: next-20210330
+>
+> This is still happening today on Linux next tag 20210407.
 
-Hi all,
+Can you add the following
 
-Commit
+  sysfs_attr_init(attrs[i]);
 
-  4f838411c98b ("pinctrl: bcm63xx: Fix More dependencies")
+to the end of the loop in gpio_sim_setup_sysfs()?
 
-is missing a Signed-off-by from its author.
+If it fixes an issue I'll send a formal patch.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/27cZD7fZ1N6aqkO3TQ/G9LM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBuNjwACgkQAVBC80lX
-0GyFMgf/QAqeh5nzILtPJRe/7t2RuGmk7/eypBbRVMoFTlJK1IK876SEz6p0eRiw
-hVWY7HXE/DENn3hAumP8Lf4Z7RkK/+9CdK1n7KyJ362DLWPsnujEauyrmyEkvsAp
-thyox3ngYgDJG0pFditA101a5qVaxcyRTF4/YL/0veKTwjAajpReBEM9VxESd6Zl
-6T8kU2mrDGwne9WkyJM6HoZr+7FppNYCp+N17zAgkwWeG6TUvWrR1SKOIJvo/iJX
-intxDFXMwLvYjZF9pLFQFyf5WhSWufazbg9PwDTdVJ14BmjhUxR+g+rAfDZtgdWi
-aWrP6QcDEhDlAOw6jfT1rRF1bwHYTg==
-=MzdA
------END PGP SIGNATURE-----
-
---Sig_/27cZD7fZ1N6aqkO3TQ/G9LM--
+-- 
+With Best Regards,
+Andy Shevchenko

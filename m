@@ -2,159 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E393583F9
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 14:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3DB3586F7
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 16:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbhDHM7i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 08:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbhDHM7f (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 08:59:35 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495C1C061760
-        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 05:59:24 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id g17so108008ejp.8
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 05:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bXaNApsUJBQRijtom4CaAhgB0kqvpHWQ8lB5126OVbU=;
-        b=GqDXqGZU3WOMP1JWd2baxuE3IyzrOvNzhGrIswRLTHGuF9mrtmJwVpIrBpcgr7FlcN
-         WEcSKNIIFX/CsruJLWPGL2QL7ImMGOnkcsp4u/azNm0XV4gUEXVOaiUWAJdALRQxfC/e
-         EBl1xxE1z3cTgnbymFn8WDpltPG/z1561B8cpvBdOK2NrfwBWW86pRBXFqXGMUUZEfsF
-         8NCZsV7VxOUJR/cqDBjxlkxe+o5yjfu0cflXxhoV5dOUDikes/YYz9H0NNJf5yThfhQx
-         9EbztooxPKJYpQmslI9JtPWXV8AMOJpwrD+Aq24gNXE2nQsLfZ2Eoaj5iHTaz1dnA8kC
-         XhxA==
+        id S231883AbhDHOTC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 10:19:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52901 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232216AbhDHOSh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 10:18:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617891505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=heAoMXR13ua17Y0mBk6t6RCTDm/2YpK2rKLhCgGdEp0=;
+        b=dQWe5+xrQ2Gj6VnwW+PJDFzYyd1nk0F9AJn/Hj0U0a1qowRfeOLHieACjZsrPvn0jK9Lsc
+        zZO+pplBzT8Q3xkuQ9FaOzuiHxdT/l5u3ZBafko8k4JAcVC19gljT6JO6PINKcWABIIUP3
+        2X7fhTYkoPIB0aZD1L+gYnPcHe3DWHg=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-491-ydCSjxNPOum4lC9BkM8lrA-1; Thu, 08 Apr 2021 10:18:24 -0400
+X-MC-Unique: ydCSjxNPOum4lC9BkM8lrA-1
+Received: by mail-ej1-f72.google.com with SMTP id kx22so920535ejc.17
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 07:18:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bXaNApsUJBQRijtom4CaAhgB0kqvpHWQ8lB5126OVbU=;
-        b=Xqs0txmIOmV7Kvbr9crN/IypoMdDOYExxUnD7ywFp0Cl4HQyBrW9XS0uQyluPlhYrK
-         5a19nukxUmKV6KBTdkCnwh2l8Kx37Hd6wyr7cRVx15+4JaIEATTquSrYZUPrFChYPOp+
-         WWXGYfMngTJDYYUKxD/Ok1OY2M+884fMHqTed+2pFV+zGshE4UH5gRKIJmINACzshF9X
-         iQIjVtxZ83zurC80fhaP07ZhPb+UutB9kPsu1Ug2j+5HpjUxxQ+hbg/ksOJvvP2zyFEh
-         Cty7U5KJ1U8qApz11fmLwgXCll6vsPZNE5AoTMT6UfcLavt17YcY3c8q85fkzKyYN0t/
-         KYVA==
-X-Gm-Message-State: AOAM533+Q1H9kWe6i6ZcS30GjXgz5MywLv+0hTK9QJ8y/x6hLqjMHN4D
-        PzfrIq9yj5JU7xt7LOGIBA/b8/q34E1qDJnamdMHEQ==
-X-Google-Smtp-Source: ABdhPJzT52+7fhpzyGdEPpFOaQHm0H5K5N9slJdZWOCE0StJyTV8DY7tAOulhTQU/LlU+EEkYf+hetlLkRsAW1D8TBw=
-X-Received: by 2002:a17:907:7785:: with SMTP id ky5mr10011936ejc.133.1617886762806;
- Thu, 08 Apr 2021 05:59:22 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=heAoMXR13ua17Y0mBk6t6RCTDm/2YpK2rKLhCgGdEp0=;
+        b=MmZNcib03RKvxv0qPCQw7ptEGZPiHFqB3SZnzjr6RD7hfvH4n9XKfdwkK4bB9YzNZt
+         wh6mi2cykw+PjmTpzBFmNztKy/51mPUEHyMHSjEBcdV1TwfifcHc7z6nWJgmFUvfV3Q4
+         bHAN77t/5htrItY6jJbXvYiv4OlsuFbNp8l3xgI8jt4uB5Jwv9cIOrQ9r6EYGPau0NJ5
+         2R/a2XglzbqesQKdQNOVq7RIN7EQm+plAfdQIofeM3Tmdrhcgnu7bGWTNnGJXmEk9HHk
+         hBRTQJdvv8aM/+bMKhDxS57mPAmne2oAhVJ8l23B8IuYLXfO8JClCIhE79Ceaput+kiI
+         CR+A==
+X-Gm-Message-State: AOAM533pyCN4PkuNyhJrF1nKUpTvirfT6old6ZfDH6GMzB7x2fVsJ6CD
+        WWTcVTsjxsm83/tIymWs0WX6kJ+AirM8zKZDuXRjl8z6V/kqzPbVPENN2OJRlNi4jglVxfL4kSx
+        od56koisiAQ7QzWWhXbQDoeDnF2m7l039Q5i0TdkIxD8AM1rjB1P4+dusjIX6MoTNuyXBf9Yn9A
+        ==
+X-Received: by 2002:a05:6402:138f:: with SMTP id b15mr11776752edv.121.1617891502838;
+        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy4EfxI4NdtRYH0iSGE+S/zrp2Jbq9CkjnDLXHxuU4gU0RGedNvtVEtWlXMpnCJvIKx5DOCOA==
+X-Received: by 2002:a05:6402:138f:: with SMTP id b15mr11776728edv.121.1617891502647;
+        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id u13sm9057314ejr.100.2021.04.08.07.18.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
+Subject: Re: linux-next: Signed-off-by missing for commit in the drivers-x86
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <mark.gross@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210408221334.63262fbf@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <08996ca7-c927-8261-d71e-e509815b5442@redhat.com>
+Date:   Thu, 8 Apr 2021 16:18:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
- <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
- <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com> <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 8 Apr 2021 18:29:11 +0530
-Message-ID: <CA+G9fYuYC3QK2Zi8pbud0ebai4d4YgB0A4DXg5XWaE1pLWP5tw@mail.gmail.com>
-Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Colin King <colin.king@canonical.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210408221334.63262fbf@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 8 Apr 2021 at 15:17, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Apr 8, 2021 at 11:33 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> > On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
-> > > <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > While running kselftest recently added gpio gpio-sim.sh test case the following
-> > > > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
-> > > > and hikey devices.
-> > > >
-> > > > GOOD: next-20210326
-> > > > BAD: next-20210330
-> > > >
-> > > > This is still happening today on Linux next tag 20210407.
-> > >
-> > > Can you add the following
-> > >
-> > >   sysfs_attr_init(attrs[i]);
-> > >
-> > > to the end of the loop in gpio_sim_setup_sysfs()?
-> >
-> > Do you mean like this,
-> >
-> > diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> > index ea17289a869c..5fe67ccf45f7 100644
-> > --- a/drivers/gpio/gpio-sim.c
-> > +++ b/drivers/gpio/gpio-sim.c
-> > @@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
-> >                 dev_attr->store = gpio_sim_sysfs_line_store;
-> >
-> >                 attrs[i] = &dev_attr->attr;
-> > +               sysfs_attr_init(attrs[i]);
-> >         }
-> >
-> >         chip->attr_group.name = "line-ctrl";
->
-> Precisely.
+Hi all,
 
-As per your suggestions the above line added and build tested
-the reported issue is fixed now.
+On 4/8/21 2:13 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   11cccec79c60 ("genirq: Add IRQF_NO_AUTOEN for request_irq/nmi()")
+> 
+> is missing a Signed-off-by from its committer.
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Ugh, thanks for letting me know, this was supposed to come from a merge
+from an immutable branch from the tip folks, but I did a rebase -i
+to fixup a typo in a commit message and that seems to have flattened
+the merge :|
 
->
-> > > If it fixes an issue I'll send a formal patch.
-> >
-> > I will build and test this and report here.
+I'll redo the last 3 commits in pdx/for-next to re-add the merge
+and do a forced push.
 
-OTOH,
-LKFT builds kernel and rootfs on host and runs tests on various target
-devices. While doing this process "make install" is not installing required
-test files like gpio-mockup-cdev and gpio-line-name.
+Regards,
 
-# ./gpio-mockup.sh: line 106: ./gpio-mockup-cdev: No such file or directory
-# ./gpio-sim.sh: line 100: ./gpio-line-name: No such file or directory
+Hans
 
-Test run log:
-------------------
-# selftests: gpio: gpio-mockup.sh
-# 1.  Module load tests
-# 1.1.  dynamic allocation of gpio
-# ./gpio-mockup.sh: line 106: ./gpio-mockup-cdev: No such file or directory
-# test failed: line value is 127 when 1 was expected
-# GPIO gpio-mockup test FAIL
-not ok 1 selftests: gpio: gpio-mockup.sh # exit=1
-# selftests: gpio: gpio-sim.sh
-# 1. chip_name and dev_name attributes
-# 1.1. Chip name is communicated to user
-# 1.2. chip_name returns 'none' if the chip is still pending
-# 1.3. Device name is communicated to user
-# 1.4. dev_name returns 'none' if chip is still pending
-# 2. Creating simulated chips
-# 2.1. Default number of lines is 1
-# 2.2. Number of lines can be specified
-# 2.3. Label can be set
-# 2.4. Label can be left empty
-# 2.5. Line names can be configured
-# ./gpio-sim.sh: line 100: ./gpio-line-name: No such file or directory
-# line name is incorrect
-# GPIO gpio-sim test FAIL
-not ok 2 selftests: gpio: gpio-sim.sh # exit=1
-
-- Naresh

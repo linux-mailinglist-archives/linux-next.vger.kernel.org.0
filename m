@@ -2,94 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C84359049
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 01:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B625735905F
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 01:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbhDHXYi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 19:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S233007AbhDHXk5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 19:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbhDHXYi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 19:24:38 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4A9C061760;
-        Thu,  8 Apr 2021 16:24:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGcm26ZC1z9sRR;
-        Fri,  9 Apr 2021 09:24:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617924263;
-        bh=3F3p2L6weF/6tTdlNbk2a0HNQXSobvHpBRo2CIga39A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pSp6IE5DtHK5GJoN7Lgn8qaAgnVDNsLjFT4H9PvWLZOvfPHG2Brl2tyWexFwdOoLC
-         SIdE/aQC1RviuJgJm6gZ7WlDPWR/aTBvV6BTpfavAOYFPC3cu5+MkMSldADJSUfEMr
-         ZAspEX1wk+i2wSMNnC6l1WZB+QPb9hzxP/0P6RjPd1kvmpjiMyWfOFOE2982OL7m5N
-         jEq387sqi1YYJTRgyC+mw3uRT2fyDbuvdOrNMRkQ8KffauKt0yVAUvxU0xXQ4rCEnF
-         VHn02hRY+ffJXTV8YsYd/y+PEAGvPxvJhF0ExG/MRXbtT5M3Jt92GzrsX1HnCEispf
-         0FQQxvSBm5F3w==
-Date:   Fri, 9 Apr 2021 09:24:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: linux-next: build warning after merge of the mvebu tree
-Message-ID: <20210409092417.36b22630@canb.auug.org.au>
-In-Reply-To: <20210408095612.71e8c56e@canb.auug.org.au>
-References: <20210408095612.71e8c56e@canb.auug.org.au>
+        with ESMTP id S232991AbhDHXk4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 19:40:56 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F468C061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 16:40:45 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id n38so3013289pfv.2
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 16:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=wb0nked1xDlpjiQJf+RDs9/dSar8rpCZVdTJufj5kug=;
+        b=Qa05YoUcczvtwnu4MTVqL1yUAYAhg22pTkmuUl+dd8N6nummHtmhzjixDlhUz46lne
+         XduHPMduE2fXsE1p4IYyy4zFu9X4zh9qd75Dy8+O9jbapAMQ0ec4460Gqczlv9AsPQge
+         wMusBXrs8liYwKhr82LA0d529Z+DQ0jVW/qhQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wb0nked1xDlpjiQJf+RDs9/dSar8rpCZVdTJufj5kug=;
+        b=UWHx2SJfIihQRxBjY8tVr2/BtZpIFywBGNDTAoXkaWBk4uB/NnKVJAi+DJmdp3jPbj
+         z6kf+3dYjdk1gxa2JWdzo5sKasnKEhWu2250q05RBVDRfjxPetBawanBC+STbOzNRwT9
+         cSfjO+VllUkE+tGWrAB4Bd1B57mNxJMfMHfAms2jKMxgQqMpO7gqNb15Rfhy0H8KcCjo
+         PjQc35ZK0aA4y77GSE0t7Wt0cs5Np8AkPgOKFzNc1Ne+D276m9e/z+um1L6+Fyplv0Lv
+         nNxr7FMUjt4/eUghF4bs00vHQeZ23tm/pO7kbHqnvjQ/wn2H1M97oP8vZUvj1MHxqK2L
+         +6ug==
+X-Gm-Message-State: AOAM531hyRNt/bbynqCE3Gbs1lwLC5RCVV01QHQSgy9n+63g468oz5om
+        /+vw68LJcnNjYqbeuE9GbpzFRMtPFS82Bg==
+X-Google-Smtp-Source: ABdhPJx9N/64fekiyhcyMYutdN8UegK/SVdNKUahLpQZ8J2U9SVCoEMrtT9vh5BDnoiYMH7p+fa50w==
+X-Received: by 2002:a62:cfc1:0:b029:200:1eed:462 with SMTP id b184-20020a62cfc10000b02902001eed0462mr9714564pfg.55.1617925244166;
+        Thu, 08 Apr 2021 16:40:44 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x18sm467397pfu.32.2021.04.08.16.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Apr 2021 16:40:43 -0700 (PDT)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Thu, 8 Apr 2021 16:40:39 -0700
+To:     Aditya Pakki <pakki001@umn.edu>
+Cc:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Coverity: rds_send_remove_from_sock(): Null pointer dereferences
+Message-ID: <202104081640.1A09A99900@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AqARpw3nz5goyADtfkTalj9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AqARpw3nz5goyADtfkTalj9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-Hi all,
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20210408 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-On Thu, 8 Apr 2021 09:56:12 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the mvebu tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> arch/arm/boot/dts/armada-385-atl-x530.dts:171.14-199.4: Warning (spi_bus_=
-reg): /soc/spi@10680/spi-flash@0: SPI bus unit address format error, expect=
-ed "1"
->=20
-> Introduced by commit
->=20
->   c6dfc019c239 ("ARM: dts: mvebu: Add device tree for ATL-x530 Board")
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-This is now a warning after the merge of the arm-soc tree.
+  Wed Apr 7 14:01:24 2021 -0700
+    0c85a7e87465 ("net/rds: Avoid potential use after free in rds_send_remove_from_sock")
 
---=20
-Cheers,
-Stephen Rothwell
+Coverity reported the following:
 
---Sig_/AqARpw3nz5goyADtfkTalj9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+*** CID 1503716:  Null pointer dereferences  (REVERSE_INULL)
+/net/rds/send.c: 668 in rds_send_remove_from_sock()
+662     		}
+663     		spin_unlock(&rs->rs_lock);
+664
+665     unlock_and_drop:
+666     		spin_unlock_irqrestore(&rm->m_rs_lock, flags);
+667     		rds_message_put(rm);
+vvv     CID 1503716:  Null pointer dereferences  (REVERSE_INULL)
+vvv     Null-checking "rm" suggests that it may be null, but it has already been dereferenced on all paths leading to the check.
+668     		if (was_on_sock && rm)
+669     			rds_message_put(rm);
+670     	}
+671
+672     	if (rs) {
+673     		rds_wake_sk_sleep(rs);
 
------BEGIN PGP SIGNATURE-----
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBvkKEACgkQAVBC80lX
-0Gx1Rwf/ddxYMhbAkS44hyw4ExbloGAw5IMIUA9kLTORLT+HufiK7UzkLxEJNqL2
-LoTn0nmT4TYwoEr9akvT9zgHrymdQailHUWtfJNhBSo7CfJx6skxhJ8BYThBmdIE
-L0Dm5nTJ8CvmIv4LrHa6e5nuZhzjayQQPt24HAmmD5k5sGtppA0NfmHDq6+ppbYd
-vQMaXAaXLrkDlVDM44Fl71xYXe9iML0Yh3k+3JprhdErpQPVAADTCYDtKXy74l6b
-qEphtKY89zfZHfhbHgDKQj2f285i4tQIJxxHo379O93jDQOPcXJnqqvAf289C8b3
-JB0havBPruIW5977F7kHDMkOc2InBw==
-=ClRI
------END PGP SIGNATURE-----
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1503716 ("Null pointer dereferences")
+Fixes: 0c85a7e87465 ("net/rds: Avoid potential use after free in rds_send_remove_from_sock")
 
---Sig_/AqARpw3nz5goyADtfkTalj9--
+Thanks for your attention!
+
+-- 
+Coverity-bot

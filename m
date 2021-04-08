@@ -2,82 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AACBA35894D
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 18:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900DC358F91
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 00:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbhDHQJt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 12:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbhDHQJt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 12:09:49 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE6BC061760;
-        Thu,  8 Apr 2021 09:09:37 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id b14so4922679lfv.8;
-        Thu, 08 Apr 2021 09:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q2y70uZn9bzb33FU99dlR3SYEgVlIDBNcQtt2y1+RFM=;
-        b=VB7uXpQBDBw9TAc+0C1va246dBbHcAG3IlxYYEK+346bf2T/yNBVAQYqcOjJvI/Rz5
-         ucCMkthqLQTOn/xJ6m+0gR3X6lvtNxM7IyC6NlDvKbAy1GGM+PCdkU5gzlI9DMRX2ikl
-         AP+soFJqGU/fjXI5bon39W/+vbldAvEWWMHWSjsHM6xHTMJupu0mPP7tUHy9BZxlopMo
-         9cPRd6maw99ks3eeg905nKJzIn6MfQi2W8MJCx4FYIYomHxoKsmrF71I9fn9rmLFCjVx
-         wvqZaZyn2MEMtvZMqWeUjfZRfRQvXlwXIYvHjvInlXksHW5kYnMgmt2FNFE3cHAoqFQP
-         iCRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q2y70uZn9bzb33FU99dlR3SYEgVlIDBNcQtt2y1+RFM=;
-        b=VxYugw40y7NTEw6U9wMi/JAmBzRLOkXcodVbyEIfzRrwVOa7hUZmbMrbGrFtR5/kpk
-         mtqc+CljTH0umJ0YuvXUcZ7Ze28XfHcyup79elAprqxxbi+4hoEr2lmSoyOwQT/LEIzi
-         l9Z5+ITJoq4OOQGicjOHv1dLtBnf3w/ApdgOOcKZ+k9YiqFCYRkwJM/KdN4e4cRILyVW
-         9ymMTDz+dZ8rH6tUwF46/EboJVwmqM1r86pLBtXEmINI1cALg51B8fLvzj7X+xCE/+/+
-         zKeoT2Xkvsu5PzAkG0Ulxj1Br0b2if4lf9do2+WwezcFr9HWHqDR05TINkr3BpYNd+z8
-         51Ow==
-X-Gm-Message-State: AOAM533u/SLQLTmsyorr8ESdE2QwHBmUWOtf9uoHxVNdlIHJVHE1B6dM
-        w11KpJ3ydkGMJt+lm+U1cW68Y3ZfSpzwp7VGeoiJ6Ebc2MA=
-X-Google-Smtp-Source: ABdhPJyJbS8fyp2YGyi1GVee1muNET1yBazDtu+lJk2Bae/jYuLjtSv5T7EoJj+9xUv1TE6EmD2SqO4knQdYzZYddgo=
-X-Received: by 2002:a19:7515:: with SMTP id y21mr7155456lfe.282.1617898174959;
- Thu, 08 Apr 2021 09:09:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210408220711.5a39d4a0@canb.auug.org.au>
-In-Reply-To: <20210408220711.5a39d4a0@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 8 Apr 2021 11:09:23 -0500
-Message-ID: <CAH2r5mts7HLToeuUgPSp5kpurYw9VYt8L26ruudiZ0vHv3BvUA@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        id S232426AbhDHWBK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 18:01:10 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58221 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232158AbhDHWBK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 8 Apr 2021 18:01:10 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGZvr2TtVz9sRf;
+        Fri,  9 Apr 2021 08:00:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1617919257;
+        bh=EtYgTBFn6oyfFMVZx45lg6/+BpeGzMT1feBky1SqNKI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aTEpUnuNexg9e7j0npNbZXXW5HoEniqFF8IM1EgOSc3dHz68Dd3NTIs6GDHqcntCU
+         6WxUqOcv37a0J/qLw4P+rQmMbfc+KFUAJjV0iILtlyrbRnXNHBfaIbDySlShqb4fyN
+         qiGViNcALTZ2muJWco8lHjVwOclBiJal+Zes1p3UiccHMGRkjca0gMEjyZSNtWSkX3
+         pi7fVzEJnG1TLYAxPEyzvq4l4R/2Z8Ulo3OkrEhPlFHn3G+a/i02vPoBv4N43NOdGI
+         KYalrcB6NA20zfzv6yh1MX06Q41Pu5O6EZg+clOW9B3MPLjbpUDCMqHAoowHaPRt0h
+         w/nFx4khglBgg==
+Date:   Fri, 9 Apr 2021 08:00:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: Signed-off-by missing for commit in the rdma tree
+Message-ID: <20210409080055.421f0dee@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/b7u5QSKny2/3lgjmqbFNbC=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-fixed - (a tmp branch was accidentally pushed)
+--Sig_/b7u5QSKny2/3lgjmqbFNbC=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 8, 2021 at 7:07 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   e67fcb31fb0e ("stuff")
->
-> is missing a Signed-off-by from its author and comitter.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+Commit
 
+  042a00f93aad ("IB/{ipoib,hfi1}: Add a timeout handler for rdma_netdev")
 
--- 
-Thanks,
+is missing a Signed-off-by from its author.
 
-Steve
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/b7u5QSKny2/3lgjmqbFNbC=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBvfRcACgkQAVBC80lX
+0GzEowf9G+KK1iYJJN16asbvV0hLVhE1T1zbPt+L13tOxvpFxE5Q25ZFarAr4ulZ
+FRxKsOt9IdjToumHIXImsG4E1hss3tcQsV4cmlqobSJhrnhMdudHX0gVaF5e9q2/
+Zi4P8iLrN/ERJkdiiDN0pnpChllLvtkGOARz1kenl4ZdawOyctyGm5aDK4OMMcb2
+EBN3iyszPMyJKvrutSxtq4MgSGatLjoleUgr/uXZk0/DLchy6gO6tl+i0JzZyfu0
+y6ii2WTAvri3WBb36f8M+rlDGtgT96m8y1c+HLmuVoP1R6VHtqkotRu+wELRVvQ6
+GCJNBD3DdTtPJa/nw6T8PwRUfLSqQg==
+=sksM
+-----END PGP SIGNATURE-----
+
+--Sig_/b7u5QSKny2/3lgjmqbFNbC=--

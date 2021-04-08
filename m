@@ -2,97 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3DB3586F7
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 16:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A86935873E
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 16:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbhDHOTC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 10:19:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52901 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232216AbhDHOSh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 10:18:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617891505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=heAoMXR13ua17Y0mBk6t6RCTDm/2YpK2rKLhCgGdEp0=;
-        b=dQWe5+xrQ2Gj6VnwW+PJDFzYyd1nk0F9AJn/Hj0U0a1qowRfeOLHieACjZsrPvn0jK9Lsc
-        zZO+pplBzT8Q3xkuQ9FaOzuiHxdT/l5u3ZBafko8k4JAcVC19gljT6JO6PINKcWABIIUP3
-        2X7fhTYkoPIB0aZD1L+gYnPcHe3DWHg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-491-ydCSjxNPOum4lC9BkM8lrA-1; Thu, 08 Apr 2021 10:18:24 -0400
-X-MC-Unique: ydCSjxNPOum4lC9BkM8lrA-1
-Received: by mail-ej1-f72.google.com with SMTP id kx22so920535ejc.17
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 07:18:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=heAoMXR13ua17Y0mBk6t6RCTDm/2YpK2rKLhCgGdEp0=;
-        b=MmZNcib03RKvxv0qPCQw7ptEGZPiHFqB3SZnzjr6RD7hfvH4n9XKfdwkK4bB9YzNZt
-         wh6mi2cykw+PjmTpzBFmNztKy/51mPUEHyMHSjEBcdV1TwfifcHc7z6nWJgmFUvfV3Q4
-         bHAN77t/5htrItY6jJbXvYiv4OlsuFbNp8l3xgI8jt4uB5Jwv9cIOrQ9r6EYGPau0NJ5
-         2R/a2XglzbqesQKdQNOVq7RIN7EQm+plAfdQIofeM3Tmdrhcgnu7bGWTNnGJXmEk9HHk
-         hBRTQJdvv8aM/+bMKhDxS57mPAmne2oAhVJ8l23B8IuYLXfO8JClCIhE79Ceaput+kiI
-         CR+A==
-X-Gm-Message-State: AOAM533pyCN4PkuNyhJrF1nKUpTvirfT6old6ZfDH6GMzB7x2fVsJ6CD
-        WWTcVTsjxsm83/tIymWs0WX6kJ+AirM8zKZDuXRjl8z6V/kqzPbVPENN2OJRlNi4jglVxfL4kSx
-        od56koisiAQ7QzWWhXbQDoeDnF2m7l039Q5i0TdkIxD8AM1rjB1P4+dusjIX6MoTNuyXBf9Yn9A
-        ==
-X-Received: by 2002:a05:6402:138f:: with SMTP id b15mr11776752edv.121.1617891502838;
-        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy4EfxI4NdtRYH0iSGE+S/zrp2Jbq9CkjnDLXHxuU4gU0RGedNvtVEtWlXMpnCJvIKx5DOCOA==
-X-Received: by 2002:a05:6402:138f:: with SMTP id b15mr11776728edv.121.1617891502647;
-        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id u13sm9057314ejr.100.2021.04.08.07.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Apr 2021 07:18:22 -0700 (PDT)
-Subject: Re: linux-next: Signed-off-by missing for commit in the drivers-x86
- tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231526AbhDHOff (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 10:35:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37316 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231370AbhDHOfe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 8 Apr 2021 10:35:34 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 72E5D60FF1;
+        Thu,  8 Apr 2021 14:35:23 +0000 (UTC)
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <maz@kernel.org>)
+        id 1lUVkf-006KZG-2Y; Thu, 08 Apr 2021 15:35:21 +0100
+Date:   Thu, 08 Apr 2021 15:35:20 +0100
+Message-ID: <87wntcondj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Jianyong Wu <jianyong.wu@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210408221334.63262fbf@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <08996ca7-c927-8261-d71e-e509815b5442@redhat.com>
-Date:   Thu, 8 Apr 2021 16:18:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <20210408221334.63262fbf@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Subject: Re: linux-next: build warning after merge of the kvm-arm tree
+In-Reply-To: <20210408214400.52632f7d@canb.auug.org.au>
+References: <20210408214400.52632f7d@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, jianyong.wu@arm.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
-
-On 4/8/21 2:13 PM, Stephen Rothwell wrote:
+On Thu, 08 Apr 2021 12:44:00 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> [1  <text/plain; US-ASCII (quoted-printable)>]
 > Hi all,
 > 
-> Commit
+> After merging the kvm-arm tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
->   11cccec79c60 ("genirq: Add IRQF_NO_AUTOEN for request_irq/nmi()")
+> /home/sfr/next/next/Documentation/virt/kvm/arm/ptp_kvm.rst:19: WARNING: Malformed table.
+> Text in column margin in table line 5.
 > 
-> is missing a Signed-off-by from its committer.
+> =============    ==========    ==========
+> Function ID:     (uint32)      0x86000001
+> Arguments:       (uint32)      KVM_PTP_VIRT_COUNTER(0)
+>                                KVM_PTP_PHYS_COUNTER(1)
+> Return Values:   (int32)       NOT_SUPPORTED(-1) on error, or
+>                  (uint32)      Upper 32 bits of wall clock time (r0)
+>                  (uint32)      Lower 32 bits of wall clock time (r1)
+>                  (uint32)      Upper 32 bits of counter (r2)
+>                  (uint32)      Lower 32 bits of counter (r3)
+> Endianness:                    No Restrictions.
+> =============    ==========    ==========
+> 
+> Introduced by commit
+> 
+>   3bf725699bf6 ("KVM: arm64: Add support for the KVM PTP service")
 
-Ugh, thanks for letting me know, this was supposed to come from a merge
-from an immutable branch from the tip folks, but I did a rebase -i
-to fixup a typo in a commit message and that seems to have flattened
-the merge :|
+Now fixed, thanks.
 
-I'll redo the last 3 commits in pdx/for-next to re-add the merge
-and do a forced push.
+	M.
 
-Regards,
-
-Hans
-
+-- 
+Without deviation from the norm, progress is not possible.

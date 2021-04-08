@@ -2,77 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB4F3582F4
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 14:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E393583F9
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 14:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbhDHMNs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 08:13:48 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39737 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229837AbhDHMNs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 8 Apr 2021 08:13:48 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGKt73qT2z9sWH;
-        Thu,  8 Apr 2021 22:13:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617884015;
-        bh=DFSMspZoMbGeeJ8Z/m1UsfIlspBhwPmT2q1uu9lnu68=;
-        h=Date:From:To:Cc:Subject:From;
-        b=f5tRjOQZXpdh877EkIifHSol3vz3b4OeEOC+PCsy0vUxGUpAFLCoR1akssDMUsMtC
-         t/xu+pllBcjlC012HhCObUoSJsfWm80jBosDjPhuHf6YRlhgl3T41+9nDW/WoRKN1L
-         Ai2NYMz/VUntnfVfoa+T+LzdnfmVDDV/Nb9OHsHqm0z23ZYNN1w48RwNpWaoKCvGJf
-         Vur362AbZAjuB3w2BZc16G2uUrZXrx1nvzm2bGcGK3xZ/RSIwP5eM1kco523vdSEfZ
-         3Z6BAbbdfgclsG9APFVpHuq8tUhaSMRggHuaRT+5QgMYLSJG4f89keEJ273w6PL/iC
-         bI/FvNCc8odWA==
-Date:   Thu, 8 Apr 2021 22:13:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the drivers-x86
- tree
-Message-ID: <20210408221334.63262fbf@canb.auug.org.au>
+        id S231195AbhDHM7i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 08:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231474AbhDHM7f (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 08:59:35 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495C1C061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 05:59:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id g17so108008ejp.8
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 05:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bXaNApsUJBQRijtom4CaAhgB0kqvpHWQ8lB5126OVbU=;
+        b=GqDXqGZU3WOMP1JWd2baxuE3IyzrOvNzhGrIswRLTHGuF9mrtmJwVpIrBpcgr7FlcN
+         WEcSKNIIFX/CsruJLWPGL2QL7ImMGOnkcsp4u/azNm0XV4gUEXVOaiUWAJdALRQxfC/e
+         EBl1xxE1z3cTgnbymFn8WDpltPG/z1561B8cpvBdOK2NrfwBWW86pRBXFqXGMUUZEfsF
+         8NCZsV7VxOUJR/cqDBjxlkxe+o5yjfu0cflXxhoV5dOUDikes/YYz9H0NNJf5yThfhQx
+         9EbztooxPKJYpQmslI9JtPWXV8AMOJpwrD+Aq24gNXE2nQsLfZ2Eoaj5iHTaz1dnA8kC
+         XhxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bXaNApsUJBQRijtom4CaAhgB0kqvpHWQ8lB5126OVbU=;
+        b=Xqs0txmIOmV7Kvbr9crN/IypoMdDOYExxUnD7ywFp0Cl4HQyBrW9XS0uQyluPlhYrK
+         5a19nukxUmKV6KBTdkCnwh2l8Kx37Hd6wyr7cRVx15+4JaIEATTquSrYZUPrFChYPOp+
+         WWXGYfMngTJDYYUKxD/Ok1OY2M+884fMHqTed+2pFV+zGshE4UH5gRKIJmINACzshF9X
+         iQIjVtxZ83zurC80fhaP07ZhPb+UutB9kPsu1Ug2j+5HpjUxxQ+hbg/ksOJvvP2zyFEh
+         Cty7U5KJ1U8qApz11fmLwgXCll6vsPZNE5AoTMT6UfcLavt17YcY3c8q85fkzKyYN0t/
+         KYVA==
+X-Gm-Message-State: AOAM533+Q1H9kWe6i6ZcS30GjXgz5MywLv+0hTK9QJ8y/x6hLqjMHN4D
+        PzfrIq9yj5JU7xt7LOGIBA/b8/q34E1qDJnamdMHEQ==
+X-Google-Smtp-Source: ABdhPJzT52+7fhpzyGdEPpFOaQHm0H5K5N9slJdZWOCE0StJyTV8DY7tAOulhTQU/LlU+EEkYf+hetlLkRsAW1D8TBw=
+X-Received: by 2002:a17:907:7785:: with SMTP id ky5mr10011936ejc.133.1617886762806;
+ Thu, 08 Apr 2021 05:59:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bbWr1S3uwXZa2YpYdWncDo/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+ <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+ <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com> <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vf1S5Ra4fdkV=faw4tCXbeNiifC3y8MF0_bCqHGfDBLsQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Apr 2021 18:29:11 +0530
+Message-ID: <CA+G9fYuYC3QK2Zi8pbud0ebai4d4YgB0A4DXg5XWaE1pLWP5tw@mail.gmail.com>
+Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bbWr1S3uwXZa2YpYdWncDo/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 8 Apr 2021 at 15:17, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Apr 8, 2021 at 11:33 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> > On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
+> > > <naresh.kamboju@linaro.org> wrote:
+> > > >
+> > > > While running kselftest recently added gpio gpio-sim.sh test case the following
+> > > > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+> > > > and hikey devices.
+> > > >
+> > > > GOOD: next-20210326
+> > > > BAD: next-20210330
+> > > >
+> > > > This is still happening today on Linux next tag 20210407.
+> > >
+> > > Can you add the following
+> > >
+> > >   sysfs_attr_init(attrs[i]);
+> > >
+> > > to the end of the loop in gpio_sim_setup_sysfs()?
+> >
+> > Do you mean like this,
+> >
+> > diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+> > index ea17289a869c..5fe67ccf45f7 100644
+> > --- a/drivers/gpio/gpio-sim.c
+> > +++ b/drivers/gpio/gpio-sim.c
+> > @@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+> >                 dev_attr->store = gpio_sim_sysfs_line_store;
+> >
+> >                 attrs[i] = &dev_attr->attr;
+> > +               sysfs_attr_init(attrs[i]);
+> >         }
+> >
+> >         chip->attr_group.name = "line-ctrl";
+>
+> Precisely.
 
-Hi all,
+As per your suggestions the above line added and build tested
+the reported issue is fixed now.
 
-Commit
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-  11cccec79c60 ("genirq: Add IRQF_NO_AUTOEN for request_irq/nmi()")
+>
+> > > If it fixes an issue I'll send a formal patch.
+> >
+> > I will build and test this and report here.
 
-is missing a Signed-off-by from its committer.
+OTOH,
+LKFT builds kernel and rootfs on host and runs tests on various target
+devices. While doing this process "make install" is not installing required
+test files like gpio-mockup-cdev and gpio-line-name.
 
---=20
-Cheers,
-Stephen Rothwell
+# ./gpio-mockup.sh: line 106: ./gpio-mockup-cdev: No such file or directory
+# ./gpio-sim.sh: line 100: ./gpio-line-name: No such file or directory
 
---Sig_/bbWr1S3uwXZa2YpYdWncDo/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Test run log:
+------------------
+# selftests: gpio: gpio-mockup.sh
+# 1.  Module load tests
+# 1.1.  dynamic allocation of gpio
+# ./gpio-mockup.sh: line 106: ./gpio-mockup-cdev: No such file or directory
+# test failed: line value is 127 when 1 was expected
+# GPIO gpio-mockup test FAIL
+not ok 1 selftests: gpio: gpio-mockup.sh # exit=1
+# selftests: gpio: gpio-sim.sh
+# 1. chip_name and dev_name attributes
+# 1.1. Chip name is communicated to user
+# 1.2. chip_name returns 'none' if the chip is still pending
+# 1.3. Device name is communicated to user
+# 1.4. dev_name returns 'none' if chip is still pending
+# 2. Creating simulated chips
+# 2.1. Default number of lines is 1
+# 2.2. Number of lines can be specified
+# 2.3. Label can be set
+# 2.4. Label can be left empty
+# 2.5. Line names can be configured
+# ./gpio-sim.sh: line 100: ./gpio-line-name: No such file or directory
+# line name is incorrect
+# GPIO gpio-sim test FAIL
+not ok 2 selftests: gpio: gpio-sim.sh # exit=1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBu824ACgkQAVBC80lX
-0Gz/DQf6Ajq3KDhe08Az2eLjoHVNyPuImCeE7iejvQC/xursD3N2SzlHQwiy9MqV
-sO3UW+w0UhMrsqSNMxw3Lkaz/9hXMCbPSUJOlJ9GE17CyUXhHTQNpI5oFOp2lfXF
-W2dLkGUoIg3BVjEEzM7sRyteo6VKpsTYCnRUAk+FRsuAP1HJ6opMaOd6rO7uVGEc
-ZOZNrXZuQUT79OgDspfA5g3YV2BuNeh6zdwi+51bCYUufd5a4g2Eg8OnC3DT9ZkF
-n+sz/C57sgbVpHBrklSzk+2eOBYhH4wMa4YWNLOTmviw8ptwQPu4IMQ425pjLJo1
-unGXZxxlpEttLU89Q7/HEZFmBms3tA==
-=7soO
------END PGP SIGNATURE-----
-
---Sig_/bbWr1S3uwXZa2YpYdWncDo/--
+- Naresh

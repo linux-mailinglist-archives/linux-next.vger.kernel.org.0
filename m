@@ -2,76 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B170357DB0
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 09:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AE9357E22
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 10:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhDHH4b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 03:56:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229510AbhDHH4b (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 8 Apr 2021 03:56:31 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A888F61157;
-        Thu,  8 Apr 2021 07:56:20 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1lUPWU-006FTf-NC; Thu, 08 Apr 2021 08:56:18 +0100
+        id S229867AbhDHIdq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 04:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbhDHIdp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 04:33:45 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B1AC061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 01:33:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id mh7so1578433ejb.12
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 01:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5yCCjiWkAwqATqPSjIjQNyLbmG/huiKlevGSmwkEyR8=;
+        b=IILPK87co6cRB30SBUD84s8jNEWHphYGfXu/trBxCn+HYZUD6LJxbIvbuvoFnHEIkJ
+         8pT9+YwIxsWGPJRTvxmuhYnpdDMWE7ehCgXLZT0USf+os5lIdDr2/icw83jnnqMaPnDJ
+         xXGMlpCnW+2Bu77aPYpaluIWMrDqKvl0b4qJ+jfLyt0aqMRftlIA69uuWYb5OSO+DKwb
+         4bGlRcnt0chwis+3AaomfayoRZ6xkjTia6ZhRGhXeGDRVC2/knn8LJ4eYbjKQEIthRZr
+         ela4zkCP9xWbLI0gWkQc5AW86VMw5RLYQeftE2A7cyrwz4VxXYWsVzKjDOPL7iBUiTGz
+         7W1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5yCCjiWkAwqATqPSjIjQNyLbmG/huiKlevGSmwkEyR8=;
+        b=kHhZyi2nkO0g+C0PuLiqQdgCDsVrD8RBfzOtN0V+heajoF5yD4344OK3NzygaRDGFU
+         bfLxPyhPcT96yk9KIPe+CkPH9TveO+UdWQpCFGtvty/2VyCrQpvf+P6g751zu8Ot/Wkm
+         rtqmnw/OTYT76uIJ5Pksi7GqGLv+MdHQNtlib7mpAdC7Xmqmc+UNcNzEJ/tSdItqXbXN
+         Yle6su+Q/9WAdti8ExJSvHdTNKDVmUD72BGbDIBhHirGSSKDHkq7UsPQM27OgHEH9ClS
+         KTCX36Gmfy0WjU+Pbx+oIGEeBvDWVkSQmdH2A2L/9VFRN6aFhSv38SAKFnn9Adp/R1Xg
+         qAbg==
+X-Gm-Message-State: AOAM533R3KCQ5rr616EutSpLsPKtMLGZysY1KozkVY9G/1osOIrzigwC
+        3LWKOdPjjuAgv+uJaNTuOwziuiP0t0/90TX4PIkvkg==
+X-Google-Smtp-Source: ABdhPJyu6/8vxWkUZcupdWZS44/FuHmo3e72vR0EqZhptpOKA0zGOzhX+uQpSlk8g3+BrTRTBir+tAGqYdWiAxlxXLk=
+X-Received: by 2002:a17:906:9605:: with SMTP id s5mr8993580ejx.287.1617870811400;
+ Thu, 08 Apr 2021 01:33:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 08 Apr 2021 08:56:18 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the irqchip tree
-In-Reply-To: <20210408163528.180240af@canb.auug.org.au>
-References: <20210408163528.180240af@canb.auug.org.au>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <8171969ffe92eed0013fe3900ba0526f@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, j.neuschaefer@gmx.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+References: <CA+G9fYsiRYaE+y44ApDkvPvbDCdiJ+nnCMhiiaPVsg6p8m4+1Q@mail.gmail.com>
+ <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+In-Reply-To: <CAHp75VdJ7kGXN6sk8HTeSfAKQtHDGSmtdVPn7CSkK5=yfDizuA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Apr 2021 14:03:20 +0530
+Message-ID: <CA+G9fYuG12WaC6QAdx1k80v8-As7a7oVVkhaUDxqgV=BaunfxQ@mail.gmail.com>
+Subject: Re: [next] [arm64] [gpio] BUG: key has not been registered! DEBUG_LOCKS_WARN_ON:
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Colin King <colin.king@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On Thu, 8 Apr 2021 at 04:21, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+>
+> On Thu, Apr 8, 2021 at 12:38 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > While running kselftest recently added gpio gpio-sim.sh test case the following
+> > warning was triggered on Linux next tag 20210330 tag running on arm64 juno
+> > and hikey devices.
+> >
+> > GOOD: next-20210326
+> > BAD: next-20210330
+> >
+> > This is still happening today on Linux next tag 20210407.
+>
+> Can you add the following
+>
+>   sysfs_attr_init(attrs[i]);
+>
+> to the end of the loop in gpio_sim_setup_sysfs()?
 
-On 2021-04-08 07:35, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the irqchip tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/irqchip/irq-wpcm450-aic.c:9:10: fatal error: asm/exception.h:
-> No such file or directory
->     9 | #include <asm/exception.h>
->       |          ^~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   fead4dd49663 ("irqchip: Add driver for WPCM450 interrupt controller")
-> 
-> I have used the irqchip tree from next-20210407 for today.
+Do you mean like this,
 
-Thanks for the heads up. I guess that's the effect of COMPILE_TEST
-which was apparently not very well tested... I'll drop it from Kconfig.
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index ea17289a869c..5fe67ccf45f7 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -296,6 +296,7 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
+                dev_attr->store = gpio_sim_sysfs_line_store;
 
-Jonathan, feel free to submit something re-enabling COMPILE_TEST once
-you've worked out the missing dependencies.
+                attrs[i] = &dev_attr->attr;
++               sysfs_attr_init(attrs[i]);
+        }
 
-Thanks,
+        chip->attr_group.name = "line-ctrl";
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+
+>
+> If it fixes an issue I'll send a formal patch.
+
+I will build and test this and report here.
+
+- Naresh

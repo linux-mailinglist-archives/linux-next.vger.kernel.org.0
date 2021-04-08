@@ -2,86 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF31357BA0
-	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 06:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528B7357CA2
+	for <lists+linux-next@lfdr.de>; Thu,  8 Apr 2021 08:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbhDHE6J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 00:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S229772AbhDHGfs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 02:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbhDHE6G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 00:58:06 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A92CC061760;
-        Wed,  7 Apr 2021 21:57:53 -0700 (PDT)
+        with ESMTP id S229512AbhDHGfq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 02:35:46 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF913C061760;
+        Wed,  7 Apr 2021 23:35:32 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FG8CJ3xPdz9sV5;
-        Thu,  8 Apr 2021 14:57:48 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGBN117Wpz9sTD;
+        Thu,  8 Apr 2021 16:35:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617857869;
-        bh=1mwdPy0riEqigaxUtYaZ41Qx/2YCuxBzqsLf+zbkIp4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eKyQISAfgMalEy6ok1zIGiYZEsf8ggIGN45COflTKKv4P+bAE9L2db+4LtjjDu2Fr
-         uiL6vxqbp9CAfrMRSNP8rhoJ8PiA5qdGJLXiPtmKpU8k31CjikddkhKLBzsccl9T3d
-         YklLkk0TN49mZJqhFUWp+mSUIlX+xAelJNu4H/HlvPQ2eVw4gS5a9lWuHV/EC6vWW9
-         5z/z2eM/KwfEHJUeAXs619Et4ikzdP5TxaUnABqm0N0Okw4ORzoJ7s6VHRP+vaOAYU
-         ELYxxgoqz1K6OZeyEIeFSc+DYgIU2U2/JlDXmBZmzjBNx0EwK7hRj1OtusLnOMWPvk
-         Ffe5qg0dcmtVA==
-Date:   Thu, 8 Apr 2021 14:57:47 +1000
+        s=201702; t=1617863729;
+        bh=sd4NiQdmVyyEmcQXDZzxR48wvz6eM9ue6+EtR9W+nwk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MD5wQeK7A9RmsEXXaM8OFOFKCajEP2ZclSxZPajBl1mQH7lCz8+snn2FQ+DE6epXi
+         QPn6SIldqV6zbKzBtJ8Hp+bse3Sp4oj8RfRrDmHOQfbl2PWPH6Xgl7DKIaWQ6D8WV0
+         XM7IcgLR9xLk91qPrVbAHMbh9g9axqruMdOKyQak4EfErDjfn/VXvu11fy8wB13c9O
+         UDjGest9zET8zyZZEkQKu+7pUY3f/A+4rdvCPr170ko2KQYsdxHrJnfRfvQVHEsQ+M
+         aH9XFR87+oxpeSM750PHf5mcvK/36nSE5T8Aha6Eh2FNcCZThNUXMEsXDQuoXBeWhD
+         QrrsRAH3xmmog==
+Date:   Thu, 8 Apr 2021 16:35:28 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bluetooth tree
-Message-ID: <20210408145747.1ed7c57e@canb.auug.org.au>
-In-Reply-To: <PH0PR11MB5126EFEDB65650EFC3368981D3749@PH0PR11MB5126.namprd11.prod.outlook.com>
-References: <PH0PR11MB5126EFEDB65650EFC3368981D3749@PH0PR11MB5126.namprd11.prod.outlook.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the irqchip tree
+Message-ID: <20210408163528.180240af@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4V.hV7W0JZuRwmTJ.gTX.4X";
+Content-Type: multipart/signed; boundary="Sig_/W_Bat7xdPOBP3AX6mzNARoo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4V.hV7W0JZuRwmTJ.gTX.4X
+--Sig_/W_Bat7xdPOBP3AX6mzNARoo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Luiz,
+Hi all,
 
-On Thu, 8 Apr 2021 04:47:04 +0000 "Von Dentz, Luiz" <luiz.von.dentz@intel.c=
-om> wrote:
->
-> I'd leave this for Marcel to comments, but there are quite many
-> instances of // comment like that, so I wonder what is going on, or
-> perhaps that is not allowed in include/uapi?
+After merging the irqchip tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-We only do these standalone compile checks on the uapi header files.
+drivers/irqchip/irq-wpcm450-aic.c:9:10: fatal error: asm/exception.h: No su=
+ch file or directory
+    9 | #include <asm/exception.h>
+      |          ^~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  fead4dd49663 ("irqchip: Add driver for WPCM450 interrupt controller")
+
+I have used the irqchip tree from next-20210407 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4V.hV7W0JZuRwmTJ.gTX.4X
+--Sig_/W_Bat7xdPOBP3AX6mzNARoo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBujUsACgkQAVBC80lX
-0GxjsAf/X2jRYLLEz+/16GpEYB1+EMCvq9ktvUJTS6zTuwkSWx/EkXSviF86tx0P
-HbF2c1+HF6CfazTqIW4HJlubM5LptJg1OUSOjExDcn6rqSTqP7vlWoHYQ08rBbDG
-xO6/ruCEowiXSgJKrCzGEIzDeXuHWpZuzvD5tNj3yNjmJgbv+XwV7jroNtKYCOPD
-D6b6Ats4CTsfoYzUzQCTp+ypvIwIYQqEAM2s9I2W67ohbG9nZb6cHYk2D9k0JnwD
-foelyXZvSxmlcPFW2qi6iNwFgXCrBEmMTfgy7NOJ/MkiL7wuJqwzlrmhQwwGkjij
-UrcCB/MHBNeO9qU86QIOyRqSnF91ow==
-=e3Bx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBupDAACgkQAVBC80lX
+0Gy3MQf+NLlJBrp8ewz7Ud9FnuqFaDhF/fhVNPdhRtxCwmscdX7JexuD5btrsQ2K
+4aEpoEpsQZBm09f/BLQRH1kQYV6dFOozmw46cCgLDcRJnvZWy8E7U/gI9LqnCja9
+vjjEfg9nC8nrmtHbeETVxc0PEhB4/ba7B8yInLixbNSPLVnY6VOoPzQqjJ+IRMkk
+VEnFLW8VUWiEb1W1THwwE02pMIs7B/Q+sbxGeZBLwfxBWmxUUAJL6jqi8NARE//3
+/+JAOerzTJ3204pEcms8bb/UNlZJnuvD00HdX26yjUfl3SOw91FtKxHyAl28B/XJ
+6k1abugOnH3hyr6T3kcSaatpfWkC9A==
+=ovGO
 -----END PGP SIGNATURE-----
 
---Sig_/4V.hV7W0JZuRwmTJ.gTX.4X--
+--Sig_/W_Bat7xdPOBP3AX6mzNARoo--

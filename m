@@ -2,54 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F78835A4E3
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 19:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5818735A4F7
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 19:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbhDIRrt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Apr 2021 13:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S234348AbhDIRym (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Apr 2021 13:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbhDIRrs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 13:47:48 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8178C061761
-        for <linux-next@vger.kernel.org>; Fri,  9 Apr 2021 10:47:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w23so7507252edx.7
-        for <linux-next@vger.kernel.org>; Fri, 09 Apr 2021 10:47:35 -0700 (PDT)
+        with ESMTP id S234250AbhDIRym (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 13:54:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB59AC061762
+        for <linux-next@vger.kernel.org>; Fri,  9 Apr 2021 10:54:26 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id l4so9940816ejc.10
+        for <linux-next@vger.kernel.org>; Fri, 09 Apr 2021 10:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h/DYqeYDZ2tv0pjw6nXCAivxGZElUhydHkSur0hy0Lg=;
-        b=fL07bRo1AlQ8538F3YddizvSL3vRN8cISsYffz2e1gqSDx1yzzsRFb9f/s6uye9b7J
-         kZ8zK1UPnRR86nK2lEJVUTVrBxgvNbP0hXJlljYXsdobPKNmOkrk1NKCkObxp7uvr4GS
-         NcRPN/YenqQPGgm25FJbGyQ6Nq7TAoaCLj2D/jnvpVdIbwzRnMd7CobpdcF+6wIhwCnA
-         LFpDOPrdcc8p8ajBEUAU6G40hEBpWU3cEzBPeFC+INBPt+hps6TQOfD0hP35fPgNWZXx
-         6ikddwhaV0DyWVQH83zWH19++Qt2/wafurQRsn/7JEonLEZtgde5JPwHgvir8Dg0q0NP
-         G6Nw==
+        bh=GuGOCMsxnSRJkFXoL0px3WemZnAxxxYEAqPblSK2aKs=;
+        b=sThAnAdSnO3iZHIZPMgbX1ZpXC5ABvIgYDEYyxUSZW9IccFRNN1xNK2emIAW3ZaVnW
+         XCokPA+zA8NFFg58OhLhPXBOixpKv154E2ERt/Vgb793MEmxddSnCyZ304LzkdGBDEFF
+         3kUYOJFZ54z8fnBl8dS853pdQaroRotAd8toOv5cbJAAwcyZuscUZ+j3XnFEyIbuOdm2
+         hSjB/zzJWinuhtGfiYVGuZeraRlZK7f2yH/rD9OpZKleTvjf7U1fO+JTpre9ybofhNRL
+         cQai7Mo2sZQYCTa1ZfEgba/7Ah8cLjbGynKXhykOaaB7090u5OnpAtlNlCQRV0ztT4V4
+         Qj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h/DYqeYDZ2tv0pjw6nXCAivxGZElUhydHkSur0hy0Lg=;
-        b=LcnOUipdgr6uV6BCQq/nh0ubf1lQt4m0JEarbQEJDmFZ70yhgZHtTb/4P94iKjg/qS
-         hOn4aaf4fXxgndi/8K7CLXkurEBsvp4CpGgPdGJW5ugzeQGSyy4IgWMJRtQR7uGRjJRS
-         RnvPie+asRy16piSyxo3N27w4Hip0q0JXs/7R0rATpdY31wtITjiWJguNt7NrEmCqATY
-         I22pfctMOePCg3b8qilqMqf0BOOqoeAu7CAL7hM+2rFKt9OJQgm98lbYbhSNVi7lf+oV
-         HrSYVg3vAWJZ8gT7kMqgMyTtm/vS5hTmC+evnCqha0AYJ9lMMNW23BlTAmAYmMA7hVLq
-         pn1A==
-X-Gm-Message-State: AOAM531Grg230CxfGcGRvJ9KQdaG4WvzxNh++4Ffmjk4U8eVuj7BRKNU
-        zRmmIJZtPJsO/FiPmLMRyPo78E5Vb25qs2eeqn/sZaNCpQnmJg==
-X-Google-Smtp-Source: ABdhPJw5dTKISltAAxoV0GJqKF6gZNwGP+zQpFKqQsBOiL2hemXFTwP8DvauaaAu4KsetLu5EdkVn0Rk8ibopUKjMJE=
-X-Received: by 2002:a50:c3c2:: with SMTP id i2mr18734759edf.23.1617990454256;
- Fri, 09 Apr 2021 10:47:34 -0700 (PDT)
+        bh=GuGOCMsxnSRJkFXoL0px3WemZnAxxxYEAqPblSK2aKs=;
+        b=WFfxiiyUZczdAvhtedVr30KTiNmUQt+GpjjaX6/fXJA3BDJtci4PnWYlSW3PzLuz33
+         EyQwfhiXCMGC+LOVZzKZNg3KPBZ0N0aDvG/0W3DIy8X0Y+JV/MFLEtYxKt/bb9o4+CrP
+         KO21dd3QZFJVTQtjA6+6xbxhm3j/RgvOMrB7XY+woKu238ECqilu5n0IV4pZrmvOJNE4
+         e3PggJlPhPTtSgE0/a+6Gu2CIyjiyeWuKHWyo5U2VCXFIrK4/PmiP3/DsZ39GHZ4jrZD
+         jgTPMRqgxSUMF/s8YZyrIoloQSWi5xfEikWCo5lJX7a8x1Fq3tMPqE4eqvrqrSE3UqiZ
+         /zFw==
+X-Gm-Message-State: AOAM532OkTY/wQ7sFv2CCuG57OmgSWHzBOUQuz/f3lB/FCj5Szthwhki
+        fFxIwTMTbC1lMU+oTaFRDvghoiWxHe6Iyo6YuF7PUA==
+X-Google-Smtp-Source: ABdhPJztzbhO6E534jWeed4RXeQBg6BWEsaaajL/mT6jcMWBCgehqrmsGKzjtxqaNuLdBvIazSo15Sb0n7hgbUgF9Go=
+X-Received: by 2002:a17:906:4f91:: with SMTP id o17mr17257086eju.503.1617990865370;
+ Fri, 09 Apr 2021 10:54:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <CA+G9fYu60T=vymv7gA0eaopfNDWXAVT9WRS11Rrk1OfTkrCevw@mail.gmail.com>
  <PSAP153MB042218315B664B15A59A80B094739@PSAP153MB0422.APCP153.PROD.OUTLOOK.COM>
-In-Reply-To: <PSAP153MB042218315B664B15A59A80B094739@PSAP153MB0422.APCP153.PROD.OUTLOOK.COM>
+ <CA+G9fYvcSK-Z7+VrRbHp7ADDDgw2tWWaqTfQMyC2dxuOYGLz6A@mail.gmail.com>
+In-Reply-To: <CA+G9fYvcSK-Z7+VrRbHp7ADDDgw2tWWaqTfQMyC2dxuOYGLz6A@mail.gmail.com>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 9 Apr 2021 23:17:22 +0530
-Message-ID: <CA+G9fYvcSK-Z7+VrRbHp7ADDDgw2tWWaqTfQMyC2dxuOYGLz6A@mail.gmail.com>
+Date:   Fri, 9 Apr 2021 23:24:14 +0530
+Message-ID: <CA+G9fYuNHTscCZDwGnxv5axibgUw1iRKQ4RJrJxHQpSNrQPaBg@mail.gmail.com>
 Subject: Re: [EXTERNAL] [next] ERROR: modpost: "dns_query" [fs/cifs/cifs.ko] undefined
 To:     Shyam Prasad <Shyam.Prasad@microsoft.com>
 Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
@@ -66,16 +67,21 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 9 Apr 2021 at 21:49, Shyam Prasad <Shyam.Prasad@microsoft.com> wrote:
+On Fri, 9 Apr 2021 at 23:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 >
-> Hi Naresh,
+> On Fri, 9 Apr 2021 at 21:49, Shyam Prasad <Shyam.Prasad@microsoft.com> wrote:
+> >
+> > Hi Naresh,
+> >
+> > AFAIK, this has been fixed in an updated patch last evening. Can you please check if you're still seeing it?
 >
-> AFAIK, this has been fixed in an updated patch last evening. Can you please check if you're still seeing it?
+> Please share the fix commit and subject here.
+>
+> FYI,
 
-Please share the fix commit and subject here.
+ignore the below statement.
+our build system did not trigger today tag yet.
 
-FYI,
-This build error is still on today's Linux next tag 20210409.
-
+> This build error is still on today's Linux next tag 20210409.
 
 - Naresh

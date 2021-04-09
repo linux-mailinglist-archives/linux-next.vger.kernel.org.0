@@ -2,98 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267B935985E
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 10:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48594359BB5
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 12:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbhDIIzi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Apr 2021 04:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S234108AbhDIKPr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Apr 2021 06:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbhDIIzh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 04:55:37 -0400
-X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Apr 2021 01:55:25 PDT
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4C6C061761
-        for <linux-next@vger.kernel.org>; Fri,  9 Apr 2021 01:55:25 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FGsHQ0xDNzMqVFY;
-        Fri,  9 Apr 2021 10:48:50 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FGsHN47Lwzlh8TL;
-        Fri,  9 Apr 2021 10:48:48 +0200 (CEST)
-Subject: Re: linux-next: manual merge of the security tree with the ext3 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>
-Cc:     James Morris <jamorris@linux.microsoft.com>,
+        with ESMTP id S234696AbhDIKPK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 06:15:10 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9EC0613AF;
+        Fri,  9 Apr 2021 03:13:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGv935JmMz9sW1;
+        Fri,  9 Apr 2021 20:13:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1617963209;
+        bh=0BjMUodmgPcivICj4iCsFznMR7XM2fWs437KiiMTk1A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Jt2tltatENitpE2vqx+BdBzRYQxBmIPSqVtXhiN5jMZymXBG5rbSM/zp41jTvbt5O
+         5yaZploqBjbNodRJx3ZMSm3G2JREsDa+JJYh7E0p6RxepoRxJ3cvrRwXCiZFEb4VXk
+         Tuo7tUZGdUpcwSMfYIT7LOvfgxPPf/HaRZ9CtnRRevYdkU+fhdeGj+uYkRKhy97AKa
+         jvEEyC9dFPBtJkB2ZNk1O1SN0gHpC1a05ydljoRNOKP8nsm3uhqpWGhOCnn7KeWmJW
+         WMTgBYrvS+kVPodt7TqGKaaGrGH0WfPg3FyUeT8AdoRESGs7wrA25Tg/lF5hzm0qgk
+         9Izm94lQWdL+g==
+Date:   Fri, 9 Apr 2021 20:13:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Hector Martin <marcan@marcan.st>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-References: <20210319130551.76ce2b8f@canb.auug.org.au>
- <20210409143954.22329cfa@canb.auug.org.au>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <ec4beec7-b68e-55d2-6551-2a910d19ff11@digikod.net>
-Date:   Fri, 9 Apr 2021 10:50:41 +0200
-User-Agent: 
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the arm-soc tree
+Message-ID: <20210409201316.6c9295a4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210409143954.22329cfa@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/O0xy41JSU/+P=v9ZX3QWlKm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Looks good, thanks Stephen!
+--Sig_/O0xy41JSU/+P=v9ZX3QWlKm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 09/04/2021 06:39, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 19 Mar 2021 13:05:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the security tree got conflicts in:
->>
->>   arch/alpha/kernel/syscalls/syscall.tbl
->>   arch/arm/tools/syscall.tbl
->>   arch/arm64/include/asm/unistd.h
->>   arch/arm64/include/asm/unistd32.h
->>   arch/ia64/kernel/syscalls/syscall.tbl
->>   arch/m68k/kernel/syscalls/syscall.tbl
->>   arch/microblaze/kernel/syscalls/syscall.tbl
->>   arch/mips/kernel/syscalls/syscall_n32.tbl
->>   arch/mips/kernel/syscalls/syscall_n64.tbl
->>   arch/mips/kernel/syscalls/syscall_o32.tbl
->>   arch/parisc/kernel/syscalls/syscall.tbl
->>   arch/powerpc/kernel/syscalls/syscall.tbl
->>   arch/s390/kernel/syscalls/syscall.tbl
->>   arch/sh/kernel/syscalls/syscall.tbl
->>   arch/sparc/kernel/syscalls/syscall.tbl
->>   arch/x86/entry/syscalls/syscall_32.tbl
->>   arch/x86/entry/syscalls/syscall_64.tbl
->>   arch/xtensa/kernel/syscalls/syscall.tbl
->>   include/uapi/asm-generic/unistd.h
->>
->> between commit:
->>
->>   fa8b90070a80 ("quota: wire up quotactl_path")
->>
->> from the ext3 tree and commit:
->>
->>   818946f8b806 ("arch: Wire up Landlock syscalls")
-> 
-> This is now commit
-> 
->   9fbebb70210a ("arch: Wire up Landlock syscalls")
-> 
->> from the security tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
-> 
-> The resolution now looks like below (since the lanlock syscall number
-> have been updated).
-> 
+Hi all,
+
+After merging the arm-soc tree, today's linux-next build (powerpc
+allnoconfig) failed like this:
+
+drivers/of/address.c: In function 'of_iomap':
+drivers/of/address.c:907:10: error: implicit declaration of function 'iorem=
+ap_np'; did you mean 'ioremap_wt'? [-Werror=3Dimplicit-function-declaration]
+  907 |   return ioremap_np(res.start, resource_size(&res));
+      |          ^~~~~~~~~~
+      |          ioremap_wt
+drivers/of/address.c:907:10: warning: returning 'int' from a function with =
+return type 'void *' makes pointer from integer without a cast [-Wint-conve=
+rsion]
+  907 |   return ioremap_np(res.start, resource_size(&res));
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/of/address.c: In function 'of_io_request_and_map':
+drivers/of/address.c:942:7: warning: assignment to 'void *' from 'int' make=
+s pointer from integer without a cast [-Wint-conversion]
+  942 |   mem =3D ioremap_np(res.start, resource_size(&res));
+      |       ^
+lib/devres.c: In function '__devm_ioremap':
+lib/devres.c:47:10: error: implicit declaration of function 'ioremap_np'; d=
+id you mean 'ioremap_wt'? [-Werror=3Dimplicit-function-declaration]
+   47 |   addr =3D ioremap_np(offset, size);
+      |          ^~~~~~~~~~
+      |          ioremap_wt
+lib/devres.c:47:8: warning: assignment to 'void *' from 'int' makes pointer=
+ from integer without a cast [-Wint-conversion]
+   47 |   addr =3D ioremap_np(offset, size);
+      |        ^
+
+Caused by commits
+
+  7c566bb5e4d5 ("asm-generic/io.h:  Add a non-posted variant of ioremap()")
+  89897f739d7b ("of/address: Add infrastructure to declare MMIO as non-post=
+ed")
+(and maybe some others)
+
+I have reverted 86332e9e3477..7d2d16ccf15d for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/O0xy41JSU/+P=v9ZX3QWlKm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBwKLwACgkQAVBC80lX
+0Gxngwf9GQWNnc5LyM+HCaI+pb327CTB58y3t1AoTLkQSwo3Z71bVcl/Z3rv1CuV
+7othJZfgn7gkU29CcB3KZXVKk2IaPfvhVqEEOjNEo7UsR/C1TBU4g5SGI3uCBhEg
+XE8Fxr4RrQ9N6IE7e8qMb6XsEXdC6bxSWmrSRLKKPMPH01PGIeRRmbrTKqtJwSAN
+rD4HDdlo+zGd6qTFuR49SqaJM8jgdA+XzKZmHKCDCQmnVVd/u7ILQ9U+dOxxy62u
+JdA6Xzl8M5aA6BEI/Vbstr8U1DuR3p2V9T/KcfBruyi8X/nOaRb5gtTwA8LbTQOY
+TnF4XkfJzuF+ic29VXw+50dtA6cKcg==
+=Akh3
+-----END PGP SIGNATURE-----
+
+--Sig_/O0xy41JSU/+P=v9ZX3QWlKm--

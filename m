@@ -2,134 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EE8359503
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 07:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D318A35955E
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 08:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbhDIFxS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Apr 2021 01:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S233332AbhDIGXw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Apr 2021 02:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbhDIFxS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 01:53:18 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AE7C061760;
-        Thu,  8 Apr 2021 22:53:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGnNV3XZNz9sVt;
-        Fri,  9 Apr 2021 15:52:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617947581;
-        bh=IaFcgmo34MevFgJEiDdEWLgJGrX80AspYRHdVxy95BY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cBPvYJmvIGCfR+9UYo4jUbqUad9/KJK3Hv0AHpoK8+O/P9wm07eHZNL5uTiUEviCa
-         dMDnrOQ3A3UKOg8JlWytJbrOKNOV+bAC3v5OtvTXBeYrVsEQe1mxk0P4IbKfahrHLZ
-         sPn6a3QnZUxNEHI4hQH4L5De9pbuX+gn7bXc8g+lmQp6dbkvX43VMihk3mLWsUWLj5
-         n1r+McBbj/Xg99leTwejje8zP/Jd6JPiT1zIFnWlq7/XbWwlk5wDpGdnX/EdljqF5k
-         o99A4wt9GNaRodn8hUp7T5ARqnQcyIq3itK8K7HWvZEkaj8HF5hgB1bfsYw8E+959n
-         m0MaeSY3NqR5Q==
-Date:   Fri, 9 Apr 2021 15:52:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the irqchip tree with the arm-soc tree
-Message-ID: <20210409155257.47f66922@canb.auug.org.au>
+        with ESMTP id S229715AbhDIGXw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 02:23:52 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1618CC061762
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 23:23:40 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id n2so6841305ejy.7
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 23:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/0WMp8MwKJ/u3qX7Dv8XtiWzb8xXHglsszw5dF/53Js=;
+        b=RSzU/8fTXW2zL+EO/inJbfSmLIUvORZ+0ncpCjsA5xwox5jMW+/13995cQ1BG3+drn
+         IZLu1plLrnt4tTK9456EABz/OGQNBErWwlNrkad+Xu2ynqUdG049uL1nGgvDOpkN5YQF
+         Z5VxJ8a24qmf8sTw08PZCOYyjRLbLc3aSYuEVLbcrzIzisS19Y+MvrZRe4EsB/OXp7Zc
+         Nduhl29srfd0adZ5Np0cthNChuCC60bAfT50gGRfWDz28GU052SKiHM22kDt34JNpaSP
+         j+zO42c44T9gPxiY1sPbQ8GzIO4UTE4AKDK4iq42bImf4aZVY+wH3fXj/mbLqLnaRAzL
+         UY3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/0WMp8MwKJ/u3qX7Dv8XtiWzb8xXHglsszw5dF/53Js=;
+        b=ONZJtAk99UnQxeG1Yiu28kLGPiQkh6VDiERpHb+6SKJrCs573dyqCRzJ9NkwezQ0HF
+         mIFaGXfrMQZaWmM4F+4EWOtf5snXKXUcQmO/+QtmTK1yjkxk6mqK57h1nmrrythYNLig
+         M9A3JzoLgs4Zkk+jgmo6nLCY+Gg/vsMOPhjkMMBEauGQuSIRJRKReVQh4a/luNXsNXvG
+         PBX5UskANFMk4CcVD0dxzLy8x1ZFklwliLZo6O2aVmF4qzH8trMWv+eie6y74qB1owtm
+         FvVOzGOY2W6H0sXSsUUC1oongkb8XI0YJ0PNnoux1d8jU+bVQ9PKZ5cqaQ46Hk164xbZ
+         Rupg==
+X-Gm-Message-State: AOAM530DltA1P2QWelrSC//UYOYauPGttpLBiXMBCf1/sfmkTAI6cCni
+        oxo4a8JkB1bLn94RnkKH6dFeBuFPQboBZt9SLPNatg==
+X-Google-Smtp-Source: ABdhPJyNW8FA7KCEbD2ruFaUWyLqipptmdm8sQ3TknahXLmC9cmxEHhJE+UDIIR9xnnqW2/0yG2B0wUwPtpsfi7AkfM=
+X-Received: by 2002:a17:907:7785:: with SMTP id ky5mr14338784ejc.133.1617949418711;
+ Thu, 08 Apr 2021 23:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2eOj.BXS5/MD4uPbvks.LUb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <CA+G9fYtNAEwCk1WkA_25FVUrR0QJ2vt2Dh_w+m-QOSjb8f5TBQ@mail.gmail.com>
+ <BYAPR04MB4965A95A5131664085CDD8B786739@BYAPR04MB4965.namprd04.prod.outlook.com>
+In-Reply-To: <BYAPR04MB4965A95A5131664085CDD8B786739@BYAPR04MB4965.namprd04.prod.outlook.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 9 Apr 2021 11:53:27 +0530
+Message-ID: <CA+G9fYt30EZOv2mUOf+xGh3R3A0SMJhvVtHFwZuKyBgB75UTTw@mail.gmail.com>
+Subject: Re: [next] drivers/cdrom/gdrom.c:586:61: error: 'rq' undeclared
+ (first use in this function)
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2eOj.BXS5/MD4uPbvks.LUb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Chaitanya,
 
-Hi all,
+On Fri, 9 Apr 2021 at 11:01, Chaitanya Kulkarni
+<Chaitanya.Kulkarni@wdc.com> wrote:
+>
+> On 4/8/21 22:21, Naresh Kamboju wrote:
+> > Linux next tag 20210408 architecture sh builds failed due to these errors.
+> >
+> > # to reproduce this build locally:
+> >
+> > make --silent --keep-going --jobs=8
+> > O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=sh
+> > CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+> > 'HOSTCC=sccache gcc'
+> >
+> >
+> > In file included from /builds/linux/include/linux/scatterlist.h:9,
+> >                  from /builds/linux/include/linux/dma-mapping.h:10,
+> >                  from /builds/linux/drivers/cdrom/gdrom.c:16:
+> > /builds/linux/drivers/cdrom/gdrom.c: In function 'gdrom_readdisk_dma':
+> > /builds/linux/drivers/cdrom/gdrom.c:586:61: error: 'rq' undeclared
+> > (first use in this function)
+> >   586 |  __raw_writel(page_to_phys(bio_page(req->bio)) + bio_offset(rq->bio),
+> >       |                                                             ^~
+> >
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> >
+> > Regressions found on sh:
+> >   - build/gcc-9-dreamcast_defconfig
+> >   - build/gcc-10-dreamcast_defconfig
+> >   - build/gcc-8-dreamcast_defconfig
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+> >
+>
+> This can be fixed by following :-
+>
+> diff --git a/drivers/cdrom/gdrom.c b/drivers/cdrom/gdrom.c
+> index e7717d090868..742b4a0932e3 100644
+> --- a/drivers/cdrom/gdrom.c
+> +++ b/drivers/cdrom/gdrom.c
+> @@ -583,7 +583,7 @@ static blk_status_t gdrom_readdisk_dma(struct
+> request *req)
+>         read_command->cmd[1] = 0x20;
+>         block = blk_rq_pos(req)/GD_TO_BLK + GD_SESSION_OFFSET;
+>         block_cnt = blk_rq_sectors(req)/GD_TO_BLK;
+> -       __raw_writel(page_to_phys(bio_page(req->bio)) + bio_offset(rq->bio),
+> +       __raw_writel(page_to_phys(bio_page(req->bio)) +
+> bio_offset(req->bio),
+>                         GDROM_DMA_STARTADDR_REG);
+>         __raw_writel(block_cnt * GDROM_HARD_SECTOR, GDROM_DMA_LENGTH_REG);
+>         __raw_writel(1, GDROM_DMA_DIRECTION_REG);
 
-Today's linux-next merge of the irqchip tree got conflicts in:
+Thanks for your patch.
+After applying this typo fix, the build pass now.
 
-  drivers/irqchip/Kconfig
-  drivers/irqchip/Makefile
-
-between commit:
-
-  76cde2639411 ("irqchip/apple-aic: Add support for the Apple Interrupt Con=
-troller")
-
-from the arm-soc tree and commits:
-
-  fead4dd49663 ("irqchip: Add driver for WPCM450 interrupt controller")
-  94bc94209a66 ("irqchip/wpcm450: Drop COMPILE_TEST")
-
-from the irqchip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/irqchip/Kconfig
-index d3a14f304ec8,715eb4366e35..000000000000
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@@ -577,12 -577,10 +577,18 @@@ config MST_IR
-  	help
-  	  Support MStar Interrupt Controller.
- =20
- +config APPLE_AIC
- +	bool "Apple Interrupt Controller (AIC)"
- +	depends on ARM64
- +	default ARCH_APPLE
- +	help
- +	  Support for the Apple Interrupt Controller found on Apple Silicon SoCs,
- +	  such as the M1.
- +
-+ config WPCM450_AIC
-+ 	bool "Nuvoton WPCM450 Advanced Interrupt Controller"
-+ 	depends on ARCH_WPCM450
-+ 	help
-+ 	  Support for the interrupt controller in the Nuvoton WPCM450 BMC SoC.
-+=20
-  endmenu
-diff --cc drivers/irqchip/Makefile
-index eb6a515f0f64,bef57937e729..000000000000
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@@ -113,4 -113,4 +113,5 @@@ obj-$(CONFIG_LOONGSON_PCH_MSI)		+=3D irq-
-  obj-$(CONFIG_MST_IRQ)			+=3D irq-mst-intc.o
-  obj-$(CONFIG_SL28CPLD_INTC)		+=3D irq-sl28cpld.o
-  obj-$(CONFIG_MACH_REALTEK_RTL)		+=3D irq-realtek-rtl.o
- +obj-$(CONFIG_APPLE_AIC)			+=3D irq-apple-aic.o
-+ obj-$(CONFIG_WPCM450_AIC)		+=3D irq-wpcm450-aic.o
-
---Sig_/2eOj.BXS5/MD4uPbvks.LUb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBv67kACgkQAVBC80lX
-0GziJAgAoeen9yM/lJRroL8vT1E55OTu83NjisHKt3y6nzsHSsDvCmiu+dSdEN8T
-42EHeu27Ylw3rhTG4B61eRMRZIBXm/uwoa8/QkP8NmSQ0SmsnwSW2puJ0LCunt4+
-43Kiw7OVb+EVY83zsKio5dcE/kNyK2YKe05VbNzxnEZiYJx4XiYrJaYJijgCSlQe
-mPmLRzYdcCqC6MbnvtayYMMzcFO8dGjLb+6TDnBlj7P3SadMnpLeXZQ73C8FX7pg
-Ez0IAH+AS8slmTTND8YwyPpa9A+jZeAdaRFy7m8augnfMTUcDbFbSTvYKGCRW6QV
-OQWahZhgHLhBOZw4Lb+BpUswGBAD4A==
-=UxOT
------END PGP SIGNATURE-----
-
---Sig_/2eOj.BXS5/MD4uPbvks.LUb--
+- Naresh

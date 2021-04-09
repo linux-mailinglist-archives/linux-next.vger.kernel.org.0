@@ -2,127 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 752133595E2
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 08:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267B935985E
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 10:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbhDIGyT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Apr 2021 02:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S230181AbhDIIzi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Apr 2021 04:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbhDIGyR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 02:54:17 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC354C061760;
-        Thu,  8 Apr 2021 23:54:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGpkw4klVz9sTD;
-        Fri,  9 Apr 2021 16:54:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1617951241;
-        bh=oF2th14REDVdRnIZ+k1NwPyoOzLOuLa/j/cyZB2p4+Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oy9XYw40lymK72hOowHNbGwd0kRmSc8il0feR7ohUg+wTv/GBJWez3WLtvBEvupGP
-         x0T8n+hz/xNI33Xn35cG3RCrq2ub4HfnDdVX+xxGlkNInMSm4hnYef025q6SCkxA+6
-         5ctWFjMU2dq8kW1A1z9nCWRUNbb8DL1hdbTho2oFI8zOg1QUhLMen/dnjBb6Djdw3o
-         FJBg3R1zi29ChvzcJ9UOPeZBitDFYiVbMLmA8G6ionOj4//C9uMicJjJlP2+lotFvQ
-         gaLnH6fRUcjib1v7B3eD9k6JOj8f7fIIoWXa1cqFHYzK0T4ST4ahaad0JBvFseaeVg
-         E5v4gy0Z3pEqg==
-Date:   Fri, 9 Apr 2021 16:53:59 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mark.gross@intel.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229846AbhDIIzh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 04:55:37 -0400
+X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Apr 2021 01:55:25 PDT
+Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4C6C061761
+        for <linux-next@vger.kernel.org>; Fri,  9 Apr 2021 01:55:25 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FGsHQ0xDNzMqVFY;
+        Fri,  9 Apr 2021 10:48:50 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FGsHN47Lwzlh8TL;
+        Fri,  9 Apr 2021 10:48:48 +0200 (CEST)
+Subject: Re: linux-next: manual merge of the security tree with the ext3 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>
+Cc:     James Morris <jamorris@linux.microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: linux-next: manual merge of the drivers-x86 tree with the battery
- tree
-Message-ID: <20210409165359.42535004@canb.auug.org.au>
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+References: <20210319130551.76ce2b8f@canb.auug.org.au>
+ <20210409143954.22329cfa@canb.auug.org.au>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <ec4beec7-b68e-55d2-6551-2a910d19ff11@digikod.net>
+Date:   Fri, 9 Apr 2021 10:50:41 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GpXxHTGakZb2qwH_erQ+_uF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210409143954.22329cfa@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GpXxHTGakZb2qwH_erQ+_uF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Looks good, thanks Stephen!
 
-Hi all,
-
-Today's linux-next merge of the drivers-x86 tree got a conflict in:
-
-  MAINTAINERS
-
-between commit:
-
-  167f77f7d0b3 ("power: supply: Add battery driver for Surface Aggregator M=
-odule")
-
-from the battery tree and commit:
-
-  1d609992832e ("platform/surface: Add DTX driver")
-
-from the drivers-x86 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index f5efa8c0b927,7dd6b67f0f51..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -11993,14 -11872,14 +12004,22 @@@ F:	drivers/scsi/smartpqi/smartpqi*.[ch
-  F:	include/linux/cciss*.h
-  F:	include/uapi/linux/cciss*.h
- =20
- +MICROSOFT SURFACE BATTERY AND AC DRIVERS
- +M:	Maximilian Luz <luzmaximilian@gmail.com>
- +L:	linux-pm@vger.kernel.org
- +L:	platform-driver-x86@vger.kernel.org
- +S:	Maintained
- +F:	drivers/power/supply/surface_battery.c
- +F:	drivers/power/supply/surface_charger.c
- +
-+ MICROSOFT SURFACE DTX DRIVER
-+ M:	Maximilian Luz <luzmaximilian@gmail.com>
-+ L:	platform-driver-x86@vger.kernel.org
-+ S:	Maintained
-+ F:	Documentation/driver-api/surface_aggregator/clients/dtx.rst
-+ F:	drivers/platform/surface/surface_dtx.c
-+ F:	include/uapi/linux/surface_aggregator/dtx.h
-+=20
-  MICROSOFT SURFACE GPE LID SUPPORT DRIVER
-  M:	Maximilian Luz <luzmaximilian@gmail.com>
-  L:	platform-driver-x86@vger.kernel.org
-
---Sig_/GpXxHTGakZb2qwH_erQ+_uF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBv+gcACgkQAVBC80lX
-0GyFoAf/SDgFr8xBtqJp3KRlbYX6fAUWingeCxmkRyTsawRLQetkBx1ps9vIOoyH
-JtW9F1Afe/hqoDCMdsISpQlTiUTenHJVse/tMLCZSaF8CT2LPvb/fPaDHkBCRMAX
-sYgAGvby+z5Irr7N4Ryqn4p851lZE29iBU+SxJXn/j48CnZ9kVDZPa/Zg+/DJ/78
-dBMR0zSmbymcmy+XSJDfFSkAXLFJlzbtd+suBLP3NnEH6asx+I1NXpR4jDUoBpFW
-HmbjRCAW/Yim25ULewIzvMOw6DBXP7IaCmss//HIAOdhsMdmDRQviYuxSTM7UzyD
-Tl4sBMtkDYYatpbPAKiL1tZ5YDCsrg==
-=wPnG
------END PGP SIGNATURE-----
-
---Sig_/GpXxHTGakZb2qwH_erQ+_uF--
+On 09/04/2021 06:39, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Fri, 19 Mar 2021 13:05:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the security tree got conflicts in:
+>>
+>>   arch/alpha/kernel/syscalls/syscall.tbl
+>>   arch/arm/tools/syscall.tbl
+>>   arch/arm64/include/asm/unistd.h
+>>   arch/arm64/include/asm/unistd32.h
+>>   arch/ia64/kernel/syscalls/syscall.tbl
+>>   arch/m68k/kernel/syscalls/syscall.tbl
+>>   arch/microblaze/kernel/syscalls/syscall.tbl
+>>   arch/mips/kernel/syscalls/syscall_n32.tbl
+>>   arch/mips/kernel/syscalls/syscall_n64.tbl
+>>   arch/mips/kernel/syscalls/syscall_o32.tbl
+>>   arch/parisc/kernel/syscalls/syscall.tbl
+>>   arch/powerpc/kernel/syscalls/syscall.tbl
+>>   arch/s390/kernel/syscalls/syscall.tbl
+>>   arch/sh/kernel/syscalls/syscall.tbl
+>>   arch/sparc/kernel/syscalls/syscall.tbl
+>>   arch/x86/entry/syscalls/syscall_32.tbl
+>>   arch/x86/entry/syscalls/syscall_64.tbl
+>>   arch/xtensa/kernel/syscalls/syscall.tbl
+>>   include/uapi/asm-generic/unistd.h
+>>
+>> between commit:
+>>
+>>   fa8b90070a80 ("quota: wire up quotactl_path")
+>>
+>> from the ext3 tree and commit:
+>>
+>>   818946f8b806 ("arch: Wire up Landlock syscalls")
+> 
+> This is now commit
+> 
+>   9fbebb70210a ("arch: Wire up Landlock syscalls")
+> 
+>> from the security tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+> 
+> The resolution now looks like below (since the lanlock syscall number
+> have been updated).
+> 

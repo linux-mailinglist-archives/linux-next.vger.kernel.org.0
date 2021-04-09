@@ -2,110 +2,162 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 876C5359266
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 05:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFD23592B6
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 05:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbhDIDDM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 23:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S233135AbhDIDNP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 23:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbhDIDDL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 23:03:11 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E75BC061760
-        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 20:02:57 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id z22-20020a17090a0156b029014d4056663fso2476410pje.0
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 20:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6DzrHeVpP1+JwvPAj6EHCpf8PHTdXBjxghkIOmRbesY=;
-        b=MxBxuEmmMyWOTQJUjOzWh0KjsXpMlGctEW8ZKMkLvFaFKaY/X4kXxY2cn3e+NrAzEb
-         U11R6xRLKXZs+C+qbDPnSMaOemSf/vqA1+efgBPMJ8HJsHdhkOxeioGrDyDZP6QU8Nh+
-         oochnJcKBkE0pn+lD+xu+PTtIaJZONleuGNwM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6DzrHeVpP1+JwvPAj6EHCpf8PHTdXBjxghkIOmRbesY=;
-        b=a62GRolb5hT1GEBZKRBbCCyb3iYBVXC7syy87a9BWgaxKF+Nh5aF/JpW07lKyM0N3v
-         0Twq2+Q0A/FjDodp5LZHM/NwiwAPKFrJTxy9jY9dbbRlc2N5AYlyRjiFE4llMlYLbnly
-         rWYAUqIHZvqxWrUlvqNj9G/gk0Z5CddSsJ/ATL2UsumV5WqZ/exF5P1OVWLRUJNPiOTc
-         N1QO9Aa6BT9qgjn2es5L6wectrXN0AVm7oGsHsDpD1rxhP9XsBnJFzLjzitHGBonFs72
-         BhH6n5ooMsrqSoBZMUDQC55dFhVhwTnUx9k8ZR/Vbh/PNOPcw4XMRcrzQ4SOAX9y199z
-         wRaA==
-X-Gm-Message-State: AOAM531EJHZApcnOEPNrPJ4Hfujy6b1jF14WvqHRjWknmadWoITlpkkf
-        wa7rF3fe6EbSXlu/SRfRnmQH2iJv/uTlyg==
-X-Google-Smtp-Source: ABdhPJz8FzxfLjWZx/jOHAK9KxUt8Iy4JpatEuwBLXLHYQLw4wpHvfpeUjFIrbvBb0svvm5tQPZOUw==
-X-Received: by 2002:a17:902:b482:b029:e8:c21a:6ad2 with SMTP id y2-20020a170902b482b02900e8c21a6ad2mr10726665plr.51.1617937376831;
-        Thu, 08 Apr 2021 20:02:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e5sm620065pjv.22.2021.04.08.20.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 20:02:56 -0700 (PDT)
-Date:   Thu, 8 Apr 2021 20:02:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Gao Xiang <hsiangkao@redhat.com>
-Cc:     Chao Yu <yuchao0@huawei.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Re: Coverity: z_erofs_handle_inplace_io(): Uninitialized variables
-Message-ID: <202104082002.C0761A0FF@keescook>
-References: <202104081709.43BC2DB@keescook>
- <20210409010146.GA689534@xiangao.remote.csb>
+        with ESMTP id S232858AbhDIDNO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 23:13:14 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B47C061760;
+        Thu,  8 Apr 2021 20:13:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FGjqr14Qqz9sW1;
+        Fri,  9 Apr 2021 13:12:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1617937978;
+        bh=//XF3pf9c64cU+t13IzrOTUQCue+ZS7pXjZN4nupHbg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qax6trgBiOYRcsSNdKFHnpVvqoT/99lvSUdSLgtPjyygpFrMlOQ0RXCE3HVNTXY07
+         04A7GqcMIbkDTCphq4BUSlczeW9m3EC4WTJV8C7JljzT47U7MQhfbKo8QuEKzmivnw
+         Z0LMeywwlwFQs7QBaWFEAVj8i9HaP9RhNmW9k8Y+jlt72qttQI7wCYhjL0bgEjHofo
+         K/aglLFfHlsrbmnpHSztligf5yRSZMblS8dLF2TN6/enfrio1sseSl/yKvEIEn4DZp
+         lxcOJdfdaBMmjSbr+6rIoIoxqdBTSxTt+t9wY2WZKMidYXcl8M4ze11jYgLbR5hnHM
+         aAEkwWBtmXs7w==
+Date:   Fri, 9 Apr 2021 13:12:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
+Message-ID: <20210409131253.1a67eae2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210409010146.GA689534@xiangao.remote.csb>
+Content-Type: multipart/signed; boundary="Sig_/.3TCEW2K/ucdGcZbZyQjv9B";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 09:01:46AM +0800, Gao Xiang wrote:
-> Hi,
-> 
-> On Thu, Apr 08, 2021 at 05:09:14PM -0700, coverity-bot wrote:
-> > Hello!
-> > 
-> > This is an experimental semi-automated report about issues detected by
-> > Coverity from a scan of next-20210408 as part of the linux-next scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by commits:
-> > 
-> >   Wed Apr 7 13:17:55 2021 +0800
-> >     c660a3a86e7e ("erofs: support decompress big pcluster for lz4 backend")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1503704:  Uninitialized variables  (UNINIT)
-> > /fs/erofs/decompressor.c: 160 in z_erofs_handle_inplace_io()
-> > 154     	}
-> > 155     	kunmap_atomic(inpage);
-> > 156     	might_sleep();
-> > 157     	while (1) {
-> > 158     		src = vm_map_ram(rq->in, nrpages_in, -1);
-> > 159     		/* retry two more times (totally 3 times) */
-> > vvv     CID 1503704:  Uninitialized variables  (UNINIT)
-> > vvv     Using uninitialized value "i".
-> > 160     		if (src || ++i >= 3)
-> > 161     			break;
-> > 162     		vm_unmap_aliases();
-> > 163     	}
-> > 164     	*maptype = 1;
-> > 165     	return src;
-> 
-> Thanks for the report!
-> 
-> This bug was reported by Colin King before (next-20210407), and has already
-> been fixed in (next-20210408), see:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/erofs/decompressor.c?h=next-20210408#n157
-> and
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/erofs/internal.h?h=next-20210408#n405
+--Sig_/.3TCEW2K/ucdGcZbZyQjv9B
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ah-ha, thank you! Colin is fast. :)
+Hi all,
 
--- 
-Kees Cook
+Today's linux-next merge of the drm tree got a conflict in:
+
+  drivers/gpu/drm/vc4/vc4_plane.c
+
+between commit:
+
+  35d65ab3fdba ("drm/vc4: plane: Remove redundant assignment")
+
+from the drm-misc-fixes tree and commit:
+
+  5ddb0bd4ddc3 ("drm/atomic: Pass the full state to planes async atomic che=
+ck and update")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/vc4/vc4_plane.c
+index 1e9c84cf614a,c76e73a452e0..000000000000
+--- a/drivers/gpu/drm/vc4/vc4_plane.c
++++ b/drivers/gpu/drm/vc4/vc4_plane.c
+@@@ -1133,31 -1135,34 +1135,33 @@@ void vc4_plane_async_set_fb(struct drm_
+  }
+ =20
+  static void vc4_plane_atomic_async_update(struct drm_plane *plane,
+- 					  struct drm_plane_state *state)
++ 					  struct drm_atomic_state *state)
+  {
++ 	struct drm_plane_state *new_plane_state =3D drm_atomic_get_new_plane_sta=
+te(state,
++ 										 plane);
+  	struct vc4_plane_state *vc4_state, *new_vc4_state;
+ =20
+- 	swap(plane->state->fb, state->fb);
+- 	plane->state->crtc_x =3D state->crtc_x;
+- 	plane->state->crtc_y =3D state->crtc_y;
+- 	plane->state->crtc_w =3D state->crtc_w;
+- 	plane->state->crtc_h =3D state->crtc_h;
+- 	plane->state->src_x =3D state->src_x;
+- 	plane->state->src_y =3D state->src_y;
+- 	plane->state->src_w =3D state->src_w;
+- 	plane->state->src_h =3D state->src_h;
+- 	plane->state->alpha =3D state->alpha;
+- 	plane->state->pixel_blend_mode =3D state->pixel_blend_mode;
+- 	plane->state->rotation =3D state->rotation;
+- 	plane->state->zpos =3D state->zpos;
+- 	plane->state->normalized_zpos =3D state->normalized_zpos;
+- 	plane->state->color_encoding =3D state->color_encoding;
+- 	plane->state->color_range =3D state->color_range;
+- 	plane->state->src =3D state->src;
+- 	plane->state->dst =3D state->dst;
+- 	plane->state->visible =3D state->visible;
+-=20
+- 	new_vc4_state =3D to_vc4_plane_state(state);
++ 	swap(plane->state->fb, new_plane_state->fb);
++ 	plane->state->crtc_x =3D new_plane_state->crtc_x;
++ 	plane->state->crtc_y =3D new_plane_state->crtc_y;
++ 	plane->state->crtc_w =3D new_plane_state->crtc_w;
++ 	plane->state->crtc_h =3D new_plane_state->crtc_h;
++ 	plane->state->src_x =3D new_plane_state->src_x;
++ 	plane->state->src_y =3D new_plane_state->src_y;
++ 	plane->state->src_w =3D new_plane_state->src_w;
++ 	plane->state->src_h =3D new_plane_state->src_h;
+ -	plane->state->src_h =3D new_plane_state->src_h;
++ 	plane->state->alpha =3D new_plane_state->alpha;
++ 	plane->state->pixel_blend_mode =3D new_plane_state->pixel_blend_mode;
++ 	plane->state->rotation =3D new_plane_state->rotation;
++ 	plane->state->zpos =3D new_plane_state->zpos;
++ 	plane->state->normalized_zpos =3D new_plane_state->normalized_zpos;
++ 	plane->state->color_encoding =3D new_plane_state->color_encoding;
++ 	plane->state->color_range =3D new_plane_state->color_range;
++ 	plane->state->src =3D new_plane_state->src;
++ 	plane->state->dst =3D new_plane_state->dst;
++ 	plane->state->visible =3D new_plane_state->visible;
++=20
++ 	new_vc4_state =3D to_vc4_plane_state(new_plane_state);
+  	vc4_state =3D to_vc4_plane_state(plane->state);
+ =20
+  	vc4_state->crtc_x =3D new_vc4_state->crtc_x;
+
+--Sig_/.3TCEW2K/ucdGcZbZyQjv9B
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBvxjUACgkQAVBC80lX
+0GxIuwf+MLYE674mIMmHxJJji/55gWYtGGX/V3SrSewLyeKvHLfDuQlPItFchsX1
+3Pz68dEgLmoWKU4VMulSbKduwWdP2SBPTT8CuKu9hXGjLj/CaVW9cG0CN6FFi55g
+GQEnlmYDcvLjvVyMmi/Tva+TJ1ck9HRWzfiuSxeo9uDp4qsmSnl04DgKcfovOoy6
+PY4kFCQ7d6QqF4Fnw5RQClDB8Lzf8SV0geat+Hvv9O9R244jLstLNx7rqLuNyd2S
+bzyIMwugX/Oiu274Cxgf9W7aIeYSDrrdVwQ1HNTZErscCjoWjoKE/aFaCOnNKQ2r
+y+SB5knEJv0xAg4gxS2Zxtzb+6SwSw==
+=ya55
+-----END PGP SIGNATURE-----
+
+--Sig_/.3TCEW2K/ucdGcZbZyQjv9B--

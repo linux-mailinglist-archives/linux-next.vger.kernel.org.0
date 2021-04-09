@@ -2,99 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CC235944C
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 07:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AD435946B
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 07:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbhDIFG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Apr 2021 01:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S231440AbhDIFSS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Apr 2021 01:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbhDIFGi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 01:06:38 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E94EC061763
-        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 22:06:25 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id f8so5012986edd.11
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 22:06:25 -0700 (PDT)
+        with ESMTP id S229498AbhDIFSS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Apr 2021 01:18:18 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9430C061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 22:18:05 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r12so6668856ejr.5
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 22:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=8iYmIB0hU1FV/TAMgjJvsR+ql1uW19IJI/pH9Ro9DkA=;
-        b=a70py4CkGoMUXeaFQVQA4FhZexNTY7CoerXO2Kv6FbkmQVGU1qkaoBu0ilmOAnZ8FL
-         7VMM8xaZNuu9MwHuQHGKFafgh6jsl2VyvafrqXVJemNWIgKlrOTXhOdKc94bF3tLPAhG
-         ANE52iIr4rhXku2oImy+Es5L5DZ2D+nnQQtr/S6nZinORJB65KAVKNQLXnZ80OzpqH8y
-         BMTTNBvKwFZqT2qU+RysEl+6rg68rexMN3tSrXoSNxb7Y3LaLiQeOOXwhO7iPyshSHzC
-         3xyeCuBvZv/TbsOkp7ZQjDIfxDA8fx9uOFEDRcHmDAzx6nlTJSCxeCLHrPDDVX14TdS3
-         5Mmg==
+        bh=YFWCdm8gK/rxc5k1ld9Wf9KmQQO/U3GJZHseXv0RvhU=;
+        b=blihwRCH6BPRaNb6n+4GjpRzJe0CLY+voSb/0Q6RtjNKxbyFuYxgiXJW8ZAD5xp8y/
+         KVm2LokvqO+3o5TUyFf8bY5PV5xcwkglds0fmNpyeidH4JnLq/NDnyZKr9gZgKF1Y5MQ
+         RnUpx4pGJY1U42VsARWS8CnFv8LNF8zmssAf7tjpgtLIxsPq33rqx1X6hg30wGNRE9FP
+         ybInYJqEOjgQ3en+oyp+wHdFkTgAjFZwqG9b3qdGsdvz4EW3g2/O75VaLUmsuh4reeqg
+         fA6Je1xnivfCdmwPoj2Sr5Oza3xW4vDu7XCNUyaUAtZeMrZ63yZNbrXrWs0lxHzABaWQ
+         Wf2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=8iYmIB0hU1FV/TAMgjJvsR+ql1uW19IJI/pH9Ro9DkA=;
-        b=iq9URxpYT7U1i87fyxFMaK/TalA+lEg0GWK/fyhPOCCDRnlvMWRJRLZZcNJ8qn1ADj
-         UjiVgkjndWvQug8coHXmq3xHy+pP1UZW0DSS2z2nS3VUSnzIWq8r0QTSB0cxpckUPeyX
-         5Dig/HR4CMsurqPTOG8XlaeKn2syVSsOIjBlNJ3lBsV7e/dTHGw3ihtN42nnen7/3mHY
-         gAClyIVB+dXKPA+oMqHwGliq4Za76AAm5ZK9UCuw9pvF9IFosP/grUmvWIpYthqbPlic
-         i1YePxDQeQxtvF+AjinPXJoHgR44EcCKXH/Hu47IhFRgv6iG2lF2JGBoBhkT1mybbxLP
-         cnVA==
-X-Gm-Message-State: AOAM531OnjqR7fNHADe62ayhrKQ8rxf9kf4T6W045vjqHQk9o3UWqAmD
-        hzn0QAffmmq9Op1fW08er6Rd3mv/rXflTdUdBV8wl815QjkOuHYO
-X-Google-Smtp-Source: ABdhPJxwuL1N3RYHPIM35VfE6Bv0fNGNmUKwjyd3Hg12yFVOn9y5ViHlt/I8RHus77kUrzTJVLJ7QA8itjw9ycd1cdI=
-X-Received: by 2002:a05:6402:145:: with SMTP id s5mr15497871edu.221.1617944783387;
- Thu, 08 Apr 2021 22:06:23 -0700 (PDT)
+        bh=YFWCdm8gK/rxc5k1ld9Wf9KmQQO/U3GJZHseXv0RvhU=;
+        b=ZK4cstONCaSD7SsaxUNsVUCcmPfhfHpy4LNuLY/8oWHHvlo6M5SOOCz0mFJBZr0ZiX
+         VhDPAYmlIkTj4KHQdtXm8MSA5jKuC0YB/BvVnk4gyoXqSKwON2sgCIzg2kWDqVv90MEv
+         5LEJwU1+Ef0kGZqPoivNv8rww7GqF9MnxwkDL2irg+Pwliq8LwHhEnkyUok9tgB0NlzJ
+         Znz+S1CIXhVxt/vE/TLWdrSHxAo8TtYOHMRjzGcU4VvOw2s8bTNmSceJSetKjBa40s2J
+         ssHVhX616ymr6wJBMhrpXRZ7wKQ3QUE39Hz/M6ejSS1/Y7eW/bU6MakSM73PKvEGtir8
+         9R4A==
+X-Gm-Message-State: AOAM532oQqEfixqGhoz2tcabeHc6jDdjqBmOS+QFpVzJrfipXfELHN3s
+        MxwErZwcCdoYJvCeBbXMXKblLeNsgv27ddfeMTF5UqA+ZOwFPe2E
+X-Google-Smtp-Source: ABdhPJyAYw1Bwp6jKS3SxG1Cpit61Ggd/8J/n4HfRANmqtGHieko6wg1KVMUr2Vgr1/f6WKlkLzH8EYHgXzT2zuWwVo=
+X-Received: by 2002:a17:906:9605:: with SMTP id s5mr14703271ejx.287.1617945483617;
+ Thu, 08 Apr 2021 22:18:03 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 9 Apr 2021 10:36:12 +0530
-Message-ID: <CA+G9fYu60T=vymv7gA0eaopfNDWXAVT9WRS11Rrk1OfTkrCevw@mail.gmail.com>
-Subject: [next] ERROR: modpost: "dns_query" [fs/cifs/cifs.ko] undefined
+Date:   Fri, 9 Apr 2021 10:47:52 +0530
+Message-ID: <CA+G9fYtNAEwCk1WkA_25FVUrR0QJ2vt2Dh_w+m-QOSjb8f5TBQ@mail.gmail.com>
+Subject: [next] drivers/cdrom/gdrom.c:586:61: error: 'rq' undeclared (first
+ use in this function)
 To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
-        samba-technical@lists.samba.org, lkft-triage@lists.linaro.org
-Cc:     Maciek Borzecki <maciek.borzecki@gmail.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Steve French <stfrench@microsoft.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Pavel Shilovsky <pshilov@microsoft.com>,
-        Steve French <sfrench@samba.org>
+        lkft-triage@lists.linaro.org, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>
+Cc:     Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <damien.lemoal@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Large number of Linux next tag 20210408 builds failed due to these errors.
+Linux next tag 20210408 architecture sh builds failed due to these errors.
+
+# to reproduce this build locally:
 
 make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=sh
+CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
 
-ERROR: modpost: "dns_query" [fs/cifs/cifs.ko] undefined
+
+In file included from /builds/linux/include/linux/scatterlist.h:9,
+                 from /builds/linux/include/linux/dma-mapping.h:10,
+                 from /builds/linux/drivers/cdrom/gdrom.c:16:
+/builds/linux/drivers/cdrom/gdrom.c: In function 'gdrom_readdisk_dma':
+/builds/linux/drivers/cdrom/gdrom.c:586:61: error: 'rq' undeclared
+(first use in this function)
+  586 |  __raw_writel(page_to_phys(bio_page(req->bio)) + bio_offset(rq->bio),
+      |                                                             ^~
 
 Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-Regressions found on parisc:
-  - build/gcc-9-defconfig
-  - build/gcc-8-defconfig
-  - build/gcc-10-defconfig
 
 Regressions found on sh:
   - build/gcc-9-dreamcast_defconfig
   - build/gcc-10-dreamcast_defconfig
   - build/gcc-8-dreamcast_defconfig
-
-Regressions found on arm:
-  - build/clang-12-s3c2410_defconfig
-  - build/gcc-8-s3c2410_defconfig
-  - build/clang-10-nhk8815_defconfig
-  - build/gcc-9-s3c2410_defconfig
-  - build/gcc-10-nhk8815_defconfig
-  - build/gcc-8-nhk8815_defconfig
-  - build/gcc-10-s3c2410_defconfig
-  - build/clang-12-nhk8815_defconfig
-  - build/clang-11-s3c2410_defconfig
-  - build/gcc-9-nhk8815_defconfig
-  - build/clang-11-nhk8815_defconfig
-  - build/clang-10-s3c2410_defconfig
 
 --
 Linaro LKFT

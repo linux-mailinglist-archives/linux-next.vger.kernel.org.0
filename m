@@ -2,124 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70D2359121
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 03:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876C5359266
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 05:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbhDIBG2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 21:06:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47672 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232918AbhDIBG1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 21:06:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617930375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3p6tRLUoxhYea5OgxPQQ7mdUA/VUMk+BELmCoQmMAQE=;
-        b=bf2cAAs38aHgrjHnaIb0UuOVjNUzCQQWF78yXamYf5uPBVBwmkn6HCt5vMak7wLdLR0lRF
-        XrkhxnOXOR8/lBntFUr9zPZYvWQ5Rm9Ox6L8mA6cSA1BlfPQ9ZS0vzLNdz1WcqMKlzLH5G
-        1iw314sgL18XXmWH/rf76GkOh8nLX7c=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-OHJHFQJDPJSCWKRaEIreew-1; Thu, 08 Apr 2021 21:06:14 -0400
-X-MC-Unique: OHJHFQJDPJSCWKRaEIreew-1
-Received: by mail-pf1-f200.google.com with SMTP id a6so2098149pfv.9
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 18:06:13 -0700 (PDT)
+        id S233070AbhDIDDM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 23:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232956AbhDIDDL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 23:03:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E75BC061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 20:02:57 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id z22-20020a17090a0156b029014d4056663fso2476410pje.0
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 20:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6DzrHeVpP1+JwvPAj6EHCpf8PHTdXBjxghkIOmRbesY=;
+        b=MxBxuEmmMyWOTQJUjOzWh0KjsXpMlGctEW8ZKMkLvFaFKaY/X4kXxY2cn3e+NrAzEb
+         U11R6xRLKXZs+C+qbDPnSMaOemSf/vqA1+efgBPMJ8HJsHdhkOxeioGrDyDZP6QU8Nh+
+         oochnJcKBkE0pn+lD+xu+PTtIaJZONleuGNwM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3p6tRLUoxhYea5OgxPQQ7mdUA/VUMk+BELmCoQmMAQE=;
-        b=VB82PZS16gITzdEHpzbB7OoBxcbjxU1ldGF0Nxgxmjr7e9szE1Os+dhy4bn9o195kl
-         Z7SNq8BWkJXK/yh9kbmhQ2L8Hc+uz/8EB859JLw6BblVWBAdD0D2SlDVmAtlywyMWOeq
-         ro3mI3pW1VvMdit6i8nfJifVh70jVYXELbLegXQjPdQibaxissf216blNQLFnJ82tKIq
-         m/snjYUhl7GmtIfUXwWg3I6Poeyd2rz+0gq2l24cjUrt9fm7kxOEvAcTXC/TFS2GmUAq
-         9UAM9qBNbLJ1oWugm58+KLZn8mF2qFq78e3H4xkEu3hettEe2UWuwmaegMLReA7w1dnz
-         rQ1Q==
-X-Gm-Message-State: AOAM530uBxxeVx7O1kR4W2tYGeoov6AmB3gSXpDpJmcAWIwefO2OsWWk
-        lnyyB/z1S+BvmNvN/UUk6LeV+s908B/HyZEQiHPKD0BQxCfRke/Hxh+LGb7zqKngZKViZY8mdXk
-        gziqDSH2tOo9+VYmd1BUhAw==
-X-Received: by 2002:a17:90a:3904:: with SMTP id y4mr10951590pjb.125.1617930372893;
-        Thu, 08 Apr 2021 18:06:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxHqjvlL1ydwmIaYocdAJeAuh44gB73afwKuX3dhfdFID0+nSmuF/PQNsf9cQLZWqZfsSJcdA==
-X-Received: by 2002:a17:90a:3904:: with SMTP id y4mr10951575pjb.125.1617930372672;
-        Thu, 08 Apr 2021 18:06:12 -0700 (PDT)
-Received: from xiangao.remote.csb ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d4sm485430pjz.46.2021.04.08.18.06.10
+         :mime-version:content-disposition:in-reply-to;
+        bh=6DzrHeVpP1+JwvPAj6EHCpf8PHTdXBjxghkIOmRbesY=;
+        b=a62GRolb5hT1GEBZKRBbCCyb3iYBVXC7syy87a9BWgaxKF+Nh5aF/JpW07lKyM0N3v
+         0Twq2+Q0A/FjDodp5LZHM/NwiwAPKFrJTxy9jY9dbbRlc2N5AYlyRjiFE4llMlYLbnly
+         rWYAUqIHZvqxWrUlvqNj9G/gk0Z5CddSsJ/ATL2UsumV5WqZ/exF5P1OVWLRUJNPiOTc
+         N1QO9Aa6BT9qgjn2es5L6wectrXN0AVm7oGsHsDpD1rxhP9XsBnJFzLjzitHGBonFs72
+         BhH6n5ooMsrqSoBZMUDQC55dFhVhwTnUx9k8ZR/Vbh/PNOPcw4XMRcrzQ4SOAX9y199z
+         wRaA==
+X-Gm-Message-State: AOAM531EJHZApcnOEPNrPJ4Hfujy6b1jF14WvqHRjWknmadWoITlpkkf
+        wa7rF3fe6EbSXlu/SRfRnmQH2iJv/uTlyg==
+X-Google-Smtp-Source: ABdhPJz8FzxfLjWZx/jOHAK9KxUt8Iy4JpatEuwBLXLHYQLw4wpHvfpeUjFIrbvBb0svvm5tQPZOUw==
+X-Received: by 2002:a17:902:b482:b029:e8:c21a:6ad2 with SMTP id y2-20020a170902b482b02900e8c21a6ad2mr10726665plr.51.1617937376831;
+        Thu, 08 Apr 2021 20:02:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id e5sm620065pjv.22.2021.04.08.20.02.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 18:06:12 -0700 (PDT)
-Date:   Fri, 9 Apr 2021 09:06:02 +0800
-From:   Gao Xiang <hsiangkao@redhat.com>
-To:     coverity-bot <keescook@chromium.org>
+        Thu, 08 Apr 2021 20:02:56 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 20:02:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gao Xiang <hsiangkao@redhat.com>
 Cc:     Chao Yu <yuchao0@huawei.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Re: Coverity: erofs_get_pcpubuf(): Program hangs
-Message-ID: <20210409010602.GB689534@xiangao.remote.csb>
-References: <202104081709.48778B3@keescook>
+Subject: Re: Coverity: z_erofs_handle_inplace_io(): Uninitialized variables
+Message-ID: <202104082002.C0761A0FF@keescook>
+References: <202104081709.43BC2DB@keescook>
+ <20210409010146.GA689534@xiangao.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202104081709.48778B3@keescook>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210409010146.GA689534@xiangao.remote.csb>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On Fri, Apr 09, 2021 at 09:01:46AM +0800, Gao Xiang wrote:
+> Hi,
+> 
+> On Thu, Apr 08, 2021 at 05:09:14PM -0700, coverity-bot wrote:
+> > Hello!
+> > 
+> > This is an experimental semi-automated report about issues detected by
+> > Coverity from a scan of next-20210408 as part of the linux-next scan project:
+> > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > 
+> > You're getting this email because you were associated with the identified
+> > lines of code (noted below) that were touched by commits:
+> > 
+> >   Wed Apr 7 13:17:55 2021 +0800
+> >     c660a3a86e7e ("erofs: support decompress big pcluster for lz4 backend")
+> > 
+> > Coverity reported the following:
+> > 
+> > *** CID 1503704:  Uninitialized variables  (UNINIT)
+> > /fs/erofs/decompressor.c: 160 in z_erofs_handle_inplace_io()
+> > 154     	}
+> > 155     	kunmap_atomic(inpage);
+> > 156     	might_sleep();
+> > 157     	while (1) {
+> > 158     		src = vm_map_ram(rq->in, nrpages_in, -1);
+> > 159     		/* retry two more times (totally 3 times) */
+> > vvv     CID 1503704:  Uninitialized variables  (UNINIT)
+> > vvv     Using uninitialized value "i".
+> > 160     		if (src || ++i >= 3)
+> > 161     			break;
+> > 162     		vm_unmap_aliases();
+> > 163     	}
+> > 164     	*maptype = 1;
+> > 165     	return src;
+> 
+> Thanks for the report!
+> 
+> This bug was reported by Colin King before (next-20210407), and has already
+> been fixed in (next-20210408), see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/erofs/decompressor.c?h=next-20210408#n157
+> and
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/erofs/internal.h?h=next-20210408#n405
 
-On Thu, Apr 08, 2021 at 05:09:53PM -0700, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20210408 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
-> 
->   Wed Apr 7 12:41:22 2021 +0800
->     91a196935395 ("erofs: introduce multipage per-CPU buffers")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1503700:  Program hangs  (LOCK)
-> /fs/erofs/pcpubuf.c: 31 in erofs_get_pcpubuf()
-> 25     	raw_spin_lock(&pcb->lock);
-> 26     	if (requiredpages > pcb->nrpages) {
-> 27     		raw_spin_unlock(&pcb->lock);
-> 28     		put_cpu_var(erofs_pcb);
-> 29     		return NULL;
-> 30     	}
-> vvv     CID 1503700:  Program hangs  (LOCK)
-> vvv     Returning without unlocking "pcb->lock".
-> 31     	return pcb->ptr;
-> 32     }
-> 33
-> 34     void erofs_put_pcpubuf(void *ptr)
-> 35     {
-> 36     	struct erofs_pcpubuf *pcb = &per_cpu(erofs_pcb, smp_processor_id());
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+Ah-ha, thank you! Colin is fast. :)
 
-I think this is a false positive here, since erofs_get_pcpubuf() should match
-with erofs_put_pcpubuf(), which is used to unlock pcb->lock.
-
-Thanks,
-Gao Xiang
-
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1503700 ("Program hangs")
-> Fixes: 91a196935395 ("erofs: introduce multipage per-CPU buffers")
-> 
-> Thanks for your attention!
-> 
-> -- 
-> Coverity-bot
-> 
-
+-- 
+Kees Cook

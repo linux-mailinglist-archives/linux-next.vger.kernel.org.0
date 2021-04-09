@@ -2,58 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8E23590CE
-	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 02:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFB83590CF
+	for <lists+linux-next@lfdr.de>; Fri,  9 Apr 2021 02:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbhDIALH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Apr 2021 20:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S232918AbhDIALm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Apr 2021 20:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbhDIALH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 20:11:07 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F43DC061760
-        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 17:10:55 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d124so3008756pfa.13
-        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 17:10:55 -0700 (PDT)
+        with ESMTP id S232426AbhDIALl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Apr 2021 20:11:41 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F5EC061760
+        for <linux-next@vger.kernel.org>; Thu,  8 Apr 2021 17:11:29 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d8so1863212plh.11
+        for <linux-next@vger.kernel.org>; Thu, 08 Apr 2021 17:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=fyM+6ZwAO2t78cebvSHcvBRylwpbrAkPYUufSnFnIPM=;
-        b=Q8lbvW/6LlEvDfegWYUTEzSqeAVj/0xMHLDhlAqOtbNOWYBQ8VP4Z0ibBrZP62wSmg
-         /fEQjmClxJT/elLQp2TNV9zfvwKSqtJ6g1cGNhh0moEe/xk2oEapW8zMlh879KKLyIfp
-         NvM1Y897WfndYJLTQa66xa5NTAlNmWAAcVDqM=
+        bh=Dhv0dxPnNN2zrGJ+r3HjFWocUrkcv3VW7q1v1279Hrc=;
+        b=Min5CJZFZK14nwfY59mnds50hrvNS4qkDRICQwXG8uvZ5dIBLK30bZCjxwROX9MhS9
+         cyS1oR4eFLpKr8jRm47gjw82u+EwdW1SIqePp1bSwtaT6nDO5nDZjsQYHIy+jl28ovWv
+         SaRsNLCFhEzrPTbOpHlYbcE2jMkz0sLXTDqVc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=fyM+6ZwAO2t78cebvSHcvBRylwpbrAkPYUufSnFnIPM=;
-        b=LPJaxHcMARDtPcIbdLPWBqzKW/lGn9uBZquRLwg0Hccg1dKDolJFnhXbRJOoID7fTe
-         TcOmyhlGrtjES4PGRBqCnmMwEUFdFCeaINIpJCSew1X3C0b4ZcbuG989lMAPCWseRC0q
-         ruD/rd2IOqexwm2MGdEqjsKbg+db64kZ+CKGJV1AFrhnxjCTjkFpzwi2E2vakMuzqFww
-         gzHZkJNJXjD7XKr2eDVfdhgJ84swRil0aAfsIk7fmk3lWvOuzSV7qkouVarwgXGolT9j
-         wpVRYBuDUFJ52zE0GKRj4ejKjzLKiiaIaIqB4sgsag+DhLdrh2du4+gOdGHOux7UqiKA
-         NNQg==
-X-Gm-Message-State: AOAM533/O/QaX5jDPPOKRjbONVDdcNFpabHa8DZ7T78ZkKXhOekPi9dK
-        JKJf46VnwGERyzvAUytTu/5xPQ==
-X-Google-Smtp-Source: ABdhPJyft4vOAo8dZuWN4tc/r8A1HSyaM2IP6nAmymHCTkbFCWkeGRCU5TJTSHnaf7rA5HSReqqGYg==
-X-Received: by 2002:a63:4763:: with SMTP id w35mr10419514pgk.226.1617927054964;
-        Thu, 08 Apr 2021 17:10:54 -0700 (PDT)
+        bh=Dhv0dxPnNN2zrGJ+r3HjFWocUrkcv3VW7q1v1279Hrc=;
+        b=UlSqBqrY+ALYqjUeIqhPdEHq6jvJWrHIl21ehwM3PkTEfcj+vMtXaCau4kpzHCVROs
+         z6X6mvE72PYNTPG+IrlbaJHUg51CW6bLfKYSOLWENmKW/B1U/mpgaCLqd2APVfSzR/ln
+         iUmZ5zAzk3kezucPHdDIett1Til/2sD+ywYYrJeeLw92CtkEAFg/D4IUUIkhzhCcGqaz
+         X50AAsvJauQIFfOL0y+9IGp7VIwDCcYO4WOIc6FjwiJvsPzhKZNmqRyKe/K9nbLcYz5e
+         uKAikWKLevSWSpZDx3+Pwcp9tNSJBjaWlKvGuryaoZVZtHVGqFZHH1s8LhK5FGGCQ4hM
+         xJ9Q==
+X-Gm-Message-State: AOAM530n5Gyf+E0J6Fewd7AndrM4ux2Wdyn9VnhkYsrcvH3o5vJcVZjV
+        SWoFmPJkIuP2EQrLlv707GIrX9yxSBNayQ==
+X-Google-Smtp-Source: ABdhPJwGPcy82QnnWHcB5+dzuuvLMQdBb+dp4ppCVEFolkIciJr89/TZCFBb/NGvVqmvtW0eTicIlg==
+X-Received: by 2002:a17:902:a502:b029:e8:3a40:bc6d with SMTP id s2-20020a170902a502b02900e83a40bc6dmr10440778plq.14.1617927088880;
+        Thu, 08 Apr 2021 17:11:28 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x69sm469234pfd.161.2021.04.08.17.10.54
+        by smtp.gmail.com with ESMTPSA id l191sm513527pfd.36.2021.04.08.17.11.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 17:10:54 -0700 (PDT)
+        Thu, 08 Apr 2021 17:11:28 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 8 Apr 2021 17:10:53 -0700
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+Date:   Thu, 8 Apr 2021 17:11:27 -0700
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: rcar_pcie_resume(): Error handling issues
-Message-ID: <202104081710.38356CA16B@keescook>
+Subject: Coverity: cdns3_gadget_start(): Error handling issues
+Message-ID: <202104081711.46CA57BC6@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -70,27 +68,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Thu Apr 1 12:16:18 2021 +0100
-    516286287d71 ("PCI: rcar: Convert to MSI domains")
+  Thu Aug 29 10:57:04 2019 +0300
+    7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
 
 Coverity reported the following:
 
-*** CID 1503693:  Error handling issues  (CHECKED_RETURN)
-/drivers/pci/controller/pcie-rcar-host.c: 992 in rcar_pcie_resume()
-986
-987     	/* Enable MSI */
-988     	if (IS_ENABLED(CONFIG_PCI_MSI)) {
-989     		struct resource res;
-990     		u32 val;
-991
-vvv     CID 1503693:  Error handling issues  (CHECKED_RETURN)
-vvv     Calling "of_address_to_resource" without checking return value (as is done elsewhere 98 out of 104 times).
-992     		of_address_to_resource(dev->of_node, 0, &res);
-993     		rcar_pci_write_reg(pcie, upper_32_bits(res.start), PCIEMSIAUR);
-994     		rcar_pci_write_reg(pcie, lower_32_bits(res.start) | MSIFE, PCIEMSIALR);
-995
-996     		bitmap_to_arr32(&val, host->msi.used, INT_PCI_MSI_NR);
-997     		rcar_pci_write_reg(pcie, val, PCIEMSIIER);
+*** CID 1503690:  Error handling issues  (CHECKED_RETURN)
+/drivers/usb/cdns3/cdns3-gadget.c: 3143 in cdns3_gadget_start()
+3137     			cdns3_gadget_release);
+3138     	cdns->gadget_dev = priv_dev;
+3139     	priv_dev->sysdev = cdns->dev;
+3140     	priv_dev->dev = cdns->dev;
+3141     	priv_dev->regs = cdns->dev_regs;
+3142
+vvv     CID 1503690:  Error handling issues  (CHECKED_RETURN)
+vvv     Calling "device_property_read_u16" without checking return value (as is done elsewhere 4 out of 5 times).
+3143     	device_property_read_u16(priv_dev->dev, "cdns,on-chip-buff-size",
+3144     				 &priv_dev->onchip_buffers);
+3145
+3146     	if (priv_dev->onchip_buffers <=  0) {
+3147     		u32 reg = readl(&priv_dev->regs->usb_cap2);
+3148
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -98,8 +96,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1503693 ("Error handling issues")
-Fixes: 516286287d71 ("PCI: rcar: Convert to MSI domains")
+Addresses-Coverity-ID: 1503690 ("Error handling issues")
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
 
 Thanks for your attention!
 

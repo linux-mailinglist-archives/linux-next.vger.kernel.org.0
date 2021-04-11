@@ -2,84 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BE835B736
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 00:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F3C35B73B
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 00:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbhDKW2u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Apr 2021 18:28:50 -0400
-Received: from ozlabs.org ([203.11.71.1]:47393 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235366AbhDKW2u (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Apr 2021 18:28:50 -0400
+        id S235487AbhDKWe2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Apr 2021 18:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235366AbhDKWe1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Apr 2021 18:34:27 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9127CC061574;
+        Sun, 11 Apr 2021 15:34:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJRNF4BvSz9sW4;
-        Mon, 12 Apr 2021 08:28:29 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJRVj5VGqz9sVt;
+        Mon, 12 Apr 2021 08:34:05 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618180110;
-        bh=fP3GesCiOkWm3CBwoD72L76loWNr2ldZNLevrAelw5Q=;
+        s=201702; t=1618180446;
+        bh=n6XSnOwkmj4T9SqjwoU/4Zw423XNVZqP8Xrb9+7iKUc=;
         h=Date:From:To:Cc:Subject:From;
-        b=jNuKGQRq88iSVfPaLiCclsMjAr9MatCwEutLCJfaqiPq6m7WM9sJ5R1UTd7Hq4XSS
-         mTTOo0lXLRV+xErsnhWH8kxji82rQeAinZ72haIF0e4IvW4ul7AfE4i2oQs1L0wtfM
-         CGk7azY4fRnNOUSM1Dde3VItEWrAQe4+BtFMpoJVlGU9sc5toSQ2ZtbSAc37qYnqOv
-         gNT75pKdJ11WddoWficrS8C8f9NTB+nl0SvqZeSAKCkWHxRMDSg9U39GmG8MJwQPWr
-         bzb6veKwoVuIxss465yxqestfnd986lIB4jAoBaVAiCYBaE3B3jYpjV9/cyreUgEco
-         pq2Tg7EyBU0tA==
-Date:   Mon, 12 Apr 2021 08:28:28 +1000
+        b=Ep+X6V41bpsTjFj6ZRWZ2QrzGzUomreS14ojfozpuT7G1Q3uzhtPLOSVjT+QRf6JC
+         ukHM2dliMI8X7YQz06xb6626TYx0I6bAxkHG3PURkyItHC2pvytCWTsjG+OcCxH2zj
+         7uFcCP7x6jqp7REyAuCWjlKnxgN2eJ8LhgrPj5jmPe65vqtgBFMsccmxgTKulo5BMl
+         5DvOropVyEKLFvwxwZynlSps6BThJfUwbnI4gvZIPoaAJSEwLcal0UApHv8UsvUdm4
+         a60Fo+DVBJyvF0ffOax3NSDcV9NxYuasvWKMy++ZIXY0PEKCZksL+0/yAXgOs5YSAh
+         JAhYBe3zX1sBw==
+Date:   Mon, 12 Apr 2021 08:34:04 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Ayush Sawal <ayush.sawal@chelsio.com>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the crypto tree
-Message-ID: <20210412082828.2d7ff09f@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the block tree
+Message-ID: <20210412083404.2d0dcf7c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J+96lH4tYICTK=sueM5b4q3";
+Content-Type: multipart/signed; boundary="Sig_/0ooZE6uvzegrzJGE+z19b+S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/J+96lH4tYICTK=sueM5b4q3
+--Sig_/0ooZE6uvzegrzJGE+z19b+S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commit
 
-  36303413885e ("crypto: chelsio - Read rxchannel-id from firmware")
+  6fa6517fe62e ("ata: ahci_tegra: call tegra_powergate_power_off only when =
+PM domain is not present")
 
-Fixes tag
-
-  Fixes: 567be3a5d227 ("crypto: chelsio - Use multiple txq/rxq per tfm to p=
-rocess the requests)
-
-has these problem(s):
-
-  - Subject has leading but no trailing quotes
+is missing a Signed-off-by from its author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/J+96lH4tYICTK=sueM5b4q3
+--Sig_/0ooZE6uvzegrzJGE+z19b+S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzeAwACgkQAVBC80lX
-0GxZQQf/SdbMaIksVBel+M7vfqNIaqcn0zCQrXsKtipyT2T+m3MFQtDP7ZSvThNP
-yRhW6mbVlq3nvfNk1yw83po1a+oCLaoV+iYEaAm0LzK+o71yTBKSmHD0m4DMu5Et
-X5t/POYQj6CX2Sxpns422sLDP3MZb2svdn/hM04ryaWA5wulxpgrMG31UzmhBXd2
-HvHTZpPjXbL/mU1w/TIJAe6vIgkUhLrq1bDlVKtphBUEkWr/XfazJKfsSgMLzoRw
-vtIew1xkjD7KHLdiZDTjdBo7iSUkunw7JYV4mcJoRBxLamxqUObahI/MnM3YxBBa
-ANOTL/YcwGoDur89Q+/2sM9hsTG1jA==
-=YmaW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzeVwACgkQAVBC80lX
+0Gy1fAf7Bb8piq6ParR+CeA4F1V7QkkHFg0vblGcf7oExtPDqq1IS5Sfxu84eAm1
+nzP7J/3WGlZdYMCskc0cuSR0kLvTw6zXc4x4iFXZojRe2aVNGfsIrwPY7H3IFmGe
+8QtYqtOvoGCTzqy6dj1R5NuO0fWQhB1Q2zCrhGuen927RUbDsgiIAcmpB9RS+2zY
+q54YeDnoVnIqahCx+Df0okuiroRCqd2qvctv7B0keF+NCJOQR5vwyUGcnnNRTtWU
+i4CQNdwoP82WA+vMRUcUYKsaqKVQ8asN9cCgHRVNM7dXek7Xe7m39WbvTpOP1QF3
+EiPJxC8TfSsD+uSfcX2c4Lzhjp6z6Q==
+=/HPy
 -----END PGP SIGNATURE-----
 
---Sig_/J+96lH4tYICTK=sueM5b4q3--
+--Sig_/0ooZE6uvzegrzJGE+z19b+S--

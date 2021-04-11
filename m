@@ -2,91 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1130135B0CD
-	for <lists+linux-next@lfdr.de>; Sun, 11 Apr 2021 01:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9B035B733
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 00:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbhDJXvH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 10 Apr 2021 19:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbhDJXvG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 10 Apr 2021 19:51:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E66C06138B;
-        Sat, 10 Apr 2021 16:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=ImmH4my3bHskVbDwy22MNIevC3JZsdugYTzI/EryWkY=; b=aR70jOycvNYFuV3tcZOk7DKHNV
-        wwdlXd86iX0i7Dv4V81aWvKYteZk/MeMjLynkhLvjrXt3BTKk0BhyYN7PXzX0l6NX/NHwqtCx+EGe
-        2pObU6rHjWf+xepnPo8orlZIISsbSszsp9wIGauULGChfa8owXWceYyprrwIvGHwAc0rpnG9svFon
-        G44UhroOekVI4z3OzypDxyS5zW1To35PbppALbOEP/ThoGonzb9Z1BdRVYsoHRCAHAfzzjtZDsyZk
-        jEfWFLWOPIV9fhM0L6UIAVf0FlSh4wczWKL3QXA+Byp4+r9HLg1Ylptj89O40GaFOMr5jyeEjjO5U
-        bm1fQlPA==;
-Received: from [2601:1c0:6280:3f0::e0e1]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lVNMu-002HrR-Cl; Sat, 10 Apr 2021 23:50:36 +0000
-Subject: Re: linux-next: Tree for Apr 9 (drivers/iommu/intel/pasid.c)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S235903AbhDKWV1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Apr 2021 18:21:27 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42743 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235894AbhDKWV1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Apr 2021 18:21:27 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJRCl5c46z9sWT;
+        Mon, 12 Apr 2021 08:21:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1618179668;
+        bh=1aHiQ3LnuB0CLh3YfgclKj1iMA+G49hSXkqLjpUdvc4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=E1OsBu88kVMfByMVoeMed2CRhmUfOFzrGmlqtbcX9JEJfTeWQPX8WoYzAopxcy0bK
+         F3fb5pcoJvMgw8OzVRAvh0Y2CEt5phxHtjYlnrQPGFYIYXBNb3/FiYXZqKqJuKiGYe
+         17C/PsQFCHpD9TaJ1Hlx/3fZe1AaeCWEUz1F8V6uMv9Jclaw9jT36lxL7gcZB+BOsk
+         3dEBHEWBnC8WaHicR6FQCazOC4t0x5Mr7x/eShYYcGjbr5yrMpTCaeANiD98v9vptk
+         SX6nb9xTetY+zkS5wWxEAt3qVd8h+jJS2mH3Kfy2lnqmHuEwdzrb61cK1x1uMpi9El
+         xWN8WDHKUWcqw==
+Date:   Mon, 12 Apr 2021 08:21:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Zhang Yi <yi.zhang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org
-References: <20210409215103.03999588@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <7fbf0e6e-bd63-d370-7d22-eafc2ed81ad2@infradead.org>
-Date:   Sat, 10 Apr 2021 16:50:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+Subject: linux-next: Fixes tag needs some work in the ext4 tree
+Message-ID: <20210412082106.488f6642@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210409215103.03999588@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/DmFOym7WZs/X1Td6bnvx=W+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/9/21 4:51 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20210408:
-> 
-> New trees: iio, iio-fixes
-> 
+--Sig_/DmFOym7WZs/X1Td6bnvx=W+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on ia64: (not X86)
+Hi all,
 
-(from a 01.org kernel config file)
+In commit
 
+  a149d2a5cabb ("ext4: fix check to prevent false positive report of incorr=
+ect used inodes")
 
-../drivers/iommu/intel/pasid.c: In function 'pasid_enable_wpe':
-../drivers/iommu/intel/pasid.c:554:22: error: implicit declaration of function 'read_cr0' [-Werror=implicit-function-declaration]
-  554 |  unsigned long cr0 = read_cr0();
-      |                      ^~~~~~~~
-In file included from ../include/linux/build_bug.h:5,
-                 from ../include/linux/bits.h:22,
-                 from ../include/linux/bitops.h:6,
-                 from ../drivers/iommu/intel/pasid.c:12:
-../drivers/iommu/intel/pasid.c:557:23: error: 'X86_CR0_WP' undeclared (first use in this function)
-  557 |  if (unlikely(!(cr0 & X86_CR0_WP))) {
-      |                       ^~~~~~~~~~
-../include/linux/compiler.h:78:42: note: in definition of macro 'unlikely'
-   78 | # define unlikely(x) __builtin_expect(!!(x), 0)
-      |                                          ^
-../drivers/iommu/intel/pasid.c:557:23: note: each undeclared identifier is reported only once for each function it appears in
-  557 |  if (unlikely(!(cr0 & X86_CR0_WP))) {
-      |                       ^~~~~~~~~~
-../include/linux/compiler.h:78:42: note: in definition of macro 'unlikely'
-   78 | # define unlikely(x) __builtin_expect(!!(x), 0)
-      |                                          ^
+Fixes tag
 
+  Fixes: 50122847007 ("ext4: fix check to prevent initializing reserved ino=
+des")
 
+has these problem(s):
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+  - SHA1 should be at least 12 digits long
+
+This is probably not worth rebasing to fix, but can be avoided in future
+commits by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
+just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DmFOym7WZs/X1Td6bnvx=W+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzdlIACgkQAVBC80lX
+0Gzdlgf+I5VGKYtQkyAK1KxRNC0smv/6SwQ9jDe7jgfhIJK5tAJprK0s9VnIcVQ5
+/KwtN2uEDSJXvBpTnBMDdSfWE1JOk5GGnsQTJyVCbsg2G6UyqRd6CJc72yZS96O5
+ffFhBD61EfFequsjqFXhH+cjGMinaB0PI0rtW3kP/iS742cbbB/R5ps4MUj1SS6x
+Kj9b6XNgACNNOEtdP1Rdkci5hTQlymGjL3sb9MNkvLGwEFRcVzFH4ISkZbj2dY0y
+zPHaFO8hbHh/W19OXm7tanorb3w7HR2+635LV14G1z26M812ZYGH3H7KRgtn8CSG
+3o+dxmu9agi4XmoKtdaPAY2FQdeZaQ==
+=tgP5
+-----END PGP SIGNATURE-----
+
+--Sig_/DmFOym7WZs/X1Td6bnvx=W+--

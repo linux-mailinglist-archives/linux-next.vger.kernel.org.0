@@ -2,81 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403AE35B74A
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 00:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E3135B74D
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 01:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbhDKWqh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Apr 2021 18:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbhDKWqh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Apr 2021 18:46:37 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111CEC061574;
-        Sun, 11 Apr 2021 15:46:20 -0700 (PDT)
+        id S235420AbhDKXAv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Apr 2021 19:00:51 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39061 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235005AbhDKXAv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Apr 2021 19:00:51 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJRmn5SyLz9sVt;
-        Mon, 12 Apr 2021 08:46:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJS566YYZz9sSC;
+        Mon, 12 Apr 2021 09:00:26 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618181178;
-        bh=Oq0oK8FN9BKCYEtk1yIAwwIQKR7keb/Qfi16ynD1cDc=;
+        s=201702; t=1618182027;
+        bh=frTL5mRDy+mTpTcBSxcK3M63GdBnFlsHY+QdOced+4o=;
         h=Date:From:To:Cc:Subject:From;
-        b=uyUR6ZV6XubzoeEIP8qtNxQ+eHCC6rzHZcoMhhWj4xnC584ijGdsi+ynaYyK0OMUu
-         BGUbpGx5+dPgI3SMOgWQVWfeq6S+OH1xe/SRmdSrtwMjRb7mjGTN3Qsbb20E3cm+NP
-         zl3LWDSRpcUl3AnH/Fmfnjg+dtwMRnbHoZVTFR5FnxrCQFU+T6z2IW/IPE0sGtTwc9
-         kePdDjPGYH3wDCt93OUeB20xzogDM4QsPVr/SbZOQAncdKKkBX6OchS3PhG00qZYk6
-         H31auWeGf4zd4NorFxikfA5pwA1H5ienU4gECjeCSd3YnaOmHJP2zTx4fiOrVB52lq
-         BA5OtlnO6crRw==
-Date:   Mon, 12 Apr 2021 08:46:16 +1000
+        b=ncBwPVhgZmoZpEwGuS3qQM2jm3Jr3t3MylRl8TPq1M4jaFAlAo7k4Uysu4BJGCE9t
+         kYf8/wWUMYgTxF/Yd1g+CRUXHqwITLw8oqwJE/w1p6KvblVEbSt+t4DlfWBTHjn5La
+         a9GlV+mW2ZyohKVGu3PTeq1eEc/KN6XO+l5LsItrbRbyBi+C1bp0m9KDEXTK/jmJsv
+         k/l8VHXAYuJDlj5ntrx3wrmtvn2i7xUvytWIMLZo0KK9FaixD1Wlog1gKoijiGWI8r
+         gIY6C1Ihp3JoU2nfy+HBDF4ZNoLrcwsMdFXVxsK1eEIByNQaSwN2CR/1l10jcLg66n
+         ytjHvYywOGsYg==
+Date:   Mon, 12 Apr 2021 09:00:26 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kvm-arm tree
-Message-ID: <20210412084616.6046d943@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the pinctrl tree
+Message-ID: <20210412090026.3af852f3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sRkWpSA3fLUxQJq6vSwASsW";
+Content-Type: multipart/signed; boundary="Sig_/BaHMQfq=8cziaEVNKYOgTBa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sRkWpSA3fLUxQJq6vSwASsW
+--Sig_/BaHMQfq=8cziaEVNKYOgTBa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  a20c5c4f18ae ("Revert "KVM: arm64: Fully zero the vcpu state on reset"")
+  2cfebcb2a22f ("pinctrl: at91-pio4: Fix slew rate disablement")
 
-is missing a Signed-off-by from its author and committer.
+Fixes tag
 
-Reverts are commits, too.
+  Fixes: 440b144978ba ("pinctrl: at91-pio4: add support for slew-rate")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: c709135e576b ("pinctrl: at91-pio4: add support for slew-rate")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/sRkWpSA3fLUxQJq6vSwASsW
+--Sig_/BaHMQfq=8cziaEVNKYOgTBa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzfDgACgkQAVBC80lX
-0GxEiwf/SLrFW8d8t5tUjpwHgSHh68Agyi+RtjgQ6EdqbeDxNyji1s71NtzrDqtF
-VBHRetFkWzdudwnQWuhyK28kjrvmL5xqMsAsvkPU4izSfZ6sKpibcws8/FGB39Et
-pceU4QBZPYGeEvfvN/Z2AqgkftXz4IrpmOpt00e2KBWL3Ds/IfpLGVYL+QfZTeUo
-zCaar1sAcqQLYxfe9R+LX/Yr2Dt3MFlXrGlsfq6soZ1qzBCnPm88MT255psE5197
-ojPPAr8GzQIU6c0eTARzu7Vp7Vc6VtrO6+Nn+61YVW0Rcq/I0HJdTlqwKQaXbAmz
-EW50susXnMUZ/URLYmBGhhPnkBdNXg==
-=MOGZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzf4oACgkQAVBC80lX
+0GyaoAf9ErhArpU9LxfMdU6Mx1Mdsh+njGyOpZlvUza0vwOu7icH5yFGUj+lCaX9
+IuIRNFeOVE7YgP1t0Yv0ufvO5Qc6pzg03saoKCm4TUcY0LUIb/JWtCZpiDg2+qfG
+dR7KV/+Kz+qCRjXlE26XKNDh8i5MSvAWr6W3lREli6zpjTAPBKNktglagIf++n38
+hWvIQY3XRZ/dx8SSvtvUoGADzHK7Hxgn0BaB96TMatLd6s4ca7emfbNE6RNCqxo6
+TbXHdLkwaxrxwmYQcyfyXbPu15osGE4xbKTUqyVmsoVeaPUEnesIMhWoIeh4ydv9
+WrO+oZrTjmGDBNWufV6WMd0mRViTJg==
+=1QWc
 -----END PGP SIGNATURE-----
 
---Sig_/sRkWpSA3fLUxQJq6vSwASsW--
+--Sig_/BaHMQfq=8cziaEVNKYOgTBa--

@@ -2,88 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919F835BABD
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 09:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D48E35C047
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 11:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbhDLHVi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Apr 2021 03:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S238229AbhDLJMI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Apr 2021 05:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbhDLHVh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 03:21:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6164DC061574;
-        Mon, 12 Apr 2021 00:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=2GY8B3E9p9XFXMEoh2odBgadQRN5Wiz6I5Q9Yv3e8yw=; b=u0zO3p4f/cWozEFmf3kUc73ucs
-        GpMLq26ixLj+AZXZEkcljuWx0RCSOfaPWdOZndbNOCa8d7XmYcbUQTdl4nBaTWLd5gY3pgM7OtBJS
-        RAQUOp9IfaZ1Amoha/+y0YFHRklIfWLWPyR5DvR8FzTeKW1RDpGwgyssOm5famY2cLNKs/lXleKlW
-        +wGgPHukkQ1y2rvvG3h24UB/WSiBNhyOiI4nw0e7jHVvvucyXVNDfGJf0AWx04l4CQPbkWuP0U+/L
-        ybfFH7PIGyH6BX5PQWDTBACi4IkgaT/C6DFvw3TH9p7/td00N7Kvq1NMnHwzT1TbWum9no+Zbs27v
-        +yQDSK9Q==;
-Received: from [2601:1c0:6280:3f0::e0e1]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lVqsl-003vcw-R1; Mon, 12 Apr 2021 07:21:16 +0000
-Subject: Re: mmotm 2021-04-11-20-47 uploaded (fs/io_uring.c)
-To:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        axboe <axboe@kernel.dk>
-References: <20210412034813.EK9k9%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <34ed89e1-683e-7c12-ceb0-f5b71148a8a7@infradead.org>
-Date:   Mon, 12 Apr 2021 00:21:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        with ESMTP id S239294AbhDLJHH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 05:07:07 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776C3C06137A;
+        Mon, 12 Apr 2021 02:02:36 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1lVsSf-0004hh-JE; Mon, 12 Apr 2021 11:02:25 +0200
+Date:   Mon, 12 Apr 2021 11:02:25 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210412090225.GB14932@breakpoint.cc>
+References: <20210412150416.4465b518@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210412034813.EK9k9%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210412150416.4465b518@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/11/21 8:48 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2021-04-11-20-47 has been uploaded to
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> net/bridge/netfilter/ebtables.c:1248:33: error: 'struct netns_xt' has no member named 'tables'
+>  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
+>       |                                 ^
+> include/linux/list.h:619:20: note: in definition of macro 'list_entry_is_head'
+>   619 |  (&pos->member == (head))
+>       |                    ^~~~
+> net/bridge/netfilter/ebtables.c:1248:2: note: in expansion of macro 'list_for_each_entry'
+>  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
+>       |  ^~~~~~~~~~~~~~~~~~~
 > 
->    https://www.ozlabs.org/~akpm/mmotm/
+> Caused by commit
 > 
-> mmotm-readme.txt says
+>   5b53951cfc85 ("netfilter: ebtables: use net_generic infra")
 > 
-> README for mm-of-the-moment:
+> interacting with commit
 > 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
+>   7ee3c61dcd28 ("netfilter: bridge: add pre_exit hooks for ebtable unregistration")
 
-on i386:
-# CONFIG_BLOCK is not set
-
-../fs/io_uring.c: In function ‘kiocb_done’:
-../fs/io_uring.c:2766:7: error: implicit declaration of function ‘io_resubmit_prep’; did you mean ‘io_put_req’? [-Werror=implicit-function-declaration]
-   if (io_resubmit_prep(req)) {
-
-
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Right, the fixup is correct.

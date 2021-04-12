@@ -2,86 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E3135B74D
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 01:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CB735B7E6
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 03:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbhDKXAv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Apr 2021 19:00:51 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39061 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235005AbhDKXAv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Apr 2021 19:00:51 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJS566YYZz9sSC;
-        Mon, 12 Apr 2021 09:00:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618182027;
-        bh=frTL5mRDy+mTpTcBSxcK3M63GdBnFlsHY+QdOced+4o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ncBwPVhgZmoZpEwGuS3qQM2jm3Jr3t3MylRl8TPq1M4jaFAlAo7k4Uysu4BJGCE9t
-         kYf8/wWUMYgTxF/Yd1g+CRUXHqwITLw8oqwJE/w1p6KvblVEbSt+t4DlfWBTHjn5La
-         a9GlV+mW2ZyohKVGu3PTeq1eEc/KN6XO+l5LsItrbRbyBi+C1bp0m9KDEXTK/jmJsv
-         k/l8VHXAYuJDlj5ntrx3wrmtvn2i7xUvytWIMLZo0KK9FaixD1Wlog1gKoijiGWI8r
-         gIY6C1Ihp3JoU2nfy+HBDF4ZNoLrcwsMdFXVxsK1eEIByNQaSwN2CR/1l10jcLg66n
-         ytjHvYywOGsYg==
-Date:   Mon, 12 Apr 2021 09:00:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the pinctrl tree
-Message-ID: <20210412090026.3af852f3@canb.auug.org.au>
+        id S235474AbhDLBNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Apr 2021 21:13:12 -0400
+Received: from mail-pl1-f177.google.com ([209.85.214.177]:35391 "EHLO
+        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235391AbhDLBNM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Apr 2021 21:13:12 -0400
+Received: by mail-pl1-f177.google.com with SMTP id j7so5486232plx.2;
+        Sun, 11 Apr 2021 18:12:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cewCN8OgBfmDDiF1Iena2yrqoabvm017S0rVAKMxvU8=;
+        b=A5ezZmu7Gyg/pyIhHY8qm/7fajDTpdq6RA91NXqAEtW7TqyMCNv2C3O380pJp1/nmi
+         j9xITOwyp0WhBrALKACZEAcZZydL2W9witBw2PjgCIeiFh0r4VjpDb/EwYGFr2L4ju9n
+         ETS9FwZ6/Y35xIySG9OBzrwVz9vYlxsh1iaZ873uhYBpUfV4AUZsvulyPlW8JCNqaqHW
+         3VYwC/tchh6aPInHX4GrBs5/pZeqGIUCGeQ89plFChduW1w6FsShyxSwjQrZGqYuv6S1
+         vieqz0STRtF2G2fJg/Y/2wlF2jFi02qyddBBWHHAfPgqRbS12zOIiiYbzWvb3Sg2AeOK
+         G9jQ==
+X-Gm-Message-State: AOAM530PJmYLMxpmseKp729RLO9LZhSF9EQeE4rvAS9vmzN42KtLmwQ3
+        Pj/YrvQohn7IgXC+3/06rhM=
+X-Google-Smtp-Source: ABdhPJxJyhJxxOJkC/p2qwseAye4xug0GTWfp1NE/yXLRkdkBd6OQBwEP1US4FmY9JZv/RU7x+8vig==
+X-Received: by 2002:a17:902:8693:b029:eb:53f:1336 with SMTP id g19-20020a1709028693b02900eb053f1336mr1015043plo.52.1618189974713;
+        Sun, 11 Apr 2021 18:12:54 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:f6ae:805e:fb4e:14b0? ([2601:647:4000:d7:f6ae:805e:fb4e:14b0])
+        by smtp.gmail.com with ESMTPSA id t23sm5245125pju.15.2021.04.11.18.12.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Apr 2021 18:12:54 -0700 (PDT)
+Subject: Re: [PATCH] gdrom: fix compilation error
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lkft-triage@lists.linaro.org, linux-block@vger.kernel.org
+Cc:     hch@lst.de, axboe@kernel.dk, Johannes.Thumshirn@wdc.com,
+        hare@suse.de, Damien.LeMoal@wdc.com, naresh.kamboju@linaro.org
+References: <20210411224330.4983-1-chaitanya.kulkarni@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <0880e158-516f-9d87-ff8c-3835da10d92b@acm.org>
+Date:   Sun, 11 Apr 2021 18:12:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BaHMQfq=8cziaEVNKYOgTBa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210411224330.4983-1-chaitanya.kulkarni@wdc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BaHMQfq=8cziaEVNKYOgTBa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 4/11/21 3:43 PM, Chaitanya Kulkarni wrote:
+> Use the right name for the struct request variable that removes the
+> following compilation error :-
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/tmp ARCH=sh
+> CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> 
+> In file included from /builds/linux/include/linux/scatterlist.h:9,
+>                  from /builds/linux/include/linux/dma-mapping.h:10,
+>                  from /builds/linux/drivers/cdrom/gdrom.c:16:
+> /builds/linux/drivers/cdrom/gdrom.c: In function 'gdrom_readdisk_dma':
+> /builds/linux/drivers/cdrom/gdrom.c:586:61: error: 'rq' undeclared
+> (first use in this function)
+>   586 |  __raw_writel(page_to_phys(bio_page(req->bio)) + bio_offset(rq->bio),
+>       |                                                             ^~
 
-Hi all,
+How about adding a Fixes: tag?
 
-In commit
+Thanks,
 
-  2cfebcb2a22f ("pinctrl: at91-pio4: Fix slew rate disablement")
-
-Fixes tag
-
-  Fixes: 440b144978ba ("pinctrl: at91-pio4: add support for slew-rate")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: c709135e576b ("pinctrl: at91-pio4: add support for slew-rate")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BaHMQfq=8cziaEVNKYOgTBa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmBzf4oACgkQAVBC80lX
-0GyaoAf9ErhArpU9LxfMdU6Mx1Mdsh+njGyOpZlvUza0vwOu7icH5yFGUj+lCaX9
-IuIRNFeOVE7YgP1t0Yv0ufvO5Qc6pzg03saoKCm4TUcY0LUIb/JWtCZpiDg2+qfG
-dR7KV/+Kz+qCRjXlE26XKNDh8i5MSvAWr6W3lREli6zpjTAPBKNktglagIf++n38
-hWvIQY3XRZ/dx8SSvtvUoGADzHK7Hxgn0BaB96TMatLd6s4ca7emfbNE6RNCqxo6
-TbXHdLkwaxrxwmYQcyfyXbPu15osGE4xbKTUqyVmsoVeaPUEnesIMhWoIeh4ydv9
-WrO+oZrTjmGDBNWufV6WMd0mRViTJg==
-=1QWc
------END PGP SIGNATURE-----
-
---Sig_/BaHMQfq=8cziaEVNKYOgTBa--
+Bart.

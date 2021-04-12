@@ -2,85 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 728BF35C565
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 13:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E82B35C590
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 13:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbhDLLhU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Apr 2021 07:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
+        id S238121AbhDLLr4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Apr 2021 07:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237829AbhDLLhU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 07:37:20 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A03C061574;
-        Mon, 12 Apr 2021 04:37:01 -0700 (PDT)
+        with ESMTP id S237705AbhDLLr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 07:47:56 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE443C061574;
+        Mon, 12 Apr 2021 04:47:38 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJmt23Wyfz9sSC;
-        Mon, 12 Apr 2021 21:36:58 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FJn6J4HVmz9sSC;
+        Mon, 12 Apr 2021 21:47:31 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618227419;
-        bh=5Tm82joAyQGhlRVkligE/W4B7Of7AjerYJW8diN4MEA=;
+        s=201702; t=1618228056;
+        bh=E9S/oqrY0+lUSUuX56T15kWI2eHfHM6JObKhhA4nUAA=;
         h=Date:From:To:Cc:Subject:From;
-        b=d9Qt/wPwTc109NqOXowwdC81si7i/pdRFKgKJ4uXHlUVUXuX6TXSIkC6LPMxU5UP8
-         N2xOH8mhxzxDCsAWNbHWGSFHmqiPpT7jmuAV8wVQt0989g3Wjd7pv7ocLTPYoiZdbJ
-         N2oOgSQkH4RfvWKI7Unigbk18+o/MYM3QBkoewcQoJNSUwy9Skvd2iYUBZWyAJeLCm
-         A3y5Kn5v0KXpIYsGF2ypTS0cumFDrDW24YFLR9XpGwJXOpYZLZmbwT+nGp6pRY42qT
-         an5sVj+eNDra7aUAtIJVz3pH3VcE7x3r5et4rNBk/gTt4Sxgg6mWl8iwlBjh1cxV/a
-         mWe17nqb8q4Cg==
-Date:   Mon, 12 Apr 2021 21:36:55 +1000
+        b=lh8PRVclnmdx+hF75KQFOyXHAvyo4gMSM3DCRFiJklvC06msGSu8Sncsrze2QbyAA
+         n91ZjYe89GWWqnpeYC0L4Jd3RUIsvn+jS8yXi/qZ7A5VI1E5x5h0qEDKCBIQA3ihTu
+         +/lNgAjSV/qppmpevlkofuBlgYs7Ppq6hslFiK3msvIAx0pDz3t3OkSH1pMVrTmvxf
+         l7AG/lAxH4ihbBwlJS7cD2qRrlukaRG63D5fK7wktgm4RGvBcvrMWzISSnH3zENZHc
+         947rYQGBgYW/J+K6czPKx0IJN9YvBb+yoFZYo8bdnNoC8Tg6B/AlEww0Fuq1083gUg
+         1V0TKrar8Ae0Q==
+Date:   Mon, 12 Apr 2021 21:47:30 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Miklos Szeredi <mszeredi@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20210412213655.3776e15e@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the vfs tree
+Message-ID: <20210412214730.2dbbcdff@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oOe35JQYRW0UFf2GvQRqcgu";
+Content-Type: multipart/signed; boundary="Sig_/xQr/7BBGQBAbNLWKFgbTOhz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oOe35JQYRW0UFf2GvQRqcgu
+--Sig_/xQr/7BBGQBAbNLWKFgbTOhz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the usb tree, today's linux-next build (x86_64 almodconfig
-modules_install) failed like this:
+After merging the vfs tree, today's linux-next build (htmldocs) produced
+this warning:
 
-depmod: ERROR: Cycle detected: usbcore -> typec -> usbcore
-depmod: ERROR: Found 2 modules in dependency cycles!
+Documentation/filesystems/locking.rst:113: WARNING: Malformed table.
+Text in column margin in table line 24.
 
-Caused by commit
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ops             i_rwsem(inode)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+lookup:         shared
+create:         exclusive
+link:           exclusive (both)
+mknod:          exclusive
+symlink:        exclusive
+mkdir:          exclusive
+unlink:         exclusive (both)
+rmdir:          exclusive (both)(see below)
+rename:         exclusive (all) (see below)
+readlink:       no
+get_link:       no
+setattr:        exclusive
+permission:     no (may not block if called in rcu-walk mode)
+get_acl:        no
+getattr:        no
+listxattr:      no
+fiemap:         no
+update_time:    no
+atomic_open:    shared (exclusive if O_CREAT is set in open flags)
+tmpfile:        no
+fileattr_get:   no or exclusive
+fileattr_set:   exclusive
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-  63cd78617350 ("usb: Link the ports to the connectors they are attached to=
-")
+Introduced by commit
 
-I have reverted that commit for today.
+  10a489bbff3e ("vfs: add fileattr ops")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/oOe35JQYRW0UFf2GvQRqcgu
+--Sig_/xQr/7BBGQBAbNLWKFgbTOhz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB0MNcACgkQAVBC80lX
-0GxLJQf/Qn84/tY2Fid1bb1Ro8nWvSiXzL9KsXZ/EiCGKCCWLBRaJ5y1ZWFwluuH
-DWsV1yAhF1Gpg53gBT7DkABO7hfgkqHF6Kq2WOXjaaqMlQBvkPXIgmSaV0sAyjW3
-BRMQ70/0hrAbz5jSaAJLhK9yy4J9vD0dlb8hDa/E+cS47vIZ/rg/NydbSpQ0mD05
-ytSiEVFnSKs9AslVQ5ksx3uvcgDgnBsgmawFtw4B5lYosPizkZAKOjhRoXYyDbve
-ugkNIoJZ5bEJD9msYMCCfag+y4haXZoCscsrG6u5+xWfDdYNf8KtthHQCEEUsXuU
-7l7kBTPm2BOYMiumDF5rOpELps8dWg==
-=a1iN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB0M1IACgkQAVBC80lX
+0Gy/rwgAjlagHSyK9ONQsNwUjA0KfX3Gasqjwlpt6and+Synou/INIijblcvnNSF
+zV/N7v8gzAmWigbf2vg6X6B9P2LEHOdNy+6bzNXzlycfGvGCruFaCh6d3csIS6mC
+sI2HFCmPV11Haf6t9yDB25CKB/PQX40gMVKsdtGdF9K9p0lWNW+EPQxnaiRq4grc
+k04ACrzefnukQVzJHFddadtz5RWlRRYbl08H7q47R5V1r/MpTWRrU0ubz5Mg9XH6
+4KkDyVOnXaEel3vyXsHN8aZFma68XTPDRKIOGVEX2x43fzbGvyFO++mFFLAf87wH
+0S33aK3AzZ16KVSCJy/3uFTvoxnzhQ==
+=XO0G
 -----END PGP SIGNATURE-----
 
---Sig_/oOe35JQYRW0UFf2GvQRqcgu--
+--Sig_/xQr/7BBGQBAbNLWKFgbTOhz--

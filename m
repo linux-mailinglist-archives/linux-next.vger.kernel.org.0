@@ -2,218 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED9B35C77C
-	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 15:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3CA35C97D
+	for <lists+linux-next@lfdr.de>; Mon, 12 Apr 2021 17:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239930AbhDLNZq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Apr 2021 09:25:46 -0400
-Received: from mail.netfilter.org ([217.70.188.207]:48284 "EHLO
-        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237277AbhDLNZo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 09:25:44 -0400
-Received: from us.es (unknown [90.77.255.23])
-        by mail.netfilter.org (Postfix) with ESMTPSA id 3069B62C0E;
-        Mon, 12 Apr 2021 15:25:01 +0200 (CEST)
-Date:   Mon, 12 Apr 2021 15:25:22 +0200
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210412132522.GA1302@salvia>
-References: <20210412150416.4465b518@canb.auug.org.au>
+        id S242495AbhDLPNn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Apr 2021 11:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239412AbhDLPNm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Apr 2021 11:13:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30B2C061574;
+        Mon, 12 Apr 2021 08:13:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=K3QQt32e+Ihaan+cSsO36hLhVbEl1gWUBbtc6CSo5/4=; b=SgG2eZxQDMaYmy1kiGQruMdsRS
+        Uh8yCsBn5X9yhqiVAzJskKImfSsMHYxd1nOtKuAwtTRPVWK9SeocL4XGiSPdiaE9JG9kG3ejlSuMs
+        3akFFQX8EPNxUiplBfe6v2KWq70xhlxlVJBOGqBFCa5Ylso5Oj856HzhK3UyaRja4x+Qh2Fwxj3uR
+        Rc0I0KkMA+FY9at0wroT6gARQYbK4iy5k5o7Wr6hxZg5tEU4xxRd8eaS+xB0aCI74oSEp6XhAK3tX
+        he2Nkr4Qc1gDzXeLFVdPRvI2pWmNf7o6EgGgom2rClzpr5KrHmstDMY/92Fjok5ZP9/7+ODhMV4G0
+        Jvt+yBAg==;
+Received: from [2601:1c0:6280:3f0::e0e1]
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lVyFd-0072YN-3o; Mon, 12 Apr 2021 15:13:21 +0000
+Subject: Re: mmotm 2021-04-11-20-47 uploaded (fs/io_uring.c)
+To:     Jens Axboe <axboe@kernel.dk>, akpm@linux-foundation.org,
+        broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org
+References: <20210412034813.EK9k9%akpm@linux-foundation.org>
+ <34ed89e1-683e-7c12-ceb0-f5b71148a8a7@infradead.org>
+ <9533afdd-208e-c25d-2e11-cc7f2c9d147b@kernel.dk>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <99c73206-8273-665a-0c66-2582873ffa48@infradead.org>
+Date:   Mon, 12 Apr 2021 08:13:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
-Content-Disposition: inline
-In-Reply-To: <20210412150416.4465b518@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <9533afdd-208e-c25d-2e11-cc7f2c9d147b@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 4/12/21 5:39 AM, Jens Axboe wrote:
+> On 4/12/21 1:21 AM, Randy Dunlap wrote:
+>> On 4/11/21 8:48 PM, akpm@linux-foundation.org wrote:
+>>> The mm-of-the-moment snapshot 2021-04-11-20-47 has been uploaded to
+>>>
+>>>    https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> https://ozlabs.org/~akpm/mmotm/series
+>>>
+>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>>> followed by the base kernel version against which this patch series is to
+>>> be applied.
+>>>
+>>> This tree is partially included in linux-next.  To see which patches are
+>>> included in linux-next, consult the `series' file.  Only the patches
+>>> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+>>> linux-next.
+>>
+>> on i386:
+>> # CONFIG_BLOCK is not set
+>>
+>> ../fs/io_uring.c: In function ‘kiocb_done’:
+>> ../fs/io_uring.c:2766:7: error: implicit declaration of function ‘io_resubmit_prep’; did you mean ‘io_put_req’? [-Werror=implicit-function-declaration]
+>>    if (io_resubmit_prep(req)) {
+> 
+> I'll apply the below to take care of that.
+> 
 
---W/nzBZO5zC0uMSeA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-On Mon, Apr 12, 2021 at 03:04:16PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> In file included from include/asm-generic/bug.h:20,
->                  from arch/x86/include/asm/bug.h:93,
->                  from include/linux/bug.h:5,
->                  from include/linux/mmdebug.h:5,
->                  from include/linux/gfp.h:5,
->                  from include/linux/umh.h:4,
->                  from include/linux/kmod.h:9,
->                  from net/bridge/netfilter/ebtables.c:14:
-> net/bridge/netfilter/ebtables.c: In function '__ebt_find_table':
-> net/bridge/netfilter/ebtables.c:1248:33: error: 'struct netns_xt' has no =
-member named 'tables'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |                                 ^
-> include/linux/kernel.h:708:26: note: in definition of macro 'container_of'
->   708 |  void *__mptr =3D (void *)(ptr);     \
->       |                          ^~~
-> include/linux/list.h:522:2: note: in expansion of macro 'list_entry'
->   522 |  list_entry((ptr)->next, type, member)
->       |  ^~~~~~~~~~
-> include/linux/list.h:628:13: note: in expansion of macro 'list_first_entr=
-y'
->   628 |  for (pos =3D list_first_entry(head, typeof(*pos), member); \
->       |             ^~~~~~~~~~~~~~~~
-> net/bridge/netfilter/ebtables.c:1248:2: note: in expansion of macro 'list=
-_for_each_entry'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |  ^~~~~~~~~~~~~~~~~~~
-> In file included from <command-line>:
-> net/bridge/netfilter/ebtables.c:1248:33: error: 'struct netns_xt' has no =
-member named 'tables'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |                                 ^
-> include/linux/compiler_types.h:300:9: note: in definition of macro '__com=
-piletime_assert'
->   300 |   if (!(condition))     \
->       |         ^~~~~~~~~
-> include/linux/compiler_types.h:320:2: note: in expansion of macro '_compi=
-letime_assert'
->   320 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COU=
-NTER__)
->       |  ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime=
-_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), m=
-sg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/kernel.h:709:2: note: in expansion of macro 'BUILD_BUG_ON_M=
-SG'
->   709 |  BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) && \
->       |  ^~~~~~~~~~~~~~~~
-> include/linux/kernel.h:709:20: note: in expansion of macro '__same_type'
->   709 |  BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) && \
->       |                    ^~~~~~~~~~~
-> include/linux/list.h:511:2: note: in expansion of macro 'container_of'
->   511 |  container_of(ptr, type, member)
->       |  ^~~~~~~~~~~~
-> include/linux/list.h:522:2: note: in expansion of macro 'list_entry'
->   522 |  list_entry((ptr)->next, type, member)
->       |  ^~~~~~~~~~
-> include/linux/list.h:628:13: note: in expansion of macro 'list_first_entr=
-y'
->   628 |  for (pos =3D list_first_entry(head, typeof(*pos), member); \
->       |             ^~~~~~~~~~~~~~~~
-> net/bridge/netfilter/ebtables.c:1248:2: note: in expansion of macro 'list=
-_for_each_entry'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |  ^~~~~~~~~~~~~~~~~~~
-> net/bridge/netfilter/ebtables.c:1248:33: error: 'struct netns_xt' has no =
-member named 'tables'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |                                 ^
-> include/linux/compiler_types.h:300:9: note: in definition of macro '__com=
-piletime_assert'
->   300 |   if (!(condition))     \
->       |         ^~~~~~~~~
-> include/linux/compiler_types.h:320:2: note: in expansion of macro '_compi=
-letime_assert'
->   320 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COU=
-NTER__)
->       |  ^~~~~~~~~~~~~~~~~~~
-> include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime=
-_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), m=
-sg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> include/linux/kernel.h:709:2: note: in expansion of macro 'BUILD_BUG_ON_M=
-SG'
->   709 |  BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) && \
->       |  ^~~~~~~~~~~~~~~~
-> include/linux/kernel.h:710:6: note: in expansion of macro '__same_type'
->   710 |     !__same_type(*(ptr), void),   \
->       |      ^~~~~~~~~~~
-> include/linux/list.h:511:2: note: in expansion of macro 'container_of'
->   511 |  container_of(ptr, type, member)
->       |  ^~~~~~~~~~~~
-> include/linux/list.h:522:2: note: in expansion of macro 'list_entry'
->   522 |  list_entry((ptr)->next, type, member)
->       |  ^~~~~~~~~~
-> include/linux/list.h:628:13: note: in expansion of macro 'list_first_entr=
-y'
->   628 |  for (pos =3D list_first_entry(head, typeof(*pos), member); \
->       |             ^~~~~~~~~~~~~~~~
-> net/bridge/netfilter/ebtables.c:1248:2: note: in expansion of macro 'list=
-_for_each_entry'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |  ^~~~~~~~~~~~~~~~~~~
-> In file included from include/linux/preempt.h:11,
->                  from include/linux/spinlock.h:51,
->                  from include/linux/mmzone.h:8,
->                  from include/linux/gfp.h:6,
->                  from include/linux/umh.h:4,
->                  from include/linux/kmod.h:9,
->                  from net/bridge/netfilter/ebtables.c:14:
-> net/bridge/netfilter/ebtables.c:1248:33: error: 'struct netns_xt' has no =
-member named 'tables'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |                                 ^
-> include/linux/list.h:619:20: note: in definition of macro 'list_entry_is_=
-head'
->   619 |  (&pos->member =3D=3D (head))
->       |                    ^~~~
-> net/bridge/netfilter/ebtables.c:1248:2: note: in expansion of macro 'list=
-_for_each_entry'
->  1248 |  list_for_each_entry(t, &net->xt.tables[NFPROTO_BRIDGE], list) {
->       |  ^~~~~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   5b53951cfc85 ("netfilter: ebtables: use net_generic infra")
->=20
-> interacting with commit
->=20
->   7ee3c61dcd28 ("netfilter: bridge: add pre_exit hooks for ebtable unregi=
-stration")
->=20
-> from the netfilter tree.
->=20
-> I have applied the following merge fix patch for today:
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 12 Apr 2021 14:58:20 +1000
-> Subject: [PATCH] merger fix for "netfilter: bridge: add pre_exit hooks for
->  ebtable unregistration"
 
 Thanks.
 
-I'll include this merge conflict in my next pull request.
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 3a837d2b8331..aa29918944f6 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -2464,6 +2464,10 @@ static bool io_rw_should_reissue(struct io_kiocb *req)
+>  	return true;
+>  }
+>  #else
+> +static bool io_resubmit_prep(struct io_kiocb *req)
+> +{
+> +	return false;
+> +}
+>  static bool io_rw_should_reissue(struct io_kiocb *req)
+>  {
+>  	return false;
+> @@ -2504,14 +2508,8 @@ static void io_complete_rw_iopoll(struct kiocb *kiocb, long res, long res2)
+>  	if (kiocb->ki_flags & IOCB_WRITE)
+>  		kiocb_end_write(req);
+>  	if (unlikely(res != req->result)) {
+> -		bool fail = true;
+> -
+> -#ifdef CONFIG_BLOCK
+> -		if (res == -EAGAIN && io_rw_should_reissue(req) &&
+> -		    io_resubmit_prep(req))
+> -			fail = false;
+> -#endif
+> -		if (fail) {
+> +		if (!(res == -EAGAIN && io_rw_should_reissue(req) &&
+> +		    io_resubmit_prep(req))) {
+>  			req_set_fail_links(req);
+>  			req->flags |= REQ_F_DONT_REISSUE;
+>  		}
+> 
 
---W/nzBZO5zC0uMSeA
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+-- 
+~Randy
 
-iQIzBAABCgAdFiEEFEKqOX9jqZmzwkCc1GSBvS7ZkBkFAmB0Sj8ACgkQ1GSBvS7Z
-kBm5qxAAw9lgQx7PmEXw7+Ji1y8xQZgXtahCa+Ze2PLxCIPkREzsrTats5EdGJRb
-PpGUCraQh2r8YB2xdAGaAaBGmGa2WRBgDriRYbGtQwMLmBy6ICnD7z5u734aHEhK
-7sYyJK/HK+ZuPxB0YdXX/djFJz0IiIAKZIyMRk1ZLU9wR9IIKTlmXyOLQ+H6Z7E8
-ORNML/q13F6zuVeEOM02j4TPDxcpv26mDlp6Of4IwybTXEvsF4Mpim8NaFNZamcg
-e30rx6V5JT+5VVfgkFuXl72E0Zc2n7ia4TakDGzLnNnu9w/lUL8b2Ox+d9o3H3xS
-BqPWRectRHW5LyUHuPQ1tu85pvdOcAHXaFKX8cbFh18SfUA86/fnlUWo55GpRBTW
-o0b+6wYdoUZNNeBn86FwtlC0muRkArdTTyLdDOXOG01nAHQbQqtNZtRWVYh64E1r
-D5htL4tutvJ+pcAXg9vsGFI5puIIp3YB9usOiHQOIPiDnC0Kd8eU+1qDdZ9DOm9N
-fEoiEuwg7ejfkFScJVkwb9fQDnSD3vCYNVFFRJGOyghE7pbIp+6Sa4OZOExpDCsm
-qp+6WynLkYks4KuivoBpdSjTdelQ44FHovIC0TzaBA+jjm4kmX7znaKM7FvUsZSz
-fD5sWPWntxX8UYrXv84/q72qMYi1KFwu7sJJ8ecKztzukUs9jXo=
-=sY+L
------END PGP SIGNATURE-----
-
---W/nzBZO5zC0uMSeA--

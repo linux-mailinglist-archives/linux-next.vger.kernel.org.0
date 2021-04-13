@@ -2,71 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DC035E6EA
-	for <lists+linux-next@lfdr.de>; Tue, 13 Apr 2021 21:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A3935E6F2
+	for <lists+linux-next@lfdr.de>; Tue, 13 Apr 2021 21:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237850AbhDMTHx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Apr 2021 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S231340AbhDMTJp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Apr 2021 15:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbhDMTHx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Apr 2021 15:07:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC26C061574;
-        Tue, 13 Apr 2021 12:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=5IS1kdjQ/wiovyMBlwaRQmI6DR2U+GDZoX5Ga6CzJBQ=; b=SWMMfeMR8QXg6ExV2ShIUEXXce
-        YXQpA18y8ZtTm8wlph3xXnq45/yTGFharQ7QepvNuhPPoO/lXFpKosDqH1vqctC6bFlzZ7ceE9ZtK
-        8mhX+F1WliOXFRe7Eo3iuZoYJWiM3UOh/jNkvsgYXFJmGOVLud88JYrqEDt8zryBojk4msfgpla9L
-        Y7ofdK8zSMpkCVOKgZwbexY5Mk3QYZKR5zEn7YS6r27PmS/uIVc5VrxgMA4FG+c73hwlO9VcVsKKO
-        kqBUcLkFQ9QrtrYbdeWEtcGEWERQCq6O6JyzE7j2SYWym/EbuRFIPOXj86IdGryxuogL0Rj1AaVeJ
-        rzc/ef3A==;
-Received: from [2601:1c0:6280:3f0::e0e1]
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lWONm-00ADIa-FA; Tue, 13 Apr 2021 19:07:31 +0000
-Subject: Re: linux-next: Tree for Apr 9 (x86 boot problem)
+        with ESMTP id S232923AbhDMTJo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Apr 2021 15:09:44 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D29AC061756
+        for <linux-next@vger.kernel.org>; Tue, 13 Apr 2021 12:09:22 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id d15so6027470qkc.9
+        for <linux-next@vger.kernel.org>; Tue, 13 Apr 2021 12:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=7hlbKO+nfOBQ9jb/4q5zl38fZNJwCd9YNYudz1e6oJo=;
+        b=emUo/ODKrTSEKAjOumtSF4lr31MN8w+c7mJq9O7Q7bHXDLIN1y/Mo948Umq7rGdAzn
+         RAsuiyqIQg1+d9PTPO650M50ud8ZcaC2g7sergtqjR7zOzsTd8ejTAc64nV9boZuYb0R
+         wMtjB/t+VQm6Bxp8EDMh8xJ3Si2KMnLMSdIJ5bjoLjS7etD90jnj6bEwc/er0yPCUE+S
+         zfL4o7U/kdXBRouiQfAPxkXHQw7DZHH5F53lYhTpp0dHrF8/fL6G82OLqaERdYSNbl9c
+         4NqwqpOyw8JYcCMmEtDbojq2r1Y7c7i562IV4g+trYrjVi+1mPVa01z+EkkxnFJWtshj
+         wn5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=7hlbKO+nfOBQ9jb/4q5zl38fZNJwCd9YNYudz1e6oJo=;
+        b=Aq1MAnjqkBvqpr0v2or4gMlCT8jCR0Wi9KubxCPepzKByD6FWKTktDkt0hXuugwHYR
+         gT93STlRT3WkqOdzqQUrkcWNjBWETI2r9hE1iNogqolKd+2ysSrCfCXzQc+Nra92hN58
+         fg5RFpn/6DwWslUrENPH6fJgWup1sE3U3l+qNs0sp/YZhnZpf7W8QNo7KqHS91MwZuS/
+         u+NjO6lL6TZpjhCaA8nchEdtJBBVVUfqHHNu8OjbPMhDY43xiR4qzSQ0mxn+ct+6yTEs
+         qAx/4GbO//LGkkuDOXdBI0TImsSeU5z0vLerU+AzfxB1kyR5G5nha5ZqMw12KbJyU9dP
+         OMpw==
+X-Gm-Message-State: AOAM533C5GY/7AK1mcPfAlOAu0keeudgzB4nTBj7Nl/OrThFAophOejD
+        jIDs8ZYIeZftNRyXZjZyy53ePQ==
+X-Google-Smtp-Source: ABdhPJwRLs56//HXapWYHGi0JxUqlYObxwGV06Fj6/7/tUMiy6xQehOCqYGMtCNI7kvFvDd5f/SelQ==
+X-Received: by 2002:a37:2cc1:: with SMTP id s184mr14892831qkh.489.1618340960420;
+        Tue, 13 Apr 2021 12:09:20 -0700 (PDT)
+Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w1sm8833346qto.85.2021.04.13.12.09.18
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Tue, 13 Apr 2021 12:09:20 -0700 (PDT)
+Date:   Tue, 13 Apr 2021 12:09:08 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@eggly.anvils
 To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         X86 ML <x86@kernel.org>
-References: <20210409215103.03999588@canb.auug.org.au>
- <f67d3e03-af90-f790-baf4-8d412fe055af@infradead.org>
- <YHPlTifk6jST5auY@kernel.org>
- <aa83b81e-a03d-b835-6b45-01efc7e08dce@infradead.org>
- <YHR86T15BzETVHhk@kernel.org>
- <d56ebb95-1c40-5994-383f-70d8f226e8c3@infradead.org>
- <YHU03AIwrpHCUlU/@kernel.org>
- <7cec048d-26f0-104a-6bca-d9afc6a7d1e8@infradead.org>
- <YHXNyVVUwZbVDBrr@kernel.org>
- <7bc072c0-bf10-bd0f-95db-0f0a7db47b93@infradead.org>
- <YHXhhtCVf0RsgsDs@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4b980588-d7b8-24e8-dc68-709a3f9b9fc0@infradead.org>
-Date:   Tue, 13 Apr 2021 12:07:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
+Subject: Re: linux-next: Tree for Apr 9 (x86 boot problem)
 In-Reply-To: <YHXhhtCVf0RsgsDs@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Message-ID: <alpine.LSU.2.11.2104131158350.1037@eggly.anvils>
+References: <20210409215103.03999588@canb.auug.org.au> <f67d3e03-af90-f790-baf4-8d412fe055af@infradead.org> <YHPlTifk6jST5auY@kernel.org> <aa83b81e-a03d-b835-6b45-01efc7e08dce@infradead.org> <YHR86T15BzETVHhk@kernel.org> <d56ebb95-1c40-5994-383f-70d8f226e8c3@infradead.org>
+ <YHU03AIwrpHCUlU/@kernel.org> <7cec048d-26f0-104a-6bca-d9afc6a7d1e8@infradead.org> <YHXNyVVUwZbVDBrr@kernel.org> <7bc072c0-bf10-bd0f-95db-0f0a7db47b93@infradead.org> <YHXhhtCVf0RsgsDs@kernel.org>
+User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/13/21 11:23 AM, Mike Rapoport wrote:
-> On Tue, Apr 13, 2021 at 10:34:25AM -0700, Randy Dunlap wrote:
->> On 4/13/21 9:58 AM, Mike Rapoport wrote:
-
->>
->> Mike,
->> That works.
->>
->> Please send the next test.
+On Tue, 13 Apr 2021, Mike Rapoport wrote:
 > 
 > I think I've found the reason. trim_snb_memory() reserved the entire first
 > megabyte very early leaving no room for real mode trampoline allocation.
@@ -101,11 +103,13 @@ On 4/13/21 11:23 AM, Mike Rapoport wrote:
 > Reported-by: Randy Dunlap <rdunlap@infradead.org>
 > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 
-Yay! That boots.
+Tested-by: Hugh Dickins <hughd@google.com>
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
+Thanks Mike and Randy. ThinkPad T420s here. I didn't notice this thread
+until this morning, but had been investigating bootup panic on mmotm
+yesterday. I was more fortunate than Randy, in getting some console
+output which soon led to a799c2bd29d1 without bisection. Expected
+to go through it line by line today, but you've saved me - thanks.
 
 > ---
 >  arch/x86/kernel/setup.c | 20 +++++++++++++++-----
@@ -158,9 +162,5 @@ Thanks.
 >  	init_mem_mapping();
 >  
 >  	idt_setup_early_pf();
-> 
-
-
--- 
-~Randy
-
+> -- 
+> 2.28.0

@@ -2,197 +2,185 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BF736064F
-	for <lists+linux-next@lfdr.de>; Thu, 15 Apr 2021 11:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92577360692
+	for <lists+linux-next@lfdr.de>; Thu, 15 Apr 2021 12:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbhDOJ6k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Apr 2021 05:58:40 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52353 "EHLO ozlabs.org"
+        id S231534AbhDOKHb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Apr 2021 06:07:31 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:65076 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229457AbhDOJ6k (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Apr 2021 05:58:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FLZXl44Zbz9sVw;
-        Thu, 15 Apr 2021 19:58:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618480695;
-        bh=1uvsyyLpIENjUj5/+XbE4hdxkNFTsrbNH/LtFMS8UAY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AlXu6KUbaDof2ItQcld3YGAmRa8HdzwPRfaWHUAYAd5ql2lQKYi4lUxcNvu6I/3qH
-         mlqHykQ0qA1++CEyRrKozetNw/imXZnkLEKxEcEoPiRx3DfhqqAUZh6m/gmVadGfGN
-         9uFRVtfAcN6uA5Z+YyLzvmCZF+IfhHfTZEVugeQBvGT5atM+dGpB6MGJZkMvfR4Tkz
-         4Yg64uPlJkOdH68kxufb+YBPGm4j4D7zXmcYpFqQMlSeJBSJw+tQA+Ua1HPD367BkC
-         D60sYe5RP3PPmxT7UIfQQG4EybyZzdfXg1k7B6ZZAc9pWPC4uRiYvQHa71EclTykZq
-         mowwMOBuylw9Q==
-Date:   Thu, 15 Apr 2021 19:58:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
+        id S229481AbhDOKHb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Apr 2021 06:07:31 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FLZky2PTvz9v4hJ;
+        Thu, 15 Apr 2021 12:07:06 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id U8NVifxNkUuw; Thu, 15 Apr 2021 12:07:06 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FLZky1QWLz9v4hH;
+        Thu, 15 Apr 2021 12:07:06 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 799B08B7F2;
+        Thu, 15 Apr 2021 12:07:06 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id o6oLMiP1k9cJ; Thu, 15 Apr 2021 12:07:06 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B61CD8B7FB;
+        Thu, 15 Apr 2021 12:07:03 +0200 (CEST)
 Subject: Re: linux-next: manual merge of the akpm-current tree with the
  powerpc tree
-Message-ID: <20210415195814.0dc4ced9@canb.auug.org.au>
-In-Reply-To: <20210415194417.498e71b7@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
 References: <20210415194417.498e71b7@canb.auug.org.au>
+ <20210415195814.0dc4ced9@canb.auug.org.au>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <9bc1b8fd-8051-54ed-b9d8-198fe1f4c348@csgroup.eu>
+Date:   Thu, 15 Apr 2021 12:07:01 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ExMvwKVEhJY+RZj1n_J_Q/A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210415195814.0dc4ced9@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ExMvwKVEhJY+RZj1n_J_Q/A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Thu, 15 Apr 2021 19:44:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the akpm-current tree got a conflict in:
->=20
->   arch/powerpc/kernel/module.c
->=20
-> between commit:
->=20
->   2ec13df16704 ("powerpc/modules: Load modules closer to kernel text")
->=20
-> from the powerpc tree and commit:
->=20
->   4930ba789f8d ("powerpc/64s/radix: enable huge vmalloc mappings")
->=20
-> from the akpm-current tree.
->=20
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc arch/powerpc/kernel/module.c
-> index fab84024650c,cdb2d88c54e7..000000000000
+Le 15/04/2021 à 11:58, Stephen Rothwell a écrit :
+> Hi all,
+> 
+> On Thu, 15 Apr 2021 19:44:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Today's linux-next merge of the akpm-current tree got a conflict in:
+>>
+>>    arch/powerpc/kernel/module.c
+>>
+>> between commit:
+>>
+>>    2ec13df16704 ("powerpc/modules: Load modules closer to kernel text")
+>>
+>> from the powerpc tree and commit:
+>>
+>>    4930ba789f8d ("powerpc/64s/radix: enable huge vmalloc mappings")
+>>
+>> from the akpm-current tree.
+>>
+>> I fixed it up (I think - see below) and can carry the fix as
+>> necessary. This is now fixed as far as linux-next is concerned, but any
+>> non trivial conflicts should be mentioned to your upstream maintainer
+>> when your tree is submitted for merging.  You may also want to consider
+>> cooperating with the maintainer of the conflicting tree to minimise any
+>> particularly complex conflicts.
+>>
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
+>>
+>> diff --cc arch/powerpc/kernel/module.c
+>> index fab84024650c,cdb2d88c54e7..000000000000
+>> --- a/arch/powerpc/kernel/module.c
+>> +++ b/arch/powerpc/kernel/module.c
+>> @@@ -88,29 -88,26 +89,42 @@@ int module_finalize(const Elf_Ehdr *hdr
+>>    	return 0;
+>>    }
+>>    
+>> - #ifdef MODULES_VADDR
+>>   -void *module_alloc(unsigned long size)
+>>   +static __always_inline void *
+>>   +__module_alloc(unsigned long size, unsigned long start, unsigned long end)
+>>    {
+>>   -	unsigned long start = VMALLOC_START;
+>>   -	unsigned long end = VMALLOC_END;
+>>   -
+>>   -#ifdef MODULES_VADDR
+>>   -	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
+>>   -	start = MODULES_VADDR;
+>>   -	end = MODULES_END;
+>>   -#endif
+>>   -
+>> + 	/*
+>> + 	 * Don't do huge page allocations for modules yet until more testing
+>> + 	 * is done. STRICT_MODULE_RWX may require extra work to support this
+>> + 	 * too.
+>> + 	 */
+>> +
+>>    	return __vmalloc_node_range(size, 1, start, end, GFP_KERNEL,
+>> - 				    PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+>> + 				    PAGE_KERNEL_EXEC,
+>> + 				    VM_NO_HUGE_VMAP | VM_FLUSH_RESET_PERMS,
+>> + 				    NUMA_NO_NODE,
+>>    				    __builtin_return_address(0));
+>>    }
+>>   +
+>> ++
+>>   +void *module_alloc(unsigned long size)
+>>   +{
+>> ++	unsigned long start = VMALLOC_START;
+>> ++	unsigned long end = VMALLOC_END;
+>>   +	unsigned long limit = (unsigned long)_etext - SZ_32M;
+>>   +	void *ptr = NULL;
+>>   +
+>> ++#ifdef MODULES_VADDR
+>>   +	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
+>> ++	start = MODULES_VADDR;
+>> ++	end = MODULES_END;
+
+The #endif should be here.
+
+
+>>   +
+>>   +	/* First try within 32M limit from _etext to avoid branch trampolines */
+>>   +	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
+>> - 		ptr = __module_alloc(size, limit, MODULES_END);
+>> ++		ptr = __module_alloc(size, limit, end);
+>>   +
+>>   +	if (!ptr)
+>> - 		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END);
+>> ++#endif
+>> ++		ptr = __module_alloc(size, start, end);
+>>   +
+>>   +	return ptr;
+>>   +}
+>> - #endif
+> 
+> Unfortunately, it also needs this:
+
+Before the #endif is too far.
+
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 15 Apr 2021 19:53:58 +1000
+> Subject: [PATCH] merge fix up for powerpc merge fix
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>   arch/powerpc/kernel/module.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
+> index d8ab1ad2eb05..c060f99afd4d 100644
 > --- a/arch/powerpc/kernel/module.c
 > +++ b/arch/powerpc/kernel/module.c
-> @@@ -88,29 -88,26 +89,42 @@@ int module_finalize(const Elf_Ehdr *hdr
->   	return 0;
->   }
->  =20
-> - #ifdef MODULES_VADDR
->  -void *module_alloc(unsigned long size)
->  +static __always_inline void *
->  +__module_alloc(unsigned long size, unsigned long start, unsigned long e=
-nd)
+> @@ -110,7 +110,9 @@ void *module_alloc(unsigned long size)
 >   {
->  -	unsigned long start =3D VMALLOC_START;
->  -	unsigned long end =3D VMALLOC_END;
->  -
->  -#ifdef MODULES_VADDR
->  -	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
->  -	start =3D MODULES_VADDR;
->  -	end =3D MODULES_END;
->  -#endif
->  -
-> + 	/*
-> + 	 * Don't do huge page allocations for modules yet until more testing
-> + 	 * is done. STRICT_MODULE_RWX may require extra work to support this
-> + 	 * too.
-> + 	 */
-> +=20
->   	return __vmalloc_node_range(size, 1, start, end, GFP_KERNEL,
-> - 				    PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
-> + 				    PAGE_KERNEL_EXEC,
-> + 				    VM_NO_HUGE_VMAP | VM_FLUSH_RESET_PERMS,
-> + 				    NUMA_NO_NODE,
->   				    __builtin_return_address(0));
->   }
->  +
-> ++
->  +void *module_alloc(unsigned long size)
->  +{
-> ++	unsigned long start =3D VMALLOC_START;
-> ++	unsigned long end =3D VMALLOC_END;
->  +	unsigned long limit =3D (unsigned long)_etext - SZ_32M;
->  +	void *ptr =3D NULL;
->  +
-> ++#ifdef MODULES_VADDR
->  +	BUILD_BUG_ON(TASK_SIZE > MODULES_VADDR);
-> ++	start =3D MODULES_VADDR;
-> ++	end =3D MODULES_END;
->  +
->  +	/* First try within 32M limit from _etext to avoid branch trampolines =
-*/
->  +	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
-> - 		ptr =3D __module_alloc(size, limit, MODULES_END);
-> ++		ptr =3D __module_alloc(size, limit, end);
->  +
->  +	if (!ptr)
-> - 		ptr =3D __module_alloc(size, MODULES_VADDR, MODULES_END);
-> ++#endif
-> ++		ptr =3D __module_alloc(size, start, end);
->  +
->  +	return ptr;
->  +}
-> - #endif
-
-Unfortunately, it also needs this:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 15 Apr 2021 19:53:58 +1000
-Subject: [PATCH] merge fix up for powerpc merge fix
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/kernel/module.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
-index d8ab1ad2eb05..c060f99afd4d 100644
---- a/arch/powerpc/kernel/module.c
-+++ b/arch/powerpc/kernel/module.c
-@@ -110,7 +110,9 @@ void *module_alloc(unsigned long size)
- {
- 	unsigned long start =3D VMALLOC_START;
- 	unsigned long end =3D VMALLOC_END;
-+#ifdef MODULES_VADDR
- 	unsigned long limit =3D (unsigned long)_etext - SZ_32M;
-+#endif
- 	void *ptr =3D NULL;
-=20
- #ifdef MODULES_VADDR
---=20
-2.30.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ExMvwKVEhJY+RZj1n_J_Q/A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB4DjYACgkQAVBC80lX
-0Gy0LggAhCiWf+SJ7ED/qi8II8H7hqc0WFIFjp3ehHQUhxUPKbMRkTF1TDdSQCkO
-ct2iwvcIoRITqGWP/Znaf/LbcArlJlKbjTQyc9mqdWl+mIVLhaZm9htfiwC9Uktb
-lS5DjGDYyIVAanA6aTxU/wKWRYJ3PR9vSZhoHxmMIaYKQeCjTvQ/8vtpWzJGW9x8
-j9uJYhL3/VhbIY9ovmTQVLPeLNk8NIeNiXcZxx9FW3Ovef3ZDdN/aswVxfhczXlv
-ZdKh+3xzw1nvZUCYiK1zSYjGMn+qeHi6fMR1x9KOGt9C5TQTCbKSYI0gCjbrUDc0
-koocZAH932c7hL2xIE5nAN8Jwc6OCA==
-=fnEY
------END PGP SIGNATURE-----
-
---Sig_/ExMvwKVEhJY+RZj1n_J_Q/A--
+>   	unsigned long start = VMALLOC_START;
+>   	unsigned long end = VMALLOC_END;
+> +#ifdef MODULES_VADDR
+>   	unsigned long limit = (unsigned long)_etext - SZ_32M;
+> +#endif
+>   	void *ptr = NULL;
+>   
+>   #ifdef MODULES_VADDR
+> 

@@ -2,105 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B36361FFD
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 14:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F8236219D
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 16:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbhDPMil (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 08:38:41 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9636 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235243AbhDPMil (ORCPT
+        id S235840AbhDPOCc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 10:02:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57849 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235815AbhDPOCc (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Apr 2021 08:38:41 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GCZX3m037291;
-        Fri, 16 Apr 2021 08:38:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=8iOl2pgc+pfrz28oppTEemV2d1omLs4ADa4tFM33Xlc=;
- b=VDFkjS+4LeYpNPu6fC7SQWNuxOwac7Q7+B2TV/pTqlrUIOJg0rgQhbwSgvERD+mUssB4
- EXZarjciy0LxqzwVoXOePZVW2NnSTgZzCrrCOxuasIt2+BUAG1Sn+R/H+2KOFhxcTphx
- xcDBBhQfk5NaSoVElMRLsRevQBJm6iQkFbCtej7/NKfRy1IIhtED9YJtNVNWL2bYv4UB
- xVzLmXmKh+EUV6XaIZYxJABihIGBgbdkDsY33D6IhEkalHK8W6cm5vE4yBAUMA5jQ530
- I+Q/YLNzrxBspepXZrNLe/AwJxIMSoIpN41fYO7xuSo/p86k8WWMxV2UhtcjFI45rdP8 jA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnphcvr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 08:38:10 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13GCZjMX038176;
-        Fri, 16 Apr 2021 08:38:09 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnphcuv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 08:38:09 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13GCRj8W006769;
-        Fri, 16 Apr 2021 12:38:08 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 37u3n8cf0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 12:38:08 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13GCc5Ea42795498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Apr 2021 12:38:05 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6D0AAE055;
-        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18E3DAE04D;
-        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.171.64.24])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
+        Fri, 16 Apr 2021 10:02:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618581727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsnX1uUtSEgpJZw9F0YXVXLSEsEMxeYY82QRT9JM2Rk=;
+        b=hDC6dBT8r/Llj13PHJ3cy3J7kIdRkgVlDgmfmK5a7Vo/XqRaHVkwsl/a1DxZTol04upY5i
+        fPbE5dPWO3tKMPPwM31L3iho+pSrSpUEmkI3NBQhh1sku+JhnGQ5eREsiU3ZRFxAZDDC+h
+        4j+HZEuIqWT2NYjDG6G67Wyd2x1/zGc=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-217-YDTzPrK3PtyKCix5HnvscA-1; Fri, 16 Apr 2021 10:02:04 -0400
+X-MC-Unique: YDTzPrK3PtyKCix5HnvscA-1
+Received: by mail-ed1-f72.google.com with SMTP id f1-20020a0564021941b02903850806bb32so1116069edz.9
+        for <linux-next@vger.kernel.org>; Fri, 16 Apr 2021 07:02:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CsnX1uUtSEgpJZw9F0YXVXLSEsEMxeYY82QRT9JM2Rk=;
+        b=kVnRKkfMp2N3HSO5MYo488TuGTd1CHg8P9THCbjdtUKl8W7mdH9dPIruCZUfjdkRSf
+         LkAP8qTULXkn3l9djkcDITOi+VZDZELQIKJvyVO+zII2uk/a2JKtJMnrmLjhzLo2Mcn4
+         W94M9kM+DyOImunOy6sieRwHxsaXyQBnODpxugA7Ff3XNiRVgkHrO3Jf7eGYS8usBkXX
+         SWrLnybws3RdNSBABR3dGx18LWp952YVQCV0cr1I8PsQk9eBqQgE/AvC7WmHBQSEOmJG
+         CeNn9ddtvJOfDg7ofpZexij4pLPwvoWb0q1pzoUpXuSdvMd2+Oe990LMTW0UlgcA92ey
+         D5zw==
+X-Gm-Message-State: AOAM532QQ9KryjKmRGJfwh7UdhQvc6jPNlfmo6XyEBDw8FwWI2aIohyU
+        mjyw4kOEn9UvB4SIndGb13WKTLa7L7Zpkhk1XI3cbenJYHHJbqmFvl2WwH/x0yjISDH0zKj9RM/
+        0DS4lSlSPxG+HmtSQdWYvLumLZmwvgpfOyx+GcN2VrTxSUdaBFYcUodNl6BGAyJiWUfWUx2+oVw
+        ==
+X-Received: by 2002:a05:6402:2552:: with SMTP id l18mr9944480edb.71.1618581723126;
+        Fri, 16 Apr 2021 07:02:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxER520adn508n7gqk1PlMU2QCKke3crrQVS65fvfRhHVdi9QlT7AtgFN9IE4YPxeKcEvIP2g==
+X-Received: by 2002:a05:6402:2552:: with SMTP id l18mr9944450edb.71.1618581722818;
+        Fri, 16 Apr 2021 07:02:02 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id jl8sm375691ejc.122.2021.04.16.07.02.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Apr 2021 07:02:02 -0700 (PDT)
 Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        KVM <kvm@vger.kernel.org>
 Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 References: <20210416222731.3e82b3a0@canb.auug.org.au>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
-Date:   Fri, 16 Apr 2021 14:38:04 +0200
+ <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <2b825142-fdd9-be35-6d88-bb3b9c985122@redhat.com>
+Date:   Fri, 16 Apr 2021 16:02:01 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210416222731.3e82b3a0@canb.auug.org.au>
+In-Reply-To: <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jhd4b3CO_inSOEuzwgnTPLcvLjuMOTHn
-X-Proofpoint-ORIG-GUID: RrMXz8aLz6p4OEC2DXqGZd9WGSa9MuRX
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-16_07:2021-04-15,2021-04-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104160094
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 16.04.21 14:27, Stephen Rothwell wrote:
-> Hi all,
+On 16/04/21 14:38, Christian Borntraeger wrote:
+> On 16.04.21 14:27, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> In commit
+>>
+>>    c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and 
+>> MSO")
+>>
+>> Fixes tag
+>>
+>>    Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in 
+>> VSIE")
+>>
+>> has these problem(s):
+>>
+>>    - Subject does not match target commit subject
+>>      Just use
+>>     git log -1 --format='Fixes: %h ("%s")'
 > 
-> In commit
+> Hmm, this has been sitting in kvms390/next for some time now. Is this a 
+> new check?
 > 
->    c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and MSO")
-> 
-> Fixes tag
-> 
->    Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in VSIE")
-> 
-> has these problem(s):
-> 
->    - Subject does not match target commit subject
->      Just use
-> 	git log -1 --format='Fixes: %h ("%s")'
 
-Hmm, this has been sitting in kvms390/next for some time now. Is this a new check?
+Maybe you just missed it when it was reported for kvms390?
+
+https://www.spinics.net/lists/linux-next/msg59652.html
+
+The SHA1 is stable now so it's too late.  It's not a big deal I guess.
+
+Paolo
+

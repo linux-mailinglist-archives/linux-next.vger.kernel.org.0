@@ -2,109 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F8236219D
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 16:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B113B362335
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 16:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbhDPOCc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 10:02:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57849 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235815AbhDPOCc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Apr 2021 10:02:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618581727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CsnX1uUtSEgpJZw9F0YXVXLSEsEMxeYY82QRT9JM2Rk=;
-        b=hDC6dBT8r/Llj13PHJ3cy3J7kIdRkgVlDgmfmK5a7Vo/XqRaHVkwsl/a1DxZTol04upY5i
-        fPbE5dPWO3tKMPPwM31L3iho+pSrSpUEmkI3NBQhh1sku+JhnGQ5eREsiU3ZRFxAZDDC+h
-        4j+HZEuIqWT2NYjDG6G67Wyd2x1/zGc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-217-YDTzPrK3PtyKCix5HnvscA-1; Fri, 16 Apr 2021 10:02:04 -0400
-X-MC-Unique: YDTzPrK3PtyKCix5HnvscA-1
-Received: by mail-ed1-f72.google.com with SMTP id f1-20020a0564021941b02903850806bb32so1116069edz.9
-        for <linux-next@vger.kernel.org>; Fri, 16 Apr 2021 07:02:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CsnX1uUtSEgpJZw9F0YXVXLSEsEMxeYY82QRT9JM2Rk=;
-        b=kVnRKkfMp2N3HSO5MYo488TuGTd1CHg8P9THCbjdtUKl8W7mdH9dPIruCZUfjdkRSf
-         LkAP8qTULXkn3l9djkcDITOi+VZDZELQIKJvyVO+zII2uk/a2JKtJMnrmLjhzLo2Mcn4
-         W94M9kM+DyOImunOy6sieRwHxsaXyQBnODpxugA7Ff3XNiRVgkHrO3Jf7eGYS8usBkXX
-         SWrLnybws3RdNSBABR3dGx18LWp952YVQCV0cr1I8PsQk9eBqQgE/AvC7WmHBQSEOmJG
-         CeNn9ddtvJOfDg7ofpZexij4pLPwvoWb0q1pzoUpXuSdvMd2+Oe990LMTW0UlgcA92ey
-         D5zw==
-X-Gm-Message-State: AOAM532QQ9KryjKmRGJfwh7UdhQvc6jPNlfmo6XyEBDw8FwWI2aIohyU
-        mjyw4kOEn9UvB4SIndGb13WKTLa7L7Zpkhk1XI3cbenJYHHJbqmFvl2WwH/x0yjISDH0zKj9RM/
-        0DS4lSlSPxG+HmtSQdWYvLumLZmwvgpfOyx+GcN2VrTxSUdaBFYcUodNl6BGAyJiWUfWUx2+oVw
-        ==
-X-Received: by 2002:a05:6402:2552:: with SMTP id l18mr9944480edb.71.1618581723126;
-        Fri, 16 Apr 2021 07:02:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxER520adn508n7gqk1PlMU2QCKke3crrQVS65fvfRhHVdi9QlT7AtgFN9IE4YPxeKcEvIP2g==
-X-Received: by 2002:a05:6402:2552:: with SMTP id l18mr9944450edb.71.1618581722818;
-        Fri, 16 Apr 2021 07:02:02 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id jl8sm375691ejc.122.2021.04.16.07.02.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Apr 2021 07:02:02 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        KVM <kvm@vger.kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        id S242887AbhDPO7C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 10:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240740AbhDPO7B (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Apr 2021 10:59:01 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772A0C061756;
+        Fri, 16 Apr 2021 07:58:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FMK8n1kfXz9sWK;
+        Sat, 17 Apr 2021 00:58:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1618585113;
+        bh=cIlMdrmnY8xfUotlk3HjA+3AaMQAPaEqG0+WRFRFMzY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Lxvk3EsayIuu49a14DRd3ArX/Xa2jMszBu/PeFy9V2YOI6MLPDfnKZ/wroYFEkjoZ
+         ruxhG+2jOinHLzd1gZpuvf1pg2+h5snEDcnSAWz9r86PiZRARRaWqAh1TGBCupm7Ei
+         zX8a9vsnM2AaNGbh+lvjv1boh2ii0vXB3vscwAwI7559JbVazl6Gu1NSl6MxR0h7R4
+         UEvaiJ/l2Ya4xKXXdyeTaktjI42a+TvRpbOF3FC4JiaCqs9gmE7jgNI2qZikWe5HRG
+         rZk1ITj2w4mNFHMXODhTw6fB/czUTuAJOhqikDpK9xXexgsHkgqmsUh6bK6pkNbbVE
+         6aPRK8udIi5vg==
+Date:   Sat, 17 Apr 2021 00:58:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        KVM <kvm@vger.kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
+Message-ID: <20210417005831.3785688b@canb.auug.org.au>
+In-Reply-To: <2b825142-fdd9-be35-6d88-bb3b9c985122@redhat.com>
 References: <20210416222731.3e82b3a0@canb.auug.org.au>
- <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <2b825142-fdd9-be35-6d88-bb3b9c985122@redhat.com>
-Date:   Fri, 16 Apr 2021 16:02:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
+        <2b825142-fdd9-be35-6d88-bb3b9c985122@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/0DmwpD/swBEIc1UY/TlK=+X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 16/04/21 14:38, Christian Borntraeger wrote:
-> On 16.04.21 14:27, Stephen Rothwell wrote:
->> Hi all,
->>
->> In commit
->>
->>    c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and 
->> MSO")
->>
->> Fixes tag
->>
->>    Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in 
->> VSIE")
->>
->> has these problem(s):
->>
->>    - Subject does not match target commit subject
->>      Just use
->>     git log -1 --format='Fixes: %h ("%s")'
-> 
-> Hmm, this has been sitting in kvms390/next for some time now. Is this a 
-> new check?
-> 
+--Sig_/0DmwpD/swBEIc1UY/TlK=+X
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Maybe you just missed it when it was reported for kvms390?
+Hi all,
 
-https://www.spinics.net/lists/linux-next/msg59652.html
+On Fri, 16 Apr 2021 16:02:01 +0200 Paolo Bonzini <pbonzini@redhat.com> wrot=
+e:
+>
+> On 16/04/21 14:38, Christian Borntraeger wrote:
+> > On 16.04.21 14:27, Stephen Rothwell wrote: =20
+> >> Hi all,
+> >>
+> >> In commit
+> >>
+> >> =C2=A0=C2=A0 c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for pre=
+fixing and >> MSO")
+> >>
+> >> Fixes tag
+> >>
+> >> =C2=A0=C2=A0 Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MV=
+PG when in >> VSIE")
+> >>
+> >> has these problem(s):
+> >>
+> >> =C2=A0=C2=A0 - Subject does not match target commit subject
+> >> =C2=A0=C2=A0=C2=A0=C2=A0 Just use
+> >> =C2=A0=C2=A0=C2=A0=C2=A0git log -1 --format=3D'Fixes: %h ("%s")' =20
+> >=20
+> > Hmm, this has been sitting in kvms390/next for some time now. Is this a=
+ > new check?
+> >  =20
+>=20
+> Maybe you just missed it when it was reported for kvms390?
+>=20
+> https://www.spinics.net/lists/linux-next/msg59652.html
 
-The SHA1 is stable now so it's too late.  It's not a big deal I guess.
+It was a different commit SHA then and was reported because the Fixes
+SHA did not exist.  It was fixed the next day, so I guess either I
+missed reporting this different problem, or I thought at least it had
+been fixed to use the correct SHA.  I am not completely consistent,
+sometimes :-)
+--=20
+Cheers,
+Stephen Rothwell
 
-Paolo
+--Sig_/0DmwpD/swBEIc1UY/TlK=+X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB5phcACgkQAVBC80lX
+0GwoqggAhj7E4OiKMOnBWhl1ZjaMdZAidgXea6JGZGTB3UEhRtJVCMk3zjqfN6N5
+BHE3GS3zfIlipzavzSDc/Qu0Vy/CqTndlYVZB+RzJszegcwTVu9Z1Cv9f+gHARjz
+QGhwHSMcJncqzICp/3fyPQvbmruZr8e3ah7iWucCOfgWj6vri5A/jDjSjIR1UKoN
+kbf38gi14BGsULsASiSEMREo2bksWBkhea0mQ8qzd/FFQgc/IS1kInazRNfxzH6k
+hGzdVc+Np9e1W3Q0LIzWiENnFiFL+hyWKkQZs+W6pk/g68jaKt4X6CG/+weKOzsv
+Ld0tGk7SIU3DhXdxstZPgnph3UiyDA==
+=5y7J
+-----END PGP SIGNATURE-----
+
+--Sig_/0DmwpD/swBEIc1UY/TlK=+X--

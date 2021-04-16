@@ -2,131 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7DC362365
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 17:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC53A3623A9
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 17:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245546AbhDPPCt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 11:02:49 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44708 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S245542AbhDPPCh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Apr 2021 11:02:37 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GEXhNB172127;
-        Fri, 16 Apr 2021 11:02:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=w/yMQKuVW9fDcWIKDNdoXX1DtC9RCc8+7zazJq8dg+w=;
- b=MY3fU53zminB1r0bRcZlHcp2yfq4FUAV6Hfji8QgWDY/2bm7q/+FbYuFVyBSqyk9Hmhk
- +uIBHQG8VgecOFzAkCA0RHKhDW3eCrF9NEyDisEtG3xLZ1TBmp95Y0L8NC30KfxuNLZ4
- /E2gUQmao0fISuP3J0/McVXR6x/n6fRmLW+vgln6N1SONdeHAm5HU+0nQGQInj5KqGJz
- j/kXTib9U0nNEcyaeTpgtH1ephba2yS+7bwA9tgQPv03opxsA83shiZ5gPKuh5KbYpPU
- gg6wlGaA9cVdRjS87pw40QPvSZBEO1RzTLpIZUZcks5tzTNgfR7k17LZcR36Mb9WpzRw Fw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnpnum1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 11:02:07 -0400
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13GEYxR4177223;
-        Fri, 16 Apr 2021 11:02:06 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnpnuk5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 11:02:06 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13GEwkLL005019;
-        Fri, 16 Apr 2021 15:02:04 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 37u3n8vha0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Apr 2021 15:02:04 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13GF227c40305106
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Apr 2021 15:02:02 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3010311C050;
-        Fri, 16 Apr 2021 15:02:02 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5E3811C04C;
-        Fri, 16 Apr 2021 15:02:01 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.171.64.24])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Apr 2021 15:02:01 +0000 (GMT)
-Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210416222731.3e82b3a0@canb.auug.org.au>
- <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
- <2b825142-fdd9-be35-6d88-bb3b9c985122@redhat.com>
- <20210417005831.3785688b@canb.auug.org.au>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Message-ID: <d4928233-670a-8930-f581-8e7b765b3c00@de.ibm.com>
-Date:   Fri, 16 Apr 2021 17:02:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-In-Reply-To: <20210417005831.3785688b@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Q6DfPmDgTMAAqyTRix6m6_ArjyHkJHDb
-X-Proofpoint-ORIG-GUID: mOzbzfkBCG9X2lN1LUhO8of4u-bZWqiY
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S245588AbhDPPRI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 11:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343492AbhDPPPm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Apr 2021 11:15:42 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3D5C061574
+        for <linux-next@vger.kernel.org>; Fri, 16 Apr 2021 08:15:17 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id w18so32773319edc.0
+        for <linux-next@vger.kernel.org>; Fri, 16 Apr 2021 08:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=gPjPQ5qDzGBkOSXJMCrPfM0jmXAYxV0r6RQg7u3LJuI=;
+        b=C7ZZFn861CebUylijr5WPKczKv6VxTRpf7M/lt1VmVJ3pR861CRGNmDaBE03/Roz7F
+         VrtIfwRZbpLI9//Xk9wHekBP6SoRqaksrmuhrwaz0n1dMRKAPI0r2Y+vRMZVNEBaE+2G
+         kJGmIaKM9a7Nvx422NzgwIR2bVfcN2Zh+tKVZO/GZ52IFA0TbHmaPJxOqHgfu3lOIq5x
+         Vp4CsHzoDpsithdfYe79Z+KDOzIcsFnuIUamu6fJ5aFmIX4h5rXc/d7B7i6ljN0f7yAj
+         IJVE95q3G7S/n7INJQQ+dUBhxDzaOT5q7rL35QzeNAZV4bOhq7iqaDU/ZLQwbv1pkN9E
+         vlMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=gPjPQ5qDzGBkOSXJMCrPfM0jmXAYxV0r6RQg7u3LJuI=;
+        b=oWC1PeDvNjUP5dndDoOtKhbxqlovNpab38HapzvRblS011eVA1fTl+4jfBqWeYN5uK
+         BP2oihLuOabOpYXjAlNGewJQ97aju5KEp3gZNga1CBQET2XMdx6xybq9/PMIq4uSQxnB
+         Uy8HvgBQBziGnV61h5Gstz8fQVJa5xDM1DocrGB7FcAVLDyFNDE02+6xDB1cXpfP1HKv
+         thO3xJT9WFwQA4wvPUKVSDQVFx7CpEv9jfZQHTrbbv7En1+syirGlV8OPOERKT9HwAN0
+         /RpXuzDibKvI5V4kj/4SzBDz7Jr72plM7+Oi/y5J9T5ZcG5DXJ4o77jamQKw49B95rZi
+         tYGg==
+X-Gm-Message-State: AOAM5334yvYU250/+rN/af/yFAVZ09rpGi7snY/eAax1Kqir8MaQ7698
+        f8sHPuv8Rz1OwayeMrp+RwHEwvRchKmFiE25LGbAQlS6NkUdh7xw
+X-Google-Smtp-Source: ABdhPJyLqnjexATn6QDAqGAVkppBTUayPGgGyCVS0rPaONsvFuwHmnuxbNdPsEJZ3ZyRkKkXah7HATHTJgMQc25C0Jw=
+X-Received: by 2002:a05:6402:145:: with SMTP id s5mr10495472edu.221.1618586115402;
+ Fri, 16 Apr 2021 08:15:15 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-16_07:2021-04-16,2021-04-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104160110
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 16 Apr 2021 20:45:04 +0530
+Message-ID: <CA+G9fYtVGhCJbnY8Hro2qx-i21cOeEBD6t_yz7B=O6Y7gD5bkQ@mail.gmail.com>
+Subject: [next] aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+The arm64 allnoconfig build failed on linux -next tag 20210416
+
+kernel/sched/fair.c:8428:13: warning: 'update_nohz_stats' defined but
+not used [-Wunused-function]
+ static bool update_nohz_stats(struct rq *rq)
+             ^~~~~~~~~~~~~~~~~
+aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+aarch64-linux-gnu-ld: arch/arm64/kernel/fpsimd.o: in function
+`task_fpsimd_load':
+fpsimd.c:(.text+0x144): undefined reference to `sve_load_state'
+aarch64-linux-gnu-ld: arch/arm64/kernel/fpsimd.o: in function `fpsimd_save':
+fpsimd.c:(.text+0x1f8): undefined reference to `sve_get_vl'
+aarch64-linux-gnu-ld: fpsimd.c:(.text+0x230): undefined reference to
+`sve_save_state'
+make[1]: *** [/builds/linux/Makefile:1277: vmlinux] Error 1
+make[1]: Target '__all' not remade because of errors.
+make: *** [Makefile:222: __sub-make] Error 2
+make: Target '__all' not remade because of errors.
+
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+steps to reproduce:
+--------------------
+# TuxMake is a command line tool and Python library that provides
+# portable and repeatable Linux kernel builds across a variety of
+# architectures, toolchains, kernel configurations, and make targets.
+#
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
 
 
-On 16.04.21 16:58, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 16 Apr 2021 16:02:01 +0200 Paolo Bonzini <pbonzini@redhat.com> wrote:
->>
->> On 16/04/21 14:38, Christian Borntraeger wrote:
->>> On 16.04.21 14:27, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> In commit
->>>>
->>>>     c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and >> MSO")
->>>>
->>>> Fixes tag
->>>>
->>>>     Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in >> VSIE")
->>>>
->>>> has these problem(s):
->>>>
->>>>     - Subject does not match target commit subject
->>>>       Just use
->>>>      git log -1 --format='Fixes: %h ("%s")'
->>>
->>> Hmm, this has been sitting in kvms390/next for some time now. Is this a > new check?
->>>    
->>
->> Maybe you just missed it when it was reported for kvms390?
->>
->> https://www.spinics.net/lists/linux-next/msg59652.html
-> 
-> It was a different commit SHA then and was reported because the Fixes
-> SHA did not exist.  It was fixed the next day, so I guess either I
-> missed reporting this different problem, or I thought at least it had
-> been fixed to use the correct SHA.  I am not completely consistent,
-> sometimes :-)
+tuxmake --runtime podman --target-arch arm64 --toolchain gcc-8
+--kconfig allnoconfig
 
-Yeah, seems that my fix was only half-way correct then but it managed to get past your review.
+metadata:
+---------
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_describe: next-20210415
+    kconfig: allnoconfig
+    target_arch: arm64
+    toolchain: gcc-8
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

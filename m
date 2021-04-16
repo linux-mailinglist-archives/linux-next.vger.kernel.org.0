@@ -2,81 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD30361FEE
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 14:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B36361FFD
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 14:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbhDPMc1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 08:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbhDPMc0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Apr 2021 08:32:26 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7BAC061574;
-        Fri, 16 Apr 2021 05:32:02 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id v3so27552169ybi.1;
-        Fri, 16 Apr 2021 05:32:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ofl4dMhmmxXq6zqRgTTqVyR9fjZoU9IM4NotJ4Me/O8=;
-        b=XZlgi/aU2fRma/aWVDJ4xIuVaYL28Gd53gpfSm1ZcwIoNiPWfkhAaurJMAe6qySz17
-         AnqE+dks7DdJBtl9TrXVuWEqsHGlnze4rZ9S787ucrRE48rxxCTGAcJ6PFH2mjt2Swd3
-         0fMeYeBLdJ7+5tiPFLQsmfUs3kCmdxahukbB7XjrXYAKDzruQBguwg2w0P0CpXsy/0dt
-         x46zH3soZX2XUOcmLa0JXr9yFCcoKKw2wISx4xQ6CDYHYztqAFRwQKxykh2nWnxABfQM
-         ANgsoQwslyxnMJlkBJqRq+dPqz340Kk2koQm+bQfeYVUAbpxtQS4kGAxxIyP9MVRyAf2
-         su5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ofl4dMhmmxXq6zqRgTTqVyR9fjZoU9IM4NotJ4Me/O8=;
-        b=XGcEOEslkwXtKV8ndzvFjxfM+p1JQlyUEvNsR2NrvZE/8gzJb7ZVPBPTmqT6Rkq8dM
-         qN98sUViUh6fLkRpcLzKVkpyABgmceIwIatA8M7HtvUqMuNjF6Sm2xf0dB4Rn6nxwAdi
-         8TA8GWA8wan6MEvVEz/uxOtE3wewvS++iOQwHIE9pUra1XqLHzQ4zehBuFBpwRu4QY+7
-         wS9LthOKqAP7OzJNa4F6+MgWFq5+YbhZnM14YqDFdcMRl5I/CTXh/RMicdy3rg/RX5Jh
-         Ci1AQWzz8zE/rzYL830+CDrqatTuffwXtHJ9i2V7oyPY2vy6We/iH5NK8V2IcVGb9vYA
-         TPpQ==
-X-Gm-Message-State: AOAM5300fz8RCxZ5csHsrX3b2w9pQPWvGSqy+8hkVv5oT78x1ZxdnUpc
-        hGQnROFxRysdwrtqsje1iujqvN0mtudWmUPhcs5Grs9x/cb1gg==
-X-Google-Smtp-Source: ABdhPJyDXt9X7cDpGJY/tH0hACPnocQHccmsJrgoU5oWXNk/jKoTiLAx0dJKkBE4SI0SjkVCB0uWMEoTjYIS0x+x2WU=
-X-Received: by 2002:a25:c444:: with SMTP id u65mr11796242ybf.93.1618576321562;
- Fri, 16 Apr 2021 05:32:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210416175806.2acd314b@canb.auug.org.au>
-In-Reply-To: <20210416175806.2acd314b@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 16 Apr 2021 14:31:50 +0200
-Message-ID: <CANiq72mGZnWRS4Yu6iUY2jE2zaNHEz5a5gjmqZtBFEVTfNxRiA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the char-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hang Lu <hangl@codeaurora.org>, Li Li <dualli@google.com>,
+        id S235459AbhDPMil (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 08:38:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9636 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235243AbhDPMil (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 16 Apr 2021 08:38:41 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GCZX3m037291;
+        Fri, 16 Apr 2021 08:38:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8iOl2pgc+pfrz28oppTEemV2d1omLs4ADa4tFM33Xlc=;
+ b=VDFkjS+4LeYpNPu6fC7SQWNuxOwac7Q7+B2TV/pTqlrUIOJg0rgQhbwSgvERD+mUssB4
+ EXZarjciy0LxqzwVoXOePZVW2NnSTgZzCrrCOxuasIt2+BUAG1Sn+R/H+2KOFhxcTphx
+ xcDBBhQfk5NaSoVElMRLsRevQBJm6iQkFbCtej7/NKfRy1IIhtED9YJtNVNWL2bYv4UB
+ xVzLmXmKh+EUV6XaIZYxJABihIGBgbdkDsY33D6IhEkalHK8W6cm5vE4yBAUMA5jQ530
+ I+Q/YLNzrxBspepXZrNLe/AwJxIMSoIpN41fYO7xuSo/p86k8WWMxV2UhtcjFI45rdP8 jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnphcvr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Apr 2021 08:38:10 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13GCZjMX038176;
+        Fri, 16 Apr 2021 08:38:09 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37xxnphcuv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Apr 2021 08:38:09 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13GCRj8W006769;
+        Fri, 16 Apr 2021 12:38:08 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 37u3n8cf0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Apr 2021 12:38:08 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13GCc5Ea42795498
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Apr 2021 12:38:05 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6D0AAE055;
+        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18E3DAE04D;
+        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.171.64.24])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Apr 2021 12:38:05 +0000 (GMT)
+Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Ballesio <balejs@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Todd Kjos <tkjos@google.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210416222731.3e82b3a0@canb.auug.org.au>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Message-ID: <00222197-fb22-ab0a-97e2-11c9f85a67f1@de.ibm.com>
+Date:   Fri, 16 Apr 2021 14:38:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
+MIME-Version: 1.0
+In-Reply-To: <20210416222731.3e82b3a0@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jhd4b3CO_inSOEuzwgnTPLcvLjuMOTHn
+X-Proofpoint-ORIG-GUID: RrMXz8aLz6p4OEC2DXqGZd9WGSa9MuRX
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-16_07:2021-04-15,2021-04-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxscore=0 impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104160094
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On 16.04.21 14:27, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and MSO")
+> 
+> Fixes tag
+> 
+>    Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in VSIE")
+> 
+> has these problem(s):
+> 
+>    - Subject does not match target commit subject
+>      Just use
+> 	git log -1 --format='Fixes: %h ("%s")'
 
-On Fri, Apr 16, 2021 at 9:58 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> from the char-misc tree and commit:
->
->   1fed5dee5fbb ("Android: Binder IPC in Rust (WIP)")
->
-> from the rust tree.
-
-If you prefer, I can take out the binder bits from rust-next since
-they will be submitted separately anyhow (i.e. they would eventually
-go through the char-misc/Android tree after/if Rust support lands).
-
-Cheers,
-Miguel
+Hmm, this has been sitting in kvms390/next for some time now. Is this a new check?

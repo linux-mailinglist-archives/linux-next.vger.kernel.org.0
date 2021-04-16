@@ -2,52 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B13361AF9
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 10:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ECA361B55
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 10:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbhDPH6f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 03:58:35 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39925 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239776AbhDPH6e (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Apr 2021 03:58:34 -0400
+        id S234291AbhDPIHa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 04:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234829AbhDPIHa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Apr 2021 04:07:30 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C718DC061574;
+        Fri, 16 Apr 2021 01:07:05 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FM7qf6TPHz9sWD;
-        Fri, 16 Apr 2021 17:58:06 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FM81w5Wkvz9s1l;
+        Fri, 16 Apr 2021 18:07:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618559889;
-        bh=j4tYcesejEmcgz3sJDlYJMq9NB1n+aTVqj5kiiFvkp8=;
+        s=201702; t=1618560422;
+        bh=1Wnk0eZUlJJHZgw/9emJx2PZi827RZvoISUmtcGsT+g=;
         h=Date:From:To:Cc:Subject:From;
-        b=EG9pWrtl1p5D6BOmh4DvvUrFczJUj9z4DILh+5SEfxPoOvygJ3z7fEKRtQ1VQL+45
-         /hWXHMABlYs4WbUCn9S4DLzXQLJxa2QdAz8Ztj9VoZU4YIstXU0tMWetRrBkciYHB+
-         L1qllqVn3pl7dfiDLh9tn4kv/Q6Orfjxn+UiBbBjH8Dn/mE9goplN7PRkpbEbO09st
-         nmtW2SwauCwmUm1GuDdbJ3aitbE8bvgBVMGmo0ZINAmrZE6MII+s+EcKHF6VFoTsit
-         i4JURGLajM1d/6+XUZ20O2W+0zOVsnyjhf+pg4JJ9Toz69xReSF2YzJYblEz8lN1W8
-         o4zjiAqffg5hQ==
-Date:   Fri, 16 Apr 2021 17:58:06 +1000
+        b=em7UneyUJ4S3MFrN0oPCM7stuKGYF2AVilxBsGjGymRrD9zL6xfhAszXNulQ1iLu7
+         szHG2k85GoeKXbTEGRjs2tjmdFobUBYDQTbfecegSYOCH1aQ3LO7YCgkfneqJKtjHX
+         0HAA0cPBX+LDQ82qhLEqfXvVnkA7cokU8lVJriCTGb/pv5lzhE0+8kcbKZF4wh+/RA
+         ALvx0JS3PR6NEgH17HTYn7lWhAS99FEplfVh1KRvHLIfOljGSmShjeOmDGKPubqCvU
+         u3it1aSHnIclW7muuNWsx5/S6IMQEkqSk27TdoB5HVmgNMRHUN3By9IXdwXpQs+0qJ
+         RaE7X18WDrT0Q==
+Date:   Fri, 16 Apr 2021 18:07:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hang Lu <hangl@codeaurora.org>, Li Li <dualli@google.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        John Ogness <john.ogness@linutronix.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marco Ballesio <balejs@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Todd Kjos <tkjos@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the char-misc tree
-Message-ID: <20210416175806.2acd314b@canb.auug.org.au>
+Subject: linux-next: manual merge of the rust tree with the printk tree
+Message-ID: <20210416180700.6b693f7b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DcS0KhKm_NOzQ7KFh5ShvdQ";
+Content-Type: multipart/signed; boundary="Sig_/GF2I8IbkuJnKG8ctnoA1y9V";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DcS0KhKm_NOzQ7KFh5ShvdQ
+--Sig_/GF2I8IbkuJnKG8ctnoA1y9V
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -55,18 +61,15 @@ Hi all,
 
 Today's linux-next merge of the rust tree got a conflict in:
 
-  include/uapi/linux/android/binder.h
+  kernel/printk/printk.c
 
-between commits:
+between commit:
 
-  432ff1e91694 ("binder: BINDER_FREEZE ioctl")
-  ae28c1be1e54 ("binder: BINDER_GET_FROZEN_INFO ioctl")
-  a7dc1e6f99df ("binder: tell userspace to dump current backtrace when dete=
-cted oneway spamming")
+  cf5b0208fda4 ("printk: introduce CONSOLE_LOG_MAX")
 
-from the char-misc tree and commit:
+from the printk tree and commit:
 
-  1fed5dee5fbb ("Android: Binder IPC in Rust (WIP)")
+  fd1e637b9b4b ("Rust: Kernel crate")
 
 from the rust tree.
 
@@ -81,79 +84,40 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/uapi/linux/android/binder.h
-index 20e435fe657a,7b13c9e9aa2f..000000000000
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@@ -217,31 -217,18 +217,33 @@@ struct binder_node_info_for_ref=20
-  	__u32            reserved3;
-  };
+diff --cc kernel/printk/printk.c
+index 421c35571797,d13be89530c4..000000000000
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@@ -394,11 -411,8 +394,12 @@@ static struct latched_seq clear_seq =3D=20
+  #define PREFIX_MAX		32
+  #endif
  =20
- +struct binder_freeze_info {
- +	__u32            pid;
- +	__u32            enable;
- +	__u32            timeout_ms;
- +};
+ +/* the maximum size of a formatted record (i.e. with prefix added per lin=
+e) */
+ +#define CONSOLE_LOG_MAX		1024
  +
- +struct binder_frozen_status_info {
- +	__u32            pid;
- +	__u32            sync_recv;
- +	__u32            async_recv;
- +};
- +
-- #define BINDER_WRITE_READ		_IOWR('b', 1, struct binder_write_read)
-- #define BINDER_SET_IDLE_TIMEOUT		_IOW('b', 3, __s64)
-- #define BINDER_SET_MAX_THREADS		_IOW('b', 5, __u32)
-- #define BINDER_SET_IDLE_PRIORITY	_IOW('b', 6, __s32)
-- #define BINDER_SET_CONTEXT_MGR		_IOW('b', 7, __s32)
-- #define BINDER_THREAD_EXIT		_IOW('b', 8, __s32)
-- #define BINDER_VERSION			_IOWR('b', 9, struct binder_version)
-- #define BINDER_GET_NODE_DEBUG_INFO	_IOWR('b', 11, struct binder_node_debu=
-g_info)
-- #define BINDER_GET_NODE_INFO_FOR_REF	_IOWR('b', 12, struct binder_node_in=
-fo_for_ref)
-- #define BINDER_SET_CONTEXT_MGR_EXT	_IOW('b', 13, struct flat_binder_objec=
-t)
-- #define BINDER_FREEZE			_IOW('b', 14, struct binder_freeze_info)
-- #define BINDER_GET_FROZEN_INFO		_IOWR('b', 15, struct binder_frozen_statu=
-s_info)
-- #define BINDER_ENABLE_ONEWAY_SPAM_DETECTION	_IOW('b', 16, __u32)
-+ enum {
-+ 	BINDER_WRITE_READ		=3D _IOWR('b', 1, struct binder_write_read),
-+ 	BINDER_SET_IDLE_TIMEOUT		=3D _IOW('b', 3, __s64),
-+ 	BINDER_SET_MAX_THREADS		=3D _IOW('b', 5, __u32),
-+ 	BINDER_SET_IDLE_PRIORITY	=3D _IOW('b', 6, __s32),
-+ 	BINDER_SET_CONTEXT_MGR		=3D _IOW('b', 7, __s32),
-+ 	BINDER_THREAD_EXIT		=3D _IOW('b', 8, __s32),
-+ 	BINDER_VERSION			=3D _IOWR('b', 9, struct binder_version),
-+ 	BINDER_GET_NODE_DEBUG_INFO	=3D _IOWR('b', 11, struct binder_node_debug_i=
-nfo),
-+ 	BINDER_GET_NODE_INFO_FOR_REF	=3D _IOWR('b', 12, struct binder_node_info_=
-for_ref),
-+ 	BINDER_SET_CONTEXT_MGR_EXT	=3D _IOW('b', 13, struct flat_binder_object),
-++	BINDER_FREEZE			=3D _IOW('b', 14, struct binder_freeze_info)
-++	BINDER_GET_FROZEN_INFO		=3D _IOWR('b', 15, struct binder_frozen_status_i=
-nfo)
-++	BINDER_ENABLE_ONEWAY_SPAM_DETECTION	=3D _IOW('b', 16, __u32)
-+ };
+ +/* the maximum size allowed to be reserved for a record */
++ /* Keep in sync with rust/kernel/print.rs */
+ -#define LOG_LINE_MAX		(1024 - PREFIX_MAX)
+ +#define LOG_LINE_MAX		(CONSOLE_LOG_MAX - PREFIX_MAX)
  =20
-  /*
-   * NOTE: Two special error codes you should check for when calling
+  #define LOG_LEVEL(v)		((v) & 0x07)
+  #define LOG_FACILITY(v)		((v) >> 3 & 0xff)
 
---Sig_/DcS0KhKm_NOzQ7KFh5ShvdQ
+--Sig_/GF2I8IbkuJnKG8ctnoA1y9V
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB5Q44ACgkQAVBC80lX
-0GxJiwgAkPJQvsnVUNQYplQn6ivTUXjVdx7vxc0tEKp3K00MG9K674dn506f2THB
-Xllg0x2S9m1KW7CrF26FHUKbjfEoxFItP/1Pj/BASo77/Cc3ty476/0jd8Anfsnr
-XLIwAQNraEDoVC6Kekuyjrx3yQPmNCx44KbatxsQ8Q5mMvT7sjmjD/7Ck2Z7RQns
-/U8m7Tia2GEG2Yl8tS81VDp8aRdTBBybTD2NA7w7RaSDZXBBODB/ckSihfmwsFa1
-H87S5qZlKd43IN0H5T48Y9pp4Ypam9SenQ9Unos3FWaFNYVip3O/WNXIlUeSHBG7
-8CMw19OUL42QU/OZWO3opq9AZbfxdA==
-=IBIc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB5RaQACgkQAVBC80lX
+0GyS4AgAnbyJfaK8RnzxdFRl47e/InmnCJNk98m/BslB2sVhpq/2SPKyy2ubjzBf
+EtdCj/R9rzbfDipPBB58KdfwyDu1u7aUiE5CvvxQ+GsSkYBU1+gZbGTslRA+wc2m
+UKPlDQfiL+DwR2dKN/Yog4kS+ijQUqKtV/yZ3TN2kWpZO9t/JT7VRrCMjzyDLodg
+Omd4ADDUkKSN3AouqisCFGXTObW0mZSALrG7BW3lUzKZMorfyhHyAOoUqFU3+fV/
+DroyDGNP6xY0SXF0F4QyAdfzE1Kv7XLR4o+goGarNkLPbK0OJgcW1ip8gzoDnrJs
+SXuqznzO/Cp4s0E8hZbjLpNKz6aqrg==
+=Y4ts
 -----END PGP SIGNATURE-----
 
---Sig_/DcS0KhKm_NOzQ7KFh5ShvdQ--
+--Sig_/GF2I8IbkuJnKG8ctnoA1y9V--

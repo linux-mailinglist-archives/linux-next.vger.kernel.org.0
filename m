@@ -2,85 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E683361FC2
-	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 14:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD30361FEE
+	for <lists+linux-next@lfdr.de>; Fri, 16 Apr 2021 14:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbhDPM2B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Apr 2021 08:28:01 -0400
-Received: from ozlabs.org ([203.11.71.1]:40005 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234914AbhDPM2B (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Apr 2021 08:28:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FMFpW6jWXz9sVb;
-        Fri, 16 Apr 2021 22:27:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618576052;
-        bh=JYdcLdPUbTo38tlUGmoVGoWuj6WMw32aNHJqgtTCmtY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qKkcct5wuDcOsZPYHyhGTQN3p9pM377ZvPDpG4ZNqnCrapu/6F9UCx4iSr8MTFBRb
-         ejhzGMofCfqPpZCKNN8Rt8Fk95xEUEPA+4s68rxggS/ddIPNzT+H8m6GmhayrPbDb5
-         faHRerQUMRT/U41nXfXhEyVYfnjB526cpflJMsqzYKsLx3tb2tbGcl+orX+qlVg3MB
-         wU3mnj2GgnCmuELAQmEdzIjWeW/oEjx0QfZmJCHg/USbl69NzkD2POIj5VypgsWVpq
-         4GDcHyX2VcBVCzFsErVnnJikU88nJ2rxpsOD0QErEGMHHLY6xFf2nbqm1CVgzH1tuz
-         53c/9vpRRNvDw==
-Date:   Fri, 16 Apr 2021 22:27:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvm tree
-Message-ID: <20210416222731.3e82b3a0@canb.auug.org.au>
+        id S235664AbhDPMc1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Apr 2021 08:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235252AbhDPMc0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Apr 2021 08:32:26 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7BAC061574;
+        Fri, 16 Apr 2021 05:32:02 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id v3so27552169ybi.1;
+        Fri, 16 Apr 2021 05:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ofl4dMhmmxXq6zqRgTTqVyR9fjZoU9IM4NotJ4Me/O8=;
+        b=XZlgi/aU2fRma/aWVDJ4xIuVaYL28Gd53gpfSm1ZcwIoNiPWfkhAaurJMAe6qySz17
+         AnqE+dks7DdJBtl9TrXVuWEqsHGlnze4rZ9S787ucrRE48rxxCTGAcJ6PFH2mjt2Swd3
+         0fMeYeBLdJ7+5tiPFLQsmfUs3kCmdxahukbB7XjrXYAKDzruQBguwg2w0P0CpXsy/0dt
+         x46zH3soZX2XUOcmLa0JXr9yFCcoKKw2wISx4xQ6CDYHYztqAFRwQKxykh2nWnxABfQM
+         ANgsoQwslyxnMJlkBJqRq+dPqz340Kk2koQm+bQfeYVUAbpxtQS4kGAxxIyP9MVRyAf2
+         su5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ofl4dMhmmxXq6zqRgTTqVyR9fjZoU9IM4NotJ4Me/O8=;
+        b=XGcEOEslkwXtKV8ndzvFjxfM+p1JQlyUEvNsR2NrvZE/8gzJb7ZVPBPTmqT6Rkq8dM
+         qN98sUViUh6fLkRpcLzKVkpyABgmceIwIatA8M7HtvUqMuNjF6Sm2xf0dB4Rn6nxwAdi
+         8TA8GWA8wan6MEvVEz/uxOtE3wewvS++iOQwHIE9pUra1XqLHzQ4zehBuFBpwRu4QY+7
+         wS9LthOKqAP7OzJNa4F6+MgWFq5+YbhZnM14YqDFdcMRl5I/CTXh/RMicdy3rg/RX5Jh
+         Ci1AQWzz8zE/rzYL830+CDrqatTuffwXtHJ9i2V7oyPY2vy6We/iH5NK8V2IcVGb9vYA
+         TPpQ==
+X-Gm-Message-State: AOAM5300fz8RCxZ5csHsrX3b2w9pQPWvGSqy+8hkVv5oT78x1ZxdnUpc
+        hGQnROFxRysdwrtqsje1iujqvN0mtudWmUPhcs5Grs9x/cb1gg==
+X-Google-Smtp-Source: ABdhPJyDXt9X7cDpGJY/tH0hACPnocQHccmsJrgoU5oWXNk/jKoTiLAx0dJKkBE4SI0SjkVCB0uWMEoTjYIS0x+x2WU=
+X-Received: by 2002:a25:c444:: with SMTP id u65mr11796242ybf.93.1618576321562;
+ Fri, 16 Apr 2021 05:32:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1tsCH=y7VINn6jpuc5OMoAl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210416175806.2acd314b@canb.auug.org.au>
+In-Reply-To: <20210416175806.2acd314b@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 16 Apr 2021 14:31:50 +0200
+Message-ID: <CANiq72mGZnWRS4Yu6iUY2jE2zaNHEz5a5gjmqZtBFEVTfNxRiA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the char-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hang Lu <hangl@codeaurora.org>, Li Li <dualli@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marco Ballesio <balejs@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Todd Kjos <tkjos@google.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1tsCH=y7VINn6jpuc5OMoAl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Fri, Apr 16, 2021 at 9:58 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> from the char-misc tree and commit:
+>
+>   1fed5dee5fbb ("Android: Binder IPC in Rust (WIP)")
+>
+> from the rust tree.
 
-In commit
+If you prefer, I can take out the binder bits from rust-next since
+they will be submitted separately anyhow (i.e. they would eventually
+go through the char-misc/Android tree after/if Rust support lands).
 
-  c3171e94cc1c ("KVM: s390: VSIE: fix MVPG handling for prefixing and MSO")
-
-Fixes tag
-
-  Fixes: bdf7509bbefa ("s390/kvm: VSIE: correctly handle MVPG when in VSIE")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/1tsCH=y7VINn6jpuc5OMoAl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB5grMACgkQAVBC80lX
-0GxTKgf8DPhUSMv9IFzE2TZZAUQun6lqp8YjsO2jTTU4tIeRuFmJmCg1tYFHRlzK
-ORAvCmKJjtNC2B0uNXh3UrhxWVCeawPjw4OBRb8DoTCnIIBo274kHbqGG2I7WNZp
-1BZZsTKa1wIf09f6fKn9MlYOPbLdFlOc3YvA/AGTfMOyRem0eF8Xozk6q/M+VvqL
-7ki2t6bht6+9qLC35MU2vlt4B/ZWQtxkcdQIIOdq/f96H/fy4P5gKytG7ztlqSxM
-51YWi0pCT5ElR/Mob1GxIRqHjTX5bDVqW0fiR1YFbhl9ZY+VLIwOLwKxNLEH7quq
-NSU4+JeZOnmy7i5igVgtAiweDxUT/A==
-=XIlH
------END PGP SIGNATURE-----
-
---Sig_/1tsCH=y7VINn6jpuc5OMoAl--
+Miguel

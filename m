@@ -2,95 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDF3365132
-	for <lists+linux-next@lfdr.de>; Tue, 20 Apr 2021 06:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64672365148
+	for <lists+linux-next@lfdr.de>; Tue, 20 Apr 2021 06:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbhDTEP3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Apr 2021 00:15:29 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34649 "EHLO ozlabs.org"
+        id S229516AbhDTEYs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Apr 2021 00:24:48 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37850 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhDTEP2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 20 Apr 2021 00:15:28 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FPVhH3s0Wz9sWQ;
-        Tue, 20 Apr 2021 14:14:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618892096;
-        bh=k8eWH1sA7VLjuI++AbBGBSJj1IIJmkdbesJARKjNeak=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fxNSa1l/hirfA/YKhI2SA2K8JZPUQXyKDul4uAOHGopwFCLySKKrWta1L58KY/3cA
-         91rhbBndjIQ19DJtTtYKJZ4tZcbL39KTyFRCdpZ8mgi0bjeXieOEIeVD3QaBp74E1/
-         6gDAUkPvjieDVqm380bTppA2eu17iRBpZ8T6LiBixK3O+p1Lq/jXAHRaLBXnGJf62c
-         +KmLYZuUMpIQgalEYX/QGhS9nCscz5dOJYZ6sI1SOsBCwTl0yUBxIlgGdedmW+GK9P
-         MsNufXFpfBHhiY0xmlBtlrjqIrKCgWJU1ZzBVKrOIZPJ7d7GhyLz9aJn4BNiptok0A
-         zlrA+QsBx/PXQ==
-Date:   Tue, 20 Apr 2021 14:14:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Florent Revest <revest@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the bpf-next tree
-Message-ID: <20210420141452.6e6658b4@canb.auug.org.au>
+        id S229508AbhDTEYr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 20 Apr 2021 00:24:47 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 0829EB15E;
+        Tue, 20 Apr 2021 04:24:15 +0000 (UTC)
+Subject: Re: linux-next: Tree for Apr 19 (bcache)
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-bcache@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20210419202309.0575ad77@canb.auug.org.au>
+ <66d41349-60ba-f27f-5c56-3520a40dd83f@infradead.org>
+ <f4ca485d-614b-6924-63bc-0948d087bdc3@suse.de>
+ <76e63e74-2237-f672-eb10-edde017bc76e@kernel.dk>
+From:   Coly Li <colyli@suse.de>
+Message-ID: <061cd630-2740-2da9-cfbe-fd18adb22fdc@suse.de>
+Date:   Tue, 20 Apr 2021 12:24:11 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pn4+GfZIM8NDSkabrm3_m.H";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <76e63e74-2237-f672-eb10-edde017bc76e@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Pn4+GfZIM8NDSkabrm3_m.H
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 4/20/21 1:50 AM, Jens Axboe wrote:
+> On 4/19/21 10:26 AM, Coly Li wrote:
+>> On 4/19/21 11:40 PM, Randy Dunlap wrote:
+>>> On 4/19/21 3:23 AM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20210416:
+>>>>
+>>>
+>>> on x86_64:
+>>>
+>>> when
+>>> # CONFIG_BLK_DEV is not set
+>>>
+>>>
+>>> WARNING: unmet direct dependencies detected for LIBNVDIMM
+>>>   Depends on [n]: PHYS_ADDR_T_64BIT [=y] && HAS_IOMEM [=y] && BLK_DEV [=n]
+>>>   Selected by [y]:
+>>>   - BCACHE_NVM_PAGES [=y] && MD [=y] && BCACHE [=y] && PHYS_ADDR_T_64BIT [=y]
+>>>
+>>>
+>>> Full randconfig file is attached.
+>>>
+>>
+>> I need hint from kbuild expert.
+>>
+>> My original idea to use "select LIBNVDIMM" is to avoid the
+>> BCACHE_NVM_PAGES option to disappear if LIBNVDIMM is not enabled.
+>> Otherwise if nvdimm driver is not configure, users won't know there is a
+>> BCACHE_NVM_PAGES option unless they read bcache Kconfig file.
+> 
+> But why? That's exactly how it should work. Just use depends to set the
+> dependency.
+> 
+>> But I see nvdimm's Kconfig, it uses "depends on BLK_DEV", I understand
+>> it is acceptable that LIBNVDIMM option to disappear from "make
+>> menuconfig" if BLK_DEV is not enabled.
+>>
+>> For such condition, which one is the proper way to set the dependence ?
+>> - Change "select LIBNVDIMM" and "select DAX" to "depends on LIBNVDIMM"
+>> and "depends on DAX" in bcache Kconfig
+>> - Or change "depends on BLK_DEV" to "select BLK_DEV" in nvdimm Kconfig.
+> 
+> The former.
+> 
 
-Hi all,
+Copied. Thanks for the hint. I will post a fix soon.
 
-Today's linux-next merge of the ftrace tree got a conflict in:
-
-  kernel/trace/bpf_trace.c
-
-between commit:
-
-  d9c9e4db186a ("bpf: Factorize bpf_trace_printk and bpf_seq_printf")
-
-from the bpf-next tree and commit:
-
-  f2cc020d7876 ("tracing: Fix various typos in comments")
-
-from the ftrace tree.
-
-I fixed it up (the former removed the comment updated by the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Pn4+GfZIM8NDSkabrm3_m.H
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB+VTwACgkQAVBC80lX
-0GxElQf/alTe2DZf/ChTMHfnV1VSdfcVegaoDGQ7iGSKaTFtxdVSrK/Xz2ve2OaQ
-iE0/TFXGRFzCTZKlXNTOyoUzifvsDE83BcDSoNxhJKnRxN+6Vvt/r9zGdEZ4VAVH
-lIDQsSVv0pun4QbDg4H8mzmHkHWo9h/P2X2jVMC4XDylYQsC3lqEcpkC3Y1n0tBj
-yyrqlpAQHZ+I75sX3e4+CViKUTXvgSA+D++KZv6SLPfKQWrbY6zlJTrBFSEdhOmy
-AA03BJ+zJP3wnn8WrT9QoQurTAdCCk7cc8PMCy0FOBIyGySwWPsG7/Vp/Nzhwybj
-qbmeNBt78drbzL65BwM95NoGUvTwTw==
-=wa+B
------END PGP SIGNATURE-----
-
---Sig_/Pn4+GfZIM8NDSkabrm3_m.H--
+Coly Li

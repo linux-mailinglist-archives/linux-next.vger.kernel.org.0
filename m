@@ -2,308 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A1D36584A
-	for <lists+linux-next@lfdr.de>; Tue, 20 Apr 2021 14:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CAB3658CD
+	for <lists+linux-next@lfdr.de>; Tue, 20 Apr 2021 14:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbhDTMDo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Apr 2021 08:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbhDTMDo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Apr 2021 08:03:44 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D974C06174A
-        for <linux-next@vger.kernel.org>; Tue, 20 Apr 2021 05:03:11 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a12so25393537pfc.7
-        for <linux-next@vger.kernel.org>; Tue, 20 Apr 2021 05:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=NmDz0G8crQoRWLMyKt6OBFbAEHkcv9SfdS96+4Ockvs=;
-        b=Csb6h+jAdK+iifndjzANE0EKE5aGCYJ53opndes+XIrVkgvNgbObptfCNdQfcFLvYm
-         QojSU5wLANrVbZytltf24NYcUm4htyY1o9mWrBzdq3SvVuw2wbMixQRPVamzfMI8MISE
-         Wb8gLYbN1GzZDx0Wi9JUw+CZn9JtX4w77G8ewWZakbi9ZMd3wEVLEtNRwHfS/ILHMlmo
-         +7uM9ITsflhmfhWiE/ClL+NYNYeDzF2Gv/DE1H1y3XI7g3ztwwnhQnEuSWdtRK73Za00
-         0TQXFyTm+YqIAgoPZdmGv4urN9AXbeO7bwsr4WpGNzBEj42YpJfeWdNiBL/tgp64w2hr
-         LJCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=NmDz0G8crQoRWLMyKt6OBFbAEHkcv9SfdS96+4Ockvs=;
-        b=Fd4Ud05D5o+NFTiZRSJu9UGCWnR+zFacmD52UvQvpxwuHGOUBe0tiL9/W9Ug11xjw1
-         aL39TTcPQz676kps0vOjRyN5ATyKnMqJ+A6dlS4zFKavJ55Lqo7A8eAib844ZbRrZGRJ
-         iJv/mTJmfWisP7bRRkWfMgJ3NGj2d+B5meUkKs4d7aFXobp16Mcw5IcBdIBptficivD/
-         XIqUdOrSamcTccVw+l+kGNGZKjIweIXR4Reyd0uaTZxyICji3/a+0Lq81n6GdQS6W7ze
-         DxVH5oVSNnQEnpfz0WwAcOTXq4D+iB8hvSKROFW7BP3DQ0aXCnl2Hp2jEyxKAKuK+yGU
-         D5uw==
-X-Gm-Message-State: AOAM530CFYr7dZ93N59o8crGig05ad48lglGrBTonaPbEqEUB5ilg+C1
-        jxfsGUlAgqJaVzOPHekE+YH5UkiUI+9U96LG
-X-Google-Smtp-Source: ABdhPJy7i6zi5kpO4Zp61tKOBsmi80hMgHWaS5OdGzgSCQMAiQjuc0ThFgGUkUNKioOcQCC5vYjhUQ==
-X-Received: by 2002:a65:4cc5:: with SMTP id n5mr16439670pgt.80.1618920190904;
-        Tue, 20 Apr 2021 05:03:10 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f18sm14425337pfk.144.2021.04.20.05.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Apr 2021 05:03:10 -0700 (PDT)
-Message-ID: <607ec2fe.1c69fb81.5a167.450f@mx.google.com>
-Date:   Tue, 20 Apr 2021 05:03:10 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S231526AbhDTMUP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Apr 2021 08:20:15 -0400
+Received: from mga01.intel.com ([192.55.52.88]:15119 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231251AbhDTMUO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 20 Apr 2021 08:20:14 -0400
+IronPort-SDR: ZlUKICTjTjHstzouJe+jOXsVt+77ldJBDPFmuohBJJcynrvzstLTFy2hwyRwS2S8fM/RmmqB3x
+ +N6S7mlq6IQw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9959"; a="216083815"
+X-IronPort-AV: E=Sophos;i="5.82,236,1613462400"; 
+   d="scan'208";a="216083815"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 05:19:43 -0700
+IronPort-SDR: O1Zz5z8jehjU1oUQZ+/0Fd5w1s/oldNIhISRT9R2awv83yoAafe5BpQxCbC0LIPp1V7KFvyjEV
+ 2/xYJcKSJ0nw==
+X-IronPort-AV: E=Sophos;i="5.82,236,1613462400"; 
+   d="scan'208";a="400978238"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 05:19:42 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1lYpLv-005jfW-A8; Tue, 20 Apr 2021 15:19:39 +0300
+Date:   Tue, 20 Apr 2021 15:19:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Apr 20
+Message-ID: <YH7G235DGG6bEDTF@smile.fi.intel.com>
+References: <20210420194718.4a4a0e8f@canb.auug.org.au>
+ <YH7C6xP5HsHYuobO@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.12-rc8-84-g9cb58cd2220c
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 278 runs,
- 6 regressions (v5.12-rc8-84-g9cb58cd2220c)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YH7C6xP5HsHYuobO@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 278 runs, 6 regressions (v5.12-rc8-84-g9cb58cd=
-2220c)
+On Tue, Apr 20, 2021 at 03:02:51PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 20, 2021 at 07:47:18PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20210419:
+> > 
+> > The powerpc tree lost its build failure.
+> > 
+> > The ftrace tree gained a conflict against the bpf-next tree.
+> > 
+> > Non-merge commits (relative to Linus' tree): 12917
+> >  11294 files changed, 619161 insertions(+), 276245 deletions(-)
+> > 
+> > ----------------------------------------------------------------------------
+> > 
+> > I have created today's linux-next tree at
+> > git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> > are tracking the linux-next tree using git, you should not use "git pull"
+> > to do so as that will try to merge the new linux-next release with the
+> > old one.  You should use "git fetch" and checkout or reset to the new
+> > master.
+> > 
+> > You can see which trees have been included by looking in the Next/Trees
+> > file in the source.  There are also quilt-import.log and merge.log
+> > files in the Next directory.  Between each merge, the tree was built
+> > with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> > multi_v7_defconfig for arm and a native build of tools/perf. After
+> > the final fixups (if any), I do an x86_64 modules_install followed by
+> > builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> > ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> > and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> > of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> > kvm enabled).
+> > 
+> > Below is a summary of the state of the merge.
+> > 
+> > I am currently merging 340 trees (counting Linus' and 89 trees of bug
+> > fix patches pending for the current merge release).
+> > 
+> > Stats about the size of the tree over time can be seen at
+> > http://neuling.org/linux-next-size.html .
+> > 
+> > Status of my local build tests will be at
+> > http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> > advice about cross compilers/configs that work, we are always open to add
+> > more builds.
+> > 
+> > Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> > Gortmaker for triage and bug fixes.
+> 
+> I have full of build warnings / errors in x86 and iommu
+> 
+> X86:
+> 
+> arch/x86/include/asm/string_64.h:14:14: warning: conflicting types for built-in function ‘memcpy’; expected ‘void *(void *, const void *, long unsigned int)’ [-Wbuiltin-declaration-mismatch]
+>    14 | extern void *memcpy(void *to, const void *from, size_t len);
+>       |              ^~~~~~
+> arch/x86/include/asm/string_64.h:7:1: note: ‘memcpy’ is declared in header ‘<string.h>’
+>     6 | #include <linux/jump_label.h>
+>   +++ |+#include <string.h>
+> 
+> And so on for standard string function definitions.
+> 
+> IOMMU:
+> 
+> drivers/iommu/amd/io_pgtable.c: In function ‘v1_alloc_pgtable’:
+> drivers/iommu/amd/io_pgtable.c:551:32: error: assignment to ‘size_t (*)(struct io_pgtable_ops *, long unsigned int,  size_t,  struct iommu_iotlb_gather *)’ {aka ‘unsigned int (*)(struct io_pgtable_ops *, long unsigned int,  unsigned int,  struct iommu_iotlb_gather *)’} from incompatible pointer type ‘long unsigned int (*)(struct io_pgtable_ops *, long unsigned int,  size_t,  struct iommu_iotlb_gather *)’ {aka ‘long unsigned int (*)(struct io_pgtable_ops *, long unsigned int,  unsigned int,  struct iommu_iotlb_gather *)’} [-Werror=incompatible-pointer-types]
+>   551 |  pgtable->iop.ops.unmap        = iommu_v1_unmap_page;
+>       |                                ^
+> cc1: some warnings being treated as errors
+> 
+> Is it only me?
+
+Okay, there is another bug and it seems compiler related:
+
+net/socket.c:2320:3: note: in expansion of macro ‘BUILD_BUG_ON’
+ 2320 |   BUILD_BUG_ON(sizeof(struct cmsghdr) !=
+      |   ^~~~~~~~~~~~
+
+% gcc --version
+gcc (Debian 10.2.1-6) 10.2.1 20210110
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Regressions Summary
--------------------
 
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-bcm2836-rpi-2-b      | arm  | lab-collabora   | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 1          =
-
-qemu_arm-versatilepb | arm  | lab-baylibre    | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-broonie     | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-cip         | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-collabora   | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-linaro-lkft | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.12-rc8-84-g9cb58cd2220c/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.12-rc8-84-g9cb58cd2220c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      9cb58cd2220c30d3488ac1eb37327d0825d45028 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-bcm2836-rpi-2-b      | arm  | lab-collabora   | gcc-8    | multi_v7_defc...=
-CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607ebf94da5304e88a9b77f3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/b=
-aseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607ebf94da5304e88a9b7=
-7f4
-        failing since 74 days (last pass: v5.11-rc6-256-gf889022827dc, firs=
-t fail: v5.11-rc6-298-g490f4659faae) =
-
- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-qemu_arm-versatilepb | arm  | lab-baylibre    | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607e8ac3f67714ed4d9b77b1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_ar=
-m-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_ar=
-m-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607e8ac3f67714ed4d9b7=
-7b2
-        failing since 155 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-qemu_arm-versatilepb | arm  | lab-broonie     | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607e8ac3f67714ed4d9b77ae
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm=
--versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_arm=
--versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607e8ac3f67714ed4d9b7=
-7af
-        failing since 155 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-qemu_arm-versatilepb | arm  | lab-cip         | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607e8ac7f67714ed4d9b77b5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ver=
-satilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ver=
-satilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607e8ac7f67714ed4d9b7=
-7b6
-        failing since 155 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-qemu_arm-versatilepb | arm  | lab-collabora   | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607e8a65b08037dde19b77a1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_a=
-rm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_a=
-rm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607e8a65b08037dde19b7=
-7a2
-        failing since 155 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab             | compiler | defconfig       =
-             | regressions
----------------------+------+-----------------+----------+-----------------=
--------------+------------
-qemu_arm-versatilepb | arm  | lab-linaro-lkft | gcc-8    | versatile_defcon=
-fig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/607e8a7712d4e55e159b77b8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu=
-_arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.12-rc8-8=
-4-g9cb58cd2220c/arm/versatile_defconfig/gcc-8/lab-linaro-lkft/baseline-qemu=
-_arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/607e8a7712d4e55e159b7=
-7b9
-        failing since 155 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =20

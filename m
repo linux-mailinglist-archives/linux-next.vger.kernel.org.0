@@ -2,95 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85147366564
-	for <lists+linux-next@lfdr.de>; Wed, 21 Apr 2021 08:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8628336656E
+	for <lists+linux-next@lfdr.de>; Wed, 21 Apr 2021 08:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbhDUG1B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Apr 2021 02:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S235504AbhDUG3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Apr 2021 02:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235104AbhDUG07 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Apr 2021 02:26:59 -0400
+        with ESMTP id S235996AbhDUG31 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Apr 2021 02:29:27 -0400
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6482CC06174A;
-        Tue, 20 Apr 2021 23:26:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA67C06174A;
+        Tue, 20 Apr 2021 23:28:54 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQ9YW2kL2z9sxS;
-        Wed, 21 Apr 2021 16:26:23 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQ9cM0nk6z9sxS;
+        Wed, 21 Apr 2021 16:28:50 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1618986383;
-        bh=ZBwFvc/PjAcb9mm54KHc6/+09qjW4Rn5ZchFLh3BRGQ=;
+        s=201702; t=1618986532;
+        bh=ZHru/G84QN9SBD/xoHHISggikSIxcgfogfgUuzGmeDw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h9rm8EPBJvr+9kd60RiwMgswxwWV7o2tr+a0GW6071wyNc2Qo5eyqhSvChV4EnbZQ
-         OqldTKG1LpxBAJRJcmq04VFbcu7BkDGD46Qe6lGbO7v1BDBzCiAtBusdgdUiYNR7/X
-         01DXx61xH+8xmlTSb4lrJzqAxjiw0QAEJcSH7O7GLrnvOjbBGG02U5Wo2fCFNkmxBC
-         NF1EajZeSKLwCC0lCd1S1o5V9SAJzREDxPiXgM52gkZ1TlWD+9OtxJGtF4Wkv5YsWp
-         0ECMgLh+nH4zn364VOsKJo6yh5YWvr2F/Q2lJvMK+j22pn8cZVxYgWIsiRcEeuk2YT
-         +UpViReFlWb8w==
-Date:   Wed, 21 Apr 2021 16:26:22 +1000
+        b=jTY233VRuXRqz0LeZPJmRxWtCCdgRLFs24+O/bEZFb0fTH5AtK0qS3o0jM/nezIgt
+         koYloHeTFTCfM9xcvJOi0WQ142ZjLbVlqY/T16EXRazIKjbVGLnRgXmH05tUPKpw0n
+         emzj2kBjkMFyBmLFHnB6DsvHTC1P98Y7exNOpsEYpydRIp6KPJJjSGTq0sEIswPpdK
+         KxmhNpp4T5YxtAaIdMsH4mscp7+Rk3ctw5EFkVPvBgNJ25tKQIlHBe3sFshLc/oMm5
+         MXohUWlr3wbq/g1MFT/1X8wDVfXxuRmApPoutbwo9eGwNuQ3u7MhotfM/Py1dmO0gH
+         4MuoAbU1xNxkg==
+Date:   Wed, 21 Apr 2021 16:28:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>,
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the overlayfs tree
-Message-ID: <20210421162622.0c686883@canb.auug.org.au>
-In-Reply-To: <20210329201426.78d4b28b@canb.auug.org.au>
-References: <20210329201426.78d4b28b@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20210421162850.49a31107@canb.auug.org.au>
+In-Reply-To: <20210401181933.08472e2d@canb.auug.org.au>
+References: <20210401181933.08472e2d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VhZwGT.t=4=p=H0AfLBs4U5";
+Content-Type: multipart/signed; boundary="Sig_/V5bviABzsYqoShe8I+VEPBk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VhZwGT.t=4=p=H0AfLBs4U5
+--Sig_/V5bviABzsYqoShe8I+VEPBk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 29 Mar 2021 20:14:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the overlayfs tree, today's linux-next build (htmldocs)
-> produced this warning:
+On Thu, 1 Apr 2021 18:19:33 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >=20
-> Documentation/devicetree/kernel-api:56: /home/sfr/next/next/drivers/of/ov=
-erlay.c:1184: WARNING: Inline emphasis start-string without end-string.
+> After merging the drm tree, today's linux-next build (htmldocs) produced
+> this warning:
+>=20
+> drivers/gpu/drm/i915/gem/i915_gem_shrinker.c:102: warning: Function param=
+eter or member 'ww' not described in 'i915_gem_shrink'
 >=20
 > Introduced by commit
 >=20
->   24789c5ce5a3 ("of: overlay: detect cases where device tree may become c=
-orrupt")
->=20
-> Probably exposed by commit
->=20
->   8c8239c2c1fb ("of: Add missing 'Return' section in kerneldoc comments")
+>   cf41a8f1dc1e ("drm/i915: Finally remove obj->mm.lock.")
 
 I am still seeing this warning (as of next-20210420).
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VhZwGT.t=4=p=H0AfLBs4U5
+--Sig_/V5bviABzsYqoShe8I+VEPBk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB/xY4ACgkQAVBC80lX
-0GwMMAgAgZ3P0YnEFEOi1m54jac24cbmRjmcvM181N24ChFeoGfuF6Zrvc7KEh7v
-STUc2DPiuALZExKZfb0KL+ZNL9Z6Z4wPajWtKfZLgakd3BsRyQoFVrr73k2VYB9f
-BNgOw+OHvhZ/k15F8afN5JKBLUXrPcQCargBJjiOIIgXWAzruhLrZnOXCrjk7VDT
-AvMALmAVpGUiFxuJO/3lHDAvg69XylwZj/vZzO7671SWwL5VzlKUTnARW0fL3N8z
-23VJW/C21MsqD6eYcFn6BeZx8ctlplp6REorSdk26trqbbXQKgEo0DFsZVQSCaaL
-oRmo77YsFdV0TEviStPVmJ4yHcJdzA==
-=Up1y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmB/xiIACgkQAVBC80lX
+0GxLWQf/d7EgIEXtOSGvZmHk07QfSo9DsZM+9YMLButVyz4ESFshdMEcePagIfw+
+Wqfo69MAcRsNczgJmj/wOP8ie86CWr3mQkiaiMBKeKWN5RIvkX9NipDLcFnIOVWG
+tIYzWz/dB+w1f5xATJLYmgTU0Nc66xSe0f7YobeI6ZRXqPGPvlJSQo3lCBWp1RFS
+9AjM/NfhtjEufjG60UgRHNGU9acm+JfH5uaX45QXxqhQSODj7orIWcVzgVCSY6xZ
+2oZK73geSpRXg2CgIRsMbEpvNjg6FAC4RjSY8m/rspDmS/EJ9vyRYhnkoErz8xy6
+sfq1XoY1fvLSSMNeHa7X/bUgmrM9XQ==
+=HiqO
 -----END PGP SIGNATURE-----
 
---Sig_/VhZwGT.t=4=p=H0AfLBs4U5--
+--Sig_/V5bviABzsYqoShe8I+VEPBk--

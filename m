@@ -2,75 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBD4366A0A
-	for <lists+linux-next@lfdr.de>; Wed, 21 Apr 2021 13:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FA7366BEB
+	for <lists+linux-next@lfdr.de>; Wed, 21 Apr 2021 15:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237924AbhDULmM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Apr 2021 07:42:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51371 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237575AbhDULmM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Apr 2021 07:42:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQJYF6wJkz9sjB;
-        Wed, 21 Apr 2021 21:41:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1619005298;
-        bh=I1NgyMIoyOKjCXFY2N2P3O3RsN3GgwWYHvsxpNnyoqM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Xi/Q8XLYVdP8mcDWDulCFUw07IDCHLva9me5ippvneiaSH3pegHI4Ta6cwf8/0wgv
-         /6sJJT65zPvMMfuf4w8P1oHgZ8769SJm6cNfkdTJ+lLgnYsHDh/ot8yeFR1fycUU7t
-         Ee+sjUz4N9ExO/cvVf2/Fw36vnrAlL8ByvBQUdbpc+leHjnUUsG0dvLoPXCFt0mzo1
-         4ka88IkNNqlQf55odi/ebX6Y4Y0dz0uFxJvoU9OiY3cGKmRNzlFMsTcE4O+79jedKK
-         MXP4twumABbE/zvunfi26bCqRuQaoZGg3LKSMF35gGkR2feNLM0bqlcEi9j8J5I8Db
-         8hlkHX2un6wpQ==
-Date:   Wed, 21 Apr 2021 21:41:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guo Ren <ren_guo@c-sky.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the csky tree
-Message-ID: <20210421214136.2aa5d34b@canb.auug.org.au>
+        id S240208AbhDUNIj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Apr 2021 09:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241040AbhDUNHk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Apr 2021 09:07:40 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52E1C061346;
+        Wed, 21 Apr 2021 06:06:51 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id r20so13641941ejo.11;
+        Wed, 21 Apr 2021 06:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NF62lDVsQt04hH2B9Wki6giRIoml6Qiuq3Q8CuUfCRo=;
+        b=XGGIQbuC2dEPTL2EO4Kd7PI8FlwkSywJFMj+ocmrvhn3IU7sX9ehbCOkdI/8WOw4sN
+         jDJmEQDff085HRxggLQS0hIK3SmRk8HG4bXnE0ls2LE0UwHJdH66jgXDvS8bILIPd/0k
+         BzdamnzuH+ClUZ3444HBACI18mfkjElUGQ/9AusO8VaAxTbRyIEa7sLY4JYkDPpgf+q7
+         D9Zr9/n/3DiNfzR5ncdCKVEC18P1RhUoXCfvtSi8D1NMcRWC48Puq1yuNKxHe9PlgkEc
+         Ol9ozFGjsKUr96y5HaW9lB1lF1hhDf+9hSq4NEPBriK0+tG5aGOKrWfjKMGcFSke0DuM
+         Hulw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NF62lDVsQt04hH2B9Wki6giRIoml6Qiuq3Q8CuUfCRo=;
+        b=Duo12ch6KnLLjcFuS2FvoHlEXzxJJfE2olr0qTfW56IiwSwCciBfOVHjN0UsGEMBqk
+         5ENKYFzYvRcmjIytTyaxOWrpYNa7SPFpGI8bbESa8bKimF8yGItL9Hj/gkKL7If/PlJQ
+         7tZCTokBpg4pVKaP3zDiwS4rJODGMazgslnR1L/HvnNZbwdDGxaYfSpT6um063Xb/rtt
+         9XSXIEY3kmUoSIXde06FABtzAPrBEE0lGrWqYQ5w3hN3iut1mFa54EwwjMTDHOPHciIX
+         4DLj233YRHbEkqHJpqVC4fzKI1WzUWgcnV6OR15gRJNuUOgwEVtVCdGUxEruCxl9YXYM
+         GqjQ==
+X-Gm-Message-State: AOAM533vrGRh/JHN7eyVktd87WW3CEawMjuxReKlOPeSTqNwRboCASQS
+        H+WpiDMKEDc+dxeBIJFu2pnZld7CYWrozPsIFg==
+X-Google-Smtp-Source: ABdhPJxoBmUNx9eX0oYOFhSIg2Y4F2e334SIF1OdXk+N9gVrawGwsjSNVDFq7zak9tQ1k0QeymJIbZBah//ut4I4GBc=
+X-Received: by 2002:a17:906:9ac5:: with SMTP id ah5mr32008102ejc.360.1619010410401;
+ Wed, 21 Apr 2021 06:06:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rs79qFZyJFWlCYYLItY1H_b";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210329200348.24a9a8be@canb.auug.org.au> <20210421162320.1e3ff588@canb.auug.org.au>
+In-Reply-To: <20210421162320.1e3ff588@canb.auug.org.au>
+From:   Rob Herring <robherring2@gmail.com>
+Date:   Wed, 21 Apr 2021 08:06:37 -0500
+Message-ID: <CAL_Jsq+0aPu75-mfQ+udkWWpJ3734J72V3fuXa_nzK9wfaX30Q@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rs79qFZyJFWlCYYLItY1H_b
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Apr 21, 2021 at 1:23 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Mon, 29 Mar 2021 20:04:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging Linus' tree, today's linux-next build (htmldocs) produced
+> > these warnings:
+> >
+> > include/linux/of.h:1211: warning: Function parameter or member 'output' not described in 'of_property_read_string_index'
+> > include/linux/of.h:1211: warning: Excess function parameter 'out_string' description in 'of_property_read_string_index'
+> >
+> > Introduced by commit
+> >
+> >   a87fa1d81a9f ("of: Fix overflow bug in string property parsing functions")
+> >
+> > I assume that these warnings have turned up now due to better(?) tooling.
+>
+> I am still seeing these warnings (as of next-20210420).
 
-Hi all,
+A fix is now in my tree.
 
-Commit
-
-  8bfe70e69658 ("csky: fix syscache.c fallthrough warning")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rs79qFZyJFWlCYYLItY1H_b
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCAD3AACgkQAVBC80lX
-0GxrQwf+Np4pQQ5ssGNYRtaQ6MCx0T+WrQswkqknEq507Yq2F2tpb9RbTpkxlEN7
-RuRRZmqk63sQriqIRH6unwlmFgwcMouZivO/qV4cU+7lBO3dFjDh6z04ZoobP5ot
-iMWsa6uxCvkG+ex+kUQFMjKNYNZaorfDadbzyki2od9OycMm5xkfBA5jHmoMgdZX
-0qEKF+T7CRM9DDGQhD76dZBUTUHCpvp+yptkvwmWbbTZdQcoU+gePgFCnLvp7CKp
-YlfKPqYIojZPGNtCTlS5mJSzeLadJSXOjXhlPy/EzF0vRL45oLvxspXBvDM0Bwdx
-nz0Av+CUrwUE2L2KSfgoQS0yLX7jAg==
-=FtTS
------END PGP SIGNATURE-----
-
---Sig_/rs79qFZyJFWlCYYLItY1H_b--
+Rob

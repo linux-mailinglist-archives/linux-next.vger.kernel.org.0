@@ -2,121 +2,182 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2048E3679EB
-	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 08:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40DB3679F4
+	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 08:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbhDVGab (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Apr 2021 02:30:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46321 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230228AbhDVGaa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Apr 2021 02:30:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619072994;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B6EiPZu3q42UgnLk/MTSD3xsxXo/x21R/hyRmF6Gxlg=;
-        b=TJaAEJYeW29n/VDDSimqW7xt0zrBzL0cCUILYjCd7XYa42MQEkjeli4jQ9c/cgGofmKum1
-        pRTD2gi9elb7sDDZh8TabgBdRn7gh4eC6Uj4tFWfM9mv1YqAuyYBO7WO8TapaVHrVcYpRy
-        z5hlqfOedVPLetyvox7vkLHXl/mGjHk=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-150-yge1uPNaN_KrphTL5kL4zA-1; Thu, 22 Apr 2021 02:29:53 -0400
-X-MC-Unique: yge1uPNaN_KrphTL5kL4zA-1
-Received: by mail-ed1-f69.google.com with SMTP id l22-20020a0564021256b0290384ebfba68cso12334940edw.2
-        for <linux-next@vger.kernel.org>; Wed, 21 Apr 2021 23:29:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B6EiPZu3q42UgnLk/MTSD3xsxXo/x21R/hyRmF6Gxlg=;
-        b=QZL9UEuCYX3/+X/eL8MdDxC8fOIs0NFU2pE2k6MYi0DSYvNJlCUtOXIDtA60SdAovf
-         EGvl09c9wIEbZFn+sBdsA+0UaKKVSx9hXNK0hiwSpvnXNXLMWcB3aPsgFXjpy8sBC/tK
-         phJ1ZGDZg8FZqSOV5pmwg0/DFKzoHcS8fZLij3gfle/kW5hPRkANP0LV1wAz8uePrJIA
-         wWtL/tCZ7D7rYdyb0iK+soiwXEhcHt2WxAMSiL+7a+2njre0CrLDAJHouIRY7+93/eWt
-         dyiVh1FbGrYxzi+JyD3UEogAdF2HMEeL3634itZ0xgrY3/1DjXc3d9KKbEi9CDYkeBG/
-         T3iQ==
-X-Gm-Message-State: AOAM5307+PNaU/YXsUe4te3lsHbK05QvxPnTriNo9ftwEdbLVqviSH8m
-        OSoEDcUeA/c9we7L/kfi1v42OsRaDW1aFFVCP5jujdoQzx4upoXcGhUi6dDKAfmNbzyopNdsA0t
-        +s0/WOHPCoeKhDhHqCpj5Ag==
-X-Received: by 2002:a17:906:d8cd:: with SMTP id re13mr1734328ejb.141.1619072991940;
-        Wed, 21 Apr 2021 23:29:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJysC/AMNwvEFPxfj5p+ELMpnF7pi7Egg3tU8xa4jD4gt4Fb63vh/8/sWYrJjGjhAPk/n/OQcw==
-X-Received: by 2002:a17:906:d8cd:: with SMTP id re13mr1734316ejb.141.1619072991741;
-        Wed, 21 Apr 2021 23:29:51 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id ca1sm1162161edb.76.2021.04.21.23.29.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Apr 2021 23:29:51 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
-To:     Nadav Amit <namit@vmware.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     KVM <kvm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        id S234901AbhDVGbu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Apr 2021 02:31:50 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33561 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229967AbhDVGbt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Apr 2021 02:31:49 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQncd5sz7z9sWD;
+        Thu, 22 Apr 2021 16:31:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1619073074;
+        bh=il4ZXMNxnxf1r1lHcVDm4MNlaD/cBBNKZJyrLI7ywlA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BV8da9LS/ezueRAh5xIqL732gaQoWZoVPfSguGCz3vXlMNQf57/PSouIzZy6hQwtr
+         kE7DRUg8pM/8pMpMzqutlvHqLB9Iv4mu70+nHZ17BX5vVdhFqfogedMyHasrqsdWH5
+         tEZuSZzpyIQ3Q9nso2dYrEHmp/3EcQ50EaejJ/sZqQ0/6vKWwr7Ezwhu5uHs4JNu+e
+         iLo/T/Q0Zl34Kdcu/TYytvdDf66+X12h13WCu6c7YEadSFLs6rNvPBoIntnSLbXbnJ
+         Ss4ac+3vCc3604D9sUJRS20mZOt/mJKFFbf4/ctj8+hrgRjOGGqFnVtZTUuUXue3n0
+         6Z1tvLoTRyViQ==
+Date:   Thu, 22 Apr 2021 16:31:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Tejun Heo <tj@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20210422143056.62a3fee4@canb.auug.org.au>
- <142AD46E-6B41-49F3-90C1-624649A20764@vmware.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <e69ecd92-f87c-eb8b-c288-83efb13bb3eb@redhat.com>
-Date:   Thu, 22 Apr 2021 08:29:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the cgroup tree
+Message-ID: <20210422163113.31fdbc9b@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <142AD46E-6B41-49F3-90C1-624649A20764@vmware.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/xO_RFI86LovZrcagAMB7RKF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 22/04/21 06:45, Nadav Amit wrote:
-> 
->> On Apr 21, 2021, at 9:30 PM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->>
->> Today's linux-next merge of the kvm tree got a conflict in:
->>
->>   arch/x86/kernel/kvm.c
->>
->> between commit:
->>
->>   4ce94eabac16 ("x86/mm/tlb: Flush remote and local TLBs concurrently")
->>
->> from the tip tree and commit:
->>
->>   2b519b5797d4 ("x86/kvm: Don't bother __pv_cpu_mask when !CONFIG_SMP")
->>
->> from the kvm tree.
-> 
-> Thank you and sorry for that.
+--Sig_/xO_RFI86LovZrcagAMB7RKF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-No problem, this is a reasonable conflict to have.
+Hi all,
 
-Paolo
+After merging the cgroup tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
->>   static void __init kvm_smp_prepare_boot_cpu(void)
->>   {
->>   	/*
->> @@@ -655,15 -668,9 +673,9 @@@ static void __init kvm_guest_init(void
->>
->>   	if (kvm_para_has_feature(KVM_FEATURE_STEAL_TIME)) {
->>   		has_steal_clock = 1;
->> -		pv_ops.time.steal_clock = kvm_steal_clock;
->> +		static_call_update(pv_steal_clock, kvm_steal_clock);
-> 
-> I do not understand how this line ended in the merge fix though.
-> 
-> Not that it is correct or wrong, but it is not part of either of
-> these 2 patches AFAIK.
-> 
+arch/x86/kvm/svm/sev.c: In function 'sev_asid_new':
+arch/x86/kvm/svm/sev.c:118:12: error: invalid type argument of '->' (have '=
+int')
+  118 |  type =3D sev->es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
+      |            ^~
+In file included from arch/x86/include/asm/bug.h:93,
+                 from include/linux/bug.h:5,
+                 from include/linux/mmdebug.h:5,
+                 from include/linux/percpu.h:5,
+                 from include/linux/context_tracking_state.h:5,
+                 from include/linux/hardirq.h:5,
+                 from include/linux/kvm_host.h:7,
+                 from arch/x86/kvm/svm/sev.c:11:
+arch/x86/kvm/svm/sev.c:119:13: error: invalid type argument of '->' (have '=
+int')
+  119 |  WARN_ON(sev->misc_cg);
+      |             ^~
+arch/x86/kvm/svm/sev.c:119:2: note: in expansion of macro 'WARN_ON'
+  119 |  WARN_ON(sev->misc_cg);
+      |  ^~~~~~~
+arch/x86/kvm/svm/sev.c:120:5: error: invalid type argument of '->' (have 'i=
+nt')
+  120 |  sev->misc_cg =3D get_current_misc_cg();
+      |     ^~
+arch/x86/kvm/svm/sev.c:121:36: error: invalid type argument of '->' (have '=
+int')
+  121 |  ret =3D misc_cg_try_charge(type, sev->misc_cg, 1);
+      |                                    ^~
+arch/x86/kvm/svm/sev.c:123:18: error: invalid type argument of '->' (have '=
+int')
+  123 |   put_misc_cg(sev->misc_cg);
+      |                  ^~
+arch/x86/kvm/svm/sev.c:124:6: error: invalid type argument of '->' (have 'i=
+nt')
+  124 |   sev->misc_cg =3D NULL;
+      |      ^~
+arch/x86/kvm/svm/sev.c:154:28: error: invalid type argument of '->' (have '=
+int')
+  154 |  misc_cg_uncharge(type, sev->misc_cg, 1);
+      |                            ^~
+arch/x86/kvm/svm/sev.c:155:17: error: invalid type argument of '->' (have '=
+int')
+  155 |  put_misc_cg(sev->misc_cg);
+      |                 ^~
+arch/x86/kvm/svm/sev.c:156:5: error: invalid type argument of '->' (have 'i=
+nt')
+  156 |  sev->misc_cg =3D NULL;
+      |     ^~
 
+Caused by commit
+
+  7aef27f0b2a8 ("svm/sev: Register SEV and SEV-ES ASIDs to the misc control=
+ler")
+
+interacting with commit
+
+  9fa1521daafb ("KVM: SVM: Do not set sev->es_active until KVM_SEV_ES_INIT =
+completes")
+
+from the kvm tree.
+
+I have applied the following for today, better suggestions welcome.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 22 Apr 2021 16:13:34 +1000
+Subject: [PATCH] fixup for "KVM: SVM: Do not set sev->es_active until KVM_S=
+EV_ES_INIT completes"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/x86/kvm/svm/sev.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 5ae091509bb0..3458710a9729 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -109,13 +109,13 @@ static bool __sev_recycle_asids(int min_asid, int max=
+_asid)
+ 	return true;
+ }
+=20
+-static int sev_asid_new(bool es_active)
++static int sev_asid_new(bool es_active, struct kvm_sev_info *sev)
+ {
+ 	int pos, min_asid, max_asid, ret;
+ 	bool retry =3D true;
+ 	enum misc_res_type type;
+=20
+-	type =3D sev->es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
++	type =3D es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
+ 	WARN_ON(sev->misc_cg);
+ 	sev->misc_cg =3D get_current_misc_cg();
+ 	ret =3D misc_cg_try_charge(type, sev->misc_cg, 1);
+@@ -221,7 +221,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_s=
+ev_cmd *argp)
+ 	if (unlikely(sev->active))
+ 		return ret;
+=20
+-	asid =3D sev_asid_new(es_active);
++	asid =3D sev_asid_new(es_active, sev);
+ 	if (asid < 0)
+ 		return ret;
+ 	sev->asid =3D asid;
+--=20
+2.30.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xO_RFI86LovZrcagAMB7RKF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCBGDEACgkQAVBC80lX
+0GwdKwgAixSFq3p6EQ/ZzhUE9hlCzKvDEVflFKzpI+Ru4T0Y0uSfGFCg+Zy7HvIM
+zEFBotnrx2JdkoRbTWrxMbimmHS/BuvXLsM78uw1IteNPTTGJs9SW6FocGk7FhrY
+iykOMt4WDg5UzwRKVECxvFmwHXdOiyPvXxAv8bhLay506V4kjzqHwsPvtbZKpCny
+Phzkgcgb9HRf/NuwZGgNCtlOhOkSZ/smGKRPPN36CKC2I9V0exWi45VwEQOmxVL5
+eAxUJOT1hHzMsE0haCW1Nr23RuC2SdhIntRQsBPmewRIO+rESUz95x/ETjloEJto
+aHtZOSsM4jCJw47fTNpPg1Lx6PbmOA==
+=UkOU
+-----END PGP SIGNATURE-----
+
+--Sig_/xO_RFI86LovZrcagAMB7RKF--

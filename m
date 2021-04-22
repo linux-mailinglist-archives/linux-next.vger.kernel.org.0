@@ -2,182 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40DB3679F4
-	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 08:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3FE3679FC
+	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 08:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234901AbhDVGbu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Apr 2021 02:31:50 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33561 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229967AbhDVGbt (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Apr 2021 02:31:49 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQncd5sz7z9sWD;
-        Thu, 22 Apr 2021 16:31:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1619073074;
-        bh=il4ZXMNxnxf1r1lHcVDm4MNlaD/cBBNKZJyrLI7ywlA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BV8da9LS/ezueRAh5xIqL732gaQoWZoVPfSguGCz3vXlMNQf57/PSouIzZy6hQwtr
-         kE7DRUg8pM/8pMpMzqutlvHqLB9Iv4mu70+nHZ17BX5vVdhFqfogedMyHasrqsdWH5
-         tEZuSZzpyIQ3Q9nso2dYrEHmp/3EcQ50EaejJ/sZqQ0/6vKWwr7Ezwhu5uHs4JNu+e
-         iLo/T/Q0Zl34Kdcu/TYytvdDf66+X12h13WCu6c7YEadSFLs6rNvPBoIntnSLbXbnJ
-         Ss4ac+3vCc3604D9sUJRS20mZOt/mJKFFbf4/ctj8+hrgRjOGGqFnVtZTUuUXue3n0
-         6Z1tvLoTRyViQ==
-Date:   Thu, 22 Apr 2021 16:31:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tejun Heo <tj@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        id S234797AbhDVGe4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Apr 2021 02:34:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41839 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230232AbhDVGey (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Apr 2021 02:34:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619073260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=32v070lHFea27N/7UXZgNzlr22E5m7KkC6ga6LEk8XM=;
+        b=g2xP28gExffuPNIBjAddJEfrMKLIPWMURtV4iTBbcfVbB16hRtLijznL1k3y8c7bUWaC5p
+        YNfe5c9hmRRpQ974MAAPQpI8CO20XjRyW3Op+B46H9rsSaSwsFUwhRs1FuIP6f900k9HO/
+        ycoU+r4aay+J3nUJSt7mX7qzlI0h01w=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-370-0gsqkRzbOjiqw2sip1JWNA-1; Thu, 22 Apr 2021 02:34:18 -0400
+X-MC-Unique: 0gsqkRzbOjiqw2sip1JWNA-1
+Received: by mail-ej1-f72.google.com with SMTP id 16-20020a1709063010b029037417ca2d43so6818496ejz.5
+        for <linux-next@vger.kernel.org>; Wed, 21 Apr 2021 23:34:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=32v070lHFea27N/7UXZgNzlr22E5m7KkC6ga6LEk8XM=;
+        b=PeR6MrFW3FMpAlMS6GxBdTvUWjwpli8Z7DNt8c17cTdkzd7twxD06tC2ZWLO1bc1qd
+         qPvBPDc7f5gMgVnR3BYa7+mxcWi7oulWJblewKsIE9XgYISk+ivWmfsAOCu2Za/McHvn
+         uCs7XISGyPaILDVegqXy4KNrgNJMfDbYpWPFxlGKrgWpAe4p3zi6MF36M7zmHQ9vgyit
+         Suq2ldof35vcTmfPLACRPkv+QhKzaZJtajcMAgGZy/vLWly8Oo9hrTmBEE764+1K8oKI
+         EYyvz+6uC8oNOjlOSWWftWXuouw+rSPQdUe56cI2HeckpcPQuZW4NrG+jlntiQSUeIbj
+         oPCQ==
+X-Gm-Message-State: AOAM5315oTaROjBaD0YAk+htJVqy4l2FrPL5mdDp6Wa0wmD8sH31H+rz
+        u++XqRXy1j3ahtg4BJh8jnHe9d2nbNLx3X3F3X3/JwnsBGPcvBj8uOXDWh5L+pVBvef7Rk7nubM
+        BO5i90fUjny5NZPM6BjTogA==
+X-Received: by 2002:a05:6402:5244:: with SMTP id t4mr1835093edd.355.1619073257020;
+        Wed, 21 Apr 2021 23:34:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzmLCrtpnW7vTQuG1hagGhM6plMHauJ8eOsASBJaES0xqweWLrTtOTKh4p/xUXsGl2I+Vr6Mw==
+X-Received: by 2002:a05:6402:5244:: with SMTP id t4mr1835080edd.355.1619073256851;
+        Wed, 21 Apr 2021 23:34:16 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id u6sm1164854ejn.14.2021.04.21.23.34.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Apr 2021 23:34:16 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the cgroup tree with the kvm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
         KVM <kvm@vger.kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20210422163113.31fdbc9b@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+References: <20210422155355.471c7751@canb.auug.org.au>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <124cf94f-e7f5-d6f3-7e7a-2685e1e7517f@redhat.com>
+Date:   Thu, 22 Apr 2021 08:34:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xO_RFI86LovZrcagAMB7RKF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210422155355.471c7751@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xO_RFI86LovZrcagAMB7RKF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 22/04/21 07:53, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the cgroup tree got conflicts in:
+> 
+>    arch/x86/kvm/svm/sev.c
+> 
+> between commit:
+> 
+>    9fa1521daafb ("KVM: SVM: Do not set sev->es_active until KVM_SEV_ES_INIT completes")
+> 
+> from the kvm tree and commit:
+> 
+>    7aef27f0b2a8 ("svm/sev: Register SEV and SEV-ES ASIDs to the misc controller")
+> 
+> from the cgroup tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-Hi all,
+Tejun, please don't commit patches to other tree without an Acked-by 
+from the maintainer (which I wouldn't have provided, as the right way to 
+go would have been a topic branch).
 
-After merging the cgroup tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Fortunately these patches are at the bottom of your tree.  If it's okay, 
+I'll just pull from there "as if" you had provided a topic branch all 
+the time.
 
-arch/x86/kvm/svm/sev.c: In function 'sev_asid_new':
-arch/x86/kvm/svm/sev.c:118:12: error: invalid type argument of '->' (have '=
-int')
-  118 |  type =3D sev->es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
-      |            ^~
-In file included from arch/x86/include/asm/bug.h:93,
-                 from include/linux/bug.h:5,
-                 from include/linux/mmdebug.h:5,
-                 from include/linux/percpu.h:5,
-                 from include/linux/context_tracking_state.h:5,
-                 from include/linux/hardirq.h:5,
-                 from include/linux/kvm_host.h:7,
-                 from arch/x86/kvm/svm/sev.c:11:
-arch/x86/kvm/svm/sev.c:119:13: error: invalid type argument of '->' (have '=
-int')
-  119 |  WARN_ON(sev->misc_cg);
-      |             ^~
-arch/x86/kvm/svm/sev.c:119:2: note: in expansion of macro 'WARN_ON'
-  119 |  WARN_ON(sev->misc_cg);
-      |  ^~~~~~~
-arch/x86/kvm/svm/sev.c:120:5: error: invalid type argument of '->' (have 'i=
-nt')
-  120 |  sev->misc_cg =3D get_current_misc_cg();
-      |     ^~
-arch/x86/kvm/svm/sev.c:121:36: error: invalid type argument of '->' (have '=
-int')
-  121 |  ret =3D misc_cg_try_charge(type, sev->misc_cg, 1);
-      |                                    ^~
-arch/x86/kvm/svm/sev.c:123:18: error: invalid type argument of '->' (have '=
-int')
-  123 |   put_misc_cg(sev->misc_cg);
-      |                  ^~
-arch/x86/kvm/svm/sev.c:124:6: error: invalid type argument of '->' (have 'i=
-nt')
-  124 |   sev->misc_cg =3D NULL;
-      |      ^~
-arch/x86/kvm/svm/sev.c:154:28: error: invalid type argument of '->' (have '=
-int')
-  154 |  misc_cg_uncharge(type, sev->misc_cg, 1);
-      |                            ^~
-arch/x86/kvm/svm/sev.c:155:17: error: invalid type argument of '->' (have '=
-int')
-  155 |  put_misc_cg(sev->misc_cg);
-      |                 ^~
-arch/x86/kvm/svm/sev.c:156:5: error: invalid type argument of '->' (have 'i=
-nt')
-  156 |  sev->misc_cg =3D NULL;
-      |     ^~
+Thanks,
 
-Caused by commit
+Paolo
 
-  7aef27f0b2a8 ("svm/sev: Register SEV and SEV-ES ASIDs to the misc control=
-ler")
-
-interacting with commit
-
-  9fa1521daafb ("KVM: SVM: Do not set sev->es_active until KVM_SEV_ES_INIT =
-completes")
-
-from the kvm tree.
-
-I have applied the following for today, better suggestions welcome.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 22 Apr 2021 16:13:34 +1000
-Subject: [PATCH] fixup for "KVM: SVM: Do not set sev->es_active until KVM_S=
-EV_ES_INIT completes"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/kvm/svm/sev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 5ae091509bb0..3458710a9729 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -109,13 +109,13 @@ static bool __sev_recycle_asids(int min_asid, int max=
-_asid)
- 	return true;
- }
-=20
--static int sev_asid_new(bool es_active)
-+static int sev_asid_new(bool es_active, struct kvm_sev_info *sev)
- {
- 	int pos, min_asid, max_asid, ret;
- 	bool retry =3D true;
- 	enum misc_res_type type;
-=20
--	type =3D sev->es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
-+	type =3D es_active ? MISC_CG_RES_SEV_ES : MISC_CG_RES_SEV;
- 	WARN_ON(sev->misc_cg);
- 	sev->misc_cg =3D get_current_misc_cg();
- 	ret =3D misc_cg_try_charge(type, sev->misc_cg, 1);
-@@ -221,7 +221,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_s=
-ev_cmd *argp)
- 	if (unlikely(sev->active))
- 		return ret;
-=20
--	asid =3D sev_asid_new(es_active);
-+	asid =3D sev_asid_new(es_active, sev);
- 	if (asid < 0)
- 		return ret;
- 	sev->asid =3D asid;
---=20
-2.30.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xO_RFI86LovZrcagAMB7RKF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCBGDEACgkQAVBC80lX
-0GwdKwgAixSFq3p6EQ/ZzhUE9hlCzKvDEVflFKzpI+Ru4T0Y0uSfGFCg+Zy7HvIM
-zEFBotnrx2JdkoRbTWrxMbimmHS/BuvXLsM78uw1IteNPTTGJs9SW6FocGk7FhrY
-iykOMt4WDg5UzwRKVECxvFmwHXdOiyPvXxAv8bhLay506V4kjzqHwsPvtbZKpCny
-Phzkgcgb9HRf/NuwZGgNCtlOhOkSZ/smGKRPPN36CKC2I9V0exWi45VwEQOmxVL5
-eAxUJOT1hHzMsE0haCW1Nr23RuC2SdhIntRQsBPmewRIO+rESUz95x/ETjloEJto
-aHtZOSsM4jCJw47fTNpPg1Lx6PbmOA==
-=UkOU
------END PGP SIGNATURE-----
-
---Sig_/xO_RFI86LovZrcagAMB7RKF--

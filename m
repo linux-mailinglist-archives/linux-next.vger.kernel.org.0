@@ -2,95 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7F1367B67
-	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 09:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09616367CEB
+	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 10:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbhDVHsB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Apr 2021 03:48:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58955 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235246AbhDVHr6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Apr 2021 03:47:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619077643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=feEZwhZhckEp2NWHe0knkLxWYyq3yllm3KyAPbxZatA=;
-        b=GlMW/pZdh3PYDwxkEyuR+ssbXt7BaDnKimD5ucCn7JX1ue1hfVf/h/+AMBcqj5RbSNYYWL
-        G7HSpsfydJeHbFVLdj5T7N2RkQRs7SclPujgIsw54DgTr6W/NdeDkx+ew+YJ2hDGiU8D45
-        D4A42OLHe20sPJ9NQmacg/uKKS9x5qU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-105-AWfEG9hzM0SQIKRTaCEhoA-1; Thu, 22 Apr 2021 03:47:07 -0400
-X-MC-Unique: AWfEG9hzM0SQIKRTaCEhoA-1
-Received: by mail-ej1-f71.google.com with SMTP id lf6-20020a1709071746b029037cee5e31c4so6879554ejc.13
-        for <linux-next@vger.kernel.org>; Thu, 22 Apr 2021 00:47:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=feEZwhZhckEp2NWHe0knkLxWYyq3yllm3KyAPbxZatA=;
-        b=Ig3kS4VnmUBpFdppdZbfReKZTf6Qnb3HxmhG3ODlwCpSY6GwhqtakRq40Kme+582lv
-         HKOX3kDdHKySoN/KaqI+wT7K/abdVm9KBoVj9FrDO71r8DMFFdInhcYTWTBJUzr1KKRH
-         QdS/SkP+btryGOxUC5GsJpF/U9StwHN80RQLnYPmf3n8vfoBItWzBTUBEUD0H1gD9flX
-         lP7e9Tpf/nqnJKB7s1cF/ChDZLqbO0xOsUT9zPo4FmUETfqFnQjighkmT2NRttb+nt6s
-         bweraMM8R8lhYaKRgP5ZfOVJXR3k5ubgxSm4m1oj80ZOMG1KDv6a/F6gZdC5RxFnkOrg
-         71Lg==
-X-Gm-Message-State: AOAM531Jb7yyiXyc8As+G1G+7UKtpHgUJXKNoJDX0e1d1IF7N1XewTYM
-        XK8l8QA04hyWjuUrqzEIaBQOnm/Akg6aqtuK/7zho2B4yW4vaapdB34VTydN5VpW8k54TD0IgBs
-        rpkuPF77eBze8c+tziLlPPQ==
-X-Received: by 2002:a05:6402:781:: with SMTP id d1mr2225853edy.32.1619077626363;
-        Thu, 22 Apr 2021 00:47:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyclzt2baCaNcGBj1gjbLknc8ok1XMcMD/HR6PAfyuesi+oGnecNQynLgSuDuyo1tmi16/4EQ==
-X-Received: by 2002:a05:6402:781:: with SMTP id d1mr2225841edy.32.1619077626172;
-        Thu, 22 Apr 2021 00:47:06 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id y25sm1371324ejb.34.2021.04.22.00.47.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 00:47:05 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the cgroup tree with the kvm tree
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
-        KVM <kvm@vger.kernel.org>,
+        id S230316AbhDVIvp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Apr 2021 04:51:45 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37443 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229938AbhDVIvo (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Apr 2021 04:51:44 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FQrk35PBnz9sTD;
+        Thu, 22 Apr 2021 18:51:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1619081468;
+        bh=p7v/3ySXxGYxDQXo7zR2Tdflwe/TTbmWoQHtiMgfIXM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a3mAbpplPOMYKzbFsuJnitDwhKx897ZNNJGMBtQK2fgOZ3o4NhDDH6lywMyWXT1i0
+         Gc4KwS0ujQDyO+Y7QQ/WWm2q1oQoi7mQFjILPzakBEokZuLUHeJbPPaJLQ61Ad2Ixq
+         s/AbjcaVMy2mrhEPWZk+f8YA3Ueg3aj/7txnHrxF6EFXAPaH+ZaIvpszu0u02lDi4a
+         0mcx4NYhgxijdRg0RwW+iyLMaLdSS9BOhAbTptD6VpT3VhzNjRcLJHUf9PDXaZIdvJ
+         zxKFribba5UjFLb7ykVLqdLTStoZiBcv4FAJTvOAVxtYfU+7BeWh+tQsEFgnwls/Do
+         bRiP/1sAvWWSA==
+Date:   Thu, 22 Apr 2021 18:51:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        David Rientjes <rientjes@google.com>
-References: <20210422155355.471c7751@canb.auug.org.au>
- <124cf94f-e7f5-d6f3-7e7a-2685e1e7517f@redhat.com>
- <CAHVum0eQX8+HCJ3F-G9nzSVMy4V8Cg58LtY=jGPRJ77E-MN1fQ@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <e6256bd5-ca11-13c1-c950-c4761edbcf4d@redhat.com>
-Date:   Thu, 22 Apr 2021 09:47:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the kvm tree
+Message-ID: <20210422185106.046d2cea@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CAHVum0eQX8+HCJ3F-G9nzSVMy4V8Cg58LtY=jGPRJ77E-MN1fQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/tBluxrhKiA0gdSsSGl7x42M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 22/04/21 09:33, Vipin Sharma wrote:
-> First of all, I am sorry that my patch series has caused this trouble to
-> all of you. I am not aware of the correct way to submit a patch series
-> which changes files in more than one maintainer's territory. Any
-> guidance for the future will be helpful.
+--Sig_/tBluxrhKiA0gdSsSGl7x42M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Vipin, don't worry as you don't have to do anything (and didn't do 
-anything wrong, for that matter).  It's all in the maintainers' hands; 
-Stephen takes care of warning maintainers of what will happen in the 
-next merge window, but as far as you're concerned you're all set.
+Hi all,
 
-You can check the current state of the merge in the queue branch of the 
-KVM tree.  This is what I plan to merge if Tejun agrees.  That would be 
-helpful indeed!
+After merging the kvm tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-Paolo
+Documentation/virt/kvm/amd-memory-encryption.rst:308: WARNING: Inline empha=
+sis start-string without end-string.
+Documentation/virt/kvm/amd-memory-encryption.rst:310: WARNING: Inline empha=
+sis start-string without end-string.
+Documentation/virt/kvm/amd-memory-encryption.rst:313: WARNING: Inline empha=
+sis start-string without end-string.
+Documentation/virt/kvm/amd-memory-encryption.rst:316: WARNING: Inline empha=
+sis start-string without end-string.
+Documentation/virt/kvm/amd-memory-encryption.rst:319: WARNING: Inline empha=
+sis start-string without end-string.
+Documentation/virt/kvm/amd-memory-encryption.rst:321: WARNING: Definition l=
+ist ends without a blank line; unexpected unindent.
+Documentation/virt/kvm/amd-memory-encryption.rst:369: WARNING: Title underl=
+ine too short.
 
+15. KVM_SEV_RECEIVE_START
+------------------------
+Documentation/virt/kvm/amd-memory-encryption.rst:369: WARNING: Title underl=
+ine too short.
+
+15. KVM_SEV_RECEIVE_START
+------------------------
+Documentation/virt/kvm/amd-memory-encryption.rst:398: WARNING: Title underl=
+ine too short.
+
+16. KVM_SEV_RECEIVE_UPDATE_DATA
+----------------------------
+Documentation/virt/kvm/amd-memory-encryption.rst:398: WARNING: Title underl=
+ine too short.
+
+16. KVM_SEV_RECEIVE_UPDATE_DATA
+----------------------------
+Documentation/virt/kvm/amd-memory-encryption.rst:422: WARNING: Title underl=
+ine too short.
+
+17. KVM_SEV_RECEIVE_FINISH
+------------------------
+Documentation/virt/kvm/amd-memory-encryption.rst:422: WARNING: Title underl=
+ine too short.
+
+17. KVM_SEV_RECEIVE_FINISH
+------------------------
+
+Introduced by commits
+
+  4cfdd47d6d95 ("KVM: SVM: Add KVM_SEV SEND_START command")
+  af43cbbf954b ("KVM: SVM: Add support for KVM_SEV_RECEIVE_START command")
+  15fb7de1a7f5 ("KVM: SVM: Add KVM_SEV_RECEIVE_UPDATE_DATA command")
+  6a443def87d2 ("KVM: SVM: Add KVM_SEV_RECEIVE_FINISH command")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/tBluxrhKiA0gdSsSGl7x42M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCBOPoACgkQAVBC80lX
+0Gwexwf+IrxvFyKV6PKpV6ooXpPzYu3kHxO9w4WPAJX0q+tlebcPh5ksMqVVfDAC
+kv1TRZVTBdHW4/oA7NYT9azJpIibspdsghOUtNXxK4vjNajNG38bVLdxwd2p10jN
+4OM829dHJDoOQHFLg90ss+iT6tYVS0YY/IE1bPyLAMZwWy/f8lz3PMx3Jj7KuV/s
+Q7zNeaqgCclek0qS7TC4+PiRPV2JibH/0A2i35tCDwuP1OTvMWzdyWXqTOgysigu
+TNYAatsNQQQvlQU//pLPbTOehqJhWd726qraOiHw5Ae0chiCbujLeYFmmnUvXNuH
+RP9arUt7WYSogYa07+/8cvBpgfJZoA==
+=L3sL
+-----END PGP SIGNATURE-----
+
+--Sig_/tBluxrhKiA0gdSsSGl7x42M--

@@ -2,72 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8163684F9
-	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 18:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B1236858D
+	for <lists+linux-next@lfdr.de>; Thu, 22 Apr 2021 19:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbhDVQhW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Apr 2021 12:37:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36684 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232670AbhDVQhV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Apr 2021 12:37:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B46C261424;
-        Thu, 22 Apr 2021 16:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619109406;
-        bh=fg/L0LsFWhXL8NfM+puv8P931c9U8iaZWIiB+Tj8fLo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=udBiQfP6XCu90KZgEaUcdamYI7R3kLPssNs5hNlOe5Trdpw62zN2Db/SKecMXLh7m
-         ZGdnDV8TtsQ4oD/XrdRHwPicM0p/pLZ+KZjDMwfwhXd0DCSXAfodGw0u8nEV06tAuF
-         PgezMQtdLtCD9K7MVHK8maarxjUeOPhPPD/RmBrkamKcCMtRHovlgU1NQd3U+ouS6c
-         B8uGz3dStaP5SG90vrPV042SqGI94WHO4NdwCp0D/1mWxiX5uNqoPGDzzJLtCkKl7h
-         Yx38vT7faP98MjTuvpNdA+UzNJDNp1TWc+1StQz5d3I3bZlfdcOItldPkz22GFQ50+
-         8PpmpzNL1t7Cw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 530485C00B4; Thu, 22 Apr 2021 09:36:46 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 09:36:46 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <20210422163646.GG975577@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210422141016.656f50bc@canb.auug.org.au>
+        id S238328AbhDVRKf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Apr 2021 13:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238255AbhDVRKe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Apr 2021 13:10:34 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19681C06138B
+        for <linux-next@vger.kernel.org>; Thu, 22 Apr 2021 10:09:58 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id x19so42914364lfa.2
+        for <linux-next@vger.kernel.org>; Thu, 22 Apr 2021 10:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h95AgVCanHu12dn3zoUEpFIcw5KfHCuizquP4MnVNqg=;
+        b=fixtjA3UBcVQHNqWWgY4qX0wbRH5p3DyUwfPTt6l3x0WuXsyvmVDdsSg8MRSHQaexl
+         FCwbTiiKeRgKySUlwTrLQ1hPk9LvLCWZG8q+0EXSQBiq3fgYhw8OtWSVn9pBfWKNOdWL
+         LVjdzwb462+SdktnG6vMMmVezVOs54IuS7+GxFeOZAlhgGXkVopAPwa6lid5qH8kVP9a
+         NdjU2SGDHC2nv1rOyBHjEND8BQpPuuThLU8/hE7pKgBuMC/zaUJTy4tOHMUbveyPXnSr
+         rWYvhC8YL/yuxmS8ZNscGZj3xLhqP3sL4pJkJA3ig/JRLWxfJ58C8GhfX52Jl4aaOMeF
+         mIkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h95AgVCanHu12dn3zoUEpFIcw5KfHCuizquP4MnVNqg=;
+        b=H8wVUqQnkWmbePRJMNKqhO/dEq3z2FAFOS7vmVztftglRZ65o3ivdvEByE+Wl3ma2p
+         TinJ1JoUnlLb0APzu9DuWVVp4ddqSNrPsbpYc7zwQPEdG/fLCM0We47Ejb+P1MOQKfXt
+         35kgvY3QZQa3NdoGPl2Rz2pSuew+P5RAFP9rZ+L6V2tdE0KdF20L2Ce6CFhIQAZxClCQ
+         JdiK5A94VMygPNQfxkNWvuGUr5zvn1OGHfguoAp8rxeB04rIrm4tmOeXTnkaoM5LK7O1
+         bUmOqOMXGLntZxZ4YQY3WPVtZPW/TuZAN8QP81zSXlY1lTPduVAjLyOL+enKj6sXHJLG
+         NZDQ==
+X-Gm-Message-State: AOAM532pbiLdsImHDX9zlpnhwjdlDmfygR13yQNXaKr9YCfEDW9Mk6Nk
+        hDfSVrvMmx8e/qeVpk+aaJsB36bedz8kYEAHlEwlcQ==
+X-Google-Smtp-Source: ABdhPJzSZyTEFgmh0FIZQYJ8ZkMxIoKaf6ErQRqkUiuDAKb9iJcaDqNkIBwT6uBHgF2hYV6GXbmvVCgsU72nlEvPgBw=
+X-Received: by 2002:a05:6512:314c:: with SMTP id s12mr3185329lfi.53.1619111396278;
+ Thu, 22 Apr 2021 10:09:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210422141016.656f50bc@canb.auug.org.au>
+References: <20210422155355.471c7751@canb.auug.org.au> <124cf94f-e7f5-d6f3-7e7a-2685e1e7517f@redhat.com>
+ <CAHVum0eQX8+HCJ3F-G9nzSVMy4V8Cg58LtY=jGPRJ77E-MN1fQ@mail.gmail.com> <e6256bd5-ca11-13c1-c950-c4761edbcf4d@redhat.com>
+In-Reply-To: <e6256bd5-ca11-13c1-c950-c4761edbcf4d@redhat.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 22 Apr 2021 10:09:18 -0700
+Message-ID: <CAHVum0cVMd-SxmjKAJyJXO7SR68GKXQ7WTqyqWVfq1MMVd+oLQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the cgroup tree with the kvm tree
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
+        KVM <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Rientjes <rientjes@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 02:10:16PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> In file included from kernel/rcu/update.c:584:
-> kernel/rcu/tasks.h:1404:20: error: static declaration of 'show_rcu_tasks_gp_kthreads' follows non-static declaration
->  1404 | static inline void show_rcu_tasks_gp_kthreads(void) {}
->       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from kernel/rcu/update.c:49:
-> kernel/rcu/rcu.h:440:6: note: previous declaration of 'show_rcu_tasks_gp_kthreads' was here
->   440 | void show_rcu_tasks_gp_kthreads(void);
->       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   4bf02dd6048d ("tasks-rcu: Make show_rcu_tasks_gp_kthreads() be static inline")
-> 
-> I have used the rcu tree from next-20210421 for today.
+On Thu, Apr 22, 2021 at 12:47 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> You can check the current state of the merge in the queue branch of the
+> KVM tree.  This is what I plan to merge if Tejun agrees.  That would be
+> helpful indeed!
 
-Well, that is one commit that isn't going into the upcoming merge window!
+Merge looks fine from my patch perspective. However, one thing is missing:
 
-I have (allegedly) fixed it with attribution, but also moved it out of
-my -next pile.  I will update rcu/next after a quick round of tests.
+In sev_guest_init() after sev_asid_free() call we should also write
+set sev->es_false = false.
 
-Apologies for the hassle!
+Without this the main intent of Sean's patch will be missing in the merge.
 
-							Thanx, Paul
+I can send you the patch but just wanted to know if that will be right because
+originally it is Sean's fix and I am not sure how to give him credit
+in my patch.
+May be Reported-By?
+
+Thanks
+Vipin

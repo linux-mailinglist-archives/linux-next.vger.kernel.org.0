@@ -2,38 +2,31 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDF736A180
-	for <lists+linux-next@lfdr.de>; Sat, 24 Apr 2021 16:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0C636A1BD
+	for <lists+linux-next@lfdr.de>; Sat, 24 Apr 2021 17:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbhDXOBk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 24 Apr 2021 10:01:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51602 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232250AbhDXOBh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 24 Apr 2021 10:01:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A393D61208;
-        Sat, 24 Apr 2021 14:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619272858;
-        bh=0noXtgABaMzp4NDBvyLKKPDGyL5Whs+MJ0a3OFI4gA4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nbFKTC2qCK1nW55Z+zrcPSxkHLyJUDxVQCCmX/ti9tuNcn/SBy6ESA8M3xq20kilt
-         IBl2mSXOj8WVmkSkjS3nrJU/yvSm3jSQkgghTPnXqrpWmPnfIV70ozYs3kTmlvNOGO
-         XcXSISrGRhdqw1xOU4lSN8u2535l1K7z4uAFq30E=
-Date:   Sat, 24 Apr 2021 16:00:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        id S232724AbhDXPMj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 24 Apr 2021 11:12:39 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46325 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231892AbhDXPMh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 24 Apr 2021 11:12:37 -0400
+Received: (qmail 313052 invoked by uid 1000); 24 Apr 2021 11:11:57 -0400
+Date:   Sat, 24 Apr 2021 11:11:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Fabio Estevam <festevam@gmail.com>
-Cc:     chunfeng.yun@mediatek.com, sfr@canb.auug.org.au,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+Cc:     gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com,
+        sfr@canb.auug.org.au, linux-usb@vger.kernel.org,
         linux-next@vger.kernel.org, corbet@lwn.net,
         linux-doc@vger.kernel.org
 Subject: Re: [PATCH] usb: Fix up movement of USB core kerneldoc location
-Message-ID: <YIQkl+rn3KuZtJOl@kroah.com>
+Message-ID: <20210424151157.GA312740@rowland.harvard.edu>
 References: <20210424135103.2476670-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210424135103.2476670-1-festevam@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
@@ -67,7 +60,52 @@ On Sat, Apr 24, 2021 at 10:51:03AM -0300, Fabio Estevam wrote:
 > They were not documented prior to 855b35ea96c4.
 > 
 > Please let me know if this is OK or not.
+> 
+>  Documentation/driver-api/usb/usb.rst | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/usb/usb.rst b/Documentation/driver-api/usb/usb.rst
+> index 078e981e2b16..543e70434da2 100644
+> --- a/Documentation/driver-api/usb/usb.rst
+> +++ b/Documentation/driver-api/usb/usb.rst
+> @@ -109,15 +109,16 @@ well as to make sure they aren't relying on some HCD-specific behavior.
+>  USB-Standard Types
+>  ==================
+>  
+> -In ``<linux/usb/ch9.h>`` you will find the USB data types defined in
+> -chapter 9 of the USB specification. These data types are used throughout
+> -USB, and in APIs including this host side API, gadget APIs, usb character
+> -devices and debugfs interfaces.
+> +In ``drivers/usb/common/common.c`` and ``drivers/usb/common/debug.c`` you
+> +will find the USB data types defined in chapter 9 of the USB specification.
+> +These data types are used throughout USB, and in APIs including this host
+> +side API, gadget APIs, usb character devices and debugfs interfaces.
 
-Looks great, thank you for this, I'll go queue it up now!
+This is quite wrong.
 
-greg k-h
+The USB data types defined in chapter 9 of the USB specification can 
+actually be found in include/uapi/linux/usb/ch9.h.  What 
+drivers/usb/common/common.c contains is the definitions of the functions 
+declared in include/linux/usb/ch9.h, which is a different file (although 
+it does #include the file in include/uapi/linux/usb/).
+
+drivers/usb/common/debug.c, on the other hand, contains definitions of 
+various functions used for debugging output.  If those functions are 
+declared in a header file anywhere, I can't see it.
+
+Alan Stern
+
+> -.. kernel-doc:: include/linux/usb/ch9.h
+> -   :internal:
+> +.. kernel-doc:: drivers/usb/common/common.c
+> +   :export:
+>  
+> -.. _usb_header:
+> +.. kernel-doc:: drivers/usb/common/debug.c
+> +   :export:
+>  
+>  Host-Side Data Types and Macros
+>  ===============================
+> -- 
+> 2.25.1
+> 

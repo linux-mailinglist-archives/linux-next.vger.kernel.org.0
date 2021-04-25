@@ -2,89 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EE236A447
-	for <lists+linux-next@lfdr.de>; Sun, 25 Apr 2021 04:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB4436A44B
+	for <lists+linux-next@lfdr.de>; Sun, 25 Apr 2021 05:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbhDYC60 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 24 Apr 2021 22:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhDYC6Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 24 Apr 2021 22:58:25 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12897C061574;
-        Sat, 24 Apr 2021 19:57:46 -0700 (PDT)
+        id S229586AbhDYDB6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 24 Apr 2021 23:01:58 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60587 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229514AbhDYDB5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 24 Apr 2021 23:01:57 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FSXks1s9Pz9sTD;
-        Sun, 25 Apr 2021 12:57:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FSXpy4T0Rz9sT6;
+        Sun, 25 Apr 2021 13:01:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1619319461;
-        bh=IlDw152+VnNwvGFbT7+RKXa6YNLAwp+EGmgw5nY/LP8=;
+        s=201702; t=1619319677;
+        bh=ziUauJwpgby+Ofvr57dpZoib6PJ1pOgHQSmGg/BBf18=;
         h=Date:From:To:Cc:Subject:From;
-        b=DZruapsxt2uqHUJwhZs4FAQmx2PRJdGmMs7qbjSrHW/uaLeR0mPIzxFPIBIGipc7N
-         WjNdGRYa6E6LDQQVptVGxn/BCFLBZpqdZGlsKHNINbNDGAyaMZS2ts+i/6Lb4fFZ1Y
-         W3xDRQfw1X2xCQYk+KHXHWsdClWOquZloxjdYCSQonqVbTsZE3OEPVcraQmg378gk8
-         j5kgSqfp7heaAMc/bD2edk9BqNp9FwiNVK6U0f7oYUIkHPuJLOrHKfQ/dU2yacsXwm
-         rcTS1Q/T3KicReCfiga+507Cxo2qV2tr6RTQhY0qL/cWY/R43D5MXVRw3GIkgHzmiT
-         8XeIsKSl0uWEg==
-Date:   Sun, 25 Apr 2021 12:57:39 +1000
+        b=UUgGf38GunoRu8HlVtfyFZi4kOVLgLhjjiMJzQMSYkJTMNC9CiFNd8NWlFwU6ni0S
+         IiwoyRCD1LlLPWPHTS4CgYymkiM5Hsdx1/CUA46IM2keNcM0QFzT0iOYpYjtFHPp9w
+         EjKnFOVt1D/GsouWACLNqBQJp96Xb5tXeIJt7KSv3BDjKSb92ijl2WwfRpGR0J3kJM
+         qll4jzpBP/4MZVqflAoCtHevFpmn6rgOicPXftZxGUZ/DuVlViPmsmgb/o0sE4hBQB
+         fAO1nUzm1BQb8xu3BZked6Ij0cN8fU/tV93qQcHUACDVX+JWek5eJAS7ZBxIuSrDBj
+         FCBdwN0lMzkBA==
+Date:   Sun, 25 Apr 2021 13:01:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Claire Chang <tientzu@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the dma-mapping-fixes tree
-Message-ID: <20210425125739.1b93e0f0@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commit in the risc-v tree
+Message-ID: <20210425130113.7bfe5cad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gfSsXbXPzN+IeowCvpcVS6D";
+Content-Type: multipart/signed; boundary="Sig_/hRS/hBA+OBWpE75XCOJ_Ylb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gfSsXbXPzN+IeowCvpcVS6D
+--Sig_/hRS/hBA+OBWpE75XCOJ_Ylb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commits
 
-  49702360af50 ("swiotlb: fix the type of index")
+  97db849866cf ("riscv: vdso: fix and clean-up Makefile")
+  ab541f55291b ("riscv: Set ARCH_HAS_STRICT_MODULE_RWX if MMU")
+  c79a9a16f7e7 ("riscv: module: Create module allocations without exec perm=
+issions")
+  b170834bcc98 ("riscv: Mark some global variables __ro_after_init")
 
-Fixes tag
-
-  Fixes: 0774983bc923 ("swiotlb: refactor swiotlb_tbl_map_single")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 26a7e094783d ("swiotlb: refactor swiotlb_tbl_map_single")
+are missing a Signed-off-by from their committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gfSsXbXPzN+IeowCvpcVS6D
+--Sig_/hRS/hBA+OBWpE75XCOJ_Ylb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCE2qMACgkQAVBC80lX
-0Gw2XAf/bXA7hX+USDh5170BCa9UDfWKXa44a1r22HHDxZ9YfQLO5vWU4sGpT/IK
-3YcwzTwDhjVEWS7N/p19aSTE+zbhr8+sfBjbntUBgJGnO1qYGsSJxRi3rvfFG51J
-+v05CtoVnSH3HTcHSt/8Ui/sjrVY6OXHXnnWCii4TreX6JspKLiw/0xXJOcVXwx8
-qJaxsASQiYhEPAL2cDX5F4+SYAHFNxOqx3hgoMN02xymtnEQIdKV+qae6Bwze3er
-pSc3yEJKoGSreP0l8Kv5WGcGxx+UNNcAiCN+FHCvN762KlknVNWQ46jO76gF0vvi
-drX+M6Imasn57i89+O1BnmEImyVDQA==
-=N8PY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCE23kACgkQAVBC80lX
+0GykPwgAkakp9NL5X4Upx9TdSU1Y7KLU8vK9An1BxRWKf02goRBfyS4a2zNUj/PU
+UWORT/Bwi2+1kqlWOAynUcpv7Ka9dFs2BIg5KYHjT14U3naSV6thyrHN7K6VZJjz
+2OrMAZiVJF7lZYcYZasYl9NtXhOYZx0cPe8iEGhb+PWUkvfg4hOO9syDlV4wG1ts
+YE1704qo60vQw7XlifRepCLc51rUU+nPZXztFe2DTnesjZzvqzVgrk4HSFqNgBIU
+hfxzTZpCbRHVjCB+vsJ9+XsnYsyHSfyyj/8dg9dxyoKZnpey3GExTe+AX+sDYygk
+TgJYsIteOgzSvNZcJXgANPuwRpgpQA==
+=Khyr
 -----END PGP SIGNATURE-----
 
---Sig_/gfSsXbXPzN+IeowCvpcVS6D--
+--Sig_/hRS/hBA+OBWpE75XCOJ_Ylb--

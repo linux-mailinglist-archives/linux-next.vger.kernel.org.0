@@ -2,88 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5412A36A45A
-	for <lists+linux-next@lfdr.de>; Sun, 25 Apr 2021 05:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB7136A5D9
+	for <lists+linux-next@lfdr.de>; Sun, 25 Apr 2021 10:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbhDYDQl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 24 Apr 2021 23:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S229898AbhDYIpQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 25 Apr 2021 04:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhDYDQl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 24 Apr 2021 23:16:41 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECADCC061574;
-        Sat, 24 Apr 2021 20:16:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FSY7y5qKPz9sTD;
-        Sun, 25 Apr 2021 13:15:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1619320560;
-        bh=RZhY5iKAzPNG0hzQj5seU21XSEWot88w564/ZzszT+M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gDl7cgwVTlEDX5wFWlREO3pP6i/07XJOUuDPTgmUSIdr63Vy/NFihypqVkiywMjxp
-         AsA/sdDQ2bcmDVWW0FZT2mERNNnxmrjFs20sH/aEPdmZX/etDzr6x7pZGlUHAMtKRB
-         v1q2r8cda6q7Rx3PEuhBGHrg6lEBLF7yFhX5Dnxlp7xB0PsvDohzII7T5L1hKsiIfk
-         2pv6QSNDS2a44V19TggHA/fHiKJKwtGFm4rhC6LdgEuXGpHwz1E1VfEH340R1Ta01o
-         jXOu2O11p5JRx4n2uRQCpSYae6wcXf0O8cZg9XL32R49Srduv0tEDLG7QIX51JJzap
-         F/XjzbJ6sL5gQ==
-Date:   Sun, 25 Apr 2021 13:15:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S229864AbhDYIpP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 25 Apr 2021 04:45:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188D3C061756
+        for <linux-next@vger.kernel.org>; Sun, 25 Apr 2021 01:44:36 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1laaNT-00025b-UY; Sun, 25 Apr 2021 10:44:31 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1laaNR-0008QD-Fd; Sun, 25 Apr 2021 10:44:29 +0200
+Date:   Sun, 25 Apr 2021 10:44:26 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the pwm tree
-Message-ID: <20210425131557.5eab8265@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the pwm tree
+Message-ID: <20210425084426.uxzfnkkxhcvblzjt@pengutronix.de>
+References: <20210425131557.5eab8265@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bFoQaMtzAyIYzAUhuxC+ig6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="afsagho32ileb2cb"
+Content-Disposition: inline
+In-Reply-To: <20210425131557.5eab8265@canb.auug.org.au>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-next@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bFoQaMtzAyIYzAUhuxC+ig6
-Content-Type: text/plain; charset=US-ASCII
+
+--afsagho32ileb2cb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hello Thierry,
 
-In commit
+On Sun, Apr 25, 2021 at 01:15:57PM +1000, Stephen Rothwell wrote:
+> In commit
+>=20
+>   30d0031bd7ca ("pwm: Reword docs about pwm_apply_state()")
+>=20
+> Fixes tag
+>=20
+>   Fixes: 539ed98e2bd3 ("pwm: Clarify documentation about pwm_get_state()")
+>=20
+> has these problem(s):
+>=20
+>   - Target SHA1 does not exist
+>=20
+> I could not easily find which commit you meant.
 
-  30d0031bd7ca ("pwm: Reword docs about pwm_apply_state()")
+This is my fault. The commit I meant is:
 
-Fixes tag
+	1a7a6e8072ea ("pwm: Clarify which state pwm_get_state() returns")
 
-  Fixes: 539ed98e2bd3 ("pwm: Clarify documentation about pwm_get_state()")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-I could not easily find which commit you meant.
+Best regards and thanks for your attention,
+Uwe
 
 --=20
-Cheers,
-Stephen Rothwell
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---Sig_/bFoQaMtzAyIYzAUhuxC+ig6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--afsagho32ileb2cb
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCE3u4ACgkQAVBC80lX
-0GzzPggAl2I7R0+wM92wgQdZKFlofjdHoLBf1xTULtr7JcfF6BlZOPa/oQXxTT0Q
-lutB5LnKD2jXNJs4UOZa3LT8ezPA1qAggx6wafe5a1bAZFSQyBXf/+NCTOlsYw+l
-+EbpUIMm5RM/AsiDuqGxcyr2XvCmTFK0ckOo0p1y89pRpQyVknQd6IqndEPhVF3J
-caLcDLWiN84Y1BiWEw+X1bu9X4ATaNvjMC4h/foCfZVKwXmjxaXX+FONzO6aNMMk
-ZKwr3t3bKpKhSdHugsBq3UcjjbPCFaw6WeiK25htZx6IpBlN/aSOHbwow0wsnqIS
-b9rTbN8J7mWyYHQiG/FCGTnsy2ljTg==
-=a7OX
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCFK+cACgkQwfwUeK3K
+7AlV0Qf/edI2C8ghD4pNs8HMAdAvZAw1btWnsXyhURId8CaBGm7E/FrMblji+XkY
+pSvOUUWwgoLna9lPcX740fBHvlSb5JtxqPNrP3qiIc2mNiXgf4oY7pNPCS7tldTx
+9fN06Y5TN7k1EU5Wx2tc6IDndQSjOK95O0P6i4RhJ2MnoD1h5p4G3U+RS8stseeU
+rpP2+Lsgrk36bfx2eUlx808ZHVmwZOPJwqdSGxUz4l22u3KV7HlvAi1y/A3rWAuP
+DVz7r2S4dbIk+iUaRhXCvImX3ZNpLQ8bdHAjO4VMP6pwRYIG8RZz5ZHlRwzD0CxX
+yMvT+4E+GVrSnLUYi9z04Buof15V0A==
+=iUUj
 -----END PGP SIGNATURE-----
 
---Sig_/bFoQaMtzAyIYzAUhuxC+ig6--
+--afsagho32ileb2cb--

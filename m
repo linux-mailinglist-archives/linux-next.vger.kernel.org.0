@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F3F36B389
-	for <lists+linux-next@lfdr.de>; Mon, 26 Apr 2021 14:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1036236B38F
+	for <lists+linux-next@lfdr.de>; Mon, 26 Apr 2021 14:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbhDZMyN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Apr 2021 08:54:13 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:42551 "EHLO
+        id S233376AbhDZMye (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Apr 2021 08:54:34 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:50967 "EHLO
         wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233528AbhDZMyC (ORCPT
+        by vger.kernel.org with ESMTP id S233262AbhDZMyd (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Apr 2021 08:54:02 -0400
+        Mon, 26 Apr 2021 08:54:33 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 3496D221;
-        Mon, 26 Apr 2021 08:53:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 26 Apr 2021 08:53:19 -0400
+        by mailout.west.internal (Postfix) with ESMTP id AD7FA1669;
+        Mon, 26 Apr 2021 08:53:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 26 Apr 2021 08:53:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=H3Ty7Phe+sDnO2HQcSm0sxQT9dD
-        B5XC7OPmO4cgKZHk=; b=CD1SS36pkAU2XF7yJ3FZL2qJlbStfWDtilPJ/ZvLe9B
-        sSKglEkxM5IR4q9e4csbldzvEeeQo2CqSxV8Q5a4m/BOFbd6v5ldS5xpIZO0cVR3
-        0YXYmQisYsM0jvf7IPbNzhw9KE4f3Iuw0DH6XgrbUqGK+NQnvWYicat/VsBkO+Lv
-        mYMlT4SMbKBqN9g2S1beHjMDOWpuXggxEbbMwBcfb9935ngBMIZmfjgNAh9QflCx
-        DcYvlAT8KJTJQsoD0St8cK0NynDIG4Hhbu2dTljDNEn8mQG7mio6FuDKPFHEVJmR
-        9jtkyzkW80mZysilDz7jMptjCPzGKUhErJdnPngMAJw==
+        :content-type:in-reply-to; s=fm3; bh=SJkxioAFqP3AnKW2nmESeAKEX4P
+        5AWVlOsZB0fraRrc=; b=cx3kHJKCAjvz/2otcKGdmDqh+MeluLQsGreebh/aS4o
+        PF/ITutfuy6zHdsIPjlsAR2yRph6jXLayPfUU3IOt8UVzmP0myfyaG2JDeEEuNJH
+        Y4HXFIB9JhVqgbQVqUdCizXzwNsWwxC7qqHUDm3kmvkfHNNBnUpLLLU8lsepRdaq
+        p5JMjv4BhAa7ANCs34+QXawKWf9sUQSVoK4pRcwkWZ37IzNm08HdrO5T+IGGEuNR
+        OZf5DCJ5Jyewdo3C8Rqb0iFFUWOOheI++GveTbXW2aws6Jf/I3BgEGig/xMdyHM7
+        oSKp8QYwGvEpXK+djU/lSamajWbx9IW+f0q4taog71g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=H3Ty7P
-        he+sDnO2HQcSm0sxQT9dDB5XC7OPmO4cgKZHk=; b=FVxC5zPPQTe4/2Cx4CrAik
-        9g6QWI7Y15h4JZDz2oCLmjvffdVhE0I244UzGQiyuPUtAXkvBs3D7dDZcGWq+Epj
-        353rBRgoyWQKdO/z2ju+tT3rJHsCvYiFrWKhsJzKPvP6L/J/fZ9U4882ynCvPvHa
-        QlGv+KPEIKqTm0TKIpJXZU5+4RIdjTaHjaP2vVjaiCFXSfUQv5ZUirEhSCsmWDh/
-        KISRWNkI05E8hEnR7nfbzvZU39HWL5je9uSCXR+0bZnbsctLTP2mjdUXBsQ4UnN/
-        Z7eht5K39frtUzZURur7cSUSJ4dnquqIFhwotXsP+frEwgcPAZW/JwIgP3ttVCZw
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=SJkxio
+        AFqP3AnKW2nmESeAKEX4P5AWVlOsZB0fraRrc=; b=gCT6Lt53gjCWX4dJByftkd
+        QWTRg3k8jxzIrmypLo20up9pXKNEXsJgXS57rKoveYYRXNObwJ5heqYs/JjNAwa+
+        B84xfiQQMQ/G7XLc0oypurz0cnzwJQmzcQPTozfeOl9Pu3GiSHUHZ/YVYpNEEswe
+        +gdS27drqvLUGbEj974SjTSxflQLoTSskObqUHPYeo+XdGmOpyNXkDsI1Zgxlydn
+        DOH1Afl1MX54/bmiDRTIEcTWhedMEJGXK2hgxrY9/KzGiQKRvXjlI2C4UL5fSkhr
+        PD9QvwnerBZnyWuDHKHgNvhdi/a4JjpWNLWCUHjumHOIThMsGHMCZHinLPysdECg
         ==
-X-ME-Sender: <xms:vreGYBHcPeo9z3hKoJcfn-jS34SSgNQ6Nh0TWTNtciNOO39bbKX2nw>
-    <xme:vreGYGUVsDWF8DaSHA_IYA870V6CZuNVwxmc2s-a_OOfSbEh1LLcJode2VPbyZf01
-    mE9aNEwHbF-Cg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddukedgheekucetufdoteggodetrfdotf
+X-ME-Sender: <xms:37eGYPybJci44lF73xUUsoa0qgkL5kVbE6wUiJDPddBfvk9bHj30qQ>
+    <xme:37eGYPssO58zi4PpfevkaqWkmcd5VyY5g_dt69527ZUoWBnxUxLuW2cGqkxg_UwgV
+    ZodEkOT27cFzQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddukedgheelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
@@ -48,45 +48,44 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddukedgheekucetufdoteggod
     fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
     rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
     hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:vreGYDIyrlUG1D2FbdNZY_-0BhDvz5y6O68KGYX5Z1mOnVPFKhs2Tg>
-    <xmx:vreGYHG3P-P2gtVXqsvTW-G8phDFVd-lQowGi1ykFLahwSuCAe1qTQ>
-    <xmx:vreGYHVlYFdVjQKXAyojLz63iUu1ijmldZ1Xe3SE7UZiWAyIB0fKhA>
-    <xmx:vreGYNddjRZRzjMmkrKYKDw-sKAuQ0Qw3ARVg5IVEgcT2noxoNC4Eg>
+X-ME-Proxy: <xmx:37eGYJwY7ftJQ3qR4dmuRtoUEX1Qx3BX0j_1EyTwrluoMl9s8DL_Dg>
+    <xmx:37eGYKBxVaYsEDMRG9x8F95LulzSs89gta8G4ZRZyigpR40xa3XoCg>
+    <xmx:37eGYPc_J6WL-F4poWVGrq99N8jLWmwo5immYhx0Jo8-SxffAHCoSg>
+    <xmx:37eGYGFfPHcBKyNlwqiTY27to0Jj4-7AEr91570517Fnyr3dZCzZCw>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 26 Apr 2021 08:53:17 -0400 (EDT)
-Date:   Mon, 26 Apr 2021 14:53:15 +0200
+        by mail.messagingengine.com (Postfix) with ESMTPA id E1985108006A;
+        Mon, 26 Apr 2021 08:53:50 -0400 (EDT)
+Date:   Mon, 26 Apr 2021 14:53:49 +0200
 From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <YIa3u0RCcOf+tZMu@kroah.com>
-References: <20210426224413.2ce59504@canb.auug.org.au>
+Message-ID: <YIa33XMckeamVe2l@kroah.com>
+References: <20210426223733.6aef5612@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210426224413.2ce59504@canb.auug.org.au>
+In-Reply-To: <20210426223733.6aef5612@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 10:44:13PM +1000, Stephen Rothwell wrote:
+On Mon, Apr 26, 2021 at 10:37:33PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the usb tree, today's linux-next build (htlmdocs) produced
+> After merging the usb tree, today's linux-next build (htmldocs) produced
 > this warning:
 > 
-> Documentation/driver-api/usb/writing_usb_driver.rst:129: WARNING: undefined label: usb_header
+> drivers/usb/dwc3/core.h:865: warning: Function parameter or member 'hwparams9' not described in 'dwc3_hwparams'
 > 
-> Presumably introduced by commit
+> Introduced by commit
 > 
->   caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location")
+>   16710380d3aa ("usb: dwc3: Capture new capability register GHWPARAMS9")
 
-Ugh, we'll get this right yet, there's been updates posted, I'll pick
-them up after 5.13-rc1 is out.
+Thinh, can you submit a fix for this?
 
-thanks!
+thanks,
 
 greg k-h

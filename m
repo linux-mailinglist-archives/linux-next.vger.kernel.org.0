@@ -2,63 +2,30 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA1036B6B3
-	for <lists+linux-next@lfdr.de>; Mon, 26 Apr 2021 18:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D3C36B715
+	for <lists+linux-next@lfdr.de>; Mon, 26 Apr 2021 18:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbhDZQYZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Apr 2021 12:24:25 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:45037 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234576AbhDZQYR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Apr 2021 12:24:17 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 5C93816DB;
-        Mon, 26 Apr 2021 12:23:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 26 Apr 2021 12:23:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=EvOAlD0iL4vjO0y6QWhCJtzm8Xr
-        ZK1+TAwkPX9KfI9I=; b=OgO7lTFt89LqoCVwnefmWir5fRczYx/C3EVpMpnolp4
-        wRvVBjw/3uoBv5/L6QhSxkxviV63P/OYSaFcxMvqvCVXa4RpYf5TDUllKxXeejqa
-        z328BA51k5CwoRkbem67d/d2X9aRNf3LQ8dgmFyBU9cDRF/S2i8hToXfz+nlkmHm
-        w1TMimRz2ThHJDow6vSM7nG3LYUHabAlvPESXAUVrDtv6Q8j8AnP/5beHQjLNaaj
-        UJ8+iBJ/w+8vDQI9y2HApfwy4z0SXfOQZmMxFSoVCprIok03rsgE2mVopTjvxvds
-        G00DrDpUWzT3N8AWmo9vulVgz0895y7yyqp8giudvkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=EvOAlD
-        0iL4vjO0y6QWhCJtzm8XrZK1+TAwkPX9KfI9I=; b=HqSmKcSJZrbM0DoABdF2SI
-        agh7dqkvvRMQDC7US8WnxYzzNmWCPT2HmN0eQRWGjTdBaN5QH/PdQQELo+kxx4g3
-        FyD1Vo7JDVGOXxGrVUYQUpDz6skqNiz+/b6o9Z6ECxZ5C5ls8Y6Xjt6086zfE6u1
-        jFgY4FteAHa/Zp/dK4VDYdGgQI8YwfRnWbTKGFeSeeaiByy11lB9oMHdClj0mtqI
-        Ko/IIeQeY0CvN71bFqFXxkw0ulQjg4XoEmSP2qoeqZl1DK73ioKITTH643CCRvAY
-        DTl9uaCxHL7cUYHsqYOna0nDMfPS81TZUBd0Swt4CTYvA29fz9jrhCWdqV2hwCsg
-        ==
-X-ME-Sender: <xms:A-mGYNDum74CZj-1Ay7Ci6lFAHdyEvAWrNEctq8WYFQdyWl4_mXUnw>
-    <xme:A-mGYLiqqRA0F3iIDdVdJ9YYsESkp7SPFmzxalHDW0drbO04rf0XIkDaE3Pzc-sO5
-    sE0H3XZwzJIiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddukedguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepueelle
-    dtheekleethfeludduvdfhffeuvdffudevgeehkeegieffveehgeeftefgnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucfkphepkeefrdekiedrjeegrdeigeenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgr
-    hhdrtghomh
-X-ME-Proxy: <xmx:A-mGYIlYn3DsVhRQ6DE2I7bNnagvHeF7MF08bsE-Igd2yU0HNf6bVg>
-    <xmx:A-mGYHw0k87bpTJp9ErhxVriN-4hj4kkVsToZzUtFrGj7LB7bB4Jng>
-    <xmx:A-mGYCSFaFxZsfcigrEg5XhwiMbnYHmBpXTNAaM5YGyx2q8WIq4tuQ>
-    <xmx:BemGYIOxaTSqy-rPdi5HxzRQ_NuKOw7av45x0VpxG1L4k9CO_3odsg>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6BBA0108005F;
-        Mon, 26 Apr 2021 12:23:31 -0400 (EDT)
-Date:   Mon, 26 Apr 2021 18:23:29 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Mark Brown <broonie@kernel.org>
+        id S234939AbhDZQmK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Apr 2021 12:42:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49930 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234958AbhDZQmG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Apr 2021 12:42:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F9BD613BA;
+        Mon, 26 Apr 2021 16:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619455254;
+        bh=e0AFV02WatfOn/ftPmzed+PCexSARnx927IgYwIZK7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DrR/ZY0+yIEY/A0jZIHfu9zlyVlfIIdbJlnj8s7Vc9b40DPf+l8Dqtpe6PxCgDj6t
+         Qwof0IuNUWrRZl35aYbEarFT1Jzf2Vnm9z7EZT96jfZWiWfZfs4ekQkpE7OOLO2skg
+         QmuCuSZNP89evusc6PQ7QQq05p/zIzhq5wDF/bP8tnGsuslFm0WX34C2HAj3dJLFT3
+         RPsB+kUCkzU3o9kQJwVUiRJ6zZwsXspuXBdBP6OlchiDU/GOCimxySCCL0gVN2JPOE
+         5dFBFPXG/Pc35yJJcB/SzgKn5ygNwibVXo5OvReWVtww33MJxzNMYJwYg5yVL/g98N
+         XA0P8r8oYZwRQ==
+Date:   Mon, 26 Apr 2021 17:40:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg KH <greg@kroah.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Alexandru Ardelean <aardelean@deviqon.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
@@ -66,43 +33,58 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the staging tree
-Message-ID: <YIbpAaCV4rXe4YZ4@kroah.com>
+Message-ID: <20210426164024.GG4590@sirena.org.uk>
 References: <20210329165525.32d51a3a@canb.auug.org.au>
  <YGFwWq//sh6onrUH@kroah.com>
  <20210426144121.GE4590@sirena.org.uk>
+ <YIbpAaCV4rXe4YZ4@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XRI2XbIfl/05pQwm"
 Content-Disposition: inline
-In-Reply-To: <20210426144121.GE4590@sirena.org.uk>
+In-Reply-To: <YIbpAaCV4rXe4YZ4@kroah.com>
+X-Cookie: Zeus gave Leda the bird.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 03:41:21PM +0100, Mark Brown wrote:
-> On Mon, Mar 29, 2021 at 08:14:50AM +0200, Greg KH wrote:
-> 
-> > Thanks for the fix, looks correct to me.
-> 
-> Here's the SPI pull request if you want to pull it in:
-> 
-> The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-> 
->   Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.13
-> 
-> for you to fetch changes up to 86527bcbc88922ea40df05d28189ee15489d2cf1:
-> 
->   spi: Rename enable1 to activate in spi_set_cs() (2021-04-23 15:36:18 +0100)
 
-I don't think I want to pull the full SPI merge into my staging tree at
-this point in time, is that wise?
+--XRI2XbIfl/05pQwm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I already submitted a pull request to Linus for the staging tree as-is,
-if there are problems we can work to address them then.
+On Mon, Apr 26, 2021 at 06:23:29PM +0200, Greg KH wrote:
+> On Mon, Apr 26, 2021 at 03:41:21PM +0100, Mark Brown wrote:
 
-thanks,
+> >   spi: Rename enable1 to activate in spi_set_cs() (2021-04-23 15:36:18 +0100)
 
-greg k-h
+> I don't think I want to pull the full SPI merge into my staging tree at
+> this point in time, is that wise?
+
+I don't either, just putting it there in case you wanted it.
+
+> I already submitted a pull request to Linus for the staging tree as-is,
+> if there are problems we can work to address them then.
+
+If it were a new API I'd have expected a cross tree merge of a tag with
+just the API being added in it, though in this case since the API was
+already there in mainline I'd been expecting it to get cleaned up with
+Stephen's patch or something similar as part of the work in staging.
+
+--XRI2XbIfl/05pQwm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCG7PcACgkQJNaLcl1U
+h9B0nQf/XnsPds+qn3ZR9xTg+JwTIyLU9KODbMhDRCjcSpv0GNULskTOGA3MKQW/
+4v0FKLvOzFfEaWHI1L1qXlKS/GbpVupB5revYp7SBxpVmkUFMxkVbf490gM52VLm
+A9CAzPNa6GGa+NWAcu1QsklLGsheRCarPCGYwSPaOpWgDokHyieAukl1t2iNomFr
+hMikc889A9763edwTaxHYCe8Dpj6DumeAWhoa0Pd2+ozmy8hLNzBfONHqHY3lv+J
+pDxUqTQN+/Xk8OfVjBCu8yyp9BwbuEm/QOLMxNPclVKVaOm3Px4DFk5X5qyJh/LU
+cMveC7gvBi+TJAS2xBCqKhflZ80KkQ==
+=PEnJ
+-----END PGP SIGNATURE-----
+
+--XRI2XbIfl/05pQwm--

@@ -2,78 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A13374B0F
-	for <lists+linux-next@lfdr.de>; Thu,  6 May 2021 00:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C212E374B22
+	for <lists+linux-next@lfdr.de>; Thu,  6 May 2021 00:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhEEWPu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 May 2021 18:15:50 -0400
-Received: from ozlabs.org ([203.11.71.1]:37291 "EHLO ozlabs.org"
+        id S233982AbhEEWW5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 May 2021 18:22:57 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:51255 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229601AbhEEWPu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 5 May 2021 18:15:50 -0400
+        id S233874AbhEEWWx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 5 May 2021 18:22:53 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fb9xQ5Yy4z9sCD;
-        Thu,  6 May 2021 08:14:50 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FbB5b2Tl3z9sCD;
+        Thu,  6 May 2021 08:21:55 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620252891;
-        bh=AQMouoRiYVsgK0gBu01oNP5Q/wg6xBiXNQ0jeT6O5FI=;
+        s=201702; t=1620253315;
+        bh=MBsrEiVVK4ikpWY8C9uwRIQbPvut3V/1aWROJgcxRXk=;
         h=Date:From:To:Cc:Subject:From;
-        b=uMLjdcch6t037Tozl/5PGePiEnKFYNr69vdmMLwco4pVpv5G4V+3TmYh82en4UYuk
-         uPKN91ynl3RSN+xkNYkJ9d3mryb5HBgKrWqweZQwkyOt3Mdi8et8+ynwWAFvLVRYUq
-         /q/yMWKBHdnCSWJzMMZ2c3YPte97l42Y32lF5CFpH3LZmSiViVZu+DybM3wF4UPPkp
-         7VbH07RENZh1/IoipPV7VcslG8Y7jM2Uq+Z7mrMbZ8yWPf+p7pILLpOhiYZrjxeffK
-         cBuUx4AymmpDdWCFuZ8ACTsUs2j192/iSScdzgH9mkXLCno0ujjKs7YDsmkEFFrCcc
-         CktsE0yne54EA==
-Date:   Thu, 6 May 2021 08:14:49 +1000
+        b=YwTi1vab1qX6KnKS+g1VLvX0CzUhWGeIihRA+u1k68GSEO145PgNzq70aXVCSxOyO
+         0x4e057G5HKcF3mwP/mehKolEwvf9xIT+cRSZLND/eFetv43FX8otAhpNiUZ1kKsVf
+         45x550Pv64+NEuFv74jnSo728frgU1xQ6xDbrYTslCujXcRZIIKibGfIDPoWAEMptp
+         oAV4FUE8EZg1HEdNjfrBEKtm/6kSXZC2dlcI2SN9lM/uOcODkg2vOS8gZ9LlXhKVd4
+         ZcGNGhfZeabNpMtFQEI6d7qvAYn8A0nhgd1aSz87rUitZw5XBRA1msKH8y5Rdtldqf
+         82o38FMhldmTA==
+Date:   Thu, 6 May 2021 08:21:54 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>,
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Michael Zaidman <michael.zaidman@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the net tree
-Message-ID: <20210506081449.5b993b8b@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20210506082154.58352028@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W.wl/tg0sQQoEF3NmKKzHk=";
+Content-Type: multipart/signed; boundary="Sig_/gX2FgZ/4hTOuWE7kBWgv/j/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/W.wl/tg0sQQoEF3NmKKzHk=
+--Sig_/gX2FgZ/4hTOuWE7kBWgv/j/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  2c16db6c92b0 ("net: fix nla_strcmp to handle more then one trailing null =
-character")
+  b45ef5db7bf2 ("HID: ft260: check data size in ft260_smbus_write()")
 
-is missing a Signed-off-by from its author.
+Fixes tag
+
+  Fixes: 98189a0adfa0 ("HID: ft260: add usb hid to i2c host bridge driver")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 6a82582d9fa4 ("HID: ft260: add usb hid to i2c host bridge driver")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/W.wl/tg0sQQoEF3NmKKzHk=
+--Sig_/gX2FgZ/4hTOuWE7kBWgv/j/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCTGNkACgkQAVBC80lX
-0Gy3FQf8C7O/GJ9sD3cumwuu/KUSH/6Jgq7ntREDx70ElGgHdOPa9HnYg5IFrpeV
-CMEUQYf5qxkfGf+8tfBvgBwpshyRzMTNXFCW4fCmjNpVoMbYCQc3Ux9jLbXQJ7gv
-+e6H6xRp2T0php+IEfByInziENDEk5cdZrkGAh3mC0b2CfZ9i6Zv62aXtc3t4bcU
-aI/mgwMKbassrr7c8S6yDr8gFoexxbSp/wPJIclquldpxJvkt/jRyVeV6KRCz8s3
-+93PKg1BdLF/0Gd32DidajPFwC3VhNHuBlHrDZHY2Jzn+shOqte1cezdE2v/vVAB
-WB96Msqt1hRMJuqGeyk7MfXGiWOZ6w==
-=2XKg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCTGoIACgkQAVBC80lX
+0GzuzAf9H9+JTF5SZ8pR8sOY0A8eNpSz1TmngMmxZWjGmswRyFKcyvS0pg+DGUq4
+J1zhKcypbADjiBv8QAgjgF3JuXg+GAWZfGVTWpIiz2RipgjHCSuW2nQeKaTwMTEt
+o0Q7w3iNcQCbWxh/0eRwIlmEPQMbjB0IN/balSrQqltTFZq5YKS3KOIPDzauK3J/
+yjfR6XuNuzOW1ZMgM71PVDVVZcB7HDevqi3gbql/lXn9bmtvkfcEIt3ZBV372o7t
+IbG9iPNPaRLkWPpHUKDOifTZtQtvz6uTasZ+Clvm4qsFJ+m8O4HKHCDTX7VUpIQH
+kRGyTVDU1P+UkCaRTYVbJ+qcTE6GVQ==
+=xaAU
 -----END PGP SIGNATURE-----
 
---Sig_/W.wl/tg0sQQoEF3NmKKzHk=--
+--Sig_/gX2FgZ/4hTOuWE7kBWgv/j/--

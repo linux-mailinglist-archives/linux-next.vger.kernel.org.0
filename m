@@ -2,89 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B783774DE
-	for <lists+linux-next@lfdr.de>; Sun,  9 May 2021 03:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C4D377911
+	for <lists+linux-next@lfdr.de>; Mon, 10 May 2021 00:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbhEIBuZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 8 May 2021 21:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S229977AbhEIWrq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 May 2021 18:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbhEIBuY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 8 May 2021 21:50:24 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97425C061573;
-        Sat,  8 May 2021 18:49:22 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id n32-20020a9d1ea30000b02902a53d6ad4bdso11353640otn.3;
-        Sat, 08 May 2021 18:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9HoOH+epaWDFISeM9NKpwA90y2D3nGBc5UaaEncRJH8=;
-        b=j6ao7YthentZIs5u4fvo5y9mByS4gly9rYrOf71ATKsnO4VAoxPiZZn/RAoqVQRmEG
-         RL0mrrNi9h9mU7NBcB33QkKXRLtdWueEYevHXKRKAWYcceiGaEXc9B3WtgeTEKX26pyt
-         ui/fiNqaM18ZWod8SsaVFthfBgvJRbFe9G1r0GF2vPnocA/4KOhOTn0JXNNKlkMkrPiN
-         mwNft9dlF2dmHrZs5sfd55/o9tAmvz1DmOuceexFGjeiPe/l99E2p4wlu7wtdbVpgTaz
-         7JDoN9Li9LH3cCBVDEiOHE1YN4v8g3/fXrqJrLt+S+bTXSPbC2KM2FRIjJXpkeAfnT29
-         bH7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9HoOH+epaWDFISeM9NKpwA90y2D3nGBc5UaaEncRJH8=;
-        b=UY/VTdjatmOJS3b3ntCR1QMbr/jnYkYPC+TbP6VNY75SVmwsn5pTQVQaH8cBSLgigw
-         cX1I28lWAZ4etJsYmAlMB94N0VdSKclySxf8TXEVCqviBtEMQpfOPSHaT15sxaFNkDP8
-         z6o6mT5em8WS80Z9TTkq1A0kiBTrT6qez1r/7kS1jWSynZRhd0bIZHEnZ46gbgakel92
-         QZLiF4Y4ptEEdcC7J/dXkxoTc0Iiftf9M9tnuVLZ0LkYY6LWgt1JIiiqqGDjHYdQ3XXy
-         G65YK7EASYqzJRh31thfRlSouj1R7yJ9ydVPh11N6tr7z6Ge+pZW4QSABrpx0hqCiFFe
-         GMxg==
-X-Gm-Message-State: AOAM533H4AcURotcxVxExZumhwZDpbu05SDRnvjfFmz9yrWv5VaANruV
-        Vc/CZl42G5pItIVDwqMO4sumvxYO2u9DU9WyS6IpMmLk
-X-Google-Smtp-Source: ABdhPJzbg9/BWud9Ec1IQPSIRhjqA20jeObpcj2xl4e0dOF8gbyISfmvf9nALZQUl2SE2lhKqI97IWHBa+p6xUmgKSQ=
-X-Received: by 2002:a9d:66da:: with SMTP id t26mr15399039otm.370.1620524962002;
- Sat, 08 May 2021 18:49:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210506082344.4f7af4af@canb.auug.org.au>
-In-Reply-To: <20210506082344.4f7af4af@canb.auug.org.au>
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-Date:   Sun, 9 May 2021 10:49:11 +0900
-Message-ID: <CAA7jztcK8N1hV-4wzpert79E8++mbzQ=AT_yjS7MwJbPAN1MGw@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        with ESMTP id S229976AbhEIWrq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 May 2021 18:47:46 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2B1C061573;
+        Sun,  9 May 2021 15:46:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FdfS50j7Mz9tlT;
+        Mon, 10 May 2021 08:46:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1620600390;
+        bh=GPSwWIto8XM1WPw0y0gO5ALkfbL0DkmvceyKA7EtgDw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mOob1wFQmaB8Lar5FRGZEfIKdKojQgfMp3dJSK22sgD0ZVYNEXOfVNVGUEp2ymU8b
+         axuok2gZRt9fJT3XEKGagfGGg0sD4Wmm10TwvD1rpiG0IYVYzt4XlJWD2QpQ/TUV16
+         kK3GIMp+PhzqVRqTKILhBNboY5b3p8JJZqWUoq8Ixh80916EwkfcBRjx5ycDNX4YB6
+         Z1LWhrz/veVUkjtd8znYh6l3Xhsn7f6OcqHkXKZVMIF6X4YIbNfPc1J1v2G895w9cX
+         GZhN9jzk6+dCDSgqff6d7I5P1y4XsfoP4N18454LMYoRgG36xZeHm9GUgVCeBTsfuT
+         7VQwDcG/5GfXw==
+Date:   Mon, 10 May 2021 08:46:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Jude Shih <shenshih@amd.com>, Hanghong Ma <Hanghong.Ma@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20210510084628.0d4bbd6c@canb.auug.org.au>
+In-Reply-To: <20210505093458.23efd0ee@canb.auug.org.au>
+References: <20210505093458.23efd0ee@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/.0HOqGBUH=7Z.5E4Xb=vk3N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/.0HOqGBUH=7Z.5E4Xb=vk3N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry for the late reply, and appreciate pointing that out :)
-I will keep that in mind.
+Hi all,
 
-Thanks!
+On Wed, 5 May 2021 09:34:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the amdgpu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function =
+'amdgpu_dm_initialize_drm_device':
+> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:3728:7: error=
+: implicit declaration of function 'register_outbox_irq_handlers'; did you =
+mean 'register_hpd_handlers'? [-Werror=3Dimplicit-function-declaration]
+>  3728 |   if (register_outbox_irq_handlers(dm->adev)) {
+>       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |       register_hpd_handlers
+>=20
+> Caused by commit
+>=20
+>   77a49c458931 ("drm/amd/display: Support for DMUB AUX")
+>=20
+> I have used the amdgpu tree from next-20210504 for today.
 
-On Thu, May 6, 2021 at 7:23 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   48145b62563a ("nvme: fix controller ioctl through ns_head")
->
-> Fixes tag
->
->   Fixes: 3557a4409701 ("nvme: don't bother to look up a namespace for
->
-> has these problem(s):
->
->   - Subject has leading but no trailing parentheses
->   - Subject has leading but no trailing quotes
->
-> Please do not split Fixes tags over more than one line.
->
-> --
-> Cheers,
-> Stephen Rothwell
+This has now been broken for 6 days ... please fix or revert.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.0HOqGBUH=7Z.5E4Xb=vk3N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCYZkQACgkQAVBC80lX
+0GzRWwf+ORoHa0UNC2mU9HMN8nZjIN9NIYqYIon4z1vb3dhxx9xo2x5L9j/C10AJ
+YUrWLIOsOryg+lrySC57fgD5v19KpYZ02yDNa08Cusq412q2VhcBQ6RquDiUSxd6
+6qGLvqlt4bkUHb2fqlcp8RzFs2eYJNlpTeUVwhdNRbyz7PwOJiaOfLxDgv9tiAKt
+ioTQDndwAN0B6qjEtx9IZPfLJye+mO6yVtU2V3jRtGvNtwk+4qRbjCtu46s4TJJE
+1d73NYmMVRXSZWXAcsAi6kzcBPf2D9I2AUAL62inklwtsspFJLSt1gqrVmRcf3qg
+xLeiSk9QVI9IrwEhG7n8WVzMgxDnXw==
+=a/wl
+-----END PGP SIGNATURE-----
+
+--Sig_/.0HOqGBUH=7Z.5E4Xb=vk3N--

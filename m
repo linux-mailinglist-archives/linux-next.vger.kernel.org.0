@@ -2,59 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E5237A633
-	for <lists+linux-next@lfdr.de>; Tue, 11 May 2021 14:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B76A37A7E2
+	for <lists+linux-next@lfdr.de>; Tue, 11 May 2021 15:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhEKMDo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 May 2021 08:03:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40480 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230225AbhEKMDo (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 11 May 2021 08:03:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 058E4ADCE;
-        Tue, 11 May 2021 12:02:37 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 8E6F9DA96D; Tue, 11 May 2021 14:00:07 +0200 (CEST)
-Date:   Tue, 11 May 2021 14:00:07 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Btrfs <linux-btrfs@vger.kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: Re: linux-next: Tree for May 11 (btrfs)
-Message-ID: <20210511120007.GI7604@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Btrfs <linux-btrfs@vger.kernel.org>,
-        David Sterba <dsterba@suse.com>
-References: <20210511133551.09bfd39c@canb.auug.org.au>
- <56cef5d3-cfb4-abe2-1cbc-f146b720396c@infradead.org>
+        id S231305AbhEKNmE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 May 2021 09:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229921AbhEKNmE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 May 2021 09:42:04 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BB3C061574;
+        Tue, 11 May 2021 06:40:58 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id l6so19075714oii.1;
+        Tue, 11 May 2021 06:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u0zqoJY9+XLKCnvlRfIASVv7tiUTgIrBxHTEpVSQbhA=;
+        b=uu4t+R6kaUZp8RlXk/Xxbth15iW6zgLgnVeCKLaiqYemeoCLWpfI7qDqSjYS585XjB
+         ZyzbivfhYYSSM4zuLtNH6EakbchJDrrJ4VEB5gzkJo0ycFjmGxXLDRCulc/OdbY7MVrZ
+         s8BFi9rrooCQ6bgOq17r7yamg/AWwBSnlw6clIA7DOq1OPQ/Kx2QzugQAfOzJzuZiqc8
+         r/XYE2o5grxono6hU3+RFLtSreKjsJy0M6ST1JU1gkUuVf0mKEVcjH+6ulgB/lfNn9rR
+         ta4yipc43eKF6A0MDlYNBj+/wS1zOvcSSLwUKf5s+3oHw33NujLpruTV/615pkE1ekna
+         JmsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u0zqoJY9+XLKCnvlRfIASVv7tiUTgIrBxHTEpVSQbhA=;
+        b=W87r5oxRS52xsOcWAsQpWo/lwgv8eVjFzrVg0HfHR75BkId8NNPNnoOf+WqfVu93Oy
+         4vdHLwG5IGo/fJx8fzbKSn1yrjjBJ7ZzycReLIocQFD/DLt1YsH/mYezokerwite4W+M
+         DSmYiSZYURsLcWkYzWbZImRgEw4/aPv5klmTpumZPbVrMBAuUx6kJEZd3FMMYHYQiSEw
+         bBoxzhN49Me2ahtPAGnbzN+UD7sFzN84Dn8jANN7uK3LykwEwVQ/fmAJRjmWkBXkLuvz
+         o3SFNuz0im0nQhdSsf0rvw98cdHXBT9U5mKRUKI/Hwqyd216p/2Q4Ksj5bYyhbv3XSrk
+         /KWg==
+X-Gm-Message-State: AOAM531LT9vn87mmdgLPasqLTTKyHP+yIDuDiMu4iq+eUqku8fP5zjnd
+        h4Twv5x1PdSFlotgU1zDVGyLI4wAHpFU49KSWP1NTBLb
+X-Google-Smtp-Source: ABdhPJzAdt/19SmncD8g04TLdvUfe9O2hOGTMNT9cOTcdXWWFA1/EOROhg+JJ6pUIlEjUzG22F7c15q9pJ7wUcsGW7s=
+X-Received: by 2002:a05:6808:206:: with SMTP id l6mr1326604oie.5.1620740457614;
+ Tue, 11 May 2021 06:40:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56cef5d3-cfb4-abe2-1cbc-f146b720396c@infradead.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+References: <20210511084206.3de50d5b@canb.auug.org.au> <f2fd1c01-d559-b8ac-b342-897c74ae852b@gatech.edu>
+In-Reply-To: <f2fd1c01-d559-b8ac-b342-897c74ae852b@gatech.edu>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 11 May 2021 09:40:46 -0400
+Message-ID: <CADnq5_NNaOEe22WoyKmrXbe5rZMx-t7KoOZay-uSYa6s2eAv8A@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     David Ward <david.ward@gatech.edu>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 10, 2021 at 10:13:17PM -0700, Randy Dunlap wrote:
-> On 5/10/21 8:35 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20210510:
-> > 
-> 
-> on i386:
-> 
-> ld: fs/btrfs/extent_io.o: in function `btrfs_submit_read_repair':
-> extent_io.c:(.text+0x624f): undefined reference to `__udivdi3'
+I'll fix it up.
 
-Thanks for the report, will be fixed in the next for-next snapshot.
+Alex
+
+On Mon, May 10, 2021 at 7:08 PM David Ward <david.ward@gatech.edu> wrote:
+>
+> On 5/10/21 6:42 PM, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >    0b62b6ed6959 ("drm/amd/display: Initialize attribute for hdcp_srm sysfs file")
+> >
+> > Fixes tag
+> >
+> >    Fixes: a193ed2094ba ("drm/amd/display: Add sysfs interface for set/get srm")
+> >
+> > has these problem(s):
+> >
+> >    - Subject does not match target commit subject
+> >      Just use
+> >       git log -1 --format='Fixes: %h ("%s")'
+> >
+> > Maybe you meant
+> >
+> > Fixes: 9037246bb2da ("drm/amd/display: Add sysfs interface for set/get srm")
+> >
+> My apologies. The correct hash is in fact 9037246bb2da. (Commit
+> a193ed2094ba introduced HDCP handling in amdgpu_pm, but did not include
+> the sysfs file.) It seems I inadvertently copied the wrong hash when
+> preparing the commit message.
+>
+> Please let me know if I need to resubmit this patch.
+>
+> Thank you,
+>
+> David
+>
+>

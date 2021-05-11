@@ -2,46 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A9237B03A
-	for <lists+linux-next@lfdr.de>; Tue, 11 May 2021 22:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B40337B109
+	for <lists+linux-next@lfdr.de>; Tue, 11 May 2021 23:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbhEKUsP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 May 2021 16:48:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39386 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229637AbhEKUsO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 11 May 2021 16:48:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C9BA6162B;
-        Tue, 11 May 2021 20:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1620766026;
-        bh=5ajF/e3Oh50kmOZO7dH7OG9SReKgDJLtmpQBJCZ7sr8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q7d6sDUuiRdvqhu7T5xq/+QwC+3+6FncciMgCmK21iJKRy6tDx4nniAv6S6qt3wC2
-         bt510CCdp4XPAe7vXWyIkTt2OxMp7Vh3xVFjLAg9oyq8p/mHqBYdcwQ2LZbguek4KT
-         Vf3wen2MEyKJBVjhx4mThCqf1VCiGtszaQXFO1ws=
-Date:   Tue, 11 May 2021 13:47:05 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: mmotm 2021-05-10-21-46 uploaded (mm/*)
-Message-Id: <20210511134705.ef543a2ff6022f1ad0154a30@linux-foundation.org>
-In-Reply-To: <e50de603-ab1d-72f7-63f5-c1fc92c5c7be@infradead.org>
-References: <20210511044719.tWGZA2U3A%akpm@linux-foundation.org>
-        <e50de603-ab1d-72f7-63f5-c1fc92c5c7be@infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S229973AbhEKVwQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 May 2021 17:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhEKVwO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 11 May 2021 17:52:14 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A560AC061574;
+        Tue, 11 May 2021 14:51:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ffs770PQxz9sWB;
+        Wed, 12 May 2021 07:50:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1620769859;
+        bh=od4h2PGWQFMzYvvwxJucYgVHgo1iQMpW5/aSXTDIzWo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GGFQRBS9rlIj93urezSWF/XtWB+PnZxN5BquBggjT8KeEE6m0mjOpsGCxI1QsOte6
+         to4jlGrYpAeVLzDa2r9D/rQA6ghWBRuxbVZyyHWFWSuvdTEG9GoWv7aJHi5EMuSMk5
+         AF3DJn1v/ih0YvWXOGH1gI1w9ZfH2jaNqxKbripiOOiZToZ+q3lQ4yIxWU34lbSyyl
+         1tBsLnp8mJClslXcxo6tZP1X17EzPA2osgGTTK34VFbLupmEM1BYQaEYIrlSRAgZQE
+         cjNmyrhhoQemUXHPgOVYMGkkMZVtdzHToehP3UwYZPnWOYfFG9LH6cS01rdwSiOaZr
+         IIoxHtteJfYYA==
+Date:   Wed, 12 May 2021 07:50:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the soundwire tree
+Message-ID: <20210512075055.69047ec0@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/b6a5BK8LoePKHE/k5jx0o1I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 11 May 2021 12:39:00 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+--Sig_/b6a5BK8LoePKHE/k5jx0o1I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Lots of various mm/ build errors:
+Hi all,
 
-Huh, It Worked For Me (tm).   Can you please share the .config?
+In commit
+
+  f136f3279d85 ("soundwire: qcom: fix handling of qcom,ports-block-pack-mod=
+e")
+
+Fixes tag
+
+  Fixes: 5943e4fb14e3 ("soundwire: qcom: check of_property_read status")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: a5943e4fb14e ("soundwire: qcom: check of_property_read status")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/b6a5BK8LoePKHE/k5jx0o1I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCa/D8ACgkQAVBC80lX
+0Gxr6gf9EgnY5GiazmqsHZJgdIa35GWaSFKNcd3WcKaTNsXh3K3X7gZ/ow2jyI4V
+D1YEkueYyDcRK9AgXXjPCbiv0RJLAOiNHx3CJ4pEeyu/PM59rOvbWpKqUVZALqCS
+UPbcuIts1LwV3ztjfpiDVpgcCXNxQdwlkRXG2IVJ9PJsi5yR6kHZ7VHGPXOhxfcz
+76Cyq3PdEO+ZLNb4Wuho9wDcbnzqNIz28imjh3SdyqwGXiVQQYgoXYVq9mC7WkGi
+aByOd6iXlOxtXsmcw9z/beuYscMByON9le91m9+bnR7BOpjp/3E9QZRC+wAHKInJ
+6lYgwwsbN01Oevjv9dC/1EzKySwujQ==
+=kbxm
+-----END PGP SIGNATURE-----
+
+--Sig_/b6a5BK8LoePKHE/k5jx0o1I--

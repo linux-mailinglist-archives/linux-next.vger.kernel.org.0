@@ -2,87 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B7537B19A
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 00:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79D237B2C9
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 01:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbhEKW0I (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 May 2021 18:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhEKW0I (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 May 2021 18:26:08 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DE2C061574;
-        Tue, 11 May 2021 15:25:01 -0700 (PDT)
+        id S229637AbhEKXxP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 May 2021 19:53:15 -0400
+Received: from ozlabs.org ([203.11.71.1]:40961 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230075AbhEKXxO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 11 May 2021 19:53:14 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FfstL2MK7z9sVt;
-        Wed, 12 May 2021 08:24:58 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ffvps6xb1z9sWC;
+        Wed, 12 May 2021 09:52:05 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620771899;
-        bh=eg3dusZ+Nto5rmGgc1s+6T8TBTKlakxJgp0CS+0cmPs=;
+        s=201702; t=1620777126;
+        bh=M7TtSkXxMF0em4ofKmMx4OFSoudGXcoUk7yXJrm2mSw=;
         h=Date:From:To:Cc:Subject:From;
-        b=AuGkIDLtHld9JWQFs/UeMRXz/mk4s8MJow7PsyBN4mz/U5fAyF9oJ4ScJku9OdS+3
-         EHriZIjIbUkP1MGA8V7D90ba9C6R9rZzh91omJdzsl582UuOyf9VxMGRVpA7Uy4kmv
-         0tTuI6LuLWpr0CcVNYOkoVRNLeo68QRWvQRq9s7sXeZrFMGXdj1i4hCdyCGx/DI1jj
-         ah1ugxe0vqbvw3ByMeqKis00AnSWp4s7IXt6Z4gp8O7kizZCeXLaZXF9W9AETQ6HH2
-         z9ePSRz8tVlxOK5B+YQ4SKjFxVkzBQ15l2rPvNg8+2CAODygROjaIbH09VtCosuODI
-         8Kj0xCt1a5yqw==
-Date:   Wed, 12 May 2021 08:24:57 +1000
+        b=BR7+Dtm3hOLEbZDwH64Edagaii6JAIUYnvjS53kvxE66ZbH/uUzJTIcBDK6kRRBl/
+         hlN2Om6zfcxNSBirT7+Hu8qJhPs0yKzDqY/RxmrEpOS6VxfL2TIqVbOf0zVkqKTD5H
+         w+OJBWxtlEJG8X/J90FDNwmtPA4FYSxbuTWl0o77dmQ6IdXJzoCFWaEZMY16D/A5/n
+         zKy0PfjPj9zRW5fYSgy1PcOKe9LSPxI07BJUuJqo82R2zNs+JD4vsOzt7D0HBWNQCl
+         94VXzZ8kKwuh99wa7GQFobgmp1z29OQTX5M1Xz+Txwqes7UyPMoBpGjP2eC5eMOHZD
+         /tjlq38aLkyoA==
+Date:   Wed, 12 May 2021 09:52:01 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the spi tree
-Message-ID: <20210512082457.370f3062@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210512095201.09323cda@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sKua6nEabQTi=W5Ug.58v5E";
+Content-Type: multipart/signed; boundary="Sig_/hG/om+Wur_o8DNz.SY9kEgL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sKua6nEabQTi=W5Ug.58v5E
+--Sig_/hG/om+Wur_o8DNz.SY9kEgL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+After merging the net-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  86b1d8ecb5f1 ("spi: tegra114: Fix an error message")
+drivers/usb/class/cdc-wdm.c: In function 'wdm_wwan_port_stop':
+drivers/usb/class/cdc-wdm.c:858:2: error: implicit declaration of function =
+'kill_urbs' [-Werror=3Dimplicit-function-declaration]
+  858 |  kill_urbs(desc);
+      |  ^~~~~~~~~
 
-Fixes tag
+Caused by commit
 
-  Fixes: f333a331ad ("spi/tegra114: add spi driver")
+  cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
 
-has these problem(s):
+kill_urbs() was removed by commit
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  18abf8743674 ("cdc-wdm: untangle a circular dependency between callback a=
+nd softint")
+
+Which is included in v5.13-rc1.
+
+I have used the net-next tree from next-20210511 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/sKua6nEabQTi=W5Ug.58v5E
+--Sig_/hG/om+Wur_o8DNz.SY9kEgL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbBDkACgkQAVBC80lX
-0GwlEgf+Mhb0yB37TQwroNCByA5r5JxqoZgVEIZ4arFFYZE8sRo8In6eQ/D2QGgh
-JBaueFCSs4zr46qIWkEsA8F71RiWuPDNEyTCiMi3H7u1xCmMWA3h0vfVtev7Yo9i
-13iLtt25ovWeHw0V+n7T6H1963QqFoBJ1txT5nmxdmYgCUVCuAjkW0Bks4uFjEMj
-LDyMeoQETxrsK2SlUy0OrDTNiXnfk5ardpHN+Eqm3t4qv+c89zKVZVzL4eq1UMYU
-JPpdPSgsdwbpBluRxge/MpZ2YmBhhzgselxYylF40XwyCkIUATG+lVFz6v04fASp
-MdTC0HRxecUMSoIP44k9zBxYSnyuEA==
-=c/eO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbGKEACgkQAVBC80lX
+0GxU0wgAldBKe6NYy9f9GJkUU0xrTAXAGMJV1AHWS6Zi70FoLXiFe7Rgw6TY9BFb
+4eSzo98zhvCIIEXw7vieH2kjFMb/b+cUPPimOA/FrEz9uUyBtIyAQGLgqdXgLWlA
+nIEtJCivCLLHH/eTEUsya9OJsb1j9oQpGHCtyH7kmIUXsoCn5yBV/XIZ6FjblgpT
+IJHkESuGDmksaZIWNBtT/iH/LBrVoJ/MfW6Q8nRNH3JV0phAViO/048oSdU0sPRH
+9CR2LGiOaSD3xGJ9WD+fFoje6KBV+GKDF01ve7EO9dZyaMDTu48Y6m/xff6zGhge
+SA/aH25cRFA9FTfqP9RuZFWOVK2oYw==
+=Mf9w
 -----END PGP SIGNATURE-----
 
---Sig_/sKua6nEabQTi=W5Ug.58v5E--
+--Sig_/hG/om+Wur_o8DNz.SY9kEgL--

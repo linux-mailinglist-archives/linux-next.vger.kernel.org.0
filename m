@@ -2,132 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AC237BF1F
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 16:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B3937BF34
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 16:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbhELOCV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 May 2021 10:02:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51640 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230196AbhELOCV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 12 May 2021 10:02:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620828072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gowrrLL3ysBs8u2zKiC3M3lu9rDb9/E0MQP7c4fvgzI=;
-        b=f2esKJSS38Nvdt2OyqSKWJbz+Bbrly1+Zu3HMWUWoRToPDyHMPGUOdDkFi7CT/jNFQ1CJ5
-        8ZQZWeG/FhYoKVTLye3qPI3sKiCiCed95BrH3YCJKoniRew5dfZA+VJywbM5dj3jGIVM9u
-        prvwtWlDL4lX27Ghu+DqZTQeP2mcNo0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-158-iLO6wEUANHeFheB0bz3w3Q-1; Wed, 12 May 2021 10:01:11 -0400
-X-MC-Unique: iLO6wEUANHeFheB0bz3w3Q-1
-Received: by mail-qk1-f199.google.com with SMTP id n2-20020a37a4020000b02902e9aef597f7so17343005qke.21
-        for <linux-next@vger.kernel.org>; Wed, 12 May 2021 07:01:11 -0700 (PDT)
+        id S230357AbhELOFW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 May 2021 10:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230284AbhELOFU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 10:05:20 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE5BC061574;
+        Wed, 12 May 2021 07:04:11 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id r13so12050826qvm.7;
+        Wed, 12 May 2021 07:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yA2uAJ2HmrP0JQYIMPBbtRW9pr6LSVlxxaesD5stbv0=;
+        b=fkWpYJa927FDQ8RBV/k0T+6cMgco+LSm3eA2N4f5FzHUEQsEvQ7hX+PYvN9J+kfdCA
+         dmN60AV/ghy4JyFKUrgdnIowiVdJFzAKsfyLcA0EFn+9hrwTtM5OW/0Y+N5YmDYKywnc
+         Pmt7vFiYOWig42T10RVDXDqCAya1k+H1q9rGOzRlB+CQsSeXNuBmc6CxFo7NRACV3jAu
+         kB5h+WDdkIG5M3+0eNBlDYya1RGakn/fMq4GSglvZJ6Ii/Yp+QydRSexlYnxWybURBMC
+         o3fSHnZcfP9f61k9J+6v7tgrrfLCO87JRKG21TFVvCKslf7pv/1jx6RstZGMLjg1XVjg
+         sTHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=gowrrLL3ysBs8u2zKiC3M3lu9rDb9/E0MQP7c4fvgzI=;
-        b=UucgXycwfAv7+M9jGCzoqDlago7eRwU9IIn6CMKnOfnf/u5kx75+lsyR/mvxCohlAg
-         1CIVlDwhWJ0B6DoN7N49TQfq/kSkynMhGcoAl3w/p2n5ArdR4r5lE2bfRQo4gfUmyz6G
-         OTsrosnS5qzqizO8Xx18wxIqUmLnYRjpczbuone7YF1ok+m3+bUwAd6J2RJc1u+PrzV4
-         629Bhe1SZAqX1WZZB8QQHrObnxH5hPuA59CVQHOlmf/+3EVPd1TXbwWBc3apoidKy7as
-         iRfM8i2XHbdPlKIUJe5K9lmSTxf2prDsiGejvhL63/MZCHRmbAB8DRYZ2Z7Bk/DuJ01P
-         6RHw==
-X-Gm-Message-State: AOAM532HG4DJXTDpX0IVASVanOqsvIdZXgtZaw+bizrM+ucHvNAk7/3+
-        TokWmJqM0PoolVRBY+oMxOxpFWeny3spNNv1TY61DEAN+2cD21JEg/BxiEuR9/NuOjlChiyrFs9
-        //JIMppZ1dn9j62NryNh975N75ZMqL6h1AozOmiYeq/wS+O5grDC8njwFBWc2LYgPRe/sKQ==
-X-Received: by 2002:ac8:1093:: with SMTP id a19mr33433653qtj.365.1620828068098;
-        Wed, 12 May 2021 07:01:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzHSgHXU1mg2XTAmCZ8AesRnZrgozE7BfPtumfVlzE2V5i/gY9cW3Q94iB0M+SOMnXPuu6Blg==
-X-Received: by 2002:ac8:1093:: with SMTP id a19mr33433611qtj.365.1620828067840;
-        Wed, 12 May 2021 07:01:07 -0700 (PDT)
-Received: from llong.remote.csb ([2601:191:8500:76c0::cdbc])
-        by smtp.gmail.com with ESMTPSA id h10sm78321qkh.47.2021.05.12.07.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 07:01:06 -0700 (PDT)
-From:   Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yA2uAJ2HmrP0JQYIMPBbtRW9pr6LSVlxxaesD5stbv0=;
+        b=Hj+0cfEqtWSiuVTbUwcFZKQxwkQRgt9+NbzWamdPI1i/qRpj7J5WX/zuReSFWwEipj
+         5KQzYY1KXWD1COIH/cZ0YQTnreOCYK1kTtA/rbZWDtyTGJCr0oBKXCOJw8Qgr9uWH3Oe
+         dvZhwLP8MGzALL24ZmHvNGzfvWhvb7nsF2IctHYRA05UVFn/m5D6H7gnvwGQnp9hg9yc
+         lYGSPnzK106VisOBSWAEEKIFy8ZV9HinOWaGo6rluY7Dx35J6MF1wE1/I/QZNEsaH5rR
+         HJg3FcgWsr5/K/1rM/hvCv+U+IYi5m/qkLhosUqQ7XOLZoNeSKOxdw2owvd9/dUf5lRF
+         adfQ==
+X-Gm-Message-State: AOAM532u2iXaTUb9nPYMWw9LGoeiyUoJjO3FDXvgWjxaQMEPo34/Vzpe
+        /ZxS/d5FUFEZ4kZHEyvgdnDdvvHsd6c=
+X-Google-Smtp-Source: ABdhPJwaJlwbvbWY29iZv/l1yMkTrMLR2Q0km3nmVaxJoqw9kO36xEV0WIj+WZTGUtwJgRJDLnQ4YA==
+X-Received: by 2002:a0c:cd10:: with SMTP id b16mr35672881qvm.0.1620828250476;
+        Wed, 12 May 2021 07:04:10 -0700 (PDT)
+Received: from localhost ([207.98.216.60])
+        by smtp.gmail.com with ESMTPSA id f19sm86181qkg.70.2021.05.12.07.04.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 May 2021 07:04:09 -0700 (PDT)
+Date:   Wed, 12 May 2021 07:04:08 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210512152806.2492ca42@canb.auug.org.au>
-Message-ID: <6e5a8e32-9b9d-67db-cfc5-8eb10ce6c87a@redhat.com>
-Date:   Wed, 12 May 2021 10:01:05 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+Subject: Re: linux-next: manual merge of the akpm-current tree with the rcu
+ tree
+Message-ID: <YJvgWHRNbLAKd7DW@yury-ThinkPad>
+References: <20210512150448.05728739@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210512152806.2492ca42@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210512150448.05728739@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/12/21 1:28 AM, Stephen Rothwell wrote:
+On Wed, May 12, 2021 at 03:04:48PM +1000, Stephen Rothwell wrote:
 > Hi all,
->
-> As Randy also reported ...
->
-> After merging the akpm-current tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> mm/slab_common.c:764:8: error: array index in initializer exceeds array bounds
->    764 |  .name[KMALLOC_RECLAIM] = "kmalloc-rcl-" #__short_size, \
->        |        ^~~~~~~~~~~~~~~
-> mm/slab_common.c:776:2: note: in expansion of macro 'INIT_KMALLOC_INFO'
->    776 |  INIT_KMALLOC_INFO(0, 0),
->        |  ^~~~~~~~~~~~~~~~~
-> mm/slab_common.c:756:39: error: array index in initializer exceeds array bounds
->    756 | #define KMALLOC_CGROUP_NAME(sz) .name[KMALLOC_CGROUP] = "kmalloc-cg-" #sz,
->        |                                       ^~~~~~~~~~~~~~
-> mm/slab_common.c:765:2: note: in expansion of macro 'KMALLOC_CGROUP_NAME'
->    765 |  KMALLOC_CGROUP_NAME(__short_size)   \
->        |  ^~~~~~~~~~~~~~~~~~~
->
-> and more
->
-> Caused by commits
->
->    4d57437a3d3c ("mm: memcg/slab: create a new set of kmalloc-cg-<n> caches")
->    0727bf117622 ("mm: memcg/slab: don't create kmalloc-cg caches with cgroup.memory=nokmem")
->    d795c307bd3a ("mm: memcg/slab: disable cache merging for KMALLOC_NORMAL caches")
->
-> At least they are the commits I have reverted to fix this.
->
-Sorry about that. It turns out that construct like that below doesn't work.
+> 
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+> 
+>   Documentation/admin-guide/kernel-parameters.rst
+> 
+> between commit:
+> 
+>   b18def121f07 ("bitmap_parse: Support 'all' semantics")
+> 
+> from the rcu tree and commit:
+> 
+>   458a0b70b496 ("bitmap_parse: support 'all' semantics")
+> 
+> from the akpm-current tree.
+> 
+> I fixed it up (I just use the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-enum kmalloc_cache_type {
-         KMALLOC_NORMAL = 0,
-#ifdef CONFIG_MEMCG_KMEM
-         KMALLOC_CGROUP,
-#else
-         KMALLOC_CGROUP = KMALLOC_NORMAL,
-#endif
-         KMALLOC_RECLAIM,
-#ifdef CONFIG_ZONE_DMA
-         KMALLOC_DMA,
-#else
-         KMALLOC_DMA = KMALLOC_NORMAL,
-#endif
-         NR_KMALLOC_TYPES
-};
+The difference is that Paul's version replaced 'isolcpus=all' with
+'rcu_nocb=all' in documentation, which is more correct in general.
 
-The first ifdef is fine, but the second one will reset the enumeration 
-count back to 0 if CONFIG_ZONE_DMA is not defined causing 
-NR_KMALLOC_TYPES set to 1. Will send a new version to fix that.
+Could you please stick with the Paul's version, and sorry for
+confusion?
 
-Cheers,
-Longman
-
+Thanks,
+Yury

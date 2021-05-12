@@ -2,102 +2,172 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C6F37B2CD
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 01:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEA137B2F7
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 02:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbhEKXz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 May 2021 19:55:29 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53671 "EHLO ozlabs.org"
+        id S230115AbhELAV4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 May 2021 20:21:56 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41987 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229637AbhEKXz2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 11 May 2021 19:55:28 -0400
+        id S229637AbhELAV4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 11 May 2021 20:21:56 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FfvsR58ZBz9sWC;
-        Wed, 12 May 2021 09:54:19 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FfwRy0NlKz9sWT;
+        Wed, 12 May 2021 10:20:46 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620777260;
-        bh=SGsGx7JGciiu+5QnXSBQ8t2IqebMwAWOqLoy+nBZKwY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g6malUTRz5JkiZZmUGwDabJ5+66dfP7iCDxvabbRZx4fNQkJCrpq8OEsTMaUi9uAW
-         nc4JQmQ2rMdBfKgegoKNHpJjUPfH8gMld804eKg9AHbYUBhgTNmDcvK8IPVhHxK2BF
-         BRD1m2JRq9YNKCd3Sa1a8PUN3/idYpiNOupIhQeIN9ijRYbuIugE74gt0a4mOx+w77
-         wqTRL3oWFj0orJLMR1GiWOlUHUcRk/W8MGDzddChZA07kj/inTlIN78/G6sX4p8V4V
-         WpnPtNRorbwJXtSMICa4QmkoiFHUscg4INFEtzqQkf5b0V44LAsjiS8YF/HESDCK43
-         4+yVArbVcfhkQ==
-Date:   Wed, 12 May 2021 09:54:18 +1000
+        s=201702; t=1620778848;
+        bh=at8WqoLbJGB6S1Ei0mKEXbtD/agRQqXu50Yp/LqIVQo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LrUyJu7SqFPWpr9OQgh7KDS+72p3nxtR6De8J90vHYvOJ1EZs7MLkB9fzrx60C2vp
+         A+Ff16j81BYgjI7Wrchz9Es1atus1q9O7Y4dhCFwaqQDMMkdjq/h+HZzFZ+bnhXLoP
+         reeIC1NTNhJnpfsi0wnN8tP24ervm+RvkhgbaJ8DNySTRUEjcbYQFmwJdj1o3ex/+w
+         1XRSWpfIoFec93Lt3Rn+GiCsQBhPf9y7lzYHYc5VyR60PkN3L1a/2OkCVnGYzkt2Fb
+         UVoP5vOUclyfKAbQeQmlm9SBs/NeROvLt+wTIBxlzGqwbi+YiMuMDCryrBB/bQE/NO
+         MLRz5Z8g8//fw==
+Date:   Wed, 12 May 2021 10:20:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>, Greg KH <greg@kroah.com>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210512095418.0ad4ea4a@canb.auug.org.au>
-In-Reply-To: <20210512095201.09323cda@canb.auug.org.au>
-References: <20210512095201.09323cda@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the amdgpu tree with the drm-misc tree
+Message-ID: <20210512102045.608686ca@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lTN1OeNplbEpaffUwB8n4zp";
+Content-Type: multipart/signed; boundary="Sig_/Lp3RkMQUbAst2dyO6aaP3.E";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lTN1OeNplbEpaffUwB8n4zp
+--Sig_/Lp3RkMQUbAst2dyO6aaP3.E
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-On Wed, 12 May 2021 09:52:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/usb/class/cdc-wdm.c: In function 'wdm_wwan_port_stop':
-> drivers/usb/class/cdc-wdm.c:858:2: error: implicit declaration of functio=
-n 'kill_urbs' [-Werror=3Dimplicit-function-declaration]
->   858 |  kill_urbs(desc);
->       |  ^~~~~~~~~
->=20
-> Caused by commit
->=20
->   cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
->=20
-> kill_urbs() was removed by commit
->=20
->   18abf8743674 ("cdc-wdm: untangle a circular dependency between callback=
- and softint")
->=20
-> Which is included in v5.13-rc1.
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-Sorry, that commit is only in linux-next (from the usb.current tree).
-I will do a merge fix up tomorrow - unless someone provides one.
+  drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
 
-> I have used the net-next tree from next-20210511 for today.
+between commit:
+
+  c777dc9e7933 ("drm/ttm: move the page_alignment into the BO v2")
+
+from the drm-misc tree and commit:
+
+  dd03daec0ff1 ("drm/amdgpu: restructure amdgpu_vram_mgr_new")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lTN1OeNplbEpaffUwB8n4zp
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+index f7235438535f,e2cbe19404c0..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+@@@ -448,10 -391,10 +391,10 @@@ static int amdgpu_vram_mgr_new(struct t
+  		pages_per_node =3D HPAGE_PMD_NR;
+  #else
+  		/* default to 2MB */
+- 		pages_per_node =3D (2UL << (20UL - PAGE_SHIFT));
++ 		pages_per_node =3D 2UL << (20UL - PAGE_SHIFT);
+  #endif
+- 		pages_per_node =3D max((uint32_t)pages_per_node,
+- 				     tbo->page_alignment);
++ 		pages_per_node =3D max_t(uint32_t, pages_per_node,
+ -				       mem->page_alignment);
+++				       tbo->page_alignment);
+  		num_nodes =3D DIV_ROUND_UP(mem->num_pages, pages_per_node);
+  	}
+ =20
+@@@ -469,38 -412,29 +412,29 @@@
+  	mem->start =3D 0;
+  	pages_left =3D mem->num_pages;
+ =20
+- 	spin_lock(&mgr->lock);
+- 	for (i =3D 0; pages_left >=3D pages_per_node; ++i) {
+- 		unsigned long pages =3D rounddown_pow_of_two(pages_left);
++ 	/* Limit maximum size to 2GB due to SG table limitations */
++ 	pages =3D min(pages_left, 2UL << (30 - PAGE_SHIFT));
+ =20
+- 		/* Limit maximum size to 2GB due to SG table limitations */
+- 		pages =3D min(pages, (2UL << (30 - PAGE_SHIFT)));
+-=20
+- 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i], pages,
+- 						pages_per_node, 0,
+- 						place->fpfn, lpfn,
+- 						mode);
+- 		if (unlikely(r))
+- 			break;
+-=20
+- 		vis_usage +=3D amdgpu_vram_mgr_vis_size(adev, &nodes[i]);
+- 		amdgpu_vram_mgr_virt_start(mem, &nodes[i]);
+- 		pages_left -=3D pages;
+- 	}
+-=20
+- 	for (; pages_left; ++i) {
+- 		unsigned long pages =3D min(pages_left, pages_per_node);
++ 	i =3D 0;
++ 	spin_lock(&mgr->lock);
++ 	while (pages_left) {
+ -		uint32_t alignment =3D mem->page_alignment;
+ +		uint32_t alignment =3D tbo->page_alignment;
+ =20
+- 		if (pages =3D=3D pages_per_node)
++ 		if (pages >=3D pages_per_node)
+  			alignment =3D pages_per_node;
+ =20
+- 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i],
+- 						pages, alignment, 0,
+- 						place->fpfn, lpfn,
+- 						mode);
+- 		if (unlikely(r))
++ 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i], pages, alignment,
++ 						0, place->fpfn, lpfn, mode);
++ 		if (unlikely(r)) {
++ 			if (pages > pages_per_node) {
++ 				if (is_power_of_2(pages))
++ 					pages =3D pages / 2;
++ 				else
++ 					pages =3D rounddown_pow_of_two(pages);
++ 				continue;
++ 			}
+  			goto error;
++ 		}
+ =20
+  		vis_usage +=3D amdgpu_vram_mgr_vis_size(adev, &nodes[i]);
+  		amdgpu_vram_mgr_virt_start(mem, &nodes[i]);
+
+--Sig_/Lp3RkMQUbAst2dyO6aaP3.E
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbGSoACgkQAVBC80lX
-0GwShAf+KABuJ1/az7j2XG+7CduJuuTtMGbqYYkd+Dgnw1wEwH9+KQ2IXsOQ+DMX
-HZokY/wD0RzHic2Fr7geOQJpgLDYslfL2GrR98fUQBVnyAU1NpK4V5MkPZ25bCT5
-8JaZ+OvIs3fsbm0blptEX6HR82V2HdKXH6hOMt4VJgRqdeWdEdVP5Xyz1p2YR0YS
-K8HgkZvfS7n0gDjJOqaHJ0nx7yZ9bCeuJoLOPq2sBQ9CCHP6xFBGynrDTJvtqQdi
-jpUVF5FJC5+1LGgmbxF2z5oF7ZTIU0EXnttHJFFp/Q56M0bjINZraW8hOTClUCCT
-ODAsEPZuh7VyJ5Ol0SB/mW0PT3X1Sw==
-=IT5I
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbH10ACgkQAVBC80lX
+0GylrAf+OuzQUSeuN8oRz0JK+QNcNQMDpT+xPXU3KK583+dqa+PCtx658wk4OfAH
+I1OisGviS22hxu1K4p8wTJxZ8Hcrysuc8YDAM/9ikrTaJqH6ywNHFzfrJNYmVjVz
+ahuMPgsrduxS1P8IoVDX3UE2/XxElsbFd/PAky9J5jEl2qyyFxi4FQcd0PInV/sB
+btKZzTYPjySRLZVuhe0aZbe/zUxzta1TXAOJG+6TFL6TDE4EMauzWWS5XqtduqbN
+AJmwdvy0dKKaG2fs7i0/L5itjW0EJM0L+pNqa6MhxQV6Y4RRML2MMHjJGnqK0ZSy
+cRzuhRQ+wW2YOB7EmtxknGdY+Y4Bvw==
+=YnWX
 -----END PGP SIGNATURE-----
 
---Sig_/lTN1OeNplbEpaffUwB8n4zp--
+--Sig_/Lp3RkMQUbAst2dyO6aaP3.E--

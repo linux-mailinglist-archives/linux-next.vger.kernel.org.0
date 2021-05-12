@@ -2,92 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A5837B537
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 07:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C5237B54F
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 07:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhELFBX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 May 2021 01:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S229654AbhELFF7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 May 2021 01:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhELFBW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 01:01:22 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EC5C061574;
-        Tue, 11 May 2021 22:00:14 -0700 (PDT)
+        with ESMTP id S229580AbhELFF6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 01:05:58 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE5EC061574;
+        Tue, 11 May 2021 22:04:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fg2fL143zz9sWX;
-        Wed, 12 May 2021 15:00:09 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fg2lj0b3tz9sSn;
+        Wed, 12 May 2021 15:04:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620795611;
-        bh=QUroELMBcg2yl0c8Ocr3GIPaSGOYYWLIChZdl8QSxTc=;
+        s=201702; t=1620795889;
+        bh=JG2pK3DvsxbgELFYBVBaO3An5BMmE+kQ2qHAsGLRVdk=;
         h=Date:From:To:Cc:Subject:From;
-        b=b14pM2A1SRpKW0kl9mTkAQZd6+AnoKrF0R9QjS2bsiDAhKgiDi7YPorLWiwLWjB6E
-         LoIpgAkWjdSi6EacTMXczcAoEztkxFPAZAYMzmwm+mLnvXxtqj13a3ff9uXPz90G1m
-         cqlP3ClFyzARQOsPH5U8I3gvQSS95Ev3PN5dPD5/QCtFqQuZtwcALY/fmGdc6KMN/M
-         2COUpgzI0bd9GZxZu4brbjkrssTk4KqFVeSjbRipVAZ3oFq8w5KZnej6883sniTnrH
-         m2710bNFD3eL18wQjgIKKWv2nCwK8YouLTwLHdptOOSNxvleEg9MUryWRyrcpa5wTk
-         +E6pY+JiGNeSQ==
-Date:   Wed, 12 May 2021 15:00:08 +1000
+        b=uCH5eH/+Wf5gaS2EJRJAMxZc+z+i4iVRrzFB9IJtxcWNl4Ez5bBmppeAAlDORzbbt
+         rZU7EIMpwyAmcMYL1Tn7WJdY8FOjtIMid12N0/9JLrcSarj9qIki2KfjH1i2CZkLSO
+         K2ICzuIrQoXHcaPZXISXwpgAJim7ShTmfE42RsCrfwYJoFb5ewDttUuUU/u12kqiFX
+         4kVNuxWyBYHdTX3hGOfGohLcyh5q1t7KdBzXVPaLV0JVGjnY/FLz22dE+GBHhTBMm9
+         IVhyFXaui5xnUpaav7rKce4MCuab1zI9qkNfcHVpPGcMXRO200nMkbdywT7rBDxLIW
+         3zkmndZyaH3bA==
+Date:   Wed, 12 May 2021 15:04:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20210512150008.52f92c26@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Yury Norov <yury.norov@gmail.com>
+Subject: linux-next: manual merge of the akpm-current tree with the rcu tree
+Message-ID: <20210512150448.05728739@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6Z92Gv.P.iwuhI+YMz0./pR";
+Content-Type: multipart/signed; boundary="Sig_/5X2=ANOdhwM.8dxjZDOsfCd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6Z92Gv.P.iwuhI+YMz0./pR
+--Sig_/5X2=ANOdhwM.8dxjZDOsfCd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-misc tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-drivers/gpu/drm/nouveau/nouveau_connector.c: In function 'nouveau_connector=
-_of_detect':
-drivers/gpu/drm/nouveau/nouveau_connector.c:463:59: error: 'struct drm_devi=
-ce' has no member named 'pdev'; did you mean 'dev'?
-  463 |  struct device_node *cn, *dn =3D pci_device_to_OF_node(dev->pdev);
-      |                                                           ^~~~
-      |                                                           dev
+  Documentation/admin-guide/kernel-parameters.rst
 
-Caused by commit
+between commit:
 
-  b347e04452ff ("drm: Remove pdev field from struct drm_device")
+  b18def121f07 ("bitmap_parse: Support 'all' semantics")
 
-I have reverted that commit for today.
+from the rcu tree and commit:
+
+  458a0b70b496 ("bitmap_parse: support 'all' semantics")
+
+from the akpm-current tree.
+
+I fixed it up (I just use the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6Z92Gv.P.iwuhI+YMz0./pR
+--Sig_/5X2=ANOdhwM.8dxjZDOsfCd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbYNgACgkQAVBC80lX
-0GyESgf/T07rjtpKJQjtzWk/qYdBRCC+Q8ax5RfJORk8UpqNlJqy9ZGe1FPXkn1D
-wJdnx9eI8J19CgueHZWJP57lp754E0NCC9Y7rG1nfqzY5JJIKRnw8kL7oJRGItQ/
-hbddLG4ddkG5bo73Z0xxDOFy8yINUsQmt0uy/tuK28fqOqVjaFU1WyBbrb5Gb3qG
-26nM90fBzqbnsO8Tz5Z8xA/DBSTJGM6ame7m1qvQ2w0/U9QhkWSEjhE50/niZWtC
-nJqdajEDtDCCKzn/9W2uV//+q9+pxYykTHBuBmbn9u06SdxmgsV24398P9Ni6tdl
-jZ+NeX33AlOhXTSdre1aAATiOjuljg==
-=uEFp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbYfAACgkQAVBC80lX
+0GyFoAf/ZuBpFpkJHErfw50H2+grJA0R2x8C8NMD54yEWYDPMzyuFZeb/XXU/EXz
+Ly9HomCItgjUFK7ExC0qblUxjxd4qI/5XdMUXWSZ4v94NqKDS2/jd8qnedBW7vnu
+jQedkzWcKFUWq4eNaIkDVLNGwkqLxZfWCPWfUQq/mMdu/kIQBueye9C7dupD55qB
+A2QT4PlhOYuJ2brlqHp03TG0CVMbXlxcM9Qo+ds5FFX7WXgwKo+pfTShGw/bnobb
+ItbYrftPXXPtdqSzWwmC9If2IAJQDJrUMr5YVMPGVoZZ92d2s1ttHtRnMwI8/waL
+5x4IKcdf8aZo/atr0L9kIYd7s1Q4XQ==
+=axzZ
 -----END PGP SIGNATURE-----
 
---Sig_/6Z92Gv.P.iwuhI+YMz0./pR--
+--Sig_/5X2=ANOdhwM.8dxjZDOsfCd--

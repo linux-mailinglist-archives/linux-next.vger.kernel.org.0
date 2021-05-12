@@ -2,132 +2,218 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252D37BA98
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 12:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BEE37BB58
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 12:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhELKcb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 May 2021 06:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S230168AbhELK4m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 May 2021 06:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbhELKbr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 06:31:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E4EC06138B
-        for <linux-next@vger.kernel.org>; Wed, 12 May 2021 03:30:00 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so703749pjp.4
-        for <linux-next@vger.kernel.org>; Wed, 12 May 2021 03:30:00 -0700 (PDT)
+        with ESMTP id S230115AbhELK4k (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 06:56:40 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779F3C061574
+        for <linux-next@vger.kernel.org>; Wed, 12 May 2021 03:55:29 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c21so17921148pgg.3
+        for <linux-next@vger.kernel.org>; Wed, 12 May 2021 03:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=NY81+qWUZJIpI8+UZ4hPTOk4kseKS0SUFoGsN139yyg=;
-        b=jt57QsxOOPChHozOcxwPf0fuFMxZyLK5LKpdD4hvmZ6g7MQM14fES2sSY2v1AxQrlH
-         7ikVdh54xFflT4kj3SUT8dgSofVPVze2Ll4yh+CtS+ltC1AV7OhDGLxrWx8wcSqGAnC8
-         4ZP1aRrDrmdiJRsvjrrwVIzxwy1+PiewdEMvKd7EMrFi/5uVIK/udQkyKQsONU9DuGqv
-         i5lG6Pupyf9xsD3DhFW5TwABzZUdrnWQ867MyFOZ6rKHwBw3nH2Xabpdyj9frVcmfJ1M
-         hoOtmPxiuLB11tJErlYwbDtB/vwTdFcvsFnKIP+wapECFii3fKkU8COH6JfsCM7Fjxny
-         Ksaw==
+        bh=InKRUvwbW+lDgM9GYg2+5WekPicgHA4kGMy/Qg2niWU=;
+        b=ZxYqZWqT3TmhridlEWv9l0LTx/cVEm7MSAsQ3Zfrz2SrwL9PjYvQC1LB7QHv62y5wX
+         IhVfDWMU/ZVQpItabtTQ+PjSuhy3e+BtorYhigT9qKKnXCSitxoSDLJOZ9DADyeSzLKx
+         b5g6gfAAqIrNgJkKLcEv6mMD/O2j4lcYHPGoCJ1KfCG9FVPr6bfk+CaxV/GQ/jfeyZDM
+         5qTyqTeGNTLESqlLougPn9EKodh3UAxiCXxff03kODMbXl+TDVqe0RnKXc8Kgq5vK0oa
+         s4mU5iRZ9Xkt4zugwI3iU+VLmCHUQwOEzD+H3ViUxunSTAXJJAhaUoaJvnCwhuwd23Mk
+         VILQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=NY81+qWUZJIpI8+UZ4hPTOk4kseKS0SUFoGsN139yyg=;
-        b=mjz/UjPbFx7KUZTLsCkZmjg8JHSGvbTM1914UxHcoj2tbw+Kg6thsL99O0+Tl9Oqvz
-         PjTyoiGAt+KcDac7lBi96ADoOhuv2cB1RryxOaebNQiDVhMjakcyP9zxlDgxAeASavSH
-         5EcUw7T4JmyMj+oQEUqfjzj0jPlVoIcT8ygUovoc8KDMRdYzjLkiYbd8weLIFLtg6In3
-         /07eCsVfitH2YGzscTf8ugb2ghwxH/i+w/7wzW6WG4Kk9/e09nPqwNQUKiIRLydOkY53
-         h1pvVvKftmhf1i7Da3kv4VT0wNYGVa93NjGzIfXO0S2lfa6b/tyZNbnEf4J77CgBDXVt
-         fcPA==
-X-Gm-Message-State: AOAM531sZ8gMjFpoz4JnviiN7SgGFkBFtuVDFhb9jEV1pn4keVm8bM4G
-        b4D1Vl6yJj/HD3/UPcP/vDkroHvPAKKrQCpF
-X-Google-Smtp-Source: ABdhPJyyUv6C1wFVpog9ulrfqs5zk1EsHMe136eiVr8PHK1Fg3gJUWIk7Lz/DR42eACAh+NU+eMEbw==
-X-Received: by 2002:a17:90a:c687:: with SMTP id n7mr10385007pjt.104.1620815399244;
-        Wed, 12 May 2021 03:29:59 -0700 (PDT)
+        bh=InKRUvwbW+lDgM9GYg2+5WekPicgHA4kGMy/Qg2niWU=;
+        b=UiO6I6WKqKH05EUnn+98yDptpJ2abBpPIQH+KlPQmu/tQCmddc45xkeMZOV81CM7ep
+         s1ybNJpZcY9hlepcWMO3WZVYq6/BdxcgpmI2XKPB61cCZSFWX17PsT3zGWQhDd5lcSnD
+         ueqGFXA0wM1RA5QnRoYUpLqdJZMzTzT2x/1GEsTrG1HFLoHi93LDoIX57yK2Tsr/L8li
+         omcJn0NrigkNEkKJxBP5xo3efovG2eW+/OJSVIcIahcYszmkSGP80o7oabjQYP8CSNot
+         Q5R+WKSzpu785J0rqwMpRZn9x6YjKjg9+cAwsEeeEnrR2heHXIcjiCch1SYvRSGHTR9v
+         7u4w==
+X-Gm-Message-State: AOAM530rBlf47GFWwkWwR1V31Rfji0bZSKaNqALB+i/llZP+r8fja51/
+        ssg2KorGbp87E1A4nXq01NHaglNwTZgnXHp2
+X-Google-Smtp-Source: ABdhPJzGCPfKRJVDfcOpxrEsK7IkEnGjDq3/0sFby3y4BnGzaDOaJeVRThWMy+CEzu9Y66KTstQq7A==
+X-Received: by 2002:a63:4a23:: with SMTP id x35mr35088512pga.270.1620816927955;
+        Wed, 12 May 2021 03:55:27 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f20sm15951655pgb.47.2021.05.12.03.29.58
+        by smtp.gmail.com with ESMTPSA id v2sm2417956pfm.134.2021.05.12.03.55.27
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 03:29:58 -0700 (PDT)
-Message-ID: <609bae26.1c69fb81.c4b94.1183@mx.google.com>
-Date:   Wed, 12 May 2021 03:29:58 -0700 (PDT)
+        Wed, 12 May 2021 03:55:27 -0700 (PDT)
+Message-ID: <609bb41f.1c69fb81.1c4e3.7bdd@mx.google.com>
+Date:   Wed, 12 May 2021 03:55:27 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.13-rc1-286-g369a8c32f8a4c
+X-Kernelci-Kernel: next-20210512
 X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 189 builds: 2 failed, 187 passed,
- 13 warnings (v5.13-rc1-286-g369a8c32f8a4c)
+Subject: next/master build: 206 builds: 8 failed, 198 passed, 42 errors,
+ 98 warnings (next-20210512)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 189 builds: 2 failed, 187 passed, 13 warnings (v5=
-.13-rc1-286-g369a8c32f8a4c)
+next/master build: 206 builds: 8 failed, 198 passed, 42 errors, 98 warnings=
+ (next-20210512)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.13-rc1-286-g369a8c32f8a4c/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20210512/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.13-rc1-286-g369a8c32f8a4c
-Git Commit: 369a8c32f8a4cd3b614b1cc1453b2f7f2036301a
+Branch: master
+Git Describe: next-20210512
+Git Commit: ec85c95b0c90a17413901b018e8ade7b9eae7cad
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-8) FAIL
+
 mips:
+    32r2el_defconfig: (gcc-8) FAIL
+    32r2el_defconfig+kselftest: (gcc-8) FAIL
     decstation_64_defconfig: (gcc-8) FAIL
     lemote2f_defconfig: (gcc-8) FAIL
 
-Warnings Detected:
+riscv:
+    defconfig+kselftest: (gcc-8) FAIL
+    nommu_k210_defconfig: (gcc-8) FAIL
+    nommu_k210_sdcard_defconfig: (gcc-8) FAIL
+
+Errors and Warnings Detected:
 
 arc:
-    haps_hs_smp_defconfig+kselftest (gcc-8): 2 warnings
+    haps_hs_smp_defconfig+kselftest (gcc-8): 10 errors, 5 warnings
 
 arm64:
+    allmodconfig (clang-10): 21 warnings
+    allmodconfig (clang-12): 16 warnings
+    defconfig (clang-12): 3 warnings
+    defconfig (clang-10): 4 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-12): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 4 warnings
 
 arm:
+    exynos_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (clang-12): 4 warnings
+    multi_v7_defconfig (clang-10): 4 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 1 warning
     multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-8): 1 warning
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-8): 1 warning
     omap1_defconfig (gcc-8): 2 warnings
 
 i386:
 
 mips:
+    32r2el_defconfig (gcc-8): 6 errors, 3 warnings
+    32r2el_defconfig+kselftest (gcc-8): 16 errors, 8 warnings
     malta_qemu_32r6_defconfig (gcc-8): 1 warning
     rm200_defconfig (gcc-8): 1 warning
 
 riscv:
+    defconfig+kselftest (gcc-8): 8 errors, 4 warnings
+    nommu_k210_defconfig (gcc-8): 1 error, 1 warning
+    nommu_k210_sdcard_defconfig (gcc-8): 1 error, 1 warning
     rv32_defconfig (gcc-8): 6 warnings
 
 x86_64:
+    x86_64_defconfig (clang-10): 2 warnings
 
+Errors summary:
+
+    20   include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=
+=E2=80=99) has incomplete type
+    20   include/linux/hugetlb.h:335:19: error: function declaration isn=E2=
+=80=99t a prototype [-Werror=3Dstrict-prototypes]
+    2    mm/gup.c:2698:3: error: implicit declaration of function =E2=80=98=
+mm_set_has_pinned_flag=E2=80=99; did you mean =E2=80=98set_tsk_thread_flag=
+=E2=80=99? [-Werror=3Dimplicit-function-declaration]
 
 Warnings summary:
 
-    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+    20   cc1: some warnings being treated as errors
+    18   1 warning generated.
+    6    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' =
+is uninitialized when used here [-Wuninitialized]
+    6    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variabl=
+e 'port_id' to silence this warning
+    5    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unu=
+sed variable =E2=80=98ret=E2=80=99 [-Wunused-variable]
+    4    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unu=
+sed variable 'ret' [-Wunused-variable]
+    3    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc1-next-20210512/kernel/drivers/media/tuners/tuner-types=
+.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    2    kernel/rcu/refscale.c:492:3: warning: variable 'x' is uninitialize=
+d when used here [-Wuninitialized]
+    2    kernel/rcu/refscale.c:487:7: note: initialize the variable 'x' to =
+silence this warning
+    2    kernel/rcu/refscale.c:479:3: warning: variable 'x' is uninitialize=
+d when used here [-Wuninitialized]
+    2    kernel/rcu/refscale.c:474:7: note: initialize the variable 'x' to =
+silence this warning
+    2    drivers/platform/surface/surface_aggregator_registry.c:478:25: war=
+ning: implicit conversion from 'int' to '__u8' (aka 'unsigned char') change=
+s value from 65535 to 255 [-Wconstant-conversion]
+    2    drivers/hid/surface-hid/surface_hid.c:233:25: warning: implicit co=
+nversion from 'int' to '__u8' (aka 'unsigned char') changes value from 6553=
+5 to 255 [-Wconstant-conversion]
+    2    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implici=
+t conversion from 'unsigned long long' to 'unsigned long' changes value fro=
+m 5000000000 to 705032704 [-Wconstant-conversion]
+    2    cc1: all warnings being treated as errors
+    2    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [=
 -Wcpp]
-    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+    2    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
-    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+    2    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemente=
 d [-Wcpp]
+    2    2 warnings generated.
     1    {standard input}:39: Warning: macro instruction expanded into mult=
 iple instructions
-    1    include/vdso/bits.h:7:26: warning: left shift count >=3D width of =
-type [-Wshift-count-overflow]
+    1    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_relocate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-=
+1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_copy_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
     1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
     1    arch/arm/mach-omap1/board-h2.c:347:34: warning: =E2=80=98isp1301_g=
 piod_table=E2=80=99 defined but not used [-Wunused-variable]
     1    arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =E2=80=98am=
 s_delta_camera_power=E2=80=99 defined but not used [-Wunused-function]
-    1    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu=
-_ev_hw_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
-    1    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pm=
-u_cache_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc1-next-20210512/kernel/sound/soc/intel/boards/snd-soc-i=
+ntel-hda-dsp-common.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc1-next-20210512/kernel/drivers/clk/keystone/pll.ko: uns=
+upported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc1-next-20210512/kernel/drivers/clk/keystone/gate.ko: un=
+supported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc1-next-20210512/kernel/crypto/cast_common.ko: unsupport=
+ed GNU_PROPERTY_TYPE (5) type: 0xc0000000
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -138,28 +224,178 @@ Detailed per-defconfig build reports:
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+32r2el_defconfig (mips, gcc-8) =E2=80=94 FAIL, 6 errors, 3 warnings, 0 sect=
 ion mismatches
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
+Errors:
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+
+Warnings:
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: all warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 FAIL, 16 errors, 8 warni=
+ngs, 0 section mismatches
+
+Errors:
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+
+Warnings:
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: all warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+allmodconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 21 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/rcu/refscale.c:479:3: warning: variable 'x' is uninitialized whe=
+n used here [-Wuninitialized]
+    kernel/rcu/refscale.c:474:7: note: initialize the variable 'x' to silen=
+ce this warning
+    kernel/rcu/refscale.c:492:3: warning: variable 'x' is uninitialized whe=
+n used here [-Wuninitialized]
+    kernel/rcu/refscale.c:487:7: note: initialize the variable 'x' to silen=
+ce this warning
+    2 warnings generated.
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable 'ret' [-Wunused-variable]
+    1 warning generated.
+    drivers/platform/surface/surface_aggregator_registry.c:478:25: warning:=
+ implicit conversion from 'int' to '__u8' (aka 'unsigned char') changes val=
+ue from 65535 to 255 [-Wconstant-conversion]
+    1 warning generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    drivers/hid/surface-hid/surface_hid.c:233:25: warning: implicit convers=
+ion from 'int' to '__u8' (aka 'unsigned char') changes value from 65535 to =
+255 [-Wconstant-conversion]
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/crypto/cast_common.ko: unsupported GN=
+U_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/drivers/clk/keystone/gate.ko: unsuppo=
+rted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/drivers/clk/keystone/pll.ko: unsuppor=
+ted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/sound/soc/intel/boards/snd-soc-intel-=
+hda-dsp-common.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-12) =E2=80=94 PASS, 0 errors, 16 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/rcu/refscale.c:479:3: warning: variable 'x' is uninitialized whe=
+n used here [-Wuninitialized]
+    kernel/rcu/refscale.c:474:7: note: initialize the variable 'x' to silen=
+ce this warning
+    kernel/rcu/refscale.c:492:3: warning: variable 'x' is uninitialized whe=
+n used here [-Wuninitialized]
+    kernel/rcu/refscale.c:487:7: note: initialize the variable 'x' to silen=
+ce this warning
+    2 warnings generated.
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable 'ret' [-Wunused-variable]
+    1 warning generated.
+    drivers/platform/surface/surface_aggregator_registry.c:478:25: warning:=
+ implicit conversion from 'int' to '__u8' (aka 'unsigned char') changes val=
+ue from 65535 to 255 [-Wconstant-conversion]
+    1 warning generated.
+    drivers/hid/surface-hid/surface_hid.c:233:25: warning: implicit convers=
+ion from 'int' to '__u8' (aka 'unsigned char') changes value from 65535 to =
+255 [-Wconstant-conversion]
+    1 warning generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
 allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -170,6 +406,16 @@ ismatches
 -----
 allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
  mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -190,6 +436,11 @@ ction mismatches
 -----
 aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -308,6 +559,11 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
 cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
 
@@ -343,13 +599,72 @@ decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
 
 ---------------------------------------------------------------------------=
 -----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-12) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
+ mismatches
+
+Warnings:
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
 defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-12) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 PASS, 0 er=
+rors, 4 warnings, 0 section mismatches
+
+Warnings:
+    sound/soc/qcom/qdsp6/q6afe.c:1213:18: warning: variable 'port_id' is un=
+initialized when used here [-Wuninitialized]
+    sound/soc/qcom/qdsp6/q6afe.c:1186:13: note: initialize the variable 'po=
+rt_id' to silence this warning
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc1-next-20210512/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
 
 ---------------------------------------------------------------------------=
 -----
@@ -358,13 +673,42 @@ defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
 
 ---------------------------------------------------------------------------=
 -----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
 , 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 FAIL, 8 errors, 4 warnings, 0 =
 section mismatches
+
+Errors:
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+
+Warnings:
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
@@ -393,8 +737,17 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable =E2=80=98ret=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -448,14 +801,37 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 wa=
-rnings, 0 section mismatches
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 FAIL, 10 errors, 5 w=
+arnings, 0 section mismatches
+
+Errors:
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
+    include/linux/hugetlb.h:340:30: error: parameter 6 (=E2=80=98mode=E2=80=
+=99) has incomplete type
+    include/linux/hugetlb.h:335:19: error: function declaration isn=E2=80=
+=99t a prototype [-Werror=3Dstrict-prototypes]
 
 Warnings:
-    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pmu_cac=
-he_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
-    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu_ev_h=
-w_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
@@ -471,6 +847,16 @@ hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 -----
 i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -569,11 +955,6 @@ ection mismatches
 
 ---------------------------------------------------------------------------=
 -----
-lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
 lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
 ion mismatches
 
@@ -668,11 +1049,6 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
 mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -688,13 +1064,59 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable =E2=80=98ret=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable 'ret' [-Wunused-variable]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 =
+section mismatches
+
+Warnings:
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable 'ret' [-Wunused-variable]
+    1 warning generated.
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
+ errors, 1 warning, 0 section mismatches
+
+Warnings:
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable =E2=80=98ret=E2=80=99 [-Wunused-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -702,18 +1124,17 @@ multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
 =94 PASS, 0 errors, 1 warning, 0 section mismatches
 
 Warnings:
-    include/vdso/bits.h:7:26: warning: left shift count >=3D width of type =
-[-Wshift-count-overflow]
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable =E2=80=98ret=E2=80=99 [-Wunused-variable]
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
-warnings, 0 section mismatches
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 =
+warning, 0 section mismatches
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
+Warnings:
+    drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused v=
+ariable =E2=80=98ret=E2=80=99 [-Wunused-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -757,13 +1178,29 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
+ection mismatches
+
+Errors:
+    mm/gup.c:2698:3: error: implicit declaration of function =E2=80=98mm_se=
+t_has_pinned_flag=E2=80=99; did you mean =E2=80=98set_tsk_thread_flag=E2=80=
+=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
-nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 FAIL, 1 error, 1 warni=
+ng, 0 section mismatches
+
+Errors:
+    mm/gup.c:2698:3: error: implicit declaration of function =E2=80=98mm_se=
+t_has_pinned_flag=E2=80=99; did you mean =E2=80=98set_tsk_thread_flag=E2=80=
+=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
 
 ---------------------------------------------------------------------------=
 -----
@@ -910,14 +1347,14 @@ rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
 on mismatches
 
 Warnings:
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
@@ -943,6 +1380,11 @@ n mismatches
 -----
 sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -977,11 +1419,6 @@ tion mismatches
 ---------------------------------------------------------------------------=
 -----
 spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
 ---------------------------------------------------------------------------=
@@ -1061,11 +1498,6 @@ tion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
 viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
 n mismatches
 
@@ -1088,6 +1520,22 @@ tion mismatches
 -----
 x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
 ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_re=
+locate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-1+0
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_co=
+py_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
 ---------------------------------------------------------------------------=
 -----

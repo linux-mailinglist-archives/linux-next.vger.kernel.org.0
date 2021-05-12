@@ -2,96 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D1D37B46D
-	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 05:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A5837B537
+	for <lists+linux-next@lfdr.de>; Wed, 12 May 2021 07:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbhELDVV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 May 2021 23:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S229803AbhELFBX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 May 2021 01:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbhELDVV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 May 2021 23:21:21 -0400
+        with ESMTP id S229627AbhELFBW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 May 2021 01:01:22 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4399C061574;
-        Tue, 11 May 2021 20:19:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EC5C061574;
+        Tue, 11 May 2021 22:00:14 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fg0Q24gKbz9sSs;
-        Wed, 12 May 2021 13:19:22 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fg2fL143zz9sWX;
+        Wed, 12 May 2021 15:00:09 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620789562;
-        bh=f/tE1O7TnGwKtzXIWKZ9E9+OSqVX+6t2Zlft+8e4zu4=;
+        s=201702; t=1620795611;
+        bh=QUroELMBcg2yl0c8Ocr3GIPaSGOYYWLIChZdl8QSxTc=;
         h=Date:From:To:Cc:Subject:From;
-        b=Y0PeF2eL4ZhBcho8ZSPSW80+0Fl4+9Sdm3ZhVIo0SUupySAj1Jx/6SZozCGUhpniv
-         BrW5KU2GJZpsQ9ldNTJd/FQ3QtBXULJRQCKUjI4jmIyIlquRlwSTokwoNoAaRmJf66
-         Iz2f+PP1boghUx0mhYquXDgI4Rf2KyTfY91ddebf3BsC9zRH6Hde1fNMO9rg8ns1gS
-         VHl0p4f6qIfclvPVKKzSbecnQz98tRdzwZNSv+GQoZjwXZOAYZtEYOzAv2uCfA+xU2
-         1e/jJkcY1kaJwBQpm1PdwWUMOPbYavZMpcFcv+dCDi1MmWgjLZrdP7GNeJrITR+0Fr
-         t+TzhNpSbQ//w==
-Date:   Wed, 12 May 2021 13:19:22 +1000
+        b=b14pM2A1SRpKW0kl9mTkAQZd6+AnoKrF0R9QjS2bsiDAhKgiDi7YPorLWiwLWjB6E
+         LoIpgAkWjdSi6EacTMXczcAoEztkxFPAZAYMzmwm+mLnvXxtqj13a3ff9uXPz90G1m
+         cqlP3ClFyzARQOsPH5U8I3gvQSS95Ev3PN5dPD5/QCtFqQuZtwcALY/fmGdc6KMN/M
+         2COUpgzI0bd9GZxZu4brbjkrssTk4KqFVeSjbRipVAZ3oFq8w5KZnej6883sniTnrH
+         m2710bNFD3eL18wQjgIKKWv2nCwK8YouLTwLHdptOOSNxvleEg9MUryWRyrcpa5wTk
+         +E6pY+JiGNeSQ==
+Date:   Wed, 12 May 2021 15:00:08 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the hyperv tree with Linus' tree
-Message-ID: <20210512131922.716824fa@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20210512150008.52f92c26@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k2q9RJCw=ag.ovMZwDStgWC";
+Content-Type: multipart/signed; boundary="Sig_/6Z92Gv.P.iwuhI+YMz0./pR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/k2q9RJCw=ag.ovMZwDStgWC
+--Sig_/6Z92Gv.P.iwuhI+YMz0./pR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the hyperv tree got a conflict in:
+After merging the drm-misc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-  drivers/hv/ring_buffer.c
+drivers/gpu/drm/nouveau/nouveau_connector.c: In function 'nouveau_connector=
+_of_detect':
+drivers/gpu/drm/nouveau/nouveau_connector.c:463:59: error: 'struct drm_devi=
+ce' has no member named 'pdev'; did you mean 'dev'?
+  463 |  struct device_node *cn, *dn =3D pci_device_to_OF_node(dev->pdev);
+      |                                                           ^~~~
+      |                                                           dev
 
-between commit:
+Caused by commit
 
-  0c85c54bf7fa ("Drivers: hv: vmbus: Drop error message when 'No request id=
- available'")
+  b347e04452ff ("drm: Remove pdev field from struct drm_device")
 
-from Linus' tree and commit:
-
-  8e74d1f319bf ("scsi: storvsc: Use blk_mq_unique_tag() to generate request=
-IDs")
-
-from the hyperv tree.
-
-I fixed it up (I just used the latter as it included the former) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/k2q9RJCw=ag.ovMZwDStgWC
+--Sig_/6Z92Gv.P.iwuhI+YMz0./pR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbSToACgkQAVBC80lX
-0GxOdggAi4Eh4OkQbQvHLilXjkcgWpjZFEq822lLfbf/BeOeWNXq5Bh0N3VFFoWb
-as9EZHF9s0AliQ70kS+g3+85bGZjnJU5O35UDo7DwPJSFLifPn/K6fgBVsB/IlzG
-fqbAXABcU1NGLbEWx4bKB/j64r7Umu/ATApwv7+uCOVmXjO9LRHETFI1MC9fV5TW
-jddiTiNOA4XHtpB5VypsWH3ds9hfn2wagO/zBH9msTzttDyWyMjf1ptNHZEQGPfu
-A70ATP8kJpUsqwHCeQr3lXOuFYFWTnbXPyiM378uZKQnEWvh+WCDF5MPFZpSVY17
-5FmwfHbC9tTIVb6/XnR46xY3aD/4vA==
-=T3zQ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCbYNgACgkQAVBC80lX
+0GyESgf/T07rjtpKJQjtzWk/qYdBRCC+Q8ax5RfJORk8UpqNlJqy9ZGe1FPXkn1D
+wJdnx9eI8J19CgueHZWJP57lp754E0NCC9Y7rG1nfqzY5JJIKRnw8kL7oJRGItQ/
+hbddLG4ddkG5bo73Z0xxDOFy8yINUsQmt0uy/tuK28fqOqVjaFU1WyBbrb5Gb3qG
+26nM90fBzqbnsO8Tz5Z8xA/DBSTJGM6ame7m1qvQ2w0/U9QhkWSEjhE50/niZWtC
+nJqdajEDtDCCKzn/9W2uV//+q9+pxYykTHBuBmbn9u06SdxmgsV24398P9Ni6tdl
+jZ+NeX33AlOhXTSdre1aAATiOjuljg==
+=uEFp
 -----END PGP SIGNATURE-----
 
---Sig_/k2q9RJCw=ag.ovMZwDStgWC--
+--Sig_/6Z92Gv.P.iwuhI+YMz0./pR--

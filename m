@@ -2,100 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E1737FFCD
-	for <lists+linux-next@lfdr.de>; Thu, 13 May 2021 23:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D8538008A
+	for <lists+linux-next@lfdr.de>; Fri, 14 May 2021 00:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbhEMV33 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 May 2021 17:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
+        id S230307AbhEMWwp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 May 2021 18:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbhEMV32 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 17:29:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A6C06175F;
-        Thu, 13 May 2021 14:28:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=V1rOYMT9k8A/s4ml+UdcdvoHKOVvK0OalWOKj1zAbw4=; b=RUDS28TunEHfrf3zmImQUjPJVw
-        rHn1CGTDnwJJAyI5ULHPZ8RueWmcrTL3lSPv7qEAdxvbgDttyIb/zSZmusU6ZOwxthy+JdlH73H/P
-        9fk85iN61NvwZ0WeKPlC1EbRjgjmXwyZMloKdSc1APDCXvmNL/HSGNxJylB4f/43jrXhKb/0r1QkV
-        oNTT9zisgQBrj36tmKbXQEDbpL2BLTVqv+cmFjoxf6oL/4Rm1EoWZJAcC5psGxcd8Oz2TH1Yv3zC9
-        yVGffF2KFDFXKun2CsvmRKCjrEAv6DNjKOoTsSiBHvpFR1TT/MSpmxzV4XLHB1hFB4ZhlFEonNphK
-        4+stMZ4Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lhIrd-009n39-8x; Thu, 13 May 2021 21:27:38 +0000
-Date:   Thu, 13 May 2021 22:27:25 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S230204AbhEMWwo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 18:52:44 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE33C061574;
+        Thu, 13 May 2021 15:51:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fh6N134Vjz9sW5;
+        Fri, 14 May 2021 08:51:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1620946291;
+        bh=5X8s9x7hCNYhfbxnbCyNQ7P37vMNwoxzFyLRY49rDeY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HHGhJM3Xf4MQD+TU+o54B/oYhhuz4Km5oin/ROJxmQzzsAAfgcfAwjSROPHDuZX3Y
+         BmraFHodj3fShwq1bYORRXRJCT3Eb3djMCCf+IHN6LaUUl4ObX8aJi0BKxO5vXniKu
+         3sechXwgNT8/kbiCyL1xHEJMBcdx5HzKAYwFIYyVki9oP0GcuVgPZ1c9KcHl32Ef0H
+         Rpb4dfo/5wKRsb/utcsp8vujq/ZbNzQST0SBTQQ0+iccCpCyChZJCuemVCPsvlpWOm
+         9Y3EwU24QxLhoXbDagvB/ZXl1tN6VrXqpvhNkFTvtUk5uoLtCpvBGVfNbfxyyog1UP
+         cIOS1WNbZEU1Q==
+Date:   Fri, 14 May 2021 08:51:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, Greg KH <greg@kroah.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: linux-next: Tree for May 13 (mm/page_alloc.c, <linux/mm.h>:
- sizeof(struct page))
-Message-ID: <YJ2ZvZaR9PTyPp8S@casper.infradead.org>
-References: <20210513154418.2946f422@canb.auug.org.au>
- <b7ebb44d-5dd7-7941-234b-f727691ed1f4@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210514085128.43026b8c@canb.auug.org.au>
+In-Reply-To: <CAMZdPi_CtyM=Rs+OEdRoscqr55qNxmG70AgUckzvyAMvY-amLQ@mail.gmail.com>
+References: <20210512095201.09323cda@canb.auug.org.au>
+        <20210512095418.0ad4ea4a@canb.auug.org.au>
+        <20210513111110.02e1caee@canb.auug.org.au>
+        <CAMZdPi_CtyM=Rs+OEdRoscqr55qNxmG70AgUckzvyAMvY-amLQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b7ebb44d-5dd7-7941-234b-f727691ed1f4@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/Kr7kHy4DBFAUfq6yvNv7vg3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 13, 2021 at 10:29:49AM -0700, Randy Dunlap wrote:
-> On 5/12/21 10:44 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20210512:
-> > 
-> 
-> on x86_64:
-> 
-> In function ‘__mm_zero_struct_page.isra.75’,
->     inlined from ‘__init_single_page.isra.76’ at ../mm/page_alloc.c:1494:2:
-> ./../include/linux/compiler_types.h:328:38: error: call to ‘__compiletime_assert_162’ declared with attribute error: BUILD_BUG_ON failed: sizeof(struct page) > 80
+--Sig_/Kr7kHy4DBFAUfq6yvNv7vg3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hmm.
+Hi Loic,
 
-                struct {
-                        long unsigned int _pt_pad_1;     /*     8     8 */
-                        pgtable_t  pmd_huge_pte;         /*    16     8 */
-                        long unsigned int _pt_pad_2;     /*    24     8 */
-                        union {
-                                struct mm_struct * pt_mm; /*    32     8 */
-                                atomic_t pt_frag_refcount; /*    32     4 */
-                        };                               /*    32     8 */
-                        spinlock_t ptl;                  /*    40    72 */
-                };                                       /*     8   104 */
+On Thu, 13 May 2021 08:35:50 +0200 Loic Poulain <loic.poulain@linaro.org> w=
+rote:
+>
+> On Thu, 13 May 2021 at 03:11, Stephen Rothwell <sfr@canb.auug.org.au> wro=
+te:
+> >
+> > On Wed, 12 May 2021 09:54:18 +1000 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > >
+> > > On Wed, 12 May 2021 09:52:01 +1000 Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote: =20
+> > > >
+> > > > After merging the net-next tree, today's linux-next build (x86_64
+> > > > allmodconfig) failed like this:
+> > > >
+> > > > drivers/usb/class/cdc-wdm.c: In function 'wdm_wwan_port_stop':
+> > > > drivers/usb/class/cdc-wdm.c:858:2: error: implicit declaration of f=
+unction 'kill_urbs' [-Werror=3Dimplicit-function-declaration]
+> > > >   858 |  kill_urbs(desc);
+> > > >       |  ^~~~~~~~~
+> > > >
+> > > > Caused by commit
+> > > >
+> > > >   cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
+> > > >
+> > > > kill_urbs() was removed by commit
+> > > >
+> > > >   18abf8743674 ("cdc-wdm: untangle a circular dependency between ca=
+llback and softint")
+> > > >
+> > > > Which is included in v5.13-rc1. =20
+> > >
+> > > Sorry, that commit is only in linux-next (from the usb.current tree).
+> > > I will do a merge fix up tomorrow - unless someone provides one.
+> > > =20
+> > > > I have used the net-next tree from next-20210511 for today. =20
+> >
+> > I have used the following merge fix patch for today.  I don't know if
+> > this is sufficient (or even correct), but it does build. =20
+>=20
+> Thanks for working on this.
+>=20
+> >
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 13 May 2021 11:04:09 +1000
+> > Subject: [PATCH] usb: class: cdc-wdm: fix for kill_urbs() removal
+> >
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/usb/class/cdc-wdm.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+> > index c88dcc4b6618..489b0e049402 100644
+> > --- a/drivers/usb/class/cdc-wdm.c
+> > +++ b/drivers/usb/class/cdc-wdm.c
+> > @@ -855,7 +855,7 @@ static void wdm_wwan_port_stop(struct wwan_port *po=
+rt)
+> >         struct wdm_device *desc =3D wwan_port_get_drvdata(port);
+> >
+> >         /* Stop all transfers and disable WWAN mode */
+> > -       kill_urbs(desc);
+> > +       poison_urbs(desc);
+> >         desc->manage_power(desc->intf, 0);
+> >         clear_bit(WDM_READ, &desc->flags);
+> >         clear_bit(WDM_WWAN_IN_USE, &desc->flags); =20
+>=20
+> AFAIU, each poison call must be balanced with unpoison call.
+> So you probably want to call unpoison_urbs right here, similarly to
+> wdm_release or wdm_suspend.
 
-#if ALLOC_SPLIT_PTLOCKS
-                        spinlock_t *ptl;
-#else
-                        spinlock_t ptl;
-#endif
+I have added that call today.
 
-something has disabled ALLOC_SPLIT_PTLOCKS when it ought to be enabled.
+Thanks for the feedback.
 
-#if USE_SPLIT_PTE_PTLOCKS
-#define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
-#else
-#define ALLOC_SPLIT_PTLOCKS     0
-#endif
+--=20
+Cheers,
+Stephen Rothwell
 
-Oh.  This is Anshuman's fault.
+--Sig_/Kr7kHy4DBFAUfq6yvNv7vg3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-commit 9b8a39056e2472592a5e5897987387f43038b8ba
-Author: Anshuman Khandual <anshuman.khandual@arm.com>
-Date:   Tue May 11 15:06:01 2021 +1000
+-----BEGIN PGP SIGNATURE-----
 
-    mm/thp: make ALLOC_SPLIT_PTLOCKS dependent on USE_SPLIT_PTE_PTLOCKS
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCdrXAACgkQAVBC80lX
+0GyllwgAk5PAqa3+IgXJfdTQqcAWry4rrYdDtDBCXocafx5NverCrvYQLGhMc+vQ
+jWz2+W+HiqbKCWsoxn0uCsuiYn9+nBuF/ZUUvVdwQa+V6T4/v/u4R+/kdstkZfHG
+hI007XWhcXojvcb0KdTrYaGw8qA7D/ud1AMYrBjOEHlzMi8DJvcYu7FHMJYoza2L
+S5OMBoc/rzOaA5cucrf3exaylvxCrwyz/iWeaixRmcRRL8dZrCcWC9lgDQ3B0kaV
+U6xf7XIfFKHasqBNJllY+8Smv471VIGn/IzM5CepcZSIKajz7iss7TaqgFjpIjKO
+VSd8z8MFlPDlynhj30yMFN1rKnrxJw==
+=HuW+
+-----END PGP SIGNATURE-----
 
-
+--Sig_/Kr7kHy4DBFAUfq6yvNv7vg3--

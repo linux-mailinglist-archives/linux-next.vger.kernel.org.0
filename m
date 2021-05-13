@@ -2,100 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884F737FF9B
-	for <lists+linux-next@lfdr.de>; Thu, 13 May 2021 23:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E1737FFCD
+	for <lists+linux-next@lfdr.de>; Thu, 13 May 2021 23:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233279AbhEMVJs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 May 2021 17:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S233478AbhEMV33 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 May 2021 17:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbhEMVJn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 17:09:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDE4C061574;
-        Thu, 13 May 2021 14:08:31 -0700 (PDT)
+        with ESMTP id S233498AbhEMV32 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 17:29:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A6C06175F;
+        Thu, 13 May 2021 14:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=puMCBatXvbMaxJ2hgetoloHiCLuOQHxAQ0mJZIFbNO4=; b=lnkdnmEFdc96TvOfe+wgZjwi8T
-        wHYrRqnF/Q3VjUvdkqzVp4p+/N+PoSHFJsxDq654rkmB8gf6/3iqBGRwec+9BwDP2W7skuy/qlKR6
-        xeFwqYaXXfVmdPn8kW1kFGbNaDHXzGTlhV8bwiU7B70Acd6t0SNtHFX4m2GYw0kJ+Q5fUn14XeZCJ
-        HMXi9g6UfjrwABORcO+yyWP9wEwtB0ThbvKINLKZjLMgEXopt7o7p0kCbegGfysNVBoCOizzWYhIS
-        qtzA7gM4QlCPoQ8K/eqvBLEeCE+veP90WBsul6d/+UGj25k9wZFiO1LexQV2r5rqDuaZZ7R7VuaZD
-        8repElig==;
-Received: from [2601:1c0:6280:3f0::7376]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lhIZJ-00BX4A-TH; Thu, 13 May 2021 21:08:29 +0000
-Subject: Re: mmotm 2021-05-12-21-46 uploaded (arch/x86/mm/pgtable.c)
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-References: <20210513044710.MCXhM_NwC%akpm@linux-foundation.org>
- <151ddd7f-1d3e-a6f7-daab-e32f785426e1@infradead.org>
- <54055e72-34b8-d43d-2ad3-87e8c8fa547b@csgroup.eu>
- <20210513134754.ab3f1a864b0156ef99248401@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <a3ac0b42-f779-ffaf-c6d7-0d4b40dc25f2@infradead.org>
-Date:   Thu, 13 May 2021 14:08:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=V1rOYMT9k8A/s4ml+UdcdvoHKOVvK0OalWOKj1zAbw4=; b=RUDS28TunEHfrf3zmImQUjPJVw
+        rHn1CGTDnwJJAyI5ULHPZ8RueWmcrTL3lSPv7qEAdxvbgDttyIb/zSZmusU6ZOwxthy+JdlH73H/P
+        9fk85iN61NvwZ0WeKPlC1EbRjgjmXwyZMloKdSc1APDCXvmNL/HSGNxJylB4f/43jrXhKb/0r1QkV
+        oNTT9zisgQBrj36tmKbXQEDbpL2BLTVqv+cmFjoxf6oL/4Rm1EoWZJAcC5psGxcd8Oz2TH1Yv3zC9
+        yVGffF2KFDFXKun2CsvmRKCjrEAv6DNjKOoTsSiBHvpFR1TT/MSpmxzV4XLHB1hFB4ZhlFEonNphK
+        4+stMZ4Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lhIrd-009n39-8x; Thu, 13 May 2021 21:27:38 +0000
+Date:   Thu, 13 May 2021 22:27:25 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: linux-next: Tree for May 13 (mm/page_alloc.c, <linux/mm.h>:
+ sizeof(struct page))
+Message-ID: <YJ2ZvZaR9PTyPp8S@casper.infradead.org>
+References: <20210513154418.2946f422@canb.auug.org.au>
+ <b7ebb44d-5dd7-7941-234b-f727691ed1f4@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20210513134754.ab3f1a864b0156ef99248401@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7ebb44d-5dd7-7941-234b-f727691ed1f4@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/13/21 1:47 PM, Andrew Morton wrote:
-> On Thu, 13 May 2021 19:09:23 +0200 Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+On Thu, May 13, 2021 at 10:29:49AM -0700, Randy Dunlap wrote:
+> On 5/12/21 10:44 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20210512:
+> > 
 > 
->>
->>
->>> on i386:
->>>
->>> ../arch/x86/mm/pgtable.c:703:5: error: redefinition of ‘pud_set_huge’
->>>   int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
->>>       ^~~~~~~~~~~~
->>> In file included from ../include/linux/mm.h:33:0,
->>>                   from ../arch/x86/mm/pgtable.c:2:
->>> ../include/linux/pgtable.h:1387:19: note: previous definition of ‘pud_set_huge’ was here
->>>   static inline int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot_t prot)
->>>                     ^~~~~~~~~~~~
->>> ../arch/x86/mm/pgtable.c:758:5: error: redefinition of ‘pud_clear_huge’
->>>   int pud_clear_huge(pud_t *pud)
->>>       ^~~~~~~~~~~~~~
->>> In file included from ../include/linux/mm.h:33:0,
->>>                   from ../arch/x86/mm/pgtable.c:2:
->>> ../include/linux/pgtable.h:1391:19: note: previous definition of ‘pud_clear_huge’ was here
->>>   static inline int pud_clear_huge(pud_t *pud)
->>>                     ^~~~~~~~~~~~~~
->>
->> Hum ...
->>
->> Comes from my patch 
->> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/5ac5976419350e8e048d463a64cae449eb3ba4b0.1620795204.git.christophe.leroy@csgroup.eu/
->>
->> But, that happens only if x86 defines __PAGETABLE_PUD_FOLDED. And if PUD is folded, then I can't 
->> understand my it has pud_set_huge() and pud_clear_huge() functions.
+> on x86_64:
 > 
-> Probably because someone messed something up ;)
-> 
-> Let's try this.
-> 
-> --- a/arch/x86/mm/pgtable.c~mm-pgtable-add-stubs-for-pmd-pub_set-clear_huge-fix
-> +++ a/arch/x86/mm/pgtable.c
+> In function ‘__mm_zero_struct_page.isra.75’,
+>     inlined from ‘__init_single_page.isra.76’ at ../mm/page_alloc.c:1494:2:
+> ./../include/linux/compiler_types.h:328:38: error: call to ‘__compiletime_assert_162’ declared with attribute error: BUILD_BUG_ON failed: sizeof(struct page) > 80
 
-That also works_for_me.
+Hmm.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+                struct {
+                        long unsigned int _pt_pad_1;     /*     8     8 */
+                        pgtable_t  pmd_huge_pte;         /*    16     8 */
+                        long unsigned int _pt_pad_2;     /*    24     8 */
+                        union {
+                                struct mm_struct * pt_mm; /*    32     8 */
+                                atomic_t pt_frag_refcount; /*    32     4 */
+                        };                               /*    32     8 */
+                        spinlock_t ptl;                  /*    40    72 */
+                };                                       /*     8   104 */
 
-thanks.
--- 
-~Randy
+#if ALLOC_SPLIT_PTLOCKS
+                        spinlock_t *ptl;
+#else
+                        spinlock_t ptl;
+#endif
+
+something has disabled ALLOC_SPLIT_PTLOCKS when it ought to be enabled.
+
+#if USE_SPLIT_PTE_PTLOCKS
+#define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
+#else
+#define ALLOC_SPLIT_PTLOCKS     0
+#endif
+
+Oh.  This is Anshuman's fault.
+
+commit 9b8a39056e2472592a5e5897987387f43038b8ba
+Author: Anshuman Khandual <anshuman.khandual@arm.com>
+Date:   Tue May 11 15:06:01 2021 +1000
+
+    mm/thp: make ALLOC_SPLIT_PTLOCKS dependent on USE_SPLIT_PTE_PTLOCKS
+
 

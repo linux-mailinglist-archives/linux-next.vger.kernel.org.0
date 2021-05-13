@@ -2,124 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B1737F5F0
-	for <lists+linux-next@lfdr.de>; Thu, 13 May 2021 12:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95537F681
+	for <lists+linux-next@lfdr.de>; Thu, 13 May 2021 13:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbhEMKxB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 May 2021 06:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbhEMKxB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 06:53:01 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81651C061574;
-        Thu, 13 May 2021 03:51:50 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b17so30492059ede.0;
-        Thu, 13 May 2021 03:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vSaWdpUe1Ty1mw9fU8RRwXWDrECbF/5dVz1Lbk9LJn4=;
-        b=SXuTO/M/wBSW7Fi521W6qZ5yk/wLIzGyC4ZNRU5IhnUQhpLQIGqQeCto3WwrzpZXU3
-         xZSMNHwlZEyq32AMzSStDhNIj0O/wllvVflI2IdBAs8U7Wu18/oonJiNCQoJTlTQGLdw
-         1WQJiI7qt48MNfCX7vw77XZt8ZLNwEXRlVRCSN7EcQeVtKH8BuY0oVsyOTjdPtTE0eZo
-         6DDU7L0HclWtubeZ0zp5bIt48UpWLYQtxNw0UMAO05uw6Q8AvYMuzz4ZCvNxHcI0PAjP
-         FtAUaWTVO4wdrS9HsTWsPuS74ODPa1ov4xsmO8dlWAjlzGhMC4Wi+gUBISEZP11vsIRm
-         vgrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=vSaWdpUe1Ty1mw9fU8RRwXWDrECbF/5dVz1Lbk9LJn4=;
-        b=cHEMPkE3vprHg+Fb1wPy+4gsLY7/uhlDiRYLm5rLoQunJlQykUO11pZJGKUAe1xspb
-         YFJhITF4cQE9Y3iYM45MtViZgL1pl9zK8AOCqS+r0MC/+6Ka5vjJdB1/xbXkMJKVSj+t
-         G13HBM2LyTm1KH2vCC4TDtOqwylKDM73zRSBuCuORat1+zT9fUh/U3kCM6Qj6nefsF0y
-         X1DVPK0ccsmds5x/QbC8qA43leECPHuu3xR+LIW2W7pnISZ4DNwO0c181ypg+p4kgN/D
-         UI7uiKMCIpWHpH9F2LJoS7OLezP4jcUKrVW9OWMj9Qlw00WlZWKC5WGaqTyWpEmysYFi
-         Ssxg==
-X-Gm-Message-State: AOAM532s3lzhjp7NVKcatKcQ0LT4PEtkH6etmZfCDMEQAr2AUw1N01Ia
-        k9HyyZzv8AW0u0qEXQNpjQU=
-X-Google-Smtp-Source: ABdhPJwaHL6C6ggtqq76KDiPHH73BSiv5T6KC00VzI7VbtTeGly5R9tSi5NGFzY5N97Z/f/caMGyaQ==
-X-Received: by 2002:aa7:cc11:: with SMTP id q17mr17071756edt.240.1620903109320;
-        Thu, 13 May 2021 03:51:49 -0700 (PDT)
-Received: from gmail.com (0526E777.dsl.pool.telekom.hu. [5.38.231.119])
-        by smtp.gmail.com with ESMTPSA id h8sm1569148ejb.104.2021.05.13.03.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 May 2021 03:51:48 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 13 May 2021 12:51:47 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S233214AbhEMLNl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 May 2021 07:13:41 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:34563 "EHLO
+        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231255AbhEMLNk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 May 2021 07:13:40 -0400
+Received: from [IPv6:2601:646:8602:8be1:5c7d:57f0:ac0a:2918] ([IPv6:2601:646:8602:8be1:5c7d:57f0:ac0a:2918])
+        (authenticated bits=0)
+        by mail.zytor.com (8.16.1/8.15.2) with ESMTPSA id 14DBBt4W2922109
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Thu, 13 May 2021 04:11:57 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 14DBBt4W2922109
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2021042801; t=1620904319;
+        bh=qSPlqdGJ/YhmwRMi/TOo7jeYGsFgt5FeFY+duSoYoTQ=;
+        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
+        b=KwCCWaMZDe6K3+jBhdvhJFERObFtuGFKL5HHZWI2o3X9Kf5wQF7khDVFoEdsdIpyD
+         Bey3gGoyMCQz3DuUHkMxjVwCG2kaIT8bKEY+qalLYpJ2go2Uyq3YHN7bX/BIgApPq5
+         WeQVI7P5duykrSwo5JAkAKFhXfAwbQeOgZ1adh6qEwgxzIIqcqN2EDXFNbnhws6CVT
+         qqhgAHY7DPY4Nv3e0Vt5J9671tlP9f5yrD/jpUqcsn3dX+CwglWpKtALdxiJ8uf+Qz
+         HU4+OtUb1vMXzBvjzJ+NFPYjf06s+Z5K6La+wMVt8Sb/bCtnwuya5oWuNrKCfWDXhw
+         xG+HESLWa9ZgQ==
+Date:   Thu, 13 May 2021 04:11:49 -0700
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YJ0Ew9gjprpCByxF@gmail.com>
+References: <20210513120515.7060879c@canb.auug.org.au> <YJ0Ew9gjprpCByxF@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: linux-next: build failure after merge of the tip tree
+To:     Ingo Molnar <mingo@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <YJ0Ew9gjprpCByxF@gmail.com>
-References: <20210513120515.7060879c@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210513120515.7060879c@canb.auug.org.au>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <4A5E6F25-37B6-4114-AB3C-476F6F551DBD@zytor.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Needed some head scratching, but then=2E=2E=2E
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+It makes sense for the cross-build: it's building for the host, and a non-=
+x86 machine isn't doing to have a register named "%rsp"=2E
 
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> In file included from tools/arch/x86/include/asm/nops.h:5,
->                  from arch/x86/decode.c:15:
-> tools/arch/x86/include/asm/asm.h:185:24: error: invalid register name for 'current_stack_pointer'
->   185 | register unsigned long current_stack_pointer asm(_ASM_SP);
->       |                        ^~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   eef23e72b78b ("x86/asm: Use _ASM_BYTES() in <asm/nops.h>")
-> 
-> I have used the tip tree from next-20210512 for today.
+So this needs to be protected from non-kernel use either via __KERNEL__ or=
+ by factoring the basic macros out into a separate file=2E
 
-Hm, this must be some cross-build artifact or toolchain version dependency 
-- as plain native build of x86-64 allmodconfig builds just fine:
+Incidentally, we seem to have three categories of include files now: kerne=
+l-only, uapi, and "tools api"=2E Perhaps we need such a "tapi" directory in=
+stead of copying things around=2E=2E=2E the infrastructure for uapi with ma=
+ke headers_install etc ought to be generalizable=2E
 
-    CC       arch/x86/decode.o
-    LD       arch/x86/objtool-in.o
 
-I tried with gcc-8, but that didn't trigger it.
+On May 13, 2021 3:51:47 AM PDT, Ingo Molnar <mingo@kernel=2Eorg> wrote:
+>
+>* Stephen Rothwell <sfr@canb=2Eauug=2Eorg=2Eau> wrote:
+>
+>> Hi all,
+>>=20
+>> After merging the tip tree, today's linux-next build (x86_64
+>allmodconfig)
+>> failed like this:
+>>=20
+>> In file included from tools/arch/x86/include/asm/nops=2Eh:5,
+>>                  from arch/x86/decode=2Ec:15:
+>> tools/arch/x86/include/asm/asm=2Eh:185:24: error: invalid register name
+>for 'current_stack_pointer'
+>>   185 | register unsigned long current_stack_pointer asm(_ASM_SP);
+>>       |                        ^~~~~~~~~~~~~~~~~~~~~
+>>=20
+>> Caused by commit
+>>=20
+>>   eef23e72b78b ("x86/asm: Use _ASM_BYTES() in <asm/nops=2Eh>")
+>>=20
+>> I have used the tip tree from next-20210512 for today=2E
+>
+>Hm, this must be some cross-build artifact or toolchain version
+>dependency=20
+>- as plain native build of x86-64 allmodconfig builds just fine:
+>
+>    CC       arch/x86/decode=2Eo
+>    LD       arch/x86/objtool-in=2Eo
+>
+>I tried with gcc-8, but that didn't trigger it=2E
+>
+>I suppose the workaround below would make it build - but that's not a
+>real=20
+>solution=2E
+>
+>hpa, any ideas?
+>
+>Thanks,
+>
+>	Ingo
+>
+>diff --git a/tools/arch/x86/include/asm/asm=2Eh
+>b/tools/arch/x86/include/asm/asm=2Eh
+>index 507a37a46027=2E=2Eada5482c024a 100644
+>--- a/tools/arch/x86/include/asm/asm=2Eh
+>+++ b/tools/arch/x86/include/asm/asm=2Eh
+>@@ -176,14 +176,6 @@
+>=20
+> /* For C file, we already have NOKPROBE_SYMBOL macro */
+>=20
+>-/*
+>- * This output constraint should be used for any inline asm which has
+>a "call"
+>- * instruction=2E  Otherwise the asm may be inserted before the frame
+>pointer
+>- * gets set up by the containing function=2E  If you forget to do this,
+>objtool
+>- * may print a "call without frame pointer save/setup" warning=2E
+>- */
+>-register unsigned long current_stack_pointer asm(_ASM_SP);
+>-#define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
+> #endif /* __ASSEMBLY__ */
+>=20
+> #endif /* _ASM_X86_ASM_H */
 
-I suppose the workaround below would make it build - but that's not a real 
-solution.
-
-hpa, any ideas?
-
-Thanks,
-
-	Ingo
-
-diff --git a/tools/arch/x86/include/asm/asm.h b/tools/arch/x86/include/asm/asm.h
-index 507a37a46027..ada5482c024a 100644
---- a/tools/arch/x86/include/asm/asm.h
-+++ b/tools/arch/x86/include/asm/asm.h
-@@ -176,14 +176,6 @@
- 
- /* For C file, we already have NOKPROBE_SYMBOL macro */
- 
--/*
-- * This output constraint should be used for any inline asm which has a "call"
-- * instruction.  Otherwise the asm may be inserted before the frame pointer
-- * gets set up by the containing function.  If you forget to do this, objtool
-- * may print a "call without frame pointer save/setup" warning.
-- */
--register unsigned long current_stack_pointer asm(_ASM_SP);
--#define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_X86_ASM_H */
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E

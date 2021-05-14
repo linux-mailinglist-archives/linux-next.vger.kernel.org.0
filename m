@@ -2,163 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD7338018F
-	for <lists+linux-next@lfdr.de>; Fri, 14 May 2021 03:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C380380207
+	for <lists+linux-next@lfdr.de>; Fri, 14 May 2021 04:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbhENByZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 May 2021 21:54:25 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:43843 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231154AbhENByZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 13 May 2021 21:54:25 -0400
+        id S230216AbhENCdm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 May 2021 22:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229459AbhENCdl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 22:33:41 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65C2C061574;
+        Thu, 13 May 2021 19:32:30 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FhBPf6TFDz9sWY;
-        Fri, 14 May 2021 11:53:10 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FhCGt22r5z9sWk;
+        Fri, 14 May 2021 12:32:22 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620957193;
-        bh=OVB81s1AxgX/uB6VuQoYBHD9V+ti3hCW+342aDl0Wv0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k5Brhjj44Wfazae3J6C2Ofxph0Qdgdm0YFDi56DqOWJTasUGrjYSvecx3okmJXrd6
-         f4BsPr30vmlA8tkdDio6rwjqNL2RMmwbw48F+xxY+Y95Oh9NOGE5XIYhy7zzqtsH0s
-         DRuHCj6mIY1Q0u+RJN+xom6ERTt2TtZGZIOVu1XeHKZ8QzsNa8yxlkPGdFWxywNSrU
-         Y76DpF8uTkPu1HkeceizuFrKQ6y3TABrGyITLfPEAJGbF5+eXQVUG+bABjM1lc06mQ
-         yjisUl61E9Ug43I5M055ltip0AFk+emeAt431Zzc401erNAaTzAZNO8hzj6aMedGuQ
-         jbFJGRdV1JxDQ==
-Date:   Fri, 14 May 2021 11:53:07 +1000
+        s=201702; t=1620959548;
+        bh=wEsq/gNmbpD/b6nmfvJT2+euaI0BOepkB7VQ3rFAxjY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aNmGsa8gdZrNqPlk9M3VhRD684BHuXsX6XJlh/+RUHhSc+VmhhgW9rjPp80Rigwps
+         OLITBsFtQI0t9YbO6tjPSq6hWNAjesMtXzNmfdc5khHafU2MqJmjTdbF5a7YLeXW5V
+         uiE1VyeINlrAYZ9DUahSUDviYW/ct2WUxTEHbP5QRXeTaWl4SI+BayGkRvnTiotYpb
+         Yl8lBw4Na80cSql1KxqOULyyE5qcGekCJW93lnzrluOA8MsN269YEbnFN+l7dgaC0z
+         p5dgZHk4wgT8C/OJ400o9jHOMRZK3AIzeEXJuRiTwA7dQ8FQB6AfeORhqUOY+ExLNU
+         hLHKp7HZeHNzQ==
+Date:   Fri, 14 May 2021 12:32:21 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     DRI <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: linux-next: manual merge of the drm-intel tree with the drm
- tree
-Message-ID: <20210514115307.4364aff9@canb.auug.org.au>
-In-Reply-To: <20210430082321.3bd9c4a5@canb.auug.org.au>
-References: <20210317140824.0a28ffec@canb.auug.org.au>
-        <20210318125241.5fdfeffd@canb.auug.org.au>
-        <20210430082321.3bd9c4a5@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Scott Wood <oss@buserror.net>, Christoph Hellwig <hch@lst.de>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        1394 <linux1394-devel@lists.sourceforge.net>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: linux-next: removed trees
+Message-ID: <20210514123221.7c21393f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xXOZ1H1+5Gl.tnx8dTNuvTz";
+Content-Type: multipart/signed; boundary="Sig_//ZBZsTOrBVa24j=4YJf1Ka2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xXOZ1H1+5Gl.tnx8dTNuvTz
+--Sig_//ZBZsTOrBVa24j=4YJf1Ka2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 30 Apr 2021 08:23:21 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Thu, 18 Mar 2021 12:52:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >=20
-> > On Wed, 17 Mar 2021 14:08:24 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > Today's linux-next merge of the drm-intel tree got a conflict in:
-> > >=20
-> > >   drivers/gpu/drm/i915/display/intel_sprite.c
-> > >=20
-> > > between commit:
-> > >=20
-> > >   92f1d09ca4ed ("drm: Switch to %p4cc format modifier")
-> > >=20
-> > > from the drm tree and commit:
-> > >=20
-> > >   46d12f911821 ("drm/i915: migrate skl planes code new file (v5)")
-> > >=20
-> > > from the drm-intel tree.
-> > >=20
-> > > I fixed it up (I used the latter version of the file and applied the
-> > > following patch) and can carry the fix as necessary. This is now fixed
-> > > as far as linux-next is concerned, but any non trivial conflicts shou=
-ld
-> > > be mentioned to your upstream maintainer when your tree is submitted =
-for
-> > > merging.  You may also want to consider cooperating with the maintain=
-er
-> > > of the conflicting tree to minimise any particularly complex conflict=
-s.
-> > >=20
-> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date: Wed, 17 Mar 2021 14:05:42 +1100
-> > > Subject: [PATCH] merge fix for "drm: Switch to %p4cc format modifier"
-> > >=20
-> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > ---
-> > >  drivers/gpu/drm/i915/display/skl_universal_plane.c | 6 ++----
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/dri=
-vers/gpu/drm/i915/display/skl_universal_plane.c
-> > > index 1f335cb09149..45ceff436bf7 100644
-> > > --- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> > > +++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-> > > @@ -1120,7 +1120,6 @@ static int skl_plane_check_fb(const struct inte=
-l_crtc_state *crtc_state,
-> > >  	struct drm_i915_private *dev_priv =3D to_i915(plane->base.dev);
-> > >  	const struct drm_framebuffer *fb =3D plane_state->hw.fb;
-> > >  	unsigned int rotation =3D plane_state->hw.rotation;
-> > > -	struct drm_format_name_buf format_name;
-> > > =20
-> > >  	if (!fb)
-> > >  		return 0;
-> > > @@ -1168,9 +1167,8 @@ static int skl_plane_check_fb(const struct inte=
-l_crtc_state *crtc_state,
-> > >  		case DRM_FORMAT_XVYU12_16161616:
-> > >  		case DRM_FORMAT_XVYU16161616:
-> > >  			drm_dbg_kms(&dev_priv->drm,
-> > > -				    "Unsupported pixel format %s for 90/270!\n",
-> > > -				    drm_get_format_name(fb->format->format,
-> > > -							&format_name));
-> > > +				    "Unsupported pixel format %p4cc for 90/270!\n",
-> > > +				    &fb->format->format);
-> > >  			return -EINVAL;
-> > >  		default:
-> > >  			break;
-> > > --=20
-> > > 2.30.0   =20
-> >=20
-> > The above fix up patch now needs to be applied to the drm tree. =20
->=20
-> I am still applying the above patch, but it applies to Linus' tree now.
+The following tree have been removed form linux-next because they have
+not been updated in more than a year.  If you want a tree reinstated,
+just let me know.
 
-I am going to stop applying this.  You guys can apply it if you want to
-some time.
+fbdev
+fsl
+generic-ioremap
+ieee1394
+  this contains the single commit
+	67f8e65e4fc1 firewire: net: remove set but not used variable 'guid'
+random
+realtek
+thermal-rzhang
+thermal-soc
+y2038
+zx2c4
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xXOZ1H1+5Gl.tnx8dTNuvTz
+--Sig_//ZBZsTOrBVa24j=4YJf1Ka2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCd2AMACgkQAVBC80lX
-0GzhVAf/fbuHprJ9IVbUr42Nxw3yUKRfFqGfOwipymb1KFWPs8UXWZK5+ZzL5uYw
-FCQCCdeIxh7Nl40GObZYZDuyB1hQEBYLhwLDvjFLeSmyMevWt4kTH3ypQQU7AlfI
-eS9ZR+GD2y7ruSJIiScuxv/lakP1wLa/qhuSUF19j1rODD56A03lJW1uvzP7ozV/
-UNlMojdAwDOzG+47QDd/JBV/Y06UN8yYtneyXByPImXob/MgefoVqMDzpdVcqJTW
-VI9PSjPmOpoNYqhJ+LSa64GQaKW4r5Hfm0JAuhW35tfRdRg5Dk8/lJe3pJuGxKGJ
-1ZTlyk7DoJu1eGOGsCcTrOYh9cgJcQ==
-=4RRO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCd4TUACgkQAVBC80lX
+0GwJsQf/TLLwsZGHoWiRtnRa6CuE4kbsToeqV8skczSRsZ5OJVlirrKahGw8liUX
+YXrr1mdCFlfTwBIcVB+EXfQy+AKOToJzX6u987Sdrm0OylVW65eWIEiEkWDCnrk5
+f2z1HyNQwfwGrXz5Eamq5+B78Kmxgmx5OyNfjf6JaWCGGJU7MdP8AhCt01FK4yGK
+GoLhVbZkswLcI26FE0It1RoKpbm/iao9iXc24hwgw0UMh8GlMJPwQ6OT6tblSBTT
+828gUu/h4EgbSabMBPLZRoIiSd2pDy0Nzn9QVMyDT68jsaWxSV1jSjoviOj2vOe1
+zZ3JQZdWo6uVXVSleJzWWykGR3qaYg==
+=xOi6
 -----END PGP SIGNATURE-----
 
---Sig_/xXOZ1H1+5Gl.tnx8dTNuvTz--
+--Sig_//ZBZsTOrBVa24j=4YJf1Ka2--

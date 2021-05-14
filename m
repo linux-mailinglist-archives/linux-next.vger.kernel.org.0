@@ -2,98 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C380380207
-	for <lists+linux-next@lfdr.de>; Fri, 14 May 2021 04:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA9B38028C
+	for <lists+linux-next@lfdr.de>; Fri, 14 May 2021 05:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbhENCdm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 May 2021 22:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S231852AbhENDmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 May 2021 23:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbhENCdl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 22:33:41 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65C2C061574;
-        Thu, 13 May 2021 19:32:30 -0700 (PDT)
+        with ESMTP id S229724AbhENDmH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 13 May 2021 23:42:07 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7CC061574;
+        Thu, 13 May 2021 20:40:56 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FhCGt22r5z9sWk;
-        Fri, 14 May 2021 12:32:22 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FhDnw3Tnjz9sWW;
+        Fri, 14 May 2021 13:40:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1620959548;
-        bh=wEsq/gNmbpD/b6nmfvJT2+euaI0BOepkB7VQ3rFAxjY=;
+        s=201702; t=1620963653;
+        bh=gp51mvqAA5f2n4jR3+M5N004LGH+fvS9evIFXb/BgSg=;
         h=Date:From:To:Cc:Subject:From;
-        b=aNmGsa8gdZrNqPlk9M3VhRD684BHuXsX6XJlh/+RUHhSc+VmhhgW9rjPp80Rigwps
-         OLITBsFtQI0t9YbO6tjPSq6hWNAjesMtXzNmfdc5khHafU2MqJmjTdbF5a7YLeXW5V
-         uiE1VyeINlrAYZ9DUahSUDviYW/ct2WUxTEHbP5QRXeTaWl4SI+BayGkRvnTiotYpb
-         Yl8lBw4Na80cSql1KxqOULyyE5qcGekCJW93lnzrluOA8MsN269YEbnFN+l7dgaC0z
-         p5dgZHk4wgT8C/OJ400o9jHOMRZK3AIzeEXJuRiTwA7dQ8FQB6AfeORhqUOY+ExLNU
-         hLHKp7HZeHNzQ==
-Date:   Fri, 14 May 2021 12:32:21 +1000
+        b=bColG3m0vC2CR2s/d22TjR8AmWF5RFlLN61hs0YcgiQMEUtL2mqTm0Zs8qHNZjzSr
+         9CONVKo+99x/M170cNjcolK9T5BZQFJwO4Mdzu0u6pLA7kNAX+dXQnljxP9CDV9jk5
+         pvuHM2KsImsEfh4UHbRp+//TAlnRaNsA/yNTFZvvTRoSwRPZir72xMdJ+1Pxc3ZJ+l
+         to9ceH6apXUILwF3qz8cmyMswqWwgursbsjjktFhqWsG7/E0f8ETYA+uTSPBygemR7
+         k7KmQNy7CT5PlE2L7r767DBvFBvgLHZ7zBFEVSMEdU8eddKn1cUPy0cVDKn1hvZi5u
+         pzwcwZQXj4mAg==
+Date:   Fri, 14 May 2021 13:40:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Scott Wood <oss@buserror.net>, Christoph Hellwig <hch@lst.de>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        1394 <linux1394-devel@lists.sourceforge.net>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: linux-next: removed trees
-Message-ID: <20210514123221.7c21393f@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linus =?UTF-8?B?TMO8c3Npbmc=?= <linus.luessing@c0d3.blue>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210514134050.0df7aef9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//ZBZsTOrBVa24j=4YJf1Ka2";
+Content-Type: multipart/signed; boundary="Sig_/B9mPQdekWggz17+.E33jm96";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//ZBZsTOrBVa24j=4YJf1Ka2
+--Sig_/B9mPQdekWggz17+.E33jm96
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following tree have been removed form linux-next because they have
-not been updated in more than a year.  If you want a tree reinstated,
-just let me know.
+After merging the net-next tree, today's linux-next build (powerpc
+pseries_le_defconfig) failed like this:
 
-fbdev
-fsl
-generic-ioremap
-ieee1394
-  this contains the single commit
-	67f8e65e4fc1 firewire: net: remove set but not used variable 'guid'
-random
-realtek
-thermal-rzhang
-thermal-soc
-y2038
-zx2c4
+net/bridge/br_multicast.c: In function '__br_multicast_enable_port':
+net/bridge/br_multicast.c:1743:3: error: implicit declaration of function '=
+br_ip6_multicast_add_router'; did you mean 'br_ip4_multicast_add_router'? [=
+-Werror=3Dimplicit-function-declaration]
+ 1743 |   br_ip6_multicast_add_router(br, port);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |   br_ip4_multicast_add_router
+net/bridge/br_multicast.c: At top level:
+net/bridge/br_multicast.c:2804:13: warning: conflicting types for 'br_ip6_m=
+ulticast_add_router'
+ 2804 | static void br_ip6_multicast_add_router(struct net_bridge *br,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+net/bridge/br_multicast.c:2804:13: error: static declaration of 'br_ip6_mul=
+ticast_add_router' follows non-static declaration
+net/bridge/br_multicast.c:1743:3: note: previous implicit declaration of 'b=
+r_ip6_multicast_add_router' was here
+ 1743 |   br_ip6_multicast_add_router(br, port);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  a3c02e769efe ("net: bridge: mcast: split multicast router state for IPv4 =
+and IPv6")
+
+# CONFIG_IPV6 is not set
+
+I have reverted that commit for today (along with commit
+
+  3b85f9ba3480 ("net: bridge: mcast: export multicast router presence adjac=
+ent to a port")
+
+in case it depends on a3c02e769efe).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//ZBZsTOrBVa24j=4YJf1Ka2
+--Sig_/B9mPQdekWggz17+.E33jm96
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCd4TUACgkQAVBC80lX
-0GwJsQf/TLLwsZGHoWiRtnRa6CuE4kbsToeqV8skczSRsZ5OJVlirrKahGw8liUX
-YXrr1mdCFlfTwBIcVB+EXfQy+AKOToJzX6u987Sdrm0OylVW65eWIEiEkWDCnrk5
-f2z1HyNQwfwGrXz5Eamq5+B78Kmxgmx5OyNfjf6JaWCGGJU7MdP8AhCt01FK4yGK
-GoLhVbZkswLcI26FE0It1RoKpbm/iao9iXc24hwgw0UMh8GlMJPwQ6OT6tblSBTT
-828gUu/h4EgbSabMBPLZRoIiSd2pDy0Nzn9QVMyDT68jsaWxSV1jSjoviOj2vOe1
-zZ3JQZdWo6uVXVSleJzWWykGR3qaYg==
-=xOi6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCd8UIACgkQAVBC80lX
+0GzcVgf/V4auLEA8X9JxJ01pGbqjadWGeoOgtVXmSgESM7a96XIjYN5FzgV/gu3f
+6l/XpIDgwCMF4B4wfPU4ewm1Sh0+rfYYFdZ3W2rA8n4vBQ5LC9vE+WFOL9vXHb2G
+qIG6CRXN7srH8hxdzhDjT4hFdqzX1efFph/UMmU2THSzuUx2H+hImsQkL7Lgmb6H
+ZOnXgXP1p2lfab9NRF4kXklMcZRtCbVhboCeNbmLjhNY42d9v+duAXuYwGwQDbo/
+DUEA2t1cjvR5pmrDGW2cD9f+pxf79t/iCyuzBCm+WJvPu+LBRhK1ebdc8VoqnqjK
+u4kBx+kWE4SyqQCVUKieZ/SSeS+gxA==
+=6U2F
 -----END PGP SIGNATURE-----
 
---Sig_//ZBZsTOrBVa24j=4YJf1Ka2--
+--Sig_/B9mPQdekWggz17+.E33jm96--

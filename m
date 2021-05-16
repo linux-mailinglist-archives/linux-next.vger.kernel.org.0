@@ -2,64 +2,40 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C93A381B45
-	for <lists+linux-next@lfdr.de>; Sat, 15 May 2021 23:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38068381D27
+	for <lists+linux-next@lfdr.de>; Sun, 16 May 2021 08:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbhEOV6K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 15 May 2021 17:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbhEOV6J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 15 May 2021 17:58:09 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B1AC061573;
-        Sat, 15 May 2021 14:56:55 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id t11so1766261pjm.0;
-        Sat, 15 May 2021 14:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aYZAtsF7xEgxqNZKNcxlm0Wj61L74IXoCGhZC5SQH54=;
-        b=Z9GvsUXCRBio9+f0zOgCgrbeKFMNn4BSBlw7C9QiWjl8v9/j14TqF6E6+V2Tv0rdSn
-         WTSq1TUpiDI0FQnHJ4H4usnSx25x2F7SRWlkrX4skgDaFz3S/qXPmdwJyLPj3g1jJg8l
-         HThY/4JLd5Mh2QCC/zF30koe8oEKt+Affzqnc2eIu7hpTUDZZJxVHuhl7UBZWca+s/Xi
-         MpoMCg+7lRektYzKIIZj4Jag/z+C2D7M/wxXU7F+R7a2jjqQunfgsCKMY8aPL0uSB0r+
-         BwMCi6ldGKr+12PhDq+QFbl9O2flEwn28F4ncOiCCb3cv2Se21UZU2ShGwPUKMlkDzNg
-         V9YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aYZAtsF7xEgxqNZKNcxlm0Wj61L74IXoCGhZC5SQH54=;
-        b=HosULz6sOiqA8B9FkZAwZovXwF27HaYHv6jI366u94p0WvjxoxYdQdmo0CgrP9k3cJ
-         Wx9QRGReFg+t7caSjuegz7UI7suH0WQJpucDAihXq4cplz1cBKTl6fcFVEfg9IbJCiJq
-         HZrk2c827xkweP1Vgug0u+VAsh3IDHE4mxGMgGgvjlgQKUjdFH80wQ3ARASDHwur1pbW
-         o8XPu4cH2x4vlEOy3cj9LksuiUK62jcK9c2AqcLx/jUm6wta8GWkywiCD4xQvcAWY009
-         YxO/QSgXqnnHhyW2e/o1wHhtlnVW1j5a7CuS8RqdnU+IaAVNr5bgO0woouKqxoq52vK+
-         +CPg==
-X-Gm-Message-State: AOAM532JAPyLZQ3bbQKtbmsFRBdpWVA4eoJTImFnjMC6JXP/JwxB9AlX
-        jA59doj9yrMyoNyYwfa/XDY=
-X-Google-Smtp-Source: ABdhPJwsSQ1+F5Y1sr1Z+1OL30QKJL0bKRaOQPub75rJ4OONTowM4GKkPQSRy3/lAVXOAeH9Id+oFA==
-X-Received: by 2002:a17:90a:1588:: with SMTP id m8mr18534229pja.31.1621115815294;
-        Sat, 15 May 2021 14:56:55 -0700 (PDT)
-Received: from hyeyoo ([121.135.181.35])
-        by smtp.gmail.com with ESMTPSA id l62sm6592567pfl.88.2021.05.15.14.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 May 2021 14:56:55 -0700 (PDT)
-Date:   Sun, 16 May 2021 06:56:47 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+        id S233450AbhEPGgK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 May 2021 02:36:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54776 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229840AbhEPGgJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 16 May 2021 02:36:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B07816100A;
+        Sun, 16 May 2021 06:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621146895;
+        bh=tOJvyDBi93XagwPx1i9XtsXpSm6miDwPi3jE4SjKmmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KhZ5MoWo5uLP7ivqT7mfz2z9+6AQblT/RCUsxVJQfjLb0HGY8QymxsszvURVe2Ixo
+         ibYuevSbFOgfIO1VYGOsjvtfna8ne2XHXqQZDsPcKV3ds1aX0Y8gAnGLn5frEWP6qT
+         6PUJOMGCGGkmyf07hkcHhvjJzyY6CGvG40Ip9fNvwg++DVnJ1DsZm4gaEE/iFMAvAB
+         kzvdzpj2QEMnD8K6H6nPpLNX0QVVIjDrpPk+jazympQB5sN2kbALWZdRuQDA1h/d7W
+         /d70KrpYnpf1SXm1eP8ss+bdUOjiHNj+/7e/gqEnsd44LlVIFKCgrUkc570JJFkYEN
+         pXJebVP+DLqhg==
+Date:   Sat, 15 May 2021 23:34:49 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
-        rientjes@google.com, penberg@kernel.org, cl@linux.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        nathan@kernel.org, naresh.kamboju@linaro.org,
-        clang-built-linux@googlegroups.com, linux-next@vger.kernel.org,
-        ndesaulniers@google.com, lkft-triage@lists.linaro.org,
-        sfr@canb.auug.org.au, arnd@arndb.de, Marco Elver <elver@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, akpm@linux-foundation.org,
+        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        naresh.kamboju@linaro.org, clang-built-linux@googlegroups.com,
+        linux-next@vger.kernel.org, ndesaulniers@google.com,
+        lkft-triage@lists.linaro.org, sfr@canb.auug.org.au, arnd@arndb.de,
+        Marco Elver <elver@google.com>
 Subject: Re: [PATCH v3] mm, slub: change run-time assertion in
  kmalloc_index() to compile-time
-Message-ID: <20210515215647.GA61684@hyeyoo>
+Message-ID: <YKC9CeAfw3aBmHTU@archlinux-ax161>
 References: <20210511173448.GA54466@hyeyoo>
  <20210515210950.GA52841@hyeyoo>
  <41c65455-a35b-3ad3-54f9-49ca7105bfa9@suse.cz>
@@ -72,33 +48,74 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 On Sat, May 15, 2021 at 11:24:25PM +0200, Vlastimil Babka wrote:
->
+> On 5/15/21 11:09 PM, Hyeonggon Yoo wrote:
+> > Hello Vlastimil, recently kbuild-all test bot reported compile error on
+> > clang 10.0.1, with defconfig.
+> 
+> Hm yes, catching some compiler bug was something that was noted to be
+> possible to happen.
+> 
+> > Nathan Chancellor wrote:
+> >> I think this happens because arch_prepare_optimized_kprobe() calls kzalloc()
+> >> with a size of MAX_OPTINSN_SIZE, which is
+> >>
+> >> #define MAX_OPTINSN_SIZE                                \
+> >>       (((unsigned long)optprobe_template_end -        \
+> >>          (unsigned long)optprobe_template_entry) +     \
+> >>         MAX_OPTIMIZED_LENGTH + JMP32_INSN_SIZE)
+> > 
+> >> and the optprobe_template_{end,entry} are not evaluated as constants.
+> >>
+> >> I am not sure what the solution is. There seem to be a growing list of issues
+> >> with LLVM 10 that were fixed in LLVM 11, which might necessitate requiring
+> >> LLVM 11 and newer to build the kernel, given this affects a defconfig.
+> >> Cheers,
+> >> Nathan
+> > 
+> > 
+> > I think it's because kmalloc compiles successfully when size is constant,
+> > and kmalloc_index isn't. so I think compiler seems to be confused.
+> > 
+> > currently if size is non-constant, kmalloc calls dummy function __kmalloc,
+> > which always returns NULL.
+> 
 > That's a misunderstanding. __kmalloc() is not a dummy function, you
 > probably found only the header declaration.
->
-
-Sorry, that was totally my misunderstanding.
-I was reading dummy function in arch/alpha/boot/bootpz.c:415.
-I wrongly configured the tool.
-
+> 
+> > so what about changing kmalloc to do compile-time assertion too, and track
+> > all callers that are calling kmalloc with non-constant argument.
+> 
+> kmalloc() is expected to be called with both constant and non-constant
+> size. __builtin_constant_p() is used to determine which implementation
+> to use. One based on kmalloc_index(), other on __kmalloc().
+> 
 > It appears clang 10.0.1 is mistakenly evaluating __builtin_constant_p()
 > as true. Probably something to do with LTO, because MAX_OPTINSN_SIZE
 > seems it could be a "link-time constant".
 
-That is what I was missing. Thank you for kindly explaining it.
+This happens with x86_64 defconfig so LTO is not involved.
+
+However, the explanation makes sense, given that the LLVM change I
+landed on changes the sparse conditional constant propagation pass,
+which I believe can influence how LLVM handles __builtin_constant_p().
 
 > Maybe we could extend Marco Elver's followup patch that uses
 > BUILD_BUG_ON vs BUG() depending on size_is_constant parameter. It could
 > use BUG() also if the compiler is LLVM < 11 or something. What would be
 > the proper code for this condition?
 
-Fixing clang's bug in linux kernel doesn't seem to be a solution.
-So now I understand why Nathan said we might require LLVM > 11.
+This should work I think:
 
-I thought I should do something to fix it because I sent the patch.
-but I was misunderstanding a lot. Thank you sincerely for letting me know.
-
-Thanks,
-
-Hyeonggon
-
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 9d316aac0aba..1b653266f2aa 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -413,7 +413,7 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
+ 	if (size <=  16 * 1024 * 1024) return 24;
+ 	if (size <=  32 * 1024 * 1024) return 25;
+ 
+-	if (size_is_constant)
++	if ((IS_ENABLED(CONFIG_CC_IS_GCC) || CONFIG_CLANG_VERSION > 110000) && size_is_constant)
+ 		BUILD_BUG_ON_MSG(1, "unexpected size in kmalloc_index()");
+ 	else
+ 		BUG();

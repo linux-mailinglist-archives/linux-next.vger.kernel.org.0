@@ -2,52 +2,52 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1BE386EAA
-	for <lists+linux-next@lfdr.de>; Tue, 18 May 2021 03:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E7C386EF5
+	for <lists+linux-next@lfdr.de>; Tue, 18 May 2021 03:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242393AbhERBFc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 May 2021 21:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S235329AbhERBNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 May 2021 21:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239943AbhERBFb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 May 2021 21:05:31 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC36C061573
-        for <linux-next@vger.kernel.org>; Mon, 17 May 2021 18:04:14 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id s4so2587150plg.12
-        for <linux-next@vger.kernel.org>; Mon, 17 May 2021 18:04:14 -0700 (PDT)
+        with ESMTP id S233019AbhERBNH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 May 2021 21:13:07 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9ABC061573
+        for <linux-next@vger.kernel.org>; Mon, 17 May 2021 18:11:50 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id b13so2449436pfv.4
+        for <linux-next@vger.kernel.org>; Mon, 17 May 2021 18:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HpzCktU8tqQwFPAjSHs1iV7tX6Mou1UQaLNa5S+82WY=;
-        b=pjjTe/8lYr8WxXm6TK3Q7mS8tb83qY0pG39Yju9bACCBelOoSTdfDrArlguKn6em2d
-         Fm+TEHYonrKe64NHnsl9hlYeyIQMt7AC83VPA3w+KIqAbTDIAoHoDgVQCDwzOPFghHbr
-         Fn+s0vzjWEN9nuLJhYZBm4D0MikCNy9Z4cBNaWgXwGJad6J7uvCr9hxX3NRDholcUy15
-         8kfl1DEDdxHnC4coyeOeXOEU1YqQgZYXDGKSyX4KKHwohTP4Vu/1UeF5UtJ3qeYlrldq
-         bcWqliVP68s7LbVHUOeQ1bs4khyf0nPMzmd8EOrPIiiio1zQEIUlbtDgt1UX3gkuJGUq
-         Vf3w==
+        bh=XVxh6wmJy66cAPboWx57VCrv0zhzV6TC1SpyfKn96NU=;
+        b=jKlSE4lEniNO6iwj1T/ZHDEIq1wSzY3PCDUeENmyPc2BHyreDdLQu/1R7qk5EWb5QN
+         G06ll6hIlf4qxgV+Oy/IikPbg/MBpit0e1+J0jngVHMncPQBrTrxMYBI70s89tm9P1ps
+         Pdmlqin7y32Up+12rVvk5nubpSbH+G/Q5YZNYY1WIBVtRU/3a5V4U5RK2ljGVSz0I4sR
+         8kzIv13Us1+yIdeVxq8h3OmbPeI/QABrHBJowJYYWgFd5xZ2TigcBWhPM/EHMIZrTOdl
+         lHP00lCKnGLbOooKG18xF+hp7ibco18g9oyXAl30hXZ7/8Rfk50u2ee+J+RbesTKfVoK
+         VuWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HpzCktU8tqQwFPAjSHs1iV7tX6Mou1UQaLNa5S+82WY=;
-        b=l/tlMWz2uR2CY7AqZ3jRKXdTGntH1wPZXYAYgxllj3lAHB3y5DaZqrVHu+mPVc+7hY
-         T8UTYlWZcWM4MgPKv+9NzDcMxiQ8v9kAVKj014ZRr9J5uLYQEUigl2nTeVAgqlFx4OTy
-         cxJQpR3wgLcEdluBU8/1xrMxmDIXHYJ4TO/HY78SeFNn4GzxJrWf9nkddHeQ6m/W2+sK
-         VK/eW82NOiw621Yvwgjlzt75+DAoPXbrJWAW91mLjcFVDAyQk0/jYxY6MFH6HghG/VBS
-         uWJIXMQd28S/g1ORUUohT37I89z6y9HL3hMiiWcXVvCChdHF7fcZuRaBm7A9boBPPZY5
-         crXQ==
-X-Gm-Message-State: AOAM5329+L0nkGcUki0lNAg/fCcXvYSKIwocVqpsLqnXE/XIQSRkzot/
-        WgMJtdVzAVhiwc9aRQxpALA=
-X-Google-Smtp-Source: ABdhPJzUVVIMNqVIsjQ1BaiRcXhsfplMglhnaCAXwlS1ZmI7KBfnE7ebZxQvB8361oVBTbUNOumPJA==
-X-Received: by 2002:a17:902:d2c5:b029:f1:c207:b0fd with SMTP id n5-20020a170902d2c5b02900f1c207b0fdmr1478354plc.45.1621299854255;
-        Mon, 17 May 2021 18:04:14 -0700 (PDT)
+        bh=XVxh6wmJy66cAPboWx57VCrv0zhzV6TC1SpyfKn96NU=;
+        b=ljUOmNzJvI0+a+TlDNuv3Q9LDeFLfMVieEBiFYh18kiM/KdprdADh7VLFj/7iGpar2
+         cF3qAmFc/7nmA3x9XS639fRBmW2ZF9ix112Q39LgveO0HaDGYUN2DURoGZYG9iinosz6
+         HDUqcEBF+Ofvg1jUEt/kloaVrmsPNtO18KCTGUaQW8d9lJacbFSaMxfNWvi5ouVvt3+I
+         KJB9l0kXjmlozMg/vq/tMI7ZDHcvMvtkXa7/331JVW1AoO9anwWWAs3jIXYRUYppprsu
+         pwwkLtZa2EFFsC2yl36iWGVA6c0kOduSfqfYT3Oy/aeo1wGbf/G7FcJTeYFjBdvz21ov
+         Uf6A==
+X-Gm-Message-State: AOAM530kr2qec+RGGyU701a1iGMta1bdU0LR9bbrTVyCOjLUTwILNUvK
+        9nQDNfoTl3rX+Tn55f6NxMo=
+X-Google-Smtp-Source: ABdhPJxcS35/NZuzVw2NN8fjyoGERKhn9t+GleoRhd6NZpt5xESLCTMTmQ8wFb73H+ygWPzYCKFn9A==
+X-Received: by 2002:aa7:864c:0:b029:2cd:558:dbb8 with SMTP id a12-20020aa7864c0000b02902cd0558dbb8mr2488917pfo.78.1621300309942;
+        Mon, 17 May 2021 18:11:49 -0700 (PDT)
 Received: from hyeyoo ([183.99.11.150])
-        by smtp.gmail.com with ESMTPSA id r10sm7719180pjm.20.2021.05.17.18.04.11
+        by smtp.gmail.com with ESMTPSA id l1sm192787pjt.40.2021.05.17.18.11.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 18:04:14 -0700 (PDT)
-Date:   Tue, 18 May 2021 10:04:07 +0900
+        Mon, 17 May 2021 18:11:49 -0700 (PDT)
+Date:   Tue, 18 May 2021 10:11:44 +0900
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Nick Desaulniers <ndesaulniers@google.com>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -60,7 +60,7 @@ Cc:     Nathan Chancellor <nathan@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [next] x86_64 defconfig failed with clang-10
-Message-ID: <20210518010407.GA83641@hyeyoo>
+Message-ID: <20210518011144.GA84628@hyeyoo>
 References: <CA+G9fYvYxqVhUTkertjZjcrUq8LWPnO7qC==Wum3gYCwWF9D6Q@mail.gmail.com>
  <e6ee5c21-a460-b4f7-9d0a-e2711ec16185@kernel.org>
  <CAKwvOd=4wux6NG_6tF6C_xjU0ps+Fh5hfW5a_0U+xcPgL+XJYg@mail.gmail.com>
@@ -72,30 +72,9 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 17, 2021 at 01:39:46PM -0700, Nick Desaulniers wrote:
-> If we can make the compile time validation done instead at runtime for
-> clang-10, that would be preferable. Then when we drop clang-10
-> support, we can revert that.  Looking at the diff, I think we could
-> reinstate parts like so:
+> I see no reason to add those lines.
+> I removed the because kmalloc isn't written to support 64Mb size,
+> and it doesn't depend on clang version.
 
-> +#if CLANG_VERSION <= 100000
-> +       if (size <=  64 * 1024 * 1024) return 26;
-> +#endif
-
-> +#if CLANG_VERSION <= 10000
-> +       ,INIT_KMALLOC_INFO(67108864, 64M)
-> +#endif
-
-I see no reason to add those lines. I removed them because kmalloc
-isn't written to support 64MB size, and it doesn't depend on clang
-version.
-
-am I misunderstanding your patch?
-
-the problem here is clang-10 is mis-understanding constant argument as
-non-constant. and the patch that Nathan linked makes compiler do run-time
-evaluation when clang version is less than 11.
-
-Thanks,
-Hyeonggon
-
+I mean, not kmalloc, but kmalloc_caches that kmalloc uses when size is
+constant. It supports only up to 32MB.

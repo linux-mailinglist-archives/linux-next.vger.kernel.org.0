@@ -2,147 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D30A387103
-	for <lists+linux-next@lfdr.de>; Tue, 18 May 2021 07:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1682D3872CA
+	for <lists+linux-next@lfdr.de>; Tue, 18 May 2021 09:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239598AbhERFBX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 May 2021 01:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237133AbhERFBW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 May 2021 01:01:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED8EC061573;
-        Mon, 17 May 2021 22:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=oSbqpt5D4K/W1amyexgttXZY/68G5PWLGU3dU5vVU9I=; b=QY4iRluRa834leZFNowWUTTJSI
-        hD3/+/ywzp+t2vyj2VP9Z+5kN2smsCFFACa0HplY4ju1ot2oQNwg+OEpeHbg3CREyAKlxkso7z45M
-        ZC3YLMwtukMJ2CNwDfWNTR2zTLVv7S3dbSiWjZzvEf0tTAz3Lkn1/cZwsL/c1wumxeyoEwtzndPSu
-        bUlTvjiXg7pNp2bgns5wo29owXcGJi6PNfKgOX9dxMkcFFvUNYKFfFalmfKJH4jnhud5Z2+bPvjM/
-        vBT2WsiGAyHGeqSBBFAAkjMi9QDKkzyCbcAkT3Nxubx7xWxlTx7zqDYbIW7xpqJ7F8JK1YXDGkVMk
-        4B6jw7Cg==;
-Received: from [2601:1c0:6280:3f0::7376]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lirpk-00EJSG-7R; Tue, 18 May 2021 04:59:56 +0000
-Subject: Re: linux-next: Tree for May 13 (mm/page_alloc.c, <linux/mm.h>:
- sizeof(struct page))
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S240696AbhERHFu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 18 May 2021 03:05:50 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47995 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237944AbhERHFt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 18 May 2021 03:05:49 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fkn6x3DjWz9sW1;
+        Tue, 18 May 2021 17:04:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1621321465;
+        bh=g3wDgr6MQQD9WBp9vNtKc0Ko1CkkmDiMlXocU+4rTQU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UHq3RZgWCZbWo2VydlSBxcA3ejCk8PVrDtQGtsYaed1oi3yNcofHBV+3F9kDM1nS+
+         b9NuwnK9SykBrgWTuI08dq/2yDEi4BO22z87ZNl9Gx1PZm9MuWnLTutBHlOdS2B67h
+         YNBCbmDMWRAZbEHuggXGi/cZQSnbWQ/9c7AXKpZqiammij1BMY0FFACXz4H6/Ch9PN
+         ptV6mtt1T++LVbmZSMBSydiLmSi4DT0R3jEjL46hee20IH1sYKfFls5gfl3L4+8aLo
+         bZHWUcei5wB8fdvn+VgJ+Zm7lw7G19qLU3QpjZzt1xAmtpV+xMbF3tx6LhDFQ/phFl
+         MCQia2pdSLLVg==
+Date:   Tue, 18 May 2021 17:04:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     YueHaibing <yuehaibing@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>
-References: <20210513154418.2946f422@canb.auug.org.au>
- <b7ebb44d-5dd7-7941-234b-f727691ed1f4@infradead.org>
- <YJ2ZvZaR9PTyPp8S@casper.infradead.org>
- <06c8a6a6-9999-7f03-6bfb-34efb7ced637@arm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <fce18700-9e98-b1fc-260d-60ebcfc9d150@infradead.org>
-Date:   Mon, 17 May 2021 21:59:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the hyperv tree
+Message-ID: <20210518170421.584dc0ec@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <06c8a6a6-9999-7f03-6bfb-34efb7ced637@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/LXdNxqsqA+Wo.ao9XCHST7.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/17/21 9:03 PM, Anshuman Khandual wrote:
-> 
-> 
-> On 5/14/21 2:57 AM, Matthew Wilcox wrote:
->> On Thu, May 13, 2021 at 10:29:49AM -0700, Randy Dunlap wrote:
->>> On 5/12/21 10:44 PM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20210512:
->>>>
->>>
->>> on x86_64:
->>>
->>> In function ‘__mm_zero_struct_page.isra.75’,
->>>     inlined from ‘__init_single_page.isra.76’ at ../mm/page_alloc.c:1494:2:
->>> ./../include/linux/compiler_types.h:328:38: error: call to ‘__compiletime_assert_162’ declared with attribute error: BUILD_BUG_ON failed: sizeof(struct page) > 80
->>
->> Hmm.
->>
->>                 struct {
->>                         long unsigned int _pt_pad_1;     /*     8     8 */
->>                         pgtable_t  pmd_huge_pte;         /*    16     8 */
->>                         long unsigned int _pt_pad_2;     /*    24     8 */
->>                         union {
->>                                 struct mm_struct * pt_mm; /*    32     8 */
->>                                 atomic_t pt_frag_refcount; /*    32     4 */
->>                         };                               /*    32     8 */
->>                         spinlock_t ptl;                  /*    40    72 */
->>                 };                                       /*     8   104 */
->>
->> #if ALLOC_SPLIT_PTLOCKS
->>                         spinlock_t *ptl;
->> #else
->>                         spinlock_t ptl;
->> #endif
->>
->> something has disabled ALLOC_SPLIT_PTLOCKS when it ought to be enabled.
->>
->> #if USE_SPLIT_PTE_PTLOCKS
->> #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
->> #else
->> #define ALLOC_SPLIT_PTLOCKS     0
->> #endif
->>
->> Oh.  This is Anshuman's fault.
->>
->> commit 9b8a39056e2472592a5e5897987387f43038b8ba
->> Author: Anshuman Khandual <anshuman.khandual@arm.com>
->> Date:   Tue May 11 15:06:01 2021 +1000
->>
->>     mm/thp: make ALLOC_SPLIT_PTLOCKS dependent on USE_SPLIT_PTE_PTLOCKS
->>
->>
-> 
-> Previously ALLOC_SPLIT_PTLOCKS was evaluated and the spin lock element
-> in struct page was getting created independent of whether split pte
-> locks are being used or not. AFAICS without USE_SPLIT_PTE_PTLOCKS, it
-> does not really matter whether struct page has spinlock_t *ptl or ptl
-> element because that is not going to be used. Should the BUILD_BUG_ON()
-> evaluation be changed when USE_SPLIT_PTE_PTLOCKS is not enabled or we
-> could something like this which drops the ptl element in such cases ?
-> 
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -152,11 +152,13 @@ struct page {
->                                 struct mm_struct *pt_mm; /* x86 pgds only */
->                                 atomic_t pt_frag_refcount; /* powerpc */
->                         };
-> +#if USE_SPLIT_PTE_PTLOCKS
->  #if ALLOC_SPLIT_PTLOCKS
->                         spinlock_t *ptl;
->  #else
->                         spinlock_t ptl;
->  #endif
-> +#endif
->                 };
->                 struct {        /* ZONE_DEVICE pages */
->                         /** @pgmap: Points to the hosting device page map. */
-> 
+--Sig_/LXdNxqsqA+Wo.ao9XCHST7.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-OK, that works.  Thanks.
+Hi all,
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+After merging the hyperv tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
+In file included from include/linux/printk.h:7,
+                 from include/linux/kernel.h:17,
+                 from drivers/hv/hv_util.c:11:
+drivers/hv/hv_util.c: In function 'hv_timesync_init':
+include/linux/kern_levels.h:5:18: warning: format '%ld' expects argument of=
+ type 'long int', but argument 2 has type 'int' [-Wformat=3D]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+include/linux/kern_levels.h:11:18: note: in expansion of macro 'KERN_SOH'
+   11 | #define KERN_ERR KERN_SOH "3" /* error conditions */
+      |                  ^~~~~~~~
+include/linux/printk.h:343:9: note: in expansion of macro 'KERN_ERR'
+  343 |  printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+      |         ^~~~~~~~
+drivers/hv/hv_util.c:753:3: note: in expansion of macro 'pr_err'
+  753 |   pr_err("cannot register PTP clock: %ld\n",
+      |   ^~~~~~
 
-I guess you should send a proper patch to Andrew.  The code above
-is whitespace-damaged (cut'n'paste).
+Introduced by commit
 
--- 
-~Randy
+  32c0ff83550e ("hv_utils: Fix passing zero to 'PTR_ERR' warning")
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LXdNxqsqA+Wo.ao9XCHST7.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCjZvUACgkQAVBC80lX
+0GyqdQf/d0keGIj+k8R5AmaHhQ7f6BjAAu3Tn9QDjxDargxGIFlHcGKbjoMtivzt
+mZjkRDCHGmKrMSh6tGsDY8MIkQbbBBVYI1OEWF+bz85A7KqdPxuETCgtHL+FZ2tv
+XcDMrZcOUpp/jmwH78XDYeTcwleuT7atPQ5z6RtfTTM+Du09IrTFJdLJaMeEQIkW
+pzXSnfgPrp60dYxC21Q0c12AdK1WEZzioZzUw2maccZWN9SyOn6ftx7xd3TbnubP
+59RLWzgHQeKZpExpBCuGvx44niwItRzzorw+UonMa5UEgMGuF413uFosne1PvKjW
+IoGzwBGkJqxneQamtsd6Q+Pz6T4mFg==
+=3Ni1
+-----END PGP SIGNATURE-----
+
+--Sig_/LXdNxqsqA+Wo.ao9XCHST7.--

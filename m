@@ -2,92 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75E93898E5
-	for <lists+linux-next@lfdr.de>; Wed, 19 May 2021 23:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851633898F4
+	for <lists+linux-next@lfdr.de>; Wed, 19 May 2021 23:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhESVyY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 May 2021 17:54:24 -0400
-Received: from ozlabs.org ([203.11.71.1]:60961 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229455AbhESVyY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 19 May 2021 17:54:24 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Flmnp2fl7z9sV5;
-        Thu, 20 May 2021 07:53:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621461182;
-        bh=3Wr2asGiMeqShxZC14lvl44PWKk1mAJ+rNRv1o6iLWw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BZWffnfFuQjGQBKTF1mf0E4bmPRphA6L0ykcU0p6ZkQNMw3QdB82SeKytfaWMc2Iv
-         deLRurHfvoq9X4c+oHpW01cG2q1nKpmL96PUionBwLyHb+ObJpeucGzr/CgrIm0FJR
-         6GbrLyOEIc4MY6Jcxbqwk5XY1DSl8ZNVb9t6wHvohjVFcrg6V1rhi4SVqPaUH3mceG
-         IBkEbS8m3Wtt/oAiSHMxddThL+te/GHkdi7UbLQsuhK/2zCQANlfMhDLcH/70L3y0S
-         rR/v2ZheV9Y2Ji9m+dlx+7X8GftVnTFDb8u/Lf72FOGiGGR3pmVnKOQyFYyKlO/FAz
-         tGvlhn44r2moQ==
-Date:   Thu, 20 May 2021 07:53:01 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229932AbhESV4s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 May 2021 17:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229790AbhESV4r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 19 May 2021 17:56:47 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29D5C061574
+        for <linux-next@vger.kernel.org>; Wed, 19 May 2021 14:55:27 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so4273547pjp.4
+        for <linux-next@vger.kernel.org>; Wed, 19 May 2021 14:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/ivKuA8eA0E4VB/FOYglu30M5yoHYAjJwhMfE0IGotA=;
+        b=Jw+5Py0TWikm6pW8u3N3gqhTxuFjTZYf7ifc4I+8o+ndKLET3H9EMmAc7sBw9y6W9o
+         2+il5d/YC4FWuVpNl7FRZjfmCByzMLJNFaeAChSYLJFXTEwCRDQy94bYlvIgDZjms3LN
+         aKRqgISJKW+haoxFwnBWGDMYGYOb01dUotzdw7DKRkHVPpotS/9QuW8KCqkWyXdFZ3fN
+         onq2nUqcTNPd6nd3b70iO6mUjoJDthIu8FBfPLI5IGfY4L04LJKPN4XlSRT0A6AAblia
+         vuqa9yUUDIqQI1sI5b4DPSFcthbNP66zDCUZJT2N2kd/H+0lLkYnSTcpoE4jCu9azJi9
+         8Ugw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/ivKuA8eA0E4VB/FOYglu30M5yoHYAjJwhMfE0IGotA=;
+        b=sBO+ij64O9WmpRLxEpGHhkHZlJNtHUcY8t2aGooPn14JzoTIZtFgpoK7/MGno7y3Kq
+         h50j3a4T7iK16k5DUC8gti2V8ZR1A5RhYiMFGOG+1JzBDne8O87V2UJ6ZQKRras1/Xhx
+         3cNZBrG2acmQcRym8+xzV+dZPLenXF9PkHAKYMF6qb6lCZA5xykyRAZUMJc3HApmbqVE
+         jvbpz0KiNVXsnLDgJqMMkji6EBFR57y7ZIw+IZaNPbQBnWuxNBacofQZC5n8UmRbDzDi
+         M7B3Z5QvWr+lKCWuDwUlTzlmqSV6g81DQBDWeCkQwBLHg6WhAOv6eLz80j7ssWjxmkPI
+         63bw==
+X-Gm-Message-State: AOAM5325LIq69pfSnWcJDHhNCutMIwyWbDt77LRpYs7uBuDGkGBHXcs/
+        jCWcgcv0DaOHEr1DAzeJ22HDv1nO4P/fhQ==
+X-Google-Smtp-Source: ABdhPJyiPZaaRiS7d68AG3+9tPqf1YZAp6bLaqxJGmxQaCX62iwcFyXDUPiKqUS9EGTE+u+NeFFm5Q==
+X-Received: by 2002:a17:90a:66cb:: with SMTP id z11mr1177565pjl.15.1621461326778;
+        Wed, 19 May 2021 14:55:26 -0700 (PDT)
+Received: from [192.168.1.134] ([66.219.217.173])
+        by smtp.gmail.com with ESMTPSA id x13sm340531pjl.22.2021.05.19.14.55.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 May 2021 14:55:26 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the cifs tree
-Message-ID: <20210520075301.6a2cf55c@canb.auug.org.au>
+References: <20210519080143.583d415d@canb.auug.org.au>
+ <3c2c877d-aa02-5202-e8e8-53b8470b0154@omp.ru>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <d51b1a64-e6a1-68e9-5a1d-da4f9b88d019@kernel.dk>
+Date:   Wed, 19 May 2021 15:55:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uG56_pooXROXh8Yp_A=3dFA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <3c2c877d-aa02-5202-e8e8-53b8470b0154@omp.ru>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uG56_pooXROXh8Yp_A=3dFA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/19/21 1:25 PM, Sergey Shtylyov wrote:
+> Hello!
+> 
+> On 5/19/21 1:01 AM, Stephen Rothwell wrote:
+> 
+> [...]
+>> In commit
+>>
+>>   1437568b56f8 ("pata_octeon_cf: avoid WARN_ON() in ata_host_activate()")
+>>
+>> Fixes tag
+>>
+>>   Fixes: 3c929c6f5aa7 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
+>>
+>> has these problem(s):
+>>
+>>   - Subject does not match target commit subject
+>>     Just use
+>> 	git log -1 --format='Fixes: %h ("%s")'
+>>
+>> Maybe you meant
+>>
+>> Fixes: 43f01da0f279 ("MIPS/OCTEON/ata: Convert pata_octeon_cf.c to use device tree.")
+> 
+>    This one!
+> 
+>> or
+>>
+>> Fixes: 3c929c6f5aa7 ("libata: New driver for OCTEON SOC Compact Flash interface (v7).")
+> 
+>    Perhaps this could be fixed still, Jens?
 
-Hi all,
+Yep, I fixed it up, thanks.
 
-In commit
+-- 
+Jens Axboe
 
-  158c6b1e3dff ("cifs: fix memory leak in smb2_copychunk_range")
-
-Fixes tag
-
-  Fixes: 9bf0c9cd431440a831e60c0a0fd0bc4f0e083e7f
-
-has these problem(s):
-
-  - missing subject
-
-Pleas just use:
-
-  git log -1 --format=3D'Fixes: %h ("%s")' <commit>
-
-So
-
-Fixes: 9bf0c9cd4314 ("CIFS: Fix SMB2/SMB3 Copy offload support (refcopy) fo=
-r large files")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/uG56_pooXROXh8Yp_A=3dFA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCliL0ACgkQAVBC80lX
-0Gx0ZAf9GyeA4JIcv6GdNywnjeyRZN1sml4sSb8oURSjkFspne0w+s5h3PgppZll
-qtowBNHnVkZmSR2NNbI2TSrOgarTQiVKcKc9irTRwiurvCBK5TuGBi0wOnPCMmAJ
-dWAJhG/QSVVFktULHsDyBDDW6sy/zvBCt0H9+LcFBw/Cv9uK3tcASLsa90Wsz/LE
-4RXz40FK82KFu88IA8k0USt/HBcII4Tl2B4UAZ9b915CDVk72wj1DFxKSSvm/fHc
-yTWqEqA36rtvmbKH8zDG+7MhW2KdU8pN15Vj5S1wvrugNBeWkLT3BtJXsKlOyHqT
-sKehsN/gLOTzlLXAfqLUgfhk22q/jg==
-=mTzL
------END PGP SIGNATURE-----
-
---Sig_/uG56_pooXROXh8Yp_A=3dFA--

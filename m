@@ -2,77 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354253898C5
-	for <lists+linux-next@lfdr.de>; Wed, 19 May 2021 23:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75E93898E5
+	for <lists+linux-next@lfdr.de>; Wed, 19 May 2021 23:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbhESVr2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 19 May 2021 17:47:28 -0400
-Received: from ozlabs.org ([203.11.71.1]:53409 "EHLO ozlabs.org"
+        id S229498AbhESVyY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 19 May 2021 17:54:24 -0400
+Received: from ozlabs.org ([203.11.71.1]:60961 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229518AbhESVr2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 19 May 2021 17:47:28 -0400
+        id S229455AbhESVyY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 19 May 2021 17:54:24 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Flmdp1zKHz9sV5;
-        Thu, 20 May 2021 07:46:05 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Flmnp2fl7z9sV5;
+        Thu, 20 May 2021 07:53:02 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621460766;
-        bh=vLXgbsvq1neic6r4wdYfFQqTu3DlG0QmV2Q7vJ9TVD8=;
+        s=201702; t=1621461182;
+        bh=3Wr2asGiMeqShxZC14lvl44PWKk1mAJ+rNRv1o6iLWw=;
         h=Date:From:To:Cc:Subject:From;
-        b=GqAGgpv7llaZkAVDC/lZyZJaEp4DqhoyjCSVL7XZkkg1E4yARHNI84eCSCn2lrH6P
-         ui09O2/lJHuCa1t+BdqQ84WU3Id2dv9ILelvxAjtrXUK1tj1MMc3zY3Id381KSNBQm
-         ejaTiCn171e/ApXdwBxcStknUO43W7LqFibsv7NCq2oFatAaGilM07MtVwO0YmIlfX
-         RxeTutv2e6e6ZfsB1eel4tWFUBvb/godifgQh1AbNcw5jPatd/LJRxMizsrVaPMS5P
-         6Faa5ir2wSQLAQMp8AFh0bOrfOJdCj8PpmRJnEGjzi6bMh4djoOFe4ypAjQOV60z47
-         9p3h+QWFnSmFA==
-Date:   Thu, 20 May 2021 07:46:03 +1000
+        b=BZWffnfFuQjGQBKTF1mf0E4bmPRphA6L0ykcU0p6ZkQNMw3QdB82SeKytfaWMc2Iv
+         deLRurHfvoq9X4c+oHpW01cG2q1nKpmL96PUionBwLyHb+ObJpeucGzr/CgrIm0FJR
+         6GbrLyOEIc4MY6Jcxbqwk5XY1DSl8ZNVb9t6wHvohjVFcrg6V1rhi4SVqPaUH3mceG
+         IBkEbS8m3Wtt/oAiSHMxddThL+te/GHkdi7UbLQsuhK/2zCQANlfMhDLcH/70L3y0S
+         rR/v2ZheV9Y2Ji9m+dlx+7X8GftVnTFDb8u/Lf72FOGiGGR3pmVnKOQyFYyKlO/FAz
+         tGvlhn44r2moQ==
+Date:   Thu, 20 May 2021 07:53:01 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
+Cc:     Ronnie Sahlberg <lsahlber@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the net tree
-Message-ID: <20210520074603.410d6bc3@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the cifs tree
+Message-ID: <20210520075301.6a2cf55c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dB5==j0kkZ4K4Y3=1B/pQNK";
+Content-Type: multipart/signed; boundary="Sig_/uG56_pooXROXh8Yp_A=3dFA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dB5==j0kkZ4K4Y3=1B/pQNK
+--Sig_/uG56_pooXROXh8Yp_A=3dFA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  6ff51ab8aa8f ("net/mlx5: Set term table as an unmanaged flow table")
+  158c6b1e3dff ("cifs: fix memory leak in smb2_copychunk_range")
 
-is missing a Signed-off-by from its committer.
+Fixes tag
+
+  Fixes: 9bf0c9cd431440a831e60c0a0fd0bc4f0e083e7f
+
+has these problem(s):
+
+  - missing subject
+
+Pleas just use:
+
+  git log -1 --format=3D'Fixes: %h ("%s")' <commit>
+
+So
+
+Fixes: 9bf0c9cd4314 ("CIFS: Fix SMB2/SMB3 Copy offload support (refcopy) fo=
+r large files")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dB5==j0kkZ4K4Y3=1B/pQNK
+--Sig_/uG56_pooXROXh8Yp_A=3dFA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmClhxsACgkQAVBC80lX
-0Gy3pQf/Yo7BSBkVQLWcgaqqgv+kAWhM1oQ+ji043I4vF/eEiQ+3dzYnC0pwci09
-VM3J5sOKHqvX8lcKOV9dr1Z2cxMN0iFWtLxYizbUYMiweV+N4FD+Nhjxf/TEWvwm
-LVOJlszGswSkcJxgWrFa80/3QLS+K9LaSewGn+Z6gTF4mh09XmhuQr7OmclEQ4/b
-i839Fcwzt8Hf928ayAzwOkneS1pAEyCFHUHE3SLSPUoUBSMgfSbqcVULTpV6gIqT
-n/kPsX5bm6Z+fOkYAoFIgdVSJu1eT679dT+JDXggf7QKwCmsor6jxYmoi7LqzekC
-C0YAYfZsUIl1TCP3kjsn2b7WflIEIQ==
-=ZqtW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCliL0ACgkQAVBC80lX
+0Gx0ZAf9GyeA4JIcv6GdNywnjeyRZN1sml4sSb8oURSjkFspne0w+s5h3PgppZll
+qtowBNHnVkZmSR2NNbI2TSrOgarTQiVKcKc9irTRwiurvCBK5TuGBi0wOnPCMmAJ
+dWAJhG/QSVVFktULHsDyBDDW6sy/zvBCt0H9+LcFBw/Cv9uK3tcASLsa90Wsz/LE
+4RXz40FK82KFu88IA8k0USt/HBcII4Tl2B4UAZ9b915CDVk72wj1DFxKSSvm/fHc
+yTWqEqA36rtvmbKH8zDG+7MhW2KdU8pN15Vj5S1wvrugNBeWkLT3BtJXsKlOyHqT
+sKehsN/gLOTzlLXAfqLUgfhk22q/jg==
+=mTzL
 -----END PGP SIGNATURE-----
 
---Sig_/dB5==j0kkZ4K4Y3=1B/pQNK--
+--Sig_/uG56_pooXROXh8Yp_A=3dFA--

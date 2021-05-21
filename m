@@ -2,85 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4595538BDEE
-	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 07:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7351838BEAF
+	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 07:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbhEUFlX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 May 2021 01:41:23 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34057 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230505AbhEUFlX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 21 May 2021 01:41:23 -0400
+        id S233098AbhEUFz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 May 2021 01:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232901AbhEUFz3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 21 May 2021 01:55:29 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3EC061574;
+        Thu, 20 May 2021 22:54:06 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fmb661mNfz9sRR;
-        Fri, 21 May 2021 15:39:57 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FmbQJ47VDz9sW4;
+        Fri, 21 May 2021 15:54:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621575598;
-        bh=DLz3xkMroWrE2NraJ5fMFx2ZIhl+AH5dKaLOOOyN/3U=;
+        s=201702; t=1621576442;
+        bh=1p/g3esLUbcvdLnzE2tozxtLFTwXslBVpqrNvl8pxsI=;
         h=Date:From:To:Cc:Subject:From;
-        b=jMqDXvDdwWx9Nnq4NzR7nolihpufSdVYGFnjGfckAcg676G/PdxBVzgOudpd642L1
-         iWGljtBiSWZ5hMfvuNSHH6cT6RfBKmVVg9SoNuk9dqib+870WmRZChNOiCxCaAMSYX
-         w81hJnKBeGTqzH7/oaSrjeRh19axMol9zJBJxotsOO9nJTevu+hYFkuBD3tcbZgUsO
-         MckfuogKmEieY9OXR4POXlnRwsfXDjMKh5Z0qB4KZqj/H9pVSX+q3KV0liu0g/jhEu
-         MwZt8cvLNynqR4pb6kLe6I5wZTukN7l8+HlBalzKVvk8M7KE3M3KWRYt6oUmSdXms4
-         NQd3Ou/9tNO3g==
-Date:   Fri, 21 May 2021 15:39:56 +1000
+        b=NHmNYL6h0OsJLgBuVZ+CFU4WlOO5tfLzqAYpS9a6wrn9ijiF1PebQvRbdXR3CUs6D
+         Jagc7/5sBkKmwsL10X36rxE/p5/F9XecMjLsO8xZMAPN2vFHYzibCqQwg9LSao9l0x
+         5AcW6wVOxIMSRFGL3ePyuSg0rFU9iZvoB0yy00yHu9YrnPefwub/596uvIyQXZz2nZ
+         VR3YEPdiXNW+TZkhXLU3LEeohqoIxMOOwmuRJUcjKsUq6V+KfejtwVUjiyhnwDFgs+
+         I0Pk2UsR98J5c4MSR5k53ALBzNZ1mz2oUY6g/QpltfDU65VDB5nsdxbLc22l2lIxr3
+         feNqrkPr861Ug==
+Date:   Fri, 21 May 2021 15:53:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20210521153956.7c3e98dc@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20210521155359.13b023ff@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gfwKR.+gqSLXjjsvvEk/bb5";
+Content-Type: multipart/signed; boundary="Sig_/9dchpohPRgL++mVnmDhoiDb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gfwKR.+gqSLXjjsvvEk/bb5
+--Sig_/9dchpohPRgL++mVnmDhoiDb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the akpm-current tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+After merging the akpm-current tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-mm/swapfile.c:1039:22: warning: 'scan_swap_map' defined but not used [-Wunu=
-sed-function]
- 1039 | static unsigned long scan_swap_map(struct swap_info_struct *si,
-      |                      ^~~~~~~~~~~~~
+mm/migrate.c: In function 'unmap_and_move_huge_page':
+mm/migrate.c:1295:6: error: implicit declaration of function 'hugetlb_page_=
+subpool' [-Werror=3Dimplicit-function-declaration]
+ 1295 |  if (hugetlb_page_subpool(hpage) && !page_mapping(hpage)) {
+      |      ^~~~~~~~~~~~~~~~~~~~
 
-Introduced by commit
+Caused by commit
 
-  c9ea6b99df3c ("mm/swapfile: move get_swap_page_of_type() under CONFIG_HIB=
-ERNATION")
+  b63794a67ae2 ("mm: migrate: fix missing update page_private to hugetlb_pa=
+ge_subpool")
 
-# CONFIG_HIBERNATION is not set
+CONFIG_HUGETLB_PAGE is not defined for this build.
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gfwKR.+gqSLXjjsvvEk/bb5
+--Sig_/9dchpohPRgL++mVnmDhoiDb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCnR6wACgkQAVBC80lX
-0GwBHAgAo9uDYd723t9X3icpOifC6HZt6zPjCUZnheVQ8cSwQDO8gyIzXJgkP9AU
-be6CZcZKhbUWpZGhDjxwIBJB5OIe7+VcE6xq673reQ0pQHtytY6M1sNMdpJRyqcS
-yS+3oFsBFFBR6RRlPnm7uD+YojvBMIygrOi8dlEfzoOyrY7H6xTW+bo21WGgHTj4
-UBkK8v22/dSwXItLkoOBfVDhFsTAW3InxqkZgPMEDUfxo5qkvSapE3TXB3AOUGsf
-r2XQO/Cc4+OEGMnaHX4irFOPtY8y04WpNtYbWBegL+C5/xddc9WqOmqlW5rXuxIn
-vqHXmAZWkwqQB1Dm/p/CW4a/0+m4bg==
-=O0xP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCnSvcACgkQAVBC80lX
+0GxGIwf/dgD3N3pEjxcvmuBD/TB3ECQ2iorgEorKLDXbskl2qJs8A3zw7QBaKGIv
+hF0ayFLFJXgCMBt17h/NLGMEbLqOflcyrBkbU1ZV9+or8FPGsIozoG4H/Z9dIp+b
+pRMu5G7tnt8HTgTQmmx75gqIdo7w85ypoPjUfD5XzMgeuwpXUFHecGaUgue9UWZd
+BysYAghM+ckviciGFZC5aI30OezCzJ4sHDNYs492kpm3vi72hDhQdgvzo7Ba4UZn
+bYWTyDVEtoe4KyTBBDDRpBepsDPYK/791oyvU8GfSoggBM8WisVvnAdnmUy7JMZo
+aEU0DQNv9l7uWeZ6YbYnMjjMMffv5A==
+=skJw
 -----END PGP SIGNATURE-----
 
---Sig_/gfwKR.+gqSLXjjsvvEk/bb5--
+--Sig_/9dchpohPRgL++mVnmDhoiDb--

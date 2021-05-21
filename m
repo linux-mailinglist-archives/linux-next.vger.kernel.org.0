@@ -2,91 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A5938BAFF
-	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 02:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C253438BB3B
+	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 03:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbhEUAtv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 May 2021 20:49:51 -0400
-Received: from ozlabs.org ([203.11.71.1]:55317 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235121AbhEUAtv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 20 May 2021 20:49:51 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FmSdm2gdlz9sRR;
-        Fri, 21 May 2021 10:48:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621558108;
-        bh=U07ibIwPyAT4fMaPrBpkdalMUCC+z8EkVav/P1eW6Eo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l2CYa4/cYADDpzcZhOIPvTG4uM0PPD82a0KgnHbrwtcxn/tbmg63eUeW01LjxZ/wt
-         rNH0V8azKiEpYXuplJ1Yw006vjkz6o4iFRR1tQx5BD0KveZ65jJlO6nzJlmpwy9xrQ
-         K7lTMuEk4dn3BRYgWMI4RnnIm/3yjDksM8um3qv89LXyn3HPQz+9Gv3JsyId/oGRM4
-         4ohov+46x3F6OMuMlliLb94svpMyBoeZ5x581KSX5+nLMoIpQRM8ZR4QT+SHdEty8H
-         V94AIoylJZchmIIPYhKLDxgbSi7UbEWWxQ+rGlTjeRSglHTQy5RJfo2bN8SNwce93S
-         MnimWfPjaYX/Q==
-Date:   Fri, 21 May 2021 10:48:27 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-Message-ID: <20210521104827.1498c56e@canb.auug.org.au>
-In-Reply-To: <20210511094649.41e707c7@canb.auug.org.au>
-References: <20210511094649.41e707c7@canb.auug.org.au>
+        id S235972AbhEUBFq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 May 2021 21:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235984AbhEUBFl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 May 2021 21:05:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C53C0613ED;
+        Thu, 20 May 2021 18:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=sni9ETK0HEg7xDqRTRD+07GslmzE5y7OWzA5WJKcjKU=; b=u70b07TD062bdzcBCW7Xa9uMDu
+        Zvi3dzeWq3DXDEzDH3xRDl6oaTR5xq5coFv6GaME2vz1KEbDa3zSXlvSB4J2oR+UjWoxvBfKQyBS7
+        BBTv8m0jL9zS/zbF1qxxGoIDV9mujDnXmmc8ui/vlS3tA8T/Ewp5/aXKrIk0oOYxN1uPnfKtgTC2E
+        OpLrinbzCPhKfYv/UcSNjCiHOFVaAy+K9mbZxx+RxWFwgeLV64yAOLbyjpfzjLLrQhl6jK4/xEMCk
+        D+GPPpxqsYdARBIBjmbe6cSpPIzaZEKIYPcEPTqfKVZy5YMTXt6pMsw78MMxnaYxEM3JbaltbQyIc
+        Xdde8GPQ==;
+Received: from [2601:1c0:6280:3f0::7376]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1ljtaL-00Gjxw-1l; Fri, 21 May 2021 01:04:17 +0000
+Subject: Re: mmotm 2021-05-19-23-58 uploaded
+ (net/netfilter/nft_set_pipapo_avx2.c)
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+References: <20210520065918.KsmugQp47%akpm@linux-foundation.org>
+ <3d718861-28bd-dd51-82d4-96b040aa1ab4@infradead.org>
+ <20210521090751.51afa10f@elm.ozlabs.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6eb826b6-4279-8cf8-1c27-01aab0f83843@infradead.org>
+Date:   Thu, 20 May 2021 18:04:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OFKK3EEHEazs=LRjmoBzKy0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210521090751.51afa10f@elm.ozlabs.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OFKK3EEHEazs=LRjmoBzKy0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/20/21 4:07 PM, Stephen Rothwell wrote:
+> Hi Randy,
+> 
+> On Thu, 20 May 2021 15:40:54 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> on x86_64:
+>> (from linux-next, not mmotm)
+> 
+> Yeah, this is caused by a bad merge resolution by me.
+> 
+>> ../net/netfilter/nft_set_pipapo_avx2.c: In function ‘nft_pipapo_avx2_lookup’:
+>> ../net/netfilter/nft_set_pipapo_avx2.c:1135:10: error: implicit declaration of function ‘nft_pipapo_lookup’; did you mean ‘nft_pipapo_avx2_lookup’? [-Werror=implicit-function-declaration]
+>>    return nft_pipapo_lookup(net, set, key, ext);
+>>           ^~~~~~~~~~~~~~~~~
+> 
+> I have added this to the merge resolution today:
+> 
+> diff --git a/include/net/netfilter/nf_tables_core.h b/include/net/netfilter/nf_tables_core.h
+> index 789e9eadd76d..8652b2514e57 100644
+> --- a/include/net/netfilter/nf_tables_core.h
+> +++ b/include/net/netfilter/nf_tables_core.h
+> @@ -89,6 +89,8 @@ extern const struct nft_set_type nft_set_bitmap_type;
+>  extern const struct nft_set_type nft_set_pipapo_type;
+>  extern const struct nft_set_type nft_set_pipapo_avx2_type;
+>  
+> +bool nft_pipapo_lookup(const struct net *net, const struct nft_set *set,
+> +			    const u32 *key, const struct nft_set_ext **ext);
+>  #ifdef CONFIG_RETPOLINE
+>  bool nft_rhash_lookup(const struct net *net, const struct nft_set *set,
+>  		      const u32 *key, const struct nft_set_ext **ext);
+> @@ -101,8 +103,6 @@ bool nft_hash_lookup_fast(const struct net *net,
+>  			  const u32 *key, const struct nft_set_ext **ext);
+>  bool nft_hash_lookup(const struct net *net, const struct nft_set *set,
+>  		     const u32 *key, const struct nft_set_ext **ext);
+> -bool nft_pipapo_lookup(const struct net *net, const struct nft_set *set,
+> -			    const u32 *key, const struct nft_set_ext **ext);
+>  bool nft_set_do_lookup(const struct net *net, const struct nft_set *set,
+>  		       const u32 *key, const struct nft_set_ext **ext);
+>  #else
+> diff --git a/net/netfilter/nft_set_pipapo.c b/net/netfilter/nft_set_pipapo.c
+> index 9addc0b447f7..dce866d93fee 100644
+> --- a/net/netfilter/nft_set_pipapo.c
+> +++ b/net/netfilter/nft_set_pipapo.c
+> @@ -408,7 +408,6 @@ int pipapo_refill(unsigned long *map, int len, int rules, unsigned long *dst,
+>   *
+>   * Return: true on match, false otherwise.
+>   */
+> -INDIRECT_CALLABLE_SCOPE
+>  bool nft_pipapo_lookup(const struct net *net, const struct nft_set *set,
+>  		       const u32 *key, const struct nft_set_ext **ext)
+>  {
+> 
+> It should apply on top of next-20210520 if you want to test it (I
+> haven't tested it yet, but will later today).
 
-Hi all,
+Yes, that builds. Thanks.
 
-On Tue, 11 May 2021 09:46:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the v4l-dvb tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> drivers/media/platform/exynos4-is/media-dev.c: In function 'cam_clk_prepa=
-re':
-> drivers/media/platform/exynos4-is/media-dev.c:1287:6: warning: unused var=
-iable 'ret' [-Wunused-variable]
->  1287 |  int ret;
->       |      ^~~
->=20
-> Introduced by commit
->=20
->   59f96244af94 ("media: exynos4-is: fix pm_runtime_get_sync() usage count=
-")
-
-I am still seeing this warning.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OFKK3EEHEazs=LRjmoBzKy0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCnA1sACgkQAVBC80lX
-0GxqvAf8DWzqZIyNT15xeURrds7HyqK1hcHoYHBg5SqrUeYZTLQhqQ7SLLWcrwGI
-r0VfdjagZCCU5PnYHJ0+JeomsmeGvvaWiv05PAw+FveyosAI4m1POHo93iS09PPk
-RZwmz2J232ZrOzfUmIocjQx0HVSnCZgaRuLBVG0kG4ZLsJaUxjvtJxvHrVmsAdqW
-OZdAXxSyeMSY5XJRGpj+LfviEbPuUIYorn6NGuTi3yy5AOnQmjfq0SlYi682mGhJ
-wd6Uv48EsxNulamLppguoSaRuJ0PUXY/kMFOGtsIcHwyu0ARezGLClW4GcMRN/qQ
-aS04H0pPkqSdKyREk9Sxcou+nYCvFA==
-=r6sA
------END PGP SIGNATURE-----
-
---Sig_/OFKK3EEHEazs=LRjmoBzKy0--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+https://people.kernel.org/tglx/notes-about-netiquette

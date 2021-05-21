@@ -2,145 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704A638BC19
-	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 03:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4199138BC63
+	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 04:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbhEUB7i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 May 2021 21:59:38 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51195 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238017AbhEUB7i (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 20 May 2021 21:59:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FmVBF1pGXz9sVt;
-        Fri, 21 May 2021 11:58:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621562294;
-        bh=YKiJJ5vfpxMNe5T8vLLSeZo6uiKw1uqUqAKy5C3g0rg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u/6hc///Ob7Uue0j64OZ0pz1rKWyMZ/ilIbQI/7eYU4yX8+6+fJNbECEoGOsV8o5D
-         betMX8bOEhu9gGAr+UNy1wGDW765hIUDKHbtOPMKnyF+zJsEbemD9BuoA48ZBmKgvL
-         wxobz9VZC+v8i6ZdtFpqRC7krAoPnv/mtjB2QAz5ornitKBdLyZ2qSeFwHyPLt+APf
-         TcyW7rcOcD15Yo5dBojNGBtAZKtt3efz2uYCKqBSZz3v41ro/SdoYCR7B9vwxAiLas
-         bwyuv04/t/C/Ej+zZyJIg96jeQWN5Aim4hkb5eCNLzTZtONjsb9KaD/2GZErwrttWv
-         ZDRLlrQ4NX5gA==
-Date:   Fri, 21 May 2021 11:58:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-intel tree
-Message-ID: <20210521115812.1f8680bf@canb.auug.org.au>
+        id S238544AbhEUCYa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 May 2021 22:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238546AbhEUCY2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 May 2021 22:24:28 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DF4C0613CE
+        for <linux-next@vger.kernel.org>; Thu, 20 May 2021 19:23:05 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 6so13134466pgk.5
+        for <linux-next@vger.kernel.org>; Thu, 20 May 2021 19:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YemI85O9bLI0m8MkylkyR0IUfS+oZy6kYsON+ubb8mg=;
+        b=gEabH7HEBFV1nPdVQ6FrQc/idUFaL/V5OxiMA1LI2BpttADEiH2k7vALxIDizC3MSG
+         gSgQMRLfRy3FJ0npyYj5LwrxlIvuF3MQ2h2kese9zmgcI9w+x8PEBOBOFIN9cqlmmWWs
+         YWBG2iCbiuzEI6wasXPpTSOLeoZFizR2a0ZXlmZYIKoUvJOSg7zhgh+AuQK2q+EyhL0T
+         bb4dzsW7mUgo878zXUzNcyoh419is9FMpDsZtuf1oO4z3uZlf9rBnv399PqOj2nK6UlG
+         WPj4JZVo6Wsh9P3URTV0gh/fgI++wQETs2AIn3RAOzMk/RopmHAfBYy0i16WlbxpkMWG
+         3UDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YemI85O9bLI0m8MkylkyR0IUfS+oZy6kYsON+ubb8mg=;
+        b=Emm9ZWpJ7adrKxxx9CwAXN8xbmXref7JF2c+SuIYtWt5cUxgETLMvgzS2daCKndVYB
+         i9BhgpPPGpD6baz09iYCy7n4KXVhwbK4DWB3N9XRPeF2zUPH4XLya6sbMtPYLvsQhHqI
+         Tr6Vsq/sPTBKjOfi6KEe9czZ8rSoe3/izW1rnEQiqZExOrr0wInrynQXvRNhr5nj5rRh
+         G3XnXoERUdJpEMhvO/e9QPnLu/IPQ3VWUEAyW4b8uWd5+2iYidRIGGwdpOS12qjmt+A2
+         fQ4kp/iiMn8EZAXK8Cq2FIP0uSIvoam74NMQ5lz0tME7+3DbHt9IbU1po1Wz+PC0xsHQ
+         6OIA==
+X-Gm-Message-State: AOAM530GojWcZZjlMwfS+f+tgI514Rzw8LNL5eXDSVRV8gOgjCH4bhRy
+        n/6m1EuSnNC+kcmYpxq+n0uH22/PHHsBEPyCH2d8Nw==
+X-Google-Smtp-Source: ABdhPJz39htdi++DEibwiL3THTiqt0knG3d1uKGkXu73GOwwzQNM1rZ8VXwFKoMc7Y2smXEQir4jGlEcmlrwzsON4+A=
+X-Received: by 2002:a05:6a00:2493:b029:2c4:b6dd:d389 with SMTP id
+ c19-20020a056a002493b02902c4b6ddd389mr7694639pfv.2.1621563785247; Thu, 20 May
+ 2021 19:23:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X_1rq9i10KBI.rsWyD/3wED";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210520065918.KsmugQp47%akpm@linux-foundation.org> <8e1de6c2-27af-f612-7467-a7d1f1a31bff@infradead.org>
+In-Reply-To: <8e1de6c2-27af-f612-7467-a7d1f1a31bff@infradead.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 21 May 2021 10:22:28 +0800
+Message-ID: <CAMZfGtW=jgjJPUNk4jxFXWZ91wuYEm4q3x7NUVSjGpu0Xjc7hA@mail.gmail.com>
+Subject: Re: [External] Re: mmotm 2021-05-19-23-58 uploaded (mm/migrate.c)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhocko@suse.cz, mm-commits@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X_1rq9i10KBI.rsWyD/3wED
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 21, 2021 at 6:21 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 5/19/21 11:59 PM, akpm@linux-foundation.org wrote:
+> > The mm-of-the-moment snapshot 2021-05-19-23-58 has been uploaded to
+> >
+> >    https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > mmotm-readme.txt says
+> >
+> > README for mm-of-the-moment:
+> >
+> > https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> >
+> > You will need quilt to apply these patches to the latest Linus release =
+(5.x
+> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated=
+ in
+> > https://ozlabs.org/~akpm/mmotm/series
+> >
+> > The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss=
+,
+> > followed by the base kernel version against which this patch series is =
+to
+> > be applied.
+> >
+> > This tree is partially included in linux-next.  To see which patches ar=
+e
+> > included in linux-next, consult the `series' file.  Only the patches
+> > within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included i=
+n
+> > linux-next.
+>
+> on x86_64:
+>
+> ../mm/migrate.c: In function =E2=80=98unmap_and_move_huge_page=E2=80=99:
+> ../mm/migrate.c:1295:6: error: implicit declaration of function =E2=80=98=
+hugetlb_page_subpool=E2=80=99; did you mean =E2=80=98hugetlb_count_sub=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+>   if (hugetlb_page_subpool(hpage) && !page_mapping(hpage)) {
+>       ^~~~~~~~~~~~~~~~~~~~
+>
+> Full randconfig file is attached.
 
-Hi all,
+Thanks. I'll fix it in the next version.
 
-After merging the drm-intel tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/gpu/drm/i915/gvt/handlers.c: In function 'init_skl_mmio_info':
-drivers/gpu/drm/i915/gvt/handlers.c:3345:9: error: 'CSR_SSP_BASE' undeclare=
-d (first use in this function); did you mean 'DMC_SSP_BASE'?
- 3345 |  MMIO_D(CSR_SSP_BASE, D_SKL_PLUS);
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:2120:48: note: in definition of macro '=
-MMIO_F'
- 2120 |  ret =3D new_mmio_info(gvt, i915_mmio_reg_offset(reg), \
-      |                                                ^~~
-drivers/gpu/drm/i915/gvt/handlers.c:3345:2: note: in expansion of macro 'MM=
-IO_D'
- 3345 |  MMIO_D(CSR_SSP_BASE, D_SKL_PLUS);
-      |  ^~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:3345:9: note: each undeclared identifie=
-r is reported only once for each function it appears in
- 3345 |  MMIO_D(CSR_SSP_BASE, D_SKL_PLUS);
-      |         ^~~~~~~~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:2120:48: note: in definition of macro '=
-MMIO_F'
- 2120 |  ret =3D new_mmio_info(gvt, i915_mmio_reg_offset(reg), \
-      |                                                ^~~
-drivers/gpu/drm/i915/gvt/handlers.c:3345:2: note: in expansion of macro 'MM=
-IO_D'
- 3345 |  MMIO_D(CSR_SSP_BASE, D_SKL_PLUS);
-      |  ^~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:3346:9: error: 'CSR_HTP_SKL' undeclared=
- (first use in this function); did you mean 'DMC_HTP_SKL'?
- 3346 |  MMIO_D(CSR_HTP_SKL, D_SKL_PLUS);
-      |         ^~~~~~~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:2120:48: note: in definition of macro '=
-MMIO_F'
- 2120 |  ret =3D new_mmio_info(gvt, i915_mmio_reg_offset(reg), \
-      |                                                ^~~
-drivers/gpu/drm/i915/gvt/handlers.c:3346:2: note: in expansion of macro 'MM=
-IO_D'
- 3346 |  MMIO_D(CSR_HTP_SKL, D_SKL_PLUS);
-      |  ^~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:3347:9: error: 'CSR_LAST_WRITE' undecla=
-red (first use in this function); did you mean 'DMC_LAST_WRITE'?
- 3347 |  MMIO_D(CSR_LAST_WRITE, D_SKL_PLUS);
-      |         ^~~~~~~~~~~~~~
-drivers/gpu/drm/i915/gvt/handlers.c:2120:48: note: in definition of macro '=
-MMIO_F'
- 2120 |  ret =3D new_mmio_info(gvt, i915_mmio_reg_offset(reg), \
-      |                                                ^~~
-drivers/gpu/drm/i915/gvt/handlers.c:3347:2: note: in expansion of macro 'MM=
-IO_D'
- 3347 |  MMIO_D(CSR_LAST_WRITE, D_SKL_PLUS);
-      |  ^~~~~~
-In file included from drivers/gpu/drm/i915/i915_drv.h:64,
-                 from drivers/gpu/drm/i915/gvt/handlers.c:39:
-drivers/gpu/drm/i915/gvt/handlers.c: At top level:
-drivers/gpu/drm/i915/gvt/handlers.c:3658:21: error: 'CSR_MMIO_START_RANGE' =
-undeclared here (not in a function); did you mean 'DMC_MMIO_START_RANGE'?
- 3658 |  {D_SKL_PLUS, _MMIO(CSR_MMIO_START_RANGE), 0x3000, NULL, NULL},
-      |                     ^~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/i915/i915_reg.h:185:47: note: in definition of macro '_MMIO'
-  185 | #define _MMIO(r) ((const i915_reg_t){ .reg =3D (r) })
-      |                                               ^
-
-Caused by commit
-
-  0633cdcbaa77 ("drm/i915/dmc: Rename macro names containing csr")
-
-I have used the drm-intel tree from next-20210520 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/X_1rq9i10KBI.rsWyD/3wED
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCnE7QACgkQAVBC80lX
-0GyWKgf9FhTLYXrDxj5B3cqWCYudB70j1lqfCiwVHuma5A/C3D+owuO1kDRVHau4
-8Anq+qZIxU+Po1kIXSCi4HTSfn4sZRRDtbrVIpJZ/nR1T2bDgZVdpSQWsGJKnetw
-BRuZRHyu2S/PT27P7PnSs0ye6s9KxcdZm4MKb0PQRAVaTsBojgcSEKIyAqwks3ux
-SPpcUqyVtfnDUExXKU4SaCNHVLNFvtdnDtjXJzNvmG6xTgI4vieePaC8LCMYtEYb
-CpcHIIOYCdwETcUPdvYB2wrvg81l95qoam1UBS2zK/6egxNn7FfkRop3ENXQ4lPO
-gEwy3peESSNX1u8x2wzrVMctVsKy/g==
-=+Gw7
------END PGP SIGNATURE-----
-
---Sig_/X_1rq9i10KBI.rsWyD/3wED--
+>
+> --
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>

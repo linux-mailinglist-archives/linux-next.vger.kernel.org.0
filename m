@@ -2,70 +2,327 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CC538BB8B
-	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 03:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988D338BBAE
+	for <lists+linux-next@lfdr.de>; Fri, 21 May 2021 03:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbhEUB3t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 May 2021 21:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S237158AbhEUBjz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 May 2021 21:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236789AbhEUB3t (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 20 May 2021 21:29:49 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05050C061574;
-        Thu, 20 May 2021 18:28:27 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e11so22023529ljn.13;
-        Thu, 20 May 2021 18:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SrcJUNIlA2c/h4q1u3F3wJeheqbYGXHxdCgoYlNSiMM=;
-        b=VKJ3BKg/185/WdPwWFHE164edKfWgburJDhQKH97Pp+lZzcQKfCjNYiWyTJcT2k77B
-         jD1dFPuJnHHF4tSr+0YbIuaoDGJZ9I0bk8+8b4BwwZmpQ20EZyx7t9VoUTHRbfbg6cCf
-         wqk7LZLzR+6ExtNxBxX03bzTCQq1kR46rx8xVJLflRn/uE7+IbxaDdqf+MpCPthvyebS
-         wKDdM0Qk+tgauYLQLXkAa36OXNQWetMy5IqmE7va2TkvvfPGyKgZJOMZa28qNEq9WLaQ
-         aBF3JNg6LfLnT3eZ8exqpENZHnyFaPieF3d85cibp9OR78gy4Cie/lwXmAkAbmOrapvT
-         vi7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SrcJUNIlA2c/h4q1u3F3wJeheqbYGXHxdCgoYlNSiMM=;
-        b=erg2sfO02aAGGcWoqPfy1cdu9Zo111TOGCyHw88IittrjZ7SGhaA3FlvwwRA2rV2PZ
-         PQh2yn5n/6TYm37CRHaO0daO3Y10N7rpI0UjYdOxVani7yPX6//qPyrqr73lR/xzlamW
-         cHEgKoZkQaypD0G2DzfpUT15AAMUnDEZ31t3wYHhU6kKTWz7gpYPj4QIYxlXTo881c8Q
-         WDf7lAdCmukPFliGMnxd6WhPKJwJUKcUqFAxqwCndZs6Ifftetkz0gIzyxfSILAFjm4K
-         7aEzXlBqAVU+uYrqcDHZpJxlC/+JWN7eOIvfT/I6JHoBXJhjmwl7kvdS28QrLc8MUmbZ
-         DTQQ==
-X-Gm-Message-State: AOAM531YuJf68pt7VnFt+p1WhqROpLyB8ureh+KwM76rTnsPBXDuHUGJ
-        rQdul3uwOSGIZeQLugMXNmA4dsWdsed5yILTgGA=
-X-Google-Smtp-Source: ABdhPJxG8IZVu/Mx3xZaR6OSP/OrDuwE6+i2uVKRtMkBjLa6VP4ODhmwGNcrf8cJFJEQzHXvHYPny5kmFoJ8ThTMZmA=
-X-Received: by 2002:a05:651c:a06:: with SMTP id k6mr4887437ljq.347.1621560505339;
- Thu, 20 May 2021 18:28:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210426224413.2ce59504@canb.auug.org.au> <YIa3u0RCcOf+tZMu@kroah.com>
- <20210521104014.796734bb@canb.auug.org.au>
-In-Reply-To: <20210521104014.796734bb@canb.auug.org.au>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 20 May 2021 22:28:14 -0300
-Message-ID: <CAOMZO5CD_xhc0L1LC+jZypXASkPu_kFv6U5WRL5kJTFRE8oTnA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the usb tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>,
+        with ESMTP id S237098AbhEUBjy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 20 May 2021 21:39:54 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F74C061574;
+        Thu, 20 May 2021 18:38:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FmTlS1Z85z9sV5;
+        Fri, 21 May 2021 11:38:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1621561108;
+        bh=4Fb+1sWp4AEVdRzTjOYK4Ft+EIzJhCyYWl/H051C5Ks=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Lao+G0QQ2gwqnbik/zz+3IYRZ7vr6ocxWUHHa7JdDmIf79+x1YKQpG+TB82PDv7Yn
+         LSvMJrCGKhfZFKfWD9y475LyDXIiqxPxZMQOVfH6aH0bIYEMu7LmrESnmx6ZB777UD
+         WRw0K1XWJjXCIXBrKzfqgb+2UwfBqZnzhB6w/ntNSeqfkjn0/Nma/GDX2hoytGz+AB
+         vCJjSm5pkZpRT53a3ez4lMEzSEUa1i4E0qKqsHzB/jUrYAia0H5vz899ufYVXmgpwi
+         GjHJVf0Rh6WdxRlB+t/dm98K2xHoOyZ05StGV/nVZhBkelWx4DjFIVSKOiQcDT7o/x
+         OIqeBol0YRYaA==
+Date:   Fri, 21 May 2021 11:38:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: manual merge of the amdgpu tree with the drm-misc tree
+Message-ID: <20210521113827.675898b8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/oCpAwbq_zZh.NtAEmX83p3b";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/oCpAwbq_zZh.NtAEmX83p3b
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 20, 2021 at 9:40 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> I am still seeing this warning.
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-I will submit a fix for this warning.
+  drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
 
-Thanks
+between commit:
+
+  35bba8313b95 ("drm/amdgpu: Convert driver sysfs attributes to static attr=
+ibutes")
+
+from the drm-misc tree and commit:
+
+  589939d40116 ("drm/amdgpu: fix coding style and documentation in amdgpu_v=
+ram_mgr.c")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+index a99d196b05df,a52e17ed3df6..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c
+@@@ -162,74 -181,6 +181,10 @@@ static struct attribute *amdgpu_vram_mg
+  	NULL
+  };
+ =20
+ +const struct attribute_group amdgpu_vram_mgr_attr_group =3D {
+ +	.attrs =3D amdgpu_vram_mgr_attributes
+ +};
+ +
+- static const struct ttm_resource_manager_func amdgpu_vram_mgr_func;
+-=20
+- /**
+-  * amdgpu_vram_mgr_init - init VRAM manager and DRM MM
+-  *
+-  * @adev: amdgpu_device pointer
+-  *
+-  * Allocate and initialize the VRAM manager.
+-  */
+- int amdgpu_vram_mgr_init(struct amdgpu_device *adev)
+- {
+- 	struct amdgpu_vram_mgr *mgr =3D &adev->mman.vram_mgr;
+- 	struct ttm_resource_manager *man =3D &mgr->manager;
+-=20
+- 	ttm_resource_manager_init(man, adev->gmc.real_vram_size >> PAGE_SHIFT);
+-=20
+- 	man->func =3D &amdgpu_vram_mgr_func;
+-=20
+- 	drm_mm_init(&mgr->mm, 0, man->size);
+- 	spin_lock_init(&mgr->lock);
+- 	INIT_LIST_HEAD(&mgr->reservations_pending);
+- 	INIT_LIST_HEAD(&mgr->reserved_pages);
+-=20
+- 	ttm_set_driver_manager(&adev->mman.bdev, TTM_PL_VRAM, &mgr->manager);
+- 	ttm_resource_manager_set_used(man, true);
+- 	return 0;
+- }
+-=20
+- /**
+-  * amdgpu_vram_mgr_fini - free and destroy VRAM manager
+-  *
+-  * @adev: amdgpu_device pointer
+-  *
+-  * Destroy and free the VRAM manager, returns -EBUSY if ranges are still
+-  * allocated inside it.
+-  */
+- void amdgpu_vram_mgr_fini(struct amdgpu_device *adev)
+- {
+- 	struct amdgpu_vram_mgr *mgr =3D &adev->mman.vram_mgr;
+- 	struct ttm_resource_manager *man =3D &mgr->manager;
+- 	int ret;
+- 	struct amdgpu_vram_reservation *rsv, *temp;
+-=20
+- 	ttm_resource_manager_set_used(man, false);
+-=20
+- 	ret =3D ttm_resource_manager_evict_all(&adev->mman.bdev, man);
+- 	if (ret)
+- 		return;
+-=20
+- 	spin_lock(&mgr->lock);
+- 	list_for_each_entry_safe(rsv, temp, &mgr->reservations_pending, node)
+- 		kfree(rsv);
+-=20
+- 	list_for_each_entry_safe(rsv, temp, &mgr->reserved_pages, node) {
+- 		drm_mm_remove_node(&rsv->mm_node);
+- 		kfree(rsv);
+- 	}
+- 	drm_mm_takedown(&mgr->mm);
+- 	spin_unlock(&mgr->lock);
+-=20
+- 	ttm_resource_manager_cleanup(man);
+- 	ttm_set_driver_manager(&adev->mman.bdev, TTM_PL_VRAM, NULL);
+- }
+-=20
+  /**
+   * amdgpu_vram_mgr_vis_size - Calculate visible node size
+   *
+@@@ -444,10 -396,10 +400,10 @@@ static int amdgpu_vram_mgr_new(struct t
+  		pages_per_node =3D HPAGE_PMD_NR;
+  #else
+  		/* default to 2MB */
+- 		pages_per_node =3D (2UL << (20UL - PAGE_SHIFT));
++ 		pages_per_node =3D 2UL << (20UL - PAGE_SHIFT);
+  #endif
+- 		pages_per_node =3D max((uint32_t)pages_per_node,
+- 				     tbo->page_alignment);
++ 		pages_per_node =3D max_t(uint32_t, pages_per_node,
+ -				       mem->page_alignment);
+++				       tbo->page_alignment);
+  		num_nodes =3D DIV_ROUND_UP(mem->num_pages, pages_per_node);
+  	}
+ =20
+@@@ -465,38 -417,29 +421,29 @@@
+  	mem->start =3D 0;
+  	pages_left =3D mem->num_pages;
+ =20
+- 	spin_lock(&mgr->lock);
+- 	for (i =3D 0; pages_left >=3D pages_per_node; ++i) {
+- 		unsigned long pages =3D rounddown_pow_of_two(pages_left);
+-=20
+- 		/* Limit maximum size to 2GB due to SG table limitations */
+- 		pages =3D min(pages, (2UL << (30 - PAGE_SHIFT)));
+-=20
+- 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i], pages,
+- 						pages_per_node, 0,
+- 						place->fpfn, lpfn,
+- 						mode);
+- 		if (unlikely(r))
+- 			break;
+-=20
+- 		vis_usage +=3D amdgpu_vram_mgr_vis_size(adev, &nodes[i]);
+- 		amdgpu_vram_mgr_virt_start(mem, &nodes[i]);
+- 		pages_left -=3D pages;
+- 	}
++ 	/* Limit maximum size to 2GB due to SG table limitations */
++ 	pages =3D min(pages_left, 2UL << (30 - PAGE_SHIFT));
+ =20
+- 	for (; pages_left; ++i) {
+- 		unsigned long pages =3D min(pages_left, pages_per_node);
++ 	i =3D 0;
++ 	spin_lock(&mgr->lock);
++ 	while (pages_left) {
+ -		uint32_t alignment =3D mem->page_alignment;
+ +		uint32_t alignment =3D tbo->page_alignment;
+ =20
+- 		if (pages =3D=3D pages_per_node)
++ 		if (pages >=3D pages_per_node)
+  			alignment =3D pages_per_node;
+ =20
+- 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i],
+- 						pages, alignment, 0,
+- 						place->fpfn, lpfn,
+- 						mode);
+- 		if (unlikely(r))
++ 		r =3D drm_mm_insert_node_in_range(mm, &nodes[i], pages, alignment,
++ 						0, place->fpfn, lpfn, mode);
++ 		if (unlikely(r)) {
++ 			if (pages > pages_per_node) {
++ 				if (is_power_of_2(pages))
++ 					pages =3D pages / 2;
++ 				else
++ 					pages =3D rounddown_pow_of_two(pages);
++ 				continue;
++ 			}
+  			goto error;
++ 		}
+ =20
+  		vis_usage +=3D amdgpu_vram_mgr_vis_size(adev, &nodes[i]);
+  		amdgpu_vram_mgr_virt_start(mem, &nodes[i]);
+@@@ -724,3 -672,73 +676,65 @@@ static const struct ttm_resource_manage
+  	.free	=3D amdgpu_vram_mgr_del,
+  	.debug	=3D amdgpu_vram_mgr_debug
+  };
++=20
++ /**
++  * amdgpu_vram_mgr_init - init VRAM manager and DRM MM
++  *
++  * @adev: amdgpu_device pointer
++  *
++  * Allocate and initialize the VRAM manager.
++  */
++ int amdgpu_vram_mgr_init(struct amdgpu_device *adev)
++ {
++ 	struct amdgpu_vram_mgr *mgr =3D &adev->mman.vram_mgr;
++ 	struct ttm_resource_manager *man =3D &mgr->manager;
+ -	int ret;
++=20
++ 	ttm_resource_manager_init(man, adev->gmc.real_vram_size >> PAGE_SHIFT);
++=20
++ 	man->func =3D &amdgpu_vram_mgr_func;
++=20
++ 	drm_mm_init(&mgr->mm, 0, man->size);
++ 	spin_lock_init(&mgr->lock);
++ 	INIT_LIST_HEAD(&mgr->reservations_pending);
++ 	INIT_LIST_HEAD(&mgr->reserved_pages);
++=20
+ -	/* Add the two VRAM-related sysfs files */
+ -	ret =3D sysfs_create_files(&adev->dev->kobj, amdgpu_vram_mgr_attributes);
+ -	if (ret)
+ -		DRM_ERROR("Failed to register sysfs\n");
+ -
++ 	ttm_set_driver_manager(&adev->mman.bdev, TTM_PL_VRAM, &mgr->manager);
++ 	ttm_resource_manager_set_used(man, true);
++ 	return 0;
++ }
++=20
++ /**
++  * amdgpu_vram_mgr_fini - free and destroy VRAM manager
++  *
++  * @adev: amdgpu_device pointer
++  *
++  * Destroy and free the VRAM manager, returns -EBUSY if ranges are still
++  * allocated inside it.
++  */
++ void amdgpu_vram_mgr_fini(struct amdgpu_device *adev)
++ {
++ 	struct amdgpu_vram_mgr *mgr =3D &adev->mman.vram_mgr;
++ 	struct ttm_resource_manager *man =3D &mgr->manager;
++ 	int ret;
++ 	struct amdgpu_vram_reservation *rsv, *temp;
++=20
++ 	ttm_resource_manager_set_used(man, false);
++=20
++ 	ret =3D ttm_resource_manager_evict_all(&adev->mman.bdev, man);
++ 	if (ret)
++ 		return;
++=20
++ 	spin_lock(&mgr->lock);
++ 	list_for_each_entry_safe(rsv, temp, &mgr->reservations_pending, node)
++ 		kfree(rsv);
++=20
++ 	list_for_each_entry_safe(rsv, temp, &mgr->reserved_pages, node) {
++ 		drm_mm_remove_node(&rsv->mm_node);
++ 		kfree(rsv);
++ 	}
++ 	drm_mm_takedown(&mgr->mm);
++ 	spin_unlock(&mgr->lock);
++=20
+ -	sysfs_remove_files(&adev->dev->kobj, amdgpu_vram_mgr_attributes);
+ -
++ 	ttm_resource_manager_cleanup(man);
++ 	ttm_set_driver_manager(&adev->mman.bdev, TTM_PL_VRAM, NULL);
++ }
+
+--Sig_/oCpAwbq_zZh.NtAEmX83p3b
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCnDxMACgkQAVBC80lX
+0GyKLQgAiPeALS3dRJg5R/+nn69plxC99oU6C/fOultRYw0tP1km0eSIYgQJfPQ7
+Oqh7ABsnY8oXd/cdUK2tqFm+hGlbv0ovpAof1QSIghel2CCUIaJU8OBNOkKJzmgt
+o3lP8iXWxYwvekYIjCK3qETzamW3jo+h7lpQKHr5Zp3J4cUXlDSVmbS8f6MjaYrc
+xSHWVKwB4Ye67Lh78BPi1cyuUC+p8LyXlZrMdR47ehzGP+xNvg8FYpIgPcy/pF3T
+rEBgMs+PFrnJx4x6y9Ehwb1CUL3yOAR7xFAG1RMvshvO7lcHp2Dl2aFT6rIIJB4H
+SNge7yo0aprgG03AImH2lTKgd8objw==
+=g5ja
+-----END PGP SIGNATURE-----
+
+--Sig_/oCpAwbq_zZh.NtAEmX83p3b--

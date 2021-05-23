@@ -2,71 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0767E38D742
-	for <lists+linux-next@lfdr.de>; Sat, 22 May 2021 21:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2F638D857
+	for <lists+linux-next@lfdr.de>; Sun, 23 May 2021 04:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbhEVTi1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 22 May 2021 15:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbhEVTi1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 22 May 2021 15:38:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B15C061574;
-        Sat, 22 May 2021 12:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=J77Q+/00dHZROE3h+kG9CJ0WG5qNx1OHZMBspyoORGw=; b=Es2Tgm07Yj46PWzOmQ2R97Vbh9
-        R2XSBLdlIB9+ZK0s8DB8vkVx7vPhOhm0qC4BUfglWM/oIkY4Qqaen57IQ3fLUcfwkqMfCg7RCAfyo
-        ULd3UgcuvcZ86ZH1iVqr2eag+CkA3NwlO1erZocmGl4HGckOzS9iRc3cM2R6rSs/rLWWTpB2Xbl5y
-        ooDD6bMVAolFe2kMQKDP79PSOzyjWrF19ckes3VHgLs4TFdES63qK0eBy4BSbANlCIagMqhKtw1Jx
-        mA3dkY9/fyXjy0epWyoxK24Xo72f654W0L/w4eNdIILExLyOOVpZ0BKc6+E4o0RdRNrZoW7Bffnwg
-        WxYd70Pw==;
-Received: from [2601:1c0:6280:3f0::7376]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lkXQ3-000BgY-Oi; Sat, 22 May 2021 19:36:19 +0000
-Subject: Re: Failed to start load kernel modules on 5.13.0-rc2-next-20210521
-To:     Hritik Vijay <hritikxx8@gmail.com>
-Cc:     linux-next@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>
-References: <YKlWqLh61Rxid7l9@Journey.localdomain>
- <21727ead-5092-8900-74e9-ee73774b0b97@infradead.org>
- <YKlcxO3ofPEr6ak7@Journey.localdomain>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <52f77a79-5042-eca7-f80e-657ac1c515de@infradead.org>
-Date:   Sat, 22 May 2021 12:36:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S231600AbhEWCkN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 22 May 2021 22:40:13 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60637 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231516AbhEWCkM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 22 May 2021 22:40:12 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fnl014z4Wz9sSn;
+        Sun, 23 May 2021 12:38:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1621737523;
+        bh=lH9AwdckluTJpRQiVDB7RMXCjnC/3+oXvLjYv6y4e8E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bSzDzM0UFtSLPnHea68W0ws0+TgrwnRgisMYUnd6wY7HF30ZquDNJP1fb0wt8MvW/
+         cWOh48A0cSXmDae8cL8QaJPvTMRtv8/1b/d4ZTFDCn0/U9My+bu7GcgFQ5xfJssNwq
+         Tc/6+3jFaNhGP5Z2X7c8RXzd7yqTebnmLeiuwQSi7t0VA5gqVY/PJOKJYnEVgNZhWU
+         qeGyF0yhSNkAwA40YSoH7set2SiSNLlbFtkzxfZShBdM5OD49r5X8bvnsypVYpJ17p
+         e0c7H44lCy+Ry0Jv/MevYI+chhVLVbcA7InhxOtvDpohfJ5m7firDe6FRt0h761FRy
+         U7RUne+BMTeFA==
+Date:   Sun, 23 May 2021 12:38:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the netfilter tree
+Message-ID: <20210523123840.101ddea5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <YKlcxO3ofPEr6ak7@Journey.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/FbsIMk5veJMUKTjyQFK=9Dq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/22/21 12:34 PM, Hritik Vijay wrote:
-> On Sat, May 22, 2021 at 12:28:25PM -0700, Randy Dunlap wrote:
->> Hi,
->> Here is a reply to a similar message/problem:
->> https://lore.kernel.org/lkml/CAEf4BzZuU2TYMapSy7s3=D8iYtVw_N+=hh2ZMGG9w6N0G1HvbA@mail.gmail.com/
->>
->> so it looks like Andrii is still debugging this problem.
->>
->> -- 
->> ~Randy
-> 
-> Hi Randy. Thank you so much. All this time I was wondering if I'm
-> messing up the compilation/boot somehow. I am not sure how to follow the
-> thread. Perhaps sending a reply to the linked mail should do the trick,
-> yes?
+--Sig_/FbsIMk5veJMUKTjyQFK=9Dq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It should, yes.
+Hi all,
 
--- 
-~Randy
+In commit
 
+  22cbdbcfb61a ("netfilter: conntrack: unregister ipv4 sockopts on error un=
+wind")
+
+Fixes tag
+
+  Fixes: a0ae2562c6c ("netfilter: conntrack: remove l3proto abstraction")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This is probably not worth rebasing for, but can be avoided in the
+future by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
+just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FbsIMk5veJMUKTjyQFK=9Dq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCpwDAACgkQAVBC80lX
+0GxMSwgAnDSz7sMT/9vItSvg3gP3XFRbR5MIOrpR+F1o8HUrTVw8Rz6rFgOC7Eq+
+SL+jiiHhB8AW8kJLJzu5knUttr6SsW7N/sS+y4jRGhEsKANBjbZmfaDBtCGoUroT
+5jqSoQ6EP/8wjWneXxl/OzWCw0KjOCLUeP+ZcFKM3eM7Sj1jauyGRxgigkWkaAR0
++4kuomfEdYEhT/SZ/NhhXmXJFhbMNETaW6Wbd56yS4RNWqHqfUjETNyztTOM+ERw
+E+Q40I8TWNk7QHDkJe9bYChWpnZDUaGlOzKEofHQUHEcCA7KlWIEcQSWbYYcFWwt
+OxXkMiT9J7pUP/FE0d4ZJFx9/iS0dw==
+=0yE/
+-----END PGP SIGNATURE-----
+
+--Sig_/FbsIMk5veJMUKTjyQFK=9Dq--

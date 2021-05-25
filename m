@@ -2,726 +2,2794 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130BA38FB0D
-	for <lists+linux-next@lfdr.de>; Tue, 25 May 2021 08:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5162E38FDC6
+	for <lists+linux-next@lfdr.de>; Tue, 25 May 2021 11:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhEYGlI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 May 2021 02:41:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:49589 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230465AbhEYGlI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 25 May 2021 02:41:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fq4F25JWYz9sT6;
-        Tue, 25 May 2021 16:39:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1621924774;
-        bh=+GSGp3mMoAAe2xezNjEC8Nunf52ujeBPQYHmQyHifmQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SsuXrrTn3AL4Ry9rk4MoR9MkuLtt/wZ5sxPIIrrI47oz87e2AO3EB18T0Lpzg2m1h
-         ny4olcYl92MHHPB7MQrb+agmjdI6dnCqbqwv2BZ25vpufearm2eXcPcfPD5gLAkzti
-         /iMDhTOMyG5HJVznR8bdi1RgeXhrx9i6YmyqcpjV9r4t5Or5cRvufCEblGt+/9TrD3
-         TXMMPVkxXFU6rP47uOt2ZdlheTtZ9IHojjUS2FY8Zv3PE43+son4qsYrSjAoGtp4Vp
-         VOJCzicgMcmGIzHBmEm/IEPPTYJ2L2l/7ldbNmv/J+YRGGQkAhpzqhzoAJrut5LdsJ
-         c+Y9/xqy4u+wQ==
-Date:   Tue, 25 May 2021 16:39:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for May 25
-Message-ID: <20210525163932.785c1a2a@canb.auug.org.au>
+        id S232431AbhEYJ2r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 May 2021 05:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232132AbhEYJ2r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 May 2021 05:28:47 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F465C061574
+        for <linux-next@vger.kernel.org>; Tue, 25 May 2021 02:27:16 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j21so755052pfj.6
+        for <linux-next@vger.kernel.org>; Tue, 25 May 2021 02:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=swiDIthOPl05oDmOQ7xqO746bXKZ7N8TzjYLbCeZbEQ=;
+        b=SGRMRbmYB3464YECpVHLvaaZv3E/ubwVNHmRfJcxYxHyfXzolvSnoUXOyLFOl9/80v
+         YcSRmBLTO2yaF1Cb9Lakm+4tXt8nTqWt19ZJGPnl2yqhNeUa088xpGfmp9PXPTQuuiSu
+         dC0ttfu1fvwgnTq9F7TgI0jHWnQZYSsAAtnp0SsKTiTg5JorXBgDbyif/fNZpcZQAk+1
+         +L4DpODk+JDk1M2zK+lYWtFD4HJbYJW+Pe+5ILYL45P9oWcvuCne/t7Q/j3lIhLn3TZx
+         kpDmGoHVpxEw3pZQK2TCQzkynX6pRPOU/QDio6d9TgWT+H3tS40Y8T4tA4Vuwsj6LbJc
+         3CbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=swiDIthOPl05oDmOQ7xqO746bXKZ7N8TzjYLbCeZbEQ=;
+        b=OypgoDGFPYv8FBUJ6+ndAaT73exsO0CUO/Ufa+s3obd2qsjH5s68VMGgwfZuS/UQ7B
+         VfEaYWqB65qLqOMUp+iC77BFVOrDhkDQkqmFs3NQTkEVaFM/wDA7mKPpb986fV7S2nQK
+         dRzG5d34As3GRYDC/PksU9iiqzOilllg4GzK66VBDat88zdig3vepkl3qYd3pexSq+wk
+         32p4+cLHkDKaURZL5qEXcn84EjmlrT1biDUUSDfTU/AocuYrd56xT/CP+tm4fRSXwkRu
+         kW1fCq3pNlTZoj3oBsD3aKT1uszEVq00MnuNjDajJfErI0C2QazzcXmP+AKOLnqcX44g
+         imEQ==
+X-Gm-Message-State: AOAM531DT1sFCWhjBy6Ib+Yejg3NawhmJbojgD8WfNrV58iLtAHfwg8h
+        hNJHpjgwLdANQjxXgQlF026qfb4+6OjIyye0
+X-Google-Smtp-Source: ABdhPJynvlVo4HvIqbsVdGboiAOH427wcoZ5EFcJ1eE5wTlXTq5JneAnS8G8C8SsheBZmbfK+kGBxg==
+X-Received: by 2002:a63:fd44:: with SMTP id m4mr18501178pgj.396.1621934833624;
+        Tue, 25 May 2021 02:27:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w19sm12436569pfu.215.2021.05.25.02.27.12
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 May 2021 02:27:12 -0700 (PDT)
+Message-ID: <60acc2f0.1c69fb81.676fd.93b7@mx.google.com>
+Date:   Tue, 25 May 2021 02:27:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QT=/74uq_B=67P6CnlGcXy5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20210525
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: build
+Subject: next/master build: 216 builds: 8 failed, 208 passed, 137 errors,
+ 329 warnings (next-20210525)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QT=/74uq_B=67P6CnlGcXy5
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+next/master build: 216 builds: 8 failed, 208 passed, 137 errors, 329 warnin=
+gs (next-20210525)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20210525/
 
-Changes since 20210524:
+Tree: next
+Branch: master
+Git Describe: next-20210525
+Git Commit: 5d765451c2409e63563fa6a3e8005bd03ab9e82f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-The kvm-fixes tree gained a build failure so I used the version from
-next-20210524.
+Build Failures Detected:
 
-The drm-intel tree lost its build failures.
+arc:
+    allnoconfig: (gcc-8) FAIL
+    nsimosci_hs_smp_defconfig: (gcc-8) FAIL
 
-The akpm-current tree still had its build failure for which I reverted
-a commit.
+mips:
+    decstation_64_defconfig: (gcc-8) FAIL
+    lemote2f_defconfig: (gcc-8) FAIL
 
-Non-merge commits (relative to Linus' tree): 4398
- 4317 files changed, 208778 insertions(+), 65829 deletions(-)
+riscv:
+    defconfig+CONFIG_EFI=3Dn: (clang-12) FAIL
+    defconfig: (gcc-8) FAIL
+    defconfig+kselftest: (gcc-8) FAIL
+    rv32_defconfig: (gcc-8) FAIL
 
-----------------------------------------------------------------------------
+Errors and Warnings Detected:
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+arc:
+    allnoconfig (gcc-8): 8 errors
+    axs103_defconfig (gcc-8): 1 warning
+    axs103_smp_defconfig (gcc-8): 1 warning
+    haps_hs_smp_defconfig+kselftest (gcc-8): 2 warnings
+    hsdk_defconfig (gcc-8): 1 warning
+    nsimosci_hs_smp_defconfig (gcc-8): 8 errors
+    vdk_hs38_defconfig (gcc-8): 1 warning
+    vdk_hs38_smp_defconfig (gcc-8): 1 warning
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-and sparc64 defconfig and htmldocs. And finally, a simple boot test
-of the powerpc pseries_le_defconfig kernel in qemu (with and without
-kvm enabled).
+arm64:
+    allmodconfig (clang-10): 17 warnings
+    allmodconfig (clang-12): 12 warnings
+    defconfig (gcc-8): 1 warning
+    defconfig (clang-12): 2 warnings
+    defconfig (clang-10): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (gcc-8): 1 warning
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 3 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-12): 2 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 1 warning
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-8): 1 warning
 
-Below is a summary of the state of the merge.
+arm:
+    allmodconfig (clang-10): 46 warnings
+    allmodconfig (gcc-8): 1 warning
+    allmodconfig (clang-12): 46 warnings
+    assabet_defconfig (gcc-8): 1 warning
+    axm55xx_defconfig (gcc-8): 1 warning
+    badge4_defconfig (gcc-8): 1 warning
+    bcm2835_defconfig (gcc-8): 1 warning
+    cerfcube_defconfig (gcc-8): 1 warning
+    cm_x300_defconfig (gcc-8): 1 warning
+    colibri_pxa270_defconfig (gcc-8): 1 warning
+    colibri_pxa300_defconfig (gcc-8): 1 warning
+    corgi_defconfig (gcc-8): 1 warning
+    dove_defconfig (gcc-8): 1 warning
+    ep93xx_defconfig (gcc-8): 1 warning
+    eseries_pxa_defconfig (gcc-8): 1 warning
+    exynos_defconfig (gcc-8): 1 warning
+    ezx_defconfig (gcc-8): 1 warning
+    footbridge_defconfig (gcc-8): 1 warning
+    gemini_defconfig (gcc-8): 1 warning
+    h3600_defconfig (gcc-8): 1 warning
+    h5000_defconfig (gcc-8): 1 warning
+    hackkit_defconfig (gcc-8): 1 warning
+    hisi_defconfig (gcc-8): 1 warning
+    imote2_defconfig (gcc-8): 1 warning
+    imx_v6_v7_defconfig (gcc-8): 1 warning
+    integrator_defconfig (gcc-8): 1 warning
+    iop32x_defconfig (gcc-8): 1 warning
+    ixp4xx_defconfig (gcc-8): 1 warning
+    jornada720_defconfig (gcc-8): 1 warning
+    lart_defconfig (gcc-8): 1 warning
+    lpc32xx_defconfig (gcc-8): 1 warning
+    lpd270_defconfig (gcc-8): 1 warning
+    lubbock_defconfig (gcc-8): 1 warning
+    magician_defconfig (gcc-8): 1 warning
+    mainstone_defconfig (gcc-8): 1 warning
+    milbeaut_m10v_defconfig (gcc-8): 1 warning
+    mini2440_defconfig (gcc-8): 1 warning
+    mmp2_defconfig (gcc-8): 1 warning
+    multi_v4t_defconfig (gcc-8): 1 warning
+    multi_v5_defconfig (gcc-8): 1 warning
+    multi_v5_defconfig (clang-12): 2 warnings
+    multi_v5_defconfig (clang-10): 2 warnings
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (clang-12): 7 warnings
+    multi_v7_defconfig (clang-10): 7 warnings
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 1 warning
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-8): 1 warning
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-8): 1 warning
+    multi_v7_defconfig+kselftest (gcc-8): 1 warning
+    mvebu_v5_defconfig (gcc-8): 1 warning
+    mvebu_v7_defconfig (gcc-8): 1 warning
+    mxs_defconfig (gcc-8): 1 warning
+    neponset_defconfig (gcc-8): 1 warning
+    netwinder_defconfig (gcc-8): 1 warning
+    omap1_defconfig (gcc-8): 1 warning
+    omap2plus_defconfig (gcc-8): 1 warning
+    orion5x_defconfig (gcc-8): 1 warning
+    oxnas_v6_defconfig (gcc-8): 1 warning
+    palmz72_defconfig (gcc-8): 1 warning
+    pxa168_defconfig (gcc-8): 1 warning
+    pxa255-idp_defconfig (gcc-8): 1 warning
+    pxa3xx_defconfig (gcc-8): 1 warning
+    pxa910_defconfig (gcc-8): 1 warning
+    pxa_defconfig (gcc-8): 1 warning
+    qcom_defconfig (gcc-8): 1 warning
+    rpc_defconfig (gcc-8): 1 warning
+    s3c2410_defconfig (gcc-8): 1 warning
+    s3c6400_defconfig (gcc-8): 1 warning
+    s5pv210_defconfig (gcc-8): 1 warning
+    shannon_defconfig (gcc-8): 1 warning
+    shmobile_defconfig (gcc-8): 1 warning
+    simpad_defconfig (gcc-8): 1 warning
+    socfpga_defconfig (gcc-8): 1 warning
+    spear13xx_defconfig (gcc-8): 1 warning
+    spear3xx_defconfig (gcc-8): 1 warning
+    spear6xx_defconfig (gcc-8): 1 warning
+    spitz_defconfig (gcc-8): 1 warning
+    sunxi_defconfig (gcc-8): 1 warning
+    tegra_defconfig (gcc-8): 1 warning
+    trizeps4_defconfig (gcc-8): 1 warning
+    versatile_defconfig (gcc-8): 1 warning
+    vexpress_defconfig (gcc-8): 1 warning
+    vt8500_v6_v7_defconfig (gcc-8): 1 warning
+    zeus_defconfig (gcc-8): 1 warning
 
-I am currently merging 331 trees (counting Linus' and 89 trees of bug
-fix patches pending for the current merge release).
+i386:
+    allmodconfig (clang-12): 2 warnings
+    i386_defconfig (clang-12): 2 warnings
+    i386_defconfig (clang-10): 2 warnings
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+mips:
+    32r2el_defconfig (gcc-8): 2 warnings
+    32r2el_defconfig+kselftest (gcc-8): 2 warnings
+    ar7_defconfig (gcc-8): 1 warning
+    ath25_defconfig (gcc-8): 1 warning
+    ath79_defconfig (gcc-8): 1 warning
+    bcm47xx_defconfig (gcc-8): 1 warning
+    bigsur_defconfig (gcc-8): 1 warning
+    capcella_defconfig (gcc-8): 1 warning
+    cavium_octeon_defconfig (gcc-8): 1 warning
+    ci20_defconfig (gcc-8): 2 warnings
+    cobalt_defconfig (gcc-8): 1 warning
+    cu1000-neo_defconfig (gcc-8): 2 warnings
+    cu1830-neo_defconfig (gcc-8): 2 warnings
+    db1xxx_defconfig (gcc-8): 2 warnings
+    decstation_64_defconfig (gcc-8): 1 warning
+    decstation_defconfig (gcc-8): 1 warning
+    decstation_r4k_defconfig (gcc-8): 1 warning
+    e55_defconfig (gcc-8): 1 warning
+    gcw0_defconfig (gcc-8): 1 warning
+    gpr_defconfig (gcc-8): 1 warning
+    ip22_defconfig (gcc-8): 1 warning
+    ip32_defconfig (gcc-8): 1 warning
+    jazz_defconfig (gcc-8): 1 warning
+    jmr3927_defconfig (gcc-8): 1 warning
+    loongson1b_defconfig (gcc-8): 1 warning
+    loongson1c_defconfig (gcc-8): 1 warning
+    loongson2k_defconfig (gcc-8): 2 warnings
+    loongson3_defconfig (gcc-8): 1 warning
+    malta_defconfig (gcc-8): 1 warning
+    malta_kvm_defconfig (gcc-8): 1 warning
+    malta_qemu_32r6_defconfig (gcc-8): 2 warnings
+    maltaaprp_defconfig (gcc-8): 1 warning
+    maltasmvp_defconfig (gcc-8): 1 warning
+    maltasmvp_eva_defconfig (gcc-8): 1 warning
+    maltaup_defconfig (gcc-8): 1 warning
+    maltaup_xpa_defconfig (gcc-8): 1 warning
+    mpc30x_defconfig (gcc-8): 1 warning
+    mtx1_defconfig (gcc-8): 1 warning
+    nlm_xlp_defconfig (gcc-8): 1 warning
+    nlm_xlr_defconfig (gcc-8): 1 warning
+    omega2p_defconfig (gcc-8): 2 warnings
+    pic32mzda_defconfig (gcc-8): 1 warning
+    pistachio_defconfig (gcc-8): 1 warning
+    qi_lb60_defconfig (gcc-8): 1 warning
+    rb532_defconfig (gcc-8): 1 warning
+    rbtx49xx_defconfig (gcc-8): 1 warning
+    rm200_defconfig (gcc-8): 2 warnings
+    rs90_defconfig (gcc-8): 1 warning
+    rt305x_defconfig (gcc-8): 1 warning
+    sb1250_swarm_defconfig (gcc-8): 1 warning
+    tb0219_defconfig (gcc-8): 1 warning
+    tb0226_defconfig (gcc-8): 1 warning
+    tb0287_defconfig (gcc-8): 1 warning
+    vocore2_defconfig (gcc-8): 2 warnings
+    workpad_defconfig (gcc-8): 1 warning
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+riscv:
+    defconfig (gcc-8): 5 errors
+    defconfig+CONFIG_EFI=3Dn (clang-12): 9 errors
+    defconfig+kselftest (gcc-8): 77 errors
+    rv32_defconfig (gcc-8): 30 errors, 13 warnings
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+x86_64:
+    x86_64_defconfig (clang-12): 2 warnings
+    x86_64_defconfig (clang-10): 4 warnings
 
---=20
-Cheers,
-Stephen Rothwell
+Errors summary:
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (1434a3127887 Merge branch 'for-5.13-fixes' of git://=
-git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup)
-Merging fixes/fixes (c06a2ba62fc4 Merge tag 'docs-5.13-3' of git://git.lwn.=
-net/linux)
-Merging kbuild-current/fixes (c4681547bcce Linux 5.13-rc3)
-Merging arc-current/for-curr (d07f6ca923ea Linux 5.13-rc2)
-Merging arm-current/fixes (d2f7eca60b29 ARM: 9071/1: uprobes: Don't hook on=
- thumb instructions)
-Merging arm64-fixes/for-next/fixes (588a513d3425 arm64: Fix race condition =
-on PG_dcache_clean in __sync_icache_dcache())
-Merging arm-soc-fixes/arm/fixes (d37316b72e8b ARM: npcm: wpcm450: select in=
-terrupt controller driver)
-Merging drivers-memory-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging m68k-current/for-linus (34e5269bf987 m68k: sun3x: Remove unneeded s=
-emicolon)
-Merging powerpc-fixes/fixes (d72500f99284 powerpc/64s/syscall: Fix ptrace s=
-yscall info with scv syscalls)
-Merging s390-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (d19d8d345eec fscrypt: fix inline encryp=
-tion not used on new files)
-Merging net/master (8c42a49738f1 net: dsa: microchip: enable phy errata wor=
-karound on 9567)
-Merging bpf/master (84316ca4e100 bpf: Set mac_len in bpf_skb_change_head)
-Merging ipsec/master (b515d2637276 xfrm: xfrm_state_mtu should return at le=
-ast 1280 for ipv6)
-Merging netfilter/master (983c4fcb81d6 netfilter: nf_tables: extended netli=
-nk error reporting for chain type)
-Merging ipvs/master (414ed7fe863a Merge git://git.kernel.org/pub/scm/linux/=
-kernel/git/pablo/nf)
-Merging wireless-drivers/master (2c2bdd2372af mt76: validate rx A-MSDU subf=
-rames)
-Merging mac80211/master (b81ac7841d51 net: cdc_eem: fix URL to CDC EEM 1.0 =
-spec)
-Merging rdma-fixes/for-rc (463a3f66473b RDMA/uverbs: Fix a NULL vs IS_ERR()=
- bug)
-Merging sound-current/for-linus (2b899f31f1a6 ALSA: usb-audio: scarlett2: s=
-nd_scarlett_gen2_controls_create() can be static)
-Merging sound-asoc-fixes/for-linus (9a2ebf1ffb55 Merge remote-tracking bran=
-ch 'asoc/for-5.13' into asoc-linus)
-Merging regmap-fixes/for-linus (d07f6ca923ea Linux 5.13-rc2)
-Merging regulator-fixes/for-linus (a9ca01a0d1b8 Merge remote-tracking branc=
-h 'regulator/for-5.13' into regulator-linus)
-Merging spi-fixes/for-linus (3efe28470745 Merge remote-tracking branch 'spi=
-/for-5.13' into spi-linus)
-Merging pci-current/for-linus (2ee4c8a26876 MAINTAINERS: Add Krzysztof as P=
-CI host/endpoint controllers reviewer)
-Merging driver-core.current/driver-core-linus (0c8713153fbf drivers: base: =
-Reduce device link removal code duplication)
-Merging tty.current/tty-linus (016002848c82 serial: rp2: use 'request_firmw=
-are' instead of 'request_firmware_nowait')
-Merging usb.current/usb-linus (e6809703e164 Merge tag 'thunderbolt-for-v5.1=
-3-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt=
- into usb-linus)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (f8e8c1b2f782 USB: serial: pl2303: add d=
-evice id for ADLINK ND-6530 GC)
-Merging usb-chipidea-fixes/for-usb-fixes (9e3927f6373d usb: chipidea: udc: =
-assign interrupt number to USB gadget structure)
-Merging phy/fixes (7c2fc79250ca phy: usb: Fix misuse of IS_ENABLED)
-Merging staging.current/staging-linus (54732a5322ff Merge tag 'iio-fixes-5.=
-13b-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio int=
-o staging-linus)
-Merging iio-fixes/fixes-togreg (54732a5322ff Merge tag 'iio-fixes-5.13b-tak=
-e2' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio into stagi=
-ng-linus)
-Merging char-misc.current/char-misc-linus (bda7d3ab06f1 kgdb: fix gcc-11 wa=
-rnings harder)
-Merging soundwire-fixes/fixes (da096fbccd52 soundwire: qcom: fix handling o=
-f qcom,ports-block-pack-mode)
-Merging thunderbolt-fixes/fixes (22c7a18ed5f0 thunderbolt: usb4: Fix NVM re=
-ad buffer bounds and offset issue)
-Merging input-current/for-linus (05665cef4b74 Input: xpad - add support for=
- Amazon Game Controller)
-Merging crypto-current/master (e3a606f2c544 fsverity: relax build time depe=
-ndency on CRYPTO_SHA256)
-Merging ide/master (6800cd8cbc6e ide-acpi: use %*ph to print small buffer)
-Merging vfio-fixes/for-linus (dc51ff91cf2d vfio/platform: fix module_put ca=
-ll in error flow)
-Merging kselftest-fixes/fixes (d07f6ca923ea Linux 5.13-rc2)
-Merging modules-fixes/modules-linus (055f23b74b20 module: check for exit se=
-ctions in layout_sections() instead of module_init_section())
-Merging dmaengine-fixes/fixes (538ea65a9fd1 dmaengine: xilinx: dpdma: initi=
-alize registers before request_irq)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (562b4e91d3b2 mtd: parsers: ofpart: fix parsing=
- subpartitions)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging reset-fixes/reset/fixes (b460e0a9e240 reset: intel: add unspecified=
- HAS_IOMEM dependency)
-Merging mips-fixes/mips-fixes (6efb943b8616 Linux 5.13-rc1)
-Merging at91-fixes/at91-fixes (2c69c8a1736e ARM: dts: at91: sam9x60: fix mu=
-x-mask to match product's datasheet)
-Merging omap-fixes/fixes (ec527f23e06a bus: ti-sysc: Fix am335x resume hang=
- for usb otg module)
-Merging kvm-fixes/master (fef7a92027dc KVM: X86: Use _BITUL() macro in UAPI=
- headers)
-$ git reset --hard HEAD^
-Merging next-20210524 version of kvm-fixes
-Merging kvms390-fixes/master (735931f9a51a MAINTAINERS: add uv.c also to KV=
-M/s390)
-Merging hwmon-fixes/hwmon (f0fb26c456a3 hwmon/pmbus: (q54sj108a2) The PMBUS=
-_MFR_ID is actually 6 chars instead of 5)
-Merging nvdimm-fixes/libnvdimm-fixes (de80d5781136 Merge branch 'for-5.13/d=
-ax' into libnvdimm-fixes)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (037239c36e72 Merge branch 'misc-5.13' into =
-next-fixes)
-Merging vfs-fixes/fixes (173e84953eaa fs: fix reporting supported extra fil=
-e attributes for statx())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (e68671e9e127 platform/x86: touchscreen_dmi=
-: Add info for the Chuwi Hi10 Pro (CWI529) tablet)
-Merging samsung-krzk-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging pinctrl-samsung-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging devicetree-fixes/dt/linus (c17611592d96 dt-bindings: More removals =
-of type references on common properties)
-Merging scsi-fixes/fixes (2ef7665dfd88 scsi: target: qla2xxx: Wait for stop=
-_phase1 at WWN removal)
-Merging drm-fixes/drm-fixes (dd6ad0516ee3 Merge tag 'amd-drm-fixes-5.13-202=
-1-05-19' of https://gitlab.freedesktop.org/agd5f/linux into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (c4681547bcce Linux 5.13-rc3)
-Merging mmc-fixes/fixes (c4681547bcce Linux 5.13-rc3)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (a38fd8748464 Linux 5.12-rc2)
-Merging hyperv-fixes/hyperv-fixes (6efb943b8616 Linux 5.13-rc1)
-Merging soc-fsl-fixes/fix (2663b3388551 soc: fsl: dpio: Get the cpumask thr=
-ough cpumask_of(cpu))
-Merging risc-v-fixes/fixes (bab0d47c0ebb riscv: kexec: Fix W=3D1 build warn=
-ings)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (2e8496f31d0b firmware: stratix10-svc: reset COMMA=
-ND_RECONFIG_FLAG_PARTIAL to 0)
-Merging spdx/spdx-linus (6efb943b8616 Linux 5.13-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (bdbe871ef0ca gpio: tegra186: Don'=
-t set parent IRQ affinity)
-Merging gpio-intel-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging pinctrl-intel-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging erofs-fixes/fixes (0852b6ca941e erofs: fix 1 lcluster-sized pcluste=
-r for big pcluster)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (d7eab3df8f39 Documentation: kunit: Update =
-kunit_tool page)
-Merging ubifs-fixes/fixes (78c7d49f55d8 ubifs: journal: Make sure to not di=
-rty twice for auth nodes)
-Merging memblock-fixes/fixes (17cbe03872be mm/memblock: Fix typo in comment=
- of memblock_phys_alloc_try_nid())
-Merging cel-fixes/for-rc (9f4ad9e425a1 Linux 5.12)
-Merging drm-misc-fixes/for-linux-next-fixes (7e008b02557c dma-buf: fix unin=
-tended pin/unpin warnings)
-Merging kspp-gustavo/for-next/kspp (135436a7d2cd xfrm: Fix fall-through war=
-nings for Clang)
-Merging kbuild/for-next (7bcdcd71f432 Makefile: extend 32B aligned debug op=
-tion to 64B aligned)
-Merging compiler-attributes/compiler-attributes (ca0760e7d79e Compiler Attr=
-ibutes: Add continue in comment)
-Merging dma-mapping/for-next (a7f3d3d3600c dma-mapping: add unlikely hint t=
-o error path in dma_mapping_error)
-Merging asm-generic/master (14462376858e Merge branch 'asm-generic-unaligne=
-d' into asm-generic)
-Merging arc/for-next (def9d2780727 Linux 5.5-rc7)
-Merging arm/for-next (d3506d256d94 Merge branch 'misc' into for-next)
-Merging arm64/for-next/core (c4681547bcce Linux 5.13-rc3)
-Merging arm-perf/for-next/perf (2c2e21e78a94 arm64: perf: Remove redundant =
-initialization in perf_event.c)
-Merging arm-soc/for-next (b433d090ac63 MAINTAINERS: ARM/Amlogic SoCs: add N=
-eil as primary maintainer)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (09dc799bceb5 Merge branch 'v5.13/fixes' into tmp/=
-aml-rebuild)
-Merging aspeed/for-next (61fbc42084f4 Merge branches 'wpcm450-for-v5.13', '=
-dt-for-v5.13' and 'lpc-for-v5.13' into for-next)
-Merging at91/at91-next (969bbb49f36c Merge branch 'at91-dt' into at91-next)
-Merging drivers-memory/for-next (76e5624f3f93 memory: pl353: Fix error retu=
-rn code in pl353_smc_probe())
-Merging imx-mxs/for-next (c8b0795265b6 Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (9d2e21ed98a2 Merge branch 'for_5.12/drivers-soc' int=
-o next)
-Merging mediatek/for-next (fd450fd2a4fb Merge branch 'v5.13-next/soc' into =
-for-next)
-Merging mvebu/for-next (79e93f9dc81a Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (a4578e77223a Merge branch 'omap-for-v5.14/dt' into f=
-or-next)
-Merging qcom/for-next (0109038cffef Merge branches 'arm64-defconfig-for-5.1=
-3', 'arm64-for-5.13', 'defconfig-for-5.13', 'drivers-for-5.13' and 'dts-for=
--5.13' into for-next)
-Merging raspberrypi/for-next (fbdcf1d20126 ARM: dts: bcm2711: Add the CEC i=
-nterrupt controller)
-CONFLICT (content): Merge conflict in arch/arm/boot/dts/bcm2711.dtsi
-Merging renesas/next (943db114cf99 Merge branch 'renesas-arm-defconfig-for-=
-v5.14' into renesas-next)
-Merging reset/reset/next (e207457f9045 reset: brcmstb: Add missing MODULE_D=
-EVICE_TABLE)
-Merging rockchip/for-next (dd1599446681 Merge branch 'v5.14-clk/next' into =
-for-next)
-Merging samsung-krzk/for-next (6fed39b8b597 Merge branch 'next/dt64' into f=
-or-next)
-Merging scmi/for-linux-next (9ae648c16be5 Merge branch 'v5.13/ffa' of git:/=
-/git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-linux-=
-next)
-Merging stm32/stm32-next (6ed9269265e1 ARM: dts: stm32: Add PTP clock to Et=
-hernet controller)
-Merging sunxi/sunxi/for-next (2b4f0bf55549 Merge branches 'sunxi/clk-fixes-=
-for-5.13', 'sunxi/dt-for-5.14' and 'sunxi/fixes-for-5.13' into sunxi/for-ne=
-xt)
-Merging tegra/for-next (93b9ea9ca307 Merge branch for-5.13/arm64/dt into fo=
-r-next)
-Merging ti-k3/ti-k3-next (1e3d655fe7b4 Merge branch 'ti-k3-config-next' int=
-o ti-k3-next)
-Merging ti-k3-new/ti-k3-next (547be9a05dc8 arm64: dts: ti: k3-am65-iot2050-=
-common: Disable mailbox nodes)
-Merging xilinx/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging clk/clk-next (6efb943b8616 Linux 5.13-rc1)
-Merging clk-imx/for-next (4539b53dd2d3 clk: imx8qm: add clock valid resourc=
-e checking)
-Merging clk-renesas/renesas-clk (6bd913f54f2f clk: renesas: r9a06g032: Swit=
-ch to .determine_rate())
-Merging clk-samsung/for-next (a38fd8748464 Linux 5.12-rc2)
-Merging csky/linux-next (280af034a71d csky: Kconfig: Remove unused selects)
-Merging h8300/h8300-next (6e5e55227c95 Merge tag 'v5.11' into h8300-next)
-Merging m68k/for-next (eeff86b6d18c m68k: dma: Remove unnecessary include o=
-f asm/cacheflush.h)
-Merging m68knommu/for-next (c4681547bcce Linux 5.13-rc3)
-Merging microblaze/next (6efb943b8616 Linux 5.13-rc1)
-Merging mips/mips-next (33ae8f801ad8 hugetlb: clear huge pte during flush f=
-unction on mips platform)
-Merging nds32/next (40e0dd851e7b nds32: Fix bogus reference to <asm/procinf=
-o.h>)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (8b549c18ae81 openrisc: Define memory barrier mb)
-Merging parisc-hd/for-next (9f4ad9e425a1 Linux 5.12)
-Merging powerpc/next (d07f6ca923ea Linux 5.13-rc2)
-Merging soc-fsl/next (242b0b398ccd soc: fsl: enable acpi support in RCPM dr=
-iver)
-Merging risc-v/for-next (11c2f6c1b303 Merge remote-tracking branches 'riscv=
-/next-misc' and 'riscv/fixes' into for-next)
-Merging s390/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging sh/for-next (2882b7626f49 sh: kernel: traps: remove unused variable)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (ed102bf2afed um: Fix W=3D1 missing-include-dirs war=
-nings)
-Merging xtensa/xtensa-for-next (6a8eb99e130f xtensa: ISS: add GDBIO impleme=
-ntation to semihosting interface)
-Merging pidfd/for-next (2ca4dcc4909d fs/mount_setattr: tighten permission c=
-hecks)
-Merging fscrypt/master (a14d0b676491 fscrypt: allow deleting files with uns=
-upported encryption policy)
-Merging fscache/fscache-next (3003bbd0697b afs: Use the netfs_write_begin()=
- helper)
-Merging afs/afs-next (7af08140979a Revert "gcov: clang: fix clang-11+ build=
-")
-Merging btrfs/for-next (98a55e55c7a4 Merge branch 'fixes-for-master' into f=
-or-next-20210521)
-Merging ceph/master (f8234d7b1fb3 libceph: kill ceph_none_authorizer::reply=
-_buf)
-Merging cifs/for-next (7d1da3f1649d cifs: change format of CIFS_FULL_KEY_DU=
-MP ioctl)
-Merging cifsd/cifsd-for-next (4ead0568f798 Merge pull request #49 from namj=
-aejeon/cifsd-for-next)
-Merging configfs/for-next (14fbbc829772 configfs: fix a use-after-free in _=
-_configfs_open_file)
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (c439c3306fea erofs: remove the occupied parameter from z=
-_erofs_pagevec_enqueue())
-Merging exfat/dev (b741596468b0 Merge tag 'riscv-for-linus-5.13-mw1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux)
-Merging ext3/for_next (a5882ee966b1 Pull disabling of quotactl_path syscall=
-. Merge branch 'for_next_testing' into for_next)
-Merging ext4/dev (6c0912739699 ext4: wipe ext4_dir_entry2 upon file deletio=
-n)
-Merging f2fs/dev (c7d833f10511 f2fs: support RO feature)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (3c9c14338c12 cuse: simplify refcount)
-Merging jfs/jfs-next (cf1031ed4752 jfs: Remove trailing semicolon in macros)
-Merging nfs/linux-next (d275880abce9 SUNRPC: Fix Oops in xs_tcp_send_reques=
-t() when transport is disconnected)
-Merging nfs-anna/linux-next (4f8be1f53bf6 nfs: we don't support removing sy=
-stem.nfs4_acl)
-Merging nfsd/nfsd-next (1808d90e8458 NFSD add vfs_fsync after async copy is=
- done)
-Merging cel/for-next (b9f83ffaa0c0 SUNRPC: Fix null pointer dereference in =
-svc_rqst_free())
-Merging orangefs/for-next (211f9f2e0503 orangefs: leave files in the page c=
-ache for a few micro seconds at least)
-Merging overlayfs/overlayfs-next (5e717c6fa41f ovl: add debug print to ovl_=
-do_getxattr())
-Merging ubifs/next (9a29f7f020e0 ubi: Remove unnecessary struct declaration)
-Merging v9fs/9p-next (cba7dcd8878e 9p/trans_virtio: Remove sysfs file on pr=
-obe failure)
-Merging xfs/for-next (e3c2b047475b xfs: restore old ioctl definitions)
-Merging zonefs/for-next (6980d29ce4da zonefs: fix to update .i_wr_refcnt co=
-rrectly in zonefs_open_zone())
-Merging iomap/iomap-for-next (6e552494fb90 iomap: remove unused private fie=
-ld from ioend)
-Merging djw-vfs/vfs-for-next (9b8523423b23 vfs: move __sb_{start,end}_write=
-* to fs.h)
-Merging file-locks/locks-next (cbe6fc4e0142 fs/locks: remove useless assign=
-ment in fcntl_getlk)
-Merging vfs/for-next (e8727aec724e Merge branch 'work.misc' into for-next)
-Merging printk/for-next (2d66d9a31ab7 Merge branch 'for-5.14-vsprintf-scanf=
-' into for-next)
-Merging pci/next (6efb943b8616 Linux 5.13-rc1)
-Merging pstore/for-next/pstore (9d843e8fafc7 pstore: Add mem_type property =
-DT parsing support)
-Merging hid/for-next (5b95bf4cc297 Merge branch 'for-5.13/upstream-fixes' i=
-nto for-next)
-Merging i2c/i2c/for-next (d07f6ca923ea Linux 5.13-rc2)
-Merging i3c/i3c/next (0d95f41ebde4 Revert "i3c master: fix missing destroy_=
-workqueue() on error in i3c_master_register")
-Merging dmi/dmi-for-next (3cb4d29a2633 MAINTAINERS: The DMI/SMBIOS tree has=
- moved)
-Merging hwmon-staging/hwmon-next (34569e775e39 docs: hwmon: Add an entry fo=
-r mp2888)
-Merging jc_docs/docs-next (0e7c52da1ab8 Documentation: checkpatch: Tweak BI=
-T() macro include)
-Merging v4l-dvb/master (bb9212fd9710 media: ARM: dts: sama5d4: enable Hantr=
-o G1 VDEC)
-Merging v4l-dvb-next/master (2fb27551ba40 media: imx: imx7_mipi_csis: Updat=
-e MAINTAINERS)
-Merging pm/linux-next (c17108d7145e Merge branch 'pm-cpufreq' into linux-ne=
-xt)
-Merging cpufreq-arm/cpufreq/arm/linux-next (4814d9c5d3b9 cpufreq: dt: Renam=
-e black/white-lists)
-Merging cpupower/cpupower (d07f6ca923ea Linux 5.13-rc2)
-Merging devfreq/devfreq-next (a15fc9aa5b38 PM / devfreq: imx8m-ddrc: Remove=
- DEVFREQ_GOV_SIMPLE_ONDEMAND dependency)
-Merging opp/opp/linux-next (ac9fd3c80340 opp: use list_del_init instead of =
-list_del/INIT_LIST_HEAD)
-Merging thermal/thermal/linux-next (c310e546164d thermal/drivers/mtk_therma=
-l: Remove redundant initializations of several variables)
-Merging dlm/next (2fd8db2dd05d fs: dlm: fix missing unlock on error in acce=
-pt_from_sock())
-Merging swiotlb/linux-next (dfc06b389a4f swiotlb: don't override user speci=
-fied size in swiotlb_adjust_size)
-Merging rdma/for-next (331859d320f5 RDMA/hns: Remove unused CMDQ member)
-Merging net-next/master (c1eaf3c09c54 Merge branch 'wan-cleanups')
-Applying: usb: class: cdc-wdm: fix for kill_urbs() removal
-Merging bpf-next/for-next (5556bacaa561 Merge branch 'Add lookup_and_delete=
-_elem support to BPF hash map types')
-Merging ipsec-next/master (ea89c862f01e net: mana: Use struct_size() in kza=
-lloc())
-Merging mlx5-next/mlx5-next (63f9c44bca5e net/mlx5: Add MEMIC operations re=
-lated bits)
-Merging netfilter-next/master (845064d752ce netfilter: Remove leading space=
-s in Kconfig)
-CONFLICT (content): Merge conflict in net/netfilter/nft_set_pipapo.c
-Applying: fix up for merge involving nft_pipapo_lookup()
-Merging ipvs-next/master (ea89c862f01e net: mana: Use struct_size() in kzal=
-loc())
-Merging wireless-drivers-next/master (6efb943b8616 Linux 5.13-rc1)
-Merging bluetooth/master (c7e1e7ccd606 Bluetooth: Translate additional addr=
-ess type during le_conn_comp)
-Merging mac80211-next/master (77091933e453 net: mdio: ipq8064: enlarge slee=
-p after read/write operation)
-Merging gfs2/for-next (75069590915f gfs2: Fix do_gfs2_set_flags description)
-Merging mtd/mtd/next (cc9d663a00a0 drivers: mtd: sm_ftl: Fix alignment of b=
-lock comment)
-Merging nand/nand/next (fd0d8d85f723 mtd: nand: bbt: Fix corner case in bad=
- block table handling)
-Merging spi-nor/spi-nor/next (6efb943b8616 Linux 5.13-rc1)
-Merging crypto/master (a6f8e68e238a crypto: ccp - Fix a resource leak in an=
- error handling path)
-Merging drm/drm-next (9a91e5e0af5e Merge tag 'amd-drm-next-5.14-2021-05-21'=
- of https://gitlab.freedesktop.org/agd5f/linux into drm-next)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_mm.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_ttm=
-.c
-Merging drm-misc/for-linux-next (a596fcd9cbc7 drm/panel: panel-simple: Add =
-missing pm_runtime_dont_use_autosuspend() calls)
-Merging amdgpu/drm-next (da79c46085ec drm/radeon: Add HD-audio component no=
-tifier support (v2))
-Merging drm-intel/for-linux-next (273895109a04 drm/i915/gvt: Add missing ma=
-cro name changes)
-Merging drm-tegra/drm/tegra/for-next (c79184a9c029 drm/tegra: Fix shift ove=
-rflow in tegra_shared_plane_atomic_update)
-Merging drm-msm/msm-next (8dbde399044b drm/msm/dp: handle irq_hpd with sink=
-_count =3D 0 correctly)
-Merging imx-drm/imx-drm/next (fc1e985b67f9 drm/imx: ipuv3-plane: add color =
-encoding and range properties)
-Merging etnaviv/etnaviv/next (4bfdd2aa67fb drm/etnaviv: rework linear windo=
-w offset calculation)
-Merging regmap/for-next (dfde31c9d10f Merge remote-tracking branch 'regmap/=
-for-5.14' into regmap-next)
-Merging sound/for-next (13d11f14ae40 ALSA: firewire-lib: code refactoring f=
-or transfer delay)
-Merging sound-asoc/for-next (ad321de079e1 Merge remote-tracking branch 'aso=
-c/for-5.14' into asoc-next)
-Merging modules/modules-next (02b2fb455b2e kernel/module: Use BUG_ON instea=
-d of if condition followed by BUG)
-Merging input/next (d12b64b9764e MAINTAINERS: repair reference in HYCON HY4=
-6XX TOUCHSCREEN SUPPORT)
-Merging block/for-next (6bcec6cee54e Merge branch 'for-5.14/io_uring' into =
-for-next)
-Merging device-mapper/for-next (42ee011e2d75 dm space map disk: cache a sma=
-ll number of index entries)
-Merging pcmcia/pcmcia-next (e9d503fef7da pcmcia: rsrc_nonstatic: Fix call-b=
-ack function as reference formatting)
-Merging mmc/next (47f4bdf989c0 mmc: sdhci-of-aspeed: Configure the SDHCIs a=
-s specified by the devicetree.)
-Merging mfd/for-mfd-next (550d489184a0 Revert "MAINTAINERS: Add entry for I=
-ntel MAX 10 mfd driver")
-Merging backlight/for-backlight-next (190ccab3185e backlight: rt4831: Adds =
-support for Richtek RT4831 backlight)
-Merging battery/for-next (2aac79d14d76 power: supply: sc2731_charger: Add m=
-issing MODULE_DEVICE_TABLE)
-Merging regulator/for-next (67fb42566de9 Merge remote-tracking branch 'regu=
-lator/for-5.14' into regulator-next)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (d108370c644b apparmor: fix error check)
-Merging integrity/next-integrity (49219d9b8785 evm: fix writing <securityfs=
->/evm overflow)
-Merging keys/keys-next (e377c31f788f integrity: Load mokx variables into th=
-e blacklist keyring)
-CONFLICT (content): Merge conflict in certs/system_keyring.c
-Merging safesetid/safesetid-next (1ca86ac1ec8d LSM: SafeSetID: Fix code spe=
-cification by scripts/checkpatch.pl)
-Merging selinux/next (869cbeef18e5 lsm_audit,selinux: pass IB device name b=
-y reference)
-Merging smack/next (0169d8f33ab7 Revert "Smack: Handle io_uring kernel thre=
-ad privileges")
-Merging tomoyo/master (6efb943b8616 Linux 5.13-rc1)
-Merging tpmdd/next (8ac91e6c6033 Merge tag 'for-5.13-rc2-tag' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/kdave/linux)
-Merging watchdog/master (c4681547bcce Linux 5.13-rc3)
-Merging iommu/next (54c80d907400 iommu/vt-d: Use user privilege for RID2PAS=
-ID translation)
-Merging audit/next (254c8b96c4af audit: add blank line after variable decla=
-rations)
-Merging devicetree/for-next (70c1fc34f3c6 dt-bindings: rng: mediatek: add m=
-t8365 to mtk rng binding)
-Merging mailbox/mailbox-for-next (2335f556b3af dt-bindings: mailbox: qcom-i=
-pcc: Add compatible for SC7280)
-Merging spi/for-next (aa946f04d384 Merge remote-tracking branch 'spi/for-5.=
-14' into spi-next)
-Merging tip/auto-latest (19c0a3af4ad1 Merge branch 'efi/core')
-Merging clockevents/timers/drivers/next (8120891105ba dt-bindings: timer: n=
-uvoton,npcm7xx: Add wpcm450-timer)
-Merging edac/edac-for-next (2e2f16d5cdb3 EDAC/aspeed: Use proper format str=
-ing for printing resource)
-Merging irqchip/irq/irqchip-next (fbb80d5ad400 irqchip: Remove redundant er=
-ror printing)
-Merging ftrace/for-next (eb01f5353bda tracing: Handle %.*s in trace_check_v=
-printf())
-Merging rcu/rcu/next (16b0662a5c98 rcu: Start timing stall repetitions afte=
-r warning complete)
-Merging kvm/next (a4345a7cecfb Merge tag 'kvmarm-fixes-5.13-1' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvm-arm/next (9a8aae605b80 Merge branch 'kvm-arm64/kill_oprofile_de=
-pendency' into kvmarm-master/next)
-Merging kvm-ppc/kvm-ppc-next (72476aaa4691 KVM: PPC: Book3S HV: Fix host ra=
-dix SLB optimisation with hash guests)
-Merging kvms390/next (44bada282190 KVM: s390: fix guarded storage control r=
-egister handling)
-Merging xen-tip/linux-next (c81d3d246025 xen-pciback: reconfigure also from=
- backend watch handler)
-Merging percpu/for-next (7b92d0f97d9b Merge branch 'for-5.14' into for-next)
-Merging workqueues/for-next (940d71c6462e wq: handle VM suspension in stall=
- detection)
-Merging drivers-x86/for-next (3f6c859c4953 platform/x86: asus-nb-wmi: Rever=
-t "add support for ASUS ROG Zephyrus G14 and G15")
-Merging chrome-platform/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging hsi/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging leds/for-next (ee522bcf026e leds: tlc591xx: fix return value check =
-in tlc591xx_probe())
-Merging ipmi/for-next (2253042d86f5 ipmi/watchdog: Stop watchdog timer when=
- the current action is 'none')
-Merging driver-core/driver-core-next (fd03c075e362 drivers/base/node.c: mak=
-e CACHE_ATTR define static DEVICE_ATTR_RO)
-Merging usb/usb-next (5cc59c418fde USB: core: WARN if pipe direction !=3D s=
-etup packet direction)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (17cd3a106e97 USB: serial: drop irq-flags initi=
-alisations)
-Merging usb-chipidea-next/for-usb-next (4ae08bc23e1b usb: cdnsp: Useless co=
-ndition has been removed)
-Merging tty/tty-next (2ac62268a2c0 tty: hvc_console: Remove the repeated wo=
-rds 'no' and 'from')
-Merging char-misc/char-misc-next (281e46844699 misc: alcor_pci: fix inverte=
-d branch condition)
-Merging extcon/extcon-next (11fb12ed9bc9 extcon: max8997: Add missing modal=
-ias string)
-Merging phy-next/next (490dbd2380c7 phy: phy-core-mipi-dphy.c: Correct refe=
-rence version)
-Merging soundwire/next (037219925e7a soundwire: dmi-quirks: remove duplicat=
-e initialization)
-Merging thunderbolt/next (c4681547bcce Linux 5.13-rc3)
-Merging vfio/next (adaeb718d46f vfio/gvt: fix DRM_I915_GVT dependency on VF=
-IO_MDEV)
-Merging staging/staging-next (1b4c0f3bbdbd staging: rtl8723bs: rename get_r=
-a() due to global symbol collision)
-Merging iio/togreg (4dc230efbdeb staging: iio: cdc: ad7746: use dt for capa=
-citive channel setup.)
-Merging mux/for-next (3516bd729358 Merge tag 's390-5.11-3' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/s390/linux)
-Merging icc/icc-next (1fd86e280d8b interconnect: qcom: Add missing MODULE_D=
-EVICE_TABLE)
-Merging dmaengine/next (6f64aa5746d2 dt-bindings: dma: convert arm-pl08x to=
- yaml)
-Merging cgroup/for-next (6962681ee8c6 Merge branch 'for-5.13-fixes' into fo=
-r-next)
-Merging scsi/for-next (31ff791600e3 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (ea2f0f77538c scsi: core: Cap scsi_host cmd_per_l=
-un at can_queue)
-Merging vhost/linux-next (7ff6e99e021c virtio_net: disable cb aggressively)
-Merging rpmsg/for-next (dc0e14fa833b Merge branches 'hwspinlock-next', 'rpm=
-sg-next' and 'rproc-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (effe3781b6cc gpio: tps65912: remove platfo=
-rm_set_drvdata() + cleanup probe)
-Merging gpio-intel/for-next (2b71b66ac041 gpio: wcove: Split error handling=
- for CTRL and IRQ registers)
-Merging pinctrl/for-next (9f96bd5ae866 Merge branch 'devel' into for-next)
-CONFLICT (content): Merge conflict in include/linux/pinctrl/pinconf-generic=
-.h
-Merging pinctrl-intel/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging pinctrl-renesas/renesas-pinctrl (904ec4bebc1d pinctrl: renesas: r8a=
-779{51,6,65}: Reduce non-functional differences)
-Merging pinctrl-samsung/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging pwm/for-next (a6efb35019d0 pwm: Reword docs about pwm_apply_state())
-Merging userns/for-next (922e3013046b signalfd: Remove SIL_PERF_EVENT field=
-s from signalfd_siginfo)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (d07f6ca923ea Linux 5.13-rc2)
-Merging livepatching/for-next (c150bbbb1731 Merge branch 'for-5.13/signal' =
-into for-next)
-Merging coresight/next (1efbcec2ef8c coresight: cti: Reduce scope for the v=
-ariable =E2=80=9Ccs_fwnode=E2=80=9D in cti_plat_create_connection())
-Merging rtc/rtc-next (bcae59d0d45b rtc: imxdi: add wakeup support)
-Merging nvdimm/libnvdimm-for-next (30c10d32152d Merge branch 'for-5.12/cxl'=
- into libnvdimm-for-next)
-Merging at24/at24/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging ntb/ntb-next (5c8fe583cce5 Linux 5.11-rc1)
-Merging seccomp/for-next/seccomp (a3fc712c5b37 seccomp: Fix "cacheable" typ=
-o in comments)
-Merging kspp/for-next/kspp (f4a35e00d248 Merge branch 'for-next/clang/featu=
-res' into for-next/kspp)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging gnss/gnss-next (994adcbd3714 gnss: drop stray semicolons)
-Merging fsi/next (4a851d714ead fsi: aspeed: Support CFAM reset GPIO)
-Merging slimbus/for-next (0320ed0a8236 drivers: slimbus: Fix word resposibl=
-e -> responsible in slimbus.h)
-CONFLICT (content): Merge conflict in drivers/nvmem/Makefile
-CONFLICT (content): Merge conflict in drivers/nvmem/Kconfig
-Merging nvmem/for-next (d1a5f4ca656b nvmem: qfprom: minor nit fixes)
-Merging xarray/main (2c7e57a02708 idr test suite: Improve reporting from id=
-r_find_test_1)
-Merging hyperv/hyperv-next (c6a8625fa4c6 hv_utils: Fix passing zero to 'PTR=
-_ERR' warning)
-Merging auxdisplay/auxdisplay (aecd79c09c2f auxdisplay: Add I2C gpio expand=
-er example)
-Merging kgdb/kgdb/for-next (83fa2d13d628 kdb: Refactor env variables get/se=
-t code)
-Merging hmm/hmm (fe07bfda2fb9 Linux 5.12-rc1)
-Merging fpga/for-next (ded39fc4a5b4 docs: driver-api: fpga: avoid using UTF=
--8 chars)
-Merging kunit/test (d07f6ca923ea Linux 5.13-rc2)
-Merging cfi/cfi/next (6efb943b8616 Linux 5.13-rc1)
-Merging kunit-next/kunit (d07f6ca923ea Linux 5.13-rc2)
-Merging trivial/for-next (9ff9b0d392ea Merge tag 'net-next-5.10' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging mhi/mhi-next (a610f3c65d3b bus: mhi: Wait for M2 state during syste=
-m resume)
-Merging memblock/for-next (097d43d85704 mm: memblock: remove return value o=
-f memblock_free_all())
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging rust/rust-next (fef0214731cc rust: allow printing in the kernel cra=
-te)
-CONFLICT (content): Merge conflict in kernel/printk/printk.c
-CONFLICT (content): Merge conflict in include/uapi/linux/android/binder.h
-CONFLICT (content): Merge conflict in Makefile
-Merging cxl/next (35c32e3095d3 cxl/docs: Fix "Title underline too short" wa=
-rning)
-Merging tpmdd-jejb/tpmdd-for-next (69977d1aeeca Merge branch 'tpmdd-fixes' =
-into tpmdd-for-next)
-Merging akpm-current/current (c5ea479305e0 ipc/sem.c: use READ_ONCE()/WRITE=
-_ONCE() for use_global_lock)
-Applying: Revert "mm: migrate: fix missing update page_private to hugetlb_p=
-age_subpool"
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (fc38b97b9f61 kdump: use vmlinux_build_id to simplify)
+    92   arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =
+=E2=80=98set_pmd_at=E2=80=99
+    10   arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types =
+when returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =
+=E2=80=98struct <anonymous>=E2=80=99} was expected
+    10   arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaratio=
+n of function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+    9    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 's=
+et_pmd_at'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x4e0): undefined reference to `=
+__softirqentry_text_end'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x4d8): undefined reference to `=
+__softirqentry_text_start'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x4cc): undefined reference to `=
+__irqentry_text_end'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x38): undefined reference to `_=
+_softirqentry_text_end'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x30): undefined reference to `_=
+_softirqentry_text_start'
+    2    arc-elf32-ld: stackdepot.c:(.text+0x24): undefined reference to `_=
+_irqentry_text_end'
+    1    stackdepot.c:(.text+0x4ac): undefined reference to `__irqentry_tex=
+t_start'
+    1    stackdepot.c:(.text+0x4): undefined reference to `__irqentry_text_=
+start'
+    1    arc-elf32-ld: stackdepot.c:(.text+0x4ac): undefined reference to `=
+__irqentry_text_start'
+    1    arc-elf32-ld: stackdepot.c:(.text+0x4): undefined reference to `__=
+irqentry_text_start'
 
---Sig_/QT=/74uq_B=67P6CnlGcXy5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Warnings summary:
 
------BEGIN PGP SIGNATURE-----
+    138  mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 de=
+fined but not used [-Wunused-function]
+    41   1 warning generated.
+    12   mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=
+=99 defined but not used [-Wunused-function]
+    12   2 warnings generated.
+    10   cc1: some warnings being treated as errors
+    4    mm/swapfile.c:1039:22: warning: unused function 'scan_swap_map' [-=
+Wunused-function]
+    4    mm/mmap_lock.c:157:20: warning: unused function 'get_mm_memcg_path=
+' [-Wunused-function]
+    4    drivers/net/phy/motorcomm.c:83:2: warning: variable 'ge' is used u=
+ninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+    4    drivers/net/phy/motorcomm.c:58:6: warning: variable 'ret' is used =
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    4    drivers/net/phy/motorcomm.c:54:9: note: initialize the variable 'r=
+et' to silence this warning
+    4    drivers/net/phy/motorcomm.c:53:17: note: initialize the variable '=
+ge' to silence this warning
+    4    drivers/md/persistent-data/dm-space-map-metadata.c:435:6: warning:=
+ variable 'r2' is used uninitialized whenever 'if' condition is true [-Wsom=
+etimes-uninitialized]
+    4    drivers/md/persistent-data/dm-space-map-metadata.c:431:11: note: i=
+nitialize the variable 'r2' to silence this warning
+    4    drivers/md/persistent-data/dm-space-map-metadata.c:418:7: warning:=
+ variable 'r2' is used uninitialized whenever 'if' condition is false [-Wso=
+metimes-uninitialized]
+    4    drivers/md/persistent-data/dm-space-map-metadata.c:412:11: note: i=
+nitialize the variable 'r2' to silence this warning
+    4    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implici=
+t conversion from 'unsigned long long' to 'unsigned long' changes value fro=
+m 5000000000 to 705032704 [-Wconstant-conversion]
+    4    drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c:752:47: warning=
+: variable 'adlp_dkl_phy_dp_ddi_trans_hbr2_hbr3' is not needed and will not=
+ be emitted [-Wunneeded-internal-declaration]
+    4    drivers/bus/ti-sysc.c:1398:13: warning: variable 'error' is used u=
+ninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    4    drivers/bus/ti-sysc.c:1386:11: note: initialize the variable 'erro=
+r' to silence this warning
+    4    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least=
+ version 4.6 of GCC [-W#warnings]
+    4    #warning This code requires at least version 4.6 of GCC
+    3    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc3-next-20210525/kernel/drivers/media/tuners/tuner-types=
+.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    2    drivers/staging/rtl8723bs/core/rtw_security.c:93:6: warning: stack=
+ frame size of 1096 bytes in function 'rtw_wep_decrypt' [-Wframe-larger-tha=
+n=3D]
+    2    drivers/staging/rtl8723bs/core/rtw_security.c:535:5: warning: stac=
+k frame size of 1144 bytes in function 'rtw_tkip_decrypt' [-Wframe-larger-t=
+han=3D]
+    2    drivers/staging/rtl8723bs/core/rtw_security.c:37:6: warning: stack=
+ frame size of 1144 bytes in function 'rtw_wep_encrypt' [-Wframe-larger-tha=
+n=3D]
+    2    drivers/staging/fbtft/fbtft-core.c:902:12: warning: stack frame si=
+ze of 1080 bytes in function 'fbtft_init_display_from_property' [-Wframe-la=
+rger-than=3D]
+    2    drivers/net/wireless/cisco/airo.c:3075:12: warning: stack frame si=
+ze of 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack fra=
+me size of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    2    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:333:1: warning: unused =
+label 'exit' [-Wunused-label]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3041:6:=
+ warning: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-la=
+rger-than=3D]
+    2    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame=
+ size of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    2    4 warnings generated.
+    1    {standard input}:39: Warning: macro instruction expanded into mult=
+iple instructions
+    1    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame siz=
+e of 1392 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=
+=3D]
+    1    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame siz=
+e of 1384 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=
+=3D]
+    1    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame siz=
+e of 1332 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=
+=3D]
+    1    drivers/staging/rtl8723bs/core/rtw_security.c:462:5: warning: stac=
+k frame size of 1168 bytes in function 'rtw_tkip_encrypt' [-Wframe-larger-t=
+han=3D]
+    1    drivers/staging/rtl8723bs/core/rtw_security.c:462:5: warning: stac=
+k frame size of 1160 bytes in function 'rtw_tkip_encrypt' [-Wframe-larger-t=
+han=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame siz=
+e of 1216 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame siz=
+e of 1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    1    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame =
+size of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=
+=3D]
+    1    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame =
+size of 1056 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=
+=3D]
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_relocate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-=
+1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_copy_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
+    1    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:333:1: warning: label =
+=E2=80=98exit=E2=80=99 defined but not used [-Wunused-label]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: =
+warning: stack frame size of 5560 bytes in function 'calculate_bandwidth' [=
+-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: =
+warning: stack frame size of 5536 bytes in function 'calculate_bandwidth' [=
+-Wframe-larger-than=3D]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    crypto/wp512.c:782:13: warning: stack frame size of 1192 bytes in =
+function 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1    crypto/wp512.c:782:13: warning: stack frame size of 1176 bytes in =
+function 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1    arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =E2=80=98am=
+s_delta_camera_power=E2=80=99 defined but not used [-Wunused-function]
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu=
+_ev_hw_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pm=
+u_cache_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc3-next-20210525/kernel/sound/soc/intel/boards/snd-soc-i=
+ntel-hda-dsp-common.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc3-next-20210525/kernel/drivers/clk/keystone/pll.ko: uns=
+upported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc3-next-20210525/kernel/drivers/clk/keystone/gate.ko: un=
+supported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.13.0-rc3-next-20210525/kernel/crypto/cast_common.ko: unsupport=
+ed GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    1    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    1    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCsm6QACgkQAVBC80lX
-0GyCGgf+KvxexNFimdEsV2D+ADReIqDWMYeH/NWupl+24MzDRC4r9g3eeHUNUZGt
-Z/f9o5Lsom6E/++rAhEQByYs6wnKvyIXm+WvaLotPHS8i5loYYEiJt87VSKbxMMc
-uHKv0EsaoQtaK7ez3MFxT947xLGtq070SY9sWSPaZ1Y2yXkvjRL/vh6cn4k5OsAb
-gOiUIeWoXrKGdJmn5S1bipym4/lEe0wHtxhL3OrAX3upcEaCXpKGpVd7iJqoDMGU
-A3D2uXDzRrbTa5kLH55Vvn8mF9It+7TOW3HlygjMdL8zZpzyUscSCIRiErQ4FP3c
-YPG/ukV/jEQWq5zNAxGQR0vybcA8Zw==
-=FobD
------END PGP SIGNATURE-----
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
---Sig_/QT=/74uq_B=67P6CnlGcXy5--
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 46 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/bus/ti-sysc.c:1398:13: warning: variable 'error' is used uninit=
+ialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    drivers/bus/ti-sysc.c:1386:11: note: initialize the variable 'error' to=
+ silence this warning
+    1 warning generated.
+    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame size of =
+1392 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame size=
+ of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    crypto/wp512.c:782:13: warning: stack frame size of 1192 bytes in funct=
+ion 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/phy/motorcomm.c:58:6: warning: variable 'ret' is used unini=
+tialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:54:9: note: initialize the variable 'ret' t=
+o silence this warning
+    drivers/net/phy/motorcomm.c:83:2: warning: variable 'ge' is used uninit=
+ialized whenever switch default is taken [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:53:17: note: initialize the variable 'ge' t=
+o silence this warning
+    2 warnings generated.
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack frame si=
+ze of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/md/persistent-data/dm-space-map-metadata.c:418:7: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is false [-Wsometim=
+es-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:412:11: note: initia=
+lize the variable 'r2' to silence this warning
+    drivers/md/persistent-data/dm-space-map-metadata.c:435:6: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is true [-Wsometime=
+s-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:431:11: note: initia=
+lize the variable 'r2' to silence this warning
+    2 warnings generated.
+    drivers/net/wireless/cisco/airo.c:3075:12: warning: stack frame size of=
+ 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:333:1: warning: unused label=
+ 'exit' [-Wunused-label]
+    1 warning generated.
+    drivers/staging/rtl8723bs/core/rtw_security.c:37:6: warning: stack fram=
+e size of 1144 bytes in function 'rtw_wep_encrypt' [-Wframe-larger-than=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:93:6: warning: stack fram=
+e size of 1096 bytes in function 'rtw_wep_decrypt' [-Wframe-larger-than=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:462:5: warning: stack fra=
+me size of 1160 bytes in function 'rtw_tkip_encrypt' [-Wframe-larger-than=
+=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:535:5: warning: stack fra=
+me size of 1144 bytes in function 'rtw_tkip_decrypt' [-Wframe-larger-than=
+=3D]
+    4 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3041:6: warn=
+ing: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-larger-=
+than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: warni=
+ng: stack frame size of 5536 bytes in function 'calculate_bandwidth' [-Wfra=
+me-larger-than=3D]
+    2 warnings generated.
+    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame size of =
+1216 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    drivers/staging/fbtft/fbtft-core.c:902:12: warning: stack frame size of=
+ 1080 bytes in function 'fbtft_init_display_from_property' [-Wframe-larger-=
+than=3D]
+    2 warnings generated.
+    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame size =
+of 1056 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 17 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/net/phy/motorcomm.c:58:6: warning: variable 'ret' is used unini=
+tialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:54:9: note: initialize the variable 'ret' t=
+o silence this warning
+    drivers/net/phy/motorcomm.c:83:2: warning: variable 'ge' is used uninit=
+ialized whenever switch default is taken [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:53:17: note: initialize the variable 'ge' t=
+o silence this warning
+    2 warnings generated.
+    drivers/md/persistent-data/dm-space-map-metadata.c:418:7: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is false [-Wsometim=
+es-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:412:11: note: initia=
+lize the variable 'r2' to silence this warning
+    drivers/md/persistent-data/dm-space-map-metadata.c:435:6: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is true [-Wsometime=
+s-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:431:11: note: initia=
+lize the variable 'r2' to silence this warning
+    2 warnings generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/crypto/cast_common.ko: unsupported GN=
+U_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/drivers/clk/keystone/gate.ko: unsuppo=
+rted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/drivers/clk/keystone/pll.ko: unsuppor=
+ted GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/sound/soc/intel/boards/snd-soc-intel-=
+hda-dsp-common.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:333:1: warning: label =E2=80=
+=98exit=E2=80=99 defined but not used [-Wunused-label]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 46 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    drivers/bus/ti-sysc.c:1398:13: warning: variable 'error' is used uninit=
+ialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    drivers/bus/ti-sysc.c:1386:11: note: initialize the variable 'error' to=
+ silence this warning
+    1 warning generated.
+    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame size of =
+1384 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame size=
+ of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    crypto/wp512.c:782:13: warning: stack frame size of 1176 bytes in funct=
+ion 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack frame si=
+ze of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/phy/motorcomm.c:58:6: warning: variable 'ret' is used unini=
+tialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:54:9: note: initialize the variable 'ret' t=
+o silence this warning
+    drivers/net/phy/motorcomm.c:83:2: warning: variable 'ge' is used uninit=
+ialized whenever switch default is taken [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:53:17: note: initialize the variable 'ge' t=
+o silence this warning
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:333:1: warning: unused label=
+ 'exit' [-Wunused-label]
+    1 warning generated.
+    drivers/net/wireless/cisco/airo.c:3075:12: warning: stack frame size of=
+ 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/md/persistent-data/dm-space-map-metadata.c:418:7: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is false [-Wsometim=
+es-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:412:11: note: initia=
+lize the variable 'r2' to silence this warning
+    drivers/md/persistent-data/dm-space-map-metadata.c:435:6: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is true [-Wsometime=
+s-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:431:11: note: initia=
+lize the variable 'r2' to silence this warning
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3041:6: warn=
+ing: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-larger-=
+than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: warni=
+ng: stack frame size of 5560 bytes in function 'calculate_bandwidth' [-Wfra=
+me-larger-than=3D]
+    2 warnings generated.
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
+    drivers/staging/rtl8723bs/core/rtw_security.c:37:6: warning: stack fram=
+e size of 1144 bytes in function 'rtw_wep_encrypt' [-Wframe-larger-than=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:93:6: warning: stack fram=
+e size of 1096 bytes in function 'rtw_wep_decrypt' [-Wframe-larger-than=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:462:5: warning: stack fra=
+me size of 1168 bytes in function 'rtw_tkip_encrypt' [-Wframe-larger-than=
+=3D]
+    drivers/staging/rtl8723bs/core/rtw_security.c:535:5: warning: stack fra=
+me size of 1144 bytes in function 'rtw_tkip_decrypt' [-Wframe-larger-than=
+=3D]
+    4 warnings generated.
+    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame size of =
+1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    drivers/staging/fbtft/fbtft-core.c:902:12: warning: stack frame size of=
+ 1080 bytes in function 'fbtft_init_display_from_property' [-Wframe-larger-=
+than=3D]
+    2 warnings generated.
+    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame size =
+of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/trace/trace_events_hist.c:4594:13: warning: stack frame size of =
+1332 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-12) =E2=80=94 PASS, 0 errors, 12 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/net/phy/motorcomm.c:58:6: warning: variable 'ret' is used unini=
+tialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:54:9: note: initialize the variable 'ret' t=
+o silence this warning
+    drivers/net/phy/motorcomm.c:83:2: warning: variable 'ge' is used uninit=
+ialized whenever switch default is taken [-Wsometimes-uninitialized]
+    drivers/net/phy/motorcomm.c:53:17: note: initialize the variable 'ge' t=
+o silence this warning
+    2 warnings generated.
+    drivers/md/persistent-data/dm-space-map-metadata.c:418:7: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is false [-Wsometim=
+es-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:412:11: note: initia=
+lize the variable 'r2' to silence this warning
+    drivers/md/persistent-data/dm-space-map-metadata.c:435:6: warning: vari=
+able 'r2' is used uninitialized whenever 'if' condition is true [-Wsometime=
+s-uninitialized]
+    drivers/md/persistent-data/dm-space-map-metadata.c:431:11: note: initia=
+lize the variable 'r2' to silence this warning
+    2 warnings generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    stackdepot.c:(.text+0x4ac): undefined reference to `__irqentry_text_sta=
+rt'
+    arc-elf32-ld: stackdepot.c:(.text+0x4ac): undefined reference to `__irq=
+entry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x4cc): undefined reference to `__irq=
+entry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x4cc): undefined reference to `__irq=
+entry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x4d8): undefined reference to `__sof=
+tirqentry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x4d8): undefined reference to `__sof=
+tirqentry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x4e0): undefined reference to `__sof=
+tirqentry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x4e0): undefined reference to `__sof=
+tirqentry_text_end'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 FAIL, 5 errors, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: unused function 'get_mm_memcg_path' [-W=
+unused-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: unused function 'get_mm_memcg_path' [-W=
+unused-function]
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
+s, 1 warning, 0 section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: unused function 'get_mm_memcg_path' [-W=
+unused-function]
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.13.0-rc3-next-20210525/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-12) =E2=80=94 PASS, 0 er=
+rors, 2 warnings, 0 section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: unused function 'get_mm_memcg_path' [-W=
+unused-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 1 warning, 0 section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-12) =E2=80=94 FAIL, 9 errors, 0 warn=
+ings, 0 section mismatches
+
+Errors:
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of 'set_pm=
+d_at'
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 1 warning, 0 section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 FAIL, 77 errors, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pmu_cac=
+he_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu_ev_h=
+w_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c:752:47: warning: var=
+iable 'adlp_dkl_phy_dp_ddi_trans_hbr2_hbr3' is not needed and will not be e=
+mitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c:752:47: warning: var=
+iable 'adlp_dkl_phy_dp_ddi_trans_hbr2_hbr3' is not needed and will not be e=
+mitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+    {standard input}:39: Warning: macro instruction expanded into multiple =
+instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: unused function 'scan_swap_map' [-Wunus=
+ed-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: unused function 'scan_swap_map' [-Wunus=
+ed-function]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 7 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: unused function 'scan_swap_map' [-Wunus=
+ed-function]
+    1 warning generated.
+    drivers/bus/ti-sysc.c:1398:13: warning: variable 'error' is used uninit=
+ialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    drivers/bus/ti-sysc.c:1386:11: note: initialize the variable 'error' to=
+ silence this warning
+    1 warning generated.
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 7 warnings, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: unused function 'scan_swap_map' [-Wunus=
+ed-function]
+    1 warning generated.
+    drivers/bus/ti-sysc.c:1398:13: warning: variable 'error' is used uninit=
+ialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    drivers/bus/ti-sysc.c:1386:11: note: initialize the variable 'error' to=
+ silence this warning
+    1 warning generated.
+    drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c:975:48: warning: implicit con=
+version from 'unsigned long long' to 'unsigned long' changes value from 500=
+0000000 to 705032704 [-Wconstant-conversion]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 1 warning, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 =
+warning, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 FAIL, 8 errors, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    stackdepot.c:(.text+0x4): undefined reference to `__irqentry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x4): undefined reference to `__irqen=
+try_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x24): undefined reference to `__irqe=
+ntry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x24): undefined reference to `__irqe=
+ntry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x30): undefined reference to `__soft=
+irqentry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x30): undefined reference to `__soft=
+irqentry_text_start'
+    arc-elf32-ld: stackdepot.c:(.text+0x38): undefined reference to `__soft=
+irqentry_text_end'
+    arc-elf32-ld: stackdepot.c:(.text+0x38): undefined reference to `__soft=
+irqentry_text_end'
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/mach-omap1/board-ams-delta.c:462:12: warning: =E2=80=98ams_del=
+ta_camera_power=E2=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 FAIL, 30 errors, 13 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+    arch/riscv/include/asm/pgtable.h:525:9: error: implicit declaration of =
+function =E2=80=98pfn_pmd=E2=80=99; did you mean =E2=80=98pfn_pgd=E2=80=99?=
+ [-Werror=3Dimplicit-function-declaration]
+    arch/riscv/include/asm/pgtable.h:525:9: error: incompatible types when =
+returning type =E2=80=98int=E2=80=99 but =E2=80=98pmd_t=E2=80=99 {aka =E2=
+=80=98struct <anonymous>=E2=80=99} was expected
+    arch/riscv/include/asm/pgtable.h:579:20: error: redefinition of =E2=80=
+=98set_pmd_at=E2=80=99
+
+Warnings:
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/mmap_lock.c:157:20: warning: =E2=80=98get_mm_memcg_path=E2=80=99 def=
+ined but not used [-Wunused-function]
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c:752:47: warning: var=
+iable 'adlp_dkl_phy_dp_ddi_trans_hbr2_hbr3' is not needed and will not be e=
+mitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_re=
+locate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-1+0
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_co=
+py_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
+    drivers/gpu/drm/i915/display/intel_ddi_buf_trans.c:752:47: warning: var=
+iable 'adlp_dkl_phy_dp_ddi_trans_hbr2_hbr3' is not needed and will not be e=
+mitted [-Wunneeded-internal-declaration]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    mm/swapfile.c:1039:22: warning: =E2=80=98scan_swap_map=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---
+For more info write to <info@kernelci.org>

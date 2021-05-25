@@ -2,83 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6AA39097F
-	for <lists+linux-next@lfdr.de>; Tue, 25 May 2021 21:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DB2390C50
+	for <lists+linux-next@lfdr.de>; Wed, 26 May 2021 00:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbhEYTRY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 May 2021 15:17:24 -0400
-Received: from www62.your-server.de ([213.133.104.62]:60556 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbhEYTRX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 May 2021 15:17:23 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1llcWq-00033u-6A; Tue, 25 May 2021 21:15:48 +0200
-Received: from [85.7.101.30] (helo=linux-2.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1llcWp-000EEp-Vx; Tue, 25 May 2021 21:15:48 +0200
-Subject: Re: linux-next: Tree for May 18 (kernel/bpf/bpf_lsm.o)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S229790AbhEYWfd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 May 2021 18:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230123AbhEYWfc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 May 2021 18:35:32 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB910C061574;
+        Tue, 25 May 2021 15:34:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FqTQF06jxz9s1l;
+        Wed, 26 May 2021 08:33:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1621982037;
+        bh=0sGkGFbwpUtcrWDso4ctGrH/KPXkkK5ySCMK66Rai9s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O73NK1RxuWsGblcF4liKa29I2KF8lp1JSv7xKRGLlWq9hsjHWnCYckQ45e5YeuT6q
+         +ZHWy5zfmO1RUEMVxoAKHFJtNX3kgRAQbQgIe/y77WJsg2u19mb1yY2gdytixnmWi3
+         iC+Ita0nWM1ug75bsURdodRHZTluaB4KMdkkAV7BL/4VCnqeFB2xnfq+03u2V4xFGk
+         a7+UHP828VFJVJO05aizSMK+sbEW6o7lSOeMxiUmql9yB4SuYc0lDvkLr7CzkoGm6B
+         lTdT5LCNLTTdoZaaK5V1AJd9H0x+UjkaJzh0fIZd7UGZcvSGEfK+cT1Btjc0VS2xAR
+         cPxjHK8gT7IGQ==
+Date:   Wed, 26 May 2021 08:33:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Yang Li <yang.lee@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20210518192729.3131eab0@canb.auug.org.au>
- <f816246b-1136-cf00-ff47-554d40ecfb38@infradead.org>
- <7955d9e2-a584-1693-749a-5983187e0306@infradead.org>
- <166d8da3-1f1f-c245-cc46-c40e12fb71ab@iogearbox.net>
- <bd4198d8-f8d3-f2bb-0fcf-ecfb7ef41ca2@iogearbox.net>
- <f6473baa-f526-6f5b-eb9d-7db657515a2b@infradead.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <f9289dbf-9ec2-8a5d-2a77-ce591bdd79ce@iogearbox.net>
-Date:   Tue, 25 May 2021 21:15:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20210526083356.62941b94@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <f6473baa-f526-6f5b-eb9d-7db657515a2b@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26181/Tue May 25 13:17:38 2021)
+Content-Type: multipart/signed; boundary="Sig_/L+q0+y9//Kh87usM00+iBvE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/25/21 9:01 PM, Randy Dunlap wrote:
-> On 5/25/21 11:31 AM, Daniel Borkmann wrote:
->> On 5/25/21 8:26 PM, Daniel Borkmann wrote:
->>> On 5/25/21 7:30 PM, Randy Dunlap wrote:
->>>> On 5/18/21 10:02 AM, Randy Dunlap wrote:
->>>>> On 5/18/21 2:27 AM, Stephen Rothwell wrote:
->>>>>> Hi all,
->>>>>>
->>>>>> Changes since 20210514:
->>>>>
->>>>> on i386:
->>>>> # CONFIG_NET is not set
->>>>>
->>>>> ld: kernel/bpf/bpf_lsm.o: in function `bpf_lsm_func_proto':
->>>>> bpf_lsm.c:(.text+0x1a0): undefined reference to `bpf_sk_storage_get_proto'
->>>>> ld: bpf_lsm.c:(.text+0x1b8): undefined reference to `bpf_sk_storage_delete_proto'
->>>>>
->>>>> Full randconfig file is attached.
->>>>
->>>> Hi,
->>>> I am still seeing this build error in linux-next-20210525.
->>>
->>> Will take a look and get back.
->>
->> This should resolve it:
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+--Sig_/L+q0+y9//Kh87usM00+iBvE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Randy, fix pushed here [0].
+Hi all,
 
-   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=3c9e8fec3c5a7833d891ac8e58fd9f6c2df0be91
+In commit
+
+  c1cf1afd8b0f ("net: hns: Fix kernel-doc")
+
+Fixes tag
+
+  Fixes: 'commit 262b38cdb3e4 ("net: ethernet: hisilicon: hns: use phydev
+
+has these problem(s):
+
+  - No SHA1 recognised
+
+Please just use
+
+git log -1 --format=3D'Fixes: %h ("%s")' <commit>
+
+and dont split FIxes tags over more than one line.
+
+So
+
+Fixes: 262b38cdb3e4 ("net: ethernet: hisilicon: hns: use phydev from struct=
+ net_device")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/L+q0+y9//Kh87usM00+iBvE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCte1QACgkQAVBC80lX
+0GwNlAf/QcfLpTzyeawP2GTG+1wcu95ksvnZ4RHqE8pBajRQ9KNYznv7aDO8D20B
+NrqYyeNLkopS25viXbo33S+XyyeLNNj9nhFC23O8fk8dSRX2Ayg9nSJ62Il2vJgD
+vKJEyREMXWL1wOmhQGqkhkh8Vzc08Rpof20n2cPDwh6P0jQr4553m6CDxJnHQMk/
+RZ8SPzopmoM5uDmDiD4tRlqctFwPd7osLpXdLnGdRCVN7vOSlMS0ldIU942WWZOh
+gPTcmwuqnJnCZpCY6EBdHKonCOSyFA+vFbS035EbcC43T3Ba6eJgCZpLRZPTJGiM
+d2zuhHE2VpQqyR3rmSiNUD+kGISVXA==
+=5Zpi
+-----END PGP SIGNATURE-----
+
+--Sig_/L+q0+y9//Kh87usM00+iBvE--

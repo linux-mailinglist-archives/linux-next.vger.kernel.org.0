@@ -2,81 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4120A39226D
-	for <lists+linux-next@lfdr.de>; Thu, 27 May 2021 00:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FFC3922DF
+	for <lists+linux-next@lfdr.de>; Thu, 27 May 2021 00:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbhEZWBc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 May 2021 18:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbhEZWBb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 May 2021 18:01:31 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B819AC061574;
-        Wed, 26 May 2021 14:59:58 -0700 (PDT)
+        id S231419AbhEZWpc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 May 2021 18:45:32 -0400
+Received: from ozlabs.org ([203.11.71.1]:46333 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234099AbhEZWpb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 26 May 2021 18:45:31 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fr4cX4CwFz9s5R;
-        Thu, 27 May 2021 07:59:56 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fr5bK0llpz9sCD;
+        Thu, 27 May 2021 08:43:57 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622066396;
-        bh=2+hLVHFT9QBw+1pJo3dO0FRsdTqnjFvgqsGvFSrYHiM=;
+        s=201702; t=1622069037;
+        bh=yoHGcZrfZWRUzRlHB6uGfY1Ujgs3zJ9QzpcaUtUjtmk=;
         h=Date:From:To:Cc:Subject:From;
-        b=VCpq9oCv6bFI63fHslB/53RHMyFI+ZEisXkRmFoYKUoI6alXcMQM3Jyiw52V2AC/Z
-         siEX+AsCG7m4Q2J0Y4UYy6yfxMH+Nwf3ksYQXf2U6AbCRkZTqj6s7uYBJgRZH0r7NX
-         FSNnT9HWsM87noC3gsk3pm6vUmvh/lw/SVUQJ5YcvmLMMv2M3eStglG7bxpc6PTQPC
-         iJcGZhSK1Oj1y4U4B21WS5iBP5hSjfJ/MIg1VXgGHWVi0Xur3rSru/9n6zrkV4v7qI
-         Qnlp6nBAHfVEcjbfcdyBdTrTyrmRNYEVIBayjiBcl/TbDn8jjxYuXNJoctju25gPJz
-         ijtBAYrDkZMDQ==
-Date:   Thu, 27 May 2021 07:59:55 +1000
+        b=DKdh5ij1oxJk/92uTHuuvF78FqR+aDxgGIVtLhVBbqdkonLWlw/GSLvpIVaZjLmj2
+         5JyLsgtqTyfBTBN1zmxHEFXHYYdDIvjMvqorMSWAHmEisiGQLMBT6LxTwNtWxaBqbv
+         gDDUhYR1N4JCVTSgOVoMoAApG5lH6BEKTb+xYKrKJt9tFIHIc3seBgzbsePj3hpdP8
+         t/kqOwOUoXyphpW/34FI4XC5NUlygenBj7uH1BETAq5QA1XPPI1Ge0K6DC5H9u1gLS
+         wDx6ihX+k+1x/RN5H/W3dMFnZB0b4ABHbYVxj2QzxcL6ahnIinyHDTbOWBib6ocCEh
+         UmFzTEKkyRVMQ==
+Date:   Thu, 27 May 2021 08:43:56 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the device-mapper
- tree
-Message-ID: <20210527075955.01aca52a@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the kvm-fixes tree
+Message-ID: <20210527084356.12c2784f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/n9UZ1+54d/Ozhz2hG.7hKl5";
+Content-Type: multipart/signed; boundary="Sig_/4fTwIM5hZ+5y2gI_IMwP4IA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/n9UZ1+54d/Ozhz2hG.7hKl5
+--Sig_/4fTwIM5hZ+5y2gI_IMwP4IA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the kvm-fixes tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  da6a76c1f697 ("dm: improve kcopyd latency")
+In file included from arch/powerpc/include/asm/kvm_ppc.h:19,
+                 from arch/powerpc/include/asm/dbell.h:17,
+                 from arch/powerpc/kernel/asm-offsets.c:38:
+include/linux/kvm_host.h: In function 'kvm_vcpu_can_poll':
+include/linux/kvm_host.h:270:9: error: implicit declaration of function 'si=
+ngle_task_running' [-Werror=3Dimplicit-function-declaration]
+  270 |  return single_task_running() && !need_resched() && ktime_before(cu=
+r, stop);
+      |         ^~~~~~~~~~~~~~~~~~~
 
-is missing a Signed-off-by from its author.
+Caused by commit
+
+  85d4c3baeb45 ("KVM: PPC: exit halt polling on need_resched()")
+
+I have used the kvm-fixes tree from next-20210524 again today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/n9UZ1+54d/Ozhz2hG.7hKl5
+--Sig_/4fTwIM5hZ+5y2gI_IMwP4IA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCuxNsACgkQAVBC80lX
-0Gx0NQf8DZoSDuC5AXW36vakomHbZBhf92Wwms/Og9exIYMujOirTGV62hDb+osr
-RWtr72jlYq3lKE1+u9rXJbuchntBOkqMbo6YYP3MsgXJtt0U1kC3bDOGCSdCXkln
-R/R5YWP+LkbBp9PJZ69EatNs4uI7HsuEn8JhC2kscxEgQVXkrCeGiHuM2wM86IT7
-adlkxN/m/LVMe4KYR1ZbwGpBCtfJnQTumr9C20JkhshYb7GT0WC9+ATZwOuxI1Bx
-kyixyc/QVS7Lu400CVTcRoBIzsvrsoUNd6fumwnAHvHka/YbLc6x3j5o73VRQ/KM
-ErzYe8ppd17lauBWwwrHqoSakXZiog==
-=b4qJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCuzywACgkQAVBC80lX
+0GxAMQf/YaCEHH3QHYGkCsUeAbZ5L1Jk0cItYgEHAY9dGy4X7gkUAGb/uzH+AbfP
+ZXUPMOK7Ucy6yudZwe/TUHQlZAGjc5nP7tTtp6WFIRSWHjL6yh0oKZg/b3maPJqy
+kp/GNSUb+VIFIMei0LtggbVh+Ot3jrzi/DD1C9iuIbmhRNe78JOBOrxD5whEG+dP
+dq3gVJeCDD61vCgNtF6T0E03OTdr4Aj4xTNNL/9L4urpgmEI/Ed2iHHUrk9uf9H8
+okQl3CeAQt6svhxMtFmEsIYcxWzmZvUqOA1/NoIddenV7mbIPLujUm/uyxuhBmlE
+MwuHBkGpnJTexv3+ewc6WlkdFqcH0Q==
+=Cx9t
 -----END PGP SIGNATURE-----
 
---Sig_/n9UZ1+54d/Ozhz2hG.7hKl5--
+--Sig_/4fTwIM5hZ+5y2gI_IMwP4IA--

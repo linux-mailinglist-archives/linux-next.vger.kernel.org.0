@@ -2,123 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B224D3918A8
-	for <lists+linux-next@lfdr.de>; Wed, 26 May 2021 15:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8DF391A73
+	for <lists+linux-next@lfdr.de>; Wed, 26 May 2021 16:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbhEZNWx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 May 2021 09:22:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42612 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233284AbhEZNWd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 26 May 2021 09:22:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 64B35613C3;
-        Wed, 26 May 2021 13:20:59 +0000 (UTC)
-Date:   Wed, 26 May 2021 14:20:56 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [next] arm64: boot failed next-20210526
-Message-ID: <20210526132056.GE19992@arm.com>
-References: <CA+G9fYtwXKK1U+SovWvuKttgqj59tNeJcRzHxWmfmyCRricmsA@mail.gmail.com>
- <20210526131936.GA19341@willie-the-truck>
+        id S234669AbhEZOkN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 May 2021 10:40:13 -0400
+Received: from condef-07.nifty.com ([202.248.20.72]:47780 "EHLO
+        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234654AbhEZOkN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 26 May 2021 10:40:13 -0400
+X-Greylist: delayed 677 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 May 2021 10:40:13 EDT
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 14QEOt8n013188
+        for <linux-next@vger.kernel.org>; Wed, 26 May 2021 23:24:56 +0900
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 14QEOXr6005846;
+        Wed, 26 May 2021 23:24:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 14QEOXr6005846
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1622039073;
+        bh=S3cdbLKJzcvU+k2/cClSUE7D/oDU/mnDHQ9eZ1mSmYs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iuiY9bXmzgMFxyv8kuk8ZPG/qtKaNvj7NGgZFynyvOqEEffIagdAMaV8pq0sPA8zB
+         ccQO/WRcN9q2IitG7BWuLrRyUY9BekYvrWby0386PSL27qp1gwP59U+PpkrMQLSEot
+         LplMTAD13fqsefSFyzdPtScvAomZrMsthhRrPlDVBH9Jab6KNCYuQcdqb+c50IWmdY
+         AosjTwviJGig05PbTaj3muvu2KKaXF1Has7WRkZdw8EAJusQUv6wrxO0hTLEIxPMgH
+         JqjlDV6hqar3sSJdtZdtvk6hXQ3ZgBl+agVhC+kZNPzlzcyoLeX7jll/4YXvLmrl1w
+         LQGOWu/vmXTrw==
+X-Nifty-SrcIP: [209.85.210.176]
+Received: by mail-pf1-f176.google.com with SMTP id y15so1026832pfn.13;
+        Wed, 26 May 2021 07:24:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532rnVNe0fgDSUeR/JyJEpALI/NcsHDn49fHFNBrb3q1Ytg692U3
+        GIgAmLsbvYq7rBRh+fo3n78+FNeq2+CcAPpTxUA=
+X-Google-Smtp-Source: ABdhPJz2Unzkmjt4AewHB8f4XFBaX31iEQ+tyeMgiGCHUZSjTNXZ/IrQYtN5evWSxdXKCtVjmcQSj4nUUF5dqCCxBFw=
+X-Received: by 2002:a63:164f:: with SMTP id 15mr25296029pgw.175.1622039072606;
+ Wed, 26 May 2021 07:24:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210526131936.GA19341@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20210526084536.1454449-1-geert@linux-m68k.org>
+In-Reply-To: <20210526084536.1454449-1-geert@linux-m68k.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 26 May 2021 23:23:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARq87zoD9-r4YfY5rewwieBOBJYETs4MLwBz9vddxMsRA@mail.gmail.com>
+Message-ID: <CAK7LNARq87zoD9-r4YfY5rewwieBOBJYETs4MLwBz9vddxMsRA@mail.gmail.com>
+Subject: Re: [PATCH] m68k: Drop duplicate "core-y += arch/m68k/" rule causing
+ link failures
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 26, 2021 at 02:19:37PM +0100, Will Deacon wrote:
-> On Wed, May 26, 2021 at 06:12:34PM +0530, Naresh Kamboju wrote:
-> > While booting Linux next-20210526 tag on arm64 the following crash noticed.
-> > 
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
-> > [    0.000000] Linux version 5.13.0-rc3-next-20210526
-> > (tuxmake@52aac593b9ff) (aarch64-linux-gnu-gcc (Debian 11.1.0-1)
-> > 11.1.0, GNU ld (GNU Binutils for Debian) 2.36.1) #1 SMP PREEMPT Wed
-> > May 26 08:29:48 UTC 2021
-> > [    0.000000] Machine model: linux,dummy-virt
-> > [    0.000000] earlycon: pl11 at MMIO 0x0000000009000000 (options '')
-> > [    0.000000] printk: bootconsole [pl11] enabled
-> > [    0.000000] efi: UEFI not found.
-> > [    0.000000] NUMA: No NUMA configuration found
-> > [    0.000000] NUMA: Faking a node at [mem
-> > 0x0000000040000000-0x00000000bfffffff]
-> > [    0.000000] NUMA: NODE_DATA [mem 0xbfc00d40-0xbfc03fff]
-> > [    0.000000] Zone ranges:
-> > [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000bfffffff]
-> > [    0.000000]   DMA32    empty
-> > [    0.000000]   Normal   empty
-> > [    0.000000]   Device   empty
-> > [    0.000000] Movable zone start for each node
-> > [    0.000000] Early memory node ranges
-> > [    0.000000]   node   0: [mem 0x0000000040000000-0x00000000bfffffff]
-> > [    0.000000] Initmem setup node 0 [mem 0x0000000040000000-0x00000000bfffffff]
-> > [    0.000000] cma: Reserved 32 MiB at 0x00000000bb800000
-> > [    0.000000] kasan: KernelAddressSanitizer initialized
-> > [    0.000000] psci: probing for conduit method from DT.
-> > [    0.000000] psci: PSCIv1.0 detected in firmware.
-> > [    0.000000] psci: Using standard PSCI v0.2 function IDs
-> > [    0.000000] psci: Trusted OS migration not required
-> > [    0.000000] psci: SMC Calling Convention v1.1
-> > [    0.000000] percpu: Embedded 500 pages/cpu s2009624 r8192 d30184 u2048000
-> > [    0.000000] ------------[ cut here ]------------
-> > [    0.000000] kernel BUG at arch/arm64/kernel/traps.c:406!
-> > [    0.000000] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> > [    0.000000] Modules linked in:
-> > [    0.000000] CPU: 0 PID: 0 Comm: swapper Tainted: G                T
-> > 5.13.0-rc3-next-20210526 #1 c8ad07b8a918e7b0a25b795f9cc1c902737164cf
-> > [    0.000000] Hardware name: linux,dummy-virt (DT)
-> > [    0.000000] pstate: 404000c5 (nZcv daIF +PAN -UAO -TCO BTYPE=--)
-> > [    0.000000] pc : do_undefinstr+0x88/0xc0
-> > [    0.000000] lr : do_undefinstr+0x88/0xc0
-> > [    0.000000] sp : ffff800014267be0
-> > [    0.000000] x29: ffff800014267be0 x28: ffff80001429b040 x27: 0000000000000000
-> > [    0.000000] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-> > [    0.000000] x23: 00000000604000c5 x22: ffff800010038528 x21: 0000000002000000
-> > [    0.000000] x20: 0000000000000005 x19: ffff800014267c50 x18: 0000000000000000
-> > [    0.000000] x17: 000c0400bb44ffff x16: 00000032b5503510 x15: 0000000000000000
-> > [    0.000000] x14: 00000000bfc12000 x13: 0000001000000000 x12: 00000000f1f1f1f1
-> > [    0.000000] x11: dfff800000000000 x10: ffff70000284cf44 x9 : ffff8000128bf2e0
-> > [    0.000000] x8 : ffff700002854905 x7 : 1ffff00002854904 x6 : ffff700002854904
-> > [    0.000000] x5 : dfff800000000000 x4 : ffff8000142a4820 x3 : ffff80001429b040
-> > [    0.000000] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-> > [    0.000000] Call trace:
-> > [    0.000000]  do_undefinstr+0x88/0xc0
-> > [    0.000000]  el1_undef+0x30/0x80
-> > [    0.000000]  el1_sync_handler+0xc0/0x140
-> > [    0.000000]  el1_sync+0x7c/0x100
-> > [    0.000000]  __cpuinfo_store_cpu+0xe8/0x440
-> > [    0.000000]  cpuinfo_store_boot_cpu+0x54/0xb4
-> > [    0.000000]  smp_prepare_boot_cpu+0x68/0x1a4
-> > [    0.000000]  start_kernel+0x128/0x870
-> > [    0.000000]  __primary_switched+0x94/0x98
-> > [    0.000000] Code: aa1403e1 940dda91 b4000074 940dd94f (d4210000)
-> > [    0.000000] random: get_random_bytes called from
-> > oops_exit+0x54/0xc0 with crng_init=0
-> > [    0.000000] ---[ end trace 0000000000000000 ]---
-> > [    0.000000] Kernel panic - not syncing: Oops - BUG: Fatal exception
-> > [    0.000000] ---[ end Kernel panic - not syncing: Oops - BUG: Fatal
-> > exception ]---
-> 
-> I'm guessing that's due to the newly introduced read of GMID_EL1, which does
-> indeed appear to be undefined on cpus without FEAT_MTE2.
-> 
-> Catalin -- I'll drop your patches for now.
+On Wed, May 26, 2021 at 5:45 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+>     Makefile:1949: target 'arch/m68k' given more than once in the same rule
+>     [...]
+>       LD      vmlinux.o
+>     m68k-linux-gnu-ld: arch/m68k/kernel/entry.o: in function `system_call':
+>     (.text+0x160): multiple definition of `system_call'; arch/m68k/kernel/entry.o:(.text+0x160): first defined here
+>     [...]
+>
+> All "core-y += arch/<arch>/" rules were dropped from the corresponding
+> arch/<arch>/Makefiles, but m68k was forgotten.
+>
+> Reported-by: noreply@ellerman.id.au
+> Fixes: 7d9677835b10b5de ("kbuild: require all architectures to have arch/$(SRCARCH)/Kbuild")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
 
-Yeah, I just noticed. I'll fix them and repost.
+I will squash this.
+Thanks.
+
+
+>  arch/m68k/Makefile | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/m68k/Makefile b/arch/m68k/Makefile
+> index c54055a3d28450aa..dd0c0ec67f67064d 100644
+> --- a/arch/m68k/Makefile
+> +++ b/arch/m68k/Makefile
+> @@ -97,7 +97,6 @@ head-$(CONFIG_SUN3)           := arch/m68k/kernel/sun3-head.o
+>  head-$(CONFIG_M68000)          := arch/m68k/68000/head.o
+>  head-$(CONFIG_COLDFIRE)                := arch/m68k/coldfire/head.o
+>
+> -core-y                         += arch/m68k/
+>  libs-y                         += arch/m68k/lib/
+>
+>
+> --
+> 2.25.1
+>
+
 
 -- 
-Catalin
+Best Regards
+Masahiro Yamada

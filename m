@@ -2,124 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29AB3926A2
-	for <lists+linux-next@lfdr.de>; Thu, 27 May 2021 06:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEA43926DC
+	for <lists+linux-next@lfdr.de>; Thu, 27 May 2021 07:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234466AbhE0E6k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 May 2021 00:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S233918AbhE0F2K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 May 2021 01:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbhE0E6j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 May 2021 00:58:39 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB90C061760;
-        Wed, 26 May 2021 21:57:05 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id i23-20020a9d68d70000b02902dc19ed4c15so3308588oto.0;
-        Wed, 26 May 2021 21:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zd33jEwk8aHcS5XVZ56yw2Oa1m/r43mn4HOR1FizvXU=;
-        b=S3Q3irWuVCW9yu9MDQAE7KTjnhM/caOcdVcxZmKxu/a9WxHh1BOfD970uWtTPqCQrV
-         Rj3gsWRoMHvBobnlMbQnZ72NxeQ7761HUk1xPHQPwd4EUO4GuHlFpkMDjnBCyBFxn2CB
-         ERnwMOp1G48Pu8Y6nKL++IroC/7XOJoUCI0U9RF/uC4k+ghA84wsIxp0u204F6biLwid
-         sfI/p9qDDPAe7cD9bmPs1aT3JxF/2w/vK6pgiJFlF3YoFei4UlaWzcgQhJnJwFkCMjoq
-         NzN1eORSy+VODVm72LhiDH3MRgAyZY/btEjET53xim+VaMZtYGClYdAH41XmdhEAjWJM
-         YvCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zd33jEwk8aHcS5XVZ56yw2Oa1m/r43mn4HOR1FizvXU=;
-        b=kbcd00dkUXUcYELmsrsGkEXZVCZtTAdc+Gwg9yANL5NWBFZ4C52UNzhI/ov24ZQVU1
-         wHjq3eErHQIFi9UTkm7riM3LAFVCj/aE5o7prMtuS1PvYirVQRe3Zk2A0SUrG41pUVFc
-         SoWddebKWTLSq85uWWEcnxiaMdKPSLh69yeN/bBGevuT+LkAx9F8rMpJ0tWP9LzYwODQ
-         CuKod1YjTocWFodRu+glvBWGq4FFSivHf0/HdoSqcX4be0mhmW4VXnSq6EOD2tW/TnNt
-         /lDIQF03htLOMfL15IXwC3BW5uDKKMeI9gnmDFKL+WsI/YeYVi3wWsa26+f2LoHHMJdl
-         OKVw==
-X-Gm-Message-State: AOAM533d0stulAPMGvyEOJfnQ5Fe5yvMifB9juX69j8OsEP7Uig83GcB
-        BhVHeAcqCZfIpDkDFBvSLdweqkPoxjU0jQn5fD8=
-X-Google-Smtp-Source: ABdhPJyqy6tKSYJTO5Q/P3AU0dl27HaGrFoIR5zhBPvAV35Y/8Rt1mNAb4MgMs8/FoG3RwsudmZ9xYXw33XpsO6chec=
-X-Received: by 2002:a9d:4b0e:: with SMTP id q14mr1304495otf.254.1622091425262;
- Wed, 26 May 2021 21:57:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210527084356.12c2784f@canb.auug.org.au>
-In-Reply-To: <20210527084356.12c2784f@canb.auug.org.au>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Thu, 27 May 2021 12:56:54 +0800
-Message-ID: <CANRm+CyC+=hMrVJCVWZ7cTC_F3CXYKRms2xNFQCvWa5rPS3U-w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kvm-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S233847AbhE0F2J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 May 2021 01:28:09 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701ADC061574;
+        Wed, 26 May 2021 22:26:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FrGWr5m4cz9sRK;
+        Thu, 27 May 2021 15:26:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1622093193;
+        bh=nozp9T1s7TmrAi1d67+s+Oddv15pVAiTnvfERQTnIsw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jfOjTLTmus+ninDnUt7ugrWL6+97i5eKlVOUoEjeGnEx7kMgN23ZH61bPE7vpgcbJ
+         7PgLAA75r5qaVTwJWuVT4RuVzAn2cD/VrpIkQ1Rs4gKCFydf9qm7DnNzMxI5Vqymc0
+         +VOdceA+qozKDjaKgWWFH0mpfhYqh2728LV1MM93jgerW8LjL+DGZNHt3S3rVJ9mou
+         pV/vXSbULCXJAWD5aAGXgNGy+xl+62Pfz60SavwFHWwz9fZp62WRej3siveD/xYlcL
+         8JEqRLeSQQE7VOUuBNIiCE08lCWvUaX/26WHyH9PLb6RS4bVJwLmmYQFGz5avgEn98
+         7daS86XJUamCA==
+Date:   Thu, 27 May 2021 15:26:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the hid tree
+Message-ID: <20210527152631.1e70fba2@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/oj7d.dECWB/4=kZX2pqD_=A";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 27 May 2021 at 10:50, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the kvm-fixes tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> In file included from arch/powerpc/include/asm/kvm_ppc.h:19,
->                  from arch/powerpc/include/asm/dbell.h:17,
->                  from arch/powerpc/kernel/asm-offsets.c:38:
-> include/linux/kvm_host.h: In function 'kvm_vcpu_can_poll':
-> include/linux/kvm_host.h:270:9: error: implicit declaration of function 'single_task_running' [-Werror=implicit-function-declaration]
->   270 |  return single_task_running() && !need_resched() && ktime_before(cur, stop);
->       |         ^~~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   85d4c3baeb45 ("KVM: PPC: exit halt polling on need_resched()")
->
-> I have used the kvm-fixes tree from next-20210524 again today.
+--Sig_/oj7d.dECWB/4=kZX2pqD_=A
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The kvm/master is broken by several patches.
+Hi all,
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 0f6f394..e851671 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1659,7 +1659,7 @@ struct kvm_hv_hcall {
+After merging the hid tree, today's linux-next build (x86_64
+modules_install (on an allmodconfig build)) failed like this:
 
- static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct
-kvm_hv_hcall *hc, bool ex)
- {
--    int i, j;
-+    int i;
-     gpa_t gpa;
-     struct kvm *kvm = vcpu->kvm;
-     struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9d095bed..feb9611 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3604,7 +3604,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu,
-struct msr_data *msr_info)
-          * to ensure backwards-compatible behavior for migration.
-          */
-         if (msr_info->host_initiated &&
--            kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TSC_HOST_ACCESS))
-+            kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TSC_HOST_ACCESS)) {
-             offset = vcpu->arch.l1_tsc_offset;
-             ratio = vcpu->arch.l1_tsc_scaling_ratio;
-         } else {
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 18905c9..4273e04 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -10,6 +10,7 @@
- #include <linux/spinlock.h>
- #include <linux/signal.h>
- #include <linux/sched.h>
-+#include <linux/sched/stat.h>
- #include <linux/bug.h>
- #include <linux/minmax.h>
- #include <linux/mm.h>
+depmod: ERROR: Cycle detected: hid -> usbhid -> hid
+depmod: ERROR: Found 2 modules in dependency cycles!
+
+I could not easily figure out what caused this (it may not be the hid
+tree, but probably is), so all I could do was leave it broken.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/oj7d.dECWB/4=kZX2pqD_=A
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCvLYcACgkQAVBC80lX
+0GwmaQf/VK7ye0A9AbT/3cWohVg0JA4br7EA0cq1GoFbD9+jRiHz/Cmy3VWKaY58
+RoEJJUQiUHwQWXAVzQVofx6+wVL8MVWKX3Aq7+/n9yjPnF5zRh7gZNH3/49uzLZu
+yVrZS6mEO/c1IN7cGSMvEVGT1w3bKvJlKjWbxx3NelM28INb3p535YPWPSMbt4jj
+uzMb+zzsLqLKRRtag9vYGdMtNbFGIUmvx1lAUkswB+XOl4KJE6ys0i2epWJo+Ge1
+Wr56aP3IHMCRP4RiUEnhhs8NyyFHN4B8+Eer0IkITHuToFTrsMZC90ZFEjSWNzKq
+/z2VRisQkAgTvI84p/BuyEFOkMWu/A==
+=SkJK
+-----END PGP SIGNATURE-----
+
+--Sig_/oj7d.dECWB/4=kZX2pqD_=A--

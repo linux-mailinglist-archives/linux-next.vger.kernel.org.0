@@ -2,733 +2,647 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D6D393EFC
-	for <lists+linux-next@lfdr.de>; Fri, 28 May 2021 10:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC6B3946B9
+	for <lists+linux-next@lfdr.de>; Fri, 28 May 2021 19:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbhE1Iwo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 28 May 2021 04:52:44 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45709 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232832AbhE1Iwn (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 28 May 2021 04:52:43 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Frz1R20Dsz9sCD;
-        Fri, 28 May 2021 18:51:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622191867;
-        bh=SDDpr6uyQQN1O6t+9Ckrtb17znBqP58/38Oc33rV89I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=obnhmI9e91YKUrcpXEJu8rpuleOoyfFLmHl013M/Ic3nE2E6x+35SwPapbpvCUvch
-         peybQ2G9JVhkbFxmOBMZBJ0rMzvNc6NJ7WAATCp8VxiB2u5cUDtR/XU73tjai/2tOO
-         Tr2VSEB2XXjNhwkZKlsnaaDtRPycIBZt8ewiJTfseZ1Q4etMnsWr2hgBEa5LkGJkvs
-         qBA8cToaUi3uXLE/gdZ385jhJu1g7FG79u+QPcKt5dQ7Pe/oCYo7Qpt7A66P9zhSWN
-         bLJRl+LIq4+jZFZ80OOVmq/U7wxaAxn8u340/dhmSQK71eRLO33xKXs/3jpwd3nQIF
-         TJeFLhPNsp+2g==
-Date:   Fri, 28 May 2021 18:51:04 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for May 28
-Message-ID: <20210528185104.57085f30@canb.auug.org.au>
+        id S229453AbhE1SB2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 28 May 2021 14:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229450AbhE1SB2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 28 May 2021 14:01:28 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3E5C061574
+        for <linux-next@vger.kernel.org>; Fri, 28 May 2021 10:59:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id e15so2003652plh.1
+        for <linux-next@vger.kernel.org>; Fri, 28 May 2021 10:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=UFD5nsv+q65bshrjQhnamB8YjPMeQv1fXH6wdUsGCqo=;
+        b=GQUiuk8cb1JgjykeGaU7pz7cTh8KkTWrxQcNVSIzI9eS7y9pswC2v06LH/jJ+VF+Gu
+         AToH8vXeTXDVbxLFH5OrPaatB+Ew5W1EXai/wvERdtH+k06p8MZqLPUCbLCjqHv62zhg
+         cFQ8fXyDVtTN/ohKE4BArEBNhjW0hBgjTtZ4pgVJw4tKL4nHE7Gb2X7S+JsAN9c85D2w
+         A7f6lhbXcgaUKnPKZ6VVr8dSrzs5tYfyDmE6SwdAI9uIyT3Sj+OqK8co8SnV6JbOlX5v
+         YZNXVEp9M3PLcrktvu9vkq3Rf/Qg7oLynbzBuRThUrqw7p2KYV1Rsud+MOqdKQl8BmTD
+         dVUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=UFD5nsv+q65bshrjQhnamB8YjPMeQv1fXH6wdUsGCqo=;
+        b=eUlNxh/+W4HgQonwJsx1YVrSRUrgL+MYeHwvDYqLrr+86Rzvkx6otBt7dx1tWRujkQ
+         WLdaT6nlh3oQQwK9vbMhWOfXy5DyRanjvRF+eysDRo97vBaYW2p7VN8QdWWNclw/srLs
+         yxkJXwQFL4PaKYYiy1YDstfCknAaxVDXumifVxVW1M6Glxm0aF2R7jX2SveqHLGDydh5
+         9G1IjnivA8INiUSisMOgZ0Fa6jR3eEoxngq02qD8LUPp5+dSEdA8heYwNF5VpvZKGuw1
+         Me5uDjIY7K6gyYhU0/HCqE9kgdg+p5pYkS74MkYJOEWPLNFJoaZvXqAEGhd/8pwdGdnn
+         3l9A==
+X-Gm-Message-State: AOAM530onBpE9Z7bbeqdxjbeDUDs6ArDxonSQaYJZbgBDnxQSylCJYn4
+        Gxzk1GUxQ01Vti7qUJy39/M=
+X-Google-Smtp-Source: ABdhPJzXvVGrAiSiy9umdu/oprHrG4Bb/49aXBLoFsUITPrmUoeQsg9p/T24zysXjgRHaKlWPwfObw==
+X-Received: by 2002:a17:90a:1b8f:: with SMTP id w15mr5621062pjc.101.1622224792779;
+        Fri, 28 May 2021 10:59:52 -0700 (PDT)
+Received: from hyeyoo ([183.99.11.150])
+        by smtp.gmail.com with ESMTPSA id u8sm4920262pgg.51.2021.05.28.10.59.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 May 2021 10:59:52 -0700 (PDT)
+Date:   Sat, 29 May 2021 02:59:47 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     sfr@canb.auug.org.au, nathan@kernel.org
+Cc:     linux-next@vger.kernel.org
+Subject: OOPs when compiling with clang-11
+Message-ID: <20210528175947.GA11557@hyeyoo>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AN1p+3G8Zklr1Bvfo/ZVIpM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AN1p+3G8Zklr1Bvfo/ZVIpM
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hello Nathan and Stephen Rothwell,
+An interesting kernel bug occurred when
+compiling with clang-11.
 
-Hi all,
+if there's someone to be added as cc, plase add it.
 
-Changes since 20210527:
+I'm on 5.13.0-rc2-next-20210520,
+clang-11 is Ubuntu clang version 11.0.0-2~ubuntu20.04.1
 
-The kvm-fixes tree lost its build failures.
+I'll try this on linux next 20210529,
+But thought reporting is needed.
 
-The hid tree lost its build failure.
+It's not clear to me if it's related with kernel or clang yet?
+(maybe kernel I think)
 
-The net-next tree gained a conflict against the net tree.
+dmesg is below:
 
-The amdgpu tree gained lost its build failure.
+[ 3526.202270] clang-11: Corrupted page table at address 7f8896d91f48
+[ 3526.202282] PGD 8000000111903067 P4D 8000000111903067 PUD 10b325067 PMD =
+ffe7a0414d080067
+[ 3526.202293] BAD
+[ 3526.202297] Bad pagetable: 000d [#1] SMP KASAN PTI
+[ 3526.202304] CPU: 0 PID: 10379 Comm: clang-11 Not tainted 5.13.0-rc2-next=
+-20210520 #1
+[ 3526.202312] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 3526.202316] RIP: 0033:0x7f889de2433e
+[ 3526.202324] Code: c8 cd cc cc cc 45 31 d2 41 b8 ff ff ff 7f 45 31 db 41 =
+83 c2 01 44 89 d2 41 89 d2 44 89 c8 44 29 d8 d1 e8 44 01 d8 48 8d 0c 80 <8b=
+> 0c cb 44 21 c1 39 f1 77 28 8d 50 01 39 97 c8 00 00 00 0f 84 8c
+[ 3526.202331] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3526.202337] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3526.202342] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3526.202347] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3526.202351] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3526.202355] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3526.202360] FS:  00007f889802c780 GS:  0000000000000000
+[ 3526.202364] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 3526.202542]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 3526.202628] ---[ end trace 1d17d15d3774d69d ]---
+[ 3526.315201] RIP: 0033:0x7f889de2433e
+[ 3526.315222] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3526.315230] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3526.315235] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3526.315240] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3526.315244] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3526.315249] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3526.315254] FS:  00007f889802c780(0000) GS:ffff8881cba00000(0000) knlGS:=
+0000000000000000
+[ 3526.315260] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3526.315264] CR2: 00007f8896d91f48 CR3: 0000000131634002 CR4: 00000000003=
+706f0
+[ 3526.329371] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[ 3526.329382] BUG: KASAN: user-memory-access in lock_page_memcg+0x22/0x140
+[ 3526.329399] Read of size 8 at addr 0000088105342008 by task clang-11/103=
+79
 
-The scsi-mkp tree still has its build failuer so I used the version
-from next-20210526.
+[ 3526.329417] CPU: 2 PID: 10379 Comm: clang-11 Tainted: G      D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 3526.329430] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 3526.329436] Call Trace:
+[ 3526.329610]  dump_stack_lvl+0x9e/0xd2
+[ 3526.329627]  ? lock_page_memcg+0x22/0x140
+[ 3526.329637]  kasan_report.cold+0x112/0x117
+[ 3526.329815]  ? lock_page_memcg+0x22/0x140
+[ 3526.329828]  __asan_load8+0x86/0xa0
+[ 3526.329839]  lock_page_memcg+0x22/0x140
+[ 3526.330017]  page_remove_rmap+0x25/0x4d0
+[ 3526.330033]  zap_huge_pmd+0x22e/0x4e0
+[ 3526.330211]  unmap_page_range+0x128a/0x1530
+[ 3526.330231]  ? vm_normal_page_pmd+0x220/0x220
+[ 3526.330410]  unmap_single_vma+0xc1/0x160
+[ 3526.330426]  unmap_vmas+0x105/0x1b0
+[ 3526.330436]  ? zap_vma_ptes+0x70/0x70
+[ 3526.330617]  ? finish_task_switch.isra.0+0x143/0x3e0
+[ 3526.330630]  ? __kasan_check_write+0x14/0x20
+[ 3526.330816]  ? invalidate_bh_lrus_cpu+0x5a/0x80
+[ 3526.330833]  exit_mmap+0x125/0x320
+[ 3526.331010]  ? do_munmap+0x20/0x20
+[ 3526.331025]  ? __kasan_check_write+0x14/0x20
+[ 3526.331035]  ? mutex_unlock+0x22/0x40
+[ 3526.331221]  mmput+0xae/0x1f0
+[ 3526.331233]  do_exit+0x5a9/0x1200
+[ 3526.331414]  ? kasan_unpoison_task_stack+0x14/0x20
+[ 3526.331430]  ? mm_update_next_owner+0x400/0x400
+[ 3526.331444]  ? do_user_addr_fault+0x4d8/0x880
+[ 3526.331457]  ? fpregs_assert_state_consistent+0x5a/0x70
+[ 3526.331473]  ? exit_to_user_mode_prepare+0x37/0x1b0
+[ 3526.331491]  rewind_stack_do_exit+0x17/0x20
+[ 3526.331507] RIP: 0033:0x7f889de2433e
+[ 3526.331517] Code: Unable to access opcode bytes at RIP 0x7f889de24314.
+[ 3526.331525] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3526.331536] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3526.331710] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3526.331720] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3526.331729] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3526.331737] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3526.331751] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[ 3526.331760] BUG: unable to handle page fault for address: 00000881053420=
+08
+[ 3526.331767] #PF: supervisor read access in kernel mode
+[ 3526.331776] #PF: error_code(0x0000) - not-present page
+[ 3526.331784] PGD 0 P4D 0
+[ 3526.331796] Oops: 0000 [#2] SMP KASAN PTI
+[ 3526.331807] CPU: 2 PID: 10379 Comm: clang-11 Tainted: G    B D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 3526.331819] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 3526.331828] RIP: 0010:lock_page_memcg+0x22/0x140
+[ 3526.331840] Code: ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 =
+57 41 56 41 55 41 54 49 89 fc 48 83 c7 08 53 48 83 ec 08 e8 1e 97 fd ff <49=
+> 8b 44 24 08 48 8d 50 ff a8 01 4c 0f 45 e2 0f 1f 44 00 00 4d 8d
+[ 3526.331853] RSP: 0018:ffff88810d6df970 EFLAGS: 00010286
+[ 3526.331864] RAX: 0000000000000001 RBX: ffe7a0414d080067 RCX: ffffffffa96=
+f809a
+[ 3526.331874] RDX: fffffbfff589a1a1 RSI: 0000000000000246 RDI: ffffffffac6=
+70aa0
+[ 3526.331882] RBP: ffff88810d6df9a0 R08: 0000000000000001 R09: ffffffffac4=
+d0d07
+[ 3526.331892] R10: fffffbfff589a1a0 R11: 0000000000000001 R12: 00000881053=
+42000
+[ 3526.332070] R13: 0000000000000001 R14: 0000088105342000 R15: 00000000000=
+00001
+[ 3526.332078] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 3526.332089] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3526.332097] CR2: 0000088105342008 CR3: 0000000116292005 CR4: 00000000003=
+706e0
+[ 3526.332107] Call Trace:
+[ 3526.332115]  page_remove_rmap+0x25/0x4d0
+[ 3526.332125]  zap_huge_pmd+0x22e/0x4e0
+[ 3526.332307]  unmap_page_range+0x128a/0x1530
+[ 3526.332323]  ? vm_normal_page_pmd+0x220/0x220
+[ 3526.332504]  unmap_single_vma+0xc1/0x160
+[ 3526.332520]  unmap_vmas+0x105/0x1b0
+[ 3526.332531]  ? zap_vma_ptes+0x70/0x70
+[ 3526.332710]  ? finish_task_switch.isra.0+0x143/0x3e0
+[ 3526.332723]  ? __kasan_check_write+0x14/0x20
+[ 3526.332735]  ? invalidate_bh_lrus_cpu+0x5a/0x80
+[ 3526.332921]  exit_mmap+0x125/0x320
+[ 3526.332932]  ? do_munmap+0x20/0x20
+[ 3526.333111]  ? __kasan_check_write+0x14/0x20
+[ 3526.333126]  ? mutex_unlock+0x22/0x40
+[ 3526.333136]  mmput+0xae/0x1f0
+[ 3526.333324]  do_exit+0x5a9/0x1200
+[ 3526.333335]  ? kasan_unpoison_task_stack+0x14/0x20
+[ 3526.333519]  ? mm_update_next_owner+0x400/0x400
+[ 3526.333533]  ? do_user_addr_fault+0x4d8/0x880
+[ 3526.333540]  ? fpregs_assert_state_consistent+0x5a/0x70
+[ 3526.333725]  ? exit_to_user_mode_prepare+0x37/0x1b0
+[ 3526.333738]  rewind_stack_do_exit+0x17/0x20
+[ 3526.333924] RIP: 0033:0x7f889de2433e
+[ 3526.333933] Code: Unable to access opcode bytes at RIP 0x7f889de24314.
+[ 3526.333937] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3526.334118] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3526.334127] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3526.334133] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3526.334309] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3526.334318] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3526.334332] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 3526.335315]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 3526.335800] CR2: 0000088105342008
+[ 3526.335809] ---[ end trace 1d17d15d3774d69e ]---
+[ 3526.611787] RIP: 0033:0x7f889de2433e
+[ 3526.611967] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3526.611980] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3526.611990] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3526.611997] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3526.612001] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3526.612176] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3526.612186] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 3526.612196] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3526.612204] CR2: 0000088105342008 CR3: 0000000116292005 CR4: 00000000003=
+706e0
+[ 3526.612210] Fixing recursive fault but reboot is needed!
+[ 3996.251760] clang-11: Corrupted page table at address 7f34d759cf48
+[ 3996.251792] PGD 800000012a69c067 P4D 800000012a69c067 PUD 113e1c067 PMD =
+ffe7a04311540067
+[ 3996.251803] BAD
+[ 3996.251808] Bad pagetable: 000d [#3] SMP KASAN PTI
+[ 3996.251815] CPU: 1 PID: 11000 Comm: clang-11 Tainted: G    B D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 3996.251823] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 3996.251828] RIP: 0033:0x7f34de62f33e
+[ 3996.251835] Code: c8 cd cc cc cc 45 31 d2 41 b8 ff ff ff 7f 45 31 db 41 =
+83 c2 01 44 89 d2 41 89 d2 44 89 c8 44 29 d8 d1 e8 44 01 d8 48 8d 0c 80 <8b=
+> 0c cb 44 21 c1 39 f1 77 28 8d 50 01 39 97 c8 00 00 00 0f 84 8c
+[ 3996.251842] RSP: 002b:00007ffced89c910 EFLAGS: 00010202
+[ 3996.251849] RAX: 000000000000fffb RBX: 00007f34d731d010 RCX: 00000000000=
+4ffe7
+[ 3996.251854] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000020=
+b81e0
+[ 3996.251859] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3996.251863] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffced8=
+9cc00
+[ 3996.251868] R13: 000000008063d59f R14: 00007ffced89cbd0 R15: 00007ffced8=
+9cc00
+[ 3996.251873] FS:  00007f34d8837780 GS:  0000000000000000
+[ 3996.251877] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 3996.252070]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 3996.252156] ---[ end trace 1d17d15d3774d69f ]---
+[ 3996.365591] RIP: 0033:0x7f889de2433e
+[ 3996.365612] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3996.365620] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3996.365625] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3996.365629] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3996.365634] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3996.365638] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3996.365644] FS:  00007f34d8837780(0000) GS:ffff8881cba80000(0000) knlGS:=
+0000000000000000
+[ 3996.365649] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3996.365654] CR2: 00007f34d759cf48 CR3: 0000000110a92005 CR4: 00000000003=
+706e0
+[ 3996.377863] BUG: unable to handle page fault for address: 000008810c4550=
+08
+[ 3996.377877] #PF: supervisor read access in kernel mode
+[ 3996.377882] #PF: error_code(0x0000) - not-present page
+[ 3996.377887] PGD 0 P4D 0
+[ 3996.377899] Oops: 0000 [#4] SMP KASAN PTI
+[ 3996.378081] CPU: 2 PID: 11000 Comm: clang-11 Tainted: G    B D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 3996.378091] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 3996.378095] RIP: 0010:lock_page_memcg+0x22/0x140
+[ 3996.378110] Code: ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 =
+57 41 56 41 55 41 54 49 89 fc 48 83 c7 08 53 48 83 ec 08 e8 1e 97 fd ff <49=
+> 8b 44 24 08 48 8d 50 ff a8 01 4c 0f 45 e2 0f 1f 44 00 00 4d 8d
+[ 3996.378292] RSP: 0018:ffff888128f9f970 EFLAGS: 00010286
+[ 3996.378299] RAX: 0000000000000000 RBX: ffe7a04311540067 RCX: ffffffffa9a=
+df5b2
+[ 3996.378307] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 000008810c4=
+55008
+[ 3996.378315] RBP: ffff888128f9f9a0 R08: 0000000000000001 R09: ffff888113e=
+1c5d7
+[ 3996.378492] R10: ffffed10227c38ba R11: 0000000000000001 R12: 000008810c4=
+55000
+[ 3996.378498] R13: 0000000000000001 R14: 000008810c455000 R15: 00000000000=
+00001
+[ 3996.378503] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 3996.378509] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3996.378517] CR2: 000008810c455008 CR3: 0000000118614002 CR4: 00000000003=
+706e0
+[ 3996.378525] Call Trace:
+[ 3996.378707]  page_remove_rmap+0x25/0x4d0
+[ 3996.378718]  zap_huge_pmd+0x22e/0x4e0
+[ 3996.378730]  unmap_page_range+0x128a/0x1530
+[ 3996.378914]  ? switch_mm_irqs_off+0x30c/0x5c0
+[ 3996.378927]  ? vm_normal_page_pmd+0x220/0x220
+[ 3996.378935]  ? __kasan_check_write+0x14/0x20
+[ 3996.379116]  ? tlb_finish_mmu+0x17e/0x350
+[ 3996.379132]  unmap_single_vma+0xc1/0x160
+[ 3996.379150]  unmap_vmas+0x105/0x1b0
+[ 3996.379164]  ? zap_vma_ptes+0x70/0x70
+[ 3996.379175]  ? finish_task_switch.isra.0+0x143/0x3e0
+[ 3996.379187]  ? __kasan_check_write+0x14/0x20
+[ 3996.379371]  ? invalidate_bh_lrus_cpu+0x5a/0x80
+[ 3996.379395]  exit_mmap+0x125/0x320
+[ 3996.379451]  ? do_munmap+0x20/0x20
+[ 3996.379465]  ? __kasan_check_write+0x14/0x20
+[ 3996.379479]  ? mutex_unlock+0x22/0x40
+[ 3996.379663]  mmput+0xae/0x1f0
+[ 3996.379671]  do_exit+0x5a9/0x1200
+[ 3996.379682]  ? kasan_unpoison_task_stack+0x14/0x20
+[ 3996.379867]  ? mm_update_next_owner+0x400/0x400
+[ 3996.379881]  ? do_user_addr_fault+0x4d8/0x880
+[ 3996.379891]  ? __kasan_check_read+0x11/0x20
+[ 3996.379899]  ? fpregs_assert_state_consistent+0x5a/0x70
+[ 3996.379909]  ? exit_to_user_mode_prepare+0x37/0x1b0
+[ 3996.380091]  rewind_stack_do_exit+0x17/0x20
+[ 3996.380104] RIP: 0033:0x7f34de62f33e
+[ 3996.380109] Code: Unable to access opcode bytes at RIP 0x7f34de62f314.
+[ 3996.380116] RSP: 002b:00007ffced89c910 EFLAGS: 00010202
+[ 3996.380295] RAX: 000000000000fffb RBX: 00007f34d731d010 RCX: 00000000000=
+4ffe7
+[ 3996.380304] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000020=
+b81e0
+[ 3996.380309] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3996.380317] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffced8=
+9cc00
+[ 3996.380493] R13: 000000008063d59f R14: 00007ffced89cbd0 R15: 00007ffced8=
+9cc00
+[ 3996.380505] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 3996.382498]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 3996.383145] CR2: 000008810c455008
+[ 3996.383324] ---[ end trace 1d17d15d3774d6a0 ]---
+[ 3996.611336] RIP: 0033:0x7f889de2433e
+[ 3996.611523] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 3996.611531] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 3996.611539] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 3996.611546] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 3996.611729] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 3996.611737] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 3996.611745] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 3996.611751] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 3996.611755] CR2: 000008810c455008 CR3: 0000000118614002 CR4: 00000000003=
+706e0
+[ 3996.611761] Fixing recursive fault but reboot is needed!
+[ 4025.769018] clang-11: Corrupted page table at address 7f1b42642f48
+[ 4025.769030] PGD 8000000106d24067 P4D 8000000106d24067 PUD 110e83067 PMD =
+ffe7a01818dc0067
+[ 4025.769041] BAD
+[ 4025.769045] Bad pagetable: 000d [#5] SMP KASAN PTI
+[ 4025.769053] CPU: 0 PID: 11479 Comm: clang-11 Tainted: G    B D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 4025.769060] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 4025.769065] RIP: 0033:0x7f1b496d533e
+[ 4025.769073] Code: c8 cd cc cc cc 45 31 d2 41 b8 ff ff ff 7f 45 31 db 41 =
+83 c2 01 44 89 d2 41 89 d2 44 89 c8 44 29 d8 d1 e8 44 01 d8 48 8d 0c 80 <8b=
+> 0c cb 44 21 c1 39 f1 77 28 8d 50 01 39 97 c8 00 00 00 0f 84 8c
+[ 4025.769079] RSP: 002b:00007ffdbefe13f0 EFLAGS: 00010202
+[ 4025.769086] RAX: 000000000000fffb RBX: 00007f1b423c3010 RCX: 00000000000=
+4ffe7
+[ 4025.769091] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 0000000001e=
+211e0
+[ 4025.769096] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 4025.769100] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffdbef=
+e16e0
+[ 4025.769104] R13: 000000008063d59f R14: 00007ffdbefe16b0 R15: 00007ffdbef=
+e16e0
+[ 4025.769109] FS:  00007f1b438dd780 GS:  0000000000000000
+[ 4025.769113] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 4025.769290]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 4025.769377] ---[ end trace 1d17d15d3774d6a1 ]---
+[ 4025.876881] RIP: 0033:0x7f889de2433e
+[ 4025.876904] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 4025.876915] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 4025.876922] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 4025.876929] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 4025.876936] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 4025.876943] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 4025.876951] FS:  00007f1b438dd780(0000) GS:ffff8881cba00000(0000) knlGS:=
+0000000000000000
+[ 4025.876960] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 4025.876967] CR2: 00007f1b42642f48 CR3: 000000011bf94003 CR4: 00000000003=
+706f0
+[ 4025.892281] BUG: unable to handle page fault for address: 0000088060bbb0=
+08
+[ 4025.892290] #PF: supervisor read access in kernel mode
+[ 4025.892295] #PF: error_code(0x0000) - not-present page
+[ 4025.892300] PGD 0 P4D 0
+[ 4025.892307] Oops: 0000 [#6] SMP KASAN PTI
+[ 4025.892314] CPU: 2 PID: 11479 Comm: clang-11 Tainted: G    B D          =
+ 5.13.0-rc2-next-20210520 #1
+[ 4025.892321] Hardware name: LG Electronics                   15U560-GR5PK=
+/15U560, BIOS 15UA1730 X64 05/29/2017
+[ 4025.892327] RIP: 0010:lock_page_memcg+0x22/0x140
+[ 4025.892337] Code: ff ff 66 0f 1f 44 00 00 0f 1f 44 00 00 55 48 89 e5 41 =
+57 41 56 41 55 41 54 49 89 fc 48 83 c7 08 53 48 83 ec 08 e8 1e 97 fd ff <49=
+> 8b 44 24 08 48 8d 50 ff a8 01 4c 0f 45 e2 0f 1f 44 00 00 4d 8d
+[ 4025.892343] RSP: 0018:ffff88810531f970 EFLAGS: 00010286
+[ 4025.892350] RAX: 0000000000000000 RBX: ffe7a0182eec0067 RCX: ffffffffa9a=
+df5b2
+[ 4025.892355] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 0000088060b=
+bb008
+[ 4025.892359] RBP: ffff88810531f9a0 R08: 0000000000000001 R09: ffff888110e=
+83097
+[ 4025.892364] R10: ffffed10221d0612 R11: 0000000000000001 R12: 0000088060b=
+bb000
+[ 4025.892369] R13: 0000000000000001 R14: 0000088060bbb000 R15: 00000000000=
+00001
+[ 4025.892373] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 4025.892379] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 4025.892384] CR2: 0000088060bbb008 CR3: 000000011279c001 CR4: 00000000003=
+706e0
+[ 4025.892389] Call Trace:
+[ 4025.892394]  page_remove_rmap+0x25/0x4d0
+[ 4025.892404]  zap_huge_pmd+0x22e/0x4e0
+[ 4025.892412]  unmap_page_range+0x128a/0x1530
+[ 4025.892423]  ? vm_normal_page_pmd+0x220/0x220
+[ 4025.892432]  unmap_single_vma+0xc1/0x160
+[ 4025.892440]  unmap_vmas+0x105/0x1b0
+[ 4025.892447]  ? zap_vma_ptes+0x70/0x70
+[ 4025.892454]  ? finish_task_switch.isra.0+0x143/0x3e0
+[ 4025.892461]  ? __kasan_check_write+0x14/0x20
+[ 4025.892470]  ? invalidate_bh_lrus_cpu+0x5a/0x80
+[ 4025.892479]  exit_mmap+0x125/0x320
+[ 4025.892486]  ? do_munmap+0x20/0x20
+[ 4025.892493]  ? __kasan_check_write+0x14/0x20
+[ 4025.892501]  ? mutex_unlock+0x22/0x40
+[ 4025.892510]  mmput+0xae/0x1f0
+[ 4025.892519]  do_exit+0x5a9/0x1200
+[ 4025.892525]  ? kasan_unpoison_task_stack+0x14/0x20
+[ 4025.892534]  ? mm_update_next_owner+0x400/0x400
+[ 4025.892541]  ? do_user_addr_fault+0x4d8/0x880
+[ 4025.892548]  ? fpregs_assert_state_consistent+0x5a/0x70
+[ 4025.892557]  ? exit_to_user_mode_prepare+0x37/0x1b0
+[ 4025.892566]  rewind_stack_do_exit+0x17/0x20
+[ 4025.892575] RIP: 0033:0x7f1b496d533e
+[ 4025.892580] Code: Unable to access opcode bytes at RIP 0x7f1b496d5314.
+[ 4025.892584] RSP: 002b:00007ffdbefe13f0 EFLAGS: 00010202
+[ 4025.892590] RAX: 000000000000fffb RBX: 00007f1b423c3010 RCX: 00000000000=
+4ffe7
+[ 4025.892595] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 0000000001e=
+211e0
+[ 4025.892599] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 4025.892604] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffdbef=
+e16e0
+[ 4025.892608] R13: 000000008063d59f R14: 00007ffdbefe16b0 R15: 00007ffdbef=
+e16e0
+[ 4025.892787] Modules linked in: rfcomm xt_nat xt_tcpudp xt_conntrack xt_M=
+ASQUERADE nf_conntrack_netlink nfnetlink xfrm_user xfrm_algo xt_addrtype ip=
+table_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 =
+libcrc32c bpfilter br_netfilter bridge stp llc ccm cmac algif_hash algif_sk=
+cipher overlay af_alg bnep binfmt_misc nls_iso8859_1 snd_hda_codec_hdmi snd=
+_hda_codec_conexant snd_hda_codec_generic ledtrig_audio intel_rapl_msr inte=
+l_rapl_common x86_pkg_temp_thermal intel_powerclamp coretemp i915 iwlmvm kv=
+m_intel snd_hda_intel kvm mac80211 snd_intel_dspcfg snd_hda_codec crct10dif=
+_pclmul libarc4 btusb crc32_pclmul snd_hwdep uvcvideo snd_hda_core ghash_cl=
+mulni_intel hid_generic btrtl mei_hdcp wmi_bmof iwlwifi aesni_intel btbcm c=
+rypto_simd videobuf2_vmalloc btintel cryptd videobuf2_memops snd_pcm videob=
+uf2_v4l2 rapl videobuf2_common bluetooth videodev snd_seq intel_cstate cfg8=
+0211 input_leds joydev usbhid efi_pstore mc i2c_algo_bit at24 hid ecdh_gene=
+ric serio_raw ecc snd_timer
+[ 4025.894295]  drm_kms_helper snd_seq_device lg_laptop sparse_keymap sysco=
+pyarea sysfillrect wmi sysimgblt snd fb_sys_fops cec mei_me rc_core soundco=
+re video mei acpi_pad mac_hid intel_xhci_usb_role_switch intel_pch_thermal =
+sch_fq_codel drm parport_pc ppdev lp parport ip_tables x_tables autofs4 rts=
+x_pci_sdmmc r8169 xhci_pci rtsx_pci realtek i2c_i801 xhci_pci_renesas psmou=
+se i2c_smbus ahci libahci
+[ 4025.894454] CR2: 0000088060bbb008
+[ 4025.894463] ---[ end trace 1d17d15d3774d6a2 ]---
+[ 4026.239403] RIP: 0033:0x7f889de2433e
+[ 4026.239420] RSP: 002b:00007ffd0471d920 EFLAGS: 00010202
+[ 4026.239433] RAX: 000000000000fffb RBX: 00007f8896b12010 RCX: 00000000000=
+4ffe7
+[ 4026.239442] RDX: 0000000000000001 RSI: 000000000063d59f RDI: 00000000006=
+301e0
+[ 4026.239641] RBP: 000000008063d5a2 R08: 000000007fffffff R09: 00000000000=
+1fff7
+[ 4026.239651] R10: 0000000000000001 R11: 0000000000000000 R12: 00007ffd047=
+1dc10
+[ 4026.239660] R13: 000000008063d59f R14: 00007ffd0471dbe0 R15: 00007ffd047=
+1dc10
+[ 4026.239670] FS:  0000000000000000(0000) GS:ffff8881cbb00000(0000) knlGS:=
+0000000000000000
+[ 4026.239679] CS:  0033 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 4026.239880] CR2: 0000088060bbb008 CR3: 000000011279c001 CR4: 00000000003=
+706e0
+[ 4026.239892] Fixing recursive fault but reboot is needed!
 
-Non-merge commits (relative to Linus' tree): 5086
- 4996 files changed, 232851 insertions(+), 78928 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-and sparc64 defconfig and htmldocs. And finally, a simple boot test
-of the powerpc pseries_le_defconfig kernel in qemu (with and without
-kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 331 trees (counting Linus' and 89 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---=20
-Cheers,
-Stephen Rothwell
-
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (97e5bf604b7a Merge branch 'for-5.13-fixes' of git://=
-git.kernel.org/pub/scm/linux/kernel/git/dennis/percpu)
-Merging fixes/fixes (c06a2ba62fc4 Merge tag 'docs-5.13-3' of git://git.lwn.=
-net/linux)
-Merging kbuild-current/fixes (c4681547bcce Linux 5.13-rc3)
-Merging arc-current/for-curr (d07f6ca923ea Linux 5.13-rc2)
-Merging arm-current/fixes (d2f7eca60b29 ARM: 9071/1: uprobes: Don't hook on=
- thumb instructions)
-Merging arm64-fixes/for-next/fixes (e69012400b0c arm64: mm: don't use CON a=
-nd BLK mapping if KFENCE is enabled)
-Merging arm-soc-fixes/arm/fixes (d37316b72e8b ARM: npcm: wpcm450: select in=
-terrupt controller driver)
-Merging drivers-memory-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging m68k-current/for-linus (34e5269bf987 m68k: sun3x: Remove unneeded s=
-emicolon)
-Merging powerpc-fixes/fixes (d72500f99284 powerpc/64s/syscall: Fix ptrace s=
-yscall info with scv syscalls)
-Merging s390-fixes/fixes (ffa99c436aa7 Merge tag 'vfio-ccw-20210520' of htt=
-ps://git.kernel.org/pub/scm/linux/kernel/git/kvms390/vfio-ccw into fixes)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (d19d8d345eec fscrypt: fix inline encryp=
-tion not used on new files)
-Merging net/master (fb91702b743d net/sched: act_ct: Fix ct template allocat=
-ion for zone 0)
-Merging bpf/master (ff2e6efda0d5 kbuild: Quote OBJCOPY var to avoid a pahol=
-e call break the build)
-Merging ipsec/master (b515d2637276 xfrm: xfrm_state_mtu should return at le=
-ast 1280 for ipv6)
-Merging netfilter/master (56e4ee82e850 ipvs: ignore IP_VS_SVC_F_HASHED flag=
- when adding service)
-Merging ipvs/master (414ed7fe863a Merge git://git.kernel.org/pub/scm/linux/=
-kernel/git/pablo/nf)
-Merging wireless-drivers/master (2c2bdd2372af mt76: validate rx A-MSDU subf=
-rames)
-Merging mac80211/master (b81ac7841d51 net: cdc_eem: fix URL to CDC EEM 1.0 =
-spec)
-Merging rdma-fixes/for-rc (c4681547bcce Linux 5.13-rc3)
-Merging sound-current/for-linus (50dbfae972cb ALSA: hda/realtek: fix mute/m=
-icmute LEDs and speaker for HP Zbook Fury 17 G8)
-Merging sound-asoc-fixes/for-linus (d131d9eeb1eb Merge remote-tracking bran=
-ch 'asoc/for-5.13' into asoc-linus)
-Merging regmap-fixes/for-linus (c4681547bcce Linux 5.13-rc3)
-Merging regulator-fixes/for-linus (2776584b8d8b Merge remote-tracking branc=
-h 'regulator/for-5.13' into regulator-linus)
-Merging spi-fixes/for-linus (3efe28470745 Merge remote-tracking branch 'spi=
-/for-5.13' into spi-linus)
-Merging pci-current/for-linus (85aabbd7b315 PCI/MSI: Fix MSIs for generic h=
-osts that use device-tree's "msi-map")
-Merging driver-core.current/driver-core-linus (0c8713153fbf drivers: base: =
-Reduce device link removal code duplication)
-Merging tty.current/tty-linus (9808f9be31c6 serial: 8250_pci: handle FL_NOI=
-RQ board flag)
-Merging usb.current/usb-linus (a7f2e9272aff xhci: Fix 5.12 regression of mi=
-ssing xHC cache clearing command after a Stall)
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (56df0c758aff USB: serial: omninet: upda=
-te driver description)
-Merging usb-chipidea-fixes/for-usb-fixes (a9aecef198fa usb: cdnsp: Fix dead=
-lock issue in cdnsp_thread_irq_handler)
-Merging phy/fixes (7c2fc79250ca phy: usb: Fix misuse of IS_ENABLED)
-Merging staging.current/staging-linus (54732a5322ff Merge tag 'iio-fixes-5.=
-13b-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio int=
-o staging-linus)
-Merging iio-fixes/fixes-togreg (ad873b492222 iio: accel: bmc150: Don't make=
- the remove function of the second accelerometer unregister itself)
-Merging char-misc.current/char-misc-linus (bbf0a94744ed mei: request autosu=
-spend after sending rx flow control)
-Merging soundwire-fixes/fixes (da096fbccd52 soundwire: qcom: fix handling o=
-f qcom,ports-block-pack-mode)
-Merging thunderbolt-fixes/fixes (22c7a18ed5f0 thunderbolt: usb4: Fix NVM re=
-ad buffer bounds and offset issue)
-Merging input-current/for-linus (0b1d6c8c0015 Input: xpad - map "Select" bu=
-tton on Microsoft Xbox One controller)
-Merging crypto-current/master (e3a606f2c544 fsverity: relax build time depe=
-ndency on CRYPTO_SHA256)
-Merging ide/master (6800cd8cbc6e ide-acpi: use %*ph to print small buffer)
-Merging vfio-fixes/for-linus (dc51ff91cf2d vfio/platform: fix module_put ca=
-ll in error flow)
-Merging kselftest-fixes/fixes (d07f6ca923ea Linux 5.13-rc2)
-Merging modules-fixes/modules-linus (055f23b74b20 module: check for exit se=
-ctions in layout_sections() instead of module_init_section())
-Merging dmaengine-fixes/fixes (538ea65a9fd1 dmaengine: xilinx: dpdma: initi=
-alize registers before request_irq)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (562b4e91d3b2 mtd: parsers: ofpart: fix parsing=
- subpartitions)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging reset-fixes/reset/fixes (b460e0a9e240 reset: intel: add unspecified=
- HAS_IOMEM dependency)
-Merging mips-fixes/mips-fixes (78cf0eb926cb MIPS: Fix kernel hang under FUN=
-CTION_GRAPH_TRACER and PREEMPT_TRACER)
-Merging at91-fixes/at91-fixes (2c69c8a1736e ARM: dts: at91: sam9x60: fix mu=
-x-mask to match product's datasheet)
-Merging omap-fixes/fixes (bae989c4bc53 ARM: OMAP1: ams-delta: remove unused=
- function ams_delta_camera_power)
-Merging kvm-fixes/master (9805cf03fdb6 KVM: LAPIC: Narrow the timer latency=
- between wait_lapic_expire and world switch)
-Merging kvms390-fixes/master (735931f9a51a MAINTAINERS: add uv.c also to KV=
-M/s390)
-Merging hwmon-fixes/hwmon (f0fb26c456a3 hwmon/pmbus: (q54sj108a2) The PMBUS=
-_MFR_ID is actually 6 chars instead of 5)
-Merging nvdimm-fixes/libnvdimm-fixes (de80d5781136 Merge branch 'for-5.13/d=
-ax' into libnvdimm-fixes)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (4ef0676a1677 Merge branch 'misc-5.13' into =
-next-fixes)
-Merging vfs-fixes/fixes (173e84953eaa fs: fix reporting supported extra fil=
-e attributes for statx())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (c0e0436cb4f6 platform/x86: thinkpad_acpi: =
-Add X1 Carbon Gen 9 second fan support)
-Merging samsung-krzk-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging pinctrl-samsung-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging devicetree-fixes/dt/linus (c17611592d96 dt-bindings: More removals =
-of type references on common properties)
-Merging scsi-fixes/fixes (2ef7665dfd88 scsi: target: qla2xxx: Wait for stop=
-_phase1 at WWN removal)
-Merging drm-fixes/drm-fixes (dd6ad0516ee3 Merge tag 'amd-drm-fixes-5.13-202=
-1-05-19' of https://gitlab.freedesktop.org/agd5f/linux into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (e11851429fdc drm/i915: Reenab=
-le LTTPR non-transparent LT mode for DPCD_REV<1.4)
-Merging mmc-fixes/fixes (c4681547bcce Linux 5.13-rc3)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (a38fd8748464 Linux 5.12-rc2)
-Merging hyperv-fixes/hyperv-fixes (292d788c64eb drivers: hv: Fix missing er=
-ror code in vmbus_connect())
-Merging soc-fsl-fixes/fix (2663b3388551 soc: fsl: dpio: Get the cpumask thr=
-ough cpumask_of(cpu))
-Merging risc-v-fixes/fixes (bab0d47c0ebb riscv: kexec: Fix W=3D1 build warn=
-ings)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (2e8496f31d0b firmware: stratix10-svc: reset COMMA=
-ND_RECONFIG_FLAG_PARTIAL to 0)
-Merging spdx/spdx-linus (6efb943b8616 Linux 5.13-rc1)
-Merging gpio-brgl-fixes/gpio/for-current (dbec64b11c65 gpio: wcd934x: Fix s=
-hift-out-of-bounds error)
-Merging gpio-intel-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging pinctrl-intel-fixes/fixes (6efb943b8616 Linux 5.13-rc1)
-Merging erofs-fixes/fixes (0852b6ca941e erofs: fix 1 lcluster-sized pcluste=
-r for big pcluster)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (d7eab3df8f39 Documentation: kunit: Update =
-kunit_tool page)
-Merging ubifs-fixes/fixes (78c7d49f55d8 ubifs: journal: Make sure to not di=
-rty twice for auth nodes)
-Merging memblock-fixes/fixes (17cbe03872be mm/memblock: Fix typo in comment=
- of memblock_phys_alloc_try_nid())
-Merging cel-fixes/for-rc (9f4ad9e425a1 Linux 5.12)
-Merging drm-misc-fixes/for-linux-next-fixes (35f819d21803 drm/ttm: Skip swa=
-pout if ttm object is not populated)
-Merging kspp-gustavo/for-next/kspp (53004ee78d62 xfs: Fix fall-through warn=
-ings for Clang)
-Merging kbuild/for-next (c39013ee64b5 kbuild: clean up ${quiet} checks in s=
-hell scripts)
-Merging compiler-attributes/compiler-attributes (ca0760e7d79e Compiler Attr=
-ibutes: Add continue in comment)
-Merging dma-mapping/for-next (a7f3d3d3600c dma-mapping: add unlikely hint t=
-o error path in dma_mapping_error)
-Merging asm-generic/master (14462376858e Merge branch 'asm-generic-unaligne=
-d' into asm-generic)
-Merging arc/for-next (def9d2780727 Linux 5.5-rc7)
-Merging arm/for-next (d3506d256d94 Merge branch 'misc' into for-next)
-Merging arm64/for-next/core (f96ff4e07147 Merge branch 'for-next/sve' into =
-for-next/core)
-Merging arm-perf/for-next/perf (2c2e21e78a94 arm64: perf: Remove redundant =
-initialization in perf_event.c)
-Merging arm-soc/for-next (b433d090ac63 MAINTAINERS: ARM/Amlogic SoCs: add N=
-eil as primary maintainer)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging aspeed/for-next (61fbc42084f4 Merge branches 'wpcm450-for-v5.13', '=
-dt-for-v5.13' and 'lpc-for-v5.13' into for-next)
-Merging at91/at91-next (969bbb49f36c Merge branch 'at91-dt' into at91-next)
-Merging drivers-memory/for-next (76e5624f3f93 memory: pl353: Fix error retu=
-rn code in pl353_smc_probe())
-Merging imx-mxs/for-next (2f875c387c54 Merge branch 'imx/defconfig' into fo=
-r-next)
-Merging keystone/next (9d2e21ed98a2 Merge branch 'for_5.12/drivers-soc' int=
-o next)
-Merging mediatek/for-next (fd450fd2a4fb Merge branch 'v5.13-next/soc' into =
-for-next)
-Merging mvebu/for-next (79e93f9dc81a Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (3f89af8097bd Merge branch 'omap-for-v5.14/dt' into f=
-or-next)
-Merging qcom/for-next (a75b593cb73f Merge branch 'drivers-for-5.14' into fo=
-r-next)
-Merging raspberrypi/for-next (fbdcf1d20126 ARM: dts: bcm2711: Add the CEC i=
-nterrupt controller)
-CONFLICT (content): Merge conflict in arch/arm/boot/dts/bcm2711.dtsi
-Merging renesas/next (dcd770bc1114 Merge branch 'renesas-arm-dt-for-v5.14' =
-into renesas-next)
-Merging reset/reset/next (e207457f9045 reset: brcmstb: Add missing MODULE_D=
-EVICE_TABLE)
-Merging rockchip/for-next (dd1599446681 Merge branch 'v5.14-clk/next' into =
-for-next)
-Merging samsung-krzk/for-next (70dba4ef13c5 Merge branch 'next/soc' into fo=
-r-next)
-Merging scmi/for-linux-next (c8c75e04118e Merge branch 'for-next/ffa' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-lin=
-ux-next)
-Merging stm32/stm32-next (6ed9269265e1 ARM: dts: stm32: Add PTP clock to Et=
-hernet controller)
-Merging sunxi/sunxi/for-next (2b4f0bf55549 Merge branches 'sunxi/clk-fixes-=
-for-5.13', 'sunxi/dt-for-5.14' and 'sunxi/fixes-for-5.13' into sunxi/for-ne=
-xt)
-Merging tegra/for-next (93b9ea9ca307 Merge branch for-5.13/arm64/dt into fo=
-r-next)
-Merging ti-k3/ti-k3-next (1e3d655fe7b4 Merge branch 'ti-k3-config-next' int=
-o ti-k3-next)
-Merging ti-k3-new/ti-k3-next (547be9a05dc8 arm64: dts: ti: k3-am65-iot2050-=
-common: Disable mailbox nodes)
-Merging xilinx/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging clk/clk-next (6efb943b8616 Linux 5.13-rc1)
-Merging clk-imx/for-next (faa1847d03a2 clk: imx: scu: add enet rgmii gpr cl=
-ocks)
-Merging clk-renesas/renesas-clk (790c06cc5df2 clk: renesas: r8a77995: Add Z=
-A2 clock)
-Merging clk-samsung/for-next (a38fd8748464 Linux 5.12-rc2)
-Merging csky/linux-next (280af034a71d csky: Kconfig: Remove unused selects)
-Merging h8300/h8300-next (6e5e55227c95 Merge tag 'v5.11' into h8300-next)
-Merging m68k/for-next (eeff86b6d18c m68k: dma: Remove unnecessary include o=
-f asm/cacheflush.h)
-Merging m68knommu/for-next (c4681547bcce Linux 5.13-rc3)
-Merging microblaze/next (6efb943b8616 Linux 5.13-rc1)
-Merging mips/mips-next (b35ef2dd1675 mips: dts: loongson: fix DTC unit name=
- warnings)
-Merging nds32/next (40e0dd851e7b nds32: Fix bogus reference to <asm/procinf=
-o.h>)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (8b549c18ae81 openrisc: Define memory barrier mb)
-Merging parisc-hd/for-next (9f4ad9e425a1 Linux 5.12)
-Merging powerpc/next (b73c8cccd72a powerpc/kprobes: Replace ppc_optinsn by =
-common optinsn)
-Merging soc-fsl/next (242b0b398ccd soc: fsl: enable acpi support in RCPM dr=
-iver)
-Merging risc-v/for-next (37a7a2a10ec5 riscv: Turn has_fpu into a static key=
- if FPU=3Dy)
-Merging s390/for-next (0a915a2f7150 Merge branch 'features' into for-next)
-Merging sh/for-next (2882b7626f49 sh: kernel: traps: remove unused variable)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (ed102bf2afed um: Fix W=3D1 missing-include-dirs war=
-nings)
-Merging xtensa/xtensa-for-next (21e0c3d5f633 xtensa: fix kconfig unmet depe=
-ndency warning for HAVE_FUTEX_CMPXCHG)
-Merging pidfd/for-next (2ca4dcc4909d fs/mount_setattr: tighten permission c=
-hecks)
-Merging fscrypt/master (a14d0b676491 fscrypt: allow deleting files with uns=
-upported encryption policy)
-Merging fscache/fscache-next (3003bbd0697b afs: Use the netfs_write_begin()=
- helper)
-Merging afs/afs-next (7af08140979a Revert "gcov: clang: fix clang-11+ build=
-")
-Merging btrfs/for-next (2166641a8734 Merge branch 'for-next-next-v5.13-2021=
-0527' into for-next-20210527)
-Merging ceph/master (f8234d7b1fb3 libceph: kill ceph_none_authorizer::reply=
-_buf)
-Merging cifs/for-next (0f2fe00a66d8 cifs: change format of CIFS_FULL_KEY_DU=
-MP ioctl)
-Merging cifsd/cifsd-for-next (bfe6cb0ce5dd Merge pull request #50 from namj=
-aejeon/cifsd-for-next)
-Merging configfs/for-next (7fe1e79b59ba configfs: implement the .read_iter =
-and .write_iter methods)
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (c439c3306fea erofs: remove the occupied parameter from z=
-_erofs_pagevec_enqueue())
-Merging exfat/dev (b741596468b0 Merge tag 'riscv-for-linus-5.13-mw1' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux)
-Merging ext3/for_next (a5882ee966b1 Pull disabling of quotactl_path syscall=
-. Merge branch 'for_next_testing' into for_next)
-Merging ext4/dev (6c0912739699 ext4: wipe ext4_dir_entry2 upon file deletio=
-n)
-Merging f2fs/dev (fe40db607855 f2fs: support RO feature)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (3c9c14338c12 cuse: simplify refcount)
-Merging jfs/jfs-next (cf1031ed4752 jfs: Remove trailing semicolon in macros)
-Merging nfs/linux-next (a799b68a7c7a nfs: Remove trailing semicolon in macr=
-os)
-Merging nfs-anna/linux-next (4f8be1f53bf6 nfs: we don't support removing sy=
-stem.nfs4_acl)
-Merging nfsd/nfsd-next (1808d90e8458 NFSD add vfs_fsync after async copy is=
- done)
-Merging cel/for-next (b9f83ffaa0c0 SUNRPC: Fix null pointer dereference in =
-svc_rqst_free())
-Merging orangefs/for-next (211f9f2e0503 orangefs: leave files in the page c=
-ache for a few micro seconds at least)
-Merging overlayfs/overlayfs-next (5e717c6fa41f ovl: add debug print to ovl_=
-do_getxattr())
-Merging ubifs/next (9a29f7f020e0 ubi: Remove unnecessary struct declaration)
-Merging v9fs/9p-next (cba7dcd8878e 9p/trans_virtio: Remove sysfs file on pr=
-obe failure)
-Merging xfs/for-next (0fe0bbe00a6f xfs: bunmapi has unnecessary AG lock ord=
-ering issues)
-Merging zonefs/for-next (6980d29ce4da zonefs: fix to update .i_wr_refcnt co=
-rrectly in zonefs_open_zone())
-Merging iomap/iomap-for-next (6e552494fb90 iomap: remove unused private fie=
-ld from ioend)
-Merging djw-vfs/vfs-for-next (9b8523423b23 vfs: move __sb_{start,end}_write=
-* to fs.h)
-Merging file-locks/locks-next (cbe6fc4e0142 fs/locks: remove useless assign=
-ment in fcntl_getlk)
-Merging vfs/for-next (e8727aec724e Merge branch 'work.misc' into for-next)
-Merging printk/for-next (7e4e0a140346 Merge branch 'for-5.14-vsprintf-scanf=
-' into for-next)
-Merging pci/next (6efb943b8616 Linux 5.13-rc1)
-Merging pstore/for-next/pstore (9d843e8fafc7 pstore: Add mem_type property =
-DT parsing support)
-Merging hid/for-next (84b5e4d4ad37 Merge branches 'for-5.13/upstream-fixes'=
-, 'for-5.14/core', 'for-5.14/google', 'for-5.14/intel-ish' and 'for-5.14/lo=
-gitech' into for-next)
-Merging i2c/i2c/for-next (0d422289f261 Merge branch 'i2c/for-5.14' into i2c=
-/for-next)
-Merging i3c/i3c/next (0d95f41ebde4 Revert "i3c master: fix missing destroy_=
-workqueue() on error in i3c_master_register")
-Merging dmi/dmi-for-next (3cb4d29a2633 MAINTAINERS: The DMI/SMBIOS tree has=
- moved)
-Merging hwmon-staging/hwmon-next (fc49fecb6518 hwmon: (max31790) Add suppor=
-t for fanX_min attributes)
-Merging jc_docs/docs-next (c8237760cc56 docs: zh_CN: update Chinese transla=
-tions)
-Merging v4l-dvb/master (71c689dc2e73 media: v4l2-ctrls: split up into four =
-source files)
-Merging v4l-dvb-next/master (71c689dc2e73 media: v4l2-ctrls: split up into =
-four source files)
-Merging pm/linux-next (b2864f8ca01d Merge branch 'pm-cpufreq' into linux-ne=
-xt)
-Merging cpufreq-arm/cpufreq/arm/linux-next (4814d9c5d3b9 cpufreq: dt: Renam=
-e black/white-lists)
-Merging cpupower/cpupower (d07f6ca923ea Linux 5.13-rc2)
-Merging devfreq/devfreq-next (a15fc9aa5b38 PM / devfreq: imx8m-ddrc: Remove=
- DEVFREQ_GOV_SIMPLE_ONDEMAND dependency)
-Merging opp/opp/linux-next (ac9fd3c80340 opp: use list_del_init instead of =
-list_del/INIT_LIST_HEAD)
-Merging thermal/thermal/linux-next (c310e546164d thermal/drivers/mtk_therma=
-l: Remove redundant initializations of several variables)
-Merging dlm/next (7d3848c03e09 fs: dlm: Fix spelling mistake "stucked" -> "=
-stuck")
-Merging swiotlb/linux-next (dfc06b389a4f swiotlb: don't override user speci=
-fied size in swiotlb_adjust_size)
-Merging rdma/for-next (331859d320f5 RDMA/hns: Remove unused CMDQ member)
-Merging net-next/master (af9207adb6d9 Merge tag 'mlx5-updates-2021-05-26' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux)
-CONFLICT (content): Merge conflict in net/core/devlink.c
-Merging bpf-next/for-next (d6a6a55518c1 libbpf: Move BPF_SEQ_PRINTF and BPF=
-_SNPRINTF to bpf_helpers.h)
-Merging ipsec-next/master (a925316af80a net: Remove unnecessary variables)
-Merging mlx5-next/mlx5-next (63f9c44bca5e net/mlx5: Add MEMIC operations re=
-lated bits)
-Merging netfilter-next/master (845064d752ce netfilter: Remove leading space=
-s in Kconfig)
-CONFLICT (content): Merge conflict in net/netfilter/nft_set_pipapo.c
-Applying: fix up for merge involving nft_pipapo_lookup()
-Merging ipvs-next/master (ea89c862f01e net: mana: Use struct_size() in kzal=
-loc())
-Merging wireless-drivers-next/master (5ada57a9a6b0 Merge git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/netdev/net)
-Merging bluetooth/master (10847cf32d5c Bluetooth: hci_h5: Add RTL8822CS cap=
-abilities)
-Merging mac80211-next/master (77091933e453 net: mdio: ipq8064: enlarge slee=
-p after read/write operation)
-Merging gfs2/for-next (75069590915f gfs2: Fix do_gfs2_set_flags description)
-Merging mtd/mtd/next (10f3b4d79958 mtd: parsers: qcom: Fix leaking of parti=
-tion name)
-Merging nand/nand/next (c374839f9b44 mtd: spinand: macronix: Add support fo=
-r serial NAND flash)
-Merging spi-nor/spi-nor/next (a6e2cd4dd28e mtd: spi-nor: otp: fix kerneldoc=
- typos)
-Merging crypto/master (a6f8e68e238a crypto: ccp - Fix a resource leak in an=
- error handling path)
-Merging drm/drm-next (5522e9f7b0fb Merge v5.13-rc3 into drm-next)
-Merging drm-misc/for-linux-next (c4eaba3853ed drm/fourcc: Remove struct drm=
-_format_buf_name)
-Merging amdgpu/drm-next (fbbfc78d113b drm/radeon: Add HD-audio component no=
-tifier support (v2))
-Merging drm-intel/for-linux-next (40e40e63f7be drm/i915/display: relax 2big=
- checking around initial fb)
-Merging drm-tegra/drm/tegra/for-next (c79184a9c029 drm/tegra: Fix shift ove=
-rflow in tegra_shared_plane_atomic_update)
-Merging drm-msm/msm-next (8dbde399044b drm/msm/dp: handle irq_hpd with sink=
-_count =3D 0 correctly)
-Merging imx-drm/imx-drm/next (fc1e985b67f9 drm/imx: ipuv3-plane: add color =
-encoding and range properties)
-Merging etnaviv/etnaviv/next (4bfdd2aa67fb drm/etnaviv: rework linear windo=
-w offset calculation)
-Merging regmap/for-next (4c82343a5c83 Merge remote-tracking branch 'regmap/=
-for-5.14' into regmap-next)
-Merging sound/for-next (d955782da290 ALSA: hda/ca0132: Make a const array s=
-tatic, makes object smaller)
-Merging sound-asoc/for-next (c48946560df6 Merge remote-tracking branch 'aso=
-c/for-5.14' into asoc-next)
-Merging modules/modules-next (2c0f0f363956 module: correctly exit module_ka=
-llsyms_on_each_symbol when fn() !=3D 0)
-Merging input/next (6cf3b3abbf0b Input: cyttsp - obtain regulators)
-Merging block/for-next (3fc19ec34392 Merge branch 'for-5.14/libata' into fo=
-r-next)
-Merging device-mapper/for-next (631c05a547da dm table: Constify static stru=
-ct blk_ksm_ll_ops)
-Merging pcmcia/pcmcia-next (e9d503fef7da pcmcia: rsrc_nonstatic: Fix call-b=
-ack function as reference formatting)
-Merging mmc/next (47f4bdf989c0 mmc: sdhci-of-aspeed: Configure the SDHCIs a=
-s specified by the devicetree.)
-Merging mfd/for-mfd-next (d7bf6f0025db mfd: si476x-i2c: Fix incorrectly doc=
-umented function names)
-Merging backlight/for-backlight-next (6fc632d3e3e0 video: backlight: qcom-w=
-led: Add PMI8994 compatible)
-Merging battery/for-next (2aac79d14d76 power: supply: sc2731_charger: Add m=
-issing MODULE_DEVICE_TABLE)
-Merging regulator/for-next (0c4fad8c4522 Merge remote-tracking branch 'regu=
-lator/for-5.14' into regulator-next)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (d108370c644b apparmor: fix error check)
-Merging integrity/next-integrity (49219d9b8785 evm: fix writing <securityfs=
->/evm overflow)
-Merging keys/keys-next (e377c31f788f integrity: Load mokx variables into th=
-e blacklist keyring)
-CONFLICT (content): Merge conflict in certs/system_keyring.c
-Merging safesetid/safesetid-next (1ca86ac1ec8d LSM: SafeSetID: Fix code spe=
-cification by scripts/checkpatch.pl)
-Merging selinux/next (869cbeef18e5 lsm_audit,selinux: pass IB device name b=
-y reference)
-Merging smack/next (0169d8f33ab7 Revert "Smack: Handle io_uring kernel thre=
-ad privileges")
-Merging tomoyo/master (6efb943b8616 Linux 5.13-rc1)
-Merging tpmdd/next (8ac91e6c6033 Merge tag 'for-5.13-rc2-tag' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/kdave/linux)
-Merging watchdog/master (c4681547bcce Linux 5.13-rc3)
-Merging iommu/next (a2bf39204785 Merge branch 'iommu/fixes' into next)
-Merging audit/next (254c8b96c4af audit: add blank line after variable decla=
-rations)
-Merging devicetree/for-next (70c1fc34f3c6 dt-bindings: rng: mediatek: add m=
-t8365 to mtk rng binding)
-Merging mailbox/mailbox-for-next (2335f556b3af dt-bindings: mailbox: qcom-i=
-pcc: Add compatible for SC7280)
-Merging spi/for-next (aa946f04d384 Merge remote-tracking branch 'spi/for-5.=
-14' into spi-next)
-Merging tip/auto-latest (19c0a3af4ad1 Merge branch 'efi/core')
-Merging clockevents/timers/drivers/next (8120891105ba dt-bindings: timer: n=
-uvoton,npcm7xx: Add wpcm450-timer)
-Merging edac/edac-for-next (e8049c4aa5d8 MAINTAINERS: Make Yazen Ghannam ma=
-intainer for EDAC-AMD64)
-Merging irqchip/irq/irqchip-next (fbb80d5ad400 irqchip: Remove redundant er=
-ror printing)
-Merging ftrace/for-next (eb01f5353bda tracing: Handle %.*s in trace_check_v=
-printf())
-Merging rcu/rcu/next (c44a4c385913 docs: Fix a typo in Documentation/RCU/st=
-allwarn.rst)
-Merging kvm/next (a4345a7cecfb Merge tag 'kvmarm-fixes-5.13-1' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvm-arm/next (9a8aae605b80 Merge branch 'kvm-arm64/kill_oprofile_de=
-pendency' into kvmarm-master/next)
-Merging kvm-ppc/kvm-ppc-next (72476aaa4691 KVM: PPC: Book3S HV: Fix host ra=
-dix SLB optimisation with hash guests)
-Merging kvms390/next (44bada282190 KVM: s390: fix guarded storage control r=
-egister handling)
-Merging xen-tip/linux-next (c81d3d246025 xen-pciback: reconfigure also from=
- backend watch handler)
-Merging percpu/for-next (7b92d0f97d9b Merge branch 'for-5.14' into for-next)
-Merging workqueues/for-next (940d71c6462e wq: handle VM suspension in stall=
- detection)
-Merging drivers-x86/for-next (4ed39d31efbd platform/x86: dell-privacy: Add =
-support for Dell hardware privacy)
-CONFLICT (content): Merge conflict in drivers/platform/surface/surface_aggr=
-egator_registry.c
-Merging chrome-platform/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging hsi/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging leds/for-next (ee522bcf026e leds: tlc591xx: fix return value check =
-in tlc591xx_probe())
-Merging ipmi/for-next (2253042d86f5 ipmi/watchdog: Stop watchdog timer when=
- the current action is 'none')
-Merging driver-core/driver-core-next (fd03c075e362 drivers/base/node.c: mak=
-e CACHE_ATTR define static DEVICE_ATTR_RO)
-Merging usb/usb-next (a0765597c986 usb: typec: tcpci: Make symbol 'tcpci_ap=
-ply_rc' static)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (17cd3a106e97 USB: serial: drop irq-flags initi=
-alisations)
-Merging usb-chipidea-next/for-usb-next (4ae08bc23e1b usb: cdnsp: Useless co=
-ndition has been removed)
-Merging tty/tty-next (2ac62268a2c0 tty: hvc_console: Remove the repeated wo=
-rds 'no' and 'from')
-Merging char-misc/char-misc-next (83aacfbcbd42 w1: fix build warning in w1_=
-ds2438.rst)
-Merging extcon/extcon-next (08a268ddb5e2 extcon: max8997: Add missing modal=
-ias string)
-Merging phy-next/next (490dbd2380c7 phy: phy-core-mipi-dphy.c: Correct refe=
-rence version)
-Merging soundwire/next (037219925e7a soundwire: dmi-quirks: remove duplicat=
-e initialization)
-Merging thunderbolt/next (c4681547bcce Linux 5.13-rc3)
-Merging vfio/next (adaeb718d46f vfio/gvt: fix DRM_I915_GVT dependency on VF=
-IO_MDEV)
-Merging staging/staging-next (21e4614b2f69 staging: emxx_udc: fix alignment=
- issues)
-Merging iio/togreg (301f7eba67df iio: adc: ti-adc161s626: Use devm managed =
-functions for all of probe.)
-Merging mux/for-next (3516bd729358 Merge tag 's390-5.11-3' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/s390/linux)
-Merging icc/icc-next (1fd86e280d8b interconnect: qcom: Add missing MODULE_D=
-EVICE_TABLE)
-Merging dmaengine/next (6f64aa5746d2 dt-bindings: dma: convert arm-pl08x to=
- yaml)
-Merging cgroup/for-next (6962681ee8c6 Merge branch 'for-5.13-fixes' into fo=
-r-next)
-Merging scsi/for-next (31ff791600e3 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (46ded13dd382 scsi: ufs: Suppress false positive =
-unhandled interrupt messages)
-$ git reset --hard HEAD^
-Merging next-20210526 version of scsi-mkp
-Merging vhost/linux-next (7ff6e99e021c virtio_net: disable cb aggressively)
-Merging rpmsg/for-next (dc0e14fa833b Merge branches 'hwspinlock-next', 'rpm=
-sg-next' and 'rproc-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (bc3aca5393c4 dt-bindings: gpio: omap: Conv=
-ert to json-schema)
-Merging gpio-intel/for-next (2b71b66ac041 gpio: wcove: Split error handling=
- for CTRL and IRQ registers)
-Merging pinctrl/for-next (9f96bd5ae866 Merge branch 'devel' into for-next)
-CONFLICT (content): Merge conflict in include/linux/pinctrl/pinconf-generic=
-.h
-Merging pinctrl-intel/for-next (258435a1c818 pinctrl: tigerlake: Add Alder =
-Lake-M ACPI ID)
-Merging pinctrl-renesas/renesas-pinctrl (904ec4bebc1d pinctrl: renesas: r8a=
-779{51,6,65}: Reduce non-functional differences)
-Merging pinctrl-samsung/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging pwm/for-next (98761ce4b91b pwm: spear: Implement .apply() callback)
-Merging userns/for-next (f928ef685db5 ucounts: Silence warning in dec_rlimi=
-t_ucounts)
-CONFLICT (content): Merge conflict in kernel/ucount.c
-CONFLICT (content): Merge conflict in kernel/signal.c
-CONFLICT (content): Merge conflict in include/linux/user_namespace.h
-CONFLICT (content): Merge conflict in include/linux/sched/user.h
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (d07f6ca923ea Linux 5.13-rc2)
-Merging livepatching/for-next (c150bbbb1731 Merge branch 'for-5.13/signal' =
-into for-next)
-Merging coresight/next (1efbcec2ef8c coresight: cti: Reduce scope for the v=
-ariable =E2=80=9Ccs_fwnode=E2=80=9D in cti_plat_create_connection())
-Merging rtc/rtc-next (bcae59d0d45b rtc: imxdi: add wakeup support)
-Merging nvdimm/libnvdimm-for-next (30c10d32152d Merge branch 'for-5.12/cxl'=
- into libnvdimm-for-next)
-Merging at24/at24/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging ntb/ntb-next (5c8fe583cce5 Linux 5.11-rc1)
-Merging seccomp/for-next/seccomp (4aa71b5e713b selftests/seccomp: Flush ben=
-chmark output)
-Merging kspp/for-next/kspp (f4a35e00d248 Merge branch 'for-next/clang/featu=
-res' into for-next/kspp)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging gnss/gnss-next (994adcbd3714 gnss: drop stray semicolons)
-Merging fsi/next (4a851d714ead fsi: aspeed: Support CFAM reset GPIO)
-Merging slimbus/for-next (0320ed0a8236 drivers: slimbus: Fix word resposibl=
-e -> responsible in slimbus.h)
-CONFLICT (content): Merge conflict in drivers/nvmem/Makefile
-CONFLICT (content): Merge conflict in drivers/nvmem/Kconfig
-Merging nvmem/for-next (d1a5f4ca656b nvmem: qfprom: minor nit fixes)
-Merging xarray/main (2c7e57a02708 idr test suite: Improve reporting from id=
-r_find_test_1)
-Merging hyperv/hyperv-next (c6a8625fa4c6 hv_utils: Fix passing zero to 'PTR=
-_ERR' warning)
-Merging auxdisplay/auxdisplay (aecd79c09c2f auxdisplay: Add I2C gpio expand=
-er example)
-Merging kgdb/kgdb/for-next (83fa2d13d628 kdb: Refactor env variables get/se=
-t code)
-Merging hmm/hmm (fe07bfda2fb9 Linux 5.12-rc1)
-Merging fpga/for-next (ded39fc4a5b4 docs: driver-api: fpga: avoid using UTF=
--8 chars)
-Merging kunit/test (d07f6ca923ea Linux 5.13-rc2)
-Merging cfi/cfi/next (6efb943b8616 Linux 5.13-rc1)
-Merging kunit-next/kunit (d07f6ca923ea Linux 5.13-rc2)
-Merging trivial/for-next (9ff9b0d392ea Merge tag 'net-next-5.10' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging mhi/mhi-next (a610f3c65d3b bus: mhi: Wait for M2 state during syste=
-m resume)
-Merging memblock/for-next (990e6d0e1de8 arm: extend pfn_valid to take into =
-accound freed memory map alignment)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging rust/rust-next (fef0214731cc rust: allow printing in the kernel cra=
-te)
-CONFLICT (content): Merge conflict in kernel/printk/printk.c
-CONFLICT (content): Merge conflict in include/uapi/linux/android/binder.h
-CONFLICT (content): Merge conflict in Makefile
-Merging cxl/next (6630d31c912e cxl/mem: Get rid of @cxlm.base)
-Merging tpmdd-jejb/tpmdd-for-next (69977d1aeeca Merge branch 'tpmdd-fixes' =
-into tpmdd-for-next)
-Merging akpm-current/current (f39ecf44ce27 linux-next-pre)
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (925702468fbc kdump: use vmlinux_build_id to simplify)
-
---Sig_/AN1p+3G8Zklr1Bvfo/ZVIpM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmCwrvgACgkQAVBC80lX
-0Gw/7gf/a6aaJ+W5vkl0QQPI4aV4FqrXqqnPzoumLCa8M/W1hdiN2MIkTkkWp28Z
-wQY0MX7DoHCh/dy4k5XpOzRbN8APFeKWwGLEom8BgQjPC/+nsiRghfpGWOiUyQfS
-uI5pKOKUma1PeTRa4Zsm1Ej111ls4c4duKWwndlCwZdKA1FJg8hti8/x3ZjgeviK
-IWHK+X5TBijL71w7nzGvSZqZTpKpnooXoAXCOwLDTvcu8EISDnXme5Jh8Aa7Vwrw
-SmwpMorqv58PF2zbx2YdNbb3CZRqLXLI6wEypxX8Jmz0f2dHFRx6OwEZEoP7lEnT
-pi+SFcQP5FlKRsaeSlyrxquksKWHsg==
-=wuB5
------END PGP SIGNATURE-----
-
---Sig_/AN1p+3G8Zklr1Bvfo/ZVIpM--

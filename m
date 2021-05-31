@@ -2,73 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7619F395645
-	for <lists+linux-next@lfdr.de>; Mon, 31 May 2021 09:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF642395AAE
+	for <lists+linux-next@lfdr.de>; Mon, 31 May 2021 14:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbhEaHi6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 May 2021 03:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S231367AbhEaMiJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 May 2021 08:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbhEaHiE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 May 2021 03:38:04 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA78C061763;
-        Mon, 31 May 2021 00:36:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FtnCT6D0rz9s24;
-        Mon, 31 May 2021 17:36:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622446566;
-        bh=edAeV7h2A8p3l1up77KsPISLlfxdBbE0RuunYMtKkAo=;
-        h=Date:From:To:Subject:From;
-        b=mC3xssSdANLRzs0lDYd26OcdH9r432Fxe5Mr8B7axraf6ZA+7jmARvOQr3ZVpqhc1
-         9uwpy4WNGV/JOH36KhStG0Dcsznp98N+qRaaq0oNkAUAZodxWmqKsTOgsaHBjhOt3x
-         ifCYtMP3JNId+iryxOe4aIvb39DVV/lXEqEE+V70piDeyzo/14kqq24h8QIARckWSd
-         nzdhFGX4di9wDdmb7dVgfwWNe/fTEVhFhTRCmgXsdlET7r5u1UYdf3sbY/L2OHTGSn
-         KZKiMr2lMC/Zx8Xb7PfP0wrB937CLJXVg2N0mrSXFcEFwj+p4khy20nOeBn1R+iScl
-         aQ8SLUYrG5DIg==
-Date:   Mon, 31 May 2021 17:36:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: no release today
-Message-ID: <20210531173605.479f7927@canb.auug.org.au>
+        with ESMTP id S231330AbhEaMiI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 31 May 2021 08:38:08 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E62C061574
+        for <linux-next@vger.kernel.org>; Mon, 31 May 2021 05:36:27 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id j14so10763033wrq.5
+        for <linux-next@vger.kernel.org>; Mon, 31 May 2021 05:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=V+ZL6IBlYhDhqaW2K8qSQL0I2+furW7I5Lbh2PK3hX0=;
+        b=ebjs5Qr4a4wRNBS/lrqJat3sjHZ3qZWV85Gta7UtDVVh+sKtAGIhDT58qrF1TWa4v9
+         YJiLR8GX/VUluptXdx3ydHvd6xqxqjT8vXa9iEcPX6tnFheqJbIBe7ZfgbYKPGlxRgQR
+         8AAOJ8mNdSndzvk7uBptfFRwpc7TN6mvGoARH9nLm0B64/+DT1/CBK4Ew913408c/0Pb
+         chPQuCAFb5BpvDGRJNS0zwpWWAMVYoRMDLBwQfcVDyXd2hj8x+PxLI5w4rU7t5RqKrDm
+         UPGPgODtiMAXJxqmv3f9DyYN0zzo/RlwarEZwgTEkAnv+e7uzj7ra1heMf0kfgVgcoEB
+         5esg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=V+ZL6IBlYhDhqaW2K8qSQL0I2+furW7I5Lbh2PK3hX0=;
+        b=X2cTxn0Lnu8zzROMCx2p2jI4kvk4dBuT22TGtAGmLt0PKImfO2LS4q5z1dBzuulurx
+         QWBqHQ/ruFBWAFSXY4IYSrKUkeeFEXoHUQg8/BM026lafO6F0RJZbGUzg3FXuW8PEHGQ
+         xiDjcdlJM54AWxhG0Go3oTjA/LkQpUwsgBPOhTxuKP4P2xO53dyQjB+CyGel7/QJkFy5
+         p1rdxiGcnwTl0dONplJ+ksMJAIOX0py2UtEdy8FmfGvTLbaswtNmnjR0m+VpHyxODBfJ
+         V2WIuc4C7HNFfLwJxrRo01IsE/OvL9fqtPQJg8rp+qRhgeE8jt8hBWq66uGZFPy3YgmB
+         9Qig==
+X-Gm-Message-State: AOAM532N01rgMox73KkbKJhcZHvL9HrHobAS9u4p2VtMWekVWmJeHCxR
+        w47dIwu8zZ2RRRbNfbY80go=
+X-Google-Smtp-Source: ABdhPJwGKT9k+Yte4TJfbAva69VtZL2NrF0VIIiAPtzNe/Vc1UL1AwxL3FWFIjlHx6MBcdHEbqDzkQ==
+X-Received: by 2002:a5d:6b09:: with SMTP id v9mr21944176wrw.297.1622464586181;
+        Mon, 31 May 2021 05:36:26 -0700 (PDT)
+Received: from [192.168.1.152] ([102.64.221.114])
+        by smtp.gmail.com with ESMTPSA id a77sm12559519wmd.14.2021.05.31.05.36.13
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 31 May 2021 05:36:25 -0700 (PDT)
+Message-ID: <60b4d849.1c69fb81.27b96.09f8@mx.google.com>
+From:   Vanina curth <risonnah.001@gmail.com>
+X-Google-Original-From: Vanina curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DO6OBqS+dazAZha.j/0STlX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Ello
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Mon, 31 May 2021 12:36:03 +0000
+Reply-To: curtisvani9008@mail.com
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DO6OBqS+dazAZha.j/0STlX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-I have not done a release today.  Back to normal tomorrow.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DO6OBqS+dazAZha.j/0STlX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC0keUACgkQAVBC80lX
-0GyNHwf+LKtRFmHb/zTZd1kLFcap6NLLpPFQ+sWhvj+95jwWfcqYQWsQZmAWoQ71
-nDCtpccD32yQSv/dtDLp5UO5FFZzYJKrh6qKgDpqf3rDYkZ4b2E+VPHa+4FvVq4C
-r38QE/HJSlsHm9C03ZD2OgHepUYXdDeACWvpZ7QOclXBXjSXAk8gxN6JYHHlBQR4
-z/1qW96w85Yo0m/Ud1SCUjaxSg6kXaOuaUW4RRamvsJZiOK+bA2vFVVoAmnWrOVH
-3fgbGVfsY4ZHVJPBCZDFh0FGwkFUATrK6qgPK5DhVcoxXVSU6NwLSOqcAA40tWp8
-mtvoB0WEVjUakmKTEfllYYEiXti6Bg==
-=jT7e
------END PGP SIGNATURE-----
-
---Sig_/DO6OBqS+dazAZha.j/0STlX--
+How are you? I'm Vanina. I picked interest in you and I would like to know =
+more about you and establish relationship with you. i will wait for your re=
+sponse. thank you.

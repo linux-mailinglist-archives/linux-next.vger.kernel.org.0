@@ -2,80 +2,206 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C75FF396979
-	for <lists+linux-next@lfdr.de>; Mon, 31 May 2021 23:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92B0396A48
+	for <lists+linux-next@lfdr.de>; Tue,  1 Jun 2021 02:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbhEaV7J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 31 May 2021 17:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhEaV7E (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 31 May 2021 17:59:04 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5635C061574;
-        Mon, 31 May 2021 14:57:19 -0700 (PDT)
+        id S232386AbhFAAeo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 31 May 2021 20:34:44 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45487 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232081AbhFAAeo (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 31 May 2021 20:34:44 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fv8K82rn4z9sSn;
-        Tue,  1 Jun 2021 07:57:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FvCmk0ctBz9sSs;
+        Tue,  1 Jun 2021 10:32:52 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622498236;
-        bh=6JdKm/y7YGw2JLTKdlhkSnBOoth0OxzC7+YPxdgCZAg=;
+        s=201702; t=1622507582;
+        bh=uT+f9seNtqv+rBUDfpbtocFbnuU+Usvrb1hEKeN4IkE=;
         h=Date:From:To:Cc:Subject:From;
-        b=elUY5TnwTQvqrLU5mXOudZR6jYWElcTyUQOwC2ig4+urOQxxdyEwsKHWATc8dLdZ4
-         tvaiSa87CKCJj9B3ftkqXO86pP99j6NkxmXXPka1+ZNebMBKbqxohmHuqh/x63CwsN
-         gnCWRr9dusgNjRaMGz6fhVSttQe8S2LxDOPMXXl0CrtCZWFH+wVMybkj4u+xWcbhAK
-         2NryPf0mQjCU/KvqBrRQo+4zRdNOiGtY6wlGZ9hq1sMR1etKm2TyUXaPlJcW0ykEWM
-         p9ATJoC9A3/24x7QGXEPDSO2jDEKq6xTwOe6HFn71839el6qNkMDB4ZYQ8DESV6c7z
-         IwN64phwzxbwA==
-Date:   Tue, 1 Jun 2021 07:57:13 +1000
+        b=APtKHPvBdzmra7MUh9f3i1vY8HvFOYLLqJ4+cbRTt0sCMOJnV/MWp8bHi/hDFjNmH
+         CDDpr7mIuHJOK5N+3fdY9Ffi7cR2Hn769ml8/+chmVrJAYh7nJ5g+NwYRo7lUPAsjV
+         ErzLil1IhleL/WrAYX1S38IAo/fvlSoLfsuqRtptVF6vaSqgIcaNV7CJaUEBKwcoRw
+         LZri6y94vxq/rvDOgteQHoh4Pn2rrqQtbKM5M9K/AjDtvQEV7p4JS+cc3BTOOCvF/d
+         p8LrXfBXSDGkDaxGkdoOMh4QT/0xilyEeMuuQzSi9jqxYlzvT9ly//ADEu6zB2O9lD
+         /FdDIL1bPQ0Fw==
+Date:   Tue, 1 Jun 2021 10:32:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the risc-v-fixes
- tree
-Message-ID: <20210601075713.6cffe979@canb.auug.org.au>
+To:     Wolfram Sang <wsa@the-dreams.de>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Cc:     Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: linux-next: build failure after merge of the i2c tree
+Message-ID: <20210601103250.07301254@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/re.ShItbnm08reIvCuXBAT8";
+Content-Type: multipart/signed; boundary="Sig_/Ou=NQ8ZD7IfuNCXYZAlReGG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/re.ShItbnm08reIvCuXBAT8
+--Sig_/Ou=NQ8ZD7IfuNCXYZAlReGG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the i2c tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  345f7d3d5e58 ("riscv: mm: Fix W+X mappings at boot")
+In file included from drivers/gpu/drm/i915/i915_gem.c:1250:
+drivers/gpu/drm/i915/selftests/i915_gem.c:97:13: error: conflicting types f=
+or 'pm_suspend'
+   97 | static void pm_suspend(struct drm_i915_private *i915)
+      |             ^~~~~~~~~~
+In file included from include/linux/regulator/consumer.h:35,
+                 from include/linux/i2c.h:18,
+                 from drivers/gpu/drm/i915/i915_drv.h:39,
+                 from drivers/gpu/drm/i915/gt/intel_context.h:14,
+                 from drivers/gpu/drm/i915/gem/i915_gem_context.h:12,
+                 from drivers/gpu/drm/i915/i915_gem.c:44:
+include/linux/suspend.h:331:12: note: previous declaration of 'pm_suspend' =
+was here
+  331 | extern int pm_suspend(suspend_state_t state);
+      |            ^~~~~~~~~~
 
-is missing a Signed-off-by from its committer.
+Caused by commit
+
+  5a7b95fb993e ("i2c: core: support bus regulator controlling in adapter")
+
+interacting with commit
+
+  3f51b7e1f36a ("drm/i915/selftests: Add a simple exerciser for suspend/hib=
+ernate")
+
+from Linus' tree (v4.20-rc1)
+
+I have added the following merge fix patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 1 Jun 2021 10:25:49 +1000
+Subject: [PATCH] drm/i915/selftests: Avoid name clash with pm_ global funct=
+ions
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/selftests/i915_gem.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/selftests/i915_gem.c b/drivers/gpu/drm/i9=
+15/selftests/i915_gem.c
+index dc394fb7ccfa..5d674708b047 100644
+--- a/drivers/gpu/drm/i915/selftests/i915_gem.c
++++ b/drivers/gpu/drm/i915/selftests/i915_gem.c
+@@ -87,14 +87,14 @@ static void simulate_hibernate(struct drm_i915_private =
+*i915)
+ 	intel_runtime_pm_put(&i915->runtime_pm, wakeref);
+ }
+=20
+-static int pm_prepare(struct drm_i915_private *i915)
++static int test_pm_prepare(struct drm_i915_private *i915)
+ {
+ 	i915_gem_suspend(i915);
+=20
+ 	return 0;
+ }
+=20
+-static void pm_suspend(struct drm_i915_private *i915)
++static void test_pm_suspend(struct drm_i915_private *i915)
+ {
+ 	intel_wakeref_t wakeref;
+=20
+@@ -104,7 +104,7 @@ static void pm_suspend(struct drm_i915_private *i915)
+ 	}
+ }
+=20
+-static void pm_hibernate(struct drm_i915_private *i915)
++static void test_pm_hibernate(struct drm_i915_private *i915)
+ {
+ 	intel_wakeref_t wakeref;
+=20
+@@ -116,7 +116,7 @@ static void pm_hibernate(struct drm_i915_private *i915)
+ 	}
+ }
+=20
+-static void pm_resume(struct drm_i915_private *i915)
++static void test_pm_resume(struct drm_i915_private *i915)
+ {
+ 	intel_wakeref_t wakeref;
+=20
+@@ -148,16 +148,16 @@ static int igt_gem_suspend(void *arg)
+ 	if (err)
+ 		goto out;
+=20
+-	err =3D pm_prepare(i915);
++	err =3D test_pm_prepare(i915);
+ 	if (err)
+ 		goto out;
+=20
+-	pm_suspend(i915);
++	test_pm_suspend(i915);
+=20
+ 	/* Here be dragons! Note that with S3RST any S3 may become S4! */
+ 	simulate_hibernate(i915);
+=20
+-	pm_resume(i915);
++	test_pm_resume(i915);
+=20
+ 	err =3D switch_to_context(ctx);
+ out:
+@@ -183,16 +183,16 @@ static int igt_gem_hibernate(void *arg)
+ 	if (err)
+ 		goto out;
+=20
+-	err =3D pm_prepare(i915);
++	err =3D test_pm_prepare(i915);
+ 	if (err)
+ 		goto out;
+=20
+-	pm_hibernate(i915);
++	test_pm_hibernate(i915);
+=20
+ 	/* Here be dragons! */
+ 	simulate_hibernate(i915);
+=20
+-	pm_resume(i915);
++	test_pm_resume(i915);
+=20
+ 	err =3D switch_to_context(ctx);
+ out:
+--=20
+2.30.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/re.ShItbnm08reIvCuXBAT8
+--Sig_/Ou=NQ8ZD7IfuNCXYZAlReGG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC1W7kACgkQAVBC80lX
-0Gwz0wf+Mlk5eOliCxp7SMAYQJIp9cS+by/bZh98pNu7GdP71y0X5bNQVV3Foz2y
-PraXiNMLpLQl4E60QVPgtgQQ86GmT/gp1MGUn79Q9tLyp8sx5jJOnm/SF5UUcgws
-/mUGRyfXWsHd7vL2kQVV6Df+EubwR3bdqZA85ae0DtUhGXSPjR5AJL1iW5hcm4Es
-BoGcAGyr5hcLWLLupFqX58Wn0lJyx+NKeVRMzbOgMajnmlgbUyNfrKml6BgLHFuw
-RdvUA03fz7Sbm1reg0QXMmOVnpN7XNaBh3WVQvcA7wUUFKVdWYGcknMeEdZBMwsp
-vdQfu3n260U7xzvZQTU7fUFDoyEgjw==
-=T8ic
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC1gDIACgkQAVBC80lX
+0GzH1gf/UGyYLcozbfcYhQ3Pz+8dBAL61LG9IcPII5mD27h4tAzXw0clnFYW/Esi
+jqnG7bkrEyyyhWA/mr/4ESE5qVL9JTaNLjgdRMqsxDaOA6R9Mfqi4grbilKJseWb
+q+b4CReChUYCm1JOAw2zwDhX+EV3X4UVSmua4yW1UCDm3UU6pDzJYyx7n1ZoiNRn
+q4h2r6+B3zFHsFqnZMMjm+/Vrr3VobcpeeWDqc4S6CN5sPkWuYkvdCFQOJWRzD5x
+ThivC1Sse6TDbUgFwQtWLg+NNV0LutWHnatyVcC1k6BCY03tChioJ3phFNMgl2ZB
+1+iwOB13j9UmES0ArupFAYpPY3fkjQ==
+=+chF
 -----END PGP SIGNATURE-----
 
---Sig_/re.ShItbnm08reIvCuXBAT8--
+--Sig_/Ou=NQ8ZD7IfuNCXYZAlReGG--

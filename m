@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215C2397C00
-	for <lists+linux-next@lfdr.de>; Wed,  2 Jun 2021 00:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CF4397C34
+	for <lists+linux-next@lfdr.de>; Wed,  2 Jun 2021 00:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbhFAWCD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Jun 2021 18:02:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:35933 "EHLO ozlabs.org"
+        id S234818AbhFAWJa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Jun 2021 18:09:30 -0400
+Received: from ozlabs.org ([203.11.71.1]:38973 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234740AbhFAWCD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 1 Jun 2021 18:02:03 -0400
+        id S234897AbhFAWJ1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 1 Jun 2021 18:09:27 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FvmL401bKz9sWc;
-        Wed,  2 Jun 2021 08:00:11 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FvmVl38Z6z9s5R;
+        Wed,  2 Jun 2021 08:07:43 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622584815;
-        bh=VNJUL7vtURQbJVy1w9t/7hyhua736mwNIIFv/kKyKiU=;
+        s=201702; t=1622585264;
+        bh=EPNCrH1ipIYIjYIZR3e7Sx4DYJbRQHwSTFXT+SSJLLo=;
         h=Date:From:To:Cc:Subject:From;
-        b=AcJ8rCyCDDuISz6JsgloQtKiOonDqbXKccrZZTwXqkT9IZ5at1Y9ccepYAI6gwP/W
-         YdMlutLKG5TrHKp+3ZELXbz5YQNkRyKn0JzXZOzP4l8HA3oOnMv2XdgoYSI+VQ1CHK
-         Vs640+uImoX2FfwgSdYVyHE+/v3I9gkeU6TfCOprqAxzgR/76FLpbiyYQKaLtEhz56
-         I0r6NiESvC2mP8LJWDCX7uHR7tckrv8qR6bzdOTq19Tz1912791NpR+rQ0YESPiNo5
-         hAn7uaHCSWy2BUqWKVK7vSzUfyBOgRpAmSzqSa7MpycJfhRxJ0C9VCULnQXB6DpMS0
-         /JWoJbTLh1rbA==
-Date:   Wed, 2 Jun 2021 08:00:11 +1000
+        b=TffMpoL9xYtQlePycD3FlvZgzpmIzSCRzD/XIrcewTmkt4paGvebz7Cc9xBpQuVCP
+         CtT9kxrGA1lCpNIpXErXag+5RoscIzlXv+XwWAiBImeorW+hhBXcOa2zRon3HQovCA
+         Y7Qs1D0Od+tvGzvlJGlw7wB9KQUIPYUnjdDfe4Xeto+olvkd2l3tZEwhRzJQjefi1s
+         HB5QyzuopP0K5okhVFrqySbK+juDVvWQKvvWqzoR9itIvyso530tdg74mVGppxsSwb
+         ifPf+y+fSWdOspN7SIr+IBX8OamH/oIkYqVBvA/L3tO3KhqPZ8ykpO6dSNfCBo/rsw
+         Ws7LXKouxGvCQ==
+Date:   Wed, 2 Jun 2021 08:07:42 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc-fixes tree
-Message-ID: <20210602080011.6c211704@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the integrity tree
+Message-ID: <20210602080742.1832f12c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qiJlL5srbB0/IGVG9BqGO+e";
+Content-Type: multipart/signed; boundary="Sig_/W.VlX1=apFJVu8WwkLkibUe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qiJlL5srbB0/IGVG9BqGO+e
+--Sig_/W.VlX1=apFJVu8WwkLkibUe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,12 +51,12 @@ Hi all,
 
 In commit
 
-  b640e8a4bd24 ("ASoC: SOF: reset enabled_cores state at suspend")
+  9eea2904292c ("evm: Execute evm_inode_init_security() only when an HMAC k=
+ey is loaded")
 
 Fixes tag
 
-  Fixes: 42077f08b3 ("ASoC: SOF: update dsp core power status in common API=
-s")
+  Fixes: 26ddabfe96b ("evm: enable EVM when X509 certificate is loaded")
 
 has these problem(s):
 
@@ -70,20 +70,20 @@ making sure it is not set (or set to "auto").
 Cheers,
 Stephen Rothwell
 
---Sig_/qiJlL5srbB0/IGVG9BqGO+e
+--Sig_/W.VlX1=apFJVu8WwkLkibUe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC2resACgkQAVBC80lX
-0GzTPgf+IBmgbBJGxc3wIhS0nnYZ3tYLcVDFmWPfz1W1POmvVWOvwGqYgP7qAbrc
-UnRVRgY4jkosKjXED4BarDZikPGTcUsoh1JlKKsi+FonV2Q+854/Qyp3XR7Oq2Y9
-YPZABSy/uMVIn6MdleQbagcJQkKM1eVXKgx1jacjC9Ds7SowwOyWrSfclPaJpNIJ
-3O9BNlATuxvsYEx2jJUTYTgs9U5DZNV2tz+FXO/WOw3r/46vD9eKq8oWEQmBIHJC
-VmdfeKcOb+PZR1Ba1SgW+kfMmj2pCI4WECdhFnmeFnlYQP1NUlpru+17aIkz2eQv
-hgNZaNHVslUFgOMzvycckWxru6zB2Q==
-=gloo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC2r64ACgkQAVBC80lX
+0GxXmwf/dzQKYbYijr16dto1MW7fmyyophM73cHjxZKSY0Lsgo/5SheqFN3pn8Gk
+SKwx5XU3B1TnFoc2f/heXh0dfPMWR8kmHeLqlcs7RJyQAzFoCofUt1IRo0y1rX/3
+k956Zw6bFo1dbTLuM/KtSG6LyhgIh2bKvYpjQBmG8pkEyUNLHmQ86TNg48zYlF/U
+4c3DLFM55A6Z4q2cO6dcvAZocaBVs7EEuG27xVeMBY9FRWe3DWPHoFSiggChwcvm
+FtBi8resblvG2diU5iGTGI2M17v79t+UOa5xHvFYmAHCvEgPHD3nFBTR9Rrmgj8a
+sS6/1DDRC962HitRVkv5PQsbbvvALg==
+=AzQp
 -----END PGP SIGNATURE-----
 
---Sig_/qiJlL5srbB0/IGVG9BqGO+e--
+--Sig_/W.VlX1=apFJVu8WwkLkibUe--

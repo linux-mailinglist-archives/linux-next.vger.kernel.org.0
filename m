@@ -2,106 +2,264 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F0B398356
-	for <lists+linux-next@lfdr.de>; Wed,  2 Jun 2021 09:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E54398384
+	for <lists+linux-next@lfdr.de>; Wed,  2 Jun 2021 09:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbhFBHo1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Jun 2021 03:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbhFBHo0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Jun 2021 03:44:26 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF248C061574;
-        Wed,  2 Jun 2021 00:42:42 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id cb9so1787994edb.1;
-        Wed, 02 Jun 2021 00:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jqawwQnqmCH2L1JuHfDBRG28iyCx1ovlrnJvUUuZP0s=;
-        b=JPLkJqtWBTNHqr9J8jmfvGIl8WJQ7ZxPG8qRmTnGQIQzyoZqhI4oIE0+4basDsc5Qy
-         2vGJIhHFtKbwXyWRWUMJmmwPFUquejVF9dkkzd02uId2Mi2N+d6Zdx/7XiU/NhuidHxm
-         pml73SHDhW8uH3UrTbb3Y/9f8FyzQydcYtM4NXsrnmRX+vMl2QaAiPe5aU5bnz+B2gUU
-         OfrrqBel4bokpD0DSBgF1wvZukXEH8FNgiEvWsH6vl88Vg8t3iMxoQbzfMfS9/lsTIgU
-         dSmp0g3kdW9d/EKRRcWNVl/qUC/oChzpOYMUxJzfGE2PNvGqS6wNGelV4IYBrB42cIdD
-         6bHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jqawwQnqmCH2L1JuHfDBRG28iyCx1ovlrnJvUUuZP0s=;
-        b=eLRbvI/j74t8sHHQ8FSHXZ9/VKSLiYg3LXsnknZifgA/54IBLroKlR9vhCbw6B41id
-         ocQMISiITq469JKj+dWUNpfm3dKtlCR665mgexjUj6bu7U6GKeml2yoniG4sYouOb3iC
-         LMoJzGFxLEoXHxN5pwkTS9lQ/0rgimhTGQcXoXUVkusyY4vJ+7AfLD4FkjRC5U7Am36l
-         nKlp6Yq/kE5khdv4IDQ1xFLOXzc0W2FHggOR/JaO9qaOdpuK6oQkkTd/H396Yo96UzED
-         sfT1UJ2H/ihNvp82TQhz29k4rMuJlaA/5g7QtJdSGNB2DQu6s5qCyNLNWxFK7ekcTX5h
-         Ytpg==
-X-Gm-Message-State: AOAM533/HCoUI/CRFTsPzjLxVE9oIOLSTnInRxOWWtPtGnrJCw7lla7G
-        LBliqXZbknYJcVSluw0UBg2vHSv+EjVeglyJrWrWmHgjxKw8f+Ihero=
-X-Google-Smtp-Source: ABdhPJzz+/WGQOrkjF6ycL1KkRictjTqcrb/NxRkjAq9YW4f20H4ughD1gldwssbn54OPSgHj/Add7UeuzbQlZL1GbU=
-X-Received: by 2002:a05:6402:4c5:: with SMTP id n5mr36501854edw.322.1622619761531;
- Wed, 02 Jun 2021 00:42:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210602170946.37a2c6ec@canb.auug.org.au> <s5h8s3syaye.wl-tiwai@suse.de>
-In-Reply-To: <s5h8s3syaye.wl-tiwai@suse.de>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 2 Jun 2021 15:42:15 +0800
-Message-ID: <CAD-N9QUDnMsKA4jH2MSjiRHPYxdb_9ocay-0eTLFtR7Qsh6ojQ@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the sound-current tree
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S230109AbhFBHtf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Jun 2021 03:49:35 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:46264 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232282AbhFBHtb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Jun 2021 03:49:31 -0400
+Received: from relay2.suse.de (unknown [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3A8CE1FD32;
+        Wed,  2 Jun 2021 07:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1622620068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=05Fgq52dKVdEKI1fvQffD3mtzrY8PhVbzseAckmChrE=;
+        b=EuOcZO8h2enDYK9iz/1rKTpE+T3wdoPpSkKaXk/BTjzN8soAXnDcCp/5alYnkTT8lxJiq6
+        j5p4IRcNQaeUfvdSqQNoRRa60pO4A+8abBtAl/lnGIbVK1cAkB04iUIAIlZgV8pq9oazTl
+        EfqWbCpWqsXWWzPA7zHnLd5DbZFACk0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1622620068;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=05Fgq52dKVdEKI1fvQffD3mtzrY8PhVbzseAckmChrE=;
+        b=G43ESwXgZJR1CZvLX+cJQxXN2ko9PHTu94KhFiWy+FuK5zaonvmExCnr5Ldz7LVxBbRZf+
+        YG3/E2faUQ5cSNAw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 32B97A3B81;
+        Wed,  2 Jun 2021 07:47:48 +0000 (UTC)
+Date:   Wed, 02 Jun 2021 09:47:48 +0200
+Message-ID: <s5h5yywyafv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: Fixes tag needs some work in the sound-current tree
+In-Reply-To: <CAD-N9QUDnMsKA4jH2MSjiRHPYxdb_9ocay-0eTLFtR7Qsh6ojQ@mail.gmail.com>
+References: <20210602170946.37a2c6ec@canb.auug.org.au>
+        <s5h8s3syaye.wl-tiwai@suse.de>
+        <CAD-N9QUDnMsKA4jH2MSjiRHPYxdb_9ocay-0eTLFtR7Qsh6ojQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: multipart/mixed;
+ boundary="Multipart_Wed_Jun__2_09:47:48_2021-1"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 2, 2021 at 3:36 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Wed, 02 Jun 2021 09:09:46 +0200,
-> Stephen Rothwell wrote:
-> >
-> > Hi all,
-> >
-> > In commit
-> >
-> >   b3531c648d87 ("ALSA: control led: fix memory leak in snd_ctl_led_register")
-> >
-> > Fixes tag
-> >
-> >   Fixes: a135dfb5de1 ("ALSA: led control - add sysfs kcontrol LED marking layer")
-> >
-> > has these problem(s):
-> >
-> >   - SHA1 should be at least 12 digits long
-> >
-> > This is probably not worth rebasing to fix, but can be avoided in the
-> > future by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
-> > just making sure it is not set (or set to "auto").
->
-> My bad, I must have overlooked the warning at applying.
+--Multipart_Wed_Jun__2_09:47:48_2021-1
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Takashi,
+On Wed, 02 Jun 2021 09:42:15 +0200,
+Dongliang Mu wrote:
+> 
+> On Wed, Jun 2, 2021 at 3:36 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 02 Jun 2021 09:09:46 +0200,
+> > Stephen Rothwell wrote:
+> > >
+> > > Hi all,
+> > >
+> > > In commit
+> > >
+> > >   b3531c648d87 ("ALSA: control led: fix memory leak in snd_ctl_led_register")
+> > >
+> > > Fixes tag
+> > >
+> > >   Fixes: a135dfb5de1 ("ALSA: led control - add sysfs kcontrol LED marking layer")
+> > >
+> > > has these problem(s):
+> > >
+> > >   - SHA1 should be at least 12 digits long
+> > >
+> > > This is probably not worth rebasing to fix, but can be avoided in the
+> > > future by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
+> > > just making sure it is not set (or set to "auto").
+> >
+> > My bad, I must have overlooked the warning at applying.
+> 
+> Hi Takashi,
+> 
+> I don't know why checkpatch.pl does not capture this warning for me.
+> 
+> ./scripts/checkpatch.pl
+> 0001-ALSA-control-led-fix-memory-leak-in-snd_ctl_led_regi.patch
+> total: 0 errors, 0 warnings, 89 lines checked
+> 
+> 0001-ALSA-control-led-fix-memory-leak-in-snd_ctl_led_regi.patch has no
+> obvious style problems and is ready for submission.
+> 
+> Any idea?
 
-I don't know why checkpatch.pl does not capture this warning for me.
+checkpatch doesn't check it strictly, IIRC.
 
-./scripts/checkpatch.pl
-0001-ALSA-control-led-fix-memory-leak-in-snd_ctl_led_regi.patch
-total: 0 errors, 0 warnings, 89 lines checked
+I'm using a script Stephen posted some time ago.  This should be
+better covered generically in checkpatch, though...
 
-0001-ALSA-control-led-fix-memory-leak-in-snd_ctl_led_regi.patch has no
-obvious style problems and is ready for submission.
 
-Any idea?
+Takashi
 
->
-> Since it's the top commit and quite fresh (just an hour old), I'll
-> refresh the tree.
->
->
-> thanks,
->
-> Takashi
+
+--Multipart_Wed_Jun__2_09:47:48_2021-1
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="git-check-fixes"
+Content-Transfer-Encoding: 7bit
+
+#!/bin/bash
+
+if [ "$#" -lt 1 ]; then
+        printf 'Usage: %s <commit range>\n', "$0" 1>&2
+        exit 1
+fi
+
+commits=$(git rev-list --no-merges -i --grep='^[[:space:]]*Fixes:' "$@")
+if [ -z "$commits" ]; then
+        exit 0
+fi
+
+# This should be a git tree that contains *only* Linus' tree
+Linus_tree="${HOME}/kernels/linus.git"
+
+split_re='^([Cc][Oo][Mm][Mm][Ii][Tt])?[[:space:]]*([[:xdigit:]]{5,})([[:space:]]*)(.*)$'
+nl=$'\n'
+tab=$'\t'
+
+# Strip the leading and training spaces from a string
+strip_spaces()
+{
+	[[ "$1" =~ ^[[:space:]]*(.*[^[:space:]])[[:space:]]*$ ]]
+	echo "${BASH_REMATCH[1]}"
+}
+
+for c in $commits; do
+
+	commit_log=$(git log -1 --format='%h ("%s")' "$c")
+	commit_msg="In commit
+
+  $commit_log
+
+"
+
+	fixes_lines=$(git log -1 --format='%B' "$c" |
+			grep -i '^[[:space:]]*Fixes:')
+
+	while read -r fline; do
+		[[ "$fline" =~ ^[[:space:]]*[Ff][Ii][Xx][Ee][Ss]:[[:space:]]*(.*)$ ]]
+		f="${BASH_REMATCH[1]}"
+		fixes_msg="Fixes tag
+
+  $fline
+
+has these problem(s):
+
+"
+		sha=
+		subject=
+		msg=
+		if [[ "$f" =~ $split_re ]]; then
+			first="${BASH_REMATCH[1]}"
+			sha="${BASH_REMATCH[2]}"
+			spaces="${BASH_REMATCH[3]}"
+			subject="${BASH_REMATCH[4]}"
+			if [ "$first" ]; then
+				msg="${msg:+${msg}${nl}}  - leading word '$first' unexpected"
+			fi
+			if [ -z "$subject" ]; then
+				msg="${msg:+${msg}${nl}}  - missing subject"
+			elif [ -z "$spaces" ]; then
+				msg="${msg:+${msg}${nl}}  - missing space between the SHA1 and the subject"
+			fi
+		else
+			printf '%s%s  - %s\n' "$commit_msg" "$fixes_msg" 'No SHA1 recognised'
+			commit_msg=''
+			continue
+		fi
+		if ! git rev-parse -q --verify "$sha" >/dev/null; then
+			printf '%s%s  - %s\n' "$commit_msg" "$fixes_msg" 'Target SHA1 does not exist'
+			commit_msg=''
+			continue
+		fi
+
+		if [ "${#sha}" -lt 12 ]; then
+			msg="${msg:+${msg}${nl}}  - SHA1 should be at least 12 digits long${nl}    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11${nl}    or later) just making sure it is not set (or set to \"auto\")."
+		fi
+		# reduce the subject to the part between () if there
+		if [[ "$subject" =~ ^\((.*)\) ]]; then
+			subject="${BASH_REMATCH[1]}"
+		elif [[ "$subject" =~ ^\((.*) ]]; then
+			subject="${BASH_REMATCH[1]}"
+			msg="${msg:+${msg}${nl}}  - Subject has leading but no trailing parentheses"
+		fi
+
+		# strip matching quotes at the start and end of the subject
+		# the unicode characters in the classes are
+		# U+201C LEFT DOUBLE QUOTATION MARK
+		# U+201D RIGHT DOUBLE QUOTATION MARK
+		# U+2018 LEFT SINGLE QUOTATION MARK
+		# U+2019 RIGHT SINGLE QUOTATION MARK
+		re1=$'^[\"\u201C](.*)[\"\u201D]$'
+		re2=$'^[\'\u2018](.*)[\'\u2019]$'
+		re3=$'^[\"\'\u201C\u2018](.*)$'
+		if [[ "$subject" =~ $re1 ]]; then
+			subject="${BASH_REMATCH[1]}"
+		elif [[ "$subject" =~ $re2 ]]; then
+			subject="${BASH_REMATCH[1]}"
+		elif [[ "$subject" =~ $re3 ]]; then
+			subject="${BASH_REMATCH[1]}"
+			msg="${msg:+${msg}${nl}}  - Subject has leading but no trailing quotes"
+		fi
+
+		subject=$(strip_spaces "$subject")
+
+		target_subject=$(git log -1 --format='%s' "$sha")
+		target_subject=$(strip_spaces "$target_subject")
+
+		# match with ellipses
+		case "$subject" in
+		*...)	subject="${subject%...}"
+			target_subject="${target_subject:0:${#subject}}"
+			;;
+		...*)	subject="${subject#...}"
+			target_subject="${target_subject: -${#subject}}"
+			;;
+		*\ ...\ *)
+			s1="${subject% ... *}"
+			s2="${subject#* ... }"
+			subject="$s1 $s2"
+			t1="${target_subject:0:${#s1}}"
+			t2="${target_subject: -${#s2}}"
+			target_subject="$t1 $t2"
+			;;
+		esac
+		subject=$(strip_spaces "$subject")
+		target_subject=$(strip_spaces "$target_subject")
+
+		if [ "$subject" != "${target_subject:0:${#subject}}" ]; then
+			msg="${msg:+${msg}${nl}}  - Subject does not match target commit subject${nl}    Just use${nl}${tab}git log -1 --format='Fixes: %h ("%s")'"
+		fi
+		lsha=$(cd "$Linus_tree" && git rev-parse -q --verify "$sha")
+		if [ -z "$lsha" ]; then
+			count=$(git rev-list --count "$sha".."$c")
+			if [ "$count" -eq 0 ]; then
+				msg="${msg:+${msg}${nl}}  - Target is not an ancestor of this commit"
+			fi
+		fi
+		if [ "$msg" ]; then
+			printf '%s%s%s\n' "$commit_msg" "$fixes_msg" "$msg"
+			commit_msg=''
+		fi
+	done <<< "$fixes_lines"
+done
+
+exit 0
+
+--Multipart_Wed_Jun__2_09:47:48_2021-1--

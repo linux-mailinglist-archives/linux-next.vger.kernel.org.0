@@ -2,98 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 153EB39979D
-	for <lists+linux-next@lfdr.de>; Thu,  3 Jun 2021 03:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65F73997D7
+	for <lists+linux-next@lfdr.de>; Thu,  3 Jun 2021 04:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbhFCBsj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Jun 2021 21:48:39 -0400
-Received: from ozlabs.org ([203.11.71.1]:41029 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229567AbhFCBsi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 2 Jun 2021 21:48:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FwTK82g8wz9sW7;
-        Thu,  3 Jun 2021 11:46:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622684813;
-        bh=ynMpJRWwCkz86MbxAZ5P7Fs8o/NBJCBM3ePrUfjkQZw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Og5qbeWUW5IMVC/ZzrSS73TsyKrRt39tzHE0cVftwMnKcCRBGwIk1qy/+O+kYcSU9
-         VPTamEAEifp8s+XWJSEOTQYMC7XNx46Rb8saNvY7kxow12BU8kmv3HdJpmfwAvDMIh
-         d3Mof3dSLM9SbscPr5vaLP92PUdA58ZNnKnrHGM/iZ/cQBPQnsazxGHDz2+Ib960L9
-         D74XtFTa6bjaGN0+DvoBl28eEGhXuwK8GIgu1vKxcJkIx7nEmsu/EA1PJrz7JZVMqK
-         l4dQOvl8UyTHrkeeUzKj8TAiUd93/XAJRVmKiTeA1p8qBaNwW9PnDahz4KBRmyMsw0
-         x7M25pCKgTcrA==
-Date:   Thu, 3 Jun 2021 11:46:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229617AbhFCCEr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Jun 2021 22:04:47 -0400
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:43750 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229541AbhFCCEq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Jun 2021 22:04:46 -0400
+Received: by mail-lj1-f181.google.com with SMTP id w15so5051937ljo.10;
+        Wed, 02 Jun 2021 19:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/8IZndxOiLWDoXbA8jpiE1ISCuoDjLto8/f1jFi4j/E=;
+        b=XvBT6QdgkOd/bFWJe4sr1HTGZAB3hFKDQSQQql6Y+63pobzzAazIb4UWMkxG0MfkDE
+         dQNR1dTVSCKrvHKdfbW+b5tway53NGBDd0EOXOYX4i1t+KvNcyIZflkeeKoCpzAZDuY+
+         Q4szIbZopSgOHjCesa0CZ4R/nY8Dwa2XioAAvWueSr5W7DdrjtHKeAxNSwvgU92b49fq
+         4uVkhBhYdDpGTYz+/wZG56dBHrI3lF5I069u965w1XQAWQTEOsIjKAcLmIz1T6Z4HHWV
+         +Im0LxdM1ovlRn+rIxVfaKdMvsVii33VrVA4FCqFhm8a0kun15z9SxPSun7aIRKxJKDA
+         aWuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/8IZndxOiLWDoXbA8jpiE1ISCuoDjLto8/f1jFi4j/E=;
+        b=OEhIY5kgamECwmgl8FKaO9zTEvpGYlSTEwROLgNcma0v/uOxulv5b/qlpNkIyoRIo5
+         ds1V8xETz8cBLQMgjUdoH8Fe3oX7QnzajYfHsetBoWKu1Ur5hVeJSlNEzLAeMmlXaqrP
+         B+nQSksmqiPvCZtIbvrYsUXijG2u9viRjgplnVeSyKWCuGMuyBccSnEbFHpCHk1IS+90
+         E6ogkdSV2sepwSSj/QMNp8wlDkO7o0XWpsEyeFhRst42ol/BFItSZzqwkDfmF7otJ4fn
+         4xdsN/LTQGwd7ByVrNigPovRTsp8hB17+MXYSAE5s6NxoaxY721wQegiaT5+CjeINT/R
+         tsPg==
+X-Gm-Message-State: AOAM531xki25PR4CRl2fvVJBaPT03E482GEO7rEHQ6LgOoulEKt5py1Z
+        zgpcjslytL+9ViI9s17BgvrLilknByc=
+X-Google-Smtp-Source: ABdhPJxK6SCugXeoioO9yW78vOgwhoCh0v4FOVMRToxZ9/D5pkfnAmFfoOb/KzEvYTHUhD+YSwRVQw==
+X-Received: by 2002:a2e:553:: with SMTP id 80mr8891837ljf.144.1622685709295;
+        Wed, 02 Jun 2021 19:01:49 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
+        by smtp.googlemail.com with ESMTPSA id r202sm158698lff.251.2021.06.02.19.01.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Jun 2021 19:01:48 -0700 (PDT)
+Subject: Re: linux-next: build warning after merge of the tegra tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Colin Cross <ccross@android.com>,
+        Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210603114650.70163765@canb.auug.org.au>
+References: <20210603103507.304b7626@canb.auug.org.au>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <8d8f947e-2ba4-f7b8-cb85-dcee940c96b4@gmail.com>
+Date:   Thu, 3 Jun 2021 05:01:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BO0FPj7bs4EEMlgyakhYDM_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210603103507.304b7626@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BO0FPj7bs4EEMlgyakhYDM_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+03.06.2021 03:35, Stephen Rothwell пишет:
+> Hi all,
+> 
+> After merging the tegra tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+> 
+> WARNING: unmet direct dependencies detected for TEGRA210_EMC_TABLE
+>   Depends on [n]: MEMORY [=y] && TEGRA_MC [=y] && ARCH_TEGRA_210_SOC [=n]
+>   Selected by [m]:
+>   - TEGRA210_EMC [=m] && MEMORY [=y] && TEGRA_MC [=y] && (ARCH_TEGRA_210_SOC [=n] || COMPILE_TEST [=y])
+> 
+> Probably introduced by commit
+> 
+>   08decdd5b448 ("memory: tegra: Enable compile testing for all drivers")
+> 
 
-Hi all,
+Thank you. This is a new warning to me, apparently this case wasn't previously tested by kernel build bot.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Perhaps this should fix it:
 
-  drivers/net/virtio_net.c
+diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
+index 71bba2345bce..3f2fa7750118 100644
+--- a/drivers/memory/tegra/Kconfig
++++ b/drivers/memory/tegra/Kconfig
+@@ -47,7 +47,6 @@ config TEGRA124_EMC
+ 
+ config TEGRA210_EMC_TABLE
+ 	bool
+-	depends on ARCH_TEGRA_210_SOC
+ 
+ config TEGRA210_EMC
+ 	tristate "NVIDIA Tegra210 External Memory Controller driver"
 
-between commits:
 
-  5c37711d9f27 ("virtio-net: fix for unable to handle page fault for addres=
-s")
-  8fb7da9e9907 ("virtio_net: get build_skb() buf by data ptr")
-
-from the net tree and commits:
-
-  6c66c147b9a4 ("virtio-net: fix for unable to handle page fault for addres=
-s")
-  7bf64460e3b2 ("virtio-net: get build_skb() buf by data ptr")
-
-from the net-next tree.
-
-These patches are different version of the same idea.
-
-I fixed it up (just used the latter versions) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BO0FPj7bs4EEMlgyakhYDM_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC4NIoACgkQAVBC80lX
-0GyzKAgAo54mdzqKe5Pjbpc5sG0EVUqLSLMMGXLufC6FrzZL7zvJuFkmd+93x03E
-Sl4QUCsVu8geuQJFx/eyjbdzzHOVQKp65o/lZIb1ukSoJSmwSaAtX1oUKYPn8f12
-hBhsmumN/WFS9xpPUbhm8Xkx41hEzVBWqvuqC4kn/0jnBM9OVuqgjqqUQyuQDm7B
-hHkX+tHIxA6FaDcgah7lAsS1HH7adCwdhngyU4iQH2JCNbYFzEgCKUq26+URWwYl
-257nmq5FlyuOSks2VEYus8ffLFdNwDwfw/YI4XnUqBCHacvIltsL0Myr8+GtHOaZ
-59MPhSDlRAaHeV8hdmQEsAEqD5eUTw==
-=X3LT
------END PGP SIGNATURE-----
-
---Sig_/BO0FPj7bs4EEMlgyakhYDM_--
+Thierry, please squash this change into the original patch if it looks good to you.

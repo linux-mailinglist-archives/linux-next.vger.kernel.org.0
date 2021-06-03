@@ -2,102 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3A6399DDA
-	for <lists+linux-next@lfdr.de>; Thu,  3 Jun 2021 11:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36C0399EA7
+	for <lists+linux-next@lfdr.de>; Thu,  3 Jun 2021 12:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhFCJeb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Jun 2021 05:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbhFCJeb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Jun 2021 05:34:31 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B40C06174A;
-        Thu,  3 Jun 2021 02:32:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fwgfg3bPVz9sPf;
-        Thu,  3 Jun 2021 19:32:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1622712765;
-        bh=O+KtTbQf+6wyiQAN9S+ojq8+vfTh0V/4wgvl1In0Auk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zwv/UCWmaj5l9RvqEEpiR+TlcPcXtSsSTpEyU/WVHcwwypWkftK7CrbfGztIaEcFJ
-         fUTCsMeDgohvqH0p0F/gpufk4dO7wPaaR+yUb/3g2USt8KGB/9aSspU9s3ajT2gwFd
-         l8IrbiRC0NjEl+m9m5Blr/MTrauZoT0GxGK4OggDcnjijoXSdfxA8vNNZcHdfev+Fj
-         DH21adlx0tgdCnPJIeT9IVrU+AgNM/CPwPYgL0HfZqeIWZeE6ptewgxWs8LUqu1uUq
-         Z2xmFTEVGRn3Z5GqWWDI2RyRaclLXTbKHhKMV8MpBUgvoFcCqab5BuXgRRbQ9vk5zx
-         3U4P7lE90ek3Q==
-Date:   Thu, 3 Jun 2021 19:32:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229800AbhFCKRK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Jun 2021 06:17:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34229 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229665AbhFCKRK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Jun 2021 06:17:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1622715325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8m+4TrAzUIo46n3NC92oZFAzX2j7x90WMjwhToa6xAY=;
+        b=e5DuuLgTp/80oCe0/ljSIOxgnG4MvYyYhSKODZLhMDIjmKbtklKJAQkMCsVbsOb1gMo5XR
+        wCgTYTVNTxwgq+v6Rdip0eOAWRSYyulDoilwKm31cBaoxbYj4scXmfah9zIp42ZUtrTbOO
+        7p2NGo8F4FsQYYd37duEW8lsMw3M2wM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-445-GqiOq6bXPL-8gzfL9dLnPw-1; Thu, 03 Jun 2021 06:15:24 -0400
+X-MC-Unique: GqiOq6bXPL-8gzfL9dLnPw-1
+Received: by mail-wr1-f69.google.com with SMTP id x10-20020adfc18a0000b029010d83c83f2aso2240994wre.8
+        for <linux-next@vger.kernel.org>; Thu, 03 Jun 2021 03:15:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8m+4TrAzUIo46n3NC92oZFAzX2j7x90WMjwhToa6xAY=;
+        b=eIvksiltt6O73yTkE5aZioFPaZstlsCwNQbZMgDCXAToUMeVDql2Dt0k1Akc7CRZ7R
+         Ip9r09m23gLY5pZlp3Z/fOGdKn285QTwbMEsonkD/NqidbCdFmpoFG+LN14o9thhAKsy
+         EB+lS1uGqhEnwmrbVLC7jqXRQmRHkJph6Vw4+oJ9/igOzZ/L1VcLU3E/gmII+zSKmerJ
+         PxiwDUBuOmtuIUbUfV5OVJgHZ7eUtn8eQFzDm0yse4zb35xRdCF2Ym5NOlFGeGiVJsn7
+         C01ft6vNc+Wvcw84+ccCB1+CwaDVex/tNKge3fUv17ijZDwoGrDlEc4iGENm5hXQ7R3j
+         o3mA==
+X-Gm-Message-State: AOAM533lb8qAhtFPvsW9FKj/EUi0NsCMuFO2JLMcCEZdBAdWaX8pFdeO
+        LIEK2kHuzPclbCnN7jpgBOvuuMSKLml+Nsf8WUJpo72pZN9ajnpgR4I0XCXCQHGULUO1HKvnorG
+        BEIS5Xtx0ZduqZjcx+2JmBhHlmW9rqP8k2H9mDRPph+5O7/Ywb0m5tCiENUJlmf9iZIwzyDTW9A
+        ==
+X-Received: by 2002:a5d:6c61:: with SMTP id r1mr38293681wrz.309.1622715323405;
+        Thu, 03 Jun 2021 03:15:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzwhEK7ocSfer7sUBxmCXKsQG6Yu/zYN1X/JyKdQCXJn6N33yFmZlR86aHuURAQSeROvXJU3w==
+X-Received: by 2002:a5d:6c61:: with SMTP id r1mr38293652wrz.309.1622715323176;
+        Thu, 03 Jun 2021 03:15:23 -0700 (PDT)
+Received: from ?IPv6:2a02:1205:5026:3180:7cea:b72b:7e73:8d8? ([2a02:1205:5026:3180:7cea:b72b:7e73:8d8])
+        by smtp.gmail.com with ESMTPSA id c7sm2842696wrs.23.2021.06.03.03.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Jun 2021 03:15:22 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the drm tree
-Message-ID: <20210603193242.1ce99344@canb.auug.org.au>
+References: <20210603083957.2ad2f30d@canb.auug.org.au>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>
+Message-ID: <61d13275-a699-d4f2-e8db-75084f65c541@redhat.com>
+Date:   Thu, 3 Jun 2021 12:15:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X=z7ep.m8R.YqP5_zcYmvjT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210603083957.2ad2f30d@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X=z7ep.m8R.YqP5_zcYmvjT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2021-06-03 12:39 a.m., Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    56b019f8eda0 ("drm/amdgpu: Use drm_dbg_kms for reporting failure to get a GEM FB")
+> 
+> Fixes tag
+> 
+>    Fixes: f258907fdd835e "drm/amdgpu: Verify bo size can fit framebuffer
+> 
+> has these problem(s):
+> 
+>    - Subject has leading but no trailing quotes
+> 
+> Please do not split Fixes tags over more than one line.
 
-Hi all,
+Got it.
 
-After merging the drm tree, today's linux-next build (htmldocs) produced
-these warnings:
 
-Documentation/gpu/driver-uapi.rst:2412: WARNING: Duplicate C declaration, a=
-lso defined at gpu/rfc/i915_gem_lmem:1393.
-Declaration is '.. c:enum:: drm_i915_gem_memory_class'.
-Documentation/gpu/driver-uapi.rst:2484: WARNING: Duplicate C declaration, a=
-lso defined at gpu/rfc/i915_gem_lmem:2484.
-Declaration is '.. c:struct:: drm_i915_gem_memory_class_instance'.
-Documentation/gpu/driver-uapi.rst:7: WARNING: Duplicate C declaration, also=
- defined at gpu/rfc/i915_gem_lmem:7.
-Declaration is '.. c:struct:: drm_i915_memory_region_info'.
-Documentation/gpu/driver-uapi.rst:2531: WARNING: Duplicate C declaration, a=
-lso defined at gpu/rfc/i915_gem_lmem:2531.
-Declaration is '.. c:struct:: drm_i915_query_memory_regions'.
-Documentation/gpu/driver-uapi.rst:2595: WARNING: Duplicate C declaration, a=
-lso defined at gpu/rfc/i915_gem_lmem:1393.
-Declaration is '.. c:struct:: drm_i915_gem_create_ext'.
-Documentation/gpu/driver-uapi.rst:2615: WARNING: Duplicate C declaration, a=
-lso defined at gpu/rfc/i915_gem_lmem:1393.
-Declaration is '.. c:struct:: drm_i915_gem_create_ext_memory_regions'.
+-- 
+Earthling Michel Dänzer               |               https://redhat.com
+Libre software enthusiast             |             Mesa and X developer
 
-Introduced by (one or more of) commits
-
-  0c1a77cbdafb ("drm/doc: add section for driver uAPI")
-  2bc9c04ea702 ("drm/doc/rfc: i915 DG1 uAPI")
-  727ecd99a4c9 ("drm/doc/rfc: drop the i915_gem_lmem.h header")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/X=z7ep.m8R.YqP5_zcYmvjT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC4oboACgkQAVBC80lX
-0GyAIwgAlnugat8uTrMp3uyPGuQQYyGtaz4KuUlZm3b30TPz3bvCpyXUHNmho5B5
-LvgpqfOtGZv9DxDzS9OCTZFZNt2MpNRRz3drBvxtkP0E6nnRuSKQLc60LdWmp1SQ
-6tX7wtb5MDk3UXDXc2ui6hlf0/B3pxdyeWYWGxFlBCAnFbUQc4Cfl5H5roFvwXW+
-WcSIasiR/cyR8AWrhIQOW3X5X4JJtGMmB4UyAkLqLiwrAHkmtKp5SKdqi0BxlUPQ
-HJXboTW38wzgVnMKSIhZ8DflHDU9F2mvSLkmNYk3OQbs9wgAw6pUajR+X4NfncsK
-pt5WP8DoQgTM0KUWNYldhXWvimCb3g==
-=io8C
------END PGP SIGNATURE-----
-
---Sig_/X=z7ep.m8R.YqP5_zcYmvjT--

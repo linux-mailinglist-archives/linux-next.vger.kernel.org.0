@@ -2,128 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B97839C915
-	for <lists+linux-next@lfdr.de>; Sat,  5 Jun 2021 16:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3927839CB0C
+	for <lists+linux-next@lfdr.de>; Sat,  5 Jun 2021 22:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhFEOlc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 5 Jun 2021 10:41:32 -0400
-Received: from mail-dm6nam11on2049.outbound.protection.outlook.com ([40.107.223.49]:50656
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229930AbhFEOlc (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 5 Jun 2021 10:41:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fkH7uWKzNfWZORDUTFwsd2eadZl9wl+qOCmr1fxjHnqd1pQyLNtTolh+CZqv7DUumJ+WJQJOvVlU1Wzf+gK2i05Fxo8iYFlWGQOQNnIX9GukvRyO21ms3VXnADY8CM/YhDpiWyjvUXOKynWgRSrInv50ezKvy9iDUurzYeYYPBuW/QXso2H0vw4n9YUiWiBk99TMYx7yHevxrRkhIkdiQ5PkK59xw+vlwO4IVDVc/G70GQ2TfNNPbyh88flAS/I+5Z+PoQ+6dLYmpEG3H1fKzPyuFKe0hT79W66hdhrp8wryw+U3vCmavTXjVeXKUcp5Yt2MaOziG8LUgUaQbl+NVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4wFIopQeRCJsKmf+zTQt9n+Zq3xhOgiNEbptBxQ1gPc=;
- b=EirPC1gmHan7bXr98Qc1Sqmxqsvvmoxozi1UbxGqvoM2TdwlEdBSa5/jPolmzFqoak5C1xdClRRmYR25T8ZPZfI/hkPFNPJp7JpiqC3mTBT7vViJWcsj4EDpR4a6BegYlruS1/U+HfbOyZfVyJLhh+fNjOtXOWCn3XSWl6AiYzgHwyXWs0kxT6VzPzzn/Ph6utflThk4DawTlc2zZBfaBkJoV3XKJQH5EgK/n3Y7Yal+5GWPxMxMy686f45TMaj3YVk7FynfNZJ7MvkjpMphfyrYf512a/ahTxvDfetQ3U1olpP8TgfAvN1M0/JDRLW0IT7Y23qGMs22bkldM4B2SA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4wFIopQeRCJsKmf+zTQt9n+Zq3xhOgiNEbptBxQ1gPc=;
- b=15UJnxpkq0T6//Tr7Aicvu1aUex6hEaFQBClxIbsf/ApRG4/5+4zjNcZ0Y6mMJWgYsLsCV2Wpho1/0iZeoZu/BVs6j6DdUPvKdQbCUEa6UIpJwPoRxbrLzcJ0RXTiYtAI2Ljy0yfTksV8Queo/gBW3jjyto7BOTus87z45x2NfU=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from DM5PR1201MB0234.namprd12.prod.outlook.com (2603:10b6:4:56::22)
- by DM6PR12MB4779.namprd12.prod.outlook.com (2603:10b6:5:172::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.20; Sat, 5 Jun
- 2021 14:39:42 +0000
-Received: from DM5PR1201MB0234.namprd12.prod.outlook.com
- ([fe80::a996:2224:603:1510]) by DM5PR1201MB0234.namprd12.prod.outlook.com
- ([fe80::a996:2224:603:1510%10]) with mapi id 15.20.4195.024; Sat, 5 Jun 2021
- 14:39:41 +0000
-Subject: Re: linux-next: build warning after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210605122627.0650db4b@canb.auug.org.au>
-From:   Eric Huang <jinhuieric.huang@amd.com>
-Message-ID: <ab066773-b3e2-ef83-e450-abe024eb5116@amd.com>
-Date:   Sat, 5 Jun 2021 10:39:38 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
-In-Reply-To: <20210605122627.0650db4b@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [2607:9880:2048:122:2095:9ab6:3c38:b529]
-X-ClientProxiedBy: YT2PR01CA0023.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:38::28) To DM5PR1201MB0234.namprd12.prod.outlook.com
- (2603:10b6:4:56::22)
+        id S230105AbhFEUyf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 5 Jun 2021 16:54:35 -0400
+Received: from mail-lf1-f42.google.com ([209.85.167.42]:34341 "EHLO
+        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230090AbhFEUyd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 5 Jun 2021 16:54:33 -0400
+Received: by mail-lf1-f42.google.com with SMTP id f30so19481720lfj.1;
+        Sat, 05 Jun 2021 13:52:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NeucVVYBqR4NtptCPVit6uqG78d6Me8sFT/5HJOioMM=;
+        b=UfZ4Y7S5wJzmo3KdhQjAWo1UGVea5AGtbObSBCNksHi9GeZ4EqgAOCYZuHrxpi2ZJm
+         2lLEwjhagfvssQnvzTqEW4Yl0o4LV1/919zs5jo1jviyRzGo1oyPqv/Bk7HJj6BmlMIw
+         AR5LCiMhWuxQs1ePGaWgJ5cVfOBALYWL16whSOI/NAOvnYwC9ym2AAT5xIHGU8Yw5DIQ
+         4neDdEWkWHEBjAoCz1i5Yu/jKicm5QYom+uIlaiodv0uRPnzUGkzmHBMwgPpHcX2QGvX
+         gJGBaAaDK49yi2XUb8ZWNX3JMMqYXfyZQMYfOgR4w7HZcCcNR/jYsfb0DK5J3VU7WSJB
+         3/oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NeucVVYBqR4NtptCPVit6uqG78d6Me8sFT/5HJOioMM=;
+        b=AvHcLy/9WMwwVLkVlBwa1Kmg9/NF9HrHh9KqW1G2VYMWUptmtiKjX7wYT33uzT4PLc
+         eo7BjIgA1eQ8HWKi9WOXVPzUlgMz9F0r69nGDEpc8m31kVwuKEnKbNWmJU9wi7mp7H8D
+         E2ATH17+jZ0+eZgn2ADTmq07RQghlZITL95KXMGeV5CODzk572Zn6jsFqzTiDVu8nQM4
+         pZrZXjvMHXiZeu0Ys+Y6dvEBxh/y0ETaEXn7RiHLo5QDF21rKh1bnKtsSa340Ta37w4f
+         v4ALh2hX5/ALLTMvufFjbIduD/Iehjswgan0RQoeGg1LH8LMVe8SYCEphVDca3c2bmYZ
+         mejg==
+X-Gm-Message-State: AOAM532o82Ij/A1osNqP0DqAUCFUXyq3QCvifi44GsKeL7eVPiLebQbf
+        hbGS9tGZfThoTnBSNLg6er6ZjK95fV9lMpjjg9o=
+X-Google-Smtp-Source: ABdhPJyaUmu4mJHf+r5EO7tRZFWoqjozfEnvSWdk9NCAhRrVk4dbn75NWh5kpQIuUY6no0ANnljhmpkNOeAmaKpllUg=
+X-Received: by 2002:a05:6512:b17:: with SMTP id w23mr6565422lfu.133.1622926290273;
+ Sat, 05 Jun 2021 13:51:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2607:9880:2048:122:2095:9ab6:3c38:b529] (2607:9880:2048:122:2095:9ab6:3c38:b529) by YT2PR01CA0023.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:38::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.28 via Frontend Transport; Sat, 5 Jun 2021 14:39:41 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8c7a3762-bd8a-4721-d4bb-08d9282fc104
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4779:
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4779058E364B10465875CBB2823A9@DM6PR12MB4779.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:862;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wFzMyFiU9xY6hvgbh6X7cTbc6e8juVNgOQYNWack+nWjlUNNCnl930C2GixKbu/m2gVdLOVyd1MFRTK+czy1V7fpV/vgiVX1A2bOtkDsXzhjbUW+CvPlIJAMdCOImU+EzVyBQLacG9s0teICKXhM2nYXzwO3ZYK3w5GzCGzsTsouB7oisBbjbhL7fD9baiNA5m4zlC8kok2snSSL/1Xhn4zvdy6yDeLMFP7xZEpssqNGFN77fwXQD/K8kZn/Kj+giHTYTYxBzjfUtqCrdAKUB6lQcyNrvOAqJ+DVcbCpHQdzE/wCxCZPblq3F6P+qRtG4m6zGtcpGILygJUzPdQBJijEBayPO/TMkJR5HQLRo11K6BzrLuV5wHA1fjE/hDI58vICgE92ZdCQDEEYRow98O76z3o0PTNcfWRfezC8kbUeER/a+/PJg+PeiGLYjlQKPDNEbZ+7Q3uF3mnsKHndMIFR6GmUnW1g9vf53orbzEyeBcob4saKNlpHt8gE8ovEQRZ5hw0Z0zVdhOqyDXC4SOmXkShvHyXAvmgEA78DddD56VvorNTH9TGw3EMX835h4HVBh3zT6hDFFUPWZBaiHQ5W8KaUr1NZfZ/TluUFCowdMYjg0tzfuNuehd90p1ofX3nB8VOxt5hpCBYAyXZKQ+fjeNrtQz6+be1DRVcNKrGZF5L78VYKLxtGz7EkSY5k
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1201MB0234.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(66946007)(5660300002)(6486002)(66476007)(316002)(66556008)(31696002)(110136005)(54906003)(36756003)(38100700002)(31686004)(16526019)(53546011)(6666004)(83380400001)(186003)(4326008)(86362001)(8676002)(2616005)(478600001)(8936002)(2906002)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?lUcNRKAZGhJYjwHcOy6VyojsIZZFDDYlWFAwMTmB40GRXabV0HHwbtdM?=
- =?Windows-1252?Q?a3ACWpcWz0b60cR58iPH2jAHOJtNpkcSXfcXLNlgXf4k9BI8faXw/zqU?=
- =?Windows-1252?Q?oCVzP8eJzpi/5Vb5Ga8ae6r8idQ5NIdjezA9j3bT4PLd5Jt9rPn3mG01?=
- =?Windows-1252?Q?RSBsVb0c4agmVB/igJtDOd9Rba9eG7NTlF3fKOfGP9zfk49FlZe9yPZU?=
- =?Windows-1252?Q?cdH9sVL4BWK1DaH7pZXHUTLYGxNXAAiPRJ3hCEj/pWGueUpcfzwcoVTM?=
- =?Windows-1252?Q?8dSYU8xEAQ6tx394c3Y+TXt68r/jp3slr9PZkH+wdOXPzekHeF+PaUXL?=
- =?Windows-1252?Q?1IM2hmE/sjMa3u9F9AoFMjkujxssivOPCqnqSZOke11y7GFoZKCr/4uy?=
- =?Windows-1252?Q?etl4ZLzngJXD6G3pxY25UAyOnqTwLh0ZTCL9aGZ3oSicW1XU0i+GKSJd?=
- =?Windows-1252?Q?uv8HvIgh57z83aXLgF6Hb77isEozWsUTw8uuTKijAJql+oJ2teftKAhv?=
- =?Windows-1252?Q?rb9O4N/wTYqHv96uk3gqoOMGmCQoLuGRZPdeHe/zQB/9aP8mrw81ULX3?=
- =?Windows-1252?Q?hnG4CRGuweUrriIJXsVRwHYm8cOrnj70tGUUmSmafxNIA6UYoNdSvBIq?=
- =?Windows-1252?Q?z+T4PUrjxmstVBkwSgOAWekfNMHt4rzWB7jsraDELJEuT5V5lyQDu6rD?=
- =?Windows-1252?Q?/hvWSadlh3dg7VehPuKvjJ5Wvy9jmz3sRvIQDwd20p5zCX7DDvxE2IWT?=
- =?Windows-1252?Q?y+1oHtjGIuUO13npmvBCZn0OUadJRIoon7n8ARrtycJ1JZGyJLmRJevc?=
- =?Windows-1252?Q?KTjiZqzYD4F5C9R9dDSv2AQ5bQIIiwGb13zOnM8XVPY6uxnsa7I5XBEt?=
- =?Windows-1252?Q?Jr+rfhkd3LXeVXcNGvUybqsxdDnhqWGAFadc2JktNzOVzySptozCpD7E?=
- =?Windows-1252?Q?/7goabHjnQI+NVoyb/LQUhaWx0NliwfO7gblZBQJtmFekrOwBOT8HDr1?=
- =?Windows-1252?Q?GUfFf2nlH1a2yX9EwinRadzzmdYtkahefR8iUy0fgPjG108LR0U3+D0L?=
- =?Windows-1252?Q?s58fMA5/o1zR/zIDmENhjR7K5+pHmsZuxsHDsoEjVLRKMVUDlqLqeNLe?=
- =?Windows-1252?Q?jW+CfnQ19lpmI9e0OG0cXfAFZUFYK0BP9lrDtO7xGgpA9iEKstDcLQX8?=
- =?Windows-1252?Q?uPCmOVVyM7CnqszyuntzCqI05mdBBZbvu73op1xpSs+WL/Yklc3xxpop?=
- =?Windows-1252?Q?/ciSPa1kh/Cc06lwmblzE+kisqF61lC3ULu22Gq1iXxjyTdiJrL56QvL?=
- =?Windows-1252?Q?esvB9GwP5sqE9U/dO+padbjKIFU1OnvBjtOR0+dMXt1b1drFG+xxp7SB?=
- =?Windows-1252?Q?Fb4eYdyRWRZe5YYhzpweoQ6NREVYF5dRh1j+JndxaQwseN5M+hHqtV+s?=
- =?Windows-1252?Q?jaXtDic0BSszm505n8yPeKXe1lq2FoMITwTzA52yqJX9aLryrltcZVpj?=
- =?Windows-1252?Q?hiDjkbAm?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c7a3762-bd8a-4721-d4bb-08d9282fc104
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1201MB0234.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2021 14:39:41.7748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BkmOIuEDwy/l/x+2e4dD2cv4Fpu1Jw8q2zNXBkcmswmfTTo9Q/MctjGGkRiMOFqd66gfM6YfWrXD2QDtCwgcbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4779
+References: <CA+G9fYsnWUYuahxv3+vQx3UQ_CvJ5caiQwb7BXEuDGxPjmrM1w@mail.gmail.com>
+In-Reply-To: <CA+G9fYsnWUYuahxv3+vQx3UQ_CvJ5caiQwb7BXEuDGxPjmrM1w@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 5 Jun 2021 15:51:19 -0500
+Message-ID: <CAH2r5msKk8=6msSYpUHJftKuV9zq15ptME4MHBNacc4FXb9iUQ@mail.gmail.com>
+Subject: Re: [next] fs: cifsglob.h:955:20: error: passing argument 2 of
+ 'test_bit' from incompatible pointer type
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Steve French <sfrench@samba.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks. I will fix it.
+Probably was reported earlier and this code has been changed.  The
+multichannel patches are also temporarily removed from for-next while
+Shyam is doing some fixes to the series.
 
-Regards,
-Eric
+On Fri, Jun 4, 2021 at 4:23 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> The following builds failed on Linux next-20210604 due to warnings / errors.
+>
+>   - arm (s3c2410_defconfig) with gcc- 8 / 9 / 10
+>   - parisc (defconfig) with gcc-8 / 9 / 10
+>   - powerpc (ppc6xx_defconfig) with gcc- 8 / 9 /10
+>
+> In file included from fs/cifs/transport.c:38:
+> fs/cifs/transport.c: In function 'cifs_pick_channel':
+> fs/cifs/cifsglob.h:955:20: error: passing argument 2 of 'test_bit'
+> from incompatible pointer type [-Werror=incompatible-pointer-types]
+>   955 |  test_bit((index), &(ses)->chans_need_reconnect)
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>            |
+>            size_t * {aka unsigned int *}
+> fs/cifs/transport.c:1065:7: note: in expansion of macro
+> 'CIFS_CHAN_NEEDS_RECONNECT'
+>  1065 |   if (CIFS_CHAN_NEEDS_RECONNECT(ses, index))
+>       |       ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from arch/powerpc/include/asm/bitops.h:193,
+>                  from include/linux/bitops.h:32,
+>                  from include/linux/kernel.h:12,
+>                  from include/linux/list.h:9,
+>                  from include/linux/wait.h:7,
+>                  from include/linux/wait_bit.h:8,
+>                  from include/linux/fs.h:6,
+>                  from fs/cifs/transport.c:23:
+> include/asm-generic/bitops/non-atomic.h:104:66: note: expected 'const
+> volatile long unsigned int *' but argument is of type 'size_t *' {aka
+> 'unsigned int *'}
+>   104 | static inline int test_bit(int nr, const volatile unsigned long *addr)
+>                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+> cc1: some warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:272: fs/cifs/transport.o] Error 1
+> fs/cifs/sess.c: In function 'cifs_chan_set_need_reconnect':
+> fs/cifs/sess.c:98:22: error: passing argument 2 of 'set_bit' from
+> incompatible pointer type [-Werror=incompatible-pointer-types]
+>    98 |  set_bit(chan_index, &ses->chans_need_reconnect);
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>              |
+>              size_t * {aka unsigned int *}
+>
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+>
+> Full build log:
+> https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1317929765#L247
+>
+> Steps to reproduce:
+> -----------------------------
+>
+> # TuxMake is a command line tool and Python library that provides
+> # portable and repeatable Linux kernel builds across a variety of
+> # architectures, toolchains, kernel configurations, and make targets.
+> #
+> # TuxMake supports the concept of runtimes.
+> # See https://docs.tuxmake.org/runtimes/, for that to work it requires
+> # that you install podman or docker on your system.
+> #
+> # To install tuxmake on your system globally:
+> # sudo pip3 install -U tuxmake
+> #
+> # See https://docs.tuxmake.org/ for complete documentation.
+>
+> tuxmake --runtime podman --target-arch arm --toolchain gcc-8 --kconfig
+> s3c2410_defconfig
+>
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
-On 2021-06-04 10:26 p.m., Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the amdgpu tree, yesterday's linux-next build (htmldocs)
-> produced this warning:
->
-> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1838: warning: Function parameter or member 'table_freed' not described in 'amdgpu_vm_bo_update'
->
-> Introduced by commit
->
->    891069653f51 ("drm/amdgpu: Add table_freed parameter to amdgpu_vm_bo_update")
->
 
+
+-- 
+Thanks,
+
+Steve

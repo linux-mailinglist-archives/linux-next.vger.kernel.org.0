@@ -2,144 +2,196 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3927839CB0C
-	for <lists+linux-next@lfdr.de>; Sat,  5 Jun 2021 22:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F0E39CF35
+	for <lists+linux-next@lfdr.de>; Sun,  6 Jun 2021 14:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbhFEUyf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 5 Jun 2021 16:54:35 -0400
-Received: from mail-lf1-f42.google.com ([209.85.167.42]:34341 "EHLO
-        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbhFEUyd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 5 Jun 2021 16:54:33 -0400
-Received: by mail-lf1-f42.google.com with SMTP id f30so19481720lfj.1;
-        Sat, 05 Jun 2021 13:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NeucVVYBqR4NtptCPVit6uqG78d6Me8sFT/5HJOioMM=;
-        b=UfZ4Y7S5wJzmo3KdhQjAWo1UGVea5AGtbObSBCNksHi9GeZ4EqgAOCYZuHrxpi2ZJm
-         2lLEwjhagfvssQnvzTqEW4Yl0o4LV1/919zs5jo1jviyRzGo1oyPqv/Bk7HJj6BmlMIw
-         AR5LCiMhWuxQs1ePGaWgJ5cVfOBALYWL16whSOI/NAOvnYwC9ym2AAT5xIHGU8Yw5DIQ
-         4neDdEWkWHEBjAoCz1i5Yu/jKicm5QYom+uIlaiodv0uRPnzUGkzmHBMwgPpHcX2QGvX
-         gJGBaAaDK49yi2XUb8ZWNX3JMMqYXfyZQMYfOgR4w7HZcCcNR/jYsfb0DK5J3VU7WSJB
-         3/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NeucVVYBqR4NtptCPVit6uqG78d6Me8sFT/5HJOioMM=;
-        b=AvHcLy/9WMwwVLkVlBwa1Kmg9/NF9HrHh9KqW1G2VYMWUptmtiKjX7wYT33uzT4PLc
-         eo7BjIgA1eQ8HWKi9WOXVPzUlgMz9F0r69nGDEpc8m31kVwuKEnKbNWmJU9wi7mp7H8D
-         E2ATH17+jZ0+eZgn2ADTmq07RQghlZITL95KXMGeV5CODzk572Zn6jsFqzTiDVu8nQM4
-         pZrZXjvMHXiZeu0Ys+Y6dvEBxh/y0ETaEXn7RiHLo5QDF21rKh1bnKtsSa340Ta37w4f
-         v4ALh2hX5/ALLTMvufFjbIduD/Iehjswgan0RQoeGg1LH8LMVe8SYCEphVDca3c2bmYZ
-         mejg==
-X-Gm-Message-State: AOAM532o82Ij/A1osNqP0DqAUCFUXyq3QCvifi44GsKeL7eVPiLebQbf
-        hbGS9tGZfThoTnBSNLg6er6ZjK95fV9lMpjjg9o=
-X-Google-Smtp-Source: ABdhPJyaUmu4mJHf+r5EO7tRZFWoqjozfEnvSWdk9NCAhRrVk4dbn75NWh5kpQIuUY6no0ANnljhmpkNOeAmaKpllUg=
-X-Received: by 2002:a05:6512:b17:: with SMTP id w23mr6565422lfu.133.1622926290273;
- Sat, 05 Jun 2021 13:51:30 -0700 (PDT)
+        id S230060AbhFFNAh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Jun 2021 09:00:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14590 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229776AbhFFNAf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Jun 2021 09:00:35 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 156CXsHW120146;
+        Sun, 6 Jun 2021 08:58:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ subject : message-id : date : cc : to : content-transfer-encoding :
+ mime-version; s=pp1; bh=YaItj7tFm7WJhxoBPqUU0TF/tFGrjN2tvV7KV5nSnJI=;
+ b=ekd2g+EMEhebGIdOfQH54BhuioCEcJNkh1AveqrRZmxvsnA0nIe73GIYvTaNCgtXhrGV
+ sCcg8UU2ymNVTOHC/sPEFXRhAjEi48PIY8l12BDEplwM6kASmdqaU7ZHngDnHVuZ1IRv
+ xWMcbozd9tYMKrjb4yrDG6OskO8Mcuo5hFNmzKwTboDzRjrv29bAyKLnYe3S27QQF75S
+ nHb2IWf8XjHmykvByI/nnXR1Ur09OpqqAJHuOcbszayOrw+VHharW700hvVtiNl8KLpN
+ sOE9wTDAYdgnNVd3cLjyiko9vykhbFxl7ya+dxehMBVjRUfj5HgQ3DDjndBrATNdoHx3 pA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 390vhasys3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Jun 2021 08:58:28 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 156CswNC002232;
+        Sun, 6 Jun 2021 12:58:26 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3900w8gecc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 06 Jun 2021 12:58:26 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 156CvhA134406700
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 6 Jun 2021 12:57:43 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 88E454C040;
+        Sun,  6 Jun 2021 12:58:24 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C02B24C044;
+        Sun,  6 Jun 2021 12:58:23 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.77.193.230])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun,  6 Jun 2021 12:58:23 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Subject: [powerpc]next-20210604 - Kernel crash while running pmem tests
+Message-Id: <DFB75BA8-603F-4A35-880B-C5B23EF8FA7D@linux.vnet.ibm.com>
+Date:   Sun, 6 Jun 2021 18:28:22 +0530
+Cc:     linux-next@vger.kernel.org, hch@lst.de
+To:     nvdimm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org
+X-Mailer: Apple Mail (2.3654.80.0.2.43)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SnG6ZVVsi88SWAAzjsJi2xuoua4pbk7S
+X-Proofpoint-GUID: SnG6ZVVsi88SWAAzjsJi2xuoua4pbk7S
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <CA+G9fYsnWUYuahxv3+vQx3UQ_CvJ5caiQwb7BXEuDGxPjmrM1w@mail.gmail.com>
-In-Reply-To: <CA+G9fYsnWUYuahxv3+vQx3UQ_CvJ5caiQwb7BXEuDGxPjmrM1w@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 5 Jun 2021 15:51:19 -0500
-Message-ID: <CAH2r5msKk8=6msSYpUHJftKuV9zq15ptME4MHBNacc4FXb9iUQ@mail.gmail.com>
-Subject: Re: [next] fs: cifsglob.h:955:20: error: passing argument 2 of
- 'test_bit' from incompatible pointer type
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Steve French <sfrench@samba.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-06_07:2021-06-04,2021-06-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104190000 definitions=main-2106060104
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Probably was reported earlier and this code has been changed.  The
-multichannel patches are also temporarily removed from for-next while
-Shyam is doing some fixes to the series.
+Running pmem tests [1] against latest next tree booted on powerpc
+results into following crash
 
-On Fri, Jun 4, 2021 at 4:23 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> The following builds failed on Linux next-20210604 due to warnings / errors.
->
->   - arm (s3c2410_defconfig) with gcc- 8 / 9 / 10
->   - parisc (defconfig) with gcc-8 / 9 / 10
->   - powerpc (ppc6xx_defconfig) with gcc- 8 / 9 /10
->
-> In file included from fs/cifs/transport.c:38:
-> fs/cifs/transport.c: In function 'cifs_pick_channel':
-> fs/cifs/cifsglob.h:955:20: error: passing argument 2 of 'test_bit'
-> from incompatible pointer type [-Werror=incompatible-pointer-types]
->   955 |  test_bit((index), &(ses)->chans_need_reconnect)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->            |
->            size_t * {aka unsigned int *}
-> fs/cifs/transport.c:1065:7: note: in expansion of macro
-> 'CIFS_CHAN_NEEDS_RECONNECT'
->  1065 |   if (CIFS_CHAN_NEEDS_RECONNECT(ses, index))
->       |       ^~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from arch/powerpc/include/asm/bitops.h:193,
->                  from include/linux/bitops.h:32,
->                  from include/linux/kernel.h:12,
->                  from include/linux/list.h:9,
->                  from include/linux/wait.h:7,
->                  from include/linux/wait_bit.h:8,
->                  from include/linux/fs.h:6,
->                  from fs/cifs/transport.c:23:
-> include/asm-generic/bitops/non-atomic.h:104:66: note: expected 'const
-> volatile long unsigned int *' but argument is of type 'size_t *' {aka
-> 'unsigned int *'}
->   104 | static inline int test_bit(int nr, const volatile unsigned long *addr)
->                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
-> cc1: some warnings being treated as errors
-> make[3]: *** [scripts/Makefile.build:272: fs/cifs/transport.o] Error 1
-> fs/cifs/sess.c: In function 'cifs_chan_set_need_reconnect':
-> fs/cifs/sess.c:98:22: error: passing argument 2 of 'set_bit' from
-> incompatible pointer type [-Werror=incompatible-pointer-types]
->    98 |  set_bit(chan_index, &ses->chans_need_reconnect);
->              ^~~~~~~~~~~~~~~~~~~~~~~~~~
->              |
->              size_t * {aka unsigned int *}
->
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
->
-> Full build log:
-> https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1317929765#L247
->
-> Steps to reproduce:
-> -----------------------------
->
-> # TuxMake is a command line tool and Python library that provides
-> # portable and repeatable Linux kernel builds across a variety of
-> # architectures, toolchains, kernel configurations, and make targets.
-> #
-> # TuxMake supports the concept of runtimes.
-> # See https://docs.tuxmake.org/runtimes/, for that to work it requires
-> # that you install podman or docker on your system.
-> #
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
->
-> tuxmake --runtime podman --target-arch arm --toolchain gcc-8 --kconfig
-> s3c2410_defconfig
->
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+[ 1307.124289] Kernel attempted to read user page (330) - exploit attempt? =
+(uid: 0)
+[ 1307.124319] BUG: Kernel NULL pointer dereference on read at 0x00000330
+[ 1307.124328] Faulting instruction address: 0xc000000000906344
+[ 1307.124336] Oops: Kernel access of bad area, sig: 11 [#1]
+[ 1307.124343] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeri=
+es
+[ 1307.124353] Modules linked in: rpadlpar_io rpaphp dm_mod bonding rfkill =
+sunrpc pseries_rng papr_scm uio_pdrv_genirq uio sch_fq_codel ip_tables sd_m=
+od t10_pi sg ibmvscsi scsi_transport_srp ibmveth fuse
+[ 1307.124392] CPU: 14 PID: 23553 Comm: lt-ndctl Not tainted 5.13.0-rc4-nex=
+t-20210604 #1
+[ 1307.124403] NIP:  c000000000906344 LR: c0000000004701d4 CTR: c0000000009=
+06320
+[ 1307.124411] REGS: c000000022cbb720 TRAP: 0300   Not tainted  (5.13.0-rc4=
+-next-20210604)
+[ 1307.124420] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR=
+: 48048288  XER: 20040000
+[ 1307.124441] CFAR: c0000000004701d0 DAR: 0000000000000330 DSISR: 40000000=
+ IRQMASK: 0=20
+[ 1307.124441] GPR00: c0000000004701d4 c000000022cbb9c0 c000000001b39100 c0=
+000000220e16a0=20
+[ 1307.124441] GPR04: c00000009483a300 c00000009483a300 0000000028048282 c0=
+0000000001dd30=20
+[ 1307.124441] GPR08: 0000000000000001 0000000000000000 0000000000000001 c0=
+00000001b7e060=20
+[ 1307.124441] GPR12: c000000000906320 c00000167fa21a80 fffffffffffffffa 00=
+00000010050f6c=20
+[ 1307.124441] GPR16: 0000000010050e88 00007fffc289f87b 00007fffc289a850 00=
+007fffc289a6b8=20
+[ 1307.124441] GPR20: 0000000000000003 0000000010033600 0000000010050f6a 00=
+00000000000000=20
+[ 1307.124441] GPR24: 0000000000000000 c0000000268cf810 c00000000bcb2660 c0=
+000000220e1728=20
+[ 1307.124441] GPR28: 0000000000000001 c000000001bf1978 c0000000220e16a0 00=
+000000040f1000=20
+[ 1307.124537] NIP [c000000000906344] pmem_pagemap_cleanup+0x24/0x40
+[ 1307.124550] LR [c0000000004701d4] memunmap_pages+0x1b4/0x4b0
+[ 1307.124560] Call Trace:
+[ 1307.124564] [c000000022cbb9c0] [c0000000009063c8] pmem_pagemap_kill+0x28=
+/0x40 (unreliable)
+[ 1307.124576] [c000000022cbb9e0] [c0000000004701d4] memunmap_pages+0x1b4/0=
+x4b0
+[ 1307.124586] [c000000022cbba90] [c0000000008b28a0] devm_action_release+0x=
+30/0x50
+[ 1307.124597] [c000000022cbbab0] [c0000000008b39c8] release_nodes+0x2f8/0x=
+3e0
+[ 1307.124607] [c000000022cbbb60] [c0000000008ac440] device_release_driver_=
+internal+0x190/0x2b0
+[ 1307.124619] [c000000022cbbba0] [c0000000008a8450] unbind_store+0x130/0x1=
+70
+[ 1307.124629] [c000000022cbbbe0] [c0000000008a75b4] drv_attr_store+0x44/0x=
+60
+[ 1307.124638] [c000000022cbbc00] [c000000000594a08] sysfs_kf_write+0x68/0x=
+80
+[ 1307.124648] [c000000022cbbc20] [c0000000005930e0] kernfs_fop_write_iter+=
+0x1a0/0x290
+[ 1307.124657] [c000000022cbbc70] [c00000000047830c] new_sync_write+0x14c/0=
+x1d0
+[ 1307.124666] [c000000022cbbd10] [c00000000047b8d4] vfs_write+0x224/0x330
+[ 1307.124675] [c000000022cbbd60] [c00000000047bbbc] ksys_write+0x7c/0x140
+[ 1307.124683] [c000000022cbbdb0] [c00000000002ecd0] system_call_exception+=
+0x150/0x2d0
+[ 1307.124694] [c000000022cbbe10] [c00000000000d45c] system_call_common+0xe=
+c/0x278
+[ 1307.124703] --- interrupt: c00 at 0x7fffa26cbd74
+[ 1307.124710] NIP:  00007fffa26cbd74 LR: 00007fffa28bb6bc CTR: 00000000000=
+00000
+[ 1307.124717] REGS: c000000022cbbe80 TRAP: 0c00   Not tainted  (5.13.0-rc4=
+-next-20210604)
+[ 1307.124726] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> =
+ CR: 24048402  XER: 00000000
+[ 1307.124746] IRQMASK: 0=20
+[ 1307.124746] GPR00: 0000000000000004 00007fffc289a180 00007fffa27c7100 00=
+00000000000004=20
+[ 1307.124746] GPR04: 0000000047d24c4c 0000000000000007 0000000000000000 00=
+007fffa28dd1d8=20
+[ 1307.124746] GPR08: 0000000000000000 0000000000000000 0000000000000000 00=
+00000000000000=20
+[ 1307.124746] GPR12: 0000000000000000 00007fffa29a2560 fffffffffffffffa 00=
+00000010050f6c=20
+[ 1307.124746] GPR16: 0000000010050e88 00007fffc289f87b 00007fffc289a850 00=
+007fffc289a6b8=20
+[ 1307.124746] GPR20: 0000000000000003 0000000010033600 0000000010050f6a 00=
+00000000000000=20
+[ 1307.124746] GPR24: 0000000010050e60 0000000047d28340 00000000100314e8 00=
+00000000000000=20
+[ 1307.124746] GPR28: 00007fffa299b5c8 0000000000000004 0000000000000007 00=
+00000047d24c4c=20
+[ 1307.124831] NIP [00007fffa26cbd74] 0x7fffa26cbd74
+[ 1307.124838] LR [00007fffa28bb6bc] 0x7fffa28bb6bc
+[ 1307.124844] --- interrupt: c00
+[ 1307.124848] Instruction dump:
+[ 1307.124854] 7c0803a6 4e800020 60000000 3c4c0123 38422de0 7c0802a6 600000=
+00 7c0802a6=20
+[ 1307.124870] f8010010 f821ffe1 e9230030 e9290088 <e8690330> 4bddbb01 6000=
+0000 38210020=20
+[ 1307.124886] ---[ end trace 9881d6f8c705bac2 ]=E2=80=94
 
+next-20210601 was good.=20
 
+The code in question pmem_pagemap_cleanup was last changed by
+commit 87eb73b2ca7
+nvdimm-pmem: convert to blk_alloc_disk/blk_cleanup_disk
 
--- 
-Thanks,
+static void pmem_pagemap_cleanup(struct dev_pagemap *pgmap)
+{
+        struct request_queue *q =3D
+                container_of(pgmap->ref, struct request_queue, q_usage_coun=
+ter);
 
-Steve
+        blk_cleanup_disk(queue_to_disk(q));  <<=3D=3D=3D=3D
+}
+
+Thanks
+-Sachin
+
+[1] https://github.com/avocado-framework-tests/avocado-misc-tests/blob/mast=
+er/memory/ndctl.py
+

@@ -2,196 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F0E39CF35
-	for <lists+linux-next@lfdr.de>; Sun,  6 Jun 2021 14:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D15139D1D9
+	for <lists+linux-next@lfdr.de>; Mon,  7 Jun 2021 00:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbhFFNAh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 6 Jun 2021 09:00:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14590 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229776AbhFFNAf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 6 Jun 2021 09:00:35 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 156CXsHW120146;
-        Sun, 6 Jun 2021 08:58:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- subject : message-id : date : cc : to : content-transfer-encoding :
- mime-version; s=pp1; bh=YaItj7tFm7WJhxoBPqUU0TF/tFGrjN2tvV7KV5nSnJI=;
- b=ekd2g+EMEhebGIdOfQH54BhuioCEcJNkh1AveqrRZmxvsnA0nIe73GIYvTaNCgtXhrGV
- sCcg8UU2ymNVTOHC/sPEFXRhAjEi48PIY8l12BDEplwM6kASmdqaU7ZHngDnHVuZ1IRv
- xWMcbozd9tYMKrjb4yrDG6OskO8Mcuo5hFNmzKwTboDzRjrv29bAyKLnYe3S27QQF75S
- nHb2IWf8XjHmykvByI/nnXR1Ur09OpqqAJHuOcbszayOrw+VHharW700hvVtiNl8KLpN
- sOE9wTDAYdgnNVd3cLjyiko9vykhbFxl7ya+dxehMBVjRUfj5HgQ3DDjndBrATNdoHx3 pA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 390vhasys3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Jun 2021 08:58:28 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 156CswNC002232;
-        Sun, 6 Jun 2021 12:58:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3900w8gecc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Jun 2021 12:58:26 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 156CvhA134406700
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 6 Jun 2021 12:57:43 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88E454C040;
-        Sun,  6 Jun 2021 12:58:24 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C02B24C044;
-        Sun,  6 Jun 2021 12:58:23 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.77.193.230])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  6 Jun 2021 12:58:23 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
-Content-Type: text/plain;
-        charset=utf-8
-Subject: [powerpc]next-20210604 - Kernel crash while running pmem tests
-Message-Id: <DFB75BA8-603F-4A35-880B-C5B23EF8FA7D@linux.vnet.ibm.com>
-Date:   Sun, 6 Jun 2021 18:28:22 +0530
-Cc:     linux-next@vger.kernel.org, hch@lst.de
-To:     nvdimm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org
-X-Mailer: Apple Mail (2.3654.80.0.2.43)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SnG6ZVVsi88SWAAzjsJi2xuoua4pbk7S
-X-Proofpoint-GUID: SnG6ZVVsi88SWAAzjsJi2xuoua4pbk7S
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S230420AbhFFW2G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 6 Jun 2021 18:28:06 -0400
+Received: from ozlabs.org ([203.11.71.1]:48539 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230355AbhFFW2F (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 6 Jun 2021 18:28:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Fyrgn5QvNz9sRN;
+        Mon,  7 Jun 2021 08:26:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623018374;
+        bh=XM86FTtYk2jY7xDjQ8M2kl6jtN1ijdymK/UCAoXuc9s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=owcgT5vvqBoO3nZzaga6808gdnX8HAOXzFYg2Y43wGt07ZpohkrabsOERYJkafIEz
+         Q5JOr8Q0rkzoHz81rf0tEHm2uDY+xzS1I0oqcn0+AtzhVlDD6NHHZDbFpZUWMkfbxR
+         iKhPHT2agh2qRiIBb72oRDtH+yPHHhycIIwPa6fmaNG0ZVo4b1qWFhuGANKuks3HdT
+         nLSyqNZ9VR9ygbaZ7AIwuRaik0EYQAJk8kun7dr55Sr1eXeeyqVBolk0GCc/mqUDO0
+         ro6R+sH+UxUHvlgwcUTPjYKVBePf7vPadCIHeILonKfsFJZ4veqjLF6rbw/rOp2jN/
+         EKNwSquNS0yaQ==
+Date:   Mon, 7 Jun 2021 08:26:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the xfs tree
+Message-ID: <20210607082607.1356821c@canb.auug.org.au>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-06_07:2021-06-04,2021-06-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2106060104
+Content-Type: multipart/signed; boundary="Sig_/YBTPPZmI3dtILHSa2nfjkV8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Running pmem tests [1] against latest next tree booted on powerpc
-results into following crash
+--Sig_/YBTPPZmI3dtILHSa2nfjkV8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[ 1307.124289] Kernel attempted to read user page (330) - exploit attempt? =
-(uid: 0)
-[ 1307.124319] BUG: Kernel NULL pointer dereference on read at 0x00000330
-[ 1307.124328] Faulting instruction address: 0xc000000000906344
-[ 1307.124336] Oops: Kernel access of bad area, sig: 11 [#1]
-[ 1307.124343] LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeri=
-es
-[ 1307.124353] Modules linked in: rpadlpar_io rpaphp dm_mod bonding rfkill =
-sunrpc pseries_rng papr_scm uio_pdrv_genirq uio sch_fq_codel ip_tables sd_m=
-od t10_pi sg ibmvscsi scsi_transport_srp ibmveth fuse
-[ 1307.124392] CPU: 14 PID: 23553 Comm: lt-ndctl Not tainted 5.13.0-rc4-nex=
-t-20210604 #1
-[ 1307.124403] NIP:  c000000000906344 LR: c0000000004701d4 CTR: c0000000009=
-06320
-[ 1307.124411] REGS: c000000022cbb720 TRAP: 0300   Not tainted  (5.13.0-rc4=
--next-20210604)
-[ 1307.124420] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR=
-: 48048288  XER: 20040000
-[ 1307.124441] CFAR: c0000000004701d0 DAR: 0000000000000330 DSISR: 40000000=
- IRQMASK: 0=20
-[ 1307.124441] GPR00: c0000000004701d4 c000000022cbb9c0 c000000001b39100 c0=
-000000220e16a0=20
-[ 1307.124441] GPR04: c00000009483a300 c00000009483a300 0000000028048282 c0=
-0000000001dd30=20
-[ 1307.124441] GPR08: 0000000000000001 0000000000000000 0000000000000001 c0=
-00000001b7e060=20
-[ 1307.124441] GPR12: c000000000906320 c00000167fa21a80 fffffffffffffffa 00=
-00000010050f6c=20
-[ 1307.124441] GPR16: 0000000010050e88 00007fffc289f87b 00007fffc289a850 00=
-007fffc289a6b8=20
-[ 1307.124441] GPR20: 0000000000000003 0000000010033600 0000000010050f6a 00=
-00000000000000=20
-[ 1307.124441] GPR24: 0000000000000000 c0000000268cf810 c00000000bcb2660 c0=
-000000220e1728=20
-[ 1307.124441] GPR28: 0000000000000001 c000000001bf1978 c0000000220e16a0 00=
-000000040f1000=20
-[ 1307.124537] NIP [c000000000906344] pmem_pagemap_cleanup+0x24/0x40
-[ 1307.124550] LR [c0000000004701d4] memunmap_pages+0x1b4/0x4b0
-[ 1307.124560] Call Trace:
-[ 1307.124564] [c000000022cbb9c0] [c0000000009063c8] pmem_pagemap_kill+0x28=
-/0x40 (unreliable)
-[ 1307.124576] [c000000022cbb9e0] [c0000000004701d4] memunmap_pages+0x1b4/0=
-x4b0
-[ 1307.124586] [c000000022cbba90] [c0000000008b28a0] devm_action_release+0x=
-30/0x50
-[ 1307.124597] [c000000022cbbab0] [c0000000008b39c8] release_nodes+0x2f8/0x=
-3e0
-[ 1307.124607] [c000000022cbbb60] [c0000000008ac440] device_release_driver_=
-internal+0x190/0x2b0
-[ 1307.124619] [c000000022cbbba0] [c0000000008a8450] unbind_store+0x130/0x1=
-70
-[ 1307.124629] [c000000022cbbbe0] [c0000000008a75b4] drv_attr_store+0x44/0x=
-60
-[ 1307.124638] [c000000022cbbc00] [c000000000594a08] sysfs_kf_write+0x68/0x=
-80
-[ 1307.124648] [c000000022cbbc20] [c0000000005930e0] kernfs_fop_write_iter+=
-0x1a0/0x290
-[ 1307.124657] [c000000022cbbc70] [c00000000047830c] new_sync_write+0x14c/0=
-x1d0
-[ 1307.124666] [c000000022cbbd10] [c00000000047b8d4] vfs_write+0x224/0x330
-[ 1307.124675] [c000000022cbbd60] [c00000000047bbbc] ksys_write+0x7c/0x140
-[ 1307.124683] [c000000022cbbdb0] [c00000000002ecd0] system_call_exception+=
-0x150/0x2d0
-[ 1307.124694] [c000000022cbbe10] [c00000000000d45c] system_call_common+0xe=
-c/0x278
-[ 1307.124703] --- interrupt: c00 at 0x7fffa26cbd74
-[ 1307.124710] NIP:  00007fffa26cbd74 LR: 00007fffa28bb6bc CTR: 00000000000=
-00000
-[ 1307.124717] REGS: c000000022cbbe80 TRAP: 0c00   Not tainted  (5.13.0-rc4=
--next-20210604)
-[ 1307.124726] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> =
- CR: 24048402  XER: 00000000
-[ 1307.124746] IRQMASK: 0=20
-[ 1307.124746] GPR00: 0000000000000004 00007fffc289a180 00007fffa27c7100 00=
-00000000000004=20
-[ 1307.124746] GPR04: 0000000047d24c4c 0000000000000007 0000000000000000 00=
-007fffa28dd1d8=20
-[ 1307.124746] GPR08: 0000000000000000 0000000000000000 0000000000000000 00=
-00000000000000=20
-[ 1307.124746] GPR12: 0000000000000000 00007fffa29a2560 fffffffffffffffa 00=
-00000010050f6c=20
-[ 1307.124746] GPR16: 0000000010050e88 00007fffc289f87b 00007fffc289a850 00=
-007fffc289a6b8=20
-[ 1307.124746] GPR20: 0000000000000003 0000000010033600 0000000010050f6a 00=
-00000000000000=20
-[ 1307.124746] GPR24: 0000000010050e60 0000000047d28340 00000000100314e8 00=
-00000000000000=20
-[ 1307.124746] GPR28: 00007fffa299b5c8 0000000000000004 0000000000000007 00=
-00000047d24c4c=20
-[ 1307.124831] NIP [00007fffa26cbd74] 0x7fffa26cbd74
-[ 1307.124838] LR [00007fffa28bb6bc] 0x7fffa28bb6bc
-[ 1307.124844] --- interrupt: c00
-[ 1307.124848] Instruction dump:
-[ 1307.124854] 7c0803a6 4e800020 60000000 3c4c0123 38422de0 7c0802a6 600000=
-00 7c0802a6=20
-[ 1307.124870] f8010010 f821ffe1 e9230030 e9290088 <e8690330> 4bddbb01 6000=
-0000 38210020=20
-[ 1307.124886] ---[ end trace 9881d6f8c705bac2 ]=E2=80=94
+Hi all,
 
-next-20210601 was good.=20
+Commit
 
-The code in question pmem_pagemap_cleanup was last changed by
-commit 87eb73b2ca7
-nvdimm-pmem: convert to blk_alloc_disk/blk_cleanup_disk
+  9f059beac967 ("xfs: cleanup error handling in xfs_buf_get_map")
 
-static void pmem_pagemap_cleanup(struct dev_pagemap *pgmap)
-{
-        struct request_queue *q =3D
-                container_of(pgmap->ref, struct request_queue, q_usage_coun=
-ter);
+is missing a Signed-off-by from its committer.
 
-        blk_cleanup_disk(queue_to_disk(q));  <<=3D=3D=3D=3D
-}
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks
--Sachin
+--Sig_/YBTPPZmI3dtILHSa2nfjkV8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-[1] https://github.com/avocado-framework-tests/avocado-misc-tests/blob/mast=
-er/memory/ndctl.py
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC9S38ACgkQAVBC80lX
+0GwWlQf/fqWxCQNzlWqhhC/Qr7weH3E7jpztZcbXCgxEJG6flyKJDqz4L3vmVRDi
+bQQhD9jgTgh7XMVPE6KHH7AKepp+NKWE/28nvYjadYIE2APRBpihO7Mp7SgK0HKe
+2GAadbtiLSPnOQU61BjhR1KFfwzs1HXv3ncLdgExo7kCIMxvl937nCFFIScE0Lg2
+oxEEBS+tCo6TTILlyDJc0p/2j1tp6fMQW36Od9sJxjRszVI8dXJm9Z6319vJhnlq
+cZ0CQZDPBazqbCQblNh85nEO9Sg72G2+Q128pATqMLWMlQnEnyL9M5cfUzv4kO8o
+Un/ed+edIAozw/dCCHnvpOGNNVYuug==
+=Vyna
+-----END PGP SIGNATURE-----
+
+--Sig_/YBTPPZmI3dtILHSa2nfjkV8--

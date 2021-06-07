@@ -2,74 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E5E39D9A8
-	for <lists+linux-next@lfdr.de>; Mon,  7 Jun 2021 12:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD6B39DBBC
+	for <lists+linux-next@lfdr.de>; Mon,  7 Jun 2021 13:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhFGKb3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Jun 2021 06:31:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53872 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230233AbhFGKb3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 7 Jun 2021 06:31:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 18B85611AD;
-        Mon,  7 Jun 2021 10:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623061778;
-        bh=Zk1bcXx7TLwrFaOUSJuFhwPwz4xFtCkQh2SupLh+gF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CP8QqgWbxC2BmMEvucqk4G+jjoxFcUHu21ySa8azUrgYh0BMEp8an3roqhckHl5i6
-         JXsaGZIo5nBHXJVeXh5/yoJv44oQ4QoRznJFL2OgSEi5wo4EGoWB3yLPUVq9PzlXxr
-         1blzWmFIWJY2QdDt0535VWX1JdWzdtdm0hxDbsqrSZ7VLPf1Nva2OoiM17Fu5TsWmR
-         cpkRt7qgH17CahpcjSArklNTgBUwDqHYXxWRNOIYdPAf0BMeMKdV5pOsjOw1syn//5
-         vP68qgg8c2ukp/ZcVgUM3Gtsp/PuyRuIejcfEHQryLsjVVGOOh64iD6pf0UAho95VJ
-         sDnn+izKeePRw==
-Date:   Mon, 7 Jun 2021 11:29:33 +0100
-From:   Will Deacon <will@kernel.org>
+        id S230177AbhFGLvq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Jun 2021 07:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230175AbhFGLvq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 7 Jun 2021 07:51:46 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8FAC061766;
+        Mon,  7 Jun 2021 04:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=b4rAFiRR6q1QLHaHBT6xTI6OSbNTFacSG20JPRHmTxs=; b=MPpQcj7PWyNMrqEm5VP13UzEw
+        GkMawcXFxqJfN6qmOAGuoj0FZMZuFmCwSxI6kN+K0mOCLlk5WNG0uZMf8jbG2bp2QKvcWOcSAsla/
+        VXfb3T4N1o7XNs/AAY4GVcBWJbr7fpM5tVO5R+lOr8YVVjMn0gVifIt4M+PwXK96RSBdSprPZY8qe
+        c9FOU2BhTkBPBh1zm5HGRouKnW9C873OP1CWe5dw8XXDyTfJerFOj1yUBJboAm6kvmlqu9x2boAma
+        z5hbgoyw6O5rUO18o0vNa/5Wp5D23cluz8e7IdKzSP4LeXjmBaxCyfu5WyqAYPCpq06bauQKhcMCQ
+        +wbpWuKXA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44786)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1lqDlP-0000T6-Mt; Mon, 07 Jun 2021 12:49:51 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1lqDlM-0005tb-T2; Mon, 07 Jun 2021 12:49:49 +0100
+Date:   Mon, 7 Jun 2021 12:49:48 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: linux-next: manual merge of the akpm tree with the arm64 tree
-Message-ID: <20210607102932.GA6924@willie-the-truck>
-References: <20210607192513.466770c0@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm tree
+Message-ID: <20210607114946.GD22278@shell.armlinux.org.uk>
+References: <20210604081503.2229b376@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607192513.466770c0@canb.auug.org.au>
+In-Reply-To: <20210604081503.2229b376@canb.auug.org.au>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 07:25:13PM +1000, Stephen Rothwell wrote:
+On Fri, Jun 04, 2021 at 08:15:03AM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the akpm-current tree got a conflict in:
+> Commit
 > 
->   arch/arm64/include/asm/page.h
+>   aafc8eb78635 ("ARM: update __swp_entry_to_pte() to use PTE_TYPE_FAULT")
 > 
-> between commits:
-> 
->   92638b4e1b47 ("mm: arch: remove indirection level in alloc_zeroed_user_highpage_movable()")
->   7a3b83537188 ("kasan: use separate (un)poison implementation for integrated init")
->   013bb59dbb7c ("arm64: mte: handle tags zeroing at page allocation time")
->   c275c5c6d50a ("kasan: disable freed user page poisoning with HW tags")
-> 
-> from the arm64 tree and (more or less) duplicated patches in the akpm tree.
-> 
-> I fixed it up (I dropped the patches form the akpm tree) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
+> is missing a Signed-off-by from its author and committer.
 
-Thanks, Stephen.
+For the record... as mentioned on irc, this looks perfectly fine to me:
 
-Andrew -- you can drop your copies of these patches, as you suggested at:
+commit aafc8eb78635a2ecb612653f57f1e86e9030b5d9
+Author:     Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+AuthorDate: Thu May 13 11:53:17 2021 +0100
+Commit:     Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+CommitDate: Thu Jun 3 11:39:02 2021 +0100
+...
+    Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-https://lore.kernel.org/r/20210603200308.2a08d25db0dc92430a545b4c@linux-foundation.org
+It seems that the author and committer do indeed have the appropriate
+sign-off in place on this commit.
 
-Will
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

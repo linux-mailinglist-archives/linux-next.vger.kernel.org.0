@@ -2,79 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F51C3A06E2
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 00:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCD93A07A1
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 01:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbhFHWdh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Jun 2021 18:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        id S234331AbhFHXO4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Jun 2021 19:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbhFHWdg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 18:33:36 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7CC061574;
-        Tue,  8 Jun 2021 15:31:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G04j55m72z9sPf;
-        Wed,  9 Jun 2021 08:31:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1623191498;
-        bh=uYSlC9D9KZmjm7OfUEE3EOaaIqPSS+22wol0DRycQ7E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JKwXolW2qEE5g8ara3D4okWvji9BVNhoZo/g0wf7pq4HNhUY0JkDxsWDMIF+kCSxX
-         AiJmI04IMvdkeiBCD16o37pP8SOJqmm+ZeXNrlWKligUDkRxKhnllFGGMHaLTq0wUj
-         2ZzR78ZSEIEjTD0oqefrNsvRouzKLSJTvuObABcWftvwMJrEEf/YpR1M01/+LbNT7G
-         Gk1+ytdXq59meZGUwQZnW1pb6+F5U2bPK89X6By/fiwz3+jIe/jUtYWhMLHdIFGGtp
-         MBkvqSDJeke9nb5tJeqHlTZQFBl0Ra3+IBlxTlxWFS2LRuiLTd6kLrnE5B8AZrWEkU
-         khlKUyww59xLg==
-Date:   Wed, 9 Jun 2021 08:31:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S234075AbhFHXOz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 19:14:55 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC73C061574
+        for <linux-next@vger.kernel.org>; Tue,  8 Jun 2021 16:12:47 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v11so3049802ply.6
+        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 16:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kN5AJmNddY4Di3EaoWry0qrGfdeRw3akunPO3LlLtUU=;
+        b=dhHLEaOVfuUVZUxM+xeM3jDgOM5Vrldn5HHYHptlKbftszGwpgWS4ebSHxH+RvHj6M
+         nCZQqkMVugTJgmoSi5js3rStYCenclsN0ZeemRjlMdcJLyuwJ/8CQPn4MvdedLMRHMdh
+         oKHw2e4Ry+uYQDTmjWnby375GRdALi4owp5Jo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kN5AJmNddY4Di3EaoWry0qrGfdeRw3akunPO3LlLtUU=;
+        b=fflpQsiajOVOkQZ19y/TAv63sI5bg3h++APTpyfeK8G2Td9TagLS2jYrjFHXZmugfX
+         jfEdEwsYoGRus6InMAQ7bUKxjv4NrT+iDrfWs8V4vGpaA5Xg96JqdSwg8SdsCZGMz2/C
+         xXjMbsFszxGJQHPqcZPdJETDcZ0PVNrgS/fUFpxOoXgsrpUJVI8ri9SvpXUlHONOcEmD
+         9d6xAk8msF/v0ugpV02+enyQgQt+VIPRqsq3426Gw7jbKwB2MgrSryeagijAJEQVjFlG
+         x/wZHWSNl49lukx772xNC7pLdw2mKpf89QSX7xC4dYrMLvTAD5IwSUVPjOM6q5NUqCw2
+         67pw==
+X-Gm-Message-State: AOAM533fomOj6jm443LSz/AT5AkC7jB1YsVQT6eF+P3rx3UVioxqsA/T
+        hiKgVxxwlyvfJB+BsGdObt0V9Wp/sXTCfA==
+X-Google-Smtp-Source: ABdhPJzg822x7E9/3+N7fhmgOPAqgX9Qgpga/uiCOnpV1++boMy4cc3vxpfZOPycH2iV6FQxzbM2Fw==
+X-Received: by 2002:a17:902:8a98:b029:f9:36dc:37cd with SMTP id p24-20020a1709028a98b02900f936dc37cdmr2411117plo.68.1623193967529;
+        Tue, 08 Jun 2021 16:12:47 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i8sm12288843pgt.58.2021.06.08.16.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 16:12:46 -0700 (PDT)
+Date:   Tue, 8 Jun 2021 16:12:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the block tree
-Message-ID: <20210609083136.25efee6e@canb.auug.org.au>
+Subject: Re: Coverity: do_migrate_range(): Error handling issues
+Message-ID: <202106081612.0C76BE7B@keescook>
+References: <202106081105.B3E3DAE44@keescook>
+ <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZPd8wcmoeJJ0BE9.CYuJlMp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZPd8wcmoeJJ0BE9.CYuJlMp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 08, 2021 at 12:35:34PM -0700, Linus Torvalds wrote:
+> But when I actually grep for it, I see 4 call-sites that don't check
+> the return value, and 5 that do. So it's more like 55% of callers that
+> do check.
+> 
+> Anyway, this is a false positive. You don't have to check the return
+> value.  The main example of doing so is the page-out code in
+> mm/vmscan.c, and it does so just to keep track of success/fail
+> statistics.
 
-Hi all,
+Okay, cool; thanks for taking a closer look at it.
 
-Commit
-
-  f6e8bd59c4e8 ("nvmet: move ka_work initialization to nvmet_alloc_ctrl")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZPd8wcmoeJJ0BE9.CYuJlMp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmC/78gACgkQAVBC80lX
-0GxY2wf9FwS9OdbYlaiYASCKboDnzzyPo/1V6M7IZmez5BVCrUy6sDimBNXAIu0h
-fq/eS2y1c8IOgrdrdQimfUDI685qpQ+Hy5gD3eOVmIwIblYfi1eAdPmNppOXQMxO
-FU0qOJsCaBK6MSasqCrScLxHoRekVDE/YejTs78IKr3nA2Fz9JwDWTcUcZKO9usO
-SuIApisEyjBLlw2avOLIclz1KDWybo9wg1U9qyc4ipgkBFBjgxi8HlwpVW1VmsOg
-3IJDfSsLJhD3f/C0BMqsWzZzqqqVJyqJdnxqge6/tT0sM5r0YgctXNYGTy0CjXjF
-qwnPJdAeIq5+k32q901bz+Ws9CPuQA==
-=9/KY
------END PGP SIGNATURE-----
-
---Sig_/ZPd8wcmoeJJ0BE9.CYuJlMp--
+-- 
+Kees Cook

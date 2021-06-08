@@ -2,103 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B603D39FE98
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jun 2021 20:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EE93A048F
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jun 2021 21:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbhFHSIP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Jun 2021 14:08:15 -0400
-Received: from mail-pj1-f50.google.com ([209.85.216.50]:50876 "EHLO
-        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbhFHSIO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 14:08:14 -0400
-Received: by mail-pj1-f50.google.com with SMTP id g4so2924050pjk.0
-        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 11:06:11 -0700 (PDT)
+        id S235795AbhFHTkC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Jun 2021 15:40:02 -0400
+Received: from mail-lf1-f47.google.com ([209.85.167.47]:35579 "EHLO
+        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235189AbhFHTjB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 15:39:01 -0400
+Received: by mail-lf1-f47.google.com with SMTP id i10so33933436lfj.2
+        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 12:36:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Ia647W1LE+G4T9UShJYw1TmwqdR1fwU7tDj1UVZC7tU=;
-        b=SKnBTphpKO1uU8jhs5nCP5XUUBUX94prIb9jfWT/TKiNjxqcL7wJWNWRDcxKalGDkk
-         ci7SROBcuEfyT1D6wuvAocWeyUxu2QkLX8jM5DEr5fIolZiGCaCwYy6nk+rox7VFgCUC
-         fUPe8fTV6zb1NGLkNHShR25VdAgFS3iBMzwlM=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QVlrY2mhKxC/NqS9/Jgj+peIC+wltZhAx3jVIe1qbeo=;
+        b=VFdbAHFakOja0A8oAbgaofdHIS79B14OXRjhv6md5YsCbxA251/ucSv5gkkrszRaHS
+         Us+i/eQH+JVQKgXQ973PiLzLQFqcT8pyKKpimuHdzLSMOafJyTRTR6aNfo9zwaRDPhXF
+         lxjZHmS8NWyy87bY8RXtcfQMagMwyz1Gjrtws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Ia647W1LE+G4T9UShJYw1TmwqdR1fwU7tDj1UVZC7tU=;
-        b=FAl5ukXqQXw0n62N72EC3iIbqeukK0Mcp28e5G9vWl7738c/7zV1lUWq7W8zpjKhJ+
-         6WMUYs2gMEGYUNowZY4iAQ1palBgDaAzEcMgvM9dBtfbcwarU1rco74iU379oM5S4zpY
-         k9FEK2Jh+FvROkbqRS8L7KvP21gjG2UyEJtFeUlhGncwwUCyIOI0Cu6+d5gXuH1Sjlvr
-         5hxfg2RYgs8+UA7c4oZ3GFfoVNoiDQQspeWPM3jUFEVnT36Ip8YRkJz5zPSJNAWD99f4
-         FxZEwzf1oNsnK4VIlFY0E8MXrRdYNDcKvDIqvD0RMZBeTejQqaDpBufRBR8B2v7jIhSc
-         Yx3Q==
-X-Gm-Message-State: AOAM530+7SiHCP/sfXdVsl3gcJve/Rmof4hOnAeTnKLVoTXnVlkYm3of
-        z+/vycJduqTBu4RxqOAkEIZMfw==
-X-Google-Smtp-Source: ABdhPJwzRxiSreIrumgnXclXEp5hCRdA13ZE2KIzSBafzPQ9u9suGwhzEWP1yNghwrVdvEHV8Yco8w==
-X-Received: by 2002:a17:902:ecc6:b029:112:8ab6:9652 with SMTP id a6-20020a170902ecc6b02901128ab69652mr917666plh.8.1623175511422;
-        Tue, 08 Jun 2021 11:05:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z5sm11363820pfa.172.2021.06.08.11.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 11:05:10 -0700 (PDT)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Tue, 8 Jun 2021 11:05:10 -0700
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QVlrY2mhKxC/NqS9/Jgj+peIC+wltZhAx3jVIe1qbeo=;
+        b=JwdsMScIZ5EXUFpvzUKYKZbBR3Mdgm8UyjWe/wDO55gkvD9dabYzKeUIdY8Eh4kDQO
+         uQ7nKodCp09iHJlvmr/c8TGuM53ExN/EnIPwcHJ/FmveJPFQ+dGWLT/Yt38w7s8g4gFd
+         QAoC6e1/Zn5ugLcN86cgmTi1mjUDv2CRTs7wC8tlOAY98jJcbMmB9lTWY3r2HyiRfjLe
+         Qwb8qlQe/jyn2evTvcR4JKtcB5BndlzGR4JZESGRF+2XYiDnN7eMkLqj3iYTzaDmRy5S
+         CnCEWSXoQ34ZAGtsa+ldcC0fBiP3dLVBSow2At+qU8wxHO7j78Np2cLtcDZ1APq3XWMI
+         yv1A==
+X-Gm-Message-State: AOAM533dZEG3ax2/U76DwQH+ew7PeFdYdI/wCh1vHbwIuxLGpva1U7f1
+        30IM4R+Bl/ndinI9VIuPyVqDT4ALtM2Umwrm54U=
+X-Google-Smtp-Source: ABdhPJzHFGC8SyAN2XdCqdKd11j5M70BnYHVK04gTAUKqYoFe9u391YnSbAZOpHOO4DJsu3ySZXNoA==
+X-Received: by 2002:ac2:4542:: with SMTP id j2mr16194547lfm.435.1623180955592;
+        Tue, 08 Jun 2021 12:35:55 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id r195sm67794lff.69.2021.06.08.12.35.54
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 12:35:55 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id f11so33776191lfq.4
+        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 12:35:54 -0700 (PDT)
+X-Received: by 2002:ac2:43b9:: with SMTP id t25mr16536970lfl.253.1623180950443;
+ Tue, 08 Jun 2021 12:35:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <202106081105.B3E3DAE44@keescook>
+In-Reply-To: <202106081105.B3E3DAE44@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 8 Jun 2021 12:35:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
+Message-ID: <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
+Subject: Re: Coverity: do_migrate_range(): Error handling issues
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Coverity: do_migrate_range(): Error handling issues
-Message-ID: <202106081105.B3E3DAE44@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+On Tue, Jun 8, 2021 at 11:05 AM coverity-bot <keescook@chromium.org> wrote:
+>
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+>
+>   Tue Dec 15 12:13:39 2020 -0800
+>     013339df116c ("mm/rmap: always do TTU_IGNORE_ACCESS")
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20210608 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Heh. Entirely independent change, but whatever..
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+That does mean that the suggested
 
-  Tue Dec 15 12:13:39 2020 -0800
-    013339df116c ("mm/rmap: always do TTU_IGNORE_ACCESS")
+> Fixes: 013339df116c ("mm/rmap: always do TTU_IGNORE_ACCESS")
 
-Coverity reported the following:
+tag would have been entirely bogus. That commit didn't actually change
+the coverity issue in question anyway, it just happened to change that
+line in other ways.
 
-*** CID 1505146:  Error handling issues  (CHECKED_RETURN)
-/mm/memory_hotplug.c: 1422 in do_migrate_range()
-1416     		 * the unmap as the catch all safety net).
-1417     		 */
-1418     		if (PageHWPoison(page)) {
-1419     			if (WARN_ON(PageLRU(page)))
-1420     				isolate_lru_page(page);
-1421     			if (page_mapped(page))
-vvv     CID 1505146:  Error handling issues  (CHECKED_RETURN)
-vvv     Calling "try_to_unmap" without checking return value (as is done elsewhere 4 out of 5 times).
-1422     				try_to_unmap(page, TTU_IGNORE_MLOCK);
-1423     			continue;
-1424     		}
-1425
-1426     		if (!get_page_unless_zero(page))
-1427     			continue;
+Maybe the coverity-bot logic could actually try to see if a coverity
+report changes, which it wouldn't have done here.
 
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
+The report itself is:
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1505146 ("Error handling issues")
-Fixes: 013339df116c ("mm/rmap: always do TTU_IGNORE_ACCESS")
+> 1421                            if (page_mapped(page))
+> vvv     CID 1505146:  Error handling issues  (CHECKED_RETURN)
+> vvv     Calling "try_to_unmap" without checking return value (as is done elsewhere 4 out of 5 times).
+> 1422                                    try_to_unmap(page, TTU_IGNORE_MLOCK);
 
-Thanks for your attention!
+Hmm. That "4 out of 5 times" seems misleading. It implies that 80% of
+callers check the return value.
 
--- 
-Coverity-bot
+But when I actually grep for it, I see 4 call-sites that don't check
+the return value, and 5 that do. So it's more like 55% of callers that
+do check.
+
+Anyway, this is a false positive. You don't have to check the return
+value.  The main example of doing so is the page-out code in
+mm/vmscan.c, and it does so just to keep track of success/fail
+statistics.
+
+             Linus

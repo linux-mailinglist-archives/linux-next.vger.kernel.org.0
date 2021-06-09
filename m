@@ -2,97 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694BD3A0864
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 02:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149583A0876
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 02:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbhFIA2J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Jun 2021 20:28:09 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:46613 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234990AbhFIA2F (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 8 Jun 2021 20:28:05 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G07FG1nZcz9sW7;
-        Wed,  9 Jun 2021 10:26:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1623198371;
-        bh=pl3AOWhvROigPTYFQ/g6KGGpHM5/xYck96wanPzXANM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qFBV7k6B4P1S5QOQP7XDiVfjhAvZ11Q04YpAmY9m3AepPQwqr+pja+YarkuXO0aXp
-         55yneG3h5ubLBKzsv4fjkw67YSJy+joH1G5QieTUDvTi1nYPoDgOAguifQJyTJ04Hk
-         og5PxZ8hQbH2t/peaRZiqWtwsmCIhU2HAdRXZZ8Qn1LzICW5zLBcguXdMYdwmLp/CP
-         tP0g17K/c9HI3MOh+c/9be4AoQLolCYkAsEV44I39Ct1dRlhHSq4DQgGtYjmwc8TzE
-         qyKsVj7jzkjdjN3Nwyh3UJwfofXwhsGEnBp6m6EIJCqgthYe++jRLCTMrdC3FcodYw
-         h7T8iNF4lAmHQ==
-Date:   Wed, 9 Jun 2021 10:26:08 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Subject: linux-next: manual merge of the risc-v tree with the risc-v-fixes
- tree
-Message-ID: <20210609102608.5582071b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/98tfuBKAYllB/MvOUzwnlvO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S232598AbhFIAkQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Jun 2021 20:40:16 -0400
+Received: from mail-pg1-f176.google.com ([209.85.215.176]:37598 "EHLO
+        mail-pg1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232202AbhFIAkP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 20:40:15 -0400
+Received: by mail-pg1-f176.google.com with SMTP id t9so17962892pgn.4
+        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 17:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UCR8T6dvOadUB7ygYan14MhvChrSqba7/u0loWi+kQ8=;
+        b=iRVfqSkcbG2fNiVmqvD+pJ9CeAa1l3oBB/cL/IYxFJ8VWaIQJXzMqNUWWVqgibrK0W
+         dxSLFHvScGabXvEMaGhkf050sQrRrR0B4kEfYw8i9baZUspCSx5n7YWNAAxnbCEZgjgM
+         T3ZnR0/UTHe/htRqvmgPJfVKDuarbTZe5Sc/3y/nEdES8xK0r0munby4t0O+iMRxB5TB
+         t1nlc4FOsBfRuWcDZsVPkAKnixjw8SYC/hzAVHfSrQzntpjlgOHA5BnkccWh3r9e1fuv
+         0GAZtZw3kV9b2IDrlLWbe+Hcdep0I3bWTswLEGUhKTFpTZUj9JumDod21nSlo4/rd2Bw
+         QZAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=UCR8T6dvOadUB7ygYan14MhvChrSqba7/u0loWi+kQ8=;
+        b=dqhzBfSUAtCrXQEjv51H6Qp9AdUi+dsMCewaLSJDwwWqvYpDYgiaQnMsYFSl+J+Wk+
+         2rHRFM6c/BWrgFdRfgSYwrqhdzgtPq9grFSKaBqNAD/V33ocgfeZW/QVLJlqHe48KrG0
+         LKkLSIivTrYuBLhYB/8krbjdUfqq4n/WrBi1oCGIb80V22tHyIETQEt4Nqp0iZSiS87d
+         omhksfCSjOcZY2XYb+orY+qepZQM5UzsTMz+gE1EA/GfIzAeg95KWMoEKbu5ovs+wHld
+         bDv55Doqn5T9/V3G2WymrUVMNw/lg7I+jkrhnHmqC9BTUt9GLciQip+avMxpzU7xNcTD
+         c55g==
+X-Gm-Message-State: AOAM5335qL14ZnyzbipCtkZKi727C0DaWaoqLWUL0eH8lFjDmhsmgx6A
+        K4f3+xY2mqH3xWS3WtXC54ImtA==
+X-Google-Smtp-Source: ABdhPJxBzOZlknCG5sbF9Ce6xSEVRnAoFk6kdQF2DaGcBQkch5HRb86Gj6rvB/SZtiDLqon1/U8+Ug==
+X-Received: by 2002:a62:79cb:0:b029:2e9:9951:eac8 with SMTP id u194-20020a6279cb0000b02902e99951eac8mr2457298pfc.59.1623199026692;
+        Tue, 08 Jun 2021 17:37:06 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id o16sm11790252pfu.75.2021.06.08.17.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 17:37:06 -0700 (PDT)
+Date:   Tue, 08 Jun 2021 17:37:06 -0700 (PDT)
+X-Google-Original-Date: Tue, 08 Jun 2021 17:37:04 PDT (-0700)
+Subject:     Re: linux-next: manual merge of the risc-v tree with the risc-v-fixes tree
+In-Reply-To: <20210609102608.5582071b@canb.auug.org.au>
+CC:     Paul Walmsley <paul@pwsan.com>, jszhang@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        vitaly.wool@konsulko.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-d47c3450-5364-43a2-a02a-965e7a9aa886@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/98tfuBKAYllB/MvOUzwnlvO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 08 Jun 2021 17:26:08 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the risc-v tree got a conflict in:
+>
+>   arch/riscv/mm/init.c
+>
+> between commit:
+>
+>   8700a6b6fee2 ("riscv: fix typo in init.c")
+>
+> from the risc-v-fixes tree and commit:
+>
+>   010623568222 ("riscv: mm: init: Consolidate vars, functions")
+>
+> from the risc-v tree.
+>
+> Note that 8700a6b6fee2 supposedly fixes 010623568222, but 010623568222
+> is not an ancestor of 8700a6b6fee2.
+>
+> I fixed it up (I just used the version from 8700a6b6fee2) and can
+> carry the fix as necessary. This is now fixed as far as linux-next is
+> concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-Hi all,
+Sorry about that, this one was supposed to go on for-next not fixes.  It 
+was causing my mail client to crash so I was kind of focused on that 
+instead of the actual code...
 
-Today's linux-next merge of the risc-v tree got a conflict in:
-
-  arch/riscv/mm/init.c
-
-between commit:
-
-  8700a6b6fee2 ("riscv: fix typo in init.c")
-
-from the risc-v-fixes tree and commit:
-
-  010623568222 ("riscv: mm: init: Consolidate vars, functions")
-
-from the risc-v tree.
-
-Note that 8700a6b6fee2 supposedly fixes 010623568222, but 010623568222
-is not an ancestor of 8700a6b6fee2.
-
-I fixed it up (I just used the version from 8700a6b6fee2) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/98tfuBKAYllB/MvOUzwnlvO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDACqAACgkQAVBC80lX
-0GwN1Af+OFsLhLCug6E2yjqN93UeaoQjN+GorRWE4ROdOkXqPoZBIgc2etpU+Yto
-k+y4QdkCTcBi6VRXOBR1cKs/wiIsvewEpBpweqyBeH+0guogSCcE+sR71XTwHCw0
-pOLFRszkYo5MTT/ReiTqKFIyQ2D7Fj0TkLg4hiL8QdJGdGKWGTmLY9Pa7RpwnKYv
-4RGm77Lf4hXg0qmYaWOAN7+iG15sEVkIpJeGu89wJg5onqbhEST0RGadpleCFIEN
-nACirCY6+y5HsTAfot/2xdhZNs5kNjW2kcnYaDPF88t4vhzCcgScpwe+dTL1Cq1p
-j4uMI7VRNgKSeIqifIZLAdokLyt/fg==
-=vt0t
------END PGP SIGNATURE-----
-
---Sig_/98tfuBKAYllB/MvOUzwnlvO--
+It's on for-nex now.

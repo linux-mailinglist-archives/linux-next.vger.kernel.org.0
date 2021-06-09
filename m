@@ -2,482 +2,215 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2E03A1554
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 15:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7CC3A160B
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 15:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbhFINVD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Jun 2021 09:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbhFINVA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Jun 2021 09:21:00 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF543C061574
-        for <linux-next@vger.kernel.org>; Wed,  9 Jun 2021 06:19:05 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id v12so12498689plo.10
-        for <linux-next@vger.kernel.org>; Wed, 09 Jun 2021 06:19:05 -0700 (PDT)
+        id S236672AbhFINvC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Jun 2021 09:51:02 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]:43650 "EHLO
+        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236336AbhFINvB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 9 Jun 2021 09:51:01 -0400
+Received: by mail-wr1-f45.google.com with SMTP id r9so8872795wrz.10
+        for <linux-next@vger.kernel.org>; Wed, 09 Jun 2021 06:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=DIh5qn7weGvfL24IhRsyjnH9goTU2KPJ/3kAtgyZsYQ=;
-        b=YEsQG8oXeNczgjaFX3yTeCw8oXiJJrpRpoOOoAy+ugl/BeVpkEc3GH5LvctrI2Lfto
-         mcWVPs3F0Yx9SnKXWCtdPjJyelKiTJKumQ2Gt0nuyCJ/xjmcH1UHDvJzz0Q3f4Zmbnm2
-         R1hP0ALzug26UebwDwIWlC0iWSmtuEA2rWfqvqGkhPh9uhPxVMYo7oreBRHmevkHVRe5
-         tCxudIywQPhVnhTn2yTpv6e9YfBYnLhm2POxaeR71xx6wBEhsAM8q3nMIdHrpC+9VtiF
-         udAewvW54AdRUa5IZabod+1/oq500o7f955qc/m8WUM5BgyzF/gMVeBB8Ujgynn4J6LD
-         Q60w==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WF+Uf0+6uR0qABWPQ66eqhfQdl7rZ4gMMiMR2FGvLq4=;
+        b=gz2EonoaoBSw2ST+sIey+GXUGkXRHdJ7428pnv0qX7c26MyUzA6e8zM60WtIKQfUDZ
+         07ulSvQoq370E+5uVXtEkwGKvZ5Lh6gDeaeVDIqgw3fQKHQoNcu5SsChl7IHfXH4Yuj9
+         U5Ut9590YeC6IcEsouEfVPVG48gH9dQlIcz2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=DIh5qn7weGvfL24IhRsyjnH9goTU2KPJ/3kAtgyZsYQ=;
-        b=VMwfc2q76XdawgrwIF9mwq3YqNZXQPij3QEaCwBIv+o+WIZV9xy8Hm+0QH6eAdYOSp
-         ibMJwjMsZRjAnHdAiArIkVaLxr4mqZ8nzOMkDyUKLT27FTNZRdCDpyknrEyYOxYUcLgy
-         mpcKQOehZV+yDFy3v8qInx6bgiH8BDE35gg9qfdp+7eFT75ag4QZVQBr9zgb9qvzhr//
-         c90sjjIeuNrZBQsAA2miLwDVjrx+0TumZzr4OQpf0awAkW6NT0VZ6b92YnJEyhmWen12
-         YW8dEH1PTbUcb8A+8N+FOEHKbRQ0KTcUl5tCgBKbmJ5CwFaIT858LHv7V5gGf/QiB0hc
-         R3lA==
-X-Gm-Message-State: AOAM533wvXZU3tKciNwvrkAV5serpa4mZvbsZyo4wx1/rOyR+OwKb+kT
-        kAHW0xZGnPOFQCbmrvNhMdKEcXzzwyIEsLMD
-X-Google-Smtp-Source: ABdhPJzT5N76MoXIn0nqy6M6DbmwToniVkDR2lYVw5iS10jPxfrQe2QgsI3xXz32O+gwslgYN4enww==
-X-Received: by 2002:a17:90b:f84:: with SMTP id ft4mr10853713pjb.104.1623244745114;
-        Wed, 09 Jun 2021 06:19:05 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q18sm14130595pfj.5.2021.06.09.06.19.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=WF+Uf0+6uR0qABWPQ66eqhfQdl7rZ4gMMiMR2FGvLq4=;
+        b=fEkb95PYYKg0KgPmaMkAEr2LXKUQLIbHslKT4mM0+i2z3+HSaUOSSAjQ3ffPzxLlbQ
+         d2HXlgmoqZmV6i24bF2WyEz+f40wqLlY7C7K8vo6oRhBHR7ehGqr4Wx8AXy1fpqe1lU0
+         iVuz/8ltN62A7Ae7aW/mdEmO6ZXBFxO2HvO9guYehJFaezK2GZtaxZ/WNZjaKKG2Jx8k
+         J2H3at5AP85WY6dbZeqFNCFXHeC3EsGepDvOdoMrr2OUU1SEvIlAIECQoCdtO1Cz1+4p
+         ULoxbdDmkp+uq+4uSQjD6MFmJW/wH3HTmnLa/oi4Fqe5yX426ZEdqFZF8p5pMPq1NgL3
+         9IFw==
+X-Gm-Message-State: AOAM532mehI0haPxPD80BEmYVJAN7T2bIZLeTdaeQI5yOrzwZitIAzRN
+        8OrL9tEeAPGJCE/C5LJrpJbDLw==
+X-Google-Smtp-Source: ABdhPJw8vzGv+KqVF/GkikUJ4ivo4GKJjxbjWP57SoIFORIov3TjYsS91udU2xEqWX1qvaxTOo30RA==
+X-Received: by 2002:adf:ea86:: with SMTP id s6mr28336030wrm.75.1623246486104;
+        Wed, 09 Jun 2021 06:48:06 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id b15sm10811649wrr.27.2021.06.09.06.48.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 06:19:04 -0700 (PDT)
-Message-ID: <60c0bfc8.1c69fb81.e8b51.b144@mx.google.com>
-Date:   Wed, 09 Jun 2021 06:19:04 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 09 Jun 2021 06:48:05 -0700 (PDT)
+Date:   Wed, 9 Jun 2021 15:48:03 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Felix Kuehling <felix.kuehling@amd.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <YMDGkyhvVAufp68p@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Felix Kuehling <felix.kuehling@amd.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210608125046.07c6deca@canb.auug.org.au>
+ <22010e38-3686-87ce-532d-4a53cae990b1@amd.com>
+ <7b825bc4-9f81-3010-6445-d6708e34a9bd@amd.com>
+ <6dc40376-77fc-2f43-693e-1bd2c52d9cbd@amd.com>
+ <d06e7d13-f24d-40f9-64bd-2b6e45d74462@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.13-rc5-256-gbb9854079531
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 285 runs,
- 11 regressions (v5.13-rc5-256-gbb9854079531)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d06e7d13-f24d-40f9-64bd-2b6e45d74462@amd.com>
+X-Operating-System: Linux phenom 5.10.32scarlett+ 
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 285 runs, 11 regressions (v5.13-rc5-256-gbb985=
-4079531)
-
-Regressions Summary
--------------------
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-bcm2836-rpi-2-b      | arm   | lab-collabora   | gcc-8    | multi_v7_defc..=
-.CONFIG_SMP=3Dn | 1          =
-
-imx6q-sabresd        | arm   | lab-nxp         | gcc-8    | imx_v6_v7_defco=
-nfig          | 1          =
-
-imx6ul-pico-hobbit   | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_defco=
-nfig          | 1          =
-
-imx8mp-evk           | arm64 | lab-nxp         | gcc-8    | defconfig      =
-              | 1          =
-
-meson-gxbb-p200      | arm64 | lab-baylibre    | gcc-8    | defconfig+CON..=
-.BIG_ENDIAN=3Dy | 1          =
-
-meson-gxl-s905d-p230 | arm64 | lab-baylibre    | gcc-8    | defconfig      =
-              | 1          =
-
-meson-gxl-s905d-p230 | arm64 | lab-baylibre    | gcc-8    | defconfig+CON..=
-.OMIZE_BASE=3Dy | 1          =
-
-qemu_arm-versatilepb | arm   | lab-baylibre    | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-broonie     | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-cip         | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-qemu_arm-versatilepb | arm   | lab-collabora   | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.13-rc5-256-gbb9854079531/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.13-rc5-256-gbb9854079531
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      bb98540795311b591adad8fd39e1d35760dcf674 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-bcm2836-rpi-2-b      | arm   | lab-collabora   | gcc-8    | multi_v7_defc..=
-.CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c09d353066a193b10c0dfe
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c09d353066a193b10c0=
-dff
-        failing since 124 days (last pass: v5.11-rc6-256-gf889022827dc, fir=
-st fail: v5.11-rc6-298-g490f4659faae) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx6q-sabresd        | arm   | lab-nxp         | gcc-8    | imx_v6_v7_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c088ca9dff5a13ca0c0e10
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c088ca9dff5a13ca0c0=
-e11
-        failing since 226 days (last pass: v5.9-13195-g0281c5220c40, first =
-fail: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx6ul-pico-hobbit   | arm   | lab-pengutronix | gcc-8    | imx_v6_v7_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c08937b655be58510c0e22
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/imx_v6_v7_defconfig/gcc-8/lab-pengutronix/baseline-imx=
-6ul-pico-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c08937b655be58510c0=
-e23
-        new failure (last pass: v5.13-rc5-196-g417f35fb395b) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-imx8mp-evk           | arm64 | lab-nxp         | gcc-8    | defconfig      =
-              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c08c3da6db98be760c0e0e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c08c3da6db98be760c0=
-e0f
-        new failure (last pass: v5.13-rc5-196-g417f35fb395b) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-meson-gxbb-p200      | arm64 | lab-baylibre    | gcc-8    | defconfig+CON..=
-.BIG_ENDIAN=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c089be79b31850d50c0e01
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxbb-p200.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxbb-p200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/arm64be/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c089be79b31850d50c0=
-e02
-        new failure (last pass: v5.13-rc5-196-g417f35fb395b) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-meson-gxl-s905d-p230 | arm64 | lab-baylibre    | gcc-8    | defconfig      =
-              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c08c2a5bdd5d39b50c0e28
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s905=
-d-p230.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s905=
-d-p230.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c08c2a5bdd5d39b50c0=
-e29
-        failing since 4 days (last pass: v5.13-rc4-179-g79d27c38a664, first=
- fail: v5.13-rc4-359-g55ec17a05277) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-meson-gxl-s905d-p230 | arm64 | lab-baylibre    | gcc-8    | defconfig+CON..=
-.OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c08e96179f852ca50c0e0a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxl-s905d-p230.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
-re/baseline-meson-gxl-s905d-p230.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c08e96179f852ca50c0=
-e0b
-        new failure (last pass: v5.13-rc5-196-g417f35fb395b) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-baylibre    | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c0860e4f571574ba0c0e32
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c0860e4f571574ba0c0=
-e33
-        failing since 205 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-broonie     | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c0861c9914ef16d30c0e0e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c0861c9914ef16d30c0=
-e0f
-        failing since 205 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-cip         | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c0860d4f571574ba0c0e2c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c0860d4f571574ba0c0=
-e2d
-        failing since 205 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch  | lab             | compiler | defconfig      =
-              | regressions
----------------------+-------+-----------------+----------+----------------=
---------------+------------
-qemu_arm-versatilepb | arm   | lab-collabora   | gcc-8    | versatile_defco=
-nfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60c097ba0c07994fb70c0e43
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc5-2=
-56-gbb9854079531/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60c097ba0c07994fb70c0=
-e44
-        failing since 205 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =20
+On Tue, Jun 08, 2021 at 09:11:57AM +0200, Christian König wrote:
+> Am 08.06.21 um 09:06 schrieb Felix Kuehling:
+> > Am 2021-06-08 um 2:55 a.m. schrieb Christian König:
+> > > Hi Felix,
+> > > 
+> > > that should already be fixed in drm-tip as part of the merge of the
+> > > TTM changes.
+> > No, the preempt_mgr doesn't exist in drm-misc-next. It does exist in
+> > drm-next, but that doesn't seem to have the TTM changes yet.
+> > 
+> > Is there another DRM branch or repository that you're referring to with
+> > drm-tip?
+> 
+> drm-tip is an integration branch for conflict resolution.
+> 
+> E.g. when we have changes in drm-misc-next which break when we merge with
+> drm-next I'm informed and need to provide a conflict resolution patch.
+> 
+> This is automatically applied when drm-next and drm-misc-next are merged
+> together again.
+> 
+> It just looks like that drm-next and drm-misc-next are merged manually into
+> linux-next and then the conflict resolution doesn't apply and everything
+> breaks into pieces.
+> 
+> Adding Daniel as well. How should that be handled? Should we merge
+> drm-misc-next into drm-next now?
+
+Yeah I'm expecting there will be a pull request this week. I've given Dave
+Airlie a headsup that the conflict is "interesting" and that maybe he
+needs to push out a test branch for you and Thomas Hellstrom to
+review/test first.
+-Daniel
+
+> 
+> Thanks,
+> Christian.
+> 
+> > 
+> > Regards,
+> >    Fel
+> > 
+> > > Regards,
+> > > Christian.
+> > > 
+> > > Am 08.06.21 um 07:37 schrieb Felix Kuehling:
+> > > > Hi Christian,
+> > > > 
+> > > > I based amdgpu_preempt_mgr on amdgpu_gtt_mgr and now I'm looking at what
+> > > > changed there. Looks like I'll need to create a dummy node in
+> > > > amdgpu_preempt_mgr_new to satisfy TTM, and free it in
+> > > > amdgpu_preempt_mgr_del.
+> > > > 
+> > > > Thanks,
+> > > >     Felix
+> > > > 
+> > > > 
+> > > > Am 2021-06-07 um 10:50 p.m. schrieb Stephen Rothwell:
+> > > > > Hi all,
+> > > > > 
+> > > > > After merging the drm-misc tree, today's linux-next build (x86_64
+> > > > > allmodconfig) failed like this:
+> > > > > 
+> > > > > drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c: In function
+> > > > > 'amdgpu_preempt_mgr_new':
+> > > > > drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c:75:5: error: 'struct
+> > > > > ttm_resource' has no member named 'mm_node'
+> > > > >      75 |  mem->mm_node = NULL;
+> > > > >         |     ^~
+> > > > > drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c: At top level:
+> > > > > drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c:129:11: error:
+> > > > > initialization of 'int (*)(struct ttm_resource_manager *, struct
+> > > > > ttm_buffer_object *, const struct ttm_place *, struct ttm_resource
+> > > > > **)' from incompatible pointer type 'int (*)(struct
+> > > > > ttm_resource_manager *, struct ttm_buffer_object *, const struct
+> > > > > ttm_place *, struct ttm_resource *)'
+> > > > > [-Werror=incompatible-pointer-types]
+> > > > >     129 |  .alloc = amdgpu_preempt_mgr_new,
+> > > > >         |           ^~~~~~~~~~~~~~~~~~~~~~
+> > > > > drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c:129:11: note: (near
+> > > > > initialization for 'amdgpu_preempt_mgr_func.alloc')
+> > > > > 
+> > > > > Caused by commit
+> > > > > 
+> > > > >     cb1c81467af3 ("drm/ttm: flip the switch for driver allocated
+> > > > > resources v2")
+> > > > > 
+> > > > > from the drm-misc tree interacting with commit
+> > > > > 
+> > > > >     b453e42a6e8b ("drm/amdgpu: Add new placement for preemptible SG
+> > > > > BOs")
+> > > > > 
+> > > > > from the drm tree.
+> > > > > 
+> > > > > I don't know how to fix this, so I added the following hack (a better
+> > > > > fix would be nice):
+> > > > > 
+> > > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > Date: Tue, 8 Jun 2021 12:41:16 +1000
+> > > > > Subject: [PATCH] hack fix up for needed amdgpu_preempt_mgr_new() fix up
+> > > > > 
+> > > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > > > ---
+> > > > >    drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c | 4 +++-
+> > > > >    1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c
+> > > > > b/drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c
+> > > > > index d607f314cc1b..e1a7b3e967b9 100644
+> > > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c
+> > > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_preempt_mgr.c
+> > > > > @@ -66,14 +66,16 @@ static DEVICE_ATTR_RO(mem_info_preempt_used);
+> > > > >    static int amdgpu_preempt_mgr_new(struct ttm_resource_manager *man,
+> > > > >                      struct ttm_buffer_object *tbo,
+> > > > >                      const struct ttm_place *place,
+> > > > > -                  struct ttm_resource *mem)
+> > > > > +                  struct ttm_resource **res)
+> > > > >    {
+> > > > > +#if 0
+> > > > >        struct amdgpu_preempt_mgr *mgr = to_preempt_mgr(man);
+> > > > >          atomic64_add(mem->num_pages, &mgr->used);
+> > > > >          mem->mm_node = NULL;
+> > > > >        mem->start = AMDGPU_BO_INVALID_OFFSET;
+> > > > > +#endif
+> > > > >        return 0;
+> > > > >    }
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

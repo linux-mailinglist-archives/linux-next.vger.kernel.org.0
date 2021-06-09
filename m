@@ -2,79 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCD93A07A1
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 01:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694BD3A0864
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jun 2021 02:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbhFHXO4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Jun 2021 19:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbhFHXOz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Jun 2021 19:14:55 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC73C061574
-        for <linux-next@vger.kernel.org>; Tue,  8 Jun 2021 16:12:47 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id v11so3049802ply.6
-        for <linux-next@vger.kernel.org>; Tue, 08 Jun 2021 16:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kN5AJmNddY4Di3EaoWry0qrGfdeRw3akunPO3LlLtUU=;
-        b=dhHLEaOVfuUVZUxM+xeM3jDgOM5Vrldn5HHYHptlKbftszGwpgWS4ebSHxH+RvHj6M
-         nCZQqkMVugTJgmoSi5js3rStYCenclsN0ZeemRjlMdcJLyuwJ/8CQPn4MvdedLMRHMdh
-         oKHw2e4Ry+uYQDTmjWnby375GRdALi4owp5Jo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kN5AJmNddY4Di3EaoWry0qrGfdeRw3akunPO3LlLtUU=;
-        b=fflpQsiajOVOkQZ19y/TAv63sI5bg3h++APTpyfeK8G2Td9TagLS2jYrjFHXZmugfX
-         jfEdEwsYoGRus6InMAQ7bUKxjv4NrT+iDrfWs8V4vGpaA5Xg96JqdSwg8SdsCZGMz2/C
-         xXjMbsFszxGJQHPqcZPdJETDcZ0PVNrgS/fUFpxOoXgsrpUJVI8ri9SvpXUlHONOcEmD
-         9d6xAk8msF/v0ugpV02+enyQgQt+VIPRqsq3426Gw7jbKwB2MgrSryeagijAJEQVjFlG
-         x/wZHWSNl49lukx772xNC7pLdw2mKpf89QSX7xC4dYrMLvTAD5IwSUVPjOM6q5NUqCw2
-         67pw==
-X-Gm-Message-State: AOAM533fomOj6jm443LSz/AT5AkC7jB1YsVQT6eF+P3rx3UVioxqsA/T
-        hiKgVxxwlyvfJB+BsGdObt0V9Wp/sXTCfA==
-X-Google-Smtp-Source: ABdhPJzg822x7E9/3+N7fhmgOPAqgX9Qgpga/uiCOnpV1++boMy4cc3vxpfZOPycH2iV6FQxzbM2Fw==
-X-Received: by 2002:a17:902:8a98:b029:f9:36dc:37cd with SMTP id p24-20020a1709028a98b02900f936dc37cdmr2411117plo.68.1623193967529;
-        Tue, 08 Jun 2021 16:12:47 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i8sm12288843pgt.58.2021.06.08.16.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 16:12:46 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 16:12:46 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: Coverity: do_migrate_range(): Error handling issues
-Message-ID: <202106081612.0C76BE7B@keescook>
-References: <202106081105.B3E3DAE44@keescook>
- <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
+        id S235097AbhFIA2J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Jun 2021 20:28:09 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46613 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234990AbhFIA2F (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Jun 2021 20:28:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G07FG1nZcz9sW7;
+        Wed,  9 Jun 2021 10:26:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623198371;
+        bh=pl3AOWhvROigPTYFQ/g6KGGpHM5/xYck96wanPzXANM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qFBV7k6B4P1S5QOQP7XDiVfjhAvZ11Q04YpAmY9m3AepPQwqr+pja+YarkuXO0aXp
+         55yneG3h5ubLBKzsv4fjkw67YSJy+joH1G5QieTUDvTi1nYPoDgOAguifQJyTJ04Hk
+         og5PxZ8hQbH2t/peaRZiqWtwsmCIhU2HAdRXZZ8Qn1LzICW5zLBcguXdMYdwmLp/CP
+         tP0g17K/c9HI3MOh+c/9be4AoQLolCYkAsEV44I39Ct1dRlhHSq4DQgGtYjmwc8TzE
+         qyKsVj7jzkjdjN3Nwyh3UJwfofXwhsGEnBp6m6EIJCqgthYe++jRLCTMrdC3FcodYw
+         h7T8iNF4lAmHQ==
+Date:   Wed, 9 Jun 2021 10:26:08 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Subject: linux-next: manual merge of the risc-v tree with the risc-v-fixes
+ tree
+Message-ID: <20210609102608.5582071b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wihqdYzXc4kd8CZAD2Kaf5Wy_q3Bz7fVsskG=MFBtw69A@mail.gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/98tfuBKAYllB/MvOUzwnlvO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 12:35:34PM -0700, Linus Torvalds wrote:
-> But when I actually grep for it, I see 4 call-sites that don't check
-> the return value, and 5 that do. So it's more like 55% of callers that
-> do check.
-> 
-> Anyway, this is a false positive. You don't have to check the return
-> value.  The main example of doing so is the page-out code in
-> mm/vmscan.c, and it does so just to keep track of success/fail
-> statistics.
+--Sig_/98tfuBKAYllB/MvOUzwnlvO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, cool; thanks for taking a closer look at it.
+Hi all,
 
--- 
-Kees Cook
+Today's linux-next merge of the risc-v tree got a conflict in:
+
+  arch/riscv/mm/init.c
+
+between commit:
+
+  8700a6b6fee2 ("riscv: fix typo in init.c")
+
+from the risc-v-fixes tree and commit:
+
+  010623568222 ("riscv: mm: init: Consolidate vars, functions")
+
+from the risc-v tree.
+
+Note that 8700a6b6fee2 supposedly fixes 010623568222, but 010623568222
+is not an ancestor of 8700a6b6fee2.
+
+I fixed it up (I just used the version from 8700a6b6fee2) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/98tfuBKAYllB/MvOUzwnlvO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDACqAACgkQAVBC80lX
+0GwN1Af+OFsLhLCug6E2yjqN93UeaoQjN+GorRWE4ROdOkXqPoZBIgc2etpU+Yto
+k+y4QdkCTcBi6VRXOBR1cKs/wiIsvewEpBpweqyBeH+0guogSCcE+sR71XTwHCw0
+pOLFRszkYo5MTT/ReiTqKFIyQ2D7Fj0TkLg4hiL8QdJGdGKWGTmLY9Pa7RpwnKYv
+4RGm77Lf4hXg0qmYaWOAN7+iG15sEVkIpJeGu89wJg5onqbhEST0RGadpleCFIEN
+nACirCY6+y5HsTAfot/2xdhZNs5kNjW2kcnYaDPF88t4vhzCcgScpwe+dTL1Cq1p
+j4uMI7VRNgKSeIqifIZLAdokLyt/fg==
+=vt0t
+-----END PGP SIGNATURE-----
+
+--Sig_/98tfuBKAYllB/MvOUzwnlvO--

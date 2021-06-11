@@ -2,119 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E7B3A3BF7
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jun 2021 08:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5C13A3C63
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jun 2021 08:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbhFKGTt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 11 Jun 2021 02:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhFKGTt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Jun 2021 02:19:49 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B00AC061574;
-        Thu, 10 Jun 2021 23:17:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G1Vy34ScNz9sW4;
-        Fri, 11 Jun 2021 16:17:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1623392268;
-        bh=Yo5Vkbo33rtG6roA++0tsbsOo20NRqEYs5gRrbRJpvc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TUzLsmQgAeqtfrF1WCJtisr83IagMvV+6wTPp0ooVpkO4qXgrGrU8Naq7RLkyTzF6
-         OZWbpe9KtnsglwfGiBj2NRvbQnstNV2eXmedsjczv2c6Z1GfoJhTcF47KYyIzNuKO7
-         fJwmjz6DILK95ju6GyqSDx/nmqtrvyn16Gv876qIQHGbrhTrp2CHXU8f/PSclqQC0/
-         zLVVzcYjRGpwy8Ic0sgD7t2gnGQVR4cZvhDn+142c9NE0g5G2Ag3ftBo4GhS2i8Vmc
-         DE0aAhGMSj+TGicId1IpDGeTVZWDJqswwywLw3ho60qEJ3v+MM/VaqTqAgbDL4//cf
-         KqsS/P3tRSkIQ==
-Date:   Fri, 11 Jun 2021 16:17:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tor Vic <torvic9@mailbox.org>
-Subject: linux-next: manual merge of the kspp tree with Linus' tree
-Message-ID: <20210611161746.7d326188@canb.auug.org.au>
+        id S231269AbhFKG5t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 11 Jun 2021 02:57:49 -0400
+Received: from mail-ua1-f48.google.com ([209.85.222.48]:45036 "EHLO
+        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhFKG5s (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 11 Jun 2021 02:57:48 -0400
+Received: by mail-ua1-f48.google.com with SMTP id 68so2212408uao.11;
+        Thu, 10 Jun 2021 23:55:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uDY2dim4aXXjh83+9TfmRnq4rAnvdm1kS4I6xxJDBSY=;
+        b=V8wkSTGaotw6yDaMI8aW6zeuqP/9qpv6sNZL7MFNPEDxPfllq+EdlOM9Njgg2l7YN4
+         RlcYRVDGe3tq4GGFcM/PXS0vZjEOI6FcWPeEBBfGnTLGKvXKwpCv8+IvTnNrSJjnuya5
+         s4QBw+/4fOzC2ihXRJhoE5MbpAOB960hQ215vegLP+cdgFmfUNjNy9YIA/7XH4ZmNJKs
+         6V2GqdQcrhUEGZP8viIgExf8sr4WRHXrdO77IMJ4HIYYveFdEgr9tfcv0k6aFYA/8sBu
+         IWdSg2MDoOnLVEnV2tQBVQFeM9t3kwkyH/FaPi/yvC5aG6/KxoHGZvXpvnkNFDE6Kc54
+         qsfg==
+X-Gm-Message-State: AOAM533Yb+mOuqMOevMSRMZYEEiQ/AJ+VOMXl8CcQ2re1+/gMq+cZq/+
+        uNFP5S5VNfNh9bGg6PK+kq/mwIdxAQ1s1Mpq1RLDbpjB2Byyeg==
+X-Google-Smtp-Source: ABdhPJzhZ+LeTQ29TGU1dlV4GczrEvE6sFGwLOsBiAcVefRdC1tiB9fStBtgAe4vXGARVmr3VV85cQxTnQjYHt/4Rsk=
+X-Received: by 2002:ab0:71d9:: with SMTP id n25mr1728908uao.2.1623394535969;
+ Thu, 10 Jun 2021 23:55:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IBjZ889dAVPehqRLWk77N3h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210610110001.2805317-1-geert@linux-m68k.org> <20210610220155.GQ664593@dread.disaster.area>
+In-Reply-To: <20210610220155.GQ664593@dread.disaster.area>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Jun 2021 08:55:24 +0200
+Message-ID: <CAMuHMdWp3E3QDnbGDcTZsCiQNP3pLV2nXVmtOD7OEQO8P-9egQ@mail.gmail.com>
+Subject: Re: [PATCH] xfs: Fix 64-bit division on 32-bit in xlog_state_switch_iclogs()
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Dave Chinner <dchinner@redhat.com>,
+        Chandan Babu R <chandanrlinux@gmail.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Allison Henderson <allison.henderson@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, linux-xfs@vger.kernel.org,
+        Linux-Next <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        noreply@ellerman.id.au
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IBjZ889dAVPehqRLWk77N3h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Dave,
 
-Hi all,
+On Fri, Jun 11, 2021 at 12:02 AM Dave Chinner <david@fromorbit.com> wrote:
+> On Thu, Jun 10, 2021 at 01:00:01PM +0200, Geert Uytterhoeven wrote:
+> > On 32-bit (e.g. m68k):
+> >
+> >     ERROR: modpost: "__udivdi3" [fs/xfs/xfs.ko] undefined!
+> >
+> > Fix this by using a uint32_t intermediate, like before.
+> >
+> > Reported-by: noreply@ellerman.id.au
+> > Fixes: 7660a5b48fbef958 ("xfs: log stripe roundoff is a property of the log")
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+> > Compile-tested only.
+> > ---
+> >  fs/xfs/xfs_log.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> <sigh>
+>
+> 64 bit division on 32 bit platforms is still a problem in this day
+> and age?
 
-Today's linux-next merge of the kspp tree got a conflict in:
+They're not a problem.  But you should use the right operations from
+<linux/math64.h>, iff you really need these expensive operations.
 
-  arch/x86/Makefile
+> Reviewed-by: Dave Chinner <dchinner@redhat.com>
 
-between commit:
+Thanks!
 
-  0024430e920f ("x86/build: Fix location of '-plugin-opt=3D' flags")
+Gr{oetje,eeting}s,
 
-from Linus' tree and commit:
+                        Geert
 
-  095f63b94205 ("x86, lto: Pass -stack-alignment only on LLD < 13.0.0")
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-from the kspp tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/Makefile
-index 2cea1ef283e3,84743ec97c05..000000000000
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@@ -197,12 -203,7 +197,13 @@@ ifdef CONFIG_RETPOLIN
-    endif
-  endif
- =20
- -KBUILD_LDFLAGS :=3D -m elf_$(UTS_MACHINE)
- +KBUILD_LDFLAGS +=3D -m elf_$(UTS_MACHINE)
- +
- +ifdef CONFIG_LTO_CLANG
-- KBUILD_LDFLAGS	+=3D -plugin-opt=3D-code-model=3Dkernel \
-- 		   -plugin-opt=3D-stack-alignment=3D$(if $(CONFIG_X86_32),4,8)
-++ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-++KBUILD_LDFLAGS	+=3D -plugin-opt=3D-stack-alignment=3D$(if $(CONFIG_X86_32=
-),4,8)
-++endif
- +endif
- =20
-  ifdef CONFIG_X86_NEED_RELOCS
-  LDFLAGS_vmlinux :=3D --emit-relocs --discard-none
-
---Sig_/IBjZ889dAVPehqRLWk77N3h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDDAAoACgkQAVBC80lX
-0GzSCwf+Ky06FBVNBr+7PPgFapsHqFfaG8h0Xtot4XR4/uufdD3RafBov8m5Pfop
-XhmMNLlhkxlOd4PXF4QZx+sPsYprkkP6Thp0Sui9ECSHGJpnwRqnvAWeANoSwxj8
-G7aKlmdWfo2wywKTUERg6GhMVkR5FxhRbYxhzedRHP1PpI0IP4k9xkrmUCP5EVvV
-Y3CaVslSHatcQLLAHWTjCRJy3PHXiQwoTBk8u/isbGjNM0w9KW+jzTgnvvUgRjlw
-0iO4Z1tnKrfXrYQlFPgYLjdlkOI1CfMJJbcfBjZa9lbm8xuwSL+dBG3Yn+HbuiGU
-2RbS7hG/no6CoFBGRIbpYxSECvoDmw==
-=m7dK
------END PGP SIGNATURE-----
-
---Sig_/IBjZ889dAVPehqRLWk77N3h--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

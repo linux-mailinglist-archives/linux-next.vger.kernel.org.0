@@ -2,57 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 325493A395E
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jun 2021 03:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633933A3A38
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jun 2021 05:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbhFKBsf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Jun 2021 21:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S230482AbhFKD0c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Jun 2021 23:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhFKBsf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Jun 2021 21:48:35 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6004EC061574;
-        Thu, 10 Jun 2021 18:46:38 -0700 (PDT)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lrWFc-006l8p-DK; Fri, 11 Jun 2021 01:46:24 +0000
-Date:   Fri, 11 Jun 2021 01:46:24 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
+        with ESMTP id S230205AbhFKD0c (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Jun 2021 23:26:32 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0CC061574;
+        Thu, 10 Jun 2021 20:24:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G1R672BSXz9sVb;
+        Fri, 11 Jun 2021 13:24:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623381871;
+        bh=Rhn5+R2MWACwQyfO1X4gGUHE7SYNLWc4cq+JGmoGgn4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mQW0gwOnni19qFEn9YLgFPsQxH7m1XLgdDoMxkWtVLpqzx8JBDGxeTUsJTKYq4KOb
+         iQ/KRkFbtHwS0yIF0CR+PMvZwsSKMFpXfOHcDzprlApkr3dr3hs4aOsdoljVUxN9pl
+         MKwUOJSQrPXyLzL9eEWRlJDS2dTsmvUsldI4eO5V0CvZxNeKKjzuEmq38MFd66BcLi
+         ZUxTPXR8VvkoUkFH491z/jvSEZ/5WSbdPBaVSldmduUKLH4yemg/eOKfyCDt9yX0ME
+         61v14Rb15ED4BFjbsyBxYARkGFEye1DYU2m+3ygkOskllRQbsWX4A96BityqKYOFMx
+         2KnPl+hroRPlQ==
+Date:   Fri, 11 Jun 2021 13:24:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Cristobal Forno <cforno12@linux.ibm.com>,
+        Thomas Falcon <tlfalcon@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the gfs2 tree with the vfs tree
-Message-ID: <YMLAcExtFTEYl5Bi@zeniv-ca.linux.org.uk>
-References: <20210611111231.7750bb60@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the net-next tree
+Message-ID: <20210611132428.74f6c1f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210611111231.7750bb60@canb.auug.org.au>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: multipart/signed; boundary="Sig_/zZ0lldrmVKcOFzK4.x/go5U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 11:12:31AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the gfs2 tree got conflicts in:
-> 
->   Documentation/filesystems/porting.rst
->   include/linux/uio.h
->   lib/iov_iter.c
-> 
-> between various commits from the vfs tree and the same, older version,
-> of the commits from the gfs2 tree.
-> 
-> I fixed it up (I used the vfs tree versions) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+--Sig_/zZ0lldrmVKcOFzK4.x/go5U
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-IMO iov_iter_fault_in_writeable() is a bloody bad idea to start with...
+Hi all,
+
+After merging the net-next tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
+
+drivers/net/ethernet/ibm/ibmvnic.c: In function 'adapter_state_to_string':
+drivers/net/ethernet/ibm/ibmvnic.c:855:2: warning: enumeration value 'VNIC_=
+DOWN' not handled in switch [-Wswitch]
+  855 |  switch (state) {
+      |  ^~~~~~
+drivers/net/ethernet/ibm/ibmvnic.c: In function 'reset_reason_to_string':
+drivers/net/ethernet/ibm/ibmvnic.c:1958:2: warning: enumeration value 'VNIC=
+_RESET_PASSIVE_INIT' not handled in switch [-Wswitch]
+ 1958 |  switch (reason) {
+      |  ^~~~~~
+
+Introduced by commit
+
+  53f8b1b25419 ("ibmvnic: Allow device probe if the device is not ready at =
+boot")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zZ0lldrmVKcOFzK4.x/go5U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDC12wACgkQAVBC80lX
+0GytjAgAjnmH5QhAcdHm1zWjXG1lYpqm4C8IyFEjBNx3D010yeGBngBQVwrV0I0n
+14NVqRiwAk4yQdlloEHlY4WBs2ImhzaXUxIS1HLxI00Aqk8XwTyoOA5Rgc7pV0mp
+JsCbI8o9QoLrq8pylyxiwvV+4tlm4F81YoryRTCupKPlgOJlw9LmHJas3XyLn0n3
+VaNaUZQj1zjSsdxQdNEOZbVcm/5L30J5Vo6u0U8sbV8dELJ51YAD30STfjQkKc4p
+H9inSd8HoAXpMui/rvKdGzD4jQLul8GnVPvthVMi1T9de70/z0n/tDOHa9V5g4pF
+xvItw3bewqJTMASMFGrRjDyGpTpSMQ==
+=Wm3b
+-----END PGP SIGNATURE-----
+
+--Sig_/zZ0lldrmVKcOFzK4.x/go5U--

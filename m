@@ -2,82 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA253A5E42
-	for <lists+linux-next@lfdr.de>; Mon, 14 Jun 2021 10:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A8F3A71CB
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jun 2021 00:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbhFNIUo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Jun 2021 04:20:44 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:38640 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232594AbhFNIUn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 14 Jun 2021 04:20:43 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-195-7lJORaaoNCKWXPve2GavIw-1; Mon, 14 Jun 2021 09:18:38 +0100
-X-MC-Unique: 7lJORaaoNCKWXPve2GavIw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 14 Jun
- 2021 09:18:37 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.018; Mon, 14 Jun 2021 09:18:37 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Geert Uytterhoeven' <geert@linux-m68k.org>,
-        Dave Chinner <david@fromorbit.com>
-CC:     Dave Chinner <dchinner@redhat.com>,
-        Chandan Babu R <chandanrlinux@gmail.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        "Allison Henderson" <allison.henderson@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        Linux-Next <linux-next@vger.kernel.org>,
+        id S231556AbhFNWOF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Jun 2021 18:14:05 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39183 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231226AbhFNWOD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 14 Jun 2021 18:14:03 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G3lzd5KfFz9sW4;
+        Tue, 15 Jun 2021 08:11:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623708717;
+        bh=Fij6i0iOv5D+lzV77efCPEQp99R7jOV/kigxL0k9Gu0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ORjhtp4AmPvLYoCDl0rLFgm727b14AnZd/XRFGi0hZWIYjZn1VTlgQjKM7oYPMK8/
+         YP4zim5aJpfhe2vULnyYPwbdBGs2jVvxPlMfEqGHQFr8j125bWGKbdUSzgGS27erES
+         TSXxIdzerRJAgJkQgqV/hMROyb8RrsnYjppa4m+lC3CEXnZVdAhYCruGQyi9qt7GEs
+         5+5loSdoYe56CzKNOSOWzN4wA2MrXWjOOE16jsOWGYbB2EoHCEF8iQjXj6Y0LSDBI3
+         9371R9XyfC9D1PNPOMsR4G7FC0EpgO2xwWqc90owBUFGa94Ajzq7T4uB+MmTqBKh/a
+         Oe4D3uhZ3Bnxw==
+Date:   Tue, 15 Jun 2021 08:11:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "noreply@ellerman.id.au" <noreply@ellerman.id.au>
-Subject: RE: [PATCH] xfs: Fix 64-bit division on 32-bit in
- xlog_state_switch_iclogs()
-Thread-Topic: [PATCH] xfs: Fix 64-bit division on 32-bit in
- xlog_state_switch_iclogs()
-Thread-Index: AQHXXo7VbmU6/rUPA0ycA+xJ6PrQ66sTKT0g
-Date:   Mon, 14 Jun 2021 08:18:37 +0000
-Message-ID: <7478840c18fc45379697609757c6c747@AcuMS.aculab.com>
-References: <20210610110001.2805317-1-geert@linux-m68k.org>
- <20210610220155.GQ664593@dread.disaster.area>
- <CAMuHMdWp3E3QDnbGDcTZsCiQNP3pLV2nXVmtOD7OEQO8P-9egQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdWp3E3QDnbGDcTZsCiQNP3pLV2nXVmtOD7OEQO8P-9egQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20210615081156.708089b1@canb.auug.org.au>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; boundary="Sig_/hN9ecARLt=ZpVfTkbGV=fgc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuDQo+IFNlbnQ6IDExIEp1bmUgMjAyMSAwNzo1NQ0KPiBI
-aSBEYXZlLA0KPiANCj4gT24gRnJpLCBKdW4gMTEsIDIwMjEgYXQgMTI6MDIgQU0gRGF2ZSBDaGlu
-bmVyIDxkYXZpZEBmcm9tb3JiaXQuY29tPiB3cm90ZToNCj4gPiBPbiBUaHUsIEp1biAxMCwgMjAy
-MSBhdCAwMTowMDowMVBNICswMjAwLCBHZWVydCBVeXR0ZXJob2V2ZW4gd3JvdGU6DQouLi4NCj4g
-PiA2NCBiaXQgZGl2aXNpb24gb24gMzIgYml0IHBsYXRmb3JtcyBpcyBzdGlsbCBhIHByb2JsZW0g
-aW4gdGhpcyBkYXkNCj4gPiBhbmQgYWdlPw0KPiANCj4gVGhleSdyZSBub3QgYSBwcm9ibGVtLiAg
-QnV0IHlvdSBzaG91bGQgdXNlIHRoZSByaWdodCBvcGVyYXRpb25zIGZyb20NCj4gPGxpbnV4L21h
-dGg2NC5oPiwgaWZmIHlvdSByZWFsbHkgbmVlZCB0aGVzZSBleHBlbnNpdmUgb3BlcmF0aW9ucy4N
-Cg0KKDY0Yml0KSBkaXZpc2lvbiBpc24ndCBleGFjdGx5IGNoZWFwIG9uIDY0Yml0IGNwdXMuDQoN
-ClNvbWUgdGltaW5nIHRhYmxlcyBmb3IgeDg2IGdpdmUgbGF0ZW5jaWVzIG9mIHdlbGwgb3ZlciAx
-IGJpdC9jbG9jaw0KZm9yIEludGVsIGNwdXMsIEFNRCByeXplbiBtYW5hZ2UgMiBiaXRzL2Nsb2Nr
-Lg0KU2lnbmVkIGRpdmlkZSBpcyBhbHNvIHNpZ25pZmljYW50bHkgbW9yZSBleHBlbnNpdmUgdGhh
-bg0KdW5zaWduZWQgZGl2aWRlLg0KDQpJbnRlZ2VyIGRpdmlkZSBwZXJmb3JtYW5jZSBpcyBjbGVh
-cmx5IG5vdCBpbXBvcnRhbnQgZW5vdWdoDQp0byB0aHJvdyBzaWxpY29uIGF0Lg0KVGhlIHNhbWUg
-dGFibGVzIHNob3cgZmRpdiBoYXZpbmcgYSBsYXRlbmN5IG9mIDE2IGNsb2Nrcy4NCg0KCURhdmlk
-DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
-YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
-IChXYWxlcykNCg==
+--Sig_/hN9ecARLt=ZpVfTkbGV=fgc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+In commit
+
+  da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg overwriting")
+
+Fixes tag
+
+  Fixes: commit c5c8635a04711 ("ASoC: qcom: Add LPASS platform driver")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+Also, please keep all the tags in the commit message together at the end.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hN9ecARLt=ZpVfTkbGV=fgc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDH1CwACgkQAVBC80lX
+0GxW8Qf/cFTUSDnnDHyIMCvZ41bMD9dFuYrHpln/qbXwH5/mo17/856gLlCHBktZ
+OVeNQS5io3mVyAoHbIlaW2bgbvNEk9D0yOYvFgVMirlJE/yEOEQPgasdDMrwc8Ne
+njhK62SMDQ7GzdLdMBmSMAAuDvIpA6N20oMQo3Ae8L6RaTq3e/jpG31gsX2EkC4Y
+fjBgjNRp4UA/0Gm6wZ5jH/oYuXzznczDsGasVUrpEedWpy6naUX4VO9AScpK6pEm
+pGAh7YCzzcE8cZn0hl/j8ElSBe4AycI+jPgDMTuUZGz0Ra1zEJp9iNcG8UL7Yjyv
+fJug+fzby9uYWKVETk9x4a6du3Iz6Q==
+=Xdar
+-----END PGP SIGNATURE-----
+
+--Sig_/hN9ecARLt=ZpVfTkbGV=fgc--

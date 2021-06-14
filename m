@@ -2,134 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085A33A4DCB
-	for <lists+linux-next@lfdr.de>; Sat, 12 Jun 2021 10:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6613A5D41
+	for <lists+linux-next@lfdr.de>; Mon, 14 Jun 2021 08:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbhFLI4t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 12 Jun 2021 04:56:49 -0400
-Received: from mail-vs1-f43.google.com ([209.85.217.43]:41774 "EHLO
-        mail-vs1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbhFLI4t (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 12 Jun 2021 04:56:49 -0400
-Received: by mail-vs1-f43.google.com with SMTP id c1so5119990vsh.8;
-        Sat, 12 Jun 2021 01:54:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GD2Olda9AmSNWAvIUnqMGuloWkjPAxn/zDHn8rCyeik=;
-        b=WMZIqcJpKrCtTBxTrQuhxSryloSzbak5D0o0I862v8EGdRs791HlhJKBqo6dsJhDl8
-         O66sEJS3CG9kxXYHskZlKX8K4sSu9+P4CeHtUu1OF0qRoAeIBA5km9bHwNX8ji52SjTp
-         OMlaVZFmft7jz3XIROSwM0j53Lp08GL0eUfCurIeGlFK5rx3qmwG2jSQ8GrQwcpteTV9
-         AEYfLpc3Jka4eHdIT6qVvNYmKSLc6Sv3/lCGyoHY8bg3qFMRPiyBZ5qG46pPXgayBi6J
-         Cjr/lvhKa57mJTOWqhxIx18StzTPN4iEkq1REZ4GJY+K8OPL3RQUSEZpsiaLse/wgqx/
-         EJZA==
-X-Gm-Message-State: AOAM532TRuMEaTDZ12b7pz2oHz6lnmZ4q35iOHQe3k056qHNqhFpqY5a
-        31eT2wqwB+D8a8cQBH+z4hiJqbb1hsMrYxBVVAU=
-X-Google-Smtp-Source: ABdhPJwQqVoaYjc0es2Y8dX/xEIoI5ZH3RdFJKE9qfsQHMDXtt6noFdUluHDMrZeJgyKIb7/kZOxucdlD8ELeejk3nU=
-X-Received: by 2002:a67:efd6:: with SMTP id s22mr13429864vsp.3.1623488074285;
- Sat, 12 Jun 2021 01:54:34 -0700 (PDT)
+        id S232426AbhFNGws (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Jun 2021 02:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232096AbhFNGwr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Jun 2021 02:52:47 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B77C061574;
+        Sun, 13 Jun 2021 23:50:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G3MXX6NHXz9sRf;
+        Mon, 14 Jun 2021 16:50:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623653437;
+        bh=QHy17iezKeraGW8eO1cKuQFhfrapQ2dvdasqzmYp1b8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Wa79ySyncOyrf2HtWefpK+TxBJwAXXeARsr8gHsYZQ0i01QN9ooQuSpnL4A0uZfrP
+         7GjfW5ImqlYQjUrWrMw/p4trSNbkB+FNPMBKnbxlhkXY4QaJiFHGEBs4VGra0GrfM6
+         eSorD/zfEoMA5wqrpob3QDDWDZiGb6i8iFHPB1gbJsTzcOwDb6QlAxejo3PmvCQgig
+         voQTz4NwhFRTOaUDm1KQfeNtLZH+tCpvaRc5Gz9jl/cTn1859YwNSh8WdB2R5zoGtP
+         +8yhTM9dwdKOJrljRYwG0FSFw/FB25rsZN5GvE3OaIU7s1ePZg6TpQ8/hUZsSHkwXB
+         nNnlDHnRw7F6A==
+Date:   Mon, 14 Jun 2021 16:50:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the risc-v tree
+Message-ID: <20210614165035.7e988616@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20210610110001.2805317-1-geert@linux-m68k.org>
- <20210610220155.GQ664593@dread.disaster.area> <CAMuHMdWp3E3QDnbGDcTZsCiQNP3pLV2nXVmtOD7OEQO8P-9egQ@mail.gmail.com>
- <20210611224638.GT664593@dread.disaster.area>
-In-Reply-To: <20210611224638.GT664593@dread.disaster.area>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 12 Jun 2021 10:54:23 +0200
-Message-ID: <CAMuHMdU1f5QD9J9Hz5m97arhF6gKQTFqz5EqrskD+cnWpYbX1Q@mail.gmail.com>
-Subject: Re: [PATCH] xfs: Fix 64-bit division on 32-bit in xlog_state_switch_iclogs()
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Dave Chinner <dchinner@redhat.com>,
-        Chandan Babu R <chandanrlinux@gmail.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, linux-xfs@vger.kernel.org,
-        Linux-Next <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        noreply@ellerman.id.au
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/PNb.XryqZxghtBuZv+drCFt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Dave,
+--Sig_/PNb.XryqZxghtBuZv+drCFt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 12, 2021 at 12:46 AM Dave Chinner <david@fromorbit.com> wrote:
-> On Fri, Jun 11, 2021 at 08:55:24AM +0200, Geert Uytterhoeven wrote:
-> > On Fri, Jun 11, 2021 at 12:02 AM Dave Chinner <david@fromorbit.com> wrote:
-> > > On Thu, Jun 10, 2021 at 01:00:01PM +0200, Geert Uytterhoeven wrote:
-> > > > On 32-bit (e.g. m68k):
-> > > >
-> > > >     ERROR: modpost: "__udivdi3" [fs/xfs/xfs.ko] undefined!
-> > > >
-> > > > Fix this by using a uint32_t intermediate, like before.
-> > > >
-> > > > Reported-by: noreply@ellerman.id.au
-> > > > Fixes: 7660a5b48fbef958 ("xfs: log stripe roundoff is a property of the log")
-> > > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > ---
-> > > > Compile-tested only.
-> > > > ---
-> > > >  fs/xfs/xfs_log.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > <sigh>
-> > >
-> > > 64 bit division on 32 bit platforms is still a problem in this day
-> > > and age?
-> >
-> > They're not a problem.  But you should use the right operations from
-> > <linux/math64.h>, iff you really need these expensive operations.
->
-> See, that's the whole problem. This *isn't* obviously a 64 bit
-> division - BBTOB is shifting the variable down by 9 (bytes to blocks)
-> and then using that as the divisor.
+Hi all,
 
-BTOBB, not BBTOB ;-)
+Commits
 
-> The problem is that BBTOB has an internal cast to a 64 bit size,
-> and roundup() just blindly takes it and hence we get non-obvious
-> compile errors only on 32 bit platforms.
+  84a844dab497 ("riscv: Map the kernel with correct permissions the first t=
+ime")
+  837f6a73c03a ("riscv: Add mem kernel parameter support")
 
-Indeed. Perhaps the macros should be fixed?
+are missing a Signed-off-by from their committer.
 
-    #define BBSHIFT         9
-    #define BBSIZE          (1<<BBSHIFT)
-    #define BBMASK          (BBSIZE-1)
-    #define BTOBB(bytes)    (((__u64)(bytes) + BBSIZE - 1) >> BBSHIFT)
-    #define BTOBBT(bytes)   ((__u64)(bytes) >> BBSHIFT)
+--=20
+Cheers,
+Stephen Rothwell
 
-Why are these two casting bytes to u64? The result will be smaller
-due to the shift.
-if the type holding bytes was too small, you're screwed anyway.
+--Sig_/PNb.XryqZxghtBuZv+drCFt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    #define BBTOB(bbs)      ((bbs) << BBSHIFT)
+-----BEGIN PGP SIGNATURE-----
 
-Why does this one lack the cast? If the passed bbs is ever 32-bit,
-it may overflow due to the shift.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDG/DsACgkQAVBC80lX
+0GzUUQf/VUNsWBG/yHMk2qEh1u1tOn8G5h6TFsBrO8aYgtTF9/0Aq/ylq74ygN/W
+O3HDbjB5x9QSfz1QUnQsyFaXyJ89UR0j94FQO0tSqRvMXbha+D0ZVs0J7t41rSid
+2OGWXzQ2eg/T+4KXkQ7w5jPMyUW7eiJHymVOfRZPsbYMPNNAqgI6+uGkLbbx39xj
+l0M5s7JPfgwFa+tV8OXd2GxVriyz3Q2MhclWb+DGB0zTspVMXXke1U1OrOiHQZ0n
+YpSFHOrzJLjseeKbxwFTFp9dMNoUgO9AHMB/JIEeLLat/onVbMHPRzYcETrAD759
+cc9dBEGaC0PV8iV7Lo59kCQ3OokYFg==
+=tisw
+-----END PGP SIGNATURE-----
 
-> We have type checking macros for all sorts of generic functionality
-> - why haven't these generic macros that do division also have type
-> checking to catch this? i.e. so that when people build kernels on
-> 64 bit machines find out that they've unwittingly broken 32 bit
-> builds the moment they use roundup() and/or friends incorrectly?
->
-> That would save a lot of extra work having fix crap like this up
-> after the fact...
-
-While adding checks would work for e.g. roundup(), it wouldn't work
-for plain divisions not involving rounding, as we don't have a way to
-catch this for "a / b", except for the link error on 32-bit platforms.
-
-Perhaps the build bots are not monitoring linux-xfs?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--Sig_/PNb.XryqZxghtBuZv+drCFt--

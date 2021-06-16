@@ -2,161 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3A43A9B39
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jun 2021 14:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BCF3A9BA4
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jun 2021 15:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbhFPM5d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 16 Jun 2021 08:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbhFPM5c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 16 Jun 2021 08:57:32 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDF6C061574
-        for <linux-next@vger.kernel.org>; Wed, 16 Jun 2021 05:55:25 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id h24-20020a9d64180000b029036edcf8f9a6so2365247otl.3
-        for <linux-next@vger.kernel.org>; Wed, 16 Jun 2021 05:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PgLISmcrZ4XM/HOFb1fJH8XxUGoU+n7XQHgYaHGSqys=;
-        b=ZKSiaKe16ivMGnUkPtYNXHZsEj2iL5FH7PfcadHkyV0ZaDhcB45PIHklFleKHjjoxa
-         AXKQbIMY2oXU3A4j61l5TSYYyxZ0U0KARAcYvXNqrOtOYm8WZ2nykTU5JdyL90UZH9V4
-         Z8d2nPLY/qVCdg62pc9IEr6l0JA8C8rlviN1v0p5kuIiOK8GHqAN7+B+KWOlx2PjSJTd
-         EEimTm1Op1//H1N03froTpFkDSxo8rlcENWAF1T0P3pspMFpxuwFMMzunvoXhS3Ubm1H
-         jn8Qho2gs6B+Qw9zn7KqYjwqAdYpn4Md3Od4d/P34p9D59VBCT8SuqWoN69NZ1uBrTRY
-         Yn4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PgLISmcrZ4XM/HOFb1fJH8XxUGoU+n7XQHgYaHGSqys=;
-        b=ijZhtVcsSyu+F9w6HUzLj13BWjMLhTb2kFT8NGJqJz5vXFTdRrBf92dVs9BfVyO2rn
-         8UPnOHB1pJQT90f57r5WJ5YNp0uD73KKlMjW+DZbMBCkLB4dpuQuo6RbJnHYM7ckKcxw
-         l0sH4eoP5dPYO+3EkWyck/DzuX2kMoQKRQXxMZ3OsruAJDFg2LfwU4M3k3Hw1u0jx9f2
-         hhLuZuPgLWQsG7nhNo3Ybqfz/sabDS4ERWdV6k8Qih3eOgCiel1GsHpKYO6wuJ7o6Hzp
-         B49smLSAzPmT4AlVBB7aMUhDTx0gruU4Dmx4obmQ1KL4ZBuNIBRmq9Koavv/3gE2q/Gd
-         2d+w==
-X-Gm-Message-State: AOAM530siuC2tto5HCaoHMkwLcicr5/f1gBaom3NCGYGH4qC+PM3vz4+
-        FTKSCvrruB7M5fInLlHIOEeNnQ==
-X-Google-Smtp-Source: ABdhPJwlJqfUC8TYFQy3FQWg8dl+UQEjY6y+2Pk638TwMuM0H39Ad/v0RUhCZd9JSSrCr3CdInG3yg==
-X-Received: by 2002:a05:6830:18c2:: with SMTP id v2mr3859219ote.153.1623848125288;
-        Wed, 16 Jun 2021 05:55:25 -0700 (PDT)
-Received: from [192.168.1.134] ([198.8.77.61])
-        by smtp.gmail.com with ESMTPSA id c205sm412111oib.20.2021.06.16.05.55.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jun 2021 05:55:24 -0700 (PDT)
-Subject: Re: [next] [arm64] Unable to handle kernel NULL pointer dereference
- at virtual address 0000000000000068
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>, lkft-triage@lists.linaro.org,
-        regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <CA+G9fYurEcTfV7Z=co2Ki-TubF4d-Ext7ivZPaQT9SR5XazUtQ@mail.gmail.com>
- <20210615162641.be9d7a676df5885394713d25@linux-foundation.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <957d58f1-a99c-42ed-b508-086e8141285d@kernel.dk>
-Date:   Wed, 16 Jun 2021 06:55:22 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S233237AbhFPNJ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 16 Jun 2021 09:09:56 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39293 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233216AbhFPNJx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 16 Jun 2021 09:09:53 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G4lpn3PJGz9sWF;
+        Wed, 16 Jun 2021 23:07:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623848865;
+        bh=LMw5KCA2t/DjasJxnr5Ba8pj4yCmDTbZ0x5VZi5+r18=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gv8+gxSiJ7DvoaPkr4bh+BToUjRkOMvRYO0rSp1LBv/Mb/GTYqFqqxnZ7I5BQV/VD
+         IVS+yHQBFVCZ6f6Wa2OTapnZHI8V/zI9s+Bvc2XWFevokkqaV2s0e4Cxe1ZQdvCINC
+         TgD6STxRb3Ic8lOOqrSk7VYRJlCU7AVmbroih08NkQBYCfyQpM1OuK/ckAR1jEnbTa
+         ghhanMCppq1Lq6xbYUFe+Ktprk6oatJZHrBlLeQiiAe5H9aKpRX0ulCH1nlxZpvt1T
+         HB6lsBn+PzjEGfUG/maQ2+0D4YWebGnCJflV4zx0chqsuYJISeirQYYgwXn53wWv0b
+         iQM60vKLKE4PA==
+Date:   Wed, 16 Jun 2021 23:07:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the akpm tree
+Message-ID: <20210616230744.34b8682f@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210615162641.be9d7a676df5885394713d25@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/X=+z8Wh0D0Ritm7BieTLkL8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/15/21 5:26 PM, Andrew Morton wrote:
-> (cc Jens)
-> 
-> On Tue, 15 Jun 2021 16:49:50 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> 
->> Following kernel crash reported while booting linux next 20210615 tag
->> on qemu_arm64.
->>
->> Crash log:
->> -------------
->> [    0.767379] Unable to handle kernel NULL pointer dereference at
->> virtual address 0000000000000068
->> [    0.769815] Mem abort info:
->> [    0.770735]   ESR = 0x96000004
->> [    0.771598]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [    0.773008]   SET = 0, FnV = 0
->> [    0.773865]   EA = 0, S1PTW = 0
->> [    0.774844]   FSC = 0x04: level 0 translation fault
->> [    0.776195] Data abort info:
->> [    0.776968]   ISV = 0, ISS = 0x00000004
->> [    0.778010]   CM = 0, WnR = 0
->> [    0.778961] [0000000000000068] user address but active_mm is swapper
->> [    0.780643] Internal error: Oops: 96000004 [#1] PREEMPT SMP
->> [    0.782189] Modules linked in:
->> [    0.783098] CPU: 2 PID: 1 Comm: swapper/0 Not tainted
->> 5.13.0-rc6-next-20210615 #1
->> [    0.785239] Hardware name: linux,dummy-virt (DT)
->> [    0.786626] pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
->> [    0.788352] pc : blk_finish_plug+0x88/0x270
->> [    0.789598] lr : blk_queue_write_cache+0x34/0x80
->> [    0.790997] sp : ffff800012aeb9d0
->> [    0.791981] x29: ffff800012aeb9d0 x28: ffff0000c088eeb0 x27: ffff800011a27110
->> [    0.794067] x26: ffff0000c18511a0 x25: ffff8000114ecaa8 x24: 0000000005a00000
->> [    0.796127] x23: ffff8000114ed3c8 x22: 0000000000000000 x21: ffff0000c088fa00
->> [    0.798208] x20: 0000000000000000 x19: 0000000000000000 x18: 0000000000000001
->> [    0.800239] x17: 7265727574636166 x16: 756e614d202e6b6e x15: ffff0000c0290488
->> [    0.802308] x14: ffffffffffffffff x13: ffff0000c088fa2c x12: ffff0000c088fa14
->> [    0.804341] x11: 0000000000000026 x10: 0000000000000401 x9 : ffff80001058247c
->> [    0.806408] x8 : ffff0000c088fa2c x7 : 0000000000000008 x6 : 0000000000000001
->> [    0.808429] x5 : ffff80001258a000 x4 : ffff80001258a260 x3 : 0000000000000068
->> [    0.810492] x2 : 0000000000000001 x1 : 0000000000000068 x0 : 0000000000020000
->> [    0.813153] Call trace:
->> [    0.813878]  blk_finish_plug+0x88/0x270
->> [    0.815064]  add_mtd_blktrans_dev+0x258/0x3f0
->> [    0.816316]  mtdblock_add_mtd+0x6c/0xb8
->> [    0.817428]  blktrans_notify_add+0x50/0x78
->> [    0.818666]  add_mtd_device+0x304/0x4d8
->> [    0.819790]  mtd_device_parse_register+0x1d8/0x2f0
->> [    0.821150]  physmap_flash_probe+0x4c8/0x7a8
->> [    0.822431]  platform_probe+0x70/0xe0
->> [    0.823494]  really_probe+0xf0/0x4d0
->> [    0.824539]  driver_probe_device+0x108/0x178
->> [    0.825760]  device_driver_attach+0x7c/0x88
->> [    0.827039]  __driver_attach+0xb8/0x190
->> [    0.828142]  bus_for_each_dev+0x78/0xd0
->> [    0.829254]  driver_attach+0x2c/0x38
->> [    0.830381]  bus_add_driver+0x14c/0x230
->> [    0.831502]  driver_register+0x6c/0x128
->> [    0.832604]  __platform_driver_register+0x30/0x40
->> [    0.833952]  physmap_init+0x24/0x30
->> [    0.835011]  do_one_initcall+0x50/0x2c8
->> [    0.836116]  kernel_init_freeable+0x25c/0x2e4
->> [    0.837366]  kernel_init+0x2c/0x138
->> [    0.838403]  ret_from_fork+0x10/0x18
->> [    0.839453] Code: c8037c22 35ffffa3 17fff238 f9800031 (c85f7c22)
->> [    0.841176] ---[ end trace 66ee8a40712bfd28 ]---
->> [    0.842563] Kernel panic - not syncing: Attempted to kill init!
->> exitcode=0x0000000b
->> [    0.844577] SMP: stopping secondary CPUs
->> [    0.845707] Kernel Offset: disabled
->> [    0.846731] CPU features: 0x10000071,00000846
->> [    0.847969] Memory Limit: none
->> [    0.848853] ---[ end Kernel panic - not syncing: Attempted to kill
->> init! exitcode=0x0000000b ]---
+--Sig_/X=+z8Wh0D0Ritm7BieTLkL8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be fixed once linux-next resyncs with the block tree.
+Hi all,
 
--- 
-Jens Axboe
+After merging the akpm tree, today's linux-next build (sparc defconfig)
+failed like this:
 
+In file included from arch/sparc/include/asm/pgtable.h:7:0,
+                 from include/linux/pgtable.h:6,
+                 from include/linux/mm.h:33,
+                 from include/linux/ring_buffer.h:5,
+                 from include/linux/trace_events.h:6,
+                 from include/trace/syscall.h:7,
+                 from include/linux/syscalls.h:87,
+                 from fs/io_uring.c:45:
+arch/sparc/include/asm/pgtable_32.h: In function 'pud_pgtable':
+arch/sparc/include/asm/pgtable_32.h:157:10: warning: return makes pointer f=
+rom integer without a cast [-Wint-conversion]
+   return ~0;
+          ^
+
+and many, many more like this.
+
+This is an error due to (part of) the tree being built with -Werror
+
+Caused by commit
+
+  8aef6710db27 ("mm: rename pud_page_vaddr to pud_pgtable and make it retur=
+n pmd_t *")
+
+I have applied the following hack fix for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 16 Jun 2021 22:51:50 +1000
+Subject: [PATCH] mm: rename pud_page_vaddr to pud_pgtable and make it retur=
+n pmd_t * fix
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/sparc/include/asm/pgtable_32.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/p=
+gtable_32.h
+index 1e6b55425f3d..ffccfe3b22ed 100644
+--- a/arch/sparc/include/asm/pgtable_32.h
++++ b/arch/sparc/include/asm/pgtable_32.h
+@@ -154,7 +154,7 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+ static inline pmd_t *pud_pgtable(pud_t pud)
+ {
+ 	if (srmmu_device_memory(pud_val(pud))) {
+-		return ~0;
++		return (pmd_t *)~0;
+ 	} else {
+ 		unsigned long v =3D pud_val(pud) & SRMMU_PTD_PMASK;
+ 		return (pmd_t *)__nocache_va(v << 4);
+--=20
+2.30.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/X=+z8Wh0D0Ritm7BieTLkL8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDJ96AACgkQAVBC80lX
+0GzTGwgAg1efvjB9GJ+Jv++Etpib0ASNX0DVs9fUZUq3E1kiYPxc8qEx5dsziHEa
+ZAJTBOo/VKM/tczb8eoZTlbLWDJ5e8UqhJQVW0DziX1aOOa/+S8nzu5OV+lVEzNy
+c6bNIQmXXyw4auwzz6bw4L9MA3uRTwJECLDUCXM1KUB/896h8B5dv3VdfG3Y6nhM
+Fr8Yy3UwZ4eXv0tda2JXV7nmw6OfZR3+KidJJn4wx6imqc9Oj66OG2NSD0JqfA22
+CokHcr1iFDZ1QOWze25F5ue9HkXhMuBxc8hQD+/DpJxGYjDP7f/jnrK7FwTU3pqV
+JqE3ai0+N7GuV2aFnwGLUbodWsLNHQ==
+=LvIo
+-----END PGP SIGNATURE-----
+
+--Sig_/X=+z8Wh0D0Ritm7BieTLkL8--

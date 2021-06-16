@@ -2,147 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B85A23A8D76
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jun 2021 02:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B850D3A8E75
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jun 2021 03:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhFPAbk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Jun 2021 20:31:40 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:50283 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230244AbhFPAbj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Jun 2021 20:31:39 -0400
-X-UUID: 984ab5af4c354bbd8baaac5e24331982-20210616
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=T+5dG9Zv3Son1yPsM21G3NCtpvIaSc9W4NcOU1b0ap8=;
-        b=A/M8CcBsaspkfLvwl4LLMyVLrnChT7TZz9WJFzQXnew+58mmrl/Q5SBAuQ3sG5tmagQwU1OF3WUGZydurtgdh9EGVN8rWA2MxjPmAZyuDZOZtUdrpd43n3vVDQeg3vrnFNF3edcc3JipoU1B4SAEqrtSXD+lIZyZhuRTIbAILuo=;
-X-UUID: 984ab5af4c354bbd8baaac5e24331982-20210616
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 354707355; Wed, 16 Jun 2021 08:29:31 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Jun 2021 08:29:29 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Jun 2021 08:29:29 +0800
-Message-ID: <1623803369.8887.9.camel@mtkswgap22>
-Subject: Re: [next] [arm64] kernel BUG at arch/arm64/mm/physaddr.c
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Linux-Next Mailing List" <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>, <lkft-triage@lists.linaro.org>,
-        <regressions@lists.linux.dev>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>
-Date:   Wed, 16 Jun 2021 08:29:29 +0800
-In-Reply-To: <20210615131902.GB47121@C02TD0UTHF1T.local>
-References: <CA+G9fYvvm2tW5QAe9hzPgs7sV8udsoufxs0Qu6N0ZjV0Z686vw@mail.gmail.com>
-         <20210615124745.GA47121@C02TD0UTHF1T.local>
-         <20210615131902.GB47121@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S230376AbhFPBko (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Jun 2021 21:40:44 -0400
+Received: from ozlabs.org ([203.11.71.1]:55669 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230371AbhFPBko (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Jun 2021 21:40:44 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G4SWd089wz9sXG;
+        Wed, 16 Jun 2021 11:38:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1623807517;
+        bh=ntMpLfRzfPiBebhmvNxEkqBnOA/8znb4d401tkYzjmw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VET4KqLi3WEoYZPYs6SMGusriHoMB2384EBcYMS759c5l69N7rI3YFi8x3dkKn68v
+         bsJWh6TkzXiKYfA4XiL/eNwRMMiT0NtFhxf2JeHYzI6JaxK82pPwjJRvJC7rtfmSWO
+         eZzn22q8oQw9W8nKbb3IdVEfY9ZZ+g9v8Q0jTDJMpaFns0QP9BTRe3BnIMdAApFuUy
+         OrTRgBgZKdGtDhfybfMhNVmS7Bc3vbGUHB0nWhDaeIti6mWqqlUay+K9tfw1O4BMFk
+         8fxDFSlL0f6cMKFV0IT9nk6CAU+uAWjAmnJJmWDfwGzClkPH2gLLI4XCGej6yXFl9J
+         rfKAmPnFoO73w==
+Date:   Wed, 16 Jun 2021 11:38:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Bumyong Lee <bumyong.lee@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the swiotlb tree
+Message-ID: <20210616113835.0f0d4952@canb.auug.org.au>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; boundary="Sig_/dfzgBL0PQx.njFrR.cC8VMl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA2LTE1IGF0IDE0OjE5ICswMTAwLCBNYXJrIFJ1dGxhbmQgd3JvdGU6DQo+
-IE9uIFR1ZSwgSnVuIDE1LCAyMDIxIGF0IDAxOjQ3OjQ1UE0gKzAxMDAsIE1hcmsgUnV0bGFuZCB3
-cm90ZToNCj4gPiBPbiBUdWUsIEp1biAxNSwgMjAyMSBhdCAwNDo0MToyNVBNICswNTMwLCBOYXJl
-c2ggS2FtYm9qdSB3cm90ZToNCj4gPiA+IEZvbGxvd2luZyBrZXJuZWwgY3Jhc2ggcmVwb3J0ZWQg
-d2hpbGUgYm9vdCBsaW51eCBuZXh0IDIwMjEwNjE1IHRhZyBvbiBxZW11X2FybTY0DQo+ID4gPiB3
-aXRoIGFsbG1vZGNvbmZpZyBidWlsZC4NCj4gPiA+IA0KPiA+ID4gWyAgICAwLjAwMDAwMF0gQm9v
-dGluZyBMaW51eCBvbiBwaHlzaWNhbCBDUFUgMHgwMDAwMDAwMDAwIFsweDQxMGZkMDM0XQ0KPiA+
-ID4gWyAgICAwLjAwMDAwMF0gTGludXggdmVyc2lvbiA1LjEzLjAtcmM2LW5leHQtMjAyMTA2MTUN
-Cj4gPiA+ICh0dXhtYWtlQGFjNzk3OGNkZGVkZSkgKGFhcmNoNjQtbGludXgtZ251LWdjYyAoRGVi
-aWFuIDExLjEuMC0xKQ0KPiA+ID4gMTEuMS4wLCBHTlUgbGQgKEdOVSBCaW51dGlscyBmb3IgRGVi
-aWFuKSAyLjM2LjUwLjIwMjEwNjAxKSAjMSBTTVANCj4gPiA+IFBSRUVNUFQgVHVlIEp1biAxNSAx
-MDoyMDo1MSBVVEMgMjAyMQ0KPiA+ID4gWyAgICAwLjAwMDAwMF0gTWFjaGluZSBtb2RlbDogbGlu
-dXgsZHVtbXktdmlydA0KPiA+ID4gWyAgICAwLjAwMDAwMF0gZWFybHljb246IHBsMTEgYXQgTU1J
-TyAweDAwMDAwMDAwMDkwMDAwMDAgKG9wdGlvbnMgJycpDQo+ID4gPiBbICAgIDAuMDAwMDAwXSBw
-cmludGs6IGJvb3Rjb25zb2xlIFtwbDExXSBlbmFibGVkDQo+ID4gPiBbICAgIDAuMDAwMDAwXSBl
-Zmk6IFVFRkkgbm90IGZvdW5kLg0KPiA+ID4gWyAgICAwLjAwMDAwMF0gTlVNQTogTm8gTlVNQSBj
-b25maWd1cmF0aW9uIGZvdW5kDQo+ID4gPiBbICAgIDAuMDAwMDAwXSBOVU1BOiBGYWtpbmcgYSBu
-b2RlIGF0IFttZW0NCj4gPiA+IDB4MDAwMDAwMDA0MDAwMDAwMC0weDAwMDAwMDAwYmZmZmZmZmZd
-DQo+ID4gPiBbICAgIDAuMDAwMDAwXSBOVU1BOiBOT0RFX0RBVEEgW21lbSAweGJmYzAwZDQwLTB4
-YmZjMDNmZmZdDQo+ID4gPiBbICAgIDAuMDAwMDAwXSAtLS0tLS0tLS0tLS1bIGN1dCBoZXJlIF0t
-LS0tLS0tLS0tLS0NCj4gPiA+IFsgICAgMC4wMDAwMDBdIGtlcm5lbCBCVUcgYXQgYXJjaC9hcm02
-NC9tbS9waHlzYWRkci5jOjI3IQ0KPiA+ID4gWyAgICAwLjAwMDAwMF0gSW50ZXJuYWwgZXJyb3I6
-IE9vcHMgLSBCVUc6IDAgWyMxXSBQUkVFTVBUIFNNUA0KPiA+ID4gWyAgICAwLjAwMDAwMF0gTW9k
-dWxlcyBsaW5rZWQgaW46DQo+ID4gPiBbICAgIDAuMDAwMDAwXSBDUFU6IDAgUElEOiAwIENvbW06
-IHN3YXBwZXIgVGFpbnRlZDogRyAgICAgICAgICAgICAgICBUDQo+ID4gPiA1LjEzLjAtcmM2LW5l
-eHQtMjAyMTA2MTUgIzEgYzE1MGE4MTYxZDhmZjM5NWM1YWU3ZWUwYzNjOGYyMmMzNjg5ZmFlNA0K
-PiA+ID4gWyAgICAwLjAwMDAwMF0gSGFyZHdhcmUgbmFtZTogbGludXgsZHVtbXktdmlydCAoRFQp
-DQo+ID4gPiBbICAgIDAuMDAwMDAwXSBwc3RhdGU6IDQwNDAwMGM1IChuWmN2IGRhSUYgK1BBTiAt
-VUFPIC1UQ08gQlRZUEU9LS0pDQo+ID4gPiBbICAgIDAuMDAwMDAwXSBwYyA6IF9fcGh5c19hZGRy
-X3N5bWJvbCsweDQ0LzB4YzANCj4gPiA+IFsgICAgMC4wMDAwMDBdIGxyIDogX19waHlzX2FkZHJf
-c3ltYm9sKzB4NDQvMHhjMA0KPiA+ID4gWyAgICAwLjAwMDAwMF0gc3AgOiBmZmZmODAwMDE0Mjg3
-YjAwDQo+ID4gPiBbICAgIDAuMDAwMDAwXSB4Mjk6IGZmZmY4MDAwMTQyODdiMDAgeDI4OiBmYzQ5
-YTliODlkYjM2ZjBhIHgyNzogZmZmZmZmZmZmZmZmZmZmZg0KPiA+ID4gWyAgICAwLjAwMDAwMF0g
-eDI2OiAwMDAwMDAwMDAwMDAwMjgwIHgyNTogMDAwMDAwMDAwMDAwMDAxMCB4MjQ6IGZmZmY4MDAw
-MTQ1YTgwMDANCj4gPiA+IFsgICAgMC4wMDAwMDBdIHgyMzogMDAwMDAwMDAwODAwMDAwMCB4MjI6
-IDAwMDAwMDAwMDAwMDAwMTAgeDIxOiAwMDAwMDAwMDAwMDAwMDAwDQo+ID4gPiBbICAgIDAuMDAw
-MDAwXSB4MjA6IGZmZmY4MDAwMTAwMDAwMDAgeDE5OiBmZmZmMDAwMDdmYzAwZDQwIHgxODogMDAw
-MDAwMDAwMDAwMDAwMA0KPiA+ID4gWyAgICAwLjAwMDAwMF0geDE3OiAwMDAwMDAwMDAwM2VlMDAw
-IHgxNjogMDAwMDAwMDBiZmMxMjAwMCB4MTU6IDAwMDAwMDEwMDAwMDAwMDANCj4gPiA+IFsgICAg
-MC4wMDAwMDBdIHgxNDogMDAwMDAwMDAwMDAwZGU4YyB4MTM6IDAwMDAwMDEwMDAwMDAwMDAgeDEy
-OiAwMDAwMDAwMGYxZjFmMWYxDQo+ID4gPiBbICAgIDAuMDAwMDAwXSB4MTE6IGRmZmY4MDAwMDAw
-MDAwMDAgeDEwOiBmZmZmNzAwMDAyODUwZWVhIHg5IDogMDAwMDAwMDAwMDAwMDAwMA0KPiA+ID4g
-WyAgICAwLjAwMDAwMF0geDggOiBmZmZmMDAwMDdmYmUwZDQwIHg3IDogMDAwMDAwMDAwMDAwMDAw
-MCB4NiA6IDAwMDAwMDAwMDAwMDAwM2YNCj4gPiA+IFsgICAgMC4wMDAwMDBdIHg1IDogMDAwMDAw
-MDAwMDAwMDA0MCB4NCA6IDAwMDAwMDAwMDAwMDAwMDUgeDMgOiBmZmZmODAwMDE0MmJiMGMwDQo+
-ID4gPiBbICAgIDAuMDAwMDAwXSB4MiA6IDAwMDAwMDAwMDAwMDAwMDAgeDEgOiAwMDAwMDAwMDAw
-MDAwMDAwIHgwIDogMDAwMDAwMDAwMDAwMDAwMA0KPiA+ID4gWyAgICAwLjAwMDAwMF0gQ2FsbCB0
-cmFjZToNCj4gPiA+IFsgICAgMC4wMDAwMDBdICBfX3BoeXNfYWRkcl9zeW1ib2wrMHg0NC8weGMw
-DQo+ID4gPiBbICAgIDAuMDAwMDAwXSAgc3BhcnNlX2luaXRfbmlkKzB4OTgvMHg2ZDANCj4gPiAN
-Cj4gPiBGcm9tIHRoZSBsb29rcyBvZiBpdCwgdGhpcyBpcyBwZ2RhdF90b19waHlzLCBhcyBpbnRy
-b2R1Y2VkIGluIG5leHQNCj4gPiBjb21taXQ6DQo+ID4gDQo+ID4gICBlMWRiNmVmNzMzNmQ4MTdj
-ICgibW0vc3BhcnNlOiBmaXggY2hlY2tfdXNlbWFwX3NlY3Rpb25fbnIgd2FybmluZ3MiKQ0KPiA+
-IA0KPiA+IEl0IGFwcGVhcnMgdGh0YSBhbGxtb2Rjb25maWcgZG9lc24ndCBoYXZlIENPTkZJR19O
-RUVEX01VTFRJUExFX05PREVTPXksDQo+ID4gYnV0IGRvZXMgaGF2ZSBDT05GSUdfTlVNQT15LCBh
-bmQgc28gKmRvZXMqIHVzZSB0aGUgZHluYW1pY2FsbHktYWxsb2NhdGVkDQo+ID4gbm9kZV9kYXRh
-IGFycmF5IChzaW5jZSBjb250aWdfcGFnZV9kYXRhIGlzIG9ubHkgZGVmaW5lZCBmb3IgIU5VTUEp
-Lg0KPiA+IA0KPiA+IEkgZG9uJ3QgdGhpbmsgdGhhdCBjb21taXQgaXMgY29ycmVjdC4NCj4gDQo+
-IExvb2tpbmcgc29tZSBtb3JlLCBpdCBsb29rcyBsaWtlIHRoYXQncyBjb3JyZWN0IGluIGlzb2xh
-dGlvbiwgYnV0IGl0DQo+IGNsYXNoZXMgd2l0aCBjb21taXQ6DQo+IA0KPiAgIDU4MzFlZWRhZDJh
-YzZmMzggKCJtbTogcmVwbGFjZSBDT05GSUdfTkVFRF9NVUxUSVBMRV9OT0RFUyB3aXRoIENPTkZJ
-R19OVU1BIikNCj4gDQo+IC4uLiBhbmQgSSByZWNrb24gaXQnZCBiZSBjbGVhcmVyIGFuZCBtb3Jl
-IHJvYnVzdCB0byBkZWZpbmUNCj4gcGdkYXRfdG9fcGh5cygpIGluIHRoZSBzYW1lIGlmZGVmcyBh
-cyBjb250aWdfcGFnZV9kYXRhIHNvIHRoYXQNCj4gdGhlc2UsIHN0YXkgaW4tc3luYy4gZS5nLiBo
-YXZlOg0KPiANCj4gfCAjaWZkZWYgQ09ORklHX05VTUENCj4gfCAjZGVmaW5lIHBnZGF0X3RvX3Bo
-eXMoeCkJdmlydF90b19waHlzKHgpDQo+IHwgI2Vsc2UgLyogQ09ORklHX05VTUEgKi8NCj4gfCAN
-Cj4gfCBleHRlcm4gc3RydWN0IHBnbGlzdF9kYXRhIGNvbnRpZ19wYWdlX2RhdGE7DQo+IHwgLi4u
-DQo+IHwgI2RlZmluZSBwZ2RhdF90b19waHlzKHgpCV9fcGFfc3ltYm9sKCZjb250aWdfcGFnZV9k
-YXRhKQ0KPiB8DQo+IHwgI2VuZGlmIC8qIENPTklGSUdfTlVNQSAqLw0KPiANCj4gLi4uIHdoaWNo
-J2QgYWxzbyBtYWtlIGNsZWFyIHRoYXQgY29udGlnX3BhZ2VfZGF0YSBpcyB0aGUgKm9ubHkqIGV4
-cGVjdGVkDQo+IHBnbGlzdF9kYXRhLg0KDQpUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbi4gDQpJ
-dCBsb29rcyBtb3JlIGNsZWFyLCBJIHdpbGwgc3VibWl0IGFub3RoZXIgcGF0Y2ggZm9yIHRoaXMu
-IChhZnRlciB0aGUNCm1lcmdlKQ0KDQpNaWxlcw0KDQo+IFRoYW5rcywNCj4gTWFyay4NCj4gDQo+
-ID4gVGhhbmtzLA0KPiA+IE1hcmsuDQo+ID4gDQo+ID4gPiBbICAgIDAuMDAwMDAwXSAgc3BhcnNl
-X2luaXQrMHg0NjAvMHg0ZDQNCj4gPiA+IFsgICAgMC4wMDAwMDBdICBib290bWVtX2luaXQrMHgx
-MTAvMHgzNDANCj4gPiA+IFsgICAgMC4wMDAwMDBdICBzZXR1cF9hcmNoKzB4MWI4LzB4MmUwDQo+
-ID4gPiBbICAgIDAuMDAwMDAwXSAgc3RhcnRfa2VybmVsKzB4MTEwLzB4ODcwDQo+ID4gPiBbICAg
-IDAuMDAwMDAwXSAgX19wcmltYXJ5X3N3aXRjaGVkKzB4YTgvMHhiMA0KPiA+ID4gWyAgICAwLjAw
-MDAwMF0gQ29kZTogOTQwY2NmMjMgZWIxMzAyOWYgNTQwMDAwNjkgOTQwY2NlNjAgKGQ0MjEwMDAw
-KQ0KPiA+ID4gWyAgICAwLjAwMDAwMF0gcmFuZG9tOiBnZXRfcmFuZG9tX2J5dGVzIGNhbGxlZCBm
-cm9tDQo+ID4gPiBvb3BzX2V4aXQrMHg1NC8weGMwIHdpdGggY3JuZ19pbml0PTANCj4gPiA+IFsg
-ICAgMC4wMDAwMDBdIC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQ0KPiA+ID4g
-WyAgICAwLjAwMDAwMF0gS2VybmVsIHBhbmljIC0gbm90IHN5bmNpbmc6IE9vcHMgLSBCVUc6IEZh
-dGFsIGV4Y2VwdGlvbg0KPiA+ID4gWyAgICAwLjAwMDAwMF0gLS0tWyBlbmQgS2VybmVsIHBhbmlj
-IC0gbm90IHN5bmNpbmc6IE9vcHMgLSBCVUc6IEZhdGFsDQo+ID4gPiBleGNlcHRpb24gXS0tLQ0K
-PiA+ID4gDQo+ID4gPiBSZXBvcnRlZC1ieTogTmFyZXNoIEthbWJvanUgPG5hcmVzaC5rYW1ib2p1
-QGxpbmFyby5vcmc+DQo+ID4gPiANCj4gPiA+IC0tDQo+ID4gPiBMaW5hcm8gTEtGVA0KPiA+ID4g
-aHR0cHM6Ly9sa2Z0LmxpbmFyby5vcmcNCg0K
+--Sig_/dfzgBL0PQx.njFrR.cC8VMl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+After merging the swiotlb tree, today's linux-next build (powerpc
+ppc64_defconfig and x86_64 allmodconfig) produced this warning:
+
+In file included from arch/powerpc/include/asm/bug.h:109,
+                 from include/linux/bug.h:5,
+                 from arch/powerpc/include/asm/mmu.h:147,
+                 from arch/powerpc/include/asm/lppaca.h:46,
+                 from arch/powerpc/include/asm/paca.h:17,
+                 from arch/powerpc/include/asm/current.h:13,
+                 from include/linux/sched.h:12,
+                 from include/linux/ratelimit.h:6,
+                 from include/linux/dev_printk.h:16,
+                 from include/linux/device.h:15,
+                 from include/linux/dma-mapping.h:7,
+                 from include/linux/dma-direct.h:9,
+                 from kernel/dma/swiotlb.c:24:
+kernel/dma/swiotlb.c: In function 'swiotlb_bounce':
+include/linux/dev_printk.h:242:23: warning: format '%lu' expects argument o=
+f type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wforma=
+t=3D]
+  242 |  WARN_ONCE(condition, "%s %s: " format, \
+      |                       ^~~~~~~~~
+include/asm-generic/bug.h:97:17: note: in definition of macro '__WARN_print=
+f'
+   97 |   __warn_printk(arg);     \
+      |                 ^~~
+include/asm-generic/bug.h:161:3: note: in expansion of macro 'WARN'
+  161 |   WARN(1, format);    \
+      |   ^~~~
+include/linux/dev_printk.h:242:2: note: in expansion of macro 'WARN_ONCE'
+  242 |  WARN_ONCE(condition, "%s %s: " format, \
+      |  ^~~~~~~~~
+kernel/dma/swiotlb.c:355:3: note: in expansion of macro 'dev_WARN_ONCE'
+  355 |   dev_WARN_ONCE(dev, 1,
+      |   ^~~~~~~~~~~~~
+
+Introduced by commit
+
+  17eb5dcf1f15 ("swiotlb: manipulate orig_addr when tlb_addr has offset")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dfzgBL0PQx.njFrR.cC8VMl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDJVhsACgkQAVBC80lX
+0GzqawgAizFVDQMp4DV845O5rEiWkw9rOjMmgZVyoX1oiop/IYfr+494NmsaTNVt
+FgwYw55T4qmtY4juN1AV06MhoA57HrN1HEIg+cuh9+ybErSJR5b3dg3PqgUvmIpd
+tM2oam7l5VxYnx+rqj8zuFvzS45UtmJ0RAiloLXPzLD59QAiP0gpDWNKSZLTwU5b
+kIo2yYUdxPXESMmMlT422dFwf5LLkFcS+By0PEb8YSpiYZwuFeD7DmcofSvDbCkg
+zmpx+kCdhfUuD917N9bHuUCYPEASwgHFdIL9OsJXFH4UTp4CdcuNY1UTpf6rusny
+r+Jwc3lEywxX4p5ZZxPZ7L3wPYibsQ==
+=k7j+
+-----END PGP SIGNATURE-----
+
+--Sig_/dfzgBL0PQx.njFrR.cC8VMl--

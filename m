@@ -2,62 +2,25 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5353C3AB696
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 16:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1163AB6E6
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 17:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbhFQO6O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 10:58:14 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56854 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230299AbhFQO6N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 17 Jun 2021 10:58:13 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HEXsAu120967;
-        Thu, 17 Jun 2021 10:55:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ZDrMf1r8Kl8gPUV4ySfa2nQ/MPIpUbeuBPOOaQuDwI4=;
- b=QL5yStQeDXXxRRJu4EmrY9DZQjuEKj5FpFMjWmZWgNGMPkZqy2rxvEL4WMTIv+N2ufZb
- brzzKp4igNJ2WPxwJTMVMVN489JGtYmslEnsaTlrTMwoj2/413gRqBM6ZJYtlTXEsH04
- 0zl9csWTWYDzG2K1IQWoP69ATr06lDJ4ETaz7dwoEFi3ifOz/2V+DQVNxbisFwAOPUg/
- BIlOSehSm1azCNiYq0uBrW+/zlZrIaHcy1TWzcolHJCyJPsuEgG927N2hbsRmjMqeM1C
- zxx6ywGO1dOABMvGiIauF9GT8QmMBjhc8/TlYDIq9JtvFe/yYgTGfpKKu+fChUiw5h7J sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39886p0xen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Jun 2021 10:55:51 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15HEYNQT125265;
-        Thu, 17 Jun 2021 10:55:50 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39886p0xdp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Jun 2021 10:55:50 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15HEqWBu029030;
-        Thu, 17 Jun 2021 14:55:48 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 394mj8tse9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Jun 2021 14:55:48 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15HEsdIf17695074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Jun 2021 14:54:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7439A4C044;
-        Thu, 17 Jun 2021 14:55:45 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04E684C052;
-        Thu, 17 Jun 2021 14:55:45 +0000 (GMT)
-Received: from osiris (unknown [9.145.177.22])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 17 Jun 2021 14:55:44 +0000 (GMT)
-Date:   Thu, 17 Jun 2021 16:55:43 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
+        id S233161AbhFQPJQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Jun 2021 11:09:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233142AbhFQPJM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Jun 2021 11:09:12 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D5D12610A2;
+        Thu, 17 Jun 2021 15:07:01 +0000 (UTC)
+Date:   Thu, 17 Jun 2021 11:07:00 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         lkft-triage@lists.linaro.org,
         open list <linux-kernel@vger.kernel.org>,
@@ -65,52 +28,70 @@ Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Nathan Chancellor <natechancellor@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [next] [clang] s390: clang: error: unable to execute command:
- Segmentation fault (core dumped)
-Message-ID: <YMtib5hKVyNknZt3@osiris>
-References: <CA+G9fYsn-3rZXkHTtH33Oo0y97nfgkQmR_Echbu_-=WAbfo4Ug@mail.gmail.com>
- <CA+G9fYu2SvwA7CDxTAJVdTi1K1267WDcdx9m6Ds6z0D3borthQ@mail.gmail.com>
+        Stephen Boyd <swboyd@chromium.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Baoquan He <bhe@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Young <dyoung@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        Sasha Levin <sashal@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vivek Goyal <vgoyal@redhat.com>, Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
+ `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
+ `__compiletime_assert_342'
+Message-ID: <20210617110700.091efd15@gandalf.local.home>
+In-Reply-To: <CA+G9fYukjZU9_88KuhW5FpG-Y6EOH4ehXgdKm9pGO0v4y4wsmA@mail.gmail.com>
+References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
+        <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
+        <YMtTdU2b9fI3dnFD@casper.infradead.org>
+        <CA+G9fYukjZU9_88KuhW5FpG-Y6EOH4ehXgdKm9pGO0v4y4wsmA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYu2SvwA7CDxTAJVdTi1K1267WDcdx9m6Ds6z0D3borthQ@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WBdfFuvlbg97OnFmhWMVfxvlf1l2TOe7
-X-Proofpoint-GUID: xsoFTxNvHHuKnwov2YPuHH_-U_2djiiw
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-17_10:2021-06-15,2021-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2106170092
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 06:19:14PM +0530, Naresh Kamboju wrote:
-> The git bisect found the first bad commit,
-> The first bad commit:
-> commit 3abbdfde5a6588a92209cd8b131769b8058e7c21
-> Author: Heiko Carstens <hca@linux.ibm.com>
-> Date:   Wed Jun 9 22:59:13 2021 +0200
->     s390/bitops: use register pair instead of register asm
-> 
->     Get rid of register asm statement and use a register pair.
->     This allows the compiler to allocate registers on its own.
-> 
->     Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
->     Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
->  arch/s390/include/asm/bitops.h | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> Previous HEAD position was 3abbdfde5a65 s390/bitops: use register pair
-> instead of register asm
-> HEAD is now at 7d9c6b8147bd Add linux-next specific files for 20210617
+On Thu, 17 Jun 2021 20:15:13 +0530
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 
-You need clang-13 development version which contains commit
-d058262b1471 ("[SystemZ] Support i128 inline asm operands.").
-Every older clang version won't be able to complile the kernel for
-s390 anymore.
+> > Your git bisect probably went astray.  There's no way that commit
+> > caused that regression.  
+> 
+> Sorry for pointing to incorrect bad commits coming from git bisect.
+> 
+> Any best way to run git bisect on  linux next tree ?
+> 
+> Here is the git bisect log from gitlab pipeline,
+> https://gitlab.com/Linaro/lkft/bisect/-/jobs/1354963448
 
-This is intended and won't be fixed.
+Is it possible that it's not 100% reproducible?
+
+Anyway, before posting the result of any commit as the buggy commit from a
+git bisect, it is best to confirm it by:
+
+ 1) Checking out the tree at the bad commit.
+ 2) Verify that the tree at that point is bad
+ 3) Check out the parent of that commit (the commit before the bad commit
+    was applied).
+ 4) Verify that the tree at that point is good
+
+May need to repeat the above a couple of times, in case the issue is not
+100% reproducible.
+
+If the above is true, then post the patch as the bad commit. If it is not,
+then something went wrong with the bisect.
+
+-- Steve
+

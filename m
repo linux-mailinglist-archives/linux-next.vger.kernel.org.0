@@ -2,130 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB453AB351
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 14:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A013AB35F
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 14:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbhFQMNh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 08:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S231744AbhFQMR4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Jun 2021 08:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbhFQMNe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 08:13:34 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81966C061574
-        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 05:11:25 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id di5so3257433ejc.9
-        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 05:11:25 -0700 (PDT)
+        with ESMTP id S231726AbhFQMRz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 08:17:55 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2BEC061574
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 05:15:48 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id n20so3691069edv.8
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 05:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=abjyLhbT3u74Zgq1l+BEIdPMtx/D7+UT5cqLY6XM2/Y=;
-        b=fzpEeib8QDNsXnonqUGJlZswtaQQxypCfy9fyjSw/U7Av49giNR+QSlWqnxQuaTia9
-         umQwoADVt0GaiLDNambhR9MFHty7iCQiOSG0iLtYrmW0UbbJbmsmAmlv5L+caH9ZGwyM
-         OWZuim0CrGslrkbqcsfUavjt9WCkh4XZy8U08eK5a7f/lWMnOrBgtiupj8qN//Pc5zkI
-         dO0yPUEDaEP/aPDybzeQ088g/QaLJJDSuC0/mqiVAiwVMbJhcMcyvNRt1/+vUv2xvS3A
-         K8HoAXLR4qZiEPIkN1CbV8eEosVdxhScorayuALxv0eLG9BOFk348bt4XtEmErIwn+gJ
-         0A7Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qja68kctcb7tECvcD3vKyKnzp3JkFSLhCUKx4V5p/io=;
+        b=vacGRMy/kpEKBpEJGikZRYXVrAAkQ3UOW9ogN8REKVbe499gzllInYYjWKB7dyFEar
+         ROMtah+mlXF8sVew9m5uWj4hs0CW7Qg64fQ0Bh0R6sZ3tFpiP3H/DD93IRGXlxiWEImB
+         NBbbtSdfoyKOzNvHt+PNyAdXYRKm2FIgre2YK6Yrq1/Q3wWCtQITRvmIOYoQ5WMSejK9
+         gmLIR194sNOsIG2O8fSX5X3YsViFTXtOTfbPlS2T1OZumRsN94VMRfiHaJ5eg8olv25M
+         bnHqEwtskQX7no1N8OVsmeruikmjNJ0wAzRpsPYTd6z/zAKHemxBjFTBur1AeoyKGbvV
+         K7hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=abjyLhbT3u74Zgq1l+BEIdPMtx/D7+UT5cqLY6XM2/Y=;
-        b=kwDdZToY9vWgFFngoYZaf3TZ+aLm7mp90sMwY81YCqsjuYjLZp8ceYXtR7lhlXH/uy
-         Q4DiUM6Pq3xm2iGxY2wBmzDZrDIPzSL6Yf30hihxBeNZdaCTEKFGsTeEhi7yCYIktcQg
-         NPL08SfTZAv4BXNeJIYNyKeYNN8hN5v4aQTokPh7ayQeUwPMrzC9M1XH2Z029sw6IX7X
-         aEQIw7AvJeEOg1qRLW/5n+86OAOEkQrzdmHESOWV6YGMEU7loQqXdEX6GrAMbB5yf87p
-         3odarGXahDGziCOsAkr+RioYWJrqQzi1hZ0BGhwbXvrA+pYyorBVUQN8Nat4ikdSLP4Y
-         5Hbg==
-X-Gm-Message-State: AOAM532leqQfKzLJTncH2Q0qOmZbdWOvIGn3jB9eSep3gXlioiKHD/4B
-        fVR+5cGozCd56sUKdctX/kF28AD3/D2q1mgKER/X3Y/Kd3rJS8Sb
-X-Google-Smtp-Source: ABdhPJyFQtRp3k9GLGGUUL5cU0unA/h1TSqJ0oPCzicqdiMTG2yE3IuJ43v1Qi5mKXryABq6IPLP0MkYbP1boPfsbXE=
-X-Received: by 2002:a17:906:9d05:: with SMTP id fn5mr4763120ejc.133.1623931883222;
- Thu, 17 Jun 2021 05:11:23 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qja68kctcb7tECvcD3vKyKnzp3JkFSLhCUKx4V5p/io=;
+        b=YlBfFcVlB4JLFmPFQ9lS+lK3nm1KU1L34eSCjeSJrwlf5beBkr54Z3SruQ85ml2WdP
+         zRb1yZBJXkn31jkKbSl/Um89GU7Yqn2MsyPQnasX/07NZBaaPydXNsF0euRj/3W26pTw
+         vkxznV4FSe+vszida6JwLVYXZVqjNrI+vhmvoyoydgVaAaVcbNFSuRwxiZkw3Whb3jSV
+         5YqiwgqrSlW22cfIWuuNNipc2vhWGGOFW0gYSYJ7Q5/aqAOcix/SD1M/T44q6G1mxBUe
+         jVXkZAfT3d2OFKNqXYCzJP+9tiNcinfNmNjlb2QKvS+ilfKjAtDphF5niWAgk4yKHO0r
+         lqRA==
+X-Gm-Message-State: AOAM532wZM/JXS64KaPfhjG9u6vbQXJ8UkL21SGqxKg5u4ecHe/uzRG/
+        CtEE1C3ukAhkmgafGeE4m0YCjjscsYi1Rb7xtwC+4Q==
+X-Google-Smtp-Source: ABdhPJxScap+bpjJHGCJGL/6faTbZ8og0NFlPnI724tvKuQtyYMLaheWpTBmohhNcXt0wfyEb0oyqWyzgYy7W7qibYU=
+X-Received: by 2002:a05:6402:220d:: with SMTP id cq13mr6037900edb.52.1623932146500;
+ Thu, 17 Jun 2021 05:15:46 -0700 (PDT)
 MIME-Version: 1.0
+References: <CA+G9fYvvm2tW5QAe9hzPgs7sV8udsoufxs0Qu6N0ZjV0Z686vw@mail.gmail.com>
+ <20210615115044.GC20598@willie-the-truck>
+In-Reply-To: <20210615115044.GC20598@willie-the-truck>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 17 Jun 2021 17:41:11 +0530
-Message-ID: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
-Subject: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
- `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        lkft-triage@lists.linaro.org,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+Date:   Thu, 17 Jun 2021 17:45:34 +0530
+Message-ID: <CA+G9fYvCX5fd5dHdaGpQ7wpZNcea-=vtuhapW00D8AUkE5VUqA@mail.gmail.com>
+Subject: Re: [next] [arm64] kernel BUG at arch/arm64/mm/physaddr.c
+To:     Will Deacon <will@kernel.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Linux next 20210617 tag following x86_64 builds failed with clang-10
-and clang-11.
-Regressions found on x86_64:
+Hi Will,
 
- - build/clang-11-tinyconfig
- - build/clang-11-allnoconfig
- - build/clang-10-tinyconfig
- - build/clang-10-allnoconfig
- - build/clang-11-x86_64_defconfig
- - build/clang-10-defconfig
+On Tue, 15 Jun 2021 at 17:20, Will Deacon <will@kernel.org> wrote:
+>
+> Hi Naresh,
+>
+> On Tue, Jun 15, 2021 at 04:41:25PM +0530, Naresh Kamboju wrote:
+> > Following kernel crash reported while boot linux next 20210615 tag on qemu_arm64
+> > with allmodconfig build.
 
-We are running git bisect to identify the bad commit.
+<trim>
 
-Build log:
-------------
-drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool:
-eb_relocate_parse_slow()+0x466: stack state mismatch: cfa1=4+120
-cfa2=-1+0
-drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool:
-eb_copy_relocations()+0x1e0: stack state mismatch: cfa1=4+104
-cfa2=-1+0
-x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
-mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
-make[1]: *** [/builds/linux/Makefile:1252: vmlinux] Error 1
-make[1]: Target '__all' not remade because of errors.
-make: *** [Makefile:222: __sub-make] Error 2
-make: Target '__all' not remade because of errors.
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=x86_64
-CROSS_COMPILE=x86_64-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-clang' headers_install
-INSTALL_HDR_PATH=/home/tuxbuild/.cache/tuxmake/builds/current/install_hdr/
-tar caf /home/tuxbuild/.cache/tuxmake/builds/current/headers.tar.xz -C
-/home/tuxbuild/.cache/tuxmake/builds/current/install_hdr .
+> Thanks for the report, although since this appears to be part of a broader
+> testing effort, here are some things that I think would make the reports
+> even more useful:
+>
+>   1. An indication as to whether or not this is a regression (i.e. do you
+>      have a known good build, perhaps even a bisection?)
+>
+>   2. Either a link to the vmlinux, or faddr2line run on the backtrace.
+>      Looking at the above, I can't tell what sparse_init_nid+0x98/0x6d0
+>      actually is.
+>
+>   3. The exact QEMU command-line you are using, so I can try to reproduce
+>      this locally. I think the 0-day bot wraps the repro up in a shell
+>      script for you.
+>
+>   4. Whether or not the issue is reproducible.
+>
+>   5. Information about the toolchain you used to build the kernel (it
+>      happens to be present here because it's in the kernel log, but
+>      generally I think it would be handy to specify that in the report).
+>
+> Please can you provide that information for this crash? It would really
+> help in debugging it.
 
-ref:
-https://builds.tuxbuild.com/1u4ZKFTh12vrYBVf8b1xGpaFOrE/
+Sorry for the incomplete bug report.
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
+Thanks for sharing these details.
+Next time I will include the suggested data points in my email report.
 
-tuxmake --runtime podman --target-arch x86_64 --toolchain clang-11
---kconfig x86_64_defconfig
-
-ref:
-https://builds.tuxbuild.com/1u4ZKFTh12vrYBVf8b1xGpaFOrE/
-
-build info:
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: 7d9c6b8147bdd76d7eb2cf6f74f84c6918ae0939
-    git_short_log: 7d9c6b8147bd (\Add linux-next specific files for 20210617\)
-    kconfig: x86_64_defconfig
-    kernel_image:
-    kernel_version: 5.13.0-rc6
-    toolchain: clang-11
-
---
-Linaro LKFT
-https://lkft.linaro.org
+- Naresh

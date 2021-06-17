@@ -2,92 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 748B13ABB23
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 20:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109E63ABB3D
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 20:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhFQSFE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 14:05:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43024 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229972AbhFQSFD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 17 Jun 2021 14:05:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC61561241;
-        Thu, 17 Jun 2021 18:02:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623952975;
-        bh=fcHJRF+HkDvnIqayIlyJg+KA7dLX7hNwPHMpsiYp03Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pT7MmJp04q0a1YmU0Q9w5QFKIXr18Znz39NDDpzPBUSZabZOlALqxHXtHdV/m1ebc
-         P7wQPiegEviQb0zFiQ5FHFsNcmEAivSeKnNrXfqRXZFi3b2ozOJM2hnrExcwDUUE2K
-         4VhteZg29OWN1IthoCRAM5CJNYKbmqTE/veRMbA76lz3QQAgsEwIGO+lkCcMn8jHyM
-         vLxKzJXXpBD3RvlFSxPKaHzzO6y3iOzG5ybLmoQke+aIJHbLnZtPTjRjxqoF4MQOh3
-         4F90jcmKKhZ5pIk3f/7so+RahCpv9eUm3LTJ8Rem2NgbANQ/jdXymYHs8QKc17qMue
-         mnjZ8lBWhP1wQ==
-Date:   Thu, 17 Jun 2021 11:02:50 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-next@vger.kernel.org, clang-built-linux@googlegroups.com,
-        lkft-triage@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
- `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
- `__compiletime_assert_342'
-Message-ID: <YMuOSnJsL9qkxweY@archlinux-ax161>
-References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
- <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
- <YMtTdU2b9fI3dnFD@casper.infradead.org>
+        id S232920AbhFQSSb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Jun 2021 14:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232844AbhFQSS3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 14:18:29 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AF1C061574
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 11:16:21 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v13so3366160ple.9
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 11:16:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KRi/QXe0LQzMi+6pLeInEK4KzKA0hEwqTLci8VnoWbw=;
+        b=KbyM6iG9HXDNGfRNYStr2s8SyPWsQZtjPlPad/4hLqGHkDrCbaOZGleaLH7yVwgmnE
+         ECfgkecSAKpwK/B66+nzo5bNna84QPwgFYhu7AmR3LnKnwV3WlgYZmTaVEAuCUbaEqk5
+         uClapizSWOCsf6X1YtOqZ+HiL0Z8/VmrFu6ZA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KRi/QXe0LQzMi+6pLeInEK4KzKA0hEwqTLci8VnoWbw=;
+        b=o73aZiJw6d3vY4vQIZ27ArbsL3u7JIj3uxXG5ICnFvU7ntrppDiJ5TZubeAoN1YHBQ
+         fe2Mq0J7U0YTjW/ARHZh1SYa0OTY78Whw/wPcjOYN01vhXxvZaSve3/G8o54Ku1T2OsX
+         Zh8LOdFk9dQd3z2Rt/DfXBCON70WtXB/lMn8zYpiN7gGqDaODs0j/xZmI8MhBI4T+0ir
+         yiuWE51HFezc3EyinBfZLbJQ39rxEVUdE/03/PgURnOGi4nAm5wWApwoQA9rchi87TgS
+         Te+HkCRDydaGOQQ6AYh/te8RkdIppjV9m18wHNwM0ekPrrvNHdL+XkUdPm1lfIUp2+Fg
+         SucQ==
+X-Gm-Message-State: AOAM5336GPIyzmnIxGOfEbGmTXn/5HmSVj/s18XXfRVyuiBd2JwAeasy
+        xPnX6Du0CN4f4FpWBbGBop8oMg==
+X-Google-Smtp-Source: ABdhPJwyJh/y5CCBFcqljYWo6aGyOfV35EucM7MER7B58+2F4yHzGguVOx690nkwweau6nsqLwS7Vw==
+X-Received: by 2002:a17:90a:6001:: with SMTP id y1mr17085610pji.5.1623953780486;
+        Thu, 17 Jun 2021 11:16:20 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:14b4:cd2e:dd64:19e8])
+        by smtp.gmail.com with UTF8SMTPSA id n8sm9069159pjo.1.2021.06.17.11.16.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jun 2021 11:16:20 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 11:16:18 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.or, lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [next] [arm64] allmodconfig build failed - xhci-plat.c:427:
+ undefined reference to `onboard_hub_destroy_pdevs'
+Message-ID: <YMuRcrE8xlWnFSWW@google.com>
+References: <CA+G9fYu6er1nZ602gCnrY+-JNtDHrUJk-RH2biPmjRoe06_m4Q@mail.gmail.com>
+ <YMtSFVg6UoOpDqIP@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YMtTdU2b9fI3dnFD@casper.infradead.org>
+In-Reply-To: <YMtSFVg6UoOpDqIP@kroah.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Rebuilt the CC list because most people were added based on the
-incorrect bisect result.
-
-On Thu, Jun 17, 2021 at 02:51:49PM +0100, Matthew Wilcox wrote:
-> On Thu, Jun 17, 2021 at 06:15:45PM +0530, Naresh Kamboju wrote:
-> > On Thu, 17 Jun 2021 at 17:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
-> > > mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
+On Thu, Jun 17, 2021 at 03:45:57PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jun 17, 2021 at 07:09:15PM +0530, Naresh Kamboju wrote:
+> > The arm64 allmodconfig build failed on Linux next 20210617 tag due to
+> > the commit,
 > > 
-> > The git bisect pointed out the first bad commit.
+> > c950686b382d ("usb: host: xhci-plat: Create platform device for
+> > onboard hubs in probe()")
 > > 
-> > The first bad commit:
-> > commit 928cf6adc7d60c96eca760c05c1000cda061604e
-> > Author: Stephen Boyd <swboyd@chromium.org>
-> > Date:   Thu Jun 17 15:21:35 2021 +1000
-> >     module: add printk formats to add module build ID to stacktraces
+> > build error:
+> > ------------
+> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > `xhci_plat_remove':
+> > drivers/usb/host/xhci-plat.c:427: undefined reference to
+> > `onboard_hub_destroy_pdevs'
+> > drivers/usb/host/xhci-plat.c:427:(.text+0x82c): relocation truncated
+> > to fit: R_AARCH64_CALL26 against undefined symbol
+> > `onboard_hub_destroy_pdevs'
+> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > `xhci_plat_probe':
+> > drivers/usb/host/xhci-plat.c:379: undefined reference to
+> > `onboard_hub_create_pdevs'
+> > drivers/usb/host/xhci-plat.c:379:(.text+0x131c): relocation truncated
+> > to fit: R_AARCH64_CALL26 against undefined symbol
+> > `onboard_hub_create_pdevs'
+> > make[1]: *** [Makefile:1252: vmlinux] Error 1
+> > make[1]: Target '__all' not remade because of errors.
+> > make: *** [Makefile:222: __sub-make] Error 2
+> > make: Target '__all' not remade because of errors.
 > 
-> Your git bisect probably went astray.  There's no way that commit
-> caused that regression.
+> Matthias, this is due to your patch, yet-another config option mis-match
+> somewhere. Can you please fix it up?
 
-My bisect landed on commit 83f85ac75855 ("mm/mremap: convert huge PUD
-move to separate helper"). flush_pud_tlb_range() evaluates to
-BUILD_BUG() when CONFIG_TRANSPARENT_HUGEPAGE is unset but this function
-is present just based on the value of
-CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD.
+I can repro this with:
 
-$ make -skj(nproc) ARCH=x86_64 CC=clang O=build/x86_64 distclean allnoconfig mm/mremap.o
+make -j 16 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
+  KCONFIG_ALLCONFIG=arch/arm64/configs/defconfig allmodconfig kernel modules
 
-$ llvm-readelf -s build/x86_64/mm/mremap.o &| rg __compiletime_assert
-    21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT   UND __compiletime_assert_337
+This results in:
 
-$ rg TRANSPARENT_ build/x86_64/.config
-450:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
-451:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
-562:# CONFIG_TRANSPARENT_HUGEPAGE is not set
+CONFIG_USB_XHCI_PLATFORM=y
+CONFIG_USB_ONBOARD_HUB=m
 
-Not sure why this does not happen on newer clang versions, presumably
-something with inlining decisions? Still seems like a legitimate issue
-to me.
+The following Kconfig dependency was supposed to prevent this scenario:
 
-Cheers,
-Nathan
+config USB_XHCI_PLATFORM
+        depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB
+
+But apparently this isn't the case.
+
+With the above allmodconfig command the following warning is emitted:
+
+WARNING: unmet direct dependencies detected for USB_XHCI_PLATFORM
+  Depends on [m]: USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && (USB_ONBOARD_HUB [=m] || !USB_ONBOARD_HUB [=m])
+
+I read through kconfig-language.rst multiple times, but it's still not
+clear to me how to specify this dependency properly.
+
+Masahiro/Greg, do you have any pointers?

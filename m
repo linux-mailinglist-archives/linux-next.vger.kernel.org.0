@@ -2,86 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551343ABEEF
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 00:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24FB3ABF06
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 00:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbhFQWeN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 18:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbhFQWeM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 18:34:12 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79752C061574;
-        Thu, 17 Jun 2021 15:32:04 -0700 (PDT)
+        id S232666AbhFQWjo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Jun 2021 18:39:44 -0400
+Received: from ozlabs.org ([203.11.71.1]:52055 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232661AbhFQWjo (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Jun 2021 18:39:44 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G5cHQ1s51z9sRf;
-        Fri, 18 Jun 2021 08:32:02 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G5cPm331wz9sRf;
+        Fri, 18 Jun 2021 08:37:32 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1623969122;
-        bh=Lg4IMDr2GbCE1yaWI9kKj6tz1z0yR0FzC7k+YHurMbg=;
+        s=201702; t=1623969453;
+        bh=M5UB9WRJ6An9Z6EqUYEWOhrgrmtFtXMCXaZLA/HVdK8=;
         h=Date:From:To:Cc:Subject:From;
-        b=nn+oep3U2A7nYDEpSbZ4CI42pXNRr5S/WNTnpZxCWoSUVvvxUw28so/juIYt21zIJ
-         1/Q7M8g8NmBogrLRqVfoAteow41OSw79W04H2R+Cqb+WtfRHtVr2V5+k2V6dOGmUtu
-         8SJLtPtoxQXYf2kPEu8KeKKUteDE2l8RWJRofQDHwPu83LhB02f2iltBC0or599EWV
-         k93CEXlbKW89cKkcqxXkOFriM8frDrvzmwUKKZuWTGr8ho4M0UufZ3z8aDFMn+2EMu
-         o7hQBT1UztHk3Tb/YqaerA7quQtGB2wp+2rRpsoYMsNKI9rW4f3O7Dz4pkytTc9u8k
-         Bs71jpgouqJwg==
-Date:   Fri, 18 Jun 2021 08:32:01 +1000
+        b=CY52DDXIZwgnqK5VyplUJG+HH9GTu1tgH92SuVVm2sVEYC9yCxft4RBDf0+IdLBK1
+         btiFdFseyKI+2j9FqcjQIrUaDLSdVq4QcKjGVzdoI47odv8Xlbc+JQq0N3q1LXuD+N
+         WVDGo25SxZ45tfpE7OIF2XWBbeOsErRls0fComHIVKizFLxHi0eDbdAVfX2IM2572Z
+         xMqw5gc8qKP5wZxx1Ks1yZrTrau/rq+pYjzeaN9MGwlM73vsXd6aayidRzdipgleNF
+         mDUQ49KoH8DmZxHNphhup17oCNi/XXTGWKicN0qTOnCl5ink4muRgThRQqsrfINIaZ
+         yOQG6o76Uq2EA==
+Date:   Fri, 18 Jun 2021 08:37:31 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
-Cc:     Kuogee Hsieh <khsieh@codeaurora.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mark.gross@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the drm-msm tree
-Message-ID: <20210618083105.0b792d7e@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commits in the drivers-x86
+ tree
+Message-ID: <20210618083731.2481f7b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CIlqbxc853XH7Srh2Vi5to.";
+Content-Type: multipart/signed; boundary="Sig_/GD18h2yq8Mf_15FBd=KSs4/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CIlqbxc853XH7Srh2Vi5to.
+--Sig_/GD18h2yq8Mf_15FBd=KSs4/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commits
 
-  63d581450413 ("drm/msm/dp: power off DP phy at suspend")
+  de5db8ebe7de ("tools/power/x86/intel-speed-select: v1.10 release")
+  f45d05b29cca ("tools/power/x86/intel-speed-select: Fix uncore memory freq=
+uency display")
 
-Fixes tag
-
-  Fixes: 8dbde399044b ("drm/msm/dp: handle irq_hpd with sink_count =3D 0 co=
-rrectly)
-
-has these problem(s):
-
-  - Subject has leading but no trailing quotes
+are missing a Signed-off-by from their committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/CIlqbxc853XH7Srh2Vi5to.
+--Sig_/GD18h2yq8Mf_15FBd=KSs4/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDLzWEACgkQAVBC80lX
-0GyTkQgAiP64jI5AfFua4PWxUl+nfCiBkU0lOBk+03glCC9wVLvp+qB7ZhabShDx
-4Hgn7WqEXcjwzoIDaLa7XI+/9TnNjY0x3wDdRTgZBEjGpdSOxRxrH6vTiUDuRzpj
-Y+ohBi+3iuzbuqWGl1EUQqT0NTOBlggAiMv+DYDa5X/U6RH6Y5pV+DR5ceDgmDCM
-rwW6cLcsxYgwvS2ZxTcroNzufMiZ2mQdMy9zBxDiEjtejDqhrhdCrmyou0v66ZBr
-mrR9CNVyMnwLDoF1IUrsX1kaAJI2qzcoebvp6cf21t7yQamx8LpDFghfO4POoEzI
-/DUm24Xgg/H++p93b7VtOYMgl6UXlA==
-=C5QM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDLzqsACgkQAVBC80lX
+0GwTiwf/ThW36llcpem4mhBg4QdM6hoktM3PLQaQbNtd7GQPlaD8/XdEMtzEq9OX
+b0dgGGrSIAsucnpOSu9bV16MBYWGfV2zaLHBNhq/qDZ1B706ICi29S1o2QwO/lde
+xpVfvNo8RgGorgjaAlTtPtBPSLxRF11MRsdR5X4pCcRrJJSm/9UwOaTO3DdD0kHB
+RjR9dhBHHJKCkfiaOaPEzS0EPe1O1DNbtigsfnESDkzSk5/0qgbB3pD3Ehj5kz+T
+lHmN82ODtb1URTqv+U9CA2tGH508Uj10lZb5RZzWC5eTflKxfkABiCu/2QGq0wAR
+vx54fmEYfAmiusl6JtjrfmqNIHewbw==
+=JlnV
 -----END PGP SIGNATURE-----
 
---Sig_/CIlqbxc853XH7Srh2Vi5to.--
+--Sig_/GD18h2yq8Mf_15FBd=KSs4/--

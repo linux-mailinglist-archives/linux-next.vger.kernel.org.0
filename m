@@ -2,80 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B733AB7CD
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 17:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769C83AB9CB
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 18:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbhFQPpt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 11:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S229887AbhFQQgf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Jun 2021 12:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbhFQPps (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 11:45:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8EFC061574;
-        Thu, 17 Jun 2021 08:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=aTwiNikuPpd63jqEaYUcFa9qs8yNeiZ9YocK3TtMFOY=; b=nQ90SBZEsCSBBkRcCyLLk1oVAV
-        9dFocU7Ub/dyjbIbG7hJi6OLSXwMnGIJs7NnAJ1sA3gwBJl/IBUE+ippiiRls47muyGc5RjRnRD9a
-        DBAk+Pzt7DgNli6qe3T8HoXG6GzVDAwqclI7l4Y1sldEvunzxNAAywMsdnP4Z3t9/z1dt1kiBdzdG
-        Z5z9LoDqpCifKn4A9QKFWFPmV+rcUqMFrknjPja8rCV2bSuBDPadV1vHFxM29y+q5OmPeP6HiNCzj
-        he1efICKogaCoUpGHQr61D6KINfiZewmPQUXSY3cVUBO9UNAhOXRnkXmM7Uc5rbNBO48J0shM7rQe
-        I5pmNeHw==;
-Received: from [2601:1c0:6280:3f0::aefb]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ltuB9-00Az2E-A9; Thu, 17 Jun 2021 15:43:39 +0000
-Subject: Re: linux-next: Tree for Jun 16 (objdump version)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        with ESMTP id S229741AbhFQQgd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 12:36:33 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E35FC061574
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 09:34:25 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id s14so5429782pfd.9
+        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 09:34:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4TO3eGw2DCtY6KaKGGAgRgperQUHgRHyPhb9mSeBbSA=;
+        b=UokaqR6lQyOcL/DyR4tDeJOpDsOTRSHHXhEZPMyxOWw0D/wdAoUOF9woR6ln9HQhex
+         V7irE3dv01MBH3QFjzNv33AkzExonvmaYh9cUBwS3UCHbwcVfxFUezkyeLkAhWQ4aGlU
+         mur7IuAU7FGBO2ujoDfMLnhHZR6+RnepLlRdY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4TO3eGw2DCtY6KaKGGAgRgperQUHgRHyPhb9mSeBbSA=;
+        b=Cml/jogBNVPQbKkj6Di+7pt61eytp0mQc4W8edKbrMYpS1Nd7nWTHXlTOCovemSQAi
+         GSZG3Kgtx+wqqk/+uV3m4yLEEUQFuCgGNlvYgHInVxeec+jFnMvDIoyCrJSIzyjO34bK
+         w7vYd+6kgYHRMYuBjeTw1JCEo6Y5Lgo8fIj34DFGv75sPUOsLYm9hrAb9HrEkpWz5nY/
+         HHPdH4DOJQ+Y5Ji3ELKxRTOkV+vSpC8NSZzqBjQ3m72nEjkvlFL34e7tYiitplPRZnDp
+         yjdlOZOQNZcfR0kPnoZSc/IJ1QyoQyI/Y/+RaiTbtUnhCw7X6VC8MkonjtYq6z+leRbF
+         L7tQ==
+X-Gm-Message-State: AOAM530Rzg8pyVQGDVOp1ZTsovYywfofyPyfZUbGTvQYOf3Veo4E1UhT
+        kOkDtQ05cAr4lOQ49gkcWo8Xjw==
+X-Google-Smtp-Source: ABdhPJzNm/DmRxSVnzflpeGAkkhA2ZiyJ9Eav9Z9RzV92/085pNsD8vUpC6zar9O5pMLio667O69ww==
+X-Received: by 2002:a63:6644:: with SMTP id a65mr5637787pgc.431.1623947664763;
+        Thu, 17 Jun 2021 09:34:24 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:14b4:cd2e:dd64:19e8])
+        by smtp.gmail.com with UTF8SMTPSA id o14sm2525081pjj.6.2021.06.17.09.34.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jun 2021 09:34:24 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 09:34:21 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <20210616231358.63fe6e42@canb.auug.org.au>
- <7d523bca-67d8-6da1-6739-e5ba85f7683c@infradead.org>
-Message-ID: <a66ab899-3e33-9a6d-6d1b-73a291efeaa6@infradead.org>
-Date:   Thu, 17 Jun 2021 08:43:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+Subject: Re: linux-next: manual merge of the usb tree with the arm-soc tree
+Message-ID: <YMt5jTLYv+DKWKdn@google.com>
+References: <20210617144346.564be887@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <7d523bca-67d8-6da1-6739-e5ba85f7683c@infradead.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20210617144346.564be887@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-{correct Masami's email address}
+On Thu, Jun 17, 2021 at 02:43:46PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got conflicts in:
+> 
+>   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+>   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+> 
+> between commit:
+> 
+>   39441f73d91a ("arm64: dts: qcom: sc7180: lazor: Simplify disabling of charger thermal zone")
+> 
+> from the arm-soc tree and commit:
+> 
+>   1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-On 6/17/21 8:07 AM, Randy Dunlap wrote:
-> On 6/16/21 6:13 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20210615:
->>
-> 
-> on i386 or x86_64:
-> 
-> Warning: objdump version 15) is older than 2.19
-> Warning: Skipping posttest.
-> 
-> 'objdump --version' says:
-> 
-> GNU objdump (GNU Binutils; SUSE Linux Enterprise 15) 2.35.1.20201123-7.18
-> Copyright (C) 2020 Free Software Foundation, Inc.
-> This program is free software; you may redistribute it under the terms of
-> the GNU General Public License version 3 or (at your option) any later version.
-> This program has absolutely no warranty.
-> 
-> 
-> 
+Thanks Stephen for fixing this up for -next!
 
+One option would be to revert 1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor:
+Add nodes for onboard USB hub") from usb-next and land it through the qcom/arm-soc
+tree with the rest of the SC7180 device tree patches.
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-
+Greg/Bjorn, does the above sound like a suitable solution to you or do you
+think it would be better to deal with the conflict in a different way?

@@ -2,86 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A973AB535
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 15:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACC13AB5AD
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jun 2021 16:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbhFQNyO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Jun 2021 09:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbhFQNyN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Jun 2021 09:54:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08ACC061574;
-        Thu, 17 Jun 2021 06:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wWpwrgGiZhe98tfTjncAJgLFY4m6Azvsm8WQSDSbfDo=; b=e2ZRYQbeDE65xcaiJL8SARSxLM
-        +WuQ5rjIWVyj9uDrmzZDygWp447lezi09/aq5Hk6yELSR+YTrynEhs9PdDtFC+IpoAaK9iog3pRrn
-        aIiwuyGekbaZqqBhTnAE6hIxbKj561NcsLOmlSWiZKlJtYvIFuSxdSPQgXEPQ84xGwG1ssbEDG9XL
-        Il43zRIMEzTTqPcXbZSIYRTfaL1WBkm7V62TdwlMp9VvgL22E4Z6uLYVLLPqRE9aORXm2WAfqlcMY
-        19IRXywyJVyyldtdhVvyfiIDiFGeBORxemVioWOcYmE+LilveCWOJ+weH66QwXe9uTXeRdV+m36ca
-        A6z5kQog==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ltsQv-009Bek-8o; Thu, 17 Jun 2021 13:51:52 +0000
-Date:   Thu, 17 Jun 2021 14:51:49 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        lkft-triage@lists.linaro.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Baoquan He <bhe@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Young <dyoung@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
-        Sasha Levin <sashal@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vivek Goyal <vgoyal@redhat.com>, Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
- `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
- `__compiletime_assert_342'
-Message-ID: <YMtTdU2b9fI3dnFD@casper.infradead.org>
-References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
- <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
+        id S231767AbhFQOUa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Thu, 17 Jun 2021 10:20:30 -0400
+Received: from mga02.intel.com ([134.134.136.20]:60770 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231720AbhFQOUa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Jun 2021 10:20:30 -0400
+IronPort-SDR: boj8i74ad3AarNCsUpaiD25PRFPjS843s5movjC3/NZo8AsfoY8GndHfLAcbFAC6gvw74+BZbC
+ nzl+x2KiiQaw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="193505927"
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="193505927"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 07:18:20 -0700
+IronPort-SDR: vYKMT80zThQkD+J5/HpCQyxiNyHdu4WjKPtj2mhw0uk29nRet35fkEYYDr+/V0HtLmeS7b2Amp
+ UjWkyOi266OQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
+   d="scan'208";a="488666603"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Jun 2021 07:18:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Thu, 17 Jun 2021 07:18:20 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Thu, 17 Jun 2021 07:18:19 -0700
+Received: from fmsmsx612.amr.corp.intel.com ([10.18.126.92]) by
+ fmsmsx612.amr.corp.intel.com ([10.18.126.92]) with mapi id 15.01.2242.008;
+ Thu, 17 Jun 2021 07:18:19 -0700
+From:   "Saleem, Shiraz" <shiraz.saleem@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     coverity-bot <keescook@chromium.org>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        "Nikolova, Tatyana E" <tatyana.e.nikolova@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>
+Subject: RE: Coverity: irdma_fill_device_info(): Null pointer dereferences
+Thread-Topic: Coverity: irdma_fill_device_info(): Null pointer dereferences
+Thread-Index: AQHXXI+P0o9izdR5wky89Oo/hCw2tasKtiDAgAsFpICAASUWIA==
+Date:   Thu, 17 Jun 2021 14:18:19 +0000
+Message-ID: <7c693feb84ce452ab2a7ad8f77720194@intel.com>
+References: <202106081056.E270F59@keescook>
+ <6bdaf0a1b0e74782b63afba1ecbdd348@intel.com>
+ <20210615160159.GV1002214@nvidia.com>
+In-Reply-To: <20210615160159.GV1002214@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 06:15:45PM +0530, Naresh Kamboju wrote:
-> On Thu, 17 Jun 2021 at 17:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
-> > mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
+> Subject: Re: Coverity: irdma_fill_device_info(): Null pointer dereferences
 > 
-> The git bisect pointed out the first bad commit.
+> On Tue, Jun 15, 2021 at 03:58:52PM +0000, Saleem, Shiraz wrote:
+> > > Subject: Coverity: irdma_fill_device_info(): Null pointer
+> > > dereferences
+> > >
+> > > Hello!
+> > >
+> > > This is an experimental semi-automated report about issues detected
+> > > by Coverity from a scan of next-20210608 as part of the linux-next scan
+> project:
+> > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > >
+> > > You're getting this email because you were associated with the
+> > > identified lines of code (noted below) that were touched by commits:
+> > >
+> > >   Wed Jun 2 19:55:16 2021 -0300
+> > >     8498a30e1b94 ("RDMA/irdma: Register auxiliary driver and
+> > > implement private channel OPs")
+> > >
+> > > Coverity reported the following:
+> > >
+> > > *** CID 1505164:  Null pointer dereferences  (NULL_RETURNS)
+> > > /drivers/infiniband/hw/irdma/main.c: 230 in irdma_fill_device_info()
+> > > 224     	rf->gen_ops.register_qset = irdma_lan_register_qset;
+> > > 225     	rf->gen_ops.unregister_qset = irdma_lan_unregister_qset;
+> > > 226     	rf->hw.hw_addr = pf->hw.hw_addr;
+> > > 227     	rf->pcidev = pf->pdev;
+> > > 228     	rf->msix_count =  pf->num_rdma_msix;
+> > > 229     	rf->msix_entries = &pf->msix_entries[pf->rdma_base_vector];
+> > > vvv     CID 1505164:  Null pointer dereferences  (NULL_RETURNS)
+> > > vvv     Dereferencing "vsi", which is known to be "NULL".
+> >
+> > This is a false +ve IMO.
 > 
-> The first bad commit:
-> commit 928cf6adc7d60c96eca760c05c1000cda061604e
-> Author: Stephen Boyd <swboyd@chromium.org>
-> Date:   Thu Jun 17 15:21:35 2021 +1000
->     module: add printk formats to add module build ID to stacktraces
+> It is because of this:
+> 
+> static inline struct ice_vsi *ice_get_main_vsi(struct ice_pf *pf) {
+>         if (pf->vsi)
+>                 return pf->vsi[0];
+> 
+>         return NULL;
+> }
+> 
+> If the above can't return null it should be rewritten
 
-Your git bisect probably went astray.  There's no way that commit
-caused that regression.
+It does appear on review that the pf->vsi can really never be NULL for paths that call ice_get_main_vsi.
+We are running some tests to confirm there is no fallout. And if so, we can just return pf->vsi[0]
+as a fix.
+
+Shiraz
+

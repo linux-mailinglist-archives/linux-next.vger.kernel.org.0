@@ -2,134 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E7E3AC401
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 08:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FB73AC407
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 08:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbhFRGiA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Jun 2021 02:38:00 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:39395 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230408AbhFRGh7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 18 Jun 2021 02:37:59 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id A6C3BFBA;
-        Fri, 18 Jun 2021 02:35:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 18 Jun 2021 02:35:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=Y9gLNjfKt95UZEKIkMcPtWQGaka
-        y82uCknphxZrF74k=; b=PIF/krMV61gfo2CzPo2jfT1f8waXFJZuTzhqOQEhvSR
-        qHmmXGp+qafit/7Q6sN22QfQrwuXJnpim6az3fZaojap0zogd9Nn/dLgAdnR4hgw
-        X4oVsB9onVYSYRS4+RFsl0mM9a9TE4mGJTlMIlp0o64++iFEQ/HLtmglkE/bDM1L
-        wlGR/oy/uIqGI4+i7HbO1L7dy3eZBm93t6si9/d+b0vr4uodp7+nfZ4bYANWVMPR
-        1aQ3uNxmVZk/TDJBf3EBa+jzbkESm0cNXINyeFjeJBYzk4dR0JW8FiYCP2MRmuS4
-        5XFOz4LJKI5h1A8Z1EFbZtjQ2lHASH2Ajx8rfo3f9Ag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Y9gLNj
-        fKt95UZEKIkMcPtWQGakay82uCknphxZrF74k=; b=k5Jd+OcudRb69uFL3tJP6N
-        qHJArQ7pqNhrlhKyoEJGv43BjEJHiCGMD4Wh7d2TG2VVyMsR4FGdmvt8EScRg36p
-        oimWjxhwKCojpG+aye0tYnsrS9lPQ8GG/lbIFP/xUPfhKCEzQM9jEDW83mhZ/7/6
-        5SX1ke/rucQzdQjtnZbnLb0jO8UJuYj3LpGLH/NnuZrt6QjngyeX2qNW90sNQPz2
-        UtCSns/rgaRoGceRH4W6J3d7p5C5O357+8si6b+mP91l7SBSk3sheiAyRD82vz8N
-        VuFkE8oJSEgi8AV8BQfJjj6ImqWMsDWX8yW4krp8Py7EOQagBggP/SzaWhJuufCw
-        ==
-X-ME-Sender: <xms:wz7MYD2HjqS40EycUURglBTiW9Eee8hPOzQ5baubDaIAU7hKdkqftw>
-    <xme:wz7MYCF_YviO393g7bQhcCOA17VBvGVbTZdIHLuFXA1Th7MUP9XJFrBKydP-0ZO3U
-    vMsbTOs8QuuyQ>
-X-ME-Received: <xmr:wz7MYD4f9AexsksGLVPsZbPmC8sjQqLjzsEC0IIrlnuZV_cYIrswJ_3tYxSh3ZQzxKWey5I-HY4ea0PqhJFMKxMNg_XBhMep>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeefvddguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:wz7MYI1tDo1in8ryEpoVjU-YgDuPngJJf84dEPzA1ME7yGf4J_RJjg>
-    <xmx:wz7MYGEX0YXsm7H86LlbD069Nghx89gatjD_dQORZ2rZEBrjIZLB3A>
-    <xmx:wz7MYJ-2WgEtYCaDtvt7AdVpY8uAtChZ5Hn8fW0wHfKUH818-eWf5g>
-    <xmx:xT7MYDfXIIgUsJDjy0c0j2pCjjTradJ-PcBybT1SAut1WdVqnmYMIdsVVEU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Jun 2021 02:35:47 -0400 (EDT)
-Date:   Fri, 18 Jun 2021 08:35:45 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        id S231332AbhFRGnE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Jun 2021 02:43:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41374 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230408AbhFRGnE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 18 Jun 2021 02:43:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7B78F60FF4;
+        Fri, 18 Jun 2021 06:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623998455;
+        bh=I6t3BsuXoW1cps0ZCaiZQV3tOIvkZXAxUoTVJlmGoVE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bV8rj8NKR6MT5+dMfX1d3UWWu78qlCZdZJdArcyOc5sixFcTYkFI73RvUPKpYRgbq
+         C7VTjsvmwQLugqTAF6z+zKfS2ayJfb0iUTrEo24yVwdMWxXmPxmv8tUJFYYVABMHZZ
+         d9dSl9N9eM+mof6SoYrdl9qrP2/HYhskIE36SXbo=
+Date:   Fri, 18 Jun 2021 08:40:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.or, lkft-triage@lists.linaro.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the arm-soc tree
-Message-ID: <YMw+weFvPxCXbvk+@kroah.com>
-References: <20210617144346.564be887@canb.auug.org.au>
- <YMt5jTLYv+DKWKdn@google.com>
- <YMuGtNTvZKHx4Rhr@yoga>
+        linux-kbuild@vger.kernel.org
+Subject: Re: [next] [arm64] allmodconfig build failed - xhci-plat.c:427:
+ undefined reference to `onboard_hub_destroy_pdevs'
+Message-ID: <YMw/9NzwwfRhUX/y@kroah.com>
+References: <CA+G9fYu6er1nZ602gCnrY+-JNtDHrUJk-RH2biPmjRoe06_m4Q@mail.gmail.com>
+ <YMtSFVg6UoOpDqIP@kroah.com>
+ <YMuRcrE8xlWnFSWW@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YMuGtNTvZKHx4Rhr@yoga>
+In-Reply-To: <YMuRcrE8xlWnFSWW@google.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 12:30:28PM -0500, Bjorn Andersson wrote:
-> On Thu 17 Jun 11:34 CDT 2021, Matthias Kaehlcke wrote:
-> 
-> > On Thu, Jun 17, 2021 at 02:43:46PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
+On Thu, Jun 17, 2021 at 11:16:18AM -0700, Matthias Kaehlcke wrote:
+> On Thu, Jun 17, 2021 at 03:45:57PM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Jun 17, 2021 at 07:09:15PM +0530, Naresh Kamboju wrote:
+> > > The arm64 allmodconfig build failed on Linux next 20210617 tag due to
+> > > the commit,
 > > > 
-> > > Today's linux-next merge of the usb tree got conflicts in:
+> > > c950686b382d ("usb: host: xhci-plat: Create platform device for
+> > > onboard hubs in probe()")
 > > > 
-> > >   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-> > >   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-> > > 
-> > > between commit:
-> > > 
-> > >   39441f73d91a ("arm64: dts: qcom: sc7180: lazor: Simplify disabling of charger thermal zone")
-> > > 
-> > > from the arm-soc tree and commit:
-> > > 
-> > >   1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub")
-> > > 
-> > > from the usb tree.
-> > > 
-> > > I fixed it up (see below) and can carry the fix as necessary. This
-> > > is now fixed as far as linux-next is concerned, but any non trivial
-> > > conflicts should be mentioned to your upstream maintainer when your tree
-> > > is submitted for merging.  You may also want to consider cooperating
-> > > with the maintainer of the conflicting tree to minimise any particularly
-> > > complex conflicts.
+> > > build error:
+> > > ------------
+> > > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > > `xhci_plat_remove':
+> > > drivers/usb/host/xhci-plat.c:427: undefined reference to
+> > > `onboard_hub_destroy_pdevs'
+> > > drivers/usb/host/xhci-plat.c:427:(.text+0x82c): relocation truncated
+> > > to fit: R_AARCH64_CALL26 against undefined symbol
+> > > `onboard_hub_destroy_pdevs'
+> > > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > > `xhci_plat_probe':
+> > > drivers/usb/host/xhci-plat.c:379: undefined reference to
+> > > `onboard_hub_create_pdevs'
+> > > drivers/usb/host/xhci-plat.c:379:(.text+0x131c): relocation truncated
+> > > to fit: R_AARCH64_CALL26 against undefined symbol
+> > > `onboard_hub_create_pdevs'
+> > > make[1]: *** [Makefile:1252: vmlinux] Error 1
+> > > make[1]: Target '__all' not remade because of errors.
+> > > make: *** [Makefile:222: __sub-make] Error 2
+> > > make: Target '__all' not remade because of errors.
 > > 
-> > Thanks Stephen for fixing this up for -next!
-> > 
-> > One option would be to revert 1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor:
-> > Add nodes for onboard USB hub") from usb-next and land it through the qcom/arm-soc
-> > tree with the rest of the SC7180 device tree patches.
-> > 
-> > Greg/Bjorn, does the above sound like a suitable solution to you or do you
-> > think it would be better to deal with the conflict in a different way?
+> > Matthias, this is due to your patch, yet-another config option mis-match
+> > somewhere. Can you please fix it up?
 > 
-> Having the dts patch go through the Qualcomm tree instead would resolve
-> the issue.
+> I can repro this with:
 > 
-> I wasn't aware that the driver code had landed yet, so I haven't merged
-> the DT patch, but can do so and include it in the pull request that I'm
-> preparing for 5.14.
+> make -j 16 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- \
+>   KCONFIG_ALLCONFIG=arch/arm64/configs/defconfig allmodconfig kernel modules
 > 
-> Greg, does that sound reasonable to you?
+> This results in:
+> 
+> CONFIG_USB_XHCI_PLATFORM=y
+> CONFIG_USB_ONBOARD_HUB=m
+> 
+> The following Kconfig dependency was supposed to prevent this scenario:
+> 
+> config USB_XHCI_PLATFORM
+>         depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB
+> 
+> But apparently this isn't the case.
+> 
+> With the above allmodconfig command the following warning is emitted:
+> 
+> WARNING: unmet direct dependencies detected for USB_XHCI_PLATFORM
+>   Depends on [m]: USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && (USB_ONBOARD_HUB [=m] || !USB_ONBOARD_HUB [=m])
+> 
+> I read through kconfig-language.rst multiple times, but it's still not
+> clear to me how to specify this dependency properly.
+> 
+> Masahiro/Greg, do you have any pointers?
 
-I will revert the dts change in my tree now, along with the rest of this
-specific series, as it is causing other build issues in linux-next at
-the moment.  That should resolve the merge issues now.
+Right now, no, sorry, and I don't have the bandwidth to look into this
+myself.
 
-If you want to take the dts patch through your tree now, that's fine
-with me.  Or we can wait until after 5.14-rc1 is out, which might make
-things easier to handle.
+I've reverted this series from the tree for now, as this issue isn't ok
+for breaking linux-next, and due to the other merge issues with the dts
+files.  Please work on fixing this up and resending the series when it
+is resolved.
 
 thanks,
 

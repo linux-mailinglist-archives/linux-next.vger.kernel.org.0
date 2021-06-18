@@ -2,161 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BFB3AC2BB
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 07:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E7E3AC401
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 08:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbhFRFFa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Jun 2021 01:05:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64678 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231193AbhFRFFa (ORCPT
+        id S231168AbhFRGiA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Jun 2021 02:38:00 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:39395 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230408AbhFRGh7 (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Fri, 18 Jun 2021 01:05:30 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15I4ekJV050542;
-        Fri, 18 Jun 2021 01:02:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2ydnrkHBg6fnhjgCtI9cMXcSBTbhCcux5VKPTMhEzPM=;
- b=iLCmwTH6TYfIN0rktEJvrjMDWaSWj67Igae6oIJ7PgnL9nZuK97i1Cnm9sLrcybxbpNb
- sDzBITj6K+CSDvloRuA7BW9JzyA5CHUcjjogKacALBot7RwkvA2DcRoTYUQftjSbHdoV
- 6Vo0FTjE7nPuOOcsBF4xkgevqysnlELCqph0z5N2K+0FAuLG9jL5vf08j5F/ttMvJ5/1
- 3cvQZqdqG3kO+iun7EVoG02qdg4HJZCxwDl8LItjMN/VV2AkWdDhhD+9N9Hz9Hklsfkr
- GvMshEV5RRSaPZOfqb0XkAenP7yaAFY3KGP7L7L+akf19JYkJ6BZC3JfBihZhB/Gl/2a HQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 398kdqt7he-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Jun 2021 01:02:50 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15I4iMLe060784;
-        Fri, 18 Jun 2021 01:02:49 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 398kdqt7gt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Jun 2021 01:02:49 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15I4vWvX022039;
-        Fri, 18 Jun 2021 05:02:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 394mj8u371-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Jun 2021 05:02:47 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15I52j1R31195526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Jun 2021 05:02:45 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8CBE74203F;
-        Fri, 18 Jun 2021 05:02:45 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E5ED42045;
-        Fri, 18 Jun 2021 05:02:43 +0000 (GMT)
-Received: from [9.77.205.195] (unknown [9.77.205.195])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Jun 2021 05:02:43 +0000 (GMT)
-Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
- `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
- `__compiletime_assert_342'
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-next@vger.kernel.org, clang-built-linux@googlegroups.com,
-        lkft-triage@lists.linaro.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
- <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
- <YMtTdU2b9fI3dnFD@casper.infradead.org> <YMuOSnJsL9qkxweY@archlinux-ax161>
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Message-ID: <6f3c5317-2877-9a57-0126-e9305f000269@linux.ibm.com>
-Date:   Fri, 18 Jun 2021 10:32:42 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 18 Jun 2021 02:37:59 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id A6C3BFBA;
+        Fri, 18 Jun 2021 02:35:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 18 Jun 2021 02:35:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=Y9gLNjfKt95UZEKIkMcPtWQGaka
+        y82uCknphxZrF74k=; b=PIF/krMV61gfo2CzPo2jfT1f8waXFJZuTzhqOQEhvSR
+        qHmmXGp+qafit/7Q6sN22QfQrwuXJnpim6az3fZaojap0zogd9Nn/dLgAdnR4hgw
+        X4oVsB9onVYSYRS4+RFsl0mM9a9TE4mGJTlMIlp0o64++iFEQ/HLtmglkE/bDM1L
+        wlGR/oy/uIqGI4+i7HbO1L7dy3eZBm93t6si9/d+b0vr4uodp7+nfZ4bYANWVMPR
+        1aQ3uNxmVZk/TDJBf3EBa+jzbkESm0cNXINyeFjeJBYzk4dR0JW8FiYCP2MRmuS4
+        5XFOz4LJKI5h1A8Z1EFbZtjQ2lHASH2Ajx8rfo3f9Ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Y9gLNj
+        fKt95UZEKIkMcPtWQGakay82uCknphxZrF74k=; b=k5Jd+OcudRb69uFL3tJP6N
+        qHJArQ7pqNhrlhKyoEJGv43BjEJHiCGMD4Wh7d2TG2VVyMsR4FGdmvt8EScRg36p
+        oimWjxhwKCojpG+aye0tYnsrS9lPQ8GG/lbIFP/xUPfhKCEzQM9jEDW83mhZ/7/6
+        5SX1ke/rucQzdQjtnZbnLb0jO8UJuYj3LpGLH/NnuZrt6QjngyeX2qNW90sNQPz2
+        UtCSns/rgaRoGceRH4W6J3d7p5C5O357+8si6b+mP91l7SBSk3sheiAyRD82vz8N
+        VuFkE8oJSEgi8AV8BQfJjj6ImqWMsDWX8yW4krp8Py7EOQagBggP/SzaWhJuufCw
+        ==
+X-ME-Sender: <xms:wz7MYD2HjqS40EycUURglBTiW9Eee8hPOzQ5baubDaIAU7hKdkqftw>
+    <xme:wz7MYCF_YviO393g7bQhcCOA17VBvGVbTZdIHLuFXA1Th7MUP9XJFrBKydP-0ZO3U
+    vMsbTOs8QuuyQ>
+X-ME-Received: <xmr:wz7MYD4f9AexsksGLVPsZbPmC8sjQqLjzsEC0IIrlnuZV_cYIrswJ_3tYxSh3ZQzxKWey5I-HY4ea0PqhJFMKxMNg_XBhMep>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeefvddguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:wz7MYI1tDo1in8ryEpoVjU-YgDuPngJJf84dEPzA1ME7yGf4J_RJjg>
+    <xmx:wz7MYGEX0YXsm7H86LlbD069Nghx89gatjD_dQORZ2rZEBrjIZLB3A>
+    <xmx:wz7MYJ-2WgEtYCaDtvt7AdVpY8uAtChZ5Hn8fW0wHfKUH818-eWf5g>
+    <xmx:xT7MYDfXIIgUsJDjy0c0j2pCjjTradJ-PcBybT1SAut1WdVqnmYMIdsVVEU>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Jun 2021 02:35:47 -0400 (EDT)
+Date:   Fri, 18 Jun 2021 08:35:45 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the arm-soc tree
+Message-ID: <YMw+weFvPxCXbvk+@kroah.com>
+References: <20210617144346.564be887@canb.auug.org.au>
+ <YMt5jTLYv+DKWKdn@google.com>
+ <YMuGtNTvZKHx4Rhr@yoga>
 MIME-Version: 1.0
-In-Reply-To: <YMuOSnJsL9qkxweY@archlinux-ax161>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KhHjSAm-d0ZelsT_a4H8fgIMkznLNc1z
-X-Proofpoint-GUID: 6tc93sbjgoVTXTqU4G_PjrCr1DOBa4zE
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-17_17:2021-06-15,2021-06-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- clxscore=1011 adultscore=0 phishscore=0 impostorscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106180024
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMuGtNTvZKHx4Rhr@yoga>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/17/21 11:32 PM, Nathan Chancellor wrote:
-> Rebuilt the CC list because most people were added based on the
-> incorrect bisect result.
+On Thu, Jun 17, 2021 at 12:30:28PM -0500, Bjorn Andersson wrote:
+> On Thu 17 Jun 11:34 CDT 2021, Matthias Kaehlcke wrote:
 > 
-> On Thu, Jun 17, 2021 at 02:51:49PM +0100, Matthew Wilcox wrote:
->> On Thu, Jun 17, 2021 at 06:15:45PM +0530, Naresh Kamboju wrote:
->>> On Thu, 17 Jun 2021 at 17:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>>> x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
->>>> mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
->>>
->>> The git bisect pointed out the first bad commit.
->>>
->>> The first bad commit:
->>> commit 928cf6adc7d60c96eca760c05c1000cda061604e
->>> Author: Stephen Boyd <swboyd@chromium.org>
->>> Date:   Thu Jun 17 15:21:35 2021 +1000
->>>      module: add printk formats to add module build ID to stacktraces
->>
->> Your git bisect probably went astray.  There's no way that commit
->> caused that regression.
+> > On Thu, Jun 17, 2021 at 02:43:46PM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Today's linux-next merge of the usb tree got conflicts in:
+> > > 
+> > >   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+> > >   arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+> > > 
+> > > between commit:
+> > > 
+> > >   39441f73d91a ("arm64: dts: qcom: sc7180: lazor: Simplify disabling of charger thermal zone")
+> > > 
+> > > from the arm-soc tree and commit:
+> > > 
+> > >   1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub")
+> > > 
+> > > from the usb tree.
+> > > 
+> > > I fixed it up (see below) and can carry the fix as necessary. This
+> > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > conflicts should be mentioned to your upstream maintainer when your tree
+> > > is submitted for merging.  You may also want to consider cooperating
+> > > with the maintainer of the conflicting tree to minimise any particularly
+> > > complex conflicts.
+> > 
+> > Thanks Stephen for fixing this up for -next!
+> > 
+> > One option would be to revert 1da8116eb0c5 ("arm64: dts: qcom: sc7180-trogdor:
+> > Add nodes for onboard USB hub") from usb-next and land it through the qcom/arm-soc
+> > tree with the rest of the SC7180 device tree patches.
+> > 
+> > Greg/Bjorn, does the above sound like a suitable solution to you or do you
+> > think it would be better to deal with the conflict in a different way?
 > 
-> My bisect landed on commit 83f85ac75855 ("mm/mremap: convert huge PUD
-> move to separate helper"). flush_pud_tlb_range() evaluates to
-> BUILD_BUG() when CONFIG_TRANSPARENT_HUGEPAGE is unset but this function
-> is present just based on the value of
-> CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD.
+> Having the dts patch go through the Qualcomm tree instead would resolve
+> the issue.
 > 
-> $ make -skj(nproc) ARCH=x86_64 CC=clang O=build/x86_64 distclean allnoconfig mm/mremap.o
+> I wasn't aware that the driver code had landed yet, so I haven't merged
+> the DT patch, but can do so and include it in the pull request that I'm
+> preparing for 5.14.
 > 
-> $ llvm-readelf -s build/x86_64/mm/mremap.o &| rg __compiletime_assert
->      21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT   UND __compiletime_assert_337
-> 
-> $ rg TRANSPARENT_ build/x86_64/.config
-> 450:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
-> 451:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
-> 562:# CONFIG_TRANSPARENT_HUGEPAGE is not set
-> 
-> Not sure why this does not happen on newer clang versions, presumably
-> something with inlining decisions? Still seems like a legitimate issue
-> to me.
-> 
+> Greg, does that sound reasonable to you?
 
-gcc 10 also doesn't give a build error. I guess that is because we evaluate
+I will revert the dts change in my tree now, along with the rest of this
+specific series, as it is causing other build issues in linux-next at
+the moment.  That should resolve the merge issues now.
 
-      if (pud_trans_huge(*old_pud) || pud_devmap(*old_pud)) {
+If you want to take the dts patch through your tree now, that's fine
+with me.  Or we can wait until after 5.14-rc1 is out, which might make
+things easier to handle.
 
-  to if (0) with CONFIG_TRANSPARENT_HUGEPAGE disabled.
+thanks,
 
-switching that to if (1) do results in BUILD_BUG triggering.
-
-Should we fix this ?
-
-modified   mm/mremap.c
-@@ -336,7 +336,7 @@ static inline bool move_normal_pud(struct 
-vm_area_struct *vma,
-  }
-  #endif
-
--#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
-+#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && 
-defined(CONFIG_TRANSPARENT_HUGEPAGE)
-  static bool move_huge_pud(struct vm_area_struct *vma, unsigned long 
-old_addr,
-  			  unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
-  {
-
+greg k-h

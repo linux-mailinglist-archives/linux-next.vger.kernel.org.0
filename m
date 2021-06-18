@@ -2,308 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEAF3AC1C4
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 06:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BFB3AC2BB
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jun 2021 07:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbhFREHw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 18 Jun 2021 00:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbhFREHv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 18 Jun 2021 00:07:51 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45C3C061574
-        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 21:05:42 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o21so4006816pll.6
-        for <linux-next@vger.kernel.org>; Thu, 17 Jun 2021 21:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=R9rbqFIlqK7ZPYPXhXd7/Fl49SmNCk23w4Np/D0M43g=;
-        b=vWb/cxtJBLhKuC2474qPs1FyUxEczYf0rhXhkIcRFOjT2la16RLfUfpUibhnUObNxZ
-         V8Acd25UtG0tcoA8smU5ZSdPCaxRJKpbiVvxHANiEHQzxHPISTl8AB0c/A6WEFHNTznp
-         LF3kaDrzP6xUyLWUaPu7kk14yi5tFLYyAHlnkxspju3/PWJ6DZt+Sv4aQR8KIGqfBDQF
-         omZyIJD1WsWegWv/TyvNvuhMqiZ3J50cLrnpF2WzFdjmC9Y5EnSrI6W++rhuyo+nhJIN
-         PcWzwoW8YgjrcgXe7VAhxNsjMkQfTtE2LI8ovrUeqCe4QV942Y3TxLuc1CFsmk7JqAiD
-         xupw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=R9rbqFIlqK7ZPYPXhXd7/Fl49SmNCk23w4Np/D0M43g=;
-        b=MV+xIF/MipMk74u4CK9mn5FksERTz6B/xc1gEoN9wHbesAVF5xlBitE7L8UPhJTm48
-         MFKeA5T75JpPk6MBvJImos9jdiSMFYZ4UJrZNoCF/FhDEcncwnIgyo9VKG+GSZRZueSL
-         S/Hg8Eg2Uv2H2XgGniq2AXmcT88wcnZ7JS3sXGsyi+VZjjMfcE3NwffXswmKFJJcnw+1
-         MMkRvtHhrMW+vaWdJeZpVP0DE4QtjUVKSM/idcXhH21cQldTVu8od4Vk8pGZBg0zLzCV
-         KBkgct9OUOIjejR3FXDs/pdDCRGByHITF/Db/YKiBDYjEwa1J22Zdq+xSfBX/NC49tfB
-         vDYA==
-X-Gm-Message-State: AOAM533emhhfNH6ODTgHuzAfg/Qj+B2qvhygcJWTXC0yX0hPSgB+AvjV
-        t7kL6vSXYRkmah4nWywPhuLMw93dEZ5UpHqa
-X-Google-Smtp-Source: ABdhPJwG7afXx4kC51UBh8rTZHKN9nkgbxtr0AYq6qGrd9jEkJ7lV3vpX7yRHsNRxak84Ho14ApDlg==
-X-Received: by 2002:a17:90a:af95:: with SMTP id w21mr20050192pjq.72.1623989141987;
-        Thu, 17 Jun 2021 21:05:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l124sm3078275pfd.26.2021.06.17.21.05.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 21:05:41 -0700 (PDT)
-Message-ID: <60cc1b95.1c69fb81.1b0bb.825c@mx.google.com>
-Date:   Thu, 17 Jun 2021 21:05:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S232149AbhFRFFa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Jun 2021 01:05:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64678 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231193AbhFRFFa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 18 Jun 2021 01:05:30 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15I4ekJV050542;
+        Fri, 18 Jun 2021 01:02:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2ydnrkHBg6fnhjgCtI9cMXcSBTbhCcux5VKPTMhEzPM=;
+ b=iLCmwTH6TYfIN0rktEJvrjMDWaSWj67Igae6oIJ7PgnL9nZuK97i1Cnm9sLrcybxbpNb
+ sDzBITj6K+CSDvloRuA7BW9JzyA5CHUcjjogKacALBot7RwkvA2DcRoTYUQftjSbHdoV
+ 6Vo0FTjE7nPuOOcsBF4xkgevqysnlELCqph0z5N2K+0FAuLG9jL5vf08j5F/ttMvJ5/1
+ 3cvQZqdqG3kO+iun7EVoG02qdg4HJZCxwDl8LItjMN/VV2AkWdDhhD+9N9Hz9Hklsfkr
+ GvMshEV5RRSaPZOfqb0XkAenP7yaAFY3KGP7L7L+akf19JYkJ6BZC3JfBihZhB/Gl/2a HQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 398kdqt7he-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Jun 2021 01:02:50 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15I4iMLe060784;
+        Fri, 18 Jun 2021 01:02:49 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 398kdqt7gt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Jun 2021 01:02:49 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15I4vWvX022039;
+        Fri, 18 Jun 2021 05:02:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 394mj8u371-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Jun 2021 05:02:47 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15I52j1R31195526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Jun 2021 05:02:45 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CBE74203F;
+        Fri, 18 Jun 2021 05:02:45 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E5ED42045;
+        Fri, 18 Jun 2021 05:02:43 +0000 (GMT)
+Received: from [9.77.205.195] (unknown [9.77.205.195])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Jun 2021 05:02:43 +0000 (GMT)
+Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
+ `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
+ `__compiletime_assert_342'
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-next@vger.kernel.org, clang-built-linux@googlegroups.com,
+        lkft-triage@lists.linaro.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
+ <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
+ <YMtTdU2b9fI3dnFD@casper.infradead.org> <YMuOSnJsL9qkxweY@archlinux-ax161>
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Message-ID: <6f3c5317-2877-9a57-0126-e9305f000269@linux.ibm.com>
+Date:   Fri, 18 Jun 2021 10:32:42 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.13-rc6-319-gd41bf1808eb7
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 180 runs,
- 6 regressions (v5.13-rc6-319-gd41bf1808eb7)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <YMuOSnJsL9qkxweY@archlinux-ax161>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KhHjSAm-d0ZelsT_a4H8fgIMkznLNc1z
+X-Proofpoint-GUID: 6tc93sbjgoVTXTqU4G_PjrCr1DOBa4zE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-17_17:2021-06-15,2021-06-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ clxscore=1011 adultscore=0 phishscore=0 impostorscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106180024
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 180 runs, 6 regressions (v5.13-rc6-319-gd41bf1=
-808eb7)
+On 6/17/21 11:32 PM, Nathan Chancellor wrote:
+> Rebuilt the CC list because most people were added based on the
+> incorrect bisect result.
+> 
+> On Thu, Jun 17, 2021 at 02:51:49PM +0100, Matthew Wilcox wrote:
+>> On Thu, Jun 17, 2021 at 06:15:45PM +0530, Naresh Kamboju wrote:
+>>> On Thu, 17 Jun 2021 at 17:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>>> x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
+>>>> mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
+>>>
+>>> The git bisect pointed out the first bad commit.
+>>>
+>>> The first bad commit:
+>>> commit 928cf6adc7d60c96eca760c05c1000cda061604e
+>>> Author: Stephen Boyd <swboyd@chromium.org>
+>>> Date:   Thu Jun 17 15:21:35 2021 +1000
+>>>      module: add printk formats to add module build ID to stacktraces
+>>
+>> Your git bisect probably went astray.  There's no way that commit
+>> caused that regression.
+> 
+> My bisect landed on commit 83f85ac75855 ("mm/mremap: convert huge PUD
+> move to separate helper"). flush_pud_tlb_range() evaluates to
+> BUILD_BUG() when CONFIG_TRANSPARENT_HUGEPAGE is unset but this function
+> is present just based on the value of
+> CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD.
+> 
+> $ make -skj(nproc) ARCH=x86_64 CC=clang O=build/x86_64 distclean allnoconfig mm/mremap.o
+> 
+> $ llvm-readelf -s build/x86_64/mm/mremap.o &| rg __compiletime_assert
+>      21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT   UND __compiletime_assert_337
+> 
+> $ rg TRANSPARENT_ build/x86_64/.config
+> 450:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
+> 451:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
+> 562:# CONFIG_TRANSPARENT_HUGEPAGE is not set
+> 
+> Not sure why this does not happen on newer clang versions, presumably
+> something with inlining decisions? Still seems like a legitimate issue
+> to me.
+> 
+
+gcc 10 also doesn't give a build error. I guess that is because we evaluate
+
+      if (pud_trans_huge(*old_pud) || pud_devmap(*old_pud)) {
+
+  to if (0) with CONFIG_TRANSPARENT_HUGEPAGE disabled.
+
+switching that to if (1) do results in BUILD_BUG triggering.
+
+Should we fix this ?
+
+modified   mm/mremap.c
+@@ -336,7 +336,7 @@ static inline bool move_normal_pud(struct 
+vm_area_struct *vma,
+  }
+  #endif
+
+-#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
++#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && 
+defined(CONFIG_TRANSPARENT_HUGEPAGE)
+  static bool move_huge_pud(struct vm_area_struct *vma, unsigned long 
+old_addr,
+  			  unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
+  {
 
-Regressions Summary
--------------------
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-bcm2836-rpi-2-b      | arm  | lab-collabora | gcc-8    | multi_v7_defc...CO=
-NFIG_SMP=3Dn | 1          =
-
-imx6q-sabresd        | arm  | lab-nxp       | gcc-8    | imx_v6_v7_defconfi=
-g          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-baylibre  | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-broonie   | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-cip       | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-qemu_arm-versatilepb | arm  | lab-collabora | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.13-rc6-319-gd41bf1808eb7/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.13-rc6-319-gd41bf1808eb7
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d41bf1808eb71f8761dc74569cd93d935b84be35 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-bcm2836-rpi-2-b      | arm  | lab-collabora | gcc-8    | multi_v7_defc...CO=
-NFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbe8dafd911370e7413266
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbe8dafd911370e7413=
-267
-        failing since 133 days (last pass: v5.11-rc6-256-gf889022827dc, fir=
-st fail: v5.11-rc6-298-g490f4659faae) =
-
- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-imx6q-sabresd        | arm  | lab-nxp       | gcc-8    | imx_v6_v7_defconfi=
-g          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbe44cfde757509341326a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabre=
-sd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbe44cfde7575093413=
-26b
-        failing since 235 days (last pass: v5.9-13195-g0281c5220c40, first =
-fail: v5.9-14860-gd56fc2efcc70) =
-
- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-qemu_arm-versatilepb | arm  | lab-baylibre  | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbdf85dfd655fa9d413291
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbdf85dfd655fa9d413=
-292
-        failing since 213 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-qemu_arm-versatilepb | arm  | lab-broonie   | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbdf7cdfd655fa9d413288
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbdf7cdfd655fa9d413=
-289
-        failing since 213 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-qemu_arm-versatilepb | arm  | lab-cip       | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbdf72c951781cf141328f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbdf72c951781cf1413=
-290
-        failing since 213 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
-           | regressions
----------------------+------+---------------+----------+-------------------=
------------+------------
-qemu_arm-versatilepb | arm  | lab-collabora | gcc-8    | versatile_defconfi=
-g          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60cbdf4b2b5d007cd141326b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.13-rc6-3=
-19-gd41bf1808eb7/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-5-g2f114cc7102b/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60cbdf4b2b5d007cd1413=
-26c
-        failing since 213 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =20

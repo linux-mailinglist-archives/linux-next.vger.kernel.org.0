@@ -2,107 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFB33AE917
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jun 2021 14:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C9E3AEA1C
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jun 2021 15:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbhFUMdJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Jun 2021 08:33:09 -0400
-Received: from gimli.rothwell.id.au ([103.230.158.156]:48735 "EHLO
-        gimli.rothwell.id.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbhFUMdJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Jun 2021 08:33:09 -0400
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        id S229719AbhFUNg5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Jun 2021 09:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229708AbhFUNg4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Jun 2021 09:36:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2EBC061574;
+        Mon, 21 Jun 2021 06:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CNc3Xrd1K/29qEhkYTyaxdo3gNoefxPfA82KPR08cuk=; b=UZA5zknswNexCVjedhqpVnPkpR
+        jRvjNhwuxJabuyR3UILC2fJTLArSkub5DrIrVf3s2tVutN33fBI2I+Fdj5m3pnfgWVzVvw5KB7bTL
+        aOSJRCaBA0/DCBgV/Y8zsJz/StwXe8g5J00PdKRs9RSJLw2IDAXjnBvqEVMoCbaPK7NVVb33QcOqI
+        EPWwPF4jCTxRXqgQO4IUM8DgDmIpZ+NMnhM5dlZjjQWwJJT6g5iJtU6HXN6Bur/NEKi0pJZrK2Eps
+        njtjkvO8OnwRH69da/OY+MMYanN2x8Cxk/dcpP6Z7KSk8sSqqU80EjQ8wN49XH7UmLDMRXciOTVqs
+        l85eq8nw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lvK4I-00AFPk-GY; Mon, 21 Jun 2021 13:34:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4G7plp719qzyNc;
-        Mon, 21 Jun 2021 22:30:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rothwell.id.au;
-        s=201702; t=1624278651;
-        bh=JQxVDoKF51qG0AkUhMlXbwCZCBS+9ZJYGc/Mz5M8mlQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KHiYwXfW/pku6rbNnj6hfeThwnw7A4z63MRtjVch5y9WhXukmPGySQORCmV9Vq7LW
-         3LPAB3i6oOXwNIdIQORNI+106+Zt4W256j4fCmvZAEwXD3o/p3w7nEq5q/AhpZ03ZA
-         7Xf9FEPobVo863M/vi3lGLhEOyas+TS8brRZWMm1qt78DZ7j/dwjGNlViv4j70mYW5
-         Aw6hFGyPs2IakijTi4ZHsAJZv5B3Y8HmdOtKgdCUK7wtRSjL3ZcHKe1hCMpo5J/EQx
-         dOUY3DIIfnKPu+NMvayMbquLxCLKkmovx9rwQDvhgHdFXPq1CGVjv09Yz1UwaDNvIX
-         sRtOl04zEZ8PA==
-Date:   Mon, 21 Jun 2021 22:30:45 +1000
-From:   Stephen Rothwell <sfr@rothwell.id.au>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D72DD3001C0;
+        Mon, 21 Jun 2021 15:34:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B7AE5200E3586; Mon, 21 Jun 2021 15:34:32 +0200 (CEST)
+Date:   Mon, 21 Jun 2021 15:34:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Miller <davem@davemloft.net>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Subject: Re: linux-next: manual merge of the block tree with the ide and
- kspp-gustavo trees
-Message-ID: <20210621223045.018223b9@elm.ozlabs.ibm.com>
-In-Reply-To: <CAHp75VcJKX4xzP1PrCBixDzgGBGwVvbV3YtMebKxpRoi1_EhaA@mail.gmail.com>
-References: <20210621141110.548ec3d0@canb.auug.org.au>
-        <CAHp75VcJKX4xzP1PrCBixDzgGBGwVvbV3YtMebKxpRoi1_EhaA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: linux-next: Tree for Apr 16 (objtool: warnings)
+Message-ID: <YNCVaPtEWlsvQfjw@hirez.programming.kicks-ass.net>
+References: <20210416213625.14542675@canb.auug.org.au>
+ <b3778b1a-9494-4724-5066-c000f7fb5e94@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Fy5o/0mu3mzyH2Kk2QtDPd5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3778b1a-9494-4724-5066-c000f7fb5e94@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Fy5o/0mu3mzyH2Kk2QtDPd5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Apr 16, 2021 at 10:50:49AM -0700, Randy Dunlap wrote:
+> On 4/16/21 4:36 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20210415:
+> 
+> 
+> on x86_64, objtool is not liking retpoline.o:
+> 
+> $ gcc --version
+> gcc (SUSE Linux) 7.5.0
+> 
+> 
+> Is there already a patch for these?
+> 
+> 
+> ===== build-r8840.out =====
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rax()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rbx()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rcx()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rdx()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rsi()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rdi()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_rbp()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r8()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r9()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r10()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r11()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r12()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r13()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r14()+0x0: call without frame pointer save/setup
+> arch/x86/lib/retpoline.o: warning: objtool: __x86_indirect_alt_call_r15()+0x0: call without frame pointer save/setup
 
-Hi Andy,
-
-On Mon, 21 Jun 2021 13:56:13 +0300 Andy Shevchenko <andy.shevchenko@gmail.c=
-om> wrote:
->
-> On Mon, Jun 21, 2021 at 7:13 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
->=20
-> >   2c8cbe0b2971 ("IDE SUBSYSTEM: Replace HTTP links with HTTPS ones")
-> >   9a51ffe845e4 ("ide: use generic power management")
-> >   f9e09a0711ca ("ide: sc1200: use generic power management")
-> >   d41b375134a9 ("ide: delkin_cb: use generic power management")
-> >   6800cd8cbc6e ("ide-acpi: use %*ph to print small buffer")
-> >   731d5f441e1c ("ide: Fix fall-through warnings for Clang")
-> >
-> > from the ide and kspp-gustavo trees and commits: =20
->=20
-> As far as I can tell the IDE hasn't sent PR to LInus for a long time
-> (like a few release cycles). I don't know what happened there, though.
-
-Yeah, the top commit in the ide tree (which is intended to hold bug
-fixes for Linus' tree) is dated 4 Aug 2020, so hopefully this will
-prompt Dave to do something with it.  There has been no ide "future
-development" tree in linux-next since 2011.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Fy5o/0mu3mzyH2Kk2QtDPd5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDQhnUACgkQAVBC80lX
-0GwlvAf+Jy/JQiD1G3kpyheGpSOuus8Uqp9jpo6/dNQOcZ+0xWbkXDM7xJWpePle
-SOR+ISangurQsuIN83jczgtHErE899J1Lol1rP8sgH/KBDKDgH4H21wljLofLHR6
-KbbpNsWhxK59YzKQqC401ERzXIFD4u0iKzI3M1VT/c3/Ksr1QzpW2iN+euBnOd+U
-8MWs62yQPI0aF7PwxNWAZLOOW7aiHzFu9n567nVCWjGAMU8VdOHPw6ZYCulc7UBB
-byzeFkrkgO5LdXgrOYMGnDCfXRwQPcit5nDf7H341blySIqtu8E96cWpkI7sG5R0
-2zG8efbBE0lws7KFINz8bvPAXfD2Gg==
-=SPti
------END PGP SIGNATURE-----
-
---Sig_/Fy5o/0mu3mzyH2Kk2QtDPd5--
+Damn, sorry I missed this. I know what the problem is, but I've yet to
+find a solution that's not terrible... hold on.

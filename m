@@ -2,84 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B833AE2EF
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jun 2021 07:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6920A3AE49E
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jun 2021 10:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbhFUGAI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Jun 2021 02:00:08 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34217 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229487AbhFUGAI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 21 Jun 2021 02:00:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G7f2T0X8Rz9s5R;
-        Mon, 21 Jun 2021 15:57:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624255073;
-        bh=XAAlCtxXaOdllDV4KH3BYVc1MbMs7iiZiVLY98G6+kg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LEGSdRkGjlrll6rxr48JY64kEEP6Gz73eHJ4rg5C255pXHxPtl6dDMgS7pAoDRCrP
-         4mnydIcQ1WcgealXfF8ztND39yKRnvs+ud5lhFEubF45jGytDLrsx5JEpWT9Unr2He
-         nBlkyf4lSQWZkxbVKeViuDJstIcAFySM12pnSl4JOr4ewlYMa00df8NvfL7tiuIdUK
-         yCTX9xSqApJokmtghOdCBztu0Z4Cq+JxzAhWkJKKXVBwJwf/BminV2Qq+hhGHS13Hw
-         LyihGYPqujhXUAqp/9d2KttH5TVnYJHUS0+ZEv23DqiPnGUWj8z8TDrwQzUi2z2ITY
-         ziaDS7suHtcHQ==
-Date:   Mon, 21 Jun 2021 15:57:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jassi Brar <jaswinder.singh@linaro.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        id S229618AbhFUIU2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Jun 2021 04:20:28 -0400
+Received: from infomag.iguana.be ([185.87.124.46]:44040 "EHLO
+        infomag.iguana.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229905AbhFUIU2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Jun 2021 04:20:28 -0400
+X-Greylist: delayed 592 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Jun 2021 04:20:27 EDT
+Received: by infomag.iguana.be (Postfix, from userid 1001)
+        id 37AFB603CACE; Mon, 21 Jun 2021 10:08:20 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 infomag.iguana.be 37AFB603CACE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iguana.be;
+        s=infomag-20180602; t=1624262900;
+        bh=R1BOYJmyCsFjrpCi/j6BH+ZFJ9mn3RCuXqY+n3LYg1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IVFd18VMfUmYlLGEAUwJpFegqlCCeutC+mBJIIqPQficpCelq181BgZaXo5MPIofn
+         i3b2WAWa+RR8Gj7rTrywq9oKBzpYAiFcYg27BOJe4VvDJFnXHz2MLHeUa2s9+NGpHN
+         zJusf5tBJAMybEeqO3kCYysurd6RfWDU4cr/8P7k=
+Date:   Mon, 21 Jun 2021 10:08:20 +0200
+From:   Wim Van Sebroeck <wim@iguana.be>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mailbox tree
-Message-ID: <20210621155752.28d0524a@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the watchdog tree
+Message-ID: <20210621080820.GA20712@infomag.iguana.be>
+References: <20210621153839.43dd423e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zNL.RwFBlvS/2Te4LeyM7yV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210621153839.43dd423e@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zNL.RwFBlvS/2Te4LeyM7yV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+Fixed for tomorrow's pull.
 
-After merging the mailbox tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+Kind regards,
+Wim.
 
-In file included from drivers/mailbox/mailbox-mpfs.c:19:
-include/soc/microchip/mpfs.h:43:12: warning: 'mpfs_blocking_transaction' de=
-fined but not used [-Wunused-function]
-   43 | static int mpfs_blocking_transaction(struct mpfs_sys_controller *mp=
-fs_client, void *msg,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~
+> Hi all,
+> 
+> After merging the watchdog tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> ERROR: modpost: "bd70528_wdt_unlock" [drivers/rtc/rtc-bd70528.ko] undefined!
+> ERROR: modpost: "bd70528_wdt_lock" [drivers/rtc/rtc-bd70528.ko] undefined!
+> ERROR: modpost: "bd70528_wdt_set" [drivers/rtc/rtc-bd70528.ko] undefined!
+> 
+> Caused by commit
+> 
+>   f2a5178b0b9f ("watchdog: bd70528 drop bd70528 support")
+> 
+> I have used the watchdog tree from next-20210618 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Introduced by commit
 
-  de5473936808 ("mbox: add polarfire soc system controller mailbox")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/zNL.RwFBlvS/2Te4LeyM7yV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDQKmAACgkQAVBC80lX
-0GynQQf/UghQ/kNknnGGvf1i6PAKwPFpQfX7sxIpiIcwoUZjaDmwjyZTwatvjdju
-ij2Nyfkk+l3XQKpuBl4JEEnoCDO5R12pfmaDip0qJ5KAaNZIG6zNap328gXyB8Lt
-YB8+3CWa68YZzf4c7TMfui7hHf/ZJthks8PxujvTZS2sHj3duJxOjms9XQA5WX+U
-CslsROh4J6CvH+jObrsETIniSPACm7EddHIY3Ug69qRyfuT/Ni06upoWbBTU2fiY
-XRaZRIiu4xtrmCgIqIRUvRNlPXygYARYjjVrTF0OzJiXnYG+Tk534ALyp5O/7ee+
-N5Wqen/oxchgSYfGuZvjev0VQVhVkQ==
-=ki1A
------END PGP SIGNATURE-----
-
---Sig_/zNL.RwFBlvS/2Te4LeyM7yV--

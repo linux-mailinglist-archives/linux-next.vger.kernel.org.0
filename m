@@ -2,104 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E7F3B0AAE
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 18:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA183B0B31
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 19:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbhFVQyc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Jun 2021 12:54:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60820 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231320AbhFVQya (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 22 Jun 2021 12:54:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624380733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4P1PfITd6m9CRCYryDXbjzGuOd03lvZO6GwMrQOOd8k=;
-        b=RZ3jyMWVgsKGixQcFMbjo5Z+S7U83pEDWFWf4lMkpCbG+R4YDQBDAC5FrithoqJn9oKb5w
-        owPvco3JHsZmGLFD/ksbfduX6SzRnW6BXkf2cx05CfN0v+/LEhp35l61OwdVxMJcoGyMv0
-        EFS0LpgcXZEie1J8glLLUVa4TiCdlso=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-527-QsRs-AYLOw2zLbcp0VO42Q-1; Tue, 22 Jun 2021 12:52:12 -0400
-X-MC-Unique: QsRs-AYLOw2zLbcp0VO42Q-1
-Received: by mail-wr1-f69.google.com with SMTP id u18-20020a5d6ad20000b0290123314c5505so1120103wrw.20
-        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 09:52:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4P1PfITd6m9CRCYryDXbjzGuOd03lvZO6GwMrQOOd8k=;
-        b=NPbWTYj1oTnbrAr+TGKiSme7LHQRR4MjiLCcic1goA5w1FxbdO/MxCM/a++/Lvlpgf
-         reRRWPkedNmkLdYzer2fxgyqlfRckeL9LfJdzcLWCG3iz8ybnlMvAqdoPwOiAWCex9gq
-         D+sY+IGpqvJKZgMSTWB5cAo7NursSw138YFWszrJZ9Rgy3Qrm05B1rWH3enEwlsGBug3
-         Pw9tiXkFuQ8cD/c06/bdQ6gY3sBuCQCUovYKYsDM7OfLPurkiCx9VEe2JeEFF6RerhDF
-         PT17IHVCM3xrNf43RwINe07uAJqe+vj1MNcgE2ADcyLEFoeduKtM7tTA17TxmUti3HQB
-         +beA==
-X-Gm-Message-State: AOAM533aIG/I1rW2wtfnCfJuHqfXfba0ILzkxXjqQF47dWdEfVikYGz6
-        2HYMIH/hZbLOrPpvjZDyIQRSDPzbDE4SwtSXOzwdXI1M3BaZu6COE5Ng2jjQ4m+g6yppEtpsI+s
-        fsVlwWV+qACg77fYP+Zi5NQ==
-X-Received: by 2002:a5d:4904:: with SMTP id x4mr5938994wrq.202.1624380731193;
-        Tue, 22 Jun 2021 09:52:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzHwvAETSGbesb6gzKh+dnovh/8/FzEzs9O+mu8f0VjdUXRziEiWzP7ITmfJWkfwxeiQrPAIQ==
-X-Received: by 2002:a5d:4904:: with SMTP id x4mr5938982wrq.202.1624380731048;
-        Tue, 22 Jun 2021 09:52:11 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id n18sm3132025wmq.41.2021.06.22.09.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 09:52:10 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the kvm tree with the powerpc tree
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        KVM <kvm@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Ashish Kalra <ashish.kalra@amd.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
+        id S229501AbhFVRMz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Jun 2021 13:12:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230102AbhFVRMz (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Jun 2021 13:12:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C7DB361166;
+        Tue, 22 Jun 2021 17:10:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624381837;
+        bh=a+PLuKVymxA0COwEw81AAw1JqR/VCb63zv7i5UvWhFs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=MkB7NIb/w7T/L65z6FzGzuSS+gkOzprtBiodbApGpVnqXYxfj5Q/0dxlp11hx8YzU
+         v3YBrANh4Zt7+fkXVtRBKhxDCObKp6hvwxpd4rovoAQpBDZOA5difyz4MeNVeyrCpR
+         BEhYOzSG+kLU1/Y40m/WM8oMSxc8YmmkoZO4vgpInYD9B4SCXA0/RpRjM4Frez+wZw
+         Czq6JAVn8Fc8bqI9JHCx3bOQUCJxQSKl74a1rbPY9lI1vCjeXNSCptfVXxetYrya2l
+         FkfBZlfO3X0D9PGpghYrDET6/pn5EPjmu9UXVPer6uWia6n4sbXzxsef+d9Zq/Btw2
+         n8HJjCK8rEFxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8E41B5C017F; Tue, 22 Jun 2021 10:10:37 -0700 (PDT)
+Date:   Tue, 22 Jun 2021 10:10:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20210622152544.74e01567@canb.auug.org.au>
- <9c2dbe56-4c64-0032-0acb-2e2925c7a2ab@redhat.com>
- <871r8u2bqp.fsf@mpe.ellerman.id.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <479d2898-07d6-9a40-70e5-f33c91943d52@redhat.com>
-Date:   Tue, 22 Jun 2021 18:52:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the rcu tree with the tip tree
+Message-ID: <20210622171037.GB4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210622144757.055a4137@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <871r8u2bqp.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210622144757.055a4137@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 22/06/21 16:51, Michael Ellerman wrote:
->> Please drop the patches at
->> https://www.spinics.net/lists/kvm-ppc/msg18666.html  from the powerpc
->> tree, and merge them through either the kvm-powerpc or kvm trees.
-> The kvm-ppc tree is not taking patches at the moment.
-
-If so, let's remove the "T" entry from MAINTAINERS and add an entry for 
-the kvm@vger.kernel.org mailing list.
-
->   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?h=topic/ppc-kvm
+On Tue, Jun 22, 2021 at 02:47:57PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> The commit Stephen mentioned has been rebased since to squash in a fix.
-> But what is in the topic branch is now final, I won't rebase what's
-> there.
+> Today's linux-next merge of the rcu tree got a conflict in:
+> 
+>   kernel/rcu/tree_stall.h
+> 
+> between commit:
+> 
+>   2f064a59a11f ("sched: Change task_struct::state")
+> 
+> from the tip tree and commit:
+> 
+>   367455053a76 ("rcu: Mark accesses in tree_stall.h")
+> 
+> from the rcu tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thanks, I pulled it.  Anyway, if the workflow is not the one indicated 
-by MAINTAINERS it's never a bad idea to Cc more people when applying 
-patches.
+I have moved this RCU commit out of my -next pile.  I will put it back
+at v5.14-rc1 time.  The other conflict looks quite straightforward,
+so I am leaving that one be.
 
-Paolo
+							Thanx, Paul
+
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc kernel/rcu/tree_stall.h
+> index acb2288063b5,24065f1acb8b..000000000000
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@@ -460,12 -462,13 +462,13 @@@ static void rcu_check_gp_kthread_starva
+>   
+>   	if (rcu_is_gp_kthread_starving(&j)) {
+>   		cpu = gpk ? task_cpu(gpk) : -1;
+>  -		pr_err("%s kthread starved for %ld jiffies! g%ld f%#x %s(%d) ->state=%#lx ->cpu=%d\n",
+>  +		pr_err("%s kthread starved for %ld jiffies! g%ld f%#x %s(%d) ->state=%#x ->cpu=%d\n",
+>   		       rcu_state.name, j,
+>   		       (long)rcu_seq_current(&rcu_state.gp_seq),
+> - 		       data_race(rcu_state.gp_flags),
+> - 		       gp_state_getname(rcu_state.gp_state), rcu_state.gp_state,
+> - 		       gpk ? gpk->__state : ~0, cpu);
+> + 		       data_race(READ_ONCE(rcu_state.gp_flags)),
+> + 		       gp_state_getname(rcu_state.gp_state),
+> + 		       data_race(READ_ONCE(rcu_state.gp_state)),
+>  -		       gpk ? data_race(READ_ONCE(gpk->state)) : ~0, cpu);
+> ++		       gpk ? data_race(READ_ONCE(gpk->__state)) : ~0, cpu);
+>   		if (gpk) {
+>   			pr_err("\tUnless %s kthread gets sufficient CPU time, OOM is now expected behavior.\n", rcu_state.name);
+>   			pr_err("RCU grace-period kthread stack dump:\n");
+> @@@ -508,7 -511,7 +511,7 @@@ static void rcu_check_gp_kthread_expire
+>   		       (long)rcu_seq_current(&rcu_state.gp_seq),
+>   		       data_race(rcu_state.gp_flags),
+>   		       gp_state_getname(RCU_GP_WAIT_FQS), RCU_GP_WAIT_FQS,
+> - 		       gpk->__state);
+>  -		       data_race(READ_ONCE(gpk->state)));
+> ++		       data_race(READ_ONCE(gpk->__state)));
+>   		pr_err("\tPossible timer handling issue on cpu=%d timer-softirq=%u\n",
+>   		       cpu, kstat_softirqs_cpu(TIMER_SOFTIRQ, cpu));
+>   	}
+> @@@ -732,23 -816,34 +816,34 @@@ void show_rcu_gp_kthreads(void
+>   	struct task_struct *t = READ_ONCE(rcu_state.gp_kthread);
+>   
+>   	j = jiffies;
+> - 	ja = j - data_race(rcu_state.gp_activity);
+> - 	jr = j - data_race(rcu_state.gp_req_activity);
+> - 	jw = j - data_race(rcu_state.gp_wake_time);
+> - 	pr_info("%s: wait state: %s(%d) ->state: %#x delta ->gp_activity %lu ->gp_req_activity %lu ->gp_wake_time %lu ->gp_wake_seq %ld ->gp_seq %ld ->gp_seq_needed %ld ->gp_flags %#x\n",
+> + 	ja = j - data_race(READ_ONCE(rcu_state.gp_activity));
+> + 	jr = j - data_race(READ_ONCE(rcu_state.gp_req_activity));
+> + 	js = j - data_race(READ_ONCE(rcu_state.gp_start));
+> + 	jw = j - data_race(READ_ONCE(rcu_state.gp_wake_time));
+>  -	pr_info("%s: wait state: %s(%d) ->state: %#lx ->rt_priority %u delta ->gp_start %lu ->gp_activity %lu ->gp_req_activity %lu ->gp_wake_time %lu ->gp_wake_seq %ld ->gp_seq %ld ->gp_seq_needed %ld ->gp_max %lu ->gp_flags %#x\n",
+> ++	pr_info("%s: wait state: %s(%d) ->state: %#x ->rt_priority %u delta ->gp_start %lu ->gp_activity %lu ->gp_req_activity %lu ->gp_wake_time %lu ->gp_wake_seq %ld ->gp_seq %ld ->gp_seq_needed %ld ->gp_max %lu ->gp_flags %#x\n",
+>   		rcu_state.name, gp_state_getname(rcu_state.gp_state),
+> - 		rcu_state.gp_state, t ? t->__state : 0x1ffff,
+> - 		ja, jr, jw, (long)data_race(rcu_state.gp_wake_seq),
+> - 		(long)data_race(rcu_state.gp_seq),
+> - 		(long)data_race(rcu_get_root()->gp_seq_needed),
+> - 		data_race(rcu_state.gp_flags));
+> + 		data_race(READ_ONCE(rcu_state.gp_state)),
+>  -		t ? data_race(READ_ONCE(t->state)) : 0x1ffffL, t ? t->rt_priority : 0xffU,
+> ++		t ? data_race(READ_ONCE(t->__state)) : 0x1ffffL, t ? t->rt_priority : 0xffU,
+> + 		js, ja, jr, jw, (long)data_race(READ_ONCE(rcu_state.gp_wake_seq)),
+> + 		(long)data_race(READ_ONCE(rcu_state.gp_seq)),
+> + 		(long)data_race(READ_ONCE(rcu_get_root()->gp_seq_needed)),
+> + 		data_race(READ_ONCE(rcu_state.gp_max)),
+> + 		data_race(READ_ONCE(rcu_state.gp_flags)));
+>   	rcu_for_each_node_breadth_first(rnp) {
+> - 		if (ULONG_CMP_GE(READ_ONCE(rcu_state.gp_seq),
+> - 				 READ_ONCE(rnp->gp_seq_needed)))
+> + 		if (ULONG_CMP_GE(READ_ONCE(rcu_state.gp_seq), READ_ONCE(rnp->gp_seq_needed)) &&
+> + 		    !data_race(READ_ONCE(rnp->qsmask)) && !data_race(READ_ONCE(rnp->boost_tasks)) &&
+> + 		    !data_race(READ_ONCE(rnp->exp_tasks)) && !data_race(READ_ONCE(rnp->gp_tasks)))
+>   			continue;
+> - 		pr_info("\trcu_node %d:%d ->gp_seq %ld ->gp_seq_needed %ld\n",
+> - 			rnp->grplo, rnp->grphi, (long)data_race(rnp->gp_seq),
+> - 			(long)data_race(rnp->gp_seq_needed));
+> + 		pr_info("\trcu_node %d:%d ->gp_seq %ld ->gp_seq_needed %ld ->qsmask %#lx %c%c%c%c ->n_boosts %ld\n",
+> + 			rnp->grplo, rnp->grphi,
+> + 			(long)data_race(READ_ONCE(rnp->gp_seq)),
+> + 			(long)data_race(READ_ONCE(rnp->gp_seq_needed)),
+> + 			data_race(READ_ONCE(rnp->qsmask)),
+> + 			".b"[!!data_race(READ_ONCE(rnp->boost_kthread_task))],
+> + 			".B"[!!data_race(READ_ONCE(rnp->boost_tasks))],
+> + 			".E"[!!data_race(READ_ONCE(rnp->exp_tasks))],
+> + 			".G"[!!data_race(READ_ONCE(rnp->gp_tasks))],
+> + 			data_race(READ_ONCE(rnp->n_boosts)));
+>   		if (!rcu_is_leaf_node(rnp))
+>   			continue;
+>   		for_each_leaf_node_possible_cpu(rnp, cpu) {
+
 

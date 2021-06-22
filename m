@@ -2,117 +2,177 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A593AFDB6
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 09:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892663AFE14
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 09:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhFVHV6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Jun 2021 03:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhFVHV5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Jun 2021 03:21:57 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08DBC061574;
-        Tue, 22 Jun 2021 00:19:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G8HpK3GcGz9sT6;
-        Tue, 22 Jun 2021 17:19:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624346378;
-        bh=lKLIBow7q6fVnoH1lCZXhkwu5k2+oE8chmuDsmdhT+o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ebtgFwWYGTTvnSn6Sy9ykoQUpu9h/sWzDWpFekxY86pbFkfRSoNcumEOp573OrIsg
-         BzexSScp+ZJWlLJJ3jUZ8FRpwcXxp2TXVUg28ChiYayNenMcsJD/kmorFO0qY2CQ5/
-         +W7uLNxshCfGhmbOj/11sC3dQPQ4jtOQgRdFze6WyGidkm+AJbYTThxD7HoMKlZsSf
-         W/n9mQS5o3b49jrYpPiOMVrmQlwnTBT4IW+8NVZrCaT22WxB8ubFTG4XCZnAKWI6Tc
-         gNIFMNsjTY6ON4aOofgXLwgnWEfnBJxTYagMAVQMaijGhjQaEpzkSIfaP+NT38L2N9
-         6upSVStC+FAuA==
-Date:   Tue, 22 Jun 2021 17:19:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: linux-next: manual merge of the soundwire tree with the
- sound-asoc-fixes tree
-Message-ID: <20210622171936.1c147fbf@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WtVq0rAqeGhl6UrT8CtiWnD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S230137AbhFVHl5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Jun 2021 03:41:57 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52758 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230107AbhFVHlv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Jun 2021 03:41:51 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15M7XelO016992;
+        Tue, 22 Jun 2021 03:39:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=ps+MxyIj04uVEqtlFH1SnSoPVeb9c0uCF51LMtYCfdI=;
+ b=ZzIKOpELz4RZgla9tKGfmSOb+2QU2jwfVwefybrV12IRGruCFz4gbtHGRavmjaINa3AG
+ n+W+p1t34pVT7dbq4anectJ3TMXnbOYcpZO6R5Gln8+jmPUwrUZdXnMa7i+i98ivRagm
+ J5/vL3398VZY7MXoNylv2K/FysZDbzl1fuROipHgBDEeyWNHxt/10/1IQ6GU+re+bw7I
+ 0osDLJIObg9gYBcsz60J8ViEsbpb3ow9rQov9j04fncxqraERj2GlvlUGCPaJZJ7S2bw
+ hvGX5mHwaVGC+za3/HdbBk2Cu3KNEWBsUbxuhi7vtZ/j9r8+pzqjXsTQelsDxMT5tWwh Yg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39bahp9nsh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 03:39:30 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15M7XI3V016244;
+        Tue, 22 Jun 2021 07:39:27 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3997uh999r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 07:39:27 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15M7c8Ms36503936
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Jun 2021 07:38:08 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8417611C052;
+        Tue, 22 Jun 2021 07:39:25 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B42211C054;
+        Tue, 22 Jun 2021 07:39:24 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.85.86.62])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Jun 2021 07:39:24 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.100.0.2.22\))
+Subject: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277 during
+ boot
+Message-Id: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
+Date:   Tue, 22 Jun 2021 13:09:23 +0530
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Odin Ugedal <odin@uged.al>
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-next@vger.kernel.org
+X-Mailer: Apple Mail (2.3654.100.0.2.22)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 10l99-e5z4-sKwoUIQuEsdcHfNcJ0eg8
+X-Proofpoint-GUID: 10l99-e5z4-sKwoUIQuEsdcHfNcJ0eg8
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-22_04:2021-06-21,2021-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 clxscore=1015 spamscore=0
+ mlxlogscore=978 phishscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106220046
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WtVq0rAqeGhl6UrT8CtiWnD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+While booting 5.13.0-rc7-next-20210621 on a PowerVM LPAR following =
+warning
+is seen
 
-Hi all,
+[   30.922154] ------------[ cut here ]------------
+[   30.922201] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg || =
+cfs_rq->avg.runnable_avg
+[   30.922219] WARNING: CPU: 6 PID: 762 at kernel/sched/fair.c:3277 =
+update_blocked_averages+0x758/0x780
+[   30.922259] Modules linked in: pseries_rng xts vmx_crypto =
+uio_pdrv_genirq uio sch_fq_codel ip_tables sd_mod t10_pi sg fuse
+[   30.922309] CPU: 6 PID: 762 Comm: augenrules Not tainted =
+5.13.0-rc7-next-20210621 #1
+[   30.922329] NIP:  c0000000001b27e8 LR: c0000000001b27e4 CTR: =
+c0000000007cfda0
+[   30.922344] REGS: c000000023fcb660 TRAP: 0700   Not tainted  =
+(5.13.0-rc7-next-20210621)
+[   30.922359] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: =
+48488224  XER: 00000005
+[   30.922394] CFAR: c00000000014d120 IRQMASK: 1=20
+               GPR00: c0000000001b27e4 c000000023fcb900 c000000002a08400 =
+0000000000000048=20
+               GPR04: 00000000ffff7fff c000000023fcb5c0 0000000000000027 =
+c000000f6fdd7e18=20
+               GPR08: 0000000000000023 0000000000000001 0000000000000027 =
+c0000000028a6650=20
+               GPR12: 0000000000008000 c000000f6fff7680 c000000f6fe62600 =
+0000000000000032=20
+               GPR16: 00000007331a989a c000000f6fe62600 c0000000238a6800 =
+0000000000000001=20
+               GPR20: 0000000000000000 c000000002a4dfe0 0000000000000000 =
+0000000000000006=20
+               GPR24: 0000000000000000 c000000f6fe63010 0000000000000001 =
+c000000f6fe62680=20
+               GPR28: 0000000000000006 c0000000238a69c0 0000000000000000 =
+c000000f6fe62600=20
+[   30.922569] NIP [c0000000001b27e8] =
+update_blocked_averages+0x758/0x780
+[   30.922599] LR [c0000000001b27e4] update_blocked_averages+0x754/0x780
+[   30.922624] Call Trace:
+[   30.922631] [c000000023fcb900] [c0000000001b27e4] =
+update_blocked_averages+0x754/0x780 (unreliable)
+[   30.922653] [c000000023fcba20] [c0000000001bd668] =
+newidle_balance+0x258/0x5c0
+[   30.922674] [c000000023fcbab0] [c0000000001bdaac] =
+pick_next_task_fair+0x7c/0x4d0
+[   30.922692] [c000000023fcbb10] [c000000000dcd31c] =
+__schedule+0x15c/0x1780
+[   30.922708] [c000000023fcbc50] [c0000000001a5a04] =
+do_task_dead+0x64/0x70
+[   30.922726] [c000000023fcbc80] [c000000000156338] do_exit+0x848/0xcc0
+[   30.922743] [c000000023fcbd50] [c000000000156884] =
+do_group_exit+0x64/0xe0
+[   30.922758] [c000000023fcbd90] [c000000000156924] =
+sys_exit_group+0x24/0x30
+[   30.922774] [c000000023fcbdb0] [c0000000000310c0] =
+system_call_exception+0x150/0x2d0
+[   30.922792] [c000000023fcbe10] [c00000000000cc5c] =
+system_call_common+0xec/0x278
+[   30.922808] --- interrupt: c00 at 0x7fffb3acddcc
+[   30.922821] NIP:  00007fffb3acddcc LR: 00007fffb3a27f04 CTR: =
+0000000000000000
+[   30.922833] REGS: c000000023fcbe80 TRAP: 0c00   Not tainted  =
+(5.13.0-rc7-next-20210621)
+[   30.922847] MSR:  800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28444202  XER: 00000000
+[   30.922882] IRQMASK: 0=20
+               GPR00: 00000000000000ea 00007fffc8f21780 00007fffb3bf7100 =
+0000000000000000=20
+               GPR04: 0000000000000000 0000000155f142f0 0000000000000000 =
+00007fffb3d23740=20
+               GPR08: fffffffffbad2a87 0000000000000000 0000000000000000 =
+0000000000000000=20
+               GPR12: 0000000000000000 00007fffb3d2aeb0 0000000116be95e0 =
+0000000000000032=20
+               GPR16: 0000000000000000 00007fffc8f21cd8 000000000000002d =
+0000000000000024=20
+               GPR20: 00007fffc8f21cd4 00007fffb3bf4f98 0000000000000001 =
+0000000000000001=20
+               GPR24: 00007fffb3bf0950 0000000000000000 0000000000000000 =
+0000000000000001=20
+               GPR28: 0000000000000000 0000000000000000 00007fffb3d23ec0 =
+0000000000000000=20
+[   30.923023] NIP [00007fffb3acddcc] 0x7fffb3acddcc
+[   30.923035] LR [00007fffb3a27f04] 0x7fffb3a27f04
+[   30.923045] --- interrupt: c00
+[   30.923052] Instruction dump:
+[   30.923061] 3863be48 9be97ae6 4bf9a8f9 60000000 0fe00000 4bfff980 =
+e9210070 e8610088=20
+[   30.923088] 39400001 99490003 4bf9a8d9 60000000 <0fe00000> 4bfffc24 =
+3d22fff5 89297ae3=20
+[   30.923113] ---[ end trace ed07974d2149c499 ]=E2=80=94
 
-Today's linux-next merge of the soundwire tree got a conflict in:
+This warning was introduced with commit 9e077b52d86a
+sched/pelt: Check that *_avg are null when *_sum are
 
-  include/linux/soundwire/sdw.h
+next-20210618 was good.
 
-between commit:
-
-  d38ebaf2c884 ("soundwire: export sdw_update() and sdw_update_no_pm()")
-
-from the sound-asoc-fixes tree and commit:
-
-  031e668bc1ad ("soundwire: bus: Make sdw_nwrite() data pointer argument co=
-nst")
-
-from the soundwire tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/soundwire/sdw.h
-index de9802a24e7e,ddbeb00799e4..000000000000
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@@ -1040,10 -1039,7 +1039,10 @@@ int sdw_write(struct sdw_slave *slave,=20
-  int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value);
-  int sdw_read_no_pm(struct sdw_slave *slave, u32 addr);
-  int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
-- int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
-+ int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 =
-*val);
- +int sdw_update(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
- +int sdw_update_no_pm(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
- +
-  int sdw_compare_devid(struct sdw_slave *slave, struct sdw_slave_id id);
-  void sdw_extract_slave_id(struct sdw_bus *bus, u64 addr, struct sdw_slave=
-_id *id);
- =20
-
---Sig_/WtVq0rAqeGhl6UrT8CtiWnD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDRjwgACgkQAVBC80lX
-0Gwm+Qf/X8WbjAiK48jPYE9swakxBg5f1W75kRol7lVN3KgZvPN9K0wiTM5GFtNt
-Du0XT9w/MwWyAR2X+x9vULzMYxUYsSd2uIFeMP6ibmnDY/dzskhCZjHGj1iNjk0E
-l8SAy56pkGpozynMXRfiu3qcT+qhOP6PZP/F1oj2TDxaENlR2G1jB5EwTi7xUd/R
-8twKMZr91sE2bAtecUQ108Whdx4c844jQ9kIm6NM6TBGeQ1ptrgpmAfuaoHeOKhU
-3LxoUfv1y9Psmg39ivT9z0FMQjAo/Rl+vJmtlFe8ds1X28FMLXDlbrbhsBZDp86j
-ZX+/TrdDHbDJN2LINnLelJIaU2B1Sg==
-=wi8+
------END PGP SIGNATURE-----
-
---Sig_/WtVq0rAqeGhl6UrT8CtiWnD--
+Thanks
+-Sachin=

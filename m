@@ -2,139 +2,187 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36643B08FC
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 17:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112AB3B09BB
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 17:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbhFVPaL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Jun 2021 11:30:11 -0400
-Received: from mail-eopbgr150072.outbound.protection.outlook.com ([40.107.15.72]:58485
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231936AbhFVPaK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 22 Jun 2021 11:30:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cQG+DowKkS2RW2YiXnkY8SsVpu9uThSkRC5TL7qyf8w8KWBJX6rm4rUbusgWRQpJ4FoAl194I58h36UAoAT1CDIf2NGVBqLzXIv+vnbg1AJ2i03bDh0sadMOYnZPl6tu7049Ju9qsEqkO0fGjhoRxfwCxAMS0u/8Ndt5QLUgMVwEKmR6M6Z+SXiSFFNy0ZizTGqoILANCVpAtkushXpl+5OeDgLOBTl13OxUxWLRlSzmpsycf4J0Y2l8GON66wDRqgL+Vl1pPP6KG4cawR/oYLpmUgNQzdqBuGdXSsBp8UIL5tOaxZABXeZRru7z7y2enmn42DVuo9iJCEqNEC5MoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C4qw9E2dLCCokETCIflhSipwEVYcL6s10H1WWLffReM=;
- b=CsTp0tTSI6+QB1lRgRLTZdhprCrzdiA21Nx60CZ7/MdDbXVSWvg8LorNezkyv/JiekFFIPjd6EieU08UnYcKcjFYOO0TK2Yt2/NPRr28pBoeBxc69RMMlKu1CsdeiwGPPIrNe1o+++1sTsYYISGEVvPFKuwLTCXQlG8Ls0+QpvKpkPt1nyCXaXkYhAYFJ5vUn05CqjFrhpdjJ52iQ0Hp/sDVNQzKfBLP+Ds0xFr8LRVT8HuqdOgSy3x7+eUvUxOzAQPJ15LZb98BC7tp9RO7AGOXrFK9mGq7A7iwAna6YJdcvKLAFiORPFt18F7v2GXkYe08VET/rXhvShmNI9O+fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C4qw9E2dLCCokETCIflhSipwEVYcL6s10H1WWLffReM=;
- b=f9e/qglROnrmpIobDeFbAVMNSgyncreafJj3tfHIK2MfAiwQO2CoCLk0+M6cIixtXmmr0CM8mbHo08Xfnke7s1v+N9NLcB4uz4mYZkpg2054IOQjhWajm6EUdj/VA2168UOuI44pDMI6o943bodaNyseeAp8glOzLY/oETotUGQ=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR0301MB2476.eurprd03.prod.outlook.com (2603:10a6:3:6e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4242.19; Tue, 22 Jun 2021 15:27:51 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::d0d6:aefc:17d9:bcb9]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::d0d6:aefc:17d9:bcb9%3]) with mapi id 15.20.4242.023; Tue, 22 Jun 2021
- 15:27:51 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "wim@iguana.be" <wim@iguana.be>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-Subject: Re: linux-next: build failure after merge of the watchdog tree
-Thread-Topic: linux-next: build failure after merge of the watchdog tree
-Thread-Index: AQHXZl+2Nd8FLT5ZHEi4FgmrXFfE8KsgKZIA
-Date:   Tue, 22 Jun 2021 15:27:50 +0000
-Message-ID: <ffb5ed53e4edd9aeb7e307290768237a387d722b.camel@fi.rohmeurope.com>
-References: <20210621153839.43dd423e@canb.auug.org.au>
-In-Reply-To: <20210621153839.43dd423e@canb.auug.org.au>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [46.132.21.91]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7bb62a17-cf9c-49c8-3f16-08d935924c4c
-x-ms-traffictypediagnostic: HE1PR0301MB2476:
-x-microsoft-antispam-prvs: <HE1PR0301MB2476864BEB3A269FF6CA2451AD099@HE1PR0301MB2476.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:883;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jaF2kF6H0jAHw1j74gQ2mwoZmpg6Dl6QvKZKQZyJ48eAlqNbzA2sm2xRxZtr6Obc3lAVaJoydY/IIzDYC587f1twqfwDfzkHfhbMcVF3LRQ9+xvhqxZXSE8AUEPxpfxQ02MgESSOUkxdFmRCOsBeVQqNieMNpTtT+n3rfV178Q+XZoU8D3YKg4DwO50SzQ68gUE4tOA3Y5s+AXC1M7ZEZJJicJaCHVBIbRP/xeQts15n7Y69Er8IB17IFFEDIktB8NDZ0WpBC3qUHPKGVmmTr7QQDpzavPaYC1Zq6DuRiRj9yIm/oFI+zbhbu3CC60+PrVIcjrwlItXIjLjDOu5vkEsuAgNWjDAk6IXOnKkyV1vZTKFp0jJD+z8s4v2o95PBy+jc3fJuwznXKGN7AnEqFjn5h4KRpZn0NRklR8HeJnfGUZygf4JMUvXwMvex9s68dj3YlNuC0WknWszM+6Ez/CzqPQbVm1soScS9tZQQBQFXDsEKbitdt+xqiib+7dBxCIyC/8/Da2XBNNoHAFQwG4ZmWoYgxeINZicF7I5qRjrFrdHHD4O2HokTc6UjbQtTV1DQtl2oufQ/GqEcbgu6O3OXqNGlx88xwFUnPO/FqV9k/7LLZDiMiRFsOW1vrlDij6hdZbnexhhPBJwk66Qr8X/XyJinVQj7xstJlFEtawXKpzito1j1CXroIhV0NyYdZ6d/2y2aIGbkHk++gOdSUL2RY5HWXTil9mW6c+KCyh4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(366004)(346002)(136003)(39840400004)(2906002)(966005)(76116006)(186003)(66446008)(5660300002)(86362001)(6512007)(71200400001)(4326008)(64756008)(83380400001)(26005)(66556008)(66946007)(4744005)(66476007)(6486002)(110136005)(2616005)(8936002)(6506007)(38100700002)(3450700001)(122000001)(316002)(54906003)(8676002)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aFF3WGEvNncvWHQ3TUpzVkUrR0MwdXgwYTNlRXpvK0VrVmF5SndiMTN0cWZX?=
- =?utf-8?B?cWpHUnNOUzVlcStEMVpCcjZqN2ZCdk5FWXR2L2V3ZWk1M21Wei9ESUJqb1Nr?=
- =?utf-8?B?N3JNcFRGKzQ3RjBiTk1mbTJGN0JnanZVSlFjTXByRkxHZmVCOE5weTFUL2Ir?=
- =?utf-8?B?QklIVWRMSHVoWEZqTThVQ3RmZUE5ektuV3M0RXNaOVZaWG5RZ1gySlZjNEl0?=
- =?utf-8?B?aXFoeTg5T1UrN1l6VTRZaGhzQUJJNWttVitJU2FpSGk3UmVZRXZzRkpRYllH?=
- =?utf-8?B?enZBU3BjZ2c5SUtZWGMvTFJzOE1UQnMwclJuYUhtT29FdkUrUThrOXpwUTM4?=
- =?utf-8?B?emhZT1lGeDVGbllQc1RTSUZxV2NtR2ZLV1VLVXJkZjcyc3lQOVNDNjJoSWZV?=
- =?utf-8?B?YVVsdnB0SDYwWmtEQWxXTDZWWndkZklDVmFKbUROOW56dHhETFpJanNFZDlu?=
- =?utf-8?B?NWZ5Tk1MY3BRenZpSEQxT2dBLzZBTSsweWhEbHVpQmJvSUNLdjlqMVdPV2Q4?=
- =?utf-8?B?ZS9ZT2pMbDdqbmNMT28yZFR2by9uUTJIeExjQ0dheDRXN0xGOTV6N1FHa214?=
- =?utf-8?B?UkRpcElmNlBtMmh5OEVuTHVzbVVPMlFhMEwvM1dhbEtHNnNkYWRtNm1pVG9T?=
- =?utf-8?B?ZXRoeStUOWVjZU1nY0h6bjRlQjNmZ1F3WktneGQrU05SZmlLaXRKL1dEaFR1?=
- =?utf-8?B?UVIzdUlYVVgwVlE1ZkRCVm9paURpWFAxby9RbElSVFJVTUNJY1BDejhIbHFk?=
- =?utf-8?B?akJHTW1RWjZQUkk3cmZzRk9xcTBBN3FmWVliblZqdmdEUkNyT1I4QTdXdVUv?=
- =?utf-8?B?UjNiOTRwVk5sZi8zTVBTVGdMQTNYdDd6eFhsWGVsMjBYbmpKK0p4RGFYL2Rl?=
- =?utf-8?B?cDNTcmZLN3RUcjkzV0NhZWVIRmZjTFMxMHJsL25JWFFVOGNGWERpc1kyb3Ez?=
- =?utf-8?B?aHN6dmZEbkQvVTd1ZTN3RmxvTy9TQkc5WTRpclVhMWJ0ZkJrVW9NTkg0WHRU?=
- =?utf-8?B?NlRDdGI5ZUlqQjJCckxsU3RHazE2a1dVMDFjZndwdHVaZWY4WFRMZVdPSFdQ?=
- =?utf-8?B?Ym1mUkdJZkxvVWw3SUlpZk51OXkzOUFLMUdUMmVhTVdaYkNMT1pyd1RBMFpZ?=
- =?utf-8?B?Um5nenFnZDc2d0lCMEpYZlg5ekZqQTZ4QWpzWnFLOE5NaHd6NXdMN2pRR0Ir?=
- =?utf-8?B?b1VaYVdSaHhNbzFkb0xybGZyZVdPbXVCSlFta3FqcHZTUEIzc0FxcGhoVmZ4?=
- =?utf-8?B?Y2pwakxNWFl1SzVBZlZ5RHVvNjFCU1U1N012amFBeENLOWtRRlB5eTNiUG5u?=
- =?utf-8?B?cHRmVHpES2VHVUg1cDR1bTJ5NW5zc3lGT1RZMXpaZWRDSWlKVC84QmN4NXV2?=
- =?utf-8?B?VW50T2pjQ3RiN0p5K2RrN0dRNTR6WnQraDZEUVJhY2hHSEFkV21TbzJWZDB6?=
- =?utf-8?B?R1B4NU4rVEdUSWJwM3FtR3k5N3AxeDhGSkVwUVFsUSs3RXk1dG15U1BRVFpT?=
- =?utf-8?B?T2tqUWxTSElVV1FXR1ZKM2hJYmdvMk1BVktXSW84NEJZL253WCsvRjdVN3lh?=
- =?utf-8?B?WkkvazVMMUVDZnFLNjUzaERiVGFtdEZSazZhYVZpMDNMWkRKODU2Sm9uRUVj?=
- =?utf-8?B?aTY5WU9yMFN3aXNIYk9BalM1OExLeHM5NU0wSlpsc1lralk0T3dyZTJsOHY4?=
- =?utf-8?B?YzI2QVJBQzNmMDJoK0JUMkNhb0hibjFlTWszV1I2TUw2UGJqb2tvcGQxWVg2?=
- =?utf-8?Q?chUEiZeyqM4j3hFyGmzkt1x/zmr4jTXEG0jSMpX?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BF131FD60DFAE14D93313654B077FE61@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bb62a17-cf9c-49c8-3f16-08d935924c4c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2021 15:27:50.9639
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SnKRxs4tWM2PS5K2mHIt2nuNsvWvmIm9C4x5DTvxV3vQEguFDt9EBIv1M3hZycrL4fZXqvyUcqBH6ZuSimbbjlLg+lvy2jQgvdYDP1djG4sy0JnUScbItx4c1YPXBX5p
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0301MB2476
+        id S232101AbhFVQCG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Jun 2021 12:02:06 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41779 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231936AbhFVQCF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Jun 2021 12:02:05 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15MFktWG187328;
+        Tue, 22 Jun 2021 11:59:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=oygtccHblXSkamR34b+VpChGugVr2Y1jSYAi+y+uYqI=;
+ b=dstYNTcVGHXIVsv72PMA4kMOumWtUTj3TxvZMx4Icbc6SnCaJnTEt9WNTy/zEyY3yA90
+ 0CxT43FZJBfyuh19O53kIJc0YA789rLmR2GMK6yY1IT3gT1dN+oCPZHay4o6g4pyE2r0
+ +qFxDkEAO9H8FVlX5IDi0y6VEzq/GTh8CIlMrCmd/tfAx/eO06byUogG9UAZYx5OczP9
+ OuhBnBinLAT1fqdMMV/ntTQeTo1Wtdhd45K4kNLX63y5oulFGlCBfrOKio+RHJRdh2KR
+ D+7qgdLty4s+8GO9nvSg3oGZwI8V/Dt9bwv55KvBNA9nSOUhotwfYsxOiJxCegfy3nwJ Fw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39bjtb8bnj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 11:59:42 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15MFs70r001456;
+        Tue, 22 Jun 2021 15:59:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3997uh9j0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 15:59:40 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15MFxcOV32178530
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Jun 2021 15:59:38 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 132E8A405F;
+        Tue, 22 Jun 2021 15:59:38 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DB02A4064;
+        Tue, 22 Jun 2021 15:59:37 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.85.86.62])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Jun 2021 15:59:36 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.100.0.2.22\))
+Subject: Re: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277
+ during boot
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20210622143154.GA804@vingu-book>
+Date:   Tue, 22 Jun 2021 21:29:36 +0530
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, Odin Ugedal <odin@uged.al>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <53968DDE-9E93-4CB4-B5E4-526230B6E154@linux.vnet.ibm.com>
+References: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
+ <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
+ <20210622143154.GA804@vingu-book>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+X-Mailer: Apple Mail (2.3654.100.0.2.22)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: i13bqTY5Fcy0mervMndR6Vv9BUakoEZM
+X-Proofpoint-ORIG-GUID: i13bqTY5Fcy0mervMndR6Vv9BUakoEZM
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-22_08:2021-06-22,2021-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106220097
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-SGkgR3VlbnRlciwgU3RlcGhlbiwgQWxsLA0KDQpPbiBNb24sIDIwMjEtMDYtMjEgYXQgMTU6Mzgg
-KzEwMDAsIFN0ZXBoZW4gUm90aHdlbGwgd3JvdGU6DQo+IEhpIGFsbCwNCj4gDQo+IEFmdGVyIG1l
-cmdpbmcgdGhlIHdhdGNoZG9nIHRyZWUsIHRvZGF5J3MgbGludXgtbmV4dCBidWlsZCAoeDg2XzY0
-DQo+IGFsbG1vZGNvbmZpZykgZmFpbGVkIGxpa2UgdGhpczoNCj4gDQo+IEVSUk9SOiBtb2Rwb3N0
-OiAiYmQ3MDUyOF93ZHRfdW5sb2NrIiBbZHJpdmVycy9ydGMvcnRjLWJkNzA1Mjgua29dDQo+IHVu
-ZGVmaW5lZCENCj4gRVJST1I6IG1vZHBvc3Q6ICJiZDcwNTI4X3dkdF9sb2NrIiBbZHJpdmVycy9y
-dGMvcnRjLWJkNzA1Mjgua29dDQo+IHVuZGVmaW5lZCENCj4gRVJST1I6IG1vZHBvc3Q6ICJiZDcw
-NTI4X3dkdF9zZXQiIFtkcml2ZXJzL3J0Yy9ydGMtYmQ3MDUyOC5rb10NCj4gdW5kZWZpbmVkIQ0K
-PiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0KPiANCj4gICBmMmE1MTc4YjBiOWYgKCJ3YXRjaGRvZzog
-YmQ3MDUyOCBkcm9wIGJkNzA1Mjggc3VwcG9ydCIpDQoNClRoaXMgb25lIHJlcXVpcmVzIHRoZSBS
-VEMgY2hhbmdlIHdoaWNoIHdhcyBhcHBsaWVkIGJ5IEFsZXhhbmRyZSBoZXJlOiANCmh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2xrbWwvMTYyNDIyMDY5NzMxLjEwODg3NjQuMTI5Nzg2NjA2NjAyNTc5
-MzgxMjcuYjQtdHlAYm9vdGxpbi5jb20vDQoNClRoaXMgaXMgbXkgYmFkLiBJIGNvbXBsZXRlbHkg
-bWlzc2VkIHRoaXMgZGVwZW5kZW5jeS4gSSBhbSByZWFsbHkgc29ycnkhDQpUaGUgUlRDIGNoYW5n
-ZSBzaG91bGQgZ2V0IGluIHByaW9yIHRoZSBXREcgY2hhbmdlLg0KDQpCeSB0aGUgd2F5LCBJIGFt
-IGhhdmluZyBhIHZhY2F0aW9uIGFuZCB0cnkgdG8ga2VlcCBteSBjb21wdXRlciB0dXJuZWQNCm9m
-ZiBzbyByZXNwb25zZXMgbWF5IGJlIGRlbGF5ZWQuDQoNCkJlc3QgUmVnYXJkcw0KCU1hdHRpIFZh
-aXR0aW5lbg0K
+>> On Tue, 22 Jun 2021 at 09:39, Sachin Sant =
+<sachinp@linux.vnet.ibm.com> wrote:
+>>>=20
+>>> While booting 5.13.0-rc7-next-20210621 on a PowerVM LPAR following =
+warning
+>>> is seen
+>>>=20
+>>> [   30.922154] ------------[ cut here ]------------
+>>> [   30.922201] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg || =
+cfs_rq->avg.runnable_avg
+>>> [   30.922219] WARNING: CPU: 6 PID: 762 at kernel/sched/fair.c:3277 =
+update_blocked_averages+0x758/0x780
+>>=20
+>> Yes. That was exactly the purpose of the patch. There is one last
+>> remaining part which could generate this. I'm going to prepare a =
+patch
+>=20
+> Could you try the patch below ? I have been able to reproduce the =
+problem locally and this
+> fix it on my system:
+>=20
+I can recreate the issue with this patch.
+
+         Starting Terminate Plymouth Boot Screen...
+         Starting Hold until boot process finishes up...
+[FAILED] Failed to start Crash recovery kernel arming.
+See 'systemctl status kdump.service' for details.
+[   10.737913] ------------[ cut here ]------------
+[   10.737960] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg || =
+cfs_rq->avg.runnable_avg
+[   10.737976] WARNING: CPU: 27 PID: 146 at kernel/sched/fair.c:3279 =
+update_blocked_averages+0x758/0x780
+[   10.738010] Modules linked in: stp llc rfkill sunrpc pseries_rng xts =
+vmx_crypto uio_pdrv_genirq uio sch_fq_codel ip_tables xfs libcrc32c =
+sr_mod sd_mod cdrom t10_pi sg ibmvscsi ibmveth scsi_transport_srp =
+dm_mirror dm_region_hash dm_log dm_mod fuse
+[   10.738089] CPU: 27 PID: 146 Comm: ksoftirqd/27 Not tainted =
+5.13.0-rc7-next-20210621-dirty #2
+[   10.738103] NIP:  c0000000001b2768 LR: c0000000001b2764 CTR: =
+c000000000729120
+[   10.738116] REGS: c000000015973840 TRAP: 0700   Not tainted  =
+(5.13.0-rc7-next-20210621-dirty)
+[   10.738130] MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  =
+CR: 48000224  XER: 00000005
+[   10.738161] CFAR: c00000000014d120 IRQMASK: 1=20
+[   10.738161] GPR00: c0000000001b2764 c000000015973ae0 c0000000029bb900 =
+0000000000000048=20
+[   10.738161] GPR04: 00000000fffeffff c0000000159737a0 0000000000000027 =
+c00000154f9f7e18=20
+[   10.738161] GPR08: 0000000000000023 0000000000000001 0000000000000027 =
+c00000167f1d7fe8=20
+[   10.738161] GPR12: 0000000000000000 c00000154ffd7e80 c00000154fa82580 =
+000000000000b78a=20
+[   10.738161] GPR16: 000000028007883c 00000000000002ed c000000038d31000 =
+0000000000000000=20
+[   10.738161] GPR20: 0000000000000000 c0000000029fdfe0 0000000000000000 =
+000000000000037b=20
+[   10.738161] GPR24: 0000000000000000 c00000154fa82f90 0000000000000001 =
+c00000003d4ca400=20
+[   10.738161] GPR28: 00000000000002ed c000000038d311c0 c000000038d31100 =
+0000000000000000=20
+[   10.738281] NIP [c0000000001b2768] =
+update_blocked_averages+0x758/0x780
+[   10.738290] LR [c0000000001b2764] update_blocked_averages+0x754/0x780
+[   10.738299] Call Trace:
+[   10.738303] [c000000015973ae0] [c0000000001b2764] =
+update_blocked_averages+0x754/0x780 (unreliable)
+[   10.738315] [c000000015973c00] [c0000000001be720] =
+run_rebalance_domains+0xa0/0xd0
+[   10.738326] [c000000015973c30] [c000000000cf9acc] =
+__do_softirq+0x15c/0x3d4
+[   10.738337] [c000000015973d20] [c000000000158464] =
+run_ksoftirqd+0x64/0x90
+[   10.738346] [c000000015973d40] [c00000000018fd24] =
+smpboot_thread_fn+0x204/0x270
+[   10.738357] [c000000015973da0] [c000000000189770] kthread+0x190/0x1a0
+[   10.738367] [c000000015973e10] [c00000000000ceec] =
+ret_from_kernel_thread+0x5c/0x70
+[   10.738381] Instruction dump:
+[   10.738388] 3863c808 9be9eefe 4bf9a979 60000000 0fe00000 4bfff980 =
+e9210070 e8610088=20
+[   10.738410] 39400001 99490003 4bf9a959 60000000 <0fe00000> 4bfffc24 =
+3d22fff6 8929eefb=20
+[   10.738431] ---[ end trace 9ca80b55840c53f0 ]=E2=80=94
+
+Thanks
+-Sachin
+
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 8cc27b847ad8..da91db1c137f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3037,8 +3037,9 @@ enqueue_load_avg(struct cfs_rq *cfs_rq, struct =
+sched_entity *se)
+> static inline void
+> dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> {
+> +       u32 divider =3D get_pelt_divider(&se->avg);
+>        sub_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
+> -       sub_positive(&cfs_rq->avg.load_sum, se_weight(se) * =
+se->avg.load_sum);
+> +       cfs_rq->avg.load_sum =3D cfs_rq->avg.load_avg * divider;
+> }
+> #else
+> static inline void
+>=20

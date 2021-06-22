@@ -2,101 +2,230 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DF23AF98A
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 01:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1323AFA6C
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 03:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbhFUXjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Jun 2021 19:39:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41922 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231569AbhFUXjs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 21 Jun 2021 19:39:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624318653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V2h6ntSeAPBXrHus5BZXUFPmgMImlj4zJ8JJFLLmnt0=;
-        b=NxFzAnDGhs0dDGL3LSLFTo0BqqU7dI3VOT4+DPBd3JuWqUhJHD/QrwFzyBvzXWhzvXhxWc
-        irvcpw5gG0dNtSxeq++fOQudRKfX4SpMqIhgWnjGpu0u984lqrsSb/JSExw9FGGp5Ks7Yd
-        P3wiBpo6DKpaw60wmfWQmceT7VDMJuQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-18-PpdmuZJYNAmAIbj6DK7daQ-1; Mon, 21 Jun 2021 19:37:32 -0400
-X-MC-Unique: PpdmuZJYNAmAIbj6DK7daQ-1
-Received: by mail-wr1-f71.google.com with SMTP id d9-20020adffbc90000b029011a3b249b10so8901079wrs.3
-        for <linux-next@vger.kernel.org>; Mon, 21 Jun 2021 16:37:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=V2h6ntSeAPBXrHus5BZXUFPmgMImlj4zJ8JJFLLmnt0=;
-        b=kZiXMeIiSCjo6DFijhm3dLpyrjz1IP859NtXJbrzmf95bhdPoGh5X4l+HfmGPg1bYz
-         N9+ByluDt54SBNyWNdoTukHVwttwtFjUSqkuE5fnSazvixNlhFearfIHUOP/dRHuEHLT
-         wyWbygJ7jea4fqHpGx8hzeUgXKRsXHDGUvFF53qnCFK1VvCBim+4PkmNR+f6ORwgT72Q
-         /3DXtyi8wEDBzClU3hAHMzjC41FFA8SmYs6hFl72wuzcQxKBQveZDk602N18ghBLYtTe
-         Ne3J7jhqr3bSOtWvcPaVAOKqGlNTM6pxqUcWGORTw2+Cro7I5UGMIVc9C6T2bmJq6tSW
-         CLeQ==
-X-Gm-Message-State: AOAM5304QCyEqZMQMjw6KGxECB7q16e+XPUoMpaiB1R7tsgDXi6wAuMH
-        aLJADbg+tKi9Wk6+X26f+oJQFkjHc87NejGzzlO83igv4whOZT+h4SKfOTtr2AKW7xp5rWFOkSi
-        xZSgih/p+xoj1jNotGhM2SQsK2keKTfVtyU6m6tFeffg78CCO5C1ThgRE67Odxd8iKMogT5A3ZQ
-        ==
-X-Received: by 2002:a05:600c:4417:: with SMTP id u23mr941640wmn.26.1624318650892;
-        Mon, 21 Jun 2021 16:37:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxRzhGoq4MyZdBYJJOc6VuvbNjdwrkuj0chXTnZdAAPB32sCkLfNpTv6WHpRNsQBsgqOcoqgA==
-X-Received: by 2002:a05:600c:4417:: with SMTP id u23mr941621wmn.26.1624318650692;
-        Mon, 21 Jun 2021 16:37:30 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id v1sm9765652wru.61.2021.06.21.16.37.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 16:37:30 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the kvm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
+        id S229915AbhFVBIp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Jun 2021 21:08:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:47613 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229663AbhFVBIn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 21 Jun 2021 21:08:43 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G87Wj0MKbz9sT6;
+        Tue, 22 Jun 2021 11:06:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1624323986;
+        bh=9YjXmRPRl40v1/64q9EY5/EN6DGBD3y3fJr/d84LgUI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KT5V6JBBl/NKcx7AxYaR6r9sJO+QQsgmnf+QQ1uDy+jN8xVkkdiS7EAES40ND2Dvx
+         zjD6OdE9sYQrwHFC/A3e1jIe8H4l1rXcFYZxV9z8iCFk7ZYDMJMHwC38VsPNoQMJFx
+         JJ5X2vBrZkwbcHi3Q3mVZhyCXMwrrlG1+1FHVDDb1toOGSlyfmhGiVQ5IMDDUCYDlk
+         RjYAt4H9AxbP2tHq+Z99P7a1BhEKM8jtjPJGCVh224etilpkhaKcx8vvtN1IaOiR1u
+         lMZQhKORe6RXlAOkyNH+M1mf06aeR0YosrQgtJMjtXqHz5fnLIaoT715MU3LuB9+8H
+         UwG3y/mQkDM6w==
+Date:   Tue, 22 Jun 2021 11:06:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Cong Wang <cong.wang@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210622081809.13dd2299@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <fbab918a-a6f0-b1d4-90ba-1ab0172b68de@redhat.com>
-Date:   Tue, 22 Jun 2021 01:37:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Subject: linux-next: manual merge of the net-next tree with the bpf tree
+Message-ID: <20210622110622.25f9f026@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210622081809.13dd2299@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/2Q2oum8Y9H2GJuK+E75X+cp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 22/06/21 00:18, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->    ade74e1433f3 ("KVM: x86/mmu: Grab nx_lpage_splits as an unsigned long before division")
-> 
-> Fixes tag
-> 
->    Fixes: 7ee093d4f3f5 ("KVM: switch per-VM stats to u64")
-> 
-> has these problem(s):
-> 
->    - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: e3cb6fa0e2bf ("KVM: switch per-VM stats to u64")
-> 
-> It is very hard to get the commit SHA right when the commit you are
-> "fixing" is after the fix commit :-)
+--Sig_/2Q2oum8Y9H2GJuK+E75X+cp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, that Fixes tag should have been removed since the patch can be 
-kept separate (does not have to be squashed).
+Hi all,
 
-Paolo
+Today's linux-next merge of the net-next tree got conflicts in:
 
+  net/ipv4/tcp_bpf.c
+  net/ipv4/udp_bpf.c
+  include/linux/skmsg.h
+  net/core/skmsg.c
+
+between commit:
+
+  9f2470fbc4cb ("skmsg: Improve udp_bpf_recvmsg() accuracy")
+
+from the bpf tree and commit:
+
+  c49661aa6f70 ("skmsg: Remove unused parameters of sk_msg_wait_data()")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/skmsg.h
+index e3d080c299f6,fcaa9a7996c8..000000000000
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+diff --cc net/core/skmsg.c
+index 9b6160a191f8,f0b9decdf279..000000000000
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+diff --cc net/ipv4/tcp_bpf.c
+index bb49b52d7be8,a80de92ea3b6..000000000000
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@@ -163,28 -163,6 +163,28 @@@ static bool tcp_bpf_stream_read(const s
+  	return !empty;
+  }
+ =20
+- static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock, int=
+ flags,
+- 			     long timeo, int *err)
+++static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+++			     long timeo)
+ +{
+ +	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+ +	int ret =3D 0;
+ +
+ +	if (sk->sk_shutdown & RCV_SHUTDOWN)
+ +		return 1;
+ +
+ +	if (!timeo)
+ +		return ret;
+ +
+ +	add_wait_queue(sk_sleep(sk), &wait);
+ +	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ +	ret =3D sk_wait_event(sk, &timeo,
+ +			    !list_empty(&psock->ingress_msg) ||
+ +			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
+ +	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ +	remove_wait_queue(sk_sleep(sk), &wait);
+ +	return ret;
+ +}
+ +
+  static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t le=
+n,
+  		    int nonblock, int flags, int *addr_len)
+  {
+@@@ -206,11 -184,11 +206,11 @@@
+  msg_bytes_ready:
+  	copied =3D sk_msg_recvmsg(sk, psock, msg, len, flags);
+  	if (!copied) {
+- 		int data, err =3D 0;
+  		long timeo;
++ 		int data;
+ =20
+  		timeo =3D sock_rcvtimeo(sk, nonblock);
+- 		data =3D tcp_msg_wait_data(sk, psock, flags, timeo, &err);
+ -		data =3D sk_msg_wait_data(sk, psock, timeo);
+++		data =3D tcp_msg_wait_data(sk, psock, timeo);
+  		if (data) {
+  			if (!sk_psock_queue_empty(psock))
+  				goto msg_bytes_ready;
+diff --cc net/ipv4/udp_bpf.c
+index 565a70040c57,b07e4b6dda25..000000000000
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@@ -21,45 -21,6 +21,45 @@@ static int sk_udp_recvmsg(struct sock *
+  	return udp_prot.recvmsg(sk, msg, len, noblock, flags, addr_len);
+  }
+ =20
+ +static bool udp_sk_has_data(struct sock *sk)
+ +{
+ +	return !skb_queue_empty(&udp_sk(sk)->reader_queue) ||
+ +	       !skb_queue_empty(&sk->sk_receive_queue);
+ +}
+ +
+ +static bool psock_has_data(struct sk_psock *psock)
+ +{
+ +	return !skb_queue_empty(&psock->ingress_skb) ||
+ +	       !sk_psock_queue_empty(psock);
+ +}
+ +
+ +#define udp_msg_has_data(__sk, __psock)	\
+ +		({ udp_sk_has_data(__sk) || psock_has_data(__psock); })
+ +
+- static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock, int=
+ flags,
+- 			     long timeo, int *err)
+++static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+++			     long timeo)
+ +{
+ +	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+ +	int ret =3D 0;
+ +
+ +	if (sk->sk_shutdown & RCV_SHUTDOWN)
+ +		return 1;
+ +
+ +	if (!timeo)
+ +		return ret;
+ +
+ +	add_wait_queue(sk_sleep(sk), &wait);
+ +	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ +	ret =3D udp_msg_has_data(sk, psock);
+ +	if (!ret) {
+ +		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
+ +		ret =3D udp_msg_has_data(sk, psock);
+ +	}
+ +	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ +	remove_wait_queue(sk_sleep(sk), &wait);
+ +	return ret;
+ +}
+ +
+  static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t le=
+n,
+  			   int nonblock, int flags, int *addr_len)
+  {
+@@@ -81,13 -43,13 +81,13 @@@
+  msg_bytes_ready:
+  	copied =3D sk_msg_recvmsg(sk, psock, msg, len, flags);
+  	if (!copied) {
+- 		int data, err =3D 0;
+  		long timeo;
++ 		int data;
+ =20
+  		timeo =3D sock_rcvtimeo(sk, nonblock);
+- 		data =3D udp_msg_wait_data(sk, psock, flags, timeo, &err);
+ -		data =3D sk_msg_wait_data(sk, psock, timeo);
+++		data =3D udp_msg_wait_data(sk, psock, timeo);
+  		if (data) {
+ -			if (!sk_psock_queue_empty(psock))
+ +			if (psock_has_data(psock))
+  				goto msg_bytes_ready;
+  			ret =3D sk_udp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
+  			goto out;
+
+--Sig_/2Q2oum8Y9H2GJuK+E75X+cp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDRN44ACgkQAVBC80lX
+0GziiAf/dC8a0qkAG7lFb2nIFgVtmOQaSPyWs+NPZa6zvG+UbCrWmPMEfHB4YyVC
+PRGAlz88dKL5a8Kayqt+9LwqpblHO9wgQF2jXXiKDL+fC0Gd4vwERCO4ByDVgAQB
++03OU22o6eYEeZIFoL9Fo8g3kgc78iTmZcqu1XDW0B9MDbgVTE8fxDaVdTH4VVQh
++L6FckTw6g89oyhthg4H8fH4Q+w/TD/HkhPHPsLE8LwKumhSh+9ideD7YX7B+cRJ
+lsin7mLiSi0LcKaIwyQTxjhUKITSR6WUSB+IS1f3unmSPDU/KhuPxVA2cjpfADN0
+BlmVR2VjA8Mk6Gd8lZfG1h/pdRa+2w==
+=GlCG
+-----END PGP SIGNATURE-----
+
+--Sig_/2Q2oum8Y9H2GJuK+E75X+cp--

@@ -2,164 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B6F3B076D
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 16:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852AD3B0790
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 16:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbhFVOeP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Jun 2021 10:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbhFVOeP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Jun 2021 10:34:15 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D9C061574
-        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 07:31:58 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h11so6449226wrx.5
-        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 07:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=IZkPpMEsSDnOlQDtsQEJ5cUHL3YA0u4F9dGrO3u8/zw=;
-        b=eiKKQMIzILeA3F1JbbiKyY1Awzk5u4m1j6jIBzmk/TwFgZ4kdJpGDWWtEsj/vBbm9+
-         hU9ADzQjVLsjBQeaGuco8wKQu9BZYTJeIg3bBhlDM7IANBt9SCYMs1RF0nx3b2znvsok
-         RtHHW25m1nlLVzMpvUDFSA417G6hLxZga1kutRzd65pJ3oj2VB03nK1+aLhZUwavjbzB
-         lHqOv+rhDqIzJDynXSYnBFXy4RRAGqoZ/iOUlbr3uZ2DHrPgni89IYgm3orODGc+hmPO
-         Ry2S3NViMZgZCODnkTxLhZ1PBTt48l4MkmsNi6eJt6ooZsmnLkBLhEDjcU41VOuef+4B
-         tVng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=IZkPpMEsSDnOlQDtsQEJ5cUHL3YA0u4F9dGrO3u8/zw=;
-        b=h16iFtsZLNzck+YL6/cETSAvAtWyzsufaTDf95/7SJGVaQwD6TujMz4YutCDYWK3zK
-         8gh0ZhOJVDHz++xscBBR+6CbfzfAVpdnKf2JD3QEinnAg0LKIemyIsZ8+sX9mnk5en1c
-         S0PUdyfpVz5KaSCndTq93hFBPIHnnvNXFbmVVPxR6DXIcaDYo74GgyAjLQX46z0RkwgE
-         YBQxYC31EPuZeFjSk14g62fqsjPqMZ+in5o1oes+5nSgy+VayUU+OuQf4KTpBgAgzDDw
-         kUOlGHKOUFDlwp4zCiW+yOEkMJc/XtYzMcnhH1tQYR+WUB0zqblxZPzvbfcfw3S+AHbM
-         T0Wg==
-X-Gm-Message-State: AOAM532ahIFNzyl/FZVrClOOszF8rFCWElKg93AZx6CVgS9MsTEfYxQo
-        9fMyRR/2Bmme9EaawUHFAasBVoxTkuk8qQ==
-X-Google-Smtp-Source: ABdhPJz8dPyg9xIOpd4cJhynMnL+AFyo8sGKUOK9J9LlPhE6e6YmkzFv/Tcxzfs3yzTaD74WczyerQ==
-X-Received: by 2002:a5d:530d:: with SMTP id e13mr1252771wrv.292.1624372316850;
-        Tue, 22 Jun 2021 07:31:56 -0700 (PDT)
-Received: from vingu-book ([2a01:e0a:f:6020:1ca7:ec4c:5563:477f])
-        by smtp.gmail.com with ESMTPSA id v15sm2728193wmj.39.2021.06.22.07.31.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 22 Jun 2021 07:31:56 -0700 (PDT)
-Date:   Tue, 22 Jun 2021 16:31:54 +0200
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, Odin Ugedal <odin@uged.al>
-Subject: Re: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277
- during boot
-Message-ID: <20210622143154.GA804@vingu-book>
-References: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
- <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
+        id S230481AbhFVOkj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Jun 2021 10:40:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:50422 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230047AbhFVOki (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Jun 2021 10:40:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F30FE31B;
+        Tue, 22 Jun 2021 07:38:21 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 043CD3F694;
+        Tue, 22 Jun 2021 07:38:19 -0700 (PDT)
+Subject: Re: WARNING: kernel/sched/fair.c:3275
+ update_blocked_averages+0x628/0x660
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Odin Ugedal <odin@uged.al>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+References: <CA+G9fYsMXELmjGUzw4SY1bghTYz_PeR2diM6dRp2J37bBZzMSA@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <a8100548-4aeb-b0b1-7dc5-080e9e665559@arm.com>
+Date:   Tue, 22 Jun 2021 16:38:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <CA+G9fYsMXELmjGUzw4SY1bghTYz_PeR2diM6dRp2J37bBZzMSA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Le mardi 22 juin 2021 à 09:49:31 (+0200), Vincent Guittot a écrit :
-> Hi Sachin,
+On 22/06/2021 09:50, Naresh Kamboju wrote:
+> [Please ignore if it already reported]
 > 
-> On Tue, 22 Jun 2021 at 09:39, Sachin Sant <sachinp@linux.vnet.ibm.com> wrote:
-> >
-> > While booting 5.13.0-rc7-next-20210621 on a PowerVM LPAR following warning
-> > is seen
-> >
-> > [   30.922154] ------------[ cut here ]------------
-> > [   30.922201] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg || cfs_rq->avg.runnable_avg
-> > [   30.922219] WARNING: CPU: 6 PID: 762 at kernel/sched/fair.c:3277 update_blocked_averages+0x758/0x780
-> > [   30.922259] Modules linked in: pseries_rng xts vmx_crypto uio_pdrv_genirq uio sch_fq_codel ip_tables sd_mod t10_pi sg fuse
-> > [   30.922309] CPU: 6 PID: 762 Comm: augenrules Not tainted 5.13.0-rc7-next-20210621 #1
-> > [   30.922329] NIP:  c0000000001b27e8 LR: c0000000001b27e4 CTR: c0000000007cfda0
-> > [   30.922344] REGS: c000000023fcb660 TRAP: 0700   Not tainted  (5.13.0-rc7-next-20210621)
-> > [   30.922359] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48488224  XER: 00000005
-> > [   30.922394] CFAR: c00000000014d120 IRQMASK: 1
-> >                GPR00: c0000000001b27e4 c000000023fcb900 c000000002a08400 0000000000000048
-> >                GPR04: 00000000ffff7fff c000000023fcb5c0 0000000000000027 c000000f6fdd7e18
-> >                GPR08: 0000000000000023 0000000000000001 0000000000000027 c0000000028a6650
-> >                GPR12: 0000000000008000 c000000f6fff7680 c000000f6fe62600 0000000000000032
-> >                GPR16: 00000007331a989a c000000f6fe62600 c0000000238a6800 0000000000000001
-> >                GPR20: 0000000000000000 c000000002a4dfe0 0000000000000000 0000000000000006
-> >                GPR24: 0000000000000000 c000000f6fe63010 0000000000000001 c000000f6fe62680
-> >                GPR28: 0000000000000006 c0000000238a69c0 0000000000000000 c000000f6fe62600
-> > [   30.922569] NIP [c0000000001b27e8] update_blocked_averages+0x758/0x780
-> > [   30.922599] LR [c0000000001b27e4] update_blocked_averages+0x754/0x780
-> > [   30.922624] Call Trace:
-> > [   30.922631] [c000000023fcb900] [c0000000001b27e4] update_blocked_averages+0x754/0x780 (unreliable)
-> > [   30.922653] [c000000023fcba20] [c0000000001bd668] newidle_balance+0x258/0x5c0
-> > [   30.922674] [c000000023fcbab0] [c0000000001bdaac] pick_next_task_fair+0x7c/0x4d0
-> > [   30.922692] [c000000023fcbb10] [c000000000dcd31c] __schedule+0x15c/0x1780
-> > [   30.922708] [c000000023fcbc50] [c0000000001a5a04] do_task_dead+0x64/0x70
-> > [   30.922726] [c000000023fcbc80] [c000000000156338] do_exit+0x848/0xcc0
-> > [   30.922743] [c000000023fcbd50] [c000000000156884] do_group_exit+0x64/0xe0
-> > [   30.922758] [c000000023fcbd90] [c000000000156924] sys_exit_group+0x24/0x30
-> > [   30.922774] [c000000023fcbdb0] [c0000000000310c0] system_call_exception+0x150/0x2d0
-> > [   30.922792] [c000000023fcbe10] [c00000000000cc5c] system_call_common+0xec/0x278
-> > [   30.922808] --- interrupt: c00 at 0x7fffb3acddcc
-> > [   30.922821] NIP:  00007fffb3acddcc LR: 00007fffb3a27f04 CTR: 0000000000000000
-> > [   30.922833] REGS: c000000023fcbe80 TRAP: 0c00   Not tainted  (5.13.0-rc7-next-20210621)
-> > [   30.922847] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28444202  XER: 00000000
-> > [   30.922882] IRQMASK: 0
-> >                GPR00: 00000000000000ea 00007fffc8f21780 00007fffb3bf7100 0000000000000000
-> >                GPR04: 0000000000000000 0000000155f142f0 0000000000000000 00007fffb3d23740
-> >                GPR08: fffffffffbad2a87 0000000000000000 0000000000000000 0000000000000000
-> >                GPR12: 0000000000000000 00007fffb3d2aeb0 0000000116be95e0 0000000000000032
-> >                GPR16: 0000000000000000 00007fffc8f21cd8 000000000000002d 0000000000000024
-> >                GPR20: 00007fffc8f21cd4 00007fffb3bf4f98 0000000000000001 0000000000000001
-> >                GPR24: 00007fffb3bf0950 0000000000000000 0000000000000000 0000000000000001
-> >                GPR28: 0000000000000000 0000000000000000 00007fffb3d23ec0 0000000000000000
-> > [   30.923023] NIP [00007fffb3acddcc] 0x7fffb3acddcc
-> > [   30.923035] LR [00007fffb3a27f04] 0x7fffb3a27f04
-> > [   30.923045] --- interrupt: c00
-> > [   30.923052] Instruction dump:
-> > [   30.923061] 3863be48 9be97ae6 4bf9a8f9 60000000 0fe00000 4bfff980 e9210070 e8610088
-> > [   30.923088] 39400001 99490003 4bf9a8d9 60000000 <0fe00000> 4bfffc24 3d22fff5 89297ae3
-> > [   30.923113] ---[ end trace ed07974d2149c499 ]—
-> >
-> > This warning was introduced with commit 9e077b52d86a
-> > sched/pelt: Check that *_avg are null when *_sum are
+> Regression found,
+> The following kernel warning reported on Linux next 20210621 while booting
+> arm64 Juno-r2 device. And also noticed a similar crash on an x86_64 machine.
 > 
-> Yes. That was exactly the purpose of the patch. There is one last
-> remaining part which could generate this. I'm going to prepare a patch
-
-Could you try the patch below ? I have been able to reproduce the problem locally and this
-fix it on my system:
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 8cc27b847ad8..da91db1c137f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3037,8 +3037,9 @@ enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
- static inline void
- dequeue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
- {
-+       u32 divider = get_pelt_divider(&se->avg);
-        sub_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
--       sub_positive(&cfs_rq->avg.load_sum, se_weight(se) * se->avg.load_sum);
-+       cfs_rq->avg.load_sum = cfs_rq->avg.load_avg * divider;
- }
- #else
- static inline void
-
-
+> Crash log:
+> -----------------
+> [   29.244230] ------------[ cut here ]------------
+> [   29.248861] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg ||
+> cfs_rq->avg.runnable_avg
+> [   29.248874] WARNING: CPU: 1 PID: 156 at kernel/sched/fair.c:3275
+> update_blocked_averages+0x628/0x660
+> [   29.265784] Modules linked in: fuse
+> [   29.269282] CPU: 1 PID: 156 Comm: kworker/u12:2 Not tainted
+> 5.13.0-rc7-next-20210621 #1
+> [   29.277305] Hardware name: ARM Juno development board (r2) (DT)
+> [   29.283241] Workqueue:  0x0 (rpciod)
+> [   29.286828] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO BTYPE=--)
+> [   29.292844] pc : update_blocked_averages+0x628/0x660
+> [   29.297817] lr : update_blocked_averages+0x628/0x660
+> [   29.302788] sp : ffff8000133fbb60
+> [   29.306103] x29: ffff8000133fbb60 x28: ffff00097ef382c0 x27: ffff00080090ca00
+> [   29.313264] x26: 00000006cacd5228 x25: 0000000000000000 x24: 00000000000000c0
+> [   29.313277] x23: 0000000000000000 x22: ffff8000125b3378 x21: 0000000000000000
+> [   29.313288] x20: ffff00097ef383c0 x19: ffff00080090cb40 x18: 0000000000000010
+> [   29.313299] x17: 6e6e75722e677661 x16: 3e2d71725f736663 x15: 207c7c206776615f
+> [[0;32m  OK  [0m] Started udev [   29.341880] x14: 6c6974752e677661
+> x13: 6776615f656c6261 x12: 6e6e75722e677661
+> Coldplug all Devices.[   29.351892] x11: ffff8000126419b0 x10:
+> ffff800012629970 x9 : ffff800010111bec
 > 
-> Thanks
-> 
-> >
-> > next-20210618 was good.
-> >
-> > Thanks
-> > -Sachin
+> [   29.360858] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 0000000000000001
+> [   29.368171] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000027
+> [   29.375324] x2 : 0000000000000023 x1 : 0000000000000000 x0 : 0000000000000000
+> [   29.382477] Call trace:
+> [   29.384923]  update_blocked_averages+0x628/0x660
+> [   29.389548]  newidle_balance+0x208/0x478
+> [   29.393477]  pick_next_task_fair+0x58/0x3b8
+> [   29.397666]  __schedule+0x1c4/0x1250
+> [   29.401249]  schedule+0x4c/0x100
+> [   29.404481]  worker_thread+0xc0/0x428
+> [   29.408147]  kthread+0x140/0x158
+> [   29.411380]  ret_from_fork+0x10/0x18
+> [   29.414960] ---[ end trace 8349fb64d5c118de ]---
+
+[ 1364.545625] cfs_rq->avg.load_avg
+[ 1364.545641] WARNING: CPU: 5 PID: 35 at kernel/sched/fair.c:3282
+update_blocked_averages+0x568/0x680
+[ 1364.563465] Modules linked in:
+[ 1364.569299] CPU: 5 PID: 35 Comm: migration/5 Not tainted
+5.13.0-rc6-00078-g78a94255ceab-dirty #93
+[ 1364.580958] Hardware name: ARM Juno development board (r0) (DT)
+[ 1364.589488] Stopper: 0x0 <- 0x0
+[ 1364.592638] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO BTYPE=--)
+[ 1364.598657] pc : update_blocked_averages+0x568/0x680
+[ 1364.603635] lr : update_blocked_averages+0x568/0x680
+[ 1364.608611] sp : ffff80001259bbf0
+[ 1364.611927] x29: ffff80001259bbf0 x28: ffff00097efb8dc0 x27:
+ffff0008033ea400
+[ 1364.619087] x26: 0000000000000005 x25: 0000013b4cca6cac x24:
+ffff000804ba4200
+[ 1364.626245] x23: 0000000000000000 x22: ffff00097efb96c0 x21:
+0000000000000028
+[ 1364.633403] x20: 0000000000000001 x19: ffff000804ba4340 x18:
+fffffffffffe55e8
+[ 1364.640561] x17: 0000000000000000 x16: 0000000000000000 x15:
+0000000000000020
+[ 1364.647719] x14: ffffffffffffffff x13: ffff800011f6cb68 x12:
+000000000000040e
+[ 1364.654877] x11: 000000000000015a x10: ffff800011fc6bd8 x9 :
+fffffffffffe55e8
+[ 1364.662035] x8 : ffff800011f6cb68 x7 : ffff800011fc4b68 x6 :
+0000000000002070
+[ 1364.669193] x5 : ffff00097efa6928 x4 : 0000000000000000 x3 :
+0000000000000027
+[ 1364.676350] x2 : 0000000000000000 x1 : 0000000000000000 x0 :
+ffff000800226740
+[ 1364.683508] Call trace:
+[ 1364.685954]  update_blocked_averages+0x568/0x680
+[ 1364.690585]  newidle_balance+0x200/0x460
+[ 1364.694515]  balance_fair+0x28/0x40
+[ 1364.698009]  __schedule+0x1118/0x1354
+[ 1364.701683]  schedule+0x74/0x10c
+[ 1364.704918]  smpboot_thread_fn+0xa4/0x280
+[ 1364.708937]  kthread+0x154/0x160
+[ 1364.712173]  ret_from_fork+0x10/0x30
+[ 1364.715757] ---[ end trace d2e73a5dbd77eeb8 ]---
+
+
+Was able to recreate this on Arm64 Juno on tip/sched/core after
+splitting the SCHED_WARN_ON() in cfs_rq_is_decayed() from ("sched/pelt:
+Check that *_avg are null when *_sum are"). This one didn't happen after
+boot but after running some taskgroup related workloads.
+
+Looks like it is `load_avg` related.
+
+We kind of expected this. ("sched/pelt: Ensure that *_sum is always
+synced with *_avg") only deals with util_avg and runnable_avg.
+
+Looks like Vincent is coming up with a for load_avg:
+
+https://lkml.kernel.org/r/CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com

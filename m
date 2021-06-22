@@ -2,172 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFCF3AFE53
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 09:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9F93AFE62
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jun 2021 09:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbhFVHwB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Jun 2021 03:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S229844AbhFVHxY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Jun 2021 03:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbhFVHwA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Jun 2021 03:52:00 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F7DC061756
-        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 00:49:44 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a16so7286837ljq.3
-        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 00:49:44 -0700 (PDT)
+        with ESMTP id S229574AbhFVHxY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Jun 2021 03:53:24 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD0C061574
+        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 00:51:08 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id he7so32979553ejc.13
+        for <linux-next@vger.kernel.org>; Tue, 22 Jun 2021 00:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wOPEtWORSkQBvaG3lQj4bBkhxW56uNEUy6C8BsqWuFQ=;
-        b=jQZNEO1AwlhsUqEwo5PX+i4dyZjplXX1aoREJE01/pbr6tgKwdX9vOhpB3bNGf461m
-         GFwkwAn4ZRPfmaB+uRJrVP/ET3Mo7/zGwUX+fGIzNmMg/mzRYV9NlXNgrbey8ib7x2N8
-         eueFb7yKfUGrw+DcR1xU8kI66tzeIBg9t3NLIYLkVGhZkum1Yus6UdP5mFI2OuGjZ9qy
-         e/7rZa+Q/VZIOnBijMjF9p2zT9ar4aRvcireDYv/AXbNXCjm7TVrBxFwF82MNH9J3KZu
-         BXHGmotkTJOpKmmubVRoVTZck6XYvmnARVBUraI31tdy+gjiEfgpLs2ADIDqnMI/WvEE
-         1CLQ==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=jytpRbGNprjVVWKHDUiGPvRaS0XiJNqXTNP7HufbF48=;
+        b=xAd8nzADCZdhgsIPouxmypnfd4sXz9CYKCiEQADzGKZpxVoln3eQLQpW0P8gI8z2A0
+         P0PB2pPAEVZtVpN7qW/GMQ7oQTgdynh+Vav6dG9p/wxOs81w1Imo/z3whRI8wrCPmU7B
+         LAhrz56UJ/uXxxv3J7qgBdyh+55vK8y6NbjGyW4d4Qc6I7UAkFz4PAExxmvDRBO2O8Lp
+         z/5WEebiAWGBXSyB38T5leSjeouAWMSr1yLbTsvebnZdaJ3QCO9bJZ2YcvvA5A4Y04N8
+         eFp7QP84XcnaFX+2Fc/fK8Quyu0cjfkibENkRanJNe2qDBNFlBJ99L0lzjfvJtWVVvXF
+         WASg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wOPEtWORSkQBvaG3lQj4bBkhxW56uNEUy6C8BsqWuFQ=;
-        b=PVjzMbw9F8FhrtMjgrRVpq5GXxap+vBuuOr8KZaxFpdMHdKbMa3ViUWdf5p46KhMah
-         2t2HZi857/122M00xgEWhf4Lx2Ld8ZRpJmaX1nLYS3naEJq/OrdZXC3mwIN3nk9Z53JL
-         N/043GYV2PYVaNi8HgvRGNNB1tixFP946V3Nv9Ommkwwd1C7tZEM0OpIC47M5Q2PDeYw
-         9bmTOK/DlyqhkqukEFjUnYrJYJXhYrktnvlHC6MnWEZ0Rp98UdMVKgBZTkaUIkGoCOfI
-         79iQtQZ4HAHqoriAhWXTKo1gtJ37JsiY0p4sueRo0zK10rk/Uz219mz6bKSvZJgfk5/l
-         bmfQ==
-X-Gm-Message-State: AOAM530m8zDzL5iEJ80Khlj4pMO+2WAONuiMpdNDboQOHQsgHBkxkBUE
-        9ir4EqvDmA10fm5gsWXMFWoJH4bnF0uJQSRF1rKRcg==
-X-Google-Smtp-Source: ABdhPJxZpIePfRvFDfeRql605aaJ6XXRsf7f2DOLTSExXnQTQxy9TXBz1HGS1e1QHH77+oPwqd6H6VwgHjvE1GpGCRc=
-X-Received: by 2002:a2e:90ca:: with SMTP id o10mr2013324ljg.299.1624348182997;
- Tue, 22 Jun 2021 00:49:42 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=jytpRbGNprjVVWKHDUiGPvRaS0XiJNqXTNP7HufbF48=;
+        b=Sy8sHkPzKP5iO4fM0EuoRV0nIk63KxTkaV1hYCSRxwokGP87cDxCoXuf42szWgJmRn
+         4pJYW4hU3qju3iuaQm8nKwGXduKw8DBhCR3kUUm5iK2JV9AGBE61t9GIWYfC9/2bno4D
+         1BCY9WLyW/HtMy6nRoey56XFWL2rE2bXwdpgEEnTViNUv637BczI64Dnxu37l8KK7iIK
+         mMgLqXwkhYJZqiHmDoCTNRfwmN7Gpz8dRtLlwX5WmR5GC5OdlYbAcLPWq+X1dOKmVZoX
+         TL9v9RHPCFpj6I0Gck/2JgNu6JPulz+abkcnT2Qy39c4yPZ0q0iJV/DwS5gGTbuANpb2
+         SezA==
+X-Gm-Message-State: AOAM530quIgaI2mL+MBQxbzFnnG9gExgGeFYMtfQcrLg8DmLupknua30
+        5guv4Yt0RiyYL9TFZ8IiNy8oBGL4Z+I/3UVIbn8v3NpF6xSgxDAU
+X-Google-Smtp-Source: ABdhPJwBPtt88ilk5scUwigmdbvyQ/CI9XzvSZXUWHmrbnxgfjhoTh2EZ13xg8Z5wLINChWOg8wYsizg7nGFAbrzUsw=
+X-Received: by 2002:a17:906:2b01:: with SMTP id a1mr2561261ejg.133.1624348267197;
+ Tue, 22 Jun 2021 00:51:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
-In-Reply-To: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 22 Jun 2021 09:49:31 +0200
-Message-ID: <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
-Subject: Re: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277
- during boot
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, Odin Ugedal <odin@uged.al>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Jun 2021 13:20:56 +0530
+Message-ID: <CA+G9fYsMXELmjGUzw4SY1bghTYz_PeR2diM6dRp2J37bBZzMSA@mail.gmail.com>
+Subject: WARNING: kernel/sched/fair.c:3275 update_blocked_averages+0x628/0x660
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Odin Ugedal <odin@uged.al>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Sachin,
+[Please ignore if it already reported]
 
-On Tue, 22 Jun 2021 at 09:39, Sachin Sant <sachinp@linux.vnet.ibm.com> wrot=
-e:
->
-> While booting 5.13.0-rc7-next-20210621 on a PowerVM LPAR following warnin=
-g
-> is seen
->
-> [   30.922154] ------------[ cut here ]------------
-> [   30.922201] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg || cfs_rq->av=
-g.runnable_avg
-> [   30.922219] WARNING: CPU: 6 PID: 762 at kernel/sched/fair.c:3277 updat=
-e_blocked_averages+0x758/0x780
-> [   30.922259] Modules linked in: pseries_rng xts vmx_crypto uio_pdrv_gen=
-irq uio sch_fq_codel ip_tables sd_mod t10_pi sg fuse
-> [   30.922309] CPU: 6 PID: 762 Comm: augenrules Not tainted 5.13.0-rc7-ne=
-xt-20210621 #1
-> [   30.922329] NIP:  c0000000001b27e8 LR: c0000000001b27e4 CTR: c00000000=
-07cfda0
-> [   30.922344] REGS: c000000023fcb660 TRAP: 0700   Not tainted  (5.13.0-r=
-c7-next-20210621)
-> [   30.922359] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 4848822=
-4  XER: 00000005
-> [   30.922394] CFAR: c00000000014d120 IRQMASK: 1
->                GPR00: c0000000001b27e4 c000000023fcb900 c000000002a08400 =
-0000000000000048
->                GPR04: 00000000ffff7fff c000000023fcb5c0 0000000000000027 =
-c000000f6fdd7e18
->                GPR08: 0000000000000023 0000000000000001 0000000000000027 =
-c0000000028a6650
->                GPR12: 0000000000008000 c000000f6fff7680 c000000f6fe62600 =
-0000000000000032
->                GPR16: 00000007331a989a c000000f6fe62600 c0000000238a6800 =
-0000000000000001
->                GPR20: 0000000000000000 c000000002a4dfe0 0000000000000000 =
-0000000000000006
->                GPR24: 0000000000000000 c000000f6fe63010 0000000000000001 =
-c000000f6fe62680
->                GPR28: 0000000000000006 c0000000238a69c0 0000000000000000 =
-c000000f6fe62600
-> [   30.922569] NIP [c0000000001b27e8] update_blocked_averages+0x758/0x780
-> [   30.922599] LR [c0000000001b27e4] update_blocked_averages+0x754/0x780
-> [   30.922624] Call Trace:
-> [   30.922631] [c000000023fcb900] [c0000000001b27e4] update_blocked_avera=
-ges+0x754/0x780 (unreliable)
-> [   30.922653] [c000000023fcba20] [c0000000001bd668] newidle_balance+0x25=
-8/0x5c0
-> [   30.922674] [c000000023fcbab0] [c0000000001bdaac] pick_next_task_fair+=
-0x7c/0x4d0
-> [   30.922692] [c000000023fcbb10] [c000000000dcd31c] __schedule+0x15c/0x1=
-780
-> [   30.922708] [c000000023fcbc50] [c0000000001a5a04] do_task_dead+0x64/0x=
-70
-> [   30.922726] [c000000023fcbc80] [c000000000156338] do_exit+0x848/0xcc0
-> [   30.922743] [c000000023fcbd50] [c000000000156884] do_group_exit+0x64/0=
-xe0
-> [   30.922758] [c000000023fcbd90] [c000000000156924] sys_exit_group+0x24/=
-0x30
-> [   30.922774] [c000000023fcbdb0] [c0000000000310c0] system_call_exceptio=
-n+0x150/0x2d0
-> [   30.922792] [c000000023fcbe10] [c00000000000cc5c] system_call_common+0=
-xec/0x278
-> [   30.922808] --- interrupt: c00 at 0x7fffb3acddcc
-> [   30.922821] NIP:  00007fffb3acddcc LR: 00007fffb3a27f04 CTR: 000000000=
-0000000
-> [   30.922833] REGS: c000000023fcbe80 TRAP: 0c00   Not tainted  (5.13.0-r=
-c7-next-20210621)
-> [   30.922847] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE=
->  CR: 28444202  XER: 00000000
-> [   30.922882] IRQMASK: 0
->                GPR00: 00000000000000ea 00007fffc8f21780 00007fffb3bf7100 =
-0000000000000000
->                GPR04: 0000000000000000 0000000155f142f0 0000000000000000 =
-00007fffb3d23740
->                GPR08: fffffffffbad2a87 0000000000000000 0000000000000000 =
-0000000000000000
->                GPR12: 0000000000000000 00007fffb3d2aeb0 0000000116be95e0 =
-0000000000000032
->                GPR16: 0000000000000000 00007fffc8f21cd8 000000000000002d =
-0000000000000024
->                GPR20: 00007fffc8f21cd4 00007fffb3bf4f98 0000000000000001 =
-0000000000000001
->                GPR24: 00007fffb3bf0950 0000000000000000 0000000000000000 =
-0000000000000001
->                GPR28: 0000000000000000 0000000000000000 00007fffb3d23ec0 =
-0000000000000000
-> [   30.923023] NIP [00007fffb3acddcc] 0x7fffb3acddcc
-> [   30.923035] LR [00007fffb3a27f04] 0x7fffb3a27f04
-> [   30.923045] --- interrupt: c00
-> [   30.923052] Instruction dump:
-> [   30.923061] 3863be48 9be97ae6 4bf9a8f9 60000000 0fe00000 4bfff980 e921=
-0070 e8610088
-> [   30.923088] 39400001 99490003 4bf9a8d9 60000000 <0fe00000> 4bfffc24 3d=
-22fff5 89297ae3
-> [   30.923113] ---[ end trace ed07974d2149c499 ]=E2=80=94
->
-> This warning was introduced with commit 9e077b52d86a
-> sched/pelt: Check that *_avg are null when *_sum are
+Regression found,
+The following kernel warning reported on Linux next 20210621 while booting
+arm64 Juno-r2 device. And also noticed a similar crash on an x86_64 machine.
 
-Yes. That was exactly the purpose of the patch. There is one last
-remaining part which could generate this. I'm going to prepare a patch
+Crash log:
+-----------------
+[   29.244230] ------------[ cut here ]------------
+[   29.248861] cfs_rq->avg.load_avg || cfs_rq->avg.util_avg ||
+cfs_rq->avg.runnable_avg
+[   29.248874] WARNING: CPU: 1 PID: 156 at kernel/sched/fair.c:3275
+update_blocked_averages+0x628/0x660
+[   29.265784] Modules linked in: fuse
+[   29.269282] CPU: 1 PID: 156 Comm: kworker/u12:2 Not tainted
+5.13.0-rc7-next-20210621 #1
+[   29.277305] Hardware name: ARM Juno development board (r2) (DT)
+[   29.283241] Workqueue:  0x0 (rpciod)
+[   29.286828] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO BTYPE=--)
+[   29.292844] pc : update_blocked_averages+0x628/0x660
+[   29.297817] lr : update_blocked_averages+0x628/0x660
+[   29.302788] sp : ffff8000133fbb60
+[   29.306103] x29: ffff8000133fbb60 x28: ffff00097ef382c0 x27: ffff00080090ca00
+[   29.313264] x26: 00000006cacd5228 x25: 0000000000000000 x24: 00000000000000c0
+[   29.313277] x23: 0000000000000000 x22: ffff8000125b3378 x21: 0000000000000000
+[   29.313288] x20: ffff00097ef383c0 x19: ffff00080090cb40 x18: 0000000000000010
+[   29.313299] x17: 6e6e75722e677661 x16: 3e2d71725f736663 x15: 207c7c206776615f
+[[0;32m  OK  [0m] Started udev [   29.341880] x14: 6c6974752e677661
+x13: 6776615f656c6261 x12: 6e6e75722e677661
+Coldplug all Devices.[   29.351892] x11: ffff8000126419b0 x10:
+ffff800012629970 x9 : ffff800010111bec
 
-Thanks
+[   29.360858] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 0000000000000001
+[   29.368171] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000027
+[   29.375324] x2 : 0000000000000023 x1 : 0000000000000000 x0 : 0000000000000000
+[   29.382477] Call trace:
+[   29.384923]  update_blocked_averages+0x628/0x660
+[   29.389548]  newidle_balance+0x208/0x478
+[   29.393477]  pick_next_task_fair+0x58/0x3b8
+[   29.397666]  __schedule+0x1c4/0x1250
+[   29.401249]  schedule+0x4c/0x100
+[   29.404481]  worker_thread+0xc0/0x428
+[   29.408147]  kthread+0x140/0x158
+[   29.411380]  ret_from_fork+0x10/0x18
+[   29.414960] ---[ end trace 8349fb64d5c118de ]---
 
->
-> next-20210618 was good.
->
-> Thanks
-> -Sachin
+Full test log,
+https://lkft.validation.linaro.org/scheduler/job/2935085#L1120
+
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git describe: next-20210621
+  kernel-config: https://builds.tuxbuild.com/1uG71M0P29j62n5g5DXGExv8HJi/config
+
+Steps to reproduce:
+--------------------------
+Boot arm64 kernel from this build on Juno-r2 and will get warning.
+
+Image:
+     https://builds.tuxbuild.com/1uG71M0P29j62n5g5DXGExv8HJi/Image.gz
+vmlinux:
+     https://builds.tuxbuild.com/1uG71M0P29j62n5g5DXGExv8HJi/vmlinux.xz
+System.map:
+     https://builds.tuxbuild.com/1uG71M0P29j62n5g5DXGExv8HJi/System.map
+
+Few more log on x86:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210621/testrun/4955196/suite/linux-log-parser/test/check-kernel-exception-2934648/log
+
+https://lkft.validation.linaro.org/scheduler/job/2934648#L1170
+
+--
+Linaro LKFT
+https://lkft.linaro.org

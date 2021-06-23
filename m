@@ -2,98 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D413B2397
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 00:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EBA3B239B
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 00:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhFWWbf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Jun 2021 18:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbhFWWbf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Jun 2021 18:31:35 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F9CC061574;
-        Wed, 23 Jun 2021 15:29:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G9HxP1HNPz9sCD;
-        Thu, 24 Jun 2021 08:29:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624487353;
-        bh=B0nnRaXy3juVwSWhjg6oCgD9xS70cicB6mdlEGWBlF0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YhD5Q6GLIwL//8kIvc1dJ1BBS1np/DKQz7tryiVL8eNi69BU5MyGfIfHIF/lc/LXz
-         MRW3NrrCRwAcGLt1VWHKz4LHwz9rwVQgc9YvHgY4CLb4Sh4nXWGTwgdhVpgxQyTQ4L
-         nSX+Ue6K2yf/DfJ9Sx5JN3tsQQzl3+dO8jlpiiO9oj/ik87nh6pwX7oum5ouj53GJ5
-         1Dm5GQVGw2aWimTKIA6cJ9bIRqdKlvI/hrEspv5YMWMGC1V+8674lWD90j2giMEE3A
-         x6C0A+VaNirVz/xu++0jUzmrWVSUpJCqr7vCdopPwf2JkXABoAg+tHns87myulzAZs
-         nupcoi0ybuxmg==
-Date:   Thu, 24 Jun 2021 08:29:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marcin Wojtas <mw@semihalf.com>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210624082911.5d013e8c@canb.auug.org.au>
+        id S229755AbhFWWce (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Jun 2021 18:32:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60316 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229688AbhFWWce (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Jun 2021 18:32:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AFB1C611C1;
+        Wed, 23 Jun 2021 22:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624487416;
+        bh=DhcHWMyjMVjNVHNhiFtI532fMsfdsNNY2V6a4zXHM+M=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=nZnhPuzcl63ZvhrCRydY4ZN7qmXjTsEzw4AlE7ZNZioNN/n28hh9idGLsqv9nWYSL
+         1rFdrLPR4Sk7CMPVxuz3rYiv3mm7Qp6nSpvwWO80Qh7g+n9RHZQwf1Y/txr0iH79/j
+         ZwiTYSyMowQS9jPzI6ED/GxNvT1ZeWBwReF6LFqxHIUI04+SM79eFTSMgUyfsUpWkT
+         Ke2Mmi9wOepE3owm4QxKbIuoTSmsdgjgziXNhG9f77ht1SbDw/47XjWcZ5MYPf+YBL
+         aUc+RKHRyOLrfIFJICj/ZsqnHAsyTvMkH18JoCr8n4c2L7F/v2SLl4xCDfOzInysAB
+         PIWkR80jSndvA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6359E5C08D8; Wed, 23 Jun 2021 15:30:15 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 15:30:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     aneesh.kumar@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, elver@google.com, ndesaulniers@google.com
+Subject: Build failure in -next
+Message-ID: <20210623223015.GA315292@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZRNepBVwBa+CXQz8hwLzlt6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZRNepBVwBa+CXQz8hwLzlt6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello, Aneesh!
 
-Hi all,
+Yesterday evening's next-20210622 testing gave me the following
+kernel-build error:
 
-Today's linux-next build (x86_64 modules_install) failed like this:
+ld: mm/mremap.o: in function `move_huge_pud':
+/home/git/linux-next/mm/mremap.c:372: undefined reference to `__compiletime_assert_395'
 
-depmod: ../tools/depmod.c:1792: depmod_report_cycles_from_root: Assertion `=
-is < stack_size' failed.
+Bisection landed on this commit:
 
-Caused by commit
+257121c5aabe ("mm/mremap: convert huge PUD move to separate helper")
 
-62a6ef6a996f ("net: mdiobus: Introduce fwnode_mdbiobus_register()")
+I have no idea how this commit relates to that error message, but
+reverting this commit on top of next-20210622 really does get rid of
+the problem.
 
-(I bisected to there and tested the commit before.)
+The following reproducer provokes this error:
 
-The actual build is an x86_64 allmodconfig, followed by a
-modules_install.  This happens in my cross build environment as well as
-a native build.
+tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --torture lock --configs LOCK07 --build-only --kconfig "CONFIG_DEBUG_LOCK_ALLOC=y CONFIG_PROVE_LOCKING=y" --kmake-arg "CC=clang-11"
 
-$ gcc --version
-gcc (Debian 10.2.1-6) 10.2.1 20210110
-$ ld --version
-GNU ld (GNU Binutils for Debian) 2.35.2
-$ /sbin/depmod --version
-kmod version 28
--ZSTD +XZ -ZLIB +LIBCRYPTO -EXPERIMENTAL
+Run the above command in the top-level directory of your -next source
+tree, and using this compiler:
 
-I have no idea why that commit should caused this failure.
---=20
-Cheers,
-Stephen Rothwell
+$ clang-11 -v
+Ubuntu clang version 11.1.0-++20210428103817+1fdec59bffc1-1~exp1~20210428204431.166
+Target: x86_64-pc-linux-gnu
 
---Sig_/ZRNepBVwBa+CXQz8hwLzlt6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thoughts?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDTtbcACgkQAVBC80lX
-0GyWnAf/fmWanH5fu0BZZxX7crVE4yFDux50672MBz3UemASiwSxESWCibgyLt/S
-iX4tn6ZZ4xev5Zj/2WBHee53ZQ+R8tpWt8JGultrcy4nWN9/+QzUJL28WRKtg3ih
-Wcau62uEnk0nI3pN/LB3OJBdrF3jsPk27zWemNdlGKK9HHLz5jwXuH2cIZXu2Y23
-jN+bJbSc/svwAQzQvNpAZiKdN4LCrGXakpYL5ztmWYDVleqYOIDZ2GZU5pQcaT+2
-J5pwlBQPjq80n3sqoBObnkTAqVRY0N78uQXraK0SWMJ4ORla9LiHme57uoIIY4nW
-JpqVGSvOqSjc9RgasAnIocaM8P4iyQ==
-=I5ac
------END PGP SIGNATURE-----
-
---Sig_/ZRNepBVwBa+CXQz8hwLzlt6--
+							Thanx, Paul

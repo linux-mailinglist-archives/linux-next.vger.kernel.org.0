@@ -2,88 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5BD3B1F68
-	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 19:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441F93B1F6C
+	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 19:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbhFWR3a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Jun 2021 13:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S229929AbhFWR3i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Jun 2021 13:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbhFWR33 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Jun 2021 13:29:29 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB64C061574;
-        Wed, 23 Jun 2021 10:27:10 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id t3so4545277edc.7;
-        Wed, 23 Jun 2021 10:27:10 -0700 (PDT)
+        with ESMTP id S229886AbhFWR3i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Jun 2021 13:29:38 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE7AC06175F
+        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 10:27:20 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a16so3990536ljq.3
+        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 10:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+KZPiHeG/Rq1ZQLgxs4APyK8yr6SPbxpLROL4ArpvqE=;
-        b=c2CgtmoF2XDF8s79vK5XcvoVAhZowxI6Lq803huU5yTmEyApOzwh5MCG2G3kpqSOpU
-         P5AD/ip6ALvfVsON9fY6px4Bh0u6ta5zF1eU9WMpUVYxm+6iC9J0ZrcihSAqPe+kx3R5
-         Rc/yz+SPf+0XxKXN5YbcAHkpbLB8WDvo20hzJxFIoCzP3wyegyiAOgkGGRgBCCS8DF0p
-         xcvJrK7ETuRjN4+W7sjAjugL3PgzcfMbzRYEZHH6iBtXvbqRzJEk5um1qyeMKX0KfEvD
-         ENzZs0kDaja2q58iZc7lRb5eM3tqwaZdhC0+8qWFjfcRQ3vG6B3a2y1m/g/8bVDg13hY
-         jpqw==
+        bh=q2d2sQHy0KntFj7PyfcvDTPhCqiaY/wl1GYeGVevyXY=;
+        b=cPVdN6PDfWFEKRnik7cWwwE2fuQoRkEUgYdGwM27Vslnjn6NScjASeLKUvFlLUy1fa
+         YXUAtS1SSrQbJJQlZ2efFgnnrPWZiW04wQ7FvzRE38YrO12OoZGIOklD5hkfp6MB68OA
+         SfQUOdH7RhRTnUfD/jg5jAIXBApRwAtdcgh895kz/BsXk26Ga/0j5nPYOctu/Pw5UgmT
+         1JMpZBvjggPUqdlW5aZtJUx5D0OCzO0zs8ct+cEbq/aIBxEevuysksboegpZhScn9etZ
+         e7FZI6h13VkR/pzJv64UlKW7uEqGqSAcjFBGzC2s/TeO0Sza0buUk/FtfmJo2PWSVNKE
+         hW1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+KZPiHeG/Rq1ZQLgxs4APyK8yr6SPbxpLROL4ArpvqE=;
-        b=MZTkqnltFDGTJcURe52y1enWik3s9VRgKj8BmZY6J10q531ZxvIYZu0B8uH1z6cArC
-         yan9yZ/YUzj4iKOjpFD87kOiSCWs7r473ZmhfWDpUrhFXdSq6Cd92E0C+MvZZMYipJMt
-         zL+AXJE0BUERomBUSoDphEenCSpl4M5iHrNIdWCoP2Kdw+i1M54mridfOJKJ4etr1aM0
-         d/4aJX7jPuTJ94eHCsKNlQJbPEY7ml79ZI1c/lnLhckyVT4BBbQxh06DfOq9Ogqb8f+w
-         fuHZ0P5O9unftG03tPbs+UUjxXoF9J0o5SR40tTuLZcmMZC9xgpAbaXFdsXAp7uw6iii
-         zfYg==
-X-Gm-Message-State: AOAM530N2rkxryZMeXSCNVA2N1SXQ5DI53S/1ym2TUZwib7GCMcSHDQW
-        mObpNkrLYcWcbOQUBXKwvdNu4Oj8AJicUnXzZw==
-X-Google-Smtp-Source: ABdhPJwxEKceuZts//aKP7vF++I/FLJ48EXaO8JiZiPxKXTTxsNfb4fm/QRD9iZNhHU0kuRZ9hX9UWPmAcG90dZ07HE=
-X-Received: by 2002:a50:9345:: with SMTP id n5mr1178741eda.289.1624469228266;
- Wed, 23 Jun 2021 10:27:08 -0700 (PDT)
+        bh=q2d2sQHy0KntFj7PyfcvDTPhCqiaY/wl1GYeGVevyXY=;
+        b=NZZstAMy6waKwAgDPFE0yfAaU3Y1kKenei3yG0inf3d1itImjMp14J7hs0643+cRuR
+         1lzCnRRe/3ZlNxON2wvEslLCJEzCK24mWNWZucj/+DvsxWVw2KzK+49XHxQ4TfzewXkO
+         fwl43R6wGJbOO7TjWCS8REge8l1T6lHxi0mAQ2L5fE3FdFeVvBX4AX4+Oph0hVEoZJ/S
+         BE+rQo+uwwWzp6OCB/K8fMWKnMbB3S83VT3WAPQ6RhZBzXtaUwWKF2sHxQO6sdb/7dWq
+         yIOIxhmOedV3zUeoRol1E6EUCNg3HVlzOpOf5XDcKkEM51FoBSuHNPXBII3lyUHDWJ2w
+         04Bw==
+X-Gm-Message-State: AOAM532ZBNoINSs0nsdcd1UpjUBsHcVOEQBSiYn0Kr/jcvsC4Im9B0ra
+        I05/CzDACA2zLut3j88i67cXDHYdqleIgFe/Yd/HwA==
+X-Google-Smtp-Source: ABdhPJyc3ed/8kGPnbAGbdKUWTuzqOmrBvOtjBG7eXcy78/JpI6wipxa14CPu+ThHwFHhGlwP4yOZgSH2Lml/drFtZg=
+X-Received: by 2002:a2e:9b07:: with SMTP id u7mr585757lji.209.1624469238388;
+ Wed, 23 Jun 2021 10:27:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210622181624.57527651@canb.auug.org.au>
-In-Reply-To: <20210622181624.57527651@canb.auug.org.au>
-From:   Rob Herring <robherring2@gmail.com>
-Date:   Wed, 23 Jun 2021 11:26:56 -0600
-Message-ID: <CAL_JsqL+4FqU=jexFiXVLN-782N+Qh6DJLYoXZGitTYY2ULRBw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the gpio-brgl tree with the
- devicetree tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
+ <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
+ <20210622143154.GA804@vingu-book> <53968DDE-9E93-4CB4-B5E4-526230B6E154@linux.vnet.ibm.com>
+ <20210623071935.GA29143@vingu-book> <CCB4222F-000A-44E8-8D61-F69893704688@linux.vnet.ibm.com>
+ <6C676AB3-5D06-471A-8715-60AABEBBE392@linux.vnet.ibm.com> <20210623120835.GB29143@vingu-book>
+ <5D874F72-B575-4830-91C3-8814A2B371CD@linux.vnet.ibm.com> <CAKfTPtBKn27=jryS_sxsVb+0yHDze_PMcLuyFtDkDo0H9Nzqww@mail.gmail.com>
+In-Reply-To: <CAKfTPtBKn27=jryS_sxsVb+0yHDze_PMcLuyFtDkDo0H9Nzqww@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 23 Jun 2021 19:27:07 +0200
+Message-ID: <CAKfTPtDFUBe+qD9z0YYb7yyup_mhdNNX+zopFwcnyh+G41viAw@mail.gmail.com>
+Subject: Re: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277
+ during boot
+To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
+Cc:     Odin Ugedal <odin@uged.al>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        linuxppc-dev@lists.ozlabs.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 2:16 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, 23 Jun 2021 at 18:55, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
-> Hi all,
+> On Wed, 23 Jun 2021 at 18:46, Sachin Sant <sachinp@linux.vnet.ibm.com> wrote:
+> >
+> >
+> > > Ok. This becomes even more weird. Could you share your config file and more details about
+> > > you setup ?
+> > >
+> > > Have you applied the patch below ?
+> > > https://lore.kernel.org/lkml/20210621174330.11258-1-vincent.guittot@linaro.org/
+> > >
+> > > Regarding the load_avg warning, I can see possible problem during attach. Could you add
+> > > the patch below. The load_avg warning seems to happen during boot and sched_entity
+> > > creation.
+> > >
+> >
+> > Here is a summary of my testing.
+> >
+> > I have a POWER box with PowerVM hypervisor. On this box I have a logical partition(LPAR) or guest
+> > (allocated with 32 cpus 90G memory) running linux-next.
+> >
+> > I started with a clean slate.
+> > Moved to linux-next 5.13.0-rc7-next-20210622 as base code.
+> > Applied patch #1 from Vincent which contains changes to dequeue_load_avg()
+> > Applied patch #2 from Vincent which contains changes to enqueue_load_avg()
+> > Applied patch #3 from Vincent which contains changes to attach_entity_load_avg()
+> > Applied patch #4 from https://lore.kernel.org/lkml/20210621174330.11258-1-vincent.guittot@linaro.org/
+> >
+> > With these changes applied I was still able to recreate the issue. I could see kernel warning
+> > during boot.
+> >
+> > I then applied patch #5 from Odin which contains changes to update_cfs_rq_load_avg()
+> >
+> > With all the 5 patches applied I was able to boot the kernel without any warning messages.
+> > I also ran scheduler related tests from ltp (./runltp -f sched) . All tests including cfs_bandwidth01
+> > ran successfully. No kernel warnings were observed.
 >
-> Today's linux-next merge of the gpio-brgl tree got a conflict in:
+> ok so Odin's patch fixes the problem which highlights that we
+> overestimate _sum or don't sync _avg and _sum correctly
 >
->   Documentation/devicetree/bindings/gpio/gpio-davinci.txt
->
-> between commit:
->
->   c601eef1e258 ("dt-bindings: clock: update ti,sci-clk.yaml references")
->
-> from the devicetree tree and commit:
->
->   c830b87a761b ("dt-bindings: gpio: gpio-davinci: Convert to json-schema")
->
-> from the gpio-brgl tree.
->
-> I fixed it up (the latter removed the file, so I did that) and can
-> carry the fix as necessary.
+> I'm going to look at this further
 
-As the reference is gone in the schema, that is the correct resolution.
+The problem is  "_avg * divider" makes the assumption that all pending
+contrib are not null contributions whereas they can be null.
 
-Rob
+Odin patch is the right way to fix this. Other patches should not be
+useful for your problem
+
+>
+> >
+> > Have also attached .config in case it is useful. config has CONFIG_HZ_100=y
+>
+> Thanks, i will have a look
+>
+> >
+> > Thanks
+> > -Sachin
+> >

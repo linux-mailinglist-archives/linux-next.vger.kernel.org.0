@@ -2,54 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F221A3B1392
-	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 07:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70293B13A9
+	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 08:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbhFWGBM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Jun 2021 02:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbhFWGBM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Jun 2021 02:01:12 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC146C061574;
-        Tue, 22 Jun 2021 22:58:55 -0700 (PDT)
+        id S229818AbhFWGHF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Jun 2021 02:07:05 -0400
+Received: from ozlabs.org ([203.11.71.1]:45397 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229665AbhFWGHF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Jun 2021 02:07:05 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G8syh4JX2z9sVm;
-        Wed, 23 Jun 2021 15:58:52 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G8t5T6kYdz9sVm;
+        Wed, 23 Jun 2021 16:04:45 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624427933;
-        bh=siE4tx1biqrCwjCyQ1Xcq/VGKY7KaoEOfWxTZZue4IQ=;
+        s=201702; t=1624428286;
+        bh=zGFQryYP618aKWsIAzWK267Cz0lCeMlvKnIsCfwMrKA=;
         h=Date:From:To:Cc:Subject:From;
-        b=EJg/p2sbAiXpneiBgnYXlw1+Nk9H8OygSOYoC7YU84pZvVIfJ5uxFHaXwAoMvF9IY
-         aWvoWTx5pmrkhi+KfqllBBWwB4RO07OZP7KKGl7K/Il7lT35Qypep0l4F+9mjTzgju
-         JDTOKnE+SkLvCLutjCCjpcX3a0mg3dMd0EBzJ1XVkhqEZ+tQdwgYpK0IMCN9kFkRwy
-         9CAAcg2YKuS4MCCFi5E3IdOkVHsuEUcghXo9U5Bqo/gTQlXEkyoS/ciNd894J03O6x
-         Jnj06K4I8FsY6hrxlGe8bYjpHnOu1uHO89PkGEg1QSwZ8DrnnCS6Y6h0w/xKCWd/9h
-         Q2LTQXtlwhAng==
-Date:   Wed, 23 Jun 2021 15:58:51 +1000
+        b=CqDCbHJzlzQ8Gh+HmoHkHgwxMKl8Wy91jEk3Gl2Kx0tHS6lJ9OBlFuJjOZVVSlGoQ
+         pChq8YWyZl8ayjFJNuCGGBSGxo65UBikQwKEjUmI+/JVgVAteGaEWcxvPv9Ohhk1uV
+         76WLr5UyEZgAkHx5NlfAKIjYX23GUgXBkpeXhzBccffQuIrQ6cNFVKbKt502YlWqIg
+         X9DR05RXH/pAYl9vMir3/oWss+K9z83N0WVj+wAtY5aqYsNaRttehyeyXHvMLVEZRv
+         Gdn7EpkOUmhmQKVlBHBQlPIr2SxdWtNYReP4moX+Yv34lEPpIlTypBKrCPTJIkf8Dg
+         2AjmR3TTo0U6g==
+Date:   Wed, 23 Jun 2021 16:04:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Christoffer Dall <cdall@cs.columbia.edu>,
         Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Ashish Kalra <ashish.kalra@amd.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Steven Price <steven.price@arm.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20210623155851.2db598e7@canb.auug.org.au>
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the powerpc and
+ kvm trees
+Message-ID: <20210623160444.413791ec@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4z.MafC/9hEqCSY8UburFXh";
+Content-Type: multipart/signed; boundary="Sig_/_S5Z7DmvPJ.DCnyaey19BjI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4z.MafC/9hEqCSY8UburFXh
+--Sig_/_S5Z7DmvPJ.DCnyaey19BjI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -57,15 +60,18 @@ Hi all,
 
 Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-  arch/arm64/include/asm/mte.h
+  include/uapi/linux/kvm.h
 
-between commit:
+between commits:
 
-  013bb59dbb7c ("arm64: mte: handle tags zeroing at page allocation time")
+  b87cc116c7e1 ("KVM: PPC: Book3S HV: Add KVM_CAP_PPC_RPT_INVALIDATE capabi=
+lity")
+  644f706719f0 ("KVM: x86: hyper-v: Introduce KVM_CAP_HYPERV_ENFORCE_CPUID")
+  0dbb11230437 ("KVM: X86: Introduce KVM_HC_MAP_GPA_RANGE hypercall")
 
-from the arm64 tree and commit:
+from the powerpc and kvm trees and commit:
 
-  69e3b846d8a7 ("arm64: mte: Sync tags for pages where PTE is untagged")
+  ea7fc1bb1cd1 ("KVM: arm64: Introduce MTE VM feature")
 
 from the kvm-arm tree.
 
@@ -80,47 +86,38 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/include/asm/mte.h
-index 67bf259ae768,347ef38a35f7..000000000000
---- a/arch/arm64/include/asm/mte.h
-+++ b/arch/arm64/include/asm/mte.h
-@@@ -37,8 -37,7 +37,8 @@@ void mte_free_tag_storage(char *storage
-  /* track which pages have valid allocation tags */
-  #define PG_mte_tagged	PG_arch_2
+diff --cc include/uapi/linux/kvm.h
+index 330835f1005b,da1edd2b4046..000000000000
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@@ -1083,10 -1083,7 +1083,11 @@@ struct kvm_ppc_resize_hpt=20
+  #define KVM_CAP_SGX_ATTRIBUTE 196
+  #define KVM_CAP_VM_COPY_ENC_CONTEXT_FROM 197
+  #define KVM_CAP_PTP_KVM 198
+ -#define KVM_CAP_ARM_MTE 199
+ +#define KVM_CAP_HYPERV_ENFORCE_CPUID 199
+ +#define KVM_CAP_SREGS2 200
+ +#define KVM_CAP_EXIT_HYPERCALL 201
+ +#define KVM_CAP_PPC_RPT_INVALIDATE 202
+++#define KVM_CAP_ARM_MTE 203
  =20
- +void mte_zero_clear_page_tags(void *addr);
-- void mte_sync_tags(pte_t *ptep, pte_t pte);
-+ void mte_sync_tags(pte_t old_pte, pte_t pte);
-  void mte_copy_page_tags(void *kto, const void *kfrom);
-  void mte_thread_init_user(void);
-  void mte_thread_switch(struct task_struct *next);
-@@@ -54,10 -53,7 +54,10 @@@ int mte_ptrace_copy_tags(struct task_st
-  /* unused if !CONFIG_ARM64_MTE, silence the compiler */
-  #define PG_mte_tagged	0
+  #ifdef KVM_CAP_IRQ_ROUTING
  =20
- +static inline void mte_zero_clear_page_tags(void *addr)
- +{
- +}
-- static inline void mte_sync_tags(pte_t *ptep, pte_t pte)
-+ static inline void mte_sync_tags(pte_t old_pte, pte_t pte)
-  {
-  }
-  static inline void mte_copy_page_tags(void *kto, const void *kfrom)
 
---Sig_/4z.MafC/9hEqCSY8UburFXh
+--Sig_/_S5Z7DmvPJ.DCnyaey19BjI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDSzZsACgkQAVBC80lX
-0GyJCwf5ASRxr/1g6JvYVjY/sASFdo2hNDb8D3hZoqdd5zD02QNh8WbocIYMuST7
-3PfMwv/XWL8nW4j9fp926SWke7C/gkXTJb+067hNwI+6/mV95v5QMTzhKyzmaLYU
-p1Zqb7dZBJLpQ0mV/+Wzwn5si3ywfk7c0gAH6m8V2/uJxnnc/kh+rtj1nBkVGj0Z
-DP3Aflh7s7eU5UWPvjNK0VlQExUbMNoUPR9GRsEtPhS/9yKb4Oo7ngobk4sdRXUv
-LEoupHhulBIkEzYVDT4zZ+SGVBvR8pWQqwvLiYOOpVIIzouQ+/8Fjoq1Sb0YxhLU
-Ila0Emp+lelztfnmA8Vd207J6hPP/Q==
-=CJqE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDSzvwACgkQAVBC80lX
+0Gy43wf/WucH04KA5/4fIZG1aO2Pglwt2RKuNbBPCxq8Gii9/cBVWr7hXoPm9wls
+CYeLOqv7Je7PPKaRgtJKBfRoJmbxrK2Zl+VkaZRFgS5SydFCfRzLImeuSv66I4EX
+u3jmv0MWEOLQgXlKDMblEZvznuPuIhvjR4rM1wlhfFv9ii32uUn+EwIlDNGz+bPv
+C+jSuq7/gu9TlHtsP8zyAHmDfMqDv+1Kqko9ZTrk82URydhKpoOZlRm3gyhviUWw
+t+P0CjEypszRwnoVPHD5yWwxOLkjy/dnx6QeQxsCIKp0QASyPq+K6PZXg3gfChq3
+M9aPKADLiNI6w7DpYV7jn526s6ynew==
+=QDit
 -----END PGP SIGNATURE-----
 
---Sig_/4z.MafC/9hEqCSY8UburFXh--
+--Sig_/_S5Z7DmvPJ.DCnyaey19BjI--

@@ -2,142 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E54E53B1FA2
-	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 19:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C873B20B4
+	for <lists+linux-next@lfdr.de>; Wed, 23 Jun 2021 21:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbhFWRkT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Jun 2021 13:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhFWRkS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Jun 2021 13:40:18 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4D4C061574
-        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 10:38:00 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id g4so7314025qkl.1
-        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 10:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=uged.al; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B5o1VpdMcZrmQnyC6VaIuCe6zHlh4bhQF/lUKDsspdg=;
-        b=uyCNzWi7QuYZIzhGrc5Gb0sdMjZK3o6D0PuYZzJifbcz5wgi1WYMMQLGlIjgLaTWiV
-         Y4aa2KgTJlvAvMQgmqyviyjzKaEw0jufgBBV0MDw9vzaM9Nm4/BsgAmh0UmIq5qmRIVy
-         iyjfe0Ng8PLGeYGk/YSVvr9pWYTZhy7WC/hqAWcRnXRZE1WQPk4VgRskrvGwvNKXusZ6
-         b8mwxVPmkgqS0o8quY79rwRVrItOcHsvvrvnr7DBPQXwCW4lqX1En11ySqqyjWAaxLyp
-         h2WPhz0s73bmvf73nVMXj6PPZv9uYKZleOl7R/tkmOjDmAT8zD5eKrJtiOqLI/E/rNkM
-         mSZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B5o1VpdMcZrmQnyC6VaIuCe6zHlh4bhQF/lUKDsspdg=;
-        b=foAQ9aaDAb7L5TOrfw2AL+gMsgkc8Lme/Hg+uVCWQeytA9fuIyHRG4wY0LOS0tiRIJ
-         DMySGppqxoMj2x1NbFf/FQX6uLeVqnzx0ZcqPogfpzQUCziGmVgWHK69T+kVooCxiti0
-         b+QKF7R/y10vV8GaqPXkwLo9huqMLwAgDTDUlQDDvmaGtb0HmjVEctBvvNT8u64Zaatc
-         oLvT+Rye6Ec0c9TeTYq035yPxGxMcrNshe+85QClQ9ybuG19A0PGtA16wG2Qvq+ZUYfJ
-         C6dSZ+WwVGMAZTgc+RH1/05WS7vOaTHvFKed10G4mH1oS++XyCndJ3Ob5adMYP/If3t2
-         Nb9w==
-X-Gm-Message-State: AOAM530H1DVu3iPsOwy8io2Wqqjk1/+OBzaRjlD26uBX5EdUgDyicZIk
-        4GmjRgdaCMfQUM/1zpBu5tAxsT5slTxp7Gge4sIrkA==
-X-Google-Smtp-Source: ABdhPJyS501FUMJKU2Fd8GSeFaTNJquoa/D16LPwAed/qRy5fatTpVdAvkwHb8W/LsdshZn6oTNpuwnYHJodG440fwc=
-X-Received: by 2002:ae9:dd06:: with SMTP id r6mr1270322qkf.74.1624469879194;
- Wed, 23 Jun 2021 10:37:59 -0700 (PDT)
+        id S229660AbhFWTCW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Jun 2021 15:02:22 -0400
+Received: from gateway34.websitewelcome.com ([192.185.149.101]:27745 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229523AbhFWTCW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Jun 2021 15:02:22 -0400
+X-Greylist: delayed 1311 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Jun 2021 15:02:22 EDT
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 2E3C933A5C3
+        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 13:38:13 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id w7lNlSzCD7sOiw7lNlXNII; Wed, 23 Jun 2021 13:38:13 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=C0MW5eb4P1KjrPDoV0Rq3MvNLJoSwHEP7qEI/WvdwRU=; b=pPzvkIo1r+5iK2//1v631kMFt5
+        gOCTU/+VJlm/+WLEudiNmods2jwPO+07eta+qiuaN+00VO3LfDivShSk3pPJ7GyL4ErKG16oqvd8Y
+        sYA/SdQODzOca88dq0etZAjW6RmuyTGXv9M3eLmCZnr505kANZ8uaVYmoCFD63H/Cl2O+1VXZk1t8
+        gEwLW/MdjQYxssK4EnmcNz8nVz4yTa8kNjEg5yMb515qZOosy7ZQD7ua/Jy1yqztlgHhCP5C+08SV
+        St1K2XXtKhvtJI6lV3JCEcWv4MsIa3CcIEQ+NPX88wRUIWM3jGYl/6nk+/mmc1KeF4Za1qXoG4QPO
+        HwtuFt6g==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:48326 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1lw7lK-000Lfm-Pt; Wed, 23 Jun 2021 13:38:10 -0500
+Subject: Re: linux-next: build warning after merge of the kspp-gustavo tree
+To:     dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210623083901.1d49d19d@canb.auug.org.au>
+ <20210623131455.GM28158@suse.cz>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <9f18da33-7446-7237-91be-e52a274877d8@embeddedor.com>
+Date:   Wed, 23 Jun 2021 13:39:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <2ED1BDF5-BC0C-47CD-8F33-9A46C738F8CF@linux.vnet.ibm.com>
- <CAKfTPtDrHv4OOfPvwOE2DMNoucXQJ=yvvEpTVKrXghSdKEnZcA@mail.gmail.com>
- <20210622143154.GA804@vingu-book> <53968DDE-9E93-4CB4-B5E4-526230B6E154@linux.vnet.ibm.com>
- <20210623071935.GA29143@vingu-book> <CCB4222F-000A-44E8-8D61-F69893704688@linux.vnet.ibm.com>
- <6C676AB3-5D06-471A-8715-60AABEBBE392@linux.vnet.ibm.com> <20210623120835.GB29143@vingu-book>
- <5D874F72-B575-4830-91C3-8814A2B371CD@linux.vnet.ibm.com> <CAKfTPtBKn27=jryS_sxsVb+0yHDze_PMcLuyFtDkDo0H9Nzqww@mail.gmail.com>
- <CAKfTPtDFUBe+qD9z0YYb7yyup_mhdNNX+zopFwcnyh+G41viAw@mail.gmail.com>
-In-Reply-To: <CAKfTPtDFUBe+qD9z0YYb7yyup_mhdNNX+zopFwcnyh+G41viAw@mail.gmail.com>
-From:   Odin Ugedal <odin@uged.al>
-Date:   Wed, 23 Jun 2021 19:37:23 +0200
-Message-ID: <CAFpoUr1kLf3knmVG4HjPaOLzbs0bz+YpRf_uno233ZPO9xxCdQ@mail.gmail.com>
-Subject: Re: [powerpc][next-20210621] WARNING at kernel/sched/fair.c:3277
- during boot
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Odin Ugedal <odin@uged.al>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210623131455.GM28158@suse.cz>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1lw7lK-000Lfm-Pt
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:48326
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 5
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-ons. 23. jun. 2021 kl. 19:27 skrev Vincent Guittot <vincent.guittot@linaro.org>:
->
-> On Wed, 23 Jun 2021 at 18:55, Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > On Wed, 23 Jun 2021 at 18:46, Sachin Sant <sachinp@linux.vnet.ibm.com> wrote:
-> > >
-> > >
-> > > > Ok. This becomes even more weird. Could you share your config file and more details about
-> > > > you setup ?
-> > > >
-> > > > Have you applied the patch below ?
-> > > > https://lore.kernel.org/lkml/20210621174330.11258-1-vincent.guittot@linaro.org/
-> > > >
-> > > > Regarding the load_avg warning, I can see possible problem during attach. Could you add
-> > > > the patch below. The load_avg warning seems to happen during boot and sched_entity
-> > > > creation.
-> > > >
-> > >
-> > > Here is a summary of my testing.
-> > >
-> > > I have a POWER box with PowerVM hypervisor. On this box I have a logical partition(LPAR) or guest
-> > > (allocated with 32 cpus 90G memory) running linux-next.
-> > >
-> > > I started with a clean slate.
-> > > Moved to linux-next 5.13.0-rc7-next-20210622 as base code.
-> > > Applied patch #1 from Vincent which contains changes to dequeue_load_avg()
-> > > Applied patch #2 from Vincent which contains changes to enqueue_load_avg()
-> > > Applied patch #3 from Vincent which contains changes to attach_entity_load_avg()
-> > > Applied patch #4 from https://lore.kernel.org/lkml/20210621174330.11258-1-vincent.guittot@linaro.org/
-> > >
-> > > With these changes applied I was still able to recreate the issue. I could see kernel warning
-> > > during boot.
-> > >
-> > > I then applied patch #5 from Odin which contains changes to update_cfs_rq_load_avg()
-> > >
-> > > With all the 5 patches applied I was able to boot the kernel without any warning messages.
-> > > I also ran scheduler related tests from ltp (./runltp -f sched) . All tests including cfs_bandwidth01
-> > > ran successfully. No kernel warnings were observed.
-> >
-> > ok so Odin's patch fixes the problem which highlights that we
-> > overestimate _sum or don't sync _avg and _sum correctly
-> >
-> > I'm going to look at this further
->
-> The problem is  "_avg * divider" makes the assumption that all pending
-> contrib are not null contributions whereas they can be null.
 
-Yeah.
 
-> Odin patch is the right way to fix this. Other patches should not be
-> useful for your problem
+On 6/23/21 08:14, David Sterba wrote:
+> On Wed, Jun 23, 2021 at 08:39:01AM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the kspp-gustavo tree, today's linux-next build (powerpc
+>> ppc64_defconfig) produced this warning:
+>>
+>> In file included from fs/btrfs/ctree.h:9,
+>>                  from fs/btrfs/struct-funcs.c:8:
+>> fs/btrfs/struct-funcs.c: In function 'btrfs_get_token_16':
+>> fs/btrfs/struct-funcs.c:80:46: warning: array subscript 1 is above array bounds of 'struct page *[1]' [-Warray-bounds]
+>>    80 |  token->kaddr = page_address(token->eb->pages[idx + 1]);  \
+>>       |                              ~~~~~~~~~~~~~~~~^~~~~~~~~
+> 
+> The warning is correct, on powerpc and 64k pages the array has only 1
+> item, ie. only index 0 is valid. The overflow won't happen in practice
+> though because of previous branch that would happen in 100% cases. The
+> code handles when some bytes cross 2 pages but on 64k pages it's all
+> just one page.
+> 
+> To allow the warning to be enabled globally we'll fix it, I'll let
+> Gustavo know once it's done.
 
-Ack. As I see it, given how PELT works now, it is the only way to
-mitigate it (without doing a lot of extra PELT stuff).
-Will post it as a patch together with a proper message later today or tomorrow.
+Awesome. :)
 
->
-> >
-> > >
-> > > Have also attached .config in case it is useful. config has CONFIG_HZ_100=y
-> >
-> > Thanks, i will have a look
-> >
-> > >
-> > > Thanks
-> > > -Sachin
-> > >
+Thanks, David.
+--
+Gustavo
 
-Thanks for reporting Sachin!
-
-Thanks
-Odin

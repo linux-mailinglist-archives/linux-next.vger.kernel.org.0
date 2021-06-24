@@ -2,164 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDD53B2437
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 02:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B533B2439
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 02:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhFXAUw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Jun 2021 20:20:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34358 "EHLO mail.kernel.org"
+        id S229844AbhFXAVq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Jun 2021 20:21:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229726AbhFXAUw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 23 Jun 2021 20:20:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2552460FF2;
-        Thu, 24 Jun 2021 00:18:34 +0000 (UTC)
+        id S229726AbhFXAVp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Jun 2021 20:21:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 444E060FE9;
+        Thu, 24 Jun 2021 00:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624493914;
-        bh=ZJfBFi3KwT9asgMeGguDFHNB56CL9D64fcrSpqs1UDc=;
+        s=k20201202; t=1624493967;
+        bh=AtqOXuFkUgj4Uw6L34Q2JkL/gHj3bAFNWm5XuAg3J9Y=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=SqAq0u92p2Zm//ynPYWu73ivv8rtKpwuWp3WWv281V6lDA21cZrhE3JFELxUiYxt4
-         rOUH7AYsvcgzbHI0+a1WnBkHzFzESC1FeQmCppYh0SQ+e560dFMRdVg3h/VeGajvRR
-         7RtFe3OohZUoD/HVAXFbDFQdpjvbpjBxXWQVm2mIcISVRwVkqvIusr25bpjAOEhCrh
-         FUxmVwHSxAfEtxvZfmYk/kZudeFtpVjbXi0puXNtcTgv1px6DtC3EV4OolQj1RjOUW
-         o60AthFuSfqGpeiZqN5CF9QtIORndwzjHpimHkKd6x/0Z6KgX51K+v/7AkrKAiEdTu
-         pumVyIyaZ+DGw==
+        b=sHaCwDoxOLnGsBg6LMDJfltO7Y5YHW+98bWv6JJlkaLdJwecfSrUBw3l+FPkjkJ18
+         KtseNH7ayhB9X7G74mQ+8D3Dq9Efq1Y7hYn5CzxMPdUnyAS0989W/24bp7UtsrXVYA
+         6paBpVPYIalgfoiuqh6XtlVzfui9Ce0p4yHOnoHCjn+QcmIUcseC1Y8l6239tqv4aj
+         5LSBgMKXbvWtBE9ZLT5xGmqLkYwn2adMuJEDFHgtl0F84VdJGHU0Hz7zLBPOutyV1S
+         OtCzwBxpL3JjIg596m/mGerGzJClzs98BjrgTOS1EIUGNVA3u/R8Dada7yy42mydhJ
+         qhGYQTcHTpcNQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E515B5C08D8; Wed, 23 Jun 2021 17:18:33 -0700 (PDT)
-Date:   Wed, 23 Jun 2021 17:18:33 -0700
+        id 186885C08D8; Wed, 23 Jun 2021 17:19:27 -0700 (PDT)
+Date:   Wed, 23 Jun 2021 17:19:27 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
+Cc:     aneesh.kumar@linux.ibm.com, LKML <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        lkft-triage@lists.linaro.org, LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] [clang] x86_64-linux-gnu-ld: mm/mremap.o: in function
- `move_pgt_entry': mremap.c:(.text+0x763): undefined reference to
- `__compiletime_assert_342'
-Message-ID: <20210624001833.GR4397@paulmck-ThinkPad-P17-Gen-1>
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marco Elver <elver@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: Build failure in -next
+Message-ID: <20210624001927.GS4397@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <CA+G9fYsWHE5Vu9T3FV-vtHHbVFJWEF=bmjQxwaZs3uVYef028g@mail.gmail.com>
- <CA+G9fYvvf+XTvZg1sTq4_f9OrVFsCazGo0ozaEbjVYgSeKCkWA@mail.gmail.com>
- <YMtTdU2b9fI3dnFD@casper.infradead.org>
- <YMuOSnJsL9qkxweY@archlinux-ax161>
- <6f3c5317-2877-9a57-0126-e9305f000269@linux.ibm.com>
- <YM0mrZIPM+sWTDHf@Ryzen-9-3900X.localdomain>
- <CAKwvOd=w0iPT_LLHQ48Mq3XCZcW9dZNRTpq+0OyVEjsg-VRXOw@mail.gmail.com>
+References: <20210623223015.GA315292@paulmck-ThinkPad-P17-Gen-1>
+ <CAKwvOd=Y1fhJM7NpotvjNy3OE+JtqEBy046ctwE=cqV_ge5tgw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=w0iPT_LLHQ48Mq3XCZcW9dZNRTpq+0OyVEjsg-VRXOw@mail.gmail.com>
+In-Reply-To: <CAKwvOd=Y1fhJM7NpotvjNy3OE+JtqEBy046ctwE=cqV_ge5tgw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 23, 2021 at 04:39:56PM -0700, Nick Desaulniers wrote:
-> An additional report:
-> https://lore.kernel.org/lkml/20210623223015.GA315292@paulmck-ThinkPad-P17-Gen-1/
-> EOM
+On Wed, Jun 23, 2021 at 04:39:11PM -0700, Nick Desaulniers wrote:
+> On Wed, Jun 23, 2021 at 3:30 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > Hello, Aneesh!
+> >
+> > Yesterday evening's next-20210622 testing gave me the following
+> > kernel-build error:
+> >
+> > ld: mm/mremap.o: in function `move_huge_pud':
+> > /home/git/linux-next/mm/mremap.c:372: undefined reference to `__compiletime_assert_395'
+> >
+> > Bisection landed on this commit:
+> >
+> > 257121c5aabe ("mm/mremap: convert huge PUD move to separate helper")
+> >
+> > I have no idea how this commit relates to that error message, but
+> > reverting this commit on top of next-20210622 really does get rid of
+> > the problem.
+> >
+> > The following reproducer provokes this error:
+> >
+> > tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --torture lock --configs LOCK07 --build-only --kconfig "CONFIG_DEBUG_LOCK_ALLOC=y CONFIG_PROVE_LOCKING=y" --kmake-arg "CC=clang-11"
+> >
+> > Run the above command in the top-level directory of your -next source
+> > tree, and using this compiler:
+> >
+> > $ clang-11 -v
+> > Ubuntu clang version 11.1.0-++20210428103817+1fdec59bffc1-1~exp1~20210428204431.166
+> > Target: x86_64-pc-linux-gnu
+> >
+> > Thoughts?
+> >
+> >                                                         Thanx, Paul
 > 
-> On Fri, Jun 18, 2021 at 4:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Fri, Jun 18, 2021 at 10:32:42AM +0530, Aneesh Kumar K.V wrote:
-> > > On 6/17/21 11:32 PM, Nathan Chancellor wrote:
-> > > > Rebuilt the CC list because most people were added based on the
-> > > > incorrect bisect result.
-> > > >
-> > > > On Thu, Jun 17, 2021 at 02:51:49PM +0100, Matthew Wilcox wrote:
-> > > > > On Thu, Jun 17, 2021 at 06:15:45PM +0530, Naresh Kamboju wrote:
-> > > > > > On Thu, 17 Jun 2021 at 17:41, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > > > > > x86_64-linux-gnu-ld: mm/mremap.o: in function `move_pgt_entry':
-> > > > > > > mremap.c:(.text+0x763): undefined reference to `__compiletime_assert_342'
-> > > > > >
-> > > > > > The git bisect pointed out the first bad commit.
-> > > > > >
-> > > > > > The first bad commit:
-> > > > > > commit 928cf6adc7d60c96eca760c05c1000cda061604e
-> > > > > > Author: Stephen Boyd <swboyd@chromium.org>
-> > > > > > Date:   Thu Jun 17 15:21:35 2021 +1000
-> > > > > >      module: add printk formats to add module build ID to stacktraces
-> > > > >
-> > > > > Your git bisect probably went astray.  There's no way that commit
-> > > > > caused that regression.
-> > > >
-> > > > My bisect landed on commit 83f85ac75855 ("mm/mremap: convert huge PUD
-> > > > move to separate helper"). flush_pud_tlb_range() evaluates to
-> > > > BUILD_BUG() when CONFIG_TRANSPARENT_HUGEPAGE is unset but this function
-> > > > is present just based on the value of
-> > > > CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD.
-> > > >
-> > > > $ make -skj(nproc) ARCH=x86_64 CC=clang O=build/x86_64 distclean allnoconfig mm/mremap.o
-> > > >
-> > > > $ llvm-readelf -s build/x86_64/mm/mremap.o &| rg __compiletime_assert
-> > > >      21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT   UND __compiletime_assert_337
-> > > >
-> > > > $ rg TRANSPARENT_ build/x86_64/.config
-> > > > 450:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
-> > > > 451:CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
-> > > > 562:# CONFIG_TRANSPARENT_HUGEPAGE is not set
-> > > >
-> > > > Not sure why this does not happen on newer clang versions, presumably
-> > > > something with inlining decisions? Still seems like a legitimate issue
-> > > > to me.
-> > > >
-> > >
-> > > gcc 10 also doesn't give a build error. I guess that is because we evaluate
-> > >
-> > >      if (pud_trans_huge(*old_pud) || pud_devmap(*old_pud)) {
-> > >
-> > >  to if (0) with CONFIG_TRANSPARENT_HUGEPAGE disabled.
-> > >
-> > > switching that to if (1) do results in BUILD_BUG triggering.
-> >
-> > Thanks for pointing that out. I think what happens with clang-10 and
-> > clang-11 is that move_huge_pud() gets inlined into move_pgt_entry() but
-> > then the compiler does not figure out that the HPAGE_PUD case is dead so
-> > the code sticks around, where as GCC and newer clang versions can figure
-> > that out and eliminate that case.
-> >
-> > > Should we fix this ?
-> >
-> > Yes, I believe that we should.
-> >
-> > > modified   mm/mremap.c
-> > > @@ -336,7 +336,7 @@ static inline bool move_normal_pud(struct vm_area_struct
-> > > *vma,
-> > >  }
-> > >  #endif
-> > >
-> > > -#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
-> > > +#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) &&
-> > > defined(CONFIG_TRANSPARENT_HUGEPAGE)
-> > >  static bool move_huge_pud(struct vm_area_struct *vma, unsigned long
-> > > old_addr,
-> > >                         unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
-> > >  {
+> ++beers_owed; for the report and bisection. Also reported
+> https://lore.kernel.org/lkml/YM0mrZIPM+sWTDHf@Ryzen-9-3900X.localdomain/,
+> let's chat over there.
 
-Making the above change does the trick for my repeat-by, thank you!
+And thank you for the redirection!
 
-> > That works or we could mirror what has already been done for the
-> > HPAGE_PMD case. No personal preference.
-> >
-> > diff --git a/mm/mremap.c b/mm/mremap.c
-> > index 9a7fbec31dc9..5989d3990020 100644
-> > --- a/mm/mremap.c
-> > +++ b/mm/mremap.c
-> > @@ -460,7 +460,8 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
-> >                                       new_entry);
-> >                 break;
-> >         case HPAGE_PUD:
-> > -               moved = move_huge_pud(vma, old_addr, new_addr, old_entry,
-> > +               moved = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
-> > +                       move_huge_pud(vma, old_addr, new_addr, old_entry,
-> >                                       new_entry);
-> >                 break;
-
-This one is already in -next, but you knew that already.  I am happy to
-test the resulting patch, when and if.
-
-						Thanx, Paul
+							Thanx, Paul

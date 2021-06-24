@@ -2,91 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5843B3909
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 00:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A8B3B3958
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 00:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbhFXWGH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Jun 2021 18:06:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28414 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232582AbhFXWGG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 24 Jun 2021 18:06:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624572226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xINwPHS+dfHZopNTm0uHfsDrjJ9951BYIaDBQCjjtec=;
-        b=auOIuPrcQXdygrnnWKib6NnLx/OF3Aqwj7PkxWx7k2AWMGm9gzHdKeAjGy/UoczpwXcOdm
-        Qnl97IDmnQRWimVcs8uRKjpmRGQPh4+lhrM8SRCExg9FThr7xAOxSojtOgMOLGid2jeSw1
-        TpP5HbHA5ShpuxNWzaAwgnWHQpV7WIQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-501-_o3DmN_VO5-htV2ID1TSgQ-1; Thu, 24 Jun 2021 18:03:45 -0400
-X-MC-Unique: _o3DmN_VO5-htV2ID1TSgQ-1
-Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc3100000b02901d849b41038so3395794wmj.7
-        for <linux-next@vger.kernel.org>; Thu, 24 Jun 2021 15:03:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xINwPHS+dfHZopNTm0uHfsDrjJ9951BYIaDBQCjjtec=;
-        b=NQbmXFGjzBwXKBmkk1YbPWUkupW3TQp4r446ng5D638x8lrTRkRGpW3qKDwKvDhpdW
-         1ehVvtrVYGDyUiAHBDvbzyxDzgL83gHkBJGy5oNmCAQupMThQ3af5Qgu7tbrQ5YSjIfk
-         1K+GCu9J90g/civ7O14AmkXyVVQ8wLWQbYVQIjARcG+Vs9j4FdqRpvVUSLq4N0PUZf3s
-         vgqATH5YuPZ4/nQ6kk7DLzGxcWVGnQAiBpB7TWm4PKdJviuTIfCJgJ1/DzvZTrshBlH/
-         5aN5LsQnOSd+dFCpXnhp/sq7MBHGcqLb0qYXpVHtILlzkb+naBE0yA6eOaYdBAKoXhb1
-         JiPQ==
-X-Gm-Message-State: AOAM530rPYicPTZQsymp75JRxL708s9b5c4abgDWH13Q2F15zGF5wQgr
-        bRvqE4MAxWmYX08lB49CBfBSuNg4Co2qM8pk+HDR6fJRe5GG3oECo9XBeCnmYuCrUyFvq56Y/Qg
-        8YPhQKxLK3XxgTQjS1nCN7/ikMm/6g3oRUDpuZRAHtc7Di7bAAcPCHs7bl5/B1YiawzTWvgujuA
-        ==
-X-Received: by 2002:a5d:5259:: with SMTP id k25mr3794476wrc.331.1624572223992;
-        Thu, 24 Jun 2021 15:03:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxCgqS09+IiM0mecZm6NBFzQwOQy0GTv6Ec+vOZajqOGoB1Q1LI/2+ZdB/c10FvH+UwrAQ+JQ==
-X-Received: by 2002:a5d:5259:: with SMTP id k25mr3794455wrc.331.1624572223821;
-        Thu, 24 Jun 2021 15:03:43 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id x25sm10368574wmj.23.2021.06.24.15.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jun 2021 15:03:43 -0700 (PDT)
-Subject: Re: linux-next: Signed-off-by missing for commits in the kvm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210625075849.3cff81da@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <9409cf8b-3d56-748f-64e6-6d1e42d62413@redhat.com>
-Date:   Fri, 25 Jun 2021 00:03:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S232917AbhFXWno (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Jun 2021 18:43:44 -0400
+Received: from ozlabs.org ([203.11.71.1]:39751 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232913AbhFXWnm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 24 Jun 2021 18:43:42 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G9w8q4svlz9sV8;
+        Fri, 25 Jun 2021 08:41:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1624574477;
+        bh=Dzv52F0SnnFNYtb+bHVaVYmqTSKv7JgbUkh4dGMK1G4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rljYfYqLBYPqi3yaoU8df5DSATRX2yaxSAUCltw/4bX3jJuERSFCSYH885HrGPNQ4
+         Tah0CKLhvnev+bEVMgMZueWnrsD0iQLv8OnB9oAal+7BGQgt8ITE+2m8AA9wu51aJJ
+         K94xkURch6Ioy2MycJEj/6ZO5X+FrkRotl3yNJT3EnQ5BFsAvwyZaDfg0d8XK/d/uT
+         Dj3o10RhlnFYb067vVNhDrenyhCgNl40Oa5NJbAZ+hq1e/h4jOKgt8HYl83aiETzPy
+         Y6Qn5AwRslPHjKoycanOO4TQTZLTEHrAEU43EOzIjn84nu0VamSey4Rw3eyHFTT1xh
+         hUTuXIQC6WVMg==
+Date:   Fri, 25 Jun 2021 08:41:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        lkft-triage@lists.linaro.org
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210625084114.4126dd02@canb.auug.org.au>
+In-Reply-To: <CAPv3WKf6HguRC_2ckau99d4iWG-FV71kn8wiX9r5wuK335EEFw@mail.gmail.com>
+References: <20210624082911.5d013e8c@canb.auug.org.au>
+        <CAPv3WKfiL+sR+iK_BjGKDhtNgjoxKEPv49bU1X9_7+v+ytdR1w@mail.gmail.com>
+        <YNPt91bfjrgSt8G3@Ryzen-9-3900X.localdomain>
+        <CA+G9fYtb07aySOpB6=wc4ip_9S4Rr2UUYNgEOG6i76g--uPryQ@mail.gmail.com>
+        <20210624185430.692d4b60@canb.auug.org.au>
+        <CAPv3WKf6HguRC_2ckau99d4iWG-FV71kn8wiX9r5wuK335EEFw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210625075849.3cff81da@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/fsjcmTTZ98dxqF2S9vcrms2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 24/06/21 23:58, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->    df40a7ffa871 ("KVM: debugfs: Reuse binary stats descriptors")
->    01bb3b73038a ("KVM: selftests: Add selftest for KVM statistics data binary interface")
->    a4b86b00ad24 ("KVM: stats: Add documentation for binary statistics interface")
->    da28cb6cd042 ("KVM: stats: Support binary stats retrieval for a VCPU")
->    170a9e1294a7 ("KVM: stats: Support binary stats retrieval for a VM")
-> 
-> are missing a Signed-off-by from their committers.
-> 
+--Sig_/fsjcmTTZ98dxqF2S9vcrms2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed, thanks.  Still getting used to b4.
+Hi Marcin,
 
-Paolo
+On Thu, 24 Jun 2021 16:25:57 +0200 Marcin Wojtas <mw@semihalf.com> wrote:
+>
+> Just to understand correctly - you reverted merge from the local
+> branch (I still see the commits on Dave M's net-next/master). I see a
 
+Yes, I reverted the merge in linux-next only.
+
+> quick solution, but I'm wondering how I should proceed. Submit a
+> correction patch to the mailing lists against the net-next? Or the
+> branch is going to be reverted and I should resubmit everything as v4?
+
+I see others have answered this.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fsjcmTTZ98dxqF2S9vcrms2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDVCgoACgkQAVBC80lX
+0GzmWwf/fr8EWOF5GQYVveJX5NrFqj8EcNIrHX9mXjVZPvXEWqQiyvnDEBXxkzmf
+9B+CQIKIyMkAnJOS3P3jJVteoy2+9SzTzEbHtYDp2yelazNDNG80Oe5H0UwZ7nYU
+mY+ba2x6vs88YoO8NB24WnIV56zul+tEo3SJH8bwdCg7ayX5HwpvjCHu+XEqf3Dw
+cUErzauWomCu5lBSBfifO5tpr7+Zl2T/1xVRSSVBr70KlwigvCKIqy5oSMR5YY7R
+f5cB9/H0Zemr2qj7zRjUUEPYjlOzksM5tTbl4PB0EUw5QJevCed/q5vVTb3cVUQn
+XaMJ79suCXHMJLIso5B/pgazhPL8nQ==
+=yG3T
+-----END PGP SIGNATURE-----
+
+--Sig_/fsjcmTTZ98dxqF2S9vcrms2--

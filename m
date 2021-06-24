@@ -2,99 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3253B37B4
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 22:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087883B38E9
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 23:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbhFXUVR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Jun 2021 16:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbhFXUVR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Jun 2021 16:21:17 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C0FC061756
-        for <linux-next@vger.kernel.org>; Thu, 24 Jun 2021 13:18:57 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id f20so5011910qtk.10
-        for <linux-next@vger.kernel.org>; Thu, 24 Jun 2021 13:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mdCrysfxWqAqrBAEJbk2pV4kE289NH197rWy91TRue0=;
-        b=J3UNp7fycefSlxiA3mkRZdfEG3spTLib7gsbR+gNSs2vBpre7+KL7zuGUa5h2j+3C2
-         m2tXLocDWlWn+5z1Ln6zP0psDRiNIBz5Hsg2+UE45J0MeRXZiY5gH8oOlVwRCQ3zockh
-         yJ8JRjDiEyknOA7nHDsHLLvwlG9O/fNruBlVNeawGcY10XIohXhffo2ahykLn5PMzAM2
-         RiYGmzUuHaR45ZUnc1dJcRCogzpYZyoSQARuXSiJtoNkukVnzYTE1khkrrTzXVdhtVnU
-         EQUtPnj8I+9Biekm2q1/SiHbMDfgO/ron+ATRuLx8dm4mQJsYQzK6UaH+Ylq/pOtiqfU
-         YysA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mdCrysfxWqAqrBAEJbk2pV4kE289NH197rWy91TRue0=;
-        b=cB5iev+pwvOnBUtOlSr5CVKhtMtXmxXTo2+MGUVtTa+1ivcLH48fed2zHOEmov/Lid
-         CF0yjOFYGyjHMymdVvqNKMkd8Rt3pu1ddsVPOLSeiG0a7GJAr2JGP4RMHrziQaH65atB
-         zNMr1/+NRTOWqfB+V4nhFhq97aR+wG0SJOsGd9/lp7obic3tUrZIWa4KYza2XH6JcwsQ
-         T2pcpAfaMnhpD3clvunXO4tvGAD9MgrAGCLiwotlHtk2qDZg4AaYXAFbzGJB9Lq9n9dI
-         wFNHzd6nmHvgR+Fl1CuWrMgyIDyVW/chKPEEBhVrtUHBaGOgAEmacSB2B0JcqVnC/OPY
-         1yDg==
-X-Gm-Message-State: AOAM5313DcrxVeWUzCBvBec2P5XXaP5t77kmbeir4BTgiMlpucPYhC6r
-        vIe0jGYI2+MTjtKyq0GoFTmDMEDzQJbwDI58jn0dJQ==
-X-Google-Smtp-Source: ABdhPJya9rAenFjimUfW1E8WtTyhpryokAVJlemxaygbzKzlIzWpb3wMdQpusHFqDZKDkOEm+8TLqVM8SVmddmrdVzg=
-X-Received: by 2002:aed:2064:: with SMTP id 91mr6409571qta.318.1624565937026;
- Thu, 24 Jun 2021 13:18:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210624082911.5d013e8c@canb.auug.org.au> <CAPv3WKfiL+sR+iK_BjGKDhtNgjoxKEPv49bU1X9_7+v+ytdR1w@mail.gmail.com>
- <YNPt91bfjrgSt8G3@Ryzen-9-3900X.localdomain> <CA+G9fYtb07aySOpB6=wc4ip_9S4Rr2UUYNgEOG6i76g--uPryQ@mail.gmail.com>
- <20210624185430.692d4b60@canb.auug.org.au> <CAPv3WKf6HguRC_2ckau99d4iWG-FV71kn8wiX9r5wuK335EEFw@mail.gmail.com>
- <3d6ea68a-9654-6def-9533-56640ceae69f@kernel.org> <CAPv3WKdjE5ywVFB+94invSLg=jG5JHBdvLQLKDTPq13+8PjqmA@mail.gmail.com>
- <20210624121424.51d754bb@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210624121424.51d754bb@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Thu, 24 Jun 2021 22:18:44 +0200
-Message-ID: <CAPv3WKdz6n0CZDusDcxDYJFgUNiEj7h=w=iVUAayiwy4Qjz3SQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Networking <netdev@vger.kernel.org>,
+        id S232732AbhFXVrl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Jun 2021 17:47:41 -0400
+Received: from ozlabs.org ([203.11.71.1]:58181 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232582AbhFXVrk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 24 Jun 2021 17:47:40 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G9twG4vyMz9sWc;
+        Fri, 25 Jun 2021 07:45:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1624571119;
+        bh=VWRgsKGXs+kf4/GDRzLPQ68mIjEHYRO3f7+CVc1LDWQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oFYiMF8J/INuMyv8WE7t81EJWa74FqXaaYUK9E+Awuz0QCEZR344mnq5MLhisTW/q
+         +su2dkXZ/4A6iRLj2VfTgEZiXhE1e6MH29BXLsrnUR28oTWz2TchGgXuBySPaHGMkv
+         8YRefE1aC8OLZSHM4ph7CJVGAxiH8k7+uu2NOa52LKj3Wq3G38DvnyZs9Nupl4BqJ+
+         SweSNvHAMh67g9cdx3V91e6oLUd9YP+HIbE/f//GqDZUOa6qcjet84aDUqtHjZ5w6r
+         W9nVG9GXgcAJ7eFqOLGfJmpn3YSjzF6nJWlFgwlgaEb9y21YxdFS0vGd+FNrZzTTIg
+         s1Kp02RFWKWIA==
+Date:   Fri, 25 Jun 2021 07:45:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20210625074517.685fb0f7@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/AYD8r9ygZRo2/172wzLr+4M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Jakub,
+--Sig_/AYD8r9ygZRo2/172wzLr+4M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your prompt response.
+Hi all,
 
-czw., 24 cze 2021 o 21:14 Jakub Kicinski <kuba@kernel.org> napisa=C5=82(a):
->
-> On Thu, 24 Jun 2021 20:15:00 +0200 Marcin Wojtas wrote:
-> > TL;DR, we need to get rid of a helper routine (introduced so that to
-> > address review comments of v1), as it causes a depmod cycles when
-> > fwnode_/of_/acpi_mdio are built as modules.
-> > It can be done twofold:
-> > a. 3 commits, i.e:
-> >   Revert "net: mdiobus: Introduce fwnode_mdbiobus_register()"
-> >   Revert "net/fsl: switch to fwnode_mdiobus_register"
-> >   net: mvmdio: resign from fwnode_mdiobus_register
-> > b. Same diff but squashed.
-> >
-> > Please let me know your preference, so that I can do it properly up fro=
-nt.
->
-> Not sure if Dave will notice this mid-thread question. It probably
-> doesn't matter as long as (1) doesn't introduce further transient
-> build failures.
+In commit
 
-I think I'll go with the squashed rollback commit that removes the
-problematic helper, as it may be easier to apply. I'll double check
-modules_install before.
+  0ec13aff058a ("Revert "ibmvnic: simplify reset_long_term_buff function"")
 
-Best regards,
-Marcin
+Fixes tag
+
+  Fixes: 1c7d45e7b2c ("ibmvnic: simplify reset_long_term_buff function")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This can be fixed for the future by setting core.abbrev to 12 (or more)
+or (for git v2.11 or later) just making sure it is not set (or set to
+"auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/AYD8r9ygZRo2/172wzLr+4M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDU/O0ACgkQAVBC80lX
+0GzhNwf+NojG313N29VJ5wIFTgpU8tivr9xiKfLduNAAhKMygb2iRFozu5F/z9+V
+57qwkGjqPbqEZl9HwIsKy4JPEGtuXX/L1nKgne8ZdVkkPK+6eAGOiprbt4X0/vIE
+g3nUDxzLgBJAsebLh7rFE/27nlwq9wfTitYk+s/LRIEL6RRAvZUzJlmt9reAuPAN
+bEGkuHs561JIBs6lMMd4hHZtGQJoJ797DBTyeDroz8BMxw4wWXQJ6TkywGkb9DRc
+kktnk3pT9awHaJ6zK50PjMgXP4cr/LJb3w3t7JX9mK6ef3KJ0ZWSxj/E3ji6ckqS
+v2Hmo8bLXbCbAAPHSs2mVP2iACMd3g==
+=xfRV
+-----END PGP SIGNATURE-----
+
+--Sig_/AYD8r9ygZRo2/172wzLr+4M--

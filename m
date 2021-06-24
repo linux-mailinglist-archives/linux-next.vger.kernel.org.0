@@ -2,157 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF07C3B3143
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 16:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67373B32E5
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 17:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbhFXO2b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Jun 2021 10:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbhFXO2a (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Jun 2021 10:28:30 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E144C061574
-        for <linux-next@vger.kernel.org>; Thu, 24 Jun 2021 07:26:11 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id b3so4250548qtq.6
-        for <linux-next@vger.kernel.org>; Thu, 24 Jun 2021 07:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eF2C5PKSwNIz1Hk6OjorU3qtEfdzoZ8f5y1ZncpfVq4=;
-        b=NtirYk5GcJaWeM5Ci3cQMud1RkVXwj+O2x4lIiPhMHgPAe1npALe96C9De94N/JisN
-         EiZG08HB7muGGuwAXT8p3NaNJmhtZ9FlARgfyYa/rq197xk7gMqTCEyE5OvRJ88/5xU2
-         h1zzdwG/O0QABXt0U9jvA1bWAcj7bAZuD3+aEr3pmHE0ZhxyzH1XE7kBmF/zy2iq6uka
-         eFNPo4G4b1t7u4ZYkjd8YrMH1WGAYRwo7nvV3OIODo5LXlnReW9ULwbDUGxhSuzSCSPa
-         Oc/5G8hrdP5XPlxNeclr8GgJxMq/LAFwf6FUg1jtcDwuZGhiRypsFBW1/OC4iC9sbUmo
-         uIgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eF2C5PKSwNIz1Hk6OjorU3qtEfdzoZ8f5y1ZncpfVq4=;
-        b=BMBhFqk4gb+cP3ADq2gsweCVot86GIW653sxgS3LAbvAKVdKlKEyG3zt70N5rGAj4Q
-         +jPSjFsAvqLopiR5uaVxgGGR1qPOudKoZUIkjUy4O8DVjOdkfSB/HDygUEEU9Bfn6JJO
-         PV75UQiLiZ6bp6hUyO4Ern9ZekwpyippmuwetEYhzNOp3MMc8kt9dMzNvk1VI+myrnC1
-         /S4sTBKFt7KoM+mFtXVp5uQ8pHQgucnZkkJmIF/zSl8YzCfE5clln5LX8e8+E6oYbUjo
-         5A0OqWRTmn6jX9jWhN4BhUbUpKX0a1JoVqd85QUwn6Jwdx+mBIZbQrOdgXMQ/Z9Dd/1p
-         YAag==
-X-Gm-Message-State: AOAM5330tvZCyLe4dkbzfW9NmsF9He6svcrj8xVmrtuqs6ODE0ShWwUL
-        G5YWCM/f+mIq+elvVHwf81VcSKMuNeDqA1ZYzMVL/Q==
-X-Google-Smtp-Source: ABdhPJxLgFfzXPHK6vcLL7zpNlT3Q675QmDxZBMaTP9WSGvZAsrzJrmYMlnoGrDXO+85MNogvb4YyEBwonpUcghFD0c=
-X-Received: by 2002:ac8:57d2:: with SMTP id w18mr5097416qta.306.1624544770432;
- Thu, 24 Jun 2021 07:26:10 -0700 (PDT)
+        id S231761AbhFXP5o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Jun 2021 11:57:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11930 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230267AbhFXP5o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 24 Jun 2021 11:57:44 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15OFYDdQ036150;
+        Thu, 24 Jun 2021 11:55:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : mime-version : content-type; s=pp1;
+ bh=70voqBDCjLyVbA4YA+h5sR8dzQZQGfW8a3mYRzXbcLs=;
+ b=r+Tk1RmqR4X1TkU2b5ybkQ9Y1bL0emshaAKQwRO/4UAUtljOk+fjt4MqajZU+j71VUuh
+ jQ4qNwRHpntoseB7v+dZkc12ZKQmg558/i3kOZPSUTxIJcl8jYEtWAmKrtlcTQRxIXbT
+ Ci9g5AtjFFoYoVte0M3UKWKfcTcLPyw0y/TCIqoz2Q0iBn5SSZRiuqB0PeGgh/CkevqS
+ aWP3yk1s+XiVjjFn4tBSO76tMnssSh91f2j9BL6P/9fx4yr+Zy+oYgsKWvR7HwyjQze9
+ 6fwsyDC1gy3zEcZaqkCPa9dP5qUczfTp/Exh9d2Q+ccrNMgjQwQXn+2W/gSzQnaGUaBO /w== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39cvq8s095-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Jun 2021 11:55:17 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15OFs3Pj001390;
+        Thu, 24 Jun 2021 15:55:15 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 399878amuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Jun 2021 15:55:15 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15OFtCqZ34931150
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Jun 2021 15:55:13 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D27A74C040;
+        Thu, 24 Jun 2021 15:55:12 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 086654C058;
+        Thu, 24 Jun 2021 15:55:12 +0000 (GMT)
+Received: from in.ibm.com (unknown [9.199.47.185])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 24 Jun 2021 15:55:11 +0000 (GMT)
+Date:   Thu, 24 Jun 2021 21:25:09 +0530
+From:   Bharata B Rao <bharata@linux.ibm.com>
+To:     linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     mpe@ellerman.id.au
+Subject: PowerPC guest getting "BUG: scheduling while atomic" on
+ linux-next-20210623 during secondary CPUs bringup
+Message-ID: <YNSq3UQTjm6HWELA@in.ibm.com>
+Reply-To: bharata@linux.ibm.com
 MIME-Version: 1.0
-References: <20210624082911.5d013e8c@canb.auug.org.au> <CAPv3WKfiL+sR+iK_BjGKDhtNgjoxKEPv49bU1X9_7+v+ytdR1w@mail.gmail.com>
- <YNPt91bfjrgSt8G3@Ryzen-9-3900X.localdomain> <CA+G9fYtb07aySOpB6=wc4ip_9S4Rr2UUYNgEOG6i76g--uPryQ@mail.gmail.com>
- <20210624185430.692d4b60@canb.auug.org.au>
-In-Reply-To: <20210624185430.692d4b60@canb.auug.org.au>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Thu, 24 Jun 2021 16:25:57 +0200
-Message-ID: <CAPv3WKf6HguRC_2ckau99d4iWG-FV71kn8wiX9r5wuK335EEFw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jHPrxFdDA7ykan0m5jEhuQwh3ZUNLzGP
+X-Proofpoint-ORIG-GUID: jHPrxFdDA7ykan0m5jEhuQwh3ZUNLzGP
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-24_12:2021-06-24,2021-06-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 phishscore=0 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106240086
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi,
 
-czw., 24 cze 2021 o 10:54 Stephen Rothwell <sfr@canb.auug.org.au> napisa=C5=
-=82(a):
->
-> Hi all,
->
-> On Thu, 24 Jun 2021 11:43:14 +0530 Naresh Kamboju <naresh.kamboju@linaro.=
-org> wrote:
-> >
-> > On Thu, 24 Jun 2021 at 07:59, Nathan Chancellor <nathan@kernel.org> wro=
-te:
-> > >
-> > > On Thu, Jun 24, 2021 at 12:46:48AM +0200, Marcin Wojtas wrote:
-> > > > Hi Stephen,
-> > > >
-> > > > czw., 24 cze 2021 o 00:29 Stephen Rothwell <sfr@canb.auug.org.au> n=
-apisa=C5=82(a):
-> > > > >
-> > > > > Hi all,
-> > > > >
-> > > > > Today's linux-next build (x86_64 modules_install) failed like thi=
-s:
-> > > > >
-> > > > > depmod: ../tools/depmod.c:1792: depmod_report_cycles_from_root: A=
-ssertion `is < stack_size' failed.
-> >
-> > LKFT test farm found this build error.
-> >
-> > Regressions found on mips:
-> >
-> >  - build/gcc-9-malta_defconfig
-> >  - build/gcc-10-malta_defconfig
-> >  - build/gcc-8-malta_defconfig
-> >
-> > depmod: ERROR: Cycle detected: fwnode_mdio -> of_mdio -> fwnode_mdio
-> > depmod: ERROR: Found 2 modules in dependency cycles!
-> > make[1]: *** [/builds/linux/Makefile:1875: modules_install] Error 1
-> >
-> > > > Thank you for letting us know. Not sure if related, but I just foun=
-d
-> > > > out that this code won't compile for the !CONFIG_FWNODE_MDIO. Below
-> > > > one-liner fixes it:
-> > > >
-> > > > --- a/include/linux/fwnode_mdio.h
-> > > > +++ b/include/linux/fwnode_mdio.h
-> > > > @@ -40,7 +40,7 @@ static inline int fwnode_mdiobus_register(struct =
-mii_bus *bus,
-> > > >          * This way, we don't have to keep compat bits around in dr=
-ivers.
-> > > >          */
-> > > >
-> > > > -       return mdiobus_register(mdio);
-> > > > +       return mdiobus_register(bus);
-> > > >  }
-> > > >  #endif
-> > > >
-> > > > I'm curious if this is the case. Tomorrow I'll resubmit with above,=
- so
-> > > > I'd appreciate recheck.
-> >
-> > This proposed fix did not work.
-> >
-> > > Reverting all the patches in that series fixes the issue for me.
-> >
-> > Yes.
-> > Reverting all the (6) patches in that series fixed this build problem.
-> >
-> > git log --oneline | head
-> > 3752a7bfe73e Revert "Documentation: ACPI: DSD: describe additional MAC
-> > configuration"
-> > da53528ed548 Revert "net: mdiobus: Introduce fwnode_mdbiobus_register()=
-"
-> > 479b72ae8b68 Revert "net/fsl: switch to fwnode_mdiobus_register"
-> > 92f85677aff4 Revert "net: mvmdio: add ACPI support"
-> > 3d725ff0f271 Revert "net: mvpp2: enable using phylink with ACPI"
-> > ffa8c267d44e Revert "net: mvpp2: remove unused 'has_phy' field"
-> > d61c8b66c840 Add linux-next specific files for 20210623
->
-> So I have reverted the merge of that topic branch from linux-next for
-> today.
+A PowerPC KVM guest gets the following BUG message when booting
+linux-next-20210623:
 
-Just to understand correctly - you reverted merge from the local
-branch (I still see the commits on Dave M's net-next/master). I see a
-quick solution, but I'm wondering how I should proceed. Submit a
-correction patch to the mailing lists against the net-next? Or the
-branch is going to be reverted and I should resubmit everything as v4?
+smp: Bringing up secondary CPUs ...
+BUG: scheduling while atomic: swapper/1/0/0x00000000
+no locks held by swapper/1/0.
+Modules linked in:
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.13.0-rc7-next-20210623
+Call Trace:
+[c00000000ae5bc20] [c000000000badc64] dump_stack_lvl+0x98/0xe0 (unreliable)
+[c00000000ae5bc60] [c000000000210200] __schedule_bug+0xb0/0xe0
+[c00000000ae5bcd0] [c000000001609e28] __schedule+0x1788/0x1c70
+[c00000000ae5be20] [c00000000160a8cc] schedule_idle+0x3c/0x70
+[c00000000ae5be50] [c00000000022984c] do_idle+0x2bc/0x420
+[c00000000ae5bf00] [c000000000229d88] cpu_startup_entry+0x38/0x40
+[c00000000ae5bf30] [c0000000000666c0] start_secondary+0x290/0x2a0
+[c00000000ae5bf90] [c00000000000be54] start_secondary_prolog+0x10/0x14
 
-Best regards,
-Marcin
+<The above repeats for all the secondary CPUs>
+
+smp: Brought up 2 nodes, 16 CPUs
+numa: Node 0 CPUs: 0-7
+numa: Node 1 CPUs: 8-15
+
+This seems to have started from next-20210521 and isn't seen on
+next-20210511.
+
+Regards,
+Bharata.

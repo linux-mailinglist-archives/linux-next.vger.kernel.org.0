@@ -2,87 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 087883B38E9
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F683B38FF
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 23:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbhFXVrl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Jun 2021 17:47:41 -0400
-Received: from ozlabs.org ([203.11.71.1]:58181 "EHLO ozlabs.org"
+        id S232693AbhFXWBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Jun 2021 18:01:11 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38623 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232582AbhFXVrk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 24 Jun 2021 17:47:40 -0400
+        id S232591AbhFXWBL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 24 Jun 2021 18:01:11 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G9twG4vyMz9sWc;
-        Fri, 25 Jun 2021 07:45:18 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4G9vCt3bN8z9sRf;
+        Fri, 25 Jun 2021 07:58:50 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624571119;
-        bh=VWRgsKGXs+kf4/GDRzLPQ68mIjEHYRO3f7+CVc1LDWQ=;
+        s=201702; t=1624571930;
+        bh=U0+KUgO34r3NW2Q6CiftK/OXjLeBJhn9Qmn2QRgn5tY=;
         h=Date:From:To:Cc:Subject:From;
-        b=oFYiMF8J/INuMyv8WE7t81EJWa74FqXaaYUK9E+Awuz0QCEZR344mnq5MLhisTW/q
-         +su2dkXZ/4A6iRLj2VfTgEZiXhE1e6MH29BXLsrnUR28oTWz2TchGgXuBySPaHGMkv
-         8YRefE1aC8OLZSHM4ph7CJVGAxiH8k7+uu2NOa52LKj3Wq3G38DvnyZs9Nupl4BqJ+
-         SweSNvHAMh67g9cdx3V91e6oLUd9YP+HIbE/f//GqDZUOa6qcjet84aDUqtHjZ5w6r
-         W9nVG9GXgcAJ7eFqOLGfJmpn3YSjzF6nJWlFgwlgaEb9y21YxdFS0vGd+FNrZzTTIg
-         s1Kp02RFWKWIA==
-Date:   Fri, 25 Jun 2021 07:45:17 +1000
+        b=BDC4T2hTSpsBWSI0gypR2f1KiKAUTONw69UKYVzEg+c9eDEZM/FbWAsMG2wLUhjlG
+         y8x3YR2KJ2UG+W1XBy69c8U7XBv5V9gmP0JtXW+3Fn8JiUNt+/kJWG763adYwiYOAl
+         CvO+USUZPqbJkRaXfaVm5qbst5HnO6vhG9YU+6wAw/q5zlHwTlh1Tbo5GUjk1lFH3R
+         jdHYQvvoEYaQIsjq13el7kwAW2GOZY09Ex1jssrRtUnnx2C35scip0l+dafF66y0GD
+         EevqH2VsvyuGLKMstlsiOWKV9pAeZGMVJRkuiTaXYnzQOloc5oBaqVrUR5lwrhxqCQ
+         P/9hng8nokGNw==
+Date:   Fri, 25 Jun 2021 07:58:49 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20210625074517.685fb0f7@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commits in the kvm tree
+Message-ID: <20210625075849.3cff81da@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AYD8r9ygZRo2/172wzLr+4M";
+Content-Type: multipart/signed; boundary="Sig_/6TC.a9LQ+qj5JmqmZBQfcEb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AYD8r9ygZRo2/172wzLr+4M
+--Sig_/6TC.a9LQ+qj5JmqmZBQfcEb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commits
 
-  0ec13aff058a ("Revert "ibmvnic: simplify reset_long_term_buff function"")
+  df40a7ffa871 ("KVM: debugfs: Reuse binary stats descriptors")
+  01bb3b73038a ("KVM: selftests: Add selftest for KVM statistics data binar=
+y interface")
+  a4b86b00ad24 ("KVM: stats: Add documentation for binary statistics interf=
+ace")
+  da28cb6cd042 ("KVM: stats: Support binary stats retrieval for a VCPU")
+  170a9e1294a7 ("KVM: stats: Support binary stats retrieval for a VM")
 
-Fixes tag
-
-  Fixes: 1c7d45e7b2c ("ibmvnic: simplify reset_long_term_buff function")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-
-This can be fixed for the future by setting core.abbrev to 12 (or more)
-or (for git v2.11 or later) just making sure it is not set (or set to
-"auto").
+are missing a Signed-off-by from their committers.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/AYD8r9ygZRo2/172wzLr+4M
+--Sig_/6TC.a9LQ+qj5JmqmZBQfcEb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDU/O0ACgkQAVBC80lX
-0GzhNwf+NojG313N29VJ5wIFTgpU8tivr9xiKfLduNAAhKMygb2iRFozu5F/z9+V
-57qwkGjqPbqEZl9HwIsKy4JPEGtuXX/L1nKgne8ZdVkkPK+6eAGOiprbt4X0/vIE
-g3nUDxzLgBJAsebLh7rFE/27nlwq9wfTitYk+s/LRIEL6RRAvZUzJlmt9reAuPAN
-bEGkuHs561JIBs6lMMd4hHZtGQJoJ797DBTyeDroz8BMxw4wWXQJ6TkywGkb9DRc
-kktnk3pT9awHaJ6zK50PjMgXP4cr/LJb3w3t7JX9mK6ef3KJ0ZWSxj/E3ji6ckqS
-v2Hmo8bLXbCbAAPHSs2mVP2iACMd3g==
-=xfRV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDVABkACgkQAVBC80lX
+0GyFAwf8Cy9ZJmKu1L6wrKhssUkK494mC41fud1JLXoYEz5OhOnqTnDxYGcbzY6P
+4yZ/S+ircfRnqquvvlUgoX+edG2qCXuZSQvaBN0oChhmkJ5wIMe4Suf+bjCMMfFX
+U8pyfwGhp+t57eNSv8ZoOWK3RJxkGApK/y8/FZeAVq5LA8QDfehHNbTu8v7hGw0c
+pCZOyGgrnDe6sPrrjt0+IV/Exb1YyfZWGYdTpPUXWEESFmP8sjweSSP1oRh4vTlt
+YXYaGJ1XYBXDXo58Sq6XPiq9AzjABVNYLR7gY0vKUOQKQB51SbVJkztOUpWqs/iu
+qrg2DDaGcXbRR46qA0vYZb30c0zOKQ==
+=/v/O
 -----END PGP SIGNATURE-----
 
---Sig_/AYD8r9ygZRo2/172wzLr+4M--
+--Sig_/6TC.a9LQ+qj5JmqmZBQfcEb--

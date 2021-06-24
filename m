@@ -2,86 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7F3B2703
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 07:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB883B2738
+	for <lists+linux-next@lfdr.de>; Thu, 24 Jun 2021 08:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhFXFwi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Jun 2021 01:52:38 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:49676 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhFXFwh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Jun 2021 01:52:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624513819; h=Content-Type: MIME-Version: Message-ID: Date:
- References: Subject: Cc: To: From: Sender;
- bh=jxLy/lhwl4e9PpQ7PCOZ9QUibWNheQYuWVGtFBs4KgM=; b=xkLZ1kzpQW6YJs5/kOynmhd6ueznjaDGrLcOyQA0lyqdoOxDJsrJugYYNN5f9xjRKGhP/Dzo
- 3NmwjndoWxKiQ0UmsoU/439bsRwKAwwemXWoNoYSdy94zQgrEzsSBbQzakzJEQ0pBAH+bCAk
- bTshSXAPKMfIBmeRLYmwsfhu2Q0=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 60d41d0701dd9a9431bb6737 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 24 Jun 2021 05:49:59
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A7EA9C43460; Thu, 24 Jun 2021 05:49:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tykki (tynnyri.adurom.net [51.15.11.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AD829C433F1;
-        Thu, 24 Jun 2021 05:49:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AD829C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the wireless-drivers-next tree
-References: <20210624121639.6d89a9b8@canb.auug.org.au>
-Date:   Thu, 24 Jun 2021 08:49:51 +0300
-Message-ID: <871r8rke0w.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S231138AbhFXGPr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Jun 2021 02:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231129AbhFXGPq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 24 Jun 2021 02:15:46 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC40BC06175F
+        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 23:13:27 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id mj3so239893ejb.4
+        for <linux-next@vger.kernel.org>; Wed, 23 Jun 2021 23:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/qcz8m6sT93MT9ppgjUkcdnhc0rZ+kUNJRZSgxYJOi8=;
+        b=UiOGjE2gYSJS5G9gMarlHQvvASgaHA/IFQeFw+NEZHffxHZnYTFF72W67acyEMxWdG
+         I03Dq14Bk8ph9L4Ybl8Bfn+djzcvhAZkC2NWFJpUWaFHM+rtK0RUo4ZRTKx8IJKyuybH
+         R8pFTqwjTAV2nb2/wOxM72rQppHB9S1ev2KsjQRkJzETnEMW65BZY68PLvV7c/WUC2IM
+         6HOYGuaDbAlDXNZITsBaP71XSCYxBDQnfEC+RUbVI9XQFRp9rjpEB88K6GHLR/WktZbe
+         NvCZORWNSr47AzGH+QHk22ugFER8ojUggESVkhxcJRw7sqg0uyLNFtLHh/0I2pxqY+aX
+         sufA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/qcz8m6sT93MT9ppgjUkcdnhc0rZ+kUNJRZSgxYJOi8=;
+        b=hG+P//ogNO/TBOSKVLk0qelETndhCAQ4v06aejXbkB+fy46ej4BE7S9HRxkBfKTbGI
+         4+HkIVXogxO1AqTmHOb/aFq5Ad5bLR89B3WvIt+Qiqsv7ZdtII6qZT27gpDeMI7IkbVL
+         2D/FNND4JG+HWJ58y7P/qe5EHgB4TPIrggB7vOlyLAzCSSz5QHehRcZ2Aue/hD5W+FTH
+         aQx8iv8p2/paY0X0CqNTkIdJ09U6UTVW3x8b69Z0GtILqxsRjG/ziw+ix3+Ej4nCIrj6
+         y9RcxTSrZp6eJnhPUkpqXHOWDE1P81/JF/XUmk99QEgbhxrNI8oMazsTDG3xNgylMig0
+         TZiQ==
+X-Gm-Message-State: AOAM533uxjWCoAYoo9qEtOlfP/YxSLjHoAZECF652Yt/neXycxL3bQgA
+        uCUoBOxKW+X2w7tOPNQ+9AMDbenTbjyt0m6tcgL7Bw==
+X-Google-Smtp-Source: ABdhPJwNY5wrcRuED2SLhvImBUBrkNfG+8zjSJ+hU2Zzu2ZwaamS5mm+MmfEBdl/ieCfow5xJATy/vljCcRojegt074=
+X-Received: by 2002:a17:906:c211:: with SMTP id d17mr3644755ejz.247.1624515206230;
+ Wed, 23 Jun 2021 23:13:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210624082911.5d013e8c@canb.auug.org.au> <CAPv3WKfiL+sR+iK_BjGKDhtNgjoxKEPv49bU1X9_7+v+ytdR1w@mail.gmail.com>
+ <YNPt91bfjrgSt8G3@Ryzen-9-3900X.localdomain>
+In-Reply-To: <YNPt91bfjrgSt8G3@Ryzen-9-3900X.localdomain>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Jun 2021 11:43:14 +0530
+Message-ID: <CA+G9fYtb07aySOpB6=wc4ip_9S4Rr2UUYNgEOG6i76g--uPryQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+Hi Marcin,
 
-> After merging the wireless-drivers-next tree, today's linux-next build
-> (x86_64 allmodconfig) produced this warning:
+On Thu, 24 Jun 2021 at 07:59, Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> drivers/net/wireless/intel/iwlwifi/fw/acpi.c:720:12: warning: 'iwl_acpi_eval_dsm_func' defined but not used [-Wunused-function]
->   720 | static u32 iwl_acpi_eval_dsm_func(struct device *dev, enum iwl_dsm_funcs_rev_0 eval_func)
->       |            ^~~~~~~~~~~~~~~~~~~~~~
->
-> Introduced by commit
->
->   7119f02b5d34 ("iwlwifi: mvm: support BIOS enable/disable for 11ax in Russia")
+> On Thu, Jun 24, 2021 at 12:46:48AM +0200, Marcin Wojtas wrote:
+> > Hi Stephen,
+> >
+> > czw., 24 cze 2021 o 00:29 Stephen Rothwell <sfr@canb.auug.org.au> napis=
+a=C5=82(a):
+> > >
+> > > Hi all,
+> > >
+> > > Today's linux-next build (x86_64 modules_install) failed like this:
+> > >
+> > > depmod: ../tools/depmod.c:1792: depmod_report_cycles_from_root: Asser=
+tion `is < stack_size' failed.
 
-Thanks for the report, I missed the warning as I had CONFIG_ACPI disabled in my
-build tests. I enabled it now and sent a fix:
+LKFT test farm found this build error.
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20210624052918.4946-1-kvalo@codeaurora.org/
+Regressions found on mips:
 
-Luca, please review. I also assigned it to me on patchwork and planning
-to apply it directly to wireless-drivers-next.
+ - build/gcc-9-malta_defconfig
+ - build/gcc-10-malta_defconfig
+ - build/gcc-8-malta_defconfig
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+depmod: ERROR: Cycle detected: fwnode_mdio -> of_mdio -> fwnode_mdio
+depmod: ERROR: Found 2 modules in dependency cycles!
+make[1]: *** [/builds/linux/Makefile:1875: modules_install] Error 1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> > Thank you for letting us know. Not sure if related, but I just found
+> > out that this code won't compile for the !CONFIG_FWNODE_MDIO. Below
+> > one-liner fixes it:
+> >
+> > --- a/include/linux/fwnode_mdio.h
+> > +++ b/include/linux/fwnode_mdio.h
+> > @@ -40,7 +40,7 @@ static inline int fwnode_mdiobus_register(struct mii_=
+bus *bus,
+> >          * This way, we don't have to keep compat bits around in driver=
+s.
+> >          */
+> >
+> > -       return mdiobus_register(mdio);
+> > +       return mdiobus_register(bus);
+> >  }
+> >  #endif
+> >
+> > I'm curious if this is the case. Tomorrow I'll resubmit with above, so
+> > I'd appreciate recheck.
+
+This proposed fix did not work.
+
+> Reverting all the patches in that series fixes the issue for me.
+
+Yes.
+Reverting all the (6) patches in that series fixed this build problem.
+
+git log --oneline | head
+3752a7bfe73e Revert "Documentation: ACPI: DSD: describe additional MAC
+configuration"
+da53528ed548 Revert "net: mdiobus: Introduce fwnode_mdbiobus_register()"
+479b72ae8b68 Revert "net/fsl: switch to fwnode_mdiobus_register"
+92f85677aff4 Revert "net: mvmdio: add ACPI support"
+3d725ff0f271 Revert "net: mvpp2: enable using phylink with ACPI"
+ffa8c267d44e Revert "net: mvpp2: remove unused 'has_phy' field"
+d61c8b66c840 Add linux-next specific files for 20210623
+
+steps to reproduce, config and build log located here in this link,
+https://builds.tuxbuild.com/1uNjGjPUAI4XwwcwKFr5FUxkwzy/
+
+
+# TuxMake is a command line tool and Python library that provides
+# portable and repeatable Linux kernel builds across a variety of
+# architectures, toolchains, kernel configurations, and make targets.
+#
+# TuxMake supports the concept of runtimes.
+# See https://docs.tuxmake.org/runtimes/, for that to work it requires
+# that you install podman or docker on your system.
+#
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+
+
+tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+--kconfig malta_defconfig
+
+
+- Naresh

@@ -2,108 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89963B3CDC
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 08:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478A43B3D55
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 09:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbhFYG7d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Jun 2021 02:59:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56452 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229818AbhFYG7c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 25 Jun 2021 02:59:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624604231;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rb8bRbPVyoQtVQmacCJeooi3a8r8Dk+kxigz4awyPbE=;
-        b=OBo1HQD8kNHb91F/WaeTPn7tjO8h2oo9jpnJTKRGmwTa3Y/NRO6VgKua+9iVYXjFGF7C8l
-        8tSt0iTTErUS9QPk4ZbcW4EkwfUETu60Ny53uV8JfkPJSECfO/sJPWLGaDmzLlKKuqWpt2
-        KKjyVGNro+R2irkjPbyO3zIFqoEoL6M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-551-GA30NA1jPsmzvAJbP_Qwow-1; Fri, 25 Jun 2021 02:57:08 -0400
-X-MC-Unique: GA30NA1jPsmzvAJbP_Qwow-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BC66E195D562;
-        Fri, 25 Jun 2021 06:57:06 +0000 (UTC)
-Received: from [10.64.54.233] (vpn2-54-233.bne.redhat.com [10.64.54.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4556E5D9F0;
-        Fri, 25 Jun 2021 06:57:01 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210624194301.7474ce76@canb.auug.org.au>
- <0b1d5003-830e-b284-0fca-cc62d9192b65@redhat.com>
- <20210625163442.185b8cb0@canb.auug.org.au>
- <20210625163701.407a2561@canb.auug.org.au>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <5742c419-f852-46b3-5c32-0334ebcc87c2@redhat.com>
-Date:   Fri, 25 Jun 2021 16:56:58 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        id S229764AbhFYHal (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Jun 2021 03:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229454AbhFYHak (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Jun 2021 03:30:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A036C061574;
+        Fri, 25 Jun 2021 00:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5NOt14/R44u0IlgyCS4cWDsu+ALJWOxhITZR4eZIO04=; b=mbmpQJtIGPMRrIGs53GWr7Cg4k
+        hU39jO9r4qRRBj9MAEIo15s/NNq2xWQpbqpoJqw26Hw/81AMfVIqZ0MaTrig4GIKpGYEgDu35LjpK
+        DKQR4icxmN6osxi72wAD1lDAQnNaqcFljxKRANiK+SL9e62PiT6KpF6dyjtsn7VEB9UrVuz4ico3Z
+        pw+9iPXbn38iSJoIpE5AJXH3P0U8i2/U9/rRI+37YuJhtnj8XWFAAeF1ZcNVmlRs++B8G+e/plX40
+        262JorqFmnQolqCavRCQwWemTpNZSt75mrvVmIYSNQmW4XlXa6rIwjw+WeEO1aRBRbgXDTinZV8h8
+        8TUaMCUA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lwgFv-00BVV0-A4; Fri, 25 Jun 2021 07:28:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 774AF300252;
+        Fri, 25 Jun 2021 09:28:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 33509200B393D; Fri, 25 Jun 2021 09:28:09 +0200 (CEST)
+Date:   Fri, 25 Jun 2021 09:28:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc:     Bharata B Rao <bharata@linux.ibm.com>, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: PowerPC guest getting "BUG: scheduling while atomic" on
+ linux-next-20210623 during secondary CPUs bringup
+Message-ID: <YNWFiZii+MINhUC3@hirez.programming.kicks-ass.net>
+References: <YNSq3UQTjm6HWELA@in.ibm.com>
+ <20210625054608.fmwt7lxuhp7inkjx@linux.vnet.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210625163701.407a2561@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210625054608.fmwt7lxuhp7inkjx@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/25/21 4:37 PM, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Jun 25, 2021 at 11:16:08AM +0530, Srikar Dronamraju wrote:
+> * Bharata B Rao <bharata@linux.ibm.com> [2021-06-24 21:25:09]:
 > 
-> On Fri, 25 Jun 2021 16:34:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> On Fri, 25 Jun 2021 16:28:15 +1000 Gavin Shan <gshan@redhat.com> wrote:
->>>
->>> On 6/24/21 7:43 PM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> After merging the akpm-current tree, today's linux-next build (powerpc
->>>> ppc64_defconfig) failed like this:
->>>>
->>>> mm/page_reporting.c:14:37: error: initializer element is not constant
->>>>      14 | unsigned int page_reporting_order = pageblock_order;
->>>>         |                                     ^~~~~~~~~~~~~~~
->>>>
->>>> Caused by commit
->>>>
->>>>     223f64d9e679 ("mm/page_reporting: export reporting order as module parameter")
->>>>
->>>> pageblock_order is defined to be various things depending on CONFIG_
->>>> symbols.
->>>>
->>>> I have reverted that commit (and the following three) for today.
->>>>      
->>>
->>> Yes, Please drop this series for now.
->>>
->>> The v3 was applied and caused the build error. Actually, we need
->>> v5, which was posted couple of hours ago.
->>>
->>>      v5: https://lkml.org/lkml/2021/6/24/1137
->>
->> Which version is in today's mmotm?
+> > A PowerPC KVM guest gets the following BUG message when booting
+> > linux-next-20210623:
+> > 
+> > smp: Bringing up secondary CPUs ...
+> > BUG: scheduling while atomic: swapper/1/0/0x00000000
+
+'funny', your preempt_count is actually too low. The check here is for
+preempt_count() == DISABLE_OFFSET (aka. 1 when PREEMPT=y), but you have
+0.
+
+> > no locks held by swapper/1/0.
+> > Modules linked in:
+> > CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.13.0-rc7-next-20210623
+> > Call Trace:
+> > [c00000000ae5bc20] [c000000000badc64] dump_stack_lvl+0x98/0xe0 (unreliable)
+> > [c00000000ae5bc60] [c000000000210200] __schedule_bug+0xb0/0xe0
+> > [c00000000ae5bcd0] [c000000001609e28] __schedule+0x1788/0x1c70
+> > [c00000000ae5be20] [c00000000160a8cc] schedule_idle+0x3c/0x70
+> > [c00000000ae5be50] [c00000000022984c] do_idle+0x2bc/0x420
+> > [c00000000ae5bf00] [c000000000229d88] cpu_startup_entry+0x38/0x40
+> > [c00000000ae5bf30] [c0000000000666c0] start_secondary+0x290/0x2a0
+> > [c00000000ae5bf90] [c00000000000be54] start_secondary_prolog+0x10/0x14
+> > 
+> > <The above repeats for all the secondary CPUs>
+> > 
+> > smp: Brought up 2 nodes, 16 CPUs
+> > numa: Node 0 CPUs: 0-7
+> > numa: Node 1 CPUs: 8-15
+> > 
+> > This seems to have started from next-20210521 and isn't seen on
+> > next-20210511.
+> > 
 > 
-> hmm, looks like v4.  So do I drop these again today?
+> Bharata,
 > 
+> I think the regression is due to Commit f1a0a376ca0c ("sched/core:
+> Initialize the idle task with preemption disabled")
 
-Stephen, lets keep v4 and I will send patch to fill the gap between v4/v5
-if no one objects. Sorry for the extra work.
+So that extra preempt_disable() that got removed would've incremented it
+to 1 and then things would've been fine.
 
-Thanks,
-Gavin
+Except.. Valentin changed things such that preempt_count() should've
+been inittialized to 1, instead of 0, but for some raisin that didn't
+stick.. what gives.
 
+So we have init_idle(p) -> init_idle_preempt_count(p) ->
+task_thread_info(p)->preempt_count = PREEMPT_DISABLED;
+
+But somehow, by the time you're running start_secondary(), that's gotten
+to be 0 again. Does DEBUG_PREEMPT give more clues?

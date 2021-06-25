@@ -2,131 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E193D3B3C36
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 07:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AF63B3C57
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 07:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbhFYF0g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Jun 2021 01:26:36 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55485 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233133AbhFYF0f (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 25 Jun 2021 01:26:35 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GB55n6sXKz9sT6;
-        Fri, 25 Jun 2021 15:24:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624598654;
-        bh=Zp3z90qF7a58nx5/paNfizx5wb5txzLsiWbTxfjPssc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iFavLbji2HMdUGx1o3Fmi0LENvDUQFTJHzwBrUVG9KT4Cf8vQjQmCrZJnzLpc0DBX
-         zW3pKzxBBAx3arBQAegX+om1ld+FYA1Y/z4X/tjMAOa5WdLjDXa+ZE4DHEku0Mvoqv
-         9qwyv1KX+UUBmJVdHa+Y6H7Hrv4oux0EtInM8ZOUbNgPmLl8odSuxV0feW4JEakkp1
-         UhPKCyqJXOg+B4uUc5hn4iOdb8VcQPQO+BRplt19GZucDLuX9ALYBKTuUWk2vCARLm
-         ffEGXxwnpYETBapWnBCgVijhIGbBYAPnVGMs1OouQQAhx4GkEykDZlmj4zNvjNMOGT
-         WKERZ0w2Rq2+A==
-Date:   Fri, 25 Jun 2021 15:24:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20210625152412.11924d50@canb.auug.org.au>
+        id S230192AbhFYFs5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Jun 2021 01:48:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2680 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230097AbhFYFs5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 25 Jun 2021 01:48:57 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15P5ihlx117234;
+        Fri, 25 Jun 2021 01:46:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=Hnp9sEc1Zv51a6wVxJRQy5Y96XTuyf8F08yDG+Cs3LE=;
+ b=lcigLJMAr7dZx/RLIWptyaB0QQCN8r7lzUHtwsO2u2/3snR5Uz6Z8GO2ze/py7cSI8sG
+ S2zsDZ6gC7PHlBsW0m4neAkamGq2na4CUxP479vBZch+srlcZ5/LFdPWqaypKZCWAA9J
+ sizV+fyNelyjZ2XLjoM36QjZ1JRcOHBk1wgbVgp56YHJcX9YSLjTifXIfUh8hzHS5Kha
+ FuRme/lsjQqP74MHa8zjT15TUzXzGp2q4nfeiLemTzfVcAuN4khwWBD6DX/R99vy7Ur3
+ Fl5HhukZ0z3J/0TaoKIoRlSYhi0AZ+PuJNKS9w9fa3M6x7Pp3Zm+ZgFV1WlsiWHtdLqc Eg== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39d98s815w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Jun 2021 01:46:16 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15P5dP3m006730;
+        Fri, 25 Jun 2021 05:46:14 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3997uhhk9r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Jun 2021 05:46:13 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15P5kBWk24904124
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Jun 2021 05:46:11 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6FF8952050;
+        Fri, 25 Jun 2021 05:46:11 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 82E5C52059;
+        Fri, 25 Jun 2021 05:46:09 +0000 (GMT)
+Date:   Fri, 25 Jun 2021 11:16:08 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Bharata B Rao <bharata@linux.ibm.com>
+Cc:     linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: PowerPC guest getting "BUG: scheduling while atomic" on
+ linux-next-20210623 during secondary CPUs bringup
+Message-ID: <20210625054608.fmwt7lxuhp7inkjx@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <YNSq3UQTjm6HWELA@in.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/id3G_mYGCmp0nVq7PpI6QaM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <YNSq3UQTjm6HWELA@in.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0Xidfmp9vCkq_Tn5j92Sq7EKuh_HE11t
+X-Proofpoint-GUID: 0Xidfmp9vCkq_Tn5j92Sq7EKuh_HE11t
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-25_01:2021-06-24,2021-06-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ spamscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2106250030
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/id3G_mYGCmp0nVq7PpI6QaM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+* Bharata B Rao <bharata@linux.ibm.com> [2021-06-24 21:25:09]:
 
-Hi all,
+> A PowerPC KVM guest gets the following BUG message when booting
+> linux-next-20210623:
+> 
+> smp: Bringing up secondary CPUs ...
+> BUG: scheduling while atomic: swapper/1/0/0x00000000
+> no locks held by swapper/1/0.
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.13.0-rc7-next-20210623
+> Call Trace:
+> [c00000000ae5bc20] [c000000000badc64] dump_stack_lvl+0x98/0xe0 (unreliable)
+> [c00000000ae5bc60] [c000000000210200] __schedule_bug+0xb0/0xe0
+> [c00000000ae5bcd0] [c000000001609e28] __schedule+0x1788/0x1c70
+> [c00000000ae5be20] [c00000000160a8cc] schedule_idle+0x3c/0x70
+> [c00000000ae5be50] [c00000000022984c] do_idle+0x2bc/0x420
+> [c00000000ae5bf00] [c000000000229d88] cpu_startup_entry+0x38/0x40
+> [c00000000ae5bf30] [c0000000000666c0] start_secondary+0x290/0x2a0
+> [c00000000ae5bf90] [c00000000000be54] start_secondary_prolog+0x10/0x14
+> 
+> <The above repeats for all the secondary CPUs>
+> 
+> smp: Brought up 2 nodes, 16 CPUs
+> numa: Node 0 CPUs: 0-7
+> numa: Node 1 CPUs: 8-15
+> 
+> This seems to have started from next-20210521 and isn't seen on
+> next-20210511.
+> 
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+Bharata,
 
-  tools/testing/selftests/kvm/include/x86_64/processor.h
+I think the regression is due to Commit f1a0a376ca0c ("sched/core:
+Initialize the idle task with preemption disabled")
 
-between commit:
+Can you please try with the above commit reverted?
 
-  ef6a74b2e55e ("KVM: sefltests: Add x86-64 test to verify MMU reacts to CP=
-UID updates")
-
-from the kvm tree and commit:
-
-  75275d7fbef4 ("KVM: selftests: Introduce UCALL_UNHANDLED for unhandled ve=
-ctor reporting")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/kvm/include/x86_64/processor.h
-index 6d27a5435971,92a62c6999bc..000000000000
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@@ -55,11 -53,6 +55,9 @@@
-  #define CPUID_PKU		(1ul << 3)
-  #define CPUID_LA57		(1ul << 16)
- =20
- +/* CPUID.0x8000_0001.EDX */
- +#define CPUID_GBPAGES		(1ul << 26)
- +
-- #define UNEXPECTED_VECTOR_PORT 0xfff0u
--=20
-  /* General Registers in 64-Bit Mode */
-  struct gpr64_regs {
-  	u64 rax;
-@@@ -396,13 -389,9 +394,13 @@@ struct ex_regs=20
- =20
-  void vm_init_descriptor_tables(struct kvm_vm *vm);
-  void vcpu_init_descriptor_tables(struct kvm_vm *vm, uint32_t vcpuid);
-- void vm_handle_exception(struct kvm_vm *vm, int vector,
-+ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
-  			void (*handler)(struct ex_regs *));
- =20
- +uint64_t vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t =
-vaddr);
- +void vm_set_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vadd=
-r,
- +			     uint64_t pte);
- +
-  /*
-   * set_cpuid() - overwrites a matching cpuid entry with the provided valu=
-e.
-   *		 matches based on ent->function && ent->index. returns true
-
---Sig_/id3G_mYGCmp0nVq7PpI6QaM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDVaHwACgkQAVBC80lX
-0GxwGggAj9aYiCGLhKwt4HasTRtwkzwInvP6BK5UfFN9u6/Oaez+JrJFeOU7c7Kg
-oc/8TRjI+XcCtmmRewZkNOM9zVIJL9FgES3cMPFOkdPEN1HptZ47arXH71dwAm2k
-jgZ/ixUjNdEEvGdXEI4j+Pk6YER53QDYyfP+Qaymhf1GibgVK2l78BYqP0E4WYlL
-wLE0+5PjWNgypW9eqjXywwwTuErHtVOno9XFt7YR95FtZcToKIahegOBTg1BvlZV
-bn3QQGoht8djJbEn4h5qPrjyzl+1lCPVPZaBNQemR+dvEjHBT6N1O8r3mpnKgbqz
-yPruy2RcfCi34kQNFBbcUiTRTiyAog==
-=WHdn
------END PGP SIGNATURE-----
-
---Sig_/id3G_mYGCmp0nVq7PpI6QaM--
+-- 
+Thanks and Regards
+Srikar Dronamraju

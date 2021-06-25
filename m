@@ -2,104 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B393B4342
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 14:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43923B4561
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jun 2021 16:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbhFYMfJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Jun 2021 08:35:09 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60170 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229934AbhFYMfI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 25 Jun 2021 08:35:08 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15PC6Dv5041356;
-        Fri, 25 Jun 2021 08:32:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=FoqHMAo4aVfUw7gRnFnF1SD6HsPYwczaCD7oSLM5WBA=;
- b=nUMMTBqDvJIih/X7JDOZmrS8GdPnkabPWcS6DUypfccsgqEf/TYCugWJi38V//M93xXc
- wqz3WJei/Qi0Hd5LMzr7ByGIKp7+Kn0KGG18gm/VKHVtdhx7FVlPlwi1z0OpFmRlCSpp
- lKim+Z9jvKtFjf/LAbQKXqu8Rxsp4CF7ejnd0jjC2SgXSMRBeQQ7kykwG1dw+/33HB4B
- VH/z5zJv+J9WfZ3qK69CLDYV96gDfSDK5D5r7/InCwV0+F0WHiHOM0Ij1micY85kTC4Q
- R8MZ998B50+VcGKMGnp515Q3+qAePAckuefIP1Wr6cLTvOXGBDIDIDzRtb5QDjE6YBNa qQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39dd7hcn90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Jun 2021 08:32:40 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15PCSuIG002538;
-        Fri, 25 Jun 2021 12:32:37 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 399878b1fs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Jun 2021 12:32:37 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15PCWZWk32571762
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Jun 2021 12:32:35 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76B01A4051;
-        Fri, 25 Jun 2021 12:32:35 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24D93A4053;
-        Fri, 25 Jun 2021 12:32:34 +0000 (GMT)
-Received: from in.ibm.com (unknown [9.85.119.88])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 25 Jun 2021 12:32:33 +0000 (GMT)
-Date:   Fri, 25 Jun 2021 18:02:31 +0530
-From:   Bharata B Rao <bharata@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: PowerPC guest getting "BUG: scheduling while atomic" on
- linux-next-20210623 during secondary CPUs bringup
-Message-ID: <YNXM33OD8/qLkygG@in.ibm.com>
-Reply-To: bharata@linux.ibm.com
-References: <YNSq3UQTjm6HWELA@in.ibm.com>
- <20210625054608.fmwt7lxuhp7inkjx@linux.vnet.ibm.com>
- <YNWFiZii+MINhUC3@hirez.programming.kicks-ass.net>
- <YNWZfKK+KBQSUdG5@in.ibm.com>
- <YNWtFKdSuoYTfSon@hirez.programming.kicks-ass.net>
+        id S229782AbhFYOUh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Jun 2021 10:20:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229653AbhFYOUh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 25 Jun 2021 10:20:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC6956162F;
+        Fri, 25 Jun 2021 14:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624630696;
+        bh=LSdeyXiFoE3OXeWs86ZxNRD8nrKgnMYz0WptQuMdPWU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ER3qOtf15njO4d4mAqvqJQ6QBupd4fpuOJ8aoFrUh7aDKPUGO4/KP6yj0GgK85uDw
+         QoEiufnOikvrMSHI/ZeyJeDtV/1i0XyI5bX+AORCrFUQ8bsUgNLrX1EpsSLg6QjU4e
+         rFOSvqApcz2SVRlxT5FXQ5S+I5lwFZRhftL6hKYaxtsLIdiyOggZRuqILci67WKlBz
+         MT5gFWLFdjuUN2HlAjEs3dD2Au9oe0adS7b04jvYkkUrhjE/GMh/03zhVhZTojBg+W
+         uS7CnwaBmpCTWZ0YUbuc2eCQjTQ+NFSaOd6IRazXlvIDtus37MW41PETsQKX9E2mTH
+         YP9CITTNU9+vg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ADEA85C065A; Fri, 25 Jun 2021 07:18:16 -0700 (PDT)
+Date:   Fri, 25 Jun 2021 07:18:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in the rcu tree
+Message-ID: <20210625141816.GA4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210625141844.2f196aeb@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YNWtFKdSuoYTfSon@hirez.programming.kicks-ass.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: znBsyfVCmurmTMEpzxmyjHoqgWGHADw-
-X-Proofpoint-GUID: znBsyfVCmurmTMEpzxmyjHoqgWGHADw-
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-25_04:2021-06-25,2021-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2106250069
+In-Reply-To: <20210625141844.2f196aeb@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 12:16:52PM +0200, Peter Zijlstra wrote:
-> You mean: CONFIG_PREEMPTION=n, what about CONFIG_PREEMPT_COUNT?
+On Fri, Jun 25, 2021 at 02:18:44PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Because if both are =n, then I don't see how that warning could trigger.
-> in_atomic_preempt_off() would then result in prempt_count() == 0, and
-> per the print above, it *is* 0.
+> Commits
+> 
+>   c6f5e7e1ac95 ("tools/nolibc: Implement msleep()")
+>   d7c47ea32af0 ("tools: include: nolibc: Fix a typo occured to occurred in the file nolibc.h")
+> 
+> are missing a Signed-off-by from their committer.
 
-CONFIG_PREEMPTION isn't set.
+Fixed, and apologies for the hassle!
 
-Also other PREEMPT related options are as under:
-
-# CONFIG_PREEMPT_NONE is not set
-CONFIG_PREEMPT_VOLUNTARY=y
-# CONFIG_PREEMPT is not set
-CONFIG_PREEMPT_COUNT=y
-CONFIG_PREEMPT_NOTIFIERS=y
-CONFIG_PREEMPTIRQ_TRACEPOINTS=y
-# CONFIG_PREEMPTIRQ_DELAY_TEST is not set
-
-Regards,
-Bharata.
+							Thanx, Paul

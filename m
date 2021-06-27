@@ -2,66 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AAC3B5534
-	for <lists+linux-next@lfdr.de>; Sun, 27 Jun 2021 23:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACBF3B55E5
+	for <lists+linux-next@lfdr.de>; Mon, 28 Jun 2021 01:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbhF0VOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Jun 2021 17:14:41 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:46971 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbhF0VOk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Jun 2021 17:14:40 -0400
-Received: by mail-pf1-f173.google.com with SMTP id x16so12328467pfa.13;
-        Sun, 27 Jun 2021 14:12:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cR0LSa7hQHxDZ8gB3Did0Bb+VeSNqfYHg3w0G+AVSOY=;
-        b=lwV52RKs7/jFSfkdsUKmIcUUevnMY7hSw0SVquuj/G89S6iNNNDEfH3QnLT7uRo0Wd
-         RIHsAtiaRTqT4ZYtIFM131VRG45+duv1XallWN2iVGXej2y7LHzoOm2bxa68VTdWWHKV
-         BJkenvJAxsahl4zGa+BurQKk5M22jaz12tuFDmG73qyRlLqVMApAd2vw87QclkCEbcaa
-         0Sw11R5tHW3E9pE2Msjsi5BnsW2clJh29c/jpPNecZHYAQMqGyrX/XL78s/7FnB2nULV
-         mVO5PF3b5EnB0lLRpWzuNTkX/ZAHDjo49b/2nLepW6ez+SUkf5mFEhUiB2RZxueWeKF8
-         uVbg==
-X-Gm-Message-State: AOAM531VVjCye/79hiSNCPlJuN9mzeJqGfzQFl5YSMWYlz7CraPty/a7
-        ZKgmbwDiYgX50Da4Xxjj8lgiENUDjHY=
-X-Google-Smtp-Source: ABdhPJz2dvDEjoTFobY6u4OvX1N/qlgiX9LWwds3dVb5opirv0byCScSz57eVmf9KYDYqsVvc2ZtXw==
-X-Received: by 2002:a63:191d:: with SMTP id z29mr20515543pgl.126.1624828335119;
-        Sun, 27 Jun 2021 14:12:15 -0700 (PDT)
-Received: from [192.168.3.217] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id z26sm7862066pfk.112.2021.06.27.14.12.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Jun 2021 14:12:14 -0700 (PDT)
-Subject: Re: [powerpc][next-20210625] WARN block/mq-deadline-main.c:743 during
- boot
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        linux-block@vger.kernel.org
-Cc:     linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        axboe@kernel.dk
-References: <74F24228-8BC7-49FA-BD43-A9FB90269E76@linux.vnet.ibm.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <d9bb36b5-fb81-8394-e80c-1dc4562376e4@acm.org>
-Date:   Sun, 27 Jun 2021 14:12:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231678AbhF0XqG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Jun 2021 19:46:06 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42831 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231508AbhF0XqF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 27 Jun 2021 19:46:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GCnPR5Q0Tz9sW7;
+        Mon, 28 Jun 2021 09:43:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1624837419;
+        bh=OHpdAbTQLet7qOxWfN8qjTyOIqguqvCQBStulRo/pXE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kfj2zGAalXTsTuSe1HmlQ4TYQwnb3oiChN8zV8y0gzwUldZ60CUzTJBjyfsmK5vLd
+         qBl0kD0V/yV0e6Qv41sXotFPlKDjYFwI/mvnjFG64vamJgy0OndFRGRV/NxbfdhSnC
+         CkGHRsDYwbULDwut4PoCOIu05XfLmyhFrfuwR+T+z+lirq9uYk2rL0CFXtHiO6b7ko
+         t3+8Oarg7whqcZIN22ebCXlut3UKPAzDzP0ZqGvQEe1ZpFNp09cH/2fpjHSBdLrKit
+         cz5rtffRZo9tBQ30kyz0AeYuOrPgu4mLo4Kwga0w52al4JPmqUxuNfXGhlVPTTMPrG
+         RfOnDVjYypD1g==
+Date:   Mon, 28 Jun 2021 09:43:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Marshall <hubcap@omnibond.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the orangefs tree
+Message-ID: <20210628094329.56de86cb@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <74F24228-8BC7-49FA-BD43-A9FB90269E76@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/2Wf+LRNEMqK3Ab+g8mvEfw3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/27/21 6:30 AM, Sachin Sant wrote:
-> While booting 5.13.0-rc7-next-20210625 on POWER9 LPAR following warning
-> is seen [ ... ]
+--Sig_/2Wf+LRNEMqK3Ab+g8mvEfw3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please help with testing of the patch that is available at
-https://lore.kernel.org/linux-block/20210627211112.12720-1-bvanassche@acm.org/T/#u
+Hi all,
 
-Thanks,
+After merging the orangefs tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Bart.
+fs/orangefs/inode.c: In function 'orangefs_readahead':
+fs/orangefs/inode.c:252:15: warning: unused variable 'file' [-Wunused-varia=
+ble]
+  252 |  struct file *file =3D rac->file;
+      |               ^~~~
+
+Introduced by commit
+
+  030bd4f13d75 ("orangefs: readahead adjustment")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2Wf+LRNEMqK3Ab+g8mvEfw3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDZDSEACgkQAVBC80lX
+0Gxbqwf/T+9YP4eIaK1ao0yJIoQytRP27DadMjmkYLiWypvnOAFL2QQFmaSuZtex
+FBGucp8UtiVYMvOQOkEFv0xgF9H9L+j1c03szVQV/BsRwh7SQKeW/gXegsIRapFp
+iWdBPzTUmas6fBiDdGpGBbg+zW7r9/O9/BazsH4YiDW51mdebZN+N+53bVWbq7xI
+aMeExYm4L/svRZ3B6CjBotta9cphhw+N+gcf3QlMsmbQ/qLxTG1qychHQdBvAGjc
+CWQkNbBWiQH7kiqym13qfrgoTohGFOWGe9I1RpO2abta+TMaB3o6vzMdZQU1AADp
++h8oYaAjyNW5C3NURwzPq30ug7wQdg==
+=9dJ9
+-----END PGP SIGNATURE-----
+
+--Sig_/2Wf+LRNEMqK3Ab+g8mvEfw3--

@@ -2,83 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43CE3B5D36
-	for <lists+linux-next@lfdr.de>; Mon, 28 Jun 2021 13:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AF73B5D4A
+	for <lists+linux-next@lfdr.de>; Mon, 28 Jun 2021 13:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbhF1Liz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Jun 2021 07:38:55 -0400
-Received: from mga09.intel.com ([134.134.136.24]:10856 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232486AbhF1Liu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 28 Jun 2021 07:38:50 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10028"; a="207877953"
-X-IronPort-AV: E=Sophos;i="5.83,305,1616482800"; 
-   d="scan'208";a="207877953"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 04:36:24 -0700
-X-IronPort-AV: E=Sophos;i="5.83,305,1616482800"; 
-   d="scan'208";a="425098684"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 04:36:21 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1lxpYm-0060zW-Sl; Mon, 28 Jun 2021 14:36:16 +0300
-Date:   Mon, 28 Jun 2021 14:36:16 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Stephen Rothwell <sfr@rothwell.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Miller <davem@davemloft.net>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Finn Thain <fthain@linux-m68k.org>,
+        id S232743AbhF1LrC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Jun 2021 07:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbhF1LrB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Jun 2021 07:47:01 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A36C061574;
+        Mon, 28 Jun 2021 04:44:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GD5PD1xXdz9sVt;
+        Mon, 28 Jun 2021 21:44:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1624880672;
+        bh=7Pb3MnxHOl/+eVEKU5ze5W1VhogzyJb/L35VwUoyH+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=V7d7oy4/KN+V7cIb8tRkQD6ApnmWPXWLD0r/atDiSwrFFOTlmifBVU1jw7pyqjhlP
+         Zdn4IbzWvYp+FJ0F630CLq7dlSdlkLM4dnMib7ZOLVeQBGme5ABdpkRy2fUeKFfAsW
+         WkDpbLV3dd/e90qqXU2A3JKcc4b42Gaml9ibJR14gTdx5R4w1prA0NXMw75WAyicjK
+         EqQyvTyO1bM29FluwXZwySAX8tE6GD6m3mPU5o5vZ6bCMhNUhFO9GHPokcMoU/AG0L
+         F6IlNH0vS4Z6Up2etWZxjuRiNneGKskPWDkk7Gg1Ej8Et7vNvhBniuVIWIXD4Dy9DR
+         +0sE7oE5G/17Q==
+Date:   Mon, 28 Jun 2021 21:44:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Robert Hancock <robert.hancock@calian.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Subject: Re: linux-next: manual merge of the block tree with the ide and
- kspp-gustavo trees
-Message-ID: <YNm0MBV6Sn+ceEZ9@smile.fi.intel.com>
-References: <20210621141110.548ec3d0@canb.auug.org.au>
- <CAHp75VcJKX4xzP1PrCBixDzgGBGwVvbV3YtMebKxpRoi1_EhaA@mail.gmail.com>
- <20210621223045.018223b9@elm.ozlabs.ibm.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tags need some work in the clk tree
+Message-ID: <20210628214430.6b3607d5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210621223045.018223b9@elm.ozlabs.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/1QVTU.+H6zquvIjKLrMdMvW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 10:30:45PM +1000, Stephen Rothwell wrote:
-> On Mon, 21 Jun 2021 13:56:13 +0300 Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Mon, Jun 21, 2021 at 7:13 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> > >   2c8cbe0b2971 ("IDE SUBSYSTEM: Replace HTTP links with HTTPS ones")
-> > >   9a51ffe845e4 ("ide: use generic power management")
-> > >   f9e09a0711ca ("ide: sc1200: use generic power management")
-> > >   d41b375134a9 ("ide: delkin_cb: use generic power management")
-> > >   6800cd8cbc6e ("ide-acpi: use %*ph to print small buffer")
-> > >   731d5f441e1c ("ide: Fix fall-through warnings for Clang")
-> > >
-> > > from the ide and kspp-gustavo trees and commits:  
-> > 
-> > As far as I can tell the IDE hasn't sent PR to LInus for a long time
-> > (like a few release cycles). I don't know what happened there, though.
-> 
-> Yeah, the top commit in the ide tree (which is intended to hold bug
-> fixes for Linus' tree) is dated 4 Aug 2020, so hopefully this will
-> prompt Dave to do something with it.  There has been no ide "future
-> development" tree in linux-next since 2011.
+--Sig_/1QVTU.+H6zquvIjKLrMdMvW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yep, I think the best approach here may be to apply those (by sending a PR)
-followed by marking subsystem orphaned or delete it entirely.
+Hi all,
 
-David, what are your thoughts?
+In commit
 
--- 
-With Best Regards,
-Andy Shevchenko
+  3c9b49b0031a ("clk: si5341: Update initialization magic")
 
+Fixes tag
 
+  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  71dcc4d1f7d2 ("clk: si5341: Check for input clock presence and PLL lock o=
+n startup")
+
+Fixes tag
+
+  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  78f6f406026d ("clk: si5341: Avoid divide errors due to bogus register con=
+tents")
+
+Fixes tag
+
+  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  6e7d2de1e000 ("clk: si5341: Wait for DEVICE_READY on startup")
+
+Fixes tag
+
+  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+This can be fixed for the future by setting core.abbrev to 12 (or more)
+or (for git v2.11 or later) just making sure it is not set (or set to
+"auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1QVTU.+H6zquvIjKLrMdMvW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDZth4ACgkQAVBC80lX
+0Gyxhwf+O9YeXvX2knf2jhvuQBCd07ZrhZpXSBH+6wYT1kS9lSyNyRBuEeQmnQQW
+xEEkUouflkkP28vTMa4Lj96y4eZyIpCONekNBYuoxgJhFMkNGAn+IjX3PxMZt3xx
+bTXGJGaWHyIIrEqadzxhWwDJj8db4MCQqLoa+fUA4rTVdRjPJFiq7QXGdVgmgqWE
+cexSz6UqKNIq16C5d3y04KhOTHv7Bqci+uvGRh6SnEAkuaK7vsae7xSUdCqJOZJs
+Fgu6kIULxJuO7wCHQwwPofR5ohD9o5LRLtV+RrBoQaXRqhWTHWuWF77TIQyXci5E
+skBnT6Oq+Xg4LIJmvFTb3p0RcCkMDw==
+=g7Gf
+-----END PGP SIGNATURE-----
+
+--Sig_/1QVTU.+H6zquvIjKLrMdMvW--

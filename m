@@ -2,128 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AF73B5D4A
-	for <lists+linux-next@lfdr.de>; Mon, 28 Jun 2021 13:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150143B65D4
+	for <lists+linux-next@lfdr.de>; Mon, 28 Jun 2021 17:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbhF1LrC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Jun 2021 07:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbhF1LrB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Jun 2021 07:47:01 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A36C061574;
-        Mon, 28 Jun 2021 04:44:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GD5PD1xXdz9sVt;
-        Mon, 28 Jun 2021 21:44:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1624880672;
-        bh=7Pb3MnxHOl/+eVEKU5ze5W1VhogzyJb/L35VwUoyH+A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=V7d7oy4/KN+V7cIb8tRkQD6ApnmWPXWLD0r/atDiSwrFFOTlmifBVU1jw7pyqjhlP
-         Zdn4IbzWvYp+FJ0F630CLq7dlSdlkLM4dnMib7ZOLVeQBGme5ABdpkRy2fUeKFfAsW
-         WkDpbLV3dd/e90qqXU2A3JKcc4b42Gaml9ibJR14gTdx5R4w1prA0NXMw75WAyicjK
-         EqQyvTyO1bM29FluwXZwySAX8tE6GD6m3mPU5o5vZ6bCMhNUhFO9GHPokcMoU/AG0L
-         F6IlNH0vS4Z6Up2etWZxjuRiNneGKskPWDkk7Gg1Ej8Et7vNvhBniuVIWIXD4Dy9DR
-         +0sE7oE5G/17Q==
-Date:   Mon, 28 Jun 2021 21:44:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Robert Hancock <robert.hancock@calian.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tags need some work in the clk tree
-Message-ID: <20210628214430.6b3607d5@canb.auug.org.au>
+        id S233681AbhF1PlF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Jun 2021 11:41:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238156AbhF1PkM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 28 Jun 2021 11:40:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DBFDC61465;
+        Mon, 28 Jun 2021 15:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624894666;
+        bh=eI2Fxjq2q3yk0vo9kgq4VdGiAnhKB9IrVvGHiaOvbaM=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=rkTVeWwWBCwhh5R6NA+GjArDyHlgG7LyRi28i/da3j+inKpdhyagF7R5tbqLAxofm
+         MhFUJm/S8odKz89GhIAG1tfLex3qB+yEoxlOEfaiy4ZHkjykrukR78CPmRHlDiM8mW
+         2tbl46gi8gHDfFpwits5I0zeOcRjOMkkSljtWcGBarurx4AU2u1ocJpglUzgLEeStg
+         JRWRzv++FxJtP/xY0y5XbybxRB5mD62dGi/epL6pAFtVnTmYtGQ8H3tfk5oERTxlLl
+         C0C1k8lVEmsYRcarROuAF86pPO9RZmq5SNzJhKecgG6MUSHhvhG4FrsILGDgEDE/Kw
+         YO+45PZo1ndSg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A9FC95C065A; Mon, 28 Jun 2021 08:37:46 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 08:37:46 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     liuyixian@huawei.com
+Cc:     jgg@nvidia.com, liweihang@huawei.com, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Lockdep splat in -next
+Message-ID: <20210628153746.GA2237462@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1QVTU.+H6zquvIjKLrMdMvW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1QVTU.+H6zquvIjKLrMdMvW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello, Yixian Liu,
 
-Hi all,
+The following -next commit results in a lockdep splat:
 
-In commit
+591f762b2750 ("RDMA/hns: Remove the condition of light load for posting DWQE")
 
-  3c9b49b0031a ("clk: si5341: Update initialization magic")
+The repeat-by is as follows:
 
-Fixes tag
+tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --trust-make --duration 1 --configs TASKS01
 
-  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+The resulting splat is as shown below.  This appears to have been either
+fixed or obscured by a later commit, but it does affect bisectability.
+Which I found out about the hard way.  ;-)
 
-has these problem(s):
+							Thanx, Paul
 
-  - SHA1 should be at least 12 digits long
+======================================================
+WARNING: possible circular locking dependency detected
+5.13.0-rc1+ #2218 Not tainted
+------------------------------------------------------
+rcu_torture_sta/66 is trying to acquire lock:
+ffffffffa0063c90 (cpu_hotplug_lock){++++}-{0:0}, at: static_key_enable+0x9/0x20
 
-In commit
+but task is already holding lock:
+ffffffffa01754e8 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_create_usercopy+0x2d/0x250
 
-  71dcc4d1f7d2 ("clk: si5341: Check for input clock presence and PLL lock o=
-n startup")
+which lock already depends on the new lock.
 
-Fixes tag
 
-  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+the existing dependency chain (in reverse order) is:
 
-has these problem(s):
+-> #1 (slab_mutex){+.+.}-{3:3}:
+       __mutex_lock+0x99/0x950
+       slub_cpu_dead+0x15/0xf0
+       cpuhp_invoke_callback+0x181/0x850
+       cpuhp_invoke_callback_range+0x3b/0x80
+       _cpu_down+0xdf/0x2a0
+       cpu_down+0x2c/0x50
+       device_offline+0x82/0xb0
+       remove_cpu+0x1a/0x30
+       torture_offline+0x80/0x140
+       torture_onoff+0x147/0x260
+       kthread+0x123/0x160
+       ret_from_fork+0x22/0x30
 
-  - SHA1 should be at least 12 digits long
+-> #0 (cpu_hotplug_lock){++++}-{0:0}:
+       __lock_acquire+0x12e6/0x27c0
+       lock_acquire+0xc8/0x3a0
+       cpus_read_lock+0x26/0xb0
+       static_key_enable+0x9/0x20
+       __kmem_cache_create+0x39e/0x440
+       kmem_cache_create_usercopy+0x146/0x250
+       kmem_cache_create+0xd/0x10
+       rcu_torture_stats+0x79/0x280
+       kthread+0x123/0x160
+       ret_from_fork+0x22/0x30
 
-In commit
+other info that might help us debug this:
 
-  78f6f406026d ("clk: si5341: Avoid divide errors due to bogus register con=
-tents")
+ Possible unsafe locking scenario:
 
-Fixes tag
+       CPU0                    CPU1
+       ----                    ----
+  lock(slab_mutex);
+                               lock(cpu_hotplug_lock);
+                               lock(slab_mutex);
+  lock(cpu_hotplug_lock);
 
-  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
+ *** DEADLOCK ***
 
-has these problem(s):
+1 lock held by rcu_torture_sta/66:
+ #0: ffffffffa01754e8 (slab_mutex){+.+.}-{3:3}, at: kmem_cache_create_usercopy+0x2d/0x250
 
-  - SHA1 should be at least 12 digits long
-
-In commit
-
-  6e7d2de1e000 ("clk: si5341: Wait for DEVICE_READY on startup")
-
-Fixes tag
-
-  Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-
-This can be fixed for the future by setting core.abbrev to 12 (or more)
-or (for git v2.11 or later) just making sure it is not set (or set to
-"auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/1QVTU.+H6zquvIjKLrMdMvW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDZth4ACgkQAVBC80lX
-0Gyxhwf+O9YeXvX2knf2jhvuQBCd07ZrhZpXSBH+6wYT1kS9lSyNyRBuEeQmnQQW
-xEEkUouflkkP28vTMa4Lj96y4eZyIpCONekNBYuoxgJhFMkNGAn+IjX3PxMZt3xx
-bTXGJGaWHyIIrEqadzxhWwDJj8db4MCQqLoa+fUA4rTVdRjPJFiq7QXGdVgmgqWE
-cexSz6UqKNIq16C5d3y04KhOTHv7Bqci+uvGRh6SnEAkuaK7vsae7xSUdCqJOZJs
-Fgu6kIULxJuO7wCHQwwPofR5ohD9o5LRLtV+RrBoQaXRqhWTHWuWF77TIQyXci5E
-skBnT6Oq+Xg4LIJmvFTb3p0RcCkMDw==
-=g7Gf
------END PGP SIGNATURE-----
-
---Sig_/1QVTU.+H6zquvIjKLrMdMvW--
+stack backtrace:
+CPU: 1 PID: 66 Comm: rcu_torture_sta Not tainted 5.13.0-rc1+ #2218
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ dump_stack+0x6d/0x89
+ check_noncircular+0xfe/0x110
+ ? rcu_read_lock_sched_held+0x4d/0x80
+ ? __alloc_pages+0x329/0x360
+ __lock_acquire+0x12e6/0x27c0
+ lock_acquire+0xc8/0x3a0
+ ? static_key_enable+0x9/0x20
+ cpus_read_lock+0x26/0xb0
+ ? static_key_enable+0x9/0x20
+ static_key_enable+0x9/0x20
+ __kmem_cache_create+0x39e/0x440
+ kmem_cache_create_usercopy+0x146/0x250
+ ? rcu_torture_stats_print+0xd0/0xd0
+ kmem_cache_create+0xd/0x10
+ rcu_torture_stats+0x79/0x280
+ kthread+0x123/0x160
+ ? kthread_park+0x80/0x80
+ ret_from_fork+0x22/0x30

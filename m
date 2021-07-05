@@ -2,89 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C01513BC351
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jul 2021 22:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8875A3BC3CE
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jul 2021 00:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbhGEUMY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Jul 2021 16:12:24 -0400
-Received: from einhorn.in-berlin.de ([192.109.42.8]:40517 "EHLO
-        einhorn-mail-out.in-berlin.de" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229565AbhGEUMY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Jul 2021 16:12:24 -0400
-X-Envelope-From: stefanr@s5r6.in-berlin.de
-Received: from authenticated.user (localhost [127.0.0.1]) by einhorn.in-berlin.de  with ESMTPSA id 165K9fls014834
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 5 Jul 2021 22:09:42 +0200
-Date:   Mon, 5 Jul 2021 22:09:35 +0200
-From:   Stefan Richter <stefanr@s5r6.in-berlin.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: linux-next: removed trees
-Message-ID: <20210705220935.4d24a7af@kant>
-In-Reply-To: <20210705215743.40b26667@kant>
-References: <20210514123221.7c21393f@canb.auug.org.au>
-        <20210705215743.40b26667@kant>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S230193AbhGEWJB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Jul 2021 18:09:01 -0400
+Received: from ozlabs.org ([203.11.71.1]:51811 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230086AbhGEWJB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 5 Jul 2021 18:09:01 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GJfsT58ktz9sWq;
+        Tue,  6 Jul 2021 08:06:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1625522781;
+        bh=TwqMw62jrR/kI5w4kSqFgyUFVnwFQ2A8qCJfovIHDIA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=l0IcdjbYrJI5JQ3eCNY49qmRtoI9T2SI/qHuePuqfgHSV/gwUHG0yT0WZeazaB8WF
+         3gVTjOSFrUz3VdnEE7kGHnjkIBZ7Kd17RRhEJgb0aKl4fafH9VPgeMnsMRNZztALhZ
+         +FoxxpHhPgMn0H7vTwGwDCiVGsO2LUvp84ZiJMbgng/o7IwnJVytZyBsZICfQpuDtG
+         npxPFzl1OX6bNBknAsTJnVWMrx3jNNV4qr1heZa4TwdoNJ6+rHVJp6COADdcFsncCl
+         pi+CXYa9kwkaLq307BnTo4rqNrw8QRp77Jhjm/YwLOrGKuus7n6vejAT/ww2ABfp84
+         2RoW3jy9kVa0A==
+Date:   Tue, 6 Jul 2021 08:06:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the memblock-fixes tree
+Message-ID: <20210706080621.5d497973@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9s8Qt82ZjAaJfCmL6FL0aXx";
+Content-Type: multipart/signed; boundary="Sig_/cOHV3q4rtL2hX9.blEKZJvr";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9s8Qt82ZjAaJfCmL6FL0aXx
+--Sig_/cOHV3q4rtL2hX9.blEKZJvr
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Jul 05 Stefan Richter wrote:
-> On May 14 Stephen Rothwell wrote:
-> > The following tree have been removed form linux-next because they have
-> > not been updated in more than a year.  If you want a tree reinstated,
-> > just let me know.
-> >=20
-> > fbdev
-> > fsl
-> > generic-ioremap
-> > ieee1394
-> >   this contains the single commit
-> > 	67f8e65e4fc1 firewire: net: remove set but not used variable 'guid'
-> > random
-> > realtek
-> > thermal-rzhang
-> > thermal-soc
-> > y2038
-> > zx2c4 =20
->=20
-> Would you be OK with adding linux1394.git (for-next branch) back to
-> linux-next?  There are two patches queued and I am finally aiming to get
-> them merged. :-)
+Hi all,
 
-(PS, this is for the /next/ merge window after 5.14 is final, not for the
-current window anymore of course.)
+In commit
+
+  24caecffab46 ("arm: ioremap: don't abuse pfn_valid() to check if pfn is i=
+n RAM")
+
+Fixes tag
+
+  Fixes: 30603c5a0c9a ("arm: ioremap: don't abuse pfn_valid() to check if p=
+fn
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+I could not easily find the actual commit that was meant.
+
+Also, please do not split Fixes tags over more than one line.
+
 --=20
-Stefan Richter
--=3D=3D=3D=3D=3D=3D--=3D-=3D -=3D=3D=3D --=3D-=3D
-http://arcgraph.de/sr/
+Cheers,
+Stephen Rothwell
 
---Sig_/9s8Qt82ZjAaJfCmL6FL0aXx
+--Sig_/cOHV3q4rtL2hX9.blEKZJvr
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElVwAmOXEbvmhUkgUefNvslRdedAFAmDjZv8ACgkQefNvslRd
-edDSyQ//USdECkSZg6HZfGDxl+r02umdl3qf5K1cM904eDj8hSL2qsnvjC4ELPZY
-Sxugd3yZWiOMCbEcbUgC0yxr8RcpXmPz/TiwA7Nj24EJ7okGU8nbIuKWXjDBZ8Fz
-m3g37DaMp1NQ0MxuIb5Hk3ILroB8QD1oSHUCQEe5VHmhQSsEPUAf4tSkwguhSynr
-jq41nOYkqXH9/0KWFWBR3yjNwDLNae7j8cNzO3ND2EatgleJ1qD0A7xfi21u3uXh
-SJF6kK+lqff0ky5wTRZPNZn5shy2AdycL2dF8YonO8BS01dIWpGio2aMCNVfLXxZ
-4kGksqw09LjwLOXvSGxplXVCUAjz1UVynegZZRb3laY5ODlsqTT80ieWZr86dFal
-pq96Q81jIzL9Eg8tVhW4jjQIInf6+VuZVgzIu3ZhzZMVeMe6lP8IBR0qjq3K3/3D
-jvonOMGnO3OZqq/PtBAn8+R43z28Q+j50kCKF9GFe7Kev08d3Gq+itqJLSwaHKeL
-khWzJ7LyeIZ36O0wd/JZrKsiK2kxUccGNtwiZTA4HS/tyRak3ZBotqlAZe2qNXZv
-HBm/wM9J4Bc3fYhpdoT/zNAY5KgFuVjKxVhDB8gGE5Lm/ER5o0p0lmH8ziIbFpI/
-/9h1XmRuVDCUqw5R8k/xRO3rlMz9/AdOT0hx0cD96SzLAxgwL54=
-=Eg1A
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDjgl0ACgkQAVBC80lX
+0GyjnAf8Cwd+kNYrUBK63Um85skjWgpV/sNrhSCb7GATYhg41oKybiAyf0HUiF67
+6WvzbkG/b8mFknBKvyRarBtFv/CFw7Bkt5sMD3w6isezcNUXvtanj2zkxQXshKQd
+V7wulwc59J0SN+Kn9pN5fPJumChW0hKgdKiuQRpB7jWiKZkgM5cK+cZjsOE0j8JB
+f6MlZfaLVhzpaToph4Pn8cE3M8Dqcu80jMTjfCF3GFHrGiVxaRrsWUrUHxuD10iM
+hIXYkTNk/kZrOAkaBFlKeXfQlh0t52qqRjQJz92Dw2Pb73aazl/QpjjUq+jiqQD6
+O6FhpWg/cwo64wjjzb0R1uI0W5sFOQ==
+=szX0
 -----END PGP SIGNATURE-----
 
---Sig_/9s8Qt82ZjAaJfCmL6FL0aXx--
+--Sig_/cOHV3q4rtL2hX9.blEKZJvr--

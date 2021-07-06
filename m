@@ -2,111 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE23D3BC46E
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jul 2021 02:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620F63BC4D3
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jul 2021 04:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbhGFAyx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 5 Jul 2021 20:54:53 -0400
-Received: from ozlabs.org ([203.11.71.1]:55495 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229733AbhGFAyv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 5 Jul 2021 20:54:51 -0400
+        id S229807AbhGFCkG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 5 Jul 2021 22:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbhGFCkG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 5 Jul 2021 22:40:06 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABA2C061574;
+        Mon,  5 Jul 2021 19:37:28 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GJkXr10JYz9sXN;
-        Tue,  6 Jul 2021 10:52:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GJmtF4wTxz9sX1;
+        Tue,  6 Jul 2021 12:37:25 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1625532732;
-        bh=z/DZ35sugsGXHcXx3xGhUN/XMaBXjJOnze8Ymh5hl3E=;
+        s=201702; t=1625539045;
+        bh=TnwaB4vNKrB5x2b6SbAnbnf0jCPcyxQjZaTxiEbBhcI=;
         h=Date:From:To:Cc:Subject:From;
-        b=qkT75D4Kv/izygeFpA5Ia9FGu2gWvh7uKrlwOITtRyIXvXesJpNgsyMs6+9GuSSc8
-         vfzuSZJaRY1ChaVNtHClH18wbdj5Kvzfrs0VxvP9d83MQJi6v3/jJEJny0M34zeV10
-         yrH99MTayQLCJqBlRQhXKKyWjWMY4ldZg2o0eAPvi5gpiCzMZQB5owYx4HIxrjDR0Y
-         gEw4Tx2sUvYuZ5SLtheRRXKFAuHjA3QdO28bXnfwdBl02FAGYjHRkJzZ4JXSLPPIi5
-         T9hQZYplmiLPCFz41qyan/0yErlx97IT1D7wC1UMLhiPPg+pyDX3LSMQMftxkesyI5
-         JO9oXXr/VlW9A==
-Date:   Tue, 6 Jul 2021 10:52:11 +1000
+        b=isMCPBZ1BfYs6NLp3RwHFx/SXTRaGxVvq95+G7EiJsPtDaJ+LJcBFkx2Re3QKCBvY
+         uOJKFIcNxDe3mI/HyaP5DWxwVrChGsJcBADI2VqIg/1LRjrbZ4c5uPPa5B20Qd8HRu
+         0LpRZjrYfEbpfo8jGPpo34eoIaUj79a/SBz+Ck+ISbCuTU6mPagWvq/Uiug+0as1l0
+         Yj6SDS/MEkQ1pygei1PVQhBknHlHsY/2u7HoBT/SCglL30FEhvn1MDOD185pOuB8p/
+         rNMlwk9FlcT8PsEW33r2h+siOdB/sXeUluNgMvJoXK5epFMOhcuryXCek06Y+We2A6
+         zWabm0hr6wH3w==
+Date:   Tue, 6 Jul 2021 12:37:24 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20210706105211.58372119@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the vhost tree
+Message-ID: <20210706123724.3acc9688@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L.fLIj=vi9/QZ.jIHcYgX/d";
+Content-Type: multipart/signed; boundary="Sig_/EFry/NhO9Itfe+DuSZs6ELJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/L.fLIj=vi9/QZ.jIHcYgX/d
+--Sig_/EFry/NhO9Itfe+DuSZs6ELJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+After merging the vhost tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+drivers/net/virtio_net.c: In function 'start_xmit':
+drivers/net/virtio_net.c:1695:15: warning: unused variable 'bytes' [-Wunuse=
+d-variable]
+ 1695 |  unsigned int bytes =3D skb->len;
+      |               ^~~~~
 
-between commit:
+Introduced by commit
 
-  e058a84bfddc ("Merge tag 'drm-next-2021-07-01' of git://anongit.freedeskt=
-op.org/drm/drm")
-
-from the origin tree and commit:
-
-  8c21fc49a8e6 ("drm/amdkfd: add owner ref param to get hmm pages")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  b3634a892df4 ("virtio_net: disable cb aggressively")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 307d22abd814,2e9ad6e0dfbb..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@@ -695,9 -692,8 +691,9 @@@ int amdgpu_ttm_tt_get_user_pages(struc
-  	readonly =3D amdgpu_ttm_tt_is_readonly(ttm);
-  	r =3D amdgpu_hmm_range_get_pages(&bo->notifier, mm, pages, start,
-  				       ttm->num_pages, &gtt->range, readonly,
-- 				       true);
- -				       false, NULL);
- -out_putmm:
-++				       true, NULL);
- +out_unlock:
- +	mmap_read_unlock(mm);
-  	mmput(mm);
- =20
-  	return r;
-
---Sig_/L.fLIj=vi9/QZ.jIHcYgX/d
+--Sig_/EFry/NhO9Itfe+DuSZs6ELJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDjqTsACgkQAVBC80lX
-0GyOMQf/SwJeBNy9zwnKww2yAKpgIHm1EWwe2gcB0WUZt7xZAIqz8QpH5cAjkocI
-vplUIVTI/OAuvuMJ/rd/fQTJ0jXTTcCOGOy7u5/2sKya37taRmcWY0C4ybDGnT9D
-V8ge8n6GC8JrPP683EpIW+NEf0yIqZ+m5pme2/cR01A2oeYvMxuAczctqmi0fFPH
-3gNP1H/mgszf5rUzhHk+H74eJjdz4jxNrC92HCle2C1ERnB9jC2ey37yCMUfb8wb
-7eNv0UQslffwl4gEPVgfmfMIAkGgsf0givoTc4lQLzXLpmvWiqAweZiRfaex/3v0
-uDNOSvqh3R6dqsoZ2/0SIKPNyldOrA==
-=JOzK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDjweQACgkQAVBC80lX
+0GyoRwf/Tbe/jR+qj+9xfgVt7rXbZLNeeN8M+GQvpBH6rTb9Dv5KayfKf4djK6xx
++jQAKw/asRWN1+VwmtoHilTPWOluasOoLOsoTZcrLWoTCo1ywOnPc12Rho0t3MZU
+x6d6KXk07O/DB1a1/UHuZCJv/L1lojISVkdtZM+Hvh+cY3FklyxJnz1dKIgIopGF
+uT0zJptyKk7auFk3yZtRczXC3KkNNeinzsmZ5sfNGhqIH1f7yXH9Q3HSJz/TjSRe
+5hH6fGF9u44komlWWcoYpczL27IUuUtoeV8Gnt4VsruFWWp6lEOGT9/wvsHiTYgt
+NPvMuxpWQ5AnzXqkFTwXK64bWA0z2A==
+=xwzy
 -----END PGP SIGNATURE-----
 
---Sig_/L.fLIj=vi9/QZ.jIHcYgX/d--
+--Sig_/EFry/NhO9Itfe+DuSZs6ELJ--

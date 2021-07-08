@@ -2,94 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1643C1B16
-	for <lists+linux-next@lfdr.de>; Thu,  8 Jul 2021 23:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B8A3C1B21
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jul 2021 23:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbhGHVk6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jul 2021 17:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S231266AbhGHVoZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jul 2021 17:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbhGHVk5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jul 2021 17:40:57 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DCAC061574;
-        Thu,  8 Jul 2021 14:38:14 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id x21-20020a17090aa395b029016e25313bfcso4860813pjp.2;
-        Thu, 08 Jul 2021 14:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ooa5d7zgG8sZhRVFlDxUhQ9CRAI+LnyQ8qvmMnTtbvw=;
-        b=E/rHzLgY2qeXdXPFF2/iT6rFe9bveLEY/1fSy3Dh18EAJleBZN4chH8y69C5r62NDK
-         2j6Yy9JwU7jQMGDZoO5FD0Wz0DOrzOLjk3dwla9o90tUCarbwzlBFSurolOqRejLKcI2
-         0fyLFjJ0Sk5W9YLjk/1EeORmRRPgXMjEz66i1/rgGFKcffhn+588GquWMifp9aF1TW69
-         Wzn+Zy6lWE2I15lhyXehHj+XiZqfExmkvwI/ED4tilqvhSuTgzw+n/O2yNid1lifMvGG
-         UfZ1w/H/meHkU9MEeUf7dsF2M2+Dia3J3FgQC51+gx8CrH/fLYMmImGh1EHmpZyLmpkH
-         9LvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ooa5d7zgG8sZhRVFlDxUhQ9CRAI+LnyQ8qvmMnTtbvw=;
-        b=qRkco5SwvSy3YrBfxOjQ7kVcvjzvBKy1QKRDarrBIBRb7xR/qpQ+0Ed1UqjR8FlO8X
-         V4Ck7J2NJwhQxtR9kXqGuZfzcaGPYUrSltfiUZYX5gxDw+kNfI/we1e3cGcIjJtfgw53
-         dBqthA4q7x5vFvFsFYMH6hH7lkFBkuKQAAldiM4mJig3K9k3BjaOJiyRzbG7uHyVwh5D
-         XyWcFHNMO9ovOyy0dMtFF8NazOvswxrzRq1sHREpX6BTKUIuReC6If1tz3TzHHrV2EbQ
-         jb39FOV8j0V3gboWzj1vxpJGic/Ynq63bkP2NaJmC+3Seg+K5mN2JpUMaGY9yNyyPoD7
-         HBiw==
-X-Gm-Message-State: AOAM531ftJU6h2yT8QkPRe9KXJ82+7wo1I2vjl4yCtBDQfUAL1umIAnn
-        Be03empgkVnPOqaxj9O0nzsHYGGBR0SKbA==
-X-Google-Smtp-Source: ABdhPJxaFNipZhejgmTJnh0jGYYvdIAPv64jXohZYrq3eyUFsHkyVtmXLfyfit0PUWmSAZNyMCarpg==
-X-Received: by 2002:a17:90a:8585:: with SMTP id m5mr33890956pjn.224.1625780293792;
-        Thu, 08 Jul 2021 14:38:13 -0700 (PDT)
-Received: from [10.67.49.104] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id n34sm3301165pji.45.2021.07.08.14.38.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jul 2021 14:38:13 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the net tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+        with ESMTP id S231265AbhGHVoY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jul 2021 17:44:24 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D665C061574;
+        Thu,  8 Jul 2021 14:41:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GLV9c2Hmpz9s5R;
+        Fri,  9 Jul 2021 07:41:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1625780500;
+        bh=iMjLue84MtL4u1QyHyLXTcIHUE91RKo/s7Pdxsd3pKc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UW7Nw0zSCCbJbgbRYE7KIX3pfSYgx9xu6pvWdsqwGWFdIbzQfZMys0+NbJWOqKbxr
+         sCYnWLIo7ict0jUUc2jzgJUNJVq+uybGRSz/Sc9E67VdrnQvjkK8HGgre7f1AtYSuJ
+         MKQtcgNfcTniI+vCj3sAVglGxrvAHQEQYqoTorEzLpJZueP/A3hv7Ha4vTJ6QSfilf
+         u5aiij7W2Zp0sID4eYXPJsqQeV7yInfVoSyBL0IOgUslLLHwAw77z5HrjgWVlwGxxq
+         Ef6nIqMHjDsL3oQeJjJaWro+ZA/DcBkbibkyt3Rkdc1YtxWMQKP5JUS39UnRrsRtLi
+         5QACbPMAqr1WA==
+Date:   Fri, 9 Jul 2021 07:41:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210709073104.7cd2da52@canb.auug.org.au>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <30e28b44-b618-bdf5-cf4a-dc676185372d@gmail.com>
-Date:   Thu, 8 Jul 2021 14:38:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Subject: Re: linux-next: build warning after merge of the irqchip tree
+Message-ID: <20210709074139.6e5a5689@canb.auug.org.au>
+In-Reply-To: <87fswo3gxq.wl-maz@kernel.org>
+References: <20210615210143.2e00d851@canb.auug.org.au>
+        <20210708121855.69b5a5f8@canb.auug.org.au>
+        <87im1l2plp.wl-maz@kernel.org>
+        <20210708225037.4980f159@canb.auug.org.au>
+        <87fswo3gxq.wl-maz@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210709073104.7cd2da52@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/oT.rqm2DlpQ5BoDyA9CsDxu";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/8/21 2:31 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   9615fe36b31d ("skbuff: Fix build with SKB extensions disabled")
-> 
-> Fixes tag
-> 
->   Fixes: Fixes: 8550ff8d8c75 ("skbuff: Release nfct refcount on napi stolen or re-used skbs")
-> 
-> has these problem(s):
-> 
->   - No SHA1 recognised
-> 
-> Not worth rebasing for, just more care next time.
+--Sig_/oT.rqm2DlpQ5BoDyA9CsDxu
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It is there though:
+Hi Marc,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=8550ff8d8c75416e984d9c4b082845e57e560984
+On Thu, 08 Jul 2021 17:32:01 +0100 Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Thu, 08 Jul 2021 13:50:37 +0100,
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >=20
+> > On Thu, 08 Jul 2021 09:10:10 +0100 Marc Zyngier <maz@kernel.org> wrote:=
+ =20
+> > >
+> > > Hmmm... I've had a fix for this sitting in irqchip-fixes for some
+> > > time. But I now realise that this branch is not included in -next
+> > > while tip tracks it.
+> > >=20
+> > > Any chance you could add [1] to -next in the future?
+> > >=20
+> > >=20
+> > > [1] git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.g=
+it irq/irqchip-fixes =20
+> >=20
+> > So I assume this a branch of bug fixes for the current release, right? =
+=20
+>=20
+> Yes, that's exactly what this is.
+>=20
+> > In which case I will add it tomorrow. =20
 
-and has the proper format AFAICT, what am I missing?
--- 
-Florian
+Added from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/oT.rqm2DlpQ5BoDyA9CsDxu
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDncRMACgkQAVBC80lX
+0GxFWQgAh2+VPDc1iUycA8NbZO9BAToojcD8dS0NqMNEam6q7OynIU6TEA8G25mB
+4dnzzyb4SJLAcHdUim087vCf5FTzCt3+m1hAC8Wt/igzGzbboBqVddOZfkX64mNI
+4P4tL/IHPEQlAAbtOWJZD0CVsAvChf/fO/HL05zF8+0zDJTCvpJhxRaaBemvJBNn
+suMr1z1+p4kQqBIb6U9JjbY2wHIqXfkvWhc8ZJM4Im5KafdVOmp/90zd8KONvUlB
+at/EvpyUm9WDw2ZS/oPWWYyybDGm0+aTp/Tp+Mfm/pcZfjro6BtL6x7/b+/O2Gec
+KElrTRL13B6xqoS3dezboFDXLz5jbw==
+=PMsz
+-----END PGP SIGNATURE-----
+
+--Sig_/oT.rqm2DlpQ5BoDyA9CsDxu--

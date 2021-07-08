@@ -2,1387 +2,1141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734813BE66D
-	for <lists+linux-next@lfdr.de>; Wed,  7 Jul 2021 12:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF63A3BF336
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jul 2021 03:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbhGGKlP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Jul 2021 06:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S230511AbhGHBEI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Jul 2021 21:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhGGKlO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jul 2021 06:41:14 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E82C061574
-        for <linux-next@vger.kernel.org>; Wed,  7 Jul 2021 03:38:34 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id m15so821972plx.7
-        for <linux-next@vger.kernel.org>; Wed, 07 Jul 2021 03:38:34 -0700 (PDT)
+        with ESMTP id S230456AbhGHBEH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Jul 2021 21:04:07 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28BDC061574
+        for <linux-next@vger.kernel.org>; Wed,  7 Jul 2021 18:01:25 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id a2so4170918pgi.6
+        for <linux-next@vger.kernel.org>; Wed, 07 Jul 2021 18:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=kCmM8riPE+QjChDIbSqv0c7pgede6ngkJGKIH+KO/Jk=;
-        b=n2nctVzN/wRwQ3JRzD9AuW4tjD9Nayo3hK3DvsD7XfO7H14bIxPjs0Bo3BjViF3BLg
-         4LApsGP/CSuWgGQL1F5neJqgaBzTshUUxFWyi3JH8+RhGz6AZlY2ljNpCesEfS/YlFMd
-         P69XOi75vsBrfi2cMgq1cPBzevuLrBSEUxpni+PO6kBljF8F6FRcVV4LKX2OcsTMMX+b
-         DAdHGxSgziNVRARcuTeXRnXSFWsZHvvxI9Hy4il0B6/WPwotQu50T1mzk8f67TFfIsoR
-         5a2g6dAOaOAnXeRFzP4c3V+WZ47gnAoPKTwGushWB/ImnhaK5YANwuvsWrClbhZ1jcov
-         y6WA==
+        bh=jK9eQruX9tdEZi8An0p5UHf4DB99Ot+Cp5AkelJa1h8=;
+        b=MDG19qT1q+jkLOOOsn1o95YNan6GQBlln2pp7EH+lCnXPvlHECFSWB16CK2j2T842t
+         aAuhnT5akwrBLN2aQ2EOLQUbSNq3HzrnFss0LYtiXV9w6evzNkA0bWuxLH+qR8yacWt2
+         JTKkG2SgNP1gV63F0b09RMqaS9rPw/v5nHhtPKkhSId9Swmk9SxKtSwHJkPorodmlACu
+         6bU3Zda78feDjAJ6w5zoV7m9MCCK8qlzJ+EZ4SDKHvcqnYKUCRuDNIMtzt30tVG6vJbf
+         97Qll9ixm/muA/Ika808dBl6GlpoKXb/hD1Gm17PmiHWggOX/8UD/KcJsQANvqPMT1QA
+         isqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=kCmM8riPE+QjChDIbSqv0c7pgede6ngkJGKIH+KO/Jk=;
-        b=cpG02TIB9XiRe4ogB/tTwoQyQNLJhPh9iIAaS8GKIxFHiDTHoc9leUpTnXQLrA31H2
-         IEdKoRfqQcmR9CiKvf18Eitiu6l/r+vAMOU1BPWhmpBFvhIPbpyCN99YeMW9+cLL4qUD
-         a95xnxEWDz8WLRSMJzhWCpQgj9VTUI8FbYAqQmjfbIa6fcaPTemmP6ZCizAdChUNJToj
-         SZxxcSl40IVAc7wwEvS5bhbNSUO5HznC0/EqKNZoU7RE7Nx1RJUOwc+dh7bAPieuhH8A
-         kBKx2DBTTLU9OVV3EUGP3kuIe8Alrw0/7aupgyoMKJZs7GHDbmaid/Y5xxmCjfoDNx4T
-         NiUQ==
-X-Gm-Message-State: AOAM532BtqW9/z/FeY9RJiXnilOmW2gpBTJiTO4YwZ+JnYO7SQzpmLAE
-        oMEkL0elVxFmUr2XLIKLTvw5CY98YTcKQVyU
-X-Google-Smtp-Source: ABdhPJzZqx/8xvRguwaxn2p06b8xswKwew0dlZL2w7DQ7s6LbdWyi0Q5NhTlFkkqRmEj63O+DDfmDQ==
-X-Received: by 2002:a17:90a:420b:: with SMTP id o11mr24955749pjg.201.1625654313742;
-        Wed, 07 Jul 2021 03:38:33 -0700 (PDT)
+        bh=jK9eQruX9tdEZi8An0p5UHf4DB99Ot+Cp5AkelJa1h8=;
+        b=p9XJUnLEFVUAp9Fzwy1hP/rHOIMEFKQVfsdEAF5mGVvM3ExfJzryczB/CZmkH+rVRi
+         PCxoWt2sut/JA3NDYJNSK7q0K0dNuE1dT4DRyiFydxN8f+9YyzO3HIsVRQbFawRv9Yib
+         2qv1QgRFMtC8QoyoL5YjfPkCQ184SF+NCHOLJRfH85FqnuyHQu2bIO3gFZ82BFsinmuS
+         nryrGoFZkdlghQ9X/gemZ3JEUo2NttfMSh/O6dRYTLyFtsreqem2BLkeGSNHtgXvuFE5
+         joinEDbpV9J0yzGu30O3Jh3vWQIqZPZDB0gv9RYg5ApHairFG1S7Zn/dmY7jiyoTPzXo
+         p3CQ==
+X-Gm-Message-State: AOAM532lgDAI1oUfxOpFnMolN9WmfuYkmv8hZmN0qMfz9nxYVx6q0rIS
+        jzZYB5RIB1dW+XSxsB/loQ4EUTAoIjpZkMeI
+X-Google-Smtp-Source: ABdhPJyA57reZ2j1P9eW2XwYhGiamz41jN13q3LN5LYA8sscqZWM2OiHwZVSRgPrg6pDRcqbm5DEvg==
+X-Received: by 2002:a05:6a00:1c5f:b029:327:bd67:9d6f with SMTP id s31-20020a056a001c5fb0290327bd679d6fmr112278pfw.48.1625706085114;
+        Wed, 07 Jul 2021 18:01:25 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q24sm22545112pgk.32.2021.07.07.03.38.33
+        by smtp.gmail.com with ESMTPSA id e24sm409355pfn.127.2021.07.07.18.01.24
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 03:38:33 -0700 (PDT)
-Message-ID: <60e58429.1c69fb81.878de.3115@mx.google.com>
-Date:   Wed, 07 Jul 2021 03:38:33 -0700 (PDT)
+        Wed, 07 Jul 2021 18:01:24 -0700 (PDT)
+Message-ID: <60e64e64.1c69fb81.a6f9a.2430@mx.google.com>
+Date:   Wed, 07 Jul 2021 18:01:24 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20210707
-X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.13-12392-g47fac7b4f4b23
+X-Kernelci-Report-Type: build
 X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 766 runs, 37 regressions (next-20210707)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes build: 191 builds: 2 failed, 189 passed,
+ 16 warnings (v5.13-12392-g47fac7b4f4b23)
+To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 766 runs, 37 regressions (next-20210707)
-
-Regressions Summary
--------------------
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | clang-12 | multi_v7_de=
-fconfig           | 1          =
-
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-bcm2836-rpi-2-b         | arm    | lab-collabora   | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-10 | defconfig  =
-                  | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-12 | defconfig  =
-                  | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig  =
-                  | 1          =
-
-bcm2837-rpi-3-b-32      | arm    | lab-baylibre    | gcc-8    | bcm2835_def=
-config            | 1          =
-
-beaglebone-black        | arm    | lab-cip         | clang-12 | multi_v7_de=
-fconfig           | 1          =
-
-beaglebone-black        | arm    | lab-cip         | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-beaglebone-black        | arm    | lab-cip         | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-beaglebone-black        | arm    | lab-cip         | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-d2500cc                 | x86_64 | lab-clabbe      | clang-10 | x86_64_defc=
-onfig             | 1          =
-
-d2500cc                 | x86_64 | lab-clabbe      | gcc-8    | x86_64_defc=
-onfig             | 1          =
-
-d2500cc                 | x86_64 | lab-clabbe      | gcc-8    | x86_64_defc=
-on...86_kvm_guest | 1          =
-
-hifive-unleashed-a00    | riscv  | lab-baylibre    | gcc-8    | defconfig  =
-                  | 1          =
-
-hip07-d05               | arm64  | lab-collabora   | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-hip07-d05               | arm64  | lab-collabora   | clang-10 | defconfig  =
-                  | 1          =
-
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig  =
-                  | 1          =
-
-imx6q-sabresd           | arm    | lab-nxp         | gcc-8    | imx_v6_v7_d=
-efconfig          | 1          =
-
-imx8mp-evk              | arm64  | lab-nxp         | clang-10 | defconfig  =
-                  | 1          =
-
-imx8mp-evk              | arm64  | lab-nxp         | clang-12 | defconfig  =
-                  | 1          =
-
-imx8mp-evk              | arm64  | lab-nxp         | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | clang-10 | defconfig  =
-                  | 1          =
-
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | gcc-8    | defconfig  =
-                  | 1          =
-
-meson-gxl-s905d-p230    | arm64  | lab-baylibre    | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-rk3328-rock64           | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | clang-10 | defconfig  =
-                  | 1          =
-
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-210707/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20210707
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      ee268dee405b4710e179426a431ffe0cdee14f13 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | clang-12 | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e55a9d507db5acde11796f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-12 (Debian clang version 12.0.1-++20210626052608+b7c7b=
-42db1d1-1~exp1~20210626034043.129)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/clang-12/lab-linaro-lkft/baseline-am57xx-beagle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/clang-12/lab-linaro-lkft/baseline-am57xx-beagle-x15.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e55a9d507db5acde117=
-970
-        failing since 5 days (last pass: next-20210629, first fail: next-20=
-210701) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e559ea795d7fe753117974
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-beagle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-beagle-x15.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e559ea795d7fe753117=
-975
-        failing since 5 days (last pass: next-20210629, first fail: next-20=
-210701) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e55a25c69d0e14a911796a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-linaro-lkft/baseline-am57xx-bea=
-gle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-linaro-lkft/baseline-am57xx-bea=
-gle-x15.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e55a25c69d0e14a9117=
-96b
-        failing since 6 days (last pass: next-20210629, first fail: next-20=
-210630) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-am57xx-beagle-x15       | arm    | lab-linaro-lkft | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e55a24795d7fe75311797a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-omap2plus_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-beagle-x15.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-omap2plus_defconfig/gcc-8/lab-linaro-lkft/baseline-am57xx-beagle-x15.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e55a24795d7fe753117=
-97b
-        failing since 5 days (last pass: next-20210629, first fail: next-20=
-210701) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2836-rpi-2-b         | arm    | lab-collabora   | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54889461a4461691179c7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/baseline-bcm2836-rpi-=
-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54889461a446169117=
-9c8
-        failing since 132 days (last pass: next-20210223, first fail: next-=
-20210224) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5469ef67e09b0d51179ce
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-bcm28=
-37-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5469ef67e09b0d5117=
-9cf
-        failing since 19 days (last pass: next-20210611, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-10 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54d93d4d9e3554d11799a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54d93d4d9e3554d117=
-99b
-        failing since 19 days (last pass: next-20210616, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | clang-12 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54aebbc6928040411799a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-12 (Debian clang version 12.0.1-++20210626052608+b7c7b=
-42db1d1-1~exp1~20210626034043.129)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-12/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-12/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54aebbc69280404117=
-99b
-        failing since 19 days (last pass: next-20210616, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e543ceeb06dcfb5b117980
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e543ceeb06dcfb5b117=
-981
-        failing since 19 days (last pass: next-20210616, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e545363c1fbb09a711796a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-=
-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-=
-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e545363c1fbb09a7117=
-96b
-        failing since 19 days (last pass: next-20210616, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b         | arm64  | lab-baylibre    | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e548065603967d05117982
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e548065603967d05117=
-983
-        failing since 19 days (last pass: next-20210611, first fail: next-2=
-0210617) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b-32      | arm    | lab-baylibre    | gcc-8    | bcm2835_def=
-config            | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54537524631fa1911796a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: bcm2835_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b-32.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b-32.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54537524631fa19117=
-96b
-        failing since 26 days (last pass: next-20210609, first fail: next-2=
-0210610) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-beaglebone-black        | arm    | lab-cip         | clang-12 | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54b28b5eeeb18e311796b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    clang-12 (Debian clang version 12.0.1-++20210626052608+b7c7b=
-42db1d1-1~exp1~20210626034043.129)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/clang-12/lab-cip/baseline-beaglebone-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/clang-12/lab-cip/baseline-beaglebone-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54b28b5eeeb18e3117=
-96c
-        failing since 5 days (last pass: next-20210629, first fail: next-20=
-210701) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-beaglebone-black        | arm    | lab-cip         | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e543d05fa1721d0811799c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e543d05fa1721d08117=
-99d
-        failing since 6 days (last pass: next-20210629, first fail: next-20=
-210630) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-beaglebone-black        | arm    | lab-cip         | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5445a70ca32db18117985
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-cip/baseline-beaglebone-black.t=
-xt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-cip/baseline-beaglebone-black.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5445a70ca32db18117=
-986
-        failing since 6 days (last pass: next-20210629, first fail: next-20=
-210630) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-beaglebone-black        | arm    | lab-cip         | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e544218bdfdd755b11796d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-omap2plus_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-omap2plus_defconfig/gcc-8/lab-cip/baseline-beaglebone-black.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e544218bdfdd755b117=
-96e
-        failing since 5 days (last pass: next-20210629, first fail: next-20=
-210701) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-d2500cc                 | x86_64 | lab-clabbe      | clang-10 | x86_64_defc=
-onfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e544bc1321d544ed1179c6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig/clang-10/lab-clabbe/baseline-d2500cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig/clang-10/lab-clabbe/baseline-d2500cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e544bc1321d544ed117=
-9c7
-        failing since 0 day (last pass: next-20210603, first fail: next-202=
-10706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-d2500cc                 | x86_64 | lab-clabbe      | gcc-8    | x86_64_defc=
-onfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54213916ab41b4d1179de
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig/gcc-8/lab-clabbe/baseline-d2500cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig/gcc-8/lab-clabbe/baseline-d2500cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54213916ab41b4d117=
-9df
-        failing since 0 day (last pass: next-20210603, first fail: next-202=
-10706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-d2500cc                 | x86_64 | lab-clabbe      | gcc-8    | x86_64_defc=
-on...86_kvm_guest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54367e9d50080b81179a3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86_kvm_guest
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig+x86_kvm_guest/gcc-8/lab-clabbe/baseline-d2500cc.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/x86_=
-64/x86_64_defconfig+x86_kvm_guest/gcc-8/lab-clabbe/baseline-d2500cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54367e9d50080b8117=
-9a4
-        failing since 0 day (last pass: next-20210603, first fail: next-202=
-10706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hifive-unleashed-a00    | riscv  | lab-baylibre    | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5443e63e72e433b117987
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (riscv64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/risc=
-v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/risc=
-v/defconfig/gcc-8/lab-baylibre/baseline-hifive-unleashed-a00.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/riscv/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5443e63e72e433b117=
-988
-        failing since 68 days (last pass: next-20210429, first fail: next-2=
-0210430) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hip07-d05               | arm64  | lab-collabora   | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54dd8eb600e2c5b117a19
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-collabora/baseline-hip0=
-7-d05.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-collabora/baseline-hip0=
-7-d05.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54dd8eb600e2c5b117=
-a1a
-        failing since 85 days (last pass: next-20210409, first fail: next-2=
-0210412) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hip07-d05               | arm64  | lab-collabora   | clang-10 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e55c39fdae40fed1117990
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-collabora/baseline-hip07-d05.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-collabora/baseline-hip07-d05.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e55c39fdae40fed1117=
-991
-        failing since 85 days (last pass: next-20210409, first fail: next-2=
-0210412) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5453d20594074a611796a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabora/baseline-hip07-d0=
-5.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collabora/baseline-hip07-d0=
-5.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5453d20594074a6117=
-96b
-        failing since 6 days (last pass: next-20210628, first fail: next-20=
-210629) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54996691d9b22d411796b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-collabora/baseline-hip07-d=
-05.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-collabora/baseline-hip07-d=
-05.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54996691d9b22d4117=
-96c
-        failing since 6 days (last pass: next-20210628, first fail: next-20=
-210629) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-hip07-d05               | arm64  | lab-collabora   | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5539a337059953d117972
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5539a337059953d117=
-973
-        failing since 6 days (last pass: next-20210624, first fail: next-20=
-210629) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-imx6q-sabresd           | arm    | lab-nxp         | gcc-8    | imx_v6_v7_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54634d63fec3e3b1179a5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v6_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm/=
-imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabresd.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm/=
-imx_v6_v7_defconfig/gcc-8/lab-nxp/baseline-imx6q-sabresd.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54634d63fec3e3b117=
-9a6
-        failing since 254 days (last pass: next-20201023, first fail: next-=
-20201026) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-imx8mp-evk              | arm64  | lab-nxp         | clang-10 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e55246d208aa710e117977
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e55246d208aa710e117=
-978
-        failing since 0 day (last pass: next-20210629, first fail: next-202=
-10706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-imx8mp-evk              | arm64  | lab-nxp         | clang-12 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54faf94f2bfcad211796b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-12 (Debian clang version 12.0.1-++20210626052608+b7c7b=
-42db1d1-1~exp1~20210626034043.129)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-12/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-12/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54faf94f2bfcad2117=
-96c
-        new failure (last pass: next-20210706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-imx8mp-evk              | arm64  | lab-nxp         | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e544fb4313710beb1179b1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/baseline-imx8mp-evk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-nxp/baseline-imx8mp-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e544fb4313710beb117=
-9b2
-        failing since 7 days (last pass: next-20210628, first fail: next-20=
-210629) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | clang-10 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54da303c29ee987117976
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54da303c29ee987117=
-977
-        failing since 8 days (last pass: next-20210625, first fail: next-20=
-210628) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e543de620319eaf81179ac
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-kontron/baseline-kontron-kb=
-ox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-kontron/baseline-kontron-kb=
-ox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e543de620319eaf8117=
-9ad
-        failing since 6 days (last pass: next-20210629, first fail: next-20=
-210630) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-kontron-kbox-a-230-ls   | arm64  | lab-kontron     | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e547b2045d44d9c8117985
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/gcc-8/lab-kontron/baseline-kontron-kbox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e547b2045d44d9c8117=
-986
-        failing since 0 day (last pass: next-20210701, first fail: next-202=
-10706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-meson-gxl-s905d-p230    | arm64  | lab-baylibre    | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54ab7320c420d87117977
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-meson=
--gxl-s905d-p230.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-baylibre/baseline-meson=
--gxl-s905d-p230.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54ab7320c420d87117=
-978
-        new failure (last pass: next-20210629) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-rk3328-rock64           | arm64  | lab-baylibre    | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e542fe88feb10bbb117974
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-rk3328-r=
-ock64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-baylibre/baseline-rk3328-r=
-ock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e542fe88feb10bbb117=
-975
-        failing since 21 days (last pass: next-20210611, first fail: next-2=
-0210615) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | clang-10 | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54657deb18595fe117975
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-clabbe/baseline-sun50i-=
-a64-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/clang-10/lab-clabbe/baseline-sun50i-=
-a64-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54657deb18595fe117=
-976
-        failing since 146 days (last pass: next-20210209, first fail: next-=
-20210210) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | clang-10 | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e54d9dde11bb3ff211798f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    clang-10 (Debian clang version 10.0.1-++20210313014605+ef32c=
-611aa21-1~exp1~20210313125208.190)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-clabbe/baseline-sun50i-a64-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig/clang-10/lab-clabbe/baseline-sun50i-a64-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e54d9dde11bb3ff2117=
-990
-        new failure (last pass: next-20210706) =
-
- =
-
-
-
-platform                | arch   | lab             | compiler | defconfig  =
-                  | regressions
-------------------------+--------+-----------------+----------+------------=
-------------------+------------
-sun50i-a64-bananapi-m64 | arm64  | lab-clabbe      | gcc-8    | defconfig+C=
-ON..._64K_PAGES=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60e5444fde9ccbb0e6117983
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-clabbe/baseline-sun50i-a64=
--bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20210707/arm6=
-4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-8/lab-clabbe/baseline-sun50i-a64=
--bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60e5444fde9ccbb0e6117=
-984
-        failing since 146 days (last pass: next-20210209, first fail: next-=
-20210210) =
-
- =20
+next/pending-fixes build: 191 builds: 2 failed, 189 passed, 16 warnings (v5=
+.13-12392-g47fac7b4f4b23)
+
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.13-12392-g47fac7b4f4b23/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.13-12392-g47fac7b4f4b23
+Git Commit: 47fac7b4f4b23f7335229b54c6a0ff9e8ee65e19
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
+
+Build Failures Detected:
+
+mips:
+    decstation_64_defconfig: (gcc-8) FAIL
+    lemote2f_defconfig: (gcc-8) FAIL
+
+Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-8): 2 warnings
+
+arm64:
+
+arm:
+    allmodconfig (gcc-8): 1 warning
+    lpc18xx_defconfig (gcc-8): 1 warning
+    mps2_defconfig (gcc-8): 1 warning
+    stm32_defconfig (gcc-8): 1 warning
+    vf610m4_defconfig (gcc-8): 1 warning
+
+i386:
+
+mips:
+    rm200_defconfig (gcc-8): 1 warning
+
+riscv:
+    nommu_k210_defconfig (gcc-8): 1 warning
+    nommu_k210_sdcard_defconfig (gcc-8): 1 warning
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    6    include/linux/rmap.h:294:34: warning: statement with no effect [-W=
+unused-value]
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    kernel/trace/trace_osnoise.c:1461:8: warning: =E2=80=98main=E2=80=
+=99 is usually a function [-Wmain]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu=
+_ev_hw_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pm=
+u_cache_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/trace/trace_osnoise.c:1461:8: warning: =E2=80=98main=E2=80=99 is=
+ usually a function [-Wmain]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    arch/arc/include/asm/perf_event.h:126:23: warning: =E2=80=98arc_pmu_cac=
+he_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu_ev_h=
+w_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warn=
+ing, 0 section mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    include/linux/rmap.h:294:34: warning: statement with no effect [-Wunuse=
+d-value]
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---
+For more info write to <info@kernelci.org>

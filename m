@@ -2,79 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BABF3BF6C4
-	for <lists+linux-next@lfdr.de>; Thu,  8 Jul 2021 10:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3E83BF6C2
+	for <lists+linux-next@lfdr.de>; Thu,  8 Jul 2021 10:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbhGHINL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jul 2021 04:13:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230486AbhGHINL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 8 Jul 2021 04:13:11 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC9AE61CD5;
-        Thu,  8 Jul 2021 08:10:29 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1m1P75-00C2vf-Qj; Thu, 08 Jul 2021 09:10:27 +0100
-Date:   Thu, 08 Jul 2021 09:10:10 +0100
-Message-ID: <87im1l2plp.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S230496AbhGHING (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jul 2021 04:13:06 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:49553 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230486AbhGHING (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jul 2021 04:13:06 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.nyi.internal (Postfix) with ESMTP id 287D55C01B0;
+        Thu,  8 Jul 2021 04:10:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 08 Jul 2021 04:10:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=iWCJd2nle4ZCB+BTiZOxEboxqnb
+        HzKIEpYwpDBjjY/A=; b=ExKRzi4j0V0WZqOnNhV5anoxdWiAb5i2bMWZSrm6KVC
+        74SDo0dhmiYcoeIDh95l1oVha9uEVgnSPFRBmc5zINy0EUT6HCf5CtMdf1sknL5/
+        Lc+3T7+BNtaZ59ll98CU7ptMUWVrafrV76jQrHOPmeZtaNWW3kNfAjAmgdlu6z0M
+        cYS8XSV8aCF6jT8bssUue0mGzz+pUl11c4qUcY3yK10dnfQh93RRNmHioxp0gl7o
+        eT2ieCxo+FJ9Y5L8HsBO5pAbyR114Z/iZ6ndSLnjg0FI+d51OdNTLLrqZwJFVlNT
+        KEtKkm+ybdXmgMtDWbVmyfksHOC0yQHHQqZ1vAEFoLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=iWCJd2
+        nle4ZCB+BTiZOxEboxqnbHzKIEpYwpDBjjY/A=; b=q+Q0GL2GPIN234SqGOwtG+
+        YrxUhRr7wDVQ0yWR6E7hOd3TBXZogCBLGJogwwycUhAHp6lnpGTTAEZ2XyhpVe7g
+        wGKmlA46b1PBL/t+P9jbxj8oqBC+t641+eIqt7EfIAs8/bHuPzKF8jZEZQ2Q4iKH
+        7CDDXhcocdpsRGGMbx42xgVRSX1SleYJTh2S+tRE7xN/ZdW0zCWRYJEsRO6GEbEp
+        YYhGGCM7tBU6eY4q82Q/d7TSF1ADC8OkrfmvYkNhI1UCIlAxTkaA98KKHeT3Ofb9
+        Myrt5rFS/ARq9+lmdF9NNRZzsT7AYKK6S5iFCuoVAO9RcIMuZ1uCOLlOHnsaQKEw
+        ==
+X-ME-Sender: <xms:77LmYCsRSanrLIgbqm4hsEWdMWq5v8HPra63YmSxNQVOYU9PxI0uPw>
+    <xme:77LmYHcNIx_gNorratbUzdleiMYPsVvMfgBVZphSRg3xHs_Dp8oQsM9pkh7_x07uF
+    xomuNCtvTxWAA>
+X-ME-Received: <xmr:77LmYNz9GVPzzp-yQi-qLM2khT_7mR5k8O3_48Lyvfy8TCP2GcPDC85UBJAe_gkNn-gsbn3potZoBCS1L2JdWc04Lw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrtdegucetufdoteggodetrfdotffvucfrrh
+    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffjuceo
+    ghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehjefgfffgie
+    dvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:77LmYNMq2M9iGHsoTsrOzJ8LC_XtAwEJ7KLtFpt5JcalWukfpcf2tw>
+    <xmx:77LmYC-SS2bGYRA09E4Iw9elfQBzOwxbPd4-9bGOC_80sG1JH1eTDg>
+    <xmx:77LmYFUUvnkLwRgHxGryzvsDl1jx21d4tZiGRtaCmtZ8USvrKxnAmA>
+    <xmx:8LLmYCwXmSCKxY1ZqX6jUUYa6RUbl2jL0wjjlOjT1dUR_KX6GRIrvw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Jul 2021 04:10:23 -0400 (EDT)
+Date:   Thu, 8 Jul 2021 10:10:21 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rajat Jain <rajatja@google.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the irqchip tree
-In-Reply-To: <20210708121855.69b5a5f8@canb.auug.org.au>
-References: <20210615210143.2e00d851@canb.auug.org.au>
-        <20210708121855.69b5a5f8@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <YOay7csNqP3Ln7la@kroah.com>
+References: <20210601183002.26176586@canb.auug.org.au>
+ <20210708122206.77856786@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210708122206.77856786@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On Thu, 08 Jul 2021 03:18:55 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
+On Thu, Jul 08, 2021 at 12:22:06PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Tue, 15 Jun 2021 21:01:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Tue, 1 Jun 2021 18:30:02 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > After merging the irqchip tree, today's linux-next build (htmldocs)
-> > produced this warning:
+> > After merging the usb tree, today's linux-next build (htmldocs) produced
+> > this warning:
 > > 
-> > kernel/irq/irqdesc.c:692: warning: Excess function parameter 'lookup' description in 'handle_domain_irq'
+> > Documentation/ABI/testing/sysfs-devices-removable:2: WARNING: Unexpected indentation.
+> > Documentation/ABI/testing/sysfs-devices-removable:2: WARNING: Block quote ends without a blank line; unexpected unindent.
 > > 
 > > Introduced by commit
 > > 
-> >   e1c054918c6c ("genirq: Move non-irqdomain handle_domain_irq() handling into ARM's handle_IRQ()")
+> >   70f400d4d957 ("driver core: Move the "removable" attribute from USB to core")
 > 
-> I am still getting this warning.
+> I am still getting these warnings.
 
-Hmmm... I've had a fix for this sitting in irqchip-fixes for some
-time. But I now realise that this branch is not included in -next
-while tip tracks it.
+Rajat, can you send me a patch to fix this up?
 
-Any chance you could add [1] to -next in the future?
+thanks,
 
-Thanks,
-
-	M.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git irq/irqchip-fixes
-
--- 
-Without deviation from the norm, progress is not possible.
+greg k-h

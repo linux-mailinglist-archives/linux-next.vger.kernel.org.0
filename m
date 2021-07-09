@@ -2,88 +2,168 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8AE3C1B9B
-	for <lists+linux-next@lfdr.de>; Fri,  9 Jul 2021 00:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C236E3C1CBE
+	for <lists+linux-next@lfdr.de>; Fri,  9 Jul 2021 02:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbhGHW6n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Jul 2021 18:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S229830AbhGIAfd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Jul 2021 20:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhGHW6m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jul 2021 18:58:42 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107C7C061574;
-        Thu,  8 Jul 2021 15:55:59 -0700 (PDT)
+        with ESMTP id S229637AbhGIAfd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Jul 2021 20:35:33 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C304EC061574;
+        Thu,  8 Jul 2021 17:32:50 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GLWqJ3R6Qz9sXN;
-        Fri,  9 Jul 2021 08:55:56 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GLYz22zrRz9sWd;
+        Fri,  9 Jul 2021 10:32:46 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1625784956;
-        bh=Exe/NnWf8lBaMwnH0fPa+CcmaR93UKYDClybA6cuv4U=;
+        s=201702; t=1625790767;
+        bh=+WN6vickkkMlDTyJCZqZwVOeIpzHZ/inZVOsfbJRzz8=;
         h=Date:From:To:Cc:Subject:From;
-        b=X4hdiOmaWActI+USu4vgMBDM4OtHmr/vjkm9nwuDxsEYavF7bp63+k+q+WJMLqmOj
-         qQ4rdzrhKda6unaZprFVIE5h5fYMjghpL5TngrcZwyTxDeByfjPlSsuT5owPLBFnPB
-         EevsQmGMgX5/U1wQ0mhhWoVLr3cULVVzH2UBjWGPVgApd+1V+WYrP2MrDJxTbrPdly
-         niYQkW0mJXGCNNsxg3n45FNnnemXtCXmt3Quri2bCJZymrUoJDHA9T7c8KU8s3ab3j
-         H2awryVkYcVyGUinSLNl2j6OJFbIiGkUK03gJDZqB2NANrYy3MPpmsFmnG0fP1Tc8X
-         9MxG6OBFErikA==
-Date:   Fri, 9 Jul 2021 08:55:55 +1000
+        b=CUpfBaH2wcyTM+9arf0YKFUPUXSP4LWKeHygArB7q5aol3yrwlJpnn13JaW6/STiW
+         RK1QgKBdBtn/ewWKiOXbkYQQiBP9UdACPwuDxAct2vlV/OV+oyGfQGFdmxZcAcZgwh
+         h4nkFO1CeAsFSGOZArC5epPZ/kdyPMXLvT1r6HXkNMpJCHA/pWzxfouypcM5dNFDCH
+         2bAJ33IRWw6VkT7uQcWKSYOrKt7mSoMpOrLnenGb3m6843mMLpEDl7dzxpj0xO4lGb
+         Jmpx4VlBztWOplwqD/cOFxpWF+EllucfAEUWUwSOQCRN7dqjiXhdmT6s19/bREHHE6
+         1RP+ylNo1aNoA==
+Date:   Fri, 9 Jul 2021 10:32:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
+To:     Jens Axboe <axboe@kernel.dk>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the bpf tree
-Message-ID: <20210709085555.291350c0@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: linux-next: manual merge of the block tree with the mmc-fixes tree
+Message-ID: <20210709103244.64b2f1de@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ProQ4XOgdqYnGASqodNvrDN";
+Content-Type: multipart/signed; boundary="Sig_/8JDPbODuzXKJlel5Nywvt_/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ProQ4XOgdqYnGASqodNvrDN
+--Sig_/8JDPbODuzXKJlel5Nywvt_/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the bpf tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+Today's linux-next merge of the block tree got a conflict in:
 
-kernel/bpf/verifier.c: In function 'jit_subprogs':
-kernel/bpf/verifier.c:12055:18: warning: unused variable 'map_ptr' [-Wunuse=
-d-variable]
-12055 |  struct bpf_map *map_ptr;
-      |                  ^~~~~~~
+  drivers/mmc/core/block.c
 
-Introduced by commit
+between commit:
 
-  7e0f5bf7eb62 ("bpf: Track subprog poke correctly, fix use-after-free")
+  5c0777665b3e ("mmc: core: Use kref in place of struct mmc_blk_data::usage=
+")
+
+from the mmc-fixes tree and commits:
+
+  249cda3325e0 ("mmc: remove an extra blk_{get,put}_queue pair")
+  607d968a5769 ("mmc: switch to blk_mq_alloc_disk")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ProQ4XOgdqYnGASqodNvrDN
+diff --cc drivers/mmc/core/block.c
+index d7b5c5ab75fa,9890a1532cb0..000000000000
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@@ -195,26 -196,18 +195,25 @@@ static inline int mmc_get_devidx(struc
+  	return devidx;
+  }
+ =20
+ -static void mmc_blk_put(struct mmc_blk_data *md)
+ +static void mmc_blk_kref_release(struct kref *ref)
+  {
+ -	mutex_lock(&open_lock);
+ -	md->usage--;
+ -	if (md->usage =3D=3D 0) {
+ -		int devidx =3D mmc_get_devidx(md->disk);
+ +	struct mmc_blk_data *md =3D container_of(ref, struct mmc_blk_data, kref);
+ +	int devidx;
+ =20
+ -		ida_simple_remove(&mmc_blk_ida, devidx);
+ -		put_disk(md->disk);
+ -		kfree(md);
+ -	}
+ +	devidx =3D mmc_get_devidx(md->disk);
+- 	blk_put_queue(md->queue.queue);
+ +	ida_simple_remove(&mmc_blk_ida, devidx);
+ +
+ +	mutex_lock(&open_lock);
+ +	md->disk->private_data =3D NULL;
+  	mutex_unlock(&open_lock);
+ +
+ +	put_disk(md->disk);
+ +	kfree(md);
+ +}
+ +
+ +static void mmc_blk_put(struct mmc_blk_data *md)
+ +{
+ +	kref_put(&md->kref, mmc_blk_kref_release);
+  }
+ =20
+  static ssize_t power_ro_lock_show(struct device *dev,
+@@@ -2334,27 -2327,11 +2333,11 @@@ static struct mmc_blk_data *mmc_blk_all
+ =20
+  	INIT_LIST_HEAD(&md->part);
+  	INIT_LIST_HEAD(&md->rpmbs);
+ -	md->usage =3D 1;
+ +	kref_init(&md->kref);
+-=20
+- 	ret =3D mmc_init_queue(&md->queue, card);
+- 	if (ret)
+- 		goto err_putdisk;
+-=20
+  	md->queue.blkdata =3D md;
+ =20
+- 	/*
+- 	 * Keep an extra reference to the queue so that we can shutdown the
+- 	 * queue (i.e. call blk_cleanup_queue()) while there are still
+- 	 * references to the 'md'. The corresponding blk_put_queue() is in
+- 	 * mmc_blk_put().
+- 	 */
+- 	if (!blk_get_queue(md->queue.queue)) {
+- 		mmc_cleanup_queue(&md->queue);
+- 		ret =3D -ENODEV;
+- 		goto err_putdisk;
+- 	}
+-=20
+  	md->disk->major	=3D MMC_BLOCK_MAJOR;
++ 	md->disk->minors =3D perdev_minors;
+  	md->disk->first_minor =3D devidx * perdev_minors;
+  	md->disk->fops =3D &mmc_bdops;
+  	md->disk->private_data =3D md;
+
+--Sig_/8JDPbODuzXKJlel5Nywvt_/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDngnsACgkQAVBC80lX
-0GwahAf+JwsPxXRu8UJbyVZ3esrnNQoUVSILSz/iu02JJ5Pb7slSGzDJ/ZtRsaCp
-aJ1kZcZoaiXrSgCYZtEWtq+PkX8E7Va/C73WNqtelmkHCDl7u0Q7Cs1pqX0fOuKW
-Qi+4g3KC9sM7oOm1NEZq7WRqZ71b5Ez3E8dlPF/DgHf8GtcjFv5HKxF/XYPWCrQO
-C/uDK0adpfAeYjJXBAxxYinuG+eEvqIePnOz62Kg8LFt6jT4gXyZuUS+OoLOfFH5
-Rmf47Y30UgRfJqFgF39G8uAQyw3bjOLKEoG9EmW6U9nKrhl2enyfDU/a1pxcZEgb
-Q8lTZM3g0LqK8TV+kbaw1Vb7FQxqeQ==
-=6njV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDnmSwACgkQAVBC80lX
+0GxpEAf/TTd1pOJ2c3TF+OFt1CnJY43J47OxQh9rRSb7DEhZLTRuLrOSu6EWPRwV
+OMtFNkCLPFiPRcbGwm0WfFgrqnyoHY+bHf0lmLzLquU/goUjmn7pb8PXK8I04Oc8
+BEFv9s2deScbYWxXcPxL38sPLI9nFCBu3/sxj8zxYekZ8i4w4vT+4VRhlk5pKN27
+nUWK+TlF8KWOu/siqx+bY0527WhzqJF1ZFHeo6qQyN98SRIGeX6tOODGRxTxvj4v
+8k8SFjYHDpg1yW5T69vrhfxXAD0B53p+uUtRo9NvxYVAJtrvQoVkylMxZMKFUazP
+Odru69agAYnSL1mw9v1Nzec0cXHhfQ==
+=/4k3
 -----END PGP SIGNATURE-----
 
---Sig_/ProQ4XOgdqYnGASqodNvrDN--
+--Sig_/8JDPbODuzXKJlel5Nywvt_/--

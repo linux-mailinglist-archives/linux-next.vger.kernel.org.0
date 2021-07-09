@@ -2,92 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13DA3C23E5
-	for <lists+linux-next@lfdr.de>; Fri,  9 Jul 2021 15:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2E33C25EF
+	for <lists+linux-next@lfdr.de>; Fri,  9 Jul 2021 16:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbhGINEg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Jul 2021 09:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S231918AbhGIO37 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Jul 2021 10:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbhGINEg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Jul 2021 09:04:36 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF64C0613DD;
-        Fri,  9 Jul 2021 06:01:52 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id j65so5947855oih.5;
-        Fri, 09 Jul 2021 06:01:52 -0700 (PDT)
+        with ESMTP id S231908AbhGIO35 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Jul 2021 10:29:57 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D77EC0613DD
+        for <linux-next@vger.kernel.org>; Fri,  9 Jul 2021 07:27:14 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id r16so3548038ilt.11
+        for <linux-next@vger.kernel.org>; Fri, 09 Jul 2021 07:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4bV1+uFZemvWfxepLcl8C7FNZfnT1P9c3vcCCXJOBHk=;
-        b=LB4eSiQiAm5sk0ney7/h64DpOnWVzOTqaCbFWSXgNIbGfJ9e93+CYnpe3bKvTBMM7m
-         npoXaPF1oo45TluGGlP2w6C33BZdH7+YUb+pMIgqaDobyup9GkVPzubWEKU8SJZ3Omfm
-         cgBIBb9VnEE3YHvLQYGgciMtGpilglWkGLiysD2U72bkWGEcjlgv5NDySeMAjOIxHlB7
-         Vg2+zu9srlgMH3j7/zYfe4K5DLL2XGW7vBOugU/ZbQoqo4CpRmspBYugGf3lkdJnma7A
-         pA6zBa+lJI56FAakfnFPWrDKHBmMif+J5j1PGzDYdi7lFr3nKLd5OERpytjxokl4ALEl
-         vvFw==
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=95dkVPm8mKfD+WhqlIEKmIqJnoyW6EzD5pKbI1YQ1aw=;
+        b=kVg4PY8RXgvhd3Sd3kOhaIkN2d1ko23xe8BkDehunth690JjMfHF3Uw5kigoViaQAd
+         XU5SoeLzp9siKxy8A0aR/ti6mesUX77cvCXt/w6QMFcJyhZdvx3swCPjnJzAFdLa9NT0
+         RyUDvr+1uJxYWr6riQTSZnI3OAGzhpFFfiLsVGGJSU11Nldg/D88ys7W0vle902NNVLw
+         hdcXc5j6MepYXGNsMtJgSnWhQvB7oBETnOEsctJ1Dc6/m5JgeuLdxyt+3mO3dpSoWpql
+         FgH55bOFLAn4LJoZFe8KLGLbKFSA5roSCxYfSjJIU8CRPlsYgB85AXp2b0ymdI7+1dh2
+         2nfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4bV1+uFZemvWfxepLcl8C7FNZfnT1P9c3vcCCXJOBHk=;
-        b=sYyiMddtfXfi2FIzqCO7o/IdD35fvwtl/e4UV+R3XfdiPt7x9mYK6YGtPJYXgMKDHQ
-         DnOsW8QJXI2ikD8SWUHXTBgqNehh7ytmbGwtxQ5eQ6E9B8K8oDvsX6pTtvUATtHCmVf5
-         IISo4MrIgLKdw/pywlzUPPiNUHV84yoPLxmBn8W+S0fJ3Aeivd2TWLuYbvf7AUSUvZIj
-         VUdnvCudREkFTAIkmqTDTc6DFAQfnUoeVhZTcgBs3+BqOIqJUsGt7ULiAqhS4CZ3Ef9B
-         7I71W+PSuYC7g1izepaSC7fZTw7z8nx/Fb3+3YuCxf8YBcdPrHYcstbSp6SzpDnXAiFb
-         nMaQ==
-X-Gm-Message-State: AOAM532pa5uLgRr4teu7QNSgZmynnrk85E1o9PqptQF0J7GAEQv8N99S
-        TXlIYAR3XGQnzNilDujqol1akLLbAjtpw5oxUrQ=
-X-Google-Smtp-Source: ABdhPJyRIWZ1kmpHHtquXxI1CIVJigGWnfKmbnO0qulm3lPIajOrlGK+eokmNKo4FESXaTXa92tQ4MSpT/qCioCXCcc=
-X-Received: by 2002:aca:a949:: with SMTP id s70mr10804673oie.123.1625835711544;
- Fri, 09 Jul 2021 06:01:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210709073711.38cfe6e1@canb.auug.org.au> <20210709074233.GK26672@kadam>
-In-Reply-To: <20210709074233.GK26672@kadam>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 9 Jul 2021 09:01:40 -0400
-Message-ID: <CADnq5_NBvvNd0zWua9tG2ify_0UDfJSZPxorxDOeqNMGxfn5gw@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=95dkVPm8mKfD+WhqlIEKmIqJnoyW6EzD5pKbI1YQ1aw=;
+        b=RY3CGMfY6isNYpMus21s9jfeeJv0ohOCzhyl0zfA2tdW5rhBhe9w+a3n+ByQ5NcmBW
+         BWhsKaPCGyA6uvERViA7YH8YzJzzZgH4uB/XEVXVdrV4LqgtetwbzSjGbkr2ajfkSKlB
+         d6HS6SoPJKWt8Jav+r6Tq64KtJk1mntqXKRZwUEyTf38NympnuU41NF24pLq4vnq/LRA
+         eZpUiw6JuzQIwVsNiwup67OvGks/GgJtIijYLzhu/UmHENUfGnzUzNTSVP8+jlqlpO+k
+         4uUlFVdIIyIutWiuBx+uhuTFTZqBU/B0X1/FDLWGlFlZDQq6anwNHQCfUxiFTXCmDnRz
+         ruSA==
+X-Gm-Message-State: AOAM531oHWbKRHaSAG19EIREWVqLzHrExAuxOM5eZMI7NZSfIs9Nj9yF
+        qo5c2pFncymJx7ZLR5k2H2Jdjw==
+X-Google-Smtp-Source: ABdhPJzC5DNGi6NgV9XHXpVkOO3/L8OD1SjkyK5Lwv4L+LABCTnOtlvRi1kZ873eia9i7G8qo59ftA==
+X-Received: by 2002:a92:c7c4:: with SMTP id g4mr5026281ilk.252.1625840833951;
+        Fri, 09 Jul 2021 07:27:13 -0700 (PDT)
+Received: from [192.168.1.134] ([198.8.77.61])
+        by smtp.gmail.com with ESMTPSA id j4sm2866189iom.28.2021.07.09.07.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jul 2021 07:27:13 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the block tree with the mmc-fixes
+ tree
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20210709103244.64b2f1de@canb.auug.org.au>
+ <CAPDyKFrO-KcrPWBLGvS9hO+rLJjr=yx1766Np2M8HHApgkwNKg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <12c52b0f-275c-4663-d1bd-3f06fece4299@kernel.dk>
+Date:   Fri, 9 Jul 2021 08:27:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAPDyKFrO-KcrPWBLGvS9hO+rLJjr=yx1766Np2M8HHApgkwNKg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 9, 2021 at 3:43 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Fri, Jul 09, 2021 at 07:37:11AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > In commit
-> >
-> >   b612f5c36279 ("drm/amdgpu: unlock on error in amdgpu_ras_debugfs_table_read()")
-> >
-> > Fixes tag
-> >
-> >   Fixes: c65b0805e77919 (""drm/amdgpu: RAS EEPROM table is now in debugfs)
-> >
-> > has these problem(s):
-> >
-> >   - Subject has leading but no trailing quotes
-> >     Just use
-> >       git log -1 --format='Fixes: %h ("%s")'
->
-> Oops.  Sorry.  I've created a fixes.sh like you say.
->
+On 7/9/21 2:34 AM, Ulf Hansson wrote:
+> On Fri, 9 Jul 2021 at 02:32, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> Today's linux-next merge of the block tree got a conflict in:
+>>
+>>   drivers/mmc/core/block.c
+>>
+>> between commit:
+>>
+>>   5c0777665b3e ("mmc: core: Use kref in place of struct mmc_blk_data::usage")
+>>
+>> from the mmc-fixes tree and commits:
+>>
+>>   249cda3325e0 ("mmc: remove an extra blk_{get,put}_queue pair")
+>>   607d968a5769 ("mmc: switch to blk_mq_alloc_disk")
+>>
+>> from the block tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
+>> --
+>> Cheers,
+>> Stephen Rothwell
+> 
+> Stephen, thanks for the heads up!
+> 
+> Jens, I noticed that you sent the PR with the mmc commits as of
+> yesterday. Assuming Linus will pull it before rc1, I will rebase and
+> fix up the conflict from my fixes branch on top. No action needed from
+> your side.
 
-Fixed up locally.
+I don't have any 5.15 code in for-next until after the merge window, so
+it's all fixes that are going into this release until then. These commits
+have been queued up for a few weeks, they are just part of a later push
+to Linus (that was sent out yesterday).
 
-Alex
+-- 
+Jens Axboe
 
-> #!/bin/bash
->
-> git log -1 --format='Fixes: %h ("%s")' $*
->
-> regards,
-> dan carpenter

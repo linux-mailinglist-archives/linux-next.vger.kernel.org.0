@@ -2,94 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B26B3C67E4
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jul 2021 03:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28183C681D
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jul 2021 03:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhGMBN0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Jul 2021 21:13:26 -0400
-Received: from gimli.rothwell.id.au ([103.230.158.156]:33693 "EHLO
-        gimli.rothwell.id.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbhGMBN0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jul 2021 21:13:26 -0400
-Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4GP2cl2z4BzyRF;
-        Tue, 13 Jul 2021 11:10:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rothwell.id.au;
-        s=201702; t=1626138631;
-        bh=LHMisR7RVz51Iood+rRmE89Y26yZ62ED2cinvMbX/u0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f04Fgw2oLPIYYV/hjJwbB9Tq10C54zNxrqKDfgw2CFdpPbnnmo0yPajXNbkb+0oaY
-         JheL1hmYHjynIuIEEgDmAz3fewuJlORs5EAusnM7ov1H3G2dDsU7adX0vYKhVplVfP
-         8AtGOWmn8hwVg9qbVyrdjkoKoAJECtjeNX9X+L6WUFV8+kqwsaNa0RpwSXYjpKcLzl
-         rEqT6Z3rMCmEdkPaRHHcFfzp0O3+A6EZzdFbSPPaSRJQrP2cNX6YJ8GdBgMM1neo8z
-         HNowa8hqi1N7keK2NakDxE8U/AWeBCIlaklBovPMZXcCMYEPtodiW4BKDBmF7aOvy2
-         MXSW8TtyAobYg==
-Date:   Tue, 13 Jul 2021 11:10:29 +1000
-From:   Stephen Rothwell <sfr@rothwell.id.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S230396AbhGMBgH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Jul 2021 21:36:07 -0400
+Received: from gateway21.websitewelcome.com ([192.185.45.147]:31033 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230182AbhGMBgH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Jul 2021 21:36:07 -0400
+X-Greylist: delayed 1428 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Jul 2021 21:36:06 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id 1AB4E400FFBEA
+        for <linux-next@vger.kernel.org>; Mon, 12 Jul 2021 20:08:41 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 36ufmPRl5oIHn36ufmhvIn; Mon, 12 Jul 2021 20:08:41 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EI1PdhcyIjOXIfe/hfGHB5sXwHWmQq3DmZIYcGdVqWg=; b=E26bAC7yDErpC4ph9r7W+bxcCg
+        xqbGz/pupPDoveAWQ1GVuXWRH7SRBtsDpnFyPtOP7e/znJqUQY6VZB5DzEto2m6Zhw8B+Lauju03O
+        W58dCahuW5GwfZ9pOMGH8cJ6J1hnqNofMb2SYQYYGUMPqgagIyYbiTpvnQpOkwatHFSRpQAQojIhP
+        xuHAs38EDCt4/4ADUzegjdg9uWLUmjpS4vMR1Xzr91M9d/5nK1ejtf/RrzYohGljv9tMQwu/Lr3NF
+        VAco5U8GYbu4rnCOK+uriQoy39JlxGN59WKAHO86d9mir5mTxgJr3ym3ijb+YSrGM8KBG7wcadtNg
+        zjmlHZmw==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:35582 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1m36uc-003ZE9-Lr; Mon, 12 Jul 2021 20:08:38 -0500
+Subject: Re: linux-next: build warning after merge of the kspp-gustavo tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Rob Clark <robdclark@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: linux-next: Tree for Jul 12 (no Rust)
-Message-ID: <20210713111029.77bfb9bb@elm.ozlabs.ibm.com>
-In-Reply-To: <c47a7f0b-4b5a-30c3-ee1e-2973793a9534@infradead.org>
-References: <20210712120828.5c480cdc@canb.auug.org.au>
-        <c47a7f0b-4b5a-30c3-ee1e-2973793a9534@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210713102230.728b4899@canb.auug.org.au>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Message-ID: <26f2ec3c-35ae-4361-62a4-ad0a84fc2399@embeddedor.com>
+Date:   Mon, 12 Jul 2021 20:10:40 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9B4ncCiGtZc/xGh.EnnXylZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210713102230.728b4899@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1m36uc-003ZE9-Lr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:35582
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 6
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9B4ncCiGtZc/xGh.EnnXylZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi Randy,
+On 7/12/21 19:22, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kspp-gustavo tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> /home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c: In function 'msm_gem_new_impl':
+> /home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c:1170:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>  1170 |   if (priv->has_cached_coherent)
+>       |      ^
+> /home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c:1173:2: note: here
+>  1173 |  default:
+>       |  ^~~~~~~
+> 
+> Introduced by commit
+> 
+>   d12e339044a0 ("drm/msm: add MSM_BO_CACHED_COHERENT")
+> 
+> Presumably exposed by commit
+> 
+>   73ffc61f4a8b ("Makefile: Enable -Wimplicit-fallthrough for Clang")
+> 
+> though I am not sure why since I am building with gcc.  The first
+> commit above introduces a new use of /* fallthrough */
 
-On Mon, 12 Jul 2021 08:24:16 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> I am getting no builds completing. I see this:
->=20
-> Error: No compiler specified.
-> Usage:
-> 	../scripts/rust-version.sh <rust-command>
-> init/Kconfig:71: syntax error
-> init/Kconfig:70: invalid statement
->=20
-> and then 'bc' running continuously until I kill it.
+We have previously adopted the new pseudo-keyword macro fallthrough; So,
+we want to avoid having more /* fallthrough */ comments being introduced.
+This is also being enforced by commit
 
-OK, this is weird.  init/Kconfig has not changed from Friday and I
-don't see these errors at all in my builds.  I also have no rust
-compiler installed.  And the kernel ci bot seems happy (well nothing
-like this anyway).
+	73ffc61f4a8b ("Makefile: Enable -Wimplicit-fallthrough for Clang")
 
---=20
-Cheers,
-Stephen Rothwell
+for both GCC and Clang.
 
---Sig_/9B4ncCiGtZc/xGh.EnnXylZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+So, the fix for this issue is merely to replace the /* fallthrough */ comment
+with fallthrough;
 
------BEGIN PGP SIGNATURE-----
+Thanks
+--
+Gustavo
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDs6AUACgkQAVBC80lX
-0GwjMQf+MQjSt2SvWr2Ev2nDpjeY14tUPle8a43TBL1TaXKgV7Pxfan+Fzq7MEqa
-iOcvNRZzpoV7g4VI9ThHqbDNzRst1aVBnUSZoCOqGZKAaKFwzGl8muBIzxxTq6LR
-BK7DG1kUD0EaUtexIAagxfCVYGIVGVUL9FRNr8c/T9FeaNRcoGpr6UElg4Vr+HK7
-0WOB3sivlQFHpe8rpHQfcEbxjPXUiYMQnJhc1RSS2L0UwJTpdICetUgrhQXTa39x
-s8hURgnw6GMLAAxH022bYr2VOcNu/Z+Sg/Ir4tNaOaWTMNz0ZBYtpL2z199rfjRK
-pk7UEOwjBty3F5JOjiyX+UihcS0wBg==
-=AYfi
------END PGP SIGNATURE-----
 
---Sig_/9B4ncCiGtZc/xGh.EnnXylZ--

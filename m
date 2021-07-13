@@ -2,81 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED483C6758
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jul 2021 02:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6BB3C6763
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jul 2021 02:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbhGMAL3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Jul 2021 20:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhGMAL3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Jul 2021 20:11:29 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED7CC0613DD;
-        Mon, 12 Jul 2021 17:08:40 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id u3so5020153plf.5;
-        Mon, 12 Jul 2021 17:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=40W98yfK4KrBzbcncfTYQiMKY3aE+mGB+FwnqwurC4g=;
-        b=ZE4YVgaxTmwdPvSnbz0qtGaX6UiIHUSawC3XZCnnEOdygBgUlESXtkYMouLl/eWWP+
-         5yp6bOe7+TtezXgEkxF5Mbbr8fetEzv/9f8oC8KE7KxzWvvUg2IEs/SjEuz9tU4O2bDp
-         VCoj9sloW3dO34Q5Oh9V/PQ7aD6wl/yUHE7zAYVEov6OzjCQdfug5PEBKeu4DCsi/KHl
-         SAMvizefI4o4BVP7EERNkftbgxnJJW8BJYvjvA5wlqmuc24Pa+ZJ9iu+bcyHFvpa2wtt
-         F0EFqb8OmcYsYve26svL6hNcqlD4JtF1xRGic1AfKHTfLPF91be5DJq54zwWq+2Q7hQJ
-         K+qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=40W98yfK4KrBzbcncfTYQiMKY3aE+mGB+FwnqwurC4g=;
-        b=b8syNR6D0cEWfXXjB5tSWUqW1qk3crEQSeundScMtB2Mjmupw83vKLSHJsdiehTMIh
-         C4RJA75gKah/3wAqO/IkFBgnlWj3JPsk4BDZQyfmTCnGeV9ui48VzUH4CT3sDACZaw/O
-         I7vZGLNT8Fohtq5PlLtPbZaPyjbOHylqyFgQNkRP9PmvsWCC1F08jtkc2o0RpBiFJxwH
-         xwC216OB0PHDgQFABaZ8JTydMQ9++aqiYve9DYfkvXuxGjw6e6km2B427FT04LsD0P27
-         1adI5zL8eFpsgTDaf62cmXfOb9wZd/3vAMlpglxUYYeBb1arlL8bTbnL++vTV4ruAxlC
-         yRng==
-X-Gm-Message-State: AOAM531oHks4EKRh6rqYqRF4oqJMmjqdUW4DsWg/IF22Y4PyarXJm8R5
-        pGFyY5zuSIX+77BI+EQpOy1RECfoPpZ+mw==
-X-Google-Smtp-Source: ABdhPJyVfHufNBXR90MoYGGPcspdPWV95//BgOYhElMG7uF27bRhRcxaEY4Dh9I9KqPfZZW6fZ5OwA==
-X-Received: by 2002:a17:90a:bc84:: with SMTP id x4mr16201107pjr.236.1626134919871;
-        Mon, 12 Jul 2021 17:08:39 -0700 (PDT)
-Received: from localhost ([2600:380:7562:f3b8:f3a:2580:7cd3:cf61])
-        by smtp.gmail.com with ESMTPSA id h24sm17512432pfn.180.2021.07.12.17.08.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jul 2021 17:08:39 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Jul 2021 14:08:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S232627AbhGMAZ2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Jul 2021 20:25:28 -0400
+Received: from ozlabs.org ([203.11.71.1]:37901 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230099AbhGMAZ2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Jul 2021 20:25:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GP1YM33s6z9sX3;
+        Tue, 13 Jul 2021 10:22:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1626135758;
+        bh=FWH8HLtm1hryJxRvwHFQLT94wClg8s2NsdsjWhHD3xw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qxqWeQ3Kbz3O+BuGj1I6X6ffZ3Ovk81/1GhYRobLYGXf62C7zeEtJTl8Mlem4UCR4
+         P0vmIZVZqLuZVpac9rbn6x81GflLiZfMOZX3fUb2ymfkYeBKVq/0hnMV/1aBxFDDOm
+         ei4H017MwdbCbcREAVwVGqt624leZe1fZpprSZhqXtsFGNqEao4WQLfWKAuqkO6iKi
+         B4fWlTsBcEkmA2Sv7QatjnSNrral713MU0KBABw4xnmFm0/IaBfTSNXiJzuizEL0a6
+         a3uuFJJdNcnWgFE0L1+u61ghOD9mNIH77eLl1v4TBKnE3k4yvTXCejmpcqJmIzmGWp
+         sLnb/p2rap4jA==
+Date:   Tue, 13 Jul 2021 10:22:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Rob Clark <robdclark@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the workqueues
- tree
-Message-ID: <YOzZhUm9pTtuX23V@mtj.duckdns.org>
-References: <20210713091825.7cfaf3fb@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the kspp-gustavo tree
+Message-ID: <20210713102230.728b4899@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713091825.7cfaf3fb@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/Evgy5G4NybMi.Hd6Km+ewXS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+--Sig_/Evgy5G4NybMi.Hd6Km+ewXS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 13, 2021 at 09:18:25AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   65160ab66cb6 ("cgroup1: fix leaked context root causing sporadic NULL deref in LTP")
-> 
-> is missing a Signed-off-by from its committer.
+Hi all,
 
-Fixed. Sorry about that. Thanks.
+After merging the kspp-gustavo tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
--- 
-tejun
+/home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c: In function 'msm_gem_new=
+_impl':
+/home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c:1170:6: warning: this sta=
+tement may fall through [-Wimplicit-fallthrough=3D]
+ 1170 |   if (priv->has_cached_coherent)
+      |      ^
+/home/sfr/next/next/drivers/gpu/drm/msm/msm_gem.c:1173:2: note: here
+ 1173 |  default:
+      |  ^~~~~~~
+
+Introduced by commit
+
+  d12e339044a0 ("drm/msm: add MSM_BO_CACHED_COHERENT")
+
+Presumably exposed by commit
+
+  73ffc61f4a8b ("Makefile: Enable -Wimplicit-fallthrough for Clang")
+
+though I am not sure why since I am building with gcc.  The first
+commit above introduces a new use of /* fallthrough */
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Evgy5G4NybMi.Hd6Km+ewXS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDs3MYACgkQAVBC80lX
+0GylYggAoZ50fQuJjc3YNtsQYjjlsdFw7nsvdc2cQIXjQ309sFiXH5Of3YqMaNnN
+/QQ7jNRcKEu3BB1VLthxx+Mg68rUQ3hf2xuMo2WT3Zpt2MszrMs4/juPpR9Fal2V
++/nKSHMqrtlYpG4rNAp0zRHJYS6sv4/LoAcqOQu75HoInKJv5gn2MNyW9ocaOh4B
+3BYYcc4sGHRMIDhQ99Y+0SZe8rOMx6tLsxuAekGewd1yXJlyWjYBvx+lrRb7YOP7
+XX7sY4iKQCFG4S+TRUR3hG5Jv+K0XSd2pdy25Vt0w6o+XMm2GDjviTCuU8o4rfGX
+Ta8G1U3kYHhZavneAyPvbX0V6mG6Sw==
+=dFzA
+-----END PGP SIGNATURE-----
+
+--Sig_/Evgy5G4NybMi.Hd6Km+ewXS--

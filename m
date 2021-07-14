@@ -2,67 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52413C7F9D
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jul 2021 09:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B413C804F
+	for <lists+linux-next@lfdr.de>; Wed, 14 Jul 2021 10:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbhGNH4H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Jul 2021 03:56:07 -0400
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:42649 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238139AbhGNH4H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Jul 2021 03:56:07 -0400
-Received: by mail-vs1-f54.google.com with SMTP id u7so448701vst.9;
-        Wed, 14 Jul 2021 00:53:16 -0700 (PDT)
+        id S238670AbhGNIgx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Jul 2021 04:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238653AbhGNIgx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Jul 2021 04:36:53 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3741C06175F;
+        Wed, 14 Jul 2021 01:34:01 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id l7so2151887wrv.7;
+        Wed, 14 Jul 2021 01:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xnojNa4qPvmfBP5uflKYHlaeAfH+rfYJSOnoIOlcfbk=;
+        b=gbxB2qpogKmSKsCZn9cPt1TJqOvzFsTYwqVj38szpFbCUSN9Mjnjsj90pkHG0nGuC+
+         ZpwnpQs/JYPEcEnrCIFRLNLDQK3hzaJNh4AVAOAFzcBp5UF8hDxMSq1PwWUyX+RTjZEa
+         Li6SoVuGpuByVaia2Nw+BYyZQgChcGZ6zW4g9Ddd8AcRUUlEKuI1wOREUbHReH7Nij33
+         sFPzRLf16M3Kpe9A7ncoAyKAak49MJzwN09zthig0b8dlL2Z7Q32OZLhG3pV62fguIWh
+         FAECQLZ725jo8lulitVfZVAWE5zNshOr9rtpmFAXEAr5OX33Mk2G1Rei1nUp1ExxcSbQ
+         0g4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x3/MK3eQJImLkG7ZMsR8ZMRn/ZP4avUxVKH3TZwMMJ0=;
-        b=nteAxe+APdWd+KRqFPtA/6z+slFq0w4HwF4/bX7LD0C2LQXnU+/p4lWG8grns3wquS
-         MZ0YFGR0B6XB/ap713IJZaZJY0sDYap5+/y840QEbNtjdMb683bCUgauukiXotJm4yBp
-         rghJgBKL7AaurllGHjz6MmnwXAePFN6fOIKHGHIEjvFaoVI3sMfPauZSdmeuLJCfKqp9
-         BWFzPFYvzW/TwJm718WYD8rSjD/+xUoZCTySIeABRCmxgAjOdS5EG+Rh0oE26HO6xuPI
-         MEBSiBFHalXWXZXsBNkqEfsOicPmzc3J2M5Y7Xtm/CZ6iqLsyOH7zirnu5vxXaka/Th3
-         OcuA==
-X-Gm-Message-State: AOAM530glC0n5ph14Z7jqYV3VF/H8WckwrIfDFyBfw7Ha7OcNj05EP1X
-        BG6qEb12pZRvfzxnSKL4Cla5eRXaMCB8sMeUuQoLC/jH
-X-Google-Smtp-Source: ABdhPJwyunVPh778G/aGGTSvtP0xUCWrSmkfw/KX9ceUj/nZomBFVLw9Uwq5tWsTu2Ills2W36zrTneFYhlPtnCGe54=
-X-Received: by 2002:a67:1542:: with SMTP id 63mr10305350vsv.40.1626249195799;
- Wed, 14 Jul 2021 00:53:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210714083156.29032075@canb.auug.org.au>
-In-Reply-To: <20210714083156.29032075@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 14 Jul 2021 09:53:04 +0200
-Message-ID: <CAMuHMdVLbfb8N_qhUfbw2aq23c-a1LA9bu7EAJQYb+4iT3pzZQ@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the clk-renesas tree
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xnojNa4qPvmfBP5uflKYHlaeAfH+rfYJSOnoIOlcfbk=;
+        b=V4E+iQELjLpwfTvUJLarGxKpORszF3V8/ISITaHc4/Lje0BGe5FCIGx0e9joMhoisA
+         GSp0vCpmjExxDHyiaVfZCSPAlZC2RzAiEHCDnelEVzT8e+NhwGnQBzR8Ijlzqn84IaCf
+         JgNHlWGc2z0vYkXpYQMxSZZd4yBjrqrNxP8Dk+KDJe35Oa5YBIi2P49FtTM4jRxVoBKW
+         CRwSKOXXqFFrGdeMrMGMEnusNnA+Hc9iTE7kPSBd/Ii9Nv6tMUkcfRWAibcuOT4sIqCX
+         BIQ1AmH9u2J7TKt4P1woq6O+MTLQjRW0w2K6s8CEgiEQMjRnAlPU4/zgNOxUOmfAKX3J
+         S6nA==
+X-Gm-Message-State: AOAM530fdfoVa2M+R0ecDhhKL2jK+xKMELQ0IZk8Wicwto2bHIfunI0j
+        rKuAVvnnHWcUlmcb0qCw7ZTQ0D5LpKvGyUSyR00=
+X-Google-Smtp-Source: ABdhPJwXmAyqg5YLkEdK5FeRuR0ckVtdzPxbV5xKPHwjdOHEPpNTMbkuXokrnEXa1CTnGYvn7CEXEw==
+X-Received: by 2002:a05:6000:180b:: with SMTP id m11mr11465163wrh.6.1626251640264;
+        Wed, 14 Jul 2021 01:34:00 -0700 (PDT)
+Received: from localhost.localdomain ([212.156.92.62])
+        by smtp.gmail.com with ESMTPSA id l20sm1465619wmq.3.2021.07.14.01.33.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jul 2021 01:34:00 -0700 (PDT)
+Date:   Wed, 14 Jul 2021 11:29:41 +0300
+From:   Pavel Skripkin <paskripkin@gmail.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20210714112941.0b17784f@gmail.com>
+In-Reply-To: <20210714082653.612f362d@canb.auug.org.au>
+References: <20210714082653.612f362d@canb.auug.org.au>
+X-Mailer: Claws Mail 3.17.8git77 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On Wed, 14 Jul 2021 08:26:53 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On Wed, Jul 14, 2021 at 12:32 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Commits
->
->   1a95840b0d0d ("clk: renesas: r9a07g044: Add DMAC clocks/resets")
->   1f5cda1cc885 ("clk: renesas: r9a07g044: Add I2C clocks/resets")
->
-> are missing a Signed-off-by from their committer.
+> Hi all,
+> 
+> In commit
+> 
+>   deb7178eb940 ("net: fddi: fix UAF in fza_probe")
+> 
+> Fixes tag
+> 
+>   Fixes: 61414f5ec983 ("FDDI: defza: Add support for DEC
+> FDDIcontroller 700
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+> 
 
-Thanks for the report, fixed.
+Hi, Stephen and net developers!
 
-Gr{oetje,eeting}s,
+This is definitely my fault, I am sorry for that :(
 
-                        Geert
+What can I do about it? Should I send revert and v2 or maybe some
+addition steps needed?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> Please do not split Fixes tags over more than one line.
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+With regards,
+Pavel Skripkin
+

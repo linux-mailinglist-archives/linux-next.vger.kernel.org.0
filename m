@@ -2,81 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B513C9711
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jul 2021 06:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AB43C9D65
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jul 2021 13:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbhGOEVy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Jul 2021 00:21:54 -0400
-Received: from ozlabs.org ([203.11.71.1]:56589 "EHLO ozlabs.org"
+        id S232558AbhGOLEW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Jul 2021 07:04:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233862AbhGOEVx (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Jul 2021 00:21:53 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GQLjF0pMPz9s5R;
-        Thu, 15 Jul 2021 14:18:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626322739;
-        bh=ex0MUn6/WmQdAE7HtUlusnPU0W5GbK7HPP3ssZenvDE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=og4lTkZCqU8uhEcrlj5fFWSceidXb7iKkWHri3bwa80OENvKAeNbh8JX/x7j8ql0e
-         oCRXfWpdYUgML0Jkuy5HaEUfq4yMcggTcDJD52ZTOmfXhrl3LusFJjbDYyr6+sxm+8
-         3HyQv8lwSy+vg3hGQZJ9r2U2GPdZZ/jDl9ZJqtD8PUbobFTe0XyysUYguo281xHEGs
-         lAGPTn1/uwQKIxv1CvhT4j8hDZ1SC6bID6B28LjDiFtxjqqar+u1RlzTgPJXDoKSaB
-         0kYghkpbSc10roAxLMBqOTHNfkymyS9ZHQceIR4V+67L4yHawmu1vIgg9gfC60kASU
-         sigdOO3BGnUcg==
-Date:   Thu, 15 Jul 2021 14:18:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Matt Roper <matthew.d.roper@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S235517AbhGOLEW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Jul 2021 07:04:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E24FB613BA;
+        Thu, 15 Jul 2021 11:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626346889;
+        bh=nSeG12PirYlnAlLJiFfuEZLYR+TEKgJoUNZFkdXkew0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WZyocnL6pfvur86PtSijWfZMEhhsj4gCAjIld2CKNNL702a7chIbaTqKNbHJGiSuz
+         QgHkJ6Ao86rs8vvhXw6lnMidl7yfRszyEBzVBLKnlzO89ZL6goJM5Acz1JOemj/A/n
+         lM8cfg2RPTYubCQzehyQnTUQKVSpGetLOgWgPyLTfhOurkMiUkWuDcU+Fp76Os+ZpD
+         t7KwuwrPAoMJPdIYXbxLH4f3q75R23dEdC8f2gpU/ttha7rsRJQP4eRr4GOMbGWU12
+         QX02YxRjdESOWU+Aayoehtm2usMBvgduv/AJJQnLz8ZntlqBgGCPVWiPDJJ1WnAEcr
+         gDr8Tm5LxRlYg==
+Date:   Thu, 15 Jul 2021 19:01:25 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the drm-intel tree
-Message-ID: <20210715141854.1ad4a956@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the imx-mxs tree
+Message-ID: <20210715110124.GA11388@dragon>
+References: <20210715080617.28efa29b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jx/Vz4=uZrGLV5ZV0Zhtu/8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210715080617.28efa29b@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jx/Vz4=uZrGLV5ZV0Zhtu/8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 15, 2021 at 08:06:17AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   857e67e935b7 ("ARM: dts: add SolidRun SolidSense support")
+> 
+> is missing a Signed-off-by from its committer.
 
-Hi all,
+Fixed, thanks!
 
-Commit
-
-  db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jx/Vz4=uZrGLV5ZV0Zhtu/8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDvty4ACgkQAVBC80lX
-0GxAUAf7BPNk+ONP5YbLLVNb9P+FIKUQhhDCy9Lt+5WNh5CSH6XlJVskjHkFK4gy
-yjlQ6GHz/xEAJ1CWOWJu1flHPjWwC+1fPiNrG4J1dTF7EYNkGePqilBf4SrzGXTw
-sgiTV21wv3/GdCKKGLva42WfKKEMIc1ayOIDvzIRRG3WpRuJXm1hCJ2mqYFuRFxZ
-ogNQX+f8zBoeHy8O+VEgSL8KNtmWz6KcHwVmPG38TIWdidZJPK1r+nbWYlOfpg22
-Wag3rLxylNsQgLFiJg1bka8akakatHLwz5ltJf3HmlotTROPum5wRtbwZ/zQl1Y8
-GWS6xAwUrP5RXx5f8FCibRCq0jwEKw==
-=/pQk
------END PGP SIGNATURE-----
-
---Sig_/jx/Vz4=uZrGLV5ZV0Zhtu/8--
+Shawn

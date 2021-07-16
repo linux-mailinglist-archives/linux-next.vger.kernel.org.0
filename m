@@ -2,697 +2,883 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B455A3CB20B
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jul 2021 07:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF11F3CB504
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jul 2021 11:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbhGPFvv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Jul 2021 01:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S239151AbhGPJG5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Jul 2021 05:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbhGPFvu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Jul 2021 01:51:50 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D4BC06175F;
-        Thu, 15 Jul 2021 22:48:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GR0fX1yKTz9sWq;
-        Fri, 16 Jul 2021 15:48:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626414532;
-        bh=dcIrQI5RI+qbZACFB48UdAtblwHFVA65Ww+KMly+b/s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hp5w6OjY0MLvVb8bjtu9hKMUFSKwuTmVDrfGWWuaay+e+Ah6HwBq858P3S+OJtE/c
-         L9Hz3jcIzx4jXNXiGRHq03vgEICl++UpBLWlWocTNR57wVUkH2mv/8L4y1dx5VDroG
-         mYJG8SFKbLFbgHA+yb19dgJoUS2Oz5XzOjOVa17cx7eg+j1x8aRhdaqZlxRHnmlgTY
-         zrVfcnrQhiI099gExOHr9+rUBANJ+uBd0b+ELpripCLcGzig5leF1Ytv9DY+dmph01
-         rUDlmZukhuuAxUB0af++3Dc+0y2VYL1ldnmc6KXBqGQMtva9mf8Rmv6EJ/bHklNWHv
-         hTuJKYf1BgnFA==
-Date:   Fri, 16 Jul 2021 15:48:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jul 16
-Message-ID: <20210716154851.70df1b6b@canb.auug.org.au>
+        with ESMTP id S239110AbhGPJGt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Jul 2021 05:06:49 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB05C061764
+        for <linux-next@vger.kernel.org>; Fri, 16 Jul 2021 02:03:53 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id oz7so10274742ejc.2
+        for <linux-next@vger.kernel.org>; Fri, 16 Jul 2021 02:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2Dsc90xeZUKcnO2vk2cTqavYu0x9bepgHVZmQV5PiPQ=;
+        b=wZ+JoytBJamwU3HH9d4e9crBzNeApXf/SsgbSaftaVoE4j6ZIRNMILUSmPfL8AV+fA
+         R3K2LbhbYVghk1Bpz+V8gytubVn+/aNVZy/LG+hEL59TsbDu0gPtVXNFUU6NXBxUzVqC
+         gpKsqP0ARx9bKXyFgcxIfyw2es3mxz5oeUur7zaVVhYXEAzFWt3a3/6kVZ3YLa5kP3L4
+         11Ht+douaXKedZl+fTOamje/cGn2/CQx2yoTYw9DzUwN8yWK6j/dj1k/r/F0x72lwOx+
+         4jGCG7B5FYQ28UWjUx9CuF8wECxzuPSotMPIEcOezV4HhLnQTDBkJMRaf1T52sFt06Ni
+         YCeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Dsc90xeZUKcnO2vk2cTqavYu0x9bepgHVZmQV5PiPQ=;
+        b=RKd9uq7Oy2N7PWoj9LcGPUADn2F6zZvC2oR02jJA6LvTIkRTJN9D/HFAS2WK3cb+kR
+         l8e3nRGZRxIauDapBhHJcRvXCBG/5LBUn8DAuCl4ui/ZzeSJ8pHe+j4H8zVpfb4N6EPY
+         w3uXzITlhMGJOP0zL6eFrZN8V001Ac8DD6jH7PXtzeHp+YPtFuni7gABIN9HFdz/+3Dx
+         ZFmoTiX3krBPS7cOhj79pKcDsAzQOPMQWRGTlgkKVGkazULZjPh1tWlj0ERHWdsP/5p8
+         kIIZWHPmlRjVs7vEOnLU5E5pFl6d+rKtPyKSzJje6NNkSaSQeXoxMj5x0WHtbZ0MZin+
+         W6nw==
+X-Gm-Message-State: AOAM533kLXhFfXKdGW/apOIsf+vN18gFiXziJeWyxXkfsYt08gFi5uu4
+        P4eDphybnUTA/v1AWy4s3Q5s8tKAKxDvvnCXKz6xDg==
+X-Google-Smtp-Source: ABdhPJy8wpUPJkzo5y5JJ8dVrL4PcxmlgHajdqU8p6EhxoE/NctFWaQdw8kVcx41J3sCbr4yGFd50ieO/7kEXel+mP4=
+X-Received: by 2002:a17:907:3d8a:: with SMTP id he10mr10619982ejc.16.1626426232014;
+ Fri, 16 Jul 2021 02:03:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v7Wo3m.EzXboSEZO2Ql=1Xn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <YO3txvw87MjKfdpq@localhost.localdomain> <YO8ioz4sHwcUAkdt@localhost.localdomain>
+In-Reply-To: <YO8ioz4sHwcUAkdt@localhost.localdomain>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Fri, 16 Jul 2021 11:03:41 +0200
+Message-ID: <CADYN=9+ZO1XHu2YZYy7s+6_qAh1obi2wk+d4A3vKmxtkoNvQLg@mail.gmail.com>
+Subject: Re: [PATCH v2] Decouple build from userspace headers
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>, hch@infradead.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/v7Wo3m.EzXboSEZO2Ql=1Xn
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Wed, 14 Jul 2021 at 19:45, Alexey Dobriyan <adobriyan@gmail.com> wrote:
+>
+> First, userspace headers can be under incompatible license.
+>
+> Second, kernel doesn't require userspace to operate and should not
+> require anything from userspace to be built other than compiler.
+> We would use -ffreestanding too if not builtin function shenanigans.
+>
+> To decouple:
+>
+> * ship minimal stdarg.h as <linux/stdarg.h>,
+>         1 type, 4 macros
+>
+> GPL 2 version of <stdarg.h> can be extracted from
+> http://archive.debian.org/debian/pool/main/g/gcc-4.2/gcc-4.2_4.2.4.orig.tar.gz
+>
+> * delete "-isystem" from command line arguments,
+>         this is what enables header leakage
+>
+> * fixup/delete include directives where necessary.
+>
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 
-Hi all,
+This patch was included into todays next tag next-20210716 and when I
+build an arm64 allmodconfig
+kernel I see the following error:
 
-Changes since 20210715:
+# to reproduce this build locally: tuxmake --target-arch=arm64
+--kconfig=allmodconfig --toolchain=gcc-11 --wrapper=none
+--environment=KBUILD_BUILD_TIMESTAMP=@1626414793
+--environment=KBUILD_BUILD_USER=tuxmake
+--environment=KBUILD_BUILD_HOST=tuxmake --runtime=podman
+--image=docker.io/tuxmake/arm64_gcc-11
+KCONFIG_ALLCONFIG=arch/arm64/configs/defconfig config default kernel
+modules
+make --silent --keep-going --jobs=32
+O=/home/anders/.cache/tuxmake/builds/current
+KCONFIG_ALLCONFIG=arch/arm64/configs/defconfig ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu- allmodconfig
+make --silent --keep-going --jobs=32
+O=/home/anders/.cache/tuxmake/builds/current
+KCONFIG_ALLCONFIG=arch/arm64/configs/defconfig ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu-
+In file included from
+/home/anders/src/kernel/testing/crypto/aegis128-neon-inner.c:7:
+/home/anders/src/kernel/testing/arch/arm64/include/asm/neon-intrinsics.h:33:10:
+fatal error: arm_neon.h: No such file or directory
+   33 | #include <arm_neon.h>
+      |          ^~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [/home/anders/src/kernel/testing/scripts/Makefile.build:272:
+crypto/aegis128-neon-inner.o] Error 1
+make[2]: Target '__build' not remade because of errors.
+make[1]: *** [/home/anders/src/kernel/testing/Makefile:1990: crypto] Error 2
+make[1]: Target '__all' not remade because of errors.
+make: *** [Makefile:227: __sub-make] Error 2
+make: Target '__all' not remade because of errors.
 
-The mhi tree gained a conflict against the net-next tree.
 
-Non-merge commits (relative to Linus' tree): 1323
- 1330 files changed, 92210 insertions(+), 14485 deletions(-)
+If I revert this patch I can build it.
 
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-and sparc64 defconfig and htmldocs. And finally, a simple boot test
-of the powerpc pseries_le_defconfig kernel in qemu (with and without
-kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 332 trees (counting Linus' and 90 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---=20
 Cheers,
-Stephen Rothwell
+Anders
 
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (e9338abf0e18 Merge tag 'Wimplicit-fallthrough-clang-=
-5.14-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux)
-Merging fixes/fixes (614124bea77e Linux 5.13-rc5)
-Merging kbuild-current/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging arc-current/for-curr (3eada7b4bd85 ARC: fp: set FPU_STATUS.FWE to e=
-nable FPU_STATUS update on context switch)
-Merging arm-current/fixes (dad7b9896a5d ARM: 9081/1: fix gcc-10 thumb2-kern=
-el regression)
-Merging arm64-fixes/for-next/fixes (e6f85cbeb23b arm64: entry: fix KCOV sup=
-pression)
-Merging arm-soc-fixes/arm/fixes (048c958f12a2 Merge tag 'tee-reviewer-for-v=
-5.13' of git://git.linaro.org:/people/jens.wiklander/linux-tee into arm/fix=
-es)
-Merging drivers-memory-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging m68k-current/for-linus (c1367ee016e3 m68k: atari: Fix ATARI_KBD_COR=
-E kconfig unmet dependency warning)
-Merging powerpc-fixes/fixes (e44fbdb68049 KVM: PPC: Book3S HV P9: Fix guest=
- TM support)
-Merging s390-fixes/fixes (f8c2602733c9 s390/ftrace: fix ftrace_update_ftrac=
-e_func implementation)
-Merging sparc/master (05a59d79793d Merge git://git.kernel.org:/pub/scm/linu=
-x/kernel/git/netdev/net)
-Merging fscrypt-current/for-stable (d19d8d345eec fscrypt: fix inline encryp=
-tion not used on new files)
-Merging net/master (a6ecfb39ba9d usb: hso: fix error handling code of hso_c=
-reate_net_device)
-Merging bpf/master (d444b06e4085 bpftool: Check malloc return value in moun=
-t_bpffs_for_pin)
-Merging ipsec/master (2580d3f40022 xfrm: Fix RCU vs hash_resize_mutex lock =
-inversion)
-Merging netfilter/master (d7fba8ff3e50 Merge git://git.kernel.org/pub/scm/l=
-inux/kernel/git/pablo/nf)
-Merging ipvs/master (c23a9fd209bc netfilter: ctnetlink: suspicious RCU usag=
-e in ctnetlink_dump_helpinfo)
-Merging wireless-drivers/master (1f9482aa8d41 mwifiex: bring down link befo=
-re deleting interface)
-Merging mac80211/master (f4b29d2ee903 Merge git://git.kernel.org/pub/scm/li=
-nux/kernel/git/pablo/nf)
-Merging rdma-fixes/for-rc (c9538831b353 RDMA/irdma: Change the returned typ=
-e to void)
-Merging sound-current/for-linus (64752a95b702 ALSA: usb-audio: Add missing =
-proc text entry for BESPOKEN type)
-Merging sound-asoc-fixes/for-linus (38947fb24d3e Merge remote-tracking bran=
-ch 'asoc/for-5.14' into asoc-linus)
-Merging regmap-fixes/for-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging regulator-fixes/for-linus (be91662fa3dc Merge remote-tracking branc=
-h 'regulator/for-5.14' into regulator-linus)
-Merging spi-fixes/for-linus (5856fcb34565 Merge remote-tracking branch 'spi=
-/for-5.14' into spi-linus)
-Merging pci-current/for-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging driver-core.current/driver-core-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging tty.current/tty-linus (de5540965853 Merge tag 'rtc-5.14' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/abelloni/linux)
-Merging usb.current/usb-linus (b0863f192732 USB: core: Fix incorrect pipe c=
-alculation in do_proc_control())
-Merging usb-gadget-fixes/fixes (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial-fixes/usb-linus (94b619a07655 USB: serial: option: add s=
-upport for u-blox LARA-R6 family)
-Merging usb-chipidea-fixes/for-usb-fixes (42c4417937be usb: cdnsp: Fix the =
-IMAN_IE_SET and IMAN_IE_CLEAR macro.)
-Merging phy/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging staging.current/staging-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging iio-fixes/fixes-togreg (4377d9ab1f16 iio: accel: fxls8962af: fix po=
-tential use of uninitialized symbol)
-Merging char-misc.current/char-misc-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging soundwire-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging thunderbolt-fixes/fixes (13311e74253f Linux 5.13-rc7)
-Merging input-current/for-linus (818b26588994 Merge branch 'next' into for-=
-linus)
-Merging crypto-current/master (66192b2e3fd8 crypto: hisilicon/sec - fix the=
- process of disabling sva prefetching)
-Merging vfio-fixes/for-linus (dc51ff91cf2d vfio/platform: fix module_put ca=
-ll in error flow)
-Merging kselftest-fixes/fixes (0c0f6299ba71 selftests: memory-hotplug: avoi=
-d spamming logs with dump_page(), ratio limit hot-remove error test)
-Merging modules-fixes/modules-linus (055f23b74b20 module: check for exit se=
-ctions in layout_sections() instead of module_init_section())
-Merging dmaengine-fixes/fixes (d5c10e0fc864 dmaengine: idxd: fix setup sequ=
-ence for MSIXPERM table)
-Merging backlight-fixes/for-backlight-fixes (a38fd8748464 Linux 5.12-rc2)
-Merging mtd-fixes/mtd/fixes (562b4e91d3b2 mtd: parsers: ofpart: fix parsing=
- subpartitions)
-Merging mfd-fixes/for-mfd-fixes (a61f4661fba4 mfd: intel_quark_i2c_gpio: Re=
-vert "Constify static struct resources")
-Merging v4l-dvb-fixes/fixes (61c6f04a988e media: s5p-mfc: Fix display delay=
- control creation)
-Merging reset-fixes/reset/fixes (b460e0a9e240 reset: intel: add unspecified=
- HAS_IOMEM dependency)
-Merging mips-fixes/mips-fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging at91-fixes/at91-fixes (6efb943b8616 Linux 5.13-rc1)
-Merging omap-fixes/fixes (3ff340e24c9d bus: ti-sysc: Fix gpt12 system timer=
- issue with reserved status)
-Merging kvm-fixes/master (d951b2210c1a KVM: selftests: smm_test: Test SMM e=
-nter from L2)
-Merging kvms390-fixes/master (cd4220d23bf3 KVM: selftests: do not require 6=
-4GB in set_memory_region_test)
-Merging hwmon-fixes/hwmon (e73f0f0ee754 Linux 5.14-rc1)
-Merging nvdimm-fixes/libnvdimm-fixes (b05d4c576b69 dax: Ensure errno is ret=
-urned from dax_direct_access)
-Merging cxl-fixes/fixes (fae8817ae804 cxl/mem: Fix memory device capacity p=
-robing)
-Merging btrfs-fixes/next-fixes (2376b98e2a50 Merge branch 'misc-5.14' into =
-next-fixes)
-Merging vfs-fixes/fixes (173e84953eaa fs: fix reporting supported extra fil=
-e attributes for statx())
-Merging dma-mapping-fixes/for-linus (18a3c5f7abfd Merge tag 'for_linus' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost)
-Merging i3c-fixes/i3c/fixes (fe07bfda2fb9 Linux 5.12-rc1)
-Merging drivers-x86-fixes/fixes (95edbbf78c3b platform/x86: amd-pmc: Fix mi=
-ssing unlock on error in amd_pmc_send_cmd())
-Merging samsung-krzk-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging pinctrl-samsung-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging devicetree-fixes/dt/linus (f88321a3bf77 dt-bindings: Move fixed str=
-ing 'patternProperties' to 'properties')
-Merging scsi-fixes/fixes (053c16ac8905 scsi: ufs: core: Add missing host_lo=
-ck in ufshcd_vops_setup_xfer_req())
-Merging drm-fixes/drm-fixes (1e7b5812f489 Merge tag 'drm-misc-fixes-2021-07=
--13' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (de01e6fc9e49 Merge tag 'gvt-f=
-ixes-2021-07-15' of https://github.com/intel/gvt-linux into drm-intel-fixes)
-Merging mmc-fixes/fixes (10252bae863d mmc: core: Don't allocate IDA for OF =
-aliases)
-Merging rtc-fixes/rtc-fixes (bd33335aa93d rtc: cmos: Disable irq around dir=
-ect invocation of cmos_interrupt())
-Merging gnss-fixes/gnss-linus (e73f0f0ee754 Linux 5.14-rc1)
-Merging hyperv-fixes/hyperv-fixes (6efb943b8616 Linux 5.13-rc1)
-Merging soc-fsl-fixes/fix (2663b3388551 soc: fsl: dpio: Get the cpumask thr=
-ough cpumask_of(cpu))
-Merging risc-v-fixes/fixes (7ede12b01b59 riscv: dts: fu740: fix cache-contr=
-oller interrupts)
-Merging pidfd-fixes/fixes (03ba0fe4d09f file: simplify logic in __close_ran=
-ge())
-Merging fpga-fixes/fixes (2e8496f31d0b firmware: stratix10-svc: reset COMMA=
-ND_RECONFIG_FLAG_PARTIAL to 0)
-Merging spdx/spdx-linus (de5540965853 Merge tag 'rtc-5.14' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/abelloni/linux)
-Merging gpio-brgl-fixes/gpio/for-current (c6414e1a2bd2 gpio: AMD8111 and TQ=
-MX86 require HAS_IOPORT_MAP)
-Merging gpio-intel-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging pinctrl-intel-fixes/fixes (e73f0f0ee754 Linux 5.14-rc1)
-Merging erofs-fixes/fixes (0852b6ca941e erofs: fix 1 lcluster-sized pcluste=
-r for big pcluster)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging kunit-fixes/kunit-fixes (df4b0807ca1a kunit: tool: Assert the versi=
-on requirement)
-Merging ubifs-fixes/fixes (78c7d49f55d8 ubifs: journal: Make sure to not di=
-rty twice for auth nodes)
-Merging memblock-fixes/fixes (024591f9a6e0 arm: ioremap: don't abuse pfn_va=
-lid() to check if pfn is in RAM)
-Merging cel-fixes/for-rc (9f4ad9e425a1 Linux 5.12)
-Merging irqchip-fixes/irq/irqchip-fixes (1fee9db9b42d irqchip/mips: Fix RCU=
- violation when using irqdomain lookup on interrupt entry)
-Merging renesas-fixes/fixes (432b52eea3dc ARM: shmobile: defconfig: Restore=
- graphical consoles)
-Merging drm-misc-fixes/for-linux-next-fixes (32a19de21ae4 drm/vc4: hdmi: Dr=
-op devm interrupt handler for CEC interrupts)
-Merging kspp-gustavo/for-next/kspp (b7eb335e26a9 Makefile: Enable -Wimplici=
-t-fallthrough for Clang)
-Merging kbuild/for-next (27932b6a2088 scripts: add generic syscallnr.sh)
-Merging compiler-attributes/compiler-attributes (ca0760e7d79e Compiler Attr=
-ibutes: Add continue in comment)
-Merging dma-mapping/for-next (2b4bbc6231d7 dma-debug: report -EEXIST errors=
- in add_dma_entry)
-Merging asm-generic/master (14462376858e Merge branch 'asm-generic-unaligne=
-d' into asm-generic)
-Merging arc/for-next (def9d2780727 Linux 5.5-rc7)
-Merging arm/for-next (3bd1461d1691 Merge branches 'fixes' and 'misc' into f=
-or-next)
-Merging arm64/for-next/core (3d1bf78c7b13 Merge branch 'for-next/sve' into =
-for-next/core)
-Merging arm-perf/for-next/perf (d96b1b8c9f79 drivers/perf: fix the missed i=
-da_simple_remove() in ddr_perf_probe())
-Merging arm-soc/for-next (2ded36511b58 ARM: Document merges)
-Merging actions/for-next (444d018d8d38 ARM: dts: owl-s500-roseapplepi: Add =
-ATC2603C PMIC)
-Merging amlogic/for-next (b03485fe99f2 Merge tags 'amlogic-arm64-dt-for-v5.=
-14-v2' and 'amlogic-arm-dt-for-v5.14' into for-next)
-Merging aspeed/for-next (cd946cfe2e7e Merge branches 'defconfig-for-v5.14' =
-and 'dt-for-v5.14' into for-next)
-Merging at91/at91-next (80cbaa6d3450 Merge branches 'at91-dt' and 'at91-def=
-config' into at91-next)
-Merging drivers-memory/for-next (20328d360a58 Merge branch 'for-v5.14/tegra=
--mc-late-or-fixes' into for-next)
-Merging imx-mxs/for-next (2332f8e99198 Merge branch 'imx/dt64' into for-nex=
-t)
-Merging keystone/next (9d2e21ed98a2 Merge branch 'for_5.12/drivers-soc' int=
-o next)
-Merging mediatek/for-next (a1c8c49de3d7 Merge branch 'v5.13-next/soc' into =
-for-next)
-Merging mvebu/for-next (72a0a49b7c77 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (91ee322340fb Merge branch 'omap-for-v5.14/dt' into f=
-or-next)
-Merging qcom/for-next (c275bbc84be9 Merge branches 'arm64-defconfig-for-5.1=
-4', 'arm64-for-5.14', 'drivers-for-5.14' and 'dts-for-5.14' into for-next)
-Merging raspberrypi/for-next (21c6bf8304f0 arm64: dts: broadcom: Add refere=
-nce to RPi 400)
-Merging renesas/next (51832d6b6211 Merge branches 'renesas-arm-defconfig-fo=
-r-v5.15' and 'renesas-arm-dt-for-v5.15' into renesas-next)
-Merging reset/reset/next (48a74b1147f7 reset: Add compile-test stubs)
-Merging rockchip/for-next (2deacb579c33 Merge branch 'v5.15-armsoc/dts64' i=
-nto for-next)
-Merging samsung-krzk/for-next (178a5d90dc04 arm64: dts: exynos: Add cpu cac=
-he information to Exynos5433)
-Merging scmi/for-linux-next (6ce2ccff5621 Merge tag 'scmi-fixes-5.14' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-lin=
-ux-next)
-Merging stm32/stm32-next (b462e2fc78f0 ARM: dts: stm32: Update AV96 adv7513=
- node per dtbs_check)
-Merging sunxi/sunxi/for-next (3f1c53207cf0 Merge branches 'sunxi/dt-for-5.1=
-4' and 'sunxi/fixes-for-5.13' into sunxi/for-next)
-Merging tegra/for-next (b34c0e9111d0 Merge branch for-5.15/arm64/dt into fo=
-r-next)
-Merging ti-k3/ti-k3-next (1e3d655fe7b4 Merge branch 'ti-k3-config-next' int=
-o ti-k3-next)
-Merging ti-k3-new/ti-k3-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging xilinx/for-next (d98fb9ab6255 Merge branch 'zynq/dt' into for-next)
-Merging clk/clk-next (783d08bd02f5 Revert "clk: divider: Switch from .round=
-_rate to .determine_rate by default")
-Merging clk-imx/for-next (c586f53ae159 clk: imx8mq: remove SYS PLL 1/2 cloc=
-k gates)
-Merging clk-renesas/renesas-clk (55e35ffd52dc clk: renesas: r9a07g044: Add =
-SSIF-2 clock and reset entries)
-Merging clk-samsung/for-next (a38fd8748464 Linux 5.12-rc2)
-Merging csky/linux-next (90dc8c0e664e csky: Kconfig: Remove unused selects)
-Merging h8300/h8300-next (6e5e55227c95 Merge tag 'v5.11' into h8300-next)
-Merging m68k/for-next (c1367ee016e3 m68k: atari: Fix ATARI_KBD_CORE kconfig=
- unmet dependency warning)
-Merging m68knommu/for-next (1ede60632ece m68k/nommu: prevent setting ROMKER=
-NEL when ROM is not set)
-Merging microblaze/next (14a832498c23 arch: microblaze: Fix spelling mistak=
-e "vesion" -> "version")
-Merging mips/mips-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging nds32/next (40e0dd851e7b nds32: Fix bogus reference to <asm/procinf=
-o.h>)
-Merging nios2/for-next (7f7bc20bc41a nios2: Don't use _end for calculating =
-min_low_pfn)
-Merging openrisc/for-next (ad4e600cbf89 drivers/soc/litex: remove 8-bit sub=
-register option)
-Merging parisc-hd/for-next (ca2b19a4bdb6 parisc: Increase gcc stack frame c=
-heck to 2048 for 32- and 64-bit)
-Merging powerpc/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging soc-fsl/next (242b0b398ccd soc: fsl: enable acpi support in RCPM dr=
-iver)
-Merging risc-v/for-next (7761e36bc722 riscv: Fix PTDUMP output now BPF regi=
-on moved back to module region)
-Merging s390/for-next (ad48fd727ccf Merge branch 'fixes' into for-next)
-Merging sh/for-next (2882b7626f49 sh: kernel: traps: remove unused variable)
-Merging sparc-next/master (dd0d718152e4 Merge tag 'spi-fix-v5.8-rc2' of git=
-://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi)
-Merging uml/linux-next (1aee020155f3 um: remove unneeded semicolon in um_ar=
-ch.c)
-Merging xtensa/xtensa-for-next (ac637a0ada71 xtensa: add fairness to IRQ ha=
-ndling)
-Merging pidfd/for-next (5ddf9602d711 Merge branch 'fs.mount_setattr.nosymfo=
-llow' into for-next)
-Merging fscrypt/master (2fc2b430f559 fscrypt: fix derivation of SipHash key=
-s on big endian CPUs)
-Merging fscache/fscache-next (5193f26aef59 fscache: Use refcount_t for the =
-cookie refcount instead of atomic_t)
-Merging afs/afs-next (7af08140979a Revert "gcov: clang: fix clang-11+ build=
-")
-Merging btrfs/for-next (808c6838dfee Merge branch 'for-next-current-v5.12-2=
-0210624' into for-next-20210624)
-Merging ceph/master (4c18347238ab ceph: take reference to req->r_parent at =
-point of assignment)
-Merging cifs/for-next (90f01855a4b2 SMB3.1.1: fix mount failure to some ser=
-vers when compression enabled)
-Merging cifsd/cifsd-for-next (9946aa630ae7 Merge pull request #61 from namj=
-aejeon/cifsd-for-next)
-Merging configfs/for-next (420405ecde06 configfs: fix the read and write it=
-erators)
-Merging ecryptfs/next (682a8e2b41ef Merge tag 'ecryptfs-5.13-rc1-updates' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs)
-Merging erofs/dev (8215d5b7f15f MAINTAINERS: erofs: update my email address)
-Merging exfat/dev (50be9417e23a Merge tag 'io_uring-5.14-2021-07-09' of git=
-://git.kernel.dk/linux-block)
-Merging ext3/for_next (abdb298f115c fs/ext2: Avoid page_address on pages re=
-turned by ext2_get_page)
-Merging ext4/dev (0705e8d1e220 ext4: inline jbd2_journal_[un]register_shrin=
-ker())
-Merging f2fs/dev (5417c98c12f6 f2fs: avoid to create an empty string as the=
- extension_list)
-Merging fsverity/fsverity (07c99001312c fs-verity: support reading signatur=
-e with ioctl)
-Merging fuse/for-next (c4e0cd4e0c16 virtiofs: Fix spelling mistakes)
-Merging gfs2/for-next (e6d1bd8d56de gfs2: Fix memory leak of object lsi on =
-error return path)
-Merging jfs/jfs-next (5d299f44d765 jfs: Avoid field-overflowing memcpy())
-Merging nfs/linux-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging nfs-anna/linux-next (4f8be1f53bf6 nfs: we don't support removing sy=
-stem.nfs4_acl)
-Merging nfsd/nfsd-next (ab1016d39cc0 nfsd: fix NULL dereference in nfs3svc_=
-encode_getaclres)
-Merging cel/for-next (14490d0ff202 NFSD: Batch release pages during splice =
-read)
-Merging orangefs/for-next (0fdec1b3c9fb orangefs: fix orangefs df output.)
-Merging overlayfs/overlayfs-next (5e717c6fa41f ovl: add debug print to ovl_=
-do_getxattr())
-Merging ubifs/next (a801fcfeef96 ubifs: Set/Clear I_LINKABLE under i_lock f=
-or whiteout inode)
-Merging v9fs/9p-next (cba7dcd8878e 9p/trans_virtio: Remove sysfs file on pr=
-obe failure)
-Merging xfs/for-next (b102a46ce16f xfs: detect misaligned rtinherit directo=
-ry extent size hints)
-Merging zonefs/for-next (95b115332a83 zonefs: remove redundant null bio che=
-ck)
-Merging iomap/iomap-for-next (229adf3c64db iomap: Don't create iomap_page o=
-bjects in iomap_page_mkwrite_actor)
-Merging djw-vfs/vfs-for-next (9b8523423b23 vfs: move __sb_{start,end}_write=
-* to fs.h)
-Merging file-locks/locks-next (e1cc6e8c1969 fcntl: fix potential deadlock f=
-or &fasync_struct.fa_lock)
-Merging vfs/for-next (303392fd5c16 Merge tag 'leds-5.14-rc1' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/pavel/linux-leds)
-Merging printk/for-next (70333dec4462 Merge branch 'rework/fixup-for-5.15' =
-into for-next)
-Merging pci/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging pstore/for-next/pstore (c5d4fb2539ca pstore/blk: Use "%lu" to forma=
-t unsigned long)
-Merging hid/for-next (1b97ec646386 Merge branch 'for-5.15/goodix' into for-=
-next)
-Merging i2c/i2c/for-next (5bac2a5bf0c6 Merge branch 'i2c/for-mergewindow' i=
-nto i2c/for-next)
-Merging i3c/i3c/next (3e5feb11a829 i3c: master: svc: fix doc warning in svc=
--i3c-master.c)
-Merging dmi/dmi-for-next (3cb4d29a2633 MAINTAINERS: The DMI/SMBIOS tree has=
- moved)
-Merging hwmon-staging/hwmon-next (3352a33e7f9c hwmon: (w83627ehf) Remove w8=
-3627ehf_remove())
-Merging jc_docs/docs-next (4b3abe1fde47 docs/zh_CN: add core api protection=
- keys translation)
-Merging v4l-dvb/master (e73f0f0ee754 Linux 5.14-rc1)
-Merging v4l-dvb-next/master (379e205dab9d media: usb: dvb-usb-v2: af9035: l=
-et subdrv autoselect enable si2168 and si2157)
-Merging pm/linux-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging cpufreq-arm/cpufreq/arm/linux-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging cpupower/cpupower (e73f0f0ee754 Linux 5.14-rc1)
-Merging devfreq/devfreq-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging opp/opp/linux-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging thermal/thermal/linux-next (fe6a6de6692e thermal/drivers/int340x/pr=
-ocessor_thermal: Fix tcc setting)
-Merging ieee1394/for-next (54b3bd99f094 firewire: nosy: switch from 'pci_' =
-to 'dma_' API)
-Merging dlm/next (957adb68b3f7 fs: dlm: invalid buffer access in lookup err=
-or)
-Merging swiotlb/linux-next (868c9ddc182b swiotlb: add overflow checks to sw=
-iotlb_bounce)
-Merging rdma/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging net-next/master (87117baf4f92 ipv6: remove unnecessary local variab=
-le)
-Merging bpf-next/for-next (5e437416ff66 Merge branch 'dsa-mv88e6xxx-topaz-f=
-ixes')
-Merging ipsec-next/master (5e437416ff66 Merge branch 'dsa-mv88e6xxx-topaz-f=
-ixes')
-Merging mlx5-next/mlx5-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging netfilter-next/master (84fe73996c2e Merge branch 'do_once_lite')
-Merging ipvs-next/master (84fe73996c2e Merge branch 'do_once_lite')
-Merging wireless-drivers-next/master (ff8744b5eb11 Merge branch '100GbE' of=
- git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue)
-Merging bluetooth/master (3c755b4545aa Bluetooth: hci_h5: Disable the hci_s=
-uspend_notifier for btrtl devices)
-Merging mac80211-next/master (5e437416ff66 Merge branch 'dsa-mv88e6xxx-topa=
-z-fixes')
-Merging mtd/mtd/next (ff44b90b325d dt_bindings: mtd: partitions: redboot: c=
-onvert to YAML)
-Merging nand/nand/next (c06dd49fd59a mtd: rawnand: omap: Add larger page NA=
-ND chips support)
-Merging spi-nor/spi-nor/next (c17e5c85b32f mtd: spi-nor: remove redundant c=
-ontinue statement)
-Merging crypto/master (66192b2e3fd8 crypto: hisilicon/sec - fix the process=
- of disabling sva prefetching)
-Merging drm/drm-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging drm-misc/for-linux-next (85fd4a8a8431 drm/ttm: Fix COW check)
-Merging amdgpu/drm-next (47ba6aa65bed drm/amdgpu/display: add support for m=
-ultiple backlights)
-Merging drm-intel/for-linux-next (7ad2d09ccde2 Merge branch 'topic/revid_st=
-eppings' into drm-intel-next)
-Merging drm-tegra/drm/tegra/for-next (b19502d1a683 drm/tegra: Bump driver v=
-ersion)
-Merging drm-msm/msm-next (e88bbc91849b Revert "drm/msm/mdp5: provide dynami=
-c bandwidth management")
-Merging imx-drm/imx-drm/next (fc1e985b67f9 drm/imx: ipuv3-plane: add color =
-encoding and range properties)
-Merging etnaviv/etnaviv/next (81fd23e2b3cc drm/etnaviv: Implement mmap as G=
-EM object function)
-Merging regmap/for-next (d63aa09f7c53 regmap: Prefer unsigned int to bare u=
-se of unsigned)
-Merging sound/for-next (2c4e31545716 ALSA: compress: Initialize mutex in sn=
-d_compress_new())
-Merging sound-asoc/for-next (449c236023c3 Merge remote-tracking branch 'aso=
-c/for-5.15' into asoc-next)
-Merging modules/modules-next (2c0f0f363956 module: correctly exit module_ka=
-llsyms_on_each_symbol when fn() !=3D 0)
-Merging input/next (f8f84af5da9e Input: joydev - prevent use of not validat=
-ed data in JSIOCSBTNMAP ioctl)
-Merging block/for-next (60b8191c4777 Merge branch 'for-5.15/block' into for=
--next)
-Merging device-mapper/for-next (5c0de3d72f8c dm writecache: make writeback =
-pause configurable)
-Merging pcmcia/pcmcia-next (e9d503fef7da pcmcia: rsrc_nonstatic: Fix call-b=
-ack function as reference formatting)
-Merging mmc/next (441b4dc421dc Merge branch 'fixes' into next)
-Merging mfd/for-mfd-next (495fb48dbd9b mfd: wm831x: Use DEFINE_RES_IRQ_NAME=
-D() and DEFINE_RES_IRQ() to simplify code)
-Merging backlight/for-backlight-next (1181f2164135 backlight: lm3630a: Conv=
-ert to atomic PWM API and check for errors)
-Merging battery/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging regulator/for-next (49d87417ec08 Merge remote-tracking branch 'regu=
-lator/for-5.15' into regulator-next)
-Merging security/next-testing (047843bdb316 Merge branch 'landlock_lsm_v34'=
- into next-testing)
-Merging apparmor/apparmor-next (d108370c644b apparmor: fix error check)
-Merging integrity/next-integrity (907a399de7b0 evm: Check xattr size discre=
-pancy between kernel and user)
-Merging keys/keys-next (e377c31f788f integrity: Load mokx variables into th=
-e blacklist keyring)
-CONFLICT (content): Merge conflict in certs/system_keyring.c
-Merging safesetid/safesetid-next (1b8b71922919 LSM: SafeSetID: Mark safeset=
-id_initialized as __initdata)
-Merging selinux/next (893c47d1964f selinux: return early for possible NULL =
-audit buffers)
-Merging smack/next (fe6bde732be8 Smack: fix doc warning)
-Merging tomoyo/master (4fb9c588398f Bluetooth: call lock_sock() outside of =
-spinlock section)
-Merging tpmdd/next (0178f9d0f60b tpm: Replace WARN_ONCE() with dev_err_once=
-() in tpm_tis_status())
-Merging watchdog/master (cf813c67d961 watchdog: iTCO_wdt: use dev_err() ins=
-tead of pr_err())
-Merging iommu/next (4a5c155a5ab3 MAINTAINERS: Add Suravee Suthikulpanit as =
-Reviewer for AMD IOMMU (AMD-Vi))
-Merging audit/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging devicetree/for-next (24519fa7f915 dt-bindings: i2c: brcm,iproc-i2c:=
- convert to the json-schema)
-Merging mailbox/mailbox-for-next (4f197188da66 MAINTAINERS: add entry for p=
-olarfire soc mailbox)
-Merging spi/for-next (f77d261b522e Merge remote-tracking branch 'spi/for-5.=
-15' into spi-next)
-Merging tip/auto-latest (dd9ced4003dd Merge branch 'core/urgent')
-Merging clockevents/timers/drivers/next (6f64c8159af9 clocksource/drivers/a=
-rm_global_timer: Remove duplicated argument in arm_global_timer)
-Merging edac/edac-for-next (d19faf0e49eb EDAC/amd64: Use DEVICE_ATTR helper=
- macros)
-Merging irqchip/irq/irqchip-next (c51e96dace68 Merge branch irq/irqchip-dri=
-ver-updates into irq/irqchip-next)
-Merging ftrace/for-next (ac58f4f28369 tracing: Add trace_event helper macro=
-s __string_len() and __assign_str_len())
-Merging rcu/rcu/next (e107ca1a35b6 doc: Update stallwarn.rst with recent ch=
-anges)
-Merging kvm/next (d951b2210c1a KVM: selftests: smm_test: Test SMM enter fro=
-m L2)
-Merging kvm-arm/next (188982cda00e Merge branch kvm-arm64/mmu/mte into kvma=
-rm-master/next)
-Merging kvm-ppc/kvm-ppc-next (72476aaa4691 KVM: PPC: Book3S HV: Fix host ra=
-dix SLB optimisation with hash guests)
-Merging kvms390/next (1f703d2cf204 KVM: s390: allow facility 192 (vector-pa=
-cked-decimal-enhancement facility 2))
-Merging xen-tip/linux-next (629a5d87e26f xen: sync include/xen/interface/io=
-/ring.h with Xen's newest version)
-Merging percpu/for-next (a81a52b325ec Merge branch 'for-5.14-fixes' into fo=
-r-next)
-Merging workqueues/for-next (7f5ba4806d3c cgroup1: fix leaked context root =
-causing sporadic NULL deref in LTP)
-CONFLICT (content): Merge conflict in include/linux/fs_context.h
-Merging drivers-x86/for-next (95edbbf78c3b platform/x86: amd-pmc: Fix missi=
-ng unlock on error in amd_pmc_send_cmd())
-Merging chrome-platform/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging hsi/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging leds/for-next (e642197562cd leds: is31fl32xx: Fix missing error cod=
-e in is31fl32xx_parse_dt())
-Merging ipmi/for-next (1a2055cd5091 bindings: ipmi: Add binding for SSIF BM=
-C driver)
-Merging driver-core/driver-core-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging usb/usb-next (97db1b081e12 dt-bindings: usb: dwc3: Update dwc3 TX f=
-ifo properties)
-Merging usb-gadget/next (e49d033bddf5 Linux 5.12-rc6)
-Merging usb-serial/usb-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging usb-chipidea-next/for-usb-next (956df1bb0ab8 usb: chipidea: host: f=
-ix port index underflow and UBSAN complains)
-Merging tty/tty-next (de5540965853 Merge tag 'rtc-5.14' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/abelloni/linux)
-Merging char-misc/char-misc-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging extcon/extcon-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging phy-next/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging soundwire/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging thunderbolt/next (b18f901382fd thunderbolt: Fix DROM handling for U=
-SB4 DROM)
-Merging vfio/next (6a45ece4c9af vfio/pci: Handle concurrent vma faults)
-Merging staging/staging-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging iio/togreg (e73f0f0ee754 Linux 5.14-rc1)
-Merging mux/for-next (3516bd729358 Merge tag 's390-5.11-3' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/s390/linux)
-Merging icc/icc-next (46bdcac533cc interconnect: qcom: Add SC7280 interconn=
-ect provider driver)
-Merging dmaengine/next (407b3ea075c2 Merge branch 'fixes' into next)
-Merging cgroup/for-next (cfeaa699186e Merge branch 'for-5.13-fixes' into fo=
-r-next)
-Merging scsi/for-next (4e65a83cd0b9 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging vhost/linux-next (db7b337709a1 virtio-mem: prioritize unplug from Z=
-ONE_MOVABLE in Big Block Mode)
-Merging rpmsg/for-next (7486f29e5e60 Merge branches 'hwspinlock-next', 'rpm=
-sg-next' and 'rproc-next' into for-next)
-Merging gpio/for-next (7ac554888233 MAINTAINERS: Remove reference to non-ex=
-isting file)
-Merging gpio-brgl/gpio/for-next (c34c1228fc1c docs: driver-api: gpio: using=
--gpio.rst: avoid using ReST :doc:`foo` markup)
-Merging gpio-intel/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging pinctrl/for-next (bfa50166cd9d pinctrl: ralink: rt305x: add missing=
- include)
-Merging pinctrl-intel/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging pinctrl-renesas/renesas-pinctrl (e9d66bdbc5ab pinctrl: renesas: r8a=
-77995: Add bias pinconf support)
-Merging pinctrl-samsung/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging pwm/for-next (f4a8e31ed84e pwm: ep93xx: Ensure configuring period a=
-nd duty_cycle isn't wrongly skipped)
-Merging userns/for-next (5e6b8a50a7ce cred: add missing return error code w=
-hen set_cred_ucounts() failed)
-Merging ktest/for-next (170f4869e662 ktest.pl: Fix the logic for truncating=
- the size of the log file for email)
-Merging kselftest/next (e73f0f0ee754 Linux 5.14-rc1)
-Merging livepatching/for-next (c150bbbb1731 Merge branch 'for-5.13/signal' =
-into for-next)
-Merging coresight/next (1efbcec2ef8c coresight: cti: Reduce scope for the v=
-ariable =E2=80=9Ccs_fwnode=E2=80=9D in cti_plat_create_connection())
-Merging rtc/rtc-next (4aa90c036df6 rtc: pcf8523: rename register and bit de=
-fines)
-Merging nvdimm/libnvdimm-for-next (30c10d32152d Merge branch 'for-5.12/cxl'=
- into libnvdimm-for-next)
-Merging at24/at24/for-next (6efb943b8616 Linux 5.13-rc1)
-Merging ntb/ntb-next (28293b6c68cd ntb: ntb_pingpong: remove redundant init=
-ialization of variables msg_data and spad_data)
-Merging seccomp/for-next/seccomp (19d67694745c Documentation: seccomp: Fix =
-typo in user notification)
-Merging kspp/for-next/kspp (6a0544606ec7 pgo: rectify comment to proper ker=
-nel-doc syntax)
-Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
-Merging gnss/gnss-next (0f79ce970e79 gnss: drop stray semicolons)
-Merging fsi/next (9ab1428dfe2c fsi/sbefifo: Fix reset timeout)
-Merging slimbus/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging nvmem/for-next (e73f0f0ee754 Linux 5.14-rc1)
-Merging xarray/main (2c7e57a02708 idr test suite: Improve reporting from id=
-r_find_test_1)
-Merging hyperv/hyperv-next (6dc77fa5ac2c Drivers: hv: Move Hyper-V misc fun=
-ctionality to arch-neutral code)
-Merging auxdisplay/auxdisplay (4f46cdab7e00 auxdisplay: charlcd: Drop unnee=
-ded initializers and switch to C99 style)
-Merging kgdb/kgdb/for-next (c8daba4640ac kgdb: Fix fall-through warning for=
- Clang)
-Merging hmm/hmm (fe07bfda2fb9 Linux 5.12-rc1)
-Merging fpga/for-next (e4998f490675 Merge tag 'v5.14-rc1' into for-next)
-Merging kunit/test (e73f0f0ee754 Linux 5.14-rc1)
-Merging cfi/cfi/next (6efb943b8616 Linux 5.13-rc1)
-Merging kunit-next/kunit (e73f0f0ee754 Linux 5.14-rc1)
-Merging trivial/for-next (9ff9b0d392ea Merge tag 'net-next-5.10' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/netdev/net-next)
-Merging mhi/mhi-next (3bd1d916c79b bus: mhi: core: Add range checks for BHI=
- and BHIe)
-CONFLICT (content): Merge conflict in drivers/bus/mhi/pci_generic.c
-Merging mhi/mhi-next (3bd1d916c79b bus: mhi: core: Add range checks for BHI=
- and BHIe)
-CONFLICT (content): Merge conflict in drivers/bus/mhi/pci_generic.c
-Merging memblock/for-next (a4d5613c4dc6 arm: extend pfn_valid to take into =
-account freed memory map alignment)
-Merging init/init-user-pointers (38b082236e77 initramfs: use vfs_utimes in =
-do_copy)
-Merging counters/counters (e71ba9452f0b Linux 5.11-rc2)
-Merging rust/rust-next (5d3986cf8ed6 MAINTAINERS: Rust)
-CONFLICT (content): Merge conflict in include/linux/kallsyms.h
-Merging cxl/next (4ad6181e4b21 cxl/pci: Rename CXL REGLOC ID)
-Merging akpm-current/current (41287ce69618 selftests/memfd: remove unused v=
-ariable)
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (0bae28db1820 Merge branch 'akpm-current/current')
-
---Sig_/v7Wo3m.EzXboSEZO2Ql=1Xn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmDxHcMACgkQAVBC80lX
-0Gz/YAgAgE5lafg/WBe65r8wpniUFyNrvSNwwMCSutbiMBBgjdVh43RNCmKuN6kT
-2QzTdlMB6jRyFVhrrwyQ9v4xNyNsu9rosMCiUU0rtQXcj+J8d6BXif446CIxZxiD
-vGOhiUf25k1+df6DEDMRjJpkd24wRHqhYvfaIDIq1TQt3ZtnSJCdEQjURWf2z3w/
-phM3BQveDmwfJ+Vh1Hch3IyW9cOJEf+pUi2K8kEK4qcVDrwiIxGNWwlWnhippVRx
-wbAwQBCKFFz6UoLCAfWQ6k7G3DQFXeF5EHj4s6dg7rMYB3t7jrfT3CBP/UjJS9tP
-fILEzKkVx8wEq2zwjJYQe9KbEu9SKA==
-=h/Re
------END PGP SIGNATURE-----
-
---Sig_/v7Wo3m.EzXboSEZO2Ql=1Xn--
+> ---
+>
+>  Makefile                                                                 |    2 -
+>  arch/arm/kernel/process.c                                                |    2 -
+>  arch/arm/mach-bcm/bcm_kona_smc.c                                         |    2 -
+>  arch/arm64/kernel/process.c                                              |    3 --
+>  arch/openrisc/kernel/process.c                                           |    2 -
+>  arch/parisc/kernel/firmware.c                                            |    2 -
+>  arch/parisc/kernel/process.c                                             |    3 --
+>  arch/powerpc/kernel/prom.c                                               |    1
+>  arch/powerpc/kernel/prom_init.c                                          |    2 -
+>  arch/powerpc/kernel/rtas.c                                               |    2 -
+>  arch/powerpc/kernel/udbg.c                                               |    2 -
+>  arch/s390/boot/pgm_check_info.c                                          |    2 -
+>  arch/sparc/kernel/process_32.c                                           |    3 --
+>  arch/sparc/kernel/process_64.c                                           |    3 --
+>  arch/um/include/shared/irq_user.h                                        |    1
+>  arch/um/include/shared/os.h                                              |    1
+>  arch/um/os-Linux/signal.c                                                |    2 -
+>  arch/um/os-Linux/util.c                                                  |    1
+>  arch/x86/boot/boot.h                                                     |    2 -
+>  crypto/aegis128-neon-inner.c                                             |    2 -
+>  drivers/block/xen-blkback/xenbus.c                                       |    1
+>  drivers/firmware/efi/libstub/efi-stub-helper.c                           |    2 -
+>  drivers/firmware/efi/libstub/vsprintf.c                                  |    2 -
+>  drivers/gpu/drm/amd/display/dc/dc_helper.c                               |    2 -
+>  drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h                          |    1
+>  drivers/gpu/drm/drm_print.c                                              |    2 -
+>  drivers/gpu/drm/msm/disp/msm_disp_snapshot.h                             |    1
+>  drivers/isdn/capi/capiutil.c                                             |    2 -
+>  drivers/macintosh/macio-adb.c                                            |    1
+>  drivers/macintosh/via-cuda.c                                             |    2 -
+>  drivers/macintosh/via-macii.c                                            |    2 -
+>  drivers/macintosh/via-pmu.c                                              |    2 -
+>  drivers/net/wireless/intersil/orinoco/hermes.c                           |    1
+>  drivers/net/wwan/iosm/iosm_ipc_imem.h                                    |    1
+>  drivers/pinctrl/aspeed/pinmux-aspeed.h                                   |    1
+>  drivers/scsi/elx/efct/efct_driver.h                                      |    1
+>  drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h   |    2 -
+>  drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h   |    2 -
+>  drivers/staging/media/atomisp/pci/ia_css_env.h                           |    2 -
+>  drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h |    2 -
+>  drivers/staging/media/atomisp/pci/sh_css_internal.h                      |    2 -
+>  drivers/xen/xen-scsiback.c                                               |    2 -
+>  fs/befs/debug.c                                                          |    2 -
+>  fs/reiserfs/prints.c                                                     |    2 -
+>  fs/ufs/super.c                                                           |    2 -
+>  include/acpi/platform/acgcc.h                                            |    2 -
+>  include/linux/filter.h                                                   |    2 -
+>  include/linux/kernel.h                                                   |    2 -
+>  include/linux/mISDNif.h                                                  |    1
+>  include/linux/printk.h                                                   |    2 -
+>  include/linux/stdarg.h                                                   |   11 ++++++++++
+>  include/linux/string.h                                                   |    2 -
+>  kernel/debug/kdb/kdb_support.c                                           |    1
+>  lib/debug_info.c                                                         |    3 --
+>  lib/kasprintf.c                                                          |    2 -
+>  lib/kunit/string-stream.h                                                |    2 -
+>  lib/vsprintf.c                                                           |    2 -
+>  mm/kfence/report.c                                                       |    2 -
+>  net/batman-adv/log.c                                                     |    2 -
+>  sound/aoa/codecs/onyx.h                                                  |    1
+>  sound/aoa/codecs/tas.c                                                   |    1
+>  sound/core/info.c                                                        |    1
+>  62 files changed, 44 insertions(+), 77 deletions(-)
+>
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -978,7 +978,7 @@ KBUILD_CFLAGS += -falign-functions=64
+>  endif
+>
+>  # arch Makefile may override CC so keep this after arch Makefile is included
+> -NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
+> +NOSTDINC_FLAGS += -nostdinc
+>
+>  # warn about C99 declaration after statement
+>  KBUILD_CFLAGS += -Wdeclaration-after-statement
+> --- a/arch/arm/kernel/process.c
+> +++ b/arch/arm/kernel/process.c
+> @@ -5,8 +5,6 @@
+>   *  Copyright (C) 1996-2000 Russell King - Converted to ARM.
+>   *  Original Copyright (C) 1995  Linus Torvalds
+>   */
+> -#include <stdarg.h>
+> -
+>  #include <linux/export.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/debug.h>
+> --- a/arch/arm/mach-bcm/bcm_kona_smc.c
+> +++ b/arch/arm/mach-bcm/bcm_kona_smc.c
+> @@ -10,8 +10,6 @@
+>   * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>   * GNU General Public License for more details.
+>   */
+> -
+> -#include <stdarg.h>
+>  #include <linux/smp.h>
+>  #include <linux/io.h>
+>  #include <linux/ioport.h>
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -6,9 +6,6 @@
+>   * Copyright (C) 1996-2000 Russell King - Converted to ARM.
+>   * Copyright (C) 2012 ARM Ltd.
+>   */
+> -
+> -#include <stdarg.h>
+> -
+>  #include <linux/compat.h>
+>  #include <linux/efi.h>
+>  #include <linux/elf.h>
+> --- a/arch/openrisc/kernel/process.c
+> +++ b/arch/openrisc/kernel/process.c
+> @@ -14,8 +14,6 @@
+>   */
+>
+>  #define __KERNEL_SYSCALLS__
+> -#include <stdarg.h>
+> -
+>  #include <linux/errno.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/debug.h>
+> --- a/arch/parisc/kernel/firmware.c
+> +++ b/arch/parisc/kernel/firmware.c
+> @@ -51,7 +51,7 @@
+>   *                                     prumpf  991016
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/delay.h>
+>  #include <linux/init.h>
+> --- a/arch/parisc/kernel/process.c
+> +++ b/arch/parisc/kernel/process.c
+> @@ -17,9 +17,6 @@
+>   *    Copyright (C) 2001-2014 Helge Deller <deller@gmx.de>
+>   *    Copyright (C) 2002 Randolph Chung <tausq with parisc-linux.org>
+>   */
+> -
+> -#include <stdarg.h>
+> -
+>  #include <linux/elf.h>
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+> --- a/arch/powerpc/kernel/prom.c
+> +++ b/arch/powerpc/kernel/prom.c
+> @@ -11,7 +11,6 @@
+>
+>  #undef DEBUG
+>
+> -#include <stdarg.h>
+>  #include <linux/kernel.h>
+>  #include <linux/string.h>
+>  #include <linux/init.h>
+> --- a/arch/powerpc/kernel/prom_init.c
+> +++ b/arch/powerpc/kernel/prom_init.c
+> @@ -14,7 +14,7 @@
+>  /* we cannot use FORTIFY as it brings in new symbols */
+>  #define __NO_FORTIFY
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/kernel.h>
+>  #include <linux/string.h>
+>  #include <linux/init.h>
+> --- a/arch/powerpc/kernel/rtas.c
+> +++ b/arch/powerpc/kernel/rtas.c
+> @@ -7,7 +7,7 @@
+>   * Copyright (C) 2001 IBM.
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/kernel.h>
+>  #include <linux/types.h>
+>  #include <linux/spinlock.h>
+> --- a/arch/powerpc/kernel/udbg.c
+> +++ b/arch/powerpc/kernel/udbg.c
+> @@ -5,7 +5,7 @@
+>   * c 2001 PPC 64 Team, IBM Corp
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/sched.h>
+>  #include <linux/console.h>
+> --- a/arch/s390/boot/pgm_check_info.c
+> +++ b/arch/s390/boot/pgm_check_info.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <linux/kernel.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/string.h>
+>  #include <linux/ctype.h>
+>  #include <asm/stacktrace.h>
+> @@ -8,7 +9,6 @@
+>  #include <asm/setup.h>
+>  #include <asm/sclp.h>
+>  #include <asm/uv.h>
+> -#include <stdarg.h>
+>  #include "boot.h"
+>
+>  const char hex_asc[] = "0123456789abcdef";
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -8,9 +8,6 @@
+>  /*
+>   * This file handles the architecture-dependent parts of process handling..
+>   */
+> -
+> -#include <stdarg.h>
+> -
+>  #include <linux/elfcore.h>
+>  #include <linux/errno.h>
+>  #include <linux/module.h>
+> --- a/arch/sparc/kernel/process_64.c
+> +++ b/arch/sparc/kernel/process_64.c
+> @@ -9,9 +9,6 @@
+>  /*
+>   * This file handles the architecture-dependent parts of process handling..
+>   */
+> -
+> -#include <stdarg.h>
+> -
+>  #include <linux/errno.h>
+>  #include <linux/export.h>
+>  #include <linux/sched.h>
+> --- a/arch/um/include/shared/irq_user.h
+> +++ b/arch/um/include/shared/irq_user.h
+> @@ -7,7 +7,6 @@
+>  #define __IRQ_USER_H__
+>
+>  #include <sysdep/ptrace.h>
+> -#include <stdbool.h>
+>
+>  enum um_irq_type {
+>         IRQ_READ,
+> --- a/arch/um/include/shared/os.h
+> +++ b/arch/um/include/shared/os.h
+> @@ -8,7 +8,6 @@
+>  #ifndef __OS_H__
+>  #define __OS_H__
+>
+> -#include <stdarg.h>
+>  #include <irq_user.h>
+>  #include <longjmp.h>
+>  #include <mm_id.h>
+> --- a/arch/um/os-Linux/signal.c
+> +++ b/arch/um/os-Linux/signal.c
+> @@ -67,7 +67,7 @@ int signals_enabled;
+>  #ifdef UML_CONFIG_UML_TIME_TRAVEL_SUPPORT
+>  static int signals_blocked;
+>  #else
+> -#define signals_blocked false
+> +#define signals_blocked 0
+>  #endif
+>  static unsigned int signals_pending;
+>  static unsigned int signals_active = 0;
+> --- a/arch/um/os-Linux/util.c
+> +++ b/arch/um/os-Linux/util.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
+>   */
+>
+> +#include <stdarg.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <unistd.h>
+> --- a/arch/x86/boot/boot.h
+> +++ b/arch/x86/boot/boot.h
+> @@ -18,7 +18,7 @@
+>
+>  #ifndef __ASSEMBLY__
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/edd.h>
+>  #include <asm/setup.h>
+> --- a/crypto/aegis128-neon-inner.c
+> +++ b/crypto/aegis128-neon-inner.c
+> @@ -15,8 +15,6 @@
+>
+>  #define AEGIS_BLOCK_SIZE       16
+>
+> -#include <stddef.h>
+> -
+>  extern int aegis128_have_aes_insn;
+>
+>  void *memcpy(void *dest, const void *src, size_t n);
+> --- a/drivers/block/xen-blkback/xenbus.c
+> +++ b/drivers/block/xen-blkback/xenbus.c
+> @@ -8,7 +8,6 @@
+>
+>  #define pr_fmt(fmt) "xen-blkback: " fmt
+>
+> -#include <stdarg.h>
+>  #include <linux/module.h>
+>  #include <linux/kthread.h>
+>  #include <xen/events.h>
+> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
+> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> @@ -7,7 +7,7 @@
+>   * Copyright 2011 Intel Corporation; author Matt Fleming
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/ctype.h>
+>  #include <linux/efi.h>
+> --- a/drivers/firmware/efi/libstub/vsprintf.c
+> +++ b/drivers/firmware/efi/libstub/vsprintf.c
+> @@ -10,7 +10,7 @@
+>   * Oh, it's a waste of space, but oh-so-yummy for debugging.
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/compiler.h>
+>  #include <linux/ctype.h>
+> --- a/drivers/gpu/drm/amd/display/dc/dc_helper.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_helper.c
+> @@ -28,9 +28,9 @@
+>   */
+>
+>  #include <linux/delay.h>
+> +#include <linux/stdarg.h>
+>
+>  #include "dm_services.h"
+> -#include <stdarg.h>
+>
+>  #include "dc.h"
+>  #include "dc_dmub_srv.h"
+> --- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
+> +++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
+> @@ -39,7 +39,6 @@
+>  #include <linux/types.h>
+>  #include <linux/string.h>
+>  #include <linux/delay.h>
+> -#include <stdarg.h>
+>
+>  #include "atomfirmware.h"
+>
+> --- a/drivers/gpu/drm/drm_print.c
+> +++ b/drivers/gpu/drm/drm_print.c
+> @@ -25,7 +25,7 @@
+>
+>  #define DEBUG /* for pr_debug() */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/io.h>
+>  #include <linux/moduleparam.h>
+> --- a/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
+> +++ b/drivers/gpu/drm/msm/disp/msm_disp_snapshot.h
+> @@ -25,7 +25,6 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/kthread.h>
+>  #include <linux/devcoredump.h>
+> -#include <stdarg.h>
+>  #include "msm_kms.h"
+>
+>  #define MSM_DISP_SNAPSHOT_MAX_BLKS             10
+> --- a/drivers/isdn/capi/capiutil.c
+> +++ b/drivers/isdn/capi/capiutil.c
+> @@ -379,7 +379,7 @@ static char *pnames[] =
+>         /*2f */ "Useruserdata"
+>  };
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  /*-------------------------------------------------------*/
+>  static _cdebbuf *bufprint(_cdebbuf *cdb, char *fmt, ...)
+> --- a/drivers/macintosh/macio-adb.c
+> +++ b/drivers/macintosh/macio-adb.c
+> @@ -2,7 +2,6 @@
+>  /*
+>   * Driver for the ADB controller in the Mac I/O (Hydra) chip.
+>   */
+> -#include <stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+> --- a/drivers/macintosh/via-cuda.c
+> +++ b/drivers/macintosh/via-cuda.c
+> @@ -9,7 +9,7 @@
+>   *
+>   * Copyright (C) 1996 Paul Mackerras.
+>   */
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+> --- a/drivers/macintosh/via-macii.c
+> +++ b/drivers/macintosh/via-macii.c
+> @@ -23,8 +23,6 @@
+>   * Apple's "ADB Analyzer" bus sniffer is invaluable:
+>   *   ftp://ftp.apple.com/developer/Tool_Chest/Devices_-_Hardware/Apple_Desktop_Bus/
+>   */
+> -
+> -#include <stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+> --- a/drivers/macintosh/via-pmu.c
+> +++ b/drivers/macintosh/via-pmu.c
+> @@ -18,7 +18,7 @@
+>   *    a sleep or a freq. switch
+>   *
+>   */
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/mutex.h>
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
+> --- a/drivers/net/wireless/intersil/orinoco/hermes.c
+> +++ b/drivers/net/wireless/intersil/orinoco/hermes.c
+> @@ -79,7 +79,6 @@
+>
+>  #undef HERMES_DEBUG
+>  #ifdef HERMES_DEBUG
+> -#include <stdarg.h>
+>
+>  #define DEBUG(lvl, stuff...) if ((lvl) <= HERMES_DEBUG) DMSG(stuff)
+>
+> --- a/drivers/net/wwan/iosm/iosm_ipc_imem.h
+> +++ b/drivers/net/wwan/iosm/iosm_ipc_imem.h
+> @@ -7,7 +7,6 @@
+>  #define IOSM_IPC_IMEM_H
+>
+>  #include <linux/skbuff.h>
+> -#include <stdbool.h>
+>
+>  #include "iosm_ipc_mmio.h"
+>  #include "iosm_ipc_pcie.h"
+> --- a/drivers/pinctrl/aspeed/pinmux-aspeed.h
+> +++ b/drivers/pinctrl/aspeed/pinmux-aspeed.h
+> @@ -5,7 +5,6 @@
+>  #define ASPEED_PINMUX_H
+>
+>  #include <linux/regmap.h>
+> -#include <stdbool.h>
+>
+>  /*
+>   * The ASPEED SoCs provide typically more than 200 pins for GPIO and other
+> --- a/drivers/scsi/elx/efct/efct_driver.h
+> +++ b/drivers/scsi/elx/efct/efct_driver.h
+> @@ -10,7 +10,6 @@
+>  /***************************************************************************
+>   * OS specific includes
+>   */
+> -#include <stdarg.h>
+>  #include <linux/module.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/firmware.h>
+> --- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
+> +++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/host/isp_local.h
+> @@ -16,8 +16,6 @@
+>  #ifndef __ISP_LOCAL_H_INCLUDED__
+>  #define __ISP_LOCAL_H_INCLUDED__
+>
+> -#include <stdbool.h>
+> -
+>  #include "isp_global.h"
+>
+>  #include <isp2400_support.h>
+> --- a/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
+> +++ b/drivers/staging/media/atomisp/pci/hive_isp_css_include/print_support.h
+> @@ -16,7 +16,7 @@
+>  #ifndef __PRINT_SUPPORT_H_INCLUDED__
+>  #define __PRINT_SUPPORT_H_INCLUDED__
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  extern int (*sh_css_printf)(const char *fmt, va_list args);
+>  /* depends on host supplied print function in ia_css_init() */
+> --- a/drivers/staging/media/atomisp/pci/ia_css_env.h
+> +++ b/drivers/staging/media/atomisp/pci/ia_css_env.h
+> @@ -17,7 +17,7 @@
+>  #define __IA_CSS_ENV_H
+>
+>  #include <type_support.h>
+> -#include <stdarg.h> /* va_list */
+> +#include <linux/stdarg.h> /* va_list */
+>  #include "ia_css_types.h"
+>  #include "ia_css_acc_types.h"
+>
+> --- a/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
+> +++ b/drivers/staging/media/atomisp/pci/runtime/debug/interface/ia_css_debug.h
+> @@ -19,7 +19,7 @@
+>  /*! \file */
+>
+>  #include <type_support.h>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include "ia_css_types.h"
+>  #include "ia_css_binary.h"
+>  #include "ia_css_frame_public.h"
+> --- a/drivers/staging/media/atomisp/pci/sh_css_internal.h
+> +++ b/drivers/staging/media/atomisp/pci/sh_css_internal.h
+> @@ -20,7 +20,7 @@
+>  #include <math_support.h>
+>  #include <type_support.h>
+>  #include <platform_support.h>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #if !defined(ISP2401)
+>  #include "input_formatter.h"
+> --- a/drivers/xen/xen-scsiback.c
+> +++ b/drivers/xen/xen-scsiback.c
+> @@ -33,8 +33,6 @@
+>
+>  #define pr_fmt(fmt) "xen-pvscsi: " fmt
+>
+> -#include <stdarg.h>
+> -
+>  #include <linux/module.h>
+>  #include <linux/utsname.h>
+>  #include <linux/interrupt.h>
+> --- a/fs/befs/debug.c
+> +++ b/fs/befs/debug.c
+> @@ -14,7 +14,7 @@
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  #ifdef __KERNEL__
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/string.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/kernel.h>
+> --- a/fs/reiserfs/prints.c
+> +++ b/fs/reiserfs/prints.c
+> @@ -8,7 +8,7 @@
+>  #include <linux/string.h>
+>  #include <linux/buffer_head.h>
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  static char error_buf[1024];
+>  static char fmt_buf[1024];
+> --- a/fs/ufs/super.c
+> +++ b/fs/ufs/super.c
+> @@ -70,7 +70,7 @@
+>  #include <linux/module.h>
+>  #include <linux/bitops.h>
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/uaccess.h>
+>
+> --- a/include/acpi/platform/acgcc.h
+> +++ b/include/acpi/platform/acgcc.h
+> @@ -22,7 +22,7 @@ typedef __builtin_va_list va_list;
+>  #define va_arg(v, l)            __builtin_va_arg(v, l)
+>  #define va_copy(d, s)           __builtin_va_copy(d, s)
+>  #else
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #endif
+>  #endif
+>
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -5,8 +5,6 @@
+>  #ifndef __LINUX_FILTER_H__
+>  #define __LINUX_FILTER_H__
+>
+> -#include <stdarg.h>
+> -
+>  #include <linux/atomic.h>
+>  #include <linux/refcount.h>
+>  #include <linux/compat.h>
+> --- a/include/linux/kernel.h
+> +++ b/include/linux/kernel.h
+> @@ -2,7 +2,7 @@
+>  #ifndef _LINUX_KERNEL_H
+>  #define _LINUX_KERNEL_H
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/align.h>
+>  #include <linux/limits.h>
+>  #include <linux/linkage.h>
+> --- a/include/linux/mISDNif.h
+> +++ b/include/linux/mISDNif.h
+> @@ -18,7 +18,6 @@
+>  #ifndef mISDNIF_H
+>  #define mISDNIF_H
+>
+> -#include <stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/errno.h>
+>  #include <linux/socket.h>
+> --- a/include/linux/printk.h
+> +++ b/include/linux/printk.h
+> @@ -2,7 +2,7 @@
+>  #ifndef __KERNEL_PRINTK__
+>  #define __KERNEL_PRINTK__
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/init.h>
+>  #include <linux/kern_levels.h>
+>  #include <linux/linkage.h>
+> new file mode 100644
+> --- /dev/null
+> +++ b/include/linux/stdarg.h
+> @@ -0,0 +1,11 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +#ifndef _LINUX_STDARG_H
+> +#define _LINUX_STDARG_H
+> +
+> +typedef __builtin_va_list va_list;
+> +#define va_start(v, l) __builtin_va_start(v, l)
+> +#define va_end(v)      __builtin_va_end(v)
+> +#define va_arg(v, T)   __builtin_va_arg(v, T)
+> +#define va_copy(d, s)  __builtin_va_copy(d, s)
+> +
+> +#endif
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -6,7 +6,7 @@
+>  #include <linux/types.h>       /* for size_t */
+>  #include <linux/stddef.h>      /* for NULL */
+>  #include <linux/errno.h>       /* for E2BIG */
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <uapi/linux/string.h>
+>
+>  extern char *strndup_user(const char __user *, long);
+> --- a/kernel/debug/kdb/kdb_support.c
+> +++ b/kernel/debug/kdb/kdb_support.c
+> @@ -10,7 +10,6 @@
+>   * 03/02/13    added new 2.5 kallsyms <xavier.bru@bull.net>
+>   */
+>
+> -#include <stdarg.h>
+>  #include <linux/types.h>
+>  #include <linux/sched.h>
+>  #include <linux/mm.h>
+> --- a/lib/debug_info.c
+> +++ b/lib/debug_info.c
+> @@ -5,8 +5,6 @@
+>   * CONFIG_DEBUG_INFO_REDUCED. Please do not add actual code. However,
+>   * adding appropriate #includes is fine.
+>   */
+> -#include <stdarg.h>
+> -
+>  #include <linux/cred.h>
+>  #include <linux/crypto.h>
+>  #include <linux/dcache.h>
+> @@ -22,6 +20,7 @@
+>  #include <linux/net.h>
+>  #include <linux/sched.h>
+>  #include <linux/slab.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/types.h>
+>  #include <net/addrconf.h>
+>  #include <net/sock.h>
+> --- a/lib/kasprintf.c
+> +++ b/lib/kasprintf.c
+> @@ -5,7 +5,7 @@
+>   *  Copyright (C) 1991, 1992  Linus Torvalds
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/export.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+> --- a/lib/kunit/string-stream.h
+> +++ b/lib/kunit/string-stream.h
+> @@ -11,7 +11,7 @@
+>
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  struct string_stream_fragment {
+>         struct kunit *test;
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -17,7 +17,7 @@
+>   * - scnprintf and vscnprintf
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>  #include <linux/build_bug.h>
+>  #include <linux/clk.h>
+>  #include <linux/clk-provider.h>
+> --- a/mm/kfence/report.c
+> +++ b/mm/kfence/report.c
+> @@ -5,7 +5,7 @@
+>   * Copyright (C) 2020, Google LLC.
+>   */
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include <linux/kernel.h>
+>  #include <linux/lockdep.h>
+> --- a/net/batman-adv/log.c
+> +++ b/net/batman-adv/log.c
+> @@ -7,7 +7,7 @@
+>  #include "log.h"
+>  #include "main.h"
+>
+> -#include <stdarg.h>
+> +#include <linux/stdarg.h>
+>
+>  #include "trace.h"
+>
+> --- a/sound/aoa/codecs/onyx.h
+> +++ b/sound/aoa/codecs/onyx.h
+> @@ -6,7 +6,6 @@
+>   */
+>  #ifndef __SND_AOA_CODEC_ONYX_H
+>  #define __SND_AOA_CODEC_ONYX_H
+> -#include <stddef.h>
+>  #include <linux/i2c.h>
+>  #include <asm/pmac_low_i2c.h>
+>  #include <asm/prom.h>
+> --- a/sound/aoa/codecs/tas.c
+> +++ b/sound/aoa/codecs/tas.c
+> @@ -58,7 +58,6 @@
+>   *    and up to the hardware designer to not wire
+>   *    them up in some weird unusable way.
+>   */
+> -#include <stddef.h>
+>  #include <linux/i2c.h>
+>  #include <asm/pmac_low_i2c.h>
+>  #include <asm/prom.h>
+> --- a/sound/core/info.c
+> +++ b/sound/core/info.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/utsname.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/mutex.h>
+> -#include <stdarg.h>
+>
+>  int snd_info_check_reserved_words(const char *str)
+>  {

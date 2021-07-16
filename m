@@ -2,86 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78023CB5C3
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jul 2021 12:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74783CB641
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jul 2021 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237336AbhGPKNF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Jul 2021 06:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237339AbhGPKNF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Jul 2021 06:13:05 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEA8C06175F;
-        Fri, 16 Jul 2021 03:10:09 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id w14so12224428edc.8;
-        Fri, 16 Jul 2021 03:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=I9ZH6xY225ft4o01XlrzMLmvWLH2occkG4KNrsfQi6M=;
-        b=tC0JMTzTrulko5j72cWSlkfiJqM8a7ageHXvYhG3Uv6xUKwdlYvC0cJjzCdRwmT1Wz
-         GVd1JYL2BhKXi1HEfgZ54jOmSMkgCdMhzX+ops3cnOoSyx8WIr/kJT9ztLWuki1ge/mK
-         pRDQ4USJPnzULA2cCgk4K3Lz+1SfdmbydOR5ZNfER8hTkNwlKOS1ytGrEkNAWKnNUf5e
-         fvd19moc8UFUM4Kv+XKDC2Gvc5LMRcC0UFj0IxNr6CEb4x6ZkOAukzfOi+vX2oJ2goHv
-         Prg1mk8vBoHNtE+Db6VkOg6ddPiTKWbFS/RlWINgnq3wPptv6EKPyeHlGdm7U1NcoSZY
-         RpTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=I9ZH6xY225ft4o01XlrzMLmvWLH2occkG4KNrsfQi6M=;
-        b=D4EDFO3jUN4TM+skBvZBMeCfE12MBcvz4m7TQrRADqAa+C5ubbvRezYmJVpHROAjse
-         LU/2+L3H6sj3sS1qJ+fc6eWDXalrOFBvQnCpX8BmN/g+D3vgBmq8hgixY5fHwl5tVq0s
-         duv9fgcB3KCHZFEb9/knDtfiRnf8x52SVIpvf2fOh4OnCiTOEPnJgGpN5XGjI49Gujbe
-         8ocFQ87dipnwFiJtWSVcItqUZNV/HZvd7GydUK3LSV98gZGVG5+xPHL1+Ve/smppIYsq
-         O3qx8NlZcGPyce/W6PK3HPEDT835jbOua3B2aebIYAFSPF1DPHD/zNjqPRICG3p4sU5z
-         IxyA==
-X-Gm-Message-State: AOAM532A6mGntew+oroISJDI37qif/PpsJ34I0nBH0cQ35DLlSjSIbuz
-        UbTFocLSDKH5+DdtpYzDrOC9Cam0BA==
-X-Google-Smtp-Source: ABdhPJyFgoeTwHNz7AcIUGS5494lDOaqMMKys9Mz1FQtTk4qbtMVe0JpTxrRTBYXtbfa+wzuIOJjxg==
-X-Received: by 2002:a05:6402:1849:: with SMTP id v9mr13211273edy.108.1626430208459;
-        Fri, 16 Jul 2021 03:10:08 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.253.48])
-        by smtp.gmail.com with ESMTPSA id e22sm3561811edu.35.2021.07.16.03.10.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jul 2021 03:10:08 -0700 (PDT)
-Date:   Fri, 16 Jul 2021 13:10:06 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>, hch@infradead.org,
+        id S238646AbhGPKtU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Jul 2021 06:49:20 -0400
+Received: from mail-dm6nam08on2089.outbound.protection.outlook.com ([40.107.102.89]:33046
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238724AbhGPKtU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 16 Jul 2021 06:49:20 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TnyheKwUAXt8fpB7C+end9N6O1EDc3qA5/4WypGj3qxZkJlu7vH1CG5qrqpjbTYyIpaV5HUSEeOS3Q3KekOhM7WRXZDoAav2t+Jq+NCqcFLnxLZLxalWW/yMTaNnjkZ2rfnDiMokvpaXXbUaTO73zwlF9g4stFQIquWU34M1embF5fsXXXkyMSP7kWbx1XFV+72mFLGd6MkRyO7twucY/oVmc0TtyfNiksKtqqsT7+mA1grtR/0dvJPbzuQX3ec5hngat1IgvbTxqBDeCeghy9r8ShoNvwnLlLugmKreOKqhO0dd1AZziV9/HJSGFMAXpXanK8qE8D4cqK9Hnk4Rmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fFfoIV0QzJ2CqNL6jGd0YeUCDEWHpfwKHhHKrnpri70=;
+ b=WpuMWZlZbiUnoelB790/1f7/SO+VZ2Vu6Nq6Hc7yB1WZ9p+NXofdTWQAxWjYxERkqgLWZa4WXRBfZs3dTnKKHtWD0K0BP5OBH8M9yYzb7SnsDimuJviMp7fNTmOncftGmMNqG86BQdDJt7rMCrz5en6y1uX/pbRmFrSp8Fpn4B7LcDGhQNCGrsm6aa39Hm0D7u0NlIGmKyU9KemHp3pFmv09hepLb6E1FqIN8OfE6hZYXEeCKhUtyKteMZV3oAXNEhFn7K2Kb5xF1M+ZnaAB0igtopdj+1b1k99j+WeaLnUlkMax7tvpQ2kyrQyMTt7UaNYvsGKpUFDcRKRpfQZNnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=lists.linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fFfoIV0QzJ2CqNL6jGd0YeUCDEWHpfwKHhHKrnpri70=;
+ b=PmFA9AvmPfEVoElj/Z45TQMgfg8o7BpSU46n1yYpXo6zvHF9zO5LIbAxXqMs74vVbHfJaE6g/8egL91Rn9icVbQoOGo8BL1D14cqXJXH6YtFGBPB74z+WTYI7RMghex0oERbl63S0KRIvjvj7H6sbbhhWbg3yzpbkDG4ENgDb134CAWsCffydwHwhat3bfUT9HnVmuBh36FN7YlMrf89EWhKTH1/Dl4VxV+vZEKrzz7rGZ8KOjde3TwqQrpfn8niYdAMQrgpNlMBJkZI98pPWg5YiILL8lI2PJN8SxwE/GJG16wrY2rFUPn0RCnxDw/TBqo1IptA6P3xKRv6GFkRuQ==
+Received: from BN6PR16CA0048.namprd16.prod.outlook.com (2603:10b6:405:14::34)
+ by MN2PR12MB3568.namprd12.prod.outlook.com (2603:10b6:208:c3::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.21; Fri, 16 Jul
+ 2021 10:46:23 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:14:cafe::86) by BN6PR16CA0048.outlook.office365.com
+ (2603:10b6:405:14::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend
+ Transport; Fri, 16 Jul 2021 10:46:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; lists.linaro.org; dkim=none (message not signed)
+ header.d=none;lists.linaro.org; dmarc=pass action=none
+ header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4331.21 via Frontend Transport; Fri, 16 Jul 2021 10:46:23 +0000
+Received: from [10.26.49.10] (172.20.187.6) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 16 Jul
+ 2021 10:46:20 +0000
+Subject: Re: submit.c:27:17: error: expected ')' before '__VA_OPT__'
+ current->comm __VA_OPT__(,) __VA_ARGS__)
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2] Decouple build from userspace headers
-Message-ID: <YPFa/tIF38eTJt1B@localhost.localdomain>
-References: <YO3txvw87MjKfdpq@localhost.localdomain>
- <YO8ioz4sHwcUAkdt@localhost.localdomain>
- <CADYN=9+ZO1XHu2YZYy7s+6_qAh1obi2wk+d4A3vKmxtkoNvQLg@mail.gmail.com>
+        open list <linux-kernel@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Nathan Chancellor <natechancellor@gmail.com>
+References: <CA+G9fYshrRFN=Qa62eLKPbKHpRt0L-FuRrp0ebc29gdBqFMxeA@mail.gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <f889adb9-dc01-79e3-12fb-1e66485246df@nvidia.com>
+Date:   Fri, 16 Jul 2021 11:46:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADYN=9+ZO1XHu2YZYy7s+6_qAh1obi2wk+d4A3vKmxtkoNvQLg@mail.gmail.com>
+In-Reply-To: <CA+G9fYshrRFN=Qa62eLKPbKHpRt0L-FuRrp0ebc29gdBqFMxeA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.187.6]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2e118498-bcc3-4860-ff22-08d94846f480
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3568:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB35682DE06834B4C6494E62B8D9119@MN2PR12MB3568.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GkCXnlYnCKb1kjMOCyrgJDSr80vAJL+jSG73PCydUOK/0OY7F0IzYbVeXjI394NGG5cX3zZgeYIVfXHtPjLFktkjlAQ9AQUDuBtO5Iu6gcaItQF8g/6rXoGXhLPH1gG6l96SHEP8nejd+IgiZqXaWK8nn5BEk+Lyv5MhRIKxQ0/Qm2QXdRJ68MzhonzGkqF/kWnLuiDz41bCAK8+jVVUhJONn+48M3pOzLW9SqIltT1yRz4XAHspTn5Mx38qUjN0z8hd/htozTdXG5wQxUvd0FfT7T9KLxZPn1KFZxlfn8cX3eRgxE9rjXeBShZn4ZmzmC/5K3E1Vc11NY6lKzHZaZ/Lv2EhJjaEfBC655MXiFP1dts/yGlaef6rvfrDpbH/scz3zvQWAnyDtZ6lCbwcybE8re3LrHMmwY/dGiddORgyFvCAcwVxJoUVZXLyx4afK/OZ+VHh7ElJo1gMHpFVbNro1bZTESJ7sbJlCgUPoXCPjOmGFoRhvYSPQFAeEgWAIY7W0C7MtR8gr19QxTRiQ41HMv9A/GREXbfZU59+cbntT3yaPHliLNv0R0gdbZ5eKyv2sPfguWe3lunrZnZSaljWy6XiuaVYOi1gYA1jOwHueNxKr2pFciVx2Js2JRJzQ6ygCQ1TijLjl3vMA7r642aweHsyRWnSV8XpX/nZoexUX1nt4k6eXFPtVBTzBM143YVMSC70eQHekjxR8SKaHrkS0eeemKCtrz0xPklSLNG5qPNmZTS0Rp4JMMvHwQhRP+IhoYpt3SgdveZFg1R663y9/9xJik60rx5m2wLNeO2+6mhGQoL99f0itJH0Yg6LY2sWMESMM+vhlKieWtjL3qo3ujLxI/+i0mvMpGR3nOknMG+hDqx0jm9LVqgdsL5d
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(376002)(39860400002)(36840700001)(46966006)(316002)(8936002)(70206006)(82740400003)(36906005)(2906002)(16526019)(186003)(36756003)(26005)(2616005)(54906003)(70586007)(478600001)(4326008)(31686004)(110136005)(31696002)(336012)(426003)(8676002)(7416002)(16576012)(53546011)(34020700004)(47076005)(7636003)(82310400003)(966005)(86362001)(356005)(36860700001)(83380400001)(5660300002)(43740500002)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2021 10:46:23.3862
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e118498-bcc3-4860-ff22-08d94846f480
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3568
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 11:03:41AM +0200, Anders Roxell wrote:
-> On Wed, 14 Jul 2021 at 19:45, Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> >
 
-> In file included from
-> /home/anders/src/kernel/testing/crypto/aegis128-neon-inner.c:7:
-> /home/anders/src/kernel/testing/arch/arm64/include/asm/neon-intrinsics.h:33:10:
-> fatal error: arm_neon.h: No such file or directory
->    33 | #include <arm_neon.h>
->       |          ^~~~~~~~~~~~
+On 15/07/2021 19:36, Naresh Kamboju wrote:
+> Regression detected on  Linux next tag 20210715 for arm64 due to the
+> following patch with
+>  - gcc-7 - FAILED
+>  -  clang-10 - FAILED
+>  -  clang-11- FAILED
+> But PASS with gcc-11 and clang-12
+> 
+> drm/tegra: Implement job submission part of new UAPI
+> Implement the job submission IOCTL with a minimum feature set.
+> 
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> 
+> Build error:
+> ------------
+>   CC [M]  drivers/gpu/drm/tegra/submit.o
+> In file included include/linux/device.h:15:0,
+>                  include/linux/host1x.h:9,
+>                  drivers/gpu/drm/tegra/submit.c:6:
+> drivers/gpu/drm/tegra/submit.c: In function 'submit_copy_gather_data':
+> drivers/gpu/drm/tegra/submit.c:27:17: error: expected ')' before '__VA_OPT__'
+>    current->comm __VA_OPT__(,) __VA_ARGS__)
+>                  ^
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> ref:
+> https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/jobs/1425953551#L197
+> 
+> https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=juno,label=docker-buster-lkft/1068/consoleText
 
-> If I revert this patch I can build it.
 
-Please, see followup fixes or grab new -mm.
-https://lore.kernel.org/lkml/YO8ioz4sHwcUAkdt@localhost.localdomain/
+Thanks, yes I am seeing the same. The following fixes this and I will
+send a patch to get this corrected.
+
+diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
+index c53b7207c478..e49630089149 100644
+--- a/drivers/gpu/drm/tegra/submit.c
++++ b/drivers/gpu/drm/tegra/submit.c
+@@ -24,7 +24,7 @@
+ #define SUBMIT_ERR(context, fmt, ...) \
+        dev_err_ratelimited(context->client->base.dev, \
+                "%s: job submission failed: " fmt "\n", \
+-               current->comm __VA_OPT__(,) __VA_ARGS__)
++               current->comm, ##__VA_ARGS__)
+
+ static struct tegra_drm_mapping *
+ tegra_drm_mapping_get(struct tegra_drm_context *context, u32 id)
+
+
+Cheers
+Jon
+
+-- 
+nvpublic

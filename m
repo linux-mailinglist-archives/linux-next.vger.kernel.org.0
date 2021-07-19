@@ -2,81 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1793CCBAB
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 02:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9895E3CCBDB
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 02:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbhGSASi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 18 Jul 2021 20:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbhGSASh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 18 Jul 2021 20:18:37 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5345EC061762;
-        Sun, 18 Jul 2021 17:15:38 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id m13so4287511qvh.8;
-        Sun, 18 Jul 2021 17:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FAaddWpYrInFFno4A8ALowrXM8vpnnyjPuQV+kmFE1E=;
-        b=mDQ5ecvjIRgad2AmBvKN3oPlsIruHmyls0vMlZSYo0quHKPCzxo7i+/zF5ZPnJh4zd
-         af3qe49xTbBPRcW7TSE0LcVCtA71mtb0NoN+XEAEQBStsDUxKWsncQdTkqIXOVyd65gL
-         95+Ta/qIaP09kcnpT3grAbzoxzIr9r871HXDg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FAaddWpYrInFFno4A8ALowrXM8vpnnyjPuQV+kmFE1E=;
-        b=c3YaBeIYhITI4E99im9q2NF93FRseMczRQZzDzrVq1J2nwkzJLhAbDNGLhzS9Vlk1I
-         n3TFMdmcieQ5yyB6gpTlDtgmKirAI9kfPTTJ4UVFZ1BjonPXMRsArkKSgwnEWvWvvZs3
-         VVFW8cE+zLabUCXh0nhvC2QSqDMGsvr3UBhvcY6XmJY5uE39Vk/4NjzdpnFRl5zqdWXq
-         OUeUTicou4/isDLhU3k56vdB97MEzhtgjAyWy35xdDSt2i3e9OEIzmsIMcGMm1T2zuMA
-         aUWOvd3Sa+5CGD4yrXBgMhcf+k90STUJ8xKGTQVO3uOpR5p/Yje8eHSMjyLPz5BkRAiG
-         FTDA==
-X-Gm-Message-State: AOAM5335fEOQURTvAqRs6EWx73dnYC0bkR7pMauOa2ppHZjbsQz1eSPL
-        LoFvzbxMOSxgUxzWc/lDsFRAqz6rkGbOLD4yXxYNGCMr
-X-Google-Smtp-Source: ABdhPJyoQARF6fZitcHiSnSEbVzsd0ZFXDGtDSpEDOEVD8ImjxY0C0lCBpgAior9HiQqp1HdpGi4W1c4XvS1DHxnvCk=
-X-Received: by 2002:ad4:55ef:: with SMTP id bu15mr21762425qvb.43.1626653737518;
- Sun, 18 Jul 2021 17:15:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210719095150.75af9e42@canb.auug.org.au>
-In-Reply-To: <20210719095150.75af9e42@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 19 Jul 2021 00:15:25 +0000
-Message-ID: <CACPK8XfQ9nAr=tsCsce6Bf4HAtWZ+bAVAhx4tBkwYahurpi0Eg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the aspeed tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        id S233759AbhGSAym (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 18 Jul 2021 20:54:42 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:52091 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233530AbhGSAym (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 18 Jul 2021 20:54:42 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GSjwD2stzz9sRf;
+        Mon, 19 Jul 2021 10:51:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1626655902;
+        bh=SmOQ1yrThLkTVeJ5jlo9RWwKgnEmPbixTf/sBetw5EA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sSIm38iQ5mDjFfpTn+S0Or0UMrOOfG9blitMhdkzDRIsiDjfT50Ul9gFfiVJG7UVu
+         R/RKa+yMADKc+MLHpktkjYbPBOWMFvXT4MdaWV7/kOqUd8BKQAkoEtVXdxP9kU0pyU
+         mSFAuvG3flOsDB1Eo9m+Pv2lqXEmcCi8fgLFwV/6UHYUZKfkcnXPQpAgCK1soAzoCX
+         YmGWg/6+TC1X+I5OrGYkUXWKE+F8JpD/AxrqggSWKvlliuoY25BHyOZosz0ceYfpvL
+         j+WHASIpdKjrIMrweDDkJlmkJYs1JXwBiAXJqPlwUT4j0ewvg9HHhahfWLKq+XKHrW
+         QeeburEQdu+0A==
+Date:   Mon, 19 Jul 2021 10:51:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Cody Haas <chaas@riotgames.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lisa Watanabe <lwatanabe@riotgames.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Zvi Effron <zeffron@riotgames.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20210719105138.2426741b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/tbaoWTj/FgoKmq9_RejeweE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, 18 Jul 2021 at 23:52, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the aspeed tree got a conflict in:
->
->   arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
->
-> between commit:
->
->   faffd1b2bde3 ("ARM: dts: everest: Add phase corrections for eMMC")
->
-> from Linus' tree and commit:
->
->   315cc563d047 ("ARM: dts: everest: Add phase corrections for eMMC")
->
-> from the aspeed tree.
+--Sig_/tbaoWTj/FgoKmq9_RejeweE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I've rebased the newer patch on the older one and pushed it
-out, so we should be good to go tomorrow.
+Hi all,
 
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  net/bpf/test_run.c
+
+between commit:
+
+  5e21bb4e8125 ("bpf, test: fix NULL pointer dereference on invalid expecte=
+d_attach_type")
+
+from the net tree and commit:
+
+  47316f4a3053 ("bpf: Support input xdp_md context in BPF_PROG_TEST_RUN")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+diff --cc net/bpf/test_run.c
+index 1cc75c811e24,cda8375bbbaf..000000000000
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@@ -697,15 -756,24 +756,27 @@@ int bpf_prog_test_run_xdp(struct bpf_pr
+  	struct netdev_rx_queue *rxqueue;
+  	struct xdp_buff xdp =3D {};
+  	u32 retval, duration;
++ 	struct xdp_md *ctx;
+  	u32 max_data_sz;
+  	void *data;
+- 	int ret;
++ 	int ret =3D -EINVAL;
+ =20
+ +	if (prog->expected_attach_type =3D=3D BPF_XDP_DEVMAP ||
+ +	    prog->expected_attach_type =3D=3D BPF_XDP_CPUMAP)
+ +		return -EINVAL;
+- 	if (kattr->test.ctx_in || kattr->test.ctx_out)
+- 		return -EINVAL;
++ 	ctx =3D bpf_ctx_init(kattr, sizeof(struct xdp_md));
++ 	if (IS_ERR(ctx))
++ 		return PTR_ERR(ctx);
++=20
++ 	if (ctx) {
++ 		/* There can't be user provided data before the meta data */
++ 		if (ctx->data_meta || ctx->data_end !=3D size ||
++ 		    ctx->data > ctx->data_end ||
++ 		    unlikely(xdp_metalen_invalid(ctx->data)))
++ 			goto free_ctx;
++ 		/* Meta data is allocated from the headroom */
++ 		headroom -=3D ctx->data;
++ 	}
+ =20
+  	/* XDP have extra tailroom as (most) drivers use full page */
+  	max_data_sz =3D 4096 - headroom - tailroom;
+
+--Sig_/tbaoWTj/FgoKmq9_RejeweE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD0zJoACgkQAVBC80lX
+0GwqOQgAhhIjnZxsNIulTAgCbUTi7bmTRXkBcabxW2Pyxv1XSyXC9TTgJAqFJvVR
+zpvfmOVJAbVuEeur08Xn+yeafXkxS8qA9XPCeuCYf71bw/Drzqu//wOWLurFcizT
+7j4HbxaaigoyNG+XbIwA2bCjB2fsi6PU4vYK5eh1WxTydQDS48mx+F7CbyJP3SYs
+tb3JdY5UGDVN7Oqh/HoShgP9dJXxARALccqXXrLztEX90wlAYf7BVe19PVxnpB1B
+/oqRdliy7GF7ZE3rlheHmTakwKuUA2oqj95BI5Fhp/Nn547Okrq8VbFcKe2cI5Im
+dBTK1tV54BQGdW4kn6y6InZ4s3HewQ==
+=mnov
+-----END PGP SIGNATURE-----
+
+--Sig_/tbaoWTj/FgoKmq9_RejeweE--

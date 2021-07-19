@@ -2,220 +2,172 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ED53CD472
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 14:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F3F3CD480
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 14:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbhGSLbi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Jul 2021 07:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236882AbhGSLbc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Jul 2021 07:31:32 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6FCC061574
-        for <linux-next@vger.kernel.org>; Mon, 19 Jul 2021 04:27:08 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id v1so23603787edt.6
-        for <linux-next@vger.kernel.org>; Mon, 19 Jul 2021 05:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/UU/c96xB2XnsKcImXrMAG0NX8G+S47OMuRsfPPQPuI=;
-        b=CK1gkwphNUpnV7qz0pEiNQPARKls7lgV4k0YhHtRviZNNNf9pduPYAm6rasO2Z4JYq
-         yCfq8C7eKnhN+sLicDffhTPpp6ANXP4DqCoi59AQthWxFpsbTPcmXNQxiSf4zkbTW0pW
-         K3aY/qy6QxN6TUQ+ylVmRuiz2j60u5w0PKO//4WhJzkw8/BP/YMkgXaltIlAxAr5v94A
-         fKQ0wT14If3pjD//EisFpRLYUCGqpzt6ZOREOCfMTFpNyAAbyVqgTwrKeuMjTSC4anJJ
-         Vb2nRPBLSF9PjEe+M0s5mDp+DlyqqAgbMhs3l4NUalgsijVHBhCBnMXqQ6NfFE39Zzyf
-         K6dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/UU/c96xB2XnsKcImXrMAG0NX8G+S47OMuRsfPPQPuI=;
-        b=N9t9R3Zwh2Y1D+88+02pnfuxxUvkdiaO2vrkJ87l3YxzBiY/IyzdIr5BlA++jl0nhl
-         3k7uFnjkCk6BHcuNPF+Tl4WniZYmo8rNvXaJmmf2FRKaCKu5O17x6FUVmZ/0AwHkOGjh
-         5HOBs96MXS9hJTdOTb+XXWj88JbZkcHqq3nk+0h9SwfeZNvKifUnPLD3owPimeRlvbFf
-         S71ISzhHxL1KWrEJb85suEBFxmx81myulxjT0QluTYmbGHrWseqW9pilzH+kr/WbKhs1
-         eafEPQG5+O/4BN4pn7PevIqaEwRM/NK+UlyoskEoVfhqEe+rvo0KIwKFB7lB8y34bYLG
-         zDHw==
-X-Gm-Message-State: AOAM533RrGuYp7BmyRX6oxFS1VvkwLxoFv+YSnx3WxpU43RBiOI8c2F0
-        kl8flK+RQDxlRCb3q/P11ZarYO5M5GU9Ii/Gxd7MmA==
-X-Google-Smtp-Source: ABdhPJxzmls3MdY2v2rmmBRiXXunC11WlDfin6gHks3OmV5v5L2L+bdoxTg7/Z6IALIyVbWP7RXCTZMIZTIgJWrEzIY=
-X-Received: by 2002:a05:6402:152:: with SMTP id s18mr33808453edu.221.1626696725478;
- Mon, 19 Jul 2021 05:12:05 -0700 (PDT)
+        id S236879AbhGSLfl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Jul 2021 07:35:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30257 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236866AbhGSLfk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 19 Jul 2021 07:35:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1626696980;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fDbKb6eEnI+AB3i9YHvAOBBN6yZ/60zZF8USCg0XPVE=;
+        b=iiVFwGW/afUuOp/iVTtol2W+asUJPUvOGOr3RxZPzwTdOZRZc02nt6GEiLQvu6TNAEF97D
+        WiIKytn4W2aPW/lLd0Cg8iPjwYGszzFCGM6TZExMlfURaOMBTpvSIPowoSleSCR/h5ZdhH
+        2618WTlsNEzQL8PcN8+nKOXcgjH7Z7o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-316-oxx_3wLPPrOpz57nnu6Zfw-1; Mon, 19 Jul 2021 08:16:16 -0400
+X-MC-Unique: oxx_3wLPPrOpz57nnu6Zfw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 081B186ABA6;
+        Mon, 19 Jul 2021 12:16:15 +0000 (UTC)
+Received: from [10.64.54.195] (vpn2-54-195.bne.redhat.com [10.64.54.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3B1B5C232;
+        Mon, 19 Jul 2021 12:16:11 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [syzbot] linux-next boot error: WARNING in debug_vm_pgtable
+To:     syzbot <syzbot+8730ec44a441a434a2c8@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+References: <00000000000048d99005c7769606@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <5e1c2578-c784-9b1e-3033-7d144c4b1e8e@redhat.com>
+Date:   Mon, 19 Jul 2021 22:16:29 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com> <1626362126-27775-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1626362126-27775-2-git-send-email-alan.maguire@oracle.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 19 Jul 2021 17:41:53 +0530
-Message-ID: <CA+G9fYtqga+zMop8Ae3+fa1ENP2T8fwfFfwWmvfRWZSYB7cPDw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 1/3] libbpf: BTF dumper support for typed data
-To:     Alan Maguire <alan.maguire@oracle.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <00000000000048d99005c7769606@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 15 Jul 2021 at 20:46, Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> Add a BTF dumper for typed data, so that the user can dump a typed
-> version of the data provided.
->
-> The API is
->
-> int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
->                              void *data, size_t data_sz,
->                              const struct btf_dump_type_data_opts *opts);
->
-> ...where the id is the BTF id of the data pointed to by the "void *"
-> argument; for example the BTF id of "struct sk_buff" for a
-> "struct skb *" data pointer.  Options supported are
->
->  - a starting indent level (indent_lvl)
->  - a user-specified indent string which will be printed once per
->    indent level; if NULL, tab is chosen but any string <= 32 chars
->    can be provided.
->  - a set of boolean options to control dump display, similar to those
->    used for BPF helper bpf_snprintf_btf().  Options are
->         - compact : omit newlines and other indentation
->         - skip_names: omit member names
->         - emit_zeroes: show zero-value members
->
-> Default output format is identical to that dumped by bpf_snprintf_btf(),
-> for example a "struct sk_buff" representation would look like this:
->
-> struct sk_buff){
->         (union){
->                 (struct){
->                         .next = (struct sk_buff *)0xffffffffffffffff,
->                         .prev = (struct sk_buff *)0xffffffffffffffff,
->                 (union){
->                         .dev = (struct net_device *)0xffffffffffffffff,
->                         .dev_scratch = (long unsigned int)18446744073709551615,
->                 },
->         },
-> ...
->
-> If the data structure is larger than the *data_sz*
-> number of bytes that are available in *data*, as much
-> of the data as possible will be dumped and -E2BIG will
-> be returned.  This is useful as tracers will sometimes
-> not be able to capture all of the data associated with
-> a type; for example a "struct task_struct" is ~16k.
-> Being able to specify that only a subset is available is
-> important for such cases.  On success, the amount of data
-> dumped is returned.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+On 7/19/21 7:30 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    08076eab6fef Add linux-next specific files for 20210719
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16624fd2300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=29a82c885e192046
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8730ec44a441a434a2c8
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8730ec44a441a434a2c8@syzkaller.appspotmail.com
+> 
+> Bluetooth: BNEP filters: protocol multicast
+> Bluetooth: BNEP socket layer initialized
+> Bluetooth: CMTP (CAPI Emulation) ver 1.0
+> Bluetooth: CMTP socket layer initialized
+> Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+> Bluetooth: HIDP socket layer initialized
+> NET: Registered PF_RXRPC protocol family
+> Key type rxrpc registered
+> Key type rxrpc_s registered
+> NET: Registered PF_KCM protocol family
+> lec:lane_module_init: lec.c: initialized
+> mpoa:atm_mpoa_init: mpc.c: initialized
+> l2tp_core: L2TP core driver, V2.0
+> l2tp_ppp: PPPoL2TP kernel driver, V2.0
+> l2tp_ip: L2TP IP encapsulation support (L2TPv3)
+> l2tp_netlink: L2TP netlink interface
+> l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
+> l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
+> NET: Registered PF_PHONET protocol family
+> 8021q: 802.1Q VLAN Support v1.8
+> DCCP: Activated CCID 2 (TCP-like)
+> DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
+> sctp: Hash tables configured (bind 32/56)
+> NET: Registered PF_RDS protocol family
+> Registered RDS/infiniband transport
+> Registered RDS/tcp transport
+> tipc: Activated (version 2.0.0)
+> NET: Registered PF_TIPC protocol family
+> tipc: Started in single node mode
+> NET: Registered PF_SMC protocol family
+> 9pnet: Installing 9P2000 support
+> NET: Registered PF_CAIF protocol family
+> NET: Registered PF_IEEE802154 protocol family
+> Key type dns_resolver registered
+> Key type ceph registered
+> libceph: loaded (mon/osd proto 15/24)
+> batman_adv: B.A.T.M.A.N. advanced 2021.2 (compatibility version 15) loaded
+> openvswitch: Open vSwitch switching datapath
+> NET: Registered PF_VSOCK protocol family
+> mpls_gso: MPLS GSO support
+> IPI shorthand broadcast: enabled
+> AVX2 version of gcm_enc/dec engaged.
+> AES CTR mode by8 optimization enabled
+> sched_clock: Marking stable (13057587730, 27846366)->(13084401149, 1032947)
+> registered taskstats version 1
+> Loading compiled-in X.509 certificates
+> Loaded X.509 cert 'Build time autogenerated kernel key: f850c787ad998c396ae089c083b940ff0a9abb77'
+> zswap: loaded using pool lzo/zbud
+> debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5349 current_gfp_context include/linux/sched/mm.h:187 [inline]
+> WARNING: CPU: 0 PID: 1 at mm/page_alloc.c:5349 __alloc_pages+0x45d/0x500 mm/page_alloc.c:5361
+> Modules linked in:
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.14.0-rc2-next-20210719-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:__alloc_pages+0x45d/0x500 mm/page_alloc.c:5349
+> Code: be c9 00 00 00 48 c7 c7 80 e4 96 89 c6 05 89 1a a5 0b 01 e8 4d ba 35 07 e9 6a ff ff ff 0f 0b e9 a0 fd ff ff 40 80 e5 3f eb 88 <0f> 0b e9 18 ff ff ff 4c 89 ef 44 89 e6 45 31 ed e8 6e 74 ff ff e9
+> RSP: 0000:ffffc90000c67b08 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 1ffff9200018cf62 RCX: dffffc0000000000
+> RDX: 0000000000000000 RSI: 0000000000000012 RDI: 0000000000000cc0
+> RBP: 0000000000000000 R08: 000000000000003f R09: 0000000000000003
+> R10: ffffffff81b9a5e8 R11: 0000000000000003 R12: 0000000000000012
+> R13: 0000000000000012 R14: 0000000000000000 R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffff88823ffff000 CR3: 000000000b68e000 CR4: 00000000001506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2124
+>   alloc_pages+0x26a/0x2d0 mm/mempolicy.c:2274
+>   alloc_mem mm/debug_vm_pgtable.c:1138 [inline]
+>   debug_vm_pgtable+0x762/0x2986 mm/debug_vm_pgtable.c:1169
+>   do_one_initcall+0x103/0x650 init/main.c:1285
+>   do_initcall_level init/main.c:1360 [inline]
+>   do_initcalls init/main.c:1376 [inline]
+>   do_basic_setup init/main.c:1396 [inline]
+>   kernel_init_freeable+0x6b8/0x741 init/main.c:1598
+>   kernel_init+0x1a/0x1d0 init/main.c:1490
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> 
+
+This was caused by allocating pages more than (1 << (MAX_ORDER - 1)) in
+mm/debug_vm_pgtable.c::alloc_mem() in v1 series. I will fix it in v3 to
+skip the allocation if the requested size is more than (1 << (MAX_ORDER - 1))
+in v3.
+
+> 
 > ---
->  tools/lib/bpf/btf.h      |  19 ++
->  tools/lib/bpf/btf_dump.c | 819 ++++++++++++++++++++++++++++++++++++++++++++++-
->  tools/lib/bpf/libbpf.map |   1 +
->  3 files changed, 834 insertions(+), 5 deletions(-)
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
 
-<trim>
+Thanks,
+Gavin
 
-> diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-> index 5dc6b517..929cf93 100644
-> --- a/tools/lib/bpf/btf_dump.c
-> +++ b/tools/lib/bpf/btf_dump.c
-
-
-Following perf build errors noticed on i386 and arm 32-bit architectures on
-linux next 20210719 tag with gcc-11.
-
-metadata:
---------------
-   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-   git_short_log: 08076eab6fef ( Add linux-next specific files for 20210719 )
-   toolchain: gcc-11
-   target_arch: arm and i386
-
-
-> +static void btf_dump_int128(struct btf_dump *d,
-> +                           const struct btf_type *t,
-> +                           const void *data)
-> +{
-> +       __int128 num = *(__int128 *)data;
-
-
-btf_dump.c: In function 'btf_dump_int128':
-btf_dump.c:1559:9: error: expected expression before '__int128'
- 1559 |         __int128 num = *(__int128 *)data;
-      |         ^~~~~~~~
-btf_dump.c:1561:14: error: 'num' undeclared (first use in this function)
- 1561 |         if ((num >> 64) == 0)
-      |              ^~~
-btf_dump.c:1561:14: note: each undeclared identifier is reported only
-once for each function it appears in
-btf_dump.c: At top level:
-btf_dump.c:1568:17: error: '__int128' is not supported on this target
- 1568 | static unsigned __int128 btf_dump_bitfield_get_data(struct btf_dump *d,
-      |                 ^~~~~~~~
-btf_dump.c: In function 'btf_dump_bitfield_get_data':
-btf_dump.c:1576:18: error: '__int128' is not supported on this target
- 1576 |         unsigned __int128 num = 0, ret;
-      |                  ^~~~~~~~
-btf_dump.c: In function 'btf_dump_bitfield_check_zero':
-btf_dump.c:1608:9: error: expected expression before '__int128'
- 1608 |         __int128 check_num;
-      |         ^~~~~~~~
-btf_dump.c:1610:9: error: 'check_num' undeclared (first use in this function)
- 1610 |         check_num = btf_dump_bitfield_get_data(d, t, data,
-bits_offset, bit_sz);
-      |         ^~~~~~~~~
-btf_dump.c: In function 'btf_dump_bitfield_data':
-btf_dump.c:1622:18: error: '__int128' is not supported on this target
- 1622 |         unsigned __int128 print_num;
-      |                  ^~~~~~~~
-btf_dump.c: In function 'btf_dump_dump_type_data':
-btf_dump.c:2212:34: error: '__int128' is not supported on this target
- 2212 |                         unsigned __int128 print_num;
-      |                                  ^~~~~~~~
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-reference build link,
-build: https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/
-config: https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/config
-
-
-steps to reproduce:
----------------------
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-
-
-tuxmake --runtime podman --target-arch arm --toolchain gcc-11
---kconfig defconfig --kconfig-add
-https://builds.tuxbuild.com/1vWeCpIox9EoV35c80bwOvU9nbb/config
-
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,100 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 492653CCBA7
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 02:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1793CCBAB
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jul 2021 02:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbhGSAEu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 18 Jul 2021 20:04:50 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42429 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232582AbhGSAEu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 18 Jul 2021 20:04:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GShpj23f8z9sRR;
-        Mon, 19 Jul 2021 10:01:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626652910;
-        bh=HbnltufWdsE6x9uaLHplATZJVPjQgnFuqc9vaPf/0AA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AJZbEBJXEEj4VzH9tf/C6BhACj4tFp4uuKild9D12kcP1YCkmY/dJ/dwPMbeH0av5
-         mvWQJr3DTQzcXFCpeK2dvhkj7iOVmXrTNZptNHCtFGqk4NnJm7yu0NyZW6Wkw24oXl
-         JwiuHCGW09Xpz0SmNx1F4Xrl/BbnVdID4p+5KUBqwqkdKLe3qVeSHKdpQU2T51QXOj
-         zSL5mAK8bcxhDrZo5QtODtF3hwXVPNtwhnWTz5cnX+v2qiUYaiO9IZaf+IbVzQ1WIl
-         pqQE7kzzpZhUIhiCBAhTqVHWBRhuzla+iONw5vQNITZHIMz/gNd1djvOMphv9HHBn9
-         scnxQ0BYg5Lew==
-Date:   Mon, 19 Jul 2021 10:01:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Nicolas Ferre <nicolas.ferre@atmel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        id S233739AbhGSASi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 18 Jul 2021 20:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233738AbhGSASh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 18 Jul 2021 20:18:37 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5345EC061762;
+        Sun, 18 Jul 2021 17:15:38 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id m13so4287511qvh.8;
+        Sun, 18 Jul 2021 17:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FAaddWpYrInFFno4A8ALowrXM8vpnnyjPuQV+kmFE1E=;
+        b=mDQ5ecvjIRgad2AmBvKN3oPlsIruHmyls0vMlZSYo0quHKPCzxo7i+/zF5ZPnJh4zd
+         af3qe49xTbBPRcW7TSE0LcVCtA71mtb0NoN+XEAEQBStsDUxKWsncQdTkqIXOVyd65gL
+         95+Ta/qIaP09kcnpT3grAbzoxzIr9r871HXDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FAaddWpYrInFFno4A8ALowrXM8vpnnyjPuQV+kmFE1E=;
+        b=c3YaBeIYhITI4E99im9q2NF93FRseMczRQZzDzrVq1J2nwkzJLhAbDNGLhzS9Vlk1I
+         n3TFMdmcieQ5yyB6gpTlDtgmKirAI9kfPTTJ4UVFZ1BjonPXMRsArkKSgwnEWvWvvZs3
+         VVFW8cE+zLabUCXh0nhvC2QSqDMGsvr3UBhvcY6XmJY5uE39Vk/4NjzdpnFRl5zqdWXq
+         OUeUTicou4/isDLhU3k56vdB97MEzhtgjAyWy35xdDSt2i3e9OEIzmsIMcGMm1T2zuMA
+         aUWOvd3Sa+5CGD4yrXBgMhcf+k90STUJ8xKGTQVO3uOpR5p/Yje8eHSMjyLPz5BkRAiG
+         FTDA==
+X-Gm-Message-State: AOAM5335fEOQURTvAqRs6EWx73dnYC0bkR7pMauOa2ppHZjbsQz1eSPL
+        LoFvzbxMOSxgUxzWc/lDsFRAqz6rkGbOLD4yXxYNGCMr
+X-Google-Smtp-Source: ABdhPJyoQARF6fZitcHiSnSEbVzsd0ZFXDGtDSpEDOEVD8ImjxY0C0lCBpgAior9HiQqp1HdpGi4W1c4XvS1DHxnvCk=
+X-Received: by 2002:ad4:55ef:: with SMTP id bu15mr21762425qvb.43.1626653737518;
+ Sun, 18 Jul 2021 17:15:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210719095150.75af9e42@canb.auug.org.au>
+In-Reply-To: <20210719095150.75af9e42@canb.auug.org.au>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 19 Jul 2021 00:15:25 +0000
+Message-ID: <CACPK8XfQ9nAr=tsCsce6Bf4HAtWZ+bAVAhx4tBkwYahurpi0Eg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the aspeed tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the at91 tree
-Message-ID: <20210719100147.76fa9ec3@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3gm9Icd+50YZtTNv4ZJJY+C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3gm9Icd+50YZtTNv4ZJJY+C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 18 Jul 2021 at 23:52, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the aspeed tree got a conflict in:
+>
+>   arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts
+>
+> between commit:
+>
+>   faffd1b2bde3 ("ARM: dts: everest: Add phase corrections for eMMC")
+>
+> from Linus' tree and commit:
+>
+>   315cc563d047 ("ARM: dts: everest: Add phase corrections for eMMC")
+>
+> from the aspeed tree.
 
-Hi all,
+Thanks, I've rebased the newer patch on the older one and pushed it
+out, so we should be good to go tomorrow.
 
-After merging the at91 tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
-
-arch/arm/mach-at91/pm_suspend.S: Assembler messages:
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_CSS used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_DIV used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_CSS_MAINCK used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_DIV1 used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_CSS used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_DIV used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_ID_MSK used as an immediate value
-arch/arm/mach-at91/pm_suspend.S:1052: Error: undefined symbol AT91_PMC_MCR_=
-V2_CMD used as an immediate value
-
-Caused by commit
-
-  6cb0e54412a3 ("ARM: at91: pm: add support for MCK1..4 save/restore for ul=
-p modes")
-
-I have used the at91 tree from next-20210716 for today.
-
---=20
 Cheers,
-Stephen Rothwell
 
---Sig_/3gm9Icd+50YZtTNv4ZJJY+C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD0wOwACgkQAVBC80lX
-0Gyuagf9HVqHfZW13jr2I8pcm9s+y8uguuAxsV7ErKlniOe87tH3dXyDMZBU43iP
-3GoVMuOsb9X61KXbg1p8zgw6f2txCsuTPZ1GpV06Ca8+cIqj2Em0wqCXuQto85lX
-hbyPrARV9Vpab5OANMjFCmNx0eu+5mFBUa23uk7m4qtPfvAHSiEEruTEI+sql8v4
-SmfRebncXraEX1RZmk3ZsH4NStatwyXyXJl/ny7Q/k5NArvyFMtgg1m6GrP+jwS4
-QxYMUjh+Ay7ApCviC66K9sikj5YVp8AO+Kb1DuGFmpwQbpxggU7XvCM7jNiOSFVw
-DxQpHrO0fO1vPVk5JEt3cqrhG5Ca/Q==
-=3vPx
------END PGP SIGNATURE-----
-
---Sig_/3gm9Icd+50YZtTNv4ZJJY+C--
+Joel

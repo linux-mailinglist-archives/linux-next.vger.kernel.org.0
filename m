@@ -2,98 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 152D33CF86E
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 12:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DD23CF963
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 14:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbhGTKOl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jul 2021 06:14:41 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:48999 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbhGTKKq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 06:10:46 -0400
-Received: by mail-io1-f69.google.com with SMTP id f2-20020a6b62020000b02905094eaa65fdso15039352iog.15
-        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 03:51:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Ole8b2cR6lQoDSXLNb5l4NYhygBr3zVA6T0AtIVglTc=;
-        b=l/L/YpDkWZ1opgwdiHQ+0jsSSZM/5+yOnzEsOKXxnxjmsVF17r2PqB7V+t2eA0NJE7
-         7n2ZEf705DXoNOIqmpQuG4Y1t1xzhSb9T1UPGHCh3Q84YwUHcI3Kd3xHH9TuznuJ+Org
-         lxZnT8nR2UcqcEe1BZ6XTWc9E7sHtnv1e6wybkBukYsz7Bqg/dqlsW/us/+rjk2ScI0L
-         pXDWFaEyb/butlvxi7Irav10WicdlOqjRUB74tHVd+8vwYc/DnrBHGSpOJ/W95E11rF8
-         Z8XJuO5caWQmMOsnmjuXGAMy35XtKCDJ5VSQJ72Ld070VaJj/sldLlEMRgR89l+FbRYb
-         ladg==
-X-Gm-Message-State: AOAM530MAPdSaZndve1paTbGew6IZwLuIx999ABWoRE5wBpb3Ie4FHie
-        bMymWJcxjqZgbNHHtluf5AmTS13iW9mkk9Gtmmbeym7+WXnJ
-X-Google-Smtp-Source: ABdhPJzrg1xbwj9UVISbQgfhQpJ0AXZpQnVvU/gpeRDUY2fKFNkOEYZTFzgFeOOaXAO+KHJa+QEprVV74Yx3q4DnDsSE2p1Jq8k1
+        id S235590AbhGTLan (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jul 2021 07:30:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235205AbhGTLaa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 20 Jul 2021 07:30:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07FA361186;
+        Tue, 20 Jul 2021 12:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626783069;
+        bh=av9dlPOiIuOYX4rH9uCvNWi6RQdlqGoBD1H0vMS1szM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PZuEca6SVRX7UrxD+bSUquzzGIz55YjMPR2xfFprnkZpbHqjEL4074TAfUpueg7XO
+         ZqEcEu8qMiK5mRH9/cj2a56SFJivuu3l33vNz2cQmCZPIuxjkptpFPq+D1aCRsf07u
+         npBvgHBaaga0X2uAE+B1lN2RApltgiaWg4TdX3/43ZnbAyIRS5gNhPmJub901EhgS1
+         oxChRRPEl3jvkr/blB2c8FT0pa0yQonD1QY7MpNDtPrWWzSUVhc7IwYVqJhA2EdY6P
+         tBYlQY6TGQvRbfN30gCz1+khN7bqfqByuOihQjcjIQ7bY/WqItLQdFWifuguYwfXMk
+         Iq+GUMIREtHqw==
+Date:   Tue, 20 Jul 2021 14:11:01 +0200
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Subject: Re: linux-next: build failure in Linus' tree
+Message-ID: <20210720141101.78c1b8ba@cakuba>
+In-Reply-To: <20210720164531.3f122a89@canb.auug.org.au>
+References: <20210715095032.6897f1f6@canb.auug.org.au>
+        <20210720164531.3f122a89@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a46:: with SMTP id u6mr20003836ilv.135.1626778282613;
- Tue, 20 Jul 2021 03:51:22 -0700 (PDT)
-Date:   Tue, 20 Jul 2021 03:51:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a9e38905c78bd588@google.com>
-Subject: [syzbot] linux-next boot error: BUG: sleeping function called from
- invalid context in cgroup_rstat_flush
-From:   syzbot <syzbot+0e2d06632863e7ddb1c7@syzkaller.appspotmail.com>
-To:     cgroups@vger.kernel.org, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        lizefan.x@bytedance.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
+On Tue, 20 Jul 2021 16:45:31 +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Thu, 15 Jul 2021 09:50:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > While compiling Linus' tree, a powerpc-allmodconfig build (and others)
+> > with gcc 4.9 failed like this:
+> > 
+> > drivers/net/ethernet/microchip/sparx5/sparx5_netdev.c: In function 'ifh_encode_bitfield':
+> > include/linux/compiler_types.h:328:38: error: call to '__compiletime_assert_431' declared with attribute error: Unsupported width, must be <= 40
+> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >                                       ^
+> > include/linux/compiler_types.h:309:4: note: in definition of macro '__compiletime_assert'
+> >     prefix ## suffix();    \
+> >     ^
+> > include/linux/compiler_types.h:328:2: note: in expansion of macro '_compiletime_assert'
+> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >   ^
+> > drivers/net/ethernet/microchip/sparx5/sparx5_netdev.c:28:2: note: in expansion of macro 'compiletime_assert'
+> >   compiletime_assert(width <= 40, "Unsupported width, must be <= 40");
+> >   ^
+> > 
+> > Caused by commit
+> > 
+> >   f3cad2611a77 ("net: sparx5: add hostmode with phylink support")
+> > 
+> > I guess this is caused by the call to ifh_encode_bitfield() not being
+> > inlined.  
+> 
+> I am still getting these failures.
 
-syzbot found the following issue on:
+Bjarni, Steen, could you address this build failure ASAP?
 
-HEAD commit:    6e235535ce82 Add linux-next specific files for 20210716
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f3d7e2300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b07a961928126747
-dashboard link: https://syzkaller.appspot.com/bug?extid=0e2d06632863e7ddb1c7
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0e2d06632863e7ddb1c7@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at kernel/cgroup/rstat.c:200
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 39, name: kworker/u4:3
-3 locks held by kworker/u4:3/39:
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:620 [inline]
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:617 [inline]
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:644 [inline]
- #0: ffff888010869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x871/0x1630 kernel/workqueue.c:2247
- #1: ffffc90000e2fdb0 (stats_flush_work){+.+.}-{0:0}, at: process_one_work+0x8a5/0x1630 kernel/workqueue.c:2251
- #2: ffffffff8bad45d8 (stats_flush_lock){+.+.}-{2:2}, at: spin_trylock include/linux/spinlock.h:369 [inline]
- #2: ffffffff8bad45d8 (stats_flush_lock){+.+.}-{2:2}, at: mem_cgroup_flush_stats mm/memcontrol.c:5358 [inline]
- #2: ffffffff8bad45d8 (stats_flush_lock){+.+.}-{2:2}, at: flush_memcg_stats_work+0xd/0x50 mm/memcontrol.c:5373
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 39 Comm: kworker/u4:3 Not tainted 5.14.0-rc1-next-20210716-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_unbound flush_memcg_stats_work
-Call Trace:
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
- ___might_sleep.cold+0x1f3/0x239 kernel/sched/core.c:9182
- cgroup_rstat_flush+0x1c/0x50 kernel/cgroup/rstat.c:200
- mem_cgroup_flush_stats mm/memcontrol.c:5361 [inline]
- mem_cgroup_flush_stats mm/memcontrol.c:5356 [inline]
- flush_memcg_stats_work+0x39/0x50 mm/memcontrol.c:5373
- process_one_work+0x98d/0x1630 kernel/workqueue.c:2276
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2422
- kthread+0x3e5/0x4d0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+We can't have a compile time asserts in static functions, if the code
+is optimized for size chances are the function won't get inlined. clang
+is pretty bad at propagating constants to compile time asserts, too.
+Please remove this check, or refactor it to be done in a macro, or ..

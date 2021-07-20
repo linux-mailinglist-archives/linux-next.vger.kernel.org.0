@@ -2,804 +2,2037 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A450A3CF652
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 10:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180F13CF741
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 11:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbhGTIDn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jul 2021 04:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S232506AbhGTJPZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jul 2021 05:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbhGTIDZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 04:03:25 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E85BC061574
-        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 01:43:58 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id u14so21837808pga.11
-        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 01:43:58 -0700 (PDT)
+        with ESMTP id S231560AbhGTJPY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 05:15:24 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BECBC061574
+        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 02:56:03 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x16so11174589plg.3
+        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 02:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=M+pPWS7KhSHJoBVdnKKoKWJYlkM/naTxShtwPZ70Dks=;
-        b=N2Krli5lY4bl8o/YmZQEfG/HYfFuHBj4/obMdYCbAdsGh8pidubVrs7DfVft8KBZ1a
-         PHPLcAQXhdx3zzvL6hB3HDwHWVa25/uI3aS9at7SiuhCrWh0wf5mIdngsFYi8ODoQNV4
-         XIwwf3/g8zKhsUnjuyjZkRDJA0JBebe2mEK7Ml1Z58QoA7x4rGMTzjoIoLtAdDjGXc10
-         Dxv5crWEIRxUKpy9HEWZAsa31NjN3fJz08Yh+sLVqPZTqydTeX3vSfmSix3dBg0guM4g
-         pQuKxpvAwMro7KG/qePvYLoBJJ5WFeTHJHp0sdiZ1y/Hg9wQD+u03QkaCSDNvlcnD6xC
-         C6aw==
+        bh=U9aO/z+JM1XKitNtPhLIAoWDSVqFpJqguTOZYIVJUUM=;
+        b=azo7mWcvUEljvUvLgAaoKuEjPfvGnmstOc1A7lElL3dvvrgtlTktgFulovUF+315Kt
+         hOj+I1SufQOSZFod1j9HWg+KdcKN+S4+BUpee0Njnl16Y8HJXHQyLut2FtWDllgkPigt
+         Dk+gmm1dk95b7KVce2aRkHUOEyqlWrlo1GDV2oOn/XIIfx0Hnbvq/yzQeWPz8o46eKEJ
+         o+fbqO8Eh0ngJ/vtXBDeLndN3wMXabJV0CRXKFKCCEpZ2hFImYBTRJTLDXhkjkFuy/Ba
+         VfeAQO2intxmxZD0KIsD4wZsNH2U3hcixaLzopzGSPZPzKHluHFtYh+TU9IK9J9uS09N
+         Lr3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=M+pPWS7KhSHJoBVdnKKoKWJYlkM/naTxShtwPZ70Dks=;
-        b=GO1qy1EV/FhtH4cQQfFtvc6YeZVEGiX3bd6locV1e/bB9XLnnZwWqzTOd/XWlaLCm1
-         3SvSsWe9nzK0FM6yOOz5gi7JLqZ2xCZYrgIatkhaxOB4xbb4Ruu+0uHUOY57RmZisLyy
-         pCEiyyx/wirdFc+Nq/Z3fddRT5DnU6TsLFuyCwvgAQfEu8ZlelhhP9oFJPK7OUM1GS6Y
-         T8429qmcvkaDBsNd4gZUOdp8/lWE4qoYHvbTuOIQo0X4ApbRyBkVaKB+8pWRQhh5cEre
-         PdVXOLrlTo6/6qZjpppkQOsfXXaipPi8FGrI4LBVAKThuAzpqBVAFZcO/Q7e0QGvDgwx
-         WzJw==
-X-Gm-Message-State: AOAM530oqjjJ7OKIi4SvkFHTtUJpScyTIsEx3/nm7oFXYRjnwbxrmAMG
-        J+9NxygFLhyUlVpy246A9q188RGL5b1Q+hNs
-X-Google-Smtp-Source: ABdhPJxu4FHKPx9wmMPnAmKXGrLyww5HpVY1FeTMJCepbi+XkaXe7UcHssy4an4kd75982pOkzc9Vw==
-X-Received: by 2002:a05:6a00:ac8:b029:320:a6bb:880d with SMTP id c8-20020a056a000ac8b0290320a6bb880dmr30475942pfl.41.1626770637663;
-        Tue, 20 Jul 2021 01:43:57 -0700 (PDT)
+        bh=U9aO/z+JM1XKitNtPhLIAoWDSVqFpJqguTOZYIVJUUM=;
+        b=tyRMjQ0XRkyclsUNkp6HzhIqOEI5yo7cdE0DDGpGhqkS29YxN+JshoFB6Qe63lReLu
+         HhjB+iLT1+goLQdAsh23nLMgPq+FYh/OH8cfFxnnk9thcY9bI4Uj0sW1cujQJfQ8nQNl
+         JvdWGBkk6+IFZ9xWdG7pX+oKGMZ3ykQpGUKlRqZrLDupUZXuxISaYRaysjZ4aP7yGpPp
+         0cEztW/iz3Z4OIt6zc6wQ/LmrVgL/GA7xwoMPp+Vu/l7bCFXgCYGBdIeh+2IpfFhMbF/
+         DV/RzPmUu6BdPzw7Kk5RcKxrVvNNkouoPKQprXezDZG3fJ/tGVMkV32nL04gSRwDlSbY
+         Y/6g==
+X-Gm-Message-State: AOAM533LDEjIl9azHLV+Vw9/7Hpp+o3fzB2S6nbiFOFFb+QbtTWMYh+C
+        rlCouA5p+15hTsICNDJU93yuL/ktTjlqd7VR
+X-Google-Smtp-Source: ABdhPJxZcfPItbPjanda0EXH/RyDI9HMENCoJx1xd2U5N0LBejqBhDOSUpOM1AQaDs781QB4JbkMOg==
+X-Received: by 2002:a17:902:f704:b029:11a:cdee:490 with SMTP id h4-20020a170902f704b029011acdee0490mr22852361plo.37.1626774962144;
+        Tue, 20 Jul 2021 02:56:02 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 26sm10350165pjg.8.2021.07.20.01.43.57
+        by smtp.gmail.com with ESMTPSA id s7sm22109933pfk.12.2021.07.20.02.56.01
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 01:43:57 -0700 (PDT)
-Message-ID: <60f68ccd.1c69fb81.9da54.ddd1@mx.google.com>
-Date:   Tue, 20 Jul 2021 01:43:57 -0700 (PDT)
+        Tue, 20 Jul 2021 02:56:01 -0700 (PDT)
+Message-ID: <60f69db1.1c69fb81.6f2a2.3138@mx.google.com>
+Date:   Tue, 20 Jul 2021 02:56:01 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.14-rc2-204-g04733141d126
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20210720
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-Subject: next/pending-fixes baseline: 317 runs,
- 21 regressions (v5.14-rc2-204-g04733141d126)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
+Subject: next/master build: 215 builds: 66 failed, 149 passed, 155 errors,
+ 110 warnings (next-20210720)
+To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 317 runs, 21 regressions (v5.14-rc2-204-g04733=
-141d126)
-
-Regressions Summary
--------------------
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-at91-sama5d4_xplained     | arm    | lab-baylibre  | gcc-8    | sama5_defco=
-nfig              | 1          =
-
-bcm2836-rpi-2-b           | arm    | lab-collabora | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-bcm2837-rpi-3-b           | arm64  | lab-baylibre  | gcc-8    | defconfig  =
-                  | 1          =
-
-bcm2837-rpi-3-b           | arm64  | lab-baylibre  | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-d2500cc                   | x86_64 | lab-clabbe    | gcc-8    | x86_64_defc=
-on...6-chromebook | 1          =
-
-d2500cc                   | x86_64 | lab-clabbe    | gcc-8    | x86_64_defc=
-onfig             | 1          =
-
-kontron-kbox-a-230-ls     | arm64  | lab-kontron   | gcc-8    | defconfig  =
-                  | 1          =
-
-kontron-kbox-a-230-ls     | arm64  | lab-kontron   | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-qemu_arm-versatilepb      | arm    | lab-baylibre  | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-qemu_arm-versatilepb      | arm    | lab-broonie   | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-qemu_arm-versatilepb      | arm    | lab-cip       | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-qemu_arm-versatilepb      | arm    | lab-collabora | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-rk3399-gru-kevin          | arm64  | lab-collabora | gcc-8    | defconfig  =
-                  | 2          =
-
-rk3399-gru-kevin          | arm64  | lab-collabora | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 2          =
-
-sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-sun8i-h2-plus-orangepi-r1 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.14-rc2-204-g04733141d126/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.14-rc2-204-g04733141d126
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      04733141d12624e00b9d78461bc75a124c8f2b2b =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-at91-sama5d4_xplained     | arm    | lab-baylibre  | gcc-8    | sama5_defco=
-nfig              | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f651c8bec987429a11611e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f651c8bec987429a116=
-11f
-        failing since 440 days (last pass: v5.7-rc3-277-ga37f92ef57b2, firs=
-t fail: v5.7-rc4-211-g6d4315023bc9) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-bcm2836-rpi-2-b           | arm    | lab-collabora | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f672cb74712c86251160a7
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-collabora/=
-baseline-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f672cb74712c8625116=
-0a8
-        failing since 165 days (last pass: v5.11-rc6-256-gf889022827dc, fir=
-st fail: v5.11-rc6-298-g490f4659faae) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b           | arm64  | lab-baylibre  | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f6504a25e76d7269116122
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-=
-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-=
-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f6504a25e76d7269116=
-123
-        failing since 13 days (last pass: v5.13-3495-gfbf137d9483a, first f=
-ail: v5.13-11972-g079b16c442fd) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-bcm2837-rpi-3-b           | arm64  | lab-baylibre  | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f652f29f940e38611160c2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
-re/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylib=
-re/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f652f29f940e3861116=
-0c3
-        failing since 13 days (last pass: v5.13-3495-gfbf137d9483a, first f=
-ail: v5.13-11972-g079b16c442fd) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f652e19f940e38611160b2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-=
-xm.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-beagle-=
-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f652e19f940e3861116=
-0b3
-        failing since 0 day (last pass: v5.14-rc1-304-g902b4f67cc56, first =
-fail: v5.14-rc2-176-g27660093e7842) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fc...CONFIG_SMP=3Dn | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f65345f107efbce61160a4
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+CONFIG_SMP=3Dn
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-beagle-xm.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig+CONFIG_SMP=3Dn/gcc-8/lab-baylibre/b=
-aseline-beagle-xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f65345f107efbce6116=
-0a5
-        failing since 7 days (last pass: v5.10-rc7-201-gc9b6935dc4f4, first=
- fail: v5.14-rc1-225-g25a1eba130d1) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-beagle-xm                 | arm    | lab-baylibre  | gcc-8    | omap2plus_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f6549960f1c8f57811609c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: omap2plus_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beagle=
--xm.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/omap2plus_defconfig/gcc-8/lab-baylibre/baseline-beagle=
--xm.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f6549960f1c8f578116=
-09d
-        failing since 6 days (last pass: v5.14-rc1-225-g25a1eba130d1, first=
- fail: v5.14-rc1-262-g396208d3cbd4) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-d2500cc                   | x86_64 | lab-clabbe    | gcc-8    | x86_64_defc=
-on...6-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f64e2f5a8fff52ef1160bc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig+x86-chromebook
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/x86_64/x86_64_defconfig+x86-chromebook/gcc-8/lab-clabbe/ba=
-seline-d2500cc.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/x86_64/x86_64_defconfig+x86-chromebook/gcc-8/lab-clabbe/ba=
-seline-d2500cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f64e2f5a8fff52ef116=
-0bd
-        failing since 13 days (last pass: v5.13-rc4-286-g6bd26f0b60ab, firs=
-t fail: v5.13-11972-g079b16c442fd) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-d2500cc                   | x86_64 | lab-clabbe    | gcc-8    | x86_64_defc=
-onfig             | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f64f843e0eb188fd11609d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/x86_64/x86_64_defconfig/gcc-8/lab-clabbe/baseline-d2500cc.=
-txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/x86_64/x86_64_defconfig/gcc-8/lab-clabbe/baseline-d2500cc.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/x86/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f64f843e0eb188fd116=
-09e
-        failing since 13 days (last pass: v5.13-rc4-286-g6bd26f0b60ab, firs=
-t fail: v5.13-11972-g079b16c442fd) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-kontron-kbox-a-230-ls     | arm64  | lab-kontron   | gcc-8    | defconfig  =
-                  | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f650a20609f895521160f8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-kontron/baseline-kontron-kbox-a-=
-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-kontron/baseline-kontron-kbox-a-=
-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f650a20609f89552116=
-0f9
-        failing since 6 days (last pass: v5.14-rc1-262-g396208d3cbd4, first=
- fail: v5.14-rc1-304-g902b4f67cc56) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-kontron-kbox-a-230-ls     | arm64  | lab-kontron   | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f6530ef59f762371116107
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-kontro=
-n/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-kontro=
-n/baseline-kontron-kbox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f6530ef59f762371116=
-108
-        failing since 6 days (last pass: v5.14-rc1-225-g25a1eba130d1, first=
- fail: v5.14-rc1-262-g396208d3cbd4) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-qemu_arm-versatilepb      | arm    | lab-baylibre  | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f64cfe41d5db9a3c1160b1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-baylibre/baseline-qemu_a=
-rm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f64cfe41d5db9a3c116=
-0b2
-        failing since 245 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-qemu_arm-versatilepb      | arm    | lab-broonie   | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f64df8b058e6be0f1160bd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-broonie/baseline-qemu_ar=
-m-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f64df8b058e6be0f116=
-0be
-        failing since 245 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-qemu_arm-versatilepb      | arm    | lab-cip       | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f64d0fca3c5f0fa31160ba
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-cip/baseline-qemu_arm-ve=
-rsatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f64d0fca3c5f0fa3116=
-0bb
-        failing since 245 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-qemu_arm-versatilepb      | arm    | lab-collabora | gcc-8    | versatile_d=
-efconfig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f665ee3b6f7e088a1160b1
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: versatile_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/versatile_defconfig/gcc-8/lab-collabora/baseline-qemu_=
-arm-versatilepb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f665ee3b6f7e088a116=
-0b2
-        failing since 245 days (last pass: v5.10-rc3-420-g5364e201065c, fir=
-st fail: v5.10-rc3-639-ga24d51ed9363) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-rk3399-gru-kevin          | arm64  | lab-collabora | gcc-8    | defconfig  =
-                  | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f651060cb8b877a31160bb
-
-  Results:     89 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-ke=
-vin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-ke=
-vin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.rockchip-usb2phy1-probed: https://kernelci.org/test/cas=
-e/id/60f651070cb8b877a31160c5
-        failing since 7 days (last pass: v5.13-12625-g5f5e6a60f828, first f=
-ail: v5.14-rc1-225-g25a1eba130d1)
-
-    2021-07-20T04:28:46.604040  /lava-4217456/1/../bin/lava-test-case
-    2021-07-20T04:28:46.615260  <8>[   24.962940] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy1-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.rockchip-usb2phy0-probed: https://kernelci.org/test/cas=
-e/id/60f651070cb8b877a31160c6
-        failing since 7 days (last pass: v5.13-12625-g5f5e6a60f828, first f=
-ail: v5.14-rc1-225-g25a1eba130d1)
-
-    2021-07-20T04:28:45.568979  /lava-4217456/1/../bin/lava-test-case
-    2021-07-20T04:28:45.580160  <8>[   23.928156] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy0-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-rk3399-gru-kevin          | arm64  | lab-collabora | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f655397bb2a645b81160e7
-
-  Results:     89 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collab=
-ora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-collab=
-ora/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.rockchip-usb2phy1-probed: https://kernelci.org/test/cas=
-e/id/60f655397bb2a645b81160f1
-        failing since 7 days (last pass: v5.13-12625-g5f5e6a60f828, first f=
-ail: v5.14-rc1-225-g25a1eba130d1)
-
-    2021-07-20T04:46:42.405101  /lava-4217557/1/../bin/lava-test-case
-    2021-07-20T04:46:42.416346  <8>[   25.135553] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy1-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.rockchip-usb2phy0-probed: https://kernelci.org/test/cas=
-e/id/60f655397bb2a645b81160f2
-        failing since 7 days (last pass: v5.13-12625-g5f5e6a60f828, first f=
-ail: v5.14-rc1-225-g25a1eba130d1)
-
-    2021-07-20T04:46:40.349737  <8>[   23.066512] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy-driver-present RESULT=3Dpass>
-    2021-07-20T04:46:41.370478  /lava-4217557/1/../bin/lava-test-case
-    2021-07-20T04:46:41.381521  <8>[   24.100638] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Drockchip-usb2phy0-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-sun50i-a64-bananapi-m64   | arm64  | lab-clabbe    | gcc-8    | defconfig+C=
-ON...OMIZE_BASE=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f653cd58aaefcac011609b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe=
-/baseline-sun50i-a64-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe=
-/baseline-sun50i-a64-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f653cd58aaefcac0116=
-09c
-        new failure (last pass: v5.14-rc1-262-g396208d3cbd4) =
-
- =
-
-
-
-platform                  | arch   | lab           | compiler | defconfig  =
-                  | regressions
---------------------------+--------+---------------+----------+------------=
-------------------+------------
-sun8i-h2-plus-orangepi-r1 | arm    | lab-baylibre  | gcc-8    | multi_v7_de=
-fconfig           | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/60f652f6f59f7623711160a9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h=
-2-plus-orangepi-r1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.14-rc2-2=
-04-g04733141d126/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-sun8i-h=
-2-plus-orangepi-r1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/60f652f6f59f762371116=
-0aa
-        new failure (last pass: v5.14-rc2-176-g27660093e7842) =
-
- =20
+next/master build: 215 builds: 66 failed, 149 passed, 155 errors, 110 warni=
+ngs (next-20210720)
+
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20210720/
+
+Tree: next
+Branch: master
+Git Describe: next-20210720
+Git Commit: 3568c2c543e25d1a47bd97a607171511e7d44a45
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
+
+Build Failures Detected:
+
+arm64:
+    allmodconfig: (clang-10) FAIL
+    allmodconfig: (gcc-8) FAIL
+
+arm:
+    allmodconfig: (clang-12) FAIL
+    allmodconfig: (gcc-8) FAIL
+
+mips:
+    32r2el_defconfig: (gcc-8) FAIL
+    32r2el_defconfig+kselftest: (gcc-8) FAIL
+    allnoconfig: (gcc-8) FAIL
+    ar7_defconfig: (gcc-8) FAIL
+    ath25_defconfig: (gcc-8) FAIL
+    ath79_defconfig: (gcc-8) FAIL
+    bcm47xx_defconfig: (gcc-8) FAIL
+    bcm63xx_defconfig: (gcc-8) FAIL
+    bigsur_defconfig: (gcc-8) FAIL
+    bmips_be_defconfig: (gcc-8) FAIL
+    bmips_stb_defconfig: (gcc-8) FAIL
+    capcella_defconfig: (gcc-8) FAIL
+    cavium_octeon_defconfig: (gcc-8) FAIL
+    ci20_defconfig: (gcc-8) FAIL
+    cobalt_defconfig: (gcc-8) FAIL
+    cu1000-neo_defconfig: (gcc-8) FAIL
+    cu1830-neo_defconfig: (gcc-8) FAIL
+    db1xxx_defconfig: (gcc-8) FAIL
+    decstation_64_defconfig: (gcc-8) FAIL
+    decstation_defconfig: (gcc-8) FAIL
+    decstation_r4k_defconfig: (gcc-8) FAIL
+    e55_defconfig: (gcc-8) FAIL
+    fuloong2e_defconfig: (gcc-8) FAIL
+    gcw0_defconfig: (gcc-8) FAIL
+    gpr_defconfig: (gcc-8) FAIL
+    ip22_defconfig: (gcc-8) FAIL
+    ip32_defconfig: (gcc-8) FAIL
+    jazz_defconfig: (gcc-8) FAIL
+    jmr3927_defconfig: (gcc-8) FAIL
+    lemote2f_defconfig: (gcc-8) FAIL
+    loongson1b_defconfig: (gcc-8) FAIL
+    loongson1c_defconfig: (gcc-8) FAIL
+    loongson2k_defconfig: (gcc-8) FAIL
+    loongson3_defconfig: (gcc-8) FAIL
+    malta_defconfig: (gcc-8) FAIL
+    malta_kvm_defconfig: (gcc-8) FAIL
+    malta_qemu_32r6_defconfig: (gcc-8) FAIL
+    maltaaprp_defconfig: (gcc-8) FAIL
+    maltasmvp_defconfig: (gcc-8) FAIL
+    maltasmvp_eva_defconfig: (gcc-8) FAIL
+    maltaup_defconfig: (gcc-8) FAIL
+    maltaup_xpa_defconfig: (gcc-8) FAIL
+    mpc30x_defconfig: (gcc-8) FAIL
+    mtx1_defconfig: (gcc-8) FAIL
+    nlm_xlp_defconfig: (gcc-8) FAIL
+    nlm_xlr_defconfig: (gcc-8) FAIL
+    omega2p_defconfig: (gcc-8) FAIL
+    pic32mzda_defconfig: (gcc-8) FAIL
+    pistachio_defconfig: (gcc-8) FAIL
+    qi_lb60_defconfig: (gcc-8) FAIL
+    rb532_defconfig: (gcc-8) FAIL
+    rbtx49xx_defconfig: (gcc-8) FAIL
+    rm200_defconfig: (gcc-8) FAIL
+    rs90_defconfig: (gcc-8) FAIL
+    rt305x_defconfig: (gcc-8) FAIL
+    sb1250_swarm_defconfig: (gcc-8) FAIL
+    tb0219_defconfig: (gcc-8) FAIL
+    tb0226_defconfig: (gcc-8) FAIL
+    tb0287_defconfig: (gcc-8) FAIL
+    vocore2_defconfig: (gcc-8) FAIL
+    workpad_defconfig: (gcc-8) FAIL
+    xway_defconfig: (gcc-8) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-8): 2 warnings
+
+arm64:
+    allmodconfig (gcc-8): 3 errors, 1 warning
+    allmodconfig (clang-10): 1 error, 17 warnings
+    defconfig (clang-12): 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-12): 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-10): 3 warnings
+
+arm:
+    allmodconfig (clang-12): 1 error, 39 warnings
+    allmodconfig (gcc-8): 1 error, 2 warnings
+    aspeed_g4_defconfig (gcc-8): 1 warning
+    aspeed_g5_defconfig (gcc-8): 1 warning
+    aspeed_g5_defconfig (clang-10): 2 warnings
+    aspeed_g5_defconfig (clang-12): 2 warnings
+    multi_v7_defconfig (clang-12): 2 warnings
+    multi_v7_defconfig (clang-10): 2 warnings
+    multi_v7_defconfig+kselftest (gcc-8): 1 warning
+
+i386:
+    i386_defconfig (gcc-8): 1 warning
+    i386_defconfig (clang-10): 4 warnings
+    i386_defconfig (clang-12): 4 warnings
+    i386_defconfig+kselftest (gcc-8): 2 warnings
+
+mips:
+    32r2el_defconfig (gcc-8): 2 errors
+    32r2el_defconfig+kselftest (gcc-8): 2 errors, 2 warnings
+    allnoconfig (gcc-8): 2 errors
+    ar7_defconfig (gcc-8): 2 errors
+    ath25_defconfig (gcc-8): 2 errors
+    ath79_defconfig (gcc-8): 2 errors
+    bcm47xx_defconfig (gcc-8): 2 errors
+    bcm63xx_defconfig (gcc-8): 3 errors
+    bigsur_defconfig (gcc-8): 3 errors
+    bmips_be_defconfig (gcc-8): 3 errors
+    bmips_stb_defconfig (gcc-8): 3 errors
+    capcella_defconfig (gcc-8): 3 errors
+    cavium_octeon_defconfig (gcc-8): 2 errors, 1 warning
+    ci20_defconfig (gcc-8): 2 errors
+    cobalt_defconfig (gcc-8): 3 errors
+    cu1000-neo_defconfig (gcc-8): 2 errors
+    cu1830-neo_defconfig (gcc-8): 2 errors
+    db1xxx_defconfig (gcc-8): 2 errors
+    decstation_64_defconfig (gcc-8): 3 errors, 1 warning
+    decstation_defconfig (gcc-8): 3 errors
+    decstation_r4k_defconfig (gcc-8): 3 errors
+    e55_defconfig (gcc-8): 3 errors
+    fuloong2e_defconfig (gcc-8): 3 errors
+    gcw0_defconfig (gcc-8): 2 errors
+    gpr_defconfig (gcc-8): 2 errors
+    ip22_defconfig (gcc-8): 3 errors
+    ip32_defconfig (gcc-8): 3 errors
+    jazz_defconfig (gcc-8): 3 errors
+    jmr3927_defconfig (gcc-8): 3 errors
+    lemote2f_defconfig (gcc-8): 3 errors
+    loongson1b_defconfig (gcc-8): 2 errors
+    loongson1c_defconfig (gcc-8): 2 errors
+    loongson2k_defconfig (gcc-8): 2 errors
+    loongson3_defconfig (gcc-8): 2 errors
+    malta_defconfig (gcc-8): 2 errors
+    malta_kvm_defconfig (gcc-8): 2 errors
+    malta_qemu_32r6_defconfig (gcc-8): 2 errors
+    maltaaprp_defconfig (gcc-8): 2 errors
+    maltasmvp_defconfig (gcc-8): 2 errors
+    maltasmvp_eva_defconfig (gcc-8): 2 errors
+    maltaup_defconfig (gcc-8): 2 errors
+    maltaup_xpa_defconfig (gcc-8): 2 errors
+    mpc30x_defconfig (gcc-8): 3 errors
+    mtx1_defconfig (gcc-8): 2 errors
+    nlm_xlp_defconfig (gcc-8): 2 errors
+    nlm_xlr_defconfig (gcc-8): 3 errors
+    omega2p_defconfig (gcc-8): 2 errors
+    pic32mzda_defconfig (gcc-8): 2 errors
+    pistachio_defconfig (gcc-8): 2 errors
+    qi_lb60_defconfig (gcc-8): 2 errors
+    rb532_defconfig (gcc-8): 2 errors
+    rbtx49xx_defconfig (gcc-8): 3 errors
+    rm200_defconfig (gcc-8): 3 errors
+    rs90_defconfig (gcc-8): 2 errors
+    rt305x_defconfig (gcc-8): 2 errors
+    sb1250_swarm_defconfig (gcc-8): 3 errors
+    tb0219_defconfig (gcc-8): 3 errors
+    tb0226_defconfig (gcc-8): 3 errors
+    tb0287_defconfig (gcc-8): 3 errors
+    vocore2_defconfig (gcc-8): 2 errors
+    workpad_defconfig (gcc-8): 3 errors
+    xway_defconfig (gcc-8): 2 errors, 2 warnings
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-12): 2 warnings
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+    x86_64_defconfig (clang-12): 2 warnings
+    x86_64_defconfig (clang-10): 4 warnings
+
+Errors summary:
+
+    13   (.text+0x19b0): undefined reference to `printk'
+    12   (.text+0x1d30): undefined reference to `printk'
+    12   (.text+0x1870): undefined reference to `printk'
+    11   (.text+0x1c40): undefined reference to `printk'
+    11   (.text+0x18e0): undefined reference to `printk'
+    9    (.text+0x1d0c): undefined reference to `printk'
+    9    (.text+0x198c): undefined reference to `printk'
+    7    (.text+0x1c8c): undefined reference to `printk'
+    7    (.text+0x190c): undefined reference to `printk'
+    4    (.text+0x1c3c): undefined reference to `printk'
+    4    (.text+0x18dc): undefined reference to `printk'
+    3    (.text+0x1ca8): undefined reference to `printk'
+    3    (.text+0x1a14): undefined reference to `printk'
+    3    (.text+0x1928): undefined reference to `printk'
+    3    (.text+0x17e8): undefined reference to `printk'
+    2    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:587: undefined re=
+ference to `printk'
+    2    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:584: undefined re=
+ference to `printk'
+    2    (.text+0x1df8): undefined reference to `printk'
+    2    (.text+0x1d88): undefined reference to `printk'
+    2    (.text+0x1a78): undefined reference to `printk'
+    2    (.text+0x1938): undefined reference to `printk'
+    2    (.text+0x18c8): undefined reference to `printk'
+    1    crypto/aegis128-neon-inner.c:11:10: fatal error: arm_neon.h: No su=
+ch file or directory
+    1    crypto/aegis128-neon-inner.c:11:10: fatal error: 'arm_neon.h' file=
+ not found
+    1    arch/arm64/include/asm/neon-intrinsics.h:33:10: fatal error: arm_n=
+eon.h: No such file or directory
+    1    arch/arm64/include/asm/neon-intrinsics.h:33:10: fatal error: 'arm_=
+neon.h' file not found
+    1    ./../include/linux/compiler_types.h:328:38: error: call to =E2=80=
+=98__compiletime_assert_1865=E2=80=99 declared with attribute error: FIELD_=
+PREP: value too large for the field
+    1    ./../include/linux/compiler_types.h:328:38: error: call to =E2=80=
+=98__compiletime_assert_1858=E2=80=99 declared with attribute error: FIELD_=
+PREP: value too large for the field
+    1    (.text+0x2284): undefined reference to `printk'
+    1    (.text+0x1eb0): undefined reference to `printk'
+    1    (.text+0x1e64): undefined reference to `printk'
+    1    (.text+0x1d94): undefined reference to `printk'
+    1    (.text+0x1d54): undefined reference to `printk'
+    1    (.text+0x1d28): undefined reference to `printk'
+    1    (.text+0x1d10): undefined reference to `printk'
+    1    (.text+0x1d08): undefined reference to `printk'
+    1    (.text+0x1d04): undefined reference to `printk'
+    1    (.text+0x1cac): undefined reference to `printk'
+    1    (.text+0x1c84): undefined reference to `printk'
+    1    (.text+0x1ad4): undefined reference to `printk'
+    1    (.text+0x19d4): undefined reference to `printk'
+    1    (.text+0x19a8): undefined reference to `printk'
+    1    (.text+0x1990): undefined reference to `printk'
+    1    (.text+0x1988): undefined reference to `printk'
+    1    (.text+0x192c): undefined reference to `printk'
+    1    (.text+0x1924): undefined reference to `printk'
+    1    (.text+0x1894): undefined reference to `printk'
+    1    (.text+0x1868): undefined reference to `printk'
+    1    (.text+0x1850): undefined reference to `printk'
+    1    (.text+0x1804): undefined reference to `printk'
+    1    (.text+0x17ec): undefined reference to `printk'
+    1    (.text+0x1690): undefined reference to `printk'
+
+Warnings summary:
+
+    37   1 warning generated.
+    16   kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration sp=
+ecifier [-Wduplicate-decl-specifier]
+    7    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to int=
+eger of different size [-Wpointer-to-int-cast]
+    4    mm/hugetlb.c:1180:1: warning: label =E2=80=98check_reserve=E2=80=
+=99 defined but not used [-Wunused-label]
+    2    sound/pci/korg1212/korg1212.c:2260:8: warning: variable 'dsp_code'=
+ is uninitialized when used here [-Wuninitialized]
+    2    sound/pci/korg1212/korg1212.c:2101:33: note: initialize the variab=
+le 'dsp_code' to silence this warning
+    2    sound/pci/cs4281.c:1298:2: warning: variable 'chip' is uninitializ=
+ed when used here [-Wuninitialized]
+    2    sound/pci/cs4281.c:1291:21: note: initialize the variable 'chip' t=
+o silence this warning
+    2    sound/pci/als300.c:713:6: warning: variable 'chip' is uninitialize=
+d when used here [-Wuninitialized]
+    2    sound/pci/als300.c:691:25: note: initialize the variable 'chip' to=
+ silence this warning
+    2    mm/hugetlb.c:1180:1: warning: unused label 'check_reserve' [-Wunus=
+ed-label]
+    2    kernel/trace/trace_osnoise.c:1461:8: warning: =E2=80=98main=E2=80=
+=99 is usually a function [-Wmain]
+    2    drivers/net/wireless/mediatek/mt76/mt7921/mcu.c:114:10: warning: i=
+mplicit conversion from enumeration type 'enum mt76_cipher_type' to differe=
+nt enumeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    2    drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:114:10: warning: i=
+mplicit conversion from enumeration type 'enum mt76_cipher_type' to differe=
+nt enumeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    2    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least=
+ version 4.6 of GCC [-W#warnings]
+    2    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    2    2 warnings generated.
+    2    #warning This code requires at least version 4.6 of GCC
+    1    kernel/trace/trace_events_hist.c:4601:13: warning: stack frame siz=
+e of 1384 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=
+=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: warning: stack fr=
+ame size of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-la=
+rger-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame siz=
+e of 1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    1    drivers/staging/fbtft/fbtft-core.c:902:12: warning: stack frame si=
+ze of 1080 bytes in function 'fbtft_init_display_from_property' [-Wframe-la=
+rger-than=3D]
+    1    drivers/net/wireless/cisco/airo.c:3075:12: warning: stack frame si=
+ze of 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1    drivers/net/ethernet/lantiq_etop.c:281:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unuse=
+d_result [-Wunused-result]
+    1    drivers/net/ethernet/lantiq_etop.c:273:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unuse=
+d_result [-Wunused-result]
+    1    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame =
+size of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=
+=3D]
+    1    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack fra=
+me size of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_relocate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-=
+1+0
+    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+eb_copy_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: =
+warning: stack frame size of 5560 bytes in function 'calculate_bandwidth' [=
+-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6:=
+ warning: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-la=
+rger-than=3D]
+    1    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame=
+ size of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1    crypto/wp512.c:782:13: warning: stack frame size of 1176 bytes in =
+function 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu=
+_ev_hw_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:27: warning: =E2=80=98arc_pm=
+u_cache_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    1    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/l=
+ib/modules/5.14.0-rc2-next-20210720/kernel/drivers/media/tuners/tuner-types=
+.ko: unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 2 warnin=
+gs, 0 section mismatches
+
+Errors:
+    (.text+0x1ad4): undefined reference to `printk'
+    (.text+0x1eb0): undefined reference to `printk'
+
+Warnings:
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 FAIL, 3 errors, 1 warning, 0 section =
+mismatches
+
+Errors:
+    arch/arm64/include/asm/neon-intrinsics.h:33:10: fatal error: arm_neon.h=
+: No such file or directory
+    ./../include/linux/compiler_types.h:328:38: error: call to =E2=80=98__c=
+ompiletime_assert_1858=E2=80=99 declared with attribute error: FIELD_PREP: =
+value too large for the field
+    ./../include/linux/compiler_types.h:328:38: error: call to =E2=80=98__c=
+ompiletime_assert_1865=E2=80=99 declared with attribute error: FIELD_PREP: =
+value too large for the field
+
+Warnings:
+    kernel/trace/trace_osnoise.c:1461:8: warning: =E2=80=98main=E2=80=99 is=
+ usually a function [-Wmain]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-12) =E2=80=94 FAIL, 1 error, 39 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    crypto/aegis128-neon-inner.c:11:10: fatal error: 'arm_neon.h' file not =
+found
+
+Warnings:
+    kernel/trace/trace_events_hist.c:4601:13: warning: stack frame size of =
+1384 bytes in function 'hist_trigger_print_key' [-Wframe-larger-than=3D]
+    1 warning generated.
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+    drivers/firmware/tegra/bpmp-debugfs.c:321:16: warning: stack frame size=
+ of 1264 bytes in function 'bpmp_debug_store' [-Wframe-larger-than=3D]
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least vers=
+ion 4.6 of GCC [-W#warnings]
+    #warning This code requires at least version 4.6 of GCC
+    1 warning generated.
+    crypto/wp512.c:782:13: warning: stack frame size of 1176 bytes in funct=
+ion 'wp512_process_buffer' [-Wframe-larger-than=3D]
+    1 warning generated.
+    sound/pci/korg1212/korg1212.c:2260:8: warning: variable 'dsp_code' is u=
+ninitialized when used here [-Wuninitialized]
+    sound/pci/korg1212/korg1212.c:2101:33: note: initialize the variable 'd=
+sp_code' to silence this warning
+    1 warning generated.
+    sound/pci/als300.c:713:6: warning: variable 'chip' is uninitialized whe=
+n used here [-Wuninitialized]
+    sound/pci/als300.c:691:25: note: initialize the variable 'chip' to sile=
+nce this warning
+    1 warning generated.
+    sound/pci/cs4281.c:1298:2: warning: variable 'chip' is uninitialized wh=
+en used here [-Wuninitialized]
+    sound/pci/cs4281.c:1291:21: note: initialize the variable 'chip' to sil=
+ence this warning
+    1 warning generated.
+    drivers/gpu/drm/selftests/test-drm_mm.c:372:12: warning: stack frame si=
+ze of 1040 bytes in function '__igt_reserve' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/wireless/cisco/airo.c:3075:12: warning: stack frame size of=
+ 1056 bytes in function 'airo_thread' [-Wframe-larger-than=3D]
+    1 warning generated.
+    drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:114:10: warning: implic=
+it conversion from enumeration type 'enum mt76_cipher_type' to different en=
+umeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    1 warning generated.
+    drivers/net/wireless/mediatek/mt76/mt7921/mcu.c:114:10: warning: implic=
+it conversion from enumeration type 'enum mt76_cipher_type' to different en=
+umeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3043:6: warn=
+ing: stack frame size of 1384 bytes in function 'bw_calcs' [-Wframe-larger-=
+than=3D]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: warni=
+ng: stack frame size of 5560 bytes in function 'calculate_bandwidth' [-Wfra=
+me-larger-than=3D]
+    2 warnings generated.
+    drivers/staging/fbtft/fbtft-core.c:992:5: warning: stack frame size of =
+1208 bytes in function 'fbtft_init_display' [-Wframe-larger-than=3D]
+    drivers/staging/fbtft/fbtft-core.c:902:12: warning: stack frame size of=
+ 1080 bytes in function 'fbtft_init_display_from_property' [-Wframe-larger-=
+than=3D]
+    2 warnings generated.
+    drivers/mtd/chips/cfi_cmdset_0001.c:1872:12: warning: stack frame size =
+of 1064 bytes in function 'cfi_intelext_writev' [-Wframe-larger-than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 2 warnings, 0 section mi=
+smatches
+
+Errors:
+    crypto/aegis128-neon-inner.c:11:10: fatal error: arm_neon.h: No such fi=
+le or directory
+
+Warnings:
+    kernel/trace/trace_osnoise.c:1461:8: warning: =E2=80=98main=E2=80=99 is=
+ usually a function [-Wmain]
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-10) =E2=80=94 FAIL, 1 error, 17 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm64/include/asm/neon-intrinsics.h:33:10: fatal error: 'arm_neon.=
+h' file not found
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+    sound/pci/korg1212/korg1212.c:2260:8: warning: variable 'dsp_code' is u=
+ninitialized when used here [-Wuninitialized]
+    sound/pci/korg1212/korg1212.c:2101:33: note: initialize the variable 'd=
+sp_code' to silence this warning
+    1 warning generated.
+    sound/pci/als300.c:713:6: warning: variable 'chip' is uninitialized whe=
+n used here [-Wuninitialized]
+    sound/pci/als300.c:691:25: note: initialize the variable 'chip' to sile=
+nce this warning
+    1 warning generated.
+    sound/pci/cs4281.c:1298:2: warning: variable 'chip' is uninitialized wh=
+en used here [-Wuninitialized]
+    sound/pci/cs4281.c:1291:21: note: initialize the variable 'chip' to sil=
+ence this warning
+    1 warning generated.
+    drivers/net/wireless/mediatek/mt76/mt7915/mcu.c:114:10: warning: implic=
+it conversion from enumeration type 'enum mt76_cipher_type' to different en=
+umeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    1 warning generated.
+    drivers/net/wireless/mediatek/mt76/mt7921/mcu.c:114:10: warning: implic=
+it conversion from enumeration type 'enum mt76_cipher_type' to different en=
+umeration type 'enum mcu_cipher_type' [-Wenum-conversion]
+    1 warning generated.
+    drivers/staging/greybus/audio_topology.c:977:12: warning: stack frame s=
+ize of 3328 bytes in function 'gbaudio_tplg_create_widget' [-Wframe-larger-=
+than=3D]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x17ec): undefined reference to `printk'
+    (.text+0x192c): undefined reference to `printk'
+    (.text+0x1cac): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x18c8): undefined reference to `printk'
+    (.text+0x1a14): undefined reference to `printk'
+    (.text+0x1d88): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    (.text+0x1938): undefined reference to `printk'
+    (.text+0x1a78): undefined reference to `printk'
+    (.text+0x1df8): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x1938): undefined reference to `printk'
+    (.text+0x1a78): undefined reference to `printk'
+    (.text+0x1df8): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 1 warning, =
+0 section mismatches
+
+Errors:
+    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:584: undefined referen=
+ce to `printk'
+    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:587: undefined referen=
+ce to `printk'
+
+Warnings:
+    mm/hugetlb.c:1180:1: warning: label =E2=80=98check_reserve=E2=80=99 def=
+ined but not used [-Wunused-label]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x17e8): undefined reference to `printk'
+    (.text+0x1928): undefined reference to `printk'
+    (.text+0x1ca8): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x18dc): undefined reference to `printk'
+    (.text+0x1c3c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 1 warning, =
+0 section mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+Warnings:
+    mm/hugetlb.c:1180:1: warning: label =E2=80=98check_reserve=E2=80=99 def=
+ined but not used [-Wunused-label]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x1894): undefined reference to `printk'
+    (.text+0x19d4): undefined reference to `printk'
+    (.text+0x1d54): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings=
+, 0 section mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-12) =E2=80=94 PASS, 0 er=
+rors, 2 warnings, 0 section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-10) =E2=80=94 PASS, 0 er=
+rors, 3 warnings, 0 section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+    aarch64-linux-gnu-strip: warning: /tmp/kci/linux/build/_modules_/lib/mo=
+dules/5.14.0-rc2-next-20210720/kernel/drivers/media/tuners/tuner-types.ko: =
+unsupported GNU_PROPERTY_TYPE (5) type: 0xc0000000
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-12) =E2=80=94 PASS, 0 errors, 2 warn=
+ings, 0 section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x1804): undefined reference to `printk'
+    (.text+0x1924): undefined reference to `printk'
+    (.text+0x1c84): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    (.text+0x18dc): undefined reference to `printk'
+    (.text+0x1c3c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    arch/arc/include/asm/perf_event.h:126:27: warning: =E2=80=98arc_pmu_cac=
+he_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: =E2=80=98arc_pmu_ev_h=
+w_map=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    mm/hugetlb.c:1180:1: warning: label =E2=80=98check_reserve=E2=80=99 def=
+ined but not used [-Wunused-label]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+    mm/hugetlb.c:1180:1: warning: unused label 'check_reserve' [-Wunused-la=
+bel]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    mm/hugetlb.c:1180:1: warning: unused label 'check_reserve' [-Wunused-la=
+bel]
+    1 warning generated.
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    mm/hugetlb.c:1180:1: warning: label =E2=80=98check_reserve=E2=80=99 def=
+ined but not used [-Wunused-label]
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x17e8): undefined reference to `printk'
+    (.text+0x1928): undefined reference to `printk'
+    (.text+0x1ca8): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x17e8): undefined reference to `printk'
+    (.text+0x1928): undefined reference to `printk'
+    (.text+0x1ca8): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x1850): undefined reference to `printk'
+    (.text+0x1990): undefined reference to `printk'
+    (.text+0x1d10): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    (.text+0x1d04): undefined reference to `printk'
+    (.text+0x1e64): undefined reference to `printk'
+    (.text+0x2284): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    (.text+0x18dc): undefined reference to `printk'
+    (.text+0x1c3c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x1988): undefined reference to `printk'
+    (.text+0x1d08): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warning=
+s, 0 section mismatches
+
+Errors:
+    (.text+0x1690): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings,=
+ 0 section mismatches
+
+Errors:
+    (.text+0x1a14): undefined reference to `printk'
+    (.text+0x1d94): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0=
+ section mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x18dc): undefined reference to `printk'
+    (.text+0x1c3c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    kernel/trace/bpf_trace.c:968:14: warning: cast from pointer to integer =
+of different size [-Wpointer-to-int-cast]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:584: undefined referen=
+ce to `printk'
+    /tmp/kci/linux/build/../arch/mips/kernel/genex.S:587: undefined referen=
+ce to `printk'
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x1868): undefined reference to `printk'
+    (.text+0x19a8): undefined reference to `printk'
+    (.text+0x1d28): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x190c): undefined reference to `printk'
+    (.text+0x1c8c): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, =
+0 section mismatches
+
+Errors:
+    (.text+0x18c8): undefined reference to `printk'
+    (.text+0x1a14): undefined reference to `printk'
+    (.text+0x1d88): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x18e0): undefined reference to `printk'
+    (.text+0x1c40): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    (.text+0x1870): undefined reference to `printk'
+    (.text+0x19b0): undefined reference to `printk'
+    (.text+0x1d30): undefined reference to `printk'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/smpboot.c:50:20: warning: duplicate 'inline' declaration specifi=
+er [-Wduplicate-decl-specifier]
+    1 warning generated.
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_re=
+locate_parse_slow()+0x427: stack state mismatch: cfa1=3D4+120 cfa2=3D-1+0
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: eb_co=
+py_relocations()+0x1d5: stack state mismatch: cfa1=3D4+104 cfa2=3D-1+0
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    (.text+0x198c): undefined reference to `printk'
+    (.text+0x1d0c): undefined reference to `printk'
+
+Warnings:
+    drivers/net/ethernet/lantiq_etop.c:273:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_res=
+ult [-Wunused-result]
+    drivers/net/ethernet/lantiq_etop.c:281:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_res=
+ult [-Wunused-result]
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---
+For more info write to <info@kernelci.org>

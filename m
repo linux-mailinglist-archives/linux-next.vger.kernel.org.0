@@ -2,87 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7953CF5BF
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 10:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7863CF5F2
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jul 2021 10:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbhGTH1m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jul 2021 03:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S233450AbhGTHhC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jul 2021 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbhGTH13 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 03:27:29 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E26AC061574;
-        Tue, 20 Jul 2021 01:08:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GTWYL1JPXz9sWX;
-        Tue, 20 Jul 2021 18:08:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626768486;
-        bh=T1GnYFQVjkMA5xYpU+3ytUl0tJIBJK55G7FhdKOT7eE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kient5TSA2SDf7NBKGvnekHFByWrAOPU36qXbwRtXLy5gQeq3g2w+FQl+5oVwFJNX
-         1HjBwH++OJGi50z9hVcYZSvsIlSaPlw8OyiWieWb2/hmEExnxNVZq5rdNpD9XjHkbU
-         47NOFUCtNd6AE6oe4JQvme7LrrI2FaeuAaipn5/0yd0r78B/lO7ir+sMHPFUBQw9EC
-         nNExSM4ZOYEbIs28JyTg+mXgBULdfgRlfHOd6ed7BfAAzmF0q5ct/iNRzyIKsViGNq
-         d7SFmMe9JLnDH/hCroKy9YLamaNnkoJHrPQlA6nfqVWRHa5Xw8bzFgdSUHL8zj46/+
-         MzHbl1Ln2uoTw==
-Date:   Tue, 20 Jul 2021 18:08:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        with ESMTP id S234190AbhGTHhA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 03:37:00 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80EC061574
+        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 01:17:38 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id hc15so33102344ejc.4
+        for <linux-next@vger.kernel.org>; Tue, 20 Jul 2021 01:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v2gsQnzIST0gsjN3UJrcLe/t2Tw7WtqJWLfqcGrUyzU=;
+        b=qfrwvKcsvCXv0OESA+8RRYb7WSVVu4AfzsV3nuOa9Q9CjH4T1NVnWAfHmEErE0ve/q
+         Tl7W2dd7fkoIotTprcdm/apYaZz7befwiEzfxZcU5SCfqdl6uRTNU1z9JZIDtiNTfGaA
+         9PCd5OGhMHTEpfxtbx18A9defDJgJAtNSFt4zDxnG+E/juIvSon9dvw+LmgAFkBi7dBt
+         g+7M8F0ojESOmKmZ1vSLpO38Pqlwt6rrABUsjVCzmWqtISNgyeiRy3SH4v92iho/BU2M
+         H854FWZE+0zyuXbPkFkJizx75kVv59dgJ77yFCWqZWBn/Pzb1wQ/QhOErneyDCVwaX8u
+         d2+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v2gsQnzIST0gsjN3UJrcLe/t2Tw7WtqJWLfqcGrUyzU=;
+        b=KZJXa3+Ee5Aiy6PbwQLtIFp2t9dRQPoFsMjE4dUzDthcrWoYtpn5iynPbgyrJDARcx
+         w7OInJwG2SaGVwZFf9/fByR2wPHVL3uocqsEPpn2olgciuD7e6xRVZa6G+3k+UfFUST2
+         6EXV47t81xnWh+LxDOO0EB3QmUA1St4jkG8WqbER/6RPNAYS2Xozsu1VR1ebu9T0IgaS
+         Y8AzzaGpXM1HPXwS1SHvLKBIfKYbLLahXh80vYoTD0cNxgnzMZrDn9tLYzWPitGpSGXD
+         /rzr2WZp/txOlqLE5kvlyj6ZR9j+kY8EnCLFN/BXWLCkzWkJOLj7Lf2XGNTQsWMX0Ezm
+         no5Q==
+X-Gm-Message-State: AOAM530/GqB8Qh6GQ6RgRg0vRFtrQRzE9mWAX0engRk/RlH6ij9lhKEF
+        GK0ouGd1uezfqq997RwbiFS/DAJENSNz5CtT/GhKWw==
+X-Google-Smtp-Source: ABdhPJzh5NZqbV6DMl/3IzLzdFeNMJYE+oTceH2715CwSYBA7iRhUu1kXrBQ0LaNs4QVN8ZF43XJv3ua51o4ERugzfc=
+X-Received: by 2002:a17:906:844d:: with SMTP id e13mr31351133ejy.503.1626769056841;
+ Tue, 20 Jul 2021 01:17:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210720174300.018cc765@canb.auug.org.au>
+In-Reply-To: <20210720174300.018cc765@canb.auug.org.au>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 20 Jul 2021 13:47:25 +0530
+Message-ID: <CA+G9fYs2ApGkrJHL5HOO1jEJZ714itVp+Tdj7fWzkG+JWc=pOA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the printk tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Petr Mladek <pmladek@suse.com>, Chris Down <chris@chrisdown.name>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-tegra tree
-Message-ID: <20210720180805.57baa5c7@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NT02V4nJ.dvgeElgK/k4Rzi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NT02V4nJ.dvgeElgK/k4Rzi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 20 Jul 2021 at 13:13, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the printk tree, today's linux-next build (mips allnoconfig)
+> failed like this:
+>
+> arch/mips/kernel/genex.o: In function `handle_mcheck_int':
+> (.text+0x190c): undefined reference to `printk'
+> arch/mips/kernel/genex.o: In function `handle_reserved_int':
+> (.text+0x1c8c): undefined reference to `printk'
+>
+> Caused by commit
+>
+>   337015573718 ("printk: Userspace format indexing support")
 
-Hi all,
+Following MIPS builds failed at our end due the reported problem.
 
-After merging the drm-tegra tree, today's linux-next build (arm64
-randconfig) failed like this:
+ - build/gcc-10-allnoconfig
+ - build/gcc-10-ar7_defconfig
+ - build/gcc-10-ath79_defconfig
+ - build/gcc-10-bcm47xx_defconfig
+ - build/gcc-10-bcm63xx_defconfig
+ - build/gcc-10-cavium_octeon_defconfig
+ - build/gcc-10-defconfig
+ - build/gcc-10-e55_defconfig
+ - build/gcc-10-malta_defconfig
+ - build/gcc-10-nlm_xlp_defconfig
+ - build/gcc-10-rt305x_defconfig
 
-ERROR: modpost: "sync_file_create" [drivers/gpu/host1x/host1x.ko] undefined!
 
-Caused by commit
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-  ad0529424def ("gpu: host1x: Add DMA fence implementation")
-
-This build has
-
-# CONFIG_SYNC_FILE is not set
-CONFIG_TEGRA_HOST1X=3Dm
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NT02V4nJ.dvgeElgK/k4Rzi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD2hGUACgkQAVBC80lX
-0GwsxAf+Kqmxmfi4ccOUI/z7vSs5q50Vuzs9Nh9+wFr5auPGkfvor8ROVaIglyf0
-KNRi1Gx8s09SlNTQ7G81ySnSStyZba105WWXhQij3JEnVBzA7MZivP9gL7DcdNxA
-c7u3zZ/MICGsBRx0W4YuKT4tVkl3jo8idHdQe4yhTI9qALnGeHEzl04QMwWsHeIR
-fkWpZR1phX2N1LwKLXa/hUGecPyNPOovL/fdZVQRg982CiH8Cz8yJP7kU7Xmp6qm
-fSfvlhb80aFfLLZnbc3WLvcCiOjWlQhoP5fSsyTTOTQoMGB4tXneQVA1oEYLxQlB
-eh898uiYnCo3Dw4TweOKcxogCEBhHw==
-=d7SQ
------END PGP SIGNATURE-----
-
---Sig_/NT02V4nJ.dvgeElgK/k4Rzi--
+- Naresh

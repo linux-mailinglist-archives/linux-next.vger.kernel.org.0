@@ -2,103 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872443D0503
-	for <lists+linux-next@lfdr.de>; Wed, 21 Jul 2021 01:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C2A3D0664
+	for <lists+linux-next@lfdr.de>; Wed, 21 Jul 2021 03:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhGTWaJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Jul 2021 18:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbhGTWaF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 20 Jul 2021 18:30:05 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2AC061762;
-        Tue, 20 Jul 2021 16:10:41 -0700 (PDT)
+        id S229816AbhGUAqT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 20 Jul 2021 20:46:19 -0400
+Received: from ozlabs.org ([203.11.71.1]:38045 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229750AbhGUAqS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 20 Jul 2021 20:46:18 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GTvZj6WnRz9sX1;
-        Wed, 21 Jul 2021 09:10:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GTybx6ZH0z9sWS;
+        Wed, 21 Jul 2021 11:26:53 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626822638;
-        bh=QTYN7KKRV+LXieSOXxO731VmB+JNarv9cNp4faA8WS0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ebZ7xjQPHhlXohP4VQH5tElM0z3o+XbN7zOpSjnxN1VC0w/O7mfz+9kG/VJidVZw3
-         T68yh71wAE6NVENyNT4t3U1lAT0mxREu5a+/Zp9kiuWatJto/CPzGlwHq1ghvNRvYJ
-         LmUiK0DenttcQQCDIke/AyGvSaXhc4Qg6EPLfUyyCSH1N2yOosk76huH3B2Vf0SjrL
-         LRJQKIB4h3LAnRymtbw2kPyT22YpOzwkC2k1jCRnIZTurjhZG1rOblT7sdlliMG4Tm
-         BCsqzR6qV/CxC8UWqPYytDiIgweSFmil2w6Sh1DQFQAX6yOgqVoP+MvEIdG0+A+3Go
-         sUnMkCbR3sgZQ==
-Date:   Wed, 21 Jul 2021 09:10:36 +1000
+        s=201702; t=1626830814;
+        bh=PD5aBmlSsWDfHbyhJMyznAe/fch2NwDfbSt8on99lkg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RekI72uDE97Ftj1BZj8cNonY16kBEeaVOH2s2ws2PLGLjtfqm/f/gyt3yj3tHUJcf
+         TQjC18z3L69ek9/I/LAwMT+yZ9FMq4RajSlAeLczO0xPBHVNBvMBP7/X5cM+yy8Inq
+         Naqj4KRyY7Brmfeci+aYrqGO1TJOxOTVzpFDKOVdtvnbGnr6/jRL7aGJiPUwvybzx6
+         v6tJ2IOrJzT38lb53z317sa/nW14f057AhdXdCii9WFN3rNsy5VC4ss5RhcNH8Rwq6
+         Ywp47H3PIY4A9sHtlbK85KXY4KUorAEQ2f79oHOZzeSw/Q6PNpdqelmW3D/JH0CCyV
+         yasu1n1C+ZEZw==
+Date:   Wed, 21 Jul 2021 11:26:52 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20210721091036.443dd942@canb.auug.org.au>
-In-Reply-To: <20210720140339.cfdf2932cbd750e3af19ada2@linux-foundation.org>
-References: <20210720182339.63c55429@canb.auug.org.au>
-        <20210720140339.cfdf2932cbd750e3af19ada2@linux-foundation.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210721112652.47225cb4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EJnitwWaWRo0VTQpCtzaku6";
+Content-Type: multipart/signed; boundary="Sig_/=Bvj6mJdUmBVPTVmWVIKz+V";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EJnitwWaWRo0VTQpCtzaku6
+--Sig_/=Bvj6mJdUmBVPTVmWVIKz+V
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andrew,
+Hi all,
 
-On Tue, 20 Jul 2021 14:03:39 -0700 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
->
-> On Tue, 20 Jul 2021 18:23:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
->=20
-> > Hi all,
-> >=20
-> > After merging the akpm-current tree, today's linux-next build (arm64
-> > randconfig) failed like this:
-> >=20
-> > arch/arm64/include/asm/neon-intrinsics.h:33:10: fatal error: arm_neon.h=
-: No such file or directory
-> >=20
-> > Also, the nds32 defconfig build failed like this;
-> >=20
-> > arch/nds32/include/asm/nds32.h:13:10: fatal error: nds32_intrinsic.h: N=
-o such file or directory
-> >=20
-> > Presumably caused by commit
-> >=20
-> >   6f4266a78a4e ("kbuild: decouple build from userspace headers") =20
->=20
-> I'm seeing several reports against that patch so I dropped it for now.
+After merging the net-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-I have removed it from linux-next today.
+In file included from include/net/dsa.h:23,
+                 from net/ethernet/eth.c:59:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/dsa.h:23,
+                 from net/core/flow_dissector.c:8:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/dsa.h:23,
+                 from net/core/dev.c:102:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/vxlan.h:9,
+                 from drivers/net/ethernet/emulex/benet/be_main.c:22:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/vxlan.h:9,
+                 from drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:37:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/net/vxlan.h:9,
+                 from drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c:50:
+include/net/switchdev.h:410:1: error: expected identifier or '(' before '{'=
+ token
+  410 | {
+      | ^
+include/net/switchdev.h:399:1: warning: 'switchdev_handle_fdb_del_to_device=
+' declared 'static' but never defined [-Wunused-function]
+  399 | switchdev_handle_fdb_del_to_device(struct net_device *dev,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  8ca07176ab00 ("net: switchdev: introduce a fanout helper for SWITCHDEV_FD=
+B_{ADD,DEL}_TO_DEVICE")
+
+I have used the net-next tree from next-20210720 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/EJnitwWaWRo0VTQpCtzaku6
+--Sig_/=Bvj6mJdUmBVPTVmWVIKz+V
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD3V+wACgkQAVBC80lX
-0GyMrQf/VUcrXTwE4YSmCteLTRd/hJts2aShAaVFvtV1/MEWkJ70lhTZNR8LGFDx
-CzG3ChXIPBXS4W2vOh1+gI30UYvjM1H+UkwZRbygWbdZ+QHurtj8Lh+TAZ8msLFT
-632fTEvJiHNWxkBVArVdtTTUSQx32NtyfEiZVIT6xwt3rJjDGvOTU8nB7psyXO3E
-fIocm2/cvNp0D8HLhgeJ4umcMuD4AumewefLR48q6iIoPfoSQNUy0sJqpTsL80mT
-0D48mFtpN1h0RcxByIQtnlpfC+RU/LX4MXgkdQPLPRgVSR1aev7CsjSmQD5mxSxq
-umu9o3AI9iyY5bd6fgKCZJiWEKD2nw==
-=3fuY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD3d9wACgkQAVBC80lX
+0GwPwgf9HXVvl9iHMXpt6OtBw+q0VBSm/4vlMsRz3al1Ppbdp8qBSror7nsDCsJG
+1KYL1/8wjoDAk2dolYX29e9UGcXAfHWytPYTaQYjOpSEcheAC+tVw37yyV6df1pr
+lAPt5nDjHb/TgQBvHj9xRyjIhik9A8DWQpiZPGvV1gIGKpwUxLi+z4qCQiqo047b
++/fe2IDq21v+n2gCn8bBLC5cka+4604oRQKo5hjG5LGr7wP4PhTFsjvjGqqoWi7y
+NCaSQZdtgw8AotRmWcSWnOAUODAxZetOZmAJSaE2QZ7OFXU+q3IqXRc2LgUQYbt2
+wpwGxMUewy/pliDlc/O9lqOC4HT0AA==
+=KRAc
 -----END PGP SIGNATURE-----
 
---Sig_/EJnitwWaWRo0VTQpCtzaku6--
+--Sig_/=Bvj6mJdUmBVPTVmWVIKz+V--

@@ -2,109 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FAF3D3785
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 11:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE743D392A
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 13:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbhGWIgX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Jul 2021 04:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbhGWIgW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jul 2021 04:36:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EB7C061757
-        for <linux-next@vger.kernel.org>; Fri, 23 Jul 2021 02:16:56 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m6rIV-0006rm-Hg; Fri, 23 Jul 2021 11:16:47 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m6rIP-00043Y-Re; Fri, 23 Jul 2021 11:16:41 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m6rIP-0007YL-Qa; Fri, 23 Jul 2021 11:16:41 +0200
-Date:   Fri, 23 Jul 2021 11:16:41 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Vinod Koul <vkoul@kernel.org>, Greg KH <greg@kroah.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S232631AbhGWK3L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jul 2021 06:29:11 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:60006 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232037AbhGWK3K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jul 2021 06:29:10 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 34A9C22651;
+        Fri, 23 Jul 2021 11:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1627038583; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5/VuAuA8TTB/OqfzWiuUX41Ip/fB8TlfGEDwF7IigoI=;
+        b=FOb+yjQ4MaUhNtGGVRPLDb3vtFN1lm1zxb1S6okTAfRpEAGH8+DKFbA4+88rj2N350mNbM
+        MtL9b8vXxFE4xwjsEAWV2/+BnPwF+D5Ttn1+aWSCngkpa12R2nWT2x9Asp4UwzEjObAnaA
+        JLbd+Ll+2ys0QvDl2ygoyBx0Hc2+IPA=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 06037A3B84;
+        Fri, 23 Jul 2021 11:09:42 +0000 (UTC)
+Date:   Fri, 23 Jul 2021 13:09:42 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the dmaengine tree with the
- driver-core tree
-Message-ID: <20210723091641.zse42sotjt2pqiif@pengutronix.de>
-References: <20210723155354.082a62d8@canb.auug.org.au>
+Subject: [PATCH] printk/documentation: Update printk()/_printk() documentation
+Message-ID: <YPqjdqSH5j69FnHV@alley>
+References: <20210720162423.75f61ce0@canb.auug.org.au>
+ <YPa/D8tSyk7dw1/l@chrisdown.name>
+ <YPbABBSTkN+xNY0w@chrisdown.name>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fr5d5cyat2qyc4gs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210723155354.082a62d8@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+In-Reply-To: <YPbABBSTkN+xNY0w@chrisdown.name>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+The commit 337015573718b161 ("printk: Userspace format indexing support")
+caused the following warning when building htmldocs:
 
---fr5d5cyat2qyc4gs
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel/printk/printk.c:1: warning: 'printk' not found
 
-Hello,
+The problem is that printk() became a macro that is defined
+in include/linux/printk.h instead of kernel/printk.c. The original
+function was renamed to _printk().
 
-On Fri, Jul 23, 2021 at 03:53:54PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the dmaengine tree got a conflict in:
->=20
->   drivers/dma/idxd/sysfs.c
->=20
-> between commit:
->=20
->   fc7a6209d571 ("bus: Make remove callback return void")
->=20
-> from the driver-core tree and commit:
->=20
->   d9e5481fca74 ("dmaengine: dsa: move dsa_bus_type out of idxd driver to =
-standalone")
->=20
-> from the dmaengine tree.
+Fixes: 337015573718b161 ("printk: Userspace format indexing support")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/YPbBfdz9srIpI+bb@chrisdown.name
+---
+This should do the trick. I do not longer see the warning.
 
-Greg provided a tag for this case at
+Documentation/core-api/printk-basics.rst |  6 +++---
+ include/linux/printk.h                   | 12 ++++++++++++
+ kernel/printk/printk.c                   |  3 ++-
+ 3 files changed, 17 insertions(+), 4 deletions(-)
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/=
-bus_remove_return_void-5.15
+diff --git a/Documentation/core-api/printk-basics.rst b/Documentation/core-api/printk-basics.rst
+index 965e4281eddd..3160a73c27b1 100644
+--- a/Documentation/core-api/printk-basics.rst
++++ b/Documentation/core-api/printk-basics.rst
+@@ -108,8 +108,8 @@ Function reference
+ ==================
+ 
+ .. kernel-doc:: kernel/printk/printk.c
+-   :functions: printk
++   :functions: _printk
+ 
+ .. kernel-doc:: include/linux/printk.h
+-   :functions: pr_emerg pr_alert pr_crit pr_err pr_warn pr_notice pr_info
+-      pr_fmt pr_debug pr_devel pr_cont
++   :functions: printk pr_emerg pr_alert pr_crit pr_err pr_warn
++	pr_notice pr_info pr_fmt pr_debug pr_devel pr_cont
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index 2651b82ed352..e0e3411db67b 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -431,6 +431,18 @@ struct pi_entry {
+ 	})
+ 
+ 
++/**
++ * printk - Print a message
++ * @fmt: format string
++ * @...: arguments for the format string
++ *
++ * This macro generates metadata for printk indexing and prints the message
++ * using _printk(). It uses pr_fmt() to generate the format string.
++ *
++ * The default log level is used when a particular one is not part of
++ * the message prefix. pr_<level>() macros are preferred because each
++ * caller should know the exact purpose of the message.
++ */
+ #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+ #define printk_deferred(fmt, ...)					\
+ 	printk_index_wrap(_printk_deferred, fmt, ##__VA_ARGS__)
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 765f7af6ce56..2e5559175214 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2187,7 +2187,8 @@ EXPORT_SYMBOL_GPL(vprintk_default);
+  * _printk - print a kernel message
+  * @fmt: format string
+  *
+- * This is _printk(). It can be called from any context. We want it to work.
++ * This is printk() implementation. It can be called from any context.
++ * We want it to work.
+  *
+  * If printk indexing is enabled, _printk() is called from printk_index_wrap.
+  * Otherwise, printk is simply #defined to _printk.
+-- 
+2.26.2
 
-=2E Vinod might want to rebase on top of this or merge it into his tree
-with Stephen's conflict resolution.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---fr5d5cyat2qyc4gs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD6iPcACgkQwfwUeK3K
-7Am9PAf8DT64/bN05JlJzWdHDafV5UAYyevkebDweEgpAByiBeWNPjO1rMX68kK9
-8C4y7FM3HAZquL7yIrbXDULKcU2i/XwIs1UgkbT269v1b0Mb+wbyk6tYYIKita3M
-8rLC6khp1lzyuJT5vNeTYh3jMRC+IHQXNXmD4E+JY1JarAXB9A93xn7wLVUlNTYX
-/dGop5FL68mUEv3TKxdLOw8lwcrMyfY+l0VsahkIDfUFEz/QAbZXTN4EofUWxfyY
-hDHu/Z/bjnW2d0XT/l6QBFShZT5RzLMba9Bad3soFTIsITGj1ba6ux9ZPH30B+F/
-o0ksFs48CsLpTtniaoIwlihKT/T9/Q==
-=6Rbt
------END PGP SIGNATURE-----
-
---fr5d5cyat2qyc4gs--

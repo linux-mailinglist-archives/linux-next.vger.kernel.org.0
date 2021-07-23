@@ -2,75 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29893D3A01
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 14:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CAC3D3A3E
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 14:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbhGWLeM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Jul 2021 07:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234833AbhGWLeL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jul 2021 07:34:11 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04757C061575
-        for <linux-next@vger.kernel.org>; Fri, 23 Jul 2021 05:14:45 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b9so1288726wrx.12
-        for <linux-next@vger.kernel.org>; Fri, 23 Jul 2021 05:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XAJbbJ2Fhb95D1bufSM9Sll38F8qYBcxQt3PahKULLo=;
-        b=OHFHerECKRQuofmF4bzLbdsCWKHWrPzmTLptlrNBwaogFJGOXmtLabF1gPwUu3fXsD
-         wek/Kecjhu1p1WHOxKPdXNAvDCes/dfwWjiQg+93bo7CauraR418vYOLC2XJ6Kfhiom9
-         0JFDEQSCKzbSjgeDMb/dcmcsfcN+qo7JuiDkA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XAJbbJ2Fhb95D1bufSM9Sll38F8qYBcxQt3PahKULLo=;
-        b=IBbg7xd6eTTWA21NVA9zXP0WjUefLRg+nTHFKuVBc6HNC3El0g8PesbOFM7Q3jZvMT
-         h5jqDDZgiAS0QhYsLcZYTXH6KjITNVRx0ISNz8kmgjhJ+HYydruHezi0yG7P4kjYEhqp
-         P0rYY/tYCUCJgFIbVV7KtZjqOV3Mkbwu5TxbDG/We7ulkGfM9HH5kGNJTswYyWlUv3Nv
-         fdvkh4BlR/7tUNfTXPpxf2v4S6AWi3U4fjnPsMNhoDXmfHiejvciA2c2dnYd6rq8Ipcu
-         9ixawxI0g4Z1LrAiE9ycVJ3v5/ME93IEah10Nm1g/PDnhY1b52KXUIZX+Nh2Le9h+5F/
-         DmsQ==
-X-Gm-Message-State: AOAM532h+U7WLWamIg9K0/swzMKZIPnZKOu4Aq08dMag+iadByY9+47j
-        ssPbYZTPz9l1avY2UmBgKdo7YQ==
-X-Google-Smtp-Source: ABdhPJyAIq5ghCjE0vy5rcG9LcABJkjlflIDedVx1xH4vmIYNuGA8a2XRUmZf9WLbrKvMG2657E6Ig==
-X-Received: by 2002:adf:d086:: with SMTP id y6mr5267284wrh.247.1627042483608;
-        Fri, 23 Jul 2021 05:14:43 -0700 (PDT)
-Received: from localhost ([2620:10d:c093:400::5:d571])
-        by smtp.gmail.com with ESMTPSA id z25sm27965559wmf.9.2021.07.23.05.14.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jul 2021 05:14:43 -0700 (PDT)
-Date:   Fri, 23 Jul 2021 13:14:42 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the printk tree
-Message-ID: <YPqysrTYsD7G0llm@chrisdown.name>
-References: <20210720174300.018cc765@canb.auug.org.au>
- <20210723090136.04ca2091@canb.auug.org.au>
- <YPqkpsc/k0tXfISe@alley>
+        id S234885AbhGWLtQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jul 2021 07:49:16 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:45983 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234774AbhGWLtQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 23 Jul 2021 07:49:16 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id ED17A3200934;
+        Fri, 23 Jul 2021 08:29:47 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 23 Jul 2021 08:29:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=+eOXjkFr/vzl4LWj2qFm/QH3AyJ
+        2LUE6Kqq+Nzq4Hmw=; b=aFoYCfq/zea4KY88rBSjeQ6mfQMaJ7Q2UitG3WdFFfl
+        1AaISfon+I8XJeogcaEMi6X9NCDmCbBGpzQ5dsMSBFD2W07948Fg+GuIcMZW3mRO
+        r4JkKTcek5+wrClYPSEPqAZMfLUgezQUS2nXEK3Blz13qOHX87Cjt7kTfAaGItj1
+        IUcPZkTHkO68V6vL1T1Wa7J+rLXbmstpSZQG9zEsolqnLPzQdoKzcaR6DcBOAYJZ
+        T+m3w8myE+YXSiIlSExkxcBkuJotDMUFir1SBRoZBz9uXEU0pObtZ0WYUcHaVte0
+        8Tew8g0Ui3mQ+JvQFnqxf9CpNzmkIDxIqUI+dmsSaKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=+eOXjk
+        Fr/vzl4LWj2qFm/QH3AyJ2LUE6Kqq+Nzq4Hmw=; b=SFug+O5ZtgCZZnm5H/40Uv
+        c3E1M0T8TBP8WT/e1TQ0r1zUr9YxR75Egc+bZBd4zL2obzMhXnjXXmbc8BhN7Mx7
+        iWQEWOMz1QFJeeE8LtcaAeXmlZI2hqVLgUAnCfIVv32JYYOfLLPL0xv/qQ7iaV6L
+        NBHZg6ekb1qie6bfxoQeKOt3kCG9/BktDR1TglsUMJFPLm3tbuRBICUHFqMTQNUK
+        oDjbhthAS0sLJnWG2ZjeKJE1MHNbivKcKMFYHFlJ9O8Vp524Z63Kst79hMWmKvYm
+        HEW2sJBGhoqZB+/+wt47nNJFK9B94ESL7kiV0S5rfOB1r01bUPHXZBy2I9HW0vGQ
+        ==
+X-ME-Sender: <xms:Orb6YJQUzgdVTxOqNRoXgrHPiBVp9EEFwOflLRaHQf_UyYwj6Pfaug>
+    <xme:Orb6YCzXoRGl5K2LHxBHvekuFQ8C1W-Dd9W3BTBRkrWj8YbHFQ4uRDtBkNgf11S1n
+    elqFZfUPg5Hqg>
+X-ME-Received: <xmr:Orb6YO19KmXKr36Dye5c7H4N7obx4bb7_9t_V3JclsCzKO0CpXLJuN3cbLqq1Yzs95XHXiVhaLOCdK555sBbwA_xbmADf3EZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeekgdehfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:Orb6YBD4mSFvaDvaXRbs40vILO2a06tSsiP6GY5Bh9-D44RZrX5Svg>
+    <xmx:Orb6YCjDcG5xTE7uS0U8AdSGxH1r12IKHCLx2ROCGWMcDGvui9_dwg>
+    <xmx:Orb6YFqkH29W5sPTOKSxjWk2_b_RVzXlrdVVA-FH0lCG1m2x-Dz5iQ>
+    <xmx:O7b6YLW72Ctj5gWPcyiOA-PoRe9h0Yn54iRh1uFMcL6ozFQTGSyoCw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 23 Jul 2021 08:29:46 -0400 (EDT)
+Date:   Fri, 23 Jul 2021 14:29:43 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linyu Yuan <linyyuan@codeaurora.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <YPq2Nxq7oa4p0b0Q@kroah.com>
+References: <20210722141228.57a92e94@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YPqkpsc/k0tXfISe@alley>
-User-Agent: Mutt/2.1 (4b100969) (2021-06-12)
+In-Reply-To: <20210722141228.57a92e94@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hey folks,
+On Thu, Jul 22, 2021 at 02:12:28PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/dwc3/gadget.c
+> 
+> between commit:
+> 
+>   40edb52298df ("usb: dwc3: avoid NULL access of usb_gadget_driver")
+> 
+> from the usb.current tree and commit:
+> 
+>   9f607a309fbe ("usb: dwc3: Resize TX FIFOs to meet EP bursting requirements")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Petr Mladek writes:
->I am sorry for the delay. I waited for a patch with reasonable commit
->message from Chris. I did it myself after all.
+Thanks, I'll fix this up when Linus takes my usb-linus branch soon.
 
-My sincere apologies for the delay. I had it in my calendar to do yesterday 
-afternoon, but ended up with no time left :-(
-
-Thanks Petr for pushing them, and sorry for the trouble caused.
+greg k-h

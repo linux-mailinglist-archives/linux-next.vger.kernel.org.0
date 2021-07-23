@@ -2,72 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B47F3D3964
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 13:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29893D3A01
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 14:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbhGWKne (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Jul 2021 06:43:34 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:39268 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbhGWKnd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jul 2021 06:43:33 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 253511FF90;
-        Fri, 23 Jul 2021 11:24:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1627039446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xS9EeQJKE82xivD+FsqdFH335Ef7VYaz/D3ftn0ztEo=;
-        b=GUe/2Tbat5Gk+Kk4RclhlqdBkHE3JnOyO6dBrJ4So73MITNLYqc/Xym0Y0Ik932zftkb8V
-        9rojo/bCx7ME2G6JGqhCmBB2akdpCfFje+i9R+GCUyIVOXIcwfVDmnQ4ZNSBQ/6flpuq6Z
-        BPJBgmDjHgf76HXJEfpUJQfq/q1p7tE=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EEA67A3B8F;
-        Fri, 23 Jul 2021 11:24:05 +0000 (UTC)
-Date:   Fri, 23 Jul 2021 13:24:05 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
+        id S234705AbhGWLeM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Jul 2021 07:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234833AbhGWLeL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Jul 2021 07:34:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04757C061575
+        for <linux-next@vger.kernel.org>; Fri, 23 Jul 2021 05:14:45 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id b9so1288726wrx.12
+        for <linux-next@vger.kernel.org>; Fri, 23 Jul 2021 05:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XAJbbJ2Fhb95D1bufSM9Sll38F8qYBcxQt3PahKULLo=;
+        b=OHFHerECKRQuofmF4bzLbdsCWKHWrPzmTLptlrNBwaogFJGOXmtLabF1gPwUu3fXsD
+         wek/Kecjhu1p1WHOxKPdXNAvDCes/dfwWjiQg+93bo7CauraR418vYOLC2XJ6Kfhiom9
+         0JFDEQSCKzbSjgeDMb/dcmcsfcN+qo7JuiDkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XAJbbJ2Fhb95D1bufSM9Sll38F8qYBcxQt3PahKULLo=;
+        b=IBbg7xd6eTTWA21NVA9zXP0WjUefLRg+nTHFKuVBc6HNC3El0g8PesbOFM7Q3jZvMT
+         h5jqDDZgiAS0QhYsLcZYTXH6KjITNVRx0ISNz8kmgjhJ+HYydruHezi0yG7P4kjYEhqp
+         P0rYY/tYCUCJgFIbVV7KtZjqOV3Mkbwu5TxbDG/We7ulkGfM9HH5kGNJTswYyWlUv3Nv
+         fdvkh4BlR/7tUNfTXPpxf2v4S6AWi3U4fjnPsMNhoDXmfHiejvciA2c2dnYd6rq8Ipcu
+         9ixawxI0g4Z1LrAiE9ycVJ3v5/ME93IEah10Nm1g/PDnhY1b52KXUIZX+Nh2Le9h+5F/
+         DmsQ==
+X-Gm-Message-State: AOAM532h+U7WLWamIg9K0/swzMKZIPnZKOu4Aq08dMag+iadByY9+47j
+        ssPbYZTPz9l1avY2UmBgKdo7YQ==
+X-Google-Smtp-Source: ABdhPJyAIq5ghCjE0vy5rcG9LcABJkjlflIDedVx1xH4vmIYNuGA8a2XRUmZf9WLbrKvMG2657E6Ig==
+X-Received: by 2002:adf:d086:: with SMTP id y6mr5267284wrh.247.1627042483608;
+        Fri, 23 Jul 2021 05:14:43 -0700 (PDT)
+Received: from localhost ([2620:10d:c093:400::5:d571])
+        by smtp.gmail.com with ESMTPSA id z25sm27965559wmf.9.2021.07.23.05.14.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jul 2021 05:14:43 -0700 (PDT)
+Date:   Fri, 23 Jul 2021 13:14:42 +0100
+From:   Chris Down <chris@chrisdown.name>
+To:     Petr Mladek <pmladek@suse.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] printk/documentation: Update printk()/_printk()
- documentation
-Message-ID: <YPqm1XpFIcOjBQsl@alley>
-References: <20210720162423.75f61ce0@canb.auug.org.au>
- <YPa/D8tSyk7dw1/l@chrisdown.name>
- <YPbABBSTkN+xNY0w@chrisdown.name>
- <YPqjdqSH5j69FnHV@alley>
+Subject: Re: linux-next: build failure after merge of the printk tree
+Message-ID: <YPqysrTYsD7G0llm@chrisdown.name>
+References: <20210720174300.018cc765@canb.auug.org.au>
+ <20210723090136.04ca2091@canb.auug.org.au>
+ <YPqkpsc/k0tXfISe@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YPqjdqSH5j69FnHV@alley>
+In-Reply-To: <YPqkpsc/k0tXfISe@alley>
+User-Agent: Mutt/2.1 (4b100969) (2021-06-12)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri 2021-07-23 13:09:43, Petr Mladek wrote:
-> The commit 337015573718b161 ("printk: Userspace format indexing support")
-> caused the following warning when building htmldocs:
-> 
-> kernel/printk/printk.c:1: warning: 'printk' not found
-> 
-> The problem is that printk() became a macro that is defined
-> in include/linux/printk.h instead of kernel/printk.c. The original
-> function was renamed to _printk().
-> 
-> Fixes: 337015573718b161 ("printk: Userspace format indexing support")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> Link: https://lore.kernel.org/r/YPbBfdz9srIpI+bb@chrisdown.name
-> ---
-> This should do the trick. I do not longer see the warning.
+Hey folks,
 
-And I have just pushed it together with the other fixes into
-printk/linux.git, branch for-5.15-printk-index.
+Petr Mladek writes:
+>I am sorry for the delay. I waited for a patch with reasonable commit
+>message from Chris. I did it myself after all.
 
-Best Regards,
-Petr
+My sincere apologies for the delay. I had it in my calendar to do yesterday 
+afternoon, but ended up with no time left :-(
+
+Thanks Petr for pushing them, and sorry for the trouble caused.

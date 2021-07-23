@@ -2,218 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9996F3D30BA
-	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 02:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2EF3D3103
+	for <lists+linux-next@lfdr.de>; Fri, 23 Jul 2021 02:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbhGVXk5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Jul 2021 19:40:57 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50829 "EHLO ozlabs.org"
+        id S232798AbhGWAE5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Jul 2021 20:04:57 -0400
+Received: from mx.ucr.edu ([138.23.62.67]:26992 "EHLO mx5.ucr.edu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232682AbhGVXk5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Jul 2021 19:40:57 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GW93Y3j36z9sRN;
-        Fri, 23 Jul 2021 10:21:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1626999690;
-        bh=QVZhutB3ya+LYSZv7vxyfLMXu42kAtWhUyq07DbF+Ms=;
-        h=Date:From:To:Cc:Subject:From;
-        b=a/FWnu2xl2YHC/AhURrda7QSux7fYxURT8SeJKtW/Gn8AcJwHiq5khf4jmhKi4Bf5
-         ejFljOgff438KQNhLD1ZQImYw4wptShgYxyJNIe7t/98TJGD2/CUBJ6qJO0j8/3+gY
-         +FSzJlHIwrXe62T2pUQk/pF2tU7IPDUDrwpsmei7i0j0NDPwWveMJRh7j3XD3hxUOc
-         ycX2hWjnkmvY6eXoi+3wISHvEwuHuE7fuTxpZ5UdhNMjN16d8yg9pKbzm0ftPzK6Hm
-         xwxQuXoBRozBb9KY8D0gFeJcVx4po/0Wev1q8S8/MHl0iuRNE/y9qlO+XC08g+avqu
-         ZvTLWJHA9oS/Q==
-Date:   Fri, 23 Jul 2021 10:21:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Jan Kara <jack@suse.cz>
-Cc:     Eric Biggers <ebiggers@google.com>,
+        id S232792AbhGWAE5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Jul 2021 20:04:57 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Jul 2021 20:04:57 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1627001132; x=1658537132;
+  h=mime-version:references:in-reply-to:from:date:message-id:
+   subject:to:cc;
+  bh=garshgjdMJCMlsmeozlgmwx58jNaTBUCFx8jv84/gXE=;
+  b=HsuB6L1SKB3id/qCAEezHlc/M/pu7cV5i5hKGzWGYgBDGOxxSdacUHBF
+   GeU3flTMa1E+PXZvIvm1QAAlkY/AYz6pdLfAPoXMo9s1u8TdX4j2EwXuf
+   D0C+Mliuxsws2JTjAXnuFoqIEhBjDxHPSIPjLBmV+0teMIGCJkobvD5HB
+   I3wo29RP0CsnPFr/sHBEAx5EeTMOxtlkoYx639nBlJ97I8DRakgeGGeb+
+   qeQMyN5oAqcTGypOQhJIIEBaCtNw4R2ZrktO4R19cIck3gYBSbaO05NI1
+   TrpMRVS+OMtf5j3PMrovu4hAxcxpuZQQD+nWVbTN+8NDTMOjy6+1BV84E
+   g==;
+IronPort-SDR: xStzLaobTpxYehsKTvXC5Omljpaf/LLqfJ9c8I7C26l26TJzr4fOYykn/WBzw2mi08IjQK/OcH
+ dTxVu8eLIiBTCvEN5FmKUtA+Yvkwb+A80Ik61t7388qXXyU/d5/6ljRHC3soFcxST9mldQ2rSV
+ TkLoaDEXFhW+vaT/mUmwPpdG70L2XeLs+Iy//y+XpgK9CvservoSIpj4jwmGg+cTeXiCBbyvoB
+ XHwX4OlUD9NzD+lNQ4IuUUEsZp2GxZFBVn919qB/ZIkqqIy8Fywq+c8xXsLKd4edD5nDW8oCyx
+ W1w+qhYqGJTz6MPt+5jnAI4d
+X-IPAS-Result: =?us-ascii?q?A2H6AwCsDvpgf0jYVdFaHgEBCxIMQIFOC4N4bIRIkWmHD?=
+ =?us-ascii?q?JRSgXwCCQEBAQ9BBAEBhFcCgngCJTQJDgIEAQEBAQMCAwEBAQEBAQMBAQYBA?=
+ =?us-ascii?q?QEBAQEFBAEBAhABAYEMC1kLY4FPgXkGBD2COCkBg20BAQEDEhFLCxALCwMKA?=
+ =?us-ascii?q?gImAgIiEgEFARwGEyKFVwWccoEEPYsygTKBAYgjAQkNgWMSfiqHCoZiJ4Ipg?=
+ =?us-ascii?q?UuCOAcwPodbgmQEg06BKQ+BFjg1RVYBAQGfE50OAQYCgwwckkSLeiumY7svE?=
+ =?us-ascii?q?COBPYIVMxolTjEGZ4FLTQECAQIBDAIBAgECAQIBAggBAQKdCyQvOAIGCwEBA?=
+ =?us-ascii?q?wmLWQEB?=
+IronPort-PHdr: A9a23:18QK8xPyiIsrk6oSRpQl6nYNDRdPi9zP1u491JMrhvp0f7i5+Ny6Z
+ QqDv60r1wCCBdqTwskHotKei7rnV20E7MTJm1E5W7sIaSU4j94LlRcrGs+PBB6zBvfraysnA
+ JYKDwc9rDm0PkdPBcnxeUDZrGGs4j4OABX/Mhd+KvjoFoLIgMm7yfy+94fdbghKizaxfbF/J
+ wiqoAvMscUbnZFsIbsrxBvTpXtIdeVWxWd2Kl+Wgh3x+MS+8oN9/ipJo/4u+NJOXqv8f6QjU
+ LxXFy8mPHwv5M3qrhbMUw2C7WYBX2oMkxpIBw/F7AzmXpr0ryD3uPZx1DWcMMbrVr0/Ryis4
+ Ll3Rx/pkCcHNiA28GfLisxrkalXpAutqwFjz4LIZY2YMud1cKHActMAXWdOUchRWC5BDI2yb
+ IUBEvQPMvpDoonhu1cDtweyCRWwCO7tzDJDm3/43bc90+QkCQzJ3g0gHtMOsHTJq9X+KaQdU
+ eCvw6nJ0D7OaPNX2Db96IfScxAtve2AULxrfMrM1UYvDRnJgUuNpoz4Jj6Y0PkGvGeH4eR6T
+ +2vl3InpB9rojip3sohhY3Ei4YVx17K6yl0z4I4K9K7RUN0b9OpEJVduj2bOoZqQ84vTWJlt
+ Dsnx7EbupO2YiYHxZskyhPCZfKKbpSF7xT+X+iSOTd1nGxpdK67ihqo8kWtyvfwWtep3FtLt
+ CZIkMfAu3YQ3BLJ8MeHUOFy/kK51DaK0ADc9/9LLFgvlareN54h2rkwlocPsUjbHi/5hkH2j
+ KiOe0Uh4Oeo6uDnbqz+pp+eKoN4kw/+P6YwlsClDuQ4NQ8OX2ef+euizrHs4Ur5QLBSgv03l
+ KnWrozaKNwFqqKlBwJZyIUu5halAzu4zdgVnGMLIVBbdB6fiojmIVDOIPT2DfelhFSslS9mx
+ vDHP73hGJrNL2TPnKvvcLtm9k5T1BAzwcpB6J1JF7ENOOjzVVPptNzEEh85NBS5w+LmCNV7y
+ 4MfVnuDAqmHP6LdrV+F/fwvI+aSa48Pojr9KOYq5+TojXAnnV8RZ66p3YEYaCPwIvMzGFmUe
+ XrhhJ87FnsKoQc6SKS+k1OYeTVaYXz0Vr8h6Xc8Eo3gBJqVFa63h7nU7SapHoBRLlJGA1HER
+ Wb6d4yFA69XQD+ZOIlsniFSBuvpcJMoyRz77Fyy8LFgNOeBv3RA7fre
+IronPort-HdrOrdr: A9a23:3hBVuqyygtxYdXiWqcXpKrPwF71zdoMgy1knxilNoNJuA7Wlfq
+ GV7YwmPHDP+VMssR0b6LK90ey7MBDhHP1OgLX5X43SODUO0VHAROpfBMnZowEIcBeOkdK1u5
+ 0QFZSWy+ecMbG5t6zHCcWDfOrICePqnpyVuQ==
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.84,262,1620716400"; 
+   d="scan'208";a="227850660"
+Received: from mail-pj1-f72.google.com ([209.85.216.72])
+  by smtpmx5.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Jul 2021 17:38:25 -0700
+Received: by mail-pj1-f72.google.com with SMTP id x22-20020a17090ab016b0290175f5313b8dso6296801pjq.8
+        for <linux-next@vger.kernel.org>; Thu, 22 Jul 2021 17:38:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=90ZPYQIIxrEQ8HDZV+gD6wEa3lFewktyltoq5V1ZqsU=;
+        b=esgqWMl4vRUKRqMAe+S2acfltXyLbodz2+j5JBy9QwciorhuZzmCN2jENPiXtN+4GB
+         ecOStx6b4C+tXdtJDssISiUjNHBdKDJj2v4KqPzfA8n58f+b3TErbQXVVsw8mvTYTRks
+         VUtCUtSVC0CxOUjRV+9NRUw9H8UOAnbsDCegP0qcwkU7ZEUrsrQgOO0CPk2fjPLNx/Am
+         6VX0OOqaw6j52QPWDYJIHXL67cMVKRkNUiFEGViYwXFluoFTuZ2pMLt+gZnlCPXuaf1T
+         OP5bRcvABbMNYdurzx1JoOtbRuhPr/9DVF3tMM3Xd4/dVu0VRsoA8zWFxZouut/8hV8S
+         ECsA==
+X-Gm-Message-State: AOAM533f+Ogs4rxm5CjN3hUnhUNbxIveOLyHppLR9LaMgX2QGynQFHXU
+        pXdab4g3NaXNK6ubBdxmSMUbjl7IUdlA38kQ9/jToeIjpbxnQEzKNDPnoukk0r6XDPUpPkJQdQ6
+        gYOrvD3dCw4BzwH26jldYNnL6V2dFMVKkp9lafq0=
+X-Received: by 2002:a17:90b:398:: with SMTP id ga24mr11456558pjb.121.1627000704542;
+        Thu, 22 Jul 2021 17:38:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzIHA+T7QwOB27+FG13Zxg0HUbQ8YtotMnwZ+asHHHo2WfeTzlqpgN8f79HzchI2DS3NyN7z9l+Ta6SYXxfpRU=
+X-Received: by 2002:a17:90b:398:: with SMTP id ga24mr11456528pjb.121.1627000704061;
+ Thu, 22 Jul 2021 17:38:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210723085145.1ce7ee5c@canb.auug.org.au>
+In-Reply-To: <20210723085145.1ce7ee5c@canb.auug.org.au>
+From:   Yizhuo Zhai <yzhai003@ucr.edu>
+Date:   Thu, 22 Jul 2021 17:38:13 -0700
+Message-ID: <CABvMjLTTtAwH7tT96TQ8THkCjTGUe-bMij449UALoyTSS94amQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the f2fs tree with the ext3 tree
-Message-ID: <20210723102128.5fc92369@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vdNYD7N=8MiRqmM3Cs8RyB=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vdNYD7N=8MiRqmM3Cs8RyB=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+All:
+I've fixed this issue and resend the patch to the maintainers. I'm so
+sorry for the inconvenience.
+Stephen:
+It seems you are not in the maintainers' mailing list, should I send a
+copy to you as well?
 
-Hi all,
 
-Today's linux-next merge of the f2fs tree got a conflict in:
+On Thu, Jul 22, 2021 at 3:51 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   c275e5d349b0 ("media: atomisp: fix the uninitialized use and rename "retvalue"")
+>
+> Fixes tag
+>
+>   Fixes: ad85094 (media / atomisp: fix the uninitialized use of model ID)
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> maybe you meant
+>
+> Fixes: ad85094b293e ("Revert "media: staging: atomisp: Remove driver"")
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-  fs/f2fs/file.c
 
-between commit:
 
-  edc6d01bad73 ("f2fs: Convert to using invalidate_lock")
+-- 
+Kind Regards,
 
-from the ext3 tree and commit:
+Yizhuo Zhai
 
-  5f2632fa1471 ("f2fs: reduce indentation in f2fs_file_write_iter()")
-
-from the f2fs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/f2fs/file.c
-index 1ff333755721,279252c7f7bc..000000000000
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@@ -4252,79 -4318,54 +4316,54 @@@ static ssize_t f2fs_file_write_iter(str
-  	}
- =20
-  	ret =3D generic_write_checks(iocb, from);
-- 	if (ret > 0) {
-- 		bool preallocated =3D false;
-- 		size_t target_size =3D 0;
-- 		int err;
--=20
-- 		if (iov_iter_fault_in_readable(from, iov_iter_count(from)))
-- 			set_inode_flag(inode, FI_NO_PREALLOC);
--=20
-- 		if ((iocb->ki_flags & IOCB_NOWAIT)) {
-- 			if (!f2fs_overwrite_io(inode, iocb->ki_pos,
-- 						iov_iter_count(from)) ||
-- 				f2fs_has_inline_data(inode) ||
-- 				f2fs_force_buffered_io(inode, iocb, from)) {
-- 				clear_inode_flag(inode, FI_NO_PREALLOC);
-- 				inode_unlock(inode);
-- 				ret =3D -EAGAIN;
-- 				goto out;
-- 			}
-- 			goto write;
-- 		}
--=20
-- 		if (is_inode_flag_set(inode, FI_NO_PREALLOC))
-- 			goto write;
-+ 	if (ret <=3D 0)
-+ 		goto out_unlock;
- =20
-- 		if (iocb->ki_flags & IOCB_DIRECT) {
-- 			/*
-- 			 * Convert inline data for Direct I/O before entering
-- 			 * f2fs_direct_IO().
-- 			 */
-- 			err =3D f2fs_convert_inline_inode(inode);
-- 			if (err)
-- 				goto out_err;
-- 			/*
-- 			 * If force_buffere_io() is true, we have to allocate
-- 			 * blocks all the time, since f2fs_direct_IO will fall
-- 			 * back to buffered IO.
-- 			 */
-- 			if (!f2fs_force_buffered_io(inode, iocb, from) &&
-- 					allow_outplace_dio(inode, iocb, from))
-- 				goto write;
-+ 	if (iocb->ki_flags & IOCB_NOWAIT) {
-+ 		if (!f2fs_overwrite_io(inode, iocb->ki_pos,
-+ 				       iov_iter_count(from)) ||
-+ 		    f2fs_has_inline_data(inode) ||
-+ 		    f2fs_force_buffered_io(inode, iocb, from)) {
-+ 			ret =3D -EAGAIN;
-+ 			goto out_unlock;
-  		}
-- 		preallocated =3D true;
-- 		target_size =3D iocb->ki_pos + iov_iter_count(from);
-+ 	}
-+ 	if (iocb->ki_flags & IOCB_DIRECT) {
-+ 		/*
-+ 		 * Convert inline data for Direct I/O before entering
-+ 		 * f2fs_direct_IO().
-+ 		 */
-+ 		ret =3D f2fs_convert_inline_inode(inode);
-+ 		if (ret)
-+ 			goto out_unlock;
-+ 	}
- =20
-- 		err =3D f2fs_preallocate_blocks(iocb, from);
-- 		if (err) {
-- out_err:
-- 			clear_inode_flag(inode, FI_NO_PREALLOC);
-- 			inode_unlock(inode);
-- 			ret =3D err;
-- 			goto out;
-- 		}
-- write:
-- 		ret =3D __generic_file_write_iter(iocb, from);
-- 		clear_inode_flag(inode, FI_NO_PREALLOC);
-+ 	/* Possibly preallocate the blocks for the write. */
-+ 	target_size =3D iocb->ki_pos + iov_iter_count(from);
-+ 	preallocated =3D f2fs_preallocate_blocks(iocb, from);
-+ 	if (preallocated < 0) {
-+ 		ret =3D preallocated;
-+ 		goto out_unlock;
-+ 	}
- =20
-- 		/* if we couldn't write data, we should deallocate blocks. */
-- 		if (preallocated && i_size_read(inode) < target_size) {
-- 			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-- 			filemap_invalidate_lock(inode->i_mapping);
-- 			f2fs_truncate(inode);
-- 			filemap_invalidate_unlock(inode->i_mapping);
-- 			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-- 		}
-+ 	ret =3D __generic_file_write_iter(iocb, from);
- =20
-- 		if (ret > 0)
-- 			f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
-+ 	/* Don't leave any preallocated blocks around past i_size. */
-+ 	if (preallocated > 0 && inode->i_size < target_size) {
-+ 		down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- -		down_write(&F2FS_I(inode)->i_mmap_sem);
-++		filemap_invalidate_lock(inode->i_mapping);
-+ 		f2fs_truncate(inode);
- -		up_write(&F2FS_I(inode)->i_mmap_sem);
-++		filemap_invalidate_unlock(inode->i_mapping);
-+ 		up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-  	}
-- unlock:
-+ 	clear_inode_flag(inode, FI_PREALLOCATED_ALL);
-+=20
-+ 	if (ret > 0)
-+ 		f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
-+ out_unlock:
-  	inode_unlock(inode);
-  out:
-- 	trace_f2fs_file_write_iter(inode, iocb->ki_pos,
-- 					iov_iter_count(from), ret);
-+ 	trace_f2fs_file_write_iter(inode, orig_pos, orig_count, ret);
-  	if (ret > 0)
-  		ret =3D generic_write_sync(iocb, ret);
-  	return ret;
-
---Sig_/vdNYD7N=8MiRqmM3Cs8RyB=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmD6C4gACgkQAVBC80lX
-0Gz8CAf7BAW6NLfQF4SSpRLNMuecRDYGJldqGfVhORGVfX+xEMnlb8bYcPNHruhl
-qW4013tcW1oWofulIwNLToIsIXjBY8qgGHs8TjlvP/6vs3QnSeqpvJDFCjKIJ78y
-kBHyjGeaosPSblkXKPsCWErF404WijWHS1uchCwuOtv1YGSjtJuUEqdQlyG6p+G0
-UsoFrn07Wo4k44J1xLfuTvWN5suwpBTWEonbG2tklLHl47NKFVpnwWtUmVV6SCHb
-Ho8R+BPY1VZXKA4snSUaqJ2MgOWhYTd341zdvMcqF/CevF2fpqkSmC4CE7HwhKE1
-5USUwToPSGl2fucadWM+ytTGJQcCNw==
-=+VEq
------END PGP SIGNATURE-----
-
---Sig_/vdNYD7N=8MiRqmM3Cs8RyB=--
+Computer Science, Graduate Student
+University of California, Riverside

@@ -2,89 +2,150 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A083D5143
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jul 2021 04:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E913D53B5
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jul 2021 09:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhGZBxG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 25 Jul 2021 21:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbhGZBxF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 25 Jul 2021 21:53:05 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71785C061760
-        for <linux-next@vger.kernel.org>; Sun, 25 Jul 2021 19:33:34 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id n15so2842228uaj.1
-        for <linux-next@vger.kernel.org>; Sun, 25 Jul 2021 19:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lpTj1qbBhUjsFO3ShCuhQlstpCRBWbI+98sXsatNNS0=;
-        b=nATDODbBf2pi+8X5DgKXTDMBMchvXVx6dblLA7b+25MLEaFfun/mxdWTPjc4zMRcgP
-         ymgCNznkoK8xhklvh+gdDtCm1aN1sZs18VApuzGkyrEVjRX8N0ZbVqQaEOnwKOTj9aGG
-         kqvN+MgTcEVl6tcxGj2JXEqLGsHOT0TjmaK3rRR43FdhV44Z6r3Ef2WjkSnEqEMNi9W+
-         sC1Ba2hVW33ISeuOsqlB3BjS4JB0SeYftmJR/Aq/T3VbmvfEqUy11G74pMldseNwwsKw
-         4ZeLWb+Q8Z4H9G4qS+zTTyj8oO2eoy5tOcsWRIhroUF161voHBfLtGLB6m2MKED/RZqH
-         PQTg==
+        id S232210AbhGZGeC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jul 2021 02:34:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37810 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232252AbhGZGeA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Jul 2021 02:34:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627283669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=um4df6F+Tcs1NedbhaEs9ICFL4JEkb2ohkfDmaRpXVs=;
+        b=HdnxcrnE9PyzpgE4b4yqNeXuzbLGuc5mu+BoNa8WdKmEgkUsbrZweEAbaDgdVG599z1bPn
+        /tgVP/+z3SG4Jx0LyZGJeuHrMvy/bCcfROrLbYV1EAC2ShAhCETm5A1dOjXkv9B8655s8D
+        kAghvLQmEWyTkHZGzHHZ3yjrQwRTKTI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-51-DuXvIpiHP6-3yPk8qvagjw-1; Mon, 26 Jul 2021 03:14:28 -0400
+X-MC-Unique: DuXvIpiHP6-3yPk8qvagjw-1
+Received: by mail-wr1-f71.google.com with SMTP id o8-20020a5d4a880000b029013a10564614so4330946wrq.15
+        for <linux-next@vger.kernel.org>; Mon, 26 Jul 2021 00:14:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lpTj1qbBhUjsFO3ShCuhQlstpCRBWbI+98sXsatNNS0=;
-        b=XnuZwtYZeKX6nJ2kqlnMLSE/996W/u0whUJAD1CUve0M/D5bv9kYxYDpjACqcDslRY
-         VmaC6stySUtBasQREHU9frdzncPZod3O0D3J2jg5gyXkfk70Ys+CCGky0ihMmSqhqRym
-         1NW8efEjMixPRcQrq3AJq8P5vfcCBQBiBBM97MySW2CNUyn+/4aspPSx6x8auwxpvznX
-         p6g3dHgIOc3RbRdkDz+1c9koPcAyje+nSLG3yk0S9XaLgR7RCUu2RAVT/ojrvmvWT6Cw
-         rEDqP2ZrdSeepwcX68B2a+FBl+dZ3l8Q/zVPTLpbRp/2wXuSSJF11tGimKhNIrzviIKs
-         ws4g==
-X-Gm-Message-State: AOAM530J7kMyl9TF0axa/V9L9FYVlbWWr18U+XTe4h/hea+B6JsfwBJh
-        iUeaxzh0k7/iQkcFkC2oXe2rC8nbvlxeIWMnODk=
-X-Google-Smtp-Source: ABdhPJyrlxvPRw4aY4E6h8TqXJeti1znGOoQF5VbCdFmRW5HxoKr7usMkcXResxc8X8ZeL4MtHhb1J/63knpKsU30xc=
-X-Received: by 2002:a9f:3e0d:: with SMTP id o13mr8701303uai.143.1627266813466;
- Sun, 25 Jul 2021 19:33:33 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=um4df6F+Tcs1NedbhaEs9ICFL4JEkb2ohkfDmaRpXVs=;
+        b=RI65eCrPzceWdDckz/geHtYHTFcn52y5c0gB4r7szlyDwBlfmjnRd1KXPYocwCFtdj
+         5xpKAyphmF+2bMu5fcV/SsRpyhwzo1kh1qEPEkLi/sFy55lJEeV8jRkCbu4MvJ12XlwR
+         Av1QY93L5NL0MN1wafu09RUKns46XQ/jm9LSjTpBJfRyohj9etqIrHVmR7MIFlG7YZSn
+         ovagGqlJ/iSImY1IG02aYKsmBBPeCYKvlFV/zE1ad4KdTy8KVr0jMMzI1o5mR9QHPDbT
+         hkx3eU1VmYtSpf+5APFZChP8IxmI3b/241J/Gx322TuZ0PFapqkgCr+HuJ0Lsd171l4V
+         JQKQ==
+X-Gm-Message-State: AOAM531ALmf3TOP/HXkRJS8nQxzUwx9YxbGEfh9zizAZwxsqvQa8+pOJ
+        yPqg01Ka02oovv++CGp2sTKvDzfeWjYgyYJNduoF4+vf0jkazYY0QaIffTltkrJtyBLawkzcZ/6
+        VWvM5A3WDGed07TTFSx35eQ==
+X-Received: by 2002:a05:600c:a08:: with SMTP id z8mr11306681wmp.52.1627283667217;
+        Mon, 26 Jul 2021 00:14:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyrJ5ioNqCfkDgUWTA7YxeWf82kzHlJSCsGt9E8hJ1xGP6IhEO9RD5CtVqgDVl+ePM/lAAEqw==
+X-Received: by 2002:a05:600c:a08:: with SMTP id z8mr11306664wmp.52.1627283667006;
+        Mon, 26 Jul 2021 00:14:27 -0700 (PDT)
+Received: from [192.168.3.132] (p4ff23b33.dip0.t-ipconnect.de. [79.242.59.51])
+        by smtp.gmail.com with ESMTPSA id d203sm7830431wmd.38.2021.07.26.00.14.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jul 2021 00:14:26 -0700 (PDT)
+Subject: Re: mmotm 2021-07-23-15-03 uploaded (mm/memory_hotplug.c)
+To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
+        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+References: <20210723220400.w5iKInKaC%akpm@linux-foundation.org>
+ <5966f6a2-bdba-3a54-c6cb-d21aaeb8f534@infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Message-ID: <5394da5e-29f0-ff7d-e614-e2805400a8bb@redhat.com>
+Date:   Mon, 26 Jul 2021 09:14:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Received: by 2002:ab0:6957:0:0:0:0:0 with HTTP; Sun, 25 Jul 2021 19:33:32
- -0700 (PDT)
-Reply-To: westernunion-claimcollector@collector.org
-From:   WESTERN UNION MONEY TRANSFER OFFICE <faki.kobebe@gmail.com>
-Date:   Mon, 26 Jul 2021 03:33:32 +0100
-Message-ID: <CAHUp8+niCqqttk9eMQw09ChaAz8vM+B2gPJrpdztHDz6oGmW_g@mail.gmail.com>
-Subject: THE MONEY HAS BEEN SENT, PLEASE COMPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5966f6a2-bdba-3a54-c6cb-d21aaeb8f534@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 24.07.21 20:49, Randy Dunlap wrote:
+> On 7/23/21 3:04 PM, akpm@linux-foundation.org wrote:
+>> The mm-of-the-moment snapshot 2021-07-23-15-03 has been uploaded to
+>>
+>>     https://www.ozlabs.org/~akpm/mmotm/
+>>
+>> mmotm-readme.txt says
+>>
+>> README for mm-of-the-moment:
+>>
+>> https://www.ozlabs.org/~akpm/mmotm/
+>>
+>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>> more than once a week.
+>>
+>> You will need quilt to apply these patches to the latest Linus release (5.x
+>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>> https://ozlabs.org/~akpm/mmotm/series
+>>
+>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>> followed by the base kernel version against which this patch series is to
+>> be applied.
+>>
+> 
+> on x86_64:
+> # CONFIG_CMA is not set
+> 
+> mm-memory_hotplug-memory-group-aware-auto-movable-online-policy.patch
+> 
+> 
+> 
+> ../mm/memory_hotplug.c: In function ‘auto_movable_stats_account_zone’:
+> ../mm/memory_hotplug.c:748:33: error: ‘struct zone’ has no member named ‘cma_pages’; did you mean ‘managed_pages’?
+>     stats->movable_pages += zone->cma_pages;
+>                                   ^~~~~~~~~
+>                                   managed_pages
+> ../mm/memory_hotplug.c:750:38: error: ‘struct zone’ has no member named ‘cma_pages’; did you mean ‘managed_pages’?
+>     stats->kernel_early_pages -= zone->cma_pages;
+>                                        ^~~~~~~~~
+>                                        managed_pages
+> 
+> 
+
+Thanks Randy, the following on top should make it fly:
+
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index bfdaa28eb86f..fa1a0afd32ba 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -741,13 +741,15 @@ static void auto_movable_stats_account_zone(struct auto_movable_stats *stats,
+         if (zone_idx(zone) == ZONE_MOVABLE) {
+                 stats->movable_pages += zone->present_pages;
+         } else {
++               stats->kernel_early_pages += zone->present_early_pages;
++#ifdef CONFIG_CMA
+                 /*
+                  * CMA pages (never on hotplugged memory) behave like
+                  * ZONE_MOVABLE.
+                  */
+                 stats->movable_pages += zone->cma_pages;
+-               stats->kernel_early_pages += zone->present_early_pages;
+                 stats->kernel_early_pages -= zone->cma_pages;
++#endif /* CONFIG_CMA */
+         }
+  }
+  struct auto_movable_group_stats {
+
+
 -- 
+Thanks,
 
+David / dhildenb
 
-Dear Beneficiary;
-
-Our Operation Manager has extract your 1st payment of $5,000.00 out of
-your total fund of ($1.5million) We need your full  information for
-the transfer.
-
-We scheduled installment sums of USD $5,000.00 daily through the cash
-fast Western Union, payment at counter as directed and we have
-commenced the relevant programming and the documentations of the said
-fund, as we are instructed to make the first payment of USD$5,000.00
-MTCN available in your name upon the receipt of your information from
-you as follows.
-
-Your Name,
-
-Address,
-
-Telephone
-
-ID CARD
-
-Contact our Operational Manager,Mr WETAYEM MYSHEAR through our office
-email for more enlightenment on your money.
-
-Email (westernunion.collector@collector.org)
-
-Thanks
-
-Managnment

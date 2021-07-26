@@ -2,59 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4903D68BE
-	for <lists+linux-next@lfdr.de>; Mon, 26 Jul 2021 23:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679AD3D68E5
+	for <lists+linux-next@lfdr.de>; Mon, 26 Jul 2021 23:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbhGZUzp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Jul 2021 16:55:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43308 "EHLO mail.kernel.org"
+        id S231839AbhGZVHC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Jul 2021 17:07:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45612 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231207AbhGZUzp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Jul 2021 16:55:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E850860F8F;
-        Mon, 26 Jul 2021 21:36:12 +0000 (UTC)
+        id S229489AbhGZVHB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Jul 2021 17:07:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 56F9560F91;
+        Mon, 26 Jul 2021 21:47:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627335373;
-        bh=Vubfk8aM5cW2938KL+upVnHES3wmu9lPf2Qpjd4nZJY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HalJUibZZEm7Sc2D9CCA3tQKU/Eysjjyg5E8ZM5bYWWkTs7468YXXxeZt25QXG6nx
-         tYgEGjbuqKSEcbQ1JQve/X0/4RWS5zRsBDT5irWo1yzgVPcMePStRPgmJAItqPjfKz
-         KV3fQ6hIcqjj+3EtbEpwVe2MQiDHYHhP7iZV7MNNAmXMJYr2Iwk+h6PQs2bbumgdLL
-         1a0M8fmwDle9QMQhHNCR39s/MLg4W4K95CEQIEjvB+/pTQ25wzS0wVxJ3LuhXDoiY0
-         2zKXDJwO/pGkGAdtVlPZ4+ukIYMK0LWBGcb+NBff/ni99uUrzXVWO18EanRryx8OWV
-         7J8YgSs/dDS0A==
+        s=k20201202; t=1627336049;
+        bh=zgyLNyyiYQ6t66updPfgvxGxtDD4JlKzRMJiCuCkQzk=;
+        h=Date:From:To:Subject:From;
+        b=OQGx89jLp1aK0do77RwEIFH03wSOAGTIpxY14FYHigQ0GP0GrirYoIydQCH0fkgMC
+         Guzyd/ne97Bo1OQuHy8w1+KW9YUH27raheOzvMfrHL/0sL+cMMVrLweffaOr5vEJcH
+         5l7MGKjEyiBXwUJTvYzHMQXq+oCxwJFCN+runXC9LmCPOxgbK8kn/Jm9VK73k5WrwF
+         ls/VvRUETTuG2NIsRlv4m9GTLcH7Bi2dRJCceJVAIBSgYfBdFMIGDhKHqVxXIPLw1v
+         zSux1WohWJoyGFRf0zc7U7kJrW3myoTbJxF2Bnbb/sYPR/dOc4wfe2BnJAubAJysjV
+         xcXbB2d2170lg==
+Date:   Mon, 26 Jul 2021 22:47:20 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Borislav Petkov <bp@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org
-Subject: linux-next: build failure due to the drm tree
-Date:   Mon, 26 Jul 2021 22:36:00 +0100
-Message-Id: <20210726213600.4054-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Jul 26
+Message-ID: <20210726214720.GL4670@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KIbT1ud6duwZIwNL"
+Content-Disposition: inline
+X-Cookie: Vini, vidi, Linux!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+
+--KIbT1ud6duwZIwNL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
 Hi all,
 
-Today's -next fails to build an arm64 allnoconfig:
+Changes since 20210723:
 
-aarch64-none-linux-gnu-ld: drivers/firmware/sysfb.o: in function `sysfb_init':
-sysfb.c:(.init.text+0xc): undefined reference to `screen_info'
-aarch64-none-linux-gnu-ld: drivers/firmware/sysfb.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `screen_info' which may bind externally can not be used when making a shared object; recompile with -fPIC
-sysfb.c:(.init.text+0xc): dangerous relocation: unsupported relocation
-aarch64-none-linux-gnu-ld: sysfb.c:(.init.text+0x10): undefined reference to `screen_info'
-make[1]: *** [/tmp/next/build/Makefile:1276: vmlinux] Error 1
+The drm tree gained a conflict with the qcom tree.
 
-Caused by
+There is a build failure in an arm64 allnoconfig on the finished tree
+due to a drm tree change.
 
-  d391c58271072d0b0f ("drivers/firmware: move x86 Generic System Framebuffers support")
+Non-merge commits (relative to Linus' tree): 2938
+ 3037 files changed, 173726 insertions(+), 51477 deletions(-)
 
-or one of the related commits.
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches will be at http://www.kernel.org/pub/linux/kernel/next/ if/when
+I get kup working).  If you are tracking the linux-next tree using git,
+you should not use "git pull" to do so as that will try to merge the new
+linux-next release with the old one.  You should use "git fetch" and
+checkout or reset to the new master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, arm64 allnoconfig, and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 333 trees (counting Linus' and 90 trees of bug
+fix patches pending for the current merge release).
+=20
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to
+add more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--KIbT1ud6duwZIwNL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmD/LWgACgkQJNaLcl1U
+h9C7+wf+Now4Ux9uUQ5ZSy5JIxrboZPMvliS7vPADiVFFy4zCMvfKj0nFU+Kzcyc
+ecEqbyOQ65AL5brTVsoRjk+w1uFSKaJLCTjYCEGJPXZ0Ml5zM9uzuL9ZIR0GFkVq
+MblL/PA0G0Fgl6QDe46gZ1l2xZaDZ2CDvPxIBM5Z27TvRsl3gmI39Mt49PW2O+Ik
+YdWxCsVxZBLnzD1Ae025WefubNkr8ALeCOSABzEP+B0LPggL2hr5P9DnNw5Bjz5A
+S0amG0p4suq26JUKpEp3KmNcl9fdWtg9DnvntEhYv7KamQj+DPaIybRsaXugU09b
+t7DvgSXM2ySXrZ8QQCvK0YDSay4QPQ==
+=Libr
+-----END PGP SIGNATURE-----
+
+--KIbT1ud6duwZIwNL--

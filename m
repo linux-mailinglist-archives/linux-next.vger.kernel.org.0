@@ -2,112 +2,130 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 520F33D945F
-	for <lists+linux-next@lfdr.de>; Wed, 28 Jul 2021 19:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F703D94B2
+	for <lists+linux-next@lfdr.de>; Wed, 28 Jul 2021 19:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbhG1Rfi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Jul 2021 13:35:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230288AbhG1Rfi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Jul 2021 13:35:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFC916103E;
-        Wed, 28 Jul 2021 17:35:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627493736;
-        bh=Dd5+s2KkNCc4fOScdHWL03hrtCdA/vqdiUXce7gQov4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DT4jVR33VjkDxlTcx4mFdRVbMKV0SwbakzDTTSn8m3wG1bNTwGtCw3eAiOBDHk4js
-         gBtZdbFBMA/MQlehtcvUO38qj7sAKD0cQmrNCgX2F7qiPaFhN6VlIBTfX1JEiUUtug
-         D66LjOl8Z6M9snQlNPzd3dWtzE8f8HSL4x0XcYUCj+KSfsXWh6tNK1PchWkUlXDb9j
-         mBDpB5xciM6JTDDirU/EO4XDc48XTWap5NHRhOLeq1QQxOlvh+nYcqT3hgmFOq4w/Y
-         Ssr+t+ndCBw/OlODG9bza0kfb3OT4PLzz84gIVSri3tcEg4866ofDAkFh4tnRtYqYO
-         Be4vpNfkun+3w==
-Date:   Wed, 28 Jul 2021 10:35:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
-        Claire Chang <tientzu@chromium.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [powerpc][next-20210727] Boot failure - kernel BUG at
- arch/powerpc/kernel/interrupt.c:98!
-Message-ID: <YQGVZnMe9hFieF8D@Ryzen-9-3900X.localdomain>
-References: <1905CD70-7656-42AE-99E2-A31FC3812EAC@linux.vnet.ibm.com>
+        id S229854AbhG1R4A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Jul 2021 13:56:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22190 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229690AbhG1R4A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Jul 2021 13:56:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627494958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GxisACX8174uMvFvlppclC4EQL5bs36jiETLuSiddmQ=;
+        b=OXlS0yfgTSxc5e+GWf0PPg/hovinvhi59WfNbjD34t6cNcP/SoHGwbSLM1HAcnnkMfCw5R
+        VHGCOdN85jb8mZf6t15N8s0WkMuh3hJNknulijoFb+O8kWYp5W0w2RIJEyxEUqrsGyE21T
+        2zIoWmnQzJ+p6C6JSEIGyoraz0I43o8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-532-k_vjcBPeObCOTphFd9xvjw-1; Wed, 28 Jul 2021 13:55:56 -0400
+X-MC-Unique: k_vjcBPeObCOTphFd9xvjw-1
+Received: by mail-ed1-f72.google.com with SMTP id c1-20020aa7df010000b02903bb5c6f746eso1621477edy.10
+        for <linux-next@vger.kernel.org>; Wed, 28 Jul 2021 10:55:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GxisACX8174uMvFvlppclC4EQL5bs36jiETLuSiddmQ=;
+        b=EwgNwCeqiRnvziJjycSySKzDqyYwhtAk38tdLO4XfPZSo2sgT97JIUtiNzY2ZIjcsn
+         0b+yRaLEG02NoaDjHGgv4MjThM29nXro0XUg1BHxfHumCxyxe2Dx3Y0QNovieYbT44rg
+         gApmocWzEPNHUKHb3tikfLt5vAnu/+TX6z3qXHexY9gAA6HSyUppehtOik/AvBC9Co0x
+         CDS+mQ8BP8KBT8lL5fRTCWtlILtkF+8S6StRBsyOtjQX5gqreZAQ6NcnUHPkxqw5HDrU
+         VIaFPoSURJofYCKai47MNtvX16S8H1p66jwXj21yGeT0DkcrzcJnWW6p80927XRYT7lt
+         CZRw==
+X-Gm-Message-State: AOAM531/AtOvlpHMHenN/qIYfHyevyClvqVKoHGcvshm+I4P8abno8w1
+        Mq+Sa3h0qNi6m9QELNlLHPw5N9uTqDvaIrXtXl/NObGhyZJwAAlmJhmG7lwf8L5yrMchGsfcsF3
+        YYvQZsWUtcArFLazgWTgwNA==
+X-Received: by 2002:a05:6402:6cb:: with SMTP id n11mr1262884edy.112.1627494955575;
+        Wed, 28 Jul 2021 10:55:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzNWLqvC1eNWQ14TfqA0JTSWLbjWeSN7zy4ZcbOLmr0SzaT8OOnqJeoK5N3U+5DYVcl7pmWfQ==
+X-Received: by 2002:a05:6402:6cb:: with SMTP id n11mr1262876edy.112.1627494955459;
+        Wed, 28 Jul 2021 10:55:55 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id jg9sm150431ejc.6.2021.07.28.10.55.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jul 2021 10:55:55 -0700 (PDT)
+Subject: Re: linux-next: build failure after merge of the drivers-x86 tree
+To:     "Kammela, Gayatri" <gayatri.kammela@intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     "Gross, Mark" <mark.gross@intel.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
+References: <20210728164847.46855-1-broonie@kernel.org>
+ <CAHp75VcP2V2j_ZHtc9y9Jw527E8PZaoFngsXD3oA0Yvmm=L4SA@mail.gmail.com>
+ <MW3PR11MB45238F497A4960B3D8FE60A7F2EA9@MW3PR11MB4523.namprd11.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <cd335478-7882-ade8-58e5-c5ab42902b8c@redhat.com>
+Date:   Wed, 28 Jul 2021 19:55:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1905CD70-7656-42AE-99E2-A31FC3812EAC@linux.vnet.ibm.com>
+In-Reply-To: <MW3PR11MB45238F497A4960B3D8FE60A7F2EA9@MW3PR11MB4523.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 01:31:06PM +0530, Sachin Sant wrote:
-> linux-next fails to boot on Power server (POWER8/POWER9). Following traces
-> are seen during boot
-> 
-> [    0.010799] software IO TLB: tearing down default memory pool
-> [    0.010805] ------------[ cut here ]------------
-> [    0.010808] kernel BUG at arch/powerpc/kernel/interrupt.c:98!
-> [    0.010812] Oops: Exception in kernel mode, sig: 5 [#1]
-> [    0.010816] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-> [    0.010820] Modules linked in:
-> [    0.010824] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.14.0-rc3-next-20210727 #1
-> [    0.010830] NIP:  c000000000032cfc LR: c00000000000c764 CTR: c00000000000c670
-> [    0.010834] REGS: c000000003603b10 TRAP: 0700   Not tainted  (5.14.0-rc3-next-20210727)
-> [    0.010838] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28000222  XER: 00000002
-> [    0.010848] CFAR: c00000000000c760 IRQMASK: 3 
-> [    0.010848] GPR00: c00000000000c764 c000000003603db0 c0000000029bd000 0000000000000001 
-> [    0.010848] GPR04: 0000000000000a68 0000000000000400 c000000003603868 ffffffffffffffff 
-> [    0.010848] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000003 
-> [    0.010848] GPR12: ffffffffffffffff c00000001ec9ee80 c000000000012a28 0000000000000000 
-> [    0.010848] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    0.010848] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    0.010848] GPR24: 000000000000f134 0000000000000000 ffffffffffffffff c000000003603868 
-> [    0.010848] GPR28: 0000000000000400 0000000000000a68 c00000000202e9c0 c000000003603e80 
-> [    0.010896] NIP [c000000000032cfc] system_call_exception+0x8c/0x2e0
-> [    0.010901] LR [c00000000000c764] system_call_common+0xf4/0x258
-> [    0.010907] Call Trace:
-> [    0.010909] [c000000003603db0] [c00000000016a6dc] calculate_sigpending+0x4c/0xe0 (unreliable)
-> [    0.010915] [c000000003603e10] [c00000000000c764] system_call_common+0xf4/0x258
-> [    0.010921] --- interrupt: c00 at kvm_template_end+0x4/0x8
-> [    0.010926] NIP:  c000000000092dec LR: c000000000114fc8 CTR: 0000000000000000
-> [    0.010930] REGS: c000000003603e80 TRAP: 0c00   Not tainted  (5.14.0-rc3-next-20210727)
-> [    0.010934] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28000222  XER: 00000000
-> [    0.010943] IRQMASK: 0 
-> [    0.010943] GPR00: c00000000202e9c0 c000000003603b00 c0000000029bd000 000000000000f134 
-> [    0.010943] GPR04: 0000000000000a68 0000000000000400 c000000003603868 ffffffffffffffff 
-> [    0.010943] GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    0.010943] GPR12: 0000000000000000 c00000001ec9ee80 c000000000012a28 0000000000000000 
-> [    0.010943] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    0.010943] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> [    0.010943] GPR24: c0000000020033c4 c00000000110afc0 c000000002081950 c000000003277d40 
-> [    0.010943] GPR28: 0000000000000000 c00000000a680000 0000000004000000 00000000000d0000 
-> [    0.010989] NIP [c000000000092dec] kvm_template_end+0x4/0x8
-> [    0.010993] LR [c000000000114fc8] set_memory_encrypted+0x38/0x60
-> [    0.010999] --- interrupt: c00
-> [    0.011001] [c000000003603b00] [c00000000000c764] system_call_common+0xf4/0x258 (unreliable)
-> [    0.011008] Instruction dump:
-> [    0.011011] 694a0003 312affff 7d495110 0b0a0000 60000000 60000000 e87f0108 68690002 
-> [    0.011019] 7929ffe2 0b090000 68634000 786397e2 <0b030000> e93f0138 792907e0 0b090000 
-> [    0.011029] ---[ end trace a20ad55589efcb10 ]---
-> [    0.012297] 
-> [    1.012304] Kernel panic - not syncing: Fatal exception
-> 
-> next-20210723 was good. The boot failure seems to have been introduced with next-20210726.
-> 
-> I have attached the boot log.
+Hi,
 
-I noticed this with OpenSUSE's ppc64le config [1] and my bisect landed on
-commit ad6c00283163 ("swiotlb: Free tbl memory in swiotlb_exit()"). That
-series just keeps on giving... Adding some people from that thread to
-this one. Original thread:
-https://lore.kernel.org/r/1905CD70-7656-42AE-99E2-A31FC3812EAC@linux.vnet.ibm.com/
+On 7/28/21 7:27 PM, Kammela, Gayatri wrote:
+>> -----Original Message-----
+>> From: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Sent: Wednesday, July 28, 2021 10:02 AM
+>> To: Mark Brown <broonie@kernel.org>
+>> Cc: Hans de Goede <hdegoede@redhat.com>; Gross, Mark
+>> <mark.gross@intel.com>; Kammela, Gayatri <gayatri.kammela@intel.com>;
+>> Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>; Linux Kernel Mailing List
+>> <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+>> next@vger.kernel.org>; Platform Driver <platform-driver-
+>> x86@vger.kernel.org>
+>> Subject: Re: linux-next: build failure after merge of the drivers-x86 tree
+>>
+>> On Wed, Jul 28, 2021 at 7:49 PM Mark Brown <broonie@kernel.org> wrote:
+>>>
+>>> Hi all,
+>>>
+>>> After merging the drivers-x86 tree, today's linux-next build
+>>> (x86 allmodconfig) failed like this:
+>>>
+>>> error: the following would cause module name conflict:
+>>>   drivers/misc/c2port/core.ko
+>>>   drivers/platform/x86/intel/pmc/core.ko
+>>>
+>>> Caused by commit
+>>>
+>>>   29036fcc92b22d ("platform/x86/intel: intel_pmc_core: Move
+>>> intel_pmc_core* files to pmc subfolder")
+>>>
+>>> Since there was nothing in the branch yesterday I've just dropped the
+>>> tree entirely.
+>>
+>> Yeah, PMC Makefile should keep the object name the same, something like
+>>
+>> obj-$(..._PMC_...) += intel_pmc_....o
+>> intel-pmc_...-y := core.o ...
 
-[1]: https://github.com/openSUSE/kernel-source/raw/master/config/ppc64le/default
+Right, I will drop the patches from pdx86/for-next and do a forced push.
 
-Cheers,
-Nathan
+> Hi Andy and Mark,
+> We've found the issue on our side as well and planning to push the fix soon. Would you prefer to have the whole patch series redone or just the fix ?
+
+I've just dropped the current version of the patches,
+please send the whole patch series redone.
+
+Thanks & Regards,
+
+Hans
+

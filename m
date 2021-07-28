@@ -2,41 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AFB3D8DE6
-	for <lists+linux-next@lfdr.de>; Wed, 28 Jul 2021 14:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA653D8E10
+	for <lists+linux-next@lfdr.de>; Wed, 28 Jul 2021 14:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbhG1Meo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Jul 2021 08:34:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40266 "EHLO mail.kernel.org"
+        id S234771AbhG1MnR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Jul 2021 08:43:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44286 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234683AbhG1Men (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Jul 2021 08:34:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A710E60F9E;
-        Wed, 28 Jul 2021 12:34:41 +0000 (UTC)
+        id S234759AbhG1MnQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Jul 2021 08:43:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADB7A60F9C;
+        Wed, 28 Jul 2021 12:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627475682;
-        bh=2wKeig8qmDRZeeiIJGk5x5q7NdKFK9WJTk7jPfELINU=;
+        s=k20201202; t=1627476195;
+        bh=Gsg1jrEEwhKgw10WMa7bDBrN6VmhryIEfCoYsaT7HQc=;
         h=From:To:Cc:Subject:Date:From;
-        b=h2jpE/un8sDwiSUvsAyJRH2B6/0t7DfcPb/dZMdPwDgM35PXurqzYneTIjAhnZw2h
-         YHckVIRd/1UlbM9UYusDYl//ESgrEhFMEG+jo6JEuN/XPKyEvBJ1dabIgB+QNjuEhl
-         RNBBR99lMKO6KC2Nwrq3wNMOmz42WlCoDF8hs5v7/SR04+LdfiUOV8IrT1D9tBB4XA
-         /Bcq0uKTGoXtB2QWlbU1OHw4lww5fgb53xNGFKhsjxQN1ZO9fPaEqIZWlgTe0gO0vI
-         RfLQBzuJXHqVebUlWdXxR6ttcSnev4Th4sR4f+tS3H0RL6+GgbjkzsFO+g0ePkD/5N
-         HSiBpHY/2d6+A==
+        b=aw2x60ZH/4rkQ7KJEjnT6kq6mqK8P3Sy+/w7BX+FIlOqE/XYGPlOkbN7nh80oLX7y
+         6eY13lnlQpHCuCGNCp6S2b8CVK/IsRYOCjy7gUz8lP6bIggZhHEnsEN9Odf/vvuwfB
+         YiiO5jc+ErGE6ADWydpWGn1cxx7CJNTyIHgzKNPgCPCeToByD4Szfs2aINkmZsNFGX
+         7K+ua8RU/WvR9AUB0F/g4zurOfpy0XLUMw8USsec0ZPfqrwKBt+Gu8RTAVEKGICZ7j
+         U1Y4/vSO5MdUx96wAmGlES5jKqAUhOqyuR80qwZyXWzKx8uIq+e5EbVGzQYLIdzvZ/
+         PW+0QB6jZNrwg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        Leung Martin <Martin.Leung@amd.com>,
-        Solomon Chiu <solomon.chiu@amd.com>,
-        Mark Morra <MarkAlbert.Morra@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>
+To:     Rob Herring <robherring2@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: linux-next: build failure after merge of the amdgpu tree
-Date:   Wed, 28 Jul 2021 13:34:31 +0100
-Message-Id: <20210728123431.32687-1-broonie@kernel.org>
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>
+Subject: linux-next: manual merge of the devicetree tree with the clk tree
+Date:   Wed, 28 Jul 2021 13:43:04 +0100
+Message-Id: <20210728124304.1199-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,13 +42,37 @@ X-Mailing-List: linux-next@vger.kernel.org
 
 Hi all,
 
-After merging the amdgpu tree, today's linux-next build (x86
-allmodconfig) failed like this:
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-ERROR: modpost: "dc_dsc_stream_bandwidth_in_kbps" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.txt
+  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
 
-Probably caused by commit
+between commit:
 
-  b6b76b0315ed7b ("drm/amd/display: Fixed EdidUtility build errors")
+  d18eb76bbd69 ("dt-bindings: ARM: Mediatek: Add mmsys document binding for MT8192")
 
-I've reverted to Monday's tree.
+from the clk/clk-next tree and commit:
+
+  cba3c40d1f97 ("dt-bindings: arm: mediatek: mmsys: convert to YAML format")
+
+from the devicetree tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+index 2d4ff0ce387b..f9ffa5b703a5 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+@@ -29,6 +29,7 @@ properties:
+               - mediatek,mt8167-mmsys
+               - mediatek,mt8173-mmsys
+               - mediatek,mt8183-mmsys
++              - mediatek,mt8192-mmsys
+               - mediatek,mt8365-mmsys
+           - const: syscon
+       - items:

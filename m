@@ -2,95 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 388993DA8A1
-	for <lists+linux-next@lfdr.de>; Thu, 29 Jul 2021 18:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E313DA8B3
+	for <lists+linux-next@lfdr.de>; Thu, 29 Jul 2021 18:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbhG2QNo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Jul 2021 12:13:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58886 "EHLO mail.kernel.org"
+        id S229577AbhG2QSC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Jul 2021 12:18:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229864AbhG2QNo (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 29 Jul 2021 12:13:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D568604DB;
-        Thu, 29 Jul 2021 16:13:39 +0000 (UTC)
+        id S229786AbhG2QSB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 29 Jul 2021 12:18:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A74060E9B;
+        Thu, 29 Jul 2021 16:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627575221;
-        bh=KVD7TN9dcK4ktTL6Ey8DL93tJliPrHY8gZ++t0vHUF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ygvx/+gIy1i+Qtm92gnOF4QTD+7jJzpbn1XjGqrGvEi5uSALRy7a0oJb+WDy0IzOs
-         2ckLUQ18NWZfDBdV0SyEvckHE6bmqug/HgfXN98nd/Smce58NrUEFZSsH24xuSO9Mv
-         v4KKei+Juvh2Qxnwz83+iFgJjfb0mnTOwfDzYnzj9D5r5wYpCUyFFpO7rx0/TFIbCy
-         8IZJa/zybafLy1fx3RK0V6m9nJz/QWH4+gEAqG1LFKWpq930/SvhmIRIabwmZssaMs
-         FAP8KrRGI/Ofj64yoY0uhHM4VPlYH5b5iQg6z67oQytfIIoIF+56XzN9P4KTMKUffY
-         Z5ifueWR9CpdA==
-Date:   Thu, 29 Jul 2021 17:13:36 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
-        Claire Chang <tientzu@chromium.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [powerpc][next-20210727] Boot failure - kernel BUG at
- arch/powerpc/kernel/interrupt.c:98!
-Message-ID: <20210729161335.GA22016@willie-the-truck>
-References: <1905CD70-7656-42AE-99E2-A31FC3812EAC@linux.vnet.ibm.com>
- <YQGVZnMe9hFieF8D@Ryzen-9-3900X.localdomain>
+        s=k20201202; t=1627575478;
+        bh=wFwVi6Ndgej2Zd82nABr+Z4XB8U8oAueY674zW7k/8Y=;
+        h=Date:From:To:Subject:From;
+        b=lhgS5SDuI0PwdXrv1NRp+1BwvwKkHdzOxiWaRDmuz7QhgWwdGE0walLLDb6tSyS7N
+         dSFowSXk7J66fvllYMx5fo3z57P2Evm/iKUPiHqaYUAAGoO46lMfKDfyANkskjLioJ
+         K70/hB7D9SP6luT0Sdg6FFZHV/OOvgUO0mJ+180evqeTXG2gOS+NdPyvplSlTF+CKF
+         knJTy38l9gcbrs0PGJ+v5mkUeTavYzKo/AEUE1UPYuOggd1+umplMURmUtdthNDZgX
+         B7AkrKtMsAO2NWYN/cQtLyqt6QZSL0v3qKNkCKS1JcgFAfbkZcGsLL/r8LK+6mW7Fl
+         WEAZJa/TMDuNg==
+Date:   Thu, 29 Jul 2021 17:17:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Jul 29
+Message-ID: <20210729161747.GR4670@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YZHBoLCvxQT2MhEB"
 Content-Disposition: inline
-In-Reply-To: <YQGVZnMe9hFieF8D@Ryzen-9-3900X.localdomain>
+X-Cookie: Vini, vidi, Linux!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 10:35:34AM -0700, Nathan Chancellor wrote:
-> On Wed, Jul 28, 2021 at 01:31:06PM +0530, Sachin Sant wrote:
-> > next-20210723 was good. The boot failure seems to have been introduced with next-20210726.
-> > 
-> > I have attached the boot log.
-> 
-> I noticed this with OpenSUSE's ppc64le config [1] and my bisect landed on
-> commit ad6c00283163 ("swiotlb: Free tbl memory in swiotlb_exit()"). That
-> series just keeps on giving...
 
-Yes, but look how handy our new print is!
+--YZHBoLCvxQT2MhEB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[    0.010799] software IO TLB: tearing down default memory pool
-[    0.010805] ------------[ cut here ]------------
-[    0.010808] kernel BUG at arch/powerpc/kernel/interrupt.c:98!
+Hi all,
 
-Following Nick's suggestion, the diff below should help? I don't have a
-relevant box on which I can test it though.
+Changes since 20210728:
 
-Will
+The drm-msm tree gained a conflict with the misc tree.
 
---->8
+The drm-msm tree gained a build failure and was dropped entirely as
+there had been no previous changes in it since the merge window.
 
-diff --git a/arch/powerpc/platforms/pseries/svm.c b/arch/powerpc/platforms/pseries/svm.c
-index 1d829e257996..87f001b4c4e4 100644
---- a/arch/powerpc/platforms/pseries/svm.c
-+++ b/arch/powerpc/platforms/pseries/svm.c
-@@ -63,6 +63,9 @@ void __init svm_swiotlb_init(void)
- 
- int set_memory_encrypted(unsigned long addr, int numpages)
- {
-+       if (!mem_encrypt_active())
-+               return 0;
-+
-        if (!PAGE_ALIGNED(addr))
-                return -EINVAL;
- 
-@@ -73,6 +76,9 @@ int set_memory_encrypted(unsigned long addr, int numpages)
- 
- int set_memory_decrypted(unsigned long addr, int numpages)
- {
-+       if (!mem_encrypt_active())
-+               return 0;
-+
-        if (!PAGE_ALIGNED(addr))
-                return -EINVAL;
- 
+Non-merge commits (relative to Linus' tree): 3847
+ 4126 files changed, 205916 insertions(+), 74462 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches will be at http://www.kernel.org/pub/linux/kernel/next/ if/when
+I get kup working).  If you are tracking the linux-next tree using git,
+you should not use "git pull" to do so as that will try to merge the new
+linux-next release with the old one.  You should use "git fetch" and
+checkout or reset to the new master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with an arm64 defconfig, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, arm64 allnoconfig, and htmldocs.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 333 trees (counting Linus' and 90 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of Stephen's local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to
+add more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--YZHBoLCvxQT2MhEB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEC1KsACgkQJNaLcl1U
+h9AhPgf9G68ypfbgbpJ+1tMDWNvJbbuEbIxRR3C25cwNhEtPli0ZTrR3AWitPY7h
+plj6m7w+bL9OxIn+J9IgDRQ+a9GWBa4t3QuVKRK92+vP0GylPv6Wf3TIgDjMPnhd
+s6Zz9Xuol2qynxVRHKN1/TQiIACNCB/NEJ/FKmPsq7AzPbrPGElBnM2tsMzBkET/
+jD4ljWLxilQruYdaGvsOBSOFPrOS8+eC5ubnKCNNJI/lL5CAYzuJe2olULKxpyuq
+45/uT6tvUfmmSwRsHS3XfeDsnKXkYe4cL3yY46eVh5p3ko/2B+cIwyofPWYg13Ss
+6vJ8+4fmY5dOvaqdfPqiHkITgm3S3w==
+=CoXa
+-----END PGP SIGNATURE-----
+
+--YZHBoLCvxQT2MhEB--

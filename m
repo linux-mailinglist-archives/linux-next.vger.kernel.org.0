@@ -2,82 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A423DB1AA
-	for <lists+linux-next@lfdr.de>; Fri, 30 Jul 2021 05:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2D23DB2B6
+	for <lists+linux-next@lfdr.de>; Fri, 30 Jul 2021 07:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhG3DD4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Jul 2021 23:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbhG3DDz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Jul 2021 23:03:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB102C061765;
-        Thu, 29 Jul 2021 20:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=UoUNO6SpxNZD8Kp5rDs7cJKyFvYdXqxIuqfJvEub1Mw=; b=ucmvasQyzJtn31aB4P2X78i/2y
-        WGRcNUGJMLzlw2x+7VuL1yP5J+LpB1ljOzytIidamb08eRhyfn+niwxax2AqAUcd4dKXm6p1/VeRZ
-        4MmxD9NN8f1wCwmYjvaq+XMPwWJYS5wk7Ha1LIia9iJjncXjq0VqYnz1PpILaJHVZKrfr0ckfA5GT
-        +ccKpF25wV1W6pn+aKw/1PZjJV8YuVzDBPkmMQ31TFY3hWJ0RP3GbKCtpqsaGrssPFUp2dMX5Kk7y
-        U/0J0FFaYn8slPT3+tOa+NXhXdmHD7RFanIAVP7UWcT9TBPZZGCwoTgmyTl7JrCHq7aAQf6Cn42ro
-        oHvha7RA==;
-Received: from [2601:1c0:6280:3f0::aefb] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m9IoO-006n2H-Cd; Fri, 30 Jul 2021 03:03:48 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org
-Subject: [PATCH -next] drm/amdgpu: fix checking pmops when PM_SLEEP is not enabled
-Date:   Thu, 29 Jul 2021 20:03:47 -0700
-Message-Id: <20210730030347.13996-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S233201AbhG3FSX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Jul 2021 01:18:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20944 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236608AbhG3FSX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 30 Jul 2021 01:18:23 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U54E77176731;
+        Fri, 30 Jul 2021 01:18:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=mRMfJDSaBEiYJwtsisL7fiThg4iCN4T1/5czZbY5axI=;
+ b=FvJ6R+IRNlN3XBd8mh75U1wb7IFYE94aLjH21FjdyTNc2ng/V+THg3+abnCVvcN0ULgE
+ leJjIs0OvxXLCDSh5TV45Xq91IKkKOB8vxuq9fnWD2kfHhJvZVsIfPyXKzcK8Fyg5B/Q
+ cmAv66+1vp64SHxEPjxshxAuVKxUAjA+NCTeaFKOjTI5RK51A4FKFO4g1y5fjsvkelJO
+ PZorV9RcMMW+Ltxf9dnoNPqdpgQbpn7CAVGYvHM98EzO4weCS03sZSLj8uQkNJv8KLa9
+ zQEeGWgzS9Vjlb68N9BUcAvJbKEZEYiBK6NdL6Gb078pYx8cXHX/Vl2vj4kKzY8e+9jU Ww== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4abj12rj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jul 2021 01:18:04 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16U5DNNP030427;
+        Fri, 30 Jul 2021 05:18:02 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3a235kjg2n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jul 2021 05:18:02 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16U5I0pV32702790
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Jul 2021 05:18:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37C3B11C05C;
+        Fri, 30 Jul 2021 05:18:00 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 493CD11C052;
+        Fri, 30 Jul 2021 05:17:58 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.3.232])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Jul 2021 05:17:58 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.100.0.2.22\))
+Subject: Re: [powerpc][next-20210727] Boot failure - kernel BUG at
+ arch/powerpc/kernel/interrupt.c:98!
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20210729161335.GA22016@willie-the-truck>
+Date:   Fri, 30 Jul 2021 10:47:56 +0530
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-next@vger.kernel.org,
+        Claire Chang <tientzu@chromium.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3123C52D-1345-43E1-905A-FF6754E4453C@linux.vnet.ibm.com>
+References: <1905CD70-7656-42AE-99E2-A31FC3812EAC@linux.vnet.ibm.com>
+ <YQGVZnMe9hFieF8D@Ryzen-9-3900X.localdomain>
+ <20210729161335.GA22016@willie-the-truck>
+To:     Will Deacon <will@kernel.org>
+X-Mailer: Apple Mail (2.3654.100.0.2.22)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DiaWfTeMzTsWBpfNTQmvb1ps_L8keHyd
+X-Proofpoint-ORIG-GUID: DiaWfTeMzTsWBpfNTQmvb1ps_L8keHyd
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-30_03:2021-07-29,2021-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 spamscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2107300030
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-'pm_suspend_target_state' is only available when CONFIG_PM_SLEEP
-is set/enabled. OTOH, when both SUSPEND and HIBERNATION are not set,
-PM_SLEEP is not set, so this variable cannot be used.
 
-../drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: In function ‘amdgpu_acpi_is_s0ix_active’:
-../drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1046:11: error: ‘pm_suspend_target_state’ undeclared (first use in this function); did you mean ‘__KSYM_pm_suspend_target_state’?
-    return pm_suspend_target_state == PM_SUSPEND_TO_IDLE;
-           ^~~~~~~~~~~~~~~~~~~~~~~
-           __KSYM_pm_suspend_target_state
 
-Also use shorter IS_ENABLED(CONFIG_foo) notation for checking the
-2 config symbols.
+> On 29-Jul-2021, at 9:43 PM, Will Deacon <will@kernel.org> wrote:
+>=20
+> On Wed, Jul 28, 2021 at 10:35:34AM -0700, Nathan Chancellor wrote:
+>> On Wed, Jul 28, 2021 at 01:31:06PM +0530, Sachin Sant wrote:
+>>> next-20210723 was good. The boot failure seems to have been =
+introduced with next-20210726.
+>>>=20
+>>> I have attached the boot log.
+>>=20
+>> I noticed this with OpenSUSE's ppc64le config [1] and my bisect =
+landed on
+>> commit ad6c00283163 ("swiotlb: Free tbl memory in swiotlb_exit()"). =
+That
+>> series just keeps on giving...
+>=20
+> Yes, but look how handy our new print is!
+>=20
+> [    0.010799] software IO TLB: tearing down default memory pool
+> [    0.010805] ------------[ cut here ]------------
+> [    0.010808] kernel BUG at arch/powerpc/kernel/interrupt.c:98!
+>=20
+> Following Nick's suggestion, the diff below should help? I don't have =
+a
+> relevant box on which I can test it though.
+>=20
 
-Fixes: 91b03fc6b50c ("drm/amdgpu: Check pmops for desired suspend state")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-next@vger.kernel.org
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the fix. This fixes the reported problem for me.
+Tested successfully on both PowerVM LPAR as well as bare metal =
+environment.
 
---- linext-20210729.orig/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-+++ linext-20210729/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-@@ -1040,7 +1040,7 @@ void amdgpu_acpi_detect(void)
-  */
- bool amdgpu_acpi_is_s0ix_active(struct amdgpu_device *adev)
- {
--#if defined(CONFIG_AMD_PMC) || defined(CONFIG_AMD_PMC_MODULE)
-+#if IS_ENABLED(CONFIG_AMD_PMC) && IS_ENABLED(CONFIG_PM_SLEEP)
- 	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) {
- 		if (adev->flags & AMD_IS_APU)
- 			return pm_suspend_target_state == PM_SUSPEND_TO_IDLE;
+Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+
+> Will
+>=20
+> --->8
+>=20
+> diff --git a/arch/powerpc/platforms/pseries/svm.c =
+b/arch/powerpc/platforms/pseries/svm.c
+> index 1d829e257996..87f001b4c4e4 100644
+> --- a/arch/powerpc/platforms/pseries/svm.c
+> +++ b/arch/powerpc/platforms/pseries/svm.c
+> @@ -63,6 +63,9 @@ void __init svm_swiotlb_init(void)
+>=20
+> int set_memory_encrypted(unsigned long addr, int numpages)
+> {
+> +       if (!mem_encrypt_active())
+> +               return 0;
+> +
+>        if (!PAGE_ALIGNED(addr))
+>                return -EINVAL;
+>=20
+> @@ -73,6 +76,9 @@ int set_memory_encrypted(unsigned long addr, int =
+numpages)
+>=20
+> int set_memory_decrypted(unsigned long addr, int numpages)
+> {
+> +       if (!mem_encrypt_active())
+> +               return 0;
+> +
+>        if (!PAGE_ALIGNED(addr))
+>                return -EINVAL;
+>=20
+

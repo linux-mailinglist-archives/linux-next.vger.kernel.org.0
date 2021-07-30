@@ -2,45 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DD23DB9DF
-	for <lists+linux-next@lfdr.de>; Fri, 30 Jul 2021 16:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E7F3DB9ED
+	for <lists+linux-next@lfdr.de>; Fri, 30 Jul 2021 16:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbhG3OAR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Jul 2021 10:00:17 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:35965 "EHLO
+        id S239084AbhG3OCu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Jul 2021 10:02:50 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:33569 "EHLO
         out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238961AbhG3OAQ (ORCPT
+        by vger.kernel.org with ESMTP id S231137AbhG3OCt (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Fri, 30 Jul 2021 10:00:16 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 475E05C0136;
-        Fri, 30 Jul 2021 10:00:11 -0400 (EDT)
+        Fri, 30 Jul 2021 10:02:49 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9367E5C0093;
+        Fri, 30 Jul 2021 10:02:44 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 30 Jul 2021 10:00:11 -0400
+  by compute4.internal (MEProxy); Fri, 30 Jul 2021 10:02:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=AV6mcwgLoFgtra4SJrg+KJHj+RL
-        GMs7+Cx0G0YGXzC8=; b=B6tvhyEXg8sJgiz69X6KSrNPcR/PEWakRR03lApaWXD
-        Qd5SN5rJVCCVe+rgXqGSeKwtt5nafUSYxkHCviNEQSZu/SmcpR9SGOqUJFTmIjH9
-        zWs1Q2+7k8qDWlpaQfl6cQLDM1bS65DDlNLsQgG2vR6VVIDr7jh3uMZBmsCl19Fk
-        qGWIU9iM1qJQa4BZoVR5wO3qQy2Lkyw1+/8TDFbXSnXS2MPqCIVy09m7/4p2NlPZ
-        Sz9byk+aGDXhWS7OTJENysDLTAmCgkjKYt/LefqZFfiJtXbr7xL/9UMf4vytKHvu
-        rYCrCRh4seGD2ye/qMiVaDgrOLNXwAQgRrF0G1gslzw==
+        :content-type:in-reply-to; s=fm1; bh=AWxV+BgGTu0QHIp9fEqiV3+Doi0
+        FTh+yjS3KUrF3PGc=; b=CPCT7PPLiTfNf5fjTf3qyD53d41gfk43HFScQD/1QqW
+        63Lm3fnVvoRD4UJXBhheUt8BQTIBcGWP8yEAkl4iCH3XTnooZRNeHKHEQnL3Lz9V
+        4gU46SR1gH402hDOko6QwIJV5lhM9ZO4c3W9OLVlzFBlDfhusvPVN3ih/cSbmaEs
+        AuapVVbWYVL9eOd6rBK0DNnm56Dv/W2OJQ953X9CNfhY0AoijOkNt+3L2bhV+f/1
+        CihxpxTIs/nzQpN3wpAIk0i6c6pfAM1UkbUGn9z2TUHR2RkPgHmMeDc9eaK74OFz
+        tBg1ekgPL4ip6FxLYDjOXPm7o85JDVWLkU8ebWakznA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=AV6mcw
-        gLoFgtra4SJrg+KJHj+RLGMs7+Cx0G0YGXzC8=; b=BQnboKZAOYIuMe5tD3atFC
-        jcuMC8xJ/V3ZG0FnCCAsDWv/vCvJmyt9/OOrKJcwvCLKix2BIv2h4knFGvNlKkQo
-        V+VmXVTtY1Ej4c0LgSkHUCAsTdZ+hrZjT29txSaer+ywte037UjbqjACfpXqxRzP
-        h0lRMAsLcHid5saqePCTKTuouYtFSe8GPbtpwWDWngpoKElxCOmP4EbvxVCY91oh
-        DzeEAIStd2tKsEJxuCMM0SeiVkwOruNryIxVVrqq+bEtnkkwDydEAeEgv0warIga
-        KH+k6Fz8xdxX0bJKAkzC344pl/RZesvX97wQvrg9g0DKh4SF00zdOF1omowmGmCg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=AWxV+B
+        gGTu0QHIp9fEqiV3+Doi0FTh+yjS3KUrF3PGc=; b=JfIWpRDL9zQ2Qs0G7fe2KE
+        GkvxQRHD6jTVfbVmqufw62ziomFzHrT9BfdTXTZIyinManMiJA2G1zNNI1Szp9LF
+        tDBDaXXhC1Ul5r0nBRRrLG2DGJb9edl8m2AFN7ho0HuuFhdCDsUl7bpz3/EkY8DE
+        29+u0QExhgXG3UHYZij9He4JYqe6jMBy4Piq+gSRr0COYZMIXlZEwJrAUDzcJ7mU
+        C2Uhy7VgrDFDAvzjkQuTXVjp6FMfFp/FldatRk3roz6fV3l6e4GfzHjsv1B2FoLn
+        dKUATAMQfU9rf24Oueto5r5KGTFZe/vECExfT6QIsZR526dw87XZoF434RKOCGqw
         ==
-X-ME-Sender: <xms:6wUEYZU7vu5h6D-GOhQnxOUU99-ixLa0GflLKiu_bDnhtxdf_8ijmw>
-    <xme:6wUEYZlY2ftI575gwPnrJcM0-dcGAlsETg_jNG-N9rwJchi2uwC4cFU6bLKYW4Vq4
-    YOqSh2ErHaRRg>
-X-ME-Received: <xmr:6wUEYVaHkNOi-7MqoLwKaI2DjHzXnirFgEj3YW498VJpVEUOIeEr3fd7NLcBuDB5JG2ZTtHidFuI8f5zY6lS0UZzLJHzcFnX>
+X-ME-Sender: <xms:hAYEYYy24qZVSzDBQmfo9ytlqG__5L8hWKOcnBFGMaUYrD6PKK5lrQ>
+    <xme:hAYEYcSdj7cMIqrnC0lUHZQ8WUBcUoEQ8hKRVNEVAy4aeOPA2eOY1-XlGB-Ut3ueM
+    7dsbALITvGY4Q>
+X-ME-Received: <xmr:hAYEYaWc9I_vm-Y-0sMdbBM8q-1EgI8ewsbUzXCwsfXkS1FflxKLzw0jiwNJMCUyGx6QaexqF6Gh6bKlv50k17HkcXE99jRB>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheehgdeijecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -49,29 +49,30 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrheehgdeijecutefuodetggdote
     ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
     rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
     gtohhm
-X-ME-Proxy: <xmx:6wUEYcVPTIpJqL9bNxr2g5fOsC8Sc4LEmaTHLqS0vJicWg976gn-ow>
-    <xmx:6wUEYTm5CA7KH2oiz0QnN2ZbrgmeCEyni2YNDeG2_-mSfncLiMRFxg>
-    <xmx:6wUEYZevkn-tn2j9t2Qv5oRCu80qZ-D97lOc6YeeG16rKqFZzInHUw>
-    <xmx:6wUEYcA2ci8d8Dc4t1Wtf7eXddIB81jmus2NsQltYRBgXFwYHG2dRg>
+X-ME-Proxy: <xmx:hAYEYWhc4tIi588BtQHMEDtWi0PRn4D71SDwdV6BdK8EJlAPZlOeYQ>
+    <xmx:hAYEYaCMisXU4DInAMKTRP_RBf8pG8i31IIyAUFYBsr2uO2u-eVKQA>
+    <xmx:hAYEYXI8vHqJqz61O3LAZnU2RJpvL7UIpD84qI3zYrbiwr1f3Sjz2w>
+    <xmx:hAYEYc3W2ge9vWQd9W0T-ZBnupQUjtOLvb0A4JOU-nVZWcUQy6h0Xg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jul 2021 10:00:10 -0400 (EDT)
-Date:   Fri, 30 Jul 2021 16:00:07 +0200
+ 30 Jul 2021 10:02:43 -0400 (EDT)
+Date:   Fri, 30 Jul 2021 16:02:41 +0200
 From:   Greg KH <greg@kroah.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Phillip Potter <phil@philpotter.co.uk>
 Subject: Re: build failure after merge of the staging tree
-Message-ID: <YQQF5/XhsxtZgj/Z@kroah.com>
-References: <20210730135219.21723-1-broonie@kernel.org>
+Message-ID: <YQQGgReGba/Ld40y@kroah.com>
+References: <20210730135340.17863-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210730135219.21723-1-broonie@kernel.org>
+In-Reply-To: <20210730135340.17863-1-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 02:52:19PM +0100, Mark Brown wrote:
+On Fri, Jul 30, 2021 at 02:53:40PM +0100, Mark Brown wrote:
 > Hi all,
 > 
 > After merging the staging tree, today's linux-next build (x86
@@ -94,6 +95,9 @@ On Fri, Jul 30, 2021 at 02:52:19PM +0100, Mark Brown wrote:
 > 
 > I've used the staging tree from yesterday instead.
 
-Very odd, why is this not hitting it in my builds?  Let me dig...
+Ah, are you building with O= ?  That might be the problem here, I think
+I had to fix up that mess with the older driver in the past...
+
+thanks,
 
 greg k-h

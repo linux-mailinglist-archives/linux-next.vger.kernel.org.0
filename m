@@ -2,80 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 995E43DF215
-	for <lists+linux-next@lfdr.de>; Tue,  3 Aug 2021 18:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE773DF318
+	for <lists+linux-next@lfdr.de>; Tue,  3 Aug 2021 18:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbhHCQFM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Aug 2021 12:05:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231410AbhHCQFM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 3 Aug 2021 12:05:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7AB4F61078;
-        Tue,  3 Aug 2021 16:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628006701;
-        bh=ChOrB3CPLBJVhPiQkbuSn1ArNPEzKoeGUjX+n3TXo5g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VBZMvvmIWB5Ddyrebf1dgYRpzzt3wrxaVS92W9vqG+Migtd90Ap/V60TOLNDUBjRF
-         OYczL/lkmhA6R/cFRmcp2IPVKawEE22zzbr9twJZPbign1OqbGTBgkukjX9mZXbLUk
-         Cm+RiPsRtBAhXMGclWrmkldogpH11A751IdjR7p89Mp0mqQo4JmqpZqfR21VC3e3jy
-         WLIU16cHsVTp3mdYpvkU5OF6trMMsp6VV1MwRRKmQtYWzIBmCwN4G7qK73B98Gbzww
-         hmNWOO9MFGjhhpU0Nb3Ghq4EOz4jR86TzidUhIRWSwtJBf0tv5r66ZMbfMjU6aFtGn
-         rgS3QRmMGx/ng==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Aug 3
-Date:   Tue,  3 Aug 2021 17:04:45 +0100
-Message-Id: <20210803160445.22331-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S234453AbhHCQqp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Aug 2021 12:46:45 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:45930 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233718AbhHCQqj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Aug 2021 12:46:39 -0400
+Received: by mail-il1-f198.google.com with SMTP id l4-20020a9270040000b02901bb78581beaso10552742ilc.12
+        for <linux-next@vger.kernel.org>; Tue, 03 Aug 2021 09:46:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=HdFltufgXmkJpv/0DbuoYZjNiSCd4PDX5QM+gk3T1Pg=;
+        b=c3NJBCFHUyXMueGXqBnBmjpPid7MdLkeuBpZVzpdPIS4ivJ4DVKtIUwAb/JXcpcy2F
+         zHn0BkF1O4eJJLf9JDl0SVf1HWYBpnrQPmvRi0EWzyhCXNjbd0N1XxWFedrVR/y+B5ay
+         cZRGPxXqvbycerRLMiOeB62KIBs17CTF4ZMEskEBlCbBYG2xR4K7PKC1GCSgodmE2hQ6
+         Vx11WwWlPoJ7SsDhU1sMSKDxYZbDJoHqP7lps60PftwcBb8lAnv6F+ej4jk+Amcc9lVP
+         +9i56CiYAIFhbAKpPE6jlZN8wA0gLL8pDKw3nq6EGqCHNywJJXDjSSpEFElzI1eesLjK
+         lQXg==
+X-Gm-Message-State: AOAM531dSeyXdAumF4/DNGByUBgS1QDlicQgyQ8fSwujxnE3QNe8OkUL
+        /sosoQImm/tNotwi8+B4cMbPVaa06sY4WIvPhhxTL4gB2yWK
+X-Google-Smtp-Source: ABdhPJy0Yn/W/PknSJHlPsyJD75+VVPUKmolIcz0MAL+B2jEKsJJqkJuyJwpzQfxZQfntmQjXkd8OuybflHo5lz+RKrFfz88w9rA
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:2814:: with SMTP id d20mr151586ioe.65.1628009188261;
+ Tue, 03 Aug 2021 09:46:28 -0700 (PDT)
+Date:   Tue, 03 Aug 2021 09:46:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b873305c8aa6da2@google.com>
+Subject: [syzbot] linux-next boot error: WARNING in find_vma
+From:   syzbot <syzbot+dcb8a1e30879e0d60e8c@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+Hello,
 
-Changes since 20210802:
+syzbot found the following issue on:
 
-The staging tree has a build failure so I used the tree from
-20210728.
+HEAD commit:    c3f7b3be172b Add linux-next specific files for 20210803
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b71b42300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ae62f6b8af876a89
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcb8a1e30879e0d60e8c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
 
-Non-merge commits (relative to Linus' tree): 4499
- 4999 files changed, 327140 insertions(+), 124203 deletions(-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcb8a1e30879e0d60e8c@syzkaller.appspotmail.com
 
-----------------------------------------------------------------------------
+kAFS: Red Hat AFS client v0.1 registering.
+FS-Cache: Netfs 'afs' registered for caching
+Btrfs loaded, crc32c=crc32c-intel, assert=on, zoned=yes, fsverity=yes
+Key type big_key registered
+Key type encrypted registered
+AppArmor: AppArmor sha1 policy hashing enabled
+ima: No TPM chip found, activating TPM-bypass!
+Loading compiled-in module X.509 certificates
+Loaded X.509 cert 'Build time autogenerated kernel key: f850c787ad998c396ae089c083b940ff0a9abb77'
+ima: Allocated hash algorithm: sha256
+ima: No architecture policies found
+evm: Initialising EVM extended attributes:
+evm: security.selinux (disabled)
+evm: security.SMACK64 (disabled)
+evm: security.SMACK64EXEC (disabled)
+evm: security.SMACK64TRANSMUTE (disabled)
+evm: security.SMACK64MMAP (disabled)
+evm: security.apparmor
+evm: security.ima
+evm: security.capability
+evm: HMAC attrs: 0x1
+PM:   Magic number: 1:653:286
+usb usb32-port1: hash matches
+usb usb22: hash matches
+ppp ppp: hash matches
+tty ttyz0: hash matches
+printk: console [netcon0] enabled
+netconsole: network logging started
+gtp: GTP module loaded (pdp ctx size 104 bytes)
+rdma_rxe: loaded
+cfg80211: Loading compiled-in X.509 certificates for regulatory database
+cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+ALSA device list:
+  #0: Dummy 1
+  #1: Loopback 1
+  #2: Virtual MIDI Card 1
+md: Waiting for all devices to be available before autodetect
+md: If you don't use raid, use raid=noautodetect
+md: Autodetecting RAID arrays.
+md: autorun ...
+md: ... autorun DONE.
+EXT4-fs (sda1): mounted filesystem without journal. Opts: (null). Quota mode: none.
+VFS: Mounted root (ext4 filesystem) readonly on device 8:1.
+devtmpfs: mounted
+Freeing unused kernel image (initmem) memory: 4348K
+Write protecting the kernel read-only data: 169984k
+Freeing unused kernel image (text/rodata gap) memory: 2012K
+Freeing unused kernel image (rodata/data gap) memory: 1460K
+Run /sbin/init as init process
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1 at include/linux/mmap_lock.h:164 mmap_assert_locked include/linux/mmap_lock.h:164 [inline]
+WARNING: CPU: 1 PID: 1 at include/linux/mmap_lock.h:164 find_vma+0xf8/0x270 mm/mmap.c:2307
+Modules linked in:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.14.0-rc4-next-20210803-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:mmap_assert_locked include/linux/mmap_lock.h:164 [inline]
+RIP: 0010:find_vma+0xf8/0x270 mm/mmap.c:2307
+Code: 49 8d bc 24 28 01 00 00 be ff ff ff ff e8 00 e0 81 07 31 ff 89 c3 89 c6 e8 e5 a5 c9 ff 85 db 0f 85 61 ff ff ff e8 98 9e c9 ff <0f> 0b e9 55 ff ff ff e8 8c 9e c9 ff 4c 89 e7 e8 d4 da fb ff 0f 0b
+RSP: 0000:ffffc90000c67600 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888011a78000 RSI: ffffffff81ac1ac8 RDI: 0000000000000003
+RBP: 00007fffffffe000 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81ac1abb R11: 0000000000000001 R12: ffff8880260df000
+R13: 0000000000000000 R14: 0000000000002016 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000b68e000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ find_extend_vma+0x25/0x150 mm/mmap.c:2622
+ __get_user_pages+0x1c7/0xf70 mm/gup.c:1124
+ __get_user_pages_locked mm/gup.c:1359 [inline]
+ __get_user_pages_remote+0x18f/0x840 mm/gup.c:1868
+ get_user_pages_remote+0x63/0x90 mm/gup.c:1941
+ tomoyo_dump_page+0xd3/0x5b0 security/tomoyo/domain.c:915
+ tomoyo_print_bprm security/tomoyo/audit.c:46 [inline]
+ tomoyo_init_log+0xdc4/0x1ec0 security/tomoyo/audit.c:264
+ tomoyo_supervisor+0x34d/0xf00 security/tomoyo/common.c:2097
+ tomoyo_audit_path_log security/tomoyo/file.c:168 [inline]
+ tomoyo_execute_permission+0x37f/0x4a0 security/tomoyo/file.c:619
+ tomoyo_find_next_domain+0x348/0x1f80 security/tomoyo/domain.c:752
+ tomoyo_bprm_check_security security/tomoyo/tomoyo.c:101 [inline]
+ tomoyo_bprm_check_security+0x121/0x1a0 security/tomoyo/tomoyo.c:91
+ security_bprm_check+0x45/0xa0 security/security.c:865
+ search_binary_handler fs/exec.c:1711 [inline]
+ exec_binprm fs/exec.c:1764 [inline]
+ bprm_execve fs/exec.c:1833 [inline]
+ bprm_execve+0x732/0x19b0 fs/exec.c:1795
+ kernel_execve+0x370/0x460 fs/exec.c:1976
+ try_to_run_init_process+0x14/0x4e init/main.c:1426
+ kernel_init+0x12c/0x1d0 init/main.c:1542
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with an arm64 defconfig, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, arm64 allnoconfig and i386, and htmldocs.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Below is a summary of the state of the merge.
-
-I am currently merging 333 trees (counting Linus' and 90 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

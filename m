@@ -2,99 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D1C3DE90C
-	for <lists+linux-next@lfdr.de>; Tue,  3 Aug 2021 10:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C073DE9A6
+	for <lists+linux-next@lfdr.de>; Tue,  3 Aug 2021 11:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbhHCI6M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Aug 2021 04:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234725AbhHCI6M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Aug 2021 04:58:12 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD23C06175F
-        for <linux-next@vger.kernel.org>; Tue,  3 Aug 2021 01:58:01 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id nh14so17068547pjb.2
-        for <linux-next@vger.kernel.org>; Tue, 03 Aug 2021 01:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=We/acfPRwhLDIriskY+WhTs3fSv02ptiPnn+28cRj7A=;
-        b=AON2BLn5KWQ1f81r9+ETwq2QTbnE0R0SXzm344y6YYW1JiGmfnsVLU40ZtO11Uwnl7
-         vjbjWghraNrMVX5KyD8bGpk/0JQapsek6XIAT7PmsKylAMf8HFg8Unq2X/uww4YNrVx6
-         l3PpQaUZ+paSQfTbRNOWYgUhB+wc54aKmerIFNtZR5rQJf+03zXem/rWuK6MGvFKHOtO
-         SX17H1h8JeL2bHO2yUx6k7mmBz4xFVct3gvhmG2bSdo9HxJJf9OW4nYJEDTG98UJkUOU
-         a7FbJwVhTybxcU91hWRlU/M8uG82KH1sR/pB+5o87WZI+aXetU3ZbEQXQVBe0FVCuoAg
-         u2+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=We/acfPRwhLDIriskY+WhTs3fSv02ptiPnn+28cRj7A=;
-        b=VAGjszXgd6TQyXPBqqkdq+erG3/TxyHOXe7AUo/rLi3Md7t4oqTc9SYDgEZyScbzca
-         /QNtQKKpx+cSL7ZKJ1XoVQAPmbfbs6J27orOxbO7Zp4LxrfD8XGZU43RKw5HFdwn4JpJ
-         XHapshO2BkbJDdw1Q5gLhiR8Hf5oYxjlqQkuGUizqaiRfOAtLJ8W3RHaUJbuTuiJa5lV
-         0c4aW/yfXa9RH/V4XMsSfJKY0mu/c9qHHHXA3vZ+NB4dzU8HGL99YXLLzLoSjqceulFR
-         Rtn70pHg0/fp+1EO+eYxAJb4G+LhnrPIEn6FkQHE4WJKQNNcyRZjH8AIAmTv8rbi46mY
-         GD4w==
-X-Gm-Message-State: AOAM532pLl8h2IC6Ke74pMHanO6OJ6u8X1DQoYzi5FPqnC0okmq9iaam
-        vcU4/LLrGeBZMTVH4OUdr+S8ZKXfTEGfcelyR+rivHETWQ7wqw==
-X-Google-Smtp-Source: ABdhPJy4+zhCiecjkitlZnXmMY+QF2JUQXqeTtvV0bDg2mPfFE4UEZt1+Sa27wjHyuHyYTkH3MypYSqH3s9CCd0MU7k=
-X-Received: by 2002:a63:f961:: with SMTP id q33mr590820pgk.82.1627981081075;
- Tue, 03 Aug 2021 01:58:01 -0700 (PDT)
+        id S235012AbhHCJX7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Aug 2021 05:23:59 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:38277 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234833AbhHCJX6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Aug 2021 05:23:58 -0400
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MMoKq-1mTcWM1L88-00Ihmg; Tue, 03 Aug 2021 11:23:46 +0200
+Received: by mail-wr1-f47.google.com with SMTP id b11so19224488wrx.6;
+        Tue, 03 Aug 2021 02:23:46 -0700 (PDT)
+X-Gm-Message-State: AOAM530Zg/zPSyNarWsERgOSZlDUbtpSeMnJgvC6SJr6VVtN3pQTQCd2
+        /y1AQycLUT2tN7+1i3qfM5Gnuw5XN16HYx7AjSg=
+X-Google-Smtp-Source: ABdhPJx2T95w7FUlTHjCk3O4PxfI9q9E5Hmvdla2RsV5aDOkJVgc4IYEMYQOoPe1DqVGQyB7XWepQGFBaL7VmLdTYfw=
+X-Received: by 2002:a5d:44c7:: with SMTP id z7mr22606289wrr.286.1627982625965;
+ Tue, 03 Aug 2021 02:23:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210802233339.25285-1-broonie@kernel.org>
-In-Reply-To: <20210802233339.25285-1-broonie@kernel.org>
-From:   Phillip Potter <phil@philpotter.co.uk>
-Date:   Tue, 3 Aug 2021 09:57:50 +0100
-Message-ID: <CAA=Fs0k95E3FN-9rwzSQcK4JmejHDKBbvk-yhRynJBTbqBNVxQ@mail.gmail.com>
+References: <20210802233339.25285-1-broonie@kernel.org> <CAA=Fs0k95E3FN-9rwzSQcK4JmejHDKBbvk-yhRynJBTbqBNVxQ@mail.gmail.com>
+In-Reply-To: <CAA=Fs0k95E3FN-9rwzSQcK4JmejHDKBbvk-yhRynJBTbqBNVxQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 Aug 2021 11:23:29 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0HWO1tPwCkhasRE1iXt+-rC72nAzsUuO6jb4XasGAAPg@mail.gmail.com>
+Message-ID: <CAK8P3a0HWO1tPwCkhasRE1iXt+-rC72nAzsUuO6jb4XasGAAPg@mail.gmail.com>
 Subject: Re: linux-next: manual merge of the staging tree with the net-next tree
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Greg KH <greg@kroah.com>, "David S . Miller" <davem@davemloft.net>,
+To:     Phillip Potter <phil@philpotter.co.uk>
+Cc:     Mark Brown <broonie@kernel.org>, Greg KH <greg@kroah.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lgVpM/ruziTpQnjryryFpX5etwoBIgzl2LGASOqLPvetijrOzx1
+ DMN70pAXuuRbSpZZgIkS69lgjYf/L72mF+FTAOJJD7DqA6LnRL0foYGixWsnGLk2kDCTxxT
+ xRawIraaFF90lh0EGXP2ksbvb98rFcnVBtprIury0M0mKrHEbueRDY9pueArhbMAJKW8zp3
+ AibHyQbk+iMsug4HtQVlw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cikjpRYLtGI=:UiXlzBgDzydJzJ4HuAutFt
+ NL+5lb05VwEV95WgfU6QAYHIY9G+2wJ28vfu/jFVSAQRwUntvFCU3AOgRhJQB9wHUcujShKz0
+ aFOmyTxiKmmLaHfbQz8dmV+S2KfYneMTJaU6u+kMk6fA53hRP36ziBZHxx7BFGYQRGE/tzl5r
+ QMnZDLOXhrZWwxRRhk+8RmV78roRZE3KZGj6LAPgK90qJ7Ti+IUujXsB/KmimEPDsUXbVjqL5
+ 822JrhwLPIZ2pv03nnmXDYCZMXU2EVs9anWwJqYDPjRHDrzac8eXD9I7OK3U0gXsVCXP9mjOz
+ IsPxpONr0QCjoE+lKezQ6z/YU0IFnaD65hpcwNZFcp+yz9Tm9rqih8Nfq0WPtkULEAVd8ZBmQ
+ Ti504P0DyotsIcyI+5KEgW5iZyV+pZI+vjIchqb75hg8LodAze17iHC0yIZCnGoOocFpDmuEj
+ klLnUauLzenljlaEmjKGOsz2tOfgiYxjBK7aVZ3dX429DouAZ3tALhSuTKoY1APsX9mOPqVEl
+ BoCQMSI1Qed3P3eRLJNFGBMNCOLdmCOSfOMnoectDX+iE9Bbd9F3dNUJGFPMm+IPg==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 3 Aug 2021 at 00:33, Mark Brown <broonie@kernel.org> wrote:
+On Tue, Aug 3, 2021 at 10:57 AM Phillip Potter <phil@philpotter.co.uk> wrote:
+> On Tue, 3 Aug 2021 at 00:33, Mark Brown <broonie@kernel.org> wrote:
 >
-> Hi all,
->
-> Today's linux-next merge of the staging tree got conflicts in:
->
->   drivers/staging/r8188eu/include/rtw_android.h
->   drivers/staging/r8188eu/os_dep/rtw_android.c
->
-> between commit:
->
->   89939e890605 ("staging: rtlwifi: use siocdevprivate")
->
-> from the net-next tree and commit:
->
->   2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
->
-> from the staging tree.
->
-> I fixed it up using the net-next version and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> Thank you for your e-mail - not sure what is going on here as the
+> r8188eu files are totally new - the net-next commit is touching files
+> from a different directory (rtl8188eu) so perhaps it is getting
+> confused and considering it a rename or similar? Regardless, all
+> commits for r8188eu subdirectory should come from staging, as it is a
+> different driver.
 
-Dear Mark,
+In net-next, the .ndo_do_ioctl() callback behaves differently, as it no
+longer gets called from user space. If you have any
+SIOCDEVPRIVATE ioctls in the driver, those need to be
+moved over to the new .ndo_siocdevprivate callback, while any
+nonstandard ioctl commands outside of that range can just be
+removed.
 
-Thank you for your e-mail - not sure what is going on here as the
-r8188eu files are totally new - the net-next commit is touching files
-from a different directory (rtl8188eu) so perhaps it is getting
-confused and considering it a rename or similar? Regardless, all
-commits for r8188eu subdirectory should come from staging, as it is a
-different driver.
-
-Regards,
-Phil
+       Arnd

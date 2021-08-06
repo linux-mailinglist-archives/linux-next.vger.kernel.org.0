@@ -2,27 +2,27 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE553E2C17
-	for <lists+linux-next@lfdr.de>; Fri,  6 Aug 2021 16:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961723E2C47
+	for <lists+linux-next@lfdr.de>; Fri,  6 Aug 2021 16:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbhHFOKs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Aug 2021 10:10:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52270 "EHLO mail.kernel.org"
+        id S235860AbhHFONp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Aug 2021 10:13:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235700AbhHFOKs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 6 Aug 2021 10:10:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2589360E52;
-        Fri,  6 Aug 2021 14:09:37 +0000 (UTC)
+        id S235485AbhHFONp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 6 Aug 2021 10:13:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD852611C5;
+        Fri,  6 Aug 2021 14:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628258978;
-        bh=RfxbWQYQfGK3Y6LfgxAbUvVwpwj0WoPmTHvAVkw1ZP4=;
+        s=k20201202; t=1628259209;
+        bh=pQ865Q4sX30TZz9yJEK9ucr+Ft03RkQ52dLK+GbcGKE=;
         h=From:To:Cc:Subject:Date:From;
-        b=fIbwcUKLXPOamUGs+WFs0sH0HprG28Keb28w3mpi1QXk4Obay2dH0k6SmndW5QaUa
-         AIfvOjtiarM2b7uXCuo8+SnFvF+ZKeVSbMUfGl6gZc7zxX8yIAGOEloa/XJj2UsgNn
-         SS2ERtmBGGG7wQHgOy/LCzNaZF58dgQ4mX8QoERknOngJG3tZiIh/uY/OYAQlVlvvX
-         ppaXCNJJGC6jSP4ICpzqghIZ06LYnGdV7lQ7jOD9ITt3ed2gn97ZB9eXirXgoshAzB
-         JTtBSLltp1ykkaLq5BtDto0RPiNTF+kVLxVc0EYC55sbUMpNA7RNhsq48p9clE/bAk
-         9Y6md3Kc0iP8w==
+        b=ERgysFFPiCZ9YnqZDv53bDg4Z6/0JghiR0lGOLgGN8cp/8303V9vSV+CSH9HuFdVb
+         QZyhD4s0RQ0eXUq5jEJhW9qOIOVJ5JySQgsvCl2CwtnMms2x4ZLc7oFtUCWqaUPLeK
+         TVE+wLyDSqHWZBwfn4XPYAnF157yWYh+fnZ1koVIBBnCOz8IDz89esLAEoAEti12dA
+         ad5GYpjLrApp8LjhrX/6cEspwWQ+j4dqmOqFsSgKJYfyKpx9UCGxDw0OMOZrMDuVOi
+         +9Pr+jmtUN5uqd/Bu7HrcQz69bEWv/w3UnO/EwRdhoHlBy9JTcIhfyQCIkVRsUNktH
+         dy04PVnKVqZhw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Greg KH <greg@kroah.com>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -30,10 +30,10 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Sandeep Maheswaram <sanm@codeaurora.org>,
-        satya priya <skakit@codeaurora.org>
+        Shaik Sajida Bhanu <sbhanu@codeaurora.org>
 Subject: linux-next: manual merge of the usb tree with the qcom tree
-Date:   Fri,  6 Aug 2021 15:09:22 +0100
-Message-Id: <20210806140922.23050-1-broonie@kernel.org>
+Date:   Fri,  6 Aug 2021 15:13:12 +0100
+Message-Id: <20210806141312.23309-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,15 +45,15 @@ Hi all,
 
 Today's linux-next merge of the usb tree got a conflict in:
 
-  arch/arm64/boot/dts/qcom/sc7280-idp.dts
+  arch/arm64/boot/dts/qcom/sc7280.dtsi
 
 between commit:
 
-  7dfb52dcc5a4 ("arm64: dts: qcom: sc7280: Remove pm8350 and pmr735b for sc7280-idp")
+  298c81a7d44f ("arm64: dts: qcom: sc7280: Add nodes for eMMC and SD card")
 
 from the qcom tree and commit:
 
-  73cb0912894b ("arm64: dts: qcom: sc7280: Add USB nodes for IDP board")
+  bb9efa59c665 ("arm64: dts: qcom: sc7280: Add USB related nodes")
 
 from the usb tree.
 
@@ -64,71 +64,7 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-index 64fc22aff33d..894c3e92a0d7 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-@@ -68,3 +68,62 @@
- 		qcom,pre-scaling = <1 1>;
- 	};
- };
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_1_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l10c_0p8>;
-+	vdda33-supply = <&vreg_l2b_3p0>;
-+	vdda18-supply = <&vreg_l1c_1p8>;
-+};
-+
-+&usb_1_qmpphy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l6b_1p2>;
-+	vdda-pll-supply = <&vreg_l1b_0p8>;
-+};
-+
-+&usb_2 {
-+	status = "okay";
-+};
-+
-+&usb_2_dwc3 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_2_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l10c_0p8>;
-+	vdda33-supply = <&vreg_l2b_3p0>;
-+	vdda18-supply = <&vreg_l1c_1p8>;
-+};
-+
-+/* PINCTRL - additions to nodes defined in sc7280.dtsi */
-+
-+&qup_uart5_default {
-+	tx {
-+		pins = "gpio46";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	rx {
-+		pins = "gpio47";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+};
+diff --cc arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 53a21d086178,cd6908f3fd09..000000000000
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi

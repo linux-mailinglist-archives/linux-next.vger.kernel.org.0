@@ -2,131 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C2C3E40E2
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 09:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015A93E40EB
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 09:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbhHIHf3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Aug 2021 03:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbhHIHf2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 03:35:28 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF75C0613CF;
-        Mon,  9 Aug 2021 00:35:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gjnt03XPsz9shx;
-        Mon,  9 Aug 2021 17:35:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628494505;
-        bh=yDC+PPA0/uo1+KW7uR6PWWOckmv1+FExHE9V6IyCagM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FLcHlgOkxjbxg4ZiTPMBBpIgsusdjLOZywcCFVC2Js4RnNoG1yfgnH+X+PTfFIYG+
-         B+MHjYVYskub0DcaeXBPqRcsnoX4MAiXpJ8vQTPYE9Sm3PvbcdVqcRmjm6diZGrPLG
-         jWT9c/Wj7feOlWivZ9+2siefR1Yd2sHnUiKnauXY96+QFMsDsbPrwvHFeyAxq0ZRre
-         yuxncLCxX3X+SIv6WZaXSvVlcM3OUwzySLnk8OZil8CWGi7nbksnM3pzoIZ/33UMCV
-         IVzB9rm1TwsTrK+r8BolxEqcMWvnBLBduf9f4o8e2VXWR2vfQeD8tqQ6FXfGwNOBul
-         n0YQ3F7rK3VWQ==
-Date:   Mon, 9 Aug 2021 17:35:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S233161AbhHIHkR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 03:40:17 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:56113 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232094AbhHIHkQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 03:40:16 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id A79552B006E9;
+        Mon,  9 Aug 2021 03:39:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 09 Aug 2021 03:39:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=fsl0bScebyCgyftSZKkh5Fsv2Dm
+        gmxJgk8SqbFNWzGc=; b=VdKldzfdZ9YJnDWsMfMhiMlw3N9V/nZ+vMNm1g0L+c4
+        XfxpgU5MoUSOpPUOxHaxENeCINP3lVMuZGcWIL0LBNX9TdEEvMCvKiSfsiDYcLN7
+        uSCPsi9yzqGc17hxUjY8BSvP97mvwy0S4a8MaW/G3JWCcdtZojV7dle3sfG7LbQN
+        KKYXk/tnHmMCh5psMCwO593IVsoeSGZyS7AqsCnpji3WDzlkSnmZ3EKVd3W5GoFR
+        So+7Hw6k/B4tyUJG4t+Ei4E5ncsFBCZfa2RhrHIeRwron9I5I7XNbFEu1tP5KToA
+        R7opcxzLXOo3YR6UQanEEgo3dfloYWeGeWfLx1FgcvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=fsl0bS
+        cebyCgyftSZKkh5Fsv2DmgmxJgk8SqbFNWzGc=; b=bf1O8R1xfcPM9Fc9MizKHC
+        iKyxRBFvFF0vU9RzUlOhgmV6vhd63oqpEOU7I9zkyG/bea0opZ9nMvZiTicEmfea
+        L+/Dyvz1FgVsnHjKinlWGlLdOGOxJxT8hq8apHoyNA4346sXrjbxAqYx6SeZRt0Z
+        P3SQZkJtOmL4CDBj/UCgT6IY5MTw2yLzbQH/1UhI8eWtK/PRvNRTK0i6EDBWxl+O
+        6n5yAotaFzSFe2DKy2C5aSFQFKo2u5rAYBcEw7QQ/Lx1nTi+MXHGt1N/72QP/OCc
+        JOnCngaBwyVZ46WroMPVANIjV3BBaWUTbYZb8VTAJ3NqyLKHfRd5jJwzP1940xrA
+        ==
+X-ME-Sender: <xms:ydsQYdSl_q_T4EznDAuGz44PHPcObE1oovBRTm9TRHNXASewMzFipA>
+    <xme:ydsQYWwvz7eQeyfKoTKP33WIP8xnNcEA7RkI4YBedh7aujLBfkK4kzHNWxX7cOxrG
+    C9Ye1xWm0ZE1A>
+X-ME-Received: <xmr:ydsQYS2Rwr73k_IY75wDyhpK1YPyYBCT1X8l6McGFzMbe5Lx9AFY6yPisF91AAuCLvxy8TJsfLUnyisfhYQ3GafjLYXus6Gz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrjeeigdduudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:ydsQYVCqpScmfjeIYWZ7ac8IeGFnMAKWzhZyvBoyBEHW5u5YQbUUrA>
+    <xmx:ydsQYWgokVYHOUVMfaXZ_lTarPnZF5rm3CxNr9dJpof3mviKOYTuOA>
+    <xmx:ydsQYZpA4jZmDFlUVlHMWrpjf2B7gzmp_Cm_2X7JInb2pTb0R_xOqw>
+    <xmx:ytsQYXZlu1YWRydBED1fEi5y6hTTugQVRXgZxezUgNwd9dal4YmOLrq-TfY>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 9 Aug 2021 03:39:52 -0400 (EDT)
+Date:   Mon, 9 Aug 2021 09:39:50 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: linux-next: manual merge of the staging tree with the char-misc
- tree
-Message-ID: <20210809173503.07581f5c@canb.auug.org.au>
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: Re: linux-next: manual merge of the phy-next tree with the usb tree
+Message-ID: <YRDbxuNwX/0y7+L/@kroah.com>
+References: <20210809171023.4d387ed3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8Yvy4sqXOeCi5Do2g6w.i5I";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210809171023.4d387ed3@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8Yvy4sqXOeCi5Do2g6w.i5I
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Aug 09, 2021 at 05:10:23PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the phy-next tree got a conflict in:
+> 
+>   Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+> 
+> between commit:
+> 
+>   e516ac5d48fe ("dt-bindings: phy: qcom,qmp-usb3-dp: Add support for SC7280")
+> 
+> from the usb tree and commit:
+> 
+>   1a00d130596f ("dt-bindings: phy: qcom,qmp-usb3-dp: Add support for sc8180x")
+> 
+> from the phy-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+> index 20199833f144,1d49cc3d4eae..000000000000
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+> @@@ -14,7 -14,7 +14,8 @@@ properties
+>     compatible:
+>       enum:
+>         - qcom,sc7180-qmp-usb3-dp-phy
+>  +      - qcom,sc7280-qmp-usb3-dp-phy
+> +       - qcom,sc8180x-qmp-usb3-dp-phy
+>         - qcom,sdm845-qmp-usb3-dp-phy
+>         - qcom,sm8250-qmp-usb3-dp-phy
+>     reg:
 
-Hi all,
 
-Today's linux-next merge of the staging tree got a conflict in:
 
-  drivers/misc/Kconfig
-
-between commit:
-
-  0f920277dc22 ("misc: gehc-achc: new driver")
-
-from the char-misc tree and commit:
-
-  bb3b6552a5b0 ("staging: hikey9xx: split hi6421v600 irq into a separate dr=
-iver")
-
-from the staging tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/misc/Kconfig
-index a420b59917db,29294c52d5af..000000000000
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@@ -208,18 -208,16 +208,28 @@@ config CS5535_CLOCK_EVENT_SR
-  	  MFGPTs have a better resolution and max interval than the
-  	  generic PIT, and are suitable for use as high-res timers.
- =20
- +config GEHC_ACHC
- +	tristate "GEHC ACHC support"
- +	depends on SPI && SYSFS
- +	depends on SOC_IMX53 || COMPILE_TEST
- +	select FW_LOADER
- +	help
- +	  Support for GE ACHC microcontroller, that is part of the GE
- +	  PPD device.
- +
- +	  To compile this driver as a module, choose M here: the
- +	  module will be called gehc-achc.
- +
-+ config HI6421V600_IRQ
-+ 	tristate "HiSilicon Hi6421v600 IRQ and powerkey"
-+ 	depends on OF
-+ 	depends on SPMI
-+ 	select MFD_CORE
-+ 	select REGMAP_SPMI
-+ 	help
-+ 	  This driver provides IRQ handling for Hi6421v600, used on
-+ 	  some Kirin chipsets, like the one at Hikey 970.
-+=20
-  config HP_ILO
-  	tristate "Channel interface driver for the HP iLO processor"
-  	depends on PCI
-
---Sig_/8Yvy4sqXOeCi5Do2g6w.i5I
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEQ2qcACgkQAVBC80lX
-0GyJugf/bJ9PD70pOzCOEHicSMq0o2mKSyzj4KTVuMVGZJQGJO260ti+o3k4NAWE
-4rxQ9RNMcItLNdhQxEtfvhdKvMkn6RuFZvr3eA85arUudtKkBNy01B6cHvGMg5wM
-H3g559Yc8nROgzpZzZWxdOrySS1Dne/138dqFGnkH8kk0dql7rAbxQ3AcLqc8Lec
-rczxJcmEyEBlkOfagvWlWnI/iNQhoIQzEE6r48OmhxZHi7GHG8op4J1cmBVyTKjQ
-7S87TXTyjtuTx4n/TgtlEMmi90uGHYfDtoh0QHnOBCshGefNBHxckIahSuyPf+jt
-x7+zeD+5JD2Kc+FcTcV9039uvRIfxQ==
-=uvL7
------END PGP SIGNATURE-----
-
---Sig_/8Yvy4sqXOeCi5Do2g6w.i5I--
+Looks good, thanks!

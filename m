@@ -2,113 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19B73E472A
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 16:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493F83E49A0
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 18:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbhHIOGY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Aug 2021 10:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbhHIOGX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 10:06:23 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11497C0613D3
-        for <linux-next@vger.kernel.org>; Mon,  9 Aug 2021 07:06:03 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id f9-20020a05600c1549b029025b0f5d8c6cso14755994wmg.4
-        for <linux-next@vger.kernel.org>; Mon, 09 Aug 2021 07:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lNSeB72xwfEDG7NSCSN7DcWJa7Xwkv52vfkg5maE5iQ=;
-        b=OpRfMH6izgVEDg7K2VDH5oaZAsJl/S1Sah7pHgP0QqMr5GYj5pgsGeQ8HjJSp28jaT
-         QKKRbUXb6QbfFhJdVKKMZaWQ2Z2jUgVw3f5wv5DQEW+1pBgDJ2ALKUW+Zc1d/qRSQjg/
-         kO38gj/jrcNyIzqgQLQuIsKIgc/tUt89Uu5AY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=lNSeB72xwfEDG7NSCSN7DcWJa7Xwkv52vfkg5maE5iQ=;
-        b=aXBYJWaIYVWjY08gITHE33Ew9MvOSfhopeHXiGZ3qB+SKhiF5t8+t3fGiK+6ohTYwq
-         fLXos7WoANsfpwLu7pSJuJjNEF0NvAMsgtoXaAmuwnBdikc3lOClJVTam9WLOFWS3zLU
-         iBcEXMtKRDo/h8E9coS+E5sEGKhmYmnQjL+9wZfpqQA7ttFTIzBc4ZMFjRlfhlLRsDUP
-         eUsHVUituGHY5Dm6QvIdt7pM/v8MnEZD1vQqSVgOQE5n1ema8/XjtYjb/YhwqeUgR+qH
-         naRivs8XCqk1UPdeqZt0SE5aonR31D+OWb9HURK3j4bRauirGo4VHulpEz6ZfAm66Q2G
-         /KtQ==
-X-Gm-Message-State: AOAM5338nFWIgc51fF+g46W4aW3A7i/5aFUaDX1/jOvoMObHjpds2MNA
-        erHe+OaqnY3RXjz9RCBjavIlqg==
-X-Google-Smtp-Source: ABdhPJxtN7hvGNB1+/RtoxcA9RAkOM8/syk57Da6EYadLpJdvS+VEMTr6VCyqxOUp3pKgRGhV2cUyw==
-X-Received: by 2002:a1c:43c1:: with SMTP id q184mr33027913wma.173.1628517961710;
-        Mon, 09 Aug 2021 07:06:01 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id e25sm6423516wra.90.2021.08.09.07.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 07:06:01 -0700 (PDT)
-Date:   Mon, 9 Aug 2021 16:05:59 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the drm-intel
- tree
-Message-ID: <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
-Mail-Followup-To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        id S230112AbhHIQVL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 12:21:11 -0400
+Received: from mga18.intel.com ([134.134.136.126]:50344 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232874AbhHIQUS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Aug 2021 12:20:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10070"; a="201899277"
+X-IronPort-AV: E=Sophos;i="5.84,307,1620716400"; 
+   d="scan'208";a="201899277"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 09:19:41 -0700
+X-IronPort-AV: E=Sophos;i="5.84,307,1620716400"; 
+   d="scan'208";a="588935639"
+Received: from mdroper-desk1.fm.intel.com (HELO mdroper-desk1.amr.corp.intel.com) ([10.1.27.134])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2021 09:19:41 -0700
+Date:   Mon, 9 Aug 2021 09:19:39 -0700
+From:   Matt Roper <matthew.d.roper@intel.com>
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         DRI <dri-devel@lists.freedesktop.org>,
         Intel Graphics <intel-gfx@lists.freedesktop.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Matt Roper <matthew.d.roper@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the drm-intel
+ tree
+Message-ID: <20210809161939.GS1556418@mdroper-desk1.amr.corp.intel.com>
 References: <20210715141854.1ad4a956@canb.auug.org.au>
  <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
+ <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
-X-Operating-System: Linux phenom 5.10.0-7-amd64 
+In-Reply-To: <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 06, 2021 at 09:36:56AM +0300, Joonas Lahtinen wrote:
-> Hi Matt,
+On Mon, Aug 09, 2021 at 04:05:59PM +0200, Daniel Vetter wrote:
+> On Fri, Aug 06, 2021 at 09:36:56AM +0300, Joonas Lahtinen wrote:
+> > Hi Matt,
+> > 
+> > Always use the dim tooling when applying patches, it will do the right
+> > thing with regards to adding the S-o-b.
 > 
-> Always use the dim tooling when applying patches, it will do the right
-> thing with regards to adding the S-o-b.
+> fd.o server rejects any pushes that haven't been done by dim, so how did
+> this get through?
 
-fd.o server rejects any pushes that haven't been done by dim, so how did
-this get through? Matt, can you pls figure out and type up the patch to
-plug that hole?
+I definitely used dim for all of these patches, but I'm not sure how I
+lost my s-o-b on this one.  Maybe when I edited the commit message after
+'dim extract-tags' I accidentally deleted an extra line when I removed
+the extract-tags marker?  It's the only patch where the line is missing,
+so it's almost certainly human error on my part rather than something
+dim did wrong.
 
-Thanks, Daniel
+> Matt, can you pls figure out and type up the patch to
+> plug that hole?
+
+Are you referring to a patch for dim here?  The i915 patch has already
+landed, so we can't change its commit message now.
+
+
+Matt
 
 > 
-> Regards, Joonas
+> Thanks, Daniel
 > 
-> Quoting Stephen Rothwell (2021-07-15 07:18:54)
-> > Hi all,
 > > 
-> > Commit
+> > Regards, Joonas
 > > 
-> >   db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
-> > 
-> > is missing a Signed-off-by from its committer.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
+> > Quoting Stephen Rothwell (2021-07-15 07:18:54)
+> > > Hi all,
+> > > 
+> > > Commit
+> > > 
+> > >   db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
+> > > 
+> > > is missing a Signed-off-by from its committer.
+> > > 
+> > > -- 
+> > > Cheers,
+> > > Stephen Rothwell
+> 
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Matt Roper
+Graphics Software Engineer
+VTT-OSGC Platform Enablement
+Intel Corporation
+(916) 356-2795

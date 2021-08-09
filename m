@@ -1,97 +1,101 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from vger.kernel.org (unknown [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375D13E4669
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 15:22:20 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 26B2F3E4725
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 16:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235401AbhHINWc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Aug 2021 09:22:32 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:48199 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbhHINWX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 09:22:23 -0400
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N0WLC-1n0o5p203g-00wTwj; Mon, 09 Aug 2021 15:21:57 +0200
-Received: by mail-wr1-f47.google.com with SMTP id z4so21434557wrv.11;
-        Mon, 09 Aug 2021 06:21:57 -0700 (PDT)
-X-Gm-Message-State: AOAM532BvkF3fCxklp8+n4ewXggk/INBd2ipbzViDrFrLKXJ8xS/FRYd
-        TCjRh3kvdEHDinpJ8PdFHjtbPlKoy6q5OuJOQuk=
-X-Google-Smtp-Source: ABdhPJy16990ho4qpaTAmbDTUFeqQ/A0wIjvh9as86tRp9Mkq8co1Vb/ON23QRD87IMks8uku7CxYKSzhHKXaR/99pw=
-X-Received: by 2002:adf:a309:: with SMTP id c9mr7600369wrb.99.1628515317048;
- Mon, 09 Aug 2021 06:21:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210809202046.596dad87@canb.auug.org.au>
-In-Reply-To: <20210809202046.596dad87@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 9 Aug 2021 15:21:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a103SSaMmFEKehPQO0p9idVwhfck-OX5t1_3-gW4ox2tw@mail.gmail.com>
-Message-ID: <CAK8P3a103SSaMmFEKehPQO0p9idVwhfck-OX5t1_3-gW4ox2tw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
+        id S233445AbhHIOFm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 10:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233366AbhHIOFl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 10:05:41 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98961C061796
+        for <linux-next@vger.kernel.org>; Mon,  9 Aug 2021 07:05:21 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id ca5so28136509pjb.5
+        for <linux-next@vger.kernel.org>; Mon, 09 Aug 2021 07:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IGxi92yHd6EYivICtZF6F80ifWW8YGcYHwCnM5eJIwE=;
+        b=PXOxm2aYFYheeQSTGHlO9lncIQYdCJo/K2qhR7K+U3s2Lbn4Mh9y5VLFSCpT654Uv7
+         bcznhF3bI0wtmWbShG3zu25IQ1itvhtyxSYGmB1EpFokQW7Qa68fO4v1iMAa2zhzml5S
+         2rXBFGXcEYL4VUmwxqalK4WLyEPxtYXV9PJ1Perui2GBITgzgLM7tzcxMYK2iczPB27a
+         kCQFJTKW3ssDXmO3vixFu2xBEcpTu4k13z0Hg8uqbnwx7uBJ79z74N5h0lnRi27KsIud
+         rlqrOneWGVViCYIo6+/WAZuJYCu4MWwExelNEADlCka5E3aByN0Zwmh4hM+nzC+5+rXn
+         bRWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IGxi92yHd6EYivICtZF6F80ifWW8YGcYHwCnM5eJIwE=;
+        b=K/RS/96k8GCeoecho/VRQbcIJk94+ej1v07EGi9bWBo4FEwaHWTUCpbmYqc/UneizY
+         Pie2ivEBk3+KXwuK+xcY7ueAouhabh8mwjWSY8b63ksatF/wi5pGH1T4oCN+/pnOQRup
+         VT38Fk1nqcMlLqY6xojxh6LbLV3Px25G7IrjwbT3JAQyvgYPaxRk7SfHbFldyoErq/Yh
+         R5FUQgR9JAPrEeRhxV2v+Q6MIQ4U8cuOxy6+bOCVBfTOwc2OpBn6DvbfaE0Pk5ZZagN/
+         DL0X83FS0KjrYadmw0/irzvHs1vuk9ZxW0V141/4bLlMRz8mkwZorwnjiQyK76oAg4mn
+         FX6A==
+X-Gm-Message-State: AOAM530ECpmmtuEpkK5lWaVSQnV19wVolWO06TcWLqgMP+VpEBJYhmWm
+        unwrDKpIJaWboKO4qtELpADmCHH1MzeUME55
+X-Google-Smtp-Source: ABdhPJzoGjsjX+2i5pu7wV/PquDe3EppQ30OCmAXPpOvutCn++xCdrI7OP9hCcd+aQ8H1Ux3MBgZaw==
+X-Received: by 2002:a17:902:c405:b029:12c:cbce:26b9 with SMTP id k5-20020a170902c405b029012ccbce26b9mr20378611plk.69.1628517920864;
+        Mon, 09 Aug 2021 07:05:20 -0700 (PDT)
+Received: from [192.168.1.116] ([198.8.77.61])
+        by smtp.gmail.com with ESMTPSA id d31sm23798686pgd.33.2021.08.09.07.05.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 07:05:20 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the block tree with Linus' tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+Cc:     Hao Xu <haoxu@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:nRo0NssWTaHIckkiOOW6M6iRtbxvF9MxcMIP4z3c/ABpnuJNra4
- SYOatWYBUamU60cy+ljuBDmYQitchtOAiDL2fLXOhIjdykDDo59yIFGc6XuY8Xmw4oOqU2o
- x7fQPXJEAbHS5Aj0Bz2S3cYbADxLkJjQrhc2MlTRWMLh/vDZmd0eglWwsWnu8+fae/M7ZHm
- VLbPxx9a1Y9tctUruqalA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x/xcfGnN9Mc=:jBHmHL/MQhSZ4mnIDnIhx+
- s5HMze53RsAAvrWcmHuYbNoKqf3xYe1bqP2fSaxEWzOA+BzYm72pANl/vfUhcBynU3LZ+aoju
- 1MQIUXYroZgM/pgb8Kz9pH9CKDqC9Dui2YE1JgY1FQrZYkpHQAdv9GO+ooVw7OcwFySPMxeH9
- ek1EWRqgmKiF3ZARwdFIDbZkihCSOAJAW1OfNRjbOtz9/jWjYPLsO5PW5KsAS21upiZNW53oa
- z5qDqNJ10ZdhNXd41dzLby4a6w7RcgUDJtUVGyp9ep8Vgaodah9gTWjEkqxSic2pZBGwGN5w0
- UN4bEPs8dPrQBbxzrskio0GikvJ8RxIA69K4Hvv48GLA/824JyA5DuhMGl/aqgjbzCVDtQZRp
- 1zO9dW+RDFKHhW4JZd3KbhgC7OZaAQHQURoaJPSseKHrY+MNm1ZyoYR5XpU6JddF79wGj7SOM
- AYRtuH5xtgU/y1mZ/bDz/QjNFouToOWvqT5AIAX84BA0OFPKUE9EOiGefLe+ijdbRMQP5vHwO
- s40bjgBmsJTM25bkSO8j3+du6THpapBYccgisE1PKv4ZC7bYQYgAMLgZwHrnIDQIM44THe8RG
- S3cEEr1Encivn4ilGxtGGwLNYU6wx1jXYSRvkf52WIuwMyobDRUdhBxnRFedX9wA8trQuOXIg
- /kFVe5Kg/Xyj5CI1o5IupXpJjt9Qwdqq3jkugzkC0pkFIeyi2g7WAsjbGiVLkV3gvlxHi47Ff
- +vsoLM6xdPFBzZsCVnDlYAUylblJXEw0EYjRVFdLHOyeJOzm2W5eHGve9RVCKvH9N7vSAhK7E
- eZQaXuctUFutRUFnHhkzJdApg/JwV2gSRlk/6fORuKZNnHObD4lkQ/q/DCR75RpaC+jnX5i
+References: <20210809142909.1d5fab20@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <037df910-899c-688c-a4f1-a280cb3b5987@kernel.dk>
+Date:   Mon, 9 Aug 2021 08:05:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210809142909.1d5fab20@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 9, 2021 at 12:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+On 8/8/21 10:29 PM, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the net-next tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->
-> drivers/net/ethernet/cirrus/cs89x0.c: In function 'net_open':
-> drivers/net/ethernet/cirrus/cs89x0.c:897:20: error: implicit declaration of function 'isa_virt_to_bus' [-Werror=implicit-function-declaration]
->   897 |     (unsigned long)isa_virt_to_bus(lp->dma_buff));
->       |                    ^~~~~~~~~~~~~~~
+> 
+> Today's linux-next merge of the block tree got a conflict in:
+> 
+>   fs/io-wq.c
+> 
+> between commit:
+> 
+>   21698274da5b ("io-wq: fix lack of acct->nr_workers < acct->max_workers judgement")
+> 
+> from Linus' tree and commit:
+> 
+>   e16aa0c614c6 ("io-wq: remove GFP_ATOMIC allocation off schedule out path")
+> 
+> from the block tree.
+> 
+> I fixed it up (I just used the latter version, but more may be needed?) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-Thank you for the report! I already sent a patch for m68knommu running into
-this issue, but it seems there are other architectures that still have it.
+I'm going to re-shuffle the 5.15 branch, I knew we'd be hitting this
+conflict after the merge for 5.14 on Saturday. Hence it'll be a short
+lived conflict.
 
-The driver checks CONFIG_ISA_DMA_API at compile time to determine
-whether isa_virt_to_bus(), set_dma_mode(), set_dma_addr(), ... are all
-defined.
+-- 
+Jens Axboe
 
-It seems that isa_virt_to_bus() is only implemented on most of the
-architectures that set ISA_DMA_API: alpha, arm, mips, parisc and x86,
-but not on m68k/coldfire and powerpc.
-
-Before my patch, the platform driver could only be built on ARM,
-so maybe we should just go back to that dependency or something
-like
-
-         depends on ARM || ((X86 || !ISA_DMA_API) && COMPILE_TEST)
-
-for extra build coverage. Then again, it's hard to find any machine
-actually using these: we have a couple of s3c24xx machines that
-use the wrong device name, so the device never gets probed, the imx
-machines that used to work are gone, and the ep7211-edb7211.dts
-is missing a device node for it. Most likely, neither the platform nor
-the ISA driver are actually used by anyone.
-
-     Arnd

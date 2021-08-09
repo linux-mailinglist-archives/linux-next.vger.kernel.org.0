@@ -2,100 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B2F3E4725
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 16:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19B73E472A
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 16:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbhHIOFm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Aug 2021 10:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S233699AbhHIOGY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 10:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbhHIOFl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 10:05:41 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98961C061796
-        for <linux-next@vger.kernel.org>; Mon,  9 Aug 2021 07:05:21 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id ca5so28136509pjb.5
-        for <linux-next@vger.kernel.org>; Mon, 09 Aug 2021 07:05:21 -0700 (PDT)
+        with ESMTP id S231478AbhHIOGX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 10:06:23 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11497C0613D3
+        for <linux-next@vger.kernel.org>; Mon,  9 Aug 2021 07:06:03 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id f9-20020a05600c1549b029025b0f5d8c6cso14755994wmg.4
+        for <linux-next@vger.kernel.org>; Mon, 09 Aug 2021 07:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IGxi92yHd6EYivICtZF6F80ifWW8YGcYHwCnM5eJIwE=;
-        b=PXOxm2aYFYheeQSTGHlO9lncIQYdCJo/K2qhR7K+U3s2Lbn4Mh9y5VLFSCpT654Uv7
-         bcznhF3bI0wtmWbShG3zu25IQ1itvhtyxSYGmB1EpFokQW7Qa68fO4v1iMAa2zhzml5S
-         2rXBFGXcEYL4VUmwxqalK4WLyEPxtYXV9PJ1Perui2GBITgzgLM7tzcxMYK2iczPB27a
-         kCQFJTKW3ssDXmO3vixFu2xBEcpTu4k13z0Hg8uqbnwx7uBJ79z74N5h0lnRi27KsIud
-         rlqrOneWGVViCYIo6+/WAZuJYCu4MWwExelNEADlCka5E3aByN0Zwmh4hM+nzC+5+rXn
-         bRWg==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lNSeB72xwfEDG7NSCSN7DcWJa7Xwkv52vfkg5maE5iQ=;
+        b=OpRfMH6izgVEDg7K2VDH5oaZAsJl/S1Sah7pHgP0QqMr5GYj5pgsGeQ8HjJSp28jaT
+         QKKRbUXb6QbfFhJdVKKMZaWQ2Z2jUgVw3f5wv5DQEW+1pBgDJ2ALKUW+Zc1d/qRSQjg/
+         kO38gj/jrcNyIzqgQLQuIsKIgc/tUt89Uu5AY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IGxi92yHd6EYivICtZF6F80ifWW8YGcYHwCnM5eJIwE=;
-        b=K/RS/96k8GCeoecho/VRQbcIJk94+ej1v07EGi9bWBo4FEwaHWTUCpbmYqc/UneizY
-         Pie2ivEBk3+KXwuK+xcY7ueAouhabh8mwjWSY8b63ksatF/wi5pGH1T4oCN+/pnOQRup
-         VT38Fk1nqcMlLqY6xojxh6LbLV3Px25G7IrjwbT3JAQyvgYPaxRk7SfHbFldyoErq/Yh
-         R5FUQgR9JAPrEeRhxV2v+Q6MIQ4U8cuOxy6+bOCVBfTOwc2OpBn6DvbfaE0Pk5ZZagN/
-         DL0X83FS0KjrYadmw0/irzvHs1vuk9ZxW0V141/4bLlMRz8mkwZorwnjiQyK76oAg4mn
-         FX6A==
-X-Gm-Message-State: AOAM530ECpmmtuEpkK5lWaVSQnV19wVolWO06TcWLqgMP+VpEBJYhmWm
-        unwrDKpIJaWboKO4qtELpADmCHH1MzeUME55
-X-Google-Smtp-Source: ABdhPJzoGjsjX+2i5pu7wV/PquDe3EppQ30OCmAXPpOvutCn++xCdrI7OP9hCcd+aQ8H1Ux3MBgZaw==
-X-Received: by 2002:a17:902:c405:b029:12c:cbce:26b9 with SMTP id k5-20020a170902c405b029012ccbce26b9mr20378611plk.69.1628517920864;
-        Mon, 09 Aug 2021 07:05:20 -0700 (PDT)
-Received: from [192.168.1.116] ([198.8.77.61])
-        by smtp.gmail.com with ESMTPSA id d31sm23798686pgd.33.2021.08.09.07.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Aug 2021 07:05:20 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the block tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Hao Xu <haoxu@linux.alibaba.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=lNSeB72xwfEDG7NSCSN7DcWJa7Xwkv52vfkg5maE5iQ=;
+        b=aXBYJWaIYVWjY08gITHE33Ew9MvOSfhopeHXiGZ3qB+SKhiF5t8+t3fGiK+6ohTYwq
+         fLXos7WoANsfpwLu7pSJuJjNEF0NvAMsgtoXaAmuwnBdikc3lOClJVTam9WLOFWS3zLU
+         iBcEXMtKRDo/h8E9coS+E5sEGKhmYmnQjL+9wZfpqQA7ttFTIzBc4ZMFjRlfhlLRsDUP
+         eUsHVUituGHY5Dm6QvIdt7pM/v8MnEZD1vQqSVgOQE5n1ema8/XjtYjb/YhwqeUgR+qH
+         naRivs8XCqk1UPdeqZt0SE5aonR31D+OWb9HURK3j4bRauirGo4VHulpEz6ZfAm66Q2G
+         /KtQ==
+X-Gm-Message-State: AOAM5338nFWIgc51fF+g46W4aW3A7i/5aFUaDX1/jOvoMObHjpds2MNA
+        erHe+OaqnY3RXjz9RCBjavIlqg==
+X-Google-Smtp-Source: ABdhPJxtN7hvGNB1+/RtoxcA9RAkOM8/syk57Da6EYadLpJdvS+VEMTr6VCyqxOUp3pKgRGhV2cUyw==
+X-Received: by 2002:a1c:43c1:: with SMTP id q184mr33027913wma.173.1628517961710;
+        Mon, 09 Aug 2021 07:06:01 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id e25sm6423516wra.90.2021.08.09.07.06.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Aug 2021 07:06:01 -0700 (PDT)
+Date:   Mon, 9 Aug 2021 16:05:59 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matt Roper <matthew.d.roper@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210809142909.1d5fab20@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <037df910-899c-688c-a4f1-a280cb3b5987@kernel.dk>
-Date:   Mon, 9 Aug 2021 08:05:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the drm-intel
+ tree
+Message-ID: <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
+Mail-Followup-To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210715141854.1ad4a956@canb.auug.org.au>
+ <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210809142909.1d5fab20@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
+X-Operating-System: Linux phenom 5.10.0-7-amd64 
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/8/21 10:29 PM, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Aug 06, 2021 at 09:36:56AM +0300, Joonas Lahtinen wrote:
+> Hi Matt,
 > 
-> Today's linux-next merge of the block tree got a conflict in:
-> 
->   fs/io-wq.c
-> 
-> between commit:
-> 
->   21698274da5b ("io-wq: fix lack of acct->nr_workers < acct->max_workers judgement")
-> 
-> from Linus' tree and commit:
-> 
->   e16aa0c614c6 ("io-wq: remove GFP_ATOMIC allocation off schedule out path")
-> 
-> from the block tree.
-> 
-> I fixed it up (I just used the latter version, but more may be needed?) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> Always use the dim tooling when applying patches, it will do the right
+> thing with regards to adding the S-o-b.
 
-I'm going to re-shuffle the 5.15 branch, I knew we'd be hitting this
-conflict after the merge for 5.14 on Saturday. Hence it'll be a short
-lived conflict.
+fd.o server rejects any pushes that haven't been done by dim, so how did
+this get through? Matt, can you pls figure out and type up the patch to
+plug that hole?
+
+Thanks, Daniel
+
+> 
+> Regards, Joonas
+> 
+> Quoting Stephen Rothwell (2021-07-15 07:18:54)
+> > Hi all,
+> > 
+> > Commit
+> > 
+> >   db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
+> > 
+> > is missing a Signed-off-by from its committer.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
 
 -- 
-Jens Axboe
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

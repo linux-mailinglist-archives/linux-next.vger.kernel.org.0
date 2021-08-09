@@ -1,109 +1,97 @@
 Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E423F3E45E6
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 14:47:08 +0200 (CEST)
+Received: from vger.kernel.org (unknown [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 375D13E4669
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 15:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbhHIMr1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Aug 2021 08:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbhHIMr1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 08:47:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5EBC0613D3
-        for <linux-next@vger.kernel.org>; Mon,  9 Aug 2021 05:47:06 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so34376800pjr.1
-        for <linux-next@vger.kernel.org>; Mon, 09 Aug 2021 05:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WfxA3gsDaSxEy+9iphVwy0TG0m80l5lpwxz/GBrg+rc=;
-        b=I2AyBSnrOnAp3FztkDuPcA97Qu0X62TuDZ0TF6q1uSrGf5IF2cOl8lhJh1ibFeslpA
-         RVTDGqZd2Yv3sDAdqrhc7RfrAEqme6FgPdkp4Le5dJmuV/M/aReargMiuZPIItFbHKXg
-         uLaoYG0yXrpZq8l/sMR2dX2fKn8vVfboLe/0KcYJFwd/tsTaOzWi+7EZhYYpTNcJEit5
-         MB5Dti1JxnWPUIGeGv9yj/Q3+LcyGH5zWMFFWHAD9X0VIT3THSJ7cxkLwaL494GsPiCZ
-         5vthBTiJXikrk/MGoYy3Bt/GpxwI/vQ9kMU6cc/Ptpat1anZ44MtMpbovHLZ794J76dC
-         bzlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WfxA3gsDaSxEy+9iphVwy0TG0m80l5lpwxz/GBrg+rc=;
-        b=bRg4xpJMmOq9kVUzJRBnevwAS53lJQzQv5LW83Eq2F8gJCumc5kG+mJCSaa/JrUybU
-         O7ETemZnurnGsNY+q2eUVxHKkNASDwMBY2A0HYD2OBksIwORbxVbwfIHQxMybKL3c20T
-         7GVmEFIkzHTd74oQehlVwHeqS0yhZDpmUueRVf8iqJAEYrtbxbLwBFm0I9b/RH2G6BHj
-         ITWX7s4mWrUkfJukBOyHG9Qjai+7qgO2jGZG+nJaoQdAjA+uE0HHLGXINyOl+awWjyKF
-         E01eK63bup//OJo8UBnWZrp2uEBY7cE8rw5fa/MGKKbFSC4qpRlOKSHY5WPycaRPJRkB
-         MPKA==
-X-Gm-Message-State: AOAM531LVxxaRLob+j6gDFBUQeU+teakT8mK5apbkB5FUX2t72NS39zA
-        a5hT7Z8Ez7tQ0neCBtTCzazvRySL+J23jrAU59co0A==
-X-Google-Smtp-Source: ABdhPJzDDcbPRdekHKX6UqgUOmND4RS/UrPR2vnOZz/atF4ytAKymvy0xMoLFf3gUQbyiE+PVZYmDInUjmlS+mNnCVs=
-X-Received: by 2002:a17:902:f704:b029:11a:cdee:490 with SMTP id
- h4-20020a170902f704b029011acdee0490mr20209906plo.37.1628513226407; Mon, 09
- Aug 2021 05:47:06 -0700 (PDT)
+        id S235401AbhHINWc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 09:22:32 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:48199 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234597AbhHINWX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Aug 2021 09:22:23 -0400
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N0WLC-1n0o5p203g-00wTwj; Mon, 09 Aug 2021 15:21:57 +0200
+Received: by mail-wr1-f47.google.com with SMTP id z4so21434557wrv.11;
+        Mon, 09 Aug 2021 06:21:57 -0700 (PDT)
+X-Gm-Message-State: AOAM532BvkF3fCxklp8+n4ewXggk/INBd2ipbzViDrFrLKXJ8xS/FRYd
+        TCjRh3kvdEHDinpJ8PdFHjtbPlKoy6q5OuJOQuk=
+X-Google-Smtp-Source: ABdhPJy16990ho4qpaTAmbDTUFeqQ/A0wIjvh9as86tRp9Mkq8co1Vb/ON23QRD87IMks8uku7CxYKSzhHKXaR/99pw=
+X-Received: by 2002:adf:a309:: with SMTP id c9mr7600369wrb.99.1628515317048;
+ Mon, 09 Aug 2021 06:21:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210802233339.25285-1-broonie@kernel.org> <CAA=Fs0k95E3FN-9rwzSQcK4JmejHDKBbvk-yhRynJBTbqBNVxQ@mail.gmail.com>
- <CAK8P3a0HWO1tPwCkhasRE1iXt+-rC72nAzsUuO6jb4XasGAAPg@mail.gmail.com> <20210809175502.226ce4cd@elm.ozlabs.ibm.com>
-In-Reply-To: <20210809175502.226ce4cd@elm.ozlabs.ibm.com>
-From:   Phillip Potter <phil@philpotter.co.uk>
-Date:   Mon, 9 Aug 2021 13:46:55 +0100
-Message-ID: <CAA=Fs0nF31NdEoPLM-a2RCupQPtHgHMzxejK67UuLh0wu32EVA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the staging tree with the net-next tree
-To:     Stephen Rothwell <sfr@rothwell.id.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Greg KH <greg@kroah.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+References: <20210809202046.596dad87@canb.auug.org.au>
+In-Reply-To: <20210809202046.596dad87@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 9 Aug 2021 15:21:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a103SSaMmFEKehPQO0p9idVwhfck-OX5t1_3-gW4ox2tw@mail.gmail.com>
+Message-ID: <CAK8P3a103SSaMmFEKehPQO0p9idVwhfck-OX5t1_3-gW4ox2tw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:nRo0NssWTaHIckkiOOW6M6iRtbxvF9MxcMIP4z3c/ABpnuJNra4
+ SYOatWYBUamU60cy+ljuBDmYQitchtOAiDL2fLXOhIjdykDDo59yIFGc6XuY8Xmw4oOqU2o
+ x7fQPXJEAbHS5Aj0Bz2S3cYbADxLkJjQrhc2MlTRWMLh/vDZmd0eglWwsWnu8+fae/M7ZHm
+ VLbPxx9a1Y9tctUruqalA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x/xcfGnN9Mc=:jBHmHL/MQhSZ4mnIDnIhx+
+ s5HMze53RsAAvrWcmHuYbNoKqf3xYe1bqP2fSaxEWzOA+BzYm72pANl/vfUhcBynU3LZ+aoju
+ 1MQIUXYroZgM/pgb8Kz9pH9CKDqC9Dui2YE1JgY1FQrZYkpHQAdv9GO+ooVw7OcwFySPMxeH9
+ ek1EWRqgmKiF3ZARwdFIDbZkihCSOAJAW1OfNRjbOtz9/jWjYPLsO5PW5KsAS21upiZNW53oa
+ z5qDqNJ10ZdhNXd41dzLby4a6w7RcgUDJtUVGyp9ep8Vgaodah9gTWjEkqxSic2pZBGwGN5w0
+ UN4bEPs8dPrQBbxzrskio0GikvJ8RxIA69K4Hvv48GLA/824JyA5DuhMGl/aqgjbzCVDtQZRp
+ 1zO9dW+RDFKHhW4JZd3KbhgC7OZaAQHQURoaJPSseKHrY+MNm1ZyoYR5XpU6JddF79wGj7SOM
+ AYRtuH5xtgU/y1mZ/bDz/QjNFouToOWvqT5AIAX84BA0OFPKUE9EOiGefLe+ijdbRMQP5vHwO
+ s40bjgBmsJTM25bkSO8j3+du6THpapBYccgisE1PKv4ZC7bYQYgAMLgZwHrnIDQIM44THe8RG
+ S3cEEr1Encivn4ilGxtGGwLNYU6wx1jXYSRvkf52WIuwMyobDRUdhBxnRFedX9wA8trQuOXIg
+ /kFVe5Kg/Xyj5CI1o5IupXpJjt9Qwdqq3jkugzkC0pkFIeyi2g7WAsjbGiVLkV3gvlxHi47Ff
+ +vsoLM6xdPFBzZsCVnDlYAUylblJXEw0EYjRVFdLHOyeJOzm2W5eHGve9RVCKvH9N7vSAhK7E
+ eZQaXuctUFutRUFnHhkzJdApg/JwV2gSRlk/6fORuKZNnHObD4lkQ/q/DCR75RpaC+jnX5i
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 9 Aug 2021 at 08:55, Stephen Rothwell <sfr@rothwell.id.au> wrote:
+On Mon, Aug 9, 2021 at 12:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> On Tue, 3 Aug 2021 11:23:29 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Aug 3, 2021 at 10:57 AM Phillip Potter <phil@philpotter.co.uk> wrote:
-> > > On Tue, 3 Aug 2021 at 00:33, Mark Brown <broonie@kernel.org> wrote:
-> > >
-> > > Thank you for your e-mail - not sure what is going on here as the
-> > > r8188eu files are totally new - the net-next commit is touching files
-> > > from a different directory (rtl8188eu) so perhaps it is getting
-> > > confused and considering it a rename or similar? Regardless, all
-> > > commits for r8188eu subdirectory should come from staging, as it is a
-> > > different driver.
-> >
-> > In net-next, the .ndo_do_ioctl() callback behaves differently, as it no
-> > longer gets called from user space. If you have any
-> > SIOCDEVPRIVATE ioctls in the driver, those need to be
-> > moved over to the new .ndo_siocdevprivate callback, while any
-> > nonstandard ioctl commands outside of that range can just be
-> > removed.
+> After merging the net-next tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 >
-> So, can that be done in the staging tree as it is, or does Greg need to
-> merge (part of) the net-next tree?  Or will someone just supply me with
-> a reasonable merge resolution patch?  Or does Greg reset the staging
-> tree to 5c872e1d2595 and try again next time?  Or similar for Dave
-> (revert Arnd's work)?
->
-> Currently it is a mess in linux-next and probably will not work even
-> though it does build.
->
-> --
-> Cheers,
-> Stephen Rothwell
+> drivers/net/ethernet/cirrus/cs89x0.c: In function 'net_open':
+> drivers/net/ethernet/cirrus/cs89x0.c:897:20: error: implicit declaration of function 'isa_virt_to_bus' [-Werror=implicit-function-declaration]
+>   897 |     (unsigned long)isa_virt_to_bus(lp->dma_buff));
+>       |                    ^~~~~~~~~~~~~~~
 
-Dear Stephen,
+Thank you for the report! I already sent a patch for m68knommu running into
+this issue, but it seems there are other architectures that still have it.
 
-Happy to try and provide a merge resolution patch if that is easier?
-Will be this evening UK time though.
+The driver checks CONFIG_ISA_DMA_API at compile time to determine
+whether isa_virt_to_bus(), set_dma_mode(), set_dma_addr(), ... are all
+defined.
 
-Regards,
-Phil
+It seems that isa_virt_to_bus() is only implemented on most of the
+architectures that set ISA_DMA_API: alpha, arm, mips, parisc and x86,
+but not on m68k/coldfire and powerpc.
+
+Before my patch, the platform driver could only be built on ARM,
+so maybe we should just go back to that dependency or something
+like
+
+         depends on ARM || ((X86 || !ISA_DMA_API) && COMPILE_TEST)
+
+for extra build coverage. Then again, it's hard to find any machine
+actually using these: we have a couple of s3c24xx machines that
+use the wrong device name, so the device never gets probed, the imx
+machines that used to work are gone, and the ep7211-edb7211.dts
+is missing a device node for it. Most likely, neither the platform nor
+the ISA driver are actually used by anyone.
+
+     Arnd

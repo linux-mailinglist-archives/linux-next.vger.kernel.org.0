@@ -2,123 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA8C3E3E34
-	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 05:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FCF3E3F01
+	for <lists+linux-next@lfdr.de>; Mon,  9 Aug 2021 06:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbhHIDSh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 8 Aug 2021 23:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhHIDSh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 8 Aug 2021 23:18:37 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACA6C061757;
-        Sun,  8 Aug 2021 20:18:17 -0700 (PDT)
+        id S231580AbhHIE3e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Aug 2021 00:29:34 -0400
+Received: from ozlabs.org ([203.11.71.1]:54619 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231788AbhHIE3e (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Aug 2021 00:29:34 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gjh9d6X6Hz9sWX;
-        Mon,  9 Aug 2021 13:18:13 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GjjlX1C8Jz9sWl;
+        Mon,  9 Aug 2021 14:29:11 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628479094;
-        bh=JSjEqkO0SK13kfbGfd0rXE6B3pLcWE5fT+mLWjxOuiw=;
+        s=201702; t=1628483353;
+        bh=GpY6Zpn0SSFgumfgOMSV7jxmKuyw+SXkuDGzfUxWPiQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=nKJDIYvetzsui66DegHwPeFqT0Gb3dN7kKtMnzeKtXFeusjw5KeWSf6uE7gOIRyib
-         +kSmEkj75DJQWP810obJ0c6YkaShU60RMX5kTugApNusgi/RnNjOnDB+jp7VL0wtZr
-         JW4oznlQNA03WJuE8gKZsUWWsSpUSjR5DqEBx6E00JrkSXNPTTSrJYT/6vmDFrnWE0
-         GijB2ao4HwlslA/or2BZAd37l/CiOr8a4cZEwCBJuk2aDHEcJyhnTvQhI+IPr/7rZv
-         9b/gFG1OYjvrf8Mpu8MXJgixJfbRYnFn3XQqjkjeKrBgj7DYjx7S6Gd4gKi2atgPEn
-         Ryg7bsoCR9WkQ==
-Date:   Mon, 9 Aug 2021 13:18:13 +1000
+        b=rMIV98B5besjXwdXARZHs89+uThHLwRTLEEC6cmFGyU6hOI0o3h5I+X5uXg9VjUyf
+         wblK8QThLE2rMgALuvISHZGWpPXQLmZzLBODKQ/e9Leu486SM7qx8usT56WeWkBwu0
+         uIeXpNIvQwzzQ0UcLiCZSPY41Z4iJanRwCDa1bMlbrIG0pP78I9WXoySMCZnheqtQ5
+         fgpSuEunC1sRfhJ9tmeivGXYf1oN5NzNYYVUzOkRe6Gq3725WmbZ3HfRgnJEYjcy62
+         ecmfVNVqU1WtH+x8zxvHStrriWf3N1loLsfDmTqU6A8ZuaYPDKk4K/+i987Xs1UK7l
+         2mqzIkuqVxSzw==
+Date:   Mon, 9 Aug 2021 14:29:09 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@codeaurora.org>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Chris Down <chris@chrisdown.name>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Hao Xu <haoxu@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: linux-next: manual merge of the wireless-drivers-next tree with the
- printk tree
-Message-ID: <20210809131813.3989f9e8@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the block tree with Linus' tree
+Message-ID: <20210809142909.1d5fab20@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J0qSpD.0pt+p+Ol=dY3doOR";
+Content-Type: multipart/signed; boundary="Sig_/KIEW3llqG=OJyd2dUqLGnUW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/J0qSpD.0pt+p+Ol=dY3doOR
+--Sig_/KIEW3llqG=OJyd2dUqLGnUW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the wireless-drivers-next tree got a
-conflict in:
+Today's linux-next merge of the block tree got a conflict in:
 
-  MAINTAINERS
+  fs/io-wq.c
 
 between commit:
 
-  337015573718 ("printk: Userspace format indexing support")
+  21698274da5b ("io-wq: fix lack of acct->nr_workers < acct->max_workers ju=
+dgement")
 
-from the printk tree and commit:
+from Linus' tree and commit:
 
-  d249ff28b1d8 ("intersil: remove obsolete prism54 wireless driver")
+  e16aa0c614c6 ("io-wq: remove GFP_ATOMIC allocation off schedule out path")
 
-from the wireless-drivers-next tree.
+from the block tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I just used the latter version, but more may be needed?) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 5cf181197a50,492bc169c3bd..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -14974,18 -14927,6 +14974,11 @@@ S:	Maintaine
-  F:	include/linux/printk.h
-  F:	kernel/printk/
- =20
- +PRINTK INDEXING
- +R:	Chris Down <chris@chrisdown.name>
- +S:	Maintained
- +F:	kernel/printk/index.c
- +
-- PRISM54 WIRELESS DRIVER
-- M:	Luis Chamberlain <mcgrof@kernel.org>
-- L:	linux-wireless@vger.kernel.org
-- S:	Obsolete
-- W:	https://wireless.wiki.kernel.org/en/users/Drivers/p54
-- F:	drivers/net/wireless/intersil/prism54/
--=20
-  PROC FILESYSTEM
-  L:	linux-kernel@vger.kernel.org
-  L:	linux-fsdevel@vger.kernel.org
-
---Sig_/J0qSpD.0pt+p+Ol=dY3doOR
+--Sig_/KIEW3llqG=OJyd2dUqLGnUW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEQnnUACgkQAVBC80lX
-0GwOYwf+MWaAUMoUFCY9sT8KILHP1ELpF5s271ME6q15pHJp/cOQjUh88YvcbjaZ
-UMR3opUfNatDLhVZb1DW/L9ru29hOIO8ShIO4OaJrhuk6Dp0Y+5vt8wMzOzbFoOm
-RPL2bIQJTvNRo1nXb2Wah1TAH1UZ80LzS7ZDA/lbs+eT2Zy3EAzsW6LHI6BSeOE/
-eGIW73qh7HNXtJBP4cOjP5ILf5FHmat+BygqIJ/Hf/QK37HeaK8RThLjfkANFv+D
-rhsi64Si6uLOVdy697lqXTdKWOcil66J7OyGBKpk/sJDqKKJ1n6zeRbpeLcrjhzS
-8ESUqh7YLm9dLU/GSNf5M/xtS20e3Q==
-=k0gP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEQrxUACgkQAVBC80lX
+0GyVngf+JaunBYc+g+eedHe1Gl8MavVh6SlLSYUYi7K0Hc7OWQWiWVT629MpN0+z
+wbONyHFF/ttbjgnf4rYhKt/OTJwCvGb9RkEECUv9nphPzSPtFseMZZSGYOF8dOXb
+PMbUj1o/CPjKufamBWpi9WoIURk0FwU3+GJoch9bzUUAmKX9Ow4v7aVZOiQmbPgL
+0N4WJLo7+h/8TLjfq1ULTcYSO/p+FfBGtWoN8AVNZDJIp/pMmTfa2zOlgSk75NRC
+Bej+lE3lWJdtD3qcUoU5XFbn7fckBgf/keQjMqwP49l8z/rKBj0rnYiDPaHfhzo9
+kQ9S9U05wRrBkhne5UUTytRRMaUsAA==
+=Ynxb
 -----END PGP SIGNATURE-----
 
---Sig_/J0qSpD.0pt+p+Ol=dY3doOR--
+--Sig_/KIEW3llqG=OJyd2dUqLGnUW--

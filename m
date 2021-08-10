@@ -2,115 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1496D3E56CB
-	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 11:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC61E3E56E1
+	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 11:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239005AbhHJJ1G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 05:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S229679AbhHJJa2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 05:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239007AbhHJJ1E (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 05:27:04 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9E5C0613D3;
-        Tue, 10 Aug 2021 02:26:40 -0700 (PDT)
+        with ESMTP id S232955AbhHJJaY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 05:30:24 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADADFC0613D3;
+        Tue, 10 Aug 2021 02:30:02 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkSJG0sQKz9sT6;
-        Tue, 10 Aug 2021 19:26:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkSN82zl9z9sX5;
+        Tue, 10 Aug 2021 19:30:00 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628587598;
-        bh=ujxBT6JOzhQsnjHTTGJrV5DnVKi8jPWIZ+grZbTmO34=;
+        s=201702; t=1628587800;
+        bh=7tvEHHo6wFA/9wFCZ+yXT1VQN4HCIabjZwE1lmKuMNo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YDXp3moxuPwwVAV440zscERSPPjtkIRQ6ltbaBAUp9iU6rtb3raxDt2JUaFiGKiIm
-         DPqgooaOlGBh61fThk8btufWzy4wxkwZfxobVitddkbHwRTfDylg/6mcrqTRLbK110
-         DlK0klQ9Yz5h/2EOcvy2vjeu/sxQLk3/e5W3hDqQKzkqNAq1ktQcB+3AjFQ+VP6SkC
-         me3ujyeyIwHdoz+6ZgGWfOK6bxmRVWLdt2ilVMwjzxcqfY5gMXG0LQC08sEFMNhDJh
-         r2wm2FfW0NCF6nysJWV3Vr8gEz/X3MEcrkHXMtGetHUkZPQiFkdLkXmtmccCmaWVlp
-         YRvzD1Aeu456w==
-Date:   Tue, 10 Aug 2021 19:26:36 +1000
+        b=EJpWISnjQkw6oYcqkslG7K9+vUmAfYzdnNsujLGlx8jPiqmXeIITgkZXXZi/o1xTt
+         vt+CL0k9pMt1gT5bUGyyqg38Z1t8fM3ZqUK+Dyh1y+ixMLUqsKAnn/u2LVgtJG4UKO
+         MtbQwb6XFOzM4f807BD7IQp61k8LPBAyMTPa3dmHbhsV0F7X7q4hjBIIDanvFEdbBf
+         Zoi76BVBgFKE23iC59/w6om4HAwOVluSBGuBXUn3Xf2JJgdPkg/MdmLIcDRBZoM5+F
+         kb69VxwraHjv0Wsz9asdrQ/kFrLdbydeLHSWKPAyk5g7HbmrIlTq8A67g0oGN4rjAL
+         n+px7at3NNusQ==
+Date:   Tue, 10 Aug 2021 19:29:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Mark Brown <broonie@kernel.org>,
+        "William A. Kennington III" <wak@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the drm tree
-Message-ID: <20210810192636.625220ae@canb.auug.org.au>
-In-Reply-To: <20210708122048.534c1c4d@canb.auug.org.au>
-References: <20210603193242.1ce99344@canb.auug.org.au>
-        <20210708122048.534c1c4d@canb.auug.org.au>
+Subject: Re: linux-next: build warning from Linus' tree
+Message-ID: <20210810192959.05d6e588@canb.auug.org.au>
+In-Reply-To: <20210720173142.00a375c5@canb.auug.org.au>
+References: <20210601172026.6bc0a96f@canb.auug.org.au>
+        <20210708122544.011171b3@canb.auug.org.au>
+        <20210720173142.00a375c5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PdFYQG0PzTCvSx0s5gcPuCo";
+Content-Type: multipart/signed; boundary="Sig_/triqxUS9/e=uPv==hqm8FPJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PdFYQG0PzTCvSx0s5gcPuCo
+--Sig_/triqxUS9/e=uPv==hqm8FPJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 8 Jul 2021 12:20:48 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Tue, 20 Jul 2021 17:31:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On Thu, 3 Jun 2021 19:32:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+> On Thu, 8 Jul 2021 12:25:44 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
  wrote:
 > >
-> > After merging the drm tree, today's linux-next build (htmldocs) produced
-> > these warnings:
+> > On Tue, 1 Jun 2021 17:20:26 +1000 Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote: =20
+> > >
+> > > When building Linus' tree, today's linux-next build (htmldocs) produc=
+ed
+> > > this warning:
+> > >=20
+> > > include/linux/spi/spi.h:671: warning: Function parameter or member 'd=
+evm_allocated' not described in 'spi_controller'
+> > >=20
+> > > Introduced by commit
+> > >=20
+> > >   794aaf01444d ("spi: Fix use-after-free with devm_spi_alloc_*")
+> > >=20
+> > > This has been around for a while (at least v5.13-rc1 and next-2021040=
+9).
+> > > Sorry I did not report it earlier.   =20
 > >=20
-> > Documentation/gpu/driver-uapi.rst:2412: WARNING: Duplicate C declaratio=
-n, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > Declaration is '.. c:enum:: drm_i915_gem_memory_class'.
-> > Documentation/gpu/driver-uapi.rst:2484: WARNING: Duplicate C declaratio=
-n, also defined at gpu/rfc/i915_gem_lmem:2484.
-> > Declaration is '.. c:struct:: drm_i915_gem_memory_class_instance'.
-> > Documentation/gpu/driver-uapi.rst:7: WARNING: Duplicate C declaration, =
-also defined at gpu/rfc/i915_gem_lmem:7.
-> > Declaration is '.. c:struct:: drm_i915_memory_region_info'.
-> > Documentation/gpu/driver-uapi.rst:2531: WARNING: Duplicate C declaratio=
-n, also defined at gpu/rfc/i915_gem_lmem:2531.
-> > Declaration is '.. c:struct:: drm_i915_query_memory_regions'.
-> > Documentation/gpu/driver-uapi.rst:2595: WARNING: Duplicate C declaratio=
-n, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > Declaration is '.. c:struct:: drm_i915_gem_create_ext'.
-> > Documentation/gpu/driver-uapi.rst:2615: WARNING: Duplicate C declaratio=
-n, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > Declaration is '.. c:struct:: drm_i915_gem_create_ext_memory_regions'.
-> >=20
-> > Introduced by (one or more of) commits
-> >=20
-> >   0c1a77cbdafb ("drm/doc: add section for driver uAPI")
-> >   2bc9c04ea702 ("drm/doc/rfc: i915 DG1 uAPI")
-> >   727ecd99a4c9 ("drm/doc/rfc: drop the i915_gem_lmem.h header") =20
+> > I am still getting this warning. =20
 >=20
-> I am still getting these warning.
+> I am still getting this warning.  It is now on line 675.
 
-Still getting them ...
+Now line 672 ...
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/PdFYQG0PzTCvSx0s5gcPuCo
+--Sig_/triqxUS9/e=uPv==hqm8FPJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmESRkwACgkQAVBC80lX
-0Gwu0Qf7BXVjF6CjiHSUhDtdaw/dtje+vQ8f84zqbdnWnbZHD7nOhIY/KfRmrYBe
-PbzQpbbdTfyJA8a9af8K4HK7SOhnjQa4kabi4RtfQGhRip9Hgb+9Y2yGH4yzddFI
-YnunPgO5yPm+PY/nLJZXNBZoJ6S0/yxxkcT9Q8BQD08JzzKSHKMBwbWv5R52sh88
-UCWzU297m4gD+eGdIZKvWY80xG6z+MWZZLvvZ2FU66MRxtLyuOImrvVGJ8bQoGWo
-5QZTtJ+SjJf/NUKlxZ0ZY3pXr8S7jSvssHiOQP85UrrHdcMUxa2AmK0I+sIaCeNZ
-oZCU81MNFfsxvrJMZCSo+h7lKrh87A==
-=Q0bJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmESRxcACgkQAVBC80lX
+0GzEwwgAmvRIHoSdTDPqYSNeMHAeBkhJKY8cKL/Qzq28SsW1wzwd8xGeSXAj2JOi
+dEfN214p4101LO9n52s17j59mS4HF0+ecyDJdRWhv7Tkob2ACXCmGrPAVPNClXbM
+5BZoWYgVS4twZAYSbzWgZB+LVXF1xnrQMOJUepLBMkVdXwEbX/QaSlz3kybEU6Kl
+TTLEt3v53AhX3AE+4zhRjK285xuVvUmxLsj9Les4nRSbMrikSRRhN3pbticIVLBw
+IcAvTomQlkigd9nDAYf2oi3yAm45cYGqcf0/chmU/hyVkVroQVhVUYW9gYAa87je
+iyuAuTgffcCdi3o5De8CtDb1HqLY8Q==
+=v52h
 -----END PGP SIGNATURE-----
 
---Sig_/PdFYQG0PzTCvSx0s5gcPuCo--
+--Sig_/triqxUS9/e=uPv==hqm8FPJ--

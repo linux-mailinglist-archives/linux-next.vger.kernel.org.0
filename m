@@ -2,79 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A823E5A17
-	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 14:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923D43E5A76
+	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 14:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240633AbhHJMjv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 08:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S240921AbhHJMx5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 08:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbhHJMju (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 08:39:50 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07719C061799
-        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 05:39:29 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id f33-20020a4a89240000b029027c19426fbeso5281592ooi.8
-        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 05:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ww4lecu94JFzIEYqvV9wG7CxGy+w0GGJNoOyQcE+rlc=;
-        b=ffiSBfSdQpFtWh7sQOjXNBnszBrgvX6rNORPzYxTX+tvrunJaBXxCrum0ZMT5f9l2k
-         zyqH+vsUOSNGCL17xPZRTerBTSJYWxCte6Roaedn0wbufD49iFAARtF040ezK7Zgr3iy
-         3h8MgKpfFJ+t2iFewQj98iYZOtPAn8i01ALs8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ww4lecu94JFzIEYqvV9wG7CxGy+w0GGJNoOyQcE+rlc=;
-        b=WbJ2V0NYCYCZsvCd7WQYVbtVvWMm6J10VkjGkl2sLBpzZPSu8pTxKunWxQEL/WLTZH
-         nasJ9IHgHfM6JsjkuHZ3oeBvq1mCiqWQ4ErXLwYQKJRJptJN9rAtwVivm9Ry2o1eZT6E
-         p+dMb1Ydfl6Gqb5hBPrw8Yxwiq9tdfLhx6dLow90j+lkVg6Vk0zBUxzGebPDveNp/sxH
-         z+0bR5JU9jPIZbtd0Z6B9RyBbyuseHJD8XlWyYi2Pr+EbZav/+PNd2Slv+vjk8LM2+L+
-         qQ0YOkXOcDKVDmTRzdgMNf6DN1XwI4dV64tRFa0rrvTKD3gVA6SRRKkOxUcwuC3t5c70
-         47EQ==
-X-Gm-Message-State: AOAM531yCmtD7mFiL1xQ9J53IAvxeBavdZzFbSQLi/kiAJAaUQbYZlNk
-        1wpZyUGMAUAdF1OGBNZDXTBnOxv6d5HpAZTSskxlGg==
-X-Google-Smtp-Source: ABdhPJzkbH9UZquu28KHT62dWS3UnyJcbbKQgX0h6vB//foTcVEs6gPGNyoiQPrtmrJTNpUd49l4Pb/NsVxqVCikPIY=
-X-Received: by 2002:a4a:b402:: with SMTP id y2mr16540156oon.89.1628599168467;
- Tue, 10 Aug 2021 05:39:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210603193242.1ce99344@canb.auug.org.au> <20210708122048.534c1c4d@canb.auug.org.au>
- <20210810192636.625220ae@canb.auug.org.au> <YRJRju/zo5YiF1EB@phenom.ffwll.local>
- <20210810203859.128649fc@canb.auug.org.au> <YRJaD51xR8rQ2ga+@phenom.ffwll.local>
- <20210810210129.03b3fba5@canb.auug.org.au>
-In-Reply-To: <20210810210129.03b3fba5@canb.auug.org.au>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 10 Aug 2021 14:39:17 +0200
-Message-ID: <CAKMK7uHyUbc5StULAgawYZUtZqyYxfud5CMh3MaGJ5KS0FeXRQ@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the drm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
+        with ESMTP id S238995AbhHJMx4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 08:53:56 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B062C0613D3;
+        Tue, 10 Aug 2021 05:53:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkXtx4Nw9z9sRR;
+        Tue, 10 Aug 2021 22:53:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1628600011;
+        bh=Lz+/UX5WL+HZTcdv8Pr14jFjbXn4bwkIvTd9yVyuaqo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z3X3GOsACpnzu+bN0ztSnLAKNmbIA1C36i+pfpDMAjlUmW2SoibyMuWVs2zLvU4lN
+         j2gKTg2h6kuCecd0os4G4lB47rwuWqkdV84dvHOMdSVHUvAxUrJULVr8MclIF/BMVL
+         aDKXWcZd1zzB4IvpCwM5hPF2tyaLqXKVlyBA503zyyqfBZ2j+SPq/c4+tEfBJQDKbz
+         kqk7E8u3pcgvnJfVsX1l/hI30KhAS0NFZ9rYZSDVcj1Et3+t+WHrSXO1MSBfad9fBZ
+         YuLxKgoFYK+k0JAIIDzDrLjTWw3+/pHlRz1F502Isz87secBDo0aR2+04NVBihA2tU
+         uBWB/zCPj9RTA==
+Date:   Tue, 10 Aug 2021 22:53:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mark Brown <broonie@kernel.org>, Dave Airlie <airlied@linux.ie>,
         DRI <dri-devel@lists.freedesktop.org>,
-        Matthew Auld <matthew.auld@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Chengming Gui <Jack.Gui@amd.com>, Tao Zhou <tao.zhou1@amd.com>
+Subject: Re: linux-next: manual merge of the drm tree with the drm-fixes
+ tree
+Message-ID: <20210810225327.19cabbf1@canb.auug.org.au>
+In-Reply-To: <CAMuHMdXNAe3_TK-YWDwxjQ1uRMb0zLSSgx7w7FYCXvRmxG3pAQ@mail.gmail.com>
+References: <20210806120417.49878-1-broonie@kernel.org>
+        <CAMuHMdXNAe3_TK-YWDwxjQ1uRMb0zLSSgx7w7FYCXvRmxG3pAQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/APvPHLzbU6PwWJ9UKay6TmO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 1:01 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi Daniel,
->
-> On Tue, 10 Aug 2021 12:50:55 +0200 Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > Uh that's not good, I missed that. I'll look into it.
->
-> Thanks.
+--Sig_/APvPHLzbU6PwWJ9UKay6TmO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Doc build is taking absolutely forever here, but I think I have the
-right patch for you. t-b/ack would be great if you can give it a spin,
-I cc'ed you.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Hi Geert,
+
+On Tue, 10 Aug 2021 13:56:12 +0200 Geert Uytterhoeven <geert@linux-m68k.org=
+> wrote:
+>
+> On Fri, Aug 6, 2021 at 6:11 PM Mark Brown <broonie@kernel.org> wrote:
+> > Today's linux-next merge of the drm tree got a conflict in:
+> >
+> >   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> >
+> > between commit:
+> >
+> >   e00f543d3596 ("drm/amdgpu: add DID for beige goby")
+> >
+> > from the drm-fixes tree and commit:
+> >
+> >   a8f706966b92 ("drm/amdgpu: add pci device id for cyan_skillfish")
+> >
+> > from the drm tree.
+> >
+> >
+> > diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > index 5ed8381ae0f5,d637b0536f84..000000000000
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > @@@ -1213,13 -1212,9 +1212,16 @@@ static const struct pci_device_id pci=
+id
+> >         {0x1002, 0x740F, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_ALDEBARAN|A=
+MD_EXP_HW_SUPPORT},
+> >         {0x1002, 0x7410, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_ALDEBARAN|A=
+MD_EXP_HW_SUPPORT},
+> >
+> >  +      /* BEIGE_GOBY */
+> >  +      {0x1002, 0x7420, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+> >  +      {0x1002, 0x7421, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+> >  +      {0x1002, 0x7422, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+> >  +      {0x1002, 0x7423, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+> >  +      {0x1002, 0x743F, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_BEIGE_GOBY},
+> >  +
+> > +       /* CYAN_SKILLFISH */
+> > +       {0x1002, 0x13FE, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_CYAN_SKILLF=
+ISH|AMD_IS_APU},
+> > +
+> >         {0, 0, 0}
+> >   }; =20
+>=20
+> next-20210806 and later have a different resolution, duplicating the
+> BEIGE_GOBY entries before and after the CYAN_SKILLFISH entry.
+
+That's because commit e00f543d3596 (which is now in Linus' tree) has
+been copied (as a separate commit) into the amdgpu tree (where the
+CYAN_SKILLFISH change is present, with the BEIGE_GOBY change after
+that).
+
+I have dropped the current rerere resolution and will redo the
+resolution tomorrow.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/APvPHLzbU6PwWJ9UKay6TmO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmESdscACgkQAVBC80lX
+0GxBpwf9FWU/lpCEK5ENy0KNiqr5k4OpaG2Bmza5Oqs+lezdKD8cXulO7xyHQQf2
+kR5jR7S9a4bZCQEBEfIngBMgXGXdVDg3SrlXnsY/slALXs7nFC97bDitdn52Vx1a
+vNmjomxB8n0O5FCC2OpWJgNsMbLkoyKMemJ5zsQhA5sfpVLLNRcX6t5CVNVfzGCn
+r8pb+qJyzuF7zZZbVdC54GXQEDlx/DcGcqmAMEL+KpfMun97DQJOrcI2ju3pBxbz
+/zDCaajFEQf+u4Hf6vLa6Wyv/m+wdMYBo7Xy/W/gVHbeSI/737q39bGVifb/T7Qi
+29/r3go6idcwR87Qg+JpbMAiouN0jQ==
+=jLVG
+-----END PGP SIGNATURE-----
+
+--Sig_/APvPHLzbU6PwWJ9UKay6TmO--

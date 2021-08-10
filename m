@@ -2,115 +2,191 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D287A3E5811
-	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 12:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BED3E5824
+	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 12:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239776AbhHJKPE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 06:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S238924AbhHJKUe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 06:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239755AbhHJKPE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 06:15:04 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE5CC0613D3
-        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 03:14:42 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b13so25535558wrs.3
-        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 03:14:42 -0700 (PDT)
+        with ESMTP id S238915AbhHJKUe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 06:20:34 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C14BC061798
+        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 03:20:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id lw7-20020a17090b1807b029017881cc80b7so3587811pjb.3
+        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 03:20:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y3QS1FCrYdlmaqXiG1OJXl7lfED7PyktVQVwB2bvr8I=;
-        b=BmXmFejb/qK7hA260JrWvlGX/gLQXJ9JOd6a76DvoRbbGZE0g593TmqcZzU/wU5IIu
-         YLakd4oCkkwGHF+AJfseqjQvDUEvI/IrRrxhJ8/jk+3PQX9Ve3nSU7FqsEQ/W7p29IU2
-         Ei5X9ir+BQAqfPiHDoU+SrQot7rpZB1ioEGL0=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ctqTRsxltCv0P8JSjNQ26LLCIiMofbgu2/56HaUjrps=;
+        b=WxhA7cVuSGmmGXYNiJw8SAClXI0RUO+Dz1DMimgA9IN2Vs8wrFl6gVCEVA2Lc+gguD
+         6nV6zkKpNhu4mfVP6YB3l2DBpPvkcLXOGWpxZzl4RsHHXwVRLLcJKf6+ezk96qzx1i4T
+         Mvh56m3FFshcZ51MHRjX9AFyi447Ko5qDrku7gDmkoAOw81tpcOq3q3QhYOa+r9CuXrd
+         Xm5DS9sgpGFHSIsZrkvSLWuwBf3GziJG3oPc8fedleAaK/twthv08VMSDDowtWaSsHoj
+         VrL3i/UXgfLoGzSo1kUI+PazQh+tLiPh6zYbHlJk/EY68tk/2BZ3vJLUG8U8ZTd1RtTC
+         UJ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=Y3QS1FCrYdlmaqXiG1OJXl7lfED7PyktVQVwB2bvr8I=;
-        b=W3WI2Wgm58lQ8ToDntiNA82vpNy7vewSMWU5l0uCC/D0nJjYD74SLyT2ntH9erq+5L
-         b+ZPNUE/wxhcqAF6/fRh83elvSrcKff/7PTxhzlUkWAoYd0tu1H8lux2LkKPIQ1OnER+
-         zK2B7fNslwmD8+lxNPGZdyvGStWi9MmtB1XQubEBi3ncTAeyW9pqLuZ66M6gxCvtbA3a
-         G4LWyeRe3dA26rQsffl2q9pRioF/4oAe8ycqEi+O7X45qsYnHDG4djhSdjXAvY9XOsXg
-         RmA0lotf9qraPkKxg0uwWED7OygFQbTc1sgzEVsX/xEZ1O1PGK1f+svwT2By5m82B3ln
-         ePxg==
-X-Gm-Message-State: AOAM532pRIqSC5u8PMK1VBRdB/HrpGywKKGaf/T7zuhJGxO38gkmUjVE
-        IX5hzxZu81xJe6/35gszd45Qbg==
-X-Google-Smtp-Source: ABdhPJxvdfIs0xvibG7SFc6t4/K9jAdA0Rjh5XE53jIDVKUe4LIjSEvpazKK2sTVLHBfF9e8ZU0rQg==
-X-Received: by 2002:a05:6000:18a5:: with SMTP id b5mr29599858wri.184.1628590480822;
-        Tue, 10 Aug 2021 03:14:40 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id 140sm21738829wmb.43.2021.08.10.03.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 03:14:40 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 12:14:38 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the drm tree
-Message-ID: <YRJRju/zo5YiF1EB@phenom.ffwll.local>
-Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210603193242.1ce99344@canb.auug.org.au>
- <20210708122048.534c1c4d@canb.auug.org.au>
- <20210810192636.625220ae@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ctqTRsxltCv0P8JSjNQ26LLCIiMofbgu2/56HaUjrps=;
+        b=CO0oKuK9hmqbla5z2stxpvX51kjvrMlGCFeh1sPCP4bDTNevSU3UqupqBfLBr/zus9
+         +ij2P8K7wdRAV5PqDISlYn76aHhFa4nFEVkXPLaYTUn3loFNAlX7fQ1vH2BlI2eic2Rv
+         pfEiuo12T7cafLhstnJrkomB3TScJpghGLzeACK+J43JfL/uzMuw+DRRKeE8EzbcKRHh
+         sIhGuvWioOtwh3mbJvGu8L3w41dTKLTAooTJIshU4YMYDoSXNg+WWKnhY2/GU81JVFAn
+         uN1kXbIgm/YboMWFKEF4JDKKnWCJX7Y9zWE4xB/rJlHLETVftpvCrPRwMSHYA+4gnHy3
+         nm4A==
+X-Gm-Message-State: AOAM533gbxbwl3ICXT2I0RTZAHvvDj0ja4CLXNPuiJuxk7wSpx8Aw2wP
+        upo2rENq+PwIMFC9ewZZhC+h5dXnvXJ+pfWgpYuS+Q==
+X-Google-Smtp-Source: ABdhPJzd9Tk7xMXMzigDZgM/5t1Tr+yjPkJdWS3dUK1Q8fd8nKLOnqc1aF2x8XbSwZeDi1SkRGFXS5Hima2z6HD1PTk=
+X-Received: by 2002:a17:90b:90f:: with SMTP id bo15mr4084745pjb.220.1628590811833;
+ Tue, 10 Aug 2021 03:20:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210810192636.625220ae@canb.auug.org.au>
-X-Operating-System: Linux phenom 5.10.0-7-amd64 
+References: <71026122-e9bc-a481-70ab-fde4e89af571@xs4all.nl> <CA+G9fYtzp5zE=NEQYcO0fZkwwQSrh9am=HMXmqnSs1OQKaivCg@mail.gmail.com>
+In-Reply-To: <CA+G9fYtzp5zE=NEQYcO0fZkwwQSrh9am=HMXmqnSs1OQKaivCg@mail.gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 10 Aug 2021 12:20:00 +0200
+Message-ID: <CAG3jFyus8771tMOcr2CouaOmzN8ceooRruZFQy1ijRnTNj_0Aw@mail.gmail.com>
+Subject: Re: [GIT PULL FOR v5.15] v2: Various fixes and enhancements
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 07:26:36PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Thu, 8 Jul 2021 12:20:48 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Thu, 3 Jun 2021 19:32:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > After merging the drm tree, today's linux-next build (htmldocs) produced
-> > > these warnings:
-> > > 
-> > > Documentation/gpu/driver-uapi.rst:2412: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > > Declaration is '.. c:enum:: drm_i915_gem_memory_class'.
-> > > Documentation/gpu/driver-uapi.rst:2484: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:2484.
-> > > Declaration is '.. c:struct:: drm_i915_gem_memory_class_instance'.
-> > > Documentation/gpu/driver-uapi.rst:7: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:7.
-> > > Declaration is '.. c:struct:: drm_i915_memory_region_info'.
-> > > Documentation/gpu/driver-uapi.rst:2531: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:2531.
-> > > Declaration is '.. c:struct:: drm_i915_query_memory_regions'.
-> > > Documentation/gpu/driver-uapi.rst:2595: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > > Declaration is '.. c:struct:: drm_i915_gem_create_ext'.
-> > > Documentation/gpu/driver-uapi.rst:2615: WARNING: Duplicate C declaration, also defined at gpu/rfc/i915_gem_lmem:1393.
-> > > Declaration is '.. c:struct:: drm_i915_gem_create_ext_memory_regions'.
-> > > 
-> > > Introduced by (one or more of) commits
-> > > 
-> > >   0c1a77cbdafb ("drm/doc: add section for driver uAPI")
-> > >   2bc9c04ea702 ("drm/doc/rfc: i915 DG1 uAPI")
-> > >   727ecd99a4c9 ("drm/doc/rfc: drop the i915_gem_lmem.h header")  
-> > 
-> > I am still getting these warning.
-> 
-> Still getting them ...
+Hey Naresh,
 
-Matt Auld is on vacation, and the other issue is that the tree where this
-is from isn't in linux-next. So will take a bit to get sorted in
-linux-next.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks for reporting this.
+
+On Tue, 10 Aug 2021 at 11:45, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> [Please ignore this if it is already reported]
+> The following kernel crash "Internal error: Oops:" found while booting the arm64
+> Dragonboard 845c device.
+>
+> Our bisect scripts are still running to bisect the first bad commit.
+> However, I would like to report on suspecting sub-systems patch set
+>
+> On Thu, 5 Aug 2021 at 15:48, Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> > Robert Foss (4):
+> >       media: camss: vfe: Don't read hardware version needlessly
+> >       media: camss: vfe: Decrease priority of of VFE HW version to 'dbg'
+> >       media: camss: vfe: Remove vfe_hw_version_read() argument
+> >       media: camss: vfe: Rework vfe_hw_version_read() function definition
+>
+> [    8.296907] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000000
+> [    8.305943] Mem abort info:
+> [    8.307150] Bluetooth: Core ver 2.22
+> [    8.308784]   ESR = 0x96000004
+> [    8.308787]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    8.308790]   SET = 0, FnV = 0
+> [    8.308792]   EA = 0, S1PTW = 0
+> [    8.308794]   FSC = 0x04: level 0 translation fault
+> [    8.308796] Data abort info:
+> [    8.308798]   ISV = 0, ISS = 0x00000004
+> [    8.313982] NET: Registered PF_BLUETOOTH protocol family
+> [    8.315502]   CM = 0, WnR = 0
+> [    8.320889] Bluetooth: HCI device and connection manager initialized
+> [    8.323948] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000107162000
+> [    8.323952] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> [    8.323959] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [    8.323963] Modules linked in: gpu_sched(+) bluetooth(+)
+> reset_qcom_pdc drm_kms_helper i2c_qcom_geni(+) qcom_camss
+> spi_geni_qcom videobuf2_dma_sg venus_core v4l2_fwnode v4l2_async
+> v4l2_mem2mem
+> [    8.327174] Bluetooth: HCI socket layer initialized
+> [    8.332068]  videobuf2_memops videobuf2_v4l2 camcc_sdm845
+> videobuf2_common qcom_rng i2c_qcom_cci ath10k_snoc ath10k_core
+> xhci_pci ath qcom_q6v5_mss qrtr xhci_pci_renesas mac80211
+> qcom_q6v5_pas ns qcom_pil_info qcom_q6v5 slim_qcom_ngd_ctrl
+> pdr_interface qcom_sysmon cfg80211 qcom_common display_connector
+> qcom_glink_smem icc_osm_l3 rfkill slimbus qcom_wdt qmi_helpers
+> mdt_loader socinfo drm rmtfs_mem fuse
+> [    8.332103] CPU: 6 PID: 9 Comm: kworker/u16:1 Not tainted
+> 5.14.0-rc5-next-20210809 #1
+> [    8.332107] Hardware name: Thundercomm Dragonboard 845c (DT)
+> [    8.332109] Workqueue: events_unbound deferred_probe_work_func
+> [    8.332120] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    8.335040] Bluetooth: L2CAP socket layer initialized
+> [    8.337046] i2c 10-003b: Fixing up cyclic dependency with hdmi-out
+> [    8.342391] pc : vfe_hw_version+0x20/0x80 [qcom_camss]
+> [    8.342405] lr : msm_vfe_subdev_init+0x8c/0x4d0 [qcom_camss]
+> [    8.342415] sp : ffff80001009ba20
+> [    8.342416] x29: ffff80001009ba20 x28: ffff330f84ea6000 x27: 0000000000000004
+> [    8.347824] Bluetooth: SCO socket layer initialized
+> [    8.350763]
+> [    8.350764] x26: 0000000000000003 x25: ffff330f8ea00080 x24: 0000000000000000
+> [    8.350767] x23: ffff330f84ea6000 x22: ffff330f80f5b010 x21: ffffd62954d86828
+> [    8.350770] x20: ffff330f80f5b000 x19: 0000000000000000 x18: 0000000000000000
+> [    8.350773] x17: 0000000000000000 x16: ffffd6298befc0e0 x15: 0000000000000000
+> [    8.350776] x14: 0000000000000000 x13: 7367616c665f746e x12: 69617274736e6f63
+> [    8.350779] x11: ffff330f80400000 x10: 0000000000000000 x9 : ffffd62954d811b0
+> [    8.350782] x8 : 0101010101010101 x7 : ffffd62954d7d814 x6 : ffffd62954d80f80
+> [    8.350785] x5 : ffff330f8ea03080 x4 : ffff330f8ea03640 x3 : ffffd62954d7d720
+> [    8.557091] x2 : 0000000000000003 x1 : ffffd62954d7dae0 x0 : ffff330f8ea00080
+> [    8.564282] Call trace:
+> [    8.566749]  vfe_hw_version+0x20/0x80 [qcom_camss]
+> [    8.571599]  msm_vfe_subdev_init+0x8c/0x4d0 [qcom_camss]
+> [    8.576956]  camss_probe+0x358/0xd60 [qcom_camss]
+> [    8.581710]  platform_probe+0x74/0xf0
+> [    8.585400]  really_probe+0xc4/0x470
+> [    8.589003]  __driver_probe_device+0x11c/0x190
+> [    8.593477]  driver_probe_device+0x48/0x110
+> [    8.597694]  __device_attach_driver+0xa4/0x140
+> [    8.602173]  bus_for_each_drv+0x84/0xe0
+> [    8.606038]  __device_attach+0xe4/0x1c0
+> [    8.609904]  device_initial_probe+0x20/0x30
+> [    8.614118]  bus_probe_device+0xa4/0xb0
+> [    8.617979]  deferred_probe_work_func+0xa8/0xfc
+> [    8.622543]  process_one_work+0x1dc/0x4a0
+> [    8.626587]  worker_thread+0x144/0x470
+> [    8.630364]  kthread+0x144/0x160
+> [    8.633617]  ret_from_fork+0x10/0x20
+> [    8.637227] Code: a9be7bfd 910003fd f9000bf3 f9400813 (b9400273)
+> [    8.643362] ---[ end trace 37b6accc93773476 ]---
+>
+> full test log:
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210809/testrun/5410288/suite/ltp-crypto-tests/test/af_alg07/log
+>
+> Reported-by:  Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> steps to reproduce:
+>  # It is always reproducible
+>  # Boot arm64 Dragonboard 845c board with built kernel Image
+>  # While booting the device you will notice this crash log
+>
+> metadata:
+>   git branch: master
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git commit: da454ebf578f6c542ba9f5b3ddb98db3ede109c1
+>   git describe: next-20210809
+>   make_kernelversion: 5.14.0-rc5
+>   kernel-config: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/config
+>   vmlinux: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/vmlinux.xz
+>   System.map: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/System.map
+>   Image: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/Image.gz
+>   gcc: gcc-11
+>
+
+Having a look at this issue, I've traced the issue to the
+vfe->ops->hw_version(vfe) call happening before vfe->base is assigned.
+
+I'll submit a patch fixing this issue shortly.
+
+
+Rob.

@@ -2,94 +2,180 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBFF3E56E4
-	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 11:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974423E5753
+	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 11:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbhHJJcO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 05:32:14 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39885 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229741AbhHJJcO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Aug 2021 05:32:14 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkSQG2Pg2z9sX5;
-        Tue, 10 Aug 2021 19:31:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628587910;
-        bh=kt+lDBI95xg3muQJf27gUpQkKk4gUz8MoNnRohL5jXU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Wq8Y1QsXKb59ll3embjvZtmw22fZMKdXeLL3SF2Pn4stnBW7Rw145+LBQH7FeCxcv
-         Fkd7M7IX7rQaOOobsIMQr8gT78/IPFkXD+A2fmUar4f6GlUUgK6x7R75EpFckqSoU2
-         DTEI3EVa5GkPeOcx4C5WTHrlVQl+G7o2gE8XsfL0CUTAB+OsVx4u38KSOpL8FsWJt4
-         xjLPT/EbkR9sUM57ge/btGYNmag5ZQ++c3mdCWdFced1HfgJp6locGIk+wf7MtXCFn
-         zSLw6Minef9c1tgTGOlBDtn6SpbzcY3qNHrg7wke6eXyOA7+q4Tob4z9D/6BoJADFL
-         feyCMlSeQWf7A==
-Date:   Tue, 10 Aug 2021 19:31:49 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>
-Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the device-mapper tree
-Message-ID: <20210810193149.4ad4714a@canb.auug.org.au>
-In-Reply-To: <20210721173432.3dce9ce3@canb.auug.org.au>
-References: <20210721173432.3dce9ce3@canb.auug.org.au>
+        id S238155AbhHJJqB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 05:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237358AbhHJJqB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 05:46:01 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB3DC0613D3
+        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 02:45:39 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id hs10so34390718ejc.0
+        for <linux-next@vger.kernel.org>; Tue, 10 Aug 2021 02:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YSzeULC9eR8XjTHf4MYVMw8+4RRom6m054+GxFl7fzM=;
+        b=Gvk2c7EvsfMjyVCCwp6udYqvmWQeOt0YuKK0J/L5t34naRJyu9vcyxnRkeLVRaK47S
+         50S/APDNyyMa/D0bU1f5IUmK6QeJODO+3qpUYKz+UYYtqMCbuE1TthyAwfy0ejvAYt45
+         ZfXX+GhIggC5O7FaHd+U5Ln4daro82MGshh7q3erPzcD65SUzIoR9yMlvRCg+WM0WHeS
+         rb3Fn0idYpFkgHX5SVXxIuePCfV9aq0ZvrA94inbIuKPHZsq2XeeoCjuUBPWAceazKL3
+         ghBxuHq1CZSJh5T7G2zveqEUZ9GSm/RCfEMZqSz6GW+4nugAU8wh6t/4ZNVtcnZfaasW
+         trmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YSzeULC9eR8XjTHf4MYVMw8+4RRom6m054+GxFl7fzM=;
+        b=l07dtXYTGxv/M6i83MkhzI0zUh+Bpn/GgrLv22nJvIdAf/FBgwdajxWq1IA245Aykm
+         9jZSKUgqWYN2QzsJCkfs3fYarPLUbGlN6fHuR/CHKnVH0UMHIgrnCOQZzDx3XP5bMMFi
+         RlfHntm7FRilEYc9d8hK99o6BHDW9S6/fplo/uX8dVhP/RwQnzg8p3NfRlA5ML+57ZFU
+         VJ4HM8p9Qg2w0/HqDtDDoxOuoG0M7FbYWBX6BapCNrHh+S/ci1yxAZWrGQVF9ccBaVyO
+         xsifpb57MoNXlcQQEFJnFvakPAAZDfS+gm/qQ7QxcTMjR1AdJSH9XZ3w0zlB5OOJ8ug+
+         qCWA==
+X-Gm-Message-State: AOAM531iQqqbULyrLc4DyVSDa3Y5ttuoODcMEW2TBa8tkVBljoiCdEHD
+        F56YOTeN59KiqQ0SzC/FBisjtysjF/eaWURa0gv5WDezkCvcEQ==
+X-Google-Smtp-Source: ABdhPJwJ8lNgpeva94sdpQYx94BKAEt0XsZZFSTmU6fmtcmnsIK8IraVmUwrN4sLGb3afuNdgbyHOSovFU/kdy6UATs=
+X-Received: by 2002:a17:906:9542:: with SMTP id g2mr1347957ejy.375.1628588737610;
+ Tue, 10 Aug 2021 02:45:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qlCnOwipGmXBF4/fgyixnVv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <71026122-e9bc-a481-70ab-fde4e89af571@xs4all.nl>
+In-Reply-To: <71026122-e9bc-a481-70ab-fde4e89af571@xs4all.nl>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 10 Aug 2021 15:15:26 +0530
+Message-ID: <CA+G9fYtzp5zE=NEQYcO0fZkwwQSrh9am=HMXmqnSs1OQKaivCg@mail.gmail.com>
+Subject: Re: [GIT PULL FOR v5.15] v2: Various fixes and enhancements
+To:     Robert Foss <robert.foss@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/qlCnOwipGmXBF4/fgyixnVv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+[Please ignore this if it is already reported]
+The following kernel crash "Internal error: Oops:" found while booting the arm64
+Dragonboard 845c device.
 
-Hi all,
+Our bisect scripts are still running to bisect the first bad commit.
+However, I would like to report on suspecting sub-systems patch set
 
-On Wed, 21 Jul 2021 17:34:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the device-mapper tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> Documentation/admin-guide/device-mapper/dm-ima.rst:29: WARNING: Unexpecte=
-d indentation.
-> Documentation/admin-guide/device-mapper/dm-ima.rst:52: WARNING: Definitio=
-n list ends without a blank line; unexpected unindent.
-> Documentation/admin-guide/device-mapper/dm-ima.rst:109: WARNING: Unexpect=
-ed indentation.
-> Documentation/admin-guide/device-mapper/dm-ima.rst:129: WARNING: Unexpect=
-ed indentation.
->=20
-> Introduced by commit
->=20
->   e820ba87f9d1 ("dm: add documentation for IMA measurement support")
+On Thu, 5 Aug 2021 at 15:48, Hans Verkuil <hverkuil@xs4all.nl> wrote:
 
-I am still getting these warnings.
+> Robert Foss (4):
+>       media: camss: vfe: Don't read hardware version needlessly
+>       media: camss: vfe: Decrease priority of of VFE HW version to 'dbg'
+>       media: camss: vfe: Remove vfe_hw_version_read() argument
+>       media: camss: vfe: Rework vfe_hw_version_read() function definition
 
---=20
-Cheers,
-Stephen Rothwell
+[    8.296907] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+[    8.305943] Mem abort info:
+[    8.307150] Bluetooth: Core ver 2.22
+[    8.308784]   ESR = 0x96000004
+[    8.308787]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    8.308790]   SET = 0, FnV = 0
+[    8.308792]   EA = 0, S1PTW = 0
+[    8.308794]   FSC = 0x04: level 0 translation fault
+[    8.308796] Data abort info:
+[    8.308798]   ISV = 0, ISS = 0x00000004
+[    8.313982] NET: Registered PF_BLUETOOTH protocol family
+[    8.315502]   CM = 0, WnR = 0
+[    8.320889] Bluetooth: HCI device and connection manager initialized
+[    8.323948] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000107162000
+[    8.323952] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[    8.323959] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    8.323963] Modules linked in: gpu_sched(+) bluetooth(+)
+reset_qcom_pdc drm_kms_helper i2c_qcom_geni(+) qcom_camss
+spi_geni_qcom videobuf2_dma_sg venus_core v4l2_fwnode v4l2_async
+v4l2_mem2mem
+[    8.327174] Bluetooth: HCI socket layer initialized
+[    8.332068]  videobuf2_memops videobuf2_v4l2 camcc_sdm845
+videobuf2_common qcom_rng i2c_qcom_cci ath10k_snoc ath10k_core
+xhci_pci ath qcom_q6v5_mss qrtr xhci_pci_renesas mac80211
+qcom_q6v5_pas ns qcom_pil_info qcom_q6v5 slim_qcom_ngd_ctrl
+pdr_interface qcom_sysmon cfg80211 qcom_common display_connector
+qcom_glink_smem icc_osm_l3 rfkill slimbus qcom_wdt qmi_helpers
+mdt_loader socinfo drm rmtfs_mem fuse
+[    8.332103] CPU: 6 PID: 9 Comm: kworker/u16:1 Not tainted
+5.14.0-rc5-next-20210809 #1
+[    8.332107] Hardware name: Thundercomm Dragonboard 845c (DT)
+[    8.332109] Workqueue: events_unbound deferred_probe_work_func
+[    8.332120] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    8.335040] Bluetooth: L2CAP socket layer initialized
+[    8.337046] i2c 10-003b: Fixing up cyclic dependency with hdmi-out
+[    8.342391] pc : vfe_hw_version+0x20/0x80 [qcom_camss]
+[    8.342405] lr : msm_vfe_subdev_init+0x8c/0x4d0 [qcom_camss]
+[    8.342415] sp : ffff80001009ba20
+[    8.342416] x29: ffff80001009ba20 x28: ffff330f84ea6000 x27: 0000000000000004
+[    8.347824] Bluetooth: SCO socket layer initialized
+[    8.350763]
+[    8.350764] x26: 0000000000000003 x25: ffff330f8ea00080 x24: 0000000000000000
+[    8.350767] x23: ffff330f84ea6000 x22: ffff330f80f5b010 x21: ffffd62954d86828
+[    8.350770] x20: ffff330f80f5b000 x19: 0000000000000000 x18: 0000000000000000
+[    8.350773] x17: 0000000000000000 x16: ffffd6298befc0e0 x15: 0000000000000000
+[    8.350776] x14: 0000000000000000 x13: 7367616c665f746e x12: 69617274736e6f63
+[    8.350779] x11: ffff330f80400000 x10: 0000000000000000 x9 : ffffd62954d811b0
+[    8.350782] x8 : 0101010101010101 x7 : ffffd62954d7d814 x6 : ffffd62954d80f80
+[    8.350785] x5 : ffff330f8ea03080 x4 : ffff330f8ea03640 x3 : ffffd62954d7d720
+[    8.557091] x2 : 0000000000000003 x1 : ffffd62954d7dae0 x0 : ffff330f8ea00080
+[    8.564282] Call trace:
+[    8.566749]  vfe_hw_version+0x20/0x80 [qcom_camss]
+[    8.571599]  msm_vfe_subdev_init+0x8c/0x4d0 [qcom_camss]
+[    8.576956]  camss_probe+0x358/0xd60 [qcom_camss]
+[    8.581710]  platform_probe+0x74/0xf0
+[    8.585400]  really_probe+0xc4/0x470
+[    8.589003]  __driver_probe_device+0x11c/0x190
+[    8.593477]  driver_probe_device+0x48/0x110
+[    8.597694]  __device_attach_driver+0xa4/0x140
+[    8.602173]  bus_for_each_drv+0x84/0xe0
+[    8.606038]  __device_attach+0xe4/0x1c0
+[    8.609904]  device_initial_probe+0x20/0x30
+[    8.614118]  bus_probe_device+0xa4/0xb0
+[    8.617979]  deferred_probe_work_func+0xa8/0xfc
+[    8.622543]  process_one_work+0x1dc/0x4a0
+[    8.626587]  worker_thread+0x144/0x470
+[    8.630364]  kthread+0x144/0x160
+[    8.633617]  ret_from_fork+0x10/0x20
+[    8.637227] Code: a9be7bfd 910003fd f9000bf3 f9400813 (b9400273)
+[    8.643362] ---[ end trace 37b6accc93773476 ]---
 
---Sig_/qlCnOwipGmXBF4/fgyixnVv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+full test log:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210809/testrun/5410288/suite/ltp-crypto-tests/test/af_alg07/log
 
------BEGIN PGP SIGNATURE-----
+Reported-by:  Linux Kernel Functional Testing <lkft@linaro.org>
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmESR4UACgkQAVBC80lX
-0GxZBwf/RxA2iB5oW/nzVSNgh69cikClXqvDkEUoyHm+pnI5uBTQcNQoU9hq1Q3x
-1z3AwCc8TuXp36dS3cDBiUh4jejkA3vORVw0xJXgS0JjiY3UECFGRnFfd747jJsR
-Bg/QtVcNnqEg58FxhUdlt/1SwY6aI5QisC+KnQnWsYscoda3rmugvbghcx/0mL9S
-oI425CYTcXWDXV3QcOFxoZOXjWoeKoc9KeHdWaaaMkOoErlqNgKjuO4i9LWgchJe
-dOyoIKXLmVzA5p1dwzOw0vBxbPj1Fe+Rn2uTD75Oj9X+XU+AaQf62iLsC6qtWwSW
-BhI0JfwQj89mTHoN32MXOgiehRk0Lw==
-=N8Pv
------END PGP SIGNATURE-----
+steps to reproduce:
+ # It is always reproducible
+ # Boot arm64 Dragonboard 845c board with built kernel Image
+ # While booting the device you will notice this crash log
 
---Sig_/qlCnOwipGmXBF4/fgyixnVv--
+metadata:
+  git branch: master
+  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git commit: da454ebf578f6c542ba9f5b3ddb98db3ede109c1
+  git describe: next-20210809
+  make_kernelversion: 5.14.0-rc5
+  kernel-config: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/config
+  vmlinux: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/System.map
+  Image: https://builds.tuxbuild.com/1wURGIfgNW0xkrl16wDktoeATBp/Image.gz
+  gcc: gcc-11
+
+--
+Linaro LKFT
+https://lkft.linaro.org

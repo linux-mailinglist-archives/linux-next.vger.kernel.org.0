@@ -2,88 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 144833E819C
-	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 20:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBDF3E85A2
+	for <lists+linux-next@lfdr.de>; Tue, 10 Aug 2021 23:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbhHJSA3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 14:00:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57246 "EHLO mail.kernel.org"
+        id S234156AbhHJVtj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 17:49:39 -0400
+Received: from ozlabs.org ([203.11.71.1]:52985 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236861AbhHJRzs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Aug 2021 13:55:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1492D6101E;
-        Tue, 10 Aug 2021 17:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628617489;
-        bh=U87jz2yLDcnwlfFLRwK6RNCPjxBmNIr2x/Ym20ZB4+4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpdBici9wKHC7aK6LzQAvZvq/fRvh5KmuQVR6ngcRgsjKj6jsIADV909tVrAaOd/o
-         EksA77uf0V3RAlw1/hp0pk19PZ9K7qbS4YBaJ7xbMn/KDVb/wd103q0bw179MeO6he
-         gXr6T4VTGP9HV1n26ojLuQksuAYakHwG9YoI59cU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org
-Subject: [PATCH 5.13 081/175] drm/amdgpu: fix checking pmops when PM_SLEEP is not enabled
-Date:   Tue, 10 Aug 2021 19:29:49 +0200
-Message-Id: <20210810173003.613302353@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210810173000.928681411@linuxfoundation.org>
-References: <20210810173000.928681411@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S233555AbhHJVtj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Aug 2021 17:49:39 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gkmn65ZWTz9sCD;
+        Wed, 11 Aug 2021 07:49:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1628632154;
+        bh=Jot/mNfUg1oqahi9OGSBbSIjW4z0xFOCMjQ6BWNFSFM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mDzNld9onKZTAD1P+lPDFe5oUn/uoYCWm61qJH/OBxsAL1kCGTZy13yhEpQGlDhvk
+         wpnCgN6RrA2WuGWq0hobaSNV0EALndScNuRpXMN7a435lfHmSV6v84KR3AykHzRy2A
+         uKh3UsFfH87wgF4IwGPAItyuSomx3QwWqanWUxgEUil+eruW8ap2198EGA2iNOMPOz
+         xc8XSOdmq2DQZChDltvxnhAHtN3epnt+wXbDiS6IzCosSWnsPHHjDgmBhf7eXSMSFr
+         EEV5bH4/gc0V/E5XAI+hGYAtDRRFzOP+udtRuTI1FJoFlB+5ZyotbwUsCdolNeT0qo
+         TPnobaYXGRysg==
+Date:   Wed, 11 Aug 2021 07:49:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Darrick J. Wong" <djwong@kernel.org>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the xfs tree
+Message-ID: <20210811074913.48605817@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/dUdzsoZRBY.BwB3HuWpTv6x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+--Sig_/dUdzsoZRBY.BwB3HuWpTv6x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-commit 5706cb3c910cc8283f344bc37a889a8d523a2c6d upstream.
+Hi all,
 
-'pm_suspend_target_state' is only available when CONFIG_PM_SLEEP
-is set/enabled. OTOH, when both SUSPEND and HIBERNATION are not set,
-PM_SLEEP is not set, so this variable cannot be used.
+Commits
 
-../drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c: In function ‘amdgpu_acpi_is_s0ix_active’:
-../drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1046:11: error: ‘pm_suspend_target_state’ undeclared (first use in this function); did you mean ‘__KSYM_pm_suspend_target_state’?
-    return pm_suspend_target_state == PM_SUSPEND_TO_IDLE;
-           ^~~~~~~~~~~~~~~~~~~~~~~
-           __KSYM_pm_suspend_target_state
+  0f3901673631 ("xfs: Rename __xfs_attr_rmtval_remove")
+  da8ca45da62e ("xfs: add attr state machine tracepoints")
 
-Also use shorter IS_ENABLED(CONFIG_foo) notation for checking the
-2 config symbols.
+are missing a Signed-off-by from their committer.
 
-Fixes: 91e273712ab8dd ("drm/amdgpu: Check pmops for desired suspend state")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-next@vger.kernel.org
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--=20
+Cheers,
+Stephen Rothwell
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
-@@ -904,7 +904,7 @@ void amdgpu_acpi_fini(struct amdgpu_devi
-  */
- bool amdgpu_acpi_is_s0ix_supported(struct amdgpu_device *adev)
- {
--#if defined(CONFIG_AMD_PMC) || defined(CONFIG_AMD_PMC_MODULE)
-+#if IS_ENABLED(CONFIG_AMD_PMC) && IS_ENABLED(CONFIG_PM_SLEEP)
- 	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0) {
- 		if (adev->flags & AMD_IS_APU)
- 			return pm_suspend_target_state == PM_SUSPEND_TO_IDLE;
+--Sig_/dUdzsoZRBY.BwB3HuWpTv6x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmES9FkACgkQAVBC80lX
+0Gz4+gf+IkfFu5UawSW8+7o+jivyVS9zWJrBogXXPsHQWtwygkjLrW3A0nfjcT7a
+qKQW21p8b1xhxnbLPH758BAFiQOYwvnmyjXy5zJDTHIZlAEoLOMLn92uSTg6EYUx
+4r5TmQh9LtXcgJyPdTmZVu+HxgvrhoIrAh63brQ6R1gN2VywhbhLL5FjQr/W1JsB
+510MRRrB0ZOsGJoL58p7uy5U7nJl6TNMT2i4/mcDw9zanZ1rlgnmf472Qven08y+
+alm0RbEjfLyaLyytLZmjsie07sATtMbI78YfqWgkJg9L0trwMsncnLT95FRflVnz
+B51Bu8NEWSHl0FaPkZnncUl3L7Vm3Q==
+=ihqQ
+-----END PGP SIGNATURE-----
+
+--Sig_/dUdzsoZRBY.BwB3HuWpTv6x--

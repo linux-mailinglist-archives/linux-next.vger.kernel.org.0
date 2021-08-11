@@ -2,69 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A083E87B5
-	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 03:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5C43E89D5
+	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 07:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbhHKBjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 21:39:52 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58395 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbhHKBjv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Aug 2021 21:39:51 -0400
+        id S234155AbhHKFkf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Aug 2021 01:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234153AbhHKFkf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Aug 2021 01:40:35 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1006AC061765;
+        Tue, 10 Aug 2021 22:40:12 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gksth1YQGz9sWS;
-        Wed, 11 Aug 2021 11:39:24 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkzDR6ZTNz9sRN;
+        Wed, 11 Aug 2021 15:40:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628645966;
-        bh=1YFO3kHG50QhRUMhTqKTIiavineTTdtGUidN3sw8EN4=;
+        s=201702; t=1628660408;
+        bh=sQV6y3XX3iHyj5pvmLRvlcPDOEiAuXdY/NHLb0fNv7g=;
         h=Date:From:To:Cc:Subject:From;
-        b=EpgO7dKwAafvgHWS1f5Yf0ijB5Crsp9RchQMnb5Iczaa2YYgO8oEePRW+fgzPfGan
-         z2ctUbsGF4JUSl8kMUh0h/V1bqRlMEGRJEC6DIyK0c13b9az/HHvxOsV6pNuIM1Nj1
-         evwmYdP4fcDSqkoA6ioOoEneJjX67idNJkfmXw2WWfoeycqpkts93XwvGsj19MzKFM
-         ohVfqaai5cQGNUZhHYIxBOHasYriY3ytylWj1HnNt2vLdmZJs7gU/61CrhyW/9Olsh
-         Nts/Xr8Evm/fwc0R8QGFtezT2DTjayU5t1j86aN/LGkswJQMYY/hYFSLYGi3D4Zmy2
-         hdrdH/2zR9NJQ==
-Date:   Wed, 11 Aug 2021 11:39:23 +1000
+        b=ZAejA8Tu18mAHVOJXGHWYwa5R3U8BJmtMZ1iok6fti59Zx76pyuQZcHdsIZfN3mbE
+         9OAS3rdiM2z/tkajgQS5fFw1i0ds2N4hQ6xT3O9XJ6mFJ2C1rH3O+/zZcy4q5sadoC
+         19BMRVui89rxmV4QKRxRcvSFDAzU4Cm8/Bf7ME54XC9hAUt2HfD8kuTghGsw9UBejx
+         ih8zLwiVq7p0DP2G0k9EjP1X/0qGa+RH6e+jNwa9m/V9mODJli4oPxzuMITDwBETdm
+         KelOevU+sTL3d06BQul+LpqoLpMuHjwvdt5XKyHvAUKiHi0NXSe0aXa9WcFCqYArCi
+         /sOFLF4OT0rVg==
+Date:   Wed, 11 Aug 2021 15:40:05 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Xu Liang <lxu@maxlinear.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210811113923.210a999d@canb.auug.org.au>
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Subject: linux-next: manual merge of the scsi-mkp tree with Linus' tree
+Message-ID: <20210811154005.7fbbb9e2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oUhMhl9BivJGe.IybsDEoPs";
+Content-Type: multipart/signed; boundary="Sig_/jQSnKhTegTuB2gIUivp.zsC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oUhMhl9BivJGe.IybsDEoPs
+--Sig_/jQSnKhTegTuB2gIUivp.zsC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the scsi-mkp tree got conflicts in:
 
-  MAINTAINERS
+  drivers/scsi/mpt3sas/mpt3sas_base.c
+  drivers/scsi/mpt3sas/mpt3sas_base.h
 
 between commit:
 
-  7b637cd52f02 ("MAINTAINERS: fix Microchip CAN BUS Analyzer Tool entry typ=
-o")
+  fae21608c31c ("scsi: mpt3sas: Transition IOC to Ready state during shutdo=
+wn")
 
-from the net tree and commit:
+from Linus' tree and commit:
 
-  7d901a1e878a ("net: phy: add Maxlinear GPY115/21x/24x driver")
+  432bc7caef4e ("scsi: mpt3sas: Add io_uring iopoll support")
 
-from the net-next tree.
+from the scsi-mkp tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -77,40 +78,55 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 9d7bc544a49d,41fcfdb24a81..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -11339,7 -11341,13 +11353,13 @@@ W:	https://linuxtv.or
-  T:	git git://linuxtv.org/media_tree.git
-  F:	drivers/media/radio/radio-maxiradio*
+diff --cc drivers/scsi/mpt3sas/mpt3sas_base.c
+index cf4a3a2c22ad,e7f6fbb282bd..000000000000
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@@ -8471,7 -8738,8 +8738,8 @@@ mpt3sas_base_hard_reset_handler(struct=20
+  	_base_pre_reset_handler(ioc);
+  	mpt3sas_wait_for_commands_to_complete(ioc);
+  	mpt3sas_base_mask_interrupts(ioc);
++ 	mpt3sas_base_pause_mq_polling(ioc);
+ -	r =3D _base_make_ioc_ready(ioc, type);
+ +	r =3D mpt3sas_base_make_ioc_ready(ioc, type);
+  	if (r)
+  		goto out;
+  	_base_clear_outstanding_commands(ioc);
+diff --cc drivers/scsi/mpt3sas/mpt3sas_base.h
+index 0c6c3df0038d,3cf2e4615ff5..000000000000
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@@ -1730,10 -1755,9 +1755,13 @@@ do {	ioc_err(ioc, "In func: %s\n", __fu
+  	status, mpi_request, sz); } while (0)
  =20
-+ MAXLINEAR ETHERNET PHY DRIVER
-+ M:	Xu Liang <lxu@maxlinear.com>
-+ L:	netdev@vger.kernel.org
-+ S:	Supported
-+ F:	drivers/net/phy/mxl-gpy.c
-+=20
- -MCAB MICROCHIP CAN BUS ANALYZER TOOL DRIVER
- +MCBA MICROCHIP CAN BUS ANALYZER TOOL DRIVER
-  R:	Yasushi SHOJI <yashi@spacecubics.com>
-  L:	linux-can@vger.kernel.org
-  S:	Maintained
+  int mpt3sas_wait_for_ioc(struct MPT3SAS_ADAPTER *ioc, int wait_count);
+ +int
+ +mpt3sas_base_make_ioc_ready(struct MPT3SAS_ADAPTER *ioc, enum reset_type =
+type);
+ +void mpt3sas_base_free_irq(struct MPT3SAS_ADAPTER *ioc);
+ +void mpt3sas_base_disable_msix(struct MPT3SAS_ADAPTER *ioc);
++ int mpt3sas_blk_mq_poll(struct Scsi_Host *shost, unsigned int queue_num);
++ void mpt3sas_base_pause_mq_polling(struct MPT3SAS_ADAPTER *ioc);
++ void mpt3sas_base_resume_mq_polling(struct MPT3SAS_ADAPTER *ioc);
+ =20
+  /* scsih shared API */
+  struct scsi_cmnd *mpt3sas_scsih_scsi_lookup_get(struct MPT3SAS_ADAPTER *i=
+oc,
 
---Sig_/oUhMhl9BivJGe.IybsDEoPs
+--Sig_/jQSnKhTegTuB2gIUivp.zsC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmETKksACgkQAVBC80lX
-0GwikggAg767Icug4ln02ZeanbkY2Oq8Y1QB9601jJU+9Y70roKAAT0etKxuo5lS
-xxgg0+RtU8y/Y6i3pnmy2Wm+b9fi7CtobnmSD4hKKVK4V3rCiv27KlY+etx7EL66
-9tC/kAD87XbF/BnOl3UcW4Rau1eEcyJ3XmcXBhjP2k4uoubQPlmazAp97yYg3/uP
-mesQpfXlBu8k/UO58NOjwvC5Ib7gAcoLZlEVpQgEc8U3qsiEu0ADW/+xgxRW6Uhu
-LEP5wzrLXR3APmDdyzVeQLHhA3OHCabD5FirAzAyWUrLOIoOwPGAVCTUVUcPtdJ0
-rKmDZYXU7vZWAU5sAFBq9/yl8PwdZQ==
-=Ju0g
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmETYrUACgkQAVBC80lX
+0Gxbqwf+LeSkg2kU8TJYXh5aMX/3AaM543vCO7luLBTgMQxjhuC/kH+jgeOttMRa
+j0QXmyuUmNwJhNWm16kogMK1PJVq9MM4qpWR/DDLcosVvl6w5hpcaUAW/4u/1qke
+56W0zS51M5xbmSlxtF6Wuknh8l80kfsXQwsJSsfHgktexa3ALBOXwC1k758AQfYl
+K59ABRSzGo5rAJl1kSc+5J3P552YctJk2lhuWllkKHaxx9kAB67+IdxiDWWZO7rw
+zENbevgZaU1EYbfSE7KxRvbIuvdQIt8ZfSSVMJ9B2BZPrYJ13VdiTn4h0lhGyMcA
+mR59vGSgWyvwq8rL+19JfMKBZRc8hQ==
+=RgVL
 -----END PGP SIGNATURE-----
 
---Sig_/oUhMhl9BivJGe.IybsDEoPs--
+--Sig_/jQSnKhTegTuB2gIUivp.zsC--

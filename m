@@ -2,77 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A8D3E9162
-	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 14:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11423E934C
+	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 16:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbhHKMcw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Aug 2021 08:32:52 -0400
-Received: from ozlabs.org ([203.11.71.1]:48503 "EHLO ozlabs.org"
+        id S231872AbhHKOKF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Aug 2021 10:10:05 -0400
+Received: from mga17.intel.com ([192.55.52.151]:5689 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhHKMci (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:32:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gl8Mv6T3kz9t4b;
-        Wed, 11 Aug 2021 22:32:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628685132;
-        bh=mhfcVNXgc/0h5v6pYrwHF5DvzDi1bz16dnsFeCrBswA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gh4AVYzWFi/xJyU2lZVn42moYQV4DKDtQFV322+31kzvWJt31DwdDSZwV+qS6kCm3
-         PN+sVr8jXQ5XrTpEQRAI/VT75kIiMT+r8R0PsMQDWmtIdoIY3w5RFZyks07B7yCjRf
-         ivp8Q0gmEV3Zhs1eBPmovCqJWs+OCOBYZN4ZsrMnJjSkebVnYU9oCLecHm9YPXwHeK
-         5A7exmn8SBYM9EkWo8oOz6dScTtOQ5UyMqZ1vdAmvwhaa+1zjv8udeb5+63L0ZyojE
-         oMR6+2PwJ3tG0soV7hhPJVlZinI+nFjibF4sqW3Iz9k7Nuv52CclaL0cdegkAjN96c
-         nJod4DTEp2PnA==
-Date:   Wed, 11 Aug 2021 22:32:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231661AbhHKOKE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Aug 2021 10:10:04 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="195396850"
+X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
+   d="scan'208";a="195396850"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 07:09:20 -0700
+X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
+   d="scan'208";a="503506436"
+Received: from gdthomps-mobl.amr.corp.intel.com (HELO intel.com) ([10.255.37.76])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 07:09:18 -0700
+Date:   Wed, 11 Aug 2021 10:09:17 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kvm-arm tree
-Message-ID: <20210811223210.19067d99@canb.auug.org.au>
+Subject: Re: [Intel-gfx] linux-next: Signed-off-by missing for commit in the
+ drm-intel tree
+Message-ID: <YRPaDYtUxXO4hzTI@intel.com>
+References: <20210715141854.1ad4a956@canb.auug.org.au>
+ <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
+ <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
+ <20210809161939.GS1556418@mdroper-desk1.amr.corp.intel.com>
+ <YRIcTTsEF0Kg7F8K@phenom.ffwll.local>
+ <8735rgo3hi.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/g6GHqUEyAD/ArJorHQTVGnJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735rgo3hi.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/g6GHqUEyAD/ArJorHQTVGnJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Aug 11, 2021 at 10:16:41AM +0300, Jani Nikula wrote:
+> On Tue, 10 Aug 2021, Daniel Vetter <daniel@ffwll.ch> wrote:
+> > On Mon, Aug 09, 2021 at 09:19:39AM -0700, Matt Roper wrote:
+> >> On Mon, Aug 09, 2021 at 04:05:59PM +0200, Daniel Vetter wrote:
+> >> > On Fri, Aug 06, 2021 at 09:36:56AM +0300, Joonas Lahtinen wrote:
+> >> > > Hi Matt,
+> >> > > 
+> >> > > Always use the dim tooling when applying patches, it will do the right
+> >> > > thing with regards to adding the S-o-b.
+> >> > 
+> >> > fd.o server rejects any pushes that haven't been done by dim, so how did
+> >> > this get through?
+> >> 
+> >> I definitely used dim for all of these patches, but I'm not sure how I
+> >> lost my s-o-b on this one.  Maybe when I edited the commit message after
+> >> 'dim extract-tags' I accidentally deleted an extra line when I removed
+> >> the extract-tags marker?  It's the only patch where the line is missing,
+> >> so it's almost certainly human error on my part rather than something
+> >> dim did wrong.
+> >
+> > Yeah that's an expected failure model, and dim is supposed to catch that
+> > by rechecking for sobs when you push. See dim_push_branch ->
+> > checkpatch_commit_push_range in dim. So you can hand-edit stuff however
+> > you want, dim /should/ catch it when pushing. That it didn't is kinda
+> > confusing and I'd like to know why that slipped through.
+> 
+> One of the failures that happened here was that the commit was part of a
+> topic branch that was merged and pushed directly. All merges should
+> happen via pull requests on the list, and applied (preferrably by
+> maintainers or at least with their acks recorded on the merge) using dim
+> apply-pull which should also have the checks.
 
-Hi all,
+My bad. I have asked Matt to go ahead with the topic branch.
+So it is an ack, which didn't get recorded.
+But I didn't expect this case of missing dim checks with this flow.
 
-Commit
+Sorry,
+Rodrigo.
 
-  676ffd34807e ("KVM: arm64: perf: Replace '0xf' instances with ID_AA64DFR0=
-_PMUVER_IMP_DEF")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/g6GHqUEyAD/ArJorHQTVGnJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmETw0oACgkQAVBC80lX
-0GzyYQgAmIknOVPopsjY4BdV9iTuqL1Uq/XCqaFPbL1K4Kog3p+BY0EBvqk37dNK
-qXtvMlWrKxn/qITcqy5ZWE4ACOawK/TyqRoCvWfp7095dDdYTblccz0VTnMtJJ/V
-pyRGDpJ2JQ0dvWco2x8GxU0dspeUL2kkN5Bh+jiNnUUY2HcttEBnfhg5Nh2DrwUd
-cwJrE7E2cryqZTuYnoziQj/b2xU1eAcJHBP/65aDbR8255YFsbKyHwq6Je7u3wCf
-h9Vc8nnwnEfJUnOoWCbEjg8bZbhh77CX6UCHlB/ue98b8Q7rOJ/eQEHWqiIV52/w
-0wjLPQaVpnro5fphycmVeGNsT+9clg==
-=O74f
------END PGP SIGNATURE-----
-
---Sig_/g6GHqUEyAD/ArJorHQTVGnJ--
+> 
+> 
+> BR,
+> Jani.
+> 
+> >
+> >> > Matt, can you pls figure out and type up the patch to
+> >> > plug that hole?
+> >> 
+> >> Are you referring to a patch for dim here?  The i915 patch has already
+> >> landed, so we can't change its commit message now.
+> >
+> > Yeah dim, not drm-intel, that can't be fixed anymore because it's all
+> > baked in.
+> > -Daniel
+> >
+> >> 
+> >> 
+> >> Matt
+> >> 
+> >> > 
+> >> > Thanks, Daniel
+> >> > 
+> >> > > 
+> >> > > Regards, Joonas
+> >> > > 
+> >> > > Quoting Stephen Rothwell (2021-07-15 07:18:54)
+> >> > > > Hi all,
+> >> > > > 
+> >> > > > Commit
+> >> > > > 
+> >> > > >   db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
+> >> > > > 
+> >> > > > is missing a Signed-off-by from its committer.
+> >> > > > 
+> >> > > > -- 
+> >> > > > Cheers,
+> >> > > > Stephen Rothwell
+> >> > 
+> >> > -- 
+> >> > Daniel Vetter
+> >> > Software Engineer, Intel Corporation
+> >> > http://blog.ffwll.ch
+> >> 
+> >> -- 
+> >> Matt Roper
+> >> Graphics Software Engineer
+> >> VTT-OSGC Platform Enablement
+> >> Intel Corporation
+> >> (916) 356-2795
+> 
+> -- 
+> Jani Nikula, Intel Open Source Graphics Center

@@ -2,101 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80AB3E87AB
-	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 03:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A083E87B5
+	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 03:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbhHKBgA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Aug 2021 21:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbhHKBf7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Aug 2021 21:35:59 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8895BC061765;
-        Tue, 10 Aug 2021 18:35:36 -0700 (PDT)
+        id S230215AbhHKBjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Aug 2021 21:39:52 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58395 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230190AbhHKBjv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Aug 2021 21:39:51 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GkspD4TgTz9sWS;
-        Wed, 11 Aug 2021 11:35:31 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gksth1YQGz9sWS;
+        Wed, 11 Aug 2021 11:39:24 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628645733;
-        bh=oLqcRhkKAlWqkAi2nMUD2QJlUlWpIKdpuMPS6Z6G9G0=;
+        s=201702; t=1628645966;
+        bh=1YFO3kHG50QhRUMhTqKTIiavineTTdtGUidN3sw8EN4=;
         h=Date:From:To:Cc:Subject:From;
-        b=RdesqB14I4595HORSPRmXz0aBsrDmLe2K/WqYg610cTAzNGOWFy+xoKKOWN8b4vas
-         OaDD3BwMfMyAB7rBlJZojWhKV3KFeoMFTQeM2SsPcJxQdJyJOS0LvnG5udUgG8eNTS
-         D6UP3OxFL6kol3znk/+wKj2GJxoDDG+dR5gRsNcMzv0hz+AyUNEJsqDUkiPQZjRRVH
-         vz94FCdonkNlQ3ktuB2Psu8C7oPYywDpPI9ZImcBZbg+EN6cN3zCa15kCMINoDc1cn
-         1ZbT9NwPqgeIZgHyhElhZEplOene7a19Pta7TVWYRxnnSBTdVdz0MysNrmUv1RhE8C
-         MCCKNhYNoZI+A==
-Date:   Wed, 11 Aug 2021 11:35:31 +1000
+        b=EpgO7dKwAafvgHWS1f5Yf0ijB5Crsp9RchQMnb5Iczaa2YYgO8oEePRW+fgzPfGan
+         z2ctUbsGF4JUSl8kMUh0h/V1bqRlMEGRJEC6DIyK0c13b9az/HHvxOsV6pNuIM1Nj1
+         evwmYdP4fcDSqkoA6ioOoEneJjX67idNJkfmXw2WWfoeycqpkts93XwvGsj19MzKFM
+         ohVfqaai5cQGNUZhHYIxBOHasYriY3ytylWj1HnNt2vLdmZJs7gU/61CrhyW/9Olsh
+         Nts/Xr8Evm/fwc0R8QGFtezT2DTjayU5t1j86aN/LGkswJQMYY/hYFSLYGi3D4Zmy2
+         hdrdH/2zR9NJQ==
+Date:   Wed, 11 Aug 2021 11:39:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Baruch Siach <baruch@tkos.co.il>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Xu Liang <lxu@maxlinear.com>
 Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20210811113531.18f8ee4d@canb.auug.org.au>
+Message-ID: <20210811113923.210a999d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lMcLOHdoJF.0nDkZSpI/_SX";
+Content-Type: multipart/signed; boundary="Sig_/oUhMhl9BivJGe.IybsDEoPs";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lMcLOHdoJF.0nDkZSpI/_SX
+--Sig_/oUhMhl9BivJGe.IybsDEoPs
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got conflicts in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  include/linux/bpf-cgroup.h
-  kernel/bpf/helpers.c
+  MAINTAINERS
 
 between commit:
 
-  a2baf4e8bb0f ("bpf: Fix potentially incorrect results with bpf_get_local_=
-storage()")
+  7b637cd52f02 ("MAINTAINERS: fix Microchip CAN BUS Analyzer Tool entry typ=
+o")
 
 from the net tree and commit:
 
-  c7603cfa04e7 ("bpf: Add ambient BPF runtime context stored in current")
+  7d901a1e878a ("net: phy: add Maxlinear GPY115/21x/24x driver")
 
 from the net-next tree.
 
-The latter removed the code that the former modified.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/lMcLOHdoJF.0nDkZSpI/_SX
+diff --cc MAINTAINERS
+index 9d7bc544a49d,41fcfdb24a81..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -11339,7 -11341,13 +11353,13 @@@ W:	https://linuxtv.or
+  T:	git git://linuxtv.org/media_tree.git
+  F:	drivers/media/radio/radio-maxiradio*
+ =20
++ MAXLINEAR ETHERNET PHY DRIVER
++ M:	Xu Liang <lxu@maxlinear.com>
++ L:	netdev@vger.kernel.org
++ S:	Supported
++ F:	drivers/net/phy/mxl-gpy.c
++=20
+ -MCAB MICROCHIP CAN BUS ANALYZER TOOL DRIVER
+ +MCBA MICROCHIP CAN BUS ANALYZER TOOL DRIVER
+  R:	Yasushi SHOJI <yashi@spacecubics.com>
+  L:	linux-can@vger.kernel.org
+  S:	Maintained
+
+--Sig_/oUhMhl9BivJGe.IybsDEoPs
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmETKWMACgkQAVBC80lX
-0Gzyfgf+KTO4rZkAA24NrU1UYOCngS691NC2QJICnvtCdwumV0b/kTlQLTLcTEGJ
-nQyY0js6Djh56plEwboBEknbob80ex8keTDm6BWq1Tpu4wqH1C1EhbenWMqtra+I
-pZyEUkz1wjX8JjbUSNKNZ8InOPZIRwlTGqVLZMTB/D/ewZZkHdVjlRgoOdzb1n5S
-DfPZliDyIdXpdKpFUq6pkt/GoojUJkhTPiXbjH9+vSbX17ldlz4eURFaYD0a5s9+
-iD03r3y17VCz/hpbvY8iUzldGRaJzJca0uBVw6iHpiaNNtD1PHC/ioz00D+AM0FX
-gNqZVfvfCX6clhRcHBtdenf2LOXH2Q==
-=/39c
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmETKksACgkQAVBC80lX
+0GwikggAg767Icug4ln02ZeanbkY2Oq8Y1QB9601jJU+9Y70roKAAT0etKxuo5lS
+xxgg0+RtU8y/Y6i3pnmy2Wm+b9fi7CtobnmSD4hKKVK4V3rCiv27KlY+etx7EL66
+9tC/kAD87XbF/BnOl3UcW4Rau1eEcyJ3XmcXBhjP2k4uoubQPlmazAp97yYg3/uP
+mesQpfXlBu8k/UO58NOjwvC5Ib7gAcoLZlEVpQgEc8U3qsiEu0ADW/+xgxRW6Uhu
+LEP5wzrLXR3APmDdyzVeQLHhA3OHCabD5FirAzAyWUrLOIoOwPGAVCTUVUcPtdJ0
+rKmDZYXU7vZWAU5sAFBq9/yl8PwdZQ==
+=Ju0g
 -----END PGP SIGNATURE-----
 
---Sig_/lMcLOHdoJF.0nDkZSpI/_SX--
+--Sig_/oUhMhl9BivJGe.IybsDEoPs--

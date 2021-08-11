@@ -2,177 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4561B3E945E
-	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 17:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F673E963A
+	for <lists+linux-next@lfdr.de>; Wed, 11 Aug 2021 18:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbhHKPQx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Aug 2021 11:16:53 -0400
-Received: from mga03.intel.com ([134.134.136.65]:4200 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233121AbhHKPPw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Aug 2021 11:15:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="215169007"
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="215169007"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:15:25 -0700
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="672904533"
-Received: from mdroper-desk1.fm.intel.com (HELO mdroper-desk1.amr.corp.intel.com) ([10.1.27.134])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 08:15:25 -0700
-Date:   Wed, 11 Aug 2021 08:15:24 -0700
-From:   Matt Roper <matthew.d.roper@intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [Intel-gfx] linux-next: Signed-off-by missing for commit in the
- drm-intel tree
-Message-ID: <20210811151524.GE1556418@mdroper-desk1.amr.corp.intel.com>
-References: <20210715141854.1ad4a956@canb.auug.org.au>
- <162823181614.15830.10618174106053255881@jlahtine-mobl.ger.corp.intel.com>
- <YRE2RwQ6XlUqbgmn@phenom.ffwll.local>
- <20210809161939.GS1556418@mdroper-desk1.amr.corp.intel.com>
- <YRIcTTsEF0Kg7F8K@phenom.ffwll.local>
- <8735rgo3hi.fsf@intel.com>
- <YROc0KkBbuAwrx0f@phenom.ffwll.local>
+        id S229914AbhHKQmc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Aug 2021 12:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbhHKQm2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Aug 2021 12:42:28 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8C0C061765;
+        Wed, 11 Aug 2021 09:42:03 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso4884698wmq.3;
+        Wed, 11 Aug 2021 09:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=cMq1k0Foqs4ceZWC5Sprgq9jprlCb7Di+FF+12BoOeajawPZs5kl4jW5WDRlYJ8ps+
+         4V32Md2SaTbv4BDboBu2Aw5vkllYVDZawV4ovDYCq/zp442Es+9MNQAtCxJbpJoRVX1j
+         EQqoaBAZT1OVteKyG9PjeLBJjuFYFmljHn1OF5N9ZEKauCzS/RpHN0Fkb8iA4PZJaji5
+         ffscT7z710nWYYKVMAHN+17sVy68QVX00V5ezkdC5IACph0BtgBecOVeMrN9OxeQWTU6
+         IgUic/QY/wOYD0qOM/ckY3z43ns9iydp4gpW8FddySXY+jF+trfLYyrxo524UDb6cyGI
+         9LDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=gcN5FMS6Y8rVOtBaupruHNKKUQDz5E8gi1uCWQo3XLljqZYB77FoyaEomhl1/caget
+         jricyRGUakK3h2SRSQFZ+Ny9E0l4BaF9VJP2KK2Y4kaSKe9ZN0LgpwKNjgrfJ4eQRiWA
+         /+NAYC8pxep5JnKSediFuvsK85zPT0XUBpBOlwuTsVtjo+XpVaxzQOpCG5Ld/59/t+G9
+         Z54icnAV2mZOJHYlSpOkekzINfb67zZ9ZLGywjZd9G+uBEwQ6Pk/PQ+D5UnNd1Rv/NKq
+         gqN4TnljTqHZ6Mws6RFt8HRLQCG95gxXygeH5/6Y9xR6GCNv+h9C3mqCvfSWfwCtX/1w
+         ndgw==
+X-Gm-Message-State: AOAM530GYTmJxp0liOhbM3086W+c7njtuxnKBRMT3c0jv5ItI8Jth/1g
+        CYg5G9o77FHrDEPMb8JkF2NH5dJbDdWt6Q==
+X-Google-Smtp-Source: ABdhPJyukuXpA+/y8ok2/w1XpoyjQcFnMAQmn5LjX3mE1U3IHjCQe6S238xdqR380greorAXW+x56Q==
+X-Received: by 2002:a1c:3c87:: with SMTP id j129mr3790177wma.54.1628700122064;
+        Wed, 11 Aug 2021 09:42:02 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.209.185])
+        by smtp.gmail.com with ESMTPSA id s1sm2699637wmh.46.2021.08.11.09.41.48
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Wed, 11 Aug 2021 09:42:01 -0700 (PDT)
+Message-ID: <6113fdd9.1c69fb81.ff4c7.b7a9@mx.google.com>
+From:   Vanina curth <curtisvani0040@gmail.com>
+X-Google-Original-From: Vanina  curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YROc0KkBbuAwrx0f@phenom.ffwll.local>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Dear
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Wed, 11 Aug 2021 16:41:34 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 11:48:00AM +0200, Daniel Vetter wrote:
-> On Wed, Aug 11, 2021 at 10:16:41AM +0300, Jani Nikula wrote:
-> > On Tue, 10 Aug 2021, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > On Mon, Aug 09, 2021 at 09:19:39AM -0700, Matt Roper wrote:
-> > >> On Mon, Aug 09, 2021 at 04:05:59PM +0200, Daniel Vetter wrote:
-> > >> > On Fri, Aug 06, 2021 at 09:36:56AM +0300, Joonas Lahtinen wrote:
-> > >> > > Hi Matt,
-> > >> > > 
-> > >> > > Always use the dim tooling when applying patches, it will do the right
-> > >> > > thing with regards to adding the S-o-b.
-> > >> > 
-> > >> > fd.o server rejects any pushes that haven't been done by dim, so how did
-> > >> > this get through?
-> > >> 
-> > >> I definitely used dim for all of these patches, but I'm not sure how I
-> > >> lost my s-o-b on this one.  Maybe when I edited the commit message after
-> > >> 'dim extract-tags' I accidentally deleted an extra line when I removed
-> > >> the extract-tags marker?  It's the only patch where the line is missing,
-> > >> so it's almost certainly human error on my part rather than something
-> > >> dim did wrong.
-> > >
-> > > Yeah that's an expected failure model, and dim is supposed to catch that
-> > > by rechecking for sobs when you push. See dim_push_branch ->
-> > > checkpatch_commit_push_range in dim. So you can hand-edit stuff however
-> > > you want, dim /should/ catch it when pushing. That it didn't is kinda
-> > > confusing and I'd like to know why that slipped through.
-> > 
-> > One of the failures that happened here was that the commit was part of a
-> > topic branch that was merged and pushed directly. All merges should
-> > happen via pull requests on the list, and applied (preferrably by
-> > maintainers or at least with their acks recorded on the merge) using dim
-> > apply-pull which should also have the checks.
-> 
-> Ah yes if the merge is applied directly instead of using apply-pull then
-> that's not good. I guess that's why we have the rule that only maintainers
-> should handle topic branches ...
-
-Hmm, I wasn't aware of this rule.  I double checked with Rodrigo before
-doing so and he thought merging a branch directly to intel-next and
-gt-next with the foundational definitions and tables should be an okay
-approach here (and he did an extra backmerge in preparation to make sure
-it went smoothly).
-
-Anyway, definitely my fault; I'll keep this in mind for the future.
-
-
-Matt
-
-> 
-> Not sure how we can fix this in dim? Maybe a check whether the patches
-> your pushing contain a merge commit, which prompts an additional query
-> like
-> 
-> "Merge commits should only be done by repo maintainers, not committers.
-> Confirm that you are a maintainer of $repo?"
-> 
-> It's not the first time this slipped through and caused some fun. Similar
-> to how we have the confirmation check if you push a lot of patches.
-> 
-> Thoughts?
-> -Daniel
-> 
-> 
-> > 
-> > 
-> > BR,
-> > Jani.
-> > 
-> > >
-> > >> > Matt, can you pls figure out and type up the patch to
-> > >> > plug that hole?
-> > >> 
-> > >> Are you referring to a patch for dim here?  The i915 patch has already
-> > >> landed, so we can't change its commit message now.
-> > >
-> > > Yeah dim, not drm-intel, that can't be fixed anymore because it's all
-> > > baked in.
-> > > -Daniel
-> > >
-> > >> 
-> > >> 
-> > >> Matt
-> > >> 
-> > >> > 
-> > >> > Thanks, Daniel
-> > >> > 
-> > >> > > 
-> > >> > > Regards, Joonas
-> > >> > > 
-> > >> > > Quoting Stephen Rothwell (2021-07-15 07:18:54)
-> > >> > > > Hi all,
-> > >> > > > 
-> > >> > > > Commit
-> > >> > > > 
-> > >> > > >   db47fe727e1f ("drm/i915/step: s/<platform>_revid_tbl/<platform>_revids")
-> > >> > > > 
-> > >> > > > is missing a Signed-off-by from its committer.
-> > >> > > > 
-> > >> > > > -- 
-> > >> > > > Cheers,
-> > >> > > > Stephen Rothwell
-> > >> > 
-> > >> > -- 
-> > >> > Daniel Vetter
-> > >> > Software Engineer, Intel Corporation
-> > >> > http://blog.ffwll.ch
-> > >> 
-> > >> -- 
-> > >> Matt Roper
-> > >> Graphics Software Engineer
-> > >> VTT-OSGC Platform Enablement
-> > >> Intel Corporation
-> > >> (916) 356-2795
-> > 
-> > -- 
-> > Jani Nikula, Intel Open Source Graphics Center
-> 
-> -- 
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
-
--- 
-Matt Roper
-Graphics Software Engineer
-VTT-OSGC Platform Enablement
-Intel Corporation
-(916) 356-2795
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.

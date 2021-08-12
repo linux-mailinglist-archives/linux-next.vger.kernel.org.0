@@ -2,78 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5023E9BF0
-	for <lists+linux-next@lfdr.de>; Thu, 12 Aug 2021 03:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313B43E9BF3
+	for <lists+linux-next@lfdr.de>; Thu, 12 Aug 2021 03:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbhHLB3C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Aug 2021 21:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbhHLB3B (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Aug 2021 21:29:01 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EF0C061765;
-        Wed, 11 Aug 2021 18:28:36 -0700 (PDT)
+        id S233237AbhHLBfS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Aug 2021 21:35:18 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34579 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233208AbhHLBfR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Aug 2021 21:35:17 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GlTbj0ShJz9t54;
-        Thu, 12 Aug 2021 11:28:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GlTkz4Gxqz9t2b;
+        Thu, 12 Aug 2021 11:34:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628731714;
-        bh=6TdmRLm6DKip6vJXXjLuBmnBFxaoIwhh1f+X+BlI2EI=;
+        s=201702; t=1628732091;
+        bh=xr5k/YLNVe7r9l4XqhHijIcgp45wUsrM8Ru/LqcEgsA=;
         h=Date:From:To:Cc:Subject:From;
-        b=k9oUD6wxT7qZ4RruX8YAkfmGILfyo0dW9/vJd3VmvtWayGMqYyTBmX57g6gBf/SYJ
-         rP09QeYsOJD2YCdx4PnzVNlq72ZOF/EbLes++uNPeW4YkJqvqKDbLujqMmP+L4+9hc
-         nvKvwBMQax+9msF703vGZRYaMfty1WLquUyrhoriWuaxKfEJOtXrO7Qv4gOxraHK2F
-         s0TISu8hzjVoy58uy7Ovn/eLKCbbU5sqRje0a5ir8JX9gkUbSEpfBoHDFbFmA2WkzH
-         Xx8ZamLH2FairH+QBvdLjJjYi3fgWWCUMNEUs3jI17zKzi9dLz8mm4XmIED22mua8y
-         kS0dsqAkCCp/Q==
-Date:   Thu, 12 Aug 2021 11:28:32 +1000
+        b=CtJ7qoTKvkOl6pAk/YFvbAl/MJ+Ky2OSa7+y3XGLHsNu4lqwS1Vgl0Nbrpd1bMfaB
+         /cWsFoIXui5fPIKTaU5W5hQf60y9PluV9GRfi0gm/iGt3U4CYh+ITJlzFmLjfMqoBs
+         Bab0SNcs0VfAJslPlCB4fvwiZ/uJi8ShmGPyEmEEuUZd8a3UI7P5Z93KaYe8aL5/Mo
+         5n+nLr/a5f7MyiFnbkGFdqtPO5uY6tAZMQCQDKBww1C+UdGLQh6udabKs+RUEliXkg
+         xwKxooAoj6RI8Yjb1AarlMCoZFFY8k64ulaASvkfOw+0iVBYzLBsHCeVSgwMe8PP/J
+         vgTupAcQTRRQA==
+Date:   Thu, 12 Aug 2021 11:34:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Kuogee Hsieh <khsieh@codeaurora.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Paulo Zanoni <paulo.r.zanoni@intel.com>,
-        Tomasz Lis <tomasz.lis@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with the drm tree
-Message-ID: <20210812112832.0c51632b@canb.auug.org.au>
+        Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm tree with Linus' tree
+Message-ID: <20210812113450.3b351ac8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0ccK2z.2lY0XR7PKc4K0bD0";
+Content-Type: multipart/signed; boundary="Sig_/k9If7l17ntdaySuXmfYGNM1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0ccK2z.2lY0XR7PKc4K0bD0
+--Sig_/k9If7l17ntdaySuXmfYGNM1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+Today's linux-next merge of the drm-msm tree got a conflict in:
 
-  drivers/gpu/drm/i915/intel_device_info.h
+  drivers/gpu/drm/msm/dp/dp_display.c
 
 between commit:
 
-  3ffe82d701a4 ("drm/i915/xehp: handle new steering options")
+  afc9b8b6bab8 ("drm/msm/dp: signal audio plugged change at dp_pm_resume")
 
-from the drm tree and commit:
+from Linus' tree and commit:
 
-  22e26af76903 ("drm/i915: Fork DG1 interrupt handler")
+  26ae419cd9ec ("drm/msm/dp: add drm debug logs to dp_pm_resume/suspend")
 
-from the drm-intel tree.
+from the drm-msm tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -86,34 +74,41 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/intel_device_info.h
-index f88be11a3570,ef1eecd259e0..000000000000
---- a/drivers/gpu/drm/i915/intel_device_info.h
-+++ b/drivers/gpu/drm/i915/intel_device_info.h
-@@@ -133,8 -131,6 +131,7 @@@ enum intel_ppgtt_type=20
-  	func(has_llc); \
-  	func(has_logical_ring_contexts); \
-  	func(has_logical_ring_elsq); \
-- 	func(has_master_unit_irq); \
- +	func(has_mslices); \
-  	func(has_pooled_eu); \
-  	func(has_rc6); \
-  	func(has_rc6p); \
+diff --cc drivers/gpu/drm/msm/dp/dp_display.c
+index 867388a399ad,419fd4a14cbf..000000000000
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@@ -1312,10 -1314,10 +1315,14 @@@ static int dp_pm_resume(struct device *
+  	else
+  		dp->dp_display.is_connected =3D false;
+ =20
+ +	dp_display_handle_plugged_change(g_dp_display,
+ +				dp->dp_display.is_connected);
+ +
+ +
++ 	DRM_DEBUG_DP("After, sink_count=3D%d is_connected=3D%d core_inited=3D%d =
+power_on=3D%d\n",
++ 			dp->link->sink_count, dp->dp_display.is_connected,
++ 			dp->core_initialized, dp_display->power_on);
++=20
+  	mutex_unlock(&dp->event_mutex);
+ =20
+  	return 0;
 
---Sig_/0ccK2z.2lY0XR7PKc4K0bD0
+--Sig_/k9If7l17ntdaySuXmfYGNM1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEUeUAACgkQAVBC80lX
-0GzycAgAoEoEXuz2v+VRpVNn0G9uqcHZ2Gii0F3udUHqILFdSV7QcV0dIxiOtcn9
-G/K1fBq6YbOsFYxLep8tXQVFi83SQFQ+zfmVOcq4btaYWz7DYCyOWTk6PF869mgw
-gRkHPBJ4wECsk+PETDyoFt4GhFQJQODrG7v/+oHJTtM8Nc+mIaLvqQPJrIXrnMJc
-yDnJQ/vohM6yYb8FvrevxaTH/ETFO3lDEq4GNzuL1JM6nbbx8z1Xgd+TEFFyGNWA
-GpA7fMHZJZr7M8JlFlWaBgFZzdGqSj2n3/ZsUyWKcmGI+glWe/n+HwqzYDsK08Qe
-ImT1wZeo0Klc2v/JrrBInLY8O9VoZg==
-=E6b0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEUeroACgkQAVBC80lX
+0GwntQf+MmFIMZCYceqx0JKHgYKG7q2Hz++RJYwrcSnsVNx8FwsG8HdcziAjGEG4
+bg3yMXJypGpooPvqTATeuSAkrmA2cPVkZ7mgYBD1aA3itBTC64L3Mi3bb5c0xl7a
+ITOT0TymM6RBRPURsgvHhUGE8FL3QoTydjEZz71sIvJzqTE6c8+BpboewltzmIxe
+Pe++TAIaiwrqYxxMUwQBLxt1mbhN8+f3IntzVkVV3OVjhUDXJ07xhxtw+HsGLURt
+xPj31cZif29tPwe9HtlZIgW3eVafPslZUk+H+0yLoVmfLuYhS3vBXAwpnBg8F7FH
+gGNukn80kEaVCjiRQnbuyyQdlbR18w==
+=qVWV
 -----END PGP SIGNATURE-----
 
---Sig_/0ccK2z.2lY0XR7PKc4K0bD0--
+--Sig_/k9If7l17ntdaySuXmfYGNM1--

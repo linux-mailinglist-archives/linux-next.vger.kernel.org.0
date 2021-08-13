@@ -2,116 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1C83EB647
-	for <lists+linux-next@lfdr.de>; Fri, 13 Aug 2021 15:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33653EB65A
+	for <lists+linux-next@lfdr.de>; Fri, 13 Aug 2021 15:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbhHMNxU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Aug 2021 09:53:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231127AbhHMNxU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 13 Aug 2021 09:53:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 943A660F11;
-        Fri, 13 Aug 2021 13:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628862773;
-        bh=sqXtbAsweP69K+laj3aPbLYAw5spnrPTjCYsrVji+U4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rJOLF0/TwQauuFK48Og23uQa8sTBjXk53YQjsGZJy1rBYqRwg6VN3Oh/xhrMO+jFY
-         FK8OKoKtJCFrxW55AUs1HgqMFvfn+iOGWa9jypc1y0T5jE52YuAyomwxqfi3s+kK2K
-         +4DA49q1POVTmg5Tk8cOjCqjZ15e09Qtp1wM5Sf6ENPqN4Swz1QLJIwZfQQ4xYyyWS
-         ts+9RCYyQ1O+rVLgL2Nl7/EcX9uTzSOeE+m62j9jcciYbeSHXW0nn0c/NIdfjS3YA1
-         Qdt1x/EteZd5O+Nx4d/zUjKtXN9iT0maKoNBvuLO3smIriupzWhyvKswkXtOcf6bGP
-         VQm0UxdJ5XHUw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 61F285C0373; Fri, 13 Aug 2021 06:52:53 -0700 (PDT)
-Date:   Fri, 13 Aug 2021 06:52:53 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        id S240714AbhHMNzY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Aug 2021 09:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240741AbhHMNzY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Aug 2021 09:55:24 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D353DC0617AD
+        for <linux-next@vger.kernel.org>; Fri, 13 Aug 2021 06:54:56 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n12so11420991plf.4
+        for <linux-next@vger.kernel.org>; Fri, 13 Aug 2021 06:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oQC/n+C5wkFlClIPjHrqQ3kOoEWEq/Nw32k6usYG8aM=;
+        b=Q8JyhdOIIC+vHiSG0UUYTJzmCspHV1ym1fFrXKyoFsMdhOXCGSkKDZPXXWsXhE4tBF
+         uHz0Hq8WZWOlSI1vx6Y26CDoSptb7tu+7iqh9uVryYolTwc/LIE5fONzrY3u7HNbN27O
+         o3hVSSLMA8D1dsgEcHVmKA+QIytfTYiLAhV1ylrpuGmR9iF5qwF8k+p28xtEc4mAThRt
+         7PlOrioxGTfkWnDsPoM2g4IFhDbM6xtZ3UFU0msk3G/b7iF8pBo8REac006S32AgtoV5
+         W+BSQ7BVImreNCkD6OVlHkj6vbfAfwjcKyJRuNqdRGRNsYcQGZTYL59JNkxYUIPVjHcV
+         LxpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oQC/n+C5wkFlClIPjHrqQ3kOoEWEq/Nw32k6usYG8aM=;
+        b=aE4AOSYStWNEFJ6XpXlz5e2X1FFo2KlGwyPxI5JUKw28iS8f/hMYu96E6kLSdp0rx2
+         HGMMIZ3x+1lmm69H79HQ5pyErGnftQEvLP01XKEQwNFh8aHPgA/xWLsc/G0szSBwoLf4
+         LwjgdpdZbKgvodHQxsDN2PD5HFgeMXisVeG2/q2QbCaLhN0B0kxZtbdNxz96LNjf7iBT
+         5tavm5jI3ebjWFatHSz7Ddea5bN92W5xDOFDPMA0zcGzzSYaOIr5exHphoV8XnVVUVSj
+         99O3XhrAlemOsNu+iJPwZG/sxRS35bC9Ol3NPcDNseJEF5ZeEf/Tb2M8Tda08BU2f6e9
+         cPEw==
+X-Gm-Message-State: AOAM532w7doDk4vG1EOj32Q1a7GP8Qy0MRB4aTnk3U4fYiaXTCYk2pTb
+        BoglynApqXa9YEjQryaCNRcgmyu29uqp1Q88
+X-Google-Smtp-Source: ABdhPJzemwI9mYnJQDtqzhrX2LcxCiDY/8WOBCEpJgn4EHMB1KhKMDIJxfaep7LxosNv0MIIuX7IlQ==
+X-Received: by 2002:a62:878a:0:b029:3e0:7810:ec36 with SMTP id i132-20020a62878a0000b02903e07810ec36mr2610733pfe.4.1628862895920;
+        Fri, 13 Aug 2021 06:54:55 -0700 (PDT)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id bo14sm1991744pjb.1.2021.08.13.06.54.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Aug 2021 06:54:55 -0700 (PDT)
+Subject: Re: linux-next: build warning after merge of the block tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Subject: Re: linux-next: manual merge of the rcu tree with the irqchip tree
-Message-ID: <20210813135253.GA4126399@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210813140437.79035655@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20210813194116.3a0297d6@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <b2492209-732c-9871-6085-6a17659f6429@kernel.dk>
+Date:   Fri, 13 Aug 2021 07:54:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210813140437.79035655@canb.auug.org.au>
+In-Reply-To: <20210813194116.3a0297d6@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 02:04:37PM +1000, Stephen Rothwell wrote:
+On 8/13/21 3:41 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the rcu tree got a conflict in:
+> After merging the block tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
->   kernel/irq/chip.c
+> block/bio.c:1689: warning: Function parameter or member 'nr_vecs' not described in 'bio_alloc_kiocb'
 > 
-> between commit:
+> Introduced by commit
 > 
->   56707bb845f5 ("genirq, irq-gic-v3: Make NMI flow handlers use ->irq_ack() if available")
-> 
-> from the irqchip tree and commit:
-> 
->   ef62bf7e92d8 ("irq: abstract irqaction handler invocation")
-> 
-> from the rcu tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>   1cbbd31c4ada ("bio: add allocation cache abstraction")
 
-I had pulled these two in just for testing only because I was chasing
-a problem that looked like long-running irq handlers, but which proved
-to be something rather different.
+Thanks, fixed up.
 
-ef62bf7e92d8 ("irq: abstract irqaction handler invocation")
-2eeaae3c02b9 ("irq: detect long-running IRQ handlers")
-
-I will be dropping these this morning, Pacific Time.
-
-							Thanx, Paul
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc kernel/irq/chip.c
-> index 1b1171113437,804c2791315d..000000000000
-> --- a/kernel/irq/chip.c
-> +++ b/kernel/irq/chip.c
-> @@@ -768,11 -744,6 +768,9 @@@ void handle_nmi(struct irq_desc *desc
->   
->   	__kstat_incr_irqs_this_cpu(desc);
->   
->  +	if (chip->irq_ack)
->  +		chip->irq_ack(&desc->irq_data);
->  +
-> - 	trace_irq_handler_entry(irq, action);
->   	/*
->   	 * NMIs cannot be shared, there is only one action.
->   	 */
-> @@@ -1050,13 -954,7 +1044,10 @@@ void handle_percpu_devid_nmi(struct irq
->   
->   	__kstat_incr_irqs_this_cpu(desc);
->   
->  +	if (chip->irq_ack)
->  +		chip->irq_ack(&desc->irq_data);
->  +
-> - 	trace_irq_handler_entry(irq, action);
-> - 	res = action->handler(irq, raw_cpu_ptr(action->percpu_dev_id));
-> - 	trace_irq_handler_exit(irq, action, res);
-> + 	handle_irqaction_percpu_devid(irq, action);
->   
->   	if (chip->irq_eoi)
->   		chip->irq_eoi(&desc->irq_data);
-
+-- 
+Jens Axboe
 

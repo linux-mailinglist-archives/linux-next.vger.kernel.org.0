@@ -2,71 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0F13EAEF0
-	for <lists+linux-next@lfdr.de>; Fri, 13 Aug 2021 05:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C209A3EAF13
+	for <lists+linux-next@lfdr.de>; Fri, 13 Aug 2021 06:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238309AbhHMD3n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Aug 2021 23:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S229654AbhHMEFH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Aug 2021 00:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbhHMD3m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Aug 2021 23:29:42 -0400
+        with ESMTP id S229468AbhHMEFG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Aug 2021 00:05:06 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE2C061756;
-        Thu, 12 Aug 2021 20:29:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697DFC061756;
+        Thu, 12 Aug 2021 21:04:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gm8DQ4TbSz9t1s;
-        Fri, 13 Aug 2021 13:29:10 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gm91L0Jkxz9sX5;
+        Fri, 13 Aug 2021 14:04:38 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1628825352;
-        bh=6H1ac3ZAOh+J15mkR+JB6nijw/1pgcTrHGDHl+cxLdc=;
+        s=201702; t=1628827478;
+        bh=D8P676YKJ8LaTCYnWyCi/miTRZ2wTckQCvZelb0CGEU=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZmbUDwbrFzdbSnyLKcyYSWKYOe+ajnWatgN0NL0O/qpasShNiqUJ7stgdTW7ALMNw
-         tjT4F6NkmWXJuGpg7atuHyB8IHJZPq7Wr2zCp6GDwIc+oIIYM3RzwQcmtuNYqkZi2P
-         Ml9zgxdXoZ2DQsTIfSJYRmhZsSlME9gzttxeCxZiJwTfmZ91j2oUaFFWnI12Q8T4DZ
-         sdm5B1alZf5/bgtDMeEOMcakGgCBIKs1FR/wVtfrbchbte1fi72Xu38tFhDBiKJ3f6
-         K3JV8HSRwwIVtyWOgVl31AkFsixLYgbGUgEFVJR+yJBQsP9j8jBlGO6PIh8nog4sab
-         xiSCF7Skd5elw==
-Date:   Fri, 13 Aug 2021 13:29:09 +1000
+        b=DhPzWUIupRVC7zVs70PJPMHTI4sI6govHp5DWkgJ2kwCNAE64mMjVNb6IvN2Jl758
+         ynQ0SH4JQycUTB+1OpZsb8iY7pQc1h42NPaOJg9r9DSfZvez4yE0YzJLW0MRwru/Fv
+         Dio1qGfMJ2FPM3kaHw4WnRkKqo8p7ts1KX8fSq/dlKiFD3N9GL5XRG/JKRhaBot20n
+         pL6Di2wUAOLN5qYnhPWcRsr+Hv3zD75iRqNxR/YVSVMaI70psNuh8SDsv7L1d4g32H
+         NM3+0wsVx+WV/FfioF/3rU4FymXmhQxXpehoW1hDwIdtvz9Q6Gf7KfTEQyIsm1A7Oq
+         2Z07jSvUuuGrA==
+Date:   Fri, 13 Aug 2021 14:04:37 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Valentin Schneider <valentin.schneider@arm.com>
-Subject: linux-next: manual merge of the irqchip tree with the tip tree
-Message-ID: <20210813132909.28f1c34c@canb.auug.org.au>
+Subject: linux-next: manual merge of the rcu tree with the irqchip tree
+Message-ID: <20210813140437.79035655@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6MXXdDGQQ9QpBXODW_PZJr8";
+Content-Type: multipart/signed; boundary="Sig_/=uvqPWeJ74d2Yakz0UbedBA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6MXXdDGQQ9QpBXODW_PZJr8
+--Sig_/=uvqPWeJ74d2Yakz0UbedBA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the irqchip tree got a conflict in:
+Today's linux-next merge of the rcu tree got a conflict in:
 
-  include/linux/irq.h
+  kernel/irq/chip.c
 
 between commit:
 
-  826da771291f ("genirq: Provide IRQCHIP_AFFINITY_PRE_STARTUP")
+  56707bb845f5 ("genirq, irq-gic-v3: Make NMI flow handlers use ->irq_ack()=
+ if available")
 
-from the tip tree and commit:
+from the irqchip tree and commit:
 
-  e0c1a5b24f5b ("genirq: Add chip flag to denote automatic IRQ (un)masking")
+  ef62bf7e92d8 ("irq: abstract irqaction handler invocation")
 
-from the irqchip tree.
+from the rcu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -79,49 +79,50 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/irq.h
-index c8293c817646,0b45e42812d6..000000000000
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@@ -569,7 -577,7 +577,8 @@@ struct irq_chip=20
-   * IRQCHIP_SUPPORTS_NMI:              Chip can deliver NMIs, only for roo=
-t irqchips
-   * IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND:  Invokes __enable_irq()/__disable_ir=
-q() for wake irqs
-   *                                    in the suspend path if they are in =
-disabled state
- + * IRQCHIP_AFFINITY_PRE_STARTUP:      Default affinity update before star=
-tup
-+  * IRQCHIP_AUTOMASKS_FLOW:            chip->ack() masks and chip->eoi() u=
-nmasks
-   */
-  enum {
-  	IRQCHIP_SET_TYPE_MASKED			=3D (1 <<  0),
-@@@ -582,7 -590,7 +591,8 @@@
-  	IRQCHIP_SUPPORTS_LEVEL_MSI		=3D (1 <<  7),
-  	IRQCHIP_SUPPORTS_NMI			=3D (1 <<  8),
-  	IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND	=3D (1 <<  9),
- -	IRQCHIP_AUTOMASKS_FLOW                  =3D (1 <<  10),
- +	IRQCHIP_AFFINITY_PRE_STARTUP		=3D (1 << 10),
-++	IRQCHIP_AUTOMASKS_FLOW                  =3D (1 << 11),
-  };
+diff --cc kernel/irq/chip.c
+index 1b1171113437,804c2791315d..000000000000
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@@ -768,11 -744,6 +768,9 @@@ void handle_nmi(struct irq_desc *desc
  =20
-  #include <linux/irqdesc.h>
+  	__kstat_incr_irqs_this_cpu(desc);
+ =20
+ +	if (chip->irq_ack)
+ +		chip->irq_ack(&desc->irq_data);
+ +
+- 	trace_irq_handler_entry(irq, action);
+  	/*
+  	 * NMIs cannot be shared, there is only one action.
+  	 */
+@@@ -1050,13 -954,7 +1044,10 @@@ void handle_percpu_devid_nmi(struct irq
+ =20
+  	__kstat_incr_irqs_this_cpu(desc);
+ =20
+ +	if (chip->irq_ack)
+ +		chip->irq_ack(&desc->irq_data);
+ +
+- 	trace_irq_handler_entry(irq, action);
+- 	res =3D action->handler(irq, raw_cpu_ptr(action->percpu_dev_id));
+- 	trace_irq_handler_exit(irq, action, res);
++ 	handle_irqaction_percpu_devid(irq, action);
+ =20
+  	if (chip->irq_eoi)
+  		chip->irq_eoi(&desc->irq_data);
 
---Sig_/6MXXdDGQQ9QpBXODW_PZJr8
+--Sig_/=uvqPWeJ74d2Yakz0UbedBA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEV5wUACgkQAVBC80lX
-0GzhMgf+IScAkgu7IvG7Z5P1zMiFHWZm76O4c6aYULO+WtofBybS8OWwECLZepnR
-hH+rpVO9GWLQCp0VQ3n37KcKGTn0quIMGF/HeEfdzpwKyhjphjHVsclt7Ngyxlip
-0KrWzy47g2GDcfmbLYXvid0nki4vNmznYbnLXGsJQGlG6uDWRsz8fYLCIoZ4QHw/
-+Nmj/2Y7tKuOnJ1q9jrH9Q6ZEALgJPuLK1Y0ZoT1JMSFbpULIGanlb6nfxCaEf28
-NXKknpYUheqdd7OGhVAJrDF/cg/HQfZjJwlR47cR4HOYDP8RKLAg99hj6P3gzDZm
-jedYqUNGkbIZ3hZ1lRpbwXHGLKLAiQ==
-=gUiH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEV71UACgkQAVBC80lX
+0Gyk0wf+L0+zjg919lDdSyljZkZ/CLIR+rtB8a6UjIiaQ7PeV8wIkjTcRCMWmL4U
+yJXf8DdrbbW+8N3W9mBNntmImkkZx+t5z9V3IIYugSVJsfcRo3H8uGpSvvkN6d6e
+Ffa3mbkO3djoUVZCe332gu1tPJm8Foe6i/OaXCrZ/G4rSH+U87ILVNqE2Ak+KFFZ
+y6IZDXHLQ+CiaK0HzOE4C2L7Jf+gFmlwGyqFWFfhJeyV1EViLilcrM2l3ef70Hif
+rUzu6ItiHb3M1nm+V/hZwGYtgYKZYO7ipjd5T8rhU7XYtL6f3DzJB9Gv2YwBVSI8
+j4HtBxwSPKNKmgwsJMV/Uw1r+FEfFQ==
+=FTyI
 -----END PGP SIGNATURE-----
 
---Sig_/6MXXdDGQQ9QpBXODW_PZJr8--
+--Sig_/=uvqPWeJ74d2Yakz0UbedBA--

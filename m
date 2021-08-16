@@ -2,81 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB443EDFB6
-	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 00:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1683EE077
+	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 01:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbhHPWJC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Aug 2021 18:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S232726AbhHPXbs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Aug 2021 19:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbhHPWJB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Aug 2021 18:09:01 -0400
+        with ESMTP id S232795AbhHPXbs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Aug 2021 19:31:48 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AA7C061764;
-        Mon, 16 Aug 2021 15:08:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C89C061764;
+        Mon, 16 Aug 2021 16:31:15 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GpSwT2QCfz9sRf;
-        Tue, 17 Aug 2021 08:08:25 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GpVlv3BLjz9sSs;
+        Tue, 17 Aug 2021 09:31:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629151707;
-        bh=8q8aIwaUFH6ZOWfn7eInIolS8NOorpSDnLwylTkBT1Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=isSiPnR9q9IEFCAu+LSGBm62u9fx4lm3HTA6w7tHmKLMwqkw6E2AWWU1s+xChfTIB
-         MfpSA7hRpzbQowif5lQBQCtsbGDyDQPATg9H7qWpneYR6e+HGd9+XHXqh8lXDjNDkX
-         g1p+navToKSAA/sRFZiAwKe4FChJN5VkCxk/6S6iCYUvxPoVMsxOVUGpUwBmEf8ONL
-         kP/xyT6SA1iKZ/A4m95iQF5wfiRxicJ6kMQQ/1nBRwdpaAxhGWdCC3CsTJsKj4ZqBI
-         4vgvxP9ExpkWVsa6jBL+s6PHW4DOCMHgH4mZ6fSEPcjPdTY0SvY0HA0Z6c4EZhJIZs
-         hbGICcG4b/+hQ==
-Date:   Tue, 17 Aug 2021 08:08:24 +1000
+        s=201702; t=1629156671;
+        bh=YNKagkj0w/Z++HsJavgR0XFe1f9k+nbxF7Wm/gC5leI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qwaFCj6LZXVowpxBWVQ6QRGhHhCHd4Wt30bJZHKDZ+RhKkKQyGLt/7gvrG4U4a1+r
+         2ePq4Ju/IxqIiOZxpye2m7gctbE1pGDLSPPo1ouxcL9OOEQR23sH01tX/YIHwWEZ3a
+         7ruxfa55NS67Lfq/uwqFjrXqKz2eD4eePW3FS6xVEXjN5YjPAIgZDCwAkvwGf3Mz/p
+         0CInUHoMocvgilAT7W0VDiq/AoyXKoQ+f8XxIEQSt9JrzVaZy3zlt8tQuvdIiOSYzt
+         xHPBYNoi+SwSwg5ATMflaK7aBbFi50r8LiPy6VLxwrh64BIS58HRBXC/puRkU3t1EQ
+         /6OHqwgUtaMxQ==
+Date:   Tue, 17 Aug 2021 09:31:06 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Jaime Liao <jaimeliao@mxic.com.tw>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the nand tree
-Message-ID: <20210817080824.7fa1ee3b@canb.auug.org.au>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kbuild@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, lkft-triage@lists.linaro.org
+Subject: Re: [PATCH] Makefile: remove stale cc-option checks
+Message-ID: <20210817093106.71315de3@canb.auug.org.au>
+In-Reply-To: <CAKwvOdkckey1=VUHApTcJYufyhdRJ=jb4qYs52f59g6ha7qphw@mail.gmail.com>
+References: <20210810204240.4008685-1-ndesaulniers@google.com>
+        <CA+G9fYtPBp_-Ko_P7NuOX6vN9-66rjJuBt21h3arrLqEaQQn6w@mail.gmail.com>
+        <CAKwvOdkckey1=VUHApTcJYufyhdRJ=jb4qYs52f59g6ha7qphw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FmjS8eLZ5U_dSYeHMN9/3Fq";
+Content-Type: multipart/signed; boundary="Sig_/toHh=u=Y5SRXotU7RVYPv46";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FmjS8eLZ5U_dSYeHMN9/3Fq
+--Sig_/toHh=u=Y5SRXotU7RVYPv46
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+On Mon, 16 Aug 2021 11:37:23 -0700 Nick Desaulniers <ndesaulniers@google.co=
+m> wrote:
+>
+> Thanks for the report. Andrew has dropped the patch from mm-next.
+> Looks like it's too soon to remove build configuration tests for
+> -mfentry.
 
-  c26b316307ff ("mtd: spinand: macronix: Add Quad support for serial NAND f=
-lash")
-
-is missing a Signed-off-by from its author.
+I have removed that patch from linux-next today as well.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FmjS8eLZ5U_dSYeHMN9/3Fq
+--Sig_/toHh=u=Y5SRXotU7RVYPv46
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEa4dgACgkQAVBC80lX
-0Gy0GQf9G9xGYzVh/7zOd7pspeZvjwihIl4asCbj1imW0HwWhMXBxR42TF27cj9d
-O/lOG5MZVn0U2dINXn6gQ6M5meMzIb4QC9/bJ6uYjzdFumiMrzodoh51LhQC0VdR
-xRXtgXFcQMEWvf5OULISXq6TEv9Zi8agjGxWPnRRjP1+3u5sJ/Vk+7jFra1cyQrD
-TWzccT30c6GREYQ9zbNdRjnceeZReTAha3QJf4o7NluUea2Fd6uAS6VcZWT4p8Tf
-sP+8wVwdXFJ0J31CkZsTx1N9kWfoC+mHu+QDtXwwjfr8LLSsWMzVVTVNIB9emrt1
-Qvrec05GBxXe214V4GmwP5DrGok4kg==
-=l/ZP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEa9ToACgkQAVBC80lX
+0Gz05AgAjSG4Pl77aQUWuGOgD5vrAWBc0gyQxvGKP9TvCVvqg3/6IuAVsDLAdt2o
+ONLNxA2MFYJofy7nCniBnh8g46GqKvFKYLhwg8U+/5IU2Vn8NX47d5TKzgyxFWVh
+/LJkkh5+tUewDJUsNWVxpS6wPbGwkjaBSaKbZlO3ITvaW3yC8Aqm2xPOC1JBn1at
+yQ4eEkhgVGH8g7RWZQXAY87XTYTDZV5LaTagpfpHyHKKmnrImKmeF7ywVJQsl+d/
+U4+lLyhDkXHAicjzJKHf/GQAcnnNfjO7IR1PQ3aIpJLmuZHsW0JWp+wiJUFpC5D0
+78VWXdohr5V59k49ztdUqKeT4S7jVw==
+=d2l8
 -----END PGP SIGNATURE-----
 
---Sig_/FmjS8eLZ5U_dSYeHMN9/3Fq--
+--Sig_/toHh=u=Y5SRXotU7RVYPv46--

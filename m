@@ -2,49 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD2D3EDFA7
-	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 00:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB223EDFB3
+	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 00:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbhHPWFX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Aug 2021 18:05:23 -0400
-Received: from ozlabs.org ([203.11.71.1]:47621 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232488AbhHPWFX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 16 Aug 2021 18:05:23 -0400
+        id S232419AbhHPWHd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Aug 2021 18:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231707AbhHPWHc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Aug 2021 18:07:32 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4436EC061764;
+        Mon, 16 Aug 2021 15:07:00 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GpSrK4FqCz9sT6;
-        Tue, 17 Aug 2021 08:04:48 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GpStn6CPzz9sVq;
+        Tue, 17 Aug 2021 08:06:57 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629151489;
-        bh=C+bMqHlDd3mBl6TZcdPBNIEFp33RdS/NB1JqWmH7QW4=;
+        s=201702; t=1629151618;
+        bh=qAT+0iV/LPEzNzYxGXkFe9N0tg2WfZPWfSMMZwA70w4=;
         h=Date:From:To:Cc:Subject:From;
-        b=hexlHDVINemkUZwjrFSORfDD/yem7jhWosAMHfmMiGsMdGA4oPK7001XazFDQ6iqB
-         SOMP9BRcmQU8YXVnNwRrK6+2djEPp14gLfrafPl3fQWZdLzhqsFbSzDuLdvrloINxv
-         nvGLYBgWVkvnQK2559szifSyYJWQtVs5Na3M7bbKndowXpM+q18MwTednryEjtk1QH
-         0pmLLziGY9QYYMv0vd4LnEQrsRJA/qyESidjvrz8C/WV2ldWl3Duw6BvjchuHwHvl3
-         Qo4Kn8pz/SH5YqiIK7Wni1Okag4gNlcavI9t3CV+s7AQkIlU7s9NK3FcnmZT+gHwyw
-         VNens9bSLmPIg==
-Date:   Tue, 17 Aug 2021 08:04:48 +1000
+        b=a4iNgDmcTc8TBx8yel49AS6vVEuZ4UJqRdlF+jc1AmXiCozdEkwXUpxw3dTHcD6zk
+         SUhAH3bbk/H5cLU2nZ5QY+GmRCRQSPhXBeUTVKwno7ziJJN1kjg8cvoMX+mGDv8SGa
+         1nvroJzMDGpINuG4ig0bFfuPVF5LH1+TglnHHIW7cD3Ff0nw+xh0z7NL4Umx1eUGDX
+         M43R/dPoTGtxR/9Brn7HmqRsrzHJJIQbiiX437pIan4YIn4lKu/c01qavq1t1R0IPG
+         7zvWF91wwT8lkwbyqey3/XXkUsaS0+kLgikGwLUgOznteCNYX1jF5zpH4XxQUX3w0k
+         3V2shB4SDH5AQ==
+Date:   Tue, 17 Aug 2021 08:06:57 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Juhee Kang <claudiajkang@gmail.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net-next tree
-Message-ID: <20210817080448.3bc182c0@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the mtd tree
+Message-ID: <20210817080657.771be36b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FPTHqf3kHb5g/Zb=s.4afe1";
+Content-Type: multipart/signed; boundary="Sig_/H_/qB+baDRPW9H1v/HQfSvZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FPTHqf3kHb5g/Zb=s.4afe1
+--Sig_/H_/qB+baDRPW9H1v/HQfSvZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -52,75 +53,37 @@ Hi all,
 
 In commit
 
-  175e66924719 ("net: bridge: mcast: account for ipv6 size when dumping que=
-rier state")
+  e128bf2f39da ("mtd: mtdconcat: Remove concat_{read|write}_oob")
 
 Fixes tag
 
-  Fixes: 5e924fe6ccfd ("net: bridge: mcast: dump ipv6 querier state")
+  Fixes: 2431c4f5b46c3("mtd: Implement mtd_{read,write}() around ...")
 
 has these problem(s):
 
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 85b410821174 ("net: bridge: mcast: dump ipv6 querier state")
-
-In commit
-
-  cdda378bd8d9 ("net: bridge: mcast: drop sizeof for nest attribute's zero =
-size")
-
-Fixes tag
-
-  Fixes: 606433fe3e11 ("net: bridge: mcast: dump ipv4 querier state")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: c7fa1d9b1fb1 ("net: bridge: mcast: dump ipv4 querier state")
-
-In commit
-
-  0f0c4f1b72e0 ("samples: pktgen: add missing IPv6 option to pktgen scripts=
-")
-
-Fixes tag
-
-  Fixes: 0f06a6787e05 ("samples: Add an IPv6 "-6" option to the pktgen scri=
-pts")
-
-has these problem(s):
-
+  - missing space between the SHA1 and the subject
   - Subject does not match target commit subject
     Just use
 	git log -1 --format=3D'Fixes: %h ("%s")'
-
-Also, please keep all the commit message tags together at the end of
-the commit message.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FPTHqf3kHb5g/Zb=s.4afe1
+--Sig_/H_/qB+baDRPW9H1v/HQfSvZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEa4QAACgkQAVBC80lX
-0GwPHQf/edmNwjEUGgr8fwH4EjRTrR7gDlefW2JOHXJqlm/VQ2qh++WExnoL69YH
-40ZxoT2fRHFuMX7V78tldmImVUElqcwg9s0pQpTJeV3QsCIU91pSyk9xXfu7fUrb
-8756ociN54+SbLZgQ+Ds4YZ6/37Fv6sZdGXKvFHe0q2yIGPb90Z3MD8GrAzEMA1q
-DQpGMjCHKxsDCEG8MSiDyLccVCzetTfJyWaUUcuP0wUdNf27SZtNz2fGlvlullXP
-VjXb5ayF/ClOZCUj/Zk0uMYnbvM+1KRBuRBclGHuuDPRmxHZcafyr3aCeNr2jqlr
-PR63HSiRP1E487p9iaW3C1/xT8pGmw==
-=67Xo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEa4YEACgkQAVBC80lX
+0Gxq0wf+NzuVFEpFMioD0ey+b4ouyPSmZqKyGYiIhklgwBZP7/CIP4h362Wi+Udw
+FGiZXPBtYOFg/V61f9BPyVQykeHoFihQW1Nu5NYMwabl3d4uj1bNFUS6B/AO+eiK
+JBK13QKJyywTBLRlwVI7lN4CBLU+sD8adC6ajnjtDFngq8WPtYgy/hRE3OQbOLcn
+JTCjthX8nvwK5Lj/x4d9gXZqqcH0NJvvZuGFS8WW12bR/sVgNt9HC0YnfYL1B8Ul
+OqcE1FKnIzgmbkkcwrVXLTEHMH5L1uKz8/f/jdjWs7WbSvL0IboFikRGC1sB8+LL
+MuupJCFSIivaAuepsd3vZv2IOiAY6w==
+=ZEHA
 -----END PGP SIGNATURE-----
 
---Sig_/FPTHqf3kHb5g/Zb=s.4afe1--
+--Sig_/H_/qB+baDRPW9H1v/HQfSvZ--

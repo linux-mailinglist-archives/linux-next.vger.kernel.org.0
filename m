@@ -2,47 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86BD3EF548
-	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 23:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504A83EF551
+	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 23:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbhHQVx0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Aug 2021 17:53:26 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44385 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235384AbhHQVx0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Aug 2021 17:53:26 -0400
+        id S232564AbhHQV67 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Aug 2021 17:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230381AbhHQV66 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Aug 2021 17:58:58 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454A9C061764;
+        Tue, 17 Aug 2021 14:58:25 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gq4X30qyxz9sVw;
-        Wed, 18 Aug 2021 07:52:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gq4fP1vf8z9sWd;
+        Wed, 18 Aug 2021 07:58:21 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629237171;
-        bh=NgaKXsEwN908HSee+oELBPDTqhLBPCGeU/n4p93/2sY=;
+        s=201702; t=1629237501;
+        bh=XIFY2/pnbFMynEgdVDaDlRg7mIPeme4ip3ceBUCsuVo=;
         h=Date:From:To:Cc:Subject:From;
-        b=CU5M/9upO+HZtMt4HQcPU1U6ddCGm/FVrywNCzTgKsnSvnPFO/eNf8kXwhGU+q0Qp
-         hp7FwnKRUcfiz/DTEijas6QbDINcC87VlzafGoXFhP3sO1BTH9HPYvRDCdQCKnXi8U
-         jMDg0bUxgibFsPwqYCq1Ok6byVaPQmWu4sybczb2akGwNId2elqHmgybWJhTVq8k3b
-         +/SSsbN7+s0aHZPmj3WdCI9sfd23Ybl1IrhDwcyRjF3oH6COuhUJ0fu0UNlBfiojDv
-         hWLqZA2gPNboKALcpuj0NF2Q+PFsd8Z8VmYSSk04Sd3PtmCChvCjEixyizKV3zuXk6
-         45pJGHpUPbj2w==
-Date:   Wed, 18 Aug 2021 07:52:50 +1000
+        b=ae4bhMiU6WKqn4nD41H6YooaFZVRy5qIJPCSrQF8lz4cYUlpmXa7ACUKUPyjW6wHv
+         k5xUtBjBzOuaydNKebHiQvRq4FxLQBu1bL549jNABStXLwqT0bK98hNkdtX9E3IEEb
+         WYsvQ9GcO6JW21Btz02vMJ/SwBHHfFdnLOSV0ztuynZZYPN3lyZPUhZ7ovLbwcEJa6
+         gxtnHcmboZQlita/pkhHZnbw91fVSu4uk5pAxUVvLNA5ZPRaTAtFPLDHVLuvbr6A01
+         0rCGHrogxHu2HVHrIIqC3s4jx7tUAOFNAZSZT5rs5ygjQZlYmjjs1s/t6uXYjK4/nV
+         R4Z+BgOzubRaA==
+Date:   Wed, 18 Aug 2021 07:58:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the i2c tree
-Message-ID: <20210818075250.08a593f1@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the mtd tree
+Message-ID: <20210818075820.702c0230@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UTePGFdnAmFi0gV.lLgtBa2";
+Content-Type: multipart/signed; boundary="Sig_/DcfiD+SSadF9cjPzubCI50s";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UTePGFdnAmFi0gV.lLgtBa2
+--Sig_/DcfiD+SSadF9cjPzubCI50s
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -50,11 +53,12 @@ Hi all,
 
 In commit
 
-  eef7fa1001c0 ("i2c: iop3xx: fix deferred probing")
+  a89d69a44e28 ("mtd: mtdconcat: Check _read, _write callbacks existence be=
+fore assignment")
 
 Fixes tag
 
-  Fixes: 489447380a29 ("handle errors returned by platform_get_irq*()")
+  Fixes: 2431c4f5b46c3 ("mtd: Implement mtd_{read,write}() around ...")
 
 has these problem(s):
 
@@ -64,27 +68,27 @@ has these problem(s):
 
 So:
 
-Fixes: 489447380a29 ("[PATCH] handle errors returned by platform_get_irq*()=
-")
+Fixes: 2431c4f5b46c ("mtd: Implement mtd_{read,write}() as wrappers around =
+mtd_{read,write}_oob()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UTePGFdnAmFi0gV.lLgtBa2
+--Sig_/DcfiD+SSadF9cjPzubCI50s
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEcL7IACgkQAVBC80lX
-0GzaXwgAg2yWd8OgeOCnYDWSLCChAh+6XteAgEFcQB/ksr7v3MWvm82Q93YpCSF8
-LtL61xpEiwwxsW+NvZkXl8kTZeUdNzxQrDARJTB1i+MTDFW9q3rZiCk7jGNKI63m
-SNxSWIF+Fg1WlEPaouVUnEWUrZ7SNc9qFAlfG/IdPohpRvu6Ro+URFDR4/dpId+A
-wFQsKRGbU5fRSHTEHDH1DBfl7Pzk04PPUWB3MBCAKQWGUmc+PuSyTZWqwtoaTxdJ
-dYL43dutWS9ZkvgdhPjp1ICScceDn2KMDzN/ogovInUVO3Us7Dgkh43udKj4ylek
-xF93wasDc16GlXA4g33H10gGNEdSnQ==
-=Ng5Z
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEcMPwACgkQAVBC80lX
+0GwwGAf/d0E+EmQXR2/1WpmHAMmcQMPGMGAhnfGDskNfjWZAuvKC674Z5DYz5h1r
+ctF8n3KNAYBB6VzYLFlt5RZEhbpi6hQhym8x2Blp3Yq6jwc3GkbxexApnL8kt3SY
+1uoNGuqQKy+hkZVzrm51yC3E24GMLFd5qpjR/kR/nFrO3l529gKzPLkTASqfOjLn
+f1hmY/a47HVCzCfdjVlLQqIy593mkOBnHsFvueej2LLcAOUW1zVNIOydLWQJaWc+
+EraApst4KvsXohvuW/jWrRY711uq3lXUPMMdIHNqD9sEdfkiljBAoIIIF69sAPga
+H/yPIdFQCHtfI7UdbmHahAMkhqu0Dw==
+=lDZN
 -----END PGP SIGNATURE-----
 
---Sig_/UTePGFdnAmFi0gV.lLgtBa2--
+--Sig_/DcfiD+SSadF9cjPzubCI50s--

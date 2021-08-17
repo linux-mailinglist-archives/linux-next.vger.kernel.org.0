@@ -2,84 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BEB3EEA4E
-	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 11:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AD33EEA85
+	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 12:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbhHQJwX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Aug 2021 05:52:23 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3654 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbhHQJwW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Aug 2021 05:52:22 -0400
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GpmW25HqVz6CCR8;
-        Tue, 17 Aug 2021 17:50:54 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Tue, 17 Aug 2021 11:51:48 +0200
-Received: from [10.202.227.179] (10.202.227.179) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.8; Tue, 17 Aug 2021 10:51:47 +0100
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <20210817194710.1cb707ba@canb.auug.org.au>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <c27c2909-1701-b972-dd7c-98bdc53ab8f9@huawei.com>
-Date:   Tue, 17 Aug 2021 10:51:46 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S235588AbhHQKFw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Aug 2021 06:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239342AbhHQKFp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Aug 2021 06:05:45 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8FC0613C1;
+        Tue, 17 Aug 2021 03:04:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GpmpN6Zl8z9sRK;
+        Tue, 17 Aug 2021 20:04:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1629194656;
+        bh=a5vBp05i0w+6dipIg/OspEpX80RBiZzeW3gLpgTDYE0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=K736wvBQAeOMYhW10/5rrjSZ0i3XBaHadyADeMa2KvCD2r6N/rLWEo9FSRtlzKfQz
+         BRjjB5VkmBqeueLPuU2RTI71bUN36yjPlWKUF+00I5he1RhxoVsf+/gqb3YD9ObWEG
+         KH/qhzZASWAD8DbSi/dEUjaTcKvxRQe2NO1jNwr6QoZRN8qxXsJu8ZjrfxX1CmF8Tl
+         6g1qkZ60QIkNLf0V7FRxt19aqS8J7SF2pzl65OUytMpx7nYmMbEYHU7jMrHKf/Ukx5
+         JgmMFFjdCWnUuuv+9SHt9VA4lOqzSix0R2io4NA+lhUI4lNK2EQV/BI77QUdwSV+P3
+         685o3HSsupGAg==
+Date:   Tue, 17 Aug 2021 20:04:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Jianqun Xu <jay.xu@rock-chips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the pinctrl tree with the irqchip tree
+Message-ID: <20210817200412.799bd992@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20210817194710.1cb707ba@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.179]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="Sig_/Hk5d0=.3ZZ3m5bQKIuoxfeR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 17/08/2021 10:47, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the scsi-mkp tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> In file included from include/linux/byteorder/big_endian.h:5,
->                   from arch/powerpc/include/uapi/asm/byteorder.h:14,
->                   from include/asm-generic/bitops/le.h:7,
->                   from arch/powerpc/include/asm/bitops.h:265,
->                   from include/linux/bitops.h:33,
->                   from include/linux/kernel.h:12,
->                   from include/linux/list.h:9,
->                   from include/linux/module.h:12,
->                   from drivers/scsi/ibmvscsi/ibmvfc.c:10:
-> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_queuecommand':
-> drivers/scsi/ibmvscsi/ibmvfc.c:1959:39: error: 'struct scsi_cmnd' has no member named 'tag'
->   1959 |   vfc_cmd->task_tag = cpu_to_be64(cmnd->tag);
->        |                                       ^~
-> include/uapi/linux/byteorder/big_endian.h:37:51: note: in definition of macro '__cpu_to_be64'
->     37 | #define __cpu_to_be64(x) ((__force __be64)(__u64)(x))
->        |                                                   ^
-> drivers/scsi/ibmvscsi/ibmvfc.c:1959:23: note: in expansion of macro 'cpu_to_be64'
->   1959 |   vfc_cmd->task_tag = cpu_to_be64(cmnd->tag);
->        |                       ^~~~~~~~~~~
-> 
-> Caused by commit
-> 
->    c7c43e3c7147 ("scsi: core: Remove scsi_cmnd.tag")
-> 
-> I have used the scsi-mkp tree from next-20210816 for today.
-> 
+--Sig_/Hk5d0=.3ZZ3m5bQKIuoxfeR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-sorry... I only built x86 and arm64 allmodconfig. Let me check this.
+Hi all,
 
-Thanks
+Today's linux-next merge of the pinctrl tree got a conflict in:
+
+  drivers/pinctrl/pinctrl-rockchip.c
+
+between commit:
+
+  a9cb09b7be84 ("pinctrl: Bulk conversion to generic_handle_domain_irq()")
+
+from the irqchip tree and commit:
+
+  9ce9a02039de ("pinctrl/rockchip: drop the gpio related codes")
+
+from the pinctrl tree.
+
+I fixed it up (the latter removed the code changed by the former, so I
+did that) and can carry the fix as necessary. This is now fixed as far
+as linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Hk5d0=.3ZZ3m5bQKIuoxfeR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEbiZwACgkQAVBC80lX
+0GzAbAf6A+vnqy0crTp/QZiL6Xjw4grziQBJCjgtIDxS7BFqhnc5ls74lS3Wy070
+q2goxA6C34fX3QAAfVFPJ81Gs6kv+5fIxWwKhnmHPVSGY+2b0hn0WjPzkrF2Jt3t
+h/pr9/AA3CEuym7kccPEsZ7GqSDLjFi4SO3aaG/nSGSHIwvQtU7ekDVnVBPfvZw2
+NENUQ46TQVOa3Odf/IT0/Sr7kc6BMuZ1JLXqDI+JPrTxHgYIkfj7KNQfaM7zOVgq
+FeLwOlijtyUO/bnSxmpNoInnxgCs+NCwhJde7trzD0E4RmOIftecN3i9bISrIxup
+8eok8uLCu6fWicQVD+UjcA0zWCOTeQ==
+=uzMx
+-----END PGP SIGNATURE-----
+
+--Sig_/Hk5d0=.3ZZ3m5bQKIuoxfeR--

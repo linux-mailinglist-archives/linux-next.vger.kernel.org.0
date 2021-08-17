@@ -2,84 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D38DB3EF078
-	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 18:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADE43EF089
+	for <lists+linux-next@lfdr.de>; Tue, 17 Aug 2021 19:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbhHQQww (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Aug 2021 12:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbhHQQws (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Aug 2021 12:52:48 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40668C061764;
-        Tue, 17 Aug 2021 09:52:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id bo18so118515pjb.0;
-        Tue, 17 Aug 2021 09:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VuDVWeaacBi4+S4E/LejbeI0CDzECNWHqSgpMOyPIpg=;
-        b=YTkuegwEbZ31QHY4ZA+2agQjkeGepaWco+GHBI+EnFWRjMcmdQEtblSU/haFgvcx2M
-         cboSKfHdoRUP0UEsCrn8Fg2iBdvrWvzNBY06cF9POnBAETEmKjISX45YG1IXfUK+rECG
-         QMKbg5lXlVnAgnHPsHz4DvgpzYAlD3go+FiffzNS27M3vpN/GBE54i8ZNrMlHruFyjNz
-         nCEbp1IpTUoxA6KoXRGQsTHAJyUqnasdgTjLyZENoqj+VbKB1810V4ZNfL7ffjmelrCj
-         Bxi89Ya8EtU0WgijQWfC3gsXMqrLWqAWOKJ1BWLFwnXRQuGarUF/kuH7nxU72OWb362Z
-         3AMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=VuDVWeaacBi4+S4E/LejbeI0CDzECNWHqSgpMOyPIpg=;
-        b=d9/i3XfHoR5JS1y6kz6kH6V08AggEycYV+vEp8JOYIPYJryi9V9GhnT9GH4yPNPULw
-         ffgNWVp9zWnYR54DKwOU7dKLEvwnK/d3JANlWou7hSihBXlHnlws/wVDFeQ1j8PYymk/
-         UHymxhoWbNvCImkfUieFRMnW+HbVBZum68Be4eqwCkw3RPKdWfU1aoT7ZIiL1ocRtUnv
-         gwJqCcUzw82+VjniG5ok/GYxxDxyD4GodJxGF+Ih5V15kPSy1rvhhqY3zeqphhaku8d3
-         wBRiwcBEx+HlJeYStcR0zqAw+uHwzuibSKBXGoHJGJ3Oeu8gfwfITEtvESHjcVtjvPF0
-         3b/Q==
-X-Gm-Message-State: AOAM530mkLo9kQm8ckvL4fEQSXL0hWaa6nz76TRalZraoI8g+nMKkOTr
-        l5gHdZtycZQ5Ef21FMcyFu8=
-X-Google-Smtp-Source: ABdhPJzOd/zAD0NcJwpD8LXFYtET18icT1DbEiSv/DK02//D72xmr6ha62x4uXhueGSYCoQvFRiW/g==
-X-Received: by 2002:a17:90b:3ec3:: with SMTP id rm3mr4327987pjb.7.1629219134617;
-        Tue, 17 Aug 2021 09:52:14 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id w18sm2915748pjg.50.2021.08.17.09.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 09:52:13 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 17 Aug 2021 06:52:11 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>,
+        id S229723AbhHQRCT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Aug 2021 13:02:19 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:19796 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229699AbhHQRCS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Aug 2021 13:02:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629219705; h=Content-Type: MIME-Version: Message-ID: Date:
+ References: In-Reply-To: Subject: Cc: To: From: Sender;
+ bh=LYwT4eDRj2JiICfdihGDs8jIqG9wwZd/0YayCwFiVtU=; b=BnFEQM9SEkEC4sn5/262/zzk16SWlDyZzHF1jnI706v6r5Fj+fLzeDFxACksG82akNkN3kzf
+ Y/0p6P98tjDxpM1n0iBI4l1s1ia+GSk4/4gohlgQnt70o6YMNQ2PlbSBbXdxWEiKA4aOp5N3
+ lK3HKCRilhcd7zFoG17um8y9Jzc=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 611beb65f746c298d9b1f585 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 17:01:25
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C28C9C43617; Tue, 17 Aug 2021 17:01:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from tykki (tynnyri.adurom.net [51.15.11.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CA75AC4338F;
+        Tue, 17 Aug 2021 17:01:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org CA75AC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Chris Down <chris@chrisdown.name>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with Linus' tree
-Message-ID: <YRvpO8Cuk0nAfuVd@slm.duckdns.org>
-References: <20210817152547.70af4cfe@canb.auug.org.au>
- <YRvmZ77w6zeG4BrU@slm.duckdns.org>
- <20210817165020.GA18069@lst.de>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: linux-next: manual merge of the wireless-drivers-next tree with the printk tree
+In-Reply-To: <20210809131813.3989f9e8@canb.auug.org.au> (Stephen Rothwell's
+        message of "Mon, 9 Aug 2021 13:18:13 +1000")
+References: <20210809131813.3989f9e8@canb.auug.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Tue, 17 Aug 2021 20:01:16 +0300
+Message-ID: <87bl5wf1k3.fsf@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210817165020.GA18069@lst.de>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 06:50:20PM +0200, Christoph Hellwig wrote:
-> On Tue, Aug 17, 2021 at 06:40:07AM -1000, Tejun Heo wrote:
-> > Ah, that probably isn't the right resolution. The seq_get_buf change needs
-> > to be applied to the original mq-deadline.c file. Jens, how do you wanna
-> > proceed?
-> 
-> Unless I'm missing something the pd_stat_fn that is affected was purely
-> in the cgroup addition, so this resolution looks fine to me.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Ah, you're right.
+> Today's linux-next merge of the wireless-drivers-next tree got a
+> conflict in:
+>
+>   MAINTAINERS
+>
+> between commit:
+>
+>   337015573718 ("printk: Userspace format indexing support")
+>
+> from the printk tree and commit:
+>
+>   d249ff28b1d8 ("intersil: remove obsolete prism54 wireless driver")
+>
+> from the wireless-drivers-next tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thank you.
+Thanks, the conflict is trivial enough so Linus should handle it without
+problems.
 
 -- 
-tejun
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,131 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE2D3F0FDC
-	for <lists+linux-next@lfdr.de>; Thu, 19 Aug 2021 03:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325793F122F
+	for <lists+linux-next@lfdr.de>; Thu, 19 Aug 2021 06:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhHSBNw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Aug 2021 21:13:52 -0400
-Received: from ozlabs.org ([203.11.71.1]:35979 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234194AbhHSBNv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Aug 2021 21:13:51 -0400
+        id S229505AbhHSEG1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Aug 2021 00:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbhHSEG1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Aug 2021 00:06:27 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E3CC061764;
+        Wed, 18 Aug 2021 21:05:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gqmwp5lvzz9sW8;
-        Thu, 19 Aug 2021 11:13:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gqrlt6mn7z9t0T;
+        Thu, 19 Aug 2021 14:05:46 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629335595;
-        bh=7u0wdeh6ACq9jBfGv825le5pDJKccJA0CgcBvvgek88=;
+        s=201702; t=1629345947;
+        bh=oHNkM81S5CrlSrOU/9DU4r+0TWJTGhKDC6cl+R4nFfE=;
         h=Date:From:To:Cc:Subject:From;
-        b=sRP8PVYDGoxrDH2BQ48Lk0XAa0un4jljv1UPj40lcg44TZg6ahY/0F2qmLK0u8+nU
-         eI9sYc49udwlrUpw+y0J9kDf3S1gsAm1moTfZwKnAWTxlU1N5YSigJ/WXtyTCM/ieZ
-         S+S0PVHTEe0JXIG0CtQ6Qy9jW/aQy3Rf6Ya/i2ki1JNqk4SVA0xLUoXhaNNuVAUqBP
-         F2EcjDbX+KWij28w1JI76m4kwcZleUOSWYQ174Hxgv8RuvBnkPegKw9eP5bo6MuEUc
-         OFgo5TwXBj67ESR/tSIpuyhPTe7+Gf7q+JH9GjFVbAA1NbADoJsv8qICY5eqRlQqHC
-         FxopVVQBSp6MQ==
-Date:   Thu, 19 Aug 2021 11:13:12 +1000
+        b=h0TWi4KDudbGqZ8bsUfMlTuuyRmV6jjBdxENTn9m3IuwxYGfiLmeJY61PpHAzSC84
+         egb9m+8n+saRYaJ9Fjbc4e92mj5pbU1nelwrIpyz1R2hNVsigum1i+A8UsCGuBueHz
+         +1lWBy9j5Ec5yndVJbhtzt6xAWc3WtqkO4AtWEL4WyRiQP7+r9CSDxGNRH2qilhPNa
+         G8ecIgbU5fvr7ZYPwg/ciKpvU3D/R+lgb1oxP56T0nm5Q4bBi1ku0wy5+6LzTw6S6w
+         VB/zgyGF9utk4xwEQsB9JlDaxtBo++oskXYqF5OMGozGWcCEuOSav1UROPqex012jG
+         0ydErujLGr/aw==
+Date:   Thu, 19 Aug 2021 14:05:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Claire Chang <tientzu@chromium.org>,
-        Konrad Rzeszutek Wilk <konrad@kernel.org>,
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the swiotlb tree with the dma-mapping
- tree
-Message-ID: <20210819111312.697fc48f@canb.auug.org.au>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20210819140544.5acbcf21@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0mLg.F44icl/ZW12lEmMpko";
+Content-Type: multipart/signed; boundary="Sig_/PbL=j7Q/zeiTsu6TxWLYGSB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0mLg.F44icl/ZW12lEmMpko
+--Sig_/PbL=j7Q/zeiTsu6TxWLYGSB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the swiotlb tree got a conflict in:
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-  kernel/dma/direct.c
+  arch/arm64/include/asm/sysreg.h
 
 between commit:
 
-  faf4ef823ac5 ("dma-direct: add support for dma_coherent_default_memory")
+  79d82cbcbb3d ("arm64/kexec: Test page size support with new TGRAN range v=
+alues")
 
-from the dma-mapping tree and commit:
+from the arm64 tree and commit:
 
-  f4111e39a52a ("swiotlb: Add restricted DMA alloc/free support")
+  504c6295b998 ("arm64/mm: Add remaining ID_AA64MMFR0_PARANGE_ macros")
 
-from the swiotlb tree.
+from the kvm-arm tree.
 
-I fixed it up (see below, though more may be needed) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/dma/direct.c
-index 8dca4f97d12d,2de33e5d302b..000000000000
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@@ -155,15 -174,10 +174,16 @@@ void *dma_direct_alloc(struct device *d
-  	}
+diff --cc arch/arm64/include/asm/sysreg.h
+index f2e06e7c0a31,1972e4b9be5c..000000000000
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@@ -847,16 -847,17 +847,21 @@@
+  #define ID_AA64MMFR0_ASID_SHIFT		4
+  #define ID_AA64MMFR0_PARANGE_SHIFT	0
  =20
-  	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
- -	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) && !dev_is_dma_coherent(dev) &&
- +	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
- +	    !IS_ENABLED(CONFIG_DMA_GLOBAL_POOL) &&
-- 	    !dev_is_dma_coherent(dev))
-++	    !dev_is_dma_coherent(dev) &&
-+ 	    !is_swiotlb_for_alloc(dev))
-  		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
- =20
- +	if (IS_ENABLED(CONFIG_DMA_GLOBAL_POOL) &&
- +	    !dev_is_dma_coherent(dev))
- +		return dma_alloc_from_global_coherent(dev, size, dma_handle);
+ -#define ID_AA64MMFR0_TGRAN4_NI		0xf
+ -#define ID_AA64MMFR0_TGRAN4_SUPPORTED	0x0
+ -#define ID_AA64MMFR0_TGRAN64_NI		0xf
+ -#define ID_AA64MMFR0_TGRAN64_SUPPORTED	0x0
+ -#define ID_AA64MMFR0_TGRAN16_NI		0x0
+ -#define ID_AA64MMFR0_TGRAN16_SUPPORTED	0x1
+ +#define ID_AA64MMFR0_TGRAN4_NI			0xf
+ +#define ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN	0x0
+ +#define ID_AA64MMFR0_TGRAN4_SUPPORTED_MAX	0x7
+ +#define ID_AA64MMFR0_TGRAN64_NI			0xf
+ +#define ID_AA64MMFR0_TGRAN64_SUPPORTED_MIN	0x0
+ +#define ID_AA64MMFR0_TGRAN64_SUPPORTED_MAX	0x7
+ +#define ID_AA64MMFR0_TGRAN16_NI			0x0
+ +#define ID_AA64MMFR0_TGRAN16_SUPPORTED_MIN	0x1
+ +#define ID_AA64MMFR0_TGRAN16_SUPPORTED_MAX	0xf
  +
-  	/*
-  	 * Remapping or decrypting memory may block. If either is required and
-  	 * we can't block, allocate the memory from the atomic pools.
-@@@ -259,9 -278,8 +284,10 @@@ void dma_direct_free(struct device *dev
-  	}
++ #define ID_AA64MMFR0_PARANGE_32		0x0
++ #define ID_AA64MMFR0_PARANGE_36		0x1
++ #define ID_AA64MMFR0_PARANGE_40		0x2
++ #define ID_AA64MMFR0_PARANGE_42		0x3
++ #define ID_AA64MMFR0_PARANGE_44		0x4
+  #define ID_AA64MMFR0_PARANGE_48		0x5
+  #define ID_AA64MMFR0_PARANGE_52		0x6
  =20
-  	if (!IS_ENABLED(CONFIG_ARCH_HAS_DMA_SET_UNCACHED) &&
- -	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) && !dev_is_dma_coherent(dev) &&
- +	    !IS_ENABLED(CONFIG_DMA_DIRECT_REMAP) &&
- +	    !IS_ENABLED(CONFIG_DMA_GLOBAL_POOL) &&
-- 	    !dev_is_dma_coherent(dev)) {
-++	    !dev_is_dma_coherent(dev) &&
-+ 	    !is_swiotlb_for_alloc(dev)) {
-  		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
-  		return;
-  	}
+@@@ -1032,16 -1035,19 +1039,19 @@@
+ =20
+  #if defined(CONFIG_ARM64_4K_PAGES)
+  #define ID_AA64MMFR0_TGRAN_SHIFT		ID_AA64MMFR0_TGRAN4_SHIFT
++ #define ID_AA64MMFR0_TGRAN_2_SHIFT		ID_AA64MMFR0_TGRAN4_2_SHIFT
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN4_SUPPORTED
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	0x7
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN4_SUPPORTED_MIN
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	ID_AA64MMFR0_TGRAN4_SUPPORTED_MAX
+  #elif defined(CONFIG_ARM64_16K_PAGES)
+  #define ID_AA64MMFR0_TGRAN_SHIFT		ID_AA64MMFR0_TGRAN16_SHIFT
++ #define ID_AA64MMFR0_TGRAN_2_SHIFT		ID_AA64MMFR0_TGRAN16_2_SHIFT
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN16_SUPPORTED
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	0xF
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN16_SUPPORTED_M=
+IN
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	ID_AA64MMFR0_TGRAN16_SUPPORTED_M=
+AX
+  #elif defined(CONFIG_ARM64_64K_PAGES)
+  #define ID_AA64MMFR0_TGRAN_SHIFT		ID_AA64MMFR0_TGRAN64_SHIFT
++ #define ID_AA64MMFR0_TGRAN_2_SHIFT		ID_AA64MMFR0_TGRAN64_2_SHIFT
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN64_SUPPORTED
+ -#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	0x7
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MIN	ID_AA64MMFR0_TGRAN64_SUPPORTED_M=
+IN
+ +#define ID_AA64MMFR0_TGRAN_SUPPORTED_MAX	ID_AA64MMFR0_TGRAN64_SUPPORTED_M=
+AX
+  #endif
+ =20
+  #define MVFR2_FPMISC_SHIFT		4
 
---Sig_/0mLg.F44icl/ZW12lEmMpko
+--Sig_/PbL=j7Q/zeiTsu6TxWLYGSB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEdsCkACgkQAVBC80lX
-0GyPwAgAjVBKqHuPcc3QJt51ZEqbtRfX9HRJDpTEv3OPCL9h+8Jw72ApDgQuFK7o
-Yh1GsqeKG0Q9WL1Y+xDbrLDZD12aTIHosJhs8XjOApQqtt7OKelgrLSA8qeeThR7
-9z9upYoBL1wfrYivvgoqex0f0zxskLXjhbmbQnXIaspyp+v59wjkFlSFFPYZU2l3
-Y3/Rk0JKxkEVEWLJf79g6MO7id9mhfnN7NhER9/9UgvBRmRMCFo9jpnE460W2vPP
-MaBZdUZWmuO1nmhEVs0LUr9MHIZAutd+kRuEfDZ0UddlRVb3A/2KJcekEyTP4avC
-D547ETBDmShm3+OzbUHHBFJp7uUhHQ==
-=yHFk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEd2JgACgkQAVBC80lX
+0Gzhcwf/SBHnPK6B2Wq94Fijm9hFMC58ketUiOw8GD0EwRgd+UbD5S3UPiTl7ww8
++FsT0yr+V3fmCKoBEK2ev9jXzZfbd3C+IjAJh0SGrgmeFFLBMbTI3jQddcCLJt0P
+qbILQpE7utGj7XJJlCTOvszkAflmO344KShsbEUg/Ou5/xdpw5TWPy5DDZSVhrDp
+VsEc6hwsxBDKr+mrljRQ3M2XQF5Lg0BA0bsikWaC5jVPbRc7vBHXkSP9x5ZOuEik
+uCkbcUz4wMLTOEqK0LcbkJKGf9rUpiNPjK8LRueewjDiFAn25l9a8afFZaseXIGO
+KAKl2Kk5n1Oc6XrCyE5Vpy/jAozhDw==
+=Clcn
 -----END PGP SIGNATURE-----
 
---Sig_/0mLg.F44icl/ZW12lEmMpko--
+--Sig_/PbL=j7Q/zeiTsu6TxWLYGSB--

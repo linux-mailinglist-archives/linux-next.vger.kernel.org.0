@@ -2,83 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685393F26B7
-	for <lists+linux-next@lfdr.de>; Fri, 20 Aug 2021 08:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0245E3F26C8
+	for <lists+linux-next@lfdr.de>; Fri, 20 Aug 2021 08:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238170AbhHTGP1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Aug 2021 02:15:27 -0400
-Received: from ozlabs.org ([203.11.71.1]:54367 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232732AbhHTGP1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 20 Aug 2021 02:15:27 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GrWZH5VLnz9sWd;
-        Fri, 20 Aug 2021 16:14:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629440088;
-        bh=kroY2SxltUzZNq48k2nx9z2Bimo2DPHva9IOqY7qNeo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nG546bZttayIFDopl8ITCSeFYrpJ4ZVjg0HLN9vbcZJFLoGfWXsoV/Ko3oF8RWDrb
-         Q8osmTbMzNqtjqrl/q+tVIesF9QfVmhiQ75WbJ57QQij7HUko57mYROFxajOdtE2eJ
-         Thb3PfKbrtu6zpZ6WTDpXgmNz+ZHWddp5nWyt/ebXVtty/pP9sgnQlAJKC0fpY+u6P
-         u+CO36XZ1tafmNeJwZ7cXLHXo8TYK8B/JAjK9N6scnLu2kjNHIsFXSvaZXJl+9FNBP
-         cft1kEKZdghi/dyURKKVMmwQaR3mn6pxAn8bctGtxlM9/yd33F2v7iHh7LU4kAYwGJ
-         JMHJelxnEsGjg==
-Date:   Fri, 20 Aug 2021 16:14:45 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the scsi tree
-Message-ID: <20210820161445.6eadab0c@canb.auug.org.au>
+        id S238392AbhHTG2Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Aug 2021 02:28:16 -0400
+Received: from condef-10.nifty.com ([202.248.20.75]:31200 "EHLO
+        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238196AbhHTG2P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Aug 2021 02:28:15 -0400
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-10.nifty.com with ESMTP id 17K6OPct027529
+        for <linux-next@vger.kernel.org>; Fri, 20 Aug 2021 15:24:25 +0900
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 17K6OCcr027851;
+        Fri, 20 Aug 2021 15:24:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 17K6OCcr027851
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1629440652;
+        bh=OYI9evttHikVcfyeKqcdTfZUAj2Daj3cr5JXajWggx8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KQRsgzQ7pRVyaAQ8Is57rgmpXQSaY8SBN+qDG+HumHP2fR0+iu8LxXjHPGK8G0HU4
+         DkdSGKQ0hvC9xpPsXAFIRIihrphv8/AvEGCGgadbYtZFPoqf5mh72449rnJUU5KBbA
+         5nOhGPRhjNpjahJrweSu7HQ7+kt8xIbxUm88dDPRrezMhYPNK3tpIEnuBGqt3sZo2z
+         Mgqoau7AMNM7YV+PC60MLEqDVr0nf9viZaTlBNw9SoxgkKnDkztmlxSc0RQguwiJ0B
+         NTScn8sZAqLTwgfV6zSKMSXrWPgeBKTLUIoy3LJgSr9v/owlFGqY53G9AjP0EuTTR3
+         eC3e7njHGMIuQ==
+X-Nifty-SrcIP: [209.85.216.51]
+Received: by mail-pj1-f51.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so13150347pjr.1;
+        Thu, 19 Aug 2021 23:24:12 -0700 (PDT)
+X-Gm-Message-State: AOAM533IjLoZTwbRK3a5TMrIw9S4H4EbPpKGTm9i9SrZQsFlA0GjtaUH
+        z8ZlxLClp6chVEY0w3r9YB9+jvevt5F7lbAhlzM=
+X-Google-Smtp-Source: ABdhPJzmya3Z8vvepOUvhlpu4SplWYYg9sHgkVXJSuh78W1Xa95N9HNSHGyonmhzVoCF9jmTdUBm/9k/hByhr4HBS0Y=
+X-Received: by 2002:a17:902:f552:b029:12d:3d11:4ff1 with SMTP id
+ h18-20020a170902f552b029012d3d114ff1mr15108803plf.1.1629440651621; Thu, 19
+ Aug 2021 23:24:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5i0xmhu1y.qgWK4eyjH/CY0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210820123348.6535a87e@canb.auug.org.au>
+In-Reply-To: <20210820123348.6535a87e@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 20 Aug 2021 15:23:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASv-F1Y7kpaDF+_=TW0Jzvpo1uuNL1B5jUmCCRqv-45bA@mail.gmail.com>
+Message-ID: <CAK7LNASv-F1Y7kpaDF+_=TW0Jzvpo1uuNL1B5jUmCCRqv-45bA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the drm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5i0xmhu1y.qgWK4eyjH/CY0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Aug 20, 2021 at 11:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>
+> In file included from drivers/gpu/drm/i915/i915_debugfs.c:39:
+> drivers/gpu/drm/i915/gt/intel_gt_requests.h:9:10: fatal error: stddef.h: No such file or directory
+>     9 | #include <stddef.h>
+>       |          ^~~~~~~~~~
+>
+> Caused by commit
+>
+>   564f963eabd1 ("isystem: delete global -isystem compile option")
+>
+> from the kbuild tree interacting with commit
+>
+>   b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to work with GuC")
+>
+> I have applied the following patch for today.
 
-Hi all,
 
-After merging the scsi tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+Thanks.
 
-drivers/scsi/Makefile:197: FORCE prerequisite is missing
+This fix-up does not depend on my kbuild tree in any way.
 
-Exposed by commit
+So, the drm maintainer can apply it to his tree.
 
-  0fc7db58e2a6 ("kbuild: warn if FORCE is missing for if_changed(_dep,_rule=
-) and filechk")
+Perhaps with
 
-I don't know why this warning only appeared after the merge of the scsi
-tree, since the offending line has been in this Makefile since 2017
+Fixes: b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to
+work with GuC")
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/5i0xmhu1y.qgWK4eyjH/CY0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEfSFUACgkQAVBC80lX
-0GwG0gf/ezRJc8wXjFxP2tDXtSw1UYYp6e7gTcQAh2oNUz7oE7F3qelfa2g4OAPD
-VfRfCgOrvrCj9ELM+VO/vOsk8uQsGRLaCQljoGLv3L57E8Zs8BtDOT5P142UVkWD
-ICG0JntG+wpvf06yaLEtprbWLtnFRiw6VUXP4krnfXQIb9iKSW2wgLzyNGiuzgGp
-7ctkjmnCRqDtqarCERNoNanSoTzaN3BQKG/U1skXPqe7zff5cfUTSSszOPhHcn/G
-wo+cVxYdSbHPybl4Twb6YIbfMIypvX6GHcKifLaEe0TXdnZhrDYU57sJIiXIoCb6
-e4feueByIJiiByM6bQc7vjIRTRmRHg==
-=BH5P
------END PGP SIGNATURE-----
 
---Sig_/5i0xmhu1y.qgWK4eyjH/CY0--
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 20 Aug 2021 12:24:19 +1000
+> Subject: [PATCH] drm/i915: use linux/stddef.h due to "isystem: trim/fixup stdarg.h and other headers"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/i915/gt/intel_gt_requests.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_requests.h b/drivers/gpu/drm/i915/gt/intel_gt_requests.h
+> index 51dbe0e3294e..d2969f68dd64 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt_requests.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt_requests.h
+> @@ -6,7 +6,7 @@
+>  #ifndef INTEL_GT_REQUESTS_H
+>  #define INTEL_GT_REQUESTS_H
+>
+> -#include <stddef.h>
+> +#include <linux/stddef.h>
+>
+>  struct intel_engine_cs;
+>  struct intel_gt;
+> --
+> 2.32.0
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

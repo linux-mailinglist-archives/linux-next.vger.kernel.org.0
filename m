@@ -2,93 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D39823F383C
-	for <lists+linux-next@lfdr.de>; Sat, 21 Aug 2021 05:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734DE3F38E6
+	for <lists+linux-next@lfdr.de>; Sat, 21 Aug 2021 07:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbhHUDJD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Aug 2021 23:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
+        id S230333AbhHUFtj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 21 Aug 2021 01:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbhHUDJC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Aug 2021 23:09:02 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F658C061575;
-        Fri, 20 Aug 2021 20:08:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gs3Nf130pz9sW8;
-        Sat, 21 Aug 2021 13:08:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629515300;
-        bh=mEhJjhXS+qMda3U7FwpADzeee1VExK11iy0O7hbSvZo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vBzPXamOxihY1Fl3SbNh+ZYp2HaegQrh5PMQadAFw71TEBrgewwRy5RpLCASl8gok
-         +kdWsbwBJB67mng9XACTmNzyYPqlROAyGrIrwHD/Y2Dw+IBj4CnL0tdkdpoyaXwzou
-         Adl28mM6dfF02E2eWpwWBWW0gKDEGPlDpiooqYBb+EKcDEMdwSijz8TzLTgBABNCBm
-         SdgTvvcCktjSa9ZShvGn4tIUFDF/2piS41bVeaP/y0IwTMVi9u1YXMqnaKy4YcjJUv
-         3yIh/L/4fSmZ9UkpEtDf2bClc6zuV3ts3OFKHzy95O98Xe0CaoMGB5IoH9F69FK+LS
-         sxeLDZbSoqTAw==
-Date:   Sat, 21 Aug 2021 13:08:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Dmytro Linkin <dlinkin@nvidia.com>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Sven Eckelmann <sven@narfation.org>,
+        with ESMTP id S230205AbhHUFth (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 21 Aug 2021 01:49:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CFEC061575
+        for <linux-next@vger.kernel.org>; Fri, 20 Aug 2021 22:48:59 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id n13-20020a17090a4e0d00b0017946980d8dso15235556pjh.5
+        for <linux-next@vger.kernel.org>; Fri, 20 Aug 2021 22:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NWXh61nIoxEnUM9HmpK2vkre7I4Nt4vNqnfH4nx8Gv0=;
+        b=YmZkRmn9/vVLBlFObf9NnGXVGhH8V3iQtAILZsfzE3JMzuOLEczWRP6sjuVNl38G7s
+         oEL5nu8XVyzSR3Tt9kF41vB00eMPt2jG7/xDp0wnCOAXLvoBPxm3AUXVkiF+6Y3A69LF
+         Pr/il4wuNgDTrV3ZoGR6RLTPNqJzVFd4XR3Vo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NWXh61nIoxEnUM9HmpK2vkre7I4Nt4vNqnfH4nx8Gv0=;
+        b=aeeMCVraeGVL5BBzQaJj4IjD3/IBPB0LdMyHCeB0b5ZpoNaIpavhGgP4RqGG1rGMXA
+         +i9u0cU5nW12OnCSkwwUF3b17MIfAPH5wUDu/I0b+ynqy29S9AOxyAfjw529g7PDjNMo
+         R+dCXfxkq8Go4NpaaGtZS2i+FUZEWRNz8jtbZv9pxZN+qPmE1AO7atbx59e0SE4RE/Lr
+         TH+YFaQ9Ioo0CMZDjJr4vDvZXTu46EPr5bFs13zU8n2j5orSqThLISUEBYTl/65+P6D0
+         8vDaOHjRRY5Fk0zVOBJJiYQ58y8xgsJxGE48BQ+s3oawI3bcYJXIsUR3chseygG9nMJE
+         Udjw==
+X-Gm-Message-State: AOAM533hp/vpuNdHarn1HQI+SQk2m8bI/EljM6AsrmWU/C83/ADtDoir
+        MyD3wSv5CrAYlMrABG2GL8636Q==
+X-Google-Smtp-Source: ABdhPJzLEWbzpC4HsQYdgNaLHNpSsaZSsNQfLQVyDp5uC59uEnUnO1jM7nkLa7XS75beJmuid15DTw==
+X-Received: by 2002:a17:90a:bd18:: with SMTP id y24mr8500824pjr.83.1629524938555;
+        Fri, 20 Aug 2021 22:48:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p17sm13227181pjg.54.2021.08.20.22.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 22:48:57 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 22:48:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the net-next tree
-Message-ID: <20210821130815.22b5cfc3@canb.auug.org.au>
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: linux-next: Tree for Aug 20 (Wno-alloc-size-larger-than)
+Message-ID: <202108202248.921E8C66@keescook>
+References: <20210820192615.23e2e617@canb.auug.org.au>
+ <2706a406-9f72-7df1-03f6-f8e852897eb2@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CA.HyUEqCjRIq9lItb9qTcl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2706a406-9f72-7df1-03f6-f8e852897eb2@infradead.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CA.HyUEqCjRIq9lItb9qTcl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Aug 20, 2021 at 02:54:05PM -0700, Randy Dunlap wrote:
+> On 8/20/21 2:26 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20210819:
+> > 
+> 
+> Both linux-next and mmotm have many of these warnings when using
+> gcc (SUSE Linux) 7.5.0:
+> 
+> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-than'
 
-Hi all,
+Ew. Thanks for letting me know. I thought I'd verified this existed in
+gcc going back to 4.9, but it looks like I did something wrong in that
+test.
 
-Commits
+I think this should fix it:
 
-  3202ea65f85c ("net/mlx5: E-switch, Add QoS tracepoints")
-  0fe132eac38c ("net/mlx5: E-switch, Allow to add vports to rate groups")
-  f47e04eb96e0 ("net/mlx5: E-switch, Allow setting share/max tx rate limits=
- of rate groups")
-  1ae258f8b343 ("net/mlx5: E-switch, Introduce rate limiting groups API")
-  ad34f02fe2c9 ("net/mlx5: E-switch, Enable devlink port tx_{share|max} rat=
-e control")
-  2d116e3e7e49 ("net/mlx5: E-switch, Move QoS related code to dedicated fil=
-e")
-  71d41c09f1fa ("batman-adv: Move IRC channel to hackint.org")
+diff --git a/Makefile b/Makefile
+index b0fafc41b686..e33ffa05899e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1097,7 +1097,7 @@ endif
+ ifdef CONFIG_CC_IS_GCC
+ # The allocators already balk at large sizes, so silence the compiler
+ # warnings for bounds checks involving those possible values.
+-KBUILD_CFLAGS += -Wno-alloc-size-larger-than
++KBUILD_CFLAGS += $(call cc-option, -Wno-alloc-size-larger-than)
+ endif
+ 
+ # disable invalid "can't wrap" optimizations for signed / pointers
 
-are missing a Signed-off-by from their committers.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CA.HyUEqCjRIq9lItb9qTcl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEgbh8ACgkQAVBC80lX
-0GwqWgf8D1+t0P9Z9FAdzzF53G4cG26V8P323a+0hs8SVQvUWIZN+1tZ0siaVeE4
-pcSnIZ6Qz9UN7EKqF/4RHRyPPHyMuPXraVc4v9rXTpY+LlyxSe3slJfJLMcBuU7Z
-TG/l7m3bffS28r+5nLGzOHxMbrd9++xVFTp8cq0WumnO61FrzvrYS3giW8WncpvD
-8QrDBrhIpLW/xEF33G7RwYf3YC+aUtrcvrAJyMuy5bVCJg1OA1jKmH7AIzbHPWv7
-bXpqkwXJI9OOcFhPTP33xwF8c8diSkYQPkljCksb+ayHC7nWLnC06vtmWcfvIWRm
-m+eB1lXHk77CYxxO/RPLslLd6pydqA==
-=MnGt
------END PGP SIGNATURE-----
-
---Sig_/CA.HyUEqCjRIq9lItb9qTcl--
+-- 
+Kees Cook

@@ -2,84 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1C83F4291
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 02:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2B33F4353
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 04:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbhHWA1O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Aug 2021 20:27:14 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:25271 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbhHWA1O (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Aug 2021 20:27:14 -0400
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 17N0QIfT014048;
-        Mon, 23 Aug 2021 09:26:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 17N0QIfT014048
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1629678378;
-        bh=kD/hh9H5i475+vNQOw2q7d4U+ruJtXyu/WdPhffFiIQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ERC7DH0c3u0T9rlC6EVa8JEEFPy7GgBAADuYG908j63d9ukiAZeEvDqKph3N7PvUx
-         Yz8W46umRaiBfohrhvhHLiEgw8eTrvgqsOmwc/QGfphNyBNP1ZJzQ8S8aQx09u6ZTy
-         cHY5asce0Ki+XWqFmvb8DExqZxtR6XEJF5RyHNG+fCGHqhBov3/dN2/4InP7vkzte8
-         y3d55ty7AFOsx9wpa5/tN1m7heG2vHNR5InJoknq0yECVq5ySCvoqNaqcf1CalFuXi
-         +1zrWFGlBx/JhTMI3GdW8gceTxAdmauZdC+fKB0tUJ/szEVI1uDwpzn0JeDIGhv/hm
-         LXRwNQAihrdfw==
-X-Nifty-SrcIP: [209.85.215.177]
-Received: by mail-pg1-f177.google.com with SMTP id x4so15047383pgh.1;
-        Sun, 22 Aug 2021 17:26:18 -0700 (PDT)
-X-Gm-Message-State: AOAM530QgHH6e0dwHZXR5x7dkLZm7ZBdjuSWQKMJUvUXS5Ux6Okc8Lts
-        gGl8Jr/T2lLzDIeyK52NUv72FSHUrVXQn716ia4=
-X-Google-Smtp-Source: ABdhPJz9fdEOOqgxK/uG/yR0iY62D3VpAQPiB0vaUeGb2ebMdEye9FmADojzm4kUBwC+k54pQLSZkyHuoz7BBa1e1O8=
-X-Received: by 2002:a63:dd51:: with SMTP id g17mr29573641pgj.47.1629678377713;
- Sun, 22 Aug 2021 17:26:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210820092816.2858fac8@canb.auug.org.au>
-In-Reply-To: <20210820092816.2858fac8@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 23 Aug 2021 09:25:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT5iYa5NqJF=fmzmfG2HNA-w9Gc=8LCtXr+30Sx=NJisA@mail.gmail.com>
-Message-ID: <CAK7LNAT5iYa5NqJF=fmzmfG2HNA-w9Gc=8LCtXr+30Sx=NJisA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S234697AbhHWCKU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Aug 2021 22:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234740AbhHWCKS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Aug 2021 22:10:18 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2851AC061575;
+        Sun, 22 Aug 2021 19:09:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtFzw0bRnz9sWS;
+        Mon, 23 Aug 2021 12:09:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1629684572;
+        bh=urcvtOto4Q3/VgDYNB5LTZdJMwfL4QJ4Fqs3AUcgWKw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gv8GprYdjulnUgV/839nSb3mHVK0bPVBkZ+legtLKQ7doctvcVI0qYim+epkKO3va
+         eeclEvbZ03UkbEbXLwrnxwbKf8VR1NGgff9i4l1S58o82Ri1oAeWFpTRMGQ5mV9IIS
+         PoUIibNWBwwMJpA3VJdid/k9c4o4UmNuxaPZb8UGiSFnOMjhwjFRRPgDtspI0tPaVP
+         udFbYVQLeb30ysTAg7YCWr87/tWNNAqlfq/w67iUW8BiK+vQVybBV/xRdkJkumyZjY
+         FFNa/WjXHj7Ly+azdmB12+GURtKdSRFO90/s5/MgTeNZoMhPsS6shwQAABeU+OzALH
+         xJeub2vx2ynPA==
+Date:   Mon, 23 Aug 2021 12:09:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210823120929.7c6f7a4f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/+ylmqHP=i0YfySSqFQ/x9wl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 8:28 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the kbuild tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
->
-> arch/x86/entry/vdso/Makefile:135: FORCE prerequisite is missing
-> arch/x86/entry/vdso/Makefile:135: FORCE prerequisite is missing
-> arch/x86/entry/vdso/Makefile:135: FORCE prerequisite is missing
->
-> Exposed by commit
->
->   0fc7db58e2a6 ("kbuild: warn if FORCE is missing for if_changed(_dep,_rule) and filechk")
->
-> Not sure why we need 3 of these :-(
+--Sig_/+ylmqHP=i0YfySSqFQ/x9wl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-This is a pattern rule, which generates
-vdso64.so, vdso32.so, and vdsox32.so
+After merging the net-next tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-The warning is produced as a side-effect
-of the recipe. That is why 3 warnings.
-Otherwise, I do not know how to implement it.
+drivers/net/ethernet/broadcom/bnx2.c: In function 'bnx2_read_vpd_fw_ver':
+drivers/net/ethernet/broadcom/bnx2.c:8055:6: error: implicit declaration of=
+ function 'pci_vpd_find_ro_info_keyword'; did you mean 'pci_vpd_find_info_k=
+eyword'? [-Werror=3Dimplicit-function-declaration]
+ 8055 |  j =3D pci_vpd_find_ro_info_keyword(data, BNX2_VPD_LEN,
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |      pci_vpd_find_info_keyword
 
+Caused by commit
 
-BTW, a fix for x86 Makefile exists in the patchwork.
+  ddc122aac91f ("bnx2: Search VPD with pci_vpd_find_ro_info_keyword()")
 
-https://lore.kernel.org/patchwork/patch/1478798/
+I have used the net-next tree from next-20210820 for today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Best Regards
-Masahiro Yamada
+--Sig_/+ylmqHP=i0YfySSqFQ/x9wl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjA1kACgkQAVBC80lX
+0GzFYggAh3Kl/lc7SKIOtE6GnkyWKWSvTURaEdcWh5igZdaecflACzwMGNbjXFjE
+e4Z5vgER8VbwjFyD1iR9RwZqQsPysBYmu5bIB4Yes8/TGMQvrMsO1+rdltsuRJU5
+KUv7p7vwKW9EPPnPmvZEao7zzF7DyLs7Yc8Z5wGCgzzDZitcw13RjxuVB2pJuJqe
+saIlSrQWznT4SgzcXvW2AuAfVP+z9wMTqhCvcxY0yyHKMmMNeSH/aTsHFEQlFn5V
+GIo/aa5/xQI5kc2I24k2yKV/9lMZuNtyNdB/bDEMOgVWWs0r4lueCLhRxbeIyiaH
+Nj7ymn9iHfEQ91Ia8pOKkywdqIJy3g==
+=JIN7
+-----END PGP SIGNATURE-----
+
+--Sig_/+ylmqHP=i0YfySSqFQ/x9wl--

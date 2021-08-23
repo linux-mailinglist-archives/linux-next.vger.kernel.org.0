@@ -2,77 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F04F3F4866
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 12:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA6D3F488D
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 12:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236091AbhHWKPH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Aug 2021 06:15:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43318 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233145AbhHWKPG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Aug 2021 06:15:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 27BED61246;
-        Mon, 23 Aug 2021 10:14:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629713664;
-        bh=ri5Gc1dGzEg01uUB2aCCRxd2yrfrIqSic3J6GtQpDGM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=a1PQ/0F39an3U3T6ntGqRGFIzFFAExQh4LviUNVrWHyCrMNjgEDD6SRhaBa9NRX9u
-         EIN7X413kJtx9Qo1f7h3w0rltn3JbyF71AhNzjkTGSwcqJGud0+yUUHwcreSWi4DSi
-         o2vPchQP9N+xKYdvcW23KwCEsT9VX6BkOJnetCzsdfQXhwmy9BGZAJVgBUV4UvV1F7
-         b/iK7Wi18TIozEUmz3rS2XaAfM5uV/Ule5krKsH+C1naQnGcV3JfpACKmuPRljQzCW
-         FBKFEPdekBB1C0ZWrR5n3GeT3Npi3BP7ccrtRCr7d83eO7MQB3gsRr8B3yOv50FOK0
-         1yAT2P7ap4YCg==
-Message-ID: <934008823b152cbe9bf170c866d2c0aa8552e61e.camel@kernel.org>
-Subject: Re: linux-next: build warnings after merge of the file-locks tree
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Mon, 23 Aug 2021 06:14:23 -0400
-In-Reply-To: <20210823101941.20ba89c3@canb.auug.org.au>
-References: <20210823101941.20ba89c3@canb.auug.org.au>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
+        id S233874AbhHWKV6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Aug 2021 06:21:58 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:51094 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233399AbhHWKV5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 06:21:57 -0400
+Received: from localhost (unknown [149.11.102.75])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id 4B2B44D0C1073;
+        Mon, 23 Aug 2021 03:21:12 -0700 (PDT)
+Date:   Mon, 23 Aug 2021 11:20:49 +0100 (BST)
+Message-Id: <20210823.112049.2183912961708089551.davem@davemloft.net>
+To:     hkallweit1@gmail.com
+Cc:     sfr@canb.auug.org.au, netdev@vger.kernel.org, bhelgaas@google.com,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: linux-next: build failure after merge of the net-next tree
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <fbac0963-385d-b593-e087-e1e75f62fcbf@gmail.com>
+References: <20210823120929.7c6f7a4f@canb.auug.org.au>
+        <fbac0963-385d-b593-e087-e1e75f62fcbf@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Mon, 23 Aug 2021 03:21:13 -0700 (PDT)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2021-08-23 at 10:19 +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the file-locks tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
-> 
-> fs/remap_range.c: In function 'remap_verify_area':
-> fs/remap_range.c:102:16: warning: unused variable 'inode' [-Wunused-variable]
->   102 |  struct inode *inode = file_inode(file);
->       |                ^~~~~
-> 
-> Also from the arm multi_v7_defconfig build:
-> 
-> fs/locks.c: In function 'fcntl_setlk64':
-> fs/locks.c:2509:16: warning: unused variable 'inode' [-Wunused-variable]
->  2509 |  struct inode *inode = locks_inode(filp);
->       |                ^~~~~
-> 
-> And from the x86_64 allmodconfig build:
-> 
-> fs/9p/vfs_file.c: In function 'v9fs_file_lock_dotl':
-> fs/9p/vfs_file.c:322:1: warning: label 'out_err' defined but not used [-Wunused-label]
->   322 | out_err:
->       | ^~~~~~~
-> 
-> Introduced by commit
-> 
->   3efee0567b4a ("fs: remove mandatory file locking support")
-> 
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Date: Mon, 23 Aug 2021 08:34:53 +0200
 
-Thanks Stephen. I'll fix those up.
+> On 23.08.2021 04:09, Stephen Rothwell wrote:
+>> Hi all,
+>> 
+>> After merging the net-next tree, today's linux-next build (powerpc
+>> ppc64_defconfig) failed like this:
+>> 
+>> drivers/net/ethernet/broadcom/bnx2.c: In function 'bnx2_read_vpd_fw_ver':
+>> drivers/net/ethernet/broadcom/bnx2.c:8055:6: error: implicit declaration of function 'pci_vpd_find_ro_info_keyword'; did you mean 'pci_vpd_find_info_keyword'? [-Werror=implicit-function-declaration]
+>>  8055 |  j = pci_vpd_find_ro_info_keyword(data, BNX2_VPD_LEN,
+>>       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>       |      pci_vpd_find_info_keyword
+>> 
+>> Caused by commit
+>> 
+>>   ddc122aac91f ("bnx2: Search VPD with pci_vpd_find_ro_info_keyword()")
+>> 
+>> I have used the net-next tree from next-20210820 for today.
+>> 
+> This series was supposed to go through the PCI tree. It builds on recent patches
+> that are in the PCI tree, but not in linux-next yet.
+> I mentioned this dependency in the cover letter for the last series, but forgot
+> it this time. Sorry.
 
-Cheers,
--- 
-Jeff Layton <jlayton@kernel.org>
+I reverted it all, please don't forget the cover letter like this.
 
+Thanks.

@@ -2,154 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4753F4603
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 09:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9363F47F5
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 11:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbhHWHvn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Aug 2021 03:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S231759AbhHWJ4b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Aug 2021 05:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbhHWHvR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 03:51:17 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593ECC061756;
-        Mon, 23 Aug 2021 00:50:35 -0700 (PDT)
+        with ESMTP id S230188AbhHWJ42 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 05:56:28 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCDEC061575;
+        Mon, 23 Aug 2021 02:55:46 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtPYJ73ySz9sWd;
-        Mon, 23 Aug 2021 17:50:28 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtSKp4R2pz9sW8;
+        Mon, 23 Aug 2021 19:55:42 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629705032;
-        bh=9dAHDCrMei61o4XJtPqjbdNJts5lkuem+/e8bvOvHNA=;
+        s=201702; t=1629712542;
+        bh=zwzpiVdFpUOY3sgpUH9+i47HU7keaNx8ICF/xEg2hKY=;
         h=Date:From:To:Cc:Subject:From;
-        b=Eh1fOSt6Rsa06Kcm6zUhe5LMinVpSwezbm4AvqbDqfoCf8Wx8QP+NfHTf5hwPPM3r
-         seE9Pm8OmZKF0xk29DoKKPZAx8HVFzC8qkHEW0NciYckpNHIxL18k6IgUg0kAsqPB1
-         4kZ6VOhB46EsB/R5gHx65lL4wT2rl8YrfYDcZV5KUcDNVE7LlI0TH2qov6acKnTWKa
-         haVCYou/apmos6kKyAGlW7ST4LnEQMsbdpZIlaCJWw7UjpNPvtxGdtCJWR46mG7/ME
-         fjFSQmdREx4bk93AUY7FjVMOS9j4RKaZvUSalutLmeyUmI1nmJKU1Kn2WoBwE3Ojrh
-         egCMWHuXWU77Q==
-Date:   Mon, 23 Aug 2021 17:50:27 +1000
+        b=Ldz2HmwxLh7cUWHIhCxZj5vYjNzl7SWL3bsnjAU6T8556c06n6QdNJRBkwCkGx6R7
+         LW5E4tfDMsVyafrAkVGfF7n9wjnKz4DZ38rvLkndsoOFGvrjibQeKLySV28x4loW7X
+         sfyb4eV4cba+P4/miXxfvsmpLa9xjZLpYo2+hnKIk9LUOFUUDgz0xggolkTbRpUa2U
+         7fStyKn8qcQI3GRiX2wUFrFrMuDk6+2WRuN00kvJUGOH6uFEjkhJEmjGyfoMlhIcxV
+         N/YwuzAnjP8jSuKP3DpS3VSW3fnXKpYhGWSKpjv3eshJjT25xN2hVGu6+dN7VX8cBx
+         lB7Ji5T6Hg06A==
+Date:   Mon, 23 Aug 2021 19:55:40 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@mellanox.com>, Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas =?UTF-8?B?SGVsbHN0?= =?UTF-8?B?csO2bQ==?= 
-        <thomas.hellstrom@linux.intel.com>,
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hmm tree
-Message-ID: <20210823175027.3f3fabd7@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the powerpc tree
+Message-ID: <20210823195540.4d7363ed@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//zQi18i=ahDnMC3+VaHQ0Vw";
+Content-Type: multipart/signed; boundary="Sig_/OD3gpQqjzB8vriqSeKQB=VJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//zQi18i=ahDnMC3+VaHQ0Vw
+--Sig_/OD3gpQqjzB8vriqSeKQB=VJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the hmm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+After merging the powerpc tree, today's linux-next build (htmldocs)
+produced this warning:
 
-drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_tt_get_st':
-drivers/gpu/drm/i915/gem/i915_gem_ttm.c:396:7: error: implicit declaration =
-of function '__sg_alloc_table_from_pages'; did you mean 'sg_alloc_table_fro=
-m_pages'? [-Werror=3Dimplicit-function-declaration]
-  396 |  sg =3D __sg_alloc_table_from_pages
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |       sg_alloc_table_from_pages
-drivers/gpu/drm/i915/gem/i915_gem_ttm.c:396:5: warning: assignment to 'stru=
-ct scatterlist *' from 'int' makes pointer from integer without a cast [-Wi=
-nt-conversion]
-  396 |  sg =3D __sg_alloc_table_from_pages
-      |     ^
+docutils.utils.SystemMessage: Documentation/powerpc/associativity.rst:1: (S=
+EVERE/4) Title overline & underline mismatch.
 
-Caused by commit
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+NUMA resource associativity
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
 
-  fcbfe956561b ("lib/scatterlist: Provide a dedicated function to support t=
-able append")
+Introduced by commit
 
-interacting with commit
+  1c6b5a7e7405 ("powerpc/pseries: Add support for FORM2 associativity")
 
-  213d50927763 ("drm/i915/ttm: Introduce a TTM i915 gem object backend")
+There are other obvious problems with this document (but sphinx seems
+to have hung before it reported them).
 
-from the drm tree.
+Like
 
-I have applied the following merge resolution patch.
+Form 0
+-----
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 23 Aug 2021 17:46:27 +1000
-Subject: [PATCH] drm/i915/ttm: fix up for "lib/scatterlist: Provide a
- dedicated function to support tableappend"
+and
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Form 1
+-----
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915=
-/gem/i915_gem_ttm.c
-index 771eb2963123..d3d95934a047 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -382,7 +382,6 @@ i915_ttm_region(struct ttm_device *bdev, int ttm_mem_ty=
-pe)
- static struct sg_table *i915_ttm_tt_get_st(struct ttm_tt *ttm)
- {
- 	struct i915_ttm_tt *i915_tt =3D container_of(ttm, typeof(*i915_tt), ttm);
--	struct scatterlist *sg;
- 	struct sg_table *st;
- 	int ret;
-=20
-@@ -393,13 +392,13 @@ static struct sg_table *i915_ttm_tt_get_st(struct ttm=
-_tt *ttm)
- 	if (!st)
- 		return ERR_PTR(-ENOMEM);
-=20
--	sg =3D __sg_alloc_table_from_pages
-+	ret =3D sg_alloc_table_from_pages_segment
- 		(st, ttm->pages, ttm->num_pages, 0,
- 		 (unsigned long)ttm->num_pages << PAGE_SHIFT,
--		 i915_sg_segment_size(), NULL, 0, GFP_KERNEL);
--	if (IS_ERR(sg)) {
-+		 i915_sg_segment_size(), GFP_KERNEL);
-+	if (ret) {
- 		kfree(st);
--		return ERR_CAST(sg);
-+		return ERR_PTR(ret);
- 	}
-=20
- 	ret =3D dma_map_sgtable(i915_tt->dev, st, DMA_BIDIRECTIONAL, 0);
---=20
-2.32.0
+and
+
+Form 2
+-------
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_//zQi18i=ahDnMC3+VaHQ0Vw
+--Sig_/OD3gpQqjzB8vriqSeKQB=VJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjU0QACgkQAVBC80lX
-0GwyKAf/djlPvQh5mFxB1HX6H6VwiNvnFMAqdCuLA9ur0ir8JX93LCvE6yDM8MGu
-fNhZdfFoF4ZBogs/VAnCqnHMmRe5onD6HJ7TAOtCt2BllQHoKLT4XMY4R3TYES2X
-gt2lL9kHBBJCJuo40CBr1VIAHsHWH8qPRZZOWrkSa9GsoWaNS2Pz3uWOsiwkC3p7
-prmCs1HACO9LS8V1Q2zhfweMHZXv6VQIceF3XfcOm1hFqeYvHpVTU+rgVFdxbyTG
-FkXMRrxp/hTDM+wltFqyDp5aMgTw9wIGvlrB0taIreHsMVCcW6ycl8hlbmHHQS4c
-3Y57a/W6nW+ExSY+sq+7q1HecMTS/w==
-=rnAY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjcJwACgkQAVBC80lX
+0Gwknwf/eh5eOVTLm0/phY7/CRqjgQcgkibEQyOqtvv75dvTPGVX/nZtzfRp9n0p
+Xqyk/sWo7FldmiKb3mp8me9CnTaEDayf46TVX8VqxNx5o82CAHbtEymja9SBces5
+trw5sejneOtOWhPF9yIYTXTVy1Q9PDiLbJQCcRfFP5piFGVUDTiTqadPbFDdGWbO
+CASRhJVras/MoOdKEpF7fy6iED0BDTn/gU1Oi0jqPrC6H0euL5TRgDfaTRqsJhol
+BRtytK/oM4n7PBLbyC50pjsoOGGFmZ2xGP2YosqR3bWAaN/h95v0bvoK0IX8bWUI
+iGIu6DbGTceYrOMcXM8CrQ34b9TtzA==
+=UOWd
 -----END PGP SIGNATURE-----
 
---Sig_//zQi18i=ahDnMC3+VaHQ0Vw--
+--Sig_/OD3gpQqjzB8vriqSeKQB=VJ--

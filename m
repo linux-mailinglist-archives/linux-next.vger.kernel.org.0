@@ -2,91 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2B33F4353
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 04:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7B83F4373
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 04:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbhHWCKU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Aug 2021 22:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbhHWCKS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Aug 2021 22:10:18 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2851AC061575;
-        Sun, 22 Aug 2021 19:09:36 -0700 (PDT)
+        id S230315AbhHWCmH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Aug 2021 22:42:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:40503 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229958AbhHWCmH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 22 Aug 2021 22:42:07 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtFzw0bRnz9sWS;
-        Mon, 23 Aug 2021 12:09:31 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtGhg08Lxz9sW8;
+        Mon, 23 Aug 2021 12:41:22 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629684572;
-        bh=urcvtOto4Q3/VgDYNB5LTZdJMwfL4QJ4Fqs3AUcgWKw=;
+        s=201702; t=1629686484;
+        bh=p8oByTOGAloztmMhai0zbi98JHCMQvgBGnOUIeW5GlE=;
         h=Date:From:To:Cc:Subject:From;
-        b=Gv8GprYdjulnUgV/839nSb3mHVK0bPVBkZ+legtLKQ7doctvcVI0qYim+epkKO3va
-         eeclEvbZ03UkbEbXLwrnxwbKf8VR1NGgff9i4l1S58o82Ri1oAeWFpTRMGQ5mV9IIS
-         PoUIibNWBwwMJpA3VJdid/k9c4o4UmNuxaPZb8UGiSFnOMjhwjFRRPgDtspI0tPaVP
-         udFbYVQLeb30ysTAg7YCWr87/tWNNAqlfq/w67iUW8BiK+vQVybBV/xRdkJkumyZjY
-         FFNa/WjXHj7Ly+azdmB12+GURtKdSRFO90/s5/MgTeNZoMhPsS6shwQAABeU+OzALH
-         xJeub2vx2ynPA==
-Date:   Mon, 23 Aug 2021 12:09:29 +1000
+        b=REPKpkgZGF1lAYk7ca2EjMAU4EBNpBTVYgvTg5HkWvjO+5NBAHhdpUgQtIucXomZz
+         BoDm9c+9oPxqev/1ifWcpoco6qILEBZuFbnqln3gg4CYEVw6lCPO8TM5OBazVYNWo3
+         i1QiQK6r81GjQMa+Ww9Fcy4MZ+O5oUnD80EfrgiDyzA7LsT0fDSfpP5JT2b1rnwpk0
+         kbg1yUSSLUrjJW7EGLUh8vqUiGP/vcHVU4vatTd5ehKG2mAih6ycRxo67YxW/uYkDR
+         jhCMWXkoF9CwSj5Mo/t/Il4WjD0XZMNRr1tQ8BVIsrw7g8uRXyZll7xT0dFaWD7ni/
+         6Pm0U2oZ5oLRQ==
+Date:   Mon, 23 Aug 2021 12:41:22 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210823120929.7c6f7a4f@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        "jason-jh.lin" <jason-jh.lin@mediatek.com>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20210823124122.3d088380@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+ylmqHP=i0YfySSqFQ/x9wl";
+Content-Type: multipart/signed; boundary="Sig_/bG7XfPthEFmfz/DOLSyhu7w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+ylmqHP=i0YfySSqFQ/x9wl
+--Sig_/bG7XfPthEFmfz/DOLSyhu7w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Today's linux-next merge of the drm tree got a conflict in:
 
-drivers/net/ethernet/broadcom/bnx2.c: In function 'bnx2_read_vpd_fw_ver':
-drivers/net/ethernet/broadcom/bnx2.c:8055:6: error: implicit declaration of=
- function 'pci_vpd_find_ro_info_keyword'; did you mean 'pci_vpd_find_info_k=
-eyword'? [-Werror=3Dimplicit-function-declaration]
- 8055 |  j =3D pci_vpd_find_ro_info_keyword(data, BNX2_VPD_LEN,
-      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |      pci_vpd_find_info_keyword
+  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
 
-Caused by commit
+between commit:
 
-  ddc122aac91f ("bnx2: Search VPD with pci_vpd_find_ro_info_keyword()")
+  71ac6f390f6a ("drm/mediatek: Add AAL output size configuration")
 
-I have used the net-next tree from next-20210820 for today.
+from Linus' tree and commit:
+
+  78d1783c3243 ("drm/mediatek: Separate aal sub driver")
+
+from the drm tree.
+
+I fixed it up (I added the following merge resolution patch after
+using the latter version of the above file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 23 Aug 2021 12:37:29 +1000
+Subject: [PATCH] drm/mediatek: merge fix for "Add AAL output size
+ configuration"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/medi=
+atek/mtk_disp_aal.c
+index 64b45284766a..a6760761088b 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+@@ -18,7 +18,7 @@
+ #define DISP_AAL_EN				0x0000
+ #define AAL_EN						BIT(0)
+ #define DISP_AAL_SIZE				0x0030
+-
++#define DISP_AAL_OUTPUT_SIZE			0x04d8
+=20
+ struct mtk_disp_aal_data {
+ 	bool has_gamma;
+@@ -57,6 +57,7 @@ void mtk_aal_config(struct device *dev, unsigned int w,
+ 	struct mtk_disp_aal *aal =3D dev_get_drvdata(dev);
+=20
+ 	mtk_ddp_write(cmdq_pkt, w << 16 | h, &aal->cmdq_reg, aal->regs, DISP_AAL_=
+SIZE);
++	mtk_ddp_write(cmdq_pkt, w << 16 | h, &priv->cmdq_reg, priv->regs, DISP_AA=
+L_OUTPUT_SIZE);
+ }
+=20
+ void mtk_aal_gamma_set(struct device *dev, struct drm_crtc_state *state)
+--=20
+2.32.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+ylmqHP=i0YfySSqFQ/x9wl
+--Sig_/bG7XfPthEFmfz/DOLSyhu7w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjA1kACgkQAVBC80lX
-0GzFYggAh3Kl/lc7SKIOtE6GnkyWKWSvTURaEdcWh5igZdaecflACzwMGNbjXFjE
-e4Z5vgER8VbwjFyD1iR9RwZqQsPysBYmu5bIB4Yes8/TGMQvrMsO1+rdltsuRJU5
-KUv7p7vwKW9EPPnPmvZEao7zzF7DyLs7Yc8Z5wGCgzzDZitcw13RjxuVB2pJuJqe
-saIlSrQWznT4SgzcXvW2AuAfVP+z9wMTqhCvcxY0yyHKMmMNeSH/aTsHFEQlFn5V
-GIo/aa5/xQI5kc2I24k2yKV/9lMZuNtyNdB/bDEMOgVWWs0r4lueCLhRxbeIyiaH
-Nj7ymn9iHfEQ91Ia8pOKkywdqIJy3g==
-=JIN7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjCtIACgkQAVBC80lX
+0GyDuAf+MqP/Zo6dleuzRf78dkVKcymuWgO25c2+tMTN3+2OCCf1a6xLAIqdAW21
+uJ55GbQGRaazlm1go052k/0sSnpZ5w69bwxJRI6WAKurKfhqdh+xmg2OAR+q8REy
+d34opG1QbdL2ZRZfr7bf/499YnRJUdYQGUlXTCYzZSiUd++8UDiEITmQekzl9Kxd
+puJKg6LsojbaCifq/PDf6MX40pu3C/tms7puVNT14TVHPWgRHvigv6yeMLR+QBCF
+IWO2eK5CmDTvDRlQbPHr5Vpr5nIzuDmQzk/WuCZ6X4oUvtB0+6hUrtm3MJ2VZWa9
+CK5sbSfLwZfVR3OsQSe+Ra4AHi+VWg==
+=5vJG
 -----END PGP SIGNATURE-----
 
---Sig_/+ylmqHP=i0YfySSqFQ/x9wl--
+--Sig_/bG7XfPthEFmfz/DOLSyhu7w--

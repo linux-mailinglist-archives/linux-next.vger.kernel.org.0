@@ -2,246 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AEE3F449E
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 07:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DA83F4501
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 08:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhHWFWV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Aug 2021 01:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S231197AbhHWGfr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Aug 2021 02:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbhHWFWV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 01:22:21 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D103EC061575;
-        Sun, 22 Aug 2021 22:21:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtLFW1y7hz9sSs;
-        Mon, 23 Aug 2021 15:21:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629696095;
-        bh=ZoH2SanBe2x53hm2+4yhICui8LqzceUj7/q40Q5aveo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DzmRbS6n1RaQsI2Jputegq1Oe+cIERqNMgL+FmMKDVL+xvBaAmmzbn3st+rZgTU/y
-         OyxT23cWoQqFzadGXRkxEqba0vUkMiXc7jY00i44Ofuhni6ghGt3bci5zztSvBC3uc
-         W+fiq2rRpigYlSWdWl3FK9qa1lwzkoxkloacMguPm+owcOBuel7BsYGZCCNSclvtmW
-         XuwNMcW5mqPN3tJcnPN2Fg/poOdZMbdoZHS6GsGpIH3DJSteaGGUX9hf8mk75o5yQq
-         GATpW0vmqnsoRFOqMmuDpFPTn3A0uj9XdUqXlRRxPfKDjSFBpD8QX/bcCg6khL267K
-         aea/8DzFBN1sg==
-Date:   Mon, 23 Aug 2021 15:21:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Gwendal Grignou <gwendal@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the chrome-platform tree
-Message-ID: <20210823152134.00d95cb4@canb.auug.org.au>
+        with ESMTP id S230260AbhHWGfq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 02:35:46 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335D5C061575;
+        Sun, 22 Aug 2021 23:35:04 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id h13so24627782wrp.1;
+        Sun, 22 Aug 2021 23:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qSV/e6QyHif3aJ5CG58TgVpcSD8xLK7XuClJ7iB4h84=;
+        b=s4ev/IgiHuIFr5xnopqiQZRs20uU/t0h2JNQZlsDqPaBqfsR/w5PGZktTCle5ypukR
+         q9qYu6TrrwG08jWZQjFlyUGFT6HO0PSttR3IkTNlrXbUUXHAOmwTuV2oj4qc4q4HxLmU
+         /qAdU7f0caLOtYWXiaDy2Q4cSDyzYDXBk/RovNjn1c6/4Cg20kqKe3TKFATT9LNaV2JR
+         +jRwe6ADy/6NJi0HbTH7XOsJdJwz4yGO23OSrdt5ifHEQt77MnvciwIWwtuNMpcqrj0q
+         X5hDmeoZFRSIuWXGqk5wpLBo0V54/ch9mJdaD7n/kStlnURFcDfBzrgfPYttUaR4FPVL
+         p2rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qSV/e6QyHif3aJ5CG58TgVpcSD8xLK7XuClJ7iB4h84=;
+        b=bhz67+Atp8Tn3DpENqXrpQZ1BSgB2quLzwAikI2lMlh7dl49OA4U6lK/W7CSJSiFn5
+         n8ipwxelO+CWivwzoosysFLQgeP3GrCbQKKrhdm2Rz61+TO2oSz4U7cvDrY1fEcF9NSN
+         0f2xjzJOUHOrE8C+acPr5A23kmRo8sPu/Wkh22TLnYsHtM7pp4okmMq5sv0KsU8/XkUM
+         SuKAS9jEk63aZnqS6+rU2HLwP3+QDwIM3bypmBuJ+moWXxT7M5x8Bo1mmmoqQRSx5uv6
+         7Hr570YL8H5M0qjf72VB17g40B8jjFn2OwhhYC7DuRoE2I93/BKLjodcfqeGJF1VA7WP
+         b6sg==
+X-Gm-Message-State: AOAM53261wZ8z/eBN34Z2eV4wHUJoab3cVHGsLflsxjen3xyTfXoqxzQ
+        vGfdERpD0unjkNmJRiO+zSPGk085Ujr7gA==
+X-Google-Smtp-Source: ABdhPJw9dO/0knZ51VRdOTtD6rx3KHx7jFCK6IapWDUPd09TgcbryXdTAwCPpXPDU0IhlMgIAe1z4Q==
+X-Received: by 2002:adf:eb89:: with SMTP id t9mr12317037wrn.66.1629700502635;
+        Sun, 22 Aug 2021 23:35:02 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f08:4500:ed43:740c:fec5:7f46? (p200300ea8f084500ed43740cfec57f46.dip0.t-ipconnect.de. [2003:ea:8f08:4500:ed43:740c:fec5:7f46])
+        by smtp.googlemail.com with ESMTPSA id o34sm17404318wms.10.2021.08.22.23.34.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Aug 2021 23:35:02 -0700 (PDT)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+References: <20210823120929.7c6f7a4f@canb.auug.org.au>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <fbac0963-385d-b593-e087-e1e75f62fcbf@gmail.com>
+Date:   Mon, 23 Aug 2021 08:34:53 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/a5u1jN6JldO845TR5XQ+Vef";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20210823120929.7c6f7a4f@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/a5u1jN6JldO845TR5XQ+Vef
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-After merging the chrome-platform tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
-
-In file included from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h: In function 'trace_raw_output_cr=
-os_ec_sensorhub_timestamp':
-drivers/platform/chrome/./cros_ec_trace.h:95:12: warning: format '%lld' exp=
-ects argument of type 'long long int', but argument 3 has type 'u32' {aka '=
-unsigned int'} [-Wformat=3D]
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/trace/trace_events.h:399:27: note: in definition of macro 'DECLARE_=
-EVENT_CLASS'
-  399 |  trace_event_printf(iter, print);    \
-      |                           ^~~~~
-include/trace/trace_events.h:80:9: note: in expansion of macro 'PARAMS'
-   80 |         PARAMS(print));         \
-      |         ^~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:74:1: note: in expansion of macro=
- 'TRACE_EVENT'
-   74 | TRACE_EVENT(cros_ec_sensorhub_timestamp,
-      | ^~~~~~~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:95:2: note: in expansion of macro=
- 'TP_printk'
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |  ^~~~~~~~~
-In file included from include/trace/trace_events.h:433,
-                 from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h:95:25: note: format string is def=
-ined here
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |                    ~~~~~^
-      |                         |
-      |                         long long int
-      |                    %12d
-In file included from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h:95:12: warning: format '%lld' exp=
-ects argument of type 'long long int', but argument 4 has type 'u32' {aka '=
-unsigned int'} [-Wformat=3D]
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/trace/trace_events.h:399:27: note: in definition of macro 'DECLARE_=
-EVENT_CLASS'
-  399 |  trace_event_printf(iter, print);    \
-      |                           ^~~~~
-include/trace/trace_events.h:80:9: note: in expansion of macro 'PARAMS'
-   80 |         PARAMS(print));         \
-      |         ^~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:74:1: note: in expansion of macro=
- 'TRACE_EVENT'
-   74 | TRACE_EVENT(cros_ec_sensorhub_timestamp,
-      | ^~~~~~~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:95:2: note: in expansion of macro=
- 'TP_printk'
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |  ^~~~~~~~~
-In file included from include/trace/trace_events.h:433,
-                 from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h:95:45: note: format string is def=
-ined here
-   95 |  TP_printk("ec_ts: %12lld, ec_fifo_ts: %12lld, fifo_ts: %12lld, cur=
-r_ts: %12lld, curr_time: %12lld, delta %12lld",
-      |                                        ~~~~~^
-      |                                             |
-      |                                             long long int
-      |                                        %12d
-In file included from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h: In function 'trace_raw_output_cr=
-os_ec_sensorhub_data':
-drivers/platform/chrome/./cros_ec_trace.h:125:12: warning: format '%lld' ex=
-pects argument of type 'long long int', but argument 4 has type 'u32' {aka =
-'unsigned int'} [-Wformat=3D]
-  125 |  TP_printk("ec_num: %4d, ec_fifo_ts: %12lld, fifo_ts: %12lld, curr_=
-ts: %12lld, curr_time: %12lld, delta %12lld",
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/trace/trace_events.h:399:27: note: in definition of macro 'DECLARE_=
-EVENT_CLASS'
-  399 |  trace_event_printf(iter, print);    \
-      |                           ^~~~~
-include/trace/trace_events.h:80:9: note: in expansion of macro 'PARAMS'
-   80 |         PARAMS(print));         \
-      |         ^~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:105:1: note: in expansion of macr=
-o 'TRACE_EVENT'
-  105 | TRACE_EVENT(cros_ec_sensorhub_data,
-      | ^~~~~~~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:125:2: note: in expansion of macr=
-o 'TP_printk'
-  125 |  TP_printk("ec_num: %4d, ec_fifo_ts: %12lld, fifo_ts: %12lld, curr_=
-ts: %12lld, curr_time: %12lld, delta %12lld",
-      |  ^~~~~~~~~
-In file included from include/trace/trace_events.h:433,
-                 from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h:125:43: note: format string is de=
-fined here
-  125 |  TP_printk("ec_num: %4d, ec_fifo_ts: %12lld, fifo_ts: %12lld, curr_=
-ts: %12lld, curr_time: %12lld, delta %12lld",
-      |                                      ~~~~~^
-      |                                           |
-      |                                           long long int
-      |                                      %12d
-In file included from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h: In function 'trace_raw_output_cr=
-os_ec_sensorhub_filter':
-drivers/platform/chrome/./cros_ec_trace.h:156:12: warning: format '%d' expe=
-cts argument of type 'int', but argument 7 has type 's64' {aka 'long long i=
-nt'} [-Wformat=3D]
-  156 |  TP_printk("dx: %12lld. dy: %12lld median_m: %12lld median_error: %=
-12lld len: %d x: %12lld y: %12lld",
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/trace/trace_events.h:399:27: note: in definition of macro 'DECLARE_=
-EVENT_CLASS'
-  399 |  trace_event_printf(iter, print);    \
-      |                           ^~~~~
-include/trace/trace_events.h:80:9: note: in expansion of macro 'PARAMS'
-   80 |         PARAMS(print));         \
-      |         ^~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:135:1: note: in expansion of macr=
-o 'TRACE_EVENT'
-  135 | TRACE_EVENT(cros_ec_sensorhub_filter,
-      | ^~~~~~~~~~~
-drivers/platform/chrome/./cros_ec_trace.h:156:2: note: in expansion of macr=
-o 'TP_printk'
-  156 |  TP_printk("dx: %12lld. dy: %12lld median_m: %12lld median_error: %=
-12lld len: %d x: %12lld y: %12lld",
-      |  ^~~~~~~~~
-In file included from include/trace/trace_events.h:433,
-                 from include/trace/define_trace.h:102,
-                 from drivers/platform/chrome/cros_ec_trace.h:178,
-                 from drivers/platform/chrome/cros_ec_trace.c:215:
-drivers/platform/chrome/./cros_ec_trace.h:156:80: note: format string is de=
-fined here
-  156 |  TP_printk("dx: %12lld. dy: %12lld median_m: %12lld median_error: %=
-12lld len: %d x: %12lld y: %12lld",
-      |                                                                    =
-           ~^
-      |                                                                    =
-            |
-      |                                                                    =
-            int
-      |                                                                    =
-           %lld
-
-Introduced by commit
-
-  d453ceb6549a ("platform/chrome: sensorhub: Add trace events for sample")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/a5u1jN6JldO845TR5XQ+Vef
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjMF4ACgkQAVBC80lX
-0GztVgf/Z9SqFDTj+rMXtiKvihK/cy7dFkooXHAfux/+F02qh9Eg6bX/KqpCethv
-03EcFTn9qj25wPHmy4VB3oUo2xrLqjNHTA0/lCwuFzN+fvTxdkLb7a4ju18Kzh4h
-M0JVsDWAbq8hNir8XZ0CbeJfTdeyCDMSLkbbmu5Cu29o5aXlDs3BwPDiyEBQ44pq
-ovFjGBndZ4PMJ42gEWTodctVsm3Bp0qbA7DEto8IK/D+219MOQIIkWF62eIcQxV2
-Wt22thXsRQFFGDSe3X64qST9Z+nRl0jbsD2HID/LM0ySmDfOXD5/X3L9f/aO84og
-5HV8b3TLAh8Kg+cBMkJvdgcqagxYiQ==
-=Ak0B
------END PGP SIGNATURE-----
-
---Sig_/a5u1jN6JldO845TR5XQ+Vef--
+On 23.08.2021 04:09, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the net-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> drivers/net/ethernet/broadcom/bnx2.c: In function 'bnx2_read_vpd_fw_ver':
+> drivers/net/ethernet/broadcom/bnx2.c:8055:6: error: implicit declaration of function 'pci_vpd_find_ro_info_keyword'; did you mean 'pci_vpd_find_info_keyword'? [-Werror=implicit-function-declaration]
+>  8055 |  j = pci_vpd_find_ro_info_keyword(data, BNX2_VPD_LEN,
+>       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |      pci_vpd_find_info_keyword
+> 
+> Caused by commit
+> 
+>   ddc122aac91f ("bnx2: Search VPD with pci_vpd_find_ro_info_keyword()")
+> 
+> I have used the net-next tree from next-20210820 for today.
+> 
+This series was supposed to go through the PCI tree. It builds on recent patches
+that are in the PCI tree, but not in linux-next yet.
+I mentioned this dependency in the cover letter for the last series, but forgot
+it this time. Sorry.

@@ -2,174 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B153F48C7
-	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 12:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68663F48E8
+	for <lists+linux-next@lfdr.de>; Mon, 23 Aug 2021 12:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbhHWKi2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Aug 2021 06:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbhHWKi1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 06:38:27 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7164EC061575;
-        Mon, 23 Aug 2021 03:37:45 -0700 (PDT)
+        id S236218AbhHWKss (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Aug 2021 06:48:48 -0400
+Received: from ozlabs.org ([203.11.71.1]:41631 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234155AbhHWKss (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Aug 2021 06:48:48 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtTGH0jB7z9sWc;
-        Mon, 23 Aug 2021 20:37:43 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtTVD3CQ5z9sWc;
+        Mon, 23 Aug 2021 20:48:04 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629715063;
-        bh=9t3C/iREO5sH++MPba8Laj5fbg4WX2W1szvEXVb10Q8=;
+        s=201702; t=1629715685;
+        bh=ytEvyC+DEnLTTfZkIg3wkrRmLBORVvoxKCJVWjIoJH8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GnykghnJJCqlTDrqxtukrKZUsUi6AcKTtkD7f23c573Sn3XCwAFeEpq1lSV5xaUJx
-         K57xAEmCyMfWH7cH5j+XZV89JIv1KkXnk65DS4qcoiX4+655mM0srHhPmmWTY8FQGj
-         jRYNvlgoV0hPW/S0pBJwZK/xbaPs8n+wKvF8ZS5Ooq6/mKhngd0RTU3I8WrSlu2OMa
-         BNMDSE3H+6Eib3kC1qy305lPnJK8p7pIG2/RVaBs1iqKvEqEztjz2Jgd8MH58Z8Hlf
-         WvFbgoKwf+hwsbyurcB92KjwJ7oUcymtTvRo4L7ExP8X63jlZ6TU7VQtcQGrmHKwwC
-         oGfCt1W5R1HUA==
-Date:   Mon, 23 Aug 2021 20:37:42 +1000
+        b=FFy1BuB3h/44cQ8yyheLTod8gxRDOgY3fD4DlBfZI6fru5t0lc2n9QtLOeq+d3DDa
+         xD5etjFiIlQziNsGx+PMbqdI8Q67eaCPdlfMqWpZJi9E10vTHFIMmpWSZPnFHrlRrW
+         ul6z6eDmmubA8/1FpvWbVz6un9R6SZAtOWp0IeatzKQ+N1XM+6EQv7TmIWD/LhoKU4
+         JoK2ghRkWZVki6NA5zAGnGdZlws9Qi2W4gedFCP3op7Z3h3Jsvk1HPfL+WFZWnD3Ns
+         tExLyFsN70uPBfbHQUZeYzr+vx25SqJWKnUvi9CihCiXy6LOFgX6petrVzB8qQ/sYG
+         WsjneOXuzY1XQ==
+Date:   Mon, 23 Aug 2021 20:48:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: linux-next: Tree for Aug 20 (Wno-alloc-size-larger-than)
-Message-ID: <20210823203742.5169ad54@canb.auug.org.au>
-In-Reply-To: <8b9cb816-9d8a-2633-1afa-f5c4597a8314@infradead.org>
-References: <20210820192615.23e2e617@canb.auug.org.au>
-        <2706a406-9f72-7df1-03f6-f8e852897eb2@infradead.org>
-        <202108202248.921E8C66@keescook>
-        <8b9cb816-9d8a-2633-1afa-f5c4597a8314@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: linux-next: build warning after merge of the powerpc tree
+Message-ID: <20210823204803.7cb76778@canb.auug.org.au>
+In-Reply-To: <20210823195540.4d7363ed@canb.auug.org.au>
+References: <20210823195540.4d7363ed@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H5_=Jn3oZB3+lLt516dPwFR";
+Content-Type: multipart/signed; boundary="Sig_/sxdg6gsIpF4HdmJ_XxRwn8Z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/H5_=Jn3oZB3+lLt516dPwFR
+--Sig_/sxdg6gsIpF4HdmJ_XxRwn8Z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Sat, 21 Aug 2021 12:09:48 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
+[cc'ing Jon in case he can fix the sphix hang - or knows anything about it]
+
+On Mon, 23 Aug 2021 19:55:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On 8/20/21 10:48 PM, Kees Cook wrote:
-> > On Fri, Aug 20, 2021 at 02:54:05PM -0700, Randy Dunlap wrote: =20
-> >> On 8/20/21 2:26 AM, Stephen Rothwell wrote: =20
-> >>> Hi all,
-> >>>
-> >>> Changes since 20210819:
-> >>> =20
-> >>
-> >> Both linux-next and mmotm have many of these warnings when using
-> >> gcc (SUSE Linux) 7.5.0:
-> >>
-> >> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger=
--than' =20
-> >=20
-> > Ew. Thanks for letting me know. I thought I'd verified this existed in
-> > gcc going back to 4.9, but it looks like I did something wrong in that
-> > test.
-> >=20
-> > I think this should fix it:
-> >=20
-> > diff --git a/Makefile b/Makefile
-> > index b0fafc41b686..e33ffa05899e 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1097,7 +1097,7 @@ endif
-> >   ifdef CONFIG_CC_IS_GCC
-> >   # The allocators already balk at large sizes, so silence the compiler
-> >   # warnings for bounds checks involving those possible values.
-> > -KBUILD_CFLAGS +=3D -Wno-alloc-size-larger-than
-> > +KBUILD_CFLAGS +=3D $(call cc-option, -Wno-alloc-size-larger-than)
-> >   endif =20
-> >   >   # disable invalid "can't wrap" optimizations for signed / pointer=
-s =20
-> >  =20
+> After merging the powerpc tree, today's linux-next build (htmldocs)
+> produced this warning:
 >=20
-> Well. That didn't help. This is very weird.
->=20
-> This -Wno... option works (is accepted, no warning) on most files
-> that are being built, but a few files report an error with it:
->=20
-> ../drivers/gpu/drm/radeon/radeon_object.c: At top level:
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
-> ../drivers/gpu/drm/amd/amdgpu/amdgpu_object.c: At top level:
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
-> ../drivers/hwmon/dell-smm-hwmon.c: At top level:
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
->    CC      arch/x86/kernel/cpu/proc.o
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
-> ../arch/x86/kvm/mmu/mmu.c: At top level:
-> cc1: error: unrecognized command line option '-Wno-alloc-size-larger-than=
-' [-Werror]
->=20
-> ../drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_chardev.c: At top level:
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
-> ../kernel/trace/trace_osnoise.c: At top level:
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
->    CC      kernel/dma/mapping.o
-> cc1: warning: unrecognized command line option '-Wno-alloc-size-larger-th=
-an'
->=20
->=20
-> It seems like it might be related to some .config option.
->=20
-> I did a couple of partial builds with V=3D1 but that info didn't help me =
-any.
->=20
->=20
-> If I am the only person seeing (reporting) this build warning, it could
-> just be (another) SUSE GCC-ism. (had one just last week with  -Wmain and
-> kernel/trace/trace_osnoise.c)
 
-Today, I am also seeing thsese, but only with my sparc{,64} defconfig
-cross builds.  This is with gcc 7.3.1 built from sources.  I also just
-get a few of them.
+I missed a line:
 
-Also, I have the above "fix" patch applied (Andrew added it to mmots
-today).
+Sphinx parallel build error:
 
-So something weird is happening.
+> docutils.utils.SystemMessage: Documentation/powerpc/associativity.rst:1: =
+(SEVERE/4) Title overline & underline mismatch.
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> NUMA resource associativity
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>=20
+> Introduced by commit
+>=20
+>   1c6b5a7e7405 ("powerpc/pseries: Add support for FORM2 associativity")
+>=20
+> There are other obvious problems with this document (but sphinx seems
+> to have hung before it reported them).
+>=20
+> Like
+>=20
+> Form 0
+> -----
+>=20
+> and
+>=20
+> Form 1
+> -----
+>=20
+> and
+>=20
+> Form 2
+> -------
+
+I also get the following warning:
+
+Documentation/powerpc/associativity.rst: WARNING: document isn't included i=
+n any toctree
+
+And applying the following patch is enough to allow sphinx to finish
+(rather than livelocking):
+
+diff --git a/Documentation/powerpc/associativity.rst b/Documentation/powerp=
+c/associativity.rst
+index 07e7dd3d6c87..b77c6ccbd6cb 100644
+--- a/Documentation/powerpc/associativity.rst
++++ b/Documentation/powerpc/associativity.rst
+@@ -1,6 +1,6 @@
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+ NUMA resource associativity
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+=20
+ Associativity represents the groupings of the various platform resources i=
+nto
+ domains of substantially similar mean performance relative to resources ou=
+tside
+@@ -20,11 +20,11 @@ A value of 1 indicates the usage of Form 1 associativit=
+y. For Form 2 associativi
+ bit 2 of byte 5 in the "ibm,architecture-vec-5" property is used.
+=20
+ Form 0
+------
++------
+ Form 0 associativity supports only two NUMA distances (LOCAL and REMOTE).
+=20
+ Form 1
+------
++------
+ With Form 1 a combination of ibm,associativity-reference-points, and ibm,a=
+ssociativity
+ device tree properties are used to determine the NUMA distance between res=
+ource groups/domains.
+=20
+@@ -45,7 +45,7 @@ level of the resource group, the kernel doubles the NUMA =
+distance between the
+ comparing domains.
+=20
+ Form 2
+--------
++------
+ Form 2 associativity format adds separate device tree properties represent=
+ing NUMA node distance
+ thereby making the node distance computation flexible. Form 2 also allows =
+flexible primary
+ domain numbering. With numa distance computation now detached from the ind=
+ex value in
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/H5_=Jn3oZB3+lLt516dPwFR
+--Sig_/sxdg6gsIpF4HdmJ_XxRwn8Z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjenYACgkQAVBC80lX
-0GykJwf/QxVBaCpsGAeHrI4VbaB1d79xCF+eidpgQzwwD0tm3bw9lXb+H8IGu65R
-14KGzd2vRuVaSqG/AWeg2/uiffSqho1Tzkouo2Qy0C8p9DYjxDIrDevfPW7XebGw
-bL49NfWTqI1O0DgqgdpekAzrpGeHjP1r+6csc66Z9OSUpWMvfdNcXrBcGe9a2wX3
-wqMtkV0ppvPJnLI1nUUhQ6xnX9KkF+EV99FOPiGm+g3iylEUA2GbQqfHyR/wKEDA
-SXwUbeQ6EJ8k5ePg+MW1OUOUvj4T93AXZezEzbDBVjnqTmelQgyHWPGR9IEqrcuz
-reNUIxcU6+QbZNlrsN6h1is/RL0YdA==
-=ZbXJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEjfOMACgkQAVBC80lX
+0GyLKggAhCMrgdwGxkXle5T2qBzbCLLt9t4orSVuLnnyOdL/bZOW3T4uZoeNrwE3
+ZgvcuzFGHpNjiT84wlMR1Ui6tD/cSF95PEyno26ZoifhPQELvZxBgiYQtCirrgIJ
+Co8qEQPsScICE8fvNNhwbliv/xYTei+Hfj2tED/FugRbaHHqoOOjUVUfO/PI0roZ
+kRD8H5x35d+oYVUwhqmzmYWMYtcdnyXcu3vsx587Nr3O9yk0n+PLwU6OaAgSPtt7
+PMo+QNZsm+E/Uyvvjkc1wPU5x8UGlU0nOGsLFAjycWrhBeTztpZlunjAHKyfqPQX
+GLRByUmgTZmQw9Gs0SfxO+QhZpkYCQ==
+=4JXF
 -----END PGP SIGNATURE-----
 
---Sig_/H5_=Jn3oZB3+lLt516dPwFR--
+--Sig_/sxdg6gsIpF4HdmJ_XxRwn8Z--

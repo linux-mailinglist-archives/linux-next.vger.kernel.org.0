@@ -2,190 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1A73F578F
-	for <lists+linux-next@lfdr.de>; Tue, 24 Aug 2021 07:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6723F5847
+	for <lists+linux-next@lfdr.de>; Tue, 24 Aug 2021 08:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhHXFTy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Aug 2021 01:19:54 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3428 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229736AbhHXFTx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 24 Aug 2021 01:19:53 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17O5CeBk174333;
-        Tue, 24 Aug 2021 01:18:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=PE/TzKz3X9Hz3XOzUeUYInAIDGmI+H9B+ly6TDLjfD4=;
- b=PG2mi5lHmfKSLIPp7PBzEVPvOP4i8j/BTkMpO+bMNNNnnnT07VagYxtZCs7gFM/7M2hQ
- wbpV1r+aZU6J79W/TeQM/tvYVsz0L+g36VM4IJXL//desOFLH7EhKWS5b0Y4OrGhNCLa
- L8m7a3yyUYih3jJdicUERAUDXUJKWsNSj6EL69srjFn00+7R6c3eqRNqdx+6NF5iQzGx
- 5XpXK4BnFVjbXkOhUtFT+0wffJOopsKvfDI0B7XUF0cTl6Gb9G20KgjF2fQx2TI4EsUk
- XKtRO9kDMLQOsVJ2pgk3CEzXcb2KJjQqYXZkHFqyCVf9OMM37NYSxqeQQQzVeBhzueF5 Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3amrx0t0qp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 01:18:55 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17O54Gd1146266;
-        Tue, 24 Aug 2021 01:18:55 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3amrx0t0qg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 01:18:55 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17O5HJLE030281;
-        Tue, 24 Aug 2021 05:18:54 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma03dal.us.ibm.com with ESMTP id 3ajs4ch0sm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 05:18:54 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17O5Iroa41877868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Aug 2021 05:18:53 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BDADEB206A;
-        Tue, 24 Aug 2021 05:18:53 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29977B2068;
-        Tue, 24 Aug 2021 05:18:51 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.125.5])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 24 Aug 2021 05:18:50 +0000 (GMT)
-X-Mailer: emacs 28.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        id S234504AbhHXGdJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Aug 2021 02:33:09 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58611 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234553AbhHXGdF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 24 Aug 2021 02:33:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gtzmd0Z3Wz9sW5;
+        Tue, 24 Aug 2021 16:32:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1629786739;
+        bh=G4Afy2bY38uD61QN93hzsG6Jibd7SKbld7PK7j0WJSE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=vJry3WwRJchnTzdrWOOU3avc8HSakHOIMw6CyBnJpJRMSgiptC9C2JlnS4DVv0/Up
+         F/KzrEoD38lrl8sqYlgOfXwOESQwv3btBubcd2HUIekhOX5wqHdVVL0Li1LsLCmalk
+         xNsEBoGZR/nYkbeKfHjBBtRNYc6UwjLvfWfqdlvJp8sHiMM50u9ar1VvuMLh5z+A6I
+         beGD2iV3wxDwNu9qK2gk62WuwA1Fw5r6j460VWyDVXcSiPCkH8l0/so38+0PZFv/bm
+         HbnviP9BNfVommsBgMKDDzBYH42QyBTBRLdQpvyBbfDeW7zXPUHnJaR5/h/Tvev9vh
+         NEBOBAygaiZ/w==
+Date:   Tue, 24 Aug 2021 16:32:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: linux-next: build warning after merge of the powerpc tree
-In-Reply-To: <20210823204803.7cb76778@canb.auug.org.au>
-References: <20210823195540.4d7363ed@canb.auug.org.au>
- <20210823204803.7cb76778@canb.auug.org.au>
-Date:   Tue, 24 Aug 2021 10:48:47 +0530
-Message-ID: <87v93ve7yg.fsf@linux.ibm.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: linux-next: manual merge of the scsi tree with the block tree
+Message-ID: <20210824163215.3f08d55c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hZjYXa38_KuuHplE-WO4QycR3zD1t4JA
-X-Proofpoint-ORIG-GUID: sH7ZjWYYbu6t_LnU8jBcOlx4rrpIfd-f
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-24_01:2021-08-23,2021-08-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 adultscore=0 clxscore=1011 impostorscore=0
- mlxlogscore=999 bulkscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108240031
+Content-Type: multipart/signed; boundary="Sig_/sc3S_ZW17TPMR5_fG=CRzmF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+--Sig_/sc3S_ZW17TPMR5_fG=CRzmF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
->
-> [cc'ing Jon in case he can fix the sphix hang - or knows anything about it]
->
-> On Mon, 23 Aug 2021 19:55:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the powerpc tree, today's linux-next build (htmldocs)
->> produced this warning:
->> 
->
-> I missed a line:
->
-> Sphinx parallel build error:
->
->> docutils.utils.SystemMessage: Documentation/powerpc/associativity.rst:1: (SEVERE/4) Title overline & underline mismatch.
->> 
->> ============================
->> NUMA resource associativity
->> =============================
->> 
->> Introduced by commit
->> 
->>   1c6b5a7e7405 ("powerpc/pseries: Add support for FORM2 associativity")
->> 
->> There are other obvious problems with this document (but sphinx seems
->> to have hung before it reported them).
->> 
->> Like
->> 
->> Form 0
->> -----
->> 
->> and
->> 
->> Form 1
->> -----
->> 
->> and
->> 
->> Form 2
->> -------
->
-> I also get the following warning:
->
-> Documentation/powerpc/associativity.rst: WARNING: document isn't included in any toctree
->
-> And applying the following patch is enough to allow sphinx to finish
-> (rather than livelocking):
->
-> diff --git a/Documentation/powerpc/associativity.rst b/Documentation/powerpc/associativity.rst
-> index 07e7dd3d6c87..b77c6ccbd6cb 100644
-> --- a/Documentation/powerpc/associativity.rst
-> +++ b/Documentation/powerpc/associativity.rst
-> @@ -1,6 +1,6 @@
-> -============================
-> +===========================
->  NUMA resource associativity
-> -=============================
-> +===========================
->  
->  Associativity represents the groupings of the various platform resources into
->  domains of substantially similar mean performance relative to resources outside
-> @@ -20,11 +20,11 @@ A value of 1 indicates the usage of Form 1 associativity. For Form 2 associativi
->  bit 2 of byte 5 in the "ibm,architecture-vec-5" property is used.
->  
->  Form 0
-> ------
-> +------
->  Form 0 associativity supports only two NUMA distances (LOCAL and REMOTE).
->  
->  Form 1
-> ------
-> +------
->  With Form 1 a combination of ibm,associativity-reference-points, and ibm,associativity
->  device tree properties are used to determine the NUMA distance between resource groups/domains.
->  
-> @@ -45,7 +45,7 @@ level of the resource group, the kernel doubles the NUMA distance between the
->  comparing domains.
->  
->  Form 2
-> --------
-> +------
->  Form 2 associativity format adds separate device tree properties representing NUMA node distance
->  thereby making the node distance computation flexible. Form 2 also allows flexible primary
->  domain numbering. With numa distance computation now detached from the index value in
+Hi all,
 
-Thanks for looking into this. I guess we also need to format the below table?
+Today's linux-next merge of the scsi tree got a conflict in:
 
-  | 0    8   40
---|------------
-  |
-0 | 10   20  80
-  |
-8 | 20   10  160
-  |
-40| 80   160  10
+  drivers/scsi/st.c
 
+between commit:
 
-I don't know how to represent that in the documentation file. A table is
-probably not the right one?
+  45938335d0a9 ("st: do not allocate a gendisk")
 
--aneesh
+from the block tree and commits:
+
+  dba7688fc903 ("scsi: st: Simplify ioctl handling")
+  2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from scsi_ioctl()")
+
+from the scsi tree.
+
+I fixed it up (I think, see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/scsi/st.c
+index d1abc020f3c0,2d1b0594af69..000000000000
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@@ -3815,35 -3821,24 +3816,24 @@@ static long st_ioctl(struct file *file
+  		goto out;
+  	}
+  	mutex_unlock(&STp->lock);
+- 	switch (cmd_in) {
+- 		case SCSI_IOCTL_STOP_UNIT:
+- 			/* unload */
+- 			retval =3D scsi_ioctl(STp->device, cmd_in, p);
+- 			if (!retval) {
+- 				STp->rew_at_close =3D 0;
+- 				STp->ready =3D ST_NO_TAPE;
+- 			}
+- 			return retval;
+ =20
+- 		case SCSI_IOCTL_GET_IDLUN:
+- 		case SCSI_IOCTL_GET_BUS_NUMBER:
+- 			break;
++ 	switch (cmd_in) {
++ 	case SG_IO:
++ 	case SCSI_IOCTL_SEND_COMMAND:
++ 	case CDROM_SEND_PACKET:
++ 		if (!capable(CAP_SYS_RAWIO))
++ 			return -EPERM;
++ 	default:
++ 		break;
++ 	}
+ =20
+- 		default:
+- 			if ((cmd_in =3D=3D SG_IO ||
+- 			     cmd_in =3D=3D SCSI_IOCTL_SEND_COMMAND ||
+- 			     cmd_in =3D=3D CDROM_SEND_PACKET) &&
+- 			    !capable(CAP_SYS_RAWIO))
+- 				i =3D -EPERM;
+- 			else
+- 				i =3D scsi_cmd_ioctl(STp->device->request_queue,
+- 						   NULL, file->f_mode, cmd_in,
+- 						   p);
+- 			if (i !=3D -ENOTTY)
+- 				return i;
+- 			break;
+ -	retval =3D scsi_ioctl(STp->device, STp->disk, file->f_mode, cmd_in, p);
+++	retval =3D scsi_ioctl(STp->device, NULL, file->f_mode, cmd_in, p);
++ 	if (!retval && cmd_in =3D=3D SCSI_IOCTL_STOP_UNIT) {
++ 		/* unload */
++ 		STp->rew_at_close =3D 0;
++ 		STp->ready =3D ST_NO_TAPE;
+  	}
+- 	return -ENOTTY;
++ 	return retval;
+ =20
+   out:
+  	mutex_unlock(&STp->lock);
+
+--Sig_/sc3S_ZW17TPMR5_fG=CRzmF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEkkm8ACgkQAVBC80lX
+0Gx4nwf+JR5aOUwt7vl+ukRTijCLETa3UZYPiCXZHEcutAnOxp+LuVUf9ri03Erj
+OSoV53BWxUux27syyqJJB9ulv18Yu3rUzledGBzyuK6OPF6YSSvo7nt2lB+iJuhA
+vdFMN3Lz+EYw+SLn4l8Gx0etjXwMKTdxjFiYQ7ZZm+MZOSniZhZy9czcvNABtOEJ
+UWJ0TRRs1FUG2WfCUJ7bKITsmtHBau329//iLq6RUYMKNjEHraZREVSOqVO1cGoZ
+TiSXpImQuBl1/BVutMFw8Z98Di0ASTnYsJEcBO7OhSs4IvJ40wndjJ9u3hAp6krU
+aLGwqminmXueiIwQCwS3mZqx73fOSw==
+=9wYc
+-----END PGP SIGNATURE-----
+
+--Sig_/sc3S_ZW17TPMR5_fG=CRzmF--

@@ -2,178 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81273F5406
-	for <lists+linux-next@lfdr.de>; Tue, 24 Aug 2021 02:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EAF3F5409
+	for <lists+linux-next@lfdr.de>; Tue, 24 Aug 2021 02:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbhHXANT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Aug 2021 20:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
+        id S233330AbhHXAOu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Aug 2021 20:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbhHXANS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 20:13:18 -0400
+        with ESMTP id S233049AbhHXAOu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Aug 2021 20:14:50 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2ADC061575;
-        Mon, 23 Aug 2021 17:12:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A274C061575
+        for <linux-next@vger.kernel.org>; Mon, 23 Aug 2021 17:14:07 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtqLS6vNQz9ssD;
-        Tue, 24 Aug 2021 10:12:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GtqNF1VGQz9ssD;
+        Tue, 24 Aug 2021 10:14:05 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1629763953;
-        bh=smG2A0KLlmpKlAo1m3EBk1m9rpYW/qPPGNszKvRwOTI=;
+        s=201702; t=1629764045;
+        bh=1wHzsAmHrSZW0xq6f7z49WWAObuooJQZCRmdk/Odil8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M6T0VavKhAndB7pGZtf8ZmfojutzDUMTVroswObGTl5FJ/pnnTQhPvcIOLetH1rVM
-         pLqArP+R5cilC0K56+cSp6VDunAiWNokvV2hXVsBuQoWdCPxwMFeXgOJ1ovOQ3bdws
-         uA7z8yJZYRmVJHcWKRyVdndK856rcaaGtSWMfD5ks8tt6woDUOnBNDZkK0SOC1xKa1
-         rLc2GzEH1G7hGimFv27mV97BkDd7kcl+OsBVDalAR/KTNVzf0Qy1ohaSL20sLDN4fK
-         FLUeTRQy8+cfoOlcOdxkqWUD/G77PyNOhhYZ/klQnrGi/nX9VlcWFeD2Ri55G7+nJo
-         hciDhvaeoKjuA==
-Date:   Tue, 24 Aug 2021 10:12:31 +1000
+        b=OpsfPNPEF7zvVKScytNeCwP3L3uJXjFHJ5Y83qna/4S18OxhuqOTO/9iV3TE4f8Ef
+         h7pl7x1fyhe7q1awkmIMS/unjY/D1tjpSnMXlI4bUHF4EWsRvuQ5n5L5WrNjJoufG5
+         Qj2iTu5CuChYU8n8a6/mPgxDWrpRwpx40tHCaIqBm/G/5qjgPoy0ljVI+zo+bg/WC1
+         q4rlwRFeEeN5Gkr53/S5m3vvFqECc0JPpsJomvsJY+sHo+uU+Ko8g7Kps/LJCr2RxH
+         D9AoYgQOYXM7WZtYRjB8Wy7p8W7ThVa5LDDBOSQj/WOObdtvGf8yOjzlKztOaGzHQP
+         51uvJXnGh1ZTw==
+Date:   Tue, 24 Aug 2021 10:14:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20210824101231.72801784@canb.auug.org.au>
-In-Reply-To: <20210823124122.3d088380@canb.auug.org.au>
-References: <20210823124122.3d088380@canb.auug.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
+Subject: Re: Notable build failures in next-20210823
+Message-ID: <20210824101353.68b6999a@elm.ozlabs.ibm.com>
+In-Reply-To: <291c0a6a-5285-0b63-21cd-f6aaff4e6727@roeck-us.net>
+References: <291c0a6a-5285-0b63-21cd-f6aaff4e6727@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kQO=hGw=Cw+9QfpvUMF0QRy";
+Content-Type: multipart/signed; boundary="Sig_/gLZAFAP0Cg7m=+lZl3f7XVJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kQO=hGw=Cw+9QfpvUMF0QRy
+--Sig_/gLZAFAP0Cg7m=+lZl3f7XVJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Guenter,
 
-[Thanks Guenter for pointing this out]
-
-On Mon, 23 Aug 2021 12:41:22 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, 23 Aug 2021 08:47:38 -0700 Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Today's linux-next merge of the drm tree got a conflict in:
+> Seen in next-20210823:
 >=20
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> Building arm64:defconfig ... failed
 >=20
-> between commit:
+> drivers/gpu/drm/mediatek/mtk_disp_aal.c: In function 'mtk_aal_config':
+> drivers/gpu/drm/mediatek/mtk_disp_aal.c:60:47: error: 'priv' undeclared
 >=20
->   71ac6f390f6a ("drm/mediatek: Add AAL output size configuration")
->=20
-> from Linus' tree and commit:
->=20
->   78d1783c3243 ("drm/mediatek: Separate aal sub driver")
->=20
-> from the drm tree.
->=20
-> I fixed it up (I added the following merge resolution patch after
-> using the latter version of the above file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 23 Aug 2021 12:37:29 +1000
-> Subject: [PATCH] drm/mediatek: merge fix for "Add AAL output size
->  configuration"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/mediatek/mtk_disp_aal.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/me=
-diatek/mtk_disp_aal.c
-> index 64b45284766a..a6760761088b 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-> @@ -18,7 +18,7 @@
->  #define DISP_AAL_EN				0x0000
->  #define AAL_EN						BIT(0)
->  #define DISP_AAL_SIZE				0x0030
-> -
-> +#define DISP_AAL_OUTPUT_SIZE			0x04d8
-> =20
->  struct mtk_disp_aal_data {
->  	bool has_gamma;
-> @@ -57,6 +57,7 @@ void mtk_aal_config(struct device *dev, unsigned int w,
->  	struct mtk_disp_aal *aal =3D dev_get_drvdata(dev);
-> =20
->  	mtk_ddp_write(cmdq_pkt, w << 16 | h, &aal->cmdq_reg, aal->regs, DISP_AA=
-L_SIZE);
-> +	mtk_ddp_write(cmdq_pkt, w << 16 | h, &priv->cmdq_reg, priv->regs, DISP_=
-AAL_OUTPUT_SIZE);
->  }
-> =20
->  void mtk_aal_gamma_set(struct device *dev, struct drm_crtc_state *state)
+> and the second
+> error was introduced by commit e2b44fa97cb8f ("Merge remote-tracking bran=
+ch
+> 'drm/drm-next"), suggesting a bad merge resolution (?).
 
-My mistake, I have fixed that patch today to be this:
+Yeah, bad merge resolution on my part.  Fixed for today.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 23 Aug 2021 12:37:29 +1000
-Subject: [PATCH] drm/mediatek: merge fix for "Add AAL output size
- configuration"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/mediatek/mtk_disp_aal.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/medi=
-atek/mtk_disp_aal.c
-index 64b45284766a..a6760761088b 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-@@ -18,7 +18,7 @@
- #define DISP_AAL_EN				0x0000
- #define AAL_EN						BIT(0)
- #define DISP_AAL_SIZE				0x0030
--
-+#define DISP_AAL_OUTPUT_SIZE			0x04d8
-=20
- struct mtk_disp_aal_data {
- 	bool has_gamma;
-@@ -57,6 +57,7 @@ void mtk_aal_config(struct device *dev, unsigned int w,
- 	struct mtk_disp_aal *aal =3D dev_get_drvdata(dev);
-=20
- 	mtk_ddp_write(cmdq_pkt, w << 16 | h, &aal->cmdq_reg, aal->regs, DISP_AAL_=
-SIZE);
-+	mtk_ddp_write(cmdq_pkt, w << 16 | h, &aal->cmdq_reg, aal->regs, DISP_AAL_=
-OUTPUT_SIZE);
- }
-=20
- void mtk_aal_gamma_set(struct device *dev, struct drm_crtc_state *state)
-
+Thanks for pointing it out.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kQO=hGw=Cw+9QfpvUMF0QRy
+--Sig_/gLZAFAP0Cg7m=+lZl3f7XVJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEkOW8ACgkQAVBC80lX
-0Gxj3Af+JUs4RUDEmZ9oeZiWmQtN2DLoKk6/ZkCh5rNEk/sNQoV8jHrkbPeYX+qi
-XKI9YLojYGGlyu4syadeBvdiXuVeYA2FR2KgLRlt/nNL5w+5w3iK2lIPK/12evI8
-N0/fe2QbZoOfh/7hGOhHbefpZORb1XHNp37MbuTxp7hwVBbuPj+e89QVFRujRXgk
-Eyre3Dpm2XEenEqOFX/djnCeJKQaFHbj5nHHDczAmosUxrt4ptUX+M3u7MIA6RiY
-oeSxiL8qqduUxv5/5DfbuTgXKeTCryF5oDpKHsR4btwA9pwe9GD9byFfthbj6RFT
-8f7G9vvZvM6ZXIlPWD4JhulCwQW3bg==
-=Zv/i
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEkOcwACgkQAVBC80lX
+0GziWAf/Vr5HR5ato32GJfv0oapzVmLg0ozd3AUBrYp+Ece0VNUlbcO7DXufs+5e
+7q7yL+K8+nCtJExrXsvcuujNrwFsbas5XS2nsHkn4LySTbD5tE4MG+WGNCUdwPhC
+4Q2W7uiu1IvRPi3yvKOk16MEpt4WWIKIpxYLQ14YuXbUl3zNZcGExORScoKkSOYt
+qF8pPBRPd9jHj1nSuO+OixaO59I2qm00Vmu8C3v/ybh33mAfV18vYN7gpaiSinOF
+4jhrrqPVetTbr9f0HyRVWbIrsgr+hjKsXNeTf1HdL94WeHc//FjUCE1aIg5/x5ea
+QlValqm/6pva7bFavVKkxmejtInAGg==
+=jS15
 -----END PGP SIGNATURE-----
 
---Sig_/kQO=hGw=Cw+9QfpvUMF0QRy--
+--Sig_/gLZAFAP0Cg7m=+lZl3f7XVJ--

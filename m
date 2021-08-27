@@ -2,100 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BF53F9489
-	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 08:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5D3F949E
+	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 08:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbhH0GuA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Aug 2021 02:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbhH0Gt7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Aug 2021 02:49:59 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D33C061757;
-        Thu, 26 Aug 2021 23:49:10 -0700 (PDT)
+        id S235220AbhH0G4d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Aug 2021 02:56:33 -0400
+Received: from ozlabs.org ([203.11.71.1]:57081 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234948AbhH0G4d (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 27 Aug 2021 02:56:33 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gwr0f6YXlz9sPf;
-        Fri, 27 Aug 2021 16:49:06 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gwr8F2cPyz9sVq;
+        Fri, 27 Aug 2021 16:55:41 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630046947;
-        bh=tAVLp/U8kG29y66CnYPSvdupsIhwTmlq5n49HOegpAI=;
+        s=201702; t=1630047343;
+        bh=W9a7uH45o/X7TI2lMvmmme6lPDzI3mybkZi6XAaP6I8=;
         h=Date:From:To:Cc:Subject:From;
-        b=TID6KPqRL7ZqPUaiMlRjisi3mTl4TkLDrwOGXkp5z/1ZaQeatQbuOHRpqg2q26NBA
-         qrsg4x+qb2ZF4yqLmt41sE9+FJ0vXFqdFKPZsAOIDH6jrb1HHq7Q992rzQeHhUZZLy
-         xmu4L0Rbxy+6r0kftOtH3kRo8ja1M1FqSleEOmsVDYJbB/TOfkIvPAXgWaGx7ce4oN
-         yqkgqtn2lvEjWtUIxhUHMbQVaHnAo2H39J2AVUKxZbVC591/l54k8vo4ynDS3WjOq1
-         y/zBydH1x9YXT9YjbYbbxdBTCjh7+loLkR8k0oambolWXdLUrAgjxuqyU5hnDQbm4d
-         Na3slohCk09Kg==
-Date:   Fri, 27 Aug 2021 16:49:04 +1000
+        b=iLzTnYgWKHuqTwqKypJubR0SL82xcPldXYqrEbW91LUvtLRV0PXifrsKyVFj/G2vX
+         oULCufSCxqqpmrCi1s7PtpzxC3fqfwkDAADvbzu5GdSK5y4phnuLnnVKqV8hLhF32J
+         U68a8z9wQITtFH1WA42MK/erQN/EEzP0O15DHJeY8L6itEhD5z2PtSglb6TKBr37c1
+         pMkbfcKL/ihJOysecfIvg4EHA3jySeAwyeVJm6CZ9IIp5+LAISOumubCdX/FvES9jh
+         fSe8sGLqxOwHPsXoRnc5bCQOhCHr29qPzfWl4SPAn4HB+nL/6TolPpEAdUlv8l0SwM
+         uzcFpcUqQXy7w==
+Date:   Fri, 27 Aug 2021 16:55:40 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: linux-next: manual merge of the char-misc tree with Linus' tree
-Message-ID: <20210827164904.6b1d1f0e@canb.auug.org.au>
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>
+Subject: linux-next: manual merge of the vfio tree with the drm tree
+Message-ID: <20210827165540.30567055@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Z.Dz2ls4Ely_Xmz7_=iSlfn";
+Content-Type: multipart/signed; boundary="Sig_/g/niN.PFBGgWn_yojOkpWNz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Z.Dz2ls4Ely_Xmz7_=iSlfn
+--Sig_/g/niN.PFBGgWn_yojOkpWNz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the char-misc tree got conflicts in:
+Today's linux-next merge of the vfio tree got a conflict in:
 
-  drivers/bus/mhi/core/main.c
-  net/qrtr/mhi.c
+  drivers/vfio/pci/vfio_pci.c
 
-between commit:
+between commits:
 
-  9ebc2758d0bb ("Revert "net: really fix the build..."")
+  b8779475869a ("vgaarb: provide a vga_client_unregister wrapper")
+  f6b1772b2555 ("vgaarb: remove the unused irq_set_state argument to vga_cl=
+ient_register")
+  bf44e8cecc03 ("vgaarb: don't pass a cookie to vga_client_register")
 
-from the origin tree and commit:
+from the drm tree and commits:
 
-  0092a1e3f763 ("bus: mhi: Add inbound buffers allocation flag")
+  1cbd70fe3787 ("vfio/pci: Rename vfio_pci.c to vfio_pci_core.c")
+  ff53edf6d6ab ("vfio/pci: Split the pci_driver code out of vfio_pci_core.c=
+")
 
-from the char-misc tree.
+from the vfio tree.
 
-I fixed it up (the commit in Linus' tree is basically a revert of the
-char-misc tree, so I effectively reverted the latter) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+I fixed it up (I reapplied the drm changes to vfio_pci_core.c - see below)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 27 Aug 2021 16:52:45 +1000
+Subject: [PATCH] fixup for "vfio/pci: Rename vfio_pci.c to vfio_pci_core.c"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/vfio/pci/vfio_pci_core.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_c=
+ore.c
+index 675616e08897..68198e0f2a63 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -53,10 +53,9 @@ static inline bool vfio_vga_disabled(void)
+  * has no way to get to it and routing can be disabled externally at the
+  * bridge.
+  */
+-static unsigned int vfio_pci_set_vga_decode(void *opaque, bool single_vga)
++static unsigned int vfio_pci_set_decode(struct pci_dev *pdev, bool single_=
+vga)
+ {
+-	struct vfio_pci_core_device *vdev =3D opaque;
+-	struct pci_dev *tmp =3D NULL, *pdev =3D vdev->pdev;
++	struct pci_dev *tmp =3D NULL;
+ 	unsigned char max_busnr;
+ 	unsigned int decodes;
+=20
+@@ -1756,10 +1755,10 @@ static int vfio_pci_vga_init(struct vfio_pci_core_d=
+evice *vdev)
+ 	if (!vfio_pci_is_vga(pdev))
+ 		return 0;
+=20
+-	ret =3D vga_client_register(pdev, vdev, NULL, vfio_pci_set_vga_decode);
++	ret =3D vga_client_register(pdev, vfio_pci_set_decode);
+ 	if (ret)
+ 		return ret;
+-	vga_set_legacy_decoding(pdev, vfio_pci_set_vga_decode(vdev, false));
++	vga_set_legacy_decoding(pdev, vfio_pci_set_decode(pdev, false));
+ 	return 0;
+ }
+=20
+@@ -1769,7 +1768,7 @@ static void vfio_pci_vga_uninit(struct vfio_pci_core_=
+device *vdev)
+=20
+ 	if (!vfio_pci_is_vga(pdev))
+ 		return;
+-	vga_client_register(pdev, NULL, NULL, NULL);
++	vga_client_unregister(pdev);
+ 	vga_set_legacy_decoding(pdev, VGA_RSRC_NORMAL_IO | VGA_RSRC_NORMAL_MEM |
+ 					      VGA_RSRC_LEGACY_IO |
+ 					      VGA_RSRC_LEGACY_MEM);
+--=20
+2.32.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Z.Dz2ls4Ely_Xmz7_=iSlfn
+--Sig_/g/niN.PFBGgWn_yojOkpWNz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEoiuAACgkQAVBC80lX
-0GyBGgf8D1X6vH/wR6nycVrqTmDViT3V+G07+/dprdZveIloBDBMwEIaZcx/K8pB
-/g46Z3mTX7aGN4PEO/dk4FcEMkW8TApcelw/GnbdPQ+hg9ntTelI3fQ2yhugn2mo
-o8Mqa0dpS8oHgzdqwPy1iSRXoCbFxtlfVqCpJawSXV75URaPRlYPpUfUFQDFYk5X
-C2P2KgIs8Yt6YgBApGDqEJyq87P7QuhLqx+SBf8lE7Sy6Jm3hEPkHeDX1T2c/GXx
-XIxFsC2Fst93OmD2Ca3bJUHxCTsouLNwJkhEGMr6DrqR/NNob7X0OUtEyWPnZVXL
-FO+vMhvFa1npTioV6Z9ORZg9rgIZ5g==
-=MKhj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEojGwACgkQAVBC80lX
+0Gwkbwf/cvmHUKI0kHJVftfJW2ihn9mGX2uu9v6b8SK5uLicP5q+yMR+SmlRtW+L
+iPT7J6UVkdg3J319pl1N2R/MFSkOkRknHyT5bibTr3eABYfDYi7YXeeJKCzB7Occ
+83/dp3FborcUuPniueYgRNp4AOa5qZd6XqFP194TJgzdAlqls8YOYsq/3dAkm3x0
+UH7c6DYEobEgXH9SMQMbAUxHamMf6YvH35IVqfFHWeLAJ0rKXNza0xzCX6vc71J5
+C9dp130xITAzHrZvOWJcsZEIHskmlBMsBH0QVtE7cQevBQB9SdZZByudQkXPKIWV
+CDkG6cbVwbuOKcopjm/MA+9V4GgDVg==
+=WuCX
 -----END PGP SIGNATURE-----
 
---Sig_/Z.Dz2ls4Ely_Xmz7_=iSlfn--
+--Sig_/g/niN.PFBGgWn_yojOkpWNz--

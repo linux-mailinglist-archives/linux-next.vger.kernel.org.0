@@ -2,139 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285BA3F928A
-	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 04:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A31B3F92ED
+	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 05:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbhH0Cv3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Aug 2021 22:51:29 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:39501 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbhH0Cv3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Aug 2021 22:51:29 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 17R2oH7a030715;
-        Fri, 27 Aug 2021 11:50:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 17R2oH7a030715
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1630032618;
-        bh=3ul5FdNxXDzBoCZ3stt7fV3y49FCqdWTBTBeH0mAs0U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HaFYJLjmaQHVSaQfeVTlgO8w3r/crCi3okE82ywbNgAYqU6wOiXCWz7fPB5RHOVGX
-         ApzhUHJ1fPae/vfR9LXUgr62Br5X02CVKlvLEt5SAtytcCxwPZ1WSO5ONC8PmHCNbV
-         3j6F60wIYtlMCeEzNpNHxNkeW++Xzjj0aHChbgJPGQU/DKiiMGM+lMDZt8DRLUJblB
-         N6f/HysajgQhecxq0kBsp4XhEzAQqXfJX2AyeQP3Vp+n2PTvNboaW+E5ROdmdDPlCD
-         Y4nNzBpxVY5W1++s/Upzu2QEaKurOLF9LUyAo/QbLp/OYOdc/GH8c/+bFsdOLAPW1s
-         Cg4ARkBqKtDFw==
-X-Nifty-SrcIP: [209.85.214.174]
-Received: by mail-pl1-f174.google.com with SMTP id n12so3011987plk.10;
-        Thu, 26 Aug 2021 19:50:18 -0700 (PDT)
-X-Gm-Message-State: AOAM531CALwvdQtyukngryUYN5r81Vha3abrFGx76vo3jJ+Nv2duY+vG
-        Q/TIpqBu9fCzEn0FMmu6wi1641vlWVhLM6inArQ=
-X-Google-Smtp-Source: ABdhPJyWXAjLg1wSsMAMpNAb/xV7A58D2hn+JY/cFGWUWGHjm0NirHuYD4IuWNqJPcttkjgRP0r/nD0czld8RL7hNFM=
-X-Received: by 2002:a17:902:a5c5:b029:12c:a867:a839 with SMTP id
- t5-20020a170902a5c5b029012ca867a839mr6522746plq.71.1630032617285; Thu, 26 Aug
- 2021 19:50:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210826191330.40dc43e8@canb.auug.org.au> <CAK7LNASL2JNb4zT7UFr41dLO0oEuvc6yUg__qhc59q8aNqWxEg@mail.gmail.com>
- <20210827115052.00391d9a@canb.auug.org.au>
-In-Reply-To: <20210827115052.00391d9a@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 27 Aug 2021 11:49:40 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ0Gxap8oxDMqcO8b9t8B2+g98pRWenJEQCEYw+9Bn3qg@mail.gmail.com>
-Message-ID: <CAK7LNAQ0Gxap8oxDMqcO8b9t8B2+g98pRWenJEQCEYw+9Bn3qg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
+        id S244175AbhH0D3y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Aug 2021 23:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244167AbhH0D3w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Aug 2021 23:29:52 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE36C0613C1
+        for <linux-next@vger.kernel.org>; Thu, 26 Aug 2021 20:29:04 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id e16so4094534pfc.6
+        for <linux-next@vger.kernel.org>; Thu, 26 Aug 2021 20:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=972//1VrtuuFZwnQDeMdS0B6akzzjiuVZWtERzM09s0=;
+        b=j9siNTCZuGh7KQq256N6d/De1fzPdgR0s59g9kiBkVFEaXhT+QJ7U7zpHzePZleqCa
+         NLeFWIHihL1/Y+z5CRxYz1icg+OLIffMO21qfx/LEc3WkIeVqdQM4oBbyPo2Jn0VviNz
+         R3/z4TnS8N0GQHIBTY0/hyXoR9RDTQMpB7Q1c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=972//1VrtuuFZwnQDeMdS0B6akzzjiuVZWtERzM09s0=;
+        b=bqr//1qwlxWQCncvfuX8ln5nw+riQxJk73SDjj0qJg630t08Q58B9Gr5LWVQX/4w3r
+         DxolzgMZmqhxT0NJ9Qdb/QRgdTWyG3xfQD3hITAAYYZt/+AFfNBH3aGFuI8JkGBCPMHA
+         CmwrNxsZ0RKqVit1Fw2bennmNPQQcVQpyLAbyXy7BqHYSVivl18WWxS0zlyXy2SG9RUE
+         bOhh3k0TeAz6DjlQcxmmt5BBLtQHI1gQvqqXvABv5tlWuhjo6Q9VLIz/759SpJHFQs6z
+         5e7MCln4elqkQ5+B8AjghVoicYBCHdml0YHbpLJKD1B4YDLK7jBpaz/Yarfm3V7iVeUn
+         JA+g==
+X-Gm-Message-State: AOAM530tUrIig+b9Jz7k4iEWhgy5auHBDx6MewU6fEkIimruXtiEW7HA
+        8IbD/ZLRRaWUhLXFPFBxmsn50tcRbywrQg==
+X-Google-Smtp-Source: ABdhPJwVDJrVgxj/z0XncPqUa8JFXd12WSJDmoQs/kn0QTdmzgf8+20bw/dtXZZdLj09qUkYvY9BQg==
+X-Received: by 2002:aa7:8198:0:b029:3dd:a2ec:9ea8 with SMTP id g24-20020aa781980000b02903dda2ec9ea8mr6921691pfi.11.1630034943468;
+        Thu, 26 Aug 2021 20:29:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c2sm4382533pfp.138.2021.08.26.20.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 20:29:02 -0700 (PDT)
+Date:   Thu, 26 Aug 2021 20:29:01 -0700
+From:   Kees Cook <keescook@chromium.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build warnings after merge of the kspp tree
+Message-ID: <202108262021.65CA0EC3@keescook>
+References: <20210826180042.35e8aab6@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210826180042.35e8aab6@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 10:50 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Masahiro,
->
-> On Fri, 27 Aug 2021 09:52:18 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Thu, Aug 26, 2021 at 6:13 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > After merging the kbuild tree, today's linux-next build (x86_64
-> > > allnoconfig) failed like this:
-> > >
-> > > make[2]: *** No rule to make target 'scripts/mod/empty.o', needed by '__build'.
-> > >
-> > > Caused by commit
-> > >
-> > >   624a912f84bc ("kbuild: detect objtool changes correctly and remove .SECONDEXPANSION")
-> > >
-> > > (at least, reverting that commit fixes it)
-> > >
-> > > I use a separate object directory and, in this case, it is newly created.
-> > >
-> > > A build with V=1 and -s removed (and no -j) gives this around the
-> > > failure:
-> > >
-> > > make -f /home/sfr/next/next/scripts/Makefile.build obj=scripts/mod
-> > > make[2]: *** No rule to make target 'scripts/mod/empty.o', needed by '__build'.  Stop.
-> > > make[1]: *** [/home/sfr/next/next/Makefile:1309: prepare0] Error 2
-> > >
-> > > I have reverted that commit for today.
-> >
-> >
-> > Hmm, it is strange.
-> >
-> >
-> > I re-applied that commit based on today's linux-next
-> > (git cherry-pick  624a912f84bc)
-> >
-> > allnoconfig built successfully.
-> >
-> >
-> > My build log is as follows.
-> >
-> > Can you tell the exact steps to reproduce the error?
-> >
-> >
-> >
-> > masahiro@grover:~/ref/linux-next$ git log -2 --oneline
-> > 5046c6516ca2 (HEAD -> tmp) kbuild: detect objtool changes correctly
-> > and remove .SECONDEXPANSION
-> > 88fac11862d3 (tag: next-20210826, origin/master, origin/HEAD) Add
-> > linux-next specific files for 20210826
-> > masahiro@grover:~/ref/linux-next$ rm -rf /tmp/foo
-> > masahiro@grover:~/ref/linux-next$ make O=/tmp/foo  allnoconfig all
->
-> I did more or less the same:
->
-> $ rm -rf ../x86_64_allnoconfig
-> $ mkdir ../x86_64_allnoconfig
-> $ make ARCH=x86_64 O=../x86_64_allnoconfig CROSS_COMPILE=x86_64-linux-gnu- allnoconfig
-> $ make V=1 ARCH=x86_64 O=../x86_64_allnoconfig CROSS_COMPILE=x86_64-linux-gnu- -O
->
-> I do cross builds hosted on a PowerPC LE host.
->
-> --
+On Thu, Aug 26, 2021 at 06:00:42PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kspp tree, today's linux-next build (arm
+> multi_v7_defconfig) produced these warnings:
+> 
+> In file included from ./arch/arm/include/generated/asm/rwonce.h:1,
+>                  from include/linux/compiler.h:264,
+>                  from include/uapi/linux/swab.h:6,
+>                  from include/linux/swab.h:5,
+>                  from arch/arm/include/asm/opcodes.h:86,
+>                  from arch/arm/include/asm/bug.h:7,
+>                  from include/linux/bug.h:5,
+>                  from include/linux/thread_info.h:13,
+>                  from include/asm-generic/current.h:5,
+>                  from ./arch/arm/include/generated/asm/current.h:1,
+>                  from include/linux/sched.h:12,
+>                  from include/linux/cgroup.h:12,
+>                  from kernel/cgroup/cgroup-internal.h:5,
+>                  from kernel/cgroup/cgroup.c:31:
+> kernel/cgroup/cgroup.c: In function 'of_css':
+> kernel/cgroup/cgroup.c:651:42: warning: array subscript '<unknown>' is outside the bounds of an interior zero-length array 'struct cgroup_subsys_state *[0]' [-Wzero-length-bounds]
+>   651 |   return rcu_dereference_raw(cgrp->subsys[cft->ss->id]);
+
+Oh, that's cute. That's "with cgroups but no cgroup subsystems". :P I
+will get this fixed.
+
+> [...]
+> Introduced by commit
+> 
+>   7d8aac16a0a8 ("Makefile: Enable -Wzero-length-bounds")
+> 
+> -- 
 > Cheers,
 > Stephen Rothwell
 
-
-
-
-Ah, OK.
-Now I understood what was happening.
-
-scripts/mod/ is built before objtool, so
-the dependency is not met.
-
-I was previously not able to reproduce it
-because a stale objtool was remaining in my source tree.
-'make clean' cannot clean up objtool.
-
-I will fix it by tomorrow's linux-next.
-
-
-
 -- 
-Best Regards
-Masahiro Yamada
+Kees Cook

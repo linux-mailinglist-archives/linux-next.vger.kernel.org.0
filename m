@@ -2,156 +2,210 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A05B3F9153
-	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 02:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767503F9176
+	for <lists+linux-next@lfdr.de>; Fri, 27 Aug 2021 02:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243853AbhH0A3c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Aug 2021 20:29:32 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54359 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230522AbhH0A3c (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 26 Aug 2021 20:29:32 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GwgYk0Gxwz9sVq;
-        Fri, 27 Aug 2021 10:28:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630024123;
-        bh=ba/WX581s3nrnsRLf23mdp32UzwwN0XGlSwedK1OmqA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O+UDBGuHfNTr3cc4y236nGvtcLrz7yZsdGP9QGU/xn8aWZpH7RxWUPqI8LFoI9/IK
-         CBgW8OJ3XU/01e3mDBiz+5g79TWigohsJv3QIyXivDMifoDDMrCZZeAc/OzU4qc076
-         b7xXPq+J/xFfxXUVBSmnghxBKTAEyoNBd/wbcGugFRXNb6pCPJk5DdDtP2PW9mK6v7
-         eheSJAPYfJszGZgk6c5CyPQhD62BojE1uhtWgICyIiTezkyRzc+32PIfNRwp9GKMMP
-         FIgov8Pn39VY2eawI2A5ip6tbAgxgqam/BmKGNpe0j4jzVanIW/+vCZligunalLDtc
-         b9KmVpMuv4yqA==
-Date:   Fri, 27 Aug 2021 10:28:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Jan Kara <jack@suse.cz>
-Cc:     Eric Biggers <ebiggers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the f2fs tree
-Message-ID: <20210827102840.386cdf1b@canb.auug.org.au>
-In-Reply-To: <20210723111119.6b2bf2ca@canb.auug.org.au>
-References: <20210723111119.6b2bf2ca@canb.auug.org.au>
+        id S243831AbhH0AyI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Aug 2021 20:54:08 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:25028 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243811AbhH0AyI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Aug 2021 20:54:08 -0400
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 17R0qumb018917;
+        Fri, 27 Aug 2021 09:52:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 17R0qumb018917
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1630025576;
+        bh=v5UrnPxdJDQzEP3fPOndvdGBkcAodv7VU8EbX3JopoU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ijBW58/sB0mmqZ8oXYanrbnQr72qd3d5hYs+b4+l20Qkz9960/VBdPBwqXnZgNPnK
+         m+yzs/iPwN5GpJGo9GGJ1Yx1iXGWCq+Qle66YpFzsRlJjNMVaX36WCtBxD8Mikse35
+         KanmAt5t0ogLo8LqWOkEYe9E5Yxm2E1IaNIw4KvOs4THN1TcPugJqXoqzV6/dHm36O
+         IsSxT5MN98k8wWQXLiNgZSNGXjbpQcSg/TChNfqYb8x+SlymmPFTDsViFgJ3Tb286j
+         xJBq3D/fI4lj3KdeVyLJzWqZfTo+71c9t8Wb+cFzXeU2miysX1YhjFoocoqOCkarkE
+         k84SyNYgfYyfQ==
+X-Nifty-SrcIP: [209.85.210.170]
+Received: by mail-pf1-f170.google.com with SMTP id y11so4200322pfl.13;
+        Thu, 26 Aug 2021 17:52:56 -0700 (PDT)
+X-Gm-Message-State: AOAM532bficr7KOKHzX4r389DL72Qy0lby9rpaSn46tvKXSBJXky10E8
+        TEXVUVh9gUu5Nk3zu/J/4yIGC2Vnw4dY4cAJAcA=
+X-Google-Smtp-Source: ABdhPJxTdJjeA2wMBM5dBg4ozXGqDFuPcHkZAEvFkrCDapueZUB1arFHJvgqF2Gbv5NKJhRK2+Chm8BlORSSQGi4ihY=
+X-Received: by 2002:aa7:98da:0:b029:3e0:8b98:df83 with SMTP id
+ e26-20020aa798da0000b02903e08b98df83mr6339470pfm.63.1630025575406; Thu, 26
+ Aug 2021 17:52:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=zd67Dy6Or6wtgpygpXKrqt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210826191330.40dc43e8@canb.auug.org.au>
+In-Reply-To: <20210826191330.40dc43e8@canb.auug.org.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 27 Aug 2021 09:52:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASL2JNb4zT7UFr41dLO0oEuvc6yUg__qhc59q8aNqWxEg@mail.gmail.com>
+Message-ID: <CAK7LNASL2JNb4zT7UFr41dLO0oEuvc6yUg__qhc59q8aNqWxEg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=zd67Dy6Or6wtgpygpXKrqt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Fri, 23 Jul 2021 11:11:19 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Thu, Aug 26, 2021 at 6:13 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> After merging the f2fs tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> fs/f2fs/data.c: In function 'f2fs_write_failed':
-> fs/f2fs/data.c:3144:27: error: 'mapping' undeclared (first use in this fu=
-nction)
->  3144 |   filemap_invalidate_lock(mapping);
->       |                           ^~~~~~~
->=20
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (x86_64
+> allnoconfig) failed like this:
+>
+> make[2]: *** No rule to make target 'scripts/mod/empty.o', needed by '__build'.
+>
 > Caused by commit
->=20
->   ceddc02b7613 ("f2fs: make f2fs_write_failed() take struct inode")
->=20
-> interacting with commit
->=20
->   edc6d01bad73 ("f2fs: Convert to using invalidate_lock")
->=20
-> from the ext3 tree.
->=20
-> I have applied the following merge fix patch.
->=20
+>
+>   624a912f84bc ("kbuild: detect objtool changes correctly and remove .SECONDEXPANSION")
+>
+> (at least, reverting that commit fixes it)
+>
+> I use a separate object directory and, in this case, it is newly created.
+>
+> A build with V=1 and -s removed (and no -j) gives this around the
+> failure:
+>
+> make -f /home/sfr/next/next/scripts/Makefile.build obj=scripts/mod
+> make[2]: *** No rule to make target 'scripts/mod/empty.o', needed by '__build'.  Stop.
+> make[1]: *** [/home/sfr/next/next/Makefile:1309: prepare0] Error 2
+>
+> I have reverted that commit for today.
+> --
+> Cheers,
+> Stephen Rothwell
 
-This fix up patch is now:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 27 Aug 2021 10:10:01 +1000
-Subject: [PATCH] fxup for "f2fs: Convert to using invalidate_lock"
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/f2fs/data.c | 4 ++--
- fs/f2fs/file.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hmm, it is strange.
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index b03ec36cce1c..0facb5eb0acb 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3260,12 +3260,12 @@ static void f2fs_write_failed(struct inode *inode, =
-loff_t to)
- 	/* In the fs-verity case, f2fs_end_enable_verity() does the truncate */
- 	if (to > i_size && !f2fs_verity_in_progress(inode)) {
- 		down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
--		filemap_invalidate_lock(mapping);
-+		filemap_invalidate_lock(inode->i_mapping);
-=20
- 		truncate_pagecache(inode, i_size);
- 		f2fs_truncate_blocks(inode, i_size, true);
-=20
--		filemap_invalidate_unlock(mapping);
-+		filemap_invalidate_unlock(inode->i_mapping);
- 		up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- 	}
- }
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 884a165e70eb..9c8ef33bd8d3 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1112,7 +1112,7 @@ static int punch_hole(struct inode *inode, loff_t off=
-set, loff_t len)
- 			blk_end =3D (loff_t)pg_end << PAGE_SHIFT;
-=20
- 			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
--			filemap_invalidate_lock(mapping);
-+			filemap_invalidate_lock(inode->i_mapping);
-=20
- 			truncate_pagecache_range(inode, blk_start, blk_end - 1);
-=20
-@@ -1120,7 +1120,7 @@ static int punch_hole(struct inode *inode, loff_t off=
-set, loff_t len)
- 			ret =3D f2fs_truncate_hole(inode, pg_start, pg_end);
- 			f2fs_unlock_op(sbi);
-=20
--			filemap_invalidate_unlock(mapping);
-+			filemap_invalidate_unlock(inode->i_mapping);
- 			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- 		}
- 	}
---=20
-2.32.0
 
---=20
-Cheers,
-Stephen Rothwell
+I re-applied that commit based on today's linux-next
+(git cherry-pick  624a912f84bc)
 
---Sig_/=zd67Dy6Or6wtgpygpXKrqt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+allnoconfig built successfully.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEoMbgACgkQAVBC80lX
-0GwChAgAoqZc+XTR+YgJAbXa5v7L826LVZhfQVHAqkBHqiEUqVEfxBSu/SyR7zFr
-JrnoCflv21w2T8WVXTI0JJTg75dDC1s2qenIgx6I7fXQeoJEAqQyWQiR9NuWjAqT
-eP3QhA3+I6f2E2uI8jUvKdhnhffkEr8el77RQ+viGOuj4VD+Ph+pNtuDJwnRNv59
-wDcZ82aOKQWG74s2pbXexKNfqI+nYol9zzTCY4zLJ/XyyaR60/uGON/LAxbz4VPd
-e4itzX8BhpJe5f8tArrjDIXiCRS7lrfwambE8B3FyY8/vHNFh/vXq7JxU58OnfCJ
-8QPEWQqE1J+fph2MCaNLS9LEUF3FRQ==
-=5Ob8
------END PGP SIGNATURE-----
+My build log is as follows.
 
---Sig_/=zd67Dy6Or6wtgpygpXKrqt--
+Can you tell the exact steps to reproduce the error?
+
+
+
+masahiro@grover:~/ref/linux-next$ git log -2 --oneline
+5046c6516ca2 (HEAD -> tmp) kbuild: detect objtool changes correctly
+and remove .SECONDEXPANSION
+88fac11862d3 (tag: next-20210826, origin/master, origin/HEAD) Add
+linux-next specific files for 20210826
+masahiro@grover:~/ref/linux-next$ rm -rf /tmp/foo
+masahiro@grover:~/ref/linux-next$ make O=/tmp/foo  allnoconfig all
+make[1]: Entering directory '/tmp/foo'
+  GEN     Makefile
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.[ch]
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  HOSTCC  scripts/kconfig/menu.o
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTCC  scripts/kconfig/util.o
+  HOSTLD  scripts/kconfig/conf
+#
+# configuration written to .config
+#
+  GEN     Makefile
+  SYSHDR  arch/x86/include/generated/uapi/asm/unistd_32.h
+  SYSHDR  arch/x86/include/generated/uapi/asm/unistd_64.h
+  SYSHDR  arch/x86/include/generated/uapi/asm/unistd_x32.h
+  SYSTBL  arch/x86/include/generated/asm/syscalls_32.h
+  HOSTCC  arch/x86/tools/relocs_32.o
+  HOSTCC  arch/x86/tools/relocs_64.o
+  HOSTCC  arch/x86/tools/relocs_common.o
+  HOSTLD  arch/x86/tools/relocs
+  HOSTCC  scripts/kallsyms
+  HOSTCC  scripts/sorttable
+  WRAP    arch/x86/include/generated/uapi/asm/bpf_perf_event.h
+  WRAP    arch/x86/include/generated/uapi/asm/errno.h
+  WRAP    arch/x86/include/generated/uapi/asm/fcntl.h
+  WRAP    arch/x86/include/generated/uapi/asm/ioctl.h
+  WRAP    arch/x86/include/generated/uapi/asm/ioctls.h
+  WRAP    arch/x86/include/generated/uapi/asm/ipcbuf.h
+  WRAP    arch/x86/include/generated/uapi/asm/param.h
+  WRAP    arch/x86/include/generated/uapi/asm/poll.h
+  WRAP    arch/x86/include/generated/uapi/asm/resource.h
+  WRAP    arch/x86/include/generated/uapi/asm/socket.h
+  WRAP    arch/x86/include/generated/uapi/asm/sockios.h
+  WRAP    arch/x86/include/generated/uapi/asm/termbits.h
+  WRAP    arch/x86/include/generated/uapi/asm/termios.h
+  WRAP    arch/x86/include/generated/uapi/asm/types.h
+  WRAP    arch/x86/include/generated/asm/early_ioremap.h
+  WRAP    arch/x86/include/generated/asm/export.h
+  WRAP    arch/x86/include/generated/asm/mcs_spinlock.h
+  WRAP    arch/x86/include/generated/asm/irq_regs.h
+  WRAP    arch/x86/include/generated/asm/kmap_size.h
+  WRAP    arch/x86/include/generated/asm/local64.h
+  WRAP    arch/x86/include/generated/asm/mmiowb.h
+  WRAP    arch/x86/include/generated/asm/module.lds.h
+  WRAP    arch/x86/include/generated/asm/rwonce.h
+  WRAP    arch/x86/include/generated/asm/unaligned.h
+  UPD     include/config/kernel.release
+  UPD     include/generated/uapi/linux/version.h
+  UPD     include/generated/utsrelease.h
+  CC      scripts/mod/empty.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  MKELF   scripts/mod/elfconfig.h
+  HOSTCC  scripts/mod/modpost.o
+  CC      scripts/mod/devicetable-offsets.s
+  UPD     scripts/mod/devicetable-offsets.h
+  HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTLD  scripts/mod/modpost
+  CC      kernel/bounds.s
+  UPD     include/generated/bounds.h
+  UPD     include/generated/timeconst.h
+  CC      arch/x86/kernel/asm-offsets.s
+  UPD     include/generated/asm-offsets.h
+  CALL    /home/masahiro/ref/linux-next/scripts/checksyscalls.sh
+  CALL    /home/masahiro/ref/linux-next/scripts/atomic/check-atomics.sh
+  CC      init/main.o
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  CC      init/do_mounts.o
+  CC      init/noinitramfs.o
+  CC      init/calibrate.o
+  CC      init/init_task.o
+  AR      init/built-in.a
+  AR      usr/built-in.a
+  CC      arch/x86/entry/vdso/vma.o
+  CC      arch/x86/entry/vdso/extable.o
+  CC      arch/x86/entry/vdso/vdso32-setup.o
+  LDS     arch/x86/entry/vdso/vdso32/vdso32.lds
+  AS      arch/x86/entry/vdso/vdso32/note.o
+  AS      arch/x86/entry/vdso/vdso32/system_call.o
+  AS      arch/x86/entry/vdso/vdso32/sigreturn.o
+  CC      arch/x86/entry/vdso/vdso32/vclock_gettime.o
+  VDSO    arch/x86/entry/vdso/vdso32.so.dbg
+/home/masahiro/ref/linux-next/arch/x86/entry/vdso/Makefile:135: FORCE
+prerequisite is missing
+  OBJCOPY arch/x86/entry/vdso/vdso32.so
+  HOSTCC  arch/x86/entry/vdso/vdso2c
+  VDSO2C  arch/x86/entry/vdso/vdso-image-32.c
+  CC      arch/x86/entry/vdso/vdso-image-32.o
+  AR      arch/x86/entry/vdso/built-in.a
+
+  [snip]
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

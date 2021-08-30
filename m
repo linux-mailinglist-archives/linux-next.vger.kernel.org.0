@@ -2,85 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B01B93FB287
-	for <lists+linux-next@lfdr.de>; Mon, 30 Aug 2021 10:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535803FB2A9
+	for <lists+linux-next@lfdr.de>; Mon, 30 Aug 2021 10:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbhH3Iep (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Aug 2021 04:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233318AbhH3Iep (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Aug 2021 04:34:45 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF68AC061575;
-        Mon, 30 Aug 2021 01:33:51 -0700 (PDT)
+        id S234877AbhH3Ip0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Aug 2021 04:45:26 -0400
+Received: from ozlabs.org ([203.11.71.1]:51739 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234824AbhH3IpZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Aug 2021 04:45:25 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GykB4497Wz9sR4;
-        Mon, 30 Aug 2021 18:33:48 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GykQQ54mvz9sT6;
+        Mon, 30 Aug 2021 18:44:30 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630312428;
-        bh=SZEzIB2RBd1HQbC5lB0qz6HFUscMIGoQqnBzOMVgl90=;
+        s=201702; t=1630313071;
+        bh=Oet/2ShYhw2WhmAox81rCS8HNSaRzTLzHbGsHoERplA=;
         h=Date:From:To:Cc:Subject:From;
-        b=tT+ikdFAwKWa7mVQony9oc4/SuNTKxuvoud61bq4naB1iPmYyV0JveKkqEJsjkE6n
-         5nL2EmpK1MVo+L8Vgofu/CkH3k2hiOfCAvC9IABbg3HuZF+UefWtMbylxeg3axnyD5
-         WStiQEOu4IJAVJAf+b4HigMDX+IE9rhToChpQrop2gPyZFrWUlgfj/5mAYviwJozJS
-         mAmG3ipLhG3YPJx+9dG+WoPI9zFxn47QFAgb6Fqsg8UIZnO3XPka0RMbtwrvYAJxLO
-         VFlnPaz3hp28eodTvf1ufHcWyVG08AksOkBeo82hOmDqfo/LD23qYcJnw24UZUcNQh
-         6savBqJOqvXDg==
-Date:   Mon, 30 Aug 2021 18:33:47 +1000
+        b=MOgzxvVQe99BPFYZ8yJ0Cw/nIgdymyzYzxBRWdr8nu9xYKJCLKy6XZqq1hzd6WdAK
+         8f6D+oVY13WefjNvHcSkywmPSX/V64HZtK9AXZtmEUP13wxo8CB67BnaIEyCZtLCee
+         P0nqiu8ssOVVSWwUn22ttbhr16X4FiKT60yqB7wNQ9pk7cp8YbiWDJo+3Ve/TJqh07
+         SrC/NmY5DkV1rPTOipN4zPuFzZBgNpuICJYPG866ug9VmdHCMoK9sMw6B0tpUp/CcN
+         /qIAhHN+4+J7hN9hAJZDt1s1z+gJeDMD4rzc5MJS8+5dvPEMK1craUR1clSJVIrjyl
+         MXFMZlmRmZYDA==
+Date:   Mon, 30 Aug 2021 18:44:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning in Linus' tree
-Message-ID: <20210830183347.6c8a5901@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: linux-next: build warning after merge of the kspp tree
+Message-ID: <20210830184429.1ee4b4d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/K_NaJh.cJphJNJN=ePRlyT4";
+Content-Type: multipart/signed; boundary="Sig_/qEpE2bEw7=XPgc=TuN69q/w";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/K_NaJh.cJphJNJN=ePRlyT4
+--Sig_/qEpE2bEw7=XPgc=TuN69q/w
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-When building Linus' tree, today's linux-next build (powerpc
-ppc44x_defconfig) produced this warning:
+After merging the kspp tree, today's linux-next build (powerpc
+allyesconfig) produced this warning:
 
-block/mq-deadline.c:274:12: warning: 'dd_queued' defined but not used [-Wun=
-used-function]
-  274 | static u32 dd_queued(struct deadline_data *dd, enum dd_prio prio)
-      |            ^~~~~~~~~
+drivers/gpu/drm/kmb/kmb_plane.c:135:20: warning: array subscript 3 is above=
+ array bounds of 'struct layer_status[1]' [-Warray-bounds]
+  135 |   kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_ENABLE;
+      |   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+drivers/gpu/drm/kmb/kmb_drv.h:48:23: note: while referencing 'plane_status'
+   48 |  struct layer_status  plane_status[KMB_MAX_PLANES];
+      |                       ^~~~~~~~~~~~
+drivers/gpu/drm/kmb/kmb_plane.c:132:20: warning: array subscript 2 is above=
+ array bounds of 'struct layer_status[1]' [-Warray-bounds]
+  132 |   kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL1_ENABLE;
+      |   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+drivers/gpu/drm/kmb/kmb_drv.h:48:23: note: while referencing 'plane_status'
+   48 |  struct layer_status  plane_status[KMB_MAX_PLANES];
+      |                       ^~~~~~~~~~~~
+drivers/gpu/drm/kmb/kmb_plane.c:129:20: warning: array subscript 1 is above=
+ array bounds of 'struct layer_status[1]' [-Warray-bounds]
+  129 |   kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_VL2_ENABLE;
+      |   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+drivers/gpu/drm/kmb/kmb_drv.h:48:23: note: while referencing 'plane_status'
+   48 |  struct layer_status  plane_status[KMB_MAX_PLANES];
+      |                       ^~~~~~~~~~~~
+
+Exposed by commit
+
+  656256c0d67c ("Makefile: Enable -Warray-bounds")
 
 Introduced by commit
 
-  7b05bf771084 ("Revert "block/mq-deadline: Prioritize high-priority reques=
-ts"")
+  7f7b96a8a0a1 ("drm/kmb: Add support for KeemBay Display")
 
+from v5.11-rc1.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/K_NaJh.cJphJNJN=ePRlyT4
+--Sig_/qEpE2bEw7=XPgc=TuN69q/w
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEsl+sACgkQAVBC80lX
-0GysTgf8CsxUjrTw2B3tXaL38tlqxAVHkfVnnb3yyoIzOJiRbpOpRnzwDnl3fPwc
-if7RnjOm4VMi84NbG1KgOVERkPzdpL4EhepePRE84VUnlY3xZtrVX3knVYCZNxEd
-ZOzhe5vKkeUlKFHHgWuyKazEh8MeGYzkIBlUwsu9YDxO08yW3KH4au9n2BxeqN0G
-R98FW7z8YX2xAv3fKws+0UEBUr0FBRJEuhyj8SkTqGZphbf683BsFUqmT1D3Hoiz
-gF+VwPoVmbPDGy0TcYT9hpppIQrd3bqXMkBN+BPozK0mbHuODI1HNQ5j1rPtLKav
-cvuDJSbFGrerGHECUQ/H2k32+0Ni7w==
-=0jBq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEsmm0ACgkQAVBC80lX
+0GyjoQf+MNK6gFevp/QNvKQHyjE4H/r0Q3ZowIhaN56dYwIaCO9ojOiD21DrvDQH
++hY0/PpEiZrTZvP4Drvz7N/QvTinBWIo6tUwPDjm6/F6Y4No7JCQyaJlAD/3G4jF
+lWzfqS3YbQwBNr14fEAkrK9CBAPZEC/3NtzFttnZac+eMG1TF9OPDRrxZ3Z2lG4X
+vD+SUSzyo4KEsWbqLlQHoDQPNVeIr8c9qrf6bNVsrGEa6QLZkKEDwMNfGDeujBTK
+ErNUDQ47gnOnG9XvV+pmh9I68/6APNofvan3/9SFV+DsGRTYmodib6M4MHm2etu3
+jeCe6gzJWXPW6SEDd5yJbiMx0S5IgA==
+=IDCX
 -----END PGP SIGNATURE-----
 
---Sig_/K_NaJh.cJphJNJN=ePRlyT4--
+--Sig_/qEpE2bEw7=XPgc=TuN69q/w--

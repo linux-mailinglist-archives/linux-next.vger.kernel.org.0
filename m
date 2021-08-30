@@ -2,70 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAF03FB0DF
-	for <lists+linux-next@lfdr.de>; Mon, 30 Aug 2021 07:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BCC3FB0E3
+	for <lists+linux-next@lfdr.de>; Mon, 30 Aug 2021 07:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbhH3FrE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Aug 2021 01:47:04 -0400
-Received: from ozlabs.org ([203.11.71.1]:55985 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229936AbhH3FrD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Aug 2021 01:47:03 -0400
+        id S232583AbhH3FrU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Aug 2021 01:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232521AbhH3FrT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Aug 2021 01:47:19 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC6FC061575;
+        Sun, 29 Aug 2021 22:46:26 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GyfSZ4MrFz9sWS;
-        Mon, 30 Aug 2021 15:46:06 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GyfSr2PrLz9sWS;
+        Mon, 30 Aug 2021 15:46:19 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630302368;
-        bh=eh3cO90c1KedAIJjSl6KhOs8itt4bFhDPyslsaki+bg=;
+        s=201702; t=1630302382;
+        bh=SnXBCriVNg8rndcjlU3Npsts9JLWsexSg+Kzt2t1PO8=;
         h=Date:From:To:Cc:Subject:From;
-        b=QnM00rPpxqrsnMXbwtoHmHkDteIgeugumsc/XoT3jOIHVJ2mMcFfl2APcwhta8Ov0
-         C077J3yxmbQIl6nZUHFqYJ6o/gVwzA+L5ETTvIQacv2rY0cSHxGdsoupRKJmdCdWWz
-         65WAyNR9tajJWXaXAhSC1Yp8eF3am4Y2UlFDaEW6NfUN9731OieVTXzU76enl7xBqK
-         +ublSzQbXKL+PGS4DEQuWXRfSz0WhXxh1HuJORKUEnQmAhOMbBevrG0h9DMqdhmJSX
-         azeNByre4P7oyKZ8vJKffAU8kFA1GCzJpbzMaYmLA3kLMfSwV3ekfpwPyXZH/ChCbw
-         8CYKskaHKTZrA==
-Date:   Mon, 30 Aug 2021 15:46:05 +1000
+        b=MSISmhZHSsfS8bwa0/tl8xufEyHq9aOGcaPh/Iufwi65GQLCX1KFraaMiL7E+Mk+e
+         izTqNILNmelIvB3Vp9RE8kGwKwgxvbIxAvxt8KkSkDdV2xf3xhJMXMX7VaIvqX6nOz
+         YZscPbqGwNgJh1Y9kAdL8/75q0UBRY+0pyikFCysgkaRv0qUfK04uuhY1MHH5FZZOy
+         kVWPni1XOpxxvwQPu4+P2pLaUEXFy4a60oOfwT/0iqPR47ex2cWpTMey5FDIjHIP9I
+         2GZlkrCtSxu8xoFSoe8389agJrVDkVI+/m0o+OsJIsHD8XtGCcLJQxi5fI5l5zT09O
+         OBXA6D/EAGYyQ==
+Date:   Mon, 30 Aug 2021 15:46:18 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, Greg KH <greg@kroah.com>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tty tree with the parisc-hd tree
-Message-ID: <20210830154605.2abe717e@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Phillip Potter <phil@philpotter.co.uk>
+Subject: linux-next: manual merge of the net-next tree with the iio-fixes,
+ staging trees
+Message-ID: <20210830154618.204ac5c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uVUbwi0.12Pg.+NH6XSljQ2";
+Content-Type: multipart/signed; boundary="Sig_/ev9Apn7Ev0m7lSHRVv+K6bx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uVUbwi0.12Pg.+NH6XSljQ2
+--Sig_/ev9Apn7Ev0m7lSHRVv+K6bx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tty tree got a conflict in:
+Today's linux-next merge of the net-next tree got conflicts in:
 
-  arch/parisc/kernel/pdc_cons.c
+  drivers/staging/rtl8188eu/include/osdep_intf.h
+  drivers/staging/rtl8188eu/os_dep/ioctl_linux.c
+  drivers/staging/rtl8188eu/os_dep/os_intfs.c
 
 between commit:
 
-  9613b0cb3eb4 ("tty: pdc_cons, free tty_driver upon failure")
+  55dfa29b43d2 ("staging: rtl8188eu: remove rtl8188eu driver from staging d=
+ir")
 
-from the parisc-hd tree and commits:
+from the iio-fixes, staging trees and commit:
 
-  0524513afe45 ("tty: don't store semi-state into tty drivers")
-  72fdb403008c ("tty: pdc_cons, free tty_driver upon failure")
+  89939e890605 ("staging: rtlwifi: use siocdevprivate")
 
-from the tty tree.
+from the net-next tree.
 
-I fixed it up (I just used the latter version) and can carry the fix as
+I fixed it up (I have removed these files) and can carry the fix as
 necessary. This is now fixed as far as linux-next is concerned, but any
 non trivial conflicts should be mentioned to your upstream maintainer
 when your tree is submitted for merging.  You may also want to consider
@@ -76,20 +84,20 @@ particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
---Sig_/uVUbwi0.12Pg.+NH6XSljQ2
+--Sig_/ev9Apn7Ev0m7lSHRVv+K6bx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEscJ0ACgkQAVBC80lX
-0Gz2wwf9EzoZZLXgVZXEOqIIY8e8do1BSIZz7CIxD2/674rEK/Tq3du0wpe3X3a4
-PJgW4uAso7V+6vxCYHXx6BdzM7gqYly1Grh2oxW3i0KeTqs08uxst3qZjYCfIduu
-2GorYxFuYVOcZpIxSOEoLaMYGkvxRE7V5QitRgaqO8SYguFYzVT6taVuJrC1CICU
-7aVndMGhlHU5ejSRcdWE8n6hKnXqRIpp8mOkjfJHQv2FCAtoRYd1fi6RadWMcWC3
-J/l9S6EMn/3xzHPkJunJN20Mc1jWpIFmCS0AY9mW4r7JoTJ3YsGwApi36ejZ0Dgf
-1taA8ciufj106PfavfhbuGKzmhhd3A==
-=VduB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEscKoACgkQAVBC80lX
+0GwMSwf+J/FcrcpCqmECTRPuz6BsaF6fb7zh1keyak7Yg00fH5glirBv3qzpPXT/
+jIqBKZI883lvnI66cnSX3fvJc7TRBzddhwFwiLjmjQ5VNhggrteMEThbwTlf4XdV
+vz6XS/X7lLTliKJ63efbw66KClqD30r8qJw/fG6hbr3jFLphVZKlCbVdbwAXxtxd
+61PEvSujFhzdjGKYMX11kQp7vTaz24cW+nKmqrF55Nz4wos7kdkEsv4Ey+bHWI7e
+4tYN54KYCR2rJ1l7VqxyzP687zj0auWHVou8tkoDd/CXwr4/mLvmCX7RaORA33N1
+gTSlVVCPWwqW/KNPeS7fFieA9UaDJw==
+=uWps
 -----END PGP SIGNATURE-----
 
---Sig_/uVUbwi0.12Pg.+NH6XSljQ2--
+--Sig_/ev9Apn7Ev0m7lSHRVv+K6bx--

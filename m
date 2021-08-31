@@ -2,123 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB43E3FC02F
-	for <lists+linux-next@lfdr.de>; Tue, 31 Aug 2021 02:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38BF3FC033
+	for <lists+linux-next@lfdr.de>; Tue, 31 Aug 2021 02:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbhHaAtj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Aug 2021 20:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbhHaAtj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Aug 2021 20:49:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426F1C06175F
-        for <linux-next@vger.kernel.org>; Mon, 30 Aug 2021 17:48:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id 18so13567287pfh.9
-        for <linux-next@vger.kernel.org>; Mon, 30 Aug 2021 17:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yFaWzb+TLH4WHLdwXSHNeJ4rSVU4dAPnjRX35vG6J3o=;
-        b=Q/zSRh/rS17rNG5gLUB6XH8qFy3N93vhHD8DJcoDWWfwtM6YJMDv7NVg+auPdojVzn
-         E2QXd/b8mgd3VbPxjn0DYt2fh5QKpg3JXdjgWcZclXEnXu7mNyQuhx4liM2XT8GlqpI5
-         UE9CUcGCHSQOREo/ILO8auhT0TObUOiYVneW74gVen4TQSf2eWQUwSahGyiVgG2+MQl9
-         KSFVlCia87RDu5t89kAEkG4NqRpvvJQQqEW3aRI/XnK+flwudjeerkSEDdaYnikFZrQv
-         +4wTVMIw2uUpqoZQZj/WJGc7avhGs5mudFqcg5WSnTGENCqvPROt8p3DymFqKI9amfkG
-         VloA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yFaWzb+TLH4WHLdwXSHNeJ4rSVU4dAPnjRX35vG6J3o=;
-        b=S/M6I2psZL7ojtnNBbf5bHDvf97bT8zA34g9pKqN56ugOtVmZe188e6Rqr3fBnAV4e
-         Nkvk5deMZsuNNdfsd+ex7OB0iaR+kfTf7+qjJHevouG5sNO2AllAABTgFe2bUEA3rn1/
-         1Jn960onTaO55K5uSJusAW4dZq8/oDOOgZXXAfVvbShBwthaW/2o7Uo4AJtxcyUHCd8S
-         BQXT5uj65/iYZ5h5TC0s6aYmTerhyoJibHP+fvhaKHIjDV7Mi/2lW31z/O1DvVLL/aqo
-         d7GY79GugGHGS1wuaVJDAFl/NqxWTYiS7Kd3ghT/pbOv698O68SPbhyceavU6VnYtSsq
-         5IZA==
-X-Gm-Message-State: AOAM532O89KjAw/zJV4W5qdRs15g72zckPIQOUqUxTwLTOwQ8QTIaw98
-        6WzsuvgR9eRQhvFQg9VPuwU6Gw==
-X-Google-Smtp-Source: ABdhPJzlUDwU/F6Inn7zoPYFB091hLOckUyDZJjmcu+Dsy0HjXMCf3Qr26QuUUXnhcUbEixSTolCHA==
-X-Received: by 2002:a63:db4b:: with SMTP id x11mr24810099pgi.396.1630370923215;
-        Mon, 30 Aug 2021 17:48:43 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:d2dc:2a51:77c9:8407])
-        by smtp.gmail.com with ESMTPSA id c11sm608804pji.24.2021.08.30.17.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Aug 2021 17:48:42 -0700 (PDT)
-Date:   Mon, 30 Aug 2021 17:48:36 -0700
-From:   Benson Leung <bleung@google.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
+        id S239138AbhHaAu3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Aug 2021 20:50:29 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40857 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236374AbhHaAu2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Aug 2021 20:50:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gz7qw39b2z9sRN;
+        Tue, 31 Aug 2021 10:49:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1630370973;
+        bh=58d4ifL/5a6hPCPtM3Vh9aotKkhRJuYUDT2ZCuYAMVw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c4+DzjtURsxjw5+l9DKUDLyU1Ctis6hpi0QhNmX2Bsy2uGgRIY5hhaB77C929t249
+         RChPFm0twqe4+z3fjUm7u4sAZqXjcpN5xLWb8dkZwAtbd0Ap9CIwjFy2QpGKdxwQuE
+         lyewGL2pXZT2PgkRaQv1josEgtuWkoaa6TvvuiMBehtf/FnTC2b7ODJvJjfj0vE/KF
+         tSdHgHhwgSZRKoiGYoQG30pt1JEE9vu74TXp+O22e5MEb/XI2VbuA5BJQjZmdLHzw+
+         roPzyBqMLoDjWlcPN6KeuhZB9ugAgvdhWuQFQKDJNGVbfhG/XcwRUeeNlV8ZcW6Xrw
+         ycEZcuCalvscQ==
+Date:   Tue, 31 Aug 2021 10:49:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the chrome-platform tree
-Message-ID: <YS18ZIR7+DctTlCH@google.com>
-References: <20210831103906.5c590f67@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>, edmund.j.dea@intel.com
+Subject: Re: linux-next: build warning after merge of the kspp tree
+Message-ID: <20210831104931.04c91075@canb.auug.org.au>
+In-Reply-To: <E98E0D1B-4865-4177-A98F-8274B699E25E@chromium.org>
+References: <20210830184429.1ee4b4d8@canb.auug.org.au>
+        <E98E0D1B-4865-4177-A98F-8274B699E25E@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Sz57E3mArmgEJ+Af"
-Content-Disposition: inline
-In-Reply-To: <20210831103906.5c590f67@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/QM7CbSBWn6PFPN=vS+BXXrk";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---Sz57E3mArmgEJ+Af
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/QM7CbSBWn6PFPN=vS+BXXrk
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi Kees,
 
-On Tue, Aug 31, 2021 at 10:39:06AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Mon, 30 Aug 2021 16:50:55 -0700 Kees Cook <keescook@chromium.org> wrote:
+>
+> On August 30, 2021 1:44:29 AM PDT, Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> >After merging the kspp tree, today's linux-next build (powerpc
+> >allyesconfig) produced this warning:
+> >
+> >drivers/gpu/drm/kmb/kmb_plane.c:135:20: warning: array subscript 3 is ab=
+ove array bounds of 'struct layer_status[1]' [-Warray-bounds]
+> >  135 |   kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_ENABLE;
+> >      |   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+> >In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
+> >drivers/gpu/drm/kmb/kmb_drv.h:48:23: note: while referencing 'plane_stat=
+us'
+> >   48 |  struct layer_status  plane_status[KMB_MAX_PLANES];
+> >      |                       ^~~~~~~~~~~~ =20
 >=20
-> In commit
->=20
->   cf7f3ebb41d8 ("platform/chrome: cros_ec_trace: Fix format warnings")
->=20
-> Fixes tag
->=20
->   Fixes: 814318242 ("platform/chrome: cros_ec_trace: Add fields to comman=
-d traces")
->=20
-> has these problem(s):
->=20
->   - SHA1 should be at least 12 digits long
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
+> Ah yes, thanks for the report. I encountered this too, and have been told=
+ the warning will go away soon:
+> https://lore.kernel.org/lkml/BY5PR11MB4182ABD607EB99C1F68777928CC69@BY5PR=
+11MB4182.namprd11.prod.outlook.com/
 
-Sorry about all the churn. One last time, my for-next has been updated:
-  4665584888ad ("platform/chrome: cros_ec_trace: Fix format warnings")
+ok, thanks
 
 --=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+Cheers,
+Stephen Rothwell
 
---Sz57E3mArmgEJ+Af
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/QM7CbSBWn6PFPN=vS+BXXrk
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYS18ZAAKCRBzbaomhzOw
-wvyiAP4+vVrVa/MpotuHcn1IcLM4SrJrw2fgefeQh1xu3ypwlQEAo2h6BRVujjKN
-jyvtobrqUXEsDEQ8wNQytkg4U6P1SQo=
-=RDfB
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEtfJsACgkQAVBC80lX
+0GzJFgf/UN2tIKKv1/UjL3Fvg3mIbDyMAj+JESXOqTdOv5AJIi563Xfyt1GOzobp
++lIVtRv+QpSPgTQ/ZoX77zPVFyJ79KgQzWI0LcsM10yvI/whZVWrTL21oKyXQseL
+AIvcGXGIRCgXDDJSfUuvIz6zhShg3xrtFnm697dnwL7UhDNWGWCsnsS3JaOswdLg
+C3nrfOV19DjxT/3vg8OdxPVW/H6R5aDLsXzCNeRhgecyzuMwuhIaiKINObSz3PvK
+Hx9d7Q2tX6MVEI+CLDDc22qBYIHx5+I7sSiFbkGwo8kk1qnUvDIJ9lDow4Reg8gC
+brOMH+oefKFmHddu9m8oyk5Hlf2eHQ==
+=P51e
 -----END PGP SIGNATURE-----
 
---Sz57E3mArmgEJ+Af--
+--Sig_/QM7CbSBWn6PFPN=vS+BXXrk--

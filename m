@@ -2,100 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38BF3FC033
-	for <lists+linux-next@lfdr.de>; Tue, 31 Aug 2021 02:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046383FC060
+	for <lists+linux-next@lfdr.de>; Tue, 31 Aug 2021 03:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbhHaAu3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Aug 2021 20:50:29 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40857 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236374AbhHaAu2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Aug 2021 20:50:28 -0400
+        id S239228AbhHaBOh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Aug 2021 21:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231297AbhHaBOg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Aug 2021 21:14:36 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80548C061575;
+        Mon, 30 Aug 2021 18:13:41 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gz7qw39b2z9sRN;
-        Tue, 31 Aug 2021 10:49:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Gz8Ml2KBfz9sT6;
+        Tue, 31 Aug 2021 11:13:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630370973;
-        bh=58d4ifL/5a6hPCPtM3Vh9aotKkhRJuYUDT2ZCuYAMVw=;
+        s=201702; t=1630372419;
+        bh=NvKX1qVZAnfCPVE4H3/0yh3zCLm3YMLzx80u8/vDjd8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c4+DzjtURsxjw5+l9DKUDLyU1Ctis6hpi0QhNmX2Bsy2uGgRIY5hhaB77C929t249
-         RChPFm0twqe4+z3fjUm7u4sAZqXjcpN5xLWb8dkZwAtbd0Ap9CIwjFy2QpGKdxwQuE
-         lyewGL2pXZT2PgkRaQv1josEgtuWkoaa6TvvuiMBehtf/FnTC2b7ODJvJjfj0vE/KF
-         tSdHgHhwgSZRKoiGYoQG30pt1JEE9vu74TXp+O22e5MEb/XI2VbuA5BJQjZmdLHzw+
-         roPzyBqMLoDjWlcPN6KeuhZB9ugAgvdhWuQFQKDJNGVbfhG/XcwRUeeNlV8ZcW6Xrw
-         ycEZcuCalvscQ==
-Date:   Tue, 31 Aug 2021 10:49:31 +1000
+        b=ngpikwQNP+Ujfbvz/K4R3SDsmmH6vHqaFziMptEViZpRsYMcbumQhhIjkQSQ4Ca/I
+         umaCohBpOwd+Q1dwbo8Pk3oc0Pxq/4xdqJGdSVs8CxBuG66UIJbJoxIouyEpAbt7lx
+         DxMsWD7DrmhwkJNTYOSRQt3P4pLwHcG7pCqC7WrDpHUAWryl8VN1+UC3ZuxwokRsrO
+         am7vltjPSi9QKg7FE49+yF6X+790/Rhax4vfCOhSUcKb69VRg5nb2RYCbv83mtjv6W
+         teRq7wGolHvoTj+5jkQ5+98IoCnpEnYL54r/JWbFfI1Vwnt4KvGOX23/DJ7UN0jrDn
+         t8r5bFJ0n27sQ==
+Date:   Tue, 31 Aug 2021 11:13:38 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>, edmund.j.dea@intel.com
-Subject: Re: linux-next: build warning after merge of the kspp tree
-Message-ID: <20210831104931.04c91075@canb.auug.org.au>
-In-Reply-To: <E98E0D1B-4865-4177-A98F-8274B699E25E@chromium.org>
-References: <20210830184429.1ee4b4d8@canb.auug.org.au>
-        <E98E0D1B-4865-4177-A98F-8274B699E25E@chromium.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the file-locks tree with the cel
+ tree
+Message-ID: <20210831111338.2e3a222c@canb.auug.org.au>
+In-Reply-To: <20210824100737.4bd6d815@canb.auug.org.au>
+References: <20210824100737.4bd6d815@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QM7CbSBWn6PFPN=vS+BXXrk";
+Content-Type: multipart/signed; boundary="Sig_/dX5Z+..yBvC/XOO+yqG3Ki0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QM7CbSBWn6PFPN=vS+BXXrk
+--Sig_/dX5Z+..yBvC/XOO+yqG3Ki0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+Hi all,
 
-On Mon, 30 Aug 2021 16:50:55 -0700 Kees Cook <keescook@chromium.org> wrote:
+On Tue, 24 Aug 2021 10:07:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On August 30, 2021 1:44:29 AM PDT, Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> >After merging the kspp tree, today's linux-next build (powerpc
-> >allyesconfig) produced this warning:
-> >
-> >drivers/gpu/drm/kmb/kmb_plane.c:135:20: warning: array subscript 3 is ab=
-ove array bounds of 'struct layer_status[1]' [-Warray-bounds]
-> >  135 |   kmb->plane_status[plane_id].ctrl =3D LCD_CTRL_GL2_ENABLE;
-> >      |   ~~~~~~~~~~~~~~~~~^~~~~~~~~~
-> >In file included from drivers/gpu/drm/kmb/kmb_plane.c:17:
-> >drivers/gpu/drm/kmb/kmb_drv.h:48:23: note: while referencing 'plane_stat=
-us'
-> >   48 |  struct layer_status  plane_status[KMB_MAX_PLANES];
-> >      |                       ^~~~~~~~~~~~ =20
+> Today's linux-next merge of the file-locks tree got a conflict in:
 >=20
-> Ah yes, thanks for the report. I encountered this too, and have been told=
- the warning will go away soon:
-> https://lore.kernel.org/lkml/BY5PR11MB4182ABD607EB99C1F68777928CC69@BY5PR=
-11MB4182.namprd11.prod.outlook.com/
+>   fs/nfs/file.c
+>=20
+> between commit:
+>=20
+>   c045f1c40a48 ("nfs: don't allow reexport reclaims")
+>=20
+> from the cel tree and commit:
+>=20
+>   f7e33bdbd6d1 ("fs: remove mandatory file locking support")
+>=20
+> from the file-locks tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc fs/nfs/file.c
+> index 7411658f8b05,514be5d28d70..000000000000
+> --- a/fs/nfs/file.c
+> +++ b/fs/nfs/file.c
+> @@@ -806,13 -806,6 +806,9 @@@ int nfs_lock(struct file *filp, int cmd
+>  =20
+>   	nfs_inc_stats(inode, NFSIOS_VFSLOCK);
+>  =20
+>  +	if (fl->fl_flags & FL_RECLAIM)
+>  +		return -ENOGRACE;
+>  +
+> - 	/* No mandatory locks over NFS */
+> - 	if (__mandatory_lock(inode) && fl->fl_type !=3D F_UNLCK)
+> - 		goto out_err;
+> -=20
+>   	if (NFS_SERVER(inode)->flags & NFS_MOUNT_LOCAL_FCNTL)
+>   		is_local =3D 1;
+>  =20
 
-ok, thanks
+This is now a conflict between the cel tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/QM7CbSBWn6PFPN=vS+BXXrk
+--Sig_/dX5Z+..yBvC/XOO+yqG3Ki0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEtfJsACgkQAVBC80lX
-0GzJFgf/UN2tIKKv1/UjL3Fvg3mIbDyMAj+JESXOqTdOv5AJIi563Xfyt1GOzobp
-+lIVtRv+QpSPgTQ/ZoX77zPVFyJ79KgQzWI0LcsM10yvI/whZVWrTL21oKyXQseL
-AIvcGXGIRCgXDDJSfUuvIz6zhShg3xrtFnm697dnwL7UhDNWGWCsnsS3JaOswdLg
-C3nrfOV19DjxT/3vg8OdxPVW/H6R5aDLsXzCNeRhgecyzuMwuhIaiKINObSz3PvK
-Hx9d7Q2tX6MVEI+CLDDc22qBYIHx5+I7sSiFbkGwo8kk1qnUvDIJ9lDow4Reg8gC
-brOMH+oefKFmHddu9m8oyk5Hlf2eHQ==
-=P51e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEtgkIACgkQAVBC80lX
+0GzWVAf/Z4F2W+ERoQJTNbk/TzqKe4sxP4te7FOplNhSEKr/OhJe35S+rOv593Tq
+KXSmss0rPZq1rg+gZWN1YDEqwm/YiB/d98MDbFJjrDT8dL4GmNZNEa6p6DqNf85o
+OK6VWHTzWkNVVRPTouS67647dwkcf8WBmJDaCZ67wNS6YZxBdaPKM9YPc9Y1yGfA
+8OOK8RTW1PL7DLsJLsCFhQ2IqHPqcip37xRSZSKCvTXDFR7vxrC7hvJD9SKVjTJ0
+VYMPpGsnqFiSxK9uJab6hbIoDx4XXrR2oCGE7xtFS4YNfOx22JYTgG+cfP8OQoch
+4KajMWm2bt7758FjvOdof5pGxDgOpw==
+=xhXZ
 -----END PGP SIGNATURE-----
 
---Sig_/QM7CbSBWn6PFPN=vS+BXXrk--
+--Sig_/dX5Z+..yBvC/XOO+yqG3Ki0--

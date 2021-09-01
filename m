@@ -2,141 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 480A63FD3DF
-	for <lists+linux-next@lfdr.de>; Wed,  1 Sep 2021 08:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2213FD3EF
+	for <lists+linux-next@lfdr.de>; Wed,  1 Sep 2021 08:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242204AbhIAGjX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Sep 2021 02:39:23 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44667 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231501AbhIAGjX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Sep 2021 02:39:23 -0400
+        id S242251AbhIAGpr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Sep 2021 02:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242074AbhIAGpr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Sep 2021 02:45:47 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F06DC061575;
+        Tue, 31 Aug 2021 23:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630478305;
-        bh=+P+jRAAoHJInhbNG/oriIYBjdXcWSMHExv29E1M8JbM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=so2jUWO366M+SYsYAI/+T49i8RtNG/CQD6qHtUcqP+lLn/kfZ8omEQRL2xNzLvY5n
-         pLVCd4djNA4Jh1rOLg7i2F/pj+Lkg+10QswjxWaB4kZjohbHIlSQ+TOBmwXzPLsTFD
-         XWPwvbeddQ8DPK2IMXA/lxVuuxvG1fDzAhUj5fC8hkqT/D4C6sba5drbTi7L8JkDUb
-         F8zkz8ZzKU6wdIQCZkzAwEoNBCwd8DjWuCACCqWCJJ+zhqEJOtpp6mtHgBZ4CI4SqI
-         nB/YhWhj4AS7t5oghlknaOjZ/lVTKU3ZFgfEptO893FvMaF5TnthAChIlYFFd1WuJl
-         NQwkZZJZPtiTg==
+        s=201702; t=1630478686;
+        bh=WVLWadZL6lDdLLOQSpArpAbR/yZfLdFO9nlownYWBEI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CQfYRaP1lutB94VrlRsZhE931hbVvv2WomOj/3YOIxLI2YnafJ+ROCsqvLI37udcC
+         StMpGPYB10mqL8iOgXNsvZhJ4lBrx/4yg8K03oRko9O+k9HpU+SnmWXosl6vJb0Bv1
+         OG6RlZ1jb6pGhfJtnDoqp1Idtb5iZ3mLVWcfosNDh1Z9TmWP2En2wMPKLoG15AxNz7
+         VUM3uOKFxVAhJF/eyBH5ljTo8ruGMXJP6IcMwRtZV+dTI9fvqnVDpxx79tYkryfZk5
+         PWRFGdzRsncSNqBp6b92CMmM82WWpWHSuMqxwaKfWCUdmWJlzI7XV27DJmYhLV/N3W
+         YbXWyn1u9K7Xg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GzvX06Bwxz9sXk;
-        Wed,  1 Sep 2021 16:38:24 +1000 (AEST)
-Date:   Wed, 1 Sep 2021 16:38:22 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4GzvgL4GZ3z9ssD;
+        Wed,  1 Sep 2021 16:44:45 +1000 (AEST)
+Date:   Wed, 1 Sep 2021 16:44:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Konrad Rzeszutek Wilk <konrad@kernel.org>,
-        Maurizio Lombardi <mlombard@redhat.com>,
+To:     Arnd Bergmann <arnd@arndb.de>, David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20210901163822.65beb208@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210901164445.4ff9d8ce@canb.auug.org.au>
+In-Reply-To: <20210820091627.2d071982@canb.auug.org.au>
+References: <20210809202046.596dad87@canb.auug.org.au>
+        <CAK8P3a103SSaMmFEKehPQO0p9idVwhfck-OX5t1_3-gW4ox2tw@mail.gmail.com>
+        <20210815220432.7eea02e9@canb.auug.org.au>
+        <20210820091627.2d071982@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/41EVaJjowJ1ijmM/dv3QE1G";
+Content-Type: multipart/signed; boundary="Sig_/s6=qHMJch1q9dqq9U5oPO.k";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/41EVaJjowJ1ijmM/dv3QE1G
+--Sig_/s6=qHMJch1q9dqq9U5oPO.k
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (X86_64
-allnoconfig) failed like this:
+On Fri, 20 Aug 2021 09:16:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Sun, 15 Aug 2021 22:04:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > On Mon, 9 Aug 2021 15:21:41 +0200 Arnd Bergmann <arnd@arndb.de> wrote: =
+=20
+> > >
+> > > On Mon, Aug 9, 2021 at 12:20 PM Stephen Rothwell <sfr@canb.auug.org.a=
+u> wrote:   =20
+> > > >
+> > > > After merging the net-next tree, today's linux-next build (powerpc
+> > > > allyesconfig) failed like this:
+> > > >
+> > > > drivers/net/ethernet/cirrus/cs89x0.c: In function 'net_open':
+> > > > drivers/net/ethernet/cirrus/cs89x0.c:897:20: error: implicit declar=
+ation of function 'isa_virt_to_bus' [-Werror=3Dimplicit-function-declaratio=
+n]
+> > > >   897 |     (unsigned long)isa_virt_to_bus(lp->dma_buff));
+> > > >       |                    ^~~~~~~~~~~~~~~     =20
+> > >=20
+> > > Thank you for the report! I already sent a patch for m68knommu runnin=
+g into
+> > > this issue, but it seems there are other architectures that still hav=
+e it.
+> > >=20
+> > > The driver checks CONFIG_ISA_DMA_API at compile time to determine
+> > > whether isa_virt_to_bus(), set_dma_mode(), set_dma_addr(), ... are all
+> > > defined.
+> > >=20
+> > > It seems that isa_virt_to_bus() is only implemented on most of the
+> > > architectures that set ISA_DMA_API: alpha, arm, mips, parisc and x86,
+> > > but not on m68k/coldfire and powerpc.
+> > >=20
+> > > Before my patch, the platform driver could only be built on ARM,
+> > > so maybe we should just go back to that dependency or something
+> > > like
+> > >=20
+> > >          depends on ARM || ((X86 || !ISA_DMA_API) && COMPILE_TEST)
+> > >=20
+> > > for extra build coverage. Then again, it's hard to find any machine
+> > > actually using these: we have a couple of s3c24xx machines that
+> > > use the wrong device name, so the device never gets probed, the imx
+> > > machines that used to work are gone, and the ep7211-edb7211.dts
+> > > is missing a device node for it. Most likely, neither the platform nor
+> > > the ISA driver are actually used by anyone.   =20
+> >=20
+> > I am still applying my patch removing COMPILE_TEST from this driver .. =
+=20
+>=20
+> Ping?  Did I miss a fix being merged?
 
-arch/x86/kernel/setup.c: In function 'setup_arch':
-arch/x86/kernel/setup.c:916:6: error: implicit declaration of function 'acp=
-i_mps_check' [-Werror=3Dimplicit-function-declaration]
-  916 |  if (acpi_mps_check()) {
-      |      ^~~~~~~~~~~~~~
-arch/x86/kernel/setup.c:1110:2: error: implicit declaration of function 'ac=
-pi_table_upgrade' [-Werror=3Dimplicit-function-declaration]
- 1110 |  acpi_table_upgrade();
-      |  ^~~~~~~~~~~~~~~~~~
-arch/x86/kernel/setup.c:1112:2: error: implicit declaration of function 'ac=
-pi_boot_table_init' [-Werror=3Dimplicit-function-declaration]
- 1112 |  acpi_boot_table_init();
-      |  ^~~~~~~~~~~~~~~~~~~~
-arch/x86/kernel/setup.c:1120:2: error: implicit declaration of function 'ea=
-rly_acpi_boot_init'; did you mean 'early_cpu_init'? [-Werror=3Dimplicit-fun=
-ction-declaration]
- 1120 |  early_acpi_boot_init();
-      |  ^~~~~~~~~~~~~~~~~~~~
-      |  early_cpu_init
-arch/x86/kernel/setup.c:1162:2: error: implicit declaration of function 'ac=
-pi_boot_init' [-Werror=3Dimplicit-function-declaration]
- 1162 |  acpi_boot_init();
-      |  ^~~~~~~~~~~~~~
-
-Caused by commit
-
-  342f43af70db ("iscsi_ibft: fix crash due to KASLR physical memory remappi=
-ng")
-
-Unfortunately that commit has now been merged into Linus' tree as well.
-
-I have added the following fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 1 Sep 2021 16:31:32 +1000
-Subject: [PATCH] x86: include acpi.h when using acpi functions
-
-The removal of the include of linux/acpi.h from include/linux/iscsi_ibft.h
-by commit
-
-  342f43af70db ("iscsi_ibft: fix crash due to KASLR physical memory remappi=
-ng")
-
-exposed this build failure.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/kernel/setup.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 63b20536c8d2..da0a4b64880f 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -13,6 +13,7 @@
- #include <linux/init_ohci1394_dma.h>
- #include <linux/initrd.h>
- #include <linux/iscsi_ibft.h>
-+#include <linux/acpi.h>
- #include <linux/memblock.h>
- #include <linux/panic_notifier.h>
- #include <linux/pci.h>
---=20
-2.32.0
+Ping, again.  The net=3Dnext tree has now been merged by Linus, so has
+this been fixed?  Or is Linus' tree now broken for this build?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/41EVaJjowJ1ijmM/dv3QE1G
+--Sig_/s6=qHMJch1q9dqq9U5oPO.k
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEvH94ACgkQAVBC80lX
-0GxOQwf/T8m8+Tqc33+IK3OjriQHCNRR+al8xPZWweHJfTouB/OJyV21zPck4uxn
-D4FaDhDFVIgGXAaf22euc4zH/IbEetBszV8WoXH04hexQMxiTV/oiE6ZAEPMZiyw
-baiwKYD03KN5XcD+rFG2rOMRbQiAi28sXLEUQiGClrqk9s+owixf6Qup01+EDofv
-19Qt6JCOAprU6SBOHpDOHT6L022dWytGtXd8je195cL56JZVephSlZDXmUBI5zrd
-hkC4HtW7OT7AwKlWgAQmj7Kx8zm2b9DMd+eNUMGJ8JJ4o4xPg2nRc9YY3z3JhFnT
-1j7XgmsPaawcMu9lbieWxKmX8dVqTw==
-=jFds
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEvIV0ACgkQAVBC80lX
+0Gz3fQf+Nwk6edQzEj9I2xNWStxk0I1+DALKDAFcqPhx9o8Xb6Ty+HeJGUllmHxc
+mA11SubeyXlFR06HcusTtNcw8w3qUxG69SEKm5OCBwl4HuXtonzoc+neb1rfdeLP
+jMxIdGF671fqbNTXQfVw4sJJhJlk6QG4xtcH7w62qSyrbUHnABOhGIqXNzwJB6o2
+zLVPhg61wblkr1dwDQ/3OVnPZUYlftfTmwOhXuKE1KdY0NtRx0ZJwWTHiOXyODKN
+rFjYhsDd9NyK1r2kgzba5N+qdWi072pUxnEofWeMMKMveHcsC9ZB/Yu50WhmhQSo
+Q80XzHAPzoBVDJRM6HHFNqL7sc2lww==
+=fRNX
 -----END PGP SIGNATURE-----
 
---Sig_/41EVaJjowJ1ijmM/dv3QE1G--
+--Sig_/s6=qHMJch1q9dqq9U5oPO.k--

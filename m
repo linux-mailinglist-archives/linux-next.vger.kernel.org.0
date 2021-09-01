@@ -2,151 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52B93FE517
-	for <lists+linux-next@lfdr.de>; Wed,  1 Sep 2021 23:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7CA3FE526
+	for <lists+linux-next@lfdr.de>; Thu,  2 Sep 2021 00:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbhIAVvp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Sep 2021 17:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbhIAVvp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Sep 2021 17:51:45 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FF1C061575;
-        Wed,  1 Sep 2021 14:50:45 -0700 (PDT)
+        id S232854AbhIAWC3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Sep 2021 18:02:29 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38423 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232860AbhIAWC2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 1 Sep 2021 18:02:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630533041;
-        bh=OY1P0NChdTXcHt/2A+jR/99JxOv1oHCWF263N2hy8mw=;
+        s=201702; t=1630533689;
+        bh=BmOhYKXE2qZFZfsXd4GE6m5wy+5xaYYXRavSABb85Xs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S4cGsRoFHf8XN5JQkJdu+/zv1sRbm+06+YXLv019NXxZspKk+aHM1Que6aedwA0Gc
-         hadVHuPbB5QZHbV7mRiib+W5jDcS4KkJmtuWWrPwfCd+QFqRatGLlMi7wRWKsrNiAw
-         UxOKP2Nj1qyMRdFiEQSp3lYFRhSjB74uqFYMItlqMghLLDMrn2r14G6cbfCFOdI6rj
-         cZJNYGt/DxkdbyTeUY5fQ8FitbYxUkMOxpklhe1V2BkKv2rC4iaKnPsJrGmM/Df8Ts
-         p8M2o0QL+DYXUM9GGrYEmbDlQ4giaDGRPWjyFWlq6Y7UPwxQVriZdgZzvhs8lgJM4c
-         LRv/SDL28VOBg==
+        b=kUwMjkpmDxp1jp8EEC09mKkUmAD9D3u9tYzRrriQKkS+NEZp6cCQptNKJrwXuxmd3
+         eteZmx9YIlArV8ZB5EfrqELziHixzMr2r4SBWY5g5FgxUzpJiWEtD2Rq4fYaBfC3ar
+         5HjndCDuTSUAUoj2q6QpPTBddHSUsXXYvsGH3/hZzJtpkNekSnZj6p6PiWMNunC7l0
+         MkfjC0abHs5wXF2P5Y0Sp398obMONd5bfXzfV9Q+81a3eTdr/3E8oxR+kaMmXmqpvX
+         XxNJiQw2umgHwKQW9wWw/VKaJi9rDH4pUwwhytcAcER6kJYiqaSnGUFEpMjqcolvAF
+         bBLww/9GNtZQA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H0Hmc0tldz9sPf;
-        Thu,  2 Sep 2021 07:50:40 +1000 (AEST)
-Date:   Thu, 2 Sep 2021 07:50:38 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H0J126w99z9sPf;
+        Thu,  2 Sep 2021 08:01:26 +1000 (AEST)
+Date:   Thu, 2 Sep 2021 08:01:25 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
+To:     Jason Gunthorpe <jgg@mellanox.com>
 Cc:     Dave Airlie <airlied@linux.ie>,
         DRI <dri-devel@lists.freedesktop.org>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas =?UTF-8?B?SGVsbHN0?= =?UTF-8?B?csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm tree
-Message-ID: <20210902075038.7461d3c8@canb.auug.org.au>
-In-Reply-To: <CAK7LNASv-F1Y7kpaDF+_=TW0Jzvpo1uuNL1B5jUmCCRqv-45bA@mail.gmail.com>
-References: <20210820123348.6535a87e@canb.auug.org.au>
-        <CAK7LNASv-F1Y7kpaDF+_=TW0Jzvpo1uuNL1B5jUmCCRqv-45bA@mail.gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>
+Subject: Re: linux-next: build failure after merge of the hmm tree
+Message-ID: <20210902080125.2872628b@canb.auug.org.au>
+In-Reply-To: <20210823175027.3f3fabd7@canb.auug.org.au>
+References: <20210823175027.3f3fabd7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P6VydhTMW+uTGLu/gN5IeDS";
+Content-Type: multipart/signed; boundary="Sig_/stlCEP4gLQ3cyH/reb0cPfS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/P6VydhTMW+uTGLu/gN5IeDS
+--Sig_/stlCEP4gLQ3cyH/reb0cPfS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Masahiro,
+Hi ,
 
-On Fri, 20 Aug 2021 15:23:34 +0900 Masahiro Yamada <masahiroy@kernel.org> w=
-rote:
->
-> On Fri, Aug 20, 2021 at 11:33 AM Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 23 Aug 2021 17:50:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
-> >
-> > Hi all,
-> >
-> > After merging the drm tree, today's linux-next build (x86_64 allmodconf=
-ig)
-> > failed like this:
-> >
-> > In file included from drivers/gpu/drm/i915/i915_debugfs.c:39:
-> > drivers/gpu/drm/i915/gt/intel_gt_requests.h:9:10: fatal error: stddef.h=
-: No such file or directory
-> >     9 | #include <stddef.h>
-> >       |          ^~~~~~~~~~
-> >
-> > Caused by commit
-> >
-> >   564f963eabd1 ("isystem: delete global -isystem compile option")
-> >
-> > from the kbuild tree interacting with commit
-> >
-> >   b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to work wi=
-th GuC")
-> >
-> > I have applied the following patch for today. =20
+>
+> Hi all,
 >=20
+> After merging the hmm tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
 >=20
-> Thanks.
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c: In function 'i915_ttm_tt_get_st':
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:396:7: error: implicit declaratio=
+n of function '__sg_alloc_table_from_pages'; did you mean 'sg_alloc_table_f=
+rom_pages'? [-Werror=3Dimplicit-function-declaration]
+>   396 |  sg =3D __sg_alloc_table_from_pages
+>       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |       sg_alloc_table_from_pages
+> drivers/gpu/drm/i915/gem/i915_gem_ttm.c:396:5: warning: assignment to 'st=
+ruct scatterlist *' from 'int' makes pointer from integer without a cast [-=
+Wint-conversion]
+>   396 |  sg =3D __sg_alloc_table_from_pages
+>       |     ^
 >=20
-> This fix-up does not depend on my kbuild tree in any way.
+> Caused by commit
 >=20
-> So, the drm maintainer can apply it to his tree.
+>   fcbfe956561b ("lib/scatterlist: Provide a dedicated function to support=
+ table append")
 >=20
-> Perhaps with
+> interacting with commit
 >=20
-> Fixes: b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to
-> work with GuC")
+>   213d50927763 ("drm/i915/ttm: Introduce a TTM i915 gem object backend")
+>=20
+> from the drm tree.
+>=20
+> I have applied the following merge resolution patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 23 Aug 2021 17:46:27 +1000
+> Subject: [PATCH] drm/i915/ttm: fix up for "lib/scatterlist: Provide a
+>  dedicated function to support tableappend"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i9=
+15/gem/i915_gem_ttm.c
+> index 771eb2963123..d3d95934a047 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -382,7 +382,6 @@ i915_ttm_region(struct ttm_device *bdev, int ttm_mem_=
+type)
+>  static struct sg_table *i915_ttm_tt_get_st(struct ttm_tt *ttm)
+>  {
+>  	struct i915_ttm_tt *i915_tt =3D container_of(ttm, typeof(*i915_tt), ttm=
+);
+> -	struct scatterlist *sg;
+>  	struct sg_table *st;
+>  	int ret;
+> =20
+> @@ -393,13 +392,13 @@ static struct sg_table *i915_ttm_tt_get_st(struct t=
+tm_tt *ttm)
+>  	if (!st)
+>  		return ERR_PTR(-ENOMEM);
+> =20
+> -	sg =3D __sg_alloc_table_from_pages
+> +	ret =3D sg_alloc_table_from_pages_segment
+>  		(st, ttm->pages, ttm->num_pages, 0,
+>  		 (unsigned long)ttm->num_pages << PAGE_SHIFT,
+> -		 i915_sg_segment_size(), NULL, 0, GFP_KERNEL);
+> -	if (IS_ERR(sg)) {
+> +		 i915_sg_segment_size(), GFP_KERNEL);
+> +	if (ret) {
+>  		kfree(st);
+> -		return ERR_CAST(sg);
+> +		return ERR_PTR(ret);
+>  	}
+> =20
+>  	ret =3D dma_map_sgtable(i915_tt->dev, st, DMA_BIDIRECTIONAL, 0);
 
-OK, so that didn't happen so I will now apply the merge fix up to the
-merge of the kbuild tree.
-
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Fri, 20 Aug 2021 12:24:19 +1000
-> > Subject: [PATCH] drm/i915: use linux/stddef.h due to "isystem: trim/fix=
-up stdarg.h and other headers"
-> >
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/i915/gt/intel_gt_requests.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/gt/intel_gt_requests.h b/drivers/gpu/=
-drm/i915/gt/intel_gt_requests.h
-> > index 51dbe0e3294e..d2969f68dd64 100644
-> > --- a/drivers/gpu/drm/i915/gt/intel_gt_requests.h
-> > +++ b/drivers/gpu/drm/i915/gt/intel_gt_requests.h
-> > @@ -6,7 +6,7 @@
-> >  #ifndef INTEL_GT_REQUESTS_H
-> >  #define INTEL_GT_REQUESTS_H
-> >
-> > -#include <stddef.h>
-> > +#include <linux/stddef.h>
-> >
-> >  struct intel_engine_cs;
-> >  struct intel_gt;
-> > --
-> > 2.32.0
+I am now applying this merge fix patch to the merge of the rdma tree
+(since that has merged the hmm tree and the drm tree has been merged
+upstream).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/P6VydhTMW+uTGLu/gN5IeDS
+--Sig_/stlCEP4gLQ3cyH/reb0cPfS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEv9a4ACgkQAVBC80lX
-0Gyfhgf/cOlOxQo7LdY6lacikjcXfwu1wdLPW7Z3AjOGWTohweO9GYJFgtOkKyEo
-7/pjpAPYTYNU/47awEy4DBjE8LS6z6A4gkakVkcd4E1GchD/HnVHyxOyZICwTwPX
-Oe3fvd7ZbjIxJ3FCUlFPySi4VydWeL2BBdAdjCEFYkcVuy33sEvx9xEQLr6X+99u
-JFZi6nIvbFTb5EjnAraJ5M1wwHDU+03Gzef2iLJTWWbWdYeYg2QuPbgafy9MWu+6
-ZrCim6nvKB/2oZ3I7YJZDCkAhmGqS1kPnrSZwjznIMoY3aJbOOOrCugfa2cOrhSR
-DmQZ1rwMa0TKMZcj8SypG166QiBV/w==
-=QCKm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmEv+DUACgkQAVBC80lX
+0Gx9WAf9EPASlxghM4C7XRvD7i/Ap/naEcc9lkxTPGlLfZuyg+sevCTU2HTadYNq
+7e4QNotQV8nHaXvCzSwwJ83uYHtVf85mKVgXb+w5cV48E0lk0ASVX5w6KGLOAdpo
+WkJUu2CCkxCTPXFrPeK4gBvSLw4Xekv0QskQB/nAon2jfJmQkYXtBPWf2VULegsN
+Rp6xj4txXVGj4MEBhGZpFQF2q3D1a+6h/JcbpMUJKTo7n7QEjgzlP6gsLlWng5Qh
+FUIYW8GAAZrqcDBaaHsmJHUr/Y5Ow3Jjw4f1imTy72hRHpaF2cn12G+uyK0N39A6
+EEc2mV+4nQ1YqrfUC2a1qb1yZlOhjw==
+=iXH5
 -----END PGP SIGNATURE-----
 
---Sig_/P6VydhTMW+uTGLu/gN5IeDS--
+--Sig_/stlCEP4gLQ3cyH/reb0cPfS--

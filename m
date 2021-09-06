@@ -2,36 +2,2153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78ECF401B4F
-	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 14:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64523401C79
+	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 15:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbhIFMmN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Sep 2021 08:42:13 -0400
-Received: from verein.lst.de ([213.95.11.211]:33004 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236388AbhIFMmM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Sep 2021 08:42:12 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id ED1F367373; Mon,  6 Sep 2021 14:41:05 +0200 (CEST)
-Date:   Mon, 6 Sep 2021 14:41:05 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the dma-mapping tree
-Message-ID: <20210906124105.GA13782@lst.de>
-References: <20210813171134.4ad7d640@canb.auug.org.au> <20210903164557.24569a83@canb.auug.org.au>
+        id S242545AbhIFNjv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Sep 2021 09:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242129AbhIFNjv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Sep 2021 09:39:51 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863DAC061575
+        for <linux-next@vger.kernel.org>; Mon,  6 Sep 2021 06:38:46 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n4so3951575plh.9
+        for <linux-next@vger.kernel.org>; Mon, 06 Sep 2021 06:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=dGT6cPRcooFFD0ayhJbYrR1bNnITmBPclHLrBQ56L4w=;
+        b=eB72S1JHFBnGAkiihcu6gHb4Kp/KVO4JHbsV/epFmfWKzJ3auMQf8I1pBod3eGPpn7
+         UAD8HtsZ5mG9JhOK80Fo8hzFUL/Qam17hzyQU9Oi1lnE1kGSxEylB6NLyqEPPfcvgCV5
+         94K2M8h7CniLWVxFNmfhcD7sVFq/fmv2Uqd+zYCI0/+czFShAZa1Qd68TuRzDBE3ioDQ
+         JmGvDXVojqypeht3lpwbsaJFKI2ZaBdelGo7Hj5hrQgRRQc1mEo79XgaQZZ58CQ6l6Up
+         Roa70pbAF64SpPS9C1RcYtJJA3pfLtXCzu7M1an+g7tfGU2LxsEwJIsi6r5Ingg8v0Cg
+         afvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=dGT6cPRcooFFD0ayhJbYrR1bNnITmBPclHLrBQ56L4w=;
+        b=d3rhSFKrPZqyPe8AS7cSrh5E7F5BwU4+GUFIEaG/dpqHh3PCgsJwIyRjF2fhx8dYWS
+         CFdW1CpouCfi33tivz3lT967WNjOdhIirFUjM0RLjG7NXxAyx9SXqE8yKPYvvH7gIecv
+         ftA6UgbLm8HGi/mwO+huhX5IgKte+AzdOtfjdGltaP4zUoqoVtHuqkGpvDj+p7RkHxUD
+         qp0PRqOwoQJKRroWeTIMPsuuh5XWwnB/v9GWGxftupq3RJBHB9kdtIpJWV2V3MahmNHI
+         wmh/AiwiTZ1lo1vREIFOBWt5GM8Zsa1ckIZAm7rHfnfmLmppDY7/oVR7HtcfCuQ2XCG1
+         tTBw==
+X-Gm-Message-State: AOAM532s8fNgJrPKn6iB4ERbWUK2vJupC7uS+ry094a845g5HvhguxUX
+        2FdznNA+e3AhC2sNoGegy4HwnwS1SpDWz4GH
+X-Google-Smtp-Source: ABdhPJxwxU3Wxgq7zfoLgBIkxEqTohVYVoLhqepHmdQCFB7o3Jf/BIzXFwXGhJ58IRMPfs3WNDVQOA==
+X-Received: by 2002:a17:903:189:b0:13a:186f:b8b7 with SMTP id z9-20020a170903018900b0013a186fb8b7mr7204245plg.57.1630935524314;
+        Mon, 06 Sep 2021 06:38:44 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o2sm10045639pgc.47.2021.09.06.06.38.43
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Sep 2021 06:38:44 -0700 (PDT)
+Message-ID: <613619e4.1c69fb81.b8d8f.b616@mx.google.com>
+Date:   Mon, 06 Sep 2021 06:38:44 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210903164557.24569a83@canb.auug.org.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20210906
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master build: 199 builds: 11 failed, 188 passed, 156 errors,
+ 183 warnings (next-20210906)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Thanks,
+next/master build: 199 builds: 11 failed, 188 passed, 156 errors, 183 warni=
+ngs (next-20210906)
 
-I've commited a fix.
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20210906/
+
+Tree: next
+Branch: master
+Git Describe: next-20210906
+Git Commit: 7800ca95d0ed11b492962dc3abc2181c9d5f7f82
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
+
+Build Failures Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-8) FAIL
+
+arm64:
+    allmodconfig: (clang-12) FAIL
+    defconfig: (clang-12) FAIL
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy: (clang-12) FAIL
+
+arm:
+    socfpga_defconfig: (gcc-8) FAIL
+
+mips:
+    lemote2f_defconfig: (gcc-8) FAIL
+    loongson2k_defconfig: (gcc-8) FAIL
+    loongson3_defconfig: (gcc-8) FAIL
+    rbtx49xx_defconfig: (gcc-8) FAIL
+    rm200_defconfig: (gcc-8) FAIL
+    xway_defconfig: (gcc-8) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-8): 2 errors, 2 warnings
+    tinyconfig (gcc-8): 1 warning
+
+arm64:
+    allmodconfig (clang-12): 4 errors, 2 warnings
+    defconfig (clang-12): 3 errors, 2 warnings
+    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-12): 3 errors, 2 warnings
+
+arm:
+    aspeed_g4_defconfig (gcc-8): 20 errors, 20 warnings
+    aspeed_g5_defconfig (gcc-8): 20 errors, 20 warnings
+    multi_v7_defconfig (clang-12): 20 warnings
+    multi_v7_defconfig+kselftest (gcc-8): 20 errors, 20 warnings
+    socfpga_defconfig (gcc-8): 1 error, 1 warning
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 1 warning
+    32r2el_defconfig+kselftest (gcc-8): 17 errors, 18 warnings
+    loongson2k_defconfig (gcc-8): 1 error, 1 warning
+    loongson3_defconfig (gcc-8): 1 error, 1 warning
+    rbtx49xx_defconfig (gcc-8): 1 error, 1 warning
+    rm200_defconfig (gcc-8): 1 error, 1 warning
+    xway_defconfig (gcc-8): 2 errors, 1 warning
+
+riscv:
+    defconfig+kselftest (gcc-8): 20 errors, 20 warnings
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+    allnoconfig (clang-10): 3 warnings
+    x86_64_defconfig+kselftest (gcc-8): 20 errors, 20 warnings
+    x86_64_defconfig+x86-chromebook+kselftest (gcc-8): 20 errors, 20 warnin=
+gs
+
+Errors summary:
+
+    14   include/linux/fortify-string.h:56:3: error: call to =E2=80=98__wri=
+te_overflow=E2=80=99 declared with attribute error: detected write beyond s=
+ize of object (1st parameter)
+    14   include/linux/fortify-string.h:319:3: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    14   include/linux/fortify-string.h:125:4: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    7    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__re=
+ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
+ze of object (1st parameter)
+    7    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__re=
+ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
+ze of object (1st parameter)
+    7    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__re=
+ad_overflow2=E2=80=99 declared with attribute error: detected read beyond s=
+ize of object (2nd parameter)
+    7    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__re=
+ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
+ze of object (1st parameter)
+    7    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__re=
+ad_overflow=E2=80=99 declared with attribute error: detected read beyond si=
+ze of object (1st parameter)
+    7    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__re=
+ad_overflow2=E2=80=99 declared with attribute error: detected read beyond s=
+ize of object (2nd parameter)
+    7    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    7    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__re=
+ad_overflow2=E2=80=99 declared with attribute error: detected read beyond s=
+ize of object (2nd parameter)
+    7    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    7    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    7    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__wr=
+ite_overflow=E2=80=99 declared with attribute error: detected write beyond =
+size of object (1st parameter)
+    6    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement wit=
+h no effect [-Werror=3Dunused-value]
+    6    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with=
+ no effect [-Werror=3Dunused-value]
+    6    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with=
+ no effect [-Werror=3Dunused-value]
+    3    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:262:7: err=
+or: variable 'err' is used uninitialized whenever switch case is taken [-We=
+rror,-Wsometimes-uninitialized]
+    3    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:257:7: err=
+or: variable 'err' is used uninitialized whenever 'if' condition is false [=
+-Werror,-Wsometimes-uninitialized]
+    3    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:157:11: er=
+ror: variable 'err' is used uninitialized whenever 'if' condition is false =
+[-Werror,-Wsometimes-uninitialized]
+    1    include/linux/slab.h:618:9: error: argument 1 value =E2=80=9818446=
+744073709551615=E2=80=99 exceeds maximum object size 9223372036854775807 [-=
+Werror=3Dalloc-size-larger-than=3D]
+    1    include/linux/slab.h:461:9: error: argument 1 value =E2=80=9842949=
+67295=E2=80=99 exceeds maximum object size 2147483647 [-Werror=3Dalloc-size=
+-larger-than=3D]
+    1    include/linux/slab.h:461:9: error: argument 1 value =E2=80=9818446=
+744073709551615=E2=80=99 exceeds maximum object size 9223372036854775807 [-=
+Werror=3Dalloc-size-larger-than=3D]
+    1    drivers/staging/greybus/audio_topology.c:977:12: error: stack fram=
+e size of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wfr=
+ame-larger-than=3D]
+    1    drivers/net/ethernet/lantiq_etop.c:281:4: error: ignoring return v=
+alue of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_=
+result [-Werror=3Dunused-result]
+    1    drivers/net/ethernet/lantiq_etop.c:273:4: error: ignoring return v=
+alue of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_=
+result [-Werror=3Dunused-result]
+    1    drivers/net/ethernet/8390/ne.c:909:20: error: =E2=80=98ne_add_devi=
+ces=E2=80=99 defined but not used [-Werror=3Dunused-function]
+    1    drivers/block/paride/bpck.c:32: error: "PC" redefined [-Werror]
+    1    arch/arc/include/asm/perf_event.h:91:27: error: =E2=80=98arc_pmu_e=
+v_hw_map=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:27: error: =E2=80=98arc_pmu_=
+cache_map=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+
+Warnings summary:
+
+    25   cc1: all warnings being treated as errors
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+    10   clang: warning: argument unused during compilation: '-Wa,-march=3D=
+armv7-a' [-Wunused-command-line-argument]
+    7    warning: unsafe strscpy() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-strscpy.c
+    7    warning: unsafe strncpy() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-strncpy.c
+    7    warning: unsafe strncpy() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-strncpy-src.c
+    7    warning: unsafe strlcpy() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-strlcpy.c
+    7    warning: unsafe strlcpy() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-strlcpy-src.c
+    7    warning: unsafe strcpy() usage lacked '__write_overflow' warning i=
+n ../lib/test_fortify/write_overflow-strcpy.c
+    7    warning: unsafe strcpy() usage lacked '__write_overflow' warning i=
+n ../lib/test_fortify/write_overflow-strcpy-lit.c
+    7    warning: unsafe memset() usage lacked '__write_overflow' warning i=
+n ../lib/test_fortify/write_overflow-memset.c
+    7    warning: unsafe memscan() usage lacked '__read_overflow' warning i=
+n ../lib/test_fortify/read_overflow-memscan.c
+    7    warning: unsafe memmove() usage lacked '__write_overflow' warning =
+in ../lib/test_fortify/write_overflow-memmove.c
+    7    warning: unsafe memmove() usage lacked '__read_overflow2' warning =
+in ../lib/test_fortify/read_overflow2-memmove.c
+    7    warning: unsafe memcpy() usage lacked '__write_overflow' warning i=
+n ../lib/test_fortify/write_overflow-memcpy.c
+    7    warning: unsafe memcpy() usage lacked '__read_overflow2' warning i=
+n ../lib/test_fortify/read_overflow2-memcpy.c
+    7    warning: unsafe memcmp() usage lacked '__read_overflow2' warning i=
+n ../lib/test_fortify/read_overflow2-memcmp.c
+    7    warning: unsafe memcmp() usage lacked '__read_overflow' warning in=
+ ../lib/test_fortify/read_overflow-memcmp.c
+    7    warning: unsafe memchr_inv() usage lacked '__read_overflow' warnin=
+g in ../lib/test_fortify/read_overflow-memchr_inv.c
+    7    warning: unsafe memchr() usage lacked '__read_overflow' warning in=
+ ../lib/test_fortify/read_overflow-memchr.c
+    3    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:247:9: not=
+e: initialize the variable 'err' to silence this warning
+    3    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:140:9: not=
+e: initialize the variable 'err' to silence this warning
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    2    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't f=
+ind starting instruction
+    1    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't f=
+ind starting instruction
+    1    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): =
+can't find starting instruction
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 17 errors, 18 warn=
+ings, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-12) =E2=80=94 FAIL, 4 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/staging/greybus/audio_topology.c:977:12: error: stack frame siz=
+e of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-l=
+arger-than=3D]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:157:11: error: =
+variable 'err' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:262:7: error: v=
+ariable 'err' is used uninitialized whenever switch case is taken [-Werror,=
+-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:257:7: error: v=
+ariable 'err' is used uninitialized whenever 'if' condition is false [-Werr=
+or,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:140:9: note: in=
+itialize the variable 'err' to silence this warning
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:247:9: note: in=
+itialize the variable 'err' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/x86/entry/entry_64.o: warning: objtool: asm_load_gs_index(): can't=
+ find starting instruction
+    arch/x86/lib/memcpy_64.o: warning: objtool: memcpy_erms(): can't find s=
+tarting instruction
+    arch/x86/lib/memset_64.o: warning: objtool: memset_erms(): can't find s=
+tarting instruction
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 20 errors, 20 warnings, 0 =
+section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 20 errors, 20 warnings, 0 =
+section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-12) =E2=80=94 FAIL, 3 errors, 2 warnings, 0 section=
+ mismatches
+
+Errors:
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:157:11: error: =
+variable 'err' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:262:7: error: v=
+ariable 'err' is used uninitialized whenever switch case is taken [-Werror,=
+-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:257:7: error: v=
+ariable 'err' is used uninitialized whenever 'if' condition is false [-Werr=
+or,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:140:9: note: in=
+itialize the variable 'err' to silence this warning
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:247:9: note: in=
+itialize the variable 'err' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-12) =E2=80=94 FAIL, 3 er=
+rors, 2 warnings, 0 section mismatches
+
+Errors:
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:157:11: error: =
+variable 'err' is used uninitialized whenever 'if' condition is false [-Wer=
+ror,-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:262:7: error: v=
+ariable 'err' is used uninitialized whenever switch case is taken [-Werror,=
+-Wsometimes-uninitialized]
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:257:7: error: v=
+ariable 'err' is used uninitialized whenever 'if' condition is false [-Werr=
+or,-Wsometimes-uninitialized]
+
+Warnings:
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:140:9: note: in=
+itialize the variable 'err' to silence this warning
+    drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c:247:9: note: in=
+itialize the variable 'err' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 20 errors, 20 warnings, =
+0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 FAIL, 2 errors, 2 wa=
+rnings, 0 section mismatches
+
+Errors:
+    arch/arc/include/asm/perf_event.h:126:27: error: =E2=80=98arc_pmu_cache=
+_map=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: error: =E2=80=98arc_pmu_ev_hw_=
+map=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 se=
+ction mismatches
+
+Errors:
+    include/linux/slab.h:461:9: error: argument 1 value =E2=80=981844674407=
+3709551615=E2=80=99 exceeds maximum object size 9223372036854775807 [-Werro=
+r=3Dalloc-size-larger-than=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    include/linux/slab.h:618:9: error: argument 1 value =E2=80=981844674407=
+3709551615=E2=80=99 exceeds maximum object size 9223372036854775807 [-Werro=
+r=3Dalloc-size-larger-than=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-12) =E2=80=94 PASS, 0 errors, 20 warnings, 0=
+ section mismatches
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-Wa,-march=3Darmv7=
+-a' [-Wunused-command-line-argument]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 20 errors, 20 war=
+nings, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/net/ethernet/8390/ne.c:909:20: error: =E2=80=98ne_add_devices=
+=E2=80=99 defined but not used [-Werror=3Dunused-function]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/block/paride/bpck.c:32: error: "PC" redefined [-Werror]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:834:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1131:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1515:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    include/linux/slab.h:461:9: error: argument 1 value =E2=80=984294967295=
+=E2=80=99 exceeds maximum object size 2147483647 [-Werror=3Dalloc-size-larg=
+er-than=3D]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
+atches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 20 errors, 20 wa=
+rnings, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 2=
+0 errors, 20 warnings, 0 section mismatches
+
+Errors:
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:237:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    lib/test_fortify/read_overflow-memcmp.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:263:4: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:235:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:250:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    lib/test_fortify/read_overflow2-memcmp.c:3:2: error: statement with no =
+effect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:265:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:221:4: error: call to =E2=80=98__read_ov=
+erflow2=E2=80=99 declared with attribute error: detected read beyond size o=
+f object (2nd parameter)
+    include/linux/fortify-string.h:154:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:125:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:219:4: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    lib/test_fortify/read_overflow-memchr.c:3:2: error: statement with no e=
+ffect [-Werror=3Dunused-value]
+    include/linux/fortify-string.h:277:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:289:3: error: call to =E2=80=98__read_ov=
+erflow=E2=80=99 declared with attribute error: detected read beyond size of=
+ object (1st parameter)
+    include/linux/fortify-string.h:319:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+    include/linux/fortify-string.h:206:3: error: call to =E2=80=98__write_o=
+verflow=E2=80=99 declared with attribute error: detected write beyond size =
+of object (1st parameter)
+    include/linux/fortify-string.h:56:3: error: call to =E2=80=98__write_ov=
+erflow=E2=80=99 declared with attribute error: detected write beyond size o=
+f object (1st parameter)
+
+Warnings:
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy.c
+    warning: unsafe memmove() usage lacked '__read_overflow2' warning in ..=
+/lib/test_fortify/read_overflow2-memmove.c
+    warning: unsafe memcmp() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memmove() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-memmove.c
+    warning: unsafe memscan() usage lacked '__read_overflow' warning in ../=
+lib/test_fortify/read_overflow-memscan.c
+    warning: unsafe memcmp() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcmp.c
+    cc1: all warnings being treated as errors
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy-lit.c
+    warning: unsafe memcpy() usage lacked '__read_overflow2' warning in ../=
+lib/test_fortify/read_overflow2-memcpy.c
+    warning: unsafe strscpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strscpy.c
+    warning: unsafe strlcpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strlcpy-src.c
+    warning: unsafe memcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memcpy.c
+    warning: unsafe memchr() usage lacked '__read_overflow' warning in ../l=
+ib/test_fortify/read_overflow-memchr.c
+    cc1: all warnings being treated as errors
+    warning: unsafe memchr_inv() usage lacked '__read_overflow' warning in =
+../lib/test_fortify/read_overflow-memchr_inv.c
+    warning: unsafe strcpy() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-strcpy.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy.c
+    warning: unsafe memset() usage lacked '__write_overflow' warning in ../=
+lib/test_fortify/write_overflow-memset.c
+    warning: unsafe strncpy() usage lacked '__write_overflow' warning in ..=
+/lib/test_fortify/write_overflow-strncpy-src.c
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    drivers/net/ethernet/lantiq_etop.c:273:4: error: ignoring return value =
+of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_resul=
+t [-Werror=3Dunused-result]
+    drivers/net/ethernet/lantiq_etop.c:281:4: error: ignoring return value =
+of =E2=80=98request_irq=E2=80=99, declared with attribute warn_unused_resul=
+t [-Werror=3Dunused-result]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---
+For more info write to <info@kernelci.org>

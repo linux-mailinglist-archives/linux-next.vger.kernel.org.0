@@ -2,153 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D286401703
-	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 09:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5608C401700
+	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 09:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240155AbhIFHfi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Sep 2021 03:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240026AbhIFHfi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Sep 2021 03:35:38 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D149C061757
-        for <linux-next@vger.kernel.org>; Mon,  6 Sep 2021 00:34:34 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so7772985otf.6
-        for <linux-next@vger.kernel.org>; Mon, 06 Sep 2021 00:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KLDv73P0F0QVUgxl+s78WI8WF2RJUO8K40NpRb3AqHQ=;
-        b=AySEBLAeHsj5uVKS43yZ6s3q3C829S5+QMS0aYfinQTmdXtS7JbvxxOJcj6be0Ta0E
-         ZqB32nk4+F7M0IwkVWOBwR7Tta9/EP/i9LsctRGtbHGfLF90/LyUlyOIzM5jSr0gTsyL
-         ETmg1qXQwAEiNDF8NRPmhEXuM/iQRbQbOR00U=
+        id S239999AbhIFHfb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Sep 2021 03:35:31 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:40920 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240098AbhIFHfa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Sep 2021 03:35:30 -0400
+Received: by mail-il1-f200.google.com with SMTP id f13-20020a056e02168d00b002244a6aa233so3598997ila.7
+        for <linux-next@vger.kernel.org>; Mon, 06 Sep 2021 00:34:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KLDv73P0F0QVUgxl+s78WI8WF2RJUO8K40NpRb3AqHQ=;
-        b=KTazFa14eMGZq941dvPj0dqqh7RQEpitHyWkrsS9UVS2voBTH8JnypWK0aUycy0KDL
-         kxcKbXcBJ5iAVMOGmXhNVW7JKFUelfiqFk2836V78hT4Yg7DoQLVsNQIhb1DK0h20TgD
-         2iVgiCJae6g58ERK7PBHEDqEhxXKOG/uO9YHwyhoCoiwuDNs/cIuGif7g1CiAJm98Xqz
-         O8z8YmCjApXhqcW3GI8aneQLhd71CusvgINDrGf9Zt4dXhSCdhDEQSQmc4KVL8xr3PEj
-         QqizUliacJSCg9HcB12mnKrSODFpGWVOUvpxIc6fh/gImmybDpiQc8Sgx8aLTbXDZ7EY
-         9jmA==
-X-Gm-Message-State: AOAM530mj9wRXSsEeZNSzEw6k1Uk5JuN4DvzwwUFMnxAJ5OGEUt8NmK1
-        7AVy3S1n8LXLQ1leN+VDpe1psiTAKyHKMVzXgwMopY1vOgA=
-X-Google-Smtp-Source: ABdhPJx1IPLOWvU3juMO7W0BfSfAXxm8nc0F1B4hcn35OkdkhajuYdWFrNbDFUxrBcyUq7wkCAIMwhj7M36O42pmDvY=
-X-Received: by 2002:a05:6830:156:: with SMTP id j22mr9487069otp.75.1630913673121;
- Mon, 06 Sep 2021 00:34:33 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=q/HxcyVp5EucpM+deS8Qmk0RVkmU6A9Zygc+jRDfO4M=;
+        b=CHjv6K7DahYQGgN95QiXvwHsWVvKWAwvW7F6o79k6ZkWGNytbC57OoAvjUXEzp37ks
+         PKTjqsWQ12GtD2pEHSrxGapDlx489M/awouzYEOSC+Vemp6esu3x5DoQlCEB1BZrsBz8
+         lqhZRjykl9I/APmle3q0WzsfDwRoqNYwSKkb/gHjhiK6nfNAPtKtVags3zmd/58CRy/y
+         b6NZPJhT4rxilpif2f3NvNyL5d0Bv6JF+tEUYtuNb7JFyLv7OGgHOV8QVlbzzWN8U7H/
+         y46Gy8lyc4Z4HbbJtNRQkBicW/bNMj4yh7RG29Jmg+qzhpAvYr5uLAsVmWl9SIgZmYos
+         nm2g==
+X-Gm-Message-State: AOAM530n1vFRgzg0r284VYlqLNmxlX/s44xFXFbcBcd5gZtiz3++0ibr
+        V7d4jne+/Sqet7rCWPkddSUK03WrogRM2aBJmGCazDLcDZKz
+X-Google-Smtp-Source: ABdhPJwk0S8mNpHUplWBQgaHA7FBhX6wsQXjT+tX0Q2vrtFri6lo7KZwjURNZczVpFSLE4Zjqnbdtyley6IpslTx3rcXOkEyAKDk
 MIME-Version: 1.0
-References: <20210820123348.6535a87e@canb.auug.org.au> <CAK7LNASv-F1Y7kpaDF+_=TW0Jzvpo1uuNL1B5jUmCCRqv-45bA@mail.gmail.com>
- <20210902075038.7461d3c8@canb.auug.org.au> <20210906084947.4f65761d@canb.auug.org.au>
-In-Reply-To: <20210906084947.4f65761d@canb.auug.org.au>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Mon, 6 Sep 2021 09:34:21 +0200
-Message-ID: <CAKMK7uF6K+gdWVT09wL0sPBQs8RRixggk01e291veE0VecD=TQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Nikula, Jani" <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+X-Received: by 2002:a02:bb16:: with SMTP id y22mr9711093jan.129.1630913666256;
+ Mon, 06 Sep 2021 00:34:26 -0700 (PDT)
+Date:   Mon, 06 Sep 2021 00:34:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bc92ac05cb4ead3e@google.com>
+Subject: [syzbot] linux-next test error: KASAN: null-ptr-deref Read in fuse_conn_put
+From:   syzbot <syzbot+b304e8cb713be5f9d4e1@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, miklos@szeredi.hu,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 6, 2021 at 12:49 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> On Thu, 2 Sep 2021 07:50:38 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Fri, 20 Aug 2021 15:23:34 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > On Fri, Aug 20, 2021 at 11:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > >
->  > > After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
-> > > > failed like this:
-> > > >
-> > > > In file included from drivers/gpu/drm/i915/i915_debugfs.c:39:
-> > > > drivers/gpu/drm/i915/gt/intel_gt_requests.h:9:10: fatal error: stddef.h: No such file or directory
-> > > >     9 | #include <stddef.h>
-> > > >       |          ^~~~~~~~~~
-> > > >
-> > > > Caused by commit
-> > > >
-> > > >   564f963eabd1 ("isystem: delete global -isystem compile option")
-> > > >
-> > > > from the kbuild tree interacting with commit
-> > > >
-> > > >   b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to work with GuC")
-> > > >
-> > > > I have applied the following patch for today.
-> > >
-> > >
-> > > Thanks.
-> > >
-> > > This fix-up does not depend on my kbuild tree in any way.
-> > >
-> > > So, the drm maintainer can apply it to his tree.
-> > >
-> > > Perhaps with
-> > >
-> > > Fixes: b97060a99b01 ("drm/i915/guc: Update intel_gt_wait_for_idle to
-> > > work with GuC")
-> >
-> > OK, so that didn't happen so I will now apply the merge fix up to the
-> > merge of the kbuild tree.
-> >
-> > > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > Date: Fri, 20 Aug 2021 12:24:19 +1000
-> > > > Subject: [PATCH] drm/i915: use linux/stddef.h due to "isystem: trim/fixup stdarg.h and other headers"
-> > > >
-> > > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > > ---
-> > > >  drivers/gpu/drm/i915/gt/intel_gt_requests.h | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/i915/gt/intel_gt_requests.h b/drivers/gpu/drm/i915/gt/intel_gt_requests.h
-> > > > index 51dbe0e3294e..d2969f68dd64 100644
-> > > > --- a/drivers/gpu/drm/i915/gt/intel_gt_requests.h
-> > > > +++ b/drivers/gpu/drm/i915/gt/intel_gt_requests.h
-> > > > @@ -6,7 +6,7 @@
-> > > >  #ifndef INTEL_GT_REQUESTS_H
-> > > >  #define INTEL_GT_REQUESTS_H
-> > > >
-> > > > -#include <stddef.h>
-> > > > +#include <linux/stddef.h>
-> > > >
-> > > >  struct intel_engine_cs;
-> > > >  struct intel_gt;
-> > > > --
-> > > > 2.32.0
->
-> Ping?  I am still applying this ...
+Hello,
 
-Apologies, this fell through a lot of cracks. I applied this to drm-next now.
+syzbot found the following issue on:
 
-Matt/John, as author/committer it's your job to make sure issues and
-fixes for the stuff you're pushing don't get lost. I'd have expected
-John to apply this to at least drm-intel-gt-next (it's not even
-there).
+HEAD commit:    14c6345e6e6c Add linux-next specific files for 20210903
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=164460ed300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c17400330d618d71
+dashboard link: https://syzkaller.appspot.com/bug?extid=b304e8cb713be5f9d4e1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
 
-Joonas, I think this is the 2nd or 3rd or so issue this release cycle
-where some compile fix got stuck a bit because drm-intel-gt-next isn't
-in linux-next. Can we please fix that? It probably needs some changes
-to the dim script.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b304e8cb713be5f9d4e1@syzkaller.appspotmail.com
 
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: null-ptr-deref in fuse_conn_put fs/fuse/inode.c:827 [inline]
+BUG: KASAN: null-ptr-deref in fuse_conn_put+0x1d7/0x300 fs/fuse/inode.c:814
+Read of size 4 at addr 0000000000000000 by task syz-fuzzer/6540
+
+CPU: 0 PID: 6540 Comm: syz-fuzzer Not tainted 5.14.0-next-20210903-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ fuse_conn_put fs/fuse/inode.c:827 [inline]
+ fuse_conn_put+0x1d7/0x300 fs/fuse/inode.c:814
+ fuse_dev_free+0x155/0x1f0 fs/fuse/inode.c:1324
+ fuse_dev_release+0x2a8/0x3f0 fs/fuse/dev.c:2205
+ __fput+0x288/0x9f0 fs/file_table.c:280
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:209
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:291 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:302
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4af19b
+Code: fb ff eb bd e8 a6 b6 fb ff e9 61 ff ff ff cc e8 9b 82 fb ff 48 8b 7c 24 10 48 8b 74 24 18 48 8b 54 24 20 48 8b 44 24 08 0f 05 <48> 3d 01 f0 ff ff 76 20 48 c7 44 24 28 ff ff ff ff 48 c7 44 24 30
+RSP: 002b:000000c0000ef430 EFLAGS: 00000206 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 000000c00001c000 RCX: 00000000004af19b
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
+RBP: 000000c0000ef470 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000009
+R13: 0000000000000008 R14: 0000000000000200 R15: 000000c0003fe000
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

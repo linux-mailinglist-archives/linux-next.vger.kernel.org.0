@@ -2,125 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A3B401515
-	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 04:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED4040151B
+	for <lists+linux-next@lfdr.de>; Mon,  6 Sep 2021 04:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238867AbhIFCvI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Sep 2021 22:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S239115AbhIFC5T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Sep 2021 22:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238842AbhIFCvI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Sep 2021 22:51:08 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87ADC061575;
-        Sun,  5 Sep 2021 19:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1630896596;
-        bh=lvnjrDHVue4jRbF+xpLu6wRs9BCkjAt29ulD1CAA8Sg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GV7VW42N/9jCdMIoTnkN/sx83SmUZIckX0mZM/bQTP/urWGXi0+Opi2qn23gvAKCp
-         QyzEW1qwmKafRUkw513I21iz7j5QFp6zutTqnhJ6ORQNI7p4/le5VzB0Gu65FCXKZh
-         4n3f1+4H4evhKXdENyVohb+n22IYfnXfBOybkIAxCPpZ+eK+32eOZIMs7HDv5I+U89
-         gaubzy8T/t8V1qKFcBoNhd1vWe7Llm6iBRQN0iOGttDaIfQHo1hUNe/Rkbqua1xGK/
-         DWdjJ96K6TgQ0vtaKh321Q2e7ucr8/gTv1unV974fdWmxElVquaePSMPIyqlrN4aPF
-         YFA3RGfWc05dQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H2tD40WlLz9sW4;
-        Mon,  6 Sep 2021 12:49:55 +1000 (AEST)
-Date:   Mon, 6 Sep 2021 12:49:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xie Yongji <xieyongji@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the vhost tree
-Message-ID: <20210906124954.55ece6e8@canb.auug.org.au>
+        with ESMTP id S239102AbhIFC5R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Sep 2021 22:57:17 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A9DC061575
+        for <linux-next@vger.kernel.org>; Sun,  5 Sep 2021 19:56:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id mf2so10460620ejb.9
+        for <linux-next@vger.kernel.org>; Sun, 05 Sep 2021 19:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xydTELVR03F9tNIX3znu9/l3opgVjN88wKbMkJ2pBWc=;
+        b=mc7XwRV4yCqZumKavNPxeFi83P8NsgpgvvJDzVTcs9Z5yXGO/Vw1sVK4ZJtvDRyj7T
+         fQhfqT3vmOy/ZhUZyNk16b756D71A0XikEhgNYbCNJ0NpwhV2cUmZ6jHIzcljk2D/Lco
+         j/Vp9xSzttiCMrrnLPxl+a65f9Ff+pMRV/50ahiGHlL9oWz+BkFWEk0VgrralmKUfv5p
+         dCpMGPWvjRUQPLtHCIpbCmh49wW/lQlFEItmC/HhxNG6JawQfkdh7xkdjyyXBI8+L42F
+         h8X/mlZ2rq/WdUM6tF0kWcr9UeamosVqFn4ZG35WYHqY29aMoeMAyYU1NXWYuSeCTt3H
+         Txgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xydTELVR03F9tNIX3znu9/l3opgVjN88wKbMkJ2pBWc=;
+        b=bsGu4lu0QCcJb46V/gdQ3GkVZbRS/RIHUqUPpvnqxQDWS9unGe6JJ3fq20Z0EpKn8+
+         LPY5PgAHAvCDBDKDmgIdImq5uti7GRimSzEldymBat5XUuUCPIsuhyDa3dA/In3GH4gm
+         /xzNqzAsrX1YKM88Tq+zMO+/p3x16fvSgDKqWP4RLQShQkgD1OvLvi2g+R+kiz2be7Ik
+         4SICRDstG7rveQHQr98ZiG+u8rGLNlfbkHYRV/SXKE2THO3QfmSKWYLLbHMBhUdoy2oS
+         Ru8It+zJ5ay9cjkcUWaC3nT+Mlvs1ATzJY0mm3EDuGjbVk/q2KqaMqvRNUMjsedubGU3
+         3mhw==
+X-Gm-Message-State: AOAM530bnMqLGdmqgaq2OkYoLKS3nY8uMXk58Bs/lgnUGXhGfhJN3ANT
+        lzOosz6ou+sVUaHfTjVp2+7lwyWJ2CjFeagWfN+Aa4kGajNZ
+X-Google-Smtp-Source: ABdhPJw9x3aDTVS//sOMbtlZpo1q7ugoS/hhYsH1jXghmXtpak3tQCvrftpkW10JUbbk5PmlDcqgWKP0//lRo1giuOE=
+X-Received: by 2002:a17:906:cecd:: with SMTP id si13mr11577549ejb.93.1630896972285;
+ Sun, 05 Sep 2021 19:56:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nZ1.Z3iCbFT6pedY5E66n9T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20210906122806.2ca7e715@canb.auug.org.au>
+In-Reply-To: <20210906122806.2ca7e715@canb.auug.org.au>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Mon, 6 Sep 2021 10:56:01 +0800
+Message-ID: <CACycT3viMCxcsg1GXDA1kmcv3n56nDj3a3OpHb3sF40SD9tSEg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the vhost tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nZ1.Z3iCbFT6pedY5E66n9T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Sep 6, 2021 at 10:28 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the vhost tree got a conflict in:
+>
+>   fs/eventfd.c
+>
+> between commit:
+>
+>   b542e383d8c0 ("eventfd: Make signal recursion protection a task bit")
+>
+> from Linus' tree and commit:
+>
+>   0afdb2abbff3 ("eventfd: Export eventfd_wake_count to modules")
+>
+> from the vhost tree.
+>
+> I fixed it up (I removed eventfd_wake_count as I could not see any added
+> use for it) and can carry the fix as necessary. This is now fixed as
+> far as linux-next is concerned, but any non trivial conflicts should be
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer
+> of the conflicting tree to minimise any particularly complex conflicts.
+>
 
-Hi all,
+Yes, I think we can safely remove the commit 0afdb2abbff3 ("eventfd:
+Export eventfd_wake_count to modules") after the commit b542e383d8c0
+applied.
 
-After merging the vhost tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/vdpa/vdpa_user/vduse_dev.c: In function 'vduse_vdpa_kick_vq':
-drivers/vdpa/vdpa_user/vduse_dev.c:489:6: error: implicit declaration of fu=
-nction 'eventfd_signal_count'; did you mean 'eventfd_signal_allowed'? [-Wer=
-ror=3Dimplicit-function-declaration]
-  489 |  if (eventfd_signal_count()) {
-      |      ^~~~~~~~~~~~~~~~~~~~
-      |      eventfd_signal_allowed
-
-Caused by commit
-
-  b66219796563 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
-
-interacting with commit
-
-  b542e383d8c0 ("eventfd: Make signal recursion protection a task bit")
-
-from Linus' tree.
-
-I have applied the following merge fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 6 Sep 2021 12:43:32 +1000
-Subject: [PATCH] fix up for "eventfd: Make signal recursion protection a ta=
-sk bit"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vd=
-use_dev.c
-index 59a93e5b967a..5c25ff6483ad 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -486,7 +486,7 @@ static void vduse_vdpa_kick_vq(struct vdpa_device *vdpa=
-, u16 idx)
- 	struct vduse_dev *dev =3D vdpa_to_vduse(vdpa);
- 	struct vduse_virtqueue *vq =3D &dev->vqs[idx];
-=20
--	if (eventfd_signal_count()) {
-+	if (eventfd_signal_allowed()) {
- 		schedule_work(&vq->kick);
- 		return;
- 	}
---=20
-2.32.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/nZ1.Z3iCbFT6pedY5E66n9T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmE1gdIACgkQAVBC80lX
-0Gy0Bgf7Bt6B1FK7vEGX9BaXfhybMKk+HcfsHskEIvbhZsavlCc9/GmRwjRrt0jR
-qi+K/iLpWQ6+PsYjI7s7MS35tX1ijecqRPlOhJCSZcRGYlYLmN2Eu2itralLkXcK
-mKM5S2uRf2KJguHMpOPv77bvt7DW190zCSAe1p+nieoKQhkaHxg9j/cBquhcml9r
-t5jySXtX5+0tG6Etzp2LN31VdW52eBI/ilLeujsNHDcFzfoBLNhPMCMxK6Y6aIja
-Ea6IhGXGSGMRCqjU1if4C1EslshNV7FXnzWT/C78rDC2LVMUZkDjYw49DLQ4PzsN
-YvFOPFfO/0eGHRDqA9cwJeWlJ4SzAg==
-=TueG
------END PGP SIGNATURE-----
-
---Sig_/nZ1.Z3iCbFT6pedY5E66n9T--
+Thanks,
+Yongji

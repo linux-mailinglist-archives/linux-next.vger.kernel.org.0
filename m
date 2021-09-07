@@ -2,95 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D2B402DD4
-	for <lists+linux-next@lfdr.de>; Tue,  7 Sep 2021 19:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FA2403165
+	for <lists+linux-next@lfdr.de>; Wed,  8 Sep 2021 01:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbhIGRoq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Sep 2021 13:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbhIGRoo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Sep 2021 13:44:44 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF59C061757
-        for <linux-next@vger.kernel.org>; Tue,  7 Sep 2021 10:43:38 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g184so10792732pgc.6
-        for <linux-next@vger.kernel.org>; Tue, 07 Sep 2021 10:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lqwUbYH10yU7MeGsUaFiPo7qZbwKlSS2XiBb3FPapD8=;
-        b=lKx2rrU1ztadshXEidn+Xm1KEocYYVZI9KeUxEWOtzv8EkwbzAloRRnia/EHQ0AUnU
-         4/NAEhIc1VIiPrR+F2QQVeT7Tn9aEnfrPM+L/561NwCaEKLVFu1XtxsovCVtIkssmHis
-         2pmtR82t9pmP/hiVcIGmVw3wbxCav30E2j9mzM5hIL9sv/LX0aOebmWI9mhTMUee6xzo
-         t9Jxj+3SYJFl98ncNPmY5layzsUw8MVLDtZ/AUj+QR0Zd3b+aLlnwxFfLaeZ1j05wzjD
-         ux4MvK0xrzWqP2ja29LKhuMxuP2FrBJ+o/vc5b7rtLALWcIo49z4zWpn2LVjkLUHH/d3
-         88ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lqwUbYH10yU7MeGsUaFiPo7qZbwKlSS2XiBb3FPapD8=;
-        b=aEUwyS4Nq/Z6D8t7qyyF3O5ZMRVNWfeKMAqOP7PloGx72X8zoHCp10VRub6Ptpmesd
-         LE69/C3w2lCrDMAoa2gCOdvzlWZ4NTSYMBBTP3KZJ3JDtMaupgH4V2u8FX8OZK4zJF3l
-         NPjG52OttyDzX5eCrDkE6Mu2IsVbt8a6M5xd7FjVZrsnZ+XI3WLtZuVyBs+QCvydpwWB
-         IhGErkZiUIJhErDMAoklzggm9UTbdqPo+gytmdakl5H+pxwLFnDjxFCzoDonuDRszcHt
-         oLEjLr8O8GMXgQhkUJMDpeLllHKKzdTmcj9mKE7s5/EoTv+K7QlRW2TJw7d7GFUGZ/dA
-         Z6dQ==
-X-Gm-Message-State: AOAM532XVWvtkIXc0oYbkD7yjQCOkQo8Zs9VY/ueN+yJqcY6+cIAO+ID
-        BW41NunlnT1axZTufyUC/t2kbnhlKrZ2sNEaA/H90Qka8ME=
-X-Google-Smtp-Source: ABdhPJyyDhFDo9smGv6KpQDswNiKCX9+8fgALhkfPGkcKWUVrfkE10SeT/PZSkNnTqVoL2xCobfI3W1cx5t2bZm5SXE=
-X-Received: by 2002:aa7:8298:0:b029:338:340:a085 with SMTP id
- s24-20020aa782980000b02903380340a085mr17912192pfm.46.1631036617612; Tue, 07
- Sep 2021 10:43:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210906142037.59f76dab@canb.auug.org.au>
-In-Reply-To: <20210906142037.59f76dab@canb.auug.org.au>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 7 Sep 2021 10:43:27 -0700
-Message-ID: <CAPcyv4gSW0Rkz24eCs9gHE_hPZzPWbNXU1TMNGSHGW0sqvUgTQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the cxl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S240690AbhIGXIc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Sep 2021 19:08:32 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39585 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347536AbhIGXIb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 7 Sep 2021 19:08:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1631056043;
+        bh=XVo6xpENuD6dmn0WJoe2yb4P18DghCaRXFxdjCks7U4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ARdhhYkH+haYbnWLbjEKTT5x8jQBsjLbu/dsB51WRhOZ9lWaakDCP4JN0ic4uffta
+         VJY/aONqC69vBIZlCbnsB1beP62MAeiKni+olL3PjWrhnqAD7Z8qzmvW/4IRg3HUKR
+         uE8KBvMvaDe8yY0Z8yaKp1nVGDA9EA4DQk/rsjDXiyHBX3szxMs1wQEV7yygXTUSAM
+         W3i9OWrxLhgqTx2v93v+1ntt2f4hslajjTTPM41JbeKlTWNaDNpiakbW+AqQ62H5xQ
+         AuUQSSrJXKvhXngve1OeYSH3DKm+Vs+YBmhKMnK1117d0tKcGpA5sKM13Ct9rCJ346
+         Ubt4QjHzSI2qw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H41BK3JVhz9t54;
+        Wed,  8 Sep 2021 09:07:21 +1000 (AEST)
+Date:   Wed, 8 Sep 2021 09:07:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the origin tree
+Message-ID: <20210908090720.0748b861@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/PMX9wECH8ThNTXGuo86an/r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Sep 5, 2021 at 9:20 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the cxl tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> drivers/nvdimm/label.c:750:32: error: 'uuid_to_nvdimm_cclass' defined but not used [-Werror=unused-function]
->   750 | static enum nvdimm_claim_class uuid_to_nvdimm_cclass(uuid_t *uuid)
->       |                                ^~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   d68bc4b2338b ("libnvdimm/labels: Add address-abstraction uuid definitions")
->
-> Exposed by commit
->
->   3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
->
-> I have applied the following patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 6 Sep 2021 14:14:52 +1000
-> Subject: [PATCH] cxl: mark unused function as such
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/nvdimm/label.c | 1 +
->  1 file changed, 1 insertion(+)
->
+--Sig_/PMX9wECH8ThNTXGuo86an/r
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for that Stephen. I'll just back this patch out and retry for
-v5.16, it's not super critical.
+Hi all,
+
+Building Linus' tree, today's linux-next build (mips
+allmodconfig) failed like this:
+
+In file included from /kisskb/src/include/linux/compiler_types.h:65:0,
+                 from <command-line>:0:
+include/linux/compiler_attributes.h:29:29: error: "__GCC4_has_attribute___n=
+o_sanitize_coverage__" is not defined [-Werror=3Dundef]
+ # define __has_attribute(x) __GCC4_has_attribute_##x
+                             ^
+include/linux/compiler-gcc.h:125:29: note: in expansion of macro '__has_att=
+ribute'
+ #if defined(CONFIG_KCOV) && __has_attribute(__no_sanitize_coverage__)
+                             ^
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  540540d06e9d ("kcov: add __no_sanitize_coverage to fix noinstr for all ar=
+chitectures")
+
+This ia a gcc 4.9 build, so presumably this?
+
+diff -ru a/include/linux/compiler_attributes.h b/include/linux/compiler_att=
+ributes.h
+--- a/include/linux/compiler_attributes.h	2021-09-08 09:03:35.169225661 +10=
+00
++++ b/include/linux/compiler_attributes.h	2021-09-08 09:05:47.790907780 +10=
+00
+@@ -36,6 +36,7 @@
+ # define __GCC4_has_attribute___no_profile_instrument_function__ 0
+ # define __GCC4_has_attribute___nonstring__           0
+ # define __GCC4_has_attribute___no_sanitize_address__ 1
++# define __GCC4_has_attribute___no_sanitize_coverage__	0
+ # define __GCC4_has_attribute___no_sanitize_undefined__ 1
+ # define __GCC4_has_attribute___fallthrough__         0
+ #endif
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/PMX9wECH8ThNTXGuo86an/r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmE38KgACgkQAVBC80lX
+0GyO5gf+ImLfhQQJv9/bNGZrKSWwuix3UXeToczkl9cZ2IsxhS8XVjmWeZY9nXYk
+LQouQ9eziyn6pF0t1rPW0PyBYkydYhRujoj8YOIIouGflrTd5zhz3dKUNXwQWhVp
+Avse/4oVMJmF32j3tq3PxEYFGoe4usRYAc9PvcVS/H93QZyuy4U7LktlITaaWCck
+EzoMrqRC4J1sN6PtIadoKfkQmDBopUejx7EQoTU6A4ZtiY8KYoi0eMjpQzt6cI3z
+T5rE1ZbHtkga6S1glhk2h0r3Ygq34tzxOAQe5x6i78t+xp8c1+xl8P0De6mHJOAQ
+npfBzuUP1mGcqFP2HnPj2PS7prla4w==
+=f5vo
+-----END PGP SIGNATURE-----
+
+--Sig_/PMX9wECH8ThNTXGuo86an/r--

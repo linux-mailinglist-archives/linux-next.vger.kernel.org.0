@@ -2,105 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EAE40650E
-	for <lists+linux-next@lfdr.de>; Fri, 10 Sep 2021 03:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E8740653C
+	for <lists+linux-next@lfdr.de>; Fri, 10 Sep 2021 03:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbhIJBXb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Sep 2021 21:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
+        id S229469AbhIJBe7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Sep 2021 21:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237590AbhIJBXU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Sep 2021 21:23:20 -0400
+        with ESMTP id S229459AbhIJBe7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Sep 2021 21:34:59 -0400
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4DFC061226;
-        Thu,  9 Sep 2021 18:16:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4CBC061574;
+        Thu,  9 Sep 2021 18:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1631236587;
-        bh=oc7tZR+KeNwMUHPKR2Q77kfHas/Q0/ikomXLgkYdZm4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s4qBzyYhza2LK3+BC2f7121igUqLGOXidPkncccg9o/LwyN1T6+kYJQ+yEZLiuAxy
-         Fv5diyt/BS4QJARDAhLTTCY/NdaRWVd5DC1BcCOZ7Z78fpt9hywrEmW0Jz9HPSUzwB
-         CliNQ96yCUFuxZNxtPzBPCO8UW6bJXSAqB12Op+5CIBwckiGWjMxlUDLbQtE22AeOB
-         +OxKivkH93RlEFceNTTqhxgR7RUjdDNmPWuhDPKLJ/xP82iiiUsuwAqxi4axb/EuLE
-         j6laYACYH9jC272NVH509MXHqqBLD6RcUO3WIW6sxhNS/UsJS02YV8KIbupqybNk6z
-         p4WcyYin438RA==
+        s=201702; t=1631237626;
+        bh=TTNbzhm/WJ9aozQQd5bRAmPji9SmhQnxav+eScNroaM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NPEBRlH61bo4hQLFGTog4AH6xU3UfTJ7IZzvzZaJkl1JWhQ61YH7KbBHs6B9rTVVJ
+         D9gfrqi0XWoX4qqVKHjluPg6KbbUvEJGNALZYpB0EsgGX+ONLzz7+a9UOuqt5Pnpcz
+         dB05vsjQJr9TZkXJs9aiAPxi4j92WyhroX7hbBFZrMoJ7bNzdu7KrpNm1CRg6QIHv3
+         2/Pi50tMoHbhzx/+Atc5iMPcB5oN6xuo29opVxSAfuvmuueFILE/DC1nBfkCEZ578C
+         25XDl4LYawTc32t2Gf0+dCCr/fcYB4KDHF6UGYlfyUsdMyUYY9UpplSjwa+r7d+rEB
+         lHN5RNds7O87w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H5HyK4XC8z9sVw;
-        Fri, 10 Sep 2021 11:16:25 +1000 (AEST)
-Date:   Fri, 10 Sep 2021 11:16:15 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H5JLL4229z9sVw;
+        Fri, 10 Sep 2021 11:33:46 +1000 (AEST)
+Date:   Fri, 10 Sep 2021 11:33:45 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20210910111615.50aa19aa@canb.auug.org.au>
-In-Reply-To: <20210902112208.23c226c8@canb.auug.org.au>
-References: <20210902112208.23c226c8@canb.auug.org.au>
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: linux-next: manual merge of the kspp tree with the
+ compiler-attributes tree
+Message-ID: <20210910113345.62bda9e6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BCp7KyTTiIFwpL2JVsB5mnd";
+Content-Type: multipart/signed; boundary="Sig_/fYJFVjRFtPZsOpVaQ4FZ30b";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BCp7KyTTiIFwpL2JVsB5mnd
+--Sig_/fYJFVjRFtPZsOpVaQ4FZ30b
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 2 Sep 2021 11:22:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the amdgpu tree got a conflict in:
->=20
->   drivers/gpu/drm/amd/amdgpu/amdgpu_ras_eeprom.c
->=20
-> between commit:
->=20
->   477f70cd2a67 ("Merge tag 'drm-next-2021-08-31-1' of git://anongit.freed=
-esktop.org/drm/drm")
->=20
-> from Linus' tree and commit:
->=20
->   cc947bf91bad ("drm/amdgpu: Process any VBIOS RAS EEPROM address")
->=20
-> from the amdgpu tree.
->=20
-> I fixed it up (I used the latter version) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+Today's linux-next merge of the kspp tree got conflicts in:
 
-This is now a conflict between the drm tree and Linus' tree.
+  include/linux/compiler-gcc.h
+  include/linux/compiler_types.h
+
+between commit:
+
+  b83a908498d6 ("compiler_attributes.h: move __compiletime_{error|warning}")
+
+from the compiler-attributes tree and commit:
+
+  122b05c65c5d ("compiler_types.h: Remove __compiletime_object_size()")
+
+from the kspp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/BCp7KyTTiIFwpL2JVsB5mnd
+diff --cc include/linux/compiler-gcc.h
+index 21c36b69eb06,01985821944b..000000000000
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@@ -41,8 -41,9 +41,6 @@@
+ =20
+  #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUN=
+TER__)
+ =20
+- #define __compiletime_object_size(obj) __builtin_object_size(obj, 0)
+ -#define __compiletime_warning(message) __attribute__((__warning__(message=
+)))
+ -#define __compiletime_error(message) __attribute__((__error__(message)))
+--
+  #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
+  #define __latent_entropy __attribute__((latent_entropy))
+  #endif
+diff --cc include/linux/compiler_types.h
+index b6ff83a714ca,c43308b0a9a9..000000000000
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@@ -290,11 -290,13 +290,6 @@@ struct ftrace_likely_data=20
+  	(sizeof(t) =3D=3D sizeof(char) || sizeof(t) =3D=3D sizeof(short) || \
+  	 sizeof(t) =3D=3D sizeof(int) || sizeof(t) =3D=3D sizeof(long))
+ =20
+- /* Compile time object size, -1 for unknown */
+- #ifndef __compiletime_object_size
+- # define __compiletime_object_size(obj) -1
+ -#ifndef __compiletime_warning
+ -# define __compiletime_warning(message)
+ -#endif
+ -#ifndef __compiletime_error
+ -# define __compiletime_error(message)
+--#endif
+--
+  #ifdef __OPTIMIZE__
+  # define __compiletime_assert(condition, msg, prefix, suffix)		\
+  	do {								\
+
+--Sig_/fYJFVjRFtPZsOpVaQ4FZ30b
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmE6seAACgkQAVBC80lX
-0GxBrggAnHHX2ADaOdAsEV4PBTzxzBW2MPGieyYcPSGn/oAPVIBaDh/Wc1IlUt9b
-UrRH9ldAeb6Z9JGFb8q3KSb1add/K8HHH+2r+7PkiDoK9DnN6guJZebP+6cWDU6b
-olK/B7/EX23+kbHAICzchXvqiJca09VjPxgtp0o0xgceIODdA3qlMmCiMKpIYrso
-ffXask+VZSLxxdWTIYyf6KACXluzpLCXY488zgAZMjAP1T+YgIAfWjAmW+Y/Itvm
-j+jwSHOhqSwrUFMIG8xFxDYuPI+Q953aX9KgCRHw70JqvK9cngACWH2Y46sXvHgD
-QyQ6MK5f/LdqPlxO5+vGDzTvnTMhUg==
-=ZAHz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmE6tfkACgkQAVBC80lX
+0GxSPQf/cZwU1II1Qwt4wzRxqYbubzCmSiul2SrdUy99zS32KhUWwuatDtZFkUcb
+QZQgZ4mFA/m1QKnEgZqHhG4CoCNmOrkSQmTf5V8ZrfJUKu+8Aujt+ulUXouimIeJ
+GLf/+6ypT5OW4B2BBPkVS3b866MEdv4Kl5KduxHQz9fNbFM1k4wUs88qGVZzR6cf
+EPvi5nTcahTMhY0HpYybKjCRWY4tpv/Xl1Sbrua3dr2F6kZUu27mxjnF08EKANG5
+4Ri0t4RXukVVnE3S984sH3MjCf46BdQjZbDQehnq8ElHR/WblwZ+0qMwxl0U27U1
+Uk9fRcACjMUehDwgfQOwRvI1siY2pQ==
+=bLgg
 -----END PGP SIGNATURE-----
 
---Sig_/BCp7KyTTiIFwpL2JVsB5mnd--
+--Sig_/fYJFVjRFtPZsOpVaQ4FZ30b--

@@ -2,188 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABCD40A27E
-	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 03:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E1040A29A
+	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 03:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbhINBbD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Sep 2021 21:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S235894AbhINBiw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Sep 2021 21:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbhINBbD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Sep 2021 21:31:03 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC73C061760
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 18:29:46 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id j12so20611999ljg.10
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 18:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bwi8JzS7IUd8bGkWIzVwnKvogSVEcsXYPsg+JItZ8oM=;
-        b=fiY6IKkngrztRhJGLgdJI9edL8TxraujPTd/SV9hEAguGAT699jCnoG9v8OqqH6g18
-         Q/qWrqcQakgXqGliTOaGo0x4Pbjavw5l8FSGzMGvdRux3P6zyr3TBrlLAYFaZ0KiKcI8
-         Ui5X/EZ1nitBe2QYSn5SdXndTGE/D8aiGMAJc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bwi8JzS7IUd8bGkWIzVwnKvogSVEcsXYPsg+JItZ8oM=;
-        b=MD31xUzvFILB18QynsWHcBFs22LWDKiAUeMlkiqxgcEmqKeWqvtm/H8ibH3mSzqnn9
-         c6Ih5pGwhjPSBEQPz167J89nJexBtfwpzgzt6k3TNQD8PkC8Ff3F8xuP79l0kgnlTEpd
-         Rx2VeagnALeceseEjkXBUm41ZxRRJXGvdLfmeQt1ebzOQ0fc/M4LAjoTkO3zmkthF7NU
-         7UGx8u04oO12OhZPcaXXeFQCp5NOGjR8NNbJMnrcxCfLY7JA8xFZ3VxuYhqWK4VkQI2w
-         EWnHhAQCXHUWcWvEyT8LnErVMWtH7NwDNG5igLxjrFj3sg8AlxE3g0R5OYDvcNpEw3E9
-         jWLQ==
-X-Gm-Message-State: AOAM533h81/HbcajJ2lgY3xJflVWRXE1tsc5dfK6yd9J+Np4D9Wdmbre
-        BMBJksT0jdSTE6tWogA7aoIgmDmZ6653NngFJlM=
-X-Google-Smtp-Source: ABdhPJwhHOrpat/FdRzUXeOP80pn88kFBjTc4v5HtucXdSEyGFlFw/ZFz0aesVFp14ZIhHuPNJ6hrQ==
-X-Received: by 2002:a05:651c:1685:: with SMTP id bd5mr12736847ljb.505.1631582984159;
-        Mon, 13 Sep 2021 18:29:44 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id h11sm1047688lfr.230.2021.09.13.18.29.42
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Sep 2021 18:29:43 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id w4so20601384ljh.13
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 18:29:42 -0700 (PDT)
-X-Received: by 2002:a05:651c:158e:: with SMTP id h14mr9527198ljq.56.1631582982632;
- Mon, 13 Sep 2021 18:29:42 -0700 (PDT)
+        with ESMTP id S235350AbhINBiw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Sep 2021 21:38:52 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D3FC061574;
+        Mon, 13 Sep 2021 18:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1631583453;
+        bh=DzZV5rkp+a8vep9FVFtVy8CeJ6UVgl8gQjVw2rD/Fs8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nrhJSITC4ykFWuxJsatAF+ZGdGEvNgjceRhsLpSR4XqLU+cGrDcpA4uXuvBeJZEp0
+         /QlwWfsib1qciywR1NlFeMy+67yAgUIbAumow4BZXMrIMzffRGLZEJqK9sAhq0BAB8
+         0BaPpwb5xkv3ceo6IOnXr+3Fs1t1xLVb9VXAW3R8kHjrEWe6XfHmasycb51fYCR4zE
+         ErXGGovGO3v8kMtFSRiX51DriHnRQDHPE1+WwKHj2WVKnpylZ9Cmbu4i8WS1hNlDeQ
+         xSuyjlGS/Gu6tmzvUmF/pOYsFacaR6mqgjSdAm0q4ldTVY2llz79oRcaVLbuxd37Cl
+         k2XBIFeR55SOw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H7mDr5QR7z9t0Z;
+        Tue, 14 Sep 2021 11:37:32 +1000 (AEST)
+Date:   Tue, 14 Sep 2021 11:37:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20210914113730.74623156@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20210914100853.3f502bc9@canb.auug.org.au> <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
- <CAHk-=whGuEkYmQcJx8WfZ7MFhbKGJDcA6NUZWtrnM6Y6xFqATw@mail.gmail.com> <20210914105359.5c651d55@canb.auug.org.au>
-In-Reply-To: <20210914105359.5c651d55@canb.auug.org.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Sep 2021 18:29:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whyWUdJDeOBN1hRWYSkQkvzYiQ5RbSW5rJjExgnbSNX9Q@mail.gmail.com>
-Message-ID: <CAHk-=whyWUdJDeOBN1hRWYSkQkvzYiQ5RbSW5rJjExgnbSNX9Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the origin tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Content-Type: multipart/mixed; boundary="0000000000001a287705cbea846b"
+Content-Type: multipart/signed; boundary="Sig_/Ljt6f9KxeoK=CdtEGm_e9Fo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---0000000000001a287705cbea846b
-Content-Type: text/plain; charset="UTF-8"
+--Sig_/Ljt6f9KxeoK=CdtEGm_e9Fo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 13, 2021 at 5:58 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> > I have no idea why it then complains about removal of the GCC4 macros.
->
-> Me neither :-(
+Hi all,
 
-Ooh.
+After merging the bpf-next tree, today's linux-next build (perf) failed
+like this:
 
-So I'm looking at gcc sources, just to see if "maybe this thing is
-somehow conditional".
+util/bpf-event.c: In function 'btf__load_from_kernel_by_id':
+util/bpf-event.c:27:8: error: 'btf__get_from_id' is deprecated: libbpf v0.6=
++: use btf__load_from_kernel_by_id instead [-Werror=3Ddeprecated-declaratio=
+ns]
+   27 |        int err =3D btf__get_from_id(id, &btf);
+      |        ^~~
+In file included from util/bpf-event.c:5:
+/home/sfr/next/next/tools/lib/bpf/btf.h:54:16: note: declared here
+   54 | LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
+      |                ^~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-And bingo.
+Caused by commit
 
-In cpp_init_special_builtins(), gcc does
+  0b46b7550560 ("libbpf: Add LIBBPF_DEPRECATED_SINCE macro for scheduling A=
+PI deprecations")
 
-      if (b->value == BT_HAS_ATTRIBUTE
-          && (CPP_OPTION (pfile, lang) == CLK_ASM
-              || pfile->cb.has_attribute == NULL))
-        continue;
+I have used the bpf-next tree from next-20210913 for today.
 
-which basically says that if we're pre-processing an ASM file, the
-magical pre-processor symbol for __has_attribute is not defined.
+--=20
+Cheers,
+Stephen Rothwell
 
-I'm not sure what that 'pfile->cb.has_attribute == NULL' thing means,
-but the libcpp/ChangeLog file also mentions this:
+--Sig_/Ljt6f9KxeoK=CdtEGm_e9Fo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-        (cpp_init_special_builtins): Don't initialize __has_attribute
-        or __has_cpp_attribute if CLK_ASM or pfile->cb.has_attribute is NULL.
+-----BEGIN PGP SIGNATURE-----
 
-So this is a very very special magical thing: if building an *.S file,
-__has_attribute magically goes away.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmE//NoACgkQAVBC80lX
+0GzcPwf+PViGcONJV39frBYvMQSz04U+bY6GPrqa+jkb1u2+xLE64kSPXJGn90Lk
+5Dr8o5bSleZ/9PO/EpXj7Tn5x1nlhKd2B1h8Lu7YOkkhX5IMZXvpW3LnpxMc0Iar
+Cs7ySEV2SzanWBQwWzfY15ekUsu20G4w3+RI0aSk/0xQ4dCvMbSrorFt4OMlokIg
+SRkx1UwgDlhPLd5S4tWYHetQzU0yQnnDZMQJXF/EAhYvJuqUjlPVeeswFrV6fsz4
+eOuLsWafDOIQUrzgLVgLFEuCtD+XCpA8jhT5uZzNfzaZGA5ykuLH97QW5wnOVBW8
+mkq+9T0U7AGQZ3/bEKOT8L56+Y9ZFw==
+=jleT
+-----END PGP SIGNATURE-----
 
-And sure enough, that's exactly what is going on. It's during that
-build of arch/powerpc/boot/crt0.S, and the reason this hits on powerpc
-is that in arch/powerpc/boot/Makefile we have
-
-         -include $(srctree)/include/linux/compiler_attributes.h
-
-as part of BOOTCFLAGS, and then it does
-
-        BOOTAFLAGS      := -D__ASSEMBLY__ $(BOOTCFLAGS) -nostdinc
-
-to also include that header file when building ASM files.
-
-And our old GCC4 code silently hid this all, and made it work, because
-for a *.S file  you'd then (completely illogically) get those fake
-gcc-4 attribute macros.
-
-Now, do I know *why* that ppc Makefile it does that? No. Neither do I
-know why the gcc people decided to just make ASM preprocessor so
-special.
-
-But at least I understand how the odd error happens.
-
-This was too damn subtle. When you have to go read the compiler
-sources to figure things like this out, you know you are too deep.
-
-The fix should be pretty simple: remove almost all of BOOTCFLAGS from
-BOOTAFLAGS.
-
-But sadly, "almost all" isn't "all". There's the include path stuff,
-there's the ABI and endianness, and there's the bit size ones.
-
-So I think the fix is either
-
- (a) remove that
-
-         -include $(srctree)/include/linux/compiler_attributes.h
-
-     thing entirely, and add it as required to the C files.
-
-OR
-
- (b) something like this ENTIRELY UNTESTED ATTACHED patch
-
-I will leave it to the powerpc people to make the right choice.
-
-               Linus
-
---0000000000001a287705cbea846b
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ktjeb6jv0>
-X-Attachment-Id: f_ktjeb6jv0
-
-IGFyY2gvcG93ZXJwYy9ib290L01ha2VmaWxlIHwgMjYgKysrKysrKysrKysrKystLS0tLS0tLS0t
-LS0KIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvYm9vdC9NYWtlZmlsZSBiL2FyY2gvcG93ZXJwYy9ib290
-L01ha2VmaWxlCmluZGV4IDY5MDBkMGFjMjQyMS4uOWJjZjYyZDY1NTA5IDEwMDY0NAotLS0gYS9h
-cmNoL3Bvd2VycGMvYm9vdC9NYWtlZmlsZQorKysgYi9hcmNoL3Bvd2VycGMvYm9vdC9NYWtlZmls
-ZQpAQCAtMzIsMjggKzMyLDMwIEBAIGVsc2UKICAgICBCT09UQVIgOj0gJChBUikKIGVuZGlmCiAK
-LUJPT1RDRkxBR1MgICAgOj0gLVdhbGwgLVd1bmRlZiAtV3N0cmljdC1wcm90b3R5cGVzIC1Xbm8t
-dHJpZ3JhcGhzIFwKLQkJIC1mbm8tc3RyaWN0LWFsaWFzaW5nIC1PMiAtbXNvZnQtZmxvYXQgLW1u
-by1hbHRpdmVjIC1tbm8tdnN4IFwKLQkJIC1waXBlIC1mb21pdC1mcmFtZS1wb2ludGVyIC1mbm8t
-YnVpbHRpbiAtZlBJQyAtbm9zdGRpbmMgXAotCQkgLWluY2x1ZGUgJChzcmN0cmVlKS9pbmNsdWRl
-L2xpbnV4L2NvbXBpbGVyX2F0dHJpYnV0ZXMuaCBcCi0JCSAkKExJTlVYSU5DTFVERSkKK0JPT1RD
-T1JFRkxBR1MgOj0gJChMSU5VWElOQ0xVREUpCiAKIGlmZGVmIENPTkZJR19QUEM2NF9CT09UX1dS
-QVBQRVIKLUJPT1RDRkxBR1MJKz0gLW02NAorQk9PVENPUkVGTEFHUwkrPSAtbTY0CiBlbHNlCi1C
-T09UQ0ZMQUdTCSs9IC1tMzIKK0JPT1RDT1JFRkxBR1MJKz0gLW0zMgogZW5kaWYKIAotQk9PVENG
-TEFHUwkrPSAtaXN5c3RlbSAkKHNoZWxsICQoQk9PVENDKSAtcHJpbnQtZmlsZS1uYW1lPWluY2x1
-ZGUpCitCT09UQ09SRUZMQUdTCSs9IC1pc3lzdGVtICQoc2hlbGwgJChCT09UQ0MpIC1wcmludC1m
-aWxlLW5hbWU9aW5jbHVkZSkKIAogaWZkZWYgQ09ORklHX0NQVV9CSUdfRU5ESUFOCi1CT09UQ0ZM
-QUdTCSs9IC1tYmlnLWVuZGlhbgorQk9PVENPUkVGTEFHUwkrPSAtbWJpZy1lbmRpYW4KIGVsc2UK
-LUJPT1RDRkxBR1MJKz0gLW1saXR0bGUtZW5kaWFuCi1CT09UQ0ZMQUdTCSs9ICQoY2FsbCBjYy1v
-cHRpb24sLW1hYmk9ZWxmdjIpCitCT09UQ09SRUZMQUdTCSs9IC1tbGl0dGxlLWVuZGlhbgorQk9P
-VENPUkVGTEFHUwkrPSAkKGNhbGwgY2Mtb3B0aW9uLC1tYWJpPWVsZnYyKQogZW5kaWYKIAotQk9P
-VEFGTEFHUwk6PSAtRF9fQVNTRU1CTFlfXyAkKEJPT1RDRkxBR1MpIC1ub3N0ZGluYworQk9PVENG
-TEFHUyAgICA6PSAtV2FsbCAtV3VuZGVmIC1Xc3RyaWN0LXByb3RvdHlwZXMgLVduby10cmlncmFw
-aHMgXAorCQkgLWZuby1zdHJpY3QtYWxpYXNpbmcgLU8yIC1tc29mdC1mbG9hdCAtbW5vLWFsdGl2
-ZWMgLW1uby12c3ggXAorCQkgLXBpcGUgLWZvbWl0LWZyYW1lLXBvaW50ZXIgLWZuby1idWlsdGlu
-IC1mUElDIC1ub3N0ZGluYyBcCisJCSAtaW5jbHVkZSAkKHNyY3RyZWUpL2luY2x1ZGUvbGludXgv
-Y29tcGlsZXJfYXR0cmlidXRlcy5oIFwKKwkJICQoQk9PVENPUkVGTEFHUykKKworQk9PVEFGTEFH
-Uwk6PSAtRF9fQVNTRU1CTFlfXyAkKEJPT1RDT1JFRkxBR1MpIC1ub3N0ZGluYwogCiBCT09UQVJG
-TEFHUwk6PSAtY3JECiAK
---0000000000001a287705cbea846b--
+--Sig_/Ljt6f9KxeoK=CdtEGm_e9Fo--

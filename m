@@ -2,163 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F7340A30F
-	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 04:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9689940A320
+	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 04:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbhINCJi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Sep 2021 22:09:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:41285 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233111AbhINCJi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Sep 2021 22:09:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1631585300;
-        bh=YX/Srh4S60PRPjnNxVBWCQQin9P6BFcBIH7YYSh4zVI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fRbdcp8KjhHQjz6XV6ffHl4hFaRkfbq3b8P+ewZZy9eDr9ltDRq+rdkw2Dqm9MX2u
-         z2ekM5vxIey7xaaMq8mprUkUvI/XuEmvuqQAl0FpnhPGLzkye++J+YCUgY6iwDeeZP
-         svVgygjo5N0l2GquqZuMx22jbPLvKh9OgwSZHdIdLIoq5WW/zmq+SXjxlLzzu/Qhdu
-         2Cd03JvoHyIZee+cwJT8BhYtp+BTSCNXTtufIH8/41xyim+XU4ztMlUSVXtMLhNkMq
-         ZCkmu2XQnqTcalfcU020DdYfFCx86GcTxL6GYCekUl9tiAKqQ4zObEH/B9RjYlyT5V
-         fMKPpWVFHyNIQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H7mwM64q1z9sR4;
-        Tue, 14 Sep 2021 12:08:19 +1000 (AEST)
-Date:   Tue, 14 Sep 2021 12:08:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S236338AbhINCNs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Sep 2021 22:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236160AbhINCNs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Sep 2021 22:13:48 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7663EC061760
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 19:12:31 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s12so20869887ljg.0
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 19:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iTZ+eFGbCDolHBudnZBl3uwTbCyuUnDDlNjR7YoJlN8=;
+        b=a8etmcMmxUvXlsF8SSWc/UbOYHx7MrB6jf8XzEcL+zzyCDw6Kat7Q5QwvXdHdsuFVl
+         tZyCY2YvkPFPJTWsENvKQB8encBX0h2+ti3zl4D14UnnVtEr1ME5aaiD3w/D1plemf+X
+         MJaYSKqDIGmy52Iro7ivbir9UMYjn+0QhvsAg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iTZ+eFGbCDolHBudnZBl3uwTbCyuUnDDlNjR7YoJlN8=;
+        b=3UsF/Te9Ec4YuUfq4DCXtvw1N5xQmH3deHUXLGdp76iR1T0r8Lfkr6b4v/+Dx/Tw3x
+         uFZaBRv9Rs0nMODHOKhpZWn8XWRFHf3tTVSA+N0c/cuPDx8BsekPVWSJcdyzWKFD8OuI
+         z2m60jxSIriKvmjOrRZVo7Vxmaczh2qN2GMnY1z23x/11yc/149pTsInQmaAnWwvHoPb
+         t6/YbA2zr3izOT4uO0il6xCQU26GC2/OID7k8BxxYyaw44PeCFsI3AcTk/Z4hMNMIwnk
+         C4vhMOqrkXU3+8N+mu4ThnwCcdqUUFtjq6pt3xtsmoXErom6FCyeMza1EOz0xzfaNxah
+         uH7Q==
+X-Gm-Message-State: AOAM532vNZXQcKtDD3WExxvLCdXgaAdasrDgzCfNrNyOEK5tKrORDYsi
+        40mPXuP6Od0efACJK+b9ATtrr9dUuG8HKhxfRHg=
+X-Google-Smtp-Source: ABdhPJzF3Huo7QL2PDWrPWtqPEriDSYaHaXb7Jrm+oUHalV3JWuK1rSny4bPxnq340gR5VmwYZCh/g==
+X-Received: by 2002:a2e:8107:: with SMTP id d7mr13464652ljg.68.1631585549422;
+        Mon, 13 Sep 2021 19:12:29 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id d3sm982953lfl.227.2021.09.13.19.12.28
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Sep 2021 19:12:28 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id i7so9087107lfr.13
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 19:12:28 -0700 (PDT)
+X-Received: by 2002:a05:6512:3984:: with SMTP id j4mr1498523lfu.280.1631585548512;
+ Mon, 13 Sep 2021 19:12:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210914100853.3f502bc9@canb.auug.org.au> <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
+ <CAHk-=whGuEkYmQcJx8WfZ7MFhbKGJDcA6NUZWtrnM6Y6xFqATw@mail.gmail.com>
+ <20210914105359.5c651d55@canb.auug.org.au> <CAHk-=whyWUdJDeOBN1hRWYSkQkvzYiQ5RbSW5rJjExgnbSNX9Q@mail.gmail.com>
+ <20210914120818.4a102b46@canb.auug.org.au>
+In-Reply-To: <20210914120818.4a102b46@canb.auug.org.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Sep 2021 19:12:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wieb251-L9D-v3BeF-Cna8r5kLz2MeyXDS3mrNUmXNYrg@mail.gmail.com>
+Message-ID: <CAHk-=wieb251-L9D-v3BeF-Cna8r5kLz2MeyXDS3mrNUmXNYrg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the origin tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: build failure after merge of the origin tree
-Message-ID: <20210914120818.4a102b46@canb.auug.org.au>
-In-Reply-To: <CAHk-=whyWUdJDeOBN1hRWYSkQkvzYiQ5RbSW5rJjExgnbSNX9Q@mail.gmail.com>
-References: <20210914100853.3f502bc9@canb.auug.org.au>
-        <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
-        <CAHk-=whGuEkYmQcJx8WfZ7MFhbKGJDcA6NUZWtrnM6Y6xFqATw@mail.gmail.com>
-        <20210914105359.5c651d55@canb.auug.org.au>
-        <CAHk-=whyWUdJDeOBN1hRWYSkQkvzYiQ5RbSW5rJjExgnbSNX9Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1jekrzk1d8gX=b60zYOtwUN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1jekrzk1d8gX=b60zYOtwUN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Linus,
-
-On Mon, 13 Sep 2021 18:29:26 -0700 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
+On Mon, Sep 13, 2021 at 7:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Mon, Sep 13, 2021 at 5:58 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
-> >
-> > > I have no idea why it then complains about removal of the GCC4 macros.
-> >
-> > Me neither :-(
->=20
-> Ooh.
->=20
-> So I'm looking at gcc sources, just to see if "maybe this thing is
-> somehow conditional".
->=20
-> And bingo.
->=20
-> In cpp_init_special_builtins(), gcc does
->=20
->       if (b->value =3D=3D BT_HAS_ATTRIBUTE
->           && (CPP_OPTION (pfile, lang) =3D=3D CLK_ASM
->               || pfile->cb.has_attribute =3D=3D NULL))
->         continue;
->=20
-> which basically says that if we're pre-processing an ASM file, the
-> magical pre-processor symbol for __has_attribute is not defined.
->=20
-> I'm not sure what that 'pfile->cb.has_attribute =3D=3D NULL' thing means,
-> but the libcpp/ChangeLog file also mentions this:
->=20
->         (cpp_init_special_builtins): Don't initialize __has_attribute
->         or __has_cpp_attribute if CLK_ASM or pfile->cb.has_attribute is N=
-ULL.
->=20
-> So this is a very very special magical thing: if building an *.S file,
-> __has_attribute magically goes away.
->=20
-> And sure enough, that's exactly what is going on. It's during that
-> build of arch/powerpc/boot/crt0.S, and the reason this hits on powerpc
-> is that in arch/powerpc/boot/Makefile we have
->=20
->          -include $(srctree)/include/linux/compiler_attributes.h
->=20
-> as part of BOOTCFLAGS, and then it does
->=20
->         BOOTAFLAGS      :=3D -D__ASSEMBLY__ $(BOOTCFLAGS) -nostdinc
->=20
-> to also include that header file when building ASM files.
->=20
-> And our old GCC4 code silently hid this all, and made it work, because
-> for a *.S file  you'd then (completely illogically) get those fake
-> gcc-4 attribute macros.
->=20
-> Now, do I know *why* that ppc Makefile it does that? No. Neither do I
-> know why the gcc people decided to just make ASM preprocessor so
-> special.
->=20
-> But at least I understand how the odd error happens.
+> That patch works for me - for the ppc64_defconfig build at least.
 
-Its good to know there is a reason :-)
+Yeah, I just tested the allmodconfig case too, although I suspect it's
+essentially the same wrt the boot *.S files, so it probably doesn't
+matter.
 
-> This was too damn subtle. When you have to go read the compiler
-> sources to figure things like this out, you know you are too deep.
->=20
-> The fix should be pretty simple: remove almost all of BOOTCFLAGS from
-> BOOTAFLAGS.
->=20
-> But sadly, "almost all" isn't "all". There's the include path stuff,
-> there's the ABI and endianness, and there's the bit size ones.
->=20
-> So I think the fix is either
->=20
->  (a) remove that
->=20
->          -include $(srctree)/include/linux/compiler_attributes.h
->=20
->      thing entirely, and add it as required to the C files.
->=20
-> OR
->=20
->  (b) something like this ENTIRELY UNTESTED ATTACHED patch
->=20
-> I will leave it to the powerpc people to make the right choice.
+I'd like to have Michael or somebody who can actually run some tests
+on the end result ack that patch (or - even better - come up with
+something cleaner) before committing it.
 
-That patch works for me - for the ppc64_defconfig build at least.
+Because yeah, the build failure is annoying and I apologize, but I'd
+rather have the build fail overnight than commit something that builds
+but then is subtle buggy for some reason.
 
---=20
-Cheers,
-Stephen Rothwell
+But if I don't get any other comments by the time I'm up again
+tomorrow, I'll just commit it as "fixes the build".
 
---Sig_/1jekrzk1d8gX=b60zYOtwUN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFABBIACgkQAVBC80lX
-0Gw36gf5Abis6eF6S1lBVUcZ8TDSTmH/OH4r6cgqJa1KHJivgzxwa3ad/cR0UI2p
-YgyVR6N/a0ON8I5LYzeFicj2JlsNtFn1qUEiw2/xtm8J+747KFC2VSHYObGkALM5
-x7LaA+3YfWfyHkSOsWjeTB/L1WSJwby+TL7HvGVcoti/pJxnbqoR0l1xcpoQTKd2
-RtR+YkmWST5uTAt5FRp+TwSo+hS7iXem03VWQtTk80/aNQJ/zJ6ttBsvXxSo2zdj
-Bo5fkZfpsTweAk1OtyFSJ4GklYzRErZfD6VCV00j4imKndsyiLHdbMAx13RUaVv/
-BpR+2toJg0tATicY/qPrcIixhomeLg==
-=ccEB
------END PGP SIGNATURE-----
-
---Sig_/1jekrzk1d8gX=b60zYOtwUN--
+                  Linus

@@ -2,55 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1D240BC22
-	for <lists+linux-next@lfdr.de>; Wed, 15 Sep 2021 01:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2F240BC4A
+	for <lists+linux-next@lfdr.de>; Wed, 15 Sep 2021 01:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbhINX10 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Sep 2021 19:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S235786AbhINXj2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Sep 2021 19:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhINX1Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Sep 2021 19:27:25 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3B8C061574;
-        Tue, 14 Sep 2021 16:26:07 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id c6so1664536ybm.10;
-        Tue, 14 Sep 2021 16:26:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8SPMZw7letZVOmwRFHSmDlggLNsURmXWVYspyUTzslg=;
-        b=jD0s0TcvVq3Pej0Lhf7QoXgiu11fIqsMP7scn9mqJQ01rYqvm7LaCAoBIS8zZK64jp
-         dS53GvTu+LWtfXg9aQAtbH7yW1Sah5QbYEahMeU6X1Jdi9kRNO/vkz4eo7sYBMSoKE+0
-         85Sa9iFS2zeQkyHnTaQqnjUxGZY8xbPToxIQsC/wK3Y9KwfabT/4pVBaVxDQN4pTpdkO
-         8I3aqw48UsmtmFHxt3sOejVVkw6AJbC1QQuLhA9MQ4qF0Phaxm8Wno8msPby9Ke2MmDv
-         Vhkihy+/9grCsLqiCNBvx6k0/Qv7cCtc9Y7bqOCskOG4N/1v429JbClTN9v/0vc7395B
-         WunQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8SPMZw7letZVOmwRFHSmDlggLNsURmXWVYspyUTzslg=;
-        b=gDBLOG5Nji2YEdGQTCmSt4nwhBwzz5zSKGlK6p4z49/20yztdFGZ16T1UakaSjgRBd
-         y/XsjGmlYHhhRoEUAFvAT3bz79In+qM57lo5GXiriH4veKngTdyYz1LI9BluqEndLiMg
-         IcP2lyeaSpjA7xWO7j22ZB8rKP47dr/tNheS2+3K9yMlqhK4eeeXC3hQ4s3oLnAttdl2
-         dTpmWlM46NvVGX8FI8ZzS0VFvsQ7gvjsY9RyOtMfdrZQocXFPWwyIT1Cpgh+ZE4TNAQ7
-         PSWk3u5jpKAQkHqyYf9lMQRVQfl8GfmBtkdJGOXVJbAgpGNsFpcyB39Jg2Txa2SZ+xJl
-         gUNg==
-X-Gm-Message-State: AOAM53165m0VxRNtXBQ3Tb8B6J4/Nb8J6r9fj8kRRYk6Zv0DPTtPIzr3
-        7UwbthejTgEbGAJ4+XwK4zaCjV+eXe67YCxXYkk=
-X-Google-Smtp-Source: ABdhPJwnPFV/2T5qq53PN9HPlJLcY/YHs+64oSKb5MTMiB2xsie7BC8FAOhkz7IfL1nWchIFhS9UueAEhsiusdfCp2k=
-X-Received: by 2002:a25:afcd:: with SMTP id d13mr2268759ybj.504.1631661966618;
- Tue, 14 Sep 2021 16:26:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210914113730.74623156@canb.auug.org.au>
-In-Reply-To: <20210914113730.74623156@canb.auug.org.au>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 14 Sep 2021 16:25:55 -0700
-Message-ID: <CAEf4BzYt4XnHr=zxAEeA2=xF_LCNs_eqneO1R6j8=PMTBo5Z5w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S235724AbhINXj2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Sep 2021 19:39:28 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19222C061574;
+        Tue, 14 Sep 2021 16:38:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1631662686;
+        bh=alohV9o9u2R335EYwz1AS38KPO3EM5BzTbTyYcFJYTM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vG/qOAMiCPWEVZSXcmU1D4qWCXRxCB7VzLXbA8B2rcho+hcFf5eKhObbE0lzJ5vZz
+         j58eZN1JkW64NjXQIbQgCgm8oR3gYxISuPy3T7sFWZZBEoC+rPJ7cY9v/4KNct1e33
+         cVRI9Z9ZTlAxTOt9Ew3QWKGIzVtuZ/daO1qqCn0dJnGsMo/x+8LGYEu4PBoImmf1TO
+         dEd30d8YLQMPqQmjEfQjFz5DxvZ9BePSLC4j0aOf6xjO3HAUW0HnP5KNvY6d5rHzNr
+         0COnX2BIdvMjc+QYgHmRRKFOTImT1LlkMk+pWB9vv4HLhoQZ6DklTo3I0tF3yHgdXq
+         xeXV6d/SyZ0SQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H8KXZ2zfGz9sVq;
+        Wed, 15 Sep 2021 09:38:06 +1000 (AEST)
+Date:   Wed, 15 Sep 2021 09:38:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Networking <netdev@vger.kernel.org>,
@@ -60,39 +42,76 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20210915093802.02303754@canb.auug.org.au>
+In-Reply-To: <CAEf4BzYt4XnHr=zxAEeA2=xF_LCNs_eqneO1R6j8=PMTBo5Z5w@mail.gmail.com>
+References: <20210914113730.74623156@canb.auug.org.au>
+        <CAEf4BzYt4XnHr=zxAEeA2=xF_LCNs_eqneO1R6j8=PMTBo5Z5w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/X.7P.+6.LF08bL+0_fN_qU+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 6:37 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the bpf-next tree, today's linux-next build (perf) failed
-> like this:
->
-> util/bpf-event.c: In function 'btf__load_from_kernel_by_id':
-> util/bpf-event.c:27:8: error: 'btf__get_from_id' is deprecated: libbpf v0.6+: use btf__load_from_kernel_by_id instead [-Werror=deprecated-declarations]
->    27 |        int err = btf__get_from_id(id, &btf);
->       |        ^~~
-> In file included from util/bpf-event.c:5:
-> /home/sfr/next/next/tools/lib/bpf/btf.h:54:16: note: declared here
->    54 | LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
->       |                ^~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   0b46b7550560 ("libbpf: Add LIBBPF_DEPRECATED_SINCE macro for scheduling API deprecations")
+--Sig_/X.7P.+6.LF08bL+0_fN_qU+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be fixed by [0], when applied to perf tree. Thanks for reporting!
+Hi Andrii,
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20210914170004.4185659-1-andrii@kernel.org/
+On Tue, 14 Sep 2021 16:25:55 -0700 Andrii Nakryiko <andrii.nakryiko@gmail.c=
+om> wrote:
+>
+> On Mon, Sep 13, 2021 at 6:37 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > After merging the bpf-next tree, today's linux-next build (perf) failed
+> > like this:
+> >
+> > util/bpf-event.c: In function 'btf__load_from_kernel_by_id':
+> > util/bpf-event.c:27:8: error: 'btf__get_from_id' is deprecated: libbpf =
+v0.6+: use btf__load_from_kernel_by_id instead [-Werror=3Ddeprecated-declar=
+ations]
+> >    27 |        int err =3D btf__get_from_id(id, &btf);
+> >       |        ^~~
+> > In file included from util/bpf-event.c:5:
+> > /home/sfr/next/next/tools/lib/bpf/btf.h:54:16: note: declared here
+> >    54 | LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
+> >       |                ^~~~~~~~~~~~~~~~
+> > cc1: all warnings being treated as errors
+> >
+> > Caused by commit
+> >
+> >   0b46b7550560 ("libbpf: Add LIBBPF_DEPRECATED_SINCE macro for scheduli=
+ng API deprecations") =20
+>=20
+> Should be fixed by [0], when applied to perf tree. Thanks for reporting!
+>=20
+>   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20210914170004=
+.4185659-1-andrii@kernel.org/
 
->
-> I have used the bpf-next tree from next-20210913 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+That really needs to be applied to the bpf-next tree (presumably with
+the appropriate Acks).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/X.7P.+6.LF08bL+0_fN_qU+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFBMlsACgkQAVBC80lX
+0Gw38gf9H4etVyKQCLG/Wm70Fp8R5CwfKdBvj2swfyre0OujinSgRVnEKWzaPb10
+m6XSGL95zoYXcoeVBiG5WyxlL2PH1EYfO2BR+UhdnfPXH1hCx5up/s/5XCj/jPqe
+EIBUA2ETHcljl6N4U4Z7O6EXJxYVEYURepFuopGgTzbEQIhqAw71ET8BFgiJGrP0
+tY+7goqm8ikcl4nWSo3tISw5tyhOFO0vfkSNpBVCrk1cvf2HsiLwrZIE2N9ITCxS
+t/aVBVb3/0BGECZKTZts8DPrJ6LWqMviZI1ulV6MQisK2uRPzaQfQiLhh+ny1PdN
+LGEEamXajPmXBHhvdnlLHEs4vh6FPA==
+=2WDc
+-----END PGP SIGNATURE-----
+
+--Sig_/X.7P.+6.LF08bL+0_fN_qU+--

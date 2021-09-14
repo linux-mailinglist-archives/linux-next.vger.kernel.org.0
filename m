@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B7440A1D1
-	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 02:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF52D40A1DC
+	for <lists+linux-next@lfdr.de>; Tue, 14 Sep 2021 02:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbhINAVE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Sep 2021 20:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S237007AbhINAZr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Sep 2021 20:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhINAVD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Sep 2021 20:21:03 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582FEC061574
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:19:47 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id p15so20402495ljn.3
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:19:47 -0700 (PDT)
+        with ESMTP id S236521AbhINAZq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Sep 2021 20:25:46 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA58C061574
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:24:30 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g1so13304022lfj.12
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=OJCOVeO589IX0eZ2k9PI4XmEqC+ha+gDBXVAR0aVS3A=;
-        b=SclZiWrkT5KucTv1KidhHP6yMCpKWMNqoOiS1UgRHORAfJuSSMf+xaeagNjetAELs6
-         Bh2TOhuIaWLPnM+/W2Yzq/TD4x6e1lZqhBUlLoChPi52C7bRjop+4ZM3lAIpZzJOEVn9
-         lcHuoBjFShp/uD8fDDM5+JSs5YrWYKB9IWsGY=
+        bh=Ilht7yuGeza7KxnmHTP+E2966EzjBhfJp58VMsQTPTY=;
+        b=OyWldn4cRJVLyXq6LgbpKqWBqxTaQjehON/ag/GIf4HbIUXBoHl9V8OzGKT2Ylw04i
+         uUG63w1xUjKTcrlLMVBNRKtBukGdfVoxMaymciw4pdsgxR1SflagLJb66lTfifVfnZuV
+         nGyWGAvhm/vMudecgclcQqVLBtG8dwi+c08xc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OJCOVeO589IX0eZ2k9PI4XmEqC+ha+gDBXVAR0aVS3A=;
-        b=oJ2pv1An8pu/ogc3oj174f+1xCE1EDsgVrtYVFROr4k/oXQZ+GdrFE0EeUod4rLril
-         mfiZkIChV/dEBP1pRFgbKCwjVyyYzGX2CBXeRp/Ljrvg1VwSB+WcyeMX1796ib2ojcFJ
-         ZWKIJz3syNzKNjY91UeKaxF+ztDIi16dN+t46X0OZLubA3+NDScG6SfySQGX35PguRYe
-         lonOYFv7EUWeAXu6vLaYAk5WNo1522VB1L+Cfvy3dlZEzYVSg1SfZ6TjasYD4dSHNc0Q
-         zgpoA6fhSr/JGCveGJH0h9Q4/7dqCnLtnrZHdWERTYhv/rRp+a/UTo3BKVEwiT+vEQf8
-         qYWQ==
-X-Gm-Message-State: AOAM530Z2+o5ckvXIdmxI5h2otVk6ol4pYmw7KpuHb5dMuvODlcH0u8w
-        LJr9XwTawGjPkkk7UPyZFyfqOWi9lMnKiVw1iNg=
-X-Google-Smtp-Source: ABdhPJzOdWUl9fzhvvnMBjzNt0ERYdTEugkcPNfVpiTosvdwn5RrGngUelU0Ln6Rkjj3p7I960dKzg==
-X-Received: by 2002:a05:651c:11c7:: with SMTP id z7mr12674272ljo.288.1631578785461;
-        Mon, 13 Sep 2021 17:19:45 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id h15sm1142752ljc.96.2021.09.13.17.19.44
+        bh=Ilht7yuGeza7KxnmHTP+E2966EzjBhfJp58VMsQTPTY=;
+        b=LpfMjFlzrvUAK2CDY78qGhkrnhETUIbfwR8KmLya1U9mKUWaEGX/Rm7I/A1UtxRfIC
+         mFfgYtxjS3KO4p+D5e28hqbNeQSP8nDb5rB7iWxaagv5Xx1eC+2SX/D+NPUFhXTQTO7w
+         idfrxXYaIa/a925dOA9hezCWLoAx39XTGP9PoV4WJwxXUrRH6TTY5+nl6rKgaRCXGV95
+         yYVQ5YsVt4uwzCQYtKfDNZnRPklCEy7yQRetwFs8thnjT1Z/cFNarf+C+QQBD8UgK42W
+         UofzQu/IJW+nSEoMSAMH4vRY5wrxthXTRU2+b/I5twmB/sU7xYmSgv246RmMfxH3lHKd
+         rb3Q==
+X-Gm-Message-State: AOAM530URFuOpsKcpKJYHadEWhjoOt1pHLfTZUUwK3iHkgnmh+hPhbOO
+        6MhRoR5vGDklR4f2xNCmg9T4xH3BAvfqD4CR2/w=
+X-Google-Smtp-Source: ABdhPJznJ174iLPotlnBg5vQMIbv5CCUfmpY1W8eeUj5NhwCq36Gvu9Pdh+56d43ZuCUI+dfOP5Orw==
+X-Received: by 2002:a05:6512:c12:: with SMTP id z18mr1133084lfu.335.1631579068174;
+        Mon, 13 Sep 2021 17:24:28 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id o4sm303244lfi.16.2021.09.13.17.24.27
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Sep 2021 17:19:45 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id w4so20348652ljh.13
-        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:19:44 -0700 (PDT)
-X-Received: by 2002:a2e:b53a:: with SMTP id z26mr12192430ljm.95.1631578784223;
- Mon, 13 Sep 2021 17:19:44 -0700 (PDT)
+        Mon, 13 Sep 2021 17:24:27 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id g1so13303909lfj.12
+        for <linux-next@vger.kernel.org>; Mon, 13 Sep 2021 17:24:27 -0700 (PDT)
+X-Received: by 2002:a05:6512:94e:: with SMTP id u14mr5107509lft.173.1631579067472;
+ Mon, 13 Sep 2021 17:24:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210914100853.3f502bc9@canb.auug.org.au>
-In-Reply-To: <20210914100853.3f502bc9@canb.auug.org.au>
+References: <20210914100853.3f502bc9@canb.auug.org.au> <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
+In-Reply-To: <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Sep 2021 17:19:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
-Message-ID: <CAHk-=whOv-LZKxBqQr8yzmhi7sN4zoFG7t8ALNx+2XFhXjGTpA@mail.gmail.com>
+Date:   Mon, 13 Sep 2021 17:24:11 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whGuEkYmQcJx8WfZ7MFhbKGJDcA6NUZWtrnM6Y6xFqATw@mail.gmail.com>
+Message-ID: <CAHk-=whGuEkYmQcJx8WfZ7MFhbKGJDcA6NUZWtrnM6Y6xFqATw@mail.gmail.com>
 Subject: Re: linux-next: build failure after merge of the origin tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -67,13 +67,19 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 5:09 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Mon, Sep 13, 2021 at 5:19 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
->   gcc -Wp,-MD,arch/powerpc/boot/.crt0.o.d
+> What version of gcc is this? Are you maybe on gcc-4.9 and we just
+> didn't check that properly?
 
-Ok, so it's not the funky "clang reports gcc-4" that caused tool breakage.
+Hmm. That version check works for me (tested by just arbitrarily
+making min-tool-version return version 15 for gcc ;)
 
-What version of gcc is this? Are you maybe on gcc-4.9 and we just
-didn't check that properly?
+So you got far enough that I don't believe you have gcc-4.
 
-              Linus
+I have no idea why it then complains about removal of the GCC4 macros.
+
+Can somebody hit me with the clue-bat?
+
+            Linus

@@ -2,87 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0890D40DDDB
-	for <lists+linux-next@lfdr.de>; Thu, 16 Sep 2021 17:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA41C40E2D7
+	for <lists+linux-next@lfdr.de>; Thu, 16 Sep 2021 19:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbhIPPV5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Sep 2021 11:21:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44782 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238632AbhIPPV4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Sep 2021 11:21:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 53EB361216;
-        Thu, 16 Sep 2021 15:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631805635;
-        bh=E9H0v3G3Ov/ePc/WdqGiURbGTrVRQfMaWxyj/2lWf6I=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XiR3lBfDdxd/En6kpPAMzQsptVKe9VXUdRghpBhphmlpPzEYGfazTxq6ntH535oSZ
-         jyjChXMEuLLSlyg0Sr0HsMn7DojUU8OLIbe7lClxZ4CNm7dWFM0cMJgLI14CQg/hlQ
-         q5J5HSsuSbzLfAjyP80+pDZUDOF8/0P3+WW7w/JA+54avH6JLdlmc9wLO1Cf7EXGE7
-         c4fZthPYB6XmkoD7HfpP2ir237FGFxbMesZfju9vTobJoGtk11tctDvYQ2NHpUwCbf
-         Vrg1/HFl2eB/ZwniWOjo0PhntuLL+8z4IJIj26zTh/gzxCUoYDR4G+TWWKeKr1XYGZ
-         ZOM6kG47xS7LQ==
-Subject: Re: clang: error: unsupported argument '-mimplicit-it=always' to
- option 'Wa,'
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, lkft-triage@lists.linaro.org,
-        llvm@lists.linux.dev,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <CA+G9fYu0dngeohP9M39Odj5-5ax97ZgA=KqV8_g2yYLdOGMQSg@mail.gmail.com>
-From:   Nathan Chancellor <nathan@kernel.org>
-Message-ID: <c3a29fd8-e743-868c-3705-460fd38b7add@kernel.org>
-Date:   Thu, 16 Sep 2021 08:20:32 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S240690AbhIPQmO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Sep 2021 12:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245224AbhIPQkO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Sep 2021 12:40:14 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1811BC05BD0C
+        for <linux-next@vger.kernel.org>; Thu, 16 Sep 2021 09:12:47 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id v2so4176337plp.8
+        for <linux-next@vger.kernel.org>; Thu, 16 Sep 2021 09:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6Vf9yNd8D3PRokI4zc/PzCfhjtTs2xF1JD+HdFkgNJw=;
+        b=nrKGtggRYTID7fKxuqzJrwo6tLj4KSMR43H7LyzTaLSZ45BLwwu+OkFI1s/Edyv8R6
+         htxD391LORs89GY/tYwrbB9bMExyzLd6HvBYlIr95N/XJlXYuCfkLJhbDi4Pn4PF9hAe
+         UI405YlDhqtW0pkaCdCp8Jma4C5Lb9EgGVXeo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6Vf9yNd8D3PRokI4zc/PzCfhjtTs2xF1JD+HdFkgNJw=;
+        b=yAAw2Mijnq29D9lgome8ipAgmFokcDFb1oFPBVhTlepzLcbQpIgCeGYjanHx1fdjxB
+         4ypsBuJK9TY4br46CBBY1VJF6BiG13TIOFD6NYqDaRi7ICZguarjZXZMuE+ms1sc06a0
+         +DcFOIBzxqBdiEy7en6fF1UWa7v8F4RQK53kQBAfqOBzHzcdF8LJDVyP8s/zhD99v+a+
+         ArG0jLDMHCZ1xe1efbAlAELbRRv4shWbgx6XuK8J5iAMie8T5mR207Cj32f6BuPOOupl
+         bKhkT56gsqQE5NDv2kesZCJstPFs+et3LPcCe7+lhicNNo0AGnpNe5LvHmNhLOx44RvE
+         B/dw==
+X-Gm-Message-State: AOAM532ittwYEHwNGf/zoXENJloPqOFb6y+3kQeC5EUsAEA9esBpaY9s
+        SjOB4VWTCTQeiGJpbsP2wgrV5T6DMP5C0A==
+X-Google-Smtp-Source: ABdhPJxBuPg56folFskewz+fdP7QFbncMgXxvCriYrGmNI7xYknt9pWWX7pEw1D+GEWNYssr/dl0JQ==
+X-Received: by 2002:a17:90a:5583:: with SMTP id c3mr6832988pji.133.1631808766631;
+        Thu, 16 Sep 2021 09:12:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h7sm3210333pjj.42.2021.09.16.09.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 09:12:46 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 09:12:45 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "kernelci.org bot" <bot@kernelci.org>,
+        Bixuan Cui <cuibixuan@huawei.com>
+Cc:     linux-next@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, tglx@linutronix.de
+Subject: Re: next/master build: 210 builds: 7 failed, 203 passed, 7 errors,
+ 1669 warnings (next-20210914)
+Message-ID: <202109160900.0E416B0E9@keescook>
+References: <61405e17.1c69fb81.67290.bb2c@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYu0dngeohP9M39Odj5-5ax97ZgA=KqV8_g2yYLdOGMQSg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <61405e17.1c69fb81.67290.bb2c@mx.google.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Naresh,
-
-On 9/16/2021 6:45 AM, Naresh Kamboju wrote:
-> Following build warnings/ errors noticed while building linux next-20210916
-> with clang-10, clang-11 and clang-12  for arm architecture.
->        - allnoconfig
->        - tinyconfig
+On Tue, Sep 14, 2021 at 01:32:23AM -0700, kernelci.org bot wrote:
+> Errors summary:
 > 
-> But builds PASS with clang-13.
-> 
-> clang: error: unsupported argument '-mimplicit-it=always' to option 'Wa,'
-> make[2]: *** [/builds/linux/scripts/Makefile.build:288:
-> scripts/mod/empty.o] Error 1
-> make[2]: Target '__build' not remade because of errors.
-> make[1]: *** [/builds/linux/Makefile:1329: prepare0] Error 2
-> make[1]: Target '__all' not remade because of errors.
-> make: *** [Makefile:226: __sub-make] Error 2
-> make: Target '__all' not remade because of errors.
+>     2    include/linux/slab.h:618:9: error: argument 1 value ‘18446744073709551615’ exceeds maximum object size 9223372036854775807 [-Werror=alloc-size-larger-than=]
+>     1    include/linux/slab.h:461:9: error: argument 1 value ‘4294967295’ exceeds maximum object size 2147483647 [-Werror=alloc-size-larger-than=]
+>     1    drivers/staging/greybus/audio_topology.c:977:12: error: stack frame size of 3312 bytes in function 'gbaudio_tplg_create_widget' [-Werror,-Wframe-larger-than=]
+>     1    drivers/media/common/v4l2-tpg/v4l2-tpg-core.c:138:4: error: argument 1 value ‘4294967295’ exceeds maximum object size 2147483647 [-Werror=alloc-size-larger-than=]
 
-Thank you for the report. This is caused by the implicit switch to the 
-integrated assembler in commit f12b034afeb3 ("scripts/Makefile.clang: 
-default to LLVM_IAS=1").
+These (the same root cause as [1]) are fixed by:
+https://lore.kernel.org/lkml/20210910201132.3809437-1-keescook@chromium.org/
 
-Prior to LLVM 13, -Wa,-mimplicit-it=... was not properly handled by the 
-integrated assembler but Nick fixed that:
+which is in mmots (soon to be mmotm, soon to be in -next):
+https://www.ozlabs.org/~akpm/mmots/broken-out/compiler-attributes-add-__alloc_size-for-better-bounds-checking-fix.patch
 
-https://github.com/ClangBuiltLinux/linux/issues/1270
+-Kees
 
-As noted in the above Linux commit, please adjust arm clang-10 through 
-clang-12 builds with TuxSuite to pass 'LLVM_IAS=0' to make, which you 
-can do with the 'make_variables' key:
+[1] https://lore.kernel.org/lkml/20210908014623.61357-1-cuibixuan@huawei.com/
 
-https://github.com/ClangBuiltLinux/continuous-integration2/blob/a998b85bf1d2ce4150005b225f4cde535fe12af5/tuxsuite/android-mainline.tux.yml#L207
-
-Sorry for not giving you guys more of a heads up about that switch.
-
-Cheers,
-Nathan
+-- 
+Kees Cook

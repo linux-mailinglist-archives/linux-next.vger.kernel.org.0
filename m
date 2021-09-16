@@ -2,101 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C1F40D6A0
-	for <lists+linux-next@lfdr.de>; Thu, 16 Sep 2021 11:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC06F40D986
+	for <lists+linux-next@lfdr.de>; Thu, 16 Sep 2021 14:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbhIPJyD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Sep 2021 05:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbhIPJx7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Sep 2021 05:53:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDF9C061574
-        for <linux-next@vger.kernel.org>; Thu, 16 Sep 2021 02:52:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mQo4I-0000tI-2F; Thu, 16 Sep 2021 11:52:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mQo4E-0003jX-2O; Thu, 16 Sep 2021 11:52:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mQo4E-00084Q-1D; Thu, 16 Sep 2021 11:52:30 +0200
-Date:   Thu, 16 Sep 2021 11:52:29 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S239362AbhIPMNY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Sep 2021 08:13:24 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35977 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239110AbhIPMNY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Sep 2021 08:13:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1631794321;
+        bh=7sztpVLHF3xzQJBZaKGK0+5UlIXFQCYGKYPDrXPda+s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ePagv1MZ186VTzn8ozXg3BM7J2UvTGuG/1vYvB99Y0gML7e/XpMrjzrRPhn/EKOZz
+         +M16vTA/IJudxGA+KRBA0Xzudjg1+YmLeiuEKRxGBJgasr/PgMFll6lZuS8x+D1/Nr
+         enM8O6UaYVXFredz/yu6Gw4yAwsNmGLHq1jzupr+6sKPuUmKdFpUgB+WmCPUzn8nmY
+         8umAndZ8r9iruOOSKU6ZrzFPkwKogVsCTztjifsWFd+GsZ4kyM94l8VzzeOdYJ+3LI
+         Pyn1z8nhlc3gVaAERqnlAMBXscyLeOPoPvC44LgJ7yDZTmh5GrOpX8a0dlVfViTyub
+         W240okspa9uwg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H9GD02n62z9sXS;
+        Thu, 16 Sep 2021 22:12:00 +1000 (AEST)
+Date:   Thu, 16 Sep 2021 22:11:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: Improvement suggestion for creation of next [Was: linux-next:
- manual merge of the dmaengine tree with the driver-core tree]
-Message-ID: <20210916095229.cvsjr4wbro26gev7@pengutronix.de>
-References: <20210723155354.082a62d8@canb.auug.org.au>
- <20210728071014.dkdvqmiw2lma6ooa@pengutronix.de>
- <20210916162740.3327df56@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20210916221159.7a495aca@canb.auug.org.au>
+In-Reply-To: <CAK7LNASCbVJ0EYoGN8iz+yskpHUuR_PZnePUUtgJu9UZqGW2cg@mail.gmail.com>
+References: <20210914121550.39cfd366@canb.auug.org.au>
+        <CAK7LNASCbVJ0EYoGN8iz+yskpHUuR_PZnePUUtgJu9UZqGW2cg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4q5izlngyi7lxack"
-Content-Disposition: inline
-In-Reply-To: <20210916162740.3327df56@canb.auug.org.au>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+Content-Type: multipart/signed; boundary="Sig_/mzcw7ryvAFRIOGzBw.57AtL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
---4q5izlngyi7lxack
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+--Sig_/mzcw7ryvAFRIOGzBw.57AtL
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hello Stephen,
+Hi Masahiro,
 
-On Thu, Sep 16, 2021 at 04:27:40PM +1000, Stephen Rothwell wrote:
-> [Sorry this took so long]
+On Thu, 16 Sep 2021 18:03:26 +0900 Masahiro Yamada <masahiroy@kernel.org> w=
+rote:
+>
+> I am sad to see the kbuild change reverted, not the net one.
+>=20
+> 13bb8429ca98 is apparently doing wrong.
+>=20
+> Including <linux/types.h> should be fine.
 
-No problem. Thanks for picking up my suggestion (and not loosing it in
-your mailbox).
-
-> I prefer to fetch all the trees (and run my checking scripts across
-> them independently of the merge/build cycle.  However, I have improved
-> the merge commit messages (I think).  Please check out today's
-> linux-next.
-
-Looks great. Thanks.
-
-> I have decided to remove the SHA1 from the message, as you
-> can see that from what is merged anyway.
-
-I understand that starting from tomorrow the short log will be shorter
-for the merge commits.
-
-Best regards
-Uwe
+This was fixed in the net-next tree.
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Cheers,
+Stephen Rothwell
 
---4q5izlngyi7lxack
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/mzcw7ryvAFRIOGzBw.57AtL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFDE9oACgkQwfwUeK3K
-7AkGiwgAg+Smsw36CajyKiZKN132GI4xDMz2/p6ea+vDvQ3fHYoTVOb0wVExpvul
-C/4YOlE4sW5aHPGCIghonEgNvZ+VLH6JmfdefhPFOLuMdz7JHRrqRKKBV2f8Nw2E
-2zcqQKt+mYx1yoIM+OkZZa3cykuB04RxbvYpFR8/eYpyinN5VheHfmnCLSl9TMm+
-OlvLvgU/9ymBkudsM7RRlVQxK3zAWY/ctCIxxoAJbhOdw4ZwfzyjydC2Lx+ksle9
-ZwLChRDoQcqbWg0Qwa8mzthce8v1Ut5zrefTfJSqHoZvu5f6IHNtpsm+yPnN2RCi
-iHUe9fhT5G09rY90Z2Hhocghk4Rw8A==
-=k/Mj
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFDNI8ACgkQAVBC80lX
+0GzUYwf/TGSVUPLkcU16Z7h2pDpCF/LCT6RnKKKhBIc7LOJEr9Nu34vRnCbxohn0
+sd2PY3KXSngViYVczk+1lpSyI36TIhtZQ5+IjiVa48450qUVFw5rXGOac5DKLsYG
+NdNdlkUg4MSt2Pmdmn2jIyywaUA3BuH1jk0VBnEGNvV22FZhAXD60aLek94IAOv2
+8XneTE7R50TyefrAbEl5EGssAc06zzdaaPzrsxsiC3A0Oc2hkIEJP/kFQ8z3I1ia
+pXl7VuNG0x77SqzXvPpucWDt5GkqW2JzMxdxGv3TgPb+/1IXADB+iGK8kC1dxanN
+3OHj7vBaF3QZpjuynJWiKIPA6i4YVg==
+=MuDj
 -----END PGP SIGNATURE-----
 
---4q5izlngyi7lxack--
+--Sig_/mzcw7ryvAFRIOGzBw.57AtL--

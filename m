@@ -2,89 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA1840EDA9
-	for <lists+linux-next@lfdr.de>; Fri, 17 Sep 2021 01:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B88940EDB3
+	for <lists+linux-next@lfdr.de>; Fri, 17 Sep 2021 01:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbhIPXHm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Sep 2021 19:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S241216AbhIPXLT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Sep 2021 19:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbhIPXHm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Sep 2021 19:07:42 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4356AC061574;
-        Thu, 16 Sep 2021 16:06:21 -0700 (PDT)
+        with ESMTP id S235393AbhIPXLT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Sep 2021 19:11:19 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FC6C061574;
+        Thu, 16 Sep 2021 16:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1631833579;
-        bh=NVLNJise4O43rAhgNgQnmJZqXyUWeHQ89TeyIjf5OtU=;
+        s=201702; t=1631833796;
+        bh=9kUrgE3Dv3FDzQP2lvjRZldZl6SOjL7yPlltV5u0MQ0=;
         h=Date:From:To:Cc:Subject:From;
-        b=rp0kycHBYlszh5bxwiLmEFYTjd5CaFwC7xXQWli6r8WRSDcTNiZwYX154FCrBoo34
-         xycL8zJtz8aUFNPoK+Yt1DQspNMPIwUuIC9JlCyYqytldWEXZvSwrWXhN9zIu8d/5r
-         OR8nhvphV9oarf6JayfJIb/y8YTx1QNEN9qfnynz6yIbNDS1gXbkSmdguGsnkZUyrX
-         gKD7zxGJuHhXrMv8DuwdXo2do8WYAD1rNPwgVmuHUc+w2zGdGIJDrPh/E8zZj0qPSZ
-         YOUjoK767+NLf3Ke36NtuTxrbjWxZ0rfiQVMSC7iKJHOlZF/AHRVf5c2pnsUe8bqjj
-         ezruhfKdQE2MQ==
+        b=jE5O/tVo02mXPa87evd8POzP6ThhemOyHuEHbKAfocBpSacsuhsgtlyF6UU/ztgDg
+         5ygGbhs+7PdA16UDeUUz6mc3DyCDHQAYX/22uqSy1Dy4SJHjVyS0+6LDd7sUI3kM/Z
+         Otqqw94KR1PxTaDY2d9zLzVaugVJho/G4hQJHzQ2de8wngwyx/4lOMpluUwQRXXt6G
+         Fo3UGFoEFZCzHiYPQY+U4JKuk8PeBlFC7SvK7Wmjk9gBYBbNOaS96+BKXu8L0J52XP
+         z7Mzp/g6K9+xpJ9z1+F7l85xZ6VFSS1UPg0S9rXguyAbiylym7OdTKX7CwK93n2/Yz
+         bNPdm/kFA/mGw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H9Xkz0DXrz9sXk;
-        Fri, 17 Sep 2021 09:06:18 +1000 (AEST)
-Date:   Fri, 17 Sep 2021 09:06:18 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H9Xq802s7z9sXk;
+        Fri, 17 Sep 2021 09:09:55 +1000 (AEST)
+Date:   Fri, 17 Sep 2021 09:09:54 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the clk-imx tree
-Message-ID: <20210917090618.3a7ac4be@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the scmi tree
+Message-ID: <20210917090954.18071850@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b8dF_tbP=zcH1ieeJHlsPoK";
+Content-Type: multipart/signed; boundary="Sig_/2Juw5/RYLdYdJDAErtt6bTG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/b8dF_tbP=zcH1ieeJHlsPoK
+--Sig_/2Juw5/RYLdYdJDAErtt6bTG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the clk-imx tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the scmi tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-ERROR: modpost: "imx_clk_hw_pfdv2" [drivers/clk/imx/clk-imx8ulp.ko] undefin=
-ed!
-ERROR: modpost: "imx_clk_hw_pllv4" [drivers/clk/imx/clk-imx8ulp.ko] undefin=
-ed!
-ERROR: modpost: "imx8ulp_clk_hw_composite" [drivers/clk/imx/clk-imx8ulp.ko]=
- undefined!
+arch/arm/boot/dts/vexpress-v2m-rs1.dtsi:107.3-49: Warning (ranges_format): =
+/bus@8000000:ranges: "ranges" property has invalid length (20 bytes) (paren=
+t #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #size-cells =3D=
+=3D 1)
 
-Caused by commit
+Introduced by commit
 
-  86ce2d393ff7 ("clk: imx: Add clock driver for imx8ulp")
-
-I have used the clk-imx tree from next-20210916 fot today.
+  bb3adfb3bd70 ("arm: dts: vexpress: Fix addressing issues with 'motherboar=
+d-bus' nodes")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/b8dF_tbP=zcH1ieeJHlsPoK
+--Sig_/2Juw5/RYLdYdJDAErtt6bTG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFDzeoACgkQAVBC80lX
-0Gy2pAf+LlQ1PAlKmvsdPaOx8cZG21uN8mHEyli0TKqZHGr3ax/HQnpJEQh6GVcu
-1csMNg+Yqicq2VVxFp1F1Z+j4CwefABKl6BdqKOwN2ADxHhOqfnbOm59ViUBlwR8
-M/3Ee4gJibURQq5FB0BJ4VnDOJo5fcMP7/0g48DB1FltQy5Y6d+9BwEepUIrHf3V
-kDPRFzplb+peNtvwJ/R0/05LTj4n/i1mGkT3G7gJLMNHMHoglCtHP1qKZPC1IFLl
-H2zja1uWF3QG+HdUI/SF6u8IlihAHz5VwDVGZ7WkavjzQ7aHV5Q3cqzvaD7E/ZEK
-DyTJH5kvqryr+4EAIjA/bvCESmDlFg==
-=0r0u
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFDzsIACgkQAVBC80lX
+0GzaGAf/f/pODR9SZ9fwdoNjwTWtc6zJokCnmN/n+lsahkN4avgp3vGEe481aXMw
+ausXCWBgUgRDfJE/F55qlgAYGsU1weunIF0x6Hz0tkOzcCUJ/FzCN7q8Tke+JlkM
+PbkDNtfrHJSt4zp1z+PC2wePb5QuCdgG3pvJKS/v52vY8IsogizHKzgBrZOaVSz9
+fI6RaBK14PTrFtxTzon23x2uRW3pRX2dvj/EoGa3I4sj+AxglEf1Ctcb3erko/Go
+p5YX13tx34f9aIzEx6jewbdFfwSWOudH7Do9uAeHq1Ob9S5FXB3vryDU8UKeNjOX
+BvU7sa+0QI16kpDZU2QWgYst2OTp/A==
+=rMGl
 -----END PGP SIGNATURE-----
 
---Sig_/b8dF_tbP=zcH1ieeJHlsPoK--
+--Sig_/2Juw5/RYLdYdJDAErtt6bTG--

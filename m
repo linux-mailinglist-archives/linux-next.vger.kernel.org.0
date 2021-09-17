@@ -2,92 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C194640F2E8
-	for <lists+linux-next@lfdr.de>; Fri, 17 Sep 2021 09:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7B440F3E1
+	for <lists+linux-next@lfdr.de>; Fri, 17 Sep 2021 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbhIQHLY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Sep 2021 03:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S235692AbhIQIQ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Sep 2021 04:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbhIQHLY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Sep 2021 03:11:24 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612FEC061574;
-        Fri, 17 Sep 2021 00:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1631862598;
-        bh=bp0ZUgxCQhZbRnxIHPQI96iWY/FZMiRUNVypU7TLoCE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iFXX8Rq0LD9Ebq6aGKM2Eqb/JrL4epmgtLmA8mPndCRIJNsC1o1HlLZEbU++LacWi
-         PxsU5/2vdAkqjmzcTfHbeOoPc88kwJxbo0lFkgIf6JrARzJfKG8c5huL2+AHclw+0Z
-         in7JBPNB9VXKAyDOWkZmXZ0QRk437VmpzjPOiqt2RYBcU3gOEKSJqul7CCLNrLvJyL
-         WO98I/3Oacmp6aQi5YDmc37JnEZ7iwZ0KFt6aAHhe5clJvlrVENhDNX5j26tqofyJN
-         9iDk7maTLlrSfAl+OyUIUbj+/BII5UT2DR4Mcm0qL7U9prEF5eQ+IcyHCfc1OAiLB6
-         kzBCIZPYgrLRA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4H9lT116S1z9sW4;
-        Fri, 17 Sep 2021 17:09:55 +1000 (AEST)
-Date:   Fri, 17 Sep 2021 17:09:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20210917170953.19d0177f@canb.auug.org.au>
+        with ESMTP id S229837AbhIQIQ6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Sep 2021 04:16:58 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B41C061574
+        for <linux-next@vger.kernel.org>; Fri, 17 Sep 2021 01:05:25 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id i8-20020a056830402800b0051afc3e373aso11858254ots.5
+        for <linux-next@vger.kernel.org>; Fri, 17 Sep 2021 01:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8TBdJtHgKKNE0SJ6m4JjwZ+pUMov7Rq43ETBcZVGRp4=;
+        b=SXdOrMZuybo5tmTQJ6vMeJs0E3/IBzBd3s8LbNHU0uWm8DAUzESNIt02JhBawSbshz
+         b3ExW2rwiP2GXtBSuvDFapw8PZjxa6zK2Dlx0eHj66jInxK7OwKYS6ttAugTMZBdM/EU
+         IduAGBBTCSW7cLKK9USzNf7C5uRQB021XyqpIFyeM7Y8kApjrP900HdshXP/vtUQgUw8
+         Q543DjGh0T4dLlq7THwcE8SLTM2svqnJZojNMQ8+PkmhwZBq6zPpCZJUj0srJnDBgVwE
+         O9PRdmQOygimaTg7zPBBfzoMV1VIjeEx1DYA/uyifwWLBZDIW89gqe8xZyk66DJu3/t/
+         4Vyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8TBdJtHgKKNE0SJ6m4JjwZ+pUMov7Rq43ETBcZVGRp4=;
+        b=O6tTRcVaQv7q/s6evX7AsQoyFtw5tGrRRuYrl7omo7f6xRgcTLDOtXUV6q9AW+JBId
+         asNlK/rwELeduYFMciUdQvXBBNp2FRA76iEnexc4FFEWrf6bKfyIIykCjZy/cL1LisBd
+         /8QPWW6+YzRdJrt4eyrvocXehMBQyVyFy8Pa59CfyAQdY74KsSkOX4lx0qGJBvm1Mcjy
+         h8IlMb9lMCp7CuligxT87hbWJaS9nv03+KY/zee/ua9lmvvZS6742TxhGy368W/7rpMC
+         YRuXkEtSJ+jzLoIiqYac5PlYp22cbVD01ZDAkIAWOtpYSJOjvA8k349K0tfJYJ/1hV7Q
+         N9DQ==
+X-Gm-Message-State: AOAM533DbrSlWSx+aFV/+H76DMbAbX5HusUU/8Gnxd351m0Z/xMeHF2/
+        t4WS3mnWOfmzJWo1p0G8IcHdtfGMeLlBATLJesGIbA==
+X-Google-Smtp-Source: ABdhPJw1du8pLRNG9d/Pnd2etZxFKqQkvXIwKB7O57pzXOPeA/cidvYKOM9WxAuabEMh4jcAH3bVKbbTbq8juNdpvyw=
+X-Received: by 2002:a9d:7244:: with SMTP id a4mr8609563otk.137.1631865924892;
+ Fri, 17 Sep 2021 01:05:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DbFq18WWwwrtySTT.BPm7f_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <000000000000bc92ac05cb4ead3e@google.com> <CAJfpeguqH3ukKeC9Rg66pUp_jWArn3rSBxkZozTVPmTnCf+d6g@mail.gmail.com>
+ <CANpmjNM4pxRk0=B+RZzpbtvViV8zSJiamQeN_7mPn-NMxnYX=g@mail.gmail.com> <CAJfpegvzgVwN_4a-ghtHSf-SCV5SEwv4aeURvK_qDzMmU2nA4Q@mail.gmail.com>
+In-Reply-To: <CAJfpegvzgVwN_4a-ghtHSf-SCV5SEwv4aeURvK_qDzMmU2nA4Q@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 17 Sep 2021 10:05:13 +0200
+Message-ID: <CACT4Y+ZmFyDOg0=gXv5G8mdqhz5gwcwA9jOVuWgLi2CiYQBzYQ@mail.gmail.com>
+Subject: Re: [syzbot] linux-next test error: KASAN: null-ptr-deref Read in fuse_conn_put
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Marco Elver <elver@google.com>,
+        syzbot <syzbot+b304e8cb713be5f9d4e1@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DbFq18WWwwrtySTT.BPm7f_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 6 Sept 2021 at 19:35, Miklos Szeredi <miklos@szeredi.hu> wrote:
+> > On Mon, 6 Sept 2021 at 13:56, Miklos Szeredi <miklos@szeredi.hu> wrote:
+> > > Thanks,
+> > >
+> > > Force pushed fixed commit 660585b56e63 ("fuse: wait for writepages in
+> > > syncfs") to fuse.git#for-next.
+> > >
+> > > This is fixed as far as I'm concerned, not sure how to tell that to syzbot.
+> >
+> > Thanks -- we can let syzbot know:
+> >
+> > #syz fix: fuse: wait for writepages in syncfs
+> >
+> > (The syntax is just "#syz fix: <commit title>".)
+>
+> Yeah, but that patch has several versions, one of which is broken.
+> Syzbot can't tell the difference just based on the title.
 
-Hi all,
+Hi Miklos,
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-modules_install) failed like this:
-
-depmod: ERROR: Cycle detected: drm_kms_helper -> drm -> drm_kms_helper
-depmod: ERROR: Cycle detected: cec
-depmod: ERROR: Found 2 modules in dependency cycles!
-
-Caused by commit
-
-  87ea95808d53 ("drm/bridge: Add a function to abstract away panels")
-
-I have reverted these commits for today:
-
-  a43dd76bacd0 ("drm/vc4: dsi: Switch to devm_drm_of_get_bridge")
-  0caddbbfdfa2 ("drm/vc4: dpi: Switch to devm_drm_of_get_bridge")
-  87ea95808d53 ("drm/bridge: Add a function to abstract away panels")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DbFq18WWwwrtySTT.BPm7f_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFEP0EACgkQAVBC80lX
-0GzMtwf/cTt3xaEfQHZ7JsDX0+AwM/sYl4xNWtaU6fKrZi000GsPNbxx7xZSz7K7
-5kW0VIM76nkMzTpV6y4midx25Tzgp8vMUnkbuiGUkHApIBRCNgCvRyweg0PsQFhS
-jMVqc4UNxv4V+1OzC5PGXiEOhpLmYyPCGex5lyvibykvDUJ4F//brQKmKYTfkW3Y
-6SukkK+u4M+e21vBNryrPcM4OJykoLh3kZgKrsM9DSpoAq3AZoYYTQOV7jbWC/MN
-qn6+NoiQjraPIVRBrYa/mUHb6dGpeC9pwllOST9ijOMxrQ+zZpDj9aDJfFyJv7Yd
-QrY/kuu4R7rtsriQNyuKy8f+jUKSWA==
-=esFv
------END PGP SIGNATURE-----
-
---Sig_/DbFq18WWwwrtySTT.BPm7f_--
+For such cases it's useful to include Tested-by: tag into the commit
+version that fixes the bug:
+http://bit.do/syzbot#amend

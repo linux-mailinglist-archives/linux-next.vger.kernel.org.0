@@ -2,130 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2D340FD70
-	for <lists+linux-next@lfdr.de>; Fri, 17 Sep 2021 17:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0F5410DA9
+	for <lists+linux-next@lfdr.de>; Mon, 20 Sep 2021 00:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbhIQP7j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Sep 2021 11:59:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51514 "EHLO mail.kernel.org"
+        id S232587AbhISWph (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Sep 2021 18:45:37 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35395 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235210AbhIQP7i (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Sep 2021 11:59:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6830160F43;
-        Fri, 17 Sep 2021 15:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631894296;
-        bh=zj2UyYcZHE6q9CXjCUeRJJBOd9INUaRewZnkKDtoHdM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZWoQ9kOBAq1+o9tlNANN2K8IDDenNx4UTW13b8VNEAXLV+7VSQZYQQ47gpBdOcuOu
-         rkAFwGRI7HJ7hAgZeRU0oy28PxSv2bvHZ5CrMMy+rD7pvGOco1gmfqtEnRsj+ZC2tk
-         BmPF8IauHHRlDFZ8/lJwHZzsrtIrJ+20m4s3lqq0pr/JOcqdSX62V7n4YcKHdeLA9k
-         YZYa9HgHspXWg8qJhGSKjOpGYZJj2nNQL2DCBg+3BKl2Tyhq+jaEVWhIumZE5U10EY
-         Hf3g8hKIttTrlpxfV5ly3kAuUgxd5QmiwMmZ8GoNX6nx+MQOwqDI5B3uNJ6MyYGmkp
-         OQsZa4lS8MzOw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3B4AF5C04F3; Fri, 17 Sep 2021 08:58:16 -0700 (PDT)
-Date:   Fri, 17 Sep 2021 08:58:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        id S230007AbhISWph (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 19 Sep 2021 18:45:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1632091449;
+        bh=azW0vTWeXjKrp+nWcpcWoQH0dQ4Zj2LkwPHFkRLJUEA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=poi7YlRxYGa5XISYPb0qQPxUI+MhTagpWePVKzQEfwKnEgheTcI9TWUmhXH9lyItu
+         gVa7CEmFZxRMIq3X2Pb+hupfTDvcnZjLaXYJtQ2mWHUu9eI3ikiFzFRIELzhjla186
+         TQho6Aqpdb9bpWNsGqdsjJhEmL91cjJG3ZsbkMVuA1xILZUAKpsbk8HCdGvslfFg3A
+         0qjXvwFHNTqMk45xzoSnQ6v6swd+TGz9z0FsbtSav7npNBMzu/sT2FLuk2UgpAnNrE
+         9bHdcMs3qxCO2DbtC9dCAEKnr4HLcLkRDCgRLDKI7Cc8+4hJEWVGwKrvr6zQL6KLKZ
+         B0HnZKTfksBBg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HCN612Jj5z9sW5;
+        Mon, 20 Sep 2021 08:44:09 +1000 (AEST)
+Date:   Mon, 20 Sep 2021 08:44:08 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <20210917155816.GQ4156@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210917115859.6cfc64a5@canb.auug.org.au>
- <YURQlNtL00f1HWVe@hirez.programming.kicks-ass.net>
+Subject: linux-next: manual merge of the spi-fixes tree with Linus' tree
+Message-ID: <20210920084408.4c93f5a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YURQlNtL00f1HWVe@hirez.programming.kicks-ass.net>
+Content-Type: multipart/signed; boundary="Sig_/DwFuqR+d6yJTJJqRrDGl3MD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 10:23:48AM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 17, 2021 at 11:58:59AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> > produced this warning:
-> > 
-> > vmlinux.o: warning: objtool: mce_setup()+0x22: call to memset() leaves .noinstr.text section
-> > vmlinux.o: warning: objtool: do_machine_check()+0x51: call to mce_gather_info() leaves .noinstr.text section
-> 
-> Those are pre-existing and Boris is lokoing into them, these however,
-> are new:
-> 
-> > vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x0: call to rcu_dynticks_task_trace_enter() leaves .noinstr.text section
-> > vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0xe: call to rcu_dynticks_task_trace_exit() leaves .noinstr.text section
-> 
-> These are from 7d0c9c50c5a1 ("rcu-tasks: Avoid IPIing userspace/idle
-> tasks if kernel is so built").
-> 
-> The below seems to help.
-> 
-> > vmlinux.o: warning: objtool: rcu_nmi_enter()+0x36: call to __kasan_check_read() leaves .noinstr.text section
-> 
-> That's 2be57f732889 ("rcu: Weaken ->dynticks accesses and updates"),
-> doing:
-> 
-> -       return !(arch_atomic_read(&this_cpu_ptr(&rcu_data)->dynticks) & 0x1);
-> +       return !(atomic_read(this_cpu_ptr(&rcu_data.dynticks)) & 0x1);
-> 
-> and causing instrumentation to be inserted where none is acceptable.
-> Flipping that back to arch_atomic_read() makes it go away as expected.
+--Sig_/DwFuqR+d6yJTJJqRrDGl3MD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The 2be57f732889 commit went in during the v5.15 merge window and the
-7d0c9c50c5a1 went into v5.8, but perhaps Linus won't be averse to taking
-a fix for an older bug along with the regression.  ;-)
+Hi all,
 
-Given no Signed-off-by, I am guessing that you would like to push
-this separately.  If so:
+Today's linux-next merge of the spi-fixes tree got a conflict in:
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+  drivers/spi/spi-tegra20-slink.c
 
-> ---
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index 1a6fdb03d0a5..5199559fbbf0 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -1479,7 +1479,7 @@ static void rcu_bind_gp_kthread(void)
->  }
->  
->  /* Record the current task on dyntick-idle entry. */
-> -static void noinstr rcu_dynticks_task_enter(void)
-> +static __always_inline void rcu_dynticks_task_enter(void)
->  {
->  #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
->  	WRITE_ONCE(current->rcu_tasks_idle_cpu, smp_processor_id());
-> @@ -1487,7 +1487,7 @@ static void noinstr rcu_dynticks_task_enter(void)
->  }
->  
->  /* Record no current task on dyntick-idle exit. */
-> -static void noinstr rcu_dynticks_task_exit(void)
-> +static __always_inline void rcu_dynticks_task_exit(void)
->  {
->  #if defined(CONFIG_TASKS_RCU) && defined(CONFIG_NO_HZ_FULL)
->  	WRITE_ONCE(current->rcu_tasks_idle_cpu, -1);
-> @@ -1495,7 +1495,7 @@ static void noinstr rcu_dynticks_task_exit(void)
->  }
->  
->  /* Turn on heavyweight RCU tasks trace readers on idle/user entry. */
-> -static void rcu_dynticks_task_trace_enter(void)
-> +static __always_inline void rcu_dynticks_task_trace_enter(void)
->  {
->  #ifdef CONFIG_TASKS_TRACE_RCU
->  	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
-> @@ -1504,7 +1504,7 @@ static void rcu_dynticks_task_trace_enter(void)
->  }
->  
->  /* Turn off heavyweight RCU tasks trace readers on idle/user exit. */
-> -static void rcu_dynticks_task_trace_exit(void)
-> +static __always_inline void rcu_dynticks_task_trace_exit(void)
->  {
->  #ifdef CONFIG_TASKS_TRACE_RCU
->  	if (IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
-> 
+between commit:
+
+  efafec27c565 ("spi: Fix tegra20 build with CONFIG_PM=3Dn")
+
+from the origin tree and commit:
+
+  2bab94090b01 ("spi: tegra20-slink: Declare runtime suspend and resume fun=
+ctions conditionally")
+
+from the spi-fixes tree.
+
+I fixed it up (I just used the letter version as that has been in
+linux-next for 10 days already) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+Mark, maybe fixes need to move on to Linus a bit faster?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DwFuqR+d6yJTJJqRrDGl3MD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFHvTgACgkQAVBC80lX
+0GzmMAf/YK3TpOTyiy/Ha7o3ONjQ71Rxvw5TgCBbu5R+hVY5+IJAf9atqZPXgfR3
+sP050uVoRBFVVney4luiPlSM4tmoXCAeIYsqDIqvPufn3f157T5eLx1qtcZ4tTAY
+fc89Ks5zkzHO7PqYRRFiAY4LrkeCEVvsD8kRii8IGi+2Q9xL/3BcAXy62wvxyaz4
+Tr3VwRPHDzhpqcgBuLWe5Q9+3pleT7lplFVotE/cu+NZ3bY+I8L367aKIU9qszkp
+Pczk1bcgNvoyXJG6yfckUuh6vzBaHaDTwFjYSmBgwWtmJpKjgiHgVp9S0su04YFQ
+BcbQCRsEZaA7xyBrrWGKNeSM+djQvw==
+=BfFW
+-----END PGP SIGNATURE-----
+
+--Sig_/DwFuqR+d6yJTJJqRrDGl3MD--

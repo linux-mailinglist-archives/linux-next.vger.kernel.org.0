@@ -2,96 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8DB410DDB
-	for <lists+linux-next@lfdr.de>; Mon, 20 Sep 2021 01:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABFA410DFF
+	for <lists+linux-next@lfdr.de>; Mon, 20 Sep 2021 02:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbhISXn6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Sep 2021 19:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhISXn5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Sep 2021 19:43:57 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF22CC061574;
-        Sun, 19 Sep 2021 16:42:31 -0700 (PDT)
+        id S229985AbhITAVS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Sep 2021 20:21:18 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55781 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229565AbhITAVR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 19 Sep 2021 20:21:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1632094949;
-        bh=t3XAqssDcPfatFRPhgTNkvbefdAl81jeSjE68b9LNGU=;
+        s=201702; t=1632097190;
+        bh=n6Y6mJwPd87qzTAfHIij558bqPiM0Z4YLCOxd/dfKZI=;
         h=Date:From:To:Cc:Subject:From;
-        b=BGgS4kc9G/IOMHgm25/+E9n6sGyECZW3bPQArlzlkTvlwcWR6vppYF7LCWZLj1OdT
-         EdmOmTWkPLqnbeSMFsk8u9JFyWcNPF3hJ9LI67TmLeseWhgs1QQn92F1Zo8R8ZQoYf
-         B5i7vF9LwykWPPoA80/dvOzmAlLBrKJJQnPlOLVOxic9Tg+Gz9jkeQesh15Ym3dipl
-         v24O7DBfDTqENo2DCkIVkc9m7VhJNwDeZNye1j+VChEPSGlqozrhXXIXbYl28K/tn8
-         404uzXN1Ar/iDNK/taoi90byNfvU0cuQ1oZa3J2qSUQ+ggzhLrT8nxHttR+1xlBk1a
-         SWrBSzxjq8zVw==
+        b=KbdrCOUQ0yiXFEVjxseO4Cd0di5qpNQSygTN/0yJ0ol+bv6cC33j/kCuYg8dErqUs
+         duCIM4c6jPaDXbKlqLZU/55oTRt8bJAhDYWy/Ac7Hg2uMkPqN6vez/7K6PFe4DrU6z
+         FymJSxym+2HnqKauTlR5Kqx/1xQcsZeBv7sklxYsy8ShA1zF6QGEquEDVMIGq/Dnqd
+         z+xiRgMZbR66eof1NTGu2Vr19XrfUgBuTuHcZGiP1Dzy9pufOYysPsijleMb5NGa4F
+         lCwdbqhVjadqyekReEtyY4s0Yh6uItYxuAuLPwInQ3tVMENtMmyOzoh2m3CYOwSeUL
+         b034eMKdiVT6g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HCPPH2x48z9ssP;
-        Mon, 20 Sep 2021 09:42:27 +1000 (AEST)
-Date:   Mon, 20 Sep 2021 09:42:26 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HCQDP4StWz9sX3;
+        Mon, 20 Sep 2021 10:19:49 +1000 (AEST)
+Date:   Mon, 20 Sep 2021 10:19:48 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ulrich Teichert <krypton@ulrich-teichert.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sean Young <sean@mess.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the origin tree
-Message-ID: <20210920094226.55df55a6@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the v4l-dvb-next tree
+Message-ID: <20210920101948.34a93713@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D=FLeTPS+5VyFV+xzC2b/Nh";
+Content-Type: multipart/signed; boundary="Sig_/gdCjGjDERhYfAqrx4wkOt2+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/D=FLeTPS+5VyFV+xzC2b/Nh
+--Sig_/gdCjGjDERhYfAqrx4wkOt2+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Building Linus' tree, today's linux-next build (sparc64 allmodconfig,
-arm64 allmodconfig, riscv defconfig and others) failed like this:
+After merging the v4l-dvb-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-In file included from arch/sparc/include/asm/io_32.h:21:0,
-                 from arch/sparc/include/asm/io.h:7,
-                 from arch/sparc/vdso/vdso32/../vclock_gettime.c:18,
-                 from arch/sparc/vdso/vdso32/vclock_gettime.c:22:
-include/asm-generic/io.h:1059:21: error: static declaration of 'pci_iounmap=
-' follows non-static declaration
- #define pci_iounmap pci_iounmap
-                     ^
-include/asm-generic/io.h:1060:20: note: in expansion of macro 'pci_iounmap'
- static inline void pci_iounmap(struct pci_dev *dev, void __iomem *p)
-                    ^
+drivers/media/rc/ir_toy.c: In function 'irtoy_tx':
+drivers/media/rc/ir_toy.c:332:36: error: 'STATE_RESET' undeclared (first us=
+e in this function)
+  332 |        sizeof(COMMAND_SMODE_EXIT), STATE_RESET);
+      |                                    ^~~~~~~~~~~
+drivers/media/rc/ir_toy.c:332:36: note: each undeclared identifier is repor=
+ted only once for each function it appears in
 
-Presumably caused by commit
+Caused by commit
 
-  9caea0007601 ("parisc: Declare pci_iounmap() parisc version only when CON=
-FIG_PCI enabled")
+  6a014f20734d ("media: ir_toy: allow tx carrier to be set")
+
+interacting with commit
+
+  f0c15b360fb6 ("media: ir_toy: prevent device from hanging during transmit=
+")
+
+from the v4l-vdb-fixes tree.
+
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 20 Sep 2021 10:14:37 +1000
+Subject: [PATCH] fix for "media: ir_toy: allow tx carrier to be set"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/media/rc/ir_toy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/rc/ir_toy.c b/drivers/media/rc/ir_toy.c
+index 9ea91d418635..71aced52248f 100644
+--- a/drivers/media/rc/ir_toy.c
++++ b/drivers/media/rc/ir_toy.c
+@@ -329,7 +329,7 @@ static int irtoy_tx(struct rc_dev *rc, uint *txbuf, uin=
+t count)
+ 	// with its led on. It does not respond to any command when this
+ 	// happens. To work around this, re-enter sample mode.
+ 	err =3D irtoy_command(irtoy, COMMAND_SMODE_EXIT,
+-			    sizeof(COMMAND_SMODE_EXIT), STATE_RESET);
++			    sizeof(COMMAND_SMODE_EXIT), STATE_COMMAND_NO_RESP);
+ 	if (err) {
+ 		dev_err(irtoy->dev, "exit sample mode: %d\n", err);
+ 		return err;
+--=20
+2.32.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/D=FLeTPS+5VyFV+xzC2b/Nh
+--Sig_/gdCjGjDERhYfAqrx4wkOt2+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFHyuIACgkQAVBC80lX
-0GwsLAf+LY6MucMB1ZX/UVqeZ8IjlyfzkXqoS/WdpCBl2CswtHMx3zfyKqEZAArY
-i+4QY0Y4fCJd/oRxg5gvnWZRtxy+bFJzuhs5F8iaOXRmdFHMx8ONXdVvXvMEyt6t
-sO6fIR4wqF/I4IJMfDhvqu578yUEghcr5tTDMe7QGCxeRuedI3FS2Lvem+ZXGs4W
-wtN/dyWVWB/1KrsplI3DeeCyAAeJT+GTsP11lsJ09WAZ/pvtk+qvsr5gsQYCgtty
-FoUkfNGcdVyLUbURTh7x97HjTt2+IsFBRmOY2OmYhBpqtCbD5dxPQGi/0AjmiuMc
-jaOfV3E4XBhnG3Ia0OHY8+SosKVFSw==
-=e1c4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFH06QACgkQAVBC80lX
+0GzfPAf+PMwV6x5eNTNKhUAiOJsBhppdJLhjLLqapACfHWaHOSJRl5YSHiRwH3q/
+BaTlSEnwAldjUUpCRPxWwI2RuXsu7kRb+Ef9lMHKLfwrqyDe6m5VbSzZlPENMcXO
+V68PIcH8KH9R/xNhwns06YqXIOlcIdQG2Ifc4W2AN79D1Nzl/Zi7IYuArX66dI14
+XVGhxvOvxXAggjEfUpKzktXIk5xe26VVYTnPqyggPYMxYr5sESSrEEOwqi/6Xj6y
+ot9YgOETQIdNmJjJHYBWiHQu9qu0+tiSYaYpl2C9xDblDb7Mryp8PLlIs4eCVTBz
+eGA93Z3KULfyLuQBI4SEtjQvUd5RNw==
+=7HlU
 -----END PGP SIGNATURE-----
 
---Sig_/D=FLeTPS+5VyFV+xzC2b/Nh--
+--Sig_/gdCjGjDERhYfAqrx4wkOt2+--

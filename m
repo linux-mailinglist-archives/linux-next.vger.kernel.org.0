@@ -2,82 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4823412D8C
-	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 05:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929C1412D90
+	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 05:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbhIUDwI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Sep 2021 23:52:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:33617 "EHLO ozlabs.org"
+        id S229584AbhIUDzw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Sep 2021 23:55:52 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56395 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231551AbhIUDwE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Sep 2021 23:52:04 -0400
+        id S229557AbhIUDzv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Sep 2021 23:55:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1632196235;
-        bh=Nf2v3ium6ChudMEM/tpTI7QeK1+fS9wTGzEBFP1rJ3I=;
+        s=201702; t=1632196462;
+        bh=0BzMHsy1hpymZlL6NJ8oZ6u/HRveT4hYBexymK9AGfM=;
         h=Date:From:To:Cc:Subject:From;
-        b=fNwI2bLn3o98nWktKaj2OTL2mkDrGTQW99n9eNIHhCnpHJRho6m57uaqR2phAzFXM
-         0uqN9L6pZdhmpMpNvyLMYoRgE8iKBaPYkc+0jkeUfl5zBCjTRd6vAI/YAAAkYyOPgQ
-         wt47lssXID40DJ3e7I8bkvWgM8P8zpg08YsGG3cB25ccy5lFI5llAfm3hc7jcjW7yv
-         qQ8LKK+cqfw/p4RxadNFTz4GlTLobswx1a7tLIAcIK7xfR5EB1snhZqy8gK2JN248F
-         OtuSvSy4Ge3fBJrbBqV5b40Ev99DlhWkcgkONU+pqBfUIIe5Vm3t6/XI2VMDCBbDki
-         F50RSjBKak6SQ==
+        b=MGgS250hdua+NRRuQrftB+Qh4HlkjFi5NHcmww/oshONsaVHQQpxx2NSIPDTgKnSY
+         IANijUNI9RGlj0C+vf89g5yNHdOhLRSiHSMc+niwE7Bnbo8e8gTuBQsQ4ifpHy8djq
+         vrotX/0h9l1qBsSqq2vT5IIRle0jUhqdPTz+x9wrrtfMmwVPA5kYo4bRXSPFcRv2DE
+         gtv40k4oSRT3SoKI/f5q+f1nKUH5jFpIJNzpl44grAI+MIIWv+OQBgWfn2cEoC3318
+         cLlQ2mxu6m2UvYFpiUEdZUwO7zUsCk4Gc0C3/g9DOA9thHqTlekKU+g0UGtGRZp1iN
+         45Mz+QYF662RA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HD6s51MQ2z9ssP;
-        Tue, 21 Sep 2021 13:50:32 +1000 (AEST)
-Date:   Tue, 21 Sep 2021 13:50:31 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HD6xV3NXPz9ssP;
+        Tue, 21 Sep 2021 13:54:22 +1000 (AEST)
+Date:   Tue, 21 Sep 2021 13:54:21 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Matthew Wilcox <willy@infradead.org>,
+        David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20210921135031.2b39fb76@canb.auug.org.au>
+Subject: linux-next: manual merge of the folio tree with the fscache tree
+Message-ID: <20210921135421.13eac778@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XyyHhQ02R++M=wGEVN_Y4J5";
+Content-Type: multipart/signed; boundary="Sig_/rz/pi.tYV_5ktpC4kYtjCMJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XyyHhQ02R++M=wGEVN_Y4J5
+--Sig_/rz/pi.tYV_5ktpC4kYtjCMJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (arm64 allmodconfig
-clang-12) produced this warning:
+Today's linux-next merge of the folio tree got a conflict in:
 
-kernel/locking/test-ww_mutex.c:138:7: error: variable 'ret' is used uniniti=
-alized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+  fs/cachefiles/rdwr.c
 
-Introduced by commit
+between commit:
 
-  12235da8c80a ("kernel/locking: Add context to ww_mutex_trylock()")
+  405f4ff7f8a3 ("fscache: Remove the old I/O API")
+
+from the fscache tree and commit:
+
+  2e96a1a81b3f ("mm/filemap: Convert page wait queues to be folios")
+
+from the folio tree.
+
+I fixed it up (the former removed the file, so I did that) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XyyHhQ02R++M=wGEVN_Y4J5
+--Sig_/rz/pi.tYV_5ktpC4kYtjCMJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFJVocACgkQAVBC80lX
-0GyJfggAk6CVwUjJvJjalOB9L4oqE0B3fDbednJx/0VPVqsJEQfcW1aOh6s0nlmC
-TOGWSAEk2WBMddzPmj1JAJEBsrx1gOplLFpaVVhUvSA9+qPt3uk+neini3QPFcbz
-6XP0b7ysMDUOEgwsSQ1rcWjaWkbjI3/948iBpqq3AvTQ82gmoC9wnb8ao0Flqgkx
-WAahsN6mdX5v+M/wwNWQx7TX/lvpEYwlnAev1WpECMIqzCi+Fd5vTd0WVPCvreQD
-Wfvj52ngTZpQJJxzpe7kDuN+vO9oheEWEoI29Y8eZpTCdOXIMVt16ps9AyagkZ0V
-ndsOSYHiJZidI0rp95qfAo3JlUfmyA==
-=U0ML
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFJV20ACgkQAVBC80lX
+0GwR1QgAoE8m/H1eN4UfrZi9P2FyQdbKUgHwj46WPo955gIERDoIivLoBfAmvy6X
+GP/UuhxaDXH+Jn/RToZOCwNTHU4Ah0U9HJQ+1rQRuRGHGNz93HRu5eRhgOQU61sz
+u3tBw0F7gCZQHaGYcQ/1YLjfvEJAKWWUL9xOatO48Vv0y+VUjWKphPZVSFjpHU+G
+QOATCqaJmjvWvGMAcxKC8JdqfhlfC5NtGS07ACNO/AAid6dcWY7AUAe1CW074vX2
+IyWHt0BCfeOMXlVJZYvbKgNY8FM53yXydz+jZ8OQ0HfVgmEQLjISwQ3t98LjOzSZ
+3/r0CuC4IgI8SnJV3Raewcr616qdBA==
+=mlnV
 -----END PGP SIGNATURE-----
 
---Sig_/XyyHhQ02R++M=wGEVN_Y4J5--
+--Sig_/rz/pi.tYV_5ktpC4kYtjCMJ--

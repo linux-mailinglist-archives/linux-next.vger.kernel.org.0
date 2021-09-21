@@ -2,115 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 263BB41340E
-	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 15:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6274134EA
+	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 15:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbhIUN3Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Sep 2021 09:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbhIUN3Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Sep 2021 09:29:25 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D549C061575
-        for <linux-next@vger.kernel.org>; Tue, 21 Sep 2021 06:27:57 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so7039187ooh.7
-        for <linux-next@vger.kernel.org>; Tue, 21 Sep 2021 06:27:57 -0700 (PDT)
+        id S233081AbhIUN7j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Sep 2021 09:59:39 -0400
+Received: from relaydlg-01.paragon-software.com ([81.5.88.159]:50827 "EHLO
+        relaydlg-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233042AbhIUN7i (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Sep 2021 09:59:38 -0400
+X-Greylist: delayed 484 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Sep 2021 09:59:38 EDT
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relaydlg-01.paragon-software.com (Postfix) with ESMTPS id 83D7B821E9;
+        Tue, 21 Sep 2021 16:50:03 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EgtcCdCSzU7k5FtxRdD3MvPckmd4WnQ4U+ziuWuV4nI=;
-        b=DySCcplmfySE1QwOknq+R/xN8XM9Feir8cJMJzRkinrsxNeUJ36MUA10u4/KG9+ILg
-         psZGjJXVoC3RG4S42/cWZmUEwKqKu+BqYaj4fWzLO8n+sQ/QGwEAhNAa5vNkfDeS8MTM
-         oxbN70FtgjDFT0wbYwBistSH3c5HkcVds74CJDZMOUjTdMdLGh2UQg/o3Ggz/pOKpl14
-         jEBxOhMmp0dSN1IVXhXaqyQjYc3vTEfuMEYRBQ4gDW27xAyJTGZ6MYcwuqD5cE4isSHZ
-         0L+ieLZIsvZpjSpyI847nGLWLY+3ruWZYng+BtZR4JfzHRr+1yjH4U04C34AsbHbKObk
-         CZ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EgtcCdCSzU7k5FtxRdD3MvPckmd4WnQ4U+ziuWuV4nI=;
-        b=RK1VOqa7ZBzzpBTNx6sovtFEizLniYwyas977o6nkkYVa2P+ItHj5/n+VtJEQAQcnK
-         ktubW6fR3dGNsHabDZ+PjC5gSYIsywoZHqEx2aK9CxCezBOgWCoaziP6jlzupYVvYJhU
-         Fd7U7x3fip4D6C2xkPtLn/qnOPAKbCNmtbobVhh5uDu21mT1oNIHzKSIX4kZ42ObGI5i
-         ONZfNSc3MHJKRSuwBbmbbeHtcbdbqzxETsGBq0T9BX00WfRY05xpiHSZfMXu6tRwjlcD
-         PiUUzRF0CZ8sl1Gk4MznY6wXfIwPSv6RD7NSNf5W8MC+Fe97DwPWHuHzk79hDLXX258p
-         djvQ==
-X-Gm-Message-State: AOAM531XwGj/oGpB2ffhy8UcIVlfnxKogfOxgdhRYj4rK5nJzO1a7E9n
-        Ast4ljP+HrcsgFHtTq5eo/YbXP5nIK/w6Q==
-X-Google-Smtp-Source: ABdhPJx4lfySURYgTaV8u4sMXn1NFpp6nXLq3QV7t2GFKU4VMyywfUGcG5LlvThswL5AcKFPnfXpqw==
-X-Received: by 2002:a4a:942:: with SMTP id 63mr8476148ooa.25.1632230876239;
-        Tue, 21 Sep 2021 06:27:56 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id d7sm2194162ooa.36.2021.09.21.06.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 06:27:55 -0700 (PDT)
-Date:   Tue, 21 Sep 2021 06:28:38 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Gross <agross@kernel.org>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Kathiravan T <kathirav@codeaurora.org>,
+        d=paragon-software.com; s=mail; t=1632232203;
+        bh=69SZli9zXZUg9CaJRX5IXFLbxpHqZtCHlXL0CEwYyHE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=nu59M+v3DIVWX4Bc7PgNccDY43d9jf24IMjr0DGdUr0S+6gnS2CRFXWdUuKCIc7FP
+         CeH6Ixwsg2nrfqtXZ2N0Yo7MQaa1yvvaka0AH97IuCI6+ISo5UAL1DfsGqUFZlSv3Z
+         VJTNtE2hiKLZni4cFQESVsQ/8gr6gUwxrsEux+68=
+Received: from [192.168.211.136] (192.168.211.136) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 21 Sep 2021 16:50:03 +0300
+Message-ID: <3320944d-8fac-0a22-ee38-f08974fcaed7@paragon-software.com>
+Date:   Tue, 21 Sep 2021 16:50:02 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: linux-next: Fixes tag needs some work in the ntfs3 tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Kari Argillander <kari.argillander@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
-Message-ID: <YUneBtogXtLnxDKw@ripper>
-References: <20210921123032.02cd498b@canb.auug.org.au>
- <YUnaJolAAZmhs4kU@ripper>
- <YUnbK840c9L6vpAl@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YUnbK840c9L6vpAl@kroah.com>
+References: <20210921083158.261517da@canb.auug.org.au>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20210921083158.261517da@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.211.136]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 21 Sep 06:16 PDT 2021, Greg KH wrote:
 
-> On Tue, Sep 21, 2021 at 06:12:06AM -0700, Bjorn Andersson wrote:
-> > On Mon 20 Sep 19:30 PDT 2021, Stephen Rothwell wrote:
-> > 
-> > > Hi all,
-> > > 
-> > > Today's linux-next merge of the usb tree got a conflict in:
-> > > 
-> > >   arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> > > 
-> > > between commit:
-> > > 
-> > >   261e8a95d9aa ("arm64: dts: qcom: ipq6018: add usb3 DT description")
-> > > 
-> > > from the qcom tree and commit:
-> > > 
-> > >   9da2c3f76164 ("arm64: qcom: ipq6018: add usb3 DT description")
-> > > 
-> > 
-> > Greg, this is not a USB patch, can you please drop it from your tree.
+
+On 21.09.2021 01:31, Stephen Rothwell wrote:
+> Hi all,
 > 
-> It was sent to me and says "add usb3 DT description", so how am I
-> supposed to know to reject it?
+> In commit
+> 
+>   0412016e4807 ("fs/ntfs3: Fix wrong error message $Logfile -> $UpCase")
+> 
+> Fixes tag
+> 
+>   Fixes: 203c2b3a406a ("fs/ntfs3: Add initialization of super block")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
 > 
 
-It's a dts patch and as we saw in the last cycle bringing in patches
-through other trees has a strong tendency to result in merge conflicts
-down the road.
+Hello.
 
-It seems like the patch was sent in a series together with driver
-changes, so I presume you took the whole series. Unfortunately it's
-quite common for these platform enablement efforts to be spread across
-multiple subsystems and we keep seeing the series be grouped by function
-rather than maintainer...
+You are right, correct SHA is 82cae269cfa9.
+Sorry, I've missed this while applying patch.
 
-Not sure if there's anything to do about this.
-
-> I'll go revert it from my tree.  {sigh}
-> 
-
-Thanks!
-
-Regards,
-Bjorn
+As far as I know there is no way to fix this now -
+commit is already in linux-next.

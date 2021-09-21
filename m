@@ -2,126 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC23B413DC2
-	for <lists+linux-next@lfdr.de>; Wed, 22 Sep 2021 00:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF85413DCB
+	for <lists+linux-next@lfdr.de>; Wed, 22 Sep 2021 01:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbhIUW76 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Sep 2021 18:59:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54742 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230034AbhIUW76 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Sep 2021 18:59:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A9D061183;
-        Tue, 21 Sep 2021 22:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632265109;
-        bh=bohJExFW1yPNYHxfeNBgqeE4SD0v9efgL6NRIGVa8Vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JdP5nbViHn1pi8Gh+UqzeMFvIgX8AN46LPD9EhqxYmi432PXTu0HORAxwcCwbvUb0
-         bRZe/gmXbE6tcVYIUHgesdWpl7PAIo1Rs/VzGozbeRgYwzf+rUBUITHRHSLbJuKO/z
-         Y0Im/8ygppODghkp7NmQHTX4P/Qd1628Zf4Dhxr7Vb4x2uHWA2FdDuu/6cviKa8fCg
-         3ZA8maPCNjHPsaXAzATTdsYKOdGaw1ewfRDRxh8899H7rKvp6ObrGtvMTdkVwmMhfM
-         7ER/E6Ebt6FUht5sjN/cg5fLIuWwjeQxd8oDhyX+u1Lkq+qa9OLST7TeVVHciJkDru
-         p1f+uXVf8IG9A==
-Date:   Tue, 21 Sep 2021 15:58:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        ville.syrjala@linux.intel.com, manasi.d.navare@intel.com,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH v3 03/13] drm/dp: add LTTPR DP 2.0 DPCD
- addresses
-Message-ID: <YUpjj7IwBqMYSR7z@archlinux-ax161>
-References: <cover.1631191763.git.jani.nikula@intel.com>
- <def17e2329722f22c35807be26b35590ccb93bfd.1631191763.git.jani.nikula@intel.com>
+        id S229518AbhIUXEK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Sep 2021 19:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229482AbhIUXEK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Sep 2021 19:04:10 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28AAC061574;
+        Tue, 21 Sep 2021 16:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1632265357;
+        bh=ymkPjnU1iq2vcqk7dsvjMfR8hRZQlMoT7JF3z1PetJU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q56ktUbwEKYtVmowgZZW/WUQHt5kLmVk3k4QybXKPLa40XrNbQI3mVN7dhPS4ROCT
+         jfPyRjzd7va+wcwvE3FwcFoTQYb6nItkhs/a9qtU5eQS5S1LPnrC/qBBwAWq/QouQQ
+         p/KKNzKHxkVCgDXDjpW8Rr6jM5lccKJCiqq/vCQBNrLYWDeJZDrR01Ov24riDfgvaq
+         ByodyDZy+bTNMHIc4VSuqxUPixgzcn62V/ZyOaIyvQ4QZ8+51gIhFa65EHXnVBxtGR
+         un5nESsCttpo4O1acrstvVohRQubiHYz5SQYEJra5KvYSp6tgQzLDriJHhm5xOhY7h
+         bHvXgrDhp5QnQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HDcQP1f3Xz9sW4;
+        Wed, 22 Sep 2021 09:02:37 +1000 (AEST)
+Date:   Wed, 22 Sep 2021 09:02:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Kuogee Hsieh <khsieh@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20210922090235.2a626af6@canb.auug.org.au>
+In-Reply-To: <20210921082438.26550938@canb.auug.org.au>
+References: <20210921082438.26550938@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <def17e2329722f22c35807be26b35590ccb93bfd.1631191763.git.jani.nikula@intel.com>
+Content-Type: multipart/signed; boundary="Sig_/jHfeLy=S=8+KO_ZFx=NbscC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 03:51:55PM +0300, Jani Nikula wrote:
-> DP 2.0 brings some new DPCD addresses for PHY repeaters.
-> 
-> Cc: dri-devel@lists.freedesktop.org
-> Reviewed-by: Manasi Navare <manasi.d.navare@intel.com>
-> Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-> ---
->  include/drm/drm_dp_helper.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-> index 1d5b3dbb6e56..f3a61341011d 100644
-> --- a/include/drm/drm_dp_helper.h
-> +++ b/include/drm/drm_dp_helper.h
-> @@ -1319,6 +1319,10 @@ struct drm_panel;
->  #define DP_MAX_LANE_COUNT_PHY_REPEATER			    0xf0004 /* 1.4a */
->  #define DP_Repeater_FEC_CAPABILITY			    0xf0004 /* 1.4 */
->  #define DP_PHY_REPEATER_EXTENDED_WAIT_TIMEOUT		    0xf0005 /* 1.4a */
-> +#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER	    0xf0006 /* 2.0 */
-> +# define DP_PHY_REPEATER_128B132B_SUPPORTED		    (1 << 0)
-> +/* See DP_128B132B_SUPPORTED_LINK_RATES for values */
-> +#define DP_PHY_REPEATER_128B132B_RATES			    0xf0007 /* 2.0 */
->  
->  enum drm_dp_phy {
->  	DP_PHY_DPRX,
-> -- 
-> 2.30.2
-> 
-> 
+--Sig_/jHfeLy=S=8+KO_ZFx=NbscC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch causes a build failure in -next when combined with the AMD
-tree:
+Hi all,
 
-In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c:33:
-In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:70:
-In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu_mode.h:36:
-./include/drm/drm_dp_helper.h:1322:9: error: 'DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER' macro redefined [-Werror,-Wmacro-redefined]
-#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER            0xf0006 /* 2.0 */
-        ^
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dp_types.h:881:9: note: previous definition is here
-#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER        0xF0006
-        ^
-1 error generated.
+On Tue, 21 Sep 2021 08:24:38 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> In commit
+>=20
+>   33c4296d99ef ("arm64: dts: qcom: sc7280: fix display port phy reg prope=
+rty")
 
-Perhaps something like this should be applied during the merge of the
-second tree or maybe this patch should be in a branch that could be
-shared between the Intel and AMD trees so that this diff could be
-applied to the AMD tree directly? Not sure what the standard procedure
-for this is.
+This is now commit 1a5968e5b7de.
 
+> Fixes tag
+>=20
+>   Fixes: 9886e8fd8438 ("arm64: dts: qcom: sc7280: Add USB related nodes")
+>=20
+> has these problem(s):
+>=20
+>   - Target SHA1 does not exist
+>=20
+> Maybe you meant
+>=20
+> Fixes: bb9efa59c665 ("arm64: dts: qcom: sc7280: Add USB related nodes")
+
+Surely if you are going to rebase the tree anyway, you can fix this up
+:-(
+
+--=20
 Cheers,
-Nathan
+Stephen Rothwell
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-index 234dfbea926a..279863b5c650 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -4590,7 +4590,7 @@ bool dp_retrieve_lttpr_cap(struct dc_link *link)
- 								DP_LT_TUNABLE_PHY_REPEATER_FIELD_DATA_STRUCTURE_REV];
- 
- 		link->dpcd_caps.lttpr_caps.supported_128b_132b_rates.raw =
--				lttpr_dpcd_data[DP_PHY_REPEATER_128b_132b_RATES -
-+				lttpr_dpcd_data[DP_PHY_REPEATER_128B132B_RATES -
- 								DP_LT_TUNABLE_PHY_REPEATER_FIELD_DATA_STRUCTURE_REV];
- #endif
- 
-diff --git a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-index a5e798b5da79..8caf9af5ffa2 100644
---- a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-@@ -878,8 +878,6 @@ struct psr_caps {
- # define DP_DSC_DECODER_COUNT_MASK			(0b111 << 5)
- # define DP_DSC_DECODER_COUNT_SHIFT			5
- #define DP_MAIN_LINK_CHANNEL_CODING_SET			0x108
--#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER	0xF0006
--#define DP_PHY_REPEATER_128b_132b_RATES			0xF0007
- #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1	0xF0022
- #define DP_INTRA_HOP_AUX_REPLY_INDICATION		(1 << 3)
- /* TODO - Use DRM header to replace above once available */
+--Sig_/jHfeLy=S=8+KO_ZFx=NbscC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFKZIsACgkQAVBC80lX
+0GzE8Qf/Wl0mNabVOQia88CpnXxTk57zeHM+DKz808bvBz6WlMdzMID+pnwxG5UV
+UzN+Wq/8qBIviJEQhO2WtmqmJUaegKPQMXAaGEXSBR61NPz/pfjedo61LFOQ3Cww
+tpRvpfHFsPGIsy2omWrW/ZYHCXRNqLnh8RUHIebmchJ+Bf1btJWn0RhHaKoXkh72
+W6dwt7q6biHKGJOnBlPQAwvweNGRTj3kUoTocq0pdz1SQ+scNFhTQT/VySNEUWE4
+exsBksiAhr6w8ZqfdeBjHvRFwxNmAwMdG/GiEkrwjUWBwK1d61HKnGjUed2rJpdZ
+DJhUAgpan6oeVYJRF/GJrKgrLwRpeQ==
+=jCvi
+-----END PGP SIGNATURE-----
+
+--Sig_/jHfeLy=S=8+KO_ZFx=NbscC--

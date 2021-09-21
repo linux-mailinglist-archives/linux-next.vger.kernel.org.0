@@ -2,100 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EC4412D39
-	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 05:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4823412D8C
+	for <lists+linux-next@lfdr.de>; Tue, 21 Sep 2021 05:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbhIUDQB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Sep 2021 23:16:01 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50825 "EHLO ozlabs.org"
+        id S231736AbhIUDwI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Sep 2021 23:52:08 -0400
+Received: from ozlabs.org ([203.11.71.1]:33617 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229973AbhIUCcF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Sep 2021 22:32:05 -0400
+        id S231551AbhIUDwE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Sep 2021 23:52:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1632191435;
-        bh=vTQXciGMsRDBZPI3BtUp0IkecWENffXTdzLmGGjwXEY=;
+        s=201702; t=1632196235;
+        bh=Nf2v3ium6ChudMEM/tpTI7QeK1+fS9wTGzEBFP1rJ3I=;
         h=Date:From:To:Cc:Subject:From;
-        b=fAVuU1PJi5/E6E2oL4KQgp/Ason8H5fS60aStrxWBBbRJcjnrlVu580PUxZWFgye2
-         PIOc96sKhQgGWcO5B0C2qYeCTSkpXAIVHEaEHInlVYZbXoOpEBQ3H6BfvCVqSxjtCO
-         JGFeuL7pe4vP5xq2yCZCj6eJnnngKgvJvzgYSmzyj2tlLNJ35KtPjUrYxlNAzULH2H
-         /azRWXoaG59ZAmTNKBqELEC7lNzvgH82XzGYQve/5S4st0Ylyig4uPgugR/r1SpsnC
-         y1GNzpHVHYxTSy7PS+CopyPmyVZxVcCF2wtHj8MK3yDRQ7Godiu9GYY8qLzASouaU2
-         po//ol4w2Am5Q==
+        b=fNwI2bLn3o98nWktKaj2OTL2mkDrGTQW99n9eNIHhCnpHJRho6m57uaqR2phAzFXM
+         0uqN9L6pZdhmpMpNvyLMYoRgE8iKBaPYkc+0jkeUfl5zBCjTRd6vAI/YAAAkYyOPgQ
+         wt47lssXID40DJ3e7I8bkvWgM8P8zpg08YsGG3cB25ccy5lFI5llAfm3hc7jcjW7yv
+         qQ8LKK+cqfw/p4RxadNFTz4GlTLobswx1a7tLIAcIK7xfR5EB1snhZqy8gK2JN248F
+         OtuSvSy4Ge3fBJrbBqV5b40Ev99DlhWkcgkONU+pqBfUIIe5Vm3t6/XI2VMDCBbDki
+         F50RSjBKak6SQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HD54n4QRQz9sW5;
-        Tue, 21 Sep 2021 12:30:33 +1000 (AEST)
-Date:   Tue, 21 Sep 2021 12:30:32 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HD6s51MQ2z9ssP;
+        Tue, 21 Sep 2021 13:50:32 +1000 (AEST)
+Date:   Tue, 21 Sep 2021 13:50:31 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Andy Gross <agross@kernel.org>
-Cc:     Baruch Siach <baruch@tkos.co.il>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kathiravan T <kathirav@codeaurora.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the qcom tree
-Message-ID: <20210921123032.02cd498b@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the tip tree
+Message-ID: <20210921135031.2b39fb76@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/a01qS2U2KELLuIltukzra2.";
+Content-Type: multipart/signed; boundary="Sig_/XyyHhQ02R++M=wGEVN_Y4J5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/a01qS2U2KELLuIltukzra2.
+--Sig_/XyyHhQ02R++M=wGEVN_Y4J5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+After merging the tip tree, today's linux-next build (arm64 allmodconfig
+clang-12) produced this warning:
 
-  arch/arm64/boot/dts/qcom/ipq6018.dtsi
+kernel/locking/test-ww_mutex.c:138:7: error: variable 'ret' is used uniniti=
+alized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
 
-between commit:
+Introduced by commit
 
-  261e8a95d9aa ("arm64: dts: qcom: ipq6018: add usb3 DT description")
-
-from the qcom tree and commit:
-
-  9da2c3f76164 ("arm64: qcom: ipq6018: add usb3 DT description")
-
-from the usb tree.
-
-Same author, same date, but the former has this committer comment:
-
-bjorn: Changed dwc3 node name to usb, per binding
-
-So I used that version.
-
-I fixed it up (see above) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  12235da8c80a ("kernel/locking: Add context to ww_mutex_trylock()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/a01qS2U2KELLuIltukzra2.
+--Sig_/XyyHhQ02R++M=wGEVN_Y4J5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFJQ8gACgkQAVBC80lX
-0GwsbAf/VxEFKaQYvUE4SCGt/iMkHoiyBRMCeoGLRHDqs5kxqbziyAmvYvwUwbL1
-+PzFSDZ11YoLEsQ4G0DAv4G5wgvtYg7UUtXMt4NLykz5frQ3b72dYqin1ZdcuZI7
-rFdx+7EtSl917uon2trZE/cFMGYuFNuCL7CSUxF4tpz2TUu0qxjD48TnRkZca8nm
-xv7Uv1TZ1Zkb6Cuy16KocqYqQJKOkXgmnfaIRjlLNc2rg+Av3UiGH5Pm9hPv8RvB
-vDo4LnjOihNc1LhY8uzRhHfvIuGIQEE9MhgLLlWAJmZMN9Rrhq5dec2VSMdfPmfA
-/x7e9MrZGsrkuOWvJqmBnbC96JDNfA==
-=Vymu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFJVocACgkQAVBC80lX
+0GyJfggAk6CVwUjJvJjalOB9L4oqE0B3fDbednJx/0VPVqsJEQfcW1aOh6s0nlmC
+TOGWSAEk2WBMddzPmj1JAJEBsrx1gOplLFpaVVhUvSA9+qPt3uk+neini3QPFcbz
+6XP0b7ysMDUOEgwsSQ1rcWjaWkbjI3/948iBpqq3AvTQ82gmoC9wnb8ao0Flqgkx
+WAahsN6mdX5v+M/wwNWQx7TX/lvpEYwlnAev1WpECMIqzCi+Fd5vTd0WVPCvreQD
+Wfvj52ngTZpQJJxzpe7kDuN+vO9oheEWEoI29Y8eZpTCdOXIMVt16ps9AyagkZ0V
+ndsOSYHiJZidI0rp95qfAo3JlUfmyA==
+=U0ML
 -----END PGP SIGNATURE-----
 
---Sig_/a01qS2U2KELLuIltukzra2.--
+--Sig_/XyyHhQ02R++M=wGEVN_Y4J5--

@@ -2,85 +2,171 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB27413E85
-	for <lists+linux-next@lfdr.de>; Wed, 22 Sep 2021 02:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4331413EAD
+	for <lists+linux-next@lfdr.de>; Wed, 22 Sep 2021 02:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbhIVAQ5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Sep 2021 20:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbhIVAQ4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Sep 2021 20:16:56 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E0BC061574;
-        Tue, 21 Sep 2021 17:15:25 -0700 (PDT)
+        id S229734AbhIVArX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Sep 2021 20:47:23 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47445 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229480AbhIVArX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Sep 2021 20:47:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1632269721;
-        bh=VJMb1VlHdkDDANH+KFH3QbakZVz7f2s1AwxXpDbSDdM=;
+        s=201702; t=1632271553;
+        bh=hXvO8OuNaSrv4ooeA7gU5YK2T3P3KpeyR9oPEm4Yo00=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mO8kyIm4zFC7GypUfFHc//0yrbGJWpe40oIwXDM2ldvLwXGBjvY2TFis1IamtCKCA
-         1erLOazZeQvlnbbMPREmYBRF+6/6i+qUbSK9ElWTb5meuNhuVpZDldPlRFPb1UETYh
-         jxwx7FdlfRi11tK5rkBKp5B9MwGCEW+2ySzQOq4MD7zdSZ5ri6Asx3cBU365pf45Zt
-         20lIsYd2N9BM1z2zivj9FEDwF7ZmilUPaIpI9qbJH81WfuDX0Ez1J/SdCXy+eR2JGK
-         jexm5rgV+xufRLbecHGK0ncTiSyUmg+lHoPS9wPMeWOpiVlN+5FduzGqZJRMMesWs/
-         pn+Pceasm6zgQ==
+        b=kfCZzOV/BNPyfmmev8lERFb8HVJxeVKlts9ZdlReU2u+djE5F0TPYQMTFNkc73tAx
+         lypC1B+PrpTDullSCk2CQEgnBtJTmUrVR03tP6+59h6WSDinVZ/RYk0frn0UQP+Hxq
+         GIzDQzh8uy5a5H6pPzS3PyGQHKcfYiSgHyVZks8iSyryDDWB32Qjq/6dEFFvb50bg2
+         Z0x/lTkYvTv4ZzNCz6tK3lxQ1vW6BJZJMcrFvAjILR019qHwZ3nXWa/6KDuSdY+Xto
+         tOkMZ05EGyNUNU1Z2lKVg3wCCKSnLJkMr8MHTqE8XsiyIubQmUGDDHeRoVCn/9KzFE
+         6WXAK3Wfi8Pfw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HDf2K40zfz9sW4;
-        Wed, 22 Sep 2021 10:15:21 +1000 (AEST)
-Date:   Wed, 22 Sep 2021 10:15:20 +1000
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HDfjW4Rr6z9sW4;
+        Wed, 22 Sep 2021 10:45:51 +1000 (AEST)
+Date:   Wed, 22 Sep 2021 10:45:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20210922101520.14de5b4f@canb.auug.org.au>
-In-Reply-To: <YUprWiZNgPt2YEUl@ripper>
-References: <20210921082438.26550938@canb.auug.org.au>
-        <20210922090235.2a626af6@canb.auug.org.au>
-        <YUprWiZNgPt2YEUl@ripper>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        ville.syrjala@linux.intel.com, manasi.d.navare@intel.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        linux-next@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH v3 03/13] drm/dp: add LTTPR DP 2.0 DPCD
+ addresses
+Message-ID: <20210922104550.744a96ca@canb.auug.org.au>
+In-Reply-To: <YUpjj7IwBqMYSR7z@archlinux-ax161>
+References: <cover.1631191763.git.jani.nikula@intel.com>
+        <def17e2329722f22c35807be26b35590ccb93bfd.1631191763.git.jani.nikula@intel.com>
+        <YUpjj7IwBqMYSR7z@archlinux-ax161>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HhwUSNoUM27L3rO=9j0Gh1g";
+Content-Type: multipart/signed; boundary="Sig_/+_2Du7kYJPSA8cCB7WSmVyA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/HhwUSNoUM27L3rO=9j0Gh1g
+--Sig_/+_2Du7kYJPSA8cCB7WSmVyA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Bjorn,
+Hi Nathan,
 
-On Tue, 21 Sep 2021 16:31:38 -0700 Bjorn Andersson <bjorn.andersson@linaro.=
-org> wrote:
+On Tue, 21 Sep 2021 15:58:23 -0700 Nathan Chancellor <nathan@kernel.org> wr=
+ote:
 >
-> I should have double checked this before pushing out the rebased branch,
-> but it looks okay to me (and checkpatch) now.
+> On Thu, Sep 09, 2021 at 03:51:55PM +0300, Jani Nikula wrote:
+> > DP 2.0 brings some new DPCD addresses for PHY repeaters.
+> >=20
+> > Cc: dri-devel@lists.freedesktop.org
+> > Reviewed-by: Manasi Navare <manasi.d.navare@intel.com>
+> > Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+> > ---
+> >  include/drm/drm_dp_helper.h | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+> > index 1d5b3dbb6e56..f3a61341011d 100644
+> > --- a/include/drm/drm_dp_helper.h
+> > +++ b/include/drm/drm_dp_helper.h
+> > @@ -1319,6 +1319,10 @@ struct drm_panel;
+> >  #define DP_MAX_LANE_COUNT_PHY_REPEATER			    0xf0004 /* 1.4a */
+> >  #define DP_Repeater_FEC_CAPABILITY			    0xf0004 /* 1.4 */
+> >  #define DP_PHY_REPEATER_EXTENDED_WAIT_TIMEOUT		    0xf0005 /* 1.4a */
+> > +#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER	    0xf0006 /* 2.0 */
+> > +# define DP_PHY_REPEATER_128B132B_SUPPORTED		    (1 << 0)
+> > +/* See DP_128B132B_SUPPORTED_LINK_RATES for values */
+> > +#define DP_PHY_REPEATER_128B132B_RATES			    0xf0007 /* 2.0 */
+> > =20
+> >  enum drm_dp_phy {
+> >  	DP_PHY_DPRX,
+> > --=20
+> > 2.30.2
+> >=20
+> >  =20
+>=20
+> This patch causes a build failure in -next when combined with the AMD
+> tree:
+>=20
+> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c:33:
+> In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:70:
+> In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu_mode.=
+h:36:
+> ./include/drm/drm_dp_helper.h:1322:9: error: 'DP_MAIN_LINK_CHANNEL_CODING=
+_PHY_REPEATER' macro redefined [-Werror,-Wmacro-redefined]
+> #define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER            0xf0006 /* 2.=
+0 */
+>         ^
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dp_types.h:881:9: note: pre=
+vious definition is here
+> #define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER        0xF0006
+>         ^
+> 1 error generated.
+>=20
+> Perhaps something like this should be applied during the merge of the
+> second tree or maybe this patch should be in a branch that could be
+> shared between the Intel and AMD trees so that this diff could be
+> applied to the AMD tree directly? Not sure what the standard procedure
+> for this is.
+>=20
+> Cheers,
+> Nathan
+>=20
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/g=
+pu/drm/amd/display/dc/core/dc_link_dp.c
+> index 234dfbea926a..279863b5c650 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> @@ -4590,7 +4590,7 @@ bool dp_retrieve_lttpr_cap(struct dc_link *link)
+>  								DP_LT_TUNABLE_PHY_REPEATER_FIELD_DATA_STRUCTURE_REV];
+> =20
+>  		link->dpcd_caps.lttpr_caps.supported_128b_132b_rates.raw =3D
+> -				lttpr_dpcd_data[DP_PHY_REPEATER_128b_132b_RATES -
+> +				lttpr_dpcd_data[DP_PHY_REPEATER_128B132B_RATES -
+>  								DP_LT_TUNABLE_PHY_REPEATER_FIELD_DATA_STRUCTURE_REV];
+>  #endif
+> =20
+> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h b/drivers/gpu/d=
+rm/amd/display/dc/dc_dp_types.h
+> index a5e798b5da79..8caf9af5ffa2 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
+> +++ b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
+> @@ -878,8 +878,6 @@ struct psr_caps {
+>  # define DP_DSC_DECODER_COUNT_MASK			(0b111 << 5)
+>  # define DP_DSC_DECODER_COUNT_SHIFT			5
+>  #define DP_MAIN_LINK_CHANNEL_CODING_SET			0x108
+> -#define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER	0xF0006
+> -#define DP_PHY_REPEATER_128b_132b_RATES			0xF0007
+>  #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1	0xF0022
+>  #define DP_INTRA_HOP_AUX_REPLY_INDICATION		(1 << 3)
+>  /* TODO - Use DRM header to replace above once available */
 
-Thanks.
+Thanks for the heads up.  I have applied the above as a merge fix patch
+until something else happens.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/HhwUSNoUM27L3rO=9j0Gh1g
+--Sig_/+_2Du7kYJPSA8cCB7WSmVyA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFKdZgACgkQAVBC80lX
-0GwIugf9EWAi+4vxuT9wHF6zRJ41spMajq7W8Or80KCEgK6FHVFt/pjPCJFnVIku
-jboCApK/ELaEnyLf/XuFSDYBzgkLuIkZ6LhEsoJnz5TL8ueaS2SaeuBolR+Bgpej
-mm/6vnG4OKG0qSNARtJTjFhR3I+QrJzPAkJ8WZBy05Sy7eWiNxPdUPd386IrTuLA
-WRKQ4l8qhFHNphJw+sIwqYFDwR6PD2LVBRAFUmosxwqiZeSAJ7yoWaGiwQfY3nrI
-qAZ5QFFVwHi04pzffx3qRLonJZKuDFrXCsHkeVZb7OUGd/d++GAzs6sPtm+ri/BX
-yYpq8sEkUYzoDYV1X6vOXQMavE+QJg==
-=sOyk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFKfL4ACgkQAVBC80lX
+0Gz2Awf/Q8TFzd9c5tHgftmNV0J36OaxF54OWCngyKdEb1OcK2nrFhQY0pxgaFSx
+/pY+fppfi66VxX9b33/SUZo0jxGgSV/UfOXzp/qOr+WZCBUo3ywqtpTPWn9dx4LO
+yv2C7sp93Mc8xNhjE3bwMZpTqyqQoTLTPQ/ogiQzGV5be8EE5AIyaFeSFblT71L4
+Ah9pS5xQ0eI21anOoi3t4ifqmehhIeu/DP/LjyZE4Q4/jWHwI4pBdn+KccagS/2c
+qlml6fQFcEF2kPIYrFssdz1+2/KGwBmFJXED7J2Xac3XnkexcCSyn/XF/OHoqLmc
+OL4U7Ry7cZvqmwbfao4tCu+dTF/kNQ==
+=+5Xi
 -----END PGP SIGNATURE-----
 
---Sig_/HhwUSNoUM27L3rO=9j0Gh1g--
+--Sig_/+_2Du7kYJPSA8cCB7WSmVyA--

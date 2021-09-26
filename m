@@ -2,48 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C81418B3D
-	for <lists+linux-next@lfdr.de>; Sun, 26 Sep 2021 23:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2B3418B42
+	for <lists+linux-next@lfdr.de>; Sun, 26 Sep 2021 23:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbhIZVae (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 26 Sep 2021 17:30:34 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:52279 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbhIZVad (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Sep 2021 17:30:33 -0400
-X-Greylist: delayed 2372 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Sep 2021 17:30:33 EDT
+        id S230183AbhIZViz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 26 Sep 2021 17:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhIZViz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 26 Sep 2021 17:38:55 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A39C061570;
+        Sun, 26 Sep 2021 14:37:18 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HHf5z1L1Lz4xbL;
-        Mon, 27 Sep 2021 07:28:55 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HHfHb6Rk6z4xZx;
+        Mon, 27 Sep 2021 07:37:15 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1632691735;
-        bh=+XN1ww0mHHW1+JZBjV/8qXo3Inu+Yv/12u2egqNhMHQ=;
+        s=201702; t=1632692237;
+        bh=n9YlnZFBhU2JLojFhUOraML2j9kRQQ0QlKAVMx4YlVA=;
         h=Date:From:To:Cc:Subject:From;
-        b=eUgpL0ALqwFbR6RiXqIxT7AkGqfpkBOftyQlX3TW6T0s0buHUsHM+dlluqEWmQgjn
-         7U0xRg7Zc6F0w32QAaV87xHgoKlfZsQXBO0F59Dx42+MNBPO0ZCBTDjlHWY96XB8SD
-         MhdY1AvLUiLKNtXPaJoU+TlOZLCU9un68sV9nZYFnv9Q79jK1UfH4v91eU3iOSjKgh
-         FdX5AXtJJcHoWTPG6B4d5gj1+Sff2La9+BSFosAVO52ffA8ITvMtxlExYkTQgWtuU+
-         cWG/ughq7kG97FS8zRfxnWApshQiHQRNMvLxKCqb3/0d0BFApx4SmHwAP/QnINYp8W
-         dyxfKObE7qXBA==
-Date:   Mon, 27 Sep 2021 07:28:54 +1000
+        b=phAEsfDshGwmHWmruTXnjwLlqGT37wiCLZX7TQ6YJ+GPYJDFS7KANuQsqcwdMNdWe
+         EgowF7Ah27agPLxajmnmrbfski18bV1YvfMn/tO4JieJoFiWFC7DKxkc9HZDMo2emc
+         rML4vdi0UD7HNJNaRa1V6aHcZdYiyxJumtj2I8osXVWXzoJX1zsKCFb7CRd6UrfmAA
+         17whGLLxe9OD+N2MspP4jpcK69lpZ0LSn9eoW6UYfY5mWli1H/8WZPxAnStKNyMyz1
+         RnzjvBfc8kolMkBYCcwX8+NNKLzrhvjY+XED85cqO9VDJmsgC/X3GLBoGg4XXgYXwQ
+         MmuFNu2Z8l51g==
+Date:   Mon, 27 Sep 2021 07:37:14 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Peter Gonda <pgonda@google.com>,
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvm-fixes tree
-Message-ID: <20210927072854.6bf14f5c@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the net-next tree
+Message-ID: <20210927073714.593e9fe0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FS=lTeigZaKhWPq37.Bn1xi";
+Content-Type: multipart/signed; boundary="Sig_/1bZHdKK=hGo/SSXMzf8+PTm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/FS=lTeigZaKhWPq37.Bn1xi
+--Sig_/1bZHdKK=hGo/SSXMzf8+PTm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,54 +54,42 @@ Hi all,
 
 In commit
 
-  5b92b6ca92b6 ("KVM: SEV: Allow some commands for mirror VM")
+  acde891c243c ("rxrpc: Fix _usecs_to_jiffies() by using usecs_to_jiffies()=
+")
 
 Fixes tag
 
-  Fixes: 54526d1fd593 ("KVM: x86: Support KVM VMs sharing SEV context", 202=
-1-04-21)
+  Fixes: c410bf01933e ("Fix the excessive initial retransmission timeout")
 
 has these problem(s):
 
-  - Subject has leading but no trailing quotes
+  - Subject does not match target commit subject
     Just use
 	git log -1 --format=3D'Fixes: %h ("%s")'
 
-In commit
+So
 
-  f43c887cb7cb ("KVM: SEV: Update svm_vm_copy_asid_from for SEV-ES")
-
-Fixes tag
-
-  Fixes: 54526d1fd593 ("KVM: x86: Support KVM VMs sharing SEV context", 202=
-1-04-21)
-
-has these problem(s):
-
-  - Subject has leading but no trailing quotes
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
-Do not include the date part in a fixes tag.  It adds nothing.
+Fixes: c410bf01933e ("rxrpc: Fix the excessive initial retransmission timeo=
+ut")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/FS=lTeigZaKhWPq37.Bn1xi
+--Sig_/1bZHdKK=hGo/SSXMzf8+PTm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFQ5hYACgkQAVBC80lX
-0GzS7gf/bRsGUjI1PGPog1L0jDga+zpmeWVZYOn3z9zgZSDLqD5Z1M9KcmZz42gR
-5zx5lfjutnbf2PPX7RfTlUrXBPEexQXYSJvMqXVx6HGI7yXmy5InU4fu9IWefnuJ
-z2JMsdbhy/ffgRt1GNSg5edkfzx1bcbd/F+M65hjxPon1FN3ivDBQn7evea9e/lI
-9DXKBBnkRlm3QdtQca35wvPHJJDIQtEuy5uAts7o6HFV7BF/PJ2Fd1h+OdGwXERx
-x4WNw1xMqAEYKa6DwrlurmoeH2xkDDsEgwRXwXcUVOt6+TjoX2z9Ky7kH0gEJ0mO
-YLtsgy7RT3/m1RkH2NB+JnKJJ1XpaA==
-=ggg+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFQ6AoACgkQAVBC80lX
+0GywxQgAiBWga4pO2yZZJc6oUxsx2AVDX1tJ1LnSK6QeuVFgTnJxWdT/hnxqZElB
+36qU4PRnbIDsdgkS1xB00UJ2LiM7nduRkTjlSMjJ06x+cA6NrR7kFeN7AIlHnI2p
+De0JkWwz7joMB9Qq6cn1xYvyUdWEja17fMySYqOr/qKZZO0yX11vPRGElsC2j3Sm
+vF6etGBfzTAvzVbHrnf7x/Ib6Xp0ZmYUunaiE/oiIkLBR9CAAZWHH9f7BhjbHrJG
+Ic41T8wjz/TN1qwoLA19s51vO6A9p18H8Kx2kgr3W/ez1AKWbXYUC8cwpNqgdNAj
+1mVCjCdIYNRi8qr36/i7rg50cLvN0g==
+=U0Lu
 -----END PGP SIGNATURE-----
 
---Sig_/FS=lTeigZaKhWPq37.Bn1xi--
+--Sig_/1bZHdKK=hGo/SSXMzf8+PTm--

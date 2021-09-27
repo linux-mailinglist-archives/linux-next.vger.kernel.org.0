@@ -2,116 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D65419460
-	for <lists+linux-next@lfdr.de>; Mon, 27 Sep 2021 14:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4309419691
+	for <lists+linux-next@lfdr.de>; Mon, 27 Sep 2021 16:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbhI0MjB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Sep 2021 08:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S234783AbhI0OoS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Sep 2021 10:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234239AbhI0MjA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Sep 2021 08:39:00 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E511FC061575
-        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 05:37:22 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 136-20020a1c048e000000b0030d05169e9bso417890wme.4
-        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 05:37:22 -0700 (PDT)
+        with ESMTP id S234706AbhI0OoS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Sep 2021 10:44:18 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCFC061575
+        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:40 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id b12so7722512ilf.11
+        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google;
-        h=reply-to:subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=guXnrK7D0JoZ+FNV6YGF0sMrXPKV49xy8opMucdOIKs=;
-        b=eK8z1ArT1Sm2lu01amNzyfif1NmqSWHC9f8TrecrT704YY7Wa2vHiT0oAMn0B6jZ/H
-         88u5+LZUIP194tuwCXMQW59GrF9Ivgq/LV92EsEdOj2A0b36Q9/CEkf74ZWoiaIAcGV1
-         EQShRTstqREB4Q54i4+Be/OXiZRiVUxXTqK08bmkWbYIIgBUTtbaXeSASMNpxkZuw3O8
-         Gys/o1SYQCy+a/vNPGSYRiIj8UPMLDl52HBNByZVRd0iCRhMkf/7tuVvgikT679aQxj/
-         w2NxBWWweEWuCGb/xIArkLDuX56cmu8jOAxgqdbNmi1ZBBFKOGhkWCuNoWvBrgYVtOBX
-         Y1mw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qvtZBZ+cLSMTupAyX2ZKGNNGtfrOCy1D4m7ug1Iv9X0=;
+        b=FoMhf7fbYbBHrVsX94BuI5a4xIeWR401smJ1jgv4AMdBDP7eETvTkECdzoAIfy84gR
+         uEtEaHGmIkJ50ww2IBTfO31HvsgASAV5T9/IBhedUO+md2ElfKEb1ht1YMOyJs+b+O6z
+         nw44azCCLeZ8Xsm5V4J0cx4XySUVHvNNX+zPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=guXnrK7D0JoZ+FNV6YGF0sMrXPKV49xy8opMucdOIKs=;
-        b=biIx14BzaJ11uH//SCz2HTrf60YVwnRsVNmlCkGd0yQqSlQJZt3V2yQ2MlJIC0ZCCv
-         hO/JmwcYhKmUHGMAsjEfYuadnyVQVhMHUzJql+PF+j2bmfZ6YkdEns0winExIpStK7Xe
-         IL/Z+85rNCUTjO+bWdVvtYE3h8eicyONaVPKNukNvqd3nzT1kpkmgyppaXalTXbLy5cr
-         MDSm3QpyCK+Qukv4vlQFf+GXVS1Eg/3gK/BImfyHc9D5r9QduxURUL2xNMvkLcnjDMXT
-         zTxYfV1GYnWNY+elI3vY1mtNRmsO5lhCZGsUsK79A4+3u4M6hpKCDvZze/MHud9oFgzB
-         f69A==
-X-Gm-Message-State: AOAM530Ooz6vpTPvt8sjMzinAZdNuifSDLdDUqjBf69URSU/X0s61oPM
-        FLxAs5eJNI3Andk3xanx+OZArLbmFmDidw==
-X-Google-Smtp-Source: ABdhPJxMueQL0W0LtlYQkIb4CN8jZ2/EubCdI9/bVyfdJSTtSblg6X9BZhAjviUcxDV4ooulircWAA==
-X-Received: by 2002:a05:600c:2e46:: with SMTP id q6mr15486473wmf.182.1632746241462;
-        Mon, 27 Sep 2021 05:37:21 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:410:bb00:d99f:4811:e8ed:bd3c? ([2a01:e0a:410:bb00:d99f:4811:e8ed:bd3c])
-        by smtp.gmail.com with ESMTPSA id j21sm17507341wmj.40.2021.09.27.05.37.20
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qvtZBZ+cLSMTupAyX2ZKGNNGtfrOCy1D4m7ug1Iv9X0=;
+        b=HZ/wY5jbmLquG8/T0gEABr1lXej/E7/yMXQFa7pqkF+fNXP2czFjRR4l4hwQNITj54
+         U+EseiX9YR3R3trl/NQu+0IuF/Dzr1wdz+kRbl7ho4bUOKc/YkHfvvwyG5H23UFdZ7g5
+         dp5NboGyJN0SA5hs2Xjg0tOGl1o562KV+kv602lRheLZcqLNTjskLSeHXxOeBcKIXExI
+         +ywC+nsh1+Xg+WoBUfYzT2Dv96k4q/3LmDmgmHKnhvPEePqa9Kud3RnxukYsP9eLH9KL
+         We0XByi3CgKGbFfLUJ0NK1OZq/Z0hanaObNp1uIdZLcejwQ1451KWK3gU4C1wrvaUpNQ
+         9Iwg==
+X-Gm-Message-State: AOAM533rTxvpj4lYbcjZHIyfLGHxCD8gMQnwXS8gzhkE+/x02WdMDPOG
+        sxwky0rZEjtlgUbZfaH3pLUSJ3OCAfFrdA==
+X-Google-Smtp-Source: ABdhPJzoal0WENaVlUnlYShDMyM9/Xuoh4vEsUrgJMC8M5JBzVlo/dNDELK6YsKLEVB5XoGNVkvHSA==
+X-Received: by 2002:a92:c247:: with SMTP id k7mr308814ilo.258.1632753759553;
+        Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
+        by smtp.gmail.com with ESMTPSA id h5sm9100939ioz.31.2021.09.27.07.42.39
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 05:37:21 -0700 (PDT)
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: linux-next: Fixes tag needs some work in the ipsec tree
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id n71so23174028iod.0
+        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
+X-Received: by 2002:a6b:f915:: with SMTP id j21mr81319iog.98.1632753758718;
+ Mon, 27 Sep 2021 07:42:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210927154422.605920fd@canb.auug.org.au>
+In-Reply-To: <20210927154422.605920fd@canb.auug.org.au>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 27 Sep 2021 07:42:26 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VrkmTDA-zLFW=1f1RAAVB_P=kJDQtAx+tng6+ZkhkCSA@mail.gmail.com>
+Message-ID: <CAD=FV=VrkmTDA-zLFW=1f1RAAVB_P=kJDQtAx+tng6+ZkhkCSA@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210927064921.06973f44@canb.auug.org.au>
- <a3680eb9-44d0-efe9-7037-9799a66786f7@6wind.com>
- <20210927111833.GH1407957@gauss3.secunet.de>
-From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Organization: 6WIND
-Message-ID: <d263cbeb-0a39-5fb3-ca4a-9dedfef24611@6wind.com>
-Date:   Mon, 27 Sep 2021 14:37:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20210927111833.GH1407957@gauss3.secunet.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Le 27/09/2021 à 13:18, Steffen Klassert a écrit :
-> On Mon, Sep 27, 2021 at 09:55:07AM +0200, Nicolas Dichtel wrote:
->> Hi Stephen,
->>
->> Le 26/09/2021 à 22:49, Stephen Rothwell a écrit :
->>> Hi all,
->>>
->>> In commit
->>>
->>>   93ec1320b017 ("xfrm: fix rcu lock in xfrm_notify_userpolicy()")
->>>
->>> Fixes tag
->>>
->>>   Fixes: 703b94b93c19 ("xfrm: notify default policy on update")
->>>
->>> has these problem(s):
->>>
->>>   - Target SHA1 does not exist
->>>
->>> Maybe you meant
->>>
->>> Fixes: 88d0adb5f13b ("xfrm: notify default policy on update")
->>>
->> In fact, the sha1 comes from the ipsec tree, which is regularly rebased.
-> 
-> The testing branch of the ipsec tree might be rebased if I have
-> a bad commit there. The master branch of the ipsec tree will not
-> be rebased, as this branch is publicly used.
-> 
->> The original patch is only in this tree for now.
->> Steffen, maybe this fix could be squashed with the original commit?
-> 
-> As said, I never rebased the master branch so far and would only do
-> so in case of emergency.
-> 
-Ok, thanks for the clarification and sorry for this wrong sha1, which probably
-comes from my tree.
+Hi,
 
+On Sun, Sep 26, 2021 at 10:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the drm-misc tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>
+> include/drm/drm_edid.h:530: warning: Function parameter or member 'vend_chr_1' not described in 'drm_edid_encode_panel_id'
+> include/drm/drm_edid.h:530: warning: Excess function parameter 'vend_chr_3' description in 'drm_edid_encode_panel_id'
+>
+>
+> Introduced by commit
+>
+>   7d1be0a09fa6 ("drm/edid: Fix EDID quirk compile error on older compilers")
 
+Thanks for the report! Fix posted.
 
-Regards,
-Nicolas
+https://lore.kernel.org/r/20210927074104.1.Ibf22f2a0b75287a5d636c0570c11498648bf61c6@changeid

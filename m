@@ -2,89 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4309419691
-	for <lists+linux-next@lfdr.de>; Mon, 27 Sep 2021 16:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB7141A169
+	for <lists+linux-next@lfdr.de>; Mon, 27 Sep 2021 23:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbhI0OoS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Sep 2021 10:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S237358AbhI0VhC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Sep 2021 17:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234706AbhI0OoS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Sep 2021 10:44:18 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCFC061575
-        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:40 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id b12so7722512ilf.11
-        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qvtZBZ+cLSMTupAyX2ZKGNNGtfrOCy1D4m7ug1Iv9X0=;
-        b=FoMhf7fbYbBHrVsX94BuI5a4xIeWR401smJ1jgv4AMdBDP7eETvTkECdzoAIfy84gR
-         uEtEaHGmIkJ50ww2IBTfO31HvsgASAV5T9/IBhedUO+md2ElfKEb1ht1YMOyJs+b+O6z
-         nw44azCCLeZ8Xsm5V4J0cx4XySUVHvNNX+zPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qvtZBZ+cLSMTupAyX2ZKGNNGtfrOCy1D4m7ug1Iv9X0=;
-        b=HZ/wY5jbmLquG8/T0gEABr1lXej/E7/yMXQFa7pqkF+fNXP2czFjRR4l4hwQNITj54
-         U+EseiX9YR3R3trl/NQu+0IuF/Dzr1wdz+kRbl7ho4bUOKc/YkHfvvwyG5H23UFdZ7g5
-         dp5NboGyJN0SA5hs2Xjg0tOGl1o562KV+kv602lRheLZcqLNTjskLSeHXxOeBcKIXExI
-         +ywC+nsh1+Xg+WoBUfYzT2Dv96k4q/3LmDmgmHKnhvPEePqa9Kud3RnxukYsP9eLH9KL
-         We0XByi3CgKGbFfLUJ0NK1OZq/Z0hanaObNp1uIdZLcejwQ1451KWK3gU4C1wrvaUpNQ
-         9Iwg==
-X-Gm-Message-State: AOAM533rTxvpj4lYbcjZHIyfLGHxCD8gMQnwXS8gzhkE+/x02WdMDPOG
-        sxwky0rZEjtlgUbZfaH3pLUSJ3OCAfFrdA==
-X-Google-Smtp-Source: ABdhPJzoal0WENaVlUnlYShDMyM9/Xuoh4vEsUrgJMC8M5JBzVlo/dNDELK6YsKLEVB5XoGNVkvHSA==
-X-Received: by 2002:a92:c247:: with SMTP id k7mr308814ilo.258.1632753759553;
-        Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
-        by smtp.gmail.com with ESMTPSA id h5sm9100939ioz.31.2021.09.27.07.42.39
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id n71so23174028iod.0
-        for <linux-next@vger.kernel.org>; Mon, 27 Sep 2021 07:42:39 -0700 (PDT)
-X-Received: by 2002:a6b:f915:: with SMTP id j21mr81319iog.98.1632753758718;
- Mon, 27 Sep 2021 07:42:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210927154422.605920fd@canb.auug.org.au>
-In-Reply-To: <20210927154422.605920fd@canb.auug.org.au>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 27 Sep 2021 07:42:26 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VrkmTDA-zLFW=1f1RAAVB_P=kJDQtAx+tng6+ZkhkCSA@mail.gmail.com>
-Message-ID: <CAD=FV=VrkmTDA-zLFW=1f1RAAVB_P=kJDQtAx+tng6+ZkhkCSA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        with ESMTP id S237381AbhI0VhB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Sep 2021 17:37:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529D8C061575;
+        Mon, 27 Sep 2021 14:35:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HJGBx1tvzz4xVP;
+        Tue, 28 Sep 2021 07:35:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1632778521;
+        bh=ldpYx0cQdcPSDO4hGkNCyKF3aAUshCs7gIrXokMxBPM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=myXCiCb2OuHGDkuiMss9w1D7ckuBJdWmiOX3eqQZq4w7kNa9ota+jkFkWnB2uOTt5
+         teGfQRgLAUS7gPjZa3xZLS9UUK1ypJEcrBdUGZmwgR2izcCDYY34xHqq3GGJTGTlyZ
+         lWCGinhixq9tZwAsgxlzEQyoFkiH6nto8R0lnjpU5tmNW3z925+5pM7gfG0w7Lk2b4
+         GMHy8L2OyYMmYrYV7stbYNXXXjCsw2pwHP7unFDp0uZ4r4qZ+wzZ9vlAA2jIC4lPns
+         jeCTbpOO9iuhDKFY1Z/psocFmLl05j0ALQhr6SMbzjJxfWtIvGV5L1jckdGg7SyLtC
+         79bh3Xvxt6HQw==
+Date:   Tue, 28 Sep 2021 07:35:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: Fixes tag needs some work in the perf-current tree
+Message-ID: <20210928073519.34ec0811@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/6zcrSIpQc3Fl8vryzKBOQcU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/6zcrSIpQc3Fl8vryzKBOQcU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 26, 2021 at 10:44 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the drm-misc tree, today's linux-next build (htmldocs)
-> produced these warnings:
->
-> include/drm/drm_edid.h:530: warning: Function parameter or member 'vend_chr_1' not described in 'drm_edid_encode_panel_id'
-> include/drm/drm_edid.h:530: warning: Excess function parameter 'vend_chr_3' description in 'drm_edid_encode_panel_id'
->
->
-> Introduced by commit
->
->   7d1be0a09fa6 ("drm/edid: Fix EDID quirk compile error on older compilers")
+Hi all,
 
-Thanks for the report! Fix posted.
+In commit
 
-https://lore.kernel.org/r/20210927074104.1.Ibf22f2a0b75287a5d636c0570c11498648bf61c6@changeid
+  5c34aea341b1 ("perf test: Fix DWARF unwind for optimized builds.")
+
+Fixes tag
+
+  Fixes: 9ae1e990f1ab ("perf tools: Remove broken __no_tail_call
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more then one line.  Also keep all
+the commit message tags together at the end fo the commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6zcrSIpQc3Fl8vryzKBOQcU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFSORcACgkQAVBC80lX
+0GyAqAf8C9PqjTejRHOi482WNG9Qj1iiPaVd6i8mEMzIZydUU16SRIKx6zuWCfFR
+dA4QpYMId1kAYH48gD/1stfTZOZzjh6tKMj189lSYo8L7syyxCzcq44WY/RE94qp
+X1Q4IDsB1vnF/L0SAbxwhjIuHE7u2XbxRdN7lnsmn8UVFnFRUqGGaKSLFg/SJFda
+zUMCQMYj+yt97VeUasM1YvQsqZHoBU0KvnbyPbQSvY2bl38WcuPSGJWDruKAjRcW
+P5l8ykwQ+OOmf6xpGgbraHxcobtZVFtC+rHezp4c5uqgTc0B49hHAalEH9kJIyg8
+/jTAdIsFKorJ7qjnUKBrFU1fHGvEnw==
+=hPeu
+-----END PGP SIGNATURE-----
+
+--Sig_/6zcrSIpQc3Fl8vryzKBOQcU--

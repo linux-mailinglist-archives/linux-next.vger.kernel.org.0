@@ -2,233 +2,205 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9D141B86A
-	for <lists+linux-next@lfdr.de>; Tue, 28 Sep 2021 22:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A2D41BB14
+	for <lists+linux-next@lfdr.de>; Wed, 29 Sep 2021 01:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242443AbhI1UkD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Sep 2021 16:40:03 -0400
-Received: from mail-bn7nam10on2056.outbound.protection.outlook.com ([40.107.92.56]:4094
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242016AbhI1UkC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Sep 2021 16:40:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J0rCvirL3rFs+xQhuPKer9EZsGlBnYyvR7hrykQC9Dt+tjHaWJi3FkerZv3ZP1EXGM8YM5MJ9X9gtJ8KqXJ6ekH3URam+7t08YTvi5aCNtMFkMAJ9F1MstuVHdXcJ9PzZ+IO+eapEzadKtw4kAZX0/ytXRNgH4wC5C1oElyA4EhF929/wAbP9me4VTqVLGoUI6LOJzgLKQuUZFeRlNRgKGpGUyrW+6u31ZSwqA1N5aX1naz1m2pTeY3FHqXYEr2IwGW74VWFtzLHlESL5hkYEcvveT8PP6yHotev8NZLiMghDUn1Ji+5C5faee5pvyRp8ez0fsNAEfzTfKpR+bDdUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=cEmjsHrxsXKlST15sl6o6mQ6LmEjStamEd8Jm01C8VY=;
- b=H4JnFnf4ROPjZGbRlJb+a2MdCtxp7NCRMgymlNrN06L08x+CGGGMaM8+GFnc05oQ7Sob0LyoWIvcDeB2RXgLJ5kteyNKwTWevAv87uLlNVe6dCCscsFo+rPyphrUBidN1VAw2HKBqcBVIB7ijK6DT8VVfnb5X8nHghiKV+YPhoybZbaysn+t5TZ7H7dm253ilNerOcR2GT1QU684EWZePww2xnC01LhLzDjG0kviqER78Wyw40Sqvemr3C5mdFzWIyAggpnYXarvxbI1FWUG6aoRIf8+phRFJxR5jy4FJW9CJMacg7zlR7Bw61x/GcEBJutbqLM0Uj/uumxETzKhag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cEmjsHrxsXKlST15sl6o6mQ6LmEjStamEd8Jm01C8VY=;
- b=wk9tBcDEpK0YFDm94VAaLrzOXMzFoviL0Br2jO3Dd2Imw3GUugY9WR5hbOp3iyN0YYkglSQo8ykROTqyT4TQaw+o4Zsm0o1o8JmNJPyqxzVEjls/uTjebU8pk9XGTt9d48Q0wv6xQBrOL0hP3OQ9p9Orw2Dhav1v2xAA9czHFnU=
-Received: from BN9PR03CA0330.namprd03.prod.outlook.com (2603:10b6:408:112::35)
- by MW3PR12MB4473.namprd12.prod.outlook.com (2603:10b6:303:56::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Tue, 28 Sep
- 2021 20:38:19 +0000
-Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:112:cafe::7) by BN9PR03CA0330.outlook.office365.com
- (2603:10b6:408:112::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend
- Transport; Tue, 28 Sep 2021 20:38:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; lists.freedesktop.org; dkim=none (message not signed)
- header.d=none;lists.freedesktop.org; dmarc=pass action=none
- header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4544.13 via Frontend Transport; Tue, 28 Sep 2021 20:38:19 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Tue, 28 Sep
- 2021 15:38:18 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Tue, 28 Sep
- 2021 13:38:17 -0700
-Received: from hwentlanryzen.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2308.8 via Frontend
- Transport; Tue, 28 Sep 2021 15:38:02 -0500
-From:   Harry Wentland <harry.wentland@amd.com>
-To:     <alexander.deucher@amd.com>, <amd-gfx@lists.freedesktop.org>,
-        <jerry.zuo@amd.com>
-CC:     <jani.nikula@intel.com>, <Sunpeng.Li@amd.com>, <nathan@kernel.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <ville.syrjala@linux.intel.com>,
-        <manasi.d.navare@intel.com>, <christian.koenig@amd.com>,
-        <Xinhui.Pan@amd.com>, <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>, <airlied@gmail.com>,
-        <daniel.vetter@ffwll.ch>, Harry Wentland <harry.wentland@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>
-Subject: [PATCH v3] drm/amd/display: Only define DP 2.0 symbols if not already defined
-Date:   Tue, 28 Sep 2021 16:37:52 -0400
-Message-ID: <20210928203752.760237-1-harry.wentland@amd.com>
-X-Mailer: git-send-email 2.33.0
+        id S243329AbhI1Xjt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Sep 2021 19:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243305AbhI1Xjs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Sep 2021 19:39:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA02C06161C;
+        Tue, 28 Sep 2021 16:38:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HJwsz6TDsz4xbC;
+        Wed, 29 Sep 2021 09:37:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1632872283;
+        bh=+blpcqgptlCQwARDb2kSj0HjKChZQdAhPqfGPmFA81g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uxDccDNqss5gHUL3l/pIsQ7cWJyF1hF/lYhbPfBofF1QHRW8PD4hLkSbB0NLnslnL
+         wCaw8Ts1GDE4/tMJwUrc9VZf8mjB4HDO1l/4fZ3z4boTi1II4MSY19XTNMiPf0sVHB
+         OD8oSouzSEODkOU1QVHWvUfmimQuai9XRaUL+69SpK0gfZJmDke5xXoLCgyq69t5uG
+         eIpCjqrcGParoaSE4txHejN8YGUcbJYV/2qegU571pptVOs3WnTJBQNEGdchJ1WWc3
+         mwfGuE1ZzmwQz2zzGIqXtnseagx039sI0U+9ITCOwA6ytRj8pyTtjA2jq/3i7vVcPW
+         1PYGHJhpyMObw==
+Date:   Wed, 29 Sep 2021 09:37:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Gary Guo <gary@garyguo.net>, Richard Weinberger <richard@nod.at>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Fox Chen <foxhlchen@gmail.com>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Yuki Okushi <jtitor@2k36.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the rust tree
+Message-ID: <20210929093758.7af9e589@canb.auug.org.au>
+In-Reply-To: <20210928155247.5220932c@canb.auug.org.au>
+References: <20210928140932.41432dff@canb.auug.org.au>
+        <20210928051849.00000e99@garyguo.net>
+        <20210928155247.5220932c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0f54533d-4916-4082-9103-08d982bfe7fd
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4473:
-X-Microsoft-Antispam-PRVS: <MW3PR12MB4473820E8DDB2F154AEF43708CA89@MW3PR12MB4473.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rYVhcEFtNIeRztChsQHOp9lsRfMMy3lLWh5GHEownpzptFapTnyYWL2HDljX9Ec0PKKZRkbX8Ytf1g/BYlyPC42Wzy+QRNthe6IyzUHeoMJx5an/lWrJNwyLfQVFYcyO/UkE+y/NHPjNXd2nzU9f8YbEL8OUqoAP9IqPUmG/r0g8BUpgg5nTUUHtzBAURqTur0R+5d5O46mJNrDwXF2vtdgxajAIPH9CYe/0R+vXkV8X3wPihsXiv8saUVivRcVS08q4zPBeVf8uhNgqOUlali+1r7cx0bpx+Ds5quLbopXOLposoZ+rj4zmGHqs7ONz6jKgv/GQaVjukKYL+9xmJJFGNUL+3r/X8S4HrmPPNjj8hhx5UHWSbghmdM5AgmVUQhcEmWcsYQBnBD4fcetZ2bzh8ou8EBeefrY2Wt+WlynOXDQVuM70LF4UrSHJHpAh9QyrjdfAb/F54C6Hsvqu5uVnQK1BpyEfdDzNiKTs0OGhOX22UVFjn3xewfuYDvH1e0zpEoMVxsPLbYk7DzNC/99KwbnqiJEOLubpF6FH3B1kUJRLLhxZx1RJimKg3SYhh+7m7ObUmkApPst1i3p0lh7qruS1voTDt62KReVczgOBeofMYJFyB7wCiealOOXZPTIXh485BRL+qinv1Yj7Mg0TUVrvUlYiduPIkv7Di1+pECQQs8dhRUyqHMILxxu4OtiQ9c31gWd03Y6W96Ke9wmo/sM/q/SwgZ2sjm4jiD95LwbGgnC9K4jnaXmPlv9L
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(508600001)(426003)(6636002)(7416002)(110136005)(8676002)(86362001)(2616005)(26005)(356005)(54906003)(81166007)(2906002)(8936002)(6666004)(5660300002)(336012)(1076003)(82310400003)(7696005)(83380400001)(316002)(186003)(36756003)(44832011)(36860700001)(70206006)(4326008)(47076005)(70586007)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2021 20:38:19.1735
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f54533d-4916-4082-9103-08d982bfe7fd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4473
+Content-Type: multipart/signed; boundary="Sig_/XdP./qtXpds=TR1YoLzR=BC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Why]
-For some reason we're defining DP 2.0 definitions inside our
-driver. Now that patches to introduce relevant definitions
-are slated to be merged into drm-next this is causing conflicts.
+--Sig_/XdP./qtXpds=TR1YoLzR=BC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c:33:
-In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:70:
-In file included from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu_mode.h:36:
-./include/drm/drm_dp_helper.h:1322:9: error: 'DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER' macro redefined [-Werror,-Wmacro-redefined]
-        ^
-./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dp_types.h:881:9: note: previous definition is here
-        ^
-1 error generated.
+Hi All,
 
-[How]
-Guard all display driver defines with #ifndef for now. Once we pull
-in the new definitions into amd-staging-drm-next we will follow
-up and drop definitions from our driver and provide follow-up
-header updates for any addition DP 2.0 definitions required
-by our driver.
+On Tue, 28 Sep 2021 15:52:47 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Tue, 28 Sep 2021 05:18:49 +0100 Gary Guo <gary@garyguo.net> wrote:
+> >
+> > On Tue, 28 Sep 2021 14:09:32 +1000
+> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >  =20
+> > > Hi all,
+> > >=20
+> > > After merging the rust tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >=20
+> > > scripts/kconfig/confdata.c: In function 'rustc_cfg_print_symbol':
+> > > scripts/kconfig/confdata.c:669:9: warning: implicit declaration of
+> > > function 'sym_escape_string_value'; did you mean
+> > > 'sym_set_string_value'? [-Wimplicit-function-declaration] 669 |   str
+> > > =3D sym_escape_string_value(value); |         ^~~~~~~~~~~~~~~~~~~~~~~=
+ |
+> > >         sym_set_string_value scripts/kconfig/confdata.c:669:7:
+> > > warning: assignment to 'const char *' from 'int' makes pointer from
+> > > integer without a cast [-Wint-conversion] 669 |   str =3D
+> > > sym_escape_string_value(value); |       ^ /usr/bin/ld:
+> > > scripts/kconfig/confdata.o: in function `rustc_cfg_print_symbol':
+> > > confdata.c:(.text+0x738): undefined reference to
+> > > `sym_escape_string_value'
+> > >=20
+> > > Caused by commit
+> > >=20
+> > >   dc08d49444e9 ("Kbuild: add Rust support")
+> > >=20
+> > > interacting with commit
+> > >=20
+> > >   420a2bdbead2 ("kconfig: Refactor sym_escape_string_value")
+> > >=20
+> > > from the kbuild tree.
+> > >=20
+> > > I applied the following patch, but it doesn't seem quite right.   =20
+> >=20
+> > That's indeed incorrect, if we have `CONFIG_FOO=3Dbar` then sym here is
+> > `FOO` and value is `bar`. I think to resolve the conflict, 420a2bdbead2
+> > would have to be reverted. =20
+>=20
+> OK, I have done that for today.  (I needed to revert
+> 16f3610168218ed5e2eafa6978bb7f10c175c7a9 as well).
 
-We also ensure drm_dp_helper.h is included before dc_dp_types.h.
+Today, I have applied the following patch to the kbuild tree.
+Masahiro, would you consider adding this to the kbuild tree itself?  Or
+is there a betters solution for what the rust tree wants to do?
 
-v3: Ensure drm_dp_helper.h is included before dc_dp_types.h
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 29 Sep 2021 09:30:02 +1000
+Subject: [PATCH] kconfig: restore sym_escape_string_value()
 
-v2: Add one missing endif
+This function will be used by the rust tree.
 
-Signed-off-by: Harry Wentland <harry.wentland@amd.com>
-Reviewed-by: Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Gary Guo <gary@garyguo.net>
+Cc: Richard Weinberger <richard@nod.at>
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/gpu/drm/amd/display/dc/dc_dp_types.h | 54 ++++++++++++++++++--
- drivers/gpu/drm/amd/display/dc/os_types.h    |  1 +
- 2 files changed, 50 insertions(+), 5 deletions(-)
+ scripts/kconfig/lkc_proto.h |  1 +
+ scripts/kconfig/symbol.c    | 11 +++++++----
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-index a5e798b5da79..9de86ff5ef1b 100644
---- a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-@@ -860,28 +860,72 @@ struct psr_caps {
- };
- 
- #if defined(CONFIG_DRM_AMD_DC_DCN)
-+#ifndef DP_MAIN_LINK_CHANNEL_CODING_CAP
- #define DP_MAIN_LINK_CHANNEL_CODING_CAP			0x006
-+#endif
-+#ifndef DP_SINK_VIDEO_FALLBACK_FORMATS
- #define DP_SINK_VIDEO_FALLBACK_FORMATS			0x020
-+#endif
-+#ifndef DP_FEC_CAPABILITY_1
- #define DP_FEC_CAPABILITY_1				0x091
-+#endif
-+#ifndef DP_DFP_CAPABILITY_EXTENSION_SUPPORT
- #define DP_DFP_CAPABILITY_EXTENSION_SUPPORT		0x0A3
-+#endif
-+#ifndef DP_DSC_CONFIGURATION
- #define DP_DSC_CONFIGURATION				0x161
-+#endif
-+#ifndef DP_PHY_SQUARE_PATTERN
- #define DP_PHY_SQUARE_PATTERN				0x249
-+#endif
-+#ifndef DP_128b_132b_SUPPORTED_LINK_RATES
- #define DP_128b_132b_SUPPORTED_LINK_RATES		0x2215
-+#endif
-+#ifndef DP_128b_132b_TRAINING_AUX_RD_INTERVAL
- #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL		0x2216
-+#endif
-+#ifndef DP_TEST_264BIT_CUSTOM_PATTERN_7_0
- #define DP_TEST_264BIT_CUSTOM_PATTERN_7_0		0X2230
-+#endif
-+#ifndef DP_TEST_264BIT_CUSTOM_PATTERN_263_256
- #define DP_TEST_264BIT_CUSTOM_PATTERN_263_256		0X2250
-+#endif
-+#ifndef DP_DSC_SUPPORT_AND_DECODER_COUNT
- #define DP_DSC_SUPPORT_AND_DECODER_COUNT		0x2260
-+#endif
-+#ifndef DP_DSC_MAX_SLICE_COUNT_AND_AGGREGATION_0
- #define DP_DSC_MAX_SLICE_COUNT_AND_AGGREGATION_0	0x2270
--# define DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK	(1 << 0)
--# define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK	(0b111 << 1)
--# define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT	1
--# define DP_DSC_DECODER_COUNT_MASK			(0b111 << 5)
--# define DP_DSC_DECODER_COUNT_SHIFT			5
-+#endif
-+#ifndef DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK
-+#define DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK	(1 << 0)
-+#endif
-+#ifndef DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK
-+#define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK	(0b111 << 1)
-+#endif
-+#ifndef DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT
-+#define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT	1
-+#endif
-+#ifndef DP_DSC_DECODER_COUNT_MASK
-+#define DP_DSC_DECODER_COUNT_MASK			(0b111 << 5)
-+#endif
-+#ifndef DP_DSC_DECODER_COUNT_SHIFT
-+#define DP_DSC_DECODER_COUNT_SHIFT			5
-+#endif
-+#ifndef DP_MAIN_LINK_CHANNEL_CODING_SET
- #define DP_MAIN_LINK_CHANNEL_CODING_SET			0x108
-+#endif
-+#ifndef DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER
- #define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER	0xF0006
-+#endif
-+#ifndef DP_PHY_REPEATER_128b_132b_RATES
- #define DP_PHY_REPEATER_128b_132b_RATES			0xF0007
-+#endif
-+#ifndef DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1
- #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1	0xF0022
-+#endif
-+#ifndef DP_INTRA_HOP_AUX_REPLY_INDICATION
- #define DP_INTRA_HOP_AUX_REPLY_INDICATION		(1 << 3)
-+#endif
- /* TODO - Use DRM header to replace above once available */
- 
- union dp_main_line_channel_coding_cap {
-diff --git a/drivers/gpu/drm/amd/display/dc/os_types.h b/drivers/gpu/drm/amd/display/dc/os_types.h
-index f50cae252de4..34efb708ea12 100644
---- a/drivers/gpu/drm/amd/display/dc/os_types.h
-+++ b/drivers/gpu/drm/amd/display/dc/os_types.h
-@@ -35,6 +35,7 @@
- #include <asm/byteorder.h>
- 
- #include <drm/drm_print.h>
-+#include <drm/drm_dp_helper.h>
- 
- #include "cgs_common.h"
- 
--- 
+diff --git a/scripts/kconfig/lkc_proto.h b/scripts/kconfig/lkc_proto.h
+index 7ce4b666bba8..62e0ed773f41 100644
+--- a/scripts/kconfig/lkc_proto.h
++++ b/scripts/kconfig/lkc_proto.h
+@@ -18,6 +18,7 @@ extern struct symbol * symbol_hash[SYMBOL_HASHSIZE];
+=20
+ struct symbol * sym_lookup(const char *name, int flags);
+ struct symbol * sym_find(const char *name);
++char *sym_escape_string_value(const char *in);
+ char *sym_escape_string(struct symbol *sym);
+ struct symbol ** sym_re_search(const char *pattern);
+ const char * sym_type_name(enum symbol_type type);
+diff --git a/scripts/kconfig/symbol.c b/scripts/kconfig/symbol.c
+index 2dc251b0930e..ca115569d497 100644
+--- a/scripts/kconfig/symbol.c
++++ b/scripts/kconfig/symbol.c
+@@ -872,15 +872,13 @@ struct symbol *sym_find(const char *name)
+ }
+=20
+ /* The returned pointer must be freed on the caller side */
+-char *sym_escape_string(struct symbol *sym)
++char *sym_escape_string_value(const char *in)
+ {
+-	const char *in, *p;
++	const char *p;
+ 	size_t reslen;
+ 	char *res;
+ 	size_t l;
+=20
+-	in =3D sym_get_string_value(sym);
+-
+ 	reslen =3D strlen(in) + strlen("\"\"") + 1;
+=20
+ 	p =3D in;
+@@ -917,6 +915,11 @@ char *sym_escape_string(struct symbol *sym)
+ 	return res;
+ }
+=20
++char *sym_escape_string(struct symbol *sym)
++{
++	return sym_escape_string_value(sym_get_string_value(sym));
++}
++
+ struct sym_match {
+ 	struct symbol	*sym;
+ 	off_t		so, eo;
+--=20
 2.33.0
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XdP./qtXpds=TR1YoLzR=BC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFTp1YACgkQAVBC80lX
+0GwDlAf+OPV+4bjJPGVxq8aj445qnYWp4ztQCmImvAVZ2+CXFtDmYbUcrXn14xCo
+8RUMK4D/ibw+3X7C22fkBuZXNUaK6Qo8nkcha38+A771l4Xdn54xAe0V+UeT+h/z
+6A1R8xMBeeHWnsdxe9YdhWdtvaYw6Vv8I8nmylA1D/icP5WOJWw3sK91FAc5uxxd
+HVk9U9aOu+NKmT9yLxv+8G65mZd5DoA5EaYYtCMmBxqLR516r2GS8DMrPiI2NS64
+XszfnPKjIQsuc0ukyf5nU/0InVUACu3eTQCOBTliprhjBLTM1wRlDseJjBUnhUZd
+rjQ6evTny3DzeSokZAE0GpVdzjE4VQ==
+=eJV+
+-----END PGP SIGNATURE-----
+
+--Sig_/XdP./qtXpds=TR1YoLzR=BC--

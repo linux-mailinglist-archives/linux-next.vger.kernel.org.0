@@ -2,242 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FC741BDD0
-	for <lists+linux-next@lfdr.de>; Wed, 29 Sep 2021 05:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777DD41BE88
+	for <lists+linux-next@lfdr.de>; Wed, 29 Sep 2021 07:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243897AbhI2D75 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 28 Sep 2021 23:59:57 -0400
-Received: from mga18.intel.com ([134.134.136.126]:47865 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243226AbhI2D74 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Sep 2021 23:59:56 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="211939754"
-X-IronPort-AV: E=Sophos;i="5.85,331,1624345200"; 
-   d="scan'208";a="211939754"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2021 20:58:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,331,1624345200"; 
-   d="scan'208";a="707030719"
-Received: from irsmsx603.ger.corp.intel.com ([163.33.146.9])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Sep 2021 20:58:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- irsmsx603.ger.corp.intel.com (163.33.146.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Wed, 29 Sep 2021 04:58:11 +0100
-Received: from orsmsx610.amr.corp.intel.com ([10.22.229.23]) by
- ORSMSX610.amr.corp.intel.com ([10.22.229.23]) with mapi id 15.01.2242.012;
- Tue, 28 Sep 2021 20:58:10 -0700
-From:   "Navare, Manasi D" <manasi.d.navare@intel.com>
-To:     "Zuo, Jerry" <Jerry.Zuo@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-CC:     "Nikula, Jani" <jani.nikula@intel.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "ville.syrjala@linux.intel.com" <ville.syrjala@linux.intel.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>
-Subject: RE: [PATCH v2] drm/amd/display: Only define DP 2.0 symbols if not
- already defined
-Thread-Topic: [PATCH v2] drm/amd/display: Only define DP 2.0 symbols if not
- already defined
-Thread-Index: AQHXtIuAL0vs/jg+d0q0VwbXvyqk8Ku6LEQAgAA2mbA=
-Date:   Wed, 29 Sep 2021 03:58:10 +0000
-Message-ID: <2c69ff90750f40ecad3cd4053bc46497@intel.com>
-References: <20210928170828.26452-1-harry.wentland@amd.com>
- <DM6PR12MB49125AD4817D693AA3987B08E5A89@DM6PR12MB4912.namprd12.prod.outlook.com>
-In-Reply-To: <DM6PR12MB49125AD4817D693AA3987B08E5A89@DM6PR12MB4912.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-msip_labels: MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ActionId=6d37b753-7317-49e9-b10f-7dd42dee753a;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_ContentBits=0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Enabled=true;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Method=Standard;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_Name=AMD Official Use
- Only-AIP 2.0;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SetDate=2021-09-28T17:35:51Z;
- MSIP_Label_88914ebd-7e6c-4e12-a031-a9906be2db14_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S244098AbhI2FCg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Sep 2021 01:02:36 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60455 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242323AbhI2FCg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Sep 2021 01:02:36 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HK42Y2v0Fz4xbL;
+        Wed, 29 Sep 2021 15:00:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1632891654;
+        bh=ZoguTJOiokVLXr2BzauUrli1aK3kR+bDWHUeHBBcKzY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=C2QVvHJT1meZ6pMWDdyy8zvaKIa21/KJgdPFeUpVbbMz/5tD1WdWulXzZKTv6IlN4
+         dtfLt8thFkOiChKcV8o1i39u707lxcTqsUJBpI2CIOaW3myV5iDJkHPfVRpQ3C4cYS
+         Rojh2egjeQh4EsKiWsXi0JOuDyd+jgJ0U+feSJ288timGKadvoCaIw/G+s8z8ArKhk
+         e3EQL/i1FMF95h5bRv8NTwh5CsrN1McVJOW2PsJkXa4wKx80E4mLCgk+v8ecTahvJP
+         o8GKEVeYoRmffrjXSzbNl+LSdq0FgrQ2Ks9pdZfqxoeTUQVn/RkxAOHlg34IfhGD0A
+         yOIETQ8i5mdcA==
+Date:   Wed, 29 Sep 2021 15:00:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the tip tree
+Message-ID: <20210929150052.41ca3989@canb.auug.org.au>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mi0L/u00_BhVi.wohliiTkm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-We have merged such DRM definition dependencies previously through a topic branch in order to avoid redefining inside the driver.
-But yes guarding this with ifdef is good.
+--Sig_/mi0L/u00_BhVi.wohliiTkm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Manasi Navare <manasi.d.navare@intel.com>
+Hi all,
 
-Manasi
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
 
------Original Message-----
-From: Zuo, Jerry <Jerry.Zuo@amd.com> 
-Sent: Tuesday, September 28, 2021 11:11 PM
-To: Wentland, Harry <Harry.Wentland@amd.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; amd-gfx@lists.freedesktop.org
-Cc: Nikula, Jani <jani.nikula@intel.com>; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; nathan@kernel.org; intel-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; ville.syrjala@linux.intel.com; Navare, Manasi D <manasi.d.navare@intel.com>; Koenig, Christian <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; sfr@canb.auug.org.au; linux-next@vger.kernel.org; airlied@gmail.com; daniel.vetter@ffwll.ch; Wentland, Harry <Harry.Wentland@amd.com>
-Subject: RE: [PATCH v2] drm/amd/display: Only define DP 2.0 symbols if not already defined
+vmlinux.o: warning: objtool: .altinstructions+0x171b4: don't know how to ha=
+ndle non-section reloc symbol do_swap
 
-[AMD Official Use Only]
+I don't know where this came from, and it started before today was
+hidden by other warnings.
 
-> -----Original Message-----
-> From: Harry Wentland <harry.wentland@amd.com>
-> Sent: September 28, 2021 1:08 PM
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>; amd- 
-> gfx@lists.freedesktop.org; Zuo, Jerry <Jerry.Zuo@amd.com>
-> Cc: jani.nikula@intel.com; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; 
-> nathan@kernel.org; intel-gfx@lists.freedesktop.org; dri- 
-> devel@lists.freedesktop.org; ville.syrjala@linux.intel.com; 
-> manasi.d.navare@intel.com; Koenig, Christian 
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; 
-> sfr@canb.auug.org.au; linux- next@vger.kernel.org; airlied@gmail.com; 
-> daniel.vetter@ffwll.ch; Wentland, Harry <Harry.Wentland@amd.com>
-> Subject: [PATCH v2] drm/amd/display: Only define DP 2.0 symbols if not 
-> already defined
->
-> [Why]
-> For some reason we're defining DP 2.0 definitions inside our driver. 
-> Now that patches to introduce relevant definitions are slated to be 
-> merged into drm- next this is causing conflicts.
->
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c:33:
-> In file included
-> from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu.h:70:
-> In file included
-> from ./drivers/gpu/drm/amd/amdgpu/../amdgpu/amdgpu_mode.h:36:
-> ./include/drm/drm_dp_helper.h:1322:9: error:
-> 'DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER' macro redefined [- 
-> Werror,-Wmacro-redefined]
->         ^
-> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dp_types.h:881:9: note:
-> previous definition is here
->         ^
-> 1 error generated.
->
-> v2: Add one missing endif
->
-> [How]
-> Guard all display driver defines with #ifndef for now. Once we pull in 
-> the new definitions into amd-staging-drm-next we will follow up and 
-> drop definitions from our driver and provide follow-up header updates 
-> for any addition DP
-> 2.0 definitions required by our driver.
->
-> Signed-off-by: Harry Wentland <harry.wentland@amd.com>
+--=20
+Cheers,
+Stephen Rothwell
 
-Reviewed-by: Fangzhi Zuo <Jerry.Zuo@amd.com>
+--Sig_/mi0L/u00_BhVi.wohliiTkm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> ---
->  drivers/gpu/drm/amd/display/dc/dc_dp_types.h | 54
-> ++++++++++++++++++--
->  1 file changed, 49 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-> b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-> index a5e798b5da79..9de86ff5ef1b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dp_types.h
-> @@ -860,28 +860,72 @@ struct psr_caps {  };
->
->  #if defined(CONFIG_DRM_AMD_DC_DCN)
-> +#ifndef DP_MAIN_LINK_CHANNEL_CODING_CAP
->  #define DP_MAIN_LINK_CHANNEL_CODING_CAP                      0x006
-> +#endif
-> +#ifndef DP_SINK_VIDEO_FALLBACK_FORMATS
->  #define DP_SINK_VIDEO_FALLBACK_FORMATS                       0x020
-> +#endif
-> +#ifndef DP_FEC_CAPABILITY_1
->  #define DP_FEC_CAPABILITY_1                          0x091
-> +#endif
-> +#ifndef DP_DFP_CAPABILITY_EXTENSION_SUPPORT
->  #define DP_DFP_CAPABILITY_EXTENSION_SUPPORT          0x0A3
-> +#endif
-> +#ifndef DP_DSC_CONFIGURATION
->  #define DP_DSC_CONFIGURATION                         0x161
-> +#endif
-> +#ifndef DP_PHY_SQUARE_PATTERN
->  #define DP_PHY_SQUARE_PATTERN                                0x249
-> +#endif
-> +#ifndef DP_128b_132b_SUPPORTED_LINK_RATES
->  #define DP_128b_132b_SUPPORTED_LINK_RATES            0x2215
-> +#endif
-> +#ifndef DP_128b_132b_TRAINING_AUX_RD_INTERVAL
->  #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL
->       0x2216
-> +#endif
-> +#ifndef DP_TEST_264BIT_CUSTOM_PATTERN_7_0
->  #define DP_TEST_264BIT_CUSTOM_PATTERN_7_0            0X2230
-> +#endif
-> +#ifndef DP_TEST_264BIT_CUSTOM_PATTERN_263_256
->  #define DP_TEST_264BIT_CUSTOM_PATTERN_263_256
->       0X2250
-> +#endif
-> +#ifndef DP_DSC_SUPPORT_AND_DECODER_COUNT
->  #define DP_DSC_SUPPORT_AND_DECODER_COUNT             0x2260
-> +#endif
-> +#ifndef DP_DSC_MAX_SLICE_COUNT_AND_AGGREGATION_0
->  #define DP_DSC_MAX_SLICE_COUNT_AND_AGGREGATION_0
->       0x2270
-> -# define DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK   (1 <<
-> 0)
-> -# define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK
->       (0b111 << 1)
-> -# define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT  1
-> -# define DP_DSC_DECODER_COUNT_MASK                   (0b111 << 5)
-> -# define DP_DSC_DECODER_COUNT_SHIFT                  5
-> +#endif
-> +#ifndef DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK
-> +#define DP_DSC_DECODER_0_MAXIMUM_SLICE_COUNT_MASK    (1 <<
-> 0)
-> +#endif
-> +#ifndef DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK
-> +#define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_MASK
->       (0b111 << 1)
-> +#endif
-> +#ifndef DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT
-> +#define DP_DSC_DECODER_0_AGGREGATION_SUPPORT_SHIFT   1
-> +#endif
-> +#ifndef DP_DSC_DECODER_COUNT_MASK
-> +#define DP_DSC_DECODER_COUNT_MASK                    (0b111 << 5)
-> +#endif
-> +#ifndef DP_DSC_DECODER_COUNT_SHIFT
-> +#define DP_DSC_DECODER_COUNT_SHIFT                   5
-> +#endif
-> +#ifndef DP_MAIN_LINK_CHANNEL_CODING_SET
->  #define DP_MAIN_LINK_CHANNEL_CODING_SET                      0x108
-> +#endif
-> +#ifndef DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER
->  #define DP_MAIN_LINK_CHANNEL_CODING_PHY_REPEATER     0xF0006
-> +#endif
-> +#ifndef DP_PHY_REPEATER_128b_132b_RATES
->  #define DP_PHY_REPEATER_128b_132b_RATES
->       0xF0007
-> +#endif
-> +#ifndef DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1
->  #define DP_128b_132b_TRAINING_AUX_RD_INTERVAL_PHY_REPEATER1
->       0xF0022
-> +#endif
-> +#ifndef DP_INTRA_HOP_AUX_REPLY_INDICATION
->  #define DP_INTRA_HOP_AUX_REPLY_INDICATION            (1 << 3)
-> +#endif
->  /* TODO - Use DRM header to replace above once available */
->
->  union dp_main_line_channel_coding_cap {
-> --
-> 2.33.0
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFT8wQACgkQAVBC80lX
+0GxBXAf/TmC2prhMUk9eA2SqAIr+xjxn74uYdeWUiGsBm/2ZdLT33OpzrvBQSYIH
+1/Qs7iPI1zPIuejGKfWNkibkDUlAWjSzFYkvfUF0LcRFHEqI+0Ar3ksig9JYLRNo
+Bilkic4et6+vacTKWG01O4e9U4UXtS/qWQN+nYXV66VX5vXZQPnAkcmrQC18zT8K
+ZHNEfTJtSA5RkmxAPqQgozKVN+ozLSR23Mwp9CTcziLnVzyb9H0L0xmpZro1sPP+
+UoxeDFAc+1UD/h8qtJiO/lJnQX78QbC48Mi0FfrNxMAVkm0WjPyA5AdFZMHiC/Lk
+U/4j72r8o4l9BjwHVf4IKx4kYNgqlQ==
+=Q39L
+-----END PGP SIGNATURE-----
+
+--Sig_/mi0L/u00_BhVi.wohliiTkm--

@@ -2,78 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB41641D072
-	for <lists+linux-next@lfdr.de>; Thu, 30 Sep 2021 02:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D0941D09F
+	for <lists+linux-next@lfdr.de>; Thu, 30 Sep 2021 02:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346071AbhI3AJA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Sep 2021 20:09:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37608 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233873AbhI3AJA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Sep 2021 20:09:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F561611C0;
-        Thu, 30 Sep 2021 00:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632960438;
-        bh=qUQiW9EvGbciV6pPB+J4tZ9pRgoJph2I7kInJhXrQ10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fpAp8C0itnmO4U0UutnjRb8wCHdDP84Vadbo6IDf721Peojnyra0QkqgUiOBn5nFW
-         Ju1hpMnDTOJBRc2rqq1aZd1c5cmiOelphzePf4i00/jer+kSGuS0jvkmGyS62EUhhj
-         nXsjO7U/nNYGtiAZ1YP6sawnABjfrkKq+kJKUJUkJmdfbSih6jXDUXi2wL3id6m5g0
-         bBzdpdUzUFu0VENquxrbS1kKFoMJVgjsgKDFNR4SvAc34q6XaIqOwGtvzx0D79nfyp
-         9ea7+e7H5GbVwEk9ZhIKK3oCY/YueckgbwAFh6WauRyKlwrQxopOROr+2fOgiUJd6z
-         ZYAinJAt26hjA==
-Date:   Wed, 29 Sep 2021 19:11:23 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+        id S1346209AbhI3AiZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Sep 2021 20:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232554AbhI3AiZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Sep 2021 20:38:25 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F7BC061769
+        for <linux-next@vger.kernel.org>; Wed, 29 Sep 2021 17:36:43 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id u32so9289751ybd.9
+        for <linux-next@vger.kernel.org>; Wed, 29 Sep 2021 17:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X2m4wTYkqfAEhAyNUuV6Q8DZUcckAKLYKf6ImK4uiq8=;
+        b=ghVBCvPquoWEts3xJ7bN5dEsukBUk9jPfKIf8PHvNz7cc+rkkYrGhYcNzAF7AoYGTs
+         bTHz4n5qKuy4EN0bMG/So4x30K8B/B8RhPi3xH1qpHxopuKczW/GQZdRMnqBow1NTD+2
+         L2RBMh5hk+Hmu/n1wpMTM6KJrMJWZPp0Uyhuo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X2m4wTYkqfAEhAyNUuV6Q8DZUcckAKLYKf6ImK4uiq8=;
+        b=vX0Pg8SnUIdwYWu09q3TFoHgfgVzlHEk26ae4Zq8kyTbtBPiQ/ZHoB6VB7QTineIO+
+         FRwJji4ksBAzCllL9XujQlsf2xCkMuyvzx4YJv3aB5EdmT0Z1q2Eu0NJjrmUhN95Hv08
+         kuWxH+NM9L2vXj1N3cmomR5uQQPc///5wIDUuxTl2itiGA6iXsbKOCvV1exdWNmPYe2v
+         KxhFFcsDsflgNL0hI5RFPUDfmg6iu6quHLMbrWKQDo2GbSN7SRW+CCmbXcY6/RhYCczn
+         IL+/eeStmFCZhn8LhfpFuuwPVyxe3KyFZrBMoCaoUxtnZT3Pv4zcZZyPFZiTaF/LiUeG
+         HQ/A==
+X-Gm-Message-State: AOAM531vyiyS76kG+wWB1Q2wWUwNCHXtK9PRaxOStpGv2VTZcb3q0ZIe
+        w8KgvMM1DRZIzbTk5Sa4wjJNLNYWyv4z2ykeLwx+uA==
+X-Google-Smtp-Source: ABdhPJznCK1TcaJ2m1s/SvhUqd/Ojpr+AV8TBGoPuQSyyTXZr4Nts/uCljWIvIeL46o6a+EhgDfRxNdf1hd5krrVdk8=
+X-Received: by 2002:a05:6902:1547:: with SMTP id r7mr3495128ybu.72.1632962202554;
+ Wed, 29 Sep 2021 17:36:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210930083201.16636e24@canb.auug.org.au>
+In-Reply-To: <20210930083201.16636e24@canb.auug.org.au>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Thu, 30 Sep 2021 09:36:32 +0900
+Message-ID: <CAD=HUj5XF9eNj+1oZZq6CcHfe-ii+M3z97BNPkSY9qW2BHaJbQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tags need some work in the iommu tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>,
+Cc:     Joerg Roedel <joro@8bytes.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
-Message-ID: <20210930001123.GA358774@embeddedor>
-References: <20210930095932.03434a3b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210930095932.03434a3b@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 09:59:32AM +1000, Stephen Rothwell wrote:
+On Thu, Sep 30, 2021 at 7:32 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > Hi all,
-> 
-> After merging the kspp-gustavo tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/bpf_verifier.h:9,
->                  from kernel/bpf/verifier.c:12:
+>
+> In commits
+>
+>   06e620345d54 ("iommu/dma: Fix arch_sync_dma for map")
+>   08ae5d4a1ae9 ("iommu/dma: Fix sync_sg with swiotlb")
 
-[..]
+It looks like the Fixes messages got rewritten along with the tags in
+the subject lines.
 
->       |                 ^~~~~~~~~~~~~
-> include/linux/filter.h:366:4: error: cast between incompatible function types from 'int (* const)(struct bpf_map *, u32,  u64)' {aka 'int (* const)(struct bpf_map *, unsigned int,  long long unsigned int)'} to 'u64 (*)(u64,  u64,  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,  long long unsigned int,  long long unsigned int,  long long unsigned int,  long long unsigned int)'} [-Werror=cast-function-type]
->   366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
->       |    ^
-> kernel/bpf/verifier.c:12977:17: note: in expansion of macro 'BPF_CAST_CALL'
-> 12977 |     insn->imm = BPF_CAST_CALL(ops->map_redirect) -
->       |                 ^~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+-David
 
-All these are already fixed in bpf-next.
-
-> Caused by commit
-> 
->   ffea83dd8823 ("Makefile: Enable -Wcast-function-type")
-> 
-> I have reverted that commit for today.
-
-I've just removed that commit from my -next tree, while I
-take a look at the ftrace warnings.
-
-Thanks!
---
-Gustavo
-
-
+> Fixes tag
+>
+>   Fixes: 82612d66d51d ("iommu: Allow the iommu/dma api to use bounce buffers")
+>
+> has these problem(s):
+>
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> --
+> Cheers,
+> Stephen Rothwell

@@ -2,112 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A9741EB2D
-	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 12:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4057341ED31
+	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 14:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbhJAKv5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Oct 2021 06:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S1354292AbhJAMRN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 Oct 2021 08:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352654AbhJAKv4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Oct 2021 06:51:56 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7238BC06177B
-        for <linux-next@vger.kernel.org>; Fri,  1 Oct 2021 03:50:11 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id s17so32573886edd.8
-        for <linux-next@vger.kernel.org>; Fri, 01 Oct 2021 03:50:11 -0700 (PDT)
+        with ESMTP id S231388AbhJAMRM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Oct 2021 08:17:12 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF61C061775;
+        Fri,  1 Oct 2021 05:15:26 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id x124so11163576oix.9;
+        Fri, 01 Oct 2021 05:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Q0Ww4rdF93vuhLA9EB8gy8zyZFUhPSXKcFE+ISMqwg0=;
-        b=wcZvcDO43h0zIQAIwDovuHJoDyirgyV5cYvW5x/H2yCkDuPswY2OXVOEu2D6AO34fY
-         ANbbxnLfGpBpoFxboRHaYI6de6ydIWbE9N/zqKULfh62kUJseMiS6lXYkZhCq1l3MPYe
-         vV/m835fq8UqpAUioTWa1xBfwLmCMRRHHGD32+KqCy1io9pahXpjxvmraJcDHpafrg6S
-         7fwzn/I7Dnx6kukl7wxM0JCKQGwgXRkn0f3MywMCJJSo0hpDiiGLO19qaMuSTab4GlXx
-         pDdDxXeyS9MRNBmBB4u6kydOaUCPQ0rhs/5kvQkB/ChD/LGPuggPgFz7aE2PmmGJjJWi
-         ZVMg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TjUVHTJjAzGJMmv8jrIbahfJghLiBpbmkBoQ41RcfXk=;
+        b=cIk8P8Q5SliLeEO+YVlkoDVHv0nUGkSMFLyyfRIZtICkdHP6VEX47pgNk6fJWCzRVn
+         f3ZhDOPQp+B8/WFdxqxJV9kmlSFkmjvxqmwh33tAylTndgz6DWXdAx6CzAfW82auoe7h
+         AJp+XR6TShc27ZABZsc7tena62g1rEwcOFFPVszrY85DuyMrHWxUDd+ug/qFVcCc1OyF
+         3PitOdY7PAhRQUJVc8+p9uJxTEWnzwyNYMgufdpZ4DgZiq0GeGx5vLQSHC23Js+3CKtB
+         3B1nP8nGLduT81FrJ3qYSOORY6lfkIXPV4URDSG34TQSDVGeSogdfdmlOkLSJWfgbnK2
+         qBig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Q0Ww4rdF93vuhLA9EB8gy8zyZFUhPSXKcFE+ISMqwg0=;
-        b=ZTlZIPBCcchDLL3E1++aJR+qPlhS6uBUGP6AGB2QqrvrD2ZsAJu/2BH511et/SF15b
-         aJebdu16sbRjqWLfmlPVQ1Zx0Aq1NabIOldCbDtXNzBsC6fWx+WjQEXg1R07Rm8pGRTO
-         9jP0aYTCa88mpJTOuDQXSWpY3GrTcyB/hL07018a79Z0Ck8/kxkSuL7onH57TwHf+0Ye
-         L+HvXoqI+LKCgj4eujaNirmSnpBIDn3HqfsVxWke9DgkQ2I+B/IsRnX4+1v+flEqVaCP
-         KMyVAD8g5INRWAjQnBoW6sf7t9YN1fYtJlIM7AEyvvbTnuoDgTDqBTxlEShRFUjVz6rA
-         AFpA==
-X-Gm-Message-State: AOAM531r0lheh8pBwy0eevH2EfUL+OFX24fyU4Dm2tf0xQ/s6B8uJUsl
-        yn7QdeW6zDRTFjnhBwae6lYJgVIWmUdBjS15wCWvhg==
-X-Google-Smtp-Source: ABdhPJwC3mpxAp+yFDP18LlzEJJAxEi6YO60QJjagz4jHMt+1+jwJGVWTjZvA/aTzdbygkEXB/7hehkVUmcIc20uTW8=
-X-Received: by 2002:a05:6402:1778:: with SMTP id da24mr13776581edb.398.1633085409734;
- Fri, 01 Oct 2021 03:50:09 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=TjUVHTJjAzGJMmv8jrIbahfJghLiBpbmkBoQ41RcfXk=;
+        b=GuR7LBK+zTfdkVzXoct8xUHCAiWh1vvdajR3HTzQyFb3r4wXuGF765c/hcjIw7F+U9
+         VayU8rG3V9DuVQjfWV9HjbKEFhG000yWFgxy11044hpmMe3DfNt0AdHtU7rKx+j+MxHc
+         g9sSQbTgEao8aQZLagQF7s9fyTZv4EkY1aP0Ldf6K4ySP9d2hw1keF6p1JCMVX5ajQxT
+         Q4mMHwFAkp/F25k+3bsPH+nhNahwNrva42si0TVpDPirHQZ+8HzEVzo9/gvEUj0g4cxJ
+         BB/gSc/rgIOfrQ2YPUq+MKCBnFfSuDJ9S3eN4GZBzyaa1bt3DwSshyB7Ybp9WnGimP+V
+         wdkQ==
+X-Gm-Message-State: AOAM532bmUU3S5eTy7FTRa/eThIxI0a1Gui6TpCEbaIJOSdNFP0HUn2X
+        6ddftiw62FO/CX/PRXgTLL3Lcf4hpw==
+X-Google-Smtp-Source: ABdhPJwlRTl/hZyr75BIi48UKqOsdWLpP2HpniDc44cZAoz2jDLHrGqStrVC1OLRZSqx1yZVxr3vMQ==
+X-Received: by 2002:a05:6808:17a4:: with SMTP id bg36mr3729514oib.49.1633090525804;
+        Fri, 01 Oct 2021 05:15:25 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id k3sm243224otn.16.2021.10.01.05.15.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Oct 2021 05:15:23 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:dcd4:c733:b801:5a91])
+        by serve.minyard.net (Postfix) with ESMTPSA id 3CA6E1800EF;
+        Fri,  1 Oct 2021 12:15:22 +0000 (UTC)
+Date:   Fri, 1 Oct 2021 07:15:21 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Corey Minyard <cminyard@mvista.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the ipmi tree
+Message-ID: <20211001121521.GP5419@minyard.net>
+Reply-To: minyard@acm.org
+References: <20211001125248.30adbdf3@canb.auug.org.au>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 1 Oct 2021 16:19:58 +0530
-Message-ID: <CA+G9fYsKjyOL1xj+GFC=Ab7Yw+b0Tg9jf8uvnN2tOc6OdupA-Q@mail.gmail.com>
-Subject: swim3.c:1200:38: error: 'FLOPPY_MAJOR' undeclared (first use in this function)
-To:     open list <linux-kernel@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211001125248.30adbdf3@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Following build errors noticed while building Linux next 20211001
-with gcc-11 for powerpc architecture.
+On Fri, Oct 01, 2021 at 12:52:48PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the ipmi tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/char/ipmi/ipmi_msghandler.c: In function 'bmc_device_id_handler':
+> drivers/char/ipmi/ipmi_msghandler.c:2376:3: error: label 'out' used but not defined
+>  2376 |   goto out;
+>       |   ^~~~
 
-kernel/sched/debug.c: In function 'print_cfs_group_stats':
-kernel/sched/debug.c:460:41: warning: unused variable 'stats'
-[-Wunused-variable]
-  460 |                struct sched_statistics *stats =
-__schedstats_from_se(se);
-      |                                         ^~~~~
-In file included from include/linux/blkdev.h:6,
-                 from include/linux/blk-mq.h:5,
-                 from drivers/block/swim3.c:24:
-drivers/block/swim3.c: In function 'swim3_attach':
-drivers/block/swim3.c:1200:38: error: 'FLOPPY_MAJOR' undeclared (first
-use in this function)
- 1200 |                 rc = register_blkdev(FLOPPY_MAJOR, "fd");
-      |                                      ^~~~~~~~~~~~
-include/linux/genhd.h:276:27: note: in definition of macro 'register_blkdev'
-  276 |         __register_blkdev(major, name, NULL)
-      |                           ^~~~~
-drivers/block/swim3.c:1200:38: note: each undeclared identifier is
-reported only once for each function it appears in
- 1200 |                 rc = register_blkdev(FLOPPY_MAJOR, "fd");
-      |                                      ^~~~~~~~~~~~
-include/linux/genhd.h:276:27: note: in definition of macro 'register_blkdev'
-  276 |         __register_blkdev(major, name, NULL)
-      |                           ^~~~~
-make[3]: *** [scripts/Makefile.build:288: drivers/block/swim3.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [scripts/Makefile.build:571: drivers/block] Error 2
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [Makefile:2034: drivers] Error 2
+I botched a cherry pick, it should be fixed now.  Sorry about that.
 
-Build config:
-https://builds.tuxbuild.com/1ytcB62L9I617oV0cveJtUhcpUu/config
+Thanks for the work you do.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-corey
 
-meta data:
------------
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_sha: a25006a77348ba06c7bc96520d331cd9dd370715
-    git_short_log: a25006a77348 (\"Add linux-next specific files for 20211001\")
-    kconfig:  ppc6xx_defconfig
-    kernel_version: 5.15.0-rc3
-    target_arch: powerpc
-    toolchain: gcc-11
+> 
+> Caused by commit
+> 
+>   2d7a6d8467f9 ("ipmi: Check error code before processing BMC response")
+> 
+> I have used the ipmi tree from next-20210930 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-steps to reproduce:
-https://builds.tuxbuild.com/1ytcB62L9I617oV0cveJtUhcpUu/tuxmake_reproducer.sh
 
---
-Linaro LKFT
-https://lkft.linaro.org

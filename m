@@ -2,84 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F7041E61B
-	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 04:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D0C41E643
+	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 05:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351715AbhJACyi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Sep 2021 22:54:38 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:56089 "EHLO
+        id S230460AbhJADk3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Sep 2021 23:40:29 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:51669 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbhJACyh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Sep 2021 22:54:37 -0400
+        with ESMTP id S230406AbhJADk2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Sep 2021 23:40:28 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HLF5w3b0Bz4xbL;
-        Fri,  1 Oct 2021 12:52:52 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HLG6q1v7Tz4xb9;
+        Fri,  1 Oct 2021 13:38:42 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633056772;
-        bh=I37CBx08ES7xEgxVUJBgPMwAK/uWSAPkRFMdAZDfiJk=;
+        s=201702; t=1633059524;
+        bh=zER17jwT/nPYJQiW2vUTIMlPaO2AajjFVc6PJANpva8=;
         h=Date:From:To:Cc:Subject:From;
-        b=M61r42mpSVPfaVqfDOi6YLzSEDjX/Oxef1EhtAJo1x0L4T1LVFTkYk4LOhAHwGtRL
-         BgQyuH6uduJXXXagTlWkLGcCHhsBEtXqMDLAHrtsyA2KZsT71H50dPItKBR+Az8Wxi
-         Y0P2dyoXeXGC51VytDObFG9SUmMbns90Qcg7ggNEmoOmTLPHAK72YQCwyeLEPiqYeV
-         0REUD/LWEXEGzrQ3j3oVdC7gHUXfeiM1u7N49YF0czmpbSzLPbojHDQbGUXCwnga4i
-         O8UhRkAmPhqjz/6l3062WdueI7qVFG7E//JrN79m10RfRbhmWO7yb4DKrPGZ6waDrw
-         It9MitWA22aNQ==
-Date:   Fri, 1 Oct 2021 12:52:48 +1000
+        b=MV5cxLsr1jXRSjU4CqozDwyFk3vUCg8HM2UmkDoPZCNYEqfhCgQGTq03Yt+PH8OPA
+         1wAVU/heHMYWwjgKMGGZnkyNBXHWjAFucJhXoF+K2SLLc7zGgKGu/uhNHI5wvgG+U9
+         g3jeuetnnQhRP5MHbEO2ilY2GyDM6S6KLy4BWDLioaPIoaCunwp3qc0F5RBGz0T+A/
+         +70G7D/iXvinglFKQgbX6cXPniejl8b+8ub2FKSHlTsnFcQETsomhiL+muRicI2//d
+         uksyaef3a4jqDM8sbeAHu5whzj3gYvOiN5X5AIbv40LlVIxaLVnbDLCIK3brzWa8mk
+         nUcky099ct4Wg==
+Date:   Fri, 1 Oct 2021 13:38:41 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the ipmi tree
-Message-ID: <20211001125248.30adbdf3@canb.auug.org.au>
+Subject: linux-next: manual merge of the iio tree with the iio-fixes tree
+Message-ID: <20211001133841.2b46b779@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M9zV3o.3FgI5l9Z+cSmFz8t";
+Content-Type: multipart/signed; boundary="Sig_/ZXIusq7ayoW1+cgDXZq=td=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/M9zV3o.3FgI5l9Z+cSmFz8t
+--Sig_/ZXIusq7ayoW1+cgDXZq=td=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the ipmi tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the iio tree got a conflict in:
 
-drivers/char/ipmi/ipmi_msghandler.c: In function 'bmc_device_id_handler':
-drivers/char/ipmi/ipmi_msghandler.c:2376:3: error: label 'out' used but not=
- defined
- 2376 |   goto out;
-      |   ^~~~
+  drivers/iio/adc/aspeed_adc.c
 
-Caused by commit
+between commit:
 
-  2d7a6d8467f9 ("ipmi: Check error code before processing BMC response")
+  eb795cd97365 ("iio: adc: aspeed: set driver data when adc probe.")
 
-I have used the ipmi tree from next-20210930 for today.
+from the iio-fixes tree and commit:
+
+  e96b152c6cc2 ("iio: adc: aspeed: Keep model data to driver data.")
+
+from the iio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/M9zV3o.3FgI5l9Z+cSmFz8t
+diff --cc drivers/iio/adc/aspeed_adc.c
+index 34ec0c28b2df,9e2c85c3cbe9..000000000000
+--- a/drivers/iio/adc/aspeed_adc.c
++++ b/drivers/iio/adc/aspeed_adc.c
+@@@ -183,7 -492,7 +492,8 @@@ static int aspeed_adc_probe(struct plat
+ =20
+  	data =3D iio_priv(indio_dev);
+  	data->dev =3D &pdev->dev;
+ +	platform_set_drvdata(pdev, indio_dev);
++ 	data->model_data =3D of_device_get_match_data(&pdev->dev);
+ =20
+  	data->base =3D devm_platform_ioremap_resource(pdev, 0);
+  	if (IS_ERR(data->base))
+
+--Sig_/ZXIusq7ayoW1+cgDXZq=td=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFWeAAACgkQAVBC80lX
-0GwUvQf/YR3ir3A+80P9bAW2+Q6KGGwdduziyfM0cexQ5osdbeUfD1ArhzK8mKG7
-LzH4Z5ZiRoHvNBA6scnTOKOLY6newv3OatR/V9129ujqN9Ds6T/YpHciOqG/aF/4
-n5ehkOXw5G4LG6bXHMBKIjBec2LdFQ7yZOyl3SOhszojTqz183ggDyIP9J6Eqmz/
-TmjKAF//KHYUvyCQPrzXMl9t9ESza4vX/boZFNVn1Iw4oxEhf5ulqehJqIn6aN2O
-6SZPsxEeL/rC07I4JwZ7h/EIXbyU4/ocukyuRsg/xIv0iGvHCws7deU1i0v932Nv
-+HfcjPSIw2hNALdepVPlIZpyYxLiUg==
-=1apl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFWgsEACgkQAVBC80lX
+0GybWwgAh6uDE34bntpaHsM2F/5qkThMNIOYRXRqFPgBXAJfO8sdMpggY0Dc8eQs
+Ou/8wF+qI5wtOEcGK8ssy7Sq+PbSiMvOvzS3DB3w9P2xj+OqBJJbqTS9YggRp1EQ
+kxAZmQtW9y2dG8t1yIhJyJhfyskQYwOzKxzZAAT102kdsYHsUuezOZkaVXBmBi6w
+p7FfxGH43sHKs+jz1vdRUCSAL7AOE5dEQMn4GVi0viWKKPFo0pVgSnujeB8KDCUJ
+QhwCqhRMebwg2YVv/wYqFYZdH0Ix+4GhUZsJzuIGqpDV3C7YZSiY0eJd1o8TtfYB
+iIo1rJKXD2gxyF1OIe4qrL4cnJUwbQ==
+=3lUu
 -----END PGP SIGNATURE-----
 
---Sig_/M9zV3o.3FgI5l9Z+cSmFz8t--
+--Sig_/ZXIusq7ayoW1+cgDXZq=td=--

@@ -2,97 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A5541E918
-	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 10:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BA441EAF3
+	for <lists+linux-next@lfdr.de>; Fri,  1 Oct 2021 12:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352746AbhJAIaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Oct 2021 04:30:07 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3905 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352731AbhJAI3w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Oct 2021 04:29:52 -0400
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HLNTg3DfCz67Psy;
-        Fri,  1 Oct 2021 16:25:27 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Fri, 1 Oct 2021 10:28:04 +0200
-Received: from localhost (10.52.123.156) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Fri, 1 Oct 2021
- 09:28:04 +0100
-Date:   Fri, 1 Oct 2021 09:27:46 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-CC:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the iio tree with the iio-fixes
- tree
-Message-ID: <20211001092746.00006ef5@Huawei.com>
-In-Reply-To: <20211001133841.2b46b779@canb.auug.org.au>
-References: <20211001133841.2b46b779@canb.auug.org.au>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+        id S1352681AbhJAKce (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 Oct 2021 06:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231311AbhJAKcd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Oct 2021 06:32:33 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5A8C061775
+        for <linux-next@vger.kernel.org>; Fri,  1 Oct 2021 03:30:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id l8so33310766edw.2
+        for <linux-next@vger.kernel.org>; Fri, 01 Oct 2021 03:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=QEE5+eR1PTRsf7Cn1O7pyaGGfFF+vSbOIpx5p0aBTl0=;
+        b=CqEmUk3io5LxKbnJnIofkJShoydE3T5j+Eo8LRewYlm/6BpATFlKewrzPHkKd6+JJy
+         ivPXQ6VtD1CSEikPoNgq5bMThRKdbVo0o0zC9d737DLdx6KXDqZx+czpwNN3ybSeRLgI
+         iWeIye89fSKYWIdF0d4d3aGh9Jy/MTg3GOWWsykMePgoGkCMQ89mBBT+f1pSMuw0d8oA
+         DcZ3xzRW+EqSDHSHWSaG328KbfsRX4XvSJF1H/9Kf7NhXq0sykWUGsATko43FvqUSeC4
+         v1+mZZd3mCwj8EAVpetgYHCPPeWHjpUxVZfvLC1muBQGDEhSvE3ad5qpBTdEQZEQFZFp
+         3irA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=QEE5+eR1PTRsf7Cn1O7pyaGGfFF+vSbOIpx5p0aBTl0=;
+        b=jhyVfjvQe4ewwnm6TpR8LJ74RG95Fa6wg1Wum1G/xDITCQwLV3s9+Q7aaVvab2tcLe
+         DuuUsDfJFI/frvP1XC2BFO2HZHhhPxb+6G5jt0qouD/lkhfxmH84bk60Ruh7WcjO4skz
+         hJtBS976XihiwIn7ZA+J6WTwXcd0M34nGrkLJeDypLLudsIGBadAk2kUmSCUvWmKF3Zn
+         ADVDbTYCXOuTlyDUMCBSzPBHQj64mmpnXmFIAnrxGyL9ijbyeKVeYU7+KOt4MOs6Vc+9
+         tnrghcU5K30QAKe6EJq25Beff5QMRbztH9jOsw3cHho1bYCIz8CLzpaoluC1qAK9A1XP
+         5gGg==
+X-Gm-Message-State: AOAM533LNkOHTnhtwCGKFNKv7bzw+JVVkFr/i+HTQTW3OFEc86XIWVpl
+        wx7dMdRYK9DV4dDlvoytz56ajlIc0MqnOg+JA6rHKg==
+X-Google-Smtp-Source: ABdhPJxOwe2DdMM4rV12tDoZFekSO5C3xyP/cXPE2zkP/P0J8YDu1zphyQs6RNWhfjff8e6CFoPBoxKq+N+rhnN4Nko=
+X-Received: by 2002:a50:bf07:: with SMTP id f7mr13553425edk.288.1633084247906;
+ Fri, 01 Oct 2021 03:30:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.123.156]
-X-ClientProxiedBy: lhreml722-chm.china.huawei.com (10.201.108.73) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 1 Oct 2021 16:00:36 +0530
+Message-ID: <CA+G9fYtsteSfwTQKV8o6VtBQDoz-+nwOf0s0X8BCkQHgAc6sdw@mail.gmail.com>
+Subject: parisc/unwind: call callback with toplevel address
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-parisc@vger.kernel.org
+Cc:     Sven Schnelle <svens@stackframe.org>, Helge Deller <deller@gmx.de>,
+        James.Bottomley@hansenpartnership.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 1 Oct 2021 13:38:41 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Following build errors noticed while building Linux next 20211001
+with gcc-11 for parisc architecture.
 
-> Hi all,
-> 
-> Today's linux-next merge of the iio tree got a conflict in:
-> 
->   drivers/iio/adc/aspeed_adc.c
-> 
-> between commit:
-> 
->   eb795cd97365 ("iio: adc: aspeed: set driver data when adc probe.")
-> 
-> from the iio-fixes tree and commit:
-> 
->   e96b152c6cc2 ("iio: adc: aspeed: Keep model data to driver data.")
-> 
-> from the iio tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
+arch/parisc/kernel/stacktrace.c: In function 'dump_trace':
+arch/parisc/kernel/stacktrace.c:20:13: error: 'regs' undeclared (first
+use in this function)
+   20 |         if (regs)
+      |             ^~~~
+arch/parisc/kernel/stacktrace.c:20:13: note: each undeclared
+identifier is reported only once for each function it appears in
+arch/parisc/kernel/stacktrace.c:21:22: error: implicit declaration of
+function 'fn' [-Werror=implicit-function-declaration]
+   21 |                 if (!fn(cookie, regs->iaoq[0]))
+      |                      ^~
+arch/parisc/kernel/stacktrace.c:21:25: error: 'cookie' undeclared
+(first use in this function)
+   21 |                 if (!fn(cookie, regs->iaoq[0]))
+      |                         ^~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:288:
+arch/parisc/kernel/stacktrace.o] Error 1
 
-Thanks.
+Build config:
+https://builds.tuxbuild.com/1ytbtyEg5SDSQgS2Oj9RsCM4ZmS/config
 
-Looks good to me.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Jonathan
+meta data:
+-----------
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_sha: a25006a77348ba06c7bc96520d331cd9dd370715
+    git_short_log: a25006a77348 (\"Add linux-next specific files for 20211001\")
+    kconfig:  defconfig
+    kernel_version: 5.15.0-rc3
+    target_arch: parisc
+    toolchain: gcc-11
 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/iio/adc/aspeed_adc.c
-> index 34ec0c28b2df,9e2c85c3cbe9..000000000000
-> --- a/drivers/iio/adc/aspeed_adc.c
-> +++ b/drivers/iio/adc/aspeed_adc.c
-> @@@ -183,7 -492,7 +492,8 @@@ static int aspeed_adc_probe(struct plat
->   
->   	data = iio_priv(indio_dev);
->   	data->dev = &pdev->dev;
->  +	platform_set_drvdata(pdev, indio_dev);
-> + 	data->model_data = of_device_get_match_data(&pdev->dev);
->   
->   	data->base = devm_platform_ioremap_resource(pdev, 0);
->   	if (IS_ERR(data->base))
+steps to reproduce:
+https://builds.tuxbuild.com/1ytbtyEg5SDSQgS2Oj9RsCM4ZmS/tuxmake_reproducer.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org

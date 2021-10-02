@@ -2,140 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADCC41F923
-	for <lists+linux-next@lfdr.de>; Sat,  2 Oct 2021 03:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F9F41FB37
+	for <lists+linux-next@lfdr.de>; Sat,  2 Oct 2021 13:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbhJBB1q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 Oct 2021 21:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbhJBB1q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 Oct 2021 21:27:46 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E887C061775
-        for <linux-next@vger.kernel.org>; Fri,  1 Oct 2021 18:26:01 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id d18so13636527iof.13
-        for <linux-next@vger.kernel.org>; Fri, 01 Oct 2021 18:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Kw2EQT4OwtFSYkrrYyMi89jNPuGjX5Pm5VnDT6BIPTo=;
-        b=iftskyZrQnblM5IeQbZ6UuCPH+aCmDe7PMu732bOeM5q5vFBs4rD1xSeoLwVhqWtX8
-         k6pib6gKKEO48cWsGpsqj44TyyFTbWtM4UOOK1M0Mwb2+y8LSffdgLB2dkpgCYnH2lF6
-         VKHwUUjHXZovjI5uvRXKc7MH7WwGVdt/heIO1yyMxzro85Ds0uMAp0Rw080U9t+0yuB8
-         K8+eDRvxuy1meShdi+fhOF8kfL3jAh6CjylbAJEpLTi8oPyEWQeo3a8KYpUVmjfKR0fk
-         9AyhQHj8klR7aV+CYyrPoFM6/JihOh2vHlhwZi/R3DOtPu27vI8gDw93dsX4IZ+vM4mz
-         JWMQ==
+        id S232868AbhJBLvP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 2 Oct 2021 07:51:15 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:46778 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232907AbhJBLvO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 2 Oct 2021 07:51:14 -0400
+Received: by mail-io1-f72.google.com with SMTP id b13-20020a05660214cd00b005d6279b61fdso11257357iow.13
+        for <linux-next@vger.kernel.org>; Sat, 02 Oct 2021 04:49:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Kw2EQT4OwtFSYkrrYyMi89jNPuGjX5Pm5VnDT6BIPTo=;
-        b=vPEirCfYqQrujaKqj0malKvr7/f/vFrFhZHKp4FZfjPXAqsOVb23ccc2KIHpxfkNOt
-         N3g2gV0KXmky3UnAI4HzP/717JyjTUeWoxvUdLEbYC9ZgJraJc6tyb5jx/n0DBi2ma1D
-         ahOvo83GFJH3UtpFpSjTxPTxGpDuJXbVViFVdJ+5YiNX85pMTaex2x8QnoOgijEN49u5
-         T0zWxn/FTcpEXm4T86LZwcCbxzMB8PwCMMBVjGKdT4Z3fpyJ7zpwn8wgm/Mtj+42P4Mw
-         9I0y0OxSsqsZQ4XYP31A0PRSCGPad9mri4Bzh57sYVXJApsq28RXFE/9N3fYoUDAnubg
-         i58g==
-X-Gm-Message-State: AOAM530mHn2fBjyMKY/FkIAoq8Cs69U4ZBITgFW7lYIVEKjnFqf2C5Yi
-        vXtjiFCLkWO9WNiKOMUK1JsUR6EBqYzVjQ==
-X-Google-Smtp-Source: ABdhPJwoqXKAX+NayArtKBl7Z/qDro3Fo4FiXW4w323FcZM2bZd0Jeg5aYb9qMoOBQdl0k+EZUJVpA==
-X-Received: by 2002:a05:6638:25cd:: with SMTP id u13mr890296jat.114.1633137960552;
-        Fri, 01 Oct 2021 18:26:00 -0700 (PDT)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id u18sm4468860ilj.24.2021.10.01.18.25.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Oct 2021 18:26:00 -0700 (PDT)
-Subject: Re: swim3.c:1200:38: error: 'FLOPPY_MAJOR' undeclared (first use in
- this function)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>
-References: <CA+G9fYsKjyOL1xj+GFC=Ab7Yw+b0Tg9jf8uvnN2tOc6OdupA-Q@mail.gmail.com>
- <250970e7-e430-e8fe-2844-5c7f627b0c26@kernel.dk>
- <b2ed59e2-aed1-1a46-bb99-b7495de0dea7@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <d8d446be-97da-1ea2-56ea-6f2c74b85273@kernel.dk>
-Date:   Fri, 1 Oct 2021 19:25:59 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TxM9Xomw4NkWnOXL5CXFszT+5JBuU4qqbJet8FXAYV4=;
+        b=vqGpKmQyimst3M142aL37WKrMATZViayoaZeythU4u31o0Q8EqSOzJKJwE6ZL4Eghy
+         bIVDcUtenRJFPh6BoJvGoRRlKcvSo6nmOrVghJViNgkrGH0AaFgGh1Hi/kQ3hrlQOoHu
+         2zfr5SKWB0rMZiBXyGOLES678gs1AK+j6ZInA49dbMUrS2awMXvR/T9QKSuoiYNZF4/f
+         UZ1C9oFsVOsZRUU5pORrX0Go8ON0vCPJ3vP6Mq//mzEP6EwHoSOuuKi+dijyg3VSxgq/
+         w1WIDyIW99OA3X91vjjgeSWs8HNH763UvgcyzoYIHjsJnCh82c3uMUXhsJaXHfwZ2Qfu
+         An2Q==
+X-Gm-Message-State: AOAM531JQGy4OST/kY8svvu1Q+7PqISXbjrrSilzdkD2HcBGbnZI+evt
+        in7byXYhGkph24y5hloLOmjkNy8uefferJPzi6rWEqJBDOSg
+X-Google-Smtp-Source: ABdhPJy0S+EUv86uoLU/w13YtrgANg3dRZq3JvPij7rcYlEaZzkLZJv9MpqQx+BneOmfW51Cu8E4aExj/kOt4a04N6xdJGH9R6Te
 MIME-Version: 1.0
-In-Reply-To: <b2ed59e2-aed1-1a46-bb99-b7495de0dea7@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:d89:: with SMTP id l9mr2580890jaj.46.1633175368985;
+ Sat, 02 Oct 2021 04:49:28 -0700 (PDT)
+Date:   Sat, 02 Oct 2021 04:49:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b96daa05cd5d4538@google.com>
+Subject: [syzbot] linux-next test error: WARNING in devlink_nl_region_notify
+From:   syzbot <syzbot+e7ae6f62421c72822b9d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jiri@nvidia.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/1/21 7:12 PM, Randy Dunlap wrote:
-> On 10/1/21 12:57 PM, Jens Axboe wrote:
->> On 10/1/21 4:49 AM, Naresh Kamboju wrote:
->>> Following build errors noticed while building Linux next 20211001
->>> with gcc-11 for powerpc architecture.
->>>
->>> kernel/sched/debug.c: In function 'print_cfs_group_stats':
->>> kernel/sched/debug.c:460:41: warning: unused variable 'stats'
->>> [-Wunused-variable]
->>>    460 |                struct sched_statistics *stats =
->>> __schedstats_from_se(se);
->>>        |                                         ^~~~~
->>> In file included from include/linux/blkdev.h:6,
->>>                   from include/linux/blk-mq.h:5,
->>>                   from drivers/block/swim3.c:24:
->>> drivers/block/swim3.c: In function 'swim3_attach':
->>> drivers/block/swim3.c:1200:38: error: 'FLOPPY_MAJOR' undeclared (first
->>> use in this function)
->>>   1200 |                 rc = register_blkdev(FLOPPY_MAJOR, "fd");
->>>        |                                      ^~~~~~~~~~~~
->>> include/linux/genhd.h:276:27: note: in definition of macro 'register_blkdev'
->>>    276 |         __register_blkdev(major, name, NULL)
->>>        |                           ^~~~~
->>> drivers/block/swim3.c:1200:38: note: each undeclared identifier is
->>> reported only once for each function it appears in
->>>   1200 |                 rc = register_blkdev(FLOPPY_MAJOR, "fd");
->>>        |                                      ^~~~~~~~~~~~
->>> include/linux/genhd.h:276:27: note: in definition of macro 'register_blkdev'
->>>    276 |         __register_blkdev(major, name, NULL)
->>>        |                           ^~~~~
->>> make[3]: *** [scripts/Makefile.build:288: drivers/block/swim3.o] Error 1
->>> make[3]: Target '__build' not remade because of errors.
->>> make[2]: *** [scripts/Makefile.build:571: drivers/block] Error 2
->>> make[2]: Target '__build' not remade because of errors.
->>> make[1]: *** [Makefile:2034: drivers] Error 2
->>>
->>> Build config:
->>> https://builds.tuxbuild.com/1ytcB62L9I617oV0cveJtUhcpUu/config
->>>
->>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>
->>> meta data:
->>> -----------
->>>      git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>>      git_sha: a25006a77348ba06c7bc96520d331cd9dd370715
->>>      git_short_log: a25006a77348 (\"Add linux-next specific files for 20211001\")
->>>      kconfig:  ppc6xx_defconfig
->>>      kernel_version: 5.15.0-rc3
->>>      target_arch: powerpc
->>>      toolchain: gcc-11
->>>
->>> steps to reproduce:
->>> https://builds.tuxbuild.com/1ytcB62L9I617oV0cveJtUhcpUu/tuxmake_reproducer.sh
->>
->> Does this fix it?
-> 
-> Yes, WorksForMe.
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Hello,
 
-Thanks, now added to my for-next branch.
+syzbot found the following issue on:
 
--- 
-Jens Axboe
+HEAD commit:    2d02a18f75fc Add linux-next specific files for 20210929
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1166777f300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4b58fe22c337ee4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7ae6f62421c72822b9d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e7ae6f62421c72822b9d@syzkaller.appspotmail.com
+
+batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+device hsr_slave_0 entered promiscuous mode
+device hsr_slave_1 entered promiscuous mode
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 6562 at net/core/devlink.c:5158 devlink_nl_region_notify+0x184/0x1e0 net/core/devlink.c:5158
+Modules linked in:
+CPU: 1 PID: 6562 Comm: syz-executor.0 Not tainted 5.15.0-rc3-next-20210929-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:devlink_nl_region_notify+0x184/0x1e0 net/core/devlink.c:5158
+Code: 38 41 b8 c0 0c 00 00 31 d2 48 89 ee 4c 89 e7 e8 62 0b 26 00 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e e9 e1 03 45 fa e8 dc 03 45 fa <0f> 0b e9 f7 fe ff ff e8 d0 03 45 fa 0f 0b eb da 4c 89 e7 e8 b4 62
+RSP: 0018:ffffc90002c3f660 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801d199d00 RSI: ffffffff87313be4 RDI: 0000000000000003
+RBP: ffff88801d320b00 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff87313ada R11: 0000000000000000 R12: ffff888019ed5000
+R13: 0000000000000000 R14: 000000000000002c R15: ffff888019ed5070
+FS:  00005555560ce400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6594537000 CR3: 00000000684dd000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ devlink_region_create+0x39f/0x4c0 net/core/devlink.c:10327
+ nsim_dev_dummy_region_init drivers/net/netdevsim/dev.c:481 [inline]
+ nsim_dev_probe+0x5f6/0x1150 drivers/net/netdevsim/dev.c:1479
+ call_driver_probe drivers/base/dd.c:517 [inline]
+ really_probe+0x245/0xcc0 drivers/base/dd.c:596
+ __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:751
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:781
+ __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:898
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:969
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xc17/0x1ee0 drivers/base/core.c:3395
+ nsim_bus_dev_new drivers/net/netdevsim/bus.c:435 [inline]
+ new_device_store+0x48b/0x770 drivers/net/netdevsim/bus.c:302
+ bus_attr_store+0x72/0xa0 drivers/base/bus.c:122
+ sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x342/0x500 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2163 [inline]
+ new_sync_write+0x429/0x660 fs/read_write.c:507
+ vfs_write+0x7cf/0xae0 fs/read_write.c:594
+ ksys_write+0x12d/0x250 fs/read_write.c:647
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f3dbe12f3ef
+Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 99 fd ff ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 cc fd ff ff 48
+RSP: 002b:00007ffcb02d3780 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3dbe12f3ef
+RDX: 0000000000000003 RSI: 00007ffcb02d37d0 RDI: 0000000000000004
+RBP: 0000000000000004 R08: 0000000000000000 R09: 00007ffcb02d3720
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f3dbe1d6971
+R13: 00007ffcb02d37d0 R14: 0000000000000000 R15: 00007ffcb02d3ea0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

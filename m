@@ -2,81 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CE64232A5
-	for <lists+linux-next@lfdr.de>; Tue,  5 Oct 2021 23:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04230423415
+	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 01:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236669AbhJEVHQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Oct 2021 17:07:16 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:33059 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbhJEVHP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Oct 2021 17:07:15 -0400
+        id S236941AbhJEXHC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Oct 2021 19:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236898AbhJEXHC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Oct 2021 19:07:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D00C061753;
+        Tue,  5 Oct 2021 16:05:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HP98f2jP6z4xbC;
-        Wed,  6 Oct 2021 08:05:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HPCpm55Mbz4xbP;
+        Wed,  6 Oct 2021 10:05:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633467922;
-        bh=vL2QHeNhPbZrBOQHl/4VANxWXSgXmKRcCLaEx2NpUKA=;
+        s=201702; t=1633475105;
+        bh=ewpFWfW0q5hk3lR5Cu+DXpceMnTH8rPJHNPPIJHe+9A=;
         h=Date:From:To:Cc:Subject:From;
-        b=qlbWYiPl/ezLJV2B4hNzZhKSXjh9rsIxs+MOSQcp24KBaLCG7hSpGnQzBDC0r6iVR
-         t0JYsSVc9uMjtXQGuMPZ5hRnpzx+jiEvqlW4QZvkuxbsZpRcQMlS5eg58vRmTk9CO2
-         ExBlH3PA0/241tVSOlFxb51qLQSq7/q5eAn7GBiEBJRYlXSDZq8DSWfqR67lkFvCZd
-         HO9MxUAe7b3h2rpEvJ3hV/ApX43Nx1jiFczgpiT+bDslnQLDPvbK7BmXi7GD6pXyaw
-         p+mGuCpaumfq2xBsw3bjR2iBFmJglYUHTevO0tvApn2q2HtSFMkABweUdD/YJeXJCY
-         5ryTh98rAYMkQ==
-Date:   Wed, 6 Oct 2021 08:05:20 +1100
+        b=Vzp51VBZ6rbSS5wzBgOJmJ059KySNak5U+HFJyf38s0WgUe+pABJC29TJQwLlIfKA
+         ryrCibbzbh7yaJfTuQh+UVTGe7wItIciutNQ9VWHllU/HI0javMXYEjyJU2hBFmHtH
+         BMW2J7xXTxuLdWLM4Na8smpD83Ev/NQxxVEo6Ls0/7E2aq1ka0gdQu8N+LD3JMaM77
+         a3DTZ1aroDyX95Lu3DxQNnmNPc6hNrTL+uobsDysfMF9C4/G4e0eQqPn50+CoTWw69
+         1HTupG8QRnCBqkGPVtgK0bRK07K0Pe7rMdWnUIIUmwYRhzaASDTNrVAWIx8UKgZhPU
+         GcSSkysLCEv0A==
+Date:   Wed, 6 Oct 2021 10:05:02 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shawn Guo <shawnguo@kernel.org>
+To:     David Howells <dhowells@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
-Message-ID: <20211006080520.1a7e34fc@canb.auug.org.au>
+Subject: linux-next: manual merge of the fscache tree with Linus' tree
+Message-ID: <20211006100502.78cff1c7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HTenxCkyTa48cNW6Qlazf2M";
+Content-Type: multipart/signed; boundary="Sig_/Pboin9D8r6p/42l+KYnA7u1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/HTenxCkyTa48cNW6Qlazf2M
+--Sig_/Pboin9D8r6p/42l+KYnA7u1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commits
+Today's linux-next merge of the fscache tree got conflicts in:
 
-  7c4a8b989a99 ("soc: imx: imx8m-blk-ctrl: add DISP blk-ctrl")
-  5b340e7813d4 ("soc: imx: add i.MX8M blk-ctrl driver")
-  592d47ea2f24 ("soc: imx: gpcv2: support system suspend/resume")
-  be4756d4bb83 ("soc: imx: gpcv2: keep i.MX8M* bus clocks enabled")
-  d0118b6be392 ("soc: imx: gpcv2: add domain option to keep domain clocks e=
-nabled")
-  68c3c82c034f ("soc: imx: gpcv2: add lockdep annotation")
+  fs/9p/cache.c
+  fs/9p/vfs_addr.c
 
-are missing a Signed-off-by from their committer.
+between commit:
+
+  bc868036569e ("9p: Fix a bunch of kerneldoc warnings shown up by W=3D1")
+
+from Linus' tree and commit:
+
+  fcd4c99b70ce ("9p: Convert to using the netfs helper lib to do reads and =
+caching")
+
+from the fscache tree.
+
+I fixed it up (I used the latter versions) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/HTenxCkyTa48cNW6Qlazf2M
+--Sig_/Pboin9D8r6p/42l+KYnA7u1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFcvhAACgkQAVBC80lX
-0GyULQf9ELPhd4VOmHvi9m3nBhx9W2HqFiwKZQOFYW8ScPqEARJUqmphBQMNqWhL
-mkLUa1UAoYCgSiA51QhpLYj62ogBlyjxbx7RVCrbTI8pbpwEI76ef99XN3nKfs5z
-EXak4o3vs2Hymjer/J7SZpB5KFXX/xTRVxnkYYt9rFSwpg3kxAyFTbV0j3NtFBNZ
-hAPstGDM49Oah6PxXKnHBtxaF77ZD652KEINejDvkFNShqa7ICYHi9+a+Gm8bcQA
-Ub6pPWR30YWiXWmyk6eDdot+SnJZOC6YnPX94D9npbyJEDUkdSoS89jb7wa7i0os
-IbFXRNms8KNF4U222NOgsy/alAuDvA==
-=pxL9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFc2h4ACgkQAVBC80lX
+0GyL5Af+P+N+oS2ZtWCkehFlh0wZtMJAls/gQHIjmEF9qbq06ImQJyMMEoQu1stI
+Yt7uOEDSL1bdH4dNNJnZCmSOm3sHBU8RFiZ1PQ76OQMMZJJREg/tMhdOPfOloSF8
+FlYVamkiv6OZ4FMZIlGq8CaKKzzhd9IaWVseEMSgwxarKooAuvXpl0fozyFWpCit
+LCag08AhKwE4kQ16I+G2HXz6bze08kVA4hg/he7hxA/xL3j3xg4WNJ/vZn2WZJEb
+T5rKlo6QC3Oz2UVeiR/QyRw5XiyhvJg1Fb6dYQPh6SI9zuR17UW0uv63MX7uuoII
+6JtcKB694Q+04O+pJOeWqKJLe+tUcw==
+=x3Qh
 -----END PGP SIGNATURE-----
 
---Sig_/HTenxCkyTa48cNW6Qlazf2M--
+--Sig_/Pboin9D8r6p/42l+KYnA7u1--

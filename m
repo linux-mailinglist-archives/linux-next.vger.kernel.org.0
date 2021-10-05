@@ -2,118 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C575C421B80
-	for <lists+linux-next@lfdr.de>; Tue,  5 Oct 2021 03:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD66421BD1
+	for <lists+linux-next@lfdr.de>; Tue,  5 Oct 2021 03:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbhJEBNs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Oct 2021 21:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S229606AbhJEB0B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Oct 2021 21:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbhJEBNr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Oct 2021 21:13:47 -0400
+        with ESMTP id S229549AbhJEB0A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Oct 2021 21:26:00 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2D4C061745;
-        Mon,  4 Oct 2021 18:11:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08633C061745;
+        Mon,  4 Oct 2021 18:24:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HNfgb633Bz4xbQ;
-        Tue,  5 Oct 2021 12:11:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HNfxh4NxZz4xbR;
+        Tue,  5 Oct 2021 12:24:08 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633396316;
-        bh=QcnoFg9wrYYDMZj3ftLGLzrX3IjtvRl4VMlIHDnSDWQ=;
+        s=201702; t=1633397049;
+        bh=yxerCLRqyOOm+Qv4v2U5hcnkfkJTlw2XC0iLRrwkNzU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NYeaX52ycFqmW90xJStCD1DZ2BSYd5cIVs3p4NXGASU6pb28y555gxidQ2FretFau
-         NE70HAsDecek2ECi9A9VJgFNtOTdIkUTpiUxjVX7p1l6sMX+aPoTtgZYZZZreIdWrx
-         3FnIVj+jR0UV4JmjaUUvrIFmbTg5HplSJLz7WfHiDNvlSjNwef3dL5rjlwzzpLJ6nt
-         d1W5P4qIXmALpDYYz0yAIFHYlArhDPOEGxkPGN92h0iEY4UGu44pYVf+6hh+j86VTY
-         hvwWsVex73STrGW39WPuwVitk5PgSDxBvOL56k5+IazYiImnZ4z7Ro3m2adyZ1LAb2
-         BTWxff727APWQ==
-Date:   Tue, 5 Oct 2021 12:11:54 +1100
+        b=Ob4T9gDUKG8Rq0Hvuhu2v1Rzz1zesPIkYTYRW3DHc8Y2Q/F19n5ICeOUHzDERHFt0
+         33bduw9DUHyRxvdQLKfHn7xZH1+ezCYXyFuSKoy1zhLopiO4joZRZVRE8zezTQcZ+q
+         DBy5pufXQFrMKtRg4u64ietZX+yI+Y2vA6GcaK4E7JFLv3tEY85wngWX4TDfYoIqA3
+         p7iB3dnt07ZkkxfzNCWIWZUMmc6khy8TDCIhNu+9oOYWvvKPdjUY9XCR8LptSkyqda
+         HpF9E0Gb+Nra70Rxqy1UVuG/rWI/owlWs4nnNfQkTnceUrT/YlY8tp6HtJEoYj+tr/
+         ip5g/3FAhdTAg==
+Date:   Tue, 5 Oct 2021 12:24:07 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     netdev@vger.kernel.org, edumazet@google.com, weiwan@google.com,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
 Subject: Re: linux-next: build failure after merge of the net-next tree
-Message-ID: <20211005121154.08641258@canb.auug.org.au>
-In-Reply-To: <20211001.144046.309542880703739165.davem@davemloft.net>
-References: <20211001161849.51b6deca@canb.auug.org.au>
-        <20211001.144046.309542880703739165.davem@davemloft.net>
+Message-ID: <20211005122407.25274909@canb.auug.org.au>
+In-Reply-To: <20211005115637.3eacc45f@canb.auug.org.au>
+References: <20211005115637.3eacc45f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/K5PWtTQ4z25yGFL2XQT1aEi";
+Content-Type: multipart/signed; boundary="Sig_/vdkn.pXgtEz.5Gm_bUxROfa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/K5PWtTQ4z25yGFL2XQT1aEi
+--Sig_/vdkn.pXgtEz.5Gm_bUxROfa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Dave,
+Hi all,
 
-On Fri, 01 Oct 2021 14:40:46 +0100 (BST) David Miller <davem@davemloft.net>=
- wrote:
+On Tue, 5 Oct 2021 11:56:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 1 Oct 2021 16:18:49 +1000
+> After merging the net-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
 >=20
-> > Hi all,
-> >=20
-> > After merging the net-next tree, today's linux-next build (sparc64
-> > defconfig) failed like this:
-> >=20
-> > net/core/sock.c: In function 'sock_setsockopt':
-> > net/core/sock.c:1417:7: error: 'SO_RESERVE_MEM' undeclared (first use i=
-n this function); did you mean 'IORESOURCE_MEM'?
-> >   case SO_RESERVE_MEM:
-> >        ^~~~~~~~~~~~~~
-> >        IORESOURCE_MEM
-> > net/core/sock.c:1417:7: note: each undeclared identifier is reported on=
-ly once for each function it appears in
-> > net/core/sock.c: In function 'sock_getsockopt':
-> > net/core/sock.c:1817:7: error: 'SO_RESERVE_MEM' undeclared (first use i=
-n this function); did you mean 'IORESOURCE_MEM'?
-> >   case SO_RESERVE_MEM:
-> >        ^~~~~~~~~~~~~~
-> >        IORESOURCE_MEM
-> >=20
-> > Caused by commit
-> >=20
-> >   2bb2f5fb21b0 ("net: add new socket option SO_RESERVE_MEM")
-> >=20
-> > arch/sparc/include/uapi/socket.h does not include uapi/asm/socket.h and
-> > some other architectures do not as well.
-> >=20
-> > I have added the following patch for today (I searched for SO_BUF_LOCK
-> > and, of these architectures, I have only compile tested sparc64 and
-> > sparc): =20
+> drivers/net/ethernet/ibm/ehea/ehea_main.c: In function 'ehea_setup_single=
+_port':
+> drivers/net/ethernet/ibm/ehea/ehea_main.c:2989:23: error: passing argumen=
+t 2 of 'eth_hw_addr_set' from incompatible pointer type [-Werror=3Dincompat=
+ible-pointer-types]
+>  2989 |  eth_hw_addr_set(dev, &port->mac_addr);
+>       |                       ^~~~~~~~~~~~~~~
+>       |                       |
+>       |                       u64 * {aka long long unsigned int *}
+> In file included from include/linux/if_vlan.h:11,
+>                  from include/linux/filter.h:19,
+>                  from include/net/sock.h:59,
+>                  from include/linux/tcp.h:19,
+>                  from drivers/net/ethernet/ibm/ehea/ehea_main.c:20:
+> include/linux/etherdevice.h:309:70: note: expected 'const u8 *' {aka 'con=
+st unsigned char *'} but argument is of type 'u64 *' {aka 'long long unsign=
+ed int *'}
+>   309 | static inline void eth_hw_addr_set(struct net_device *dev, const =
+u8 *addr)
+>       |                                                            ~~~~~~=
+~~~~^~~~
+> cc1: some warnings being treated as errors
 >=20
-> I committed the sparc part into net-next today, thanks.
+> Caused by commit
+>=20
+>   a96d317fb1a3 ("ethernet: use eth_hw_addr_set()")
+>=20
+> I have used the net-next tree from next-20211001 for today.
 
-Unfortunately, there is a typo in what you committed in bfaf03935f74
-("sparc: add SO_RESERVE_MEM definition."), SO_RESEVE_MEM instead of
-SO_RESERVE_MEM ...
+I also had to use the next-20211001 version if the bpf-next tree (since
+it had been reset past the broken commit in the net-next tree).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/K5PWtTQ4z25yGFL2XQT1aEi
+--Sig_/vdkn.pXgtEz.5Gm_bUxROfa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFbploACgkQAVBC80lX
-0Gyo1gf/dnSvjxx13Gkwpx84SSOykZFD7FbLiHsgn2ZK4E+dKRkMP+0SRvzrZcFB
-+gPDB0AodxmtwtXX0G/kgoquYFBj/75Y5wNEUGti/C8KOn09ifsz1uP0GB76XRNG
-wbU97JfEU9ndRvHjgKrpZg67b4ML6rJTNcTlh73L2QZca5Do4MpdlpER8bUc+42/
-SWkir51JextoUOdaRyAHhHz9qad2Wec/owm1NZLRZuwUjpw2xntBK2ocokvmHckb
-IZy37ZKT3x0pSVG4hl/MeXhPYEwLKQMNbgw1BzLPbfCPLNzlY7Xvf+sEZBnC7fav
-M+VSB5841hft1hSrPjbsLRKhvLP25A==
-=pHAX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFbqTcACgkQAVBC80lX
+0GyHNgf+IoiEDX3xLfrpgRZCVaL1GC0cBjU1+nfiTHOIPGu77fR5SRANw0RbU+D0
+xybpri6oJ57oN0WFSXW1T+9bQR0j/y6Y+ANxNECjwJ2yFSQJ5gRgoeZuzwo2xcPp
+91UwyKHLzDeM06egqKL2TvBP4RYcpuuv/Bp/7jisRGNRjtK0Vhb8Q8jo3LMTOBKx
+jEn7WUCoLtyIcs86mXX7woDDqzDmQcPsjzGwU3kf07LtU0vKM29+wUfInAYgiJRt
+D3npLdi9SrW4ZR3cnNjplgFyH57OHrh8KsBds1T42gN10TerJCH69qlnIjMl0YSF
+hEsmh7vVM/yq5oKufONW0jYqcSc1kQ==
+=mnT6
 -----END PGP SIGNATURE-----
 
---Sig_/K5PWtTQ4z25yGFL2XQT1aEi--
+--Sig_/vdkn.pXgtEz.5Gm_bUxROfa--

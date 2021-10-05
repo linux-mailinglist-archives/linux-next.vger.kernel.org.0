@@ -2,80 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A975542229C
-	for <lists+linux-next@lfdr.de>; Tue,  5 Oct 2021 11:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3DF42231D
+	for <lists+linux-next@lfdr.de>; Tue,  5 Oct 2021 12:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbhJEJsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Oct 2021 05:48:05 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:48975 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbhJEJsF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Oct 2021 05:48:05 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HNt520DMVz4xR9;
-        Tue,  5 Oct 2021 20:46:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633427174;
-        bh=84eqqgNw6zWux6L32esx+ONxFpgmhKvUPjxStrTVukE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZXB74NmmmVlpcCc6tAz9ixgmFxFztxqj5OXA2Ctt3xuoL+LJm6JOVAB8cjTLta8P2
-         yncrtHz/+e4s51YKqwTzyX9QRg81+/Jhr3SMEmpcSt57YqtxQILux3oAW3ugEnGzcH
-         BEmEdbGAtdE0jq43W4K9QSxLmW6oytDfHRd75RAF3whhqh5dos8FTe1dPqeO0CXzkc
-         KdzOFXxWS3pGVqMKO/k5MUO3mgDdn/dR9s6ct9ax1FY6e+wqSJbd4g8uptn+tScgSs
-         qyhed+R2cQZDc+HJOgv0G7PwWYgNZt3mOG6OS39xhQCK+G0bg2fgKbqgGZMMhoTTpa
-         q9PQeq23kfe0A==
-Date:   Tue, 5 Oct 2021 20:46:13 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+        id S233738AbhJEKMV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Oct 2021 06:12:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233671AbhJEKMU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 5 Oct 2021 06:12:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1511761247;
+        Tue,  5 Oct 2021 10:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633428630;
+        bh=4iWhdJ7s4eAjrOEDuZHxUg1f+avIITd37qcdykKBzII=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=tmeHwkOgCKJ6iCZWCHUG7XhijYqJEH9/wdhTMV0e71vNdgpi6uBqnhn1PNXab8Znw
+         3CiL/tfetWhM5EZNyMTnXP9FHGS4F6zXlwjVx8S8GVWhPTcCblWobKz0sZm/R0O+CC
+         edOEjMlhiLOi0v1zgQ9aoEOWW89SJRBZ5/BzNpWCY8n5uqgKQfAcFQaHL3kCSvdW/A
+         oz8+yWDW5QD4iKYR/1z+rYm1aaaJyNDJ4AI3v7eFE4xEk46KTLh0BIauEnDr7Rd4Kc
+         aW0Ob33YjBxlRIcwX7Xxpu61Se1wds/75tCUfLUSgAn+MZnuYlpaBdrmqfEZQecTJ+
+         HG9LlXHmr0GXg==
+Message-ID: <94f1ac147ba08e3d95fb74369c4f1482f0833ec4.camel@kernel.org>
+Subject: Re: linux-next: build warning after merge of Linus' tree
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the fscache tree
-Message-ID: <20211005204613.53cbdfb9@canb.auug.org.au>
+Date:   Tue, 05 Oct 2021 06:10:29 -0400
+In-Reply-To: <20211005201851.38832f67@canb.auug.org.au>
+References: <20211005201851.38832f67@canb.auug.org.au>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DvtSlDavDl6vsPbGt9QkVn0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DvtSlDavDl6vsPbGt9QkVn0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2021-10-05 at 20:18 +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In Linus' tree, today's linux-next build (htmldocs) produced this warning:
+> 
+> Documentation/filesystems/index.rst:18: WARNING: toctree contains reference to nonexisting document 'filesystems/mandatory-locking'
+> 
+> Introduced by commit
+> 
+>   f7e33bdbd6d1 ("fs: remove mandatory file locking support")
+> 
 
-Hi all,
+Thanks Stephen.
 
-After merging the fscache tree, today's linux-next build (htmldocs)
-produced this warning:
+I rolled up a patch to remove that line and put it in my locks-next
+branch. It should end up in linux-next soon. I'll plan to send that on
+to Linus for v5.16, unless anyone thinks it needs to go in sooner.
+-- 
+Jeff Layton <jlayton@kernel.org>
 
-Documentation/filesystems/caching/backend-api.rst:402: WARNING: Inline emph=
-asis start-string without end-string.
-
-Introduced by commit
-
-  9c74b32d892e ("fscache: Update the documentation to reflect I/O API chang=
-es")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DvtSlDavDl6vsPbGt9QkVn0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFcHuUACgkQAVBC80lX
-0GzToQf/UVrdSovKpXSO4oe71vtU1WMTr4C4e+GzQ7zTfamfFI6VNHwN62b7ptKG
-VE64btcLiD96T6AJPzvQ2octZTt+UVBO2mob1zxXQeU4exg45It+5SKmtZpO8Ncs
-FA1K1eyGQsPnRD9okjYdQ5YODJLL6fRielH+6yAJCuOjW5UHnKYLsBOCufAQ/tju
-1QrZS78O1cgXJKBxnfcRsMWRdhSHvuzsmKeYoJgSVNLSRCbiaN6ZJja3ICCvjAlD
-5weHc6W0KfQt8RCbuefG1G8krXRU7oLi0/77zZ8WvBhLjS5aNAtVNw2zV/v3HEI3
-8ScL9+XWDtKn7DStj2HwuYlTN97nmQ==
-=f6QK
------END PGP SIGNATURE-----
-
---Sig_/DvtSlDavDl6vsPbGt9QkVn0--

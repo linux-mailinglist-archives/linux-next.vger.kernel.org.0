@@ -2,215 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A44E424580
-	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 20:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AB14245A8
+	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 20:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbhJFSC3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Oct 2021 14:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S239360AbhJFSHn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Oct 2021 14:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhJFSC2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 14:02:28 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6C7C061746;
-        Wed,  6 Oct 2021 11:00:36 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t8so11434749wri.1;
-        Wed, 06 Oct 2021 11:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EPNCCSvlkMxEqS60vnaY80nAIfQ2x+FisCTo8PhpnNI=;
-        b=YaYs1nWRhu1qjZuQdKnS5hT/tdWkGV4MWKyHCGYv21kS5A6rvA8AQcoxeA2IwZcamq
-         utq055Y5LwdstG4WW3JKijldku1Q+VIwyVVymc1F5y7TVLUMcDyzEnUk9w24P80WD6PA
-         IjibsMZpFitMYBvOhJf+XMXkM8SFApmXMpxqIgytlKzgaGrYaegO1ddm2NfbNb8wblez
-         Fk6/DXjRHMEHIDGxBrKtzdvO2n7JB/kWICc5ZSnUABwSdyV7QK2oeTGpqLhmktiyUrLZ
-         uItYZvbguecHv/KcahyAlNb3YcoQumdOHFDMqTPI0K2w3ViZ3WWYHRoi8sp8OEIO3kSS
-         gsVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EPNCCSvlkMxEqS60vnaY80nAIfQ2x+FisCTo8PhpnNI=;
-        b=uZnHOYZPStAM5Jn820bXwtdnH1u473E6g6j3lKYeu0T54oRMryYeS86UzJ1kDr+7dg
-         Ebnc3ljfdGka4mvFdVKbVG2HJ4p9WTXJcHuHCwcv/5NIE6Z/FYShZ4lxzwKrHIwZWx9r
-         yUMiatIJlmc7zRHBQWwrjgui4VPkMXXfwjPltvjaXb6tB67wytQ0ZW084jTERi1dN0UK
-         YqcOXwljkrcMIkgJJmGkwXgX92CMidPqNTEw4PqGalzIYnrju5Icp00LPDtOi+BTkxQ5
-         AqQFSfU6rGUDJ/FMyIbuZWq4AGmHAUO3BHzMCIqun1DgfaS3zRtLENzFaKha/hWP9nk/
-         Qc2Q==
-X-Gm-Message-State: AOAM532eRAV9wV6MHMeerb2o013IxeXtFWRx8CrMMeIuUYy57gnEeL4R
-        Me/cBjrwHn/lCLG8pEfnJDk=
-X-Google-Smtp-Source: ABdhPJyvoi0ram5mwr6OdEm44/6bwDjCaD9mcLelkQkBg/9ZHIQaKIDjoqXN1D0ZY3E/SEDZmtSgrg==
-X-Received: by 2002:a05:6000:1885:: with SMTP id a5mr11945807wri.64.1633543234667;
-        Wed, 06 Oct 2021 11:00:34 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id l16sm6506475wmj.33.2021.10.06.11.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 11:00:33 -0700 (PDT)
-Date:   Wed, 6 Oct 2021 20:00:32 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Colin Cross <ccross@android.com>,
-        Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tegra tree
-Message-ID: <YV3kQPYVKraegCf5@orome.fritz.box>
-References: <20211005103952.0914094d@canb.auug.org.au>
- <445e6daa-f210-74c5-cf8d-4aa138136b7e@gmail.com>
+        with ESMTP id S239342AbhJFSHk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 14:07:40 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FBCC061766;
+        Wed,  6 Oct 2021 11:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UXOqw6LYYO+wVibxP4e/orAi9rkc97L/HWtRElWnpJY=; b=462AX6p5/pblPwzDuTNTIoQdTm
+        55fDtkidx88LFDHJd7iCL4sfa4X9pd49aIkLbRrrkT/4J+lPF2CIVkSNPC2uiWVCkmX0nrzfkrvP/
+        hItmXQl9oeHxbtulFkxUSI/W0+fpAp++iKDSXmK0+gQRKj8fkCEQaMA36uBHA+DB6OykHj4mSmjk+
+        dz1y7uErtG4BPtMRBq6TV3zWJJYGZEstq7GU3u7NYnYLpwifW4etczK1+qIIiU8EvXM/FaCATw7SE
+        PBawL4Gskhv9VpWxkS4KW4rahq55RR5E3I0GyQOqQizeMF78ZUfKF7+LTMZml0Kdz5cXFy9UGOXLJ
+        +3MlZq2Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mYBIV-00FILd-UO; Wed, 06 Oct 2021 18:05:44 +0000
+Subject: Re: mmotm 2021-10-05-19-53 uploaded
+ (drivers/gpu/drm/msm/hdmi/hdmi_phy.o)
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+References: <20211006025350.a5PczFZP4%akpm@linux-foundation.org>
+ <58fbf2ff-b367-2137-aa77-fcde6c46bbb7@infradead.org>
+ <20211006182052.6ecc17cf@canb.auug.org.au>
+ <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <34c2f6ab-3982-a031-1af6-5ed482b5c344@infradead.org>
+Date:   Wed, 6 Oct 2021 11:05:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qLw0vJmupSraQi/M"
-Content-Disposition: inline
-In-Reply-To: <445e6daa-f210-74c5-cf8d-4aa138136b7e@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+In-Reply-To: <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 10/6/21 12:24 AM, Christian König wrote:
+> 
+> 
+> Am 06.10.21 um 09:20 schrieb Stephen Rothwell:
+>> Hi Randy,
+>>
+>> On Tue, 5 Oct 2021 22:48:03 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+>>> on i386:
+>>>
+>>> ld: drivers/gpu/drm/msm/hdmi/hdmi_phy.o:(.rodata+0x3f0): undefined reference to `msm_hdmi_phy_8996_cfg'
+>>>
+>>>
+>>> Full randconfig fle is attached.
+>> This would be because CONFIG_DRM_MSM is set but CONFIG_COMMON_CLOCK is
+>> not and has been exposed by commit
+>>
+>>    b3ed524f84f5 ("drm/msm: allow compile_test on !ARM")
+>>
+>> from the drm-misc tree.
+> 
+> Good point, how about this change:
+> 
+> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+> index 5879f67bc88c..d9879b011fb0 100644
+> --- a/drivers/gpu/drm/msm/Kconfig
+> +++ b/drivers/gpu/drm/msm/Kconfig
+> @@ -5,7 +5,7 @@ config DRM_MSM
+>          depends on DRM
+>          depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
+>          depends on IOMMU_SUPPORT
+> -       depends on (OF && COMMON_CLK) || COMPILE_TEST
+> +       depends on (OF || COMPILE_TEST) && COMMON_CLK
+>          depends on QCOM_OCMEM || QCOM_OCMEM=n
+>          depends on QCOM_LLCC || QCOM_LLCC=n
+>          depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
 
---qLw0vJmupSraQi/M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+WorksForMe. Thanks.
+(other than the whitespace damage)
 
-On Tue, Oct 05, 2021 at 02:54:43AM +0300, Dmitry Osipenko wrote:
-> 05.10.2021 02:39, Stephen Rothwell =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi all,
-> >=20
-> > After merging the tegra tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > In file included from arch/x86/include/asm/bug.h:84,
-> >                  from include/linux/bug.h:5,
-> >                  from arch/x86/include/asm/paravirt.h:15,
-> >                  from arch/x86/include/asm/irqflags.h:63,
-> >                  from include/linux/irqflags.h:16,
-> >                  from include/linux/rcupdate.h:26,
-> >                  from include/linux/rculist.h:11,
-> >                  from include/linux/pid.h:5,
-> >                  from include/linux/sched.h:14,
-> >                  from include/linux/ratelimit.h:6,
-> >                  from include/linux/dev_printk.h:16,
-> >                  from include/linux/device.h:15,
-> >                  from include/linux/of_reserved_mem.h:5,
-> >                  from drivers/memory/tegra/tegra210-emc-table.c:6:
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_rail_off_ready':
-> > include/linux/clk/tegra.h:112:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   112 |  if (WARN_ON(!tegra_cpu_car_ops->rail_off_ready))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h:112:15: note: each undeclared identifier is r=
-eported only once for each function it appears in
-> >   112 |  if (WARN_ON(!tegra_cpu_car_ops->rail_off_ready))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_clock_suspend':
-> > include/linux/clk/tegra.h:120:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   120 |  if (WARN_ON(!tegra_cpu_car_ops->suspend))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_clock_resume':
-> > include/linux/clk/tegra.h:128:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   128 |  if (WARN_ON(!tegra_cpu_car_ops->resume))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > In file included from arch/x86/include/asm/bug.h:84,
-> >                  from include/linux/bug.h:5,
-> >                  from include/linux/cpumask.h:14,
-> >                  from arch/x86/include/asm/cpumask.h:5,
-> >                  from arch/x86/include/asm/msr.h:11,
-> >                  from arch/x86/include/asm/processor.h:22,
-> >                  from arch/x86/include/asm/timex.h:5,
-> >                  from include/linux/timex.h:65,
-> >                  from include/linux/time32.h:13,
-> >                  from include/linux/time.h:60,
-> >                  from include/linux/stat.h:19,
-> >                  from include/linux/module.h:13,
-> >                  from drivers/media/cec/platform/tegra/tegra_cec.c:14:
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_rail_off_ready':
-> > include/linux/clk/tegra.h:112:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   112 |  if (WARN_ON(!tegra_cpu_car_ops->rail_off_ready))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h:112:15: note: each undeclared identifier is r=
-eported only once for each function it appears in
-> >   112 |  if (WARN_ON(!tegra_cpu_car_ops->rail_off_ready))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_clock_suspend':
-> > include/linux/clk/tegra.h:120:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   120 |  if (WARN_ON(!tegra_cpu_car_ops->suspend))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> > include/linux/clk/tegra.h: In function 'tegra_cpu_clock_resume':
-> > include/linux/clk/tegra.h:128:15: error: 'tegra_cpu_car_ops' undeclared=
- (first use in this function)
-> >   128 |  if (WARN_ON(!tegra_cpu_car_ops->resume))
-> >       |               ^~~~~~~~~~~~~~~~~
-> > include/asm-generic/bug.h:121:25: note: in definition of macro 'WARN_ON'
-> >   121 |  int __ret_warn_on =3D !!(condition);    \
-> >       |                         ^~~~~~~~~
-> >=20
-> > Presumably caused by commit
-> >=20
-> >   bbe30ae68d14 ("cpuidle: tegra: Enable compile testing")
-> >=20
-> > I have used the tegra tree from next-20211001 for today.
-> >=20
->=20
-> Stephen, thank you. Now I recall what was the actual reason for my
-> version of the patch [1]. Thierry, please use my original patch, thanks.
->=20
-> [1]
-> https://patchwork.ozlabs.org/project/linux-tegra/patch/20210912202907.284=
-71-5-digetx@gmail.com/
-
-Sorry, I forgot to reply to this yesterday. I found a simpler fix for
-this and I pushed that yesterday. Today's linux-next didn't have the
-build failure anymore, so I guess it worked.
-
-Thierry
-
---qLw0vJmupSraQi/M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmFd5D0ACgkQ3SOs138+
-s6FLKRAAhmpECO0bnxSlRePMARoo8f1a1IYrae52l6ThkA3vgKPJbBOfP8dCaty7
-pC4IiMYPIjNitQbnvglRfIZl0+xZwaEawP/jkkeNwiFJwiRtQ3t+dhvcqeO++fk4
-ZZaTt80Qm5y/r03p3uBcnpZPQH3xBTPsFurhrT8Xb5HIVSQuLwrbzmShFHxRIn9K
-FyekzbcfpdXBHxYBih6tBEES+fhzVpv5Ulg/F7r3K+KcUkjP/4HjOajQfeL+kSye
-4HrTpYXXpRGcGbXr6Jsn2e1dVzQXjaFazRrHNtrv1biba0ezlzK95iS4PWg3wyKC
-4KYKWS1vcxcfcbIpJUelceodsFWpaE1fqBSVNKzvLiJDqr2y5xP15Q3si5DD9IyS
-NbSZeZhroFukNaFkL3vMWTyZ1zvWAp49M3WAf1pTp4c4hnL8m0eXJBdQOTvkyZgX
-7Ej8LHV8Tgm53mgiJSBG4R4uas9EX5hXHI0YOcqDB/kbzVlFoqjKSUJl3VlnaQ+U
-asBEeY0Z3Z/cftrjHEv2vV+95NHBG0qQxzfDOJDN8MEFPE8wn4dwmspGNEzHns+P
-VGrANsMesTfZF0j53UNVM6T/yOW/XeYau4uAIrdUJl/Czl0aBXkQ3cnp3f33XSmG
-HzaDr2cz2Y1M2xvNz8VS2gqggixyOvVFbSCduNl0L3eVU/qTMcA=
-=8p6Q
------END PGP SIGNATURE-----
-
---qLw0vJmupSraQi/M--
+-- 
+~Randy

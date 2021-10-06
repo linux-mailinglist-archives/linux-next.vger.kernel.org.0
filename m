@@ -2,128 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2700E423629
-	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 05:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF97A423660
+	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 05:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbhJFDIu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Oct 2021 23:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S231511AbhJFDwQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Oct 2021 23:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbhJFDIt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Oct 2021 23:08:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33427C061749;
-        Tue,  5 Oct 2021 20:06:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        with ESMTP id S230317AbhJFDwP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Oct 2021 23:52:15 -0400
+X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Oct 2021 20:50:24 PDT
+Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA85C061749;
+        Tue,  5 Oct 2021 20:50:23 -0700 (PDT)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HPK9r0WbYz4xbC;
-        Wed,  6 Oct 2021 14:06:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633489616;
-        bh=FpJb17O/OK8AZco1UjAOqyAOGqm9kvGdwy8j1IJGb8w=;
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4HPKzx3yL0z101M;
+        Wed,  6 Oct 2021 14:43:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1633491806;
+        bh=XO+0Xhw21W4/0Mk9c03o2/Jf8G9l8/F80awZFNi1ApQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mo2WjpEGpb7AdQE/7SuCHsCwnfve1S9T68OJq6v6Hvvupw4r1lfgQqqPt2jEFmjja
-         tnsrKnPNRde5++Rf49WSkyZm9JSXmO7/Ij/4nXp+5ojBcj1l+GQxdLxcJlbsY+TAZ9
-         VQKucOskwGASGsrEMEWP9FSpIFkf0bc0kfnkeO5z9eKiRAeMAGlWk6TuPbLH1XNdjk
-         I9lQ7R2VIEhbKE6xuAmIlUqUozDNGP0RCBTSmkBKxpeo+vLTXq+I5FRQP9EEc0OS6b
-         ixE7rJQlYmzLIAmG1Ws7N2vWVXYQTaLqAD9n6Sa615KKIQ+Yn0F3LDGMvZWOmx6H4L
-         Dd88IwQzolWng==
-Date:   Wed, 6 Oct 2021 14:06:55 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
+        b=e8gIeca8l2SWih+XLakjitFrSvB/Y8qu4X9ZW/CS6UabTf79w56wUkXI1bjin1NyK
+         71TBPrbGzu6B3dRJ7fdAeqFeb3yFtoxWyxof9/oaaesrqYr9bNwJGcfDv91wvq7jMy
+         zcpuNFjfau/GrY62Ytrlyh6AFNbAdSuWnb4dBgfoieVOJElKxBD3sxSgdIx8DqctnD
+         eun8vghH7rntK5YX18fAmNfbTyv/cPv4XLxpcircFZmqeYdRAlYghLJUb8ZuQFwBYX
+         mR7GAts3SwYqKvVyxA1R8c6wnlyMpdyY6W6LyLcJLuReJ8uFgU5b2JzP//dRPnldeZ
+         vRG53/0oKAvzw==
+Date:   Wed, 6 Oct 2021 14:43:22 +1100
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <20211006140655.6381bc5d@canb.auug.org.au>
-In-Reply-To: <YUhuHcHeeNELK8cr@hirez.programming.kicks-ass.net>
-References: <20210920113330.29f12b99@canb.auug.org.au>
-        <YUhuHcHeeNELK8cr@hirez.programming.kicks-ass.net>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20211006144322.640b966a@elm.ozlabs.ibm.com>
+In-Reply-To: <20211005185217.7fb12960@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20211006122315.4e04fb87@canb.auug.org.au>
+        <20211005185217.7fb12960@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vX4IllVywMMtwm8gQ4235.v";
+Content-Type: multipart/signed; boundary="Sig_/U0eCoNvbiJYoTXcpB5kKmJ_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vX4IllVywMMtwm8gQ4235.v
+--Sig_/U0eCoNvbiJYoTXcpB5kKmJ_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Peter,
+Hi Jakub,
 
-On Mon, 20 Sep 2021 13:18:53 +0200 Peter Zijlstra <peterz@infradead.org> wr=
-ote:
+On Tue, 5 Oct 2021 18:52:17 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> On Mon, Sep 20, 2021 at 11:33:30AM +1000, Stephen Rothwell wrote:
-> >=20
-> > After merging the tip tree, today's linux-next build (powerpc_ppc64
-> > defconfig) produced this warning:
-> >=20
-> > kernel/sched/debug.c: In function 'print_cfs_group_stats':
-> > kernel/sched/debug.c:460:41: warning: unused variable 'stats' [-Wunused=
--variable]
-> >   460 |                struct sched_statistics *stats =3D  __schedstats=
-_from_se(se);
-> >       |                                         ^~~~~
->=20
-> So I've not seen that one *yet*, I've dont a bunch of SCHEDSTAT=3Dn
-> builds. I do think GCC is being quite stupid for giving it, seeing how
-> the whole thing is within if (0). The GCC people seem to disagree when I
-> brought it up.
->=20
-> Anyway, what I did in other parts was the below; that seems to 'upgrade'
-> the warnings from -Wunused-variable to -Wunused-but-set-variable, and
-> that latter *is* in W=3D1, and I'm arguing it should be promoted to W=3D2=
- or
-> thereabout.
->=20
-> Given that whole if(0) {} thing, I don't feel motivated to change things
-> overly much and quite strongly feel this is the compiler being daft.
->=20
-> ---
->=20
-> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-> index 935dad7dffb7..ef71de01e4d7 100644
-> --- a/kernel/sched/debug.c
-> +++ b/kernel/sched/debug.c
-> @@ -457,7 +457,8 @@ static void print_cfs_group_stats(struct seq_file *m,=
- int cpu, struct task_group
->  	PN(se->sum_exec_runtime);
-> =20
->  	if (schedstat_enabled()) {
-> -               struct sched_statistics *stats =3D  __schedstats_from_se(=
-se);
-> +		struct sched_statistics *stats;
-> +		stats =3D __schedstats_from_se(se);
-> =20
->  		PN_SCHEDSTAT(wait_start);
->  		PN_SCHEDSTAT(sleep_start);
+> Applied, thanks. Is this the last one? ;)
 
-Any progress on this?  I am still getting the warning.
+No idea :-(
+
+> I wonder what happened to the kbuild bot :S
+
+Does it do ppc builds?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/vX4IllVywMMtwm8gQ4235.v
+--Sig_/U0eCoNvbiJYoTXcpB5kKmJ_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFdEs8ACgkQAVBC80lX
-0GywCwf9FqdLggpxZhSH93X3gPvN72Es9QkzqDcYS6b3me34+2uwiayPgQi65O8c
-zSkeTRqBJSy7bcBnX+1zJCdQG5djwRrekXu0UkkZKe/0PrwTLxHmsQUWPWWPfFdJ
-DyiUEES9gBiQ449xovjPhvkhRTKG5pL2qdQ4i3vvl7sOIhoZIUIhHfNzQA2mCh1u
-sWFp4NgTgvuzhaICSYCTbZJl51FvL/NE0Eljb+vSq4Ov/4OBSfpcgtFQ1amv6Gsx
-eFHvH8WEHCCavi9AZmKQKVeDpDM4Aeb5dz59hHPuABQ/NtqfmyZYMKqS99ixARLw
-sHGIv4vqr2tvcf8v5ZVe63gxGwfBvg==
-=TUTX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFdG1oACgkQAVBC80lX
+0GwVagf/Sc+2+FiM2X+efpF5Zxon+9nwfrG4j0c0/pQqzOGG6xnFSioW+UvtqFDE
+bgqr5ODrlVrJbiSQ4E3W5a5UEeq+H+yIqBMFkyutaIc8/KQ8XJH5Gejsh+9V3m+d
+m9nPmvfKay8W+LuqUdlWYRZsczROLYO+i1ObYS0xwAqzDJoDWSd95hk2OsplaJ6+
+bZIjkaBk4rfM8uM1B4CErSwN5EyaXw/4+BUsy7h1AtVJ78eRhSSXmwIWoa1lwUih
+qYXc0i4vGfhUUFQjFxFdxbOL6X9I9GrzMUgSmM2UynfICvd/fgjjtnIwjVDi4i+G
+ZBnYAZGTmuq+2yV+a1XMflsvbEmIbw==
+=s87e
 -----END PGP SIGNATURE-----
 
---Sig_/vX4IllVywMMtwm8gQ4235.v--
+--Sig_/U0eCoNvbiJYoTXcpB5kKmJ_--

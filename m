@@ -2,52 +2,34 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56238423A91
-	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 11:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E91423B1B
+	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 11:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbhJFJdN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Oct 2021 05:33:13 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:60402 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbhJFJdN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 05:33:13 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S237931AbhJFJ45 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Oct 2021 05:56:57 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60071 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238020AbhJFJ4l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 05:56:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B55E3224C0;
-        Wed,  6 Oct 2021 09:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1633512680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F2c6GFcbFRrTM/fRz3jOdvzgBLFsLLOg1NUfdovPQQY=;
-        b=GOR9p+nk2Ct/dX53lBTiSQe/2JSOo6VkZ4Qp21TuF30hqcU872n+vFNnLh20zRsjRyk4hb
-        aa1ZTeiyjAjBxb5fPHB46bUARf/30SBd0FgnUYiLP708MNrSRdbD7pH/AkwvBp9afylWZH
-        jbGKFO5mUVZSK6WkSJaDe30g4YfiNSs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1633512680;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F2c6GFcbFRrTM/fRz3jOdvzgBLFsLLOg1NUfdovPQQY=;
-        b=vqYoYiwK/JSjYBXWnJnMfbTglv8qhwQvRraszT89BYn9AicNrLbB2QeW/0KQ8kiEzEtfBA
-        4bDZZUSfRp10VhCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4AC813B73;
-        Wed,  6 Oct 2021 09:31:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xj0qKOhsXWFzUQAAMHmgww
-        (envelope-from <bp@suse.de>); Wed, 06 Oct 2021 09:31:20 +0000
-Date:   Wed, 6 Oct 2021 11:31:00 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HPVDP6WYzz4xbC;
+        Wed,  6 Oct 2021 20:54:45 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1633514087;
+        bh=B3Pf85bSPRGhEPXqUInjc3AxG2GKRX0U9FpffRCpdxQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PaBtL6RNjNxObkhXMTPfCon/2NwYfjbu7O0Tgoa3kJmmsAizEaldOlOuF8LKFqzlo
+         COYVzQCvoFXpNjdFWKtOwAW7mSvZj1QDs74GegaNl/bRZ36mPwlR+qm3SMt2b6snij
+         lPkv+MTz8Ycr5JutJKdhryeDgH4CNO4RMY78J68CE5ojMRiQI4bKJZhUeqMTXU2J5Y
+         NRd0pwblZ+Ih7FJZe7VWKqxA4vg929n/ZmwKJoEebfHCSTCpUtEGIZIFYtD+UL8CF+
+         1x8AtcqukV1VFvq/kQSaxYROT1flZWmimX3VxVd7CWbF8xklRzCLFiVVQl38zi2JiO
+         hcLZ3nhFFDBnA==
+Date:   Wed, 6 Oct 2021 20:54:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Borislav Petkov <bp@suse.de>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -56,175 +38,73 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>
 Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <YV1s1GJ+e/qASPy7@zn.tnic>
+Message-ID: <20211006205444.52e088a9@canb.auug.org.au>
+In-Reply-To: <YV1s1GJ+e/qASPy7@zn.tnic>
 References: <20211006135826.3e1783f1@canb.auug.org.au>
+        <YV1s1GJ+e/qASPy7@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211006135826.3e1783f1@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/.q35oSktLfCfGBpC6q+.OCi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+ acme.
+--Sig_/.q35oSktLfCfGBpC6q+.OCi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 06, 2021 at 01:58:26PM +1100, Stephen Rothwell wrote:
-> After merging the tip tree, today's linux-next build (native perf)
-> failed like this:
+Hi Borislav,
+
+On Wed, 6 Oct 2021 11:31:00 +0200 Borislav Petkov <bp@suse.de> wrote:
 >
-> In file included from util/intel-pt-decoder/../../../arch/x86/lib/insn.c:16,
->                  from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
-> util/intel-pt-decoder/../../../arch/x86/lib/insn.c: In function '__insn_get_emulate_prefix':
-> tools/include/../include/asm-generic/unaligned.h:10:15: error: packed attribute is unnecessary [-Werror=packed]
->    10 |  const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr); \
+> + acme.
+>=20
+> On Wed, Oct 06, 2021 at 01:58:26PM +1100, Stephen Rothwell wrote:
+> > After merging the tip tree, today's linux-next build (native perf)
+> > failed like this:
+> >
+> > In file included from util/intel-pt-decoder/../../../arch/x86/lib/insn.=
+c:16,
+> >                  from util/intel-pt-decoder/intel-pt-insn-decoder.c:15:
+> > util/intel-pt-decoder/../../../arch/x86/lib/insn.c: In function '__insn=
+_get_emulate_prefix':
+> > tools/include/../include/asm-generic/unaligned.h:10:15: error: packed a=
+ttribute is unnecessary [-Werror=3Dpacked]
+> >    10 |  const struct { type x; } __packed *__pptr =3D (typeof(__pptr))=
+(ptr); \ =20
+>=20
+> Thanks for the report - luckily, the patch is the topmost one on the
+> branch so I can simply edit it.
+>=20
+> Here's the new version, you can simply apply the last hunk on your tree
+> only to verify that it fixes it but it should as the hw arch should not
+> matter - it explodes because perf tool builds with -Werror and I can
+> trigger it too.
+>=20
+> I'll redo tip/master once you confirm.
 
-Thanks for the report - luckily, the patch is the topmost one on the
-branch so I can simply edit it.
+Works for me, thanks.
 
-Here's the new version, you can simply apply the last hunk on your tree
-only to verify that it fixes it but it should as the hw arch should not
-matter - it explodes because perf tool builds with -Werror and I can
-trigger it too.
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> # ppc64le compile
 
-I'll redo tip/master once you confirm.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thx.
+--Sig_/.q35oSktLfCfGBpC6q+.OCi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
----
-From: Borislav Petkov <bp@suse.de>
-Date: Wed, 29 Sep 2021 16:37:53 +0200
-Subject: [PATCH] x86/insn: Use get_unaligned() instead of memcpy()
+-----BEGIN PGP SIGNATURE-----
 
-Use get_unaligned() instead of memcpy() to access potentially unaligned
-memory, which, when accessed through a pointer, leads to undefined
-behavior. get_unaligned() describes much better what is happening there
-anyway even if memcpy() does the job.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFdcmQACgkQAVBC80lX
+0GwImQf/Yea0ty2AtTxhGOHCW9BBPANH8RvLKItpMqe2rG2ZJzj6tLgvCe1sGFoN
+0paOPy7R9NT94aPAwILPvZKYYjqWk5Y+v5SPePGjmfN6eGPYD231iW0tjjnDJrFB
+IfyAr5AYwxQxVubKcNGtjB7Hssk9NV7XS1yl+sXQ5pfgaAkPhS0+G23rr+rDFOdH
+hN5d0179Tq+gm8fGASk81P6jrOYasdO5xBHoZjRO564UjF/2o4jGQcz+1/0YgCYx
+55R1Hjxrq8fUhbjwyAVU6+R886Myh9dzczoJ7fkdsr9DFpMssYKLMeR16Ir4ljCe
+P6V2CdM2DCr2FqXy0QTsLqP0AqAXMQ==
+=4JdA
+-----END PGP SIGNATURE-----
 
-In addition, since perf tool builds with -Werror, it would fire with:
-
-  util/intel-pt-decoder/../../../arch/x86/lib/insn.c: In function '__insn_get_emulate_prefix':
-  tools/include/../include/asm-generic/unaligned.h:10:15: error: packed attribute is unnecessary [-Werror=packed]
-     10 |  const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr); \
-
-because -Werror=packed would complain if the packed attribute would have
-no effect on the layout of the structure.
-
-In this case, that is intentional so disable the warning only for that
-compilation unit.
-
-That part is Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-
-No functional changes.
-
-Fixes: 5ba1071f7554 ("x86/insn, tools/x86: Fix undefined behavior due to potential unaligned accesses")
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Link: https://lkml.kernel.org/r/YVSsIkj9Z29TyUjE@zn.tnic
----
- arch/x86/lib/insn.c                    |  5 +++--
- tools/arch/x86/lib/insn.c              |  5 +++--
- tools/include/asm-generic/unaligned.h  | 23 +++++++++++++++++++++++
- tools/perf/util/intel-pt-decoder/Build |  2 ++
- 4 files changed, 31 insertions(+), 4 deletions(-)
- create mode 100644 tools/include/asm-generic/unaligned.h
-
-diff --git a/arch/x86/lib/insn.c b/arch/x86/lib/insn.c
-index c565def611e2..55e371cc69fd 100644
---- a/arch/x86/lib/insn.c
-+++ b/arch/x86/lib/insn.c
-@@ -13,6 +13,7 @@
- #endif
- #include <asm/inat.h> /*__ignore_sync_check__ */
- #include <asm/insn.h> /* __ignore_sync_check__ */
-+#include <asm/unaligned.h> /* __ignore_sync_check__ */
- 
- #include <linux/errno.h>
- #include <linux/kconfig.h>
-@@ -37,10 +38,10 @@
- 	((insn)->next_byte + sizeof(t) + n <= (insn)->end_kaddr)
- 
- #define __get_next(t, insn)	\
--	({ t r; memcpy(&r, insn->next_byte, sizeof(t)); insn->next_byte += sizeof(t); leXX_to_cpu(t, r); })
-+	({ t r = get_unaligned((t *)(insn)->next_byte); (insn)->next_byte += sizeof(t); leXX_to_cpu(t, r); })
- 
- #define __peek_nbyte_next(t, insn, n)	\
--	({ t r; memcpy(&r, (insn)->next_byte + n, sizeof(t)); leXX_to_cpu(t, r); })
-+	({ t r = get_unaligned((t *)(insn)->next_byte + n); leXX_to_cpu(t, r); })
- 
- #define get_next(t, insn)	\
- 	({ if (unlikely(!validate_next(t, insn, 0))) goto err_out; __get_next(t, insn); })
-diff --git a/tools/arch/x86/lib/insn.c b/tools/arch/x86/lib/insn.c
-index 797699462cd8..8fd63a067308 100644
---- a/tools/arch/x86/lib/insn.c
-+++ b/tools/arch/x86/lib/insn.c
-@@ -13,6 +13,7 @@
- #endif
- #include "../include/asm/inat.h" /* __ignore_sync_check__ */
- #include "../include/asm/insn.h" /* __ignore_sync_check__ */
-+#include "../include/asm-generic/unaligned.h" /* __ignore_sync_check__ */
- 
- #include <linux/errno.h>
- #include <linux/kconfig.h>
-@@ -37,10 +38,10 @@
- 	((insn)->next_byte + sizeof(t) + n <= (insn)->end_kaddr)
- 
- #define __get_next(t, insn)	\
--	({ t r; memcpy(&r, insn->next_byte, sizeof(t)); insn->next_byte += sizeof(t); leXX_to_cpu(t, r); })
-+	({ t r = get_unaligned((t *)(insn)->next_byte); (insn)->next_byte += sizeof(t); leXX_to_cpu(t, r); })
- 
- #define __peek_nbyte_next(t, insn, n)	\
--	({ t r; memcpy(&r, (insn)->next_byte + n, sizeof(t)); leXX_to_cpu(t, r); })
-+	({ t r = get_unaligned((t *)(insn)->next_byte + n); leXX_to_cpu(t, r); })
- 
- #define get_next(t, insn)	\
- 	({ if (unlikely(!validate_next(t, insn, 0))) goto err_out; __get_next(t, insn); })
-diff --git a/tools/include/asm-generic/unaligned.h b/tools/include/asm-generic/unaligned.h
-new file mode 100644
-index 000000000000..47387c607035
---- /dev/null
-+++ b/tools/include/asm-generic/unaligned.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copied from the kernel sources to tools/perf/:
-+ */
-+
-+#ifndef __TOOLS_LINUX_ASM_GENERIC_UNALIGNED_H
-+#define __TOOLS_LINUX_ASM_GENERIC_UNALIGNED_H
-+
-+#define __get_unaligned_t(type, ptr) ({						\
-+	const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);	\
-+	__pptr->x;								\
-+})
-+
-+#define __put_unaligned_t(type, val, ptr) do {					\
-+	struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);		\
-+	__pptr->x = (val);							\
-+} while (0)
-+
-+#define get_unaligned(ptr)	__get_unaligned_t(typeof(*(ptr)), (ptr))
-+#define put_unaligned(val, ptr) __put_unaligned_t(typeof(*(ptr)), (val), (ptr))
-+
-+#endif /* __TOOLS_LINUX_ASM_GENERIC_UNALIGNED_H */
-+
-diff --git a/tools/perf/util/intel-pt-decoder/Build b/tools/perf/util/intel-pt-decoder/Build
-index bc629359826f..b41c2e9c6f88 100644
---- a/tools/perf/util/intel-pt-decoder/Build
-+++ b/tools/perf/util/intel-pt-decoder/Build
-@@ -18,3 +18,5 @@ CFLAGS_intel-pt-insn-decoder.o += -I$(OUTPUT)util/intel-pt-decoder
- ifeq ($(CC_NO_CLANG), 1)
-   CFLAGS_intel-pt-insn-decoder.o += -Wno-override-init
- endif
-+
-+CFLAGS_intel-pt-insn-decoder.o += -Wno-packed
--- 
-2.29.2
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+--Sig_/.q35oSktLfCfGBpC6q+.OCi--

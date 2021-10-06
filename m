@@ -2,60 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DB5423DC9
-	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 14:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C083C423E1C
+	for <lists+linux-next@lfdr.de>; Wed,  6 Oct 2021 14:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbhJFMgL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Oct 2021 08:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbhJFMgK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 08:36:10 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F50DC061749
-        for <linux-next@vger.kernel.org>; Wed,  6 Oct 2021 05:34:18 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r19so9526783lfe.10
-        for <linux-next@vger.kernel.org>; Wed, 06 Oct 2021 05:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
-        b=XDRb/KCESOYd/TvZkqh6j2vTrO8D7XexoyDgJzpF6Tmy56VBAKZt6kje4ETIqhDbzg
-         Ys18LTIZPy1c/YyaeRQmnd+PiNrnds5orHO1+pOsSqZUi+vP2xnOKBGQkMFIz4vAydvO
-         iszlPPFHHMf2M8hMgd2ZQjg/trczO62JQhkocLpmgEVplxvBA8KngC77GyaCJGjhQSZS
-         psSWsmEml18FlLq/JE7fH71K0kPItKg3ggF7adbOVLngLm/AkGe0jLULixuThBRV7F1r
-         afp9S30xFUtnZ9QkbH/PdFRHOiMfV4U0C33qsqKNS6S7qxTjEPKMxvLflAmw4zPMeXY4
-         LRVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=0NqHQYP/c3mUi/IFOx7CMz/U7QYzqFRbcXZKclx3qeg=;
-        b=Ps0wQK79VFvv7jauMjVgIn8Zv8UodnSx0o/lCDMyNoXZ+5Ktss5xWxDr/OOozqlcgE
-         WJAlNf3dUVoy1c7b1m0tVbkMUHjgSEM9eykvtQR+xoYib5zQeApDONMSpLpnkOh38C87
-         +U0s8THyuuKm86vKwTEPlBJeKAQz6/7ZsUToOkpAfxUF4Uond+vRXT21ruwQttqfOBIz
-         8TXkbzIpaTAKyOIZcYrirfDA5rLIk7b++XHDbjhn4DM/GPuzBPXaqSYV23bWiIzi1L2c
-         H7JuIlqxHlnMDPo/DBB1RzQH0BwgE/WVDsdDZ11F2yN/5cNq6B8dscKms30Jl2/sORwf
-         uWKQ==
-X-Gm-Message-State: AOAM532aFSF/4VjVHePO+UuQmRt1415mwMQEVK4dNRC5KdVBx+D7ZDyB
-        hHo7pXdoqsKbSyoFu5Xs/RcUGgp2/eaebjtAbvVDp8mCffw=
-X-Google-Smtp-Source: ABdhPJx+dwgmZjUv8qLuIvbSpNu6hiqF23yVb7g1ahfBHYb4UrfsxkpMWSYHBZuXJ6V672HCw0478BmPZtSTjkG+xP0=
-X-Received: by 2002:a05:6512:3095:: with SMTP id z21mr9192459lfd.167.1633523649672;
- Wed, 06 Oct 2021 05:34:09 -0700 (PDT)
+        id S238796AbhJFMvL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Oct 2021 08:51:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34558 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238730AbhJFMvE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 6 Oct 2021 08:51:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94EDE60F59;
+        Wed,  6 Oct 2021 12:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633524552;
+        bh=E5lZpXanoKV/1QIoaU3zZX3ltqIP1NnyAvFloPV4JbQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TRcnFP8kaXhX9QIaNANQEvNfhUa58NLmSC5BQIlMfkuRQclBSZmyJF2TJPEIGg0/3
+         c8frrOjd2sMyi38it4tEN05c9g8nw1qXwTtp1OOtSzo7OjC9eHiH72Wxxx441tMhVY
+         WGjcZhg/nWMF4FK0391vGOyyy3zsC0u3lzF4FLAuXpId9d3VS7r+cGwgl2JLPt97cc
+         KRR6Xi7HCdHnyGkqZK5w/HcJkzXgEGJ2bs11gLQJiBJZMd23l62GXALb+BG1kP9a3s
+         TMXZHNIhINj7XIQ22XJrgl7Mox0LVKtO71w09gDD8a04Arlnz8D49zPCRj78xxCJpt
+         k5a88kJP87m+w==
+Date:   Wed, 6 Oct 2021 05:49:11 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+Message-ID: <20211006054911.790cbf46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211006144322.640b966a@elm.ozlabs.ibm.com>
+References: <20211006122315.4e04fb87@canb.auug.org.au>
+        <20211005185217.7fb12960@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20211006144322.640b966a@elm.ozlabs.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:3a83:0:0:0:0 with HTTP; Wed, 6 Oct 2021 05:34:08
- -0700 (PDT)
-Reply-To: monica43brown@gmail.com
-From:   monica brown <ahoblejeanne80@gmail.com>
-Date:   Wed, 6 Oct 2021 13:34:08 +0100
-Message-ID: <CABuaXxPg9Ut=76Kgh7fLh4NJ0vP+E5Q_UBaPv+2jziw93takug@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Greetings from me
-My name is Monica Brown and how are you today, please I have something that
-i will like to share with you okay please try and get back.
+On Wed, 6 Oct 2021 14:43:22 +1100 Stephen Rothwell wrote:
+> On Tue, 5 Oct 2021 18:52:17 -0700 Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > Applied, thanks. Is this the last one? ;)  
+> 
+> No idea :-(
+> 
+> > I wonder what happened to the kbuild bot :S  
+> 
+> Does it do ppc builds?
+
+I thought it did, I get a build status email periodically with a list
+of 135 builds. PPC is well represented there.

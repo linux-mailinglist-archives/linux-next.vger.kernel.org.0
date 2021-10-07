@@ -2,121 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6626C42500A
-	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 11:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01CF42520E
+	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 13:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbhJGJaN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Thu, 7 Oct 2021 05:30:13 -0400
-Received: from mail-vk1-f176.google.com ([209.85.221.176]:34727 "EHLO
-        mail-vk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240592AbhJGJaN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Oct 2021 05:30:13 -0400
-Received: by mail-vk1-f176.google.com with SMTP id z202so2461191vkd.1;
-        Thu, 07 Oct 2021 02:28:19 -0700 (PDT)
+        id S241059AbhJGLey (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Oct 2021 07:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241062AbhJGLev (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Oct 2021 07:34:51 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B995DC061760
+        for <linux-next@vger.kernel.org>; Thu,  7 Oct 2021 04:32:57 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g8so21830899edt.7
+        for <linux-next@vger.kernel.org>; Thu, 07 Oct 2021 04:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vyoTVfW0q/Sz3MjyHTCgqtubb6sYVUua8s/Tg/xpMNA=;
+        b=rS7GjWh14BJN1s07cRh9Ip2/XMDUYffaHojGBth76ffHw6Tue2LTzLy2Ec/DiL9yZ4
+         Wix9Prhd3bhQoOxA8upfQxS4A/0FqsbCThw2TL9WjSLhhmy3jWsWzBzAYf/67Z9e8Bzr
+         6KWUNh/Bt9UfxZHZqa6yfxMauOYn/rJj7St0bL9FvkO+1EfYD/wLb9kRMIeg1v1mIg5Y
+         QBrFfoAsI6RCfd6+XfCRAvNm9X70XlQeVvLCPNA0zOkZ6URn6Dq2naqolQ0xIW0IU+iP
+         MSbbRLjMaIxdpmGAf0U5fwHxTwtlkEmcXMNgXikc9NI4E0hLksVdQ0WnH395G2dkUPsD
+         gnhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hzHW72Ay3gWV8fEJFQ+iu6g37baZLnF8PQ8Ot4oxoaI=;
-        b=qeBLCc16D7buQsBfZGYlmXCUZ/w243AJOQ/U9QHKzS8K+xLM2qCRhGiy46ZP6fUfXE
-         wflMWuY4ySLkJOr0B63wuuO2a8BwGCV9e7qkaAw8/ZzB6DGcWaNnDahpcn0Cx6v/WT38
-         tl0HznkRYarmgx8JI4FdafIVXuuU+20dVaKn1V/MmTuiYsu55hcreNXyCb3QN/aM9c0A
-         kuZ2YnarftLtP1i7yn0yi3TrmD4ONGm2T4j79mvyRLDPq2oFYmFZ5T9ez1TY4G7yB6p/
-         ZOp0dvUxO+6NwVfsKTDsuyE3PimfpBpPL/9L1Hsni9KkFg1/hf7a2I/vIhT7fxNR6kqN
-         ndlA==
-X-Gm-Message-State: AOAM533Vo9TjIYD9FhXlfUCQ9Tn+xG8GOvKlU+BaMXSXQZYc0gGzJqbF
-        g9wCorUjRUnV5b8xxQJXpfXLpcIb//4VbUO93xE=
-X-Google-Smtp-Source: ABdhPJxa3fwE1gntWrjljDsvFH6UlsS62TRi8FeltjZ+YAQFTMpawuIEL6cDelrBaNePH9pbfBWO3F+KAs1dSlBCJEY=
-X-Received: by 2002:a1f:3a4b:: with SMTP id h72mr2286297vka.19.1633598898975;
- Thu, 07 Oct 2021 02:28:18 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=vyoTVfW0q/Sz3MjyHTCgqtubb6sYVUua8s/Tg/xpMNA=;
+        b=0bhUmJ1aIkB021zunoPEfEb1nWvUN8VYPgseVDJfhwM+KZJYW0daasvB3Rp/dNMyhB
+         uaV7CmmB/1RGQm5NyT2mSdQCwgEu0hAIi3N5iuQVpvryRWmChN9KClbIQ+2MCMmdXUtN
+         h5Xa6s4vyRAKwiah+jO14Lha5SUUblSjq5vV0tS2G7R3nU/G2D9MSCJJCbNZcaBAncAs
+         tDKCzBp4HRra+DSsGfZ/26JeB/5IYd4NpccOFV+A1/7crlUqteQ/XuoM/nxua8IKXz+F
+         +gK/1c+0E2gngREbge9F5PYziKyzCndlOlHNZQ5lHOv1nBPO+kNDW7IWDY3bCMT8s7o3
+         5vkA==
+X-Gm-Message-State: AOAM533domuVVhqFrKIcl58pEQ/6xhCrySBqnRNn1Yb8YrbyGf6BCqfK
+        32PF1lCcFwA806Ec5suqllVxmBkj9kw+VAp+gmD2/Q==
+X-Google-Smtp-Source: ABdhPJx1LxdbI+6Eo1iN/qluMq/FkpUgQwUazu70RZATfKUUIW2IRfqilrQHPRzlPMpYRYiaPBQfkLpphSrTn5AbKKg=
+X-Received: by 2002:a17:906:318b:: with SMTP id 11mr5170753ejy.493.1633606376037;
+ Thu, 07 Oct 2021 04:32:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211006025350.a5PczFZP4%akpm@linux-foundation.org>
- <58fbf2ff-b367-2137-aa77-fcde6c46bbb7@infradead.org> <20211006182052.6ecc17cf@canb.auug.org.au>
- <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com>
-In-Reply-To: <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 7 Oct 2021 11:28:07 +0200
-Message-ID: <CAMuHMdV3eMchpgUasU6BBHrDQyjCc2TrqJ+zJgFhgAySpqVGfw@mail.gmail.com>
-Subject: Re: mmotm 2021-10-05-19-53 uploaded (drivers/gpu/drm/msm/hdmi/hdmi_phy.o)
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux-Next <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+References: <20211004065851.1903-1-pkushwaha@marvell.com> <20211004065851.1903-7-pkushwaha@marvell.com>
+In-Reply-To: <20211004065851.1903-7-pkushwaha@marvell.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 7 Oct 2021 17:02:44 +0530
+Message-ID: <CA+G9fYspE5kQd=hjpLf1nv_kKBQhaHi8jd2qhdH5JfUTzfmjog@mail.gmail.com>
+Subject: Re: [PATCH v2 06/13] qed: Update qed_hsi.h for fw 8.59.1.0
+To:     Prabhakar Kushwaha <pkushwaha@marvell.com>
+Cc:     Netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        aelior@marvell.com, smalin@marvell.com, jhasan@marvell.com,
+        mrangankar@marvell.com, prabhakar.pkin@gmail.com,
+        malin1024@gmail.com, Omkar Kulkarni <okulkarni@marvell.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Christian,
+Regression found on arm gcc-11 build.
+Following build warnings / errors reported on Linux next 20211007.
 
-On Wed, Oct 6, 2021 at 9:28 AM Christian König <christian.koenig@amd.com> wrote:
-> Am 06.10.21 um 09:20 schrieb Stephen Rothwell:
-> > On Tue, 5 Oct 2021 22:48:03 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> >> on i386:
-> >>
-> >> ld: drivers/gpu/drm/msm/hdmi/hdmi_phy.o:(.rodata+0x3f0): undefined reference to `msm_hdmi_phy_8996_cfg'
-> >>
-> >>
-> >> Full randconfig fle is attached.
-> > This would be because CONFIG_DRM_MSM is set but CONFIG_COMMON_CLOCK is
-> > not and has been exposed by commit
-> >
-> >    b3ed524f84f5 ("drm/msm: allow compile_test on !ARM")
-> >
-> > from the drm-misc tree.
+On Mon, 4 Oct 2021 at 12:29, Prabhakar Kushwaha <pkushwaha@marvell.com> wrote:
 >
-> Good point, how about this change:
+> The qed_hsi.h has been updated to support new FW version 8.59.1.0 with
+> changes.
+>  - Updates FW HSI (Hardware Software interface) structures.
+>  - Addition/update in function declaration and defines as per HSI.
+>  - Add generic infrastructure for FW error reporting as part of
+>    common event queue handling.
+>  - Move malicious VF error reporting to FW error reporting
+>    infrastructure.
+>  - Move consolidation queue initialization from FW context to ramrod
+>    message.
 >
-> diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
-> index 5879f67bc88c..d9879b011fb0 100644
-> --- a/drivers/gpu/drm/msm/Kconfig
-> +++ b/drivers/gpu/drm/msm/Kconfig
-> @@ -5,7 +5,7 @@ config DRM_MSM
->          depends on DRM
->          depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
->          depends on IOMMU_SUPPORT
-> -       depends on (OF && COMMON_CLK) || COMPILE_TEST
-> +       depends on (OF || COMPILE_TEST) && COMMON_CLK
-
-I'd make that:
-
-    -        depends on DRM
-    +       depends on COMMON_CLK && DRM && IOMMU_SUPPORT
-            depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
-    -        depends on IOMMU_SUPPORT
-    -       depends on (OF && COMMON_CLK) || COMPILE_TEST
-    +       depends on OF || COMPILE_TEST
-
-to keep a better separation between hard and soft dependencies.
-
-Note that the "depends on OF || COMPILE_TEST" can even be
-deleted, as the dependency on ARCH_QCOM || SOC_IMX5 implies OF.
-
->          depends on QCOM_OCMEM || QCOM_OCMEM=n
->          depends on QCOM_LLCC || QCOM_LLCC=n
->          depends on QCOM_COMMAND_DB || QCOM_COMMAND_DB=n
+> qed_hsi.h header file changes lead to change in many files to ensure
+> compilation.
 >
+> This patch also fixes the existing checkpatch warnings and few important
+> checks.
 
-Gr{oetje,eeting}s,
+<trim>
 
-                        Geert
+> +static int qed_fw_err_handler(struct qed_hwfn *p_hwfn,
+> +                             u8 opcode,
+> +                             u16 echo,
+> +                             union event_ring_data *data, u8 fw_return_code)
+> +{
+> +       if (fw_return_code != COMMON_ERR_CODE_ERROR)
+> +               goto eqe_unexpected;
+> +
+> +       if (data->err_data.recovery_scope == ERR_SCOPE_FUNC &&
+> +           le16_to_cpu(data->err_data.entity_id) >= MAX_NUM_PFS) {
+> +               qed_sriov_vfpf_malicious(p_hwfn, &data->err_data);
+> +               return 0;
+> +       }
+
+
+metadata:
+    git_describe: next-20211007
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_short_log: f8dc23b3dc0c (\Add linux-next specific files for 20211007\)
+    target_arch: arm
+    toolchain: gcc-11
+
+build error :
+--------------
+drivers/net/ethernet/qlogic/qed/qed_dev.c: In function 'qed_fw_err_handler':
+drivers/net/ethernet/qlogic/qed/qed_dev.c:2390:17: error: implicit
+declaration of function 'qed_sriov_vfpf_malicious'
+[-Werror=implicit-function-declaration]
+ 2390 |                 qed_sriov_vfpf_malicious(p_hwfn, &data->err_data);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/qlogic/qed/qed_dev.c: In function 'qed_common_eqe_event':
+drivers/net/ethernet/qlogic/qed/qed_dev.c:2410:24: error: implicit
+declaration of function 'qed_sriov_eqe_event'; did you mean
+'qed_common_eqe_event'? [-Werror=implicit-function-declaration]
+ 2410 |                 return qed_sriov_eqe_event(p_hwfn, opcode, echo, data,
+      |                        ^~~~~~~~~~~~~~~~~~~
+      |                        qed_common_eqe_event
+cc1: some warnings being treated as errors
+make[6]: *** [scripts/Makefile.build:288:
+drivers/net/ethernet/qlogic/qed/qed_dev.o] Error 1
+make[6]: Target '__build' not remade because of errors.
+make[5]: *** [scripts/Makefile.build:571:
+drivers/net/ethernet/qlogic/qed] Error 2
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+build link:
+-----------
+https://builds.tuxbuild.com/1zAeXBdIL6bf5zawzmHpVFEQ3wV/build.log
+
+build config:
+-------------
+https://builds.tuxbuild.com/1zAeXBdIL6bf5zawzmHpVFEQ3wV/config
+
+# To install tuxmake on your system globally
+# sudo pip3 install -U tuxmake
+tuxmake --runtime podman --target-arch arm --toolchain gcc-11
+--kconfig defconfig --kconfig-add
+https://builds.tuxbuild.com/1zAeXBdIL6bf5zawzmHpVFEQ3wV/config
+
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Linaro LKFT
+https://lkft.linaro.org

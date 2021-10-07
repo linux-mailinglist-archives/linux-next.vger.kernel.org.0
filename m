@@ -2,88 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAB3424C22
-	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 05:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56207424C43
+	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 05:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbhJGDPl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Oct 2021 23:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S232404AbhJGDs6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Oct 2021 23:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbhJGDPj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 23:15:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA42C061746;
-        Wed,  6 Oct 2021 20:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=34yG0yolFJPz5oFr6D7PlKRd0ixiVrEKP+B9Vx2JloY=; b=XYvgeZ4KaZGtOb7G8AtpRXlI3P
-        +9Z4xIaBQ6AWojP3BdarOscDdIt9QJpja/wWOwS0Oe9gCalWO99Zit4tKviCTBVjF0UVamCyAkHO6
-        A0GbVZlo39edIgM4g+nA+rvWVNeafEnUcGdQ5y9SMez32qPcZ4D6lkhMSA8hAsMmUm/kDhouZgZLD
-        /hLpsxdGInMc5MmP4zVav76RwxJC9HZE3udFahrM5Bz7xQdXV7pug7h6IDkKpbaCWEO6zL7A+4AOb
-        A5SgjVtS4na29vcvzuK/y+euMcbfg9a/uS/xfC0R6XCx1Ar6VXkz81wWXFX8xmEBXi03nD08Y+Vi0
-        PCrRCwUg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mYJqn-00G3cm-7t; Thu, 07 Oct 2021 03:13:41 +0000
-Subject: Re: linux-next: Tree for Oct 5 (warnings: a. trace; b. mm/migrate)
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Jackie Liu <liu.yun@linux.dev>
-References: <20211005190628.1f26b13d@canb.auug.org.au>
- <c1d9e328-ad7c-920b-6c24-9e1598a6421c@infradead.org>
- <20211006172207.11982951@gandalf.local.home>
- <6d8f22a1-5f54-aa2a-7628-1d98a7f0fb95@infradead.org>
- <20211006211000.16b2284b@rorschach.local.home>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <bbe4a9ed-f641-8bd2-8501-2ab79f0c882d@infradead.org>
-Date:   Wed, 6 Oct 2021 20:13:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S232389AbhJGDs6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 23:48:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70095C061746;
+        Wed,  6 Oct 2021 20:47:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HPy1g1GRMz4xR9;
+        Thu,  7 Oct 2021 14:47:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1633578423;
+        bh=42ih9NkINQFcNhSK+JpSpUpUaP9Q8m5arSAYH2VHwHM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rJstF5x/jqrzviBHKJKKv0nYPP/qchbVh2TQwhltIEt5LnTnasF75wfmOVTbhwGLv
+         7WmjmqhqXu2khnVz3CrrEYevJExrW6xzXsyvSQTnkG2P47YfgC6Tvbeymutm/itsIT
+         Kzv3rG9pCYUYQgmfXybBLhIOAIi/wULVvgTVg01ThYqSjXEB6ZpY1dOPqvTq9oa94D
+         lIYOPhqJ9KzqTqeFnbW6ZfpXfX5Gh296B6+3/tr5Wzd2Ajvn5WyWuorCxAh2irrrE0
+         NIPfTtLQFuYWtBsVe68JXZtz1UIoivWBNhAncbnSvnUNawKMg5LYL3Z7T7VCjcqW1M
+         KYYKtPc2EgsIg==
+Date:   Thu, 7 Oct 2021 14:47:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the userns tree
+Message-ID: <20211007144701.67592574@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211006211000.16b2284b@rorschach.local.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/=zhTghZGMTEf07gSVInv.qI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/6/21 6:10 PM, Steven Rostedt wrote:
-> On Wed, 6 Oct 2021 14:32:21 -0700
-> Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->> On 10/6/21 2:22 PM, Steven Rostedt wrote:
->>> On Tue, 5 Oct 2021 13:46:52 -0700
->>> Randy Dunlap <rdunlap@infradead.org> wrote:
->>>    
->>>> a. randconfig: KCONFIG_SEED=0xBFBEA13C
->>>> ../kernel/trace/trace.c:1712:13: error: 'trace_create_maxlat_file' defined but not used [-Werror=unused-function]
->>>>     static void trace_create_maxlat_file(struct trace_array *tr,
->>>
->>> Does this fix it?
->>>
->>> -- Steve
->>
->> Yes, thanks.
->>
->> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> 
-> Plumbers followed by Open Source Summit totally blew my brain cache. I
-> have a fix for this in my queue from Jackie Liu that I haven't
-> processed yet (just going through my queue now when I noticed it).
-> 
-> Can you test this patch instead?
-> 
->     https://lore.kernel.org/r/20210922025122.3268022-1-liu.yun@linux.dev
+--Sig_/=zhTghZGMTEf07gSVInv.qI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Sure, done. Same good result.
+After merging the userns tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-thanks.
--- 
-~Randy
+In file included from include/linux/kernel.h:19,
+                 from mm/debug.c:9:
+mm/debug.c: In function 'dump_mm':
+mm/debug.c:251:28: error: 'const struct mm_struct' has no member named 'cor=
+e_state'
+  251 |   mm->binfmt, mm->flags, mm->core_state,
+      |                            ^~
+include/linux/printk.h:418:19: note: in definition of macro 'printk_index_w=
+rap'
+  418 |   _p_func(_fmt, ##__VA_ARGS__);    \
+      |                   ^~~~~~~~~~~
+include/linux/printk.h:459:2: note: in expansion of macro 'printk'
+  459 |  printk(KERN_EMERG pr_fmt(fmt), ##__VA_ARGS__)
+      |  ^~~~~~
+mm/debug.c:208:2: note: in expansion of macro 'pr_emerg'
+  208 |  pr_emerg("mm %px mmap %px seqnum %llu task_size %lu\n"
+      |  ^~~~~~~~
+
+Caused by commit
+
+  483f2bb374b7 ("coredump: Limit coredumps to a single thread group")
+
+I have used the userns tree from next-20211006 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=zhTghZGMTEf07gSVInv.qI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFebbUACgkQAVBC80lX
+0GwTmwf9GAYKvo5JzaA2NSFm1F814w4iVz+PIgGfEMueL8AFoCxRV1/EMU+sLmRv
+LT0r0GoI0Sts3Ob2e0sN+zHC+M2C4STAQVnr8qxfJKO40lT+ri5PfYuU4O33PXwU
+39kjqJpR8OZ0cbptk0rI8yGB5AiqpxNPn4/O4nlzeUpksuZ2v9vPKGrl7ik8F3Ka
+xPEgtmePFTNHesLhJDzpADWi/vqQNXaHmTva7eBoUWc6cKFgaWpoN1WE596cAHGJ
+WeTxCjovvgDlSqy0yU9tEHe1JhlPHG3fSqlH3NtikYvhSEQvmqnMcbcDAjVZYaF6
+SSRg4mFQnYHxarCGLM3tcdyjK1daoA==
+=nzPg
+-----END PGP SIGNATURE-----
+
+--Sig_/=zhTghZGMTEf07gSVInv.qI--

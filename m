@@ -2,80 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E25425EDF
-	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 23:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141E3425EF2
+	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 23:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241385AbhJGV2x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Oct 2021 17:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S233241AbhJGVdQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Oct 2021 17:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242187AbhJGV2p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Oct 2021 17:28:45 -0400
+        with ESMTP id S230120AbhJGVdQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Oct 2021 17:33:16 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D27C061760;
-        Thu,  7 Oct 2021 14:26:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1289EC061570;
+        Thu,  7 Oct 2021 14:31:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HQPXJ6ngLz4xb9;
-        Fri,  8 Oct 2021 08:26:40 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HQPdg6RD9z4xb9;
+        Fri,  8 Oct 2021 08:31:19 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633642001;
-        bh=lJBSSC0ipR++BQDepp/kqzjaJPT17SlSby74jcw4HbQ=;
+        s=201702; t=1633642280;
+        bh=5/XFPcuf7C72Hw7AsZjDnLmvBgF2glmuCRaS6v7XwFc=;
         h=Date:From:To:Cc:Subject:From;
-        b=VKLV4nVrC46r2280vnB7AB2kNFo6v/3c+DncyNpQltj7waViGT1BijAXQug62JRy6
-         yYHhlGbofy7UuTLpMIxpdU1e8rT317j37wyg0Q6xvC8WmEMSt3Q52Ap6fqKBoeQLLm
-         uOBFbFeaxb1+V9LCFR792mZVp9J+EWR4JNodOCuBXVO92TEP07HnVyOzHt7vKgzhcU
-         G8QDqMApOJCna2HY3fBHa3/NSsWVQ8G4CJ/Ug7+SwDC5Pq0pLb/mx3mft23FaLSLGN
-         haXCWw1K2I6kwSWG6vN6hCYcLRJHBeZ6n/nJBzA0F9ubOK/Z3cvL/CAga4/k5Ha4l3
-         v4cQj3egL8+KA==
-Date:   Fri, 8 Oct 2021 08:26:37 +1100
+        b=PE3E8BKuskQXJzX7thQ5I8h9kk2IOg0GcvPMPCm1wj55fIuZv1McHhh3PsLdLs1bi
+         3pCk+fn/Bpq4Uji8FlEwzNMlp9nfSQw9fip6HHS/9SFmO9XO8rxKUAyuPP/mS3FFRt
+         s8dqZpD0kGLB75rLUvSFe8d2If5/5t18b/Jmnob4Vrx2YnK8qkdVI3vx+ALNS73K4h
+         5vXZaKSHRbYn8BRnzuOxTjcwualKIPtcK2WoLSeFaFxtpjQanD3FoZ0BqmMFJrDI0x
+         P/Hy6U/gUmiBhaCrGvOgKdwis6vs0zIiTlwodf9Kfwbc/LT8hsT2wM1TIludA8IxM0
+         t7FQ4VSCO0DfA==
+Date:   Fri, 8 Oct 2021 08:31:18 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: contact/tree changes for the swiotlb tree
-Message-ID: <20211008082637.78598d36@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the bpf-next tree
+Message-ID: <20211008083118.43f6d79f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iXFg3DT5UEbM/FGQnm4r2cy";
+Content-Type: multipart/signed; boundary="Sig_/aTfZNbFXbbcOWTzmiM.ECJy";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iXFg3DT5UEbM/FGQnm4r2cy
+--Sig_/aTfZNbFXbbcOWTzmiM.ECJy
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-I noticed commit
+In commit
 
-  c4800765c0ed ("MAINTAINERS: Update SWIOTLB maintainership")
+  065485ac5e86 ("mips, bpf: Fix Makefile that referenced a removed file")
 
-in the swiotlb tree today.  I assume that I should update the tree/branch
-I fetch and the contact information?
+Fixes tag
+
+  Fixes: 06b339fe5450 ("mips, bpf: Remove old BPF JIT implementations")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: ebcbacfa50ec ("mips, bpf: Remove old BPF JIT implementations")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/iXFg3DT5UEbM/FGQnm4r2cy
+--Sig_/aTfZNbFXbbcOWTzmiM.ECJy
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFfZg0ACgkQAVBC80lX
-0GxkGggAoFIiDp9BI2Ut4dE/j0hfzOTBmGtmWAZYDPxVNczHOkJL2yAWsKLk5uHL
-ycpP59iu/sP6liLEN6h9s37B5FZtGtZIl6nxfEYtKujfOqs1NS04HbuLH/JlBzr6
-3a0HwG8/+4tz3QPUp25krjDCIfvl60yvG5pazdM/3a/ye9bf7Bfg5njqzjyoN2zg
-0M0XjBHhjElBZpvyPiH8FSjLDhD2meWwC+sEWZzIonv/o5Gps2W1fKJj/Zhda9W0
-HCDkxuAnFWYtyBkO5O8rQ+R2UAIZzADtL0SJ1DSqUf/BIWxzqXNacI7YZudfT9GK
-qmzjQslNNGtvrP5sEXbgtkSYofmRZA==
-=k1YM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFfZyYACgkQAVBC80lX
+0GxaAgf9GJm36VIGvMepSVbgO/Yv2IfKJZt9Ou/89+kk1PiUddCqfP+ZfDe2l2k6
+BGl/32KQMCrCqKIQ/VMLUMBTStrJnlyXW2tyyQr8kyhD34iVIOnXO+P+7uuBdEd9
+6An8w8P43iWnSQbf0qH/kBbCzBHgViSaa60R0clh9Pm3ShDCjRofh4ofYc/kBJJX
+yzHOMJh642iw/dHH86J6q2nKCW7SEQ9/8yfytvxzOSyOhzNvFflW4/OGKCrT9U0K
+Y3TYx3XANlTCLRh/f6Evo07Jf2rXbpYiznGZpSxAe5dNwy/3FlmTzxKLjTbikg2r
+hwIcLGkClYXJuq0h3zj9xq13Z8a8Ig==
+=/nsQ
 -----END PGP SIGNATURE-----
 
---Sig_/iXFg3DT5UEbM/FGQnm4r2cy--
+--Sig_/aTfZNbFXbbcOWTzmiM.ECJy--

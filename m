@@ -2,164 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632D8424B6B
-	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 02:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24424424B86
+	for <lists+linux-next@lfdr.de>; Thu,  7 Oct 2021 03:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240128AbhJGA6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Oct 2021 20:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbhJGA6w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Oct 2021 20:58:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9650CC061746;
-        Wed,  6 Oct 2021 17:56:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S230492AbhJGBLz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Oct 2021 21:11:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41388 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230252AbhJGBLy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 6 Oct 2021 21:11:54 -0400
+Received: from rorschach.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HPtFN1lZQz4xbP;
-        Thu,  7 Oct 2021 11:56:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633568217;
-        bh=UpZEWDiRGS+OBlhuAxcpxvS6DE5buvVbtK8MzqmhPvA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nGBBkhvsc5LWgJzk+GRdEn+NlwEZLtbmDX0HNrepJ9PfSTFUEYygBcuZprP9Wkxzw
-         4uYZ628aRT8eOqkh35VB27DxrFgjRRhljCBbPsLJ3vEGeZ5lp/4YSiR8fb/EBzFoLC
-         be6ilH7b1wJMB+0X24ofqqWeHkry1dIX6digQxD/k6cHbxnpxts9o66kklMVPB1g8m
-         t50NJaK2WxoyEm/UNCALa1uxFRNyLhg4p7PjooZ6M3fY5mk1bOjcdnLkOz+r88KVxG
-         00z/ah951QeC+yZ8b0Ye02E4Pj/WF09SWJG16UZi1vpOoI3+gyofTlzSQVwhTuv/Uk
-         w2QTSA4HP/EjA==
-Date:   Thu, 7 Oct 2021 11:56:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Moore <paul@paul-moore.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F45C610FC;
+        Thu,  7 Oct 2021 01:10:01 +0000 (UTC)
+Date:   Wed, 6 Oct 2021 21:10:00 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: linux-next: manual merge of the selinux tree with the block tree
-Message-ID: <20211007115653.133463cb@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: linux-next: Tree for Oct 5 (warnings: a. trace; b. mm/migrate)
+Message-ID: <20211006211000.16b2284b@rorschach.local.home>
+In-Reply-To: <6d8f22a1-5f54-aa2a-7628-1d98a7f0fb95@infradead.org>
+References: <20211005190628.1f26b13d@canb.auug.org.au>
+        <c1d9e328-ad7c-920b-6c24-9e1598a6421c@infradead.org>
+        <20211006172207.11982951@gandalf.local.home>
+        <6d8f22a1-5f54-aa2a-7628-1d98a7f0fb95@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hYJsUwdRDsF7gElQlPLj1CV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hYJsUwdRDsF7gElQlPLj1CV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 6 Oct 2021 14:32:21 -0700
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Hi all,
+> On 10/6/21 2:22 PM, Steven Rostedt wrote:
+> > On Tue, 5 Oct 2021 13:46:52 -0700
+> > Randy Dunlap <rdunlap@infradead.org> wrote:
+> >   
+> >> a. randconfig: KCONFIG_SEED=0xBFBEA13C
+> >> ../kernel/trace/trace.c:1712:13: error: 'trace_create_maxlat_file' defined but not used [-Werror=unused-function]
+> >>    static void trace_create_maxlat_file(struct trace_array *tr,  
+> > 
+> > Does this fix it?
+> > 
+> > -- Steve  
+> 
+> Yes, thanks.
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Today's linux-next merge of the selinux tree got a conflict in:
+Plumbers followed by Open Source Summit totally blew my brain cache. I
+have a fix for this in my queue from Jackie Liu that I haven't
+processed yet (just going through my queue now when I noticed it).
 
-  fs/io_uring.c
+Can you test this patch instead?
 
-between commit:
+   https://lore.kernel.org/r/20210922025122.3268022-1-liu.yun@linux.dev
 
-  3d2b8972f292 ("io_uring: optimise plugging")
+Thanks!
 
-from the block tree and commit:
+-- Steve
 
-  5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_u=
-ring")
 
-from the selinux tree.
+> 
+> 
+> > 
+> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> > index 7896d30d90f7..4520cbab0da5 100644
+> > --- a/kernel/trace/trace.c
+> > +++ b/kernel/trace/trace.c
+> > @@ -1744,16 +1744,15 @@ void latency_fsnotify(struct trace_array *tr)
+> >   	irq_work_queue(&tr->fsnotify_irqwork);
+> >   }
+> >   
+> > -/*
+> > - * (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)) && \
+> > - *  defined(CONFIG_FSNOTIFY)
+> > - */
+> > -#else
+> > +/* CONFIG_FSNOTIFY else */
+> > +#elif CREATE_MAX_TRACE_FILE
+> >   
+> >   #define trace_create_maxlat_file(tr, d_tracer)				\
+> >   	trace_create_file("tracing_max_latency", 0644, d_tracer,	\
+> >   			  &tr->max_latency, &tracing_max_lat_fops)
+> >   
+> > +#else
+> > +#define trace_create_maxlat_file(tr, d_tracer) do { } while (0)
+> >   #endif
+> >   
+> >   #ifdef CONFIG_TRACER_MAX_TRACE
+> > @@ -9473,9 +9472,7 @@ init_tracer_tracefs(struct trace_array *tr, struct dentry *d_tracer)
+> >   
+> >   	create_trace_options_dir(tr);
+> >   
+> > -#if defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER)
+> >   	trace_create_maxlat_file(tr, d_tracer);
+> > -#endif
+> >   
+> >   	if (ftrace_create_function_files(tr, d_tracer))
+> >   		MEM_FAIL(1, "Could not allocate function filter files");
+> > diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+> > index b7c0f8e160fb..680935949aef 100644
+> > --- a/kernel/trace/trace.h
+> > +++ b/kernel/trace/trace.h
+> > @@ -679,8 +679,11 @@ void update_max_tr_single(struct trace_array *tr,
+> >   #endif /* CONFIG_TRACER_MAX_TRACE */
+> >   
+> >   #if (defined(CONFIG_TRACER_MAX_TRACE) || defined(CONFIG_HWLAT_TRACER) \
+> > -	|| defined(CONFIG_OSNOISE_TRACER)) && defined(CONFIG_FSNOTIFY)
+> > -#define LATENCY_FS_NOTIFY
+> > +	|| defined(CONFIG_OSNOISE_TRACER))
+> > +# define CREATE_MAX_TRACE_FILE
+> > +# ifdef CONFIG_FSNOTIFY
+> > +#  define LATENCY_FS_NOTIFY
+> > +# endif
+> >   #endif
+> >   
+> >   #ifdef LATENCY_FS_NOTIFY
+> >   
+> 
+> 
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/io_uring.c
-index 73135c5c6168,f89d00af3a67..000000000000
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@@ -903,8 -917,10 +905,10 @@@ struct io_op_def=20
-  	unsigned		buffer_select : 1;
-  	/* do prep async if is going to be punted */
-  	unsigned		needs_async_setup : 1;
- -	/* should block plug */
- -	unsigned		plug : 1;
- +	/* opcode is not supported by this kernel */
- +	unsigned		not_supported : 1;
-+ 	/* skip auditing */
-+ 	unsigned		audit_skip : 1;
-  	/* size of async data needed, if any */
-  	unsigned short		async_size;
-  };
-@@@ -6542,9 -6622,12 +6576,12 @@@ static int io_issue_sqe(struct io_kioc
-  	const struct cred *creds =3D NULL;
-  	int ret;
- =20
- -	if ((req->flags & REQ_F_CREDS) && req->creds !=3D current_cred())
- +	if (unlikely((req->flags & REQ_F_CREDS) && req->creds !=3D current_cred(=
-)))
-  		creds =3D override_creds(req->creds);
- =20
-+ 	if (!io_op_defs[req->opcode].audit_skip)
-+ 		audit_uring_entry(req->opcode);
-+=20
-  	switch (req->opcode) {
-  	case IORING_OP_NOP:
-  		ret =3D io_nop(req, issue_flags);
-@@@ -7042,10 -7071,34 +7082,15 @@@ static int io_init_req(struct io_ring_c
-  		if (!req->creds)
-  			return -EINVAL;
-  		get_cred(req->creds);
-+ 		ret =3D security_uring_override_creds(req->creds);
-+ 		if (ret) {
-+ 			put_cred(req->creds);
-+ 			return ret;
-+ 		}
-  		req->flags |=3D REQ_F_CREDS;
-  	}
- -	state =3D &ctx->submit_state;
- -
- -	/*
- -	 * Plug now if we have more than 1 IO left after this, and the target
- -	 * is potentially a read/write to block based storage.
- -	 */
- -	if (!state->plug_started && state->ios_left > 1 &&
- -	    io_op_defs[req->opcode].plug) {
- -		blk_start_plug(&state->plug);
- -		state->plug_started =3D true;
- -	}
- -
- -	if (io_op_defs[req->opcode].needs_file) {
- -		req->file =3D io_file_get(ctx, req, READ_ONCE(sqe->fd),
- -					(sqe_flags & IOSQE_FIXED_FILE));
- -		if (unlikely(!req->file))
- -			ret =3D -EBADF;
- -	}
- =20
- -	state->ios_left--;
- -	return ret;
- +	return io_req_prep(req, sqe);
-  }
- =20
-  static int io_submit_sqe(struct io_ring_ctx *ctx, struct io_kiocb *req,
-
---Sig_/hYJsUwdRDsF7gElQlPLj1CV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFeRdUACgkQAVBC80lX
-0GyVqwf9F3Q1y9j8NbfZIhUuTDZhZPiZRxcymjeVuSDUUEHl7nORD/Ku7YyxVJy7
-RAlzn5P7XpjCECm8HbMd7KET9fqWXnmV/bg07nMk9/sOa1dN3/LM2qNMr97PBM7W
-D4qFrWSfnQ9xhu7LuZk2vxvS4Eta2dpCWXnbN/+9tEaI3ZP+UI8T4jOjFtKbGjbz
-ha1eaHOEzG+ZD1LGgjq8I19qQU96/WTq+0LLxiGcKDdp+9PJYY5psIBWuXr8loYa
-iy3P5OxJZGe9cSvkUSK/9fKwAdQBGn6AxmgDGPQFtpL+uaBNeAc6q3qoeUx8PTDE
-yeTbmFtaITsxQuUtIdIUDXoBzVD/Sg==
-=QL30
------END PGP SIGNATURE-----
-
---Sig_/hYJsUwdRDsF7gElQlPLj1CV--

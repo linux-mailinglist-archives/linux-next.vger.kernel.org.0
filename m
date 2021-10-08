@@ -2,114 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 516D1426404
-	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 07:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D428426422
+	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 07:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbhJHFXB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Oct 2021 01:23:01 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:56787 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbhJHFXB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 01:23:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HQc3h4ytdz4xbc;
-        Fri,  8 Oct 2021 16:21:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633670465;
-        bh=fO46+zE2G2W+f4Yn3/vP4Zgexf2v7j+Wy7IxhBJwVa8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Y3UOlASfMJ911Ajsw4HHvQVsRa73GSRtLOq0eKqKmW62uPplVF6nGFGcHnVMdJJJ5
-         wOs2oak8osIcbyJWm2RgYggGm4pE7MmIXyeaSzybOKoX+a7xIUlKpgtNTARb92Is+Y
-         cdIyt2M+ZSeH/ShUypfRBklraL80DIzl19BMjqjHkZi2zlaPNt/gZgd4ovBKJ3Opyq
-         YRxUCCMtHUhUt8MEb3+KR2qtiRH8ZgGIMqPrLdKX6et1edJ38W//Dzd74dmuTeyNJr
-         xSOIrCjpp/ReRH+kdRLLbDCJMpMSYSXwBnDrPUpQ6BahekQOVrwLUCeOLsYvDq+EYW
-         yhQ+PMoI5chKg==
-Date:   Fri, 8 Oct 2021 16:21:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Jouni Malinen <jouni@codeaurora.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20211008162103.1921a7a7@canb.auug.org.au>
+        id S229654AbhJHFmG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Oct 2021 01:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229511AbhJHFmF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 01:42:05 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D421C061570;
+        Thu,  7 Oct 2021 22:40:10 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t8so26122349wri.1;
+        Thu, 07 Oct 2021 22:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c2QUI9TYy6QLpttg1evSF5Z552Y1SnXO8l+S/s47Hro=;
+        b=KTV6bGO6ZIzTcs8S+lfDc/Z++xPkXJQSP2d+1Eg/Mx1Jr7Nv4kgS81RPh3mDuMR9mg
+         I0tFYsewbjQgbs6erHzJvZTVVdWrB5DC5rdxGrNRq5QdUAWnPVhYDhpU0e+QmgdMzlYE
+         CTG36UxIC5qE7hJafvwz42v4SvydVyR08rHDsoEwL8iHMJ66j6/R3vjrpafFDP6Qnj3o
+         tDfQM3fZXbNA9ufvHsBinqXmM1FEyhYse8NkIhd/BVYs0rZmB00tW9fThpTkk63MRscd
+         xj+imTkg5vkJumtCfii4i7I3vkjkGMH8mBXUwzNw9b+VCWCnxiDZH08FnlYf3AlcfF/c
+         4/+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c2QUI9TYy6QLpttg1evSF5Z552Y1SnXO8l+S/s47Hro=;
+        b=vMLIwbXPwm7J/N82q5o+QYNS+PnqGIQyYFgulap1Ky0CBzZs8IegNsBAH6xstJ+6Bd
+         cPZPKzp4mL1M2fr7ORXZSqH6GO+RvfI0pyWPZKZjG0icDntOcvjh+QlAHvxk47tqGPkn
+         gQv/BDrg8a6yU0FEMxFKwFMzNvF+jWynY4yXRwOOUo4094wr3SYuHOVirheymfQImb0U
+         AcForQ3gYvpwV4aCKiP0f42aWyJnoRjYe6/u65edxyKB15HpB8tLpIWPaCDn/ipfhb2q
+         iBp9klGQ+hxLNW7VyNM+mIE3tqIt5sM5b+KEOgAYMUUpID3fCBEzIyglLTPOTBNdvzBf
+         OOcw==
+X-Gm-Message-State: AOAM531jbr2T/3DfifeFro3mJqC0kpFZCGpTxFv1Ro9+cr4RNAaeBF8b
+        Ebu3O83XqeoKBqIgGlvs3Zf8wQmX+MdSdVlQTAxCN/VMdZA=
+X-Google-Smtp-Source: ABdhPJyMiQ/ZGhNjm9J9QB/3671bpRzCA29LquGl8paqVfA0pcGnQdMsCU/88s7/AdWZRIk3CtYY83cB14EMXwYfxsI=
+X-Received: by 2002:adf:f610:: with SMTP id t16mr1478945wrp.309.1633671608705;
+ Thu, 07 Oct 2021 22:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OWkET=COPDXOIyb7J.sAON7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211008151511.5a7c6e56@canb.auug.org.au>
+In-Reply-To: <20211008151511.5a7c6e56@canb.auug.org.au>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 8 Oct 2021 07:39:57 +0200
+Message-ID: <CAMhs-H_Gg+iLVJ43h5Boa5H1W6LieA_atiYYo+tRtw22bQZSLg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the staging tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OWkET=COPDXOIyb7J.sAON7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+[+cc Thomas Bogendoerfer as mips maintainer]
 
-After merging the net-next tree, today's linux-next build (xtensa,
-m68k allmodconfig) failed like this:
+On Fri, Oct 8, 2021 at 6:15 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the staging tree, today's linux-next build (mips
+> nlm_xlp_defconfig) failed like this:
+>
+> drivers/pci/pci.c:4210: undefined reference to `pci_remap_iospace'
+>
+> Caused by commit
+>
+>   9f76779f2418 ("MIPS: implement architecture-specific 'pci_remap_iospace()'")
+>
+> CONFIG_PCI_DRIVERS_GENERIC is not set for this build, so
+> arch/mips/pci/pci-generic.c is not built.
 
-In file included from <command-line>:0:0:
-In function 'ath11k_peer_assoc_h_smps',
-    inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/at=
-h11k/mac.c:2362:2:
-include/linux/compiler_types.h:317:38: error: call to '__compiletime_assert=
-_650' declared with attribute error: FIELD_GET: type of reg too small for m=
-ask
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                      ^
-include/linux/compiler_types.h:298:4: note: in definition of macro '__compi=
-letime_assert'
-    prefix ## suffix();    \
-    ^
-include/linux/compiler_types.h:317:2: note: in expansion of macro '_compile=
-time_assert'
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-  ^
-include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
-ssert'
- #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                     ^
-include/linux/bitfield.h:52:3: note: in expansion of macro 'BUILD_BUG_ON_MS=
-G'
-   BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,  \
-   ^
-include/linux/bitfield.h:108:3: note: in expansion of macro '__BF_FIELD_CHE=
-CK'
-   __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: "); \
-   ^
-drivers/net/wireless/ath/ath11k/mac.c:2079:10: note: in expansion of macro =
-'FIELD_GET'
-   smps =3D FIELD_GET(IEEE80211_HE_6GHZ_CAP_SM_PS,
-          ^
+I don't know what should be the correct fix for this.
+'pci_remap_iospace' for mips is added in 'pci-generic.c' which in only
+compiled when 'CONFIG_PCI_DRIVERS_GENERIC' is selected. In mips there
+is also 'CONFIG_PCI_DRIVERS_LEGACY' option that include 'pci-legacy.c'
+and drivers in 'arch/mips/pci' are normally defining this
+'CONFIG_PCI_DRIVERS_LEGACY'. For the failing build
+mips_nlm_xlp_defconfig, none of them are defined and code (I guess
+./arch/mips/pci/pci-xlp.c) is just initializing PCI calling
+'pcibios_init' and not using PCI core apis and 'pci_remap_iospace' at
+all like other drivers inside 'arch/mips/pci'. So I think the correct
+thing to do would be just move this mips architecture dependent define
+to be dependant of CONFIG_PCI_DRIVERS_GENERIC. The following patch
+would be enough:
 
-Caused by commit
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 35270984a5f0..421231f55935 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -20,7 +20,9 @@
+ #include <linux/list.h>
+ #include <linux/of.h>
 
-  6f4d70308e5e ("ath11k: support SMPS configuration for 6 GHz")
++#ifdef CONFIG_PCI_DRIVERS_GENERIC
+ #define pci_remap_iospace pci_remap_iospace
++#endif
 
---=20
-Cheers,
-Stephen Rothwell
+ #ifdef CONFIG_PCI_DRIVERS_LEGACY
 
---Sig_/OWkET=COPDXOIyb7J.sAON7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thomas, if you are ok with this, let me know and I'll send this patch
+to be added to staging tree for fixing this issue.
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+    Sergio Paracuellos
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFf1T8ACgkQAVBC80lX
-0GxN4gf/XbvnPj4onsQ0DSCEd/9Xm7lJxN/nxwMngxwhgMoHk+1XYT8jMH+pybyW
-vcOOqFUJ3Bmvw8baM5KSBp0lvykxqvNsIuYLfTa282R10gn5+gZ3zRpBH7TBlveG
-7/xqiH8y6GVTO3IZVcc9Z14FNOGd4zb1VV8trqbPITu1Rt2qowoFilyPlQQL6nha
-RbWDJfe8Ve06pN5vLEX0v6DX6obZoF6ibUEuzB9XnXXVup+AkoTxehXbEr4U1Jle
-TCLk8SQ6g39T5iirdxj2k+r94I5JeyYw5G1iCl7hS3kTfZhKSRqZBMBteLc219DV
-tWCTJxgMTKf9ENfTu/MXTnA7xg7gpQ==
-=Zz2x
------END PGP SIGNATURE-----
-
---Sig_/OWkET=COPDXOIyb7J.sAON7--
+>
+> --
+> Cheers,
+> Stephen Rothwell

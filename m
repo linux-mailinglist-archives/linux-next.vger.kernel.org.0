@@ -2,55 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B77142669F
-	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 11:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8188F426732
+	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 11:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbhJHJYT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Oct 2021 05:24:19 -0400
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:48007 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237288AbhJHJYS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 05:24:18 -0400
-Date:   Fri, 08 Oct 2021 09:22:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1633684939;
-        bh=i8yz2Dg75XXWZjL9bsGvVhDicxEByCAZeWOpe1sB2M0=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=XiBRvlEep33rZf0acsxl1nCNw+zCnNV5wgsIn7gZM2q1rnZ6TkhNgQNVMBMrGDprO
-         +T8KUCDCDTDDs7iNy2KLjmhMREkwhqy2CbjuOyaOhDStApKAnEwCIenJM7yxaIAsXm
-         goN7BoNjgnjZNav9jjTqWOB0H7cip3yldlVyRA0C2Wn9W+i84b1TEa6qUaReUX8mSb
-         nqyhagGOjS8fl3e2q+9sOBjP9sTprpC7e5TgqnqYSRcEcJMjbXsR38IEI0j3dnLZin
-         1cUj4YrEzU3eRH7myIALI+eIs6+m+KmW+ArxyllS9UN5gcjYvw2vWZl/CDV9luD5Wp
-         LgNKSa5eia3nA==
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <Dz13Vv6-f2sFL9b6FSyhY_PlgeJfAnCBSn_SLFYSVRmXevReQOCK7ZD_DRX2DsjHYb45cTPpnTC-aG-tFNU2AapS9qsQZQB_boozWiTz-dI=@emersion.fr>
-In-Reply-To: <20211008192910.600a188d@canb.auug.org.au>
-References: <20211008113116.4bdd7b6c@canb.auug.org.au> <jXLIcCYkgHdIQna5SW6W4GGHVG5By4-GXiaosbXyyaYXFNTH60nmH6twdxMYgM2X63FhEOyxU7Qh_vbKFywBKmUwp7l4DYXe_hTt86AS-ZM=@emersion.fr> <20211008192910.600a188d@canb.auug.org.au>
+        id S238638AbhJHJzK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Oct 2021 05:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229869AbhJHJzK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 05:55:10 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD30C061570;
+        Fri,  8 Oct 2021 02:53:14 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r18so28018991wrg.6;
+        Fri, 08 Oct 2021 02:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uj9+OxfyZUIYBVS3coN0oP8CwB3d5MCS18cjbvWyJdY=;
+        b=GBeqpTAjEQSxGx0TjU9ypgASF+ct1wnX9YFTj/N5nOPvBogbGRd4P0Zxf+NSRk6+DU
+         LTIJxpp3+oQ2y2i8lah9hUuieF6SLyVnxFVEqRCxNCKVmOH9+BRFv85qj5KlvJ3Bw2iV
+         edk251OprIdUsJpx1g25RMyW73W7TB8IQUwoxRdqtnCdE/JR4WJIasfvBQ/VJRN1QdIU
+         bHFJ9vcc/r7BtgyzTLOeu4dNM49WVpJ8G/J+gHr+tI2hV952iXteEviE1koke2d79N6Z
+         nAhb5ILnQ1gbjKwNhGD7CseaaO58MPplf1yh/eNrSrpAqe89D227MchZj7t1AJDeB17W
+         GHAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uj9+OxfyZUIYBVS3coN0oP8CwB3d5MCS18cjbvWyJdY=;
+        b=xmuvkXtxI3O4g5hL30nGai6kejxpzKQV8GjoPAIsp5oAu/E2oavHnwovAgiUDvCl8q
+         +MdyIuGSa3ORYx/D4sb0i6z9Y4slXx9AcoCZiEsaKUlzeJy2YVqkP2QuBl9ZsBh2clm6
+         YPW2T5iRS8bF2FJqG5Xgqa38+1LoB4Z6IuqfqyKJLRrdRtZzMbFp0B9g4wDsYlsRGe16
+         6AoU8N7VX3CdnQlSfsEZVTjmFMvRw9J+G23uGy/wzrR+TVHBHhPiDZ5TJ7gLw/K7hj5j
+         FpCtqRMz10ZM/x3X4xQP+kCsGwGQGo15mVthBSI2UyuLQGkjIXAZTvydyCJpS+9etPtm
+         4ePA==
+X-Gm-Message-State: AOAM531KuBTswsh67o27Gk8kQnNPWUfM4O8Gmlf0i3Tr3p09cb2wfRvt
+        /HEksievedmjbZa27BRui2OgycXdVtE=
+X-Google-Smtp-Source: ABdhPJzUv/jKssKsIvUOnoogDe7MYO7BM/G2x1Se2RLTCu7pekj+1ysr+08gp7EhM5qQNRMCyyHrEg==
+X-Received: by 2002:a1c:a401:: with SMTP id n1mr2357130wme.162.1633686793204;
+        Fri, 08 Oct 2021 02:53:13 -0700 (PDT)
+Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
+        by smtp.gmail.com with ESMTPSA id z8sm707670wrq.16.2021.10.08.02.53.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Oct 2021 02:53:12 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] MIPS: asm: pci: define arch-specific 'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'
+Date:   Fri,  8 Oct 2021 11:53:11 +0200
+Message-Id: <20211008095311.26475-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Friday, October 8th, 2021 at 10:29, Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
+Some MIPS defconfigs that don't define 'CONFIG_PCI_DRIVERS_GENERIC' but
+define 'CONFIG_PCI_DRIVERS_LEGACY' or none of them, can fail when they are
+built since definition for 'pci_remap_iospace' is being done in include
+file 'arch/mips/include/asm/pci.h' and the specific function implemented
+in 'arch/mips/pci/pci-generic.c'. MIPS PCI drivers that don't use generic
+PCI core APIs don't really need 'pci_remap_iospace' to be defined at all.
+Hence, change definition for 'pci_remap_iospace' to be dependent on the
+preprocessor 'CONFIG_PCI_DRIVERS_GENERIC' definition to avoid possible
+build problems.
 
-> That symbol (get_mm_exe_file) is not exported to modules.
+CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 9f76779f2418 ("MIPS: implement architecture-specific 'pci_remap_iospace()'")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+Hi Greg, Thomas, Stephen,
 
-I see this:
+I guess this should also go through the staging-tree.
 
-    EXPORT_SYMBOL(get_mm_exe_file);
+Thanks in advance for your time.
 
-in kernel/fork.c
+Best regards,
+    Sergio Paracuellos
+
+ arch/mips/include/asm/pci.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 35270984a5f0..421231f55935 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -20,7 +20,9 @@
+ #include <linux/list.h>
+ #include <linux/of.h>
+ 
++#ifdef CONFIG_PCI_DRIVERS_GENERIC
+ #define pci_remap_iospace pci_remap_iospace
++#endif
+ 
+ #ifdef CONFIG_PCI_DRIVERS_LEGACY
+ 
+-- 
+2.33.0
+

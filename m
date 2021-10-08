@@ -2,78 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 842C0426C8D
-	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 16:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7852A426CE6
+	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 16:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbhJHONl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Oct 2021 10:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbhJHONk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 10:13:40 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5179C061570;
-        Fri,  8 Oct 2021 07:11:44 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id y16-20020a4ade10000000b002b5dd6f4c8dso2940158oot.12;
-        Fri, 08 Oct 2021 07:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MbGs/6x4pN4s6g/EDyFQWl+AmouMo20lgCsXdHhqXbI=;
-        b=CYlQUjWN7bHcAi6jliv4m4PdnbRKujP760zw7djhMLhe92lpS0Eo7QJHgRnuCVoiMB
-         umvqWwHyO+dGKgnVKJ6pNM4ppmM5zxEj9a437Ysr8OPkghAJVtI9nR/GqL6bbX0QYkZa
-         OcAUYlfGQK2M23mfZsUFWQhcSBbvN4GMZxUU1cJm9dMf1RbAZJrDWzSevROtoMni5WzL
-         sE+wqqBD/vY0f1GVwSliqxvGQvIfRhar5x76tyAwO2FrMbZhztGUFe0wjqONBy+ay2GE
-         c/a4WIgdBvnmA7D+h+39cI5n7UQ5POrXb/nK/uAbRJq30bJT5nvt0RtTBfP5Y3RUAHPq
-         xuwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MbGs/6x4pN4s6g/EDyFQWl+AmouMo20lgCsXdHhqXbI=;
-        b=Q0cK8MNIsMcq2zLl3nMrJn9bW+xDEtrVWZpaaFOoevkhMNrCwUXIIYWW7wX/CX8+My
-         t5b5SaL8yVDk+czoI33G22QixRh1QK2c0uCgJgXPbm/SFECTOMjODe0lFYloTgmAnVHz
-         NeSeCLDajsJknS27TgwY80UFfpA5cNkjeaOYXSQ7S0nXaG/PoUSlEZiMffZ8dgGto1zE
-         PcCNharwJZ+iGjc+dH+O6l6M9S+UgmdIGr10nhOYB7WyNdB/Zqzl326fnbSygR5/0fXL
-         TIYACkBEvvt457G+HDaGJGRB4yvKvGhdqUBNvCQu4ULc5Fy6XzwlwznDu2ldLG30WgPh
-         Ymjg==
-X-Gm-Message-State: AOAM530eQ3sDKzPLQwfZoQm9cnqdREVNJuhJtY1NlfGuJEBI1u2sGXjI
-        eQ56PDjZPHGkSFmTRhEDEpINY4L3PDAghcaFcFa87Xzs5It2Ww==
-X-Google-Smtp-Source: ABdhPJyuzJhYJX1W0W2grPoVqrm/kc4OHoRdDoWqTvxU16y8o9/g+xwk/94jq0VboLjiC07sPgOqwvAv7cNk7vbd41s=
-X-Received: by 2002:a4a:e899:: with SMTP id g25mr8372784ooe.68.1633702304000;
- Fri, 08 Oct 2021 07:11:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211008113116.4bdd7b6c@canb.auug.org.au> <jXLIcCYkgHdIQna5SW6W4GGHVG5By4-GXiaosbXyyaYXFNTH60nmH6twdxMYgM2X63FhEOyxU7Qh_vbKFywBKmUwp7l4DYXe_hTt86AS-ZM=@emersion.fr>
- <20211008192910.600a188d@canb.auug.org.au> <Dz13Vv6-f2sFL9b6FSyhY_PlgeJfAnCBSn_SLFYSVRmXevReQOCK7ZD_DRX2DsjHYb45cTPpnTC-aG-tFNU2AapS9qsQZQB_boozWiTz-dI=@emersion.fr>
-In-Reply-To: <Dz13Vv6-f2sFL9b6FSyhY_PlgeJfAnCBSn_SLFYSVRmXevReQOCK7ZD_DRX2DsjHYb45cTPpnTC-aG-tFNU2AapS9qsQZQB_boozWiTz-dI=@emersion.fr>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 8 Oct 2021 10:11:33 -0400
-Message-ID: <CADnq5_NUkzK=uOJKn5tiaSSA0i=WPJZFZBSPDne8ooims8JkCQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Simon Ser <contact@emersion.fr>
+        id S242509AbhJHOp4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Oct 2021 10:45:56 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:19823 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242412AbhJHOpy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 8 Oct 2021 10:45:54 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633704239; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=9zDcaEkAkspustVVY2KAKAYV6I1Sut33Nhr4VG24NAw=; b=NuyZlUipnUKXlBal2dsmQ/fudUPqfun3KrjaCxHt4sAes0nnQACTVMi7WRO8EwJeeU3hFlXS
+ jm3B6pI+1KlCNgChu5cpMrNS3zCsP55tibNHrcdYoYsuZs8Z/GXpnwE1xy91pHjMNLLIP7fx
+ 1FC24ZfDxpLTqLy5p0zp1CmKvmQ=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 61605920f3e5b80f1f06214a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 08 Oct 2021 14:43:44
+ GMT
+Sender: kvalo=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 934CFC4360C; Fri,  8 Oct 2021 14:43:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from tykki (tynnyri.adurom.net [51.15.11.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 51711C4338F;
+        Fri,  8 Oct 2021 14:43:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 51711C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Jouni Malinen <jouni@codeaurora.org>,
+        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ath11k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net-next tree
+References: <20211008162103.1921a7a7@canb.auug.org.au>
+        <87tuhs5ah8.fsf@codeaurora.org>
+        <CAMuHMdUZa9o15_fGJ7Si_-bOQVcFOxtWgo_MOiKsV0FjoPeX6Q@mail.gmail.com>
+Date:   Fri, 08 Oct 2021 17:43:39 +0300
+In-Reply-To: <CAMuHMdUZa9o15_fGJ7Si_-bOQVcFOxtWgo_MOiKsV0FjoPeX6Q@mail.gmail.com>
+        (Geert Uytterhoeven's message of "Fri, 8 Oct 2021 10:14:25 +0200")
+Message-ID: <87pmsf60h0.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 8, 2021 at 5:22 AM Simon Ser <contact@emersion.fr> wrote:
->
-> On Friday, October 8th, 2021 at 10:29, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> > That symbol (get_mm_exe_file) is not exported to modules.
->
-> I see this:
->
->     EXPORT_SYMBOL(get_mm_exe_file);
->
-> in kernel/fork.c
+Hi Geert,
 
-Was recently removed:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/fork.c?id=05da8113c9ba63a8913e6c73dc06ed01cae55f68
-I guess we need to rethink that patch.
+Geert Uytterhoeven <geert@linux-m68k.org> writes:
 
-Alex
+> On Fri, Oct 8, 2021 at 7:55 AM Kalle Valo <kvalo@codeaurora.org> wrote:
+>> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>>
+>> > After merging the net-next tree, today's linux-next build (xtensa,
+>> > m68k allmodconfig) failed like this:
+>> >
+>> > In file included from <command-line>:0:0:
+>> > In function 'ath11k_peer_assoc_h_smps',
+>> >     inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2362:2:
+>> > include/linux/compiler_types.h:317:38: error: call to '__compiletime_assert_650' declared with attribute error: FIELD_GET: type of reg too small for mask
+>> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>> >                                       ^
+>> > include/linux/compiler_types.h:298:4: note: in definition of macro '__compiletime_assert'
+>> >     prefix ## suffix();    \
+>> >     ^
+>> > include/linux/compiler_types.h:317:2: note: in expansion of macro '_compiletime_assert'
+>> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>> >   ^
+>> > include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+>> >  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>> >                                      ^
+>> > include/linux/bitfield.h:52:3: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+>> >    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,  \
+>> >    ^
+>> > include/linux/bitfield.h:108:3: note: in expansion of macro '__BF_FIELD_CHECK'
+>> >    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: "); \
+>> >    ^
+>> > drivers/net/wireless/ath/ath11k/mac.c:2079:10: note: in expansion of macro 'FIELD_GET'
+>> >    smps = FIELD_GET(IEEE80211_HE_6GHZ_CAP_SM_PS,
+>> >           ^
+>> >
+>> > Caused by commit
+>> >
+>> >   6f4d70308e5e ("ath11k: support SMPS configuration for 6 GHz")
+>>
+>> Thanks for the report, weird that I don't see it on x86. I can't look at
+>> this in detail now, maybe later today, but I wonder if the diff below
+>> fixes the issue?
+>
+> It seems to be related to passing "le16_to_cpu(sta->he_6ghz_capa.capa)".
+> Probably typeof(le16_to_cpu(sta->he_6ghz_capa.capa)) goes berserk.
+> le16_to_cpu() is a complex macro on big-endian. I had expected to see
+> a similar issue on powerpc, but I don't.
+> Using an intermediate "u16 capa = le16_to_cpu(sta->he_6ghz_capa.capa)"
+> fixes the problem.
+>
+>> At least it's cleaner than using FIELD_GET(), actually ath11k should be
+>> cleaned up to use xx_get_bits() all over.
+>>
+>> Kalle
+>>
+>> diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+>> index d897020dd52d..3e7e569f284b 100644
+>> --- a/drivers/net/wireless/ath/ath11k/mac.c
+>> +++ b/drivers/net/wireless/ath/ath11k/mac.c
+>> @@ -2076,8 +2076,8 @@ static void ath11k_peer_assoc_h_smps(struct ieee80211_sta *sta,
+>>                 smps = ht_cap->cap & IEEE80211_HT_CAP_SM_PS;
+>>                 smps >>= IEEE80211_HT_CAP_SM_PS_SHIFT;
+>>         } else {
+>> -               smps = FIELD_GET(IEEE80211_HE_6GHZ_CAP_SM_PS,
+>> -                                le16_to_cpu(sta->he_6ghz_capa.capa));
+>> +               smps = le16_get_bits(sta->he_6ghz_capa.capa,
+>> +                                    IEEE80211_HE_6GHZ_CAP_SM_PS);
+>>         }
+>
+> Thanks, that works, too, so (compile)
+> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Thanks Geert, you helped a lot! I now submitted a patch to netdev:
+
+https://patchwork.kernel.org/project/netdevbpf/patch/20211008143932.23884-1-kvalo@codeaurora.org/
+
+Dave & Jakub, if you can please take the patch directly to net-next.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

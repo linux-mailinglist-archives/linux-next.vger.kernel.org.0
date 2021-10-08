@@ -2,133 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 566534265A9
-	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 10:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573C34265E7
+	for <lists+linux-next@lfdr.de>; Fri,  8 Oct 2021 10:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbhJHIQd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Oct 2021 04:16:33 -0400
-Received: from mail-ua1-f45.google.com ([209.85.222.45]:34723 "EHLO
-        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbhJHIQc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 04:16:32 -0400
-Received: by mail-ua1-f45.google.com with SMTP id h4so6198069uaw.1;
-        Fri, 08 Oct 2021 01:14:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7wO+xcQh6vNN08iok37rOCPRwho9ClVLbVfs6DvZcoU=;
-        b=1V+mwmje0bbAVYIweZ9k+xoyyotUOqd0jO9GkvoXdg6/lVr/Bvc6/ykGQFLBE/BEm2
-         LdDqqh1LbwB8g5uDQkB8vTOOVvNMBKfqKyWhZkp9mpqIniq/jNlrp1sufYnkyyy7GGS3
-         jBvk+7QCLD2+oEKKAaOql3OEDuRpqrJAKpIKPNXNHlIVnFZva2qpJtKeu/84TVgFoMsq
-         Xq9PehJrJvSWAjnjLKjvLWk17nmu7oMfM3LJWMVaeu2n9Oc78YS8cfiAd6QF8xgwVg90
-         S5jMmhiiFhajs3ZBuHe3c62PV9Y3uPXEmywRwzK8makrR81SV4ENCI6LPgKUyEQ1Sfa1
-         Nvxw==
-X-Gm-Message-State: AOAM530UZyevZG0l6HMETNPC7NcScgs/sMbTv/b//XEycgYjweX09j9W
-        S+mqOcRkkyX1hXlj5g419Pip0EorYDALjJrX/MJHImVBioo=
-X-Google-Smtp-Source: ABdhPJxD3cm5x6NWNfsGlyqVJout9BqXENj3uvqqT6UeA6jfU03wynvPPBTZw2mQph2TScrcb7ByvBjOn/L2fjppPQ4=
-X-Received: by 2002:ab0:16d4:: with SMTP id g20mr1204838uaf.114.1633680876846;
- Fri, 08 Oct 2021 01:14:36 -0700 (PDT)
+        id S232350AbhJHIa5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Oct 2021 04:30:57 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:34665 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229868AbhJHIa5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Oct 2021 04:30:57 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MkIAB-1n1oXt0bs1-00kjtT; Fri, 08 Oct 2021 10:29:00 +0200
+Received: by mail-wr1-f52.google.com with SMTP id r18so27281932wrg.6;
+        Fri, 08 Oct 2021 01:29:00 -0700 (PDT)
+X-Gm-Message-State: AOAM533Y+2nbKM6SJgkqoDRu8UwCxIdncqlCHuI/0AmT11OcJ38kt8/u
+        EYGODxaB51+iDNR22GENxxzX9xa7Q0rRT7609tI=
+X-Google-Smtp-Source: ABdhPJyBXhX12PpUH/38oXcC7qr2BYBPWQ5taeWZl0TIvVnaFmovsl1ju5x37gj8x61HAzSl9KvyaqVJ+2IwzjjJtjY=
+X-Received: by 2002:adf:a3da:: with SMTP id m26mr2249533wrb.336.1633681739740;
+ Fri, 08 Oct 2021 01:28:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211008162103.1921a7a7@canb.auug.org.au> <87tuhs5ah8.fsf@codeaurora.org>
-In-Reply-To: <87tuhs5ah8.fsf@codeaurora.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 8 Oct 2021 10:14:25 +0200
-Message-ID: <CAMuHMdUZa9o15_fGJ7Si_-bOQVcFOxtWgo_MOiKsV0FjoPeX6Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the net-next tree
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Jouni Malinen <jouni@codeaurora.org>,
-        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
+References: <20211008131649.01295541@canb.auug.org.au>
+In-Reply-To: <20211008131649.01295541@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 8 Oct 2021 10:28:43 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2h=DS=-xKc059YQg=K400kRUHHpJ=xyDPRW40D3ZsaTQ@mail.gmail.com>
+Message-ID: <CAK8P3a2h=DS=-xKc059YQg=K400kRUHHpJ=xyDPRW40D3ZsaTQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the kvm tree with the asm-generic tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup.patel@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        ath11k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:cO3gUc9t+xVLt/YFmZBBzbXujU8kFS4KLvTC3xr9KctFGUjmdlX
+ uLgIppT/EbulXUlhANavFjfJyWl5Ypqf+XvvqqslpH497JiCNYrRTvGirWpbLSWk2MdkpZL
+ qdMlPnolh5d1YE0kSFO4Tk6VpsM7Hzo5nKaV/bJWzloGWTRlLEMYwrGhp3Oa1RLO7t+ea5Y
+ WPQViijWrH5UDhlA/AZNg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MqdWWM9NNSg=:1rqzRRiSLLV6wRpRhTbrQn
+ TAMADRrVJPUvSszf4zzk+hyzrJAR72mvTXR7pL8M3twTWcxMqEtTKObGBt2jYSQrk8nvPmXfB
+ DQi+/oriT1O+VXJcuCwFCDe/pPqHXS3XzKgPlpey+ufFWLLVObpa8iO4ne+jPnI1FShjrDHtc
+ 70AaQP+TugLbpQoNyKCMMyNzAb3pMQ54e/Cm+l1lN7gYlzLFOyyJqvwn3jL3mMJBaWYAFwqnF
+ odJBXVtIMz2pneGllEuvW3NsWIb+svOx44QkP+i+3BE24aBM4GiriKtlrN7srTWeZsrvsNcq9
+ 8zdXXrqLgwp8+iCTkRLEpYZJ3DRTKNtL6OoAmzVgilChi4TvtU3AZIFOM7tJ/pX3BHvTBq2vf
+ amVUJKd4VVAJ4wGFi22RAsV4TsMcEF8eKc1sCE8K1tIGcJqY2x27GwrAvJaEwNL4f1gcxXiDC
+ aG0oIUz5eF9bVWX+XflwZuvXyOdUXYqcAuY7N9nArwpBsNqMbjwxz586Xt/jE91cbtcLAnRkb
+ WBQd0n4sEh8rXKecxBbHgjLn7DDQP+/kABxA1nDsaU6pVFukUUOwy4rsmna6brl5nh1uOa5uQ
+ RKKk1C0LaFQSt9aTeEEq11gllDfcw4WKBG5vsdf20ekpWd50hLIsdN1RAgUyWVNxmnUYOynn+
+ QSh/R7MQjWOB3lsc8BKVGaDlThR4G6rC4II3860w4+PSlI6KMVGmUOLW5ptpYhFzH09NiiKAs
+ 5FgbJMzs2If2Czl3bwNygJq7kNqvbtOz7dX6P6+a/gmnGElS6lB1tQwRzu5Q40G+NkiPjm+6l
+ FLRa4j9pUea/VsZQ3x76+POnWyFCbYvm1oylp1LSK4wwHmuONBRJAdIeW7flLNYXusZ/hV1at
+ U8w6Xa5IBJfbJIPFxWjw==
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Kalle,
-
-On Fri, Oct 8, 2021 at 7:55 AM Kalle Valo <kvalo@codeaurora.org> wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+On Fri, Oct 8, 2021 at 4:17 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> > After merging the net-next tree, today's linux-next build (xtensa,
-> > m68k allmodconfig) failed like this:
-> >
-> > In file included from <command-line>:0:0:
-> > In function 'ath11k_peer_assoc_h_smps',
-> >     inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2362:2:
-> > include/linux/compiler_types.h:317:38: error: call to '__compiletime_assert_650' declared with attribute error: FIELD_GET: type of reg too small for mask
-> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >                                       ^
-> > include/linux/compiler_types.h:298:4: note: in definition of macro '__compiletime_assert'
-> >     prefix ## suffix();    \
-> >     ^
-> > include/linux/compiler_types.h:317:2: note: in expansion of macro '_compiletime_assert'
-> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >   ^
-> > include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-> >  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                      ^
-> > include/linux/bitfield.h:52:3: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-> >    BUILD_BUG_ON_MSG((_mask) > (typeof(_reg))~0ull,  \
-> >    ^
-> > include/linux/bitfield.h:108:3: note: in expansion of macro '__BF_FIELD_CHECK'
-> >    __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: "); \
-> >    ^
-> > drivers/net/wireless/ath/ath11k/mac.c:2079:10: note: in expansion of macro 'FIELD_GET'
-> >    smps = FIELD_GET(IEEE80211_HE_6GHZ_CAP_SM_PS,
-> >           ^
-> >
-> > Caused by commit
-> >
-> >   6f4d70308e5e ("ath11k: support SMPS configuration for 6 GHz")
+> Hi all,
 >
-> Thanks for the report, weird that I don't see it on x86. I can't look at
-> this in detail now, maybe later today, but I wonder if the diff below
-> fixes the issue?
-
-It seems to be related to passing "le16_to_cpu(sta->he_6ghz_capa.capa)".
-Probably typeof(le16_to_cpu(sta->he_6ghz_capa.capa)) goes berserk.
-le16_to_cpu() is a complex macro on big-endian. I had expected to see
-a similar issue on powerpc, but I don't.
-Using an intermediate "u16 capa = le16_to_cpu(sta->he_6ghz_capa.capa)"
-fixes the problem.
-
-> At least it's cleaner than using FIELD_GET(), actually ath11k should be
-> cleaned up to use xx_get_bits() all over.
+> Today's linux-next merge of the kvm tree got a conflict in:
 >
-> Kalle
+>   arch/riscv/Kconfig
 >
-> diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-> index d897020dd52d..3e7e569f284b 100644
-> --- a/drivers/net/wireless/ath/ath11k/mac.c
-> +++ b/drivers/net/wireless/ath/ath11k/mac.c
-> @@ -2076,8 +2076,8 @@ static void ath11k_peer_assoc_h_smps(struct ieee80211_sta *sta,
->                 smps = ht_cap->cap & IEEE80211_HT_CAP_SM_PS;
->                 smps >>= IEEE80211_HT_CAP_SM_PS_SHIFT;
->         } else {
-> -               smps = FIELD_GET(IEEE80211_HE_6GHZ_CAP_SM_PS,
-> -                                le16_to_cpu(sta->he_6ghz_capa.capa));
-> +               smps = le16_get_bits(sta->he_6ghz_capa.capa,
-> +                                    IEEE80211_HE_6GHZ_CAP_SM_PS);
->         }
+> between commit:
+>
+>   b63dc8f2b02c ("firmware: include drivers/firmware/Kconfig unconditionally")
+>
+> from the asm-generic tree and commit:
+>
+>   99cdc6c18c2d ("RISC-V: Add initial skeletal KVM support")
+>
+> from the kvm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Thanks, that works, too, so (compile)
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Looks good, thanks!
 
-Gr{oetje,eeting}s,
+I'm planning to send the commit in the asm-generic tree to mainline
+today, so it will then be a conflict against 5.15.
 
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+       Arnd

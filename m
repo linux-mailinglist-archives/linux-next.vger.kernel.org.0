@@ -2,123 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8141E4283C4
-	for <lists+linux-next@lfdr.de>; Sun, 10 Oct 2021 23:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3756428423
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 01:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbhJJV3H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Oct 2021 17:29:07 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:51383 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbhJJV3H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Oct 2021 17:29:07 -0400
+        id S233216AbhJJXO5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Oct 2021 19:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232812AbhJJXO4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Oct 2021 19:14:56 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329E6C061570;
+        Sun, 10 Oct 2021 16:12:57 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSFPQ0CpGz4xb9;
-        Mon, 11 Oct 2021 08:27:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSHlR526lz4xbX;
+        Mon, 11 Oct 2021 10:12:51 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633901226;
-        bh=Tdpa6xnFc3ophnWEiOl1ld3ry0k/KgAZC1Myk8IqKNE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mcgfXPRRZC7Eo3EhA1j7l7YmgqLE0qefC1LBZanrPS/alYfJN861aigEFznukuT/R
-         BSpO420gbDzloZGrULJ81Wqcf4m8zgWHFBfTeh7VHlEHo+Zg/AeuRFKF122XzhHILZ
-         kfmSlcvhoEzxk2+kGYAzdksFUk0ZhTLqvDGmHfulpWl9OqU8tLzFcttjXL+KPuZq/T
-         npDi8IuqVpLVlS+szraSwypKUFpu3exd/JjPq3Nsvbmcecx+FjyD2d9ox5isCGmyik
-         RNnpb2KlGPh9+xNkSLwkFovpNk12BDMJ0ugHUjr6Dg18Em22YiqKad4XJU1/ctksUu
-         mcTZHDJMk3BFw==
-Date:   Mon, 11 Oct 2021 08:27:04 +1100
+        s=201702; t=1633907572;
+        bh=r4GrcWgdPshNlgLFAN2ew38xMvBogldJEh6Jwj6T4Lo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=plD333k2zZ919Oksf26N01S6htufeT8J3HDCkLm8P7ymey7KTvhr02P4CdtHxAWch
+         pNflSwq9jbshGs95iqi3wy5o5MkbSf4gEygRqU8ahV9erh7MEJOmwqzg67mePyBPX2
+         NX6iiCuMgGLcdbwTh375JwvSS4bjTEZ9E4S+jxKPT4wEP7znUGxdBkHW0dxTSYO3ZA
+         j8x4l9fJZ6rgV11L4G6WC798RPx7ryFm59QfQwtaEeC6aOZvNPjXmBc+KWxZ9aASpc
+         0asN71yuFSyZgJyAwiBvLDDQ3g7mM6OprhA1s9W8qkbcAUP8IfGeV9W5Y3yNxCwGQr
+         u8V3uvguJgfLQ==
+Date:   Mon, 11 Oct 2021 10:12:50 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: linux-next: build warnings in Linus' tree
-Message-ID: <20211011082704.3cff4568@canb.auug.org.au>
-In-Reply-To: <20211008164728.30e3d3a3@canb.auug.org.au>
-References: <20211008164728.30e3d3a3@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Siddartha Mohanadoss <smohanad@codeaurora.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pci tree
+Message-ID: <20211011101250.11902b31@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xIyb51QYuHZd2a6dL62QVXX";
+Content-Type: multipart/signed; boundary="Sig_/ZQ0r+/uMtE58Xit7vKdYfVj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xIyb51QYuHZd2a6dL62QVXX
+--Sig_/ZQ0r+/uMtE58Xit7vKdYfVj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-[Cc'ing Rob]
+After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-Rob: these warnings have been there for a long time ...
+ERROR: modpost: "dw_pcie_ep_reset_bar" [drivers/pci/controller/dwc/pcie-qco=
+m-ep.ko] undefined!
+ERROR: modpost: "dw_pcie_ep_raise_msi_irq" [drivers/pci/controller/dwc/pcie=
+-qcom-ep.ko] undefined!
+ERROR: modpost: "dw_pcie_ep_raise_legacy_irq" [drivers/pci/controller/dwc/p=
+cie-qcom-ep.ko] undefined!
 
-On Fri, 8 Oct 2021 16:47:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Hi all,
->=20
-> After merging the origin tree, today's linux-next build (powerpc
-> allyesconfig) produced these warnings (along with many others):
->=20
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
-> arch/powerpc/boot/dts/mpc5200b.dtsi:182.18-186.5: Warning (spi_bus_bridge=
-): /soc5200@f0000000/psc@2000: node name for SPI buses should be 'spi'
-> arch/powerpc/boot/dts/mpc5200b.dtsi:267.20-280.4: Warning (pci_bridge): /=
-pci@f0000d00: missing ranges for PCI bridge (or not a bridge)
->=20
-> Given that arch/powerpc/boot/dts/mpc5200b.dtsi is oncluded by several
-> other dts files, fixing this one file would go quite a long way to
-> silencing our allyesoncig build.  Unfotunatley, I have no idea how to
-> fix this file (ad maybe some fo the interactions it has with other files).
+Caused by commit
+
+  3872e6f0544f ("PCI: qcom-ep: Add Qualcomm PCIe Endpoint controller driver=
+")
+
+I have used the pci tree from next-20211008 fot today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xIyb51QYuHZd2a6dL62QVXX
+--Sig_/ZQ0r+/uMtE58Xit7vKdYfVj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFjWqgACgkQAVBC80lX
-0GxbWQf+NO+y1FHCcKtadFk+9aCdVAiB5cYV5hPoHV65SuG78Ye4TEu8yhF3pO46
-EMJ0h9CsatqseqR5dnTqS58wXWqhdGXy4IW0C8zvygeDUFLTSSEVCNp4WmrAKeya
-YD0iEzIAbmNjEwoV9eLh2uJGMaKHf0DvKaBHSjavhVpZf2wAT3nsYF3B+0nT/U61
-px5hq0/aAYkrl3gLySfNeAxwzZQ02evyMqPKhuuA+DF6knKX21mIRFRNCvfSnN8n
-E1AY72UmJeuFXce5XEiwquZ2ULAJCVwPEFyhApX0d27zi65MbcREMlogzWkoMcZQ
-Hej0NkhOhbDH8JpPGM3JVn8DIkWEyA==
-=8c1M
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFjc3IACgkQAVBC80lX
+0GyO2QgAjV4gmDCOEw+EtCFZoOfOazl7NZQ4ttI0l6Sdz/2V8lF8/fc5hDAZ2crm
+3KapfaB93lHG4ai75gs0fEAZRtU7Ry9tnyICbdyenuNjoieD1LmEzM0olH6puaYV
+u2vWMgR1U3UkVMEvRDpiCn/2csRd+pkBhi57Yfm5hJd2GlW0ieOuFZPanrV5x0HR
+G0wnCYhNWMaqJvw1ArB/NVvOqSFyj+D7Cfwc2ebOwLRhaNNN+td6n1vKeckH8Tc1
+hpNGTu6+UVQQu07rh9JvxUXEpQbyzBmgDUNWpSi+gFY5jfbmny3YATge0CoejicL
+4cyJ/0asRvzvhGeEKp9w6/8GmS0DjQ==
+=g/5v
 -----END PGP SIGNATURE-----
 
---Sig_/xIyb51QYuHZd2a6dL62QVXX--
+--Sig_/ZQ0r+/uMtE58Xit7vKdYfVj--

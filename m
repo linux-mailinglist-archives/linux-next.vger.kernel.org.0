@@ -2,96 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7A542882F
-	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 09:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEBC428833
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 09:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbhJKH5o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Oct 2021 03:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234689AbhJKH5o (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 03:57:44 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD0C061570;
-        Mon, 11 Oct 2021 00:55:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSWLk5V0zz4xqM;
-        Mon, 11 Oct 2021 18:55:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633938942;
-        bh=Y1w5b91rWPOG/E+8Iq3qY+BNUz2oYa7A/lduuFtqcY8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hfaKZVjFYFyRfyFUN+xZCM0ffG6jxB5oR8Le68ywAhp6ROf9fVXtx4jYd+iOm8hRt
-         OSIzoPNyToIoAt/nMCGv/L+3JQJFufBg4KcH424ZxlK19g2tIo8TEMntV3bkW+lhcs
-         uKtrtR5xD8Jv7+/66slU1EzeZEJAiAOfPkyziy6UMor+C4hJbrbrVD0zDACQawS7Ro
-         bNqfK/Kffe/v//aGBEMRe2XygtFiBlMrO/m5gpDEYatm8FZXgvOHdFS9bpFqVcITAr
-         00p98b8GcT5KdBHMzQoc8lKXgXKtMaPKtm6u1UO297algsD9pqUIg9i5iTTeCd3QuY
-         62iTpTzdp3ZMw==
-Date:   Mon, 11 Oct 2021 18:55:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        id S234653AbhJKH7Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Oct 2021 03:59:24 -0400
+Received: from mail-4317.proton.ch ([185.70.43.17]:20865 "EHLO
+        mail-4317.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233968AbhJKH7V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 03:59:21 -0400
+Date:   Mon, 11 Oct 2021 07:57:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail; t=1633939040;
+        bh=bPUo23XnKaWR9gAuxsFlt500SGKQSmr/055s768a5ps=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Qhrj4twJlJ2enHmx7RxbnCq2+Ya2x7CmFLKxYw31T9EGDj2JaqRhDcyY4cEmnIgKO
+         auDs2ydqqU8qXH0R9IQooC4H1sGKtjI8U2sH4zz6OImzU/Fsw4ePT0VDArNs3uFR7+
+         d0BrEAgjop3btzf3dG3sHi7qmRaiu4vPsxOIUaM4A8xV5IbwTgtefMvj8BJ0IgShlx
+         w94dW+CptY/a1KzsinLmlEbcTEXNsBesGf+j62XQSbJO12WzgcjGRmA7B9hcd+XZKM
+         BXkKNt2Nk8C+ZG5DR3V7cfFn90E4Lu+z0UQwwWhZBD6yUef1pntmWdJxS0uRDC6/wn
+         vn6/xoQtezIAQ==
+To:     Christoph Hellwig <hch@lst.de>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: contact/tree changes for the swiotlb tree
-Message-ID: <20211011185541.1fe7bcd0@canb.auug.org.au>
-In-Reply-To: <YWPqTEURBGvyguWI@infradead.org>
-References: <20211008082637.78598d36@canb.auug.org.au>
-        <YWCZHIk+QpsDb7Y8@0xbeefdead.lan>
-        <20211009160846.5b90d9ba@canb.auug.org.au>
-        <YWPqTEURBGvyguWI@infradead.org>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <eOlxebs_u0NKPwzSFL2q48CRHVKEXqiWyoQcHWDsG5qHnhrrphhwczUtgd4bE1o1988Jja35uxf3pWwn2lU8I_5Tmyk1WzeKYQ7yi9qS4sc=@emersion.fr>
+In-Reply-To: <20211011075125.GA11098@lst.de>
+References: <20211008113116.4bdd7b6c@canb.auug.org.au> <Dz13Vv6-f2sFL9b6FSyhY_PlgeJfAnCBSn_SLFYSVRmXevReQOCK7ZD_DRX2DsjHYb45cTPpnTC-aG-tFNU2AapS9qsQZQB_boozWiTz-dI=@emersion.fr> <CADnq5_NUkzK=uOJKn5tiaSSA0i=WPJZFZBSPDne8ooims8JkCQ@mail.gmail.com> <_POw9ikafXoqSFqiOb8SZb_uvRZ4okgD4qrl4EtJ0UBiQTV7pwV3pJIM20eIzmpuFWDeBF9NPD00r72ttX0mZZ0bNeH_J44MoaB-jfjrQSU=@emersion.fr> <20211011073348.GA10672@lst.de> <-6WWj2RSqFheia8o3VKtAiF3bELME9376cYzwiLSY1-E7p9nqfWNqJ5i86Q--BKXa3aolokj8g8nj2tQorzn0LXuD85tD_rXSfE5t1lsvBs=@emersion.fr> <20211011074316.GA10882@lst.de> <XrjqMK5E95uVkQJ-wCjostUwiUD_39UdfIJzQhmnSwZO3aStGYHAxf9QsACe2WZ6vUn08BoW5X5Ya-tazSy0Iwn2jLLrCQDKxlJ6uWXLGaA=@emersion.fr> <20211011075125.GA11098@lst.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pOLmHrhGHLl/RkxFoz=p9Vr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pOLmHrhGHLl/RkxFoz=p9Vr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Monday, October 11th, 2021 at 09:51, Christoph Hellwig <hch@lst.de> wrot=
+e:
 
-Hi Christoph,
-
-On Mon, 11 Oct 2021 08:39:56 +0100 Christoph Hellwig <hch@infradead.org> wr=
-ote:
+> On Mon, Oct 11, 2021 at 07:49:44AM +0000, Simon Ser wrote:
+> > Have you heard about the kernel no-regression rule? Here, we can't enab=
+le a new
+> > feature because that would regress user-space which mis-uses the kernel=
+ uAPI.
 >
-> On Sat, Oct 09, 2021 at 04:08:46PM +1100, Stephen Rothwell wrote:
-> > Hi Konrad,
-> >=20
-> > On Fri, 8 Oct 2021 15:16:44 -0400 Konrad Rzeszutek Wilk <konrad.wilk@or=
-acle.com> wrote: =20
-> > >=20
-> > > Yes please go ahead and drop the swiotlb.git tree from your excellent
-> > > system. =20
-> >=20
-> > Done. =20
->=20
-> Thanks.  swiotlb will now be covered by the existing dma-mapping tree.
+> Then you can't enable the feature without an explicit opt-in from
+> userspace.  This ain't rocket science.
 
-OK, thanks.
+No, we can't have a "I_AM_NOT_BROKEN" ioctl for each and every uAPI mis-use=
+.
+User-space detection has been determined to be the best course of action.
 
---=20
-Cheers,
-Stephen Rothwell
+> > If your reply wasn't aggressive, I don't know what it is.
+>
+> If there is one thing I find agressive it is your extreme passive
+> aggressive behavior.
 
---Sig_/pOLmHrhGHLl/RkxFoz=p9Vr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Come on. I'm just asking you to be civil, that's all. But that seems too mu=
+ch.
 
------BEGIN PGP SIGNATURE-----
+* * *
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFj7f0ACgkQAVBC80lX
-0GyZEAf8DaZkl8x50McLIAQoFX+HqZ/OnY/CYl13sldIZw2pFiL9XN/YjuHgNw3L
-A1ob201smq4nPNzsU006Td9OLiWf6uCfs7HUBOKeEB90HeLVKH4rpiu4aW+SoK+s
-ENvFR/d7HNIHHIBU3IRe6QJ40PzfhhpZg0mP+EgEBFPOjPTdll74Pe1kk1D+huVF
-+TPpc3Q7NbPxcBnr7XXtbtfaLeyQTvmki9a7lXzUBjx8prZdvbrkyEWtzzX9cg7W
-ivoMdPwOoJf3eV1E3GugGHBJAqwFYKFmW4xF3OExbPIJitUyYFMJR5yPyii+tBN0
-UtLUQ+j/Be7eBfJRU6LGr3LoWvJwCA==
-=jV7U
------END PGP SIGNATURE-----
-
---Sig_/pOLmHrhGHLl/RkxFoz=p9Vr--
+I guess I'll just inline these functions in the driver then, if a revert wi=
+ll
+be NACK'ed by you?

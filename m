@@ -2,111 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8304287A7
-	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 09:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539044287B7
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 09:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbhJKHds (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Oct 2021 03:33:48 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:48701 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbhJKHdr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 03:33:47 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSVq65xhmz4xb7;
-        Mon, 11 Oct 2021 18:31:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633937507;
-        bh=SCPyOZEtiteoQfDJSQr511Ncjg8b28+HnVZHpvs35qo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dyx66GylUUJLC01nHRx9cBSDWiTWGJ6hz4B7Zni/vO5ciqebqrOoS60cOHB2X9+JM
-         htnj4F1FTOxwrwOAjaxQbQTIHQuBz/z5AfaBcIO2pFy2naSJT29SmXas95UQYjnXE1
-         85ZaRNEUiMngSPzoMM+vBJcTJQd9DdPW6xxwz1yHAoQSJc/R+Zt6PfV8r6WW2PA7aj
-         766lgERiYu2+8lNYaT7ABS59vNLNFFGZrER//sMu47XsMv+j9+q89JGluTsxsKfEhr
-         fPMvGzj/vttqEY8ZLxjF+U3nJlmRfreYLjwVEhJO30cBfOI7P9I7GpulwsKIxtXIVs
-         ZuwzDO1Gu7Bwg==
-Date:   Mon, 11 Oct 2021 18:31:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Daniel Micay <danielmicay@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
+        id S234476AbhJKHfv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Oct 2021 03:35:51 -0400
+Received: from verein.lst.de ([213.95.11.211]:36155 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234401AbhJKHfu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Oct 2021 03:35:50 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id AF37268AFE; Mon, 11 Oct 2021 09:33:48 +0200 (CEST)
+Date:   Mon, 11 Oct 2021 09:33:48 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Simon Ser <contact@emersion.fr>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the akpm-current tree
-Message-ID: <20211011183145.6ac3bef3@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20211011073348.GA10672@lst.de>
+References: <20211008113116.4bdd7b6c@canb.auug.org.au> <jXLIcCYkgHdIQna5SW6W4GGHVG5By4-GXiaosbXyyaYXFNTH60nmH6twdxMYgM2X63FhEOyxU7Qh_vbKFywBKmUwp7l4DYXe_hTt86AS-ZM=@emersion.fr> <20211008192910.600a188d@canb.auug.org.au> <Dz13Vv6-f2sFL9b6FSyhY_PlgeJfAnCBSn_SLFYSVRmXevReQOCK7ZD_DRX2DsjHYb45cTPpnTC-aG-tFNU2AapS9qsQZQB_boozWiTz-dI=@emersion.fr> <CADnq5_NUkzK=uOJKn5tiaSSA0i=WPJZFZBSPDne8ooims8JkCQ@mail.gmail.com> <_POw9ikafXoqSFqiOb8SZb_uvRZ4okgD4qrl4EtJ0UBiQTV7pwV3pJIM20eIzmpuFWDeBF9NPD00r72ttX0mZZ0bNeH_J44MoaB-jfjrQSU=@emersion.fr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b1XoT7P7Bmi/XTKG6E0Rx7Z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <_POw9ikafXoqSFqiOb8SZb_uvRZ4okgD4qrl4EtJ0UBiQTV7pwV3pJIM20eIzmpuFWDeBF9NPD00r72ttX0mZZ0bNeH_J44MoaB-jfjrQSU=@emersion.fr>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/b1XoT7P7Bmi/XTKG6E0Rx7Z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Oct 08, 2021 at 06:07:33PM +0000, Simon Ser wrote:
+> Would it be reasonable to re-export get_mm_exe_file? amdgpu uses it here:
+> 
+> https://gitlab.freedesktop.org/agd5f/linux/-/commit/0d4da915c7098eca2aa6f559f42e33b5e9c7c5e8
 
-Hi all,
-
-After merging the akpm-current tree, today's linux-next build (htmldocs)
-produced these warnings:
-
-include/linux/slab.h:577: warning: Function parameter or member '1' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:577: warning: expecting prototype for kmalloc(). Proto=
-type was for __alloc_size() instead
-include/linux/slab.h:623: warning: Function parameter or member '1' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:623: warning: Function parameter or member '2' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:623: warning: expecting prototype for kmalloc_array().=
- Prototype was for __alloc_size() instead
-include/linux/slab.h:644: warning: Function parameter or member '2' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:644: warning: Function parameter or member '3' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:644: warning: expecting prototype for krealloc_array()=
-. Prototype was for __alloc_size() instead
-include/linux/slab.h:660: warning: Function parameter or member '1' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:660: warning: Function parameter or member '2' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:660: warning: expecting prototype for kcalloc(). Proto=
-type was for __alloc_size() instead
-include/linux/slab.h:723: warning: Function parameter or member '1' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:723: warning: expecting prototype for kzalloc(). Proto=
-type was for __alloc_size() instead
-include/linux/slab.h:734: warning: Function parameter or member '1' not des=
-cribed in '__alloc_size'
-include/linux/slab.h:734: warning: expecting prototype for kzalloc_node(). =
-Prototype was for __alloc_size() instead
-include/linux/slab.h:1: warning: no structured comments found
-
-Introduced by commit
-
-  04ba82afbbf3 ("slab: add __alloc_size attributes for better bounds checki=
-ng")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/b1XoT7P7Bmi/XTKG6E0Rx7Z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFj6GEACgkQAVBC80lX
-0GxzYwgAnPMBM6zTtQPsn0fbvJVknX2DXmNZVGntJZpoC1VbRMB1R97BygYbDVze
-iqOqyqOzd5X0ekxMLMnX7qjriyHb6dWVcAXx+gwjBb4q0xB41GlG8NBqfatAbTG9
-NDYqak4sbPr+CzHKI9PmqnMMNb0upEnsdbBelWUeJ9eSi3AeXsuN9Ua8PnTAXEFK
-yNjGPX5V37hO8Q5eFUZd0Y43QbVy+PA7bDgqN0jgjiF3M9o6/Cdh8P0sp39obHh+
-KNmrGC0R8y3Xo/Q5vXPGgc/zPfvMotKv8KLj/CQIQeukVamkfTzEH665iV1pg4ac
-VOZZTJqZXWbAzFvjWW+7xLqNe5AsJg==
-=OPyt
------END PGP SIGNATURE-----
-
---Sig_/b1XoT7P7Bmi/XTKG6E0Rx7Z--
+Seriously?  No, it obviously not.  Unexporting it is important to catch
+utter crap like in that commit which should have never made it into a
+maintainer tree.

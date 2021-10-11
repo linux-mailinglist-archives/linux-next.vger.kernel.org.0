@@ -2,65 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66322428641
-	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 07:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5E14286DF
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 08:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbhJKFjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Oct 2021 01:39:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53174 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230341AbhJKFjw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Oct 2021 01:39:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 872A160E94;
-        Mon, 11 Oct 2021 05:37:46 +0000 (UTC)
-Date:   Mon, 11 Oct 2021 11:07:37 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Siddartha Mohanadoss <smohanad@codeaurora.org>,
+        id S233362AbhJKGg2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Oct 2021 02:36:28 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56923 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231425AbhJKGg1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 02:36:27 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSTXy2nXYz4xbL;
+        Mon, 11 Oct 2021 17:34:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1633934066;
+        bh=6GOk3nyhP0azIbPuESw0RXCw6kG6vR7AfVI2n4LS2fs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aB6bQ7y5FNQfHdhK5MJuK17rY6/BvtM8aZzu7EoV6qjXuandJM4qMbvrNIiSm64CO
+         cK4PcOElis9B2ekbagKOcRjYROEJTEnro80e1ARg7REwnY2wPqClCqXTKZcqod9T2S
+         XKoXKPlKCra+h9clq1o7Uj40d78XSO9SxFR0hLRT/dWS3wVR3xm5nMweShMQmh2Fet
+         sVCdC/6xBYbEyCFb4pOaREPw3JCVdrngQI22zopBI7en5xi2lcHAgFEAq/2OxrGtfZ
+         vW0oF5rehZDbUpn8RJqXndttCYV7fLQQ4ha74JlK5uidzmwKmkBqIUYothDCif57xh
+         rxokJ32y2cjsQ==
+Date:   Mon, 11 Oct 2021 17:34:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pci tree
-Message-ID: <20211011053737.GA1834@thinkpad>
-References: <20211011101250.11902b31@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20211011173424.7743035d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211011101250.11902b31@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/6=hlm7uJknGQV.an36uVEl.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/6=hlm7uJknGQV.an36uVEl.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 11, 2021 at 10:12:50AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> ERROR: modpost: "dw_pcie_ep_reset_bar" [drivers/pci/controller/dwc/pcie-qcom-ep.ko] undefined!
-> ERROR: modpost: "dw_pcie_ep_raise_msi_irq" [drivers/pci/controller/dwc/pcie-qcom-ep.ko] undefined!
-> ERROR: modpost: "dw_pcie_ep_raise_legacy_irq" [drivers/pci/controller/dwc/pcie-qcom-ep.ko] undefined!
-> 
-> Caused by commit
-> 
->   3872e6f0544f ("PCI: qcom-ep: Add Qualcomm PCIe Endpoint controller driver")
-> 
-> I have used the pci tree from next-20211008 fot today.
-> 
+Hi all,
 
-I have submitted a patch for fixing this issue:
+After merging the net-next tree, today's linux-next build (sparc64
+defconfig) failed like this:
 
-https://patchwork.kernel.org/project/linux-pci/patch/20211010115937.15856-1-manivannan.sadhasivam@linaro.org/
+drivers/net/ethernet/sun/ldmvsw.c: In function 'vsw_alloc_netdev':
+drivers/net/ethernet/sun/ldmvsw.c:243:2: error: expected ';' before 'sprint=
+f'
+  sprintf(dev->name, "vif%d.%d", (int)handle, (int)port_id);
+  ^~~~~~~
 
-Thanks,
-Mani
+Caused by commit
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  a7639279c93c ("ethernet: sun: remove direct netdev->dev_addr writes")
 
+I have applied the following fix patch for today.
 
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 11 Oct 2021 17:24:43 +1100
+Subject: [PATCH] ethernet: sun: fix for "remove direct netdev->dev_addr wri=
+tes"
+
+Fix for this build problem:
+
+drivers/net/ethernet/sun/ldmvsw.c: In function 'vsw_alloc_netdev':
+drivers/net/ethernet/sun/ldmvsw.c:243:2: error: expected ';' before 'sprint=
+f'
+  sprintf(dev->name, "vif%d.%d", (int)handle, (int)port_id);
+  ^~~~~~~
+
+Fixes: a7639279c93c ("ethernet: sun: remove direct netdev->dev_addr writes")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/sun/ldmvsw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/sun/ldmvsw.c b/drivers/net/ethernet/sun/l=
+dmvsw.c
+index 074c5407c86b..6b59b14e74b1 100644
+--- a/drivers/net/ethernet/sun/ldmvsw.c
++++ b/drivers/net/ethernet/sun/ldmvsw.c
+@@ -238,7 +238,7 @@ static struct net_device *vsw_alloc_netdev(u8 hwaddr[],
+ 	dev->needed_tailroom =3D 8;
+=20
+ 	eth_hw_addr_set(dev, hwaddr);
+-	ether_addr_copy(dev->perm_addr, dev->dev_addr)
++	ether_addr_copy(dev->perm_addr, dev->dev_addr);
+=20
+ 	sprintf(dev->name, "vif%d.%d", (int)handle, (int)port_id);
+=20
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6=hlm7uJknGQV.an36uVEl.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFj2vAACgkQAVBC80lX
+0GwnZgf/Xfn9J6jrJmHmTec9x6RHfasJQ+ihUFHqxdfv9H58lNKkqCcNdUwdv/Kg
+GQeuNpY/MyKMsstHTTtw6R/FIeBn06iAkn/A0UrLipzeVc+wNG8o7e5NcdouyzGO
+HlxYR/L/9FX1vUV4xmRi71MfgJ25kdXsXFxuES504UZFpzSr+csbL4kor5HKuv4i
+PYGv0Ix7pLyewI4fDf6KvwTZCkNokCORWR21+bdEdVbjQ5sqx7UkRi18qpDwSLQu
+9QJwIh9ROyCRsJbcE7QJhywKl8/pUgMHaYxAQqNJa2LIPQG5rQaV+s26I+nDB4PJ
+w8DtFO6wqLSH8AZxxcgKpv1SF1ALLw==
+=OeAq
+-----END PGP SIGNATURE-----
+
+--Sig_/6=hlm7uJknGQV.an36uVEl.--

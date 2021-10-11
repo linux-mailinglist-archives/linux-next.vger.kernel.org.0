@@ -2,72 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6FB4288AC
-	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 10:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEF1428AFC
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 12:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbhJKIYt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Oct 2021 04:24:49 -0400
-Received: from mail-0301.mail-europe.com ([188.165.51.139]:42354 "EHLO
-        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235103AbhJKIY1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 04:24:27 -0400
-Date:   Mon, 11 Oct 2021 08:21:41 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1633940504;
-        bh=B0gd5nUP0yYSh5GJBfd4sJA35hrT0X4kACSzyDpxVUc=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=Mo7ixwiBjlj1Qj7CORVeKhtZg3S5loGSJDtw1CYB8cQedEIrc6l483SXB0/GOEW2l
-         HsCJFtuegB8fKrhrX1jiVabu7IRMSCTd5QiHrf1oZDjnUw+1tFvXTDPLMTT3nIzdaC
-         TEIdwsGYNc0Bl3Gm6mzBd352oa2gwCx4FY0XTycuDSK7t2jAPGh7DEe5GcBUxAsJwB
-         HfHixDTjvOp7bzxN6EgC14cPAYRnAd1ysT2VKSvdnyvHzor+99rNDKeRSAufnDU66q
-         Kg87VJGmCcFYqeuQL/VYtjjnqG2dw3Z0QeWhiSDCyeaqQNUJryQH18wycvk+Fq0Lp0
-         1otZr0EjIgvVQ==
-To:     Christoph Hellwig <hch@lst.de>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <I4IG-HGTQl3WHcdp7MrnMOrQZwL4HhudvbFPBKneSpZGbC20QrEL4YaO7H4YDaQvfpG1vkzovugRwgV_Qu5DMDQoCbdCK2SRESC2yoP1T3Y=@emersion.fr>
-In-Reply-To: <20211011080135.GA11242@lst.de>
-References: <20211008113116.4bdd7b6c@canb.auug.org.au> <_POw9ikafXoqSFqiOb8SZb_uvRZ4okgD4qrl4EtJ0UBiQTV7pwV3pJIM20eIzmpuFWDeBF9NPD00r72ttX0mZZ0bNeH_J44MoaB-jfjrQSU=@emersion.fr> <20211011073348.GA10672@lst.de> <-6WWj2RSqFheia8o3VKtAiF3bELME9376cYzwiLSY1-E7p9nqfWNqJ5i86Q--BKXa3aolokj8g8nj2tQorzn0LXuD85tD_rXSfE5t1lsvBs=@emersion.fr> <20211011074316.GA10882@lst.de> <XrjqMK5E95uVkQJ-wCjostUwiUD_39UdfIJzQhmnSwZO3aStGYHAxf9QsACe2WZ6vUn08BoW5X5Ya-tazSy0Iwn2jLLrCQDKxlJ6uWXLGaA=@emersion.fr> <20211011075125.GA11098@lst.de> <eOlxebs_u0NKPwzSFL2q48CRHVKEXqiWyoQcHWDsG5qHnhrrphhwczUtgd4bE1o1988Jja35uxf3pWwn2lU8I_5Tmyk1WzeKYQ7yi9qS4sc=@emersion.fr> <20211011080135.GA11242@lst.de>
+        id S235868AbhJKKrO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Oct 2021 06:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235792AbhJKKrN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 06:47:13 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CE3C06161C
+        for <linux-next@vger.kernel.org>; Mon, 11 Oct 2021 03:45:13 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id w10so37951058ybt.4
+        for <linux-next@vger.kernel.org>; Mon, 11 Oct 2021 03:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zO20pXIc4aHnqYviESIViCK1/daYvjDKa+lAXFV6ImY=;
+        b=Z30CScqdT9B2AVuZ9+JCREQ9IUSHwVIIkSD1l8KFSNBLvTAHHO5tJOOi509W8XXZRG
+         yPK+/wu8/f04lAqnEirG59fU7Di3pgrtLftinhXXoffhYtmTruV04OKsVo7m+jbxWtsN
+         jcY5mow1+7QZdRP5Iq0Hg76vMi2ezVG9LudjNbJTXMVZzzCzOiqvykL391sj7SJGutnL
+         kjbcO+0vkTRVJ1eZj+qH7FcaQS12I6cFOjbHIVPKsCluGojWhkPOj3VkLRNCL1F6hCXV
+         A3fDTWTd71D/+4UwXHChv5Ryn8Qry3/2R7Fem/UHwdVb/bHN2zNzvWg2zuZF0SXiXpkW
+         JETg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zO20pXIc4aHnqYviESIViCK1/daYvjDKa+lAXFV6ImY=;
+        b=Ee0Pq04Jbj2N4EsH/vaxz18W7d3dHzxzEfQYy5WO4JG8oDgLkXfIE2B8ONGhJRyzhw
+         Q/9c/Odwh7u9baKVIST9cJ1r4J6nk6FfqCRv7/7vdAfuQfDtbWTlCcNn/HU8orMSlxhm
+         NmH0Kg28tAl3t9oQSs8dnO7oUgv5ncXTRyQ2ifdCI8TSwB33iKgE2kbVFwkjcVS2H4zK
+         Jq71Eno8FWkCK+XZV8zIRs+VefugK8rYUpJ4nYqNEoCbxG1RkvkpT8RTwGOlFF+IwNO3
+         M+fXid8pPveDeP6SLjBlq9B4xpgzRC01Dy0RqW6NLNjwTceYAcKYoeEty/d1IMZxK+s4
+         +xPA==
+X-Gm-Message-State: AOAM5331ess7tsiq8AT2zAor3bnBOEI0fbln/2aHcrH/xT3ZBB3XNnwU
+        eBf2Lok5nO2PEMGOQZBZPw0ntSE8QtKawYxwOeI=
+X-Google-Smtp-Source: ABdhPJyCV+tSU18l/Q2mR16pBpwqXWe5PDxn4lzoMcI1mis+QvlunlxZKWRrsYqx9xoOwzWznS3MNgoa9jgftucXKnk=
+X-Received: by 2002:a25:5093:: with SMTP id e141mr21005571ybb.171.1633949112074;
+ Mon, 11 Oct 2021 03:45:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Received: by 2002:a05:7000:3652:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:45:11
+ -0700 (PDT)
+Reply-To: robertskelvin22@gmail.com
+From:   Roberts kelvin <delepeters200@gmail.com>
+Date:   Mon, 11 Oct 2021 10:45:11 +0000
+Message-ID: <CAPcm=sMLkE1SvjEP5rkjH6jw_PVK8XcMXftagZw__OT4LVieGg@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Monday, October 11th, 2021 at 10:01, Christoph Hellwig <hch@lst.de> wrot=
-e:
+Dear Sir/Madam,
 
-> On Mon, Oct 11, 2021 at 07:57:17AM +0000, Simon Ser wrote:
-> > No, we can't have a "I_AM_NOT_BROKEN" ioctl for each and every uAPI mis=
--use.
-> > User-space detection has been determined to be the best course of actio=
-n.
->
-> If your API addition breaks userspace, yes you need an add-in.
+My principals have now obtained foreign exchange quotas and approvals
+including capital and under accounts, trade platform, corporate
+accounts and even private accounts.
 
-It's not an API addition. It's a ChromeOS fix that breaks my user-space.
+Do you have any viable business plan that needs funding? Depending on
+your business plan/project our principals are in the position to
+provide the capital to the ideal partner ready to work for a mutual
+benefit and the capital will be delivered to you under a non-recourse
+Finance platform.
 
-> With your completely broken change you cement in a mapping of an executab=
-le
-> name to map to what you consider a "bug" without any way to fix it up.
+It will be my duty to guide you to secure a successful corporate small
+or large capital investment or private capital enhancement.
 
-If that's the only concern, it'd be very easy to add a CAP_ATOMIC >=3D 2 ch=
-eck
-like we have for Xorg. This would make it so ChromeOS can eventually opt-ou=
-t
-of the quirk.
+For more d=C3=A9tails contact me { robertskelvin22@gmail.com }
+Whatsapp +1 {901} 6545402
+
+Regards, Roberts Kelvin

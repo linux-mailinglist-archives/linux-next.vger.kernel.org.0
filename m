@@ -2,93 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3756428423
-	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 01:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86260428451
+	for <lists+linux-next@lfdr.de>; Mon, 11 Oct 2021 02:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbhJJXO5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Oct 2021 19:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbhJJXO4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Oct 2021 19:14:56 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329E6C061570;
-        Sun, 10 Oct 2021 16:12:57 -0700 (PDT)
+        id S232813AbhJKAkA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Oct 2021 20:40:00 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44453 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230188AbhJKAj7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Oct 2021 20:39:59 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSHlR526lz4xbX;
-        Mon, 11 Oct 2021 10:12:51 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSKdd4pmJz4xb9;
+        Mon, 11 Oct 2021 11:37:56 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1633907572;
-        bh=r4GrcWgdPshNlgLFAN2ew38xMvBogldJEh6Jwj6T4Lo=;
+        s=201702; t=1633912679;
+        bh=Ax1GJIXnCtIn0NUDYilG5pwOdgBFXtOsdMYg8/AgB6g=;
         h=Date:From:To:Cc:Subject:From;
-        b=plD333k2zZ919Oksf26N01S6htufeT8J3HDCkLm8P7ymey7KTvhr02P4CdtHxAWch
-         pNflSwq9jbshGs95iqi3wy5o5MkbSf4gEygRqU8ahV9erh7MEJOmwqzg67mePyBPX2
-         NX6iiCuMgGLcdbwTh375JwvSS4bjTEZ9E4S+jxKPT4wEP7znUGxdBkHW0dxTSYO3ZA
-         j8x4l9fJZ6rgV11L4G6WC798RPx7ryFm59QfQwtaEeC6aOZvNPjXmBc+KWxZ9aASpc
-         0asN71yuFSyZgJyAwiBvLDDQ3g7mM6OprhA1s9W8qkbcAUP8IfGeV9W5Y3yNxCwGQr
-         u8V3uvguJgfLQ==
-Date:   Mon, 11 Oct 2021 10:12:50 +1100
+        b=jVs6WrPVvJ/IaNBbsDEBDvMOdEwsInrHiQXLjVUAK+70ERxRKtIJF2a8fF7X+178m
+         K/J2/w13i5qwm5JT3QP9HkR5U/v6qqc0LqScOYL3glguaG5xsijF866MDHE0cO8cR5
+         tkr5oNE7ZBLIz16CP3F/CwPuIE6/X8GzrnqRNklvntD0Zs6wKcxclsnOIHgFltOF9i
+         FiC2TavL9c4W+dCz5vTSsUvrF0MwMsedEx4K8Xz7pKCpFPxW9f16GvhPNIKc/3vMUH
+         QzRzqrEKWDNc2kbnL1cNTI3kxIUahOrP4ZojEQK8CnNWN5l046X0uP3wMDemCVnBzd
+         f3l29kYgxOBhw==
+Date:   Mon, 11 Oct 2021 11:37:55 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Siddartha Mohanadoss <smohanad@codeaurora.org>,
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Jude Shih <shenshih@amd.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pci tree
-Message-ID: <20211011101250.11902b31@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20211011113755.7a0597af@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZQ0r+/uMtE58Xit7vKdYfVj";
+Content-Type: multipart/signed; boundary="Sig_/HOhXqr_tUBv5nIVqn1p28Y5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZQ0r+/uMtE58Xit7vKdYfVj
+--Sig_/HOhXqr_tUBv5nIVqn1p28Y5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the drm tree got a conflict in:
 
-ERROR: modpost: "dw_pcie_ep_reset_bar" [drivers/pci/controller/dwc/pcie-qco=
-m-ep.ko] undefined!
-ERROR: modpost: "dw_pcie_ep_raise_msi_irq" [drivers/pci/controller/dwc/pcie=
--qcom-ep.ko] undefined!
-ERROR: modpost: "dw_pcie_ep_raise_legacy_irq" [drivers/pci/controller/dwc/p=
-cie-qcom-ep.ko] undefined!
+  drivers/gpu/drm/amd/display/include/dal_asic_id.h
 
-Caused by commit
+between commit:
 
-  3872e6f0544f ("PCI: qcom-ep: Add Qualcomm PCIe Endpoint controller driver=
-")
+  7ab0965079bb ("drm/amd/display: USB4 bring up set correct address")
 
-I have used the pci tree from next-20211008 fot today.
+from Linus' tree and commit:
+
+  13900e6fde3f ("drm/amd/display: Fix for null pointer access for ddc pin a=
+nd aux engine.")
+
+from the drm tree.
+
+I fixed it up (I used the former) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZQ0r+/uMtE58Xit7vKdYfVj
+--Sig_/HOhXqr_tUBv5nIVqn1p28Y5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFjc3IACgkQAVBC80lX
-0GyO2QgAjV4gmDCOEw+EtCFZoOfOazl7NZQ4ttI0l6Sdz/2V8lF8/fc5hDAZ2crm
-3KapfaB93lHG4ai75gs0fEAZRtU7Ry9tnyICbdyenuNjoieD1LmEzM0olH6puaYV
-u2vWMgR1U3UkVMEvRDpiCn/2csRd+pkBhi57Yfm5hJd2GlW0ieOuFZPanrV5x0HR
-G0wnCYhNWMaqJvw1ArB/NVvOqSFyj+D7Cfwc2ebOwLRhaNNN+td6n1vKeckH8Tc1
-hpNGTu6+UVQQu07rh9JvxUXEpQbyzBmgDUNWpSi+gFY5jfbmny3YATge0CoejicL
-4cyJ/0asRvzvhGeEKp9w6/8GmS0DjQ==
-=g/5v
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFjh2MACgkQAVBC80lX
+0Gy3/gf9EhTj4llOseoDDJw9Ky2BbHLscqr+d3jCLVp/0A287YlSFrvcsX+9fgw4
+QGoLlP2jUqy6krXH2OnYRx8KAEuDhmGe+iqRYeSGIwHteUbUPlzqMD7IMPegxhRh
+RO5h4G+FrQVljzzBLhDUL2sonHaTexAoS/GANJj7vdc1bkK/IwT7yTcrvmytspb3
+5mVXqyMbtfxUFGaLFsHX/NrlbpwxDxuQLS2DItA9PHkAxG42pcpavwEfswq0DWH4
+5sNRKkyKyPeaTJj5ar31/qrIe5ZA6e0VSlXgyEypDsllznRpgeIAQQYLwQRpFhSH
+91/w9fLfL0F0TN9a+woSIPkzwBbo6w==
+=gR3t
 -----END PGP SIGNATURE-----
 
---Sig_/ZQ0r+/uMtE58Xit7vKdYfVj--
+--Sig_/HOhXqr_tUBv5nIVqn1p28Y5--

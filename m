@@ -2,91 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAE0429B5D
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 04:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002B6429B78
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 04:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbhJLCUn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Oct 2021 22:20:43 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:40159 "EHLO
+        id S231550AbhJLC1b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Oct 2021 22:27:31 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:45149 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhJLCUm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 22:20:42 -0400
+        with ESMTP id S230330AbhJLC1b (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Oct 2021 22:27:31 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSzqL3w2Bz4xqP;
-        Tue, 12 Oct 2021 13:18:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HSzzD5BjWz4xbX;
+        Tue, 12 Oct 2021 13:25:28 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634005120;
-        bh=7TdwyrOsBCjwW6kUZLQ0ge42Vqvzaat+9cR/oYtHFUQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VYfu0/fB6iI+Rzc+h/RAHVjla9SGIeXzax2RuDc9USZYB0FKyd66GQ3M3d3yo0kWF
-         8B9dYbG2roCO0ayVXP40pFmaB8zo0rUMJdabTcQ095IbcCgzqmVcwMoj3GbJTKeYgK
-         oA0SI+7kltUIfPiczgIcKPRXQAy32Xm1rc8jYhKCRCY3ary5kknqpOndLBzdDkBCXz
-         UvXicU9Oz5RMvz0A99R0zFRtesl67NPRJmSW5/vYmorARw7sFftx2KRMs7BGQtkNvp
-         G0Mo5TkxuJioVdXYC/f+QjpzVbWe/LJIbCq0LRctDR8yCo5QzgoNcHWIyXYM4g8Wkt
-         tfl+nEJwBISCA==
-Date:   Tue, 12 Oct 2021 13:18:36 +1100
+        s=201702; t=1634005529;
+        bh=vddGlHYjaDL79x4gwUeZCao6d9EjDoSt7eNrGFjNSDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DKZTOV9ZP8MP82gJvom7TTHGfKDnYVAlJcXZE0SoiiQcnapIUvR6APo99W+rMA1re
+         UwnaR1t+zUnbWpE+rtt14sE3e0rPjxAAH1EKyBU6wrwFu1zWWqaKl+3xI1QTCVJBdH
+         EO3SBflHVUhSpZO6DGc7SVUdKj0g/yj1ef9Yu/zl4AIoYO6JU/hLB7bsUcZxPGdOMA
+         g5Z/+6nixDCIZlATu/C+wTM0GDcYWkx/85sXgVMsK8Tr+QIl8WaV2Y81TLykbwRFvI
+         I7zvxbDAGdY3ZaQ5gh3D6adFyEZwx9XoukApGOr1nsZnOW0S70Kluq8nb0hlnagJGy
+         F/AZBbftEuLug==
+Date:   Tue, 12 Oct 2021 13:25:26 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Luo penghao <luo.penghao@zte.com.cn>,
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Simon Ser <contact@emersion.fr>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20211012131836.4e17a031@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20211012132526.237d8f6e@canb.auug.org.au>
+In-Reply-To: <20211008113116.4bdd7b6c@canb.auug.org.au>
+References: <20211008113116.4bdd7b6c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aSVkmKQBx7LDjmkhgmtejTx";
+Content-Type: multipart/signed; boundary="Sig_/Vg1tVp.+yqGP=hiiZCu_N_1";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/aSVkmKQBx7LDjmkhgmtejTx
+--Sig_/Vg1tVp.+yqGP=hiiZCu_N_1
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Stephen,
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Fri, 8 Oct 2021 11:31:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Hi all,
+>=20
+> After merging the amdgpu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> ERROR: modpost: "get_mm_exe_file" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] =
+undefined!
+>=20
+> Caused by commit
+>=20
+>   f4f80155e6e8 ("amd/display: only require overlay plane to cover whole C=
+RTC on ChromeOS")
+>=20
+> I have used the amdgpu tree from next-20211007 for today.
 
-drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c: In function 'gp100_vmm_=
-fault_cancel':
-drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c:491:6: error: unused var=
-iable 'inst' [-Werror=3Dunused-variable]
-  491 |  u32 inst, aper;
-      |      ^~~~
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  404046cf4805 ("drm/nouveau/mmu/gp100-: drop unneeded assignment in the if=
- condition.")
-
-I have used the drm-misc tree from next-20211011 for today.
-
+This failure has returned today ...
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/aSVkmKQBx7LDjmkhgmtejTx
+--Sig_/Vg1tVp.+yqGP=hiiZCu_N_1
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFk8HwACgkQAVBC80lX
-0GxR9gf/dWV2TjBgsZxX9IdzhcV03t7T1O/NqxYkgb8OAGgM4dTbIKVqPLoHPOHN
-C+S/I6iPKyiFKcMhdzepdt3VDZJ11Ww4vauK3NWQTZ9a+SgmaH9ykbDp6+nkOrzS
-PfPi4mEMnfS//WmCgd8PWgULRkOcoFvwuGpy7kml4TLGTI06i9tHZreRQKkUzBN8
-Oy+k1ev2ZPh9g0aqeBxucB4yXHxGSPNON3XqIO8/91qPFtTubJ8wrFBg6CIJw2gl
-I3Qp+EnJ35kWlszJQiHmmTzVQzbBw7Lw1Ztz8ZgZblUCgvBtEjoA6a1KHBw89Jnv
-rzbtA1U9Xx8IcRqtnUygkFvxySkvjA==
-=O10a
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFk8hYACgkQAVBC80lX
+0Gz4sQf9FVfINcnivq0DM3nsj9CewzD1JLUNXVCM7ti/bld4UXdQjEFABAt8CTKR
+Ovmpqir7iohkgNDMMQ6r4huW7Y0QxTuRg7spqs/KNFXrVXPDL5nlfzrm3Wi8xHIK
+lSfmI9C8YV6/TwLonC7VvDgGZN27FNw6Wlg1Gf/XRK6rT0wyZ2d9uOEsI04xjpNo
+ZmfKFXE1FVOhzNbHUZgS9GVOxg7ZPjlAyhnY/0HCa7SMl0rf/1Gfo8bylZ/67Abm
+OP/HacdTl26fvXESWQ2r98YjkDEzqtUxdqi3QcuJnlTXNMT8eGFytt0TbksFVnln
+tfe+y+7GcvFz4Q4GGj3mIECWRyduPA==
+=gEVI
 -----END PGP SIGNATURE-----
 
---Sig_/aSVkmKQBx7LDjmkhgmtejTx--
+--Sig_/Vg1tVp.+yqGP=hiiZCu_N_1--

@@ -2,98 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 591E542A684
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 15:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C96342A691
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 15:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbhJLN6J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 09:58:09 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53414 "EHLO
+        id S236961AbhJLOA2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 10:00:28 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53458 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236783AbhJLN6J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 09:58:09 -0400
+        with ESMTP id S236917AbhJLOA2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 10:00:28 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 9480A1F439EA
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+        with ESMTPSA id DAF981F43A49
+Message-ID: <495d088b-3428-f96f-9932-57d944c5d966@collabora.com>
+Date:   Tue, 12 Oct 2021 10:58:19 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Content-Language: en-US
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH] docs: futex: Fix kernel-doc references
-Date:   Tue, 12 Oct 2021 10:55:49 -0300
-Message-Id: <20211012135549.14451-1-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211012212005.4e8fecdd@canb.auug.org.au>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+In-Reply-To: <20211012212005.4e8fecdd@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Since the futex code was restructured, there's no futex.c file anymore
-and the implementation is split in various files. Point kernel-doc
-references to the new files.
+Hi Stephen,
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
- Documentation/kernel-hacking/locking.rst           | 14 +++++++++++++-
- .../translations/it_IT/kernel-hacking/locking.rst  | 14 +++++++++++++-
- 2 files changed, 26 insertions(+), 2 deletions(-)
+Às 07:20 de 12/10/21, Stephen Rothwell escreveu:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (htmldocs) produced
+> these warnings:
+> 
+> Error: Cannot open file kernel/futex.c
+> Error: Cannot open file kernel/futex.c
+> Error: Cannot open file kernel/futex.c
+> Error: Cannot open file kernel/futex.c
+> 
+> Introduced by commit
+> 
+>   77e52ae35463 ("futex: Move to kernel/futex/")
+> 
+> $ git grep kernel/futex Documentation
+> Documentation/kernel-hacking/locking.rst:.. kernel-doc:: kernel/futex.c
+> Documentation/translations/it_IT/kernel-hacking/locking.rst:.. kernel-doc:: kernel/futex.c
+> 
 
-diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-hacking/locking.rst
-index 90bc3f51eda9..e6cd40663ea5 100644
---- a/Documentation/kernel-hacking/locking.rst
-+++ b/Documentation/kernel-hacking/locking.rst
-@@ -1352,7 +1352,19 @@ Mutex API reference
- Futex API reference
- ===================
- 
--.. kernel-doc:: kernel/futex.c
-+.. kernel-doc:: kernel/futex/core.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/futex.h
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/pi.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/requeue.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/waitwake.c
-    :internal:
- 
- Further reading
-diff --git a/Documentation/translations/it_IT/kernel-hacking/locking.rst b/Documentation/translations/it_IT/kernel-hacking/locking.rst
-index 1efb8293bf1f..163f1bd4e857 100644
---- a/Documentation/translations/it_IT/kernel-hacking/locking.rst
-+++ b/Documentation/translations/it_IT/kernel-hacking/locking.rst
-@@ -1396,7 +1396,19 @@ Riferimento per l'API dei Mutex
- Riferimento per l'API dei Futex
- ===============================
- 
--.. kernel-doc:: kernel/futex.c
-+.. kernel-doc:: kernel/futex/core.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/futex.h
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/pi.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/requeue.c
-+   :internal:
-+
-+.. kernel-doc:: kernel/futex/waitwake.c
-    :internal:
- 
- Approfondimenti
--- 
-2.33.0
+Thanks for pointing that out. I posted a fix:
 
+https://lore.kernel.org/lkml/20211012135549.14451-1-andrealmeid@collabora.com/

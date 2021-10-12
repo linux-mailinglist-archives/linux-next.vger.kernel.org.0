@@ -2,89 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A5A42A8BF
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 17:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96BC42ADA6
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 22:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbhJLPut (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 11:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S232419AbhJLUPM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 16:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbhJLPus (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 11:50:48 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CA8C061570;
-        Tue, 12 Oct 2021 08:48:47 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id m67so3557533oif.6;
-        Tue, 12 Oct 2021 08:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:from:cc:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=2qmD6+vaMWoQqWaeUIWFicVZqs7HNdeMB3LTPfFG2Pw=;
-        b=UCC+nhX5bSHDhee9N++ybcRDdn1tsy2g0Lyx69LtGJlBj+RbxZAiCOynoXOpQN0AY1
-         r2pfH2GqpkAbDNXhPL6tRF6wZ8ty36ZI8jLAf+xFlnEFXMjS0Uv0hCit12U7HcozeEUw
-         eo9BKXA/Sky5b73PBfE3ECtERl7pNIgs5y9vUAORqhCwQKu1T4LoDRny6MGfk+TxBaZP
-         hdgzDIopexpui2hkXQB2Tbppw+s1/iW00dEyCBtPffGnlg/za65OHeH6ApZIa1UiMDoQ
-         /bLRRrwmYlHqz5fQqiiKnnDC0yZYkj9rklQ/veGvR8+KkM6iudUitng/LKtPPc5FTnbM
-         Zy2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:from:cc:subject:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=2qmD6+vaMWoQqWaeUIWFicVZqs7HNdeMB3LTPfFG2Pw=;
-        b=31p+A3hjdMSt8hJShlefk+aavGLUW3DDEVqtMaszPK1ZzZPvy+QUghhoRWYD8uaMdX
-         ZD/YpAow9dsBm5FtUmFzGZ0spltvZRgamMQDR5kK4g1oxNvVVSBu9BCM31SNWQFOwYd8
-         ZjdkONXYln2FaTC/tBFM3XdmLhUXmHm2+CgHXekWYQZtrck8dvD+bbCBwkEEsAq2nAgA
-         AqKX+AT4m0H+utiCkqbUo0/uYd0qKN3Pt3EbLDYLWMeDJBsRxTYnmVbkFugqVl3TpDLP
-         Lp3shvOt6w1nM1hWcEpymcdkPdJIQcp3dnfhpOZzjMbX2xM0ndOsDCv0MIXsCLR0t3/C
-         csbA==
-X-Gm-Message-State: AOAM532rVU6f9Xb7EY+7Rn1rDOk/3iMPnZP5d302JxVYsbOhTwX10FL2
-        uxXGKTgfDjrNvNM3wExjf4zLq/tGdVE=
-X-Google-Smtp-Source: ABdhPJxxagBPIlYS6howJFc4u343Lob3u7I/z0qlk/YUtuZP81zVQcRfsd2EVH9ZSoNCMlgZNhlbnw==
-X-Received: by 2002:aca:3e09:: with SMTP id l9mr4154731oia.131.1634053726366;
-        Tue, 12 Oct 2021 08:48:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bf21sm1730995oib.4.2021.10.12.08.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Oct 2021 08:48:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Cc:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: spi-tegra build failures in -next
-Message-ID: <dbd820df-45b8-8d42-d482-cd5d9a2b22f6@roeck-us.net>
-Date:   Tue, 12 Oct 2021 08:48:43 -0700
+        with ESMTP id S232145AbhJLUPM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 16:15:12 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56400C061570;
+        Tue, 12 Oct 2021 13:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=n58V8M3p+f5+C2ZTAmK8/0SrMrG0LAFyRVyaZfvNw60=; b=B1u4HyWlWb7hP3n/XPr38CccP+
+        6276I54bo3AJ8W14Yr5qsPbw5erpUbhPpGlJOlvpNAWkf4wQRWWWpgM/Z2SyHzoovu/5VST15upPe
+        W/OGIkBBLo8jhNu8i3oo0R0ACCrNHtsbYQquyeb4wUkuFmaQpu8y7qW1DkYzxM47OUdML9vgQK994
+        Ny3oNhG/ZoWs/J7r7Lmb+xIsyi2xk8uJ/TqzXj94rC41LbhUySoIom0uEqWGuFPgfvZeuC0N3g8wS
+        4XnQN0KSTa60qIJxM0w753MpJqVjVs7W7wpIAVrhnL3O5RZysydQzlJWzQQykgw0ATko+cViBSsf1
+        VOEcgSQw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1maO97-00DuIm-Hg; Tue, 12 Oct 2021 20:13:09 +0000
+Subject: Re: linux-next: build warnings in Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211012215651.300f8bc1@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <87ec4a83-1262-03b9-dd86-f37568b38df0@infradead.org>
+Date:   Tue, 12 Oct 2021 13:13:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20211012215651.300f8bc1@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Mark,
+On 10/12/21 3:56 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> When building Linus' tree, today's linux-next build (htmldocs) produced
+> these warnings:
+> 
+> Error: Cannot open file drivers/counter/counter.c
+> Error: Cannot open file drivers/counter/counter.c
+> 
+> Introduced by commit
+> 
+>    d70e46af7531 ("counter: Internalize sysfs interface code")
+> 
+> $ git grep -w drivers/counter/counter.c Documentation
+> Documentation/driver-api/generic-counter.rst:.. kernel-doc:: drivers/counter/counter.c
+> 
 
-I see a number of build failures in -next:
+Jonathan has already accepted my patch for this docs error.
+Hopefully it will show up in mainline soonish.
 
-Building alpha:allmodconfig ... failed
---------------
-Error log:
-<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-drivers/spi/spi-tegra20-slink.c:1197:12: error: 'tegra_slink_runtime_resume' defined but not used
-
-Looking into it, the problem seems to be a bad conflict resolution between
-the following two commits.
-
-efafec27c565 ("spi: Fix tegra20 build with CONFIG_PM=n")
-2bab94090b01 ("spi: tegra20-slink: Declare runtime suspend and resume functions conditionally")
-
-Granted, Linus' solution is better than mine, but it looks like the second
-__maybe_unused in commit efafec27c565 got lost in spi/for-linus due to a
-later merge. Would it be possible to either fix that up or drop commit
-efafec27c565 from spi/for-linus ?
-
-Thanks,
-Guenter
+thanks.
+-- 
+~Randy

@@ -2,93 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BD342A1E4
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 12:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494B442A23D
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 12:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbhJLKWR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 06:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S236106AbhJLKiN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 06:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235153AbhJLKWM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 06:22:12 -0400
+        with ESMTP id S236086AbhJLKiL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 06:38:11 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3687C061570;
-        Tue, 12 Oct 2021 03:20:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44929C06161C;
+        Tue, 12 Oct 2021 03:36:10 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTBVt4qsDz4xbG;
-        Tue, 12 Oct 2021 21:20:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTBsN1Lrbz4xbG;
+        Tue, 12 Oct 2021 21:36:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634034009;
-        bh=OyyvlVJQv7EGGiQ92vclYwV2x6aVR2+zcJ53U1caZLg=;
+        s=201702; t=1634034968;
+        bh=vRx++bFEsl2BHQylnM8wJf19bltnXOc8oVnJQjBbxlg=;
         h=Date:From:To:Cc:Subject:From;
-        b=gkSDSJcIpyqtcuIRf05AEj2Uynfr4Nset7atqr6wpyubhbBEjVC71JB9c4TdjHJEn
-         SHHWLQ5L9Rw95+XW2k/jZYJ6YuLrAAsHNRS4qjw+2LrfBFbRb/7lDoxEZn1RvdFOMf
-         3qgBGzhouY3s1Xgurq0QKByDMMCAyU8oJIaBF+7jtuO7Xf83QHzWhN528zSjV+1B9W
-         I+929J0Ml8v08cUsWXFo3y/b8tF0SI7BTlSkVjHxn/gn2Yy1TBblaYJgObEIbmcyUM
-         tisUW+qy/gYiIZXNQ6Gigxo7y7jkTGALb7dbdobYtd4E4pOT6TSSGI7aWvvdALbUe8
-         4+VrdNZBq/P6w==
-Date:   Tue, 12 Oct 2021 21:20:05 +1100
+        b=Efnx+GnCL5bVan4SV6G0SiX2Fo7Z/go9a3VnOKNOhHowLyaoE5GZy+1HKiLctc0sD
+         eK5UopbqodTXKP9ai+uXjQ+l4HoIcj3nKHVHP7hNpPQr+scIBGd7tIE0Dl2HVysE46
+         mwe01CAPgptyLjbDIxYm/p2qwDeydLrup47SYhk+ElS7vs67F7y6ywe8FFIJ1l3bVi
+         vfsOEuwwlUtegTT32M+VfCrPp6AkBoaDl2g9LBSpcniLs0ly0tNAuaLfG8NLr9S5TT
+         CtOda2HDYMHJaohLSdMzmXKLquO7GyKSGWM+JCgdAjNaF9PqZJxzxmilOoQ2p5kJea
+         Hckl1p35NU5jg==
+Date:   Tue, 12 Oct 2021 21:36:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Rob Clark <robdclark@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the tip tree
-Message-ID: <20211012212005.4e8fecdd@canb.auug.org.au>
+Subject: linux-next: Fixes tag needs some work in the drm-fixes tree
+Message-ID: <20211012213606.54facf76@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YNrivWfIN=a+2Ba/Bz4Lg7l";
+Content-Type: multipart/signed; boundary="Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YNrivWfIN=a+2Ba/Bz4Lg7l
+--Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (htmldocs) produced
-these warnings:
+In commit
 
-Error: Cannot open file kernel/futex.c
-Error: Cannot open file kernel/futex.c
-Error: Cannot open file kernel/futex.c
-Error: Cannot open file kernel/futex.c
+  654e9c18dfab ("drm/msm: Fix crash on dev file close")
 
-Introduced by commit
+Fixes tag
 
-  77e52ae35463 ("futex: Move to kernel/futex/")
+  Fixes: 86c2a0f000c1 drm/msm: ("Small submitqueue creation cleanup")
 
-$ git grep kernel/futex Documentation
-Documentation/kernel-hacking/locking.rst:.. kernel-doc:: kernel/futex.c
-Documentation/translations/it_IT/kernel-hacking/locking.rst:.. kernel-doc::=
- kernel/futex.c
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YNrivWfIN=a+2Ba/Bz4Lg7l
+--Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlYVUACgkQAVBC80lX
-0GwxAAf/X/vgCIMo+FM40uo8lM/m8YjWJ/ffzwHejX5PliwxHOLGs45jUVhVOv7o
-OMnNucShYijtthRjXkjiifgjHWpNFKApJmXaqucNsf/594oIkCjIzlWmNiezNsMg
-YKKCaGPYwueZeIMr9aIYpoEV3xBPs8eu3XX06RwPW7fgCkMt7/nPwx0lQnCEYkqm
-d5C/3/m1hSGXCMH2+RM6XK/izYdaHiQHmABfJdKuQGRyYSaJqj35cXAdmp654Qg8
-mMFy1noHfPIHlKGdJJ0O3bVgID9onoi295fTTjcH+VUERhng+MzjmIGWwt+YrpI5
-vl/6DPczsFQf4dwW8FJ8ihcnDiIlpg==
-=7Osp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlZRYACgkQAVBC80lX
+0GzUYQf+Pz9ExFYDVBQLwV3s3M0NIvT88yFegdS2IHylosvgMkJXyXMMbEIaM+Ea
+sfZkRX1DrMeqjVD/CWL9asDyHKRn1hUtYy/dBOZb42YCBUb/bcflBS0b4eOmIdnM
+XeqlsthOoAMVuIUmLJwPCt1kKn1G+CICHK6a0+E2ZvU/1sddNV0FnhrWbmT4ea11
+zW/wKAt2WaZiJ+DATTEOB0IJyIN93Ix4ZbkySFfBTPE83fcmkrqWBhYr1YGNDu9W
+Jc7W/ULVRAZfzkr8igVcCXJBZa6xMyQSWch5wIaeAyNjQ1S+aW4rWRLkKf2+bprU
+KZWL/tkTz8hsU9qysHjG8g4zuJauKQ==
+=hdGd
 -----END PGP SIGNATURE-----
 
---Sig_/YNrivWfIN=a+2Ba/Bz4Lg7l--
+--Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ--

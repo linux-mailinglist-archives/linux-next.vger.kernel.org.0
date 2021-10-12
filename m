@@ -2,72 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96BC42ADA6
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 22:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BCA42ADCD
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 22:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbhJLUPM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 16:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S233658AbhJLUaL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 16:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbhJLUPM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 16:15:12 -0400
+        with ESMTP id S231902AbhJLUaL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 16:30:11 -0400
 Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56400C061570;
-        Tue, 12 Oct 2021 13:13:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718E8C061570;
+        Tue, 12 Oct 2021 13:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
         Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=n58V8M3p+f5+C2ZTAmK8/0SrMrG0LAFyRVyaZfvNw60=; b=B1u4HyWlWb7hP3n/XPr38CccP+
-        6276I54bo3AJ8W14Yr5qsPbw5erpUbhPpGlJOlvpNAWkf4wQRWWWpgM/Z2SyHzoovu/5VST15upPe
-        W/OGIkBBLo8jhNu8i3oo0R0ACCrNHtsbYQquyeb4wUkuFmaQpu8y7qW1DkYzxM47OUdML9vgQK994
-        Ny3oNhG/ZoWs/J7r7Lmb+xIsyi2xk8uJ/TqzXj94rC41LbhUySoIom0uEqWGuFPgfvZeuC0N3g8wS
-        4XnQN0KSTa60qIJxM0w753MpJqVjVs7W7wpIAVrhnL3O5RZysydQzlJWzQQykgw0ATko+cViBSsf1
-        VOEcgSQw==;
+        bh=5IE6qAD4wcr48hJHMkptfnkPZIoHalUtFis0kheqFLg=; b=orpSKoGhm84/S/Gbv6Lc1eP+35
+        6wpajkgi4Gbx2ySUWgt7lJjUUgrbWdfHVjOplGAZ+oz+2jhB6bZ4PyGnYozVLJgCw65pOgwX0ZC6W
+        5PHYPimqT1ztyyw2OOmC1ypeVi/v97uxprdVYJPSaCgYWZ096pyIjGKZl0gA0ME6wfh0nef5jNqet
+        d7PKimwWTymmRrq7isUEKsaKeRdjE1m3FgqDCSSoRM2ANeKNqZv5eYn6RRvKsrVyKM6Uh7uYObcXY
+        pPsX/r92tH0vaCCtjej8Vuojd5FFSg4F/ZU+mQhzlCisrDHEz+ic3tQcL6aL+k8ZqRIP0if+JV5Le
+        jyx4megw==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1maO97-00DuIm-Hg; Tue, 12 Oct 2021 20:13:09 +0000
-Subject: Re: linux-next: build warnings in Linus' tree
+        id 1maONZ-00DvFt-KK; Tue, 12 Oct 2021 20:28:05 +0000
+Subject: Re: linux-next: Tree for Oct 12 (drivers/iio/adc/imx8qxp-adc.c)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211012215651.300f8bc1@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Cai Huoqing <caihuoqing@baidu.com>
+References: <20211012204606.1dd72037@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <87ec4a83-1262-03b9-dd86-f37568b38df0@infradead.org>
-Date:   Tue, 12 Oct 2021 13:13:08 -0700
+Message-ID: <27c3f066-1926-db85-d183-d129a2ab43e8@infradead.org>
+Date:   Tue, 12 Oct 2021 13:28:05 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211012215651.300f8bc1@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <20211012204606.1dd72037@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/12/21 3:56 AM, Stephen Rothwell wrote:
+On 10/12/21 2:46 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> When building Linus' tree, today's linux-next build (htmldocs) produced
-> these warnings:
+> News: there will be no linux-next release on Thursday.
 > 
-> Error: Cannot open file drivers/counter/counter.c
-> Error: Cannot open file drivers/counter/counter.c
-> 
-> Introduced by commit
-> 
->    d70e46af7531 ("counter: Internalize sysfs interface code")
-> 
-> $ git grep -w drivers/counter/counter.c Documentation
-> Documentation/driver-api/generic-counter.rst:.. kernel-doc:: drivers/counter/counter.c
+> Changes since 20211011:
 > 
 
-Jonathan has already accepted my patch for this docs error.
-Hopefully it will show up in mainline soonish.
+on x86_64:
 
-thanks.
+../drivers/iio/adc/imx8qxp-adc.c:433:12: error: ‘imx8qxp_adc_runtime_resume’ defined but not used [-Werror=unused-function]
+  static int imx8qxp_adc_runtime_resume(struct device *dev)
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../drivers/iio/adc/imx8qxp-adc.c:419:12: error: ‘imx8qxp_adc_runtime_suspend’ defined but not used [-Werror=unused-function]
+  static int imx8qxp_adc_runtime_suspend(struct device *dev)
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# CONFIG_SUSPEND is not set
+# CONFIG_HIBERNATION is not set
+# CONFIG_PM is not set
+
+
 -- 
 ~Randy

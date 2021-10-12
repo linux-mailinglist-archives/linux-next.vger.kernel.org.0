@@ -2,92 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66BB429F1A
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 09:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE41A429FF8
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 10:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbhJLH7R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 03:59:17 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:43119 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbhJLH7R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 03:59:17 -0400
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MDN3O-1mQoTU2fN0-00ATlq; Tue, 12 Oct 2021 09:57:14 +0200
-Received: by mail-wr1-f52.google.com with SMTP id k7so63966282wrd.13;
-        Tue, 12 Oct 2021 00:57:14 -0700 (PDT)
-X-Gm-Message-State: AOAM530MB4Sh3F6fS42xG83uXgsMIujmhDy4dwZppDXtXR07q5epu2ca
-        he0cxEmgpNJwcCSY5SCVtroQLdHKqG6lTz4o0v0=
-X-Google-Smtp-Source: ABdhPJzWrZtND5T+4NGejpva/W8WIuD9h+k1kDLd+VcFgHNzaQqSyGSZf5ek5xhDWcL5GxoX2zXDA9fgG0pHtoPUydE=
-X-Received: by 2002:a05:600c:4f42:: with SMTP id m2mr1227990wmq.82.1634025434301;
- Tue, 12 Oct 2021 00:57:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211012110309.17d51c3e@canb.auug.org.au> <97e578a3-b12e-1975-717d-a0cf663673f0@microchip.com>
-In-Reply-To: <97e578a3-b12e-1975-717d-a0cf663673f0@microchip.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 12 Oct 2021 09:56:57 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0G9VoB71aBWGrtdxe2bNbv7apaAQqQXSf==TGwcKQvaw@mail.gmail.com>
-Message-ID: <CAK8P3a0G9VoB71aBWGrtdxe2bNbv7apaAQqQXSf==TGwcKQvaw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the arm-soc tree
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        id S234831AbhJLIfw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 04:35:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234788AbhJLIfw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Oct 2021 04:35:52 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07ADB60EE5;
+        Tue, 12 Oct 2021 08:33:51 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1maDEL-00GCsN-6d; Tue, 12 Oct 2021 09:33:49 +0100
+Date:   Tue, 12 Oct 2021 09:33:48 +0100
+Message-ID: <87ily2prpv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:YCjqiO5d8rM/ML//nqqgeghr7hhfufNL84KVlvlohxLkuHFH8JP
- psa2SD4+IMonWusynNJKPSIuqBCgpBQK1EApliaZmVZ6PG4Mh5NxdlmikRlTE4no18bolqF
- uyHYLe+CbiGtDtlMfy3A+iKsZsRvOId6/o3Q+cipFeOcCx58Bq4NopOJKqMg6bl9yjvRjgm
- fMH2EFOPoo7f7tohcXV5A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B0fYAbf004E=:osQJhuFZv855WWeJkzfbpl
- 1XaGwpYsOW4tA8opfTFAHZzDDQmMhf6KkrCUnXqvnKlt/Wj8nt/4G+Tq4XCDUFs/TqPY5Yzf/
- bBM00PyHf6cU3xOZVfsvExpC4+UXDM4HyHcltY+Jb5quzZbXMerKCnCuk5Ti6rTT+dZ3dJ5Ar
- 0LA6fCiuLY8WKK9Y23tsRrF0yasXsWnfIUrDCOjNY3sSKZ1qIYDkmXKVndtMnVHJDEh84kQyP
- 0aqgtFarXPWyjNiZNBI6lsm7/bT2w3YKwyXv++lBaz+DbuT3Xnt6NszA6fwSGR1hSzsQUArmz
- dE7Rd9ij9qNFbG98oU+hk8AGnjMrKOvrsZv5YWzfWywgPBxnv7prOpdpDx4T5DM8ccMVBVH7Q
- WvS8lqHT98dS9qynBR8Z/h3DOV7IG6uGPqFpB0vBMHt6qOeC7CBfbOoDTEwPIUTD+A2RRkD9v
- 1QKtz3dYgmNiQINbgb78Q87B8z4j0dqz40kIs0x2/88+Xa/CYB9GCSqD7xNgb3YO+72s4E+SB
- dpbSC8HJp6hy1xdyKMkLmQf+Hqros2cHZWn5eRoOdag9nhOyjgdh0y4lnoYXLTTuKIMT5/xSq
- X7JK/fXIDFw9ntgIodXHT47lAlPksQn2f9XT7TrF77+Zu2w58ttkZuyrLMnW55yiwOdmYj0lc
- jdWSeVFXVhCqEF8ZWYpIB171W60t5Vr1xdPBfwsBIykcm30P4TWbJ6mePaaadRlfT6eRxD7Fn
- 8W4lhGBYJg7aO1clr2HQG1R8rjaPBHK1JTN4KQ==
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: linux-next: build failure after merge of the iommu tree
+In-Reply-To: <20211012144639.0af3457c@canb.auug.org.au>
+References: <20211012144639.0af3457c@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, lorenzo.pieralisi@arm.com, joro@8bytes.org, robin.murphy@arm.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, sven@svenpeter.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 9:35 AM Nicolas Ferre
-<nicolas.ferre@microchip.com> wrote:
-> On 12/10/2021 at 02:03, Stephen Rothwell wrote:
-> >
-> > After merging the arm-soc tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >
-> > Error: arch/arm/boot/dts/sama7g5.dtsi:167.3-7 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> >
-> > Caused by commit
-> >
-> >    9be4be3ed1ec ("Merge branch 'arm/dt' into for-next")
+[+ Sven]
 
-Thank you for the report!
+On Tue, 12 Oct 2021 04:46:39 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> After merging the iommu tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/iommu/apple-dart.c: In function 'apple_dart_get_resv_regions':
+> drivers/iommu/apple-dart.c:758:2: error: implicit declaration of function 'iommu_dma_get_resv_regions'; did you mean 'iommu_get_resv_regions'? [-Werror=implicit-function-declaration]
+>   758 |  iommu_dma_get_resv_regions(dev, head);
+>       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |  iommu_get_resv_regions
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   b2b2781a9755 ("iommu/dart: Clean up IOVA cookie crumbs")
+> 
+> interactig with commit
+> 
+>   05dc551614a4 ("iommu/dart: Exclude MSI doorbell from PCIe device IOVA range")
+> 
+> from the pci tree.
+> 
+> I have applied the following merge fix patch.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 12 Oct 2021 14:40:49 +1100
+> Subject: [PATCH] fix for "iommu/dart: Exclude MSI doorbell from PCIe device
+>  IOVA range"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/iommu/apple-dart.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+> index 912be9b7669c..280ff8df728d 100644
+> --- a/drivers/iommu/apple-dart.c
+> +++ b/drivers/iommu/apple-dart.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/clk.h>
+>  #include <linux/dev_printk.h>
+> +#include <linux/dma-iommu.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/err.h>
+>  #include <linux/interrupt.h>
 
-I had verified the arm/dt branch by itself, but didn't recheck it after I
-merged it into the for-next branch. At least that one is easy to fix
-up as I don't send the combined branch to Linus, and the arm/dt
-branch does not have the problem.
+Thanks for fixing this. Lorenzo, do you mind slapping this on top of
+the Apple PCIe series?
 
-> I had following patch to have the nodes in alphabetical order:
->
-...
->
-> Sorry for not having mentioned this conflict in the pull-request.
+Thanks,
 
-No worries,
+	M.
 
-I had assumed you had them sorted by unit-address, so I had them
- in the wrong order as well. Fixing up both issues in for-next
-now by redoing the merge.
-
-       Arnd
+-- 
+Without deviation from the norm, progress is not possible.

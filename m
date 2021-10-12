@@ -2,82 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AC842A774
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 16:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A5A42A8BF
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 17:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbhJLOmQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 10:42:16 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:45495 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237260AbhJLOmQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 10:42:16 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MvazO-1mrHKt0xaY-00sg8K; Tue, 12 Oct 2021 16:40:13 +0200
-Received: by mail-wr1-f48.google.com with SMTP id e3so34015636wrc.11;
-        Tue, 12 Oct 2021 07:40:13 -0700 (PDT)
-X-Gm-Message-State: AOAM531dj7yPXOKfrMR+lrifguTg+u8bbz7Qb3YfPrLRItDJoBbuJo9+
-        QO+zqvmRcNfQs5qqq42r28sXIuGttZcn0X3gBoE=
-X-Google-Smtp-Source: ABdhPJwsX00JvLV147YNI/vITnilDiDSyCMYaOBQxpBe5IV6UNyEVoOL9Nc4pFKmxwenTCCaRUt2Gu+9DapKCFiP6aE=
-X-Received: by 2002:a1c:2358:: with SMTP id j85mr5978288wmj.1.1634049612821;
- Tue, 12 Oct 2021 07:40:12 -0700 (PDT)
+        id S236864AbhJLPut (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 11:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234892AbhJLPus (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 11:50:48 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CA8C061570;
+        Tue, 12 Oct 2021 08:48:47 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id m67so3557533oif.6;
+        Tue, 12 Oct 2021 08:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:to:from:cc:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=2qmD6+vaMWoQqWaeUIWFicVZqs7HNdeMB3LTPfFG2Pw=;
+        b=UCC+nhX5bSHDhee9N++ybcRDdn1tsy2g0Lyx69LtGJlBj+RbxZAiCOynoXOpQN0AY1
+         r2pfH2GqpkAbDNXhPL6tRF6wZ8ty36ZI8jLAf+xFlnEFXMjS0Uv0hCit12U7HcozeEUw
+         eo9BKXA/Sky5b73PBfE3ECtERl7pNIgs5y9vUAORqhCwQKu1T4LoDRny6MGfk+TxBaZP
+         hdgzDIopexpui2hkXQB2Tbppw+s1/iW00dEyCBtPffGnlg/za65OHeH6ApZIa1UiMDoQ
+         /bLRRrwmYlHqz5fQqiiKnnDC0yZYkj9rklQ/veGvR8+KkM6iudUitng/LKtPPc5FTnbM
+         Zy2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:from:cc:subject:message-id:date
+         :user-agent:mime-version:content-language:content-transfer-encoding;
+        bh=2qmD6+vaMWoQqWaeUIWFicVZqs7HNdeMB3LTPfFG2Pw=;
+        b=31p+A3hjdMSt8hJShlefk+aavGLUW3DDEVqtMaszPK1ZzZPvy+QUghhoRWYD8uaMdX
+         ZD/YpAow9dsBm5FtUmFzGZ0spltvZRgamMQDR5kK4g1oxNvVVSBu9BCM31SNWQFOwYd8
+         ZjdkONXYln2FaTC/tBFM3XdmLhUXmHm2+CgHXekWYQZtrck8dvD+bbCBwkEEsAq2nAgA
+         AqKX+AT4m0H+utiCkqbUo0/uYd0qKN3Pt3EbLDYLWMeDJBsRxTYnmVbkFugqVl3TpDLP
+         Lp3shvOt6w1nM1hWcEpymcdkPdJIQcp3dnfhpOZzjMbX2xM0ndOsDCv0MIXsCLR0t3/C
+         csbA==
+X-Gm-Message-State: AOAM532rVU6f9Xb7EY+7Rn1rDOk/3iMPnZP5d302JxVYsbOhTwX10FL2
+        uxXGKTgfDjrNvNM3wExjf4zLq/tGdVE=
+X-Google-Smtp-Source: ABdhPJxxagBPIlYS6howJFc4u343Lob3u7I/z0qlk/YUtuZP81zVQcRfsd2EVH9ZSoNCMlgZNhlbnw==
+X-Received: by 2002:aca:3e09:: with SMTP id l9mr4154731oia.131.1634053726366;
+        Tue, 12 Oct 2021 08:48:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bf21sm1730995oib.4.2021.10.12.08.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Oct 2021 08:48:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Cc:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: spi-tegra build failures in -next
+Message-ID: <dbd820df-45b8-8d42-d482-cd5d9a2b22f6@roeck-us.net>
+Date:   Tue, 12 Oct 2021 08:48:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211008164728.30e3d3a3@canb.auug.org.au> <20211011082704.3cff4568@canb.auug.org.au>
- <CAL_JsqJE_GHnehBz-71BOGXfjm6q2p0u6FQA5KwO8zK_i1LpMQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqJE_GHnehBz-71BOGXfjm6q2p0u6FQA5KwO8zK_i1LpMQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 12 Oct 2021 16:39:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1EcNuxT-w-8w-HDr2+idsP=vFZ3Cn27fX7o56GOuu_Cg@mail.gmail.com>
-Message-ID: <CAK8P3a1EcNuxT-w-8w-HDr2+idsP=vFZ3Cn27fX7o56GOuu_Cg@mail.gmail.com>
-Subject: Re: linux-next: build warnings in Linus' tree
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anatolij Gustschin <agust@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:tmFm9ObBhI7LEVPCH+fNRyD3HR566ndNt9VAoC376+nLsGFC9M2
- JwkcoMll6ImpR9wr21a40R6+PqucZRONlA9i9yAM+5FmhghxCRyDqWMHK7Meln2ztqaphDP
- EO1A6A37xBKEhuGV9bzr1rpMEKSzlyDkdDElGHaTnw3OniRrc7MwtTk2MYcDq9ubg69PP5e
- QbpjCKRbLkarB1cXpvkeQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:on4rvQwVu1g=:SKNCD0SACllaiYOpEF4ojM
- luo3rsjFqdDHVnrJMrqgEykKWkugyiuBVpwm4lt2yv8zVx9hjYLoOYfl96I7afLRPKeIE3r7d
- 87H/pjqTk2v/Nw8V2Z0ExaNp7UPvXY44Z6+19oO70TFErcshlmYWnp26fHe91Lqtfjn/4W96z
- OqULaRg99HTHgD8b2uCkhQtSHddZlCrmOFWJjMebf4fJflvHxy1McgSthLjH4xK6ZINI5FYAs
- Ky2pYPy09tBU3ZixtzUlimJUDZu86aex7CpzNZSEplSbSNQY/BMo/XUnaOZIhNITxRdyGVpx1
- nQjrC9s6lRaVpMW2v12Xk1GS/Bfa+cluQm9NTvZqVt1QW1fwCodndIJi/WSzyVjgdovHk6yXD
- X75VvkX/TZsByhTiVLNK3cCWkTc36zT9C//nbWP/99mTVa3fTKDJCBevSnb7bTp6e4SyjUk77
- NwvZNdE4E1FNOd9bC4s+jyxEHx6kDgB6LBstoxmoO7OfkYxDjWz7TzqMSDkq36ASa8B2gri5M
- zPB4d8MuMjIPoN3XlzkJX3hr3AWwLDtJvraI703SovrrXT5MDrE3+qfJy+RwMUwDV4ehXiq7q
- sJNyZiZLK5VOKIwkKJ22CKYiGiUS7fHPynSzMo4U+3JkVL/R32Tc0OwFN7PlYLSnDMQeGyZjv
- ZxcRGFH6clh5Wuka9StkWmj3r0jmRbUfeBEPzzuzd7C/Um5REggDzRjB11N3u8Le31UDlR/fV
- IDqbth3RI79HtSFahsq4OhZDhurkzpe/3X2Ypg==
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 10:42 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Sun, Oct 10, 2021 at 4:27 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> FYI, u-boot removed mpc5xxx support in 2017, so maybe there's
-> similarly not a need to keep them in the kernel? It does appear NXP
-> will still sell you the parts though the last BSP was 2009.
+Hi Mark,
 
-Specifically, MPC5200B has a 15 year lifetime, which ends in
-11 months from now. The original bplan/Genesi Efika 5K2 was
-quite popular at the time it came out, and there are probably
-still some of those hanging around, but they came with Open
-Firmware rather than relying on the dts files that ship with the
-kernel.
+I see a number of build failures in -next:
 
-Grant Likely was the original maintainer for MPC52xx until 2011,
-Anatolij Gustschin is still listed as maintainer since then but hasn't
-been active in it for a while either. Anatolij can probably best judge
-which of these boards are still in going to be used with future kernels,
-but I suspect once you start removing bits from 52xx, the newer
-but less common 512x platform can go away as well.
+Building alpha:allmodconfig ... failed
+--------------
+Error log:
+<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+drivers/spi/spi-tegra20-slink.c:1197:12: error: 'tegra_slink_runtime_resume' defined but not used
 
-         Arnd
+Looking into it, the problem seems to be a bad conflict resolution between
+the following two commits.
+
+efafec27c565 ("spi: Fix tegra20 build with CONFIG_PM=n")
+2bab94090b01 ("spi: tegra20-slink: Declare runtime suspend and resume functions conditionally")
+
+Granted, Linus' solution is better than mine, but it looks like the second
+__maybe_unused in commit efafec27c565 got lost in spi/for-linus due to a
+later merge. Would it be possible to either fix that up or drop commit
+efafec27c565 from spi/for-linus ?
+
+Thanks,
+Guenter

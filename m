@@ -2,88 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF0742A5B7
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 15:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591E542A684
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 15:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbhJLNej (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 09:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236727AbhJLNei (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 09:34:38 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593EAC061570;
-        Tue, 12 Oct 2021 06:32:37 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so8571608otq.12;
-        Tue, 12 Oct 2021 06:32:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lZ7Vrmf9d2xbm+q8X0yumIO1w+C3Yq5fjSeU+n7YeJ4=;
-        b=Y4of+zcZTT2qRSlpOr8737KUph+/+qqIM5/WFjhwDT3+WNagKLQQkJZF4MRZ53DpbU
-         V/rWaBp3ilHUeuRZNad8NCl4ilQexGvjtZ4FF/9q1GxeN0SiJYqBC8nAebCXQaKAM0ys
-         AkpqtLaaibrwhiJt/uNm8XQmmK0lO9uv8A5LuaAgZ7xwf1gWsHvSF41goCfC1I9f+K38
-         R2rwtKK+3VYMCeWvabpao1vd88Ujp0W4QIYUGNDxaVF0ttRpyYfn1w9CBFuAqUA152Cv
-         8zxzvqCagrJuEIVLlREDzOChs+ejmVmFKMbXBVcBG3IZ2et4hQhAUEwcpyA4Nq2bTtHB
-         OcJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZ7Vrmf9d2xbm+q8X0yumIO1w+C3Yq5fjSeU+n7YeJ4=;
-        b=Lk156Sf/LOYHd1nKc3UANf4ol7GKo35JFtEYBS++9ro1Y5u84KqSmrhZLi7X3KZvpR
-         uv2sFHkhHIgvMx68tAADBqGR5n+snE3CfCXLN63lScvi/K+zZfVluUlKUnWvpiXZIFOA
-         VZbrcEYWnA+/6fpTCqz/kBwPae0A/WqPE92rQ8T5ROGF7HuEcfIRuKScoGrmYu4PgiG7
-         nM8YAV5hJKSt+o2wjZWlyhh/tMy9QVwLglWgiY9tLklM1SUBSJwoHlUNRap3xmn5q5ov
-         PMXFpJ5EKZx4XrhJ6D8fDfBrNRnLd2IUe0CI1BXZg7W/jnsH4/2A0kjBzbeXBmuMOukj
-         Qc7A==
-X-Gm-Message-State: AOAM5335qEsSv9ejlqxbk07eU9JAUb1fbVqvLFegRxOBaUOBoUvYHxmc
-        /vV4rI7DB+FB2BW8CXTzJ0kAUA7P1Z25ZTlZZDGAD0YFVsQ=
-X-Google-Smtp-Source: ABdhPJzur/SiBvRHhaGs0GFst1Y5rPRxox6pQZUPDy+DQ7q4Is4o4cm0jKQ3f4QXAxV4xaDb9/UIpQshf2NUyseq3Vc=
-X-Received: by 2002:a05:6830:23ac:: with SMTP id m12mr4492411ots.357.1634045556644;
- Tue, 12 Oct 2021 06:32:36 -0700 (PDT)
+        id S236943AbhJLN6J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 09:58:09 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53414 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236783AbhJLN6J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 09:58:09 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 9480A1F439EA
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH] docs: futex: Fix kernel-doc references
+Date:   Tue, 12 Oct 2021 10:55:49 -0300
+Message-Id: <20211012135549.14451-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211008113116.4bdd7b6c@canb.auug.org.au> <20211012132526.237d8f6e@canb.auug.org.au>
-In-Reply-To: <20211012132526.237d8f6e@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 12 Oct 2021 09:32:25 -0400
-Message-ID: <CADnq5_M+xwzsf5=nZk_B_XsBeTMx5O1ViaByh0jpVzswvoOt_g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Simon Ser <contact@emersion.fr>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 10:25 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Stephen,
->
-> On Fri, 8 Oct 2021 11:31:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the amdgpu tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >
-> > ERROR: modpost: "get_mm_exe_file" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-> >
-> > Caused by commit
-> >
-> >   f4f80155e6e8 ("amd/display: only require overlay plane to cover whole CRTC on ChromeOS")
-> >
-> > I have used the amdgpu tree from next-20211007 for today.
->
-> This failure has returned today ...
+Since the futex code was restructured, there's no futex.c file anymore
+and the implementation is split in various files. Point kernel-doc
+references to the new files.
 
-Whoops, pushed the wrong branch.  Fixed.
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+---
+ Documentation/kernel-hacking/locking.rst           | 14 +++++++++++++-
+ .../translations/it_IT/kernel-hacking/locking.rst  | 14 +++++++++++++-
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-Alex
+diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-hacking/locking.rst
+index 90bc3f51eda9..e6cd40663ea5 100644
+--- a/Documentation/kernel-hacking/locking.rst
++++ b/Documentation/kernel-hacking/locking.rst
+@@ -1352,7 +1352,19 @@ Mutex API reference
+ Futex API reference
+ ===================
+ 
+-.. kernel-doc:: kernel/futex.c
++.. kernel-doc:: kernel/futex/core.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/futex.h
++   :internal:
++
++.. kernel-doc:: kernel/futex/pi.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/requeue.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/waitwake.c
+    :internal:
+ 
+ Further reading
+diff --git a/Documentation/translations/it_IT/kernel-hacking/locking.rst b/Documentation/translations/it_IT/kernel-hacking/locking.rst
+index 1efb8293bf1f..163f1bd4e857 100644
+--- a/Documentation/translations/it_IT/kernel-hacking/locking.rst
++++ b/Documentation/translations/it_IT/kernel-hacking/locking.rst
+@@ -1396,7 +1396,19 @@ Riferimento per l'API dei Mutex
+ Riferimento per l'API dei Futex
+ ===============================
+ 
+-.. kernel-doc:: kernel/futex.c
++.. kernel-doc:: kernel/futex/core.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/futex.h
++   :internal:
++
++.. kernel-doc:: kernel/futex/pi.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/requeue.c
++   :internal:
++
++.. kernel-doc:: kernel/futex/waitwake.c
+    :internal:
+ 
+ Approfondimenti
+-- 
+2.33.0
 
-> --
-> Cheers,
-> Stephen Rothwell

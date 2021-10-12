@@ -2,142 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5271E429CB7
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 06:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5A9429D99
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 08:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbhJLEue (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 00:50:34 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55433 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhJLEud (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 00:50:33 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HT38F4bP5z4xb9;
-        Tue, 12 Oct 2021 15:48:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634014111;
-        bh=FJNzj0iQa+QNUJ+e+1TYvef3simjmmBQ7rllRp9fYRc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qngT4LJoE3IZjN6xmikS9obwg9Jh2apsGq+j8Th1NFmsGS5gXJmqBswLfu+g2c7yR
-         MXegVhiJVGF5MQgk3/s2l3LKwfHt+GEn15CwVUw/zZbTSiuZ32Z7Gh+r0aC+htp/Zu
-         DG1NKjCHjpc4etmSb3S2nFb9r6Ut+4oYQlSw3+G39iBXMaWweU1BGB/XGgEo6q/A5G
-         pKkvRcFoIZamoT0c8HLqHCJ+RwESXuGxh0Ocez0FYYunSB0Z6L7wm89tkhftVnSK/p
-         eo9E7d/jr0BjWmfBBoEyG8XKUCjdPHwe6Sa2776oq0WKqDQhoyJ4clJ+8NYz736isB
-         a/h2cyTVpauqg==
-Date:   Tue, 12 Oct 2021 15:48:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rcu tree with the tip tree
-Message-ID: <20211012154828.312f870f@canb.auug.org.au>
+        id S232690AbhJLGWz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 02:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231190AbhJLGWy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 02:22:54 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA517C061570
+        for <linux-next@vger.kernel.org>; Mon, 11 Oct 2021 23:20:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id p13so77402118edw.0
+        for <linux-next@vger.kernel.org>; Mon, 11 Oct 2021 23:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tdVE2a8510+ecH7NgHJAGAocypiBhgiXrxDc0OfOSbs=;
+        b=RPclkyfiHytoiCHP7EuuhiN9D5KbgJNDw6hXQLrxwbZprhLhGR+Pu0vhitzYfvpta8
+         APSXXBadECnOadWAi5R9c+k0NhvsERtihbruP9EVPnveM9PfowWKXrgg3dSt4q9RlRh/
+         SRdV8cFE0xkVItpML31n1V3PwPWObmDv37Y6Rv8EzOfCpYZN4ekc0qILVNd5ofC/h6Lz
+         Q7xvnt+jzfO2rzRIydy33gsnR3cDlCtxHJ/jMWn+7RprO7ap+FxpO/Z8nRmBBbRAkK61
+         R4BtGCn/baKEb3ZW4KPU0y0Nh1OaR8Sy16OVy72qeBcTShKC/BFETSWcFD+e05Krw+Vp
+         au/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=tdVE2a8510+ecH7NgHJAGAocypiBhgiXrxDc0OfOSbs=;
+        b=UtsR6mg9A76uhGv3wg8Vh3VOVP0dll79QxsMSGB3SJNsX2tfTQRGXGdZ8Yt/EkL+U0
+         gEuN1+yik1f8HyUry/GqXn0eCbvt5qaphaGpLFx8ylwp1F7VNa0trRXuUL+2jnw4f3gn
+         nJlo9z5exobwrkKZDj8BQqUfcZQGEo+PK6fgEHwpruVXI2unZSR8PPMZLsDK8ZVVtzQm
+         UudFMfVSwATrGv3hHEhJyeLNgKgmDy0YMu+PZQuCfwNIgRvatt+NRh6d337MC0wK1Hql
+         HNOrU4Qq/SZqrRs7RZib27AwWwV3DCxC20k1LjNyg05rad9qqY3bUdzd4Sf8EZR1Aalh
+         NC4w==
+X-Gm-Message-State: AOAM531FDcb4EJ3crWeS0jPeHTobg46/+9BpGE6/yIa+6sIZfN2EsAnF
+        CVIsv9z4VFnz6ZfiziR4q4Ipq4YQR0G8kPLLa2o=
+X-Google-Smtp-Source: ABdhPJyUgXseWDUt1u1KJEllydCzzqqZPVF3eXaOVDiUCRYm4+Lsnd9rZ30RS669yAJCVbyItyagBI5uN6BcYrreNwc=
+X-Received: by 2002:a17:906:394:: with SMTP id b20mr30831605eja.328.1634019651033;
+ Mon, 11 Oct 2021 23:20:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kb.nPBRY5QO_NX+JtXLlX3y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Received: by 2002:a17:907:60cc:0:0:0:0 with HTTP; Mon, 11 Oct 2021 23:20:50
+ -0700 (PDT)
+Reply-To: pomtfoundation1@gmail.com
+From:   Peace Of Mind Trust <robertfoundation2019@gmail.com>
+Date:   Tue, 12 Oct 2021 09:20:50 +0300
+Message-ID: <CA+O_5qiuZWe-JBv8a+6Ch2x28w5hz6rV_RCyaUY53rPXNU5Prw@mail.gmail.com>
+Subject: =?UTF-8?Q?Wohlt=C3=A4tigkeitsspende_f=C3=BCr_Covid=2D19?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kb.nPBRY5QO_NX+JtXLlX3y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-Today's linux-next merge of the rcu tree got a conflict in:
-
-  kernel/rcu/tasks.h
-
-between commit:
-
-  9b3c4ab3045e ("sched,rcu: Rework try_invoke_on_locked_down_task()")
-
-from the tip tree and commit:
-
-  18f08e758f34 ("rcu-tasks: Add trc_inspect_reader() checks for exiting cri=
-tical section")
-
-from the rcu tree.
-
-I fixed it up (I hope - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
 --=20
-Cheers,
-Stephen Rothwell
+Hallo, lieber Beg=C3=BCnstigter
+Sie haben eine Spende von 2.000.000,00 =E2=82=AC aus dem Frieden von Mind
+Trust Foundation (PMT).
+Bitte kontaktieren Sie uns =C3=BCber: pomtfoundation1@gmail.com Weitere
+Informationen zum Anhalten dieser Spendenfonds
 
-diff --cc kernel/rcu/tasks.h
-index 171bc848e8e3,e4a32db9f712..000000000000
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@@ -928,10 -919,10 +919,10 @@@ reset_ipi
-  }
- =20
-  /* Callback function for scheduler to check locked-down task.  */
- -static bool trc_inspect_reader(struct task_struct *t, void *arg)
- +static int trc_inspect_reader(struct task_struct *t, void *arg)
-  {
-  	int cpu =3D task_cpu(t);
-- 	bool in_qs =3D false;
-+ 	int nesting;
-  	bool ofl =3D cpu_is_offline(cpu);
- =20
-  	if (task_curr(t)) {
-@@@ -951,18 -942,18 +942,18 @@@
-  		n_heavy_reader_updates++;
-  		if (ofl)
-  			n_heavy_reader_ofl_updates++;
-- 		in_qs =3D true;
-+ 		nesting =3D 0;
-  	} else {
-  		// The task is not running, so C-language access is safe.
-- 		in_qs =3D likely(!t->trc_reader_nesting);
-+ 		nesting =3D t->trc_reader_nesting;
-  	}
- =20
-- 	// Mark as checked so that the grace-period kthread will
-- 	// remove it from the holdout list.
-- 	t->trc_reader_checked =3D true;
--=20
-- 	if (in_qs)
-- 		return 0;  // Already in quiescent state, done!!!
-+ 	// If not exiting a read-side critical section, mark as checked
-+ 	// so that the grace-period kthread will remove it from the
-+ 	// holdout list.
-+ 	t->trc_reader_checked =3D nesting >=3D 0;
-+ 	if (nesting <=3D 0)
- -		return !nesting;  // If in QS, done, otherwise try again later.
-++		return (!nesting) ? 0 : -EINVAL;  // If in QS, done, otherwise try agai=
-n later.
- =20
-  	// The task is in a read-side critical section, so set up its
-  	// state so that it will awaken the grace-period kthread upon exit
-
---Sig_/Kb.nPBRY5QO_NX+JtXLlX3y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlE5wACgkQAVBC80lX
-0Gxl5gf8Ca1lWACFU7u842u1TQLwdNTyy5HhXOKhl97fnGDr42+SqdcBpyvvmWFC
-ZDjxPOednIagRBPYf176EHx6ugqGC+vAq1YUK58GLxAaNhKoeltAxYhZZPHi4f6S
-2dONeS51ic+m6swXyyWm700k26djbYqQCgdwjkTJydlc4W+e0HpRYfNEDhdlxROj
-0iY1+Wu3cYiWKU8/aofpOj6p5MV4hTkAjB4qQrvg0OzUn5qPwvWACwX0BOjqBmFN
-9dUNl7LKXP8BoD4lmdo5orxdKThzgfQh7Us46vVhs2zRnxAgqjp0ePiW/8xT6KY2
-9c5pDm7gLZ2Ws/8C2Nrbyvos8v8HRA==
-=2qKt
------END PGP SIGNATURE-----
-
---Sig_/Kb.nPBRY5QO_NX+JtXLlX3y--
+mit bestem Gru=C3=9F
+Peace Of Mind Trust (PMT)

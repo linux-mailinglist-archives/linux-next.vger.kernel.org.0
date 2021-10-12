@@ -2,84 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E85142A2B3
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 12:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5997742A31E
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 13:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235881AbhJLK64 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 06:58:56 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36801 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236036AbhJLK6z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 06:58:55 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTCKJ5DcYz4xbV;
-        Tue, 12 Oct 2021 21:56:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634036213;
-        bh=Xf1lPcg61XghCxXyudffvXGozRoqikwBbfUwHO27xIw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=J18wbPSfa8fGX6RX6LtWwwxseI/SrZAVfoHTvyWNt5Sqdt1j3/kXy8ufUq7IA2ata
-         y5SIRh8+hHXOu9EWCqdzsDZYvULtQ8afZbfkVGC4KJBROwd2xUJqCbxrdCPbriT9XW
-         WraIS5FzqOnh4LT02Yc6xgf5T63CtOXx/f/XceWOlUHRhYAhhdaZNGkL9THUlkxuEH
-         BaMWUFd2yHzj8Gxsrcfxw5ZOE8pNtz8IbWiSWLO3hWW1CldqBnMCdYg5gNtYOQSCXn
-         r67nfuvbs2s66syUHBhmv1B1HjiBW3RS6HMB10duPkZgVrdB17FhFnUsTOlOjyoGbC
-         XBsnka7IRPF3Q==
-Date:   Tue, 12 Oct 2021 21:56:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        id S236149AbhJLLYL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 07:24:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:36466 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236177AbhJLLYL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Oct 2021 07:24:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 745921FB;
+        Tue, 12 Oct 2021 04:22:09 -0700 (PDT)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5989B3F694;
+        Tue, 12 Oct 2021 04:22:08 -0700 (PDT)
+Date:   Tue, 12 Oct 2021 12:21:58 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Marc Zyngier <maz@kernel.org>, bhelgaas@google.com
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings in Linus' tree
-Message-ID: <20211012215651.300f8bc1@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: linux-next: build failure after merge of the iommu tree
+Message-ID: <20211012112150.GA27560@lpieralisi>
+References: <20211012144639.0af3457c@canb.auug.org.au>
+ <87ily2prpv.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xES2aqxswmOIh2v9KQcV=WX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ily2prpv.wl-maz@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xES2aqxswmOIh2v9KQcV=WX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Oct 12, 2021 at 09:33:48AM +0100, Marc Zyngier wrote:
+> [+ Sven]
+> 
+> On Tue, 12 Oct 2021 04:46:39 +0100,
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > Hi all,
+> > 
+> > After merging the iommu tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > drivers/iommu/apple-dart.c: In function 'apple_dart_get_resv_regions':
+> > drivers/iommu/apple-dart.c:758:2: error: implicit declaration of function 'iommu_dma_get_resv_regions'; did you mean 'iommu_get_resv_regions'? [-Werror=implicit-function-declaration]
+> >   758 |  iommu_dma_get_resv_regions(dev, head);
+> >       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >       |  iommu_get_resv_regions
+> > cc1: all warnings being treated as errors
+> > 
+> > Caused by commit
+> > 
+> >   b2b2781a9755 ("iommu/dart: Clean up IOVA cookie crumbs")
+> > 
+> > interactig with commit
+> > 
+> >   05dc551614a4 ("iommu/dart: Exclude MSI doorbell from PCIe device IOVA range")
+> > 
+> > from the pci tree.
+> > 
+> > I have applied the following merge fix patch.
+> > 
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 12 Oct 2021 14:40:49 +1100
+> > Subject: [PATCH] fix for "iommu/dart: Exclude MSI doorbell from PCIe device
+> >  IOVA range"
+> > 
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/iommu/apple-dart.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+> > index 912be9b7669c..280ff8df728d 100644
+> > --- a/drivers/iommu/apple-dart.c
+> > +++ b/drivers/iommu/apple-dart.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/bitfield.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/dev_printk.h>
+> > +#include <linux/dma-iommu.h>
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/err.h>
+> >  #include <linux/interrupt.h>
+> 
+> Thanks for fixing this. Lorenzo, do you mind slapping this on top of
+> the Apple PCIe series?
 
-Hi all,
+I think this will have to be done by Bjorn at PR time, depending on
+IOMMU<->PCI trees PRs timing, please correct me if I am wrong, we
+have to reintroduce the line above since it is deleted by:
 
-When building Linus' tree, today's linux-next build (htmldocs) produced
-these warnings:
+b2b2781a9755 ("iommu/dart: Clean up IOVA cookie crumbs")
 
-Error: Cannot open file drivers/counter/counter.c
-Error: Cannot open file drivers/counter/counter.c
+in the IOMMU tree.
 
-Introduced by commit
+Lorenzo
 
-  d70e46af7531 ("counter: Internalize sysfs interface code")
-
-$ git grep -w drivers/counter/counter.c Documentation
-Documentation/driver-api/generic-counter.rst:.. kernel-doc:: drivers/counte=
-r/counter.c
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xES2aqxswmOIh2v9KQcV=WX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlafMACgkQAVBC80lX
-0Gzdrwf+NhdXQRA8FrfoLzS0Jf7p/I1LB0T9+LL4C/RkoJR05RClQRFyOzHgNLKY
-uY82jt5yCJwGDR5x5eCboV2WexqFNHCQTRDVlkmkzxQs7K+I2yOOCs4f6R8kyUbS
-SIXyau1ERsJ8Fmy5K86xSvII8dmzc7TagcA68R3JnfXFLt4I+pgT2s2G+XwQBElz
-Fxo+LorzakLc8smz2FQDLUqlQoacRJ5+bDrb/Y6XpHZCRmLEw/YXVYPGcOiNj/sD
-qjqB4yJyg6ceFQcVvd285QQWBmHsyPpxllLA5G9ihtdyh5IykRlgEV+Vh0B/L+sC
-BMwcJq85m/QuqwHChfyDW0gmJT9dGQ==
-=dU+X
------END PGP SIGNATURE-----
-
---Sig_/xES2aqxswmOIh2v9KQcV=WX--
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

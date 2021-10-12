@@ -2,88 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494B442A23D
-	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 12:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E85142A2B3
+	for <lists+linux-next@lfdr.de>; Tue, 12 Oct 2021 12:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236106AbhJLKiN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Oct 2021 06:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbhJLKiL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 06:38:11 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44929C06161C;
-        Tue, 12 Oct 2021 03:36:10 -0700 (PDT)
+        id S235881AbhJLK64 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Oct 2021 06:58:56 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:36801 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236036AbhJLK6z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Oct 2021 06:58:55 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTBsN1Lrbz4xbG;
-        Tue, 12 Oct 2021 21:36:07 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTCKJ5DcYz4xbV;
+        Tue, 12 Oct 2021 21:56:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634034968;
-        bh=vRx++bFEsl2BHQylnM8wJf19bltnXOc8oVnJQjBbxlg=;
+        s=201702; t=1634036213;
+        bh=Xf1lPcg61XghCxXyudffvXGozRoqikwBbfUwHO27xIw=;
         h=Date:From:To:Cc:Subject:From;
-        b=Efnx+GnCL5bVan4SV6G0SiX2Fo7Z/go9a3VnOKNOhHowLyaoE5GZy+1HKiLctc0sD
-         eK5UopbqodTXKP9ai+uXjQ+l4HoIcj3nKHVHP7hNpPQr+scIBGd7tIE0Dl2HVysE46
-         mwe01CAPgptyLjbDIxYm/p2qwDeydLrup47SYhk+ElS7vs67F7y6ywe8FFIJ1l3bVi
-         vfsOEuwwlUtegTT32M+VfCrPp6AkBoaDl2g9LBSpcniLs0ly0tNAuaLfG8NLr9S5TT
-         CtOda2HDYMHJaohLSdMzmXKLquO7GyKSGWM+JCgdAjNaF9PqZJxzxmilOoQ2p5kJea
-         Hckl1p35NU5jg==
-Date:   Tue, 12 Oct 2021 21:36:06 +1100
+        b=J18wbPSfa8fGX6RX6LtWwwxseI/SrZAVfoHTvyWNt5Sqdt1j3/kXy8ufUq7IA2ata
+         y5SIRh8+hHXOu9EWCqdzsDZYvULtQ8afZbfkVGC4KJBROwd2xUJqCbxrdCPbriT9XW
+         WraIS5FzqOnh4LT02Yc6xgf5T63CtOXx/f/XceWOlUHRhYAhhdaZNGkL9THUlkxuEH
+         BaMWUFd2yHzj8Gxsrcfxw5ZOE8pNtz8IbWiSWLO3hWW1CldqBnMCdYg5gNtYOQSCXn
+         r67nfuvbs2s66syUHBhmv1B1HjiBW3RS6HMB10duPkZgVrdB17FhFnUsTOlOjyoGbC
+         XBsnka7IRPF3Q==
+Date:   Tue, 12 Oct 2021 21:56:51 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Rob Clark <robdclark@chromium.org>,
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the drm-fixes tree
-Message-ID: <20211012213606.54facf76@canb.auug.org.au>
+Subject: linux-next: build warnings in Linus' tree
+Message-ID: <20211012215651.300f8bc1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ";
+Content-Type: multipart/signed; boundary="Sig_/xES2aqxswmOIh2v9KQcV=WX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ
+--Sig_/xES2aqxswmOIh2v9KQcV=WX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+When building Linus' tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-  654e9c18dfab ("drm/msm: Fix crash on dev file close")
+Error: Cannot open file drivers/counter/counter.c
+Error: Cannot open file drivers/counter/counter.c
 
-Fixes tag
+Introduced by commit
 
-  Fixes: 86c2a0f000c1 drm/msm: ("Small submitqueue creation cleanup")
+  d70e46af7531 ("counter: Internalize sysfs interface code")
 
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+$ git grep -w drivers/counter/counter.c Documentation
+Documentation/driver-api/generic-counter.rst:.. kernel-doc:: drivers/counte=
+r/counter.c
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ
+--Sig_/xES2aqxswmOIh2v9KQcV=WX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlZRYACgkQAVBC80lX
-0GzUYQf+Pz9ExFYDVBQLwV3s3M0NIvT88yFegdS2IHylosvgMkJXyXMMbEIaM+Ea
-sfZkRX1DrMeqjVD/CWL9asDyHKRn1hUtYy/dBOZb42YCBUb/bcflBS0b4eOmIdnM
-XeqlsthOoAMVuIUmLJwPCt1kKn1G+CICHK6a0+E2ZvU/1sddNV0FnhrWbmT4ea11
-zW/wKAt2WaZiJ+DATTEOB0IJyIN93Ix4ZbkySFfBTPE83fcmkrqWBhYr1YGNDu9W
-Jc7W/ULVRAZfzkr8igVcCXJBZa6xMyQSWch5wIaeAyNjQ1S+aW4rWRLkKf2+bprU
-KZWL/tkTz8hsU9qysHjG8g4zuJauKQ==
-=hdGd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFlafMACgkQAVBC80lX
+0Gzdrwf+NhdXQRA8FrfoLzS0Jf7p/I1LB0T9+LL4C/RkoJR05RClQRFyOzHgNLKY
+uY82jt5yCJwGDR5x5eCboV2WexqFNHCQTRDVlkmkzxQs7K+I2yOOCs4f6R8kyUbS
+SIXyau1ERsJ8Fmy5K86xSvII8dmzc7TagcA68R3JnfXFLt4I+pgT2s2G+XwQBElz
+Fxo+LorzakLc8smz2FQDLUqlQoacRJ5+bDrb/Y6XpHZCRmLEw/YXVYPGcOiNj/sD
+qjqB4yJyg6ceFQcVvd285QQWBmHsyPpxllLA5G9ihtdyh5IykRlgEV+Vh0B/L+sC
+BMwcJq85m/QuqwHChfyDW0gmJT9dGQ==
+=dU+X
 -----END PGP SIGNATURE-----
 
---Sig_/1D0Ff+Y3RpH3B89yFf9vBpZ--
+--Sig_/xES2aqxswmOIh2v9KQcV=WX--

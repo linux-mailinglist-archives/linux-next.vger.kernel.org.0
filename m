@@ -2,102 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7229642BF31
-	for <lists+linux-next@lfdr.de>; Wed, 13 Oct 2021 13:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9634242BF90
+	for <lists+linux-next@lfdr.de>; Wed, 13 Oct 2021 14:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbhJMLvN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Oct 2021 07:51:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229535AbhJMLvN (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 Oct 2021 07:51:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 481956113E;
-        Wed, 13 Oct 2021 11:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634125750;
-        bh=08cmMCW6GG9gWIOhjxYfXSFIYClklm6HhvdpGKvi16g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a8/bDma6IeOw47+CVOZM0/AVmVmBWj1bzuEKec7UQcITca/iyIJH9GPAJIvAVnR2H
-         gIj1lAPQWNgzGnxnDjDyDaF32C+R5o6fUz/YUAp3c1YZe/9hIP383TAgZJNW4BPXEl
-         xYD+h/4uCsU8H8vRNmQD46ZYx8EtXiEsgIDmEbcLam7Kgy7p0D1CEyyWBZc8Oo5s4s
-         mKx9gm2Et/G27qN8h5upJOFFpTZWaLQUyDXCOPY+Lk6JU5Ixx50zk5XTqJg6j3RoFm
-         M2wBcpLSkUUaqE3EQb6QT7vjrO8+tWKwpsFH21EvMrrffZtKhX7xSJj6hkqXb9k04J
-         n/uD/fERi9WNA==
-Received: by mail-wr1-f47.google.com with SMTP id u18so7454311wrg.5;
-        Wed, 13 Oct 2021 04:49:10 -0700 (PDT)
-X-Gm-Message-State: AOAM5336sVVSTv4GlHgyv6EXioK/K2NL0aV6Jg7okZrRAzM61oFdCg9f
-        1ZjYZgvJn6hw+C66/MlVwogV4enydqLgkjA86v0=
-X-Google-Smtp-Source: ABdhPJxAPtyVc3G/tOtzJ7z3+RdpcFSsTVHBBrdmAoAeaOD1MZ0LF/ObKmsWMXdtxVVGB9gwLelX+Cl/3S/Jhom+ziQ=
-X-Received: by 2002:a1c:2358:: with SMTP id j85mr12179996wmj.1.1634125748613;
- Wed, 13 Oct 2021 04:49:08 -0700 (PDT)
+        id S229653AbhJMMPO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Oct 2021 08:15:14 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:39449 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229535AbhJMMPO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Oct 2021 08:15:14 -0400
+Received: by mail-ot1-f54.google.com with SMTP id k2-20020a056830168200b0054e523d242aso3379522otr.6;
+        Wed, 13 Oct 2021 05:13:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Tfe2N7rj5j3n+ftOPGZJE3vZ01hZsrDbPoprLIjlnLs=;
+        b=d9Jun4rmsIXccI3udHg5SMG4eEGfgdSI9+YL9g6k/odKfb01pJ+x6DOtZrFPCvGC2H
+         /ul+kZPqRlOZbu4PvWmwxu4x7Ztlivt/SrjPhwhCzI9BOijB+JTRXeE5jmnVamalsoBK
+         BqvbzzDvicTkv30AsnSsxUnnxA1P0NCvNFHtdhs/Ef2XsvVhFOJEr9WqJvASJqYlzKkD
+         s08/EBzk5FehUl7mI8hFLCbgFYOnnwZ6FRNnuGhwgW/oJxVUXiO7LUzcokqsG2aSmG0c
+         9v5wc8CaTW5zVBKag/W9a2mxak4zBWW1SHlEKgGkUDvubfaddh2/12IJ/NvdhBVMi6wl
+         h6LQ==
+X-Gm-Message-State: AOAM532RHcEHpVvP3QDdjLWov5TrKe12BQbsBbbY48X2qTHcfUPrvtxQ
+        pRO/VfeQFB+O0HklX9jttQ==
+X-Google-Smtp-Source: ABdhPJzFOBhZFAsfOWqs1w4jktLjtdmNcDllxLmZYKERPT8tfehw3S1S9Td/QzIYNylxaIz1UngLzQ==
+X-Received: by 2002:a05:6830:349:: with SMTP id h9mr15633550ote.349.1634127190546;
+        Wed, 13 Oct 2021 05:13:10 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bb39sm2956661oib.28.2021.10.13.05.13.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 05:13:10 -0700 (PDT)
+Received: (nullmailer pid 783942 invoked by uid 1000);
+        Wed, 13 Oct 2021 12:13:09 -0000
+Date:   Wed, 13 Oct 2021 07:13:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Corey Minyard <minyard@acm.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Oct 13
+Message-ID: <YWbNVXemcnxO8wsG@robh.at.kernel.org>
+References: <20211013170522.4c6e21a1@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20211006025350.a5PczFZP4%akpm@linux-foundation.org>
- <58fbf2ff-b367-2137-aa77-fcde6c46bbb7@infradead.org> <20211006182052.6ecc17cf@canb.auug.org.au>
- <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com> <CAMuHMdV3eMchpgUasU6BBHrDQyjCc2TrqJ+zJgFhgAySpqVGfw@mail.gmail.com>
- <CAK8P3a1LLABstZ2rPYpsXRTxMdbSTrh0y753vrfGbRovv9fS8A@mail.gmail.com>
-In-Reply-To: <CAK8P3a1LLABstZ2rPYpsXRTxMdbSTrh0y753vrfGbRovv9fS8A@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 13 Oct 2021 13:48:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1PoL4KMJfRyOB59tNYR6-cn3rWqDfqXeeW5ggMVGaeVg@mail.gmail.com>
-Message-ID: <CAK8P3a1PoL4KMJfRyOB59tNYR6-cn3rWqDfqXeeW5ggMVGaeVg@mail.gmail.com>
-Subject: Re: mmotm 2021-10-05-19-53 uploaded (drivers/gpu/drm/msm/hdmi/hdmi_phy.o)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux-Next <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211013170522.4c6e21a1@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 12:54 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Thu, Oct 7, 2021 at 11:51 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> -msm-$(CONFIG_DRM_FBDEV_EMULATION) += msm_fbdev.o
-> -msm-$(CONFIG_COMMON_CLK) += disp/mdp4/mdp4_lvds_pll.o
-> -msm-$(CONFIG_COMMON_CLK) += hdmi/hdmi_pll_8960.o
-> -msm-$(CONFIG_COMMON_CLK) += hdmi/hdmi_phy_8996.o
-> +msm-$(CONFIG_DRM_FBDEV_EMULATION) += msm_fbdev.o \
-> + disp/mdp4/mdp4_lvds_pll.o \
-> + hdmi/hdmi_pll_8960.o \
-> + hdmi/hdmi_phy_8996.o
->
->  msm-$(CONFIG_DRM_MSM_HDMI_HDCP) += hdmi/hdmi_hdcp.o
+On Wed, Oct 13, 2021 at 05:05:22PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> News: there will be no linux-next release tomorrow.
+> 
+> Changes since 20211012:
+> 
+> The arm-soc tree lost its build failure.
+> 
+> The net-next tree gained a conflict against the net tree.
+> 
+> The drm-misc tree lost its build failure.
+> 
+> The amdgpu tree lost its build failure.
+> 
+> Non-merge commits (relative to Linus' tree): 7055
+>  6867 files changed, 394074 insertions(+), 162696 deletions(-)
 
-I fixed my local copy now after noticing that these should not go
-after CONFIG_DRM_FBDEV_EMULATION but the top-level option:
+The commit 9cc6726f68af ("ipmi:ipmb: Add OF support") was added and has 
+warnings for 'make dt_binding_check'. I'm replying here because the 
+commit hasn't been sent to any list in lore.
 
-@@ -23,8 +23,10 @@ msm-y := \
-        hdmi/hdmi_i2c.o \
-        hdmi/hdmi_phy.o \
-        hdmi/hdmi_phy_8960.o \
-+       hdmi/hdmi_phy_8996.o
-        hdmi/hdmi_phy_8x60.o \
-        hdmi/hdmi_phy_8x74.o \
-+       hdmi/hdmi_pll_8960.o \
-        edp/edp.o \
-        edp/edp_aux.o \
-        edp/edp_bridge.o \
-@@ -37,6 +39,7 @@ msm-y := \
-        disp/mdp4/mdp4_dtv_encoder.o \
-        disp/mdp4/mdp4_lcdc_encoder.o \
-        disp/mdp4/mdp4_lvds_connector.o \
-+       disp/mdp4/mdp4_lvds_pll.o \
-        disp/mdp4/mdp4_irq.o \
-        disp/mdp4/mdp4_kms.o \
-        disp/mdp4/mdp4_plane.o \
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dts:22.13-26: Warning (reg_format): /example-0/ipmi-ipmb@0x40:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dts:19.24-26.11: Warning (unit_address_format): /example-0/ipmi-ipmb@0x40: unit name should not have leading "0x"
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: example-0: ipmi-ipmb@0x40:reg:0: [64] is too short
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.example.dt.yaml: example-0: 'ipmi-ipmb@0x40' does not match any of the regexes: '.*-names$', '.*-supply$', '^#.*-cells$', '^#[a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$', '^__.*__$', 'pinctrl-[0-9]+'
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/dt-core.yaml
 
-           Arnd
+
+Rob

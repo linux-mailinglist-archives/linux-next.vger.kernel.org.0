@@ -2,83 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6391942B722
-	for <lists+linux-next@lfdr.de>; Wed, 13 Oct 2021 08:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A2D42BDE3
+	for <lists+linux-next@lfdr.de>; Wed, 13 Oct 2021 12:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237916AbhJMGaw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Oct 2021 02:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbhJMGaw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Oct 2021 02:30:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1EAC061570;
-        Tue, 12 Oct 2021 23:28:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HTjKW6r92z4xbX;
-        Wed, 13 Oct 2021 17:28:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634106528;
-        bh=w8PF9bP8rPv6Aqy5AkyNtTTvt2SM3fvgmtYQ0JWxWvw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QkCkeRIZft3EUHqQvg1JCuyTqWKnHKDaiJNYdjRVaM88LxW0rAHa11h3d7S/03QWK
-         YSClNg7jgWGXDjyxM5eQHli1uQNWjapb4zP62QiGMWKI0tnxqjxfdx94zvSxjPVBfd
-         3IAAfPK6jX/IY6B9Dp6aranpj9k9/9VrjmCDajgs5NBhkcx2r+PeMUAOv8LJoLyc3s
-         RGSsTSqG8sBkiX3vTNrVWjUfuF/t2PlsETeh0MwP13c1SBOpUf5ujMIQBEvgk0tWtG
-         QkCsz9uAspGozhOvwehuXB00z3LWW+wUsX1N2zpUcw7U4So+i/wvYUpbwlRkRHtF4p
-         BIdcTltu/PkiQ==
-Date:   Wed, 13 Oct 2021 17:28:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the pm tree
-Message-ID: <20211013172846.55fb665a@canb.auug.org.au>
+        id S229750AbhJMK5I (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Oct 2021 06:57:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229602AbhJMK5H (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 Oct 2021 06:57:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3886610D1;
+        Wed, 13 Oct 2021 10:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634122504;
+        bh=cHJwlE/4hKjsg8N9PIPkUgBxfg4CYIeT2a/7mtQ0gV4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Gvd6nNUOzZ1UK/F83pyQaR5TauDo53BnYMnJejta47hA700Gc4nEjGIFnHwmjOADo
+         AKNy+aONpGH/0IsqLm0Dcpm6wjEJavnew940SDLuN/5a6FYUw3ELyYcU0A3Q/NRQek
+         QfoThQlCQv7p+iOVnXWOAHkCznwBtAwOy+ujza96o7WAaFxFjrC8XZ1wckA/fZVTbk
+         VwI4mJWJKdlfyh1Lt6ftM0G3FhFyxA8FUoE+m7e14+8RRL2PlJvv9hf7Oz7NJ/FAwC
+         wgr7gidywOLH4DV+TxM46MeGP/by3gM7M3FjX3pF1U7UjvwkkKAPLPGpJwUDxBDIsM
+         sv3E+u1PeyN3A==
+Received: by mail-wr1-f45.google.com with SMTP id o20so6930614wro.3;
+        Wed, 13 Oct 2021 03:55:04 -0700 (PDT)
+X-Gm-Message-State: AOAM530iZXvF4GxMweqi4kkfiz7ZUk97vL95SLqNn2ulZn679H1I9FS6
+        nYyJQLDddw3zeAFg/BNgI5e/wVU24xPXuOhmPUE=
+X-Google-Smtp-Source: ABdhPJzW6QwF+fpri3xax3BToB6ExyXZ9H+Kw/HXMbby5km4lbFfKsXJq/EA3ZMCLu9RmweZx7YA8FnfMM0PPRf9Pg4=
+X-Received: by 2002:a05:600c:4f42:: with SMTP id m2mr9273874wmq.82.1634122503094;
+ Wed, 13 Oct 2021 03:55:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vjKg7qpKcOuenmaedRJbrMd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211006025350.a5PczFZP4%akpm@linux-foundation.org>
+ <58fbf2ff-b367-2137-aa77-fcde6c46bbb7@infradead.org> <20211006182052.6ecc17cf@canb.auug.org.au>
+ <f877a1c9-1898-23f3-bba3-3442dc1f3979@amd.com> <CAMuHMdV3eMchpgUasU6BBHrDQyjCc2TrqJ+zJgFhgAySpqVGfw@mail.gmail.com>
+In-Reply-To: <CAMuHMdV3eMchpgUasU6BBHrDQyjCc2TrqJ+zJgFhgAySpqVGfw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 13 Oct 2021 12:54:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LLABstZ2rPYpsXRTxMdbSTrh0y753vrfGbRovv9fS8A@mail.gmail.com>
+Message-ID: <CAK8P3a1LLABstZ2rPYpsXRTxMdbSTrh0y753vrfGbRovv9fS8A@mail.gmail.com>
+Subject: Re: mmotm 2021-10-05-19-53 uploaded (drivers/gpu/drm/msm/hdmi/hdmi_phy.o)
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux-Next <linux-next@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vjKg7qpKcOuenmaedRJbrMd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Oct 7, 2021 at 11:51 AM Geert Uytterhoeven <geert@linux-m68k.org> w=
+rote:
+> On Wed, Oct 6, 2021 at 9:28 AM Christian K=C3=B6nig <christian.koenig@amd=
+.com> wrote:
+> > Am 06.10.21 um 09:20 schrieb Stephen Rothwell:
+> > > On Tue, 5 Oct 2021 22:48:03 -0700 Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+> > >> on i386:
+> > >>
+> > >> ld: drivers/gpu/drm/msm/hdmi/hdmi_phy.o:(.rodata+0x3f0): undefined r=
+eference to `msm_hdmi_phy_8996_cfg'
 
-Hi all,
+I ran into the same thing now as well.
+E_TEST) && COMMON_CLK
+>
+> I'd make that:
+>
+>     -        depends on DRM
+>     +       depends on COMMON_CLK && DRM && IOMMU_SUPPORT
+>             depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
+>     -        depends on IOMMU_SUPPORT
+>     -       depends on (OF && COMMON_CLK) || COMPILE_TEST
+>     +       depends on OF || COMPILE_TEST
+>
+> to keep a better separation between hard and soft dependencies.
+>
+> Note that the "depends on OF || COMPILE_TEST" can even be
+> deleted, as the dependency on ARCH_QCOM || SOC_IMX5 implies OF.
 
-After merging the pm tree, today's linux-next build (htmldocs) produced
-this warning:
+Looks good to me, I would also drop that last line in this case, and maybe
+add this change as building without COMMON_CLK is no longer possible:
 
-Documentation/ABI/testing/sysfs-class-thermal:201: WARNING: Bullet list end=
-s without a blank line; unexpected unindent.
+diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
+index 904535eda0c4..a5d87e03812f 100644
+--- a/drivers/gpu/drm/msm/Makefile
++++ b/drivers/gpu/drm/msm/Makefile
+@@ -116,10 +116,10 @@ msm-$(CONFIG_DRM_MSM_DP)+=3D dp/dp_aux.o \
+  dp/dp_power.o \
+  dp/dp_audio.o
 
-Introduced by commit
+-msm-$(CONFIG_DRM_FBDEV_EMULATION) +=3D msm_fbdev.o
+-msm-$(CONFIG_COMMON_CLK) +=3D disp/mdp4/mdp4_lvds_pll.o
+-msm-$(CONFIG_COMMON_CLK) +=3D hdmi/hdmi_pll_8960.o
+-msm-$(CONFIG_COMMON_CLK) +=3D hdmi/hdmi_phy_8996.o
++msm-$(CONFIG_DRM_FBDEV_EMULATION) +=3D msm_fbdev.o \
++ disp/mdp4/mdp4_lvds_pll.o \
++ hdmi/hdmi_pll_8960.o \
++ hdmi/hdmi_phy_8996.o
 
-  80da1b508f29 ("thermal: Move ABI documentation to Documentation/ABI")
+ msm-$(CONFIG_DRM_MSM_HDMI_HDCP) +=3D hdmi/hdmi_hdcp.o
 
---=20
-Cheers,
-Stephen Rothwell
+Has anyone submitted a patch already, or should I send the version
+that I am using locally now?
 
---Sig_/vjKg7qpKcOuenmaedRJbrMd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFmfJ4ACgkQAVBC80lX
-0Gziagf/VULKinytmi2I6h1CMaucMVKy+rkGDBIDPfdNopEvdCLE4Xn1s3QSguSs
-1JntNnWsgv7Xjftgo0KVY22+IXSIJL+ibidT0ST30q7NEPw3W5LdRoR1EiqliRuN
-bivSxK+ixQN2wiGG0ycS1qzB2hBaFEbrq1ueAinPIDP+JGK9gJgyO4DBqWY7KZK+
-IQ+GLiAKzmr5NliLiKvsvYTBG2z6FzYNI2qAYZvV1kX3/Jn363677b248jbUXThC
-oHhxQebwgxPgQFMP9SlYqsg3QcxuHzAjOIuCvHWQawXW2iWMw6iPIyZodUl0wo5I
-V0yNf1hIcBHtVV38h7/5VXccMaxk7Q==
-=rlRS
------END PGP SIGNATURE-----
-
---Sig_/vjKg7qpKcOuenmaedRJbrMd--
+        Arnd

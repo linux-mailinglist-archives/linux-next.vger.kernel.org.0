@@ -2,128 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE8142E34B
-	for <lists+linux-next@lfdr.de>; Thu, 14 Oct 2021 23:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2ED42E428
+	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 00:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbhJNVg0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Oct 2021 17:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S232619AbhJNWbu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Oct 2021 18:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbhJNVg0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 17:36:26 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF7C061570;
-        Thu, 14 Oct 2021 14:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3uz2MkNVnJq3tzD89PFjBt7/bgaD45MTB8/bwuUoYEY=; b=U6Y05WuYcP5EXxvp6aXswlEF0b
-        HeYDv9+jGedfXi8wIMy53Lz1SjAGZpmHT+hMGEmn2GhdciXU5OT3ctTGNPM/rjqYDLGn/a6FWlLkQ
-        T9ZJ7GBOeCFVtuNV1fmQpbZ3W9aitEvBcHcvKPphwPAQAi7eYA5nXW872vzoubGQBYDV9tPEkdgmI
-        HIVfZ/26GVFmxyAoP6Fw+72u9eE6kciyb8hPi9Zd7WYr5koVvSanTM0AHZaUl0MR7vdrio5TfiteO
-        EBkgObIK8SLsd6dmX2CGec92o2tu3Ex5Huowc6QOgm7u+1hQe2O2dXLqem4FaVkj2FnTIMibWA2iz
-        gevguIIw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mb8Ml-004QkI-8N; Thu, 14 Oct 2021 21:34:19 +0000
-Subject: Re: [PATCH] mm/damon/vaddr: Include 'highmem.h' to fix a build
- failure
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     broonie@kernel.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        sfr@canb.auug.org.au, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211014110848.5204-1-sj@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <8e8a5739-59e8-7b73-5fca-1768b3e18ffe@infradead.org>
-Date:   Thu, 14 Oct 2021 14:34:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S229995AbhJNWbu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 18:31:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDDAC061570;
+        Thu, 14 Oct 2021 15:29:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HVkbj0MBNz4xbP;
+        Fri, 15 Oct 2021 09:29:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634250578;
+        bh=7J+zMFVVCPk6f3qKqBKYj68sCRxcMV7azRCODVCP33Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KX1JP2IaN3R+DtzxXSnn+arxXPtkXajtiKJA7H36EygEx+2whXtKwbBLjQSnva7qF
+         O3kZM/cA1shq0uc00NKuxuQkHYnNkbMnXK6DTRgUHshpkXsLdZ0h6vrtX+Y+w4Xzhk
+         gzem8KtmnQ6LViIF821GrzZtp5DQXL7x8vW7aqcjbGigVztYTPz6FnaNh8magxPru8
+         1chH7ZPsltQnd5Lj5Xkn2qrGlNxAZ1EjITgxx9Jsx80eWLrp8FtF+GXw0kMUD0LCsv
+         g1GLQR6g/B9E9UBHA2a+bdJ4Tfi+2uVJPxAiJr0DTZ8TP4K8iKU9eylTv6btoM9+it
+         eeNyeGT9TQ4IA==
+Date:   Fri, 15 Oct 2021 09:29:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20211015092934.726ed2d4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211014110848.5204-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/P_JF0YxXo2u.I8RG_E4cXs1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/14/21 4:08 AM, SeongJae Park wrote:
-> Commit 0ff28922686c ("mm/damon/vaddr: separate commonly usable
-> functions") in -mm tree[1] moves include of 'highmem.h' from 'vaddr.c'
-> to 'prmtv-common.c', though the code for the header is still in
-> 'vaddr.c'.  As a result, build with 'CONFIG_HIGHPTE' fails as below:
-> 
->      In file included from ../include/linux/mm.h:33:0,
->                        from ../include/linux/kallsyms.h:13,
->                        from ../include/linux/bpf.h:20,
->                        from ../include/linux/bpf-cgroup.h:5,
->                        from ../include/linux/cgroup-defs.h:22,
->                        from ../include/linux/cgroup.h:28,
->                        from ../include/linux/hugetlb.h:9,
->                        from ../mm/damon/vaddr.c:11:
->      ../mm/damon/vaddr.c: In function ‘damon_mkold_pmd_entry’:
->      ../include/linux/pgtable.h:97:12: error: implicit declaration of function ‘kmap_atomic’; did you mean ‘mcopy_atomic’? [-Werror=implicit-function-declaration]
->         ((pte_t *)kmap_atomic(pmd_page(*(dir))) +  \
->                   ^
->      ../include/linux/mm.h:2376:17: note: in expansion of macro ‘pte_offset_map’
->         pte_t *__pte = pte_offset_map(pmd, address); \
->                        ^~~~~~~~~~~~~~
->      ../mm/damon/vaddr.c:387:8: note: in expansion of macro ‘pte_offset_map_lock’
->         pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
->               ^~~~~~~~~~~~~~~~~~~
->      ../include/linux/pgtable.h:99:24: error: implicit declaration of function ‘kunmap_atomic’; did you mean ‘in_atomic’? [-Werror=implicit-function-declaration]
->        #define pte_unmap(pte) kunmap_atomic((pte))
->                               ^
->      ../include/linux/mm.h:2384:2: note: in expansion of macro ‘pte_unmap’
->         pte_unmap(pte);     \
->         ^~~~~~~~~
->      ../mm/damon/vaddr.c:392:2: note: in expansion of macro ‘pte_unmap_unlock’
->         pte_unmap_unlock(pte, ptl);
->         ^~~~~~~~~~~~~~~~
-> 
-> This commit fixes the issue by moving the include back to 'vaddr.c'.
-> 
-> [1] https://github.com/hnaz/linux-mm/commit/0ff28922686c
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: SeongJae Park <sj@kernel.org>
+--Sig_/P_JF0YxXo2u.I8RG_E4cXs1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Hi all,
 
-Thanks.
+Commits
 
-> ---
->   mm/damon/prmtv-common.c | 1 -
->   mm/damon/vaddr.c        | 1 +
->   2 files changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/damon/prmtv-common.c b/mm/damon/prmtv-common.c
-> index 1768cbe1b9ff..7e62ee54fb54 100644
-> --- a/mm/damon/prmtv-common.c
-> +++ b/mm/damon/prmtv-common.c
-> @@ -5,7 +5,6 @@
->    * Author: SeongJae Park <sj@kernel.org>
->    */
->   
-> -#include <linux/highmem.h>
->   #include <linux/mmu_notifier.h>
->   #include <linux/page_idle.h>
->   #include <linux/pagemap.h>
-> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-> index ce7e36ca1bff..758501b8d97d 100644
-> --- a/mm/damon/vaddr.c
-> +++ b/mm/damon/vaddr.c
-> @@ -8,6 +8,7 @@
->   #define pr_fmt(fmt) "damon-va: " fmt
->   
->   #include <asm-generic/mman-common.h>
-> +#include <linux/highmem.h>
->   #include <linux/hugetlb.h>
->   #include <linux/mmu_notifier.h>
->   #include <linux/page_idle.h>
-> 
+  3f3247285461 ("ARM: dts: bcm2711-rpi-4-b: Fix usb's unit address")
+  13dbc954b3c9 ("ARM: dts: bcm2711-rpi-4-b: Fix pcie0's unit address format=
+ting")
 
+are missing a Signed-off-by from their committer.
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/P_JF0YxXo2u.I8RG_E4cXs1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFor04ACgkQAVBC80lX
+0GxdFQgAgryV5L20c3Mq6mOj9qLZhHhW7i+wDIFtiiWy7oPMvzWlT3oawP1gPw+c
+w4G7wOmXdw1aDEs+9su4oUka5SIwuApIBg4wrft0WfFZWUkwglXq6IpR9YdQPbUn
+/aGc60zsutiKVgbRI7lTvxQzthiVorI/bwrbpH43oW3ehRvtjV7PkCvo6ZU1c8XZ
+h8tLUkDAquG8fxg3ClhxjDLr5v7dYoRbJqZWzEsriV/tJRPLtHhU5wLBTUUz+juD
+qVdRC/M5+a08zt0IRTTaM+J+AIGA9euvg59SMHNlbC2EViQ3IS9kou8Z3DOkzQn1
+Hlm9QsPxCTI9A68C/W365oUnlnXS4g==
+=gelo
+-----END PGP SIGNATURE-----
+
+--Sig_/P_JF0YxXo2u.I8RG_E4cXs1--

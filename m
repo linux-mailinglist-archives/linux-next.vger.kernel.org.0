@@ -2,92 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D729342E4BA
-	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 01:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4443742E4E1
+	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 01:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbhJNXYG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Oct 2021 19:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S232078AbhJNXuu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Oct 2021 19:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbhJNXYF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 19:24:05 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CAFC061570;
-        Thu, 14 Oct 2021 16:22:00 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y7so6779317pfg.8;
-        Thu, 14 Oct 2021 16:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Pz7wpNudlFp0iJ4ceF8FtD9oN6fD0QtioM4sSlEJ8dg=;
-        b=CNtu3IVYffo8MHC2GdIeqq/qAPhnLr12J1ULaQFkkxbsxpFUvr7n2wLticHtu4c3Rq
-         JgbgyuIIDURlWv0uqkWXpTvRF5q+vyysJblTU1C5elNjtb/UUrEPcNH5c6V5iCrnOeYj
-         skTyNL5snAdkkYVA2mCrm6xFSiL4V6VAx9O+SBaIALPsY7JwBBQmZnCMjWoDTX3bYE4B
-         or5BdUdjMk0s/vfqaniduu4E48JVmh102ufKDGDiIhVFCwK5r9wmaNwFpTzJxJs6dQCP
-         sXFSm7mbuGGeqyDzmqLBH1rpn7PYSfBnvDifnX4WhTs4mKQg0qgcSi8WhYGbX6sF5I0W
-         mc/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Pz7wpNudlFp0iJ4ceF8FtD9oN6fD0QtioM4sSlEJ8dg=;
-        b=bxVOkrWzxsaNE++rPxc4sAOSsvfwetg+UnfbpPm+cLXgueZ9hcsKrWfTWCvrRPAnxo
-         7BFW5gIzF/oMwuh6YgOboH4gP1HFClDEQM9+qcBWpZP29f6R540gAdoYq5r9vtOVTiRU
-         1oveQiVvYTV1kbx8Eesgjn0+czjzEFJcD3q7rifqie6Fnw5S35qJ13hzxha7WMTSnRqb
-         LVsQRJBMfeYy7sz7YpUQVeVWY+8ufYBqmyjeiF9xKbM47VXK6kFFYHtQcQjcv15yW/rO
-         +h65daF5dUdKV0XHDqnOcqzoVzbpywbwRDzslHZX8cqVBJJixh2SCGCz8PlquwRiLAp3
-         2hsg==
-X-Gm-Message-State: AOAM533Ohy9IALpTCMPeWdQJElw000MTjNXSqSYYZrbl72Gel6kDZBBu
-        D7P3aoyliw+jrxQ4aCZi4YI=
-X-Google-Smtp-Source: ABdhPJyKAMFpl1Lke85fC3bxHNLBHwylVYdYKLXUW2MD0IbzVSpt+eLUYVjJHqJo2Iy4PeEjzUdnQw==
-X-Received: by 2002:a05:6a00:1501:b0:44d:8dbe:ca59 with SMTP id q1-20020a056a00150100b0044d8dbeca59mr2833289pfu.75.1634253719468;
-        Thu, 14 Oct 2021 16:21:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id e15sm3256633pfc.134.2021.10.14.16.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Oct 2021 16:21:58 -0700 (PDT)
-Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-References: <20211015092934.726ed2d4@canb.auug.org.au>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <a1f2f236-73ea-2459-63bc-8f51ae0231b2@gmail.com>
-Date:   Thu, 14 Oct 2021 16:21:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S230371AbhJNXuu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 19:50:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947CDC061570;
+        Thu, 14 Oct 2021 16:48:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HVmLy4fLwz4xbG;
+        Fri, 15 Oct 2021 10:48:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634255322;
+        bh=hOOJzLdSb5SPACXow+S4SsAWlvs2V7xCXloVIMc1PJc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c/BHebmXQhrYh6CEsEHMTzZZyRrDM0l7fPN21t9PhHqm6/12pBMkNNaYEvtmOZqot
+         Ucw6JzRpKGuANb4MeEG1sqNi2WvQQ1LLMMnOh4Xq69IGjuaJmWAtY0lwIk9ubV7eMm
+         sZsTb6xBYOm7MU2tY5kfZZ2IvTJ5KIX3kOYuKtN63V125S1utqgn7zc3CqGPxoXcJW
+         81QxXL5cK/UHgcmF1ibwzo4xzdGvPaSGVZEBscVwyYLut9ywl0Pe9TfaLIgsL6r/wc
+         iPqxAm4/QwVrCafOoYX/fQVatnSplFuGmzAKQG+m4FFIVuH3zntrNKrMA4hLmI0BvI
+         2kla5Sx5aM5rg==
+Date:   Fri, 15 Oct 2021 10:48:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp-gustavo tree
+Message-ID: <20211015104840.4e1ceb89@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211015092934.726ed2d4@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/+T+zq66izOpOt0XU=GJr7I1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/14/21 3:29 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   3f3247285461 ("ARM: dts: bcm2711-rpi-4-b: Fix usb's unit address")
->   13dbc954b3c9 ("ARM: dts: bcm2711-rpi-4-b: Fix pcie0's unit address formatting")
-> 
-> are missing a Signed-off-by from their committer.
+--Sig_/+T+zq66izOpOt0XU=GJr7I1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes that is because I had to rewrite Nicolas' Author email to match his
-Signed-off-by and in the process I became the committer and did not add
-my Signed-off-by.
+Hi all,
 
-Nicolas, the commits you had submitted to me originally used your
-@redhat.com emails in the Author/From, whereas the Signed-off-by used
-your @kernel.org address. Can you have both match for next commits?
+After merging the kspp-gustavo tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Thanks!
--- 
-Florian
+In file included from include/linux/bpf_verifier.h:9,
+                 from kernel/bpf/verifier.c:12:
+kernel/bpf/verifier.c: In function 'jit_subprogs':
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'unsigned int (*)(const void *, const struct bpf_insn *)' to 'u64 (=
+*)(u64,  u64,  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long=
+ unsigned int,  long long unsigned int,  long long unsigned int,  long long=
+ unsigned int,  long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12472:16: note: in expansion of macro 'BPF_CAST_CALL'
+12472 |    insn->imm =3D BPF_CAST_CALL(func[subprog]->bpf_func) -
+      |                ^~~~~~~~~~~~~
+kernel/bpf/verifier.c: In function 'do_misc_fixups':
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'void * (* const)(struct bpf_map *, void *)' to 'u64 (*)(u64,  u64,=
+  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int=
+,  long long unsigned int,  long long unsigned int,  long long unsigned int=
+,  long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12953:17: note: in expansion of macro 'BPF_CAST_CALL'
+12953 |     insn->imm =3D BPF_CAST_CALL(ops->map_lookup_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, void *, void *, u64)' {aka 'int (*=
+ const)(struct bpf_map *, void *, void *, long long unsigned int)'} to 'u64=
+ (*)(u64,  u64,  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long lo=
+ng unsigned int,  long long unsigned int,  long long unsigned int,  long lo=
+ng unsigned int,  long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12957:17: note: in expansion of macro 'BPF_CAST_CALL'
+12957 |     insn->imm =3D BPF_CAST_CALL(ops->map_update_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, void *)' to 'u64 (*)(u64,  u64,  u=
+64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,  =
+long long unsigned int,  long long unsigned int,  long long unsigned int,  =
+long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12961:17: note: in expansion of macro 'BPF_CAST_CALL'
+12961 |     insn->imm =3D BPF_CAST_CALL(ops->map_delete_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, void *, u64)' {aka 'int (* const)(=
+struct bpf_map *, void *, long long unsigned int)'} to 'u64 (*)(u64,  u64, =
+ u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,=
+  long long unsigned int,  long long unsigned int,  long long unsigned int,=
+  long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12965:17: note: in expansion of macro 'BPF_CAST_CALL'
+12965 |     insn->imm =3D BPF_CAST_CALL(ops->map_push_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, void *)' to 'u64 (*)(u64,  u64,  u=
+64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,  =
+long long unsigned int,  long long unsigned int,  long long unsigned int,  =
+long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12969:17: note: in expansion of macro 'BPF_CAST_CALL'
+12969 |     insn->imm =3D BPF_CAST_CALL(ops->map_pop_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, void *)' to 'u64 (*)(u64,  u64,  u=
+64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,  =
+long long unsigned int,  long long unsigned int,  long long unsigned int,  =
+long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12973:17: note: in expansion of macro 'BPF_CAST_CALL'
+12973 |     insn->imm =3D BPF_CAST_CALL(ops->map_peek_elem) -
+      |                 ^~~~~~~~~~~~~
+include/linux/filter.h:366:4: error: cast between incompatible function typ=
+es from 'int (* const)(struct bpf_map *, u32,  u64)' {aka 'int (* const)(st=
+ruct bpf_map *, unsigned int,  long long unsigned int)'} to 'u64 (*)(u64,  =
+u64,  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned=
+ int,  long long unsigned int,  long long unsigned int,  long long unsigned=
+ int,  long long unsigned int)'} [-Werror=3Dcast-function-type]
+  366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
+      |    ^
+kernel/bpf/verifier.c:12977:17: note: in expansion of macro 'BPF_CAST_CALL'
+12977 |     insn->imm =3D BPF_CAST_CALL(ops->map_redirect) -
+      |                 ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  21078041965e ("Makefile: Enable -Wcast-function-type")
+
+I have used the kspp-gustavo tree from next-20211013 for today.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+T+zq66izOpOt0XU=GJr7I1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFowdgACgkQAVBC80lX
+0Gygqgf/bb5iQwKjUy0O9o5t8QWk3881mUL9O4KiiLzHntDHBYx3bHNCOfNqmjTW
+gWXg8ReeNXqvnUNF59BK5fcIVGY6Yi0iYbYMWK69H6yLOu15e2ZgYPv9x6PA+QTX
+prftqdepVusA0qTFKFVUJN9O3ppLeN5aQG0PBiM4uaja23EjJLPkhj1jsBdKGoJh
+0YCNpmI1VfHmKXKWftgTRBorb6Bn8z9TQ4Gqivb/KsovTBq2xVA1dLJZ2ni7uFub
+CoVqeZ4rF6jrSP8XXAgl1/1fXJaxzSLiuzMdx67sdmYghHkxjT8zpylY4HYvkGun
+FuctoBd2QTESj8ARUNVyjendZmsFJg==
+=NmKO
+-----END PGP SIGNATURE-----
+
+--Sig_/+T+zq66izOpOt0XU=GJr7I1--

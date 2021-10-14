@@ -2,90 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD34042D553
-	for <lists+linux-next@lfdr.de>; Thu, 14 Oct 2021 10:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F4942D7CD
+	for <lists+linux-next@lfdr.de>; Thu, 14 Oct 2021 13:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbhJNIrJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Oct 2021 04:47:09 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:55665 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhJNIrI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 04:47:08 -0400
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2VCb-1mjlFB2aA3-013t07; Thu, 14 Oct 2021 10:45:02 +0200
-Received: by mail-wr1-f54.google.com with SMTP id m22so17170935wrb.0;
-        Thu, 14 Oct 2021 01:45:02 -0700 (PDT)
-X-Gm-Message-State: AOAM532LVWDbnxESNLroeG3ifExw6VhYQT7QdZkPTOO1Mz2ffkIwDTRY
-        Te1HlwviBHY6NoNPtFmGBwWMumXSZqvech5WEUM=
-X-Google-Smtp-Source: ABdhPJy2Q55sSkLZB6jxCTWqm25cFC7UAeGhHD3tsyQeSyokhHvq8V2pJoW6joP1ItyVfyCebQbp8k3zAHKoURn20CM=
-X-Received: by 2002:a1c:4b08:: with SMTP id y8mr4618289wma.98.1634201102285;
- Thu, 14 Oct 2021 01:45:02 -0700 (PDT)
+        id S230253AbhJNLLA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Oct 2021 07:11:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229988AbhJNLK7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Oct 2021 07:10:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3385A60F23;
+        Thu, 14 Oct 2021 11:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634209735;
+        bh=HHKCYup8+gHVwWVOB+Bc7IT9RNl6ysJ2n6UcEXDuoY4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hyz8gG2uOFBcvyzceZp6eLX2XZd1QxKvaBMJyc6/73HkK5VnezFdl9r1knNnjAR3p
+         Y0vf2QFqesNtP4SLw20sCnrbTk/cbbpwt8Hnb08BZs0ebceYIGTjaCYhDQHb7aY0ga
+         NR/LsBZTL5NAjD2apKANMhFMZPhrn53H8uJdX7m83s43rWy+3z/ZiLzA6F3qtPKvzk
+         aKrogzWNcffeZGq0kBvkjRI7xIjKfNP94iNw2vCiCEnPRVk7/y362lP5sp0KvFJyXE
+         k8moUHzS3OvN8VJKdAVqINg56j5CkbwhHU1PrLe4FbwpduRT6sILNZ/piz21YzY8NT
+         ZFOSSupYLGk/A==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     rdunlap@infradead.org, broonie@kernel.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH] mm/damon/vaddr: Include 'highmem.h' to fix a build failure
+Date:   Thu, 14 Oct 2021 11:08:48 +0000
+Message-Id: <20211014110848.5204-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20211008164728.30e3d3a3@canb.auug.org.au> <20211011082704.3cff4568@canb.auug.org.au>
- <CAL_JsqJE_GHnehBz-71BOGXfjm6q2p0u6FQA5KwO8zK_i1LpMQ@mail.gmail.com>
- <CAK8P3a1EcNuxT-w-8w-HDr2+idsP=vFZ3Cn27fX7o56GOuu_Cg@mail.gmail.com> <20211014001232.3becbe99@crub>
-In-Reply-To: <20211014001232.3becbe99@crub>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Oct 2021 10:44:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0yKvZW2-XFJtPORpa=FhG+UJgk=m0O1GiC_yLw+1Pfvw@mail.gmail.com>
-Message-ID: <CAK8P3a0yKvZW2-XFJtPORpa=FhG+UJgk=m0O1GiC_yLw+1Pfvw@mail.gmail.com>
-Subject: Re: linux-next: build warnings in Linus' tree
-To:     Anatolij Gustschin <agust@denx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6Yv4eaUGMtbIlsCrktG1sQMSXp+EgvJPyfDzjPo4e5eIfxrGVyO
- RCWBUrsYG8kCqcG0uFDo9OWGuTpuQYOqOULr0O2HLWB5ZUwCOTmLeNJ06Q0Z+ylJgLtwZSO
- JXiSgPFiCIKzXKEvXcQfhTPo0zNfHrMsPnN9y7Jgl4GZkFIvsLBPto/4VIX43+x9omn7spB
- TQc577mYa0VzRyA1fstrw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CDX8eeXsrJ4=:3sPMwRMFoqdR01p2h7k8ZB
- x0K21C88T1+nmImCwCUNxv+H5QsdKIsLVit9dqmCm4EAxptvoBFNXgvxkZ/9WYLGlBLVvgfRZ
- 428PYf4a87240lxJHIH8FEsNN//TA/Xqmclj+5sbvFQErhndHXmZAI5zIUEoAdUa5a24fx6r0
- vbudP8Q5AwczwH1EscdRTenLNEALX5rH2I/NIlbv49HMaNx4Z1/mjBw0gY+qOS5uFmlumjKBU
- SkAmZOkxfROWropGlScHwPLLNuHUf8jfXJ/IMoBd42ktZWxXgSJp+UnL7BmB7+y2dGSy7tl+y
- 39n+lcILjmIxNYr/fQtex7pKa/IHKoJy8Rh4fXSbRiTQfExCA3KO7iqnbU1vvlk/SXmQvcnh+
- etu0oAU3VY5cuAsvjp7gX1IhXx7S5N+7oKGv6/zNUKcagpXIzF/UFF2lgcip/74IuUXxWCjyz
- 3l9uRpWd+2ce5OEa2UWpaEzUvrDl3f3fk0PDfrOEAEnpXU656AqwvhWbVYyy1qZJRJ9G1s3YQ
- CwaJE/PQj6Q8DQUXjtvOhO5jTK92aATXv4LF0syUhBl+OSdUgpYOq3huzX9QopDRlru8gqf/O
- RpABwl+C71rWSCMqvGD3EsBo+5CXTSbu5s8/o/dx/DhOa0EcxomuafDAq1551WSFpnB2sXGAR
- LqyPAJV5iWxhC9yTSPBoR7/QNFur/GwWAXNWjjtIyBvoQjbb6Zi4pG/43pw+AFq+vWhnFwYB9
- Q2FZN2JEzyw+D86kjVKuh3Haw7Y3dZoFw+lGuA==
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 12:12 AM Anatolij Gustschin <agust@denx.de> wrote:
-> On Tue, 12 Oct 2021 16:39:56 +0200
-> Arnd Bergmann arnd@arndb.de wrote:
-> ...
-> >Grant Likely was the original maintainer for MPC52xx until 2011,
-> >Anatolij Gustschin is still listed as maintainer since then but hasn't
-> >been active in it for a while either. Anatolij can probably best judge
-> >which of these boards are still in going to be used with future kernels,
-> >but I suspect once you start removing bits from 52xx, the newer
-> >but less common 512x platform can go away as well.
->
-> many of these boards are still used, i.e. o2d*, digsy_mtc, tqm5200.
+Commit 0ff28922686c ("mm/damon/vaddr: separate commonly usable
+functions") in -mm tree[1] moves include of 'highmem.h' from 'vaddr.c'
+to 'prmtv-common.c', though the code for the header is still in
+'vaddr.c'.  As a result, build with 'CONFIG_HIGHPTE' fails as below:
 
-Just for clarification, I assume when you say "still used" that implies
-getting updated to new kernels rather than just running the old BSPs,
-right?
+    In file included from ../include/linux/mm.h:33:0,
+                      from ../include/linux/kallsyms.h:13,
+                      from ../include/linux/bpf.h:20,
+                      from ../include/linux/bpf-cgroup.h:5,
+                      from ../include/linux/cgroup-defs.h:22,
+                      from ../include/linux/cgroup.h:28,
+                      from ../include/linux/hugetlb.h:9,
+                      from ../mm/damon/vaddr.c:11:
+    ../mm/damon/vaddr.c: In function ‘damon_mkold_pmd_entry’:
+    ../include/linux/pgtable.h:97:12: error: implicit declaration of function ‘kmap_atomic’; did you mean ‘mcopy_atomic’? [-Werror=implicit-function-declaration]
+       ((pte_t *)kmap_atomic(pmd_page(*(dir))) +  \
+                 ^
+    ../include/linux/mm.h:2376:17: note: in expansion of macro ‘pte_offset_map’
+       pte_t *__pte = pte_offset_map(pmd, address); \
+                      ^~~~~~~~~~~~~~
+    ../mm/damon/vaddr.c:387:8: note: in expansion of macro ‘pte_offset_map_lock’
+       pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+             ^~~~~~~~~~~~~~~~~~~
+    ../include/linux/pgtable.h:99:24: error: implicit declaration of function ‘kunmap_atomic’; did you mean ‘in_atomic’? [-Werror=implicit-function-declaration]
+      #define pte_unmap(pte) kunmap_atomic((pte))
+                             ^
+    ../include/linux/mm.h:2384:2: note: in expansion of macro ‘pte_unmap’
+       pte_unmap(pte);     \
+       ^~~~~~~~~
+    ../mm/damon/vaddr.c:392:2: note: in expansion of macro ‘pte_unmap_unlock’
+       pte_unmap_unlock(pte, ptl);
+       ^~~~~~~~~~~~~~~~
 
-What are the typical distro release cycles for those machines
-you list: do you move from one LTS kernel to the next each year,
-or are they getting more sporadic over time?
+This commit fixes the issue by moving the include back to 'vaddr.c'.
 
-Do you expect the machines with the lowest memory such as the
-32MB digsy to stop getting kernel updates before the others?
+[1] https://github.com/hnaz/linux-mm/commit/0ff28922686c
 
-> I've sent first series to fix some warnings. Other dts fixes
-> require driver changes, so it will take some time to fix them.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/prmtv-common.c | 1 -
+ mm/damon/vaddr.c        | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
+diff --git a/mm/damon/prmtv-common.c b/mm/damon/prmtv-common.c
+index 1768cbe1b9ff..7e62ee54fb54 100644
+--- a/mm/damon/prmtv-common.c
++++ b/mm/damon/prmtv-common.c
+@@ -5,7 +5,6 @@
+  * Author: SeongJae Park <sj@kernel.org>
+  */
+ 
+-#include <linux/highmem.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/page_idle.h>
+ #include <linux/pagemap.h>
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index ce7e36ca1bff..758501b8d97d 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -8,6 +8,7 @@
+ #define pr_fmt(fmt) "damon-va: " fmt
+ 
+ #include <asm-generic/mman-common.h>
++#include <linux/highmem.h>
+ #include <linux/hugetlb.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/page_idle.h>
+-- 
+2.17.1
 
-      Arnd

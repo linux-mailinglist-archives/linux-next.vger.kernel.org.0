@@ -2,101 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7315D42E476
-	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 00:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D729342E4BA
+	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 01:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbhJNWzk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Oct 2021 18:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S232335AbhJNXYG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Oct 2021 19:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbhJNWzk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 18:55:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96933C061570;
-        Thu, 14 Oct 2021 15:53:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HVl7F0WNLz4xb9;
-        Fri, 15 Oct 2021 09:53:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634252009;
-        bh=W9k4rlXYFcvRmBCEV+RIrGWKO5o3ELTRNuvQrIhpF0g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CV+giH1APtHjdfp3D6+ewP8I1SRKdNybX3mo1KN/yZ0/J3vGjYAtHQhLhlYe/ozt3
-         2SJ6S8V2MweXYA1E6KQaX/gHeQr7RqCkkzvg4ovg0msP/JgYn29UHYp2eFW2OCP66v
-         zi6TVipIH4FSKNst2qWE0Sa7H1pJtxeUqpxX2apxyjhcoB1xoK1riAeE6+0UEeG/97
-         tPVDAdYuLCZQ5N5tfgbgfrIvQS7w1sQkw18KaiCv6654x5O9FQRMM2ganq1T6Xxyg2
-         kPvZaG3va2OCKaz9b1WVyFR7gpVEvjhNV/3zUcbI/ZmXFTjnNomEksT6OXMgZ5lNaO
-         hk8kaNLX8if1g==
-Date:   Fri, 15 Oct 2021 09:53:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Todd Kjos <tkjos@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tags needs some work in the selinux tree
-Message-ID: <20211015095327.42344a21@canb.auug.org.au>
+        with ESMTP id S231325AbhJNXYF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 19:24:05 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CAFC061570;
+        Thu, 14 Oct 2021 16:22:00 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y7so6779317pfg.8;
+        Thu, 14 Oct 2021 16:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Pz7wpNudlFp0iJ4ceF8FtD9oN6fD0QtioM4sSlEJ8dg=;
+        b=CNtu3IVYffo8MHC2GdIeqq/qAPhnLr12J1ULaQFkkxbsxpFUvr7n2wLticHtu4c3Rq
+         JgbgyuIIDURlWv0uqkWXpTvRF5q+vyysJblTU1C5elNjtb/UUrEPcNH5c6V5iCrnOeYj
+         skTyNL5snAdkkYVA2mCrm6xFSiL4V6VAx9O+SBaIALPsY7JwBBQmZnCMjWoDTX3bYE4B
+         or5BdUdjMk0s/vfqaniduu4E48JVmh102ufKDGDiIhVFCwK5r9wmaNwFpTzJxJs6dQCP
+         sXFSm7mbuGGeqyDzmqLBH1rpn7PYSfBnvDifnX4WhTs4mKQg0qgcSi8WhYGbX6sF5I0W
+         mc/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Pz7wpNudlFp0iJ4ceF8FtD9oN6fD0QtioM4sSlEJ8dg=;
+        b=bxVOkrWzxsaNE++rPxc4sAOSsvfwetg+UnfbpPm+cLXgueZ9hcsKrWfTWCvrRPAnxo
+         7BFW5gIzF/oMwuh6YgOboH4gP1HFClDEQM9+qcBWpZP29f6R540gAdoYq5r9vtOVTiRU
+         1oveQiVvYTV1kbx8Eesgjn0+czjzEFJcD3q7rifqie6Fnw5S35qJ13hzxha7WMTSnRqb
+         LVsQRJBMfeYy7sz7YpUQVeVWY+8ufYBqmyjeiF9xKbM47VXK6kFFYHtQcQjcv15yW/rO
+         +h65daF5dUdKV0XHDqnOcqzoVzbpywbwRDzslHZX8cqVBJJixh2SCGCz8PlquwRiLAp3
+         2hsg==
+X-Gm-Message-State: AOAM533Ohy9IALpTCMPeWdQJElw000MTjNXSqSYYZrbl72Gel6kDZBBu
+        D7P3aoyliw+jrxQ4aCZi4YI=
+X-Google-Smtp-Source: ABdhPJyKAMFpl1Lke85fC3bxHNLBHwylVYdYKLXUW2MD0IbzVSpt+eLUYVjJHqJo2Iy4PeEjzUdnQw==
+X-Received: by 2002:a05:6a00:1501:b0:44d:8dbe:ca59 with SMTP id q1-20020a056a00150100b0044d8dbeca59mr2833289pfu.75.1634253719468;
+        Thu, 14 Oct 2021 16:21:59 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id e15sm3256633pfc.134.2021.10.14.16.21.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Oct 2021 16:21:58 -0700 (PDT)
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+References: <20211015092934.726ed2d4@canb.auug.org.au>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <a1f2f236-73ea-2459-63bc-8f51ae0231b2@gmail.com>
+Date:   Thu, 14 Oct 2021 16:21:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w0rmlU4D5Kvd6qci1qP3yaB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20211015092934.726ed2d4@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w0rmlU4D5Kvd6qci1qP3yaB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/14/21 3:29 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   3f3247285461 ("ARM: dts: bcm2711-rpi-4-b: Fix usb's unit address")
+>   13dbc954b3c9 ("ARM: dts: bcm2711-rpi-4-b: Fix pcie0's unit address formatting")
+> 
+> are missing a Signed-off-by from their committer.
 
-Hi all,
+Yes that is because I had to rewrite Nicolas' Author email to match his
+Signed-off-by and in the process I became the committer and did not add
+my Signed-off-by.
 
-In commit
+Nicolas, the commits you had submitted to me originally used your
+@redhat.com emails in the Author/From, whereas the Signed-off-by used
+your @kernel.org address. Can you have both match for next commits?
 
-  fef994d85ac9 ("binder: use cred instead of task for getsecid")
-
-Fixes tag
-
-  Fixes: ec74136ded79 ("binder: create node flag to request sender's
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-In commit
-
-  d1c927fb8b52 ("binder: use cred instead of task for selinux checks")
-
-Fixes tag
-
-  Fixes: 79af73079d75 ("Add security hooks to binder and implement the
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/w0rmlU4D5Kvd6qci1qP3yaB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFotOcACgkQAVBC80lX
-0GyCsggAl9x6zITN++MNBb2CJ1IFMO0tehCYyXg3dlpnYzZL1KQ0ahbdOzt0MLa0
-2pA5pUGkvW2JJ6YQnIMbzFNVJX1bGp4ehrijtL39AuYWZXERcPfbzFcskw20BZKl
-wQd6KVdU1HJGfyr/UUfxDeWGS3OYeV/1xOw+ci2RS6d/ZT4Du4hz5mDnU3ElfTd5
-Ntyz7uklWzP43bns2Ma9DRIBiGqOKXCEj9Td/FCoeGKBbIxL4pkWoeOpLBzsd/Jr
-ObsMZF8WRERsKmU34GlWKQu9RrILJNTc9DmarAWTGckWjHC0TtEEaL5KGitjx1n6
-81BSaRn7LVfU2739st15Rzkb2hrPtw==
-=AAj0
------END PGP SIGNATURE-----
-
---Sig_/w0rmlU4D5Kvd6qci1qP3yaB--
+Thanks!
+-- 
+Florian

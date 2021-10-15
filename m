@@ -2,71 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA3742E4FE
-	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 02:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A89142E532
+	for <lists+linux-next@lfdr.de>; Fri, 15 Oct 2021 02:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234553AbhJOAFc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Oct 2021 20:05:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231305AbhJOAFc (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 Oct 2021 20:05:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BDE8610FF;
-        Fri, 15 Oct 2021 00:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634256207;
-        bh=4LQ20uG1krTlY6LZA4iRtePdasxtekH4VH2cgg20BEc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OK30nTk2jdkPaUdHDPD4BoP/VOHz81bCbGtaefq0oU7i5HrMoFiyMZvXf7FKt95xm
-         tHVINp5IFifea9gdZQ0z0G7TmrUaK/SazdDftlPlguhh8/u6us6/UYOEEUKM/k5Fpo
-         Vlu0D0iToFcVRxKtele6TALPSAmL5hMgb5+fSN+gOHtJ4LN6eGQlHgiLZ1Iw+Uj7ZL
-         L9TevWzROt5FS0whCr05W6K2dIkfV86JpHh9mMfFaY1+n0h3sDcpNXVvGTNHWGTmE3
-         4aQP9FDmsEZ8Y7cOI1QRYA9fwzVlytukB+nXsr8okmdjuNal8R8iJpduljeT5PeCBK
-         Ef4QjUcU8+Hvw==
-Date:   Thu, 14 Oct 2021 19:07:52 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+        id S232201AbhJOAXP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Oct 2021 20:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231894AbhJOAXO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Oct 2021 20:23:14 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E020DC061570
+        for <linux-next@vger.kernel.org>; Thu, 14 Oct 2021 17:21:08 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x27so34475344lfu.5
+        for <linux-next@vger.kernel.org>; Thu, 14 Oct 2021 17:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=axcc21xdI/dvORlK9JnY4plyzJWNbNS1Oplgc4UgVPQ=;
+        b=Vkna6zOYpmrV6tfJTpvlreMclp67ltxLbYGSiwE+44ex2NwtqiQS8YhV7jr/PeCtNF
+         bIecXGY3fpYF7Q9pPdaUWzd3fjd9PCTU+RsVkROOQnikztXmitWv039xuwlFszGxg5Lw
+         /LRZcYlWN5eQjrYAKVXF1WfuxnIhmYtQj30kaSIgQH6kO31YIjcV5MbB5MX5HjULHXvg
+         BdPn4vtiV+29Y1ce90UjbWU8qEG0Q3/8X+lSWSRzx4IwU2/YjkGP5mXV80vW0T6o/dkg
+         JLtY6iJrK5NmqDpBNibkvByacmoSSoQrvsqE42gOoz/jX8RV7hTDl7Z2u5Kpkqw2Qs1m
+         i0Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=axcc21xdI/dvORlK9JnY4plyzJWNbNS1Oplgc4UgVPQ=;
+        b=yrhwcsS2VvPuLREwVVlv7mXl28DAY5YCvRUIgEH7IGc04wqDcALR0t8UsPzXW4SHVt
+         iXhJxKjknInEDmJT8cTAE/8dDpCtaZZ4uOoWj8z//R7+UnCHGLZQ+C4x3K80z18Tfwg4
+         2PIVyDJpsXIAalMrmHH32nv/rgQNu968Aq2zNfRB0K+OfQ/fNfS56GeUba/bf4bJOE08
+         hBvlqZxEjlx+EaS3+vhdEIiKJZeyhibpCaX/KWMZbNT/d/flSrfWWJwVEatZmIHh+nS9
+         erNaUpZLyB9EVJhmEu8cM6f/DHdxMWcqjVGHzmHI1gHXNWSr0Gb5Yl1EKVyL9ee05R6j
+         t0HQ==
+X-Gm-Message-State: AOAM532M+NieK9Kq0raz1lifBaU3xJQ9uCSrj/xLsNXP8xtloc0sVKI1
+        ZlRy/LTDwf+FhNWRXsBfts4IU1F1OKX+/r6PesZnVA==
+X-Google-Smtp-Source: ABdhPJwNeN0mOd7mY/vsrY80L4MJjAYh7Wko7XKqQaD5V0rIKucUbvX8H4lpmKqsHw9HeLJ5Mhu/GMSZZ3EU7mlTU9M=
+X-Received: by 2002:a2e:b690:: with SMTP id l16mr2155205ljo.112.1634257267086;
+ Thu, 14 Oct 2021 17:21:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211015095327.42344a21@canb.auug.org.au>
+In-Reply-To: <20211015095327.42344a21@canb.auug.org.au>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Thu, 14 Oct 2021 17:20:54 -0700
+Message-ID: <CAHRSSEwR9c1jV_Hy6DbH9aZ5Q02AeR_dkay9W9od0RpiYKdgLg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tags needs some work in the selinux tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>,
+Cc:     Paul Moore <paul@paul-moore.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
-Message-ID: <20211015000752.GA1159064@embeddedor>
-References: <20211015104840.4e1ceb89@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211015104840.4e1ceb89@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen,
-
-On Fri, Oct 15, 2021 at 10:48:40AM +1100, Stephen Rothwell wrote:
+On Thu, Oct 14, 2021 at 3:53 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
 > Hi all,
-> 
-> After merging the kspp-gustavo tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/bpf_verifier.h:9,
->                  from kernel/bpf/verifier.c:12:
-> kernel/bpf/verifier.c: In function 'jit_subprogs':
-> include/linux/filter.h:366:4: error: cast between incompatible function types from 'unsigned int (*)(const void *, const struct bpf_insn *)' to 'u64 (*)(u64,  u64,  u64,  u64,  u64)' {aka 'long long unsigned int (*)(long long unsigned int,  long long unsigned int,  long long unsigned int,  long long unsigned int,  long long unsigned int)'} [-Werror=cast-function-type]
->   366 |   ((u64 (*)(u64, u64, u64, u64, u64))(x))
-[..]
-> 
->   21078041965e ("Makefile: Enable -Wcast-function-type")
-> 
-> I have used the kspp-gustavo tree from next-20211013 for today.
+>
+> In commit
+>
+>   fef994d85ac9 ("binder: use cred instead of task for getsecid")
+>
+> Fixes tag
+>
+>   Fixes: ec74136ded79 ("binder: create node flag to request sender's
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> In commit
+>
+>   d1c927fb8b52 ("binder: use cred instead of task for selinux checks")
+>
+> Fixes tag
+>
+>   Fixes: 79af73079d75 ("Add security hooks to binder and implement the
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> Please do not split Fixes tags over more than one line.
 
-Please, merge my -next tree. All the warnings above are already fixed in
-bpf-next by commit:
+Stephen / Paul - do you want me to upload a new series for this or is
+this something you would normally do since it is a simple change?
 
-	3d717fad5081 ("bpf: Replace "want address" users of BPF_CAST_CALL with BPF_CALL_IMM")
-
-So, once you merge bpf-next, those warnings will go away.
-
-Thanks
---
-Gustavo
+>
+>
+> --
+> Cheers,
+> Stephen Rothwell

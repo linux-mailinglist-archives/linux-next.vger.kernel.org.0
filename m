@@ -2,95 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEF1430CC4
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 00:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E630430CEA
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 01:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbhJQW5k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Oct 2021 18:57:40 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:54683 "EHLO
+        id S233897AbhJQXyG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 17 Oct 2021 19:54:06 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43397 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbhJQW5k (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Oct 2021 18:57:40 -0400
+        with ESMTP id S232246AbhJQXyF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Oct 2021 19:54:05 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXb2837r5z4xbT;
-        Mon, 18 Oct 2021 09:55:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXcHF4dMvz4xbb;
+        Mon, 18 Oct 2021 10:51:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634511328;
-        bh=9WqkwRQu05GrAEfhShhd3twouja2E2uPIdIhfR23DPE=;
+        s=201702; t=1634514714;
+        bh=KjGu3MGXsTCBFX+Z8yAnMd7Gs1S9zeIeL3S5XdiB67s=;
         h=Date:From:To:Cc:Subject:From;
-        b=XvaLieQ6BXF7tl2z4ceCxUVT1Znh8+p9TjL/fbO7Nh+LAcmMMz4vYVwOsGIjLJYZ5
-         Sz7SAuDlcqqD1oa1OEbccMeI093pwdcQestwoMYU3DHv5041QTU/dQta94HzFscxHU
-         0LO0+T2QoqZzGyxLsVUZYWrGMTzts7CI0sBQ6KDX5KtRhez3na4IW3/xU18pTkMlKm
-         5bAnY4UNcQuQ9kfuqUpqhw4J4reATdJ0YRlg7WsvPojZ/OikdFGsA61xR9H3vHPfSA
-         GIcy1OXalTLhNwbgSEcFQwZRr0Y/D0S5QUdwnI0qlZpkMOXGh4gFurxP6Zi1354WwU
-         9kZpOZl3f/4ww==
-Date:   Mon, 18 Oct 2021 09:55:25 +1100
+        b=WleoNlxDPHcZWwn4tP3WO4qsGSfzqAO8CYjan8mQ75oW04t6QRYLC0EF2T5BbC/45
+         9jIfqe1116RYIpPTW9oeeVKDNB+YGXEc4YUScG5ydMbS8ZBvROZ8jza4dp9BGX5OL1
+         B2m6o27M5ReXX5fT/qQtmWPuyyWiqFHrbODzmK/6HCknuNL3J6gD9I42gPIoN1kmCG
+         SvQ2REbdXCRmyyqneM2FTspSxMd2XkFOT0C2+QxpN1GkVZuF4s6ny1rarL3uAnS43z
+         Dq1TnEUCVwXUbFPylffUOxNjARwWEtIxmO9/fqFYQC+djt2pVYKzMTAQeg1gPiDoO+
+         xNlAP2pycox7A==
+Date:   Mon, 18 Oct 2021 10:51:51 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pci tree
-Message-ID: <20211018095525.39bea5b0@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Amit Cohen <amcohen@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20211018105151.16ff248d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0GVZ/qL34XxV3Jm=BrqhzDr";
+Content-Type: multipart/signed; boundary="Sig_/Hs2dpeLF+Nct.9OE+F0tNkI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0GVZ/qL34XxV3Jm=BrqhzDr
+--Sig_/Hs2dpeLF+Nct.9OE+F0tNkI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the pci tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-drivers/misc/cxl/pci.c: In function 'cxl_vphb_error_detected':
-drivers/misc/cxl/pci.c:1816:15: error: assignment discards 'const' qualifie=
-r from pointer target type [-Werror=3Ddiscarded-qualifiers]
- 1816 |   err_handler =3D afu_drv->err_handler;
-      |               ^
-drivers/misc/cxl/pci.c: In function 'cxl_pci_slot_reset':
-drivers/misc/cxl/pci.c:2041:16: error: assignment discards 'const' qualifie=
-r from pointer target type [-Werror=3Ddiscarded-qualifiers]
- 2041 |    err_handler =3D afu_drv->err_handler;
-      |                ^
-drivers/misc/cxl/pci.c: In function 'cxl_pci_resume':
-drivers/misc/cxl/pci.c:2090:16: error: assignment discards 'const' qualifie=
-r from pointer target type [-Werror=3Ddiscarded-qualifiers]
- 2090 |    err_handler =3D afu_drv->err_handler;
-      |                ^
-cc1: all warnings being treated as errors
+  tools/testing/selftests/net/forwarding/forwarding.config.sample
 
-Caused by commit
+between commit:
 
-  115c9d41e583 ("cxl: Factor out common dev->driver expressions")
+  0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig netdev")
 
-I have used the pci tree from next-20211015 for today.
+from the net tree and commit:
+
+  45d45e5323a9 ("testing: selftests: forwarding.config.sample: Add tc flag")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/0GVZ/qL34XxV3Jm=BrqhzDr
+diff --cc tools/testing/selftests/net/forwarding/forwarding.config.sample
+index e5e2fbeca22e,10ce3720aa6f..000000000000
+--- a/tools/testing/selftests/net/forwarding/forwarding.config.sample
++++ b/tools/testing/selftests/net/forwarding/forwarding.config.sample
+@@@ -39,5 -39,6 +39,8 @@@ NETIF_CREATE=3Dye
+  # Timeout (in seconds) before ping exits regardless of how many packets h=
+ave
+  # been sent or received
+  PING_TIMEOUT=3D5
+ +# IPv6 traceroute utility name.
+ +TROUTE6=3Dtraceroute6
++ # Flag for tc match, supposed to be skip_sw/skip_hw which means do not pr=
+ocess
++ # filter by software/hardware
++ TC_FLAG=3Dskip_hw
+
+--Sig_/Hs2dpeLF+Nct.9OE+F0tNkI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFsqd0ACgkQAVBC80lX
-0GxqVgf+K7FkvcKIuK5pWKGVpCdnKYZO/zK11tlc7Tiy/xFwhvmvCVP6UqYTTpgQ
-mqOgGr0+adM0s0Yu3RQ3etFUC7DlAEHZKM38a6RWRmsSxID3p3Z5n1ZZSTaKUjMM
-ZpUjOobiexf2fHKDDcThPuwoiRUuTQueYHT9jikupt/yo8wC3uR3b683xfS9kuGD
-rVjUXUFZy+d3z0/o4udTUyKC6zxsla3RhSwtmxkVL6U4Dyq1DBpwzaiBRI9T1dXf
-W+hGT1nxYgWgzZOU7dqfvtGSqdr9QpTTYs9m1gO9fELiiq+ZlIWF4boQbJa4ybqJ
-hqLeOLyU/80/oaLwODbkxccpnJWv2g==
-=zioy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFstxcACgkQAVBC80lX
+0GxDSggAil9dModuqoVIsb9QsFofJDbAHjD0IrUra0WWOLvoB280SlYPRxZLD21J
+dhw+gnoT5HvobYdK6/CqHXT0if8vYhEwwXtR8EDxtUUyBHpYBbA9KdJIhKCuUhVR
+/p5r+3USy09QcVA27nGUhw+t59kpVOlvs41YVgjoyx1rEzOYcXKULrK2AC4VdGnV
+debRzkkBkW2m7MKDfQoOSiN3MLx+iLMETHNk9cCXtiPq9/2Ju+fd2NKj3eI6SEW5
+U8TlewuQfeHOOfKy79SVo23V0NxePsr8Dyv77f6IguX+beRKi0FC12x1cZnHSD3j
+Yg2m5Zc/tRMxD+3i3JgU+qousVaMWQ==
+=vWlO
 -----END PGP SIGNATURE-----
 
---Sig_/0GVZ/qL34XxV3Jm=BrqhzDr--
+--Sig_/Hs2dpeLF+Nct.9OE+F0tNkI--

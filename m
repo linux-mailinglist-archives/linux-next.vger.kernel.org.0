@@ -2,94 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714DD431023
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 08:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41ABA431072
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 08:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbhJRGHb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 02:07:31 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:57759 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229533AbhJRGHb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 Oct 2021 02:07:31 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 432EA5C018A;
-        Mon, 18 Oct 2021 02:05:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 18 Oct 2021 02:05:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=BiWPny
-        J/W+lzFpsP4kXiVnmaGa3SLmP1Bl/bcwhD1UY=; b=jTIEOoHVnEUayQTRbpBaan
-        KefSyLPT/gZ0EiuNiOapntqTTPkqYio3JmgOloaCx3e4sU+hd0V/y5FxRXP9HIPu
-        A54sU4ZrXPcjQ1hRxafJh9qP024Q2616V6N/WC2s9X2ZmNB+hFax0BcN8wB4w3ek
-        o9qnoNi3XbYuJncE0xtMxTLysb2VOW27OnI/o08tXSZejhIJn1rkj0YkdSoZ22V7
-        6WEr+RCt0zDkAd/9FqJ4iQHSl4gWWGkyJLcRoquuMm/LMkCZpHsHmT8Jv93A0PHi
-        tEvXapuHF6jwcfykmEX84b1Un7L4LK6eK3TgL1mYtEILp7kjX/CaliKmcsUpc2iw
-        ==
-X-ME-Sender: <xms:nw5tYQuMs9U2jAGVK_xSHsTk4MnS5gjxAIRdK8GIS6c-v-w0goNXrQ>
-    <xme:nw5tYdeeXjlsXEmHBnU_UvfwJ99-aWbImKXmwRNSLeuaofGqqmq9w_FRE9STFO5Pe
-    yjiNGvRGTkdJAI>
-X-ME-Received: <xmr:nw5tYbwjk0cuXPmMGi-P7y-BAXC5IYyD157vQ_TcDFG_RZalCKPAV7i1wgKqMsIEu8mg7LRvqY3s3j5xMoEJtFAZf-Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdduledgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:nw5tYTOL9OmZ3PmAMXice8QF5qxTlVKZ3hNoYa7QdOkSDSUL6jeUVw>
-    <xmx:nw5tYQ_bdhsiXEhrm2RcsiX3UpYQoylGnI77afAQ7NZxqH3mFXu94Q>
-    <xmx:nw5tYbVbJe_c0he6UmVNlhr_1mv5yuUL-apqehzF-dy2hY0pVdYjww>
-    <xmx:oA5tYQwKGOqfRk3kOFQge4C_N9Ejxk1nQBZ6SnT6AknJ0_w8_GeG1Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 18 Oct 2021 02:05:19 -0400 (EDT)
-Date:   Mon, 18 Oct 2021 09:05:14 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S229848AbhJRGZp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 02:25:45 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54089 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230209AbhJRGZp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 02:25:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXmz76vZ3z4xbb;
+        Mon, 18 Oct 2021 17:23:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634538213;
+        bh=wFfQjUVSlELzOvVkwtPiuSslpY32vT0yZ5KFAyxwfJM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S2I3769UHtKQSIKjlTtREtiNO0V3mWxbx49CH93im3taeevNTKwv8PEXecm1SbfpY
+         /dCyNXtI3OnY0532lvk4yiBpXN86+q0XWaWxF62TUKD3aRAKsBa4hFUzJzRs9LRwGq
+         nq7Mh+PGQWwx2a0RtgG0DhdQLZ3xIS53kkOW37sMDEtobSckGhzhyNHRRwY6VyVN+t
+         ITO/SqDo+IcHqf/frL9UgsLiNxk3joeAdVJKdhCRx5dL9ooRqc/PvgCSVD8J6I5CT9
+         yL6jwSJ2XGQgeMMyNe0BJjO8lX0FO0b21beHVnaKBW2E7e5Xu3Sy5mtnf7P7XXsIJB
+         b9ILZHynV9A/g==
+Date:   Mon, 18 Oct 2021 17:23:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <YW0OmrRN0uFc6oiz@shredder>
-References: <20211018105151.16ff248d@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20211018172330.379b2061@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211018105151.16ff248d@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/iea/yGZ+7Qs/j230w26yVX1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 10:51:51AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the net-next tree got a conflict in:
-> 
->   tools/testing/selftests/net/forwarding/forwarding.config.sample
-> 
-> between commit:
-> 
->   0857d6f8c759 ("ipv6: When forwarding count rx stats on the orig netdev")
-> 
-> from the net tree and commit:
-> 
->   45d45e5323a9 ("testing: selftests: forwarding.config.sample: Add tc flag")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/iea/yGZ+7Qs/j230w26yVX1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Looks good to me. Thanks!
+Hi all,
+
+After merging the tip tree, today's linux-next build (x86_64 allnoconfig)
+failed like this:
+
+arch/x86/kernel/process.c: In function '__get_wchan':
+arch/x86/kernel/process.c:950:2: error: implicit declaration of function 's=
+tack_trace_save_tsk' [-Werror=3Dimplicit-function-declaration]
+  950 |  stack_trace_save_tsk(p, &entry, 1, 0);
+      |  ^~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+
+Caused by commit
+
+  bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
+
+stack_trace_save_tsk() requires CONFIG_STACKTRACE which is not set for
+this build.
+
+I have reverted that commit, and commit
+
+  42a20f86dc19 ("sched: Add wrapper for get_wchan() to keep task blocked")
+
+which follows it, for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iea/yGZ+7Qs/j230w26yVX1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFtEuIACgkQAVBC80lX
+0GyLewf+JxIj44eOOvF0/ffEXEESx61ZtHmzjJJrILL8JDr5NJz3eQKe211B9IzM
+OqHEGZOTuFiJx0sp1hrOYFpeoi3Dm7ebVk7c5M2vQczwGBgfIT2R+y266Pfb30Ed
+zMdEH34D28vakMHb5Ts7yl9wevpPoA3/mJgxiAHCjWAH3xMwRAHUg9Oi8+NEXgF+
+PctvZaxODWGhkQXYNmPmSdx1fPguUO2TDHtIjZwhfp/TYQLvCw8Pzwtd7q8Ar8sp
+Hf3tYgBaESppjPA4IFuablPhZXZKUUJclEYkLMEJKQ8H+fnWYS3EC5D/1m2uohjt
+eIuddEBm+qvm1nGwSGhUlq8VG2t3Sg==
+=0fe8
+-----END PGP SIGNATURE-----
+
+--Sig_/iea/yGZ+7Qs/j230w26yVX1--

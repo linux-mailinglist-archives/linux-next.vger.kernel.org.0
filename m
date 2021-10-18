@@ -2,156 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1597B430DDD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 04:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5BC430F59
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 06:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237767AbhJRChy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Oct 2021 22:37:54 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:57085 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbhJRChx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 17 Oct 2021 22:37:53 -0400
+        id S229600AbhJRExe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 00:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbhJRExd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 00:53:33 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91FBC06161C;
+        Sun, 17 Oct 2021 21:51:22 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXgwD4C5bz4xbL;
-        Mon, 18 Oct 2021 13:35:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXkwh29Rbz4xbT;
+        Mon, 18 Oct 2021 15:51:16 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634524541;
-        bh=ei5+KbAdb1qdjYIroNHcJtk+ULUrHithw8AGM+I+Hes=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cGquabEpNei/vw8wXdsbaB5JUu95HQ2fw/s8bd905HYskuBtvcvdNRl/JGl4XLjr9
-         qxFPlMXuBbG/TryF46sHTIbW4FMqi8PGZScG/7bHw/Vz9rwIoytyjB6ezQSWeI6SYw
-         yWIWsfks7hjxYuNSxI1FXlMZr0Iz6q7SVnTwZYdSOVdcD3kSWlRdbKCBTmiYTwMZgc
-         oF64LalBmF3dx+LKTlsoKv2LA5Bxe1s8DOB1jnRxd5VFv8Gbv8K565gvlkMrdoLX2m
-         HUd58cyFGn231sx7BzrCQOmOipsf0zeKtQs1DG56++JDpF48k5IDIauk6ZuNmBYh8M
-         1fTo8eIHULuPA==
-Date:   Mon, 18 Oct 2021 13:35:38 +1100
+        s=201702; t=1634532680;
+        bh=6zAiMGt9lN3fX/YpWxecPHWsTqnDTeNDIYa0BPeLy5s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fW4c7a4S/JgodkeUS5uKVtw8Q4E3ao37mrDmKYENGIKvDmHGQey+1kYSbznxuC2jN
+         +R1BbKYoCf20pZgPrc3++8oCq3NIEf+fKQjdkNNKuV/0iciMqpO/H4xCXXt6aySG6E
+         lgblEFmvcyvR2s9cWE625J+uCGyfWrLYAdH+XaX3cQrZX0jUPc76JkTeizvxmYXR8M
+         ec+oxNixp4voipZj1qrECGmfKnu5hiviVUT8EKuuFr4/nf656dnyBAiwXfo8cfIgqo
+         P+s2sBOceoCxGgieQO4uTfaiLGoKAYxRitm/VByYu0zH2Wf4mpjvBQH/EEPmYzHeAM
+         +VTaOnI3aknoA==
+Date:   Mon, 18 Oct 2021 15:51:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Fox Chen <foxhlchen@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20211018133538.2a0dec43@canb.auug.org.au>
-In-Reply-To: <YWl+0PFixaNqgIxb@smile.fi.intel.com>
-References: <20211015202908.1c417ae2@canb.auug.org.au>
-        <YWl+0PFixaNqgIxb@smile.fi.intel.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: linux-next: manual merge of the rust tree with the bpf-next tree
+Message-ID: <20211018155113.1303fa5e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7vcLm23FUTr0AN8x54MuUun";
+Content-Type: multipart/signed; boundary="Sig_/czlDD6Zf2uoH0zh=yDxuLMx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7vcLm23FUTr0AN8x54MuUun
+--Sig_/czlDD6Zf2uoH0zh=yDxuLMx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Hi all,
 
-On Fri, 15 Oct 2021 16:14:56 +0300 Andy Shevchenko <andriy.shevchenko@linux=
-.intel.com> wrote:
->
-> Thanks! As a quick fix looks good, but I think we need a separate header =
-for
-> those _*_IP_ macros.
+Today's linux-next merge of the rust tree got a conflict in:
 
-Like this (on top of my previous fix - which I assume Andrew will
-squash out of existence)?
+  scripts/Makefile.modfinal
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 18 Oct 2021 13:27:54 +1100
-Subject: [PATCH] kernel.h: split out instrcutions pointer accessors
+between commit:
 
-botton_half.h needs _THIS_IP_ to be standalone, so split that and _RET_IP_
-out from kernel.h into the new instruction_pointer.h.  kernel.h directly
-needs them, so include it there and replace the include of kernel.h with
-this new file in bottom_half.h.
+  0e32dfc80bae ("bpf: Enable TCP congestion control kfunc from modules")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/bottom_half.h         | 2 +-
- include/linux/instruction_pointer.h | 8 ++++++++
- include/linux/kernel.h              | 4 +---
- 3 files changed, 10 insertions(+), 4 deletions(-)
- create mode 100644 include/linux/instruction_pointer.h
+from the bpf-next tree and commit:
 
-diff --git a/include/linux/bottom_half.h b/include/linux/bottom_half.h
-index 11d107d88d03..fc53e0ad56d9 100644
---- a/include/linux/bottom_half.h
-+++ b/include/linux/bottom_half.h
-@@ -2,7 +2,7 @@
- #ifndef _LINUX_BH_H
- #define _LINUX_BH_H
-=20
--#include <linux/kernel.h>
-+#include <linux/instruction_pointer.h>
- #include <linux/preempt.h>
-=20
- #if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_TRACE_IRQFLAGS)
-diff --git a/include/linux/instruction_pointer.h b/include/linux/instructio=
-n_pointer.h
-new file mode 100644
-index 000000000000..19e979425bda
---- /dev/null
-+++ b/include/linux/instruction_pointer.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_INSTRUCTION_POINTER_H
-+#define _LINUX_INSTRUCTION_POINTER_H
-+
-+#define _RET_IP_		(unsigned long)__builtin_return_address(0)
-+#define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-+
-+#enfif /* _LINUX_INSTRUCTION_POINTER_H */
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 973c61ff2ef9..be84ab369650 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -20,6 +20,7 @@
- #include <linux/printk.h>
- #include <linux/build_bug.h>
- #include <linux/static_call_types.h>
-+#include <linux/instruction_pointer.h>
- #include <asm/byteorder.h>
-=20
- #include <uapi/linux/kernel.h>
-@@ -53,9 +54,6 @@
- }					\
- )
-=20
--#define _RET_IP_		(unsigned long)__builtin_return_address(0)
--#define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
--
- /**
-  * upper_32_bits - return bits 32-63 of a number
-  * @n: the number we're accessing
---=20
-2.33.0
+  c862c7fee526 ("Kbuild: add Rust support")
 
-There are, presumably, other places this new file can be included ...
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7vcLm23FUTr0AN8x54MuUun
+diff --cc scripts/Makefile.modfinal
+index 1fb45b011e4b,c0842e999a75..000000000000
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@@ -39,11 -39,12 +39,13 @@@ quiet_cmd_ld_ko_o =3D LD [M]  $
+ =20
+  quiet_cmd_btf_ko =3D BTF [M] $@
+        cmd_btf_ko =3D 							\
+- 	if [ -f vmlinux ]; then						\
++ 	if [ ! -f vmlinux ]; then					\
++ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux=
+\n" $@ 1>&2; \
++ 	elif $(srctree)/scripts/is_rust_module.sh $@; then 		\
++ 		printf "Skipping BTF generation for %s because it's a Rust module\n" $@=
+ 1>&2; \
++ 	else								\
+  		LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J --btf_base vmlinux $@; \
+ +		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+- 	else								\
+- 		printf "Skipping BTF generation for %s due to unavailability of vmlinux=
+\n" $@ 1>&2; \
+  	fi;
+ =20
+  # Same as newer-prereqs, but allows to exclude specified extra dependenci=
+es
+
+--Sig_/czlDD6Zf2uoH0zh=yDxuLMx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFs3XoACgkQAVBC80lX
-0GxsGQf/QYDOeiXb+RzZNGiZy3/fiIWwphCpUOBuVsFrdX7y0Bt0oQkt3SSEWxuF
-XeBiRO/sGINEicmFE3rxBTKVOeZgow3Xhlghr8+n8lOvnwTBK0YVDLNpYMKPVMe6
-AN4k3bIe3lar1udAENbwHY4slyGJxWYMgx87XVGDxkgvaTTkLN+Tln3M0c708D+4
-DRnaOuit0XIG0lnJVqTLbaaEbuNrergKG5rnKN86hdW16plx2XfWW/02999NykMe
-MH/StTcnYJ7nP4OtzgFO2kyz0wYx+/CGHd3IDUU0BcZHgOFRdxk4wPdDPyktjsmB
-wrRr+i/c+oU/kX5380sXDjnW71zB/A==
-=EyBf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFs/UIACgkQAVBC80lX
+0GxNKgf+OIlNISH1VEOt5ZFH7WDK6buIRBYIG2BHwHx1dUiyJMiMHktLCMlDJ36L
+Z8J8FubHOY7GCUz5OC3UBISL5xq6kBvKi8/Hw0synGDkIeKXl17KP+AbBfwxwOWo
+leeUZg7rXERwRjJymxwluVtqexBGkOJVN7iADHDrxPpbgHjBgsAkVi4MtgT4AQPG
+RdXRE/ody2JDMd86XFJY+0gao4ruhK6EDjtFUjtmqFG969aSILrE2AzUJNypY6SD
+d35lCGJwsxVQ9xhCoyQIziOfaNicJJoKe5I8dlvnGH5Vh6hE1+5qD/20QPwIZArq
+mIWpExST/gS8FYz1iTuvDxgO0Vnn5Q==
+=KBES
 -----END PGP SIGNATURE-----
 
---Sig_/7vcLm23FUTr0AN8x54MuUun--
+--Sig_/czlDD6Zf2uoH0zh=yDxuLMx--

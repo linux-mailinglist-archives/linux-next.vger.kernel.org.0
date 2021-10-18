@@ -2,159 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EF14310A4
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 08:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047EC4310C9
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 08:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbhJRGjV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 02:39:21 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:56926 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbhJRGjV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 02:39:21 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8EB2921A6B;
-        Mon, 18 Oct 2021 06:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1634539029; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=axkVwMCJWGOjTC2SPYws1bBoVFyPgvGOg+EGo3bGeEc=;
-        b=G1in2rQNCWV3Zq4oJ6CRFZnWQxNt2qNX6fSByLuILS+S1XH0lH9uKsnraRDjnJfuCe5qeY
-        B4927tstZNkRhXvhI5kWRaR0rK+mbMjs4ut3vXNgZvfUG8IN4yfVs/FtaGAmiXinjC71n4
-        FOZRkd9jKV9aVgykAFoGjX+7HZE6r7Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1634539029;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=axkVwMCJWGOjTC2SPYws1bBoVFyPgvGOg+EGo3bGeEc=;
-        b=i17mdPTgwkhGgZKMOWKjtKWlcS4xFcE0jm0FwMDn+/5p9aFKlig5xgLY4lhRrQAOdKE7DZ
-        /LyMi5GKmMIlrtBA==
-Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 7AB09A3B84;
-        Mon, 18 Oct 2021 06:37:09 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     alsa-devel@alsa-project.org
-Cc:     Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: firewire: Fix C++ style comments in uapi header
-Date:   Mon, 18 Oct 2021 08:37:00 +0200
-Message-Id: <20211018063700.30834-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.26.2
+        id S230260AbhJRGr3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 02:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230169AbhJRGr3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 02:47:29 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883E8C061745
+        for <linux-next@vger.kernel.org>; Sun, 17 Oct 2021 23:45:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id np13so11510297pjb.4
+        for <linux-next@vger.kernel.org>; Sun, 17 Oct 2021 23:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=DMgduQp/zctdpl9lhlJhxC+AafmDlkmeR4lQyrVCvzo=;
+        b=x6Y7c7k3AJYf36wkRA5SCf7htdnB2MWJ9QSVU//V2tRmYIUGDbjUNDPzFHs9/NG2oM
+         zZ8xVHXauaMicyUFZdKu9PswlyuLU9QXCwqptXo3KLTidDqalgbnjhkepyjRi78k80wj
+         vNK4QxxhHLv7hZL1LPFsdtSH+jEfRj9NpYtFk5E1KJ5O9cPdSgFKezbgUH7MZ0J3TvwA
+         vuuc/sXGt6lmK7KCDQ+5oDjEsX0nUAoZpTPPA07lg48+y/OtbzV+VJeIvX98+9xZa/ys
+         xqJVwsstLX93bnMkVXT8rUTdMmNjQUB+ZaVyTqbt4uFO/vF/uF3ItpVNuiXqNvyKox4j
+         tlXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=DMgduQp/zctdpl9lhlJhxC+AafmDlkmeR4lQyrVCvzo=;
+        b=Uy9gps9lMCTVuYfITTIbNYYR47HoD6vZLQdFk2IqKQwDEB3AFkmeLsD7SXbepXqr/m
+         KDhG+sXuqrQ+t16qfaaJi0+wZ3jGc7z+HjjFvrR6ZhTxfLY2kudA3QTIbv2f7OgEbrvB
+         JhC+m0iHB+NUHlHw+Q6QrKjVE0508u/Uy/K4UU17e7TRp7uOgvdRUbtT57hoMr22hSAP
+         zuV0SYVosXslFvH7GTKcZHUY1FuLAidilNrM0b41cJw0CslW5u8WlGGo9F0Um7I9QzW7
+         6y+fXZtCPONAh2v35f7V10SWuFtvXNhrGjFw3+aTpAt/yZBrJ1NFXj6AfHKNDj9WawFy
+         C/Sg==
+X-Gm-Message-State: AOAM531VC6p+QQpQcdtWhi1zDI4I40DGf6FBljfqZOKPXLQ5zfWkaET8
+        zmdac142X60CNcWqjy70q0qwAwYOwTO2Zw==
+X-Google-Smtp-Source: ABdhPJxzRqRGRAo5ZS+zVyWfl14FoNKeNRQcRdvzrhyL28TL3zUalpTt6j9ZLaDRJ6uNhicwzmaNzg==
+X-Received: by 2002:a17:90a:a24:: with SMTP id o33mr3756210pjo.229.1634539517708;
+        Sun, 17 Oct 2021 23:45:17 -0700 (PDT)
+Received: from [10.254.242.85] ([139.177.225.252])
+        by smtp.gmail.com with ESMTPSA id t38sm7903771pfg.102.2021.10.17.23.45.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Oct 2021 23:45:17 -0700 (PDT)
+Subject: linux-next: build failure after merge of the tip tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211018172330.379b2061@canb.auug.org.au>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+Message-ID: <60e736e7-cc37-9fea-a0fb-6628f87e741c@bytedance.com>
+Date:   Mon, 18 Oct 2021 14:45:12 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211018172330.379b2061@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-UAPI headers are built with -std=c90 and C++ style comments are
-explicitly prohibited.  The recent commit overlooked the rule and
-caused the error at header installation.  This patch corrects those.
 
-Fixes: bea36afa102e ("ALSA: firewire-motu: add message parser to gather meter information in register DSP model")
-Fixes: 90b28f3bb85c ("ALSA: firewire-motu: add message parser for meter information in command DSP model")
-Fixes: 634ec0b2906e ("ALSA: firewire-motu: notify event for parameter change in register DSP model")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Link: https://lore.kernel.org/r/20211018113812.0a16efb0@canb.auug.org.au
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- include/uapi/sound/firewire.h | 70 ++++++++++++++++++-----------------
- 1 file changed, 37 insertions(+), 33 deletions(-)
 
-diff --git a/include/uapi/sound/firewire.h b/include/uapi/sound/firewire.h
-index 76190a0cb069..e52a97b3ceaa 100644
---- a/include/uapi/sound/firewire.h
-+++ b/include/uapi/sound/firewire.h
-@@ -68,8 +68,8 @@ struct snd_firewire_event_tascam_control {
- 
- struct snd_firewire_event_motu_register_dsp_change {
- 	unsigned int type;
--	__u32 count;		// The number of changes.
--	__u32 changes[];	// Encoded event for change of register DSP.
-+	__u32 count;		/* The number of changes. */
-+	__u32 changes[];	/* Encoded event for change of register DSP. */
- };
- 
- union snd_firewire_event {
-@@ -119,25 +119,27 @@ struct snd_firewire_tascam_state {
- 	__be32 data[SNDRV_FIREWIRE_TASCAM_STATE_COUNT];
- };
- 
--// In below MOTU models, software is allowed to control their DSP by accessing to registers.
--//  - 828mk2
--//  - 896hd
--//  - Traveler
--//  - 8 pre
--//  - Ultralite
--//  - 4 pre
--//  - Audio Express
--//
--// On the other hand, the status of DSP is split into specific messages included in the sequence of
--// isochronous packet. ALSA firewire-motu driver gathers the messages and allow userspace applications
--// to read it via ioctl. In 828mk2, 896hd, and Traveler, hardware meter for all of physical inputs
--// are put into the message, while one pair of physical outputs is selected. The selection is done by
--// LSB one byte in asynchronous write quadlet transaction to 0x'ffff'f000'0b2c.
--//
--// I note that V3HD/V4HD uses asynchronous transaction for the purpose. The destination address is
--// registered to 0x'ffff'f000'0b38 and '0b3c by asynchronous write quadlet request. The size of
--// message differs between 23 and 51 quadlets. For the case, the number of mixer bus can be extended
--// up to 12.
-+/*
-+ * In below MOTU models, software is allowed to control their DSP by accessing to registers.
-+ *  - 828mk2
-+ *  - 896hd
-+ *  - Traveler
-+ *  - 8 pre
-+ *  - Ultralite
-+ *  - 4 pre
-+ *  - Audio Express
-+ *
-+ * On the other hand, the status of DSP is split into specific messages included in the sequence of
-+ * isochronous packet. ALSA firewire-motu driver gathers the messages and allow userspace applications
-+ * to read it via ioctl. In 828mk2, 896hd, and Traveler, hardware meter for all of physical inputs
-+ * are put into the message, while one pair of physical outputs is selected. The selection is done by
-+ * LSB one byte in asynchronous write quadlet transaction to 0x'ffff'f000'0b2c.
-+ *
-+ * I note that V3HD/V4HD uses asynchronous transaction for the purpose. The destination address is
-+ * registered to 0x'ffff'f000'0b38 and '0b3c by asynchronous write quadlet request. The size of
-+ * message differs between 23 and 51 quadlets. For the case, the number of mixer bus can be extended
-+ * up to 12.
-+ */
- 
- #define SNDRV_FIREWIRE_MOTU_REGISTER_DSP_METER_COUNT	40
- 
-@@ -219,18 +221,20 @@ struct snd_firewire_motu_register_dsp_parameter {
- 	__u8 reserved[64];
- };
- 
--// In below MOTU models, software is allowed to control their DSP by command in frame of
--// asynchronous transaction to 0x'ffff'0001'0000:
--//
--//  - 828 mk3 (FireWire only and Hybrid)
--//  - 896 mk3 (FireWire only and Hybrid)
--//  - Ultralite mk3 (FireWire only and Hybrid)
--//  - Traveler mk3
--//  - Track 16
--//
--// On the other hand, the states of hardware meter is split into specific messages included in the
--// sequence of isochronous packet. ALSA firewire-motu driver gathers the message and allow userspace
--// application to read it via ioctl.
-+/*
-+ * In below MOTU models, software is allowed to control their DSP by command in frame of
-+ * asynchronous transaction to 0x'ffff'0001'0000:
-+ *
-+ *  - 828 mk3 (FireWire only and Hybrid)
-+ *  - 896 mk3 (FireWire only and Hybrid)
-+ *  - Ultralite mk3 (FireWire only and Hybrid)
-+ *  - Traveler mk3
-+ *  - Track 16
-+ *
-+ * On the other hand, the states of hardware meter is split into specific messages included in the
-+ * sequence of isochronous packet. ALSA firewire-motu driver gathers the message and allow userspace
-+ * application to read it via ioctl.
-+ */
- 
- #define SNDRV_FIREWIRE_MOTU_COMMAND_DSP_METER_COUNT	400
- 
--- 
-2.26.2
+On 10/18/21 2:23 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (x86_64 allnoconfig)
+> failed like this:
+> 
+> arch/x86/kernel/process.c: In function '__get_wchan':
+> arch/x86/kernel/process.c:950:2: error: implicit declaration of function 'stack_trace_save_tsk' [-Werror=implicit-function-declaration]
+>    950 |  stack_trace_save_tsk(p, &entry, 1, 0);
+>        |  ^~~~~~~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
+> 
+> Caused by commit
+> 
+>    bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
+> 
+> stack_trace_save_tsk() requires CONFIG_STACKTRACE which is not set for
+> this build.
 
+Maybe get_wchan() can be updated to:
+
+unsigned long get_wchan(struct task_struct *p)
+{
+#ifdef CONFIG_STACKTRACE
+	unsigned long entry = 0;
+
+	stack_trace_save_tsk(p, &entry, 1, 0);
+	return entry;
+#else /* CONFIG_STACKTRACE */
+	return 0;
+#endif
+}
+
+Thanks,
+Qi
+
+> 
+> I have reverted that commit, and commit
+> 
+>    42a20f86dc19 ("sched: Add wrapper for get_wchan() to keep task blocked")
+> 
+> which follows it, for today.
+> 

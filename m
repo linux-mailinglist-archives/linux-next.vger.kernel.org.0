@@ -2,84 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1621B43288D
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 22:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EBE432899
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 22:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbhJRUnf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 16:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S229544AbhJRUuX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 16:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbhJRUnc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 16:43:32 -0400
+        with ESMTP id S229709AbhJRUuV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 16:50:21 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42580C06161C;
-        Mon, 18 Oct 2021 13:41:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62350C06161C;
+        Mon, 18 Oct 2021 13:48:09 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HY80v5v87z4xbP;
-        Tue, 19 Oct 2021 07:41:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HY88l6Tzgz4xbb;
+        Tue, 19 Oct 2021 07:48:07 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634589680;
-        bh=h5mqZCkGGQIMnUa8fz7ccWbQq7gWUaHg7i5STy2aJIs=;
+        s=201702; t=1634590088;
+        bh=YT7M4csQgCRnGXVeGaF8mV6PLKkcLRquanAzqTzaxxQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=t2KNzf9r/5KcDCAZAkQWTrfGjIkASw6wId1v+NshgRGBjST2cnBw0a/LL/gXv/WJK
-         N7knBvogqiZHQLh2+DENCG2J+9dkup4i0kDDX5RwasmNdUPNEHbG/0MuifQ7dN7wf9
-         TWLplDhfs6hQDSYfTF5slXv4ZjlGSwzg670Et8ZE0iln0m9G7jfWSkMgdkfoeWvn8A
-         kUTUzmCk3aCZTsvq1QA1CjhY4/RzLeU4bM5GsaZE2w75KI77SubmMx67/M7U/3tCSk
-         J+h2HtooLTSIkjnDpYrraGR7Q9/do48OaNA5XZudpEEln3pdaeda2nDY9BP3Dc/Nhz
-         iCFBYNIHtki4g==
-Date:   Tue, 19 Oct 2021 07:41:19 +1100
+        b=EGT8LlnMS25LWHyf1zN4RqApdJSlDADwGVU0iRPIgZ/l4euKBhgGB4nLbnej72lal
+         C1G3cmSDfI7dC4QkCNVODcALszsns++vK3Ch1Yhuat32BUFtsEr46YBaPEN8MatwMK
+         5OulOc0Pbykr6qQIcidAsihTK3yB1n3kOBajsC7lWvayxzo5DCxJ1LjiIhken/ICZ7
+         cmx+WrVHc0EXaeTEkvfJgDGfOWgOjhmft5c4QyIOGll9G3UTbc8JT2a7vrbw+AHZ8o
+         67dK59dLvxykH6OHNTrA1AED68A5sUDg5guXryD5VautEv3EsCZ9ZV3iyMP+dk3pvu
+         YctqUoY15+XyQ==
+Date:   Tue, 19 Oct 2021 07:48:06 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the scsi-mkp tree
-Message-ID: <20211019074119.6e180896@canb.auug.org.au>
+Subject: linux-next: Signed-off-by missing for commits in the block tree
+Message-ID: <20211019074806.4bb0cbcc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fuIV8MTANc.=PpBsb.hLN53";
+Content-Type: multipart/signed; boundary="Sig_/6+iN67ftml+l+RBtQPel8Ht";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fuIV8MTANc.=PpBsb.hLN53
+--Sig_/6+iN67ftml+l+RBtQPel8Ht
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the scsi-mkp tree, today's linux-next build (htmldocs)
-produced this warning:
+Commits
 
-drivers/scsi/scsi_scan.c:129: warning: Function parameter or member 'dev' n=
-ot described in 'scsi_enable_async_suspend'
+  e036488d8a4a ("md: update superblock after changing rdev flags in state_s=
+tore")
+  3a79dfe0318e ("md: remove unused argument from md_new_event")
+  b6f5737bc4f2 ("md/raid5: call roundup_pow_of_two in raid5_run")
+  57644bef4efb ("md/raid1: use rdev in raid1_write_request directly")
+  7d5f9b337c20 ("md/raid1: only allocate write behind bio for WriteMostly d=
+evice")
+  78eef929e8a5 ("md: properly unwind when failing to add the kobject in md_=
+alloc")
+  c57a1efbeadb ("md: extend disks_mutex coverage")
+  a1094e65cde0 ("md: add the bitmap group to the default groups for the md =
+kobject")
+  96c85588b9b6 ("md: add error handling support for add_disk()")
 
-Introduced by commit
+are missing a Signed-off-by from their committer.
 
-  a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async p=
-ower management")
+Rebased?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fuIV8MTANc.=PpBsb.hLN53
+--Sig_/6+iN67ftml+l+RBtQPel8Ht
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFt2+8ACgkQAVBC80lX
-0GxxmQf/SR8ah6PsNLSd09STuDR06IgyWf7Wcv6+sKu2PhjqLT3gR2k496rq/ai/
-2qb7KLuKlOY8aly9F0P5cYjyzBC88thaKqjMo/1XLYnJ+coTUasafk9UHcw1VGYJ
-/UeWFyWOChhxMsLIV7AvSwtBoxUOY964nhMNOQlS5MCs1po0yd3Dq+Ugn2jWztzx
-i0vSLSf2A82Go0Z0m/HgSoY6vnrz/ciCwVteYPAgC5xYF8zkUuL2Ui2rroq0RawT
-gRhs6Bz7TW398VoI6ycM55wPvcG8UvlRcht9fYGK/UQBd6SFoCJ451LBYcuu5Z+8
-qeDrdyJGpbCNU/3z0qDHZvBPKEWKSA==
-=ah0y
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFt3YYACgkQAVBC80lX
+0Gxn4Af9FiKpjqWRLArzEx8kIDaTypBo83aJO3QxwA/pCleaIW6a6rRffV9UgqOX
+ohbIsvFlL1qPorSto623MM+NSzkqg9TYaHD09VHku5KhOqBKNUD30LdKGhyAOlo4
+tSidhPKUqpBwI5FUS9ixYlPw2TfX10NVqoGL83E5bSaONwxARKItF6QoupHeKKiZ
+Tfq3MMNiD3avgkFnl5BYX4+WURMO05jW0KUHjKau+Em+qdoB7yQYF1Zn+D4XvgZB
+cLQAMpyfnXy2R3U4267CfIkTfpaGSz9Mf0V2er9LYVpQpEVYwXX8UvBvBNWeoR3T
+x1o/Oj5NT5FmxRg6VqqXlmjAwTiS3A==
+=bHzh
 -----END PGP SIGNATURE-----
 
---Sig_/fuIV8MTANc.=PpBsb.hLN53--
+--Sig_/6+iN67ftml+l+RBtQPel8Ht--

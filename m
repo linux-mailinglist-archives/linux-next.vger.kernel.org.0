@@ -2,116 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 047EC4310C9
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 08:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064C643113E
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 09:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbhJRGr3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 02:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbhJRGr3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 02:47:29 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883E8C061745
-        for <linux-next@vger.kernel.org>; Sun, 17 Oct 2021 23:45:18 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id np13so11510297pjb.4
-        for <linux-next@vger.kernel.org>; Sun, 17 Oct 2021 23:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=DMgduQp/zctdpl9lhlJhxC+AafmDlkmeR4lQyrVCvzo=;
-        b=x6Y7c7k3AJYf36wkRA5SCf7htdnB2MWJ9QSVU//V2tRmYIUGDbjUNDPzFHs9/NG2oM
-         zZ8xVHXauaMicyUFZdKu9PswlyuLU9QXCwqptXo3KLTidDqalgbnjhkepyjRi78k80wj
-         vNK4QxxhHLv7hZL1LPFsdtSH+jEfRj9NpYtFk5E1KJ5O9cPdSgFKezbgUH7MZ0J3TvwA
-         vuuc/sXGt6lmK7KCDQ+5oDjEsX0nUAoZpTPPA07lg48+y/OtbzV+VJeIvX98+9xZa/ys
-         xqJVwsstLX93bnMkVXT8rUTdMmNjQUB+ZaVyTqbt4uFO/vF/uF3ItpVNuiXqNvyKox4j
-         tlXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=DMgduQp/zctdpl9lhlJhxC+AafmDlkmeR4lQyrVCvzo=;
-        b=Uy9gps9lMCTVuYfITTIbNYYR47HoD6vZLQdFk2IqKQwDEB3AFkmeLsD7SXbepXqr/m
-         KDhG+sXuqrQ+t16qfaaJi0+wZ3jGc7z+HjjFvrR6ZhTxfLY2kudA3QTIbv2f7OgEbrvB
-         JhC+m0iHB+NUHlHw+Q6QrKjVE0508u/Uy/K4UU17e7TRp7uOgvdRUbtT57hoMr22hSAP
-         zuV0SYVosXslFvH7GTKcZHUY1FuLAidilNrM0b41cJw0CslW5u8WlGGo9F0Um7I9QzW7
-         6y+fXZtCPONAh2v35f7V10SWuFtvXNhrGjFw3+aTpAt/yZBrJ1NFXj6AfHKNDj9WawFy
-         C/Sg==
-X-Gm-Message-State: AOAM531VC6p+QQpQcdtWhi1zDI4I40DGf6FBljfqZOKPXLQ5zfWkaET8
-        zmdac142X60CNcWqjy70q0qwAwYOwTO2Zw==
-X-Google-Smtp-Source: ABdhPJxzRqRGRAo5ZS+zVyWfl14FoNKeNRQcRdvzrhyL28TL3zUalpTt6j9ZLaDRJ6uNhicwzmaNzg==
-X-Received: by 2002:a17:90a:a24:: with SMTP id o33mr3756210pjo.229.1634539517708;
-        Sun, 17 Oct 2021 23:45:17 -0700 (PDT)
-Received: from [10.254.242.85] ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id t38sm7903771pfg.102.2021.10.17.23.45.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Oct 2021 23:45:17 -0700 (PDT)
-Subject: linux-next: build failure after merge of the tip tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        id S230114AbhJRHSO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 03:18:14 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59595 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230006AbhJRHSO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 03:18:14 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXp7j23Xhz4xbL;
+        Mon, 18 Oct 2021 18:16:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634541362;
+        bh=b2JzZNK7/O7fcgl3qcXRGSKrRtuXFeYvkYhtEGTrX0Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ewgdtQ7z5kH/gdpzOEOPmOc84lUYVe9KKv39ep62gXZz48RrmTUaoNRf3X0FJMBjx
+         jBTSpCD7bU2jL44fAoMKB83ASZEg4oRxV+0hb9OM8Msmu0W2eWVrNamK8C9BbV9LSt
+         zdMFojm+p4mG4I+4Qx4EGgdpEHVgunjVE4rj4aHv+HfyqW2ifhFpJvBdkz2d7V9Y8z
+         mlXp35hZ2eKgxT2aIyqeLUPyqBfq6xUZODEXqlC+yKZAd/fmmfg0s0l/2nRnqL/0DY
+         1zbW+dNrqzWXJlROyIbzEL6W/68RjWMmOihiZ+OoguPHxnKWJIswKDRgDMITFB31en
+         9m9CWsY5mQxQQ==
+Date:   Mon, 18 Oct 2021 18:15:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211018172330.379b2061@canb.auug.org.au>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-Message-ID: <60e736e7-cc37-9fea-a0fb-6628f87e741c@bytedance.com>
-Date:   Mon, 18 Oct 2021 14:45:12 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+Subject: linux-next: build failure after merge of the kspp-gustavo tree
+Message-ID: <20211018181559.5d3bcf7e@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211018172330.379b2061@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/23g=ORi_5_sn=_TxevFQWcm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/23g=ORi_5_sn=_TxevFQWcm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 10/18/21 2:23 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allnoconfig)
-> failed like this:
-> 
-> arch/x86/kernel/process.c: In function '__get_wchan':
-> arch/x86/kernel/process.c:950:2: error: implicit declaration of function 'stack_trace_save_tsk' [-Werror=implicit-function-declaration]
->    950 |  stack_trace_save_tsk(p, &entry, 1, 0);
->        |  ^~~~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> 
-> Caused by commit
-> 
->    bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
-> 
-> stack_trace_save_tsk() requires CONFIG_STACKTRACE which is not set for
-> this build.
+After merging the kspp-gustavo tree, today's linux-next build (powerpc
+pseries_le_defconfig) failed like this:
 
-Maybe get_wchan() can be updated to:
+In file included from include/linux/perf_event.h:49,
+                 from arch/powerpc/perf/callchain.c:9:
+include/linux/ftrace.h:49:41: error: 'struct ftrace_regs' declared inside p=
+arameter list will not be visible outside of this definition or declaration=
+ [-Werror]
+   49 |           struct ftrace_ops *op, struct ftrace_regs *fregs);
+      |                                         ^~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-unsigned long get_wchan(struct task_struct *p)
-{
-#ifdef CONFIG_STACKTRACE
-	unsigned long entry = 0;
+(many of these)
 
-	stack_trace_save_tsk(p, &entry, 1, 0);
-	return entry;
-#else /* CONFIG_STACKTRACE */
-	return 0;
-#endif
-}
+Caused by commit
 
-Thanks,
-Qi
+  c45ede6c2781 ("ftrace: Fix -Wmissing-prototypes errors")
 
-> 
-> I have reverted that commit, and commit
-> 
->    42a20f86dc19 ("sched: Add wrapper for get_wchan() to keep task blocked")
-> 
-> which follows it, for today.
-> 
+I have added the following fixup for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 18 Oct 2021 17:56:30 +1100
+Subject: [PATCH] fixup for "ftrace: Fix -Wmissing-prototypes errors"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/ftrace.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 871b51bec170..ada656c6824d 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -45,6 +45,7 @@ struct ftrace_ops;
+ void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip);
+ #else
+ # define FTRACE_FORCE_LIST_FUNC 0
++struct ftrace_regs;
+ void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+ 			       struct ftrace_ops *op, struct ftrace_regs *fregs);
+ #endif
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/23g=ORi_5_sn=_TxevFQWcm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFtHy8ACgkQAVBC80lX
+0Gy7sAf6A3gbD0RJFFT0D17zAzVnpwhZdY0kIfx+cVOuNS8eVFPuot2DPOZrJaNk
+lLZxcBX9a+u+8VLJmDR6X4Lpd0C2R9V1SBIfdQxx77YeS/eM1wLI8Q+xch+XSUl+
+nmBuefHwsVXNjzfzhWmiu6a5oZ6sYkKmZtPC1zjYxRY19C/Byr9ATVntz4YutTTt
+k3sAt92GBgiCMfqQKVcHZ1E5MxGCQdrA2isCIM9dFjX1nNEmliwL45eLWgKF0qfU
+qv3l/bxTLmc2WZ9TVe9M63vhAWitGafusq/zf70g6BPTFjz0w8Fl4W+sFM0vzcsn
+61lFoZUDpQ0Fnyrhc8qeLQ6BGIGDVw==
+=MEpY
+-----END PGP SIGNATURE-----
+
+--Sig_/23g=ORi_5_sn=_TxevFQWcm--

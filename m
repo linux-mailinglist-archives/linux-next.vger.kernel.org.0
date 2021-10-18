@@ -2,159 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B52FF4311BD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 10:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900A3431225
+	for <lists+linux-next@lfdr.de>; Mon, 18 Oct 2021 10:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbhJRIE3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 04:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbhJRIEZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 04:04:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D027C06161C;
-        Mon, 18 Oct 2021 01:01:56 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ec8so67616041edb.6;
-        Mon, 18 Oct 2021 01:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ib1GURrYRt0KmD3mck0TUZJ8oysi6z7ZzWmIcJUfDzo=;
-        b=qmMjIirDeuP5bI+PkEaqVafjIRq77p7GJ8hZQ6iHNIbCrFQaW3x1SZnx8GkNGMJcMn
-         CcgIX7Xo+FC3O2mrKVGBPR8rItY2TCJTR1NOmrhO8IneTGS6MjMpRTxQmUtJj143GXfN
-         KTwNtMtnaZmTPONGUKxWKfWL4eeWLG+3ZyYmtSUnW4UKckMum0uy8fDIO6QvqnCg0U7s
-         UT8raNxLjWJB3A6ViVdzz7FDCfbBAD1hc8iGZzsVqObfjJpYrqtoswuETketRT+Sq45v
-         vnqqwWeOK/lCbTZuk1l0LrVtGf+CpRa8DFQmTfh3s3ol4goKERemmAX1xcmYr68bv8WI
-         FfJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ib1GURrYRt0KmD3mck0TUZJ8oysi6z7ZzWmIcJUfDzo=;
-        b=AK5sP2qfrhIvBSTukN8e5hPqV0aFHvZLkGN03R7Aqt5LJEaxEy4d+cBK5vKicL/cFl
-         8gE8Sa6ZdC9+1fhpnXRoAo1SlBsZdekQqWu3cWwzItq5WbYUOAXaLDcNvTyN4EvxR1Hj
-         dM5YWMLvXMTWInIDIXJpIe5o1FDE+N/rVfXGF2drYsi8BIEO79zqtTDSbHebPHQx5aP4
-         QMWUkXdJVGvrAAaw9HES3NEOiL0MrmAyPtcyF/zsjvFXWO1Oz3SCRJddGScLnCffJz9H
-         DlnLRDz04JPeyUBy1wRRLFpnT7G3tcaKCIwHOcEQSmi96c3TbYGBiQ9XhduS6mTH6mCD
-         7oAQ==
-X-Gm-Message-State: AOAM5300R+aLZ+OqTjV0u1iYcdTl5pil33rZFUvD6ZsHEDQDHViibWNZ
-        AuEmnqVhXFTlOkR6xQXb/OimiIwKJLe86AeCukU=
-X-Google-Smtp-Source: ABdhPJzw2mlJJyF+4ETFc6PjhIldLhEVTWD27wtjv0VWtaRKEjyRiBDp2ryxCMwbkdoAfX+zu/3/3EFUF8/VK7lnPUM=
-X-Received: by 2002:a17:906:a158:: with SMTP id bu24mr25997655ejb.356.1634544114335;
- Mon, 18 Oct 2021 01:01:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211015202908.1c417ae2@canb.auug.org.au> <YWl+0PFixaNqgIxb@smile.fi.intel.com>
- <20211018133538.2a0dec43@canb.auug.org.au>
-In-Reply-To: <20211018133538.2a0dec43@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Oct 2021 11:01:18 +0300
-Message-ID: <CAHp75VcDwBkwL4+cFmeJt7b-p6V0w283ai9T9K02y0Sej0WLxg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S230006AbhJRIby (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 04:31:54 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:42743 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229820AbhJRIby (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 04:31:54 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HXqmj4s4Bz4xbT;
+        Mon, 18 Oct 2021 19:29:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634545782;
+        bh=It3hFh75EWdaSrblOEeRmbA3hm969xn3FcN5G2/xSpw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uua6/4gdBpVMVKwzzawhRkFXJ7qAOsVHyUMi24bqFmaFm2KwmlUIO1QvwgMFmPyez
+         7UlRRF/62kOhRiCf4NwaKPGl0NqJ8sPKBfNMAfkM9Y7UEc0nO/Oa6ZnyoeWCWux+ux
+         ZrbW3aQ6VdW94P7ZA2XwZ2QyQEC4MLiI8S6uDr5hX61TrvEZZhZVVgSsVbEWK6Nt9r
+         6HrdPGa/xB/HP4bcCIkg3kNVUEdVqMagEh/5YIHlI/Hym+gk5vXURpUb/srO5PAZqa
+         fPIBi2nhsP21CQL3U+kAHPUtazJ1kLMonne4lx0IdE841Wg/nWA40djf9fCvqV1naX
+         /hijtFDf4ITRg==
+Date:   Mon, 18 Oct 2021 19:29:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20211018192940.3d1d532f@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Mt0ujaPJ7AjyfRm5TX1_R6j";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 6:49 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Fri, 15 Oct 2021 16:14:56 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Thanks! As a quick fix looks good, but I think we need a separate header for
-> > those _*_IP_ macros.
->
-> Like this (on top of my previous fix - which I assume Andrew will
-> squash out of existence)?
+--Sig_/Mt0ujaPJ7AjyfRm5TX1_R6j
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yep, thanks!
-I thought that it makes sense to have STACK_MAGIC also in this header. Thoughts?
+Hi all,
 
-One spelling correction below.
+After merging the akpm-current tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 18 Oct 2021 13:27:54 +1100
-> Subject: [PATCH] kernel.h: split out instrcutions pointer accessors
+init/main.c: In function 'xbc_make_cmdline':
+init/main.c:384:3: error: implicit declaration of function 'memblock_free_p=
+tr'; did you mean 'memblock_free_late'? [-Werror=3Dimplicit-function-declar=
+ation]
+  384 |   memblock_free_ptr(new_cmdline, len + 1);
+      |   ^~~~~~~~~~~~~~~~~
+      |   memblock_free_late
+cc1: all warnings being treated as errors
 
-instructions
+Caused by commit
 
-> botton_half.h needs _THIS_IP_ to be standalone, so split that and _RET_IP_
-> out from kernel.h into the new instruction_pointer.h.  kernel.h directly
-> needs them, so include it there and replace the include of kernel.h with
-> this new file in bottom_half.h.
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  include/linux/bottom_half.h         | 2 +-
->  include/linux/instruction_pointer.h | 8 ++++++++
->  include/linux/kernel.h              | 4 +---
->  3 files changed, 10 insertions(+), 4 deletions(-)
->  create mode 100644 include/linux/instruction_pointer.h
->
-> diff --git a/include/linux/bottom_half.h b/include/linux/bottom_half.h
-> index 11d107d88d03..fc53e0ad56d9 100644
-> --- a/include/linux/bottom_half.h
-> +++ b/include/linux/bottom_half.h
-> @@ -2,7 +2,7 @@
->  #ifndef _LINUX_BH_H
->  #define _LINUX_BH_H
->
-> -#include <linux/kernel.h>
-> +#include <linux/instruction_pointer.h>
->  #include <linux/preempt.h>
->
->  #if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_TRACE_IRQFLAGS)
-> diff --git a/include/linux/instruction_pointer.h b/include/linux/instruction_pointer.h
-> new file mode 100644
-> index 000000000000..19e979425bda
-> --- /dev/null
-> +++ b/include/linux/instruction_pointer.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_INSTRUCTION_POINTER_H
-> +#define _LINUX_INSTRUCTION_POINTER_H
-> +
-> +#define _RET_IP_               (unsigned long)__builtin_return_address(0)
-> +#define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-> +
-> +#enfif /* _LINUX_INSTRUCTION_POINTER_H */
-> diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-> index 973c61ff2ef9..be84ab369650 100644
-> --- a/include/linux/kernel.h
-> +++ b/include/linux/kernel.h
-> @@ -20,6 +20,7 @@
->  #include <linux/printk.h>
->  #include <linux/build_bug.h>
->  #include <linux/static_call_types.h>
-> +#include <linux/instruction_pointer.h>
->  #include <asm/byteorder.h>
->
->  #include <uapi/linux/kernel.h>
-> @@ -53,9 +54,6 @@
->  }                                      \
->  )
->
-> -#define _RET_IP_               (unsigned long)__builtin_return_address(0)
-> -#define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
-> -
->  /**
->   * upper_32_bits - return bits 32-63 of a number
->   * @n: the number we're accessing
-> --
-> 2.33.0
->
-> There are, presumably, other places this new file can be included ...
->
-> --
-> Cheers,
-> Stephen Rothwell
+  d6e96e5e2e23 ("memblock: use memblock_free for freeing virtual pointers")
 
+interacting with commit
 
+  1ae43851b18a ("bootconfig: init: Fix memblock leak in xbc_make_cmdline()")
 
--- 
-With Best Regards,
-Andy Shevchenko
+from Linus' tree.
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 18 Oct 2021 19:25:44 +1100
+Subject: [PATCH] fixup for "memblock: use memblock_free for freeing virtual
+ pointers"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ init/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init/main.c b/init/main.c
+index 9b7fdd04e8cb..2851ebbe1985 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -381,7 +381,7 @@ static char * __init xbc_make_cmdline(const char *key)
+ 	ret =3D xbc_snprint_cmdline(new_cmdline, len + 1, root);
+ 	if (ret < 0 || ret > len) {
+ 		pr_err("Failed to print extra kernel cmdline.\n");
+-		memblock_free_ptr(new_cmdline, len + 1);
++		memblock_free(new_cmdline, len + 1);
+ 		return NULL;
+ 	}
+=20
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Mt0ujaPJ7AjyfRm5TX1_R6j
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFtMHQACgkQAVBC80lX
+0Gw8sgf/XmyJ8lMYquuyjZAGfvEnU6MDmECHMEW3sT2d34rbdLkXRaRuE/PaG8B+
+kNYoURrLLm02cAnGrkrvk2AXYPpEJTtclqzd+pf7/quYTK6ixkvPw9Fhfi/LY9vP
+QT3qGC8qisEhV64N9DkgyBoCKG2dz5ynKsbpZ+TAmpRza5QutIQ/WR8wFkNKc+OC
+1UvkesowvY677SU90pVWCKUfbstGhUR5Ldfwj1LZUMJpF/WadISebZc7YFkF+hHB
+rbbbJ19zbozQVjL5RDlJWeMYUuTqPdenlIja6V971sIk3qquNCOt+VR6V/bL5426
+Zd2pw6Aj0s+yxB6snvT5Sh1tFyEtgw==
+=bMnQ
+-----END PGP SIGNATURE-----
+
+--Sig_/Mt0ujaPJ7AjyfRm5TX1_R6j--

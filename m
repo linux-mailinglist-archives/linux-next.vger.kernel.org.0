@@ -2,100 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4816B4329B3
-	for <lists+linux-next@lfdr.de>; Tue, 19 Oct 2021 00:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE0C432A1B
+	for <lists+linux-next@lfdr.de>; Tue, 19 Oct 2021 01:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbhJRWVI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Oct 2021 18:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S233423AbhJRXPw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Oct 2021 19:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbhJRWVH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 18:21:07 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5743C06161C;
-        Mon, 18 Oct 2021 15:18:55 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id d125so18111560iof.5;
-        Mon, 18 Oct 2021 15:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O4Cl7rQY6UihJ8OG3pvvrpFfvwN0U29biQDTj754OeE=;
-        b=LIxdzhs0aXZM12qF1ewvwQiaQUJKAV48DahO7iRPZ0OcZRweOSx2shKkHSnUHKwQm9
-         ZgxClbpMOAIULfQVIlp0DWRt9namQNJBrlrrLGNDl98EUy5/Sxhg03670ukgVMX5f2YH
-         07wKGZuFj9+dQg72UZoY3JVS+SBD0aBak1OKoBwgnnWV8+lhUZqp1eB9Jg5X23Nwq/y4
-         mAD0wB2HmiWVRnMGvkZivDsuMLf1+jQ8yqvIu4Rlzoe8ge2K1v0I4eiEIoxn4C72m5Yc
-         pXT7jTxquC7vnkw+Cjvz+zIuBM9k9FwZx8uhHvP5PB2VN4Flts6fnK0Z+JHfuPaVNSUa
-         Uk9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O4Cl7rQY6UihJ8OG3pvvrpFfvwN0U29biQDTj754OeE=;
-        b=MIksuC6fpsGDijh8TiO63fUX6dPJTKXKW3BGjslw6+rZpcnJmnicTgntLyNuN8caJK
-         Gjc2WUrygbJMCWlChqyR5+3U34OIZgy9E1h2zsZt9vLVDXzYpo8Fms/utBo36IlkBecr
-         7pzJn+EBpdsUJx7xmqpsKEriFynOJUNGMfe62juDT0/tfyC9wLVDBwEuiy+FE/CbQ742
-         8rQrU47YatGwCAV2m41bGnYTw277QbBUvGUAoBRKNJi5oOSjvhlNkjXLj1kBPBuIKbV7
-         KPZoAjPeE3QGpDm1eklwl3V+trfqUs9qcRXKa/3IZigDyAKX1z9xXegBK3YoIYkA/y1k
-         YSeA==
-X-Gm-Message-State: AOAM533GKk9O1p4Mx1XflGsE8Cl3MmKD5eRznUMfex1PvARnhJPWqPM9
-        52bEEmkFh4efdRzZDCBW6Ma28TMyBnLK3UXA+aY=
-X-Google-Smtp-Source: ABdhPJzKclVdx8J4wBZle/K9Q+8N1HaFM8sSrjTx9vzBnG1XtaICa5LvPQKFbCRveyZrv6QQyoZH2f/ve6T15+Z+7O0=
-X-Received: by 2002:a5d:8903:: with SMTP id b3mr11657664ion.44.1634595535272;
- Mon, 18 Oct 2021 15:18:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211018203023.036d8362@canb.auug.org.au> <a1b2bdda-d1cf-807b-6a84-73a3e347639c@infradead.org>
- <20211019085811.362b4304@canb.auug.org.au>
-In-Reply-To: <20211019085811.362b4304@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 19 Oct 2021 00:18:44 +0200
-Message-ID: <CANiq72=+5w7KzVKmN57ud5+GGEiuRbtgezfROGAuO=b-OYeWAA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Oct 18 ('make' error on ARCH=um)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S232424AbhJRXPv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Oct 2021 19:15:51 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F922C06161C;
+        Mon, 18 Oct 2021 16:13:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HYCNX1vgPz4xd8;
+        Tue, 19 Oct 2021 10:13:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634598814;
+        bh=0JD4M3w968qMBzkNmzmzABvLfRCjiTJMb0zNLPTmqCA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fsgTW2zSFYjdcdebjDF8Cjk1TnecVDhP5pwtLZQcegwoSSE/8zmjM4+8dXxv9eHsL
+         3nV6dWfvW57syB5+e2K0tojDiIU3/AjWtalVS/uPG2SBAxtYTc9+kfUn7U5FZPOoFJ
+         ynTzFPbQ2RYXHLCEl1mzYFwRuyQiSYBQlbmRiIjTce5g/iUBdF5Wfm19pUfZCWijB5
+         CWx1ezrWDOvYBXSQCRhOasq4pHAyJSAeqPdANtv3BxoZ+eqiEuGPNvOx/l/HOOjNvS
+         NMzqEwfOnLU4OQmL38IG10oZZMbv097ttyQ0IxbB9SdDZU8z2d7qFQhY3w8XiwdPtc
+         bBsUuzyyVk0dg==
+Date:   Tue, 19 Oct 2021 10:13:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Dust Li <dust.li@linux.alibaba.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>, Yuki Okushi <jtitor@2k36.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the netfilter-next tree with the
+ netfilter tree
+Message-ID: <20211019101330.59790f64@canb.auug.org.au>
+In-Reply-To: <20211015130022.51468c6d@canb.auug.org.au>
+References: <20211015130022.51468c6d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/TNrxAlFP+r_f.3.oxqd_ipx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 11:58 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> In commit
->
->   c862c7fee526 ("Kbuild: add Rust support")
->
-> from the rust tree, these bits should probably not be there:
->
-> -ifneq ($(findstring clang,$(CC_VERSION_TEXT)),)
->  include $(srctree)/scripts/Makefile.clang
-> -endif
+--Sig_/TNrxAlFP+r_f.3.oxqd_ipx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So this was on purpose -- we need the Clang flags even in GCC builds
-for bindgen. But now there is that `$(error ...)` added there :(
+Hi all,
 
-> Miguel, does that seem reasonable?
+On Fri, 15 Oct 2021 13:00:22 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the netfilter-next tree got a conflict in:
+>=20
+>   net/netfilter/ipvs/ip_vs_ctl.c
+>=20
+> between commit:
+>=20
+>   174c37627894 ("netfilter: ipvs: make global sysctl readonly in non-init=
+ netns")
+>=20
+> from the netfilter tree and commit:
+>=20
+>   2232642ec3fb ("ipvs: add sysctl_run_estimation to support disable estim=
+ation")
+>=20
+> from the netfilter-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc net/netfilter/ipvs/ip_vs_ctl.c
+> index 29ec3ef63edc,cbea5a68afb5..000000000000
+> --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> @@@ -4090,11 -4096,8 +4096,13 @@@ static int __net_init ip_vs_control_net
+>   	tbl[idx++].data =3D &ipvs->sysctl_conn_reuse_mode;
+>   	tbl[idx++].data =3D &ipvs->sysctl_schedule_icmp;
+>   	tbl[idx++].data =3D &ipvs->sysctl_ignore_tunneled;
+> + 	ipvs->sysctl_run_estimation =3D 1;
+> + 	tbl[idx++].data =3D &ipvs->sysctl_run_estimation;
+>  +#ifdef CONFIG_IP_VS_DEBUG
+>  +	/* Global sysctls must be ro in non-init netns */
+>  +	if (!net_eq(net, &init_net))
+>  +		tbl[idx++].mode =3D 0444;
+>  +#endif
+>  =20
+>   	ipvs->sysctl_hdr =3D register_net_sysctl(net, "net/ipv4/vs", tbl);
+>   	if (ipvs->sysctl_hdr =3D=3D NULL) {
 
-Of course, for today please feel free to apply your fix (i.e. to put
-the conditional back to where it was). I will solve it on my side
-tomorrow.
+This is now a conflict between the net-next tree and the netfilter tree.
 
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/TNrxAlFP+r_f.3.oxqd_ipx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFt/5oACgkQAVBC80lX
+0GxLHQf/W9/BAOuvRDEH1LJ2CBoJ7+FZADcYmfCCFqYmIlTyLkvVo5gJOuZnd+A0
+5pq/vZkS93qbBf5yfIQqeaQRg4ICq85r4LDTliQpdr8hjQMb+n6l0C+DQ5uHkHJ9
+Ow1giWH8aiqzA4rUbOksZmmXtDDxDCsH7dxIDssVDTM5YhcWpLRAwZhewKfSnYta
+YsLZXZB9iO4rcwq05PibIOwcw/7iBShDfLfGX2bAbKYKMVCXUbCmBEQc5wzSEbYl
+6YLGDN+aEtNOA0AxA0ZLZOO5A1OaRgH47tYlHKidDCepKeZ0b2N7VY38wVllXynR
+W/kqOHAB7OPoNY+C04/sY8Beu37etA==
+=XEu3
+-----END PGP SIGNATURE-----
+
+--Sig_/TNrxAlFP+r_f.3.oxqd_ipx--

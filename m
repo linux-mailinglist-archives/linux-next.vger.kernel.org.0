@@ -2,86 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040844340C0
-	for <lists+linux-next@lfdr.de>; Tue, 19 Oct 2021 23:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7D6434140
+	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 00:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhJSVse (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Oct 2021 17:48:34 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37663 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbhJSVse (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 17:48:34 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        id S229670AbhJSWWw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Oct 2021 18:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229548AbhJSWWv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 18:22:51 -0400
+Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [IPv6:2404:9400:2:0:216:3eff:fee1:997a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC60C06161C;
+        Tue, 19 Oct 2021 15:20:38 -0700 (PDT)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HYnPR0GLyz4xbX;
-        Wed, 20 Oct 2021 08:46:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634679979;
-        bh=67NghoYSVDIDSbX2jq03TjedMzRU5urHVLkWAReFBQ0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Tvmsyk6Zek2QF8muTCmn4sVE785Oy38ZNnG3nCK1/vG4o2f6Ks+okprXBDA7lPYFO
-         Sj2JWqyPwBEqGKudsGOlaNd9Cr4bDIG0fnhb7geeJFJGoyCqoJeEH2C1Bt4zVKJLue
-         hiBLnTZULuOSSOP+SOhXGOqQQpwLku9oOV0yiLzVYmmQFx6adxPIlUO1UECTi9iQEH
-         p7rcFn4ucoiKQa52az6Du+Zo6qqvbVmo6NN6M+drKgnIhSldnzXOHvsUvHS4hEgnYH
-         N1KDneswmf1sbQMFq8lW/KarFEZc6E8Iy+yH++xF7zg+oKEdZIyLNzib3twa/aeKPq
-         kcoYLNGG8IISg==
-Date:   Wed, 20 Oct 2021 08:46:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4HYp8m57WDzytn;
+        Wed, 20 Oct 2021 09:20:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1634682025;
+        bh=BsZDeOgDiE+nxryU78tK9C1iGM3YQmcPupQaMFCpk1U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bgou3IHIlEt/VAzdjlzPBFqvFJEBBnwf1+V8X5UbWhuE+xTkzyCEjn6wH2ahaAoRK
+         wVoJzLPz1Pg1AUhgwkzZkx6P6lzDrBctxifLMnCTfODeUwxzPvPuU5wmH7NdwzFedB
+         Vh2ZBINRD/6gbt/oKMTC8RK1Y3AVHiyNSgQD7SAZQGb+HkUysUG5iXFiPjWli3u2UW
+         oOjK239Q+eLSbQaaM6ADGIGBB5fGauxbHV4iA7lZ2elbCJf+uxKIIQJ0fN61jJm0/x
+         LArjTu0oH2Bt2Fx5IwbKD41FWr3weHCRC8xASibA3IrsTgjQRLSACiSWLkvDpC7B2z
+         BPjdLTtWBVoUA==
+Date:   Wed, 20 Oct 2021 09:20:23 +1100
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Latypov <dlatypov@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20211020084617.453ba30d@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: linux-next: manual merge of the kunit-next tree with the
+ kunit-fixes tree
+Message-ID: <20211020092023.0a9a43f4@elm.ozlabs.ibm.com>
+In-Reply-To: <009188fd-a744-fb50-a9d2-ca1ce9b7905f@linuxfoundation.org>
+References: <20211008152930.03787395@canb.auug.org.au>
+        <ba01fb13-e1a1-299e-9a7b-ccdeaeef267a@linuxfoundation.org>
+        <009188fd-a744-fb50-a9d2-ca1ce9b7905f@linuxfoundation.org>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+3h022_UR35vHX/2xu19_1r";
+Content-Type: multipart/signed; boundary="Sig_/BzRp6QoQu6qcixc9NvWUnLH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+3h022_UR35vHX/2xu19_1r
+--Sig_/BzRp6QoQu6qcixc9NvWUnLH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Shuah,
 
-In commit
+On Tue, 19 Oct 2021 15:26:40 -0600 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>
+> I fixed the merge conflict in kunit-next tree after rebase to Linux 5.15-=
+rc6.
+> There is no need to carry this fix.
+>=20
+> Daniel! Please review to see if it looks good. It was very minor fix-up.
 
-  2fc428f6b7ca ("block, bfq: fix UAF problem in bfqg_stats_init()")
-
-Fixes tag
-
-  Fixes: commit fd41e60331b ("bfq-iosched: stop using blkg->stat_bytes and =
-->stat_ios")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+There was really no need to rebase.  A simple merge of the kunit-fixes
+tree into the kunit-next tree would has sufficed, maintained history
+and allowed a place for an explanation.  Or you could have mentioned
+the conflict to Linus during the merge window.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+3h022_UR35vHX/2xu19_1r
+--Sig_/BzRp6QoQu6qcixc9NvWUnLH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFvPKkACgkQAVBC80lX
-0Gx7CwgAmswCbVqw1YqX3bq2a6L9e+hLHpoAaNsWpXny+poqj1NW8+kSGdA6PxNd
-YhLk/0oX4U9GN6k2wHA05HDc2N+z/pkwWZx0mnIzrH1Jh6gaRppJxLYNeyTGFfu3
-mYE/pzXJ4opvgkR4Qd5ZYjfirK4kgVI2ELjNSw/kRg6Yil3K41cyrGfv9Rd8Gvue
-luWzrWdgFLftQR0EoYw1vEOzASJUIgc8IudE3DXYk+R2tfGFpHhI6OLIwAKfy2d7
-YNrdcfAPZPBqZ0CaiR5iK5oeR8kLdl0oqoClY/FNQ2kIW2chomOkVVCb8WEI0j0Z
-zrj2B5glz0adRsnCXwti5wP1rKL1KA==
-=l8v9
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFvRKcACgkQAVBC80lX
+0Gx+tQf9HDBDLRVl7P07Du15kl3+IGaOfgj9kaeB6iX937OsYZfoAHG0OnIYp+p1
+w83dQ5xeZmwhPVEvNx3Kg6JzpRA3mef2Yt0TiFJ3GBsdL7MMvNJzLD5XniI4DwbA
+hTnARKAc4RMznnYHJXDvleT1VMemJDeGp2gxwLOTX7VJQ8kHtOUwvIQ4m4p/xQmw
+CRepOLhJrMQCQO51/fdWUxDfL3KAG/qUG7J6aGskjpftR6nZjNTYaGcj5QSvRO8C
+IMc8UiRCcCnwhr6iN8XvTTsEKRTWV4k2Jn+r3DYjrFlsAZE4r/o9x7isAqIdiKsJ
+0/9obqTxw6FqWf+koI5Z7T6aqRmnSg==
+=0iCm
 -----END PGP SIGNATURE-----
 
---Sig_/+3h022_UR35vHX/2xu19_1r--
+--Sig_/BzRp6QoQu6qcixc9NvWUnLH--

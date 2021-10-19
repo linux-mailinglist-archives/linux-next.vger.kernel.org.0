@@ -2,74 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FF1434208
-	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 01:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DE643421B
+	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 01:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhJSXXj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Oct 2021 19:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhJSXXi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 19:23:38 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC91C06161C;
-        Tue, 19 Oct 2021 16:21:25 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id j8so20116510ila.11;
-        Tue, 19 Oct 2021 16:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1YffYkhIkyiBX1RpmiIHmHRBxEHfykvk4rfLTMjU9mA=;
-        b=Ley8yCZU66Hp8bphTPLcy5UPaVpS5ZB4zgSjDPDptNLf9/HIIzn6GN5Ogd1Y/nMGmM
-         7o2cQFSJ4E/mCLdll08hCAZpvigPB1Ddo1s3v4t3l8ZgBcQNFvWBcuyO/NxXdWOSWwW3
-         pLP5wFpA/qWKrP29P4UMkG1g/2NTutziqtq5tJFL4B42wcyEqTXqSPIoe1kjCXHQj0lV
-         QthZ2PmMYScGVXYQRmt6Pc8ldAFRClLUo5xdLapVk8wIfs28gNUsIBZeS11eQm6nhWlO
-         cydnewLyKdAdLlJNUxbFiCuOA0rJqJypBu15lyS/hbFNa1Ee7AdhmoDvsN1qkimmwl59
-         vyqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1YffYkhIkyiBX1RpmiIHmHRBxEHfykvk4rfLTMjU9mA=;
-        b=1NR4VlETSXVioAKbhh7JaHFmdBNot4uouWW4oRdgYyZ6bY+eGP6iHr9vfr+ebZxwKA
-         GNkED11QMUxYc5SQ6cJO9fIeVp+VATY/OErfrVYHP8un9NqsI6UXtqD5J+dhWpAvW/lQ
-         TgYd86I51z0VaORM2deXheCJm0oWO6Jtt1lRL5C3nfw9+WpjLqNmrXnwSTRpVC65Ii24
-         OtPLinMECNhKkCyTXRGVIcL3eJi9oY+WUB1tLfFfbIvJfdPGjFmx+7+Q7g65waPOMyHC
-         yZATKuZCHSpVocu1BS3cRoZEBLiLqnIbaQlnHcT4JerbYXJ7h572+mUFmeRS5JDPzSL3
-         AEnw==
-X-Gm-Message-State: AOAM531Jj8mv7t6Y/a5YjTHPPoGT5wwXNpZJQFTeWBGTpvK5X+dCYE1S
-        xrpicJ0jsMKYLE3X672/Givw72wU7MGlP5XmVe0=
-X-Google-Smtp-Source: ABdhPJwOXYqZgY89d+8bJA5uSmqLQTkttqksAjYy+LSLDY4VIPPZm0dDQeR1NVdY6YonTTrKjDHNhuIVz7pRN+Ml2cM=
-X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr21348652ild.76.1634685684069;
- Tue, 19 Oct 2021 16:21:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211020092258.71861678@canb.auug.org.au>
-In-Reply-To: <20211020092258.71861678@canb.auug.org.au>
-From:   =?UTF-8?Q?Andreas_Gr=C3=BCnbacher?= <andreas.gruenbacher@gmail.com>
-Date:   Wed, 20 Oct 2021 01:21:12 +0200
-Message-ID: <CAHpGcMJXYcRcZi=zWjtXEJvBJM2hn9K2+jYJWjHCp6qbNAGU+Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gfs2 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
+        id S229900AbhJSXgd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Oct 2021 19:36:33 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:52101 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhJSXgd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 19:36:33 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HYqp05qNvz4xbP;
+        Wed, 20 Oct 2021 10:34:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634686457;
+        bh=a2YGRENPpVP9X/6KzFVetTvNS4DQSPpW45kTm2eue9c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oUrOFknEhT2tupjpczyp0VYw8y7L//ckrVnbl95bCPNGjNalGBIKNYiLGtGbF+DQg
+         sKhXg+CrTMWqLn1Xs/uZ69aQ1x2TNH6tGJ6+TROfsInUP/OdfBHnwgL5QoUdc6zioQ
+         LSYqRPXIHs3ijokgV+M4vSN6Zdkmfq6BmKEYFD7fVXN1EwJ8A5aP3ytzUjhr2y/739
+         47zN9gdmdgorftxumvmNfRCBS0+nelV3yaCk/ZkJFlEdvW0emzzuozG4FaTSk5H66i
+         +VIPW/IuFJWixlEDWSd7k3kwXJky2Ul6tsjgXiC3NLipA9DZnSorcM6Ajwt2XJlruC
+         ntyUUs40GCJaw==
+Date:   Wed, 20 Oct 2021 10:34:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Aharon Landau <aharonl@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: linux-next: manual merge of the net-next tree with the rdma tree
+Message-ID: <20211020103414.3e7533f4@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/bNvDVWR+DvTaT6EPwJ+Gii_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/bNvDVWR+DvTaT6EPwJ+Gii_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Am Mi., 20. Okt. 2021 um 00:23 Uhr schrieb Stephen Rothwell
-<sfr@canb.auug.org.au>:
-> Hi all,
->
-> [expected 'struct gfs2_glock *' but argument is of type 'const struct gfs2_glock *']
+Hi all,
 
-fixed now. Sorry for the mess.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Thanks,
-Andreas
+  include/linux/mlx5/fs.h
+
+between commit:
+
+  b8dfed636fc6 ("net/mlx5: Add priorities for counters in RDMA namespaces")
+
+from the rdma tree and commit:
+
+  425a563acb1d ("net/mlx5: Introduce port selection namespace")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/mlx5/fs.h
+index f2c3da2006d9,7a43fec63a35..000000000000
+--- a/include/linux/mlx5/fs.h
++++ b/include/linux/mlx5/fs.h
+@@@ -83,8 -83,7 +83,9 @@@ enum mlx5_flow_namespace_type=20
+  	MLX5_FLOW_NAMESPACE_RDMA_RX,
+  	MLX5_FLOW_NAMESPACE_RDMA_RX_KERNEL,
+  	MLX5_FLOW_NAMESPACE_RDMA_TX,
+ +	MLX5_FLOW_NAMESPACE_RDMA_RX_COUNTERS,
+ +	MLX5_FLOW_NAMESPACE_RDMA_TX_COUNTERS,
++ 	MLX5_FLOW_NAMESPACE_PORT_SEL,
+  };
+ =20
+  enum {
+
+--Sig_/bNvDVWR+DvTaT6EPwJ+Gii_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFvVfYACgkQAVBC80lX
+0Gz/vgf+NQ1i+LJBGV2jG+t967hX+9jwXOO6DazWxOAkczm7HlCGnNjOHELDN307
+y2Ip928sPeLL1kqwYJwqIUAXb06diAdtvvoa9wgFRG/JjwBfnM1JHcD9u990ZiSu
+XWAQjv7Lsepp1QjbHWqiSgU83XF51fNix86M4HIBANLCGg581j28KdGL3gPPa9qF
+o2PEqre9mHOSzkdA7o20BWWgGoPMUbQM4QCuuAuJE9k9C8YKKY15wmRpkKf1oTX0
+10sgydLIUw+eHDvWOw33v//JbU7KCtv/gtdv+daYqwH23CJT461lWt7CMqnFIg4H
+1pGSYSCsUtLmpi+wAj6i4lMwEVuEtA==
+=r2BJ
+-----END PGP SIGNATURE-----
+
+--Sig_/bNvDVWR+DvTaT6EPwJ+Gii_--

@@ -2,64 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C334D4336E4
-	for <lists+linux-next@lfdr.de>; Tue, 19 Oct 2021 15:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95314339E6
+	for <lists+linux-next@lfdr.de>; Tue, 19 Oct 2021 17:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbhJSNXa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Oct 2021 09:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S232126AbhJSPOh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Oct 2021 11:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbhJSNX3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 09:23:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D627CC06161C;
-        Tue, 19 Oct 2021 06:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=GevZs/a8xWOsf4/BG4XLBlFSGbW9x5dz83z4G9jb0EQ=; b=d+VRpY/VkfivaxBtAUhznbRhmj
-        tinwcHfwXiP6YT1qvX/du/s8SeoD/cb5Lb5qshrkSO17TQnKE0TRjIPUuR+PPDNvMxeZBIPatRY6g
-        Qd68kiIyAzxH+lTeva3KPSdxR/mYnfPQmtRU1VWeWmd1mqur+GR9H4CiGskrQfv7SMSkk6VgLSKm1
-        /D++3Hlp42lAjARvIoZMP2Vr7J7BrEo9NSy5f94qP8lXwk2Vzz7vFcS037kk0Innnnyu+c4p1yAz1
-        2DQxb5l80xIjQezY+iOFFBDcvK9BKqE2kJ0mCxbwWCSZDi9BBJBFkOQFV3kjPf33CrqDhNfbk/ZpH
-        RhQdTTCw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mcp2u-00AmG7-NJ; Tue, 19 Oct 2021 13:20:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DB2AB300288;
-        Tue, 19 Oct 2021 15:20:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CB5D7212B2C00; Tue, 19 Oct 2021 15:20:45 +0200 (CEST)
-Date:   Tue, 19 Oct 2021 15:20:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] docs: futex: Fix kernel-doc references
-Message-ID: <YW7GLTdP3TAcg9Ac@hirez.programming.kicks-ass.net>
-References: <20211012135549.14451-1-andrealmeid@collabora.com>
+        with ESMTP id S233239AbhJSPOg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Oct 2021 11:14:36 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E86DC061768
+        for <linux-next@vger.kernel.org>; Tue, 19 Oct 2021 08:12:22 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id y1so13865121plk.10
+        for <linux-next@vger.kernel.org>; Tue, 19 Oct 2021 08:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=jaCZSSAkbAMREaY/hqrdytvcXWwYWJ58MCP7XcU6bpM=;
+        b=OtojuuknHotAZNqZU45oHGIXhK8z8njOphqoJDOGxcWzqPrIxUvDJg+hDSagWvaM0D
+         TZYjjSmFh5Zs5+vignu0qieDRlyLgINvl+XUM6AMh7BG+e/vCIMQAYDNiZrSGJ6uQ/4J
+         ht3bbj5G7WhtkXBryAvTNxzJXIpuKzie3GSvdJj3tsTXVV5XV1czTPFwdO8TnSnaUqdO
+         /T98ntglomDGVB4kArVnmtwNKUACaSUHf0bx3/KaWzutWXLToSBkYQQWKUa8nh1XwIMt
+         IG7MgdMy5KE0xcpnavwf6aSZspysnVHUdBrjeDdRiM1XKii9z52zkbCHDKOYbwc+bRlP
+         4hQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=jaCZSSAkbAMREaY/hqrdytvcXWwYWJ58MCP7XcU6bpM=;
+        b=RK2Wq8BFzyr6XIYNjJ0zGn+CF9KjlTGOVrC2AMmp76HLD/MCpjPr2BCcgRlatfqLuZ
+         kwOoS/rq4dubby9o/hfYXNU4G8J3fID3Q/Sctf6mBwpEZuwYHi1PY4G1EG7h+cCdY5s1
+         OklfR+Anxxfns/ZZ67LE7umbm5MvEAnH1e9IZCAspEaQEuz2aHiaW0mtUrCwRchXfxyU
+         A2SArGjD+5Woxht4qx4HkS9HN97jYfKuCi8Zt4pS6eCh3uwZjtDONfw48mn6MbP4d5cw
+         2VoQxdpsQpWCPiUt2VzDrg3aT4vx6W+2czXLm8/lkjj49uW70QtRXBgFYc9p9FM0kh47
+         PaSQ==
+X-Gm-Message-State: AOAM533w164XN90UpfMnzUWd6yorQkSlmSCkgAv36oFe4T5uIvfbpMnq
+        nLDN/XQ9rFmf1tyPFf18A9uAFTPiH6Al/M9xsX4=
+X-Google-Smtp-Source: ABdhPJyyiRffCRVasl/SCfyfXYoonH1HPNFia2pZdDROcAe+XslQoWyxETYe1TSE6FRM1rkGuMV9F4gUFJby1Unkam8=
+X-Received: by 2002:a17:90b:ecc:: with SMTP id gz12mr493235pjb.241.1634656341544;
+ Tue, 19 Oct 2021 08:12:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211012135549.14451-1-andrealmeid@collabora.com>
+Received: by 2002:a05:6a06:1891:b0:46b:b1a1:af94 with HTTP; Tue, 19 Oct 2021
+ 08:12:20 -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <harrydav828@gmail.com>
+Date:   Tue, 19 Oct 2021 18:12:20 +0300
+Message-ID: <CAKKtfnKaFHXfR67Pu5tXvDe=8ajr2JXh2BqeYm4RyGubEnzceg@mail.gmail.com>
+Subject: My Regards
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 10:55:49AM -0300, André Almeida wrote:
-> Since the futex code was restructured, there's no futex.c file anymore
-> and the implementation is split in various files. Point kernel-doc
-> references to the new files.
-> 
-> Signed-off-by: André Almeida <andrealmeid@collabora.com>
-
-Thanks!
+Greetings dear,
+I'm a cancer patient and I intend to donate funds to a charity in your
+country with your help... Please respond for additional information
+here.=F0=9F=91=87 (lydiawright836@gmail.com), if you are interested.
+regards
+Mrs. Lydia A. Wright

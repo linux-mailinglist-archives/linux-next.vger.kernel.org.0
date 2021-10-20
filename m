@@ -2,91 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B99A8434E3C
-	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 16:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030CC434F90
+	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 18:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbhJTOv0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Oct 2021 10:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhJTOvZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 10:51:25 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3165AC06161C;
-        Wed, 20 Oct 2021 07:49:11 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id l7so9040600iln.8;
-        Wed, 20 Oct 2021 07:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fI7q9bSy10kq6cygcSIh1Jg75Jpa8rMiA6bcvJr155o=;
-        b=I7qMRfFVmoyxKG9DSwevt5bjKYqp1PH5hv77A5+xiNZpergvh7pWG+srarEclI/LKh
-         9cwc5fT9SV11C0R53WLzbUm1TAkN9lkXEaSpm1yiY3ezlb8KK/wWY9+SFFXMwLULo93t
-         7Q93rvae34KVceUmvKutY/UjOvPptn0R7S/wFGGzHs3nUe2t7bKWUp9FriNLoMiE1XMd
-         kNSum3y7Zsl67uLHJA/2hhfjXNpsBYDw+sIpyqOt/jOr/MYUMzlR4cZfgD1e0kkqM68l
-         rA/FIdHQGdD/85ktz7PS26jWSABMI4BKxXT+JAYoMIBfU6fcPVyME5GgYDO+3NhElEdZ
-         dV3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fI7q9bSy10kq6cygcSIh1Jg75Jpa8rMiA6bcvJr155o=;
-        b=f7aM9XEZz5r69eE5SNVFZvZTjRLXCx5bndbbVQECjmPxDx5IZuyI4uKb+nXasduuE0
-         X4q91xtpE8iNb1KfRMks0ySkb56dDA6XoPnytjxtO94S8CvrNpJTwzPynuBnoAAnYb59
-         MNipILj5AXZ8vqM8PYTfzcWDvSpdRPf9OOSTY9TdtBV+3BquL5c+4I5Hu2UpNfMG6AYE
-         Q3wKGjwlYuTZHJqnG7DCvYiRLB/uvCC/pV2nNbYFjsXPvWSL3rKrLHh1ZhgU8EuVyrlx
-         thUiui1f+aQ5KyLtHlsjR0l9N+5l9K8c4Ubxhj149bUcnAjYTMwuZ3p+IGcdN/536rUD
-         naTg==
-X-Gm-Message-State: AOAM532qbvDOysN8JOA9TVACpdZBq2m1foA+2yj6GruVI/y2TsX6I6L0
-        UMOIE+YtcgG/P5aT6oflpAg63io0vliOt7yV09M=
-X-Google-Smtp-Source: ABdhPJwZn9zjVTqNY+9dsIKovzb+H7crSRdEvVp49jrI+ZiiZmjUE5frgHeNrvQtDhNigYmmWHcYnP+CNFkjcVDhtcE=
-X-Received: by 2002:a05:6e02:1543:: with SMTP id j3mr187448ilu.151.1634741349940;
- Wed, 20 Oct 2021 07:49:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211018203023.036d8362@canb.auug.org.au> <a1b2bdda-d1cf-807b-6a84-73a3e347639c@infradead.org>
- <20211019085811.362b4304@canb.auug.org.au> <CANiq72=+5w7KzVKmN57ud5+GGEiuRbtgezfROGAuO=b-OYeWAA@mail.gmail.com>
- <20211020155627.7d6f6637@canb.auug.org.au> <81c2e5c6-7388-3d1d-87a9-1b000517661b@infradead.org>
- <b0eddd67-e62f-c6c3-37d1-8c69f27c51fb@infradead.org>
-In-Reply-To: <b0eddd67-e62f-c6c3-37d1-8c69f27c51fb@infradead.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 20 Oct 2021 16:48:58 +0200
-Message-ID: <CANiq72=zBuRWdYQBE=i_pmv57QS7ZGNKZzL2wegNYeB=4G-JyQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Oct 18 ('make' error on ARCH=um)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S230398AbhJTQD7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Oct 2021 12:03:59 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:52932 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230510AbhJTQD5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 12:03:57 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52]:40844)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mdE28-002QTs-V7; Wed, 20 Oct 2021 10:01:40 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:42706 helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mdE27-000qtw-Tc; Wed, 20 Oct 2021 10:01:40 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>, Yuki Okushi <jtitor@2k36.org>
-Content-Type: text/plain; charset="UTF-8"
+        Yu Zhao <yuzhao@google.com>, Alexey Gladkov <legion@kernel.org>
+References: <20211020144651.10321529@canb.auug.org.au>
+Date:   Wed, 20 Oct 2021 11:00:14 -0500
+In-Reply-To: <20211020144651.10321529@canb.auug.org.au> (Stephen Rothwell's
+        message of "Wed, 20 Oct 2021 14:46:51 +1100")
+Message-ID: <875ytrptyp.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1mdE27-000qtw-Tc;;;mid=<875ytrptyp.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+nFg8WEoM2KyuoGiFCYzJt/cSk6/DICqw=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
+        version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4987]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Stephen Rothwell <sfr@canb.auug.org.au>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 402 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 10 (2.6%), b_tie_ro: 9 (2.3%), parse: 0.75 (0.2%),
+         extract_message_metadata: 10 (2.4%), get_uri_detail_list: 1.11 (0.3%),
+         tests_pri_-1000: 4.5 (1.1%), tests_pri_-950: 1.09 (0.3%),
+        tests_pri_-900: 0.83 (0.2%), tests_pri_-90: 144 (35.9%), check_bayes:
+        143 (35.5%), b_tokenize: 6 (1.4%), b_tok_get_all: 6 (1.4%),
+        b_comp_prob: 1.59 (0.4%), b_tok_touch_all: 126 (31.4%), b_finish: 0.88
+        (0.2%), tests_pri_0: 217 (54.0%), check_dkim_signature: 0.47 (0.1%),
+        check_dkim_adsp: 2.4 (0.6%), poll_dns_idle: 1.74 (0.4%), tests_pri_10:
+        1.74 (0.4%), tests_pri_500: 9 (2.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: linux-next: build failure after merge of the userns tree
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 4:46 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Stephen, Miguel,
->
-> No problems like this in linux-next 2021-10-20.
->
-> thanks.
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Thanks for the confirmation and apologies for the issue.
+> Hi all,
+>
+> After merging the userns tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> In file included from arch/x86/include/asm/bug.h:84,
+>                  from include/linux/bug.h:5,
+>                  from arch/x86/include/asm/paravirt.h:15,
+>                  from arch/x86/include/asm/irqflags.h:63,
+>                  from include/linux/irqflags.h:16,
+>                  from include/linux/rcupdate.h:26,
+>                  from include/linux/rculist.h:11,
+>                  from include/linux/pid.h:5,
+>                  from include/linux/sched.h:14,
+>                  from security/keys/process_keys.c:9:
+> security/keys/process_keys.c: In function 'key_change_session_keyring':
+> security/keys/process_keys.c:923:16: error: format '%s' expects a matching 'char *' argument [-Werror=format=]
+>   923 |   WARN_ONCE(1, "In %s get_ucounts failed\n");
+>       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> include/asm-generic/bug.h:99:17: note: in definition of macro '__WARN_printf'
+>    99 |   __warn_printk(arg);     \
+>       |                 ^~~
+> include/linux/once_lite.h:19:4: note: in expansion of macro 'WARN'
+>    19 |    func(__VA_ARGS__);    \
+>       |    ^~~~
+> include/asm-generic/bug.h:150:2: note: in expansion of macro 'DO_ONCE_LITE_IF'
+>   150 |  DO_ONCE_LITE_IF(condition, WARN, 1, format)
+>       |  ^~~~~~~~~~~~~~~
+> security/keys/process_keys.c:923:3: note: in expansion of macro 'WARN_ONCE'
+>   923 |   WARN_ONCE(1, "In %s get_ucounts failed\n");
+>       |   ^~~~~~~~~
+> security/keys/process_keys.c:923:21: note: format string is defined here
+>   923 |   WARN_ONCE(1, "In %s get_ucounts failed\n");
+>       |                    ~^
+>       |                     |
+>       |                     char *
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>   346b5b4aa656 ("ucounts: Move get_ucounts from cred_alloc_blank to key_change_session_keyring")
+>
+> I have used the userns tree from next-20211019 for today.
 
-Cheers,
-Miguel
+Thank you very much for catching that.
+
+I am now quite embarrassed I did not catch that myself.
+
+Eric
+

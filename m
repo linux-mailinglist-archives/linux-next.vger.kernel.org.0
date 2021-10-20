@@ -2,170 +2,200 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0283243529C
-	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 20:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCEC4352C9
+	for <lists+linux-next@lfdr.de>; Wed, 20 Oct 2021 20:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbhJTS0r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Oct 2021 14:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S230487AbhJTSlw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Oct 2021 14:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbhJTS0p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 14:26:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F294C06161C
-        for <linux-next@vger.kernel.org>; Wed, 20 Oct 2021 11:24:30 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w19so94935edd.2
-        for <linux-next@vger.kernel.org>; Wed, 20 Oct 2021 11:24:30 -0700 (PDT)
+        with ESMTP id S230454AbhJTSlw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 14:41:52 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA1CC061749
+        for <linux-next@vger.kernel.org>; Wed, 20 Oct 2021 11:39:35 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g8so1574464edb.12
+        for <linux-next@vger.kernel.org>; Wed, 20 Oct 2021 11:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7wgOrtW4kNMgDGFBayDR7NepP+nkjDyN/nZep5skNo4=;
-        b=Y1JIeYON777wT0WBG7EWb1ZxJP6Nt5ZmXlRkfiHUgWgW0B2VSDPNgfkVcHFIhd49+e
-         wobk/cEW+ITkKFzZ5vOMSfu/sYOn341+9gqRf2b+HhFT00vBIZO0MoLt1cHStkygC5Ak
-         yyPmkzsnrgdCWinXUyIXdnKOVFyMif6IRXUIcwqHNDfo1MmzwdKtQGz4n+2bs6LITZQl
-         rz2MoFoqF6rFaZHgubHy0+OXLAjL3ERBw6YGkT+WNjCy4zzGeTR5AQEp1/gS+ZX4aDtp
-         KqPVzjaipUYBthoEc4PuNGs1gQbMhhk3+7V3Zyr3d8+JUOi/wOBuhSI/UKwf+/6WDJbk
-         gDOg==
+        bh=IOnuBNH10izCy7bvEjOZ+zy8jkLs6gqN7bvf8hCT9qk=;
+        b=Lw5N3LhxQcN/IteqznskbBJ67qhEtso9Ea1Nc62KAHv2dCwUf8TMgs9dSd0a+veyei
+         i9ocmgm1MzaSzJLg3b0k+jM2AwdZoyiGR+q8oyz4clrWeT2iUeYTA652TVGScPq/zVnI
+         F3gOA0f1xm98apkVCzFfg6Fp61+/v/HFNIijvpeLXllR/wlkS0ITf1EoYE70kqAZqjIk
+         fXFMjf2cjCh9Pe5C+Tnsuk0wTCW1ZKjrC9WW5Nq2lI3OYNIhF1gBaOi/j2OH6/ApBOO/
+         +pmYlqX8vZRGDFUSsjdc8sQghpzpvCrETt1IVBt9m3yBDpyLGO2HFUofak1NccdtyeW6
+         0B/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7wgOrtW4kNMgDGFBayDR7NepP+nkjDyN/nZep5skNo4=;
-        b=rClRbWKGbXUS1GjeNZlSOYx5b8OD7LTUrqZJ4WXyGNH8hl8v7eDJwj7Nq7m9VGApC/
-         sFFRdJA8U9LHvBnb4A3wDWXaB+88wIj9AOCpK05OkCZrqNCkK9LkJtsAIX8LwoN5Mn7L
-         6DgzHyDAHv+Zg4DjLp3RbGFmMHdojmmMUpPJ41S7DpuANBsd7ANBzSQFqC/5+qbL+tuz
-         0a+NfLuyezqHSHeFmB3XRYF6mbO0YH8z+iy9cpmTLpNx4tN5FBG4o5RLFd3y53ElsupT
-         L+Tj/SM8Jzz3LM0pLcFkKp6pfxa7z1fFGuZfePDhRK2VTBzTTMZFgWUyxEGNJIqUvWH4
-         0hQA==
-X-Gm-Message-State: AOAM531Jzec8CiQpVbNiyWCoXHZog416+BbN3fxQI7yotm17d3nRDwYL
-        RFBIx2ziopa+iSI+udYH4SWMPeYMj197wxIxINzw2Q==
-X-Google-Smtp-Source: ABdhPJzERw9O+P2DfPqtK7BVQLjR7ZoMOPp/OnTZixSdN0JoFdPPAnVgHST4OnNfdsRK3rrXAMGS/mC9zwO5Bb25STY=
-X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr798259edz.198.1634754268561;
- Wed, 20 Oct 2021 11:24:28 -0700 (PDT)
+        bh=IOnuBNH10izCy7bvEjOZ+zy8jkLs6gqN7bvf8hCT9qk=;
+        b=MtLVfQJoqkunAMUwJ5tUvcsAVrN6h9rh5RlZk1qu8dF0myeIQ5a/WnBzxMrvvNpH0L
+         kZY4DqiRUP3JTfSEu8BOZBTJJ1U08MoOpo/rTJOsw+OuL5ePZs0vGshNfZIHvJaCLy4s
+         gR9kaqyfA35VU9/9ekc7x0iTqwrUAdn8Kc4fHRcmEB9QN6lr3g8G2ixPvH2F6ktZR+Gv
+         vUFRlJy4XxcWPYm/M4Ji0VjsMdd/XU/ErralkQBRR7ffUX5dekjRPTn43WnrKMRRFsJh
+         eXpgNZXIqGk6lCatjGA1mT6Y+nIoIlXq2VJYcRMsPhkAwhwHUcwt9/UKlg+QlK+J97ya
+         IREw==
+X-Gm-Message-State: AOAM530Fr264IN3Wibg+Y44C4L+8OwaJwMqY8hB03Yhh2FTenLasBU7R
+        wI46lCLOLIEcs6WItEZnmyEDL/AYmJiE5A1HVthkVg==
+X-Google-Smtp-Source: ABdhPJz0BNKf5f7ihREF52JOz13SD8v+jz7TKix4ZVZJxdSzI9keWX2gJVGK9k2Er+/7aPop3kPBKgHe76FCOGw34NA=
+X-Received: by 2002:a17:907:3e08:: with SMTP id hp8mr1169133ejc.493.1634755173829;
+ Wed, 20 Oct 2021 11:39:33 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 20 Oct 2021 23:54:16 +0530
-Message-ID: <CA+G9fYv3jAjBKHM-CjrMzNgrptx-rpYVmGaD39OBiBeuz7osfg@mail.gmail.com>
-Subject: [next] [dragonboard 410c] Unable to handle kernel paging request at
- virtual address 00000000007c4240
-To:     open list <linux-kernel@vger.kernel.org>,
+Date:   Thu, 21 Oct 2021 00:09:22 +0530
+Message-ID: <CA+G9fYu8oby3LZ732W5xR0VS0WZ8D1XFWOuP-Tu7wogULcuNCA@mail.gmail.com>
+Subject: [Next] WARNING: CPU: 1 PID: 219 at include/linux/seqlock.h:271 gnet_stats_add_basic+0x2e0/0x548
+To:     Netdev <netdev@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, dri-devel@lists.freedesktop.org
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Marco Elver <elver@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 Following kernel crash noticed on linux next 20211020 tag.
-while booting on arm64 architecture dragonboard 410c device.
-
-I see the following config is enabled in 20211020 tag builds.
-CONFIG_STACKDEPOT=y
+while booting on qemu_arm devices.
 
 Crash log,
-[   18.583097] Unable to handle kernel paging request at virtual
-address 00000000007c4240
-[   18.583521] Mem abort info:
-[   18.590286]   ESR = 0x96000004
-[   18.592920]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   18.596103]   SET = 0, FnV = 0
-[   18.601512]   EA = 0, S1PTW = 0
-[   18.604384]   FSC = 0x04: level 0 translation fault
-[   18.607447] Data abort info:
-[   18.612296]   ISV = 0, ISS = 0x00000004
-[   18.615451]   CM = 0, WnR = 0
-[   18.618990] user pgtable: 4k pages, 48-bit VAs, pgdp=000000008b4c7000
-[   18.622054] [00000000007c4240] pgd=0000000000000000, p4d=0000000000000000
-[   18.628974] Internal error: Oops: 96000004 [#1] SMP
-[   18.635073] Modules linked in: adv7511 cec snd_soc_lpass_apq8016
-snd_soc_lpass_cpu snd_soc_lpass_platform snd_soc_msm8916_digital
-qcom_camss qrtr snd_soc_apq8016_sbc videobuf2_dma_sg qcom_pon
-qcom_spmi_vadc snd_soc_qcom_common qcom_q6v5_mss qcom_vadc_common
-rtc_pm8xxx qcom_spmi_temp_alarm msm qcom_pil_info v4l2_fwnode
-qcom_q6v5 snd_soc_msm8916_analog qcom_sysmon qcom_common v4l2_async
-qnoc_msm8916 qcom_rng gpu_sched qcom_glink_smem venus_core
-videobuf2_memops icc_smd_rpm qmi_helpers drm_kms_helper v4l2_mem2mem
-mdt_loader display_connector i2c_qcom_cci videobuf2_v4l2 crct10dif_ce
-videobuf2_common socinfo drm rmtfs_mem fuse
-[   18.672948] CPU: 0 PID: 178 Comm: kworker/u8:3 Not tainted
+         Starting Entropy Daemon based on the HAVEGE algorithm...
+[   15.611450] ------------[ cut here ]------------
+[   15.614631] WARNING: CPU: 1 PID: 219 at include/linux/seqlock.h:271
+gnet_stats_add_basic+0x2e0/0x548
+[   15.619863] Modules linked in: fuse
+[   15.621820] CPU: 1 PID: 219 Comm: NetworkManager Not tainted
 5.15.0-rc6-next-20211020 #1
-[   18.695000] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[   18.695012] Workqueue: events_unbound deferred_probe_work_func
-[   18.695033] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   18.715282] pc : __stack_depot_save+0x13c/0x4e0
-[   18.722130] lr : stack_depot_save+0x14/0x20
-[   18.726641] sp : ffff800014a23500
-[   18.730801] x29: ffff800014a23500 x28: 00000000000f8848 x27: ffff800013acdf68
-[   18.734294] x26: 0000000000000000 x25: 00000000007c4240 x24: ffff800014a23780
-[   18.741413] x23: 0000000000000008 x22: ffff800014a235b8 x21: 0000000000000008
-[   18.748530] x20: 00000000c32f8848 x19: ffff00001038cc18 x18: ffffffffffffffff
-[   18.755649] x17: ffff80002d9f8000 x16: ffff800010004000 x15: 000000000000c426
-[   18.762767] x14: 0000000000000000 x13: ffff800014a23780 x12: 0000000000000000
-[   18.769885] x11: ffff00001038cc80 x10: ffff8000136e9ba0 x9 : ffff800014a235f4
-[   18.777003] x8 : 0000000000000001 x7 : 00000000b664620b x6 : 0000000011a58b4a
-[   18.784121] x5 : 000000001aa43464 x4 : 000000009e7d8b67 x3 : 0000000000000001
-[   18.791239] x2 : 0000000000002800 x1 : ffff800013acd000 x0 : 00000000f2d429d8
-[   18.798358] Call trace:
-[   18.805451]  __stack_depot_save+0x13c/0x4e0
-[   18.807716]  stack_depot_save+0x14/0x20
-[   18.811881]  __drm_stack_depot_save+0x44/0x70 [drm]
-[   18.815710]  modeset_lock.part.0+0xe0/0x1a4 [drm]
-[   18.820571]  drm_modeset_lock_all_ctx+0x2d4/0x334 [drm]
-[   18.825435]  drm_client_firmware_config.constprop.0.isra.0+0xc0/0x5d0 [drm]
-[   18.830478]  drm_client_modeset_probe+0x328/0xbb0 [drm]
-[   18.837413]  __drm_fb_helper_initial_config_and_unlock+0x54/0x5b4
-[drm_kms_helper]
-[   18.842633]  drm_fb_helper_initial_config+0x5c/0x70 [drm_kms_helper]
-[   18.850266]  msm_fbdev_init+0x98/0x100 [msm]
-[   18.856767]  msm_drm_bind+0x650/0x720 [msm]
-[   18.861021]  try_to_bring_up_master+0x230/0x320
-[   18.864926]  __component_add+0xc8/0x1c4
-[   18.869435]  component_add+0x20/0x30
-[   18.873253]  mdp5_dev_probe+0xe0/0x11c [msm]
-[   18.877077]  platform_probe+0x74/0xf0
-[   18.881328]  really_probe+0xc4/0x470
-[   18.884883]  __driver_probe_device+0x11c/0x190
-[   18.888534]  driver_probe_device+0x48/0x110
-[   18.892786]  __device_attach_driver+0xa4/0x140
-[   18.896869]  bus_for_each_drv+0x84/0xe0
-[   18.901380]  __device_attach+0xe4/0x1c0
-[   18.905112]  device_initial_probe+0x20/0x30
-[   18.908932]  bus_probe_device+0xac/0xb4
-[   18.913098]  deferred_probe_work_func+0xc8/0x120
-[   18.916920]  process_one_work+0x280/0x6a0
-[   18.921780]  worker_thread+0x80/0x454
-[   18.925683]  kthread+0x178/0x184
-[   18.929326]  ret_from_fork+0x10/0x20
-[   18.932634] Code: d37d4e99 92404e9c f940077a 8b190359 (c8dfff33)
-[   18.936203] ---[ end trace 3e289b724840642d ]---
+[   15.629011] Hardware name: Generic DT based system
+[   15.632132] Backtrace:
+[   15.633763] [<c159a598>] (dump_backtrace) from [<c159a7b0>]
+(show_stack+0x20/0x24)
+[   15.640696]  r7:00000009 r6:00000000 r5:c1c896e0 r4:60000013
+[   15.644135] [<c159a790>] (show_stack) from [<c15a41bc>]
+(dump_stack_lvl+0x60/0x78)
+[   15.649336] [<c15a415c>] (dump_stack_lvl) from [<c15a41ec>]
+(dump_stack+0x18/0x1c)
+[   15.656049]  r7:00000009 r6:0000010f r5:c12ea968 r4:c1c796b4
+[   15.659501] [<c15a41d4>] (dump_stack) from [<c0356838>] (__warn+0xe0/0x144)
+[   15.665905] [<c0356758>] (__warn) from [<c159b7d0>]
+(warn_slowpath_fmt+0x84/0xb8)
+[   15.670799]  r8:00000009 r7:c12ea968 r6:0000010f r5:c1c796b4 r4:00000000
+[   15.674824] [<c159b750>] (warn_slowpath_fmt) from [<c12ea968>]
+(gnet_stats_add_basic+0x2e0/0x548)
+[   15.682438]  r9:00000000 r8:c12eb178 r7:00000000 r6:c53b99d0
+r5:c3365ea0 r4:00000000
+[   15.687144] [<c12ea688>] (gnet_stats_add_basic) from [<c12eb178>]
+(___gnet_stats_copy_basic+0x94/0x18c)
+[   15.695278]  r10:00000001 r9:c4d4d780 r8:c3365ea0 r7:00000000
+r6:00000000 r5:c53b9a68
+[   15.700138]  r4:c53b99d0
+[   15.701596] [<c12eb0e4>] (___gnet_stats_copy_basic) from
+[<c12eb298>] (gnet_stats_copy_basic+0x28/0x30)
+[   15.709271]  r10:00000000 r9:c5220cc0 r8:00000000 r7:c5408000
+r6:00000000 r5:c5220cc0
+[   15.716754]  r4:c3365e00
+[   15.718375] [<c12eb270>] (gnet_stats_copy_basic) from [<c137e5b0>]
+(tc_fill_qdisc+0x29c/0x45c)
+[   15.723901] [<c137e314>] (tc_fill_qdisc) from [<c137e808>]
+(tc_dump_qdisc_root+0x98/0x1bc)
+[   15.728747]  r10:00000000 r9:c5220cc0 r8:c5053bb8 r7:00000000
+r6:00000000 r5:00000000
+[   15.736183]  r4:00000001
+[   15.738107] [<c137e770>] (tc_dump_qdisc_root) from [<c137f2ac>]
+(tc_dump_qdisc+0x174/0x25c)
+[   15.745388]  r10:00000001 r9:c234bb40 r8:c5220cc0 r7:00000000
+r6:c5053bb8 r5:00000000
+[   15.749667]  r4:c33f0000
+[   15.751277] [<c137f138>] (tc_dump_qdisc) from [<c1396460>]
+(netlink_dump+0x154/0x364)
+[   15.758400]  r10:00000000 r9:00007f00 r8:c5053bb8 r7:c4d4d780
+r6:00007f00 r5:c5220cc0
+[   15.762750]  r4:c5053800
+[   15.764050] [<c139630c>] (netlink_dump) from [<c1396fa4>]
+(__netlink_dump_start+0x174/0x224)
+[   15.771348]  r10:00000000 r9:c5053bb8 r8:00000000 r7:c53b9c7c
+r6:c5220d80 r5:c5205000
+[   15.776145]  r4:c5053800
+[   15.777715] [<c1396e30>] (__netlink_dump_start) from [<c131d180>]
+(rtnetlink_rcv_msg+0x2f4/0x540)
+[   15.785106]  r9:00000000 r8:c137f138 r7:c5220d80 r6:c4d4d780
+r5:00000000 r4:c5205000
+[   15.791886] [<c131ce8c>] (rtnetlink_rcv_msg) from [<c1399600>]
+(netlink_rcv_skb+0xc4/0x11c)
+[   15.796838]  r10:c4d4d780 r9:c5053a44 r8:00000024 r7:c5205000
+r6:c4d4d780 r5:c131ce8c
+[   15.801860]  r4:c5220d80
+[   15.803413] [<c139953c>] (netlink_rcv_skb) from [<c1317b2c>]
+(rtnetlink_rcv+0x20/0x24)
+[   15.810282]  r8:00000000 r7:c5220d80 r6:c5053800 r5:00000024 r4:c304f800
+[   15.816716] [<c1317b0c>] (rtnetlink_rcv) from [<c1398c98>]
+(netlink_unicast+0x1a0/0x264)
+[   15.822014] [<c1398af8>] (netlink_unicast) from [<c1398f68>]
+(netlink_sendmsg+0x20c/0x460)
+[   15.827255]  r10:c5053800 r9:00000000 r8:00000000 r7:c5220d80
+r6:c4d4d780 r5:c53b9f48
+[   15.834244]  r4:00000024
+[   15.835804] [<c1398d5c>] (netlink_sendmsg) from [<c12d0318>]
+(____sys_sendmsg+0x1e0/0x290)
+[   15.843564]  r10:c4d4d780 r9:c53b9dcc r8:00000000 r7:00000000
+r6:c46adc00 r5:c1398d5c
+[   15.848266]  r4:c53b9f48
+[   15.849821] [<c12d0138>] (____sys_sendmsg) from [<c12d233c>]
+(___sys_sendmsg+0xb0/0xdc)
+[   15.857074]  r10:00000128 r9:00000000 r8:c4d4d780 r7:00000000
+r6:c46adc00 r5:c53b9f48
+[   15.862000]  r4:00000000
+[   15.863630] [<c12d228c>] (___sys_sendmsg) from [<c12d2514>]
+(sys_sendmsg+0x5c/0x98)
+[   15.869879]  r9:c4d4d780 r8:c03002a4 r7:befe879c r6:c4d4d780
+r5:c46adc00 r4:00000000
+[   15.874816] [<c12d24b8>] (sys_sendmsg) from [<c03000c0>]
+(ret_fast_syscall+0x0/0x1c)
+[   15.881956] Exception stack(0xc53b9fa8 to 0xc53b9ff0)
+[   15.884954] 9fa0:                   00000000 befe879c 00000007
+befe879c 00000000 00000000
+[   15.891833] 9fc0: 00000000 befe879c 00000007 00000128 b6a62000
+00000001 00000005 0027fe18
+[   15.897081] 9fe0: 00000000 befe8740 00000000 b6d71ec0
+[   15.900493]  r7:00000128 r6:00000007 r5:befe879c r4:00000000
+[   15.906386] irq event stamp: 36305
+[   15.907882] hardirqs last  enabled at (36313): [<c03e31c8>]
+__up_console_sem+0x60/0x70
+[   15.911674] hardirqs last disabled at (36320): [<c03e31b4>]
+__up_console_sem+0x4c/0x70
+[   15.918671] softirqs last  enabled at (36304): [<c0301fec>]
+__do_softirq+0x32c/0x560
+[   15.922707] softirqs last disabled at (36261): [<c0360034>]
+__irq_exit_rcu+0x154/0x178
+[   15.922869] ---[ end trace 3190ec354e2b2e34 ]---
 
 Full log,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211020/testrun/6177937/suite/linux-log-parser/test/check-kernel-oops-3786583/log
-https://lkft.validation.linaro.org/scheduler/job/3786583#L2549
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211020/testrun/6177894/suite/linux-log-parser/test/check-kernel-warning-3786488/log
+https://lkft.validation.linaro.org/scheduler/job/3786488#L775
 
 Build config:
-https://builds.tuxbuild.com/1zlLlQrUyHVr1MQ1gcler3dKaE6/config
+https://builds.tuxbuild.com/1zlLmMyDukg9DNVY8NUNkQ1d2ff/config
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+
 steps to reproduce:
-1) https://builds.tuxbuild.com/1zlLlQrUyHVr1MQ1gcler3dKaE6/tuxmake_reproducer.sh
-2) Boot db410c device
+1) https://builds.tuxbuild.com/1zlLmMyDukg9DNVY8NUNkQ1d2ff/tuxmake_reproducer.sh
+2) boot qemu_arm with OE rootfs as showing in below command line.
+/usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
+virt-2.10,accel=kvm -nographic -net
+nic,model=virtio,macaddr=BA:DD:AD:CC:09:02 -net tap -m 2048 -monitor
+none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
+-hda rootfs/rpb-console-image-lkft-am57xx-evm-20211006160523.rootfs.ext4
+-m 4096 -smp 2 -nographic
 
 --
 Linaro LKFT

@@ -2,126 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4004436651
-	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 17:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8FC436781
+	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 18:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhJUPeQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 11:34:16 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:36064 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhJUPeP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 11:34:15 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        id S231424AbhJUQX1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 12:23:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42056 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230072AbhJUQXY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 21 Oct 2021 12:23:24 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EB6B31FD50;
-        Thu, 21 Oct 2021 15:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1634830318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nXPwudmomqzIqQrwGaXyiAXLub/qasPhIndmnj6Vycs=;
-        b=VNZ+cAUb1uxMz7nvY0ksOnREW+p6njGEeTVBlbXbCDFnkqveTJSin9Y0jtWrYLx52V8Hsd
-        k/1NG0JVRU1xEf1qr0yC9iZZ0SsJTR5JBxLZ0Plx/DUgzOHWWj34ansfUrGeJr+OTzZ3FF
-        nOpq7sl8Pgy2X6V1CznSwELhPAxN1jA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1634830318;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nXPwudmomqzIqQrwGaXyiAXLub/qasPhIndmnj6Vycs=;
-        b=mBodyqUoS7Pu4V3oQzCZ2VWqrdsSfmo3Yzqq5LMVVuFuTMBlnRZ7ntJOmxr0Qwx+GzniUB
-        Bu8rnHj+ti/obzCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D95AF13AE4;
-        Thu, 21 Oct 2021 15:31:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YsmCNO6HcWFWWwAAMHmgww
-        (envelope-from <bp@suse.de>); Thu, 21 Oct 2021 15:31:58 +0000
-Date:   Thu, 21 Oct 2021 17:32:01 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id C4B7D6137C;
+        Thu, 21 Oct 2021 16:21:08 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mdaoU-000kXw-IW; Thu, 21 Oct 2021 17:21:06 +0100
+Date:   Thu, 21 Oct 2021 17:21:06 +0100
+Message-ID: <87r1cebb7x.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <YXGH8Y/flJWCCrbt@zn.tnic>
-References: <20211021133931.1a0e096b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211021133931.1a0e096b@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: linux-next: Tree for Oct 21 (drivers/irqchip/irq-mchp-eic.o)
+In-Reply-To: <bfc6fc7b-2bc3-b2b6-d65b-04805fbeb59d@infradead.org>
+References: <20211021184300.30c77f51@canb.auug.org.au>
+        <bfc6fc7b-2bc3-b2b6-d65b-04805fbeb59d@infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rdunlap@infradead.org, sfr@canb.auug.org.au, linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, claudiu.beznea@microchip.com, narmstrong@baylibre.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 01:39:31PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the kvm tree got a conflict in:
-> 
->   arch/x86/kvm/x86.c
-> 
-> between commit:
-> 
->   126fe0401883 ("x86/fpu: Cleanup xstate xcomp_bv initialization")
-> 
-> from the tip tree and commits:
-> 
->   5ebbc470d7f3 ("KVM: x86: Remove defunct setting of CR0.ET for guests during vCPU create")
->   e8f65b9bb483 ("KVM: x86: Remove defunct setting of XCR0 for guest during vCPU create")
->   583d369b36a9 ("KVM: x86: Fold fx_init() into kvm_arch_vcpu_create()")
-> 
-> from the kvm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/x86/kvm/x86.c
-> index 04350680b649,3ea4f6ef2474..000000000000
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@@ -10615,10 -10687,10 +10590,9 @@@ int kvm_arch_vcpu_create(struct kvm_vcp
->   		pr_err("kvm: failed to allocate vcpu's fpu\n");
->   		goto free_user_fpu;
->   	}
->  -	fpstate_init(&vcpu->arch.guest_fpu->state);
->  -	if (boot_cpu_has(X86_FEATURE_XSAVES))
->  -		vcpu->arch.guest_fpu->state.xsave.header.xcomp_bv =
->  -			host_xcr0 | XSTATE_COMPACTION_ENABLED;
->  +
->  +	fpu_init_fpstate_user(vcpu->arch.user_fpu);
->  +	fpu_init_fpstate_user(vcpu->arch.guest_fpu);
-> - 	fx_init(vcpu);
->   
->   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
->   	vcpu->arch.reserved_gpa_bits = kvm_vcpu_reserved_gpa_bits_raw(vcpu);
+Hi Randy,
 
-LGTM too, thx Stephen!
+On Thu, 21 Oct 2021 16:26:58 +0100,
+Randy Dunlap <rdunlap@infradead.org> wrote:
+> 
+> On 10/21/21 12:43 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20211020:
+> > 
+> 
+> on i386 and x86_64:
+> 
+> ld: drivers/irqchip/irq-meson-gpio.o:(.data+0x0): undefined reference to `platform_irqchip_probe'
+> ld: drivers/irqchip/irq-mchp-eic.o:(.data+0x0): undefined reference to `platform_irqchip_probe'
+> 
+> Full randconfig file is attached.
+
+Thanks for the heads up. It looks like despite the drivers advertising
+being able to compile on all architectures (CONFIG_COMPILE_TEST), they
+obviously don't.
+
+I'm going to slap the "fix" below on top of the current tree.
+
+	M.
+
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 7038957f4a77..77887e2002db 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -407,7 +407,7 @@ config IRQ_UNIPHIER_AIDET
+ 
+ config MESON_IRQ_GPIO
+        tristate "Meson GPIO Interrupt Multiplexer"
+-       depends on ARCH_MESON || COMPILE_TEST
++       depends on ARCH_MESON
+        default ARCH_MESON
+        select IRQ_DOMAIN_HIERARCHY
+        help
+@@ -611,7 +611,7 @@ config APPLE_AIC
+ 
+ config MCHP_EIC
+ 	bool "Microchip External Interrupt Controller"
+-	depends on ARCH_AT91 || COMPILE_TEST
++	depends on ARCH_AT91
+ 	select IRQ_DOMAIN
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	help
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Without deviation from the norm, progress is not possible.

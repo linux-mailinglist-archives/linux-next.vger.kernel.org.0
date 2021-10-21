@@ -2,89 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5594A436E18
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 01:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64260436E33
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 01:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbhJUXRh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 19:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
+        id S232261AbhJUXWB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 19:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbhJUXRh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 19:17:37 -0400
+        with ESMTP id S231183AbhJUXWA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 19:22:00 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FBFC061764;
-        Thu, 21 Oct 2021 16:15:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9C7C061764;
+        Thu, 21 Oct 2021 16:19:43 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hb3H95FG7z4xdQ;
-        Fri, 22 Oct 2021 10:15:17 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hb3NF2cVqz4xdb;
+        Fri, 22 Oct 2021 10:19:40 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634858117;
-        bh=zGLJenURHHt8jck4mkWKA7oPW22QVMmOYjxoXknXqdM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VoKi/CNi+qhbHtBv8m4FpCwJEis5BOkIDJpkDcDx5L3JydcElVz0g3R8s13mzH99/
-         E5Ha3SF/r54T7owkRnTFkwK4Riw0N4GBa3QpPhnP/FE3937yOqk4I4Xp/d6hImE95S
-         kHFxfqb4pM5QKEXaGCsu+BHdoPierDWCYVzeda84oOgEYe/pl42KN5TWbiuvJEK8Vv
-         sMTtjGb07zo7iCcAKFBLypROWoAwGilnVuyXojwZtF7IxlN6yZeutiPdTaQ954NMVB
-         rfuZzTC1b0tPLuLKv9BmB9tj4HFJfb/hUEgmxgiSXdoZvQLw6FOF7cTn6nu9R46SNt
-         w0siaGf/y8S8g==
-Date:   Fri, 22 Oct 2021 10:15:16 +1100
+        s=201702; t=1634858382;
+        bh=6/t6+f25dFPDKmlst0gpSR2W5GgVgdO7IRWg9l8R+R0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FBrnlLKZIaV9qsYE6qxeYvX6uNZUZHHGeCzkPjdrXK6t70wRQLSlgTfUC5aJwbP9H
+         0PuoTu9GeD7VV7TV74Q5pdxR7xXU13T7lrGTZ4kZtYP1NREdpOUGcOuJCMqqiEkNxc
+         WALSa/FHVL1sFaU6dPfOG2mUXCaH4UCNFmv2b5osQHtOcGBI368aX5kOdvYKR1vdRR
+         th4LgO3B5cnOHZyKlhPxQQvR/B3V5BJNXZ5JBCcpnb4rzQ/UD6U2EjWkl1lO/Cp3yd
+         y4wlQVKcKuote1liA7LB0uszR06baRi6CGfeDSoTIHvMiysrnQcDxZIMdRg82hZh/p
+         AqGc20mDIsuXw==
+Date:   Fri, 22 Oct 2021 10:19:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the fscache tree
-Message-ID: <20211022101516.7877fa7f@canb.auug.org.au>
-In-Reply-To: <738109.1634826774@warthog.procyon.org.uk>
-References: <20211021122909.0346c093@canb.auug.org.au>
-        <20211005204613.53cbdfb9@canb.auug.org.au>
-        <738109.1634826774@warthog.procyon.org.uk>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Maciej Machnikowski <maciej.machnikowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20211022101939.3fb5beb2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YJJXyfdgsUPEV5V6D/z_UyP";
+Content-Type: multipart/signed; boundary="Sig_/wVyx0QaeSkc_b51qrGoZ=4f";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YJJXyfdgsUPEV5V6D/z_UyP
+--Sig_/wVyx0QaeSkc_b51qrGoZ=4f
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi all,
 
-On Thu, 21 Oct 2021 15:32:54 +0100 David Howells <dhowells@redhat.com> wrot=
-e:
->
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->=20
-> > > Documentation/filesystems/caching/backend-api.rst:402: WARNING: Inlin=
-e emphasis start-string without end-string. =20
->=20
-> I'm not sure what that even means.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-I assume it is referring to the "*cres" with on ending "*" ... I am not
-sure how to quote the "*".  Maybe just with \ ... or ``*cres`` ?
+  drivers/net/ethernet/intel/ice/ice_devids.h
+
+between commit:
+
+  7dcf78b870be ("ice: Add missing E810 device ids")
+
+from the net tree and commit:
+
+  885fe6932a11 ("ice: Add support for SMA control multiplexer")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YJJXyfdgsUPEV5V6D/z_UyP
+diff --cc drivers/net/ethernet/intel/ice/ice_devids.h
+index ef4392e6e244,8d2c39ee775b..000000000000
+--- a/drivers/net/ethernet/intel/ice/ice_devids.h
++++ b/drivers/net/ethernet/intel/ice/ice_devids.h
+@@@ -21,10 -21,8 +21,12 @@@
+  #define ICE_DEV_ID_E810C_QSFP		0x1592
+  /* Intel(R) Ethernet Controller E810-C for SFP */
+  #define ICE_DEV_ID_E810C_SFP		0x1593
++ #define ICE_SUBDEV_ID_E810T		0x000E
++ #define ICE_SUBDEV_ID_E810T2		0x000F
+ +/* Intel(R) Ethernet Controller E810-XXV for backplane */
+ +#define ICE_DEV_ID_E810_XXV_BACKPLANE	0x1599
+ +/* Intel(R) Ethernet Controller E810-XXV for QSFP */
+ +#define ICE_DEV_ID_E810_XXV_QSFP	0x159A
+  /* Intel(R) Ethernet Controller E810-XXV for SFP */
+  #define ICE_DEV_ID_E810_XXV_SFP		0x159B
+  /* Intel(R) Ethernet Connection E823-C for backplane */
+
+--Sig_/wVyx0QaeSkc_b51qrGoZ=4f
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFx9IQACgkQAVBC80lX
-0GzHWgf+JAECh71zG7lnuaSRZ9OytX57Er+KqH9tWeMNsbpKwsY4xCJufdVaZdes
-s8ZaB4p3GwjfDVmN653HCpNejaCsjWRLPgZPFr5H3Co3LJt4eN/P0PQUT90y6EoF
-bMgOp/lDOrbJ8A1/2Jgbf5MwRU3Qc5qIJPKgsToSElqueeSYts+LbZtWOxBCKIoy
-PbIZP0JLSKyxcMxTITH0+gS8mhXRgrjv25+BTggr8AXLwOXmUii+eyVSx7eqwGqL
-pRtuOK6R8ueQ0Ev9rGvqkK6kxNcPAX0ZcHUq900GFcXgBNjXKakiWvEzn+VmwYzq
-Sz1bmp8d6wGoaujYxHvwOBA1riXh5g==
-=/ggr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFx9YwACgkQAVBC80lX
+0GzODwf/SbgfhCK4YZohL9xD9TRMbuZpTf++S8zyaRRS8O5az5mtZ30nUp7hBLhj
+z+ilaAaloCasXkfPReCFC6Dr6LxaTNMRAap6q1XCiBtoii4/srVT0hMCww+l8Gby
+vHeEQVe25ZCinMuWYPkJ/F35TRrZHEoyo0B6H8Ws+30vp3VIFADg3sVDneAo34+a
+k4yJsRGOrBKLCm1MYoS2b1YDOg4ykEqGp+i0MBRlJZgQdUZtcRugcHNfqjnMljrP
+vR2M0I4kVJlWInsMEVQcv7gZynqrKUXVUcyaAFNNEuU7XSJ4HYhQNc8/PN3nnj7S
+IJQNrtzzZ4jN0NwHkz5afgrVpfeltA==
+=PIid
 -----END PGP SIGNATURE-----
 
---Sig_/YJJXyfdgsUPEV5V6D/z_UyP--
+--Sig_/wVyx0QaeSkc_b51qrGoZ=4f--

@@ -2,184 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 974644369C1
-	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 19:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFA6436BB6
+	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 22:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbhJURxi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 13:53:38 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:46878 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbhJURxi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 13:53:38 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S230272AbhJUUFP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 16:05:15 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43559 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230020AbhJUUFO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 16:05:14 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CBB4E1FD50;
-        Thu, 21 Oct 2021 17:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1634838680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZsmryUSY+wyzBCewqKbucEe4Xr/mA/KtNiq91fwmf3A=;
-        b=PnEvVpjOdGRum8Yi1lPCAcQmRrFYxfVAJbY2HicvlwFJWrwZ8GbGv5BsKzHpUKzwBY/A0E
-        8XuWXQdNZw0SSsh1nw8d1g1nlqB/J6MYKPNnUGybjz2HiO7s5zzZMcX35ARmL6tiB5A10e
-        8NsmfW34eQJPebot5mY864hTaTCIFNM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1634838680;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZsmryUSY+wyzBCewqKbucEe4Xr/mA/KtNiq91fwmf3A=;
-        b=NmH9BRpdir7XsJGX76dVPoS6qCbZ/Z64AZzq2szzU/NvG2Pv95G7BE5H/BbNgZeqUl26uP
-        Jzts5ewqP+76XeCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 674FE13AE4;
-        Thu, 21 Oct 2021 17:51:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id p9V5GJiocWGLFgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 21 Oct 2021 17:51:20 +0000
-Message-ID: <2a692365-cfa1-64f2-34e0-8aa5674dce5e@suse.cz>
-Date:   Thu, 21 Oct 2021 19:51:20 +0200
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HZz1D5LKxz4xbT;
+        Fri, 22 Oct 2021 07:02:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634846576;
+        bh=8hutoUrhjoImTeuC/RieV6PxFK1CZ/JC0JpDZOJuWfk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IBpykymVNLuF2fmU+iYCTkDfLvzPFGTPAgqrXonzg+PIlhcsDIGy+HaUGNsBX3/6V
+         DnqVa6C9P+Elw5AUIqvMxAzF7S6L8vk2lO0Wbk0LdZBOGC6CRWzH/LeRhS7K+YTPBF
+         ei6r0PsbkJMLd4i8gXEGQApaRuuNtiSQCB1smXnu9PR+x0By8X5vElip95jJw2BceD
+         ZnkHf79Inspa1qgj+sKPTpPC5x0HyjHQrsUO16XnWyBngu7zQerCbvSoa3M85krxBh
+         M7YnlEEM8Bz+myFUyhlO4E5pVLfuu+/zk4RWPlc1vRmch5x1mc5CGl0HKArFxQJqSl
+         /61ipB+oHKWQQ==
+Date:   Fri, 22 Oct 2021 07:02:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the drivers-x86 tree
+Message-ID: <20211022070254.7ad873a2@canb.auug.org.au>
+In-Reply-To: <2b5929e2-eb77-d625-5637-fd8353909fda@redhat.com>
+References: <20211021184735.794b22a7@canb.auug.org.au>
+        <2b5929e2-eb77-d625-5637-fd8353909fda@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, dri-devel@lists.freedesktop.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marco Elver <elver@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <CA+G9fYv3jAjBKHM-CjrMzNgrptx-rpYVmGaD39OBiBeuz7osfg@mail.gmail.com>
- <80ab567d-74f3-e14b-3c30-e64bbd64b354@suse.cz> <87fssuojoc.fsf@intel.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [next] [dragonboard 410c] Unable to handle kernel paging request
- at virtual address 00000000007c4240
-In-Reply-To: <87fssuojoc.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/MGALi7gXpMgh00UoJHvgrdZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/21/21 10:40, Jani Nikula wrote:
-> On Thu, 21 Oct 2021, Vlastimil Babka <vbabka@suse.cz> wrote:
->> This one seems a bit more tricky and I could really use some advice.
->> cd06ab2fd48f adds stackdepot usage to drm_modeset_lock which itself has a
->> number of different users and requiring those to call stack_depot_init()
->> would be likely error prone. Would it be ok to add the call of
->> stack_depot_init() (guarded by #ifdef CONFIG_DRM_DEBUG_MODESET_LOCK) to
->> drm_modeset_lock_init()? It will do a mutex_lock()/unlock(), and kvmalloc()
->> on first call.
->> I don't know how much of hotpath this is, but hopefully should be acceptable
->> in debug config. Or do you have better suggestion? Thanks.
-> 
-> I think that should be fine.
-> 
-> Maybe add __drm_stack_depot_init() in the existing #if
-> IS_ENABLED(CONFIG_DRM_DEBUG_MODESET_LOCK), similar to the other
-> __drm_stack_depot_*() functions, with an empty stub for
-> CONFIG_DRM_DEBUG_MODESET_LOCK=n, and call it unconditionally in
-> drm_modeset_lock_init().
+--Sig_/MGALi7gXpMgh00UoJHvgrdZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Good idea.
- 
->> Then we have to figure out how to order a fix between DRM and mmotm...
-> 
-> That is the question! The problem exists only in the merge of the
-> two. On current DRM side stack_depot_init() exists but it's __init and
-> does not look safe to call multiple times. And obviously my changes
-> don't exist at all in mmotm.
-> 
-> I guess one (admittedly hackish) option is to first add a patch in
-> drm-next (or drm-misc-next) that makes it safe to call
-> stack_depot_init() multiple times in non-init context. It would be
-> dropped in favour of your changes once the trees get merged together.
-> 
-> Or is there some way for __drm_stack_depot_init() to detect whether it
-> should call stack_depot_init() or not, i.e. whether your changes are
-> there or not?
+Hi Hans,
 
-Let's try the easiest approach first. AFAIK mmotm series is now split to
-pre-next and post-next part and moving my patch
-lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
-with the following fixup to the post-next part should solve this. Would that
-work, Andrew? Thanks.
+On Thu, 21 Oct 2021 11:14:29 +0200 Hans de Goede <hdegoede@redhat.com> wrot=
+e:
+>
+> On 10/21/21 09:47, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+> > produced these warnings:
+> >=20
+> > Documentation/ABI/stable/sysfs-driver-mlxreg-io:230: WARNING: Unexpecte=
+d indentation.
+> > Documentation/ABI/stable/sysfs-driver-mlxreg-io:230: WARNING: Block quo=
+te ends without a blank line; unexpected unindent.
+> >=20
+> > Introduced by commit
+> >=20
+> >   527cd54d49dd ("Documentation/ABI: Add new attributes for mlxreg-io sy=
+sfs interfaces") =20
+>=20
+> Thank you for reporting this.
+>=20
+> I've a bit of a noob question which tool / make target generates these wa=
+rnings?
 
-----8<----
-From 719e91df5571034b62fa992f6738b00f8d29020e Mon Sep 17 00:00:00 2001
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Thu, 21 Oct 2021 19:43:33 +0200
-Subject: [PATCH] lib/stackdepot: allow optional init and stack_table
- allocation by kvmalloc() - fixup3
+I just do "make htmldocs".
 
-Due to cd06ab2fd48f ("drm/locking: add backtrace for locking contended locks
-without backoff") landing recently to -next adding a new stack depot user in
-drivers/gpu/drm/drm_modeset_lock.c we need to add an appropriate call to
-stack_depot_init() there as well.
+--=20
+Cheers,
+Stephen Rothwell
 
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- drivers/gpu/drm/drm_modeset_lock.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+--Sig_/MGALi7gXpMgh00UoJHvgrdZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/drivers/gpu/drm/drm_modeset_lock.c b/drivers/gpu/drm/drm_modeset_lock.c
-index c97323365675..918065982db4 100644
---- a/drivers/gpu/drm/drm_modeset_lock.c
-+++ b/drivers/gpu/drm/drm_modeset_lock.c
-@@ -107,6 +107,11 @@ static void __drm_stack_depot_print(depot_stack_handle_t stack_depot)
- 
- 	kfree(buf);
- }
-+
-+static void __drm_stack_depot_init(void)
-+{
-+	stack_depot_init();
-+}
- #else /* CONFIG_DRM_DEBUG_MODESET_LOCK */
- static depot_stack_handle_t __drm_stack_depot_save(void)
- {
-@@ -115,6 +120,9 @@ static depot_stack_handle_t __drm_stack_depot_save(void)
- static void __drm_stack_depot_print(depot_stack_handle_t stack_depot)
- {
- }
-+static void __drm_stack_depot_init(void)
-+{
-+}
- #endif /* CONFIG_DRM_DEBUG_MODESET_LOCK */
- 
- /**
-@@ -359,6 +367,7 @@ void drm_modeset_lock_init(struct drm_modeset_lock *lock)
- {
- 	ww_mutex_init(&lock->mutex, &crtc_ww_class);
- 	INIT_LIST_HEAD(&lock->head);
-+	__drm_stack_depot_init();
- }
- EXPORT_SYMBOL(drm_modeset_lock_init);
- 
--- 
-2.33.0
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFxx24ACgkQAVBC80lX
+0GxKwwf/dpOhm9AOlGI0luT4z17DQc5R9hczWOAK5qqy2b9rRyqKYozapTVPwsWV
+dBKmSXJq5MXZNK7o985hsYtczWXz/U5ozFsobQGB715neDq26yFbo0WqG0HWt0ec
+oOCN1w2OvlWaf9OKffxgrUKmEgqiWOUdXGWbVWqqfbmNGKkxntBHkVTqHnzFcKWo
+GP+JFaCyA3u6KAVTJ90Q11yhHVHBrNYr2dqXVmZ9mOxR2ndJQGkMvDljerFkjboD
+srtldlQW3M92KAfiDG5++L8SyORml4cECkJRlYGO5A567r7gF5uYlz2PIuxy1Dm6
+9MIfM8gLBpdzkTjbmxQzMJ4BwGO2Gg==
+=HPTv
+-----END PGP SIGNATURE-----
+
+--Sig_/MGALi7gXpMgh00UoJHvgrdZ--

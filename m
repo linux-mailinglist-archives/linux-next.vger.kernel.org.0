@@ -2,220 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12FC435D7C
-	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 10:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49671435D97
+	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 11:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbhJUJAx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 05:00:53 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:52986 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbhJUJAw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 05:00:52 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EE3C1FD53;
-        Thu, 21 Oct 2021 08:58:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1634806716; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sbWYdz6Wz913HfScu1UZ7h+IgOLpDvOmE8sinRYcXJo=;
-        b=CGoodxDtGTt1KyamyZ+qvhwJd0OoS15pawh/sq6LgX5HsjxeAulq9b54ZapH0QM0iOwRFD
-        NlH2BmLe/kkR4oDBVgrk4vTiwk2LYmf78cFs1kZI8x149uIow+tFK0ywzFaQHSrxpv1bcD
-        CUElY4+OojusG4lImRu2BsguVy7B3aY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2ABB213BDA;
-        Thu, 21 Oct 2021 08:58:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L98tCLwrcWGdJQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 21 Oct 2021 08:58:36 +0000
-Subject: Re: linux-next: build warning after merge of the tip tree
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231330AbhJUJJV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 05:09:21 -0400
+Received: from mail-dm6nam08on2083.outbound.protection.outlook.com ([40.107.102.83]:50177
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230440AbhJUJJU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 21 Oct 2021 05:09:20 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aoxmQ8SoXiGuWW3XxNv9AY4hUVw2JqxtB+DdRedqKF0S2s2fSzgQ1imCbVQQHvfW61O5er3BZhA0wyo0G+fmrflqjNhpDBCbcioGaDoabkmDgmJoULlSbVqWDa+wIsynnzFDRQ4cZ97DKVRJMhpqK/2ti/cfCvybInF5nBZmrGJBaL8LJpFdz1sXd/zaaqtNwW04ChNJ86eaPOVCi3KaoEJ47c0EgXtlquRG04x4oawyEHJy0N0XAhIGrLwrFTYEckMuQkj8UJvi9Ntral8NZp6Il0Y4J9oVwK6iaJn5cEUL+wA8CaXoPhcryQP8QIEn3EQ9ceRhv1UwOHxCsZsdfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VtxoEHsH44+THyc/VV3MpRHQRC/Oz+okPi7xBiENXd0=;
+ b=B8bKaT0pV6BKAKW7ge+GOGpLNF/pUOP5LS48EyD+5/Tgk/8UjCwQCN3A0NppJlrDRsJ4MnyLOyoba+j/1z+zIZ5JYzVoi5L9//9oj9QIYrvecDv8I2gbbDaK7/WXvyPXNtF9ciMA+TLdXDhjYSZSsNys96EvvnCofpDLs3cUMPff4Tz1iFiKhg31cNWDuglZrvplzrgCmUOjDQSFfGCY1i4u2lGID7UbA2qos2sDsG4VredEtoucKBf+qIlysqftQaBn0L46aVhmRxZVY8fTYFPWXZWo/hH8tXnRYPD2LV3LllpOhhbQJSVbFZgILnQu3YjAjckRgCZyaTl8Ai/eSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VtxoEHsH44+THyc/VV3MpRHQRC/Oz+okPi7xBiENXd0=;
+ b=AhEyvS0pzSzVYmBLuK0kSm2epUtsQFTsY5PwTGjYNmDDMu6HqfvTyyxcQaTsseFwmtlH8WXRtouOnpSUkk7v/Nkcyb+b7PtRJ6TO+HmaIwE2JJ2FzA4z8oIGRfytNjjh1+FLfb3KTHmqAtFHJ5XDP0oAA8Zwof01tEvlfePie3eX9ET+DUBrPf/jmaRzDX79b/xHaAiA94KGUYLGrx16VCKIR8Kl58CweFhaoPjjfw5k+ClnnsD94kcICd4nxakX2tLLFIPDy7AVuYIbHImS5CRjhYe/H3groOkKwPDKVQzQhWc0rvS4o1XYXg0TSMo0Ae2ifZszFHCST7N5lUfNJA==
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com (2603:10b6:408:102::24)
+ by BN9PR12MB5365.namprd12.prod.outlook.com (2603:10b6:408:102::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.15; Thu, 21 Oct
+ 2021 09:07:03 +0000
+Received: from BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::f846:3ab1:9cc3:ee1]) by BN9PR12MB5381.namprd12.prod.outlook.com
+ ([fe80::f846:3ab1:9cc3:ee1%7]) with mapi id 15.20.4628.018; Thu, 21 Oct 2021
+ 09:07:03 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20210917115859.6cfc64a5@canb.auug.org.au>
- <20210920113809.18b9b70c@canb.auug.org.au>
- <20211021140340.139eab65@canb.auug.org.au>
- <YXErbb3TGDwUJXHw@hirez.programming.kicks-ass.net>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <e33163e0-2c44-1e84-81ee-5df217ed19d9@suse.com>
-Date:   Thu, 21 Oct 2021 10:58:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+Subject: RE: linux-next: build warnings after merge of the drivers-x86 tree
+Thread-Topic: linux-next: build warnings after merge of the drivers-x86 tree
+Thread-Index: AQHXxk/tUu18LybahU6SygVXiBoT3qvdKHKA
+Date:   Thu, 21 Oct 2021 09:07:03 +0000
+Message-ID: <BN9PR12MB53814D3DCD5BD5E9441DE3F3AFBF9@BN9PR12MB5381.namprd12.prod.outlook.com>
+References: <20211021184735.794b22a7@canb.auug.org.au>
+In-Reply-To: <20211021184735.794b22a7@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: canb.auug.org.au; dkim=none (message not signed)
+ header.d=none;canb.auug.org.au; dmarc=none action=none
+ header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 95386047-6fbb-4e7d-e36b-08d99472262b
+x-ms-traffictypediagnostic: BN9PR12MB5365:
+x-microsoft-antispam-prvs: <BN9PR12MB5365D64D4E557B62676ABE1FAFBF9@BN9PR12MB5365.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:339;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FVtnHEVd8ktOtGsM0YJROmVkXM/o+gXy3SUI6AbeILHn2Xh/SmDxu0H1hOrMj+8bIY3vtzJj0uUsl9rg47s9+c6BqeDRttPSnC4RIFc7pvDriBRt41DjjhaaPi8Z5Y/ZszBPqVFu3eADf8K6j/qztGXR3blZhF0lW7/xFIJqCoFEFAxHAgzy6UUx4kHZWm3b3RbY+0kqcZVymkYXJgSfmanGk0NTRq6EEVUdP+ZHg0q7Mjd2BlFqqt0JkUxqDm/LYoonyH+M45kX4qX8kIiUI6ricEWijX5BB4GLaJ2Tc/srWdnff9wh0ZpfZkecbNByaCSiIadHePeVUwzbBJv+uAZ9DsZ1+bcxXW6OlxElDoIFMPS556ykOWevw7HYW651XHXCBTyYfvBftW0cMzEjiKN5UVmd72w36Y1ZjQNKKaVRrVaZN9L5GRKagTiwo5pWGxTIOeObeIv8zFj8NCHz/8wD7bxKSlOMglh0B/J8zoHTAf33Hb3V7sO/xpOJRgblyRo5q+uMRyZ3hpB09ra1PN3aihPU/E7bC/DeXRoS7GcJTHKFqwHxa6399B8f9sEf7fPsuXQO6GWqtAXCEcmgfsjSFMFllGt9dxroAQFIAdfh7dXlnaGZQr6MIbUkXQndInuwwuuV6COaKYKfqCrW7u4/hj2aLZt8oYc9YB7PMdWaIHAxUB9d54P+W0NqCqsa+QLZ1rmr6hjPF9bCsCiU7g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(33656002)(4326008)(54906003)(316002)(7696005)(9686003)(8936002)(86362001)(5660300002)(38070700005)(55016002)(8676002)(53546011)(76116006)(66476007)(52536014)(64756008)(66446008)(83380400001)(186003)(110136005)(122000001)(38100700002)(66556008)(66946007)(71200400001)(508600001)(6506007)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QQbrnrsMP3GzpkN1zpjfy1XWYh4D9ETVEs28N4DHo7kFS+fTu84iLkLxJIRq?=
+ =?us-ascii?Q?iJCzdEohLgG9to010Gq775piHzxS+gjx+GIdFymAooxk2DzXuE0sBRInnScJ?=
+ =?us-ascii?Q?XMrumssc3qdSvusWo3FHvCDITqh6LMUmx9tKS3NTT30QO0ph2gf6XlM1ewW+?=
+ =?us-ascii?Q?rbYHGqieJB+LW10Mv/jjjzgtiXHVWfPh30BQtKCQpjSJ+2ba9GvShwCFxm2m?=
+ =?us-ascii?Q?DRqykIxn+PCaeV/vGlOVlP964Q3xWUVf8wor5CDjG0dKN8pbmIqPXm/pCxkZ?=
+ =?us-ascii?Q?51N1qJ/PHnfiqhcG/sGbZjzAusGdfpgksiTPF0/b9E0zAfwr1+Lr+PASFDuN?=
+ =?us-ascii?Q?kOkmQkpXP17L/OugLSzrPl2wcWUArsq8O4HdglNVUON+3mAnk5D0a1NQm4mw?=
+ =?us-ascii?Q?cEdc/syYTu9XCJc7+JPbR4mb1QqsDb7QLmyLhLlgFO0VfRCOeMwmtrJGKCYV?=
+ =?us-ascii?Q?2Md5LwW1pmhDoGMETLQxsss7DADjTscf/xAbthVS5zDCi10Ds/HWESPUI6Pl?=
+ =?us-ascii?Q?cG7xhI6uqaooUsw0nCQVOcxt8r2la3WxPNkJMaQWeOKWx/SUDLvNo1gHUN4I?=
+ =?us-ascii?Q?kgc/RSEPGj7HDikevNtyhzWDSKBNMv97oYTKx+ZhbuZK0WWdICRnrtcWQVay?=
+ =?us-ascii?Q?t7UvhN0rgfTMOHKF5YZv4KnwI10FrCJAorsjNln9otyx4NhrrvnkRJOfWIKz?=
+ =?us-ascii?Q?FY4jUSjEpHIK0OKu4SlhLUvauXUMG4EESE+D9+tyqJzxUS1u9im2IdnncErk?=
+ =?us-ascii?Q?ey4neYEPYPBIaeEFYX+T67go4UNrdX1gNtzf9O/E6MIOdXGrhXpNj6Qo7mPk?=
+ =?us-ascii?Q?pmV4pxAeFZ4TuVCa8SYLf6xr235lPxhWGFZ8taaYTOifEYpyyFChgnOfwwj5?=
+ =?us-ascii?Q?pq/hHjTyyr6nKCBbjJYVlURYtFeTXW3YPexvRaV5WfIQYJ+8ytcD+l56Ryd0?=
+ =?us-ascii?Q?7Kqy3WD99eLuxfSTyfXVpB5vjuLX0M+gkhxALRlDjR1g7GjLxjLTFTAEURv6?=
+ =?us-ascii?Q?s5jJJ+DbIEAeDfe9s1sLwQqI23N+ecMu01eZRPr7DxChffXoTkZ0yStXhTWh?=
+ =?us-ascii?Q?NuyFJJrlWMXbkTsNuYTp4Te5f6duTK0an5GujHLF0l9LCgwRWpzyQIZIZNP7?=
+ =?us-ascii?Q?VeJGHyxvnsc7cNnMUntpvM0LoCJsJAktD1LF+qQAYBHDRz73eIBdolli9MO3?=
+ =?us-ascii?Q?AM8dunGtOvEPCTvHWmD8rZ35W/bQAEOND4jikZ44QMN3if/3tp4aagvPfSfp?=
+ =?us-ascii?Q?Cxz9cCJzsqRMAeN7firPszWp3yHmZmPZmhkOhOffyP30VoGydadcvZs+BoDS?=
+ =?us-ascii?Q?Zr24x+H6hsjc6hIjAERRTmEFQdFfAOthZT27u0FUE48XYnlbDL44EhwO9wYT?=
+ =?us-ascii?Q?UmcljLSvJrktGSe2c/srwkX1NJc8GI2C+jaHpQQDMzLY/VYchl39d8PepOdy?=
+ =?us-ascii?Q?cPYBokaSw40=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <YXErbb3TGDwUJXHw@hirez.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="Y7BwP2tQYFXqKzkPa0u4Tubk7qU0CQ12L"
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5381.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95386047-6fbb-4e7d-e36b-08d99472262b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2021 09:07:03.5745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vadimp@nvidia.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5365
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Y7BwP2tQYFXqKzkPa0u4Tubk7qU0CQ12L
-Content-Type: multipart/mixed; boundary="mRiJw3L4XPZGYibQSZmgW6XmiiJiSdIXw";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Peter Zijlstra <peterz@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Message-ID: <e33163e0-2c44-1e84-81ee-5df217ed19d9@suse.com>
-Subject: Re: linux-next: build warning after merge of the tip tree
-References: <20210917115859.6cfc64a5@canb.auug.org.au>
- <20210920113809.18b9b70c@canb.auug.org.au>
- <20211021140340.139eab65@canb.auug.org.au>
- <YXErbb3TGDwUJXHw@hirez.programming.kicks-ass.net>
-In-Reply-To: <YXErbb3TGDwUJXHw@hirez.programming.kicks-ass.net>
 
---mRiJw3L4XPZGYibQSZmgW6XmiiJiSdIXw
-Content-Type: multipart/mixed;
- boundary="------------00BB78E1F6D50CBA7692B7C0"
-Content-Language: en-US
 
-This is a multi-part message in MIME format.
---------------00BB78E1F6D50CBA7692B7C0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-On 21.10.21 10:57, Peter Zijlstra wrote:
-> On Thu, Oct 21, 2021 at 02:03:40PM +1100, Stephen Rothwell wrote:
->> vmlinux.o: warning: objtool: xen_irq_disable()+0xa: call to preempt_co=
-unt_add() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: xen_irq_enable()+0xb: call to preempt_cou=
-nt_add() leaves .noinstr.text section
+> -----Original Message-----
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Sent: Thursday, October 21, 2021 10:48 AM
+> To: Hans de Goede <hdegoede@redhat.com>; Mark Gross
+> <markgross@kernel.org>
+> Cc: Vadim Pasternak <vadimp@nvidia.com>; Linux Kernel Mailing List <linux=
+-
+> kernel@vger.kernel.org>; Linux Next Mailing List <linux-
+> next@vger.kernel.org>
+> Subject: linux-next: build warnings after merge of the drivers-x86 tree
 >=20
-> https://lkml.kernel.org/r/20210922103102.3589-1-jgross@suse.com
+> Hi all,
 >=20
-> Juergen, where are we with those patches?
+> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
+> produced these warnings:
 >=20
+> Documentation/ABI/stable/sysfs-driver-mlxreg-io:230: WARNING:
+> Unexpected indentation.
+> Documentation/ABI/stable/sysfs-driver-mlxreg-io:230: WARNING: Block
+> quote ends without a blank line; unexpected unindent.
 
-Queued for 5.16.
+Hi,
 
+What is wrong with the syntax at line 230 and where blank line is expected?
 
-Juergen
+What:		/sys/devices/platform/mlxplat/mlxreg-io/hwmon/hwmon*/bios_active_ima=
+ge
+What:		/sys/devices/platform/mlxplat/mlxreg-io/hwmon/hwmon*/bios_auth_fail
+What:		/sys/devices/platform/mlxplat/mlxreg-io/hwmon/hwmon*/bios_upgrade_fa=
+il
+Date:		October 2021	<--- this is line 230
+KernelVersion:	5.16
 
---------------00BB78E1F6D50CBA7692B7C0
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Thanks,
+Vadim.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------00BB78E1F6D50CBA7692B7C0--
-
---mRiJw3L4XPZGYibQSZmgW6XmiiJiSdIXw--
-
---Y7BwP2tQYFXqKzkPa0u4Tubk7qU0CQ12L
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmFxK7sFAwAAAAAACgkQsN6d1ii/Ey9H
-3Qf+Os0di+N4ydcbM+DpOdFERXbZ6ZyiTEUm+KqB8GDZaulKv5BMr82RMmzGCrZXG5J2E7CnBSDs
-T0eluHjWDXxT090z2JAftvJn8HfZ6SOtfWYe51LBHhkr4uGSuBDX+m8uqXLRZllvJjcB3IXntNlb
-FBGamoI7r+iR92kwv7VzjOVgfR1wkTFfTBtxsV44WjV943aF78Z7twNHsdF/NuemS1YMVXzijw8X
-Ikf5ANRYng3TL2S/u3qcu2ruNSeaZDUgaurTBqNpN2T+mbyVgmcEBgcVNGfOnPQXR6vP7//dLSng
-XjXg7kf4JXYdidVzaeRmp4vqyzUJuImni3pDApMfjQ==
-=ePVU
------END PGP SIGNATURE-----
-
---Y7BwP2tQYFXqKzkPa0u4Tubk7qU0CQ12L--
+>=20
+> Introduced by commit
+>=20
+>   527cd54d49dd ("Documentation/ABI: Add new attributes for mlxreg-io sysf=
+s
+> interfaces")
+>=20
+> --
+> Cheers,
+> Stephen Rothwell

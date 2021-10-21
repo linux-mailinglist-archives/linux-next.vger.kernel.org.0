@@ -2,96 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0866843582C
-	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 03:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E181435837
+	for <lists+linux-next@lfdr.de>; Thu, 21 Oct 2021 03:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbhJUB30 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Oct 2021 21:29:26 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:33927 "EHLO
+        id S230192AbhJUBa3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Oct 2021 21:30:29 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:54625 "EHLO
         gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbhJUB30 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 21:29:26 -0400
+        with ESMTP id S231342AbhJUBa2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Oct 2021 21:30:28 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HZVFm2b3Rz4xbL;
-        Thu, 21 Oct 2021 12:27:08 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HZVH02P4nz4xbT;
+        Thu, 21 Oct 2021 12:28:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634779629;
-        bh=/P3sXv3gg+XWwVuNNFzsys4NuZ1Yv/74orig70uJzH4=;
+        s=201702; t=1634779692;
+        bh=vDWuEnZ5RpZM5FmpEAHbWhY2teRuUOgp7f/FO0fESKU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o6UOh8UKYL9dHZPIkbY5Goqo8g0WDASq0S9rVYBWjy/R+yUoe8yVCxCCoEsjY4kyH
-         6yr3lTwN3LP8Zy924fHKfJUSsROszJ2rCjaQPv2LS7Re0DGPQX7ELnYBnKuOlJU0l9
-         cxyqGrYDtaar8WEeaGbO9d513ytVaJ4kXlFvLycWSyUwQxBmOe2PILlM1bfD8eG3Nc
-         +ym7tJ/OQzC6vZijFNxGEjPBF2Ygycfh0lINu4JVkLxywqL7fKvfcZtLXE3aiCVX5h
-         DAPX2Dhyv/zz0Un78T6V1U4O2mglL+33HHqqP1LldqnwQZr9IJR4YCQ8rofXzKqEW+
-         H5zuuiHwlgrag==
-Date:   Thu, 21 Oct 2021 12:27:05 +1100
+        b=P2p/Q7i/GeP8r7PnkI8xJOyNUDudRxPsaHhEszzMKZ9VZsGcodcTUtk5vGADIFiZt
+         eFWCbPk23tNoPygGBY5KQpt9uSa78jCr4epCJ+Bs8O9vIgEvbeTWoYbNY1gUCx5OTg
+         UBTQIFzGDiZ7VRXtxvLpGDcRV92HDwcMcMh5owq27Zz4vOG0TjBqV6wkdLKNQX1pnc
+         X275FKMxbUycpyirxSj+vPG6BcD3KT/ugMzE/vduKSuEkCalm2CbGcPewTORmw68eG
+         bmfim1eYFanKr/M6cx6C27gAYSxx0r5HVyh3LZ6T6W5YGrudFf091Miw8HnAJKBcLx
+         lMMCFqmAu50DQ==
+Date:   Thu, 21 Oct 2021 12:28:11 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
+To:     Fengnan Chang <changfengnan@vivo.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20211021122705.2282c49b@canb.auug.org.au>
-In-Reply-To: <f9b1b7e6-94ab-50f8-d16c-a3581096687d@amd.com>
-References: <20211005185940.382720e7@canb.auug.org.au>
-        <f9b1b7e6-94ab-50f8-d16c-a3581096687d@amd.com>
+Subject: Re: linux-next: build warning in Linus' tree
+Message-ID: <20211021122811.1e7d96f4@canb.auug.org.au>
+In-Reply-To: <20211005202900.29285789@canb.auug.org.au>
+References: <20211005202900.29285789@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gnfe75AE3eq1OYO7JPRDy2e";
+Content-Type: multipart/signed; boundary="Sig_/=Cr5nnekvT=WQ44hVISRhKM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gnfe75AE3eq1OYO7JPRDy2e
-Content-Type: text/plain; charset=UTF-8
+--Sig_/=Cr5nnekvT=WQ44hVISRhKM
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 5 Oct 2021 10:23:23 +0200 Christian K=C3=B6nig <christian.koenig@am=
-d.com> wrote:
+On Tue, 5 Oct 2021 20:29:00 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Am 05.10.21 um 09:59 schrieb Stephen Rothwell:
-> >
-> > After merging the drm-misc tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >
-> > include/linux/dma-buf.h:456: warning: Function parameter or member 'cb_=
-in' not described in 'dma_buf'
-> > include/linux/dma-buf.h:456: warning: Function parameter or member 'cb_=
-out' not described in 'dma_buf'
-> >
-> > Introduced by commit
-> >
-> >    6b51b02a3a0a ("dma-buf: fix and rework dma_buf_poll v7")
->
-> Thanks for the notice, going to fix this.
+> In Linus' tree, today's linux-next build (htmldocs) produced this warning:
+>=20
+> Documentation/filesystems/f2fs.rst:288: WARNING: Block quote ends without=
+ a blank line; unexpected unindent.
+>=20
+> Introduced by commit
+>=20
+>   151b1982be5d ("f2fs: compress: add nocompress extensions support")
 
-I am still seeing these warnings.
+I ma still seeing this warning.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gnfe75AE3eq1OYO7JPRDy2e
+--Sig_/=Cr5nnekvT=WQ44hVISRhKM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFwwekACgkQAVBC80lX
-0GyV5gf/S+g93X5+pnzfg+sMV1u6Z81Eki3YB95pwwcQpaGQFYtBBKi+wrp+NlJg
-9Z8HSyE7JDD5Fzv13vC6fEQsufrBn8haG7GNDcI9SVOCtaPMsvtzbtYg3sktR9al
-TjISf3cac7B7pqjEmx3DfcUhP2DvD9vMyiHsPd9beJU8PAFW991ChMz0iDEiaOQ9
-IGg1SzAUohuIet+IyFhgUd9OKr4dyYUF5TDtXMO+UmRQhnqoGf4h7FOnmc2+GVYO
-JeNwoVgPHq1jSH5rXm5SBPWFF7T+8BOmo874yFDaKwMsieiGnylwjuzWkYg/n8i9
-fAuXp5RwIGCD9pnvMH9oZ9Z6y76ttA==
-=AusU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFwwisACgkQAVBC80lX
+0GxuoQf+Lf90QkZGE8k3tuoFSg4U6fzibeRS8VvrkUIkxvZV6rgLYT4Xy2NjwzsE
+axx8hIr3Rk7bCh/Z7p7w9r8BaUMxoclGtkt4hDfjUBPDLQwp56vIq/Qe1lxmseND
+gewXme+1HTWlfLVa3I585ptuA7EmYivgdH76+ER0/M0czJ65EFpEnOf2eUo0PXAZ
+Wiw1lfapbbVlcsJw+cdHhLonBupcHSYkTmu85HiX4TD1z8rahpxqvIW/cR9sxP/5
+GbSNuxnptmQ5Mf3rmr4kLppICg5paI6S/lKp0npa93w5dNzFjalWDtNIuU/TUh2J
+14xpyRaxcRlGUmqHvOQGWkGitY4zIA==
+=aHB3
 -----END PGP SIGNATURE-----
 
---Sig_/gnfe75AE3eq1OYO7JPRDy2e--
+--Sig_/=Cr5nnekvT=WQ44hVISRhKM--

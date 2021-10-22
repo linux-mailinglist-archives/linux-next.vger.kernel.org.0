@@ -2,74 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CCF437A9E
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 18:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62703437F51
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 22:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbhJVQMZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Oct 2021 12:12:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55088 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231453AbhJVQMZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 22 Oct 2021 12:12:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 77FC961163;
-        Fri, 22 Oct 2021 16:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634919007;
-        bh=SPlMHyht+w/MLteefYniQ3lbjF7zRKUSnY88v5UDeDk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HWLbitFHgifXGTmKpwto5yEyRRYXaoBgZy53n51cB5Ym0uqsyl7QEZuvNQP7Q87D1
-         tYrVlI3R0Mo9sn1gcpNp/S4rbGoeGA24es4x5x/Sbw2hshEs75ZCz1PjD0QPDoOgmf
-         +yGo42TxYWgJBWdWdm9zrE2BL7FpTDufFSqnxIzVaRx+fkiM5YRLoR2Ii8F+pGggD2
-         CO6ys8FALP+uKEDBSVu+t/V1uAn9WNldgX1tsMj/PUE8HAEgkL6SN4D/ED2Gs/1Mvl
-         Sl3V4VeA/mFhftQtIlZGji4iGKH4Qzg3pL9a9HXJ8pb7ZC1kw/lCxdoUczxNZ6utoT
-         v05M+vvJXmiZg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6479E60A2A;
-        Fri, 22 Oct 2021 16:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S233644AbhJVU2E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Oct 2021 16:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232089AbhJVU2E (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Oct 2021 16:28:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E83C061764;
+        Fri, 22 Oct 2021 13:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=yJUQGZL4e2STxDZm0pZwpMRWUfeTfstNIaev+eEoaKs=; b=A0OV3FXpdqLoPcndlGopdUao7g
+        Xv5vYELg7S3zPwA1lJocuFoxsm1hfIAPhwCNRgQp5OktVladtfWlgKoIOv/RqKf6xnqsYiBqDu9Zn
+        W5QvP7seoBTBIv7+X2t5WHkDm+CgUtTWGnWrHPTiSpxcs3T8BRUFTpV6oLuk77gR+f3+W2GSj7brZ
+        kKvi5LOr7KjOZHhvdqxgC3va4GIG83TLtDfS7CosQjSsABrtG0oNcWN2NWqeRxECqgfWaab31Dijm
+        o/YeaaIWxk4FHe7Xif/6aUTdhQ9ykvRdquITNfMZ8YOio+JDVHErYaOpe7MXsSEJWgWZyVBE8UPXU
+        4B5y5J+Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1me16k-00Bwhu-7Z; Fri, 22 Oct 2021 20:25:42 +0000
+Subject: Re: linux-next: Tree for Oct 22 (sched...)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+References: <20211022201533.6085b17f@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <fcb0c32f-efcf-961c-2226-85a5121c7c09@infradead.org>
+Date:   Fri, 22 Oct 2021 13:25:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20211022201533.6085b17f@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Subject: Re: linux-next: build failure after merge of the net-next tree
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163491900740.27396.7600994383536368181.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Oct 2021 16:10:07 +0000
-References: <20211022112436.4c46b5a4@canb.auug.org.au>
-In-Reply-To: <20211022112436.4c46b5a4@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, maorg@nvidia.com,
-        maord@nvidia.com, saeedm@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 22 Oct 2021 11:24:36 +1100 you wrote:
+On 10/22/21 2:15 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> Changes since 20211021:
 > 
-> drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:71:10: fatal error: lag.h: No such file or directory
->    71 | #include "lag.h"
->       |          ^~~~~~~
-> drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:13:10: fatal error: lag.h: No such file or directory
->    13 | #include "lag.h"
->       |          ^~~~~~~
-> 
-> [...]
 
-Here is the summary with links:
-  - linux-next: build failure after merge of the net-next tree
-    https://git.kernel.org/netdev/net-next/c/016c89460d34
+on i386 or x86_64:
 
-You are awesome, thank you!
+Lots of errors referring to sched->plug when CONFIG_BLOCK
+is not set.
+
+E.g.:
+../kernel/sched/core.c: In function ‘io_schedule_prepare’:
+../kernel/sched/core.c:8331:13: error: ‘struct task_struct’ has no member named ‘plug’
+   if (current->plug)
+              ^~
+../kernel/sched/core.c:8332:25: error: ‘struct task_struct’ has no member named ‘plug’
+    blk_flush_plug(current->plug, true);
+                          ^~
+../fs/fs-writeback.c: In function ‘writeback_sb_inodes’:
+../fs/fs-writeback.c:1896:15: error: ‘struct task_struct’ has no member named ‘plug’
+     if (current->plug)
+                ^~
+../fs/fs-writeback.c:1897:27: error: ‘struct task_struct’ has no member named ‘plug’
+      blk_flush_plug(current->plug, false);
+                            ^~
+   CC      arch/x86/kernel/cpu/capflags.o
+../fs/fs-writeback.c: In function ‘wakeup_flusher_threads’:
+../fs/fs-writeback.c:2295:25: error: ‘struct task_struct’ has no member named ‘plug’
+    blk_flush_plug(current->plug, true);
+                          ^~
+
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+~Randy

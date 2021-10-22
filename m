@@ -2,129 +2,169 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1755D4372FC
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 09:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAF74372FF
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 09:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhJVHpn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Oct 2021 03:45:43 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33846 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbhJVHpm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Oct 2021 03:45:42 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DBD3E2197F;
-        Fri, 22 Oct 2021 07:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1634888602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fYXqzL/6HhifHEzyeb6y/B1mDBHnANb3wM0JqTVeJN4=;
-        b=E1TDhKkVmIVQtRKSIats7Bjc0Q75KzXyErPC+SvzP4SkOnDmhpYEnEJIUXMR+uR3pd+KTL
-        7N/6y5Ncfn6BH5ECDsGkc/TxCCW1kfcNlP1/TLynAjdEh1drXdjyQR1fswi2xbkIqPiNqT
-        sjGwJjJnnMhvLUeugmD+z6LZo8Rs/cI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1634888602;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fYXqzL/6HhifHEzyeb6y/B1mDBHnANb3wM0JqTVeJN4=;
-        b=1/OkM3q/XS7FD68wNB6gOmxpXW/2Rn4Xxr3uAgYhCm8tzgQFYSnECUrYNRRnL/FQmzBeHU
-        uwgbaQtnwZgkjBAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 82E3713C7A;
-        Fri, 22 Oct 2021 07:43:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +PE1H5prcmF7LgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 22 Oct 2021 07:43:22 +0000
-Message-ID: <1810283b-164a-800b-63ab-c3fab303a84a@suse.cz>
-Date:   Fri, 22 Oct 2021 09:43:22 +0200
+        id S231846AbhJVHqM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Oct 2021 03:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231773AbhJVHqL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Oct 2021 03:46:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D8CC061764;
+        Fri, 22 Oct 2021 00:43:54 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d3so3333249wrh.8;
+        Fri, 22 Oct 2021 00:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QDe8eGn1242gSfR7Is43fRQHdJR93magL2F5GakfHEE=;
+        b=mjxadADG3/7KVemwPXS50oEIEXflR9aiQ/P8tEKIYGuxFixdw96R+9yMdN7mPVO1GS
+         eFT2suEIg9Y592iMRV9s40AfwLs2ncJ1aN5UEtbz9WPmR59kzaECpfBS77Anku1YNu3/
+         AQC8fl6BZHD6O0CQyj6GvwiVBMLGb4OO9EVt2Et5BkLUGpk8wqt8gZUF6OjIaLIJTaTU
+         nL0xiVJgGDKJSGeV6xE5esknbaeq9h6hzoDkP3HnbZTpsyd5dx385PLuqGLirnWTB+zN
+         beKDI+MwOBzxNfNJAz5Mb25SN7FSnh0ZLliQ+/H1BKqcD8QUFg+qXThCYX2VsydXZkqg
+         uwaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=QDe8eGn1242gSfR7Is43fRQHdJR93magL2F5GakfHEE=;
+        b=3CGRRlKrg8Q+1kz+DTWLzWoNxEjAZdld4YNj51g7EYATagKD4Rix27g8CJfUY4hdn4
+         WQumMdzZlAsvAEGrZClXZ8tONot2d7S1mBqCLPWYjq/eEPOGgeGppZ1xomJTQu3TNH5a
+         D4mDe00bigOjCesTflxNgi9/eE0BhVWxfP4F6Anoph1uV2C1bHa+QnEZgDiOLbBhiMna
+         WExu9Gvcfggf19DfJd6O3AcgNhJ6XTQ/J9ayJLlyGgz5Rf3TyjkDTa8/Gp1VBJS5tK3c
+         6lO/4Gj3DLguwbtQKDMS5B9pxNM3ECmAkysyIWy0Ibw62SkJryak5tBn+5lc/kIaoAtb
+         O08w==
+X-Gm-Message-State: AOAM533QEP3CgH/QDE9Q2ZUCp3JXzh+j5gRa3ad1qUYQBuYX7yUP7Hce
+        CbSzm02MsMrp4E4/4POe1s+F30GdWDc=
+X-Google-Smtp-Source: ABdhPJzaRDW7PH4hkD8Yjx/uOud9MZymvRbT6QqTBQp3bTMfCiG+bNXFb4YbR7YmIjI0E5J+khiHjw==
+X-Received: by 2002:a5d:64c5:: with SMTP id f5mr13417395wri.321.1634888632758;
+        Fri, 22 Oct 2021 00:43:52 -0700 (PDT)
+Received: from gmail.com (563BB2F5.dsl.pool.telekom.hu. [86.59.178.245])
+        by smtp.gmail.com with ESMTPSA id i203sm10161968wma.48.2021.10.22.00.43.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Oct 2021 00:43:52 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 22 Oct 2021 09:43:50 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] stacktrace: Provide stack_trace_save_tsk() stub in the
+ !CONFIG_STACKTRACE case too
+Message-ID: <YXJrtiFgwMCYNAAM@gmail.com>
+References: <20211018172330.379b2061@canb.auug.org.au>
+ <60e736e7-cc37-9fea-a0fb-6628f87e741c@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [next] [dragonboard 410c] Unable to handle kernel paging request
- at virtual address 00000000007c4240
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, dri-devel@lists.freedesktop.org,
-        Marco Elver <elver@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <CA+G9fYv3jAjBKHM-CjrMzNgrptx-rpYVmGaD39OBiBeuz7osfg@mail.gmail.com>
- <80ab567d-74f3-e14b-3c30-e64bbd64b354@suse.cz> <87fssuojoc.fsf@intel.com>
- <2a692365-cfa1-64f2-34e0-8aa5674dce5e@suse.cz>
- <20211021203856.1151daebedef7b180fdfec22@linux-foundation.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211021203856.1151daebedef7b180fdfec22@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60e736e7-cc37-9fea-a0fb-6628f87e741c@bytedance.com>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/22/21 05:38, Andrew Morton wrote:
-> On Thu, 21 Oct 2021 19:51:20 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
+
+* Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+
 > 
->> >> Then we have to figure out how to order a fix between DRM and mmotm...
->> > 
->> > That is the question! The problem exists only in the merge of the
->> > two. On current DRM side stack_depot_init() exists but it's __init and
->> > does not look safe to call multiple times. And obviously my changes
->> > don't exist at all in mmotm.
->> > 
->> > I guess one (admittedly hackish) option is to first add a patch in
->> > drm-next (or drm-misc-next) that makes it safe to call
->> > stack_depot_init() multiple times in non-init context. It would be
->> > dropped in favour of your changes once the trees get merged together.
->> > 
->> > Or is there some way for __drm_stack_depot_init() to detect whether it
->> > should call stack_depot_init() or not, i.e. whether your changes are
->> > there or not?
->> 
->> Let's try the easiest approach first. AFAIK mmotm series is now split to
->> pre-next and post-next part
 > 
-> It has been this way for many years!
-
-Aha, great. Looks like I misinterpreted few months ago the thread about
-adding folio tree to next.
-
->> and moving my patch
->> lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
->> with the following fixup to the post-next part should solve this. Would that
->> work, Andrew? Thanks.
+> On 10/18/21 2:23 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tip tree, today's linux-next build (x86_64 allnoconfig)
+> > failed like this:
+> > 
+> > arch/x86/kernel/process.c: In function '__get_wchan':
+> > arch/x86/kernel/process.c:950:2: error: implicit declaration of function 'stack_trace_save_tsk' [-Werror=implicit-function-declaration]
+> >    950 |  stack_trace_save_tsk(p, &entry, 1, 0);
+> >        |  ^~~~~~~~~~~~~~~~~~~~
+> > cc1: some warnings being treated as errors
+> > 
+> > Caused by commit
+> > 
+> >    bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
+> > 
+> > stack_trace_save_tsk() requires CONFIG_STACKTRACE which is not set for
+> > this build.
 > 
-> For this reason.  No probs, thanks.
-
-Thanks!
-
-> I merge up the post-linux-next parts late in the merge window.  I do
-> need to manually check that the prerequisites are in mainline, because
-> sometimes the patches apply OK but don't make sense.
+> Maybe get_wchan() can be updated to:
 > 
+> unsigned long get_wchan(struct task_struct *p)
+> {
+> #ifdef CONFIG_STACKTRACE
+> 	unsigned long entry = 0;
+> 
+> 	stack_trace_save_tsk(p, &entry, 1, 0);
+> 	return entry;
+> #else /* CONFIG_STACKTRACE */
+> 	return 0;
+> #endif
+> }
 
+And repeat the same ugliness in every single function that happens to use 
+the stack_trace_save_tsk() API??
+
+The correct solution is to define stack_trace_save_tsk() in the 
+!CONFIG_STACKTRACE case too, as the patch below does.
+
+Thanks,
+
+	Ingo
+
+==============================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Fri, 22 Oct 2021 09:40:27 +0200
+Subject: [PATCH] stacktrace: Provide stack_trace_save_tsk() stub in the !CONFIG_STACKTRACE case too
+
+The following commit:
+
+  bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
+
+Added stack_trace_save_tsk() use to __get_wchan(), while this method is not
+unconditionally defined: it's not available in the !CONFIG_STACKTRACE case.
+
+Give a default implementation that does nothing.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: bc9bbb81730e ("x86: Fix get_wchan() to support the ORC unwinder")
+Cc: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ include/linux/stacktrace.h | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/stacktrace.h b/include/linux/stacktrace.h
+index 9edecb494e9e..3ccaf599630f 100644
+--- a/include/linux/stacktrace.h
++++ b/include/linux/stacktrace.h
+@@ -91,8 +91,19 @@ extern void save_stack_trace_tsk(struct task_struct *tsk,
+ extern int save_stack_trace_tsk_reliable(struct task_struct *tsk,
+ 					 struct stack_trace *trace);
+ extern void save_stack_trace_user(struct stack_trace *trace);
++
+ #endif /* !CONFIG_ARCH_STACKWALK */
+-#endif /* CONFIG_STACKTRACE */
++
++#else /* !CONFIG_STACKTRACE: */
++static inline unsigned int
++stack_trace_save_tsk(struct task_struct *task,
++		     unsigned long *store, unsigned int size,
++		     unsigned int skipnr)
++{
++	return -ENOSYS;
++}
++
++#endif /* !CONFIG_STACKTRACE */
+ 
+ #if defined(CONFIG_STACKTRACE) && defined(CONFIG_HAVE_RELIABLE_STACKTRACE)
+ int stack_trace_save_tsk_reliable(struct task_struct *tsk, unsigned long *store,

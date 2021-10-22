@@ -2,88 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F25436F98
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 03:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9738437089
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 05:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbhJVBzq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 21:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJVBzq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 21:55:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4A6C061764;
-        Thu, 21 Oct 2021 18:53:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hb6nd741vz4xdL;
-        Fri, 22 Oct 2021 12:53:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1634867606;
-        bh=upVFOZ+lnugwui2TvAVxtFcw4cFArSM7r7QeC47etps=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fC5xd7CEVWDb4QS9YxOjsipsQwuIWODv9hJqHB5bQu4RY4OxNXKii5za0pYZ4jl9v
-         fnhp3Pr3H392GOCr68slHAg0H3r6hHDoZwDcIDURywg6PLHD+7HsxqJ/SX8PKqIxlA
-         9harmoe1DpLj/c4FeTB344ly8XlZhH0nAB1Sc2jRfQ3AUN25jejSmPqLeNfbBtgB1U
-         W9ybIHcnmI6+CDK1JgNCdfkxUwD6ia3yQNCXz1uQWfOfxm70TeGdZIhbIjoFCBl/n4
-         pFHmFYiBCZuOD8EMmUkg1IlHvl/z1TRRgMoeU+KdarQJ+FvlgXZIOfP8EfF1o4ttst
-         eyQACsCFDdHhA==
-Date:   Fri, 22 Oct 2021 12:53:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the regulator tree
-Message-ID: <20211022125323.132b950d@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ck4VImbxkQ150ojxxS+iO.m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S232853AbhJVDlS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 23:41:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232845AbhJVDlQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 21 Oct 2021 23:41:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB75D610A4;
+        Fri, 22 Oct 2021 03:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1634873939;
+        bh=9TMOq2xQPIJH4U6BSsyCI1yOB5IvYFxcsxgSaPT7PFY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nO0WJv17dRlACHIr/0GNZYQnsy6tXHHuwlZjcd6so1f3kCb3EvbBJHg4fkhQJg+7G
+         O2kyXtKYneEt0ZLHZrHz4hrrKuI9UZqLBMfY3OoMRZg9Bz7xWV8Mpmk0UWDVOOFWX0
+         Cf7x8TnbV/CLoKsyzLHZvgX+bod9cAwaAcGHJMuI=
+Date:   Thu, 21 Oct 2021 20:38:56 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, dri-devel@lists.freedesktop.org,
+        Marco Elver <elver@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Oliver Glitta <glittao@gmail.com>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [next] [dragonboard 410c] Unable to handle kernel paging
+ request at virtual address 00000000007c4240
+Message-Id: <20211021203856.1151daebedef7b180fdfec22@linux-foundation.org>
+In-Reply-To: <2a692365-cfa1-64f2-34e0-8aa5674dce5e@suse.cz>
+References: <CA+G9fYv3jAjBKHM-CjrMzNgrptx-rpYVmGaD39OBiBeuz7osfg@mail.gmail.com>
+        <80ab567d-74f3-e14b-3c30-e64bbd64b354@suse.cz>
+        <87fssuojoc.fsf@intel.com>
+        <2a692365-cfa1-64f2-34e0-8aa5674dce5e@suse.cz>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ck4VImbxkQ150ojxxS+iO.m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 21 Oct 2021 19:51:20 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
 
-Hi all,
+> >> Then we have to figure out how to order a fix between DRM and mmotm...
+> > 
+> > That is the question! The problem exists only in the merge of the
+> > two. On current DRM side stack_depot_init() exists but it's __init and
+> > does not look safe to call multiple times. And obviously my changes
+> > don't exist at all in mmotm.
+> > 
+> > I guess one (admittedly hackish) option is to first add a patch in
+> > drm-next (or drm-misc-next) that makes it safe to call
+> > stack_depot_init() multiple times in non-init context. It would be
+> > dropped in favour of your changes once the trees get merged together.
+> > 
+> > Or is there some way for __drm_stack_depot_init() to detect whether it
+> > should call stack_depot_init() or not, i.e. whether your changes are
+> > there or not?
+> 
+> Let's try the easiest approach first. AFAIK mmotm series is now split to
+> pre-next and post-next part
 
-After merging the regulator tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+It has been this way for many years!
 
-drivers/regulator/sy7636a-regulator.c:14:10: fatal error: linux/mfd/sy7636a=
-.h: No such file or directory
-   14 | #include <linux/mfd/sy7636a.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~
+> and moving my patch
+> lib-stackdepot-allow-optional-init-and-stack_table-allocation-by-kvmalloc.patch
+> with the following fixup to the post-next part should solve this. Would that
+> work, Andrew? Thanks.
 
-Caused by commit
+For this reason.  No probs, thanks.
 
-  cb17820ef71e ("regulator: sy7636a: Remove requirement on sy7636a mfd")
-
-I have used the regulator tree from next-20211021 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ck4VImbxkQ150ojxxS+iO.m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFyGZMACgkQAVBC80lX
-0Gyw5wgAiqrGJunK3lvQTpjGCuYkN/0xgbhZepNAHF950nBdVsd6yKwcWAHI+mKa
-ZHeMbdDulOk6GU0kU1sDCIiNygq17Gjgy4Jn1NIhx57qSoKu5p43zEow8IXk4DDW
-Ki74V/MCgdh9Xj9i5Njns/L6iPikBKtWH7Xq1FdBeXqpabZctWPBjSUqZf+JqoSw
-TnCZh6QDj5zaRZMklW9Y+Z8oat26kdbYsJhEX6JZrmwAaINSFVN7J/+32Zkia8+b
-hn1ZGI+nEbRcE+YESINjdMJZwAqbHTdVG+5tlvwFz5vBArV7e+xOobbDav4/Z8V5
-jB5HA39PqAIAgQhejEZbdAd5iag/yw==
-=tO3B
------END PGP SIGNATURE-----
-
---Sig_/ck4VImbxkQ150ojxxS+iO.m--
+I merge up the post-linux-next parts late in the merge window.  I do
+need to manually check that the prerequisites are in mainline, because
+sometimes the patches apply OK but don't make sense.

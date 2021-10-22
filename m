@@ -2,83 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3274A436E66
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 01:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A153436ECD
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 02:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhJUXmh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Oct 2021 19:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S231844AbhJVA1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Oct 2021 20:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhJUXmg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 19:42:36 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CC7C061764;
-        Thu, 21 Oct 2021 16:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=OEUJmZNnx6E69Y9a/rMQD8aPaxuy5E3qagoQ7/1dgv8=; b=LeAL3jxJzHoChU3dqDXfik7tW8
-        jLoixIxsIvwW7KwwtQwc94gxDhK9X3ZMU24/u5k95/rYGlirlRdI6ByV/OHN+At6d5155OBddVgdn
-        RzBuAfjPG5zSz+IHKIwKPigl8mpFEgmZNiN14HTlrXi505YbZ43/dsfwA/ACN83toh67amsUsojnX
-        UsEuD6KT1o1lK9JXhu8G1fIwT6mDyzTmPu+fHHdOhNvgpnYw513CSQ2lzwR/JSy2y0IKSvAY/yXQ6
-        6TQYC1y+oESTeOT/mLC+Ektx8+GE7F/SgTlOY/m8tHI8MPBj9FRap0sl8rSNLW0BbsmZGyLT5Pfs0
-        DWfJ7g+A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mdhfV-009Iqz-QT; Thu, 21 Oct 2021 23:40:17 +0000
-Subject: Re: linux-next: Tree for Oct 21
- (drivers/net/wireless/mediatek/mt76/sdio.o)
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S231740AbhJVA06 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Oct 2021 20:26:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B427C061764;
+        Thu, 21 Oct 2021 17:24:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hb4qB2FYNz4xbP;
+        Fri, 22 Oct 2021 11:24:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1634862278;
+        bh=4NUhw2kA9TTVCk0/qiwWdQNyoUtSrc/+RLv8jEzz2VA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Dqdsl5o79mLBy80YXoxWx7RgAMFwUUFQquou7LD/D6mJDfFV5Hcafw3t7gLZR7cTL
+         NC5WVv91dpIud2HNLLP6QTQny0+4bUhXFW/W0Zl7921sBAz7lcDQNG5PMDyYpje2Lq
+         3OVFZ3z6fDLM97IDy0egBklApbicKM9IM1c6GOYku01kBbD0J0l75r1bB75UM7FwF/
+         qdiWUuGM7EcK/POvodQO1bUSDs8v/zQ7lCUF95ghtbaOzopT86G/PTSqU4WAlAGgC1
+         xugJDpajw86dEHvlupBTMt6W1aSsJvHUF6xVgaxiQJienEb90fdV0gEcw1H70oZ3fa
+         FgyzgxxqD6LgA==
+Date:   Fri, 22 Oct 2021 11:24:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Maor Gottlieb <maorg@nvidia.com>, Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, linux-wireless@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>
-References: <20211021184300.30c77f51@canb.auug.org.au>
- <88795dab-d8a9-856e-a938-8da6acc944ea@infradead.org>
- <YXHtdI61S54Cm0S2@lore-desk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <831cb7e7-dd85-0883-dfcb-52aad52f8322@infradead.org>
-Date:   Thu, 21 Oct 2021 16:40:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20211022112436.4c46b5a4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <YXHtdI61S54Cm0S2@lore-desk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/xZbKQyhHJP0aVX9i5lOgcaX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/21/21 3:45 PM, Lorenzo Bianconi wrote:
->> On 10/21/21 12:43 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20211020:
-> 
-> Hi Randy,
-> 
-> can you please the patch below?
-> 
-> Regards,
-> Lorenzo
-> 
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/Kconfig b/drivers/net/wireless/mediatek/mt76/mt7921/Kconfig
-> index ce3a06227901..71154fc2a87c 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt7921/Kconfig
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/Kconfig
-> @@ -19,6 +19,7 @@ config MT7921S
->   	select MT76_SDIO
->   	select MT7921_COMMON>   	depends on MAC80211
-> +	depends on MMC
->   	help
->   	  This adds support for MT7921S 802.11ax 2x2:2SS wireless devices.
+--Sig_/xZbKQyhHJP0aVX9i5lOgcaX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-Yes, that works. Thanks.
+Hi all,
 
--- 
-~Randy
+After merging the net-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:71:10: fatal error: lag.h: =
+No such file or directory
+   71 | #include "lag.h"
+      |          ^~~~~~~
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:13:10: fatal error: lag=
+.h: No such file or directory
+   13 | #include "lag.h"
+      |          ^~~~~~~
+
+Caused by commit
+
+  3d677735d3b7 ("net/mlx5: Lag, move lag files into directory")
+
+interacting with commit
+
+  14fe2471c628 ("net/mlx5: Lag, change multipath and bonding to be mutually=
+ exclusive")
+
+from the net tree.
+
+I have applied the following merge fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 22 Oct 2021 11:10:06 +1100
+Subject: [PATCH] fixup for "net/mlx5: Lag, move lag files into directory"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c | 4 ++--
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c     | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c b/drivers/=
+net/ethernet/mellanox/mlx5/core/en/tc_tun.c
+index b7461c17d601..d7e613d0139a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c
+@@ -10,8 +10,8 @@
+ #include "en_tc.h"
+ #include "rep/tc.h"
+ #include "rep/neigh.h"
+-#include "lag.h"
+-#include "lag_mp.h"
++#include "lag/lag.h"
++#include "lag/mp.h"
+=20
+ struct mlx5e_tc_tun_route_attr {
+ 	struct net_device *out_dev;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/=
+ethernet/mellanox/mlx5/core/en_tc.c
+index 57369925a788..3af3da214a5b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+@@ -68,8 +68,8 @@
+ #include "lib/fs_chains.h"
+ #include "diag/en_tc_tracepoint.h"
+ #include <asm/div64.h>
+-#include "lag.h"
+-#include "lag_mp.h"
++#include "lag/lag.h"
++#include "lag/mp.h"
+=20
+ #define nic_chains(priv) ((priv)->fs.tc.chains)
+ #define MLX5_MH_ACT_SZ MLX5_UN_SZ_BYTES(set_add_copy_action_in_auto)
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xZbKQyhHJP0aVX9i5lOgcaX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmFyBMQACgkQAVBC80lX
+0Gx6wAgAll/yy8LLkLU4O5II6DTo+w2fXiSiV2IQICe4Q5067JiX8MtHcbcJPsU2
+sIDB5qnH0pcw8/uL/TrVyF8cthtBPRCXRfIzjgOWxN5/aTp35NAuM6LCQopzbuFu
+8CXCqYEQoCqaKpa3BkWnyGW1ZRSxxHJVr4r1wC9PdmC4yaurpogz2MHwDIHoFufw
+XbN7k+m43PFOiwnGFwlqgsal4eC++BvEN1c2dSBjBSswS6dXJbJdhAT6LaEUh4Xk
+Y4SSFMv6cYLCgp7s2cn1cOR7ZhelveuujFSUJl9o9/QnB6fji/WLfUeCjAVTIvyN
+oWAquJRJGlubM2ezgv5IBx8xvhCFzQ==
+=BJR/
+-----END PGP SIGNATURE-----
+
+--Sig_/xZbKQyhHJP0aVX9i5lOgcaX--

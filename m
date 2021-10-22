@@ -2,100 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CD54374E2
-	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 11:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C69C43757E
+	for <lists+linux-next@lfdr.de>; Fri, 22 Oct 2021 12:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbhJVJlC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Oct 2021 05:41:02 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:41678 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbhJVJlB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Oct 2021 05:41:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1634895524; x=1666431524;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=FwWHFiTyuZ4DhFbgzIdL2AIGl6n8DFMRj6YhMJTHOic=;
-  b=GlX+x4dGcuUf72e4A5G5Kn+w3+dTs8tkVO++wkBR1euLsMi+4FdTZDWK
-   W8xBqybrHvMfPiD2M9LlAtVg6eYZhWjoyx137eH4WsfmcIWQk5SzWMajE
-   eCDIc6t69uu8ZZaKyX8sZm+eTk+NqIk/2oq7TCSL1j3NVB7DiEiyB9B2s
-   RsmgsVNISZlRsw2syMG2tnvLjo3LIQm+SL1qYs1M9gzrAnRu9ZU53ZVlT
-   tWg6LMRUisqQA8qKVL/jBdbWDYRHzTgdjKIu0/K7ytBXZXFH/fVI0CG0i
-   2Ybipm7cDUF+XQQPZTWC43FxgmVmSAT6rCeAUXbEgvCAT9LgnSyLwDOrX
-   w==;
-IronPort-SDR: 4h2g7uZ3dTfBnXeVb5dsOcCgEjDE3UseshPGlYc3xcYoxTa0Zgw5XYApD6UyN4P+h+pMNDvVcl
- r0DVPtmUNuXn0sIwY8TiSCrqdgzkHi5kGcL1xRAlWHAVYsn40HeS1wJk3RSvw4nkwmzIMYiKgN
- BWeB4PbzIVZX6yi75De4recayzH4IBexm419c3A+ZGi/tfu8Vqps88dmL95u7wxFQVBCc8H8vZ
- vaFo6TrcDapfh1/ezYFDz8iSqxf7Z/M3Kc1CmNks4ZjxT4bPuka5UvgqijqFMA/RZI4wsQsP86
- DdIk1L6Yr/IelK68W8adTSUs
-X-IronPort-AV: E=Sophos;i="5.87,172,1631602800"; 
-   d="scan'208";a="73939202"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Oct 2021 02:38:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 22 Oct 2021 02:38:43 -0700
-Received: from [10.171.246.101] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Fri, 22 Oct 2021 02:38:41 -0700
-Subject: Re: linux-next: manual merge of the at91 tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Nicolas Ferre <nicolas.ferre@atmel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-CC:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211022085641.57d666a4@canb.auug.org.au>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <0235edf0-9b33-9a88-3793-9062e59b8711@microchip.com>
-Date:   Fri, 22 Oct 2021 11:38:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20211022085641.57d666a4@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S232616AbhJVKdt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Oct 2021 06:33:49 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:55807 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232573AbhJVKds (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 22 Oct 2021 06:33:48 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id DD65B3200A1E;
+        Fri, 22 Oct 2021 06:31:30 -0400 (EDT)
+Received: from imap43 ([10.202.2.93])
+  by compute3.internal (MEProxy); Fri, 22 Oct 2021 06:31:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm2; bh=KbMpnRh1mWwjoX89UJ/WIrnsgzEo
+        huauhd3dYa3aqWQ=; b=R9bFt/6UFPwHQr8DQO6aCJbcQIJIwqBGhBfPKUV2GpLB
+        99WYb/K7rOvMFJv6E0HbSgdpOtnun6Zdg+hcE+NcopHSfTV1kv8R6JYPgnN1GyAo
+        plGZsqHhGt0KxCsftm7e5sDZa6dCTVi2UbbQG9p5JXP444JGKlQ8kMtYOZ3smpLZ
+        +r9gxTmMQLUyHv0O4cr65i/qblEiy5xZXhr3Fyiw6WptwQj+hRwE7c2K1JVln2mb
+        TX9dd5DQmhFgCDf37/98IKO6Swqile9nr4R4ZwboQsAiHnkeulh42UMKUDEH26jj
+        NmfdPuVtv1iIlZO6G74mS/BOalK4lIIsn1nysgmu1w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=KbMpnR
+        h1mWwjoX89UJ/WIrnsgzEohuauhd3dYa3aqWQ=; b=babQCnMTJIsdx1498obkxE
+        1e/jsWUbFsLUKg4LvJuf4RqvqJjm9BjWIZ3fhFpGoeFnUZ/aEV5R6nv7xVFfQn4S
+        3kCeonT3UHodPFskBqYxHoYbV9Uxas1z1O2tbMK+mmNmo8kv1hadlOiSmXUHhP3V
+        1t8aTzy1BW0n+eadmtQ59dO9rbuFW8n2Di7Uq/75bbH23uDs9crMuxB37kuFreEm
+        DutXlpA8+eVMSnDxFM5CmW8uFO4FzZtT4JDy0sUwirq69E5McQajw4CBf1QhoWDe
+        0lLUPDYzLcMQWmAUAp+7IBCMf2rSSWxmzZmCXww6ODNzPvgAqIwz/Vl/lE8wnhIw
+        ==
+X-ME-Sender: <xms:AZNyYbca8DV0CaeN_82ihSCNa13XFDrf9pQnaJV78VvwLZImI529Tw>
+    <xme:AZNyYRPm5UkAD4Izv7qnXlqM_W1txNZkb3q3ocBeqPFU5FU2OdclwGj0rGot1JLKo
+    VHchO4T5jV85OqaxT0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvddvkedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomheptehlihhs
+    thgrihhruceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrg
+    htthgvrhhnpeeuffekveehjeeltdeuveeikeelkeejhfejheduhfdtgfdtgfejjeekvdev
+    jeevueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:AZNyYUhgfI7b4HaXKZYfwGDKjsrVj3K1IctuoOQmQoB-0Xpqx1P5cQ>
+    <xmx:AZNyYc8aueCabnglVa746m2N2nbaqComQZjrSZpw-70WlTfF6XwRQg>
+    <xmx:AZNyYXso_nGlJJz4aZJUGT6fER1J7bjcyo5GetesBb5omBaUgElWeQ>
+    <xmx:ApNyYQ6qeYgbOeTFW1P61Ru7RaMPZ_nQL1rN6Z6fv4DWpGYSeV_KgA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DAD0AAC0DD1; Fri, 22 Oct 2021 06:31:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
+Mime-Version: 1.0
+Message-Id: <bd49c44d-372e-453a-ac8e-04252b2eaba8@www.fastmail.com>
+In-Reply-To: <20211022125323.132b950d@canb.auug.org.au>
+References: <20211022125323.132b950d@canb.auug.org.au>
+Date:   Fri, 22 Oct 2021 20:31:08 +1000
+From:   Alistair <alistair@alistair23.me>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the regulator tree
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 21/10/2021 at 23:56, Stephen Rothwell wrote:
+On Fri, Oct 22, 2021, at 11:53 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Today's linux-next merge of the at91 tree got a conflict in:
+> After merging the regulator tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
->    arch/arm/boot/dts/sama7g5.dtsi
+> drivers/regulator/sy7636a-regulator.c:14:10: fatal error: linux/mfd/sy7636a.h: No such file or directory
+>    14 | #include <linux/mfd/sy7636a.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~
 > 
-> between commit:
+> Caused by commit
 > 
->    6f3466228451 ("ARM: dts: at91: sama7g5: add chipid")
-> 
-> from Linus' tree and commit:
-> 
->    9430ff34385e ("ARM: dts: at91: sama7g5: add tcb nodes")
-> 
-> from the at91 tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>   cb17820ef71e ("regulator: sy7636a: Remove requirement on sy7636a mfd")
 
-Stephen,
+The above patch allows the sy7636a regulator to be built, as it no longer depends on
+the mfd driver directly.
+This fails to build on current upstream as the sy7636a header file isn't upstream
+yet. The header file is added earlier in the patch series.
 
-Yes, carry this fix please.
-It's handled in arm-soc tree by Arnd and Olof: should not be a problem 
-upstream.
+This patch should probably not be applied until after:
 
-Thanks, best regards,
-   Nicolas
+mfd: simple-mfd-i2c: Enable support for the silergy,sy7636a
 
--- 
-Nicolas Ferre
+Or if preferred I can split adding the header file into it's own patch that can be
+applied.
+
+Alistair
+
+
+> 
+> I have used the regulator tree from next-20211021 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 

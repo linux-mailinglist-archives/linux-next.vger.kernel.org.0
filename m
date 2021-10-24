@@ -2,88 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 317AD438C10
-	for <lists+linux-next@lfdr.de>; Sun, 24 Oct 2021 23:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11835438C17
+	for <lists+linux-next@lfdr.de>; Sun, 24 Oct 2021 23:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhJXV0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Oct 2021 17:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhJXV0M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 17:26:12 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29620C061745;
-        Sun, 24 Oct 2021 14:23:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hcrg32FWmz4xZ1;
-        Mon, 25 Oct 2021 08:23:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635110624;
-        bh=ySMup7slLgs9GKvo6mz6M6b9wQSL0hppBSxsAMDXV3w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W5UzRrW5E5mL4M5CUKrRuL68wj6ihlSQKaRsY+VzZaGs5Q8FAjKK6OPeW/DrHW9pD
-         MfwVy1SyKDLk5a1frC46fY+XwdIRYXS8hWOx7aRt7QdFZFagLSlhc0flJyOQQddSW8
-         Fu5pf5wmL3D2Rv4lU6Ep3iOg23tfyCGQUNZ0FvIfcCHuytRM+5NafJGMCtR8BtBpbI
-         1XyYIWY0vx0yHCBKpY2PG35wfFKtmwbza/43HwnM6KWDdDSHebzTH9JhqvvcfyxFuD
-         mulYxVszivJHrMmMsxLjH+us45+utnz7LhV/iIUByP2EcFMmwvAqFoh+ewOMrQaVzx
-         Z9JuH48BVGrwQ==
-Date:   Mon, 25 Oct 2021 08:23:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the vhost tree
-Message-ID: <20211025082329.4bc6a609@canb.auug.org.au>
+        id S232036AbhJXV1w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Oct 2021 17:27:52 -0400
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:35809 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhJXV1u (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 17:27:50 -0400
+Received: by mail-pg1-f169.google.com with SMTP id q187so8973538pgq.2;
+        Sun, 24 Oct 2021 14:25:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pJDD/v04sfjRKB3/TxhJ7E4ItPwl7Sfp4PT/SwwRXYc=;
+        b=ZW0kS8TF6eHWYKeF2JmFkwZfsaOnfmQiJGcoZ5O8NXTlPLjU/FLoGYKP4GLYt2eR5w
+         i8YQF+lUFnJEJ+YD8tq/dw0SnHqCSXlYyVrumVMxRloWKdL2iPzS4OId/YPURNcWlDJb
+         dxv5EXIWzIWXrPjYyW5AdRP0DG6zgdEqZVq566aZot0QBawl1JtriJVZ5NRejffszRGr
+         x/VWkUm1vDyHJLnWy8O87BQM3dqYoIPX26X8qi1CXmIdCTJerK2McG98g3Plyh6+snE8
+         aNv2Ay/h4BmPjraAS3jBTioy8QrqMVGhJ2xCach9ISDg8IDtYmPFyiwGt4RbGGE2SmPa
+         4dSg==
+X-Gm-Message-State: AOAM533Ti9g+AU+kLa+RXIabcOIK6Myr6UwPOJ/CRzGseuBF3ZxSGvb6
+        rc2dRQhidyKyqKUS/JVDY5c=
+X-Google-Smtp-Source: ABdhPJy+yXD9hVkMWN+x+U/QsZKU7cRsNCHsc1497wj0Nhbn1GVaJiVKvQ0wBDoWUSEHNHWR/s4/rw==
+X-Received: by 2002:a63:790b:: with SMTP id u11mr10364809pgc.71.1635110728627;
+        Sun, 24 Oct 2021 14:25:28 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:1d23:4f1f:253d:c1e1? ([2601:647:4000:d7:1d23:4f1f:253d:c1e1])
+        by smtp.gmail.com with ESMTPSA id c12sm16558663pfc.161.2021.10.24.14.25.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Oct 2021 14:25:28 -0700 (PDT)
+Message-ID: <b5e69621-e2ee-750a-e542-a27aaa9293e5@acm.org>
+Date:   Sun, 24 Oct 2021 14:25:26 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dSQbQUsk9q54wDBAegvbm0j";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] scsi: core: Fix early registration of sysfs attributes
+ for scsi_device
+Content-Language: en-US
+To:     Steffen Maier <maier@linux.ibm.com>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com, linux-scsi@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, bblock@linux.ibm.com,
+        linux-next@vger.kernel.org, linux-s390@vger.kernel.org
+References: <604fad4c-4003-b413-b3c8-00abcd65341e@linux.ibm.com>
+ <20211024111815.556995-1-maier@linux.ibm.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20211024111815.556995-1-maier@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/dSQbQUsk9q54wDBAegvbm0j
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/24/21 04:18, Steffen Maier wrote:
+> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> index c26f0e29e8cd..a3e37d3728df 100644
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@ -1583,7 +1583,7 @@ void scsi_sysfs_device_initialize(struct scsi_device *sdev)
+>   	scsi_enable_async_suspend(&sdev->sdev_gendev);
+>   	dev_set_name(&sdev->sdev_gendev, "%d:%d:%d:%llu",
+>   		     sdev->host->host_no, sdev->channel, sdev->id, sdev->lun);
+> -	sdev->gendev_attr_groups[j++] = &scsi_sdev_attr_group;
+> +	sdev->sdev_gendev.groups = sdev->gendev_attr_groups;
+>   	if (hostt->sdev_groups) {
+>   		for (i = 0; hostt->sdev_groups[i] &&
+>   			     j < ARRAY_SIZE(sdev->gendev_attr_groups);
 
-Hi all,
+How about also updating the comment above the gendev_attr_groups
+declaration since the above change makes that comment incorrect?
 
-In commit
+Thanks,
 
-  f89ef240d5d0 ("virtio_ring: check desc =3D=3D NULL when using indirect wi=
-th packed")
+Bart.
 
-Fixes tag
 
-  Fixes: 1ce9e6055fa ("virtio_ring: introduce packed ring support")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dSQbQUsk9q54wDBAegvbm0j
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF1ztEACgkQAVBC80lX
-0GyGhAf+J0PCy/o08odZ5wuMYpF0PgE4Sd4RuJU/aTM8J23p45NL7lESBFd1W7dO
-TbxWYsMtBj77Jzbmer9b6cartScG/MkKCwkliFLA3ohBTomaaFRI8uj5Q3tYDhxz
-rHr3NNz5yOoc+RSvJSYsDNTVNA7uqRdQJntCclgH59qHkRcIdFTsOxN+giKw3bUR
-hfiBQ9Bcidh2wHHX5/r/h6MSUNU8SM3MHuXx5arl59OeyEQhmKUIbiLrbdnGTOL+
-VFPveBn7QjCEpXjOlxBGwTH+vEXP/4YVk2SqMOWJfC4neOreDdHLD0k+Eua/FHzH
-ylrsUNWxqDbwKu3kqrtEe8Sx2+L3rg==
-=mvme
------END PGP SIGNATURE-----
-
---Sig_/dSQbQUsk9q54wDBAegvbm0j--

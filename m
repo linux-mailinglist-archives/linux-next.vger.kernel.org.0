@@ -2,134 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C751438F0D
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 07:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBD8438F26
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 08:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbhJYGBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 02:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbhJYGBL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 02:01:11 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B0DC061745;
-        Sun, 24 Oct 2021 22:58:49 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id v17so9376478qtp.1;
-        Sun, 24 Oct 2021 22:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=phz2ShPYJOTTRkBu8WpGV2HU9X5zCxuIcyKps/Mt5nE=;
-        b=TKyXcphaOJ9oZO8Znx2ZdIlkgGjytUp7N1N1NS8fGMck/vZtOTddQMFcvKLGijqCg5
-         APdASY/diuFz9hl+WaBIaVmTvB+M4hD8mUzuWRBtOKwAAzZPE4Zx+1E3PDZsWoGjELkw
-         5hV/6mb8gmi12xtwdjhpBv+UJAPPvxYm/+DQk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=phz2ShPYJOTTRkBu8WpGV2HU9X5zCxuIcyKps/Mt5nE=;
-        b=aO+cBRb32kwWCZRZOTUJQAxkFk1IdGrjiCjOSrNnHDt73DdHzLlrPXpeUI6ZEmrw1N
-         7buLL05I85B/2eRrm51wDVsVvDTTLEzWE9J9Bv1qhdbTVKwpgYGtZdDKskNtZN7IoGS1
-         Bn0OiK9UXzsLJXY1lo7fPyY3uDYEUbIjHC4ydxidFx8So0VycA3D5wxl/7+HNLglRUf9
-         vASc7zw58iLqic7pdE1Y6jzKplsb1aLP8ICKmC9JvJ+kQLW7t/QL/BhEywycyra7W6fQ
-         HzqyooZT6EPmmjC1MWafJX5S4QyDjJaIoGqNlNVf9C7boKVtpfcBECnoiWeFyDtc6zyK
-         wkQA==
-X-Gm-Message-State: AOAM531AUjBWBOzvWLmr52o4VodK5Gi/mIXLDYmALREspz4wfo3gH1Ma
-        ZD+ZOt5bVTIA7e5hS6AnuPB47TVh1Pr3iOwLlBIbv6Cm
-X-Google-Smtp-Source: ABdhPJw+9olsgOQMLLhshv8Kh1yA5kiVKyBo8XO6qFacdWiAM18lG8QMBz3jZrPhQS/KwpivNjJJpMDtcGEiWrV6BP0=
-X-Received: by 2002:ac8:5bcc:: with SMTP id b12mr15462614qtb.392.1635141528969;
- Sun, 24 Oct 2021 22:58:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211022193853.296c4ee9@canb.auug.org.au>
-In-Reply-To: <20211022193853.296c4ee9@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 25 Oct 2021 05:58:37 +0000
-Message-ID: <CACPK8XcWyJYj94q+Jp+KgTnM_f4vyY_gSyjUXN8ZPOtnbpJjfg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S229987AbhJYGMG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Oct 2021 02:12:06 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:41103 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229873AbhJYGMF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 02:12:05 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hd4Ky4tSNz4xbr;
+        Mon, 25 Oct 2021 17:09:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635142182;
+        bh=lARUbalfcU75V5nPICqhWN/XA1PYjayw6a7ig82sc4U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QaSxyvH4J1bYRo7QWV1ijOC01xTLv7Jh/qK9TqHO8j+OofGK8zTqJh1ZhvEaWZKS6
+         0tDb3a9T2t16fwpntNLUIZaf55NBts4s4m8j8uWSHfjUuEjKRASFgn88+uJrtvWRS6
+         ZOHOwjMQ8D3vAnZ6uRCo3wqApc/FZPh3NX1/qvMWwf+0kF65NgNKgJDXjsEsYbI74m
+         /zcNury+wUUhM+RQXRVnSeIu0mX5BlVyFmkYQOHa/tlisMVlL9h4AS+2CzsSLdHjss
+         +XyjUbgzatjWh90DPrBPw/e/GRFZmFN9xFZO7YyGLmSQKOYnB3vVuPGRdItVI8W58S
+         o2eH3oi997O1g==
+Date:   Mon, 25 Oct 2021 17:09:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joel Stanley <joel@jms.id.au>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Eddie James <eajames@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20211025170941.7eb30042@canb.auug.org.au>
+In-Reply-To: <CACPK8XcWyJYj94q+Jp+KgTnM_f4vyY_gSyjUXN8ZPOtnbpJjfg@mail.gmail.com>
+References: <20211022193853.296c4ee9@canb.auug.org.au>
+        <CACPK8XcWyJYj94q+Jp+KgTnM_f4vyY_gSyjUXN8ZPOtnbpJjfg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/wfzeW/Q3XN1d2s72avONvOM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 22 Oct 2021 at 08:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the akpm-current tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/hwmon/occ/p9_sbe.c: In function 'p9_sbe_occ_save_ffdc':
-> drivers/hwmon/occ/p9_sbe.c:58:5: error: implicit declaration of function 'kvfree' [-Werror=implicit-function-declaration]
->    58 |     kvfree(ctx->ffdc);
->       |     ^~~~~~
-> drivers/hwmon/occ/p9_sbe.c:59:16: error: implicit declaration of function 'kvmalloc'; did you mean 'key_alloc'? [-Werror=implicit-function-declaration]
->    59 |    ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
->       |                ^~~~~~~~
->       |                key_alloc
-> drivers/hwmon/occ/p9_sbe.c:59:14: error: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
->    59 |    ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
->       |              ^
-> cc1: all warnings being treated as errors
->
-> Caused by commit
->
->   5027a34a575e ("hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs")
->
-> from the fsi tree interacting with commit
->
->   9192e3be4cc2 ("mm: move kvmalloc-related functions to slab.h")
->
-> from the akpm-current tree.
+--Sig_/wfzeW/Q3XN1d2s72avONvOM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If I apply this patch then the build fails in a tree that doesn't have
-Willy's patch.
+Hi Joel,
 
-Unless someone has a better suggestion I'll send a patch that includes
-both headers for now, and make a note to remove the mm.h include down
-the track.
+On Mon, 25 Oct 2021 05:58:37 +0000 Joel Stanley <joel@jms.id.au> wrote:
+>
+> If I apply this patch then the build fails in a tree that doesn't have
+> Willy's patch.
+>=20
+> Unless someone has a better suggestion I'll send a patch that includes
+> both headers for now, and make a note to remove the mm.h include down
+> the track.
 
+Don't apply anything.  Just remember to tell Linus (or whoever you
+merge this tree via) about this conflict and the resolution when you
+send the pull request.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+--Sig_/wfzeW/Q3XN1d2s72avONvOM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->
-> I have applied the following merge fix patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 22 Oct 2021 19:32:54 +1100
-> Subject: [PATCH] kvmalloc etc moved to slab.h
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/hwmon/occ/p9_sbe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-> index e50243580269..bb082eb52243 100644
-> --- a/drivers/hwmon/occ/p9_sbe.c
-> +++ b/drivers/hwmon/occ/p9_sbe.c
-> @@ -4,10 +4,10 @@
->  #include <linux/device.h>
->  #include <linux/errno.h>
->  #include <linux/fsi-occ.h>
-> -#include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/platform_device.h>
-> +#include <linux/slab.h>
->  #include <linux/string.h>
->  #include <linux/sysfs.h>
->
-> --
-> 2.33.0
->
-> --
-> Cheers,
-> Stephen Rothwell
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2SiUACgkQAVBC80lX
+0GyDqwf/dmqvaiG0RGqHJ/W7F7KtYPPb4Ig4JKQswP8zpd+JPbUE62StUEzrDoDv
+EHZ6rAPHBhEA/wT47cHKbfUcfARYQ64QNyFOARms9iz6OgPi18+iG3KwvH8CrJR2
+jMjG6BSAuyHrzpK9s7IcB4veuKCUTcgV9fw5hMI61/aUh8c7y6c07XonGyI5agn+
+DnY2DsbflF8eQQeCNjKap/OTs4ONZOV4oG6f+RXcAecp7hSZuOk8NpteJh7Oh6hn
+WIOsyDNaAOAMTSsWvvLi7pzFd5PHEdzefz3efCxQ/0nObRwDD6pr2OgsxEajNjcv
+iyEB8SbtDKOhGoLIUaNZ/6/r3L7W6Q==
+=9oEj
+-----END PGP SIGNATURE-----
+
+--Sig_/wfzeW/Q3XN1d2s72avONvOM--

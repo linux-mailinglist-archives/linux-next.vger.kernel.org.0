@@ -2,125 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE74438D53
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 03:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14897438D55
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 03:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbhJYB5N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Oct 2021 21:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S232256AbhJYB56 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Oct 2021 21:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbhJYB5N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 21:57:13 -0400
+        with ESMTP id S232145AbhJYB55 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 21:57:57 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA2C061745;
-        Sun, 24 Oct 2021 18:54:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4EC061745;
+        Sun, 24 Oct 2021 18:55:36 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hcygr0TVKz4xYy;
-        Mon, 25 Oct 2021 12:54:47 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hcyhk5Wppz4xYy;
+        Mon, 25 Oct 2021 12:55:34 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635126888;
-        bh=I7SPuy5XF/qpL0LgpEtDISFmHslKggpBDDuSsDoZwmM=;
+        s=201702; t=1635126935;
+        bh=P0XjyRWWXAVb0oPOKlvBVANsP8TDCXeKludKZnXf0lM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W6JqfN86a9jt8aA05PH2BOvOl3oVnEp2RowPRE1yirk/Yj1zdsdhkMpncCLruKu0J
-         St3eM0gU9o8qRTraiGl1sv+8rLLDX9XnM/53rqnSacFmDcWFGypKLKU+l7POCk48k5
-         MOcfiEeHTkQ51jGJSw1ka+5oVbDOMZtmBg71X8PWy4xqbBdNeI/tLqw+FnXihme1b+
-         Ltfzz3q4K33ploAbKRD+HKDPsPVrQQdeQ7TNUkJTRnztNz2hz5GbwVEIZ5r3IatUEW
-         Ij7rwDfKHw0RDQTpFTRjD2c+DRl6wsAfEMJiIhnd7flCs+cblcJ04ryzFUKLc40CXM
-         AhXPBANp8D74w==
-Date:   Mon, 25 Oct 2021 12:54:46 +1100
+        b=Bq+iQwFjQMNG/HlLN7F/a0Aej4PqVg85vEv99/PsW58YKF3y457F3nWv4uWK6v1KC
+         dJUL/TaMRU5kvqa1hBL+JXzznv0g8lHvXN7d0PFw1nPOAWyl1dz6w+wXmY8TgBFZZP
+         lo9aKHnAyBow1PShsPc1rlIRPZfHwpF8i89T5UZDSGrYwqYglRpripGq0Bd/aNaRga
+         fRy5Nm741LOuq9pntHsXkoOZDJXNh6SyVvdEyx9nngnQOpXiNjK4Cw0iHc1fWCp1/2
+         QeZXhRNvTmFGk4vTuuResqz962jl+cbVFgaMJG8zWliIg2zNApxl6dfZob7PVCXfe1
+         vDDs7r/Wju5BA==
+Date:   Mon, 25 Oct 2021 12:55:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
+Cc:     Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
-Message-ID: <20211025125446.51bed661@canb.auug.org.au>
-In-Reply-To: <20211018181559.5d3bcf7e@canb.auug.org.au>
-References: <20211018181559.5d3bcf7e@canb.auug.org.au>
+Message-ID: <20211025125534.4681416a@canb.auug.org.au>
+In-Reply-To: <20211018193048.14517460@canb.auug.org.au>
+References: <20211018193048.14517460@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Wp=UcRq8Y=zrEOErt6dWmZt";
+Content-Type: multipart/signed; boundary="Sig_/PfL.q=7mAcyWsc9_=nliIj/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Wp=UcRq8Y=zrEOErt6dWmZt
+--Sig_/PfL.q=7mAcyWsc9_=nliIj/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 18 Oct 2021 18:15:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 18 Oct 2021 19:30:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> After merging the kspp-gustavo tree, today's linux-next build (powerpc
-> pseries_le_defconfig) failed like this:
+> Hi all,
 >=20
-> In file included from include/linux/perf_event.h:49,
->                  from arch/powerpc/perf/callchain.c:9:
-> include/linux/ftrace.h:49:41: error: 'struct ftrace_regs' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->    49 |           struct ftrace_ops *op, struct ftrace_regs *fregs);
->       |                                         ^~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> After merging the kspp-gustavo tree, today's linux-next build (sparc64
+> defconfig) failed like this:
 >=20
-> (many of these)
+> sparc64-linux-gcc: error: unrecognized command line option '-Wcast-functi=
+on-type'; did you mean '-Wbad-function-cast'?
+>=20
+> $ sparc64-linux-gcc --version
+> sparc64-linux-gcc (Custom f51944395b6aa154) 7.3.1 20180130
 >=20
 > Caused by commit
 >=20
->   c45ede6c2781 ("ftrace: Fix -Wmissing-prototypes errors")
+>   21078041965e ("Makefile: Enable -Wcast-function-type")
 >=20
-> I have added the following fixup for today.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 18 Oct 2021 17:56:30 +1100
-> Subject: [PATCH] fixup for "ftrace: Fix -Wmissing-prototypes errors"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  include/linux/ftrace.h | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 871b51bec170..ada656c6824d 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -45,6 +45,7 @@ struct ftrace_ops;
->  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip=
-);
->  #else
->  # define FTRACE_FORCE_LIST_FUNC 0
-> +struct ftrace_regs;
->  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
->  			       struct ftrace_ops *op, struct ftrace_regs *fregs);
->  #endif
-> --=20
-> 2.33.0
+> I have reverted that commit for today.
 
-I am still applying this fix ...
+I am still reverting that commit ...
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Wp=UcRq8Y=zrEOErt6dWmZt
+--Sig_/PfL.q=7mAcyWsc9_=nliIj/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2DmYACgkQAVBC80lX
-0Gy0IAf+JRG6AIZzCRvxq0+qM5CIU5aJJfb6Ew4RuLkP5yPBlU6tBIivzHKHrWdQ
-ftqZAF4uok8MVU7sFioXMdHSbOjw4f2oVuc3QY7U2KP2YL82Me+2fjiupkulvZCg
-IyK1Ygktqbjb8Zw0DKDfDoctKSqVuW8yNGt6S9aCp9kFLZ+ntc6qFGU+0FTMkLi5
-LzCuaAucLHm9GyEcjMYA1sOIPwnefQZiDLv6Fbsfprahz17GTpxjSk4qJ4UgSH3O
-rJqYxJPqItzygjfBmrXywT/NrwQfnYfm+S0Tkly5h9+PhpaJGu0xBdk/Wbq+jc4F
-sCNzNFRLmBMnHdnK7HdpdAhaC0+xig==
-=4p++
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2DpYACgkQAVBC80lX
+0GyXEAf+MkFDGwEjyrGOJ4JhCeKwTHwNLzU6Wf9OnJ29J49dv+tNkS35kUUyM1Uv
+NS20F4arh0KHQ8ARC5DyMNKzbA0fCYRiSc+SIhiBenk3ubZ2anF1OEk6eM0eY4QW
+gVmUfUBGjRg67T/9WRM/TNzYIDVKR4iRWPSwLTkPd/XDFvrq4BLn1zqp2BdIWTSX
+sOgTaiY5EXpH33dkCUwtE+6kl7nKTotWOY8eIcy9h3JNtRQif6amvHlZRZfoUXbd
+e9TtPuXCNjr/iyfnivtFLlLKQj62XWkUDRsdGFECWDoE39DXxeAwXb2dSmCQG9C5
+3MBiZmsaVQ7HFASS0YOP+aXLzpxEpQ==
+=2bt8
 -----END PGP SIGNATURE-----
 
---Sig_/Wp=UcRq8Y=zrEOErt6dWmZt--
+--Sig_/PfL.q=7mAcyWsc9_=nliIj/--

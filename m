@@ -2,89 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ECC438D83
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 04:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4C2438D85
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 04:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbhJYCkQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Oct 2021 22:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbhJYCkP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 22:40:15 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9C9C061745
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 19:37:54 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id v77so13591833oie.1
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 19:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IwN99OfY/bxm/QeMkx5/SdLoA3HcDZGPBi95jv3c8Qw=;
-        b=LK4+jmghG0mSGT3l7Bg7yvtpwp1jedwLgp7SYckRy9VNcfROh6vKUBzNGeqdHtXkWP
-         kCUIsJb4sdpbKF+9v5+2Yz4oruhHs9V5EHsyCrzEUPTucCtPZF/8aL4sqdgM78Z7lKj6
-         91tQSpA6/R3SAqZfratxs/PNDQJNGyvy1hGr32jDDm6PwpujdfaTS6ODFA3htsbOM/3I
-         FLbGKIqaaJoWJXBQO7Y22xvKljEvAYBmgYeyDqEPiZvXEncV/61xiqvMrTCDzeAa5ncI
-         20QnGq1PkxBDULTEuNQxrhf9Z8rpyxVboElbafvEXTkPXlPbe1UF47a8Zxdksab/NWMT
-         5bnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IwN99OfY/bxm/QeMkx5/SdLoA3HcDZGPBi95jv3c8Qw=;
-        b=IqpvM2YAeI/dvWZyZpkdCdMSCV4WiF9f+oIV6smch5pOsWf6pk4fxBOkCysBGoNgkm
-         Q34vyloXwFsqqEziP+YfP41BAagmAM/VLzzSKaYAJ/XZXIILZhs0hVfhpsWPtO/VYltP
-         KO1lOCgGoisDaZ8bjUHuY0UUZY7BLtdAk4muRMEtAG5fIgIW0SGg0zW37caeXFQlHaSI
-         JrhpLMXfNBxxb8002rqoU/Obbj17yMScBPu1d98oZTbhwBhXlfzW33DeAYXK6oXITBeI
-         lduBcaGO/NBbwDP/QYxiRzgl2TXePmYToSmHk7HruobJCrVvpRYgzOm080HV/fGuY4Um
-         AzWg==
-X-Gm-Message-State: AOAM532MYvjpC/z3b6wCLxGA1yzgEhcLlBdkP8ZlvG7dk++CyWZzvjrL
-        NWGN0xZiRehOsxnX4cyzLvdhBA==
-X-Google-Smtp-Source: ABdhPJwYcUSFkCXObXggQ5HmkUdSuJPtLFWzc/Xa7+X5NJ1hByMgjGcviCFAbBkFruYK87VP9dNjsA==
-X-Received: by 2002:a05:6808:120e:: with SMTP id a14mr19694590oil.122.1635129473494;
-        Sun, 24 Oct 2021 19:37:53 -0700 (PDT)
-Received: from yoga ([2600:1700:a0:3dc8:40c7:d4ff:fe65:a72c])
-        by smtp.gmail.com with ESMTPSA id j8sm3424138otu.59.2021.10.24.19.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Oct 2021 19:37:53 -0700 (PDT)
-Date:   Sun, 24 Oct 2021 21:37:51 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
+        id S232171AbhJYCoj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Oct 2021 22:44:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36988 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230040AbhJYCoj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 24 Oct 2021 22:44:39 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26B2E60E09;
+        Mon, 25 Oct 2021 02:42:17 +0000 (UTC)
+Date:   Sun, 24 Oct 2021 22:42:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the qcom tree
-Message-ID: <YXYYf9TveqwZRUNp@yoga>
-References: <20211025104333.4a3dfb09@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
+Message-ID: <20211024224215.018c36cd@gandalf.local.home>
+In-Reply-To: <20211025021119.GA1424114@embeddedor>
+References: <20211018181559.5d3bcf7e@canb.auug.org.au>
+        <20211025125446.51bed661@canb.auug.org.au>
+        <20211025021119.GA1424114@embeddedor>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211025104333.4a3dfb09@canb.auug.org.au>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun 24 Oct 18:43 CDT 2021, Stephen Rothwell wrote:
+On Sun, 24 Oct 2021 21:11:19 -0500
+"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 
-> Hi all,
+> On Mon, Oct 25, 2021 at 12:54:46PM +1100, Stephen Rothwell wrote:
+> > > --- a/include/linux/ftrace.h
+> > > +++ b/include/linux/ftrace.h
+> > > @@ -45,6 +45,7 @@ struct ftrace_ops;
+> > >  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip);
+> > >  #else
+> > >  # define FTRACE_FORCE_LIST_FUNC 0
+> > > +struct ftrace_regs;
+> > >  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+> > >  			       struct ftrace_ops *op, struct ftrace_regs *fregs);
+> > >  #endif
+> > > -- 
+> > > 2.33.0  
+> > 
+> > I am still applying this fix ...  
 > 
-> After merging the qcom tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/firmware/qcom_scm.c:20:10: fatal error: asm/smp_plat.h: No such file or directory
->    20 | #include <asm/smp_plat.h>
->       |          ^~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   55845f46df03 ("firmware: qcom: scm: Add support for MC boot address API")
-> 
+> I will add this fix to the original patch for my tomorrow's -next tree.
 
-Thanks for the report Stephen, I will take a look at this.
+Hmm, I pushed my version to my for-next branch. Do you have this in the
+next tree?
 
-> I have used the qcom tree from next-20211022 for today.
-> 
+  34cdd18b8d245f3e901e5325 ("tracing: Use linker magic instead of recasting
+  ftrace_ops_list_func()")
 
-Thanks,
-Bjorn
+Which shouldn't need this fix.
+
+-- Steve

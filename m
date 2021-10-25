@@ -2,129 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B242438CBC
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 02:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE74438D53
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 03:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbhJYANC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Oct 2021 20:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        id S232252AbhJYB5N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Oct 2021 21:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbhJYANC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 20:13:02 -0400
+        with ESMTP id S229668AbhJYB5N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 21:57:13 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05B8C061745;
-        Sun, 24 Oct 2021 17:10:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA2C061745;
+        Sun, 24 Oct 2021 18:54:51 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HcwMf4vgyz4xbr;
-        Mon, 25 Oct 2021 11:10:38 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hcygr0TVKz4xYy;
+        Mon, 25 Oct 2021 12:54:47 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635120639;
-        bh=CahYHHO62eFOy5myA/8RGsjfkANf200+JsYPQzgehw4=;
+        s=201702; t=1635126888;
+        bh=I7SPuy5XF/qpL0LgpEtDISFmHslKggpBDDuSsDoZwmM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lkzvIZ6+xzB8iHrUDexiKFIkkFITUaUr83yM3MabibkJcHLz/KDkf0+8dxj0WA1Ir
-         TW6UzGUXBKDywd0gbPCnt1nrL57fGVjHZlP9K3PekYrgcrEspQ8rtKEWVwpfqcjnpK
-         DOegaBI2QjBigg8mdpFFVVKAIMlZjlGurENfb7slzU8szZOylLPe8AI1FETMyZizP+
-         ynJ+RU/yeSFh7NOPHzR254SSRXbdKGpKM0yPjPV6MEGFC9khgKJb86UXaMq5CfYf9T
-         MrB3KwhDCQfE17pUpevLb/Q1VAQ/EZHIbVUZT+sIYaUXs/9tntdN16KdarVOLfiGNl
-         JpgmqxKeGKF4A==
-Date:   Mon, 25 Oct 2021 11:10:37 +1100
+        b=W6JqfN86a9jt8aA05PH2BOvOl3oVnEp2RowPRE1yirk/Yj1zdsdhkMpncCLruKu0J
+         St3eM0gU9o8qRTraiGl1sv+8rLLDX9XnM/53rqnSacFmDcWFGypKLKU+l7POCk48k5
+         MOcfiEeHTkQ51jGJSw1ka+5oVbDOMZtmBg71X8PWy4xqbBdNeI/tLqw+FnXihme1b+
+         Ltfzz3q4K33ploAbKRD+HKDPsPVrQQdeQ7TNUkJTRnztNz2hz5GbwVEIZ5r3IatUEW
+         Ij7rwDfKHw0RDQTpFTRjD2c+DRl6wsAfEMJiIhnd7flCs+cblcJ04ryzFUKLc40CXM
+         AhXPBANp8D74w==
+Date:   Mon, 25 Oct 2021 12:54:46 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "J. Bruce Fields" <bfields@fieldses.org>,
-        Trond Myklebust <trondmy@gmail.com>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        "J. Bruce Fields" <bfields@redhat.com>,
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: Re: linux-next: manual merge of the nfsd tree with the nfs tree
-Message-ID: <20211025111037.7b4b8889@canb.auug.org.au>
-In-Reply-To: <20211025105951.109598aa@canb.auug.org.au>
-References: <20211025105951.109598aa@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp-gustavo tree
+Message-ID: <20211025125446.51bed661@canb.auug.org.au>
+In-Reply-To: <20211018181559.5d3bcf7e@canb.auug.org.au>
+References: <20211018181559.5d3bcf7e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4=9mYuJ8EAlk6+lmNcnnz1.";
+Content-Type: multipart/signed; boundary="Sig_/Wp=UcRq8Y=zrEOErt6dWmZt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4=9mYuJ8EAlk6+lmNcnnz1.
+--Sig_/Wp=UcRq8Y=zrEOErt6dWmZt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 25 Oct 2021 10:59:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 18 Oct 2021 18:15:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the nfsd tree got a conflict in:
+> After merging the kspp-gustavo tree, today's linux-next build (powerpc
+> pseries_le_defconfig) failed like this:
 >=20
->   include/trace/events/sunrpc.h
+> In file included from include/linux/perf_event.h:49,
+>                  from arch/powerpc/perf/callchain.c:9:
+> include/linux/ftrace.h:49:41: error: 'struct ftrace_regs' declared inside=
+ parameter list will not be visible outside of this definition or declarati=
+on [-Werror]
+>    49 |           struct ftrace_ops *op, struct ftrace_regs *fregs);
+>       |                                         ^~~~~~~~~~~
+> cc1: all warnings being treated as errors
 >=20
-> between commit:
+> (many of these)
 >=20
->   b4776a341ec0 ("SUNRPC: Tracepoints should display tk_pid and cl_clid as=
- a fixed-size field")
+> Caused by commit
 >=20
-> from the nfs tree and commit:
+>   c45ede6c2781 ("ftrace: Fix -Wmissing-prototypes errors")
 >=20
->   35940a58f9f1 ("SUNRPC: Capture value of xdr_buf::page_base")
+> I have added the following fixup for today.
 >=20
-> from the nfsd tree.
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 18 Oct 2021 17:56:30 +1100
+> Subject: [PATCH] fixup for "ftrace: Fix -Wmissing-prototypes errors"
 >=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  include/linux/ftrace.h | 1 +
+>  1 file changed, 1 insertion(+)
 >=20
-> diff --cc include/trace/events/sunrpc.h
-> index dc922e664820,9ea59959a2fe..000000000000
-> --- a/include/trace/events/sunrpc.h
-> +++ b/include/trace/events/sunrpc.h
-> @@@ -80,11 -80,12 +82,14 @@@ DECLARE_EVENT_CLASS(rpc_xdr_buf_class
->   		__entry->msg_len =3D xdr->len;
->   	),
->  =20
->  -	TP_printk("task:%u@%u head=3D[%p,%zu] page=3D%u(%u) tail=3D[%p,%zu] le=
-n=3D%u",
->  +	TP_printk(SUNRPC_TRACE_TASK_SPECIFIER
->  +		  " head=3D[%p,%zu] page=3D%u tail=3D[%p,%zu] len=3D%u",
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 871b51bec170..ada656c6824d 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -45,6 +45,7 @@ struct ftrace_ops;
+>  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip=
+);
+>  #else
+>  # define FTRACE_FORCE_LIST_FUNC 0
+> +struct ftrace_regs;
+>  void arch_ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
+>  			       struct ftrace_ops *op, struct ftrace_regs *fregs);
+>  #endif
+> --=20
+> 2.33.0
 
-Oops, I have taken the above line out.
-
-> ++		  " head=3D[%p,%zu] page=3D%u(%u) tail=3D[%p,%zu] len=3D%u",
->   		__entry->task_id, __entry->client_id,
-> - 		__entry->head_base, __entry->head_len, __entry->page_len,
-> - 		__entry->tail_base, __entry->tail_len, __entry->msg_len
-> + 		__entry->head_base, __entry->head_len,
-> + 		__entry->page_len, __entry->page_base,
-> + 		__entry->tail_base, __entry->tail_len,
-> + 		__entry->msg_len
->   	)
->   );
+I am still applying this fix ...
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/4=9mYuJ8EAlk6+lmNcnnz1.
+--Sig_/Wp=UcRq8Y=zrEOErt6dWmZt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF19f0ACgkQAVBC80lX
-0GyvKAf+P4qrdE6aZjXK0LdRNz7wmzdQlg5jO6AFhDk95EX7jj0AygfzF61JOzY1
-+xeXwBkg1jk2AciYluxiB/P21N09k9vqbMjrrzsEBKHGF5/BtZgoXgpsz48zdfvD
-UgrsAq2HMeBI8xnU/cU5nR61ocaeROcbglMkxRyUS1XKcRvhvfckU5T7UnFFBlrD
-RIrGpZV+2RhG7DOCzGD1CUxV1xwtL+3FJhYsTkjtjJpo+Htm/+NuQ9LS+DsI1ZBT
-o6/rxKRE/XTMU85HABQMlaJickVZWYSSm9gjeGfDsVKlWiSo+YK/OVdNkeNJ0woB
-VSh3+esRcs7f9sPEe3iBalyP3kfg6g==
-=6Kee
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2DmYACgkQAVBC80lX
+0Gy0IAf+JRG6AIZzCRvxq0+qM5CIU5aJJfb6Ew4RuLkP5yPBlU6tBIivzHKHrWdQ
+ftqZAF4uok8MVU7sFioXMdHSbOjw4f2oVuc3QY7U2KP2YL82Me+2fjiupkulvZCg
+IyK1Ygktqbjb8Zw0DKDfDoctKSqVuW8yNGt6S9aCp9kFLZ+ntc6qFGU+0FTMkLi5
+LzCuaAucLHm9GyEcjMYA1sOIPwnefQZiDLv6Fbsfprahz17GTpxjSk4qJ4UgSH3O
+rJqYxJPqItzygjfBmrXywT/NrwQfnYfm+S0Tkly5h9+PhpaJGu0xBdk/Wbq+jc4F
+sCNzNFRLmBMnHdnK7HdpdAhaC0+xig==
+=4p++
 -----END PGP SIGNATURE-----
 
---Sig_/4=9mYuJ8EAlk6+lmNcnnz1.--
+--Sig_/Wp=UcRq8Y=zrEOErt6dWmZt--

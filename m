@@ -2,213 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B20E438D74
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 04:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742FB438D76
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 04:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbhJYC1B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 24 Oct 2021 22:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S231786AbhJYC3M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Oct 2021 22:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbhJYC1A (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 22:27:00 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58410C061745
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 19:24:39 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 34-20020a9d0325000000b00552cae0decbso12912343otv.0
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 19:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i36gJPjI9a6NPzKIQ98b+JVm12o4NkdkYYJPaIDx2U8=;
-        b=nI1gWwqKycE/NwnznWTcpkEY4wXmgPmwaxfJ1vhpvVgcn1yxHkNBkFutTq+Mx6TzNr
-         f/lucOI/UsYBg/YOhAMfNHh3VhKBJZCaTLf5finPoRv2w2QpQYGUBQkLN17THcsAnLJ7
-         ZppvwCFdWqSDd3w4Cef+ISEtNnNAJLT7yANJFAuE9dah1RB0EzqQTFn/3Ieo1BdqjRE+
-         rgYUeuwhCVDN/gMr2wX8EUhWRDM0KL9PBk4qRLtamuyXrJyHCfFe3zGsdd84aZfoxQDy
-         NdBncm4wVwfG5E91gKh3/EYMm4uyqaTbd3Jki8aCKHrg/4GAIbg9hYO6n0alpct84ySW
-         gaXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i36gJPjI9a6NPzKIQ98b+JVm12o4NkdkYYJPaIDx2U8=;
-        b=YkdL6rtQjyzB3Ca9kxF9SYhlpjBXmS7+M5wo3fP3uc9LrWF1RkyGmwH0fRUIquEpLf
-         SKuenbTz1uEiCCBon+Cp51cAZllNknNfyHMnv9n4rr/EZCWMG1/R8t4P5a0Ztntqy6AJ
-         dN6cSKIF+c+9yWtBqQ2aJHj1/HscDc6yh2DbSQClBqkBtxwSK3f6on49tOG2uy3yo0+E
-         m8W/EDSoGSfLp+VLBt9oPy5Xb1zNltcoDuflSe4eCdonLHgFJPzusO5g9OhuTU1WFfbo
-         +6D27Qpv0t+LPSPcbWELq06VsuuiVQj4tHUNSUSqyszfdn1ZGfWOhFOSuT0KbH7vtyXQ
-         zElw==
-X-Gm-Message-State: AOAM532LI+0EKXjBlvJrWU2rr/U2j5JZ63vPdK91cL/Z6OchnIY+EJug
-        I00chbeDHxzWR+a1cSAp42V5gHIxW1rEff+E
-X-Google-Smtp-Source: ABdhPJznI3jwKztaWfkjzMYgLyTR07+z5juLa1nlvd4+1yC90lCRZRXb9jElialOmWa1dBGTukeVTQ==
-X-Received: by 2002:a05:6830:30ad:: with SMTP id g13mr11505287ots.344.1635128678653;
-        Sun, 24 Oct 2021 19:24:38 -0700 (PDT)
-Received: from yoga ([2600:1700:a0:3dc8:40c7:d4ff:fe65:a72c])
-        by smtp.gmail.com with ESMTPSA id w17sm3361499otm.50.2021.10.24.19.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Oct 2021 19:24:38 -0700 (PDT)
-Date:   Sun, 24 Oct 2021 21:24:36 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Gross <agross@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the qcom tree
-Message-ID: <YXYVZF7ARs3HSh9+@yoga>
-References: <20211025102802.11a92147@canb.auug.org.au>
- <LR9I1R.IR2MHJE8MRKZ1@ixit.cz>
+        with ESMTP id S230057AbhJYC3M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Oct 2021 22:29:12 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5C9C061745;
+        Sun, 24 Oct 2021 19:26:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HczNm6lKhz4xbM;
+        Mon, 25 Oct 2021 13:26:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635128809;
+        bh=TrM9APB2AGvQ5WsCyA/bZkd87C42PO0byLCrTUGQqE4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DnseFRv1HurZ3VZnGL3jDe2qzuCa7MDPtZNfY7KmfQ2I4IEr9kJSZqmmwuLSHVA2j
+         se4KCUXtNINCnFq+zpU87O0DXSSVcxxqa0zn8K+UmXf7SrDOMlNXupjB2RMJqH66hw
+         a4p0RYNpw+y/CKCoDd6aSKp1W/orkzdM/vs5jWQDLr2r8bWeqpdpiNLHkM/+F334df
+         gQWP0gXBXtFNiU3AKL9dZvfIqpWsyC0QpMS9GPKjl5mGIrhCCb9XclRWLYG+q+fD5Y
+         eCwRtwy4K8qf1RyQd7LuRFoAtAA5A3ocVZx7KX8N3575qCt0krSzg6Dgj8sw0yJH9E
+         sKXjVcxAcwsFA==
+Date:   Mon, 25 Oct 2021 13:26:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: linux-next: manual merge of the block tree with Linus' tree
+Message-ID: <20211025132647.5e1c57b9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <LR9I1R.IR2MHJE8MRKZ1@ixit.cz>
+Content-Type: multipart/signed; boundary="Sig_/eN8zNdIHN1yb78UuNu75moN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun 24 Oct 18:40 CDT 2021, David Heidelberg wrote:
+--Sig_/eN8zNdIHN1yb78UuNu75moN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hello,
-> 
-> I believe patch "ARM: dts: qcom: fix typo in IPQ8064 thermal-sensor node"
-> should solve it [1] (sent 4 days ago, not merged yet thou).
-> 
-> David
-> [1] https://lists.sr.ht/~okias/devicetree/patches/25837
-> 
-> Best regards
-> David Heidelberg
-> 
+Hi all,
 
-Thank you, I had indeed missed that. It's now picked up.
+Today's linux-next merge of the block tree got a conflict in:
 
-Regards,
-Bjorn
+  fs/io_uring.c
 
-> On Mon, Oct 25 2021 at 10:28:02 +1100, Stephen Rothwell
-> <sfr@canb.auug.org.au> wrote:
-> > Hi all,
-> > 
-> > After merging the qcom tree, today's linux-next build (arm
-> > multi_v7_defconfig) produced this warning:
-> > 
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:52.19-70.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor0-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:72.19-90.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor1-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:92.19-110.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor2-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:112.19-130.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor3-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:132.19-150.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor4-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:152.19-170.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor5-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:172.19-190.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor6-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:192.19-210.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor7-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:212.19-230.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor8-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:232.19-250.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor9-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:252.20-270.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor10-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:52.19-70.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor0-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:72.19-90.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor1-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:92.19-110.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor2-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:112.19-130.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor3-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:132.19-150.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor4-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:152.19-170.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor5-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:172.19-190.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor6-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:192.19-210.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor7-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:212.19-230.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor8-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:232.19-250.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor9-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > arch/arm/boot/dts/qcom-ipq8064.dtsi:252.20-270.5: Warning
-> > (thermal_sensors_property): /thermal-zones/sensor10-thermal: Missing
-> > property '#thermal-sensor-cells' in node
-> > /soc/clock-controller@900000/thermal-sensor@900000 or bad phandle
-> > (referred from thermal-sensors[0])
-> > 
-> > Presumably introduced by commit
-> > 
-> >   88542b1d37dc ("ARM: dts: qcom: fix thermal zones naming")
-> > 
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> 
-> 
+between commits:
+
+  4ea672ab694c ("io_uring: fix ltimeout unprep")
+  b22fa62a35d7 ("io_uring: apply worker limits to previous users")
+
+from Linus' tree and commit:
+
+  d475a9a6226c ("io_uring: inline hot path of __io_queue_sqe()")
+  c072481ded14 ("io_uring: mark cold functions")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/io_uring.c
+index bc18af5e0a93,c2176bf339e0..000000000000
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@@ -6947,7 -6906,33 +6903,33 @@@ static void io_queue_linked_timeout(str
+  	io_put_req(req);
+  }
+ =20
+- static void __io_queue_sqe(struct io_kiocb *req)
++ static void io_queue_sqe_arm_apoll(struct io_kiocb *req)
++ 	__must_hold(&req->ctx->uring_lock)
++ {
++ 	struct io_kiocb *linked_timeout =3D io_prep_linked_timeout(req);
++=20
++ 	switch (io_arm_poll_handler(req)) {
++ 	case IO_APOLL_READY:
++ 		if (linked_timeout) {
+ -			io_unprep_linked_timeout(req);
+++			io_queue_linked_timeout(linked_timeout);
++ 			linked_timeout =3D NULL;
++ 		}
++ 		io_req_task_queue(req);
++ 		break;
++ 	case IO_APOLL_ABORTED:
++ 		/*
++ 		 * Queued up for async execution, worker will release
++ 		 * submit reference when the iocb is actually submitted.
++ 		 */
++ 		io_queue_async_work(req, NULL);
++ 		break;
++ 	}
++=20
++ 	if (linked_timeout)
++ 		io_queue_linked_timeout(linked_timeout);
++ }
++=20
++ static inline void __io_queue_sqe(struct io_kiocb *req)
+  	__must_hold(&req->ctx->uring_lock)
+  {
+  	struct io_kiocb *linked_timeout;
+@@@ -10647,11 -10690,9 +10696,11 @@@ static __cold int io_unregister_iowq_af
+  	return io_wq_cpu_affinity(tctx->io_wq, NULL);
+  }
+ =20
+- static int io_register_iowq_max_workers(struct io_ring_ctx *ctx,
+- 					void __user *arg)
++ static __cold int io_register_iowq_max_workers(struct io_ring_ctx *ctx,
++ 					       void __user *arg)
+ +	__must_hold(&ctx->uring_lock)
+  {
+ +	struct io_tctx_node *node;
+  	struct io_uring_task *tctx =3D NULL;
+  	struct io_sq_data *sqd =3D NULL;
+  	__u32 new_count[2];
+
+--Sig_/eN8zNdIHN1yb78UuNu75moN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2FecACgkQAVBC80lX
+0Gwokwf/eTQ5En0HQoD/+lAad0rlypwAsws2zpgfb3KxzAzkmfI8BK03QjmGAoX7
+wd5XFIlgjxHQSGC8xXgZdWSkeKIBRtXu5FDzTK90/EsvfZWehJVKEjGpEbVLbYoq
+pZQCvn3pKhnMp6XbRkhlXCdOx4dTnQRyyOScDTxAMkjJcR2lHXLOACLNKBbN+GLR
+XtPV2/WYbr7RXmZ/dt0McAWZfLHxVaKPkiAk9ylbbFkUE5NjFs6f/Qe7I/PMfPbI
+Vphtvz4wj/9xw6uecqjAl1J+TXByGxqKX8khkzX/D/BAAeNjhslCRdJq7DPsPWK6
+h61UvyXLB0bkCd5AdMZa1JfUvDgJlw==
+=jVZ1
+-----END PGP SIGNATURE-----
+
+--Sig_/eN8zNdIHN1yb78UuNu75moN--

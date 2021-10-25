@@ -2,164 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3985438ED7
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 07:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C751438F0D
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 07:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbhJYFdN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 01:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S229888AbhJYGBL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Oct 2021 02:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbhJYFdN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 01:33:13 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3847C061745
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 22:30:51 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r28so5452531pga.0
-        for <linux-next@vger.kernel.org>; Sun, 24 Oct 2021 22:30:51 -0700 (PDT)
+        with ESMTP id S229678AbhJYGBL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 02:01:11 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B0DC061745;
+        Sun, 24 Oct 2021 22:58:49 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id v17so9376478qtp.1;
+        Sun, 24 Oct 2021 22:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8Z0Ko+DkSAGAy52wrJnMu25WQR4Tz5SIvVRzc/yc0R8=;
-        b=k4REHGfIXfQN3jjOya48KDYgiAw0O/4x/s83U6QIxUTFgdrcgYD3UgacAlFA3cGiQQ
-         uXyrUJn8TmnOWltrqtdKtEnFUrKpUY09U57/HVL9WOfDpASQAgFyO3T/iD/zg3Z2c93M
-         J1UW1mlPkspE8WrjZS2wxs2bfVoGXcxqiw6oSidH2tnYMn/bbsNtprgoJBVzjpyVevtP
-         zGfJcHD7Ot2OhxSDFqCuS2xuCh/pBIrG7fmds0YKeH9PulL985JU3jwi6BSI2b2lY1eT
-         BWXe7CfdinQEtkcbMej0w6SItudZjvnTy1HopWr2Morek/8dX6QcSY31EEXTqPJh4Qib
-         WuHA==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=phz2ShPYJOTTRkBu8WpGV2HU9X5zCxuIcyKps/Mt5nE=;
+        b=TKyXcphaOJ9oZO8Znx2ZdIlkgGjytUp7N1N1NS8fGMck/vZtOTddQMFcvKLGijqCg5
+         APdASY/diuFz9hl+WaBIaVmTvB+M4hD8mUzuWRBtOKwAAzZPE4Zx+1E3PDZsWoGjELkw
+         5hV/6mb8gmi12xtwdjhpBv+UJAPPvxYm/+DQk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8Z0Ko+DkSAGAy52wrJnMu25WQR4Tz5SIvVRzc/yc0R8=;
-        b=Ltp0FxkTPi0P1VuDk5gFRbavDOKRdL1yNyaQ+d0XI9d/vNP2v87BWGBFlLX/kQKKWi
-         bwyL3I1C1SqoG4dcIH5EwsSZe/Dgq78eG061fo4zYSOOWF1A3Lbc3VwKbSyyb26AeFDA
-         nmID6CTNciWhf66njpX/AdcSbR3/kLRCPUXsNfFlUIeu93l152SJzbIcdD443XmhVZlD
-         cEpTDYVb1T98DetOb1NyOm54u7SMKuKGdkfudRnc0QcsdsH4K/6eNhFwVoYbqGwRm105
-         dHK0ny+fY1QngC7VGUvg9YDhDmfF5JqOjXUCeA5bhKEoLVljrfu9DmLCUDV7t/G1CXxD
-         3E1Q==
-X-Gm-Message-State: AOAM532gU1P8Oq929I/DvFaXLQ2RTm6FwJqwRpZNneSRVkKxS1J8x8VD
-        f8pxpTjbFnIEKc6fpZlJ3+jkcfQbNa6GyA==
-X-Google-Smtp-Source: ABdhPJyzQxuC7bNCfAjKYIeUREuORR/ltRTdz4q3G02TIszjBqDGuUaXvKxSpQ9eOlblkVNy7RGlYA==
-X-Received: by 2002:a05:6a00:1398:b0:44d:3234:dc31 with SMTP id t24-20020a056a00139800b0044d3234dc31mr16326594pfg.7.1635139851137;
-        Sun, 24 Oct 2021 22:30:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n21sm16672601pfv.115.2021.10.24.22.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Oct 2021 22:30:50 -0700 (PDT)
-Message-ID: <6176410a.1c69fb81.3122e.dd31@mx.google.com>
-Date:   Sun, 24 Oct 2021 22:30:50 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=phz2ShPYJOTTRkBu8WpGV2HU9X5zCxuIcyKps/Mt5nE=;
+        b=aO+cBRb32kwWCZRZOTUJQAxkFk1IdGrjiCjOSrNnHDt73DdHzLlrPXpeUI6ZEmrw1N
+         7buLL05I85B/2eRrm51wDVsVvDTTLEzWE9J9Bv1qhdbTVKwpgYGtZdDKskNtZN7IoGS1
+         Bn0OiK9UXzsLJXY1lo7fPyY3uDYEUbIjHC4ydxidFx8So0VycA3D5wxl/7+HNLglRUf9
+         vASc7zw58iLqic7pdE1Y6jzKplsb1aLP8ICKmC9JvJ+kQLW7t/QL/BhEywycyra7W6fQ
+         HzqyooZT6EPmmjC1MWafJX5S4QyDjJaIoGqNlNVf9C7boKVtpfcBECnoiWeFyDtc6zyK
+         wkQA==
+X-Gm-Message-State: AOAM531AUjBWBOzvWLmr52o4VodK5Gi/mIXLDYmALREspz4wfo3gH1Ma
+        ZD+ZOt5bVTIA7e5hS6AnuPB47TVh1Pr3iOwLlBIbv6Cm
+X-Google-Smtp-Source: ABdhPJw+9olsgOQMLLhshv8Kh1yA5kiVKyBo8XO6qFacdWiAM18lG8QMBz3jZrPhQS/KwpivNjJJpMDtcGEiWrV6BP0=
+X-Received: by 2002:ac8:5bcc:: with SMTP id b12mr15462614qtb.392.1635141528969;
+ Sun, 24 Oct 2021 22:58:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.15-rc6-377-g5baf390d41aa
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 497 runs,
- 2 regressions (v5.15-rc6-377-g5baf390d41aa)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211022193853.296c4ee9@canb.auug.org.au>
+In-Reply-To: <20211022193853.296c4ee9@canb.auug.org.au>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 25 Oct 2021 05:58:37 +0000
+Message-ID: <CACPK8XcWyJYj94q+Jp+KgTnM_f4vyY_gSyjUXN8ZPOtnbpJjfg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 497 runs, 2 regressions (v5.15-rc6-377-g5baf39=
-0d41aa)
+On Fri, 22 Oct 2021 at 08:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the akpm-current tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/hwmon/occ/p9_sbe.c: In function 'p9_sbe_occ_save_ffdc':
+> drivers/hwmon/occ/p9_sbe.c:58:5: error: implicit declaration of function 'kvfree' [-Werror=implicit-function-declaration]
+>    58 |     kvfree(ctx->ffdc);
+>       |     ^~~~~~
+> drivers/hwmon/occ/p9_sbe.c:59:16: error: implicit declaration of function 'kvmalloc'; did you mean 'key_alloc'? [-Werror=implicit-function-declaration]
+>    59 |    ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>       |                ^~~~~~~~
+>       |                key_alloc
+> drivers/hwmon/occ/p9_sbe.c:59:14: error: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
+>    59 |    ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>       |              ^
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>   5027a34a575e ("hwmon: (occ) Provide the SBEFIFO FFDC in binary sysfs")
+>
+> from the fsi tree interacting with commit
+>
+>   9192e3be4cc2 ("mm: move kvmalloc-related functions to slab.h")
+>
+> from the akpm-current tree.
 
-Regressions Summary
--------------------
+If I apply this patch then the build fails in a tree that doesn't have
+Willy's patch.
 
-platform                     | arch  | lab           | compiler | defconfig=
-        | regressions
------------------------------+-------+---------------+----------+----------=
---------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+crypto | 1          =
+Unless someone has a better suggestion I'll send a patch that includes
+both headers for now, and make a note to remove the mm.h include down
+the track.
 
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe    | gcc-10   | defconfig=
-        | 1          =
+Cheers,
 
+Joel
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.15-rc6-377-g5baf390d41aa/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.15-rc6-377-g5baf390d41aa
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5baf390d41aa17086c48d8200d51ef9ffb461594 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-        | regressions
------------------------------+-------+---------------+----------+----------=
---------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+crypto | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61760ef9437cb2a8b5335906
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+crypto
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc6-3=
-77-g5baf390d41aa/arm64/defconfig+crypto/gcc-10/lab-collabora/baseline-meson=
--g12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc6-3=
-77-g5baf390d41aa/arm64/defconfig+crypto/gcc-10/lab-collabora/baseline-meson=
--g12b-a311d-khadas-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61760ef9437cb2a8b5335=
-907
-        new failure (last pass: v5.15-rc6-297-g9344874edebc) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-        | regressions
------------------------------+-------+---------------+----------+----------=
---------+------------
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe    | gcc-10   | defconfig=
-        | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/61760f940d3d6751c03358dc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc6-3=
-77-g5baf390d41aa/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-a64-bana=
-napi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc6-3=
-77-g5baf390d41aa/arm64/defconfig/gcc-10/lab-clabbe/baseline-sun50i-a64-bana=
-napi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61760f950d3d6751c0335=
-8dd
-        new failure (last pass: v5.15-rc6-265-gc48af0f39374) =
-
- =20
+>
+> I have applied the following merge fix patch for today.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 22 Oct 2021 19:32:54 +1100
+> Subject: [PATCH] kvmalloc etc moved to slab.h
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/hwmon/occ/p9_sbe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index e50243580269..bb082eb52243 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -4,10 +4,10 @@
+>  #include <linux/device.h>
+>  #include <linux/errno.h>
+>  #include <linux/fsi-occ.h>
+> -#include <linux/mm.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/slab.h>
+>  #include <linux/string.h>
+>  #include <linux/sysfs.h>
+>
+> --
+> 2.33.0
+>
+> --
+> Cheers,
+> Stephen Rothwell

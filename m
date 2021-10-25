@@ -2,81 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E05438F43
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 08:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C2D438F82
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 08:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbhJYGTb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 02:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S230395AbhJYGax (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Oct 2021 02:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbhJYGTb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 02:19:31 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D131C061745;
-        Sun, 24 Oct 2021 23:17:09 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id g20so10895041qka.1;
-        Sun, 24 Oct 2021 23:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GPoDgik1UiWQBssAGNA2GV0mEfcDQ5chmLH4PvoXO3c=;
-        b=c5WQkxd1JsEO+v+0JDW2pjqbjhfsP3Phyndl/d3yoeV4sLQ/RhLOCzxg/1nzpjKNXN
-         3/fqoY5/tOMLeX7Yzfs0MAA/l3s18f1fD4fBTqbJaPrge0mlJ+MRfh2wOdiw2Bsq57VL
-         2DkYs2yeR83vF4eVSrRMG6dwCjdEn54pxLf+A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GPoDgik1UiWQBssAGNA2GV0mEfcDQ5chmLH4PvoXO3c=;
-        b=ReBDuwzlP6xL4qS8gjPqgJB7O97nS0XZkFcuLx5nbYNhyraAFYkz9aganSaKuu98wG
-         /KMIwCVTPO0m4Gv0ksiVqpHV4z6NGBlUDyR3caKKIV/JcwmbRhi/hriJI2NVLyVSPi3N
-         Plql8vHGzDq/KQvVt65iuJZ0Kbb7Gz8eSpdxGww36JB3j+h9nZ2MWuMcp04/Kw2OTefh
-         X9/tvb7PJI5Ie4n/S/TAIPyXvChKWwYOGTdyaGIm03ZrEHLYUg9MGtcSXFBLLDpyeJk4
-         eYRizG0OOdSxDX7ZHZ9riUcVQFmg3/JB8+ba0Q5at5Tf40MjjuvvGghy770V/csVxZui
-         cBgQ==
-X-Gm-Message-State: AOAM530eLkF72i5e9A8KQFHLadIfKJ3Xo/B6MVqBs1ZZPiVmC8f13r//
-        PXyrgjy0hA2LbhWuDCbJCWHf/if0DwcqYbEr+3QfCkKB
-X-Google-Smtp-Source: ABdhPJxjEX0xUK/d9UEEvS2J857EtIGyVDBgU/LBD/CeB1nRTgq5Wp266O2imCHr4aYsMdT+MmrAsCNhqIw8Y+KZEkA=
-X-Received: by 2002:a05:620a:46aa:: with SMTP id bq42mr11912821qkb.291.1635142628512;
- Sun, 24 Oct 2021 23:17:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211022193853.296c4ee9@canb.auug.org.au> <CACPK8XcWyJYj94q+Jp+KgTnM_f4vyY_gSyjUXN8ZPOtnbpJjfg@mail.gmail.com>
- <20211025170941.7eb30042@canb.auug.org.au>
-In-Reply-To: <20211025170941.7eb30042@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 25 Oct 2021 06:16:56 +0000
-Message-ID: <CACPK8XfVEn11ps5AuwcoUgPWE+hw-O+_rjAUARd=rkLCQNW8kA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
+        with ESMTP id S230369AbhJYGax (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 02:30:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794E3C061745;
+        Sun, 24 Oct 2021 23:28:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hd4ld2Lsrz4xbM;
+        Mon, 25 Oct 2021 17:28:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1635143309;
+        bh=UO+7LTZTfEH3+SFxoPjM7xKmJkD9pA6Voc4UYPRznJA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Ea69VD8965Yuq6XlOPvdP5TkWcECD/6tUkVRjODiIvBnHC2hPrs3MlG+JKEVDBbny
+         +QOnB1UeABzgl3GQDtx9FjA21wd9q6pwEYcScx4bCNcrPF4xXmU56nENQjlhjxQHT8
+         sHid3NV9VpO5lRRVY3pGrPXsnEq4aZtCnR5FjZOVkwgFLygkLqtM09xuRHrAJ1BiQ2
+         lhskJB36QZcrS1EfDHVrTsh6DJ0HrMgbMrlIuWt+k0QyIvxcmmFwV0LQxwlR8TV+Je
+         EeKYK6qUZfN884p2BiowXNIuQhiymzMvsqFB/uU44LqIheDsNSLHR3xBB14ObvKeYz
+         s+6mfoOUuQkkw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] crypto: api - Export crypto_boot_test_finished
+In-Reply-To: <20210928151621.7aec3f34@canb.auug.org.au>
+References: <20210927143229.543749f4@canb.auug.org.au>
+ <20210927112341.GA22483@gondor.apana.org.au>
+ <20210928151621.7aec3f34@canb.auug.org.au>
+Date:   Mon, 25 Oct 2021 17:28:24 +1100
+Message-ID: <87sfwpbotz.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 25 Oct 2021 at 06:09, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> Hi Herbert,
 >
-> Hi Joel,
+> On Mon, 27 Sep 2021 19:23:42 +0800 Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>>
+>> Oops, does this patch fix the problem?
 >
-> On Mon, 25 Oct 2021 05:58:37 +0000 Joel Stanley <joel@jms.id.au> wrote:
-> >
-> > If I apply this patch then the build fails in a tree that doesn't have
-> > Willy's patch.
-> >
-> > Unless someone has a better suggestion I'll send a patch that includes
-> > both headers for now, and make a note to remove the mm.h include down
-> > the track.
+> Yes, that fixes my build, thanks.
 >
-> Don't apply anything.  Just remember to tell Linus (or whoever you
-> merge this tree via) about this conflict and the resolution when you
-> send the pull request.
+> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au> # ppc32 build
 
-Okay. It's not a conflict though, rather an ordering issue.
+It fixes the build, but modules_install still fails:
 
-Greg has already merged this patch into his char-misc driver tree.
+  $ git checkout adad556efcdd42a1d9e060cbe5f6161cccf1fa28
+  HEAD is now at adad556efcdd crypto: api - Fix built-in testing dependency failures
+
+  $ git show e42dff467ee6 | patch -p1	# apply fixup patch
+  patching file crypto/api.c
+
+  $ make -s -j $(nproc) modules
+
+  $ make -s modules_install
+  depmod: ERROR: Cycle detected: crypto -> crypto_algapi -> crypto
+  depmod: ERROR: Found 2 modules in dependency cycles!
+  make: *** [Makefile:1801: modules_install] Error 1
+
+cheers

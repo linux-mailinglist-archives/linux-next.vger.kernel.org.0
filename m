@@ -2,113 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A39284390AF
-	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 09:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C96543913A
+	for <lists+linux-next@lfdr.de>; Mon, 25 Oct 2021 10:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbhJYIBC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 04:01:02 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37083 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbhJYIBB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 04:01:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hd6lf0Hcrz4xbr;
-        Mon, 25 Oct 2021 18:58:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635148718;
-        bh=Rs2hL2bZirC/Oo0FED5RRklUK4aoCtuUNsUnmx1hC20=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c3UQ67wRmABqhbiFzbJazQwQqKX4o00PCpeFslzKY8rlnfGvYPNL5YDp8hsyBk30G
-         5vZiRCtrHSmlweM+TyYZHyhnE9lt3mCpf7IHYd0/i8Kq3IzYxNzhhtnSsByUkjJnhp
-         pWfZDW9RwCatiCfI9TzPr269uuls8glxwl4YKpB3PFkPWCzqUs6tSgtBv4UfSCyF2N
-         sxAXfk4aRS+kfS2AkOqSOC18+HWZTYQt3JS3WstVZzsSFUw1n2cmJpUoCfnT8Szvzp
-         XLxMT1WDn56/LkEdnlt1cs7zStv8ef+P8CI0BTl4krVC65SezVh6fQ8rqMPXWGv5Wl
-         0xASt0BxImUIA==
-Date:   Mon, 25 Oct 2021 18:58:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S231241AbhJYIfH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Oct 2021 04:35:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229839AbhJYIfG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 Oct 2021 04:35:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C2A3604AC;
+        Mon, 25 Oct 2021 08:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635150764;
+        bh=+0hJcJGigVEilsD8EtE+r1TM7uyL/Vy0B+cfcagyyjs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GOh34K1PJUjKWDlE8Sb5ah+ICCkL4xm6WQqp/OY+fQNDp8HRIZCO/jz8+2zoPyicQ
+         nnJNFJXsPgtci6xb2PulZbfbIq0VY05xF1QpuGQ/awtwIsna7YyUTvQGSsjZZMduLX
+         B/pY5L8uVRgQCXrZOR6CUO2hjaO76zqQlpSMbIgOEqdYhtRHdNioT+kfZfKLfIdXva
+         9U1IBLhpLqV02nKZwCHB78sBq/kSxv7TOgD3I0M+FnQuX9nhuy843fTD/izwHzSKZh
+         Aolgk85i/CbTUDyeMRLCuHx4YC2xn8BShIpLsocNvI/Qc5ye8NQPIgLep+uwKv20wT
+         d75341uKw6vZw==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20211025185836.0df72e58@canb.auug.org.au>
-In-Reply-To: <YXZf1KAgWobGNO5a@zn.tnic>
-References: <20211025151144.552c60ca@canb.auug.org.au>
-        <YXZf1KAgWobGNO5a@zn.tnic>
+Subject: [PATCH] lib/bootconfig: Make xbc_alloc_mem() and xbc_free_mem() as __init function
+Date:   Mon, 25 Oct 2021 17:32:37 +0900
+Message-Id: <163515075747.547467.5746167540626712819.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211025151327.00af129d9f876e252b042d01@kernel.org>
+References: <20211025151327.00af129d9f876e252b042d01@kernel.org>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OBdEkQfXvf.qI3gxB9qFud0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OBdEkQfXvf.qI3gxB9qFud0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Since the xbc_alloc_mem() and xbc_free_mem() are used from
+the __init functions and memblock_alloc() is __init function,
+make them __init functions too.
 
-Hi Borislav,
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Fixes: 4ee1b4cac236 ("bootconfig: Cleanup dummy headers in tools/bootconfig")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ lib/bootconfig.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 25 Oct 2021 09:42:12 +0200 Borislav Petkov <bp@suse.de> wrote:
->
-> I cannot reproduce here. It could be uncovered by some stuff you merge
-> before tip/auto-latest or so.
+diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+index a056ae137750..3276675b25e1 100644
+--- a/lib/bootconfig.c
++++ b/lib/bootconfig.c
+@@ -43,12 +43,12 @@ static int open_brace[XBC_DEPTH_MAX] __initdata;
+ static int brace_index __initdata;
+ 
+ #ifdef __KERNEL__
+-static inline void *xbc_alloc_mem(size_t size)
++static inline void * __init xbc_alloc_mem(size_t size)
+ {
+ 	return memblock_alloc(size, SMP_CACHE_BYTES);
+ }
+ 
+-static inline void xbc_free_mem(void *addr, size_t size)
++static inline void __init xbc_free_mem(void *addr, size_t size)
+ {
+ 	memblock_free_ptr(addr, size);
+ }
 
-Yeah, I fugured something like that must have happened.
-
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Mon, 25 Oct 2021 15:04:13 +1100
-> > Subject: [PATCH] x86/fpu: include vmalloc.h for vzalloc etc
-> >=20
-> > Fixes: 69f6ed1d14c6 ("x86/fpu: Provide infrastructure for KVM FPU clean=
-up")
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  arch/x86/kernel/fpu/core.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> > index 9c475e2efd4d..c55013fc82ab 100644
-> > --- a/arch/x86/kernel/fpu/core.c
-> > +++ b/arch/x86/kernel/fpu/core.c
-> > @@ -16,6 +16,7 @@
-> > =20
-> >  #include <linux/hardirq.h>
-> >  #include <linux/pkeys.h>
-> > +#include <linux/vmalloc.h>
-> > =20
-> >  #include "context.h"
-> >  #include "internal.h"
-> > --  =20
->=20
-> I'm thinking I could simply fold in your change into 69f6ed1d14c6 ...
-
-That will certainly make it more robust against people cleaning up
-include files.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OBdEkQfXvf.qI3gxB9qFud0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF2Y6wACgkQAVBC80lX
-0GzGcQf+PtUcGxVXPvAmLIwAlEC+PLbFqqdS5xOoaHjWDMGok3VQhiK27YCex3qQ
-XdQCZLZiLJdM+qKGi2nJjtysZNhSp0vX5ol2vA2Qbdg6W3bt5+gg20vPqurUMS5v
-61lE82L4n67OeuFU0AX5YU5Mqa5ELB3IagdD75uvP5fqvK2KUftAZOOkR/BNvR9N
-RZzg6ZGkxUCw3xAiH/nA+jEfZWcqbq6Xb0Hyam3JkQENNlhB6tX77RdWvQMipm4N
-8CsgTJgmdbXmV9q6Iqi7jpAzYDM7Yb6CR2yT1mFWVpH8rryteAkJUWs/KUXi8BI2
-VPnAVefS0DMFdwYL46Wyxn2EgbIq6g==
-=Hzjn
------END PGP SIGNATURE-----
-
---Sig_/OBdEkQfXvf.qI3gxB9qFud0--

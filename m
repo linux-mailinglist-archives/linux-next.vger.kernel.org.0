@@ -2,110 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A0C43BD17
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 00:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9447F43BD9C
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 01:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235479AbhJZWTc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 18:19:32 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37243 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbhJZWTc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 18:19:32 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hf5lk1nJQz4xbr;
-        Wed, 27 Oct 2021 09:17:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635286626;
-        bh=DvdDyr1TSw29nQTLtvEiazqeBjIwNYSuHPpJlfGEoCY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n2/BJYKcPjybhAUKO37IQSaz7J83pvB/SwZs6cl9OgyBxor3zosIyqwBx98IzkvsU
-         2H3688FW4Fa23KDTtaaJWXksz2jUSMotiyv31auhrQIYL4FXxIZ+RKQjO6l38j0pi5
-         +v20KfWtaCwY0k9toW+Cz2+JBksNLaHTYVYbRWVS4TZo7ET9LlvT/ntejdREsZZ0tb
-         7pEwdOMaOcFJCGpsxfigYKZPIGPfvLBYnD+bvUs53klf4IalPeiIyXElJpdIjVViiL
-         Z88G3+1HaX3+ScsiP9fw3jTR0qw1ZynabCfCmbJ8aG3lHhynv4fW6dJTU5HmNXoPow
-         HmbVIAg7gh0BQ==
-Date:   Wed, 27 Oct 2021 09:17:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        id S235347AbhJZXI6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 19:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235278AbhJZXI6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 19:08:58 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E7CC061570;
+        Tue, 26 Oct 2021 16:06:33 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id p6-20020a9d7446000000b0054e6bb223f3so972618otk.3;
+        Tue, 26 Oct 2021 16:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=qhfQLJOgDvln9IuLBpMPA2NZUQIrC6XLO3bbkhnZKr0=;
+        b=T643XUt+TfuKOqk++crkBs0mWZBOYPKhmUKYurHK5hzbDKBydx1CC+kdvwwI1CN9OX
+         kEhTFhYFdQi8nuVhkrXaOkkVKDL75G0DziDM8Sz4EXtQtmPt+5JWJkmG9tpFIgB8G6l1
+         Uh0MlsSKvDeCOZ5293/wHFBQDF6gMsv/Erxwe5+nupQf1NNnr7SPJTo0Tcy5grjOWwIt
+         fg2oCXVsMvV9K/jw44KR1Fv3tASYFCYd8fzDuBwADRQrSRaTE9AbqyrRDTQbIhffI6mG
+         x7EA2rNhjX2qWKpop7dl8pMAB1IdaWrmVLECUmeVXrxNwDd0f115RrN5C7i6h+k4vfsz
+         7cTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=qhfQLJOgDvln9IuLBpMPA2NZUQIrC6XLO3bbkhnZKr0=;
+        b=MsONGzam8R7tk353O2KbCrkd+EG+Y1384eWirLe/HCAxwyxwDC0+Bs2kAuCW8ozpQX
+         3+vXHVBLbJR/MEt4xC9HWT1NTVbol3pyUrBiunKjFSeixYQI90HB1FOX0xnRGH/IMrbE
+         zsbgukT7GjEWQgtLFyW0hBkYtjrmZkN7NC8X6EtPIagvOSm4epyrtAxtnch8novT88QH
+         dpqHnyemOf27pvzySofKL2GJjrI1lDPLIqDMXemhtfAHhzx1rVqvDWjirNMWvdF1JzkM
+         STI3CCfTOhQsHFQR4bF4toOwJlYnRk9DuUZxY2naggH307AIVxeuL+aPd1jD7ZLYMiPV
+         H+BA==
+X-Gm-Message-State: AOAM530SUrHsevkakN4Cyy+um9kseWBBHIJ7X7sPcaNEvhAl60j3sQcZ
+        P4WleYEfU3LC7kcIBt8QcAs=
+X-Google-Smtp-Source: ABdhPJxk6iZqCbzxcHk7Me3XEtCBaRWXbeKaRStoVgRfFy2huR++yNlXSHMZ8oIa7PPzrdXllnng3A==
+X-Received: by 2002:a05:6830:153:: with SMTP id j19mr14207194otp.375.1635289592966;
+        Tue, 26 Oct 2021 16:06:32 -0700 (PDT)
+Received: from [127.0.0.1] ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id bn13sm79256oib.37.2021.10.26.16.06.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Oct 2021 16:06:32 -0700 (PDT)
+Date:   Tue, 26 Oct 2021 20:06:10 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the perf tree with Linus' tree
-Message-ID: <20211027091705.1e24694e@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the perf tree with Linus' tree
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20211027091705.1e24694e@canb.auug.org.au>
+References: <20211027091705.1e24694e@canb.auug.org.au>
+Message-ID: <9FB29D99-7F54-428E-912A-A9B025FD7CF3@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kl_5tiGQv+HiJPXr+ZJU55F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kl_5tiGQv+HiJPXr+ZJU55F
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the perf tree got a conflict in:
+On October 26, 2021 7:17:05 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eauu=
+g=2Eorg=2Eau> wrote:
+>Hi all,
+>
+>Today's linux-next merge of the perf tree got a conflict in:
+>
+>  tools/perf/util/session=2Ec
+>
+>between commit:
+>
+>  8e820f962345 ("perf report: Output non-zero offset for decompressed rec=
+ords")
+>
+>from Linus' tree and commit:
+>
+>  3a3535e67dfd ("perf session: Introduce decompressor in reader object")
+>
+>from the perf tree=2E
+>
+>I fixed it up (see below) and can carry the fix as necessary=2E This
+>is now fixed as far as linux-next is concerned, but any non trivial
+>conflicts should be mentioned to your upstream maintainer when your tree
+>is submitted for merging=2E  You may also want to consider cooperating
+>with the maintainer of the conflicting tree to minimise any particularly
+>complex conflicts=2E
+>
 
-  tools/perf/util/session.c
 
-between commit:
+Fixed locally, will publish tomorrow after regression tests finish=2E
 
-  8e820f962345 ("perf report: Output non-zero offset for decompressed recor=
-ds")
-
-from Linus' tree and commit:
-
-  3a3535e67dfd ("perf session: Introduce decompressor in reader object")
-
-from the perf tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/perf/util/session.c
-index 352f16076e01,51bf2efceb7f..000000000000
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@@ -2116,8 -2122,8 +2122,8 @@@ fetch_decomp_event(u64 head, size_t mma
-  static int __perf_session__process_decomp_events(struct perf_session *ses=
-sion)
-  {
-  	s64 skip;
- -	u64 size, file_pos =3D 0;
- +	u64 size;
-- 	struct decomp *decomp =3D session->decomp_last;
-+ 	struct decomp *decomp =3D session->active_decomp->decomp_last;
- =20
-  	if (!decomp)
-  		return 0;
-
---Sig_/Kl_5tiGQv+HiJPXr+ZJU55F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF4fmEACgkQAVBC80lX
-0GzPhAf/VnPGdVKrtXZYojHLnBzKwujiu9p9U4mTytgNrMo+1eFdNT4KphKH/61I
-3YjN3ZmV7YBQpkxXP7qdqDmTbasaZSDwK1U3wBlOSjsT+CU7jzQcZcuLB86k59ED
-K4xdj4w5dwYffgY2PRdOKjao1x5Wwp2vCGkGZ3RwNRnVlxdBSCBXwX24c5VbEtxa
-Hb2IJWQav9wsqCNTOcUZI4Xj/17Iy5RCTQ7quqVmbefq6SXseVOP4CmTqr7KGeZI
-dwPtGVPQuaaa8WWslZNQSPYPESVR61HRJILsIcUZxeDH3MtRInivw3T1NVlMk0nj
-Q0h9RLkdzZ7hZkCBnmwEM+RF0qBSYw==
-=rZVn
------END PGP SIGNATURE-----
-
---Sig_/Kl_5tiGQv+HiJPXr+ZJU55F--
+- Arnaldo

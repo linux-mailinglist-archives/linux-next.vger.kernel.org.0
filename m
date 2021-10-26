@@ -2,164 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD01B43ABED
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 07:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407CD43AC22
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 08:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbhJZF6r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 01:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S235223AbhJZGSG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 02:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbhJZF6p (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 01:58:45 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8152C061745
-        for <linux-next@vger.kernel.org>; Mon, 25 Oct 2021 22:56:22 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id x66so13193663pfx.13
-        for <linux-next@vger.kernel.org>; Mon, 25 Oct 2021 22:56:22 -0700 (PDT)
+        with ESMTP id S235221AbhJZGSF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 02:18:05 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D43FC061745;
+        Mon, 25 Oct 2021 23:15:42 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id y11so12497399qtn.13;
+        Mon, 25 Oct 2021 23:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Rx3dL7qQnXdcdkq9jbZgTb3gNMueVuBWzOXukyaDi3U=;
-        b=flxOe97AQ3W8yIDDdDlUttLpmbRznyM7ZzVYEvjLtrfQjXspskGwZeP3g399ex7TDb
-         xzBm6R/BKrB9E5lYsBuxtGbRltNdxmitB+Urobwu/XCGbmx91FDjv+AMw5JfWTEEnzDF
-         sNsVkd3h60ETz5z3H+T0zPPATGJqLMyl3pUbenEpsdoj/fowEhc0DeCPDafjmT8R6WLC
-         viB7YPcXtxqXXaNtsXsq2ST8Vy6TZ4FaKWrgzd8ywwSEmf5HMH9y5DljlSOj+oBj7J0H
-         zUUnyX18kwtDZtdywMXf8Pn/Je6WzP5+0MwGljnrsVszNkNc8KLfzN0RAdW09fchhAqD
-         yC8A==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D/dur7Sn2ZYzb23rhe+lhXmkmVlrpP62SVIG02l086Y=;
+        b=aeMt714LaHa+SG1Xpln7wKEpu7YaAu3RlCvOBNQ5ZNJHUaTrZDegZyPVfR1k6EBzk2
+         WwoxrqON094LB4Y0fOvQtY6H9KWqB+Y3qmrrGm5rvPb4bvtlvvjPvHnrrUgN8XW193ce
+         gcJpBikDv0KgNZkj8SfRPWlYHpDwnQWl8Uauc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Rx3dL7qQnXdcdkq9jbZgTb3gNMueVuBWzOXukyaDi3U=;
-        b=4aWtZc9guSc38073euX3qSovQR4R3qr8OTpvcgLxGF8yDfd92I3Lz+I95djoPyqAqO
-         EYwY4kc9YF8OBRwc1mXhNdC6x+F5SYr1sVB9zNPKYRsXiSZcTjSa6ADBnZjYbyK6fcyW
-         mdfzsIIuWlX1qb0iRDo7WStLmPcKQXMXezSefFjEXjyA1m1/xk3VL8olk/ULxQS7BPRu
-         jBl0f+3bFpX4a4/kldoYsACUq7iYTGpp4Azagdd+XuNdAF3vhAWzILfdbOk7KvVuBScY
-         q/GZ2lPfXDq9hPfDUcfocOtCYRN7O4+A7m0xo2e111V0l/i3QIpzkDH8qqeOwXNqtzSG
-         o1/A==
-X-Gm-Message-State: AOAM530q1hrmQv58q+OK7DZtClcNsLuuIS8lSUo972MfOhri/qkNfNRm
-        iSfhPzT+xGIeD5EKYeTHHQT/RaI/FWz5Kzfj
-X-Google-Smtp-Source: ABdhPJyFbXwC+HEJneDRmciEAX/RlGCmq88zp+LiZDw2orKbM9hXLDVWe1XcuD3/VdzoXQZ2isNpww==
-X-Received: by 2002:a05:6a00:887:b0:474:1f41:2293 with SMTP id q7-20020a056a00088700b004741f412293mr23398446pfj.44.1635227782074;
-        Mon, 25 Oct 2021 22:56:22 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l4sm21762250pfu.101.2021.10.25.22.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Oct 2021 22:56:21 -0700 (PDT)
-Message-ID: <61779885.1c69fb81.e9852.8ab1@mx.google.com>
-Date:   Mon, 25 Oct 2021 22:56:21 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D/dur7Sn2ZYzb23rhe+lhXmkmVlrpP62SVIG02l086Y=;
+        b=TAVlYFHsQ+q6ps5bnusgvWrECZijwMy/kK+J04ZlvuWKOpGHDOgGMcBqtHFCIxu4NI
+         YVnOcPBNnaAxi0bo9fXht/htdm9dV6L5Ikn4mPqmVlR466N6FSGPj2xhY05rZ3sYYKY0
+         pmGUSmLjdNaOIx7TVEnn/7MS5TEwPeBQZMC22tVjOXAVX/FV/49YJWIxIX3x1SbPD2jX
+         YjzeKK0bJpKUnS+vbWaqDjvfEGEQZ1tR3NTnsjsOzamvDVOUprUuNDLf+Td22ZiOvaPj
+         IHoFPPrfNQOkHcaIN8BhX/HjBt9TquKmC+u+yN0sCbwgBrjKQ+tOfpE0wbSBqOvJROhX
+         OQQA==
+X-Gm-Message-State: AOAM533RM4hVvdQjvcAmaGZo/TaIKLySwMlPpHR+RxaSTjkAfTnKOtYp
+        ydLYuSIOimkGL9aVaBQQOHjJ9BZOI03OshlYNlo=
+X-Google-Smtp-Source: ABdhPJwLpix2QoCyq66ckF90hg3QuitUesuv8mX2KdKU7ghjQW3WVqC0qjEWMswKGAXpcrK0KX/K0Gr7JDf80WzpCNA=
+X-Received: by 2002:a05:622a:180b:: with SMTP id t11mr2167219qtc.25.1635228941623;
+ Mon, 25 Oct 2021 23:15:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.15-rc7-147-g35e02e34c7cc
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 284 runs,
- 2 regressions (v5.15-rc7-147-g35e02e34c7cc)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20211026103939.136dc73b@canb.auug.org.au>
+In-Reply-To: <20211026103939.136dc73b@canb.auug.org.au>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 26 Oct 2021 06:15:29 +0000
+Message-ID: <CACPK8XfS+Gy1dhL-_uWKhW1D4++6LdWM-SdXtnsEV15OUhiK1w@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
+        Oskar Senft <osk@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 284 runs, 2 regressions (v5.15-rc7-147-g35e02e=
-34c7cc)
+On Mon, 25 Oct 2021 at 23:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing:2: WARNING: Inline emphasis start-string without end-string.
+>
+> Introduced by commit
+>
+>   c6807970c3bc ("soc: aspeed: Add UART routing support")
+>
+> The problem is (probably) the '*'s on the previous line.
 
-Regressions Summary
--------------------
-
-platform              | arch  | lab         | compiler | defconfig     | re=
-gressions
-----------------------+-------+-------------+----------+---------------+---=
----------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig     | 1 =
-         =
-
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig+ima | 1 =
-         =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.15-rc7-147-g35e02e34c7cc/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.15-rc7-147-g35e02e34c7cc
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      35e02e34c7cc912af4af045c3ea3938f1db251cc =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig     | re=
-gressions
-----------------------+-------+-------------+----------+---------------+---=
----------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig     | 1 =
-         =
-
-
-  Details:     https://kernelci.org/test/plan/id/61775f012452520bb93358f8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
-47-g35e02e34c7cc/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a=
--230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
-47-g35e02e34c7cc/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a=
--230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61775f012452520bb9335=
-8f9
-        new failure (last pass: v5.15-rc6-377-g5baf390d41aa) =
-
- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig     | re=
-gressions
-----------------------+-------+-------------+----------+---------------+---=
----------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig+ima | 1 =
-         =
-
-
-  Details:     https://kernelci.org/test/plan/id/61776004a2ef3043e433598b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+ima
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
-47-g35e02e34c7cc/arm64/defconfig+ima/gcc-10/lab-kontron/baseline-kontron-kb=
-ox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
-47-g35e02e34c7cc/arm64/defconfig+ima/gcc-10/lab-kontron/baseline-kontron-kb=
-ox-a-230-ls.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/61776004a2ef3043e4335=
-98c
-        new failure (last pass: v5.15-rc6-377-g5baf390d41aa) =
-
- =20
+Chai-Wei, are you able to send a fix for this issue?

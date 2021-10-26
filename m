@@ -2,99 +2,179 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A317343B877
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 19:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B99F43B8D6
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 19:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbhJZRqk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 13:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbhJZRqj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 13:46:39 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA241C061745
-        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 10:44:15 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m17so5523953edc.12
-        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 10:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=tmXVzuh5dkyrAII+ZVrZrBIPLN2O4THznBgHQCPFnbQ=;
-        b=Dqi3PP/SSAWFWG3gfFkOGyGSEegQad3EgGyE34NDLLAELVK50eCq1MDlOhgmBPwOU6
-         so2oMwx8riSKbOO2mzEapG+9A6CRdtzRiSu3Y2NZ918aQTUcvOnEQBpUTC0i7yFT18qw
-         XvmE3p37xBMf/1zXADOuvDJFF8+rbErRKKvQ6WrLtvKyH7G9Jp1nujOWNxj50IVXj1wm
-         BpYRzv7tWEq4TDOG+41TYA22vLr1Kg734dVaWfNKDwROR+iCblGttPlsJw1JRqIkUDFg
-         EF5y6WjI+0R4VxsGN6ksjPs0HRVys6LuGpN9HdX8BTjsZwe4H7dpGfgVwHlCsQhkgT0U
-         TA6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=tmXVzuh5dkyrAII+ZVrZrBIPLN2O4THznBgHQCPFnbQ=;
-        b=jmrDXAawgZueRxXMQge8ZBKDfLzSb0bGD6RCnwaMFYP+dYa/V+wMV6EQteDb0GvRbs
-         ytnwUMTnCueee7GRm7ZbOemxNNtiS9SCKsL0c/uL6g7MFjQI+QoEIcVyhqo6xQ/UIini
-         l/SUsjBTE5SoM/ewLTNVsqPvySOz6iiZs35XGxN2at2P7QNV7wLL0AfTB3g/xhzAEUV+
-         y7+8YjajEAJahmfNDVJF6MpQkxtTRq6DdsO01HWXmxoJkbUkZ8IgotpeOhP3wrx0MWqL
-         r+U9/+XPalSDqIf/hjA/shANnUMMwslcbvKEX1JpAVA5iBxnqKL6RzQbb3DTAIASxYzF
-         2P0Q==
-X-Gm-Message-State: AOAM533Tj+ohkfgOWi/gjte8JB5xE6sUTCwOXgwYsmdPqafZm5eN5d7b
-        h2CdI9Rrzi3mLB00zSJWqSDE+ENclVuTMEqLkOSMxw==
-X-Google-Smtp-Source: ABdhPJzpc5E2MH0dqfxYAdQeV4sDDHg8gxDgPhXTBuOBsaV+P2Ti1CzuJ28DAy8IRpeA3OQ6rZ34ANCraRU5f+j8IkI=
-X-Received: by 2002:a50:ff0a:: with SMTP id a10mr23553041edu.357.1635270254187;
- Tue, 26 Oct 2021 10:44:14 -0700 (PDT)
+        id S230493AbhJZSCG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 14:02:06 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:58268 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231671AbhJZSCG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 14:02:06 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E84AE218B1;
+        Tue, 26 Oct 2021 17:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635271180; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/IfyzD47ljPw1WkDD65/9cBWHj8bmddldSGi/M6KrnU=;
+        b=idiLTSAt6Udp6++x9MUivgkAKlweWBwhdf4UATnPNYS3Se2F0jllhOpuiYG0GqDhdNWTYf
+        oqJDqAMpSkWsGRHR7Lh0Da/7rAFZDaCF0ExbXAgg16gW6684SAHPPigO6BF6SiocPtx83P
+        icBCNS3hDcgZz+hK6hiZVKWvgrsC/Bg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635271180;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/IfyzD47ljPw1WkDD65/9cBWHj8bmddldSGi/M6KrnU=;
+        b=z1t6M8V0chQGmRZNI8ZOj8wmVXPLNcRQToWQ5DOyvNeDs0D7bJVBDcxX886OAzktZsV7Sa
+        ve28PrkwUZ0zYOCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FC3113EE9;
+        Tue, 26 Oct 2021 17:59:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id myQPJgxCeGGCbwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 26 Oct 2021 17:59:40 +0000
+Message-ID: <b26491f8-66a4-d532-e866-2dc0ecb922d2@suse.de>
+Date:   Tue, 26 Oct 2021 19:59:40 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 26 Oct 2021 23:14:03 +0530
-Message-ID: <CA+G9fYuAuu3vXMh_Re9Vcrne2BvAbJz=zujeoh5NQ8qmQqs2Mg@mail.gmail.com>
-Subject: parisc: sched.h:2138:38: error: 'const struct thread_info' has no
- member named 'cpu'
-To:     linux-parisc@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
+ `drm_gem_fb_get_obj'
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        dri-devel@lists.freedesktop.org,
         open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
+ <CA+G9fYvdhk-H8wBDdaPmRMZS_egxndncUkbZ92HCnUFD1g_wSQ@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CA+G9fYvdhk-H8wBDdaPmRMZS_egxndncUkbZ92HCnUFD1g_wSQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------tCtkVkBO019eIkSFKj0lZ9Pa"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Please ignore this email if it is already reported ]
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------tCtkVkBO019eIkSFKj0lZ9Pa
+Content-Type: multipart/mixed; boundary="------------8KOyy6PugOrkxvflSSuljoS7";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>,
+ dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Andrey Konovalov <andreyknvl@gmail.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>
+Message-ID: <b26491f8-66a4-d532-e866-2dc0ecb922d2@suse.de>
+Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
+ `drm_gem_fb_get_obj'
+References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
+ <CA+G9fYvdhk-H8wBDdaPmRMZS_egxndncUkbZ92HCnUFD1g_wSQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYvdhk-H8wBDdaPmRMZS_egxndncUkbZ92HCnUFD1g_wSQ@mail.gmail.com>
 
-Regression found on parisc gcc-8/9/10 and gcc-11 built with defconfig
-Following build warnings / errors reported on linux next 20211026.
+--------------8KOyy6PugOrkxvflSSuljoS7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-metadata:
-    git_describe: next-20211026
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_short_log: 2376e5fe91bc (\"Add linux-next specific files for 20211026\")
-    target_arch: parisc
-    toolchain: gcc-10
+SGkNCg0KQW0gMjUuMTAuMjEgdW0gMTY6MDEgc2NocmllYiBOYXJlc2ggS2FtYm9qdToNCj4g
+T24gTW9uLCAyNSBPY3QgMjAyMSBhdCAxNzo0MywgTmFyZXNoIEthbWJvanUgPG5hcmVzaC5r
+YW1ib2p1QGxpbmFyby5vcmc+IHdyb3RlOg0KPj4NCj4+IFJlZ3Jlc3Npb24gZm91bmQgb24g
+YXJtIGdjYy0xMSBidWlsdCB3aXRoIG11bHRpX3Y1X2RlZmNvbmZpZw0KPj4gRm9sbG93aW5n
+IGJ1aWxkIHdhcm5pbmdzIC8gZXJyb3JzIHJlcG9ydGVkIG9uIGxpbnV4IG5leHQgMjAyMTEw
+MjUuDQo+Pg0KPj4gbWV0YWRhdGE6DQo+PiAgICAgIGdpdF9kZXNjcmliZTogbmV4dC0yMDIx
+MTAyNQ0KPj4gICAgICBnaXRfcmVwbzogaHR0cHM6Ly9naXRsYWIuY29tL0xpbmFyby9sa2Z0
+L21pcnJvcnMvbmV4dC9saW51eC1uZXh0DQo+PiAgICAgIGdpdF9zaG9ydF9sb2c6IDlhZTFm
+YmRlYWJkMyAoXCJBZGQgbGludXgtbmV4dCBzcGVjaWZpYyBmaWxlcyBmb3IgMjAyMTEwMjVc
+IikNCj4+ICAgICAgdGFyZ2V0X2FyY2g6IGFybQ0KPj4gICAgICB0b29sY2hhaW46IGdjYy0x
+MQ0KPj4gICAgICBjb25maWc6IG11bHRpX3Y1X2RlZmNvbmZpZw0KPj4NCj4+IGJ1aWxkIGVy
+cm9yIDoNCj4+IC0tLS0tLS0tLS0tLS0tDQo+PiBhcm0tbGludXgtZ251ZWFiaWhmLWxkOiBk
+cml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2NtYV9oZWxwZXIubzogaW4NCj4+IGZ1bmN0aW9uIGBk
+cm1fZmJfY21hX2dldF9nZW1fb2JqJzoNCj4+IGRyaXZlcnMvZ3B1L2RybS9kcm1fZmJfY21h
+X2hlbHBlci5jOjQ2OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvDQo+PiBgZHJtX2dlbV9mYl9n
+ZXRfb2JqJw0KPj4gYXJtLWxpbnV4LWdudWVhYmloZi1sZDogZHJpdmVycy9ncHUvZHJtL2Ry
+bV9mYl9jbWFfaGVscGVyLmM6NDY6DQo+PiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBkcm1f
+Z2VtX2ZiX2dldF9vYmonDQo+PiBhcm0tbGludXgtZ251ZWFiaWhmLWxkOiBkcml2ZXJzL2dw
+dS9kcm0vZHJtX2ZiX2NtYV9oZWxwZXIuYzo0NjoNCj4+IHVuZGVmaW5lZCByZWZlcmVuY2Ug
+dG8gYGRybV9nZW1fZmJfZ2V0X29iaicNCj4+IGFybS1saW51eC1nbnVlYWJpaGYtbGQ6IGRy
+aXZlcnMvZ3B1L2RybS9kcm1fZmJfY21hX2hlbHBlci5vOiBpbg0KPj4gZnVuY3Rpb24gYGRy
+bV9mYl9jbWFfc3luY19ub25fY29oZXJlbnQnOg0KPj4gZHJpdmVycy9ncHUvZHJtL2RybV9m
+Yl9jbWFfaGVscGVyLmM6MTMzOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvDQo+PiBgZHJtX2F0
+b21pY19oZWxwZXJfZGFtYWdlX2l0ZXJfaW5pdCcNCj4+IGFybS1saW51eC1nbnVlYWJpaGYt
+bGQ6IGRyaXZlcnMvZ3B1L2RybS9kcm1fZmJfY21hX2hlbHBlci5jOjEzNToNCj4+IHVuZGVm
+aW5lZCByZWZlcmVuY2UgdG8gYGRybV9hdG9taWNfaGVscGVyX2RhbWFnZV9pdGVyX25leHQn
+DQo+PiBtYWtlWzFdOiAqKiogW01ha2VmaWxlOjEyNTI6IHZtbGludXhdIEVycm9yIDENCj4+
+IG1ha2VbMV06IFRhcmdldCAnX19hbGwnIG5vdCByZW1hZGUgYmVjYXVzZSBvZiBlcnJvcnMu
+DQo+PiBtYWtlOiAqKiogW01ha2VmaWxlOjIyNjogX19zdWItbWFrZV0gRXJyb3IgMg0KPj4N
+Cj4+IFJlcG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxsa2Z0
+QGxpbmFyby5vcmc+DQo+IA0KPiBUaGUgYmlzZWN0aW9uIHNjcmlwdCBwb2ludGVkIHRvIHRo
+ZSBmaXJzdCBiYWQgY29tbWl0LA0KPiANCj4gY29tbWl0IDRiMmI1ZTE0MmZmNDk5YTJiZWYy
+YjhkYjAyNzJiYmRhMTA4OGEzZmUNCj4gZHJtOiBNb3ZlIEdFTSBtZW1vcnkgbWFuYWdlcnMg
+aW50byBtb2R1bGVzDQoNCkNvdWxkIHlvdSBwbGVhc2UgdHJ5IHRoZSBwYXRjaCBhdCBbMV0/
+IEl0IGZpeGVzIHRoZSBwcm9ibGVtIGZvciBtZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMN
+Cg0KWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLmZyZWVkZXNrdG9wLm9yZy9wYXRjaC80NjE0MjYv
+DQoNCj4gDQo+PiBidWlsZCBsaW5rOg0KPj4gLS0tLS0tLS0tLS0NCj4+IGh0dHBzOi8vYnVp
+bGRzLnR1eGJ1aWxkLmNvbS8xenpnRlpCR2pwUTVSMGxhd1FGVzlpSjM5SHAvYnVpbGQubG9n
+DQo+Pg0KPj4gYnVpbGQgY29uZmlnOg0KPj4gLS0tLS0tLS0tLS0tLQ0KPj4gaHR0cHM6Ly9i
+dWlsZHMudHV4YnVpbGQuY29tLzF6emdGWkJHanBRNVIwbGF3UUZXOWlKMzlIcC9jb25maWcN
+Cj4+DQo+PiAjIFRvIGluc3RhbGwgdHV4bWFrZSBvbiB5b3VyIHN5c3RlbSBnbG9iYWxseQ0K
+Pj4gIyBzdWRvIHBpcDMgaW5zdGFsbCAtVSB0dXhtYWtlDQo+PiB0dXhtYWtlIC0tcnVudGlt
+ZSBwb2RtYW4gLS10YXJnZXQtYXJjaCBhcm0gLS10b29sY2hhaW4gZ2NjLTExDQo+PiAtLWtj
+b25maWcgbXVsdGlfdjVfZGVmY29uZmlnDQo+Pg0KPj4gLS0NCj4+IExpbmFybyBMS0ZUDQo+
+PiBodHRwczovL2xrZnQubGluYXJvLm9yZw0KPiANCj4gLSBOYXJlc2gNCj4gDQoNCi0tIA0K
+VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
+dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
+cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
+ZsO8aHJlcjogRmVsaXggSW1lbmTDtnJmZmVyDQo=
 
-build error :
---------------
-In file included from <command-line>:
-/builds/linux/include/linux/sched.h: In function 'task_cpu':
-/builds/linux/include/linux/sched.h:2138:38: error: 'const struct
-thread_info' has no member named 'cpu'
- 2138 |  return READ_ONCE(task_thread_info(p)->cpu);
-      |                                      ^~
+--------------8KOyy6PugOrkxvflSSuljoS7--
 
+--------------tCtkVkBO019eIkSFKj0lZ9Pa
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-----BEGIN PGP SIGNATURE-----
 
-build link:
------------
-https://builds.tuxbuild.com/202T6V9WW7HdyiYW1pERBsc94FT/build.log
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF4QgwFAwAAAAAACgkQlh/E3EQov+BG
+Iw/+JTHivG4hZU7vT50hmorrpRLVi03Smcf4MwOcbx07EhFpEpcZqYurS6Cmujuy6L0hACDLW/8h
+4l8/y4vZ5TUyohbBlcJRDz8IJNnnTRn+RmccXsLcfdf8upWR45lrsTjmNOmTtAE1/izgvJ3/T1O1
+JjFSQtRHWA8hnPzcSnmC7X8SytIEUKgLqQuYLBZjyrvLri/J7Cme43cE1Q1q8bR0kyFfcFG9sRAu
+0FS/mOxeRPICg6BJ3pup0nSpXH6bgF4Nt9R4Zk284uS4eVi+1gH3Ao22fj9WStpAsjL4MH4LE3jj
+N2DpG/U3aR+u+AT6bElE3w146UHEMUiDIVIWCfSj4j3rYt8ClTKiWqr8N9xcoTb2j4XNLNLd8Zo8
+YNQidiCVHDB2kVqmGjWbnrpXPJ9AYZHuiqbiC6i3cpFeauA0AYd/VxTmowTDlNAmR3gcY1tt2rkC
+D2PbtrUZksp18kv8tNPmBZN32u1Y8gQvpnTNWsTQRyn3xVjzb5L0JxbtyleyH4KZ+5YQyMVZepRU
+AiA8D83emTzgeXw5dalO8F5GuA09mFlhFnx4YEs069wObi02sdbry/izZQGJ/kbQFy1ciKmoUJzh
+xwvcrgaLtaLnCZtP6X8Gr7vcZOqYNGKoQEVfc/hfjZynxWrm/lGH/DEpjLDNt3Nw4IxOd0AWvAD9
+SPo=
+=ex6E
+-----END PGP SIGNATURE-----
 
-build config:
--------------
-https://builds.tuxbuild.com/202T6V9WW7HdyiYW1pERBsc94FT/config
-
-# To install tuxmake on your system globally
-# sudo pip3 install -U tuxmake
-tuxmake --runtime podman --target-arch parisc --toolchain gcc-10
---kconfig defconfig
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--------------tCtkVkBO019eIkSFKj0lZ9Pa--

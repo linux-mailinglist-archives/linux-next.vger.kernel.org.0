@@ -2,140 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B26CC43AAB7
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 05:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C498143AB58
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 06:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbhJZDWa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 23:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbhJZDW3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 23:22:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0097DC061745;
-        Mon, 25 Oct 2021 20:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=jAPA2L/R+i/IgedRAop6/upAuHcwMUUqczAkGrwyOr8=; b=Q78gdiQ1qmD1wV1buvfDzjgyRH
-        EU0bsSspjh6VAjRhxA1AAxJtd8uVyZrkiLhtNSX53nRuyr+S7kvF7q4klbrn30Acf+Q5+8sGe4kt+
-        Lf+4bNm/ku9UXhLB8sa2XfYWupA73LFX+uVG37rknvtSymU6hjHUCPN/Zc1yPwXpEZjaE9Fs3HrQh
-        eVyYIGu5FkzSCy6CwhLnJzAD0vfQvUd7cWi60dxkyP4yRUzdOt0xs+omlBh6T4Yq5tdtko/nW7Yjm
-        fO1b1qXQ6BwaP3rkWLIK662Ni9U+pqMQaz1R6S6OHe5F1I5PXyzl78zKzUqbKLAuWywM9Wf/SBPAv
-        21nS1jew==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mfD0O-000X0H-9D; Tue, 26 Oct 2021 03:20:04 +0000
-Subject: Re: linux-next: Tree for Oct 25 (bootconfig: xbc_alloc_mem())
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20211025204921.73cb3011@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <fe148532-a26d-103a-bcb5-4a749763d71a@infradead.org>
-Date:   Mon, 25 Oct 2021 20:20:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S234105AbhJZEku (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 00:40:50 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:56326 "EHLO deadmen.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230414AbhJZEks (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Oct 2021 00:40:48 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
+        id 1mfEE6-00008Q-4e; Tue, 26 Oct 2021 12:38:18 +0800
+Received: from herbert by gondobar with local (Exim 4.92)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1mfEE3-0004dn-AT; Tue, 26 Oct 2021 12:38:15 +0800
+Date:   Tue, 26 Oct 2021 12:38:15 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] crypto: api - Export crypto_boot_test_finished
+Message-ID: <20211026043815.GA17728@gondor.apana.org.au>
+References: <20210927143229.543749f4@canb.auug.org.au>
+ <20210927112341.GA22483@gondor.apana.org.au>
+ <20210928151621.7aec3f34@canb.auug.org.au>
+ <87sfwpbotz.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <20211025204921.73cb3011@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sfwpbotz.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/25/21 2:49 AM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Oct 25, 2021 at 05:28:24PM +1100, Michael Ellerman wrote:
+>
+> It fixes the build, but modules_install still fails:
 > 
-> There seems to be something amiss with cnosole output in today's release
-> (at least on my ppc qemu boot tests).
-> 
-> Changes since 20211022:
-> 
-> The nds32 tree gained a conflict against the kbuild tree.
-> 
-> The qcom tree gained a build failure so I used the version from
-> next-20211022.
-> 
-> The nfsd tree gained a conflict against the nfs tree.
-> 
-> The sound-asoc tree gained a build failure so I used the version from
-> next-20211022.
-> 
-> The block tree gained a conflict against Linus' tree.
-> 
-> The regulator tree lost its build failure.
-> 
-> The tip tree lost its build failure but gained another for which I
-> applied a patch.
-> 
-> The ftrace tree gained a conflict against the parisc-hd tree.
-> 
-> The kvm tree gained a conflict against the tip tree.
-> 
-> The kspp-gustavo tree still had one of its build failures for which I
-> reverted a commit.  It also gained a conflict against the ftrace tree.
-> 
-> The akpm-current tree gained a conflict against the ftrace tree.
-> 
-> Non-merge commits (relative to Linus' tree): 10130
->   9510 files changed, 594184 insertions(+), 218643 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf. After
-> the final fixups (if any), I do an x86_64 modules_install followed by
-> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> kvm enabled).
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 340 trees (counting Linus' and 92 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
+>   $ git checkout adad556efcdd42a1d9e060cbe5f6161cccf1fa28
+>   HEAD is now at adad556efcdd crypto: api - Fix built-in testing dependency failures
 
-on i386:
+Sorry, the fix is in the queue:
 
-WARNING: modpost: vmlinux.o(.text.unlikely+0x29b16): Section mismatch in reference from the function xbc_alloc_mem() to the function .init.text:memblock_alloc_try_nid()
-The function xbc_alloc_mem() references
-the function __init memblock_alloc_try_nid().
-This is often because xbc_alloc_mem lacks a __init
-annotation or the annotation of memblock_alloc_try_nid is wrong.
+https://patchwork.kernel.org/project/linux-crypto/patch/20211019132802.GA14233@gondor.apana.org.au/
 
-
-Looks like lib/bootconfig.c::xbc_alloc_mem() should be marked
-as __init (when it's built for KERNEL).
-
-
+Cheers,
 -- 
-~Randy
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

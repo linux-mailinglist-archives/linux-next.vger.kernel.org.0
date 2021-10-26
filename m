@@ -2,148 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9B943AD9B
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 09:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2666443ADF4
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 10:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbhJZH5v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 03:57:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60963 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233064AbhJZH5r (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Oct 2021 03:57:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635234923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        id S234064AbhJZI3w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 04:29:52 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:39818 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231283AbhJZI3t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 04:29:49 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 69CBB1FCA3;
+        Tue, 26 Oct 2021 08:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635236845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CKM4ZHMVNzPWAjQplTfZaVztzxcY6FyKLhDTL4NBYQ4=;
-        b=XCqpqkDxAFllOIaD+7alCi8vkuEwKoJInav+CFi2IaaDMMDlbBGxbOjXalrWRj5KsqHTSA
-        uNlCMHQObyUn3ytXmIcEb8AjwkP3r1+IvcvHIz/4wMhuanUp/7r4bt5jZUoJMS1bf/l4oL
-        niwCgHHLWJ0uGygPyKvMvY5pmX2eMV4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-337-gEYFnnraNQGH7F9hVUcwog-1; Tue, 26 Oct 2021 03:55:22 -0400
-X-MC-Unique: gEYFnnraNQGH7F9hVUcwog-1
-Received: by mail-ed1-f71.google.com with SMTP id r25-20020a05640216d900b003dca3501ab4so12216537edx.15
-        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 00:55:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CKM4ZHMVNzPWAjQplTfZaVztzxcY6FyKLhDTL4NBYQ4=;
-        b=a5Ic3QfWINwUGGJYNWDEJJPkL2fEjDLqGVBmbY5X3w3dMph4Xk7poFPP9CjRIdCx94
-         VzBHTEn0Az10BLaUaeUy9p20rfn0vNju37MeE+pxNP4YsWK2HL3YBxyY2I3U1VTfwR2m
-         /qwYalrjMcwoqbVaa/LbMgFstDncDav7xFTvwjY0pmZjca745+BZCzMIHnWCG79yK/Kl
-         5pxXKlwiwPcRzzzOyLt0Z0qVG9RM1wbeib3ecIL8qPixz6Y2tSCruBrTwgBqQd3ZYVo8
-         zkkKEQlkEV6q4zvU8v2gJlTMV5L1T9YCt3snxvTbGhnBqjdr7PIyKcpgXKN0mO0xpGbb
-         UmFg==
-X-Gm-Message-State: AOAM5313217wVKX72dxttnIk7Utk6+nehQbi8X1Fxv1kPrVJdDbgDw2W
-        InEMH4Z4g4KSm9kh1QlWgkUvFLQBXtvYAfxe9IY7yKtu4orCojbzq6VrilIxZcMZNgvmhAT6Rhw
-        VqyOgVUtnHR74IV6ZfI9CvA==
-X-Received: by 2002:a05:6402:203:: with SMTP id t3mr34431968edv.69.1635234921078;
-        Tue, 26 Oct 2021 00:55:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzeUzcVftYemRv659bKFSre1PW0yZzztGsYMlMDGwg6Ha1O3GIjdjJw7XUFWNbbHmBkSvQDcQ==
-X-Received: by 2002:a05:6402:203:: with SMTP id t3mr34431953edv.69.1635234920930;
-        Tue, 26 Oct 2021 00:55:20 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id k15sm8580157eje.37.2021.10.26.00.55.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 00:55:20 -0700 (PDT)
-Message-ID: <d218bccf-2715-4e37-5c54-9dcd66f6d028@redhat.com>
-Date:   Tue, 26 Oct 2021 09:55:19 +0200
+        bh=P7u0wBqRsH3OQDCxU4GIDfdl7I5NNgO6MqICOkElv98=;
+        b=dMbf3JbCiptnB8cuG4J+1f3A+QL4rTpQ91enq9bXEkndFjjXU8DwUxmD5AU/1cRM8zs0uf
+        +tLNuTCuSTRYWo08y34jfNrZ/LZuOCvs/j4hMmIH8JdsoaSIRCLJJ+iQkNRArwBml046Sy
+        P/6GS8vgQOcDHcCtLu7uvMeF2SDkAR0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635236845;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P7u0wBqRsH3OQDCxU4GIDfdl7I5NNgO6MqICOkElv98=;
+        b=Xa/h5+HGRvIwTVm6PWy75lgF7Ew+5799LqgTKV1eb9a4zzFkUiVe9i4VikhoeKRHjjmTA1
+        McuXM/8DlgXJ1ICg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5194B13AEE;
+        Tue, 26 Oct 2021 08:27:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fBXlE+27d2FHVgAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 26 Oct 2021 08:27:25 +0000
+Date:   Tue, 26 Oct 2021 10:27:26 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wei Liu <wei.liu@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: linux-next: manual merge of the hyperv tree with the tip tree
+Message-ID: <YXe77nC1uNKiuPch@zn.tnic>
+References: <20211026172251.0f655709@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: Tree for Oct 25 (drivers/platform/x86/amd-pmc.c)
-Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>
-References: <20211025204921.73cb3011@canb.auug.org.au>
- <af7d7b8f-45fd-53c5-a8c4-1f594a16111e@infradead.org>
- <92c26aee-d3eb-258c-a0dd-e09783db6a20@redhat.com>
- <SA0PR12MB451081DCA2B973935FC1CF03E2839@SA0PR12MB4510.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <SA0PR12MB451081DCA2B973935FC1CF03E2839@SA0PR12MB4510.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211026172251.0f655709@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Mario,
-
-On 10/25/21 23:32, Limonciello, Mario wrote:
-> [Public]
+On Tue, Oct 26, 2021 at 05:22:51PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
+> Today's linux-next merge of the hyperv tree got a conflict in:
 > 
+>   arch/x86/mm/pat/set_memory.c
 > 
->> -----Original Message-----
->> From: Hans de Goede <hdegoede@redhat.com>
->> Sent: Monday, October 25, 2021 16:29
->> To: Randy Dunlap <rdunlap@infradead.org>; Stephen Rothwell
->> <sfr@canb.auug.org.au>; Linux Next Mailing List <linux-
->> next@vger.kernel.org>; Limonciello, Mario <Mario.Limonciello@amd.com>
->> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; platform-
->> driver-x86@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-
->> k@amd.com>
->> Subject: Re: linux-next: Tree for Oct 25 (drivers/platform/x86/amd-pmc.c)
->>
->> Hi,
->>
->> On 10/25/21 22:50, Randy Dunlap wrote:
->>> On 10/25/21 2:49 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> There seems to be something amiss with cnosole output in today's
->> release
->>>> (at least on my ppc qemu boot tests).
->>>>
->>>> Changes since 20211022:
->>>>
->>>
->>> on x86_64:
->>>
->>> ../drivers/platform/x86/amd-pmc.c: In function
->> ‘amd_pmc_verify_czn_rtc’:
->>> ../drivers/platform/x86/amd-pmc.c:428:30: error:
->> ‘CONFIG_RTC_SYSTOHC_DEVICE’ undeclared (first use in this function); did
->> you mean ‘CONFIG_RTC_HCTOSYS_DEVICE’?
->>>   rtc_device = rtc_class_open(CONFIG_RTC_SYSTOHC_DEVICE);
->>>                               ^~~~~~~~~~~~~~~~~~~~~~~~~
->>>                               CONFIG_RTC_HCTOSYS_DEVICE
->>
->> Hmm, yes using either CONFIG setting is a problem since it is not always
->> defined. Both simply default to "rtc0" though and this is also which
->> standard distro configs use.
->>
->> Mario, can we just replace CONFIG_RTC_SYSTOHC_DEVICE with "rtc0"
->> here to fix this ?
->>
->> Regards,
->>
->> Hans
+> between commit:
 > 
-> Shyam pointed me at this and I sent out a fix, but I think our emails just crossed paths.
+>   e9d1d2bb75b2 ("treewide: Replace the use of mem_encrypt_active() with cc_platform_has()")
 > 
-> Take a look at what I did, but if you would prefer to just hardcode it to 
-> "rtc0" that is fine for me.
+> from the tip tree and commit:
+> 
+>   cf90c4532b92 ("x86/hyperv: Add new hvcall guest address host visibility support")
+> 
+> from the hyperv tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/x86/mm/pat/set_memory.c
+> index 527957586f3c,525f682ab150..000000000000
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@@ -2024,6 -2025,17 +2026,17 @@@ static int __set_memory_enc_pgtable(uns
+>   	return ret;
+>   }
+>   
+> + static int __set_memory_enc_dec(unsigned long addr, int numpages, bool enc)
+> + {
+> + 	if (hv_is_isolation_supported())
+> + 		return hv_set_mem_host_visibility(addr, numpages, !enc);
+> + 
+>  -	if (mem_encrypt_active())
+> ++	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+> + 		return __set_memory_enc_pgtable(addr, numpages, enc);
+> + 
+> + 	return 0;
+> + }
+> + 
+>   int set_memory_encrypted(unsigned long addr, int numpages)
+>   {
+>   	return __set_memory_enc_dec(addr, numpages, true);
 
-Just hardcoding it to "rtc0" saves us a #ifdef, so I slightly prefer that,
-but if you believe it would be better to go with CONFIG_RTC_SYSTOHC_DEVICE
-I'm fine with going with your fix.
+Looks good, thanks.
 
-Either way please let me know how you want to proceed with this.
+Wei, you could mention this conflict when sending to Linus or you can
+simply merge into your branch the tip branch tip:x86/cc which has the
+cc_platform_has() changes and then redo the isolation VM stuff ontop.
 
-Regards,
+HTH.
 
-Hans
+-- 
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

@@ -2,176 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B42CA43B96D
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 20:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B0043B9A1
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 20:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbhJZSYO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 14:24:14 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:51408 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbhJZSYN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 14:24:13 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 83EF81FD40;
-        Tue, 26 Oct 2021 18:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1635272508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RlzNvBlvWXrnHNZW8wayOcp5aLg6n6BHOqsTUV+jdWo=;
-        b=pebB2EKx2Ol0qnQimJY1uxN58jlB6Ypkpis5xsNQ7LJvxsT3HqbUF1vvrJyvSIiVjfqh7K
-        LRTwm/I0aBW06ecepfW745H84IoBlagBDwUCiMRd/z4sWIyWAoxD/P4er1cUzPzYuUwtJ9
-        TkZDEvQbrMB6RHdJ93ldGc6+g0eftIs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1635272508;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RlzNvBlvWXrnHNZW8wayOcp5aLg6n6BHOqsTUV+jdWo=;
-        b=pmPE68Mzwq+DqopjQcabLiNALiEodPm1MHhVq5aKil/AFymGTM8rhpH9VGq5G1yxuqaOIO
-        a3WBryOkjnXMmbDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 35E6213EE9;
-        Tue, 26 Oct 2021 18:21:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0PCUCzxHeGE3dwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 26 Oct 2021 18:21:48 +0000
-Message-ID: <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
-Date:   Tue, 26 Oct 2021 20:21:47 +0200
+        id S238322AbhJZSeD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 14:34:03 -0400
+Received: from mail-pj1-f53.google.com ([209.85.216.53]:43914 "EHLO
+        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236171AbhJZSdy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 14:33:54 -0400
+Received: by mail-pj1-f53.google.com with SMTP id k2-20020a17090ac50200b001a218b956aaso182004pjt.2;
+        Tue, 26 Oct 2021 11:31:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uopvb2qp8VpwzAYgXBeb+ewVZo7WAA32gjRIR84G0wU=;
+        b=BTVV6d3NnLUwSFmMkXiKSaRQ6UUysYTs88FVC4xZC1qcRHUZmgFPbhwqjbMf5ZxCP9
+         cR2fGr5XS8Krr7hh2uag4FvK8004kETYr3F88puWBiSgXgad8veiQFXtCKumvVTtoHER
+         w7D7c91qqfXevkefdkKWQ+c9mdbW7P8bG+s5lj4mjzBvDtu8LH2J/Ei7doT0UeJtyY64
+         wY1bwXVZr7hgjVG5pKXfTy8Mz2IUf1fDcncnPgHsQoyzwTxxT0eGC1ZjLr9u/giwnFEM
+         hzk1bNwNQD1Rqo0uMOr/h3aA/FgYUtBNeZXy6mbchhdKtt8Lt4muSDykYdIZlG7qGGxf
+         Sb7g==
+X-Gm-Message-State: AOAM530o3ydGC14Y8N5JeF3WQdlYy8tgKxOjRHKrB5KcuQufOEQVWERv
+        V9Tv0HQGY30D8VuSh8xDu3oFHZLKwjWNaQ==
+X-Google-Smtp-Source: ABdhPJwIBY9eQePiQquBgu8ef6u3xdUlwf1y8/xhypVAxNK/Dt9TMM4HXHBa57YhxnWdZ05ZncjkDg==
+X-Received: by 2002:a17:90a:4e42:: with SMTP id t2mr461259pjl.108.1635273089765;
+        Tue, 26 Oct 2021 11:31:29 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:26a4:3b5f:3c4f:53f5])
+        by smtp.gmail.com with ESMTPSA id b6sm26555566pfv.171.2021.10.26.11.31.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Oct 2021 11:31:29 -0700 (PDT)
+Subject: Re: [PATCH v3] scsi: core: Fix early registration of sysfs attributes
+ for scsi_device
+To:     Steffen Maier <maier@linux.ibm.com>, jwi@linux.ibm.com,
+        martin.petersen@oracle.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, bblock@linux.ibm.com,
+        linux-next@vger.kernel.org, linux-s390@vger.kernel.org
+References: <2f5e5d18-7ba9-10f6-1855-84546172b473@linux.ibm.com>
+ <20211026014240.4098365-1-maier@linux.ibm.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <9a2535ec-7380-f948-d132-763d3d2140c5@acm.org>
+Date:   Tue, 26 Oct 2021 11:31:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
- `drm_gem_fb_get_obj'
+In-Reply-To: <20211026014240.4098365-1-maier@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------KyOHR2H1qiOfizW4J4NUWdmK"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------KyOHR2H1qiOfizW4J4NUWdmK
-Content-Type: multipart/mixed; boundary="------------3L4NCn3SGwkCG00xV9c0n1mD";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
- dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
- Linux-Next Mailing List <linux-next@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Andrey Konovalov <andreyknvl@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>
-Message-ID: <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
- `drm_gem_fb_get_obj'
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
-In-Reply-To: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
+On 10/25/21 6:42 PM, Steffen Maier wrote:
+> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> index c26f0e29e8cd..fa064bf9a55c 100644
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@ -1571,7 +1571,6 @@ static struct device_type scsi_dev_type = {
+>   
+>   void scsi_sysfs_device_initialize(struct scsi_device *sdev)
+>   {
+> -	int i, j = 0;
+>   	unsigned long flags;
+>   	struct Scsi_Host *shost = sdev->host;
+>   	struct scsi_host_template *hostt = shost->hostt;
+> @@ -1583,15 +1582,7 @@ void scsi_sysfs_device_initialize(struct scsi_device *sdev)
+>   	scsi_enable_async_suspend(&sdev->sdev_gendev);
+>   	dev_set_name(&sdev->sdev_gendev, "%d:%d:%d:%llu",
+>   		     sdev->host->host_no, sdev->channel, sdev->id, sdev->lun);
+> -	sdev->gendev_attr_groups[j++] = &scsi_sdev_attr_group;
+> -	if (hostt->sdev_groups) {
+> -		for (i = 0; hostt->sdev_groups[i] &&
+> -			     j < ARRAY_SIZE(sdev->gendev_attr_groups);
+> -		     i++, j++) {
+> -			sdev->gendev_attr_groups[j] = hostt->sdev_groups[i];
+> -		}
+> -	}
+> -	WARN_ON_ONCE(j >= ARRAY_SIZE(sdev->gendev_attr_groups));
+> +	sdev->sdev_gendev.groups = hostt->sdev_groups;
+>   
+>   	device_initialize(&sdev->sdev_dev);
+>   	sdev->sdev_dev.parent = get_device(&sdev->sdev_gendev);
+> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+> index b1e9b3bd3a60..b97e142a7ca9 100644
+> --- a/include/scsi/scsi_device.h
+> +++ b/include/scsi/scsi_device.h
+> @@ -225,12 +225,6 @@ struct scsi_device {
+>   
+>   	struct device		sdev_gendev,
+>   				sdev_dev;
+> -	/*
+> -	 * The array size 6 provides space for one attribute group for the
+> -	 * SCSI core, four attribute groups defined by SCSI LLDs and one
+> -	 * terminating NULL pointer.
+> -	 */
+> -	const struct attribute_group *gendev_attr_groups[6];
+>   
+>   	struct execute_work	ew; /* used to get process context on put */
+>   	struct work_struct	requeue_work;
 
---------------3L4NCn3SGwkCG00xV9c0n1mD
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks!
 
-SGkNCg0KQW0gMjUuMTAuMjEgdW0gMTQ6MTMgc2NocmllYiBOYXJlc2ggS2FtYm9qdToNCj4g
-UmVncmVzc2lvbiBmb3VuZCBvbiBhcm0gZ2NjLTExIGJ1aWx0IHdpdGggbXVsdGlfdjVfZGVm
-Y29uZmlnDQo+IEZvbGxvd2luZyBidWlsZCB3YXJuaW5ncyAvIGVycm9ycyByZXBvcnRlZCBv
-biBsaW51eCBuZXh0IDIwMjExMDI1Lg0KPiANCj4gbWV0YWRhdGE6DQo+ICAgICAgZ2l0X2Rl
-c2NyaWJlOiBuZXh0LTIwMjExMDI1DQo+ICAgICAgZ2l0X3JlcG86IGh0dHBzOi8vZ2l0bGFi
-LmNvbS9MaW5hcm8vbGtmdC9taXJyb3JzL25leHQvbGludXgtbmV4dA0KPiAgICAgIGdpdF9z
-aG9ydF9sb2c6IDlhZTFmYmRlYWJkMyAoXCJBZGQgbGludXgtbmV4dCBzcGVjaWZpYyBmaWxl
-cyBmb3IgMjAyMTEwMjVcIikNCj4gICAgICB0YXJnZXRfYXJjaDogYXJtDQo+ICAgICAgdG9v
-bGNoYWluOiBnY2MtMTENCj4gICAgICBjb25maWc6IG11bHRpX3Y1X2RlZmNvbmZpZw0KPiAN
-Cj4gYnVpbGQgZXJyb3IgOg0KPiAtLS0tLS0tLS0tLS0tLQ0KPiBhcm0tbGludXgtZ251ZWFi
-aWhmLWxkOiBkcml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2NtYV9oZWxwZXIubzogaW4NCj4gZnVu
-Y3Rpb24gYGRybV9mYl9jbWFfZ2V0X2dlbV9vYmonOg0KPiBkcml2ZXJzL2dwdS9kcm0vZHJt
-X2ZiX2NtYV9oZWxwZXIuYzo0NjogdW5kZWZpbmVkIHJlZmVyZW5jZSB0bw0KPiBgZHJtX2dl
-bV9mYl9nZXRfb2JqJw0KPiBhcm0tbGludXgtZ251ZWFiaWhmLWxkOiBkcml2ZXJzL2dwdS9k
-cm0vZHJtX2ZiX2NtYV9oZWxwZXIuYzo0NjoNCj4gdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBg
-ZHJtX2dlbV9mYl9nZXRfb2JqJw0KPiBhcm0tbGludXgtZ251ZWFiaWhmLWxkOiBkcml2ZXJz
-L2dwdS9kcm0vZHJtX2ZiX2NtYV9oZWxwZXIuYzo0NjoNCj4gdW5kZWZpbmVkIHJlZmVyZW5j
-ZSB0byBgZHJtX2dlbV9mYl9nZXRfb2JqJw0KPiBhcm0tbGludXgtZ251ZWFiaWhmLWxkOiBk
-cml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2NtYV9oZWxwZXIubzogaW4NCj4gZnVuY3Rpb24gYGRy
-bV9mYl9jbWFfc3luY19ub25fY29oZXJlbnQnOg0KPiBkcml2ZXJzL2dwdS9kcm0vZHJtX2Zi
-X2NtYV9oZWxwZXIuYzoxMzM6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8NCj4gYGRybV9hdG9t
-aWNfaGVscGVyX2RhbWFnZV9pdGVyX2luaXQnDQo+IGFybS1saW51eC1nbnVlYWJpaGYtbGQ6
-IGRyaXZlcnMvZ3B1L2RybS9kcm1fZmJfY21hX2hlbHBlci5jOjEzNToNCj4gdW5kZWZpbmVk
-IHJlZmVyZW5jZSB0byBgZHJtX2F0b21pY19oZWxwZXJfZGFtYWdlX2l0ZXJfbmV4dCcNCj4g
-bWFrZVsxXTogKioqIFtNYWtlZmlsZToxMjUyOiB2bWxpbnV4XSBFcnJvciAxDQo+IG1ha2Vb
-MV06IFRhcmdldCAnX19hbGwnIG5vdCByZW1hZGUgYmVjYXVzZSBvZiBlcnJvcnMuDQo+IG1h
-a2U6ICoqKiBbTWFrZWZpbGU6MjI2OiBfX3N1Yi1tYWtlXSBFcnJvciAyDQo+IA0KPiBSZXBv
-cnRlZC1ieTogTGludXggS2VybmVsIEZ1bmN0aW9uYWwgVGVzdGluZyA8bGtmdEBsaW5hcm8u
-b3JnPg0KPiANCj4gDQo+IGJ1aWxkIGxpbms6DQo+IC0tLS0tLS0tLS0tDQo+IGh0dHBzOi8v
-YnVpbGRzLnR1eGJ1aWxkLmNvbS8xenpnRlpCR2pwUTVSMGxhd1FGVzlpSjM5SHAvYnVpbGQu
-bG9nDQo+IA0KPiBidWlsZCBjb25maWc6DQo+IC0tLS0tLS0tLS0tLS0NCj4gaHR0cHM6Ly9i
-dWlsZHMudHV4YnVpbGQuY29tLzF6emdGWkJHanBRNVIwbGF3UUZXOWlKMzlIcC9jb25maWcN
-Cg0KTG9va2luZyBhdCB0aGlzIGNvbmZpZywgdGhlcmUgaXM6DQoNCkNPTkZJR19EUk09eQ0K
-IyBDT05GSUdfRFJNX0RQX0FVWF9DSEFSREVWIGlzIG5vdCBzZXQNCiMgQ09ORklHX0RSTV9E
-RUJVR19NTSBpcyBub3Qgc2V0DQojIENPTkZJR19EUk1fREVCVUdfU0VMRlRFU1QgaXMgbm90
-IHNldA0KQ09ORklHX0RSTV9LTVNfSEVMUEVSPW0NCiMgQ09ORklHX0RSTV9MT0FEX0VESURf
-RklSTVdBUkUgaXMgbm90IHNldA0KIyBDT05GSUdfRFJNX0RQX0NFQyBpcyBub3Qgc2V0DQpD
-T05GSUdfRFJNX0dFTV9DTUFfSEVMUEVSPXkNCkNPTkZJR19EUk1fS01TX0NNQV9IRUxQRVI9
-eQ0KDQpHRU1fQ01BX0hFTFBFUiBkZXBlbmRzIG9uIEtNU19IRUxQRVIsIGJ1dCB0aGUgbGF0
-dGVyIGlzIGEgbW9kdWxlLiBUaGF0J3MgDQpwcm9iYWJseSB0aGUgY2F1c2Ugb2YgdGhlIHBy
-b2JsZW0uIElzIGl0IGludGVudGlvbmFsbHkgc2V0IHRoaXMgd2F5Pw0KDQpCZXN0IHJlZ2Fy
-ZHMNClRob21hcw0KDQo+IA0KPiAjIFRvIGluc3RhbGwgdHV4bWFrZSBvbiB5b3VyIHN5c3Rl
-bSBnbG9iYWxseQ0KPiAjIHN1ZG8gcGlwMyBpbnN0YWxsIC1VIHR1eG1ha2UNCj4gdHV4bWFr
-ZSAtLXJ1bnRpbWUgcG9kbWFuIC0tdGFyZ2V0LWFyY2ggYXJtIC0tdG9vbGNoYWluIGdjYy0x
-MQ0KPiAtLWtjb25maWcgbXVsdGlfdjVfZGVmY29uZmlnDQo+IA0KPiAtLQ0KPiBMaW5hcm8g
-TEtGVA0KPiBodHRwczovL2xrZnQubGluYXJvLm9yZw0KPiANCg0KLS0gDQpUaG9tYXMgWmlt
-bWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1
-dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdl
-cm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBG
-ZWxpeCBJbWVuZMO2cmZmZXINCg==
-
---------------3L4NCn3SGwkCG00xV9c0n1mD--
-
---------------KyOHR2H1qiOfizW4J4NUWdmK
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF4RzsFAwAAAAAACgkQlh/E3EQov+Db
-7BAAw7hR/bUwBrvSMv+xPuWxdEiYEhB3AcRmKyDFh/G2PEf1x+55nKKCGYdmqYT/TZb/AjR0CVWe
-7C3xB5QCpsiE/1gio3lv0rmdUlNRZNXWGHbEkCalPk+pPUlLNJ1Zh0UdRucWeVkx3EPsM//DbMDN
-Ort4h73VrcnP3Z7ZlxYG+CErfJBhOCzS5FKLtAtCzhPjp3JC1KNZDBno7ieiz9xctCSLZRwT5hqx
-Oq/6mIKxyjyKk/5ZKDXzFQ4cVF+6TY8uItrNWuWAC/tBDnyN+LOEpIugs681SN2/NfGEdH9FGxmv
-l9v5oDmk9GzfsWXgX36nzCVtSYPR0S73BY4wLbMN1IsGTPiIoh33OOe+9jyw84yfdYyfKt0M4ZyK
-WHOM+52NVoPZk4zdl+iNzzgp7gJDTBmm2UrfOqpJZNiXuIh4RD5R2vD6jYpaeSAYNewoUHngvv6s
-DLZwkQVzg59T9m4BDiTNrr9sqO2ZMvgx2SGgw30AYJd0qDT6MEhtOLWgJIYc0PNnJ+gBXEBIiIhH
-Jlbny4zH+Z8haxxG6ERvVTHKOBNBXd65FlXcNL2PiDiJjO+AicoedhpWApQYf6RYOvj+ffxv5qbZ
-OjUCE/0SIJwHc2PIdcRwJnKnctZfv2uPTGrCQh7p2fV43mdyMGFlV+N5b9sWhyDbKADc7GRjS9/o
-Re4=
-=FY7p
------END PGP SIGNATURE-----
-
---------------KyOHR2H1qiOfizW4J4NUWdmK--
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

@@ -2,103 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4BA43B395
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 16:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F8143B42A
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 16:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbhJZOIl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 10:08:41 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63905 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233975AbhJZOIj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Oct 2021 10:08:39 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19QDk9bf026984;
-        Tue, 26 Oct 2021 14:06:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=GP8CO/2jsR8SHNwqcsSjaXyiOqIp4oc3BF7XnJL/5pY=;
- b=qO0JMbbTbfscV8rkaFtDdTNO8fKrx8p17GvYZVrjGxB50mkJRGrx7frrSB+p+Uq0g1FD
- yy90tiTzO3z5kfd6FXqEovQx8jz2Mby2QU/XQ4Vfh8ZaA627DPFhvb95ca5D0LxpyxXv
- o4d0zy6A5cOHHRvglWTTaloDdRYnMTdLEEBv2BTuXsSLokAR1mIQMeE9aCNAXHbMRiZH
- ajWUCWlGG1VkOpjUjdWJZoP3hOM+wh/QNo1Yl55sJwcYZ6lfs7xWmxu/6X/zTanmYbwl
- mcsdGiyNEVTK69HV833pfwzSTXQkOZnBhVBWAZtgRnBpu8SLacQKThNWPPXgUnCxSedb BQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bx59700ky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Oct 2021 14:06:02 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19QDsxew002847;
-        Tue, 26 Oct 2021 14:06:01 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3bx4f16ams-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Oct 2021 14:06:00 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19QE5vZ260424492
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Oct 2021 14:05:57 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C6C042041;
-        Tue, 26 Oct 2021 14:05:57 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1727642047;
-        Tue, 26 Oct 2021 14:05:57 +0000 (GMT)
-Received: from localhost (unknown [9.171.26.69])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 26 Oct 2021 14:05:57 +0000 (GMT)
-Date:   Tue, 26 Oct 2021 16:05:55 +0200
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-next@vger.kernel.org
-Subject: Upcoming merge conflict between akpm-current/current and s390 trees
-Message-ID: <your-ad-here.call-01635257155-ext-6484@work.hours>
+        id S235602AbhJZOc2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 10:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236637AbhJZOcX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 10:32:23 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981E5C061224
+        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 07:29:59 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 5so14417167edw.7
+        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 07:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wJSGFytkkdPheB+wlk955znZt0m/KBc4qQJPUDxpyPw=;
+        b=sANo+1Tne2i5Hv2mCCMeAhl0VxMgfF0YX0e60QWrmhXe7LzpBaTDBClGhYRoPML4ny
+         8/JThRqJbNcFapRZxTpVFWFr1v1j5kG/XahTeep8+Z8b5dzqWGXzy/e0NlbjQsaK8G3N
+         +t+Rkzg7Yec+g1gcMvi050G26Vy4x71gampIaLNpfrrzjNhSl3vjGAvCpP59o6CL7O8d
+         CTxMaMYSwl/rLKRCRf7jPCpT/78zTXYeiRQ4G3AJfQ5CZJd/hGBHzTubFtHOCQHaIr2h
+         548O9lotYZRkdLgU+SQsYZHEGA89qKQ/ontY01cGfo5wFOY+MSMI7bU5naRy5xvB609Z
+         609w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wJSGFytkkdPheB+wlk955znZt0m/KBc4qQJPUDxpyPw=;
+        b=p1pkZfbUFh3DN7YncNdDYDtOajF4r32wOORtfb4uxStRgI3S5ou6QwbcYdXUJ/zAAj
+         T5MWqBbLbz7kUbFFGaQIcLCElk1uVf4486WJq3MlUQmDLhZI1FnNKV7dAwZPSn9VdSiX
+         WRwbjluHq+iORwkQbP6Wcu74SWlivFEnYC3+TxFnpnOovC+loY9ecbloYpi5sXmDDrvJ
+         6WbJTH5txa91WReTuGqR05Q+k+4GDmAmC+kvkAY4p2ZlyptkzsaKWdYx/HYo9dTeKFYU
+         qsuPDh3L27E50BwTpa4vGg7bc2Rtmiwd75WPD80QCBPrxWabVIvMYyf/Ri/AuFc9yEgg
+         o1Xg==
+X-Gm-Message-State: AOAM530iKn1GvtN32g+nFtwiVJMywx5kew6vxTWvNMJHjYu3w5j9xXnD
+        8HErR/7h//eUWw/AMoPqnlkqTsFWj4oN1dasD8Cl
+X-Google-Smtp-Source: ABdhPJzAsQP0OAB+yYut6tHR+uRO8G4JL5eHkcZxmzYtC/7OerWPHYb1y9xLveuncd1s4fZzTrey1LV3hCwICiSozeI=
+X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr31210516ejc.69.1635258482206;
+ Tue, 26 Oct 2021 07:28:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KX05YV3QhWiTwpYS7oXNyeQ1a2Dv6QK4
-X-Proofpoint-GUID: KX05YV3QhWiTwpYS7oXNyeQ1a2Dv6QK4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-26_04,2021-10-26_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- mlxlogscore=904 phishscore=0 adultscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2110260081
+References: <20211026133147.35d19e00@canb.auug.org.au> <87k0i0awdl.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87k0i0awdl.fsf@mpe.ellerman.id.au>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 26 Oct 2021 10:27:51 -0400
+Message-ID: <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Richard Guy Briggs <rgb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On Tue, Oct 26, 2021 at 6:55 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> > Hi all,
+> >
+> > Today's linux-next merge of the audit tree got conflicts in:
+> >
+> >   arch/powerpc/kernel/audit.c
+> >   arch/powerpc/kernel/compat_audit.c
+> >
+> > between commit:
+> >
+> >   566af8cda399 ("powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC")
+> >
+> > from the powerpc tree and commits:
+> >
+> >   42f355ef59a2 ("audit: replace magic audit syscall class numbers with macros")
+> >   1c30e3af8a79 ("audit: add support for the openat2 syscall")
+> >
+> > from the audit tree.
+>
+> Thanks.
+>
+> I guess this is OK, unless the audit folks disagree. I could revert the
+> powerpc commit and try it again later.
+>
+> If I don't hear anything I'll leave it as-is.
 
-updating s390 tree for linux-next today I hit a merge conflict with
-akpm-current/current. Please find conflict resolution below.
+Hi Michael,
 
-Thank you
+Last I recall from the powerpc/audit thread there were still some
+issues with audit working properly in your testing, has that been
+resolved?  If nothing else, -rc7 seems a bit late for this to hit
+-next for me to feel comfortable about this.
 
-diff --cc arch/s390/kernel/setup.c
-index 27454962c119,e738a45057ac..40405f2304f1
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@@ -880,14 -878,12 +879,12 @@@ static void __init setup_randomness(voi
-  {
-  	struct sysinfo_3_2_2 *vmms;
-  
-- 	vmms = (struct sysinfo_3_2_2 *) memblock_phys_alloc(PAGE_SIZE,
-- 							    PAGE_SIZE);
-+ 	vmms = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-  	if (!vmms)
-  		panic("Failed to allocate memory for sysinfo structure\n");
-- 
-  	if (stsi(vmms, 3, 2, 2) == 0 && vmms->count)
-  		add_device_randomness(&vmms->vm, sizeof(vmms->vm[0]) * vmms->count);
-- 	memblock_phys_free((unsigned long)vmms, PAGE_SIZE);
- -	memblock_free_ptr(vmms, PAGE_SIZE);
-++	memblock_free(vmms, PAGE_SIZE);
-  }
-  
-  /*
+-- 
+paul moore
+www.paul-moore.com

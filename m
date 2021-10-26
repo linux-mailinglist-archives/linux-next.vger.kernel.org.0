@@ -2,76 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 407CD43AC22
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 08:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91143AC3E
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 08:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbhJZGSG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 02:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235221AbhJZGSF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 02:18:05 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D43FC061745;
-        Mon, 25 Oct 2021 23:15:42 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id y11so12497399qtn.13;
-        Mon, 25 Oct 2021 23:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D/dur7Sn2ZYzb23rhe+lhXmkmVlrpP62SVIG02l086Y=;
-        b=aeMt714LaHa+SG1Xpln7wKEpu7YaAu3RlCvOBNQ5ZNJHUaTrZDegZyPVfR1k6EBzk2
-         WwoxrqON094LB4Y0fOvQtY6H9KWqB+Y3qmrrGm5rvPb4bvtlvvjPvHnrrUgN8XW193ce
-         gcJpBikDv0KgNZkj8SfRPWlYHpDwnQWl8Uauc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D/dur7Sn2ZYzb23rhe+lhXmkmVlrpP62SVIG02l086Y=;
-        b=TAVlYFHsQ+q6ps5bnusgvWrECZijwMy/kK+J04ZlvuWKOpGHDOgGMcBqtHFCIxu4NI
-         YVnOcPBNnaAxi0bo9fXht/htdm9dV6L5Ikn4mPqmVlR466N6FSGPj2xhY05rZ3sYYKY0
-         pmGUSmLjdNaOIx7TVEnn/7MS5TEwPeBQZMC22tVjOXAVX/FV/49YJWIxIX3x1SbPD2jX
-         YjzeKK0bJpKUnS+vbWaqDjvfEGEQZ1tR3NTnsjsOzamvDVOUprUuNDLf+Td22ZiOvaPj
-         IHoFPPrfNQOkHcaIN8BhX/HjBt9TquKmC+u+yN0sCbwgBrjKQ+tOfpE0wbSBqOvJROhX
-         OQQA==
-X-Gm-Message-State: AOAM533RM4hVvdQjvcAmaGZo/TaIKLySwMlPpHR+RxaSTjkAfTnKOtYp
-        ydLYuSIOimkGL9aVaBQQOHjJ9BZOI03OshlYNlo=
-X-Google-Smtp-Source: ABdhPJwLpix2QoCyq66ckF90hg3QuitUesuv8mX2KdKU7ghjQW3WVqC0qjEWMswKGAXpcrK0KX/K0Gr7JDf80WzpCNA=
-X-Received: by 2002:a05:622a:180b:: with SMTP id t11mr2167219qtc.25.1635228941623;
- Mon, 25 Oct 2021 23:15:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211026103939.136dc73b@canb.auug.org.au>
-In-Reply-To: <20211026103939.136dc73b@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 26 Oct 2021 06:15:29 +0000
-Message-ID: <CACPK8XfS+Gy1dhL-_uWKhW1D4++6LdWM-SdXtnsEV15OUhiK1w@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Oskar Senft <osk@google.com>,
+        id S231324AbhJZGZW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 02:25:22 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60963 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230344AbhJZGZV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 02:25:21 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HdhZh5mJDz4xbM;
+        Tue, 26 Oct 2021 17:22:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635229374;
+        bh=SvmuLrAtdjTncLWxPr0oWfdBGe3se7oBVEf8ePvbZjY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=pXRekACUwp3RkBGaBMj4PrAPMiX4FzdOJDjdGhRko5l0UDaK1j3JAwLIK/AhreDJo
+         Wikd4Tdr+GatmldPtqIv01cgI9l0+dN/OPPeK/165nv8GtdryPslLpqxntaGRHTpnR
+         4lCwI9pfLSr6d9kzcgc6pLiZuNQa0xr0aLL3AemrRI56UdWMUhEfSqER4gOiWEVG3Q
+         5pTG3I+vuZIa9dEzFJO6DsDHMT6bPT+HyYKMEhHpfcpaDthZfAifSt2ZKDFr+BDS2T
+         toNX0Z6kcmI74vc9geAhACQLX7z9HLkm8UAGvhu5MGknSNZW8Mf5UgF/x8+GW2Fz93
+         4/RsxAYsEwbRA==
+Date:   Tue, 26 Oct 2021 17:22:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Liu <wei.liu@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: linux-next: manual merge of the hyperv tree with the tip tree
+Message-ID: <20211026172251.0f655709@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/l7P5XwJqpsfbtmFPXdxUtNv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 25 Oct 2021 at 23:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the arm-soc tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing:2: WARNING: Inline emphasis start-string without end-string.
->
-> Introduced by commit
->
->   c6807970c3bc ("soc: aspeed: Add UART routing support")
->
-> The problem is (probably) the '*'s on the previous line.
+--Sig_/l7P5XwJqpsfbtmFPXdxUtNv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Chai-Wei, are you able to send a fix for this issue?
+Hi all,
+
+Today's linux-next merge of the hyperv tree got a conflict in:
+
+  arch/x86/mm/pat/set_memory.c
+
+between commit:
+
+  e9d1d2bb75b2 ("treewide: Replace the use of mem_encrypt_active() with cc_=
+platform_has()")
+
+from the tip tree and commit:
+
+  cf90c4532b92 ("x86/hyperv: Add new hvcall guest address host visibility s=
+upport")
+
+from the hyperv tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/mm/pat/set_memory.c
+index 527957586f3c,525f682ab150..000000000000
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@@ -2024,6 -2025,17 +2026,17 @@@ static int __set_memory_enc_pgtable(uns
+  	return ret;
+  }
+ =20
++ static int __set_memory_enc_dec(unsigned long addr, int numpages, bool en=
+c)
++ {
++ 	if (hv_is_isolation_supported())
++ 		return hv_set_mem_host_visibility(addr, numpages, !enc);
++=20
+ -	if (mem_encrypt_active())
+++	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
++ 		return __set_memory_enc_pgtable(addr, numpages, enc);
++=20
++ 	return 0;
++ }
++=20
+  int set_memory_encrypted(unsigned long addr, int numpages)
+  {
+  	return __set_memory_enc_dec(addr, numpages, true);
+
+--Sig_/l7P5XwJqpsfbtmFPXdxUtNv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF3nrsACgkQAVBC80lX
+0GwHuAf+P9tcZbWKVWXq2vmdhRFyI+E9a5LrbnP7qTWpCZkcxV2lBDf5qTk9LyYZ
+/Qzo1AxOcMHelB+eZByBaCz1FAgZO3AIaLRomKtuciAcA4v9HRTCCjzguVnEwIDz
+f8D0fULGaDWIRpCCpmoXrAFffC+xYZB0UK15Mopi9vBQuDi7ULJRXq6ZnE0rvXYU
+2oyl+v6VXD49PeEgPIX0S/ihqSeIcyWAgJmwzU3j1oyElLW9zfIwBf8h3TpZq2xy
+XufPfRszQbqgfbquBKxV3mZ+aTTE9QvDukWtuKO5IiqJ/jhib3+c6HYgaSTLLreF
+VIzs4pNT73icEaX/rNE7s0vlNU28Rg==
+=0Pb2
+-----END PGP SIGNATURE-----
+
+--Sig_/l7P5XwJqpsfbtmFPXdxUtNv--

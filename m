@@ -2,84 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FBE43AA70
-	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 04:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26CC43AAB7
+	for <lists+linux-next@lfdr.de>; Tue, 26 Oct 2021 05:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbhJZCqn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Oct 2021 22:46:43 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36677 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhJZCqm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 22:46:42 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HdbkV0pTKz4xbM;
-        Tue, 26 Oct 2021 13:44:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635216258;
-        bh=e+yqnpXu0B7HjSmFPYNQFE491k30m4dzAb57qlF2fpw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=j9fm43lMzpESWbSdZ/kI1jZvCEggUlG4hRU/UnUvsvxISOze+1r26WG+prMkXbw5D
-         Q7c7UWUEfqhHC967rOlkvjGelx55kZ+BxZ+SQk//SHWaMb48CsZ+P+DhkRGFjEVVMc
-         yDTjPrBBCmhgsDutL45TpLQrRq/tRcjTcZD+bki6AfaDrsjvh/Kr+4rKw31IFgICSW
-         syghzGD1gl/tbYNvErQfeASthBjwInGNvf3ijccgGcUBgwo6+f8qyNv1AaLN9YMZJD
-         C0B9mCkxxHJECnyS5MY35Ln/6g7I+dPWQZpKmq1nAjAGpleCoyZv0MppoU2HCPhvEy
-         o6Agur3sycWdQ==
-Date:   Tue, 26 Oct 2021 13:44:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231536AbhJZDWa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Oct 2021 23:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231469AbhJZDW3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Oct 2021 23:22:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0097DC061745;
+        Mon, 25 Oct 2021 20:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jAPA2L/R+i/IgedRAop6/upAuHcwMUUqczAkGrwyOr8=; b=Q78gdiQ1qmD1wV1buvfDzjgyRH
+        EU0bsSspjh6VAjRhxA1AAxJtd8uVyZrkiLhtNSX53nRuyr+S7kvF7q4klbrn30Acf+Q5+8sGe4kt+
+        Lf+4bNm/ku9UXhLB8sa2XfYWupA73LFX+uVG37rknvtSymU6hjHUCPN/Zc1yPwXpEZjaE9Fs3HrQh
+        eVyYIGu5FkzSCy6CwhLnJzAD0vfQvUd7cWi60dxkyP4yRUzdOt0xs+omlBh6T4Yq5tdtko/nW7Yjm
+        fO1b1qXQ6BwaP3rkWLIK662Ni9U+pqMQaz1R6S6OHe5F1I5PXyzl78zKzUqbKLAuWywM9Wf/SBPAv
+        21nS1jew==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mfD0O-000X0H-9D; Tue, 26 Oct 2021 03:20:04 +0000
+Subject: Re: linux-next: Tree for Oct 25 (bootconfig: xbc_alloc_mem())
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the devicetree tree
-Message-ID: <20211026134417.1be98b56@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20211025204921.73cb3011@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <fe148532-a26d-103a-bcb5-4a749763d71a@infradead.org>
+Date:   Mon, 25 Oct 2021 20:20:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1a2SAgje1igT8crAvcwruHe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20211025204921.73cb3011@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1a2SAgje1igT8crAvcwruHe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/25/21 2:49 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> There seems to be something amiss with cnosole output in today's release
+> (at least on my ppc qemu boot tests).
+> 
+> Changes since 20211022:
+> 
+> The nds32 tree gained a conflict against the kbuild tree.
+> 
+> The qcom tree gained a build failure so I used the version from
+> next-20211022.
+> 
+> The nfsd tree gained a conflict against the nfs tree.
+> 
+> The sound-asoc tree gained a build failure so I used the version from
+> next-20211022.
+> 
+> The block tree gained a conflict against Linus' tree.
+> 
+> The regulator tree lost its build failure.
+> 
+> The tip tree lost its build failure but gained another for which I
+> applied a patch.
+> 
+> The ftrace tree gained a conflict against the parisc-hd tree.
+> 
+> The kvm tree gained a conflict against the tip tree.
+> 
+> The kspp-gustavo tree still had one of its build failures for which I
+> reverted a commit.  It also gained a conflict against the ftrace tree.
+> 
+> The akpm-current tree gained a conflict against the ftrace tree.
+> 
+> Non-merge commits (relative to Linus' tree): 10130
+>   9510 files changed, 594184 insertions(+), 218643 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 340 trees (counting Linus' and 92 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
+> 
 
-Hi all,
+on i386:
 
-After merging the devicetree tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+WARNING: modpost: vmlinux.o(.text.unlikely+0x29b16): Section mismatch in reference from the function xbc_alloc_mem() to the function .init.text:memblock_alloc_try_nid()
+The function xbc_alloc_mem() references
+the function __init memblock_alloc_try_nid().
+This is often because xbc_alloc_mem lacks a __init
+annotation or the annotation of memblock_alloc_try_nid is wrong.
 
-drivers/of/unittest-data/tests-phandle.dtsi:11.18-22: Warning (node_name_vs=
-_property_name): /testcase-data/duplicate-name: node name and property name=
- conflict
-drivers/of/unittest-data/tests-phandle.dtsi:11.18-22: Warning (node_name_vs=
-_property_name): /testcase-data/duplicate-name: node name and property name=
- conflict
 
-Presumably exposed by commit
+Looks like lib/bootconfig.c::xbc_alloc_mem() should be marked
+as __init (when it's built for KERNEL).
 
-  e76187b9792e ("scripts/dtc: Update to upstream version v1.6.1-19-g0a3a9d3=
-449c8")
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/1a2SAgje1igT8crAvcwruHe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF3a4EACgkQAVBC80lX
-0GxmlQf/XfOW9+GgFnd67IoCx37PvlYBwltqaEY08YY3+P8eEFffmJwvlFx/tl7S
-WPhBR4LzFN5cYF2LVx/fLleE+vrnZbYmnAqBQuPhxDIh44QiPtinvFv364YEWvsy
-Gm9D1O2FlXwdwHb3/m5Pq18O+8hjU9L4LHGj63zvs0TmTuyLC5GeJCiir832o58d
-uVnzugd+cHLYob7Yo2MuFgveY/88jyCBB3ORFjOWgUM4RRnfy3S9dCUR/OoE7B54
-38QgGVDZg4b7yASzCKc6+M/jVIyCVDIpcSZ09sdsvuUObdi7CkXqBdcE80IFQLH1
-xG51SzaQdt/csSJhNv975YcTZPmq9g==
-=v9Dt
------END PGP SIGNATURE-----
-
---Sig_/1a2SAgje1igT8crAvcwruHe--
+-- 
+~Randy

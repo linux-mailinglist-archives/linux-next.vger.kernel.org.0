@@ -2,172 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 412DA43C4AC
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 10:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF50743C65D
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 11:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbhJ0IKb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 04:10:31 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:39096 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbhJ0IKa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 04:10:30 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S236358AbhJ0JYX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 05:24:23 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55697 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234091AbhJ0JYW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 05:24:22 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AEF3821960;
-        Wed, 27 Oct 2021 08:08:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1635322084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HYRTO7SiYiDRR4OmHP9Dvsu9mAgR87HDVXZkLpnAbPU=;
-        b=N0LfwUuXRj0rCv6r0hp30+Sg/UEMj/HLyp/XetndR3u/6CAg4BoGxqMPO1J8O5CSWDn8tg
-        VsZfvCE+RG25zuSCxgSKTON9oy9Ppc5e0eLC7G9tSdSuT6RDtAaMdxYnYXjik8z3lvAbI+
-        nI8VLekGQ+M176FTFIa/Wn10AdjBod8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1635322084;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HYRTO7SiYiDRR4OmHP9Dvsu9mAgR87HDVXZkLpnAbPU=;
-        b=U5wwmVMho/GzzvGeJdFHyXIDbz8VpvSGmGJX5FY+KwGQz7eljiKH2gvBUD7Z6NVcVMICxR
-        xzYoJcuuZ6CeGIDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 628C813FF0;
-        Wed, 27 Oct 2021 08:08:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zXwGF+QIeWGmBAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 27 Oct 2021 08:08:04 +0000
-Message-ID: <109f764d-60fe-0ae5-ddd4-760210e4992a@suse.de>
-Date:   Wed, 27 Oct 2021 10:08:03 +0200
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfNVq6GTkz4xbW;
+        Wed, 27 Oct 2021 20:21:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635326516;
+        bh=elNCz4h0uELKfdL9FVEWHw7ypkrevedK/hgfDXaHWFI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rVEKk5rzdpRJ6Es4JsGlPR20SAOSu0ioDRiuAOlYDPn/AXAmupi8GQiYfeAYTTGST
+         Otw2+cyzFfmEVDjKTli4vbJJyweLRv64QVzL2oV+LyV/HbPETsuPyYm97UnSQjGvvq
+         i52nrVAGdUw9C1w3hpZ7T4C3UuEJbuIcY+S8grNdhn0N4FzMD2Vj/EZCzXO0Q2SoMk
+         sVDqy9jMj7EXfe4pGKLREzP8QMGtqZnkAjHLp2LkDZnRXuduIP10EA0912YSajPPZQ
+         v2/JyHemRDKMqoUrPkDCcotcyRnav2YE633of045YOXUOIKj0LrPZTlcVcqiQ7dd+E
+         TUSkZb1HGLCzA==
+Date:   Wed, 27 Oct 2021 20:21:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: linux-next: manual merge of the akpm-current tree with the s390
+ tree
+Message-ID: <20211027202149.2aae434d@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
- `drm_gem_fb_get_obj'
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
- <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
- <6862b109-ea12-6ffa-c82b-b23ee26aa5b2@infradead.org>
- <CAK8P3a0wG8dKnuQMOL=bKmBHuSkWcu6OfvhTP-86rpLdr7_5CA@mail.gmail.com>
- <61f14f2b-b1cd-b9df-86fd-8fcc4b9eb738@infradead.org>
- <CAK8P3a3v9mb8RH7ER=iF2SAizv-Sb=hTWzpuQzL050ToR02h+Q@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAK8P3a3v9mb8RH7ER=iF2SAizv-Sb=hTWzpuQzL050ToR02h+Q@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------GVlbCROwYOR5BML01ZhCGFoi"
+Content-Type: multipart/signed; boundary="Sig_/_KU65k4ekwOtwCMcW=ajvBF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------GVlbCROwYOR5BML01ZhCGFoi
-Content-Type: multipart/mixed; boundary="------------QrcDRKDH0lpKTS4slmMoFCDN";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@arndb.de>, Randy Dunlap <rdunlap@infradead.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- open list <linux-kernel@vger.kernel.org>,
- Linux-Next Mailing List <linux-next@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Andrey Konovalov <andreyknvl@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>
-Message-ID: <109f764d-60fe-0ae5-ddd4-760210e4992a@suse.de>
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
- `drm_gem_fb_get_obj'
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
- <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
- <6862b109-ea12-6ffa-c82b-b23ee26aa5b2@infradead.org>
- <CAK8P3a0wG8dKnuQMOL=bKmBHuSkWcu6OfvhTP-86rpLdr7_5CA@mail.gmail.com>
- <61f14f2b-b1cd-b9df-86fd-8fcc4b9eb738@infradead.org>
- <CAK8P3a3v9mb8RH7ER=iF2SAizv-Sb=hTWzpuQzL050ToR02h+Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a3v9mb8RH7ER=iF2SAizv-Sb=hTWzpuQzL050ToR02h+Q@mail.gmail.com>
+--Sig_/_KU65k4ekwOtwCMcW=ajvBF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---------------QrcDRKDH0lpKTS4slmMoFCDN
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hi all,
 
-SGkhDQoNCkFtIDI3LjEwLjIxIHVtIDA4OjUwIHNjaHJpZWIgQXJuZCBCZXJnbWFubjoNCj4g
-T24gV2VkLCBPY3QgMjcsIDIwMjEgYXQgODoyNiBBTSBSYW5keSBEdW5sYXAgPHJkdW5sYXBA
-aW5mcmFkZWFkLm9yZz4gd3JvdGU6DQo+PiBPbiAxMC8yNi8yMSAxMToxOSBQTSwgQXJuZCBC
-ZXJnbWFubiB3cm90ZToNCj4+PiBPbiBXZWQsIE9jdCAyNywgMjAyMSBhdCAyOjU4IEFNIFJh
-bmR5IER1bmxhcCA8cmR1bmxhcEBpbmZyYWRlYWQub3JnPiB3cm90ZToNCj4gDQo+Pj4gVGhp
-cyB0cml2aWFsIGNoYW5nZSBtYWtlcyBpdCBhbGwgYnVpbGQ6DQo+Pj4NCj4+PiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9ncHUvZHJtL0tjb25maWcgYi9kcml2ZXJzL2dwdS9kcm0vS2NvbmZp
-Zw0KPj4+IGluZGV4IGMwODg2MGRiMjUyMC4uNjk5ZjQzNGNlODEzIDEwMDY0NA0KPj4+IC0t
-LSBhL2RyaXZlcnMvZ3B1L2RybS9LY29uZmlnDQo+Pj4gKysrIGIvZHJpdmVycy9ncHUvZHJt
-L0tjb25maWcNCj4+PiBAQCAtMjE4LDcgKzIxOCw3IEBAIGNvbmZpZyBEUk1fR0VNX0NNQV9I
-RUxQRVINCj4+PiAgICAgICAgICAgICBDaG9vc2UgdGhpcyBpZiB5b3UgbmVlZCB0aGUgR0VN
-IENNQSBoZWxwZXIgZnVuY3Rpb25zDQo+Pj4NCj4+PiAgICBjb25maWcNCj4gDQo+Pj4gLSAg
-ICAgICBib29sDQo+Pj4gKyAgICAgICB0cmlzdGF0ZQ0KPj4+ICAgICAgICAgICBkZXBlbmRz
-IG9uIERSTQ0KPj4+ICAgICAgICAgICBzZWxlY3QgRFJNX0dFTV9DTUFfSEVMUEVSDQo+Pj4g
-ICAgICAgICAgIGhlbHANCj4+Pg0KPj4+IGJ1dCB0aGlzIG5lZWRzIHNvbWUgbW9yZSB0ZXN0
-aW5nIHRvIG1ha2Ugc3VyZSBpdCBkb2Vzbid0IGFkZA0KPj4+IGFueSBvdGhlciByZWdyZXNz
-aW9ucy4NCj4+Pg0KPj4+IEludGVyZXN0aW5nbHksIEkgbmV2ZXIgaGl0IHRoZSBwcm9ibGVt
-IGluIHJhbmRjb25maWcgdGVzdGluZyBzaW5jZQ0KPj4+IHRoZXJlIGlzIGFsd2F5cyBzb21l
-ICc9eScgZHJpdmVyIHRoYXQgc2VsZWN0cyBEUk1fS01TX0hFTFBFUi4NCj4+DQo+PiBUaG9t
-YXMgaGFkIHBvc3RlZCBhIHBhdGNoIHRoYXQgYWxzbyBmaXhlcyB0aGUgcHJvYmxlbS4NCj4+
-IFNvbWVob3cgSSBtaXNzZWQgc2VlaW5nIHRoYXQgdGhlIGZpcnN0IHRpbWUgYXJvdW5kLg0K
-PiANCj4gQWggcmlnaHQsIEkgbWlzc2VkIHRoYXQgYXMgd2VsbC4gVGhhdCBwYXRjaCBzZWVt
-cyByZWFzb25hYmxlDQo+IHRvIG1lLCBidXQgSSB0aGluayB3ZSBtYXkgd2FudCBib3RoIG9m
-IHRoZW0gaW4gdGhpcyBjYXNlLCBhcw0KPiBpdCBkb2VzIG5vdCBhZGRyZXNzIERSTV9HRU1f
-Q01BX0hFTFBFUiBiZWluZyBzZXQgdG8gPXkNCj4gd2hlbiBpdCBpcyBvbmx5IHVzZWQgZnJv
-bSBtb2R1bGVzLg0KDQpZZXMsIHRoZSBib29sIHN0YXRlIHdhcyBpbmRlZWQgdGhlIHByb2Js
-ZW0uIFRoZSBwYXRjaCBJIHBvc3RlZCByZXNvbHZlcyANCnRoZSBpc3N1ZSBmb3Igbm93LiBG
-b3IgbGF0ZXIsIEkgaGF2ZSBhIHBhdGNoc2V0IHRoYXQgaW1wcm92ZXMgQ01BIGhlbHBlciAN
-CnVzYWdlIGEgYml0IGFuZCByZXNvbHZlcyB0aGUgS2NvbmZpZyBwcm9ibGVtLg0KDQpCZXN0
-IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAgICAgICAgIEFybmQNCj4gDQoNCi0tIA0KVGhv
-bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
-cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
-ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
-aHJlcjogRmVsaXggSW1lbmTDtnJmZmVyDQo=
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
---------------QrcDRKDH0lpKTS4slmMoFCDN--
+  arch/s390/kernel/setup.c
 
---------------GVlbCROwYOR5BML01ZhCGFoi
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+between commit:
+
+  e035389b73b1 ("s390/setup: use virtual address for STSI instruction")
+
+from the s390 tree and commits:
+
+  0d52db59796e ("memblock: rename memblock_free to memblock_phys_free")
+  13ab40b0e60e ("memblock: use memblock_free for freeing virtual pointers")
+
+from the akpm-current tree.
+
+I fixed it up (thanks, Vasily for the heads up and resolution) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/s390/kernel/setup.c
+index e738a45057ac,8a378d426239..000000000000
+--- a/arch/s390/kernel/setup.c
++++ b/arch/s390/kernel/setup.c
+@@@ -878,12 -884,14 +879,12 @@@ static void __init setup_randomness(voi
+  {
+  	struct sysinfo_3_2_2 *vmms;
+ =20
+ -	vmms =3D (struct sysinfo_3_2_2 *) memblock_phys_alloc(PAGE_SIZE,
+ -							    PAGE_SIZE);
+ +	vmms =3D memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+  	if (!vmms)
+  		panic("Failed to allocate memory for sysinfo structure\n");
+ -
+  	if (stsi(vmms, 3, 2, 2) =3D=3D 0 && vmms->count)
+  		add_device_randomness(&vmms->vm, sizeof(vmms->vm[0]) * vmms->count);
+- 	memblock_free_ptr(vmms, PAGE_SIZE);
+ -	memblock_phys_free((unsigned long)vmms, PAGE_SIZE);
+++	memblock_free(vmms, PAGE_SIZE);
+  }
+ =20
+  /*
+
+--Sig_/_KU65k4ekwOtwCMcW=ajvBF
+Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF5COMFAwAAAAAACgkQlh/E3EQov+Cu
-+RAAwbx6XbFt3hi4Y99OS23g/45RL6yz9bx2FgTDul1YaKZ16/JsPbP4REl+Vu0TpGDb62t/BccA
-bd1jML7lqVyhdahGAuPMvJleU0uMZg62W19i+S1hbJVCx8l2wAy+q4ubd3LIybMySAsxy2KAi7+w
-4r9sXTGjN8YhBuajlUhZVlR21lYeKsh78tUbQdKDJKM9Kd7LErv+MLq/KmJqoRkFJAxPj3iTE9JV
-NzIhKCgz+1hkRBXWlBlIIB+bWv00XqE5Gp7E3T+CzADVZDqmqbjB8SymZJQ0YkIcpxlmh+BMRC/f
-gLjWoq+vsskSp2nppZdg2sw0UzstTHBLY36zqXOe7mIo5U8uVjUmvpObzCkUlNK5cS2xqbhdvW9+
-iybzf45iHrF6JNw6LOwgJQ/xKYZ2q5hIc9L4jy2qd21HFJqcwUQ7XiSHJWzEnq329pINg4WRCcKH
-+ImF8ejaogohLeQp03Z40BaDR1whQIrpP5OodXC2FNKM2OXYxoIZNKWguG9cWigLi2ZIIEamBzX/
-LQTsDgPrYgdULEa9wd8I2mMwwQjkhXgFjjgjnkI/3wy1feA/QztPzDsmnRMylpofMtFSlROpI7dt
-jeISsSKXyWL5GkWhRL5J/y8t5TP/LD6wiLiLeK4faAwf0nnI0Tghzi70yukgvMs1dWzFla3dELgA
-U0o=
-=mL4e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF5Gi0ACgkQAVBC80lX
+0Gwl3QgAndcznrCT1UNQ57kym+1+YOUYeA7Gxjhhzmdzg1JqS0yGH111lo1vN5x5
+LAR4jDFCJ4Qu3eImYCixmoNddvQIEAncP0VDkmJOMD6cjSrV0whtTMGMLii8Im08
+usERW9P2Ey6WACVuJYPCyaeQ8w3mhVcL7qA+bCpCCT53IWihZZpynmiwECK0Syjb
+qgSARM2pRJnuDf0DrCidcm62fpDiHAG3UV/0It4VdC5uPuzYA4gWEanyGS1gWQ9u
+bD0pUeNxKzU6GUAkT+jXfPaNmUpJeRz7GBjgqx9CIamtPVdVSsNgKEi4bFMXpOnl
+/mXpUsJfEl60CvBI9xXJT+Jzdh0cEA==
+=u/U0
 -----END PGP SIGNATURE-----
 
---------------GVlbCROwYOR5BML01ZhCGFoi--
+--Sig_/_KU65k4ekwOtwCMcW=ajvBF--

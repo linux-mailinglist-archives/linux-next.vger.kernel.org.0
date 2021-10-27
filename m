@@ -2,112 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A9943C950
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 14:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5497343C9E8
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 14:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241789AbhJ0MPR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Wed, 27 Oct 2021 08:15:17 -0400
-Received: from mga07.intel.com ([134.134.136.100]:24073 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239982AbhJ0MPQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 27 Oct 2021 08:15:16 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10149"; a="293606341"
-X-IronPort-AV: E=Sophos;i="5.87,186,1631602800"; 
-   d="scan'208";a="293606341"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 05:12:50 -0700
-X-IronPort-AV: E=Sophos;i="5.87,186,1631602800"; 
-   d="scan'208";a="537504651"
-Received: from aeremina-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.254.123])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 05:12:47 -0700
-Content-Type: text/plain; charset="utf-8"
+        id S241970AbhJ0Mql (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 08:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241968AbhJ0Mqk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 08:46:40 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728BFC061570
+        for <linux-next@vger.kernel.org>; Wed, 27 Oct 2021 05:44:15 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u13so9968349edy.10
+        for <linux-next@vger.kernel.org>; Wed, 27 Oct 2021 05:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=CUP4vrt1rUdvfDXyrscKzMJOp93zpu22SaFg7PrBhiA=;
+        b=CcPOQ4OiOX2pt/+YZ+a+5+PtsWF58l5SIZlH7c0NMdqivhouLD+fqU1vUJ422nap8B
+         pXvW4gzg5Z+Ti/2tVTyhRbxCD7rdEYI6XvjOMGWYQbKtmy/pc7QvOVhwNyQu184WqIC5
+         2tV2MOHw276tD+nGtZmQG8Ba/v3g6qUs6plqIh/ut+JOLhXhZtwqwhtVKZkucfTLZabK
+         9jdO5soJ/DOaLWObW8ethd2/N1Hps4tn1zIRZlUR+lKmFJg0biwKXf65CD45k1qXdJAt
+         r0adfgL8DZmSWiXmeRX4XaBTp+PL5NT81t0OI1CJjwfUDicLP4x//QMngQR/4rme5oOn
+         r9kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=CUP4vrt1rUdvfDXyrscKzMJOp93zpu22SaFg7PrBhiA=;
+        b=W/myj0V6LhLC2j1OTyADQ4uCiHGRcBgbI6FP+HXEbZF0nC+iHtn3u8iLPXBIlsZbsS
+         PdY0ieD9pXt806rMV0lu4CmXqtfDao1Q0l9T8agjpuI5fyHA1fcNm5gCFqOnAe+34QA0
+         Y8mEULHEWLELPf/eZZAARASjODJZMZETMbE5RWDHrTTjLiRqXbw7HSz/iBAWkA7G8lHl
+         2lUaxXoOBCkv+Gxjttf4kxYGnWDKlqD4PKB/gMd1qeHMzMeMNtmYZSd8jtxbbSC+Zjnf
+         WHXsJZXbYUJySmABNZwguGc/dJHQRKkarx8YpDmY55c67+EkQSaNeOE9NKfb7TSKQk+E
+         MmJw==
+X-Gm-Message-State: AOAM531/Lup/Jz9IuO2E+9PwMCkLhjWfUQcsLqJt5QHopy6h/7aBkHeY
+        c0t2bBlm+0HxokQgZ9SxkEjx8CAvRmUXp3PougCFh6q5BsRFgA==
+X-Google-Smtp-Source: ABdhPJzwVWeqcvccpIgdrAd8nGZnO+VjAujcw0FniNnKHAKDWNnTXb7Z/uiWrqylHJantGjdST3K827hkeW2H4l5IBA=
+X-Received: by 2002:a50:ff0a:: with SMTP id a10mr30220760edu.357.1635338652901;
+ Wed, 27 Oct 2021 05:44:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <CAKMK7uFWFVC0be2foiP8+2=vrqyh1e4mqkuk+2xY+fgSWAExyQ@mail.gmail.com>
-References: <20210122115918.63b56fa1@canb.auug.org.au> <CAKMK7uEuJa1J66mo5dS+QRPy9NOENTx95SZ4rU2MeVRTWj7Kcw@mail.gmail.com> <20210122182946.6beb10b7@canb.auug.org.au> <CAKMK7uFWFVC0be2foiP8+2=vrqyh1e4mqkuk+2xY+fgSWAExyQ@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm tree
-To:     "Nikula, Jani" <jani.nikula@linux.intel.com>,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 27 Oct 2021 18:14:01 +0530
+Message-ID: <CA+G9fYsOdhqbgRwuV7RD5k3Wh3n_Cb_EmMnkYOJ+4wZi-7MgrQ@mail.gmail.com>
+Subject: ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from
+ namespace DMA_BUF, but does not import it.
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <163533676481.68716.4009950051571709814@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date:   Wed, 27 Oct 2021 15:12:44 +0300
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-(+ Tvrtko who was recently added as a drm/i915 co-maintainer)
+Regression found on arm64 gcc-10 and gcc-11 built with defconfig
+Following build warnings / errors reported on linux next 20211027.
 
-Quoting Daniel Vetter (2021-01-22 10:40:48)
-> On Fri, Jan 22, 2021 at 8:29 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi Daniel,
-> >
-> > On Fri, 22 Jan 2021 08:17:58 +0100 Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > Hm that has been in drm-intel-gt-next for a few days, is that tree not
-> > > in linux-next?
-> >
-> > It is not.
+metadata:
+    git_describe: next-20211027
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_short_log: ae5179317e79 (\"Add linux-next specific files for 20211027\")
+    target_arch: arm64
+    toolchain: gcc-11
 
-Hi Stephen,
+build error :
+--------------
+ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from
+namespace DMA_BUF, but does not import it.
+ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vmap from
+namespace DMA_BUF, but does not import it.
+make[2]: *** [/builds/linux/scripts/Makefile.modpost:134:
+modules-only.symvers] Error 1
+make[2]: *** Deleting file 'modules-only.symvers'
+make[2]: Target '__modpost' not remade because of errors.
 
-We should be now good to go and add drm-intel-gt-next to linux-next.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-The branch would be as follows:
+build link:
+-----------
+https://builds.tuxbuild.com/205SAU159J0g6lSlRRS11o5hHyY/build.log
 
-drm-intel-gt-next	git://anongit.freedesktop.org/drm-intel	for-linux-next-gt
+build config:
+-------------
+https://builds.tuxbuild.com/205SAU159J0g6lSlRRS11o5hHyY/config
 
-Notice the "-gt" and the end of the for-linux-next branch name. This should eliminate
-the gap we have been having. The change to add it to the DIM tool is here:
+# To install tuxmake on your system globally
+# sudo pip3 install -U tuxmake
+tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
+--kconfig defconfig
 
-https://gitlab.freedesktop.org/drm/maintainer-tools/-/commit/7b5c2c29cdbc054e8c8fce38f095c56290fc4833
-
-So once all developers have updated their tooling (for which they will
-get an automatic nag message) we should be all up-to-date for future
-merge windows.
-
-Regards, Joonas
-
-> Adding -intel maintainers to get that sorted.
-> -Daniel
-> 
-> > These are the drm branches currently in linux-next:
-> 
-> Oh for ordering maybe put drm-misc ahead of the other subtrees, -misc
-> is where nowadays a lot of refactorings and core changes land.
-> Probably doesn't matter in practice.
-> -Daniel
-> 
-> > drm-fixes       git://git.freedesktop.org/git/drm/drm.git       drm-fixes
-> > amdgpu-fixes    git://people.freedesktop.org/~agd5f/linux       drm-fixes
-> > drm-intel-fixes git://anongit.freedesktop.org/drm-intel         for-linux-next-fixes
-> > drm-misc-fixes  git://anongit.freedesktop.org/drm/drm-misc      for-linux-next-fixes
-> > drm             git://git.freedesktop.org/git/drm/drm.git       drm-next
-> > amdgpu          https://gitlab.freedesktop.org/agd5f/linux      drm-next
-> > drm-intel       git://anongit.freedesktop.org/drm-intel         for-linux-next
-> > drm-tegra       git://anongit.freedesktop.org/tegra/linux.git   drm/tegra/for-next
-> > drm-misc        git://anongit.freedesktop.org/drm/drm-misc      for-linux-next
-> > drm-msm         https://gitlab.freedesktop.org/drm/msm.git      msm-next
-> > imx-drm         https://git.pengutronix.de/git/pza/linux        imx-drm/next
-> > etnaviv         https://git.pengutronix.de/git/lst/linux        etnaviv/next
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> 
-> 
-> 
-> -- 
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,101 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9447F43BD9C
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 01:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6336743BE5C
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 02:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbhJZXI6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 19:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbhJZXI6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 19:08:58 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E7CC061570;
-        Tue, 26 Oct 2021 16:06:33 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id p6-20020a9d7446000000b0054e6bb223f3so972618otk.3;
-        Tue, 26 Oct 2021 16:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=qhfQLJOgDvln9IuLBpMPA2NZUQIrC6XLO3bbkhnZKr0=;
-        b=T643XUt+TfuKOqk++crkBs0mWZBOYPKhmUKYurHK5hzbDKBydx1CC+kdvwwI1CN9OX
-         kEhTFhYFdQi8nuVhkrXaOkkVKDL75G0DziDM8Sz4EXtQtmPt+5JWJkmG9tpFIgB8G6l1
-         Uh0MlsSKvDeCOZ5293/wHFBQDF6gMsv/Erxwe5+nupQf1NNnr7SPJTo0Tcy5grjOWwIt
-         fg2oCXVsMvV9K/jw44KR1Fv3tASYFCYd8fzDuBwADRQrSRaTE9AbqyrRDTQbIhffI6mG
-         x7EA2rNhjX2qWKpop7dl8pMAB1IdaWrmVLECUmeVXrxNwDd0f115RrN5C7i6h+k4vfsz
-         7cTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=qhfQLJOgDvln9IuLBpMPA2NZUQIrC6XLO3bbkhnZKr0=;
-        b=MsONGzam8R7tk353O2KbCrkd+EG+Y1384eWirLe/HCAxwyxwDC0+Bs2kAuCW8ozpQX
-         3+vXHVBLbJR/MEt4xC9HWT1NTVbol3pyUrBiunKjFSeixYQI90HB1FOX0xnRGH/IMrbE
-         zsbgukT7GjEWQgtLFyW0hBkYtjrmZkN7NC8X6EtPIagvOSm4epyrtAxtnch8novT88QH
-         dpqHnyemOf27pvzySofKL2GJjrI1lDPLIqDMXemhtfAHhzx1rVqvDWjirNMWvdF1JzkM
-         STI3CCfTOhQsHFQR4bF4toOwJlYnRk9DuUZxY2naggH307AIVxeuL+aPd1jD7ZLYMiPV
-         H+BA==
-X-Gm-Message-State: AOAM530SUrHsevkakN4Cyy+um9kseWBBHIJ7X7sPcaNEvhAl60j3sQcZ
-        P4WleYEfU3LC7kcIBt8QcAs=
-X-Google-Smtp-Source: ABdhPJxk6iZqCbzxcHk7Me3XEtCBaRWXbeKaRStoVgRfFy2huR++yNlXSHMZ8oIa7PPzrdXllnng3A==
-X-Received: by 2002:a05:6830:153:: with SMTP id j19mr14207194otp.375.1635289592966;
-        Tue, 26 Oct 2021 16:06:32 -0700 (PDT)
-Received: from [127.0.0.1] ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id bn13sm79256oib.37.2021.10.26.16.06.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 16:06:32 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 20:06:10 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        id S240376AbhJ0APb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 20:15:31 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43761 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230500AbhJ0APa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 20:15:30 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hf8KS3VyZz4xbW;
+        Wed, 27 Oct 2021 11:12:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635293584;
+        bh=mHh1stcao4rPBa1WkjlflOW8SghL+SJ1HlGP/m/Vj1I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XpI3IGcE1FlwvfMfuqf0+ZBAwR9s7AkntjGZ9rcdm9mJKgy3PRFSPNTdGNYGQhB55
+         1xzel0ZsPbmupKwXf8bwFro91xLxfv24nErN0er1x3UipQ1pkOb87ZI2xCjbHGcKyh
+         ibLzUflSrP68FzQf9DJYuktLLuJcOeqdrSvd+VB6jrE/4a/R/qr2aeflb3xWX1Ko47
+         WCf0o6TOa624O9Go+FC+DunsZvJAw1qXwAkil8wqKAD/6GzRaHvEOun6hdDGNgcAZy
+         bCnFUbDHmHDYwixeqQM6lpLmH91doq+Z+DveD1GMwQjXjM5ivpy/QTEUjtMeK8/CSi
+         LQg5ucrpLI4+g==
+Date:   Wed, 27 Oct 2021 11:12:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Cong Wang <cong.wang@bytedance.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the perf tree with Linus' tree
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20211027091705.1e24694e@canb.auug.org.au>
-References: <20211027091705.1e24694e@canb.auug.org.au>
-Message-ID: <9FB29D99-7F54-428E-912A-A9B025FD7CF3@gmail.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: linux-next: manual merge of the net-next tree with the bpf tree
+Message-ID: <20211027111258.13136955@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/yLNrGkC4z.ubCL6pErra2mJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/yLNrGkC4z.ubCL6pErra2mJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On October 26, 2021 7:17:05 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eauu=
-g=2Eorg=2Eau> wrote:
->Hi all,
->
->Today's linux-next merge of the perf tree got a conflict in:
->
->  tools/perf/util/session=2Ec
->
->between commit:
->
->  8e820f962345 ("perf report: Output non-zero offset for decompressed rec=
-ords")
->
->from Linus' tree and commit:
->
->  3a3535e67dfd ("perf session: Introduce decompressor in reader object")
->
->from the perf tree=2E
->
->I fixed it up (see below) and can carry the fix as necessary=2E This
->is now fixed as far as linux-next is concerned, but any non trivial
->conflicts should be mentioned to your upstream maintainer when your tree
->is submitted for merging=2E  You may also want to consider cooperating
->with the maintainer of the conflicting tree to minimise any particularly
->complex conflicts=2E
->
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  include/net/sock.h
 
-Fixed locally, will publish tomorrow after regression tests finish=2E
+between commit:
 
-- Arnaldo
+  7b50ecfcc6cd ("net: Rename ->stream_memory_read to ->sock_is_readable")
+
+from the bpf tree and commit:
+
+  4c1e34c0dbff ("vsock: Enable y2038 safe timeval for timeout")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/net/sock.h
+index 463f390d90b3,ff4e62aa62e5..000000000000
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@@ -2820,10 -2840,8 +2840,15 @@@ void sock_set_sndtimeo(struct sock *sk
+ =20
+  int sock_bind_add(struct sock *sk, struct sockaddr *addr, int addr_len);
+ =20
++ int sock_get_timeout(long timeo, void *optval, bool old_timeval);
++ int sock_copy_user_timeval(struct __kernel_sock_timeval *tv,
++ 			   sockptr_t optval, int optlen, bool old_timeval);
++=20
+ +static inline bool sk_is_readable(struct sock *sk)
+ +{
+ +	if (sk->sk_prot->sock_is_readable)
+ +		return sk->sk_prot->sock_is_readable(sk);
+ +	return false;
+ +}
+++
+  #endif	/* _SOCK_H */
+
+--Sig_/yLNrGkC4z.ubCL6pErra2mJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF4mYoACgkQAVBC80lX
+0Gwr7AgApbgV9qUiLTkz2uVip3LC5eOIRle3rYW1/RceWyiFSKDXKdad/HR3E1ed
+fzkGdaU+kNIvf7JF3wNhRewPsrT616XHZ9fwmtk5/vXn4bUXa7U8udEtX0xJyLiI
+Vg0UH1GJQvVJoSpPDNRbjsv4s9BqytkRNrFN0cl5uBCRwqO3JuP3kGS/9CIZg7aU
+YvDWZanAC0XwXzHJRnc7Q0r1kBpF9bwt3caGFfXg6s8FzVpvHLaYQlqqGBy5+jRY
+Q+hRNMiyxFBOTGa13KocDvDY8geUSUZ9i2KgGJySLwoL3vHRjk43o6B4h+fvPvxj
+873nxKAoOGXr2NqF3MS3lvy1iJqSgg==
+=yLjd
+-----END PGP SIGNATURE-----
+
+--Sig_/yLNrGkC4z.ubCL6pErra2mJ--

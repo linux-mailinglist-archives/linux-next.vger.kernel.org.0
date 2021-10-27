@@ -2,90 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD68343D30A
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 22:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B5043D332
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 22:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243971AbhJ0Uoz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 16:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241017AbhJ0Uow (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 16:44:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B941AC061570;
-        Wed, 27 Oct 2021 13:42:25 -0700 (PDT)
+        id S244061AbhJ0Uy1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 16:54:27 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:36709 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238909AbhJ0Uy1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 16:54:27 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hfgby4y8Fz4xbr;
-        Thu, 28 Oct 2021 07:42:22 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hfgq06GF4z4xbw;
+        Thu, 28 Oct 2021 07:51:56 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635367343;
-        bh=vmDS/GWkMu1yFl4fOJkChcYqAokt1FKesRPIJ1VXgqo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vI8Ef+XvokvfhFTALu/+MUI7HVGlw/Rwd68tNDj3rQ01LSnm10J9eiQ6v/ysQ4YEv
-         j6+W61wkNbcPbPvuB6iJmGKQXEWiwN+txzSyA+5OTRaN/63kyrerLoJSmeUfPuiKS6
-         hfn2DHKzPTA4YRMvuZJK9QpRdxsq+JkTKgQrLSFVEj81pVB/nSTZI23A3mIbLL/rjF
-         pnAtSRtee4MFTa2iKThLW7CY7tURB6T1SS/KCzZ5RWYB8OkAv0W88foRHMx38+8W7W
-         seclNP5Kl6maq3PmyVSMejBNNPrKeux0Jn0iwmllFySZ4DjPGq9PcTZSQupPJUf16k
-         dyMUhvUhABSaQ==
-Date:   Thu, 28 Oct 2021 07:42:20 +1100
+        s=201702; t=1635367920;
+        bh=5Y8NA6U3yNgxnNJyRa2otd4eCLUptj9+0XcbhyPWVjo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q51G2eKcUSlkJKQJEPCVbbhP9KTi/ieoY3LoOCd6Ej2Bu9amIt109H8yIIFglKSFf
+         2rFVDZ0ybhwjVDBSiUaA//CZZP4AQmLRoR/S1yjCKIUtkynnGr2iHQ9/wk+hfPeo5q
+         npD5Co5Ef9IOsJYAeRgq1JPDbJeJKOWucADE1yl8x2oVyhGTjQhr/Hlm+lVZgO2AJu
+         n+DU9ffLpJHxcG3XocS3CJLM01RB2EWT1WhhKdR1K7ypL4APWji1T6umQZhZv6WEeC
+         MZYs4DXtyClbnoSEZvUWL/xSS2seqTxdFzUYAis32ollv0K8YMuo5fx26vaMyAFChx
+         desxHwy+ylftg==
+Date:   Thu, 28 Oct 2021 07:51:55 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Jie Wang <wangjie125@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     "Nikula, Jani" <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20211028074220.7ac95b03@canb.auug.org.au>
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: linux-next: build warning after merge of the drm tree
+Message-ID: <20211028075155.02825f86@canb.auug.org.au>
+In-Reply-To: <163533676481.68716.4009950051571709814@jlahtine-mobl.ger.corp.intel.com>
+References: <20210122115918.63b56fa1@canb.auug.org.au>
+        <CAKMK7uEuJa1J66mo5dS+QRPy9NOENTx95SZ4rU2MeVRTWj7Kcw@mail.gmail.com>
+        <20210122182946.6beb10b7@canb.auug.org.au>
+        <CAKMK7uFWFVC0be2foiP8+2=vrqyh1e4mqkuk+2xY+fgSWAExyQ@mail.gmail.com>
+        <163533676481.68716.4009950051571709814@jlahtine-mobl.ger.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nZM+.0Lr.zeWxp+ZNqq3=DZ";
+Content-Type: multipart/signed; boundary="Sig_/Hk7RweDXpOKZXpJ2ckQ5Ttf";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nZM+.0Lr.zeWxp+ZNqq3=DZ
+--Sig_/Hk7RweDXpOKZXpJ2ckQ5Ttf
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Joonas,
 
-In commit
+On Wed, 27 Oct 2021 15:12:44 +0300 Joonas Lahtinen <joonas.lahtinen@linux.i=
+ntel.com> wrote:
+>
+> We should be now good to go and add drm-intel-gt-next to linux-next.
+>=20
+> The branch would be as follows:
+>=20
+> drm-intel-gt-next	git://anongit.freedesktop.org/drm-intel	for-linux-next-=
+gt
+>=20
+> Notice the "-gt" and the end of the for-linux-next branch name. This shou=
+ld eliminate
+> the gap we have been having.
 
-  6754614a787c ("net: hns3: add more string spaces for dumping packets numb=
-er of queue info in debugfs")
+I have added it to linux-next from today. I called it just
+"drm-intel-gt" for consistency with the other drm trees in linux-next.
 
-Fixes tag
+Currently I just have you listed as a contact, is there anyone else (or
+a list) that I should add?
 
-  Fixes: e44c495d95e ("net: hns3: refactor queue info of debugfs")
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
 
-has these problem(s):
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nZM+.0Lr.zeWxp+ZNqq3=DZ
+--Sig_/Hk7RweDXpOKZXpJ2ckQ5Ttf
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF5uawACgkQAVBC80lX
-0GzLPggAoI5ERsPjk++Pv4yVIY1E/jflslz+1s2UCqPWopyxPMf30VYm+0RyjQ9S
-0hGVWo9DXYNVQH0RQXtcVm5Ldiu1fMTk6KSyI18GAFgcw6Wr+ho4H0m4eSETlzrJ
-L1zrWCczw0cpeKYyfTUFNY0uzGG6rceDLqdBYt+wxMu8+cpIFZcuYJIYYGMyaLe5
-bbX1V0o37tQajk7gqID5SF4NL6/OIRSGOR5ClgUB8fH5cLla1BeOY+zGGubL+5mu
-3qDDkp5idLkQvVAx5CDFhjzgXQ7+YPLoNzoapEN+9hfdYDxSR85xXGvuYMd1G5rb
-quGCPc/J+67Te0MaQ+URcjME95LMEQ==
-=xOe7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF5u+sACgkQAVBC80lX
+0GyL4wgAinKWeTjSgRL2p4EwwgFCQr0nKu7Fz27XMK81p8reA+qvVPccClAaSVqr
+cOyNTq/yGj/vF2H9UFfjxW5eju+5TicCbSUd3CLi/ePxO8YH9PSKTBywpGYBzI4q
+6MkZW9aAPWt5Usbfe1j/EphQaujM9/X8BLC6kDj+LoiZ3bgZtMiDvmNkqs4ICE/w
+OJlOOz7LpkPTaoFliNIQct1l9PIHAfDMPnbYj7Rtb/IIOHoZcaT67RUB3ShnVoGt
+7qwN9iPhCCFiUYQRZv7FKII3AebeX/zjmJMnr0J+Njd3lM5y37v6v0hYgyzJax0D
+S4+4bMnlnZpi9rAIeHPs7x7NToSnxQ==
+=HjKj
 -----END PGP SIGNATURE-----
 
---Sig_/nZM+.0Lr.zeWxp+ZNqq3=DZ--
+--Sig_/Hk7RweDXpOKZXpJ2ckQ5Ttf--

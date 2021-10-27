@@ -2,93 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B4343C06F
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 04:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4197143C0B3
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 05:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbhJ0C72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 22:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238755AbhJ0C71 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 22:59:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AE9C061745
-        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 19:57:02 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id g8so4606525edb.2
-        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 19:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+MnMGWD/0lv6QE/2RZDyhTwihVaLaY/cF7VXa6a77gU=;
-        b=ZaNVx/jqk9FWOrIgexWO/hOBqGfCeeBmqbojUEelH+VIpmg5St9QloHjV2C1+VvhTT
-         t7MPi+nZ4z/Fo15zsr28uLoGGxiK6FvKZMnMqv4hPPkre96n58ktGO355LHuuQ5H1CqH
-         eaEuYLl1bJjgYwCaabrq+lq4D9ku5jq+J+TaScuvWE1m5CPtDTOaUx0EXIMDiMZ7uyUU
-         9zjDyq2q16TEwZgTO72CuOGgixDNxjAF67A96baU6kD8hkWePLImvIALsVxiJPFPa9x+
-         2P3f7WuDYHsxQIk4UVy1JC7oR0xJovKp/QU50a6GrBYwoY87R5ClSagU53FAfV4zXlch
-         fOtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+MnMGWD/0lv6QE/2RZDyhTwihVaLaY/cF7VXa6a77gU=;
-        b=oCQvJqzKGKjPLNLAicO20ld6wNv2getexwDRs/ScedU8wHIpu7vtCSYxOGowYX4B9Y
-         x2pC8AiJ+mZxX3xSZjusd7UPphDFReW835rjemcHhDfoMw6fIjRmFJ2NiiTvINnYBsDZ
-         jYfwBB7ODP5+XKgdcEhEYRk9HhI2547aC2lvkzyfhxalNsX8Sp6NP+juvD+6RxpxVxAZ
-         mRvFU4ftuZ2Q0YGRhd5mcIaE82Pk1MDwADLkHNBy9p8lxNYqMbLNVFRWQEUQdxrcX6BM
-         Bp7LFC8wA6HTyNL11Osc1xnzhVXM168bcW3+3P9UJalXr0DqzuLX0SxdgYj4FXH55NQ7
-         +b1g==
-X-Gm-Message-State: AOAM532hcSOv9RzypwlC/yeP0HsebabaOHvSKkjyncLIuqkZlog8HosC
-        sj5isAORTTW8Q7X5J2kdSrfEEr3xBv5EOkdevcFing==
-X-Google-Smtp-Source: ABdhPJwIK61/V7qcKbhx4yii4iHXjQOUbVeTBUCQwnBLVrY1BbKYFYOd48L8rLqNKXbJxAp/xU4REFHyMBfMvTKiQy8=
-X-Received: by 2002:a17:906:c7c1:: with SMTP id dc1mr35935786ejb.6.1635303421412;
- Tue, 26 Oct 2021 19:57:01 -0700 (PDT)
+        id S232490AbhJ0DTK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 23:19:10 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58297 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235112AbhJ0DTK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 23:19:10 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfDPS1Mz6z4xbW;
+        Wed, 27 Oct 2021 14:16:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635304604;
+        bh=05bcNuJ4Wl4PUgWD9xHg+dVJU6pfjSBBUdKHYx/JoJ4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r2BvL2PQnlJhZVvjYPl9ibJ7GKHAsIMttxV5j6n2zT8kEgUeWDk/0TuBvfqnF49VW
+         lUe7Lx3ZXOTbf3eASC2ihQGbgR0AMt18SBjARN6ZbLd+XP6njIo1AS10Z3xzMoj4jX
+         9BlMR+1aQhz52PbpwgXl/PJDnwbNzuZzEssdd+b2nvCsiw5S67hUlJgBbo1KkrXiBU
+         NL2VesmeCZgPuZTZ6+Ps3n5BMdCx8N0ArP7ya2cgMTAe52mBR05jtv6t99v/06SZc5
+         +syIQLiCt/UW9q8hRAEYFojRejvTzO/HF+3/mxZKuF3KcI+2CmLF2iUbWGbbWcmAjc
+         exyW3w9L9qiqw==
+Date:   Wed, 27 Oct 2021 14:16:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, Jiri Olsa <jolsa@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-next@vger.kernel.org
+Subject: Re: Upcoming merge conflict between ftrace and s390 trees
+Message-ID: <20211027141642.047382df@canb.auug.org.au>
+In-Reply-To: <YXAqZ/EszRisunQw@osiris>
+References: <YXAqZ/EszRisunQw@osiris>
 MIME-Version: 1.0
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
- <CA+G9fYvdhk-H8wBDdaPmRMZS_egxndncUkbZ92HCnUFD1g_wSQ@mail.gmail.com> <b26491f8-66a4-d532-e866-2dc0ecb922d2@suse.de>
-In-Reply-To: <b26491f8-66a4-d532-e866-2dc0ecb922d2@suse.de>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 27 Oct 2021 08:26:48 +0530
-Message-ID: <CA+G9fYvsfNO5qNj7TChXQ_si1xDwL3gqyM+8SUgCowocpRqKdA@mail.gmail.com>
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to `drm_gem_fb_get_obj'
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/x/wmD6yRRj1dGyR+WdWGk6S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Thomas,
+--Sig_/x/wmD6yRRj1dGyR+WdWGk6S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I have tested the fix patch [1] and it works fine for me.
+Hi all,
 
-> Could you please try the patch at [1]? It fixes the problem for me.
-
-=F0=9F=8E=89 Pass: 6d61a7c3bc2a ("arm: multi_v5_defconfig build fix")
- arm (multi_v5_defconfig) with gcc-11
-@ https://builds.tuxbuild.com/204SnLe1DFWQ4iAHpwAMiyUcpsL/
-
-
-> Best regards
-> Thomas
+On Wed, 20 Oct 2021 16:40:39 +0200 Heiko Carstens <hca@linux.ibm.com> wrote:
 >
-> [1] https://patchwork.freedesktop.org/patch/461426/
+> just as heads-up: there will be an upcoming merge conflict between
+> ftrace and s390 trees in linux-next which will cause a compile error
+> for s390.
+>=20
+> With the s390 tree this commit is already in linux-next:
+> https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=
+=3Dfeatures&id=3Dc316eb4460463b6dd1aee6d241cb20323a0030aa
+>=20
+> And soon this patch will likely be within the ftrace tree:
+> https://lore.kernel.org/lkml/20211008091336.33616-9-jolsa@kernel.org/
+>=20
+> Maybe Steven could reply to this when he applies it.
+>=20
+> This would be required to fix the conflict:
+>=20
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 999907dd7544..d654b95a1e3e 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -190,6 +190,7 @@ config X86
+>  	select HAVE_DYNAMIC_FTRACE_WITH_ARGS	if X86_64
+>  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
+> +	select HAVE_SAMPLE_FTRACE_MULTI_DIRECT	if X86_64
+>  	select HAVE_EBPF_JIT
+>  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+>  	select HAVE_EISA
+> diff --git a/samples/Kconfig b/samples/Kconfig
+> index 0823b97d8546..7561f3e42296 100644
+> --- a/samples/Kconfig
+> +++ b/samples/Kconfig
+> @@ -229,3 +229,6 @@ endif # SAMPLES
+> =20
+>  config HAVE_SAMPLE_FTRACE_DIRECT
+>  	bool
+> +
+> +config HAVE_SAMPLE_FTRACE_MULTI_DIRECT
+> +	bool
+> diff --git a/samples/Makefile b/samples/Makefile
+> index 291663e56a3c..7a38538b577d 100644
+> --- a/samples/Makefile
+> +++ b/samples/Makefile
+> @@ -21,6 +21,7 @@ subdir-$(CONFIG_SAMPLE_TIMER)		+=3D timers
+>  obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+=3D trace_events/
+>  obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+=3D trace_printk/
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+=3D ftrace/
+> +obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) +=3D ftrace/
+>  obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+=3D ftrace/
+>  subdir-$(CONFIG_SAMPLE_UHID)		+=3D uhid
+>  obj-$(CONFIG_VIDEO_PCI_SKELETON)	+=3D v4l/
+> diff --git a/samples/ftrace/Makefile b/samples/ftrace/Makefile
+> index ab1d1c05c288..e8a3f8520a44 100644
+> --- a/samples/ftrace/Makefile
+> +++ b/samples/ftrace/Makefile
+> @@ -3,7 +3,7 @@
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct.o
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-too.o
+>  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-modify.o
+> -obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-multi.o
+> +obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) +=3D ftrace-direct-multi.o
+> =20
+>  CFLAGS_sample-trace-array.o :=3D -I$(src)
+>  obj-$(CONFIG_SAMPLE_TRACE_ARRAY) +=3D sample-trace-array.o
 
+I have applied that as a merge fixup in linux-next today.  I assume
+that it would apply directly to the ftrace tree so a proper patch
+should be sent to Steve (as he asked).  It is clearly needed as
+ftrace-direct-multi.c contains an x86 asm statement :-(
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+--=20
+Cheers,
+Stephen Rothwell
 
-- Naresh
+--Sig_/x/wmD6yRRj1dGyR+WdWGk6S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF4xJoACgkQAVBC80lX
+0Gw9xwf+I7AkjuHOzAiEiveC7VJPKH5y7HVYPSIlQwg75W9iX2WojMW3XU14LQl4
+izAsG7gS0bF8DDhj8n6MEcQViMuBPozMxCjjy37cc9MWBYgAr+FsuhN5DLoSlpbW
+IMjEh6obONESDlfUocGP+49J8bdTkfnxttR3W773KrmPnQVZ+sx/gBL6LiC6PbnQ
+QlkR/oW7r2JNVjR2i/PDZXDWh7rJSnu+TR/KW9RVlhcYwiClJcnKdSeU83AAwy8f
+Fr9dOngJZyR10vsdmd4lOdHmU4TwbgqNlDLGI5IPk8jD+20QXJ2oEBxcONj9ajWf
+sTDTD2UjeuLGXLMxnoC3vXcobS8BEA==
+=I0fN
+-----END PGP SIGNATURE-----
+
+--Sig_/x/wmD6yRRj1dGyR+WdWGk6S--

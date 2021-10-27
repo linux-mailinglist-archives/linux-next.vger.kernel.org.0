@@ -2,142 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4197143C0B3
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 05:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061FC43C13B
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 06:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbhJ0DTK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 23:19:10 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:58297 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235112AbhJ0DTK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 23:19:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfDPS1Mz6z4xbW;
-        Wed, 27 Oct 2021 14:16:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635304604;
-        bh=05bcNuJ4Wl4PUgWD9xHg+dVJU6pfjSBBUdKHYx/JoJ4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r2BvL2PQnlJhZVvjYPl9ibJ7GKHAsIMttxV5j6n2zT8kEgUeWDk/0TuBvfqnF49VW
-         lUe7Lx3ZXOTbf3eASC2ihQGbgR0AMt18SBjARN6ZbLd+XP6njIo1AS10Z3xzMoj4jX
-         9BlMR+1aQhz52PbpwgXl/PJDnwbNzuZzEssdd+b2nvCsiw5S67hUlJgBbo1KkrXiBU
-         NL2VesmeCZgPuZTZ6+Ps3n5BMdCx8N0ArP7ya2cgMTAe52mBR05jtv6t99v/06SZc5
-         +syIQLiCt/UW9q8hRAEYFojRejvTzO/HF+3/mxZKuF3KcI+2CmLF2iUbWGbbWcmAjc
-         exyW3w9L9qiqw==
-Date:   Wed, 27 Oct 2021 14:16:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, Jiri Olsa <jolsa@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-next@vger.kernel.org
-Subject: Re: Upcoming merge conflict between ftrace and s390 trees
-Message-ID: <20211027141642.047382df@canb.auug.org.au>
-In-Reply-To: <YXAqZ/EszRisunQw@osiris>
-References: <YXAqZ/EszRisunQw@osiris>
+        id S231132AbhJ0EVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 00:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230479AbhJ0EVL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 00:21:11 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30110C061570
+        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 21:18:47 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id i5so1097769pla.5
+        for <linux-next@vger.kernel.org>; Tue, 26 Oct 2021 21:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=0TMjfOHx03aGnT1D4jpstewBcWF1cun2mkCTNtz9Il0=;
+        b=iH7GmE6hEifYRZWJ2lkukAuMXIEa08/SBMGXtPUEJUrIMaGdUsXcZ3QVNLJNERvB1C
+         AdpRgU0PxYuqPebbq7+BzLqRK0psCh+qv5wQbRK5ikQx+jjf3URllTpiOCEg+BxIsx3O
+         basrCuefbv4awIYkVvqQ40ZeDZzjB4T/JiheAgNgb9L5jtsBAvUS9ZKmPEISEIpzvoaH
+         XfekzKCCk4wBSbA2kjucZcBGKhyZJGDdGvSstx/7T/08egwpOCQwcTiROqS56ZPAZ2/i
+         4tXYDuzcd75fYWGErmc+7YWahiccqExzh61vwMZdbiMcshvj9SCPZoYgOTiNT2osbXpP
+         ae7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=0TMjfOHx03aGnT1D4jpstewBcWF1cun2mkCTNtz9Il0=;
+        b=ZfNhfeWeVfZtU5AcEVyus+i3oDnM6a/u5VlARg6wcP8fuK/M8nrIxuw7cRII00zDmj
+         iwE0Zd7U4spXnvJ8Fgo3nurRwpJUGY+tPtgAhMV/u96nyr+TzyagIpARf27rx4c2tf65
+         OffYa6CFtwY1hczaZ1eGH69AmE5S+byo7YtGUhRmqjiCt5m/aj0aGuH+WDc+KUwGXM2t
+         6p/kM0M4A6ye/FtMGNxWays/tWGH2GZ7sRvxaNXefuD+b7rUD5I7lpkMy2sVRzrhT2+0
+         RkoesS5QVSEvks30UHQqLcf0UMtcwl2BSNZAKgaSD20DilF+R3cXx7ZPfymhSCZxGofS
+         UD2A==
+X-Gm-Message-State: AOAM532Xm0rpwue+hVobOgPTfVE/oEdiTF6KhD8S7GornWLvOvIV8NYS
+        Lxligahkn+GcpX7srAjcQUBin/Ifc2Gpumpn
+X-Google-Smtp-Source: ABdhPJwKCERilkoW8b1UUjftfpy7BSygrUDHX666VUZWw7W0wmkUfWirK3Tq4ILdXIWJEKofRBrx6g==
+X-Received: by 2002:a17:902:d2c4:b0:140:57d9:7fbd with SMTP id n4-20020a170902d2c400b0014057d97fbdmr14848003plc.87.1635308326527;
+        Tue, 26 Oct 2021 21:18:46 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 1sm23855095pfl.133.2021.10.26.21.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 21:18:46 -0700 (PDT)
+Message-ID: <6178d326.1c69fb81.8286d.0852@mx.google.com>
+Date:   Tue, 26 Oct 2021 21:18:46 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x/wmD6yRRj1dGyR+WdWGk6S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.15-rc7-176-gbfbd58926fc5
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 394 runs,
+ 2 regressions (v5.15-rc7-176-gbfbd58926fc5)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/x/wmD6yRRj1dGyR+WdWGk6S
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 394 runs, 2 regressions (v5.15-rc7-176-gbfbd58=
+926fc5)
 
-Hi all,
+Regressions Summary
+-------------------
 
-On Wed, 20 Oct 2021 16:40:39 +0200 Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> just as heads-up: there will be an upcoming merge conflict between
-> ftrace and s390 trees in linux-next which will cause a compile error
-> for s390.
->=20
-> With the s390 tree this commit is already in linux-next:
-> https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=
-=3Dfeatures&id=3Dc316eb4460463b6dd1aee6d241cb20323a0030aa
->=20
-> And soon this patch will likely be within the ftrace tree:
-> https://lore.kernel.org/lkml/20211008091336.33616-9-jolsa@kernel.org/
->=20
-> Maybe Steven could reply to this when he applies it.
->=20
-> This would be required to fix the conflict:
->=20
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 999907dd7544..d654b95a1e3e 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -190,6 +190,7 @@ config X86
->  	select HAVE_DYNAMIC_FTRACE_WITH_ARGS	if X86_64
->  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->  	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
-> +	select HAVE_SAMPLE_FTRACE_MULTI_DIRECT	if X86_64
->  	select HAVE_EBPF_JIT
->  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
->  	select HAVE_EISA
-> diff --git a/samples/Kconfig b/samples/Kconfig
-> index 0823b97d8546..7561f3e42296 100644
-> --- a/samples/Kconfig
-> +++ b/samples/Kconfig
-> @@ -229,3 +229,6 @@ endif # SAMPLES
-> =20
->  config HAVE_SAMPLE_FTRACE_DIRECT
->  	bool
-> +
-> +config HAVE_SAMPLE_FTRACE_MULTI_DIRECT
-> +	bool
-> diff --git a/samples/Makefile b/samples/Makefile
-> index 291663e56a3c..7a38538b577d 100644
-> --- a/samples/Makefile
-> +++ b/samples/Makefile
-> @@ -21,6 +21,7 @@ subdir-$(CONFIG_SAMPLE_TIMER)		+=3D timers
->  obj-$(CONFIG_SAMPLE_TRACE_EVENTS)	+=3D trace_events/
->  obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+=3D trace_printk/
->  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+=3D ftrace/
-> +obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) +=3D ftrace/
->  obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+=3D ftrace/
->  subdir-$(CONFIG_SAMPLE_UHID)		+=3D uhid
->  obj-$(CONFIG_VIDEO_PCI_SKELETON)	+=3D v4l/
-> diff --git a/samples/ftrace/Makefile b/samples/ftrace/Makefile
-> index ab1d1c05c288..e8a3f8520a44 100644
-> --- a/samples/ftrace/Makefile
-> +++ b/samples/ftrace/Makefile
-> @@ -3,7 +3,7 @@
->  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct.o
->  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-too.o
->  obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-modify.o
-> -obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) +=3D ftrace-direct-multi.o
-> +obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) +=3D ftrace-direct-multi.o
-> =20
->  CFLAGS_sample-trace-array.o :=3D -I$(src)
->  obj-$(CONFIG_SAMPLE_TRACE_ARRAY) +=3D sample-trace-array.o
+platform                | arch  | lab           | compiler | defconfig     =
+               | regressions
+------------------------+-------+---------------+----------+---------------=
+---------------+------------
+mt8173-elm-hana         | arm64 | lab-collabora | gcc-10   | defconfig     =
+               | 1          =
 
-I have applied that as a merge fixup in linux-next today.  I assume
-that it would apply directly to the ftrace tree so a proper patch
-should be sent to Steve (as he asked).  It is clearly needed as
-ftrace-direct-multi.c contains an x86 asm statement :-(
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-10   | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/x/wmD6yRRj1dGyR+WdWGk6S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.15-rc7-176-gbfbd58926fc5/plan/baseline/
 
------BEGIN PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.15-rc7-176-gbfbd58926fc5
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      bfbd58926fc51b1cc34e4ec9b9113d8324267c36 =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF4xJoACgkQAVBC80lX
-0Gw9xwf+I7AkjuHOzAiEiveC7VJPKH5y7HVYPSIlQwg75W9iX2WojMW3XU14LQl4
-izAsG7gS0bF8DDhj8n6MEcQViMuBPozMxCjjy37cc9MWBYgAr+FsuhN5DLoSlpbW
-IMjEh6obONESDlfUocGP+49J8bdTkfnxttR3W773KrmPnQVZ+sx/gBL6LiC6PbnQ
-QlkR/oW7r2JNVjR2i/PDZXDWh7rJSnu+TR/KW9RVlhcYwiClJcnKdSeU83AAwy8f
-Fr9dOngJZyR10vsdmd4lOdHmU4TwbgqNlDLGI5IPk8jD+20QXJ2oEBxcONj9ajWf
-sTDTD2UjeuLGXLMxnoC3vXcobS8BEA==
-=I0fN
------END PGP SIGNATURE-----
 
---Sig_/x/wmD6yRRj1dGyR+WdWGk6S--
+
+Test Regressions
+---------------- =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | regressions
+------------------------+-------+---------------+----------+---------------=
+---------------+------------
+mt8173-elm-hana         | arm64 | lab-collabora | gcc-10   | defconfig     =
+               | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61789cb9eee38d23d4335937
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
+76-gbfbd58926fc5/arm64/defconfig/gcc-10/lab-collabora/baseline-mt8173-elm-h=
+ana.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
+76-gbfbd58926fc5/arm64/defconfig/gcc-10/lab-collabora/baseline-mt8173-elm-h=
+ana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61789cb9eee38d23d4335=
+938
+        new failure (last pass: v5.15-rc7-147-g35e02e34c7cc) =
+
+ =
+
+
+
+platform                | arch  | lab           | compiler | defconfig     =
+               | regressions
+------------------------+-------+---------------+----------+---------------=
+---------------+------------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe    | gcc-10   | defconfig+CON.=
+..OMIZE_BASE=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61789b3c2ef76fc2e13358f3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
+76-gbfbd58926fc5/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabb=
+e/baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-1=
+76-gbfbd58926fc5/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-clabb=
+e/baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61789b3c2ef76fc2e1335=
+8f4
+        new failure (last pass: v5.15-rc6-377-g5baf390d41aa) =
+
+ =20

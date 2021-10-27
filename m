@@ -2,161 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D7443D0C1
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 20:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616B243D0F7
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 20:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243533AbhJ0SdC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 14:33:02 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:41964 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbhJ0SdB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 14:33:01 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 285DF1FD47;
-        Wed, 27 Oct 2021 18:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1635359435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZMfINNzPE6pHkEjnDunLstZlbAYeAixrrZvtYFj0Hk=;
-        b=enQcVm5/bI1fZrAiZCXx1PQ8EWmEgqrHYFTe02dBOj19NX0FxxZZVD5TqdQLYKbVdhnjU0
-        RyGS4nMkzK1EoHWi/BPgJUweNwOfgvSS2HHZHO+KO8QEhzAzrotcilX49pw2NKN2ghm+eT
-        O2Q89BznTdppQcM2QR+JuidScIIjpzI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1635359435;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZMfINNzPE6pHkEjnDunLstZlbAYeAixrrZvtYFj0Hk=;
-        b=0tDjn3+FOpuiGCgpAvRQAzbuW5+DwAJYNMkbWdROxf8pq2fqXCKOKfvBg1Vr+vwJSR8UYY
-        PviTArgsX/oWhPAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C736B14068;
-        Wed, 27 Oct 2021 18:30:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Pg5/L8qaeWETLwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 27 Oct 2021 18:30:34 +0000
-Message-ID: <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
-Date:   Wed, 27 Oct 2021 20:30:34 +0200
+        id S243605AbhJ0Sp5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 14:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240472AbhJ0Spz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 14:45:55 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B360C061570
+        for <linux-next@vger.kernel.org>; Wed, 27 Oct 2021 11:43:29 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id a26so3523967pfr.11
+        for <linux-next@vger.kernel.org>; Wed, 27 Oct 2021 11:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=DtHNDzQgoW2qLm0MxOdD0Ai97j2XTccBgseySuKYmk0=;
+        b=v65oM0tiaHCNYlR2nqOaqgJLbb0+5IwZH4CHko+5NenghW20LTbTlZN2nk55nSVdfb
+         M5sWHl53N5hTncCPKJV1HNJlRXyEYI3ZCFiTn+7yQI8Gf8wHYS2g/xNHU3c6v09JpOFn
+         r9QyRtxUtZjckBHa9ylMhWZRgjE0rt7I6mF0/U2wFGkLbi8yN+tQ62g7tb64oQespFKl
+         kCa7bCVQmuIdMuKUEsRoiCDj3vHxASX7HzT7dVii2vfZgopN81beOW2S7JtZN2KNS4zZ
+         NV9z6tQson6bxATVEJyN0s7BOyxvzTD9jZhh5tiMM/LlZVvsdvW6/m9d4VtTR2ExcGAo
+         qTSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=DtHNDzQgoW2qLm0MxOdD0Ai97j2XTccBgseySuKYmk0=;
+        b=hJ/jZ2FoW8P9rqKUNFVxUOUI70DwaxXMBOTpij0D5GdV89z1LoQlR/iD9zGdtSsXUi
+         DmwyPiYAM2L0kWGS/iDl6K+66O2Il0mdBvhQSegoMP5dHNIu7uwN4G10Gmz6Dje9mD28
+         pIzAhyvkLTs/QC6oIvJWt5lI/+k1ymjTEzRPeEpWU9bQ0/G9QFq7qHjJY8glqHLpaK3y
+         0AILGAo+PVrDKK57V4qXBmo7/iB0fzvIf3ft/eoq4SOHALwMFZUajt2vJI06tM5FzN5r
+         S4oUkYVF+L+dkN4WWR1R9kBea1qNAddoR9CGLzpOCfjJjQ8bABF86WO9vhiWs9utRn4U
+         W/AA==
+X-Gm-Message-State: AOAM532jq6y0DulqgP2dtwyLtPQ3W45b3gpuaOtje5WYJ+pW+6HRCFfm
+        VjmEzBehC36t6Agkbk1PYykkLqfTGlMZknAD5FI=
+X-Google-Smtp-Source: ABdhPJxKGJKCECxThVAGuGLKpNGzIereEwUHmRbGpY1fZhHSTvAD7cElGgdWv03LMXTBXMfFIbJsUQ==
+X-Received: by 2002:a63:b002:: with SMTP id h2mr13148194pgf.464.1635360207981;
+        Wed, 27 Oct 2021 11:43:27 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q10sm679305pfk.6.2021.10.27.11.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 11:43:26 -0700 (PDT)
+Message-ID: <61799dce.1c69fb81.2cd4.2915@mx.google.com>
+Date:   Wed, 27 Oct 2021 11:43:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel@ziswiler.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-References: <20211027152534.3366799-1-marcel@ziswiler.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211027152534.3366799-1-marcel@ziswiler.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------F01O19CvWQNgrIzOLOyiFHsr"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211027
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 244 runs, 2 regressions (next-20211027)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------F01O19CvWQNgrIzOLOyiFHsr
-Content-Type: multipart/mixed; boundary="------------gna0B3soxyr33E0wIY0PXBNH";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Marcel Ziswiler <marcel@ziswiler.com>,
- Linux-Next Mailing List <linux-next@vger.kernel.org>,
- dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
- Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- David Airlie <airlied@linux.ie>, Maxime Ripard <mripard@kernel.org>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Linus Walleij <linus.walleij@linaro.org>, Daniel Vetter <daniel@ffwll.ch>,
- Marcel Ziswiler <marcel.ziswiler@toradex.com>,
- Linux Kernel Functional Testing <lkft@linaro.org>
-Message-ID: <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
-Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
-References: <20211027152534.3366799-1-marcel@ziswiler.com>
-In-Reply-To: <20211027152534.3366799-1-marcel@ziswiler.com>
+next/master baseline: 244 runs, 2 regressions (next-20211027)
 
---------------gna0B3soxyr33E0wIY0PXBNH
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Regressions Summary
+-------------------
 
-SGksDQoNCnRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KDQpBbSAyNy4xMC4yMSB1bSAxNzoyNSBz
-Y2hyaWViIE1hcmNlbCBaaXN3aWxlcjoNCj4gRnJvbTogTWFyY2VsIFppc3dpbGVyIDxtYXJj
-ZWwuemlzd2lsZXJAdG9yYWRleC5jb20+DQo+IA0KPiBUb2RheSdzIC1uZXh0IGZhaWxzIGJ1
-aWxkaW5nIGFybTY0IGRlZmNvbmZpZyBhcyBmb2xsb3dzOg0KPiANCj4gRVJST1I6IG1vZHBv
-c3Q6IG1vZHVsZSBkcm1fY21hX2hlbHBlciB1c2VzIHN5bWJvbCBkbWFfYnVmX3Z1bm1hcCBm
-cm9tDQo+ICAgbmFtZXNwYWNlIERNQV9CVUYsIGJ1dCBkb2VzIG5vdCBpbXBvcnQgaXQuDQo+
-IEVSUk9SOiBtb2Rwb3N0OiBtb2R1bGUgZHJtX2NtYV9oZWxwZXIgdXNlcyBzeW1ib2wgZG1h
-X2J1Zl92bWFwIGZyb20NCj4gICBuYW1lc3BhY2UgRE1BX0JVRiwgYnV0IGRvZXMgbm90IGlt
-cG9ydCBpdC4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBU
-ZXN0aW5nIDxsa2Z0QGxpbmFyby5vcmc+DQo+IEZpeGVzOiBjb21taXQgNGIyYjVlMTQyZmY0
-ICgiZHJtOiBNb3ZlIEdFTSBtZW1vcnkgbWFuYWdlcnMgaW50byBtb2R1bGVzIikNCj4gU2ln
-bmVkLW9mZi1ieTogTWFyY2VsIFppc3dpbGVyIDxtYXJjZWwuemlzd2lsZXJAdG9yYWRleC5j
-b20+DQo+IA0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hl
-bHBlci5jIHwgMiArKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4g
-DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9jbWFfaGVscGVyLmMg
-Yi9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9jbWFfaGVscGVyLmMNCj4gaW5kZXggNmY3YjNm
-OGVjMDRkMy4uNjlmODU2NGFkMTFjZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
-L2RybV9nZW1fY21hX2hlbHBlci5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2Vt
-X2NtYV9oZWxwZXIuYw0KPiBAQCAtMjMsNiArMjMsOCBAQA0KPiAgICNpbmNsdWRlIDxkcm0v
-ZHJtX2dlbV9jbWFfaGVscGVyLmg+DQo+ICAgI2luY2x1ZGUgPGRybS9kcm1fdm1hX21hbmFn
-ZXIuaD4NCj4gICANCj4gK01PRFVMRV9JTVBPUlRfTlMoRE1BX0JVRik7DQoNCkNvdWxkIHRo
-aXMgbGluZSBiZSBtb3ZlZCB0byB0aGUgYm90dG9tIG9mIHRoZSBmaWxlLCB3aGVyZSB0aGUg
-b3RoZXIgDQpNT0RVTEUgc3RhdGVtZW50cyBhcmU/DQoNCkluIHRoZSBmaXhlZCBjb21taXQg
-NGIyYjVlMTQyZmY0LCB0aGVyZSdzIGEgc2ltaWxhciBjaGFuZ2UgZm9yIA0KZHJtX2dlbV9z
-aG1lbV9oZWxwZXIuYy4gSXQgdXNlcyBkbWEtYnVmX3ZtYXAgYXMgd2VsbC4gRG9lcyB0aGF0
-IG1vZHVsZSANCnJlcXVpcmUgdGhlIHNhbWUgZml4Pw0KDQpEbyB5b3UgaGF2ZSBhbnkgaWRl
-YSB3aHkgSSBkb24ndCBzZWUgdGhlc2UgZXJyb3JzIGluIG15IGJ1aWxkcz8NCg0KQmVzdCBy
-ZWdhcmRzDQpUaG9tYXMNCg0KPiArDQo+ICAgLyoqDQo+ICAgICogRE9DOiBjbWEgaGVscGVy
-cw0KPiAgICAqDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2
-ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1h
-eGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcg
-TsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEZlbGl4IEltZW5kw7ZyZmZlcg0K
+platform             | arch  | lab          | compiler | defconfig         =
+ | regressions
+---------------------+-------+--------------+----------+-------------------=
+-+------------
+beagle-xm            | arm   | lab-baylibre | clang-13 | multi_v7_defconfig=
+ | 1          =
 
---------------gna0B3soxyr33E0wIY0PXBNH--
+hifive-unleashed-a00 | riscv | lab-baylibre | gcc-10   | defconfig         =
+ | 1          =
 
---------------F01O19CvWQNgrIzOLOyiFHsr
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+211027/plan/baseline/
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF5msoFAwAAAAAACgkQlh/E3EQov+D/
-IRAAsSnYvDWGk/IsOQXPm8nwU8S0Lw3lf2x0lAd/jKuZu1hnd06+b71mLGsjEyRE0uuRFoQRzyeI
-xRjRQsMsriT6ECDLnyflluze07ycoqbB+JIBHvE36CdO+dP53AiSlsKO0ayatAilbn9kGO5Q5dk+
-6zfw9ZcNvQhGYVXNULlTw17S4azAKOtaghLTDIxhDHioeI1Kwx+2UPLtDlJfcnmt2OxByvqo5Tcy
-pjgDG5loMJ7EavtyapzaW9GE8YMMywlBoFjWP15rgv6MrmZy1om5cHWboxPD7eHkjIPycGz8DfJh
-MuQ1isGBsFoyJsBliGFDYjgFL4DRXtgpeuwZWD326P0VCf7Ulw/6jjpQOjZVzZ55iJ2lkiC/aNxk
-kBNWOyKWB2ijiWaV8OXldks5yYUtc9dhLsPriN4CHL7Iqw+n6E+Cka/1n6QN79IHRBGrsEdQ7Z1f
-oXgX0RPlqvOKdi5fpVY+LoujBiDUErloQswEDbq5TZmOBpKO/Gl79qFPjCQH/qhVtx3SxeO0iP9a
-CQnYXJwDlecsXPFFXcGC+YqEFaJTK0hAmA087a/uCmJy7MUDJxIEmQs1ji+7/ov+ZxdPy+v7hhd4
-sn8ks+4UToYiOc6phkxbd752FKTZmTgqnUN//kQz2Y9g61Ah0BJKv/z7NqZiw6wJwKUv5nwhXO9r
-xx8=
-=hPKg
------END PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20211027
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      ae5179317e794160e471db0e122c6ac811a97235 =
 
---------------F01O19CvWQNgrIzOLOyiFHsr--
+
+
+Test Regressions
+---------------- =
+
+
+
+platform             | arch  | lab          | compiler | defconfig         =
+ | regressions
+---------------------+-------+--------------+----------+-------------------=
+-+------------
+beagle-xm            | arm   | lab-baylibre | clang-13 | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61796389343820fae43358f3
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211023125221+73dae=
+b3d507f-1~exp1~20211023125744.17)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211027/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211027/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61796389343820fae4335=
+8f4
+        new failure (last pass: next-20211026) =
+
+ =
+
+
+
+platform             | arch  | lab          | compiler | defconfig         =
+ | regressions
+---------------------+-------+--------------+----------+-------------------=
+-+------------
+hifive-unleashed-a00 | riscv | lab-baylibre | gcc-10   | defconfig         =
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61795b47c5a1ea25813358dd
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211027/risc=
+v/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a00.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211027/risc=
+v/defconfig/gcc-10/lab-baylibre/baseline-hifive-unleashed-a00.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/riscv/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61795b47c5a1ea2581335=
+8de
+        new failure (last pass: next-20211026) =
+
+ =20

@@ -2,83 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA2E43C8AE
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C457043C8BC
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241666AbhJ0LhR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 07:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbhJ0LhP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 07:37:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A36C061745;
-        Wed, 27 Oct 2021 04:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vkzTnRsFNQy28hg2qAojgnTTG6uRtg36mAzN67icHy0=; b=G1TJyFRuxR/e28VjSxIRUhSgSs
-        q1j+KIA+7XsorRJQpJXZzUSfguLLOaWeXFZ5ie0oJbBRziZ82XOiCXPs+C9CqmFyM38xiLWFhgK52
-        FcRlco+MIfTAMbDrN0ceMVzEiOBJJtOpxahtFepqFHzTxEymhfyppVGy4XTsDOOdVWtDjtm02hl8h
-        b8dRQzHwFk/yGz1d09hqIXtwiSw3hOXlHsNlf+rNctWEGhVsQMNWe2AxC72ft/Pjy/0T9aSzk3JrY
-        cCCF0VsFfnO7hvzzlKG3flhcC76Jzq2Vot47swa8hZnR/AvXpImWwa4l66QlF0AD4h/iPyeNM+dmp
-        N1weyPCA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55340)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mfhCe-0006Kr-Gs; Wed, 27 Oct 2021 12:34:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mfhCc-0007gl-Un; Wed, 27 Oct 2021 12:34:42 +0100
-Date:   Wed, 27 Oct 2021 12:34:42 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the net-next tree
-Message-ID: <YXk5Uii+pNPaDiSR@shell.armlinux.org.uk>
-References: <20211027220721.5a941815@canb.auug.org.au>
+        id S241691AbhJ0Lnh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 07:43:37 -0400
+Received: from pegase2.c-s.fr ([93.17.235.10]:35313 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230336AbhJ0Lng (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 27 Oct 2021 07:43:36 -0400
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HfRbV2BBhz9sSg;
+        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1CyGxDHopVgI; Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HfRbV1Hjrz9sRr;
+        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 16CD68B778;
+        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 4A3tr9kP0AiX; Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
+Received: from [192.168.232.182] (unknown [192.168.232.182])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 720E18B776;
+        Wed, 27 Oct 2021 13:41:09 +0200 (CEST)
+Message-ID: <2012df5e-62ec-06fb-9f4d-e27dde184a3f@csgroup.eu>
+Date:   Wed, 27 Oct 2021 13:41:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211027220721.5a941815@canb.auug.org.au>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
+Content-Language: fr-FR
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Richard Guy Briggs <rgb@redhat.com>
+References: <20211026133147.35d19e00@canb.auug.org.au>
+ <87k0i0awdl.fsf@mpe.ellerman.id.au>
+ <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
+ <87tuh2aepp.fsf@mpe.ellerman.id.au>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <87tuh2aepp.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 10:07:21PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> include/linux/phylink.h:82: warning: Function parameter or member 'DECLARE_PHY_INTERFACE_MASK(supported_interfaces' not described in 'phylink_config'
-> 
-> Introduced by commit
-> 
->   38c310eb46f5 ("net: phylink: add MAC phy_interface_t bitmap")
-> 
-> Or maybe this is a problem with the tool ...
 
-Hmm. Looks like it is a tooling problem.
 
- * @supported_interfaces: bitmap describing which PHY_INTERFACE_MODE_xxx
- *                        are supported by the MAC/PCS.
+Le 27/10/2021 à 13:29, Michael Ellerman a écrit :
+> Paul Moore <paul@paul-moore.com> writes:
+>> On Tue, Oct 26, 2021 at 6:55 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>>> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>>>> Hi all,
+>>>>
+>>>> Today's linux-next merge of the audit tree got conflicts in:
+>>>>
+>>>>    arch/powerpc/kernel/audit.c
+>>>>    arch/powerpc/kernel/compat_audit.c
+>>>>
+>>>> between commit:
+>>>>
+>>>>    566af8cda399 ("powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC")
+>>>>
+>>>> from the powerpc tree and commits:
+>>>>
+>>>>    42f355ef59a2 ("audit: replace magic audit syscall class numbers with macros")
+>>>>    1c30e3af8a79 ("audit: add support for the openat2 syscall")
+>>>>
+>>>> from the audit tree.
+>>>
+>>> Thanks.
+>>>
+>>> I guess this is OK, unless the audit folks disagree. I could revert the
+>>> powerpc commit and try it again later.
+>>>
+>>> If I don't hear anything I'll leave it as-is.
+>>
+>> Hi Michael,
+>>
+>> Last I recall from the powerpc/audit thread there were still some
+>> issues with audit working properly in your testing, has that been
+>> resolved?
+> 
+> No.
+> 
+> There's one test failure both before and after the conversion to use the
+> generic code.
+> 
+>> If nothing else, -rc7 seems a bit late for this to hit -next for me to
+>> feel comfortable about this.
+> 
+> OK. I'll revert the patch in my tree.
+> 
 
-        DECLARE_PHY_INTERFACE_MASK(supported_interfaces);
+But it's been in the pipe since end of August and no one reported any 
+issue other issue than the pre-existing one, so what's the new issue 
+that prevents us to merge it two monthes later, and how do we walk 
+forward then ?
 
-I'm guessing the tool doesn't use the preprocessed source. I'm not sure
-what the solution to this would be.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks
+Christophe

@@ -2,94 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E09FE43C891
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA2E43C8AE
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbhJ0Lbe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 07:31:34 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:35447 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237421AbhJ0Lbe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 07:31:34 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfRKb41TQz4xbP;
-        Wed, 27 Oct 2021 22:29:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1635334148;
-        bh=MHq64eZS9Jri3BDBh8LS9jVHE07Z90nQn+T4OkS25Qg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=o6u2CEpOxGBJvNemtoJ2GOBbPtwJQy/PgPE76ook/TmAX8J+i482whrIrJmiNgzsL
-         pZcK4uTPRvoHWa1kBw9ER9Z5IvA5HEUmo4kaGmqWR3gcyPilWeR4Vnubb7mH0/dXo5
-         MAD37mlLtxFGYW6MRFktS7hqlVO1vi4js4K2T7pC7KRygNrc/KIgxUu15IT57A+iqI
-         1HDWdmAm03vjeQubfeoZZD2/AeFGiOsD2LdwvBAHhYqOjHCb5QTmb5R7WcbSeSTZAd
-         BYrezRd5CfBV8G1tXX1ta70GfaBcwVPTbM8fG34tlfQidUtrBpyIws4JGqT6GE5PTt
-         QEVWRkmaKiU8g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        id S241666AbhJ0LhR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 07:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230336AbhJ0LhP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 07:37:15 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A36C061745;
+        Wed, 27 Oct 2021 04:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vkzTnRsFNQy28hg2qAojgnTTG6uRtg36mAzN67icHy0=; b=G1TJyFRuxR/e28VjSxIRUhSgSs
+        q1j+KIA+7XsorRJQpJXZzUSfguLLOaWeXFZ5ie0oJbBRziZ82XOiCXPs+C9CqmFyM38xiLWFhgK52
+        FcRlco+MIfTAMbDrN0ceMVzEiOBJJtOpxahtFepqFHzTxEymhfyppVGy4XTsDOOdVWtDjtm02hl8h
+        b8dRQzHwFk/yGz1d09hqIXtwiSw3hOXlHsNlf+rNctWEGhVsQMNWe2AxC72ft/Pjy/0T9aSzk3JrY
+        cCCF0VsFfnO7hvzzlKG3flhcC76Jzq2Vot47swa8hZnR/AvXpImWwa4l66QlF0AD4h/iPyeNM+dmp
+        N1weyPCA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55340)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mfhCe-0006Kr-Gs; Wed, 27 Oct 2021 12:34:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mfhCc-0007gl-Un; Wed, 27 Oct 2021 12:34:42 +0100
+Date:   Wed, 27 Oct 2021 12:34:42 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Richard Guy Briggs <rgb@redhat.com>
-Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
-In-Reply-To: <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
-References: <20211026133147.35d19e00@canb.auug.org.au>
- <87k0i0awdl.fsf@mpe.ellerman.id.au>
- <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
-Date:   Wed, 27 Oct 2021 22:29:06 +1100
-Message-ID: <87tuh2aepp.fsf@mpe.ellerman.id.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <YXk5Uii+pNPaDiSR@shell.armlinux.org.uk>
+References: <20211027220721.5a941815@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211027220721.5a941815@canb.auug.org.au>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
-> On Tue, Oct 26, 2021 at 6:55 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->> Stephen Rothwell <sfr@canb.auug.org.au> writes:
->> > Hi all,
->> >
->> > Today's linux-next merge of the audit tree got conflicts in:
->> >
->> >   arch/powerpc/kernel/audit.c
->> >   arch/powerpc/kernel/compat_audit.c
->> >
->> > between commit:
->> >
->> >   566af8cda399 ("powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC")
->> >
->> > from the powerpc tree and commits:
->> >
->> >   42f355ef59a2 ("audit: replace magic audit syscall class numbers with macros")
->> >   1c30e3af8a79 ("audit: add support for the openat2 syscall")
->> >
->> > from the audit tree.
->>
->> Thanks.
->>
->> I guess this is OK, unless the audit folks disagree. I could revert the
->> powerpc commit and try it again later.
->>
->> If I don't hear anything I'll leave it as-is.
->
-> Hi Michael,
->
-> Last I recall from the powerpc/audit thread there were still some
-> issues with audit working properly in your testing, has that been
-> resolved?
+On Wed, Oct 27, 2021 at 10:07:21PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the net-next tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> include/linux/phylink.h:82: warning: Function parameter or member 'DECLARE_PHY_INTERFACE_MASK(supported_interfaces' not described in 'phylink_config'
+> 
+> Introduced by commit
+> 
+>   38c310eb46f5 ("net: phylink: add MAC phy_interface_t bitmap")
+> 
+> Or maybe this is a problem with the tool ...
 
-No.
+Hmm. Looks like it is a tooling problem.
 
-There's one test failure both before and after the conversion to use the
-generic code.
+ * @supported_interfaces: bitmap describing which PHY_INTERFACE_MODE_xxx
+ *                        are supported by the MAC/PCS.
 
-> If nothing else, -rc7 seems a bit late for this to hit -next for me to
-> feel comfortable about this.
+        DECLARE_PHY_INTERFACE_MASK(supported_interfaces);
 
-OK. I'll revert the patch in my tree.
+I'm guessing the tool doesn't use the preprocessed source. I'm not sure
+what the solution to this would be.
 
-cheers
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

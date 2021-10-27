@@ -2,113 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B5A43D594
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 23:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8BB43D648
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 00:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbhJ0V3G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 17:29:06 -0400
-Received: from mout.perfora.net ([74.208.4.196]:52859 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236746AbhJ0V2L (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 27 Oct 2021 17:28:11 -0400
-Received: from toolbox.cardiotech.int ([194.191.235.54]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MNa9c-1mZono1QFO-007BhL;
- Wed, 27 Oct 2021 23:25:14 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maxime Ripard <mripard@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH v2] drm: import DMA_BUF module namespace
-Date:   Wed, 27 Oct 2021 23:25:05 +0200
-Message-Id: <20211027212506.3418521-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.26.2
+        id S229474AbhJ0WLc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 18:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhJ0WLc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 18:11:32 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE49C061570;
+        Wed, 27 Oct 2021 15:09:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfjWw4rzpz4xbP;
+        Thu, 28 Oct 2021 09:09:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635372541;
+        bh=E9vVZjugBxglNf6mi6b6L+lVqqoYk5z7JFagTw04whQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=scASQ9Ug6DFtYELD9ZZ2S49iOPriP9YMcrQAt3L2xBRaCOo5Mt+8V535+hXdHZYd0
+         /Qut292kAVwJd5BHAtIfYs8RT7RoTp5wvxmjm2XgZx9zoTCE4m0X+rT/7rXydgmiC1
+         CLPu0zYuK5xAHYq6kRl7Pq4HUNQ2+EKAEqzE8vsn6yhBo+HW6n2D4iIYgQUrAjo/A2
+         iaPzjcZ4kAGUZnewakyhkCo32imuys97NBnj8aCKN5/OyWhK5bklQEr1L8hjCwl6I0
+         Cfz6wGDmEdP3zeOoEniD37zxpywAoeNhhte26AzX5thUWL2ouW9Tig0cWIb7WfG4m3
+         Ww+PDf+KCNmGw==
+Date:   Thu, 28 Oct 2021 09:08:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the net-next tree
+Message-ID: <20211028090858.138ece92@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:/EW1KHq6JOS45VcqOsIkE6SaDE6tPSUuItgHgntq/Eo7T8y418u
- DLncPtwYU3quKjvGFC7pJ1PXofJed2tHxjT/ohX5akjVujoHnXaKGhQNWDi6Bb6vRf3VhyO
- ptPtaOGiUfgdst50xRSGABOig9tMxTO2DJayOx91DQajyzdO8D53uIj12xXO5Hkmh46ntsd
- 2EFpKfxw6bbqh+EAwrFjQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:T/4P8uXEbB4=:WPqN5r5fs2uVwzAGtuvEJY
- zBsZMlGXCb1HwJNr7smGq5KFTIeu/mpnAt4oGwP/g06QnArYDCLKOYeuCBG5lHFrjZ9e4+3Ql
- KarH9kTwqWuc9SW8qQUOZGQns9VdE9m0shNXPCkZwp4QdYuN5JZyArIxDGrN7Y2CKhZx4sGmI
- ToxX6j/QuAWgB7/lEInRI4ta9Gyukdw4XzMxT/vnsqO4b4sGXI2mi3HAMMeQ6aDntW+hOg8Jn
- k5jWxDtZA1vIU6TVsZvWK1Z6WnDJ0GiCm5q2yA93sRORUNuPPF82cyCyk/w5Roi4fFqTcig+8
- /ssAasetbvuioF1RBG6q9bbF7Z/TpbJH1oMuACttCHApQQ1S/FaZWZJNqd4HUlOnSraWHKwa2
- K+Bzry+OhztoF8wg/QtUw2LF/eeASxbpp/yu9DTX2e/Q88zhhI1tXlxmaVIQLuAOqbKSAPdxz
- oURMd9VG9RUGkkxu8uySBgtVx4m55cW/VOWYiO1Ra3asuZtgtRYNjUnofKfagHwLTSVET4Rx4
- Sq+x4XrEwcqo5VAfagwzVTm9wDIIY9dZ06ReScZAdMGeBIWFnZ128Li6r3SypW062mqSzSxh7
- j/v6kRRGzbqi3x9+2hMn7ANPaoxx6yB1LjF6K2wGhOaHXymrvZCdKQFvI/LJgEr5BXik+FDd+
- uHle0yfrEVee6CZ57RlNgEd3uPQb3bdItJ6e84w0r4vUtXsxq8IELPv8Bj+qq+1GatkI=
+Content-Type: multipart/signed; boundary="Sig_/hG=c7RxsV1BQlc5BrNzc+qA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+--Sig_/hG=c7RxsV1BQlc5BrNzc+qA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Today's -next fails building arm64 defconfig as follows:
+Hi all,
 
-ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from
- namespace DMA_BUF, but does not import it.
-ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vmap from
- namespace DMA_BUF, but does not import it.
+Commit
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Fixes: commit 4b2b5e142ff4 ("drm: Move GEM memory managers into modules")
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+  8ca9caee851c ("net/mlx5: Lag, Make mlx5_lag_is_multipath() be static inli=
+ne")
 
----
+is missing a Signed-off-by from its committer.
 
-Changes in v2:
-- After consulting the documentation move it to the bottom of the file
-  where the other MODULE statements are as suggested by Thomas.
-- Also move it down there for the drm_gem_shmem_helper.c file.
+--=20
+Cheers,
+Stephen Rothwell
 
- drivers/gpu/drm/drm_gem_cma_helper.c   | 1 +
- drivers/gpu/drm/drm_gem_shmem_helper.c | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--Sig_/hG=c7RxsV1BQlc5BrNzc+qA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index 6f7b3f8ec04d3..2a34241fee025 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -581,4 +581,5 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_device *dev,
- EXPORT_SYMBOL(drm_gem_cma_prime_import_sg_table_vmap);
- 
- MODULE_DESCRIPTION("DRM CMA memory-management helpers");
-+MODULE_IMPORT_NS(DMA_BUF);
- MODULE_LICENSE("GPL");
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index f7324582afe71..a5b743a83ce99 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -22,8 +22,6 @@
- #include <drm/drm_prime.h>
- #include <drm/drm_print.h>
- 
--MODULE_IMPORT_NS(DMA_BUF);
--
- /**
-  * DOC: overview
-  *
-@@ -779,4 +777,5 @@ drm_gem_shmem_prime_import_sg_table(struct drm_device *dev,
- EXPORT_SYMBOL_GPL(drm_gem_shmem_prime_import_sg_table);
- 
- MODULE_DESCRIPTION("DRM SHMEM memory-management helpers");
-+MODULE_IMPORT_NS(DMA_BUF);
- MODULE_LICENSE("GPL v2");
--- 
-2.26.2
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF5zfoACgkQAVBC80lX
+0Gz0dggAh0vYgmI8g3kbbr6S1C39+SeVfTpwP2iuvEh9wzLSYtXVce3ukR59kqPf
+hMQ0YNAaaVTfDKHj0pEjS4Ie39XBrasZquwsrhjzX3ZW51cziU84Eq2XCLb+Lcw8
+YfAX6Cx6DzF74sllppO9BtHstppzvfyTVaLt6AaHJo3+dek17B6g7eud/O4mFVZO
+J23Vl3NydBa9/8Ybwn93KxPAqKr4wuMu96ef9Gi/5bofYMJkm4ePBHz6Tf8b/9QE
+29gjkAXpTFMLRKC5w0wyeRxQRAaXy3Ha83zc956XIe8mgrPAPpuPwp8qkOI07XLw
+fXPnYB6WonmcOM0neh7kJmxL/DoQtw==
+=HDX9
+-----END PGP SIGNATURE-----
+
+--Sig_/hG=c7RxsV1BQlc5BrNzc+qA--

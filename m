@@ -2,165 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC11B43BEB0
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 02:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BA943BEBF
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 03:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbhJ0BBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Oct 2021 21:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S236301AbhJ0BIH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Oct 2021 21:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbhJ0BBS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 21:01:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A0C061570;
-        Tue, 26 Oct 2021 17:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:
-        Subject:From:Sender:Reply-To:Content-ID:Content-Description;
-        bh=X6fcEAbwRUlxqO8/g60aGuQDzDDW3CnmwfK/tyqVlJo=; b=R8WtgvqCdXPApZUBXpV+GrvNoV
-        JfryZLRqDgy4d1kc5B3/SFU/31pYaHCKmpsnJOJ7fP+kMj9rWgBRJZvzz9hUc54vQWaek7jsSZyzh
-        R+UlGy50DnabiCCFaW1TexhfSUS09yKHU2yIGZdzY6X23UK2cWsWA8RA84EBq8/M4/QyQfh1RGUu7
-        HVY+eLPb20oUyZsOM3AhYt6QjggEqidvkuvUGLi/vaxtsQgY8rA3Y4v0ZCTP/bvSocxaOK7bnLmqy
-        zc+SHiHXpDKIjyroNmXsw9UuqlzRsXwcBtnS/ZkkZf/ZIZ50dFmpLjfkac5Uacq7xE4fwLLXN7blP
-        gO6l/kuA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mfXH1-003Rlf-Rn; Wed, 27 Oct 2021 00:58:35 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: gpu: drm_fb_cma_helper.c:46: undefined reference to
- `drm_gem_fb_get_obj'
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        dri-devel@lists.freedesktop.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <CA+G9fYvpyUbqLko+9Dza8h4=9yOd-n9J0dKoQtZxawstCCnsZw@mail.gmail.com>
- <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
-Message-ID: <6862b109-ea12-6ffa-c82b-b23ee26aa5b2@infradead.org>
-Date:   Tue, 26 Oct 2021 17:58:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        with ESMTP id S231916AbhJ0BIG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Oct 2021 21:08:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F480C061570;
+        Tue, 26 Oct 2021 18:05:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hf9VC32cdz4xZ1;
+        Wed, 27 Oct 2021 12:05:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635296739;
+        bh=CCY1wV509qQFuRHJrOFAfSQZUkfQ1ZtYO8PioZA0GbA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=K4XBk/SAltBPTyrrhypP4IfhTic46fyZE/kizSLDU33Fv93cFOuv+H11FtUpDjNd3
+         bEE9+KcYerKDbNroCpIx2QAd6omGPzcSIvID6593eotTcPiuQLkNakI+jVeGDmXD/f
+         IH0hGgqgSbkVobhlKZVSfAgQtABynCRMAETCcx2rY6earXZk2lhfsNi2f6T2B97bek
+         PqvF63y6k+Rc1t4E7IlrAV7+dcEQuede3K6Zdzbyllad8gmOkWwcVYhTscoDxTsFV7
+         J2EztQB4yQxKM1j7F6O9+0Xc5lLZ7Xqms3LFki/BFSrGVrRIOjoTciU0GiSIsuJ72Z
+         zQgShGA6ZZbpg==
+Date:   Wed, 27 Oct 2021 12:05:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Jude Shih <shenshih@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: linux-next: build failures after merge of the amdgpu tree
+Message-ID: <20211027120538.3cb76465@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <857ab1a9-0175-2b2c-e729-2620d0221e1e@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/98ETBO7.+81Wr3AtYHa7lpL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/26/21 11:21 AM, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 25.10.21 um 14:13 schrieb Naresh Kamboju:
->> Regression found on arm gcc-11 built with multi_v5_defconfig
->> Following build warnings / errors reported on linux next 20211025.
->>
->> metadata:
->>      git_describe: next-20211025
->>      git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>      git_short_log: 9ae1fbdeabd3 (\"Add linux-next specific files for 20211025\")
->>      target_arch: arm
->>      toolchain: gcc-11
->>      config: multi_v5_defconfig
->>
->> build error :
->> --------------
->> arm-linux-gnueabihf-ld: drivers/gpu/drm/drm_fb_cma_helper.o: in
->> function `drm_fb_cma_get_gem_obj':
->> drivers/gpu/drm/drm_fb_cma_helper.c:46: undefined reference to
->> `drm_gem_fb_get_obj'
->> arm-linux-gnueabihf-ld: drivers/gpu/drm/drm_fb_cma_helper.c:46:
->> undefined reference to `drm_gem_fb_get_obj'
->> arm-linux-gnueabihf-ld: drivers/gpu/drm/drm_fb_cma_helper.c:46:
->> undefined reference to `drm_gem_fb_get_obj'
->> arm-linux-gnueabihf-ld: drivers/gpu/drm/drm_fb_cma_helper.o: in
->> function `drm_fb_cma_sync_non_coherent':
->> drivers/gpu/drm/drm_fb_cma_helper.c:133: undefined reference to
->> `drm_atomic_helper_damage_iter_init'
->> arm-linux-gnueabihf-ld: drivers/gpu/drm/drm_fb_cma_helper.c:135:
->> undefined reference to `drm_atomic_helper_damage_iter_next'
->> make[1]: *** [Makefile:1252: vmlinux] Error 1
->> make[1]: Target '__all' not remade because of errors.
->> make: *** [Makefile:226: __sub-make] Error 2
->>
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->>
->> build link:
->> -----------
->> https://builds.tuxbuild.com/1zzgFZBGjpQ5R0lawQFW9iJ39Hp/build.log
->>
->> build config:
->> -------------
->> https://builds.tuxbuild.com/1zzgFZBGjpQ5R0lawQFW9iJ39Hp/config
-> 
-> Looking at this config, there is:
-> 
-> CONFIG_DRM=y
-> # CONFIG_DRM_DP_AUX_CHARDEV is not set
-> # CONFIG_DRM_DEBUG_MM is not set
-> # CONFIG_DRM_DEBUG_SELFTEST is not set
-> CONFIG_DRM_KMS_HELPER=m
-> # CONFIG_DRM_LOAD_EDID_FIRMWARE is not set
-> # CONFIG_DRM_DP_CEC is not set
-> CONFIG_DRM_GEM_CMA_HELPER=y
-> CONFIG_DRM_KMS_CMA_HELPER=y
-> 
-> GEM_CMA_HELPER depends on KMS_HELPER, but the latter is a module. That's probably the cause of the problem. Is it intentionally set this way?
-> 
+--Sig_/98ETBO7.+81Wr3AtYHa7lpL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The only drivers that select DRM_KMS_HELPER are both =m, so that's how
-DRM_KMS_HELPER is set also.
+Hi all,
 
-Symbol: DRM_KMS_HELPER [=m]
-Type : tristate
-Defined at drivers/gpu/drm/Kconfig:82
-Depends on: HAS_IOMEM [=y] && DRM [=y]
-Selected by [m]:
-- DRM_ATMEL_HLCDC [=m] && HAS_IOMEM [=y] && DRM [=y] && OF [=y] && COMMON_CLK [=y] && MFD_ATMEL_HLCDC [=y] && ARM [=y]
-- DRM_ASPEED_GFX [=m] && HAS_IOMEM [=y] && DRM [=y] && OF [=y] && (COMPILE_TEST [=n] || ARCH_ASPEED [=y]) && MMU [=y]
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'd=
+m_dmub_hw_init':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:1111:38: error:=
+ 'struct dc_debug_options' has no member named 'dpia_debug'
+ 1111 |    hw_params.disable_dpia =3D dc->debug.dpia_debug.bits.disable_dpi=
+a;
+      |                                      ^
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'a=
+mdgpu_dm_atomic_check':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:10728:34: error=
+: unused variable 'mgr' [-Werror=3Dunused-variable]
+10728 |  struct drm_dp_mst_topology_mgr *mgr;
+      |                                  ^~~
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:10727:36: error=
+: unused variable 'mst_state' [-Werror=3Dunused-variable]
+10727 |  struct drm_dp_mst_topology_state *mst_state;
+      |                                    ^~~~~~~~~
+cc1: all warnings being treated as errors
 
-I did the ARM cross-build and also see the linker error.
-I didn't understand why -- and still don't, but here is a little
-speculation:
+Caused by commits
 
-In the past (e.g. 10 years ago), we have to move some .o files
-in lib/ from lib-y to obj-y so that they would always be included
-in the final object file and not cause their user/caller object
-files to suffer from undefined references.
-These happened because unused functions(?) in lib-y files are
-stripped out of the final object files.
-The same thing could be happening here (still just guessing).
+  df91b2adc24a ("drm/amd/display: Add DP 2.0 MST DM Support")
+  707021dc0e16 ("drm/amd/display: Enable dpia in dmub only for DCN31 B0")
 
-Does that help any?  I dunno.
+CONFIG_DRM_AMD_DC_DCN is not set for this build.
 
-Adding Arnd to Cc: to see if he has any ideas...
+I have used the amdgpu tree frm next-20211026 for today.
 
->>
->> # To install tuxmake on your system globally
->> # sudo pip3 install -U tuxmake
->> tuxmake --runtime podman --target-arch arm --toolchain gcc-11
->> --kconfig multi_v5_defconfig
->>
->> -- 
->> Linaro LKFT
->> https://lkft.linaro.org
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/98ETBO7.+81Wr3AtYHa7lpL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-~Randy
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF4peIACgkQAVBC80lX
+0GyZowf/WME9hXOdhAJmYF+P8NfejK4lf40+cxLAlm9L1BK9G34m8i/YceTFMvpM
+/XzPgTDspTQysQkLR8WUCPdnHZkK+LJ2Bw5vm7E905DNBrY5GN0OK4XTOWY3AGcm
+HVANvT7nyV66oT1jSuhBtx3aTizC/V7uzfETkRLcVr9RjYiBZKrtqurQCDiNpcJd
+D1zOPspIHrO2G0saViYytT2jDNyeLXk73RM1IKTlpDxfHx3rew7kqNTNWKTWveV/
+tiZ/RmfX1q/dKrd6GjFebfMFexNrK7e9WXtzoiqfy06aDS/K7qgH5JDBGmFwYlwo
+GsLsiCDbMWhxsuPl5TVTSQHCNB6Tzw==
+=Wg2M
+-----END PGP SIGNATURE-----
+
+--Sig_/98ETBO7.+81Wr3AtYHa7lpL--

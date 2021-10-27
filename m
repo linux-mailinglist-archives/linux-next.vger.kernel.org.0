@@ -2,113 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C457043C8BC
-	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62B743C8C0
+	for <lists+linux-next@lfdr.de>; Wed, 27 Oct 2021 13:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241691AbhJ0Lnh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Oct 2021 07:43:37 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:35313 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230336AbhJ0Lng (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 27 Oct 2021 07:43:36 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HfRbV2BBhz9sSg;
-        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1CyGxDHopVgI; Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HfRbV1Hjrz9sRr;
-        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 16CD68B778;
-        Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 4A3tr9kP0AiX; Wed, 27 Oct 2021 13:41:10 +0200 (CEST)
-Received: from [192.168.232.182] (unknown [192.168.232.182])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 720E18B776;
-        Wed, 27 Oct 2021 13:41:09 +0200 (CEST)
-Message-ID: <2012df5e-62ec-06fb-9f4d-e27dde184a3f@csgroup.eu>
-Date:   Wed, 27 Oct 2021 13:41:09 +0200
+        id S230336AbhJ0LpB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Oct 2021 07:45:01 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:43453 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234834AbhJ0LpA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Oct 2021 07:45:00 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfRd46p0tz4xbq;
+        Wed, 27 Oct 2021 22:42:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635334954;
+        bh=G7vtBzdtwJ7fjHZiICFxjEO1GioPBcOgVhByiF5L4N8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZQH2CM0Yx0m2OsXP3gcECvHlLOSKOUhcV7r8OecVM7lakviKoU8gI9sfyug6FiJ1i
+         Fwm1aWia1kWI7+QT8xfldklaca91zM77suHPabimlpPlepR1AtHKFK8P1EiDSjH70r
+         UHMdSl7x2B6smXypKjSnp6wX5hHA/8WK5ieskcED5J7EBPAKUvEdw67R4p8+AHKeqp
+         7+xiStsQUNI3VTUolx+IgxbbdeQ+P3DhU2aEFrko4SYjMQpBFY0ffjr2CEqn+Iyuak
+         kDweAciHurf/ftDRgCTXIZEG7ZdJXlTQd6SQkjGpSp9LfnU60VtypcguCpoDG2djqg
+         i/OrqC4b74XzQ==
+Date:   Wed, 27 Oct 2021 22:42:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>
+Subject: Re: linux-next: Tree for Oct 25
+Message-ID: <20211027224231.1634cc6c@canb.auug.org.au>
+In-Reply-To: <20211025204921.73cb3011@canb.auug.org.au>
+References: <20211025204921.73cb3011@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: manual merge of the audit tree with the powerpc tree
-Content-Language: fr-FR
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Richard Guy Briggs <rgb@redhat.com>
-References: <20211026133147.35d19e00@canb.auug.org.au>
- <87k0i0awdl.fsf@mpe.ellerman.id.au>
- <CAHC9VhTj7gn3iAOYctVRKvv_Bk1iQMrmkA8FVJtYzdvBjqFmvg@mail.gmail.com>
- <87tuh2aepp.fsf@mpe.ellerman.id.au>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <87tuh2aepp.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/5iKOjd.5EWHPwSYHxwsDRT=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/5iKOjd.5EWHPwSYHxwsDRT=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Le 27/10/2021 à 13:29, Michael Ellerman a écrit :
-> Paul Moore <paul@paul-moore.com> writes:
->> On Tue, Oct 26, 2021 at 6:55 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->>> Stephen Rothwell <sfr@canb.auug.org.au> writes:
->>>> Hi all,
->>>>
->>>> Today's linux-next merge of the audit tree got conflicts in:
->>>>
->>>>    arch/powerpc/kernel/audit.c
->>>>    arch/powerpc/kernel/compat_audit.c
->>>>
->>>> between commit:
->>>>
->>>>    566af8cda399 ("powerpc/audit: Convert powerpc to AUDIT_ARCH_COMPAT_GENERIC")
->>>>
->>>> from the powerpc tree and commits:
->>>>
->>>>    42f355ef59a2 ("audit: replace magic audit syscall class numbers with macros")
->>>>    1c30e3af8a79 ("audit: add support for the openat2 syscall")
->>>>
->>>> from the audit tree.
->>>
->>> Thanks.
->>>
->>> I guess this is OK, unless the audit folks disagree. I could revert the
->>> powerpc commit and try it again later.
->>>
->>> If I don't hear anything I'll leave it as-is.
->>
->> Hi Michael,
->>
->> Last I recall from the powerpc/audit thread there were still some
->> issues with audit working properly in your testing, has that been
->> resolved?
-> 
-> No.
-> 
-> There's one test failure both before and after the conversion to use the
-> generic code.
-> 
->> If nothing else, -rc7 seems a bit late for this to hit -next for me to
->> feel comfortable about this.
-> 
-> OK. I'll revert the patch in my tree.
-> 
+On Mon, 25 Oct 2021 20:49:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> There seems to be something amiss with cnosole output in today's release
+> (at least on my ppc qemu boot tests).
 
-But it's been in the pipe since end of August and no one reported any 
-issue other issue than the pre-existing one, so what's the new issue 
-that prevents us to merge it two monthes later, and how do we walk 
-forward then ?
+The console output seems to be back today.  I assume its repair had
+something to do with commit
 
-Thanks
-Christophe
+  60f41e848492 ("Revert "tty: hvc: pass DMA capable memory to put_chars()"")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5iKOjd.5EWHPwSYHxwsDRT=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF5OycACgkQAVBC80lX
+0GzIrAf/QPJ8D+knDQ0Jx+Y2x0hUU0+jZa8xexb5q6jbM9ZRTBenGtEbgnuGRzMV
+BeOWQ6OoBM/lfNbD1IJ3WI/pBRIjezUUJqbrxOL54XL6Lb5EW3Kyuzl17kfiR9xi
+j92l37j66FGDopiqBsjrg+wZKmaRdyGbvn4f8oJ6G+qcX2ZbsN1GbSB3y47wps8i
+kTHZUezRDjNg6anbUb4AUMa4fDWnQefHlEnnZfqf/ZKZbqDUFxc942QY/BpC/Ngr
+7AktCWgS8CBWcvh+Hq20B7sAuzKe1RUIKH9MqV43tzofA3r5U3TUhrBPC/+G+S2Y
+RR0amaYQ0Wms0YtjNYHtNwuDUE+BAg==
+=ZngI
+-----END PGP SIGNATURE-----
+
+--Sig_/5iKOjd.5EWHPwSYHxwsDRT=--

@@ -2,103 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1943DD03
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 10:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893E343DD70
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 11:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbhJ1In2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 04:43:28 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:36017 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbhJ1In1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 04:43:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1635410461; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=O7AOKoJYSND+E4RnN3ie5X4QpUzInyFR/VVhy/H4E+Y=; b=HjDz95tcvrGZGZEIenasgZutZov7Zi45OTndqfOFuceSnbRb4hJp2ccR1hVOCtsnFbrq41Ij
- 9HhJ6OW9jg3gWaXajQUrDNVuai2ygp8KkfSGrDKmSLL/trJ9EfqtJXWYYXi7MvaSRIa8mP2P
- IWfcLXOnTnE9lqIYXdA+SRcX+Pw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 617a6212648aeeca5cf3a13d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 Oct 2021 08:40:50
- GMT
-Sender: kvalo=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 40677C4338F; Thu, 28 Oct 2021 08:40:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tykki (tynnyri.adurom.net [51.15.11.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S229835AbhJ1JL6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 05:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhJ1JL6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 05:11:58 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCC8C061570;
+        Thu, 28 Oct 2021 02:09:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 639ECC4338F;
-        Thu, 28 Oct 2021 08:40:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 639ECC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Wireless <linux-wireless@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hg09y6rtTz4xcC;
+        Thu, 28 Oct 2021 20:09:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635412170;
+        bh=6bxZMa6u3BdmZNcWDX7MjL0GNbyqtdo/SRu92As+UL8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hG3JmjhWcSB4EDi4Xu/QR5Tt6PY/1DrDw866wpE3S/pNzUfAjEMtxtmfnG+M6v4EM
+         YP62Kxpl5SeM5fjMy8yyPz6nJwJxKWEtJ6vbbrN1MlWnuXR3LEtpOqVgkyu76wFUv2
+         rQq4MDBMefCm+2CO8+bCe7k0dR/ND5zOCY3RYCkNqwOBV7XSaGhxlFe74ChZIprNFx
+         PLndJv2nnFE83pVkiksk4sclFxafYnis1QesBSHeGLYsijZ9VZiPOb7fhSneawIs9G
+         iEPcfHkmvebuZgAtDU/eEbO1pXSz+983PQnjryYUqkb4F9P6s/mm5CjOq7Gqn44a+Y
+         vzXUlFO/5/Vkg==
+Date:   Thu, 28 Oct 2021 20:09:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Fox Chen <foxhlchen@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>
-Subject: Re: linux-next: manual merge of the kspp tree with the wireless-drivers-next tree
-References: <20211028192934.01520d7e@canb.auug.org.au>
-Date:   Thu, 28 Oct 2021 11:40:42 +0300
-In-Reply-To: <20211028192934.01520d7e@canb.auug.org.au> (Stephen Rothwell's
-        message of "Thu, 28 Oct 2021 19:29:34 +1100")
-Message-ID: <87ilxh5yph.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Yuki Okushi <jtitor@2k36.org>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+Message-ID: <20211028200925.64f16df2@canb.auug.org.au>
+In-Reply-To: <20211015182404.0355bef6@canb.auug.org.au>
+References: <20211015182404.0355bef6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/vvi=bl.Rr0pN0CqAV8ZNVTF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-(adding Jakub and Dave so that they are aware of this)
+--Sig_/vvi=bl.Rr0pN0CqAV8ZNVTF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+Hi all,
 
-> Hi all,
+On Fri, 15 Oct 2021 18:24:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Today's linux-next merge of the kspp tree got a conflict in:
->
->   drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
->
+> Today's linux-next merge of the rust tree got a conflict in:
+>=20
+>   Makefile
+>=20
 > between commit:
->
->   dc52fac37c87 ("iwlwifi: mvm: Support new TX_RSP and COMPRESSED_BA_RES versions")
->
-> from the wireless-drivers-next tree and commit:
->
->   fa7845cfd53f ("treewide: Replace open-coded flex arrays in unions")
->
-> from the kspp tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>=20
+>   09708df61f2b ("kbuild: split DEBUG_CFLAGS out to scripts/Makefile.debug=
+")
+>=20
+> from the kbuild tree and commit:
+>=20
+>   dc08d49444e9 ("Kbuild: add Rust support")
+>=20
+> from the rust tree.
+>=20
+> I fixed it up (I used the Makefile conflicting part from the former and
+> applied the patch below) and can carry the fix as necessary. This is
+> now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your
+> tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-I don't know what kspp tree is and either I don't know why they didn't
-submit the patch to wireless-drivers-next, so I assume they will handle
-the conflict as well. But I really prefer that they would submit patches
-to wireless-drivers-next instead to avoid unnecessary conflicts like
-this.
+The fixup patch now looks like this:
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 15 Oct 2021 18:16:09 +1100
+Subject: [PATCH] Kbuild: fix for "kbuild: split DEBUG_CFLAGS out to
+ scripts/Makefile.debug"
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ scripts/Makefile.debug | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+index 9f39b0130551..c664af3ccc6b 100644
+--- a/scripts/Makefile.debug
++++ b/scripts/Makefile.debug
+@@ -1,4 +1,5 @@
+ DEBUG_CFLAGS	:=3D
++DEBUG_RUSTFLAGS :=3D
+=20
+ ifdef CONFIG_DEBUG_INFO_SPLIT
+ DEBUG_CFLAGS	+=3D -gsplit-dwarf
+@@ -10,6 +11,12 @@ ifndef CONFIG_AS_IS_LLVM
+ KBUILD_AFLAGS	+=3D -Wa,-gdwarf-2
+ endif
+=20
++ifdef CONFIG_DEBUG_INFO_REDUCED
++DEBUG_RUSTFLAGS +=3D -Cdebuginfo=3D1
++else
++DEBUG_RUSTFLAGS +=3D -Cdebuginfo=3D2
++endif
++
+ ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) :=3D 4
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) :=3D 5
+@@ -31,3 +38,6 @@ endif
+=20
+ KBUILD_CFLAGS +=3D $(DEBUG_CFLAGS)
+ export DEBUG_CFLAGS
++
++KBUILD_RUSTFLAGS +=3D $(DEBUG_RUSTFLAGS)
++export DEBUG_RUSTFLAGS
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vvi=bl.Rr0pN0CqAV8ZNVTF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF6aMUACgkQAVBC80lX
+0Gwa0Qf+LZYWYOrgNlZxCXHxfx0/2s9nJjvXc+upbheQHszM6ho9nOolaMchN+RF
+h4lA7IeYvbvOArK5LM3wIxPAIb0vUTNooXrW2+u+NkSLEroUMfcSXfeLcxaD5Pd8
+longZPyCobQ6lIEZXLXFe4q2cJP4Fj/1SJQccyCCXLgJ+rVHlljqRv1wZ041KXU8
+jkcgEWIpOETLgKwIp/qSJah6EyTfFNwr6F1beE2BgGNhzjTkdFsI0t9+W8CTfa14
+JRT3+FjEXmcPDSgAIpPZxTfkhppm9ZenlMp9a8F6WhPxNGVb/ym2seXyqTFGPBuc
+S0R/Div6hklj/wppqNzlKxZeW+tcoQ==
+=3618
+-----END PGP SIGNATURE-----
+
+--Sig_/vvi=bl.Rr0pN0CqAV8ZNVTF--

@@ -2,203 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F09E43E897
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 20:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D9A43E8A0
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 20:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbhJ1Ssa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 14:48:30 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:37892 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbhJ1Ss3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 14:48:29 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 81E941FD53;
-        Thu, 28 Oct 2021 18:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1635446760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecWVPcwOfzpV0QpOBidyI3KRjmXmd+oaLSz7CPNfAeI=;
-        b=KhkBBOn2Vdct7RM/TTVUyX+511kWS5r5BqL7En9hUhxS4OurA+OH2jw8J5Hhv4NrBWsbbQ
-        ajChZGk4Y4pK+C30piZ5BIY5RmibPc/HSnP8m9ex69nSQbKXBmHLocx16vB3PglXwe3baK
-        xhh2E51GCMQe/U8JtrUCOIad3cSPG1E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1635446760;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ecWVPcwOfzpV0QpOBidyI3KRjmXmd+oaLSz7CPNfAeI=;
-        b=v8wLO+0StmBGDA07NDUBcmqFxhV4POUZhzQMPiCZBXzKjODhhwzFrl3+pN6kkwueK1OjAq
-        tsb3uY8rwJSipoBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C52113F51;
-        Thu, 28 Oct 2021 18:46:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id arReCejvemF/fwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 28 Oct 2021 18:46:00 +0000
-Message-ID: <e5b4681a-36cd-20ba-c763-c4ff00732eb4@suse.de>
-Date:   Thu, 28 Oct 2021 20:45:59 +0200
+        id S230384AbhJ1SwK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 14:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230293AbhJ1SwK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 14:52:10 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4588AC061570
+        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 11:49:43 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id c4so7279206pgv.11
+        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 11:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Zfu+HtENEEAusvDFXbJ3h2BKoG5E7LS3LJIm0IeEqKw=;
+        b=oQsKpX4KNT+jQYaKdhQlVaJoC2QKCOBVh8mByzBpYqrDXYouGOGcUwDOyg7RGh3TSt
+         4hJ8vqRwaF7cVtcQ/sJZ/+vUVpIsp9fGRf6yfkigwWGz1+Hw9rFudUD19w7UsGmdTEbl
+         BPMrNNrqIo91nDVW3h4BeZy6o5YWRcsvmyixH5AgcRj904qtLFLMxpXQyZ0dExyyKux6
+         Rteqq82ODHx6ZFd+2tHUzR/Lclq2lKo0v/x1MLhUQ43A0mbBy5HcxvA3yJEJysjX5sU+
+         ruIIl8d0Fr5b7ZZF5RW6x0Ke+K5U3Iu/Vq15h56QXJsmwU/uiYGSs5lRbn0JdcWYgv8u
+         S1RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Zfu+HtENEEAusvDFXbJ3h2BKoG5E7LS3LJIm0IeEqKw=;
+        b=xSKC9ZzixruNtnVRe96Nu2MirJNHqyY6ioWfFCg79c99ee6NYRrl8A3dfwvdfTgxr+
+         Km9K0S6FaGQv7cehPsY96QLygbCPRAYDZ/ru6xt922fA+0jgBGXM18KHW4pBkSIqtpj7
+         fUO85Vwlah3A2Y2/jsWso2RGgWIWP5saw/pK6eSTAMzI90TIv/KagQBmcKsziVEm+zmb
+         VNuk3uSlQ4OwiSLKDc3pU8gqVS9FrUhCDbsXRqxiMyJAARy5K/XXS5abf4ju0ft16RBQ
+         RA9GkdhXMr1lvO5NxgN7iMHZP+mwbqa9JAF2F+LmkIfb/lc49gYHFju2BJOeibqPcrAX
+         ksKQ==
+X-Gm-Message-State: AOAM532TfMevxyKg3hUdN6XDTCCrkaSmNR3IkjkEoBsdtU5E00oSc6FR
+        2rQzGQtJ8SVlPQeLD08rFU03uV/wR1mtTdZfm3o=
+X-Google-Smtp-Source: ABdhPJwxoe3QPYh8RH/q4dli0I1joHcGlU65M6DhOFgB8i1d4eFu9ueQ/UQgqmTmRaVGiU3iMbIH2Q==
+X-Received: by 2002:a05:6a00:23c8:b0:47c:37d5:430 with SMTP id g8-20020a056a0023c800b0047c37d50430mr6085813pfc.72.1635446982681;
+        Thu, 28 Oct 2021 11:49:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c85sm4579766pfc.146.2021.10.28.11.49.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 11:49:42 -0700 (PDT)
+Message-ID: <617af0c6.1c69fb81.4e6e7.d36e@mx.google.com>
+Date:   Thu, 28 Oct 2021 11:49:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "lkft@linaro.org" <lkft@linaro.org>,
-        "maarten.lankhorst@linux.intel.com" 
-        <maarten.lankhorst@linux.intel.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>
-References: <20211027152534.3366799-1-marcel@ziswiler.com>
- <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
- <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mErstqRuzD08suBMKdvgcL6H"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211028
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 298 runs, 1 regressions (next-20211028)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mErstqRuzD08suBMKdvgcL6H
-Content-Type: multipart/mixed; boundary="------------YoNzEKjaCWljAM4gZ7Iwc0LE";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
- "airlied@linux.ie" <airlied@linux.ie>,
- "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
- "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
- "arnd@arndb.de" <arnd@arndb.de>, "lkft@linaro.org" <lkft@linaro.org>,
- "maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
- "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- "mripard@kernel.org" <mripard@kernel.org>, "daniel@ffwll.ch"
- <daniel@ffwll.ch>
-Message-ID: <e5b4681a-36cd-20ba-c763-c4ff00732eb4@suse.de>
-Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
-References: <20211027152534.3366799-1-marcel@ziswiler.com>
- <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
- <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
-In-Reply-To: <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
+next/master baseline: 298 runs, 1 regressions (next-20211028)
 
---------------YoNzEKjaCWljAM4gZ7Iwc0LE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Regressions Summary
+-------------------
 
-SGkNCg0KQW0gMjcuMTAuMjEgdW0gMjI6NTQgc2NocmllYiBNYXJjZWwgWmlzd2lsZXI6DQo+
-IFNhbGkgVGhvbWFzDQo+IA0KPiBPbiBXZWQsIDIwMjEtMTAtMjcgYXQgMjA6MzAgKzAyMDAs
-IFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGksDQo+Pg0KPj4gdGhhbmtzIGZvciB0
-aGUgcGF0Y2guDQo+IA0KPiBZb3UgYXJlIHZlcnkgd2VsY29tZS4NCj4gDQo+PiBBbSAyNy4x
-MC4yMSB1bSAxNzoyNSBzY2hyaWViIE1hcmNlbCBaaXN3aWxlcjoNCj4+PiBGcm9tOiBNYXJj
-ZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4NCj4+Pg0KPj4+IFRv
-ZGF5J3MgLW5leHQgZmFpbHMgYnVpbGRpbmcgYXJtNjQgZGVmY29uZmlnIGFzIGZvbGxvd3M6
-DQo+Pj4NCj4+PiBFUlJPUjogbW9kcG9zdDogbW9kdWxlIGRybV9jbWFfaGVscGVyIHVzZXMg
-c3ltYm9sIGRtYV9idWZfdnVubWFwIGZyb20NCj4+PiAgwqAgbmFtZXNwYWNlIERNQV9CVUYs
-IGJ1dCBkb2VzIG5vdCBpbXBvcnQgaXQuDQo+Pj4gRVJST1I6IG1vZHBvc3Q6IG1vZHVsZSBk
-cm1fY21hX2hlbHBlciB1c2VzIHN5bWJvbCBkbWFfYnVmX3ZtYXAgZnJvbQ0KPj4+ICDCoCBu
-YW1lc3BhY2UgRE1BX0JVRiwgYnV0IGRvZXMgbm90IGltcG9ydCBpdC4NCj4+Pg0KPj4+IFJl
-cG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxsa2Z0QGxpbmFy
-by5vcmc+DQo+Pj4gRml4ZXM6IGNvbW1pdCA0YjJiNWUxNDJmZjQgKCJkcm06IE1vdmUgR0VN
-IG1lbW9yeSBtYW5hZ2VycyBpbnRvIG1vZHVsZXMiKQ0KPj4+IFNpZ25lZC1vZmYtYnk6IE1h
-cmNlbCBaaXN3aWxlciA8bWFyY2VsLnppc3dpbGVyQHRvcmFkZXguY29tPg0KPj4+DQo+Pj4g
-LS0tDQo+Pj4NCj4+PiAgwqAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5j
-IHwgMiArKw0KPj4+ICDCoCAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pj4N
-Cj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5j
-IGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5jDQo+Pj4gaW5kZXggNmY3
-YjNmOGVjMDRkMy4uNjlmODU2NGFkMTFjZCAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL2dw
-dS9kcm0vZHJtX2dlbV9jbWFfaGVscGVyLmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
-ZHJtX2dlbV9jbWFfaGVscGVyLmMNCj4+PiBAQCAtMjMsNiArMjMsOCBAQA0KPj4+ICDCoCAj
-aW5jbHVkZSA8ZHJtL2RybV9nZW1fY21hX2hlbHBlci5oPg0KPj4+ICDCoCAjaW5jbHVkZSA8
-ZHJtL2RybV92bWFfbWFuYWdlci5oPg0KPj4+ICAgIA0KPj4+ICtNT0RVTEVfSU1QT1JUX05T
-KERNQV9CVUYpOw0KPj4NCj4+IENvdWxkIHRoaXMgbGluZSBiZSBtb3ZlZCB0byB0aGUgYm90
-dG9tIG9mIHRoZSBmaWxlLCB3aGVyZSB0aGUgb3RoZXINCj4+IE1PRFVMRSBzdGF0ZW1lbnRz
-IGFyZT8NCj4gDQo+IEhlaGUsIGdvb2QgcXVlc3Rpb24uIEkgd2FzIGFjdHVhbGx5IGFza2lu
-ZyBteXNlbGYgdGhlIHNhbWUgYnV0IHF1aWNrbHkgbG9va2luZyBhdCBhIGZldyBmaWxlcyBh
-bmQgdGhleSBhbGwgaGFkDQo+IGl0IGFmdGVyIHRoZWlyIGluY2x1ZGVzIHRvd2FyZHMgdGhl
-IHRvcC4gVHVybnMgb3V0IHRoYXQgd2FzIHJhdGhlciBzaG9ydCBzaWdodGVkLi4uDQo+IA0K
-PiBMZXQgbWUgbG9vayBtb3JlIGNsb3NlbHkuIEN1cnJlbnQgLW5leHQgaGFzIGV4YWN0bHkg
-MjAwIGZpbGVzIHdpdGggYSBNT0RVTEVfSU1QT1JUX05TIHN0YXRlbWVudC4gT2theSwgc29t
-ZSBvZg0KPiB3aGljaCBhcmUgZG9jdW1lbnRhdGlvbi4gQW55d2F5LCAxMzIgb2Ygd2hpY2gg
-ZG8gaGF2ZSBpdCB3aXRoIHRoZWlyIG90aGVyIE1PRFVMRSBtYWNyb3MgdG93YXJkcyB0aGUg
-ZW5kIGFzIHlvdQ0KPiBzdWdnZXN0LiAyMCBvZiB3aGljaCBhbmQgbWFpbmx5IERSTSBzdHVm
-ZiBoYXMgaXQgdG93YXJkcyB0aGUgdG9wIGFmdGVyIHRoZW0gaW5jbHVkZXMuIEZ1bm55Lg0K
-PiANCj4gV2hhdCBkb2VzIHRoZSBkb2N1bWVudGF0aW9uIHN1Z2dlc3Q/DQo+IA0KPiBEb2N1
-bWVudGF0aW9uL2NvcmUtYXBpL3N5bWJvbC1uYW1lc3BhY2VzLnJzdA0KPiANCj4gIkl0IGlz
-IGFkdmlzYWJsZSB0byBhZGQgdGhlIE1PRFVMRV9JTVBPUlRfTlMoKSBzdGF0ZW1lbnQgY2xv
-c2UgdG8gb3RoZXIgbW9kdWxlDQo+IG1ldGFkYXRhIGRlZmluaXRpb25zIGxpa2UgTU9EVUxF
-X0FVVEhPUigpIG9yIE1PRFVMRV9MSUNFTlNFKCkuIFJlZmVyIHRvIHNlY3Rpb24NCj4gNS4g
-Zm9yIGEgd2F5IHRvIGNyZWF0ZSBtaXNzaW5nIGltcG9ydCBzdGF0ZW1lbnRzIGF1dG9tYXRp
-Y2FsbHkuIg0KPiANCj4gVGhlcmUgeW91IGdvLiBQbHVzIHRoZXJlIGlzIGV2ZW4gc29tZSBm
-YW5jeSBhdXRvbWF0aW9uICg7LXApLg0KPiANCj4gU28gbGV0IG1lIG1vdmUgaXQgZG93biB0
-aGVyZSB0aGVuLg0KDQpXaWxsIHlvdSBzZW5kIG91dCBhbm90aGVyIHJldmlzaW9uIG9mIHRo
-ZSBwYXRjaD8NCg0KPiANCj4+IEluIHRoZSBmaXhlZCBjb21taXQgNGIyYjVlMTQyZmY0LCB0
-aGVyZSdzIGEgc2ltaWxhciBjaGFuZ2UgZm9yDQo+PiBkcm1fZ2VtX3NobWVtX2hlbHBlci5j
-LiBJdCB1c2VzIGRtYS1idWZfdm1hcCBhcyB3ZWxsLiBEb2VzIHRoYXQgbW9kdWxlDQo+PiBy
-ZXF1aXJlIHRoZSBzYW1lIGZpeD8NCj4gDQo+IExpa2VseS4gTGV0IG1lIGp1c3QgcnVuIHpl
-IGF1dG9tYXRpb24gYW5kIHNlZSB3aGF0IHdlIGdldC4uLg0KPiANCj4+IERvIHlvdSBoYXZl
-IGFueSBpZGVhIHdoeSBJIGRvbid0IHNlZSB0aGVzZSBlcnJvcnMgaW4gbXkgYnVpbGRzPw0K
-PiANCj4gV2VsbCwgSSBndWVzcywgdGhlcmUgYXJlIHZhcmlvdXMgS0NPTkZJRyBzeW1ib2xz
-IGluZmx1ZW5jaW5nIHRoYXQgd2hvbGUgc3RvcnkuIEhvdyBhYm91dCBlLmcuDQo+IA0KPiBp
-bml0L0tjb25maWc6Y29uZmlnIE1PRFVMRV9BTExPV19NSVNTSU5HX05BTUVTUEFDRV9JTVBP
-UlRTDQoNClRoYW5rcyBmb3IgdGhlIGhpbnQuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoN
-Cj4gDQo+PiBCZXN0IHJlZ2FyZHMNCj4+IFRob21hcw0KPiANCj4gQ2hlZXJzDQo+IA0KPiBN
-YXJjZWwNCj4gDQo+Pj4gKw0KPj4+ICDCoCAvKioNCj4+PiAgwqDCoCAqIERPQzogY21hIGhl
-bHBlcnMNCj4+PiAgwqDCoCAqDQo+Pj4NCj4+DQo+PiAtLSANCj4+IFRob21hcyBaaW1tZXJt
-YW5uDQo+PiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3YXJlIFNv
-bHV0aW9ucyBHZXJtYW55IEdtYkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
-ZywgR2VybWFueQ0KPj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2VzY2jDpGZ0
-c2bDvGhyZXI6IEZlbGl4IEltZW5kw7ZyZmZlcg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVy
-bWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlv
-bnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1h
-bnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBGZWxp
-eCBJbWVuZMO2cmZmZXINCg==
+platform  | arch | lab          | compiler | defconfig          | regressio=
+ns
+----------+------+--------------+----------+--------------------+----------=
+--
+beagle-xm | arm  | lab-baylibre | clang-13 | multi_v7_defconfig | 1        =
+  =
 
---------------YoNzEKjaCWljAM4gZ7Iwc0LE--
 
---------------mErstqRuzD08suBMKdvgcL6H
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+211028/plan/baseline/
 
------BEGIN PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20211028
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      503f375baa99edff894eb1a534d2ac0b4f799573 =
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF67+cFAwAAAAAACgkQlh/E3EQov+CR
-Dw/8C0RXo97a70QQN2Xt9ROWfK+aE3antAURtxdLdXbKyjjeXlywMzzpTjkjID8YOS/cIwz5rU7h
-sswYnkEGzKLgwMdwVHU51R0cKG4Wrvgz6nB/3zkSlt0yZJv5PY0GkX2oZ842lcYcC4FyDc/grjc4
-1ntK3vORuWF/NnEk/VPqU1JlX1gf45b6OHEIhovgfAjnWdoOeD1cB6XNMxyOH2rXvgCqzDUT0lIa
-XtzKlPKrG0AP2J1DWDgDyOJGeyMQeDz46p2ud3+2a1VnLFCz8493flBZwtv5CRQdloZ12dLMdWBe
-OepG2BKbgbemJpmpgKVJAhc3mipvLlSuWPuaO9kP9dxhsxQPrrCMcKX8Wr3/VzQh9pOCCj6cddsI
-mIaSZAFPpJVrkTISCMdOFnpwjBd8YaeVryJv9ahec8TMad+lJA9SIDMcLpQ35w3pOKgnyktS6Mlr
-+tW6F1w8WvmMIBpGIpMd2PDZ0zrHGgrDwTyxdqLd7fL7v60xS44SaTftpYB//VtIW5o26Nfs8tco
-DeKpDm5JP84utCDt/a/KMRnfZ5iDpJaQFn+WWeBeGxgH573aW9Qg9b3EcqHYn4u6FfP4SM3+00AA
-8YtOM70ZXJejvrBBdGU9ILA0zfyrnhz04I9dBAWZ4u+lhjCx31MjHafcl66wS0AEC2xilUYQhYpC
-KsQ=
-=L9Du
------END PGP SIGNATURE-----
 
---------------mErstqRuzD08suBMKdvgcL6H--
+
+Test Regressions
+---------------- =
+
+
+
+platform  | arch | lab          | compiler | defconfig          | regressio=
+ns
+----------+------+--------------+----------+--------------------+----------=
+--
+beagle-xm | arm  | lab-baylibre | clang-13 | multi_v7_defconfig | 1        =
+  =
+
+
+  Details:     https://kernelci.org/test/plan/id/617ab93d2bcec0d86133592b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211023125221+73dae=
+b3d507f-1~exp1~20211023125744.17)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211028/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211028/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/617ab93e2bcec0d861335=
+92c
+        failing since 1 day (last pass: next-20211026, first fail: next-202=
+11027) =
+
+ =20

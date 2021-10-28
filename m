@@ -2,108 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8AE43E9DD
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B146943E9F8
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 23:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbhJ1Uu1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 16:50:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230451AbhJ1UuZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 16:50:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3588D60F21;
-        Thu, 28 Oct 2021 20:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635454078;
-        bh=QIIErr9k/GQ8cPnA4NVe5+CaffoR9OvTQo8rGLm1sGY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fyCHgBKRLWVUiE7jSBydUg2K5TvD7NRO2xtSrG9BOGKjyGkvnVFUPekPQ9kBvqcU9
-         uAd4vG+FZ9sZFYEt+di/4wC7U4RsxhdmFJ9FVX6hchKmjCf4ba6ked5MLI0S76Wtje
-         S4sAvfP2kCfIs/v5Y2Pt2gtLjvtYsLI2wY2xCtQ/mYNvRqSkaY7C08uFAc+TuF2G7X
-         OnSfuz6FoHMXF9giGvL3RZijUjIN7BfY9ofuzF55Ei+Yapbc1yO6/WxIRlmoR4ImwP
-         LHfIc5oHs6ck0Cn9k5Ai5cAthno++jwv8rElte0uKT6sGrDUqkRPg3P6cj0maPUraq
-         H/5JO/h9LwilA==
-Date:   Thu, 28 Oct 2021 15:47:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        id S231313AbhJ1VIZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 17:08:25 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46250 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231282AbhJ1VIY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 17:08:24 -0400
+Received: from localhost (unknown [IPv6:2804:14c:124:8a08::1002])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: krisman)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 138A01F4554B;
+        Thu, 28 Oct 2021 22:05:54 +0100 (BST)
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-Message-ID: <20211028204756.GA293663@bhelgaas>
+Subject: Re: linux-next: build warning after merge of the ext3 tree
+Organization: Collabora
+References: <20211028232100.03d394fd@canb.auug.org.au>
+Date:   Thu, 28 Oct 2021 18:05:49 -0300
+In-Reply-To: <20211028232100.03d394fd@canb.auug.org.au> (Stephen Rothwell's
+        message of "Thu, 28 Oct 2021 23:21:00 +1100")
+Message-ID: <87y26camhe.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > >
-> > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > drivers become modules.
-> > > > >
-> > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > >
-> > > > > Let's just export them.
-> > > > >
-> > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > ---
-> > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > >  2 files changed, 6 insertions(+)
-> > > > >
-> > > >
-> > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > >
-> > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > all MIPS specific stuff for just making an essential driver modular
-> > > doesn't IMHO make much sense.
-> >
-> > The driver is modular because I have been advised other times that new
-> > drivers should be able to be compiled as modules and we should avoid
-> > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > also always including as 'y' the driver since for me not having pci in
-> > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > instead of 'tristate', but I don't know what should be the correct
-> > thing to do in this case. Thoughts?
-> 
-> I guess we also want the driver to at least be compile tested in
-> 'allmodconfig' and other similars...
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Sounds like the systems that actually use this driver require it to be
-built-in, and the only benefit of exporting these symbols is that we
-would get better compile test coverage.
+> Hi all,
+>
+> After merging the ext3 tree, today's linux-next build (htmldocs) produced
+> this warning:
+>
+> Documentation/admin-guide/filesystem-monitoring.rst:60: WARNING: Definition list ends without a blank line; unexpected unindent.
+>
+> Introduced by commit
+>
+>   c0baf9ac0b05 ("docs: Document the FAN_FS_ERROR event")
 
-If that's the case, I agree that it's better to just make it
-non-modular.
+Hi Stephen, Jan,
 
-Bjorn
+I'd suggest the patch below.
+
+Thank you,
+
+-- >8 --
+From: Gabriel Krisman Bertazi <krisman@collabora.com>
+Date: Thu, 28 Oct 2021 17:17:47 -0300
+Subject: [PATCH] docs: Fix formatting of literal sections in fanotify docs
+
+Stephen Rothwell reported the following warning was introduced by commit
+c0baf9ac0b05 ("docs: Document the FAN_FS_ERROR event").
+
+Documentation/admin-guide/filesystem-monitoring.rst:60: WARNING:
+ Definition list ends without a blank line; unexpected unindent.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+---
+ .../admin-guide/filesystem-monitoring.rst     | 20 +++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/Documentation/admin-guide/filesystem-monitoring.rst b/Documentation/admin-guide/filesystem-monitoring.rst
+index 5a3c84e60095..ab8dba76283c 100644
+--- a/Documentation/admin-guide/filesystem-monitoring.rst
++++ b/Documentation/admin-guide/filesystem-monitoring.rst
+@@ -35,9 +35,11 @@ notifications is Ext4.
+ 
+ A FAN_FS_ERROR Notification has the following format::
+ 
+-  [ Notification Metadata (Mandatory) ]
+-  [ Generic Error Record  (Mandatory) ]
+-  [ FID record            (Mandatory) ]
++  ::
++
++     [ Notification Metadata (Mandatory) ]
++     [ Generic Error Record  (Mandatory) ]
++     [ FID record            (Mandatory) ]
+ 
+ The order of records is not guaranteed, and new records might be added
+ in the future.  Therefore, applications must not rely on the order and
+@@ -53,11 +55,13 @@ providing any additional details about the problem.  This record is
+ identified by ``struct fanotify_event_info_header.info_type`` being set
+ to FAN_EVENT_INFO_TYPE_ERROR.
+ 
+-  struct fanotify_event_info_error {
+-	struct fanotify_event_info_header hdr;
+-	__s32 error;
+-	__u32 error_count;
+-  };
++  ::
++
++     struct fanotify_event_info_error {
++          struct fanotify_event_info_header hdr;
++         __s32 error;
++         __u32 error_count;
++     };
+ 
+ The `error` field identifies the type of error using errno values.
+ `error_count` tracks the number of errors that occurred and were
+-- 
+2.33.0
+

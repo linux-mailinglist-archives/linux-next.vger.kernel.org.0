@@ -2,107 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3373E43DDEC
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 11:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD7143DDAF
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 11:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbhJ1Jpe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Thu, 28 Oct 2021 05:45:34 -0400
-Received: from mga17.intel.com ([192.55.52.151]:59538 "EHLO mga17.intel.com"
+        id S230071AbhJ1J0v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 05:26:51 -0400
+Received: from elvis.franken.de ([193.175.24.41]:45139 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229626AbhJ1Jpe (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 05:45:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="211137786"
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="211137786"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 02:16:54 -0700
-X-IronPort-AV: E=Sophos;i="5.87,189,1631602800"; 
-   d="scan'208";a="487056454"
-Received: from djustese-mobl.ger.corp.intel.com (HELO localhost) ([10.249.254.12])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 02:16:51 -0700
-Content-Type: text/plain; charset="utf-8"
+        id S229626AbhJ1J0v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 28 Oct 2021 05:26:51 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mg1dv-0002j1-00; Thu, 28 Oct 2021 11:24:15 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id ED26FC2770; Thu, 28 Oct 2021 11:23:18 +0200 (CEST)
+Date:   Thu, 28 Oct 2021 11:23:18 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Yanteng Si <siyanteng01@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
+ able to use them from driver code
+Message-ID: <20211028092318.GA6574@alpha.franken.de>
+References: <cover.1635390750.git.siyanteng@loongson.cn>
+ <112fea0c8c1b65a762ac98412216239160721263.1635390750.git.siyanteng@loongson.cn>
+ <CAMhs-H9LUQ6Km=sA992LH=+E0MbGuMf9YhM6w2HoyeqE0QbzJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20211028075155.02825f86@canb.auug.org.au>
-References: <20210122115918.63b56fa1@canb.auug.org.au> <CAKMK7uEuJa1J66mo5dS+QRPy9NOENTx95SZ4rU2MeVRTWj7Kcw@mail.gmail.com> <20210122182946.6beb10b7@canb.auug.org.au> <CAKMK7uFWFVC0be2foiP8+2=vrqyh1e4mqkuk+2xY+fgSWAExyQ@mail.gmail.com> <163533676481.68716.4009950051571709814@jlahtine-mobl.ger.corp.intel.com> <20211028075155.02825f86@canb.auug.org.au>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Cc:     "Nikula, Jani" <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <163541260904.5162.14679444275127334752@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date:   Thu, 28 Oct 2021 12:16:49 +0300
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMhs-H9LUQ6Km=sA992LH=+E0MbGuMf9YhM6w2HoyeqE0QbzJQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Quoting Stephen Rothwell (2021-10-27 23:51:55)
-> Hi Joonas,
-> 
-> On Wed, 27 Oct 2021 15:12:44 +0300 Joonas Lahtinen <joonas.lahtinen@linux.intel.com> wrote:
+On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
+> On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
 > >
-> > We should be now good to go and add drm-intel-gt-next to linux-next.
-> > 
-> > The branch would be as follows:
-> > 
-> > drm-intel-gt-next     git://anongit.freedesktop.org/drm-intel for-linux-next-gt
-> > 
-> > Notice the "-gt" and the end of the for-linux-next branch name. This should eliminate
-> > the gap we have been having.
+> > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+> > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
+> > drivers become modules.
+> >
+> > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> >
+> > Let's just export them.
+> >
+> > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> > ---
+> >  arch/mips/kernel/mips-cm.c  | 5 +++++
+> >  arch/mips/kernel/mips-cpc.c | 1 +
+> >  2 files changed, 6 insertions(+)
+> >
 > 
-> I have added it to linux-next from today.
+> Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Thanks!
+could we instead make the pcie-mt761 driver non modular ? Exporting
+all MIPS specific stuff for just making an essential driver modular
+doesn't IMHO make much sense.
 
-> I called it just
-> "drm-intel-gt" for consistency with the other drm trees in linux-next.
+Thomas.
 
-We use the drm-intel-gt-next as the branch name in repo and DIM tolling, so if
-we are after consistenty consistency, using the full name probably makes
-sense. drm-intel-gt-next for name keeps open the option for separating
-the drm-intel-gt-fixes too, if we decide to do so in the future.
-
-> Currently I just have you listed as a contact, is there anyone else (or
-> a list) that I should add?
-
-Please do add Tvrtko (Cc'd). I guess it might make sense adding Jani and
-Rodrigo too, as backups. Similarly Tvrtko could be added to the other
-drm-intel-* trees. Doesn't hurt to have more eyes especially if some
-folks are on a vacation.
-
-Regards, Joonas
-
-> Thanks for adding your subsystem tree as a participant of linux-next.  As
-> you may know, this is not a judgement of your code.  The purpose of
-> linux-next is for integration testing and to lower the impact of
-> conflicts between subsystems in the next merge window. 
-> 
-> You will need to ensure that the patches/commits in your tree/series have
-> been:
->      * submitted under GPL v2 (or later) and include the Contributor's
->         Signed-off-by,
->      * posted to the relevant mailing list,
->      * reviewed by you (or another maintainer of your subsystem tree),
->      * successfully unit tested, and 
->      * destined for the current or next Linux merge window.
-> 
-> Basically, this should be just what you would send to Linus (or ask him
-> to fetch).  It is allowed to be rebased if you deem it necessary.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell 
-> sfr@canb.auug.org.au
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

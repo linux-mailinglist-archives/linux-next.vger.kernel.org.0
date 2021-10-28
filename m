@@ -2,111 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5E243DBA1
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 09:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DCC43DBFC
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 09:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbhJ1HGC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 03:06:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48844 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229626AbhJ1HGC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 03:06:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6707160FF2;
-        Thu, 28 Oct 2021 07:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635404615;
-        bh=86u9JaFjx1bbI+cakk6gCSU7N3ac0DZfd5iIvtQn9T4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CaHOKMYkUuGT9nrJwKqIOyJK+o/+MlD1QlKOqjx4IgSCKgIlYo7+fy2AdcK7UaRMt
-         xpq2MObON9CuAhoCr3hZyjXvKzCjEMrnwFssTRE8EwePYQK2Ug8k6n3GvUiT/VNagr
-         yEH0tvWZIkAX510CYiPkgjADkFLvGESNuCA1LjWqFaB6qJ+p5RGKU3opyKOUFwqCfJ
-         jLvAxcT1fUQnEaHXUDnQkhYI1A07i9R6XZ+smh4jG6bLsMPOWCm6Qk4svHE1xrhQPA
-         ThP28IX+rKv8Ze4twvy7VdDldDkY4HgEcKduTykp6yq0zXnLPRxOogeXiHqx0HTmLe
-         OeWb2Me65fTAQ==
-Date:   Thu, 28 Oct 2021 08:03:31 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joey Gouly <joey.gouly@arm.com>,
+        id S229868AbhJ1Ha0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 03:30:26 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56363 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhJ1HaZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 03:30:25 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hfxwp5Hh5z4xYy;
+        Thu, 28 Oct 2021 18:27:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635406077;
+        bh=Qcv0WIWBqgF7S3Hx8WF1gQA6e3vrfumd7O64F1UC2XU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dteowK2iy6rMIyEGowhklT5fLwvmRbh3E/otbGJ68i/5MHgwMXUCkwq7IDT8J6Pjj
+         khzcJOW9FDVdxT9s7f0DpcZyfd267CrcAbIarL0nImIYlpTAVXXVo7k081S8d7X24w
+         65bl+38Yag7DfqvLZRGZgB41tEWzU8D3+M6tGmIyddIO+GdTHpaUXLDWH2nF67YBS4
+         pg/vuZAOjiZ1/yVAt7Owjh9WBcJCILnUPrUZTdVw4Tqhra2itSe2NgxcbMmD1UR0FW
+         seh6DVyaCZd1z64nsI8Ta3c2BT5o9Agx80kgHgztPtfxhR79VtjK6zA0r17pvNwFqU
+         EKPB9ukJwQjAg==
+Date:   Thu, 28 Oct 2021 18:27:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
-Message-ID: <20211028080331.6d199082@sal.lan>
-In-Reply-To: <874k92bu4q.wl-maz@kernel.org>
-References: <20211027220118.71a229ab@canb.auug.org.au>
-        <874k92bu4q.wl-maz@kernel.org>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>
+Subject: linux-next: manual merge of the char-misc tree with the drm-intel
+ tree
+Message-ID: <20211028182753.56b6a174@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/ZxH8PJt7z=AaYJvoJhDlVz7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Wed, 27 Oct 2021 12:10:45 +0100
-Marc Zyngier <maz@kernel.org> escreveu:
+--Sig_/ZxH8PJt7z=AaYJvoJhDlVz7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Wed, 27 Oct 2021 12:01:18 +0100,
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> > Hi all,
-> > 
-> > After merging the pinctrl tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> > 
-> > include/linux/gpio/driver.h:284: warning: Function parameter or member 'parent_handler_data_array' not described in 'gpio_irq_chip'
-> > 
-> > Introduced by commit
-> > 
-> >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
-> > 
-> > But may actually be a problem with the tool :-(  
-> 
-> I guess the tool doesn't like having two fields that are part of a
-> union documented together... Happy to tweak it if someone tells me how
-> this should be written.
+Hi all,
 
-Yes, that's the case. See, when you do:
+Today's linux-next merge of the char-misc tree got a conflict in:
 
-	/**
-	 * @parent_handler_data:
-	 * @parent_handler_data_array:
-	 *
-	 * Data associated, and passed to, the handler for the parent
-	 * interrupt. Can either be a single pointer if @per_parent_data
-	 * is false, or an array of @num_parents pointers otherwise.  If
-	 * @per_parent_data is true, @parent_handler_data_array cannot be
-	 * NULL.
-	 */
-	union {
-		void *parent_handler_data;
-		void **parent_handler_data_array;
-	};
+  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
 
-The tool will understand it as an undocumented "parent_handler_data" and
-a documented "parent_handler_data_array".
+between commit:
 
-It has to do that, as otherwise it won't get cases where people just adds a
-@foo: as a template but actually forgets to fill it.
+  5740211ea442 ("drm/i915/dmabuf: fix broken build")
 
-The solution would be to add a description for both, e. g. something
-similar to:
+from the drm-intel tree and commit:
 
-	/**
-	 * @parent_handler_data:
-	 *
-	 * If @per_parent_data is false, contains a single pointer 
-	 * with the data associated, and passed to, the handler for the 
-	 * parent interrupt.
-	 *
-	 * @parent_handler_data_array:
-	 *
-	 * If @per_parent_data is true, it should contain an array of 
-	 * @num_parents pointers with the data associated, and passed to,
-	 * the handler for the parent interrupt. Cannot be NULL.
-	 */
+  16b0314aa746 ("dma-buf: move dma-buf symbols into the DMA_BUF module name=
+space")
 
-Regards,
-Mauro
+from the char-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+index a45d0ec2c5b6,abb854281347..000000000000
+--- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
+@@@ -12,13 -13,8 +13,15 @@@
+  #include "i915_gem_object.h"
+  #include "i915_scatterlist.h"
+ =20
+ +#if defined(CONFIG_X86)
+ +#include <asm/smp.h>
+ +#else
+ +#define wbinvd_on_all_cpus() \
+ +	pr_warn(DRIVER_NAME ": Missing cache flush in %s\n", __func__)
+ +#endif
+ +
++ MODULE_IMPORT_NS(DMA_BUF);
++=20
+  I915_SELFTEST_DECLARE(static bool force_different_devices;)
+ =20
+  static struct drm_i915_gem_object *dma_buf_to_obj(struct dma_buf *buf)
+
+--Sig_/ZxH8PJt7z=AaYJvoJhDlVz7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF6UPkACgkQAVBC80lX
+0GzRngf/eUNxuO7M1M1QXanRfCOH/GCb3ybr/TsDwmInoK3A3IJQe3/Btjt5lbUE
+uh+KLTNNclL/Wk+batwFzkuNjjswFkkEGNVUjK4DEJkOKzKmPgl8LQ/BjpbGF+fv
+OnHbqb6Zj3DYyP0aWxkicTas83i2gK2DEbMfvTTRWI5S5pExoXc60Mhc3MsgGcPE
+xekDfHCTWEjzU4XzRLQeTgTCOj9n8s5b242gjc0wZizoP2L1y3lUab+2QauYxroL
+IVVegaFuTTZEuriepSs1jtFnYlyzFD57jS1AKi+hi/QU0EBJU4DhezFxw7p+AMil
+EIiCJ8jZZsCSPk59brKDGG46KQ7EIw==
+=as+o
+-----END PGP SIGNATURE-----
+
+--Sig_/ZxH8PJt7z=AaYJvoJhDlVz7--

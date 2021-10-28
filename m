@@ -2,88 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCF443DCDE
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 10:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD44843DCED
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 10:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbhJ1ITk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 04:19:40 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:47946 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhJ1ITk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 04:19:40 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        id S229808AbhJ1IcH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 04:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhJ1IcG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 04:32:06 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B5BC061745;
+        Thu, 28 Oct 2021 01:29:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 211432177B;
-        Thu, 28 Oct 2021 08:17:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1635409033; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqdN6Yjfc0XO6AHhq0eQB4f4yiJINc5vCkKCiBekK2M=;
-        b=NgbGwfcr7oyJW7XwZ6TcRjr0SKAHialJKfeXWxWb6kmsx8zY6B+hXCxgILiQssu9G8KVxx
-        MSqODr51OJ2U41JEKshfU/hMeWEwk17EFYkCcfEFiyb1/I2W3cwA+LSJx92M8tAcJ8jGkg
-        wLAi7rUkQdfiAQbdbqngjA2m4avMU0k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1635409033;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqdN6Yjfc0XO6AHhq0eQB4f4yiJINc5vCkKCiBekK2M=;
-        b=XFBH3OHzK02GTqiMsYUPCMkwMUyAgNBwDdJ8soiJb7xH/nlmoSFp+zyuHa6cALbyWqRFh4
-        H0ij0Izb7tpZ/pCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 109AA139BE;
-        Thu, 28 Oct 2021 08:17:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id V2YJBIlcemGVMwAAMHmgww
-        (envelope-from <bp@suse.de>); Thu, 28 Oct 2021 08:17:13 +0000
-Date:   Thu, 28 Oct 2021 10:17:06 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <YXpcgoGzF4Sh3qs3@zn.tnic>
-References: <20211025151144.552c60ca@canb.auug.org.au>
- <20211028161058.39c0d199@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfzJ01H0fz4xcC;
+        Thu, 28 Oct 2021 19:29:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1635409777;
+        bh=X4uCS05x0BzlU2reBiuh8ykPwQkXGQAAbY+K+IifiSI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XR7XhmZ+7HCFRY/IO6tnCUMJbT2Pi13eORSgGN0/eK9lGQJzn9PAFckjqc5krfBH/
+         ofT4jFtjdO/1dgu4599n9kFi1yJs21noy3F9EL1iQLbw0xtFJn0yYXotfafAUetZOP
+         5+yIhklU/MKzi0j1fJONIsJzfWgpS2knQgcGrt57bCUT17bhDuJClwZWD1sHVMejNv
+         GP6I1D7gkXhBSKYT4/+bcmHRVNgVxMu0xV1OK+1zpkZg7TVxUK4scRV68MVRz2/p9C
+         Tg8aO0SIQrTkB/Xq60TfkzG0BxG3BALEpKHHmhj4Z/lfedto0kayj9Skv/IRQCGhHW
+         MR2gBMpf4RnLQ==
+Date:   Thu, 28 Oct 2021 19:29:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>
+Subject: linux-next: manual merge of the kspp tree with the
+ wireless-drivers-next tree
+Message-ID: <20211028192934.01520d7e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211028161058.39c0d199@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/DOZuLkFxk_X_y2D5FQRhN18";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/DOZuLkFxk_X_y2D5FQRhN18
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 28, 2021 at 04:10:58PM +1100, Stephen Rothwell wrote:
-> This build failure has returned today :-(
+Hi all,
 
-Sorry about that.
+Today's linux-next merge of the kspp tree got a conflict in:
 
-I had the original patch updated but then it is very possible I
-fat-fingered the branch during the patch frenzy in the past days here.
+  drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
 
-Now I've applied yours because it happening a second time simply
-warrants having this as a separate patch.
+between commit:
 
-Thx.
+  dc52fac37c87 ("iwlwifi: mvm: Support new TX_RSP and COMPRESSED_BA_RES ver=
+sions")
 
--- 
-Regards/Gruss,
-    Boris.
+from the wireless-drivers-next tree and commit:
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+  fa7845cfd53f ("treewide: Replace open-coded flex arrays in unions")
+
+from the kspp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+index 9b3bce83efb6,5fddfd391941..000000000000
+--- a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
++++ b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+@@@ -720,10 -715,11 +722,12 @@@ struct iwl_mvm_compressed_ba_notif=20
+  	__le32 tx_rate;
+  	__le16 tfd_cnt;
+  	__le16 ra_tid_cnt;
+- 	struct iwl_mvm_compressed_ba_ratid ra_tid[0];
+- 	struct iwl_mvm_compressed_ba_tfd tfd[];
++ 	union {
++ 		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_ratid, ra_tid);
++ 		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_tfd, tfd);
++ 	};
+ -} __packed; /* COMPRESSED_BA_RES_API_S_VER_4 */
+ +} __packed; /* COMPRESSED_BA_RES_API_S_VER_4,
+ +	       COMPRESSED_BA_RES_API_S_VER_5 */
+ =20
+  /**
+   * struct iwl_mac_beacon_cmd_v6 - beacon template command
+
+--Sig_/DOZuLkFxk_X_y2D5FQRhN18
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF6X24ACgkQAVBC80lX
+0GxeDgf/T3r+U+CZjL9KlT19vbpSRLwiT8w+XGLe0g66wEreQRWCqtU5mJMvtAND
+DoXEYjGVrSRF358gzMYbbubrHD8l55lT0z9LxB0Ug7m4H5ilrpg2huufzPL2C8ul
+H33zGMNoElTG5/bYih+1k5oeupOHqDMW4zEkbqb+BZc+M5VJ3xSFQ1lc3c+f6/aK
+SRjoFU76ykMIeNjx/WulA8rGPRWjVnr7aRuBEROt1dI9HBwa61Ae5uGB2TTd+uFs
+qFAn7LvgnzaHt5WfpLWBLwrv9vgsJ5kyuOjiFjJHcdjOsbZBfFZgDtuR3koYh/kX
+kj7oydHy4sDNLswqYguxsvZ6898XFA==
+=Di/1
+-----END PGP SIGNATURE-----
+
+--Sig_/DOZuLkFxk_X_y2D5FQRhN18--

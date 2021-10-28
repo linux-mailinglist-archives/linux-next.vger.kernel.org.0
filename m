@@ -2,139 +2,172 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF01243DAA8
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 07:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4238743DAC0
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 07:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhJ1FNc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 01:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbhJ1FNa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 01:13:30 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05CEC061570;
-        Wed, 27 Oct 2021 22:11:03 -0700 (PDT)
+        id S229801AbhJ1Fdm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 01:33:42 -0400
+Received: from gandalf.ozlabs.org ([150.107.74.76]:42611 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229805AbhJ1Fdm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 01:33:42 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hfttr1QpYz4xcB;
-        Thu, 28 Oct 2021 16:10:59 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HfvL93mtCz4xcB;
+        Thu, 28 Oct 2021 16:31:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635397862;
-        bh=iCeoh5MOSFMdmwhKeYS0ibGllhX3aH3QzBQP6pzBhoY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J40O6eeaqN/OLSIGCrxOy1Mp/ylZen6N38yLptDiF2A4nYKMRUmV8ztC5ngsGp1Wv
-         7NptxToKeieodjXsm4WY5HMmLfR9dlR8BXAyqkg3v39eugMxI8Dinmy/uDJvXSC0d5
-         Na2bxVqS8WJfr1uq/G+pYGSoH93vDAyX/K6mrmXYdEaZwzYP5GnPFF2KIA4Yo+jidR
-         5RxM8kaKxBRCAVCO/FsoIks+eedBfaZInNNyE5UsnmJFUnFZBVZEoJ+ImCn3de1zpz
-         imWq4bVDU2Yjc47f4yqq0IwpTmbwJ1XS7N3roEVo4BNJWu8r+YZPu6FP1eMrl/M4e9
-         AEd+oMj5jUN6g==
-Date:   Thu, 28 Oct 2021 16:10:58 +1100
+        s=201702; t=1635399074;
+        bh=yZYawobkENgE1I6+jbr9EHc4+oOEH0e5xwvS7zwmPN4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ICwfpShRpKUMOuJWW7S8O9/8i30LEsKIUcvqSVhyuE8ib8TQnMjJ8C2yLofXDKjkc
+         p1JlnRFGpC/oDCpeq6eoGAVrUYciFN6nQy011+hfWqDka6EcrwvuI6hP1Uz116YnE5
+         Sb48/S8qtL+ftsDSvOBHGYKt6MsGWYUfdq0WyHbuOiiFCRN8ziuxV8m0D8dlL6/X1V
+         sVTKKlUHaEJJTYa4Qe8ujGCmT/zvE3W8A90g/nARCryvlkggvqIthR9HJnDyxkgaq/
+         NGVUb/+eeriDllDdsBTsfRJ0rQlhS1R4TVAPgMDPKU7cURptlvr/fyqC5PZuuYTYN7
+         r3f+PgZZfUaSw==
+Date:   Thu, 28 Oct 2021 16:31:11 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20211028161058.39c0d199@canb.auug.org.au>
-In-Reply-To: <20211025151144.552c60ca@canb.auug.org.au>
-References: <20211025151144.552c60ca@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Wang <yun.wang@linux.alibaba.com>
+Subject: linux-next: manual merge of the ftrace tree with Linus' tree
+Message-ID: <20211028163111.7f09f7eb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+ji0ctx9r/azHz.0qUscCCJ";
+Content-Type: multipart/signed; boundary="Sig_/VLiZnhr=XxBCyJ44NH/xjlb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+ji0ctx9r/azHz.0qUscCCJ
+--Sig_/VLiZnhr=XxBCyJ44NH/xjlb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 25 Oct 2021 15:11:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->=20
-> arch/x86/kernel/fpu/core.c: In function 'fpu_alloc_guest_fpstate':
-> arch/x86/kernel/fpu/core.c:187:12: error: implicit declaration of functio=
-n 'vzalloc'; did you mean 'kzalloc'? [-Werror=3Dimplicit-function-declarati=
-on]
->   187 |  fpstate =3D vzalloc(size);
->       |            ^~~~~~~
->       |            kzalloc
-> arch/x86/kernel/fpu/core.c:187:10: error: assignment to 'struct fpstate *=
-' from 'int' makes pointer from integer without a cast [-Werror=3Dint-conve=
-rsion]
->   187 |  fpstate =3D vzalloc(size);
->       |          ^
-> arch/x86/kernel/fpu/core.c: In function 'fpu_free_guest_fpstate':
-> arch/x86/kernel/fpu/core.c:212:2: error: implicit declaration of function=
- 'vfree'; did you mean 'kfree'? [-Werror=3Dimplicit-function-declaration]
->   212 |  vfree(fps);
->       |  ^~~~~
->       |  kfree
-> cc1: all warnings being treated as errors
->=20
-> Caused by commit
->=20
->   69f6ed1d14c6 ("x86/fpu: Provide infrastructure for KVM FPU cleanup")
->=20
-> I have applied the following patch for today (because it was quicker
-> than using the tip tree from next-20211022).
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 25 Oct 2021 15:04:13 +1100
-> Subject: [PATCH] x86/fpu: include vmalloc.h for vzalloc etc
->=20
-> Fixes: 69f6ed1d14c6 ("x86/fpu: Provide infrastructure for KVM FPU cleanup=
-")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/x86/kernel/fpu/core.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index 9c475e2efd4d..c55013fc82ab 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -16,6 +16,7 @@
-> =20
->  #include <linux/hardirq.h>
->  #include <linux/pkeys.h>
-> +#include <linux/vmalloc.h>
-> =20
->  #include "context.h"
->  #include "internal.h"
-> --=20
-> 2.33.0
+Today's linux-next merge of the ftrace tree got conflicts in:
 
-This build failure has returned today :-(
+  include/linux/trace_recursion.h
+  kernel/trace/ftrace.c
+
+between commit:
+
+  ed65df63a39a ("tracing: Have all levels of checks prevent recursion")
+
+from Linus' tree and commit:
+
+  ce5e48036c9e ("ftrace: disable preemption when recursion locked")
+
+from the ftrace tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+ji0ctx9r/azHz.0qUscCCJ
+diff --cc include/linux/trace_recursion.h
+index fe95f0922526,a13f23b04d73..000000000000
+--- a/include/linux/trace_recursion.h
++++ b/include/linux/trace_recursion.h
+@@@ -139,8 -155,11 +135,11 @@@ extern void ftrace_record_recursion(uns
+  # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
+  #endif
+ =20
++ /*
++  * Preemption is promised to be disabled when return bit >=3D 0.
++  */
+  static __always_inline int trace_test_and_set_recursion(unsigned long ip,=
+ unsigned long pip,
+ -							int start, int max)
+ +							int start)
+  {
+  	unsigned int val =3D READ_ONCE(current->trace_recursion);
+  	int bit;
+@@@ -148,10 -167,18 +147,14 @@@
+  	bit =3D trace_get_context_bit() + start;
+  	if (unlikely(val & (1 << bit))) {
+  		/*
+- 		 * It could be that preempt_count has not been updated during
+- 		 * a switch between contexts. Allow for a single recursion.
++ 		 * If an interrupt occurs during a trace, and another trace
++ 		 * happens in that interrupt but before the preempt_count is
++ 		 * updated to reflect the new interrupt context, then this
++ 		 * will think a recursion occurred, and the event will be dropped.
++ 		 * Let a single instance happen via the TRANSITION_BIT to
++ 		 * not drop those events.
+  		 */
+ -		bit =3D TRACE_TRANSITION_BIT;
+ +		bit =3D TRACE_CTX_TRANSITION + start;
+  		if (val & (1 << bit)) {
+  			do_ftrace_record_recursion(ip, pip);
+  			return -1;
+@@@ -162,12 -192,22 +165,18 @@@
+  	current->trace_recursion =3D val;
+  	barrier();
+ =20
++ 	preempt_disable_notrace();
++=20
+ -	return bit + 1;
+ +	return bit;
+  }
+ =20
++ /*
++  * Preemption will be enabled (if it was previously enabled).
++  */
+  static __always_inline void trace_clear_recursion(int bit)
+  {
+ -	if (!bit)
+ -		return;
+ -
++ 	preempt_enable_notrace();
+  	barrier();
+ -	bit--;
+  	trace_recursion_clear(bit);
+  }
+ =20
+diff --cc kernel/trace/ftrace.c
+index 635fbdc9d589,b4ed1a301232..000000000000
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@@ -6977,7 -7198,12 +7198,12 @@@ __ftrace_ops_list_func(unsigned long ip
+  	struct ftrace_ops *op;
+  	int bit;
+ =20
++ 	/*
++ 	 * The ftrace_test_and_set_recursion() will disable preemption,
++ 	 * which is required since some of the ops may be dynamically
++ 	 * allocated, they must be freed after a synchronize_rcu().
++ 	 */
+ -	bit =3D trace_test_and_set_recursion(ip, parent_ip, TRACE_LIST_START, TR=
+ACE_LIST_MAX);
+ +	bit =3D trace_test_and_set_recursion(ip, parent_ip, TRACE_LIST_START);
+  	if (bit < 0)
+  		return;
+ =20
+
+--Sig_/VLiZnhr=XxBCyJ44NH/xjlb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF6MOIACgkQAVBC80lX
-0GzTAgf+Jckqrmc7Nh3L5M5lGLWfU4oKuwZsH/6A9KwF2NYdxVLtJdvT1nTu2GCa
-ZonWuoC0j92bkHtnRLQyMtWElqJ6bTwpB8kLro9HOT3Y7uoiMFOVDaKFva0kgGz0
-Fa7yRnPmuTBs1onBgw7KF/cc+BOO75z5qvC5dc+SQAK/tK/Wqc7ihg8mHnKL5RHW
-9HqoaXHdH2EJRA/V2xG9kiyJTaHOm3FWORfaU6E+2MFhDuWQG2QkkTqa1cAj/EMf
-WsExOCPm5L0++c/WjxvlFtOCRB5FRbEJp4lXuLDeV+LFG3i0sxUxi0eI0x8xgAE9
-YwvJc9keManUTfdXsS7JiZtY/zjZ3g==
-=kkli
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF6NZ8ACgkQAVBC80lX
+0GzshQf+LTuy4gpfVTawHLF9u9NZrUR6GTAdKb3Lr+Uf80XcP06rXz6RYntGXKZx
+DCXzGi+q/oz22FnrIjl1WBFxeNLlGYUn6jM189VXszs2xS8VrfgL1Dzul+LPJfrJ
+/s15vRGXM3v9oYX0uYThzsmk63io8bR69m7xtg/km/LMZTPTiQlsa+mqLM+O4+lv
+5ULDWHl3u9dGMrRbE/HSmQMxzn8I1Epa0EOkSEQ6GdQN96mHXJg+JPIBNbM+ow96
+aOD5+9bIXx45GU4eqYyXqNlqPvspWA8j4SRewhB+p5qGinLKC46+W+FB7ScgQNWP
+4hPJSTj4xhcSA30g6ev7ik0qssEZXA==
+=Ro0R
 -----END PGP SIGNATURE-----
 
---Sig_/+ji0ctx9r/azHz.0qUscCCJ--
+--Sig_/VLiZnhr=XxBCyJ44NH/xjlb--

@@ -2,84 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC143E15A
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 14:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4298643E16F
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 14:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbhJ1M5K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 08:57:10 -0400
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:56717 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229946AbhJ1M5K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 08:57:10 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Uu.SxT._1635425680;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0Uu.SxT._1635425680)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 28 Oct 2021 20:54:41 +0800
-Subject: Re: linux-next: Tree for Oct 25
+        id S230179AbhJ1NBc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 09:01:32 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:60252 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229946AbhJ1NBc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 09:01:32 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 39675212C9;
+        Thu, 28 Oct 2021 12:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635425944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MBfQdZfMmLNO0jMthBAt+lb0E0lH+x5RMf8VhWZdRlQ=;
+        b=g26/DtPLkHKqligwE4Tl6Akr83t0quaq0Kt6prTTxFHo5kqkwQBh1rN8rOmRU45B0PWKGA
+        UqLkjvoMX09njD8Tna3fEMJRv9D5uDKrqc3DHLDreFmq80T33PcQf6hnOr78lg/8PaHpga
+        O+xvWKx+QTevnIsrgC4ElJ2kDD8aEas=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635425944;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MBfQdZfMmLNO0jMthBAt+lb0E0lH+x5RMf8VhWZdRlQ=;
+        b=hDbvKlhXA3NQuzRPyypLrxkvDIaDG53YS3C3OrCaKXkwXYcV1lZec3T16PIbCciuB/h3Vm
+        zbj76F+KP64JanCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 28C1C13F14;
+        Thu, 28 Oct 2021 12:59:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iabtCZieemG2cgAAMHmgww
+        (envelope-from <bp@suse.de>); Thu, 28 Oct 2021 12:59:04 +0000
+Date:   Thu, 28 Oct 2021 14:58:59 +0200
+From:   Borislav Petkov <bp@suse.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>
-References: <20211025204921.73cb3011@canb.auug.org.au>
- <20211027224231.1634cc6c@canb.auug.org.au>
- <864bbf0b-e6db-1a97-80f5-a92968a4e086@linux.alibaba.com>
- <20211028155126.0b187410@canb.auug.org.au>
- <8c917fd9-c569-560e-5d6f-e19417f61cdf@linux.alibaba.com>
- <20211028234846.78e715df@canb.auug.org.au>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <cef396ef-373d-6a02-62f2-191c440cec14@linux.alibaba.com>
-Date:   Thu, 28 Oct 2021 20:54:40 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the tip tree
+Message-ID: <YXqekxadmoKZJPW/@zn.tnic>
+References: <20211028232651.31c01c86@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211028234846.78e715df@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211028232651.31c01c86@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Oct 28, 2021 at 11:26:51PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/x86/xstate.rst:15: WARNING: Title underline too short.
+> 
+> Using dynamically enabled XSTATE features in user space applications
+> -------------------------------------------------------------------
+> 
+> Introduced by commit
+> 
+>   93175ec299f8 ("Documentation/x86: Add documentation for using dynamic XSTATE features")
 
-在 2021/10/28 下午8:48, Stephen Rothwell 写道:
-> Hi Xianting,
->
-> On Thu, 28 Oct 2021 15:59:02 +0800 Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
->> 在 2021/10/28 下午12:51, Stephen Rothwell 写道:
->>> Hi Xianting,
->>>
->>> On Thu, 28 Oct 2021 09:51:00 +0800 Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
->>>> 在 2021/10/27 下午7:42, Stephen Rothwell 写道:
->>>>> Hi all,
->>>>>
->>>>> On Mon, 25 Oct 2021 20:49:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>>>> There seems to be something amiss with cnosole output in today's release
->>>>>> (at least on my ppc qemu boot tests).
->>>>> The console output seems to be back today.  I assume its repair had
->>>>> something to do with commit
->>>>>
->>>>>      60f41e848492 ("Revert "tty: hvc: pass DMA capable memory to put_chars()"")
->>>>>    >> hi Stephen，
->>>> Thanks for the info, Could you share more details about the issue you met? is it about early console print issue?
->>>>   
->>> Here is the diff between my boot logs:
->> thanks, I checked the log, Can I understand it as you missed some early bootup log  when use new release?
-> yes, the console messages stopped for a while when we switched from the
-> bootconsole to the final hvc0 console.
-thanks, it makes sense, this commit broken the early console mechanism, 
-I will submit the fix patch for reviewing soon.
->
->>> @@ -124,81 +124,9 @@
->>>     clocksource: timebase mult[1f40000] shift[24] registered
->>>     Console: colour dummy device 80x25
->>>     printk: console [hvc0] enabled
->>> - printk: console [hvc0] enabled
->>> - printk: bootconsole [udbg0] disabled
->>>     printk: bootconsole [udbg0] disabled
->>> - pid_max: default: 32768 minimum: 301
->>> - Mount-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
->>> - Mountpoint-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
-> 	.
-> 	.
-> 	.
+The one time I don't run htmldocs on a documentation patch. ;-\
+
+Thx for reporting, fixed.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

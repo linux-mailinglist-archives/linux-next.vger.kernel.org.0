@@ -2,209 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8E343DC92
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 09:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCF443DCDE
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 10:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbhJ1IBe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 04:01:34 -0400
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:43471 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229640AbhJ1IBc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 04:01:32 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UtytliC_1635407943;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0UtytliC_1635407943)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 28 Oct 2021 15:59:03 +0800
-Subject: Re: linux-next: Tree for Oct 25
+        id S229833AbhJ1ITk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 04:19:40 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:47946 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhJ1ITk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 04:19:40 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 211432177B;
+        Thu, 28 Oct 2021 08:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635409033; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zqdN6Yjfc0XO6AHhq0eQB4f4yiJINc5vCkKCiBekK2M=;
+        b=NgbGwfcr7oyJW7XwZ6TcRjr0SKAHialJKfeXWxWb6kmsx8zY6B+hXCxgILiQssu9G8KVxx
+        MSqODr51OJ2U41JEKshfU/hMeWEwk17EFYkCcfEFiyb1/I2W3cwA+LSJx92M8tAcJ8jGkg
+        wLAi7rUkQdfiAQbdbqngjA2m4avMU0k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635409033;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zqdN6Yjfc0XO6AHhq0eQB4f4yiJINc5vCkKCiBekK2M=;
+        b=XFBH3OHzK02GTqiMsYUPCMkwMUyAgNBwDdJ8soiJb7xH/nlmoSFp+zyuHa6cALbyWqRFh4
+        H0ij0Izb7tpZ/pCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 109AA139BE;
+        Thu, 28 Oct 2021 08:17:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V2YJBIlcemGVMwAAMHmgww
+        (envelope-from <bp@suse.de>); Thu, 28 Oct 2021 08:17:13 +0000
+Date:   Thu, 28 Oct 2021 10:17:06 +0200
+From:   Borislav Petkov <bp@suse.de>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>
-References: <20211025204921.73cb3011@canb.auug.org.au>
- <20211027224231.1634cc6c@canb.auug.org.au>
- <864bbf0b-e6db-1a97-80f5-a92968a4e086@linux.alibaba.com>
- <20211028155126.0b187410@canb.auug.org.au>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <8c917fd9-c569-560e-5d6f-e19417f61cdf@linux.alibaba.com>
-Date:   Thu, 28 Oct 2021 15:59:02 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <YXpcgoGzF4Sh3qs3@zn.tnic>
+References: <20211025151144.552c60ca@canb.auug.org.au>
+ <20211028161058.39c0d199@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211028155126.0b187410@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211028161058.39c0d199@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Stephen,
 
-在 2021/10/28 下午12:51, Stephen Rothwell 写道:
-> Hi Xianting,
->
-> On Thu, 28 Oct 2021 09:51:00 +0800 Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
->> 在 2021/10/27 下午7:42, Stephen Rothwell 写道:
->>> Hi all,
->>>
->>> On Mon, 25 Oct 2021 20:49:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>> There seems to be something amiss with cnosole output in today's release
->>>> (at least on my ppc qemu boot tests).
->>> The console output seems to be back today.  I assume its repair had
->>> something to do with commit
->>>
->>>     60f41e848492 ("Revert "tty: hvc: pass DMA capable memory to put_chars()"")
->>>   
->> hi Stephen，
->>
->> Thanks for the info, Could you share more details about the issue you met? is it about early console print issue?
->>
-> Here is the diff between my boot logs:
-thanks, I checked the log, Can I understand it as you missed some early 
-bootup log  when use new release?
->
-> @@ -33,14 +33,14 @@
->   
->   Booting from memory...
->   OF stdout device is: /vdevice/vty@71000000
-> -Preparing to boot Linux version 5.15.0-rc6 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Fri Oct 22 20:04:18 AEDT 2021
-> +Preparing to boot Linux version 5.15.0-rc7 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Tue Oct 26 19:57:54 AEDT 2021
->   Detected machine type: 0000000000000101
->   command line:
->   Max number of cores passed to firmware: 2048 (NR_CPUS = 2048)
->   Calling ibm,client-architecture-support... done
->   memory layout at init:
->     memory_limit : 0000000000000000 (16 MB aligned)
-> -  alloc_bottom : 0000000002020000
-> +  alloc_bottom : 0000000002f50000
->     alloc_top    : 0000000030000000
->     alloc_top_hi : 0000000080000000
->     rmo_top      : 0000000030000000
-> @@ -50,8 +50,8 @@
->   copying OF device tree...
->   Building dt strings...
->   Building dt structure...
-> -Device tree strings 0x0000000002030000 -> 0x0000000002030a77
-> -Device tree struct  0x0000000002040000 -> 0x0000000002050000
-> +Device tree strings 0x0000000002f60000 -> 0x0000000002f60a77
-> +Device tree struct  0x0000000002f70000 -> 0x0000000002f80000
->   Quiescing Open Firmware ...
->   Booting Linux via __start() @ 0x0000000000400000 ...
->    hash-mmu: Page sizes from device-tree:
-> @@ -59,8 +59,8 @@
->    hash-mmu: base_shift=16: shift=16, sllp=0x0110, avpnm=0x00000000, tlbiel=1, penc=1
->    Using 1TB segments
->    hash-mmu: Initializing hash mmu with SLB
-> - Linux version 5.15.0-rc6 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Fri Oct 22 20:04:18 AEDT 2021
-> - Found initrd at 0xc000000001e50000:0xc00000000201d70b
-> + Linux version 5.15.0-rc7 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Tue Oct 26 19:57:54 AEDT 2021
-> + Found initrd at 0xc000000002d80000:0xc000000002f4d70b
->    Using pSeries machine description
->    printk: bootconsole [udbg0] enabled
->    Partition configured for 1 cpus.
-> @@ -106,9 +106,9 @@
->    Dentry cache hash table entries: 262144 (order: 5, 2097152 bytes, linear)
->    Inode-cache hash table entries: 131072 (order: 4, 1048576 bytes, linear)
->    mem auto-init: stack:off, heap alloc:off, heap free:off
-> - Memory: 1995200K/2097152K available (14208K kernel code, 3136K rwdata, 2944K rodata, 4992K init, 1531K bss, 101952K reserved, 0K cma-reserved)
-> + Memory: 1979648K/2097152K available (14208K kernel code, 3136K rwdata, 2944K rodata, 4992K init, 1531K bss, 117504K reserved, 0K cma-reserved)
->    SLUB: HWalign=128, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-> - ftrace: allocating 33247 entries in 13 pages
-> + ftrace: allocating 33265 entries in 13 pages
->    ftrace: allocated 13 pages with 3 groups
->    trace event string verifier disabled
->    rcu: Hierarchical RCU implementation.
-> @@ -124,81 +124,9 @@
->    clocksource: timebase mult[1f40000] shift[24] registered
->    Console: colour dummy device 80x25
->    printk: console [hvc0] enabled
-> - printk: console [hvc0] enabled
-> - printk: bootconsole [udbg0] disabled
->    printk: bootconsole [udbg0] disabled
-> - pid_max: default: 32768 minimum: 301
-> - Mount-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
-> - Mountpoint-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
-> - POWER8 performance monitor hardware support registered
-> - rcu: Hierarchical SRCU implementation.
-> - smp: Bringing up secondary CPUs ...
-> - smp: Brought up 1 node, 1 CPU
-> - numa: Node 0 CPUs: 0
-> - devtmpfs: initialized
-> - PCI host bridge /pci@800000020000000  ranges:
-> -   IO 0x0000200000000000..0x000020000000ffff -> 0x0000000000000000
-> -  MEM 0x0000200080000000..0x00002000ffffffff -> 0x0000000080000000
-> -  MEM 0x0000210000000000..0x000021ffffffffff -> 0x0000210000000000
-> - PCI: OF: PROBE_ONLY disabled
-> - clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
-> - futex hash table entries: 256 (order: -1, 32768 bytes, linear)
-> - NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> - audit: initializing netlink subsys (disabled)
-> - cpuidle: using governor menu
-> - pstore: Registered nvram as persistent store backend
->   
-> Linux ppc64le
-> -#2 SMP Fri Oct 2 audit: type=2000 audit(1634893757.210:1): state=initialized audit_enabled=0 res=1
-> - EEH: pSeries platform initialized
-> - software IO TLB: tearing down default memory pool
-> - PCI: Probing PCI hardware
-> - PCI host bridge to bus 0000:00
-> - pci_bus 0000:00: root bus resource [io  0x10000-0x1ffff] (bus address [0x0000-0xffff])
-> - pci_bus 0000:00: root bus resource [mem 0x200080000000-0x2000ffffffff] (bus address [0x80000000-0xffffffff])
-> - pci_bus 0000:00: root bus resource [mem 0x210000000000-0x21ffffffffff 64bit]
-> - pci_bus 0000:00: root bus resource [bus 00-ff]
-> - IOMMU table initialized, virtual merging enabled
-> - pci_bus 0000:00: resource 4 [io  0x10000-0x1ffff]
-> - pci_bus 0000:00: resource 5 [mem 0x200080000000-0x2000ffffffff]
-> - pci_bus 0000:00: resource 6 [mem 0x210000000000-0x21ffffffffff 64bit]
-> - EEH: No capable adapters found: recovery disabled.
-> - kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
-> - iommu: Default domain type: Translated
-> - iommu: DMA domain TLB invalidation policy: strict mode
-> - vgaarb: loaded
-> - SCSI subsystem initialized
-> - usbcore: registered new interface driver usbfs
-> - usbcore: registered new interface driver hub
-> - usbcore: registered new device driver usb
-> - pps_core: LinuxPPS API ver. 1 registered
-> - pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
-> - PTP clock support registered
-> - clocksource: Switched to clocksource timebase
-> - hugetlbfs: disabling because there are no supported hugepage sizes
-> - NET: Registered PF_INET protocol family
-> - IP idents hash table entries: 32768 (order: 2, 262144 bytes, linear)
-> - tcp_listen_portaddr_hash hash table entries: 4096 (order: 0, 65536 bytes, linear)
-> - TCP established hash table entries: 16384 (order: 1, 131072 bytes, linear)
-> - TCP bind hash table entries: 16384 (order: 2, 262144 bytes, linear)
-> - TCP: Hash tables configured (established 16384 bind 16384)
-> - UDP hash table entries: 2048 (order: 0, 65536 bytes, linear)
-> - UDP-Lite hash table entries: 2048 (order: 0, 65536 bytes, linear)
-> - NET: Registered PF_UNIX/PF_LOCAL protocol family
-> - RPC: Registered named UNIX socket transport module.
-> - RPC: Registered udp transport module.
-> - RPC: Registered tcp transport module.
-> - RPC: Registered tcp NFSv4.1 backchannel transport module.
-> - PCI: CLS 0 bytes, default 128
-> - Trying to unpack rootfs image as initramfs...
-> - vas: API is supported only with radix page tables
-> - workingset: timestamp_bits=38 max_order=15 bucket_order=0
-> - NFS: Registering the id_resolver key type
-> - Key type id_resolver registered
-> - Key type id_legacy registered
-> - Block layer SCSI generic (bsg) driver version 0.4 loaded (major 250)
-> - io scheduler mq-deadline registered
-> - io scheduler kyber registered
-> - Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
-> +#2 SMP Tue Oct 2 Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
->    Non-volatile memory driver v1.3
->    Freeing initrd memory: 1792K
->    brd: module loaded
-> @@ -230,7 +158,7 @@
->    ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
->    ohci-pci: OHCI PCI platform driver
->    rtc-generic rtc-generic: registered as rtc0
-> - rtc-generic rtc-generic: setting system clock to 2021-10-22T09:09:21 UTC (1634893761)
-> + rtc-generic rtc-generic: setting system clock to 2021-10-26T09:02:50 UTC (1635238970)
->    i2c_dev: i2c /dev entries driver
->    device-mapper: uevent: version 1.0.3
->    device-mapper: ioctl: 4.45.0-ioctl (2021-03-22) initialised: dm-devel@redhat.com
->
+On Thu, Oct 28, 2021 at 04:10:58PM +1100, Stephen Rothwell wrote:
+> This build failure has returned today :-(
+
+Sorry about that.
+
+I had the original patch updated but then it is very possible I
+fat-fingered the branch during the patch frenzy in the past days here.
+
+Now I've applied yours because it happening a second time simply
+warrants having this as a separate patch.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

@@ -2,149 +2,209 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7C543DC56
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 09:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8E343DC92
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 09:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbhJ1Hup (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 03:50:45 -0400
-Received: from mail-dm6nam10on2072.outbound.protection.outlook.com ([40.107.93.72]:44512
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229626AbhJ1Hup (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 28 Oct 2021 03:50:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UPp8XoQwqgx0+vcNYK3TVwyq7XsrjfG3xa7mHPCh00FHbsMU3zt1SeR+LQly1x18kuzRp8wQ3FHSJ95lmgmbzOq5TkpGrWHTwafNDdT/2+W7AyGXv7tCYjAaF4+3Tk8Q+LPdmbjZkUGKYuNVMDjE+g1vo1NDN7UixSxl6JZ0IGukgZKI59GdOKzf/NdWRG5vdbAkaoBWZb4SBw9TPzJT9/0M32xr/CzqbjMEZNwfzZMooK18Awwsn8hmKljVbobCDwPWwfAUabHpTR5zvegDDqJwRwOvYGApveGIV/b+U+pSC2woKoiToTxTbHRyjxyMB6yvh5074p9wtPf3uM2UlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y4nDwsRlv/EqLlWxDKPAKdU77TdVL/E4X+obdJ8ckJc=;
- b=hus/8egK+S7rnZUYsetaniLbmxiHjV2SjVEZgpHijKOdlo+dG3wxCZxIVmcmOReYrv+tuEgKWVRjA5VADhQ49vL3WZC2CJDqqOyfqL0VepLefO+BNz6wzXz9RHgHXPJPdlfi/j7uWIYSF98pGueYW/aX4pAnT6R5QjrIzosC36I8tYYz69+vtResI3gb4ysLB07OaxE2NpQ3KKUyIWw1hOuO9ChOg3c6IMQG2EnHVXs+4bTW8alUQEvM3UwsZx9FCYzB5Jf4Ypg/+LAYlh4JfjEN/3y9rokDjcuPt3o9i6b8K/YcFVYgTRkawFUPC2huh1Vll4UsZMCQcV1mibM3QA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y4nDwsRlv/EqLlWxDKPAKdU77TdVL/E4X+obdJ8ckJc=;
- b=OAe34YrohPERS2dw+fgNg0avYHuOYWMtHnrw48ySsIDK7d7YSHw0fNN2yXA2qSp/Nyzt1dgC+yDSQf2DocKhtwTiPcdtvVqVxw1lvB4z/zM99ciWKRGEMqW4856KZRs+8Tf+EHOOXKavMeEw1wFvly1vdba55GQxAG+/dYVmibRRhDJk4BTpKhxZiejoBtMt+vXh+nu9lD4Ak673I0i+XzYBHvoc4uWJN/iyalGtJKDCqhnn2dBiMM89Vdg3FiZIssQwrREDhnpCiix4fB0DkIO2q4VelmeNCMjGVGftAaVHzAyXGYjPigDZQnXbPule5j1eUb60WssTW/vWrIBzlg==
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
- by BYAPR12MB3525.namprd12.prod.outlook.com (2603:10b6:a03:13b::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Thu, 28 Oct
- 2021 07:48:17 +0000
-Received: from BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::b9dc:e444:3941:e034]) by BY5PR12MB4209.namprd12.prod.outlook.com
- ([fe80::b9dc:e444:3941:e034%6]) with mapi id 15.20.4649.015; Thu, 28 Oct 2021
- 07:48:16 +0000
-From:   Saeed Mahameed <saeedm@nvidia.com>
-To:     "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "dledford@redhat.com" <dledford@redhat.com>
-CC:     Ben Ben Ishay <benishay@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Aharon Landau <aharonl@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "leon@kernel.org" <leon@kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the rdma tree
-Thread-Topic: linux-next: manual merge of the net-next tree with the rdma tree
-Thread-Index: AQHXy5audcCoEmxRNEOFWkvsdzNr1qvoCScA
-Date:   Thu, 28 Oct 2021 07:48:16 +0000
-Message-ID: <bc7ba7b44e704b6316085949693e250ef0866a65.camel@nvidia.com>
-References: <20211028115637.1ed0ba86@canb.auug.org.au>
-In-Reply-To: <20211028115637.1ed0ba86@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.40.4 (3.40.4-2.fc34) 
-authentication-results: canb.auug.org.au; dkim=none (message not signed)
- header.d=none;canb.auug.org.au; dmarc=none action=none
- header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d82d92c5-4812-46f7-3ffa-08d999e74dab
-x-ms-traffictypediagnostic: BYAPR12MB3525:
-x-microsoft-antispam-prvs: <BYAPR12MB3525FE3A3B4E4B6B826ADA39B3869@BYAPR12MB3525.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wle3hrhR/DeOVCYvLgUGYmBFPVHnQVHYcYG2L+irtwOdyXfp/T4myynMURlj8pR+Rfh1ipuJwkCfKGqP/tytCvvkKPD+ze1IFJm2XvjOwN6lsGQL3asZj/FHkp7zoGZs9fbduAUpb1YfhvPeNvZhiychViyKb+NSAtvm/mphvrPDQ2P3Q6BVeexA0ZQSTApoZAUuOT0Q7GvbH5puPPgS6JHGf5Sg9isbhUY0gZ7JHzAwKIUzrS0Z+bJTvr40thnOIkrFoTEV89qPWG1OQkikhep7UG9pk8RJZS06QFwSogTXbiKQKfmQein5mOgHsw3zK770hVcz/W9lhKV2G8dAUx4tnrBG7zjF7WeeqW0p4zlKHAgh1DmeAm6e89yb+Cyu3QIw/kua8Ud+KWJLddXzNt2dmbssycIe0iN9CdcLVtx5EVKMcOcX3QtdRNw3EK8C0aCOjYTM4CdMgFwGH18VImGa3xFRXpcV3fETQc4UlmRLxIfdOUxYoE0rGXK7tJ7StyY3ixBzDKgy37glEITJIArNuGCiNCYdxygdL96pDu0vfTsMabdAA15FgqxAjxxmPGStOpjMPoN4nyJ0ACjJP1bmVNJcIbXWlpPFb+27xhUTonTzm5Qu57LspNuNwBwtccmjf4c0KVqJ7bIrzhNW2lYZ9NgOMd39rUGKU+D/5Kw/xMeCMdb9NY7OW2tIJ2zbAE8/4xeB5MQEY33wi1penAZZ/y5L68ZncEnVxzmk3OZF3AXfubjPi/baYd9uMPC+H1kDWZ+n3dEGUfiNKCItPDAF8AglyeFqbXfT+IZi1ZA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4209.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(86362001)(5660300002)(4744005)(8676002)(6486002)(4326008)(316002)(4001150100001)(2906002)(36756003)(66476007)(76116006)(38100700002)(54906003)(6506007)(38070700005)(66946007)(64756008)(110136005)(186003)(66556008)(122000001)(66446008)(8936002)(71200400001)(2616005)(6512007)(966005)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UGNQS1k5SmlCMzdVSm5WNTV3dmY5bmNEVTJzTkZqeFQzRm1PMHlQQ3ZvY29G?=
- =?utf-8?B?Q2lKMm5NZWhJKzl6c3BIdlZEU00xYmU3cDJpOVdvUDFYMnJtUmJpY3pmQ1pD?=
- =?utf-8?B?WndudlJxSE0wVDlzOTgvMlZvSjVuT0VoKzV6bWpFb0pIcU82ak5PVmNIL2J6?=
- =?utf-8?B?dVJ4eHBVM3MvOFRqU29tM0xMbU1Vb0F6dXdzOGNMMkx3a203MFFGWnRobGx2?=
- =?utf-8?B?Z3BvOG9kdFQ3ZE1Bcm5CQjl5ME11b0Nza2J1MEtUN1ZvQUVONDN0bUxBU0Zn?=
- =?utf-8?B?ekdSRkM1TXZDSzhabnNsbDdTNFNvdjRxbmU4and0amZSdWZiYytqaEdlNmd0?=
- =?utf-8?B?Z2ZRbXh2OFp3algyeXpPUEVrOUd6WVFsSThYSU1Wa2RmUGdnMkpZT05JdTFq?=
- =?utf-8?B?em1SLzk1VnUxMktPWVFiUmZxZk1Oc2F4L1dwaG9nek5yTHFWRXBpdjNmaDRU?=
- =?utf-8?B?ZGxTQldoNUk4TDVxN2ExYTU2MFd6bGV4eUQ5bWtoVmp1V1Z3aGVyZ0ZOWml3?=
- =?utf-8?B?WGNKbUVCU0IzajNTUzBleUFWYlJmM2JCSElNT2N2TWpScnZMZjJDTDYrb3Bx?=
- =?utf-8?B?TzNHL3hSOHh4cHplaWZDSS9Uc3ZQVFNxcFhwM0prMTc2KzdvTjZkMmJ5N0tP?=
- =?utf-8?B?U3RpTktQS292NCsvV2kxbEdaNlRLT1hkc3pwZmFYQkFhcnQvajRudUFWT1NP?=
- =?utf-8?B?eC9VV2JmOXpOditMbXBidGttZHdiMmR1U2lxcmJCV3ZpajRzTVJweVZCbHN0?=
- =?utf-8?B?V0tyaEk0VzVUaDcyemgyUWRJTzhEdXhZeGtsRllpdlJtZlFBZS9xTXFMaWdI?=
- =?utf-8?B?Wk9RVFAwcmtVMkdPVlFFM1BnekxKNjJnNDU4cTJrU3dJaU1VUG9PVUZtN1RZ?=
- =?utf-8?B?a3V6V0pFNy90NGFVaW43c3hEOW01V2hhT0ZkSG51VXhNRGwwbXZsSW56V0tP?=
- =?utf-8?B?WWNQRm1IdmtJNzJYckp2emdSa2FmMlFyZC9UbGM5TnFYQ2hmN2x1SDhzU3pF?=
- =?utf-8?B?ZmNTU0tsTjFPazRYVWd2REFaZkpGdmZnUzgwN25zTXh1dGtrYkc4NEVybjk3?=
- =?utf-8?B?YjdXTnVRWC9kcWtzNzErT2N0Yy9PR3R3QVNaZ1N3a2dxM0hjeDl5alcvSis0?=
- =?utf-8?B?cGlPZGhmWmIyU28rR1JuN1dJQjdMeVFZT2FxMTJ3K2EwWHZKYXNuMmNtM3hB?=
- =?utf-8?B?blNBUnFubnNLYThkRHJjTnphWE1UenZHdmNoeHhaNUZ3MEVBM1dsVlJJL0E1?=
- =?utf-8?B?SzVZZ2Y0SjVEcFR6RkdDb1U0NDVxSGo2eTQvWk5kTkZ2WnNTOTBzK2V5dXhP?=
- =?utf-8?B?a3RSM2c2c2xyQ3pSQnpXRmUxWGlPM0ZYa2FES0lqYUp5NGdqVWpyRmgrYnhS?=
- =?utf-8?B?dVVHVmVGL3FuV1lEOTlNaVdxN1YvL3d2SHJWQXZwZ25wbmhrM1Yvb3dqbmZE?=
- =?utf-8?B?YXl0MWcyTXF2UGNKUnJMd0JOaGVLNDV1M0h3T2pOTlJWWDJxM0xNb2RjZVY2?=
- =?utf-8?B?ckZBNUdYQ2UyZnBwR1JnYnNDTHZmeXhlY3VqK1JTd3hBcmQ1TWtrSmx2NnV1?=
- =?utf-8?B?czMzRXFhd0dLNnhZRldwa0hQUEg3a1hpQlV3OGhpeFM3Uld2UmlOZzQ1WmJi?=
- =?utf-8?B?bW1CeWVOL3NQTnJQUFhlUVQ5T3JqQ3NVb3puS3ZkVEZNYVFQdGVvdzRyQmhl?=
- =?utf-8?B?ajJPcHRXcUlnelIzK2pnRXBJTnVXWmJoU0hjbEt3dFd6ZGx1Qk0ySmsxSms1?=
- =?utf-8?B?VUNTOFhxeTRuVS9MZUUwUUZLK3RJSHBYQ0trVlN2SjJoWHM2eC93c28wcnk0?=
- =?utf-8?B?QzBRYUhSMUNmQ0tSOStEZkNyQXV5bmV6eVlqV3FwMnFicm1ESEF1S1JtUFdD?=
- =?utf-8?B?ZFFmcXJRQXgxRURwRkI1a2dOWkkwRnZFdnRDV0xmTzFQTjRvU2d4bXBodGVx?=
- =?utf-8?B?RUo3eVBGMzlRMkZGbkNXcDZBMGd6QUxYdG9sdTh2NVNRNnA4UUt0QmZLY28r?=
- =?utf-8?B?UXpteWdZZ3hLZnhrU2JzMVN5NnkyQzhpVHlvTlR4dWNpbjA5N1Z0bjBTamI2?=
- =?utf-8?B?Z0lYVGVva1pucngwZW12OS9EMDFZMEhWUWNwdWZGMHVtUzRTZXM5NjhtVVJV?=
- =?utf-8?B?S0NGaStLQ1Qxb3VHeXFnWHFzVEc2N0xRYjJmcEJ1Q0dvS2E1SEJ5TlpTVThQ?=
- =?utf-8?Q?LYRwamN+NjnGWrzMw5U5UFc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <02D42D3DA8CF2948B1E07FA0744E1686@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S229800AbhJ1IBe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 04:01:34 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:43471 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229640AbhJ1IBc (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 28 Oct 2021 04:01:32 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UtytliC_1635407943;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0UtytliC_1635407943)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 28 Oct 2021 15:59:03 +0800
+Subject: Re: linux-next: Tree for Oct 25
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>
+References: <20211025204921.73cb3011@canb.auug.org.au>
+ <20211027224231.1634cc6c@canb.auug.org.au>
+ <864bbf0b-e6db-1a97-80f5-a92968a4e086@linux.alibaba.com>
+ <20211028155126.0b187410@canb.auug.org.au>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <8c917fd9-c569-560e-5d6f-e19417f61cdf@linux.alibaba.com>
+Date:   Thu, 28 Oct 2021 15:59:02 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4209.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d82d92c5-4812-46f7-3ffa-08d999e74dab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2021 07:48:16.8263
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IXeHV0eqNa26EfDnkoJLP2CfbhSdZ1hjOJ6KdiL6Lneqr4gRSBX4nJteLvjO3qLyDUE8PwQTSejT8bipxWwM0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3525
+In-Reply-To: <20211028155126.0b187410@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTEwLTI4IGF0IDExOjU2ICsxMTAwLCBTdGVwaGVuIFJvdGh3ZWxsIHdyb3Rl
-Og0KPiBIaSBhbGwsDQo+IA0KPiBUb2RheSdzIGxpbnV4LW5leHQgbWVyZ2Ugb2YgdGhlIG5ldC1u
-ZXh0IHRyZWUgZ290IGEgY29uZmxpY3QgaW46DQo+IA0KPiDCoCBkcml2ZXJzL25ldC9ldGhlcm5l
-dC9tZWxsYW5veC9tbHg1L2NvcmUvZW5fbWFpbi5jDQo+IA0KPiBiZXR3ZWVuIGNvbW1pdDoNCj4g
-DQo+IMKgIDgzZmVjM2YxMmE1OSAoIlJETUEvbWx4NTogUmVwbGFjZSBzdHJ1Y3QgbWx4NV9jb3Jl
-X21rZXkgYnkgdTMyIGtleSIpDQo+IA0KPiBmcm9tIHRoZSByZG1hIHRyZWUgYW5kIGNvbW1pdDoN
-Cj4gDQo+IMKgIGU1Y2E4ZmIwOGFiMiAoIm5ldC9tbHg1ZTogQWRkIGNvbnRyb2wgcGF0aCBmb3Ig
-U0hBTVBPIGZlYXR1cmUiKQ0KPiANCj4gZnJvbSB0aGUgbmV0LW5leHQgdHJlZS4NCj4gDQo+IEkg
-Zml4ZWQgaXQgdXAgKHNlZSBiZWxvdykgYW5kIGNhbiBjYXJyeSB0aGUgZml4IGFzIG5lY2Vzc2Fy
-eS4gVGhpcw0KPiBpcyBub3cgZml4ZWQgYXMgZmFyIGFzIGxpbnV4LW5leHQgaXMgY29uY2VybmVk
-LCBidXQgYW55IG5vbiB0cml2aWFsDQo+IGNvbmZsaWN0cyBzaG91bGQgYmUgbWVudGlvbmVkIHRv
-IHlvdXIgdXBzdHJlYW0gbWFpbnRhaW5lciB3aGVuIHlvdXINCj4gdHJlZQ0KPiBpcyBzdWJtaXR0
-ZWQgZm9yIG1lcmdpbmcuwqAgWW91IG1heSBhbHNvIHdhbnQgdG8gY29uc2lkZXIgY29vcGVyYXRp
-bmcNCj4gd2l0aCB0aGUgbWFpbnRhaW5lciBvZiB0aGUgY29uZmxpY3RpbmcgdHJlZSB0byBtaW5p
-bWlzZSBhbnkNCj4gcGFydGljdWxhcmx5DQo+IGNvbXBsZXggY29uZmxpY3RzLg0KPiANCg0KDQpB
-IG1lcmdlIGNvbmZsaWN0IHJlc29sdXRpb24gcHIgd2FzIGFscmVhZHkgc2VudCB0byBuZXQtbmV4
-dCwNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi8yMDIxMTAyODA1MjEwNC4xMDcxNjcw
-LTEtc2FlZWRAa2VybmVsLm9yZy9ULyN1DQoNCg==
+
+在 2021/10/28 下午12:51, Stephen Rothwell 写道:
+> Hi Xianting,
+>
+> On Thu, 28 Oct 2021 09:51:00 +0800 Xianting Tian <xianting.tian@linux.alibaba.com> wrote:
+>> 在 2021/10/27 下午7:42, Stephen Rothwell 写道:
+>>> Hi all,
+>>>
+>>> On Mon, 25 Oct 2021 20:49:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>> There seems to be something amiss with cnosole output in today's release
+>>>> (at least on my ppc qemu boot tests).
+>>> The console output seems to be back today.  I assume its repair had
+>>> something to do with commit
+>>>
+>>>     60f41e848492 ("Revert "tty: hvc: pass DMA capable memory to put_chars()"")
+>>>   
+>> hi Stephen，
+>>
+>> Thanks for the info, Could you share more details about the issue you met? is it about early console print issue?
+>>
+> Here is the diff between my boot logs:
+thanks, I checked the log, Can I understand it as you missed some early 
+bootup log  when use new release?
+>
+> @@ -33,14 +33,14 @@
+>   
+>   Booting from memory...
+>   OF stdout device is: /vdevice/vty@71000000
+> -Preparing to boot Linux version 5.15.0-rc6 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Fri Oct 22 20:04:18 AEDT 2021
+> +Preparing to boot Linux version 5.15.0-rc7 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Tue Oct 26 19:57:54 AEDT 2021
+>   Detected machine type: 0000000000000101
+>   command line:
+>   Max number of cores passed to firmware: 2048 (NR_CPUS = 2048)
+>   Calling ibm,client-architecture-support... done
+>   memory layout at init:
+>     memory_limit : 0000000000000000 (16 MB aligned)
+> -  alloc_bottom : 0000000002020000
+> +  alloc_bottom : 0000000002f50000
+>     alloc_top    : 0000000030000000
+>     alloc_top_hi : 0000000080000000
+>     rmo_top      : 0000000030000000
+> @@ -50,8 +50,8 @@
+>   copying OF device tree...
+>   Building dt strings...
+>   Building dt structure...
+> -Device tree strings 0x0000000002030000 -> 0x0000000002030a77
+> -Device tree struct  0x0000000002040000 -> 0x0000000002050000
+> +Device tree strings 0x0000000002f60000 -> 0x0000000002f60a77
+> +Device tree struct  0x0000000002f70000 -> 0x0000000002f80000
+>   Quiescing Open Firmware ...
+>   Booting Linux via __start() @ 0x0000000000400000 ...
+>    hash-mmu: Page sizes from device-tree:
+> @@ -59,8 +59,8 @@
+>    hash-mmu: base_shift=16: shift=16, sllp=0x0110, avpnm=0x00000000, tlbiel=1, penc=1
+>    Using 1TB segments
+>    hash-mmu: Initializing hash mmu with SLB
+> - Linux version 5.15.0-rc6 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Fri Oct 22 20:04:18 AEDT 2021
+> - Found initrd at 0xc000000001e50000:0xc00000000201d70b
+> + Linux version 5.15.0-rc7 (sfr@ash) (gcc (Debian 10.3.0-11) 10.3.0, GNU ld (GNU Binutils for Debian) 2.37) #2 SMP Tue Oct 26 19:57:54 AEDT 2021
+> + Found initrd at 0xc000000002d80000:0xc000000002f4d70b
+>    Using pSeries machine description
+>    printk: bootconsole [udbg0] enabled
+>    Partition configured for 1 cpus.
+> @@ -106,9 +106,9 @@
+>    Dentry cache hash table entries: 262144 (order: 5, 2097152 bytes, linear)
+>    Inode-cache hash table entries: 131072 (order: 4, 1048576 bytes, linear)
+>    mem auto-init: stack:off, heap alloc:off, heap free:off
+> - Memory: 1995200K/2097152K available (14208K kernel code, 3136K rwdata, 2944K rodata, 4992K init, 1531K bss, 101952K reserved, 0K cma-reserved)
+> + Memory: 1979648K/2097152K available (14208K kernel code, 3136K rwdata, 2944K rodata, 4992K init, 1531K bss, 117504K reserved, 0K cma-reserved)
+>    SLUB: HWalign=128, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+> - ftrace: allocating 33247 entries in 13 pages
+> + ftrace: allocating 33265 entries in 13 pages
+>    ftrace: allocated 13 pages with 3 groups
+>    trace event string verifier disabled
+>    rcu: Hierarchical RCU implementation.
+> @@ -124,81 +124,9 @@
+>    clocksource: timebase mult[1f40000] shift[24] registered
+>    Console: colour dummy device 80x25
+>    printk: console [hvc0] enabled
+> - printk: console [hvc0] enabled
+> - printk: bootconsole [udbg0] disabled
+>    printk: bootconsole [udbg0] disabled
+> - pid_max: default: 32768 minimum: 301
+> - Mount-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
+> - Mountpoint-cache hash table entries: 8192 (order: 0, 65536 bytes, linear)
+> - POWER8 performance monitor hardware support registered
+> - rcu: Hierarchical SRCU implementation.
+> - smp: Bringing up secondary CPUs ...
+> - smp: Brought up 1 node, 1 CPU
+> - numa: Node 0 CPUs: 0
+> - devtmpfs: initialized
+> - PCI host bridge /pci@800000020000000  ranges:
+> -   IO 0x0000200000000000..0x000020000000ffff -> 0x0000000000000000
+> -  MEM 0x0000200080000000..0x00002000ffffffff -> 0x0000000080000000
+> -  MEM 0x0000210000000000..0x000021ffffffffff -> 0x0000210000000000
+> - PCI: OF: PROBE_ONLY disabled
+> - clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+> - futex hash table entries: 256 (order: -1, 32768 bytes, linear)
+> - NET: Registered PF_NETLINK/PF_ROUTE protocol family
+> - audit: initializing netlink subsys (disabled)
+> - cpuidle: using governor menu
+> - pstore: Registered nvram as persistent store backend
+>   
+> Linux ppc64le
+> -#2 SMP Fri Oct 2 audit: type=2000 audit(1634893757.210:1): state=initialized audit_enabled=0 res=1
+> - EEH: pSeries platform initialized
+> - software IO TLB: tearing down default memory pool
+> - PCI: Probing PCI hardware
+> - PCI host bridge to bus 0000:00
+> - pci_bus 0000:00: root bus resource [io  0x10000-0x1ffff] (bus address [0x0000-0xffff])
+> - pci_bus 0000:00: root bus resource [mem 0x200080000000-0x2000ffffffff] (bus address [0x80000000-0xffffffff])
+> - pci_bus 0000:00: root bus resource [mem 0x210000000000-0x21ffffffffff 64bit]
+> - pci_bus 0000:00: root bus resource [bus 00-ff]
+> - IOMMU table initialized, virtual merging enabled
+> - pci_bus 0000:00: resource 4 [io  0x10000-0x1ffff]
+> - pci_bus 0000:00: resource 5 [mem 0x200080000000-0x2000ffffffff]
+> - pci_bus 0000:00: resource 6 [mem 0x210000000000-0x21ffffffffff 64bit]
+> - EEH: No capable adapters found: recovery disabled.
+> - kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+> - iommu: Default domain type: Translated
+> - iommu: DMA domain TLB invalidation policy: strict mode
+> - vgaarb: loaded
+> - SCSI subsystem initialized
+> - usbcore: registered new interface driver usbfs
+> - usbcore: registered new interface driver hub
+> - usbcore: registered new device driver usb
+> - pps_core: LinuxPPS API ver. 1 registered
+> - pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+> - PTP clock support registered
+> - clocksource: Switched to clocksource timebase
+> - hugetlbfs: disabling because there are no supported hugepage sizes
+> - NET: Registered PF_INET protocol family
+> - IP idents hash table entries: 32768 (order: 2, 262144 bytes, linear)
+> - tcp_listen_portaddr_hash hash table entries: 4096 (order: 0, 65536 bytes, linear)
+> - TCP established hash table entries: 16384 (order: 1, 131072 bytes, linear)
+> - TCP bind hash table entries: 16384 (order: 2, 262144 bytes, linear)
+> - TCP: Hash tables configured (established 16384 bind 16384)
+> - UDP hash table entries: 2048 (order: 0, 65536 bytes, linear)
+> - UDP-Lite hash table entries: 2048 (order: 0, 65536 bytes, linear)
+> - NET: Registered PF_UNIX/PF_LOCAL protocol family
+> - RPC: Registered named UNIX socket transport module.
+> - RPC: Registered udp transport module.
+> - RPC: Registered tcp transport module.
+> - RPC: Registered tcp NFSv4.1 backchannel transport module.
+> - PCI: CLS 0 bytes, default 128
+> - Trying to unpack rootfs image as initramfs...
+> - vas: API is supported only with radix page tables
+> - workingset: timestamp_bits=38 max_order=15 bucket_order=0
+> - NFS: Registering the id_resolver key type
+> - Key type id_resolver registered
+> - Key type id_legacy registered
+> - Block layer SCSI generic (bsg) driver version 0.4 loaded (major 250)
+> - io scheduler mq-deadline registered
+> - io scheduler kyber registered
+> - Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+> +#2 SMP Tue Oct 2 Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+>    Non-volatile memory driver v1.3
+>    Freeing initrd memory: 1792K
+>    brd: module loaded
+> @@ -230,7 +158,7 @@
+>    ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+>    ohci-pci: OHCI PCI platform driver
+>    rtc-generic rtc-generic: registered as rtc0
+> - rtc-generic rtc-generic: setting system clock to 2021-10-22T09:09:21 UTC (1634893761)
+> + rtc-generic rtc-generic: setting system clock to 2021-10-26T09:02:50 UTC (1635238970)
+>    i2c_dev: i2c /dev entries driver
+>    device-mapper: uevent: version 1.0.3
+>    device-mapper: ioctl: 4.45.0-ioctl (2021-03-22) initialised: dm-devel@redhat.com
+>

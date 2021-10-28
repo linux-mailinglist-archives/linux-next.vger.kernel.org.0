@@ -2,91 +2,203 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 723E843E6C9
-	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 19:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F09E43E897
+	for <lists+linux-next@lfdr.de>; Thu, 28 Oct 2021 20:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbhJ1RIW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 13:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhJ1RIW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 13:08:22 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8A7C061570
-        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 10:05:55 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id r11-20020a170902be0b00b0013f4f30d71cso3089048pls.21
-        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 10:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=ErvuDA1ElQaCco+4n4DcJ4OhuycZwOW9DeeX1vLe+30=;
-        b=LBOVJZKWIzt1/Nn4r/5uhdXigjSqIetx7K1ikqomJ0bETUkwrxDuZgg+WfjSMWrKhq
-         qWmL5e1/UNDZbJKhedETmkVxrSB/qtbZVJEExJ8/vd/t2QFlL+rAoKdViOH1ajwOQn6B
-         IuNI+JuQlM+3gSsHMvvKjSvQnLZxHiTEyIBUocZcn8cKH277fccZt2XU5vQ3j3R8rBjq
-         B60G/UH+4FSL7M1ttTYXVhfgSD3EeXjpFVXurR8UZVqKIAaPcqjZ2C7IRWUIcsGJcWuy
-         J4QPnNWQd3ORx2AAtfX2JDfEUvwIhsjYIp0mRmaK2qZgTAcF6yN19BinYE7JEraKTK3C
-         ia4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=ErvuDA1ElQaCco+4n4DcJ4OhuycZwOW9DeeX1vLe+30=;
-        b=T7ioCrdYqLfj0IB2us6mep7DS1RV7XT8SecMTJlDqH4g6v22zTBZ7GG8BFs5ktPDrT
-         P6mZlfw//ME/c9zvhn05opVFnY7GZjRgcwSwI0VbPn96pE7HRYFLVDGN399D4d8h/alQ
-         yFj7Ozxhad1dFySXnTZZlK3VPQhiNhMvtbEDoG+oGDl0CXmOdawwwPHDv0TDefHrdeK0
-         wCuStUWTxWTFYgFgW8ENzsvrr7JqA/MbQzMXfkY0Ji4MO9OuT+8hwE/NO8+XKaTUnYMd
-         icAjm/JEnDTPm0bnXVKxPzMdW1VCvqJgq2mcVj9Zp/AG8YzwjM1FQ035tZwnwriOmhVR
-         RTEw==
-X-Gm-Message-State: AOAM533ZQpVB22wbTRtcR0lJe/TRi7RMTgC8aFnSVLFwX0MvZ6DSuLhu
-        dpqtGluVjtCWV35zxwhDYm1HPKnWbF2+BWdqDg==
-X-Google-Smtp-Source: ABdhPJw1j/ergvA9UHnj1GszoH0Stqyu/UZaI6A+IdNtPA7h4FN9o5otSGwFHwdWozUmeCEhviEYL7XgLG1SbfTyCQ==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:ac51:b6be:9b51:3a7c])
- (user=kaleshsingh job=sendgmr) by 2002:a63:2cf:: with SMTP id
- 198mr4141837pgc.274.1635440754464; Thu, 28 Oct 2021 10:05:54 -0700 (PDT)
-Date:   Thu, 28 Oct 2021 10:05:48 -0700
-In-Reply-To: <20211028091646.15f6e6de@gandalf.local.home>
-Message-Id: <20211028170548.2597449-1-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20211028091646.15f6e6de@gandalf.local.home>
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH] tracing/histogram: Fix documentation inline emphasis warning
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, hridya@google.com, kernel-team@android.com,
-        rostedt@goodmis.org, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Kalesh Singh <kaleshsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+        id S231151AbhJ1Ssa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 Oct 2021 14:48:30 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:37892 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230505AbhJ1Ss3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 14:48:29 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 81E941FD53;
+        Thu, 28 Oct 2021 18:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635446760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ecWVPcwOfzpV0QpOBidyI3KRjmXmd+oaLSz7CPNfAeI=;
+        b=KhkBBOn2Vdct7RM/TTVUyX+511kWS5r5BqL7En9hUhxS4OurA+OH2jw8J5Hhv4NrBWsbbQ
+        ajChZGk4Y4pK+C30piZ5BIY5RmibPc/HSnP8m9ex69nSQbKXBmHLocx16vB3PglXwe3baK
+        xhh2E51GCMQe/U8JtrUCOIad3cSPG1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635446760;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ecWVPcwOfzpV0QpOBidyI3KRjmXmd+oaLSz7CPNfAeI=;
+        b=v8wLO+0StmBGDA07NDUBcmqFxhV4POUZhzQMPiCZBXzKjODhhwzFrl3+pN6kkwueK1OjAq
+        tsb3uY8rwJSipoBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C52113F51;
+        Thu, 28 Oct 2021 18:46:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id arReCejvemF/fwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 28 Oct 2021 18:46:00 +0000
+Message-ID: <e5b4681a-36cd-20ba-c763-c4ff00732eb4@suse.de>
+Date:   Thu, 28 Oct 2021 20:45:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "lkft@linaro.org" <lkft@linaro.org>,
+        "maarten.lankhorst@linux.intel.com" 
+        <maarten.lankhorst@linux.intel.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>
+References: <20211027152534.3366799-1-marcel@ziswiler.com>
+ <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
+ <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------mErstqRuzD08suBMKdvgcL6H"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This fixes the warning:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mErstqRuzD08suBMKdvgcL6H
+Content-Type: multipart/mixed; boundary="------------YoNzEKjaCWljAM4gZ7Iwc0LE";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+ "airlied@linux.ie" <airlied@linux.ie>,
+ "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+ "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+ "arnd@arndb.de" <arnd@arndb.de>, "lkft@linaro.org" <lkft@linaro.org>,
+ "maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
+ "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+ "mripard@kernel.org" <mripard@kernel.org>, "daniel@ffwll.ch"
+ <daniel@ffwll.ch>
+Message-ID: <e5b4681a-36cd-20ba-c763-c4ff00732eb4@suse.de>
+Subject: Re: [PATCH v1] drm: import DMA_BUF module namespace
+References: <20211027152534.3366799-1-marcel@ziswiler.com>
+ <77d1966e-3081-10d3-d7a8-c159b62004aa@suse.de>
+ <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
+In-Reply-To: <0f90b5da6139316429363fc14f76e96366f4a4b5.camel@toradex.com>
 
-Documentation/trace/histogram.rst:1766: WARNING: Inline emphasis
-start-string without end-string
+--------------YoNzEKjaCWljAM4gZ7Iwc0LE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The issue was caused by an unescaped '*' character.
+SGkNCg0KQW0gMjcuMTAuMjEgdW0gMjI6NTQgc2NocmllYiBNYXJjZWwgWmlzd2lsZXI6DQo+
+IFNhbGkgVGhvbWFzDQo+IA0KPiBPbiBXZWQsIDIwMjEtMTAtMjcgYXQgMjA6MzAgKzAyMDAs
+IFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGksDQo+Pg0KPj4gdGhhbmtzIGZvciB0
+aGUgcGF0Y2guDQo+IA0KPiBZb3UgYXJlIHZlcnkgd2VsY29tZS4NCj4gDQo+PiBBbSAyNy4x
+MC4yMSB1bSAxNzoyNSBzY2hyaWViIE1hcmNlbCBaaXN3aWxlcjoNCj4+PiBGcm9tOiBNYXJj
+ZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4NCj4+Pg0KPj4+IFRv
+ZGF5J3MgLW5leHQgZmFpbHMgYnVpbGRpbmcgYXJtNjQgZGVmY29uZmlnIGFzIGZvbGxvd3M6
+DQo+Pj4NCj4+PiBFUlJPUjogbW9kcG9zdDogbW9kdWxlIGRybV9jbWFfaGVscGVyIHVzZXMg
+c3ltYm9sIGRtYV9idWZfdnVubWFwIGZyb20NCj4+PiAgwqAgbmFtZXNwYWNlIERNQV9CVUYs
+IGJ1dCBkb2VzIG5vdCBpbXBvcnQgaXQuDQo+Pj4gRVJST1I6IG1vZHBvc3Q6IG1vZHVsZSBk
+cm1fY21hX2hlbHBlciB1c2VzIHN5bWJvbCBkbWFfYnVmX3ZtYXAgZnJvbQ0KPj4+ICDCoCBu
+YW1lc3BhY2UgRE1BX0JVRiwgYnV0IGRvZXMgbm90IGltcG9ydCBpdC4NCj4+Pg0KPj4+IFJl
+cG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxsa2Z0QGxpbmFy
+by5vcmc+DQo+Pj4gRml4ZXM6IGNvbW1pdCA0YjJiNWUxNDJmZjQgKCJkcm06IE1vdmUgR0VN
+IG1lbW9yeSBtYW5hZ2VycyBpbnRvIG1vZHVsZXMiKQ0KPj4+IFNpZ25lZC1vZmYtYnk6IE1h
+cmNlbCBaaXN3aWxlciA8bWFyY2VsLnppc3dpbGVyQHRvcmFkZXguY29tPg0KPj4+DQo+Pj4g
+LS0tDQo+Pj4NCj4+PiAgwqAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5j
+IHwgMiArKw0KPj4+ICDCoCAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pj4N
+Cj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5j
+IGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5jDQo+Pj4gaW5kZXggNmY3
+YjNmOGVjMDRkMy4uNjlmODU2NGFkMTFjZCAxMDA2NDQNCj4+PiAtLS0gYS9kcml2ZXJzL2dw
+dS9kcm0vZHJtX2dlbV9jbWFfaGVscGVyLmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
+ZHJtX2dlbV9jbWFfaGVscGVyLmMNCj4+PiBAQCAtMjMsNiArMjMsOCBAQA0KPj4+ICDCoCAj
+aW5jbHVkZSA8ZHJtL2RybV9nZW1fY21hX2hlbHBlci5oPg0KPj4+ICDCoCAjaW5jbHVkZSA8
+ZHJtL2RybV92bWFfbWFuYWdlci5oPg0KPj4+ICAgIA0KPj4+ICtNT0RVTEVfSU1QT1JUX05T
+KERNQV9CVUYpOw0KPj4NCj4+IENvdWxkIHRoaXMgbGluZSBiZSBtb3ZlZCB0byB0aGUgYm90
+dG9tIG9mIHRoZSBmaWxlLCB3aGVyZSB0aGUgb3RoZXINCj4+IE1PRFVMRSBzdGF0ZW1lbnRz
+IGFyZT8NCj4gDQo+IEhlaGUsIGdvb2QgcXVlc3Rpb24uIEkgd2FzIGFjdHVhbGx5IGFza2lu
+ZyBteXNlbGYgdGhlIHNhbWUgYnV0IHF1aWNrbHkgbG9va2luZyBhdCBhIGZldyBmaWxlcyBh
+bmQgdGhleSBhbGwgaGFkDQo+IGl0IGFmdGVyIHRoZWlyIGluY2x1ZGVzIHRvd2FyZHMgdGhl
+IHRvcC4gVHVybnMgb3V0IHRoYXQgd2FzIHJhdGhlciBzaG9ydCBzaWdodGVkLi4uDQo+IA0K
+PiBMZXQgbWUgbG9vayBtb3JlIGNsb3NlbHkuIEN1cnJlbnQgLW5leHQgaGFzIGV4YWN0bHkg
+MjAwIGZpbGVzIHdpdGggYSBNT0RVTEVfSU1QT1JUX05TIHN0YXRlbWVudC4gT2theSwgc29t
+ZSBvZg0KPiB3aGljaCBhcmUgZG9jdW1lbnRhdGlvbi4gQW55d2F5LCAxMzIgb2Ygd2hpY2gg
+ZG8gaGF2ZSBpdCB3aXRoIHRoZWlyIG90aGVyIE1PRFVMRSBtYWNyb3MgdG93YXJkcyB0aGUg
+ZW5kIGFzIHlvdQ0KPiBzdWdnZXN0LiAyMCBvZiB3aGljaCBhbmQgbWFpbmx5IERSTSBzdHVm
+ZiBoYXMgaXQgdG93YXJkcyB0aGUgdG9wIGFmdGVyIHRoZW0gaW5jbHVkZXMuIEZ1bm55Lg0K
+PiANCj4gV2hhdCBkb2VzIHRoZSBkb2N1bWVudGF0aW9uIHN1Z2dlc3Q/DQo+IA0KPiBEb2N1
+bWVudGF0aW9uL2NvcmUtYXBpL3N5bWJvbC1uYW1lc3BhY2VzLnJzdA0KPiANCj4gIkl0IGlz
+IGFkdmlzYWJsZSB0byBhZGQgdGhlIE1PRFVMRV9JTVBPUlRfTlMoKSBzdGF0ZW1lbnQgY2xv
+c2UgdG8gb3RoZXIgbW9kdWxlDQo+IG1ldGFkYXRhIGRlZmluaXRpb25zIGxpa2UgTU9EVUxF
+X0FVVEhPUigpIG9yIE1PRFVMRV9MSUNFTlNFKCkuIFJlZmVyIHRvIHNlY3Rpb24NCj4gNS4g
+Zm9yIGEgd2F5IHRvIGNyZWF0ZSBtaXNzaW5nIGltcG9ydCBzdGF0ZW1lbnRzIGF1dG9tYXRp
+Y2FsbHkuIg0KPiANCj4gVGhlcmUgeW91IGdvLiBQbHVzIHRoZXJlIGlzIGV2ZW4gc29tZSBm
+YW5jeSBhdXRvbWF0aW9uICg7LXApLg0KPiANCj4gU28gbGV0IG1lIG1vdmUgaXQgZG93biB0
+aGVyZSB0aGVuLg0KDQpXaWxsIHlvdSBzZW5kIG91dCBhbm90aGVyIHJldmlzaW9uIG9mIHRo
+ZSBwYXRjaD8NCg0KPiANCj4+IEluIHRoZSBmaXhlZCBjb21taXQgNGIyYjVlMTQyZmY0LCB0
+aGVyZSdzIGEgc2ltaWxhciBjaGFuZ2UgZm9yDQo+PiBkcm1fZ2VtX3NobWVtX2hlbHBlci5j
+LiBJdCB1c2VzIGRtYS1idWZfdm1hcCBhcyB3ZWxsLiBEb2VzIHRoYXQgbW9kdWxlDQo+PiBy
+ZXF1aXJlIHRoZSBzYW1lIGZpeD8NCj4gDQo+IExpa2VseS4gTGV0IG1lIGp1c3QgcnVuIHpl
+IGF1dG9tYXRpb24gYW5kIHNlZSB3aGF0IHdlIGdldC4uLg0KPiANCj4+IERvIHlvdSBoYXZl
+IGFueSBpZGVhIHdoeSBJIGRvbid0IHNlZSB0aGVzZSBlcnJvcnMgaW4gbXkgYnVpbGRzPw0K
+PiANCj4gV2VsbCwgSSBndWVzcywgdGhlcmUgYXJlIHZhcmlvdXMgS0NPTkZJRyBzeW1ib2xz
+IGluZmx1ZW5jaW5nIHRoYXQgd2hvbGUgc3RvcnkuIEhvdyBhYm91dCBlLmcuDQo+IA0KPiBp
+bml0L0tjb25maWc6Y29uZmlnIE1PRFVMRV9BTExPV19NSVNTSU5HX05BTUVTUEFDRV9JTVBP
+UlRTDQoNClRoYW5rcyBmb3IgdGhlIGhpbnQuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoN
+Cj4gDQo+PiBCZXN0IHJlZ2FyZHMNCj4+IFRob21hcw0KPiANCj4gQ2hlZXJzDQo+IA0KPiBN
+YXJjZWwNCj4gDQo+Pj4gKw0KPj4+ICDCoCAvKioNCj4+PiAgwqDCoCAqIERPQzogY21hIGhl
+bHBlcnMNCj4+PiAgwqDCoCAqDQo+Pj4NCj4+DQo+PiAtLSANCj4+IFRob21hcyBaaW1tZXJt
+YW5uDQo+PiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQo+PiBTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCj4+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
+ZywgR2VybWFueQ0KPj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KPj4gR2VzY2jDpGZ0
+c2bDvGhyZXI6IEZlbGl4IEltZW5kw7ZyZmZlcg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVy
+bWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlv
+bnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1h
+bnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBGZWxp
+eCBJbWVuZMO2cmZmZXINCg==
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- Documentation/trace/histogram.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--------------YoNzEKjaCWljAM4gZ7Iwc0LE--
 
-diff --git a/Documentation/trace/histogram.rst b/Documentation/trace/histogram.rst
-index e12699abaee8..66ec972dfb78 100644
---- a/Documentation/trace/histogram.rst
-+++ b/Documentation/trace/histogram.rst
-@@ -1764,7 +1764,7 @@ using the same key and variable from yet another event::
-   # echo 'hist:key=pid:wakeupswitch_lat=$wakeup_lat+$switchtime_lat ...' >> event3/trigger
- 
- Expressions support the use of addition, subtraction, multiplication and
--division operators (+-*/).
-+division operators (+-\*/).
- 
- Note that division by zero always returns -1.
- 
--- 
-2.33.0.1079.g6e70778dc9-goog
+--------------mErstqRuzD08suBMKdvgcL6H
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF67+cFAwAAAAAACgkQlh/E3EQov+CR
+Dw/8C0RXo97a70QQN2Xt9ROWfK+aE3antAURtxdLdXbKyjjeXlywMzzpTjkjID8YOS/cIwz5rU7h
+sswYnkEGzKLgwMdwVHU51R0cKG4Wrvgz6nB/3zkSlt0yZJv5PY0GkX2oZ842lcYcC4FyDc/grjc4
+1ntK3vORuWF/NnEk/VPqU1JlX1gf45b6OHEIhovgfAjnWdoOeD1cB6XNMxyOH2rXvgCqzDUT0lIa
+XtzKlPKrG0AP2J1DWDgDyOJGeyMQeDz46p2ud3+2a1VnLFCz8493flBZwtv5CRQdloZ12dLMdWBe
+OepG2BKbgbemJpmpgKVJAhc3mipvLlSuWPuaO9kP9dxhsxQPrrCMcKX8Wr3/VzQh9pOCCj6cddsI
+mIaSZAFPpJVrkTISCMdOFnpwjBd8YaeVryJv9ahec8TMad+lJA9SIDMcLpQ35w3pOKgnyktS6Mlr
++tW6F1w8WvmMIBpGIpMd2PDZ0zrHGgrDwTyxdqLd7fL7v60xS44SaTftpYB//VtIW5o26Nfs8tco
+DeKpDm5JP84utCDt/a/KMRnfZ5iDpJaQFn+WWeBeGxgH573aW9Qg9b3EcqHYn4u6FfP4SM3+00AA
+8YtOM70ZXJejvrBBdGU9ILA0zfyrnhz04I9dBAWZ4u+lhjCx31MjHafcl66wS0AEC2xilUYQhYpC
+KsQ=
+=L9Du
+-----END PGP SIGNATURE-----
+
+--------------mErstqRuzD08suBMKdvgcL6H--

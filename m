@@ -2,144 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F77344027D
-	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 20:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7333440283
+	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 20:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbhJ2SwW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Oct 2021 14:52:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46752 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231154AbhJ2SwW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:52:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D962C61040;
-        Fri, 29 Oct 2021 18:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635533393;
-        bh=O8j+eIcFHO42eBXB/HW5ZtEu1Eo+aRSqEdx7g78XWBw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IK+OcgXFKcn2uI7XrdaaVjnnPWturVsiX3l4ZgeB0t50qfwRv8inFWFDjZc9u4Ifm
-         lm9D+ZfE9k3nVY4hPuEfmURsLyuAVpVR4AIn9KLG7V1FFZ62I9N6urXKwV1VqsAVL8
-         eo3LtZhrN6G1JEiG4URaJzq8O7bDzLp0nT8jZ3DCCyWRiSAtU82/eupwkHRGorSZWv
-         hJLpsd4pSvJKUF7IjxSoEJ/ftunYfYmXqkRpd8PCMxzaIiwY/7sdfKpAIRKwrjxM8h
-         grLpGCCmIqwOIIviez8rHwX8BeiZJ7JKn0iJ0AVsgCdij3wl8WKPrdhRaVOnOz2rWw
-         eUXkvViMQB7hQ==
-Date:   Fri, 29 Oct 2021 13:49:51 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-Message-ID: <20211029184951.GA329702@bhelgaas>
+        id S229897AbhJ2SyZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Oct 2021 14:54:25 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:48122 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229826AbhJ2SyY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Oct 2021 14:54:24 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D50A421974;
+        Fri, 29 Oct 2021 18:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635533513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xZEEWsS0omfe6n+p9ZkN0+ncu/msq8vTIZqm5m52VmM=;
+        b=D+3nhl8S82XEXqxv7QiTPQvxRdClW68MBEOVaosKePHLjVYypo9Vt8uj6gyhII7xIIoG1A
+        1HDlDRchWsIuHUrbWRdwF35Ihn6qPf4CwIBAqokIUMPOq+oYKaBv3DXq3KbLAeznCFkKRR
+        cqYV8tgtqAkKLPOyUnQdWuHO/pYDWXU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635533513;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xZEEWsS0omfe6n+p9ZkN0+ncu/msq8vTIZqm5m52VmM=;
+        b=RMLqy2873U+JC/l4Or23eqyU3hgFzwgjZn/tNlno2M9CzAk1RxJJ488bjTp4L6m6iKaq5l
+        Zh5WvWEBkn7JCHDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EE6F13F79;
+        Fri, 29 Oct 2021 18:51:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZeeeGclCfGGoFAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 29 Oct 2021 18:51:53 +0000
+Message-ID: <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+Date:   Fri, 29 Oct 2021 20:51:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H_a0PqATB3kFO3dcFiq+reR+5z7FW27M=m2MnnYA48NYw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2] drm: import DMA_BUF module namespace
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20211027212506.3418521-1-marcel@ziswiler.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211027212506.3418521-1-marcel@ziswiler.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------9UoZI03OroPWbiDYMVeDgvmE"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 07:28:47AM +0200, Sergio Paracuellos wrote:
-> On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> > > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> > > <sergio.paracuellos@gmail.com> wrote:
-> > > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > > > <tsbogend@alpha.franken.de> wrote:
-> > > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > > > >
-> > > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > > > drivers become modules.
-> > > > > > >
-> > > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > >
-> > > > > > > Let's just export them.
-> > > > > > >
-> > > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > > > ---
-> > > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > > > >  2 files changed, 6 insertions(+)
-> > > > > > >
-> > > > > >
-> > > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > >
-> > > > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > > > all MIPS specific stuff for just making an essential driver modular
-> > > > > doesn't IMHO make much sense.
-> > > >
-> > > > The driver is modular because I have been advised other times that new
-> > > > drivers should be able to be compiled as modules and we should avoid
-> > > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > > > also always including as 'y' the driver since for me not having pci in
-> > > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > > > instead of 'tristate', but I don't know what should be the correct
-> > > > thing to do in this case. Thoughts?
-> > >
-> > > I guess we also want the driver to at least be compile tested in
-> > > 'allmodconfig' and other similars...15692a80d949
-> >
-> > Sounds like the systems that actually use this driver require it to be
-> > built-in, and the only benefit of exporting these symbols is that we
-> > would get better compile test coverage.
-> >
-> > If that's the case, I agree that it's better to just make it
-> > non-modular.
-> 
-> I agree and that was my reasoning for sending a patch to also convert
-> to bool the phy driver that this PCIe controller uses. When the pull
-> request was sent from Vinod to Greg, Greg refused to take it because
-> of that commit and the commit was reverted and a new pull request was
-> sent including this revert. This is commit 15692a80d949 ("phy: Revert
-> "phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
-> of this I also changed the PCIe controller Kconfig from bool to
-> tristate when I sent v3 of the series which at the end were the ones
-> that was finally taken. There are also other ralink related symbols
-> that have been exported to allow to compile other drivers as a
-> modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
-> ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
-> agree and I am using the driver as if it were a bool and also ralink
-> systems normally require all drivers built-in, but I think we have to
-> take into account also the "historical facts" here. In any case,
-> Bjorn, let me know if you want me to send whatever patch might be
-> needed.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------9UoZI03OroPWbiDYMVeDgvmE
+Content-Type: multipart/mixed; boundary="------------2M4is0FbJj0AqLvyf1yxRAiS";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Marcel Ziswiler <marcel@ziswiler.com>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc: Maxime Ripard <mripard@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@linux.ie>,
+ Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+ Linux Kernel Functional Testing <lkft@linaro.org>
+Message-ID: <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+Subject: Re: [PATCH v2] drm: import DMA_BUF module namespace
+References: <20211027212506.3418521-1-marcel@ziswiler.com>
+In-Reply-To: <20211027212506.3418521-1-marcel@ziswiler.com>
 
-I didn't see the conversation with Greg, so I don't know the whole
-story.
+--------------2M4is0FbJj0AqLvyf1yxRAiS
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-For pcie-mt7621.c, it looks like the only problem is
-setup_cm_memory_region(), which does a little coherency-related stuff.
-If we could move that to arch/mips, we could still make this tristate.
+SGkNCg0KQW0gMjcuMTAuMjEgdW0gMjM6MjUgc2NocmllYiBNYXJjZWwgWmlzd2lsZXI6DQo+
+IEZyb206IE1hcmNlbCBaaXN3aWxlciA8bWFyY2VsLnppc3dpbGVyQHRvcmFkZXguY29tPg0K
+PiANCj4gVG9kYXkncyAtbmV4dCBmYWlscyBidWlsZGluZyBhcm02NCBkZWZjb25maWcgYXMg
+Zm9sbG93czoNCj4gDQo+IEVSUk9SOiBtb2Rwb3N0OiBtb2R1bGUgZHJtX2NtYV9oZWxwZXIg
+dXNlcyBzeW1ib2wgZG1hX2J1Zl92dW5tYXAgZnJvbQ0KPiAgIG5hbWVzcGFjZSBETUFfQlVG
+LCBidXQgZG9lcyBub3QgaW1wb3J0IGl0Lg0KPiBFUlJPUjogbW9kcG9zdDogbW9kdWxlIGRy
+bV9jbWFfaGVscGVyIHVzZXMgc3ltYm9sIGRtYV9idWZfdm1hcCBmcm9tDQo+ICAgbmFtZXNw
+YWNlIERNQV9CVUYsIGJ1dCBkb2VzIG5vdCBpbXBvcnQgaXQuDQo+IA0KPiBSZXBvcnRlZC1i
+eTogTGludXggS2VybmVsIEZ1bmN0aW9uYWwgVGVzdGluZyA8bGtmdEBsaW5hcm8ub3JnPg0K
+PiBGaXhlczogY29tbWl0IDRiMmI1ZTE0MmZmNCAoImRybTogTW92ZSBHRU0gbWVtb3J5IG1h
+bmFnZXJzIGludG8gbW9kdWxlcyIpDQo+IFNpZ25lZC1vZmYtYnk6IE1hcmNlbCBaaXN3aWxl
+ciA8bWFyY2VsLnppc3dpbGVyQHRvcmFkZXguY29tPg0KDQpJIGFkZGVkIHRoaXMgZml4IGlu
+dG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzIQ0KDQpIb3dldmVyLCBJIGhhZCB0byBpbXBvcnQg
+bGludXgtbmV4dCB3aGlsZSBkb2luZyBzby4gJ0dpdCBhbScgZGlkIGEgMy13YXkgDQptZXJn
+ZSwgd2hpY2ggbWF5IHJlc3VsdCBpbiBhIGNvbmZsaWN0IHdoZW4gdGhlIGZpeCByZWFjaGVz
+IGxpbnV4LW5leHQgDQphZ2Fpbi4gSSBhbHNvIHVwZGF0ZWQgdGhlIGNvbW1pdCBkZXNjcmlw
+dGlvbi4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gLS0tDQo+IA0KPiBDaGFu
+Z2VzIGluIHYyOg0KPiAtIEFmdGVyIGNvbnN1bHRpbmcgdGhlIGRvY3VtZW50YXRpb24gbW92
+ZSBpdCB0byB0aGUgYm90dG9tIG9mIHRoZSBmaWxlDQo+ICAgIHdoZXJlIHRoZSBvdGhlciBN
+T0RVTEUgc3RhdGVtZW50cyBhcmUgYXMgc3VnZ2VzdGVkIGJ5IFRob21hcy4NCj4gLSBBbHNv
+IG1vdmUgaXQgZG93biB0aGVyZSBmb3IgdGhlIGRybV9nZW1fc2htZW1faGVscGVyLmMgZmls
+ZS4NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5jICAgfCAx
+ICsNCj4gICBkcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYyB8IDMgKy0t
+DQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
+DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBl
+ci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fY21hX2hlbHBlci5jDQo+IGluZGV4IDZm
+N2IzZjhlYzA0ZDMuLjJhMzQyNDFmZWUwMjUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1
+L2RybS9kcm1fZ2VtX2NtYV9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJt
+X2dlbV9jbWFfaGVscGVyLmMNCj4gQEAgLTU4MSw0ICs1ODEsNSBAQCBkcm1fZ2VtX2NtYV9w
+cmltZV9pbXBvcnRfc2dfdGFibGVfdm1hcChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LA0KPiAg
+IEVYUE9SVF9TWU1CT0woZHJtX2dlbV9jbWFfcHJpbWVfaW1wb3J0X3NnX3RhYmxlX3ZtYXAp
+Ow0KPiAgIA0KPiAgIE1PRFVMRV9ERVNDUklQVElPTigiRFJNIENNQSBtZW1vcnktbWFuYWdl
+bWVudCBoZWxwZXJzIik7DQo+ICtNT0RVTEVfSU1QT1JUX05TKERNQV9CVUYpOw0KPiAgIE1P
+RFVMRV9MSUNFTlNFKCJHUEwiKTsNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fZ2VtX3NobWVtX2hlbHBlci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1f
+aGVscGVyLmMNCj4gaW5kZXggZjczMjQ1ODJhZmU3MS4uYTViNzQzYTgzY2U5OSAxMDA2NDQN
+Cj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMNCj4gKysr
+IGIvZHJpdmVycy9ncHUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMNCj4gQEAgLTIyLDgg
+KzIyLDYgQEANCj4gICAjaW5jbHVkZSA8ZHJtL2RybV9wcmltZS5oPg0KPiAgICNpbmNsdWRl
+IDxkcm0vZHJtX3ByaW50Lmg+DQo+ICAgDQo+IC1NT0RVTEVfSU1QT1JUX05TKERNQV9CVUYp
+Ow0KPiAtDQo+ICAgLyoqDQo+ICAgICogRE9DOiBvdmVydmlldw0KPiAgICAqDQo+IEBAIC03
+NzksNCArNzc3LDUgQEAgZHJtX2dlbV9zaG1lbV9wcmltZV9pbXBvcnRfc2dfdGFibGUoc3Ry
+dWN0IGRybV9kZXZpY2UgKmRldiwNCj4gICBFWFBPUlRfU1lNQk9MX0dQTChkcm1fZ2VtX3No
+bWVtX3ByaW1lX2ltcG9ydF9zZ190YWJsZSk7DQo+ICAgDQo+ICAgTU9EVUxFX0RFU0NSSVBU
+SU9OKCJEUk0gU0hNRU0gbWVtb3J5LW1hbmFnZW1lbnQgaGVscGVycyIpOw0KPiArTU9EVUxF
+X0lNUE9SVF9OUyhETUFfQlVGKTsNCj4gICBNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7DQo+
+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
+DQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUs
+IDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0K
+R2VzY2jDpGZ0c2bDvGhyZXI6IEZlbGl4IEltZW5kw7ZyZmZlcg0K
 
-One way might be to implement a pcibios_root_bridge_prepare() for mips
-and put the setup_cm_memory_region() stuff in there.  It's not *ideal*
-because that's a strong/weak function arrangement that doesn't allow
-for multiple host bridges, but that's probably not an issue here.
+--------------2M4is0FbJj0AqLvyf1yxRAiS--
 
-If we can't do that, I think making it bool is probably the right
-answer, but it would be worth a brief comment in the commit log to
-explain the issue.
+--------------9UoZI03OroPWbiDYMVeDgvmE
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Bjorn
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF8QsgFAwAAAAAACgkQlh/E3EQov+CL
+qRAAycQJlJBfMdyTGJf46MNjORkfrWlh7GAvn7ohXgbvd7vXvZjB7wO/xoZhsevjLPgKZJ0jdOaD
++mZW1hReUmiOFHUijkAs+JoRKDvhZ70a+N3y8qP8/I/D+qVqiiMgHoGFW9ZB1BdBDpN0pAB8lFtu
+jLycKeogxwYAeocuHzIwc799f9zIwvo6W1lE99DYH0se86kmLwtcoiASDGB/J1Tlisq7Us8qECzJ
+yJoM3p2LIBH2E2dxzvh8O97X/ec0nNPg2h/FawJUzrFSoXEsma6byTO59awwQRxo+T3FpALI4sxP
+uvB7V0r+60QuT8nkDcJFVKlurSzXQPO0zUMCiVSdLxv2r+GiqWJC2qKL5JzGIDjmsiUCUtnJiGCh
+2NzoDZjhbvC9BEPxii/GbjPeWKMfcQpkbs5t0DatYIMdN9dtQww/SrpwO0gZfVpBs4FJsWEZDQ7V
+K5rJZqyuP/ZVlfK7s55dPGR0FoxgGXmRz/cPZ0O59fOL/s5zMIWMPsumc64JmcKYDK3BSLCrnXu7
+oROaUGx5IO3cYyd04mIQPXb85hYsYt8/vBiovgLo+IgW7M5xKSY7otptaB5Ks7uORINKlKbcRFjo
+R5ok0eQsTyEPApa1ElTzIZQ3AYsEc2c0C9bQ8cEsbzgzJH1f3NmSGSRNoqXVoXlI/FuRSLerp/6h
+FAs=
+=f6UX
+-----END PGP SIGNATURE-----
+
+--------------9UoZI03OroPWbiDYMVeDgvmE--

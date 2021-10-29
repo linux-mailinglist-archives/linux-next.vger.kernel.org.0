@@ -2,166 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B138D43F587
-	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 05:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C066043F6A8
+	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 07:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbhJ2DuZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 Oct 2021 23:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S230362AbhJ2Fb3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Oct 2021 01:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbhJ2DuY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 Oct 2021 23:50:24 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDA3C061570
-        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 20:47:56 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id n36-20020a17090a5aa700b0019fa884ab85so9554193pji.5
-        for <linux-next@vger.kernel.org>; Thu, 28 Oct 2021 20:47:56 -0700 (PDT)
+        with ESMTP id S229504AbhJ2Fb2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Oct 2021 01:31:28 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8EAC061570;
+        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id h4so16073265uaw.1;
+        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9wIQmQck0wCY6F1J1Te6/1/xGIpB07Ftc9XVpp/ImE4=;
-        b=bdYmWDV8pHAc2KR8Z9CdEr0L4fUx9o84rHyZjIfcvHxLQWlJPQwkD207iupVSF53xh
-         rEa4dYSCfb0Hcgl56c0QxBxNgmPvRghHnR2c0EWpTT1kLfiVIq1FNbwvjGMJjLqSn6af
-         O4RDRq21NtXnt6HCV3Jl6Dp7hL1Skgt813RnMi+FEBejorNpd4Aw6Psd0S7zlGkjlSM4
-         OhVNk6bJ8W4pN8vNoc9jyeW3ChcYwDrsWsxkL3ezzk70QKV9h69dxmAvn+oWqt+3TQTb
-         0H4dMfBdmjQjLGjnMRkGtJu7jWk7nsbVTxBoJXAHCG6nKXssP1gIXlFAdYtrvrezAnB+
-         eINw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
+        b=dAPzFHqY6a3yuq3WPaxBDLMqDiOOIvbGTScOjWeJ9qYjDnceFbeYAjHCjmG2cdtSt/
+         JF2Sh3MpKz+H0WgA2dhV0urNCpDT9IsQJaEkdOg1h6AfroREvG2h/J9t5qpr3xFV5Y6/
+         Luj+VxSUsDZk2KOXn+bmj0KnCRWv8z0BYM+ULkYivoL2izRIUAjmePHDr8IYa5njuX/t
+         +hzFigJBtBfggVl8QM4sriD8UiUWzEg8+z2AXzEVPvOUEdyEhbue8rLgopr/FYLUtVav
+         n2iBAoefklk9UzAs/gNG3stlyB85kiGCLNqjCfTEQ72igNsfST0LQEwdTDkeGpChJrEc
+         1MhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9wIQmQck0wCY6F1J1Te6/1/xGIpB07Ftc9XVpp/ImE4=;
-        b=lwg5bps1g1fds30FEPetHFTqDtTMJMV1uAN5WvUpSf9noezGyt50ueeXLXmzA1S94c
-         J1u1M4Gf9Aei/AON88Udn+a5sisUQn/TPL+aTtPFLHfqab84YJ4z0qihJytsiID/PCv8
-         1AMjq7ZHisR5XKUsoKh9sg8m9TNikBc4MCHdlkznW2071XzzUpqVT97A0shM3TA6zLda
-         YNuM1lC04okRMZ7zH66udp0OylS/yMPrbDbcdhmgKkelL7PTWBbg5T537HvRAiEXCYxq
-         9NI78mcZv+mt5enOBSfFGYrVfV5WiAW8GYbt0bVgkLo/GWCHvyN3hyQXHc3ZXKC+c/Ym
-         kuXA==
-X-Gm-Message-State: AOAM530g9Dn5J0/zcWeO2YA9dKlMb4YfdtsIEB+h98ZvsPho/5FGqR8U
-        JLIErHjLi4j/SoX3/Nq0jPZUubQM6a84vMYD
-X-Google-Smtp-Source: ABdhPJw/A02fzexscZ1q+7ebdFKbww8M8QeQL8R1rr5SD8tXC5RKk1J2FPWNSU0nVbRCfHgY8XXrBg==
-X-Received: by 2002:a17:90b:3b85:: with SMTP id pc5mr8892225pjb.74.1635479276226;
-        Thu, 28 Oct 2021 20:47:56 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q13sm5526314pfj.26.2021.10.28.20.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 20:47:55 -0700 (PDT)
-Message-ID: <617b6eeb.1c69fb81.84d7b.1187@mx.google.com>
-Date:   Thu, 28 Oct 2021 20:47:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
+        b=d17Pn5xY+sVAIiEVp7vib4IWEemkhZMfbOmKA7sVfNKcUpUvnrMhOJAUiULEMw7wtK
+         Yc/OwCQLbot3GGx2sqqtUy0FsbcM7X3qBZqXtsphVu2Iwi+FVp1FRVDqU3capbc6Dr9a
+         rez107DE1PakswRzl3urvIyFSh/toH82GsXJAM/tUFz1Lbe92Y0wpqYZqxHLnGnIyOxt
+         Zn6JYepkGaXwxuTa/STWzQ7wDL9fUQgf5qRfxacIudLtnSoM6qAgAZw4Uripqx/gDWpS
+         LhZl0tIvw+zzHyGPFtWre5KUZTCPLlHG+CniXrLp05QpgM/NFSOD3aM3nPh7PF9RC4FV
+         KOPg==
+X-Gm-Message-State: AOAM531K2x5jq2hSfhQtbK6jcZme3lT6cT5Y0kK01jFECsIHeJwHGREh
+        SVSoCLaD/4ZB6CVeDnuJmopDXbCFTjH9EVttx8A=
+X-Google-Smtp-Source: ABdhPJxs1fI3cK3JY0LAlIQGqCHUDGWxH+wj3J2xlepe64o7dHGMQFS10+///IP4btkcLM3sItdX9v4WNeESaNXOQSs=
+X-Received: by 2002:a05:6102:3ec3:: with SMTP id n3mr9762236vsv.48.1635485338588;
+ Thu, 28 Oct 2021 22:28:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.15-rc7-550-g923cde4b8abd
-X-Kernelci-Report-Type: test
-Subject: next/pending-fixes baseline: 569 runs,
- 2 regressions (v5.15-rc7-550-g923cde4b8abd)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
+ <20211028204756.GA293663@bhelgaas>
+In-Reply-To: <20211028204756.GA293663@bhelgaas>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 29 Oct 2021 07:28:47 +0200
+Message-ID: <CAMhs-H_a0PqATB3kFO3dcFiq+reR+5z7FW27M=m2MnnYA48NYw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
+ able to use them from driver code
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yanteng Si <siyanteng01@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 569 runs, 2 regressions (v5.15-rc7-550-g923cde=
-4b8abd)
+On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
+> > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
+> > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
+> > > > > >
+> > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+> > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
+> > > > > > drivers become modules.
+> > > > > >
+> > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > >
+> > > > > > Let's just export them.
+> > > > > >
+> > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> > > > > > ---
+> > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
+> > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
+> > > > > >  2 files changed, 6 insertions(+)
+> > > > > >
+> > > > >
+> > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > >
+> > > > could we instead make the pcie-mt761 driver non modular ? Exporting
+> > > > all MIPS specific stuff for just making an essential driver modular
+> > > > doesn't IMHO make much sense.
+> > >
+> > > The driver is modular because I have been advised other times that new
+> > > drivers should be able to be compiled as modules and we should avoid
+> > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
+> > > also always including as 'y' the driver since for me not having pci in
+> > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
+> > > instead of 'tristate', but I don't know what should be the correct
+> > > thing to do in this case. Thoughts?
+> >
+> > I guess we also want the driver to at least be compile tested in
+> > 'allmodconfig' and other similars...15692a80d949
+>
+> Sounds like the systems that actually use this driver require it to be
+> built-in, and the only benefit of exporting these symbols is that we
+> would get better compile test coverage.
+>
+> If that's the case, I agree that it's better to just make it
+> non-modular.
 
-Regressions Summary
--------------------
+I agree and that was my reasoning for sending a patch to also convert
+to bool the phy driver that this PCIe controller uses. When the pull
+request was sent from Vinod to Greg, Greg refused to take it because
+of that commit and the commit was reverted and a new pull request was
+sent including this revert. This is commit 15692a80d949 ("phy: Revert
+"phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
+of this I also changed the PCIe controller Kconfig from bool to
+tristate when I sent v3 of the series which at the end were the ones
+that was finally taken. There are also other ralink related symbols
+that have been exported to allow to compile other drivers as a
+modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
+ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
+agree and I am using the driver as if it were a bool and also ralink
+systems normally require all drivers built-in, but I think we have to
+take into account also the "historical facts" here. In any case,
+Bjorn, let me know if you want me to send whatever patch might be
+needed.
 
-platform      | arch  | lab          | compiler | defconfig                =
-    | regressions
---------------+-------+--------------+----------+--------------------------=
-----+------------
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMIZE_BAS=
-E=3Dy | 1          =
+Best regards,
+    Sergio Paracuellos
 
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig                =
-    | 1          =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.15-rc7-550-g923cde4b8abd/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.15-rc7-550-g923cde4b8abd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      923cde4b8abd403c3ca5a4693900627b43d66646 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform      | arch  | lab          | compiler | defconfig                =
-    | regressions
---------------+-------+--------------+----------+--------------------------=
-----+------------
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMIZE_BAS=
-E=3Dy | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/617b389517f5151ecb335927
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-5=
-50-g923cde4b8abd/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
-bre/baseline-rk3328-rock64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-5=
-50-g923cde4b8abd/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-bayli=
-bre/baseline-rk3328-rock64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/617b389517f5151ecb335=
-928
-        failing since 0 day (last pass: v5.15-rc7-176-gbfbd58926fc5, first =
-fail: v5.15-rc7-202-gc79631111e0b) =
-
- =
-
-
-
-platform      | arch  | lab          | compiler | defconfig                =
-    | regressions
---------------+-------+--------------+----------+--------------------------=
-----+------------
-rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig                =
-    | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/617b3b2a7985754aa833591b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-5=
-50-g923cde4b8abd/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64=
-.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-rc7-5=
-50-g923cde4b8abd/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/617b3b2a7985754aa8335=
-91c
-        failing since 0 day (last pass: v5.15-rc7-176-gbfbd58926fc5, first =
-fail: v5.15-rc7-202-gc79631111e0b) =
-
- =20
+>
+> Bjorn

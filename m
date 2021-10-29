@@ -2,110 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0000643FB0F
-	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 12:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C9C43FC19
+	for <lists+linux-next@lfdr.de>; Fri, 29 Oct 2021 14:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbhJ2Kx4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 Oct 2021 06:53:56 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:43568 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbhJ2Kxz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Oct 2021 06:53:55 -0400
+        id S230492AbhJ2MRO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 Oct 2021 08:17:14 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:55758 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230273AbhJ2MRN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 Oct 2021 08:17:13 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4DEAD1FD53;
-        Fri, 29 Oct 2021 10:51:26 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 67061217BA;
+        Fri, 29 Oct 2021 12:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1635504686;
+        t=1635509684;
         h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
          cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TyVjdqscO8NIKtfAt2hF9LKJUEv3Q/czSE4LKTRarjc=;
-        b=zZ1zDKWhGmi5teD7umyt5oUZFIlgWwFgnyPYKHvX98GXsx4iBTMwxd9qVhCzpBIqgjS0M4
-        pic5fH4zm9R/bZaEH8GwFhGmszsjyhMMrk07cnOtaddevtzsBGzhXhh2zSQxnibsChrVWG
-        v3El+ftG2E18fFCpzpd3dbcJ2Il214w=
+        bh=fOqJfV+Aey4e3tvNIeU6bJo2ZmdcFDdbpKccfiZf5ZU=;
+        b=vDqR5zNQvrHRU2VfsOVH9icjtoK0aeIgCmZPHpzt9gPy64fK+qcGbDlj0YkJGXd2YykPkB
+        CuCizXk9OQLbWSQsEuoqtE2YlbvAoZx8Xdx97iWOz26ZIqB/YkZtHfZ7mmzatdyiH7FENu
+        XeTq98mq73sbV0Jdm6KTdqgDWk7blqY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1635504686;
+        s=susede2_ed25519; t=1635509684;
         h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
          cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TyVjdqscO8NIKtfAt2hF9LKJUEv3Q/czSE4LKTRarjc=;
-        b=B05G5e+1Azeb7fWZW21ZJ4WbYU0OQ1qPdtD96mnIxK3oQSMiifPdfYVblT0u+fhwmd0K4V
-        PhXJMZRYnwKo6eDA==
+        bh=fOqJfV+Aey4e3tvNIeU6bJo2ZmdcFDdbpKccfiZf5ZU=;
+        b=Z8Z9VsJGgrw2dyn88IfmCfPIAHxI6V+mMNFInq0Lzv02uiRXdAurNJMp4cYn6tY5UtNFog
+        hMTb/kdd8mCTIoAA==
 Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 413F0A3B85;
-        Fri, 29 Oct 2021 10:51:26 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 57706A3B88;
+        Fri, 29 Oct 2021 12:14:44 +0000 (UTC)
 Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 14300DA7A9; Fri, 29 Oct 2021 12:50:53 +0200 (CEST)
-Date:   Fri, 29 Oct 2021 12:50:52 +0200
+        id BB779DA7A9; Fri, 29 Oct 2021 14:14:10 +0200 (CEST)
+Date:   Fri, 29 Oct 2021 14:14:09 +0200
 From:   David Sterba <dsterba@suse.cz>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20211029105052.GW20319@suse.cz>
+Message-ID: <20211029121409.GX20319@suse.cz>
 Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+Mail-Followup-To: dsterba@suse.cz,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>
 References: <20211027210924.22ef5881@canb.auug.org.au>
  <20211029095226.GV20319@suse.cz>
+ <20211029105052.GW20319@suse.cz>
+ <CAHp75VdXJEuY86pFC+bLoGbAYuGsA+KqEV-g4Dca25HHD-njHA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211029095226.GV20319@suse.cz>
+In-Reply-To: <CAHp75VdXJEuY86pFC+bLoGbAYuGsA+KqEV-g4Dca25HHD-njHA@mail.gmail.com>
 User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 11:52:26AM +0200, David Sterba wrote:
-> On Wed, Oct 27, 2021 at 09:09:24PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > [I am not sure why this error only popped up after I merged Andrew's
-> > patch set ...]
-> > 
-> > After merging the btrfs tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > In file included from include/linux/string.h:253,
-> >                  from include/linux/bitmap.h:11,
-> >                  from include/linux/cpumask.h:12,
-> >                  from arch/x86/include/asm/cpumask.h:5,
-> >                  from arch/x86/include/asm/msr.h:11,
-> >                  from arch/x86/include/asm/processor.h:22,
-> >                  from arch/x86/include/asm/cpufeature.h:5,
-> >                  from arch/x86/include/asm/thread_info.h:53,
-> >                  from include/linux/thread_info.h:60,
-> >                  from arch/x86/include/asm/preempt.h:7,
-> >                  from include/linux/preempt.h:78,
-> >                  from include/linux/spinlock.h:55,
-> >                  from include/linux/wait.h:9,
-> >                  from include/linux/mempool.h:8,
-> >                  from include/linux/bio.h:8,
-> >                  from fs/btrfs/ioctl.c:7:
-> > In function 'memcpy',
-> >     inlined from '_btrfs_ioctl_send' at fs/btrfs/ioctl.c:4846:3:
-> > include/linux/fortify-string.h:219:4: error: call to '__write_overflow' declared with attribute error: detected write beyond size of object (1st parameter)
-> >   219 |    __write_overflow();
-> >       |    ^~~~~~~~~~~~~~~~~~
-> > 
-> > Caused by commit
-> > 
-> >   c8d9cdfc766d ("btrfs: send: prepare for v2 protocol")
-> > 
-> > This changes the "reserved" field of struct btrfs_ioctl_send_args from 4 u64's to 3, but the above memcpy is copying the "reserved" filed from a struct btrfs_ioctl_send_args_32 (4 u64s) into it.
+On Fri, Oct 29, 2021 at 01:58:53PM +0300, Andy Shevchenko wrote:
+> On Friday, October 29, 2021, David Sterba <dsterba@suse.cz> wrote:
 > 
-> I'll fix it in the next update. There are two structures for the ioctl
-> that need to be in sync but I forgot to do that.
+> > On Fri, Oct 29, 2021 at 11:52:26AM +0200, David Sterba wrote:
+> > > On Wed, Oct 27, 2021 at 09:09:24PM +1100, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > [I am not sure why this error only popped up after I merged Andrew's
+> > > > patch set ...]
+> >
+> >
+> 
+> 
+> 
+> > Also I think that next time you can use some older version of the
+> > for-next branch instead of making the whole subsystem depend on BROKEN.
+> > This causes much more harm in the testing setups that suddenly can't
+> > work at all, compared to testing a few days older branch.
+> 
+> The Linux Next reflects current state of affairs and marking something
+> which is definitely broken as BROCKEN is what I expect as a developer who
+> tests some other stuff on top of broken code.
 
-Now pushed with top commit 764ada31357678.
+I'd argue against using the big 'depdends BROKEN' hammer as much as
+possible, surely not for linux-next. Normaly the BROKEN status is earned
+after known unfixed breakage for subsystems where nobody cares. If code
+is buggy and causes crashes when testing linux-next, that's something we
+want to see, not "no test results at all".
 
-Also I think that next time you can use some older version of the
-for-next branch instead of making the whole subsystem depend on BROKEN.
-This causes much more harm in the testing setups that suddenly can't
-work at all, compared to testing a few days older branch.
+Can you imagine all compilation breakages in linux-next get resolved by
+BROKEN? I know Stephen is capable of fixing various compilation problems
+by himself and given the whole-tree scope it's heroic efforts, leaving
+the shortcuts for the rest. In this case the fix may not be obvious so
+I'd understand not merging my for-next branch at all or merging a stub
+like the latest rc instead, ie. resolving that on the integration level
+and not touching the config or code itself.

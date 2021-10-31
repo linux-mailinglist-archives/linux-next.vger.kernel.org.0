@@ -2,137 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A84440CB8
-	for <lists+linux-next@lfdr.de>; Sun, 31 Oct 2021 05:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABD6441011
+	for <lists+linux-next@lfdr.de>; Sun, 31 Oct 2021 19:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbhJaEcs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 31 Oct 2021 00:32:48 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:34083 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhJaEcs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 31 Oct 2021 00:32:48 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        id S230043AbhJaSPx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 31 Oct 2021 14:15:53 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:50504 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230346AbhJaSPw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 31 Oct 2021 14:15:52 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HhjrM3VGvz4xbc;
-        Sun, 31 Oct 2021 15:30:11 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635654611;
-        bh=vEzmphI99yoDvtVkzfKFMonILD2eztvW5urapUsPvVo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Mk7qScKRoMs1j8oTqGbOFU3LdsI/EXQw80US3JpfPNL/S0Soo/GA2iRUIRHbpI0Fy
-         VS+SieHf1ER3iMuHYgW7P6Q/GD3R5BTfqx3XqPGSXTw4Ouxo+SiWDhnoxXg4SQPabB
-         UGt6kV2R5+N/ohLgPdcOnSE792ZLljDsInoe+DSzrZFeNFmycxGYhBT4q+koKIA3LA
-         dj9IgVgkERV6mkyAXvMpfyUBOVRaNA5xBuyLS20H6AV6T5jAG8bSDtDrrAHt3crDva
-         Mph40cK8EgVgwqGCEVVFj50r1dVnW7YKDc+vSr2f5X0VgcPaploq/1Ve6/xVhYS3B9
-         EWOnUZSg4lJMA==
-Date:   Sun, 31 Oct 2021 15:30:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: linux-next: build failure after merge of the btrfs tree
-Message-ID: <20211031153009.79a2879d@canb.auug.org.au>
-In-Reply-To: <20211029121409.GX20319@suse.cz>
-References: <20211027210924.22ef5881@canb.auug.org.au>
-        <20211029095226.GV20319@suse.cz>
-        <20211029105052.GW20319@suse.cz>
-        <CAHp75VdXJEuY86pFC+bLoGbAYuGsA+KqEV-g4Dca25HHD-njHA@mail.gmail.com>
-        <20211029121409.GX20319@suse.cz>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 04DC621958;
+        Sun, 31 Oct 2021 18:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1635703999; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Up7oZPl8s4bWT/CVfU9jOEhgwIrK+zsoVt+amABM9Fc=;
+        b=ArBdtU9C55HqEXW5VW+xDG2ExgWnefN7/0hEOiyMnlFqrbrZ7jd2hoGtTN0EAOdia4pU8t
+        zIbk7Vk77Y3Ex/WlMqXNy3CGk/H85M5mJfvRasznOJU9SQ2p7B+iE9xyACJozNFBFCTTJu
+        H1KMnewRUn4ilztLA+V68yiDt+yWJtg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1635703999;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Up7oZPl8s4bWT/CVfU9jOEhgwIrK+zsoVt+amABM9Fc=;
+        b=1aQzPD5rSzmZfQjsSfbuJBONG3vE3g38mOslVlrt/rDrmFowKw5l5NTgH6HAcQX3qR0x0d
+        jHzXoL72vwfPuHAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96D711323E;
+        Sun, 31 Oct 2021 18:13:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MEk2I77cfmGRVQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sun, 31 Oct 2021 18:13:18 +0000
+Message-ID: <eadfa89d-1c39-be25-abaf-4150396e1024@suse.de>
+Date:   Sun, 31 Oct 2021 19:13:17 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/G+VgasT.S=ynf_DLQSYpa4y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2] drm: import DMA_BUF module namespace
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+Cc:     Marcel Ziswiler <marcel@ziswiler.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20211027212506.3418521-1-marcel@ziswiler.com>
+ <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+ <20211031132155.7dc972e8@canb.auug.org.au>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211031132155.7dc972e8@canb.auug.org.au>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------xHcEni6FN9N08ZFYv4DeOYvy"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/G+VgasT.S=ynf_DLQSYpa4y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------xHcEni6FN9N08ZFYv4DeOYvy
+Content-Type: multipart/mixed; boundary="------------X8nU0lx0ulAy9q1uaU0R0pzt";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+Cc: Marcel Ziswiler <marcel@ziswiler.com>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ Maxime Ripard <mripard@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@linux.ie>,
+ Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+ Linux Kernel Functional Testing <lkft@linaro.org>
+Message-ID: <eadfa89d-1c39-be25-abaf-4150396e1024@suse.de>
+Subject: Re: [PATCH v2] drm: import DMA_BUF module namespace
+References: <20211027212506.3418521-1-marcel@ziswiler.com>
+ <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+ <20211031132155.7dc972e8@canb.auug.org.au>
+In-Reply-To: <20211031132155.7dc972e8@canb.auug.org.au>
 
-Hi David,
+--------------X8nU0lx0ulAy9q1uaU0R0pzt
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Fri, 29 Oct 2021 14:14:09 +0200 David Sterba <dsterba@suse.cz> wrote:
->
-> On Fri, Oct 29, 2021 at 01:58:53PM +0300, Andy Shevchenko wrote:
-> > On Friday, October 29, 2021, David Sterba <dsterba@suse.cz> wrote:
-> >  =20
-> > > On Fri, Oct 29, 2021 at 11:52:26AM +0200, David Sterba wrote: =20
-> > > > On Wed, Oct 27, 2021 at 09:09:24PM +1100, Stephen Rothwell wrote: =
-=20
-> > > > > Hi all,
-> > > > >
-> > > > > [I am not sure why this error only popped up after I merged Andre=
-w's
-> > > > > patch set ...] =20
-> > >
-> > > =20
-> >=20
-> >=20
-> >  =20
-> > > Also I think that next time you can use some older version of the
-> > > for-next branch instead of making the whole subsystem depend on BROKE=
-N.
-> > > This causes much more harm in the testing setups that suddenly can't
-> > > work at all, compared to testing a few days older branch. =20
-> >=20
-> > The Linux Next reflects current state of affairs and marking something
-> > which is definitely broken as BROCKEN is what I expect as a developer w=
-ho
-> > tests some other stuff on top of broken code. =20
->=20
-> I'd argue against using the big 'depdends BROKEN' hammer as much as
-> possible, surely not for linux-next. Normaly the BROKEN status is earned
-> after known unfixed breakage for subsystems where nobody cares. If code
-> is buggy and causes crashes when testing linux-next, that's something we
-> want to see, not "no test results at all".
->=20
-> Can you imagine all compilation breakages in linux-next get resolved by
-> BROKEN? I know Stephen is capable of fixing various compilation problems
-> by himself and given the whole-tree scope it's heroic efforts, leaving
-> the shortcuts for the rest. In this case the fix may not be obvious so
-> I'd understand not merging my for-next branch at all or merging a stub
-> like the latest rc instead, ie. resolving that on the integration level
-> and not touching the config or code itself.
+SGkNCg0KQW0gMzEuMTAuMjEgdW0gMDM6MjEgc2NocmllYiBTdGVwaGVuIFJvdGh3ZWxsOg0K
+PiBIaSBUaG9tYXMsDQo+IA0KPiBPbiBGcmksIDI5IE9jdCAyMDIxIDIwOjUxOjUyICswMjAw
+IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cm90ZToNCj4+DQo+
+PiBBbSAyNy4xMC4yMSB1bSAyMzoyNSBzY2hyaWViIE1hcmNlbCBaaXN3aWxlcjoNCj4+PiBG
+cm9tOiBNYXJjZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4NCj4+
+Pg0KPj4+IFRvZGF5J3MgLW5leHQgZmFpbHMgYnVpbGRpbmcgYXJtNjQgZGVmY29uZmlnIGFz
+IGZvbGxvd3M6DQo+Pj4NCj4+PiBFUlJPUjogbW9kcG9zdDogbW9kdWxlIGRybV9jbWFfaGVs
+cGVyIHVzZXMgc3ltYm9sIGRtYV9idWZfdnVubWFwIGZyb20NCj4+PiAgICBuYW1lc3BhY2Ug
+RE1BX0JVRiwgYnV0IGRvZXMgbm90IGltcG9ydCBpdC4NCj4+PiBFUlJPUjogbW9kcG9zdDog
+bW9kdWxlIGRybV9jbWFfaGVscGVyIHVzZXMgc3ltYm9sIGRtYV9idWZfdm1hcCBmcm9tDQo+
+Pj4gICAgbmFtZXNwYWNlIERNQV9CVUYsIGJ1dCBkb2VzIG5vdCBpbXBvcnQgaXQuDQo+Pj4N
+Cj4+PiBSZXBvcnRlZC1ieTogTGludXggS2VybmVsIEZ1bmN0aW9uYWwgVGVzdGluZyA8bGtm
+dEBsaW5hcm8ub3JnPg0KPj4+IEZpeGVzOiBjb21taXQgNGIyYjVlMTQyZmY0ICgiZHJtOiBN
+b3ZlIEdFTSBtZW1vcnkgbWFuYWdlcnMgaW50byBtb2R1bGVzIikNCj4+PiBTaWduZWQtb2Zm
+LWJ5OiBNYXJjZWwgWmlzd2lsZXIgPG1hcmNlbC56aXN3aWxlckB0b3JhZGV4LmNvbT4NCj4+
+DQo+PiBJIGFkZGVkIHRoaXMgZml4IGludG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzIQ0KPj4N
+Cj4+IEhvd2V2ZXIsIEkgaGFkIHRvIGltcG9ydCBsaW51eC1uZXh0IHdoaWxlIGRvaW5nIHNv
+LiAnR2l0IGFtJyBkaWQgYQ0KPj4gMy13YXkgbWVyZ2UsIHdoaWNoIG1heSByZXN1bHQgaW4g
+YSBjb25mbGljdCB3aGVuIHRoZSBmaXggcmVhY2hlcw0KPj4gbGludXgtbmV4dCBhZ2Fpbi4g
+SSBhbHNvIHVwZGF0ZWQgdGhlIGNvbW1pdCBkZXNjcmlwdGlvbi4NCj4gDQo+IFlvdSBjYW5u
+b3QgbWVyZ2UgbGludXgtbmV4dCBpbnRvIGFueSB0cmVlLCBzb3JyeS4gIEl0IHJlYmFzZXMg
+ZXZlcnkgZGF5DQo+IChhbmQgc28gZG8gc2V2ZXJhbCBvZiB0aGUgaW5jbHVkZWQgdHJlZXMp
+Lg0KDQpObyBubywgZG9uJ3Qgd29ycnkuIEkgbWVhbnQgJ2ltcG9ydCcgYXMgaW4gJ2dpdCBy
+ZW1vdGUgYWRkIGxpbnV4LW5leHQnLiANCkkgd2FzIGFjdHVhbGx5IGNvbXBsYWluaW5nIHRo
+YXQgdGhlIHByb3ZpZGVkIGZpeCB3YXMgbm90IGFnYWluc3QgYSBEUk0gdHJlZS4NCg0KQmVz
+dCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gWW91ciBmaXggcGF0Y2ggc2hvdWxkIGJlIHNl
+bnQgdG8gR3JlZyBLSCBhbmQgQXJuZCBhcyB0aGUgYnVpbGQgZmFpbHVyZQ0KPiBpcyBpbnRy
+b2R1Y2VkIGluIHRoZSBjaGFyLW1pc2MgdHJlZS4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1l
+cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
+b25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJt
+YW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogRmVs
+aXggSW1lbmTDtnJmZmVyDQo=
 
-OK, this was a pain because the error did not show up until late in
-the day (something in Andrew's patch series exposed the problem - note
-my report was sent at 9:09 PM - my day starts about 7:30 AM).  This is
-after I had merged maybe 150-200 tress in top of yours. My choices are
-few at that point (you don't expect me to remerge all those trees,
-right?).  Almost all errors I see are immediately after I merge a tree,
-at which point my usual response is to reset my tree to before the
-merge and then merge the previous day's version of the tree. Generally,
-I do not fix build errors unless they are caused by an interaction
-between 2 trees.
+--------------X8nU0lx0ulAy9q1uaU0R0pzt--
 
-Given that I had spent some time to figure out what the problem was, I
-expected a fix to be done pretty soon, so the easiest way I could
-continue was to just mark btrfs broken and continue on (I still had
-another hour to go before I was finished (my days get really long just
-before Linus does a release :-( ).
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/G+VgasT.S=ynf_DLQSYpa4y
-Content-Type: application/pgp-signature
+--------------xHcEni6FN9N08ZFYv4DeOYvy
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF+G9EACgkQAVBC80lX
-0GzDPAf/V2rEcDDyyC6/LLjMMmA6ctcKZpCLBHJhzcbzEs2fRvyldHqfczXT1c37
-2bGTSjRJxp3DIdaWQc5WxSK32AQ6MnvB8wsfRpolHJD1tmcAx5bQg7+obrC9oJVd
-VZrXC48KVTYoc6XuZ77HFExnrzVP4dES1wXKOWmZIOAmyVmSX+2CV7FrxneUwPDB
-ALIJzEjmx7LVxK67/O2ZP5pzI7DVmbxxGhJgj4/U/V923Ketv+G/yyY0OPfBKuWA
-Km3vPCnaHsMJ6Iq/fcUF8qEG+pZKjsCqaE86iomb1MvaWUxvlt0JUnWQ6PynpzHy
-5gKFcwQNHvP67IVLla6eVJr5YGrZOQ==
-=lUs1
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmF+3L0FAwAAAAAACgkQlh/E3EQov+BY
+BA/+KHAwHCFaAsejmukP+E7sYrqLuAjl+4pIhX4woK34y1f7LVav8PjxbTdpN20U2SMdjyPzUsLV
+IVHPO4Y4AEM2bNlrF/T+Aybg/lUmDPewknIn15rqi1QM7MngfrqtdLcVwM9fe7uWR9h3ygX6gAo4
+3oLIgS7ZWAlihy+DIyN/zasD+aG2YT6g6BL9Z3OX2wFrQKhEiW2f+Ng0ns3dEu8y37bWTWtNatE7
+BaWgU5QGMlXNQJ39oDGbnOzZJGttUmUqScTZ7VpmkhlpIRUk8YpJu5aO0ZL4paKqqy9dYvIqakDx
+FNXlzBPBaYgk0rrHeyzBzumjGWZY5GFhnZsP8YLK8IEhh4wsMMTdYnYvX9rqGnHvUa7smrG/rigA
+RAUawiowToaeEAvsbj9gtVXwwwrlq2uNvD+vCFghn4373hKzYBrW7H+xcYsfAOCI/qMgQPZeTadj
+VLM2ZghP5n9JsAyadlGjsgO9DmP0fpa/eulYtrDpAFuf8X6oGT/M5SxEFHXnK3NC7BzQhg1/ZLc6
++pEnvu0UjAht3/RW1IbwhqK9C/x594C+VkjgKiqLb5wB4rDTbYlxTHdRdtUVX+gvO/csIGQitVPg
+8+asMtMgZhHyCa66Q8FCUYXrT9HwlYs9YVrd5/nTUyXnUYZf23htXp6oAS2tMbHvyBll5vB3UXgW
+TkY=
+=CLUF
 -----END PGP SIGNATURE-----
 
---Sig_/G+VgasT.S=ynf_DLQSYpa4y--
+--------------xHcEni6FN9N08ZFYv4DeOYvy--

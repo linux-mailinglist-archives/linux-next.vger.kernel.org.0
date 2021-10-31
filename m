@@ -2,35 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FC9440C87
-	for <lists+linux-next@lfdr.de>; Sun, 31 Oct 2021 03:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC09440CA4
+	for <lists+linux-next@lfdr.de>; Sun, 31 Oct 2021 04:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhJaCYh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 30 Oct 2021 22:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S232020AbhJaDd0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 30 Oct 2021 23:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbhJaCYg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 30 Oct 2021 22:24:36 -0400
+        with ESMTP id S231176AbhJaDdZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 30 Oct 2021 23:33:25 -0400
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E4FC061570;
-        Sat, 30 Oct 2021 19:22:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6586CC061570;
+        Sat, 30 Oct 2021 20:30:52 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hhg0P3lyqz4xZ1;
-        Sun, 31 Oct 2021 13:21:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HhhWp1klRz4xbP;
+        Sun, 31 Oct 2021 14:30:45 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635646923;
-        bh=DUO9TOyM77Bq9mupg3Q1Mb7ti0F3HKcOqB/TwJSBtS4=;
+        s=201702; t=1635651049;
+        bh=lElvBm4kxWpYBa05SHe2+518FGFYo2nvrjWJliNGrOw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lpJmMXvZ3/rXvokfTgJlBRpbu0I2XmKDaJdfnt1n1id4WLANBhA6oaWgtPdChQzLG
-         fAU9Rzrp6OZv3lZ88E9Trj7I4w5yMPtB0isrSKWWjHTfsMn4Gm16izveTCRdW/WMRh
-         marTOmz51e9GCkdOOEJqEz+9JJb8qTmMvBuPuj4LdbK1UvAQ4rxkHvc3N0ykt7qd4I
-         eZ9nfUgv2QwJ/n0e4rJfgVYCkUY1+z4OvSzKcBq543GxY9XRHdVBVQGkfPy8xGex2W
-         yV/q5VkReU6//CMUimBk1LzcrJW49CUi7VO4lHYjfbUAX2Rfg4FUIHt/38qwtQ/5PQ
-         UpXOBX1DKr59g==
-Date:   Sun, 31 Oct 2021 13:21:55 +1100
+        b=gOJ3bTeMjFismbBeJVfEbfpzwP2C0hmKDCL7fYAqjK4N+bEDYxY2YhSXrDekoIJRO
+         rM260n6ECg6LxFqgtbn35UQ5mPMbpxt82Lh2xzhtGwxGvNBMBR1B7BNQqZ3TC/AJHo
+         8PsdiSMqWHUy1vwjngE2QkYQPIExW22ZxXkJXRESsTNuY9nzhTD2Qx2zqkkjbXU9oN
+         t3v12ub58UAPR05Cjj3RP9E+J23NYYZuilavBr1NtTPB9OB1cXCn2rJbW+hgm7QGmJ
+         p1JHiWsAbl4rUaFqdPgfb0K1zIjtyE1mVk9eJEY6VRQnWQSZ4BPCPiE47auw6fFTTx
+         +L7mxie4h8+mA==
+Date:   Sun, 31 Oct 2021 14:30:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Zimmermann <tzimmermann@suse.de>, Greg KH <greg@kroah.com>
 Cc:     Marcel Ziswiler <marcel@ziswiler.com>,
@@ -49,70 +49,67 @@ Cc:     Marcel Ziswiler <marcel@ziswiler.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Linux Kernel Functional Testing <lkft@linaro.org>
 Subject: Re: [PATCH v2] drm: import DMA_BUF module namespace
-Message-ID: <20211031132155.7dc972e8@canb.auug.org.au>
-In-Reply-To: <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+Message-ID: <20211031143045.6abb9225@canb.auug.org.au>
+In-Reply-To: <20211031132155.7dc972e8@canb.auug.org.au>
 References: <20211027212506.3418521-1-marcel@ziswiler.com>
         <2312b5c3-ffc9-b54e-a08b-2548e3837d83@suse.de>
+        <20211031132155.7dc972e8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tw5wYLogO=aZ9rmUAiMowQ4";
+Content-Type: multipart/signed; boundary="Sig_/wf9NJo5lImerRBFY12uaiK5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tw5wYLogO=aZ9rmUAiMowQ4
+--Sig_/wf9NJo5lImerRBFY12uaiK5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+Hi all,
 
-On Fri, 29 Oct 2021 20:51:52 +0200 Thomas Zimmermann <tzimmermann@suse.de> =
+On Sun, 31 Oct 2021 13:21:55 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Am 27.10.21 um 23:25 schrieb Marcel Ziswiler:
-> > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> >=20
-> > Today's -next fails building arm64 defconfig as follows:
-> >=20
-> > ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from
-> >   namespace DMA_BUF, but does not import it.
-> > ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vmap from
-> >   namespace DMA_BUF, but does not import it.
-> >=20
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Fixes: commit 4b2b5e142ff4 ("drm: Move GEM memory managers into modules=
-")
-> > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com> =20
->=20
-> I added this fix into drm-misc-next. Thanks!
->=20
-> However, I had to import linux-next while doing so. 'Git am' did a
-> 3-way merge, which may result in a conflict when the fix reaches
-> linux-next again. I also updated the commit description.
+> On Fri, 29 Oct 2021 20:51:52 +0200 Thomas Zimmermann <tzimmermann@suse.de=
+> wrote:
+> >
+> > Am 27.10.21 um 23:25 schrieb Marcel Ziswiler: =20
+> > > From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > >=20
+> > > Today's -next fails building arm64 defconfig as follows:
+> > >=20
+> > > ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vunmap from
+> > >   namespace DMA_BUF, but does not import it.
+> > > ERROR: modpost: module drm_cma_helper uses symbol dma_buf_vmap from
+> > >   namespace DMA_BUF, but does not import it.
+> > >=20
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > Fixes: commit 4b2b5e142ff4 ("drm: Move GEM memory managers into modul=
+es")
 
-You cannot merge linux-next into any tree, sorry.  It rebases every day
-(and so do several of the included trees).
+Oh, and it is actually:
 
-Your fix patch should be sent to Greg KH and Arnd as the build failure
-is introduced in the char-misc tree.
+Fixes: 16b0314aa746 ("dma-buf: move dma-buf symbols into the DMA_BUF module=
+ namespace")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/tw5wYLogO=aZ9rmUAiMowQ4
+--Sig_/wf9NJo5lImerRBFY12uaiK5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF9/cMACgkQAVBC80lX
-0Gx7VAf/doFfX4Te328O/6riL+zHiG+zdqagH9eFcsnoNyguGQvM2KXmYLwErGC2
-/uKyTlihOeaU2o3bZmNhoEYxzeV/5s+owf4n+KNNy5NWQrtOy+dWBX70rkyhLbGU
-+DOyfN6slXSkB4S7WkbbP83TMDkGWIaypa4OcOq5wq7Chc6lxwzk93XSVILxgrJO
-2dNbhL72lzpj+ug6hwzJM6cLdk7Vqm3JWHZuHJwxAkJBUfF6wX/WIyIy2NP6gb/l
-i7H7GLohSFcV5BC8rpxG5Mq06FHhrl+Jl97tr3Do+8vu4Eq4nZFGefaGdIELSeX5
-Pz3x2dv4AncEN2lIwoQDnkWYfbmxkg==
-=4Zmp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF+DeUACgkQAVBC80lX
+0Gz2bQf+MNOX1/rN9oa/jPNwlc5VjeOSrrS7cXxshE8zON0/kdHnQpBB1TmV9FIX
+O7nyZYnAL2G35PXRQHsAkpzxSY0GrzdBPxZrweofHFjE0rH1HmhzZzajoYL+EWoe
+lc1306PDJJrzHLUn74lv7AvqLiqe7sALN5PbmM6RKIR0Fkp1Q2tjneb1Qd7S9SzS
+3rznO7Giva3PXWecs2nEIRVzUDADY0UbLYOTfISA/SWD1Ex/8UsPUugHDNGWUNTK
+cP/kqZQZw/6SIfZh0+YXmF96xOmtaJSmpBuM/3LOrQpyu/KX55MDrdyPkSahG8Y/
+aGh3RwFNWNoKv3ziIaAJBsN3nTghRQ==
+=HknL
 -----END PGP SIGNATURE-----
 
---Sig_/tw5wYLogO=aZ9rmUAiMowQ4--
+--Sig_/wf9NJo5lImerRBFY12uaiK5--

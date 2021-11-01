@@ -2,121 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CBC4413E7
-	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 07:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D8E441583
+	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 09:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbhKAGvX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Nov 2021 02:51:23 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:49269 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbhKAGvX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 02:51:23 -0400
+        id S231185AbhKAIpD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Nov 2021 04:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230520AbhKAIpC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 04:45:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4270DC061714;
+        Mon,  1 Nov 2021 01:42:29 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HjNsr5bzFz4xbc;
-        Mon,  1 Nov 2021 17:48:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HjRNx3Hdrz4xbC;
+        Mon,  1 Nov 2021 19:42:24 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635749329;
-        bh=LwOxcSmejku04OvgnT+sj+dtnKHGyaxldQw1RO/zOWg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mRvQGzBeKlpajrKfoMBVh6y3YupdWNLNTp1yw96QOFHtAHTmVG1VPF2FT1rB8h9HE
-         ujKSsFwBVshmiYCy3fxv9jR6XkV85SlUw3L7Rr/ipw4/FuENTdCQAu18OUa1x9X0Nj
-         1jcUuFzfgr2wmsn55A82X9TXnNkWmjN3Y+hECoFyRDCXNvp0Izs23LBg3waPkGRJxJ
-         /a16cb6a0wWtxLu7q0dowRJ0dG60f1LCGeEzDIByKDtS3MSXRwG4Kg553sGJ8qMklF
-         ZbTTcOpneVyj0q3vwxdT0Kcd59tfWmHK+gvPTMAbtgxQrf6nFcaWVTLPbvExKYvxob
-         7jSZP/d9/cMAg==
-Date:   Mon, 1 Nov 2021 17:48:46 +1100
+        s=201702; t=1635756147;
+        bh=zeBNRU97MSWpu1D2Ts3/Tp8r/3C233Ohd7glZC2TBJw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c52KPRl251BVXF489gMOE2VQI7MZgyoDLzJR7/hJJw61N/sIcR+X2cZkA3e9+Od/q
+         83luLwx7TN40+DeG5r6cy3xpqNlsdB7JEC8Haxg/ezWyt3B69aQPAujy1QGIKhnTB6
+         fmhTXJxaLsj5ytHwOIM8EnCDvfrBYzdDRTC+0bphfvdP9LM5bxlAOfOhgwEcZulc18
+         pZxc4s937mKthLXnaZXV/csQ+icDoiAPfVBEiTtiZFI1xAbqHvtKhCv7CABnS7SyAS
+         k79pQEW9a95T8fstx62jFvezS5/CbcdL/1rS0sc+5XA8GaHdBGrqxddI+s5w/4baWV
+         NI4GDm8Me8WbQ==
+Date:   Mon, 1 Nov 2021 19:42:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the folio tree
-Message-ID: <20211101174846.2b1097d7@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20211101194223.749197c5@canb.auug.org.au>
+In-Reply-To: <20211015202648.258445ef@canb.auug.org.au>
+References: <20211015202648.258445ef@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fdcIZB22wX8enD78RFxDID3";
+Content-Type: multipart/signed; boundary="Sig_/AvYxcYE9xVAnbawWvDaH9ME";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fdcIZB22wX8enD78RFxDID3
+--Sig_/AvYxcYE9xVAnbawWvDaH9ME
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the folio tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Fri, 15 Oct 2021 20:26:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the drm-misc tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>=20
+> drivers/gpu/drm/drm_modeset_lock.c:111:29: error: conflicting types for '=
+__stack_depot_save'
+>   111 | static depot_stack_handle_t __stack_depot_save(void)
+>       |                             ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/page_ext.h:7,
+>                  from include/linux/mm.h:25,
+>                  from include/linux/kallsyms.h:13,
+>                  from include/linux/bpf.h:20,
+>                  from include/linux/bpf-cgroup.h:5,
+>                  from include/linux/cgroup-defs.h:22,
+>                  from include/linux/cgroup.h:28,
+>                  from include/linux/memcontrol.h:13,
+>                  from include/linux/swap.h:9,
+>                  from include/linux/suspend.h:5,
+>                  from include/linux/regulator/consumer.h:35,
+>                  from include/linux/i2c.h:18,
+>                  from include/drm/drm_crtc.h:28,
+>                  from include/drm/drm_atomic.h:31,
+>                  from drivers/gpu/drm/drm_modeset_lock.c:24:
+> include/linux/stackdepot.h:18:22: note: previous declaration of '__stack_=
+depot_save' was here
+>    18 | depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>       |                      ^~~~~~~~~~~~~~~~~~
+>=20
+> Caused by commit
+>=20
+>   cd06ab2fd48f ("drm/locking: add backtrace for locking contended locks w=
+ithout backoff")
+>=20
+> This may only have been revealed because of another fix I have had to
+> apply today.
+>=20
+> I have applied the following patch for today.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Fri, 15 Oct 2021 20:17:52 +1100
+> Subject: [PATCH] drm/locking: fix for name conflict
+>=20
+> Fixes: cd06ab2fd48f ("drm/locking: add backtrace for locking contended lo=
+cks without backoff")
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/drm_modeset_lock.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_modeset_lock.c b/drivers/gpu/drm/drm_mod=
+eset_lock.c
+> index 4d32b61fa1fd..ee36dd20900d 100644
+> --- a/drivers/gpu/drm/drm_modeset_lock.c
+> +++ b/drivers/gpu/drm/drm_modeset_lock.c
+> @@ -79,7 +79,7 @@
+>  static DEFINE_WW_CLASS(crtc_ww_class);
+> =20
+>  #if IS_ENABLED(CONFIG_DRM_DEBUG_MODESET_LOCK)
+> -static noinline depot_stack_handle_t __stack_depot_save(void)
+> +static noinline depot_stack_handle_t __drm_stack_depot_save(void)
+>  {
+>  	unsigned long entries[8];
+>  	unsigned int n;
+> @@ -108,7 +108,7 @@ static void __stack_depot_print(depot_stack_handle_t =
+stack_depot)
+>  	kfree(buf);
+>  }
+>  #else /* CONFIG_DRM_DEBUG_MODESET_LOCK */
+> -static depot_stack_handle_t __stack_depot_save(void)
+> +static depot_stack_handle_t __drm_stack_depot_save(void)
+>  {
+>  	return 0;
+>  }
+> @@ -317,7 +317,7 @@ static inline int modeset_lock(struct drm_modeset_loc=
+k *lock,
+>  		ret =3D 0;
+>  	} else if (ret =3D=3D -EDEADLK) {
+>  		ctx->contended =3D lock;
+> -		ctx->stack_depot =3D __stack_depot_save();
+> +		ctx->stack_depot =3D __drm_stack_depot_save();
+>  	}
+> =20
+>  	return ret;
+> --=20
+> 2.33.0
 
+This has reappeared today.  I don't know what happened to the drm-misc
+tree over the weeked :-(
 
-Caused by commit
-
-  d389a4a81155 ("mm: Add folio flag manipulation functions")
-
-interacting with commit
-
-  eac96c3efdb5 ("mm: filemap: check if THP has hwpoisoned subpage for PMD p=
-age fault")
-
-from Linus' tree.
-
-I have applied the following merge fix patch taken from Andrew's patch
-series.
-
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: mm-filemap-check-if-thp-has-hwpoisoned-subpage-for-pmd-page-fault-=
-vs-folios
-
-fix
-mm-filemap-check-if-thp-has-hwpoisoned-subpage-for-pmd-page-fault.patch
-for folio tree PAGEFLAG_FALSE() change.
-
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- include/linux/page-flags.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---- a/include/linux/page-flags.h~mm-filemap-check-if-thp-has-hwpoisoned-sub=
-page-for-pmd-page-fault-vs-folios
-+++ a/include/linux/page-flags.h
-@@ -803,8 +803,8 @@ PAGEFLAG_FALSE(DoubleMap, double_map)
- PAGEFLAG(HasHWPoisoned, has_hwpoisoned, PF_SECOND)
- 	TESTSCFLAG(HasHWPoisoned, has_hwpoisoned, PF_SECOND)
- #else
--PAGEFLAG_FALSE(HasHWPoisoned)
--	TESTSCFLAG_FALSE(HasHWPoisoned)
-+PAGEFLAG_FALSE(HasHWPoisoned, has_hwpoisoned)
-+	TESTSCFLAG_FALSE(HasHWPoisoned, has_hwpoisoned)
- #endif
-=20
- /*
-_
-
+I have reapplied the above fix.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fdcIZB22wX8enD78RFxDID3
+--Sig_/AvYxcYE9xVAnbawWvDaH9ME
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF/jc4ACgkQAVBC80lX
-0Gzriwf/VkRZOXqlYYmKbzLXlqhJbJix6BbemTQ1wS0Lz56rOtqcNxfKgjEzh1vG
-dQ9VzDEzZBsSdGt02K4OVlt6qac43birNycwExAVgdDVvqO/9tNvoSZBV9gwl14L
-Rcdhte25I7VKxaFXy4iOmwrhS2RwRO+EABVsnKJQmD6sSsnwXZPE5UVZvKfB8AWz
-NwKznpyB/3BYvakYr4DWwxtaFxAJ8HRgStGmUrFthXzx2RLDoY2PdY1So5CAeSgm
-GsCHjOQhyjde6UV884qOgdxaPTAx1x+6iBufnSjavhpJsQZ13qL2lcr7MdeoB77F
-01uQhSQeEh+SGFiAPuM8tFvil3lzvQ==
-=YSdf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF/qG8ACgkQAVBC80lX
+0GyNiAf+Ms39LuFBShnOv9eD0ADdpHrEZTj45+fbpivngOM/Ezt/r5mrf5QEI2VN
+DW6TpcExT8EnKmA6OmOVwJ8aoGfZagU6iyFOLd7JZ3rjxpJJTxTmzAPn8YQmBRAh
+4Vkgl2CHv73+J6ptIuu+cHeqB75mIRsUJJ3Ig7sjhhdWncF7OQrWWXhLMSE0M6Lm
+WQOzGOQm13QUKhGupADWHq1a5NoRiKpHR+dI6DnmgM0PTgM1PoVxqnfZ3UvGOQmi
+eXsyUZbaK4EHqo5cn/0+p8/K6MpjVCupcrIr+dlJ9JPntducoFS3OzDpIhzgTBJL
+kvN4/iz2JTwrvuMjVbDwdedpmJAi3w==
+=9avb
 -----END PGP SIGNATURE-----
 
---Sig_/fdcIZB22wX8enD78RFxDID3--
+--Sig_/AvYxcYE9xVAnbawWvDaH9ME--

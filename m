@@ -2,98 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D86442306
-	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 23:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27AD442465
+	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 00:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbhKAWKZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Nov 2021 18:10:25 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:44723 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbhKAWKY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 18:10:24 -0400
+        id S231425AbhKBAAE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Nov 2021 20:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229540AbhKBAAD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 20:00:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DAFC061714;
+        Mon,  1 Nov 2021 16:57:29 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HjnGG02L0z4xbG;
-        Tue,  2 Nov 2021 09:07:49 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hjqhf50brz4xbY;
+        Tue,  2 Nov 2021 10:57:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635804470;
-        bh=ahP9+6U0lEYgYKS1RdstYss1Lpyoi4ko6k+AobHq7sw=;
+        s=201702; t=1635811043;
+        bh=8esQ6lYRSQpn8iI/jCExJ72OMlSUoX9ZCEItGgJWlNM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PfJFcri5zkn1+2aLLBQ2vDSVUvUewEUCDSnEiYaCkZ4bYZz/jzV6DCdd8kUqibJDm
-         9GDeFppV/8d7vvm+ChIVPWAWyMEWUVeBCbXMTZKkcqlALevMNsIXCuHiRP+8s4E9Hr
-         qI+gAiXlh4GRzF3Dv6BdiMf5zR/zSuCQ1tnhWvw5KzSCVN4asMEL9+sAzOQcTdLW6z
-         evasqAs5iYo+gP9gagb6jBoSh+mzN4rRjnsdyQOwFnPnsWiFOdM/xyqvnMus1PHwDS
-         LM5KTPnSbqBzZeRsgshzeN34yA7zjfZxk5P7UjN21uUwYPR75gAph3BicWIu8Zkl6I
-         FGwFVU+bbdQTw==
-Date:   Tue, 2 Nov 2021 09:07:49 +1100
+        b=hNTelzg7wPXutjJvDuUuN4yrHtiqmm9nwO2l5sogNejjM+uOECTu2/17xFe3IEOxx
+         MBvipDMyPCsYdBkhOVihJxoSIwCHGTeGgEHi6xfU3tf6nwdus855GuhivdoDTwnppK
+         FtHtS7l+CfUHhUF2QXuzTG4z2lVbMjRIV1gk2+VfhI/Iav+dMoiiuE/fFILT4FLOBw
+         CP4K9x3lR98a7EUb1Ai6c6OCcFJ0QRIA4+UASBOfhGd3pQThrdXVIAk+5rIEfJdy7M
+         o6JRgdapc+5zEZvUhZP1gJ4HLk1yQ3Nc501A4VYP+9Ot3MsWLkwfKnlbnUD5rH4Sef
+         si7/2wU46qMBw==
+Date:   Tue, 2 Nov 2021 10:57:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Borislav Petkov <bp@suse.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the folio tree with the fscache
- tree
-Message-ID: <20211102090749.009f42b3@canb.auug.org.au>
-In-Reply-To: <20210921135421.13eac778@canb.auug.org.au>
-References: <20210921135421.13eac778@canb.auug.org.au>
+Subject: Re: linux-next: manual merge of the tip tree with the gfs2 tree
+Message-ID: <20211102105720.091d21e2@canb.auug.org.au>
+In-Reply-To: <20211015150420.617125bd@canb.auug.org.au>
+References: <20211015150420.617125bd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xfTOUFvRZKlPAnCwNxZFhRS";
+Content-Type: multipart/signed; boundary="Sig_/DB2Flx69xkQxikKjyLxZL/.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xfTOUFvRZKlPAnCwNxZFhRS
+--Sig_/DB2Flx69xkQxikKjyLxZL/.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 21 Sep 2021 13:54:21 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Fri, 15 Oct 2021 15:04:20 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the folio tree got a conflict in:
+> Today's linux-next merge of the tip tree got a conflict in:
 >=20
->   fs/cachefiles/rdwr.c
+>   arch/x86/kernel/fpu/signal.c
 >=20
 > between commit:
 >=20
->   405f4ff7f8a3 ("fscache: Remove the old I/O API")
+>   4303543bac16 ("gup: Turn fault_in_pages_{readable,writeable} into fault=
+_in_{readable,writeable}")
 >=20
-> from the fscache tree and commit:
+> from the gfs2 tree and commits:
 >=20
->   2e96a1a81b3f ("mm/filemap: Convert page wait queues to be folios")
+>   fcfb7163329c ("x86/fpu/signal: Move xstate clearing out of copy_fpregs_=
+to_sigframe()")
+>   a2a8fd9a3efd ("x86/fpu/signal: Change return code of restore_fpregs_fro=
+m_user() to boolean")
 >=20
-> from the folio tree.
+> from the tip tree.
 >=20
-> I fixed it up (the former removed the file, so I did that) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> I fixed it up (I used the latter version - see below) and can carry the
+> fix as necessary. This is now fixed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
+>=20
+> diff --cc arch/x86/kernel/fpu/signal.c
+> index 164c96434704,37dbfed29d75..000000000000
+> --- a/arch/x86/kernel/fpu/signal.c
+> +++ b/arch/x86/kernel/fpu/signal.c
+> @@@ -275,12 -283,12 +283,12 @@@ retry
+>   		fpregs_unlock();
+>  =20
+>   		/* Try to handle #PF, but anything else is fatal. */
+> - 		if (ret !=3D -EFAULT)
+> - 			return -EINVAL;
+> + 		if (ret !=3D X86_TRAP_PF)
+> + 			return false;
+>  =20
+>  -		if (!fault_in_pages_readable(buf, size))
+>  +		if (!fault_in_readable(buf, size))
+>   			goto retry;
+> - 		return -EFAULT;
+> + 		return false;
+>   	}
+>  =20
+>   	/*
 
-This is now a conflict between Linus' tree and the fscache tree.
+This is now a conflict between Linus' tree and the gfs2 tree.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/xfTOUFvRZKlPAnCwNxZFhRS
+--Sig_/DB2Flx69xkQxikKjyLxZL/.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGAZTUACgkQAVBC80lX
-0GxxhAgAjMBbF4PrFzBCvRtitVmkPRzvGR84XRt1AMfunCygD7H6acd96YY9iIUj
-ZlB0YW4LosqdWm/x8CTYZ6wK8L+F1Vt+tgSst5sWqxm96Ibedh5VEkM3EgKvmCWS
-8NpEAwGrqRrKPzSFt20zCAmuhlpfJ5xvBAfH2vM/G+zBmgsaAJo+Ncgy36bWYLdt
-waS8G1WdxhV1scU2QBMqZCxTnyYj3X5jACCSiTA1w/VbfscDfecBcBBpa25zGFBT
-8DORMLdlaSYfDgMMN/RN9AN5LufpE+Bx2Od54c5Xudg5q9WvbJSY+wTNU2hUP3yH
-795ygJFkcN/VbT0qva7gqJRjZYQLew==
-=nL7x
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGAfuAACgkQAVBC80lX
+0GyS7gf+M5ISOwmRUBs4FOiAsP7uZ1CMV+W6ASqd6UHfwTBzhhz1kbAzEdWG5Nrd
+Qix2cI/R1oSLWIIWHejC93z1+r+6mRXZoueAOuTo5unSxPactobOF7An7Ole0+S4
+9Mk/qUjH5BYeEXbJC7Zh1Nrvi5Z52ESdgYKQKYH36VxUQI5OU14GaIZI88Om/Igx
+nmPCAfdZYCbHwnCy2PDJ09ZYgIFYNpJWOb5Pjs3d4PM74ap+5UnWuU/W7oXVDBPi
+fQz/0JPBpqtJoXad7+g85CgMKjb0kpUcTHR6miMV5kvSX/fiLazhYO37jVWFEm4X
+jpzYKRlXvrZarzUCmyarxbhhmjhYTw==
+=gxkG
 -----END PGP SIGNATURE-----
 
---Sig_/xfTOUFvRZKlPAnCwNxZFhRS--
+--Sig_/DB2Flx69xkQxikKjyLxZL/.--

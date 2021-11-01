@@ -2,75 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A0A441A67
-	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 12:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D109D441ADB
+	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 12:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbhKALEu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Nov 2021 07:04:50 -0400
-Received: from mout.gmx.net ([212.227.17.20]:48419 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232191AbhKALEt (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 1 Nov 2021 07:04:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1635764533;
-        bh=6BnVRDqnhVQAfvZaew0wzOzHXs7hYC/8rBJZUhkNBxQ=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=JMalodGx+ps/3rCvm0TGbk9jOBWER9uKf/jwvokRAaTfVWW9F9Qp1UokywLZPKctj
-         Rh3PWwXE7VQ8cPDTVL107nqpB/P8d+BBp3nGNNrnGxGiwVfSqoXQPd6bLNMwzV21RV
-         IInw6iXH/486jmhclf3JCF8phyPDTHO1po0en2P0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.177.231]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWici-1mATcL0iFc-00X0h4; Mon, 01
- Nov 2021 12:02:13 +0100
-Message-ID: <38022e9f-4b1b-2fac-2098-acf45f2f59c0@gmx.de>
-Date:   Mon, 1 Nov 2021 12:01:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the parisc-hd
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Parisc List <linux-parisc@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S232367AbhKALsU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Nov 2021 07:48:20 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:50470 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232324AbhKALsT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 07:48:19 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8F66D212C2;
+        Mon,  1 Nov 2021 11:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1635767145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=udXCdAEmS4VTvg1V1PFPhQUcJosQzWcPRY0wGlGXD48=;
+        b=jmYuh594Y+YTjMR45WeakBcsbZNx9IH6J2lQX2xfbgRCPSuWGLNp2PQP2MBR4h4a6DhPXA
+        7htuByfWnFdFd80bZNGVt8rIgYWtcYSo7SCLKA3LRBdtuY0cICTt4RcNNW3DMEQ9QglQY+
+        68wyj5HsI2lR9zhFxLgPekj9xJkrSKU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1635767145;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=udXCdAEmS4VTvg1V1PFPhQUcJosQzWcPRY0wGlGXD48=;
+        b=9ar6MWqPsaOboVyRjARG1N1/HTxU6FZRd/p7AdnhSpqFQxo0kgOr3ZgbBvO0wk5Bmj0pgg
+        xFUkN5za82qqGbAw==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 81C27A3B87;
+        Mon,  1 Nov 2021 11:45:45 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 2766D1E0922; Mon,  1 Nov 2021 12:45:45 +0100 (CET)
+Date:   Mon, 1 Nov 2021 12:45:45 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211101214403.47d36f6c@canb.auug.org.au>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20211101214403.47d36f6c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:fq1Hn7mjIU603CMi1AFS6ksT5GSU++YfUXwRQ2hTgdThLOp+VJT
- qUMK04lde6yEbh+beiFq7KJBq/HognEm7iYrlz4FuOQFdbmTl5o2lCv2hj0hXOky2oFLI8t
- BJ4hbPQRGgTca+Eqfbzt1vHGc2p+zUOkadEx/+pE4PvFHW9XUGJQvKNGMnEnJkt8FMoSV0t
- rP+7wPSY3uva9cYqsC8OQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:COJ7QdyaPIM=:QVaX88KqLcS1jDTX+AiYtX
- +9bZ0diNFx/Wj+lmPOFCaVaBmtXdyfUC+S2BllwT1YcjsFJLFgbzWazHpE46Z0JseMQj02onS
- P06U625oBOGPiHJsm8IEhEB5yeYtFnwfipS54kVOorc+gy77bEExXqO4Fm7tg4okNxwNWDZ8B
- dQ52qgvv8XZtgi4VHSRSpYFpcgSI6XLtfQtB5UAQUF8JEn2VI1OQGaUvyT13pg16UjESOeRUf
- OzojmpkGs+g732OE4xbT1O9bXXvMFqXeamD+wXVo1kW4CfXAObFT+O6CbWrcfY3Ql7f2g6Yfj
- XkWdxJpEwn+irVgukNgoRl5hh9qadde/K4kR0/FUOBLxCbKIuOOcGziFE3jGs4jbLSwPZ23Rk
- Qr+lZ4nCrkfXvs4AZPIlH2YrmEhbE3QJennHUY8/tDzxYTceUaRUbzw3hVjfwo+rGSEoSpYcx
- ifFqZaZXwCOv/bJr6EDya+IhjzWGcJXdaoIrMPVjYZMY7koVCkbXd/Fxaizuewgd7WSVSqlNW
- QoD+0qwICEKUDr2otOxlJIpXyKltSKdK48NAwee7uCvYXz0YeV22Bfq7m2W17QI8ZXvXSxIpH
- Sfl0xqubW6Arw2jhT5ZyIlQDEN9Og9zAUd9tHb7B7SIw8I7fEvhraR9pgvbWjsMQbLLBn9pJh
- o4aKb0Ki7ucMl2gYSWsL0WvHZw3DjKNENEmHtjxyWmaReCxcYdSHMQGvQhXFPBsF3mLkyp1JR
- xvmbwPpVRk2smso79haadU+DNYy8lzpBQmuj+qYpE8T8qVHmwkrX04s/gP9b8uK76iKA0Jt8O
- RlBG8sdpPIMeft78Ir4RSLo8YBxLJwMmDXuCDQyYc+coV4mNHHZUFgT3dV/8jC8qbQTENEtTN
- 20vzb61CrsTq5pfTTtgR6Yfj9nY9dfNx51drmFzBEPflmv7CVu5w8GH54NWqbm9hYF6SMLfnj
- sw75ud8HuIhVeI0DGfwslNumF+SVZklfeLvfNM7LJqpD3YT91sqf/KLsm1r/06GpTyaqQXYXD
- rLdBobHvDx0L0EKjtMV6B5g4u7e3WoyKQHuM+D6Zbe54bFqUsQebS6Y5VAaqiJPBbCbkrbyue
- W9fO0sR2651qfY=
+Subject: Re: linux-next: build warning after merge of the ext3 tree
+Message-ID: <20211101114545.GB21679@quack2.suse.cz>
+References: <20211028232100.03d394fd@canb.auug.org.au>
+ <87y26camhe.fsf@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y26camhe.fsf@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/1/21 11:44, Stephen Rothwell wrote:
-> Commit
->   cad7eadf2afb ("parisc: Use swap() to swap values in setup_bootmem()")
-> is missing a Signed-off-by from its committer.
+On Thu 28-10-21 18:05:49, Gabriel Krisman Bertazi wrote:
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> 
+> > Hi all,
+> >
+> > After merging the ext3 tree, today's linux-next build (htmldocs) produced
+> > this warning:
+> >
+> > Documentation/admin-guide/filesystem-monitoring.rst:60: WARNING: Definition list ends without a blank line; unexpected unindent.
+> >
+> > Introduced by commit
+> >
+> >   c0baf9ac0b05 ("docs: Document the FAN_FS_ERROR event")
+> 
+> Hi Stephen, Jan,
+> 
+> I'd suggest the patch below.
 
-Thanks, fixed now.
+Thanks. I've added the patch to my tree.
 
-Helge
+										Honza
 
+> 
+> Thank you,
+> 
+> -- >8 --
+> From: Gabriel Krisman Bertazi <krisman@collabora.com>
+> Date: Thu, 28 Oct 2021 17:17:47 -0300
+> Subject: [PATCH] docs: Fix formatting of literal sections in fanotify docs
+> 
+> Stephen Rothwell reported the following warning was introduced by commit
+> c0baf9ac0b05 ("docs: Document the FAN_FS_ERROR event").
+> 
+> Documentation/admin-guide/filesystem-monitoring.rst:60: WARNING:
+>  Definition list ends without a blank line; unexpected unindent.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+> ---
+>  .../admin-guide/filesystem-monitoring.rst     | 20 +++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/filesystem-monitoring.rst b/Documentation/admin-guide/filesystem-monitoring.rst
+> index 5a3c84e60095..ab8dba76283c 100644
+> --- a/Documentation/admin-guide/filesystem-monitoring.rst
+> +++ b/Documentation/admin-guide/filesystem-monitoring.rst
+> @@ -35,9 +35,11 @@ notifications is Ext4.
+>  
+>  A FAN_FS_ERROR Notification has the following format::
+>  
+> -  [ Notification Metadata (Mandatory) ]
+> -  [ Generic Error Record  (Mandatory) ]
+> -  [ FID record            (Mandatory) ]
+> +  ::
+> +
+> +     [ Notification Metadata (Mandatory) ]
+> +     [ Generic Error Record  (Mandatory) ]
+> +     [ FID record            (Mandatory) ]
+>  
+>  The order of records is not guaranteed, and new records might be added
+>  in the future.  Therefore, applications must not rely on the order and
+> @@ -53,11 +55,13 @@ providing any additional details about the problem.  This record is
+>  identified by ``struct fanotify_event_info_header.info_type`` being set
+>  to FAN_EVENT_INFO_TYPE_ERROR.
+>  
+> -  struct fanotify_event_info_error {
+> -	struct fanotify_event_info_header hdr;
+> -	__s32 error;
+> -	__u32 error_count;
+> -  };
+> +  ::
+> +
+> +     struct fanotify_event_info_error {
+> +          struct fanotify_event_info_header hdr;
+> +         __s32 error;
+> +         __u32 error_count;
+> +     };
+>  
+>  The `error` field identifies the type of error using errno values.
+>  `error_count` tracks the number of errors that occurred and were
+> -- 
+> 2.33.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

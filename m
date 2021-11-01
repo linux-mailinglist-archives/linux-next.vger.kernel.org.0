@@ -2,125 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C334412BE
-	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 05:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D644412CD
+	for <lists+linux-next@lfdr.de>; Mon,  1 Nov 2021 05:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbhKAEh3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Nov 2021 00:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S229468AbhKAEub (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Nov 2021 00:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbhKAEh3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 00:37:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CBAC061714;
-        Sun, 31 Oct 2021 21:34:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HjKvG1499z4xbG;
-        Mon,  1 Nov 2021 15:34:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635741294;
-        bh=kUAMvzaleDb6jyDupmX8DAn2jNnpXYP40FQ2Cu+RRK4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Izpr156fl4IvGOeMVxhLpowpLoxJtXR3B9pam5VViRNz2TaxuP+/Zg/avRG/2mRD5
-         gRaj5n5wgb0vjUs6VRXyyrRX1Irv6l1BAxo53kT7xAhFvnWL9jLiHUAEYCOWRLKTl+
-         U+Zq0jf7Y8kXPWMneG97/wFUFjeQBmXQgGV42eicBO13SU8kUD3KdnqD7E7INZ+/GN
-         c+ggVQ13FFQ5y0u41FnoSOJBYnNfXJ7uYcdu7AsVviJNp2Pn+6K+pX5+JY6L/vITDI
-         BiXWYCTHc8SgIPSDKIs8kEevdX5kBNb/45UrW3lHztCvc3K0daRMUsb5DQwgGc1Z3+
-         FZSZTdvSfKC6w==
-Date:   Mon, 1 Nov 2021 15:34:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: Re: linux-next: manual merge of the irqchip tree with the risc-v
- tree
-Message-ID: <20211101153448.4ee33b3a@canb.auug.org.au>
-In-Reply-To: <20211027135550.399f81b7@canb.auug.org.au>
-References: <20211027135550.399f81b7@canb.auug.org.au>
+        with ESMTP id S229462AbhKAEub (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Nov 2021 00:50:31 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57083C061714
+        for <linux-next@vger.kernel.org>; Sun, 31 Oct 2021 21:47:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r28so16228646pga.0
+        for <linux-next@vger.kernel.org>; Sun, 31 Oct 2021 21:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=h1rW+2/2F/ViqgUIePB1csQDkKAmnepK70dHbP5T+2c=;
+        b=fG9bSH+EJa+3cFaTh4dz4AvERGlBpLnRbNn5ApHuUSSfkM2Zth3xXwleAKvCCzmbdF
+         nfp32ljc+Zo9Hu4k+m6wJmyIocTQE1BKC//PfM5dYQvTIbgspCDQek0Hd42kg/LKobhR
+         CR6bG55SOgyolbgF++UBHxdmIdHx5DZPtxQxreWPuWFy/fjr87Fch6MBSTMQzmtr79R/
+         7Pm4ywwII4gid0wq6O7AP1FuNQ7UHUlWm0QNkkSLo6yVj3WKm7vH3xgY7kfyKHJvoDkW
+         F6aSQ4hnT+/PhY9+68szFaflvYetZuNN3rVLPiYZBSRswD3EFTINEKFC9GX2GyWptzM5
+         h6Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=h1rW+2/2F/ViqgUIePB1csQDkKAmnepK70dHbP5T+2c=;
+        b=hi/inGCJL8NXEqpPyEObX2EAKtjgFjHyrAG6aA3KIrnKpExlOCuBQ8zaKVHPresG7z
+         h37Yd6tjS1oj436aqiG8L7a50YRMrlM5LjCJsibpiilj+2MyQd+r7zz6DhMqJgJ6lzZJ
+         or9hR6HP4IktZrxnb9983HL8GOUuOAte0PrVfohqy5CoITUBsUyqJjKx7hXQyulMrfDz
+         sFlFvsPPXefuZBYXb1Y7BDnT/BS1mL6PcokdKJHpsVJqX/bnvbZbSjkqeeYyyBjiR7bl
+         Sr8htMOdFLnEkaurAgf6OaCiy58TQdUklLBTI10MOMV5BdmzW+zgpS9jDcMY15cSZ2hV
+         /QNA==
+X-Gm-Message-State: AOAM530hlwhHXC4vn8qI44c5rI0sTKLD1p0MKT6+pBPH0fckFcGPuHOI
+        LIJldUHwraszFXwAlccDrUdi65dyfmgyDJ6t
+X-Google-Smtp-Source: ABdhPJxeke6IOhXRP7BJNEUG3ptRPrHZs1reRuvJSSFhdyBT62fdw8aU1CSVj7Op5oYm9WLVnrYIdg==
+X-Received: by 2002:a62:9282:0:b0:47b:d0e9:a3c4 with SMTP id o124-20020a629282000000b0047bd0e9a3c4mr26363278pfd.12.1635742077472;
+        Sun, 31 Oct 2021 21:47:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m15sm12089539pjf.49.2021.10.31.21.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 Oct 2021 21:47:57 -0700 (PDT)
+Message-ID: <617f717d.1c69fb81.30e3f.38a2@mx.google.com>
+Date:   Sun, 31 Oct 2021 21:47:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Bzw_q.l22SHy_JXEmAowEq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.15-388-g75f097aa9969
+X-Kernelci-Report-Type: test
+Subject: next/pending-fixes baseline: 413 runs,
+ 2 regressions (v5.15-388-g75f097aa9969)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1Bzw_q.l22SHy_JXEmAowEq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 413 runs, 2 regressions (v5.15-388-g75f097aa99=
+69)
 
-Hi all,
+Regressions Summary
+-------------------
 
-On Wed, 27 Oct 2021 13:55:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the irqchip tree got a conflict in:
->=20
->   arch/riscv/Kconfig
->=20
-> between commit:
->=20
->   dffe11e280a4 ("riscv/vdso: Add support for time namespaces")
->=20
-> from the risc-v tree and commit:
->=20
->   0953fb263714 ("irq: remove handle_domain_{irq,nmi}()")
->=20
-> from the irqchip tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc arch/riscv/Kconfig
-> index 0050a2adf67b,353e28f5f849..000000000000
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@@ -62,8 -62,6 +62,7 @@@ config RISC
->   	select GENERIC_SCHED_CLOCK
->   	select GENERIC_SMP_IDLE_THREAD
->   	select GENERIC_TIME_VSYSCALL if MMU && 64BIT
->  +	select GENERIC_VDSO_TIME_NS if HAVE_GENERIC_VDSO
-> - 	select HANDLE_DOMAIN_IRQ
->   	select HAVE_ARCH_AUDITSYSCALL
->   	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL
->   	select HAVE_ARCH_JUMP_LABEL_RELATIVE if !XIP_KERNEL
+platform      | arch  | lab          | compiler | defconfig                =
+    | regressions
+--------------+-------+--------------+----------+--------------------------=
+----+------------
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMIZE_BAS=
+E=3Dy | 1          =
 
-This is now a conflict between the tip tree and the risc-v tree.
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig                =
+    | 1          =
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/1Bzw_q.l22SHy_JXEmAowEq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.15-388-g75f097aa9969/plan/baseline/
 
------BEGIN PGP SIGNATURE-----
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.15-388-g75f097aa9969
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      75f097aa99691fa885771a1d2fc5badc231aee61 =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmF/bmgACgkQAVBC80lX
-0GwENgf+NBvEpUoxdUZT6hVcbzrv3mPtvlin6Eeszfd70p16ZuAc6q+qrR7EexE0
-scSOjJa0uI2FwXqLj96zXucZg25CUFIvUcUjbgHOaLvWeayYw0yvDRY7uHVQvROp
-GPBsvdNRqn+caiILWxqKrerQCSBfKpz0a3wYmEvc+pn5GfMzGrWE2/bvMS1zI7QC
-S1bcCW9giDejDulGNSb+Q2aQ0ELQFlvEKsAfXKg7BFj3qy+1eK8qdqbVYWD2OHNe
-qj0r+X/r/d08kX047T5QLKe63iT9w5y/rsLrrK9Ud2MNblp4+1yym0jYXNjm00/A
-mCwjyOUsIHzjW4cH87635MA1prNJFg==
-=Udad
------END PGP SIGNATURE-----
 
---Sig_/1Bzw_q.l22SHy_JXEmAowEq--
+
+Test Regressions
+---------------- =
+
+
+
+platform      | arch  | lab          | compiler | defconfig                =
+    | regressions
+--------------+-------+--------------+----------+--------------------------=
+----+------------
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig+CON...OMIZE_BAS=
+E=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/617f34c0bcc5b410153358eb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-388-g=
+75f097aa9969/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/=
+baseline-rk3328-rock64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-388-g=
+75f097aa9969/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-10/lab-baylibre/=
+baseline-rk3328-rock64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/617f34c0bcc5b41015335=
+8ec
+        failing since 4 days (last pass: v5.15-rc7-176-gbfbd58926fc5, first=
+ fail: v5.15-rc7-202-gc79631111e0b) =
+
+ =
+
+
+
+platform      | arch  | lab          | compiler | defconfig                =
+    | regressions
+--------------+-------+--------------+----------+--------------------------=
+----+------------
+rk3328-rock64 | arm64 | lab-baylibre | gcc-10   | defconfig                =
+    | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/617f3bb4dce48a1d41335967
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.15-388-g=
+75f097aa9969/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.15-388-g=
+75f097aa9969/arm64/defconfig/gcc-10/lab-baylibre/baseline-rk3328-rock64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/617f3bb4dce48a1d41335=
+968
+        failing since 4 days (last pass: v5.15-rc7-176-gbfbd58926fc5, first=
+ fail: v5.15-rc7-202-gc79631111e0b) =
+
+ =20

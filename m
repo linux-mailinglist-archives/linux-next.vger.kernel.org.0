@@ -2,102 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF85442BA2
-	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 11:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312B9442BC3
+	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 11:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbhKBKay (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Nov 2021 06:30:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47979 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229577AbhKBKax (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 06:30:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635848898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        id S229800AbhKBKqA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Nov 2021 06:46:00 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:58026 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhKBKp4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 06:45:56 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 373171FD4C;
+        Tue,  2 Nov 2021 10:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1635849801;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/KIXqG/+aRX3VfX0pbGv7+LnUyCe/jR+SgkDGe77Qco=;
-        b=RcB6/AoP5ufEJM4FMgOedu2rd1TVAgl/LyZCmM6jHk4M7YtEbo/Jh1A0qZ6J/JassYC2DR
-        2UeFSsL54MV3KGhPwWoL2yzzEs0Ibx/1sCYT2hV5cv5/Y//nBDQdDGhxfyO+PTQC9pPUWZ
-        ELUTgDSnXBNUoQ3KXeNNVbCpqCxVqQQ=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-318-Y17PsCu_P0yKSkGShhOxUA-1; Tue, 02 Nov 2021 06:28:17 -0400
-X-MC-Unique: Y17PsCu_P0yKSkGShhOxUA-1
-Received: by mail-ed1-f71.google.com with SMTP id w12-20020aa7da4c000000b003e28acbf765so5889401eds.6
-        for <linux-next@vger.kernel.org>; Tue, 02 Nov 2021 03:28:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/KIXqG/+aRX3VfX0pbGv7+LnUyCe/jR+SgkDGe77Qco=;
-        b=PGgI1gleASWoS430U7RsMfOzgj0k/zGi1JhptYxSo9V+FRbIgvpBgmieHxIJoH0vHr
-         ZIqBFhJ3BFaCBWjo3vNnFTbY5Rp4u6i86PYhHMCiRE/Vk+LykfgrB547druhWMLsh7fE
-         yZBbBhnlCm2l1Qb/NdohRmkJqXZEr4Vby3NS7jiNZxNvq6ve+RiyvWkkzpgtQDHkO3Mm
-         alB1KDheeT+E1szXNNZEyjDyY/2yFoRVTm+Lo4FBHv665nkvzom88SQ8/RPgh7DEqVdp
-         OqCHMb0+QVOobTQPn6qkooUlSfkY734sE2yPn90s9iXTlUYyq3wLmV0zgIeNIHbkpE4n
-         ZYBA==
-X-Gm-Message-State: AOAM532qJFXa1MBWyFaIbh3iTZZmsEM+Tjj58DQlk4rNUws+SzfYALNC
-        k4kpbIWGNsQ0zDYbXvxOjlrcebnh8aaCPfdN7r1SiEsNgY0Uyz1PaA1+kzPUhWhT8RYol2Y8YgF
-        uzleui+2RCui1kfo8SNAXfg==
-X-Received: by 2002:a05:6402:40cf:: with SMTP id z15mr48998772edb.138.1635848896650;
-        Tue, 02 Nov 2021 03:28:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJygd/kOa0LmQJO7gJ7dW3kSjTVBWPteQe1G8nO+W/t28YcbO7eaHan+3AORZNhaEB+zJqth9A==
-X-Received: by 2002:a05:6402:40cf:: with SMTP id z15mr48998748edb.138.1635848896467;
-        Tue, 02 Nov 2021 03:28:16 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id rl1sm577976ejb.90.2021.11.02.03.28.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Nov 2021 03:28:16 -0700 (PDT)
-Message-ID: <f16d7cb4-7ac9-382e-ea9b-45433f5b8299@redhat.com>
-Date:   Tue, 2 Nov 2021 11:28:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: linux-next: Fixes tag needs some work in the drivers-x86 tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Gross <markgross@kernel.org>
-Cc:     Tim Crawford <tcrawford@system76.com>,
+        bh=iP9s5V68lnmmTWr/35lppAJ3NsqUjQUeGHNbsNNDic8=;
+        b=mg1bPRBt6cHoKnFO/ho29dEvaq3izz1fojn5fvSu1syy1vryPVM3u49EUFn6Jzoj722swF
+        vb7Qe4LVnVSV7/I/56qWaly9uhY779xtwEViaDL8liQr/Vn6neaw8QTUGbpWm9dWH2EBtx
+        uha1LUoFyFmrUQmYr4Tj1XuTHqv/NZM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1635849801;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iP9s5V68lnmmTWr/35lppAJ3NsqUjQUeGHNbsNNDic8=;
+        b=rNE42V13llB/6+zJuJVjoxqiDp6Lrrc0jO+iMYB8eBzHuzLIwgtBg6UO7XO0T5wCD61sN5
+        hF1103EsBDvnEeCw==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 2C70DA3B87;
+        Tue,  2 Nov 2021 10:43:20 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 73E17DA7A9; Tue,  2 Nov 2021 11:42:44 +0100 (CET)
+Date:   Tue, 2 Nov 2021 11:42:44 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Sterba <dsterba@suse.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211102083724.5e6c8d68@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211102083724.5e6c8d68@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qu Wenruo <wqu@suse.com>
+Subject: Re: linux-next: manual merge of the btrfs tree with Linus' tree
+Message-ID: <20211102104244.GH20319@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qu Wenruo <wqu@suse.com>
+References: <20211101105341.5fde8108@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211101105341.5fde8108@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On 11/1/21 22:37, Stephen Rothwell wrote:
+On Mon, Nov 01, 2021 at 10:53:41AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> In commit
+> Today's linux-next merge of the btrfs tree got a conflict in:
 > 
->   7885061a10f4 ("platform/x86: system76_acpi: Fix input device error handling")
+>   fs/btrfs/lzo.c
 > 
-> Fixes tag
+> between commit:
 > 
->   Fixes: 0de30fc684b ("platform/x86: system76_acpi: Replace Fn+F2 function for OLED models")
+>   ccaa66c8dd27 ("Revert "btrfs: compression: drop kmap/kunmap from lzo"")
 > 
-> has these problem(s):
+> from Linus' tree and commit:
 > 
->   - SHA1 should be at least 12 digits long
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
+>   d4088803f511 ("btrfs: subpage: make lzo_compress_pages() compatible")
 > 
-> Also, please keep all the commit tags together at the end of the commit
-> message.
+> from the btrfs tree.
+> 
+> I fixed it up (this may be completely wrong or incomplete :-( - see below)
+> and can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-Thank you for reporting this, I've fixed up both issues and done
-a forced-push of my for-next branch.
-
-Regards,
-
-Hans
-
+Thanks, it's a bit different that I did as a proposed conflict
+resulution and Linus resolved it in a yet another way. I'll refresh my
+for-next branch today to minimize the conflict surface.

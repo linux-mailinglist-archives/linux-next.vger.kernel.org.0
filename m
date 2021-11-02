@@ -2,105 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46C1442737
-	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 07:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AC2442767
+	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 08:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhKBGqk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Nov 2021 02:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhKBGqk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 02:46:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA8BC061714;
-        Mon,  1 Nov 2021 23:44:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S230109AbhKBHFm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Nov 2021 03:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37069 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229970AbhKBHFl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 03:05:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635836587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=739j9R+5ax++itfBAbq2Y8M3UgHf0DU269XaCThUi5U=;
+        b=hIef8nlDRVKpqeHFAp4MvBxjD2sEwalHgOHF0wMhLwVUO378Xl6xhJc3JwqDDq6Fe0+vfU
+        2KRJCd6Q6AqSPny24U8VdZEnnbe4ns6PLrqL6dRhzs8f3niLI0QM9W7dANVfOJFDG0yOI9
+        b2TMiL6yq6sNSDCVRMLPJiaPujjSQE4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-516-cnlzvNwMPy6BIOTPHEgt4g-1; Tue, 02 Nov 2021 03:03:01 -0400
+X-MC-Unique: cnlzvNwMPy6BIOTPHEgt4g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hk0jt1vVvz4xbs;
-        Tue,  2 Nov 2021 17:44:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635835444;
-        bh=bOOZS5nbUjBv862XOi3I7CszIKPwC88Hl0rQIUzEvRA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eCwBp7iULU8JA4n6ANcHxf93NjgvmrDE9s/L0iCFfYZK2Z64LeugKulKHuKqCwKKB
-         6BUvqKlHg5D6Kk/7jB+DFr6U30eHdnItMk0n0B4xy3F2fiIeHmnUF5B2tW7YD0XnRM
-         f5UbNV6hUVLK37LUxBPIrbMLHXtMF18eYQvarDXiquyqqyhFM1RStZtuYfmD2LD8zd
-         g9f8iRxZhziOTzfY1yGbJku5g7eQPanCv9f3kZBW/7dljR2ay67Y3urqFJWtAwF5Ej
-         AzXpyRyI7MZHXqHL0DJNSuBlpC1mgNT+/LZLzyDogB4FzubAgnMZmSfJUC30v0TzaO
-         kESy0n1/0WbEw==
-Date:   Tue, 2 Nov 2021 17:44:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: linux-next: build failure after merge of almost all the trees
-Message-ID: <20211102174400.1aaee22c@canb.auug.org.au>
-In-Reply-To: <20211028233844.292e1319@canb.auug.org.au>
-References: <20211028212651.57beb05b@canb.auug.org.au>
-        <20211028233844.292e1319@canb.auug.org.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 457AE19057A8;
+        Tue,  2 Nov 2021 07:03:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1D5F45D9DC;
+        Tue,  2 Nov 2021 07:02:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211102090507.26f3c9ef@canb.auug.org.au>
+References: <20211102090507.26f3c9ef@canb.auug.org.au> <20210921142628.75ba9ef2@canb.auug.org.au> <20210922141910.778a5a86@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the folio tree
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Q0i+RCAj50gvq8+yc3sXSIq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4010544.1635836578.1@warthog.procyon.org.uk>
+Date:   Tue, 02 Nov 2021 07:02:58 +0000
+Message-ID: <4010545.1635836578@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Q0i+RCAj50gvq8+yc3sXSIq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> > -	    wait_on_page_bit_killable(page, PG_fscache) < 0)
+> > +	    folio_wait_bit_killable(page_folio(page), PG_fscache) < 0)
+> ...
+> > -	    wait_on_page_bit_killable(page, PG_writeback) < 0)
+> > +	    folio_wait_bit_killable(page_folio(page), PG_writeback) < 0)
 
-On Thu, 28 Oct 2021 23:38:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Hi all,
->=20
-> On Thu, 28 Oct 2021 21:26:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next build (powerpc allyesconfig) failed like this:
-> >=20
-> > fs/ntfs/aops.c: In function 'ntfs_write_mst_block':
-> > fs/ntfs/aops.c:1311:1: error: the frame size of 2304 bytes is larger th=
-an 2048 bytes [-Werror=3Dframe-larger-than=3D]
-> >  1311 | }
-> >       | ^
-> > cc1: all warnings being treated as errors
-> >=20
-> > I have no idea what has caused this. =20
->=20
-> With a nudge from Arnd, it seems the immediate case was commit
->=20
->   f22969a66041 ("powerpc/64s: Default to 64K pages for 64 bit book3s")
->=20
-> from the powerpc tree switching the allyesconfig build from 4k pages to
-> 64k pages which expanded a few arrays on the stack in that function.
+I rebased it and pushed a new version, but I think I missed your pull by a
+couple of hours.
 
-Can we do something about this, please?
---=20
-Cheers,
-Stephen Rothwell
+David
 
---Sig_/Q0i+RCAj50gvq8+yc3sXSIq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGA3jAACgkQAVBC80lX
-0Gy1Ngf/VIQO0QejptIhJB+ipN07FLLi926uVNwNZZq+AhbqM9EjegrZaHdEf6j/
-lYGPNRxkTzU7k0+eaPl1sJ0KJ9rqdB+2R/uUJR8/QQxmlxIIffKlc/+FyHEqKFAc
-FHmESAn0dpGrgmVrd3GU6oXvKdKgy2kzZqcQ7wM2W8Kbl+6guLHAptSkFBxovEv6
-aUY2u2HgeIN18nr9JRPx/8vKNrav74Jyw5l9I59Udymq9iSToE4ere+5HQDFHODo
-YxIY7UgVQ4feV7i0O8Lez2cmHiJlIrc3SVDrYFE/yR8hBEfxxxAeyEhAmycKny6A
-/C3+ap1aWuaQCdQL9xnGY/HKdZOmeQ==
-=aXvZ
------END PGP SIGNATURE-----
-
---Sig_/Q0i+RCAj50gvq8+yc3sXSIq--

@@ -2,96 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D60442EE3
-	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 14:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C4E44304D
+	for <lists+linux-next@lfdr.de>; Tue,  2 Nov 2021 15:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhKBNOp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Nov 2021 09:14:45 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:54441 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbhKBNOo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 09:14:44 -0400
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mbj7g-1mCgQr1MkQ-00dFfG; Tue, 02 Nov 2021 14:12:07 +0100
-Received: by mail-wm1-f54.google.com with SMTP id b184-20020a1c1bc1000000b0033140bf8dd5so2040402wmb.5;
-        Tue, 02 Nov 2021 06:12:07 -0700 (PDT)
-X-Gm-Message-State: AOAM533HsBf5Gf9KRJESvzVw9BRYFj72E8D7JPNPfSJiLcKZSYFITutZ
-        nxqhe2lnjcq4Z0lq7vVmjHTea+crOv7usbs8hqU=
-X-Google-Smtp-Source: ABdhPJxOsaTw5vAetQEOxBosHISPNr1ZsPmnJGi6QG09ny8cY32Sh2+o5ShDcq7ct2r48DahMHC96w/OLFyup0rXrKE=
-X-Received: by 2002:a1c:1c1:: with SMTP id 184mr6969502wmb.1.1635858726974;
- Tue, 02 Nov 2021 06:12:06 -0700 (PDT)
+        id S231571AbhKBO0b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Nov 2021 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231532AbhKBO01 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 10:26:27 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C293C061205
+        for <linux-next@vger.kernel.org>; Tue,  2 Nov 2021 07:23:53 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s136so20286983pgs.4
+        for <linux-next@vger.kernel.org>; Tue, 02 Nov 2021 07:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=bLP0GZ7qKmzdEoB4Kwa9VdCVCA5n7rW4EYZQ1W3DYaU=;
+        b=gwX2g7u9YF/BIEYDH5ide/+9kRap3aYd8/a/ydo6nRaZngxCW/b5a2Ah9oPGEhiUm/
+         sFp++7KNuIPorf2a8n2RpgGwr1+Gs7SLZ84Q3U0hQaCLnz2WCZdGx45NWw/CiW39qMkJ
+         y7HFUBdA/CiDNFryFmnY1pwO0JBgERiPMz7lBkY2owrGBWKvcP6K8yfJ+25KaHGACSmS
+         v2ScTsJHsHViEXVaxjODGZmbVnH34WW8aQcSbg91/SgUDKuZUXxyuBHwfLZ1LwmdlQzS
+         pKxmH4dOMfa2Va5il0qEFHiezC+OIKJ/ZcJnn/8rv6CmAZvmB2k0ZfAsLKZshQGKiYPS
+         yN6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=bLP0GZ7qKmzdEoB4Kwa9VdCVCA5n7rW4EYZQ1W3DYaU=;
+        b=6ZyvauT6CJBFQaVrG6c1jTGBCkqjuAxh74JWxkXJGrEb80CV8kQNnAYb6q4VIsyh5U
+         q0DifeH+SxpSelYPBAGS3vHRmLG8ADMIWuRt0GOX6fjCLGnCiHKJwrI9v/GGUzJ1MYJp
+         0vSjEpNmixBa28Wjy80TmVJtbMOkeEFeL9X8rOJlOtYRY9H4qJcjZZ+qo1OXNo98jaQL
+         V8i3VJjpsdm01NDGOYH8+I1OgsT+xz5Lh33JYptw83FBfRNcUcUErC5JepqhUXPDDawA
+         JhJjK5/OJ8TBP0q92rrHZxId98zRIRvAldyf4BDuXFV/lmr9l7dAnyriqTwa7yFIq48N
+         gBKg==
+X-Gm-Message-State: AOAM532sZKE3dltO8vBtml1lMvCZfEIsli5o61zwCjnkGA6vnSROoSZ3
+        C/dpQELadakj04FmglIVC0JuipbG4PuFjGRW
+X-Google-Smtp-Source: ABdhPJzUThmeifOlMBkSL7cn+g9ax3h8c33sHNTjauXxfwltQiZTpQgDVirsRnj1arp6Z77ZEvH6Mg==
+X-Received: by 2002:a05:6a00:1945:b0:44c:a955:35ea with SMTP id s5-20020a056a00194500b0044ca95535eamr36489359pfk.85.1635863032397;
+        Tue, 02 Nov 2021 07:23:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id v8sm17945669pfu.107.2021.11.02.07.23.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 07:23:52 -0700 (PDT)
+Message-ID: <618149f8.1c69fb81.65cd.fed5@mx.google.com>
+Date:   Tue, 02 Nov 2021 07:23:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211028212651.57beb05b@canb.auug.org.au> <20211028233844.292e1319@canb.auug.org.au>
- <20211102174400.1aaee22c@canb.auug.org.au> <CAK8P3a3Fx0UmbxP48RnXHcJYf_tU3_NTkMZrFnM42eAb_F4jRQ@mail.gmail.com>
- <20211102231307.6ba98df2@canb.auug.org.au> <20211102231937.2fe27ba6@canb.auug.org.au>
-In-Reply-To: <20211102231937.2fe27ba6@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 2 Nov 2021 14:11:50 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a39gZLWdh03_mL51qj6w+LYSPQ+T+d0t4wn8zgeSPhtqg@mail.gmail.com>
-Message-ID: <CAK8P3a39gZLWdh03_mL51qj6w+LYSPQ+T+d0t4wn8zgeSPhtqg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of almost all the trees
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zbmDJHObcocYNg/2oTojVeQfrwcNX0r8lJw1zudsAIQr3dMe+QC
- 4lkr1gFOjcrt/gNHuEKRz9jpuiVXmLUZ1Hx7xwAsLP69AqHdEz3L7rSinlOOt9ORZcgz/iq
- rT9Gz7pdU1fiWr9ZNg9meVkdgk8+xEeZHfDaHmsDaGB+20RCnE0b/oA+/pPa0ukW9crA+Dj
- BwLzm4k0ttqiJJIxM/ibw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4abEI/MMx5Y=:dCxK4aOCOj+WgUoJY3HB8u
- 5YQxRvJ0ILm+yeJUk4SYQOgx8Bp+lnV2WS8TeJ9GkWauWRud0knTrlvviCEHfmFxHCIeTBdrn
- niblxQMCfX9eBBdfD0IiD12be4uChomtUZXM3SJP8ZUWUZuoyX/jnZeAPuICTocIWeEjzQurk
- T6Gr8eVGpHvmD1Pbm5vy7m0sMphHBqlV4ElzJM/2JVf10gqNN21G6OQAeUQuB4YI9oKG00upO
- 3T0Rj5bOTLQUcbkP15+rKXjG1zO/wlfZK6YQ5rA3DJMa2j/yADcrMRgIi/p5NdQoEp0qTwoOL
- wKeYeons1Nwr6Z+B1oYkxiXlHIZnKDqLnucMu4RI4UB7CvqoIMRKpiCYmPwpp2IWRP2dGDC0q
- 5u1XX0edoPFrgcPOfjvrOgqO+F3lg6uTMb6mmCXjSenI80skvRRn8CLM9K7mbZsw1NCnydCgO
- KCVJIs8Wji60YYw2wcLlpeUnjGENNz7yWxbaK19j1/qUceuEWo8SQX4y6M5ws5h0oHNFJ/Jx8
- 2Zddq8pmwBIRuZHwKCFGdspgWKmdS59QUoGTqkFxdhK0PzdC1mDbv7Dd7jHN9TzN6J3Ver4K/
- s1EJKLrGmVP++DAhs7UPSV9S7qheuBhIpJDQrnS76uV8wC3pCxe+nIVpEliJSqGii8caQ/V5n
- fSA7dQNsKeXxjmGRWY/mCqOElTOxMPEXSyDnLlAFcCpBhnVtU0W+KroFSYlEmcwCPV7umPRAw
- afI485G/eCz/siF3fG+8t48XX9Er/ayG4P6jCDH6G/O4Z/53EPbdawyLZmxYe7kcVHxsQqzsP
- hsqo9G2OdhRvuoH/23jKb8VP8Vg5updT6I4VnbUv4LWZqjr7c0=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20211102
+X-Kernelci-Report-Type: test
+Subject: next/master baseline: 679 runs, 2 regressions (next-20211102)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 2, 2021 at 1:19 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Tue, 2 Nov 2021 23:13:07 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > On Tue, 2 Nov 2021 08:06:10 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Tue, Nov 2, 2021 at 7:44 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > It does need to be changed a bit as I realized it depends on a rework of
-> > > the Kconfig logic that I had in my randconfig build tree to have a common
-> > > page size symbol across architectures. Without my other patch, it also
-> > > needs to check for PPC_64K_PAGES.
-> > >
-> > > Should I send an updated version of the patch?
-> >
-> > That would be good, thanks.
-> >
-> > Even better would be to split up the function some how, but having had
-> > a bit of a look at it, that may be a much longer job.
+next/master baseline: 679 runs, 2 regressions (next-20211102)
 
-Yes, that was my initial conclusion when I looked at the code trying to
-redo that loop.
+Regressions Summary
+-------------------
 
-> > I am assuming
-> > that allocations (or their failure) are out of the question in that
-> > particular function.
->
-> Looking again, we probably just need to disable CONFIG_NTFS_RW ...
+platform        | arch  | lab          | compiler | defconfig              =
+      | regressions
+----------------+-------+--------------+----------+------------------------=
+------+------------
+beagle-xm       | arm   | lab-baylibre | clang-13 | multi_v7_defconfig     =
+      | 1          =
 
-Ah right, that would work as well. Another possibility would be
-to change NTFS_BLOCK_SIZE to 4096, at least in the affected configurations.
+imx8mn-ddr4-evk | arm64 | lab-nxp      | gcc-10   | defconfig+CON..._64K_PA=
+GES=3Dy | 1          =
 
-According to the documentation I linked to in my commit, file system images
-with smaller block sizes should be extremely rare, but I have no idea if the
-code would work correctly for normal images after that change.
 
-        Arnd
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+211102/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20211102
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      9150de4aac1eb6e6441b2b086f6ca8132aaea040 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab          | compiler | defconfig              =
+      | regressions
+----------------+-------+--------------+----------+------------------------=
+------+------------
+beagle-xm       | arm   | lab-baylibre | clang-13 | multi_v7_defconfig     =
+      | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/618114480ffacbd81f335914
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    clang-13 (Debian clang version 13.0.1-++20211029101439+08e3a=
+5ccd952-1~exp1~20211029222017.20)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211102/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211102/arm/=
+multi_v7_defconfig/clang-13/lab-baylibre/baseline-beagle-xm.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/armel/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/618114490ffacbd81f335=
+915
+        failing since 5 days (last pass: next-20211026, first fail: next-20=
+211027) =
+
+ =
+
+
+
+platform        | arch  | lab          | compiler | defconfig              =
+      | regressions
+----------------+-------+--------------+----------+------------------------=
+------+------------
+imx8mn-ddr4-evk | arm64 | lab-nxp      | gcc-10   | defconfig+CON..._64K_PA=
+GES=3Dy | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/61810ef31f2da394ef3358e8
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_ARM64_64K_PAGES=3Dy
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//next/master/next-20211102/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20211102/arm6=
+4/defconfig+CONFIG_ARM64_64K_PAGES=3Dy/gcc-10/lab-nxp/baseline-imx8mn-ddr4-=
+evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-6-g8983f3b738df/arm64/baseline/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/61810ef31f2da394ef335=
+8e9
+        new failure (last pass: next-20211026) =
+
+ =20

@@ -2,514 +2,1700 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE1A443B4D
-	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 03:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079E2443BA7
+	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 04:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbhKCCYp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Nov 2021 22:24:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40707 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229974AbhKCCYp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 22:24:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635906129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0hxTfec/foUJpZHNSlIIBB5iQ/0J05TFVrmWAYfwsaw=;
-        b=BDGjI63mk8+O2QNLmWHDBtSPZ/ZSlcUCpVx08Y68kBEgnGmQpt+Zp6Rw7MGbuMQXw3Vcw2
-        XEYfK40zbkpnj+dW/SVyQZyzOYx6R4GY8osR6Wt5meRckU32dzdunpqCpNZRfWxVlTMDoK
-        vrTH1UYAafsEw448vwn6oMN+x01NEdw=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-522-Vi66jMf-P5CPbIIm7vytiw-1; Tue, 02 Nov 2021 22:22:07 -0400
-X-MC-Unique: Vi66jMf-P5CPbIIm7vytiw-1
-Received: by mail-yb1-f198.google.com with SMTP id t24-20020a252d18000000b005c225ae9e16so1997792ybt.15
-        for <linux-next@vger.kernel.org>; Tue, 02 Nov 2021 19:22:07 -0700 (PDT)
+        id S229506AbhKCDEZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Nov 2021 23:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229462AbhKCDEY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 23:04:24 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E017C061714
+        for <linux-next@vger.kernel.org>; Tue,  2 Nov 2021 20:01:49 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id n8so1546210plf.4
+        for <linux-next@vger.kernel.org>; Tue, 02 Nov 2021 20:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5faKoCnF1iDNsk94+97rcb0GZPxEVHhUko592oNDZWw=;
+        b=fkFO8nQkIJM51QHjq5qOk/X0fJfC2XO5+kt8XCC5zFE98ut2Ys8SnTeZbKV56btXlS
+         2eZVB7pUdpPw9tbUfZKyS0PXqd30Nti5KWzz8Q+RmxiSUvsHAqEYtD+J43Lkt8Ra+0Eb
+         S5neVZk9DG0Q+eNlHF3mKJuFf/hyOURUcHq9lrU0hJY9q/OqK9ucJzfjToaQg9zNZfnT
+         1u6PdP1Ej8QFKBG4YX+J7+wmTFIFXWiz3VBpfOkHlP8G8mm0Eefd94cxwxva1ZQC8LZj
+         K7PcgU9xpJ2DnY9G5w61djo0+OjQJk9+LxyZ4Gk6FpiULDkROrG6/X10yXeoDY3K05aR
+         1rpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0hxTfec/foUJpZHNSlIIBB5iQ/0J05TFVrmWAYfwsaw=;
-        b=YyEn5P2pQ+kxv9SVpeYhXgCvEB0f0T5uenDwl4Zxo9WVz+y0Hz/VuK9SgC7QMmxqvS
-         wIjX1WNnoG+CRAMJsBiQBN4pUMoyOnj3H75ihJhld0tmEGBXAvyBfhqdFS3jUmRfPX6q
-         3YIy7e+DuT19Ud3cZ2rqpDAhgWg4/jnt2DWTIXgo5oF50BFuxkWfohlEEIJyQ4bWIcC7
-         AWJ9lMpHD9HE28rAraE7afItpWdr6q2Ynh53uc+X6K7bnX1EYso6gA99w6sZZ9xSeF/r
-         wp1UdCarW5q1nzsqYyYfWa8fIyqzA3ZI36y5RZ9jbDJwFaDJm4Y5WtXn9ufLYY5j2ZXe
-         6uDw==
-X-Gm-Message-State: AOAM530Auphi7DWO+A/jgj7mKO3JBhHMb2HCMbyIWvO/ufjH5OMGtFee
-        JuQ1oWT7e491BH7lgQtWwGoUO+YRMEna6glg8JkDhYV3nfjlxPj/0yUcwGuUyFN4hVjxUf3A8wL
-        D9V7jlHi5AmcWkrjK4NC3bOwJXzetiyr06FOTjw==
-X-Received: by 2002:a25:f50b:: with SMTP id a11mr39866967ybe.241.1635906126927;
-        Tue, 02 Nov 2021 19:22:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8/NVoMGxaKLjdMxgABPA16raKQKSQ+NYt/DcrrEsqF3bpi/etdtfthCplYtvygitTxScsWZoI61Kmux0mgz0=
-X-Received: by 2002:a25:f50b:: with SMTP id a11mr39866936ybe.241.1635906126512;
- Tue, 02 Nov 2021 19:22:06 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5faKoCnF1iDNsk94+97rcb0GZPxEVHhUko592oNDZWw=;
+        b=sYbhNIXy/btTC0DU8DE0EIneVMzDUuVHpm3hFl3KIYVaxSNXIkCkrO9pS78AO24kWV
+         itIqnAt7BQQqtdE5u14OA94/ihvop48XLwKJa+kww/KO3XcIb5+OO/Umtta+PhVTkYen
+         4rvU8eeVK2h8xKIdv5U/6YIW+qrzwawhPz1M0zt25DI7KsehS6YNtvbj6fMlYW/4uPOl
+         q/a7/kSyerBGRBad5o35qx725z8TNCIxPHJJMzxIas3/goTEyI7NVUixNgS2c7iJn5yD
+         F8ivrN4ClHK6NmxL0URxVEvFBxcF6D3DRIBvdAzYUHR+FYULAmcHQFH/aBppTw0YkqhF
+         E54w==
+X-Gm-Message-State: AOAM533uvPTSzboN/qpmruI5z2XVjBE5xxuRw1jCVqDejugvyBrwdB5i
+        etVZjd30um7Cq2G2+PNDOpWRmEj6uG4ttsHo
+X-Google-Smtp-Source: ABdhPJx/mOOrYTiSHfxFGPIcG1NH10983FuVuNv4jnBqy/AwmfURiq/mPqYtd4hA3/XWYF8Zyd/AIw==
+X-Received: by 2002:a17:902:c3cc:b0:141:be17:405e with SMTP id j12-20020a170902c3cc00b00141be17405emr25456719plj.76.1635908507226;
+        Tue, 02 Nov 2021 20:01:47 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m6sm275398pgc.17.2021.11.02.20.01.46
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 20:01:46 -0700 (PDT)
+Message-ID: <6181fb9a.1c69fb81.d3980.19db@mx.google.com>
+Date:   Tue, 02 Nov 2021 20:01:46 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAHj4cs-NUKzGj5pgzRhDgdrGGbgPBqUoQ44+xgvk6njH9a_RYQ@mail.gmail.com>
- <1cf57bc2-5283-a2ce-0bbc-db6a62953c8f@linux.ibm.com> <e9965a7c-faba-496e-8110-dbe8f7065080@kernel.dk>
- <4f3811f6-88d9-c0c6-055f-1a3220357e22@kernel.dk>
-In-Reply-To: <4f3811f6-88d9-c0c6-055f-1a3220357e22@kernel.dk>
-From:   Yi Zhang <yi.zhang@redhat.com>
-Date:   Wed, 3 Nov 2021 10:21:53 +0800
-Message-ID: <CAHj4cs_+ZDe3KVbKYUK0XnupTxU2MqfA6ARxMkhkTwg9hYBiLg@mail.gmail.com>
-Subject: Re: [bug report] WARNING: CPU: 1 PID: 1386 at block/blk-mq-sched.c:432
- blk_mq_sched_insert_request+0x54/0x178
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Steffen Maier <maier@linux.ibm.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.15-5907-g771bcd3baddd
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 203 builds: 7 failed, 196 passed, 6 errors,
+ 160 warnings (v5.15-5907-g771bcd3baddd)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
->
-> Can either one of you try with this patch? Won't fix anything, but it'll
-> hopefully shine a bit of light on the issue.
->
-Hi Jens
+next/pending-fixes build: 203 builds: 7 failed, 196 passed, 6 errors, 160 w=
+arnings (v5.15-5907-g771bcd3baddd)
 
-Here is the full log:
-[  566.964613] run blktests srp/001 at 2021-11-02 22:09:12
-[  567.372541] alua: device handler registered
-[  567.375340] emc: device handler registered
-[  567.388737] rdac: device handler registered
-[  567.403792] null_blk: module loaded
-[  567.624077] rdma_rxe: loaded
-[  567.629083] infiniband enc8000_rxe: set active
-[  567.629087] infiniband enc8000_rxe: added enc8000
-[  567.699017] scsi_debug:sdebug_add_store: dif_storep 524288 bytes @
-000000005c9bf0dc
-[  567.699682] scsi_debug:sdebug_driver_probe: scsi_debug: trim
-poll_queues to 0. poll_q/nr_hw = (0/1)
-[  567.699686] scsi_debug:sdebug_driver_probe: host protection DIF3 DIX3
-[  567.699691] scsi host0: scsi_debug: version 0190 [20200710]
-                 dev_size_mb=32, opts=0x0, submit_queues=1, statistics=0
-[  567.700433] scsi 0:0:0:0: Direct-Access     Linux    scsi_debug
-  0190 PQ: 0 ANSI: 7
-[  567.700588] sd 0:0:0:0: Power-on or device reset occurred
-[  567.700610] sd 0:0:0:0: [sda] Enabling DIF Type 3 protection
-[  567.700634] sd 0:0:0:0: [sda] 65536 512-byte logical blocks: (33.6
-MB/32.0 MiB)
-[  567.700643] sd 0:0:0:0: [sda] Write Protect is off
-[  567.700648] sd 0:0:0:0: [sda] Mode Sense: 73 00 10 08
-[  567.700658] sd 0:0:0:0: [sda] Write cache: enabled, read cache:
-enabled, supports DPO and FUA
-[  567.700679] sd 0:0:0:0: [sda] Optimal transfer size 524288 bytes
-[  567.700807] sd 0:0:0:0: Attached scsi generic sg0 type 0
-[  567.787563] sd 0:0:0:0: [sda] Enabling DIX T10-DIF-TYPE3-CRC protection
-[  567.787568] sd 0:0:0:0: [sda] DIF application tag size 6
-[  567.887644] sd 0:0:0:0: [sda] Attached SCSI disk
-[  568.453337] Rounding down aligned max_sectors from 4294967295 to 4294967288
-[  568.488877] ib_srpt:srpt_add_one: ib_srpt device = 00000000dd1cba21
-[  568.488883] ib_srpt:srpt_use_srq: ib_srpt
-srpt_use_srq(enc8000_rxe): use_srq = 0; ret = 0
-[  568.488885] ib_srpt:srpt_add_one: ib_srpt Target login info:
-id_ext=00debdfffebeef80,ioc_guid=00debdfffebeef80,pkey=ffff,service_id=00debdfffebeef80
-[  568.488924] ib_srpt:srpt_add_one: ib_srpt added enc8000_rxe.
-[  568.933299] Rounding down aligned max_sectors from 255 to 248
-[  568.942144] Rounding down aligned max_sectors from 255 to 248
-[  568.951076] Rounding down aligned max_sectors from 4294967295 to 4294967288
-[  569.055204] ib_srp:srp_add_one: ib_srp: srp_add_one:
-18446744073709551615 / 4096 = 4503599627370495 <> 512
-[  569.055208] ib_srp:srp_add_one: ib_srp: enc8000_rxe: mr_page_shift
-= 12, device->max_mr_size = 0xffffffffffffffff,
-device->max_fast_reg_page_list_len = 512, max_pages_per_mr = 512,
-mr_max_size = 0x200000
-[  569.072666] ib_srp:srp_parse_in: ib_srp: 10.16.69.39 -> 10.16.69.39:0
-[  569.072672] ib_srp:srp_parse_in: ib_srp: 10.16.69.39:5555 -> 10.16.69.39:5555
-[  569.072674] ib_srp:add_target_store: ib_srp: max_sectors = 1024;
-max_pages_per_mr = 512; mr_page_size = 4096; max_sectors_per_mr =
-4096; mr_per_cmd = 2
-[  569.072676] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  569.073279] ib_srpt Received SRP_LOGIN_REQ with i_port_id
-fe80:0000:0000:0000:00de:bdff:febe:ef80, t_port_id
-00de:bdff:febe:ef80:00de:bdff:febe:ef80 and it_iu_len 8260 on port 1
-(guid=fe80:0000:0000:0000:00de:bdff:febe:ef80); pkey 0xffff
-[  569.073366] ib_srpt:srpt_cm_req_recv: ib_srpt imm_data_offset = 68
-[  569.076164] ib_srpt:srpt_create_ch_ib: ib_srpt srpt_create_ch_ib:
-max_cqe= 8191 max_sge= 32 sq_size = 4096 ch= 0000000097d2923d
-[  569.076177] ib_srpt:srpt_cm_req_recv: ib_srpt registering src addr
-10.16.69.39 or i_port_id 0xfe8000000000000000debdfffebeef80
-[  569.076201] ib_srpt:srpt_cm_req_recv: ib_srpt Establish connection
-sess=00000000ffaa765e name=10.16.69.39 ch=0000000097d2923d
-[  569.076233] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  569.076236] scsi host1: ib_srp: using immediate data
-[  569.076606] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-18:
-queued zerolength write
-[  569.076620] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-18 wc->status 0
-[  569.076907] ib_srpt Received SRP_LOGIN_REQ with i_port_id
-fe80:0000:0000:0000:00de:bdff:febe:ef80, t_port_id
-00de:bdff:febe:ef80:00de:bdff:febe:ef80 and it_iu_len 8260 on port 1
-(guid=fe80:0000:0000:0000:00de:bdff:febe:ef80); pkey 0xffff
-[  569.076989] ib_srpt:srpt_cm_req_recv: ib_srpt imm_data_offset = 68
-[  569.079227] ib_srpt:srpt_create_ch_ib: ib_srpt srpt_create_ch_ib:
-max_cqe= 8191 max_sge= 32 sq_size = 4096 ch= 0000000078d4dcf5
-[  569.079240] ib_srpt:srpt_cm_req_recv: ib_srpt registering src addr
-10.16.69.39 or i_port_id 0xfe8000000000000000debdfffebeef80
-[  569.079255] ib_srpt:srpt_cm_req_recv: ib_srpt Establish connection
-sess=0000000015a0b0b5 name=10.16.69.39 ch=0000000078d4dcf5
-[  569.079311] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  569.079313] scsi host1: ib_srp: using immediate data
-[  569.079669] scsi host1: SRP.T10:00DEBDFFFEBEEF80
-[  569.079675] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-20:
-queued zerolength write
-[  569.079686] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-20 wc->status 0
-[  569.080892] scsi 1:0:0:0: Direct-Access     LIO-ORG  IBLOCK
-  4.0  PQ: 0 ANSI: 6
-[  569.081009] scsi 1:0:0:0: alua: supports implicit and explicit TPGS
-[  569.081014] scsi 1:0:0:0: alua: device
-naa.60014056e756c6c62300000000000000 port group 0 rel port 1
-[  569.081143] sd 1:0:0:0: Warning! Received an indication that the
-LUN assignments on this target have changed. The Linux SCSI layer does
-not automatical
-[  569.081849] sd 1:0:0:0: Attached scsi generic sg1 type 0
-[  569.097426] sd 1:0:0:0: alua: transition timeout set to 60 seconds
-[  569.097431] sd 1:0:0:0: alua: port group 00 state A non-preferred
-supports TOlUSNA
-[  569.097619] sd 1:0:0:0: [sdb] 65536 512-byte logical blocks: (33.6
-MB/32.0 MiB)
-[  569.097649] sd 1:0:0:0: [sdb] Write Protect is off
-[  569.097652] sd 1:0:0:0: [sdb] Mode Sense: 43 00 00 08
-[  569.097680] scsi 1:0:0:2: Direct-Access     LIO-ORG  IBLOCK
-  4.0  PQ: 0 ANSI: 6
-[  569.097702] sd 1:0:0:0: [sdb] Write cache: disabled, read cache:
-enabled, doesn't support DPO or FUA
-[  569.097714] srpt/10.16.69.39: Unsupported SCSI Opcode 0xa3, sending
-CHECK_CONDITION.
-[  569.097753] sd 1:0:0:0: [sdb] Optimal transfer size 126976 bytes
-[  569.097794] scsi 1:0:0:2: alua: supports implicit and explicit TPGS
-[  569.097798] scsi 1:0:0:2: alua: device
-naa.60014057363736964626700000000000 port group 0 rel port 1
-[  569.098042] sd 1:0:0:2: [sdc] 65536 512-byte logical blocks: (33.6
-MB/32.0 MiB)
-[  569.098068] sd 1:0:0:2: [sdc] Write Protect is off
-[  569.098070] sd 1:0:0:2: [sdc] Mode Sense: 43 00 10 08
-[  569.098117] sd 1:0:0:2: [sdc] Write cache: enabled, read cache:
-enabled, supports DPO and FUA
-[  569.098129] srpt/10.16.69.39: Unsupported SCSI Opcode 0xa3, sending
-CHECK_CONDITION.
-[  569.098169] sd 1:0:0:2: [sdc] Optimal transfer size 524288 bytes
-[  569.099162] sd 1:0:0:2: Attached scsi generic sg2 type 0
-[  569.099412] scsi 1:0:0:1: Direct-Access     LIO-ORG  IBLOCK
-  4.0  PQ: 0 ANSI: 6
-[  569.099531] scsi 1:0:0:1: alua: supports implicit and explicit TPGS
-[  569.099535] scsi 1:0:0:1: alua: device
-naa.60014056e756c6c62310000000000000 port group 0 rel port 1
-[  569.102434] sd 1:0:0:1: Warning! Received an indication that the
-LUN assignments on this target have changed. The Linux SCSI layer does
-not automatical
-[  569.102913] sd 1:0:0:1: Attached scsi generic sg3 type 0
-[  569.102941] ib_srp:srp_add_target: ib_srp: host1: SCSI scan
-succeeded - detected 3 LUNs
-[  569.102943] scsi host1: ib_srp: new target: id_ext 00debdfffebeef80
-ioc_guid 00debdfffebeef80 sgid fe80:0000:0000:0000:00de:bdff:febe:ef80
-dest 10.16.69.39
-[  569.104669] ib_srp:srp_parse_in: ib_srp: 10.16.69.39 -> 10.16.69.39:0
-[  569.104673] ib_srp:srp_parse_in: ib_srp: 10.16.69.39:5555 -> 10.16.69.39:5555
-[  569.104679] ib_srp:srp_parse_in: ib_srp:
-[2620:52:0:1040:de:bdff:febe:ef80] ->
-[2620:52:0:1040:de:bdff:febe:ef80]:0/168838439%0
-[  569.104683] ib_srp:srp_parse_in: ib_srp:
-[2620:52:0:1040:de:bdff:febe:ef80]:5555 ->
-[2620:52:0:1040:de:bdff:febe:ef80]:5555/168838439%0
-[  569.104686] scsi host2: ib_srp: Already connected to target port
-with id_ext=00debdfffebeef80;ioc_guid=00debdfffebeef80;dest=2620:0052:0000:1040:00de:bdff:febe:ef80
-[  569.127417] sd 1:0:0:1: alua: transition timeout set to 60 seconds
-[  569.127422] sd 1:0:0:1: alua: port group 00 state A non-preferred
-supports TOlUSNA
-[  569.127518] sd 1:0:0:2: alua: transition timeout set to 60 seconds
-[  569.127523] sd 1:0:0:2: alua: port group 00 state A non-preferred
-supports TOlUSNA
-[  569.127803] sd 1:0:0:1: [sdd] 65536 512-byte logical blocks: (33.6
-MB/32.0 MiB)
-[  569.128220] sd 1:0:0:1: [sdd] Write Protect is off
-[  569.128223] sd 1:0:0:1: [sdd] Mode Sense: 43 00 00 08
-[  569.128273] sd 1:0:0:1: [sdd] Write cache: disabled, read cache:
-enabled, doesn't support DPO or FUA
-[  569.128284] srpt/10.16.69.39: Unsupported SCSI Opcode 0xa3, sending
-CHECK_CONDITION.
-[  569.128320] sd 1:0:0:1: [sdd] Optimal transfer size 126976 bytes
-[  569.140904] ib_srp:srp_parse_in: ib_srp: 10.16.69.39 -> 10.16.69.39:0
-[  569.140909] ib_srp:srp_parse_in: ib_srp: 10.16.69.39:5555 -> 10.16.69.39:5555
-[  569.140914] ib_srp:srp_parse_in: ib_srp:
-[2620:52:0:1040:de:bdff:febe:ef80] ->
-[2620:52:0:1040:de:bdff:febe:ef80]:0/168838439%0
-[  569.140919] ib_srp:srp_parse_in: ib_srp:
-[2620:52:0:1040:de:bdff:febe:ef80]:5555 ->
-[2620:52:0:1040:de:bdff:febe:ef80]:5555/168838439%0
-[  569.140926] ib_srp:srp_parse_in: ib_srp:
-[fe80::de:bdff:febe:ef80%2] -> [fe80::de:bdff:febe:ef80]:0/168838439%2
-[  569.140932] ib_srp:srp_parse_in: ib_srp:
-[fe80::de:bdff:febe:ef80%2]:5555 ->
-[fe80::de:bdff:febe:ef80]:5555/168838439%2
-[  569.140934] scsi host2: ib_srp: Already connected to target port
-with id_ext=00debdfffebeef80;ioc_guid=00debdfffebeef80;dest=fe80:0000:0000:0000:00de:bdff:febe:ef80
-[  569.197816] tag=31/-1, e=16ac2000, rq cmd_flags 22, rq_flags 2800
-[  569.247577] sd 1:0:0:2: [sdc] Attached SCSI disk
-[  569.248420] tag=25/-1, e=1c08c400, rq cmd_flags 22, rq_flags 2800
-[  569.248569] sd 1:0:0:1: [sdd] Attached SCSI disk
-[  569.248931] tag=29/-1, e=16ac0800, rq cmd_flags 22, rq_flags 2800
-[  569.249108] sd 1:0:0:0: [sdb] Attached SCSI disk
-[  569.305302] rdma_rxe: rxe_invalidate_mr: rkey (0x84f6) doesn't
-match mr->ibmr.rkey (0x84f7)
-[  569.305315] scsi host1: ib_srp: failed RECV status WR flushed (5)
-for CQE 00000000a216794f
-[  569.367710] scsi 1:0:0:0: alua: Detached
-[  576.367413] scsi host1: SRP abort called
-[  579.907417] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  579.907624] ib_srpt receiving failed for ioctx 000000005e721910 with status 5
-[  579.907631] ib_srpt receiving failed for ioctx 0000000056beb878 with status 5
-[  579.907634] ib_srpt receiving failed for ioctx 000000001f2eb0be with status 5
-[  579.907636] ib_srpt receiving failed for ioctx 00000000338f74b5 with status 5
-[  579.907639] ib_srpt receiving failed for ioctx 00000000d57a4874 with status 5
-[  579.907642] ib_srpt receiving failed for ioctx 00000000806f7498 with status 5
-[  579.907646] ib_srpt receiving failed for ioctx 00000000330004a8 with status 5
-[  579.907649] ib_srpt receiving failed for ioctx 00000000833f52ea with status 5
-[  579.907652] ib_srpt receiving failed for ioctx 00000000a4a4cd8e with status 5
-[  579.907656] ib_srpt receiving failed for ioctx 000000006f7d8b81 with status 5
-[  580.127744] ib_srpt Received SRP_LOGIN_REQ with i_port_id
-fe80:0000:0000:0000:00de:bdff:febe:ef80, t_port_id
-00de:bdff:febe:ef80:00de:bdff:febe:ef80 and it_iu_len 8260 on port 1
-(guid=fe80:0000:0000:0000:00de:bdff:febe:ef80); pkey 0xffff
-[  580.127890] ib_srpt:srpt_cm_req_recv: ib_srpt imm_data_offset = 68
-[  580.130681] ib_srpt:srpt_create_ch_ib: ib_srpt srpt_create_ch_ib:
-max_cqe= 8191 max_sge= 32 sq_size = 4096 ch= 000000003dffffde
-[  580.130694] ib_srpt:srpt_cm_req_recv: ib_srpt registering src addr
-10.16.69.39 or i_port_id 0xfe8000000000000000debdfffebeef80
-[  580.130714] ib_srpt:srpt_cm_req_recv: ib_srpt Establish connection
-sess=00000000d7a559cb name=10.16.69.39 ch=000000003dffffde
-[  580.130737] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  580.130740] scsi host1: ib_srp: using immediate data
-[  580.130785] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-23:
-queued zerolength write
-[  580.130801] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-23 wc->status 0
-[  580.130825] ib_srpt Received SRP_LOGIN_REQ with i_port_id
-fe80:0000:0000:0000:00de:bdff:febe:ef80, t_port_id
-00de:bdff:febe:ef80:00de:bdff:febe:ef80 and it_iu_len 8260 on port 1
-(guid=fe80:0000:0000:0000:00de:bdff:febe:ef80); pkey 0xffff
-[  580.130926] ib_srpt:srpt_cm_req_recv: ib_srpt imm_data_offset = 68
-[  580.132805] ib_srpt:srpt_create_ch_ib: ib_srpt srpt_create_ch_ib:
-max_cqe= 8191 max_sge= 32 sq_size = 4096 ch= 00000000518459a5
-[  580.132820] ib_srpt:srpt_cm_req_recv: ib_srpt registering src addr
-10.16.69.39 or i_port_id 0xfe8000000000000000debdfffebeef80
-[  580.132832] ib_srpt:srpt_cm_req_recv: ib_srpt Establish connection
-sess=00000000292cad95 name=10.16.69.39 ch=00000000518459a5
-[  580.132851] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  580.132852] scsi host1: ib_srp: using immediate data
-[  580.132875] scsi host1: ib_srp: reconnect succeeded
-[  580.132883] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-24:
-queued zerolength write
-[  580.132894] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-24 wc->status 0
-[  582.027396] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-20:
-queued zerolength write
-[  582.027406] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-18:
-queued zerolength write
-[  582.027425] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-20 wc->status 5
-[  582.027429] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-18 wc->status 5
-[  582.027432] ib_srpt:srpt_release_channel_work: ib_srpt 10.16.69.39-20
-[  582.027440] ib_srpt:srpt_release_channel_work: ib_srpt 10.16.69.39-18
-[  614.717672] ib_srpt Closing channel 10.16.69.39-23 because target
-enc8000_rxe_1 has been disabled
-[  614.717687] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-23:
-queued zerolength write
-[  614.717693] ib_srpt Closing channel 10.16.69.39-24 because target
-enc8000_rxe_1 has been disabled
-[  614.717696] ib_srpt:srpt_zerolength_write: ib_srpt 10.16.69.39-24:
-queued zerolength write
-[  614.717802] srpt_recv_done: 246 callbacks suppressed
-[  614.717803] ib_srpt receiving failed for ioctx 000000005b444422 with status 5
-[  614.717809] ib_srpt receiving failed for ioctx 00000000776294fd with status 5
-[  614.717812] ib_srpt receiving failed for ioctx 000000002feadcfd with status 5
-[  614.717815] ib_srpt receiving failed for ioctx 000000006a886bb2 with status 5
-[  614.717818] ib_srpt receiving failed for ioctx 0000000016397dad with status 5
-[  614.717822] ib_srpt receiving failed for ioctx 00000000740fece1 with status 5
-[  614.717825] ib_srpt receiving failed for ioctx 00000000e7518963 with status 5
-[  614.717829] ib_srpt receiving failed for ioctx 00000000eb32ccfd with status 5
-[  614.717833] ib_srpt receiving failed for ioctx 000000009d275157 with status 5
-[  614.717837] ib_srpt receiving failed for ioctx 00000000549482a1 with status 5
-[  614.717865] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-23 wc->status 5
-[  614.717880] ib_srpt:srpt_zerolength_write_done: ib_srpt
-10.16.69.39-24 wc->status 5
-[  614.717894] ib_srpt:srpt_release_channel_work: ib_srpt 10.16.69.39-23
-[  614.717902] ib_srpt:srpt_release_channel_work: ib_srpt 10.16.69.39-24
-[  614.717915] scsi host1: ib_srp: received DREQ
-[  614.717997] scsi host1: ib_srp: failed RECV status WR flushed (5)
-for CQE 000000005a1c1db0
-[  614.721889] scsi host1: ib_srp: received DREQ
-[  614.721905] ib_srpt:srpt_close_ch: ib_srpt 10.16.69.39: already closed
-[  614.721964] ib_srpt:srpt_close_ch: ib_srpt 10.16.69.39: already closed
-[  616.827436] scsi host1: ib_srp: connection closed
-[  616.827446] scsi host1: ib_srp: connection closed
-[  625.347390] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  625.567932] scsi host1: ib_srp: REJ received
-[  625.567935] scsi host1:   REJ reason 0x8
-[  625.567953] scsi host1: reconnect attempt 1 failed (-104)
-[  629.787421] fast_io_fail_tmo expired for SRP port-1:1 / host1.
-[  636.187360] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  636.407959] scsi host1: ib_srp: REJ received
-[  636.407963] scsi host1:   REJ reason 0x8
-[  636.407982] scsi host1: reconnect attempt 2 failed (-104)
-[  646.427427] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  646.647993] scsi host1: ib_srp: REJ received
-[  646.647997] scsi host1:   REJ reason 0x8
-[  646.648017] scsi host1: reconnect attempt 3 failed (-104)
-[  656.667405] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  656.887953] scsi host1: ib_srp: REJ received
-[  656.887958] scsi host1:   REJ reason 0x8
-[  656.887979] scsi host1: reconnect attempt 4 failed (-104)
-[  666.907388] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  667.127961] scsi host1: ib_srp: REJ received
-[  667.127965] scsi host1:   REJ reason 0x8
-[  667.127989] scsi host1: reconnect attempt 5 failed (-104)
-[  677.147368] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  677.377871] scsi host1: ib_srp: REJ received
-[  677.377874] scsi host1:   REJ reason 0x8
-[  677.377892] scsi host1: reconnect attempt 6 failed (-104)
-[  687.387428] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  687.607973] scsi host1: ib_srp: REJ received
-[  687.607977] scsi host1:   REJ reason 0x8
-[  687.608006] scsi host1: reconnect attempt 7 failed (-104)
-[  687.608014] sd 1:0:0:1: rejecting I/O to offline device
-[  697.627395] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  697.848018] scsi host1: ib_srp: REJ received
-[  697.848022] scsi host1:   REJ reason 0x8
-[  697.848070] ------------[ cut here ]------------
-[  697.848076] WARNING: CPU: 1 PID: 1973 at block/blk-mq.c:294
-blk_mq_unquiesce_queue+0xb2/0xc8
-[  697.848087] Modules linked in: ib_srp scsi_transport_srp rdma_cm
-iw_cm ib_cm ib_umad scsi_debug rdma_rxe ib_uverbs ip6_udp_tunnel
-udp_tunnel null_blk scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_multipath
-ib_core sunrpc qeth_l2 bridge stp llc qeth qdio ccwgroup vfio_ccw mdev
-zcrypt_cex4 vfio_iommu_type1 vfio drm fb fuse font
-drm_panel_orientation_quirks i2c_core backlight zram ip_tables xfs
-crc32_vx_s390 ghash_s390 prng aes_s390 des_s390 libdes sha512_s390
-sha256_s390 sha1_s390 sha_common dasd_eckd_mod dasd_mod pkey zcrypt
-[last unloaded: target_core_mod]
-[  697.848149] CPU: 1 PID: 1973 Comm: kworker/1:5 Not tainted 5.15.0+ #4
-[  697.848154] Hardware name: IBM 2964 N96 400 (z/VM 6.4.0)
-[  697.848158] Workqueue: events_long srp_reconnect_work [scsi_transport_srp]
-[  697.848168] Krnl PSW : 0404c00180000000 000000003253c696
-(blk_mq_unquiesce_queue+0xb6/0xc8)
-[  697.848183]            R:0 T:1 IO:0 EX:0 Key:0 M:1 W:0 P:0 AS:3
-CC:0 PM:0 RI:0 EA:3
-[  697.848187] Krnl GPRS: 00000000000000d4 0000000000000000
-00000000078b4f30 0000000000000002
-[  697.848190]            0000000000000004 0000000000000009
-ffffffffffffff98 00000000326f7df0
-[  697.848192]            000003800729fcdc 0000000000000007
-070003800729fb00 00000000078b4ec0
-[  697.848194]            000000001b9b2100 0000000000000000
-000003800729fb00 000003800729fac0
-[  697.848203] Krnl Code: 000000003253c68a: a7180001 lhi %r1,1
-                          000000003253c68e: a7f4ffd7 brc 15,000000003253c63c
-                         #000000003253c692: af000000 mc 0,0
-                         >000000003253c696: a7180000 lhi %r1,0
-                          000000003253c69a: a7f4ffd1 brc 15,000000003253c63c
-                          000000003253c69e: c0e500071f89 brasl
-%r14,00000000326205b0
-                          000000003253c6a4: a7f4ffbe brc 15,000000003253c620
-                          000000003253c6a8: c004002ce124 brcl 0,0000000032ad88f0
-[  697.848221] Call Trace:
-[  697.848224]  [<000000003253c696>] blk_mq_unquiesce_queue+0xb6/0xc8
-[  697.848230]  [<00000000326f7da0>]
-scsi_internal_device_unblock_nowait+0x50/0xa0
-[  697.848235]  [<00000000326f7e30>] device_unblock+0x40/0x50
-[  697.848238]  [<00000000326ef9c8>] starget_for_each_device+0xa8/0xd0
-[  697.848244]  [<00000000326f862e>] target_unblock+0x56/0x68
-[  697.848247]  [<00000000326b7018>] device_for_each_child+0x60/0xa0
-[  697.848251]  [<00000000326f7ea6>] scsi_target_unblock+0x66/0x78
-[  697.848253]  [<000003ff808e3872>] srp_reconnect_rport+0x202/0x238
-[scsi_transport_srp]
-[  697.848340]  [<000003ff808e3902>] srp_reconnect_work+0x5a/0xf0
-[scsi_transport_srp]
-[  697.848345]  [<0000000031f8b62a>] process_one_work+0x21a/0x498
-[  697.848349]  [<0000000031f8bdd4>] worker_thread+0x64/0x498
-[  697.848351]  [<0000000031f9471c>] kthread+0x184/0x190
-[  697.848356]  [<0000000031f1f468>] __ret_from_fork+0x40/0x58
-[  697.848359]  [<0000000032a6d2da>] ret_from_fork+0xa/0x30
-[  697.848365] Last Breaking-Event-Address:
-[  697.848367]  [<0000000000000000>] 0x0
-[  697.848370] ---[ end trace 270726b44805023e ]---
-[  697.848374] scsi host1: reconnect attempt 8 failed (-104)
-[  707.867368] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  708.087976] scsi host1: ib_srp: REJ received
-[  708.087981] scsi host1:   REJ reason 0x8
-[  708.088024] scsi host1: reconnect attempt 9 failed (-104)
-[  718.107392] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  718.327884] scsi host1: ib_srp: REJ received
-[  718.327888] scsi host1:   REJ reason 0x8
-[  718.327929] scsi host1: reconnect attempt 10 failed (-104)
-[  728.347398] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  728.567888] scsi host1: ib_srp: REJ received
-[  728.567891] scsi host1:   REJ reason 0x8
-[  728.567931] scsi host1: reconnect attempt 11 failed (-104)
-[  735.447460] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-[  738.587419] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  738.807992] scsi host1: ib_srp: REJ received
-[  738.807995] scsi host1:   REJ reason 0x8
-[  738.808049] scsi host1: reconnect attempt 12 failed (-104)
-[  759.067426] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  759.288047] scsi host1: ib_srp: REJ received
-[  759.288051] scsi host1:   REJ reason 0x8
-[  759.288103] scsi host1: reconnect attempt 13 failed (-104)
-[  789.787399] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  790.007875] scsi host1: ib_srp: REJ received
-[  790.007878] scsi host1:   REJ reason 0x8
-[  790.007922] scsi host1: reconnect attempt 14 failed (-104)
-[  830.107393] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  830.329148] scsi host1: ib_srp: REJ received
-[  830.329152] scsi host1:   REJ reason 0x8
-[  830.329221] scsi host1: reconnect attempt 15 failed (-104)
-[  883.867389] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  884.087954] scsi host1: ib_srp: REJ received
-[  884.087958] scsi host1:   REJ reason 0x8
-[  884.088004] scsi host1: reconnect attempt 16 failed (-104)
-[  945.307398] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[  945.527867] scsi host1: ib_srp: REJ received
-[  945.527870] scsi host1:   REJ reason 0x8
-[  945.527914] scsi host1: reconnect attempt 17 failed (-104)
-[ 1016.987360] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[ 1017.207882] scsi host1: ib_srp: REJ received
-[ 1017.207885] scsi host1:   REJ reason 0x8
-[ 1017.207937] scsi host1: reconnect attempt 18 failed (-104)
-[ 1098.907436] ib_srp:srp_max_it_iu_len: ib_srp: max_iu_len = 8260
-[ 1099.127947] scsi host1: ib_srp: REJ received
-[ 1099.127951] scsi host1:   REJ reason 0x8
-[ 1099.128003] scsi host1: reconnect attempt 19 failed (-104)
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.15-5907-g771bcd3baddd/
 
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.15-5907-g771bcd3baddd
+Git Commit: 771bcd3baddd4f66646b2b456725bcdb8b2fa5c4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
->
-> diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-> index 4a6789e4398b..1b7647722ec0 100644
-> --- a/block/blk-mq-sched.c
-> +++ b/block/blk-mq-sched.c
-> @@ -429,7 +429,8 @@ void blk_mq_sched_insert_request(struct request *rq, bool at_head,
->         struct blk_mq_ctx *ctx = rq->mq_ctx;
->         struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
->
-> -       WARN_ON(e && (rq->tag != BLK_MQ_NO_TAG));
-> +       if (e && (rq->tag != BLK_MQ_NO_TAG))
-> +               printk("tag=%d/%d, e=%lx, rq cmd_flags %x, rq_flags %x\n", rq->tag, rq->internal_tag, (long) e, rq->cmd_flags, rq->rq_flags);
->
->         if (blk_mq_sched_bypass_insert(hctx, rq)) {
->                 /*
->
-> --
-> Jens Axboe
->
+Build Failures Detected:
 
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
--- 
-Best Regards,
-  Yi Zhang
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+    ip27_defconfig: (gcc-10) FAIL
+    ip28_defconfig: (gcc-10) FAIL
+    lemote2f_defconfig: (gcc-10) FAIL
+    xway_defconfig: (gcc-10) FAIL
 
+x86_64:
+    allmodconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 3 warnings
+    tinyconfig (gcc-10): 1 warning
+
+arm64:
+
+arm:
+    rpc_defconfig (gcc-10): 2 errors
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 3 warnings
+    32r2el_defconfig+kselftest (gcc-10): 4 warnings
+    ar7_defconfig (gcc-10): 2 warnings
+    ath25_defconfig (gcc-10): 2 warnings
+    ath79_defconfig (gcc-10): 2 warnings
+    bcm47xx_defconfig (gcc-10): 2 warnings
+    bcm63xx_defconfig (gcc-10): 1 warning
+    bigsur_defconfig (gcc-10): 6 warnings
+    bmips_be_defconfig (gcc-10): 1 warning
+    bmips_stb_defconfig (gcc-10): 1 warning
+    capcella_defconfig (gcc-10): 2 warnings
+    cavium_octeon_defconfig (gcc-10): 6 warnings
+    ci20_defconfig (gcc-10): 2 warnings
+    cobalt_defconfig (gcc-10): 2 warnings
+    cu1000-neo_defconfig (gcc-10): 2 warnings
+    cu1830-neo_defconfig (gcc-10): 2 warnings
+    db1xxx_defconfig (gcc-10): 1 warning
+    decstation_64_defconfig (gcc-10): 6 warnings
+    decstation_defconfig (gcc-10): 2 warnings
+    decstation_r4k_defconfig (gcc-10): 2 warnings
+    e55_defconfig (gcc-10): 2 warnings
+    fuloong2e_defconfig (gcc-10): 6 warnings
+    gcw0_defconfig (gcc-10): 2 warnings
+    gpr_defconfig (gcc-10): 2 warnings
+    ip22_defconfig (gcc-10): 2 warnings
+    ip32_defconfig (gcc-10): 6 warnings
+    jazz_defconfig (gcc-10): 2 warnings
+    jmr3927_defconfig (gcc-10): 1 warning
+    lemote2f_defconfig (gcc-10): 6 warnings
+    loongson1b_defconfig (gcc-10): 2 warnings
+    loongson1c_defconfig (gcc-10): 2 warnings
+    loongson2k_defconfig (gcc-10): 6 warnings
+    loongson3_defconfig (gcc-10): 6 warnings
+    malta_defconfig (gcc-10): 2 warnings
+    malta_kvm_defconfig (gcc-10): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-10): 2 warnings
+    maltaaprp_defconfig (gcc-10): 2 warnings
+    maltasmvp_defconfig (gcc-10): 2 warnings
+    maltasmvp_eva_defconfig (gcc-10): 2 warnings
+    maltaup_defconfig (gcc-10): 2 warnings
+    maltaup_xpa_defconfig (gcc-10): 2 warnings
+    mpc30x_defconfig (gcc-10): 2 warnings
+    mtx1_defconfig (gcc-10): 2 warnings
+    nlm_xlp_defconfig (gcc-10): 6 warnings
+    nlm_xlr_defconfig (gcc-10): 2 warnings
+    omega2p_defconfig (gcc-10): 1 warning
+    pic32mzda_defconfig (gcc-10): 2 warnings
+    qi_lb60_defconfig (gcc-10): 2 warnings
+    rb532_defconfig (gcc-10): 2 warnings
+    rbtx49xx_defconfig (gcc-10): 2 warnings
+    rm200_defconfig (gcc-10): 3 warnings
+    rs90_defconfig (gcc-10): 1 warning
+    rt305x_defconfig (gcc-10): 2 warnings
+    sb1250_swarm_defconfig (gcc-10): 4 warnings
+    tb0219_defconfig (gcc-10): 2 warnings
+    tb0226_defconfig (gcc-10): 2 warnings
+    tb0287_defconfig (gcc-10): 2 warnings
+    vocore2_defconfig (gcc-10): 1 warning
+    workpad_defconfig (gcc-10): 2 warnings
+    xway_defconfig (gcc-10): 2 errors, 4 warnings
+
+riscv:
+
+x86_64:
+    allmodconfig (gcc-10): 2 errors
+
+Errors summary:
+
+    2    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h=
+:2500:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or d=
+irectory
+    1    drivers/net/ethernet/lantiq_etop.c:673:8: error: implicit declarat=
+ion of function =E2=80=98device_property_read_u32=E2=80=99 [-Werror=3Dimpli=
+cit-function-declaration]
+    1    drivers/net/ethernet/lantiq_etop.c:265:55: error: =E2=80=98rx_burs=
+t_len=E2=80=99 undeclared (first use in this function)
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    150  <stdin>:1559:2: warning: #warning syscall futex_waitv not implemen=
+ted [-Wcpp]
+    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    2    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' i=
+s unknown, fallback to ''
+    1    drivers/net/ethernet/lantiq_etop.c:284:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98wa=
+rn_unused_result=E2=80=99 [-Wunused-result]
+    1    drivers/net/ethernet/lantiq_etop.c:276:4: warning: ignoring return=
+ value of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98wa=
+rn_unused_result=E2=80=99 [-Wunused-result]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    cc1: some warnings being treated as errors
+    1    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_m=
+ap' defined but not used [-Wunused-const-variable=3D]
+    1    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_=
+map' defined but not used [-Wunused-const-variable=3D]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+    /usr/lib/gcc/x86_64-linux-gnu/10/plugin/include/config/i386/i386.h:2500=
+:10: fatal error: common/config/i386/i386-cpuinfo.h: No such file or direct=
+ory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 6 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 3 w=
+arnings, 0 section mismatches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+    arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' =
+defined but not used [-Wunused-const-variable=3D]
+    arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' d=
+efined but not used [-Wunused-const-variable=3D]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0=
+ section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+crypto (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+ima (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings,=
+ 0 section mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arc/Makefile:26: ** WARNING ** CONFIG_ARC_TUNE_MCPU flag '' is unk=
+nown, fallback to ''
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-10) =E2=80=94 FAIL, 2 errors, 4 warnings, 0 secti=
+on mismatches
+
+Errors:
+    drivers/net/ethernet/lantiq_etop.c:265:55: error: =E2=80=98rx_burst_len=
+=E2=80=99 undeclared (first use in this function)
+    drivers/net/ethernet/lantiq_etop.c:673:8: error: implicit declaration o=
+f function =E2=80=98device_property_read_u32=E2=80=99 [-Werror=3Dimplicit-f=
+unction-declaration]
+
+Warnings:
+    <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [=
+-Wcpp]
+    drivers/net/ethernet/lantiq_etop.c:276:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98warn_un=
+used_result=E2=80=99 [-Wunused-result]
+    drivers/net/ethernet/lantiq_etop.c:284:4: warning: ignoring return valu=
+e of =E2=80=98request_irq=E2=80=99 declared with attribute =E2=80=98warn_un=
+used_result=E2=80=99 [-Wunused-result]
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

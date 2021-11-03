@@ -2,106 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB2F444000
-	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 11:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5814440F1
+	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 12:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbhKCKdX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Nov 2021 06:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
+        id S231705AbhKCMCU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Nov 2021 08:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbhKCKdX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Nov 2021 06:33:23 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0237C061714;
-        Wed,  3 Nov 2021 03:30:46 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id v65so2101163ioe.5;
-        Wed, 03 Nov 2021 03:30:46 -0700 (PDT)
+        with ESMTP id S231521AbhKCMCT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Nov 2021 08:02:19 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4B6C061714
+        for <linux-next@vger.kernel.org>; Wed,  3 Nov 2021 04:59:43 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id x9so2214186ilu.6
+        for <linux-next@vger.kernel.org>; Wed, 03 Nov 2021 04:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rJ0W9665zPN33aTHCee5/NAuKAsFNx/P9dYEi6U9HoY=;
-        b=LsZEz8mwaGbJQ9F6VUUAzCwksNpBCNKXe9VoZ8Wgck0e7kaQ8mXSqaGTx3PJ6mtUI3
-         Qun8/sZbcpXmcDcXvzOGvjMSZ6N3630nzhihI+yT9+clmvkNODgozOuww7WC9TT/QRfC
-         xfn17nuOmzuBxCaYyG7X2QQqcjWQzXwrsayadxhxohfWJLVkxvziCReqXhyxHqEldLBe
-         CIrXA7HmZK58E0sh828Gn/rAOs1xq7LauJqbtJ1IWORymFBcL2y/Fdo1yOFVh86O+EEv
-         vC7u7SmQdmv/4pJ36EvVO2aECSdWqdBvV865YCwHAtLRyCcKhBZXvVe+pM4pmwlqutbz
-         pqng==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hkrFrHqgVjTg6gXAk46b2nB4I3hOJoyqjtnsKka5lB8=;
+        b=rv/7YguhQ5xBR8sowInwgWwdHzfXevYwJpyg74fiFDU7k69rXKsrtBDU8IEhE7xIFs
+         N5s3La3DdGdg60IqxM9Zub+nFho93frOhPywBgDqAYQGLMBhKuJU/N0D7oJ0traCyrX9
+         cPN2GswZQB026KeOOoUhpyA+A7Nup+4hNof/JrLOh8TiRuUjMzXx1giVTxm9A3qxdkw4
+         U/Q/aTrVHf6idf0JxGXLZTzUjVy38QZHy2Ax0ALViqXNa3tweQRmMenv68BsflqsoidP
+         wXprWPprxbjTw4xUk4IfqvEdK85UrR4LLuzn7ahrGgHDpDq2lwVCFm5esbbPyUGEHPri
+         Jz3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rJ0W9665zPN33aTHCee5/NAuKAsFNx/P9dYEi6U9HoY=;
-        b=anqudKXrmRFISy3K6xG1XqSsbuwHU1m+gVerw24v9+adj/0aj7xGhCp/H7Rok3RXPQ
-         3eGaBjjLJe3MPtgV9NYg2JY8rjawScerxGu2nHeQTz4Zgpb932WzF+qspWcfs/9M7ziQ
-         D97Ff3Qbjc2mY8y7tExy1D1dKAOYLFSyyc4EcDkyRmPCFMmoVifRAL2cuQLRAA7GEDtk
-         CLUIPMMvy1W9Q+KHe7Nd3ZC4zBHZ5rTvbeK147S7y/g8IRKVhY3oQDFNs0kMmuKDLDUp
-         vFrSwUvbjwHycBcFlGNHJymI6PpEpdsTtj8bb4GIx+1bkSPuLWdCQdNNEogs8nsRmWpp
-         GpNw==
-X-Gm-Message-State: AOAM533WR+2vHtO4pqQ/VMm+H6jLdW0sSDun4hQ2neo/lPOcqWq+sJfk
-        mY4ONWLqmz4pawc2AJSYFL5++2X+CAS4kTJKbY8=
-X-Google-Smtp-Source: ABdhPJwxaX+ZSzkC08wQZnyBshUwZ+yVOM14zJF+O1WfAUAgt2J2bqOjHxzj77GO0xfn0kklyH+x1iLyGXlJ1DeYzRY=
-X-Received: by 2002:a5d:9c4c:: with SMTP id 12mr30213483iof.64.1635935446370;
- Wed, 03 Nov 2021 03:30:46 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hkrFrHqgVjTg6gXAk46b2nB4I3hOJoyqjtnsKka5lB8=;
+        b=gjGdd3NtAaOg8RKvLFw+QZqk7ZiK3mf9gCE8IIKEAmuz5M7w3yttDEsQq7EiMmWV9a
+         HMEBmGnbgmuOdLFlCHrFwqFnL9QRoazx5muWAnsNPLjOOL4hA9OkEmbpND/+Qavjs3R9
+         d4wiCI8NzlV5Q5QBnktD8/74FJR7fuF/AcVCQUoxWV0tOpIYF9m3Rar6J/O1sLrfX+J4
+         WFmQhPa+r7d9cFhvUqCn4BQfKuXOiWPsHIim+InxwkgGBBnXWiwqT9UiaV2JbyqE8Jzl
+         WhX15L4kT5d1o47DeOuZd8nfzBWrFsY2sf0ZnOBDd0rq7VFrjvZsbh07F3VcuSb7HcpV
+         JuTQ==
+X-Gm-Message-State: AOAM532M7okGrQTLrTAAR4EJJV4rg0JZFRNA/J0ew/u5apvRvfK01hkZ
+        MFLecJE1K9uJCOevtFjBlCuJaUS14XgkiQ==
+X-Google-Smtp-Source: ABdhPJy6WvG8mT6V+42crfbNqxw0Q0w5U1A/P6SFWQCA078btj3A6hsLgxKYpxVTCyi6ehu2VO/d3w==
+X-Received: by 2002:a05:6e02:1526:: with SMTP id i6mr5548414ilu.3.1635940782450;
+        Wed, 03 Nov 2021 04:59:42 -0700 (PDT)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id d10sm1037520iog.25.2021.11.03.04.59.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Nov 2021 04:59:42 -0700 (PDT)
+Subject: Re: [bug report] WARNING: CPU: 1 PID: 1386 at
+ block/blk-mq-sched.c:432 blk_mq_sched_insert_request+0x54/0x178
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Yi Zhang <yi.zhang@redhat.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <YYIHXGSb2O5va0vA@T590>
+ <85F2E9AC-385F-4BCA-BD3C-7A093442F87F@kernel.dk>
+Message-ID: <733e1dcd-36a1-903e-709a-5ebe5f491564@kernel.dk>
+Date:   Wed, 3 Nov 2021 05:59:41 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211103141919.4feefaf0@canb.auug.org.au>
-In-Reply-To: <20211103141919.4feefaf0@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 3 Nov 2021 11:30:35 +0100
-Message-ID: <CANiq72=fuk-eVuCpW5jkDn71Pbs=1L2LhSvadR_bTjxcPvtVUQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>, Jiri Olsa <jolsa@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <85F2E9AC-385F-4BCA-BD3C-7A093442F87F@kernel.dk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+On 11/2/21 9:54 PM, Jens Axboe wrote:
+> On Nov 2, 2021, at 9:52 PM, Ming Lei <ming.lei@redhat.com> wrote:
+>>
+>> ﻿On Tue, Nov 02, 2021 at 09:21:10PM -0600, Jens Axboe wrote:
+>>>> On 11/2/21 8:21 PM, Yi Zhang wrote:
+>>>>>>
+>>>>>> Can either one of you try with this patch? Won't fix anything, but it'll
+>>>>>> hopefully shine a bit of light on the issue.
+>>>>>>
+>>>> Hi Jens
+>>>>
+>>>> Here is the full log:
+>>>
+>>> Thanks! I think I see what it could be - can you try this one as well,
+>>> would like to confirm that the condition I think is triggering is what
+>>> is triggering.
+>>>
+>>> diff --git a/block/blk-mq.c b/block/blk-mq.c
+>>> index 07eb1412760b..81dede885231 100644
+>>> --- a/block/blk-mq.c
+>>> +++ b/block/blk-mq.c
+>>> @@ -2515,6 +2515,8 @@ void blk_mq_submit_bio(struct bio *bio)
+>>>    if (plug && plug->cached_rq) {
+>>>        rq = rq_list_pop(&plug->cached_rq);
+>>>        INIT_LIST_HEAD(&rq->queuelist);
+>>> +        WARN_ON_ONCE(q->elevator && !(rq->rq_flags & RQF_ELV));
+>>> +        WARN_ON_ONCE(!q->elevator && (rq->rq_flags & RQF_ELV));
+>>>    } else {
+>>>        struct blk_mq_alloc_data data = {
+>>>            .q        = q,
+>>> @@ -2535,6 +2537,8 @@ void blk_mq_submit_bio(struct bio *bio)
+>>>                bio_wouldblock_error(bio);
+>>>            goto queue_exit;
+>>>        }
+>>> +        WARN_ON_ONCE(q->elevator && !(rq->rq_flags & RQF_ELV));
+>>> +        WARN_ON_ONCE(!q->elevator && (rq->rq_flags & RQF_ELV));
+>>
+>> Hello Jens,
+>>
+>> I guess the issue could be the following code run without grabbing
+>> ->q_usage_counter from blk_mq_alloc_request() and blk_mq_alloc_request_hctx().
+>>
+>> .rq_flags       = q->elevator ? RQF_ELV : 0,
+>>
+>> then elevator is switched to real one from none, and check on q->elevator
+>> becomes not consistent.
+> 
+> Indeed, that’s where I was going with this. I have a patch, testing it
+> locally but it’s getting late. Will send it out tomorrow. The nice
+> benefit is that it allows dropping the weird ref get on plug flush,
+> and batches getting the refs as well. 
 
-On Wed, Nov 3, 2021 at 4:19 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> diff --cc scripts/Makefile.modfinal
-> index 7f39599e9fae,c0842e999a75..000000000000
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@@ -39,11 -39,12 +39,12 @@@ quiet_cmd_ld_ko_o = LD [M]  $
->
->   quiet_cmd_btf_ko = BTF [M] $@
->         cmd_btf_ko =                                                    \
-> -       if [ -f vmlinux ]; then                                         \
-> -               LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
-> -               $(RESOLVE_BTFIDS) -b vmlinux $@;                        \
-> -       else                                                            \
-> +       if [ ! -f vmlinux ]; then                                       \
->                 printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-> +       elif $(srctree)/scripts/is_rust_module.sh $@; then              \
-> +               printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
-> +       else                                                            \
->  -              LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J --btf_base vmlinux $@; \
-> ++              LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
->         fi;
+Yi/Steffen, can you try pulling this into your test kernel:
 
-It looks like the `$(RESOLVE_BTFIDS)` line is gone with this
-resolution. The rest looks good.
+git://git.kernel.dk/linux-block for-next
 
-Thanks!
+and see if it fixes the issue for you. Thanks!
 
-Cheers,
-Miguel
+-- 
+Jens Axboe
+

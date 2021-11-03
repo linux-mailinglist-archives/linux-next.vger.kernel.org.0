@@ -2,174 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC98443BCD
-	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 04:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178E3443BD1
+	for <lists+linux-next@lfdr.de>; Wed,  3 Nov 2021 04:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbhKCDWO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Nov 2021 23:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S230008AbhKCDXu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Nov 2021 23:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhKCDWN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 23:22:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B0C061714;
-        Tue,  2 Nov 2021 20:19:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HkX7F2lDgz4xbC;
-        Wed,  3 Nov 2021 14:19:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1635909565;
-        bh=mXNiDRbvftcWwQQwxnyYXK5OgdpAMzBq9zZ7/YFPumk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lRDeW1gaLDTEmpeGRgH0wSX9B9eqUK1wK5lXMAVY3iTihV+lfj7KLdqKGNB6ZZHlK
-         sLRYJphTESScFge6FYY1sUl9lN/PQQquJXHWPC4f95ljkTjoHjWaQ0SJd9iiWdfB4g
-         iGJ2HmJkCjrqxl/2FBsgil1w10eknPHUzeErWTke+WRiR0kTUyYvTBP1+izCCzOWG1
-         iFW/TKWgTxdlb/IlHihrMaM/HjLv/tIINKMzDm4/TJTTtt7jrt1gpFqcWNRxdrEVaO
-         cyX0hJh3pTgTSV93E/TYljZOToTKu4CtjHBL+EZREn411fKEPFaYr53x54W9+zn58+
-         k2kKK8banh6cw==
-Date:   Wed, 3 Nov 2021 14:19:19 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>, Jiri Olsa <jolsa@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20211103141919.4feefaf0@canb.auug.org.au>
+        with ESMTP id S229746AbhKCDXt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Nov 2021 23:23:49 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04209C061203
+        for <linux-next@vger.kernel.org>; Tue,  2 Nov 2021 20:21:14 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id i9so1160544ilu.8
+        for <linux-next@vger.kernel.org>; Tue, 02 Nov 2021 20:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0nndE3bXje7v1hNIF7AwZXvSEQQyGas46aJLK284tBE=;
+        b=j9z7xjNnS5ETYg8Q72T5Xdf6iuSHyqOGf0yU1wJNbbqUezM2apSlpnMP3RHZ2oZm8P
+         /WzviMl42aB+xpNu0obC9UpvYGKIDHcEfdEcBYN0HpesuAvPnY9TqxHnty/ltR5xTTxh
+         /z/g5LvMy4RYv583LPMF6urmOVXTTu8rSFR8gmz+53+OvUCvSGm9M2k7FpunFsN0M/D/
+         rE0UCcgkJy/7DAB3gqL2PQRBXn8ipB+nn2NuDufjeeYS7ieObPR9gyQeVWGzvKOp2/C9
+         uTsSFvgi9AlgzH+ho1jbS0TvpSq0C+f83gyzHYfgwlI7vbjp4dKNBRz48mD8aYS7beRE
+         htTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0nndE3bXje7v1hNIF7AwZXvSEQQyGas46aJLK284tBE=;
+        b=QF1XDE8dqd8MBWxzLFj520tN9ZCD1fOT+NZkR7wPuPok8mnioYltdw+tAOIPFQlRce
+         jx03JtMoFSTsd2N0nXQJo9OFW+sH38kNoIF4Q3zUV7FBUEnazuz5MYjMO0j34IWAoS7F
+         Rf4sGc5FSMcce508yUeP3pLZZMTZAn3j2TdZqhA7TVN1wycR+mSWy1SDmaB8LddHGbZe
+         tdTidUdpi5Pvm5iUfmbwh0ooFzEiv7X22ze539EzVoUxwZmv0ltK10Eu3p7xCw5M6IN5
+         +H8sq6XPtKtawvugN+++VNjrf7xAGaerpznIYxjDM6Rhtgn9d4kSmZBPjVrluZOakWsS
+         QGLQ==
+X-Gm-Message-State: AOAM530vsvknITnoiuK6vEBZkvYUF6/o1YIXyeQbhNceu42Eh8eLgsnV
+        1/hSUjTx/zthFukJPJmQ832alQ==
+X-Google-Smtp-Source: ABdhPJzGYSHWgG5gxXyAsqg8Tw8gDMfzIc938IuDdh0mkt+a7Zficg5mNUWgA+73MBBxMI6zSTOGtQ==
+X-Received: by 2002:a05:6e02:1d9e:: with SMTP id h30mr21815713ila.138.1635909673421;
+        Tue, 02 Nov 2021 20:21:13 -0700 (PDT)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id s12sm435613iol.30.2021.11.02.20.21.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Nov 2021 20:21:13 -0700 (PDT)
+Subject: Re: [bug report] WARNING: CPU: 1 PID: 1386 at
+ block/blk-mq-sched.c:432 blk_mq_sched_insert_request+0x54/0x178
+To:     Yi Zhang <yi.zhang@redhat.com>
+Cc:     Steffen Maier <maier@linux.ibm.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <CAHj4cs-NUKzGj5pgzRhDgdrGGbgPBqUoQ44+xgvk6njH9a_RYQ@mail.gmail.com>
+ <1cf57bc2-5283-a2ce-0bbc-db6a62953c8f@linux.ibm.com>
+ <e9965a7c-faba-496e-8110-dbe8f7065080@kernel.dk>
+ <4f3811f6-88d9-c0c6-055f-1a3220357e22@kernel.dk>
+ <CAHj4cs_+ZDe3KVbKYUK0XnupTxU2MqfA6ARxMkhkTwg9hYBiLg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <cb1c00aa-8d06-ef04-4621-0f7b02f54d93@kernel.dk>
+Date:   Tue, 2 Nov 2021 21:21:10 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i.X8tMgFsm0alWFe66nkbZF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <CAHj4cs_+ZDe3KVbKYUK0XnupTxU2MqfA6ARxMkhkTwg9hYBiLg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i.X8tMgFsm0alWFe66nkbZF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/2/21 8:21 PM, Yi Zhang wrote:
+>>
+>> Can either one of you try with this patch? Won't fix anything, but it'll
+>> hopefully shine a bit of light on the issue.
+>>
+> Hi Jens
+> 
+> Here is the full log:
 
-Hi all,
+Thanks! I think I see what it could be - can you try this one as well,
+would like to confirm that the condition I think is triggering is what
+is triggering.
 
-Today's linux-next merge of the rust tree got conflicts in:
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 07eb1412760b..81dede885231 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2515,6 +2515,8 @@ void blk_mq_submit_bio(struct bio *bio)
+ 	if (plug && plug->cached_rq) {
+ 		rq = rq_list_pop(&plug->cached_rq);
+ 		INIT_LIST_HEAD(&rq->queuelist);
++		WARN_ON_ONCE(q->elevator && !(rq->rq_flags & RQF_ELV));
++		WARN_ON_ONCE(!q->elevator && (rq->rq_flags & RQF_ELV));
+ 	} else {
+ 		struct blk_mq_alloc_data data = {
+ 			.q		= q,
+@@ -2535,6 +2537,8 @@ void blk_mq_submit_bio(struct bio *bio)
+ 				bio_wouldblock_error(bio);
+ 			goto queue_exit;
+ 		}
++		WARN_ON_ONCE(q->elevator && !(rq->rq_flags & RQF_ELV));
++		WARN_ON_ONCE(!q->elevator && (rq->rq_flags & RQF_ELV));
+ 	}
+ 
+ 	trace_block_getrq(bio);
 
-  Makefile
-  scripts/Makefile.modfinal
+-- 
+Jens Axboe
 
-between commit:
-
-  9741e07ece7c ("kbuild: Unify options for BTF generation for vmlinux and m=
-odules")
-
-from Linus' tree and commit:
-
-  fcd48fa27403 ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Makefile
-index 8581ffca7f96,c4dd2c6b55e4..000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -533,10 -572,10 +574,11 @@@ export KBUILD_HOSTCXXFLAGS KBUILD_HOSTL
- =20
-  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LD=
-FLAGS
-  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-+ export KBUILD_RUST_TARGET KBUILD_RUSTFLAGS RUSTFLAGS_KERNEL RUSTFLAGS_MOD=
-ULE
-  export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
-- export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
-- export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
-+ export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_RUSTFLAGS_MODULE =
-KBUILD_LDFLAGS_MODULE
-+ export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL KBUILD_RUSTFLAGS_KERNEL
- +export PAHOLE_FLAGS
- =20
-  # Files to ignore in find ... statements
- =20
-@@@ -1089,9 -1203,12 +1167,13 @@@ export MODORDER :=3D $(extmod_prefix)modu
-  export MODULES_NSDEPS :=3D $(extmod_prefix)modules.nsdeps
- =20
-  ifeq ($(KBUILD_EXTMOD),)
- -core-y		+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
- +core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
- +core-$(CONFIG_BLOCK)	+=3D block/
- =20
-+ ifdef CONFIG_RUST
-+ core-y		+=3D rust/
-+ endif
-+=20
-  vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
-  		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
-  		     $(libs-y) $(libs-m)))
-diff --cc scripts/Makefile.modfinal
-index 7f39599e9fae,c0842e999a75..000000000000
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@@ -39,11 -39,12 +39,12 @@@ quiet_cmd_ld_ko_o =3D LD [M]  $
- =20
-  quiet_cmd_btf_ko =3D BTF [M] $@
-        cmd_btf_ko =3D 							\
-- 	if [ -f vmlinux ]; then						\
-- 		LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vml=
-inux $@; \
-- 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
-- 	else								\
-+ 	if [ ! -f vmlinux ]; then					\
-  		printf "Skipping BTF generation for %s due to unavailability of vmlinux=
-\n" $@ 1>&2; \
-+ 	elif $(srctree)/scripts/is_rust_module.sh $@; then 		\
-+ 		printf "Skipping BTF generation for %s because it's a Rust module\n" $@=
- 1>&2; \
-+ 	else								\
- -		LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J --btf_base vmlinux $@; \
-++		LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vml=
-inux $@; \
-  	fi;
- =20
-  # Same as newer-prereqs, but allows to exclude specified extra dependenci=
-es
-
---Sig_/i.X8tMgFsm0alWFe66nkbZF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGB/7cACgkQAVBC80lX
-0GwfVwf/d/0OQpkbR8tnolQawx/EByyl0Fm/vgrwWY9A6FRwAzuFFPVOpLgz4Mh0
-So5JpktRS3q9UMDhq/yXWV/j0c3Hnn45oDxoWy1c7+U6sxKYhucW98Ki8O294Oh1
-par5hFWRvtcjRNxwBAFbzXKfUw62XkmpnTGV6Rzira+i6qmPb8h0e2y372+cRdyL
-592vQ3HuKBv24EWxfR1442tb7/mhacxNIvrL9yCsaYjtLrmlVUkYKV/3VHuxp6XE
-OrJqY8OolDIdtSg83H1UakrBNbShUWMKS1vwmGsi1f+1KSm+y/mg4hJ1B9aOnRh/
-KOKaD2V+BWPKyBxn0jvdzr+YPs39oQ==
-=yY7i
------END PGP SIGNATURE-----
-
---Sig_/i.X8tMgFsm0alWFe66nkbZF--

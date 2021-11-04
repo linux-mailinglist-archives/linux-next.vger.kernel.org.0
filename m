@@ -2,56 +2,37 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7644452E0
-	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 13:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0507445B21
+	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 21:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbhKDMWS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Nov 2021 08:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S232057AbhKDUee (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Nov 2021 16:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbhKDMWP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 08:22:15 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C028FC061714;
-        Thu,  4 Nov 2021 05:19:34 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id i79so6307213ioa.13;
-        Thu, 04 Nov 2021 05:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FAhOhIoKCmk+qa4z0Rjp9YHAgZ274dKuMxynLfkh9us=;
-        b=pa7WIvUUEyxCKFgQH8p4wLZJdLZqKt/Sjz+XzsqXy6JJgzTP5oM5Mm7bp+1I5p4nxW
-         iZ8cqLs0CNAq970bOgA720t6U9xYTcnUgG1hhL4RegoqEuFwAzObhaZPpaqt4X0RftqD
-         qmrG0NOO0H+d/p5JQIGEl32TTC9BWzGuVTkrN+VtkTHiCmk7AI2DxEDVvJxhLwAdsJY+
-         UHw9iCiwpjYxuPqQEh0os/issivmfzEChE8lAp/ZKTh6jQ36EZ3r6JG8nsuSZQg/7Qb8
-         Thu4GIzuFVN0y0X+BlciwVWB0FUQcjUpye9H8KVrZ9fNKhnv92McT/YbM/emsM4r5VZy
-         L78Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FAhOhIoKCmk+qa4z0Rjp9YHAgZ274dKuMxynLfkh9us=;
-        b=IJMX39uywSfjuF0WAyJLC6vCP/RbSshMvKmIknzmr2iRAoknPblfaEj6m18lzDruT0
-         wK98c3/bVnenV1IwMt4z4l9pjl2BogrTGD5DOmgL78B9EKijrzeXXz7CYWjpnm7yqF6Y
-         0qzCJx9EEV/R8T8aPO9V8rEwdYETvPGo32QUN13Sm+SLiQV2S5anihPaDvTsDyrCGORD
-         exV3UZXkxtX2ixwHlUkwNLHzLdncJCAUQ5w6DE93m0zD5x6JER7YZWgfBqwLrNB0ULep
-         tCsQqVSzKWctokokWpiMeM//h/hyy3L2LRRilSoeap47kq+Fb6IKXbuJD9NdJuuWTRSM
-         M/7g==
-X-Gm-Message-State: AOAM531XohXscduVX//re0Jed1Gzg81i4dLpsww/3NJ+kEH7/6B/iHiT
-        mIKREIrlkdkSYve1fF0QAngjzeIPfcisIdHGcSQ=
-X-Google-Smtp-Source: ABdhPJwxm1lrvQinBF79LcB5XUUY1yWDHu+l/aM99OB1uLMV8VpmguwLQvgshZzUQSk9qB3j+P5I2TJ3N9QQWP78HqA=
-X-Received: by 2002:a6b:f812:: with SMTP id o18mr5287460ioh.64.1636028374264;
- Thu, 04 Nov 2021 05:19:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211103141919.4feefaf0@canb.auug.org.au> <CANiq72=fuk-eVuCpW5jkDn71Pbs=1L2LhSvadR_bTjxcPvtVUQ@mail.gmail.com>
- <20211104080152.41c38912@canb.auug.org.au>
-In-Reply-To: <20211104080152.41c38912@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 4 Nov 2021 13:19:22 +0100
-Message-ID: <CANiq72mLAc1OMTo6LBTy1bwxM_+BbrRSCNn1uKW0irezUXBFcg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S231484AbhKDUee (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 16:34:34 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E841BC061714;
+        Thu,  4 Nov 2021 13:31:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hlb0647Cbz4xcG;
+        Fri,  5 Nov 2021 07:31:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1636057913;
+        bh=i4XBsFKlHePIk36I8I1JYukXRUvnEx+toP0p5wmiIWo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hGBO3f0Npg1Q/pQcgJYwIGFqq5dgHP2X7l0Ed/Pe0CktQxLEt6fxTWDOhbHM42EnT
+         eS0FzGtPsGe6534ISckxO+lmAjc1l5uksfnFZclhHXOYYcLEFsWWk3FWJCb/PYqK0/
+         Mu34JXjoxnvlnOisIBN9pXSABXFmRNtt4L4jyzBwGRVbYKQruJO8taUNBHRsG0FHzp
+         9jkIqC8hYRWMkvi+Bmlg5lHSaPZclmDH66VVTAvFxAY30EDweHY2Tzt1j9R82MBtZh
+         GJYujz/um3x0OvSgHRRCKuo8ND/o88P+hVuW4rRjCCL6QJFTqQPCdZKz1HaVI41Wki
+         3VDAIUF52Q++w==
+Date:   Fri, 5 Nov 2021 07:31:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -69,25 +50,71 @@ Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
         Miguel Ojeda <ojeda@kernel.org>,
         Sven Van Asbroeck <thesven73@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
+Message-ID: <20211105073149.5bc4e8a7@canb.auug.org.au>
+In-Reply-To: <CANiq72mLAc1OMTo6LBTy1bwxM_+BbrRSCNn1uKW0irezUXBFcg@mail.gmail.com>
+References: <20211103141919.4feefaf0@canb.auug.org.au>
+        <CANiq72=fuk-eVuCpW5jkDn71Pbs=1L2LhSvadR_bTjxcPvtVUQ@mail.gmail.com>
+        <20211104080152.41c38912@canb.auug.org.au>
+        <CANiq72mLAc1OMTo6LBTy1bwxM_+BbrRSCNn1uKW0irezUXBFcg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8Y+6VUZ6oAh1Wtd3i+KtWZJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 3, 2021 at 10:01 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/8Y+6VUZ6oAh1Wtd3i+KtWZJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Miguel,
+
+On Thu, 4 Nov 2021 13:19:22 +0100 Miguel Ojeda <miguel.ojeda.sandonis@gmail=
+.com> wrote:
 >
-> Oops, sorry about that.  I have added it back from today.
+> On Wed, Nov 3, 2021 at 10:01 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > Oops, sorry about that.  I have added it back from today. =20
+>=20
+> No worries! By the way, I will be rebasing soon to fix a build error
+> that happened due to some changes in mainline, so the conflict will
+> disappear.
 
-No worries! By the way, I will be rebasing soon to fix a build error
-that happened due to some changes in mainline, so the conflict will
-disappear.
+I would suggest that you don't rebase if you are intending to submit to
+Linus.  Instead, do a test merge with his tree and fix the issue in the
+merge and test that, then explain it all the in the pull request (but
+ask him to pull your tree without the merge).
 
-> BTW, are you intending to submit the rust tree this merge window?
+> > BTW, are you intending to submit the rust tree this merge window? =20
+>=20
+> That was the idea, but a few things need to be taken care of before.
+> In any case, I was told to start submitting it every couple weeks or
+> so, so I think Linus et. al. do not mind if it aligns to a merge
+> window or not (though I might be wrong...).
 
-That was the idea, but a few things need to be taken care of before.
-In any case, I was told to start submitting it every couple weeks or
-so, so I think Linus et. al. do not mind if it aligns to a merge
-window or not (though I might be wrong...).
+Much better to do it in the merge window.  Linus almost never takes new
+features outside a merge window (but you could always ask him).
 
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/8Y+6VUZ6oAh1Wtd3i+KtWZJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEQzUACgkQAVBC80lX
+0GwTMgf+JPS238i+wto9si/BT+s7SME6hWLM3c3lc67qw2y+whjFwJWQK3KcLMVe
+E8eHJWQ3pfoZrWmcu5uWIkZGZUbIp0z++xSxlwM9DUrHi8xpK2KwsoeaY9gdjr7l
+7RiqFYpykRqMcbubbBc+YGStnoFQ4vT4RzakqLwHf769J1G6bjPFP7dEvzipujrd
+8wyOu51sWl9AUQfTN3j8O/V21qUk1tTvRGaS48g48tjqjLuDtLwjL09pAI+Pzh9Z
+BquHbYhJQmZ0vit1Y7lDoFyiYkrtyYukg1yilOL1TFFaqmK/P30kdBM/vBoOErWe
+oHFnKaKY+d0Vx7Ex0U84Eh4oAejzyQ==
+=ESlA
+-----END PGP SIGNATURE-----
+
+--Sig_/8Y+6VUZ6oAh1Wtd3i+KtWZJ--

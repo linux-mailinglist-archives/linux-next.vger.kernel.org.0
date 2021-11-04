@@ -2,86 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF60445B82
-	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 22:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABEA445C72
+	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 23:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbhKDVKt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Nov 2021 17:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S231322AbhKDW67 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Nov 2021 18:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbhKDVKt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 17:10:49 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931ADC061203;
-        Thu,  4 Nov 2021 14:08:10 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bu18so14707353lfb.0;
-        Thu, 04 Nov 2021 14:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+3x8ra5sNrTiTw8qM8NIDlugsWNCkwlsLBa5rW7Dmzw=;
-        b=cU8zhucv4Q58CAwoyCTw7SC6WQEnxPbg3jdwhgLYS211esOGAZ3q0BpUn5ilVBIrRi
-         nzb66LBeEiPbdDvMB/oXdnrKaO0PZR57A6SGtZTGWZo28yFYOBOtS9v3Vd0s9Ti4WCsJ
-         CGcxpLfjV1VEtMf4VxmWygOJG2bp1A7N5sUkP0t3JOx1+uffRuKs8uUflS05Ilnz08qE
-         GW7B2Qzw8sRiAv+b2A8wZyQhvPMPByqHse/YGrHPYHIUpphClOKGwkXqbzqt1syZzqLZ
-         dzGJzHb+gvzeQet54znhXhA7Ucv7mt31jHktiNKOhSXKbl6Ayksdb2KFfL2ethZb2JVD
-         glCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+3x8ra5sNrTiTw8qM8NIDlugsWNCkwlsLBa5rW7Dmzw=;
-        b=ojhefaOdPyMevWe6bedyo/s9eSZqPEFtyk+bh942QkGW9zZsaShQj4yjRD9fANPjNC
-         2eYNZp3WU1sLHMbho/wbJsZ4TrnWFTt6C0CHo0aJj06PDe2z0NM+PHYIpMDOOlwmYXXM
-         w+aGrmWQh61M8XVnQGReY0JGUk+QkrB4ByXbHUm0mYOCPcm/iupUFnlZMdnJ5D4O8/Ho
-         FUTaMh65u/74X8e90CWIE5aeRKsWkClj86cWa1jpNJiK82+vbRO8bj1U37fyEFvWm8tr
-         qODTK/wIOPE5qKUyzrp41mDVtgddpp8/9tX2L2jyoHh2Y2H6bgKJh41wfghj358gQYlQ
-         DCQg==
-X-Gm-Message-State: AOAM532hQf12ogYXtHvTjhwAMRr8LafGhwsJX9OoH9yYdZCz5UWGrSKX
-        3W/OCavXGvxK1inGejve7Dee2KhFzM5uWa9Uzo4=
-X-Google-Smtp-Source: ABdhPJzUtNu6HpNLfKsE5QP8GTvju8c6761QXrM2Xh20TAjvQCSvlOtBSVsg35YYg046e5OI7xkqypiAwQYydrsm3+M=
-X-Received: by 2002:ac2:4309:: with SMTP id l9mr48883244lfh.667.1636060088866;
- Thu, 04 Nov 2021 14:08:08 -0700 (PDT)
+        with ESMTP id S232025AbhKDW67 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 18:58:59 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CFEC061714;
+        Thu,  4 Nov 2021 15:56:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HlfBl1gqGz4xd8;
+        Fri,  5 Nov 2021 09:56:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1636066576;
+        bh=grcmNFBX6Zg8EjXAyRbS7cvifulEVMPhW4wGYPqFZpo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FpJBo9U2tgsR3Gxadiz2PIAO1+/NOW7HC0GSYz9svyzJx4iih7DHRgNc+IaUnwjZg
+         UZOcL2DBZDNJoK8ovwUc3hSGiS7d6dMORrMem261SnZl1FiuAx4r1zV524RgcC8Xk1
+         didyKvcdoWknhV9kR1Jf3wlFweCqapNSDlKQ3tBa2vEZWU1iMh9nS5jw238HBTk1kl
+         sDTBqnRBtNImyVw86OssrDTjE7ZETZ5LsmTRZnm6XC/YGhqfQLlFoC3b2wX8GojUxo
+         8jTl0wLJ2s8vvCumS1ksNGuvcJBltCDNX8VVBtEaXxTycmIcYSAkdEAkjKnWpbnb7Q
+         aqBFGXe2UGwYA==
+Date:   Fri, 5 Nov 2021 09:56:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <jroedel@suse.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pci tree
+Message-ID: <20211105095614.6bc6fc96@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20211105074627.76ab1526@canb.auug.org.au>
-In-Reply-To: <20211105074627.76ab1526@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 4 Nov 2021 16:07:58 -0500
-Message-ID: <CAH2r5mu5NLoUMKJ-t8hBVKEuCP5pA9CyJ41YUdggr3RsSNpYgA@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the ksmbd tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/qdt613cmfmMZgU7Svgtyos_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fixed
+--Sig_/qdt613cmfmMZgU7Svgtyos_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 4, 2021 at 3:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commits
->
->   99f76ea5661e ("ksmbd: change LeaseKey data type to u8 array")
->   f5ab639bc25e ("ksmbd: remove smb2_buf_length in smb2_transform_hdr")
->   1b3bd95c0471 ("ksmbd: remove smb2_buf_length in smb2_hdr")
->   2361911de730 ("ksmbd: remove md4 leftovers")
->   13fe1226bef4 ("ksmbd: set unique value to volume serial field in FS_VOLUME_INFORMATION")
->
-> are missing a Signed-off-by from their committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
+drivers/iommu/apple-dart.c: In function 'apple_dart_get_resv_regions':
+drivers/iommu/apple-dart.c:762:2: error: implicit declaration of function '=
+iommu_dma_get_resv_regions'; did you mean 'iommu_get_resv_regions'? [-Werro=
+r=3Dimplicit-function-declaration]
+  762 |  iommu_dma_get_resv_regions(dev, head);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |  iommu_get_resv_regions
 
--- 
-Thanks,
+Caused by commit
 
-Steve
+  946d619fa25f ("iommu/dart: Exclude MSI doorbell from PCIe device IOVA ran=
+ge")
+
+Unfortunately, the linux/dma-iommu.h include was removed by commit
+
+  b2b2781a9755 ("iommu/dart: Clean up IOVA cookie crumbs")
+
+which is now in Linus' tree.
+
+I have added this merge fixup for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 5 Nov 2021 09:51:19 +1100
+Subject: [PATCH] iommu/dart: restore include of linux/dma-iommu.h
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/iommu/apple-dart.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+index b7265a8e9540..565ef5598811 100644
+--- a/drivers/iommu/apple-dart.c
++++ b/drivers/iommu/apple-dart.c
+@@ -15,6 +15,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/dev_printk.h>
++#include <linux/dma-iommu.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qdt613cmfmMZgU7Svgtyos_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGEZQ4ACgkQAVBC80lX
+0Gy78AgAhesX5qd981QechtQbh6vkMpBaEJTO6DBC23V9UXnZUbqcs/wbP/0Jtlz
+YSWkhU6cHhS8FWnr591+T/fB9lq/lE5TmOisUWC5WlwkXBiEXnEVFZ/vYLR1iIh0
+4OPpgBOSbZu4efKENIBwb9p7E7Mh7Ldc9nc14BWIbdd3e47DKs7qjJbvO/bx+/nM
+qnEDqs418R5XiLqdqpfhHkeT2lVlEYXsoFZHsb2FRQO3cgtc+vPDk8/zshQdg7Jl
+Lh37uTUszSlg86XKdG9b762gowadLnLzxEbf4L5seUPD4+f3Z5MJD0+Y2msbekbl
+wX3dy8H5JEJukE5URb2f5Bh6vp/SYw==
+=yQqQ
+-----END PGP SIGNATURE-----
+
+--Sig_/qdt613cmfmMZgU7Svgtyos_--

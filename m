@@ -2,80 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C16445B32
-	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 21:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF60445B82
+	for <lists+linux-next@lfdr.de>; Thu,  4 Nov 2021 22:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbhKDUtI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Nov 2021 16:49:08 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:51335 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbhKDUtH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 16:49:07 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HlbK00fSsz4xcG;
-        Fri,  5 Nov 2021 07:46:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1636058788;
-        bh=Q6jveyxUcJjAyWI/Fm6rQCVZxrdQeIii8jLdg66GsPw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XAVFqtFslKSZP0D2/NypUVjU9U+WZirFgmXsqZHTUOS2WXCJT/knSHcTDwXK6v+Nv
-         NmlPNEGgdxsNa2HBGWdt2EMOcfJS1mBMi1mbUfHtCOdPhaXoMgaATTZd6ewBBXmFT5
-         zQxFHmq/Xy8zNBKf3BogNYOZmrwEih7cEniiwkMKs8HnqTeQD7XtmU36gWTv+bRwUl
-         1pIh86JwAGKyJI4BMEcO+LlKxGPG7qsY1dqRVF0chJJ1cVSn/WfQhj5Wrb5Rykuyzo
-         /FligCeMnXDQy497+VcDU/fL1iqPKOnLe6nlocWdhF15lJAXwPx/fZ/733k1rVE+UF
-         aMvRKO52VydNQ==
-Date:   Fri, 5 Nov 2021 07:46:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the ksmbd tree
-Message-ID: <20211105074627.76ab1526@canb.auug.org.au>
+        id S232126AbhKDVKt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Nov 2021 17:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230162AbhKDVKt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Nov 2021 17:10:49 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931ADC061203;
+        Thu,  4 Nov 2021 14:08:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bu18so14707353lfb.0;
+        Thu, 04 Nov 2021 14:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+3x8ra5sNrTiTw8qM8NIDlugsWNCkwlsLBa5rW7Dmzw=;
+        b=cU8zhucv4Q58CAwoyCTw7SC6WQEnxPbg3jdwhgLYS211esOGAZ3q0BpUn5ilVBIrRi
+         nzb66LBeEiPbdDvMB/oXdnrKaO0PZR57A6SGtZTGWZo28yFYOBOtS9v3Vd0s9Ti4WCsJ
+         CGcxpLfjV1VEtMf4VxmWygOJG2bp1A7N5sUkP0t3JOx1+uffRuKs8uUflS05Ilnz08qE
+         GW7B2Qzw8sRiAv+b2A8wZyQhvPMPByqHse/YGrHPYHIUpphClOKGwkXqbzqt1syZzqLZ
+         dzGJzHb+gvzeQet54znhXhA7Ucv7mt31jHktiNKOhSXKbl6Ayksdb2KFfL2ethZb2JVD
+         glCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+3x8ra5sNrTiTw8qM8NIDlugsWNCkwlsLBa5rW7Dmzw=;
+        b=ojhefaOdPyMevWe6bedyo/s9eSZqPEFtyk+bh942QkGW9zZsaShQj4yjRD9fANPjNC
+         2eYNZp3WU1sLHMbho/wbJsZ4TrnWFTt6C0CHo0aJj06PDe2z0NM+PHYIpMDOOlwmYXXM
+         w+aGrmWQh61M8XVnQGReY0JGUk+QkrB4ByXbHUm0mYOCPcm/iupUFnlZMdnJ5D4O8/Ho
+         FUTaMh65u/74X8e90CWIE5aeRKsWkClj86cWa1jpNJiK82+vbRO8bj1U37fyEFvWm8tr
+         qODTK/wIOPE5qKUyzrp41mDVtgddpp8/9tX2L2jyoHh2Y2H6bgKJh41wfghj358gQYlQ
+         DCQg==
+X-Gm-Message-State: AOAM532hQf12ogYXtHvTjhwAMRr8LafGhwsJX9OoH9yYdZCz5UWGrSKX
+        3W/OCavXGvxK1inGejve7Dee2KhFzM5uWa9Uzo4=
+X-Google-Smtp-Source: ABdhPJzUtNu6HpNLfKsE5QP8GTvju8c6761QXrM2Xh20TAjvQCSvlOtBSVsg35YYg046e5OI7xkqypiAwQYydrsm3+M=
+X-Received: by 2002:ac2:4309:: with SMTP id l9mr48883244lfh.667.1636060088866;
+ Thu, 04 Nov 2021 14:08:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o5VZqTI1tFccuR_2ag8.HR6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211105074627.76ab1526@canb.auug.org.au>
+In-Reply-To: <20211105074627.76ab1526@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 4 Nov 2021 16:07:58 -0500
+Message-ID: <CAH2r5mu5NLoUMKJ-t8hBVKEuCP5pA9CyJ41YUdggr3RsSNpYgA@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the ksmbd tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/o5VZqTI1tFccuR_2ag8.HR6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fixed
 
-Hi all,
+On Thu, Nov 4, 2021 at 3:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commits
+>
+>   99f76ea5661e ("ksmbd: change LeaseKey data type to u8 array")
+>   f5ab639bc25e ("ksmbd: remove smb2_buf_length in smb2_transform_hdr")
+>   1b3bd95c0471 ("ksmbd: remove smb2_buf_length in smb2_hdr")
+>   2361911de730 ("ksmbd: remove md4 leftovers")
+>   13fe1226bef4 ("ksmbd: set unique value to volume serial field in FS_VOLUME_INFORMATION")
+>
+> are missing a Signed-off-by from their committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Commits
 
-  99f76ea5661e ("ksmbd: change LeaseKey data type to u8 array")
-  f5ab639bc25e ("ksmbd: remove smb2_buf_length in smb2_transform_hdr")
-  1b3bd95c0471 ("ksmbd: remove smb2_buf_length in smb2_hdr")
-  2361911de730 ("ksmbd: remove md4 leftovers")
-  13fe1226bef4 ("ksmbd: set unique value to volume serial field in FS_VOLUM=
-E_INFORMATION")
 
-are missing a Signed-off-by from their committer.
+-- 
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/o5VZqTI1tFccuR_2ag8.HR6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGERqMACgkQAVBC80lX
-0Gwnnwf/eU1Jg3DwrH6xyRIPf03+dyhlDex+pi7JBUVnBNqQfSxGgcPha+kqZ7fC
-Rtyuvl7vIvreJPO/ZdMf5+elVBe12b6QawzB7CA0adKal72CrcFOBMkSOjOXtMev
-FLsLWZG76O3rkfT0Hxa/1LrGoTnxor/an2IbD5J1ACpUOgnwDtDygRQ4UT/OGJmp
-AiBiSKvuzQcuFz3elRXkLYdY4tThoaHxxP69qHifH6c1xurRhxILjAm30dUU+zAD
-C6khhlvY/fvXahf3r5KsjPCgkAq/3jAe4AYJW0PSLKHKP+YZ5XkpeRaSYgrFi/+C
-knuhBRcmIcVklZwQAeRvP9XLRVGwlg==
-=eC/l
------END PGP SIGNATURE-----
-
---Sig_/o5VZqTI1tFccuR_2ag8.HR6--
+Steve
